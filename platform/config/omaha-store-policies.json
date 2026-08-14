@@ -75,6 +75,8 @@
       "priceMode": "in_store",
       "retailerLocationKey": "043",
       "priceLocationKey": "043",
+      "availabilityLocationKey": "531573",
+      "availabilityShopKey": "16671402",
       "adLocationKey": "043",
       "exactAddress": "17070 Audrey St, Omaha, NE 68136",
       "locationCanary": { "expectedLocationPattern": "17070\\s+Audrey|Omaha.*043", "expectedModePattern": "In-Store" },

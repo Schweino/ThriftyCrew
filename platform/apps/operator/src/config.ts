@@ -20,6 +20,8 @@ export const omahaStorePolicySchema = z.object({
     priceMode: z.enum(["pickup", "in_store", "club"]),
     retailerLocationKey: z.string().trim().min(1),
     priceLocationKey: z.string().trim().min(1),
+    availabilityLocationKey: z.string().trim().min(1).optional(),
+    availabilityShopKey: z.string().trim().min(1).optional(),
     adLocationKey: z.string().trim().min(1).nullable(),
     exactAddress: z.string().trim().min(10),
     locationCanary: z.object({

@@ -94,6 +94,28 @@ describe("truthful V4 catalog backfill", () => {
       document: mixed })).resolves.toMatchObject({ outcome: "priced", winner: { productId: "a", quantityMicros: 2_000_000 } });
   });
 
+  it("prices an eligible winner beside an irrelevant variable-weight raw candidate", async () => {
+    const mixed = walmartChunk();
+    mixed.rows[1]!.name = mixed.rows[1]!._capture.offer.productName = "Fresh-Cut Vegetable Tray with Ranch, priced per pound";
+    mixed.rows[1]!.size = mixed.rows[1]!._capture.offer.sizeText = "";
+    (mixed.rows[1]!._capture.offer as Record<string, unknown>).candidateIssues = ["invalid_package_basis"];
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: ["Bananas"], identity,
+      document: mixed })).resolves.toMatchObject({ outcome: "priced", winner: { productId: "a" } });
+  });
+
+  it("blocks absence when an exact-identity variable-weight raw candidate is unresolved", async () => {
+    const unresolved = walmartChunk();
+    unresolved.rows = [unresolved.rows[1]!];
+    unresolved.rows[0]!.name = unresolved.rows[0]!._capture.offer.productName = "Fresh Bananas, priced per pound";
+    unresolved.rows[0]!.size = unresolved.rows[0]!._capture.offer.sizeText = "";
+    (unresolved.rows[0]!._capture.offer as Record<string, unknown>).candidateIssues = ["invalid_package_basis"];
+    unresolved.terms[0]!.rowCount = 1;
+    unresolved.terms[0]!.retrieval.loadedResultCount = 1;
+    unresolved.terms[0]!.retrieval.availableResultCount = 1;
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: ["Bananas"], identity,
+      document: unresolved })).resolves.toMatchObject({ outcome: "needs_operator", winner: null });
+  });
+
   it("never derives not-found from an exact candidate whose availability is unknown", async () => {
     const unknown = walmartChunk();
     for (const row of unknown.rows) row._capture.offer.availability = {
@@ -162,12 +184,25 @@ describe("truthful V4 catalog backfill", () => {
       row._capture.offer.sourceUrl = row._capture.offer.sourceUrl.replace("walmart.com", "shop.fareway.com");
       row._capture.offer.availability.locationId = "043";
       row._capture.offer.availability.fulfillmentMode = "in_store";
+      row._capture.offer.availability.sourceBinding = { retailerLocationId: "531573", shopId: "16671402", serviceType: "instore",
+        productId: row.id, sourceProductId: row.id };
     }
     await expect(deriveCatalogBackfillCapture({ storeLocationId: "fareway-omaha-043", queryTerms: ["Bananas"], identity, document: chunk }))
       .resolves.toMatchObject({ outcome: "priced" });
     for (const row of chunk.rows) row._capture.offer.availability.locationId = "999";
     await expect(deriveCatalogBackfillCapture({ storeLocationId: "fareway-omaha-043", queryTerms: ["Bananas"], identity, document: chunk }))
       .resolves.toMatchObject({ outcome: "not_found" });
+    for (const row of chunk.rows) {
+      row._capture.offer.availability.locationId = "043";
+      delete row._capture.offer.availability.sourceBinding;
+    }
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "fareway-omaha-043", queryTerms: ["Bananas"], identity, document: chunk }))
+      .resolves.toMatchObject({ outcome: "needs_operator", winner: null });
+    for (const row of chunk.rows) row._capture.offer.availability.sourceBinding = {
+      retailerLocationId: "531573", shopId: "16671402", serviceType: "instore", productId: "wrong", sourceProductId: row.id,
+    };
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "fareway-omaha-043", queryTerms: ["Bananas"], identity, document: chunk }))
+      .resolves.toMatchObject({ outcome: "needs_operator", winner: null });
   });
 
   it("accepts the source-native Omaha Hy-Vee #01 canary while binding offers to store 1465", async () => {

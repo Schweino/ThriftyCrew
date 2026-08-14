@@ -75,15 +75,18 @@ describe("source-native offer parsing", () => {
       url: "https://www.samsclub.com/s/turkey", title: "Turkey", query: "turkey", locale: "en-US",
       rows: [{ ...base, id: "exact", name: "Turkey Breast, 2 lb Bag", visiblePrice: "$4.25" }, { ...base, id: "missing-size", name: "Premium Carved Turkey Breast", visiblePrice: "$4.25" }],
     }, capturedAt);
-    expect(result.rows).toHaveLength(1);
+    expect(result.rows).toHaveLength(2);
     expect(result.rows[0]).toMatchObject({ id: "exact", size: "2 lb", availability_status: "in_stock", fulfillment_mode: "pickup", seller_name: "Sam's Club", offer_id: "offer" });
-    expect(result.excludedResults).toEqual([{ productKey: "missing-size", name: "Premium Carved Turkey Breast", reason: "source-native package size is not exact" }]);
+    expect(result.rows[1]).toMatchObject({ id: "missing-size", size: "", _capture: { offer: {
+      sizeText: "", candidateIssues: ["invalid_package_basis"] }, parser: { status: "typed_unpriceable" } } });
+    expect(result.excludedResults).toEqual([]);
   });
 
-  it("completes an all-excluded search without fabricating an observation or retrying it", () => {
-    const built = { rows: [], excludedResults: [{ productKey: "missing-size", name: "Premium Turkey", reason: "source-native package size is not exact" }] };
+  it("keeps complete raw-result accounting for a typed unpriceable row", () => {
+    const built = buildNextDataRows("sams", "turkey", { url: "https://www.samsclub.com/s/turkey", title: "Turkey", query: "turkey", locale: "en-US",
+      rows: [{ id: "missing-size", name: "Premium Turkey", linePrice: "$4.25", unitPrice: "", wasPrice: "", priceDisplayCondition: "", savings: "", memberPriceString: "", promotionText: "", taxonomy: "", url: "https://www.samsclub.com/p/item", imageUrl: "", availabilityStatus: "IN_STOCK", availabilityText: "In stock", offerId: "", sellerName: "Sam's Club", pickupStoreIds: ["8146"], visiblePrice: "$4.25" }] }, "2026-08-12T19:00:00.000Z");
     expect(buildNextDataSuccess("turkey", { hasMore: false }, built, { attempts: 1, startedAt: "2026-08-12T19:00:00.000Z", finishedAt: "2026-08-12T19:00:01.000Z" })).toMatchObject({
-      blocked: false, rows: [], term: { outcome: "success", rowCount: 0, retrieval: { loadedResultCount: 1, availableResultCount: 1 }, excludedResults: built.excludedResults },
+      blocked: false, rows: [{ id: "missing-size" }], term: { outcome: "success", rowCount: 1, retrieval: { loadedResultCount: 1, availableResultCount: 1 } },
     });
   });
 });

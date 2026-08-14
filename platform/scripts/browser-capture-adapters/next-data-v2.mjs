@@ -190,13 +190,19 @@ export function buildNextDataRows(store, query, page, capturedAt) {
   for (const [resultIndex, row] of page.rows.entries()) {
     try {
       const purchasePriceMinor = priceMinor(row.linePrice);
+      if (!Number.isSafeInteger(purchasePriceMinor) || purchasePriceMinor <= 0) throw new Error("source purchase price is not exact");
       const size = packageSizeFromName(row.name);
-      if (!size) throw new Error("source-native package size is not exact");
-      const priceSemantics = sourcePriceSemantics(store, row);
+      const candidateIssues = [];
+      if (!size) candidateIssues.push("invalid_package_basis");
+      let priceSemantics;
+      try { priceSemantics = sourcePriceSemantics(store, row); }
+      catch { priceSemantics = { offerType: "unknown", condition: "unknown", unitPriceMinor: purchasePriceMinor,
+        qualifyingQuantity: 1, totalPriceMinor: purchasePriceMinor, ambiguity: true }; candidateIssues.push("invalid_price_semantics"); }
       const pickup = pickupEligible(row, config.locationId);
       const offer = {
       version: 1, retailerProductId: row.id, ...(row.offerId ? { offerId: row.offerId } : {}), productName: row.name,
       sizeText: size, rawPriceText: row.linePrice, purchasePriceMinor, ...(row.unitPrice ? { unitPriceText: row.unitPrice } : {}),
+      ...(!size ? { rawSizeText: row.name } : {}), ...(candidateIssues.length ? { candidateIssues } : {}),
       ...(row.sellerName ? { sellerName: row.sellerName } : {}),
       availability: { status: pickup ? "in_stock" : "unavailable", ...(row.availabilityText ? { rawText: row.availabilityText } : {}),
         fulfillmentMode: "pickup", locationId: config.locationId, eligible: pickup },
@@ -213,7 +219,7 @@ export function buildNextDataRows(store, query, page, capturedAt) {
       visible: { rawText: row.visiblePrice, priceMinor: purchasePriceMinor, productName: row.name, productKey: row.id, sizeText: size, priceSemantics },
       structured: { rawText: row.linePrice, priceMinor: purchasePriceMinor, productName: row.name, productKey: row.id, sizeText: size, ...(row.unitPrice ? { unitPriceText: row.unitPrice } : {}), priceSemantics },
       offer,
-      parser: { status: "exact", rule: "next-data-price-lines", notes: "Visible product-card price agrees with the projected __NEXT_DATA__ linePrice for the same retailer item ID." },
+      parser: { status: candidateIssues.length ? "typed_unpriceable" : "exact", rule: "next-data-price-lines", notes: "Visible product-card price agrees with the projected __NEXT_DATA__ linePrice for the same retailer item ID; candidate eligibility remains server-derived." },
     };
       rows.push({
         q: query, n: row.name, lp: row.linePrice, up: row.unitPrice, id: row.id, size,

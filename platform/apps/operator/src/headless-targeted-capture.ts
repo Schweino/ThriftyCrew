@@ -164,26 +164,31 @@ export function headlessPriceSemantics(current: number, regular: number | null, 
 function capturedRow(store: HeadlessStore, query: string, item: { id: string; name: string; size: string; url: string;
   price: number; regular: number | null; available: boolean; rawAvailability: string; effective?: string | null; expires?: string | null },
   pageIndex: number, resultIndex: number, observedAt: string): JsonRecord | null {
-  if (!item.id || !item.name || !item.size || !item.url || !Number.isSafeInteger(item.price) || item.price <= 0
-    || sourceNativeSizeConflict(item.name, item.size)) return null;
-  const semantics = headlessPriceSemantics(item.price, item.regular, item.effective, item.expires);
-  if (!semantics) return null;
+  if (!item.id || !item.name || !item.url || !Number.isSafeInteger(item.price) || item.price <= 0) return null;
+  const packageExact = Boolean(item.size) && !sourceNativeSizeConflict(item.name, item.size);
+  const candidateIssues = [...(!packageExact ? ["invalid_package_basis"] : [])];
+  const exactSemantics = headlessPriceSemantics(item.price, item.regular, item.effective, item.expires);
+  const semantics = exactSemantics ?? { offerType: "unknown", condition: "unknown", unitPriceMinor: item.price,
+    qualifyingQuantity: 1, totalPriceMinor: item.price, ambiguity: true };
+  if (!exactSemantics) candidateIssues.push("invalid_price_semantics");
   const config = STORE[store];
-  const offer = { version: 1, retailerProductId: item.id, productName: item.name, sizeText: item.size,
+  const offer = { version: 1, retailerProductId: item.id, productName: item.name, sizeText: packageExact ? item.size : "",
+    ...(!packageExact ? { rawSizeText: item.size } : {}), ...(candidateIssues.length ? { candidateIssues } : {}),
     rawPriceText: `$${(item.price / 100).toFixed(2)}`, purchasePriceMinor: item.price, sellerName: config.seller,
     availability: { status: item.available ? "in_stock" : "unavailable", rawText: item.rawAvailability,
       fulfillmentMode: config.priceMode, locationId: config.locationId, eligible: item.available },
     priceSemantics: semantics, observedAt, sourceUrl: item.url };
-  return { term: query, id: item.id, name: item.name, n: item.name, size: item.size, url: item.url,
+  return { term: query, id: item.id, name: item.name, n: item.name, size: packageExact ? item.size : "", url: item.url,
     taxonomy_path: "Grocery", _capture: { capturedAt: observedAt, pageUrl: item.url, location: config.location,
       priceMode: config.priceMode, pageIndex, resultIndex,
       pageState: { pageType: "api_search_results", query, resultRegionPresent: true, challengeDetected: false,
         currency: "USD", locale: "en-US", locationText: config.location, fulfillmentText: config.priceMode },
       visible: { rawText: `$${(item.price / 100).toFixed(2)}`, priceMinor: item.price, productName: item.name,
-        productKey: item.id, sizeText: item.size, priceSemantics: semantics },
+        productKey: item.id, sizeText: packageExact ? item.size : "", rawSizeText: item.size, priceSemantics: semantics },
       structured: { rawText: `$${(item.price / 100).toFixed(2)}`, priceMinor: item.price, productName: item.name,
-        productKey: item.id, sizeText: item.size, priceSemantics: semantics }, offer,
-      parser: { status: "exact", rule: `${store}-first-party-api-v2`, notes: "Store-bound first-party API response." } } };
+        productKey: item.id, sizeText: packageExact ? item.size : "", rawSizeText: item.size, priceSemantics: semantics }, offer,
+      parser: { status: candidateIssues.length ? "typed_unpriceable" : "exact", rule: `${store}-first-party-api-v2`,
+        notes: "Store-bound first-party API response; candidate eligibility remains server-derived." } } };
 }
 
 async function captureBakers(query: string, token: string, observedAt: string, fetchImpl: FetchLike, pageConcurrency: number) {

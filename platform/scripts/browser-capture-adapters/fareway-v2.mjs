@@ -4,6 +4,8 @@ import { checkpointAdapterChunk } from "./adapter-protocol.mjs";
 const LOCATION = "Omaha 17070 Audrey Street";
 const PRICE_MODE = "In-Store";
 const TARGET_RESULTS = 25;
+const FAREWAY_SHOP_ID = "16671402";
+const FAREWAY_RETAILER_LOCATION_ID = "531573";
 
 function normalize(value) {
   return String(value ?? "").trim().toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
@@ -18,6 +20,62 @@ export function validatedRegularPrice(currentPriceMinor, candidateRegularPriceMi
   return Number.isInteger(candidateRegularPriceMinor) && candidateRegularPriceMinor > currentPriceMinor
     ? candidateRegularPriceMinor
     : undefined;
+}
+
+export function parseFarewayApolloAvailability(state, productId) {
+  const target = String(productId ?? "").trim();
+  const objects = [];
+  const visit = (value, path = "$", parentKey = "") => {
+    if (!value || typeof value !== "object") return;
+    objects.push({ value, path, parentKey });
+    if (Array.isArray(value)) value.forEach((child, index) => visit(child, `${path}[${index}]`, parentKey));
+    else Object.entries(value).forEach(([key, child]) => visit(child, `${path}.${key}`, key));
+  };
+  visit(state);
+  const shop = objects.find(({ value }) => String(value.id ?? value.shopId ?? "") === FAREWAY_SHOP_ID
+    && String(value.retailerLocationId ?? "") === FAREWAY_RETAILER_LOCATION_ID
+    && normalize(value.serviceType) === "instore");
+  if (!shop) return { status: "unknown", eligible: false, rawText: "Fareway detail omitted the canonical Omaha in-store shop binding",
+    sourceBinding: { shopId: FAREWAY_SHOP_ID, retailerLocationId: FAREWAY_RETAILER_LOCATION_ID, serviceType: "instore", productId: target } };
+  const itemKey = `items_${FAREWAY_RETAILER_LOCATION_ID}-${target}`;
+  const containers = objects.map((entry) => {
+    let keyVariables = {};
+    try { keyVariables = JSON.parse(entry.parentKey); } catch { /* non-query cache key */ }
+    return { ...entry, variables: { ...keyVariables, shopId: entry.value.shopId ?? keyVariables.shopId,
+      ids: entry.value.ids ?? keyVariables.ids, postalCode: entry.value.postalCode ?? keyVariables.postalCode,
+      zoneId: entry.value.zoneId ?? keyVariables.zoneId } };
+  }).filter(({ variables }) => String(variables.shopId ?? "") === FAREWAY_SHOP_ID
+    && Array.isArray(variables.ids) && variables.ids.map(String).includes(itemKey)
+    && (variables.postalCode == null || String(variables.postalCode) === "68136")
+    && (variables.zoneId == null || String(variables.zoneId) === "917"));
+  const facts = containers.flatMap(({ value, path }) => (Array.isArray(value.items) ? value.items : [])
+    .filter((item) => String(item?.id ?? item?.productId ?? item?.viewSection?.trackingProperties?.element_details?.product_id ?? "") === target
+      && item?.availability)
+    .map((item, index) => ({ path: `${path}.items[${index}].availability`, available: item.availability.available,
+      stockLevel: String(item.availability.stockLevel ?? ""), productId: target })));
+  const typed = facts.map((fact) => fact.available === true && normalize(fact.stockLevel) === "instock" ? "in_stock"
+    : fact.available === false && normalize(fact.stockLevel) === "outofstock" ? "unavailable" : "unknown");
+  const decisive = [...new Set(typed.filter((value) => value !== "unknown"))];
+  const status = decisive.length === 1 && typed.every((value) => value === decisive[0] || value === "unknown") ? decisive[0] : "unknown";
+  return { status, eligible: status === "in_stock", rawText: facts.length ? JSON.stringify(facts) : "Fareway detail omitted exact item availability",
+    sourceBinding: { shopId: FAREWAY_SHOP_ID, retailerLocationId: FAREWAY_RETAILER_LOCATION_ID, serviceType: "instore",
+      productId: target, itemPaths: facts.map((fact) => fact.path) } };
+}
+
+async function readFarewayAvailabilityDetail(tab, productId) {
+  const detail = await tab.playwright.evaluate(() => ({
+    url: location.href,
+    challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied|robot or human/i.test(document.body.innerText),
+    plainOmaha: [...document.querySelectorAll("button")].some((button) => /In-Store[\s\S]*Omaha/i.test(button.innerText || "") && !/Omaha (?:Meat Market|- North)/i.test(button.innerText || "")),
+    apolloState: document.querySelector("script#node-apollo-state")?.textContent || "",
+  }));
+  const observedId = new URL(detail.url).pathname.match(/\/products\/(\d+)(?:-|$)/)?.[1] || "";
+  if (observedId !== String(productId)) throw new Error("Fareway detail availability identity changed during capture");
+  if (detail.challenge) return { challenge: true };
+  if (!detail.plainOmaha) throw new Error("Fareway detail availability lost the Omaha/In-Store binding");
+  let state;
+  try { state = JSON.parse(detail.apolloState); } catch { state = null; }
+  return { challenge: false, ...parseFarewayApolloAvailability(state, productId) };
 }
 
 async function readPage(tab) {
@@ -92,9 +150,10 @@ export function buildFarewayRows(query, page, capturedAt) {
       ...(regularPriceMinor ? { regularPriceMinor } : {}),
       ambiguity: false,
     };
-    const availabilityText = row.lines.find((line) => /^(?:many in stock|in stock|low stock|only \d+ left)$/i.test(line)) || "";
-    const inStock = /in stock|only \d+ left/i.test(availabilityText);
-    const offer = { version: 1, retailerProductId: row.href, productName: row.name, sizeText: row.size, rawPriceText: row.current, purchasePriceMinor: row.priceMinor, availability: { status: inStock ? "in_stock" : "unknown", ...(availabilityText ? { rawText: availabilityText } : {}), fulfillmentMode: "in_store", locationId: "043", eligible: inStock }, priceSemantics, observedAt: capturedAt, sourceUrl: row.href };
+    const availability = row.availability ?? { status: "unknown", eligible: false, rawText: "Fareway detail availability was not captured" };
+    const offer = { version: 1, retailerProductId: row.href, productName: row.name, sizeText: row.size, rawPriceText: row.current, purchasePriceMinor: row.priceMinor,
+      availability: { status: availability.status, rawText: availability.rawText, fulfillmentMode: "in_store", locationId: "043",
+        eligible: availability.eligible === true, sourceBinding: { ...availability.sourceBinding, sourceProductId: String(row.id) } }, priceSemantics, observedAt: capturedAt, sourceUrl: row.href };
       rows.push({
       id: row.id,
       term: query,
@@ -196,6 +255,18 @@ async function captureTerm(tab, query) {
         return { blocked: false, term: { query, outcome: "empty", rowCount: 0, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, availableResultCount: 0, pageCount, hasMoreResults: false, termination: "no-results" } }, rows: [] };
       }
       if (page.rows.length < TARGET_RESULTS && page.hasMore) throw new Error("pagination remained truncated below target depth");
+      const availabilityRows = [];
+      for (const row of page.rows) {
+        await tab.goto(row.href);
+        await tab.playwright.waitForTimeout(350);
+        const availability = await readFarewayAvailabilityDetail(tab, row.id);
+        if (availability.challenge) return { blocked: true, term: { query, outcome: "blocked", rowCount: 0, attempts,
+          startedAt, finishedAt: new Date().toISOString(), retrieval: { targetResultCount: TARGET_RESULTS,
+            loadedResultCount: 0, pageCount, hasMoreResults: false, termination: "blocked" },
+          reason: "Retailer challenge detected during exact product availability capture." }, rows: [] };
+        availabilityRows.push({ ...row, availability });
+      }
+      page.rows = availabilityRows;
       const built = buildFarewayRows(query, page, finishedAt);
       if (built.rows.length === 0) throw new Error(`all ${built.excludedResults.length} result rows failed exact offer projection`);
       const examinedResultCount = built.rows.length + built.excludedResults.length;
@@ -265,6 +336,8 @@ async function readProductDetail(tab) {
       challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied|robot or human/i.test(body),
       unavailable: /(?:item|product) (?:is )?(?:unavailable|not found)|page not found|404/i.test(body),
       plainOmaha: [...document.querySelectorAll("button")].some((button) => /In-Store[\s\S]*Omaha/i.test(button.innerText || "") && !/Omaha (?:Meat Market|- North)/i.test(button.innerText || "")),
+      productId,
+      apolloState: document.querySelector("script#node-apollo-state")?.textContent || "",
     };
   });
 }
@@ -287,6 +360,9 @@ async function captureProductDetail(tab, target) {
       if (page.url !== target.productKey) return { outcome: "missing", reason: `product detail redirected from ${target.productKey} to ${page.url}` };
       if (!page.name || !page.size || !Number.isInteger(page.priceMinor) || !page.current) throw new Error("product detail lacked exact name, size, or Current price label");
       const observedAt = new Date().toISOString();
+      let apolloState;
+      try { apolloState = JSON.parse(page.apolloState); } catch { apolloState = null; }
+      const availability = parseFarewayApolloAvailability(apolloState, page.productId);
       const regularPriceMinor = validatedRegularPrice(page.priceMinor, page.regularPriceMinor);
       const priceSemantics = {
         offerType: regularPriceMinor ? "sale" : "everyday",
@@ -297,7 +373,9 @@ async function captureProductDetail(tab, target) {
         ...(regularPriceMinor ? { regularPriceMinor } : {}),
         ambiguity: false,
       };
-      const offer = { version: 1, retailerProductId: page.url, productName: page.name, sizeText: page.size, rawPriceText: page.current, purchasePriceMinor: page.priceMinor, availability: { status: "unknown", fulfillmentMode: "in_store", locationId: "043", eligible: false }, priceSemantics, observedAt, sourceUrl: page.url };
+      const offer = { version: 1, retailerProductId: page.url, productName: page.name, sizeText: page.size, rawPriceText: page.current, purchasePriceMinor: page.priceMinor,
+        availability: { status: availability.status, rawText: availability.rawText, fulfillmentMode: "in_store", locationId: "043",
+          eligible: availability.eligible, sourceBinding: { ...availability.sourceBinding, sourceProductId: String(page.productId) } }, priceSemantics, observedAt, sourceUrl: page.url };
       return {
         outcome: "observed",
         observedAt,

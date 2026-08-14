@@ -221,6 +221,48 @@ describe("headless targeted store capture", () => {
     }
   });
 
+  it("preserves a Baker's priced raw candidate with unresolved package facts", async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), "tc-kroger-raw-test-"));
+    const credentials = path.join(directory, "kroger.json"); const output = path.join(directory, "capture.json");
+    await writeFile(credentials, JSON.stringify({ client_id: "id", client_secret: "secret" }), "utf8");
+    const fetchImpl = async (input: string | URL | Request) => {
+      const url = new URL(String(input));
+      if (url.pathname.endsWith("/token")) return new Response(JSON.stringify({ access_token: "token" }), { status: 200 });
+      return new Response(JSON.stringify({ data: [{ productId: "b1", description: "Loose Acorn Squash priced per pound",
+        productPageURI: "/p/acorn/b1", items: [{ itemId: "i1", size: "", price: { regular: 1.49 },
+          fulfillment: { inStore: true }, inventory: { stockLevel: "HIGH" } }] }],
+        meta: { pagination: { start: 0, limit: 50, total: 1 } } }), { status: 200 });
+    };
+    try {
+      const chunk = await captureHeadlessDiscovery("bakers", ["acorn squash"], output,
+        { krogerCredentialsFile: credentials, fetchImpl });
+      expect(chunk.rows).toHaveLength(1);
+      expect(chunk.rows?.[0]).toMatchObject({ id: "b1", size: "", _capture: { offer: {
+        candidateIssues: ["invalid_package_basis"] }, parser: { status: "typed_unpriceable" } } });
+      expect(chunk.terms?.[0]).toMatchObject({ rowCount: 1, retrieval: { loadedResultCount: 1, availableResultCount: 1 } });
+    } finally { await rm(directory, { recursive: true, force: true }); }
+  });
+
+  it("preserves a Family Fare priced raw candidate with unresolved package facts", async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), "tc-freshop-raw-test-"));
+    const catalog = path.join(directory, "catalog.json"); const output = path.join(directory, "capture.json");
+    await writeFile(catalog, JSON.stringify({ deals: [{ product_id: "f1", item: "Loose Acorn Squash" }] }), "utf8");
+    const fetchImpl = async (input: string | URL | Request) => {
+      const url = new URL(String(input));
+      if (url.pathname.endsWith("/stores/6401")) return new Response(JSON.stringify({ city: "Omaha" }), { status: 200 });
+      return new Response(JSON.stringify({ id: "f1", name: "Loose Acorn Squash", size: "", price: 1.29,
+        base_price: 1.29, status: "available", canonical_url: "/product/f1" }), { status: 200 });
+    };
+    try {
+      const chunk = await captureHeadlessDiscovery("family-fare", ["acorn squash"], output,
+        { familyFareCatalogFile: catalog, fetchImpl });
+      expect(chunk.rows).toHaveLength(1);
+      expect(chunk.rows?.[0]).toMatchObject({ id: "f1", size: "", _capture: { offer: {
+        candidateIssues: ["invalid_package_basis"] }, parser: { status: "typed_unpriceable" } } });
+      expect(chunk.terms?.[0]).toMatchObject({ rowCount: 1, retrieval: { loadedResultCount: 1, availableResultCount: 1 } });
+    } finally { await rm(directory, { recursive: true, force: true }); }
+  });
+
   it("keeps one Hy-Vee search view across parallel pages and counts its complete envelope", async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), "tc-hyvee-test-"));
     const output = path.join(directory, "capture.json"); const requests: Array<{ pageNumber: number; pageViewId: string }> = [];
@@ -241,7 +283,7 @@ describe("headless targeted store capture", () => {
     }
   });
 
-  it("excludes a Hy-Vee result whose dedicated size contradicts its exact title suffix", async () => {
+  it("preserves a Hy-Vee raw result whose dedicated size contradicts its exact title suffix", async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), "tc-hyvee-size-test-"));
     const output = path.join(directory, "capture.json");
     const fetchImpl = async () => new Response(JSON.stringify({
@@ -251,8 +293,10 @@ describe("headless targeted store capture", () => {
     }), { status: 200 });
     try {
       const chunk = await captureHeadlessDiscovery("hy-vee", ["saffron"], output, { fetchImpl });
-      expect(chunk.rows).toHaveLength(0);
-      expect(chunk.terms?.[0]?.excludedResults).toContainEqual(expect.objectContaining({ productKey: "3976100" }));
+      expect(chunk.rows).toHaveLength(1);
+      expect(chunk.rows?.[0]).toMatchObject({ id: "3976100", size: "", _capture: { offer: {
+        rawSizeText: "0.35 oz", candidateIssues: ["invalid_package_basis"] }, parser: { status: "typed_unpriceable" } } });
+      expect(chunk.terms?.[0]?.excludedResults).toBeUndefined();
     } finally {
       await rm(directory, { recursive: true, force: true });
     }

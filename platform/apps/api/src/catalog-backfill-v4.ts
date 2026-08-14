@@ -20,7 +20,7 @@ const AGENT_BY_STORE: Record<string, string> = {
 const VERIFIER_BY_STORE = Object.fromEntries(Object.entries(AGENT_BY_STORE).map(([store, agent]) =>
   [store, agent.replace("price-producer", "price-verifier")])) as Record<string, string>;
 type StoreCapturePolicy = { storeLocationId: string; sourceId: string; firstPartyHost: string; priceMode: string;
-  retailerLocationKey: string; priceLocationKey: string; exactAddress: string;
+  retailerLocationKey: string; priceLocationKey: string; availabilityLocationKey?: string; availabilityShopKey?: string; exactAddress: string;
   locationCanary: { expectedLocationPattern: string; expectedModePattern: string }; evidenceFreshnessMinutes: number };
 const CAPTURE_POLICY_BY_STORE = Object.fromEntries((omahaStorePolicies.stores as StoreCapturePolicy[])
   .map((policy) => [policy.storeLocationId, policy])) as Record<string, StoreCapturePolicy>;
@@ -443,6 +443,7 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
     const packageText = String(offer.sizeText ?? row.size ?? "").trim();
     const priceMinor = Number(offer.purchasePriceMinor);
     const availability = offer.availability as Record<string, any> | undefined;
+    const sourceBinding = availability?.sourceBinding as Record<string, any> | undefined;
     const locationText = stableJson([capture.location, pageState?.locationText]);
     const mode = String(capture.priceMode ?? pageState?.fulfillmentText ?? "");
     const locationPattern = new RegExp(policy.locationCanary.expectedLocationPattern, "i");
@@ -476,17 +477,24 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
     const availabilityUnknown = availability.status === "unknown" || availability.status === "";
     const locationUnknown = availabilityLocation === "";
     const fulfillmentUnknown = availabilityMode === "";
+    const availabilitySourceUnknown = Boolean(policy.availabilityLocationKey) && (String(sourceBinding?.retailerLocationId ?? "") !== policy.availabilityLocationKey
+      || String(sourceBinding?.shopId ?? "") !== policy.availabilityShopKey
+      || String(sourceBinding?.productId ?? "") !== String(sourceBinding?.sourceProductId ?? "")
+      || String(sourceBinding?.sourceProductId ?? "") !== String(row.id ?? "")
+      || normalizeName(String(sourceBinding?.serviceType ?? "")).replace(/\s/g, "") !== normalizeName(policy.priceMode).replace(/\s/g, ""));
     const availabilityModeEligible = normalizeName(availabilityMode) === normalizeName(policy.priceMode)
       || new RegExp(policy.locationCanary.expectedModePattern, "i").test(availabilityMode);
     const storeEligible = (availabilityLocation === policy.retailerLocationKey.toLowerCase()
       || availabilityLocation === policy.priceLocationKey.toLowerCase())
       && availabilityModeEligible
+      && !availabilitySourceUnknown
       && availability.eligible === true && availability.status === "in_stock";
     candidates.push({ productId, productName, productUrl, packageText, priceMinor, quantityMicros,
       validFrom, validTo,
       eligible: identityAccepted && !identityExcluded && storeEligible && quantityMicros !== null && quantityMicros > 0 && semanticsExact && validPromotion,
       rejectionCodes: [!identityAccepted && "identity_not_included", identityExcluded && "identity_excluded", !quantityMicros && "invalid_package_basis",
         availabilityUnknown && "availability_unknown", locationUnknown && "location_unknown", fulfillmentUnknown && "fulfillment_unknown",
+        availabilitySourceUnknown && "availability_source_unknown",
         !storeEligible && !availabilityUnknown && !locationUnknown && !fulfillmentUnknown && "store_ineligible",
         !semanticsExact && "invalid_price_semantics", !validPromotion && "missing_or_inactive_ad_dates"].filter(Boolean) });
   }
@@ -498,7 +506,7 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
   }
   const frozen = [...unique.values()].sort((a, b) => String(a.productId).localeCompare(String(b.productId)));
   const unresolvedCandidate = frozen.some((candidate) => candidate.rejectionCodes.some((code: string) =>
-    ["invalid_package_basis", "availability_unknown", "location_unknown", "fulfillment_unknown", "invalid_price_semantics", "missing_or_inactive_ad_dates"].includes(code))
+    ["invalid_package_basis", "availability_unknown", "location_unknown", "fulfillment_unknown", "availability_source_unknown", "invalid_price_semantics", "missing_or_inactive_ad_dates"].includes(code))
     && !candidate.rejectionCodes.includes("identity_not_included") && !candidate.rejectionCodes.includes("identity_excluded"));
   const eligible = frozen.filter((row) => row.eligible).sort((a, b) => {
     const left = BigInt(a.priceMinor) * BigInt(b.quantityMicros); const right = BigInt(b.priceMinor) * BigInt(a.quantityMicros);
