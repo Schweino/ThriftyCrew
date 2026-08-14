@@ -1638,17 +1638,19 @@ if (command === "status") {
   else if (action === "run") result = await runIngredientPipeline(await mutationClient());
   else throw new Error("tc ingredient pipeline requires run, tick, or status");
 } else if (command === "ingredient" && subcommand === "capture-claim") {
-  const [storeLocationId, limitText = "50"] = arguments_;
+  const [storeLocationId, limitText = "50", outputFile, ownerOverride] = arguments_;
   if (!storeLocationId) throw new Error("tc ingredient capture-claim requires a store location id");
   result = await (await mutationClient()).request("/internal/ingredient-pricing/store-checks/claim", {
-    json: { storeLocationId, owner: `codex-capture-${process.pid}`, lane: "targeted_refresh", limit: Number(limitText), leaseSeconds: 900 },
+    json: { storeLocationId, owner: ownerOverride ?? process.env.TC_CAPTURE_OWNER ?? `codex-capture-${process.pid}`, lane: "targeted_refresh", limit: Number(limitText), leaseSeconds: 900 },
   });
+  if (outputFile) await writeJson(cliPath(outputFile), result);
 } else if (command === "ingredient" && subcommand === "qa-claim") {
-  const [storeLocationId, limitText = "50"] = arguments_;
+  const [storeLocationId, limitText = "50", outputFile, ownerOverride] = arguments_;
   if (!storeLocationId) throw new Error("tc ingredient qa-claim requires a store location id");
   result = await (await mutationClient()).request("/internal/ingredient-pricing/store-checks/claim", {
-    json: { storeLocationId, owner: `codex-qa-${process.pid}`, lane: "qa", limit: Number(limitText), leaseSeconds: 900 },
+    json: { storeLocationId, owner: ownerOverride ?? process.env.TC_QA_OWNER ?? `codex-qa-${process.pid}`, lane: "qa", limit: Number(limitText), leaseSeconds: 900 },
   });
+  if (outputFile) await writeJson(cliPath(outputFile), result);
 } else if (command === "ingredient" && subcommand === "capture-complete") {
   const [checkId, inputFile] = arguments_;
   if (!checkId || !inputFile) throw new Error("tc ingredient capture-complete requires a check id and input JSON");

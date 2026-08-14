@@ -1,7 +1,7 @@
 import { browserLanePolicy, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
 import { checkpointAdapterChunk } from "./adapter-protocol.mjs";
 
-const LOCATION = "ALDI - OLA 42 - Omaha";
+const LOCATION = "ALDI - OLA 48 - Omaha";
 const PRICE_MODE = "In-Store";
 const TARGET_RESULTS = 25;
 const MAX_TERMS_PER_CHUNK = 3;
@@ -99,7 +99,7 @@ export function buildAldiRows(query, page, capturedAt) {
         pageState: { pageType: "search_results", pageTitle: page.title, query: page.query, resultRegionPresent: true, challengeDetected: false, currency: "USD", locale: page.locale, locationText: LOCATION, fulfillmentText: PRICE_MODE },
         visible: { rawText: row.current, priceMinor: row.priceMinor, productName: row.name, productKey: row.href, sizeText: size, priceSemantics },
         offer,
-        parser: { status: "exact", rule: "current-price-label", notes: "ALDI visible Current price label; OLA 42 Omaha and In-Store mode verified by the chunk canary." },
+        parser: { status: "exact", rule: "current-price-label", notes: "ALDI visible Current price label; OLA 48 Omaha and In-Store mode verified by the chunk canary." },
       },
       });
     } catch (error) {
@@ -158,9 +158,9 @@ async function captureTerm(tab, query) {
 }
 
 async function captureCanary(tab, screenshotSha256) {
-  const state = await tab.playwright.evaluate(() => ({ url: location.href, challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied/i.test(document.body.innerText), exact: document.body.innerText.includes("In-Store") && document.body.innerText.includes("ALDI - OLA 42 - Omaha") }));
+  const state = await tab.playwright.evaluate(() => ({ url: location.href, challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied/i.test(document.body.innerText), exact: document.body.innerText.includes("In-Store") && document.body.innerText.includes("ALDI - OLA 48 - Omaha") }));
   if (state.challenge) throw new Error("ALDI retailer block page detected; stop the lane without retrying or attempting a bypass");
-  if (!state.exact) throw new Error("ALDI OLA 42 Omaha/In-Store canary failed");
+  if (!state.exact) throw new Error("ALDI OLA 48 Omaha/In-Store canary failed");
   return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: LOCATION, priceMode: PRICE_MODE, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
 }
 
