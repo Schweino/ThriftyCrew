@@ -1541,7 +1541,11 @@ app.get("/internal/ingredient-pricing/publication-ready", async (context) => {
   const rows = await context.env.DB.prepare(
     `SELECT job.gap_id, job.id AS pricing_job_id FROM ingredient_pricing_jobs job
       WHERE job.state = 'ready_to_publish' AND job.commodity_proposal_json IS NOT NULL
-        AND NOT EXISTS (SELECT 1 FROM ingredient_publication_members member WHERE member.gap_id = job.gap_id AND member.state != 'failed')
+        AND NOT EXISTS (
+          SELECT 1 FROM ingredient_publication_members member
+          JOIN ingredient_publication_batches batch ON batch.id = member.batch_id
+          WHERE member.gap_id = job.gap_id AND member.state != 'failed' AND batch.state != 'sealed'
+        )
       ORDER BY job.updated_at, job.id LIMIT 50`,
   ).all();
   return context.json({ ok: true, gaps: rows.results });
@@ -4194,13 +4198,13 @@ app.get("/internal/capture-batches/promoted", async (context) => {
           AND (valid_from IS NULL OR valid_from <= ?1)
           AND (valid_to IS NULL OR valid_to > ?1)
      )
-     SELECT ranked.id, ranked.source_id, ranked.coverage_mode, ranked.captured_to,
+     SELECT ranked.id, ranked.source_id, source.store_location_id, ranked.coverage_mode, ranked.captured_to,
             EXISTS (
               SELECT 1 FROM match_runs run
               JOIN configuration_versions configuration ON configuration.id = run.configuration_id
              WHERE run.batch_id = ranked.id AND run.status = 'passed' AND configuration.active = 1
             ) AS has_active_match
-       FROM ranked WHERE ordinal = 1
+       FROM ranked JOIN capture_sources source ON source.id = ranked.source_id WHERE ordinal = 1
       ORDER BY source_id`,
   ).bind(observedAt).all();
   return context.json({ ok: true, batches: batches.results });

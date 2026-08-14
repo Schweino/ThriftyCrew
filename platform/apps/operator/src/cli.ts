@@ -363,29 +363,44 @@ async function matchBatch(client: MutationClient, batchId: string, reusableConte
 async function rematchPromotedBatches(client: MutationClient, verbose = false): Promise<Record<string, unknown>> {
   const startedAt = performance.now();
   const listed = await client.request("/internal/capture-batches/promoted") as {
-    batches?: Array<{ id: string; source_id: string; captured_to: string; has_active_match?: number }>;
+    batches?: Array<{ id: string; source_id: string; store_location_id: string; captured_to: string; has_active_match?: number }>;
   };
   const context = await loadMatchContext();
   const batches: Array<Record<string, unknown>> = [];
   const selected = listed.batches ?? [];
   const pending = selected.filter((batch) => Number(batch.has_active_match ?? 0) !== 1);
   const summary = { selected: selected.length, alreadyBound: selected.length - pending.length, checked: 0, reused: 0, rebuilt: 0, failed: 0, products: 0, matched: 0, decisionWrites: 0, unchanged: 0 };
-  for (const batch of pending) {
-    const matching = await matchBatch(client, batch.id, context);
-    summary.checked += 1;
-    summary.products += Number(matching.productCount ?? 0);
-    summary.matched += Number(matching.matchedCount ?? 0);
-    if (matching.reused) summary.reused += 1;
-    else summary.rebuilt += 1;
-    const efficiency = (matching.detail as { efficiency?: { decisionWrites?: number; unchanged?: number } } | undefined)?.efficiency;
-    summary.decisionWrites += Number(efficiency?.decisionWrites ?? 0);
-    summary.unchanged += Number(efficiency?.unchanged ?? 0);
-    if (matching.status !== "passed") {
+  const byStore = new Map<string, typeof pending>();
+  for (const batch of pending) byStore.set(batch.store_location_id, [...(byStore.get(batch.store_location_id) ?? []), batch]);
+  const settled = await Promise.allSettled([...byStore.values()].map(async (storeBatches) => {
+    const results = [];
+    for (const batch of storeBatches) results.push({ batch, matching: await matchBatch(client, batch.id, context) });
+    return results;
+  }));
+  const failures: string[] = [];
+  for (const storeResult of settled) {
+    if (storeResult.status === "rejected") {
       summary.failed += 1;
-      throw new Error(`promoted batch ${batch.id} failed matching under the active configuration`);
+      failures.push(storeResult.reason instanceof Error ? storeResult.reason.message : String(storeResult.reason));
+      continue;
     }
-    batches.push({ ...batch, matching });
+    for (const { batch, matching } of storeResult.value) {
+      summary.checked += 1;
+      summary.products += Number(matching.productCount ?? 0);
+      summary.matched += Number(matching.matchedCount ?? 0);
+      if (matching.reused) summary.reused += 1;
+      else summary.rebuilt += 1;
+      const efficiency = (matching.detail as { efficiency?: { decisionWrites?: number; unchanged?: number } } | undefined)?.efficiency;
+      summary.decisionWrites += Number(efficiency?.decisionWrites ?? 0);
+      summary.unchanged += Number(efficiency?.unchanged ?? 0);
+      if (matching.status !== "passed") {
+        summary.failed += 1;
+        failures.push(`promoted batch ${batch.id} failed matching under the active configuration`);
+      }
+      batches.push({ ...batch, matching });
+    }
   }
+  if (failures.length > 0) throw new Error(`promoted batch rematching failed: ${failures.slice(0, 3).join("; ")}`);
   const inactiveDecisionReconciliation = await client.request("/internal/match-decisions/reconcile-inactive", { method: "POST" });
   return {
     ok: true,
