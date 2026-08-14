@@ -274,14 +274,14 @@ async function captureTerm(tab, store, query) {
         if (nextWithoutHash && nextWithoutHash !== currentWithoutHash) {
           await tab.goto(page.nextHref);
         } else {
-          // Walmart renders the real pagination control as a client-routed
-          // `href="#"` link. Navigating that href reloads page one forever;
-          // activate the visible control so its router advances the result
-          // envelope and then re-read the newly rendered __NEXT_DATA__.
-          // The element is an <a href="#"> but Walmart declares
-          // role="button"; target its accessible role so the client router,
-          // rather than a hash navigation, advances the result envelope.
-          await tab.playwright.getByRole("button", { name: "Next Page" }).click({ timeout: 10_000 });
+          // Walmart exposes a client-routed href="#" continuation. The
+          // accessible control can time out while its router is replacing the
+          // result envelope, so advance through Walmart's canonical `page`
+          // query parameter and revalidate the visible query and structured
+          // rows after navigation.
+          const continuation = new URL(page.url);
+          continuation.searchParams.set("page", String(pageCount + 1));
+          await tab.goto(continuation.href);
         }
         // Walmart updates the URL before replacing the product envelope. A
         // sub-second read can therefore see page-one's pager under page two's

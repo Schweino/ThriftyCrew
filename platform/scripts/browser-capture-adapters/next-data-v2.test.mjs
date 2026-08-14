@@ -11,9 +11,10 @@ describe("next-data winner verification", () => {
 });
 
 describe("next-data pagination implementation", () => {
-  it("uses the visible client-routed Next Page control when Walmart exposes only a hash href", async () => {
+  it("uses canonical page navigation when Walmart exposes only a hash href", async () => {
     const source = await readFile(new URL("./next-data-v2.mjs", import.meta.url), "utf8");
-    expect(source).toContain('getByRole("button", { name: "Next Page" }).click({ timeout: 10_000 })');
+    expect(source).toContain('continuation.searchParams.set("page", String(pageCount + 1))');
+    expect(source).toContain("await tab.goto(continuation.href)");
     expect(source).toContain('replace(/#.*$/, "")');
   });
 });
