@@ -165,12 +165,12 @@ export async function materializeIngredientPublicationCaptures(db: D1Database, b
     throw new Error("ingredient publication batch is not sealed for capture materialization");
   }
   const rows = await db.prepare(
-    `SELECT member.commodity_id, check.store_location_id, check.result_json
+    `SELECT member.commodity_id, store_check.store_location_id, store_check.result_json
        FROM ingredient_publication_members member
        JOIN ingredient_pricing_jobs job ON job.gap_id = member.gap_id
-       JOIN ingredient_store_checks check ON check.pricing_job_id = job.id
-      WHERE member.batch_id = ?1 AND check.state = 'qa_verified_priced'
-      ORDER BY check.store_location_id, member.commodity_id`,
+       JOIN ingredient_store_checks store_check ON store_check.pricing_job_id = job.id
+      WHERE member.batch_id = ?1 AND store_check.state = 'qa_verified_priced'
+      ORDER BY store_check.store_location_id, member.commodity_id`,
   ).bind(batchId).all<{ commodity_id: string; store_location_id: string; result_json: string }>();
   if (rows.results.length < 1) throw new Error("ingredient publication batch has no QA-verified prices to materialize");
   const grouped = new Map<string, typeof rows.results>();
