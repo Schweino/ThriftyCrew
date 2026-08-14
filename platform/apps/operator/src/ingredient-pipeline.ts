@@ -42,12 +42,45 @@ async function drainCatalogLane(client: MutationClient, storeLocationId: string,
 
 async function uploadEvidence(client: MutationClient, check: ClaimedCheck, kind: "producer" | "verifier", chunk: AdapterChunk) {
   const claim = { checkId: check.id, queryPlanHash: check.query_plan_hash };
+  const evidenceChunk = compactEvidenceChunkForCheck(check, chunk);
   const response = await client.request("/internal/ingredient-pricing/evidence", { json: {
-    checkId: check.id, kind, sourceUrl: chunk.canary.evidenceUrl, observedAt: chunk.canary.observedAt,
-    document: kind === "producer" ? { claim, chunks: [chunk] } : { claim, verification: chunk },
+    checkId: check.id, kind, sourceUrl: evidenceChunk.canary.evidenceUrl, observedAt: evidenceChunk.canary.observedAt,
+    document: kind === "producer" ? { claim, chunks: [evidenceChunk] } : { claim, verification: evidenceChunk },
   } }) as { evidence?: unknown };
   if (!response.evidence) throw new Error(`evidence upload omitted its immutable pointer for ${check.id}`);
   return response.evidence as Parameters<typeof buildIngredientCapturePayload>[2];
+}
+
+function normalizedEvidenceTerm(value: unknown): string {
+  return String(value ?? "").trim().toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+/**
+ * Headless APIs can return hundreds of products for a broad alias. The full
+ * chunk remains local for deterministic candidate selection, while immutable
+ * evidence is scoped to the claimed commodity and removes duplicated visible/
+ * structured projections already preserved in the canonical offer.
+ */
+export function compactEvidenceChunkForCheck(check: ClaimedCheck, chunk: AdapterChunk): AdapterChunk {
+  if (chunk.phase !== "discovery") return chunk;
+  const proposal = JSON.parse(String(check.commodity_proposal_json ?? "{}")) as { searchTerms?: string[] };
+  const expected = new Set((proposal.searchTerms ?? []).map(normalizedEvidenceTerm).filter(Boolean));
+  if (expected.size === 0) return chunk;
+  const terms = (chunk.terms ?? []).filter((term) => expected.has(normalizedEvidenceTerm(term.query))).map((term) => {
+    const excluded = Array.isArray((term as any).excludedResults) ? (term as any).excludedResults.length : 0;
+    const { excludedResults: _excludedResults, ...rest } = term as any;
+    return excluded > 0 ? { ...rest, reason: `${excluded} source result(s) explicitly excluded; detailed source envelope retained in the local capture artifact` } : rest;
+  });
+  const rows = (chunk.rows ?? []).filter((row: any) => expected.has(normalizedEvidenceTerm(row.q ?? row.term))).map((row: any) => {
+    const capture = row._capture ?? {};
+    const compactCapture = { capturedAt: capture.capturedAt, pageUrl: capture.pageUrl, location: capture.location,
+      priceMode: capture.priceMode, pageIndex: capture.pageIndex, resultIndex: capture.resultIndex,
+      pageState: capture.pageState, offer: capture.offer, parser: capture.parser };
+    return { ...(row.q !== undefined ? { q: row.q } : {}), ...(row.term !== undefined ? { term: row.term } : {}),
+      id: row.id, name: row.name, n: row.n, size: row.size, url: row.url, taxonomy_path: row.taxonomy_path,
+      _capture: compactCapture };
+  });
+  return { ...chunk, terms, rows };
 }
 
 async function failClaimedChecks(client: MutationClient, checks: ClaimedCheck[], reason: unknown): Promise<void> {

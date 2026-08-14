@@ -162,7 +162,11 @@ async function captureTerm(tab, query) {
         if (page.challenge || page.rows.length || page.noResults) break;
       }
       let pageCount = 1;
-      while (page && !page.challenge && page.rows.length > 0 && page.rows.length < TARGET_RESULTS && page.hasMore && pageCount < 5) {
+      // A minimum result depth is sufficient when an exact eligible product is
+      // found, but it cannot support a durable not-found conclusion. Continue
+      // through the retailer's visible result envelope so QA can distinguish a
+      // true absence from a broad query that merely reached TARGET_RESULTS.
+      while (page && !page.challenge && page.rows.length > 0 && page.hasMore && pageCount < 10) {
         const more = tab.playwright.getByRole("button", { name: /^(Load|Show) more$/i }).filter({ visible: true });
         if (await more.count() < 1) throw new Error("continuation reported but visible Load more control is absent");
         const priorCount = page.rows.length;
