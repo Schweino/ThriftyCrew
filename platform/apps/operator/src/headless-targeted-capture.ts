@@ -20,6 +20,13 @@ const STORE = {
     evidenceUrl: "https://www.hy-vee.com/aisles-online/search" },
 } as const;
 
+export function headlessStoreCanary(store: HeadlessStore, observedAt: string) {
+  const config = STORE[store];
+  return { evidenceUrl: config.evidenceUrl, observedAt, location: config.location, priceMode: config.priceMode,
+    locationId: config.locationId, retailerLocationKey: config.locationId,
+    locationVerified: true, priceModeVerified: true };
+}
+
 const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/148 Safari/537.36";
 const DEFAULT_TERM_CONCURRENCY: Record<HeadlessStore, number> = { bakers: 8, "family-fare": 12, "hy-vee": 8 };
 const DEFAULT_PAGE_CONCURRENCY = 8;
@@ -555,10 +562,8 @@ export async function captureHeadlessDiscovery(store: HeadlessStore, terms: stri
           failure: String(error instanceof Error ? error.message : error).slice(0, 2000) };
       }
     });
-  const config = STORE[store];
   const chunk: AdapterChunk = { version: 2, phase: "discovery", store,
-    canary: { evidenceUrl: config.evidenceUrl, observedAt, location: config.location, priceMode: config.priceMode,
-      locationId: config.locationId, retailerLocationKey: config.locationId, locationVerified: true, priceModeVerified: true },
+    canary: headlessStoreCanary(store, observedAt),
     terms: records.map((record) => ({ query: record.query, outcome: record.failure ? "rejected" : record.rows.length ? "success" : "empty",
       rowCount: record.rows.length, attempts: 1, startedAt: observedAt, finishedAt: new Date().toISOString(),
       retrieval: { targetResultCount: record.total, loadedResultCount: record.examined,

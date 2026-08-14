@@ -56,8 +56,12 @@ export function pickupEligible(row, locationId) {
 
 export function packageSizeFromName(name) {
   const text = String(name ?? "").replace(/\s+/g, " ").trim();
-  const unit = (value) => value.toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").replace(/^gallons?$/, "gal").replace(/^liters?$/, "l");
-  const unitPattern = "fl\\.?\\s*oz\\.?|oz\\.?|lb\\.?|g|kg|ml|l|liters?|gal(?:lon)?s?|qt|pt";
+  // Variable-weight offers do not have a fixed checkout package even when the
+  // title also contains a merchandising weight or count.
+  if (/priced\s+per\s+(?:pound|lb)\b/i.test(text)) return "";
+  const unit = (value) => value.toLowerCase().replace(/\./g, "").replace(/\s+/g, " ")
+    .replace(/^lbs?$/, "lb").replace(/^gallons?$/, "gal").replace(/^liters?$/, "l");
+  const unitPattern = "fl\\.?\\s*oz\\.?|oz\\.?|lbs?\\.?|g|kg|ml|l|liters?|gal(?:lon)?s?|qt|pt";
   // Retailer titles commonly put merchandising descriptors after the size
   // ("18 oz, Rye Bread, Bag"). Select the final source-native quantity/unit
   // token instead of requiring it to be the final title suffix.
@@ -65,12 +69,8 @@ export function packageSizeFromName(name) {
   if (packs.length) { const pack = packs.at(-1); return `${pack[3]} x ${pack[1]} ${unit(pack[2])}`; }
   const quantities = [...text.matchAll(new RegExp(`(?:^|[^a-z0-9])([0-9]+(?:\\.[0-9]+)?)\\s*(${unitPattern})(?=$|[^a-z])`, "ig"))];
   if (quantities.length) { const quantity = quantities.at(-1); return `${quantity[1]} ${unit(quantity[2])}`; }
-  // A count paired with "priced per pound" is not a checkout package size;
-  // preserving it as a count would misstate variable-weight price semantics.
-  if (!/priced\s+per\s+(?:pound|lb)/i.test(text)) {
-    const counts = [...text.matchAll(/(?:^|[^a-z0-9])(\d+)\s*(?:pk|pack|ct|count)\.?(?=$|[^a-z])/ig)];
-    if (counts.length) return `${counts.at(-1)[1]} ct`;
-  }
+  const counts = [...text.matchAll(/(?:^|[^a-z0-9])(\d+)\s*(?:pk|pack|ct|count)\.?(?=$|[^a-z])/ig)];
+  if (counts.length) return `${counts.at(-1)[1]} ct`;
   const word = text.match(/(?:^|[,;(]\s*)(half\s+gallon|gallon|dozen|each)(?=$|[^a-z])/i);
   if (word) return word[1].toLowerCase() === "half gallon" ? "0.5 gal" : word[1].toLowerCase() === "gallon" ? "1 gal" : word[1].toLowerCase();
   return "";

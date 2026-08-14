@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { buildFarewayRows, validatedRegularPrice } from "./fareway-v2.mjs";
+import { buildFarewayRows, captureFarewayCanary, validatedRegularPrice } from "./fareway-v2.mjs";
+
+it("emits the canonical Fareway policy key from a passing Omaha in-store canary", async () => {
+  const canary = await captureFarewayCanary({ playwright: {
+    evaluate: async () => ({ url: "https://shop.fareway.com/store/fareway/products", challenge: false, plainOmaha: true }),
+    getByRole: () => ({ filter: () => ({ count: async () => 1 }) }),
+  } });
+  expect(canary).toMatchObject({ locationId: "043", retailerLocationKey: "043",
+    location: "Omaha 17070 Audrey Street", priceMode: "In-Store", locationVerified: true, priceModeVerified: true });
+});
 
 describe("Fareway regular-price semantics", () => {
   it("keeps only a genuine higher comparison price", () => {

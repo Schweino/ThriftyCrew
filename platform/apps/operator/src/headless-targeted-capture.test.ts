@@ -2,11 +2,20 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { assertCompleteResultEnvelope, captureHeadlessDiscovery, claimSearchTerms, familyFareCatalogMatches,
+import { assertCompleteResultEnvelope, captureHeadlessDiscovery, claimSearchTerms, familyFareCatalogMatches, headlessStoreCanary,
   headlessPriceMinor, headlessPriceSemantics, mapWithConcurrency, matchesFrozenWinner, offsetPageStarts,
   stableProductName } from "./headless-targeted-capture";
 
 describe("headless targeted store capture", () => {
+  it.each([
+    ["bakers", "61500319", "in_store"],
+    ["family-fare", "6401", "pickup"],
+    ["hy-vee", "1465", "in_store"],
+  ] as const)("emits the canonical %s policy key", (store, key, priceMode) => {
+    expect(headlessStoreCanary(store, "2026-08-14T00:00:00.000Z")).toMatchObject({
+      locationId: key, retailerLocationKey: key, priceMode, locationVerified: true, priceModeVerified: true,
+    });
+  });
   it("accepts only unambiguous single-package prices", () => {
     expect(headlessPriceMinor("$3.49")).toBe(349);
     expect(headlessPriceMinor(3.49)).toBe(349);

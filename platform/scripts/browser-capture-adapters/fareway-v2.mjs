@@ -214,7 +214,7 @@ async function captureTerm(tab, query) {
   return { blocked: false, term: { query, outcome: "rejected", rowCount: 0, attempts: 2, startedAt: instant, finishedAt: instant, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "error" }, reason: lastError || "Fareway capture failed twice" }, rows: [] };
 }
 
-async function captureCanary(tab, screenshotSha256) {
+export async function captureFarewayCanary(tab, screenshotSha256) {
   const state = await tab.playwright.evaluate(() => ({
     url: location.href,
     challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied|robot or human/i.test(document.body.innerText),
@@ -374,7 +374,7 @@ async function captureExactNameVerification(tab, target, detailReason) {
 async function captureFarewayChunkInternal({ tab, terms, file, sessionDirectory, screenshotSha256 }) {
   const policy = await browserLanePolicy("fareway");
   if (!Array.isArray(terms) || terms.length < 1 || terms.length > policy.maxTerms) throw new Error(`Fareway chunk requires 1-${policy.maxTerms} terms`);
-  const canary = await captureCanary(tab, screenshotSha256);
+  const canary = await captureFarewayCanary(tab, screenshotSha256);
   const results = [];
   const chunkStarted = Date.now();
   for (let index = 0; index < terms.length; index += 1) {
@@ -403,7 +403,7 @@ async function captureFarewayChunkInternal({ tab, terms, file, sessionDirectory,
 async function captureFarewayVerificationChunkInternal({ tab, targets, file, sessionDirectory, screenshotSha256 }) {
   const policy = await browserLanePolicy("fareway");
   if (!Array.isArray(targets) || targets.length < 1 || targets.length > policy.maxTerms) throw new Error(`Fareway verification chunk requires 1-${policy.maxTerms} targets`);
-  const canary = await captureCanary(tab, screenshotSha256);
+  const canary = await captureFarewayCanary(tab, screenshotSha256);
   const verifications = [];
   const chunkStarted = Date.now();
   for (let index = 0; index < targets.length; index += 1) {

@@ -83,6 +83,16 @@ describe("truthful V4 catalog backfill", () => {
       .resolves.toMatchObject({ outcome: "needs_operator" });
   });
 
+  it("prices an exact mass winner despite a source row with an incompatible volume basis", async () => {
+    const mixed = walmartChunk();
+    mixed.rows[0]!.name = mixed.rows[0]!._capture.offer.productName = "Bananas, 2 lbs.";
+    mixed.rows[0]!.size = mixed.rows[0]!._capture.offer.sizeText = "2 lbs.";
+    mixed.rows[1]!.name = mixed.rows[1]!._capture.offer.productName = "Bananas Fragrance Refill";
+    mixed.rows[1]!.size = mixed.rows[1]!._capture.offer.sizeText = "2 x 0.25 fl oz";
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: ["Bananas"], identity,
+      document: mixed })).resolves.toMatchObject({ outcome: "priced", winner: { productId: "a", quantityMicros: 2_000_000 } });
+  });
+
   it("binds Sam's only to canonical club 8146 with configured pickup semantics", async () => {
     const chunk = walmartChunk() as Record<string, any>;
     chunk.store = "sams";
@@ -192,6 +202,9 @@ describe("truthful V4 catalog backfill", () => {
     await expect(deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: ["Bananas"], identity, document: excluded }))
       .resolves.toMatchObject({ outcome: "needs_operator" });
     const undatedSale = walmartChunk(); undatedSale.rows[0]!._capture.offer.priceSemantics.offerType = "sale";
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: ["Bananas"], identity, document: undatedSale }))
+      .resolves.toMatchObject({ outcome: "priced", winner: { productId: "b" } });
+    for (const row of undatedSale.rows) row._capture.offer.priceSemantics.offerType = "sale";
     await expect(deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: ["Bananas"], identity, document: undatedSale }))
       .resolves.toMatchObject({ outcome: "needs_operator" });
   });

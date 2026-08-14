@@ -256,7 +256,7 @@ type DerivedBackfillCapture = { outcome: "priced" | "not_found" | "challenged" |
 
 function parsedBackfillPackage(value: string): { unit: string; quantityMicros: number } | null {
   const normalized = value.toLowerCase().replace(/fluid ounces?/g, "fl oz").replace(/ounces?/g, "oz")
-    .replace(/pounds?/g, "lb").replace(/grams?/g, "g").replace(/kilograms?/g, "kg")
+    .replace(/pounds?/g, "lb").replace(/\blbs?\.?/g, "lb").replace(/grams?/g, "g").replace(/kilograms?/g, "kg")
     .replace(/liters?/g, "l").replace(/gallons?/g, "gal").replace(/counts?/g, "ct").trim();
   const match = normalized.match(/^(?:(\d+)\s*[x×]\s*)?([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|oz|lb|ml|l|g|kg|ct|ea|each|dozen|gal|qt|pt)\b/);
   if (!match) return /^(?:each|ea)$/.test(normalized) ? { unit: "each", quantityMicros: 1_000_000 } : null;
@@ -414,13 +414,18 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
   const unresolvedCandidate = frozen.some((candidate) => candidate.rejectionCodes.some((code: string) =>
     ["invalid_package_basis", "invalid_price_semantics", "missing_or_inactive_ad_dates"].includes(code))
     && !candidate.rejectionCodes.includes("identity_not_included") && !candidate.rejectionCodes.includes("identity_excluded"));
-  if (unresolvedCandidate || termRows.some((term: any) => Array.isArray(term.excludedResults) && term.excludedResults.length > 0)) {
-    return { outcome: "needs_operator", observedAt, sourceUrl, candidateSetHash: await digestHex(stableJson(frozen)), winner: null, coverageHash };
-  }
   const eligible = frozen.filter((row) => row.eligible).sort((a, b) => {
     const left = BigInt(a.priceMinor) * BigInt(b.quantityMicros); const right = BigInt(b.priceMinor) * BigInt(a.quantityMicros);
     return left < right ? -1 : left > right ? 1 : String(a.productId).localeCompare(String(b.productId));
   });
+  // An eligible exact candidate gives the deterministic winner authority. An
+  // unresolved same-identity candidate blocks only absence: it could conceal a
+  // qualifying result when there is no exact candidate to price. Fact-free
+  // client exclusions remain nonterminal because the server cannot type them.
+  if ((!eligible.length && unresolvedCandidate)
+    || termRows.some((term: any) => Array.isArray(term.excludedResults) && term.excludedResults.length > 0)) {
+    return { outcome: "needs_operator", observedAt, sourceUrl, candidateSetHash: await digestHex(stableJson(frozen)), winner: null, coverageHash };
+  }
   const winner = eligible[0] ? { ...eligible[0], unitPriceNumerator: eligible[0].priceMinor, unitPriceDenominator: eligible[0].quantityMicros } : null;
   return { outcome: winner ? "priced" : "not_found", observedAt, sourceUrl,
     candidateSetHash: await digestHex(stableJson(frozen)), winner,

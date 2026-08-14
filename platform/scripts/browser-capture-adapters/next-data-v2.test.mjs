@@ -51,9 +51,11 @@ describe("source-native offer parsing", () => {
     expect(packageSizeFromName("Maruchan Instant Lunch Ramen Noodles, Chicken Flavor, 2.25 oz Cup")).toBe("2.25 oz");
     expect(packageSizeFromName('The Cheesecake Factory Famous "Brown Bread", 18.7 oz, Kosher Rye Bread, Bag')).toBe("18.7 oz");
     expect(packageSizeFromName("Dave's Killer Bread, 20.5 oz Loaf")).toBe("20.5 oz");
+    expect(packageSizeFromName("Wholesum Organic Mixed Squash, 3 lbs.")).toBe("3 lb");
     expect(packageSizeFromName("Jimmy Dean Turkey Sausage Patties 24 ct.")).toBe("24 ct");
     expect(packageSizeFromName("Member's Mark Tilapia Fillet, priced per pound")).toBe("");
     expect(packageSizeFromName("Lobster Tails, 4 ct., priced per pound")).toBe("");
+    expect(packageSizeFromName("Mixed Squash, 3 lbs., priced per pound")).toBe("");
   });
 
   it("preserves promotion conditions instead of labeling every price everyday", () => {

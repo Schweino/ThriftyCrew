@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { buildAldiRows, selectAldiInStoreControl } from "./aldi-v2.mjs";
+import { buildAldiRows, captureAldiCanary, selectAldiInStoreControl } from "./aldi-v2.mjs";
+
+it("emits the canonical ALDI policy key from a passing Omaha in-store canary", async () => {
+  const canary = await captureAldiCanary({ playwright: { evaluate: async () => ({
+    url: "https://www.aldi.us/store/aldi/s?k=milk", challenge: false, exact: true,
+    selectedFulfillment: "In-Store ALDI - OLA 48 - Omaha",
+  }) } });
+  expect(canary).toMatchObject({ locationId: "OLA 48", retailerLocationKey: "OLA 48",
+    location: "ALDI - OLA 48 - Omaha", priceMode: "In-Store", locationVerified: true, priceModeVerified: true });
+});
 
 it("selects In-Store when Pickup is listed first", () => {
   expect(selectAldiInStoreControl([

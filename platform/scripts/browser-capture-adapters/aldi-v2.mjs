@@ -162,7 +162,7 @@ async function captureTerm(tab, query) {
   return { blocked: false, term: { query, outcome: "rejected", rowCount: 0, attempts: 2, startedAt: instant, finishedAt: instant, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "error" }, reason: lastError || "ALDI capture failed twice" }, rows: [] };
 }
 
-async function captureCanary(tab, screenshotSha256) {
+export async function captureAldiCanary(tab, screenshotSha256) {
   const state = await tab.playwright.evaluate(() => {
     const body = document.body.innerText;
     const selectedFulfillment = [...document.querySelectorAll("button")]
@@ -188,7 +188,7 @@ async function captureAldiChunkInternal({ tab, terms, file, sessionDirectory, sc
   if (!Array.isArray(terms) || terms.length < 1 || terms.length > policy.maxTerms) throw new Error(`ALDI chunk requires 1-${policy.maxTerms} terms`);
   interTermDelayMs = Math.max(interTermDelayMs, policy.dynamicDelayMs);
   if (!Number.isInteger(interTermDelayMs) || interTermDelayMs < 0 || interTermDelayMs > 30_000) throw new Error("ALDI inter-term delay must be 0-30000ms");
-  const canary = await captureCanary(tab, screenshotSha256);
+  const canary = await captureAldiCanary(tab, screenshotSha256);
   const results = [];
   const chunkStarted = Date.now();
   for (let index = 0; index < terms.length; index += 1) {
@@ -211,7 +211,7 @@ async function captureAldiVerificationChunkInternal({ tab, targets, file, sessio
   if (!Array.isArray(targets) || targets.length < 1 || targets.length > policy.maxTerms) throw new Error(`ALDI verification chunk requires 1-${policy.maxTerms} targets`);
   interTermDelayMs = Math.max(interTermDelayMs, policy.dynamicDelayMs);
   if (!Number.isInteger(interTermDelayMs) || interTermDelayMs < 0 || interTermDelayMs > 30_000) throw new Error("ALDI verification inter-target delay must be 0-30000ms");
-  const canary = await captureCanary(tab, screenshotSha256);
+  const canary = await captureAldiCanary(tab, screenshotSha256);
   const verifications = [];
   const chunkStarted = Date.now();
   for (let index = 0; index < targets.length; index += 1) {
