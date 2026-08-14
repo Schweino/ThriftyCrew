@@ -236,6 +236,23 @@ export async function materializeIngredientPublicationCaptures(db: D1Database, b
             AND (decision.commodity_id IS NULL OR decision.commodity_id NOT IN (SELECT value FROM json_each(?4)))`,
       ).bind(captureBatchId, prior.id, activeConfiguration.id, stableJson(refreshedCommodityIds)).run();
     }
+    // Carried memberships may contain observations newer than the freshly
+    // inserted ingredient rows. The snapshot selector ranks batches by this
+    // envelope, so it must describe every member observation, not only the
+    // rows that caused this publication refresh.
+    await db.prepare(
+      `UPDATE capture_batches
+          SET captured_from = (SELECT MIN(observation.captured_at)
+                                 FROM capture_observation_memberships membership
+                                 JOIN observations observation ON observation.id = membership.observation_id
+                                WHERE membership.batch_id = ?1),
+              captured_to = (SELECT MAX(observation.captured_at)
+                               FROM capture_observation_memberships membership
+                               JOIN observations observation ON observation.id = membership.observation_id
+                              WHERE membership.batch_id = ?1)
+        WHERE id = ?1 AND status = 'open'
+          AND EXISTS (SELECT 1 FROM capture_observation_memberships WHERE batch_id = ?1)`,
+    ).bind(captureBatchId).run();
     const membershipCount = await db.prepare("SELECT COUNT(DISTINCT observation_id) AS count FROM capture_observation_memberships WHERE batch_id = ?1")
       .bind(captureBatchId).first<{ count: number }>();
     const summary = {
