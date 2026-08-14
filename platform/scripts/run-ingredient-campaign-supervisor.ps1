@@ -74,7 +74,10 @@ try {
     $pending = @($status.gaps | Where-Object status -eq 'pending').Count
     $researching = @($status.gaps | Where-Object status -eq 'researching').Count
     $ready = @($status.gaps | Where-Object status -eq 'ready_to_publish').Count
-    $v2RunningJobs = [int](($pipeline.jobs | Where-Object { $_.state -in @('queued', 'store_checks_running', 'aggregate_qa') } | Measure-Object count -Sum).Sum)
+    # Pipeline status exposes the v2 operational state as `state`. Keep the
+    # definition/publication cycle alive for every nonterminal job phase.
+    $activeJobStates = @('queued','identity_ready','store_checks_running','aggregate_ready','proposal_ready','ready_to_publish','publishing')
+    $v2RunningJobs = [int](($pipeline.jobs | Where-Object { $_.state -in $activeJobStates } | Measure-Object count -Sum).Sum)
     if (-not $pipelineProcess -or $pipelineProcess.HasExited) {
       $pipelineProcess = Start-PersistentPricingCoordinator
       Write-PcRuntimeLog $logFile ("recovered persistent pricing coordinator pid={0}" -f $pipelineProcess.Id)
