@@ -235,6 +235,13 @@ function winnerAuditIdentity(value: DerivedBackfillCapture) {
     priceMinor: value.winner.priceMinor, quantityMicros: value.winner.quantityMicros } : null;
 }
 
+function rejectionAuditDelta(before: DerivedBackfillCapture, after: DerivedBackfillCapture) {
+  const flatten = (value: DerivedBackfillCapture) => new Set((value.candidateRejections ?? [])
+    .flatMap((candidate) => candidate.rejectionCodes.map((code) => `${candidate.productId}:${code}`)));
+  const oldSet = flatten(before); const newSet = flatten(after);
+  return { added: [...newSet].filter((value) => !oldSet.has(value)).sort(), removed: [...oldSet].filter((value) => !newSet.has(value)).sort() };
+}
+
 export async function auditCatalogBackfillDefinitions(db: D1Database, runId: string, input: { definitionOffset?: number; terminalOffset?: number; limit?: number } = {}) {
   const limit = Math.min(50, Math.max(1, Number(input.limit ?? 25)));
   const definitionOffset = Math.max(0, Number(input.definitionOffset ?? 0));
@@ -296,6 +303,7 @@ export async function auditCatalogBackfillDefinitions(db: D1Database, runId: str
       terminalAudits.push({ commodityId: cell.commodity_id, storeLocationId: cell.store_location_id,
         durableBefore: derivedAuditSummary(durableBefore), producerBefore: derivedAuditSummary(producerBefore), verifierBefore: derivedAuditSummary(verifierBefore),
         producerAfter: derivedAuditSummary(producerAfter), verifierAfter: derivedAuditSummary(verifierAfter),
+        rejectionDeltas: { producer: rejectionAuditDelta(producerBefore, producerAfter), verifier: rejectionAuditDelta(verifierBefore, verifierAfter) },
         safeToPreserve: producerAfter.outcome === verifierAfter.outcome
           && stableJson(winnerAuditIdentity(producerAfter)) === stableJson(winnerAuditIdentity(verifierAfter))
           && producerAfter.outcome === durableBefore.outcome
@@ -480,6 +488,111 @@ export async function correctCatalogBackfillEvidence(db: D1Database, input: {
   }
   return { workItemId, correctionId: input.correctionId, previousState: prior.evidence_state,
     supersededWorkItemIds: [prior.producer_work_item_id, prior.verifier_work_item_id].filter(Boolean), state: "queued", idempotent: false };
+}
+
+export async function correctCatalogBackfillDefinition(db: D1Database, input: {
+  runId: string; commodityId: string; correctionId: string; reason: string;
+}) {
+  if (!input.correctionId.trim() || input.reason.trim().length < 20) throw new Error("definition correction requires a durable identity and detailed reason");
+  const existing = await db.prepare(`SELECT * FROM catalog_backfill_definition_corrections_v4 WHERE correction_id=?1`)
+    .bind(input.correctionId).first<Record<string, unknown>>();
+  if (existing) return { ...existing, idempotent: true };
+  const current = await db.prepare(`SELECT backfill.ingredient_id,backfill.definition_version_id,current.current_version_id,current.pointer_generation,
+      version.version,version.slug,version.definition_hash,version.identity_json,version.source_gap_id
+    FROM catalog_backfill_ingredients_v4 backfill JOIN catalog_ingredient_current current ON current.ingredient_id=backfill.ingredient_id
+    JOIN catalog_ingredient_versions version ON version.version_id=backfill.definition_version_id
+    WHERE backfill.run_id=?1 AND backfill.commodity_id=?2 AND current.current_version_id=backfill.definition_version_id`)
+    .bind(input.runId, input.commodityId).first<{ ingredient_id: string; definition_version_id: string; current_version_id: string;
+      pointer_generation: number; version: number; slug: string; definition_hash: string; identity_json: string; source_gap_id: string | null }>();
+  if (!current) throw new Error("definition correction requires the current backfill definition pointer");
+  const identity = authoritativeBackfillIdentity(input.commodityId, JSON.parse(current.identity_json));
+  const identityJson = stableJson(identity); const definitionHash = await digestHex(identityJson);
+  if (definitionHash === current.definition_hash) throw new Error("definition correction has no authored identity change");
+  const version = Number(current.version) + 1;
+  const versionId = await deterministicId("ingdef", current.ingredient_id, String(version), definitionHash);
+  const aliases = [...new Set([identity.canonicalName, identity.displayName, ...identity.aliases].map(normalizeName))].sort();
+  const conflicts = await db.prepare(`SELECT DISTINCT alias.ingredient_id FROM catalog_ingredient_aliases alias
+    JOIN catalog_ingredient_current pointer ON pointer.ingredient_id=alias.ingredient_id AND pointer.current_version_id=alias.version_id
+    WHERE alias.normalized_alias IN (${aliases.map((_, index) => `?${index + 1}`).join(",")}) AND alias.ingredient_id<>?${aliases.length + 1}`)
+    .bind(...aliases, current.ingredient_id).all<{ ingredient_id: string }>();
+  if (conflicts.results.length) throw new Error("definition correction creates an ambiguous current alias");
+  const cells = await db.prepare(`SELECT cell.store_location_id,cell.evidence_state,cell.producer_work_item_id,cell.verifier_work_item_id,
+      cell.terminal_result_hash,work.agent_id,work.input_json,work.state AS producer_state,work.result_ref_hash AS producer_result_ref_hash,
+      work.lease_owner AS producer_lease_owner,work.lease_generation AS producer_lease_generation,
+      work.lease_expires_at AS producer_lease_expires_at,verifier.state AS verifier_state,
+      verifier.result_ref_hash AS verifier_result_ref_hash,verifier.lease_owner AS verifier_lease_owner,
+      verifier.lease_generation AS verifier_lease_generation,verifier.lease_expires_at AS verifier_lease_expires_at
+    FROM catalog_backfill_cells_v4 cell JOIN pipeline_agent_work_items_v4 work ON work.id=cell.producer_work_item_id
+    LEFT JOIN pipeline_agent_work_items_v4 verifier ON verifier.id=cell.verifier_work_item_id
+    WHERE cell.run_id=?1 AND cell.commodity_id=?2 AND cell.definition_version_id=?3 ORDER BY cell.store_location_id`)
+    .bind(input.runId, input.commodityId, current.definition_version_id).all<{ store_location_id: string; evidence_state: string;
+      producer_work_item_id: string; verifier_work_item_id: string | null; terminal_result_hash: string | null; agent_id: string; input_json: string;
+      producer_state: string; producer_result_ref_hash: string | null; producer_lease_owner: string | null; producer_lease_generation: number;
+      producer_lease_expires_at: string | null; verifier_state: string | null; verifier_result_ref_hash: string | null;
+      verifier_lease_owner: string | null; verifier_lease_generation: number | null; verifier_lease_expires_at: string | null }>();
+  if (cells.results.length !== OMAHA_STORE_LOCATION_IDS.length) throw new Error("definition correction requires exactly seven fenced cells");
+  const correctedAt = new Date().toISOString();
+  const rollbackJson = stableJson({ oldDefinitionVersionId: current.definition_version_id, oldDefinitionHash: current.definition_hash,
+    oldPointerGeneration: Number(current.pointer_generation), cells: cells.results.map((cell) => ({ storeLocationId: cell.store_location_id,
+      evidenceState: cell.evidence_state, producerWorkItemId: cell.producer_work_item_id, verifierWorkItemId: cell.verifier_work_item_id,
+      terminalResultHash: cell.terminal_result_hash })) });
+  const immutableStatements: D1PreparedStatement[] = [
+    db.prepare(`INSERT OR IGNORE INTO catalog_ingredient_versions(version_id,ingredient_id,version,slug,canonical_name,display_name,identity_json,
+      unit_dimension,basis_unit,source_gap_id,definition_hash,planner_run_id) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12)`)
+      .bind(versionId, current.ingredient_id, version, current.slug, identity.canonicalName, identity.displayName, identityJson,
+        identity.unitDimension, identity.basisUnit, current.source_gap_id, definitionHash, identity.plannerRunId),
+  ];
+  aliases.forEach((alias) => immutableStatements.push(db.prepare(`INSERT OR IGNORE INTO catalog_ingredient_aliases
+    (ingredient_id,version_id,normalized_alias,alias_type,confidence_millis,authority,source) VALUES(?1,?2,?3,?4,1000,'authored-config',?5)`)
+    .bind(current.ingredient_id, versionId, alias, alias === normalizeName(identity.canonicalName) ? "canonical" : "source", input.correctionId)));
+  for (const cell of cells.results) {
+    const dedupeKey = `catalog-backfill:${current.ingredient_id}:${cell.store_location_id}:${versionId}:producer`;
+    const workItemId = await deterministicId("pipeline-v4-work", dedupeKey);
+    const workInput = stableJson({ ...(JSON.parse(cell.input_json) as Record<string, unknown>), definitionVersionId: versionId,
+      retryOf: cell.producer_work_item_id, definitionCorrection: { id: input.correctionId, oldDefinitionVersionId: current.definition_version_id,
+        newDefinitionVersionId: versionId, reason: input.reason.trim(), correctedAt } });
+    immutableStatements.push(db.prepare(`INSERT OR IGNORE INTO catalog_backfill_definition_correction_stage_v4
+      (correction_id,run_id,commodity_id,ingredient_id,old_definition_version_id,new_definition_version_id,
+       old_pointer_generation,new_pointer_generation,store_location_id,old_evidence_state,old_producer_work_item_id,
+       old_verifier_work_item_id,old_terminal_result_hash,old_producer_state,old_producer_result_ref_hash,
+       old_producer_lease_owner,old_producer_lease_generation,old_producer_lease_expires_at,old_verifier_state,
+       old_verifier_result_ref_hash,old_verifier_lease_owner,old_verifier_lease_generation,old_verifier_lease_expires_at,
+       new_work_item_id,new_agent_id,new_dedupe_key,new_input_ref_hash,new_input_json)
+      VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15,?16,?17,?18,?19,?20,?21,?22,?23,?24,?25,?26,?27,?28)`)
+      .bind(input.correctionId, input.runId, input.commodityId, current.ingredient_id, current.definition_version_id, versionId,
+        current.pointer_generation, Number(current.pointer_generation) + 1, cell.store_location_id, cell.evidence_state,
+        cell.producer_work_item_id, cell.verifier_work_item_id, cell.terminal_result_hash, cell.producer_state,
+        cell.producer_result_ref_hash, cell.producer_lease_owner, cell.producer_lease_generation, cell.producer_lease_expires_at,
+        cell.verifier_state, cell.verifier_result_ref_hash, cell.verifier_lease_owner, cell.verifier_lease_generation,
+        cell.verifier_lease_expires_at, workItemId, cell.agent_id, dedupeKey, await digestHex(workInput), workInput));
+  }
+  await db.batch(immutableStatements);
+  const durableVersion = await db.prepare(`SELECT version_id,ingredient_id,definition_hash FROM catalog_ingredient_versions WHERE version_id=?1`)
+    .bind(versionId).first<{ version_id: string; ingredient_id: string; definition_hash: string }>();
+  const staged = await db.prepare(`SELECT COUNT(*) AS cells FROM catalog_backfill_definition_correction_stage_v4
+    WHERE correction_id=?1 AND run_id=?2 AND commodity_id=?3 AND ingredient_id=?4 AND old_definition_version_id=?5
+      AND new_definition_version_id=?6 AND old_pointer_generation=?7 AND new_pointer_generation=?8`)
+    .bind(input.correctionId, input.runId, input.commodityId, current.ingredient_id, current.definition_version_id, versionId,
+      current.pointer_generation, Number(current.pointer_generation) + 1).first<{ cells: number }>();
+  if (durableVersion?.ingredient_id !== current.ingredient_id || durableVersion?.definition_hash !== definitionHash
+    || Number(staged?.cells) !== 7) throw new Error("definition correction immutable staging conflict");
+  await db.prepare(`INSERT INTO catalog_backfill_definition_corrections_v4
+    (correction_id,run_id,commodity_id,ingredient_id,old_definition_version_id,new_definition_version_id,old_definition_hash,new_definition_hash,
+     old_pointer_generation,new_pointer_generation,rollback_json,reason) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12)`)
+    .bind(input.correctionId, input.runId, input.commodityId, current.ingredient_id, current.definition_version_id, versionId,
+      current.definition_hash, definitionHash, current.pointer_generation, Number(current.pointer_generation) + 1, rollbackJson, input.reason.trim()).run();
+  const verified = await db.prepare(`SELECT current.current_version_id,current.pointer_generation,backfill.definition_version_id,backfill.terminal_evidence_count,
+      COUNT(cell.store_location_id) AS cells,SUM(CASE WHEN cell.evidence_state='queued' THEN 1 ELSE 0 END) AS queued
+    FROM catalog_ingredient_current current JOIN catalog_backfill_ingredients_v4 backfill ON backfill.ingredient_id=current.ingredient_id
+    JOIN catalog_backfill_cells_v4 cell ON cell.run_id=backfill.run_id AND cell.commodity_id=backfill.commodity_id
+    WHERE backfill.run_id=?1 AND backfill.commodity_id=?2 GROUP BY current.current_version_id,current.pointer_generation,backfill.definition_version_id,backfill.terminal_evidence_count`)
+    .bind(input.runId, input.commodityId).first<Record<string, unknown>>();
+  if (verified?.current_version_id !== versionId || verified?.definition_version_id !== versionId || Number(verified?.cells) !== 7
+    || Number(verified?.queued) !== 7 || Number(verified?.terminal_evidence_count) !== 0) throw new Error("definition correction failed post-transaction verification");
+  return { correctionId: input.correctionId, commodityId: input.commodityId, oldDefinitionVersionId: current.definition_version_id,
+    newDefinitionVersionId: versionId, oldDefinitionHash: current.definition_hash, newDefinitionHash: definitionHash,
+    oldPointerGeneration: current.pointer_generation, newPointerGeneration: Number(current.pointer_generation) + 1,
+    cells: 7, queued: 7, terminalEvidenceCount: 0, rollback: JSON.parse(rollbackJson), idempotent: false };
 }
 
 export type BackfillEvidenceSubmission = {

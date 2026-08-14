@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { deterministicId } from "@thriftycrew/domain";
 import { assertFreshBackfillEvidence, assertFrozenBackfillReproduction, assertIndependentBackfillEvidence, assertLegacyBoard,
   catalogBackfillPromotionAllowed, claimCatalogBackfillWorkItem, deriveCatalogBackfillCapture, heartbeatCatalogBackfillOwner } from "./catalog-backfill-v4";
-import { assertBackfillIdentityPatterns, compileKnownWrongBackfillProducts, correctCatalogBackfillEvidence, requeueCatalogBackfillCell } from "./catalog-backfill-v4";
+import { assertBackfillIdentityPatterns, compileKnownWrongBackfillProducts, correctCatalogBackfillDefinition, correctCatalogBackfillEvidence, requeueCatalogBackfillCell } from "./catalog-backfill-v4";
 
 const identity = { canonicalName: "Bananas", displayName: "Bananas", acceptedForms: ["Bananas"], excludedForms: ["chips"], basisUnit: "lb" };
 
@@ -488,5 +488,53 @@ describe("truthful V4 catalog backfill", () => {
     await expect(claimCatalogBackfillWorkItem(db, { agentId: "omaha-price-producer-fareway",
       workItemId: "pipeline-v4-work_foreign", owner: "v4-backfill-fareway-repair", leaseSeconds: 900 }))
       .rejects.toThrow("unavailable, mismatched, or already leased");
+  });
+
+  it("atomically versions one definition and supersedes all seven cells with rollback metadata", async () => {
+    const statements: Array<{ sql: string; bound: unknown[] }> = []; let newVersionId = ""; let newDefinitionHash = "";
+    const oldIdentity = { canonicalName: "Almonds", displayName: "Almonds", aliases: [], acceptedForms: ["Almonds"], excludedForms: [],
+      requiredQualifiers: [], optionalQualifiers: [], unitDimension: "weight", basisUnit: "oz", packageNormalizationRules: ["legacy"],
+      queryTerms: ["Almonds"], storeQueryVariants: {}, sourceOccurrences: [{ recipeCandidateId: "legacy", sourceOccurrenceId: "almonds" }],
+      plannerRunId: "legacy", adjudication: null };
+    const stores = ["aldi-omaha-446-048", "bakers-saddle-creek", "family-fare-omaha-6401", "fareway-omaha-043",
+      "hy-vee-omaha-1465", "sams-omaha", "walmart-omaha"];
+    const db = { prepare(sql: string) {
+      const statement = { sql, bound: [] as unknown[] }; statements.push(statement);
+      return { bind(...values: unknown[]) { statement.bound = values; if (sql.includes("INSERT OR IGNORE INTO catalog_ingredient_versions")) {
+          newVersionId = String(values[0]); newDefinitionHash = String(values[10]);
+        } return this; },
+        async first() {
+          if (sql.includes("catalog_backfill_definition_corrections_v4 WHERE")) return null;
+          if (sql.includes("SELECT version_id,ingredient_id,definition_hash")) return { version_id: newVersionId,
+            ingredient_id: "ingredient-almonds", definition_hash: newDefinitionHash };
+          if (sql.includes("COUNT(*) AS cells FROM catalog_backfill_definition_correction_stage_v4")) return { cells: 7 };
+          if (sql.includes("COUNT(cell.store_location_id)")) return { current_version_id: newVersionId, pointer_generation: 4,
+            definition_version_id: newVersionId, terminal_evidence_count: 0, cells: 7, queued: 7 };
+          if (sql.includes("backfill.ingredient_id")) return { ingredient_id: "ingredient-almonds", definition_version_id: "old-definition",
+            current_version_id: "old-definition", pointer_generation: 3, version: 1, slug: "almonds", definition_hash: "a".repeat(64),
+            identity_json: JSON.stringify(oldIdentity), source_gap_id: null };
+          return null;
+        }, async all() {
+          if (sql.includes("DISTINCT alias.ingredient_id")) return { results: [] };
+          if (sql.includes("cell.store_location_id")) return { results: stores.map((store, index) => ({ store_location_id: store,
+            evidence_state: index === 0 ? "terminal_verified" : "queued", producer_work_item_id: `producer-${index}`,
+            verifier_work_item_id: index === 0 ? "verifier-0" : null, terminal_result_hash: index === 0 ? "b".repeat(64) : null,
+            producer_state: index === 0 ? "succeeded" : "queued",
+            producer_result_ref_hash: index === 0 ? "c".repeat(64) : null, producer_lease_owner: null,
+            producer_lease_generation: 0, producer_lease_expires_at: null, verifier_state: index === 0 ? "claimed" : null,
+            verifier_result_ref_hash: null, verifier_lease_owner: index === 0 ? "qa-owner" : null,
+            verifier_lease_generation: index === 0 ? 1 : null, verifier_lease_expires_at: index === 0 ? "2099-01-01" : null,
+            agent_id: `omaha-price-producer-${index}`, input_json: JSON.stringify({ runId: "run", commodityId: "almonds",
+              ingredientId: "ingredient-almonds", definitionVersionId: "old-definition", storeLocationId: store, queryTerms: ["Almonds"] }) })) };
+          return { results: [] };
+        }, async run() { return {}; } };
+    }, async batch(items: unknown[]) { return items; } } as unknown as D1Database;
+    const result = await correctCatalogBackfillDefinition(db, { runId: "run", commodityId: "almonds", correctionId: "almonds-authored-v1",
+      reason: "Persist authored include, exclude, taxonomy, and known-wrong identity rules" });
+    expect(result).toMatchObject({ oldDefinitionVersionId: "old-definition", cells: 7, queued: 7, terminalEvidenceCount: 0,
+      oldPointerGeneration: 3, newPointerGeneration: 4, idempotent: false });
+    expect(statements.filter((statement) => statement.sql.includes("INSERT OR IGNORE INTO catalog_backfill_definition_correction_stage_v4"))).toHaveLength(7);
+    expect(statements.filter((statement) => statement.sql.includes("INSERT INTO catalog_backfill_definition_corrections_v4"))).toHaveLength(1);
+    expect(statements.some((statement) => statement.sql.includes("catalog_backfill_definition_corrections_v4"))).toBe(true);
   });
 });
