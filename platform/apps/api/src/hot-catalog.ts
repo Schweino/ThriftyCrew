@@ -139,12 +139,21 @@ export async function materializeHotCatalog(db: D1Database): Promise<{ roots: nu
   return { roots: policies.results.length, offers: offerCount, tokens: tokenCount };
 }
 
-export async function readStoreCatalog(db: D1Database, storeLocationId: string): Promise<{ coverageMode: string | null; rootHash: string | null; offers: CatalogCandidate[] }> {
+export async function readStoreCatalog(db: D1Database, storeLocationId: string, searchTerms?: string[]): Promise<{ coverageMode: string | null; rootHash: string | null; offers: CatalogCandidate[] }> {
   const root = await db.prepare(
     `SELECT root.coverage_mode, root.root_hash
        FROM capture_source_roots root JOIN store_pricing_policies policy ON policy.source_id = root.source_id
       WHERE policy.store_location_id = ?1`,
   ).bind(storeLocationId).first<{ coverage_mode: string; root_hash: string }>();
+  const searchTokens = searchTerms ? [...new Set(searchTerms.flatMap(tokens))].sort() : [];
+  const candidateFilter = searchTerms
+    ? searchTokens.length > 0
+      ? `AND offer.product_id IN (
+           SELECT DISTINCT product_id FROM catalog_offer_tokens
+            WHERE store_location_id = ?2 AND token IN (${searchTokens.map(() => "?").join(",")})
+         )`
+      : "AND 1 = 0"
+    : "";
   const rows = await db.prepare(
     `SELECT product_id, observation_id, product_name, normalized_name, size_text, product_url,
             availability_status, fulfillment_mode, seller_name, offer_kind, package_price_minor,
@@ -154,8 +163,9 @@ export async function readStoreCatalog(db: D1Database, storeLocationId: string):
        JOIN store_pricing_policies policy ON policy.store_location_id = offer.store_location_id
       WHERE offer.store_location_id = ?1
         AND lower(replace(offer.fulfillment_mode, '-', '_')) = policy.price_mode
+        ${candidateFilter}
       ORDER BY offer.product_id`,
-  ).bind(storeLocationId).all<Record<string, unknown>>();
+  ).bind(...(searchTerms && searchTokens.length > 0 ? [storeLocationId, storeLocationId, ...searchTokens] : [storeLocationId])).all<Record<string, unknown>>();
   return {
     coverageMode: root?.coverage_mode ?? null,
     rootHash: root?.root_hash ?? null,

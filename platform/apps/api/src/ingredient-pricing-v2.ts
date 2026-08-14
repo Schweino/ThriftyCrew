@@ -181,10 +181,10 @@ export async function resolveClaimedStoreCheckFromCatalog(db: D1Database, checkI
   if (!row || row.state !== "leased" || row.lease_owner !== input.owner || row.lease_generation !== input.leaseGeneration) {
     throw new Error("catalog resolution rejected by lease fence");
   }
-  const catalog = await readStoreCatalog(db, row.store_location_id);
   const aliases = JSON.parse(row.aliases_json) as string[];
   const exclusions = JSON.parse(row.exclusions_json) as string[];
   const terms = [row.canonical_term, ...aliases];
+  const catalog = await readStoreCatalog(db, row.store_location_id, terms);
   const candidates = catalogCandidatesForTerms(catalog.offers, terms, new Date(), exclusions);
   const selection = chooseCatalogWinner(candidates);
   const statements: D1PreparedStatement[] = [];
