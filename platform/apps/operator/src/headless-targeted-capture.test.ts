@@ -301,16 +301,32 @@ describe("headless targeted store capture", () => {
     } finally { await rm(directory, { recursive: true, force: true }); }
   });
 
+  it("preserves additive sponsored rows outside Hy-Vee's organic reported total", async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), "tc-hyvee-sponsored-additive-test-"));
+    const output = path.join(directory, "capture.json");
+    const product = (id: string, isSponsored: boolean) => ({ id, description: `${id} Adobo Seasoning`, unitOfMeasure: "8 oz",
+      isSponsored, isEcommerceActive: true, pricing: { tagPriceValue: 2.99, basePriceValue: 2.99 } });
+    const fetchImpl = async () => new Response(JSON.stringify({ results: [product("s1", true), product("o1", false)],
+      meta: { pagination: { pagesTotal: 1, total: 1 } } }), { status: 200 });
+    try {
+      const chunk = await captureHeadlessDiscovery("hy-vee", ["adobo seasoning"], output, { fetchImpl });
+      expect(chunk.terms?.[0]?.retrieval).toMatchObject({ loadedResultCount: 2, availableResultCount: 2,
+        partitionProof: [{ strategy: "organic_total_plus_sponsored", organicReportedTotal: 1, sponsoredUnique: 1,
+          authoritativeUniqueTotal: 2 }] });
+    } finally { await rm(directory, { recursive: true, force: true }); }
+  });
+
   it("rejects a Hy-Vee envelope whose raw rows exceed its reported total", async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), "tc-hyvee-sponsored-count-test-"));
     const output = path.join(directory, "capture.json");
     const fetchImpl = async () => new Response(JSON.stringify({ results: [
       { id: "s1", description: "Sponsored Almonds", isSponsored: true },
       { id: "o1", description: "Organic Almonds", isSponsored: false },
+      { id: "o2", description: "More Organic Almonds", isSponsored: false },
     ], meta: { pagination: { pagesTotal: 1, total: 1 } } }), { status: 200 });
     try {
       const chunk = await captureHeadlessDiscovery("hy-vee", ["almonds"], output, { fetchImpl });
-      expect(chunk.terms?.[0]).toMatchObject({ outcome: "rejected", reason: "Hy-Vee pagination examined 2 of 1 reported results" });
+      expect(chunk.terms?.[0]).toMatchObject({ outcome: "rejected", reason: "Hy-Vee pagination examined 3 raw/2 organic of 1 reported results" });
     } finally { await rm(directory, { recursive: true, force: true }); }
   });
 

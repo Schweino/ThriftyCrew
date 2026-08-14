@@ -528,14 +528,36 @@ async function captureHyVee(query: string, observedAt: string, fetchImpl: FetchL
   const rest = await mapWithConcurrency(remainingPages, pageConcurrency, (page) => fetchPage(page));
   const pageResults = [first, ...rest];
   if (pageResults.some((page) => page.total !== first.total || page.pagesTotal !== first.pagesTotal)) throw new Error("Hy-Vee pagination totals changed during capture");
-  // Hy-Vee's pagination total is the complete returned envelope, including
-  // source-declared sponsored rows. Sponsored rows consume page slots and must
-  // remain raw candidates; removing them produced a false 222/224 gap and also
-  // discarded immutable product facts.
   const completePages = pageResults.map((result) => ({ offset: (result.page - 1) * pageSize, items: result.items }));
-  assertCompleteResultEnvelope("Hy-Vee", first.total, completePages.map((result) => ({ offset: result.offset,
-    count: result.items.length, ids: result.items.map((item: JsonRecord) => String(item.id ?? "")) })), pageSize);
-  const capturedItems = pageResults.flatMap((result) => result.items.map((item: JsonRecord, index: number) => ({ item, page: result.page, index })));
+  const organicPages = completePages.map((result) => ({ ...result, items: result.items.filter((item: JsonRecord) => item.isSponsored !== true) }));
+  const rawCount = completePages.reduce((sum, page) => sum + page.items.length, 0);
+  const organicCount = organicPages.reduce((sum, page) => sum + page.items.length, 0);
+  let additiveSponsored = false;
+  if (rawCount === first.total) {
+    // Some search views count sponsored rows inside the reported envelope; they
+    // consume ordinary page slots (e.g. Almonds 224 raw / 222 organic).
+    assertCompleteResultEnvelope("Hy-Vee", first.total, completePages.map((result) => ({ offset: result.offset,
+      count: result.items.length, ids: result.items.map((item: JsonRecord) => String(item.id ?? "")) })), pageSize);
+  } else if (organicCount === first.total) {
+    // Other views append sponsored rows outside the organic total (e.g. Adobo
+    // 20 organic + 1 sponsored). Both partitions remain immutable candidates.
+    additiveSponsored = true;
+    assertCompleteResultEnvelope("Hy-Vee", first.total, organicPages.map((result) => ({ offset: result.offset,
+      count: result.items.length, ids: result.items.map((item: JsonRecord) => String(item.id ?? "")) })), pageSize);
+  } else {
+    throw new Error(`Hy-Vee pagination examined ${rawCount} raw/${organicCount} organic of ${first.total} reported results`);
+  }
+  const sponsored = new Map<string, { item: JsonRecord; page: number; index: number }>();
+  for (const result of pageResults) for (const [index, item] of result.items.entries()) if (item.isSponsored === true) {
+    const id = String(item.id ?? ""); if (!id) throw new Error("Hy-Vee sponsored result omitted stable product identity");
+    const prior = sponsored.get(id);
+    if (prior && JSON.stringify(prior.item) !== JSON.stringify(item)) throw new Error("Hy-Vee sponsored result changed across pages");
+    sponsored.set(id, { item, page: result.page, index });
+  }
+  const capturedItems = additiveSponsored
+    ? [...pageResults.flatMap((result) => result.items.map((item: JsonRecord, index: number) => ({ item, page: result.page, index })))
+      .filter(({ item }) => item.isSponsored !== true), ...sponsored.values()]
+    : pageResults.flatMap((result) => result.items.map((item: JsonRecord, index: number) => ({ item, page: result.page, index })));
   for (const { item, page, index } of capturedItems) {
       const current = headlessPriceMinor(item.pricing?.tagPriceValue); const regular = headlessPriceMinor(item.pricing?.basePriceValue ?? item.pricing?.regularPriceValue);
       const name = stableProductName(item.description);
@@ -545,7 +567,10 @@ async function captureHyVee(query: string, observedAt: string, fetchImpl: FetchL
         rawAvailability: item.isEcommerceActive === true ? "Store 1465 ecommerce active" : "Store 1465 inactive" }, page - 1, index, observedAt);
       if (normalized) rows.push(normalized); else excludedResults.push({ productKey: String(item.id ?? ""), name, reason: "incomplete, ambiguous, discounted-without-dates, or unavailable Hy-Vee result" });
   }
-  return { rows, total: first.total, examined: first.total, pages: first.pagesTotal, excludedResults };
+  const authoritativeTotal = first.total + (additiveSponsored ? sponsored.size : 0);
+  return { rows, total: authoritativeTotal, examined: authoritativeTotal, pages: first.pagesTotal, excludedResults,
+    ...(additiveSponsored ? { partitionProof: [{ strategy: "organic_total_plus_sponsored", organicReportedTotal: first.total,
+      sponsoredUnique: sponsored.size, authoritativeUniqueTotal: authoritativeTotal }] } : {}) };
 }
 
 export async function captureHeadlessDiscovery(store: HeadlessStore, terms: string[], file: string,
