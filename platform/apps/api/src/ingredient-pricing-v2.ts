@@ -505,24 +505,24 @@ export async function pricingWaveStatus(db: D1Database, waveId: string): Promise
 
 export async function ingredientPipelineStatus(db: D1Database): Promise<Record<string, unknown>> {
   const [jobs, stores, waves, inbox, attention, lastProgress, challenges, outbox, stageLatency, orphans] = await Promise.all([
-    db.prepare(`SELECT CASE WHEN job.state = 'failed' AND gap.qa_resolution IS NOT NULL
-          THEN 'cancelled_existing_alias' ELSE job.state END AS state, COUNT(*) AS count
+    db.prepare(`SELECT CASE WHEN job.operational_state = 'cancelled' AND gap.qa_resolution IS NOT NULL
+          THEN 'cancelled_existing_alias' ELSE job.operational_state END AS state, COUNT(*) AS count
       FROM ingredient_pricing_jobs job JOIN ingredient_gaps gap ON gap.id = job.gap_id
-      GROUP BY CASE WHEN job.state = 'failed' AND gap.qa_resolution IS NOT NULL
-          THEN 'cancelled_existing_alias' ELSE job.state END ORDER BY state`).all(),
-    db.prepare(`SELECT check_row.store_location_id, check_row.state, COUNT(*) AS count
+      GROUP BY CASE WHEN job.operational_state = 'cancelled' AND gap.qa_resolution IS NOT NULL
+          THEN 'cancelled_existing_alias' ELSE job.operational_state END ORDER BY state`).all(),
+    db.prepare(`SELECT check_row.store_location_id, check_row.operational_state AS state, COUNT(*) AS count
       FROM ingredient_store_checks check_row JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
-      WHERE job.state = 'store_checks_running' GROUP BY check_row.store_location_id, check_row.state
-      ORDER BY check_row.store_location_id, check_row.state`).all(),
+      WHERE job.operational_state = 'store_checks_running' GROUP BY check_row.store_location_id, check_row.operational_state
+      ORDER BY check_row.store_location_id, check_row.operational_state`).all(),
     db.prepare("SELECT state, COUNT(*) AS count FROM pricing_waves GROUP BY state ORDER BY state").all(),
     db.prepare(`SELECT state, COUNT(*) AS count, MIN(created_at) AS oldest_created_at
       FROM ingredient_pricing_inbox GROUP BY state ORDER BY state`).all(),
     db.prepare(`SELECT check_row.id, check_row.gap_id, gap.display_name, check_row.store_location_id,
-        check_row.state, check_row.challenge_id, check_row.last_error, check_row.updated_at
+        check_row.operational_state AS state, check_row.challenge_id, check_row.last_error, check_row.updated_at
       FROM ingredient_store_checks check_row JOIN ingredient_gaps gap ON gap.id = check_row.gap_id
       JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
-      WHERE check_row.state IN ('blocked_challenge','ambiguous','adapter_quarantined')
-        AND job.state != 'failed' AND gap.qa_resolution IS NULL
+      WHERE check_row.operational_state IN ('challenge_blocked','ambiguous','adapter_quarantined','authentication_blocked')
+        AND job.operational_state NOT IN ('cancelled','failed_manual') AND gap.qa_resolution IS NULL
       ORDER BY check_row.updated_at, check_row.id LIMIT 100`).all(),
     db.prepare(`SELECT MAX(changed_at) AS changed_at FROM (
       SELECT MAX(updated_at) AS changed_at FROM ingredient_store_checks
