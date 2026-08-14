@@ -1,6 +1,7 @@
 import {
   OMAHA_GROCERY_STORE_LOCATION_IDS,
   ingredientPricingWaveCreateSchema,
+  ingredientPriceResearchSchema,
   ingredientStorePriceSchema,
   ingredientStoreCheckClaimSchema,
   ingredientStoreCheckCompleteSchema,
@@ -18,9 +19,28 @@ type StoreClaim = z.infer<typeof ingredientStoreCheckClaimSchema>;
 type StoreHeartbeat = z.infer<typeof ingredientStoreCheckHeartbeatSchema>;
 type StoreComplete = z.infer<typeof ingredientStoreCheckCompleteSchema>;
 type StoreFail = z.infer<typeof ingredientStoreCheckFailSchema>;
+type StorePrice = z.infer<typeof ingredientStorePriceSchema>;
 
 export function aggregateStoreCheckStates(states: Array<{ state: string }>): IngredientAggregate {
   return aggregateIngredientStoreChecks(states);
+}
+
+export function buildPermanentUnavailableResearch(input: {
+  gapId: string;
+  ingredientName: string;
+  researchedAt: string;
+  stores: StorePrice[];
+}) {
+  return ingredientPriceResearchSchema.parse({
+    gapId: input.gapId,
+    ingredientName: input.ingredientName,
+    marketId: "omaha",
+    researchedAt: input.researchedAt,
+    disposition: "permanently_unavailable",
+    stores: input.stores,
+    commodityProposal: null,
+    summary: `Independent first-party QA completed all seven Omaha store checks for ${input.ingredientName}; every location-bound search found no qualifying in-stock product.`,
+  });
 }
 
 async function appendOutbox(db: D1Database, topic: string, aggregateKind: string, aggregateId: string, dedupeKey: string, payload: unknown): Promise<D1PreparedStatement> {
@@ -318,8 +338,11 @@ export async function sealAggregateIfTerminal(env: Pick<WorkerEnv, "DB" | "EVIDE
     throw new Error("terminal aggregate is missing immutable evidence or QA hashes");
   }
   const job = await env.DB.prepare(
-    "SELECT gap_id, entity_id FROM ingredient_pricing_jobs WHERE id = ?1",
-  ).bind(pricingJobId).first<{ gap_id: string; entity_id: string | null }>();
+    `SELECT job.gap_id, job.entity_id, gap.display_name
+       FROM ingredient_pricing_jobs job
+       JOIN ingredient_gaps gap ON gap.id = job.gap_id
+      WHERE job.id = ?1`,
+  ).bind(pricingJobId).first<{ gap_id: string; entity_id: string | null; display_name: string }>();
   if (!job) throw new Error("ingredient pricing job disappeared during aggregation");
   const bundle = {
     schema: "tc-ingredient-resolution-v2", pricingJobId, gapId: job.gap_id,
@@ -337,6 +360,14 @@ export async function sealAggregateIfTerminal(env: Pick<WorkerEnv, "DB" | "EVIDE
   }
   const qaResultHash = await digestHex(stableJson(rows.results.map((row) => row.qa_hash)));
   const disposition = aggregate.state === "ready_to_publish" ? "available" : "unavailable";
+  const unavailableResearchJson = aggregate.state === "permanently_unavailable"
+    ? stableJson(buildPermanentUnavailableResearch({
+      gapId: job.gap_id,
+      ingredientName: job.display_name,
+      researchedAt: new Date().toISOString(),
+      stores: rows.results.map((row) => ingredientStorePriceSchema.parse(JSON.parse(String(row.result_json)))),
+    }))
+    : null;
   const statements: D1PreparedStatement[] = [
     env.DB.prepare(
       `INSERT INTO ingredient_resolution_versions
@@ -352,9 +383,12 @@ export async function sealAggregateIfTerminal(env: Pick<WorkerEnv, "DB" | "EVIDE
     env.DB.prepare("UPDATE ingredient_pricing_inbox SET state = ?2, updated_at = CURRENT_TIMESTAMP WHERE pricing_job_id = ?1")
       .bind(pricingJobId, aggregate.state === "ready_to_publish" ? "publish_pending" : "active"),
     env.DB.prepare(
-      `UPDATE ingredient_gaps SET status = ?2, updated_at = CURRENT_TIMESTAMP
+      `UPDATE ingredient_gaps
+          SET status = ?2,
+              research_json = CASE WHEN ?2 = 'permanently_unavailable' THEN ?3 ELSE research_json END,
+              updated_at = CURRENT_TIMESTAMP
         WHERE id = ?1 AND status NOT IN ('published','permanently_unavailable')`,
-    ).bind(job.gap_id, aggregate.state),
+    ).bind(job.gap_id, aggregate.state, unavailableResearchJson),
     await appendOutbox(env.DB, aggregate.state === "ready_to_publish" ? "ingredient.resolution.available" : "ingredient.resolution.unavailable",
       "ingredient_resolution", resolutionId, `ingredient.resolution:${resolutionId}`, bundle),
   ];
