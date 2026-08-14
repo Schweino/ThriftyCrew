@@ -2,7 +2,7 @@ import { mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { browserLanePolicy, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
+import { browserLanePolicy, browserLaneStartDelayMs, jitteredBrowserDelayMs, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
 import { closeBrowserCaptureJournals } from "./capture-journal.mjs";
 
 const roots = [];
@@ -46,5 +46,16 @@ describe("browser store lane policy", () => {
     await expect(withBrowserStoreLane("sams", async () => null, environment)).rejects.toThrow("active capture");
     release(null);
     await held;
+  });
+
+  it("paces one-term chunks from the prior completion instead of letting chunk boundaries bypass Aldi's minimum", () => {
+    const policy = { dynamicDelayMs: 5_000, state: { lastCompletedAt: "2026-08-12T15:00:00.000Z" } };
+    expect(browserLaneStartDelayMs(policy, Date.parse("2026-08-12T15:00:04.000Z"), () => 0)).toBe(1_500);
+  });
+
+  it("does not delay a chunk that already waited beyond the jittered Aldi minimum", () => {
+    const policy = { dynamicDelayMs: 5_000, state: { lastCompletedAt: "2026-08-12T15:00:00.000Z" } };
+    expect(browserLaneStartDelayMs(policy, Date.parse("2026-08-12T15:00:07.000Z"), () => 1)).toBe(0);
+    expect(jitteredBrowserDelayMs(5_000, () => 1)).toBe(6_250);
   });
 });

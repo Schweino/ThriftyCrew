@@ -10,6 +10,19 @@ const DEFAULTS = {
 
 const RUNTIME_PROCESS = globalThis.process ?? { env: {}, pid: 0 };
 
+export function jitteredBrowserDelayMs(baseDelayMs, random = Math.random) {
+  const base = Math.max(0, Math.round(Number(baseDelayMs) || 0));
+  if (base === 0) return 0;
+  const sample = Math.max(0, Math.min(1, Number(random()) || 0));
+  return base + Math.round(base * (0.1 + sample * 0.15));
+}
+
+export function browserLaneStartDelayMs(policy, nowMs = Date.now(), random = Math.random) {
+  const completedAt = Date.parse(String(policy?.state?.lastCompletedAt ?? ""));
+  if (!Number.isFinite(completedAt)) return 0;
+  return Math.max(0, completedAt + jitteredBrowserDelayMs(policy.dynamicDelayMs, random) - nowMs);
+}
+
 async function controllerRequest(pathname, init = {}, environment = RUNTIME_PROCESS.env) {
   const body = typeof init.body === "string" ? JSON.parse(init.body) : {};
   return captureControllerRequest(pathname, body, environment, 5_000, true);
@@ -70,7 +83,12 @@ export async function withBrowserStoreLane(store, operation, environment = RUNTI
     void controllerRequest(`/v1/lanes/${encodeURIComponent(store)}/acquire`, { method: "POST", body: JSON.stringify({ owner, ttlMs: 15 * 60_000 }) }, environment);
   }, 60_000) : null;
   heartbeat?.unref?.();
-  try { return await operation(await browserLanePolicy(store, new Date(), environment)); }
+  try {
+    const policy = await browserLanePolicy(store, new Date(), environment);
+    const startDelayMs = browserLaneStartDelayMs(policy);
+    if (startDelayMs > 0) await new Promise((resolve) => setTimeout(resolve, startDelayMs));
+    return await operation(policy);
+  }
   catch (error) {
     if (/challenge|block page|human.verification|captcha/i.test(String(error?.message ?? error))) {
       await controllerRequest("/v1/challenges/open", { method: "POST", body: JSON.stringify({ store, detail: { reason: String(error?.message ?? error) } }) }, environment);

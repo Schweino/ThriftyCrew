@@ -1,4 +1,4 @@
-import { browserLanePolicy, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
+import { browserLanePolicy, jitteredBrowserDelayMs, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
 import { checkpointAdapterChunk } from "./adapter-protocol.mjs";
 
 const LOCATION = "ALDI - OLA 48 - Omaha";
@@ -198,7 +198,7 @@ async function captureAldiChunkInternal({ tab, terms, file, sessionDirectory, sc
     await checkpointAdapterChunk(file, { version: 2, phase: "discovery", store: "aldi", canary, terms: results.map((result) => result.term), rows: results.flatMap((result) => result.rows) }, previousCount, sessionDirectory);
     if (captured.blocked) break;
     if (Date.now() - chunkStarted >= 45_000) break;
-    if (index < terms.length - 1 && interTermDelayMs > 0) await tab.playwright.waitForTimeout(interTermDelayMs);
+    if (index < terms.length - 1 && interTermDelayMs > 0) await tab.playwright.waitForTimeout(jitteredBrowserDelayMs(interTermDelayMs));
   }
   return { file, attempted: results.length, rows: results.reduce((total, result) => total + result.rows.length, 0), blocked: results.some((result) => result.blocked), rejected: results.filter((result) => result.term.outcome === "rejected").map((result) => ({ query: result.term.query, reason: result.term.reason })), empty: results.filter((result) => result.term.outcome === "empty").map((result) => result.term.query) };
 }
@@ -238,7 +238,7 @@ async function captureAldiVerificationChunkInternal({ tab, targets, file, sessio
     }
     await checkpointAdapterChunk(file, { version: 2, phase: "verification", store: "aldi", canary, verifications }, previousCount, sessionDirectory);
     if (Date.now() - chunkStarted >= 45_000) break;
-    if (index < targets.length - 1 && interTermDelayMs > 0) await tab.playwright.waitForTimeout(interTermDelayMs);
+    if (index < targets.length - 1 && interTermDelayMs > 0) await tab.playwright.waitForTimeout(jitteredBrowserDelayMs(interTermDelayMs));
   }
   return {
     file,
