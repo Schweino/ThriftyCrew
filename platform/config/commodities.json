@@ -9948,7 +9948,9 @@
       "\\bheart\\s+health\\b",
       "epsom",
       "tampons?",
-      "lip\\s+balm"
+      "lip\\s+balm",
+      "\\bPacific\\s+Foods\\s+Organic\\s+Chicken\\s+Bone\\s+Broth\\s+With\\s+Sea\\s+Salt\\s+32\\s+000\\s+Oz\\b",
+      "\\bSimple\\s+Truth\\s+Organic\\s+Chicken\\s+Bone\\s+Broth\\s+with\\s+Sea\\s+Salt\\b"
     ]
   },
   {
@@ -10540,7 +10542,14 @@
       "lip\\s+balm",
       "\\bberbere\\b",
       "\\bSalt\\s+Pork\\b",
-      "\\bsalt\\s+pork\\b"
+      "\\bsalt\\s+pork\\b",
+      "\\bSea\\s+salt\\b",
+      "\\bsea\\s+salt\\b",
+      "\\bGreat\\s+Value\\s+Iodized\\s+Sea\\s+Salt\\s+24\\s+oz\\b",
+      "\\bLibby\\s+s\\s+Microwavable\\s+Cut\\s+Green\\s+Beans\\s+Lightly\\s+Seasoned\\s+with\\s+Sea\\s+Salt\\s+4\\s+4\\s+oz\\s+Cups\\b",
+      "\\bMember\\s+s\\s+Mark\\s+Sea\\s+Salt\\s+36\\s+oz\\b",
+      "\\bPacific\\s+Foods\\s+Organic\\s+Chicken\\s+Bone\\s+Broth\\s+With\\s+Sea\\s+Salt\\s+32\\s+000\\s+Oz\\b",
+      "\\bSimple\\s+Truth\\s+Organic\\s+Chicken\\s+Bone\\s+Broth\\s+with\\s+Sea\\s+Salt\\b"
     ]
   },
   {
@@ -23172,7 +23181,8 @@
       "\\bheart\\s+health\\b",
       "epsom",
       "tampons?",
-      "lip\\s+balm"
+      "lip\\s+balm",
+      "\\bLibby\\s+s\\s+Microwavable\\s+Cut\\s+Green\\s+Beans\\s+Lightly\\s+Seasoned\\s+with\\s+Sea\\s+Salt\\s+4\\s+4\\s+oz\\s+Cups\\b"
     ]
   },
   {
@@ -55992,6 +56002,21 @@
     ],
     "exclude": [
       "\\b(?:shells?|cups?|bites?|baklava|spanakopita)\\b"
+    ]
+  },
+  {
+    "id": "ingredient-definition-sea-salt",
+    "label": "Sea salt",
+    "unit": "oz",
+    "include": [
+      "\\bsea salt\\b"
+    ],
+    "exclude": [
+      "\\bseasoned salt\\b",
+      "\\bsalt blend\\b",
+      "\\bsalt grinder\\b",
+      "\\bbath\\b",
+      "\\bscrub\\b"
     ]
   }
 ]
