@@ -6,6 +6,7 @@ describe("release payload object identity", () => {
     const hash = "a".repeat(64);
     expect(releasePayloadObjectKey("rel_one", "board", hash)).not.toBe(releasePayloadObjectKey("rel_two", "board", hash));
     expect(releasePayloadObjectKey("rel_one", "board", hash)).toContain("release=rel_one/kind=board");
+    expect(releasePayloadObjectKey("rel_one", "top5", hash)).toContain("kind=top5");
   });
 
   it("rejects unsafe key material", () => {
