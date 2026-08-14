@@ -69,7 +69,7 @@ export async function deterministicId(prefix: string, ...parts: string[]): Promi
   return `${prefix}_${(await digestHex(parts.join("\u001f"))).slice(0, 32)}`;
 }
 
-const INGREDIENT_NON_FOOD_PRODUCT = /\b(?:wax\s+melts?|candles?|air\s+fresheners?|fragrance|perfumes?|eau\s+de\s+parfum|colognes?|potpourri|diffusers?|essential\s+oils?|soaps?|shampoos?|conditioners?|hair\s+(?:care|mask|treatment)|body\s+wash|lotions?|moisturizers?|serums?|cosmetics?|pet\s+food|dog\s+treats?|cat\s+treats?|craft|decor)\b/i;
+const INGREDIENT_NON_FOOD_PRODUCT = /\b(?:wax\s+melts?|candles?|incense|air\s+fresheners?|fragrance|perfumes?|eau\s+de\s+parfum|colognes?|potpourri|diffusers?|essential\s+oils?|soaps?|shampoos?|conditioners?|hair\s+(?:care|mask|treatment)|body\s+wash|lotions?|moisturizers?|serums?|cosmetics?|pet\s+food|dog\s+treats?|cat\s+treats?|craft|decor)\b/i;
 
 /** Shared fail-closed identity rules used by both producer ranking and independent QA. */
 export function isClearlyNonFoodIngredientProduct(name: string, taxonomy = ""): boolean {

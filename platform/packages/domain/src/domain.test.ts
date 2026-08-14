@@ -10,6 +10,7 @@ describe("domain invariants", () => {
     expect(isClearlyIngredientDerivative("green-chilli", "Pueblo Lindo Chopped Green Chiles")).toBe(true);
     expect(isClearlyIngredientDerivative("saffron", "Mahatma Saffron Rice")).toBe(true);
     expect(isClearlyNonFoodIngredientProduct("Saffron Eau de Parfum Spray")).toBe(true);
+    expect(isClearlyNonFoodIngredientProduct("Amber & Saffron Incense Sticks")).toBe(true);
   });
 
   it("applies locked package-form exclusions as well as product-name exclusions", () => {
