@@ -29,6 +29,7 @@ const decisionAliases: Record<string, Record<string, string[]>> = {
   "recipe-fact-extractor": { facts: ["facts", "extract"], refuse: ["refuse", "reject", "cannot"] },
   "recipe-mapper": { chickpeas: ["chickpeas"], mapped: ["mapped"], unmapped: ["unmapped", "unknown"], blocked: ["blocked", "block"], "chicken-breast": ["chicken-breast", "chicken breast"] },
   "recipe-writer": { content: ["content", "recipe"], refuse: ["refuse", "reject", "cannot"] },
+  "recipe-verifier": { pass: ["pass", "verified"], fail: ["fail", "reject", "drift"] },
   "recipe-auditor": { pass: ["pass"], fail: ["fail", "reject"] },
   "ingredient-price-researcher": { available: ["available", "priced"], permanently_unavailable: ["permanently_unavailable", "not_found"], needs_operator: ["needs_operator", "blocked", "ambiguous"] },
   "ingredient-definition-planner": { plan: ["plan", "proposal"], refuse: ["refuse", "category"] },

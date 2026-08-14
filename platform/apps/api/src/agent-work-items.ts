@@ -87,7 +87,8 @@ const RECIPE_CHAIN: Record<string, string | undefined> = {
   "recipe-deduper": "recipe-fact-extractor",
   "recipe-fact-extractor": "recipe-mapper",
   "recipe-mapper": "recipe-writer",
-  "recipe-writer": "recipe-auditor",
+  "recipe-writer": "recipe-verifier",
+  "recipe-verifier": "recipe-auditor",
   "recipe-auditor": undefined,
 };
 
@@ -742,8 +743,11 @@ async function enqueueRecipeNext(db: D1Database, completed: Record<string, unkno
   const input: Record<string, unknown> = { contract: String(completed.output_contract), previousWorkItemId: completed.id, output, nextAgentId, nextPromptHash: next.prompt_sha256 };
   if (nextAgentId === "recipe-deduper") input.catalog = await currentRecipeCatalog(db);
   if (nextAgentId === "recipe-mapper") input.commodities = await currentCommodityCatalog(db);
-  if (nextAgentId === "recipe-auditor" && String(completed.agent_id) === "recipe-writer") {
+  if (nextAgentId === "recipe-verifier" && String(completed.agent_id) === "recipe-writer") {
     input.lockedMap = object(JSON.parse(String(completed.input_json))).output;
+  }
+  if (nextAgentId === "recipe-auditor" && String(completed.agent_id) === "recipe-verifier") {
+    input.lockedMap = object(JSON.parse(String(completed.input_json))).lockedMap;
   }
   await enqueue(db, next, {
     sourceKind: "recipe-request",
@@ -798,6 +802,11 @@ export function assertRecipeChainContinuity(agentId: string, inputValue: unknown
         throw new Error(`deterministic recipe verification rejected provenance drift for ${item.sourceCandidateId}`);
       }
     }
+  }
+  if (agentId === "recipe-verifier") {
+    const writerOutput = contentBatchItemsSchema.parse(input.output);
+    const verifiedOutput = contentBatchItemsSchema.parse(outputValue);
+    if (stableJson(writerOutput) !== stableJson(verifiedOutput)) throw new Error("recipe verifier must preserve the exact verified writer output");
   }
 }
 
@@ -1339,21 +1348,22 @@ export async function completeAgentWorkItem(env: Pick<WorkerEnv, "DB" | "EVIDENC
     await persistIngredientDefinitionPlan(db, output);
   } else if (current.agent_id === "recipe-auditor") contentBatch = await stageAuditedRecipeBatch(db, current, output);
   else if (String(current.agent_id).startsWith("recipe-")) {
-    if (current.agent_id === "recipe-writer") {
+    if (current.agent_id === "recipe-verifier") {
       const writerInput = object(JSON.parse(String(current.input_json)));
-      const dependencyRoot = String(writerInput.dependencyRoot ?? await digestHex(stableJson(writerInput.output)));
-      const verifierInputHash = await digestHex(stableJson({ dependencyRoot, lockedMap: writerInput.output }));
-      const verificationId = await deterministicId("recipe-write-verification", workItemId, verifierInputHash, outputHash);
+      const writerWorkItemId = String(writerInput.previousWorkItemId);
+      const dependencyRoot = String(writerInput.dependencyRoot ?? await digestHex(stableJson(writerInput.lockedMap)));
+      const verifierInputHash = await digestHex(stableJson({ dependencyRoot, lockedMap: writerInput.lockedMap, writerOutput: writerInput.output }));
+      const verificationId = await deterministicId("recipe-write-verification", writerWorkItemId, verifierInputHash, outputHash);
       await db.batch([
         db.prepare(`INSERT INTO recipe_write_verification_versions
           (id, request_id, writer_work_item_id, dependency_root_hash, input_hash, output_hash, verifier_version, verdict, findings_json)
-          VALUES (?1, ?2, ?3, ?4, ?5, ?6, 'locked-facts-v2', 'verified', '[]')
+          VALUES (?1, ?2, ?3, ?4, ?5, ?6, 'recipe-verifier-v1', 'verified', '[]')
           ON CONFLICT(writer_work_item_id, input_hash, output_hash) DO NOTHING`)
-          .bind(verificationId, current.source_ref, workItemId, dependencyRoot, verifierInputHash, outputHash),
+          .bind(verificationId, current.source_ref, writerWorkItemId, dependencyRoot, verifierInputHash, outputHash),
         db.prepare(
           `INSERT INTO pipeline_stage_events (campaign_id, lane, aggregate_kind, aggregate_id, stage, event_kind, detail_json)
-           VALUES (?1, 'recipe', 'recipe_request', ?1, 'deterministic-verify', 'passed', ?2)`,
-        ).bind(current.source_ref, stableJson({ workItemId, outputHash, verificationId, dependencyRoot, verifierVersion: "locked-facts-v2" })),
+           VALUES (?1, 'recipe', 'recipe_request', ?1, 'independent-recipe-verifier', 'passed', ?2)`,
+        ).bind(current.source_ref, stableJson({ workItemId, writerWorkItemId, outputHash, verificationId, dependencyRoot, verifierVersion: "recipe-verifier-v1" })),
       ]);
     }
     if (current.agent_id === "recipe-fact-extractor" && !recipeFactsPersisted) await persistRecipeSourceFacts(env, output);

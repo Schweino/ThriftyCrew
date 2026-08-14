@@ -69,6 +69,7 @@ export async function checkAgentRegistry(platformRoot: string): Promise<Record<s
     enabled: registry.agents.filter((agent) => agent.enabled).length,
     ci: registry.agents.filter((agent) => agent.plane === "ci").length,
     pc: registry.agents.filter((agent) => agent.plane === "pc").length,
+    pipelineAgents: registry.pipelineAgents.length,
     monthlyBudgetMicrousd: registry.agents.reduce((sum, agent) => sum + agent.monthlyBudgetMicrousd, 0),
     promptHashes: hashes,
     executionConfigHashes: executionHashes,

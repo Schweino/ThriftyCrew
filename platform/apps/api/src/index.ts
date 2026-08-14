@@ -130,6 +130,9 @@ import { completeIngredientStoreCapture, completeIngredientStoreQa, rejectIngred
 import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredientChallenge } from "./ingredient-challenges";
 import { materializeHotCatalog } from "./hot-catalog";
 import { attachIngredientProposal, createIngredientPublicationBatch, failIngredientPublicationBatch, ingredientPublicationProofPlan, materializeIngredientPublicationCaptures, verifyIngredientPublicationExternal, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
+import { listPublicIngredients, getPublicIngredientBySlug, publicIngredientResponse } from "./public-grocery-v3";
+import { compareAndSwapIngredientPointer, finalizeIncrementalIngredient, previewIncrementalIngredient, rollbackIncrementalIngredientPointer, stageIncrementalIngredient } from "./incremental-ingredient-publication";
+import { resumeRecipesForPublishedIngredient } from "./recipe-dependency-resume-v2";
 import { releasePayloadObjectKey } from "./release-payloads";
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
@@ -157,6 +160,11 @@ export { CaptureValidationWorkflow } from "./capture-validation-workflow";
 
 type Bindings = { Bindings: WorkerEnv; Variables: { identity: MutationIdentity } };
 const app = new Hono<Bindings>();
+
+async function v4FeatureEnabled(db: D1Database, feature: string, allowShadow = false): Promise<boolean> {
+  const row = await db.prepare("SELECT mode FROM pipeline_rollouts WHERE feature=?1").bind(feature).first<{ mode: string }>();
+  return row?.mode === "enforce" || row?.mode === "canary" || (allowShadow && row?.mode === "shadow");
+}
 
 app.use("*", async (context, next) => {
   await next();
@@ -504,6 +512,23 @@ app.post("/api/v2/events", zValidator("json", telemetryEventSchema), (context) =
 });
 
 app.post("/v2/events", (context) => app.fetch(new Request(new URL("/api/v2/events", context.req.url), context.req.raw), context.env));
+
+app.get("/api/v3/grocery/ingredients", async (context) => {
+  if (!await v4FeatureEnabled(context.env.DB, "dynamic_ingredient_catalog_v4")) return context.json({ ok: false, error: "v4 grocery catalog is disabled" }, 404);
+  const result = await listPublicIngredients(context.env.DB);
+  const ifNoneMatch = context.req.header("if-none-match")?.replaceAll('"', "");
+  if (ifNoneMatch === result.manifestHash) return new Response(null, { status: 304, headers: { etag: `"${result.manifestHash}"` } });
+  return publicIngredientResponse({ ok: true, ...result }, result.manifestHash);
+});
+
+app.get("/api/v3/grocery/ingredients/:slug", async (context) => {
+  if (!await v4FeatureEnabled(context.env.DB, "dynamic_ingredient_catalog_v4")) return context.json({ ok: false, error: "v4 grocery catalog is disabled" }, 404);
+  const result = await getPublicIngredientBySlug(context.env.DB, context.req.param("slug"));
+  if (!result) return context.json({ ok: false, error: "ingredient not found" }, 404);
+  const ifNoneMatch = context.req.header("if-none-match")?.replaceAll('"', "");
+  if (ifNoneMatch === result.contentHash) return new Response(null, { status: 304, headers: { etag: `"${result.contentHash}"` } });
+  return publicIngredientResponse({ ok: true, ingredient: result }, result.contentHash);
+});
 
 app.get("/api/v2/board", async (context) => {
   return cachedPublicJson(context.req.raw, async () => {
@@ -1636,6 +1661,50 @@ app.post("/internal/ingredient-pricing/checks/:id/retry-adapter", zValidator("js
   if (context.get("identity").role !== "operator") return jsonError("only an operator may retry a quarantined adapter check", 403);
   try { return context.json({ ok: true, ...await retryAdapterQuarantinedStoreCheck(context.env.DB, context.req.param("id"), context.req.valid("json")) }); }
   catch (error) { return jsonError(error instanceof Error ? error.message : "adapter retry failed", 409); }
+});
+
+app.post("/internal/v4/ingredients/stage", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may stage an incremental ingredient", 403);
+  if (!await v4FeatureEnabled(context.env.DB, "incremental_ingredient_publish_v4", true)) return jsonError("incremental ingredient publication is disabled", 409);
+  try {
+    const body = await context.req.json<{ snapshot: Parameters<typeof stageIncrementalIngredient>[1]["snapshot"]; pricingJobId: string }>();
+    return context.json({ ok: true, ...await stageIncrementalIngredient(context.env.DB, body) }, 201);
+  } catch (error) { return jsonError(error instanceof Error ? error.message : "incremental ingredient staging failed", 409); }
+});
+
+app.get("/internal/v4/ingredients/:version/preview", async (context) => {
+  try { return context.json({ ok: true, ...await previewIncrementalIngredient(context.env.DB, context.req.param("version")) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "incremental ingredient preview failed", 404); }
+});
+
+app.post("/internal/v4/ingredients/:version/pointer", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may move an incremental ingredient pointer", 403);
+  if (!await v4FeatureEnabled(context.env.DB, "incremental_ingredient_publish_v4")) return jsonError("incremental ingredient pointer writes require canary or enforce mode", 409);
+  try {
+    const body = await context.req.json<{ ingredientId: string; expectedGeneration: number }>();
+    const pointerGeneration = await compareAndSwapIngredientPointer(context.env.DB, { ...body, publicVersionId: context.req.param("version") });
+    return context.json({ ok: true, pointerGeneration });
+  } catch (error) { return jsonError(error instanceof Error ? error.message : "incremental ingredient pointer conflict", 409); }
+});
+
+app.post("/internal/v4/ingredients/:version/finalize", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may finalize an incremental ingredient", 403);
+  if (!await v4FeatureEnabled(context.env.DB, "incremental_ingredient_publish_v4")) return jsonError("incremental ingredient finalization requires canary or enforce mode", 409);
+  try {
+    const body = await context.req.json<{ pricingJobId: string; definitionVersionId: string; ingredientId: string; originProofs: Array<{ origin: string; url: string; expectedHash: string; observedHash: string; verifiedAt: string }> }>();
+    await finalizeIncrementalIngredient(context.env.DB, { publicVersionId: context.req.param("version"), pricingJobId: body.pricingJobId, originProofs: body.originProofs });
+    const resume = await resumeRecipesForPublishedIngredient(context.env.DB, { ingredientId: body.ingredientId, definitionVersionId: body.definitionVersionId, publicVersionId: context.req.param("version") });
+    return context.json({ ok: true, resume });
+  } catch (error) { return jsonError(error instanceof Error ? error.message : "incremental ingredient finalization failed", 409); }
+});
+
+app.post("/internal/v4/ingredients/:version/rollback", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may roll back an incremental ingredient", 403);
+  try {
+    const body = await context.req.json<{ ingredientId: string; expectedGeneration: number; previousVersionId: string | null }>();
+    await rollbackIncrementalIngredientPointer(context.env.DB, { ...body, failedVersionId: context.req.param("version") });
+    return context.json({ ok: true });
+  } catch (error) { return jsonError(error instanceof Error ? error.message : "incremental ingredient rollback failed", 409); }
 });
 
 app.post("/internal/ingredient-publication/batches", zValidator("json", ingredientPublicationBatchCreateSchema), async (context) => {

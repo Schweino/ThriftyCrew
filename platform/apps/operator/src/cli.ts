@@ -29,6 +29,7 @@ import { commodityPhraseExclusionPattern, compileCommodityRegexPattern, normaliz
 import { compactEvidenceChunkForCheck, isIdempotentCaptureResumeConflict, isIdempotentQaResumeConflict, runIngredientPipeline } from "./ingredient-pipeline";
 import { buildIngredientCapturePayload, buildIngredientQaPayload, mergeIngredientQaDiscoveryChunks, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
 import { captureHeadlessDiscovery, captureHeadlessVerification, claimSearchTerms, type HeadlessStore } from "./headless-targeted-capture";
+import { PipelineAgentSupervisor } from "./pipeline-agent-supervisor";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -2097,6 +2098,12 @@ if (command === "status") {
   }
   else if (action === "run") result = await runIngredientPipeline(await mutationClient());
   else throw new Error("tc ingredient pipeline requires run, tick [coordinator|<store> <lane>], or status");
+} else if (command === "ingredient" && subcommand === "supervisor") {
+  const supervisor = new PipelineAgentSupervisor(await mutationClient());
+  const shutdown = () => supervisor.stop();
+  process.once("SIGINT", shutdown); process.once("SIGTERM", shutdown);
+  supervisor.on("progress", () => console.error(JSON.stringify({ event: "v4_pipeline_progress", ...supervisor.status() })));
+  await supervisor.run(); result = { ok: true, status: supervisor.status() };
 } else if (command === "ingredient" && subcommand === "capture-claim") {
   const [storeLocationId, limitText = "50", outputFile, ownerOverride] = arguments_;
   if (!storeLocationId) throw new Error("tc ingredient capture-claim requires a store location id");
@@ -2290,7 +2297,7 @@ if (command === "status") {
       "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|rematch-promoted|checkpoint-match-runs [batch-id...] [--verbose]|abandon <batch-id> <reason>",
       "tc accuracy draw [seed]|revalidate", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",
       "tc sentinel latest [bakers family-fare hy-vee]",
-      "tc match batch <batch-id>", "tc commodity add <file>", "tc ingredient discover [request-file]", "tc ingredient status [state]", "tc ingredient apply <research-output>", "tc ingredient apply-ready", "tc recipe add <file>",
+      "tc match batch <batch-id>", "tc commodity add <file>", "tc ingredient discover [request-file]", "tc ingredient status [state]", "tc ingredient apply <research-output>", "tc ingredient apply-ready", "tc ingredient supervisor", "tc recipe add <file>",
     ],
   };
   if (!isHelpRequest) process.exitCode = 2;

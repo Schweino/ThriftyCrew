@@ -1,4 +1,8 @@
 import { z } from "zod";
+import { pipelineAgentRegistrationSchema } from "./pipeline-agents.js";
+
+export * from "./dynamic-ingredient-catalog.js";
+export * from "./pipeline-agents.js";
 
 export const isoDateTime = z.iso.datetime({ offset: true });
 export const nonEmptyId = z.string().min(1).max(160).regex(/^[a-zA-Z0-9][a-zA-Z0-9._:-]*$/);
@@ -948,6 +952,7 @@ export const agentRegistrySchema = z.object({
     cacheReadMicrousdPerMillion: z.number().int().nonnegative().default(0),
   })),
   agents: z.array(agentRegistryEntrySchema).min(1).max(50),
+  pipelineAgents: z.array(pipelineAgentRegistrationSchema).max(100).default([]),
 }).superRefine((value, context) => {
   const ids = new Set<string>();
   value.agents.forEach((agent, index) => {
@@ -955,6 +960,11 @@ export const agentRegistrySchema = z.object({
     ids.add(agent.id);
     if (!value.pricing[agent.model]) context.addIssue({ code: "custom", path: ["agents", index, "model"], message: "model needs effective pricing" });
     if (agent.fallbackModel && !value.pricing[agent.fallbackModel]) context.addIssue({ code: "custom", path: ["agents", index, "fallbackModel"], message: "fallback model needs effective pricing" });
+  });
+  const pipelineIds = new Set<string>();
+  value.pipelineAgents.forEach((agent, index) => {
+    if (pipelineIds.has(agent.agentId) || ids.has(agent.agentId)) context.addIssue({ code: "custom", path: ["pipelineAgents", index, "agentId"], message: "agent ids must be unique across both registries" });
+    pipelineIds.add(agent.agentId);
   });
 });
 

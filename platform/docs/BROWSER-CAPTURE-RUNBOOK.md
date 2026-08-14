@@ -1,5 +1,7 @@
 # V3 real-Chrome capture runbook
 
+> V4 rollout note: browser capture remains a producer/verifier evidence boundary, but store-oriented agents claim up to 50 ready identities per store. Aldi, Fareway, Sam's Club, and Walmart start concurrently with distinct sessions, tab ownership, pacing, challenge circuits, and producer/verifier generations. A challenge durably blocks only its store lane and the Windows Done callback must be followed by a fresh location/mode canary. Successful V4 pricing publishes one database snapshot and never enters the legacy global-release tail. Until the V4 flags reach enforce after parity/canary gates, this note is shadow-only and the procedures below remain authoritative for production.
+
 ## Authority and scope
 
 Cloudflare does not drive retail websites. A local Codex automation uses the connected real Chrome session for

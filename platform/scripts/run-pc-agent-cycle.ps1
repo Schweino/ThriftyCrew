@@ -26,8 +26,8 @@ $cycleAgents = @{
   Triage = @('triage-reviewer','triage-developer')
   PostPublish = @('post-publish-reviewer')
   SourceSentinel = @('source-sentinel-investigator')
-  Recipe = @('recipe-sourcer','recipe-deduper','recipe-fact-extractor','recipe-mapper','recipe-writer','recipe-auditor')
-  RecipeCompletion = @('recipe-writer','recipe-auditor')
+  Recipe = @('recipe-sourcer','recipe-deduper','recipe-fact-extractor','recipe-mapper','recipe-writer','recipe-verifier','recipe-auditor')
+  RecipeCompletion = @('recipe-writer','recipe-verifier','recipe-auditor')
   IngredientPricing = @()
   IngredientPublication = @('ingredient-definition-planner')
   Accuracy = @('accuracy-headless')
@@ -458,7 +458,7 @@ try {
     if ($CompletionWorkerSlot -eq 0) {
       Invoke-IngredientDownstreamDrain
     } else {
-      $completionAgent = if ($CompletionWorkerSlot -eq 1) { 'recipe-writer' } else { 'recipe-auditor' }
+      $completionAgent = if ($CompletionWorkerSlot -eq 1) { 'recipe-writer' } else { 'recipe-verifier' }
       $contentAdvanced = $false
       for ($item = 0; $item -lt $MaxItems; $item++) {
         if (-not (Invoke-AgentItem $completionAgent)) { break }

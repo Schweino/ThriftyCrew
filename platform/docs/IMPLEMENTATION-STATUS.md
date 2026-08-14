@@ -89,3 +89,8 @@ implementation.
   canaries enforce privacy and same-profile timing. Routine and incident reserve budgets are isolated.
 
 See `docs/HARDENING-STATUS.md` for the implementation and retirement boundary.
+# V4 incremental ingredient catalog (2026-08-14)
+
+Phase 0 baseline is recorded with verified checkpoint `checkpoint_2026-08-14-8abc7c94-aa90-414b-b8ba-8a2c6c75017f`; the two current V2 origins agreed before implementation. The additive V4 schema, flags-off code, store-agent registry, direct per-ingredient publisher, exact dependency resume, Node supervisor, challenge callback, benchmark, and distinct recipe verifier are locally implemented. Clean migration replay through 0073, registry/config/schedule checks, live ChatGPT verifier evaluation, typechecks, 476 tests, dry-run production builds, and PowerShell parser checks pass.
+
+Production traffic remains on V3. The V4 flags remain `off`; the pending publication job is preserved. UI/V2 cutover and legacy-writer enforcement are prohibited until current-board backfill and semantic parity pass, followed by shadow store comparison, one- and ten-ingredient canaries, the complete recipe-to-publication flow, the release-blocking 30-item benchmark, two-origin verification, and a rollback drill. The 30-day read-only legacy soak begins only after those gates pass; no retirement date is approved yet.

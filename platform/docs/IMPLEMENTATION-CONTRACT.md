@@ -15,7 +15,7 @@ the Worker validates and finalizes it before the object becomes evidence.
 
 ## Non-negotiable invariants
 
-1. Every public grocery, recipe, feed, Top 5, and rotation response references one published `release_id`.
+1. Public version boundaries are product-scoped: each grocery ingredient has one current definition and one current seven-store snapshot; each recipe has one current bundle; rankings, feeds, Top 5, and rotation are asynchronous projections. Consistency is expressed by exact version references, never by rebuilding a global release for one ingredient.
 2. Draft and rejected releases never appear publicly.
 3. Partial capture coverage remains explicit at batch and term/page level.
 4. Observations are append-only; capture and ingestion times remain distinct.
@@ -61,6 +61,10 @@ the Worker validates and finalizes it before the object becomes evidence.
     DPAPI-protected key, and restoration must verify ciphertext, plaintext and SQLite integrity before use.
 36. The public Worker has no privileged bindings. D1, R2, workflow and operational secrets exist only on the
     unrouted control Worker reached through a Cloudflare service binding.
+37. Incremental ingredient publication is database-only and may not invoke Git, worktrees, configuration deployment, product rematching, native/global release construction, whole-board validation, or the legacy global release pointer.
+38. A public ingredient snapshot contains exactly one independently producer- and verifier-backed terminal row for each of the seven authoritative Omaha stores and at least one verified priced row.
+39. Ingredient pointer writes are compare-and-swap; failed public-origin verification restores only that ingredient's previous pointer and leaves its inbox work active.
+40. Recipe dependency resume is indexed by canonical ingredient and exact definition/public versions. It never resumes or recalculates an unrelated recipe.
 
 ## Migration calendar and retirement
 
