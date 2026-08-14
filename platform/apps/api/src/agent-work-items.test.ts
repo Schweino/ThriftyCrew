@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { ingredientPriceResearchSchema, ingredientStoreCaptureResultSchema, OMAHA_GROCERY_STORE_LOCATION_IDS, recipeMapSchema, recipeSourceCandidatesSchema } from "@thriftycrew/contracts";
-import { activeIngredientCategoryContextSql, assertRecipeChainContinuity, ingredientCampaignPhase, type IngredientCampaignSnapshot, isAtomicDiscoveryGapName, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
+import { activeIngredientCategoryContextSql, assertRecipeChainContinuity, assertRetailerTolerantIngredientDefinition, ingredientCampaignPhase, type IngredientCampaignSnapshot, isAtomicDiscoveryGapName, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
 
 const candidate = {
   id: "candidate-bean-chili",
@@ -33,6 +33,19 @@ describe("discovery gap identity", () => {
     expect(isAtomicDiscoveryGapName("water")).toBe(false);
     expect(isAtomicDiscoveryGapName("dried apricots or prunes")).toBe(false);
     expect(isAtomicDiscoveryGapName("roasted peanuts and cilantro")).toBe(false);
+  });
+});
+
+describe("ingredient definition planning", () => {
+  it("rejects whole-title anchors that exclude ordinary retailer brand prefixes", () => {
+    expect(() => assertRetailerTolerantIngredientDefinition({
+      id: "garlic-herb-seasoning",
+      include: ["^garlic\\s*(?:&|and)?\\s*herb(?:s)?\\s+seasoning$"],
+    })).toThrow(/branded retailer product names/);
+    expect(() => assertRetailerTolerantIngredientDefinition({
+      id: "garlic-herb-seasoning",
+      include: ["\\bgarlic\\s*(?:&|and)?\\s*herb(?:s)?\\s+seasoning\\b"],
+    })).not.toThrow();
   });
 });
 

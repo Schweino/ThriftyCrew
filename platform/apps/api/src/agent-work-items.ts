@@ -1081,10 +1081,20 @@ export async function enqueueIngredientDefinitionPlan(db: D1Database, limit = 50
   return { queued: true, batchId, count: rows.results.length };
 }
 
+export function assertRetailerTolerantIngredientDefinition(proposal: { id: string; include: string[] }): void {
+  for (const pattern of proposal.include) {
+    const trimmed = pattern.trim();
+    if (trimmed.startsWith("^") && trimmed.endsWith("$")) {
+      throw new Error(`ingredient definition ${proposal.id} uses a whole-title anchored include that cannot match ordinary branded retailer product names`);
+    }
+  }
+}
+
 async function persistIngredientDefinitionPlan(db: D1Database, outputValue: unknown): Promise<void> {
   const plan = ingredientDefinitionPlanSchema.parse(outputValue);
   const statements: D1PreparedStatement[] = [];
   for (const item of plan.items) {
+    assertRetailerTolerantIngredientDefinition(item.proposal);
     const proposalJson = stableJson(item.proposal);
     const proposalHash = await digestHex(proposalJson);
     const canonicalTerm = item.proposal.searchTerms[0]!;
