@@ -49,7 +49,6 @@ import {
   ingredientQaRetrySchema,
   ingredientQaResolutionSchema,
   ingredientStoreCheckClaimSchema,
-  ingredientStoreCheckCompleteSchema,
   ingredientStoreCheckFailSchema,
   ingredientStoreCheckHeartbeatSchema,
   ingredientStoreCaptureResultSchema,
@@ -116,7 +115,7 @@ import { engineMayWriteCaptureSource } from "./capture-authorization";
 import { evaluateContentPromotion } from "./content-batches";
 import { recipeCommodityIds } from "./recipe-commodity-catalog";
 import { claimAgentWorkItem, completeAgentWorkItem, enqueueIngredientDefinitionPlan, failAgentWorkItem, ingredientCampaignSnapshot, reconcileIngredientCampaign, reconcileIngredientHolds } from "./agent-work-items";
-import { claimStoreChecks, completeStoreCheck, createPricingWave, failStoreCheck, heartbeatStoreCheck, ingredientPipelineStatus, pipelineEvents, pricingWaveStatus, qaClaimedCatalogStoreCheck, resolveClaimedStoreCheckFromCatalog } from "./ingredient-pricing-v2";
+import { claimStoreChecks, createPricingWave, failStoreCheck, heartbeatStoreCheck, ingredientPipelineStatus, pipelineEvents, pricingWaveStatus, resolveClaimedStoreCheckFromCatalog } from "./ingredient-pricing-v2";
 import { acknowledgePipelineOutbox, claimPipelineOutbox, nackPipelineOutbox } from "./pipeline-outbox";
 import { completeIngredientStoreCapture, completeIngredientStoreQa, uploadIngredientEvidence } from "./ingredient-independent-qa";
 import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredientChallenge } from "./ingredient-challenges";
@@ -1553,15 +1552,8 @@ app.post("/internal/ingredient-pricing/store-checks/:id/catalog-resolve", zValid
   }
 });
 
-app.post("/internal/ingredient-pricing/store-checks/:id/complete", zValidator("json", ingredientStoreCheckCompleteSchema), async (context) => {
-  if (context.get("identity").role !== "operator") return jsonError("only the local operator coordinator may complete store checks", 403);
-  try {
-    const aggregate = await completeStoreCheck(context.env, context.req.param("id"), context.req.valid("json"));
-    return context.json({ ok: true, checkId: context.req.param("id"), aggregate });
-  } catch (error) {
-    return jsonError(error instanceof Error ? error.message : "store-check completion failed", 409);
-  }
-});
+app.post("/internal/ingredient-pricing/store-checks/:id/complete", (context) =>
+  jsonError("legacy direct completion is disabled; submit capture evidence and independent QA", 404));
 
 app.post("/internal/ingredient-pricing/store-checks/:id/capture-result", zValidator("json", ingredientStoreCaptureResultSchema), async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only the local capture coordinator may submit store evidence", 403);
@@ -1599,15 +1591,8 @@ app.post("/internal/ingredient-pricing/challenges/:id/resolve", zValidator("json
   catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient challenge resolution failed", 409); }
 });
 
-app.post("/internal/ingredient-pricing/store-checks/:id/catalog-qa", zValidator("json", ingredientStoreCheckHeartbeatSchema), async (context) => {
-  if (context.get("identity").role !== "operator") return jsonError("only the local operator coordinator may QA catalog checks", 403);
-  try {
-    const aggregate = await qaClaimedCatalogStoreCheck(context.env, context.req.param("id"), context.req.valid("json"));
-    return context.json({ ok: true, checkId: context.req.param("id"), aggregate });
-  } catch (error) {
-    return jsonError(error instanceof Error ? error.message : "catalog QA failed", 409);
-  }
-});
+app.post("/internal/ingredient-pricing/store-checks/:id/catalog-qa", (context) =>
+  jsonError("legacy catalog QA is disabled; use independent store QA", 404));
 
 app.post("/internal/ingredient-pricing/store-checks/:id/fail", zValidator("json", ingredientStoreCheckFailSchema), async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only the local operator coordinator may fail store checks", 403);
