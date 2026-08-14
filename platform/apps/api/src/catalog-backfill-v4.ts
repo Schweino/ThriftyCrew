@@ -106,12 +106,13 @@ export async function importCatalogBackfillPage(db: D1Database, input: {
         const cell = await db.prepare(`SELECT cell.observation_id FROM release_cells cell JOIN observations observation ON observation.id=cell.observation_id
           WHERE cell.release_id=?1 AND cell.commodity_id=?2 AND cell.store_location_id=?3 AND cell.status='priced' AND cell.observation_id=?4`)
           .bind(input.releaseId, commodityId, storeLocationId, legacyRow.observationId).first<{ observation_id: string }>();
-        if (!cell) throw new Error(`board provenance does not match release cell for ${commodityId}/${storeLocationId}`);
-        observationId = cell.observation_id;
-        rowJson = stableJson(legacyRow);
-        rowHash = await digestHex(rowJson);
-        semanticState = "priced_provenance_recovered";
-        pricedRecovered += 1;
+        if (cell) {
+          observationId = cell.observation_id;
+          rowJson = stableJson(legacyRow);
+          rowHash = await digestHex(rowJson);
+          semanticState = "priced_provenance_recovered";
+          pricedRecovered += 1;
+        } else legacyUnknown += 1;
       } else legacyUnknown += 1;
       const agentId = AGENT_BY_STORE[storeLocationId];
       const dedupeKey = `catalog-backfill:${ingredientId}:${storeLocationId}:${definition.versionId}:producer`;

@@ -2264,9 +2264,12 @@ if (command === "status") {
   const [action, first, second] = arguments_;
   const client = await mutationClient();
   if (action === "initialize") result = await client.request("/internal/v4/backfill/initialize", { method: "POST" });
-  else if (action === "import") result = await client.request("/internal/v4/backfill/import", { json: {
-    offset: Number(first ?? 0), limit: Number(second ?? 25),
+  else if (action === "import") {
+    if (!first) throw new Error("tc ingredient backfill-v4 import requires run id [offset] [limit]");
+    result = await client.request("/internal/v4/backfill/import", { json: {
+    runId: first, offset: Number(second ?? 0), limit: Number(arguments_[3] ?? 25),
   } });
+  }
   else if (action === "progress") result = await client.request(`/internal/v4/backfill/progress${first ? `?runId=${encodeURIComponent(first)}` : ""}`);
   else if (action === "claim") {
     if (!first) throw new Error("tc ingredient backfill-v4 claim requires an agent id [owner] [limit]");
@@ -2279,7 +2282,7 @@ if (command === "status") {
   } else if (action === "producer-submit" || action === "verifier-submit") {
     if (!first) throw new Error(`tc ingredient backfill-v4 ${action} requires an evidence JSON file`);
     result = await client.request(`/internal/v4/backfill/${action}`, { json: JSON.parse(await readFile(cliPath(first), "utf8")) });
-  } else throw new Error("tc ingredient backfill-v4 requires initialize|import [offset] [limit]|progress [run]|claim <agent> [owner] [limit]|heartbeat <owner> [lease-seconds]");
+  } else throw new Error("tc ingredient backfill-v4 requires initialize|import <run> [offset] [limit]|progress [run]|claim <agent> [owner] [limit]|heartbeat <owner> [lease-seconds]");
 } else if (command === "recipe" && subcommand === "wave") {
   const [action, waveId, value] = arguments_;
   if (!action || !waveId) throw new Error("tc recipe wave requires snapshot|published|corrective and a wave id");

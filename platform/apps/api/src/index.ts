@@ -1668,11 +1668,17 @@ app.post("/internal/ingredient-pricing/checks/:id/retry-adapter", zValidator("js
   catch (error) { return jsonError(error instanceof Error ? error.message : "adapter retry failed", 409); }
 });
 
-async function currentLegacyBoardForBackfill(env: WorkerEnv) {
+async function legacyBoardForBackfill(env: WorkerEnv, runId?: string) {
   const row = await env.DB.prepare(`SELECT release.id AS release_id,payload.payload_json,payload.object_key,payload.content_hash
     FROM current_releases current JOIN releases release ON release.id=current.release_id
     JOIN release_payloads payload ON payload.release_id=release.id AND payload.kind='board'
-    WHERE current.market_id='omaha'`).first<{ release_id: string; payload_json: string; object_key: string | null; content_hash: string }>();
+    WHERE current.market_id='omaha' AND ?1 IS NULL
+    UNION ALL
+    SELECT release.id AS release_id,payload.payload_json,payload.object_key,payload.content_hash
+    FROM catalog_backfill_runs_v4 run JOIN releases release ON release.id=run.source_release_id
+    JOIN release_payloads payload ON payload.release_id=release.id AND payload.kind='board'
+    WHERE run.run_id=?1 LIMIT 1`).bind(runId ?? null)
+    .first<{ release_id: string; payload_json: string; object_key: string | null; content_hash: string }>();
   if (!row) throw new Error("current Omaha legacy board is missing");
   const board = row.object_key ? await env.EVIDENCE.get(row.object_key).then((object) => object?.json()) : JSON.parse(row.payload_json);
   if (!board) throw new Error("current Omaha legacy board payload is unavailable");
@@ -1681,18 +1687,22 @@ async function currentLegacyBoardForBackfill(env: WorkerEnv) {
 
 app.post("/internal/v4/backfill/initialize", async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only an operator may initialize catalog backfill", 403);
-  try { return context.json({ ok: true, ...await initializeCatalogBackfill(context.env.DB, await currentLegacyBoardForBackfill(context.env)) }, 201); }
+  try { return context.json({ ok: true, ...await initializeCatalogBackfill(context.env.DB, await legacyBoardForBackfill(context.env)) }, 201); }
   catch (error) { return jsonError(error instanceof Error ? error.message : "catalog backfill initialization failed", 409); }
 });
 
 app.post("/internal/v4/backfill/import", async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only an operator may import catalog backfill", 403);
   try {
-    const body: { offset?: number; limit?: number } = await context.req.json<{ offset?: number; limit?: number }>().catch(() => ({}));
+    const body: { runId?: string; offset?: number; limit?: number } = await context.req.json<{ runId?: string; offset?: number; limit?: number }>().catch(() => ({}));
+    if (!body.runId) return jsonError("backfill import requires its frozen run id", 400);
     const offset = Math.max(0, Number(body.offset ?? 0));
     const limit = Math.min(50, Math.max(1, Number(body.limit ?? 25)));
     if (!Number.isInteger(offset) || !Number.isInteger(limit)) return jsonError("backfill page must use integer offset and limit", 400);
-    return context.json({ ok: true, ...await importCatalogBackfillPage(context.env.DB, { ...await currentLegacyBoardForBackfill(context.env), offset, limit }) });
+    const source = await legacyBoardForBackfill(context.env, body.runId);
+    const imported = await importCatalogBackfillPage(context.env.DB, { ...source, offset, limit });
+    if (imported.runId !== body.runId) return jsonError("backfill import source does not match its frozen run", 409);
+    return context.json({ ok: true, ...imported });
   } catch (error) { return jsonError(error instanceof Error ? error.message : "catalog backfill import failed", 409); }
 });
 
