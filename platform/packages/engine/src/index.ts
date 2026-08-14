@@ -195,10 +195,14 @@ export function selectWinner(candidates: readonly WinnerCandidate[], nowIso: str
 
   if (eligible.length === 0) return { winner: null, eligible, rejected };
 
-  // A partial capture may add observations but cannot evict an otherwise eligible
-  // product from a newer complete window merely because its batch is thinner.
+  // A QA-verified targeted refresh is authoritative for its exact
+  // commodity/store cell. It must supersede the broader catalog snapshot that
+  // caused the targeted lookup, even when a retailer-rounded unit price makes
+  // the older row appear a fraction cheaper. Partial captures remain additive
+  // only and cannot evict a complete window.
+  const targeted = eligible.filter((candidate) => candidate.batchCoverageMode === "targeted");
   const complete = eligible.filter((candidate) => candidate.batchCoverageMode === "full" || candidate.batchCoverageMode === "ad_only");
-  const selectionPool = complete.length > 0 ? complete : eligible;
+  const selectionPool = targeted.length > 0 ? targeted : complete.length > 0 ? complete : eligible;
   const winner = [...selectionPool].sort((left, right) =>
     left.perUnitMicros - right.perUnitMicros || right.capturedAt.localeCompare(left.capturedAt) || left.observationId.localeCompare(right.observationId)
   )[0] ?? null;

@@ -181,6 +181,23 @@ describe("headless targeted store capture", () => {
     }
   });
 
+  it("excludes a Hy-Vee result whose dedicated size contradicts its exact title suffix", async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), "tc-hyvee-size-test-"));
+    const output = path.join(directory, "capture.json");
+    const fetchImpl = async () => new Response(JSON.stringify({
+      results: [{ id: "3976100", description: "McCormick Gourmet Saffron, 0.04 oz", unitOfMeasure: "0.35 oz",
+        isEcommerceActive: true, pricing: { tagPriceValue: 24.99, basePriceValue: 24.99 } }],
+      meta: { pagination: { pagesTotal: 1, total: 1 } },
+    }), { status: 200 });
+    try {
+      const chunk = await captureHeadlessDiscovery("hy-vee", ["saffron"], output, { fetchImpl });
+      expect(chunk.rows).toHaveLength(0);
+      expect(chunk.terms?.[0]?.excludedResults).toContainEqual(expect.objectContaining({ productKey: "3976100" }));
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+
   it("gives Hy-Vee QA exact producer identity, size, and price semantics", () => {
     const captured = { sourceUrl: "https://www.hy-vee.com/aisles-online/p/1/spice", productName: "Whole Spice",
       packageText: "2 oz", packagePriceMinor: 499 };

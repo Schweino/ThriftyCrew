@@ -198,6 +198,14 @@ describe("winner selection", () => {
     expect(result.winner?.observationId).toBe("complete");
   });
 
+  it("lets an exact targeted refresh supersede a retailer-rounded full-catalog row", () => {
+    const result = selectWinner([
+      { observationId: "rounded-full", commodityId: "whole-cloves", storeLocationId: "walmart", perUnitMicros: 2_490_000, capturedAt: "2026-08-11T12:00:00.000Z", batchCapturedTo: "2026-08-11T12:00:00.000Z", batchCoverageMode: "full" },
+      { observationId: "exact-targeted", commodityId: "whole-cloves", storeLocationId: "walmart", perUnitMicros: 2_492_308, capturedAt: "2026-08-14T12:00:00.000Z", batchCapturedTo: "2026-08-14T12:00:00.000Z", batchCoverageMode: "targeted" },
+    ], "2026-08-14T13:00:00.000Z");
+    expect(result.winner?.observationId).toBe("exact-targeted");
+  });
+
   it("removes known-wrong observations before ranking", () => {
     const result = selectWinner([
       { observationId: "bad", commodityId: "x", storeLocationId: "s", perUnitMicros: 1, capturedAt: "2026-08-09T12:00:00.000Z", batchCapturedTo: "2026-08-09T12:00:00.000Z", batchCoverageMode: "full", knownWrong: true },

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hasCompleteLocationModeProof, isCompleteVerificationTerm, lockedQueryCoverageTerms } from "./ingredient-independent-qa";
+import { hasCompleteLocationModeProof, hasConsistentPricedSourceIdentity, isCompleteVerificationTerm, lockedQueryCoverageTerms } from "./ingredient-independent-qa";
 
 const common = { storeLocationId: "aldi-omaha-446-048", checkedAt: "2026-08-13T20:00:00.000Z",
   queryTerms: ["test"], searchComplete: true, qualifyingProductsExamined: 0, locationVerified: true,
@@ -24,6 +24,15 @@ describe("ingredient independent QA capture proof", () => {
       normalizedBasisUnit: "oz", normalizedBasisQtyMicros: 8_000_000, perUnitMicros: 500_000,
       offerKind: "everyday", validFrom: null, validTo: null, loyaltyRequired: false, membershipRequired: false } as const;
     expect(hasCompleteLocationModeProof(priced as unknown as Parameters<typeof hasCompleteLocationModeProof>[0], "in_store")).toBe(false);
+  });
+
+  it("rejects a priced result whose exact title suffix contradicts its package basis", () => {
+    const priced = { ...common, outcome: "priced", qualifyingProductsExamined: 1,
+      productName: "McCormick Gourmet Saffron, 0.04 oz", sellerName: "Hy-Vee", fulfillmentMode: "in_store",
+      availabilityText: "In stock", packageText: "0.35 oz", packagePriceMinor: 2499,
+      normalizedBasisUnit: "gram", normalizedBasisQtyMicros: 9_922_333, perUnitMicros: 2_518_561,
+      offerKind: "everyday", validFrom: null, validTo: null, loyaltyRequired: false, membershipRequired: false } as const;
+    expect(hasConsistentPricedSourceIdentity(priced as unknown as Parameters<typeof hasConsistentPricedSourceIdentity>[0])).toBe(false);
   });
 
   it("deduplicates aliases that normalize to the canonical query", () => {

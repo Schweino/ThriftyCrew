@@ -1,5 +1,6 @@
 import { ingredientStoreCaptureResultSchema, ingredientStoreQaCompleteSchema } from "@thriftycrew/contracts";
 import { deterministicId, digestHex, isClearlyIngredientDerivative, isClearlyNonFoodIngredientProduct, matchesIngredientCommodityExclusion, normalizeName, stableJson } from "@thriftycrew/domain";
+import { sourceNativeSizeConflict } from "@thriftycrew/engine";
 import type { z } from "zod";
 import type { WorkerEnv } from "./env";
 import { sealAggregateIfTerminal } from "./ingredient-pricing-v2";
@@ -12,6 +13,10 @@ type QaReject = { owner: string; leaseGeneration: number; reason: string; valida
 export function hasCompleteLocationModeProof(result: CaptureResult["result"], priceMode: unknown): boolean {
   if (!result.searchComplete || !result.locationVerified || !result.priceModeVerified) return false;
   return result.outcome === "not_found" ? result.fulfillmentMode === null : result.fulfillmentMode === priceMode;
+}
+
+export function hasConsistentPricedSourceIdentity(result: CaptureResult["result"]): boolean {
+  return result.outcome !== "priced" || !sourceNativeSizeConflict(result.productName ?? undefined, result.packageText);
 }
 
 export function isCompleteVerificationTerm(item: Record<string, any>): boolean {
@@ -73,6 +78,10 @@ export async function completeIngredientStoreCapture(env: Pick<WorkerEnv, "DB" |
   if (input.result.storeLocationId !== row.store_location_id || input.queryPlanHash !== row.query_plan_hash) throw new Error("capture result identity mismatch");
   if (!hasCompleteLocationModeProof(input.result, row.price_mode)) {
     throw new Error("capture result lacks complete location/mode proof");
+  }
+  if (!hasConsistentPricedSourceIdentity(input.result)
+    || input.candidates.some((candidate) => candidate.eligible && sourceNativeSizeConflict(candidate.productName, candidate.packageText))) {
+    throw new Error("capture result has a source-native product-name/package-size conflict");
   }
   if (new Set(input.coverage.map((item) => item.normalizedQuery)).size !== input.coverage.length) throw new Error("capture coverage contains duplicate queries");
   const expectedQueries = lockedQueryCoverageTerms(String(row.canonical_term), JSON.parse(String(row.aliases_json)) as string[]);
@@ -152,10 +161,11 @@ export async function completeIngredientStoreQa(env: Pick<WorkerEnv, "DB" | "EVI
     throw new Error("QA completion rejected by lease fence or lane boundary");
   }
   if (!row.capture_result_json || !row.producer_evidence_id) throw new Error("QA has no frozen producer evidence");
-  const result = JSON.parse(String(row.capture_result_json)) as { outcome: string; searchComplete: boolean; locationVerified: boolean; priceModeVerified: boolean; qualifyingProductsExamined: number };
+  const result = JSON.parse(String(row.capture_result_json)) as CaptureResult["result"];
   if (input.verdict !== "ambiguous" && input.verdict !== result.outcome) throw new Error("QA verdict disagrees with captured outcome");
   if (input.verdict !== "ambiguous" && (!result.searchComplete || !result.locationVerified || !result.priceModeVerified)) throw new Error("QA cannot verify incomplete capture");
   if (input.verdict === "priced" && result.qualifyingProductsExamined < 1) throw new Error("priced QA requires a qualifying candidate");
+  if (input.verdict === "priced" && !hasConsistentPricedSourceIdentity(result)) throw new Error("QA cannot verify a source-native product-name/package-size conflict");
   if (input.verdict === "not_found" && result.qualifyingProductsExamined !== 0) throw new Error("not-found QA requires zero qualifying candidates");
   const coverage = await env.DB.prepare(`SELECT COUNT(*) AS count FROM ingredient_query_coverage
     WHERE store_check_id = ?1 AND complete = 1 AND end_of_results_proven = 1

@@ -1,5 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { sourceNativeSizeConflict } from "@thriftycrew/engine";
 import type { AdapterChunk, ClaimedCheck } from "./ingredient-targeted-capture";
 
 type HeadlessStore = "bakers" | "family-fare" | "hy-vee";
@@ -155,7 +156,8 @@ export function headlessPriceSemantics(current: number, regular: number | null, 
 function capturedRow(store: HeadlessStore, query: string, item: { id: string; name: string; size: string; url: string;
   price: number; regular: number | null; available: boolean; rawAvailability: string; effective?: string | null; expires?: string | null },
   pageIndex: number, resultIndex: number, observedAt: string): JsonRecord | null {
-  if (!item.id || !item.name || !item.size || !item.url || !Number.isSafeInteger(item.price) || item.price <= 0) return null;
+  if (!item.id || !item.name || !item.size || !item.url || !Number.isSafeInteger(item.price) || item.price <= 0
+    || sourceNativeSizeConflict(item.name, item.size)) return null;
   const semantics = headlessPriceSemantics(item.price, item.regular, item.effective, item.expires);
   if (!semantics) return null;
   const config = STORE[store];
