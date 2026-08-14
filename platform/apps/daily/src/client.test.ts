@@ -35,16 +35,18 @@ describe("configuration deployment", () => {
       if (pathname === "/internal/configurations") return { active: false };
       if (pathname.endsWith("/clone-active")) return { ok: true, commodityIds: ["unchanged"] };
       if (pathname.endsWith("/commodities")) return { ok: true };
+      if (pathname.includes("/known-wrong")) return { ok: true };
       if (pathname.endsWith("/activate")) return { ok: true };
       throw new Error(`unexpected path ${pathname}`);
     });
-    const configuration = { id: "cfg_delta", sourceCommit: "test", contentHash: "a".repeat(64), categories: [], knownWrong: [], commodities: [
+    const configuration = { id: "cfg_delta", sourceCommit: "test", contentHash: "a".repeat(64), categories: [], knownWrong: [{ id: "rule-1" }], commodities: [
       { id: "unchanged", label: "Unchanged", unit: "oz", categoryId: "pantry", include: ["unchanged"], exclude: [] },
       { id: "new-item", label: "New Item", unit: "oz", categoryId: "pantry", include: ["new item"], exclude: [] },
     ] } as unknown as CurrentBridgeArtifact["configuration"];
     await deployConfigurationDelta({ request } as unknown as MutationClient, configuration, ["new-item"]);
     expect(paths).toEqual(["/internal/configurations", "/internal/configurations/cfg_delta/clone-active",
-      "/internal/configurations/cfg_delta/commodities", "/internal/configurations/cfg_delta/activate"]);
+      "/internal/configurations/cfg_delta/commodities", "/internal/configurations/cfg_delta/known-wrong?replace=1",
+      "/internal/configurations/cfg_delta/activate"]);
     const commodityPayload = request.mock.calls.find(([pathname]) => String(pathname).endsWith("/commodities"))?.[1] as { json: { commodities: Array<{ id: string }> } };
     expect(commodityPayload.json.commodities.map((commodity) => commodity.id)).toEqual(["new-item"]);
   });

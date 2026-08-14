@@ -547,6 +547,9 @@ export async function deployConfigurationDelta(client: MutationClient, config: C
         })),
       } });
     }
+    for (const [index, ruleChunk] of chunks(config.knownWrong, 75).entries()) {
+      await client.request(`/internal/configurations/${config.id}/known-wrong${index === 0 ? "?replace=1" : ""}`, { method: "PUT", json: { rules: ruleChunk } });
+    }
     activation = await client.request(`/internal/configurations/${config.id}/activate`, { method: "POST" });
   }
   return { ok: true, configurationId: config.id, active: true, idempotent: configuration.active === true, activation };
