@@ -1789,7 +1789,9 @@ if (command === "status") {
     json: JSON.parse(await readFile(cliPath(inputFile), "utf8")),
   });
 } else if (command === "ingredient" && subcommand === "qa-submit") {
-  const [claimFile, ...verificationFiles] = arguments_;
+  const [claimFile, ...verificationArguments] = arguments_;
+  const resume = verificationArguments.includes("--resume");
+  const verificationFiles = verificationArguments.filter((value: string) => value !== "--resume");
   if (!claimFile || verificationFiles.length === 0) throw new Error("tc ingredient qa-submit requires a QA claim JSON and one or more independent verification chunk JSON files");
   const claimDocument = JSON.parse(await readFile(cliPath(claimFile), "utf8")) as { checks?: ClaimedCheck[] };
   const verifications = await Promise.all(verificationFiles.map(async (file: string) => JSON.parse(await readFile(cliPath(file), "utf8")) as AdapterChunk));
@@ -1811,7 +1813,12 @@ if (command === "status") {
       observedAt: verification.canary.observedAt, document: { claim: { checkId: check.id, queryPlanHash: check.query_plan_hash }, verification },
     } }) as unknown as { evidence: any };
     const payload = buildIngredientQaPayload(check, verification, pointer.evidence);
-    submitted.push(await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/qa-complete`, { json: payload }));
+    try {
+      submitted.push(await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/qa-complete`, { json: payload }));
+    } catch (error) {
+      if (!resume || !/returned 409:/.test(String(error))) throw error;
+      submitted.push({ ok: true, checkId: check.id, idempotentResume: true, reason: "check already left this QA lease" });
+    }
   }
   result = { ok: true, submitted };
 } else if (command === "ingredient" && subcommand === "qa-reject") {

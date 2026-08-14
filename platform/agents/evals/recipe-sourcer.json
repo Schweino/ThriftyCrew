@@ -243,6 +243,19 @@
         }
       },
       "expect": { "decision": "refuse", "mustMention": ["standalone", "accompaniment"] }
+    },
+    {
+      "id": "ingredient-discovery-prefers-gap-yield",
+      "input": {
+        "id": "recipe_eval_gap_yield",
+        "request": { "request_text": "Discover missing grocery ingredients from diverse complete meal-prep recipes." },
+        "commodities": ["chicken-breast | Chicken breast", "white-rice | White rice", "olive-oil | Olive oil"],
+        "sourceEvidence": {
+          "candidateA": { "title": "Basic Chicken and Rice", "url": "https://example.test/basic", "concept": "Chicken breast and white rice with olive oil." },
+          "candidateB": { "title": "Harissa Chickpea Freekeh Bowls", "url": "https://example.test/harissa", "concept": "A complete meal-prep bowl centered on harissa, chickpeas, freekeh, and roasted vegetables.", "structuredDataAvailable": true }
+        }
+      },
+      "expect": { "decision": "candidates", "mustMention": ["harissa", "freekeh"] }
     }
   ]
 }
