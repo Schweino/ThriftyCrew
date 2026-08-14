@@ -61,7 +61,7 @@ export function packageSizeFromName(name) {
   // Retailer titles commonly put merchandising descriptors after the size
   // ("18 oz, Rye Bread, Bag"). Select the final source-native quantity/unit
   // token instead of requiring it to be the final title suffix.
-  const packs = [...text.matchAll(new RegExp(`([0-9]+(?:\\.[0-9]+)?)\\s*(${unitPattern})\\s*[,;]?\\s*(\\d+)\\s*(?:pk|pack|ct)\\.?`, "ig"))];
+  const packs = [...text.matchAll(new RegExp(`([0-9]+(?:\\.[0-9]+)?)\\s*(${unitPattern})\\s*[,;]?\\s*(\\d+)\\s*(?:pk|pack|ct|counts?)\\.?`, "ig"))];
   if (packs.length) { const pack = packs.at(-1); return `${pack[3]} x ${pack[1]} ${unit(pack[2])}`; }
   const quantities = [...text.matchAll(new RegExp(`(?:^|[^a-z0-9])([0-9]+(?:\\.[0-9]+)?)\\s*(${unitPattern})(?=$|[^a-z])`, "ig"))];
   if (quantities.length) { const quantity = quantities.at(-1); return `${quantity[1]} ${unit(quantity[2])}`; }

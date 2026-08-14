@@ -43,6 +43,7 @@ describe("source-native offer parsing", () => {
     expect(packageSizeFromName("Great Value Whole Milk, Gallon")).toBe("1 gal");
     expect(packageSizeFromName("Kemps Protein+ Whole Milk, 48 Fl. Oz.")).toBe("48 fl oz");
     expect(packageSizeFromName("Silk Almond Milk, 64 fl. oz., 3 pk.")).toBe("3 x 64 fl oz");
+    expect(packageSizeFromName("Minute Ready-to-Eat Jasmine Rice, Microwaveable Rice Cups, 4.4 oz, 2 Count")).toBe("2 x 4.4 oz");
     expect(packageSizeFromName("Large Eggs (24 ct)")).toBe("24 ct");
     expect(packageSizeFromName("Happy Farms String Cheese 10 OZ")).toBe("10 oz");
     expect(packageSizeFromName("McCormick Pure Vanilla Extract, 1.0 fl oz Box")).toBe("1.0 fl oz");
