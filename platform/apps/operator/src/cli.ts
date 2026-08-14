@@ -878,6 +878,12 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     const snapshot = await loadEngineSnapshot(client, "direct");
     const materializedBatchIds = new Set(materializedCaptures.map((capture) => capture.batchId));
     const publicationCommodityIds = new Set((sealed.members ?? []).map((member) => member.proposal.id).filter((id): id is string => Boolean(id)));
+    const selectedPublicationCandidates = publicationCandidates(snapshot.candidates, publicationCommodityIds, materializedBatchIds);
+    const publicationCandidateHash = await digestHex(stableJson(selectedPublicationCandidates
+      .filter((candidate) => publicationCommodityIds.has(candidate.commodity_id))
+      .map((candidate) => [candidate.observation_id, candidate.commodity_id, candidate.store_location_id,
+        candidate.coverage_mode, candidate.batch_id ?? null])
+      .sort((left, right) => stableJson(left).localeCompare(stableJson(right)))));
     const publicationSnapshot: NativeEngineSnapshot = {
       ...snapshot,
       inputHash: await digestHex(stableJson({
@@ -885,8 +891,9 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
         ingredientPublicationBatchId: sealed.batchId,
         memberRootHash: sealed.memberRootHash,
         materializedBatchIds: [...materializedBatchIds].sort(),
+        publicationCandidateHash,
       })),
-      candidates: publicationCandidates(snapshot.candidates, publicationCommodityIds, materializedBatchIds),
+      candidates: selectedPublicationCandidates,
     };
     const catalog = await loadNativeReleaseCatalog(worktreeRoot);
     const releaseArtifact = await buildNativeRelease(worktreeRoot, publicationSnapshot, catalog, await loadCurrentReleaseGraph(client));
