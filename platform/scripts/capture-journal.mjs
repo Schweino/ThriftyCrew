@@ -557,6 +557,12 @@ export function resolveCaptureChallenge(id, canaryPassed, now = new Date(), file
       .run(now.toISOString(), now.toISOString(), id);
     db.prepare(`UPDATE capture_work_units SET status = 'queued', available_at = ?, updated_at = ?
       WHERE store = ? AND status = 'blocked'`).run(now.getTime(), now.toISOString(), challenge.store);
+    const lane = db.prepare("SELECT state_json FROM lane_state WHERE store = ?").get(challenge.store);
+    if (lane?.state_json) {
+      const state = JSON.parse(lane.state_json);
+      db.prepare("UPDATE lane_state SET state_json = ?, updated_at = ? WHERE store = ?")
+        .run(JSON.stringify({ ...state, consecutiveFailures: 0, circuitOpenUntil: null, lastOutcome: "canary_passed", lastCompletedAt: now.toISOString() }), now.toISOString(), challenge.store);
+    }
     db.exec("COMMIT");
     return { resolved: true, store: challenge.store };
   } catch (error) { db.exec("ROLLBACK"); throw error; }

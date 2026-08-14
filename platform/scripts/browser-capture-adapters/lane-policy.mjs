@@ -12,7 +12,7 @@ const RUNTIME_PROCESS = globalThis.process ?? { env: {}, pid: 0 };
 
 async function controllerRequest(pathname, init = {}, environment = RUNTIME_PROCESS.env) {
   const body = typeof init.body === "string" ? JSON.parse(init.body) : {};
-  return captureControllerRequest(pathname, body, environment, 750);
+  return captureControllerRequest(pathname, body, environment, 5_000, true);
 }
 
 export async function browserLanePolicy(store, now = new Date(), environment = RUNTIME_PROCESS.env) {
@@ -79,7 +79,9 @@ export async function withBrowserStoreLane(store, operation, environment = RUNTI
   }
   finally {
     if (heartbeat) clearInterval(heartbeat);
-    if (controllerOwned) await controllerRequest(`/v1/lanes/${encodeURIComponent(store)}/release`, { method: "POST", body: JSON.stringify({ owner }) }, environment);
-    else releaseLaneLease(store, owner, environment);
+    if (controllerOwned) {
+      const released = await controllerRequest(`/v1/lanes/${encodeURIComponent(store)}/release`, { method: "POST", body: JSON.stringify({ owner }) }, environment);
+      if (!released?.controllerReachable) releaseLaneLease(store, owner, environment);
+    } else releaseLaneLease(store, owner, environment);
   }
 }

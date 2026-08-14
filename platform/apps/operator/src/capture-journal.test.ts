@@ -81,10 +81,18 @@ describe("unified persistent capture journal", () => {
     expect(new TextDecoder().decode(readSessionPayload(directory, entry.id, file)?.body)).toContain('"eggs"');
 
     const challenge = openCaptureChallenge("aldi", { reason: "wall" }, new Date(started.getTime() + 2_000), file);
+    const journal = new DatabaseSync(file);
+    journal.prepare("INSERT INTO lane_state (store, state_json, updated_at) VALUES (?, ?, ?)")
+      .run("aldi", JSON.stringify({ consecutiveFailures: 1, circuitOpenUntil: new Date(started.getTime() + 30 * 60_000).toISOString(), lastOutcome: "blocked" }), started.toISOString());
+    journal.close();
     expect(leaseCaptureWork("executor-2", "aldi", new Date(started.getTime() + 10_000), 60_000, file)).toMatchObject({ acquired: false });
     expect(acknowledgeCaptureChallenge(challenge.id, new Date(started.getTime() + 3_000), file)).toMatchObject({ acknowledged: true, requiresCanary: true });
     expect(resolveCaptureChallenge(challenge.id, false, new Date(started.getTime() + 4_000), file)).toMatchObject({ resolved: false });
     expect(resolveCaptureChallenge(challenge.id, true, new Date(started.getTime() + 5_000), file)).toMatchObject({ resolved: true });
+    const resumedJournal = new DatabaseSync(file, { readOnly: true });
+    const resumedLane = JSON.parse((resumedJournal.prepare("SELECT state_json FROM lane_state WHERE store = ?").get("aldi") as { state_json: string }).state_json);
+    resumedJournal.close();
+    expect(resumedLane).toMatchObject({ consecutiveFailures: 0, circuitOpenUntil: null, lastOutcome: "canary_passed" });
     const resumed = leaseCaptureWork("executor-2", "aldi", new Date(started.getTime() + 12_000), 60_000, file) as { acquired: boolean; work: { unitKey: string } };
     expect(resumed.acquired).toBe(true);
     expect(resumed.work.unitKey).toBe("milk");
