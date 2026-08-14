@@ -164,3 +164,15 @@ export async function claimCatalogBackfillBatch(db: D1Database, input: {
   return claimPipelineAgentWork(db, { agentId: input.agentId, owner: input.owner, now: now.toISOString(),
     leaseExpiresAt: new Date(now.getTime() + Math.min(3600, Math.max(60, input.leaseSeconds)) * 1000).toISOString(), limit: input.limit });
 }
+
+export async function heartbeatCatalogBackfillOwner(db: D1Database, input: { owner: string; leaseSeconds: number }) {
+  const leaseSeconds = Math.min(3600, Math.max(60, input.leaseSeconds));
+  const result = await db.prepare(`UPDATE pipeline_agent_work_items_v4
+    SET lease_expires_at=datetime('now',?2),heartbeat_at=CURRENT_TIMESTAMP,state='running'
+    WHERE lease_owner=?1 AND entity_type='catalog_backfill_cell' AND state IN ('claimed','running')
+      AND lease_expires_at>CURRENT_TIMESTAMP`)
+    .bind(input.owner, `+${leaseSeconds} seconds`).run();
+  const renewed = Number(result.meta.changes ?? 0);
+  if (renewed === 0) throw new Error("backfill owner has no unexpired claimed work");
+  return { owner: input.owner, renewed, leaseSeconds };
+}

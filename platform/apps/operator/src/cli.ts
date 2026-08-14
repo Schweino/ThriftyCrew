@@ -2273,7 +2273,10 @@ if (command === "status") {
     result = await client.request("/internal/v4/backfill/claim", { json: {
       agentId: first, owner: second ?? `v4-backfill-${process.pid}`, limit: Number(arguments_[3] ?? 50), leaseSeconds: 900,
     } });
-  } else throw new Error("tc ingredient backfill-v4 requires initialize|import [offset] [limit]|progress [run]|claim <agent> [owner] [limit]");
+  } else if (action === "heartbeat") {
+    if (!first) throw new Error("tc ingredient backfill-v4 heartbeat requires an exact owner [lease-seconds]");
+    result = await client.request("/internal/v4/backfill/heartbeat", { json: { owner: first, leaseSeconds: Number(second ?? 900) } });
+  } else throw new Error("tc ingredient backfill-v4 requires initialize|import [offset] [limit]|progress [run]|claim <agent> [owner] [limit]|heartbeat <owner> [lease-seconds]");
 } else if (command === "recipe" && subcommand === "wave") {
   const [action, waveId, value] = arguments_;
   if (!action || !waveId) throw new Error("tc recipe wave requires snapshot|published|corrective and a wave id");

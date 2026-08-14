@@ -131,7 +131,7 @@ import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredi
 import { materializeHotCatalog } from "./hot-catalog";
 import { attachIngredientProposal, createIngredientPublicationBatch, failIngredientPublicationBatch, ingredientPublicationProofPlan, materializeIngredientPublicationCaptures, verifyIngredientPublicationExternal, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
 import { listPublicIngredients, getPublicIngredientBySlug, publicIngredientResponse } from "./public-grocery-v3";
-import { catalogBackfillProgress, claimCatalogBackfillBatch, importCatalogBackfillPage, initializeCatalogBackfill } from "./catalog-backfill-v4";
+import { catalogBackfillProgress, claimCatalogBackfillBatch, heartbeatCatalogBackfillOwner, importCatalogBackfillPage, initializeCatalogBackfill } from "./catalog-backfill-v4";
 import { compareAndSwapIngredientPointer, finalizeIncrementalIngredient, previewIncrementalIngredient, rollbackIncrementalIngredientPointer, stageIncrementalIngredient } from "./incremental-ingredient-publication";
 import { completePermanentlyUnavailableIngredient, resumeRecipesForPublishedIngredient } from "./recipe-dependency-resume-v2";
 import { releasePayloadObjectKey } from "./release-payloads";
@@ -1710,6 +1710,17 @@ app.post("/internal/v4/backfill/claim", async (context) => {
       limit: Math.min(50, Math.max(1, Number(body.limit ?? 50))), leaseSeconds: Number(body.leaseSeconds ?? 900) });
     return context.json({ ok: true, workItems });
   } catch (error) { return jsonError(error instanceof Error ? error.message : "catalog backfill claim failed", 409); }
+});
+
+app.post("/internal/v4/backfill/heartbeat", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may heartbeat catalog backfill", 403);
+  try {
+    const body = await context.req.json<{ owner: string; leaseSeconds?: number }>();
+    if (!body.owner?.startsWith("v4-backfill-")) return jsonError("backfill heartbeat requires its exact lane owner", 400);
+    return context.json({ ok: true, ...await heartbeatCatalogBackfillOwner(context.env.DB, {
+      owner: body.owner, leaseSeconds: Number(body.leaseSeconds ?? 900),
+    }) });
+  } catch (error) { return jsonError(error instanceof Error ? error.message : "catalog backfill heartbeat failed", 409); }
 });
 
 app.post("/internal/v4/ingredients/stage", async (context) => {
