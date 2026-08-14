@@ -269,8 +269,25 @@ async function captureTerm(tab, store, query) {
       const accumulated = [...page.rows];
       let pageCount = 1;
       while (page.hasMore && page.nextHref && pageCount < 5) {
-        await tab.goto(page.nextHref);
-        await tab.playwright.waitForTimeout(800);
+        const currentWithoutHash = String(page.url).replace(/#.*$/, "");
+        const nextWithoutHash = String(page.nextHref).replace(/#.*$/, "");
+        if (nextWithoutHash && nextWithoutHash !== currentWithoutHash) {
+          await tab.goto(page.nextHref);
+        } else {
+          // Walmart renders the real pagination control as a client-routed
+          // `href="#"` link. Navigating that href reloads page one forever;
+          // activate the visible control so its router advances the result
+          // envelope and then re-read the newly rendered __NEXT_DATA__.
+          // The element is an <a href="#"> but Walmart declares
+          // role="button"; target its accessible role so the client router,
+          // rather than a hash navigation, advances the result envelope.
+          await tab.playwright.getByRole("button", { name: "Next Page" }).click({ timeout: 10_000 });
+        }
+        // Walmart updates the URL before replacing the product envelope. A
+        // sub-second read can therefore see page-one's pager under page two's
+        // URL and attempt a nonexistent extra continuation. Allow the routed
+        // result region to settle before evaluating termination.
+        await tab.playwright.waitForTimeout(2_500);
         const nextPage = await readPage(tab);
         if (nextPage.challenge) return { blocked: true, term: { query, outcome: "blocked", rowCount: 0, attempts, startedAt, finishedAt: new Date().toISOString(), retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: pageCount + 1, hasMoreResults: false, termination: "blocked" }, reason: "Retailer challenge detected during result pagination." }, rows: [] };
         if (normalize(nextPage.query) !== normalize(query)) throw new Error(`visible query mismatch on continuation: expected ${query}, saw ${nextPage.query}`);

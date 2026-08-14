@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildIngredientCapturePayload, buildIngredientQaPayload, mergeIngredientQaDiscoveryChunks, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
+import { buildIngredientCapturePayload, buildIngredientQaPayload, isClearlyNonFoodProduct, mergeIngredientQaDiscoveryChunks, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
 
 const hash = (character: string) => character.repeat(64);
 const observedAt = "2026-08-13T20:00:00.000Z";
@@ -24,6 +24,20 @@ const evidence = { objectKey: "ingredient-store-evidence/check/producer/hash.jso
   contentType: "application/json", sourceUrl: chunk.canary.evidenceUrl, observedAt };
 
 describe("targeted ingredient capture bridge", () => {
+  it("fails closed on non-food products whose names happen to match an ingredient", () => {
+    expect(isClearlyNonFoodProduct("Spicy Cinnamon Stick Scented Wax Melts", "Home Decor")).toBe(true);
+    expect(isClearlyNonFoodProduct("Organic Cinnamon Sticks", "Pantry / Spices")).toBe(false);
+  });
+
+  it("keeps non-food matches in the evidence set but makes them ineligible", async () => {
+    const nonFood = structuredClone(chunk);
+    nonFood.rows![0]!.n = "Test Spice Scented Wax Melt";
+    (nonFood.rows![0]!._capture as Record<string, any>).offer.productName = "Test Spice Scented Wax Melt";
+    const payload = await buildIngredientCapturePayload(claim, [nonFood], evidence, new Date(observedAt));
+    expect(payload.result.outcome).toBe("not_found");
+    expect(payload.candidates[0]).toMatchObject({ eligible: false, rejectionCodes: ["non_food_product"] });
+  });
+
   it("locks every candidate to one comparison basis and deterministically selects the cheapest eligible product", async () => {
     const payload = await buildIngredientCapturePayload(claim, [chunk], evidence, new Date(observedAt));
     expect(payload.result).toMatchObject({ outcome: "priced", productName: "Great Value Test Spice", normalizedBasisUnit: "oz",

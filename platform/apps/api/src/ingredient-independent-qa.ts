@@ -7,6 +7,7 @@ import type { IngredientAggregate } from "./ingredient-state-machine";
 
 type CaptureResult = z.infer<typeof ingredientStoreCaptureResultSchema>;
 type QaComplete = z.infer<typeof ingredientStoreQaCompleteSchema>;
+type QaReject = { owner: string; leaseGeneration: number; reason: string; validatorVersion: string };
 
 export function hasCompleteLocationModeProof(result: CaptureResult["result"], priceMode: unknown): boolean {
   if (!result.searchComplete || !result.locationVerified || !result.priceModeVerified) return false;
@@ -222,4 +223,36 @@ export async function completeIngredientStoreQa(env: Pick<WorkerEnv, "DB" | "EVI
   const results = await env.DB.batch(statements);
   if ((results.at(-2)?.meta.changes ?? 0) !== 1) throw new Error("QA completion lost its lease fence");
   return sealAggregateIfTerminal(env, String(row.pricing_job_id));
+}
+
+/**
+ * Independent QA must be able to return a bad frozen capture to collection
+ * without turning it into a terminal result. Raw R2 evidence and audit events
+ * remain immutable; only the derived candidate/coverage projection is cleared
+ * so the next fenced producer generation cannot accidentally rank stale rows.
+ */
+export async function rejectIngredientStoreQa(env: Pick<WorkerEnv, "DB">, checkId: string, input: QaReject) {
+  const row = await env.DB.prepare(`SELECT pricing_job_id, lease_owner, lease_generation, lease_lane
+    FROM ingredient_store_checks WHERE id = ?1 AND state = 'leased'`).bind(checkId).first<Record<string, unknown>>();
+  if (!row || row.lease_owner !== input.owner || Number(row.lease_generation) !== input.leaseGeneration || row.lease_lane !== "qa") {
+    throw new Error("QA rejection rejected by lease fence or lane boundary");
+  }
+  const results = await env.DB.batch([
+    env.DB.prepare("DELETE FROM ingredient_query_coverage WHERE store_check_id = ?1").bind(checkId),
+    env.DB.prepare("DELETE FROM ingredient_store_candidates WHERE store_check_id = ?1").bind(checkId),
+    env.DB.prepare(`UPDATE ingredient_store_checks SET state = 'capture_pending', operational_state = 'capture_queued',
+      terminal_outcome = NULL, capture_result_json = NULL, candidate_set_hash = NULL, producer_evidence_id = NULL,
+      verifier_evidence_id = NULL, verifier_version = NULL, qa_attestation_id = NULL,
+      lease_owner = NULL, lease_expires_at = NULL, heartbeat_at = NULL, lease_lane = NULL,
+      error_class = 'qa_rejected', last_error = ?4, state_version = state_version + 1,
+      next_attempt_at = CURRENT_TIMESTAMP, last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?1 AND state = 'leased' AND lease_owner = ?2 AND lease_generation = ?3 AND lease_lane = 'qa'`)
+      .bind(checkId, input.owner, input.leaseGeneration, input.reason),
+    env.DB.prepare(`INSERT INTO pipeline_stage_events
+      (lane, aggregate_kind, aggregate_id, stage, event_kind, detail_json)
+      VALUES ('pricing', 'store_check', ?1, 'qa', 'rejected_to_capture', ?2)`)
+      .bind(checkId, stableJson({ reason: input.reason, validatorVersion: input.validatorVersion })),
+  ]);
+  if ((results.at(-2)?.meta.changes ?? 0) !== 1) throw new Error("QA rejection lost its lease fence");
+  return { checkId, pricingJobId: String(row.pricing_job_id), state: "capture_queued" as const };
 }

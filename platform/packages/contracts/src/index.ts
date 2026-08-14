@@ -1514,6 +1514,13 @@ export const ingredientStoreQaCompleteSchema = z.object({
   findings: z.array(z.string().trim().min(3).max(1000)).max(100).default([]),
 }).strict();
 
+export const ingredientStoreQaRejectSchema = z.object({
+  owner: nonEmptyId,
+  leaseGeneration: z.number().int().positive(),
+  reason: z.string().trim().min(10).max(2000),
+  validatorVersion: z.string().trim().min(3).max(160),
+}).strict();
+
 export const ingredientStoreCheckFailSchema = z.object({
   owner: nonEmptyId,
   leaseGeneration: z.number().int().positive(),

@@ -53,6 +53,7 @@ import {
   ingredientStoreCheckHeartbeatSchema,
   ingredientStoreCaptureResultSchema,
   ingredientStoreQaCompleteSchema,
+  ingredientStoreQaRejectSchema,
   ingredientCaptureChallengeOpenSchema,
   ingredientCaptureChallengeResolveSchema,
   ingredientEvidenceUploadSchema,
@@ -117,7 +118,7 @@ import { recipeCommodityIds } from "./recipe-commodity-catalog";
 import { claimAgentWorkItem, completeAgentWorkItem, enqueueIngredientDefinitionPlan, failAgentWorkItem, ingredientCampaignSnapshot, reconcileIngredientCampaign, reconcileIngredientHolds } from "./agent-work-items";
 import { claimStoreChecks, createPricingWave, failStoreCheck, heartbeatStoreCheck, ingredientPipelineStatus, pipelineEvents, pricingWaveStatus, resolveClaimedStoreCheckFromCatalog } from "./ingredient-pricing-v2";
 import { acknowledgePipelineOutbox, claimPipelineOutbox, nackPipelineOutbox } from "./pipeline-outbox";
-import { completeIngredientStoreCapture, completeIngredientStoreQa, uploadIngredientEvidence } from "./ingredient-independent-qa";
+import { completeIngredientStoreCapture, completeIngredientStoreQa, rejectIngredientStoreQa, uploadIngredientEvidence } from "./ingredient-independent-qa";
 import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredientChallenge } from "./ingredient-challenges";
 import { materializeHotCatalog } from "./hot-catalog";
 import { attachIngredientProposal, createIngredientPublicationBatch, verifyIngredientPublication, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
@@ -1571,6 +1572,10 @@ app.post("/internal/ingredient-pricing/store-checks/:id/qa-complete", zValidator
   if (context.get("identity").role !== "operator") return jsonError("only the independent QA coordinator may complete store QA", 403);
   try { return context.json({ ok: true, aggregate: await completeIngredientStoreQa(context.env, context.req.param("id"), context.req.valid("json")) }); }
   catch (error) { return jsonError(error instanceof Error ? error.message : "store QA completion failed", 409); }
+});
+app.post("/internal/ingredient-pricing/store-checks/:id/qa-reject", zValidator("json", ingredientStoreQaRejectSchema), async (context) => {
+  try { return context.json({ ok: true, result: await rejectIngredientStoreQa(context.env, context.req.param("id"), context.req.valid("json")) }); }
+  catch (error) { return context.json({ ok: false, error: error instanceof Error ? error.message : String(error) }, 409); }
 });
 
 app.post("/internal/ingredient-pricing/store-checks/:id/challenge-open", zValidator("json", ingredientCaptureChallengeOpenSchema), async (context) => {

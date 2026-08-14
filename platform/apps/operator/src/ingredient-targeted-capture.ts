@@ -41,6 +41,11 @@ const STORE = {
 
 const MASS_GRAMS: Record<string, number> = { oz: 28.349523125, lb: 453.59237, gram: 1, kg: 1000 };
 const VOLUME_ML: Record<string, number> = { fl_oz: 29.5735295625, ml: 1, liter: 1000, gal: 3785.411784, qt: 946.352946, pt: 473.176473 };
+const NON_FOOD_PRODUCT = /\b(?:wax\s+melts?|candles?|air\s+fresheners?|fragrance|potpourri|diffusers?|essential\s+oils?|soaps?|shampoos?|lotions?|pet\s+food|dog\s+treats?|cat\s+treats?|craft|decor)\b/i;
+
+export function isClearlyNonFoodProduct(name: string, taxonomy = ""): boolean {
+  return NON_FOOD_PRODUCT.test(`${name} ${taxonomy}`);
+}
 
 function sha(value: unknown): string {
   return createHash("sha256").update(stableJson(value)).digest("hex");
@@ -98,6 +103,7 @@ function canonicalCandidate(row: Record<string, unknown>, check: ClaimedCheck, e
   try { url = new URL(identity.sourceUrl); } catch { rejections.push("invalid_source_url"); }
   if (url?.hostname !== store.host) rejections.push("wrong_first_party_host");
   if (!identity.productId || !identity.productName) rejections.push("missing_product_identity");
+  if (isClearlyNonFoodProduct(identity.productName, String(row.taxonomy_path ?? row.taxonomy ?? ""))) rejections.push("non_food_product");
   if (!regexes(proposal.include).some((rule) => rule.test(identity.productName))) rejections.push("identity_not_included");
   if (regexes(proposal.exclude).some((rule) => rule.test(identity.productName))) rejections.push("identity_excluded");
   const availability = identity.offer?.availability ?? {};

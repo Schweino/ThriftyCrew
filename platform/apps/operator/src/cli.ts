@@ -1709,6 +1709,14 @@ if (command === "status") {
     submitted.push(await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/qa-complete`, { json: payload }));
   }
   result = { ok: true, submitted };
+} else if (command === "ingredient" && subcommand === "qa-reject") {
+  const [checkId, owner, generationText, validatorVersion, ...reasonParts] = arguments_;
+  if (!checkId || !owner || !generationText || !validatorVersion || reasonParts.length === 0) {
+    throw new Error("tc ingredient qa-reject requires check id, owner, lease generation, validator version, and reason");
+  }
+  result = await (await mutationClient()).request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(checkId)}/qa-reject`, {
+    json: { owner, leaseGeneration: Number(generationText), validatorVersion, reason: reasonParts.join(" ") },
+  });
 } else if (command === "ingredient" && subcommand === "challenge-open") {
   const [checkId, inputFile] = arguments_;
   if (!checkId || !inputFile) throw new Error("tc ingredient challenge-open requires a check id and input JSON");
