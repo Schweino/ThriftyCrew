@@ -55881,7 +55881,8 @@
       "\\bsaffron(?: threads?)?\\b"
     ],
     "exclude": [
-      "\\bsaffron rice\\b",
+      "\\bsaffron(?:\\s+[a-z0-9-]+){0,4}\\s+rice\\b",
+      "\\brice(?:\\s+[a-z0-9-]+){0,4}\\s+saffron\\b",
       "\\bsaffron tea\\b",
       "\\bsaffron seasoning\\b",
       "\\bextract\\b",
