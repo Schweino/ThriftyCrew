@@ -82,7 +82,7 @@ describe("native release construction", () => {
     const artifact = await buildNativeRelease(root, snapshot);
     const identity = await nativeReleaseIdentity(snapshot, await loadNativeReleaseCatalog(root));
     expect(identity).toMatchObject({ releaseId: artifact.releaseId, inputHash: artifact.inputHash, inputBatchIds: artifact.inputBatchIds });
-    expect(identity.inputManifest.engineVersion).toBe("native-v4.4.3-triage-guard-recovery");
+    expect(identity.inputManifest.engineVersion).toBe("native-v4.4.4-materialized-shards");
     const laterBoundaryCheck = await nativeReleaseIdentity(
       { ...snapshot, observedAt: "2026-08-09T13:00:00.000Z" },
       await loadNativeReleaseCatalog(root),

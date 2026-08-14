@@ -211,7 +211,7 @@ export async function nativeReleaseIdentity(
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
   const inputManifest = {
     kind: "native-v3-release",
-    engineVersion: "native-v4.4.3-triage-guard-recovery",
+    engineVersion: "native-v4.4.4-materialized-shards",
     marketId: "omaha",
     mode: "direct",
     releaseDate: weekOf,
