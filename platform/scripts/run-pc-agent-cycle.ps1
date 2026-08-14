@@ -479,7 +479,10 @@ try {
       $readyStart = $readyText.IndexOf('{'); $readyEnd = $readyText.LastIndexOf('}')
       if ($readyStart -ge 0 -and $readyEnd -gt $readyStart) {
         $readyDocument = $readyText.Substring($readyStart, $readyEnd - $readyStart + 1) | ConvertFrom-Json
-        $gapIds = @($readyDocument.gaps | Select-Object -First $MaxItems | ForEach-Object { [string]$_.gap_id })
+        # Publication is intentionally one ingredient per transaction. Matcher
+        # surgery or release failure for one definition must never strand its
+        # independently QA-verified siblings in the same sealed batch.
+        $gapIds = @($readyDocument.gaps | Select-Object -First 1 | ForEach-Object { [string]$_.gap_id })
         if ($gapIds.Count -gt 0) {
           Invoke-LoggedCommand 'ingredient-v2-publish' { & $pnpmPath tc ingredient publish-v2 @gapIds } | Out-Null
           $publishedGaps = $gapIds.Count

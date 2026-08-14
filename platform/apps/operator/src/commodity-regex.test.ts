@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { compileCommodityRegexPattern, normalizeCommodityRegexPattern, parseCatalogJson } from "./commodity-regex";
+import { commodityPhraseExclusionPattern, compileCommodityRegexPattern, normalizeCommodityRegexPattern, parseCatalogJson } from "./commodity-regex";
 
 describe("commodity regex compatibility", () => {
   it("normalizes a leading PCRE case-insensitive flag because matching is already case-insensitive", () => {
@@ -11,6 +11,12 @@ describe("commodity regex compatibility", () => {
 
   it("preserves ordinary JavaScript patterns", () => {
     expect(normalizeCommodityRegexPattern("\\bpepitas?\\b")).toBe("\\bpepitas?\\b");
+  });
+
+  it("builds a bounded flexible-space exclusion for a reviewed commodity phrase", () => {
+    const pattern = compileCommodityRegexPattern(commodityPhraseExclusionPattern("Fresh whole nutmeg"));
+    expect(pattern.test("Organic fresh   whole nutmeg 2 oz")).toBe(true);
+    expect(pattern.test("ground nutmeg 2 oz")).toBe(false);
   });
 
   it("continues to reject malformed syntax", () => {

@@ -122,7 +122,7 @@ import { acknowledgePipelineOutbox, claimPipelineOutbox, nackPipelineOutbox } fr
 import { completeIngredientStoreCapture, completeIngredientStoreQa, rejectIngredientStoreQa, uploadIngredientEvidence } from "./ingredient-independent-qa";
 import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredientChallenge } from "./ingredient-challenges";
 import { materializeHotCatalog } from "./hot-catalog";
-import { attachIngredientProposal, createIngredientPublicationBatch, ingredientPublicationProofPlan, materializeIngredientPublicationCaptures, verifyIngredientPublicationExternal, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
+import { attachIngredientProposal, createIngredientPublicationBatch, failIngredientPublicationBatch, ingredientPublicationProofPlan, materializeIngredientPublicationCaptures, verifyIngredientPublicationExternal, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
 import { releasePayloadObjectKey } from "./release-payloads";
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
@@ -1440,6 +1440,14 @@ app.post("/internal/ingredient-publication/batches", zValidator("json", ingredie
   if (context.get("identity").role !== "operator") return jsonError("only an operator may seal an ingredient publication batch", 403);
   try { return context.json({ ok: true, ...await createIngredientPublicationBatch(context.env.DB, context.req.valid("json")) }, 201); }
   catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient publication batch failed", 409); }
+});
+
+app.post("/internal/ingredient-publication/batches/:id/fail-predeployment", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may fail an ingredient publication batch", 403);
+  try {
+    const body = await context.req.json<{ detail?: unknown }>();
+    return context.json({ ok: true, ...await failIngredientPublicationBatch(context.env.DB, context.req.param("id"), String(body.detail ?? "predeployment publication failure")) });
+  } catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient publication failure transition failed", 409); }
 });
 
 app.post("/internal/ingredient-publication/batches/:id/materialize", async (context) => {

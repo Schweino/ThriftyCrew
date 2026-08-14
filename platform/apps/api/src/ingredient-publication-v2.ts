@@ -160,6 +160,23 @@ export async function createIngredientPublicationBatch(db: D1Database, inputValu
   return { batchId, memberRootHash, members };
 }
 
+export async function failIngredientPublicationBatch(db: D1Database, batchId: string, detail: string) {
+  const failureDetail = detail.slice(0, 4000);
+  const batch = await db.prepare(
+    `UPDATE ingredient_publication_batches
+        SET state = 'failed', failure_class = 'predeployment', failure_detail = ?2,
+            lease_owner = NULL, lease_expires_at = NULL, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?1 AND state IN ('open','sealed','git_committed')`,
+  ).bind(batchId, failureDetail).run();
+  if ((batch.meta.changes ?? 0) !== 1) throw new Error("only a predeployment ingredient publication batch may be failed and retried");
+  await db.prepare(
+    `UPDATE ingredient_publication_members
+        SET state = 'failed', failure_detail = ?2, updated_at = CURRENT_TIMESTAMP
+      WHERE batch_id = ?1 AND state = 'pending'`,
+  ).bind(batchId, failureDetail).run();
+  return { batchId, state: "failed", retryableMembers: true };
+}
+
 export async function materializeIngredientPublicationCaptures(db: D1Database, batchId: string) {
   const publication = await db.prepare("SELECT state, member_root_hash FROM ingredient_publication_batches WHERE id = ?1")
     .bind(batchId).first<{ state: string; member_root_hash: string }>();

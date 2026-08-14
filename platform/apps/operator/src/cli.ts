@@ -24,7 +24,7 @@ import { captureControllerRequest } from "../../../scripts/capture-controller-cl
 import { catalogRefreshPlan } from "./capture-journal";
 import { agentJobRunFields } from "./job-run";
 import { loadR2ShardedEngineSnapshot } from "./engine-snapshot";
-import { compileCommodityRegexPattern, normalizeCommodityRegexPattern, parseCatalogJson } from "./commodity-regex";
+import { commodityPhraseExclusionPattern, compileCommodityRegexPattern, normalizeCommodityRegexPattern, parseCatalogJson } from "./commodity-regex";
 import { compactEvidenceChunkForCheck, isIdempotentCaptureResumeConflict, isIdempotentQaResumeConflict, runIngredientPipeline } from "./ingredient-pipeline";
 import { buildIngredientCapturePayload, buildIngredientQaPayload, mergeIngredientQaDiscoveryChunks, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
 import { captureHeadlessDiscovery, captureHeadlessVerification, claimSearchTerms, type HeadlessStore } from "./headless-targeted-capture";
@@ -474,9 +474,12 @@ async function commodityAddSpecification(incoming: CommodityAddition, generate =
       throw new Error(`commodity ${incoming.id} include rules collide with existing commodity ${String(existing.id)}`);
     }
     const existingIncludes = Array.isArray(existing.include) ? existing.include.map((pattern) => compileCommodityRegexPattern(String(pattern))) : [];
-    const existingExcludes = Array.isArray(existing.exclude) ? existing.exclude.map((pattern) => compileCommodityRegexPattern(String(pattern))) : [];
-    if (proposedNames.some((name) => existingIncludes.some((pattern) => pattern.test(name)) && !existingExcludes.some((pattern) => pattern.test(name)))) {
-      throw new Error(`existing commodity ${String(existing.id)} would also claim proposed commodity ${incoming.id}; operator matcher surgery is required`);
+    const existingExcludeValues = Array.isArray(existing.exclude) ? existing.exclude.map(String) : [];
+    const existingExcludes = existingExcludeValues.map(compileCommodityRegexPattern);
+    const collisions = proposedNames.filter((name) => existingIncludes.some((pattern) => pattern.test(name))
+      && !existingExcludes.some((pattern) => pattern.test(name)));
+    if (collisions.length > 0) {
+      existing.exclude = [...new Set([...existingExcludeValues, ...collisions.map(commodityPhraseExclusionPattern)])];
     }
   }
   if (incoming.bandMin !== undefined && (!Number.isFinite(incoming.bandMin) || incoming.bandMin <= 0)) throw new Error(`commodity ${incoming.id} has an invalid minimum price band`);
@@ -519,6 +522,8 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
   const retrySuffix = path.basename(worktreeRoot).slice(-6).toLowerCase();
   const branch = `ingredient-publish/${sealed.batchId}-${retrySuffix}`;
   let completed = false;
+  let configurationDeployed = false;
+  let discardBranch = false;
   try {
     await execFileAsync("git", ["-C", incomeRoot, "worktree", "add", "-b", branch, worktreeRoot, "HEAD"]);
     const applied = [];
@@ -532,6 +537,7 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     const sourceCommit = (await execFileAsync("git", ["-C", worktreeRoot, "rev-parse", "HEAD"])).stdout.trim();
     const bridge = await buildCurrentBridge(worktreeRoot);
     const deployment = await deployConfiguration(client, bridge.configuration);
+    configurationDeployed = true;
     const matching = await rematchPromotedBatches(client);
     const materialization = await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(sealed.batchId)}/materialize`, { method: "POST" }) as {
       batches?: Array<{ batchId: string; status: string }>;
@@ -581,11 +587,20 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     return { ok: true, batchId: sealed.batchId, releaseId: releaseArtifact.releaseId, sourceCommit,
       applied: applied.length, deployment, matching, materialization, materializedCaptures, stagedRelease, prepublication, publication, verification };
   } catch (error) {
-    throw new Error(`${error instanceof Error ? error.message : String(error)}; failed publication worktree preserved at ${worktreeRoot}`);
+    const detail = error instanceof Error ? error.message : String(error);
+    if (!configurationDeployed) {
+      await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(sealed.batchId)}/fail-predeployment`, {
+        json: { detail },
+      });
+      completed = true;
+      discardBranch = true;
+    }
+    throw new Error(configurationDeployed ? `${detail}; post-deployment publication worktree preserved at ${worktreeRoot}`
+      : `${detail}; predeployment batch failed durably and its temporary worktree was cleaned`);
   } finally {
     if (completed) {
-      await execFileAsync("git", ["-C", incomeRoot, "worktree", "remove", worktreeRoot]);
-      await execFileAsync("git", ["-C", incomeRoot, "branch", "-d", branch]);
+      await execFileAsync("git", ["-C", incomeRoot, "worktree", "remove", ...(discardBranch ? ["--force"] : []), worktreeRoot]);
+      await execFileAsync("git", ["-C", incomeRoot, "branch", discardBranch ? "-D" : "-d", branch]);
     }
   }
 }
