@@ -116,6 +116,24 @@ describe("truthful V4 catalog backfill", () => {
       document: unresolved })).resolves.toMatchObject({ outcome: "needs_operator", winner: null });
   });
 
+  it("classifies identity before nullable raw price facts without inventing zero", async () => {
+    const irrelevant = walmartChunk();
+    irrelevant.rows[1]!.name = irrelevant.rows[1]!._capture.offer.productName = "Vegetable Tray with Ranch";
+    irrelevant.rows[1]!._capture.offer.purchasePriceMinor = null as unknown as number;
+    irrelevant.rows[1]!._capture.offer.priceSemantics = { offerType: "unknown", condition: "unknown", ambiguity: true,
+      unitPriceMinor: null, qualifyingQuantity: 1, totalPriceMinor: null } as any;
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: ["Bananas"], identity,
+      document: irrelevant })).resolves.toMatchObject({ outcome: "priced", winner: { productId: "a" } });
+    const exact = walmartChunk();
+    exact.rows = [exact.rows[1]!];
+    exact.rows[0]!._capture.offer.purchasePriceMinor = null as unknown as number;
+    exact.rows[0]!._capture.offer.priceSemantics = { offerType: "unknown", condition: "unknown", ambiguity: true,
+      unitPriceMinor: null, qualifyingQuantity: 1, totalPriceMinor: null } as any;
+    exact.terms[0]!.rowCount = 1; exact.terms[0]!.retrieval.loadedResultCount = 1; exact.terms[0]!.retrieval.availableResultCount = 1;
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: ["Bananas"], identity,
+      document: exact })).resolves.toMatchObject({ outcome: "needs_operator", winner: null });
+  });
+
   it("never derives not-found from an exact candidate whose availability is unknown", async () => {
     const unknown = walmartChunk();
     for (const row of unknown.rows) row._capture.offer.availability = {
@@ -185,7 +203,7 @@ describe("truthful V4 catalog backfill", () => {
       row._capture.offer.availability.locationId = "043";
       row._capture.offer.availability.fulfillmentMode = "in_store";
       row._capture.offer.availability.sourceBinding = { retailerLocationId: "531573", shopId: "16671402", serviceType: "instore",
-        productId: row.id, sourceProductId: row.id };
+        productId: row.id, sourceProductId: row.id, apolloEncoding: "percent-encoded-json", apolloRawSha256: "a".repeat(64), apolloRawBytes: 100 };
     }
     await expect(deriveCatalogBackfillCapture({ storeLocationId: "fareway-omaha-043", queryTerms: ["Bananas"], identity, document: chunk }))
       .resolves.toMatchObject({ outcome: "priced" });
@@ -200,6 +218,7 @@ describe("truthful V4 catalog backfill", () => {
       .resolves.toMatchObject({ outcome: "needs_operator", winner: null });
     for (const row of chunk.rows) row._capture.offer.availability.sourceBinding = {
       retailerLocationId: "531573", shopId: "16671402", serviceType: "instore", productId: "wrong", sourceProductId: row.id,
+      apolloEncoding: "percent-encoded-json", apolloRawSha256: "a".repeat(64), apolloRawBytes: 100,
     };
     await expect(deriveCatalogBackfillCapture({ storeLocationId: "fareway-omaha-043", queryTerms: ["Bananas"], identity, document: chunk }))
       .resolves.toMatchObject({ outcome: "needs_operator", winner: null });

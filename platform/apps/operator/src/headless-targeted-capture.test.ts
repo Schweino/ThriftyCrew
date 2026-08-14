@@ -165,8 +165,10 @@ describe("headless targeted store capture", () => {
         { krogerCredentialsFile: credentials, fetchImpl, pageConcurrency: 2 });
       expect(chunk.terms?.find((term) => term.query === "sea salt")).toMatchObject({ outcome: "rejected",
         retrieval: { termination: "error", hasMoreResults: false } });
-      expect(chunk.terms?.find((term) => term.query === "cumin seeds")).toMatchObject({ outcome: "empty",
+      expect(chunk.terms?.find((term) => term.query === "cumin seeds")).toMatchObject({ outcome: "success", rowCount: 1,
         retrieval: { termination: "end-of-results", availableResultCount: 1 } });
+      expect(chunk.rows?.find((row) => row.id === "c1")).toMatchObject({ _capture: { offer: {
+        purchasePriceMinor: null, candidateIssues: ["invalid_package_basis", "invalid_price_semantics"] } } });
     } finally {
       await rm(directory, { recursive: true, force: true });
     }
@@ -229,7 +231,7 @@ describe("headless targeted store capture", () => {
       const url = new URL(String(input));
       if (url.pathname.endsWith("/token")) return new Response(JSON.stringify({ access_token: "token" }), { status: 200 });
       return new Response(JSON.stringify({ data: [{ productId: "b1", description: "Loose Acorn Squash priced per pound",
-        productPageURI: "/p/acorn/b1", items: [{ itemId: "i1", size: "", price: { regular: 1.49 },
+        productPageURI: "/p/acorn/b1", items: [{ itemId: "i1", size: "", price: { regular: null },
           fulfillment: { inStore: true }, inventory: { stockLevel: "HIGH" } }] }],
         meta: { pagination: { start: 0, limit: 50, total: 1 } } }), { status: 200 });
     };
@@ -238,7 +240,8 @@ describe("headless targeted store capture", () => {
         { krogerCredentialsFile: credentials, fetchImpl });
       expect(chunk.rows).toHaveLength(1);
       expect(chunk.rows?.[0]).toMatchObject({ id: "b1", size: "", _capture: { offer: {
-        candidateIssues: ["invalid_package_basis"] }, parser: { status: "typed_unpriceable" } } });
+        purchasePriceMinor: null, candidateIssues: ["invalid_package_basis", "invalid_price_semantics"] },
+        parser: { status: "typed_unpriceable" } } });
       expect(chunk.terms?.[0]).toMatchObject({ rowCount: 1, retrieval: { loadedResultCount: 1, availableResultCount: 1 } });
     } finally { await rm(directory, { recursive: true, force: true }); }
   });
@@ -281,6 +284,22 @@ describe("headless targeted store capture", () => {
     } finally {
       await rm(directory, { recursive: true, force: true });
     }
+  });
+
+  it("reconciles source-declared sponsored rows separately from Hy-Vee's organic total", async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), "tc-hyvee-sponsored-test-"));
+    const output = path.join(directory, "capture.json");
+    const product = (id: string, isSponsored: boolean) => ({ id, description: `${id} Adobo Seasoning`, unitOfMeasure: "8 oz",
+      isSponsored, isEcommerceActive: true, pricing: { tagPriceValue: 2.99, basePriceValue: 2.99 } });
+    const fetchImpl = async () => new Response(JSON.stringify({ results: [product("s1", true), product("o1", false)],
+      meta: { pagination: { pagesTotal: 1, total: 1 } } }), { status: 200 });
+    try {
+      const chunk = await captureHeadlessDiscovery("hy-vee", ["adobo seasoning"], output, { fetchImpl });
+      expect(chunk.rows).toHaveLength(2);
+      expect(chunk.terms?.[0]?.retrieval).toMatchObject({ loadedResultCount: 2, availableResultCount: 2,
+        partitionProof: [{ strategy: "organic_total_plus_sponsored", organicReportedTotal: 1, sponsoredUnique: 1,
+          authoritativeUniqueTotal: 2 }] });
+    } finally { await rm(directory, { recursive: true, force: true }); }
   });
 
   it("preserves a Hy-Vee raw result whose dedicated size contradicts its exact title suffix", async () => {

@@ -162,19 +162,20 @@ export function headlessPriceSemantics(current: number, regular: number | null, 
 }
 
 function capturedRow(store: HeadlessStore, query: string, item: { id: string; name: string; size: string; url: string;
-  price: number; regular: number | null; available: boolean; rawAvailability: string; effective?: string | null; expires?: string | null },
+  price: number | null; regular: number | null; available: boolean; rawAvailability: string; effective?: string | null; expires?: string | null },
   pageIndex: number, resultIndex: number, observedAt: string): JsonRecord | null {
-  if (!item.id || !item.name || !item.url || !Number.isSafeInteger(item.price) || item.price <= 0) return null;
+  if (!item.id || !item.name || !item.url) return null;
+  const priceExact = Number.isSafeInteger(item.price) && Number(item.price) > 0;
   const packageExact = Boolean(item.size) && !sourceNativeSizeConflict(item.name, item.size);
-  const candidateIssues = [...(!packageExact ? ["invalid_package_basis"] : [])];
-  const exactSemantics = headlessPriceSemantics(item.price, item.regular, item.effective, item.expires);
+  const candidateIssues = [...(!packageExact ? ["invalid_package_basis"] : []), ...(!priceExact ? ["invalid_price_semantics"] : [])];
+  const exactSemantics = priceExact ? headlessPriceSemantics(Number(item.price), item.regular, item.effective, item.expires) : null;
   const semantics = exactSemantics ?? { offerType: "unknown", condition: "unknown", unitPriceMinor: item.price,
     qualifyingQuantity: 1, totalPriceMinor: item.price, ambiguity: true };
-  if (!exactSemantics) candidateIssues.push("invalid_price_semantics");
+  if (priceExact && !exactSemantics) candidateIssues.push("invalid_price_semantics");
   const config = STORE[store];
   const offer = { version: 1, retailerProductId: item.id, productName: item.name, sizeText: packageExact ? item.size : "",
     ...(!packageExact ? { rawSizeText: item.size } : {}), ...(candidateIssues.length ? { candidateIssues } : {}),
-    rawPriceText: `$${(item.price / 100).toFixed(2)}`, purchasePriceMinor: item.price, sellerName: config.seller,
+    rawPriceText: priceExact ? `$${(Number(item.price) / 100).toFixed(2)}` : "", purchasePriceMinor: item.price, sellerName: config.seller,
     availability: { status: item.available ? "in_stock" : "unavailable", rawText: item.rawAvailability,
       fulfillmentMode: config.priceMode, locationId: config.locationId, eligible: item.available },
     priceSemantics: semantics, observedAt, sourceUrl: item.url };
@@ -183,9 +184,9 @@ function capturedRow(store: HeadlessStore, query: string, item: { id: string; na
       priceMode: config.priceMode, pageIndex, resultIndex,
       pageState: { pageType: "api_search_results", query, resultRegionPresent: true, challengeDetected: false,
         currency: "USD", locale: "en-US", locationText: config.location, fulfillmentText: config.priceMode },
-      visible: { rawText: `$${(item.price / 100).toFixed(2)}`, priceMinor: item.price, productName: item.name,
+      visible: { rawText: priceExact ? `$${(Number(item.price) / 100).toFixed(2)}` : "", priceMinor: item.price, productName: item.name,
         productKey: item.id, sizeText: packageExact ? item.size : "", rawSizeText: item.size, priceSemantics: semantics },
-      structured: { rawText: `$${(item.price / 100).toFixed(2)}`, priceMinor: item.price, productName: item.name,
+      structured: { rawText: priceExact ? `$${(Number(item.price) / 100).toFixed(2)}` : "", priceMinor: item.price, productName: item.name,
         productKey: item.id, sizeText: packageExact ? item.size : "", rawSizeText: item.size, priceSemantics: semantics }, offer,
       parser: { status: candidateIssues.length ? "typed_unpriceable" : "exact", rule: `${store}-first-party-api-v2`,
         notes: "Store-bound first-party API response; candidate eligibility remains server-derived." } } };
@@ -441,7 +442,7 @@ async function captureBakers(query: string, token: string, observedAt: string, f
       const current = headlessPriceMinor(item?.price?.promo ?? item?.price?.regular);
       const regular = headlessPriceMinor(item?.price?.regular);
       const source = String(product.productPageURI ?? "").split("?", 1)[0];
-      const normalized = current === null ? null : capturedRow("bakers", query, { id: String(product.productId ?? item?.itemId ?? ""),
+      const normalized = capturedRow("bakers", query, { id: String(product.productId ?? item?.itemId ?? ""),
         name: stableProductName(product.description), size: String(item?.size ?? ""),
         url: new URL(source || `/p/${product.productId}`, "https://www.bakersplus.com").href, price: current, regular,
         available: item?.fulfillment?.inStore === true && String(item?.inventory?.stockLevel ?? "").toUpperCase() !== "TEMPORARILY_OUT_OF_STOCK",
@@ -490,7 +491,7 @@ async function captureFamilyFareBatch(queries: string[], observedAt: string,
       // eligible only when that current store-6401 response supplies its own
       // stable identity, canonical product URL, and current package price.
       const available = Boolean(item.id && urlValue && current !== null && /^available$/i.test(String(item.status ?? "")));
-      const normalized = current === null ? null : capturedRow("family-fare", query, { id: String(item.id ?? ""), name: stableProductName(item.name),
+      const normalized = capturedRow("family-fare", query, { id: String(item.id ?? ""), name: stableProductName(item.name),
         size: String(item.size ?? ""), url: urlValue, price: current, regular, available,
         rawAvailability: available ? "Freshop store 6401 available" : "Freshop did not prove current availability" }, 0, index, observedAt);
       if (normalized) rows.push(normalized); else excludedResults.push({ productKey: String(item.id ?? ""), name: String(item.name ?? ""), reason: "incomplete, ambiguous, or unavailable Freshop result" });
@@ -527,21 +528,31 @@ async function captureHyVee(query: string, observedAt: string, fetchImpl: FetchL
   const rest = await mapWithConcurrency(remainingPages, pageConcurrency, (page) => fetchPage(page));
   const pageResults = [first, ...rest];
   if (pageResults.some((page) => page.total !== first.total || page.pagesTotal !== first.pagesTotal)) throw new Error("Hy-Vee pagination totals changed during capture");
-  assertCompleteResultEnvelope("Hy-Vee", first.total, pageResults.map((result) => ({ offset: (result.page - 1) * pageSize,
+  const organicPages = pageResults.map((result) => ({ offset: (result.page - 1) * pageSize,
+    items: result.items.filter((item: JsonRecord) => item.isSponsored !== true) }));
+  assertCompleteResultEnvelope("Hy-Vee", first.total, organicPages.map((result) => ({ offset: result.offset,
     count: result.items.length, ids: result.items.map((item: JsonRecord) => String(item.id ?? "")) })), pageSize);
-  for (const result of pageResults) {
-    const { items, page } = result;
-    for (const [index, item] of items.entries()) {
+  const sponsored = new Map<string, { item: JsonRecord; page: number; index: number }>();
+  for (const result of pageResults) for (const [index, item] of result.items.entries()) if (item.isSponsored === true) {
+    const id = String(item.id ?? ""); if (!id) throw new Error("Hy-Vee sponsored result omitted stable product identity");
+    const prior = sponsored.get(id);
+    if (prior && JSON.stringify(prior.item) !== JSON.stringify(item)) throw new Error("Hy-Vee sponsored result changed across pages");
+    sponsored.set(id, { item, page: result.page, index });
+  }
+  const capturedItems = [...pageResults.flatMap((result) => result.items.map((item: JsonRecord, index: number) => ({ item, page: result.page, index })))
+    .filter(({ item }) => item.isSponsored !== true), ...sponsored.values()];
+  for (const { item, page, index } of capturedItems) {
       const current = headlessPriceMinor(item.pricing?.tagPriceValue); const regular = headlessPriceMinor(item.pricing?.basePriceValue ?? item.pricing?.regularPriceValue);
       const name = stableProductName(item.description);
-      const normalized = current === null ? null : capturedRow("hy-vee", query, { id: String(item.id ?? ""), name,
+      const normalized = capturedRow("hy-vee", query, { id: String(item.id ?? ""), name,
         size: String(item.unitOfMeasure ?? ""), url: `https://www.hy-vee.com/aisles-online/p/${item.id}/${slug(name)}`,
         price: current, regular, available: item.isEcommerceActive === true,
         rawAvailability: item.isEcommerceActive === true ? "Store 1465 ecommerce active" : "Store 1465 inactive" }, page - 1, index, observedAt);
       if (normalized) rows.push(normalized); else excludedResults.push({ productKey: String(item.id ?? ""), name, reason: "incomplete, ambiguous, discounted-without-dates, or unavailable Hy-Vee result" });
-    }
   }
-  return { rows, total: first.total, examined: pageResults.reduce((sum, page) => sum + page.items.length, 0), pages: first.pagesTotal, excludedResults };
+  return { rows, total: first.total + sponsored.size, examined: first.total + sponsored.size, pages: first.pagesTotal, excludedResults,
+    ...(sponsored.size ? { partitionProof: [{ strategy: "organic_total_plus_sponsored", organicReportedTotal: first.total,
+      sponsoredUnique: sponsored.size, authoritativeUniqueTotal: first.total + sponsored.size }] } : {}) };
 }
 
 export async function captureHeadlessDiscovery(store: HeadlessStore, terms: string[], file: string,

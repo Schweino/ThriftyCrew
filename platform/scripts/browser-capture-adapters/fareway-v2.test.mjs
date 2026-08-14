@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildFarewayRows, captureFarewayCanary, parseFarewayApolloAvailability, validatedRegularPrice } from "./fareway-v2.mjs";
+import { buildFarewayRows, captureFarewayCanary, decodeFarewayApolloState, parseFarewayApolloAvailability, validatedRegularPrice } from "./fareway-v2.mjs";
 
 it("emits the canonical Fareway policy key from a passing Omaha in-store canary", async () => {
   const canary = await captureFarewayCanary({ playwright: {
@@ -42,6 +42,16 @@ describe("Fareway exact Omaha detail availability", () => {
         retailerLocationId: "531573", serviceType: "instore", productId: "90266603" } });
     expect(parseFarewayApolloAvailability(state({ available: false, stockLevel: "outOfStock" }), "90266603"))
       .toMatchObject({ status: "unavailable", eligible: false });
+  });
+
+  it("decodes one percent-encoded real-shape Apollo state with immutable provenance", () => {
+    const raw = encodeURIComponent(JSON.stringify(state({ available: true, stockLevel: "inStock" })));
+    const decoded = decodeFarewayApolloState(raw);
+    expect(decoded).toMatchObject({ encoding: "percent-encoded-json", rawBytes: raw.length });
+    expect(decoded.rawSha256).toMatch(/^[a-f0-9]{64}$/);
+    expect(parseFarewayApolloAvailability(decoded.state, "90266603")).toMatchObject({ status: "in_stock", eligible: true });
+    expect(decodeFarewayApolloState(encodeURIComponent(raw))).toMatchObject({ state: null, encoding: "invalid" });
+    expect(decodeFarewayApolloState("%7Bbroken")).toMatchObject({ state: null, encoding: "invalid" });
   });
 
   it("fails closed on missing shop binding, missing item truth, or conflicting exact facts", () => {

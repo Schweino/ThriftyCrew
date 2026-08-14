@@ -452,9 +452,9 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
       throw new Error("backfill capture row is not bound to the authoritative location and price mode");
     }
     const url = new URL(productUrl);
-    if (url.hostname !== policy.firstPartyHost && !url.hostname.endsWith(`.${policy.firstPartyHost}`) || !productId || !productName || !Number.isSafeInteger(priceMinor) || priceMinor <= 0
+    if (url.hostname !== policy.firstPartyHost && !url.hostname.endsWith(`.${policy.firstPartyHost}`) || !productId || !productName
       || !availability || typeof availability.eligible !== "boolean" || !String(availability.status ?? "")) {
-      throw new Error("backfill capture row has invalid source, product, price, or availability identity");
+      throw new Error("backfill capture row has invalid source, product, or availability identity");
     }
     const normalizedProduct = normalizeName(productName);
     const identityAccepted = accepted.some((tokens) => tokens.every((token) => normalizedProduct.includes(token)));
@@ -463,7 +463,8 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
     const quantityMicros = parsed ? convertedBackfillQuantity(parsed, String(input.identity.basisUnit ?? "")) : null;
     const semantics = offer.priceSemantics as Record<string, any> | undefined;
     const qualifyingQuantity = Number(semantics?.qualifyingQuantity ?? 1);
-    const semanticsExact = semantics?.ambiguity === false && Number.isSafeInteger(Number(semantics?.unitPriceMinor))
+    const priceExact = Number.isSafeInteger(priceMinor) && priceMinor > 0;
+    const semanticsExact = priceExact && semantics?.ambiguity === false && Number.isSafeInteger(Number(semantics?.unitPriceMinor))
       && Number.isSafeInteger(Number(semantics?.totalPriceMinor)) && Number.isSafeInteger(qualifyingQuantity) && qualifyingQuantity > 0
       && Math.abs(Number(semantics?.unitPriceMinor) * qualifyingQuantity - Number(semantics?.totalPriceMinor)) <= 1
       && Number(semantics?.totalPriceMinor) === priceMinor;
@@ -481,6 +482,9 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
       || String(sourceBinding?.shopId ?? "") !== policy.availabilityShopKey
       || String(sourceBinding?.productId ?? "") !== String(sourceBinding?.sourceProductId ?? "")
       || String(sourceBinding?.sourceProductId ?? "") !== String(row.id ?? "")
+      || !["json", "percent-encoded-json"].includes(String(sourceBinding?.apolloEncoding ?? ""))
+      || !/^[a-f0-9]{64}$/.test(String(sourceBinding?.apolloRawSha256 ?? ""))
+      || !Number.isSafeInteger(Number(sourceBinding?.apolloRawBytes)) || Number(sourceBinding?.apolloRawBytes) < 2
       || normalizeName(String(sourceBinding?.serviceType ?? "")).replace(/\s/g, "") !== normalizeName(policy.priceMode).replace(/\s/g, ""));
     const availabilityModeEligible = normalizeName(availabilityMode) === normalizeName(policy.priceMode)
       || new RegExp(policy.locationCanary.expectedModePattern, "i").test(availabilityMode);
@@ -491,7 +495,7 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
       && availability.eligible === true && availability.status === "in_stock";
     candidates.push({ productId, productName, productUrl, packageText, priceMinor, quantityMicros,
       validFrom, validTo,
-      eligible: identityAccepted && !identityExcluded && storeEligible && quantityMicros !== null && quantityMicros > 0 && semanticsExact && validPromotion,
+      eligible: identityAccepted && !identityExcluded && storeEligible && quantityMicros !== null && quantityMicros > 0 && priceExact && semanticsExact && validPromotion,
       rejectionCodes: [!identityAccepted && "identity_not_included", identityExcluded && "identity_excluded", !quantityMicros && "invalid_package_basis",
         availabilityUnknown && "availability_unknown", locationUnknown && "location_unknown", fulfillmentUnknown && "fulfillment_unknown",
         availabilitySourceUnknown && "availability_source_unknown",

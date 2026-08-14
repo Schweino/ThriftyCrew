@@ -1,4 +1,5 @@
 import { browserLanePolicy, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
+import { createHash } from "node:crypto";
 import { checkpointAdapterChunk } from "./adapter-protocol.mjs";
 
 const LOCATION = "Omaha 17070 Audrey Street";
@@ -20,6 +21,19 @@ export function validatedRegularPrice(currentPriceMinor, candidateRegularPriceMi
   return Number.isInteger(candidateRegularPriceMinor) && candidateRegularPriceMinor > currentPriceMinor
     ? candidateRegularPriceMinor
     : undefined;
+}
+
+export function decodeFarewayApolloState(raw) {
+  const text = String(raw ?? "");
+  const rawBytes = Buffer.byteLength(text, "utf8");
+  const provenance = { rawBytes, rawSha256: createHash("sha256").update(text, "utf8").digest("hex") };
+  if (!text || rawBytes > 5_000_000) return { state: null, encoding: "invalid", ...provenance };
+  try { return { state: JSON.parse(text), encoding: "json", ...provenance }; } catch { /* encoded fallback */ }
+  try {
+    const decoded = decodeURIComponent(text);
+    if (decoded === text || /%[0-9a-f]{2}/i.test(decoded)) return { state: null, encoding: "invalid", ...provenance };
+    return { state: JSON.parse(decoded), encoding: "percent-encoded-json", ...provenance };
+  } catch { return { state: null, encoding: "invalid", ...provenance }; }
 }
 
 export function parseFarewayApolloAvailability(state, productId) {
@@ -73,9 +87,10 @@ async function readFarewayAvailabilityDetail(tab, productId) {
   if (observedId !== String(productId)) throw new Error("Fareway detail availability identity changed during capture");
   if (detail.challenge) return { challenge: true };
   if (!detail.plainOmaha) throw new Error("Fareway detail availability lost the Omaha/In-Store binding");
-  let state;
-  try { state = JSON.parse(detail.apolloState); } catch { state = null; }
-  return { challenge: false, ...parseFarewayApolloAvailability(state, productId) };
+  const decoded = decodeFarewayApolloState(detail.apolloState);
+  const availability = parseFarewayApolloAvailability(decoded.state, productId);
+  return { challenge: false, ...availability, sourceBinding: { ...availability.sourceBinding,
+    apolloEncoding: decoded.encoding, apolloRawSha256: decoded.rawSha256, apolloRawBytes: decoded.rawBytes } };
 }
 
 async function readPage(tab) {
@@ -360,9 +375,10 @@ async function captureProductDetail(tab, target) {
       if (page.url !== target.productKey) return { outcome: "missing", reason: `product detail redirected from ${target.productKey} to ${page.url}` };
       if (!page.name || !page.size || !Number.isInteger(page.priceMinor) || !page.current) throw new Error("product detail lacked exact name, size, or Current price label");
       const observedAt = new Date().toISOString();
-      let apolloState;
-      try { apolloState = JSON.parse(page.apolloState); } catch { apolloState = null; }
-      const availability = parseFarewayApolloAvailability(apolloState, page.productId);
+      const decoded = decodeFarewayApolloState(page.apolloState);
+      const availability = parseFarewayApolloAvailability(decoded.state, page.productId);
+      availability.sourceBinding = { ...availability.sourceBinding, apolloEncoding: decoded.encoding,
+        apolloRawSha256: decoded.rawSha256, apolloRawBytes: decoded.rawBytes };
       const regularPriceMinor = validatedRegularPrice(page.priceMinor, page.regularPriceMinor);
       const priceSemantics = {
         offerType: regularPriceMinor ? "sale" : "everyday",
