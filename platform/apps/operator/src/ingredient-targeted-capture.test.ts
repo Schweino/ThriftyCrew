@@ -69,6 +69,16 @@ describe("targeted ingredient capture bridge", () => {
     await expect(buildIngredientCapturePayload(claim, [truncated], evidence, new Date(observedAt))).rejects.toThrow(/end-of-results coverage/);
   });
 
+  it("accepts an explicit no-results terminal as complete empty coverage", async () => {
+    const empty = structuredClone(chunk);
+    empty.terms![0]!.outcome = "empty";
+    empty.terms![0]!.rowCount = 0;
+    empty.terms![0]!.retrieval = { pageCount: 1, loadedResultCount: 0, hasMoreResults: false, termination: "no-results" };
+    empty.rows = [];
+    const payload = await buildIngredientCapturePayload(claim, [empty], evidence, new Date(observedAt));
+    expect(payload.result.outcome).toBe("not_found");
+  });
+
   it("deduplicates the same product found by multiple locked queries when only observation metadata differs", async () => {
     const multiClaim = { ...claim, commodity_proposal_json: JSON.stringify({ id: "test-spice", label: "Test Spice", categoryId: "pantry", unit: "oz",
       include: ["\\btest spice\\b"], exclude: ["extract"], searchTerms: ["test spice", "whole test spice"] }) };
@@ -116,6 +126,19 @@ describe("targeted ingredient capture bridge", () => {
     (repeated.rows![0]!._capture as Record<string, any>).offer.productName = "Great Value Test Spice";
     expect(() => buildIngredientQaPayload(qaClaim, repeated, { ...evidence, objectKey: "ingredient-store-evidence/check/verifier/hash.json",
       sha256: hash("c"), observedAt: "2026-08-13T20:02:00.000Z" })).toThrow(/eligible exact candidate/);
+  });
+
+  it("verifies a no-match result from an explicit empty no-results search", () => {
+    const qaClaim = { ...claim, lease_owner: "qa-owner", lease_generation: 3, capture_result_json: JSON.stringify({
+      outcome: "not_found", queryTerms: ["test spice"], qualifyingProductsExamined: 0,
+    }) };
+    const repeated = structuredClone(chunk);
+    repeated.terms![0]!.outcome = "empty";
+    repeated.terms![0]!.rowCount = 0;
+    repeated.terms![0]!.retrieval = { pageCount: 1, loadedResultCount: 0, hasMoreResults: false, termination: "no-results" };
+    repeated.rows = [];
+    expect(buildIngredientQaPayload(qaClaim, repeated, { ...evidence, objectKey: "ingredient-store-evidence/check/verifier/empty.json",
+      sha256: hash("c"), observedAt: "2026-08-13T20:02:00.000Z" }).verdict).toBe("not_found");
   });
 
   it("merges bounded independent discovery chunks without losing query coverage", () => {

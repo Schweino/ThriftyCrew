@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { buildAldiRows } from "./aldi-v2.mjs";
+import { buildAldiRows, selectAldiInStoreControl } from "./aldi-v2.mjs";
+
+it("selects In-Store when Pickup is listed first", () => {
+  expect(selectAldiInStoreControl([
+    "Pickup available today ALDI - OLA 48 - Omaha",
+    "In-Store open today ALDI - OLA 48 - Omaha",
+  ])).toBe("In-Store open today ALDI - OLA 48 - Omaha");
+});
 
 describe("ALDI exact-row projection", () => {
   it("keeps exact rows while explicitly recording a row with no package size", () => {

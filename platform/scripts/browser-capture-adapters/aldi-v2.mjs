@@ -11,6 +11,10 @@ function normalize(value) {
   return String(value ?? "").trim().toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
+export function selectAldiInStoreControl(texts) {
+  return texts.find((text) => /^In-Store\b/.test(text)) || "";
+}
+
 function expandVerification(target, verification) {
   const rows = Array.isArray(target.satisfies) && target.satisfies.length ? target.satisfies : [target];
   return rows.map((row) => ({ ...verification, rowKey: row.rowKey, discoveryHash: row.discoveryHash }));
@@ -163,7 +167,7 @@ async function captureCanary(tab, screenshotSha256) {
     const selectedFulfillment = [...document.querySelectorAll("button")]
       .filter((button) => button.offsetParent !== null)
       .map((button) => (button.innerText || "").trim().replace(/\s+/g, " "))
-      .find((text) => /^(?:Pickup|In-Store)\b/.test(text)) || "";
+      .find((text) => /^In-Store\b/.test(text)) || "";
     return {
       url: location.href,
       challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied/i.test(body),

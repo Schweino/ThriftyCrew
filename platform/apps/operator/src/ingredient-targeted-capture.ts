@@ -154,7 +154,10 @@ export async function buildIngredientCapturePayload(check: ClaimedCheck, chunks:
   for (const term of expectedTerms) {
     const record = byQuery.get(term);
     const retrieval = record?.retrieval as Record<string, unknown> | undefined;
-    if (!record || !["success", "empty"].includes(String(record.outcome)) || retrieval?.termination !== "end-of-results" || retrieval.hasMoreResults !== false) {
+    const outcome = String(record?.outcome ?? "");
+    const complete = (outcome === "success" && retrieval?.termination === "end-of-results")
+      || (outcome === "empty" && ["no-results", "end-of-results"].includes(String(retrieval?.termination)));
+    if (!record || !complete || retrieval?.hasMoreResults !== false) {
       throw new Error(`${check.id} lacks end-of-results coverage for ${term}`);
     }
   }
@@ -224,9 +227,13 @@ export function buildIngredientQaPayload(check: ClaimedCheck, verification: Adap
     if (!match) throw new Error(`${check.id} independent verification does not reproduce the frozen winner`);
   } else if (captured.outcome === "not_found") {
     if (verification.phase !== "discovery") throw new Error("not-found QA requires an independent repeated discovery chunk");
-    const complete = new Set((verification.terms ?? []).filter((item) => ["success", "empty"].includes(String(item.outcome))
-      && (item.retrieval as Record<string, unknown> | undefined)?.termination === "end-of-results"
-      && (item.retrieval as Record<string, unknown> | undefined)?.hasMoreResults === false)
+    const complete = new Set((verification.terms ?? []).filter((item) => {
+      const outcome = String(item.outcome);
+      const retrieval = item.retrieval as Record<string, unknown> | undefined;
+      const terminal = (outcome === "success" && retrieval?.termination === "end-of-results")
+        || (outcome === "empty" && ["no-results", "end-of-results"].includes(String(retrieval?.termination)));
+      return terminal && retrieval?.hasMoreResults === false;
+    })
       .map((item) => normalizeName(String(item.query ?? ""))));
     if (!captured.queryTerms.every((term) => complete.has(normalizeName(term)))) throw new Error(`${check.id} independent pass did not reproduce complete no-match coverage`);
     const expected = new Set(captured.queryTerms.map(normalizeName));

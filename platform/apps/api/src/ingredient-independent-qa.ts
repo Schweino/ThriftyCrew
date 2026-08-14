@@ -14,6 +14,15 @@ export function hasCompleteLocationModeProof(result: CaptureResult["result"], pr
   return result.outcome === "not_found" ? result.fulfillmentMode === null : result.fulfillmentMode === priceMode;
 }
 
+export function isCompleteVerificationTerm(item: Record<string, any>): boolean {
+  const outcome = String(item.outcome);
+  const termination = String(item.retrieval?.termination ?? "");
+  return item.retrieval?.hasMoreResults === false && (
+    (outcome === "success" && termination === "end-of-results")
+    || (outcome === "empty" && ["no-results", "end-of-results"].includes(termination))
+  );
+}
+
 export async function uploadIngredientEvidence(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, input: { checkId: string; kind: string; sourceUrl: string; observedAt: string; document: unknown }) {
   const check = await env.DB.prepare("SELECT id FROM ingredient_store_checks WHERE id = ?1").bind(input.checkId).first<{ id: string }>();
   if (!check) throw new Error("ingredient evidence check does not exist");
@@ -177,8 +186,7 @@ export async function completeIngredientStoreQa(env: Pick<WorkerEnv, "DB" | "EVI
   } else if (input.verdict === "not_found") {
     const captured = JSON.parse(String(row.capture_result_json)) as { queryTerms?: string[] };
     const terms = Array.isArray(verification.terms) ? verification.terms : [];
-    const complete = new Set(terms.filter((item: Record<string, any>) => ["success", "empty"].includes(String(item.outcome))
-      && item.retrieval?.termination === "end-of-results" && item.retrieval?.hasMoreResults === false)
+    const complete = new Set(terms.filter(isCompleteVerificationTerm)
       .map((item: Record<string, unknown>) => String(item.query).trim().toLowerCase()));
     if (!(captured.queryTerms ?? []).every((term) => complete.has(term.trim().toLowerCase()))) throw new Error("independent verifier did not reproduce complete no-match coverage");
     const proposal = JSON.parse(String(row.commodity_proposal_json ?? "null")) as { include?: string[]; exclude?: string[] } | null;
