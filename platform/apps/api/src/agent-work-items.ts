@@ -893,20 +893,31 @@ async function persistRecipeIngredientGaps(db: D1Database, completed: Record<str
     }
   }
   for (let offset = 0; offset < statements.length; offset += 90) await db.batch(statements.slice(offset, offset + 90));
-  const waveId = await deterministicId("pricing-wave", String(completed.source_ref));
-  const campaignTarget = discovery
-    ? await db.prepare("SELECT target_published_ingredients FROM ingredient_discovery_batches WHERE request_id = ?1")
-      .bind(completed.source_ref).first<{ target_published_ingredients: number }>()
-    : null;
-  await createPricingWave(db, {
-    id: waveId,
-    campaignId: String(completed.source_ref),
-    sourceKind: "recipe",
-    gapIds: [...gapIdsByName.values()],
-    targetAvailable: Number(campaignTarget?.target_published_ingredients ?? Math.max(1, gapIdsByName.size)),
-    deadlineAt: null,
-    inputHash: await digestHex(`ingredient-pricing-wave-v2\u001f${String(completed.source_ref)}`),
-  });
+  const candidateGapIds = [...new Set(gapIdsByName.values())].sort();
+  const activeGaps = await db.prepare(
+    `SELECT id FROM ingredient_gaps
+      WHERE id IN (${candidateGapIds.map(() => "?").join(",")})
+        AND status NOT IN ('published','permanently_unavailable')
+        AND qa_resolution IS NULL
+      ORDER BY id`,
+  ).bind(...candidateGapIds).all<{ id: string }>();
+  const activeGapIds = activeGaps.results.map((row) => row.id);
+  if (activeGapIds.length > 0) {
+    const waveId = await deterministicId("pricing-wave", String(completed.source_ref));
+    const campaignTarget = discovery
+      ? await db.prepare("SELECT target_published_ingredients FROM ingredient_discovery_batches WHERE request_id = ?1")
+        .bind(completed.source_ref).first<{ target_published_ingredients: number }>()
+      : null;
+    await createPricingWave(db, {
+      id: waveId,
+      campaignId: String(completed.source_ref),
+      sourceKind: "recipe",
+      gapIds: activeGapIds,
+      targetAvailable: Number(campaignTarget?.target_published_ingredients ?? Math.max(1, activeGapIds.length)),
+      deadlineAt: null,
+      inputHash: await digestHex(`ingredient-pricing-wave-v2\u001f${String(completed.source_ref)}`),
+    });
+  }
   if (!discovery) return { gapCount: gapIdsByName.size, discovery: false, collecting: false };
   const count = await db.prepare(
     "SELECT COUNT(DISTINCT gap_id) AS count FROM ingredient_gap_occurrences WHERE request_id = ?1",
