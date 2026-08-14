@@ -20,7 +20,16 @@ export class PipelineAgentSupervisor extends EventEmitter {
     if (this.running) throw new Error("pipeline supervisor is already running"); this.running = true;
     while (this.running && !this.controller.signal.aborted) {
       const started = Date.now();
-      const tick = await runIngredientPipelineTick(this.client, { owner: `v4-supervisor-${process.pid}`, limitPerStore: 50 });
+      const v4 = await this.client.request("/internal/v4/status") as unknown as { flags?: Array<{ feature: string; mode: string }>; workItems?: unknown[] };
+      const modes = new Map((v4.flags ?? []).map((flag) => [flag.feature, flag.mode]));
+      const enabled = (feature: string) => ["canary", "enforce"].includes(modes.get(feature) ?? "off");
+      const storeTick = enabled("store_catalog_batch_v4")
+        ? await runIngredientPipelineTick(this.client, { owner: `v4-supervisor-${process.pid}`, limitPerStore: 50 })
+        : { progressed: false, disabled: true };
+      const resumeTick = enabled("incremental_recipe_resume_v4")
+        ? await this.client.request("/internal/v4/work-items/drain", { method: "POST" }) as unknown as { completed?: number }
+        : { completed: 0 };
+      const tick = { progressed: storeTick.progressed || Number(resumeTick.completed ?? 0) > 0, storeTick, resumeTick, v4 };
       this.ticks += 1; this.lastTickAt = new Date().toISOString();
       if (tick.progressed) { this.lastProgressAt = this.lastTickAt; this.emit("progress", tick); continue; }
       const elapsed = Date.now() - started;

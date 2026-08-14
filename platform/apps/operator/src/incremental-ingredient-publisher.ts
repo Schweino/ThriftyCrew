@@ -21,8 +21,7 @@ export async function publishIncrementalIngredient(client: MutationClient, input
       return { origin, url, expectedHash: staged.snapshotHash, observedHash: String(body.ingredient?.contentHash ?? ""), verifiedAt: new Date().toISOString() };
     }));
     await client.request(`/internal/v4/ingredients/${encodeURIComponent(staged.publicVersionId)}/finalize`, { json: {
-      pricingJobId: input.pricingJobId, ingredientId: input.snapshot.ingredientId,
-      definitionVersionId: input.snapshot.definitionVersionId, originProofs: proofs,
+      pricingJobId: input.pricingJobId, originProofs: proofs,
     } });
     return { ok: true, ...staged, proofs };
   } catch (error) {

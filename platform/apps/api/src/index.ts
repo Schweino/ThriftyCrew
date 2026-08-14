@@ -132,7 +132,7 @@ import { materializeHotCatalog } from "./hot-catalog";
 import { attachIngredientProposal, createIngredientPublicationBatch, failIngredientPublicationBatch, ingredientPublicationProofPlan, materializeIngredientPublicationCaptures, verifyIngredientPublicationExternal, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
 import { listPublicIngredients, getPublicIngredientBySlug, publicIngredientResponse } from "./public-grocery-v3";
 import { compareAndSwapIngredientPointer, finalizeIncrementalIngredient, previewIncrementalIngredient, rollbackIncrementalIngredientPointer, stageIncrementalIngredient } from "./incremental-ingredient-publication";
-import { resumeRecipesForPublishedIngredient } from "./recipe-dependency-resume-v2";
+import { completePermanentlyUnavailableIngredient, resumeRecipesForPublishedIngredient } from "./recipe-dependency-resume-v2";
 import { releasePayloadObjectKey } from "./release-payloads";
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
@@ -164,6 +164,10 @@ const app = new Hono<Bindings>();
 async function v4FeatureEnabled(db: D1Database, feature: string, allowShadow = false): Promise<boolean> {
   const row = await db.prepare("SELECT mode FROM pipeline_rollouts WHERE feature=?1").bind(feature).first<{ mode: string }>();
   return row?.mode === "enforce" || row?.mode === "canary" || (allowShadow && row?.mode === "shadow");
+}
+async function v4FeatureEnforced(db: D1Database, feature: string): Promise<boolean> {
+  const row = await db.prepare("SELECT mode FROM pipeline_rollouts WHERE feature=?1").bind(feature).first<{ mode: string }>();
+  return row?.mode === "enforce";
 }
 
 app.use("*", async (context, next) => {
@@ -1666,6 +1670,7 @@ app.post("/internal/ingredient-pricing/checks/:id/retry-adapter", zValidator("js
 app.post("/internal/v4/ingredients/stage", async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only an operator may stage an incremental ingredient", 403);
   if (!await v4FeatureEnabled(context.env.DB, "incremental_ingredient_publish_v4", true)) return jsonError("incremental ingredient publication is disabled", 409);
+  if (!await v4FeatureEnabled(context.env.DB, "dynamic_ingredient_catalog_v4", true)) return jsonError("dynamic ingredient catalog is disabled", 409);
   try {
     const body = await context.req.json<{ snapshot: Parameters<typeof stageIncrementalIngredient>[1]["snapshot"]; pricingJobId: string }>();
     return context.json({ ok: true, ...await stageIncrementalIngredient(context.env.DB, body) }, 201);
@@ -1691,11 +1696,61 @@ app.post("/internal/v4/ingredients/:version/finalize", async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only an operator may finalize an incremental ingredient", 403);
   if (!await v4FeatureEnabled(context.env.DB, "incremental_ingredient_publish_v4")) return jsonError("incremental ingredient finalization requires canary or enforce mode", 409);
   try {
-    const body = await context.req.json<{ pricingJobId: string; definitionVersionId: string; ingredientId: string; originProofs: Array<{ origin: string; url: string; expectedHash: string; observedHash: string; verifiedAt: string }> }>();
-    await finalizeIncrementalIngredient(context.env.DB, { publicVersionId: context.req.param("version"), pricingJobId: body.pricingJobId, originProofs: body.originProofs });
-    const resume = await resumeRecipesForPublishedIngredient(context.env.DB, { ingredientId: body.ingredientId, definitionVersionId: body.definitionVersionId, publicVersionId: context.req.param("version") });
+    const body = await context.req.json<{ pricingJobId: string; originProofs: Array<{ origin: string; url: string; expectedHash: string; observedHash: string; verifiedAt: string }> }>();
+    const requiredOrigins = [new URL(context.env.PUBLIC_ORIGIN).origin, new URL(context.env.GHOST_PUBLIC_ORIGIN ?? "https://www.thriftycrew.com").origin].sort();
+    const suppliedOrigins = body.originProofs.map((proof) => new URL(proof.origin).origin).sort();
+    if (stableJson(requiredOrigins) !== stableJson(suppliedOrigins)
+      || body.originProofs.some((proof) => new URL(proof.url).origin !== new URL(proof.origin).origin)) {
+      return jsonError("origin proofs must target both configured public origins", 409);
+    }
+    const finalized = await finalizeIncrementalIngredient(context.env.DB, { publicVersionId: context.req.param("version"), pricingJobId: body.pricingJobId, originProofs: body.originProofs });
+    let resume: Record<string, unknown> = { queued: false, disabled: true };
+    if (await v4FeatureEnabled(context.env.DB, "incremental_recipe_resume_v4")) {
+      const dedupeKey = `resume:${context.req.param("version")}:${finalized.ingredientId}`;
+      const id = await deterministicId("pipeline-work-v4", dedupeKey);
+      const payload = { ingredientId: finalized.ingredientId, definitionVersionId: finalized.definitionVersionId, publicVersionId: context.req.param("version") };
+      await context.env.DB.prepare(`INSERT OR IGNORE INTO pipeline_agent_work_items_v4
+        (id,agent_id,entity_type,entity_id,dedupe_key,state,input_ref_hash,correlation_id,input_json)
+        VALUES(?1,'recipe-dependency-resumer','ingredient',?2,?3,'queued',?4,?5,?6)`)
+        .bind(id, finalized.ingredientId, dedupeKey, await digestHex(stableJson(payload)), context.req.header("x-correlation-id") ?? id, stableJson(payload)).run();
+      resume = { queued: true, workItemId: id };
+    }
     return context.json({ ok: true, resume });
   } catch (error) { return jsonError(error instanceof Error ? error.message : "incremental ingredient finalization failed", 409); }
+});
+
+app.get("/internal/v4/status", async (context) => {
+  const [flags, work, projections] = await Promise.all([
+    context.env.DB.prepare("SELECT feature,mode FROM pipeline_rollouts WHERE feature LIKE '%_v4' ORDER BY feature").all(),
+    context.env.DB.prepare("SELECT agent_id,state,COUNT(*) AS count,MIN(created_at) AS oldest FROM pipeline_agent_work_items_v4 GROUP BY agent_id,state ORDER BY agent_id,state").all(),
+    context.env.DB.prepare("SELECT state,COUNT(*) AS count FROM recipe_incremental_projection_events GROUP BY state ORDER BY state").all(),
+  ]);
+  return context.json({ ok: true, flags: flags.results, workItems: work.results, projections: projections.results, observedAt: new Date().toISOString() });
+});
+
+app.post("/internal/v4/work-items/drain", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may drain V4 work", 403);
+  if (!await v4FeatureEnabled(context.env.DB, "incremental_recipe_resume_v4")) return context.json({ ok: true, disabled: true, completed: 0 });
+  const rows = await context.env.DB.prepare(`SELECT * FROM pipeline_agent_work_items_v4
+    WHERE agent_id='recipe-dependency-resumer' AND state IN ('queued','failed_transient') AND available_at<=CURRENT_TIMESTAMP
+    ORDER BY priority,available_at,id LIMIT 50`).all<Record<string, unknown>>();
+  let completed = 0;
+  for (const row of rows.results) {
+    const claim = await context.env.DB.prepare(`UPDATE pipeline_agent_work_items_v4 SET state='running',lease_owner='v4-node-supervisor',
+      lease_generation=lease_generation+1,lease_expires_at=datetime('now','+60 seconds'),attempt_count=attempt_count+1,
+      started_at=COALESCE(started_at,CURRENT_TIMESTAMP),heartbeat_at=CURRENT_TIMESTAMP WHERE id=?1 AND state IN ('queued','failed_transient')`).bind(row.id).run();
+    if ((claim.meta.changes ?? 0) !== 1) continue;
+    try {
+      const payload = JSON.parse(String(row.input_json)) as { ingredientId: string; definitionVersionId: string; publicVersionId: string };
+      const result = await resumeRecipesForPublishedIngredient(context.env.DB, payload);
+      await context.env.DB.prepare("UPDATE pipeline_agent_work_items_v4 SET state='succeeded',result_json=?2,result_ref_hash=?3,terminal_at=CURRENT_TIMESTAMP,lease_owner=NULL,lease_expires_at=NULL WHERE id=?1 AND state='running'")
+        .bind(row.id, stableJson(result), await digestHex(stableJson(result))).run(); completed += 1;
+    } catch (error) {
+      await context.env.DB.prepare("UPDATE pipeline_agent_work_items_v4 SET state='failed_transient',available_at=datetime('now','+5 seconds'),lease_owner=NULL,lease_expires_at=NULL,result_json=?2 WHERE id=?1 AND state='running'")
+        .bind(row.id, stableJson({ error: error instanceof Error ? error.message : String(error) })).run();
+    }
+  }
+  return context.json({ ok: true, completed });
 });
 
 app.post("/internal/v4/ingredients/:version/rollback", async (context) => {
@@ -1707,8 +1762,21 @@ app.post("/internal/v4/ingredients/:version/rollback", async (context) => {
   } catch (error) { return jsonError(error instanceof Error ? error.message : "incremental ingredient rollback failed", 409); }
 });
 
+app.post("/internal/v4/ingredients/:version/permanently-unavailable", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may complete permanent unavailability", 403);
+  if (!await v4FeatureEnabled(context.env.DB, "dynamic_ingredient_catalog_v4")
+    || !await v4FeatureEnabled(context.env.DB, "store_catalog_batch_v4")
+    || !await v4FeatureEnabled(context.env.DB, "incremental_recipe_resume_v4")) return jsonError("V4 permanent-unavailable completion is disabled", 409);
+  try {
+    const body = await context.req.json<{ pricingJobId: string; ingredientId: string; resolutionEventId: string }>();
+    const blocked = await completePermanentlyUnavailableIngredient(context.env.DB, { ...body, definitionVersionId: context.req.param("version") });
+    return context.json({ ok: true, blocked });
+  } catch (error) { return jsonError(error instanceof Error ? error.message : "permanent-unavailable completion failed", 409); }
+});
+
 app.post("/internal/ingredient-publication/batches", zValidator("json", ingredientPublicationBatchCreateSchema), async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only an operator may seal an ingredient publication batch", 403);
+  if (await v4FeatureEnforced(context.env.DB, "incremental_ingredient_publish_v4")) return jsonError("legacy global ingredient publication is disabled while V4 is enforced", 409);
   try { return context.json({ ok: true, ...await createIngredientPublicationBatch(context.env.DB, context.req.valid("json")) }, 201); }
   catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient publication batch failed", 409); }
 });
@@ -1723,6 +1791,7 @@ app.post("/internal/ingredient-publication/batches/:id/fail-predeployment", asyn
 
 app.post("/internal/ingredient-publication/batches/:id/materialize", async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only an operator may materialize ingredient publication captures", 403);
+  if (await v4FeatureEnforced(context.env.DB, "incremental_ingredient_publish_v4")) return jsonError("legacy global ingredient publication is disabled while V4 is enforced", 409);
   try { return context.json({ ok: true, ...await materializeIngredientPublicationCaptures(context.env.DB, context.req.param("id")) }); }
   catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient publication materialization failed", 409); }
 });
@@ -1735,6 +1804,7 @@ app.get("/internal/ingredient-publication/batches/:id/proof-plan", async (contex
 
 app.post("/internal/ingredient-publication/batches/:id/verify", zValidator("json", ingredientPublicationExternalVerifySchema), async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only an operator may verify an ingredient publication", 403);
+  if (await v4FeatureEnforced(context.env.DB, "incremental_ingredient_publish_v4")) return jsonError("legacy global ingredient publication is disabled while V4 is enforced", 409);
   try { return context.json({ ok: true, ...await verifyIngredientPublicationExternal(context.env, context.req.param("id"), context.req.valid("json")) }); }
   catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient publication verification failed", 409); }
 });

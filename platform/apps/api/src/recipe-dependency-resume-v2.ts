@@ -40,3 +40,31 @@ export async function blockRecipesForUnavailableIngredient(db: D1Database, ingre
   ).bind(row.recipe_candidate_id, row.source_occurrence_id)));
   return { blockedOccurrences: rows.results.length, recipeIds: [...new Set(rows.results.map((row) => row.recipe_candidate_id))] };
 }
+
+export async function completePermanentlyUnavailableIngredient(db: D1Database, input: {
+  pricingJobId: string; ingredientId: string; definitionVersionId: string; resolutionEventId: string;
+}) {
+  const job = await db.prepare(`SELECT entity_id,operational_state,not_found_store_count,priced_store_count
+    FROM ingredient_pricing_jobs WHERE id=?1`).bind(input.pricingJobId)
+    .first<{ entity_id: string; operational_state: string; not_found_store_count: number; priced_store_count: number }>();
+  const definition = await db.prepare(`SELECT definition_hash,identity_json FROM catalog_ingredient_versions
+    WHERE version_id=?1 AND ingredient_id=?2`).bind(input.definitionVersionId, input.ingredientId)
+    .first<{ definition_hash: string; identity_json: string }>();
+  const checks = await db.prepare(`SELECT COUNT(*) AS count FROM ingredient_store_checks
+    WHERE pricing_job_id=?1 AND operational_state='qa_verified_not_found'`).bind(input.pricingJobId).first<{ count: number }>();
+  if (!job || job.entity_id !== input.ingredientId || job.operational_state !== "permanently_unavailable"
+    || Number(job.not_found_store_count) !== 7 || Number(job.priced_store_count) !== 0 || Number(checks?.count) !== 7 || !definition) {
+    throw new Error("permanent-unavailable completion requires seven independently verified not-found checks");
+  }
+  const identity = JSON.parse(definition.identity_json) as { aliases?: string[] };
+  await db.batch([
+    db.prepare(`INSERT INTO catalog_permanently_unavailable
+      (ingredient_id,identity_version_id,identity_hash,normalized_aliases_json,resolution_event_id)
+      VALUES(?1,?2,?3,?4,?5) ON CONFLICT(ingredient_id) DO NOTHING`)
+      .bind(input.ingredientId, input.definitionVersionId, definition.definition_hash, JSON.stringify(identity.aliases ?? []), input.resolutionEventId),
+    db.prepare("UPDATE catalog_ingredient_current SET current_state='permanently_unavailable',pointer_generation=pointer_generation+1,updated_at=CURRENT_TIMESTAMP WHERE ingredient_id=?1 AND current_version_id=?2")
+      .bind(input.ingredientId, input.definitionVersionId),
+    db.prepare("DELETE FROM ingredient_pricing_inbox WHERE pricing_job_id=?1").bind(input.pricingJobId),
+  ]);
+  return blockRecipesForUnavailableIngredient(db, input.ingredientId);
+}
