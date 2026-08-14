@@ -2274,9 +2274,13 @@ if (command === "status") {
   else if (action === "progress") result = await client.request(`/internal/v4/backfill/progress${first ? `?runId=${encodeURIComponent(first)}` : ""}`);
   else if (action === "claim") {
     if (!first) throw new Error("tc ingredient backfill-v4 claim requires an agent id [owner] [limit]");
-    result = await client.request("/internal/v4/backfill/claim", { json: {
+    const claimed = await client.request("/internal/v4/backfill/claim", { json: {
       agentId: first, owner: second ?? `v4-backfill-${process.pid}`, limit: Number(arguments_[3] ?? 50), leaseSeconds: 900,
-    } });
+    } }) as { workItems?: unknown[] };
+    const outputFile = arguments_[4];
+    if (outputFile) await writeFile(cliPath(outputFile), `${JSON.stringify({ kind: "catalog-backfill-claim-v4", agentId: first,
+      owner: second ?? `v4-backfill-${process.pid}`, claimedAt: new Date().toISOString(), workItems: claimed.workItems ?? [] }, null, 2)}\n`, "utf8");
+    result = { ...claimed, ...(outputFile ? { outputFile: cliPath(outputFile) } : {}) };
   } else if (action === "heartbeat") {
     if (!first) throw new Error("tc ingredient backfill-v4 heartbeat requires an exact owner [lease-seconds]");
     result = await client.request("/internal/v4/backfill/heartbeat", { json: { owner: first, leaseSeconds: Number(second ?? 900) } });

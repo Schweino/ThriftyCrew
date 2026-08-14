@@ -107,7 +107,7 @@ Operators page the import to keep D1 requests bounded:
 pnpm tc ingredient backfill-v4 initialize
 pnpm tc ingredient backfill-v4 import <run-id> 0 25
 pnpm tc ingredient backfill-v4 progress <run-id>
-pnpm tc ingredient backfill-v4 claim <producer-agent-id> <owner> 50
+pnpm tc ingredient backfill-v4 claim <producer-agent-id> <owner> <adaptive-limit-5-to-10> <claim-output.json>
 pnpm tc ingredient backfill-v4 heartbeat <owner> 900
 pnpm tc ingredient backfill-v4 producer-submit <lease-fenced-adapter-artifact.json>
 pnpm tc ingredient backfill-v4 verifier-submit <independent-adapter-artifact.json>
