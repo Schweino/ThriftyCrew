@@ -78,6 +78,9 @@ describe("flags-off headless backfill coordinator", () => {
     const plan = planHeadlessBackfill({ runId: "run", outputDirectory: output, limit: 99, waveId: "wave" });
     expect(plan.limit).toBe(50);
     expect(plan.stores.map((store) => store.key)).toEqual(["bakers", "family-fare", "hy-vee"]);
+    expect(planHeadlessBackfill({ runId: "run", outputDirectory: output, limit: 25, waveId: "subset",
+      stores: "bakers,family-fare" }).stores.map((store) => store.key)).toEqual(["bakers", "family-fare"]);
+    expect(() => planHeadlessBackfill({ runId: "run", outputDirectory: output, stores: "bakers,bakers" })).toThrow(/unique subset/);
     expect(JSON.stringify(plan)).not.toMatch(/aldi|fareway|sams|walmart|rollout|feature.flag/i);
   });
 

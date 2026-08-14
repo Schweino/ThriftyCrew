@@ -14,18 +14,23 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const safeSegment = (value) => String(value).replace(/[^a-zA-Z0-9._-]+/g, "-");
 const normalize = (value) => String(value ?? "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
-export function planHeadlessBackfill({ runId, outputDirectory, limit = 5, waveId = new Date().toISOString().replace(/\D/g, "").slice(0, 14) }) {
+export function planHeadlessBackfill({ runId, outputDirectory, limit = 5, waveId = new Date().toISOString().replace(/\D/g, "").slice(0, 14), stores }) {
   if (!runId) throw new Error("headless backfill coordinator requires --run-id");
   if (!outputDirectory) throw new Error("headless backfill coordinator requires --output-dir");
   const boundedLimit = Math.min(50, Math.max(1, Number(limit)));
   if (!Number.isSafeInteger(boundedLimit)) throw new Error("headless backfill limit must be an integer from 1 to 50");
+  const selectedStores = stores ? String(stores).split(",").map((value) => value.trim()).filter(Boolean) : HEADLESS_BACKFILL_STORES.map((store) => store.key);
+  if (selectedStores.length === 0 || new Set(selectedStores).size !== selectedStores.length
+    || selectedStores.some((key) => !HEADLESS_BACKFILL_STORES.some((store) => store.key === key))) {
+    throw new Error("headless backfill stores must be a unique subset of bakers,family-fare,hy-vee");
+  }
   return {
     kind: "v4-flags-off-headless-backfill-plan",
     runId,
     waveId,
     limit: boundedLimit,
     outputDirectory: path.resolve(outputDirectory),
-    stores: HEADLESS_BACKFILL_STORES.map((store) => ({
+    stores: HEADLESS_BACKFILL_STORES.filter((store) => selectedStores.includes(store.key)).map((store) => ({
       ...store,
       producerAgent: `omaha-price-producer-${store.agentSuffix}`,
       verifierAgent: `omaha-price-verifier-${store.agentSuffix}`,
@@ -227,7 +232,8 @@ function parseArgs(values) {
 
 export async function main(argv = process.argv.slice(2)) {
   const args = parseArgs(argv);
-  const plan = planHeadlessBackfill({ runId: args["run-id"], outputDirectory: args["output-dir"], limit: Number(args.limit ?? 5), waveId: args["wave-id"] });
+  const plan = planHeadlessBackfill({ runId: args["run-id"], outputDirectory: args["output-dir"], limit: Number(args.limit ?? 5),
+    waveId: args["wave-id"], stores: args.stores });
   await mkdir(plan.outputDirectory, { recursive: true });
   await writeFile(path.join(plan.outputDirectory, "plan.json"), `${JSON.stringify(plan, null, 2)}\n`, "utf8");
   if (args.dryRun) { process.stdout.write(`${JSON.stringify({ ok: true, dryRun: true, plan }, null, 2)}\n`); return; }
