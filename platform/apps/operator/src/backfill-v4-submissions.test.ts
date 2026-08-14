@@ -24,13 +24,20 @@ describe("V4 backfill submission mapper", () => {
   it("rejects expired leases, missing locked queries, extra terms, and mixed roles", () => {
     expect(() => buildBackfillSubmissions({ role: "producer", claim, chunk, generationPrefix: "g", sessionPrefix: "s",
       now: new Date("2026-08-14T23:00:00.000Z") })).toThrow("expired");
-    expect(() => buildBackfillSubmissions({ role: "producer", claim, chunk: { ...chunk, terms: chunk.terms.slice(0, 1) },
-      generationPrefix: "g", sessionPrefix: "s", now: new Date("2026-08-14T21:32:00.000Z") })).toThrow("omitted locked query");
     expect(() => buildBackfillSubmissions({ role: "producer", claim: { workItems: claim.workItems.slice(0, 1) }, chunk,
       generationPrefix: "g", sessionPrefix: "s", now: new Date("2026-08-14T21:32:00.000Z") })).toThrow("outside the claim");
     const verifier = { workItems: [{ ...claim.workItems[0], agent_id: "omaha-price-verifier-walmart" }] };
     expect(() => buildBackfillSubmissions({ role: "producer", claim: verifier, chunk: { ...chunk, terms: [chunk.terms[1]], rows: [chunk.rows[0]] },
       generationPrefix: "g", sessionPrefix: "s", now: new Date("2026-08-14T21:32:00.000Z") })).toThrow("mixes non-producer");
   });
-});
 
+  it("maps a rolling chunk subset and rejects duplicate-label claim ambiguity", () => {
+    const result = buildBackfillSubmissions({ role: "producer", claim,
+      chunk: { ...chunk, terms: [chunk.terms[0]], rows: [chunk.rows[1]] }, generationPrefix: "g", sessionPrefix: "s",
+      now: new Date("2026-08-14T21:32:00.000Z") });
+    expect(result.map((row) => row.workItemId)).toEqual(["work_a"]);
+    const ambiguous = { workItems: [claim.workItems[0]!, { ...claim.workItems[1]!, input_json: claim.workItems[0]!.input_json }] };
+    expect(() => buildBackfillSubmissions({ role: "producer", claim: ambiguous, chunk, generationPrefix: "g", sessionPrefix: "s",
+      now: new Date("2026-08-14T21:32:00.000Z") })).toThrow("ambiguous duplicate locked query");
+  });
+});

@@ -24,14 +24,29 @@ export function buildBackfillSubmissions(input: { role: "producer" | "verifier";
     if (!query || termByQuery.has(query)) throw new Error("adapter chunk has missing or duplicate normalized queries");
     termByQuery.set(query, term);
   }
-  const claimedQueries = new Set<string>();
-  const submissions = claim.workItems.map((work) => {
+  const queriesByWork = new Map<string, string[]>();
+  const workByQuery = new Map<string, string>();
+  for (const work of claim.workItems) {
     if (!work.agent_id.startsWith(`omaha-price-${input.role}-`)) throw new Error(`claim mixes non-${input.role} work`);
-    if (!work.lease_owner || !Number.isInteger(Number(work.lease_generation)) || Number(work.lease_generation) < 1
-      || !work.lease_expires_at || Date.parse(work.lease_expires_at) <= now) throw new Error(`claim lease is missing or expired for ${work.id}`);
     const payload = JSON.parse(work.input_json) as { queryTerms?: string[] };
     const queries = [...new Set((payload.queryTerms ?? []).map(normalizeName))].sort();
     if (queries.length === 0) throw new Error(`work item ${work.id} has no locked queries`);
+    queriesByWork.set(work.id, queries);
+    for (const query of queries) {
+      const owner = workByQuery.get(query);
+      if (owner && owner !== work.id) throw new Error(`claim has ambiguous duplicate locked query ${query}`);
+      workByQuery.set(query, work.id);
+    }
+  }
+  const outsideClaim = [...termByQuery.keys()].filter((query) => !workByQuery.has(query));
+  if (outsideClaim.length) throw new Error(`adapter chunk contains ${outsideClaim.length} query terms outside the claim`);
+  const selectedWork = claim.workItems.filter((work) => queriesByWork.get(work.id)!.every((query) => termByQuery.has(query)));
+  if (selectedWork.length === 0) throw new Error("adapter chunk does not complete any exact claimed work item");
+  const claimedQueries = new Set<string>();
+  const submissions = selectedWork.map((work) => {
+    if (!work.lease_owner || !Number.isInteger(Number(work.lease_generation)) || Number(work.lease_generation) < 1
+      || !work.lease_expires_at || Date.parse(work.lease_expires_at) <= now) throw new Error(`claim lease is missing or expired for ${work.id}`);
+    const queries = queriesByWork.get(work.id)!;
     const terms = queries.map((query) => {
       const term = termByQuery.get(query);
       if (!term) throw new Error(`adapter chunk omitted locked query ${query}`);
@@ -52,4 +67,3 @@ export function buildBackfillSubmissions(input: { role: "producer" | "verifier";
   }
   return submissions.sort((a, b) => a.workItemId.localeCompare(b.workItemId));
 }
-
