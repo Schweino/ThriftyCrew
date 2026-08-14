@@ -155,10 +155,10 @@ export async function readStoreCatalog(db: D1Database, storeLocationId: string, 
       : "AND 1 = 0"
     : "";
   const rows = await db.prepare(
-    `SELECT product_id, observation_id, product_name, normalized_name, size_text, product_url,
-            availability_status, fulfillment_mode, seller_name, offer_kind, package_price_minor,
-            normalized_basis_unit, normalized_basis_qty_micros, per_unit_micros, loyalty_required,
-            membership_required, valid_from, valid_to, captured_at, evidence_hash
+    `SELECT offer.product_id, offer.observation_id, offer.product_name, offer.normalized_name, offer.size_text, offer.product_url,
+            offer.availability_status, offer.fulfillment_mode, offer.seller_name, offer.offer_kind, offer.package_price_minor,
+            offer.normalized_basis_unit, offer.normalized_basis_qty_micros, offer.per_unit_micros, offer.loyalty_required,
+            offer.membership_required, offer.valid_from, offer.valid_to, offer.captured_at, offer.evidence_hash
        FROM catalog_current_offers offer
        JOIN store_pricing_policies policy ON policy.store_location_id = offer.store_location_id
       WHERE offer.store_location_id = ?1
