@@ -46,7 +46,9 @@ function Read-PipelineStatus {
   $start = $text.IndexOf('{')
   $end = $text.LastIndexOf('}')
   if ($start -lt 0 -or $end -le $start) { throw 'ingredient pipeline status returned no JSON document' }
-  return ($text.Substring($start, $end - $start + 1) | ConvertFrom-Json)
+  $document = $text.Substring($start, $end - $start + 1) | ConvertFrom-Json
+  if (-not $document.status) { throw 'ingredient pipeline status omitted its status payload' }
+  return $document.status
 }
 
 function Start-Cycle([string]$CycleName, [int]$MaxItems, [int]$Slot = 0) {
