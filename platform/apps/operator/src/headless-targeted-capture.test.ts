@@ -136,6 +136,31 @@ describe("headless targeted store capture", () => {
     }
   });
 
+  it("isolates one failed term without discarding successful sibling terms", async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), "tc-kroger-term-isolation-"));
+    const credentials = path.join(directory, "kroger.json"); const output = path.join(directory, "capture.json");
+    await writeFile(credentials, JSON.stringify({ client_id: "id", client_secret: "secret" }), "utf8");
+    const fetchImpl = async (input: string | URL | Request) => {
+      const url = new URL(String(input));
+      if (url.pathname.endsWith("/token")) return new Response(JSON.stringify({ access_token: "token" }), { status: 200 });
+      const term = url.searchParams.get("filter.term"); const start = Number(url.searchParams.get("filter.start"));
+      if (term === "sea salt") return new Response(JSON.stringify({ error: "source ceiling" }), { status: 400 });
+      const products = [{ productId: "c1", brand: "Spice Co", description: "Whole Cumin Seeds" }];
+      return new Response(JSON.stringify({ data: products.slice(start, start + 50),
+        meta: { pagination: { start, limit: 50, total: products.length } } }), { status: 200 });
+    };
+    try {
+      const chunk = await captureHeadlessDiscovery("bakers", ["sea salt", "cumin seeds"], output,
+        { krogerCredentialsFile: credentials, fetchImpl, pageConcurrency: 2 });
+      expect(chunk.terms?.find((term) => term.query === "sea salt")).toMatchObject({ outcome: "rejected",
+        retrieval: { termination: "error", hasMoreResults: false } });
+      expect(chunk.terms?.find((term) => term.query === "cumin seeds")).toMatchObject({ outcome: "empty",
+        retrieval: { termination: "end-of-results", availableResultCount: 1 } });
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+
   it("keeps one Hy-Vee search view across parallel pages and counts its complete envelope", async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), "tc-hyvee-test-"));
     const output = path.join(directory, "capture.json"); const requests: Array<{ pageNumber: number; pageViewId: string }> = [];

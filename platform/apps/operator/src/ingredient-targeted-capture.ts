@@ -157,7 +157,8 @@ export async function buildIngredientCapturePayload(check: ClaimedCheck, chunks:
     const complete = (outcome === "success" && retrieval?.termination === "end-of-results")
       || (outcome === "empty" && ["no-results", "end-of-results"].includes(String(retrieval?.termination)));
     if (!record || !complete || retrieval?.hasMoreResults !== false) {
-      throw new Error(`${check.id} lacks end-of-results coverage for ${term}`);
+      const reason = record?.reason ? `: ${String(record.reason).slice(0, 2000)}` : "";
+      throw new Error(`${check.id} lacks end-of-results coverage for ${term}${reason}`);
     }
   }
   const rows = relevant.flatMap((chunk) => chunk.rows ?? []).filter((row) => expectedTerms.includes(normalizeName(String(row.q ?? row.term ?? ""))));

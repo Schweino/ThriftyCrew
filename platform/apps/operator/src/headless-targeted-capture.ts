@@ -6,7 +6,7 @@ type HeadlessStore = "bakers" | "family-fare" | "hy-vee";
 type JsonRecord = Record<string, any>;
 type FetchLike = (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
 type CaptureRecord = { query: string; rows: JsonRecord[]; total: number; examined: number; pages: number;
-  excludedResults: JsonRecord[]; partitionProof?: JsonRecord[] };
+  excludedResults: JsonRecord[]; partitionProof?: JsonRecord[]; failure?: string };
 type HeadlessCaptureOptions = { krogerCredentialsFile?: string; familyFareCatalogFile?: string; fetchImpl?: FetchLike;
   termConcurrency?: number; pageConcurrency?: number };
 
@@ -481,18 +481,26 @@ export async function captureHeadlessDiscovery(store: HeadlessStore, terms: stri
       await captureFamilyFareCatalog(options.familyFareCatalogFile
         ?? path.resolve("..", "grocery", "out", "regular", `family-fare-regular-${new Date().toISOString().slice(0, 10)}.json`), fetchImpl),
       fetchImpl, termConcurrency)
-    : await mapWithConcurrency(queries, termConcurrency, async (query) => ({ query,
-      ...(store === "bakers" ? await captureBakers(query, token!, observedAt, fetchImpl, pageConcurrency)
-        : await captureHyVee(query, observedAt, fetchImpl, pageConcurrency)) }));
+    : await mapWithConcurrency(queries, termConcurrency, async (query) => {
+      try {
+        return { query, ...(store === "bakers" ? await captureBakers(query, token!, observedAt, fetchImpl, pageConcurrency)
+          : await captureHyVee(query, observedAt, fetchImpl, pageConcurrency)) };
+      } catch (error) {
+        return { query, rows: [], total: 0, examined: 0, pages: 0, excludedResults: [],
+          failure: String(error instanceof Error ? error.message : error).slice(0, 2000) };
+      }
+    });
   const config = STORE[store];
   const chunk: AdapterChunk = { version: 2, phase: "discovery", store,
     canary: { evidenceUrl: config.evidenceUrl, observedAt, locationVerified: true, priceModeVerified: true },
-    terms: records.map((record) => ({ query: record.query, outcome: record.rows.length ? "success" : "empty",
+    terms: records.map((record) => ({ query: record.query, outcome: record.failure ? "rejected" : record.rows.length ? "success" : "empty",
       rowCount: record.rows.length, attempts: 1, startedAt: observedAt, finishedAt: new Date().toISOString(),
       retrieval: { targetResultCount: record.total, loadedResultCount: record.examined,
-        availableResultCount: record.total, pageCount: record.pages, hasMoreResults: false, termination: "end-of-results",
+        availableResultCount: record.total, pageCount: record.pages, hasMoreResults: false,
+        termination: record.failure ? "error" : "end-of-results",
         ...(record.partitionProof ? { partitionProof: record.partitionProof } : {}) },
-      ...(record.excludedResults.length ? { reason: `${record.excludedResults.length} source result(s) explicitly excluded`, excludedResults: record.excludedResults } : {}) })),
+      ...(record.failure ? { reason: record.failure }
+        : record.excludedResults.length ? { reason: `${record.excludedResults.length} source result(s) explicitly excluded`, excludedResults: record.excludedResults } : {}) })),
     rows: records.flatMap((record) => record.rows) };
   await writeFile(file, `${JSON.stringify(chunk)}\n`, "utf8");
   return chunk;
