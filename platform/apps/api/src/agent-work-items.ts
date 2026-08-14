@@ -36,7 +36,7 @@ interface RegistryRow {
 }
 
 interface WorkSeed {
-  sourceKind: "triage-item" | "accuracy-draw" | "recipe-request" | "ingredient-definition" | "source-sentinel-result" | "release-status";
+  sourceKind: "triage-item" | "accuracy-draw" | "recipe-request" | "source-sentinel-result" | "release-status";
   sourceRef: string;
   stage: string;
   input: unknown;
@@ -1030,7 +1030,7 @@ export async function enqueueIngredientDefinitionPlan(db: D1Database, limit = 50
   const agent = await activeAgent(db, "ingredient-definition-planner");
   const categories = await db.prepare(activeIngredientCategoryContextSql).all<{ id: string; label: string }>();
   await enqueue(db, agent, {
-    sourceKind: "ingredient-definition",
+    sourceKind: "recipe-request",
     sourceRef: batchId,
     stage: "definition-plan",
     severity: agent.criticality,
