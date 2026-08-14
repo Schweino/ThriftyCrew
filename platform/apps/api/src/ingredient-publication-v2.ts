@@ -361,7 +361,7 @@ export async function verifyIngredientPublicationExternal(env: Pick<WorkerEnv, "
     && members.results.every((member) => input.proofs.filter((proof) => proof.gapId === member.gap_id).length === 2);
   if (allVerified) for (const member of members.results) {
     statements.push(env.DB.prepare("UPDATE ingredient_publication_members SET state = 'public_verified', updated_at = CURRENT_TIMESTAMP WHERE batch_id = ?1 AND gap_id = ?2").bind(batchId, member.gap_id));
-    statements.push(env.DB.prepare("UPDATE ingredient_gaps SET status = 'published', published_commodity_id = ?2, updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'ready_to_publish'").bind(member.gap_id, member.commodity_id));
+    statements.push(env.DB.prepare("UPDATE ingredient_gaps SET status = 'published', commodity_id = ?2, updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'ready_to_publish'").bind(member.gap_id, member.commodity_id));
     statements.push(env.DB.prepare("UPDATE ingredient_pricing_jobs SET state = 'public_verified', operational_state = 'public_verified', terminal_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE gap_id = ?1 AND state = 'ready_to_publish'").bind(member.gap_id));
     statements.push(env.DB.prepare("UPDATE recipe_hold_requirements SET terminal_kind = 'available', satisfied_at = CURRENT_TIMESTAMP WHERE gap_id = ?1 AND terminal_kind IS NULL").bind(member.gap_id));
     statements.push(env.DB.prepare("DELETE FROM ingredient_pricing_inbox WHERE gap_id = ?1").bind(member.gap_id));
