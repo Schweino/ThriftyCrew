@@ -1748,7 +1748,8 @@ if (command === "status") {
   const claimDocument = JSON.parse(await readFile(cliPath(claimFile), "utf8")) as { checks?: ClaimedCheck[] };
   const checks = claimDocument.checks ?? [];
   const chunk = await captureHeadlessDiscovery(store as HeadlessStore, claimSearchTerms(checks), cliPath(outputFile),
-    { krogerCredentialsFile: path.join(incomeRoot, "grocery", ".krogerkey") });
+    { krogerCredentialsFile: path.join(incomeRoot, "grocery", ".krogerkey"),
+      familyFareCatalogFile: path.join(incomeRoot, "grocery", "out", "regular", `family-fare-regular-${new Date().toISOString().slice(0, 10)}.json`) });
   result = { ok: true, store, terms: chunk.terms?.length ?? 0, rows: chunk.rows?.length ?? 0, outputFile: cliPath(outputFile) };
 } else if (command === "ingredient" && subcommand === "headless-verify") {
   const [store, claimFile, outputFile] = arguments_;
@@ -1756,7 +1757,8 @@ if (command === "status") {
   const claimDocument = JSON.parse(await readFile(cliPath(claimFile), "utf8")) as { checks?: ClaimedCheck[] };
   const checks = claimDocument.checks ?? [];
   const chunk = await captureHeadlessVerification(store as HeadlessStore, checks, cliPath(outputFile),
-    { krogerCredentialsFile: path.join(incomeRoot, "grocery", ".krogerkey") });
+    { krogerCredentialsFile: path.join(incomeRoot, "grocery", ".krogerkey"),
+      familyFareCatalogFile: path.join(incomeRoot, "grocery", "out", "regular", `family-fare-regular-${new Date().toISOString().slice(0, 10)}.json`) });
   result = { ok: true, store, verifications: chunk.verifications?.length ?? 0, outputFile: cliPath(outputFile) };
 } else if (command === "ingredient" && subcommand === "capture-submit") {
   const [claimFile, ...chunkFiles] = arguments_;

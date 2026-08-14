@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { claimSearchTerms, headlessPriceMinor, headlessPriceSemantics, stableProductName } from "./headless-targeted-capture";
+import { claimSearchTerms, familyFareCatalogMatches, headlessPriceMinor, headlessPriceSemantics, stableProductName } from "./headless-targeted-capture";
 
 describe("headless targeted store capture", () => {
   it("accepts only unambiguous single-package prices", () => {
@@ -27,5 +27,11 @@ describe("headless targeted store capture", () => {
       { commodity_proposal_json: JSON.stringify({ searchTerms: ["pistachios", "cinnamon sticks"] }) },
     ];
     expect(claimSearchTerms(claims as never)).toEqual(["pistachios", "pistachio nuts", "cinnamon sticks"]);
+  });
+
+  it("filters a full Family Fare catalog with order-independent query tokens", () => {
+    expect(familyFareCatalogMatches("ground chipotle", "Organic Chipotle Ground Pepper")).toBe(true);
+    expect(familyFareCatalogMatches("wild rice blend", "Long Grain & Wild Rice Blend")).toBe(true);
+    expect(familyFareCatalogMatches("chipotle paste", "Chipotle Pepper Sauce")).toBe(false);
   });
 });

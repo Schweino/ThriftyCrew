@@ -14,6 +14,8 @@ const HEADLESS_STORES: Partial<Record<string, HeadlessStore>> = {
   "hy-vee-omaha-1465": "hy-vee",
 };
 const KROGER_CREDENTIALS_FILE = path.resolve(import.meta.dirname, "../../../..", "grocery", ".krogerkey");
+const FAMILY_FARE_CATALOG_FILE = path.resolve(import.meta.dirname, "../../../..", "grocery", "out", "regular",
+  `family-fare-regular-${new Date().toISOString().slice(0, 10)}.json`);
 
 const pause = (milliseconds: number) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
@@ -70,7 +72,9 @@ async function drainHeadlessCaptureLane(client: MutationClient, storeLocationId:
   const file = path.join(os.tmpdir(), `tc-ingredient-${adapter}-capture-${process.pid}-${Date.now()}.json`);
   try {
     const terms = claimSearchTerms(checks);
-    const chunk = await captureHeadlessDiscovery(adapter, terms, file, { krogerCredentialsFile: KROGER_CREDENTIALS_FILE });
+    const chunk = await captureHeadlessDiscovery(adapter, terms, file, {
+      krogerCredentialsFile: KROGER_CREDENTIALS_FILE, familyFareCatalogFile: FAMILY_FARE_CATALOG_FILE,
+    });
     for (const check of checks) {
       const evidence = await uploadEvidence(client, check, "producer", chunk);
       const payload = await buildIngredientCapturePayload(check, [chunk], evidence);

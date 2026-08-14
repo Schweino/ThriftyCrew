@@ -32,6 +32,15 @@ export function stableProductName(value: unknown): string {
   return String(value ?? "").replace(/Ã‚Â®|Ã‚Â™|Â®|Â™|[®™©]/g, "").replace(/\s+/g, " ").trim();
 }
 
+function searchTokens(value: string): string[] {
+  return value.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim().split(/\s+/).filter(Boolean);
+}
+
+export function familyFareCatalogMatches(query: string, productName: string): boolean {
+  const productTokens = new Set(searchTokens(productName));
+  return searchTokens(query).every((token) => productTokens.has(token));
+}
+
 async function jsonFetch(url: string, init: RequestInit = {}, attempts = 2): Promise<JsonRecord> {
   let last: unknown;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
@@ -126,20 +135,24 @@ async function captureBakers(query: string, token: string, observedAt: string) {
   return { rows, total, pages, excludedResults };
 }
 
-async function captureFamilyFare(query: string, observedAt: string) {
+async function captureFamilyFareCatalog(file = path.resolve("..", "grocery", "out", "regular", `family-fare-regular-${new Date().toISOString().slice(0, 10)}.json`)) {
   const store = await jsonFetch("https://api.freshop.ncrcloud.com/1/stores/6401?app_key=family_fare", { headers: { "user-agent": USER_AGENT } }, 1);
   if (!/^omaha$/i.test(String(store.city ?? ""))) throw new Error("Family Fare store 6401 did not prove Omaha location");
+  const snapshot = JSON.parse((await readFile(file, "utf8")).replace(/^\uFEFF/, "")) as { deals?: JsonRecord[] };
+  const indexed = new Map<string, JsonRecord>();
+  for (const deal of snapshot.deals ?? []) {
+    const id = String(deal.product_id ?? "");
+    if (id) indexed.set(id, deal);
+  }
+  if (indexed.size === 0) throw new Error(`Family Fare daily candidate index is empty: ${file}`);
+  return [...indexed.values()];
+}
+
+async function captureFamilyFare(query: string, observedAt: string, catalog: Awaited<ReturnType<typeof captureFamilyFareCatalog>>) {
   const rows: JsonRecord[] = []; const excludedResults: JsonRecord[] = [];
-  let offset = 0; let pages = 0; let total: number | null = null;
-  do {
-    const url = new URL("https://api.freshop.ncrcloud.com/1/products");
-    for (const [key, value] of Object.entries({ app_key: "family_fare", store_id: "6401", q: query, limit: "50", offset: String(offset), fields: "id,name,size,price,base_price,unit_price,canonical_url" })) url.searchParams.set(key, value);
-    const response = await jsonFetch(url.href, { headers: { "user-agent": USER_AGENT } }, 1);
-    const items = Array.isArray(response.items) ? response.items : [];
-    const reported = response.total ?? response.total_count ?? response.meta?.pagination?.total;
-    if (reported !== undefined && reported !== null) total = Number(reported);
-    pages += 1;
-    for (const [index, item] of items.entries()) {
+  const candidates = catalog.filter((item) => familyFareCatalogMatches(query, stableProductName(item.item)));
+  for (const [index, candidate] of candidates.entries()) {
+    const item = await jsonFetch(`https://api.freshop.ncrcloud.com/1/products/${encodeURIComponent(String(candidate.product_id))}?app_key=family_fare&store_id=6401`, { headers: { "user-agent": USER_AGENT } }, 1);
       const current = headlessPriceMinor(item.price); const regular = headlessPriceMinor(item.base_price);
       const rawUrl = String(item.canonical_url ?? "");
       const urlValue = rawUrl ? new URL(rawUrl, "https://www.shopfamilyfare.com").href : "";
@@ -147,18 +160,13 @@ async function captureFamilyFare(query: string, observedAt: string) {
       // pickup catalog; it omits a separate availability field. A row is
       // eligible only when that current store-6401 response supplies its own
       // stable identity, canonical product URL, and current package price.
-      const available = Boolean(item.id && urlValue && current !== null);
+      const available = Boolean(item.id && urlValue && current !== null && /^available$/i.test(String(item.status ?? "")));
       const normalized = current === null ? null : capturedRow("family-fare", query, { id: String(item.id ?? ""), name: stableProductName(item.name),
         size: String(item.size ?? ""), url: urlValue, price: current, regular, available,
-        rawAvailability: available ? "Freshop store 6401 available" : "Freshop did not prove current availability" }, pages - 1, index, observedAt);
+        rawAvailability: available ? "Freshop store 6401 available" : "Freshop did not prove current availability" }, 0, index, observedAt);
       if (normalized) rows.push(normalized); else excludedResults.push({ productKey: String(item.id ?? ""), name: String(item.name ?? ""), reason: "incomplete, ambiguous, or unavailable Freshop result" });
-    }
-    offset += items.length;
-    if (items.length < 50) { if (total === null) total = offset; break; }
-    if (items.length === 0) break;
-  } while ((total === null || offset < total) && pages < 20);
-  if (total === null || offset < total) throw new Error(`Family Fare pagination did not prove end of results (${offset}/${total ?? "unknown"})`);
-  return { rows, total, pages, excludedResults };
+  }
+  return { rows, total: candidates.length, pages: candidates.length ? 1 : 0, excludedResults };
 }
 
 async function captureHyVee(query: string, observedAt: string) {
@@ -192,14 +200,15 @@ async function captureHyVee(query: string, observedAt: string) {
 }
 
 export async function captureHeadlessDiscovery(store: HeadlessStore, terms: string[], file: string,
-  options: { krogerCredentialsFile?: string } = {}): Promise<AdapterChunk> {
+  options: { krogerCredentialsFile?: string; familyFareCatalogFile?: string } = {}): Promise<AdapterChunk> {
   if (!(store in STORE) || terms.length < 1 || terms.length > 50) throw new Error("headless capture requires one supported store and 1-50 terms");
   const observedAt = new Date().toISOString();
   const token = store === "bakers" ? await krogerToken(options.krogerCredentialsFile ?? path.resolve("..", "grocery", ".krogerkey")) : null;
+  const familyFareCatalog = store === "family-fare" ? await captureFamilyFareCatalog(options.familyFareCatalogFile) : null;
   const records: Array<{ query: string; rows: JsonRecord[]; total: number; pages: number; excludedResults: JsonRecord[] }> = [];
   for (const query of [...new Set(terms.map((term) => term.trim()).filter(Boolean))]) {
     const captured = store === "bakers" ? await captureBakers(query, token!, observedAt)
-      : store === "family-fare" ? await captureFamilyFare(query, observedAt) : await captureHyVee(query, observedAt);
+      : store === "family-fare" ? await captureFamilyFare(query, observedAt, familyFareCatalog!) : await captureHyVee(query, observedAt);
     records.push({ query, ...captured });
   }
   const config = STORE[store];
@@ -223,7 +232,7 @@ export function claimSearchTerms(claims: ClaimedCheck[]): string[] {
 }
 
 export async function captureHeadlessVerification(store: HeadlessStore, claims: ClaimedCheck[], file: string,
-  options: { krogerCredentialsFile?: string } = {}): Promise<AdapterChunk> {
+  options: { krogerCredentialsFile?: string; familyFareCatalogFile?: string } = {}): Promise<AdapterChunk> {
   const temporary = `${file}.discovery.json`;
   const discovery = await captureHeadlessDiscovery(store, claimSearchTerms(claims), temporary, options);
   const rows = discovery.rows ?? [];
