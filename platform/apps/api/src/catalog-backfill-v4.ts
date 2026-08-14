@@ -230,6 +230,11 @@ function derivedAuditSummary(value: DerivedBackfillCapture) {
     taxonomyPath: value.winner.taxonomyPath ?? "" } : null, candidateRejections: value.candidateRejections ?? [] };
 }
 
+function winnerAuditIdentity(value: DerivedBackfillCapture) {
+  return value.winner ? { productId: value.winner.productId, productName: value.winner.productName,
+    priceMinor: value.winner.priceMinor, quantityMicros: value.winner.quantityMicros } : null;
+}
+
 export async function auditCatalogBackfillDefinitions(db: D1Database, runId: string, input: { definitionOffset?: number; terminalOffset?: number; limit?: number } = {}) {
   const limit = Math.min(50, Math.max(1, Number(input.limit ?? 25)));
   const definitionOffset = Math.max(0, Number(input.definitionOffset ?? 0));
@@ -291,8 +296,10 @@ export async function auditCatalogBackfillDefinitions(db: D1Database, runId: str
       terminalAudits.push({ commodityId: cell.commodity_id, storeLocationId: cell.store_location_id,
         durableBefore: derivedAuditSummary(durableBefore), producerBefore: derivedAuditSummary(producerBefore), verifierBefore: derivedAuditSummary(verifierBefore),
         producerAfter: derivedAuditSummary(producerAfter), verifierAfter: derivedAuditSummary(verifierAfter),
-        safeToPreserve: producerAfter.outcome === verifierAfter.outcome && stableJson(producerAfter.winner) === stableJson(verifierAfter.winner)
-          && producerAfter.outcome === durableBefore.outcome && stableJson(producerAfter.winner) === stableJson(durableBefore.winner) });
+        safeToPreserve: producerAfter.outcome === verifierAfter.outcome
+          && stableJson(winnerAuditIdentity(producerAfter)) === stableJson(winnerAuditIdentity(verifierAfter))
+          && producerAfter.outcome === durableBefore.outcome
+          && stableJson(winnerAuditIdentity(producerAfter)) === stableJson(winnerAuditIdentity(durableBefore)) });
     } catch (error) {
       terminalAudits.push({ commodityId: cell.commodity_id, storeLocationId: cell.store_location_id,
         safeToPreserve: false, error: error instanceof Error ? error.message : String(error) });

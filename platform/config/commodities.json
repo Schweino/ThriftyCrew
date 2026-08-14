@@ -11792,6 +11792,7 @@
     "band_max": 15,
     "include": [
       "aluminum\\s+foil",
+      "aluminum\\b.{0,20}\\bfoil",
       "\\bfoil\\b.{0,15}(?:roll|sq)"
     ],
     "exclude": [

@@ -17,7 +17,7 @@ export const catalogIngredientIdentitySchema = z.object({
   acceptedForms: z.array(z.string().trim().min(1).max(300)).max(100),
   excludedForms: z.array(z.string().trim().min(1).max(300)).max(100),
   includeNamePatterns: z.array(z.string().trim().min(1).max(500)).max(100).optional(),
-  excludeNamePatterns: z.array(z.string().trim().min(1).max(500)).max(200).optional(),
+  excludeNamePatterns: z.array(z.string().trim().min(1).max(500)).max(250).optional(),
   storeTaxonomyRules: z.record(z.string(), z.object({
     allowTerminalIds: z.array(z.string().trim().min(1).max(120)).max(100).optional(),
     denyTerminalIds: z.array(z.string().trim().min(1).max(120)).max(100).optional(),
