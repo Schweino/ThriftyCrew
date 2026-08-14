@@ -794,6 +794,11 @@ async function persistRecipeIngredientGaps(db: D1Database, completed: Record<str
     return { gapCount: 0, discovery: true, collecting };
   }
   const statements: D1PreparedStatement[] = [];
+  // One canonical entity/identity version may be referenced by many recipe
+  // occurrences. Emit those inserts once per persistence pass so differing
+  // package expressions for the same normalized requirement cannot collide on
+  // ingredient_entities.id or ingredient_identity_versions(entity_id, version).
+  const emittedEntityIds = new Set<string>();
   for (const recipe of map.recipes) {
     if (rejectedAlternativeCandidates.has(recipe.candidate.id)) {
       continue;
@@ -823,19 +828,22 @@ async function persistRecipeIngredientGaps(db: D1Database, completed: Record<str
           `INSERT INTO ingredient_gaps (id, normalized_name, display_name)
            VALUES (?1, ?2, ?3) ON CONFLICT(normalized_name) DO NOTHING`,
         ).bind(gapId, requirement.normalizedName, requirement.displayName));
-        statements.push(db.prepare(
-          `INSERT INTO ingredient_entities
-             (id, market_id, canonical_name, identity_hash, identity_json, state)
-           VALUES (?1, 'omaha', ?2, ?3, ?4, 'novel')
-           ON CONFLICT(market_id, identity_hash) DO NOTHING`,
-        ).bind(entityId, requirement.displayName, identityHash, stableJson(identity)));
-        statements.push(db.prepare(
-          `INSERT INTO ingredient_identity_versions
-             (id, entity_id, version, base_product, aliases_json, exclusions_json, expected_unit_dimension,
-              identity_hash, resolver_version, verified_at)
-           VALUES (?1, ?2, 1, ?3, ?4, '[]', ?5, ?6, 'atomic-source-v1', CURRENT_TIMESTAMP)
-           ON CONFLICT(entity_id, identity_hash) DO NOTHING`,
-        ).bind(identityVersionId, entityId, requirement.normalizedName, stableJson([requirement.normalizedName]), identity.expectedUnitDimension, identityHash));
+        if (!emittedEntityIds.has(entityId)) {
+          emittedEntityIds.add(entityId);
+          statements.push(db.prepare(
+            `INSERT INTO ingredient_entities
+               (id, market_id, canonical_name, identity_hash, identity_json, state)
+             VALUES (?1, 'omaha', ?2, ?3, ?4, 'novel')
+             ON CONFLICT DO NOTHING`,
+          ).bind(entityId, requirement.displayName, identityHash, stableJson(identity)));
+          statements.push(db.prepare(
+            `INSERT INTO ingredient_identity_versions
+               (id, entity_id, version, base_product, aliases_json, exclusions_json, expected_unit_dimension,
+                identity_hash, resolver_version, verified_at)
+             VALUES (?1, ?2, 1, ?3, ?4, '[]', ?5, ?6, 'atomic-source-v1', CURRENT_TIMESTAMP)
+             ON CONFLICT DO NOTHING`,
+          ).bind(identityVersionId, entityId, requirement.normalizedName, stableJson([requirement.normalizedName]), identity.expectedUnitDimension, identityHash));
+        }
         statements.push(db.prepare(
           `INSERT INTO ingredient_aliases
              (market_id, normalized_alias, entity_id, resolution_source, confidence, evidence_hash)
@@ -1166,6 +1174,16 @@ export async function completeAgentWorkItem(env: Pick<WorkerEnv, "DB" | "EVIDENC
   // completed work item with no verified facts.
   const recipeFactsPersisted = current.agent_id === "recipe-fact-extractor";
   if (recipeFactsPersisted) await persistRecipeSourceFacts(env, output);
+  // Mapping persistence is also an acceptance gate. It creates the durable
+  // Lane A -> Lane B handoff, so it must succeed before the lease is marked
+  // completed. Every write in these helpers is deterministic/idempotent and is
+  // therefore safe to replay after a partial D1 batch.
+  const recipeMappingsPersisted = current.agent_id === "recipe-mapper";
+  let persistedMapperGapResult: Awaited<ReturnType<typeof persistRecipeIngredientGaps>> | undefined;
+  if (recipeMappingsPersisted) {
+    await persistRecipeMappings(db, output);
+    persistedMapperGapResult = await persistRecipeIngredientGaps(db, current, output);
+  }
   const outputJson = stableJson(output);
   const outputHash = await digestHex(outputJson);
   const finishedAt = new Date().toISOString();
@@ -1238,9 +1256,9 @@ export async function completeAgentWorkItem(env: Pick<WorkerEnv, "DB" | "EVIDENC
       ]);
     }
     if (current.agent_id === "recipe-fact-extractor" && !recipeFactsPersisted) await persistRecipeSourceFacts(env, output);
-    if (current.agent_id === "recipe-mapper") await persistRecipeMappings(db, output);
+    if (current.agent_id === "recipe-mapper" && !recipeMappingsPersisted) await persistRecipeMappings(db, output);
     const gapResult = current.agent_id === "recipe-mapper"
-      ? await persistRecipeIngredientGaps(db, current, output)
+      ? persistedMapperGapResult ?? await persistRecipeIngredientGaps(db, current, output)
       : { gapCount: 0, discovery: false, collecting: false };
     const reason = gapResult.gapCount > 0 ? undefined : recipeTerminalReason(String(current.agent_id), output);
     if (reason) {
