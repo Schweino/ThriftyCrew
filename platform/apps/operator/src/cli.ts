@@ -2357,6 +2357,32 @@ if (command === "status") {
     result = await client.request("/internal/v4/backfill/definition-correct", { json: {
       runId, commodityId, correctionId, reason: reason.join(" "),
     } });
+  } else if (action === "definition-sync") {
+    const [runId, auditFile, outputFile, rawOffset = "0", rawLimit = "25", rawExclude = ""] = arguments_.slice(1);
+    const offset = Number(rawOffset); const limit = Number(rawLimit);
+    if (!runId || !auditFile || !outputFile || !Number.isSafeInteger(offset) || offset < 0
+      || !Number.isSafeInteger(limit) || limit < 1 || limit > 100) {
+      throw new Error("tc ingredient backfill-v4 definition-sync requires run audit.json output.json [offset] [limit<=100] [excluded-commodity-csv]");
+    }
+    const audit = JSON.parse(await readFile(cliPath(auditFile), "utf8")) as any;
+    const unmapped = audit.unmapped ?? {}; const unmappedCount = Object.values(unmapped).reduce((sum: number, rows: any) => sum + (Array.isArray(rows) ? rows.length : 0), 0);
+    if (audit.summary?.total !== 573 || audit.summary?.invalid !== 0 || !Array.isArray(audit.definitions)
+      || audit.definitions.length !== 573 || unmappedCount !== 0) throw new Error("definition sync requires a complete clean 573-definition audit artifact");
+    const excluded = new Set(rawExclude.split(",").map((value: string) => value.trim()).filter(Boolean));
+    const definitions = audit.definitions.filter((row: any) => row.changed === true && !excluded.has(String(row.commodityId)));
+    const page = definitions.slice(offset, offset + limit); const synced: any[] = [];
+    for (const definition of page) {
+      const commodityId = String(definition.commodityId);
+      const correctionId = `authored-identity-v1-${commodityId}`;
+      synced.push(await client.request("/internal/v4/backfill/definition-correct", { json: { runId, commodityId, correctionId,
+        reason: "Persist the audited authored include, exclude, taxonomy, and store-scoped known-wrong identity rules." } }));
+      const progress = { kind: "catalog-backfill-definition-sync-v4", runId, auditSha256: await digestHex(await readFile(cliPath(auditFile), "utf8")),
+        excluded: [...excluded].sort(), offset, requested: page.length, completed: synced.length, nextOffset: offset + synced.length,
+        total: definitions.length, synced };
+      await writeFile(cliPath(outputFile), `${JSON.stringify(progress, null, 2)}\n`, "utf8");
+    }
+    result = { ok: true, outputFile: cliPath(outputFile), offset, completed: synced.length, nextOffset: offset + synced.length,
+      total: definitions.length, remaining: Math.max(0, definitions.length - offset - synced.length), synced };
   } else if (action === "submit-claim") {
     const [role, claimFile, chunkFile, generationPrefix, sessionPrefix, outputFile] = arguments_.slice(1);
     if (!(["producer", "verifier"] as string[]).includes(role ?? "") || !claimFile || !chunkFile || !generationPrefix || !sessionPrefix || !outputFile) {
@@ -2370,7 +2396,7 @@ if (command === "status") {
     const submitted = [];
     for (const submission of submissions) submitted.push(await client.request(`/internal/v4/backfill/${role}-submit`, { json: submission }));
     result = { ok: true, role, wrappers: submissions.length, outputFile: cliPath(outputFile), submitted };
-  } else throw new Error("tc ingredient backfill-v4 requires initialize|import <run> [offset] [limit]|progress [run]|definition-audit <run> <output.json>|definition-correct <run> <commodity> <correction-id> <reason>|claim <agent> [owner] [limit] [output.json]|claim-exact <agent> <work-item> <owner> <output.json>|heartbeat <owner> [lease-seconds] [output.json]|producer-submit <adapter-artifact>|verifier-submit <independent-adapter-artifact>|submit-claim <role> <claim> <chunk> <generation-prefix> <session-prefix> <wrapper-output>|requeue <run> <commodity> <store> <adjudication-id> <resolution-type> <reason>|correct <run> <commodity> <store> <correction-id> <detailed-reason>");
+  } else throw new Error("tc ingredient backfill-v4 requires initialize|import <run> [offset] [limit]|progress [run]|definition-audit <run> <output.json>|definition-correct <run> <commodity> <correction-id> <reason>|definition-sync <run> <audit.json> <output.json> [offset] [limit] [exclude-csv]|claim <agent> [owner] [limit] [output.json]|claim-exact <agent> <work-item> <owner> <output.json>|heartbeat <owner> [lease-seconds] [output.json]|producer-submit <adapter-artifact>|verifier-submit <independent-adapter-artifact>|submit-claim <role> <claim> <chunk> <generation-prefix> <session-prefix> <wrapper-output>|requeue <run> <commodity> <store> <adjudication-id> <resolution-type> <reason>|correct <run> <commodity> <store> <correction-id> <detailed-reason>");
 } else if (command === "recipe" && subcommand === "wave") {
   const [action, waveId, value] = arguments_;
   if (!action || !waveId) throw new Error("tc recipe wave requires snapshot|published|corrective and a wave id");
