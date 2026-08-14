@@ -30,6 +30,7 @@ import { compactEvidenceChunkForCheck, isIdempotentCaptureResumeConflict, isIdem
 import { buildIngredientCapturePayload, buildIngredientQaPayload, mergeIngredientQaDiscoveryChunks, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
 import { captureHeadlessDiscovery, captureHeadlessVerification, claimSearchTerms, type HeadlessStore } from "./headless-targeted-capture";
 import { PipelineAgentSupervisor } from "./pipeline-agent-supervisor";
+import { buildBackfillSubmissions } from "./backfill-v4-submissions";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -2288,7 +2289,20 @@ if (command === "status") {
       throw new Error("tc ingredient backfill-v4 requeue requires run commodity store adjudication-id adapter_repaired|challenge_resolved reason");
     }
     result = await client.request("/internal/v4/backfill/requeue", { json: { runId, commodityId, storeLocationId, adjudicationId, resolutionType, reason: reason.join(" ") } });
-  } else throw new Error("tc ingredient backfill-v4 requires initialize|import <run> [offset] [limit]|progress [run]|claim <agent> [owner] [limit]|heartbeat <owner> [lease-seconds]|producer-submit <adapter-artifact>|verifier-submit <independent-adapter-artifact>|requeue <run> <commodity> <store> <adjudication-id> <resolution-type> <reason>");
+  } else if (action === "submit-claim") {
+    const [role, claimFile, chunkFile, generationPrefix, sessionPrefix, outputFile] = arguments_.slice(1);
+    if (!(["producer", "verifier"] as string[]).includes(role ?? "") || !claimFile || !chunkFile || !generationPrefix || !sessionPrefix || !outputFile) {
+      throw new Error("tc ingredient backfill-v4 submit-claim requires producer|verifier claim.json chunk.json generation-prefix session-prefix wrapper-output.json");
+    }
+    const submissions = buildBackfillSubmissions({ role: role as "producer" | "verifier",
+      claim: JSON.parse(await readFile(cliPath(claimFile), "utf8")), chunk: JSON.parse(await readFile(cliPath(chunkFile), "utf8")),
+      generationPrefix, sessionPrefix });
+    const artifact = { kind: `catalog-backfill-${role}-submissions-v4`, createdAt: new Date().toISOString(), submissions };
+    await writeFile(cliPath(outputFile), `${JSON.stringify(artifact, null, 2)}\n`, "utf8");
+    const submitted = [];
+    for (const submission of submissions) submitted.push(await client.request(`/internal/v4/backfill/${role}-submit`, { json: submission }));
+    result = { ok: true, role, wrappers: submissions.length, outputFile: cliPath(outputFile), submitted };
+  } else throw new Error("tc ingredient backfill-v4 requires initialize|import <run> [offset] [limit]|progress [run]|claim <agent> [owner] [limit]|heartbeat <owner> [lease-seconds]|producer-submit <adapter-artifact>|verifier-submit <independent-adapter-artifact>|submit-claim <role> <claim> <chunk> <generation-prefix> <session-prefix> <wrapper-output>|requeue <run> <commodity> <store> <adjudication-id> <resolution-type> <reason>");
 } else if (command === "recipe" && subcommand === "wave") {
   const [action, waveId, value] = arguments_;
   if (!action || !waveId) throw new Error("tc recipe wave requires snapshot|published|corrective and a wave id");

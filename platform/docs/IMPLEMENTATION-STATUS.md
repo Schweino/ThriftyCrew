@@ -111,8 +111,11 @@ pnpm tc ingredient backfill-v4 claim <producer-agent-id> <owner> 50
 pnpm tc ingredient backfill-v4 heartbeat <owner> 900
 pnpm tc ingredient backfill-v4 producer-submit <lease-fenced-adapter-artifact.json>
 pnpm tc ingredient backfill-v4 verifier-submit <independent-adapter-artifact.json>
+pnpm tc ingredient backfill-v4 submit-claim <producer|verifier> <claim.json> <adapter-chunk.json> <generation-prefix> <session-prefix> <wrapper-output.json>
 pnpm tc ingredient backfill-v4 requeue <run-id> <commodity-id> <store-id> <adjudication-id> <adapter_repaired|challenge_resolved> <resolution-reason>
 ```
+
+`submit-claim` is the batch-safe path for both lanes. It rejects expired/mixed claims and chunks with missing, duplicate, or extra queries/rows; slices the chunk to each work item's exact locked query plan; derives one generation/session-fenced wrapper per lease; writes the complete wrapper artifact before mutation; then submits each wrapper to the producer or verifier endpoint. A verifier must use its own verifier claim, a later independently captured chunk, and different generation/session prefixes.
 
 A `needs_operator` or `challenged` cell is recoverable only after an actual typed resolution. `adapter_repaired` means the deployed adapter now preserves the previously missing immutable raw/source facts; `challenge_resolved` records an acknowledged retailer challenge resolution. Free-form reason text never excludes a candidate. Requeue is idempotent by adjudication ID, retains the prior work identity, and creates a new dedupe/lease/generation fence that must capture fresh checked evidence; old evidence is retained and can never be reused as the verifier pass.
 
