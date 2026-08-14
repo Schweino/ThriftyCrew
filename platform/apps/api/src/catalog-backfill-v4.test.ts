@@ -104,6 +104,27 @@ describe("truthful V4 catalog backfill", () => {
       .rejects.toThrow("authoritative location and price mode");
   });
 
+  it("accepts Fareway's configured exact-address canary while keeping row availability bound to store 043", async () => {
+    const chunk = walmartChunk() as Record<string, any>;
+    chunk.store = "fareway";
+    chunk.canary.evidenceUrl = "https://shop.fareway.com/store/fareway/products";
+    for (const row of chunk.rows) {
+      row.url = row.url.replace("walmart.com", "shop.fareway.com");
+      row._capture.location = "17070 Audrey Street, Omaha, NE 68136";
+      row._capture.priceMode = "In-Store";
+      row._capture.pageState.locationText = "17070 Audrey Street, Omaha, NE 68136";
+      row._capture.pageState.fulfillmentText = "In-Store";
+      row._capture.offer.sourceUrl = row._capture.offer.sourceUrl.replace("walmart.com", "shop.fareway.com");
+      row._capture.offer.availability.locationId = "043";
+      row._capture.offer.availability.fulfillmentMode = "in_store";
+    }
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "fareway-omaha-043", queryTerms: ["Bananas"], identity, document: chunk }))
+      .resolves.toMatchObject({ outcome: "priced" });
+    for (const row of chunk.rows) row._capture.offer.availability.locationId = "999";
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "fareway-omaha-043", queryTerms: ["Bananas"], identity, document: chunk }))
+      .resolves.toMatchObject({ outcome: "not_found" });
+  });
+
   it("fails closed on forged empty, missing raw exclusions, policy mismatch, and incomplete pagination", async () => {
     const empty = walmartChunk({ rows: [], terms: [{ query: "Bananas", outcome: "empty", rowCount: 0,
       retrieval: { loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "no-results" } }] });

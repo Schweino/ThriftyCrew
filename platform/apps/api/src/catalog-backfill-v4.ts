@@ -357,9 +357,7 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
     const mode = String(capture.priceMode ?? pageState?.fulfillmentText ?? "");
     const locationPattern = new RegExp(policy.locationCanary.expectedLocationPattern, "i");
     const modePattern = new RegExp(policy.locationCanary.expectedModePattern, "i");
-    const canonicalKeyPresent = locationText.toLowerCase().includes(policy.retailerLocationKey.toLowerCase())
-      || locationText.toLowerCase().includes(policy.priceLocationKey.toLowerCase());
-    if (!locationPattern.test(locationText) || !canonicalKeyPresent || !modePattern.test(mode)) {
+    if (!locationPattern.test(locationText) || !modePattern.test(mode)) {
       throw new Error("backfill capture row is not bound to the authoritative location and price mode");
     }
     const url = new URL(productUrl);
@@ -384,9 +382,12 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
     const validPromotion = !promotional || Boolean(validFrom && validTo && Date.parse(validFrom) <= Date.parse(observedAt)
       && Date.parse(validTo) >= Date.parse(observedAt) && validTo > validFrom);
     const availabilityLocation = String(availability.locationId ?? "").toLowerCase();
+    const availabilityMode = String(availability.fulfillmentMode ?? "");
+    const availabilityModeEligible = normalizeName(availabilityMode) === normalizeName(policy.priceMode)
+      || new RegExp(policy.locationCanary.expectedModePattern, "i").test(availabilityMode);
     const storeEligible = (availabilityLocation === policy.retailerLocationKey.toLowerCase()
       || availabilityLocation === policy.priceLocationKey.toLowerCase())
-      && new RegExp(policy.locationCanary.expectedModePattern, "i").test(String(availability.fulfillmentMode ?? ""))
+      && availabilityModeEligible
       && availability.eligible === true && availability.status === "in_stock";
     candidates.push({ productId, productName, productUrl, packageText, priceMinor, quantityMicros,
       validFrom, validTo,
