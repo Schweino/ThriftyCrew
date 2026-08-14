@@ -77,7 +77,12 @@ export async function completeIngredientStoreCapture(env: Pick<WorkerEnv, "DB" |
     (id, store_check_id, kind, object_key, sha256, byte_length, content_type, observed_at, source_url)
     VALUES (?1, ?2, 'query', ?3, ?4, ?5, ?6, ?7, ?8) ON CONFLICT(store_check_id, kind, sha256) DO NOTHING`)
     .bind(evidenceId, checkId, input.evidence.objectKey, input.evidence.sha256, input.evidence.byteLength,
-      input.evidence.contentType, input.evidence.observedAt, input.evidence.sourceUrl)];
+      input.evidence.contentType, input.evidence.observedAt, input.evidence.sourceUrl),
+  // A producer generation is a complete frozen search, not an append. Replace
+  // the prior derived projection atomically so corrected captures cannot be
+  // ranked against stale candidates or stale query coverage during QA.
+  env.DB.prepare("DELETE FROM ingredient_query_coverage WHERE store_check_id = ?1").bind(checkId),
+  env.DB.prepare("DELETE FROM ingredient_store_candidates WHERE store_check_id = ?1").bind(checkId)];
   for (const coverage of input.coverage) {
     const coverageId = await deterministicId("ingredient-query-coverage", checkId, coverage.normalizedQuery, input.evidence.sha256);
     statements.push(env.DB.prepare(`INSERT INTO ingredient_query_coverage
