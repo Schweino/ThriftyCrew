@@ -117,7 +117,7 @@ import { engineMayWriteCaptureSource } from "./capture-authorization";
 import { evaluateContentPromotion } from "./content-batches";
 import { recipeCommodityIds } from "./recipe-commodity-catalog";
 import { claimAgentWorkItem, completeAgentWorkItem, enqueueIngredientDefinitionPlan, failAgentWorkItem, ingredientCampaignSnapshot, reconcileIngredientCampaign, reconcileIngredientHolds } from "./agent-work-items";
-import { claimStoreChecks, createPricingWave, failStoreCheck, heartbeatStoreCheck, ingredientCampaignProgress, ingredientPipelineStatus, pipelineEvents, pricingWaveStatus, resolveClaimedStoreCheckFromCatalog } from "./ingredient-pricing-v2";
+import { claimStoreChecks, createPricingWave, failStoreCheck, heartbeatStoreCheck, ingredientCampaignProgress, ingredientPipelineStatus, pipelineEvents, pricingWaveStatus, reconcileTerminalPricingJobs, resolveClaimedStoreCheckFromCatalog } from "./ingredient-pricing-v2";
 import { acknowledgePipelineOutbox, claimPipelineOutbox, nackPipelineOutbox } from "./pipeline-outbox";
 import { completeIngredientStoreCapture, completeIngredientStoreQa, rejectIngredientStoreQa, uploadIngredientEvidence } from "./ingredient-independent-qa";
 import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredientChallenge } from "./ingredient-challenges";
@@ -1483,6 +1483,8 @@ app.get("/internal/ingredient-pricing/waves/:id", async (context) => {
 app.get("/internal/ingredient-pricing/status", async (context) => context.json({ ok: true, status: await ingredientPipelineStatus(context.env.DB) }));
 app.get("/internal/ingredient-pricing/progress", async (context) => context.json({ ok: true,
   progress: await ingredientCampaignProgress(context.env.DB, context.req.query("requestId")) }));
+app.post("/internal/ingredient-pricing/reconcile", async (context) => context.json({ ok: true,
+  ...await reconcileTerminalPricingJobs(context.env, 50) }));
 
 app.get("/internal/ingredient-pricing/publication-ready", async (context) => {
   const rows = await context.env.DB.prepare(

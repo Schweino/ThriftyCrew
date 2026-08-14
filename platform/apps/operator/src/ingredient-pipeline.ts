@@ -126,13 +126,15 @@ export async function runIngredientPipelineTick(client: MutationClient, options:
     const qaCompleted = adapter ? await drainHeadlessQaLane(client, storeLocationId, adapter, `${owner}-qa`, limit) : 0;
     return { storeLocationId, catalogResolved, captured, qaCompleted };
   }));
+  const reconciliation = await client.request("/internal/ingredient-pricing/reconcile", { method: "POST" }) as { repaired?: string[] };
   const definitionPlanning = await client.request("/internal/ingredient-pricing/proposals/plan", { method: "POST" });
   await Promise.all((claimedEvents.events ?? []).map((event) => client.request(`/internal/pipeline/outbox/${encodeURIComponent(String(event.id))}/ack`, {
     json: { owner, leaseGeneration: Number(event.lease_generation) },
   })));
   const status = await client.request("/internal/ingredient-pricing/status");
-  return { ok: true, catalog, outboxEvents: (claimedEvents.events ?? []).length, stores: storeResults, definitionPlanning, status,
-    progressed: (claimedEvents.events ?? []).length > 0 || storeResults.some((row) => row.catalogResolved > 0 || row.captured > 0 || row.qaCompleted > 0) || definitionPlanning.queued === true };
+  return { ok: true, catalog, outboxEvents: (claimedEvents.events ?? []).length, stores: storeResults, definitionPlanning, reconciliation, status,
+    progressed: (claimedEvents.events ?? []).length > 0 || (reconciliation.repaired ?? []).length > 0
+      || storeResults.some((row) => row.catalogResolved > 0 || row.captured > 0 || row.qaCompleted > 0) || definitionPlanning.queued === true };
 }
 
 export async function runIngredientPipeline(client: MutationClient, options: { owner?: string; limitPerStore?: number; once?: boolean } = {}) {

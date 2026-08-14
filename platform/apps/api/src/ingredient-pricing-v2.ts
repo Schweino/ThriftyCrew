@@ -326,14 +326,16 @@ export async function sealAggregateIfTerminal(env: Pick<WorkerEnv, "DB" | "EVIDE
       WHERE check_row.pricing_job_id = ?1 ORDER BY check_row.store_location_id`,
   ).bind(pricingJobId).all<{ id: string; gap_id: string; store_location_id: string; state: string; result_json: string | null; evidence_id: string | null; qa_attestation_id: string | null; evidence_hash: string | null; qa_hash: string | null }>();
   const aggregate = aggregateStoreCheckStates(rows.results);
-  await env.DB.prepare(
-    `UPDATE ingredient_pricing_jobs
-        SET state = ?2, operational_state = ?2, state_version = state_version + 1,
-            terminal_store_count = ?3, priced_store_count = ?4,
-            not_found_store_count = ?5, last_progress_at = CURRENT_TIMESTAMP,
-            updated_at = CURRENT_TIMESTAMP WHERE id = ?1`,
-  ).bind(pricingJobId, aggregate.state, aggregate.terminalCount, aggregate.pricedCount, aggregate.notFoundCount).run();
-  if (aggregate.state === "store_checks_running") return aggregate;
+  if (aggregate.state === "store_checks_running") {
+    await env.DB.prepare(
+      `UPDATE ingredient_pricing_jobs
+          SET state = ?2, operational_state = ?2, state_version = state_version + 1,
+              terminal_store_count = ?3, priced_store_count = ?4,
+              not_found_store_count = ?5, last_progress_at = CURRENT_TIMESTAMP,
+              updated_at = CURRENT_TIMESTAMP WHERE id = ?1`,
+    ).bind(pricingJobId, aggregate.state, aggregate.terminalCount, aggregate.pricedCount, aggregate.notFoundCount).run();
+    return aggregate;
+  }
   if (rows.results.length !== OMAHA_GROCERY_STORE_LOCATION_IDS.length || rows.results.some((row) => !row.evidence_hash || !row.qa_hash)) {
     throw new Error("terminal aggregate is missing immutable evidence or QA hashes");
   }
@@ -379,7 +381,13 @@ export async function sealAggregateIfTerminal(env: Pick<WorkerEnv, "DB" | "EVIDE
       `INSERT INTO ingredient_current_resolutions (gap_id, resolution_version_id)
        VALUES (?1, ?2) ON CONFLICT(gap_id) DO UPDATE SET resolution_version_id = excluded.resolution_version_id, updated_at = CURRENT_TIMESTAMP`,
     ).bind(job.gap_id, resolutionId),
-    env.DB.prepare("UPDATE ingredient_pricing_jobs SET resolution_version_id = ?2, last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(pricingJobId, resolutionId),
+    env.DB.prepare(
+      `UPDATE ingredient_pricing_jobs
+          SET state = ?2, operational_state = ?2, state_version = state_version + 1,
+              terminal_store_count = ?3, priced_store_count = ?4, not_found_store_count = ?5,
+              resolution_version_id = ?6, last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?1`,
+    ).bind(pricingJobId, aggregate.state, aggregate.terminalCount, aggregate.pricedCount, aggregate.notFoundCount, resolutionId),
     env.DB.prepare("UPDATE ingredient_pricing_inbox SET state = ?2, updated_at = CURRENT_TIMESTAMP WHERE pricing_job_id = ?1")
       .bind(pricingJobId, aggregate.state === "ready_to_publish" ? "publish_pending" : "active"),
     env.DB.prepare(
@@ -409,6 +417,20 @@ export async function sealAggregateIfTerminal(env: Pick<WorkerEnv, "DB" | "EVIDE
   }
   await env.DB.batch(statements);
   return aggregate;
+}
+
+export async function reconcileTerminalPricingJobs(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, limit = 50): Promise<{ repaired: string[] }> {
+  const rows = await env.DB.prepare(
+    `SELECT id FROM ingredient_pricing_jobs
+      WHERE operational_state IN ('ready_to_publish','permanently_unavailable')
+        AND resolution_version_id IS NULL ORDER BY updated_at, id LIMIT ?1`,
+  ).bind(Math.max(1, Math.min(50, limit))).all<{ id: string }>();
+  const repaired: string[] = [];
+  for (const row of rows.results) {
+    await sealAggregateIfTerminal(env, row.id);
+    repaired.push(row.id);
+  }
+  return { repaired };
 }
 
 export async function completeStoreCheck(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, checkId: string, inputValue: unknown): Promise<IngredientAggregate> {
