@@ -395,6 +395,46 @@ async function rematchPromotedBatches(client: MutationClient, verbose = false): 
   };
 }
 
+function ingredientPublicProjection(commodity: Record<string, unknown>): Record<string, unknown> {
+  const cheapest = commodity.cheapest && typeof commodity.cheapest === "object" && !Array.isArray(commodity.cheapest)
+    ? commodity.cheapest as Record<string, unknown> : null;
+  const stores = (Array.isArray(commodity.stores) ? commodity.stores : []).map((value) => {
+    const store = value as Record<string, unknown>;
+    return { storeLocationId: String(store.storeLocationId), perUnitMicros: Number(store.perUnitMicros), unit: String(store.unit),
+      validFrom: store.validFrom === null || store.validFrom === undefined ? null : String(store.validFrom),
+      validTo: store.validTo === null || store.validTo === undefined ? null : String(store.validTo) };
+  }).sort((left, right) => left.storeLocationId.localeCompare(right.storeLocationId));
+  return { id: String(commodity.id), cheapest: cheapest ? {
+    storeLocationId: String(cheapest.storeLocationId), perUnitMicros: Number(cheapest.perUnitMicros),
+  } : null, stores };
+}
+
+async function verifyIngredientPublicationExternally(client: MutationClient, batchId: string, expectedReleaseId?: string): Promise<Record<string, unknown>> {
+  const plan = await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(batchId)}/proof-plan`) as {
+    releaseId?: string;
+    checks?: Array<{ gapId: string; originKind: "worker" | "custom_domain"; url: string }>;
+  };
+  if (!plan.releaseId || !plan.checks?.length || (expectedReleaseId && plan.releaseId !== expectedReleaseId)) {
+    throw new Error("ingredient publication proof plan is missing or targets the wrong release");
+  }
+  const proofs = await Promise.all(plan.checks.map(async (check) => {
+    const checkedAt = new Date().toISOString();
+    const response = await fetch(check.url, { headers: { accept: "application/json", "cache-control": "no-cache" } });
+    let responseReleaseId: string | null = null;
+    let observedHash = await digestHex("");
+    try {
+      const payload = await response.json() as { releaseId?: unknown; commodity?: Record<string, unknown> };
+      responseReleaseId = String(payload.releaseId ?? "") || null;
+      if (payload.commodity) observedHash = await digestHex(stableJson(ingredientPublicProjection(payload.commodity)));
+    } catch { /* malformed edge payload is submitted as a failing proof */ }
+    return { gapId: check.gapId, originKind: check.originKind, url: check.url, status: response.status,
+      etag: response.headers.get("etag"), responseReleaseId, observedHash, checkedAt };
+  }));
+  return await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(batchId)}/verify`, {
+    json: { releaseId: plan.releaseId, proofs },
+  }) as Record<string, unknown>;
+}
+
 interface CommodityAddition {
   id?: string; label?: string; unit?: string; include?: string[]; exclude?: string[]; categoryId?: string; searchTerms?: string[];
   bandMin?: number; bandMax?: number;
@@ -530,9 +570,7 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     const publication = await publishValidatedRelease(client, releaseArtifact.releaseId);
     let verification: Record<string, unknown> = {};
     for (let attempt = 1; attempt <= 8; attempt++) {
-      verification = await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(sealed.batchId)}/verify`, {
-        json: { releaseId: releaseArtifact.releaseId },
-      });
+      verification = await verifyIngredientPublicationExternally(client, sealed.batchId, releaseArtifact.releaseId);
       if (verification.complete === true) break;
       if (attempt < 8) await new Promise((resolve) => setTimeout(resolve, Math.min(10_000, attempt * 1_500)));
     }
@@ -1668,9 +1706,7 @@ if (command === "status") {
 } else if (command === "ingredient" && subcommand === "publication-verify") {
   const [batchId, releaseId] = arguments_;
   if (!batchId || !releaseId) throw new Error("tc ingredient publication-verify requires <batch-id> <release-id>");
-  result = await (await mutationClient()).request(`/internal/ingredient-publication/batches/${encodeURIComponent(batchId)}/verify`, {
-    json: { releaseId },
-  });
+  result = await verifyIngredientPublicationExternally(await mutationClient(), batchId, releaseId);
 } else if (command === "ingredient" && subcommand === "reconcile") {
   result = await (await mutationClient()).request("/internal/ingredient-gaps/reconcile", { method: "POST" });
 } else if (command === "ingredient" && subcommand === "status") {

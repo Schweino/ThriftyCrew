@@ -40,6 +40,7 @@ import {
   ingredientCampaignControlSchema,
   ingredientPricingWaveCreateSchema,
   ingredientPublicationBatchCreateSchema,
+  ingredientPublicationExternalVerifySchema,
   ingredientPublicationVerifySchema,
   ingredientResolutionProposalSchema,
   ingredientPublicationFailureSchema,
@@ -121,7 +122,7 @@ import { acknowledgePipelineOutbox, claimPipelineOutbox, nackPipelineOutbox } fr
 import { completeIngredientStoreCapture, completeIngredientStoreQa, rejectIngredientStoreQa, uploadIngredientEvidence } from "./ingredient-independent-qa";
 import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredientChallenge } from "./ingredient-challenges";
 import { materializeHotCatalog } from "./hot-catalog";
-import { attachIngredientProposal, createIngredientPublicationBatch, materializeIngredientPublicationCaptures, verifyIngredientPublication, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
+import { attachIngredientProposal, createIngredientPublicationBatch, ingredientPublicationProofPlan, materializeIngredientPublicationCaptures, verifyIngredientPublicationExternal, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
@@ -1446,9 +1447,15 @@ app.post("/internal/ingredient-publication/batches/:id/materialize", async (cont
   catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient publication materialization failed", 409); }
 });
 
-app.post("/internal/ingredient-publication/batches/:id/verify", zValidator("json", ingredientPublicationVerifySchema), async (context) => {
+app.get("/internal/ingredient-publication/batches/:id/proof-plan", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may read an ingredient publication proof plan", 403);
+  try { return context.json({ ok: true, ...await ingredientPublicationProofPlan(context.env, context.req.param("id")) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient publication proof plan failed", 409); }
+});
+
+app.post("/internal/ingredient-publication/batches/:id/verify", zValidator("json", ingredientPublicationExternalVerifySchema), async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only an operator may verify an ingredient publication", 403);
-  try { return context.json({ ok: true, ...await verifyIngredientPublication(context.env, context.req.param("id"), context.req.valid("json")) }); }
+  try { return context.json({ ok: true, ...await verifyIngredientPublicationExternal(context.env, context.req.param("id"), context.req.valid("json")) }); }
   catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient publication verification failed", 409); }
 });
 

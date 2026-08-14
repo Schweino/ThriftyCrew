@@ -1597,6 +1597,20 @@ export const ingredientPublicationVerifySchema = z.object({
   releaseId: nonEmptyId,
 }).strict();
 
+export const ingredientPublicationExternalVerifySchema = z.object({
+  releaseId: nonEmptyId,
+  proofs: z.array(z.object({
+    gapId: nonEmptyId,
+    originKind: z.enum(["worker", "custom_domain"]),
+    url: z.string().url(),
+    status: z.number().int().min(100).max(599),
+    etag: z.string().nullable(),
+    responseReleaseId: nonEmptyId.nullable(),
+    observedHash: z.string().regex(/^[a-f0-9]{64}$/),
+    checkedAt: isoDateTime,
+  }).strict()).min(2).max(100),
+}).strict();
+
 export const sourceSentinelResultSchema = z.object({
   sourceId: nonEmptyId,
   contractVersion: z.number().int().positive(),

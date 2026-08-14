@@ -1,4 +1,4 @@
-import { ingredientPublicationBatchCreateSchema, ingredientPublicationVerifySchema, ingredientResolutionProposalSchema, observationInputSchema, type ObservationInput } from "@thriftycrew/contracts";
+import { ingredientPublicationBatchCreateSchema, ingredientPublicationExternalVerifySchema, ingredientResolutionProposalSchema, observationInputSchema, type ObservationInput } from "@thriftycrew/contracts";
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
 import type { z } from "zod";
 import type { WorkerEnv } from "./env";
@@ -258,29 +258,6 @@ export async function materializeIngredientPublicationCaptures(db: D1Database, b
   return { publicationBatchId: batchId, batches: materialized };
 }
 
-async function fetchProof(origin: string, commodityId: string, releaseId: string, expectedHash: string) {
-  const proofUrl = new URL(`/api/v2/board/${encodeURIComponent(commodityId)}`, origin);
-  proofUrl.searchParams.set("release", releaseId);
-  const url = proofUrl.toString();
-  const response = await fetch(url, { headers: { accept: "application/json", "cache-control": "no-cache" } });
-  const body = await response.text();
-  let responseReleaseId: string | null = null;
-  let observedHash = await digestHex("");
-  try {
-    const parsed = JSON.parse(body) as { releaseId?: unknown; commodity?: { id?: unknown; cheapest?: { storeLocationId?: unknown; perUnitMicros?: unknown }; stores?: Array<Record<string, unknown>> } };
-    responseReleaseId = String(parsed.releaseId ?? "") || null;
-    const stores = (parsed.commodity?.stores ?? []).map((store) => ({ storeLocationId: String(store.storeLocationId), perUnitMicros: Number(store.perUnitMicros),
-      unit: String(store.unit), validFrom: store.validFrom === null || store.validFrom === undefined ? null : String(store.validFrom),
-      validTo: store.validTo === null || store.validTo === undefined ? null : String(store.validTo) })).sort((left, right) => left.storeLocationId.localeCompare(right.storeLocationId));
-    const projection = { id: String(parsed.commodity?.id), cheapest: parsed.commodity?.cheapest ? {
-      storeLocationId: String(parsed.commodity.cheapest.storeLocationId), perUnitMicros: Number(parsed.commodity.cheapest.perUnitMicros),
-    } : null, stores };
-    observedHash = await digestHex(stableJson(projection));
-  } catch { /* invalid JSON fails verification */ }
-  return { url, status: response.status, etag: response.headers.get("etag"), responseReleaseId, observedHash,
-    verified: response.ok && responseReleaseId === releaseId && observedHash === expectedHash };
-}
-
 function publicProjection(commodity: Record<string, unknown>): Record<string, unknown> {
   const cheapest = commodity.cheapest && typeof commodity.cheapest === "object" && !Array.isArray(commodity.cheapest)
     ? commodity.cheapest as Record<string, unknown> : null;
@@ -324,37 +301,63 @@ export async function verifyIngredientPublicationCandidate(env: Pick<WorkerEnv, 
   return { batchId, releaseId, verified, checks };
 }
 
-export async function verifyIngredientPublication(env: Pick<WorkerEnv, "DB" | "PUBLIC_ORIGIN" | "GHOST_PUBLIC_ORIGIN">, batchId: string, inputValue: unknown) {
-  const input: z.infer<typeof ingredientPublicationVerifySchema> = ingredientPublicationVerifySchema.parse(inputValue);
+export async function ingredientPublicationProofPlan(env: Pick<WorkerEnv, "DB" | "PUBLIC_ORIGIN" | "GHOST_PUBLIC_ORIGIN">, batchId: string) {
   if (!env.GHOST_PUBLIC_ORIGIN) throw new Error("Ghost public origin is required for dual-origin verification");
-  const batch = await env.DB.prepare("SELECT state, member_root_hash FROM ingredient_publication_batches WHERE id = ?1").bind(batchId).first<{ state: string; member_root_hash: string }>();
+  const batch = await env.DB.prepare("SELECT state, release_id FROM ingredient_publication_batches WHERE id = ?1").bind(batchId).first<{ state: string; release_id: string | null }>();
   if (!batch || !["sealed", "validated", "pointer_published", "edge_verified"].includes(batch.state)) throw new Error("publication batch is not awaiting public verification");
   const members = await env.DB.prepare("SELECT gap_id, commodity_id, expected_public_projection_hash FROM ingredient_publication_members WHERE batch_id = ?1 ORDER BY gap_id")
     .bind(batchId).all<{ gap_id: string; commodity_id: string; expected_public_projection_hash: string }>();
+  if (!batch.release_id) throw new Error("publication batch has no bound release");
+  const origins = [["worker", env.PUBLIC_ORIGIN], ["custom_domain", env.GHOST_PUBLIC_ORIGIN]] as const;
+  const checks = members.results.flatMap((member) => origins.map(([originKind, origin]) => {
+    const proofUrl = new URL(`/api/v2/board/${encodeURIComponent(member.commodity_id)}`, origin);
+    proofUrl.searchParams.set("release", batch.release_id!);
+    return { gapId: member.gap_id, commodityId: member.commodity_id, expectedHash: member.expected_public_projection_hash,
+      originKind, url: proofUrl.toString() };
+  }));
+  return { batchId, releaseId: batch.release_id, checks };
+}
+
+export function validateIngredientPublicationExternalProofs(
+  plan: { releaseId: string; checks: Array<{ gapId: string; originKind: "worker" | "custom_domain"; url: string; expectedHash: string }> },
+  input: z.infer<typeof ingredientPublicationExternalVerifySchema>,
+) {
+  if (input.releaseId !== plan.releaseId) throw new Error("external proofs do not target the publication batch release");
+  const expectedByKey = new Map(plan.checks.map((check) => [`${check.gapId}:${check.originKind}`, check]));
+  if (input.proofs.length !== expectedByKey.size) throw new Error("external proofs must cover every member on exactly two origins");
+  const seen = new Set<string>();
+  const proofs = input.proofs.map((proof) => {
+    const key = `${proof.gapId}:${proof.originKind}`;
+    const expected = expectedByKey.get(key);
+    if (!expected || seen.has(key) || proof.url !== expected.url) throw new Error("external proof set contains an unexpected, duplicate, or untrusted target");
+    seen.add(key);
+    const verified = proof.status === 200 && proof.responseReleaseId === input.releaseId && proof.observedHash === expected.expectedHash;
+    return { ...proof, expectedHash: expected.expectedHash, verified };
+  });
+  return { proofs, allVerified: proofs.length > 0 && proofs.every((proof) => proof.verified) };
+}
+
+export async function verifyIngredientPublicationExternal(env: Pick<WorkerEnv, "DB" | "PUBLIC_ORIGIN" | "GHOST_PUBLIC_ORIGIN">, batchId: string, inputValue: unknown) {
+  const input: z.infer<typeof ingredientPublicationExternalVerifySchema> = ingredientPublicationExternalVerifySchema.parse(inputValue);
+  const plan = await ingredientPublicationProofPlan(env, batchId);
+  const validation = validateIngredientPublicationExternalProofs(plan, input);
   const statements: D1PreparedStatement[] = [];
-  const proofs = [];
-  const verifiedMembers: typeof members.results = [];
-  for (const member of members.results) {
-    const origins = [["worker", env.PUBLIC_ORIGIN], ["custom_domain", env.GHOST_PUBLIC_ORIGIN]] as const;
-    let memberVerified = true;
-    for (const [originKind, origin] of origins) {
-      const proof = await fetchProof(origin, member.commodity_id, input.releaseId, member.expected_public_projection_hash);
-      memberVerified &&= proof.verified;
-      const proofId = await deterministicId("ingredient-public-proof", batchId, member.gap_id, originKind, proof.url, proof.observedHash);
+  for (const proof of validation.proofs) {
+      const proofId = await deterministicId("ingredient-public-proof", batchId, proof.gapId, proof.originKind, proof.url, proof.observedHash);
       statements.push(env.DB.prepare(
         `INSERT INTO public_verification_proofs
            (id, publication_batch_id, release_id, origin_kind, url, expected_hash, observed_hash, response_status,
             etag, response_release_id, verified, checked_at)
-         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, CURRENT_TIMESTAMP)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)
          ON CONFLICT(publication_batch_id, origin_kind, url, observed_hash) DO NOTHING`,
-      ).bind(proofId, batchId, input.releaseId, originKind, proof.url, member.expected_public_projection_hash, proof.observedHash,
-        proof.status, proof.etag, proof.responseReleaseId, proof.verified ? 1 : 0));
-      proofs.push({ gapId: member.gap_id, originKind, ...proof });
-    }
-    if (memberVerified) verifiedMembers.push(member);
+      ).bind(proofId, batchId, input.releaseId, proof.originKind, proof.url, proof.expectedHash, proof.observedHash,
+        proof.status, proof.etag, proof.responseReleaseId, proof.verified ? 1 : 0, proof.checkedAt));
   }
-  const allVerified = verifiedMembers.length === members.results.length && members.results.length > 0;
-  if (allVerified) for (const member of verifiedMembers) {
+  const members = await env.DB.prepare("SELECT gap_id, commodity_id FROM ingredient_publication_members WHERE batch_id = ?1 ORDER BY gap_id")
+    .bind(batchId).all<{ gap_id: string; commodity_id: string }>();
+  const allVerified = members.results.length > 0 && validation.allVerified
+    && members.results.every((member) => input.proofs.filter((proof) => proof.gapId === member.gap_id).length === 2);
+  if (allVerified) for (const member of members.results) {
     statements.push(env.DB.prepare("UPDATE ingredient_publication_members SET state = 'public_verified', updated_at = CURRENT_TIMESTAMP WHERE batch_id = ?1 AND gap_id = ?2").bind(batchId, member.gap_id));
     statements.push(env.DB.prepare("UPDATE ingredient_gaps SET status = 'published', published_commodity_id = ?2, updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'ready_to_publish'").bind(member.gap_id, member.commodity_id));
     statements.push(env.DB.prepare("UPDATE ingredient_pricing_jobs SET state = 'public_verified', operational_state = 'public_verified', terminal_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE gap_id = ?1 AND state = 'ready_to_publish'").bind(member.gap_id));
@@ -371,7 +374,7 @@ export async function verifyIngredientPublication(env: Pick<WorkerEnv, "DB" | "P
     const receiptId = await deterministicId("ingredient-publication-receipt", batchId, "pointer_published", "completed", input.releaseId);
     await env.DB.prepare(`INSERT INTO ingredient_publication_transition_receipts
       (id, batch_id, from_state, to_state, actor, detail_json) VALUES (?1, ?2, 'pointer_published', 'completed', 'dual-origin-verifier', ?3)
-      ON CONFLICT(batch_id, from_state, to_state, actor) DO NOTHING`).bind(receiptId, batchId, stableJson({ releaseId: input.releaseId, proofs })).run();
+    ON CONFLICT(batch_id, from_state, to_state, actor) DO NOTHING`).bind(receiptId, batchId, stableJson({ releaseId: input.releaseId, proofs: validation.proofs })).run();
   }
-  return { batchId, releaseId: input.releaseId, complete, proofs };
+  return { batchId, releaseId: input.releaseId, complete, proofs: validation.proofs };
 }
