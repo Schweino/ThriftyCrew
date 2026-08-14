@@ -99,13 +99,21 @@ Production traffic remains on V3. The V4 flags remain `off`; the pending publica
 
 Migration 0075 stages the current V2 board without converting missing display cells into availability claims. A row whose observation is still the exact priced `release_cells` member is recorded as `priced_provenance_recovered`; an absent cell is recorded only as non-public `legacy_unknown`. Neither state is terminal V4 evidence. Every ingredient/store/definition tuple receives one deduplicated producer work item, and independent verifier work is required before a cell can become `terminal_verified`.
 
+Migration 0077 pins each run to the content-addressed board object and verifies the board hash on every import page, so later release-payload compaction cannot move a backfill to a newer board. Evidence submission accepts an adapter chunk, not a caller-declared outcome. The API rederives the result from the current ingredient definition, locked queries, canonical store policy, complete raw/projected/excluded counts, pagination, product and availability identity, exact integer price semantics, package basis, and ad dates. Blocks become durable `challenged`; rejected, excluded, ambiguous, or incomplete facts become `needs_operator`. Only a complete `priced` or `not_found` derivation queues a distinct verifier, which must submit a newer independent chunk reproducing the frozen result.
+
 Operators page the import to keep D1 requests bounded:
 
 ```text
 pnpm tc ingredient backfill-v4 initialize
-pnpm tc ingredient backfill-v4 import 0 25
-pnpm tc ingredient backfill-v4 progress
+pnpm tc ingredient backfill-v4 import <run-id> 0 25
+pnpm tc ingredient backfill-v4 progress <run-id>
 pnpm tc ingredient backfill-v4 claim <producer-agent-id> <owner> 50
+pnpm tc ingredient backfill-v4 heartbeat <owner> 900
+pnpm tc ingredient backfill-v4 producer-submit <lease-fenced-adapter-artifact.json>
+pnpm tc ingredient backfill-v4 verifier-submit <independent-adapter-artifact.json>
+pnpm tc ingredient backfill-v4 requeue <run-id> <commodity-id> <store-id> <adjudication-id> <resolution-reason>
 ```
+
+A `needs_operator` or `challenged` cell is recoverable: after resolving the source ambiguity or challenge, an operator records a durable adjudication and requeues a new producer work item. The new item retains the prior work identity in its input, has a new dedupe/lease/generation fence, and must capture fresh checked evidence; old evidence is retained and can never be reused as the verifier pass.
 
 The progress response deliberately reports `semanticParity` and `terminalEvidenceReadiness` separately. `promotionAllowed` is true only when the exact expected cell count is present and every cell is independently terminal-verified; extra, partial, mixed, challenged, stale, or `legacy_unknown` evidence fails closed. Import and capture may run with all public V4 flags off, but no V4 public pointer or UI route may be enabled from backfill staging data.

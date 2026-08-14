@@ -81,7 +81,7 @@ describe("source-native offer parsing", () => {
   it("completes an all-excluded search without fabricating an observation or retrying it", () => {
     const built = { rows: [], excludedResults: [{ productKey: "missing-size", name: "Premium Turkey", reason: "source-native package size is not exact" }] };
     expect(buildNextDataSuccess("turkey", { hasMore: false }, built, { attempts: 1, startedAt: "2026-08-12T19:00:00.000Z", finishedAt: "2026-08-12T19:00:01.000Z" })).toMatchObject({
-      blocked: false, rows: [], term: { outcome: "success", rowCount: 0, retrieval: { loadedResultCount: 0, availableResultCount: 0 }, excludedResults: built.excludedResults },
+      blocked: false, rows: [], term: { outcome: "success", rowCount: 0, retrieval: { loadedResultCount: 1, availableResultCount: 1 }, excludedResults: built.excludedResults },
     });
   });
 });

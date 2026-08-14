@@ -193,11 +193,13 @@ export function buildNextDataRows(store, query, page, capturedAt) {
       const size = packageSizeFromName(row.name);
       if (!size) throw new Error("source-native package size is not exact");
       const priceSemantics = sourcePriceSemantics(store, row);
+      const pickup = pickupEligible(row, config.locationId);
       const offer = {
       version: 1, retailerProductId: row.id, ...(row.offerId ? { offerId: row.offerId } : {}), productName: row.name,
       sizeText: size, rawPriceText: row.linePrice, purchasePriceMinor, ...(row.unitPrice ? { unitPriceText: row.unitPrice } : {}),
       ...(row.sellerName ? { sellerName: row.sellerName } : {}),
-      availability: { status: "in_stock", ...(row.availabilityText ? { rawText: row.availabilityText } : {}), fulfillmentMode: "pickup", locationId: config.locationId, eligible: true },
+      availability: { status: pickup ? "in_stock" : "unavailable", ...(row.availabilityText ? { rawText: row.availabilityText } : {}),
+        fulfillmentMode: "pickup", locationId: config.locationId, eligible: pickup },
       priceSemantics, observedAt: capturedAt, sourceUrl: row.url,
     };
       const truth = {
@@ -230,6 +232,7 @@ export function buildNextDataRows(store, query, page, capturedAt) {
 }
 
 export function buildNextDataSuccess(query, page, built, { attempts, startedAt, finishedAt }) {
+  const examinedResultCount = built.rows.length + built.excludedResults.length;
   const reason = built.excludedResults.length
     ? `${built.excludedResults.length} retailer result(s) explicitly excluded from pricing`
     : undefined;
@@ -237,7 +240,7 @@ export function buildNextDataSuccess(query, page, built, { attempts, startedAt, 
     blocked: false,
     term: {
       query, outcome: "success", rowCount: built.rows.length, attempts, startedAt, finishedAt,
-      retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: built.rows.length, availableResultCount: built.rows.length, pageCount: page.pageCount ?? 1, hasMoreResults: page.hasMore, termination: page.hasMore ? "target-depth" : "end-of-results" },
+      retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: examinedResultCount, availableResultCount: examinedResultCount, pageCount: page.pageCount ?? 1, hasMoreResults: page.hasMore, termination: page.hasMore ? "target-depth" : "end-of-results" },
       ...(reason ? { reason, excludedResults: built.excludedResults } : {}),
     },
     rows: built.rows,
@@ -255,12 +258,7 @@ async function captureTerm(tab, store, query) {
       for (let poll = 0; poll < 20; poll += 1) {
         await tab.playwright.waitForTimeout(poll === 0 ? 800 : 300);
         page = await readPage(tab);
-        if (store === "walmart" || store === "sams") {
-          const rawRowCount = page.rows.length;
-          page.rows = page.rows.filter((row) => pickupEligible(row, config.locationId));
-          page.pickupFilteredEmpty = rawRowCount > 0 && page.rows.length === 0;
-        }
-        if (page.challenge || page.rows.length || page.noResults || page.pickupFilteredEmpty) break;
+        if (page.challenge || page.rows.length || page.noResults) break;
       }
       let finishedAt = new Date().toISOString();
       if (page?.challenge) return { blocked: true, term: { query, outcome: "blocked", rowCount: 0, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "blocked" }, reason: "Retailer challenge detected; sweep stopped without attempting to solve it." }, rows: [] };
@@ -291,7 +289,6 @@ async function captureTerm(tab, store, query) {
         const nextPage = await readPage(tab);
         if (nextPage.challenge) return { blocked: true, term: { query, outcome: "blocked", rowCount: 0, attempts, startedAt, finishedAt: new Date().toISOString(), retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: pageCount + 1, hasMoreResults: false, termination: "blocked" }, reason: "Retailer challenge detected during result pagination." }, rows: [] };
         if (normalize(nextPage.query) !== normalize(query)) throw new Error(`visible query mismatch on continuation: expected ${query}, saw ${nextPage.query}`);
-        if (store === "walmart" || store === "sams") nextPage.rows = nextPage.rows.filter((row) => pickupEligible(row, config.locationId));
         accumulated.push(...nextPage.rows);
         page = nextPage;
         pageCount += 1;
@@ -301,8 +298,8 @@ async function captureTerm(tab, store, query) {
       page.pageCount = pageCount;
       finishedAt = new Date().toISOString();
       if (page.rows.length === 0) {
-        if (!page.noResults && !page.pickupFilteredEmpty) throw new Error("zero visible/structured agreements without an explicit no-results state");
-        return { blocked: false, term: { query, outcome: "empty", rowCount: 0, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "no-results" }, ...(page.pickupFilteredEmpty ? { reason: `all exact result agreements lacked in-stock pickup fulfillment at ${store} location ${config.locationId}` } : {}) }, rows: [] };
+        if (!page.noResults) throw new Error("zero visible/structured agreements without an explicit no-results state");
+        return { blocked: false, term: { query, outcome: "empty", rowCount: 0, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, availableResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "no-results" } }, rows: [] };
       }
       if (page.rows.length < TARGET_RESULTS && page.hasMore) throw new Error("visible/structured agreement remained truncated below target depth while a continuation was present");
       if (page.rows.some((row) => priceMinor(row.linePrice) === null || !row.id || !row.name)) throw new Error("one or more agreed rows lacked an exact line price, retailer item ID, or name");

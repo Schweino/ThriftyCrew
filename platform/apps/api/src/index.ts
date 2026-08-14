@@ -131,7 +131,7 @@ import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredi
 import { materializeHotCatalog } from "./hot-catalog";
 import { attachIngredientProposal, createIngredientPublicationBatch, failIngredientPublicationBatch, ingredientPublicationProofPlan, materializeIngredientPublicationCaptures, verifyIngredientPublicationExternal, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
 import { listPublicIngredients, getPublicIngredientBySlug, publicIngredientResponse } from "./public-grocery-v3";
-import { catalogBackfillProgress, claimCatalogBackfillBatch, heartbeatCatalogBackfillOwner, importCatalogBackfillPage, initializeCatalogBackfill, submitCatalogBackfillProducer, submitCatalogBackfillVerifier } from "./catalog-backfill-v4";
+import { catalogBackfillProgress, claimCatalogBackfillBatch, heartbeatCatalogBackfillOwner, importCatalogBackfillPage, initializeCatalogBackfill, requeueCatalogBackfillCell, submitCatalogBackfillProducer, submitCatalogBackfillVerifier } from "./catalog-backfill-v4";
 import { compareAndSwapIngredientPointer, finalizeIncrementalIngredient, previewIncrementalIngredient, rollbackIncrementalIngredientPointer, stageIncrementalIngredient } from "./incremental-ingredient-publication";
 import { completePermanentlyUnavailableIngredient, resumeRecipesForPublishedIngredient } from "./recipe-dependency-resume-v2";
 import { releasePayloadObjectKey } from "./release-payloads";
@@ -1674,15 +1674,20 @@ async function legacyBoardForBackfill(env: WorkerEnv, runId?: string) {
     JOIN release_payloads payload ON payload.release_id=release.id AND payload.kind='board'
     WHERE current.market_id='omaha' AND ?1 IS NULL
     UNION ALL
-    SELECT release.id AS release_id,payload.payload_json,payload.object_key,payload.content_hash
+    SELECT release.id AS release_id,'{}' AS payload_json,run.source_board_object_key AS object_key,run.source_board_hash AS content_hash
     FROM catalog_backfill_runs_v4 run JOIN releases release ON release.id=run.source_release_id
-    JOIN release_payloads payload ON payload.release_id=release.id AND payload.kind='board'
     WHERE run.run_id=?1 LIMIT 1`).bind(runId ?? null)
     .first<{ release_id: string; payload_json: string; object_key: string | null; content_hash: string }>();
   if (!row) throw new Error("current Omaha legacy board is missing");
   const board = row.object_key ? await env.EVIDENCE.get(row.object_key).then((object) => object?.json()) : JSON.parse(row.payload_json);
   if (!board) throw new Error("current Omaha legacy board payload is unavailable");
-  return { releaseId: row.release_id, boardHash: row.content_hash, board };
+  if (await digestHex(stableJson(board)) !== row.content_hash) throw new Error("legacy board immutable object hash mismatch");
+  const boardObjectKey = row.object_key ?? releasePayloadObjectKey(row.release_id, "board", row.content_hash);
+  if (!row.object_key) {
+    await env.EVIDENCE.put(boardObjectKey, stableJson(board), { httpMetadata: { contentType: "application/json; charset=utf-8" },
+      customMetadata: { sha256: row.content_hash, kind: "board", schema: "catalog-backfill-source-v4" } });
+  }
+  return { releaseId: row.release_id, boardHash: row.content_hash, boardObjectKey, board };
 }
 
 app.post("/internal/v4/backfill/initialize", async (context) => {
@@ -1743,6 +1748,12 @@ app.post("/internal/v4/backfill/heartbeat", async (context) => {
       owner: body.owner, leaseSeconds: Number(body.leaseSeconds ?? 900),
     }) });
   } catch (error) { return jsonError(error instanceof Error ? error.message : "catalog backfill heartbeat failed", 409); }
+});
+
+app.post("/internal/v4/backfill/requeue", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may requeue catalog backfill", 403);
+  try { return context.json({ ok: true, ...await requeueCatalogBackfillCell(context.env.DB, await context.req.json()) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "catalog backfill requeue failed", 409); }
 });
 
 app.post("/internal/v4/ingredients/stage", async (context) => {

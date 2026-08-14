@@ -193,14 +193,15 @@ async function captureTerm(tab, query) {
       if (normalize(page.query) !== normalize(query)) throw new Error(`visible query mismatch: expected ${query}, saw ${page.query}`);
       if (page.rows.length === 0) {
         if (!page.noResults) throw new Error("zero cards without an explicit no-results state");
-        return { blocked: false, term: { query, outcome: "empty", rowCount: 0, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount, hasMoreResults: false, termination: "no-results" } }, rows: [] };
+        return { blocked: false, term: { query, outcome: "empty", rowCount: 0, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, availableResultCount: 0, pageCount, hasMoreResults: false, termination: "no-results" } }, rows: [] };
       }
       if (page.rows.length < TARGET_RESULTS && page.hasMore) throw new Error("pagination remained truncated below target depth");
       const built = buildFarewayRows(query, page, finishedAt);
       if (built.rows.length === 0) throw new Error(`all ${built.excludedResults.length} result rows failed exact offer projection`);
+      const examinedResultCount = built.rows.length + built.excludedResults.length;
       return {
         blocked: false,
-        term: { query, outcome: "success", rowCount: built.rows.length, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: built.rows.length, availableResultCount: built.rows.length, pageCount, hasMoreResults: page.hasMore, termination: page.hasMore ? "target-depth" : "end-of-results" },
+        term: { query, outcome: "success", rowCount: built.rows.length, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: examinedResultCount, availableResultCount: examinedResultCount, pageCount, hasMoreResults: page.hasMore, termination: page.hasMore ? "target-depth" : "end-of-results" },
           ...(built.excludedResults.length ? { reason: `${built.excludedResults.length} retailer result(s) explicitly excluded from pricing`, excludedResults: built.excludedResults } : {}) },
         rows: built.rows,
       };

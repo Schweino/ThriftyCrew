@@ -2,6 +2,7 @@ import { OMAHA_STORE_LOCATION_IDS } from "@thriftycrew/contracts";
 import { deterministicId, digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 import { createCatalogIngredientVersion } from "./dynamic-ingredient-catalog";
 import { claimPipelineAgentWork } from "./store-catalog-generations";
+import omahaStorePolicies from "../../../config/omaha-store-policies.json";
 
 type LegacyStoreRow = { storeLocationId?: string; observationId?: string; [key: string]: unknown };
 type LegacyCommodity = { id?: string; label?: string; unit?: string; stores?: LegacyStoreRow[]; [key: string]: unknown };
@@ -18,11 +19,15 @@ const AGENT_BY_STORE: Record<string, string> = {
 };
 const VERIFIER_BY_STORE = Object.fromEntries(Object.entries(AGENT_BY_STORE).map(([store, agent]) =>
   [store, agent.replace("price-producer", "price-verifier")])) as Record<string, string>;
-const HOST_BY_STORE: Record<string, string> = {
-  "aldi-omaha-446-048": "aldi.us", "bakers-saddle-creek": "bakersplus.com",
-  "family-fare-omaha-6401": "shopfamilyfare.com", "fareway-omaha-043": "fareway.com",
-  "hy-vee-omaha-1465": "hy-vee.com", "sams-omaha": "samsclub.com", "walmart-omaha": "walmart.com",
-};
+type StoreCapturePolicy = { storeLocationId: string; sourceId: string; firstPartyHost: string; priceMode: string;
+  retailerLocationKey: string; priceLocationKey: string; exactAddress: string;
+  locationCanary: { expectedLocationPattern: string; expectedModePattern: string }; evidenceFreshnessMinutes: number };
+const CAPTURE_POLICY_BY_STORE = Object.fromEntries((omahaStorePolicies.stores as StoreCapturePolicy[])
+  .map((policy) => [policy.storeLocationId, policy])) as Record<string, StoreCapturePolicy>;
+
+function adapterNameForPolicy(policy: StoreCapturePolicy): string {
+  return policy.sourceId.replace(/^direct-/, "").replace(/-(?:browser|headless)$/, "");
+}
 
 function unitDimension(unit: string): "weight" | "volume" | "count" | "other" {
   const normalized = unit.toLowerCase();
@@ -41,24 +46,25 @@ export function assertLegacyBoard(boardValue: unknown): LegacyCommodity[] {
   return commodities;
 }
 
-export async function initializeCatalogBackfill(db: D1Database, input: { releaseId: string; boardHash: string; board: unknown }) {
+export async function initializeCatalogBackfill(db: D1Database, input: { releaseId: string; boardHash: string; boardObjectKey: string; board: unknown }) {
   const commodities = assertLegacyBoard(input.board);
   const runId = await deterministicId("catalog-backfill-v4", input.releaseId, input.boardHash);
   await db.prepare(`INSERT INTO catalog_backfill_runs_v4
-      (run_id,source_release_id,source_board_hash,state,commodity_count,expected_cell_count)
-    VALUES(?1,?2,?3,'staging',?4,?5)
+      (run_id,source_release_id,source_board_hash,source_board_object_key,state,commodity_count,expected_cell_count)
+    VALUES(?1,?2,?3,?4,'staging',?5,?6)
     ON CONFLICT(source_release_id) DO NOTHING`).bind(runId, input.releaseId, input.boardHash,
-      commodities.length, commodities.length * OMAHA_STORE_LOCATION_IDS.length).run();
-  const current = await db.prepare("SELECT run_id,source_board_hash,commodity_count FROM catalog_backfill_runs_v4 WHERE source_release_id=?1")
-    .bind(input.releaseId).first<{ run_id: string; source_board_hash: string; commodity_count: number }>();
+      input.boardObjectKey, commodities.length, commodities.length * OMAHA_STORE_LOCATION_IDS.length).run();
+  const current = await db.prepare("SELECT run_id,source_board_hash,source_board_object_key,commodity_count FROM catalog_backfill_runs_v4 WHERE source_release_id=?1")
+    .bind(input.releaseId).first<{ run_id: string; source_board_hash: string; source_board_object_key: string; commodity_count: number }>();
   if (!current || current.run_id !== runId || current.source_board_hash !== input.boardHash || Number(current.commodity_count) !== commodities.length) {
     throw new Error("legacy backfill source release changed after initialization");
   }
+  if (current.source_board_object_key !== input.boardObjectKey) throw new Error("legacy backfill immutable source object changed after initialization");
   return { runId, commodityCount: commodities.length, expectedCellCount: commodities.length * OMAHA_STORE_LOCATION_IDS.length };
 }
 
 export async function importCatalogBackfillPage(db: D1Database, input: {
-  releaseId: string; boardHash: string; board: unknown; offset: number; limit: number;
+  releaseId: string; boardHash: string; boardObjectKey: string; board: unknown; offset: number; limit: number;
 }) {
   const commodities = assertLegacyBoard(input.board);
   const run = await initializeCatalogBackfill(db, input);
@@ -185,22 +191,225 @@ export async function heartbeatCatalogBackfillOwner(db: D1Database, input: { own
   return { owner: input.owner, renewed, leaseSeconds };
 }
 
-type BackfillEvidenceSubmission = {
+export async function requeueCatalogBackfillCell(db: D1Database, input: {
+  runId: string; commodityId: string; storeLocationId: string; adjudicationId: string; reason: string;
+}) {
+  if (!input.adjudicationId.trim() || input.reason.trim().length < 10) throw new Error("backfill requeue requires durable adjudication identity and reason");
+  const prior = await db.prepare(`SELECT cell.producer_work_item_id,work.agent_id,work.input_json,work.dedupe_key
+    FROM catalog_backfill_cells_v4 cell JOIN pipeline_agent_work_items_v4 work ON work.id=cell.producer_work_item_id
+    WHERE cell.run_id=?1 AND cell.commodity_id=?2 AND cell.store_location_id=?3
+      AND cell.evidence_state IN ('needs_operator','challenged')`)
+    .bind(input.runId, input.commodityId, input.storeLocationId)
+    .first<{ producer_work_item_id: string; agent_id: string; input_json: string; dedupe_key: string }>();
+  if (!prior) throw new Error("backfill cell is not awaiting operator resolution");
+  const dedupeKey = `${prior.dedupe_key}:adjudication:${input.adjudicationId}`;
+  const workItemId = await deterministicId("pipeline-v4-work", dedupeKey);
+  const workInput = stableJson({ ...(JSON.parse(prior.input_json) as Record<string, unknown>), retryOf: prior.producer_work_item_id,
+    operatorAdjudication: { id: input.adjudicationId, reason: input.reason.trim(), resolvedAt: new Date().toISOString() } });
+  const inputHash = await digestHex(workInput);
+  await db.batch([
+    db.prepare(`INSERT INTO pipeline_agent_work_items_v4
+      (id,agent_id,entity_type,entity_id,dedupe_key,priority,state,input_ref_hash,correlation_id,input_json)
+      SELECT ?1,?2,'catalog_backfill_cell',ingredient_id,?3,60,'queued',?4,run_id,?5
+      FROM catalog_backfill_cells_v4 WHERE run_id=?6 AND commodity_id=?7 AND store_location_id=?8
+      ON CONFLICT(dedupe_key) DO NOTHING`).bind(workItemId, prior.agent_id, dedupeKey, inputHash, workInput,
+        input.runId, input.commodityId, input.storeLocationId),
+    db.prepare(`UPDATE catalog_backfill_cells_v4 SET evidence_state='queued',producer_work_item_id=?4,verifier_work_item_id=NULL,
+      terminal_result_json=NULL,terminal_result_hash=NULL,updated_at=CURRENT_TIMESTAMP
+      WHERE run_id=?1 AND commodity_id=?2 AND store_location_id=?3 AND producer_work_item_id=?5
+        AND evidence_state IN ('needs_operator','challenged')
+        AND EXISTS(SELECT 1 FROM pipeline_agent_work_items_v4 WHERE id=?4)`)
+      .bind(input.runId, input.commodityId, input.storeLocationId, workItemId, prior.producer_work_item_id),
+  ]);
+  const moved = await db.prepare(`SELECT producer_work_item_id,evidence_state FROM catalog_backfill_cells_v4
+    WHERE run_id=?1 AND commodity_id=?2 AND store_location_id=?3`).bind(input.runId, input.commodityId, input.storeLocationId)
+    .first<{ producer_work_item_id: string; evidence_state: string }>();
+  if (moved?.producer_work_item_id !== workItemId || moved.evidence_state !== "queued") throw new Error("backfill requeue lost its cell fence");
+  return { workItemId, adjudicationId: input.adjudicationId, state: "queued", idempotent: prior.producer_work_item_id === workItemId };
+}
+
+export type BackfillEvidenceSubmission = {
   workItemId: string; owner: string; leaseGeneration: number; generationId: string; sessionId: string;
-  sourceUrl: string; observedAt: string; outcome: "priced" | "not_found" | "ambiguous" | "challenged";
   document: unknown;
 };
 
-function assertFreshBackfillEvidence(storeLocationId: string, input: BackfillEvidenceSubmission) {
+type DerivedBackfillCapture = { outcome: "priced" | "not_found" | "challenged" | "needs_operator"; observedAt: string; sourceUrl: string;
+  candidateSetHash: string; winner: Record<string, unknown> | null; coverageHash: string };
+
+function parsedBackfillPackage(value: string): { unit: string; quantityMicros: number } | null {
+  const normalized = value.toLowerCase().replace(/fluid ounces?/g, "fl oz").replace(/ounces?/g, "oz")
+    .replace(/pounds?/g, "lb").replace(/grams?/g, "g").replace(/kilograms?/g, "kg")
+    .replace(/liters?/g, "l").replace(/gallons?/g, "gal").replace(/counts?/g, "ct").trim();
+  const match = normalized.match(/^(?:(\d+)\s*[x×]\s*)?([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|oz|lb|ml|l|g|kg|ct|ea|each|dozen|gal|qt|pt)\b/);
+  if (!match) return /^(?:each|ea)$/.test(normalized) ? { unit: "each", quantityMicros: 1_000_000 } : null;
+  const count = Number(match[1] ?? 1); const quantity = Number(match[2]) * count;
+  const raw = String(match[3]).replace(/\s/g, "");
+  const unit = raw === "floz" ? "fl_oz" : raw === "l" ? "liter" : raw === "g" ? "gram" : ["ct", "ea", "each"].includes(raw) ? "each" : raw;
+  return Number.isFinite(quantity) && quantity > 0 ? { unit, quantityMicros: Math.round(quantity * 1_000_000) } : null;
+}
+
+function convertedBackfillQuantity(value: { unit: string; quantityMicros: number }, basisUnit: string): number | null {
+  const from = value.unit; const to = basisUnit.toLowerCase().replace("fl oz", "fl_oz");
+  const mass: Record<string, number> = { oz: 28.349523125, lb: 453.59237, gram: 1, g: 1, kg: 1000 };
+  const volume: Record<string, number> = { fl_oz: 29.5735295625, ml: 1, liter: 1000, l: 1000, gal: 3785.411784, qt: 946.352946, pt: 473.176473 };
+  if (from === to || (from === "gram" && to === "g") || (from === "liter" && to === "l")) return value.quantityMicros;
+  if (from in mass && to in mass) return Math.round(value.quantityMicros * mass[from]! / mass[to]!);
+  if (from in volume && to in volume) return Math.round(value.quantityMicros * volume[from]! / volume[to]!);
+  if (from === "each" && to === "dozen") return Math.round(value.quantityMicros / 12);
+  if (from === "dozen" && ["each", "ea", "ct"].includes(to)) return value.quantityMicros * 12;
+  return null;
+}
+
+function phraseTokens(value: string): string[][] {
+  return value.split("/").map((part) => normalizeName(part.replace(/\([^)]*\)/g, " ")).split(" ")
+    .filter((token) => token.length > 1 && !["fresh", "whole", "ground", "canned", "jarred"].includes(token))).filter((tokens) => tokens.length > 0);
+}
+
+export async function deriveCatalogBackfillCapture(input: { storeLocationId: string; queryTerms: string[]; identity: Record<string, any>; document: unknown }): Promise<DerivedBackfillCapture> {
+  const policy = CAPTURE_POLICY_BY_STORE[input.storeLocationId];
+  if (!policy) throw new Error("backfill capture store policy is missing");
+  const chunk = input.document as Record<string, any>;
+  if (chunk?.version !== 2 || chunk?.phase !== "discovery" || chunk?.store !== adapterNameForPolicy(policy)) throw new Error("backfill capture adapter chunk identity mismatch");
+  const canary = chunk.canary as Record<string, unknown> | undefined;
+  if (!canary || canary.locationVerified !== true || canary.priceModeVerified !== true) throw new Error("backfill capture lacks an exact location/mode canary");
+  const sourceUrl = String(canary.evidenceUrl ?? "");
+  const observedAt = String(canary.observedAt ?? "");
+  const host = new URL(sourceUrl).hostname;
+  if (host !== policy.firstPartyHost && !host.endsWith(`.${policy.firstPartyHost}`)) throw new Error("backfill capture canary uses the wrong retailer host");
+  const expectedTerms = [...new Set(input.queryTerms.map(normalizeName))].sort();
+  const termRows = Array.isArray(chunk.terms) ? chunk.terms : [];
+  const observedTerms = termRows.map((row: any) => normalizeName(String(row.query ?? ""))).sort();
+  if (stableJson(expectedTerms) !== stableJson(observedTerms)) throw new Error("backfill capture does not cover exactly the locked query plan");
+  const coverageHash = await digestHex(stableJson(termRows.map((term: any) => ({ query: normalizeName(String(term.query)),
+    outcome: term.outcome, rowCount: term.rowCount, retrieval: term.retrieval, excludedResults: term.excludedResults ?? [] }))));
+  const challenged = termRows.some((term: any) => term.outcome === "blocked" || /challenge|captcha|blocked/i.test(String(term.reason ?? "")));
+  if (challenged) return { outcome: "challenged", observedAt, sourceUrl,
+    candidateSetHash: await digestHex(stableJson(chunk.rows ?? [])), winner: null, coverageHash };
+  const rejected = termRows.some((term: any) => !["success", "empty"].includes(String(term.outcome)));
+  if (rejected) return { outcome: "needs_operator", observedAt, sourceUrl,
+    candidateSetHash: await digestHex(stableJson(chunk.rows ?? [])), winner: null, coverageHash };
+  const rowsByTerm = new Map(expectedTerms.map((term) => [term, 0]));
+  for (const row of Array.isArray(chunk.rows) ? chunk.rows : []) {
+    const query = normalizeName(String(row.q ?? row.term ?? ""));
+    if (!rowsByTerm.has(query)) throw new Error("backfill capture row is outside the locked query plan");
+    rowsByTerm.set(query, (rowsByTerm.get(query) ?? 0) + 1);
+  }
+  for (const term of termRows) {
+    const retrieval = term.retrieval as Record<string, unknown> | undefined;
+    const query = normalizeName(String(term.query ?? ""));
+    const projectedRows = rowsByTerm.get(query) ?? 0;
+    const excludedResults = Array.isArray(term.excludedResults) ? term.excludedResults : [];
+    if (!Number.isSafeInteger(term.rowCount) || term.rowCount !== projectedRows) throw new Error(`backfill capture row count mismatch for ${term.query}`);
+    if (excludedResults.some((item: any) => !String(item?.productKey ?? "").trim() || !String(item?.name ?? "").trim() || !String(item?.reason ?? "").trim())
+      || new Set(excludedResults.map((item: any) => String(item.productKey))).size !== excludedResults.length) {
+      throw new Error(`backfill capture raw exclusion facts are incomplete for ${term.query}`);
+    }
+    const terminal = term.outcome === "success" ? retrieval?.termination === "end-of-results"
+      : term.outcome === "empty" && ["no-results", "end-of-results"].includes(String(retrieval?.termination));
+    const loadedResultCount = Number(retrieval?.loadedResultCount);
+    const availableResultCount = Number(retrieval?.availableResultCount);
+    if (!terminal || retrieval?.hasMoreResults !== false || !Number.isSafeInteger(loadedResultCount) || !Number.isSafeInteger(availableResultCount)
+      || loadedResultCount !== availableResultCount
+      || loadedResultCount !== projectedRows + excludedResults.length
+      || Number(retrieval.pageCount ?? 0) < 1) {
+      throw new Error(`backfill capture lacks complete challenge-free pagination for ${term.query}`);
+    }
+    if (term.outcome === "empty" && (projectedRows !== 0 || excludedResults.length !== 0 || loadedResultCount !== 0)) {
+      throw new Error(`backfill capture forged or filtered an empty result for ${term.query}`);
+    }
+  }
+  const accepted = [input.identity.canonicalName, input.identity.displayName, ...(input.identity.acceptedForms ?? [])]
+    .flatMap((value: string) => phraseTokens(String(value)));
+  const excluded = (input.identity.excludedForms ?? []).map((value: string) => normalizeName(String(value))).filter(Boolean);
+  const candidates: Array<Record<string, any>> = [];
+  for (const row of Array.isArray(chunk.rows) ? chunk.rows : []) {
+    const query = normalizeName(String(row.q ?? row.term ?? ""));
+    if (!expectedTerms.includes(query)) throw new Error("backfill capture row is outside the locked query plan");
+    const capture = row._capture as Record<string, any> | undefined;
+    const offer = capture?.offer as Record<string, any> | undefined;
+    const pageState = capture?.pageState as Record<string, any> | undefined;
+    if (!capture || !offer || pageState?.challengeDetected === true) throw new Error("backfill capture row lacks challenge-free source truth");
+    const productId = String(offer.retailerProductId ?? row.id ?? "").trim();
+    const productName = String(offer.productName ?? row.name ?? row.n ?? "").trim();
+    const productUrl = String(offer.sourceUrl ?? row.url ?? "");
+    const packageText = String(offer.sizeText ?? row.size ?? "").trim();
+    const priceMinor = Number(offer.purchasePriceMinor);
+    const availability = offer.availability as Record<string, any> | undefined;
+    const locationText = stableJson([capture.location, pageState?.locationText]);
+    const mode = String(capture.priceMode ?? pageState?.fulfillmentText ?? "");
+    const locationPattern = new RegExp(policy.locationCanary.expectedLocationPattern, "i");
+    const modePattern = new RegExp(policy.locationCanary.expectedModePattern, "i");
+    const canonicalKeyPresent = locationText.toLowerCase().includes(policy.retailerLocationKey.toLowerCase())
+      || locationText.toLowerCase().includes(policy.priceLocationKey.toLowerCase());
+    if (!locationPattern.test(locationText) || !canonicalKeyPresent || !modePattern.test(mode)) {
+      throw new Error("backfill capture row is not bound to the authoritative location and price mode");
+    }
+    const url = new URL(productUrl);
+    if (url.hostname !== policy.firstPartyHost && !url.hostname.endsWith(`.${policy.firstPartyHost}`) || !productId || !productName || !Number.isSafeInteger(priceMinor) || priceMinor <= 0
+      || !availability || typeof availability.eligible !== "boolean" || !String(availability.status ?? "")) {
+      throw new Error("backfill capture row has invalid source, product, price, or availability identity");
+    }
+    const normalizedProduct = normalizeName(productName);
+    const identityAccepted = accepted.some((tokens) => tokens.every((token) => normalizedProduct.includes(token)));
+    const identityExcluded = excluded.some((value: string) => normalizedProduct.includes(value));
+    const parsed = parsedBackfillPackage(packageText);
+    const quantityMicros = parsed ? convertedBackfillQuantity(parsed, String(input.identity.basisUnit ?? "")) : null;
+    const semantics = offer.priceSemantics as Record<string, any> | undefined;
+    const qualifyingQuantity = Number(semantics?.qualifyingQuantity ?? 1);
+    const semanticsExact = semantics?.ambiguity === false && Number.isSafeInteger(Number(semantics?.unitPriceMinor))
+      && Number.isSafeInteger(Number(semantics?.totalPriceMinor)) && Number.isSafeInteger(qualifyingQuantity) && qualifyingQuantity > 0
+      && Math.abs(Number(semantics?.unitPriceMinor) * qualifyingQuantity - Number(semantics?.totalPriceMinor)) <= 1
+      && Number(semantics?.totalPriceMinor) === priceMinor;
+    const promotional = ["sale", "markdown", "multibuy", "loyalty"].includes(String(semantics?.offerType));
+    const validFrom = typeof semantics?.validFrom === "string" ? semantics.validFrom : null;
+    const validTo = typeof semantics?.validTo === "string" ? semantics.validTo : null;
+    const validPromotion = !promotional || Boolean(validFrom && validTo && Date.parse(validFrom) <= Date.parse(observedAt)
+      && Date.parse(validTo) >= Date.parse(observedAt) && validTo > validFrom);
+    const availabilityLocation = String(availability.locationId ?? "").toLowerCase();
+    const storeEligible = (availabilityLocation === policy.retailerLocationKey.toLowerCase()
+      || availabilityLocation === policy.priceLocationKey.toLowerCase())
+      && new RegExp(policy.locationCanary.expectedModePattern, "i").test(String(availability.fulfillmentMode ?? ""))
+      && availability.eligible === true && availability.status === "in_stock";
+    candidates.push({ productId, productName, productUrl, packageText, priceMinor, quantityMicros,
+      validFrom, validTo,
+      eligible: identityAccepted && !identityExcluded && storeEligible && quantityMicros !== null && quantityMicros > 0 && semanticsExact && validPromotion,
+      rejectionCodes: [!identityAccepted && "identity_not_included", identityExcluded && "identity_excluded", !quantityMicros && "invalid_package_basis",
+        !storeEligible && "store_ineligible", !semanticsExact && "invalid_price_semantics", !validPromotion && "missing_or_inactive_ad_dates"].filter(Boolean) });
+  }
+  const unique = new Map<string, Record<string, any>>();
+  for (const candidate of candidates) {
+    const prior = unique.get(candidate.productId);
+    if (prior && stableJson(prior) !== stableJson(candidate)) throw new Error("backfill capture contains conflicting source facts for one product");
+    unique.set(candidate.productId, candidate);
+  }
+  const frozen = [...unique.values()].sort((a, b) => String(a.productId).localeCompare(String(b.productId)));
+  const unresolvedCandidate = frozen.some((candidate) => candidate.rejectionCodes.some((code: string) =>
+    ["invalid_package_basis", "invalid_price_semantics", "missing_or_inactive_ad_dates"].includes(code))
+    && !candidate.rejectionCodes.includes("identity_not_included") && !candidate.rejectionCodes.includes("identity_excluded"));
+  if (unresolvedCandidate || termRows.some((term: any) => Array.isArray(term.excludedResults) && term.excludedResults.length > 0)) {
+    return { outcome: "needs_operator", observedAt, sourceUrl, candidateSetHash: await digestHex(stableJson(frozen)), winner: null, coverageHash };
+  }
+  const eligible = frozen.filter((row) => row.eligible).sort((a, b) => {
+    const left = BigInt(a.priceMinor) * BigInt(b.quantityMicros); const right = BigInt(b.priceMinor) * BigInt(a.quantityMicros);
+    return left < right ? -1 : left > right ? 1 : String(a.productId).localeCompare(String(b.productId));
+  });
+  const winner = eligible[0] ? { ...eligible[0], unitPriceNumerator: eligible[0].priceMinor, unitPriceDenominator: eligible[0].quantityMicros } : null;
+  return { outcome: winner ? "priced" : "not_found", observedAt, sourceUrl,
+    candidateSetHash: await digestHex(stableJson(frozen)), winner,
+    coverageHash };
+}
+
+export function assertFreshBackfillEvidence(storeLocationId: string, input: BackfillEvidenceSubmission, derived: DerivedBackfillCapture) {
   if (!input.owner || !input.generationId || !input.sessionId || !Number.isInteger(input.leaseGeneration) || input.leaseGeneration < 1) {
     throw new Error("backfill evidence omitted its lease, generation, or session fence");
   }
-  const observedAt = Date.parse(input.observedAt);
-  if (!Number.isFinite(observedAt) || Date.now() - observedAt > 15 * 60_000 || observedAt - Date.now() > 60_000) {
+  const policy = CAPTURE_POLICY_BY_STORE[storeLocationId];
+  const observedAt = Date.parse(derived.observedAt);
+  if (!policy || !Number.isFinite(observedAt) || Date.now() - observedAt > policy.evidenceFreshnessMinutes * 60_000 || observedAt - Date.now() > 60_000) {
     throw new Error("backfill evidence is stale or future-dated");
   }
-  const url = new URL(input.sourceUrl);
-  if (url.protocol !== "https:" || !url.hostname.endsWith(HOST_BY_STORE[storeLocationId] ?? ".invalid")) {
+  const url = new URL(derived.sourceUrl);
+  if (url.protocol !== "https:" || !policy || url.hostname !== policy.firstPartyHost && !url.hostname.endsWith(`.${policy.firstPartyHost}`)) {
     throw new Error("backfill evidence source does not match the authoritative retailer");
   }
 }
@@ -214,86 +423,111 @@ export function assertIndependentBackfillEvidence(input: {
   if (Date.parse(input.verifier.observedAt) <= Date.parse(input.producer.observedAt)) throw new Error("verifier evidence must be newer than producer evidence");
 }
 
+export function assertFrozenBackfillReproduction(producerOutcome: string, producerWinner: unknown, derived: DerivedBackfillCapture) {
+  if (!["priced", "not_found"].includes(producerOutcome) || derived.outcome !== producerOutcome) {
+    throw new Error("verifier rederivation does not match the frozen producer outcome");
+  }
+  if (producerOutcome === "priced" && stableJson(derived.winner) !== stableJson(producerWinner)) {
+    throw new Error("verifier did not independently reproduce the frozen producer winner");
+  }
+}
+
 export async function submitCatalogBackfillProducer(db: D1Database, input: BackfillEvidenceSubmission) {
   const work = await db.prepare(`SELECT * FROM pipeline_agent_work_items_v4 WHERE id=?1 AND entity_type='catalog_backfill_cell'`)
     .bind(input.workItemId).first<Record<string, unknown>>();
   if (!work || !String(work.agent_id).startsWith("omaha-price-producer-")) throw new Error("producer backfill work item is missing");
-  const payload = JSON.parse(String(work.input_json)) as Record<string, string>;
+  const payload = JSON.parse(String(work.input_json)) as Record<string, any>;
   const storeLocationId = String(payload.storeLocationId ?? "");
   if (!payload.runId || !payload.commodityId || !payload.ingredientId || !payload.definitionVersionId || !storeLocationId) throw new Error("producer work item payload is incomplete");
-  assertFreshBackfillEvidence(storeLocationId, input);
-  const documentJson = stableJson(input.document);
+  const definition = await db.prepare(`SELECT version.identity_json FROM catalog_ingredient_versions version
+    JOIN catalog_ingredient_current current ON current.ingredient_id=version.ingredient_id
+      AND current.current_version_id=version.version_id AND current.current_state='active'
+    WHERE version.version_id=?1 AND version.ingredient_id=?2`)
+    .bind(payload.definitionVersionId, payload.ingredientId).first<{ identity_json: string }>();
+  if (!definition) throw new Error("producer work item definition is not current and durable");
+  const queryTerms = Array.isArray(payload.queryTerms) ? payload.queryTerms.map(String) : [];
+  const derived = await deriveCatalogBackfillCapture({ storeLocationId, queryTerms,
+    identity: JSON.parse(definition.identity_json) as Record<string, any>, document: input.document });
+  assertFreshBackfillEvidence(storeLocationId, input, derived);
+  const documentJson = stableJson({ adapterChunk: input.document, derived });
   const documentHash = await digestHex(documentJson);
   const evidenceId = await deterministicId("catalog-backfill-evidence", input.workItemId, "producer", documentHash);
-  const isTerminalCandidate = input.outcome === "priced" || input.outcome === "not_found";
+  const terminalCandidate = derived.outcome === "priced" || derived.outcome === "not_found";
   const verifierAgent = VERIFIER_BY_STORE[storeLocationId];
-  if (isTerminalCandidate && !verifierAgent) throw new Error("producer work item has no registered verifier lane");
+  if (terminalCandidate && !verifierAgent) throw new Error("producer work item has no registered verifier lane");
   const verifierDedupe = `catalog-backfill:${payload.ingredientId}:${payload.storeLocationId}:${payload.definitionVersionId}:verifier:${evidenceId}`;
   const verifierWorkId = await deterministicId("pipeline-v4-work", verifierDedupe);
   const verifierInput = stableJson({ ...payload, kind: "catalog_backfill_verify_v4", producerWorkItemId: input.workItemId,
-    producerEvidenceId: evidenceId, producerOutcome: input.outcome, producerDocumentHash: documentHash,
-    producerGenerationId: input.generationId, producerSessionId: input.sessionId, producerObservedAt: input.observedAt });
+    producerEvidenceId: evidenceId, producerOutcome: derived.outcome, producerWinner: derived.winner,
+    producerCandidateSetHash: derived.candidateSetHash, producerCoverageHash: derived.coverageHash, producerDocumentHash: documentHash,
+    producerGenerationId: input.generationId, producerSessionId: input.sessionId, producerObservedAt: derived.observedAt });
   const verifierInputHash = await digestHex(verifierInput);
-  const resultJson = stableJson({ outcome: input.outcome, evidenceId, documentHash });
+  const resultJson = stableJson({ ...derived, evidenceId, documentHash });
   const statements: D1PreparedStatement[] = [
     db.prepare(`INSERT INTO catalog_backfill_evidence_v4
       (evidence_id,run_id,commodity_id,store_location_id,work_item_id,kind,generation_id,session_id,source_url,observed_at,document_json,document_hash)
       SELECT ?1,?2,?3,?4,id,'producer',?5,?6,?7,?8,?9,?10 FROM pipeline_agent_work_items_v4
       WHERE id=?11 AND lease_owner=?12 AND lease_generation=?13 AND state IN ('claimed','running') AND lease_expires_at>CURRENT_TIMESTAMP
       ON CONFLICT(work_item_id) DO NOTHING`).bind(evidenceId, payload.runId, payload.commodityId, payload.storeLocationId,
-        input.generationId, input.sessionId, input.sourceUrl, input.observedAt, documentJson, documentHash,
+        input.generationId, input.sessionId, derived.sourceUrl, derived.observedAt, documentJson, documentHash,
         input.workItemId, input.owner, input.leaseGeneration),
     db.prepare(`UPDATE pipeline_agent_work_items_v4 SET state=?2,result_json=?3,result_ref_hash=?4,terminal_at=CURRENT_TIMESTAMP,
       lease_owner=NULL,lease_expires_at=NULL WHERE id=?1 AND EXISTS(SELECT 1 FROM catalog_backfill_evidence_v4 WHERE evidence_id=?5)`)
-      .bind(input.workItemId, isTerminalCandidate ? "succeeded" : input.outcome === "challenged" ? "blocked_challenge" : "needs_operator",
+      .bind(input.workItemId, terminalCandidate ? "succeeded" : derived.outcome === "challenged" ? "blocked_challenge" : "needs_operator",
         resultJson, documentHash, evidenceId),
     db.prepare(`UPDATE catalog_backfill_cells_v4 SET evidence_state=?4,updated_at=CURRENT_TIMESTAMP
       WHERE run_id=?1 AND commodity_id=?2 AND store_location_id=?3 AND EXISTS(SELECT 1 FROM catalog_backfill_evidence_v4 WHERE evidence_id=?5)`)
       .bind(payload.runId, payload.commodityId, payload.storeLocationId,
-        isTerminalCandidate ? "producer_ready" : input.outcome === "challenged" ? "challenged" : "needs_operator", evidenceId),
+        terminalCandidate ? "producer_ready" : derived.outcome, evidenceId),
   ];
-  if (isTerminalCandidate) {
-    statements.push(db.prepare(`INSERT INTO pipeline_agent_work_items_v4
+  if (terminalCandidate) statements.push(db.prepare(`INSERT INTO pipeline_agent_work_items_v4
       (id,agent_id,entity_type,entity_id,dedupe_key,priority,state,input_ref_hash,correlation_id,input_json)
       SELECT ?1,?2,'catalog_backfill_cell',?3,?4,50,'queued',?5,?6,?7
       WHERE EXISTS(SELECT 1 FROM catalog_backfill_evidence_v4 WHERE evidence_id=?8) ON CONFLICT(dedupe_key) DO NOTHING`)
-      .bind(verifierWorkId, verifierAgent, payload.ingredientId, verifierDedupe, verifierInputHash, payload.runId, verifierInput, evidenceId));
-    statements.push(db.prepare(`UPDATE catalog_backfill_cells_v4 SET verifier_work_item_id=?4 WHERE run_id=?1 AND commodity_id=?2
+      .bind(verifierWorkId, verifierAgent!, payload.ingredientId, verifierDedupe, verifierInputHash, payload.runId, verifierInput, evidenceId));
+  if (terminalCandidate) statements.push(db.prepare(`UPDATE catalog_backfill_cells_v4 SET verifier_work_item_id=?4 WHERE run_id=?1 AND commodity_id=?2
       AND store_location_id=?3 AND EXISTS(SELECT 1 FROM catalog_backfill_evidence_v4 WHERE evidence_id=?5)`)
       .bind(payload.runId, payload.commodityId, payload.storeLocationId, verifierWorkId, evidenceId));
-  }
   await db.batch(statements);
   const stored = await db.prepare("SELECT evidence_id FROM catalog_backfill_evidence_v4 WHERE evidence_id=?1").bind(evidenceId).first();
   if (!stored) throw new Error("producer evidence rejected by lease fence");
-  return { evidenceId, documentHash, outcome: input.outcome, verifierWorkItemId: isTerminalCandidate ? verifierWorkId : null };
+  return { evidenceId, documentHash, outcome: derived.outcome, candidateSetHash: derived.candidateSetHash,
+    coverageHash: derived.coverageHash, winner: derived.winner, verifierWorkItemId: terminalCandidate ? verifierWorkId : null };
 }
 
 export async function submitCatalogBackfillVerifier(db: D1Database, input: BackfillEvidenceSubmission) {
   const work = await db.prepare(`SELECT * FROM pipeline_agent_work_items_v4 WHERE id=?1 AND entity_type='catalog_backfill_cell'`)
     .bind(input.workItemId).first<Record<string, unknown>>();
   if (!work || !String(work.agent_id).startsWith("omaha-price-verifier-")) throw new Error("verifier backfill work item is missing");
-  const payload = JSON.parse(String(work.input_json)) as Record<string, string>;
+  const payload = JSON.parse(String(work.input_json)) as Record<string, any>;
   const storeLocationId = String(payload.storeLocationId ?? "");
   const producerOutcome = String(payload.producerOutcome ?? "");
   if (!payload.runId || !payload.commodityId || !payload.producerEvidenceId || !storeLocationId) throw new Error("verifier work item payload is incomplete");
-  assertFreshBackfillEvidence(storeLocationId, input);
-  if (!["priced", "not_found"].includes(producerOutcome) || input.outcome !== producerOutcome) {
-    if (!['ambiguous','challenged'].includes(input.outcome)) throw new Error("verifier outcome does not match the frozen producer outcome");
-  }
+  const definition = await db.prepare(`SELECT version.identity_json FROM catalog_ingredient_versions version
+    JOIN catalog_ingredient_current current ON current.ingredient_id=version.ingredient_id
+      AND current.current_version_id=version.version_id AND current.current_state='active'
+    WHERE version.version_id=?1 AND version.ingredient_id=?2`)
+    .bind(payload.definitionVersionId, payload.ingredientId).first<{ identity_json: string }>();
+  if (!definition) throw new Error("verifier work item definition is not current and durable");
+  const queryTerms = Array.isArray(payload.queryTerms) ? payload.queryTerms.map(String) : [];
+  const derived = await deriveCatalogBackfillCapture({ storeLocationId, queryTerms,
+    identity: JSON.parse(definition.identity_json) as Record<string, any>, document: input.document });
+  assertFreshBackfillEvidence(storeLocationId, input, derived);
+  assertFrozenBackfillReproduction(producerOutcome, payload.producerWinner, derived);
   const producer = await db.prepare(`SELECT document_hash,generation_id,session_id,observed_at FROM catalog_backfill_evidence_v4
     WHERE evidence_id=?1 AND kind='producer'`).bind(payload.producerEvidenceId)
     .first<{ document_hash: string; generation_id: string; session_id: string; observed_at: string }>();
   if (!producer) throw new Error("verifier work item is not bound to producer evidence");
-  const documentJson = stableJson(input.document);
+  const documentJson = stableJson({ adapterChunk: input.document, derived });
   const documentHash = await digestHex(documentJson);
   assertIndependentBackfillEvidence({ producer: { documentHash: producer.document_hash, generationId: producer.generation_id,
     sessionId: producer.session_id, observedAt: producer.observed_at }, verifier: { documentHash, generationId: input.generationId,
-    sessionId: input.sessionId, observedAt: input.observedAt } });
+    sessionId: input.sessionId, observedAt: derived.observedAt } });
   const evidenceId = await deterministicId("catalog-backfill-evidence", input.workItemId, "verifier", documentHash);
-  const terminal = input.outcome === "priced" || input.outcome === "not_found";
-  const terminalJson = stableJson({ outcome: input.outcome, producerEvidenceId: payload.producerEvidenceId,
+  const terminalJson = stableJson({ outcome: derived.outcome, winner: derived.winner,
+    candidateSetHash: derived.candidateSetHash, coverageHash: derived.coverageHash, producerEvidenceId: payload.producerEvidenceId,
     verifierEvidenceId: evidenceId, producerDocumentHash: producer.document_hash, verifierDocumentHash: documentHash,
-    verifiedAt: input.observedAt, document: input.document });
+    verifiedAt: derived.observedAt });
   const terminalHash = await digestHex(terminalJson);
   await db.batch([
     db.prepare(`INSERT INTO catalog_backfill_evidence_v4
@@ -301,23 +535,21 @@ export async function submitCatalogBackfillVerifier(db: D1Database, input: Backf
       SELECT ?1,?2,?3,?4,id,'verifier',?5,?6,?7,?8,?9,?10 FROM pipeline_agent_work_items_v4
       WHERE id=?11 AND lease_owner=?12 AND lease_generation=?13 AND state IN ('claimed','running') AND lease_expires_at>CURRENT_TIMESTAMP
       ON CONFLICT(work_item_id) DO NOTHING`).bind(evidenceId, payload.runId, payload.commodityId, payload.storeLocationId,
-        input.generationId, input.sessionId, input.sourceUrl, input.observedAt, documentJson, documentHash,
+        input.generationId, input.sessionId, derived.sourceUrl, derived.observedAt, documentJson, documentHash,
         input.workItemId, input.owner, input.leaseGeneration),
     db.prepare(`UPDATE pipeline_agent_work_items_v4 SET state=?2,result_json=?3,result_ref_hash=?4,terminal_at=CURRENT_TIMESTAMP,
       lease_owner=NULL,lease_expires_at=NULL WHERE id=?1 AND EXISTS(SELECT 1 FROM catalog_backfill_evidence_v4 WHERE evidence_id=?5)`)
-      .bind(input.workItemId, terminal ? "succeeded" : input.outcome === "challenged" ? "blocked_challenge" : "needs_operator",
-        terminalJson, terminalHash, evidenceId),
+      .bind(input.workItemId, "succeeded", terminalJson, terminalHash, evidenceId),
     db.prepare(`UPDATE catalog_backfill_cells_v4 SET evidence_state=?4,terminal_result_json=?5,terminal_result_hash=?6,updated_at=CURRENT_TIMESTAMP
       WHERE run_id=?1 AND commodity_id=?2 AND store_location_id=?3 AND evidence_state='producer_ready'
         AND EXISTS(SELECT 1 FROM catalog_backfill_evidence_v4 WHERE evidence_id=?7)`)
       .bind(payload.runId, payload.commodityId, payload.storeLocationId,
-        terminal ? "terminal_verified" : input.outcome === "challenged" ? "challenged" : "needs_operator",
-        terminal ? terminalJson : null, terminal ? terminalHash : null, evidenceId),
+        "terminal_verified", terminalJson, terminalHash, evidenceId),
     db.prepare(`UPDATE catalog_backfill_ingredients_v4 SET terminal_evidence_count=(SELECT COUNT(*) FROM catalog_backfill_cells_v4 cell
       WHERE cell.run_id=?1 AND cell.commodity_id=?2 AND cell.evidence_state='terminal_verified'),updated_at=CURRENT_TIMESTAMP
       WHERE run_id=?1 AND commodity_id=?2`).bind(payload.runId, payload.commodityId),
   ]);
   const stored = await db.prepare("SELECT evidence_id FROM catalog_backfill_evidence_v4 WHERE evidence_id=?1").bind(evidenceId).first();
   if (!stored) throw new Error("verifier evidence rejected by lease fence");
-  return { evidenceId, documentHash, terminalHash: terminal ? terminalHash : null, outcome: input.outcome };
+  return { evidenceId, documentHash, terminalHash, outcome: derived.outcome, winner: derived.winner };
 }
