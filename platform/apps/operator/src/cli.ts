@@ -25,7 +25,7 @@ import { catalogRefreshPlan } from "./capture-journal";
 import { agentJobRunFields } from "./job-run";
 import { loadR2ShardedEngineSnapshot } from "./engine-snapshot";
 import { compileCommodityRegexPattern, normalizeCommodityRegexPattern, parseCatalogJson } from "./commodity-regex";
-import { runIngredientPipeline } from "./ingredient-pipeline";
+import { isIdempotentQaResumeConflict, runIngredientPipeline } from "./ingredient-pipeline";
 import { buildIngredientCapturePayload, buildIngredientQaPayload, mergeIngredientQaDiscoveryChunks, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
 import { captureHeadlessDiscovery, captureHeadlessVerification, claimSearchTerms, type HeadlessStore } from "./headless-targeted-capture";
 
@@ -1818,7 +1818,7 @@ if (command === "status") {
     try {
       submitted.push(await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/qa-complete`, { json: payload }));
     } catch (error) {
-      if (!resume || !/returned 409:/.test(String(error))) throw error;
+      if (!resume || !isIdempotentQaResumeConflict(error)) throw error;
       submitted.push({ ok: true, checkId: check.id, idempotentResume: true, reason: "check already left this QA lease" });
     }
   }

@@ -166,7 +166,10 @@ async function captureFamilyFare(query: string, observedAt: string, catalog: Awa
         rawAvailability: available ? "Freshop store 6401 available" : "Freshop did not prove current availability" }, 0, index, observedAt);
       if (normalized) rows.push(normalized); else excludedResults.push({ productKey: String(item.id ?? ""), name: String(item.name ?? ""), reason: "incomplete, ambiguous, or unavailable Freshop result" });
   }
-  return { rows, total: candidates.length, pages: candidates.length ? 1 : 0, excludedResults };
+  // The local index lookup is still one complete examined result envelope when
+  // no candidate IDs match. Coverage requires a positive page count so a true
+  // empty result can advance to independent QA instead of retrying forever.
+  return { rows, total: candidates.length, pages: 1, excludedResults };
 }
 
 async function captureHyVee(query: string, observedAt: string) {

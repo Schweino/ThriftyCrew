@@ -256,6 +256,26 @@
         }
       },
       "expect": { "decision": "candidates", "mustMention": ["harissa", "freekeh"] }
+    },
+    {
+      "id": "ingredient-discovery-requires-two-gaps-and-domain-diversity",
+      "input": {
+        "id": "recipe_eval_gap_density",
+        "request": { "request_text": "Discover 20 missing grocery ingredients from diverse complete meal-prep recipes." },
+        "commodities": ["chicken-breast | Chicken breast", "white-rice | White rice", "olive-oil | Olive oil", "onions | Onions"],
+        "sourceEvidence": {
+          "genericRoundup": [
+            { "title": "Chicken Rice Bowls", "url": "https://roundup.example.test/chicken-rice", "concept": "Chicken, rice, onion, and olive oil." },
+            { "title": "Lemon Chicken Rice", "url": "https://roundup.example.test/lemon-chicken", "concept": "Chicken, rice, onion, olive oil, and lemon." },
+            { "title": "Garlic Chicken Rice", "url": "https://roundup.example.test/garlic-chicken", "concept": "Chicken, rice, onion, olive oil, and garlic." }
+          ],
+          "ingredientForward": [
+            { "title": "Gochujang Tteokbokki Meal-Prep Bowls", "url": "https://korean.example.test/tteokbokki", "concept": "A complete meal-prep bowl centered on gochujang, garaetteok rice cakes, fish cake, and vegetables.", "structuredDataAvailable": true },
+            { "title": "Aji Amarillo Quinoa Chicken Bowls", "url": "https://andean.example.test/aji-amarillo", "concept": "A complete meal-prep bowl centered on aji amarillo paste, quinoa, queso fresco, chicken, and vegetables.", "structuredDataAvailable": true }
+          ]
+        }
+      },
+      "expect": { "decision": "candidates", "mustMention": ["gochujang", "garaetteok", "aji amarillo", "queso fresco", "domain"] }
     }
   ]
 }

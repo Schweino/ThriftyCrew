@@ -52,6 +52,12 @@ async function uploadEvidence(client: MutationClient, check: ClaimedCheck, kind:
 
 async function failClaimedChecks(client: MutationClient, checks: ClaimedCheck[], reason: unknown): Promise<void> {
   const message = String(reason instanceof Error ? reason.message : reason);
+  console.error(JSON.stringify({
+    event: "ingredient_store_check_failed",
+    checkIds: checks.map((check) => check.id),
+    stores: [...new Set(checks.map((check) => check.store_location_id))],
+    reason: message.slice(0, 5000),
+  }));
   // Freshop reports throttling as either HTTP 429 or HTTP 400 with
   // {"error_code":429}. Give the shared retailer quota time to recover
   // instead of allowing the event loop to amplify the refusal every minute.
@@ -61,6 +67,28 @@ async function failClaimedChecks(client: MutationClient, checks: ClaimedCheck[],
     owner: check.lease_owner, leaseGeneration: Number(check.lease_generation), failureClass: "transient",
     reason: message.slice(0, 5000), challengeId: null, retryAt,
   } })));
+}
+
+export function ingredientQaFailureAction(reason: unknown): "reject_to_capture" | "retry" {
+  const message = String(reason instanceof Error ? reason.message : reason);
+  return /(?:independent (?:pass|verifier) found an eligible exact candidate|independent (?:verification|verifier) (?:does not|did not) reproduce the frozen winner)/i.test(message)
+    ? "reject_to_capture"
+    : "retry";
+}
+
+export function isIdempotentQaResumeConflict(reason: unknown): boolean {
+  return /QA completion (?:rejected by|lost its) lease fence(?: or lane boundary)?/i
+    .test(String(reason instanceof Error ? reason.message : reason));
+}
+
+async function rejectQaToCapture(client: MutationClient, check: ClaimedCheck, reason: unknown): Promise<void> {
+  const message = String(reason instanceof Error ? reason.message : reason).slice(0, 2000);
+  console.error(JSON.stringify({ event: "ingredient_store_qa_rejected_to_capture", checkId: check.id,
+    store: check.store_location_id, reason: message }));
+  await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/qa-reject`, { json: {
+    owner: check.lease_owner, leaseGeneration: Number(check.lease_generation),
+    validatorVersion: "targeted-independent-verifier-v1", reason: message,
+  } });
 }
 
 async function drainHeadlessCaptureLane(client: MutationClient, storeLocationId: string, adapter: HeadlessStore, owner: string, limit: number): Promise<number> {
@@ -75,12 +103,18 @@ async function drainHeadlessCaptureLane(client: MutationClient, storeLocationId:
     const chunk = await captureHeadlessDiscovery(adapter, terms, file, {
       krogerCredentialsFile: KROGER_CREDENTIALS_FILE, familyFareCatalogFile: FAMILY_FARE_CATALOG_FILE,
     });
+    let completed = 0;
     for (const check of checks) {
-      const evidence = await uploadEvidence(client, check, "producer", chunk);
-      const payload = await buildIngredientCapturePayload(check, [chunk], evidence);
-      await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/capture-result`, { json: payload });
+      try {
+        const evidence = await uploadEvidence(client, check, "producer", chunk);
+        const payload = await buildIngredientCapturePayload(check, [chunk], evidence);
+        await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/capture-result`, { json: payload });
+        completed += 1;
+      } catch (error) {
+        await failClaimedChecks(client, [check], error);
+      }
     }
-    return checks.length;
+    return completed;
   } catch (error) {
     await failClaimedChecks(client, checks, error);
     return 0;
@@ -98,16 +132,25 @@ async function drainHeadlessQaLane(client: MutationClient, storeLocationId: stri
   const file = path.join(os.tmpdir(), `tc-ingredient-${adapter}-qa-${process.pid}-${Date.now()}.json`);
   const discoveryFile = `${file}.discovery.json`;
   try {
-    const verification = await captureHeadlessVerification(adapter, checks, file, { krogerCredentialsFile: KROGER_CREDENTIALS_FILE });
+    const verification = await captureHeadlessVerification(adapter, checks, file, {
+      krogerCredentialsFile: KROGER_CREDENTIALS_FILE, familyFareCatalogFile: FAMILY_FARE_CATALOG_FILE,
+    });
     const discovery = JSON.parse(await readFile(discoveryFile, "utf8")) as AdapterChunk;
+    let completed = 0;
     for (const check of checks) {
-      const captured = JSON.parse(String(check.capture_result_json ?? "null")) as { outcome?: string } | null;
-      const chunk = captured?.outcome === "priced" ? verification : discovery;
-      const evidence = await uploadEvidence(client, check, "verifier", chunk);
-      const payload = buildIngredientQaPayload(check, chunk, evidence as Parameters<typeof buildIngredientQaPayload>[2]);
-      await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/qa-complete`, { json: payload });
+      try {
+        const captured = JSON.parse(String(check.capture_result_json ?? "null")) as { outcome?: string } | null;
+        const chunk = captured?.outcome === "priced" ? verification : discovery;
+        const evidence = await uploadEvidence(client, check, "verifier", chunk);
+        const payload = buildIngredientQaPayload(check, chunk, evidence as Parameters<typeof buildIngredientQaPayload>[2]);
+        await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/qa-complete`, { json: payload });
+        completed += 1;
+      } catch (error) {
+        if (ingredientQaFailureAction(error) === "reject_to_capture") await rejectQaToCapture(client, check, error);
+        else await failClaimedChecks(client, [check], error);
+      }
     }
-    return checks.length;
+    return completed;
   } catch (error) {
     await failClaimedChecks(client, checks, error);
     return 0;
