@@ -1,5 +1,5 @@
 import { ingredientStoreCaptureResultSchema, ingredientStoreQaCompleteSchema } from "@thriftycrew/contracts";
-import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
+import { deterministicId, digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 import type { z } from "zod";
 import type { WorkerEnv } from "./env";
 import { sealAggregateIfTerminal } from "./ingredient-pricing-v2";
@@ -31,11 +31,22 @@ async function verifyPointer(bucket: R2Bucket, pointer: { objectKey: string; sha
   if (bytes.byteLength !== pointer.byteLength || await digestHex(bytes) !== pointer.sha256) throw new Error("ingredient evidence failed SHA-256 or length verification");
 }
 
+async function readEvidenceEnvelope(bucket: R2Bucket, pointer: { objectKey: string; sha256: string; byteLength: number }) {
+  const object = await bucket.get(pointer.objectKey);
+  if (!object) throw new Error("ingredient evidence object is absent");
+  const bytes = new Uint8Array(await object.arrayBuffer());
+  if (bytes.byteLength !== pointer.byteLength || await digestHex(bytes) !== pointer.sha256) throw new Error("ingredient evidence failed SHA-256 or length verification");
+  const parsed = JSON.parse(new TextDecoder().decode(bytes)) as Record<string, unknown>;
+  if (parsed.schema !== "tc-ingredient-evidence-v3" || typeof parsed.document !== "object" || !parsed.document) throw new Error("ingredient evidence envelope is invalid");
+  return parsed as { checkId: string; kind: string; sourceUrl: string; observedAt: string; document: Record<string, any> };
+}
+
 export async function completeIngredientStoreCapture(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, checkId: string, inputValue: unknown) {
   const input: CaptureResult = ingredientStoreCaptureResultSchema.parse(inputValue);
   const row = await env.DB.prepare(`SELECT check_row.store_location_id, check_row.lease_owner, check_row.lease_generation,
-      check_row.lease_lane, check_row.query_plan_hash, policy.price_mode
+      check_row.lease_lane, check_row.query_plan_hash, policy.price_mode, plan.canonical_term, plan.aliases_json
       FROM ingredient_store_checks check_row JOIN store_pricing_policies policy ON policy.store_location_id = check_row.store_location_id
+      JOIN ingredient_query_plans plan ON plan.id = check_row.query_plan_id
       WHERE check_row.id = ?1 AND check_row.state = 'leased'`).bind(checkId).first<Record<string, unknown>>();
   if (!row || row.lease_owner !== input.owner || Number(row.lease_generation) !== input.leaseGeneration || row.lease_lane !== "targeted_refresh") {
     throw new Error("capture completion rejected by lease fence or lane boundary");
@@ -45,7 +56,16 @@ export async function completeIngredientStoreCapture(env: Pick<WorkerEnv, "DB" |
     throw new Error("capture result lacks complete location/mode proof");
   }
   if (new Set(input.coverage.map((item) => item.normalizedQuery)).size !== input.coverage.length) throw new Error("capture coverage contains duplicate queries");
-  await verifyPointer(env.EVIDENCE, input.evidence);
+  const expectedQueries = [String(row.canonical_term), ...(JSON.parse(String(row.aliases_json)) as string[])]
+    .map(normalizeName).sort();
+  const coveredQueries = input.coverage.map((item) => normalizeName(item.normalizedQuery)).sort();
+  if (stableJson(expectedQueries) !== stableJson(coveredQueries)) throw new Error("capture coverage does not exactly match the locked query plan");
+  const producerEnvelope = await readEvidenceEnvelope(env.EVIDENCE, input.evidence);
+  if (producerEnvelope.checkId !== checkId || producerEnvelope.kind !== "producer") throw new Error("producer evidence identity mismatch");
+  if (producerEnvelope.document.claim?.checkId !== checkId || producerEnvelope.document.claim?.queryPlanHash !== input.queryPlanHash) throw new Error("producer evidence is not bound to the claimed query plan");
+  const recomputedCandidateSetHash = await digestHex(stableJson(input.candidates.map(({ evidenceHash: _evidenceHash, ...candidate }) => candidate)));
+  if (recomputedCandidateSetHash !== input.candidateSetHash) throw new Error("candidate set hash does not match the complete normalized candidates");
+  if (input.coverage.some((item) => item.evidenceHash !== input.evidence.sha256)) throw new Error("coverage is not bound to the producer evidence object");
   const evidenceId = await deterministicId("ingredient-producer-evidence", checkId, input.evidence.sha256);
   const statements: D1PreparedStatement[] = [env.DB.prepare(`INSERT INTO ingredient_evidence_refs
     (id, store_check_id, kind, object_key, sha256, byte_length, content_type, observed_at, source_url)
@@ -100,7 +120,7 @@ export async function completeIngredientStoreCapture(env: Pick<WorkerEnv, "DB" |
 
 export async function completeIngredientStoreQa(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, checkId: string, inputValue: unknown): Promise<IngredientAggregate> {
   const input: QaComplete = ingredientStoreQaCompleteSchema.parse(inputValue);
-  const row = await env.DB.prepare(`SELECT pricing_job_id, lease_owner, lease_generation, lease_lane,
+  const row = await env.DB.prepare(`SELECT pricing_job_id, lease_owner, lease_generation, lease_lane, query_plan_hash,
       capture_result_json, candidate_set_hash, producer_evidence_id FROM ingredient_store_checks
       WHERE id = ?1 AND state = 'leased'`).bind(checkId).first<Record<string, unknown>>();
   if (!row || row.lease_owner !== input.owner || Number(row.lease_generation) !== input.leaseGeneration || row.lease_lane !== "qa") {
@@ -129,7 +149,26 @@ export async function completeIngredientStoreQa(env: Pick<WorkerEnv, "DB" | "EVI
       || Number(winner.per_unit_micros) !== Number(captured.perUnitMicros)
       || winner.normalized_basis_unit !== captured.normalizedBasisUnit) throw new Error("QA winner is not the cheapest frozen eligible candidate");
   }
-  await verifyPointer(env.EVIDENCE, input.verifierEvidence);
+  const verifierEnvelope = await readEvidenceEnvelope(env.EVIDENCE, input.verifierEvidence);
+  if (verifierEnvelope.checkId !== checkId || verifierEnvelope.kind !== "verifier") throw new Error("verifier evidence identity mismatch");
+  if (verifierEnvelope.document.claim?.checkId !== checkId || verifierEnvelope.document.claim?.queryPlanHash !== row.query_plan_hash) throw new Error("verifier evidence is not bound to the claimed query plan");
+  const verification = verifierEnvelope.document.verification as Record<string, any> | undefined;
+  if (!verification?.canary?.locationVerified || !verification?.canary?.priceModeVerified) throw new Error("verifier evidence lacks fresh Omaha location/mode proof");
+  if (Date.parse(input.verifierEvidence.observedAt) <= Date.parse(String((result as Record<string, unknown>).checkedAt))) throw new Error("verifier evidence must be newer than producer capture");
+  if (input.verdict === "priced") {
+    const captured = JSON.parse(String(row.capture_result_json)) as Record<string, unknown>;
+    const reproduced = Array.isArray(verification.verifications) && verification.verifications.some((item: Record<string, unknown>) => item.outcome === "observed"
+      && item.productKey === captured.sourceUrl && item.name === captured.productName && item.sizeText === captured.packageText
+      && Number(item.purchasePriceMinor) === Number(captured.packagePriceMinor));
+    if (!reproduced) throw new Error("independent verifier did not reproduce the frozen winner identity, size, and price");
+  } else if (input.verdict === "not_found") {
+    const captured = JSON.parse(String(row.capture_result_json)) as { queryTerms?: string[] };
+    const terms = Array.isArray(verification.terms) ? verification.terms : [];
+    const empty = new Set(terms.filter((item: Record<string, any>) => item.outcome === "empty"
+      && item.retrieval?.termination === "end-of-results" && item.retrieval?.hasMoreResults === false)
+      .map((item: Record<string, unknown>) => String(item.query).trim().toLowerCase()));
+    if (!(captured.queryTerms ?? []).every((term) => empty.has(term.trim().toLowerCase()))) throw new Error("independent verifier did not reproduce complete no-result coverage");
+  }
   const producer = await env.DB.prepare("SELECT sha256 FROM ingredient_evidence_refs WHERE id = ?1").bind(row.producer_evidence_id).first<{ sha256: string }>();
   if (!producer || producer.sha256 === input.verifierEvidence.sha256) throw new Error("producer and verifier evidence must be distinct");
   const verifierEvidenceId = await deterministicId("ingredient-verifier-evidence", checkId, input.verifierEvidence.sha256);

@@ -26,6 +26,7 @@ import { agentJobRunFields } from "./job-run";
 import { loadR2ShardedEngineSnapshot } from "./engine-snapshot";
 import { compileCommodityRegexPattern, normalizeCommodityRegexPattern, parseCatalogJson } from "./commodity-regex";
 import { runIngredientPipeline } from "./ingredient-pipeline";
+import { buildIngredientCapturePayload, buildIngredientQaPayload, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -1654,6 +1655,24 @@ if (command === "status") {
   result = await (await mutationClient()).request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(checkId)}/capture-result`, {
     json: JSON.parse(await readFile(cliPath(inputFile), "utf8")),
   });
+} else if (command === "ingredient" && subcommand === "capture-submit") {
+  const [claimFile, ...chunkFiles] = arguments_;
+  if (!claimFile || chunkFiles.length === 0) throw new Error("tc ingredient capture-submit requires a claim JSON and one or more discovery chunk JSON files");
+  const claimDocument = JSON.parse(await readFile(cliPath(claimFile), "utf8")) as { checks?: ClaimedCheck[] };
+  const chunks = await Promise.all(chunkFiles.map(async (file: string) => JSON.parse(await readFile(cliPath(file), "utf8")) as AdapterChunk));
+  const client = await mutationClient();
+  const submitted = [];
+  for (const check of claimDocument.checks ?? []) {
+    const store = chunks.find((chunk) => chunk.phase === "discovery");
+    if (!store) throw new Error(`no discovery chunk supplied for ${check.id}`);
+    const evidenceDocument = { claim: { checkId: check.id, queryPlanHash: check.query_plan_hash }, chunks };
+    const pointer = await client.request("/internal/ingredient-pricing/evidence", { json: {
+      checkId: check.id, kind: "producer", sourceUrl: store.canary.evidenceUrl, observedAt: store.canary.observedAt, document: evidenceDocument,
+    } }) as unknown as { evidence: any };
+    const payload = await buildIngredientCapturePayload(check, chunks, pointer.evidence);
+    submitted.push(await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/capture-result`, { json: payload }));
+  }
+  result = { ok: true, submitted };
 } else if (command === "ingredient" && subcommand === "evidence-upload") {
   const [inputFile] = arguments_;
   if (!inputFile) throw new Error("tc ingredient evidence-upload requires an input JSON file");
@@ -1666,6 +1685,22 @@ if (command === "status") {
   result = await (await mutationClient()).request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(checkId)}/qa-complete`, {
     json: JSON.parse(await readFile(cliPath(inputFile), "utf8")),
   });
+} else if (command === "ingredient" && subcommand === "qa-submit") {
+  const [claimFile, verificationFile] = arguments_;
+  if (!claimFile || !verificationFile) throw new Error("tc ingredient qa-submit requires a QA claim JSON and independent verification chunk JSON");
+  const claimDocument = JSON.parse(await readFile(cliPath(claimFile), "utf8")) as { checks?: ClaimedCheck[] };
+  const verification = JSON.parse(await readFile(cliPath(verificationFile), "utf8")) as AdapterChunk;
+  const client = await mutationClient();
+  const submitted = [];
+  for (const check of claimDocument.checks ?? []) {
+    const pointer = await client.request("/internal/ingredient-pricing/evidence", { json: {
+      checkId: check.id, kind: "verifier", sourceUrl: verification.canary.evidenceUrl,
+      observedAt: verification.canary.observedAt, document: { claim: { checkId: check.id, queryPlanHash: check.query_plan_hash }, verification },
+    } }) as unknown as { evidence: any };
+    const payload = buildIngredientQaPayload(check, verification, pointer.evidence);
+    submitted.push(await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/qa-complete`, { json: payload }));
+  }
+  result = { ok: true, submitted };
 } else if (command === "ingredient" && subcommand === "challenge-open") {
   const [checkId, inputFile] = arguments_;
   if (!checkId || !inputFile) throw new Error("tc ingredient challenge-open requires a check id and input JSON");

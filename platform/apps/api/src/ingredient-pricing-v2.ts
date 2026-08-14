@@ -117,6 +117,7 @@ export async function claimStoreChecks(db: D1Database, inputValue: unknown): Pro
         AND check_row.state IN (${claimStates.map(() => "?").join(",")})
         AND check_row.next_attempt_at <= ?
         AND job.state = 'store_checks_running'
+        AND job.commodity_proposal_json IS NOT NULL
         AND gap.qa_resolution IS NULL
       ORDER BY check_row.next_attempt_at, check_row.created_at, check_row.id LIMIT ?`,
   ).bind(input.storeLocationId, ...claimStates, now.toISOString(), input.limit).all<{ id: string }>();
@@ -135,9 +136,11 @@ export async function claimStoreChecks(db: D1Database, inputValue: unknown): Pro
     if ((updated.meta.changes ?? 0) !== 1) continue;
     const row = await db.prepare(
       `SELECT check_row.*, gap.display_name, gap.normalized_name,
-              plan.canonical_term, plan.aliases_json, plan.exclusions_json, plan.plan_hash
+              plan.canonical_term, plan.aliases_json, plan.exclusions_json, plan.plan_hash,
+              job.commodity_proposal_json, job.commodity_proposal_hash
          FROM ingredient_store_checks check_row
          JOIN ingredient_gaps gap ON gap.id = check_row.gap_id
+         JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
          LEFT JOIN ingredient_query_plans plan ON plan.id = check_row.query_plan_id
         WHERE check_row.id = ?1`,
     ).bind(candidate.id).first<Record<string, unknown>>();

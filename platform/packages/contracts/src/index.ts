@@ -1461,7 +1461,7 @@ const ingredientCapturedCandidateSchema = z.object({
   if (Math.abs(expected - value.perUnitMicros) > 2) context.addIssue({ code: "custom", path: ["perUnitMicros"], message: `candidate unit price must equal ${expected}` });
   if (value.eligible && value.rejectionCodes.length > 0) context.addIssue({ code: "custom", path: ["rejectionCodes"], message: "eligible candidates cannot carry rejection codes" });
   if (!value.eligible && value.rejectionCodes.length === 0) context.addIssue({ code: "custom", path: ["rejectionCodes"], message: "ineligible candidates require a rejection code" });
-  if ((value.offerKind === "sale" || value.offerKind === "markdown") && (!value.validFrom || !value.validTo || value.validTo <= value.validFrom)) {
+  if (value.eligible && (value.offerKind === "sale" || value.offerKind === "markdown") && (!value.validFrom || !value.validTo || value.validTo <= value.validFrom)) {
     context.addIssue({ code: "custom", path: ["validFrom"], message: "promotional candidates require a valid effective window" });
   }
 });

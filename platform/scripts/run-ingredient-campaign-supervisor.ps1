@@ -92,7 +92,8 @@ try {
     $remaining = if ($campaigns.Count -gt 0) { [int](($campaigns | ForEach-Object { [int]$_.target_published_ingredients - [int]$_.published_ingredients } | Measure-Object -Minimum).Minimum) } else { $ready }
     $publishLimit = [Math]::Min($batchSize, [Math]::Max(1, [int]$remaining))
     $flushTail = $ready -gt 0 -and $pending -eq 0 -and $researching -eq 0
-    if (($ready -ge $publishLimit -or $flushTail) -and (-not $publisherProcess -or $publisherProcess.HasExited) -and ((Get-Date) - $lastPublisherStart).TotalSeconds -ge 60) {
+    $definitionOrPublicationWork = $v2RunningJobs -gt 0 -or $ready -ge $publishLimit -or $flushTail
+    if ($definitionOrPublicationWork -and (-not $publisherProcess -or $publisherProcess.HasExited) -and ((Get-Date) - $lastPublisherStart).TotalSeconds -ge 60) {
       $publisherProcess = Start-Cycle 'IngredientPublication' $publishLimit
       $lastPublisherStart = Get-Date
       Write-PcRuntimeLog $logFile ("started batch publication for up to {0} ingredients; ready={1}" -f $publishLimit, $ready)

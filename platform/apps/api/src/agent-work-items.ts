@@ -1018,7 +1018,7 @@ export async function enqueueIngredientDefinitionPlan(db: D1Database, limit = 50
     `SELECT job.id AS pricing_job_id, job.gap_id, gap.display_name, gap.normalized_name,
             job.resolution_version_id
        FROM ingredient_pricing_jobs job JOIN ingredient_gaps gap ON gap.id = job.gap_id
-      WHERE job.state = 'ready_to_publish' AND job.resolution_version_id IS NOT NULL
+      WHERE job.state IN ('store_checks_running','ready_to_publish')
         AND job.commodity_proposal_json IS NULL
         AND NOT EXISTS (SELECT 1 FROM agent_work_items work WHERE work.agent_id = 'ingredient-definition-planner'
           AND work.state IN ('queued','leased','retryable') AND json_extract(work.input_json, '$.pricingJobIds') LIKE '%' || job.id || '%')
@@ -1046,10 +1046,26 @@ async function persistIngredientDefinitionPlan(db: D1Database, outputValue: unkn
   for (const item of plan.items) {
     const proposalJson = stableJson(item.proposal);
     const proposalHash = await digestHex(proposalJson);
+    const canonicalTerm = item.proposal.searchTerms[0]!;
+    const aliases = item.proposal.searchTerms.slice(1);
+    const queryPlanHash = await digestHex(stableJson({ canonicalTerm, aliases, exclusions: item.proposal.exclude,
+      basisUnit: item.proposal.unit, commodityId: item.proposal.id, version: 2 }));
     statements.push(db.prepare(
-      `UPDATE ingredient_pricing_jobs SET commodity_proposal_json = ?2, commodity_proposal_hash = ?3, updated_at = CURRENT_TIMESTAMP
-        WHERE id = ?1 AND gap_id = ?4 AND state = 'ready_to_publish' AND resolution_version_id IS NOT NULL`,
-    ).bind(item.pricingJobId, proposalJson, proposalHash, item.gapId));
+      `UPDATE ingredient_pricing_jobs SET commodity_proposal_json = ?2, commodity_proposal_hash = ?3,
+         operational_state = CASE WHEN state = 'store_checks_running' THEN 'definition_ready' ELSE operational_state END,
+         semantic_plan_hash = ?5, last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?1 AND gap_id = ?4 AND state IN ('store_checks_running','ready_to_publish')`,
+    ).bind(item.pricingJobId, proposalJson, proposalHash, item.gapId, queryPlanHash));
+    statements.push(db.prepare(
+      `UPDATE ingredient_query_plans SET version = 2, canonical_term = ?2, aliases_json = ?3,
+         exclusions_json = ?4, plan_hash = ?5, planner_version = 'ingredient-definition-planner-v2'
+        WHERE pricing_job_id = ?1`,
+    ).bind(item.pricingJobId, canonicalTerm, stableJson(aliases), stableJson(item.proposal.exclude), queryPlanHash));
+    statements.push(db.prepare(
+      `UPDATE ingredient_store_checks SET query_plan_hash = ?2, last_progress_at = CURRENT_TIMESTAMP,
+         operational_state = CASE WHEN state IN ('queued','targeted_refresh','transient_failed','evidence_expired') THEN 'capture_queued' ELSE operational_state END,
+         updated_at = CURRENT_TIMESTAMP WHERE pricing_job_id = ?1`,
+    ).bind(item.pricingJobId, queryPlanHash));
     statements.push(db.prepare(
       `UPDATE ingredient_resolution_versions SET commodity_proposal_hash = ?2
         WHERE id = (SELECT resolution_version_id FROM ingredient_pricing_jobs WHERE id = ?1)`,
