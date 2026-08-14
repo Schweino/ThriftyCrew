@@ -55708,5 +55708,16 @@
     "exclude": [
       "\\b(?:instant|soup|broth|dressing|marinade|sauce|ramen)\\b"
     ]
+  },
+  {
+    "id": "shawarma-spice-blend",
+    "label": "Shawarma Spice Blend",
+    "unit": "oz",
+    "include": [
+      "\\bshawarma\\s+(?:(?:spice|seasoning)\\s+blend|seasoning)\\b"
+    ],
+    "exclude": [
+      "\\b(?:marinade|sauce|paste|meal|kit|chips?|nuts?)\\b"
+    ]
   }
 ]
