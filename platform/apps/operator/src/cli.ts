@@ -2281,6 +2281,17 @@ if (command === "status") {
     if (outputFile) await writeFile(cliPath(outputFile), `${JSON.stringify({ kind: "catalog-backfill-claim-v4", agentId: first,
       owner: second ?? `v4-backfill-${process.pid}`, claimedAt: new Date().toISOString(), workItems: claimed.workItems ?? [] }, null, 2)}\n`, "utf8");
     result = { ...claimed, ...(outputFile ? { outputFile: cliPath(outputFile) } : {}) };
+  } else if (action === "claim-exact") {
+    const [agentId, workItemId, owner, outputFile] = arguments_.slice(1);
+    if (!agentId || !workItemId || !owner || !outputFile) {
+      throw new Error("tc ingredient backfill-v4 claim-exact requires agent work-item owner output.json");
+    }
+    const claimed = await client.request("/internal/v4/backfill/claim-exact", { json: {
+      agentId, workItemId, owner, leaseSeconds: 900,
+    } }) as { workItem?: unknown };
+    await writeFile(cliPath(outputFile), `${JSON.stringify({ kind: "catalog-backfill-claim-v4", agentId, owner,
+      claimedAt: new Date().toISOString(), workItems: claimed.workItem ? [claimed.workItem] : [] }, null, 2)}\n`, "utf8");
+    result = { ...claimed, outputFile: cliPath(outputFile) };
   } else if (action === "heartbeat") {
     if (!first) throw new Error("tc ingredient backfill-v4 heartbeat requires an exact owner [lease-seconds] [output.json]");
     const refreshed = await client.request("/internal/v4/backfill/heartbeat", {
@@ -2324,7 +2335,7 @@ if (command === "status") {
     const submitted = [];
     for (const submission of submissions) submitted.push(await client.request(`/internal/v4/backfill/${role}-submit`, { json: submission }));
     result = { ok: true, role, wrappers: submissions.length, outputFile: cliPath(outputFile), submitted };
-  } else throw new Error("tc ingredient backfill-v4 requires initialize|import <run> [offset] [limit]|progress [run]|claim <agent> [owner] [limit] [output.json]|heartbeat <owner> [lease-seconds] [output.json]|producer-submit <adapter-artifact>|verifier-submit <independent-adapter-artifact>|submit-claim <role> <claim> <chunk> <generation-prefix> <session-prefix> <wrapper-output>|requeue <run> <commodity> <store> <adjudication-id> <resolution-type> <reason>|correct <run> <commodity> <store> <correction-id> <detailed-reason>");
+  } else throw new Error("tc ingredient backfill-v4 requires initialize|import <run> [offset] [limit]|progress [run]|claim <agent> [owner] [limit] [output.json]|claim-exact <agent> <work-item> <owner> <output.json>|heartbeat <owner> [lease-seconds] [output.json]|producer-submit <adapter-artifact>|verifier-submit <independent-adapter-artifact>|submit-claim <role> <claim> <chunk> <generation-prefix> <session-prefix> <wrapper-output>|requeue <run> <commodity> <store> <adjudication-id> <resolution-type> <reason>|correct <run> <commodity> <store> <correction-id> <detailed-reason>");
 } else if (command === "recipe" && subcommand === "wave") {
   const [action, waveId, value] = arguments_;
   if (!action || !waveId) throw new Error("tc recipe wave requires snapshot|published|corrective and a wave id");

@@ -179,6 +179,22 @@ export async function claimCatalogBackfillBatch(db: D1Database, input: {
     leaseExpiresAt: new Date(now.getTime() + Math.min(3600, Math.max(60, input.leaseSeconds)) * 1000).toISOString(), limit: input.limit });
 }
 
+export async function claimCatalogBackfillWorkItem(db: D1Database, input: {
+  agentId: string; workItemId: string; owner: string; leaseSeconds: number;
+}) {
+  const now = new Date();
+  const leaseExpiresAt = new Date(now.getTime() + Math.min(3600, Math.max(60, input.leaseSeconds)) * 1000).toISOString();
+  const row = await db.prepare(`UPDATE pipeline_agent_work_items_v4
+    SET state='claimed',lease_owner=?3,lease_generation=lease_generation+1,lease_expires_at=?4,
+      attempt_count=attempt_count+1,started_at=COALESCE(started_at,?5),heartbeat_at=?5
+    WHERE id=?1 AND agent_id=?2 AND entity_type='catalog_backfill_cell' AND available_at<=?5
+      AND (state IN ('queued','failed_transient') OR (state IN ('claimed','running') AND lease_expires_at<?5))
+    RETURNING *`).bind(input.workItemId, input.agentId, input.owner, leaseExpiresAt, now.toISOString())
+    .first<Record<string, unknown>>();
+  if (!row) throw new Error("exact backfill work item is unavailable, mismatched, or already leased");
+  return row;
+}
+
 export async function heartbeatCatalogBackfillOwner(db: D1Database, input: { owner: string; leaseSeconds: number }) {
   const leaseSeconds = Math.min(3600, Math.max(60, input.leaseSeconds));
   const workItems = (await db.prepare(`UPDATE pipeline_agent_work_items_v4

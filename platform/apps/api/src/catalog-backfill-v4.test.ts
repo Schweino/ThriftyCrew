@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { deterministicId } from "@thriftycrew/domain";
 import { assertFreshBackfillEvidence, assertFrozenBackfillReproduction, assertIndependentBackfillEvidence, assertLegacyBoard,
-  catalogBackfillPromotionAllowed, deriveCatalogBackfillCapture, heartbeatCatalogBackfillOwner } from "./catalog-backfill-v4";
+  catalogBackfillPromotionAllowed, claimCatalogBackfillWorkItem, deriveCatalogBackfillCapture, heartbeatCatalogBackfillOwner } from "./catalog-backfill-v4";
 import { correctCatalogBackfillEvidence, requeueCatalogBackfillCell } from "./catalog-backfill-v4";
 
 const identity = { canonicalName: "Bananas", displayName: "Bananas", acceptedForms: ["Bananas"], excludedForms: ["chips"], basisUnit: "lb" };
@@ -310,5 +310,29 @@ describe("truthful V4 catalog backfill", () => {
     expect(statements[0]?.sql).toContain("WHERE lease_owner=?1");
     expect(statements[0]?.sql).toContain("RETURNING *");
     expect(statements[0]?.bound).toEqual(["v4-backfill-walmart-owner", "+900 seconds"]);
+  });
+
+  it("claims only the exact agent-bound backfill work item without scanning global work", async () => {
+    const statements: Array<{ sql: string; bound: unknown[] }> = [];
+    const db = { prepare(sql: string) {
+      const statement = { sql, bound: [] as unknown[] }; statements.push(statement);
+      return { bind(...values: unknown[]) { statement.bound = values; return this; }, async first() {
+        return statement.bound[0] === "pipeline-v4-work_target" && statement.bound[1] === "omaha-price-producer-sams-club"
+          ? { id: statement.bound[0], agent_id: statement.bound[1], lease_owner: statement.bound[2] } : null;
+      } };
+    } } as unknown as D1Database;
+    await expect(claimCatalogBackfillWorkItem(db, { agentId: "omaha-price-producer-sams-club",
+      workItemId: "pipeline-v4-work_target", owner: "v4-backfill-sams-repair", leaseSeconds: 900 }))
+      .resolves.toMatchObject({ id: "pipeline-v4-work_target", lease_owner: "v4-backfill-sams-repair" });
+    expect(statements).toHaveLength(1);
+    expect(statements[0]?.sql).toContain("WHERE id=?1 AND agent_id=?2");
+    expect(statements[0]?.sql).toContain("RETURNING *");
+  });
+
+  it("rejects an exact backfill claim when the agent or lease state does not match", async () => {
+    const db = { prepare() { return { bind() { return this; }, async first() { return null; } }; } } as unknown as D1Database;
+    await expect(claimCatalogBackfillWorkItem(db, { agentId: "omaha-price-producer-fareway",
+      workItemId: "pipeline-v4-work_foreign", owner: "v4-backfill-fareway-repair", leaseSeconds: 900 }))
+      .rejects.toThrow("unavailable, mismatched, or already leased");
   });
 });

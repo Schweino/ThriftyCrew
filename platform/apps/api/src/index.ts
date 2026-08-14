@@ -131,7 +131,7 @@ import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredi
 import { materializeHotCatalog } from "./hot-catalog";
 import { attachIngredientProposal, createIngredientPublicationBatch, failIngredientPublicationBatch, ingredientPublicationProofPlan, materializeIngredientPublicationCaptures, verifyIngredientPublicationExternal, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
 import { listPublicIngredients, getPublicIngredientBySlug, publicIngredientResponse } from "./public-grocery-v3";
-import { catalogBackfillProgress, claimCatalogBackfillBatch, correctCatalogBackfillEvidence, heartbeatCatalogBackfillOwner, importCatalogBackfillPage, initializeCatalogBackfill, requeueCatalogBackfillCell, submitCatalogBackfillProducer, submitCatalogBackfillVerifier } from "./catalog-backfill-v4";
+import { catalogBackfillProgress, claimCatalogBackfillBatch, claimCatalogBackfillWorkItem, correctCatalogBackfillEvidence, heartbeatCatalogBackfillOwner, importCatalogBackfillPage, initializeCatalogBackfill, requeueCatalogBackfillCell, submitCatalogBackfillProducer, submitCatalogBackfillVerifier } from "./catalog-backfill-v4";
 import { compareAndSwapIngredientPointer, finalizeIncrementalIngredient, previewIncrementalIngredient, rollbackIncrementalIngredientPointer, stageIncrementalIngredient } from "./incremental-ingredient-publication";
 import { completePermanentlyUnavailableIngredient, resumeRecipesForPublishedIngredient } from "./recipe-dependency-resume-v2";
 import { releasePayloadObjectKey } from "./release-payloads";
@@ -1725,6 +1725,19 @@ app.post("/internal/v4/backfill/claim", async (context) => {
       limit: Math.min(50, Math.max(1, Number(body.limit ?? 50))), leaseSeconds: Number(body.leaseSeconds ?? 900) });
     return context.json({ ok: true, workItems });
   } catch (error) { return jsonError(error instanceof Error ? error.message : "catalog backfill claim failed", 409); }
+});
+
+app.post("/internal/v4/backfill/claim-exact", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may claim exact catalog backfill work", 403);
+  try {
+    const body = await context.req.json<{ agentId: string; workItemId: string; owner: string; leaseSeconds?: number }>();
+    if (!/^omaha-price-(?:producer|verifier)-/.test(body.agentId ?? "") || !body.workItemId?.startsWith("pipeline-v4-work_") || !body.owner) {
+      return jsonError("exact backfill claim requires its agent, work item, and owner", 400);
+    }
+    return context.json({ ok: true, workItem: await claimCatalogBackfillWorkItem(context.env.DB, {
+      agentId: body.agentId, workItemId: body.workItemId, owner: body.owner, leaseSeconds: Number(body.leaseSeconds ?? 900),
+    }) });
+  } catch (error) { return jsonError(error instanceof Error ? error.message : "exact catalog backfill claim failed", 409); }
 });
 
 app.post("/internal/v4/backfill/producer-submit", async (context) => {
