@@ -131,7 +131,7 @@ import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredi
 import { materializeHotCatalog } from "./hot-catalog";
 import { attachIngredientProposal, createIngredientPublicationBatch, failIngredientPublicationBatch, ingredientPublicationProofPlan, materializeIngredientPublicationCaptures, verifyIngredientPublicationExternal, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
 import { listPublicIngredients, getPublicIngredientBySlug, publicIngredientResponse } from "./public-grocery-v3";
-import { catalogBackfillProgress, claimCatalogBackfillBatch, heartbeatCatalogBackfillOwner, importCatalogBackfillPage, initializeCatalogBackfill, requeueCatalogBackfillCell, submitCatalogBackfillProducer, submitCatalogBackfillVerifier } from "./catalog-backfill-v4";
+import { catalogBackfillProgress, claimCatalogBackfillBatch, correctCatalogBackfillEvidence, heartbeatCatalogBackfillOwner, importCatalogBackfillPage, initializeCatalogBackfill, requeueCatalogBackfillCell, submitCatalogBackfillProducer, submitCatalogBackfillVerifier } from "./catalog-backfill-v4";
 import { compareAndSwapIngredientPointer, finalizeIncrementalIngredient, previewIncrementalIngredient, rollbackIncrementalIngredientPointer, stageIncrementalIngredient } from "./incremental-ingredient-publication";
 import { completePermanentlyUnavailableIngredient, resumeRecipesForPublishedIngredient } from "./recipe-dependency-resume-v2";
 import { releasePayloadObjectKey } from "./release-payloads";
@@ -1754,6 +1754,12 @@ app.post("/internal/v4/backfill/requeue", async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only an operator may requeue catalog backfill", 403);
   try { return context.json({ ok: true, ...await requeueCatalogBackfillCell(context.env.DB, await context.req.json()) }); }
   catch (error) { return jsonError(error instanceof Error ? error.message : "catalog backfill requeue failed", 409); }
+});
+
+app.post("/internal/v4/backfill/correct", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may correct catalog backfill evidence", 403);
+  try { return context.json({ ok: true, ...await correctCatalogBackfillEvidence(context.env.DB, await context.req.json()) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "catalog backfill evidence correction failed", 409); }
 });
 
 app.post("/internal/v4/ingredients/stage", async (context) => {

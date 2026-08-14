@@ -81,7 +81,7 @@ export function buildAldiRows(query, page, capturedAt) {
     const regularPriceMinor = originalMatch ? Math.round(Number(originalMatch[1]) * 100) : undefined;
     const priceSemantics = { offerType: regularPriceMinor ? "sale" : "everyday", condition: "none", unitPriceMinor: row.priceMinor, qualifyingQuantity: 1, totalPriceMinor: row.priceMinor, ...(regularPriceMinor ? { regularPriceMinor } : {}), ambiguity: false };
     const inStock = /in stock|only \d+ left/i.test(row.availabilityText);
-    const offer = { version: 1, retailerProductId: row.id, productName: row.name, sizeText: size, rawPriceText: row.current, purchasePriceMinor: row.priceMinor, availability: { status: inStock ? "in_stock" : "unknown", ...(row.availabilityText ? { rawText: row.availabilityText } : {}), fulfillmentMode: "in_store", eligible: inStock }, priceSemantics, observedAt: capturedAt, sourceUrl: row.href };
+    const offer = { version: 1, retailerProductId: row.id, productName: row.name, sizeText: size, rawPriceText: row.current, purchasePriceMinor: row.priceMinor, availability: { status: inStock ? "in_stock" : "unknown", ...(row.availabilityText ? { rawText: row.availabilityText } : {}), fulfillmentMode: "in_store", locationId: "OLA 48", eligible: inStock }, priceSemantics, observedAt: capturedAt, sourceUrl: row.href };
       rows.push({
       id: row.id,
       term: query,

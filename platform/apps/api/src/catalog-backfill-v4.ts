@@ -246,6 +246,66 @@ export async function requeueCatalogBackfillCell(db: D1Database, input: {
   return { workItemId, adjudicationId: input.adjudicationId, state: "queued", idempotent: false };
 }
 
+/** Invalidates derived evidence after a deterministic capture/validator defect.
+ * Immutable evidence remains queryable, while every work item that authorized
+ * the current cell is superseded and the terminal readiness count is reduced.
+ */
+export async function correctCatalogBackfillEvidence(db: D1Database, input: {
+  runId: string; commodityId: string; storeLocationId: string; correctionId: string; reason: string;
+}) {
+  if (!input.correctionId.trim() || input.reason.trim().length < 20) {
+    throw new Error("backfill evidence correction requires a durable identity and detailed reason");
+  }
+  const existing = await db.prepare(`SELECT id FROM pipeline_agent_work_items_v4
+    WHERE correlation_id=?1 AND entity_type='catalog_backfill_cell'
+      AND json_extract(input_json,'$.commodityId')=?2 AND json_extract(input_json,'$.storeLocationId')=?3
+      AND json_extract(input_json,'$.evidenceCorrection.id')=?4 ORDER BY created_at DESC LIMIT 1`)
+    .bind(input.runId, input.commodityId, input.storeLocationId, input.correctionId).first<{ id: string }>();
+  if (existing) return { workItemId: existing.id, correctionId: input.correctionId, state: "queued", idempotent: true };
+  const prior = await db.prepare(`SELECT cell.ingredient_id,cell.producer_work_item_id,cell.verifier_work_item_id,cell.evidence_state,
+      work.agent_id,work.input_json,work.dedupe_key
+    FROM catalog_backfill_cells_v4 cell JOIN pipeline_agent_work_items_v4 work ON work.id=cell.producer_work_item_id
+    WHERE cell.run_id=?1 AND cell.commodity_id=?2 AND cell.store_location_id=?3
+      AND cell.evidence_state IN ('producer_ready','terminal_verified','needs_operator')`)
+    .bind(input.runId, input.commodityId, input.storeLocationId).first<{ ingredient_id: string; producer_work_item_id: string;
+      verifier_work_item_id: string | null; evidence_state: string; agent_id: string; input_json: string; dedupe_key: string }>();
+  if (!prior) throw new Error("backfill cell has no invalidatable derived evidence");
+  const dedupeKey = `${prior.dedupe_key}:correction:${input.correctionId}`;
+  const workItemId = await deterministicId("pipeline-v4-work", dedupeKey);
+  const correctedAt = new Date().toISOString();
+  const workInput = stableJson({ ...(JSON.parse(prior.input_json) as Record<string, unknown>),
+    retryOf: prior.producer_work_item_id, evidenceCorrection: { id: input.correctionId, type: "evidence_invalidated",
+      reason: input.reason.trim(), invalidatedState: prior.evidence_state, correctedAt } });
+  const inputHash = await digestHex(workInput);
+  await db.batch([
+    db.prepare(`INSERT INTO pipeline_agent_work_items_v4
+      (id,agent_id,entity_type,entity_id,dedupe_key,priority,state,input_ref_hash,correlation_id,input_json)
+      VALUES(?1,?2,'catalog_backfill_cell',?3,?4,100,'queued',?5,?6,?7)
+      ON CONFLICT(dedupe_key) DO NOTHING`).bind(workItemId, prior.agent_id, prior.ingredient_id, dedupeKey, inputHash, input.runId, workInput),
+    db.prepare(`UPDATE pipeline_agent_work_items_v4 SET state='superseded',terminal_at=COALESCE(terminal_at,CURRENT_TIMESTAMP),
+      lease_owner=NULL,lease_expires_at=NULL WHERE id IN (?1,?2) AND state<>'superseded'`)
+      .bind(prior.producer_work_item_id, prior.verifier_work_item_id ?? ""),
+    db.prepare(`UPDATE catalog_backfill_cells_v4 SET evidence_state='queued',producer_work_item_id=?4,verifier_work_item_id=NULL,
+      terminal_result_json=NULL,terminal_result_hash=NULL,updated_at=CURRENT_TIMESTAMP
+      WHERE run_id=?1 AND commodity_id=?2 AND store_location_id=?3 AND producer_work_item_id=?5
+        AND evidence_state IN ('producer_ready','terminal_verified','needs_operator')
+        AND EXISTS(SELECT 1 FROM pipeline_agent_work_items_v4 WHERE id=?4)`)
+      .bind(input.runId, input.commodityId, input.storeLocationId, workItemId, prior.producer_work_item_id),
+    db.prepare(`UPDATE catalog_backfill_ingredients_v4 SET terminal_evidence_count=(SELECT COUNT(*)
+      FROM catalog_backfill_cells_v4 cell WHERE cell.run_id=?1 AND cell.commodity_id=?2
+        AND cell.evidence_state='terminal_verified'),updated_at=CURRENT_TIMESTAMP WHERE run_id=?1 AND commodity_id=?2`)
+      .bind(input.runId, input.commodityId),
+  ]);
+  const moved = await db.prepare(`SELECT producer_work_item_id,evidence_state FROM catalog_backfill_cells_v4
+    WHERE run_id=?1 AND commodity_id=?2 AND store_location_id=?3`).bind(input.runId, input.commodityId, input.storeLocationId)
+    .first<{ producer_work_item_id: string; evidence_state: string }>();
+  if (moved?.producer_work_item_id !== workItemId || moved.evidence_state !== "queued") {
+    throw new Error("backfill evidence correction lost its cell fence");
+  }
+  return { workItemId, correctionId: input.correctionId, previousState: prior.evidence_state,
+    supersededWorkItemIds: [prior.producer_work_item_id, prior.verifier_work_item_id].filter(Boolean), state: "queued", idempotent: false };
+}
+
 export type BackfillEvidenceSubmission = {
   workItemId: string; owner: string; leaseGeneration: number; generationId: string; sessionId: string;
   document: unknown;
@@ -392,6 +452,9 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
       && Date.parse(validTo) >= Date.parse(observedAt) && validTo > validFrom);
     const availabilityLocation = String(availability.locationId ?? "").toLowerCase();
     const availabilityMode = String(availability.fulfillmentMode ?? "");
+    const availabilityUnknown = availability.status === "unknown" || availability.status === "";
+    const locationUnknown = availabilityLocation === "";
+    const fulfillmentUnknown = availabilityMode === "";
     const availabilityModeEligible = normalizeName(availabilityMode) === normalizeName(policy.priceMode)
       || new RegExp(policy.locationCanary.expectedModePattern, "i").test(availabilityMode);
     const storeEligible = (availabilityLocation === policy.retailerLocationKey.toLowerCase()
@@ -402,7 +465,9 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
       validFrom, validTo,
       eligible: identityAccepted && !identityExcluded && storeEligible && quantityMicros !== null && quantityMicros > 0 && semanticsExact && validPromotion,
       rejectionCodes: [!identityAccepted && "identity_not_included", identityExcluded && "identity_excluded", !quantityMicros && "invalid_package_basis",
-        !storeEligible && "store_ineligible", !semanticsExact && "invalid_price_semantics", !validPromotion && "missing_or_inactive_ad_dates"].filter(Boolean) });
+        availabilityUnknown && "availability_unknown", locationUnknown && "location_unknown", fulfillmentUnknown && "fulfillment_unknown",
+        !storeEligible && !availabilityUnknown && !locationUnknown && !fulfillmentUnknown && "store_ineligible",
+        !semanticsExact && "invalid_price_semantics", !validPromotion && "missing_or_inactive_ad_dates"].filter(Boolean) });
   }
   const unique = new Map<string, Record<string, any>>();
   for (const candidate of candidates) {
@@ -412,7 +477,7 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
   }
   const frozen = [...unique.values()].sort((a, b) => String(a.productId).localeCompare(String(b.productId)));
   const unresolvedCandidate = frozen.some((candidate) => candidate.rejectionCodes.some((code: string) =>
-    ["invalid_package_basis", "invalid_price_semantics", "missing_or_inactive_ad_dates"].includes(code))
+    ["invalid_package_basis", "availability_unknown", "location_unknown", "fulfillment_unknown", "invalid_price_semantics", "missing_or_inactive_ad_dates"].includes(code))
     && !candidate.rejectionCodes.includes("identity_not_included") && !candidate.rejectionCodes.includes("identity_excluded"));
   const eligible = frozen.filter((row) => row.eligible).sort((a, b) => {
     const left = BigInt(a.priceMinor) * BigInt(b.quantityMicros); const right = BigInt(b.priceMinor) * BigInt(a.quantityMicros);

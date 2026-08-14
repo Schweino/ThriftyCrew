@@ -94,7 +94,7 @@ export function buildFarewayRows(query, page, capturedAt) {
     };
     const availabilityText = row.lines.find((line) => /^(?:many in stock|in stock|low stock|only \d+ left)$/i.test(line)) || "";
     const inStock = /in stock|only \d+ left/i.test(availabilityText);
-    const offer = { version: 1, retailerProductId: row.href, productName: row.name, sizeText: row.size, rawPriceText: row.current, purchasePriceMinor: row.priceMinor, availability: { status: inStock ? "in_stock" : "unknown", ...(availabilityText ? { rawText: availabilityText } : {}), fulfillmentMode: "in_store", eligible: inStock }, priceSemantics, observedAt: capturedAt, sourceUrl: row.href };
+    const offer = { version: 1, retailerProductId: row.href, productName: row.name, sizeText: row.size, rawPriceText: row.current, purchasePriceMinor: row.priceMinor, availability: { status: inStock ? "in_stock" : "unknown", ...(availabilityText ? { rawText: availabilityText } : {}), fulfillmentMode: "in_store", locationId: "043", eligible: inStock }, priceSemantics, observedAt: capturedAt, sourceUrl: row.href };
       rows.push({
       id: row.id,
       term: query,
@@ -297,7 +297,7 @@ async function captureProductDetail(tab, target) {
         ...(regularPriceMinor ? { regularPriceMinor } : {}),
         ambiguity: false,
       };
-      const offer = { version: 1, retailerProductId: page.url, productName: page.name, sizeText: page.size, rawPriceText: page.current, purchasePriceMinor: page.priceMinor, availability: { status: "unknown", fulfillmentMode: "in_store", eligible: false }, priceSemantics, observedAt, sourceUrl: page.url };
+      const offer = { version: 1, retailerProductId: page.url, productName: page.name, sizeText: page.size, rawPriceText: page.current, purchasePriceMinor: page.priceMinor, availability: { status: "unknown", fulfillmentMode: "in_store", locationId: "043", eligible: false }, priceSemantics, observedAt, sourceUrl: page.url };
       return {
         outcome: "observed",
         observedAt,
