@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { MutationClient } from "@thriftycrew/daily/client";
+import { MutationClient } from "../apps/daily/src/client.ts";
 import { buildBrowserBackfillWavePlan, closeCompletedBrowserBackfillSessions, executeBrowserBackfillWave, heartbeatBrowserBackfillWave,
   validateBrowserBackfillWaveArtifacts } from "../apps/operator/src/browser-backfill-wave.ts";
 
