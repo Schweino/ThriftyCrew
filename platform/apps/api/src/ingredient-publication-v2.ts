@@ -353,7 +353,11 @@ export async function verifyIngredientPublicationCandidate(env: Pick<WorkerEnv, 
       verified: observedHash === member.expected_public_projection_hash });
   }
   const verified = checks.length > 0 && checks.every((check) => check.verified);
-  if (!verified) throw new Error("validated release board does not exactly match every sealed ingredient projection");
+  if (!verified) {
+    throw new Error(`validated release board does not exactly match every sealed ingredient projection: ${stableJson(
+      checks.filter((check) => !check.verified),
+    )}`);
+  }
   const receiptId = await deterministicId("ingredient-publication-receipt", batchId, "sealed", "validated", releaseId);
   await env.DB.batch([
     env.DB.prepare("UPDATE ingredient_publication_batches SET state = 'validated', release_id = ?2, updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND state IN ('sealed','release_built','validated')").bind(batchId, releaseId),
