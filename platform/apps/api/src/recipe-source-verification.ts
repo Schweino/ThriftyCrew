@@ -1,13 +1,20 @@
 import { digestHex, stableJson } from "@thriftycrew/domain";
 
 function visibleText(value: string): string {
-  return value.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
+  const structuredRecipeText = [...value.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)]
+    .map((match) => match[1] ?? "").join(" ");
+  return `${value.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")} ${structuredRecipeText}`
     .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
     .replace(/<[^>]+>/g, " ")
+    .replace(/&#x([0-9a-f]+);/gi, (_match, code: string) => String.fromCodePoint(Number.parseInt(code, 16)))
+    .replace(/&#([0-9]+);/g, (_match, code: string) => String.fromCodePoint(Number.parseInt(code, 10)))
     .replace(/&(?:nbsp|#160);/gi, " ")
     .replace(/&amp;/gi, "&")
     .replace(/&quot;/gi, '"')
     .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&(?:frac12|half);/gi, " 1/2 ")
+    .replace(/&frac14;/gi, " 1/4 ")
+    .replace(/&frac34;/gi, " 3/4 ")
     .toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
