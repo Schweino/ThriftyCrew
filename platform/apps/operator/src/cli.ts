@@ -528,10 +528,15 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     });
     if (prepublication.verified !== true) throw new Error("ingredient release failed exact prepublication projection verification");
     const publication = await publishValidatedRelease(client, releaseArtifact.releaseId);
-    const verification = await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(sealed.batchId)}/verify`, {
-      json: { releaseId: releaseArtifact.releaseId },
-    });
-    if (verification.complete !== true) throw new Error("ingredient microbatch exact projection failed on one or both required public origins");
+    let verification: Record<string, unknown> = {};
+    for (let attempt = 1; attempt <= 8; attempt++) {
+      verification = await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(sealed.batchId)}/verify`, {
+        json: { releaseId: releaseArtifact.releaseId },
+      });
+      if (verification.complete === true) break;
+      if (attempt < 8) await new Promise((resolve) => setTimeout(resolve, Math.min(10_000, attempt * 1_500)));
+    }
+    if (verification.complete !== true) throw new Error("ingredient microbatch exact projection failed on one or both required public origins after bounded convergence polling");
     await execFileAsync("git", ["-C", incomeRoot, "merge", "--ff-only", branch]);
     completed = true;
     return { ok: true, batchId: sealed.batchId, releaseId: releaseArtifact.releaseId, sourceCommit,
@@ -1659,6 +1664,12 @@ if (command === "status") {
   }
   result = await (await mutationClient()).request(`/internal/ingredient-gaps/${encodeURIComponent(gapId)}/publication-failure`, {
     method: "POST", json: { error: reasonParts.join(" ").trim(), requiresJudgment: judgmentText === "true" },
+  });
+} else if (command === "ingredient" && subcommand === "publication-verify") {
+  const [batchId, releaseId] = arguments_;
+  if (!batchId || !releaseId) throw new Error("tc ingredient publication-verify requires <batch-id> <release-id>");
+  result = await (await mutationClient()).request(`/internal/ingredient-publication/batches/${encodeURIComponent(batchId)}/verify`, {
+    json: { releaseId },
   });
 } else if (command === "ingredient" && subcommand === "reconcile") {
   result = await (await mutationClient()).request("/internal/ingredient-gaps/reconcile", { method: "POST" });
