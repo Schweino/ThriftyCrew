@@ -31,6 +31,7 @@ import { buildIngredientCapturePayload, buildIngredientQaPayload, mergeIngredien
 import { captureHeadlessDiscovery, captureHeadlessVerification, claimSearchTerms, type HeadlessStore } from "./headless-targeted-capture";
 import { PipelineAgentSupervisor } from "./pipeline-agent-supervisor";
 import { buildBackfillSubmissions } from "./backfill-v4-submissions";
+import { planDefinitionSync } from "./backfill-v4-definition-sync";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -2364,25 +2365,20 @@ if (command === "status") {
       || !Number.isSafeInteger(limit) || limit < 1 || limit > 100) {
       throw new Error("tc ingredient backfill-v4 definition-sync requires run audit.json output.json [offset] [limit<=100] [excluded-commodity-csv]");
     }
-    const audit = JSON.parse(await readFile(cliPath(auditFile), "utf8")) as any;
-    const unmapped = audit.unmapped ?? {}; const unmappedCount = Object.values(unmapped).reduce((sum: number, rows: any) => sum + (Array.isArray(rows) ? rows.length : 0), 0);
-    if (audit.summary?.total !== 573 || audit.summary?.invalid !== 0 || !Array.isArray(audit.definitions)
-      || audit.definitions.length !== 573 || unmappedCount !== 0) throw new Error("definition sync requires a complete clean 573-definition audit artifact");
-    const excluded = new Set(rawExclude.split(",").map((value: string) => value.trim()).filter(Boolean));
-    const definitions = audit.definitions.filter((row: any) => row.changed === true && !excluded.has(String(row.commodityId)));
-    const page = definitions.slice(offset, offset + limit); const synced: any[] = [];
-    for (const definition of page) {
-      const commodityId = String(definition.commodityId);
-      const correctionId = `authored-identity-v1-${commodityId}`;
+    const auditText = await readFile(cliPath(auditFile), "utf8"); const audit = JSON.parse(auditText) as any;
+    const excluded = new Set<string>(rawExclude.split(",").map((value: string) => value.trim()).filter(Boolean));
+    const plan = planDefinitionSync(audit, { offset, limit, excluded }); const synced: any[] = [];
+    for (const definition of plan.page) {
+      const { commodityId, correctionId } = definition;
       synced.push(await client.request("/internal/v4/backfill/definition-correct", { json: { runId, commodityId, correctionId,
         reason: "Persist the audited authored include, exclude, taxonomy, and store-scoped known-wrong identity rules." } }));
-      const progress = { kind: "catalog-backfill-definition-sync-v4", runId, auditSha256: await digestHex(await readFile(cliPath(auditFile), "utf8")),
-        excluded: [...excluded].sort(), offset, requested: page.length, completed: synced.length, nextOffset: offset + synced.length,
-        total: definitions.length, synced };
+      const progress = { kind: "catalog-backfill-definition-sync-v4", runId, auditSha256: await digestHex(auditText),
+        excluded: [...excluded].sort(), offset, requested: plan.page.length, completed: synced.length, nextOffset: offset + synced.length,
+        total: plan.total, reversedKnownWrong: plan.reversedKnownWrong, synced };
       await writeFile(cliPath(outputFile), `${JSON.stringify(progress, null, 2)}\n`, "utf8");
     }
     result = { ok: true, outputFile: cliPath(outputFile), offset, completed: synced.length, nextOffset: offset + synced.length,
-      total: definitions.length, remaining: Math.max(0, definitions.length - offset - synced.length), synced };
+      total: plan.total, remaining: Math.max(0, plan.total - offset - synced.length), reversedKnownWrong: plan.reversedKnownWrong, synced };
   } else if (action === "submit-claim") {
     const [role, claimFile, chunkFile, generationPrefix, sessionPrefix, outputFile] = arguments_.slice(1);
     if (!(["producer", "verifier"] as string[]).includes(role ?? "") || !claimFile || !chunkFile || !generationPrefix || !sessionPrefix || !outputFile) {
