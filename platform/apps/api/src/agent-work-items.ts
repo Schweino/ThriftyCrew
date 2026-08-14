@@ -392,6 +392,28 @@ export async function reconcileIngredientCampaign(db: D1Database, requestId: str
   const snapshot = await ingredientCampaignSnapshot(db, requestId);
   if (!snapshot || snapshot.pausedAt) return snapshot;
   const state = ingredientCampaignPhase(snapshot);
+  if (state === "collecting" && !snapshot.discoveryFrozenAt) {
+    const sourcing = await db.prepare(
+      `SELECT batch.source_round, request.status,
+              MAX(CASE WHEN work.agent_id = 'recipe-sourcer'
+                    THEN CAST(json_extract(work.input_json, '$.discovery.sourceRound') AS INTEGER) END) AS latest_seeded_round,
+              SUM(CASE WHEN work.state IN ('queued','retryable','leased') THEN 1 ELSE 0 END) AS active_work
+         FROM ingredient_discovery_batches batch
+         JOIN recipe_suggestion_requests request ON request.id = batch.request_id
+         LEFT JOIN agent_work_items work ON work.source_ref = batch.request_id
+        WHERE batch.request_id = ?1 GROUP BY batch.request_id, request.status`,
+    ).bind(requestId).first<{ source_round: number; status: string; latest_seeded_round: number | null; active_work: number }>();
+    // The round is part of the sourcer work-item fingerprint. Advance it once
+    // only after that round's entire chain is terminal and the request has been
+    // returned to collecting. The newly advanced round has no matching seed,
+    // so repeated reconciliation is idempotent until the sourcer claims it.
+    if (sourcing?.status === "queued" && Number(sourcing.active_work) === 0
+      && sourcing.latest_seeded_round !== null && Number(sourcing.latest_seeded_round) >= Number(sourcing.source_round)) {
+      await db.prepare(
+        "UPDATE ingredient_discovery_batches SET source_round = source_round + 1, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1 AND source_round = ?2",
+      ).bind(requestId, sourcing.source_round).run();
+    }
+  }
   await db.batch([
     db.prepare("UPDATE ingredient_discovery_batches SET state = ?2, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1")
       .bind(requestId, state),
