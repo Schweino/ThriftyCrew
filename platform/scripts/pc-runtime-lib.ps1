@@ -41,7 +41,16 @@ function Initialize-PcRuntimeEnvironment($Config) {
 function Write-PcRuntimeLog([string]$LogFile, [string]$Message) {
   $directory = Split-Path -Parent $LogFile
   if (-not (Test-Path -LiteralPath $directory)) { New-Item -ItemType Directory -Path $directory -Force | Out-Null }
-  Add-Content -LiteralPath $LogFile -Value ("[{0}] {1}" -f (Get-Date).ToString('s'), $Message)
+  $line = "[{0}] {1}" -f (Get-Date).ToString('s'), $Message
+  for ($attempt = 1; $attempt -le 20; $attempt++) {
+    try {
+      Add-Content -LiteralPath $LogFile -Value $line -ErrorAction Stop
+      return
+    } catch [IO.IOException] {
+      if ($attempt -eq 20) { return }
+      Start-Sleep -Milliseconds 50
+    }
+  }
 }
 
 function Send-PcRuntimeAlert([string]$Subject, [string]$Body) {
