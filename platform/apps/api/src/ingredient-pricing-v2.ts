@@ -583,6 +583,29 @@ export async function reopenTerminalStoreCheckForCorrection(
     supersededResolutionVersionId: check.resolution_version_id };
 }
 
+export async function retryAdapterQuarantinedStoreCheck(
+  db: D1Database,
+  checkId: string,
+  input: { expectedStateVersion: number; reason: string },
+) {
+  const reason = input.reason.trim().slice(0, 2000);
+  const update = await db.prepare(`UPDATE ingredient_store_checks
+    SET state = 'targeted_refresh', operational_state = 'capture_queued',
+        next_attempt_at = CURRENT_TIMESTAMP, lease_owner = NULL, lease_expires_at = NULL,
+        heartbeat_at = NULL, lease_lane = NULL, last_error = ?3,
+        state_version = state_version + 1, last_progress_at = CURRENT_TIMESTAMP,
+        updated_at = CURRENT_TIMESTAMP
+    WHERE id = ?1 AND state = 'adapter_quarantined' AND operational_state = 'adapter_quarantined'
+      AND state_version = ?2 AND evidence_id IS NULL AND qa_attestation_id IS NULL`)
+    .bind(checkId, input.expectedStateVersion, `adapter retry authorized: ${reason}`).run();
+  if ((update.meta.changes ?? 0) !== 1) throw new Error("adapter retry lost its quarantined state/version fence");
+  await db.prepare(`INSERT INTO pipeline_stage_events
+    (lane, aggregate_kind, aggregate_id, stage, event_kind, detail_json)
+    VALUES ('pricing', 'store_check', ?1, 'capture', 'adapter_retry', ?2)`)
+    .bind(checkId, stableJson({ reason, expectedStateVersion: input.expectedStateVersion })).run();
+  return { checkId, state: "capture_queued", stateVersion: input.expectedStateVersion + 1 };
+}
+
 export async function ingestAgentIngredientResearch(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, inputValue: unknown): Promise<IngredientAggregate | null> {
   void env;
   void inputValue;

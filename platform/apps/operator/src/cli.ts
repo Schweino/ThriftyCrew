@@ -2049,6 +2049,15 @@ if (command === "status") {
     retried.push(await client.request(`/internal/ingredient-gaps/${encodeURIComponent(gapId)}/publication-retry`, { method: "POST" }));
   }
   result = { ok: true, retried };
+} else if (command === "ingredient" && subcommand === "adapter-retry") {
+  const [checkId, expectedStateVersionText, ...reasonParts] = arguments_;
+  const reason = reasonParts.join(" ").trim();
+  if (!checkId || !/^\d+$/.test(expectedStateVersionText ?? "") || reason.length < 10) {
+    throw new Error("tc ingredient adapter-retry requires <check-id> <expected-state-version> <reason>");
+  }
+  result = await (await mutationClient()).request(`/internal/ingredient-pricing/checks/${encodeURIComponent(checkId)}/retry-adapter`, {
+    json: { expectedStateVersion: Number(expectedStateVersionText), reason },
+  });
 } else if (command === "ingredient" && subcommand === "publication-failure") {
   const [gapId, judgmentText, ...reasonParts] = arguments_;
   if (!gapId || !["true", "false"].includes(judgmentText ?? "") || reasonParts.join(" ").trim().length < 10) {

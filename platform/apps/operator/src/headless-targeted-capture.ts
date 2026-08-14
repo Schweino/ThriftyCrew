@@ -25,6 +25,7 @@ const DEFAULT_TERM_CONCURRENCY: Record<HeadlessStore, number> = { bakers: 8, "fa
 const DEFAULT_PAGE_CONCURRENCY = 8;
 const KROGER_PAGE_SIZE = 50;
 const KROGER_MAX_START = 250;
+const KROGER_ABSOLUTE_START_CEILING = 299;
 const KROGER_BRANDS_PER_PARTITION = 20;
 
 export class HeadlessSourceLimitError extends Error {
@@ -299,23 +300,46 @@ async function captureBakers(query: string, token: string, observedAt: string, f
     const direct = await captureReadablePrefix("accessible-prefix", baseFilters, first);
     products = direct.products;
     partitionProof.push(direct.proof);
+    // Kroger accepts arbitrary starts below 300 even though the next regular
+    // 50-row page (start=300) is rejected. Read one overlapping tail window
+    // first; for totals through 349 this proves the whole reported envelope in
+    // one request instead of dozens of reorder/probe requests.
+    const tailStart = first.total - KROGER_PAGE_SIZE;
+    if (tailStart > KROGER_MAX_START && tailStart <= KROGER_ABSOLUTE_START_CEILING) {
+      try {
+        const tail = await fetchPage(tailStart, baseFilters);
+        if (tail.total !== first.total || tail.products.length !== KROGER_PAGE_SIZE
+          || tail.products.some((product: JsonRecord) => !String(product.productId ?? ""))) {
+          throw new HeadlessSourceLimitError("Baker's overlapping tail window changed total, length, or stable identity");
+        }
+        products = unionProductHits([...products, ...tail.products.map((product: JsonRecord, resultIndex: number) => ({ product,
+          pageIndex: direct.pages, resultIndex }))], "overlapping tail window");
+        partitionProof.push({ label: "overlapping-tail-window", strategy: "exact_reported_tail",
+          start: tailStart, loaded: tail.products.length, recoveredUnique: products.length, reportedTotal: first.total });
+      } catch (error) {
+        partitionProof.push({ label: "overlapping-tail-window", strategy: "unsupported",
+          start: tailStart, error: String(error instanceof Error ? error.message : error).slice(0, 500) });
+      }
+    }
     // Kroger can reorder equally relevant rows between requests. Repeat every
     // legal window concurrently under the exact same query/location/fulfillment
     // filters, then union stable product IDs. This is authoritative recovery,
     // not semantic guessing: every recovered identity came from the base query.
-    const repeatStarts = Array.from({ length: 3 }, () => offsetPageStarts(KROGER_MAX_START + KROGER_PAGE_SIZE, KROGER_PAGE_SIZE)).flat();
-    const repeated = await mapWithConcurrency(repeatStarts, pageConcurrency, (start) => fetchPage(start, baseFilters));
-    const repeatedProducts: ProductHit[] = [];
-    for (const [pageIndex, page] of repeated.entries()) {
-      if (page.total !== first.total || page.products.some((product: JsonRecord) => !String(product.productId ?? ""))) {
-        throw new HeadlessSourceLimitError("Baker's repeated in-store window changed total or omitted a stable identity");
+    if (products.length !== first.total) {
+      const repeatStarts = Array.from({ length: 3 }, () => offsetPageStarts(KROGER_MAX_START + KROGER_PAGE_SIZE, KROGER_PAGE_SIZE)).flat();
+      const repeated = await mapWithConcurrency(repeatStarts, pageConcurrency, (start) => fetchPage(start, baseFilters));
+      const repeatedProducts: ProductHit[] = [];
+      for (const [pageIndex, page] of repeated.entries()) {
+        if (page.total !== first.total || page.products.some((product: JsonRecord) => !String(product.productId ?? ""))) {
+          throw new HeadlessSourceLimitError("Baker's repeated in-store window changed total or omitted a stable identity");
+        }
+        repeatedProducts.push(...page.products.map((product: JsonRecord, resultIndex: number) => ({ product,
+          pageIndex: direct.pages + pageIndex, resultIndex })));
       }
-      repeatedProducts.push(...page.products.map((product: JsonRecord, resultIndex: number) => ({ product,
-        pageIndex: direct.pages + pageIndex, resultIndex })));
+      products = unionProductHits([...products, ...repeatedProducts], "repeated in-store windows");
+      partitionProof.push({ label: "repeated-in-store-windows", strategy: "stable_identity_union",
+        rounds: 3, loaded: repeatedProducts.length, recoveredUnique: products.length, reportedTotal: first.total });
     }
-    products = unionProductHits([...products, ...repeatedProducts], "repeated in-store windows");
-    partitionProof.push({ label: "repeated-in-store-windows", strategy: "stable_identity_union",
-      rounds: 3, loaded: repeatedProducts.length, recoveredUnique: products.length, reportedTotal: first.total });
 
     if (products.length !== first.total) {
       // A capped envelope can still hide a low-ranked brand. Narrower probes

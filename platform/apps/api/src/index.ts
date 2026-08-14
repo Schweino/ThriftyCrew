@@ -57,6 +57,7 @@ import {
   ingredientStoreCheckFailSchema,
   ingredientStoreCheckHeartbeatSchema,
   ingredientStoreCheckReopenSchema,
+  ingredientAdapterRetrySchema,
   ingredientStoreCaptureResultSchema,
   ingredientStoreQaCompleteSchema,
   ingredientStoreQaRejectSchema,
@@ -123,7 +124,7 @@ import { engineMayWriteCaptureSource } from "./capture-authorization";
 import { evaluateContentPromotion } from "./content-batches";
 import { recipeCommodityIds } from "./recipe-commodity-catalog";
 import { claimAgentWorkItem, completeAgentWorkItem, enqueueIngredientDefinitionPlan, failAgentWorkItem, ingredientCampaignSnapshot, reconcileIngredientCampaign, reconcileIngredientHolds } from "./agent-work-items";
-import { claimStoreChecks, createPricingWave, failStoreCheck, heartbeatStoreCheck, ingredientCampaignProgress, ingredientPipelineStatus, pipelineEvents, pricingWaveStatus, reconcileTerminalPricingJobs, reopenTerminalStoreCheckForCorrection, resolveClaimedStoreCheckFromCatalog } from "./ingredient-pricing-v2";
+import { claimStoreChecks, createPricingWave, failStoreCheck, heartbeatStoreCheck, ingredientCampaignProgress, ingredientPipelineStatus, pipelineEvents, pricingWaveStatus, reconcileTerminalPricingJobs, reopenTerminalStoreCheckForCorrection, retryAdapterQuarantinedStoreCheck, resolveClaimedStoreCheckFromCatalog } from "./ingredient-pricing-v2";
 import { acknowledgePipelineOutbox, claimPipelineOutbox, nackPipelineOutbox } from "./pipeline-outbox";
 import { completeIngredientStoreCapture, completeIngredientStoreQa, rejectIngredientStoreQa, uploadIngredientEvidence } from "./ingredient-independent-qa";
 import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredientChallenge } from "./ingredient-challenges";
@@ -1629,6 +1630,12 @@ app.post("/internal/ingredient-pricing/checks/:id/reopen-correction", zValidator
   if (context.get("identity").role !== "operator") return jsonError("only an operator may reopen a terminal store check", 403);
   try { return context.json({ ok: true, ...await reopenTerminalStoreCheckForCorrection(context.env.DB, context.req.param("id"), context.req.valid("json")) }); }
   catch (error) { return jsonError(error instanceof Error ? error.message : "store-check correction failed", 409); }
+});
+
+app.post("/internal/ingredient-pricing/checks/:id/retry-adapter", zValidator("json", ingredientAdapterRetrySchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may retry a quarantined adapter check", 403);
+  try { return context.json({ ok: true, ...await retryAdapterQuarantinedStoreCheck(context.env.DB, context.req.param("id"), context.req.valid("json")) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "adapter retry failed", 409); }
 });
 
 app.post("/internal/ingredient-publication/batches", zValidator("json", ingredientPublicationBatchCreateSchema), async (context) => {

@@ -127,6 +127,8 @@ describe("headless targeted store capture", () => {
       const chunk = await captureHeadlessDiscovery("bakers", ["sea salt"], output,
         { krogerCredentialsFile: credentials, fetchImpl, pageConcurrency: 8 });
       expect(requests.some((request) => request.brands === null && request.start === 300)).toBe(false);
+      expect(requests.some((request) => request.brands === null && request.start === 297)).toBe(true);
+      expect(requests.filter((request) => request.brands === null)).toHaveLength(7);
       expect(requests.every((request) => request.fulfillment === "ais")).toBe(true);
       expect(chunk.terms?.[0]?.retrieval).toMatchObject({ targetResultCount: 347, loadedResultCount: 347,
         availableResultCount: 347, hasMoreResults: false, termination: "end-of-results" });
