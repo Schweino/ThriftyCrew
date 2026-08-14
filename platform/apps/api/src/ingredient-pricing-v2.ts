@@ -663,12 +663,13 @@ export async function ingredientPipelineStatus(db: D1Database): Promise<Record<s
         AND job.state = 'store_checks_running' AND job.commodity_proposal_json IS NOT NULL AND gap.qa_resolution IS NULL
     ) WHERE role IS NOT NULL GROUP BY store_location_id, role ORDER BY store_location_id, role`).all(),
     db.prepare(`SELECT COUNT(*) AS count FROM recipe_ingredient_holds hold
-      WHERE hold.status = 'paused'
-        AND EXISTS (SELECT 1 FROM recipe_hold_requirements requirement WHERE requirement.hold_id = hold.id)
+      WHERE hold.status = 'paused' AND hold.resume_error IS NULL
+        AND EXISTS (SELECT 1 FROM recipe_hold_requirement_occurrences occurrence
+          WHERE occurrence.hold_id = hold.id AND occurrence.role = 'purchased' AND occurrence.gap_id IS NOT NULL)
         AND NOT EXISTS (
-          SELECT 1 FROM recipe_hold_requirements requirement
-          JOIN ingredient_gaps gap ON gap.id = requirement.gap_id
-          WHERE requirement.hold_id = hold.id
+          SELECT 1 FROM recipe_hold_requirement_occurrences occurrence
+          JOIN ingredient_gaps gap ON gap.id = occurrence.gap_id
+          WHERE occurrence.hold_id = hold.id AND occurrence.role = 'purchased'
             AND gap.status NOT IN ('published','permanently_unavailable')
             AND gap.qa_resolution IS NULL
         )`).first<{ count: number }>(),

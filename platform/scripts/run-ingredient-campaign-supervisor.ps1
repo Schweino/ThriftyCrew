@@ -97,7 +97,7 @@ try {
     $terminalStoreStates = @('cancelled','qa_verified_priced','qa_verified_not_found')
     $headlessWork = [int](($pipeline.stores | Where-Object { $_.store_location_id -in $headlessStoreIds -and $_.state -notin $terminalStoreStates } | Measure-Object count -Sum).Sum)
     $browserWork = [int](($pipeline.stores | Where-Object { $_.store_location_id -in $browserStoreIds -and $_.state -notin $terminalStoreStates } | Measure-Object count -Sum).Sum)
-    $inboxWork = [int](($pipeline.inbox | Where-Object { $_.state -in @('pending','claimed') } | Measure-Object count -Sum).Sum)
+    $inboxWork = [int](($pipeline.inbox | Where-Object { $_.state -in @('queued','pending','claimed') } | Measure-Object count -Sum).Sum)
     $outboxWork = [int](($pipeline.outbox | Where-Object state -eq 'pending' | Measure-Object count -Sum).Sum)
     $catalogWork = [int](($pipeline.workerQueues | Where-Object role -eq 'catalog' | Measure-Object count -Sum).Sum)
     Start-PricingWorker 0 'coordinator/catalog' ($inboxWork + $outboxWork + $catalogWork)
