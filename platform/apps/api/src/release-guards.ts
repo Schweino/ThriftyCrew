@@ -258,8 +258,13 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
        FROM release_cells c
        JOIN releases r ON r.id = c.release_id
        JOIN observations o ON o.id = c.observation_id
-       JOIN release_input_batches input ON input.release_id = c.release_id
-       JOIN capture_batch_observations member ON member.batch_id = input.batch_id AND member.observation_id = o.id
+       JOIN (
+         SELECT membership.batch_id, membership.observation_id, MAX(membership.observed_at) AS observed_at
+           FROM release_input_batches scoped_input
+           JOIN capture_observation_memberships membership ON membership.batch_id = scoped_input.batch_id
+          WHERE scoped_input.release_id = ?1
+          GROUP BY membership.batch_id, membership.observation_id
+       ) member ON member.observation_id = o.id
        JOIN product_versions pv ON pv.id = o.product_version_id
        JOIN products p ON p.id = pv.product_id
        JOIN capture_batches b ON b.id = member.batch_id
