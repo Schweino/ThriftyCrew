@@ -8,7 +8,7 @@
     "grocery/recipe-commodities.json"
   ],
   "hashes": {
-    "commodities.json": "2d08b8d1c8f8c65413e803618dbc311a97638e9238ddc5414b135402f78d43c1",
+    "commodities.json": "42c5f15d44611775a5cc7f365ae25ff52c16e5ea848e5fa185144d0fcd40ee01",
     "categories.json": "36a926434783b36ace533e333ee4df018c1fef07ce91e1ab629ede6f98c7dbe7",
     "known-wrong.json": "55489ceee179b14120dcfcd45481a4c0b929b6ba9137ed13cb8bddc638037ade",
     "recipe-commodities.json": "b44604ffac3eca6d80916dd530bf1b8e2025e123b5d3737fedd6559db3bb33a7",
@@ -18,7 +18,7 @@
   },
   "counts": {
     "commodities": 571,
-    "uniqueMatchRules": 49452,
+    "uniqueMatchRules": 49459,
     "knownWrongRulings": 121,
     "expandedKnownWrongNames": 126
   }

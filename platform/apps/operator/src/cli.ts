@@ -461,8 +461,18 @@ async function commodityAddSpecification(incoming: CommodityAddition, generate =
   const categoryFile = path.join(targetPlatformRoot, "config", "categories.json");
   const searchFile = path.join(targetIncomeRoot, "grocery", "commodity-search.json");
   const commodities = parseCatalogJson<Array<Record<string, unknown>>>(await readFile(commodityFile, "utf8"));
-  if (commodities.some((item) => item.id === incoming.id)) throw new Error(`commodity ${incoming.id} already exists`);
-  if (commodities.some((item) => normalizeName(String(item.label ?? "")) === normalizeName(incoming.label!))) throw new Error(`commodity label ${incoming.label} already exists`);
+  const existingCommodity = commodities.find((item) => item.id === incoming.id);
+  if (commodities.some((item) => item.id !== incoming.id && normalizeName(String(item.label ?? "")) === normalizeName(incoming.label!))) throw new Error(`commodity label ${incoming.label} already exists`);
+  if (existingCommodity) {
+    const existingIncludes = Array.isArray(existingCommodity.include) ? existingCommodity.include.map(String) : [];
+    const existingExcludes = Array.isArray(existingCommodity.exclude) ? existingCommodity.exclude.map(String) : [];
+    if (normalizeName(String(existingCommodity.label ?? "")) !== normalizeName(incoming.label)
+      || String(existingCommodity.unit ?? "") !== incoming.unit
+      || include.some((pattern) => !existingIncludes.includes(pattern))
+      || exclude.some((pattern) => !existingExcludes.includes(pattern))) {
+      throw new Error(`commodity ${incoming.id} conflicts with its authoritative existing definition`);
+    }
+  }
   const proposedNames = [...new Set([incoming.label!, ...searchTerms,
     ...(incoming.verifiedProductNames ?? []).map((value) => value.trim()).filter(Boolean)])];
   const matcherSurgeryIds: string[] = [];
@@ -472,6 +482,7 @@ async function commodityAddSpecification(incoming: CommodityAddition, generate =
     throw new Error(`commodity ${incoming.id} include rules do not positively identify its own label or search terms`);
   }
   for (const existing of commodities) {
+    if (existing.id === incoming.id) continue;
     const existingLabel = String(existing.label ?? "");
     if (newIncludes.some((pattern) => pattern.test(existingLabel)) && !newExcludes.some((pattern) => pattern.test(existingLabel))) {
       throw new Error(`commodity ${incoming.id} include rules collide with existing commodity ${String(existing.id)}`);
@@ -488,7 +499,7 @@ async function commodityAddSpecification(incoming: CommodityAddition, generate =
   }
   if (incoming.bandMin !== undefined && (!Number.isFinite(incoming.bandMin) || incoming.bandMin <= 0)) throw new Error(`commodity ${incoming.id} has an invalid minimum price band`);
   if (incoming.bandMax !== undefined && (!Number.isFinite(incoming.bandMax) || incoming.bandMax <= (incoming.bandMin ?? 0))) throw new Error(`commodity ${incoming.id} has an invalid maximum price band`);
-  commodities.push({
+  if (!existingCommodity) commodities.push({
     id: incoming.id, label: incoming.label.trim(), unit: incoming.unit, include, exclude,
     ...(incoming.bandMin !== undefined ? { band_min: incoming.bandMin } : {}),
     ...(incoming.bandMax !== undefined ? { band_max: incoming.bandMax } : {}),
@@ -496,15 +507,15 @@ async function commodityAddSpecification(incoming: CommodityAddition, generate =
   const categoryDocument = parseCatalogJson<{ categories: Array<{ key: string; commodities: string[] }> }>(await readFile(categoryFile, "utf8"));
   const category = categoryDocument.categories.find((item) => item.key === incoming.categoryId);
   if (!category) throw new Error(`category ${incoming.categoryId} does not exist`);
-  category.commodities.push(incoming.id);
+  if (!category.commodities.includes(incoming.id)) category.commodities.push(incoming.id);
   const searchDocument = parseCatalogJson<{ note?: string; terms: Record<string, string> }>(await readFile(searchFile, "utf8"));
-  if (searchDocument.terms[incoming.id]) throw new Error(`commodity search term ${incoming.id} already exists`);
-  searchDocument.terms[incoming.id] = searchTerms[0]!;
+  if (!existingCommodity && searchDocument.terms[incoming.id]) throw new Error(`commodity search term ${incoming.id} already exists`);
+  searchDocument.terms[incoming.id] ??= searchTerms[0]!;
   await writeJson(commodityFile, commodities);
   await writeJson(categoryFile, categoryDocument);
   await writeJson(searchFile, searchDocument);
   return { ...(generate ? await generateLegacyConfiguration(targetIncomeRoot, false) : { generated: false }), commodityId: incoming.id,
-    searchTerm: searchTerms[0], modifiedCommodityIds: [incoming.id, ...matcherSurgeryIds] };
+    searchTerm: searchTerms[0], existing: Boolean(existingCommodity), modifiedCommodityIds: [incoming.id, ...matcherSurgeryIds] };
 }
 
 async function commodityAdd(inputFile: string | undefined): Promise<unknown> {
@@ -541,7 +552,10 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     const publicationMatchContext = await loadMatchContext(path.join(worktreeRoot, "platform"));
     await execFileAsync("git", ["-C", worktreeRoot, "add", "--", "platform/config/commodities.json", "platform/config/categories.json",
       "platform/config/manifest.json", "grocery/commodities.json", "grocery/categories.json", "grocery/commodity-search.json"]);
-    await execFileAsync("git", ["-C", worktreeRoot, "commit", "-m", `Publish ${applied.length} verified Omaha ingredients (${sealed.batchId})`]);
+    const stagedChanges = await execFileAsync("git", ["-C", worktreeRoot, "diff", "--cached", "--name-only"]);
+    if (stagedChanges.stdout.trim()) {
+      await execFileAsync("git", ["-C", worktreeRoot, "commit", "-m", `Publish ${applied.length} verified Omaha ingredients (${sealed.batchId})`]);
+    }
     const sourceCommit = (await execFileAsync("git", ["-C", worktreeRoot, "rev-parse", "HEAD"])).stdout.trim();
     const bridge = await buildCurrentBridge(worktreeRoot);
     const modifiedCommodityIds = [...new Set(applied.flatMap((entry) => {
