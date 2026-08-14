@@ -55719,5 +55719,20 @@
     "exclude": [
       "\\b(?:marinade|sauce|paste|meal|kit|chips?|nuts?)\\b"
     ]
+  },
+  {
+    "id": "ingredient-definition-cumin-seeds",
+    "label": "Cumin seeds",
+    "unit": "oz",
+    "include": [
+      "\\bcumin seeds?\\b",
+      "\\bwhole cumin\\b"
+    ],
+    "exclude": [
+      "\\bground\\b",
+      "\\bpowder\\b",
+      "\\bseasoning mix\\b",
+      "\\bseed oil\\b"
+    ]
   }
 ]
