@@ -131,6 +131,7 @@ import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredi
 import { materializeHotCatalog } from "./hot-catalog";
 import { attachIngredientProposal, createIngredientPublicationBatch, failIngredientPublicationBatch, ingredientPublicationProofPlan, materializeIngredientPublicationCaptures, verifyIngredientPublicationExternal, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
 import { listPublicIngredients, getPublicIngredientBySlug, publicIngredientResponse } from "./public-grocery-v3";
+import { catalogBackfillProgress, claimCatalogBackfillBatch, importCatalogBackfillPage, initializeCatalogBackfill } from "./catalog-backfill-v4";
 import { compareAndSwapIngredientPointer, finalizeIncrementalIngredient, previewIncrementalIngredient, rollbackIncrementalIngredientPointer, stageIncrementalIngredient } from "./incremental-ingredient-publication";
 import { completePermanentlyUnavailableIngredient, resumeRecipesForPublishedIngredient } from "./recipe-dependency-resume-v2";
 import { releasePayloadObjectKey } from "./release-payloads";
@@ -1665,6 +1666,50 @@ app.post("/internal/ingredient-pricing/checks/:id/retry-adapter", zValidator("js
   if (context.get("identity").role !== "operator") return jsonError("only an operator may retry a quarantined adapter check", 403);
   try { return context.json({ ok: true, ...await retryAdapterQuarantinedStoreCheck(context.env.DB, context.req.param("id"), context.req.valid("json")) }); }
   catch (error) { return jsonError(error instanceof Error ? error.message : "adapter retry failed", 409); }
+});
+
+async function currentLegacyBoardForBackfill(env: WorkerEnv) {
+  const row = await env.DB.prepare(`SELECT release.id AS release_id,payload.payload_json,payload.object_key,payload.content_hash
+    FROM current_releases current JOIN releases release ON release.id=current.release_id
+    JOIN release_payloads payload ON payload.release_id=release.id AND payload.kind='board'
+    WHERE current.market_id='omaha'`).first<{ release_id: string; payload_json: string; object_key: string | null; content_hash: string }>();
+  if (!row) throw new Error("current Omaha legacy board is missing");
+  const board = row.object_key ? await env.EVIDENCE.get(row.object_key).then((object) => object?.json()) : JSON.parse(row.payload_json);
+  if (!board) throw new Error("current Omaha legacy board payload is unavailable");
+  return { releaseId: row.release_id, boardHash: row.content_hash, board };
+}
+
+app.post("/internal/v4/backfill/initialize", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may initialize catalog backfill", 403);
+  try { return context.json({ ok: true, ...await initializeCatalogBackfill(context.env.DB, await currentLegacyBoardForBackfill(context.env)) }, 201); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "catalog backfill initialization failed", 409); }
+});
+
+app.post("/internal/v4/backfill/import", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may import catalog backfill", 403);
+  try {
+    const body: { offset?: number; limit?: number } = await context.req.json<{ offset?: number; limit?: number }>().catch(() => ({}));
+    const offset = Math.max(0, Number(body.offset ?? 0));
+    const limit = Math.min(50, Math.max(1, Number(body.limit ?? 25)));
+    if (!Number.isInteger(offset) || !Number.isInteger(limit)) return jsonError("backfill page must use integer offset and limit", 400);
+    return context.json({ ok: true, ...await importCatalogBackfillPage(context.env.DB, { ...await currentLegacyBoardForBackfill(context.env), offset, limit }) });
+  } catch (error) { return jsonError(error instanceof Error ? error.message : "catalog backfill import failed", 409); }
+});
+
+app.get("/internal/v4/backfill/progress", async (context) => {
+  const progress = await catalogBackfillProgress(context.env.DB, context.req.query("runId"));
+  return progress ? context.json({ ok: true, ...progress }) : jsonError("catalog backfill run not found", 404);
+});
+
+app.post("/internal/v4/backfill/claim", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may claim catalog backfill", 403);
+  try {
+    const body = await context.req.json<{ agentId: string; owner: string; limit?: number; leaseSeconds?: number }>();
+    if (!body.agentId?.startsWith("omaha-price-producer-") || !body.owner) return jsonError("backfill claim requires a producer agent and owner", 400);
+    const workItems = await claimCatalogBackfillBatch(context.env.DB, { agentId: body.agentId, owner: body.owner,
+      limit: Math.min(50, Math.max(1, Number(body.limit ?? 50))), leaseSeconds: Number(body.leaseSeconds ?? 900) });
+    return context.json({ ok: true, workItems });
+  } catch (error) { return jsonError(error instanceof Error ? error.message : "catalog backfill claim failed", 409); }
 });
 
 app.post("/internal/v4/ingredients/stage", async (context) => {

@@ -94,3 +94,18 @@ See `docs/HARDENING-STATUS.md` for the implementation and retirement boundary.
 Phase 0 baseline is recorded with verified checkpoint `checkpoint_2026-08-14-8abc7c94-aa90-414b-b8ba-8a2c6c75017f`; the two current V2 origins agreed before implementation. The additive V4 schema, flags-off code, store-agent registry, direct per-ingredient publisher, exact dependency resume, Node supervisor, challenge callback, benchmark, and distinct recipe verifier are locally implemented. Clean migration replay through 0073, registry/config/schedule checks, live ChatGPT verifier evaluation, typechecks, 476 tests, dry-run production builds, and PowerShell parser checks pass.
 
 Production traffic remains on V3. The V4 flags remain `off`; the pending publication job is preserved. UI/V2 cutover and legacy-writer enforcement are prohibited until current-board backfill and semantic parity pass, followed by shadow store comparison, one- and ten-ingredient canaries, the complete recipe-to-publication flow, the release-blocking 30-item benchmark, two-origin verification, and a rollback drill. The 30-day read-only legacy soak begins only after those gates pass; no retirement date is approved yet.
+
+### Truthful current-board backfill
+
+Migration 0075 stages the current V2 board without converting missing display cells into availability claims. A row whose observation is still the exact priced `release_cells` member is recorded as `priced_provenance_recovered`; an absent cell is recorded only as non-public `legacy_unknown`. Neither state is terminal V4 evidence. Every ingredient/store/definition tuple receives one deduplicated producer work item, and independent verifier work is required before a cell can become `terminal_verified`.
+
+Operators page the import to keep D1 requests bounded:
+
+```text
+pnpm tc ingredient backfill-v4 initialize
+pnpm tc ingredient backfill-v4 import 0 25
+pnpm tc ingredient backfill-v4 progress
+pnpm tc ingredient backfill-v4 claim <producer-agent-id> <owner> 50
+```
+
+The progress response deliberately reports `semanticParity` and `terminalEvidenceReadiness` separately. `promotionAllowed` is true only when the exact expected cell count is present and every cell is independently terminal-verified; extra, partial, mixed, challenged, stale, or `legacy_unknown` evidence fails closed. Import and capture may run with all public V4 flags off, but no V4 public pointer or UI route may be enabled from backfill staging data.
