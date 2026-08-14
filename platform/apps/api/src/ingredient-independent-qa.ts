@@ -1,5 +1,5 @@
 import { ingredientStoreCaptureResultSchema, ingredientStoreQaCompleteSchema } from "@thriftycrew/contracts";
-import { deterministicId, digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
+import { deterministicId, digestHex, isClearlyIngredientDerivative, isClearlyNonFoodIngredientProduct, matchesIngredientCommodityExclusion, normalizeName, stableJson } from "@thriftycrew/domain";
 import type { z } from "zod";
 import type { WorkerEnv } from "./env";
 import { sealAggregateIfTerminal } from "./ingredient-pricing-v2";
@@ -192,7 +192,7 @@ export async function completeIngredientStoreQa(env: Pick<WorkerEnv, "DB" | "EVI
     const complete = new Set(terms.filter(isCompleteVerificationTerm)
       .map((item: Record<string, unknown>) => String(item.query).trim().toLowerCase()));
     if (!(captured.queryTerms ?? []).every((term) => complete.has(term.trim().toLowerCase()))) throw new Error("independent verifier did not reproduce complete no-match coverage");
-    const proposal = JSON.parse(String(row.commodity_proposal_json ?? "null")) as { include?: string[]; exclude?: string[] } | null;
+    const proposal = JSON.parse(String(row.commodity_proposal_json ?? "null")) as { id?: string; include?: string[]; exclude?: string[] } | null;
     if (!proposal || !Array.isArray(proposal.include) || !Array.isArray(proposal.exclude)) throw new Error("QA lacks the locked ingredient definition");
     const include = proposal.include.map((pattern) => new RegExp(pattern.replace(/^\(\?i\)/, ""), "i"));
     const exclude = proposal.exclude.map((pattern) => new RegExp(pattern.replace(/^\(\?i\)/, ""), "i"));
@@ -202,7 +202,11 @@ export async function completeIngredientStoreQa(env: Pick<WorkerEnv, "DB" | "EVI
       const availability = offer.availability ?? {};
       const price = Number(offer.purchasePriceMinor ?? item?._capture?.visible?.priceMinor);
       const size = String(offer.sizeText ?? item.size ?? "").trim();
+      const taxonomy = String(item.taxonomy_path ?? item.taxonomy ?? "");
       return include.some((rule) => rule.test(name)) && !exclude.some((rule) => rule.test(name))
+        && !isClearlyNonFoodIngredientProduct(name, taxonomy)
+        && !isClearlyIngredientDerivative(String(proposal.id ?? ""), name)
+        && !matchesIngredientCommodityExclusion(proposal.exclude ?? [], name, size)
         && availability.eligible === true && availability.status === "in_stock" && Number.isSafeInteger(price) && price > 0 && size.length > 0;
     });
     if (eligibleLike) throw new Error("independent verifier found an eligible exact candidate in the repeated result envelope");

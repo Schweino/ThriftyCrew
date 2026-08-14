@@ -1,9 +1,20 @@
 import { describe, expect, it } from "vitest";
-import { assertObservationArithmetic, canonicalProductUrl, expectedPerUnitMicros, expectedProductIdentityFingerprint, normalizeName, productIdentityPass, semanticOfferFact, semanticProductVersion, stableJson } from "./index";
+import { assertObservationArithmetic, canonicalProductUrl, expectedPerUnitMicros, expectedProductIdentityFingerprint, isClearlyIngredientDerivative, isClearlyNonFoodIngredientProduct, matchesIngredientCommodityExclusion, normalizeName, productIdentityPass, semanticOfferFact, semanticProductVersion, stableJson } from "./index";
 
 describe("domain invariants", () => {
   it("normalizes product identity without punctuation drift", () => {
     expect(normalizeName("Member's Mark, 48 OZ. & More")).toBe("member s mark 48 oz and more");
+  });
+
+  it("rejects prepared derivatives and non-food lookalikes from ingredient pricing", () => {
+    expect(isClearlyIngredientDerivative("green-chilli", "Pueblo Lindo Chopped Green Chiles")).toBe(true);
+    expect(isClearlyIngredientDerivative("saffron", "Mahatma Saffron Rice")).toBe(true);
+    expect(isClearlyNonFoodIngredientProduct("Saffron Eau de Parfum Spray")).toBe(true);
+  });
+
+  it("applies locked package-form exclusions as well as product-name exclusions", () => {
+    expect(matchesIngredientCommodityExclusion(["(?i)\\bcanned\\b"], "Green Chiles", "4 oz can")).toBe(true);
+    expect(matchesIngredientCommodityExclusion(["(?i)\\bcanned\\b"], "Fresh Green Chilli", "8 oz bag")).toBe(false);
   });
 
   it("computes integer per-unit money", () => {

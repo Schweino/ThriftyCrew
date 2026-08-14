@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { ingredientStoreCaptureResultSchema, ingredientStoreQaCompleteSchema } from "@thriftycrew/contracts";
-import { digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
+import { digestHex, isClearlyIngredientDerivative, isClearlyNonFoodIngredientProduct, matchesIngredientCommodityExclusion, normalizeName, stableJson } from "@thriftycrew/domain";
 import type { z } from "zod";
 
 type CapturePayload = z.infer<typeof ingredientStoreCaptureResultSchema>;
@@ -41,27 +41,12 @@ const STORE = {
 
 const MASS_GRAMS: Record<string, number> = { oz: 28.349523125, lb: 453.59237, gram: 1, kg: 1000 };
 const VOLUME_ML: Record<string, number> = { fl_oz: 29.5735295625, ml: 1, liter: 1000, gal: 3785.411784, qt: 946.352946, pt: 473.176473 };
-const NON_FOOD_PRODUCT = /\b(?:wax\s+melts?|candles?|air\s+fresheners?|fragrance|perfumes?|eau\s+de\s+parfum|colognes?|potpourri|diffusers?|essential\s+oils?|soaps?|shampoos?|conditioners?|hair\s+(?:care|mask|treatment)|body\s+wash|lotions?|moisturizers?|serums?|cosmetics?|pet\s+food|dog\s+treats?|cat\s+treats?|craft|decor)\b/i;
-
 export function isClearlyNonFoodProduct(name: string, taxonomy = ""): boolean {
-  return NON_FOOD_PRODUCT.test(`${name} ${taxonomy}`);
+  return isClearlyNonFoodIngredientProduct(name, taxonomy);
 }
 
 export function isClearlyDerivativeProduct(commodityId: string, name: string): boolean {
-  if (/pistachios?/.test(commodityId)) {
-    return /\b(?:frosting|muffins?|cakes?|cookies?|pudding|ice\s+cream|gelato|butter|cream|paste|spread|cereal|granola|chocolate|flavor(?:ed|ing)?)\b/i.test(name);
-  }
-  // Ingredient identity must describe the requested commodity itself, not a
-  // prepared food that happens to mention it. Locked exclusions remain the
-  // primary definition, while these high-risk whole-commodity guards fail
-  // closed across retailers when catalog titles omit words such as "canned".
-  if (/green-chilli/.test(commodityId)) {
-    return /\b(?:tomatoes?|salsa|sauces?|soups?|stews?|meals?|rice|seasoning|diced|chopped|roasted)\b/i.test(name);
-  }
-  if (/saffron/.test(commodityId)) {
-    return /\b(?:rice|tea|seasonings?|extract|supplements?|color(?:ing)?)\b/i.test(name);
-  }
-  return false;
+  return isClearlyIngredientDerivative(commodityId, name);
 }
 
 function sha(value: unknown): string {
@@ -101,14 +86,7 @@ function regexes(patterns: string[]): RegExp[] {
 }
 
 export function matchesCommodityExclusion(patterns: string[], productName: string, packageText = ""): boolean {
-  if (regexes(patterns).some((rule) => rule.test(productName))) return true;
-  const joined = `${productName} ${packageText}`;
-  return patterns.some((pattern) => {
-    const normalized = pattern.toLowerCase().replace(/\\b|\\s\+|\(\?:|[()^$?+*|[\]{}]/g, " ").replace(/[^a-z]+/g, " ").trim();
-    if (/\bcanned\b/.test(normalized) && /\b(?:can|cans|canned)\b/i.test(joined)) return true;
-    if (/\bdried\b/.test(normalized) && /\b(?:dry|dried)\b/i.test(joined)) return true;
-    return false;
-  });
+  return matchesIngredientCommodityExclusion(patterns, productName, packageText);
 }
 
 function rowIdentity(row: Record<string, unknown>) {
