@@ -55646,5 +55646,34 @@
       "\\bground\\s+cinnamon\\b",
       "\\bcinnamon\\s+(?:powder|sugar|candy|tea)\\b"
     ]
+  },
+  {
+    "id": "garlic-herb-seasoning",
+    "label": "Garlic Herb Seasoning",
+    "unit": "oz",
+    "include": [
+      "\\bgarlic\\s*(?:&|and)?\\s*herb(?:s)?\\s+seasoning(?:\\s+blend)?\\b",
+      "\\b(?:roasted\\s+)?garlic\\s*(?:&|and)\\s*herb(?:s)?\\b(?:\\s+seasoning(?:\\s+blend)?)?\\s*$"
+    ],
+    "exclude": [
+      "garlic salt",
+      "seasoned salt",
+      "butter seasoning",
+      "marinade",
+      "sauce",
+      "dressing"
+    ]
+  },
+  {
+    "id": "lemon-pepper-seasoning",
+    "label": "Lemon Pepper Seasoning",
+    "unit": "oz",
+    "include": [
+      "\\blemon\\s*(?:&|and)?\\s*pepper(?:\\s+(?:seasoning|seasoning blend|spice blend))?\\b"
+    ],
+    "exclude": [
+      "\\blemon pepper\\s+(?:sauce|marinade|dressing|wings?|chicken|fish|tuna|rice|pasta|chips?|crackers?|nuts?)\\b",
+      "\\blemon[\\s-]+peppercorn\\b"
+    ]
   }
 ]
