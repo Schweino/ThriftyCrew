@@ -84,6 +84,16 @@ export function evaluateAisleFamilyEvidence(
   return { status: "rejected", examined: true, taxonomyPath, reason: `store shelf taxonomy identifies ${observedFamily}, contradicting the ${expectedFamily} commodity family` };
 }
 
+/**
+ * A successful authored name-rule match remains rule-authoritative. Shelf
+ * taxonomy may corroborate it or reject it before this point, but confirmation
+ * does not transfer authority to a different observation field.
+ */
+export function authoredRuleMatchAuthority(verdict: AisleVerdict): "rule" {
+  if (verdict.status === "rejected") throw new Error("rejected aisle evidence cannot authorize an authored rule match");
+  return "rule";
+}
+
 export function evaluateAisleEvidence(
   taxonomyPath: string | undefined,
   allowedPatterns: readonly string[],

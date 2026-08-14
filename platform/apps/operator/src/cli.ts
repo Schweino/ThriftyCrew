@@ -12,7 +12,7 @@ import { buildNativeRelease, loadNativeReleaseCatalog, nativeReleaseIdentity } f
 import type { ContentAddressedReleaseGraph } from "@thriftycrew/daily/release-graph";
 import { digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 import { generateLegacyConfiguration } from "./config";
-import { buildNativeParityReport, compileProductMatcher, decodeNativeEngineSnapshot, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot, type TupleEncodedNativeEngineSnapshot } from "@thriftycrew/engine";
+import { authoredRuleMatchAuthority, buildNativeParityReport, compileProductMatcher, decodeNativeEngineSnapshot, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot, type TupleEncodedNativeEngineSnapshot } from "@thriftycrew/engine";
 import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
 import { checkAgentRegistry, readAgentRegistry } from "./agents";
 import { browserCaptureCycleStatus, captureQueueStatus, compactPromotedCaptureQueue, defaultCaptureQueueRoot, enqueueCapture, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
@@ -299,7 +299,11 @@ function classifyProduct(product: MatchProductRow, configurationId: string, matc
     productId: product.product_id,
     commodityId: outcome.commodityId,
     configurationId,
-    decidedBy: aisle.status === "confirmed" ? "aisle" : "rule",
+    // The authored name rule makes the match. Shelf taxonomy can reject that
+    // match or corroborate it, but it is not the decision authority. Calling a
+    // corroborated rule match "aisle" incorrectly requires every later price
+    // observation for the product to repeat the taxonomy payload.
+    decidedBy: authoredRuleMatchAuthority(aisle),
     reason: `Authored first-match rule precedence${product.taxonomy_path ? `; shelf taxonomy examined: ${aisle.reason}` : "; no shelf taxonomy supplied"}`,
   } };
 }

@@ -244,7 +244,9 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
             x.band_min_micros, x.band_max_micros,
             EXISTS(
               SELECT 1 FROM match_decisions aisle
-               WHERE aisle.product_id = p.id AND aisle.superseded_at IS NULL AND aisle.decided_by = 'aisle'
+               WHERE aisle.product_id = p.id
+                 AND aisle.configuration_id = r.configuration_id
+                 AND aisle.decided_by = 'aisle'
             ) AS aisle_authoritative,
             (
               SELECT k.id FROM known_wrong_rules k

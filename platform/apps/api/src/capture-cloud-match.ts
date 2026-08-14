@@ -1,5 +1,5 @@
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
-import { compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily } from "@thriftycrew/engine";
+import { authoredRuleMatchAuthority, compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily } from "@thriftycrew/engine";
 import type { WorkerEnv } from "./env";
 import { archiveConfiguration, verifyConfigurationArchive } from "./configuration-archive";
 import { reconcileInactiveConfigurationDecisions } from "./match-decision-reconciliation";
@@ -111,7 +111,10 @@ export async function runCloudCaptureMatch(env: WorkerEnv, batchId: string, pin:
       aisleRejected.push({ productId: product.product_id, name: product.name, commodityId: outcome.commodityId, taxonomyPath: product.taxonomy_path, reason: aisle.reason });
       continue;
     }
-    decisions.push({ productId: product.product_id, commodityId: outcome.commodityId, decidedBy: aisle.status === "confirmed" ? "aisle" : "rule", reason: `Cloud-authored first-match precedence${product.taxonomy_path ? `; shelf taxonomy examined: ${aisle.reason}` : "; no shelf taxonomy supplied"}` });
+    // The authored name rule is authoritative. Taxonomy is independent
+    // corroborating/rejecting evidence and must not turn the product-level
+    // match into a requirement on every later observation version.
+    decisions.push({ productId: product.product_id, commodityId: outcome.commodityId, decidedBy: authoredRuleMatchAuthority(aisle), reason: `Cloud-authored first-match precedence${product.taxonomy_path ? `; shelf taxonomy examined: ${aisle.reason}` : "; no shelf taxonomy supplied"}` });
   }
   const inputHash = await digestHex(stableJson({
     batchId, sourceId: batch.source_id, configurationId: configuration.id, configurationHash: configuration.content_hash,

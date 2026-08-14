@@ -1,8 +1,15 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { buildNativeCells, buildNativeParityReport, candidatePriceForUnit, convertUnitPriceMicros, evaluateAisleEvidence, evaluateAisleFamilyEvidence, guardResult, matchProductName, selectWinner, sourceNativeSizeConflict } from "./index";
+import { authoredRuleMatchAuthority, buildNativeCells, buildNativeParityReport, candidatePriceForUnit, convertUnitPriceMicros, evaluateAisleEvidence, evaluateAisleFamilyEvidence, guardResult, matchProductName, selectWinner, sourceNativeSizeConflict } from "./index";
 
 describe("matching", () => {
+  it("keeps a taxonomy-confirmed authored match rule-authoritative", () => {
+    const confirmed = evaluateAisleFamilyEvidence("meat/seafood/frozen", "food");
+    expect(confirmed.status).toBe("confirmed");
+    expect(authoredRuleMatchAuthority(confirmed)).toBe("rule");
+    expect(() => authoredRuleMatchAuthority({ status: "rejected", examined: true, taxonomyPath: "household/cleaners", reason: "wrong family" })).toThrow(/cannot authorize/);
+  });
+
   it("ports the authored .NET inline case-insensitive prefix", () => {
     expect(matchProductName("Del Monte Sliced Pears", [{ commodityId: "pears", includes: ["pears"], excludes: ["(?i)^.*sliced.*pears"], priority: 1 }]).status).toBe("unmatched");
   });
