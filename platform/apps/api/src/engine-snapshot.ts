@@ -61,6 +61,19 @@ export function snapshotIncludesRawCandidates(profile: EngineSnapshotProfile): b
   return profile === "release";
 }
 
+export async function materializedSnapshotInputHash(
+  baseInputHash: string,
+  shards: readonly Pick<EngineSnapshotShardRow, "batch_id" | "match_run_id" | "content_hash">[],
+): Promise<string> {
+  return await digestHex(stableJson({
+    schema: "materialized-engine-snapshot-v1",
+    baseInputHash,
+    shards: [...shards]
+      .sort((left, right) => left.batch_id.localeCompare(right.batch_id))
+      .map((shard) => [shard.batch_id, shard.match_run_id, shard.content_hash]),
+  }));
+}
+
 export function partitionSnapshotCandidateRows<T extends { commodity_id?: unknown }>(rows: readonly T[], includeRaw: boolean) {
   const candidates: T[] = [];
   const unmatchedRawCandidates: T[] = [];
@@ -318,10 +331,13 @@ export async function readEngineSnapshotManifest(env: WorkerEnv, mode: EngineSou
   const verification = await Promise.all(rows.results.map(async (row) => ({ row, verified: await verifiedShardObject(env, row) })));
   const verified = verification.filter((item) => item.verified).map((item) => item.row);
   const byBatch = new Map(verified.map((row) => [row.batch_id, row]));
+  const materializedInputHash = verified.length === context.batches.length
+    ? await materializedSnapshotInputHash(context.inputHash, verified)
+    : context.inputHash;
   const { configurationHash: _configurationHash, ...identity } = context;
   return {
     ok: true, version: 1, transportEncoding: "r2-shards-v1" as const, shardSchemaVersion: SHARD_SCHEMA_VERSION,
-    ...identity, ...dimensions, shards: context.batches.flatMap((batch) => byBatch.has(batch.id) ? [byBatch.get(batch.id)!] : []),
+    ...identity, inputHash: materializedInputHash, ...dimensions, shards: context.batches.flatMap((batch) => byBatch.has(batch.id) ? [byBatch.get(batch.id)!] : []),
     missingBatchIds: context.batches.filter((batch) => !byBatch.has(batch.id)).map((batch) => batch.id),
   };
 }

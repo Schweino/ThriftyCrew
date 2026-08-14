@@ -378,7 +378,7 @@ export async function buildNativeRelease(
         .sort((left, right) => left.observation_id.localeCompare(right.observation_id));
       const observedAtMillis = Date.parse(snapshot.observedAt);
       const dependencyHash = await digestHex(stableJson({
-        version: "commodity-store-cell-dag-v2", commodity, storeLocationId: store.id,
+        version: "commodity-store-cell-dag-v3", commodity, storeLocationId: store.id,
         candidates: storeCandidates.map((candidate) => ({
           observationId: candidate.observation_id,
           perUnitMicros: candidate.per_unit_micros, basisUnit: candidate.normalized_basis_unit,
