@@ -52,7 +52,7 @@ describe("configuration deployment", () => {
   });
 
   it("repairs cloned commodities whose durable fingerprint differs from source control", async () => {
-    const request = vi.fn(async (pathname: string) => {
+    const request = vi.fn(async (pathname: string, _options?: unknown) => {
       if (pathname === "/internal/configurations") return { active: false };
       if (pathname.endsWith("/clone-active")) return { commodityIds: ["drifted"], commodityFingerprints: { drifted: "stale" } };
       return { ok: true };
