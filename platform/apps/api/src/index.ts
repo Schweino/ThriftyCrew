@@ -732,6 +732,11 @@ app.put("/internal/configurations/:id/commodities", zValidator("json", configura
   const statements: D1PreparedStatement[] = [];
   for (const commodity of context.req.valid("json").commodities) {
     statements.push(context.env.DB.prepare(
+      `DELETE FROM configuration_match_rules
+        WHERE configuration_id = ?1
+          AND definition_id IN (SELECT id FROM match_rule_definitions WHERE commodity_id = ?2)`,
+    ).bind(configurationId, commodity.id));
+    statements.push(context.env.DB.prepare(
       `INSERT INTO commodities (id, configuration_id, label, basis_unit, category_id, band_min_micros, band_max_micros, match_priority)
        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
        ON CONFLICT(id, configuration_id) DO UPDATE SET
@@ -944,8 +949,31 @@ app.post("/internal/configurations/:id/clone-active", async (context) => {
     VALUES (?1,?2,?3,?4,?5,?6,?7,?8)`).bind(await deterministicId("known-wrong-clone", configurationId, stableJson(rule)), configurationId,
     rule.commodity_id, rule.store_location_id, rule.external_product_key, rule.normalized_name, rule.ruling, rule.evidence)));
   for (let offset = 0; offset < statements.length; offset += 90) await context.env.DB.batch(statements.slice(offset, offset + 90));
-  const cloned = await context.env.DB.prepare("SELECT id FROM commodities WHERE configuration_id = ?1 ORDER BY id").bind(configurationId).all<{ id: string }>();
-  return context.json({ ok: true, configurationId, sourceConfigurationId: source.id, commodityIds: cloned.results.map((row) => row.id), idempotent: false });
+  const cloned = await context.env.DB.prepare(
+    `SELECT commodity.id, commodity.label, commodity.basis_unit, commodity.category_id,
+            commodity.band_min_micros, commodity.band_max_micros, commodity.match_priority,
+            definition.kind, definition.pattern
+       FROM commodities commodity
+       LEFT JOIN configuration_match_rules link
+         ON link.configuration_id = commodity.configuration_id
+       LEFT JOIN match_rule_definitions definition ON definition.id = link.definition_id
+      WHERE commodity.configuration_id = ?1
+      ORDER BY commodity.id, definition.kind, definition.pattern`,
+  ).bind(configurationId).all<Record<string, unknown>>();
+  const fingerprints: Record<string, string> = {};
+  const grouped = new Map<string, { commodity: Record<string, unknown>; include: string[]; exclude: string[] }>();
+  for (const row of cloned.results) {
+    const id = String(row.id);
+    const entry = grouped.get(id) ?? { commodity: { id, label: row.label, basisUnit: row.basis_unit, categoryId: row.category_id,
+      bandMinMicros: row.band_min_micros, bandMaxMicros: row.band_max_micros, matchPriority: row.match_priority }, include: [], exclude: [] };
+    if (row.kind === "include") entry.include.push(String(row.pattern));
+    if (row.kind === "exclude") entry.exclude.push(String(row.pattern));
+    grouped.set(id, entry);
+  }
+  for (const [id, entry] of grouped) fingerprints[id] = await digestHex(stableJson({ ...entry.commodity,
+    include: [...entry.include].sort(), exclude: [...entry.exclude].sort() }));
+  return context.json({ ok: true, configurationId, sourceConfigurationId: source.id,
+    commodityIds: [...grouped.keys()].sort(), commodityFingerprints: fingerprints, idempotent: false });
 });
 
 app.post("/internal/match-decisions/reconcile-inactive", async (context) => {

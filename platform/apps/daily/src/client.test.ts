@@ -50,6 +50,20 @@ describe("configuration deployment", () => {
     const commodityPayload = request.mock.calls.find(([pathname]) => String(pathname).endsWith("/commodities"))?.[1] as { json: { commodities: Array<{ id: string }> } };
     expect(commodityPayload.json.commodities.map((commodity) => commodity.id)).toEqual(["new-item"]);
   });
+
+  it("repairs cloned commodities whose durable fingerprint differs from source control", async () => {
+    const request = vi.fn(async (pathname: string) => {
+      if (pathname === "/internal/configurations") return { active: false };
+      if (pathname.endsWith("/clone-active")) return { commodityIds: ["drifted"], commodityFingerprints: { drifted: "stale" } };
+      return { ok: true };
+    });
+    const configuration = { id: "cfg_repair", sourceCommit: "test", contentHash: "b".repeat(64), categories: [], knownWrong: [], commodities: [
+      { id: "drifted", label: "Drifted", unit: "oz", categoryId: "pantry", include: ["new exact rule"], exclude: ["wrong form"] },
+    ] } as unknown as CurrentBridgeArtifact["configuration"];
+    await deployConfigurationDelta({ request } as unknown as MutationClient, configuration, []);
+    const payload = request.mock.calls.find(([pathname]) => String(pathname).endsWith("/commodities"))?.[1] as { json: { commodities: Array<{ id: string }> } };
+    expect(payload.json.commodities.map((commodity) => commodity.id)).toEqual(["drifted"]);
+  });
 });
 
 describe("direct capture observation deduplication", () => {

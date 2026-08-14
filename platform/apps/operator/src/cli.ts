@@ -533,7 +533,12 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
   const scopedStatus = await execFileAsync("git", ["-C", incomeRoot, "status", "--porcelain", "--",
     "platform/config/commodities.json", "platform/config/categories.json", "platform/config/manifest.json",
     "grocery/commodities.json", "grocery/categories.json", "grocery/commodity-search.json"]);
-  if (scopedStatus.stdout.trim()) throw new Error("ingredient publication requires clean authoritative commodity files");
+  if (scopedStatus.stdout.trim()) {
+    await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(sealed.batchId)}/fail-predeployment`, {
+      json: { detail: "ingredient publication requires clean authoritative commodity files" },
+    });
+    throw new Error("ingredient publication requires clean authoritative commodity files; sealed batch failed durably for retry");
+  }
   const worktreeRoot = await mkdtemp(path.join(os.tmpdir(), `tc-ingredient-publish-${sealed.batchId}-`));
   const retrySuffix = path.basename(worktreeRoot).slice(-6).toLowerCase();
   const branch = `ingredient-publish/${sealed.batchId}-${retrySuffix}`;

@@ -527,10 +527,25 @@ export async function deployConfigurationDelta(client: MutationClient, config: C
   } });
   let activation: Record<string, unknown> | null = null;
   if (configuration.active !== true) {
-    const clone = await client.request(`/internal/configurations/${config.id}/clone-active`, { method: "POST" }) as { commodityIds?: string[] };
+    const clone = await client.request(`/internal/configurations/${config.id}/clone-active`, { method: "POST" }) as {
+      commodityIds?: string[];
+      commodityFingerprints?: Record<string, string>;
+    };
     const clonedCommodityIds = new Set(clone.commodityIds ?? []);
+    const desiredFingerprints = new Map(await Promise.all(config.commodities.map(async (commodity) => [commodity.id, await digestHex(stableJson({
+      id: commodity.id,
+      label: commodity.label,
+      basisUnit: apiBasisUnit(commodity.unit),
+      categoryId: commodity.categoryId,
+      bandMinMicros: commodity.band_min === undefined ? null : Math.round(commodity.band_min * 1_000_000),
+      bandMaxMicros: commodity.band_max === undefined ? null : Math.round(commodity.band_max * 1_000_000),
+      matchPriority: config.commodities.length - config.commodities.indexOf(commodity),
+      include: [...commodity.include].sort(),
+      exclude: [...commodity.exclude].sort(),
+    }))] as const)));
     const changed = new Set([...changedCommodityIds,
-      ...config.commodities.filter((commodity) => !clonedCommodityIds.has(commodity.id)).map((commodity) => commodity.id)]);
+      ...config.commodities.filter((commodity) => !clonedCommodityIds.has(commodity.id)
+        || (clone.commodityFingerprints && clone.commodityFingerprints[commodity.id] !== desiredFingerprints.get(commodity.id))).map((commodity) => commodity.id)]);
     const commodities = config.commodities.filter((commodity) => changed.has(commodity.id));
     for (const commodityChunk of chunks(commodities, 20)) {
       await client.request(`/internal/configurations/${config.id}/commodities`, { method: "PUT", json: {
