@@ -11793,6 +11793,7 @@
     "include": [
       "aluminum\\s+foil",
       "aluminum\\b.{0,20}\\bfoil",
+      "\\bfoil\\b.{0,30}\\baluminum\\b",
       "\\bfoil\\b.{0,15}(?:roll|sq)"
     ],
     "exclude": [
