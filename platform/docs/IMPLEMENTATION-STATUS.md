@@ -108,7 +108,7 @@ pnpm tc ingredient backfill-v4 initialize
 pnpm tc ingredient backfill-v4 import <run-id> 0 25
 pnpm tc ingredient backfill-v4 progress <run-id>
 pnpm tc ingredient backfill-v4 claim <producer-agent-id> <owner> <adaptive-limit-5-to-10> <claim-output.json>
-pnpm tc ingredient backfill-v4 heartbeat <owner> 900
+pnpm tc ingredient backfill-v4 heartbeat <owner> 900 <refreshed-claim.json>
 pnpm tc ingredient backfill-v4 producer-submit <lease-fenced-adapter-artifact.json>
 pnpm tc ingredient backfill-v4 verifier-submit <independent-adapter-artifact.json>
 pnpm tc ingredient backfill-v4 submit-claim <producer|verifier> <claim.json> <adapter-chunk.json> <generation-prefix> <session-prefix> <wrapper-output.json>
@@ -116,6 +116,8 @@ pnpm tc ingredient backfill-v4 requeue <run-id> <commodity-id> <store-id> <adjud
 ```
 
 `submit-claim` is the batch-safe path for both lanes. It rejects expired/mixed claims, duplicate-label ambiguity, and chunks with duplicate or out-of-claim queries/rows; selects only the rolling chunk subset whose work items have their complete locked query plan; derives one generation/session-fenced wrapper per lease; writes the complete wrapper artifact before mutation; then submits each wrapper immediately. Fareway can therefore submit one term at a time while other lanes use fresh 5–10-term chunks. A verifier must use its own verifier claim, a later independently captured chunk, and different generation/session prefixes.
+
+`heartbeat` renews only the exact authenticated lane owner's unexpired work and atomically returns that owner's current fenced rows. Supplying the output path rewrites a mapper-compatible claim snapshot with the renewed `lease_generation` and `lease_expires_at`; no second claim or wait for expiry is required, and another owner's rows are never included.
 
 A `needs_operator` or `challenged` cell is recoverable only after an actual typed resolution. `adapter_repaired` means the deployed adapter now preserves the previously missing immutable raw/source facts; `challenge_resolved` records an acknowledged retailer challenge resolution. Free-form reason text never excludes a candidate. Requeue is idempotent by adjudication ID, retains the prior work identity, and creates a new dedupe/lease/generation fence that must capture fresh checked evidence; old evidence is retained and can never be reused as the verifier pass.
 

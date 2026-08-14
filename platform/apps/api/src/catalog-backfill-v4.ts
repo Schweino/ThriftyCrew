@@ -181,14 +181,18 @@ export async function claimCatalogBackfillBatch(db: D1Database, input: {
 
 export async function heartbeatCatalogBackfillOwner(db: D1Database, input: { owner: string; leaseSeconds: number }) {
   const leaseSeconds = Math.min(3600, Math.max(60, input.leaseSeconds));
-  const result = await db.prepare(`UPDATE pipeline_agent_work_items_v4
+  const workItems = (await db.prepare(`UPDATE pipeline_agent_work_items_v4
     SET lease_expires_at=datetime('now',?2),heartbeat_at=CURRENT_TIMESTAMP,state='running'
     WHERE lease_owner=?1 AND entity_type='catalog_backfill_cell' AND state IN ('claimed','running')
-      AND lease_expires_at>CURRENT_TIMESTAMP`)
-    .bind(input.owner, `+${leaseSeconds} seconds`).run();
-  const renewed = Number(result.meta.changes ?? 0);
+      AND lease_expires_at>CURRENT_TIMESTAMP
+    RETURNING *`)
+    .bind(input.owner, `+${leaseSeconds} seconds`).all<Record<string, unknown>>()).results;
+  const renewed = workItems.length;
   if (renewed === 0) throw new Error("backfill owner has no unexpired claimed work");
-  return { owner: input.owner, renewed, leaseSeconds };
+  workItems.sort((left, right) => Number(left.priority ?? 0) - Number(right.priority ?? 0)
+    || String(left.available_at ?? "").localeCompare(String(right.available_at ?? ""))
+    || String(left.id ?? "").localeCompare(String(right.id ?? "")));
+  return { owner: input.owner, renewed, leaseSeconds, workItems };
 }
 
 export async function requeueCatalogBackfillCell(db: D1Database, input: {

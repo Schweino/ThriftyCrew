@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { assertFreshBackfillEvidence, assertFrozenBackfillReproduction, assertIndependentBackfillEvidence, assertLegacyBoard,
-  catalogBackfillPromotionAllowed, deriveCatalogBackfillCapture } from "./catalog-backfill-v4";
+  catalogBackfillPromotionAllowed, deriveCatalogBackfillCapture, heartbeatCatalogBackfillOwner } from "./catalog-backfill-v4";
 import { requeueCatalogBackfillCell } from "./catalog-backfill-v4";
 
 const identity = { canonicalName: "Bananas", displayName: "Bananas", acceptedForms: ["Bananas"], excludedForms: ["chips"], basisUnit: "lb" };
@@ -158,5 +158,24 @@ describe("truthful V4 catalog backfill", () => {
     await expect(requeueCatalogBackfillCell(db, { runId: "run", commodityId: "bananas", storeLocationId: "walmart-omaha",
       adjudicationId: "adapter-fix-1", resolutionType: "adapter_repaired", reason: "adapter now preserves complete raw pickup facts" }))
       .resolves.toEqual({ workItemId: "work_repaired", adjudicationId: "adapter-fix-1", state: "queued", idempotent: true });
+  });
+
+  it("returns a refreshed heartbeat snapshot for the exact owner without cross-owner leakage", async () => {
+    const rows = [
+      { id: "owned", lease_owner: "v4-backfill-walmart-owner", state: "running", agent_id: "omaha-price-producer-walmart" },
+      { id: "foreign", lease_owner: "v4-backfill-aldi-owner", state: "running", agent_id: "omaha-price-producer-aldi" },
+    ];
+    const statements: Array<{ sql: string; bound: unknown[] }> = [];
+    const db = { prepare(sql: string) {
+      const statement = { sql, bound: [] as unknown[] };
+      statements.push(statement);
+      return { bind(...values: unknown[]) { statement.bound = values; return this; },
+        async all() { return { results: rows.filter((row) => row.lease_owner === statement.bound[0]) }; } };
+    } } as unknown as D1Database;
+    await expect(heartbeatCatalogBackfillOwner(db, { owner: "v4-backfill-walmart-owner", leaseSeconds: 900 }))
+      .resolves.toMatchObject({ renewed: 1, workItems: [{ id: "owned", lease_owner: "v4-backfill-walmart-owner" }] });
+    expect(statements[0]?.sql).toContain("WHERE lease_owner=?1");
+    expect(statements[0]?.sql).toContain("RETURNING *");
+    expect(statements[0]?.bound).toEqual(["v4-backfill-walmart-owner", "+900 seconds"]);
   });
 });
