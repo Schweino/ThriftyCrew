@@ -16,6 +16,17 @@ export const catalogIngredientIdentitySchema = z.object({
   aliases: z.array(z.string().trim().min(1).max(300)).max(200),
   acceptedForms: z.array(z.string().trim().min(1).max(300)).max(100),
   excludedForms: z.array(z.string().trim().min(1).max(300)).max(100),
+  includeNamePatterns: z.array(z.string().trim().min(1).max(500)).max(100).optional(),
+  excludeNamePatterns: z.array(z.string().trim().min(1).max(500)).max(200).optional(),
+  storeTaxonomyRules: z.record(z.string(), z.object({
+    allowTerminalIds: z.array(z.string().trim().min(1).max(120)).max(100).optional(),
+    denyTerminalIds: z.array(z.string().trim().min(1).max(120)).max(100).optional(),
+  }).strict()).optional(),
+  knownWrongProducts: z.array(z.object({
+    storeLocationId: z.enum(OMAHA_STORE_LOCATION_IDS).optional(),
+    productId: z.string().trim().min(1).max(300).optional(),
+    normalizedName: z.string().trim().min(1).max(1000).optional(),
+  }).strict().refine((value) => Boolean(value.productId || value.normalizedName), "known-wrong product needs an id or normalized name")).max(500).optional(),
   requiredQualifiers: z.array(z.string().trim().min(1).max(300)).max(100),
   optionalQualifiers: z.array(z.string().trim().min(1).max(300)).max(100),
   unitDimension: z.enum(["weight", "volume", "count", "other"]),

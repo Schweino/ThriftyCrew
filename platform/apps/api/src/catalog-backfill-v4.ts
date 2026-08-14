@@ -1,8 +1,10 @@
-import { OMAHA_STORE_LOCATION_IDS } from "@thriftycrew/contracts";
+import { catalogIngredientIdentitySchema, OMAHA_STORE_LOCATION_IDS } from "@thriftycrew/contracts";
 import { deterministicId, digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 import { createCatalogIngredientVersion } from "./dynamic-ingredient-catalog";
 import { claimPipelineAgentWork } from "./store-catalog-generations";
 import omahaStorePolicies from "../../../config/omaha-store-policies.json";
+import authoredCommodities from "../../../config/commodities.json";
+import authoredKnownWrong from "../../../config/known-wrong.json";
 
 type LegacyStoreRow = { storeLocationId?: string; observationId?: string; [key: string]: unknown };
 type LegacyCommodity = { id?: string; label?: string; unit?: string; stores?: LegacyStoreRow[]; [key: string]: unknown };
@@ -24,6 +26,60 @@ type StoreCapturePolicy = { storeLocationId: string; sourceId: string; firstPart
   locationCanary: { expectedLocationPattern: string; expectedModePattern: string }; evidenceFreshnessMinutes: number };
 const CAPTURE_POLICY_BY_STORE = Object.fromEntries((omahaStorePolicies.stores as StoreCapturePolicy[])
   .map((policy) => [policy.storeLocationId, policy])) as Record<string, StoreCapturePolicy>;
+
+type AuthoredCommodity = { id: string; label: string; unit: string; include?: string[]; exclude?: string[];
+  v4_store_taxonomy_allow?: Record<string, string[]>; v4_store_taxonomy_deny?: Record<string, string[]> };
+type KnownWrongEntry = { commodity?: string; store?: string; names?: string[]; product_id?: string | number | null; verdict?: string;
+  reversed_on?: string | null; reversed_by?: string | null };
+const STORE_ID_BY_AUTHORED_NAME: Record<string, string> = Object.fromEntries(Object.entries({
+  Aldi: "aldi-omaha-446-048", Bakers: "bakers-saddle-creek", "Baker's": "bakers-saddle-creek",
+  "Family Fare": "family-fare-omaha-6401", Fareway: "fareway-omaha-043", "Hy-Vee": "hy-vee-omaha-1465",
+  HyVee: "hy-vee-omaha-1465", "Sam's Club": "sams-omaha", Sams: "sams-omaha", Walmart: "walmart-omaha",
+}).map(([name, store]) => [normalizeName(name), store]));
+
+export function compileKnownWrongBackfillProducts(entries: KnownWrongEntry[], commodityId: string) {
+  const matching = entries.filter((entry) => entry.commodity === commodityId);
+  const reversed = matching.filter((entry) => Boolean(entry.reversed_on && entry.reversed_by));
+  const active = matching.filter((entry) => !entry.reversed_on && !entry.reversed_by);
+  const unmapped = active.filter((entry) => entry.store && !STORE_ID_BY_AUTHORED_NAME[normalizeName(entry.store)]);
+  const products: Array<{ storeLocationId?: string; productId?: string; normalizedName?: string }> = [];
+  for (const entry of active.filter((item) => !item.store || STORE_ID_BY_AUTHORED_NAME[normalizeName(item.store)])) {
+    const storeLocationId = entry.store ? STORE_ID_BY_AUTHORED_NAME[normalizeName(entry.store)] : undefined;
+    if (entry.product_id) products.push({ ...(storeLocationId ? { storeLocationId } : {}), productId: String(entry.product_id) });
+    for (const name of entry.names ?? []) products.push({ ...(storeLocationId ? { storeLocationId } : {}), normalizedName: normalizeName(name) });
+  }
+  return { products, unmapped, reversed };
+}
+
+export function compileAuthoritativeBackfillIdentity(commodityId: string, prior: Record<string, any>) {
+  const commodity = (authoredCommodities as AuthoredCommodity[]).find((item) => item.id === commodityId);
+  if (!commodity) throw new Error(`authored commodity definition is missing for ${commodityId}`);
+  const storeIds = new Set(OMAHA_STORE_LOCATION_IDS as readonly string[]);
+  const taxonomyStores = new Set([...Object.keys(commodity.v4_store_taxonomy_allow ?? {}), ...Object.keys(commodity.v4_store_taxonomy_deny ?? {})]);
+  if ([...taxonomyStores].some((store) => !storeIds.has(store))) throw new Error(`authored taxonomy rule has an unknown store for ${commodityId}`);
+  const storeTaxonomyRules = Object.fromEntries([...taxonomyStores].sort().map((store) => [store, {
+    ...((commodity.v4_store_taxonomy_allow?.[store]?.length ?? 0) ? { allowTerminalIds: [...new Set(commodity.v4_store_taxonomy_allow![store])].sort() } : {}),
+    ...((commodity.v4_store_taxonomy_deny?.[store]?.length ?? 0) ? { denyTerminalIds: [...new Set(commodity.v4_store_taxonomy_deny![store])].sort() } : {}),
+  }]));
+  const compiledKnownWrong = compileKnownWrongBackfillProducts((authoredKnownWrong as { entries?: KnownWrongEntry[] }).entries ?? [], commodityId);
+  const knownWrongProducts = compiledKnownWrong.products;
+  const identity = catalogIngredientIdentitySchema.parse({ ...prior,
+    includeNamePatterns: commodity.include ?? [commodity.label], excludeNamePatterns: commodity.exclude ?? [],
+    ...(Object.keys(storeTaxonomyRules).length ? { storeTaxonomyRules } : {}),
+    ...(knownWrongProducts.length ? { knownWrongProducts } : {}),
+  });
+  boundedIdentityRegexes(identity.includeNamePatterns);
+  boundedIdentityRegexes(identity.excludeNamePatterns);
+  return { identity, diagnostics: { unmappedKnownWrongRows: compiledKnownWrong.unmapped, reversedKnownWrongRows: compiledKnownWrong.reversed,
+    ruleCounts: { include: identity.includeNamePatterns?.length ?? 0, exclude: identity.excludeNamePatterns?.length ?? 0,
+      taxonomyStores: Object.keys(identity.storeTaxonomyRules ?? {}).length, knownWrong: identity.knownWrongProducts?.length ?? 0 } } };
+}
+
+export function authoritativeBackfillIdentity(commodityId: string, prior: Record<string, any>) {
+  const compiled = compileAuthoritativeBackfillIdentity(commodityId, prior);
+  if (compiled.diagnostics.unmappedKnownWrongRows.length) throw new Error(`known-wrong store mapping is incomplete for ${commodityId}`);
+  return compiled.identity;
+}
 
 function adapterNameForPolicy(policy: StoreCapturePolicy): string {
   return policy.sourceId.replace(/^direct-/, "").replace(/-(?:browser|headless)$/, "");
@@ -87,13 +143,16 @@ export async function importCatalogBackfillPage(db: D1Database, input: {
     if (!entity || entity.commodity_id !== commodityId || entity.identity_hash !== identityHash) throw new Error(`legacy ingredient identity conflict for ${commodityId}`);
     const pointer = await db.prepare("SELECT pointer_generation FROM catalog_ingredient_current WHERE ingredient_id=?1")
       .bind(ingredientId).first<{ pointer_generation: number }>();
+    const definitionIdentity = authoritativeBackfillIdentity(commodityId, {
+      canonicalName: label, displayName: label, aliases: [], acceptedForms: [label], excludedForms: [],
+      requiredQualifiers: [], optionalQualifiers: [], unitDimension: unitDimension(basisUnit), basisUnit,
+      packageNormalizationRules: [`legacy board basis unit: ${basisUnit}`], queryTerms: [label], storeQueryVariants: {},
+      sourceOccurrences: [{ recipeCandidateId: `legacy-board:${input.releaseId}`, sourceOccurrenceId: commodityId }],
+      plannerRunId: `legacy-board-backfill:${input.releaseId}`, adjudication: null,
+    });
     const definition = await createCatalogIngredientVersion(db, {
       ingredientId, slug: commodityId, sourceGapId: null, expectedPointerGeneration: Number(pointer?.pointer_generation ?? 0),
-      identity: { canonicalName: label, displayName: label, aliases: [], acceptedForms: [label], excludedForms: [],
-        requiredQualifiers: [], optionalQualifiers: [], unitDimension: unitDimension(basisUnit), basisUnit,
-        packageNormalizationRules: [`legacy board basis unit: ${basisUnit}`], queryTerms: [label], storeQueryVariants: {},
-        sourceOccurrences: [{ recipeCandidateId: `legacy-board:${input.releaseId}`, sourceOccurrenceId: commodityId }],
-        plannerRunId: `legacy-board-backfill:${input.releaseId}`, adjudication: null },
+      identity: definitionIdentity,
     });
     const semanticJson = stableJson(commodity);
     const semanticHash = await digestHex(semanticJson);
@@ -164,6 +223,95 @@ export async function catalogBackfillProgress(db: D1Database, runId?: string) {
   ]);
   return { run, semanticParity: semantic.results, terminalEvidenceReadiness: evidence.results, workItems: work.results,
     promotionAllowed: catalogBackfillPromotionAllowed(evidence.results, Number(run.expected_cell_count)) };
+}
+
+function derivedAuditSummary(value: DerivedBackfillCapture) {
+  return { outcome: value.outcome, winner: value.winner ? { productId: value.winner.productId, productName: value.winner.productName,
+    taxonomyPath: value.winner.taxonomyPath ?? "" } : null, candidateRejections: value.candidateRejections ?? [] };
+}
+
+export async function auditCatalogBackfillDefinitions(db: D1Database, runId: string, input: { definitionOffset?: number; terminalOffset?: number; limit?: number } = {}) {
+  const limit = Math.min(50, Math.max(1, Number(input.limit ?? 25)));
+  const definitionOffset = Math.max(0, Number(input.definitionOffset ?? 0));
+  const terminalOffset = Math.max(0, Number(input.terminalOffset ?? 0));
+  const counts = await db.prepare(`SELECT
+      (SELECT COUNT(*) FROM catalog_backfill_ingredients_v4 WHERE run_id=?1) AS definitions,
+      (SELECT COUNT(*) FROM catalog_backfill_cells_v4 WHERE run_id=?1 AND evidence_state='terminal_verified') AS terminals`)
+    .bind(runId).first<{ definitions: number; terminals: number }>();
+  const allRunCommodities = await db.prepare(`SELECT commodity_id FROM catalog_backfill_ingredients_v4 WHERE run_id=?1 ORDER BY commodity_id`)
+    .bind(runId).all<{ commodity_id: string }>();
+  const definitions = await db.prepare(`SELECT ingredient.commodity_id,backfill.ingredient_id,backfill.definition_version_id,
+      version.definition_hash,version.identity_json
+    FROM catalog_backfill_ingredients_v4 backfill JOIN ingredient_entities ingredient ON ingredient.id=backfill.ingredient_id
+    JOIN catalog_ingredient_versions version ON version.version_id=backfill.definition_version_id
+    WHERE backfill.run_id=?1 ORDER BY ingredient.commodity_id LIMIT ?2 OFFSET ?3`).bind(runId, limit, definitionOffset)
+    .all<{ commodity_id: string; ingredient_id: string; definition_version_id: string; definition_hash: string; identity_json: string }>();
+  const runCommodityIds = new Set(allRunCommodities.results.map((row) => row.commodity_id));
+  const rows = [];
+  for (const row of definitions.results) {
+    try {
+      const compiled = compileAuthoritativeBackfillIdentity(row.commodity_id, JSON.parse(row.identity_json));
+      const newHash = await digestHex(stableJson(compiled.identity));
+      rows.push({ commodityId: row.commodity_id, ingredientId: row.ingredient_id, oldVersionId: row.definition_version_id,
+        oldHash: row.definition_hash, newHash, changed: newHash !== row.definition_hash, ruleCounts: compiled.diagnostics.ruleCounts });
+    } catch (error) {
+      rows.push({ commodityId: row.commodity_id, ingredientId: row.ingredient_id, oldVersionId: row.definition_version_id,
+        oldHash: row.definition_hash, newHash: null, changed: null, error: error instanceof Error ? error.message : String(error) });
+    }
+  }
+  const terminal = await db.prepare(`SELECT cell.commodity_id,cell.store_location_id,cell.terminal_result_json,version.identity_json,
+      producer.document_json AS producer_document,producer_work.input_json AS producer_input,
+      verifier.document_json AS verifier_document,verifier_work.input_json AS verifier_input
+    FROM catalog_backfill_cells_v4 cell JOIN catalog_ingredient_versions version ON version.version_id=cell.definition_version_id
+    JOIN catalog_backfill_evidence_v4 producer ON producer.work_item_id=cell.producer_work_item_id AND producer.kind='producer'
+    JOIN pipeline_agent_work_items_v4 producer_work ON producer_work.id=cell.producer_work_item_id
+    JOIN catalog_backfill_evidence_v4 verifier ON verifier.work_item_id=cell.verifier_work_item_id AND verifier.kind='verifier'
+    JOIN pipeline_agent_work_items_v4 verifier_work ON verifier_work.id=cell.verifier_work_item_id
+    WHERE cell.run_id=?1 AND cell.evidence_state='terminal_verified' ORDER BY cell.commodity_id,cell.store_location_id
+    LIMIT ?2 OFFSET ?3`).bind(runId, limit, terminalOffset)
+    .all<{ commodity_id: string; store_location_id: string; terminal_result_json: string; identity_json: string;
+      producer_document: string; producer_input: string; verifier_document: string; verifier_input: string }>();
+  const terminalAudits = [];
+  for (const cell of terminal.results) {
+    try {
+      const oldIdentity = JSON.parse(cell.identity_json);
+      const newIdentity = authoritativeBackfillIdentity(cell.commodity_id, oldIdentity);
+      const producerInput = JSON.parse(cell.producer_input) as { queryTerms: string[] };
+      const verifierInput = JSON.parse(cell.verifier_input) as { queryTerms: string[] };
+      const producerDocument = JSON.parse(cell.producer_document) as { adapterChunk?: unknown };
+      const verifierDocument = JSON.parse(cell.verifier_document) as { adapterChunk?: unknown };
+      if (!producerDocument.adapterChunk || !verifierDocument.adapterChunk) throw new Error("immutable evidence omitted its adapter chunk");
+      const [producerBefore, verifierBefore, producerAfter, verifierAfter] = await Promise.all([
+        deriveCatalogBackfillCapture({ storeLocationId: cell.store_location_id, queryTerms: producerInput.queryTerms, identity: oldIdentity, document: producerDocument.adapterChunk }),
+        deriveCatalogBackfillCapture({ storeLocationId: cell.store_location_id, queryTerms: verifierInput.queryTerms, identity: oldIdentity, document: verifierDocument.adapterChunk }),
+        deriveCatalogBackfillCapture({ storeLocationId: cell.store_location_id, queryTerms: producerInput.queryTerms, identity: newIdentity, document: producerDocument.adapterChunk }),
+        deriveCatalogBackfillCapture({ storeLocationId: cell.store_location_id, queryTerms: verifierInput.queryTerms, identity: newIdentity, document: verifierDocument.adapterChunk }),
+      ]);
+      const durableBefore = JSON.parse(cell.terminal_result_json) as DerivedBackfillCapture;
+      terminalAudits.push({ commodityId: cell.commodity_id, storeLocationId: cell.store_location_id,
+        durableBefore: derivedAuditSummary(durableBefore), producerBefore: derivedAuditSummary(producerBefore), verifierBefore: derivedAuditSummary(verifierBefore),
+        producerAfter: derivedAuditSummary(producerAfter), verifierAfter: derivedAuditSummary(verifierAfter),
+        safeToPreserve: producerAfter.outcome === verifierAfter.outcome && stableJson(producerAfter.winner) === stableJson(verifierAfter.winner)
+          && producerAfter.outcome === durableBefore.outcome && stableJson(producerAfter.winner) === stableJson(durableBefore.winner) });
+    } catch (error) {
+      terminalAudits.push({ commodityId: cell.commodity_id, storeLocationId: cell.store_location_id,
+        safeToPreserve: false, error: error instanceof Error ? error.message : String(error) });
+    }
+  }
+  const authoredIds = new Set((authoredCommodities as AuthoredCommodity[]).map((row) => row.id));
+  const knownWrongEntries = (authoredKnownWrong as { entries?: KnownWrongEntry[] }).entries ?? [];
+  const activeRunKnownWrong = knownWrongEntries.filter((entry) => entry.commodity && runCommodityIds.has(entry.commodity));
+  return { runId, page: { definitionOffset, terminalOffset, limit, expectedDefinitions: Number(counts?.definitions ?? 0),
+    expectedTerminals: Number(counts?.terminals ?? 0), nextDefinitionOffset: definitionOffset + rows.length,
+    nextTerminalOffset: terminalOffset + terminalAudits.length }, definitions: rows, summary: { total: rows.length, changed: rows.filter((row) => row.changed === true).length,
+    unchanged: rows.filter((row) => row.changed === false).length, invalid: rows.filter((row) => row.newHash === null).length },
+    unmapped: { missingConfig: [...runCommodityIds].filter((id) => !authoredIds.has(id)).sort(), configNotInRun: [...authoredIds].filter((id) => !runCommodityIds.has(id)).sort(),
+      knownWrongCommodityNotInRun: knownWrongEntries.filter((entry) => entry.commodity && !runCommodityIds.has(entry.commodity)),
+      knownWrongStore: activeRunKnownWrong.filter((entry) => entry.store && !STORE_ID_BY_AUTHORED_NAME[normalizeName(entry.store)]),
+      reversedKnownWrong: activeRunKnownWrong.filter((entry) => Boolean(entry.reversed_on && entry.reversed_by)) },
+    terminalAudits, terminalSummary: { total: terminalAudits.length,
+      safeToPreserve: terminalAudits.filter((row) => row.safeToPreserve).length,
+      changedOrInvalid: terminalAudits.filter((row) => !row.safeToPreserve).length } };
 }
 
 export function catalogBackfillPromotionAllowed(rows: Array<Record<string, unknown>>, expectedCellCount: number): boolean {
@@ -333,7 +481,8 @@ export type BackfillEvidenceSubmission = {
 };
 
 type DerivedBackfillCapture = { outcome: "priced" | "not_found" | "challenged" | "needs_operator"; observedAt: string; sourceUrl: string;
-  candidateSetHash: string; winner: Record<string, unknown> | null; coverageHash: string };
+  candidateSetHash: string; winner: Record<string, unknown> | null; coverageHash: string;
+  candidateRejections?: Array<{ productId: string; productName: string; taxonomyPath: string; rejectionCodes: string[] }> };
 
 function parsedBackfillPackage(value: string): { unit: string; quantityMicros: number } | null {
   const normalized = value.toLowerCase().replace(/fluid ounces?/g, "fl oz").replace(/ounces?/g, "oz")
@@ -364,6 +513,26 @@ function phraseTokens(value: string): string[][] {
     .filter((token) => token.length > 1 && !["fresh", "whole", "ground", "canned", "jarred"].includes(token))).filter((tokens) => tokens.length > 0);
 }
 
+function boundedIdentityRegexes(values: unknown): RegExp[] {
+  if (!Array.isArray(values)) return [];
+  return values.map((value) => {
+    const pattern = String(value);
+    if (!pattern || pattern.length > 500 || /\\[1-9]/.test(pattern)) throw new Error("ingredient identity contains an unsafe name pattern");
+    try { return new RegExp(pattern.replace(/^\(\?i\)/, ""), "i"); }
+    catch { throw new Error("ingredient identity contains an invalid name pattern"); }
+  });
+}
+
+export function assertBackfillIdentityPatterns(identity: Record<string, unknown>) {
+  boundedIdentityRegexes(identity.includeNamePatterns);
+  boundedIdentityRegexes(identity.excludeNamePatterns);
+}
+
+function terminalTaxonomyId(value: unknown): string {
+  const parts = String(value ?? "").split(/[/:>]/).map((part) => part.trim()).filter(Boolean);
+  return parts.at(-1) ?? "";
+}
+
 export async function deriveCatalogBackfillCapture(input: { storeLocationId: string; queryTerms: string[]; identity: Record<string, any>; document: unknown }): Promise<DerivedBackfillCapture> {
   const policy = CAPTURE_POLICY_BY_STORE[input.storeLocationId];
   if (!policy) throw new Error("backfill capture store policy is missing");
@@ -392,10 +561,10 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
     outcome: term.outcome, rowCount: term.rowCount, retrieval: term.retrieval, excludedResults: term.excludedResults ?? [] }))));
   const challenged = termRows.some((term: any) => term.outcome === "blocked" || /challenge|captcha|blocked/i.test(String(term.reason ?? "")));
   if (challenged) return { outcome: "challenged", observedAt, sourceUrl,
-    candidateSetHash: await digestHex(stableJson(chunk.rows ?? [])), winner: null, coverageHash };
+    candidateSetHash: await digestHex(stableJson(chunk.rows ?? [])), winner: null, coverageHash, candidateRejections: [] };
   const rejected = termRows.some((term: any) => !["success", "empty"].includes(String(term.outcome)));
   if (rejected) return { outcome: "needs_operator", observedAt, sourceUrl,
-    candidateSetHash: await digestHex(stableJson(chunk.rows ?? [])), winner: null, coverageHash };
+    candidateSetHash: await digestHex(stableJson(chunk.rows ?? [])), winner: null, coverageHash, candidateRejections: [] };
   const rowsByTerm = new Map(expectedTerms.map((term) => [term, 0]));
   for (const row of Array.isArray(chunk.rows) ? chunk.rows : []) {
     const query = normalizeName(String(row.q ?? row.term ?? ""));
@@ -429,6 +598,12 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
   const accepted = [input.identity.canonicalName, input.identity.displayName, ...(input.identity.acceptedForms ?? [])]
     .flatMap((value: string) => phraseTokens(String(value)));
   const excluded = (input.identity.excludedForms ?? []).map((value: string) => normalizeName(String(value))).filter(Boolean);
+  const includeNamePatterns = boundedIdentityRegexes(input.identity.includeNamePatterns);
+  const excludeNamePatterns = boundedIdentityRegexes(input.identity.excludeNamePatterns);
+  const taxonomyRule = input.identity.storeTaxonomyRules?.[input.storeLocationId] as Record<string, unknown> | undefined;
+  const taxonomyAllow = new Set(Array.isArray(taxonomyRule?.allowTerminalIds) ? taxonomyRule.allowTerminalIds.map(String) : []);
+  const taxonomyDeny = new Set(Array.isArray(taxonomyRule?.denyTerminalIds) ? taxonomyRule.denyTerminalIds.map(String) : []);
+  const knownWrong = Array.isArray(input.identity.knownWrongProducts) ? input.identity.knownWrongProducts as Array<Record<string, unknown>> : [];
   const candidates: Array<Record<string, any>> = [];
   for (const row of Array.isArray(chunk.rows) ? chunk.rows : []) {
     const query = normalizeName(String(row.q ?? row.term ?? ""));
@@ -457,8 +632,20 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
       throw new Error("backfill capture row has invalid source, product, or availability identity");
     }
     const normalizedProduct = normalizeName(productName);
-    const identityAccepted = accepted.some((tokens) => tokens.every((token) => normalizedProduct.includes(token)));
-    const identityExcluded = excluded.some((value: string) => normalizedProduct.includes(value));
+    const taxonomyPath = String(row.taxonomy_path ?? row.taxonomyPath ?? "").trim();
+    const taxonomyTerminalId = terminalTaxonomyId(taxonomyPath);
+    const identityAccepted = includeNamePatterns.length
+      ? includeNamePatterns.some((pattern) => pattern.test(productName))
+      : accepted.some((tokens) => tokens.every((token) => normalizedProduct.includes(token)));
+    const identityExcluded = excludeNamePatterns.some((pattern) => pattern.test(`${productName} ${packageText}`))
+      || excluded.some((value: string) => normalizedProduct.includes(value));
+    const taxonomyRulesPresent = taxonomyAllow.size > 0 || taxonomyDeny.size > 0;
+    const taxonomyUnknown = taxonomyRulesPresent && !taxonomyTerminalId;
+    const taxonomyExcluded = Boolean(taxonomyTerminalId) && (taxonomyDeny.has(taxonomyTerminalId)
+      || Boolean(taxonomyAllow.size && !taxonomyAllow.has(taxonomyTerminalId)));
+    const knownWrongProduct = knownWrong.some((item) => (!item.storeLocationId || item.storeLocationId === input.storeLocationId)
+      && (Boolean(item.productId && String(item.productId) === productId)
+        || Boolean(item.normalizedName && normalizeName(String(item.normalizedName)) === normalizedProduct)));
     const parsed = parsedBackfillPackage(packageText);
     const quantityMicros = parsed ? convertedBackfillQuantity(parsed, String(input.identity.basisUnit ?? "")) : null;
     const semantics = offer.priceSemantics as Record<string, any> | undefined;
@@ -493,10 +680,11 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
       && availabilityModeEligible
       && !availabilitySourceUnknown
       && availability.eligible === true && availability.status === "in_stock";
-    candidates.push({ productId, productName, productUrl, packageText, priceMinor, quantityMicros,
+    candidates.push({ productId, productName, productUrl, packageText, taxonomyPath, priceMinor, quantityMicros,
       validFrom, validTo,
-      eligible: identityAccepted && !identityExcluded && storeEligible && quantityMicros !== null && quantityMicros > 0 && priceExact && semanticsExact && validPromotion,
-      rejectionCodes: [!identityAccepted && "identity_not_included", identityExcluded && "identity_excluded", !quantityMicros && "invalid_package_basis",
+      eligible: identityAccepted && !identityExcluded && !taxonomyExcluded && !taxonomyUnknown && !knownWrongProduct && storeEligible && quantityMicros !== null && quantityMicros > 0 && priceExact && semanticsExact && validPromotion,
+      rejectionCodes: [!identityAccepted && "identity_not_included", identityExcluded && "identity_excluded",
+        taxonomyExcluded && "taxonomy_not_allowed", taxonomyUnknown && "taxonomy_unknown", knownWrongProduct && "known_wrong_product", !quantityMicros && "invalid_package_basis",
         availabilityUnknown && "availability_unknown", locationUnknown && "location_unknown", fulfillmentUnknown && "fulfillment_unknown",
         availabilitySourceUnknown && "availability_source_unknown",
         !storeEligible && !availabilityUnknown && !locationUnknown && !fulfillmentUnknown && "store_ineligible",
@@ -509,9 +697,12 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
     unique.set(candidate.productId, candidate);
   }
   const frozen = [...unique.values()].sort((a, b) => String(a.productId).localeCompare(String(b.productId)));
+  const candidateRejections = frozen.map((candidate) => ({ productId: String(candidate.productId), productName: String(candidate.productName),
+    taxonomyPath: String(candidate.taxonomyPath ?? ""), rejectionCodes: [...candidate.rejectionCodes].sort() }));
   const unresolvedCandidate = frozen.some((candidate) => candidate.rejectionCodes.some((code: string) =>
-    ["invalid_package_basis", "availability_unknown", "location_unknown", "fulfillment_unknown", "availability_source_unknown", "invalid_price_semantics", "missing_or_inactive_ad_dates"].includes(code))
-    && !candidate.rejectionCodes.includes("identity_not_included") && !candidate.rejectionCodes.includes("identity_excluded"));
+    ["invalid_package_basis", "taxonomy_unknown", "availability_unknown", "location_unknown", "fulfillment_unknown", "availability_source_unknown", "invalid_price_semantics", "missing_or_inactive_ad_dates"].includes(code))
+    && !candidate.rejectionCodes.includes("identity_not_included") && !candidate.rejectionCodes.includes("identity_excluded")
+    && !candidate.rejectionCodes.includes("taxonomy_not_allowed") && !candidate.rejectionCodes.includes("known_wrong_product"));
   const eligible = frozen.filter((row) => row.eligible).sort((a, b) => {
     const left = BigInt(a.priceMinor) * BigInt(b.quantityMicros); const right = BigInt(b.priceMinor) * BigInt(a.quantityMicros);
     return left < right ? -1 : left > right ? 1 : String(a.productId).localeCompare(String(b.productId));
@@ -522,12 +713,12 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
   // client exclusions remain nonterminal because the server cannot type them.
   if ((!eligible.length && unresolvedCandidate)
     || termRows.some((term: any) => Array.isArray(term.excludedResults) && term.excludedResults.length > 0)) {
-    return { outcome: "needs_operator", observedAt, sourceUrl, candidateSetHash: await digestHex(stableJson(frozen)), winner: null, coverageHash };
+    return { outcome: "needs_operator", observedAt, sourceUrl, candidateSetHash: await digestHex(stableJson(frozen)), winner: null, coverageHash, candidateRejections };
   }
   const winner = eligible[0] ? { ...eligible[0], unitPriceNumerator: eligible[0].priceMinor, unitPriceDenominator: eligible[0].quantityMicros } : null;
   return { outcome: winner ? "priced" : "not_found", observedAt, sourceUrl,
     candidateSetHash: await digestHex(stableJson(frozen)), winner,
-    coverageHash };
+    coverageHash, candidateRejections };
 }
 
 export function assertFreshBackfillEvidence(storeLocationId: string, input: BackfillEvidenceSubmission, derived: DerivedBackfillCapture) {

@@ -2308,6 +2308,33 @@ if (command === "status") {
   } else if (action === "producer-submit" || action === "verifier-submit") {
     if (!first) throw new Error(`tc ingredient backfill-v4 ${action} requires an evidence JSON file`);
     result = await client.request(`/internal/v4/backfill/${action}`, { json: JSON.parse(await readFile(cliPath(first), "utf8")) });
+  } else if (action === "definition-audit") {
+    const [runId, outputFile] = arguments_.slice(1);
+    if (!runId || !outputFile) throw new Error("tc ingredient backfill-v4 definition-audit requires run output.json");
+    const definitions: unknown[] = []; const terminalAudits: unknown[] = []; let definitionOffset = 0; let terminalOffset = 0;
+    let expectedDefinitions = -1; let expectedTerminals = -1; let unmapped: unknown = null;
+    while (expectedDefinitions < 0 || definitionOffset < expectedDefinitions || terminalOffset < expectedTerminals) {
+      const page = await client.request(`/internal/v4/backfill/definition-audit?runId=${encodeURIComponent(runId)}&definitionOffset=${definitionOffset}&terminalOffset=${terminalOffset}&limit=25`) as any;
+      expectedDefinitions = Number(page.page?.expectedDefinitions); expectedTerminals = Number(page.page?.expectedTerminals);
+      if (!Number.isSafeInteger(expectedDefinitions) || !Number.isSafeInteger(expectedTerminals)) throw new Error("definition audit page omitted authoritative counts");
+      definitions.push(...(page.definitions ?? [])); terminalAudits.push(...(page.terminalAudits ?? [])); unmapped ??= page.unmapped;
+      const nextDefinitionOffset = Number(page.page?.nextDefinitionOffset); const nextTerminalOffset = Number(page.page?.nextTerminalOffset);
+      if (nextDefinitionOffset < definitionOffset || nextTerminalOffset < terminalOffset
+        || nextDefinitionOffset === definitionOffset && definitionOffset < expectedDefinitions
+        || nextTerminalOffset === terminalOffset && terminalOffset < expectedTerminals) throw new Error("definition audit pagination made no progress");
+      definitionOffset = nextDefinitionOffset; terminalOffset = nextTerminalOffset;
+    }
+    if (definitions.length !== expectedDefinitions || terminalAudits.length !== expectedTerminals) throw new Error("definition audit artifact is partial");
+    const audit = { ok: true, runId, definitions, summary: { total: definitions.length,
+      changed: definitions.filter((row: any) => row.changed === true).length,
+      unchanged: definitions.filter((row: any) => row.changed === false).length,
+      invalid: definitions.filter((row: any) => row.newHash === null).length }, unmapped, terminalAudits,
+      terminalSummary: { total: terminalAudits.length, safeToPreserve: terminalAudits.filter((row: any) => row.safeToPreserve).length,
+        changedOrInvalid: terminalAudits.filter((row: any) => !row.safeToPreserve).length } };
+    const artifactText = `${JSON.stringify(audit, null, 2)}\n`;
+    await writeFile(cliPath(outputFile), artifactText, "utf8");
+    result = { ok: true, outputFile: cliPath(outputFile), sha256: await digestHex(artifactText), bytes: Buffer.byteLength(artifactText),
+      summary: audit.summary, terminalSummary: audit.terminalSummary, unmapped: audit.unmapped };
   } else if (action === "requeue") {
     const [runId, commodityId, storeLocationId, adjudicationId, resolutionType, ...reason] = arguments_.slice(1);
     if (!runId || !commodityId || !storeLocationId || !adjudicationId || !["adapter_repaired", "challenge_resolved"].includes(resolutionType ?? "") || reason.join(" ").length < 10) {
@@ -2335,7 +2362,7 @@ if (command === "status") {
     const submitted = [];
     for (const submission of submissions) submitted.push(await client.request(`/internal/v4/backfill/${role}-submit`, { json: submission }));
     result = { ok: true, role, wrappers: submissions.length, outputFile: cliPath(outputFile), submitted };
-  } else throw new Error("tc ingredient backfill-v4 requires initialize|import <run> [offset] [limit]|progress [run]|claim <agent> [owner] [limit] [output.json]|claim-exact <agent> <work-item> <owner> <output.json>|heartbeat <owner> [lease-seconds] [output.json]|producer-submit <adapter-artifact>|verifier-submit <independent-adapter-artifact>|submit-claim <role> <claim> <chunk> <generation-prefix> <session-prefix> <wrapper-output>|requeue <run> <commodity> <store> <adjudication-id> <resolution-type> <reason>|correct <run> <commodity> <store> <correction-id> <detailed-reason>");
+  } else throw new Error("tc ingredient backfill-v4 requires initialize|import <run> [offset] [limit]|progress [run]|definition-audit <run> <output.json>|claim <agent> [owner] [limit] [output.json]|claim-exact <agent> <work-item> <owner> <output.json>|heartbeat <owner> [lease-seconds] [output.json]|producer-submit <adapter-artifact>|verifier-submit <independent-adapter-artifact>|submit-claim <role> <claim> <chunk> <generation-prefix> <session-prefix> <wrapper-output>|requeue <run> <commodity> <store> <adjudication-id> <resolution-type> <reason>|correct <run> <commodity> <store> <correction-id> <detailed-reason>");
 } else if (command === "recipe" && subcommand === "wave") {
   const [action, waveId, value] = arguments_;
   if (!action || !waveId) throw new Error("tc recipe wave requires snapshot|published|corrective and a wave id");

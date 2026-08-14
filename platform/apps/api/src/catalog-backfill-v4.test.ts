@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { deterministicId } from "@thriftycrew/domain";
 import { assertFreshBackfillEvidence, assertFrozenBackfillReproduction, assertIndependentBackfillEvidence, assertLegacyBoard,
   catalogBackfillPromotionAllowed, claimCatalogBackfillWorkItem, deriveCatalogBackfillCapture, heartbeatCatalogBackfillOwner } from "./catalog-backfill-v4";
-import { correctCatalogBackfillEvidence, requeueCatalogBackfillCell } from "./catalog-backfill-v4";
+import { assertBackfillIdentityPatterns, compileKnownWrongBackfillProducts, correctCatalogBackfillEvidence, requeueCatalogBackfillCell } from "./catalog-backfill-v4";
 
 const identity = { canonicalName: "Bananas", displayName: "Bananas", acceptedForms: ["Bananas"], excludedForms: ["chips"], basisUnit: "lb" };
 
@@ -64,6 +64,106 @@ describe("truthful V4 catalog backfill", () => {
     const derived = await deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: ["Bananas"], identity,
       document: walmartChunk() });
     expect(derived).toMatchObject({ outcome: "priced", winner: { productId: "a", priceMinor: 200, quantityMicros: 2_000_000 } });
+  });
+
+  it.each([
+    { ingredient: "Almonds", product: "Member's Mark Whole Natural Almonds, 48 oz.", include: ["\\balmonds\\b"], exclude: ["\\bcereals?\\b", "crackers?", "\\bcandy\\b", "trail\\s*mix"], outcome: "priced" },
+    { ingredient: "Almonds", product: "Honey Bunches of Oats with Crispy Almonds Cereal, 48 oz.", include: ["\\balmonds\\b"], exclude: ["\\bcereals?\\b", "\\boats?\\b"], outcome: "not_found" },
+    { ingredient: "Almonds", product: "Almond Flour Crackers with Sea Salt, 20 oz.", include: ["\\balmonds\\b"], exclude: ["crackers?", "\\bflour\\b"], outcome: "not_found" },
+    { ingredient: "Apple Juice", product: "Apple Juice Flavored Breakfast Cereal, 18 oz.", include: ["apple\\s+juice"], exclude: ["\\bcereals?\\b", "flavored"], outcome: "not_found" },
+    { ingredient: "Air Freshener", product: "Glade Air Freshener Spray, 8 oz.", include: ["air\\s+freshener"], exclude: ["candles?", "wax\\s+melts?"], outcome: "priced" },
+    { ingredient: "Air Freshener", product: "Air Freshener Scented Candle, 8 oz.", include: ["air\\s+freshener"], exclude: ["candles?", "wax\\s+melts?"], outcome: "not_found" },
+  ])("uses versioned include/exclude identity rules for $ingredient: $product", async ({ ingredient, product, include, exclude, outcome }) => {
+    const chunk = walmartChunk();
+    chunk.rows = [chunk.rows[0]!];
+    chunk.rows[0]!.term = ingredient;
+    chunk.rows[0]!.name = chunk.rows[0]!._capture.offer.productName = product;
+    chunk.terms[0]!.query = ingredient;
+    chunk.terms[0]!.rowCount = 1;
+    chunk.terms[0]!.retrieval.loadedResultCount = 1;
+    chunk.terms[0]!.retrieval.availableResultCount = 1;
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: [ingredient], identity: {
+      canonicalName: ingredient, displayName: ingredient, acceptedForms: [ingredient], excludedForms: [],
+      includeNamePatterns: include, excludeNamePatterns: exclude, basisUnit: "lb",
+    }, document: chunk })).resolves.toMatchObject({ outcome });
+  });
+
+  it("binds Sam's almond identity to the definition's source taxonomy and known-wrong facts", async () => {
+    const chunk = walmartChunk() as Record<string, any>;
+    chunk.store = "sams";
+    chunk.canary = { ...chunk.canary, evidenceUrl: "https://www.samsclub.com/club/8146-omaha-ne",
+      location: "Omaha Sam's Club", exactAddress: "Omaha Sam's Club", locationId: "8146", retailerLocationKey: "8146", priceMode: "Pickup" };
+    chunk.terms[0].query = "Almonds";
+    chunk.rows = [chunk.rows[0]];
+    chunk.rows[0].term = "Almonds";
+    chunk.rows[0].url = chunk.rows[0].url.replace("walmart.com", "samsclub.com");
+    chunk.rows[0]._capture.location = "Omaha Sam's Club 8146";
+    chunk.rows[0]._capture.pageState.locationText = "Omaha Sam's Club 8146";
+    chunk.rows[0]._capture.offer.sourceUrl = chunk.rows[0]._capture.offer.sourceUrl.replace("walmart.com", "samsclub.com");
+    chunk.rows[0]._capture.offer.availability.locationId = "8146";
+    chunk.rows[0].name = chunk.rows[0]._capture.offer.productName = "Member's Mark Whole Natural Almonds, 48 oz.";
+    chunk.rows[0].taxonomy_path = "0:100001:9520104";
+    chunk.terms[0].rowCount = 1; chunk.terms[0].retrieval.loadedResultCount = 1; chunk.terms[0].retrieval.availableResultCount = 1;
+    const almondIdentity = { canonicalName: "Almonds", displayName: "Almonds", acceptedForms: ["Almonds"], excludedForms: [],
+      includeNamePatterns: ["\\balmonds\\b"], excludeNamePatterns: ["\\bcereals?\\b"], basisUnit: "lb",
+      storeTaxonomyRules: { "sams-omaha": { allowTerminalIds: ["9520104"] } },
+      knownWrongProducts: [{ storeLocationId: "sams-omaha", productId: "known-bad" }] };
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "sams-omaha", queryTerms: ["Almonds"], identity: almondIdentity, document: chunk }))
+      .resolves.toMatchObject({ outcome: "priced" });
+    chunk.rows[0].name = chunk.rows[0]._capture.offer.productName = "Honey Bunches of Oats with Crispy Almonds, 48 oz.";
+    chunk.rows[0].taxonomy_path = "0:100001:2261";
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "sams-omaha", queryTerms: ["Almonds"], identity: almondIdentity, document: chunk }))
+      .resolves.toMatchObject({ outcome: "not_found", winner: null });
+    chunk.rows[0].name = chunk.rows[0]._capture.offer.productName = "Whole Natural Almonds, 48 oz.";
+    chunk.rows[0].taxonomy_path = "";
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "sams-omaha", queryTerms: ["Almonds"], identity: almondIdentity, document: chunk }))
+      .resolves.toMatchObject({ outcome: "needs_operator", winner: null });
+    chunk.rows.push(structuredClone(chunk.rows[0]));
+    chunk.rows[0].id = chunk.rows[0]._capture.offer.retailerProductId = "eligible";
+    chunk.rows[0].taxonomy_path = "0:100001:9520104";
+    chunk.rows[1].id = chunk.rows[1]._capture.offer.retailerProductId = "irrelevant";
+    chunk.rows[1].name = chunk.rows[1]._capture.offer.productName = "Vegetable Tray, 48 oz.";
+    chunk.terms[0].rowCount = 2; chunk.terms[0].retrieval.loadedResultCount = 2; chunk.terms[0].retrieval.availableResultCount = 2;
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "sams-omaha", queryTerms: ["Almonds"], identity: almondIdentity, document: chunk }))
+      .resolves.toMatchObject({ outcome: "priced", winner: { productId: "eligible" } });
+  });
+
+  it("compiles known-wrong rulings with exact normalized store/name/id authority and excludes reversed rulings", () => {
+    const compiled = compileKnownWrongBackfillProducts([
+      { commodity: "almonds", store: "Baker's", names: ["Bad Almond Cereal"], product_id: "bad-1", verdict: "wrong-product" },
+      { commodity: "almonds", store: "Hy-Vee", names: ["Rehabilitated Almonds"], product_id: "good-1", verdict: "wrong-product",
+        reversed_on: "2026-08-14", reversed_by: "operator" },
+    ], "almonds");
+    expect(compiled.unmapped).toEqual([]);
+    expect(compiled.reversed).toHaveLength(1);
+    expect(compiled.products).toEqual(expect.arrayContaining([
+      { storeLocationId: "bakers-saddle-creek", productId: "bad-1" },
+      { storeLocationId: "bakers-saddle-creek", normalizedName: "bad almond cereal" },
+    ]));
+    expect(compiled.products.some((row) => row.productId === "good-1")).toBe(false);
+  });
+
+  it.each([
+    { productId: "different-id", productName: "Bad Almond Cereal", label: "same normalized name with a different id" },
+    { productId: "bad-1", productName: "Renamed Almond Product", label: "same scoped id with changed spelling" },
+  ])("rejects a known-wrong product by $label", async ({ productId, productName }) => {
+    const chunk = walmartChunk();
+    chunk.rows = [chunk.rows[0]!];
+    chunk.rows[0]!.term = "Almonds"; chunk.rows[0]!.id = chunk.rows[0]!._capture.offer.retailerProductId = productId;
+    chunk.rows[0]!.name = chunk.rows[0]!._capture.offer.productName = productName;
+    chunk.terms[0]!.query = "Almonds"; chunk.terms[0]!.rowCount = 1;
+    chunk.terms[0]!.retrieval.loadedResultCount = 1; chunk.terms[0]!.retrieval.availableResultCount = 1;
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: ["Almonds"], identity: {
+      canonicalName: "Almonds", displayName: "Almonds", acceptedForms: ["Almonds"], excludedForms: [],
+      includeNamePatterns: ["almond"], excludeNamePatterns: [], basisUnit: "lb",
+      knownWrongProducts: [{ storeLocationId: "walmart-omaha", productId: "bad-1", normalizedName: "bad almond cereal" }],
+    }, document: chunk })).resolves.toMatchObject({ outcome: "not_found", winner: null });
+  });
+
+  it("rejects invalid, oversized, and backreference identity patterns before persistence", () => {
+    expect(() => assertBackfillIdentityPatterns({ includeNamePatterns: ["("], excludeNamePatterns: [] })).toThrow("invalid name pattern");
+    expect(() => assertBackfillIdentityPatterns({ includeNamePatterns: ["a".repeat(501)], excludeNamePatterns: [] })).toThrow("unsafe name pattern");
+    expect(() => assertBackfillIdentityPatterns({ includeNamePatterns: ["(almond)\\1"], excludeNamePatterns: [] })).toThrow("unsafe name pattern");
   });
 
   it("terminalizes safely typed raw ineligible candidates but not fact-free exclusions", async () => {

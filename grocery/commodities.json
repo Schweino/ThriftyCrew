@@ -25471,6 +25471,13 @@
       "breeze",
       "yog",
       "granola",
+      "\\bcereals?\\b",
+      "\\boats?\\b",
+      "crackers?",
+      "\\bcandy\\b",
+      "ice\\s*cream",
+      "trail\\s*mix",
+      "prepared",
       "beech\\s*nut",
       "\\bgerber\\b",
       "\\bstage\\s*[1-3]\\b",
@@ -25550,7 +25557,12 @@
       "tampons?",
       "lip\\s+balm",
       "balanced\\s*breaks"
-    ]
+    ],
+    "v4_store_taxonomy_allow": {
+      "sams-omaha": [
+        "9520104"
+      ]
+    }
   },
   {
     "id": "raisins",

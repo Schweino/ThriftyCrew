@@ -131,7 +131,7 @@ import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredi
 import { materializeHotCatalog } from "./hot-catalog";
 import { attachIngredientProposal, createIngredientPublicationBatch, failIngredientPublicationBatch, ingredientPublicationProofPlan, materializeIngredientPublicationCaptures, verifyIngredientPublicationExternal, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
 import { listPublicIngredients, getPublicIngredientBySlug, publicIngredientResponse } from "./public-grocery-v3";
-import { catalogBackfillProgress, claimCatalogBackfillBatch, claimCatalogBackfillWorkItem, correctCatalogBackfillEvidence, heartbeatCatalogBackfillOwner, importCatalogBackfillPage, initializeCatalogBackfill, requeueCatalogBackfillCell, submitCatalogBackfillProducer, submitCatalogBackfillVerifier } from "./catalog-backfill-v4";
+import { auditCatalogBackfillDefinitions, catalogBackfillProgress, claimCatalogBackfillBatch, claimCatalogBackfillWorkItem, correctCatalogBackfillEvidence, heartbeatCatalogBackfillOwner, importCatalogBackfillPage, initializeCatalogBackfill, requeueCatalogBackfillCell, submitCatalogBackfillProducer, submitCatalogBackfillVerifier } from "./catalog-backfill-v4";
 import { compareAndSwapIngredientPointer, finalizeIncrementalIngredient, previewIncrementalIngredient, rollbackIncrementalIngredientPointer, stageIncrementalIngredient } from "./incremental-ingredient-publication";
 import { completePermanentlyUnavailableIngredient, resumeRecipesForPublishedIngredient } from "./recipe-dependency-resume-v2";
 import { releasePayloadObjectKey } from "./release-payloads";
@@ -1714,6 +1714,17 @@ app.post("/internal/v4/backfill/import", async (context) => {
 app.get("/internal/v4/backfill/progress", async (context) => {
   const progress = await catalogBackfillProgress(context.env.DB, context.req.query("runId"));
   return progress ? context.json({ ok: true, ...progress }) : jsonError("catalog backfill run not found", 404);
+});
+
+app.get("/internal/v4/backfill/definition-audit", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may audit catalog backfill definitions", 403);
+  const runId = context.req.query("runId");
+  if (!runId) return jsonError("definition audit requires a runId", 400);
+  try { return context.json({ ok: true, ...await auditCatalogBackfillDefinitions(context.env.DB, runId, {
+    definitionOffset: Number(context.req.query("definitionOffset") ?? 0), terminalOffset: Number(context.req.query("terminalOffset") ?? 0),
+    limit: Number(context.req.query("limit") ?? 25),
+  }) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "catalog backfill definition audit failed", 409); }
 });
 
 app.post("/internal/v4/backfill/claim", async (context) => {
