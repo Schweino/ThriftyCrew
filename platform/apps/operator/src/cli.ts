@@ -412,9 +412,10 @@ function ingredientPublicProjection(commodity: Record<string, unknown>): Record<
 async function verifyIngredientPublicationExternally(client: MutationClient, batchId: string, expectedReleaseId?: string): Promise<Record<string, unknown>> {
   const plan = await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(batchId)}/proof-plan`) as {
     releaseId?: string;
+    publicationReleaseId?: string;
     checks?: Array<{ gapId: string; originKind: "worker" | "custom_domain"; url: string }>;
   };
-  if (!plan.releaseId || !plan.checks?.length || (expectedReleaseId && plan.releaseId !== expectedReleaseId)) {
+  if (!plan.releaseId || !plan.checks?.length || (expectedReleaseId && plan.publicationReleaseId !== expectedReleaseId)) {
     throw new Error("ingredient publication proof plan is missing or targets the wrong release");
   }
   const proofs = await Promise.all(plan.checks.map(async (check) => {

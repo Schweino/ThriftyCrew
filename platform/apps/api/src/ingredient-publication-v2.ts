@@ -308,14 +308,16 @@ export async function ingredientPublicationProofPlan(env: Pick<WorkerEnv, "DB" |
   const members = await env.DB.prepare("SELECT gap_id, commodity_id, expected_public_projection_hash FROM ingredient_publication_members WHERE batch_id = ?1 ORDER BY gap_id")
     .bind(batchId).all<{ gap_id: string; commodity_id: string; expected_public_projection_hash: string }>();
   if (!batch.release_id) throw new Error("publication batch has no bound release");
+  const current = await env.DB.prepare("SELECT release_id FROM current_releases WHERE market_id = 'omaha'").first<{ release_id: string }>();
+  if (!current?.release_id) throw new Error("ingredient publication proof requires a current public release");
   const origins = [["worker", env.PUBLIC_ORIGIN], ["custom_domain", env.GHOST_PUBLIC_ORIGIN]] as const;
   const checks = members.results.flatMap((member) => origins.map(([originKind, origin]) => {
     const proofUrl = new URL(`/api/v2/board/${encodeURIComponent(member.commodity_id)}`, origin);
-    proofUrl.searchParams.set("release", batch.release_id!);
+    proofUrl.searchParams.set("release", current.release_id);
     return { gapId: member.gap_id, commodityId: member.commodity_id, expectedHash: member.expected_public_projection_hash,
       originKind, url: proofUrl.toString() };
   }));
-  return { batchId, releaseId: batch.release_id, checks };
+  return { batchId, publicationReleaseId: batch.release_id, releaseId: current.release_id, checks };
 }
 
 export function validateIngredientPublicationExternalProofs(
@@ -367,14 +369,15 @@ export async function verifyIngredientPublicationExternal(env: Pick<WorkerEnv, "
   if (statements.length) for (let offset = 0; offset < statements.length; offset += 90) await env.DB.batch(statements.slice(offset, offset + 90));
   const remaining = await env.DB.prepare("SELECT COUNT(*) AS count FROM ingredient_publication_members WHERE batch_id = ?1 AND state != 'public_verified'").bind(batchId).first<{ count: number }>();
   const complete = allVerified && Number(remaining?.count ?? 0) === 0;
-  await env.DB.prepare(`UPDATE ingredient_publication_batches SET state = ?2, release_id = ?3,
+  await env.DB.prepare(`UPDATE ingredient_publication_batches SET state = ?2,
       completed_at = CASE WHEN ?2 = 'completed' THEN CURRENT_TIMESTAMP ELSE completed_at END, updated_at = CURRENT_TIMESTAMP WHERE id = ?1`)
-    .bind(batchId, complete ? "completed" : "edge_verified", input.releaseId).run();
+    .bind(batchId, complete ? "completed" : "edge_verified").run();
   if (complete) {
     const receiptId = await deterministicId("ingredient-publication-receipt", batchId, "pointer_published", "completed", input.releaseId);
     await env.DB.prepare(`INSERT INTO ingredient_publication_transition_receipts
       (id, batch_id, from_state, to_state, actor, detail_json) VALUES (?1, ?2, 'pointer_published', 'completed', 'dual-origin-verifier', ?3)
-    ON CONFLICT(batch_id, from_state, to_state, actor) DO NOTHING`).bind(receiptId, batchId, stableJson({ releaseId: input.releaseId, proofs: validation.proofs })).run();
+    ON CONFLICT(batch_id, from_state, to_state, actor) DO NOTHING`).bind(receiptId, batchId,
+      stableJson({ publicationReleaseId: plan.publicationReleaseId, verifiedReleaseId: input.releaseId, proofs: validation.proofs })).run();
   }
   return { batchId, releaseId: input.releaseId, complete, proofs: validation.proofs };
 }
