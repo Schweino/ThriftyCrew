@@ -55697,5 +55697,16 @@
     "exclude": [
       "\\b(?:spray|mayonnaise|mayo|dressing|ranch|chips?|crackers?|capsules?|softgels?|skin|hair|cosmetic|conditioner|shampoo)\\b"
     ]
+  },
+  {
+    "id": "white-miso-paste",
+    "label": "White Miso Paste",
+    "unit": "oz",
+    "include": [
+      "\\bwhite\\s+miso(?:\\s+paste)?\\b"
+    ],
+    "exclude": [
+      "\\b(?:instant|soup|broth|dressing|marinade|sauce|ramen)\\b"
+    ]
   }
 ]
