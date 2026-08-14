@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { compactEvidenceChunkForCheck, ingredientQaFailureAction, isIdempotentCaptureResumeConflict, isIdempotentQaResumeConflict } from "./ingredient-pipeline";
+import { compactEvidenceChunkForCheck, ingredientQaFailureAction, isIdempotentCaptureResumeConflict, isIdempotentQaResumeConflict,
+  settleIndependentLanes, storeCheckFailureDisposition } from "./ingredient-pipeline";
 
 describe("ingredient QA failure routing", () => {
   it.each([
@@ -30,6 +31,15 @@ describe("ingredient QA failure routing", () => {
   });
 });
 
+describe("headless source-limit routing", () => {
+  it("quarantines a provably incomplete retailer envelope without scheduling another retry", () => {
+    expect(storeCheckFailureDisposition(new Error("[headless_source_limit] recovered 300 of 347")))
+      .toEqual({ failureClass: "adapter_quarantined", retryAt: null });
+    expect(storeCheckFailureDisposition(new Error("temporary network error"), new Date("2026-08-14T12:00:00.000Z")))
+      .toEqual({ failureClass: "transient", retryAt: "2026-08-14T12:01:00.000Z" });
+  });
+});
+
 describe("headless ingredient evidence compaction", () => {
   it("scopes evidence to one claim and removes redundant source projections", () => {
     const check = { commodity_proposal_json: JSON.stringify({ searchTerms: ["freekeh grain", "freekeh"] }) } as any;
@@ -50,5 +60,36 @@ describe("headless ingredient evidence compaction", () => {
     expect((compacted.rows![0] as any)._capture.visible).toBeUndefined();
     expect((compacted.rows![0] as any)._capture.structured).toBeUndefined();
     expect(JSON.stringify(compacted).length).toBeLessThan(JSON.stringify(chunk).length / 10);
+  });
+});
+
+describe("independent ingredient worker pools", () => {
+  it("starts producer, QA, and catalog work without a serial barrier", async () => {
+    const started: string[] = [];
+    const releases = new Map<string, () => void>();
+    const lane = (name: string, completed: number) => async () => {
+      started.push(name);
+      await new Promise<void>((resolve) => releases.set(name, resolve));
+      return completed;
+    };
+    const resultPromise = settleIndependentLanes({ catalog: lane("catalog", 1), capture: lane("capture", 2), qa: lane("qa", 3) });
+    await Promise.resolve();
+    expect(new Set(started)).toEqual(new Set(["catalog", "capture", "qa"]));
+    for (const release of releases.values()) release();
+    await expect(resultPromise).resolves.toEqual({
+      catalog: { completed: 1, error: null }, capture: { completed: 2, error: null }, qa: { completed: 3, error: null },
+    });
+  });
+
+  it("isolates one failed role so sibling queues still complete", async () => {
+    await expect(settleIndependentLanes({
+      catalog: async () => 4,
+      capture: async () => { throw new Error("retailer refused one producer"); },
+      qa: async () => 5,
+    })).resolves.toEqual({
+      catalog: { completed: 4, error: null },
+      capture: { completed: 0, error: "retailer refused one producer" },
+      qa: { completed: 5, error: null },
+    });
   });
 });

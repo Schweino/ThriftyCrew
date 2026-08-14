@@ -198,7 +198,7 @@ powershell -ExecutionPolicy Bypass -File platform/scripts/enqueue-browser-captur
 The wrapper verifies that the raw capture, manifest, and screenshot hashes bind to one session, builds and
 validates the V3 artifact, and atomically enqueues all three evidence classes. Image magic bytes and minimum
 dimensions are checked locally and again by the Worker. The at-logon capture controller owns a SQLite WAL
-journal, enforces at most two distinct concurrent store lanes, and drains on startup, wake events, and a
+journal, runs one isolated concurrent lane for each of Aldi, Fareway, Sam's, and Walmart, and drains on startup, wake events, and a
 five-minute fallback interval. A single-instance per-user supervisor restarts it with bounded backoff after an
 unexpected exit, without requiring administrator rights. Controller commands use a per-user authenticated
 Windows named pipe; no loopback HTTP listener is opened. Queue, capture-session, planner, lane and controller

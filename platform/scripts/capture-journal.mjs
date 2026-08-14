@@ -453,7 +453,7 @@ export function leaseCaptureWork(owner, requestedStore, now = new Date(), ttlMs 
     // Executor rows are capacity reservations, not independent leases. A
     // controller restart can outlive the work lease's in-memory finally
     // handler, so remove any executor that no longer owns leased work before
-    // enforcing the two-store concurrency ceiling.
+    // enforcing the one-lane-per-store, four-store concurrency ceiling.
     db.prepare(`DELETE FROM capture_executors WHERE NOT EXISTS (
       SELECT 1 FROM capture_work_units work
       WHERE work.lease_owner = capture_executors.owner AND work.status = 'leased'
@@ -589,15 +589,18 @@ export function recordStoreRateResult(store, outcome, latencyMs, now = new Date(
   return { store, pressure, refillMs, nextEligibleAt: new Date(now.getTime() + cooldown).toISOString(), latencyMs: Math.max(0, Math.round(latencyMs)) };
 }
 
-export function captureCoordinatorStatus(file) {
+export function captureCoordinatorStatus(file, now = new Date()) {
   const db = database(file);
   const work = db.prepare("SELECT store, phase, status, COUNT(*) AS count FROM capture_work_units GROUP BY store, phase, status ORDER BY store, phase, status").all();
   const challenges = db.prepare("SELECT id, store, status, detail_json AS detailJson, opened_at AS openedAt, acknowledged_at AS acknowledgedAt FROM capture_challenges WHERE status <> 'resolved' ORDER BY opened_at").all()
     .map((row) => ({ ...row, detail: JSON.parse(row.detailJson), detailJson: undefined }));
   const executors = db.prepare("SELECT owner, store, current_unit_id AS currentUnitId, last_heartbeat_at AS lastHeartbeatAt FROM capture_executors ORDER BY owner").all();
   const budgets = db.prepare("SELECT store, tokens, capacity, refill_ms AS refillMs, next_eligible_at AS nextEligibleAt, pressure FROM store_rate_budgets ORDER BY store").all();
+  const lanes = db.prepare(`SELECT lease.store, lease.owner, lease.expires_at AS expiresAt, lease.acquired_at AS acquiredAt,
+    state.state_json AS stateJson FROM lane_leases lease LEFT JOIN lane_state state ON state.store = lease.store
+    WHERE lease.expires_at > ? ORDER BY lease.store`).all(now.getTime()).map((row) => ({ ...row, state: row.stateJson ? JSON.parse(row.stateJson) : null, stateJson: undefined }));
   const sessions = db.prepare("SELECT session_id AS sessionId, session_directory AS sessionDirectory, store, phase, updated_at AS updatedAt FROM capture_session_state ORDER BY updated_at DESC").all();
-  return { sessions, work, challenges, executors, budgets };
+  return { sessions, work, challenges, executors, lanes, budgets };
 }
 
 export function readSessionJournal(directory, file) {

@@ -1,7 +1,7 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { browserLanePolicy, browserLaneStartDelayMs, jitteredBrowserDelayMs, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
 import { closeBrowserCaptureJournals } from "./capture-journal.mjs";
 
@@ -46,6 +46,21 @@ describe("browser store lane policy", () => {
     await expect(withBrowserStoreLane("sams", async () => null, environment)).rejects.toThrow("active capture");
     release(null);
     await held;
+  });
+
+  it("permits all four retailer adapters to hold isolated lanes concurrently", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-browser-four-lanes-"));
+    roots.push(root);
+    const environment = { LOCALAPPDATA: root, TC_CAPTURE_CONTROLLER_ORIGIN: "disabled" };
+    const started = [];
+    const releases = new Map();
+    const held = ["aldi", "fareway", "sams", "walmart"].map((store) => withBrowserStoreLane(store, () => new Promise((resolve) => {
+      started.push(store);
+      releases.set(store, resolve);
+    }), environment));
+    await vi.waitFor(() => expect(started).toHaveLength(4));
+    for (const store of started) releases.get(store)(store);
+    await expect(Promise.all(held)).resolves.toEqual(["aldi", "fareway", "sams", "walmart"]);
   });
 
   it("paces one-term chunks from the prior completion instead of letting chunk boundaries bypass Aldi's minimum", () => {

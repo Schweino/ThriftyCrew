@@ -13,10 +13,12 @@ $lock = Enter-PcRuntimeLock 'ingredient-campaign-supervisor' 300
 if (-not $lock) { Write-PcRuntimeLog $logFile 'another supervisor owns the active ingredient campaign; standing down'; exit 0 }
 $lastPublisherStart = [DateTime]::MinValue
 $lastRecipeStart = [DateTime]::MinValue
-$lastPricingStart = [DateTime]::MinValue
+$lastPricingStarts = @{}
 $lastBrowserAlertKey = ''
-$pricingProcess = $null
+$lastStallAlertKey = ''
+$pricingProcesses = @{}
 $recipeProcess = $null
+$completionProcesses = @{}
 $publisherProcess = $null
 
 function Read-IngredientStatus {
@@ -60,6 +62,26 @@ function Start-Cycle([string]$CycleName, [int]$MaxItems, [int]$Slot = 0) {
   return Start-Process -FilePath 'powershell.exe' -ArgumentList $arguments -WorkingDirectory $platformRoot -WindowStyle Hidden -PassThru
 }
 
+function Start-PricingWorker([int]$Slot, [string]$Label, [int]$WorkCount) {
+  $process = $pricingProcesses[$Slot]
+  $lastStart = $lastPricingStarts[$Slot]
+  if ($WorkCount -le 0 -or ($process -and -not $process.HasExited) -or
+      ($lastStart -and ((Get-Date) - $lastStart).TotalSeconds -lt 2)) { return }
+  $pricingProcesses[$Slot] = Start-Cycle 'IngredientPricing' 50 $Slot
+  $lastPricingStarts[$Slot] = Get-Date
+  Write-PcRuntimeLog $logFile ("started pricing worker {0}; queued={1}" -f $Label,$WorkCount)
+}
+
+function Start-CompletionWorker([int]$Slot, [string]$Label, [int]$WorkCount) {
+  $process = $completionProcesses[$Slot]
+  if ($WorkCount -le 0 -or ($process -and -not $process.HasExited)) { return }
+  $scriptPath = Join-Path $platformRoot 'scripts\run-pc-agent-cycle.ps1'
+  $arguments = @('-NoProfile','-ExecutionPolicy','Bypass','-WindowStyle','Hidden','-File',('"{0}"' -f $scriptPath),
+    '-Cycle','RecipeCompletion','-CompletionWorkerSlot',[string]$Slot,'-MaxItems','50')
+  $completionProcesses[$Slot] = Start-Process -FilePath 'powershell.exe' -ArgumentList $arguments -WorkingDirectory $platformRoot -WindowStyle Hidden -PassThru
+  Write-PcRuntimeLog $logFile ("started recipe completion worker {0}; queued={1}" -f $Label,$WorkCount)
+}
+
 try {
   Write-PcRuntimeLog $logFile 'stage-aware supervisor started; idle stages are not launched'
   while ($true) {
@@ -77,19 +99,39 @@ try {
     $browserWork = [int](($pipeline.stores | Where-Object { $_.store_location_id -in $browserStoreIds -and $_.state -notin $terminalStoreStates } | Measure-Object count -Sum).Sum)
     $inboxWork = [int](($pipeline.inbox | Where-Object { $_.state -in @('pending','claimed') } | Measure-Object count -Sum).Sum)
     $outboxWork = [int](($pipeline.outbox | Where-Object state -eq 'pending' | Measure-Object count -Sum).Sum)
-    if (($headlessWork -gt 0 -or $inboxWork -gt 0 -or $outboxWork -gt 0) -and
-        (-not $pricingProcess -or $pricingProcess.HasExited) -and ((Get-Date) - $lastPricingStart).TotalSeconds -ge 5) {
-      $pricingProcess = Start-Cycle 'IngredientPricing' 50
-      $lastPricingStart = Get-Date
-      Write-PcRuntimeLog $logFile ("started one bounded headless pricing tick; headless={0} inbox={1} outbox={2}" -f $headlessWork, $inboxWork, $outboxWork)
+    $catalogWork = [int](($pipeline.workerQueues | Where-Object role -eq 'catalog' | Measure-Object count -Sum).Sum)
+    Start-PricingWorker 0 'coordinator/catalog' ($inboxWork + $outboxWork + $catalogWork)
+    $headlessAssignments = @(
+      @{ Slot=1; Store='bakers-saddle-creek'; Role='capture' }, @{ Slot=2; Store='bakers-saddle-creek'; Role='qa' },
+      @{ Slot=3; Store='family-fare-omaha-6401'; Role='capture' }, @{ Slot=4; Store='family-fare-omaha-6401'; Role='qa' },
+      @{ Slot=5; Store='hy-vee-omaha-1465'; Role='capture' }, @{ Slot=6; Store='hy-vee-omaha-1465'; Role='qa' }
+    )
+    foreach ($assignment in $headlessAssignments) {
+      $roleWork = [int](($pipeline.workerQueues | Where-Object { $_.store_location_id -eq $assignment.Store -and $_.role -eq $assignment.Role } | Measure-Object count -Sum).Sum)
+      Start-PricingWorker $assignment.Slot ("{0}/{1}" -f $assignment.Store,$assignment.Role) $roleWork
     }
     if ($browserWork -gt 0) {
-      $browserAlertKey = [string]$browserWork
+      $browserBreakdown = @($pipeline.stores | Where-Object { $_.store_location_id -in $browserStoreIds -and $_.state -notin $terminalStoreStates } |
+        Group-Object store_location_id | Sort-Object Name | ForEach-Object { "{0}={1}" -f $_.Name,[int](($_.Group | Measure-Object count -Sum).Sum) })
+      $browserAlertKey = $browserBreakdown -join ';'
       if ($browserAlertKey -ne $lastBrowserAlertKey) {
-        Send-PcRuntimeAlert 'Omaha pricing browser lanes are ready' ("$browserWork browser-store checks are queued. Open Codex and ask it to use `$omaha-ingredient-pricing. Chrome challenges will raise a separate Done callback alert.")
+        Send-PcRuntimeAlert 'Four Omaha browser pricing lanes are ready' ("Run Aldi, Fareway, Sam's, and Walmart as four simultaneous isolated Codex browser agents. Queue: $browserAlertKey. Chrome challenges raise a separate Done callback alert; one blocked store must not stop the other three.")
         $lastBrowserAlertKey = $browserAlertKey
       }
     } else { $lastBrowserAlertKey = '' }
+
+    $completionReady = [int]$pipeline.recipeCompletionReady
+    $writerWork = [int](($pipeline.recipeCompletionWork | Where-Object agent_id -eq 'recipe-writer' | Measure-Object count -Sum).Sum)
+    $auditorWork = [int](($pipeline.recipeCompletionWork | Where-Object agent_id -eq 'recipe-auditor' | Measure-Object count -Sum).Sum)
+    Start-CompletionWorker 1 'writer' ($completionReady + $writerWork)
+    Start-CompletionWorker 2 'auditor/publisher' $auditorWork
+
+    if ($pipeline.noProgressAlert -and ($headlessWork -gt 0 -or $browserWork -gt 0 -or $inboxWork -gt 0)) {
+      if ($lastStallAlertKey -ne [string]$pipeline.lastProgressAt) {
+        Send-PcRuntimeAlert 'Omaha ingredient pipeline has stalled' ("No durable progress for $($pipeline.noProgressSeconds) seconds with active work. Inspect per-store workers and browser challenges now.")
+        $lastStallAlertKey = [string]$pipeline.lastProgressAt
+      }
+    } else { $lastStallAlertKey = '' }
 
     $collecting = @($campaigns | Where-Object { $_.state -eq 'collecting' -and -not $_.discovery_frozen_at }).Count -gt 0
     if ($collecting -and (-not $recipeProcess -or $recipeProcess.HasExited) -and ((Get-Date) - $lastRecipeStart).TotalSeconds -ge 5) {
@@ -119,6 +161,11 @@ try {
   Send-PcRuntimeAlert 'ThriftyCrew ingredient campaign supervisor failed' ("The durable campaign is preserved but paused operationally.`n`n$($_.Exception.Message)`n`nLog: $logFile")
   exit 1
 } finally {
-  if ($pricingProcess -and -not $pricingProcess.HasExited) { Stop-Process -Id $pricingProcess.Id -Force -ErrorAction SilentlyContinue }
+  foreach ($process in $pricingProcesses.Values) {
+    if ($process -and -not $process.HasExited) { Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue }
+  }
+  foreach ($process in $completionProcesses.Values) {
+    if ($process -and -not $process.HasExited) { Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue }
+  }
   Exit-PcRuntimeLock $lock
 }

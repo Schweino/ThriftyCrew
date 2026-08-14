@@ -1,10 +1,11 @@
 param(
   [Parameter(Mandatory=$true)]
-  [ValidateSet('Triage','PostPublish','SourceSentinel','Recipe','IngredientPricing','IngredientPublication','Accuracy')]
+  [ValidateSet('Triage','PostPublish','SourceSentinel','Recipe','RecipeCompletion','IngredientPricing','IngredientPublication','Accuracy')]
   [string]$Cycle,
   [ValidateRange(1,50)][int]$MaxItems = 1,
   [ValidateRange(0,10)][int]$PricingWorkerSlot = 0,
   [ValidateRange(0,4)][int]$RecipeWorkerSlot = 0,
+  [ValidateRange(0,2)][int]$CompletionWorkerSlot = 0,
   [string]$OnlyAgent,
   [switch]$SelfTest
 )
@@ -26,6 +27,7 @@ $cycleAgents = @{
   PostPublish = @('post-publish-reviewer')
   SourceSentinel = @('source-sentinel-investigator')
   Recipe = @('recipe-sourcer','recipe-deduper','recipe-fact-extractor','recipe-mapper','recipe-writer','recipe-auditor')
+  RecipeCompletion = @('recipe-writer','recipe-auditor')
   IngredientPricing = @()
   IngredientPublication = @('ingredient-definition-planner')
   Accuracy = @('accuracy-headless')
@@ -42,6 +44,9 @@ $script:ingredientProposalFiles = [Collections.Generic.List[string]]::new()
 $script:ingredientConfigurationChanged = $false
 if ($Cycle -ne 'IngredientPricing' -and $PricingWorkerSlot -ne 0) {
   throw 'PricingWorkerSlot is valid only for the IngredientPricing cycle'
+}
+if ($Cycle -ne 'RecipeCompletion' -and $CompletionWorkerSlot -ne 0) {
+  throw 'CompletionWorkerSlot is valid only for the RecipeCompletion cycle'
 }
 if ($OnlyAgent) {
   if ($OnlyAgent -notin $agentsForCycle) {
@@ -322,17 +327,17 @@ function Start-IngredientPricingDrain {
 
 function Invoke-IngredientDownstreamDrain {
   $downstreamLock = $null
-  for ($attempt = 0; $attempt -lt 360 -and -not $downstreamLock; $attempt++) {
+  for ($attempt = 0; $attempt -lt 12 -and -not $downstreamLock; $attempt++) {
     $downstreamLock = Enter-PcRuntimeLock 'ingredient-recipe-downstream' 300
     if (-not $downstreamLock) { Start-Sleep -Seconds 5 }
   }
-  if (-not $downstreamLock) { throw 'ingredient recipe downstream lock remained occupied for 30 minutes' }
+  if (-not $downstreamLock) { throw 'ingredient recipe completion lock remained occupied for one minute' }
   try {
     $contentAdvanced = $false
-    foreach ($agentId in @('recipe-mapper','recipe-writer','recipe-auditor')) {
+    foreach ($agentId in @('recipe-writer','recipe-auditor')) {
       for ($item = 0; $item -lt $MaxItems; $item++) {
         if (-not (Invoke-AgentItem $agentId)) { break }
-        if ($agentId -in @('recipe-writer','recipe-auditor')) { $contentAdvanced = $true }
+        $contentAdvanced = $true
       }
     }
     if ($contentAdvanced) { Publish-ReadyRecipeContent }
@@ -342,7 +347,7 @@ function Invoke-IngredientDownstreamDrain {
 }
 
 if ($SelfTest) {
-  if ($Cycle -in @('Recipe','IngredientPricing','IngredientPublication')) {
+  if ($Cycle -in @('Recipe','RecipeCompletion','IngredientPricing','IngredientPublication')) {
     $authPath = Join-Path ([Environment]::GetFolderPath('UserProfile')) '.codex\auth.json'
     if (-not (Test-Path -LiteralPath $authPath)) { throw 'Codex ChatGPT authentication is not configured' }
     $auth = Read-PcUtf8Json $authPath
@@ -358,6 +363,8 @@ if ($SelfTest) {
 
 $lockName = if ($Cycle -eq 'IngredientPricing' -and $PricingWorkerSlot -gt 0) {
   "agent-cycle-ingredientpricing-{0}" -f $PricingWorkerSlot
+} elseif ($Cycle -eq 'RecipeCompletion' -and $CompletionWorkerSlot -gt 0) {
+  "agent-cycle-recipecompletion-{0}" -f $CompletionWorkerSlot
 } elseif ($Cycle -eq 'Recipe' -and $RecipeWorkerSlot -gt 0) {
   "agent-cycle-recipe-shard-{0}" -f $RecipeWorkerSlot
 } else {
@@ -425,11 +432,40 @@ try {
     }
     if ($contentAdvanced) { Publish-ReadyRecipeContent }
   } elseif ($Cycle -eq 'IngredientPricing' -and -not $OnlyAgent) {
-    if ($PricingWorkerSlot -gt 1) { throw 'V3 ingredient pricing uses one coordinator with seven store lanes, not model worker slots' }
+    $pricingAssignments = @{
+      1 = @('bakers-saddle-creek','capture')
+      2 = @('bakers-saddle-creek','qa')
+      3 = @('family-fare-omaha-6401','capture')
+      4 = @('family-fare-omaha-6401','qa')
+      5 = @('hy-vee-omaha-1465','capture')
+      6 = @('hy-vee-omaha-1465','qa')
+    }
+    if ($PricingWorkerSlot -gt 6) { throw 'IngredientPricing worker slots 1-6 map to the three independent headless producer/QA pools' }
     Set-PcRuntimeCredential $config 'local-operator'
     Push-Location $platformRoot
-    try { Invoke-LoggedCommand 'ingredient-v3-pricing-tick' { & $pnpmPath tc ingredient pipeline tick } | Out-Null }
+    try {
+      if ($PricingWorkerSlot -eq 0) {
+        Invoke-LoggedCommand 'ingredient-v3-pricing-coordinator' { & $pnpmPath tc ingredient pipeline tick coordinator } | Out-Null
+      } else {
+        $assignment = $pricingAssignments[$PricingWorkerSlot]
+        Invoke-LoggedCommand ("ingredient-v3-pricing-{0}-{1}" -f $assignment[0],$assignment[1]) {
+          & $pnpmPath tc ingredient pipeline tick $assignment[0] $assignment[1]
+        } | Out-Null
+      }
+    }
     finally { Pop-Location }
+  } elseif ($Cycle -eq 'RecipeCompletion' -and -not $OnlyAgent) {
+    if ($CompletionWorkerSlot -eq 0) {
+      Invoke-IngredientDownstreamDrain
+    } else {
+      $completionAgent = if ($CompletionWorkerSlot -eq 1) { 'recipe-writer' } else { 'recipe-auditor' }
+      $contentAdvanced = $false
+      for ($item = 0; $item -lt $MaxItems; $item++) {
+        if (-not (Invoke-AgentItem $completionAgent)) { break }
+        $contentAdvanced = $true
+      }
+      if ($CompletionWorkerSlot -eq 2 -and $contentAdvanced) { Publish-ReadyRecipeContent }
+    }
   } elseif ($Cycle -eq 'IngredientPublication' -and -not $OnlyAgent) {
     for ($item = 0; $item -lt $MaxItems; $item++) {
       if (-not (Invoke-AgentItem 'ingredient-definition-planner')) { break }
@@ -450,7 +486,7 @@ try {
         }
       }
     } finally { Pop-Location }
-    if ($publishedGaps -gt 0) { Invoke-IngredientDownstreamDrain }
+    if ($publishedGaps -gt 0) { Start-IngredientPricingDrain }
   } else {
     foreach ($agentId in $agentsForCycle) {
       for ($item = 0; $item -lt $MaxItems; $item++) {

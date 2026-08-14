@@ -583,7 +583,8 @@ export async function pricingWaveStatus(db: D1Database, waveId: string): Promise
 }
 
 export async function ingredientPipelineStatus(db: D1Database): Promise<Record<string, unknown>> {
-  const [jobs, stores, waves, inbox, attention, lastProgress, challenges, outbox, stageLatency, orphans, definitionWork] = await Promise.all([
+  const [jobs, stores, waves, inbox, attention, lastProgress, challenges, outbox, stageLatency, orphans, definitionWork,
+    storeTelemetry, workerQueues, recipeCompletionReady, recipeCompletionWork] = await Promise.all([
     db.prepare(`SELECT CASE WHEN job.operational_state = 'cancelled' AND gap.qa_resolution IS NOT NULL
           THEN 'cancelled_existing_alias' ELSE job.operational_state END AS state, COUNT(*) AS count
       FROM ingredient_pricing_jobs job JOIN ingredient_gaps gap ON gap.id = job.gap_id
@@ -624,12 +625,69 @@ export async function ingredientPipelineStatus(db: D1Database): Promise<Record<s
     db.prepare(`SELECT state, COUNT(*) AS count FROM agent_work_items
       WHERE agent_id = 'ingredient-definition-planner' AND state IN ('queued','retryable','leased')
       GROUP BY state ORDER BY state`).all(),
+    db.prepare(`WITH event_counts AS (
+        SELECT aggregate_id,
+          SUM(CASE WHEN stage = 'capture' AND event_kind = 'completed' THEN 1 ELSE 0 END) AS producer_completed,
+          SUM(CASE WHEN stage = 'qa' AND event_kind = 'completed' THEN 1 ELSE 0 END) AS qa_completed,
+          SUM(CASE WHEN stage = 'qa' AND event_kind = 'rejected_to_capture' THEN 1 ELSE 0 END) AS qa_rejected
+        FROM pipeline_stage_events WHERE aggregate_kind = 'store_check' AND created_at >= datetime('now','-1 day')
+        GROUP BY aggregate_id
+      ) SELECT check_row.store_location_id,
+        SUM(COALESCE(event.producer_completed,0)) AS producer_completed_24h,
+        SUM(COALESCE(event.qa_completed,0)) AS qa_completed_24h,
+        SUM(COALESCE(event.qa_rejected,0)) AS qa_rejected_24h,
+        CAST(AVG(CASE WHEN check_row.capture_completed_at IS NOT NULL
+          THEN (julianday(check_row.capture_completed_at) - julianday(check_row.created_at)) * 86400 END) AS INTEGER) AS producer_queue_and_active_seconds_avg,
+        CAST(AVG(CASE WHEN check_row.qa_completed_at IS NOT NULL AND check_row.capture_completed_at IS NOT NULL
+          THEN (julianday(check_row.qa_completed_at) - julianday(check_row.capture_completed_at)) * 86400 END) AS INTEGER) AS qa_queue_and_active_seconds_avg,
+        MAX(CASE WHEN check_row.state = 'leased' AND check_row.heartbeat_at IS NOT NULL
+          THEN CAST((julianday('now') - julianday(check_row.heartbeat_at)) * 86400 AS INTEGER) ELSE 0 END) AS active_since_heartbeat_seconds,
+        MAX(CASE WHEN check_row.operational_state IN ('challenge_blocked','location_blocked','authentication_blocked')
+          THEN CAST((julianday('now') - julianday(check_row.updated_at)) * 86400 AS INTEGER) ELSE 0 END) AS externally_blocked_seconds,
+        MAX(CASE WHEN check_row.operational_state NOT IN ('cancelled','qa_verified_priced','qa_verified_not_found')
+          THEN CAST((julianday('now') - julianday(check_row.last_progress_at)) * 86400 AS INTEGER) ELSE 0 END) AS max_idle_seconds
+      FROM ingredient_store_checks check_row
+      LEFT JOIN event_counts event ON event.aggregate_id = check_row.id
+      GROUP BY check_row.store_location_id ORDER BY check_row.store_location_id`).all(),
+    db.prepare(`SELECT store_location_id, role, COUNT(*) AS count FROM (
+      SELECT store_location_id,
+        CASE WHEN state = 'qa_pending' OR (state = 'transient_failed' AND resume_state = 'qa_queued') THEN 'qa'
+             WHEN state IN ('targeted_refresh','evidence_expired')
+               OR (state = 'transient_failed' AND COALESCE(resume_state,'capture_queued') = 'capture_queued') THEN 'capture'
+             WHEN state IN ('queued','catalog_lookup') THEN 'catalog' END AS role
+      FROM ingredient_store_checks check_row
+      JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
+      JOIN ingredient_gaps gap ON gap.id = check_row.gap_id
+      WHERE julianday(check_row.next_attempt_at) <= julianday('now')
+        AND check_row.state IN ('queued','catalog_lookup','targeted_refresh','evidence_expired','qa_pending','transient_failed')
+        AND job.state = 'store_checks_running' AND job.commodity_proposal_json IS NOT NULL AND gap.qa_resolution IS NULL
+    ) WHERE role IS NOT NULL GROUP BY store_location_id, role ORDER BY store_location_id, role`).all(),
+    db.prepare(`SELECT COUNT(*) AS count FROM recipe_ingredient_holds hold
+      WHERE hold.status = 'paused'
+        AND EXISTS (SELECT 1 FROM recipe_hold_requirements requirement WHERE requirement.hold_id = hold.id)
+        AND NOT EXISTS (
+          SELECT 1 FROM recipe_hold_requirements requirement
+          JOIN ingredient_gaps gap ON gap.id = requirement.gap_id
+          WHERE requirement.hold_id = hold.id
+            AND gap.status NOT IN ('published','permanently_unavailable')
+            AND gap.qa_resolution IS NULL
+        )`).first<{ count: number }>(),
+    db.prepare(`SELECT agent_id, state, COUNT(*) AS count FROM agent_work_items
+      WHERE agent_id IN ('recipe-writer','recipe-auditor') AND state IN ('queued','retryable','leased')
+      GROUP BY agent_id, state ORDER BY agent_id, state`).all(),
   ]);
+  const lastProgressAt = lastProgress?.changed_at ?? null;
+  const noProgressSeconds = lastProgressAt
+    ? Math.max(0, Math.floor((Date.now() - new Date(lastProgressAt).getTime()) / 1000)) : null;
   return { marketId: "omaha", waves: waves.results, jobs: jobs.results, stores: stores.results, inbox: inbox.results,
     needsOperator: attention.results, challenges: challenges.results, outbox: outbox.results,
     definitionWork: definitionWork.results,
+    storeTelemetry: storeTelemetry.results,
+    workerQueues: workerQueues.results,
+    recipeCompletionReady: Number(recipeCompletionReady?.count ?? 0),
+    recipeCompletionWork: recipeCompletionWork.results,
     stagesLast24Hours: stageLatency.results, orphanActiveChecks: Number(orphans?.count ?? 0),
-    lastProgressAt: lastProgress?.changed_at ?? null };
+    lastProgressAt, noProgressSeconds, noProgressAlert: noProgressSeconds !== null && noProgressSeconds > 60 };
 }
 
 export async function ingredientCampaignProgress(db: D1Database, requestId?: string): Promise<Record<string, unknown>> {

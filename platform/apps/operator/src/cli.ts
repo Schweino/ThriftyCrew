@@ -1719,9 +1719,22 @@ if (command === "status") {
 } else if (command === "ingredient" && subcommand === "pipeline") {
   const action = arguments_[0] ?? "run";
   if (action === "status") result = await (await mutationClient()).request("/internal/ingredient-pricing/status");
-  else if (action === "tick") result = await runIngredientPipeline(await mutationClient(), { once: true });
+  else if (action === "tick") {
+    const worker = arguments_[1];
+    const lane = arguments_[2];
+    if (worker === "coordinator") {
+      result = await runIngredientPipeline(await mutationClient(), { once: true, lanes: ["catalog"], orchestration: true });
+    } else if (worker) {
+      if (!lane || !["catalog", "capture", "qa"].includes(lane)) {
+        throw new Error("tc ingredient pipeline tick <store-location-id> requires catalog, capture, or qa");
+      }
+      result = await runIngredientPipeline(await mutationClient(), {
+        once: true, storeLocationIds: [worker], lanes: [lane as "catalog" | "capture" | "qa"], orchestration: false,
+      });
+    } else result = await runIngredientPipeline(await mutationClient(), { once: true });
+  }
   else if (action === "run") result = await runIngredientPipeline(await mutationClient());
-  else throw new Error("tc ingredient pipeline requires run, tick, or status");
+  else throw new Error("tc ingredient pipeline requires run, tick [coordinator|<store> <lane>], or status");
 } else if (command === "ingredient" && subcommand === "capture-claim") {
   const [storeLocationId, limitText = "50", outputFile, ownerOverride] = arguments_;
   if (!storeLocationId) throw new Error("tc ingredient capture-claim requires a store location id");

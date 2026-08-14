@@ -136,7 +136,7 @@ may deploy while those counters accrue, but no transition executor is retired ea
 - Local capture authority moved from scattered queue, planner, lane and session JSON files into one SQLite WAL
   journal. JSON and NDJSON remain bounded, hash-bound recovery evidence rather than mutable control state.
 - Aldi, Fareway, Walmart and Sam's adapters emit the same append-only discovery/verification protocol. The
-  persistent at-logon controller owns the two-store concurrency ceiling, store leases, queue wakeups and bounded
+  persistent at-logon controller owns four independent one-per-store lanes, store leases, queue wakeups and bounded
   logs. A single-instance per-user supervisor restarts it with bounded backoff after crashes without requiring
   administrator rights, eliminating repeated scheduled process startup as the coordination mechanism.
 - Browser evidence is split into bounded immutable product shards and uploaded straight to the evidence bucket.

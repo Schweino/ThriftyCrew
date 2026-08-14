@@ -187,6 +187,41 @@ describe("unified persistent capture journal", () => {
     expect((captureCoordinatorStatus(file) as { executors: Array<{ store: string }> }).executors).toHaveLength(4);
   });
 
+  it("reports each adapter lease with only its store-local pacing state", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-capture-lane-status-"));
+    roots.push(root);
+    const file = path.join(root, "capture-journal.sqlite");
+    const environment = { ...process.env, TC_CAPTURE_JOURNAL: file };
+    const started = new Date("2026-08-12T12:00:00.000Z");
+    expect(acquireControllerLane("aldi", "aldi-owner", started, 60_000, environment)).toMatchObject({ acquired: true });
+    expect(acquireControllerLane("walmart", "walmart-owner", started, 60_000, environment)).toMatchObject({ acquired: true });
+    const database = new DatabaseSync(file);
+    database.prepare("INSERT INTO lane_state (store, state_json, updated_at) VALUES (?, ?, ?)")
+      .run("aldi", JSON.stringify({ lastOutcome: "blocked", circuitOpenUntil: "2026-08-12T12:30:00.000Z" }), started.toISOString());
+    database.prepare("INSERT INTO lane_state (store, state_json, updated_at) VALUES (?, ?, ?)")
+      .run("walmart", JSON.stringify({ lastOutcome: "success", circuitOpenUntil: null }), started.toISOString());
+    database.close();
+    expect((captureCoordinatorStatus(file, started) as { lanes: Array<{ store: string; owner: string; state: Record<string, unknown> }> }).lanes).toEqual([
+      expect.objectContaining({ store: "aldi", owner: "aldi-owner", state: expect.objectContaining({ lastOutcome: "blocked" }) }),
+      expect.objectContaining({ store: "walmart", owner: "walmart-owner", state: expect.objectContaining({ lastOutcome: "success" }) }),
+    ]);
+  });
+
+  it("does not pause other retailer work when one store has an open challenge", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-capture-challenge-isolation-"));
+    roots.push(root);
+    const file = path.join(root, "capture-journal.sqlite");
+    const started = new Date("2026-08-12T12:00:00.000Z");
+    for (const store of ["aldi", "walmart"] as const) {
+      const directory = path.join(root, store);
+      upsertSessionJournal(directory, { sessionId: `session-${store}`, store, chunks: [] }, file);
+      replaceSessionWorkUnits(directory, store, "discovery", [{ key: `${store}-term`, ordinal: 0, payload: { query: `${store} term` } }], started.toISOString(), file);
+    }
+    openCaptureChallenge("aldi", { reason: "ALDI CloudFront wall" }, started, file);
+    expect(leaseCaptureWork("aldi-worker", "aldi", started, 60_000, file)).toMatchObject({ acquired: false });
+    expect(leaseCaptureWork("walmart-worker", "walmart", started, 60_000, file)).toMatchObject({ acquired: true, work: { store: "walmart" } });
+  });
+
   it("answers weekly browser freshness from journaled queue truth without scanning artifact files", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "tc-capture-due-journal-"));
     roots.push(root);

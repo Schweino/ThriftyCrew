@@ -22,7 +22,7 @@ export function openCaptureChallenge(store: string, detail?: Record<string, unkn
 export function acknowledgeCaptureChallenge(id: string, now?: Date, file?: string): Record<string, unknown>;
 export function resolveCaptureChallenge(id: string, canaryPassed: boolean, now?: Date, file?: string): Record<string, unknown>;
 export function recordStoreRateResult(store: string, outcome: string, latencyMs: number, now?: Date, file?: string): Record<string, unknown>;
-export function captureCoordinatorStatus(file?: string): Record<string, unknown>;
+export function captureCoordinatorStatus(file?: string, now?: Date): Record<string, unknown>;
 export function setCaptureSessionPhase(sessionId: string, phase: string, observedAt?: string, file?: string): Record<string, unknown>;
 export function browserCaptureJournalDueState(now?: Date, file?: string): Record<string, unknown> | null;
 export function readPlannerJournal(namespace: string, file?: string): Record<string, Record<string, unknown>>;

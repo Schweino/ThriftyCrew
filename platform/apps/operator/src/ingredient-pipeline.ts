@@ -3,10 +3,21 @@ import type { MutationClient } from "@thriftycrew/daily/client";
 import { readFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { captureHeadlessDiscovery, captureHeadlessVerification, claimSearchTerms, type HeadlessStore } from "./headless-targeted-capture";
+import { captureHeadlessDiscovery, captureHeadlessVerification, claimSearchTerms, mapWithConcurrency, type HeadlessStore } from "./headless-targeted-capture";
 import { buildIngredientCapturePayload, buildIngredientQaPayload, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
 
 type ClaimResponse = { checks?: ClaimedCheck[] };
+
+export type IngredientPipelineLane = "catalog" | "capture" | "qa";
+export type IngredientPipelineTickOptions = {
+  owner?: string;
+  limitPerStore?: number;
+  storeLocationIds?: string[];
+  lanes?: IngredientPipelineLane[];
+  orchestration?: boolean;
+};
+
+type LaneResult = { completed: number; error: string | null };
 
 const HEADLESS_STORES: Partial<Record<string, HeadlessStore>> = {
   "bakers-saddle-creek": "bakers",
@@ -83,6 +94,13 @@ export function compactEvidenceChunkForCheck(check: ClaimedCheck, chunk: Adapter
   return { ...chunk, terms, rows };
 }
 
+export function storeCheckFailureDisposition(reason: unknown, now = new Date()): { failureClass: "transient" | "adapter_quarantined"; retryAt: string | null } {
+  const message = String(reason instanceof Error ? reason.message : reason);
+  if (/\[headless_source_limit\]/i.test(message)) return { failureClass: "adapter_quarantined", retryAt: null };
+  const retryDelay = /source throttled/i.test(message) ? 5 * 60_000 : 60_000;
+  return { failureClass: "transient", retryAt: new Date(now.getTime() + retryDelay).toISOString() };
+}
+
 async function failClaimedChecks(client: MutationClient, checks: ClaimedCheck[], reason: unknown): Promise<void> {
   const message = String(reason instanceof Error ? reason.message : reason);
   console.error(JSON.stringify({
@@ -94,11 +112,10 @@ async function failClaimedChecks(client: MutationClient, checks: ClaimedCheck[],
   // Freshop reports throttling as either HTTP 429 or HTTP 400 with
   // {"error_code":429}. Give the shared retailer quota time to recover
   // instead of allowing the event loop to amplify the refusal every minute.
-  const retryDelay = /source throttled/i.test(message) ? 5 * 60_000 : 60_000;
-  const retryAt = new Date(Date.now() + retryDelay).toISOString();
+  const disposition = storeCheckFailureDisposition(reason);
   await Promise.allSettled(checks.map((check) => client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/fail`, { json: {
-    owner: check.lease_owner, leaseGeneration: Number(check.lease_generation), failureClass: "transient",
-    reason: message.slice(0, 5000), challengeId: null, retryAt,
+    owner: check.lease_owner, leaseGeneration: Number(check.lease_generation), failureClass: disposition.failureClass,
+    reason: message.slice(0, 5000), challengeId: null, retryAt: disposition.retryAt,
   } })));
 }
 
@@ -131,7 +148,7 @@ async function rejectQaToCapture(client: MutationClient, check: ClaimedCheck, re
 
 async function drainHeadlessCaptureLane(client: MutationClient, storeLocationId: string, adapter: HeadlessStore, owner: string, limit: number): Promise<number> {
   const claimed = await client.request("/internal/ingredient-pricing/store-checks/claim", {
-    json: { storeLocationId, owner, lane: "targeted_refresh", limit: Math.min(15, limit), leaseSeconds: 900 },
+    json: { storeLocationId, owner, lane: "targeted_refresh", limit: Math.min(50, limit), leaseSeconds: 900 },
   }) as ClaimResponse;
   const checks = claimed.checks ?? [];
   if (checks.length === 0) return 0;
@@ -141,18 +158,18 @@ async function drainHeadlessCaptureLane(client: MutationClient, storeLocationId:
     const chunk = await captureHeadlessDiscovery(adapter, terms, file, {
       krogerCredentialsFile: KROGER_CREDENTIALS_FILE, familyFareCatalogFile: FAMILY_FARE_CATALOG_FILE,
     });
-    let completed = 0;
-    for (const check of checks) {
+    const completions = await mapWithConcurrency(checks, Math.min(10, checks.length), async (check) => {
       try {
         const evidence = await uploadEvidence(client, check, "producer", chunk);
         const payload = await buildIngredientCapturePayload(check, [chunk], evidence);
         await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/capture-result`, { json: payload });
-        completed += 1;
+        return 1;
       } catch (error) {
         await failClaimedChecks(client, [check], error);
+        return 0;
       }
-    }
-    return completed;
+    });
+    return completions.reduce<number>((sum, value) => sum + value, 0);
   } catch (error) {
     await failClaimedChecks(client, checks, error);
     return 0;
@@ -163,7 +180,7 @@ async function drainHeadlessCaptureLane(client: MutationClient, storeLocationId:
 
 async function drainHeadlessQaLane(client: MutationClient, storeLocationId: string, adapter: HeadlessStore, owner: string, limit: number): Promise<number> {
   const claimed = await client.request("/internal/ingredient-pricing/store-checks/claim", {
-    json: { storeLocationId, owner, lane: "qa", limit: Math.min(15, limit), leaseSeconds: 900 },
+    json: { storeLocationId, owner, lane: "qa", limit: Math.min(50, limit), leaseSeconds: 900 },
   }) as ClaimResponse;
   const checks = claimed.checks ?? [];
   if (checks.length === 0) return 0;
@@ -174,21 +191,21 @@ async function drainHeadlessQaLane(client: MutationClient, storeLocationId: stri
       krogerCredentialsFile: KROGER_CREDENTIALS_FILE, familyFareCatalogFile: FAMILY_FARE_CATALOG_FILE,
     });
     const discovery = JSON.parse(await readFile(discoveryFile, "utf8")) as AdapterChunk;
-    let completed = 0;
-    for (const check of checks) {
+    const completions = await mapWithConcurrency(checks, Math.min(10, checks.length), async (check) => {
       try {
         const captured = JSON.parse(String(check.capture_result_json ?? "null")) as { outcome?: string } | null;
         const chunk = captured?.outcome === "priced" ? verification : discovery;
         const evidence = await uploadEvidence(client, check, "verifier", chunk);
         const payload = buildIngredientQaPayload(check, chunk, evidence as Parameters<typeof buildIngredientQaPayload>[2]);
         await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/qa-complete`, { json: payload });
-        completed += 1;
+        return 1;
       } catch (error) {
         if (ingredientQaFailureAction(error) === "reject_to_capture") await rejectQaToCapture(client, check, error);
         else await failClaimedChecks(client, [check], error);
+        return 0;
       }
-    }
-    return completed;
+    });
+    return completions.reduce<number>((sum, value) => sum + value, 0);
   } catch (error) {
     await failClaimedChecks(client, checks, error);
     return 0;
@@ -197,32 +214,80 @@ async function drainHeadlessQaLane(client: MutationClient, storeLocationId: stri
   }
 }
 
-export async function runIngredientPipelineTick(client: MutationClient, options: { owner?: string; limitPerStore?: number } = {}) {
+async function isolateLane(work: () => Promise<number>): Promise<LaneResult> {
+  try {
+    return { completed: await work(), error: null };
+  } catch (error) {
+    return { completed: 0, error: String(error instanceof Error ? error.message : error).slice(0, 5000) };
+  }
+}
+
+export async function settleIndependentLanes(
+  work: Partial<Record<IngredientPipelineLane, () => Promise<number>>>,
+): Promise<Record<IngredientPipelineLane, LaneResult>> {
+  const skipped = () => Promise.resolve({ completed: 0, error: null });
+  const [catalog, capture, qa] = await Promise.all([
+    work.catalog ? isolateLane(work.catalog) : skipped(),
+    work.capture ? isolateLane(work.capture) : skipped(),
+    work.qa ? isolateLane(work.qa) : skipped(),
+  ]);
+  return { catalog, capture, qa };
+}
+
+export async function drainIndependentStoreLanes(
+  client: MutationClient,
+  storeLocationId: string,
+  owner: string,
+  limit: number,
+  lanes: ReadonlySet<IngredientPipelineLane>,
+) {
+  const adapter = HEADLESS_STORES[storeLocationId];
+  // These claims are state-disjoint and lease-fenced. Keeping them in separate
+  // promises lets an existing QA backlog drain while a producer fills the next
+  // generation, and one failed source role cannot cancel either sibling role.
+  const { catalog, capture, qa } = await settleIndependentLanes({
+    ...(lanes.has("catalog") ? { catalog: () => drainCatalogLane(client, storeLocationId, `${owner}-catalog`, limit) } : {}),
+    ...(lanes.has("capture") && adapter ? { capture: () => drainHeadlessCaptureLane(client, storeLocationId, adapter, `${owner}-capture`, limit) } : {}),
+    ...(lanes.has("qa") && adapter ? { qa: () => drainHeadlessQaLane(client, storeLocationId, adapter, `${owner}-qa`, limit) } : {}),
+  });
+  return { storeLocationId, catalogResolved: catalog.completed, captured: capture.completed, qaCompleted: qa.completed,
+    errors: { catalog: catalog.error, capture: capture.error, qa: qa.error } };
+}
+
+export async function runIngredientPipelineTick(client: MutationClient, options: IngredientPipelineTickOptions = {}) {
   const owner = options.owner ?? `ingredient-coordinator-${process.pid}`;
   const limit = options.limitPerStore ?? 50;
-  const claimedEvents = await client.request("/internal/pipeline/outbox/claim", {
+  const configuredStores = options.storeLocationIds ?? [...OMAHA_GROCERY_STORE_LOCATION_IDS];
+  const invalidStores = configuredStores.filter((store) => !OMAHA_GROCERY_STORE_LOCATION_IDS.includes(store as typeof OMAHA_GROCERY_STORE_LOCATION_IDS[number]));
+  if (invalidStores.length > 0) throw new Error(`unknown Omaha store lane(s): ${invalidStores.join(", ")}`);
+  const lanes = new Set<IngredientPipelineLane>(options.lanes ?? ["catalog", "capture", "qa"]);
+  const orchestration = options.orchestration ?? true;
+  const claimedEvents = orchestration ? await client.request("/internal/pipeline/outbox/claim", {
     json: { owner, limit: 200, leaseSeconds: 120 },
-  }) as { events?: Array<{ id?: unknown; lease_generation?: unknown }> };
-  const catalog = await client.request("/internal/ingredient-pricing/catalog/materialize", { method: "POST", retrySafe: true });
-  const storeResults = await Promise.all(OMAHA_GROCERY_STORE_LOCATION_IDS.map(async (storeLocationId) => {
-    const catalogResolved = await drainCatalogLane(client, storeLocationId, owner, limit);
-    const adapter = HEADLESS_STORES[storeLocationId];
-    const captured = adapter ? await drainHeadlessCaptureLane(client, storeLocationId, adapter, owner, limit) : 0;
-    const qaCompleted = adapter ? await drainHeadlessQaLane(client, storeLocationId, adapter, `${owner}-qa`, limit) : 0;
-    return { storeLocationId, catalogResolved, captured, qaCompleted };
-  }));
-  const reconciliation = await client.request("/internal/ingredient-pricing/reconcile", { method: "POST" }) as { repaired?: string[] };
-  const definitionPlanning = await client.request("/internal/ingredient-pricing/proposals/plan", { method: "POST" });
-  await Promise.all((claimedEvents.events ?? []).map((event) => client.request(`/internal/pipeline/outbox/${encodeURIComponent(String(event.id))}/ack`, {
+  }) as { events?: Array<{ id?: unknown; lease_generation?: unknown }> } : { events: [] };
+  const catalog = orchestration
+    ? await client.request("/internal/ingredient-pricing/catalog/materialize", { method: "POST", retrySafe: true })
+    : { skipped: true };
+  // Queue definition work before store I/O. The definition agent is an
+  // independent pool, so it can lock identities while catalog lanes drain.
+  const definitionPlanning = orchestration
+    ? await client.request("/internal/ingredient-pricing/proposals/plan", { method: "POST" }) as Record<string, unknown>
+    : { skipped: true };
+  const storeResults = await Promise.all(configuredStores.map((storeLocationId) =>
+    drainIndependentStoreLanes(client, storeLocationId, `${owner}-${storeLocationId}`, limit, lanes)));
+  const reconciliation = orchestration
+    ? await client.request("/internal/ingredient-pricing/reconcile", { method: "POST" }) as { repaired?: string[] }
+    : { repaired: [] };
+  if (orchestration) await Promise.all((claimedEvents.events ?? []).map((event) => client.request(`/internal/pipeline/outbox/${encodeURIComponent(String(event.id))}/ack`, {
     json: { owner, leaseGeneration: Number(event.lease_generation) },
   })));
-  const status = await client.request("/internal/ingredient-pricing/status");
+  const status = orchestration ? await client.request("/internal/ingredient-pricing/status") : null;
   return { ok: true, catalog, outboxEvents: (claimedEvents.events ?? []).length, stores: storeResults, definitionPlanning, reconciliation, status,
     progressed: (claimedEvents.events ?? []).length > 0 || (reconciliation.repaired ?? []).length > 0
       || storeResults.some((row) => row.catalogResolved > 0 || row.captured > 0 || row.qaCompleted > 0) || definitionPlanning.queued === true };
 }
 
-export async function runIngredientPipeline(client: MutationClient, options: { owner?: string; limitPerStore?: number; once?: boolean } = {}) {
+export async function runIngredientPipeline(client: MutationClient, options: IngredientPipelineTickOptions & { once?: boolean } = {}) {
   let idleDelay = 1_000;
   let ticks = 0;
   for (;;) {

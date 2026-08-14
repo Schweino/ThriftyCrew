@@ -3,28 +3,29 @@ import { readFile } from "node:fs/promises";
 
 const DEFINITIONS = {
   aldi: {
-    id: "aldi-real-chrome", version: "3.3.3", module: "aldi-v2.mjs",
+    id: "aldi-real-chrome", version: "3.3.4", module: "aldi-v2.mjs",
     capabilities: ["canary", "discovery", "verification", "taxonomy", "visible-price", "offer-provenance"],
     rate: { maxConcurrent: 1, minimumDelayMs: 5_000, maxTermsPerLegacyChunk: 3 },
   },
   fareway: {
-    id: "fareway-real-chrome", version: "3.3.3", module: "fareway-v2.mjs",
+    id: "fareway-real-chrome", version: "3.3.4", module: "fareway-v2.mjs",
     capabilities: ["canary", "discovery", "verification", "taxonomy", "visible-price", "product-detail", "offer-provenance"],
     rate: { maxConcurrent: 1, minimumDelayMs: 2_000, maxTermsPerLegacyChunk: 4 },
   },
   sams: {
-    id: "sams-next-data-real-chrome", version: "3.3.3", module: "next-data-v2.mjs",
+    id: "sams-next-data-real-chrome", version: "3.3.4", module: "next-data-v2.mjs",
     capabilities: ["canary", "discovery", "verification", "taxonomy", "dual-price", "structured-identity", "offer-provenance"],
     rate: { maxConcurrent: 1, minimumDelayMs: 3_000, maxTermsPerLegacyChunk: 3 },
   },
   walmart: {
-    id: "walmart-next-data-real-chrome", version: "3.3.3", module: "next-data-v2.mjs",
+    id: "walmart-next-data-real-chrome", version: "3.3.4", module: "next-data-v2.mjs",
     capabilities: ["canary", "discovery", "verification", "taxonomy", "dual-price", "structured-identity", "offer-provenance"],
     rate: { maxConcurrent: 1, minimumDelayMs: 1_500, maxTermsPerLegacyChunk: 5 },
   },
 };
 
 const SHARED_RUNTIME = [
+  "browser-store-fanout.mjs",
   "lane-policy.mjs",
   "adapter-protocol.mjs",
   "capture-journal.mjs",
@@ -52,7 +53,7 @@ export async function captureAdapterRegistry() {
 }
 
 export function validateCaptureAdapterManifest(manifest) {
-  if (!manifest || !/^3\.(?:0\.[1-3]|1\.[01]|2\.[0-2]|3\.[0-3])$/.test(manifest.version) || !/^[a-f0-9]{64}$/.test(manifest.sha256)) throw new Error("browser adapter manifest is invalid");
+  if (!manifest || !/^3\.(?:0\.[1-3]|1\.[01]|2\.[0-2]|3\.[0-4])$/.test(manifest.version) || !/^[a-f0-9]{64}$/.test(manifest.sha256)) throw new Error("browser adapter manifest is invalid");
   for (const capability of ["canary", "discovery", "verification", "taxonomy"] ) {
     if (!manifest.capabilities.includes(capability)) throw new Error(`${manifest.store} adapter lacks ${capability}`);
   }

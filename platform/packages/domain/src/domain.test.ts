@@ -11,6 +11,8 @@ describe("domain invariants", () => {
     expect(isClearlyIngredientDerivative("saffron", "Mahatma Saffron Rice")).toBe(true);
     expect(isClearlyNonFoodIngredientProduct("Saffron Eau de Parfum Spray")).toBe(true);
     expect(isClearlyNonFoodIngredientProduct("Amber & Saffron Incense Sticks")).toBe(true);
+    expect(isClearlyNonFoodIngredientProduct("Rose Water Eyeshadow Palette")).toBe(true);
+    expect(isClearlyNonFoodIngredientProduct("Micellar Rose Cleansing Water")).toBe(true);
   });
 
   it("applies locked package-form exclusions as well as product-name exclusions", () => {
