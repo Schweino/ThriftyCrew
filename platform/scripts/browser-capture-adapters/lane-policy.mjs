@@ -8,12 +8,14 @@ const DEFAULTS = {
   walmart: { maxTerms: 5, minimumDelayMs: 1_500 },
 };
 
-async function controllerRequest(pathname, init = {}, environment = process.env) {
+const RUNTIME_PROCESS = globalThis.process ?? { env: {}, pid: 0 };
+
+async function controllerRequest(pathname, init = {}, environment = RUNTIME_PROCESS.env) {
   const body = typeof init.body === "string" ? JSON.parse(init.body) : {};
   return captureControllerRequest(pathname, body, environment, 750);
 }
 
-export async function browserLanePolicy(store, now = new Date(), environment = process.env) {
+export async function browserLanePolicy(store, now = new Date(), environment = RUNTIME_PROCESS.env) {
   const defaults = DEFAULTS[store];
   if (!defaults) throw new Error(`unsupported browser lane ${store}`);
   const state = readLaneState(store, { consecutiveFailures: 0, successStreak: 0, dynamicDelayMs: defaults.minimumDelayMs, dynamicMaxTerms: defaults.maxTerms, ewmaLatencyMs: 0, circuitOpenUntil: null }, environment);
@@ -27,7 +29,7 @@ export async function browserLanePolicy(store, now = new Date(), environment = p
   };
 }
 
-export async function recordBrowserLaneResult(store, outcome, latencyMs, now = new Date(), environment = process.env) {
+export async function recordBrowserLaneResult(store, outcome, latencyMs, now = new Date(), environment = RUNTIME_PROCESS.env) {
   const policy = await browserLanePolicy(store, now, environment).catch((error) => {
     if (!String(error?.message).includes("circuit is open")) throw error;
     return { ...DEFAULTS[store], dynamicDelayMs: DEFAULTS[store].minimumDelayMs, state: { consecutiveFailures: 0 } };
@@ -58,8 +60,8 @@ export async function recordBrowserLaneResult(store, outcome, latencyMs, now = n
   return next;
 }
 
-export async function withBrowserStoreLane(store, operation, environment = process.env) {
-  const owner = `adapter-${process.pid}-${crypto.randomUUID()}`;
+export async function withBrowserStoreLane(store, operation, environment = RUNTIME_PROCESS.env) {
+  const owner = `adapter-${RUNTIME_PROCESS.pid}-${crypto.randomUUID()}`;
   const controller = await controllerRequest(`/v1/lanes/${encodeURIComponent(store)}/acquire`, { method: "POST", body: JSON.stringify({ owner, ttlMs: 15 * 60_000 }) }, environment);
   const controllerOwned = controller?.acquired === true;
   if (controller?.controllerReachable && !controllerOwned) throw new Error(`${store} browser lane is unavailable: ${controller.reason ?? "controller rejected the lease"}`);
