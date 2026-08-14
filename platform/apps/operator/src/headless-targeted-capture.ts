@@ -37,9 +37,13 @@ async function jsonFetch(url: string, init: RequestInit = {}, attempts = 2): Pro
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     try {
       const response = await fetch(url, { ...init, signal: AbortSignal.timeout(30_000) });
-      if (response.status === 429) throw new Error(`source throttled HTTP 429: ${new URL(url).hostname}`);
+      const text = await response.text();
+      const bodyReportsThrottle = /"error_code"\s*:\s*429\b/.test(text);
+      if (response.status === 429 || bodyReportsThrottle) {
+        throw new Error(`source throttled HTTP ${response.status}: ${new URL(url).hostname}`);
+      }
       if (!response.ok) throw new Error(`source returned HTTP ${response.status}: ${new URL(url).hostname}`);
-      return await response.json() as JsonRecord;
+      return JSON.parse(text) as JsonRecord;
     } catch (error) {
       last = error;
       if (/HTTP 429|HTTP 4\d\d/.test(String(error)) || attempt === attempts) break;

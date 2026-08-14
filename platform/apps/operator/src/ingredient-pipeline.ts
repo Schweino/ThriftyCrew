@@ -43,10 +43,15 @@ async function uploadEvidence(client: MutationClient, check: ClaimedCheck, kind:
 }
 
 async function failClaimedChecks(client: MutationClient, checks: ClaimedCheck[], reason: unknown): Promise<void> {
-  const retryAt = new Date(Date.now() + 60_000).toISOString();
+  const message = String(reason instanceof Error ? reason.message : reason);
+  // Freshop reports throttling as either HTTP 429 or HTTP 400 with
+  // {"error_code":429}. Give the shared retailer quota time to recover
+  // instead of allowing the event loop to amplify the refusal every minute.
+  const retryDelay = /source throttled/i.test(message) ? 5 * 60_000 : 60_000;
+  const retryAt = new Date(Date.now() + retryDelay).toISOString();
   await Promise.allSettled(checks.map((check) => client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/fail`, { json: {
     owner: check.lease_owner, leaseGeneration: Number(check.lease_generation), failureClass: "transient",
-    reason: String(reason instanceof Error ? reason.message : reason).slice(0, 5000), challengeId: null, retryAt,
+    reason: message.slice(0, 5000), challengeId: null, retryAt,
   } })));
 }
 
