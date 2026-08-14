@@ -25,6 +25,8 @@ import {
   jobRunCreateSchema,
   jobRunUpdateSchema,
   matchDecisionReconcileSchema,
+  matchDecisionDeltaReconcileSchema,
+  matchDecisionRebindSchema,
   matchDecisionsChunkSchema,
   matchRunSchema,
   milestoneAccrualSchema,
@@ -272,6 +274,7 @@ app.use("/internal/capture-journal-checkpoints/*", requireIdentityRole(["capture
 app.use("/internal/configurations", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/configurations/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/match-decisions", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/match-decisions/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/match-runs", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/match-runs/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/job-runs", requireIdentityRole(["capture", "engine", "operator"]));
@@ -925,6 +928,118 @@ app.post("/internal/match-decisions/reconcile", zValidator("json", matchDecision
   return context.json({ ok: true, batchId: body.batchId, retained: body.retainedProductIds.length, superseded: updated.meta.changes });
 });
 
+app.post("/internal/match-decisions/rebind", zValidator("json", matchDecisionRebindSchema), async (context) => {
+  const body = context.req.valid("json");
+  const batch = await findBatch(context.env.DB, body.batchId);
+  if (!batch) return jsonError("capture batch not found", 404);
+  const target = await context.env.DB.prepare(
+    "SELECT id FROM configuration_versions WHERE id = ?1 AND active = 1",
+  ).bind(body.targetConfigurationId).first<{ id: string }>();
+  if (!target) return jsonError("match decision rebind target must be the active configuration", 422);
+  const baseline = await context.env.DB.prepare(
+    `SELECT id, input_hash, product_count, matched_count, unmatched_count, collision_count, aisle_rejected_count
+       FROM match_runs
+      WHERE batch_id = ?1 AND configuration_id = ?2 AND status = 'passed'
+      ORDER BY created_at DESC, id DESC LIMIT 1`,
+  ).bind(body.batchId, body.sourceConfigurationId).first<Record<string, unknown>>();
+  if (!baseline) return jsonError("passed source-configuration match baseline not found", 409);
+  const excluded = stableJson([...new Set(body.excludedProductIds)]);
+  const cloneId = `'match_rebind_' || ?3 || '_' || decision.product_id`;
+  const membership = `decision.product_id IN (
+    SELECT DISTINCT product.id
+      FROM capture_batch_observations member
+      JOIN observations observation ON observation.id = member.observation_id
+      JOIN product_versions version ON version.id = observation.product_version_id
+      JOIN products product ON product.id = version.product_id
+     WHERE member.batch_id = ?1
+  )`;
+  const results = await context.env.DB.batch([
+    context.env.DB.prepare(`INSERT OR IGNORE INTO match_decisions
+      (id, product_id, commodity_id, configuration_id, decided_by, reason, superseded_at)
+      SELECT ${cloneId}, decision.product_id, decision.commodity_id, ?3, decision.decided_by,
+             decision.reason || '; unchanged classification rebound from ' || ?2, CURRENT_TIMESTAMP
+        FROM match_decisions decision
+       WHERE decision.configuration_id = ?2 AND decision.superseded_at IS NULL
+         AND ${membership}
+         AND decision.product_id NOT IN (SELECT value FROM json_each(?4))
+         AND EXISTS (SELECT 1 FROM commodities commodity
+                      WHERE commodity.id = decision.commodity_id AND commodity.configuration_id = ?3)`)
+      .bind(body.batchId, body.sourceConfigurationId, body.targetConfigurationId, excluded),
+    context.env.DB.prepare(`UPDATE match_decisions AS decision
+      SET superseded_at = CURRENT_TIMESTAMP
+      WHERE decision.configuration_id = ?2 AND decision.superseded_at IS NULL
+        AND ${membership}
+        AND decision.product_id NOT IN (SELECT value FROM json_each(?4))
+        AND EXISTS (SELECT 1 FROM match_decisions clone
+                     WHERE clone.id = 'match_rebind_' || ?3 || '_' || decision.product_id
+                       AND clone.configuration_id = ?3)`)
+      .bind(body.batchId, body.sourceConfigurationId, body.targetConfigurationId, excluded),
+    context.env.DB.prepare(`UPDATE match_decisions AS decision
+      SET superseded_at = NULL
+      WHERE decision.configuration_id = ?3
+        AND decision.id = 'match_rebind_' || ?3 || '_' || decision.product_id
+        AND decision.product_id IN (
+          SELECT DISTINCT product.id
+            FROM capture_batch_observations member
+            JOIN observations observation ON observation.id = member.observation_id
+            JOIN product_versions version ON version.id = observation.product_version_id
+            JOIN products product ON product.id = version.product_id
+           WHERE member.batch_id = ?1
+        )
+        AND decision.product_id NOT IN (SELECT value FROM json_each(?4))
+        AND NOT EXISTS (SELECT 1 FROM match_decisions active
+                         WHERE active.product_id = decision.product_id AND active.superseded_at IS NULL)`)
+      .bind(body.batchId, body.sourceConfigurationId, body.targetConfigurationId, excluded),
+  ]);
+  const response = {
+    ok: true,
+    batchId: body.batchId,
+    sourceConfigurationId: body.sourceConfigurationId,
+    targetConfigurationId: body.targetConfigurationId,
+    excluded: body.excludedProductIds.length,
+    inserted: results[0]?.meta.changes ?? 0,
+    superseded: results[1]?.meta.changes ?? 0,
+    activated: results[2]?.meta.changes ?? 0,
+    baseline,
+  };
+  await recordAudit(context.env, context.get("identity"), "matching.incremental-rebind", "capture_batch", body.batchId, "accepted", response);
+  return context.json(response);
+});
+
+app.post("/internal/match-decisions/reconcile-delta", zValidator("json", matchDecisionDeltaReconcileSchema), async (context) => {
+  const body = context.req.valid("json");
+  const batch = await findBatch(context.env.DB, body.batchId);
+  if (!batch) return jsonError("capture batch not found", 404);
+  const target = await context.env.DB.prepare(
+    "SELECT id FROM configuration_versions WHERE id = ?1 AND active = 1",
+  ).bind(body.configurationId).first<{ id: string }>();
+  if (!target) return jsonError("delta reconciliation must use the active configuration", 422);
+  const affected = stableJson([...new Set(body.affectedProductIds)]);
+  const retained = stableJson([...new Set(body.retainedProductIds)]);
+  const updated = await context.env.DB.prepare(`UPDATE match_decisions
+    SET superseded_at = CURRENT_TIMESTAMP
+    WHERE superseded_at IS NULL
+      AND product_id IN (SELECT value FROM json_each(?2))
+      AND product_id NOT IN (SELECT value FROM json_each(?3))
+      AND product_id IN (
+        SELECT DISTINCT product.id
+          FROM capture_batch_observations member
+          JOIN observations observation ON observation.id = member.observation_id
+          JOIN product_versions version ON version.id = observation.product_version_id
+          JOIN products product ON product.id = version.product_id
+         WHERE member.batch_id = ?1
+      )`).bind(body.batchId, affected, retained).run();
+  const retainedCount = body.retainedProductIds.length === 0 ? 0 : Number((await context.env.DB.prepare(`SELECT COUNT(DISTINCT decision.product_id) AS count
+    FROM match_decisions decision
+    WHERE decision.configuration_id = ?1 AND decision.superseded_at IS NULL
+      AND decision.product_id IN (SELECT value FROM json_each(?2))`).bind(body.configurationId, retained).first<{ count: number }>())?.count ?? 0);
+  if (retainedCount !== new Set(body.retainedProductIds).size) return jsonError("delta reconciliation retained products lack active target decisions", 409);
+  const response = { ok: true, batchId: body.batchId, affected: body.affectedProductIds.length,
+    retained: body.retainedProductIds.length, superseded: updated.meta.changes ?? 0 };
+  await recordAudit(context.env, context.get("identity"), "matching.incremental-reconcile", "capture_batch", body.batchId, "accepted", response);
+  return context.json(response);
+});
+
 app.get("/internal/configurations/active-metadata", async (context) => {
   const active = await context.env.DB.prepare(
     "SELECT id, source_commit, content_hash FROM configuration_versions WHERE active = 1",
@@ -982,15 +1097,19 @@ app.get("/internal/capture-batches/:id/products", async (context) => {
        SELECT p.id AS product_id, p.external_key, p.store_location_id,
               pv.name, pv.normalized_name, pv.taxonomy_path,
               o.normalized_basis_unit, o.normalized_basis_qty_micros,
+              decision.commodity_id AS active_commodity_id,
+              decision.configuration_id AS active_configuration_id,
               ROW_NUMBER() OVER (PARTITION BY p.id ORDER BY member.observed_at DESC, o.id DESC) AS ordinal
          FROM capture_batch_observations member
          JOIN observations o ON o.id = member.observation_id
          JOIN product_versions pv ON pv.id = o.product_version_id
          JOIN products p ON p.id = pv.product_id
+         LEFT JOIN match_decisions decision ON decision.product_id = p.id AND decision.superseded_at IS NULL
         WHERE member.batch_id = ?1
      )
      SELECT product_id, external_key, store_location_id, name, normalized_name,
-            taxonomy_path, normalized_basis_unit, normalized_basis_qty_micros
+            taxonomy_path, normalized_basis_unit, normalized_basis_qty_micros,
+            active_commodity_id, active_configuration_id
        FROM ranked WHERE ordinal = 1 ORDER BY product_id`,
   ).bind(batch.id).all();
   return context.json({
@@ -1064,8 +1183,20 @@ app.get("/internal/match-runs/:id", async (context) => {
        FROM match_runs WHERE id = ?1`,
   ).bind(context.req.param("id")).first<Record<string, unknown> & { detail_json: string }>();
   if (!row) return context.json({ ok: false, found: false, error: "match run not found" }, 404);
+  const actual = await context.env.DB.prepare(
+    `SELECT COUNT(DISTINCT product.id) AS products,
+            COUNT(DISTINCT CASE WHEN decision.product_id IS NOT NULL THEN product.id END) AS matched
+       FROM capture_batch_observations member
+       JOIN observations observation ON observation.id = member.observation_id
+       JOIN product_versions version ON version.id = observation.product_version_id
+       JOIN products product ON product.id = version.product_id
+       LEFT JOIN match_decisions decision ON decision.product_id = product.id
+        AND decision.configuration_id = ?2 AND decision.superseded_at IS NULL
+      WHERE member.batch_id = ?1`,
+  ).bind(String(row.batch_id), String(row.configuration_id)).first<{ products: number; matched: number }>();
   const { detail_json: detailJson, ...run } = row;
-  return context.json({ ok: true, found: true, run: { ...run, detail: JSON.parse(detailJson) } });
+  return context.json({ ok: true, found: true, run: { ...run, detail: JSON.parse(detailJson), actual,
+    integrity: Number(actual?.products ?? -1) === Number(row.product_count) && Number(actual?.matched ?? -1) === Number(row.matched_count) } });
 });
 
 app.post("/internal/match-runs", zValidator("json", matchRunSchema), async (context) => {
@@ -4197,14 +4328,31 @@ app.get("/internal/capture-batches/promoted", async (context) => {
         WHERE status IN ('promoted','superseded')
           AND (valid_from IS NULL OR valid_from <= ?1)
           AND (valid_to IS NULL OR valid_to > ?1)
+     ), selected AS (
+       SELECT * FROM ranked WHERE ordinal = 1
+     ), ranked_runs AS (
+       SELECT run.batch_id, run.matched_count,
+              ROW_NUMBER() OVER (PARTITION BY run.batch_id ORDER BY run.created_at DESC, run.id DESC) AS ordinal
+         FROM match_runs run JOIN configuration_versions configuration ON configuration.id = run.configuration_id
+        WHERE run.status = 'passed' AND configuration.active = 1
+     ), active_counts AS (
+       SELECT selected.id AS batch_id,
+              COUNT(DISTINCT CASE WHEN decision.product_id IS NOT NULL THEN product.id END) AS matched_count
+         FROM selected
+         LEFT JOIN capture_batch_observations member ON member.batch_id = selected.id
+         LEFT JOIN observations observation ON observation.id = member.observation_id
+         LEFT JOIN product_versions version ON version.id = observation.product_version_id
+         LEFT JOIN products product ON product.id = version.product_id
+         LEFT JOIN match_decisions decision ON decision.product_id = product.id
+          AND decision.configuration_id = (SELECT id FROM configuration_versions WHERE active = 1)
+          AND decision.superseded_at IS NULL
+        GROUP BY selected.id
      )
      SELECT ranked.id, ranked.source_id, source.store_location_id, ranked.coverage_mode, ranked.captured_to,
-            EXISTS (
-              SELECT 1 FROM match_runs run
-              JOIN configuration_versions configuration ON configuration.id = run.configuration_id
-             WHERE run.batch_id = ranked.id AND run.status = 'passed' AND configuration.active = 1
-            ) AS has_active_match
-       FROM ranked JOIN capture_sources source ON source.id = ranked.source_id WHERE ordinal = 1
+            CASE WHEN run.batch_id IS NOT NULL AND run.matched_count = active_counts.matched_count THEN 1 ELSE 0 END AS has_active_match
+       FROM selected ranked JOIN capture_sources source ON source.id = ranked.source_id
+       LEFT JOIN ranked_runs run ON run.batch_id = ranked.id AND run.ordinal = 1
+       LEFT JOIN active_counts ON active_counts.batch_id = ranked.id
       ORDER BY source_id`,
   ).bind(observedAt).all();
   return context.json({ ok: true, batches: batches.results });

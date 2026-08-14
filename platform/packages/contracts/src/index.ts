@@ -712,6 +712,27 @@ export const matchDecisionReconcileSchema = z.object({
   retainedProductIds: z.array(nonEmptyId).max(50_000),
 });
 
+export const matchDecisionRebindSchema = z.object({
+  batchId: nonEmptyId,
+  sourceConfigurationId: nonEmptyId,
+  targetConfigurationId: nonEmptyId,
+  excludedProductIds: z.array(nonEmptyId).max(50_000),
+}).refine((value) => value.sourceConfigurationId !== value.targetConfigurationId, {
+  message: "source and target configurations must differ",
+});
+
+export const matchDecisionDeltaReconcileSchema = z.object({
+  batchId: nonEmptyId,
+  configurationId: nonEmptyId,
+  affectedProductIds: z.array(nonEmptyId).max(50_000),
+  retainedProductIds: z.array(nonEmptyId).max(50_000),
+}).superRefine((value, context) => {
+  const affected = new Set(value.affectedProductIds);
+  if (value.retainedProductIds.some((productId) => !affected.has(productId))) {
+    context.addIssue({ code: "custom", path: ["retainedProductIds"], message: "retained products must be affected products" });
+  }
+});
+
 export const matchRunSchema = z.object({
   id: nonEmptyId,
   batchId: nonEmptyId,

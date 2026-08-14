@@ -35,6 +35,16 @@ export async function reconcileInactiveConfigurationDecisions(
                WHERE run.batch_id = effective.id
                  AND run.configuration_id = ?2
                  AND run.status = 'passed'
+                 AND run.matched_count = (
+                   SELECT COUNT(DISTINCT CASE WHEN decision.product_id IS NOT NULL THEN product.id END)
+                     FROM capture_batch_observations member
+                     JOIN observations observation ON observation.id = member.observation_id
+                     JOIN product_versions version ON version.id = observation.product_version_id
+                     JOIN products product ON product.id = version.product_id
+                     LEFT JOIN match_decisions decision ON decision.product_id = product.id
+                      AND decision.configuration_id = ?2 AND decision.superseded_at IS NULL
+                    WHERE member.batch_id = effective.id
+                 )
             ) THEN 0 ELSE 1 END), 0) AS missing_active_matches
        FROM effective`,
   ).bind(observedAt, active.id).first<{ effective_batches: number; missing_active_matches: number }>();
@@ -71,6 +81,16 @@ export async function reconcileInactiveConfigurationDecisions(
               WHERE run.batch_id = effective.id
                 AND run.configuration_id = ?2
                 AND run.status = 'passed'
+                AND run.matched_count = (
+                  SELECT COUNT(DISTINCT CASE WHEN decision.product_id IS NOT NULL THEN product.id END)
+                    FROM capture_batch_observations member
+                    JOIN observations observation ON observation.id = member.observation_id
+                    JOIN product_versions version ON version.id = observation.product_version_id
+                    JOIN products product ON product.id = version.product_id
+                    LEFT JOIN match_decisions decision ON decision.product_id = product.id
+                     AND decision.configuration_id = ?2 AND decision.superseded_at IS NULL
+                   WHERE member.batch_id = effective.id
+                )
            )
         )`,
   ).bind(observedAt, active.id).run();

@@ -234,6 +234,8 @@ interface MatchProductRow {
   taxonomy_path: string | null;
   normalized_basis_unit: string;
   normalized_basis_qty_micros: number;
+  active_commodity_id?: string | null;
+  active_configuration_id?: string | null;
 }
 
 interface MatchContext {
@@ -242,9 +244,24 @@ interface MatchContext {
   nonFoodFamilies: Set<string>;
 }
 
-async function loadMatchContext(targetPlatformRoot = platformRoot): Promise<MatchContext> {
-  const commodities = JSON.parse(await readFile(path.join(targetPlatformRoot, "config", "commodities.json"), "utf8")) as Array<{ id: string; include?: string[]; exclude?: string[] }>;
-  const categoryDocument = JSON.parse((await readFile(path.join(targetPlatformRoot, "config", "categories.json"), "utf8")).replace(/^\uFEFF/, "")) as { categories: Array<{ key: string; commodities: string[] }> };
+interface IncrementalMatchContext {
+  sourceConfigurationId: string;
+  sourceCommit: string;
+  changedCommodityIds: Set<string>;
+  previous: MatchContext;
+  affects: (name: string) => boolean;
+}
+
+type ProductClassification = {
+  status: "matched" | "unmatched" | "collision" | "aisle_rejected";
+  decision?: { productId: string; commodityId: string; configurationId: string; decidedBy: "rule" | "aisle"; reason: string };
+  detail?: Record<string, unknown>;
+};
+
+type MatchCommodity = { id: string; include?: string[]; exclude?: string[] };
+type MatchCategories = { categories: Array<{ key: string; commodities: string[] }> };
+
+function compileMatchContext(commodities: MatchCommodity[], categoryDocument: MatchCategories): MatchContext {
   return {
     categoryByCommodity: new Map(categoryDocument.categories.flatMap((category) => category.commodities.map((commodityId) => [commodityId, category.key] as const))),
     nonFoodFamilies: new Set(["household", "personal", "baby", "pet"]),
@@ -259,44 +276,50 @@ async function loadMatchContext(targetPlatformRoot = platformRoot): Promise<Matc
   };
 }
 
+function classifyProduct(product: MatchProductRow, configurationId: string, matchContext: MatchContext): ProductClassification {
+  const outcome = matchContext.matcher(product.name);
+  if (outcome.status === "collision") {
+    return { status: "collision", detail: { productId: product.product_id, name: product.name, candidates: outcome.candidates } };
+  }
+  if (outcome.status === "unmatched" || !outcome.commodityId) {
+    return { status: "unmatched", detail: { productId: product.product_id, name: product.name } };
+  }
+  const category = matchContext.categoryByCommodity.get(outcome.commodityId) ?? "food";
+  const expectedFamily: AisleFamily = matchContext.nonFoodFamilies.has(category) ? category as AisleFamily : "food";
+  const additionalAllowedFamilies: AisleFamily[] = [];
+  if (outcome.commodityId === "protein-bars" || outcome.commodityId === "hand-soap") additionalAllowedFamilies.push("personal");
+  if (outcome.commodityId === "facial-tissues") additionalAllowedFamilies.push("household");
+  const aisle = evaluateAisleFamilyEvidence(product.taxonomy_path ?? undefined, expectedFamily, additionalAllowedFamilies);
+  if (aisle.status === "rejected") {
+    return { status: "aisle_rejected", detail: { productId: product.product_id, name: product.name,
+      commodityId: outcome.commodityId, taxonomyPath: product.taxonomy_path, reason: aisle.reason } };
+  }
+  return { status: "matched", decision: {
+    productId: product.product_id,
+    commodityId: outcome.commodityId,
+    configurationId,
+    decidedBy: aisle.status === "confirmed" ? "aisle" : "rule",
+    reason: `Authored first-match rule precedence${product.taxonomy_path ? `; shelf taxonomy examined: ${aisle.reason}` : "; no shelf taxonomy supplied"}`,
+  } };
+}
+
 async function matchBatch(client: MutationClient, batchId: string, reusableContext?: MatchContext): Promise<Record<string, unknown>> {
   const snapshot = await client.request(`/internal/capture-batches/${encodeURIComponent(batchId)}/products`) as unknown as Record<string, unknown> & {
     sourceId: string; status: string; configurationId: string; configurationHash: string; products: MatchProductRow[];
   };
   if (!Array.isArray(snapshot.products)) throw new Error("matching snapshot omitted products");
   if (!(snapshot.status === "promoted" || snapshot.status === "superseded" || snapshot.status === "validated")) throw new Error(`batch ${batchId} cannot be matched from ${snapshot.status}`);
-  const { matcher, categoryByCommodity, nonFoodFamilies } = reusableContext ?? await loadMatchContext();
+  const matchContext = reusableContext ?? await loadMatchContext();
   const decisions: Array<{ productId: string; commodityId: string; configurationId: string; decidedBy: "rule" | "aisle"; reason: string }> = [];
   const unmatched: Array<Record<string, unknown>> = [];
   const collisions: Array<Record<string, unknown>> = [];
   const aisleRejected: Array<Record<string, unknown>> = [];
   for (const product of snapshot.products) {
-    const outcome = matcher(product.name);
-    if (outcome.status === "collision") {
-      collisions.push({ productId: product.product_id, name: product.name, candidates: outcome.candidates });
-      continue;
-    }
-    if (outcome.status === "unmatched" || !outcome.commodityId) {
-      unmatched.push({ productId: product.product_id, name: product.name });
-      continue;
-    }
-    const category = categoryByCommodity.get(outcome.commodityId) ?? "food";
-    const expectedFamily: AisleFamily = nonFoodFamilies.has(category) ? category as AisleFamily : "food";
-    const additionalAllowedFamilies: AisleFamily[] = [];
-    if (outcome.commodityId === "protein-bars" || outcome.commodityId === "hand-soap") additionalAllowedFamilies.push("personal");
-    if (outcome.commodityId === "facial-tissues") additionalAllowedFamilies.push("household");
-    const aisle = evaluateAisleFamilyEvidence(product.taxonomy_path ?? undefined, expectedFamily, additionalAllowedFamilies);
-    if (aisle.status === "rejected") {
-      aisleRejected.push({ productId: product.product_id, name: product.name, commodityId: outcome.commodityId, taxonomyPath: product.taxonomy_path, reason: aisle.reason });
-      continue;
-    }
-    decisions.push({
-      productId: product.product_id,
-      commodityId: outcome.commodityId,
-      configurationId: snapshot.configurationId,
-      decidedBy: aisle.status === "confirmed" ? "aisle" : "rule",
-      reason: `Authored first-match rule precedence${product.taxonomy_path ? `; shelf taxonomy examined: ${aisle.reason}` : "; no shelf taxonomy supplied"}`,
-    });
+    const classification = classifyProduct(product, snapshot.configurationId, matchContext);
+    if (classification.status === "matched" && classification.decision) decisions.push(classification.decision);
+    else if (classification.status === "collision") collisions.push(classification.detail ?? {});
+    else if (classification.status === "aisle_rejected") aisleRejected.push(classification.detail ?? {});
+    else unmatched.push(classification.detail ?? {});
   }
   const inputMaterial = {
     batchId,
@@ -326,9 +349,9 @@ async function matchBatch(client: MutationClient, batchId: string, reusableConte
     } as Record<string, unknown>,
   };
   const existing = await client.request(`/internal/match-runs/${encodeURIComponent(report.id)}`, { acceptStatuses: [404] }) as {
-    found?: boolean; run?: { input_hash?: string; status?: string };
+    found?: boolean; run?: { input_hash?: string; status?: string; integrity?: boolean };
   };
-  if (existing.found) {
+  if (existing.found && existing.run?.integrity === true) {
     if (existing.run?.input_hash !== inputHash) throw new Error(`match run ${report.id} has a conflicting input hash`);
     return { ok: existing.run.status === "passed", runId: report.id, status: existing.run.status, idempotent: true, reused: true, ...report };
   }
@@ -360,7 +383,123 @@ async function matchBatch(client: MutationClient, batchId: string, reusableConte
   return { ...persisted, ...report };
 }
 
-async function rematchPromotedBatches(client: MutationClient, verbose = false): Promise<Record<string, unknown>> {
+async function matchBatchIncremental(
+  client: MutationClient,
+  batchId: string,
+  current: MatchContext,
+  incremental: IncrementalMatchContext,
+): Promise<Record<string, unknown>> {
+  const snapshot = await client.request(`/internal/capture-batches/${encodeURIComponent(batchId)}/products`) as unknown as Record<string, unknown> & {
+    sourceId: string; status: string; configurationId: string; configurationHash: string; products: MatchProductRow[];
+  };
+  if (!Array.isArray(snapshot.products)) throw new Error("incremental matching snapshot omitted products");
+  if (!(snapshot.status === "promoted" || snapshot.status === "superseded")) throw new Error(`batch ${batchId} cannot be incrementally matched from ${snapshot.status}`);
+  if (snapshot.configurationId === incremental.sourceConfigurationId) return matchBatch(client, batchId, current);
+  const affected = snapshot.products.filter((product) => (product.active_commodity_id !== null
+      && product.active_commodity_id !== undefined && incremental.changedCommodityIds.has(product.active_commodity_id))
+    || incremental.affects(product.name));
+  const classifications = affected.map((product) => ({
+    product,
+    previous: classifyProduct(product, incremental.sourceConfigurationId, incremental.previous),
+    current: classifyProduct(product, snapshot.configurationId, current),
+  }));
+  for (const item of classifications) {
+    if (item.product.active_configuration_id === incremental.sourceConfigurationId && item.previous.status === "matched"
+      && item.previous.decision?.commodityId !== item.product.active_commodity_id) {
+      throw new Error(`incremental baseline disagrees with active decision for ${item.product.product_id}`);
+    }
+  }
+  const rebind = await client.request("/internal/match-decisions/rebind", { method: "POST", json: {
+    batchId,
+    sourceConfigurationId: incremental.sourceConfigurationId,
+    targetConfigurationId: snapshot.configurationId,
+    excludedProductIds: affected.map((product) => product.product_id),
+  } }) as { baseline?: Record<string, unknown>; inserted?: number; activated?: number };
+  const baseline = rebind.baseline;
+  if (!baseline || Number(baseline.product_count) !== snapshot.products.length) {
+    throw new Error(`incremental baseline product count does not match immutable batch ${batchId}`);
+  }
+  const counts = {
+    matched: Number(baseline.matched_count),
+    unmatched: Number(baseline.unmatched_count),
+    collision: Number(baseline.collision_count),
+    aisle_rejected: Number(baseline.aisle_rejected_count),
+  };
+  const decisions: NonNullable<ProductClassification["decision"]>[] = [];
+  const unmatched: Record<string, unknown>[] = [];
+  const collisions: Record<string, unknown>[] = [];
+  const aisleRejected: Record<string, unknown>[] = [];
+  for (const item of classifications) {
+    counts[item.previous.status] -= 1;
+    counts[item.current.status] += 1;
+    if (item.current.status === "matched" && item.current.decision) decisions.push(item.current.decision);
+    else if (item.current.status === "collision") collisions.push(item.current.detail ?? {});
+    else if (item.current.status === "aisle_rejected") aisleRejected.push(item.current.detail ?? {});
+    else unmatched.push(item.current.detail ?? {});
+  }
+  if (Object.values(counts).some((count) => !Number.isInteger(count) || count < 0)
+    || counts.matched + counts.unmatched + counts.collision + counts.aisle_rejected !== snapshot.products.length) {
+    throw new Error(`incremental classification accounting failed for ${batchId}`);
+  }
+  let decisionWrites = 0;
+  let superseded = 0;
+  for (let offset = 0; offset < decisions.length; offset += 250) {
+    const result = await client.request("/internal/match-decisions", { method: "PUT", json: { decisions: decisions.slice(offset, offset + 250) } }) as {
+      decisionWrites?: number; superseded?: number;
+    };
+    decisionWrites += result.decisionWrites ?? 0;
+    superseded += result.superseded ?? 0;
+  }
+  const reconciliation = await client.request("/internal/match-decisions/reconcile-delta", { method: "POST", json: {
+    batchId,
+    configurationId: snapshot.configurationId,
+    affectedProductIds: affected.map((product) => product.product_id),
+    retainedProductIds: decisions.map((decision) => decision.productId),
+  } }) as { superseded?: number };
+  const inputHash = await digestHex(stableJson({
+    version: 2,
+    batchId,
+    sourceId: snapshot.sourceId,
+    configurationId: snapshot.configurationId,
+    configurationHash: snapshot.configurationHash,
+    baselineRunId: String(baseline.id),
+    baselineInputHash: String(baseline.input_hash),
+    changedCommodityIds: [...incremental.changedCommodityIds].sort(),
+    affected: classifications.map((item) => [item.product.product_id, item.product.normalized_name,
+      item.product.taxonomy_path, item.current.status, item.current.decision?.commodityId ?? null]),
+  }));
+  const report = {
+    id: `match_${inputHash.slice(0, 32)}`,
+    batchId,
+    configurationId: snapshot.configurationId,
+    inputHash,
+    productCount: snapshot.products.length,
+    matchedCount: counts.matched,
+    unmatchedCount: counts.unmatched,
+    collisionCount: counts.collision,
+    aisleRejectedCount: counts.aisle_rejected,
+    detail: {
+      sourceId: snapshot.sourceId,
+      precedence: "authored commodity order",
+      incremental: true,
+      baselineRunId: baseline.id,
+      sourceConfigurationId: incremental.sourceConfigurationId,
+      changedCommodityIds: [...incremental.changedCommodityIds].sort(),
+      affectedProducts: affected.length,
+      reusedProducts: snapshot.products.length - affected.length,
+      unmatchedExamples: unmatched.slice(0, 100),
+      collisionExamples: collisions.slice(0, 100),
+      aisleRejectedExamples: aisleRejected.slice(0, 100),
+      efficiency: { submitted: decisions.length, decisionWrites, superseded,
+        rebound: Number(rebind.activated ?? 0), reconciledSuperseded: Number(reconciliation.superseded ?? 0),
+        writeAvoidanceRatio: snapshot.products.length === 0 ? 1 : (snapshot.products.length - decisionWrites) / snapshot.products.length },
+    } as Record<string, unknown>,
+  };
+  const persisted = await client.request("/internal/match-runs", { method: "POST", json: report, acceptStatuses: [422] });
+  return { ...persisted, ...report };
+}
+
+async function rematchPromotedBatches(client: MutationClient, verbose = false, incremental?: IncrementalMatchContext | null): Promise<Record<string, unknown>> {
   const startedAt = performance.now();
   const listed = await client.request("/internal/capture-batches/promoted") as {
     batches?: Array<{ id: string; source_id: string; store_location_id: string; captured_to: string; has_active_match?: number }>;
@@ -374,7 +513,18 @@ async function rematchPromotedBatches(client: MutationClient, verbose = false): 
   for (const batch of pending) byStore.set(batch.store_location_id, [...(byStore.get(batch.store_location_id) ?? []), batch]);
   const settled = await Promise.allSettled([...byStore.values()].map(async (storeBatches) => {
     const results = [];
-    for (const batch of storeBatches) results.push({ batch, matching: await matchBatch(client, batch.id, context) });
+    for (const batch of storeBatches) {
+      let matching: Record<string, unknown>;
+      if (incremental) {
+        try {
+          matching = await matchBatchIncremental(client, batch.id, context, incremental);
+        } catch (error) {
+          matching = await matchBatch(client, batch.id, context);
+          matching.incrementalFallback = error instanceof Error ? error.message : String(error);
+        }
+      } else matching = await matchBatch(client, batch.id, context);
+      results.push({ batch, matching });
+    }
     return results;
   }));
   const failures: string[] = [];
@@ -408,6 +558,12 @@ async function rematchPromotedBatches(client: MutationClient, verbose = false): 
     inactiveDecisionReconciliation,
     ...(verbose ? { batches } : {}),
   };
+}
+
+async function loadMatchContext(targetPlatformRoot = platformRoot): Promise<MatchContext> {
+  const commodities = JSON.parse(await readFile(path.join(targetPlatformRoot, "config", "commodities.json"), "utf8")) as MatchCommodity[];
+  const categoryDocument = JSON.parse((await readFile(path.join(targetPlatformRoot, "config", "categories.json"), "utf8")).replace(/^\uFEFF/, "")) as MatchCategories;
+  return compileMatchContext(commodities, categoryDocument);
 }
 
 function ingredientPublicProjection(commodity: Record<string, unknown>): Record<string, unknown> {
@@ -547,10 +703,62 @@ async function configurationCommodityDriftIds(activeSourceCommit: string | null 
       maxBuffer: 16 * 1024 * 1024,
     })).stdout;
     const prior = parseCatalogJson<Array<Record<string, unknown>>>(priorText);
-    const priorById = new Map(prior.map((commodity) => [String(commodity.id), stableJson(commodity)]));
-    return target.filter((commodity) => priorById.get(String(commodity.id)) !== stableJson(commodity)).map((commodity) => String(commodity.id));
+    const priorCategoriesText = (await execFileAsync("git", ["-C", incomeRoot, "show", `${activeSourceCommit}:platform/config/categories.json`], {
+      maxBuffer: 4 * 1024 * 1024,
+    })).stdout;
+    const targetCategories = parseCatalogJson<MatchCategories>(await readFile(path.join(targetIncomeRoot, "platform", "config", "categories.json"), "utf8"));
+    const priorCategories = parseCatalogJson<MatchCategories>(priorCategoriesText);
+    const categoryMap = (document: MatchCategories) => new Map(document.categories.flatMap((category) => category.commodities.map((id) => [id, category.key] as const)));
+    const priorCategoryById = categoryMap(priorCategories);
+    const targetCategoryById = categoryMap(targetCategories);
+    const priorById = new Map(prior.map((commodity, index) => [String(commodity.id), { definition: stableJson(commodity), index }]));
+    return target.filter((commodity, index) => {
+      const id = String(commodity.id);
+      const previous = priorById.get(id);
+      return !previous || previous.definition !== stableJson(commodity) || previous.index !== index
+        || priorCategoryById.get(id) !== targetCategoryById.get(id);
+    }).map((commodity) => String(commodity.id));
   } catch {
     return target.map((commodity) => String(commodity.id));
+  }
+}
+
+async function loadIncrementalMatchContext(
+  active: { configurationId?: string | null; sourceCommit?: string | null },
+  targetIncomeRoot: string,
+  changedCommodityIds: string[],
+): Promise<IncrementalMatchContext | null> {
+  if (!active.configurationId || !active.sourceCommit || !/^[0-9a-f]{7,40}$/i.test(active.sourceCommit)) return null;
+  try {
+    const [priorCommodityText, priorCategoryText, targetCommodityText, targetCategoryText] = await Promise.all([
+      execFileAsync("git", ["-C", incomeRoot, "show", `${active.sourceCommit}:platform/config/commodities.json`], { maxBuffer: 16 * 1024 * 1024 }).then((result) => result.stdout),
+      execFileAsync("git", ["-C", incomeRoot, "show", `${active.sourceCommit}:platform/config/categories.json`], { maxBuffer: 4 * 1024 * 1024 }).then((result) => result.stdout),
+      readFile(path.join(targetIncomeRoot, "platform", "config", "commodities.json"), "utf8"),
+      readFile(path.join(targetIncomeRoot, "platform", "config", "categories.json"), "utf8"),
+    ]);
+    const priorCommodities = parseCatalogJson<MatchCommodity[]>(priorCommodityText);
+    const priorCategories = parseCatalogJson<MatchCategories>(priorCategoryText);
+    const targetCommodities = parseCatalogJson<MatchCommodity[]>(targetCommodityText);
+    const changed = new Set(changedCommodityIds);
+    const impactRules = [
+      ...priorCommodities.filter((commodity) => changed.has(commodity.id)).map((commodity, index) => ({ ...commodity, id: `prior-${index}-${commodity.id}` })),
+      ...targetCommodities.filter((commodity) => changed.has(commodity.id)).map((commodity, index) => ({ ...commodity, id: `target-${index}-${commodity.id}` })),
+    ];
+    const impactMatcher = compileProductMatcher(impactRules.map((commodity, index) => ({
+      commodityId: commodity.id,
+      includes: commodity.include ?? [],
+      excludes: commodity.exclude ?? [],
+      priority: impactRules.length - index,
+    })));
+    return {
+      sourceConfigurationId: active.configurationId,
+      sourceCommit: active.sourceCommit,
+      changedCommodityIds: changed,
+      previous: compileMatchContext(priorCommodities, priorCategories),
+      affects: (name) => impactRules.length > 0 && impactMatcher(name).status !== "unmatched",
+    };
+  } catch {
+    return null;
   }
 }
 
@@ -594,15 +802,16 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     }
     const sourceCommit = (await execFileAsync("git", ["-C", worktreeRoot, "rev-parse", "HEAD"])).stdout.trim();
     const bridge = await buildCurrentBridge(worktreeRoot);
-    const activeConfiguration = await client.request("/internal/configurations/active-metadata") as { sourceCommit?: string | null };
+    const activeConfiguration = await client.request("/internal/configurations/active-metadata") as { configurationId?: string | null; sourceCommit?: string | null };
     const driftCommodityIds = await configurationCommodityDriftIds(activeConfiguration.sourceCommit, worktreeRoot);
     const modifiedCommodityIds = [...new Set(applied.flatMap((entry) => {
       const value = entry as { modifiedCommodityIds?: string[] };
       return value.modifiedCommodityIds ?? [];
     }).concat(driftCommodityIds))];
+    const incrementalMatchContext = await loadIncrementalMatchContext(activeConfiguration, worktreeRoot, modifiedCommodityIds);
     const deployment = await deployConfigurationDelta(client, bridge.configuration, modifiedCommodityIds);
     configurationDeployed = true;
-    const matching = await rematchPromotedBatches(client);
+    const matching = await rematchPromotedBatches(client, false, incrementalMatchContext);
     const materialization = await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(sealed.batchId)}/materialize`, { method: "POST" }) as {
       batches?: Array<{ batchId: string; status: string }>;
     };

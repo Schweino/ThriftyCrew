@@ -3,8 +3,10 @@ import { reconcileInactiveConfigurationDecisions } from "./match-decision-reconc
 
 function database(effectiveBatches: number, missingActiveMatches: number) {
   const updates: unknown[][] = [];
+  const statements: string[] = [];
   const db = {
     prepare(sql: string) {
+      statements.push(sql);
       if (sql.startsWith("SELECT id FROM configuration_versions")) {
         return { first: async () => ({ id: "cfg_new" }) };
       }
@@ -26,7 +28,7 @@ function database(effectiveBatches: number, missingActiveMatches: number) {
       throw new Error(`unexpected SQL: ${sql}`);
     },
   } as unknown as D1Database;
-  return { db, updates };
+  return { db, updates, statements };
 }
 
 describe("inactive configuration decision reconciliation", () => {
@@ -43,9 +45,10 @@ describe("inactive configuration decision reconciliation", () => {
   });
 
   it("preserves the last usable decision set during a partial rematch", async () => {
-    const { db, updates } = database(7, 1);
+    const { db, updates, statements } = database(7, 1);
     await expect(reconcileInactiveConfigurationDecisions(db)).resolves.toMatchObject({ ready: false, superseded: 0 });
     expect(updates).toHaveLength(0);
+    expect(statements.some((sql) => sql.includes("run.matched_count") && sql.includes("decision.superseded_at IS NULL"))).toBe(true);
   });
 
   it("does not retire decisions when there is no effective capture snapshot", async () => {
