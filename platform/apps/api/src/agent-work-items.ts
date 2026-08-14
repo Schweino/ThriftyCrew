@@ -279,6 +279,13 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
            JOIN ingredient_gaps gap ON gap.id = occurrence.gap_id
           WHERE occurrence.request_id = ?1 ORDER BY occurrence.source_url, gap.normalized_name`,
       ).bind(row.id).all<{ source_url: string; normalized_name: string }>() : { results: [] };
+      const rejectedSources = row.target_missing_ingredients ? await db.prepare(
+        `SELECT DISTINCT json_extract(detail_json, '$.sourceUrl') AS source_url
+           FROM pipeline_stage_events
+          WHERE campaign_id = ?1 AND lane = 'discovery' AND event_kind = 'source_rejected'
+            AND json_extract(detail_json, '$.sourceUrl') IS NOT NULL
+          ORDER BY source_url`,
+      ).bind(row.id).all<{ source_url: string }>() : { results: [] };
       return {
         sourceKind: "recipe-request" as const,
         sourceRef: String(row.id),
@@ -293,7 +300,10 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
             targetMissingIngredients: row.target_published_ingredients ?? row.target_missing_ingredients,
             uniqueMissingIngredients: row.unique_missing_ingredients,
             sourceRound: row.source_round,
-            priorSourceUrls: [...new Set(prior.results.map((item) => item.source_url))],
+            priorSourceUrls: [...new Set([
+              ...prior.results.map((item) => item.source_url),
+              ...rejectedSources.results.map((item) => item.source_url),
+            ])],
             previouslyFoundIngredients: [...new Set(prior.results.map((item) => item.normalized_name))],
           } : null,
         },
@@ -961,13 +971,23 @@ async function persistIngredientResearch(db: D1Database, outputValue: unknown): 
   }
 }
 
-async function persistRecipeSourceFacts(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, outputValue: unknown): Promise<void> {
+async function persistRecipeSourceFacts(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, outputValue: unknown): Promise<unknown> {
   const facts = recipeSourceFactsSchema.parse(outputValue);
   const lockByCandidate = new Map(facts.factLocks.map((lock) => [lock.candidateId, lock]));
-  const artifacts = await Promise.all(facts.candidates.map(async (candidate) => {
+  const rejectedSources = [...facts.rejectedSources];
+  const artifacts = (await Promise.all(facts.candidates.map(async (candidate) => {
     const sourceUrl = assertPublicRecipeSourceUrl(candidate.sourceUrl).toString();
     const response = await fetch(sourceUrl, { headers: { accept: "text/html,application/ld+json,application/json;q=0.9" }, redirect: "follow" });
-    if (!response.ok) throw new Error(`source artifact fetch failed for ${candidate.id}: HTTP ${response.status}`);
+    if (!response.ok) {
+      const reason = `source artifact fetch returned HTTP ${response.status}`;
+      rejectedSources.push({ candidateId: candidate.id, sourceUrl, reason });
+      await env.DB.prepare(
+        `INSERT INTO pipeline_stage_events
+           (campaign_id, lane, aggregate_kind, aggregate_id, stage, event_kind, detail_json)
+         VALUES (?1, 'discovery', 'recipe_candidate', ?2, 'source-artifact', 'source_rejected', ?3)`,
+      ).bind(facts.requestId, candidate.id, stableJson({ sourceUrl, reason })).run();
+      return null;
+    }
     const bytes = new Uint8Array(await response.arrayBuffer());
     if (bytes.byteLength < 1 || bytes.byteLength > 2_000_000) throw new Error(`source artifact size is invalid for ${candidate.id}`);
     const sha256 = await digestHex(bytes);
@@ -978,7 +998,7 @@ async function persistRecipeSourceFacts(env: Pick<WorkerEnv, "DB" | "EVIDENCE">,
     const stored = await env.EVIDENCE.head(objectKey);
     if (!stored || stored.size !== bytes.byteLength || stored.customMetadata?.sha256 !== sha256) throw new Error(`source artifact storage verification failed for ${candidate.id}`);
     return { candidate, sourceUrl, bytes, sha256, artifactId, objectKey, contentType, status: response.status };
-  }));
+  }))).filter((artifact): artifact is NonNullable<typeof artifact> => artifact !== null);
   const statements: D1PreparedStatement[] = [];
   for (const artifact of artifacts) {
     const { candidate } = artifact;
@@ -1019,6 +1039,14 @@ async function persistRecipeSourceFacts(env: Pick<WorkerEnv, "DB" | "EVIDENCE">,
     ).bind(id, verificationId, artifact.artifactId, factsHash));
   }
   for (let offset = 0; offset < statements.length; offset += 90) await env.DB.batch(statements.slice(offset, offset + 90));
+  const acceptedIds = new Set(artifacts.map((artifact) => artifact.candidate.id));
+  return recipeSourceFactsSchema.parse({
+    ...facts,
+    candidates: facts.candidates.filter((candidate) => acceptedIds.has(candidate.id)),
+    factLocks: facts.factLocks.filter((lock) => acceptedIds.has(lock.candidateId)),
+    rejectedSources,
+    extractionSummary: facts.extractionSummary,
+  });
 }
 
 async function persistRecipeMappings(db: D1Database, outputValue: unknown): Promise<void> {
@@ -1190,7 +1218,7 @@ export async function completeAgentWorkItem(env: Pick<WorkerEnv, "DB" | "EVIDENC
   if (!current) throw new Error("work item not found");
   if (identity.registeredAgentId !== current.agent_id) throw new Error("an agent may only complete its own work");
   if (current.state === "completed" && current.lease_id === body.leaseId && Number(current.lease_generation) === body.leaseGeneration) return { idempotent: true, workItemId, state: "completed" };
-  const output = validateAgentOutput(String(current.output_contract), body.output, String(current.source_ref), String(current.agent_id));
+  let output = validateAgentOutput(String(current.output_contract), body.output, String(current.source_ref), String(current.agent_id));
   if (String(current.agent_id).startsWith("recipe-")) assertRecipeChainContinuity(String(current.agent_id), JSON.parse(String(current.input_json)), output);
   // Fact verification is an acceptance gate, not a post-completion side effect.
   // Persisting it first is safe to replay because artifacts and fact versions are
@@ -1198,7 +1226,7 @@ export async function completeAgentWorkItem(env: Pick<WorkerEnv, "DB" | "EVIDENC
   // failure path can retry or source a replacement instead of stranding a
   // completed work item with no verified facts.
   const recipeFactsPersisted = current.agent_id === "recipe-fact-extractor";
-  if (recipeFactsPersisted) await persistRecipeSourceFacts(env, output);
+  if (recipeFactsPersisted) output = await persistRecipeSourceFacts(env, output);
   // Mapping persistence is also an acceptance gate. It creates the durable
   // Lane A -> Lane B handoff, so it must succeed before the lease is marked
   // completed. Every write in these helpers is deterministic/idempotent and is
