@@ -340,7 +340,7 @@ export async function verifyIngredientPublication(env: Pick<WorkerEnv, "DB" | "P
     for (const [originKind, origin] of origins) {
       const proof = await fetchProof(origin, member.commodity_id, input.releaseId, member.expected_public_projection_hash);
       memberVerified &&= proof.verified;
-      const proofId = await deterministicId("ingredient-public-proof", batchId, member.gap_id, originKind, proof.observedHash);
+      const proofId = await deterministicId("ingredient-public-proof", batchId, member.gap_id, originKind, proof.url, proof.observedHash);
       statements.push(env.DB.prepare(
         `INSERT INTO public_verification_proofs
            (id, publication_batch_id, release_id, origin_kind, url, expected_hash, observed_hash, response_status,
