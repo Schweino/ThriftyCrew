@@ -77,7 +77,7 @@ export function buildAldiRows(query, page, capturedAt) {
     const regularPriceMinor = originalMatch ? Math.round(Number(originalMatch[1]) * 100) : undefined;
     const priceSemantics = { offerType: regularPriceMinor ? "sale" : "everyday", condition: "none", unitPriceMinor: row.priceMinor, qualifyingQuantity: 1, totalPriceMinor: row.priceMinor, ...(regularPriceMinor ? { regularPriceMinor } : {}), ambiguity: false };
     const inStock = /in stock|only \d+ left/i.test(row.availabilityText);
-    const offer = { version: 1, retailerProductId: row.href, productName: row.name, sizeText: size, rawPriceText: row.current, purchasePriceMinor: row.priceMinor, availability: { status: inStock ? "in_stock" : "unknown", ...(row.availabilityText ? { rawText: row.availabilityText } : {}), fulfillmentMode: "in_store", eligible: inStock }, priceSemantics, observedAt: capturedAt, sourceUrl: row.href };
+    const offer = { version: 1, retailerProductId: row.id, productName: row.name, sizeText: size, rawPriceText: row.current, purchasePriceMinor: row.priceMinor, availability: { status: inStock ? "in_stock" : "unknown", ...(row.availabilityText ? { rawText: row.availabilityText } : {}), fulfillmentMode: "in_store", eligible: inStock }, priceSemantics, observedAt: capturedAt, sourceUrl: row.href };
       rows.push({
       id: row.id,
       term: query,
@@ -158,9 +158,21 @@ async function captureTerm(tab, query) {
 }
 
 async function captureCanary(tab, screenshotSha256) {
-  const state = await tab.playwright.evaluate(() => ({ url: location.href, challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied/i.test(document.body.innerText), exact: document.body.innerText.includes("In-Store") && document.body.innerText.includes("ALDI - OLA 48 - Omaha") }));
+  const state = await tab.playwright.evaluate(() => {
+    const body = document.body.innerText;
+    const selectedFulfillment = [...document.querySelectorAll("button")]
+      .filter((button) => button.offsetParent !== null)
+      .map((button) => (button.innerText || "").trim().replace(/\s+/g, " "))
+      .find((text) => /^(?:Pickup|In-Store)\b/.test(text)) || "";
+    return {
+      url: location.href,
+      challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied/i.test(body),
+      exact: /^In-Store\b/.test(selectedFulfillment) && selectedFulfillment.includes("ALDI - OLA 48 - Omaha"),
+      selectedFulfillment,
+    };
+  });
   if (state.challenge) throw new Error("ALDI retailer block page detected; stop the lane without retrying or attempting a bypass");
-  if (!state.exact) throw new Error("ALDI OLA 48 Omaha/In-Store canary failed");
+  if (!state.exact) throw new Error(`ALDI OLA 48 Omaha/In-Store canary failed; selected control was ${state.selectedFulfillment || "absent"}`);
   return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: LOCATION, priceMode: PRICE_MODE, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
 }
 

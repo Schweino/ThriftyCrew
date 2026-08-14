@@ -38,6 +38,29 @@ describe("targeted ingredient capture bridge", () => {
     await expect(buildIngredientCapturePayload(claim, [truncated], evidence, new Date(observedAt))).rejects.toThrow(/end-of-results coverage/);
   });
 
+  it("deduplicates the same product found by multiple locked queries when only observation metadata differs", async () => {
+    const multiClaim = { ...claim, commodity_proposal_json: JSON.stringify({ id: "test-spice", label: "Test Spice", categoryId: "pantry", unit: "oz",
+      include: ["\\btest spice\\b"], exclude: ["extract"], searchTerms: ["test spice", "whole test spice"] }) };
+    const first = structuredClone(chunk);
+    const second = structuredClone(chunk);
+    second.canary.observedAt = "2026-08-13T20:01:00.000Z";
+    second.terms![0]!.query = "whole test spice";
+    second.terms![0]!.finishedAt = second.canary.observedAt;
+    second.rows![0]!.q = "whole test spice";
+    (first.rows![0]!._capture as Record<string, any>).offer.observedAt = observedAt;
+    (second.rows![0]!._capture as Record<string, any>).offer.observedAt = second.canary.observedAt;
+    const payload = await buildIngredientCapturePayload(multiClaim, [first, second], evidence, new Date(second.canary.observedAt));
+    expect(payload.candidates).toHaveLength(1);
+    expect(payload.result).toMatchObject({ outcome: "priced", packagePriceMinor: 400 });
+  });
+
+  it("uses the retailer row id when a legacy offer incorrectly carries a URL-shaped product id", async () => {
+    const legacy = structuredClone(chunk);
+    (legacy.rows![0]!._capture as Record<string, any>).offer.retailerProductId = "https://www.walmart.com/ip/test-spice/123";
+    const payload = await buildIngredientCapturePayload(claim, [legacy], evidence, new Date(observedAt));
+    expect(payload.candidates[0]!.productId).toBe("123");
+  });
+
   it("requires the independent pass to reproduce the frozen winner", () => {
     const qaClaim = { ...claim, lease_owner: "qa-owner", lease_generation: 3, capture_result_json: JSON.stringify({
       outcome: "priced", sourceUrl: "https://www.walmart.com/ip/test-spice/123", productName: "Great Value Test Spice",

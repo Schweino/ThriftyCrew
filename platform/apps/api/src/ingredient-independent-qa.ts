@@ -8,6 +8,11 @@ import type { IngredientAggregate } from "./ingredient-state-machine";
 type CaptureResult = z.infer<typeof ingredientStoreCaptureResultSchema>;
 type QaComplete = z.infer<typeof ingredientStoreQaCompleteSchema>;
 
+export function hasCompleteLocationModeProof(result: CaptureResult["result"], priceMode: unknown): boolean {
+  if (!result.searchComplete || !result.locationVerified || !result.priceModeVerified) return false;
+  return result.outcome === "not_found" ? result.fulfillmentMode === null : result.fulfillmentMode === priceMode;
+}
+
 export async function uploadIngredientEvidence(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, input: { checkId: string; kind: string; sourceUrl: string; observedAt: string; document: unknown }) {
   const check = await env.DB.prepare("SELECT id FROM ingredient_store_checks WHERE id = ?1").bind(input.checkId).first<{ id: string }>();
   if (!check) throw new Error("ingredient evidence check does not exist");
@@ -52,7 +57,7 @@ export async function completeIngredientStoreCapture(env: Pick<WorkerEnv, "DB" |
     throw new Error("capture completion rejected by lease fence or lane boundary");
   }
   if (input.result.storeLocationId !== row.store_location_id || input.queryPlanHash !== row.query_plan_hash) throw new Error("capture result identity mismatch");
-  if (!input.result.searchComplete || !input.result.locationVerified || !input.result.priceModeVerified || input.result.fulfillmentMode !== row.price_mode) {
+  if (!hasCompleteLocationModeProof(input.result, row.price_mode)) {
     throw new Error("capture result lacks complete location/mode proof");
   }
   if (new Set(input.coverage.map((item) => item.normalizedQuery)).size !== input.coverage.length) throw new Error("capture coverage contains duplicate queries");

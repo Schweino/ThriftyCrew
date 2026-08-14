@@ -81,7 +81,7 @@ function regexes(patterns: string[]): RegExp[] {
 function rowIdentity(row: Record<string, unknown>) {
   const truth = row._capture as Record<string, any> | undefined;
   const offer = truth?.offer as Record<string, any> | undefined;
-  const productId = String(offer?.retailerProductId ?? row.id ?? row.url ?? row.href ?? "").trim();
+  const productId = String(row.id ?? offer?.retailerProductId ?? row.url ?? row.href ?? "").trim();
   const productName = String(offer?.productName ?? row.n ?? row.name ?? "").trim();
   const sourceUrl = String(offer?.sourceUrl ?? row.url ?? row.href ?? "").trim();
   const packageText = String(offer?.sizeText ?? row.size ?? "").trim();
@@ -153,7 +153,13 @@ export async function buildIngredientCapturePayload(check: ClaimedCheck, chunks:
   }
   const candidates: CapturePayload["candidates"] = [];
   for (const [productId, copies] of grouped) {
-    const semantics = copies.map((row) => { const i = rowIdentity(row); return stableJson({ productId, name: i.productName, url: i.sourceUrl, size: i.packageText, price: i.packagePriceMinor, offer: i.offer }); });
+    const semantics = copies.map((row) => {
+      const i = rowIdentity(row);
+      const availability = i.offer?.availability ?? {};
+      const priceSemantics = i.offer?.priceSemantics ?? i.truth?.visible?.priceSemantics ?? {};
+      return stableJson({ productId, name: i.productName, url: i.sourceUrl, size: i.packageText, price: i.packagePriceMinor,
+        sellerName: i.offer?.sellerName ?? null, availability, priceSemantics });
+    });
     if (new Set(semantics).size !== 1) throw new Error(`${check.id} captured conflicting facts for product ${productId}`);
     candidates.push(canonicalCandidate(copies[0]!, check, await digestHex(stableJson(copies.map((row) => row._capture)))));
   }
