@@ -13,6 +13,7 @@ const HEADLESS_STORES: Partial<Record<string, HeadlessStore>> = {
   "family-fare-omaha-6401": "family-fare",
   "hy-vee-omaha-1465": "hy-vee",
 };
+const KROGER_CREDENTIALS_FILE = path.resolve(import.meta.dirname, "../../../..", "grocery", ".krogerkey");
 
 const pause = (milliseconds: number) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
@@ -32,9 +33,10 @@ async function drainCatalogLane(client: MutationClient, storeLocationId: string,
 }
 
 async function uploadEvidence(client: MutationClient, check: ClaimedCheck, kind: "producer" | "verifier", chunk: AdapterChunk) {
+  const claim = { checkId: check.id, queryPlanHash: check.query_plan_hash };
   const response = await client.request("/internal/ingredient-pricing/evidence", { json: {
     checkId: check.id, kind, sourceUrl: chunk.canary.evidenceUrl, observedAt: chunk.canary.observedAt,
-    document: { claim: { checkId: check.id, queryPlanHash: check.query_plan_hash }, chunk },
+    document: kind === "producer" ? { claim, chunks: [chunk] } : { claim, verification: chunk },
   } }) as { evidence?: unknown };
   if (!response.evidence) throw new Error(`evidence upload omitted its immutable pointer for ${check.id}`);
   return response.evidence as Parameters<typeof buildIngredientCapturePayload>[2];
@@ -57,7 +59,7 @@ async function drainHeadlessCaptureLane(client: MutationClient, storeLocationId:
   const file = path.join(os.tmpdir(), `tc-ingredient-${adapter}-capture-${process.pid}-${Date.now()}.json`);
   try {
     const terms = claimSearchTerms(checks);
-    const chunk = await captureHeadlessDiscovery(adapter, terms, file);
+    const chunk = await captureHeadlessDiscovery(adapter, terms, file, { krogerCredentialsFile: KROGER_CREDENTIALS_FILE });
     for (const check of checks) {
       const evidence = await uploadEvidence(client, check, "producer", chunk);
       const payload = await buildIngredientCapturePayload(check, [chunk], evidence);
@@ -81,7 +83,7 @@ async function drainHeadlessQaLane(client: MutationClient, storeLocationId: stri
   const file = path.join(os.tmpdir(), `tc-ingredient-${adapter}-qa-${process.pid}-${Date.now()}.json`);
   const discoveryFile = `${file}.discovery.json`;
   try {
-    const verification = await captureHeadlessVerification(adapter, checks, file);
+    const verification = await captureHeadlessVerification(adapter, checks, file, { krogerCredentialsFile: KROGER_CREDENTIALS_FILE });
     const discovery = JSON.parse(await readFile(discoveryFile, "utf8")) as AdapterChunk;
     for (const check of checks) {
       const captured = JSON.parse(String(check.capture_result_json ?? "null")) as { outcome?: string } | null;
