@@ -192,7 +192,7 @@ export async function materializeIngredientPublicationCaptures(db: D1Database, b
     if (!source) throw new Error(`ingredient targeted source ${sourceId} is not active`);
     const captureBatchId = await deterministicId("ingredient-publication-capture", batchId, storeLocationId);
     const existing = await db.prepare("SELECT status FROM capture_batches WHERE id = ?1").bind(captureBatchId).first<{ status: string }>();
-    if (existing) {
+    if (existing && existing.status !== "open") {
       materialized.push({ batchId: captureBatchId, sourceId, storeLocationId, status: existing.status, idempotent: true });
       continue;
     }
@@ -207,7 +207,7 @@ export async function materializeIngredientPublicationCaptures(db: D1Database, b
         WHERE source_id = ?1 AND status IN ('promoted','superseded')
         ORDER BY captured_to DESC, promoted_at DESC, id DESC LIMIT 1`,
     ).bind(sourceId).first<{ id: string; coverage_mode: string }>();
-    await db.prepare(
+    if (!existing) await db.prepare(
       `INSERT INTO capture_batches
          (id, source_id, coverage_mode, status, captured_from, captured_to, expected_terms, attempted_terms,
           successful_terms, empty_terms, rejected_terms, blocked_terms, market_verified, location_verified,
