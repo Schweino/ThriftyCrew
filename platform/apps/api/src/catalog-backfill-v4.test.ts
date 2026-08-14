@@ -103,6 +103,15 @@ describe("truthful V4 catalog backfill", () => {
       document: unknown })).resolves.toMatchObject({ outcome: "needs_operator", winner: null });
   });
 
+  it("prices an eligible exact winner despite an unknown-availability nonwinner", async () => {
+    const mixed = walmartChunk();
+    mixed.rows[1]!._capture.offer.availability = {
+      locationId: "5361", fulfillmentMode: "pickup", eligible: false, status: "unknown",
+    };
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: ["Bananas"], identity,
+      document: mixed })).resolves.toMatchObject({ outcome: "priced", winner: { productId: "a" } });
+  });
+
   it("never derives not-found when an exact candidate omits its row-level location key", async () => {
     const missingLocation = walmartChunk();
     for (const row of missingLocation.rows) delete (row._capture.offer.availability as Record<string, unknown>).locationId;
@@ -245,29 +254,43 @@ describe("truthful V4 catalog backfill", () => {
       .resolves.toEqual({ workItemId: "work_repaired", adjudicationId: "adapter-fix-1", state: "queued", idempotent: true });
   });
 
-  it("supersedes invalid producer/verifier work and clears terminal readiness before correction recapture", async () => {
-    const expectedWorkId = await deterministicId("pipeline-v4-work", "old:correction:missing-location-id-v1");
-    const statements: string[] = [];
-    const db = { prepare(sql: string) {
-      statements.push(sql);
-      return { bind() { return this; }, async first() {
-        if (sql.includes("$.evidenceCorrection.id")) return null;
-        if (sql.includes("cell.ingredient_id")) return { ingredient_id: "ingredient", producer_work_item_id: "producer-old",
-          verifier_work_item_id: "verifier-old", evidence_state: "terminal_verified", agent_id: "omaha-price-producer-aldi",
-          input_json: JSON.stringify({ runId: "run", commodityId: "bananas", storeLocationId: "aldi-omaha-446-048" }), dedupe_key: "old" };
-        if (sql.includes("SELECT producer_work_item_id,evidence_state")) return {
-          producer_work_item_id: expectedWorkId, evidence_state: "queued" };
-        return null;
-      } };
-    }, async batch(items: unknown[]) { return items; } } as unknown as D1Database;
-    const result = await correctCatalogBackfillEvidence(db, { runId: "run", commodityId: "bananas",
+  it.each(["producer_ready", "needs_operator", "terminal_verified"])(
+    "supersedes invalid %s producer/verifier work and clears readiness before recapture", async (priorState) => {
+      const expectedWorkId = await deterministicId("pipeline-v4-work", `old-${priorState}:correction:missing-location-id-v1`);
+      const statements: string[] = [];
+      const db = { prepare(sql: string) {
+        statements.push(sql);
+        return { bind() { return this; }, async first() {
+          if (sql.includes("$.evidenceCorrection.id")) return null;
+          if (sql.includes("cell.ingredient_id")) return { ingredient_id: "ingredient", producer_work_item_id: "producer-old",
+            verifier_work_item_id: "verifier-old", evidence_state: priorState, agent_id: "omaha-price-producer-aldi",
+            input_json: JSON.stringify({ runId: "run", commodityId: "bananas", storeLocationId: "aldi-omaha-446-048" }), dedupe_key: `old-${priorState}` };
+          if (sql.includes("SELECT producer_work_item_id,evidence_state")) return {
+            producer_work_item_id: expectedWorkId, evidence_state: "queued" };
+          return null;
+        } };
+      }, async batch(items: unknown[]) { return items; } } as unknown as D1Database;
+      const result = await correctCatalogBackfillEvidence(db, { runId: "run", commodityId: "bananas",
+        storeLocationId: "aldi-omaha-446-048", correctionId: "missing-location-id-v1",
+        reason: "Row availability lacked its canonical retailer location key" });
+      expect(result).toMatchObject({ previousState: priorState, state: "queued",
+        supersededWorkItemIds: ["producer-old", "verifier-old"] });
+      expect(statements.some((sql) => sql.includes("state='superseded'"))).toBe(true);
+      expect(statements.some((sql) => sql.includes("terminal_result_json=NULL"))).toBe(true);
+      expect(statements.some((sql) => sql.includes("terminal_evidence_count"))).toBe(true);
+    });
+
+  it("reports the actual progressed cell state for an idempotent evidence correction", async () => {
+    const db = { prepare() { return { bind() { return this; }, async first() { return {
+      id: "correction-work", work_state: "succeeded", producer_work_item_id: "correction-work",
+      evidence_state: "producer_ready",
+    }; } }; } } as unknown as D1Database;
+    await expect(correctCatalogBackfillEvidence(db, { runId: "run", commodityId: "bananas",
       storeLocationId: "aldi-omaha-446-048", correctionId: "missing-location-id-v1",
-      reason: "Row availability lacked its canonical retailer location key" });
-    expect(result).toMatchObject({ previousState: "terminal_verified", state: "queued",
-      supersededWorkItemIds: ["producer-old", "verifier-old"] });
-    expect(statements.some((sql) => sql.includes("state='superseded'"))).toBe(true);
-    expect(statements.some((sql) => sql.includes("terminal_result_json=NULL"))).toBe(true);
-    expect(statements.some((sql) => sql.includes("terminal_evidence_count"))).toBe(true);
+      reason: "Row availability lacked its canonical retailer location key" })).resolves.toMatchObject({
+        workItemId: "correction-work", correctionWorkItemId: "correction-work", state: "producer_ready",
+        workState: "succeeded", idempotent: true,
+      });
   });
 
   it("returns a refreshed heartbeat snapshot for the exact owner without cross-owner leakage", async () => {

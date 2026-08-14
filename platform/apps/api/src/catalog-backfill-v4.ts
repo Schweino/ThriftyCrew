@@ -256,12 +256,17 @@ export async function correctCatalogBackfillEvidence(db: D1Database, input: {
   if (!input.correctionId.trim() || input.reason.trim().length < 20) {
     throw new Error("backfill evidence correction requires a durable identity and detailed reason");
   }
-  const existing = await db.prepare(`SELECT id FROM pipeline_agent_work_items_v4
-    WHERE correlation_id=?1 AND entity_type='catalog_backfill_cell'
-      AND json_extract(input_json,'$.commodityId')=?2 AND json_extract(input_json,'$.storeLocationId')=?3
-      AND json_extract(input_json,'$.evidenceCorrection.id')=?4 ORDER BY created_at DESC LIMIT 1`)
-    .bind(input.runId, input.commodityId, input.storeLocationId, input.correctionId).first<{ id: string }>();
-  if (existing) return { workItemId: existing.id, correctionId: input.correctionId, state: "queued", idempotent: true };
+  const existing = await db.prepare(`SELECT work.id,work.state AS work_state,cell.producer_work_item_id,cell.evidence_state
+    FROM pipeline_agent_work_items_v4 work JOIN catalog_backfill_cells_v4 cell
+      ON cell.run_id=work.correlation_id AND cell.commodity_id=json_extract(work.input_json,'$.commodityId')
+      AND cell.store_location_id=json_extract(work.input_json,'$.storeLocationId')
+    WHERE work.correlation_id=?1 AND work.entity_type='catalog_backfill_cell'
+      AND json_extract(work.input_json,'$.commodityId')=?2 AND json_extract(work.input_json,'$.storeLocationId')=?3
+      AND json_extract(work.input_json,'$.evidenceCorrection.id')=?4 ORDER BY work.created_at DESC LIMIT 1`)
+    .bind(input.runId, input.commodityId, input.storeLocationId, input.correctionId)
+    .first<{ id: string; work_state: string; producer_work_item_id: string; evidence_state: string }>();
+  if (existing) return { workItemId: existing.producer_work_item_id, correctionWorkItemId: existing.id,
+    correctionId: input.correctionId, state: existing.evidence_state, workState: existing.work_state, idempotent: true };
   const prior = await db.prepare(`SELECT cell.ingredient_id,cell.producer_work_item_id,cell.verifier_work_item_id,cell.evidence_state,
       work.agent_id,work.input_json,work.dedupe_key
     FROM catalog_backfill_cells_v4 cell JOIN pipeline_agent_work_items_v4 work ON work.id=cell.producer_work_item_id
