@@ -307,17 +307,24 @@ async function captureBakers(query: string, token: string, observedAt: string, f
     const tailStart = first.total - KROGER_PAGE_SIZE;
     if (tailStart > KROGER_MAX_START && tailStart <= KROGER_ABSOLUTE_START_CEILING) {
       try {
-        const tail = await fetchPage(tailStart, baseFilters);
-        if (tail.total !== first.total || tail.products.length !== KROGER_PAGE_SIZE
-          || tail.products.some((product: JsonRecord) => !String(product.productId ?? ""))) {
-          throw new HeadlessSourceLimitError("Baker's overlapping tail window changed total, length, or stable identity");
+        const starts = [tailStart, ...Array.from({ length: KROGER_ABSOLUTE_START_CEILING - KROGER_MAX_START },
+          (_, index) => KROGER_MAX_START + 1 + index).filter((start) => start !== tailStart)];
+        const tails = await mapWithConcurrency(starts, pageConcurrency, (start) => fetchPage(start, baseFilters));
+        const tailProducts: ProductHit[] = [];
+        for (const [pageIndex, tail] of tails.entries()) {
+          const expectedCount = Math.min(KROGER_PAGE_SIZE, Math.max(0, first.total - tail.start));
+          if (tail.total !== first.total || tail.products.length !== expectedCount
+            || tail.products.some((product: JsonRecord) => !String(product.productId ?? ""))) {
+            throw new HeadlessSourceLimitError("Baker's overlapping tail sweep changed total, length, or stable identity");
+          }
+          tailProducts.push(...tail.products.map((product: JsonRecord, resultIndex: number) => ({ product,
+            pageIndex: direct.pages + pageIndex, resultIndex })));
         }
-        products = unionProductHits([...products, ...tail.products.map((product: JsonRecord, resultIndex: number) => ({ product,
-          pageIndex: direct.pages, resultIndex }))], "overlapping tail window");
-        partitionProof.push({ label: "overlapping-tail-window", strategy: "exact_reported_tail",
-          start: tailStart, loaded: tail.products.length, recoveredUnique: products.length, reportedTotal: first.total });
+        products = unionProductHits([...products, ...tailProducts], "overlapping tail sweep");
+        partitionProof.push({ label: "overlapping-tail-sweep", strategy: "all_legal_tail_offsets",
+          starts, loaded: tailProducts.length, recoveredUnique: products.length, reportedTotal: first.total });
       } catch (error) {
-        partitionProof.push({ label: "overlapping-tail-window", strategy: "unsupported",
+        partitionProof.push({ label: "overlapping-tail-sweep", strategy: "unsupported",
           start: tailStart, error: String(error instanceof Error ? error.message : error).slice(0, 500) });
       }
     }
