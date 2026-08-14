@@ -55596,5 +55596,55 @@
     ],
     "band_min": 0.02,
     "band_max": 0.46
+  },
+  {
+    "id": "ingredient-definition-pistachios",
+    "label": "Pistachios",
+    "unit": "oz",
+    "include": [
+      "^(?=.*\\bpistachios?\\b).*$"
+    ],
+    "exclude": [
+      "\\bpistachio[- ]flavored\\b",
+      "\\bpistachio\\s+(?:butter|cream|paste|pudding|ice cream|gelato|cookies?|cake|mix)\\b"
+    ]
+  },
+  {
+    "id": "ingredient-definition-frozen-cauliflower-florets",
+    "label": "Frozen Cauliflower Florets",
+    "unit": "oz",
+    "include": [
+      "^(?=.*\\bfrozen\\b)(?=.*\\bcauliflower\\s+florets?\\b).*$"
+    ],
+    "exclude": [
+      "\\b(?:fresh|riced|mashed)\\s+cauliflower\\b",
+      "\\bcauliflower\\s+(?:rice|pizza|crust|wings)\\b",
+      "\\bvegetable\\s+blend\\b"
+    ]
+  },
+  {
+    "id": "ingredient-definition-kalamata-olives",
+    "label": "Kalamata Olives",
+    "unit": "oz",
+    "include": [
+      "^(?=.*\\bkalamata\\s+olives?\\b).*$"
+    ],
+    "exclude": [
+      "\\b(?:green|black|manzanilla|castelvetrano)\\s+olives?\\b",
+      "\\bolive\\s+(?:oil|tapenade|spread)\\b",
+      "\\b(?:salad|pizza|pasta)\\b"
+    ]
+  },
+  {
+    "id": "ingredient-definition-cinnamon-stick",
+    "label": "Cinnamon Sticks",
+    "unit": "oz",
+    "include": [
+      "^(?=.*\\bcinnamon\\s+sticks?\\b).*$"
+    ],
+    "exclude": [
+      "\\bground\\s+cinnamon\\b",
+      "\\bcinnamon\\s+(?:powder|sugar|candy|tea)\\b"
+    ]
   }
 ]
