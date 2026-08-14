@@ -1,7 +1,11 @@
 import { browserLanePolicy, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
 import { checkpointAdapterChunk } from "./adapter-protocol.mjs";
 
-const TARGET_RESULTS = 25;
+// Targeted ingredient evidence is accepted only after the true end of the
+// result set. A depth of 25 truncated common Walmart queries even when only a
+// few additional cards remained, so keep loading through the bounded five-page
+// loop before a no-match result can be asserted.
+const TARGET_RESULTS = 100;
 const CONFIG = {
   sams: {
     location: "Omaha Sam's Club",
@@ -31,6 +35,11 @@ function priceMinor(value) {
 function expandVerification(target, verification) {
   const rows = Array.isArray(target.satisfies) && target.satisfies.length ? target.satisfies : [target];
   return rows.map((row) => ({ ...verification, rowKey: row.rowKey, discoveryHash: row.discoveryHash }));
+}
+
+export function findVerificationRow(rows, target) {
+  const key = String(target.retailerProductId ?? target.productKey ?? "");
+  return rows.find((candidate) => String(candidate.id) === key || String(candidate.url) === String(target.productKey));
 }
 
 export function walmartPickupEligible(row) {
@@ -165,6 +174,7 @@ async function readPage(tab) {
         || /verify you are human|captcha|access denied|unusual traffic|robot or human|not a robot|403 error|request blocked|request could not be satisfied/i.test(`${document.title}\n${body}`),
       noResults: /no (?:matching )?(?:results|products)|0 results|couldn.t find/i.test(body),
       hasMore: [...document.querySelectorAll("button,a")].some((element) => /^(?:next|next page|load more|show more)$/i.test((element.innerText || element.getAttribute("aria-label") || "").trim()) && element.offsetParent !== null),
+      nextHref: [...document.querySelectorAll("a")].find((element) => /^(?:next|next page)$/i.test((element.innerText || element.getAttribute("aria-label") || "").trim()) && element.offsetParent !== null)?.href || null,
       rows,
     };
   });
@@ -227,7 +237,7 @@ export function buildNextDataSuccess(query, page, built, { attempts, startedAt, 
     blocked: false,
     term: {
       query, outcome: "success", rowCount: built.rows.length, attempts, startedAt, finishedAt,
-      retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: built.rows.length, availableResultCount: built.rows.length, pageCount: 1, hasMoreResults: page.hasMore, termination: page.hasMore ? "target-depth" : "end-of-results" },
+      retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: built.rows.length, availableResultCount: built.rows.length, pageCount: page.pageCount ?? 1, hasMoreResults: page.hasMore, termination: page.hasMore ? "target-depth" : "end-of-results" },
       ...(reason ? { reason, excludedResults: built.excludedResults } : {}),
     },
     rows: built.rows,
@@ -252,10 +262,27 @@ async function captureTerm(tab, store, query) {
         }
         if (page.challenge || page.rows.length || page.noResults || page.pickupFilteredEmpty) break;
       }
-      const finishedAt = new Date().toISOString();
+      let finishedAt = new Date().toISOString();
       if (page?.challenge) return { blocked: true, term: { query, outcome: "blocked", rowCount: 0, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "blocked" }, reason: "Retailer challenge detected; sweep stopped without attempting to solve it." }, rows: [] };
       if (!page) throw new Error(`${store} page produced no readable state`);
       if (normalize(page.query) !== normalize(query)) throw new Error(`visible query mismatch: expected ${query}, saw ${page.query}`);
+      const accumulated = [...page.rows];
+      let pageCount = 1;
+      while (page.hasMore && page.nextHref && pageCount < 5) {
+        await tab.goto(page.nextHref);
+        await tab.playwright.waitForTimeout(800);
+        const nextPage = await readPage(tab);
+        if (nextPage.challenge) return { blocked: true, term: { query, outcome: "blocked", rowCount: 0, attempts, startedAt, finishedAt: new Date().toISOString(), retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: pageCount + 1, hasMoreResults: false, termination: "blocked" }, reason: "Retailer challenge detected during result pagination." }, rows: [] };
+        if (normalize(nextPage.query) !== normalize(query)) throw new Error(`visible query mismatch on continuation: expected ${query}, saw ${nextPage.query}`);
+        if (store === "walmart" || store === "sams") nextPage.rows = nextPage.rows.filter((row) => pickupEligible(row, config.locationId));
+        accumulated.push(...nextPage.rows);
+        page = nextPage;
+        pageCount += 1;
+      }
+      const uniqueRows = new Map(accumulated.map((row) => [row.id, row]));
+      page.rows = [...uniqueRows.values()];
+      page.pageCount = pageCount;
+      finishedAt = new Date().toISOString();
       if (page.rows.length === 0) {
         if (!page.noResults && !page.pickupFilteredEmpty) throw new Error("zero visible/structured agreements without an explicit no-results state");
         return { blocked: false, term: { query, outcome: "empty", rowCount: 0, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "no-results" }, ...(page.pickupFilteredEmpty ? { reason: `all exact result agreements lacked in-stock pickup fulfillment at ${store} location ${config.locationId}` } : {}) }, rows: [] };
@@ -286,7 +313,7 @@ export async function captureNextDataCanary(tab, store, screenshotSha256) {
     if (state.challenge) throw new Error(`${store} retailer block page detected; stop the lane without retrying or attempting a bypass`);
     const pass = store === "sams"
       ? /Pickup[\s\S]*Omaha Sam's Club/i.test(state.body)
-      : /Omaha L St Supercenter/i.test(state.body) && /12850 L St/i.test(state.body) && /fulfillment_method%3APickup/i.test(state.url);
+      : /Omaha L St Supercenter/i.test(state.body) && /fulfillment_method%3APickup/i.test(state.url);
     if (pass) return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: config.location, priceMode: config.priceMode, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
     if (attempt < 4) await tab.playwright.waitForTimeout(750);
   }
@@ -332,13 +359,13 @@ async function captureNextDataVerificationChunkInternal({ tab, store, targets, f
     const target = targets[index];
     const previousCount = verifications.length;
     let captured = await captureTerm(tab, store, target.query);
-    let row = captured.rows.find((candidate) => candidate.id === target.productKey);
+    let row = findVerificationRow(captured.rows, target);
     if (!captured.blocked && captured.term.outcome !== "blocked" && !row && normalize(target.name) !== normalize(target.query)) {
       if (effectiveDelayMs > 0) await tab.playwright.waitForTimeout(effectiveDelayMs);
       const exactNameCapture = await captureTerm(tab, store, target.name);
       if (exactNameCapture.blocked || exactNameCapture.term.outcome === "blocked") captured = exactNameCapture;
       else {
-        const exactNameRow = exactNameCapture.rows.find((candidate) => candidate.id === target.productKey);
+        const exactNameRow = findVerificationRow(exactNameCapture.rows, target);
         if (exactNameRow) {
           captured = exactNameCapture;
           row = exactNameRow;
@@ -358,7 +385,7 @@ async function captureNextDataVerificationChunkInternal({ tab, store, targets, f
       verifications.push(...expandVerification(target, {
         observedAt,
         outcome: "observed",
-        productKey: row.id,
+        productKey: row.url,
         name: row.n,
         sizeText: row.size,
         purchasePriceMinor: priceMinor(row.lp),

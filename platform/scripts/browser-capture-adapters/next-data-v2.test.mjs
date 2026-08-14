@@ -1,6 +1,14 @@
 import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
-import { buildNextDataRows, buildNextDataSuccess, captureNextDataCanary, packageSizeFromName, parseNextDataOfferItem, pickupEligible, sourcePriceSemantics, walmartPickupEligible } from "./next-data-v2.mjs";
+import { buildNextDataRows, buildNextDataSuccess, captureNextDataCanary, findVerificationRow, packageSizeFromName, parseNextDataOfferItem, pickupEligible, sourcePriceSemantics, walmartPickupEligible } from "./next-data-v2.mjs";
+
+describe("next-data winner verification", () => {
+  it("finds the frozen winner by canonical URL while retaining the retailer id", () => {
+    const rows = [{ id: "7874229289", url: "https://www.samsclub.com/ip/item/7874229289" }];
+    expect(findVerificationRow(rows, { productKey: rows[0].url })).toBe(rows[0]);
+    expect(findVerificationRow(rows, { productKey: rows[0].url, retailerProductId: rows[0].id })).toBe(rows[0]);
+  });
+});
 
 describe("Walmart pickup eligibility", () => {
   it("requires in-stock pickup at the configured Omaha store", () => {
