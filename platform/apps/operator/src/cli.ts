@@ -586,6 +586,33 @@ async function rematchPromotedBatches(client: MutationClient, verbose = false, i
   };
 }
 
+async function checkpointEffectiveMatchRuns(client: MutationClient, requestedBatchIds: string[] = [], verbose = false): Promise<Record<string, unknown>> {
+  const startedAt = performance.now();
+  const selected = requestedBatchIds.length > 0
+    ? [...new Set(requestedBatchIds)]
+    : ((await client.request("/internal/capture-batches/promoted") as { batches?: Array<{ id?: unknown }> }).batches ?? [])
+      .map((batch) => String(batch.id ?? "")).filter(Boolean);
+  if (selected.length === 0) throw new Error("no effective promoted capture batches were selected for match-run checkpointing");
+  const settled = await Promise.allSettled(selected.map(async (batchId) =>
+    await client.request(`/internal/capture-batches/${encodeURIComponent(batchId)}/match-checkpoint`, { method: "POST" }) as Record<string, unknown>));
+  const checkpoints: Record<string, unknown>[] = [];
+  const failures: string[] = [];
+  for (const [index, outcome] of settled.entries()) {
+    if (outcome.status === "fulfilled") checkpoints.push(outcome.value);
+    else failures.push(`${selected[index]}: ${outcome.reason instanceof Error ? outcome.reason.message : String(outcome.reason)}`);
+  }
+  if (failures.length > 0) {
+    throw new Error(`match-run integrity checkpoint failed closed for ${failures.length}/${selected.length} batches: ${failures.slice(0, 5).join("; ")}`);
+  }
+  return { ok: true, summary: {
+    selected: selected.length, created: checkpoints.filter((row) => row.idempotent !== true).length,
+    idempotent: checkpoints.filter((row) => row.idempotent === true).length,
+    products: checkpoints.reduce((sum, row) => sum + Number(row.productCount ?? 0), 0),
+    matched: checkpoints.reduce((sum, row) => sum + Number(row.matchedCount ?? 0), 0),
+    decisionWrites: 0, elapsedMs: Math.round(performance.now() - startedAt),
+  }, ...(verbose ? { checkpoints } : {}) };
+}
+
 async function loadMatchContext(targetPlatformRoot = platformRoot): Promise<MatchContext> {
   const commodities = JSON.parse(await readFile(path.join(targetPlatformRoot, "config", "commodities.json"), "utf8")) as MatchCommodity[];
   const categoryDocument = JSON.parse((await readFile(path.join(targetPlatformRoot, "config", "categories.json"), "utf8")).replace(/^\uFEFF/, "")) as MatchCategories;
@@ -1768,6 +1795,8 @@ if (command === "status") {
   result = { ok: true, ready: ready.batches?.length ?? 0, promoted };
 } else if (command === "capture" && subcommand === "rematch-promoted") {
   result = await rematchPromotedBatches(await mutationClient(), arguments_.includes("--verbose"));
+} else if (command === "capture" && subcommand === "checkpoint-match-runs") {
+  result = await checkpointEffectiveMatchRuns(await mutationClient(), arguments_.filter((value: string) => value !== "--verbose"), arguments_.includes("--verbose"));
 } else if (command === "capture" && subcommand === "abandon") {
   const batchId = arguments_[0];
   const reason = arguments_.slice(1).join(" ");
@@ -2238,7 +2267,7 @@ if (command === "status") {
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
         "tc capture metrics [limit]", "tc capture coordinator status|next|heartbeat|fail|challenge|resolve", "tc capture session worklist|init|append|evidence|verification-plan|finalize|status",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog", "tc capture journal checkpoint|restore [--force]",
-      "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|rematch-promoted|abandon <batch-id> <reason>",
+      "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|rematch-promoted|checkpoint-match-runs [batch-id...] [--verbose]|abandon <batch-id> <reason>",
       "tc accuracy draw [seed]|revalidate", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",
       "tc sentinel latest [bakers family-fare hy-vee]",
       "tc match batch <batch-id>", "tc commodity add <file>", "tc ingredient discover [request-file]", "tc ingredient status [state]", "tc ingredient apply <research-output>", "tc ingredient apply-ready", "tc recipe add <file>",

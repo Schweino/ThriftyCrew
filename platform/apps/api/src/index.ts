@@ -100,6 +100,7 @@ import { createRelease, findBatch, insertObservations, insertRecipeCosts, insert
 import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { evaluateReleaseIntegrity } from "./release-integrity";
 import { reconcileInactiveConfigurationDecisions } from "./match-decision-reconciliation";
+import { checkpointPassedMatchRun } from "./match-run-checkpoint";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
 import { dispatchGithubJob, dispatchRegisteredAgent, githubWorkflowRuns, jobStatusRequiresAlert, raiseOperationalAlert, recordAudit, resolveOperationalAlert, resolveRecoveredJobRunAlerts, runArchivalForecast, runControlPlaneProof, runD1RecoveryCheckpoint, runScheduledOperations, scheduleGap } from "./operations";
@@ -1206,6 +1207,21 @@ app.get("/internal/match-runs/:id", async (context) => {
   const { detail_json: detailJson, ...run } = row;
   return context.json({ ok: true, found: true, run: { ...run, detail: JSON.parse(detailJson), actual,
     integrity: Number(actual?.products ?? -1) === Number(row.product_count) && Number(actual?.matched ?? -1) === Number(row.matched_count) } });
+});
+
+app.post("/internal/capture-batches/:id/match-checkpoint", async (context) => {
+  if (context.get("identity").role !== "operator" && context.get("identity").role !== "engine") {
+    return jsonError("only an operator or engine may checkpoint a match run", 403);
+  }
+  const batchId = context.req.param("id");
+  try {
+    const checkpoint = await checkpointPassedMatchRun(context.env.DB, batchId);
+    await recordAudit(context.env, context.get("identity"), "matching.integrity_checkpoint", "capture_batch", batchId,
+      "accepted", checkpoint);
+    return context.json({ ok: true, ...checkpoint }, checkpoint.idempotent ? 200 : 201);
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "match-run checkpoint failed", 409);
+  }
 });
 
 app.post("/internal/match-runs", zValidator("json", matchRunSchema), async (context) => {

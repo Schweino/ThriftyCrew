@@ -353,6 +353,7 @@ export async function insertRecipeCosts(db: D1Database, releaseId: string, costs
 
 export async function upsertGuardResult(db: D1Database, releaseId: string, result: ReleaseGuardResult): Promise<void> {
   const resultId = await deterministicId("guard", releaseId, result.guardId);
+  const findings = deduplicateGuardFindings(result.findings);
   const definition = await db.prepare("SELECT severity FROM guard_definitions WHERE id = ?1").bind(result.guardId).first<{ severity: "hard" | "warning" | "info" }>();
   const statements: D1PreparedStatement[] = [db.prepare(
     `INSERT INTO guard_results
@@ -371,15 +372,17 @@ export async function upsertGuardResult(db: D1Database, releaseId: string, resul
     result.status,
     result.eligibleCount,
     result.examinedCount,
-    result.findings.length,
+    findings.length,
     stableJson(result.detail),
   )];
   statements.push(db.prepare("DELETE FROM guard_findings WHERE result_id = ?1").bind(resultId));
-  for (const finding of result.findings) {
+  for (const finding of findings) {
     const findingId = await deterministicId("finding", resultId, finding.key);
     statements.push(db.prepare(
       `INSERT INTO guard_findings (id, result_id, finding_key, message, evidence_json)
-       VALUES (?1, ?2, ?3, ?4, ?5)`,
+       VALUES (?1, ?2, ?3, ?4, ?5)
+       ON CONFLICT(result_id, finding_key) DO UPDATE SET
+         id = excluded.id, message = excluded.message, evidence_json = excluded.evidence_json`,
     ).bind(findingId, resultId, finding.key, finding.message, stableJson(finding.evidence)));
     const triageId = await deterministicId("triage", "guard_finding", findingId);
     statements.push(db.prepare(
@@ -393,4 +396,24 @@ export async function upsertGuardResult(db: D1Database, releaseId: string, resul
   for (let offset = 0; offset < statements.length; offset += 90) {
     await db.batch(statements.slice(offset, offset + 90));
   }
+}
+
+export function deduplicateGuardFindings(findings: ReleaseGuardResult["findings"]): ReleaseGuardResult["findings"] {
+  const grouped = new Map<string, ReleaseGuardResult["findings"]>();
+  for (const finding of findings) grouped.set(finding.key, [...(grouped.get(finding.key) ?? []), finding]);
+  return [...grouped.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([key, duplicates]) => {
+    const variants = [...new Map(duplicates.map((finding) => [stableJson({ message: finding.message, evidence: finding.evidence }), finding])).values()]
+      .sort((left, right) => stableJson({ message: left.message, evidence: left.evidence })
+        .localeCompare(stableJson({ message: right.message, evidence: right.evidence })));
+    if (duplicates.length === 1) return duplicates[0]!;
+    return {
+      key,
+      message: [...new Set(variants.map((finding) => finding.message))].sort().join(" | "),
+      evidence: {
+        deduplicatedFindingCount: duplicates.length,
+        distinctVariantCount: variants.length,
+        variants: variants.map((finding) => ({ message: finding.message, evidence: finding.evidence })),
+      },
+    };
+  });
 }
