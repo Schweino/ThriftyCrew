@@ -16,6 +16,13 @@ const AGENT_BY_STORE: Record<string, string> = {
   "sams-omaha": "omaha-price-producer-sams-club",
   "walmart-omaha": "omaha-price-producer-walmart",
 };
+const VERIFIER_BY_STORE = Object.fromEntries(Object.entries(AGENT_BY_STORE).map(([store, agent]) =>
+  [store, agent.replace("price-producer", "price-verifier")])) as Record<string, string>;
+const HOST_BY_STORE: Record<string, string> = {
+  "aldi-omaha-446-048": "aldi.us", "bakers-saddle-creek": "bakersplus.com",
+  "family-fare-omaha-6401": "shopfamilyfare.com", "fareway-omaha-043": "fareway.com",
+  "hy-vee-omaha-1465": "hy-vee.com", "sams-omaha": "samsclub.com", "walmart-omaha": "walmart.com",
+};
 
 function unitDimension(unit: string): "weight" | "volume" | "count" | "other" {
   const normalized = unit.toLowerCase();
@@ -175,4 +182,141 @@ export async function heartbeatCatalogBackfillOwner(db: D1Database, input: { own
   const renewed = Number(result.meta.changes ?? 0);
   if (renewed === 0) throw new Error("backfill owner has no unexpired claimed work");
   return { owner: input.owner, renewed, leaseSeconds };
+}
+
+type BackfillEvidenceSubmission = {
+  workItemId: string; owner: string; leaseGeneration: number; generationId: string; sessionId: string;
+  sourceUrl: string; observedAt: string; outcome: "priced" | "not_found" | "ambiguous" | "challenged";
+  document: unknown;
+};
+
+function assertFreshBackfillEvidence(storeLocationId: string, input: BackfillEvidenceSubmission) {
+  if (!input.owner || !input.generationId || !input.sessionId || !Number.isInteger(input.leaseGeneration) || input.leaseGeneration < 1) {
+    throw new Error("backfill evidence omitted its lease, generation, or session fence");
+  }
+  const observedAt = Date.parse(input.observedAt);
+  if (!Number.isFinite(observedAt) || Date.now() - observedAt > 15 * 60_000 || observedAt - Date.now() > 60_000) {
+    throw new Error("backfill evidence is stale or future-dated");
+  }
+  const url = new URL(input.sourceUrl);
+  if (url.protocol !== "https:" || !url.hostname.endsWith(HOST_BY_STORE[storeLocationId] ?? ".invalid")) {
+    throw new Error("backfill evidence source does not match the authoritative retailer");
+  }
+}
+
+export function assertIndependentBackfillEvidence(input: {
+  producer: { documentHash: string; generationId: string; sessionId: string; observedAt: string };
+  verifier: { documentHash: string; generationId: string; sessionId: string; observedAt: string };
+}) {
+  if (input.producer.documentHash === input.verifier.documentHash || input.producer.generationId === input.verifier.generationId
+    || input.producer.sessionId === input.verifier.sessionId) throw new Error("verifier evidence is not independent from producer evidence");
+  if (Date.parse(input.verifier.observedAt) <= Date.parse(input.producer.observedAt)) throw new Error("verifier evidence must be newer than producer evidence");
+}
+
+export async function submitCatalogBackfillProducer(db: D1Database, input: BackfillEvidenceSubmission) {
+  const work = await db.prepare(`SELECT * FROM pipeline_agent_work_items_v4 WHERE id=?1 AND entity_type='catalog_backfill_cell'`)
+    .bind(input.workItemId).first<Record<string, unknown>>();
+  if (!work || !String(work.agent_id).startsWith("omaha-price-producer-")) throw new Error("producer backfill work item is missing");
+  const payload = JSON.parse(String(work.input_json)) as Record<string, string>;
+  const storeLocationId = String(payload.storeLocationId ?? "");
+  if (!payload.runId || !payload.commodityId || !payload.ingredientId || !payload.definitionVersionId || !storeLocationId) throw new Error("producer work item payload is incomplete");
+  assertFreshBackfillEvidence(storeLocationId, input);
+  const documentJson = stableJson(input.document);
+  const documentHash = await digestHex(documentJson);
+  const evidenceId = await deterministicId("catalog-backfill-evidence", input.workItemId, "producer", documentHash);
+  const isTerminalCandidate = input.outcome === "priced" || input.outcome === "not_found";
+  const verifierAgent = VERIFIER_BY_STORE[storeLocationId];
+  if (isTerminalCandidate && !verifierAgent) throw new Error("producer work item has no registered verifier lane");
+  const verifierDedupe = `catalog-backfill:${payload.ingredientId}:${payload.storeLocationId}:${payload.definitionVersionId}:verifier:${evidenceId}`;
+  const verifierWorkId = await deterministicId("pipeline-v4-work", verifierDedupe);
+  const verifierInput = stableJson({ ...payload, kind: "catalog_backfill_verify_v4", producerWorkItemId: input.workItemId,
+    producerEvidenceId: evidenceId, producerOutcome: input.outcome, producerDocumentHash: documentHash,
+    producerGenerationId: input.generationId, producerSessionId: input.sessionId, producerObservedAt: input.observedAt });
+  const verifierInputHash = await digestHex(verifierInput);
+  const resultJson = stableJson({ outcome: input.outcome, evidenceId, documentHash });
+  const statements: D1PreparedStatement[] = [
+    db.prepare(`INSERT INTO catalog_backfill_evidence_v4
+      (evidence_id,run_id,commodity_id,store_location_id,work_item_id,kind,generation_id,session_id,source_url,observed_at,document_json,document_hash)
+      SELECT ?1,?2,?3,?4,id,'producer',?5,?6,?7,?8,?9,?10 FROM pipeline_agent_work_items_v4
+      WHERE id=?11 AND lease_owner=?12 AND lease_generation=?13 AND state IN ('claimed','running') AND lease_expires_at>CURRENT_TIMESTAMP
+      ON CONFLICT(work_item_id) DO NOTHING`).bind(evidenceId, payload.runId, payload.commodityId, payload.storeLocationId,
+        input.generationId, input.sessionId, input.sourceUrl, input.observedAt, documentJson, documentHash,
+        input.workItemId, input.owner, input.leaseGeneration),
+    db.prepare(`UPDATE pipeline_agent_work_items_v4 SET state=?2,result_json=?3,result_ref_hash=?4,terminal_at=CURRENT_TIMESTAMP,
+      lease_owner=NULL,lease_expires_at=NULL WHERE id=?1 AND EXISTS(SELECT 1 FROM catalog_backfill_evidence_v4 WHERE evidence_id=?5)`)
+      .bind(input.workItemId, isTerminalCandidate ? "succeeded" : input.outcome === "challenged" ? "blocked_challenge" : "needs_operator",
+        resultJson, documentHash, evidenceId),
+    db.prepare(`UPDATE catalog_backfill_cells_v4 SET evidence_state=?4,updated_at=CURRENT_TIMESTAMP
+      WHERE run_id=?1 AND commodity_id=?2 AND store_location_id=?3 AND EXISTS(SELECT 1 FROM catalog_backfill_evidence_v4 WHERE evidence_id=?5)`)
+      .bind(payload.runId, payload.commodityId, payload.storeLocationId,
+        isTerminalCandidate ? "producer_ready" : input.outcome === "challenged" ? "challenged" : "needs_operator", evidenceId),
+  ];
+  if (isTerminalCandidate) {
+    statements.push(db.prepare(`INSERT INTO pipeline_agent_work_items_v4
+      (id,agent_id,entity_type,entity_id,dedupe_key,priority,state,input_ref_hash,correlation_id,input_json)
+      SELECT ?1,?2,'catalog_backfill_cell',?3,?4,50,'queued',?5,?6,?7
+      WHERE EXISTS(SELECT 1 FROM catalog_backfill_evidence_v4 WHERE evidence_id=?8) ON CONFLICT(dedupe_key) DO NOTHING`)
+      .bind(verifierWorkId, verifierAgent, payload.ingredientId, verifierDedupe, verifierInputHash, payload.runId, verifierInput, evidenceId));
+    statements.push(db.prepare(`UPDATE catalog_backfill_cells_v4 SET verifier_work_item_id=?4 WHERE run_id=?1 AND commodity_id=?2
+      AND store_location_id=?3 AND EXISTS(SELECT 1 FROM catalog_backfill_evidence_v4 WHERE evidence_id=?5)`)
+      .bind(payload.runId, payload.commodityId, payload.storeLocationId, verifierWorkId, evidenceId));
+  }
+  await db.batch(statements);
+  const stored = await db.prepare("SELECT evidence_id FROM catalog_backfill_evidence_v4 WHERE evidence_id=?1").bind(evidenceId).first();
+  if (!stored) throw new Error("producer evidence rejected by lease fence");
+  return { evidenceId, documentHash, outcome: input.outcome, verifierWorkItemId: isTerminalCandidate ? verifierWorkId : null };
+}
+
+export async function submitCatalogBackfillVerifier(db: D1Database, input: BackfillEvidenceSubmission) {
+  const work = await db.prepare(`SELECT * FROM pipeline_agent_work_items_v4 WHERE id=?1 AND entity_type='catalog_backfill_cell'`)
+    .bind(input.workItemId).first<Record<string, unknown>>();
+  if (!work || !String(work.agent_id).startsWith("omaha-price-verifier-")) throw new Error("verifier backfill work item is missing");
+  const payload = JSON.parse(String(work.input_json)) as Record<string, string>;
+  const storeLocationId = String(payload.storeLocationId ?? "");
+  const producerOutcome = String(payload.producerOutcome ?? "");
+  if (!payload.runId || !payload.commodityId || !payload.producerEvidenceId || !storeLocationId) throw new Error("verifier work item payload is incomplete");
+  assertFreshBackfillEvidence(storeLocationId, input);
+  if (!["priced", "not_found"].includes(producerOutcome) || input.outcome !== producerOutcome) {
+    if (!['ambiguous','challenged'].includes(input.outcome)) throw new Error("verifier outcome does not match the frozen producer outcome");
+  }
+  const producer = await db.prepare(`SELECT document_hash,generation_id,session_id,observed_at FROM catalog_backfill_evidence_v4
+    WHERE evidence_id=?1 AND kind='producer'`).bind(payload.producerEvidenceId)
+    .first<{ document_hash: string; generation_id: string; session_id: string; observed_at: string }>();
+  if (!producer) throw new Error("verifier work item is not bound to producer evidence");
+  const documentJson = stableJson(input.document);
+  const documentHash = await digestHex(documentJson);
+  assertIndependentBackfillEvidence({ producer: { documentHash: producer.document_hash, generationId: producer.generation_id,
+    sessionId: producer.session_id, observedAt: producer.observed_at }, verifier: { documentHash, generationId: input.generationId,
+    sessionId: input.sessionId, observedAt: input.observedAt } });
+  const evidenceId = await deterministicId("catalog-backfill-evidence", input.workItemId, "verifier", documentHash);
+  const terminal = input.outcome === "priced" || input.outcome === "not_found";
+  const terminalJson = stableJson({ outcome: input.outcome, producerEvidenceId: payload.producerEvidenceId,
+    verifierEvidenceId: evidenceId, producerDocumentHash: producer.document_hash, verifierDocumentHash: documentHash,
+    verifiedAt: input.observedAt, document: input.document });
+  const terminalHash = await digestHex(terminalJson);
+  await db.batch([
+    db.prepare(`INSERT INTO catalog_backfill_evidence_v4
+      (evidence_id,run_id,commodity_id,store_location_id,work_item_id,kind,generation_id,session_id,source_url,observed_at,document_json,document_hash)
+      SELECT ?1,?2,?3,?4,id,'verifier',?5,?6,?7,?8,?9,?10 FROM pipeline_agent_work_items_v4
+      WHERE id=?11 AND lease_owner=?12 AND lease_generation=?13 AND state IN ('claimed','running') AND lease_expires_at>CURRENT_TIMESTAMP
+      ON CONFLICT(work_item_id) DO NOTHING`).bind(evidenceId, payload.runId, payload.commodityId, payload.storeLocationId,
+        input.generationId, input.sessionId, input.sourceUrl, input.observedAt, documentJson, documentHash,
+        input.workItemId, input.owner, input.leaseGeneration),
+    db.prepare(`UPDATE pipeline_agent_work_items_v4 SET state=?2,result_json=?3,result_ref_hash=?4,terminal_at=CURRENT_TIMESTAMP,
+      lease_owner=NULL,lease_expires_at=NULL WHERE id=?1 AND EXISTS(SELECT 1 FROM catalog_backfill_evidence_v4 WHERE evidence_id=?5)`)
+      .bind(input.workItemId, terminal ? "succeeded" : input.outcome === "challenged" ? "blocked_challenge" : "needs_operator",
+        terminalJson, terminalHash, evidenceId),
+    db.prepare(`UPDATE catalog_backfill_cells_v4 SET evidence_state=?4,terminal_result_json=?5,terminal_result_hash=?6,updated_at=CURRENT_TIMESTAMP
+      WHERE run_id=?1 AND commodity_id=?2 AND store_location_id=?3 AND evidence_state='producer_ready'
+        AND EXISTS(SELECT 1 FROM catalog_backfill_evidence_v4 WHERE evidence_id=?7)`)
+      .bind(payload.runId, payload.commodityId, payload.storeLocationId,
+        terminal ? "terminal_verified" : input.outcome === "challenged" ? "challenged" : "needs_operator",
+        terminal ? terminalJson : null, terminal ? terminalHash : null, evidenceId),
+    db.prepare(`UPDATE catalog_backfill_ingredients_v4 SET terminal_evidence_count=(SELECT COUNT(*) FROM catalog_backfill_cells_v4 cell
+      WHERE cell.run_id=?1 AND cell.commodity_id=?2 AND cell.evidence_state='terminal_verified'),updated_at=CURRENT_TIMESTAMP
+      WHERE run_id=?1 AND commodity_id=?2`).bind(payload.runId, payload.commodityId),
+  ]);
+  const stored = await db.prepare("SELECT evidence_id FROM catalog_backfill_evidence_v4 WHERE evidence_id=?1").bind(evidenceId).first();
+  if (!stored) throw new Error("verifier evidence rejected by lease fence");
+  return { evidenceId, documentHash, terminalHash: terminal ? terminalHash : null, outcome: input.outcome };
 }

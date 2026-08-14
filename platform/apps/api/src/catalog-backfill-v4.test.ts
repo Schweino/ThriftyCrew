@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { assertLegacyBoard, catalogBackfillPromotionAllowed } from "./catalog-backfill-v4";
+import { assertIndependentBackfillEvidence, assertLegacyBoard, catalogBackfillPromotionAllowed } from "./catalog-backfill-v4";
 
 describe("truthful V4 catalog backfill", () => {
   it("rejects incomplete and duplicate legacy commodity identities", () => {
@@ -21,5 +21,15 @@ describe("truthful V4 catalog backfill", () => {
     expect(catalogBackfillPromotionAllowed([{ evidence_state: "terminal_verified", count: 4011 }, { evidence_state: "queued", count: 1 }], 4011)).toBe(false);
     expect(catalogBackfillPromotionAllowed([{ evidence_state: "terminal_verified", count: 4012 }], 4011)).toBe(false);
     expect(catalogBackfillPromotionAllowed([{ evidence_state: "terminal_verified", count: 4011 }], 4011)).toBe(true);
+  });
+
+  it("requires a newer, independently generated verifier session and hash", () => {
+    const producer = { documentHash: "a".repeat(64), generationId: "producer-generation", sessionId: "producer-session",
+      observedAt: "2026-08-14T20:00:00.000Z" };
+    expect(() => assertIndependentBackfillEvidence({ producer, verifier: { documentHash: "b".repeat(64),
+      generationId: "verifier-generation", sessionId: "verifier-session", observedAt: "2026-08-14T20:01:00.000Z" } })).not.toThrow();
+    expect(() => assertIndependentBackfillEvidence({ producer, verifier: { ...producer, observedAt: "2026-08-14T20:01:00.000Z" } })).toThrow("not independent");
+    expect(() => assertIndependentBackfillEvidence({ producer, verifier: { documentHash: "b".repeat(64),
+      generationId: "verifier-generation", sessionId: "verifier-session", observedAt: producer.observedAt } })).toThrow("must be newer");
   });
 });

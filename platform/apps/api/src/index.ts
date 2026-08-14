@@ -131,7 +131,7 @@ import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredi
 import { materializeHotCatalog } from "./hot-catalog";
 import { attachIngredientProposal, createIngredientPublicationBatch, failIngredientPublicationBatch, ingredientPublicationProofPlan, materializeIngredientPublicationCaptures, verifyIngredientPublicationExternal, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
 import { listPublicIngredients, getPublicIngredientBySlug, publicIngredientResponse } from "./public-grocery-v3";
-import { catalogBackfillProgress, claimCatalogBackfillBatch, heartbeatCatalogBackfillOwner, importCatalogBackfillPage, initializeCatalogBackfill } from "./catalog-backfill-v4";
+import { catalogBackfillProgress, claimCatalogBackfillBatch, heartbeatCatalogBackfillOwner, importCatalogBackfillPage, initializeCatalogBackfill, submitCatalogBackfillProducer, submitCatalogBackfillVerifier } from "./catalog-backfill-v4";
 import { compareAndSwapIngredientPointer, finalizeIncrementalIngredient, previewIncrementalIngredient, rollbackIncrementalIngredientPointer, stageIncrementalIngredient } from "./incremental-ingredient-publication";
 import { completePermanentlyUnavailableIngredient, resumeRecipesForPublishedIngredient } from "./recipe-dependency-resume-v2";
 import { releasePayloadObjectKey } from "./release-payloads";
@@ -1705,11 +1705,23 @@ app.post("/internal/v4/backfill/claim", async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only an operator may claim catalog backfill", 403);
   try {
     const body = await context.req.json<{ agentId: string; owner: string; limit?: number; leaseSeconds?: number }>();
-    if (!body.agentId?.startsWith("omaha-price-producer-") || !body.owner) return jsonError("backfill claim requires a producer agent and owner", 400);
+    if (!/^omaha-price-(?:producer|verifier)-/.test(body.agentId ?? "") || !body.owner) return jsonError("backfill claim requires a producer or verifier agent and owner", 400);
     const workItems = await claimCatalogBackfillBatch(context.env.DB, { agentId: body.agentId, owner: body.owner,
       limit: Math.min(50, Math.max(1, Number(body.limit ?? 50))), leaseSeconds: Number(body.leaseSeconds ?? 900) });
     return context.json({ ok: true, workItems });
   } catch (error) { return jsonError(error instanceof Error ? error.message : "catalog backfill claim failed", 409); }
+});
+
+app.post("/internal/v4/backfill/producer-submit", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may submit producer backfill evidence", 403);
+  try { return context.json({ ok: true, ...await submitCatalogBackfillProducer(context.env.DB, await context.req.json()) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "producer backfill submission failed", 409); }
+});
+
+app.post("/internal/v4/backfill/verifier-submit", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may submit verifier backfill evidence", 403);
+  try { return context.json({ ok: true, ...await submitCatalogBackfillVerifier(context.env.DB, await context.req.json()) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "verifier backfill submission failed", 409); }
 });
 
 app.post("/internal/v4/backfill/heartbeat", async (context) => {

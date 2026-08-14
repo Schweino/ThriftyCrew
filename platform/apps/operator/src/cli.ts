@@ -2276,6 +2276,9 @@ if (command === "status") {
   } else if (action === "heartbeat") {
     if (!first) throw new Error("tc ingredient backfill-v4 heartbeat requires an exact owner [lease-seconds]");
     result = await client.request("/internal/v4/backfill/heartbeat", { json: { owner: first, leaseSeconds: Number(second ?? 900) } });
+  } else if (action === "producer-submit" || action === "verifier-submit") {
+    if (!first) throw new Error(`tc ingredient backfill-v4 ${action} requires an evidence JSON file`);
+    result = await client.request(`/internal/v4/backfill/${action}`, { json: JSON.parse(await readFile(cliPath(first), "utf8")) });
   } else throw new Error("tc ingredient backfill-v4 requires initialize|import [offset] [limit]|progress [run]|claim <agent> [owner] [limit]|heartbeat <owner> [lease-seconds]");
 } else if (command === "recipe" && subcommand === "wave") {
   const [action, waveId, value] = arguments_;
