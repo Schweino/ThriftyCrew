@@ -1551,6 +1551,12 @@ export const ingredientStoreCheckFailSchema = z.object({
   retryAt: isoDateTime.nullable().default(null),
 }).strict();
 
+export const ingredientStoreCheckReopenSchema = z.object({
+  reason: z.string().trim().min(10).max(2000),
+  expectedEvidenceId: nonEmptyId,
+  expectedQaAttestationId: nonEmptyId,
+}).strict();
+
 export const ingredientCaptureChallengeOpenSchema = z.object({
   owner: nonEmptyId,
   leaseGeneration: z.number().int().positive(),

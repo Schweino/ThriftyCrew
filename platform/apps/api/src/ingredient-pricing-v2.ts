@@ -481,6 +481,92 @@ export async function completeStoreCheck(env: Pick<WorkerEnv, "DB" | "EVIDENCE">
   return sealAggregateIfTerminal(env, row.pricing_job_id);
 }
 
+export async function reopenTerminalStoreCheckForCorrection(
+  db: D1Database,
+  checkId: string,
+  input: { reason: string; expectedEvidenceId: string; expectedQaAttestationId: string },
+) {
+  const check = await db.prepare(`SELECT check_row.pricing_job_id, check_row.gap_id, check_row.state,
+      check_row.evidence_id, check_row.qa_attestation_id, job.resolution_version_id, gap.status AS gap_status
+    FROM ingredient_store_checks check_row
+    JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
+    JOIN ingredient_gaps gap ON gap.id = check_row.gap_id
+    WHERE check_row.id = ?1`).bind(checkId).first<Record<string, unknown>>();
+  if (!check || !["qa_verified_priced", "qa_verified_not_found"].includes(String(check.state))) {
+    throw new Error("only a QA-terminal store check may be reopened for correction");
+  }
+  if (check.gap_status === "published" || check.gap_status === "permanently_unavailable") {
+    throw new Error("published or permanently unavailable ingredients require a corrective release, not queue reopening");
+  }
+  if (check.evidence_id !== input.expectedEvidenceId || check.qa_attestation_id !== input.expectedQaAttestationId) {
+    throw new Error("store-check correction lost its immutable evidence/QA compare-and-set fence");
+  }
+  const blocking = await db.prepare(`SELECT batch.id, batch.state FROM ingredient_publication_batches batch
+    JOIN ingredient_publication_members member ON member.batch_id = batch.id
+    WHERE member.gap_id = ?1 AND batch.state NOT IN ('open','sealed','failed','rolled_back')
+    ORDER BY batch.created_at DESC LIMIT 1`).bind(check.gap_id).first<{ id: string; state: string }>();
+  if (blocking) throw new Error(`ingredient publication ${blocking.id} already reached ${blocking.state}; use a corrective release`);
+  const reason = input.reason.trim().slice(0, 2000);
+  const eventDetail = stableJson({ reason, supersededEvidenceId: check.evidence_id,
+    supersededQaAttestationId: check.qa_attestation_id, supersededResolutionVersionId: check.resolution_version_id });
+  const statements: D1PreparedStatement[] = [
+    db.prepare(`UPDATE ingredient_publication_batches SET state = 'failed', failure_class = 'evidence_correction',
+      failure_detail = ?2, lease_owner = NULL, lease_expires_at = NULL, updated_at = CURRENT_TIMESTAMP
+      WHERE id IN (SELECT batch_id FROM ingredient_publication_members WHERE gap_id = ?1)
+        AND state IN ('open','sealed') AND EXISTS (SELECT 1 FROM ingredient_store_checks
+          WHERE id = ?3 AND state = ?4 AND evidence_id = ?5 AND qa_attestation_id = ?6)`)
+      .bind(check.gap_id, reason, checkId, check.state, check.evidence_id, check.qa_attestation_id),
+    db.prepare(`UPDATE ingredient_publication_members SET state = 'failed', failure_detail = ?2,
+      updated_at = CURRENT_TIMESTAMP WHERE gap_id = ?1 AND state = 'pending'
+      AND batch_id IN (SELECT id FROM ingredient_publication_batches WHERE state = 'failed')
+      AND EXISTS (SELECT 1 FROM ingredient_store_checks WHERE id = ?3 AND state = ?4
+        AND evidence_id = ?5 AND qa_attestation_id = ?6)`)
+      .bind(check.gap_id, reason, checkId, check.state, check.evidence_id, check.qa_attestation_id),
+    db.prepare(`DELETE FROM ingredient_current_resolutions WHERE gap_id = ?1
+      AND resolution_version_id = ?2 AND EXISTS (SELECT 1 FROM ingredient_store_checks
+        WHERE id = ?3 AND state = ?4 AND evidence_id = ?5 AND qa_attestation_id = ?6)`)
+      .bind(check.gap_id, check.resolution_version_id, checkId, check.state, check.evidence_id, check.qa_attestation_id),
+    db.prepare(`UPDATE ingredient_pricing_jobs SET state = 'store_checks_running', operational_state = 'store_checks_running',
+      resolution_version_id = NULL, terminal_store_count = terminal_store_count - 1,
+      priced_store_count = priced_store_count - CASE WHEN ?2 = 'qa_verified_priced' THEN 1 ELSE 0 END,
+      not_found_store_count = not_found_store_count - CASE WHEN ?2 = 'qa_verified_not_found' THEN 1 ELSE 0 END,
+      state_version = state_version + 1, last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?1 AND resolution_version_id = ?3 AND EXISTS (SELECT 1 FROM ingredient_store_checks
+        WHERE id = ?4 AND state = ?2 AND evidence_id = ?5 AND qa_attestation_id = ?6)`)
+      .bind(check.pricing_job_id, check.state, check.resolution_version_id, checkId, check.evidence_id, check.qa_attestation_id),
+    db.prepare(`UPDATE ingredient_gaps SET status = 'researching', updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?1 AND status = 'ready_to_publish' AND EXISTS (SELECT 1 FROM ingredient_store_checks
+        WHERE id = ?2 AND state = ?3 AND evidence_id = ?4 AND qa_attestation_id = ?5)`)
+      .bind(check.gap_id, checkId, check.state, check.evidence_id, check.qa_attestation_id),
+    db.prepare(`UPDATE ingredient_pricing_inbox SET state = 'active', lease_owner = NULL, lease_expires_at = NULL,
+      updated_at = CURRENT_TIMESTAMP WHERE pricing_job_id = ?1 AND EXISTS (SELECT 1 FROM ingredient_store_checks
+        WHERE id = ?2 AND state = ?3 AND evidence_id = ?4 AND qa_attestation_id = ?5)`)
+      .bind(check.pricing_job_id, checkId, check.state, check.evidence_id, check.qa_attestation_id),
+    db.prepare(`INSERT INTO pipeline_stage_events
+      (lane, aggregate_kind, aggregate_id, stage, event_kind, detail_json)
+      SELECT 'pricing', 'store_check', ?1, 'correction', 'reopened', ?2
+      WHERE EXISTS (SELECT 1 FROM ingredient_store_checks WHERE id = ?1 AND state = ?3
+        AND evidence_id = ?4 AND qa_attestation_id = ?5)`)
+      .bind(checkId, eventDetail, check.state, check.evidence_id, check.qa_attestation_id),
+    db.prepare(`UPDATE ingredient_store_checks SET state = 'targeted_refresh', operational_state = 'capture_queued',
+      terminal_outcome = NULL, evidence_id = NULL, qa_attestation_id = NULL, result_json = NULL,
+      capture_result_json = NULL, candidate_set_hash = NULL, producer_evidence_id = NULL,
+      verifier_evidence_id = NULL, producer_version = NULL, verifier_version = NULL,
+      capture_completed_at = NULL, qa_completed_at = NULL, next_attempt_at = CURRENT_TIMESTAMP,
+      lease_owner = NULL, lease_expires_at = NULL, heartbeat_at = NULL, lease_lane = NULL,
+      last_error = ?4, state_version = state_version + 1, last_progress_at = CURRENT_TIMESTAMP,
+      updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?1 AND state = ?2 AND evidence_id = ?3 AND qa_attestation_id = ?5`)
+      .bind(checkId, check.state, check.evidence_id, `correction requested: ${reason}`, check.qa_attestation_id),
+  ];
+  const results = await db.batch(statements);
+  if ((results[7]?.meta.changes ?? 0) !== 1 || (results[3]?.meta.changes ?? 0) !== 1) {
+    throw new Error("store-check correction lost its durable state fence");
+  }
+  return { checkId, pricingJobId: check.pricing_job_id, gapId: check.gap_id, state: "targeted_refresh",
+    supersededResolutionVersionId: check.resolution_version_id };
+}
+
 export async function ingestAgentIngredientResearch(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, inputValue: unknown): Promise<IngredientAggregate | null> {
   void env;
   void inputValue;
