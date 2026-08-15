@@ -1,0 +1,379 @@
+# wave-publish.ps1 - the ONLY sanctioned path from a green wave audit to live recipe posts.
+#
+# WHY THIS EXISTS (2026-08-15). The Recipe Hunter v2 publishes automatically: Brad approved removing the
+# human gate, which means the gates that remain are the only thing between a hunted recipe and the site.
+# This script is where they are enforced, in one place, so "did the audit pass" cannot be answered from a
+# session's memory of what it thinks it did.
+#
+# IT PUBLISHES THROUGH THE ENGINE, NOT THROUGH ITS OWN GHOST CALL. engine\publish.ps1 already owns the
+# hard-won behaviour: it PRESERVES visibility on update (rotate-free-dinners owns visibility, and a
+# hardcoded 'paid' upsert would re-paywall every hand-freed dinner), it distinguishes a 404 from a
+# transport error so a swallowed failure cannot mint a paid <slug>-2 orphan, it isolates per-slug
+# failures, and it verifies the live page after each post. propagate-recipes.ps1 wraps it with the rest of
+# the chain (recipes-db sync -> audit-db-agreement hard gate -> planner data -> cards -> hash-gated
+# publish) and only advances its stamps after every stage succeeds. Re-implementing any of that here would
+# be a second copy of a rule the estate has already paid to get right.
+#
+# WHAT IT DELIBERATELY DOES NOT RUN: pipeline\spec-guards.ps1 full mode. It CANNOT run against db\recipes
+# specs - it merges prose from specs\prose\prose-<slug>.json files the engine no longer produces, and on
+# pass it re-serialises the whole spec, which is the documented \uXXXX prose-corruption trap
+# (NEXT-RUN-PLAYBOOK, "SPEC-GUARDS ON THE v2 PATH"). Its invariants are still the contract; the v2
+# enforcers are build-v2-spec's write-time guards plus the audits run below.
+#
+# Usage:
+#   .\wave-publish.ps1 -RunDir <p> -Wave 1 -DryRun     walk every gate, print what would ship, publish nothing
+#   .\wave-publish.ps1 -RunDir <p> -Wave 1             for real
+#   .\wave-publish.ps1 -SelfTest
+param(
+  [string]$RunDir = '', [int]$Wave = 0,
+  [switch]$DryRun, [switch]$SelfTest, [switch]$SkipGit, [switch]$SkipGhostCheck,
+  # -LedgerPath exists ONLY so the gate drill can run over a scratch ledger instead of writing a fake
+  # batch into the live one (a test row there would never close cleanly and batch-ledger -Verify would
+  # report it as a stalled batch forever). The default is the live path, exactly as cost-recipes.ps1's
+  # -DbRoot works for the golden test. It does not weaken the gate: the audit stamp still has to exist.
+  [string]$LedgerPath = ''
+)
+$ErrorActionPreference = 'Stop'
+# capture switches before dot-sourcing anything (a dot-sourced param() block binds in THIS scope)
+$runSelfTest = [bool]$SelfTest; $runDryRun = [bool]$DryRun
+$runSkipGit = [bool]$SkipGit; $runSkipGhost = [bool]$SkipGhostCheck
+
+$here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+$mp   = Split-Path -Parent $here                      # ...\meal-prep
+$repo = Split-Path -Parent $mp                        # ...\income
+. (Join-Path $repo 'lib\guard-contract.ps1')
+
+# ===================================================================================================
+# PURE GATE PREDICATES - so each founding bug can be pinned without touching a live file or Ghost.
+# ===================================================================================================
+
+# THE AUDIT VERDICT. Only an explicit GO publishes. Anything else - a NO-GO, an empty file, or a report
+# that merely reads encouragingly - refuses. "Sounds positive" is not a verdict, and a wave that cannot
+# state GO on its first line has not been audited as far as this script is concerned.
+function Get-AuditVerdict {
+  param($Lines)
+  $first = @(@($Lines) | ForEach-Object { [string]$_ } | Where-Object { $_.Trim() -ne '' })
+  if (-not $first.Count) { return 'UNREADABLE' }
+  $t = $first[0].Trim()
+  if ($t -match '^(?i)NO[-\s]?GO\b') { return 'NO-GO' }     # tested BEFORE GO: "NO-GO" contains "GO"
+  if ($t -match '^(?i)GO\b')         { return 'GO' }
+  return 'UNREADABLE'
+}
+
+# EVERY SLUG IN THE MANIFEST MUST BE SITTING IN THIS WAVE. A slug that slipped back to `written` (a QA
+# repair) or into another wave is not covered by this wave's audit, and this wave's audit is the only
+# thing authorising a publish.
+function Get-WaveStateProblems {
+  param($Entries, $Slugs, [int]$K)
+  $byslug = @{}
+  foreach ($e in @($Entries)) { $byslug[[string]$e.slug] = $e }
+  $problems = @()
+  foreach ($s in @($Slugs)) {
+    if (-not $byslug.ContainsKey($s)) { $problems += ("{0}: no state file" -f $s); continue }
+    $e = $byslug[$s]
+    $st = [string]$e.state
+    if ($st -eq 'published' -or $st -eq 'verified') { continue }   # resume: already shipped, upsert is safe
+    if ($st -ne 'waved') { $problems += ("{0}: state is '{1}', expected 'waved'" -f $s, $st); continue }
+    if ([int]$e.wave -ne $K) { $problems += ("{0}: sits in wave {1}, not {2}" -f $s, [int]$e.wave, $K) }
+  }
+  return @($problems)
+}
+
+# A dirty spec outside this wave is not ours. propagate carries everything dirty by design (that is what
+# makes it the one command after any spec edit), so this does not block - but it must be SAID, or a wave
+# quietly ships another session's half-finished edit and the ledger records it as ours.
+function Get-ForeignDirty {
+  param($Dirty, $Slugs)
+  return @(@($Dirty) | Where-Object { @($Slugs) -notcontains $_ })
+}
+
+function Test-LedgerStamped {
+  param($Row, [string]$Stage)
+  return (@(@($Row.stages) | ForEach-Object { [string]$_.stage }) -contains $Stage)
+}
+
+# ===================================================================================================
+# SELF-TEST
+# ===================================================================================================
+if ($runSelfTest) {
+  $f = 0
+  function T($msg, $cond, $got) { if ($cond) { Write-Output ("ok    " + $msg) } else { Write-Output ("FAIL  " + $msg + "   got: " + $got); $script:f++ } }
+
+  # ---- THE FOUNDING GATE, frozen. An auditor NO-GO blocks publish, full stop.
+  T 'MUST FIRE  a NO-GO audit refuses to publish' `
+    ((Get-AuditVerdict @('NO-GO', '', 'blocked: 3 recipes quote a stale price')) -eq 'NO-GO') 'not refused'
+  T 'MUST FIRE  an empty audit file is not a GO'      ((Get-AuditVerdict @()) -eq 'UNREADABLE') 'read as GO'
+  T 'MUST FIRE  a blank-only audit file is not a GO'  ((Get-AuditVerdict @('', '   ')) -eq 'UNREADABLE') 'read as GO'
+  # the dangerous near-miss: a report that READS positive but never states the verdict
+  T 'MUST FIRE  prose that merely sounds approving is not a GO' `
+    ((Get-AuditVerdict @('Everything checks out, no blockers found.')) -eq 'UNREADABLE') 'read as GO'
+  T 'MUST FIRE  "NO-GO" is not parsed as "GO" because it contains it' `
+    ((Get-AuditVerdict @('NO-GO - macros disagree on 2 recipes')) -eq 'NO-GO') 'parsed as GO'
+  T 'CLEAN TWIN a GO first line publishes'            ((Get-AuditVerdict @('GO', 'all 10 recipes clean')) -eq 'GO') 'refused a GO'
+  T 'CLEAN TWIN GO with a trailing summary on the same line' ((Get-AuditVerdict @('GO - 10/10 clean')) -eq 'GO') 'refused a GO'
+  T 'leading blank lines do not defeat the verdict'   ((Get-AuditVerdict @('', 'GO')) -eq 'GO') 'refused a GO'
+
+  # ---- the wave must actually contain what the manifest claims
+  $entries = @(
+    [pscustomobject]@{ slug = 'a'; state = 'waved';  wave = 1 },
+    [pscustomobject]@{ slug = 'b'; state = 'waved';  wave = 1 },
+    [pscustomobject]@{ slug = 'c'; state = 'written'; wave = $null }
+  )
+  T 'CLEAN TWIN a wave whose slugs are all waved has no problems' `
+    ((Get-WaveStateProblems $entries @('a', 'b') 1).Count -eq 0) 'spurious problem'
+  T 'MUST FIRE  a slug that fell back to `written` blocks the wave' `
+    ((Get-WaveStateProblems $entries @('a', 'c') 1).Count -eq 1) 'let an unaudited recipe publish'
+  T 'MUST FIRE  a slug with no state file blocks the wave' `
+    ((Get-WaveStateProblems $entries @('a', 'zzz') 1).Count -eq 1) 'published a slug with no state'
+  T 'MUST FIRE  a slug belonging to a different wave blocks' `
+    ((Get-WaveStateProblems @([pscustomobject]@{ slug = 'a'; state = 'waved'; wave = 2 }) @('a') 1).Count -eq 1) 'published out of wave'
+  T 'CLEAN TWIN an already-published slug is fine on a resume' `
+    ((Get-WaveStateProblems @([pscustomobject]@{ slug = 'a'; state = 'published'; wave = 1 }) @('a') 1).Count -eq 0) 'blocked a resume'
+
+  # ---- foreign dirt is reported, never silently carried
+  T 'MUST FIRE  a dirty spec outside the wave is reported' `
+    ((Get-ForeignDirty @('a', 'b', 'someone-elses-recipe') @('a', 'b')) -contains 'someone-elses-recipe') 'carried silently'
+  T 'CLEAN TWIN a wave whose dirt is exactly its own reports nothing' `
+    ((Get-ForeignDirty @('a', 'b') @('a', 'b')).Count -eq 0) 'spurious report'
+
+  # ---- the ledger stamp the auditor owes before this script will run
+  $row = [pscustomobject]@{ stages = @([pscustomobject]@{ stage = 'select' }, [pscustomobject]@{ stage = 'audit' }) }
+  T 'CLEAN TWIN an audit-stamped batch passes the ledger gate' (Test-LedgerStamped $row 'audit') 'refused'
+  T 'MUST FIRE  a batch with no audit stamp is refused' `
+    (-not (Test-LedgerStamped ([pscustomobject]@{ stages = @([pscustomobject]@{ stage = 'select' }) }) 'audit')) 'allowed'
+  T 'MUST FIRE  a batch with NO stages at all is refused' `
+    (-not (Test-LedgerStamped ([pscustomobject]@{ stages = @() }) 'audit')) 'allowed'
+
+  if ($f -eq 0) { Write-Output 'wave-publish SELF-TEST PASS'; exit 0 }
+  Write-Output ("wave-publish SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
+}
+
+# ===================================================================================================
+# LIVE
+# ===================================================================================================
+if (-not $RunDir -or $Wave -le 0) { Write-Output 'wave-publish: -RunDir and -Wave are required'; exit 1 }
+if (-not (Test-Path $RunDir)) { Write-Output ("wave-publish: RunDir not found: {0}" -f $RunDir); exit 1 }
+
+$UTF8 = New-Object System.Text.UTF8Encoding($false)
+function Read-Json { param([string]$P) return (([IO.File]::ReadAllText($P, [Text.Encoding]::UTF8) -replace "^﻿", '') | ConvertFrom-Json) }
+function Fail { param([string]$M) Write-Output ("wave-publish: REFUSED - " + $M); Write-GuardComplete -Name 'wave-publish' -Summary 'refused'; exit 1 }
+
+$manPath = Join-Path $RunDir ("waves\wave-{0}.json" -f $Wave)
+if (-not (Test-Path $manPath)) { Fail ("no manifest at {0} - close the wave first (hunt-run.ps1 -WaveClose)" -f $manPath) }
+$man   = Read-Json $manPath
+$slugs = @(@($man.slugs) | ForEach-Object { [string]$_ })
+$batch = [string]$man.batch
+if (-not $slugs.Count) { Fail 'the wave manifest lists no slugs' }
+
+Write-Output ("wave-publish: {0}  wave {1}  ({2} recipe(s)){3}" -f $man.run, $Wave, $slugs.Count, $(if ($runDryRun) { '   [DRY RUN]' } else { '' }))
+Write-Output ''
+Write-Output '== PREFLIGHT =============================================================='
+
+# ---- P1. the audit verdict -----------------------------------------------------------------------
+$auditPath = Join-Path $RunDir ("waves\wave-{0}.audit.md" -f $Wave)
+if (-not (Test-Path $auditPath)) { Fail ("no audit report at {0}. The recipe-batch-auditor must write one whose FIRST line is GO or NO-GO." -f $auditPath) }
+$verdict = Get-AuditVerdict (Get-Content $auditPath -Encoding UTF8)
+if ($verdict -ne 'GO') {
+  Fail ("the wave audit reads '{0}', not GO ({1}). A NO-GO blocks publish, full stop - repair the named recipes, re-audit, then re-run." -f $verdict, $auditPath)
+}
+Write-Output ("  P1  audit verdict          GO   ({0})" -f (Split-Path $auditPath -Leaf))
+
+# ---- P2. the ledger must carry the audit stamp ----------------------------------------------------
+$ledgerPath = if ($LedgerPath) { $LedgerPath } else { Join-Path $mp 'db\batch-ledger.json' }
+if (-not (Test-Path $ledgerPath)) { Fail ("no batch ledger at {0}" -f $ledgerPath) }
+$ledger = @(Read-Json $ledgerPath)
+$row = @($ledger | Where-Object { [string]$_.batch -eq $batch })[0]
+if (-not $row) { Fail ("no ledger row for batch '{0}' - hunt-run.ps1 -WaveClose opens it" -f $batch) }
+if (-not (Test-LedgerStamped $row 'audit')) {
+  Fail ("batch '{0}' has no 'audit' stamp. The orchestrator stamps it AFTER the auditor returns GO: batch-ledger.ps1 -Stamp -Batch {0} -Stage audit -Detail '<n>/<n> GO'" -f $batch)
+}
+Write-Output ("  P2  ledger audit stamp     present   (batch {0})" -f $batch)
+
+# ---- P3. every slug is sitting in this wave -------------------------------------------------------
+$stateDir = Join-Path $RunDir 'state'
+$entries = @()
+if (Test-Path $stateDir) { $entries = @(Get-ChildItem (Join-Path $stateDir '*.json') -File | ForEach-Object { Read-Json $_.FullName }) }
+$problems = @(Get-WaveStateProblems $entries $slugs $Wave)
+if ($problems.Count) { $problems | ForEach-Object { Write-Output ("      ! " + $_) }; Fail ("{0} slug(s) are not in wave {1}" -f $problems.Count, $Wave) }
+Write-Output ("  P3  recipe states          all {0} in wave {1}" -f $slugs.Count, $Wave)
+
+# ---- P4. the spec and its card source actually exist ----------------------------------------------
+$missing = @()
+foreach ($s in $slugs) { if (-not (Test-Path (Join-Path $mp ("db\recipes\{0}.json" -f $s)))) { $missing += $s } }
+if ($missing.Count) { Fail ("no v2 spec in db\recipes for: " + ($missing -join ', ')) }
+Write-Output ("  P4  v2 specs               {0}/{0} present in db\recipes" -f $slugs.Count)
+
+# ---- P5. the v2 spec audits (NOT spec-guards full mode - see the header) ---------------------------
+function Invoke-Gate {
+  param([string]$Label, [string]$Script, [string[]]$GateArgs = @())
+  $out = & powershell -NoProfile -ExecutionPolicy Bypass -File $Script @GateArgs 2>&1
+  $rc = $LASTEXITCODE
+  if ($rc -ne 0) {
+    Write-Output ("      ! {0} exited {1}:" -f $Label, $rc)
+    @($out | Select-Object -Last 25) | ForEach-Object { Write-Output ("        " + [string]$_) }
+    return $false
+  }
+  return $true
+}
+$gates = @(
+  @{ label = 'audit-spec-contradictions'; path = (Join-Path $here 'audit-spec-contradictions.ps1'); args = @('-Quiet') },
+  @{ label = 'audit-store-integrity';     path = (Join-Path $here 'audit-store-integrity.ps1');     args = @() },
+  @{ label = 'test-guards';               path = (Join-Path $here 'test-guards.ps1');               args = @() }
+)
+foreach ($g in $gates) {
+  if (-not (Test-Path $g.path)) { Fail ("gate script missing: " + $g.path) }
+  if (-not (Invoke-Gate $g.label $g.path $g.args)) {
+    Fail ("{0} is red. Fix it through the owning stage - never weaken a gate to pass a wave." -f $g.label)
+  }
+  Write-Output ("  P5  {0,-26} clean" -f $g.label)
+}
+
+# ---- P6. THE DEDUP ESCAPE GUARD -------------------------------------------------------------------
+# The last net under the selector. A slug that is already live and was NOT published by this estate's
+# recipe publisher is somebody else's post: publishing over it would clobber a hand-made page, and the
+# hand-freed free-dinner posts are exactly the ones that must never be silently re-paywalled.
+if ($runSkipGhost) {
+  Write-Output '  P6  dedup escape guard     SKIPPED (-SkipGhostCheck)'
+} else {
+  . (Join-Path $repo 'lib\ghost-lib.ps1')
+  $apiUrl = 'https://map-to-success.ghost.io'
+  $adminKey = Get-GhostKey -Root $repo
+  $hashFile = Join-Path $mp 'db\published-hashes.json'
+  $known = @{}
+  if (Test-Path $hashFile) { try { $o = Read-Json $hashFile; foreach ($p in $o.PSObject.Properties) { $known[$p.Name] = $true } } catch {} }
+  $collisions = @()
+  foreach ($s in $slugs) {
+    $jwt = Get-GhostJWT -Key $adminKey
+    $exists = $false
+    try {
+      $r = Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$s/?fields=id,slug,visibility" -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' }
+      $exists = [bool]$r.posts[0]
+    } catch {
+      $code = 0; try { $code = [int]$_.Exception.Response.StatusCode } catch {}
+      # a 404 is the answer we want; anything else means we could not look, and could-not-look is never
+      # a clean bill on a guard whose whole job is to catch a collision
+      if ($code -ne 404) { Fail ("could not check slug '{0}' on Ghost (HTTP {1}). Not publishing on an unchecked collision guard." -f $s, $code) }
+    }
+    if ($exists -and -not $known.ContainsKey($s)) { $collisions += $s }
+  }
+  if ($collisions.Count) {
+    Fail ("these slugs already exist live and were NOT published by this pipeline: " + ($collisions -join ', ') +
+          ". That is a dedup escape or a hand-made post. Re-slug the recipe or resolve it by hand; do not upsert over it.")
+  }
+  Write-Output ("  P6  dedup escape guard     clean   ({0} slug(s) checked against live)" -f $slugs.Count)
+}
+
+# ---- P7. recipes-db delta preview ------------------------------------------------------------------
+$slugListPath = Join-Path $RunDir ("waves\wave-{0}.slugs.txt" -f $Wave)
+[IO.File]::WriteAllText($slugListPath, ((@($slugs) -join "`r`n") + "`r`n"), $UTF8)
+$specsDir = Join-Path $mp 'db\recipes'
+$dry = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'update-recipes-db.ps1') `
+        -RunDir $RunDir -SpecsDir $specsDir -SpecList $slugListPath -RunLabel $batch -DryRun 2>&1
+if ($LASTEXITCODE -ne 0) {
+  @($dry | Select-Object -Last 20) | ForEach-Object { Write-Output ("        " + [string]$_) }
+  Fail 'update-recipes-db -DryRun failed'
+}
+Write-Output '  P7  recipes-db delta (dry run):'
+@($dry | Select-Object -Last 8) | ForEach-Object { Write-Output ("        " + [string]$_) }
+
+Write-Output ''
+if ($runDryRun) {
+  Write-Output '== DRY RUN - every gate above passed. These steps were NOT run: ============'
+  Write-Output ("  E1  migrate-prose-tokens.ps1 -Slugs <{0} slugs> -Apply" -f $slugs.Count)
+  Write-Output ("  E2  update-recipes-db.ps1 -SpecList {0}" -f (Split-Path $slugListPath -Leaf))
+  Write-Output '  E3  propagate-recipes.ps1  (recipes-db sync -> db-agreement gate -> planner -> cards -> publish)'
+  Write-Output '  E4  git add <scoped> && git commit && git push'
+  Write-Output ''
+  Write-Output '  Would publish:'
+  foreach ($s in $slugs) { Write-Output ("    https://www.thriftycrew.com/{0}/" -f $s) }
+  Write-GuardComplete -Name 'wave-publish' -Summary ("dry-run wave {0} n={1} all gates green" -f $Wave, $slugs.Count)
+  exit 0
+}
+
+# ===================================================================================================
+# EXECUTE. Each step is stamped AFTER it completes - a stamp written before the work it certifies turns
+# a failure into a silently skipped stage.
+# ===================================================================================================
+Write-Output '== PUBLISH ================================================================'
+$bl = Join-Path $here 'batch-ledger.ps1'
+function Stamp { param([string]$Stage, [string]$Detail)
+  & powershell -NoProfile -ExecutionPolicy Bypass -File $bl -Stamp -Batch $batch -Stage $Stage -Detail $Detail | Out-Null
+}
+
+# ---- E1. prose tokens. Idempotent, and it only swaps a literal that PROVABLY equals the spec's own
+# stat, so running it here guarantees the templating rule holds for everything this wave publishes.
+$mig = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'migrate-prose-tokens.ps1') -Slugs $slugs -Apply 2>&1
+if ($LASTEXITCODE -ne 0) { @($mig | Select-Object -Last 15) | ForEach-Object { Write-Output ("    " + [string]$_) }; Fail 'migrate-prose-tokens failed' }
+Write-Output ("  E1  prose tokens           " + [string](@($mig | Select-Object -Last 1)))
+
+# ---- E2. recipes-db rows
+$upd = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'update-recipes-db.ps1') `
+        -RunDir $RunDir -SpecsDir $specsDir -SpecList $slugListPath -RunLabel $batch 2>&1
+if ($LASTEXITCODE -ne 0) { @($upd | Select-Object -Last 20) | ForEach-Object { Write-Output ("    " + [string]$_) }; Fail 'update-recipes-db failed' }
+Write-Output ("  E2  recipes-db             " + [string](@($upd | Select-Object -Last 1)))
+Stamp 'recipes-db' ("{0} row(s) via {1}" -f $slugs.Count, $batch)
+
+# ---- E3. what is dirty, and is any of it not ours?
+$pd = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'propagate-recipes.ps1') -DryRun 2>&1
+$dirty = @(@($pd) | ForEach-Object { [string]$_ } | Where-Object { $_ -match '^\s{2}\S' } | ForEach-Object { $_.Trim() })
+$foreign = @(Get-ForeignDirty $dirty $slugs)
+if ($foreign.Count) {
+  Write-Output ("  E3  NOTE {0} dirty spec(s) outside this wave will also be carried by propagate:" -f $foreign.Count)
+  @($foreign | Select-Object -First 10) | ForEach-Object { Write-Output ("        " + $_) }
+}
+
+# ---- E4. THE CHAIN. sync-recipesdb-buy -> audit-db-agreement (hard gate) -> planner -> build-cards
+# -> engine\publish (hash-gated, visibility-preserving, live-verified). Stamps advance only on success.
+$prop = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'propagate-recipes.ps1') 2>&1
+$propRc = $LASTEXITCODE
+@($prop | ForEach-Object { Write-Output ("    " + [string]$_) })
+if ($propRc -ne 0) { Fail 'propagate-recipes failed - nothing was stamped, the next run retries the same slugs' }
+if (-not (@($prop | Where-Object { $_ -match 'propagate COMPLETE' }).Count)) {
+  Fail 'propagate did not report COMPLETE - treating an unfinished chain as unfinished'
+}
+Stamp 'build-cards' ("{0} card(s) rebuilt via propagate" -f $slugs.Count)
+Stamp 'publish' ("{0}/{0} published through engine\publish (visibility preserved)" -f $slugs.Count)
+Write-Output ("  E4  propagate               COMPLETE")
+
+# ---- E5. push. The push IS the deploy here. NEVER `git add -A`: it sweeps whatever else is in Brad's
+# real tree into this commit.
+if ($runSkipGit) { Write-Output '  E5  git                    SKIPPED (-SkipGit)' }
+else {
+  $paths = @(
+    ('meal-prep/runs/' + (Split-Path $RunDir -Leaf)),
+    'meal-prep/recipes-db.json', 'meal-prep/db/costed.json', 'meal-prep/db/published-hashes.json',
+    'meal-prep/db/batch-ledger.json', 'meal-prep/pipeline/propagate-stamps.json',
+    'meal-prep/pipeline/v2-perserving.json', 'meal-prep/planner-data.js'
+  )
+  foreach ($s in $slugs) {
+    $paths += ('meal-prep/db/recipes/' + $s + '.json')
+    $paths += ('meal-prep/db/built/' + $s + '.body.html')
+    $paths += ('meal-prep/db/built/' + $s + '.head.html')
+  }
+  $add = @($paths | Where-Object { Test-Path (Join-Path $repo ($_ -replace '/', '\')) })
+  & git -C $repo add -- @add 2>&1 | Out-Null
+  $msg = ("recipes: publish {0} ({1} recipes, audit GO)" -f $batch, $slugs.Count)
+  $ci = & git -C $repo commit -m $msg 2>&1
+  if ($LASTEXITCODE -ne 0 -and -not (@($ci) -match 'nothing to commit')) {
+    @($ci | Select-Object -Last 6) | ForEach-Object { Write-Output ("    " + [string]$_) }
+    Fail 'git commit failed'
+  }
+  $push = & git -C $repo push 2>&1
+  if ($LASTEXITCODE -ne 0) { @($push | Select-Object -Last 6) | ForEach-Object { Write-Output ("    " + [string]$_) }; Fail 'git push failed - the push IS the deploy, so this is not done' }
+  Write-Output ("  E5  git                    committed and pushed ({0} path(s))" -f $add.Count)
+}
+
+# ---- advance the recipes to `published`
+foreach ($s in $slugs) {
+  & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'hunt-run.ps1') -Advance -RunDir $RunDir -Slug $s -To published -By 'wave-publish' -Detail ("wave {0}" -f $Wave) | Out-Null
+}
+
+Write-Output ''
+Write-Output '== LIVE ==================================================================='
+foreach ($s in $slugs) { Write-Output ("  https://www.thriftycrew.com/{0}/" -f $s) }
+Write-Output ''
+Write-Output ("  NEXT (not optional): dispatch post-publish-reviewer scoped to these {0} slug(s), then" -f $slugs.Count)
+Write-Output ("    batch-ledger.ps1 -Stamp -Batch {0} -Stage post-publish-review -Detail '<verdict>'" -f $batch)
+Write-Output ("    batch-ledger.ps1 -Close -Batch {0} -Detail '<verdict>'" -f $batch)
+Write-GuardComplete -Name 'wave-publish' -Summary ("wave {0} published n={1}" -f $Wave, $slugs.Count)
+exit 0

@@ -3,6 +3,42 @@
 Date: 2026-08-15. Author: Fable (design review session with Brad). Implementer: Opus.
 Status: APPROVED by Brad. Auto-publish after a green batch audit is explicitly authorized.
 
+## 0a. CORRECTIONS APPLIED DURING IMPLEMENTATION (2026-08-15, same day)
+
+This plan was written against the r300-era run pipeline. Reading the engine before coding showed that
+path is retired, and two of the plan's instructions were wrong in ways that would have shipped defects.
+Both are corrected in the built code; they are recorded here because the plan is the artifact people
+re-read.
+
+1. **PUBLISHING. The plan said `publish-recipe.ps1` per slug with `visibility` defaulting to paid.
+   WRONG.** That script hardcodes visibility on an upsert, and `rotate-free-dinners` owns visibility:
+   publishing that way would silently RE-PAYWALL every hand-freed free dinner. The sanctioned path is
+   `engine\publish.ps1` (visibility-PRESERVING, 404-vs-error aware so it cannot mint a paid `<slug>-2`
+   orphan, per-slug failure isolation, live verify), reached through `pipeline\propagate-recipes.ps1`,
+   which is the estate's one command after any spec edit: recipes-db sync -> `audit-db-agreement` hard
+   gate -> planner data -> `build-cards -Slugs` -> hash-gated publish, with stamps advancing only after
+   every stage succeeds. `wave-publish.ps1` calls that chain instead of re-implementing it.
+
+2. **SPEC VALIDATION. The plan said "spec-guards.ps1 exits 0 per slug TODAY". WRONG, and destructive.**
+   `spec-guards.ps1` full mode CANNOT run against `db\recipes` specs: it merges prose from
+   `specs\prose\prose-<slug>.json` files the engine no longer produces, and on pass it re-serialises the
+   whole spec, which is the documented \uXXXX prose-corruption trap (NEXT-RUN-PLAYBOOK, "SPEC-GUARDS ON
+   THE v2 PATH"). The v2 enforcers are build-v2-spec's write-time guards plus
+   `audit-spec-contradictions.ps1`, `audit-store-integrity.ps1`, `test-guards.ps1` and
+   `engine\audit-db-agreement.ps1`. `wave-publish.ps1` runs those.
+
+3. **SPECS DO NOT LIVE IN THE RUN DIR.** `db\recipes\<slug>.json` is the only spec home. The run dir
+   holds `intake\<slug>.json` (the writer's intake for `build-v2-spec.ps1`), not `specs\`. Cards are
+   built by the engine into `db\built\`. The wave manifest therefore carries slugs, not Ghost post
+   fields, because the engine publisher reads the spec.
+
+4. **PROSE TOKENS.** New batches must run `migrate-prose-tokens.ps1 -Slugs <batch> -Apply` after specs
+   land, or `reanchor-all`'s daily verify hard-fails on the money literals. `wave-publish.ps1` runs it
+   as its first execute step (idempotent, and it only swaps a literal that provably equals the stat).
+
+5. **`waved:<k>` is stored as `state: "waved"` plus a `wave: <k>` field**, not as a compound string.
+   Same semantics, no string parsing.
+
 ## 0. What this is
 
 An upgrade to the existing `recipe-hunter` skill (C:\Codex\.claude\skills\recipe-hunter\SKILL.md).
@@ -275,26 +311,31 @@ PREFLIGHT (any failure = exit 1, nothing published; these are production-called 
 with a -SelfTest fixture per the guard-fixture rule):
  1. waves\wave-<k>.audit.md exists and its first line is exactly GO, and the batch-ledger has
     an `audit` stamp for `<run-id>-w<k>`. MUST-FIRE fixture: a NO-GO or missing stamp refuses.
- 2. Every manifest slug's state is waved:<k>; spec-guards.ps1 exits 0 per slug TODAY (re-run,
-    not trusted from earlier); card file exists and is non-empty.
- 3. DEDUP ESCAPE GUARD: query Ghost by slug (same admin-JWT pattern as publish-recipe.ps1).
-    A slug that already exists live and was NOT published by this run = hard stop. This is the
-    last net under the selector, and it also protects hand-freed posts from a paywall-clobbering
-    upsert. A slug this run already published (resume case) is fine to upsert.
- 4. update-recipes-db.ps1 -DryRun for the wave's slugs; mapped/fallback/null counts and protein
-    tallies must match the audit report's numbers (a drift means data moved after audit: stop).
+ 2. Every manifest slug's state is `waved` with `wave == k` (an already-published slug passes, so a
+    resume works); the v2 spec exists in db\recipes. CORRECTED per 0a.2: NOT spec-guards.
+ 3. The v2 spec audits, re-run today rather than trusted from earlier: audit-spec-contradictions.ps1,
+    audit-store-integrity.ps1, test-guards.ps1. Any red = refuse. (audit-db-agreement runs inside
+    propagate at the point where the two recipe masters can actually be compared.)
+ 4. DEDUP ESCAPE GUARD: query Ghost by slug (lib\ghost-lib.ps1 admin JWT). A slug that already exists
+    live and is NOT in db\published-hashes.json = hard stop: that is a dedup escape or a hand-made
+    post, and upserting over it is how a hand-freed dinner gets clobbered. A non-404 error on the
+    check is also a stop - could-not-look is never a clean bill on a collision guard.
+ 5. update-recipes-db.ps1 -DryRun (-SpecsDir db\recipes -SpecList <wave slugs>) for the delta.
 
 EXECUTE, in order, ledger-stamped AFTER each step completes (checkpoint-before-durable):
- 5. update-recipes-db.ps1 for real; stamp recipes-db. Stamp build-cards (verify count).
- 6. publish-recipe.ps1 per slug from the manifest (title, excerpt, metas, htmlfile,
-    visibility paid unless the manifest says otherwise). -DryRun mode prints the exact calls
-    and Ghost payload sizes without POSTing. Continue-on-error per slug, report ok/fail per
-    slug; ANY fail = exit 1 after the loop (partial publish is visible in the ledger, and the
-    script is idempotent to re-run: already-published slugs upsert harmlessly).
- 7. Stamp publish with `<n>/<n> ok`. git add ONLY: the run dir, meal-prep\recipes-db.json and
-    any db files the run's stages changed, then commit and push IMMEDIATELY (the push is the
-    deploy; and per the push-data lesson, NEVER `git add -A`).
- 8. Print the live URLs. Post-publish review is dispatched by the orchestrator, not this script.
+ 6. migrate-prose-tokens.ps1 -Slugs <wave> -Apply   (0a.4; idempotent, equality-gated).
+ 7. update-recipes-db.ps1 for real; stamp recipes-db.
+ 8. propagate-recipes.ps1 -DryRun to capture the dirty set, and REPORT any dirty spec outside this
+    wave (propagate carries everything dirty by design; it must be said, not silently attributed
+    to this wave). Then propagate-recipes.ps1 for real: sync-recipesdb-buy -> audit-db-agreement
+    HARD GATE -> gen-planner-data -> build-cards -Slugs -> engine\publish.ps1 -Slugs (hash-gated,
+    visibility-PRESERVING, live-verified). Require its COMPLETE line, not just rc=0. Stamp
+    build-cards and publish.
+ 9. git add ONLY an explicit path list (run dir, recipes-db, the wave's db\recipes + db\built files,
+    costed, published-hashes, ledger, propagate-stamps, v2-perserving, planner-data), then commit
+    and push IMMEDIATELY (the push is the deploy; per the push-data lesson, NEVER `git add -A`).
+10. Advance each slug to `published`, print the live URLs, and print the exact post-publish-review
+    and ledger-close commands. Post-publish review is dispatched by the orchestrator, not this script.
 
 ### D4. Rewrite .claude\skills\recipe-hunter\SKILL.md
 
