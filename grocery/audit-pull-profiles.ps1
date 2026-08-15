@@ -86,7 +86,29 @@ function Test-PullProfiles {
       $problems.Add("$name : has a delay_ms but confidence 'n/a'")
     }
 
-    # 4) THE DUPLICATED-CONSTANT GUARD: the agent's mirror must equal the registry.
+    # 4) EVERY WALLED STORE NEEDS AN AGENT. A store that can be blocked but has no agent is pulled by
+    # an ad-hoc console snippet - which is exactly how Sam's walled at 207/595 and Walmart walled at
+    # an unknown rate, both leaving no measurement behind.
+    if ($s.walled -and -not $p.agent) {
+      $problems.Add("$name : is walled but has no agent module - a blockable store pulled by an ad-hoc snippet records no verdict and no timing")
+    }
+
+    # 5) AN AGENT MUST LEAVE A MEASUREMENT BEHIND. Without a timing ledger a profile can never move
+    # off 'proposed', because nobody can produce the number that would promote it.
+    if ($p.agent) {
+      $agentSrc = Join-Path $Root ([string]$p.agent)
+      if (Test-Path $agentSrc) {
+        $src = Get-Content $agentSrc -Raw
+        # An agent satisfies this either by building the ledger itself (finishLedger, as Aldi's
+        # slug-lookup loop does) or by delegating its whole loop to the lib's runPacedSweep, which
+        # always emits one. Both are real measurement; only silence is a finding.
+        if ($src -notmatch 'finishLedger|observedMeanIntervalMs|runPacedSweep') {
+          $problems.Add("$name : agent '$($p.agent)' emits no timing ledger - its runs cannot promote the profile past 'proposed'")
+        }
+      }
+    }
+
+    # 6) THE DUPLICATED-CONSTANT GUARD: the agent's mirror must equal the registry.
     if ($p.agent) {
       $agentPath = Join-Path $Root ([string]$p.agent)
       if (-not (Test-Path $agentPath)) {
@@ -135,6 +157,7 @@ const SAMS_PROFILE = { delayMs: 200, jitterMs: 1400, retries: 3, backoffMs: 2000
     # CLEAN TWIN: the same profile with a mirror that agrees must pass silently.
     Set-Content -Path (Join-Path $fixDir '__fixture_agent.js') -Encoding UTF8 -Value @'
 const SAMS_PROFILE = { delayMs: 2600, jitterMs: 1400, retries: 3, backoffMs: 20000, wallLimit: 3 };
+runPacedSweep(agent, worklist);   // fixture delegates its ledger to the lib, like the real agents
 '@
     $r2 = Test-PullProfiles -Stores $drift -Root $fixDir
     Check "CLEAN TWIN: an agreeing mirror passes" ($r2.Count -eq 0)
@@ -159,6 +182,28 @@ const SAMS_PROFILE = { delayMs: 2600, jitterMs: 1400, retries: 3, backoffMs: 200
       agent = $null; delay_ms = $null; confidence = 'n/a'; evidence = 'sanctioned feed' } })
   $r5 = Test-PullProfiles -Stores $server -Root $here
   Check "CLEAN TWIN: a server-fed store needs no pacing" ($r5.Count -eq 0)
+
+  # MUST-FIRE: a walled store with no agent - the ad-hoc-snippet shape that walled Sam's and Walmart.
+  $noAgent = @([pscustomobject]@{ name = 'WalledStore'; walled = $true; pull_profile = [pscustomobject]@{
+      agent = $null; delay_ms = $null; confidence = 'unmeasured'; evidence = 'x' } })
+  $r6 = Test-PullProfiles -Stores $noAgent -Root $here
+  Check "MUST-FIRE: a walled store with no agent is caught" (@($r6 | Where-Object { $_ -match 'no agent module' }).Count -eq 1)
+
+  # MUST-FIRE: an agent that leaves no measurement behind can never promote its own profile.
+  $fixDir2 = Join-Path $env:TEMP ('tc-pp2-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $fixDir2 | Out-Null
+  try {
+    Set-Content -Path (Join-Path $fixDir2 '__mute_agent.js') -Encoding UTF8 -Value @'
+const X_PROFILE = { delayMs: 900, jitterMs: 0, retries: 2, backoffMs: 4000 };
+// no ledger anywhere in this file
+'@
+    $mute = @([pscustomobject]@{ name = 'MuteStore'; walled = $true; pull_profile = [pscustomobject]@{
+        agent = '__mute_agent.js'; delay_ms = 900; jitter_ms = 0; retries = 2; backoff_ms = 4000
+        confidence = 'proposed'; evidence = 'x' } })
+    $r7 = Test-PullProfiles -Stores $mute -Root $fixDir2
+    Check "MUST-FIRE: an agent with no timing ledger is caught" (@($r7 | Where-Object { $_ -match 'no timing ledger' }).Count -eq 1)
+  }
+  finally { Remove-Item $fixDir2 -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($fail) { Write-Output "PULL-PROFILE SELFTEST FAILED ($fail)"; exit 1 }
   Write-Output 'all self-tests pass'

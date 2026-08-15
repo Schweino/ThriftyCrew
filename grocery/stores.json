@@ -92,17 +92,22 @@
       "price_mode": "in-store (Instacart delivery-price trap - mode_verified required)",
       "notes": "was silently missing from the store-guide (07-12..07-26) and both publish gates - the drift that motivated this registry",
       "pull_profile": {
-        "agent": null,
-        "surface": "browser (Instacart storefront)",
-        "delay_ms": null,
-        "jitter_ms": null,
-        "wall_limit": null,
-        "backoff_ms": null,
-        "retries": null,
-        "confidence": "unmeasured",
-        "evidence": "2026-08-15 sweep of 144 terms completed with 0 empties and no wall, so no rate limit has been observed yet. No agent module extracted; the sweep is still ad-hoc.",
+        "agent": "pull-fareway-instore.js",
+        "surface": "browser (Instacart storefront, same-origin fetch)",
+        "delay_ms": 900,
+        "jitter_ms": 600,
+        "wall_limit": 3,
+        "backoff_ms": 20000,
+        "retries": 3,
+        "confidence": "proposed",
+        "evidence": "2026-08-15: a 144-term sweep completed with 0 empties and no wall, so no rate limit has ever been OBSERVED - but never-observed is not measured-safe, and 144 is a fifth of the full list. Starts at the Aldi rate (900ms, the one measured Instacart figure) plus jitter. Promote to measured only after a full sweep reports timing.verdict CLEAN, and paste the observedMeanIntervalMs here.",
         "identity_assert": "read retailerLocation from __APOLLO_CLIENT__ cache, not the on-screen label - a fresh session read plausibly while sitting on Des Moines",
-        "wall_signals": []
+        "wall_signals": [
+          "429",
+          "403",
+          "unusual traffic",
+          "px-captcha"
+        ]
       }
     },
     {
@@ -152,7 +157,7 @@
         "backoff_ms": 20000,
         "retries": 3,
         "confidence": "proposed",
-        "evidence": "2026-08-15: an UNPACED sweep walled after 207 of 595 (id,term) pairs. The 2600+/-1400ms figure is a starting point chosen from that ceiling, NOT yet a measured safe rate. Downgrade to measured only after a full 595-pair run completes without a wall, and record the real number here.",
+        "evidence": "2026-08-15: an UNPACED sweep (no sleep between searches; interval was network-bound only) walled after 207 of 595 (id,term) pairs. THE OLD RATE WAS NEVER MEASURED - that run recorded no timing at all, which is why no before/after comparison can be stated. The 2600+/-1400ms here is derived from that ceiling, NOT from a clean run. pull-sams-instore.js now emits a timing block (observedMeanIntervalMs, firstWallAfterTerms); promote this to confidence:measured only after a run reports verdict CLEAN, and paste the real observedMeanIntervalMs into this field.",
         "identity_assert": "an Omaha club must be readable on the page (prices are per-club)",
         "wall_signals": [
           "bot interstitial phrases",
@@ -175,18 +180,23 @@
       "everyday_only": true,
       "notes": "no ad cycle -> partial daily refreshes UNION with recent captures (EVERYDAY_ONLY_STORES in compare-deals) or the board collapses",
       "pull_profile": {
-        "agent": null,
-        "surface": "browser",
-        "delay_ms": null,
-        "jitter_ms": null,
-        "wall_limit": null,
-        "backoff_ms": null,
-        "retries": null,
-        "confidence": "unmeasured",
-        "evidence": "2026-08-15: hit a Robot or human? wall; the rate that triggered it was never recorded. Needs the same treatment as Sams.",
-        "identity_assert": "no store toggle; only the bot wall matters",
+        "agent": "pull-walmart-instore.js",
+        "surface": "browser (same-origin fetch)",
+        "delay_ms": 3500,
+        "jitter_ms": 2000,
+        "wall_limit": 3,
+        "backoff_ms": 30000,
+        "retries": 3,
+        "confidence": "proposed",
+        "evidence": "2026-08-15: hit a Robot or human? wall during the weekly refresh. THE RATE THAT TRIGGERED IT WAS NEVER RECORDED - the sweep was an ad-hoc snippet with no instrumentation, so there is no before-number to compare against. Deliberately the most conservative of the four agents because Walmart has already walled us once at an unknown rate. Promote only on a CLEAN timing verdict.",
+        "identity_assert": "no store toggle (prices are already the local store's); assert origin is walmart.com and the page is not already the interstitial",
         "wall_signals": [
-          "Robot or human?"
+          "Robot or human?",
+          "access denied",
+          "unusual traffic",
+          "px-captcha",
+          "403",
+          "429"
         ]
       }
     }

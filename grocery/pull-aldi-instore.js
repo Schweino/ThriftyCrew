@@ -69,14 +69,26 @@ async function pullAldiInStore(worklist, opts = {}) {
   const ctx = assertInStore();           // throws if not In-Store
   const res = JSON.parse(localStorage.getItem('TC_ALDI_INSTORE') || '{}');
 
+  /*
+    TIMING LEDGER (2026-08-15). Aldi's loop is a product-slug lookup, not a term sweep, so it does
+    not run through runPacedSweep -- but it shares the MEASUREMENT via finishLedger from
+    pull-agent-lib.js. Paste that file first. The Sam's sweep walled with no record of its own
+    cadence; no agent should be able to do that again. `firstWall` here counts 403s, Aldi's
+    rate-limit signal.
+  */
+  const t0 = Date.now();
+  let requests = 0, settledCount = 0, firstWall = null;
+
   for (const item of worklist) {
     if (res[item.i]?.ok) continue;       // resumable: skip what we already have
 
     let got = false;
     for (let attempt = 0; attempt < retries && !got; attempt++) {
       try {
+        requests++;
         const r = await fetch(ALDI_PRODUCT_BASE + item.s, { credentials: 'include' });
         if (r.status === 403) {          // rate limited - back off, do not record a price
+          if (firstWall === null) firstWall = settledCount;
           await sleep(ALDI_PROFILE.backoffMs * (attempt + 1));
           continue;
         }
@@ -93,13 +105,18 @@ async function pullAldiInStore(worklist, opts = {}) {
       }
     }
     if (!got) res[item.i] = { p: null, z: null, n: null, ok: false };  // honest miss
+    else settledCount++;
 
     localStorage.setItem('TC_ALDI_INSTORE', JSON.stringify(res));      // persist every item
     await sleep(delayMs);
   }
 
   const ok = Object.values(res).filter(v => v.ok).length;
-  return { context: ctx, ok, missing: Object.values(res).length - ok, results: res };
+  const timing = finishLedger({
+    t0, requests, delayMs, jitterMs: ALDI_PROFILE.jitterMs, firstWallAfter: firstWall,
+  });
+  console.log('Aldi pull:', timing);
+  return { context: ctx, ok, missing: Object.values(res).length - ok, timing, results: res };
 }
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
