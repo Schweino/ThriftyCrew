@@ -92,6 +92,32 @@ function Test-LedgerStamped {
   return (@(@($Row.stages) | ForEach-Object { [string]$_.stage }) -contains $Stage)
 }
 
+# AUDIT FRESHNESS. A GO that predates a spec edit is a GO for bytes that no longer exist. Nothing caught
+# this: P1 only asks whether the first line says GO, and the shakedown's third audit round re-verified a
+# whole wave because one prose field of one spec had changed - the repair loop is exactly where a spec
+# moves under a finished audit. This is reanchor-pair-or-corrupt applied to the audit itself.
+#
+# MTIMES, NOT CONTENT, on purpose. The spec hash legitimately changes on every machine re-anchor, so a
+# content comparison would either fire constantly or need a second copy of the "which fields count" rule.
+# The question here is only "did the auditor see the current bytes", and mtime ordering answers exactly
+# that and nothing more.
+function Get-StaleAuditProblems {
+  param([datetime]$AuditWritten, $SpecTimes)
+  $problems = @()
+  foreach ($k in @($SpecTimes.Keys | Sort-Object)) {
+    $t = [datetime]$SpecTimes[$k]
+    if ($t -gt $AuditWritten) {
+      $problems += ("{0}: spec edited {1}, after the audit was written {2}" -f $k, $t.ToString('HH:mm:ss'), $AuditWritten.ToString('HH:mm:ss'))
+    }
+  }
+  # `,@(...)` is load-bearing, not style. PS 5.1 UNROLLS a one-element array on function output, so a
+  # single stale spec came back as a bare string and `[0]` on it returned its first CHARACTER - the
+  # fixture asserting the message names the slug read 'c' and failed. The .Count assertions all still
+  # passed, because a scalar reports .Count 1. Exactly the trap feed-covers-published documents on its
+  # own Invoke-Cov helper. Do not simplify to a bare `return @($problems)`.
+  return , @($problems)
+}
+
 # THE COST BASIS. Every live spec carries stat.cost_ps on the EVERYDAY basis (cost_first_run / servings),
 # which is what pipeline\v2-perserving.json publishes as everyday_ps. A brand-new recipe is not in that
 # manifest when build-v2-spec runs, so it silently falls back to batch/14 - roughly HALF. Shipping that
@@ -160,6 +186,24 @@ function Get-GuardFeedUrl {
   $m = [regex]::Match($GuardText, "(?m)^(?!\s*#)\s*\`$FEED_URL\s*=\s*'([^']+)'")
   if (-not $m.Success) { return '' }
   return $m.Groups[1].Value
+}
+
+# WHICH SLUGS COME DOWN. feed-covers-published names each failing slug on an `  X <slug>  [VERDICT]` line.
+# The rollback is PER SLUG - a wave where one recipe cannot price should not take the other nine down with
+# it. But a guard that failed while naming NOBODY is the dangerous case: reading that as "no slugs to roll
+# back" would leave the whole wave live on an unexplained failure, so it escalates to the full wave. The
+# scope is intersected with the wave's own slugs, because the guard also reports collateral it was not
+# asked about and this script must never draft another session's recipe.
+function Get-FeedcovFailedSlugs {
+  param($Lines, $WaveSlugs)
+  $named = @()
+  foreach ($l in @($Lines)) {
+    $m = [regex]::Match([string]$l, '^\s*X\s+(\S+)')
+    if ($m.Success) { $named += $m.Groups[1].Value }
+  }
+  $scoped = @(@($WaveSlugs) | Where-Object { @($named) -contains $_ })
+  if (-not $scoped.Count) { return , @($WaveSlugs) }   # failed but named nobody: take the wave down, not a guess
+  return , @($scoped)
 }
 
 # ===================================================================================================
@@ -231,6 +275,20 @@ if ($runSelfTest) {
   T 'penny rounding does not trip the basis check' `
     ((Get-CostBasisProblems @([pscustomobject]@{ slug = 'chicken-florentine'; cost_ps = 3.27 }) $mrows).Count -eq 0) 'too strict'
 
+  # ---- AUDIT FRESHNESS. The repair loop is where a spec moves under a finished audit.
+  $auditAt = [datetime]'2026-08-15T14:00:00'
+  T 'MUST FIRE  a spec edited AFTER the GO invalidates the audit' `
+    ((Get-StaleAuditProblems $auditAt @{ 'country-captain-chicken' = [datetime]'2026-08-15T14:05:00' }).Count -eq 1) `
+    'published bytes the auditor never saw'
+  T '   and it names the slug and both times' `
+    ((Get-StaleAuditProblems $auditAt @{ 'country-captain-chicken' = [datetime]'2026-08-15T14:05:00' })[0] -match 'country-captain-chicken.*14:05:00.*14:00:00') 'unhelpful message'
+  T 'CLEAN TWIN an audit written after every spec edit passes' `
+    ((Get-StaleAuditProblems $auditAt @{ 'a' = [datetime]'2026-08-15T13:50:00'; 'b' = [datetime]'2026-08-15T13:59:59' }).Count -eq 0) 'spurious staleness'
+  T 'MUST FIRE  only ONE stale spec out of many is still caught' `
+    ((Get-StaleAuditProblems $auditAt @{ 'a' = [datetime]'2026-08-15T13:50:00'; 'b' = [datetime]'2026-08-15T14:01:00' }).Count -eq 1) 'missed a single stale spec'
+  T 'a spec written in the same second as the audit is not stale' `
+    ((Get-StaleAuditProblems $auditAt @{ 'a' = [datetime]'2026-08-15T14:00:00' }).Count -eq 0) 'too strict at the boundary'
+
   # ---- THE SERVEABILITY GATE, frozen at its founding bug -------------------------------------------
   # FIXTURE: the template exactly as it stood on 2026-08-15 before the repoint. This assignment is what
   # made two audited recipes go live unable to price. With zero HTTP calls, this refuses that publish.
@@ -279,6 +337,28 @@ var OTHER=1;
   T 'MUST FIRE  a coverage guard left pointing at the OLD feed is caught' `
     ((Get-GuardFeedUrl $guardStale) -ne (Get-CardFeedUrl $tplLive)) 'a stale second copy read as agreeing'
 
+  # ---- THE ROLLBACK SCOPE. Per-slug, and never a guess.
+  $fcFail = @('FEEDCOV: 2 published recipe(s) checked against ...',
+              '  X country-captain-chicken  [SLUG_MISSING]  slug absent from the feed''s recipes map',
+              'FEEDCOV: 1 published recipe(s) the cards'' own feed cannot fully price.')
+  $wave3 = @('country-captain-chicken', 'chicken-florentine', 'american-goulash-pasta')
+  # THE WHOLE COMPARISON GOES INSIDE ONE PAREN. Written as `(...) -eq 'x'` with the paren closing before
+  # the -eq, PowerShell binds the bare string to $cond, a non-empty string is truthy, and the trailing
+  # `-eq 'x'` is swallowed as a further positional argument - the case then passes against a DELIBERATELY
+  # WRONG expectation. Measured while writing this file. A fixture that cannot fail is worse than no
+  # fixture, because the suite reports it as covered.
+  T 'CLEAN TWIN only the slug the guard NAMED is rolled back, not the whole wave' `
+    (((Get-FeedcovFailedSlugs $fcFail $wave3) -join ',') -eq 'country-captain-chicken') `
+    ((Get-FeedcovFailedSlugs $fcFail $wave3) -join ',')
+  T 'MUST FIRE  a guard that failed while naming NOBODY takes the whole wave down' `
+    ((Get-FeedcovFailedSlugs @('FEEDCOV: something went wrong') $wave3).Count -eq 3) 'left a failing wave live'
+  # the guard also reports collateral it was not asked about; drafting another session's recipe is not ours
+  $fcForeign = @('  X somebody-elses-recipe  [SLUG_MISSING]  ...', '  X chicken-florentine  [BIDS_UNPRICEABLE]  ...')
+  T 'MUST FIRE  a failing slug OUTSIDE this wave is never drafted by this script' `
+    ((Get-FeedcovFailedSlugs $fcForeign $wave3) -notcontains 'somebody-elses-recipe') 'drafted a foreign recipe'
+  T '   but the in-wave slug on the same report still comes down' `
+    ((Get-FeedcovFailedSlugs $fcForeign $wave3) -contains 'chicken-florentine') 'missed the real failure'
+
   # ---- THE SEAL. These predicates are worth nothing if the live path does not call them (the
   # tested-is-not-run lesson: a guard whose only caller is its own test runs never).
   $selfSrc = [IO.File]::ReadAllText($PSCommandPath)
@@ -320,6 +400,22 @@ if ($verdict -ne 'GO') {
   Fail ("the wave audit reads '{0}', not GO ({1}). A NO-GO blocks publish, full stop - repair the named recipes, re-audit, then re-run." -f $verdict, $auditPath)
 }
 Write-Output ("  P1  audit verdict          GO   ({0})" -f (Split-Path $auditPath -Leaf))
+
+# ---- P1b. the GO must be newer than every spec it certifies ---------------------------------------
+# A GO older than a spec edit is a GO for bytes that no longer exist. Specs that do not exist yet are
+# P4's problem, not this one - it judges only what it can actually compare.
+$auditWritten = (Get-Item $auditPath).LastWriteTime
+$specTimes = @{}
+foreach ($s in $slugs) {
+  $sp = Join-Path $mp ("db\recipes\{0}.json" -f $s)
+  if (Test-Path $sp) { $specTimes[$s] = (Get-Item $sp).LastWriteTime }
+}
+$stale = @(Get-StaleAuditProblems $auditWritten $specTimes)
+if ($stale.Count) {
+  $stale | ForEach-Object { Write-Output ("      ! " + $_) }
+  Fail ("{0} spec(s) were edited after the wave audit was written. That GO certifies bytes that no longer exist - re-audit the repaired slug(s) (scoped: recipe-local blockers do not need the whole wave) and re-run." -f $stale.Count)
+}
+Write-Output ("  P1b audit freshness        GO is newer than all {0} spec(s)   (audit {1})" -f $specTimes.Count, $auditWritten.ToString('HH:mm:ss'))
 
 # ---- P2. the ledger must carry the audit stamp ----------------------------------------------------
 $ledgerPath = if ($LedgerPath) { $LedgerPath } else { Join-Path $mp 'db\batch-ledger.json' }
@@ -474,6 +570,9 @@ if ($runDryRun) {
   Write-Output ("  E3  update-recipes-db.ps1 -SpecList {0}" -f (Split-Path $slugListPath -Leaf))
   Write-Output '  E4  propagate-recipes.ps1  (recipes-db sync -> db-agreement gate -> planner -> cards -> publish)'
   Write-Output '  E5  git add <scoped> && git commit && git push'
+  Write-Output '  E6  top5-weekly -NoPublish + export-feed, then feed-covers-published scoped to this wave'
+  Write-Output '        (a slug that cannot price is rolled back to draft and moved to `held`, per slug)'
+  Write-Output '  E7  git add public/smp-feed.json grocery/out/* && commit && push  (the feed deploy)'
   Write-Output ''
   Write-Output '  Would publish:'
   foreach ($s in $slugs) { Write-Output ("    https://www.thriftycrew.com/{0}/" -f $s) }
@@ -575,13 +674,18 @@ if ($propRc -ne 0) { Fail 'propagate-recipes failed - nothing was stamped, the n
 if (-not (@($prop | Where-Object { $_ -match 'propagate COMPLETE' }).Count)) {
   Fail 'propagate did not report COMPLETE - treating an unfinished chain as unfinished'
 }
+# THE COLLATERAL IS IN THE STAMP, not just on screen. DECISION 2026-08-15: propagate stays whole-dirty -
+# it is THE one command that makes the site match the specs, and a wave-scoped variant would be a second
+# copy of that rule. What was wrong was the RECORD: a stamp reading "2/2 published" for a run that
+# actually republished 361 recipes lets the ledger be read as a 2-recipe blast radius. The post-publish
+# reviewer is dispatched off these numbers, so it has to see both to sample the collateral at all.
 Stamp 'build-cards' ("{0} card(s) rebuilt via propagate" -f $slugs.Count)
-Stamp 'publish' ("{0}/{0} published through engine\publish (visibility preserved)" -f $slugs.Count)
-Write-Output ("  E5  propagate               COMPLETE")
+Stamp 'publish' ("{0}/{0} wave slug(s) published through engine\publish (visibility preserved) + {1} collateral spec(s) carried by propagate (total dirty {2})" -f $slugs.Count, $foreignTotal, $dirtyTotal)
+Write-Output ("  E4  propagate              COMPLETE")
 
 # ---- E5. push. The push IS the deploy here. NEVER `git add -A`: it sweeps whatever else is in Brad's
 # real tree into this commit.
-if ($runSkipGit) { Write-Output '  E6  git                    SKIPPED (-SkipGit)' }
+if ($runSkipGit) { Write-Output '  E5  git                    SKIPPED (-SkipGit)' }
 else {
   $paths = @(
     ('meal-prep/runs/' + (Split-Path $RunDir -Leaf)),
@@ -605,29 +709,152 @@ else {
     & git -C $repo add -- @add | Out-Null
     $staged = @(& git -C $repo diff --cached --name-only | Where-Object { "$_".Trim() -ne '' })
     if (-not $staged.Count) {
-      Write-Output '  E6  git                    nothing staged (already committed on a previous run)'
+      Write-Output '  E5  git                    nothing staged (already committed on a previous run)'
     } else {
       $msg = ("recipes: publish {0} ({1} recipes in the wave, audit GO)" -f $batch, $slugs.Count)
       & git -C $repo commit -m $msg | Out-Null
       if ($LASTEXITCODE -ne 0) { Fail ("git commit failed AFTER a successful publish - the recipes ARE live, only the repo is behind") }
       & git -C $repo push | Out-Null
       if ($LASTEXITCODE -ne 0) { Fail ("git push failed AFTER a successful publish - the recipes ARE live, but the repo is unpushed and the push is the deploy for everything else") }
-      Write-Output ("  E6  git                    committed and pushed ({0} path(s))" -f $staged.Count)
+      Write-Output ("  E5  git                    committed and pushed ({0} path(s))" -f $staged.Count)
     }
   } finally { $ErrorActionPreference = $prevEap }
 }
 
-# ---- advance the recipes to `published`
+# ---- advance the recipes to `published` (before E6, so a rollback has a `published` state to leave)
 foreach ($s in $slugs) {
   & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'hunt-run.ps1') -Advance -RunDir $RunDir -Slug $s -To published -By 'wave-publish' -Detail ("wave {0}" -f $Wave) | Out-Null
+}
+
+# ---- E6. POST-PUBLISH SERVEABILITY, WITH A ROLLBACK ARM -------------------------------------------
+# THE GAP THIS CLOSES, measured 2026-08-15. propagate runs feed-covers-published as a hard gate, but that
+# guard only judges slugs already in db\published-hashes.json - and a brand-new recipe enters that file
+# during the very publish it is meant to gate. So the wave's own recipes are the one set the pre-publish
+# check structurally cannot see. It is a fallback-tests-absence-not-function shape: the gate reads green
+# over the new slugs precisely because they are not there yet.
+#
+# AND THE FEED HAS TO BE REBUILT FIRST, in the right order. export-feed builds its `recipes` map from
+# grocery\out\recipe-costs.json, NOT from recipes-db (recipes-db supplies servings only). Re-running
+# export-feed alone therefore would NOT pick up a slug published seconds ago, and the verification below
+# would fail every wave for a reason that is not the recipe's fault. top5-weekly.ps1 is what writes
+# recipe-costs.json, so it runs first. -NoPublish is not optional: without it top5-weekly publishes the
+# Top 5 hub page, which is not this script's to ship.
+#
+# WHY THIS DOES NOT SCAN THE LIVE PAGE. The plan called for fetching each page and scanning for hydration
+# placeholder text. Measured: recipe posts are members-only, so an anonymous fetch of a live recipe gets
+# the upgrade CTA and never the card at all - the placeholder scan would pass on a totally broken page
+# because the content is absent, not because it is correct. Same trap as the guard it replaces. The feed
+# check below is the real question anyway: engine\publish already verifies the page bytes it wrote.
+Write-Output ''
+Write-Output '== SERVEABILITY ==========================================================='
+$rollback = @()
+try {
+  $t5 = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $mp 'top5-weekly.ps1') -NoPublish 2>&1
+  if ($LASTEXITCODE -ne 0) { @($t5 | Select-Object -Last 10) | ForEach-Object { Write-Output ("        " + [string]$_) }; throw 'top5-weekly failed' }
+  $ef = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repo 'grocery\export-feed.ps1') 2>&1
+  if ($LASTEXITCODE -ne 0) { @($ef | Select-Object -Last 10) | ForEach-Object { Write-Output ("        " + [string]$_) }; throw 'export-feed failed' }
+  Write-Output ("  E6  feed rebuilt           " + [string](@($ef | Where-Object { $_ -match '^smp-feed\.json:' } | Select-Object -Last 1)))
+} catch {
+  Write-Output ("      ! " + $_.Exception.Message)
+  Write-Output '      The wave IS live but its feed was not rebuilt, so new slugs cannot price yet.'
+  Write-Output '      Run: meal-prep\top5-weekly.ps1 -NoPublish ; grocery\export-feed.ps1 ; then re-run this script.'
+  Stamp 'serveability' 'FEED REBUILD FAILED - wave is live and unverified'
+  Write-GuardComplete -Name 'wave-publish' -Summary ("wave {0} published but feed rebuild failed" -f $Wave)
+  exit 1
+}
+
+# THE VERIFICATION ITSELF is feed-covers-published, scoped to this wave. It is the guard that already owns
+# this question; re-implementing "is the slug in the feed and are its bids priceable" here would be a
+# second copy of a rule the estate has already paid to get right. It reads the LOCAL feed just rebuilt -
+# not -Live - because the deployed copy lags this push by CDN propagation, and a check that fails on cache
+# timing would get switched off within a week.
+# NO `2>&1` HERE. Test-GuardComplete requires the completion marker to be the LAST non-empty line, and in
+# PS 5.1 redirecting a native command's stderr interleaves it into the same stream - one stray warning
+# after the marker and a guard that finished cleanly reads as one that died. (It is also the
+# NativeCommandError trap that killed a publish at its last step on the first live run.)
+$fcOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'feed-covers-published.ps1') -Slugs $slugs
+$fcRc = $LASTEXITCODE
+$fcLines = @($fcOut | ForEach-Object { [string]$_ })
+@($fcLines | Where-Object { $_ -match '^\s*X |^FEEDCOV' }) | ForEach-Object { Write-Output ("      " + $_) }
+# COMPLETION AND VERDICT ARE DIFFERENT QUESTIONS. A guard that died mid-run is not a clean bill.
+if (-not (Test-GuardComplete -Output $fcOut -Name 'FEEDCOV')) {
+  Write-Output '      ! feed-covers-published never printed its completion marker, so it did not finish.'
+  $rollback = @($slugs)
+} elseif ($fcRc -ne 0) {
+  $rollback = @(Get-FeedcovFailedSlugs $fcLines $slugs)   # ONE implementation, the one the self-test pins
+}
+
+if (-not $rollback.Count) {
+  Write-Output ("  E6  serveability           all {0} slug(s) resolve in the feed their cards fetch" -f $slugs.Count)
+  Stamp 'serveability' ("{0}/{0} wave slug(s) verified against the rebuilt feed" -f $slugs.Count)
+} else {
+  # ---- THE ROLLBACK ARM. A page that cannot price is drafted in seconds instead of waiting an hour for
+  # the post-publish reviewer to find it. This is the manual remediation of 2026-08-15 made mechanical.
+  Write-Output ''
+  Write-Output ("  E6  serveability           FAILED for {0} slug(s) - rolling them back to draft" -f $rollback.Count)
+  . (Join-Path $repo 'lib\ghost-lib.ps1')
+  $apiUrl = 'https://map-to-success.ghost.io'
+  $adminKey = Get-GhostKey -Root $repo
+  $drafted = @(); $stuck = @()
+  foreach ($s in $rollback) {
+    try {
+      $jwt = Get-GhostJWT -Key $adminKey
+      $hdr = @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0'; 'Content-Type' = 'application/json' }
+      $r = Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$s/?fields=id,updated_at" -Headers $hdr
+      $p = $r.posts[0]
+      if (-not $p) { $stuck += ("{0}: not found live" -f $s); continue }
+      # Ghost's collision check: the PUT must carry the post's own updated_at or it 409s.
+      $body = (@{ posts = @(@{ id = $p.id; updated_at = $p.updated_at; status = 'draft' }) } | ConvertTo-Json -Depth 6 -Compress)
+      Invoke-GhostApi -Method 'PUT' -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/" -Headers $hdr -Body $body | Out-Null
+      $drafted += $s
+      & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'hunt-run.ps1') -Advance -RunDir $RunDir -Slug $s -To held -By 'wave-publish' -Detail 'serveability rollback: the feed its card fetches cannot price it' | Out-Null
+    } catch {
+      $stuck += ("{0}: {1}" -f $s, $_.Exception.Message)
+    }
+  }
+  foreach ($d in $drafted) { Write-Output ("      drafted + held   {0}" -f $d) }
+  foreach ($x in $stuck)   { Write-Output ("      ! STILL LIVE     {0}" -f $x) }
+  Stamp 'publish' ("ROLLED BACK: {0} - serveability failed{1}" -f ($rollback -join ', '), $(if ($stuck.Count) { "; {0} COULD NOT be drafted and are STILL LIVE" -f $stuck.Count } else { '' }))
+  $kept = @(@($slugs) | Where-Object { @($rollback) -notcontains $_ })
+  if ($kept.Count) { Write-Output ("      {0} slug(s) passed and stay live: {1}" -f $kept.Count, ($kept -join ', ')) }
+  Write-Output ''
+  Write-Output '  The recipes are not lost - they are drafts in `held`. Fix what the feed cannot price,'
+  Write-Output ("  then hunt-run.ps1 -Advance -To published and re-run: wave-publish.ps1 -RunDir {0} -Wave {1}" -f $RunDir, $Wave)
+  Write-GuardComplete -Name 'wave-publish' -Summary ("wave {0} ROLLED BACK n={1}" -f $Wave, $rollback.Count)
+  exit 1
+}
+
+# ---- E7. push the rebuilt feed. The push is the deploy for public\.
+if ($runSkipGit) { Write-Output '  E7  feed git               SKIPPED (-SkipGit)' }
+else {
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $feedPaths = @('public/smp-feed.json', 'grocery/out/smp-feed.json', 'grocery/out/recipe-costs.json')
+    $fadd = @($feedPaths | Where-Object { Test-Path (Join-Path $repo ($_ -replace '/', '\')) })
+    & git -C $repo add -- @fadd | Out-Null
+    $fstaged = @(& git -C $repo diff --cached --name-only | Where-Object { "$_".Trim() -ne '' })
+    if (-not $fstaged.Count) { Write-Output '  E7  feed git               nothing staged (feed unchanged)' }
+    else {
+      & git -C $repo commit -m ("feed: rebuild for {0} ({1} new recipe(s) now priceable)" -f $batch, $slugs.Count) | Out-Null
+      if ($LASTEXITCODE -ne 0) { Write-Output '  E7  feed git               ! commit failed - the recipes are live and verified, the feed is unpushed' }
+      else {
+        & git -C $repo push | Out-Null
+        if ($LASTEXITCODE -ne 0) { Write-Output '  E7  feed git               ! push failed - the feed is committed but not deployed; push by hand' }
+        else { Write-Output ("  E7  feed git               committed and pushed ({0} path(s))" -f $fstaged.Count) }
+      }
+    }
+  } finally { $ErrorActionPreference = $prevEap }
 }
 
 Write-Output ''
 Write-Output '== LIVE ==================================================================='
 foreach ($s in $slugs) { Write-Output ("  https://www.thriftycrew.com/{0}/" -f $s) }
 Write-Output ''
-Write-Output ("  NEXT (not optional): dispatch post-publish-reviewer scoped to these {0} slug(s), then" -f $slugs.Count)
+Write-Output ("  NEXT (not optional): dispatch post-publish-reviewer scoped to these {0} slug(s)" -f $slugs.Count)
+Write-Output ("    AND tell it the collateral: propagate carried {0} spec(s) outside this wave ({1} dirty in total)," -f $foreignTotal, $dirtyTotal)
+Write-Output  '    so the review samples what shipped, not just the wave. Then:'
 Write-Output ("    batch-ledger.ps1 -Stamp -Batch {0} -Stage post-publish-review -Detail '<verdict>'" -f $batch)
 Write-Output ("    batch-ledger.ps1 -Close -Batch {0} -Detail '<verdict>'" -f $batch)
-Write-GuardComplete -Name 'wave-publish' -Summary ("wave {0} published n={1}" -f $Wave, $slugs.Count)
+Write-GuardComplete -Name 'wave-publish' -Summary ("wave {0} published n={1} serveability verified" -f $Wave, $slugs.Count)
 exit 0
