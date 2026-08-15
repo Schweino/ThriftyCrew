@@ -704,7 +704,14 @@ else {
     ('meal-prep/runs/' + (Split-Path $RunDir -Leaf)),
     'meal-prep/recipes-db.json', 'meal-prep/db/costed.json', 'meal-prep/db/published-hashes.json',
     'meal-prep/db/batch-ledger.json', 'meal-prep/pipeline/propagate-stamps.json',
-    'meal-prep/pipeline/v2-perserving.json', 'meal-prep/planner-data.js'
+    'meal-prep/pipeline/v2-perserving.json', 'meal-prep/planner-data.js',
+    # gen-planner-data writes TWO artifacts: meal-prep\planner-data.js (baked into the tool page) and
+    # public\planner-data.json (Worker-served to the live Meal Plan Builder). Staging only the first
+    # left the second dirty-but-unpushed after a wave, so new recipes were live on the site and absent
+    # from the planner until the next daily push swept it in. The push is the deploy for public\.
+    # Found by the v2.1 review, 2026-08-15 - the same class the post-publish reviewer caught on
+    # public\board.json an hour earlier.
+    'public/planner-data.json'
   )
   # db\built is DERIVED and gitignored on purpose - build-cards regenerates it from the spec, so staging
   # it would only ever produce "paths are ignored by .gitignore" noise on every publish. The spec is the
