@@ -12,21 +12,35 @@
 # -NoAlert exists so the REFUSAL PATH ITSELF is reachable by a test without mailing Brad and filing a
 # triage-queue entry. A safety branch nothing can exercise is a branch nothing has proved; test-auditors
 # runs the real script this way daily. No production caller passes it.
-param([string]$FeedPath = '', [switch]$SelfTest, [switch]$NoAlert)
+# -CrossCheck re-derives every recipe's cheapest total straight from the BUILT CARD's own data block and
+# demands it match this manifest. That is what keeps the PowerShell mirror of the pricing rule honest
+# against the JS that actually prices the page - run it after any change to either side. Not daily: it
+# reads 544 built cards.
+param([string]$FeedPath = '', [switch]$SelfTest, [switch]$NoAlert, [switch]$CrossCheck)
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
 Add-Type -AssemblyName System.Web -ErrorAction SilentlyContinue
 
-# BLOCK-BEFORE-SHIP (2026-07-27, overhaul-1): cheapest_ps can never legitimately exceed everyday_ps -
-# 'cheapest everywhere' is by construction the floor over the same aligned product the db everyday bid
-# prices. A row where cheapest > everyday means the two pricing paths disagree (a stale/wrong feed price,
-# or a residual gpu/unit mismatch surviving the 07-26 reconciliation). Shipping it puts a 'cheapest' HIGHER
-# than 'everyday' on every manifest surface (rankings, top5, meal-planner) - visibly nonsensical to a
-# shopper and an accuracy violation. We CLAMP the shipped cheapest to everyday (the valid bound: never
-# inverted, never overstated) so the bad number can't reach a surface, and separately flag rows whose RAW
-# inversion is beyond rounding so triage fixes the underlying price. The clamp is the block; the flag is
-# the alert. Pure function (no globals) so it is self-testable without the feed/db.
+# BLOCK-BEFORE-SHIP (2026-07-27, overhaul-1): a 'cheapest' HIGHER than 'everyday' is nonsensical on every
+# manifest surface (rankings, top5, meal-planner), so we CLAMP the shipped cheapest to everyday - the valid
+# bound: never inverted, never overstated. Both numbers are real shopping plans, so min() of them is
+# achievable. The clamp is the block; the flag is the alert. Pure function (no globals) so it is
+# self-testable without the feed/db.
+#
+# THE ALERT'S PREMISE CHANGED ON 2026-08-15 AND THE THRESHOLD MOVED WITH IT. The original reasoning was
+# that cheapest "is by construction the floor over the same aligned product the db everyday bid prices",
+# so ANY inversion beyond rounding meant a wrong price - true while cheapest_ps was min-per-unit times the
+# RECIPE's package size, i.e. the same package basis on both sides. cheapest_ps is now whole-package cost
+# at the STORE's package size (aligned to what the cards charge), while everyday_ps is still the recipe's
+# own authored package basis - it feeds stat.cost_ps and therefore every {{cost_ps}} token in the prose,
+# so it deliberately did NOT move. Two different package bases means an inversion is now an ordinary
+# PACKAGING artifact: the smallest package a store actually sells can be bigger and dearer than the
+# package the recipe assumed. 50 of 544 recipes invert that way on the first run, none by more than 41%.
+# Alerting on those would file 50 false "root price bug" tickets and train everyone to ignore the alert.
+# So the flag threshold is now 0.50: still catches an inversion too large to be explained by packaging
+# (the wrong-price/gpu case it was written for), and stays quiet about the expected ones. The exact check
+# that this manifest agrees with the cards is -CrossCheck, which is exhaustive rather than heuristic.
 function Resolve-Inversions($rows, $tol, $alertFrac){
   $flagged = New-Object System.Collections.Generic.List[object]
   foreach($r in $rows){
@@ -75,8 +89,29 @@ if(Test-FeedVerdictFatal $feedInfo.verdict){
   }
   exit 2
 }
-$feed = (Get-Content $feedInfo.path -Raw -Encoding utf8 | ConvertFrom-Json).ingredients
+$feedDoc = Get-Content $feedInfo.path -Raw -Encoding utf8 | ConvertFrom-Json
+$feed = $feedDoc.ingredients
 $feedMap = @{}; foreach($p in $feed.PSObject.Properties){ $feedMap[$p.Name] = $p.Value }
+# THE CARD'S OWN PRICING INPUTS (2026-08-15). cheapest_ps used to be k * (pkg_g/gpu) * feed.cheapest -
+# the minimum PER-UNIT price times the RECIPE's package size. That is the same defect the cards carried:
+# the cheapest store per unit is not the cheapest store to BUY at, because you buy whole packages and a
+# warehouse pack wins per-unit with a huge one. Now it computes what the card computes: scan every store
+# cell and keep the minimum COST, on the STORE's package size where the board knows one.
+# NOTE the two are only the same question when the package size is fixed - keeping the recipe's own
+# package size and merely picking the min-cost store is algebraically identical to min per-unit, so
+# "align the selection" without "align the basis" is a no-op. This changes the basis.
+$piMap = @{}
+if($feedDoc.PSObject.Properties['pricing_inputs']){ foreach($p in $feedDoc.pricing_inputs.PSObject.Properties){ $piMap[$p.Name] = $p.Value } }
+# ONE PowerShell copy of the rule, shared with grocery\measure-cheapest-selection.ps1. Do not transcribe
+# costAt() again here: the JS in tpl2-scaler-prefix.html is the authority, this lib is its single server
+# -side mirror, and -CrossCheck below proves the two agree against the built cards.
+. (Join-Path $mp 'lib\package-cost-lib.ps1')
+function Get-CheapestCost($bid,[double]$req,[double]$fallbackBasis){
+  if(-not $bid -or -not $piMap.ContainsKey($bid)){ return $null }
+  $r = Get-PkgCheapestAcross $piMap[$bid] $req $fallbackBasis
+  if($null -eq $r){ return $null }
+  return [double]$r.cost
+}
 
 function Slugify([string]$s){ (($s.ToLower() -replace "[^a-z0-9]+","-").Trim('-')) }
 
@@ -110,9 +145,16 @@ foreach($run in @('db')){
         $ev += $k * $pkgP
         $bid = if($ing.PSObject.Properties.Name -contains 'bid'){ [string]$ing.bid } else { '' }
         $gpu = if($ing.PSObject.Properties.Name -contains 'gpu' -and $ing.gpu){ [double]$ing.gpu } else { 0 }
-        $fe = if($bid -and $feedMap.ContainsKey($bid)){ $feedMap[$bid] } else { $null }
-        if($fe -and [double]$fe.cheapest -gt 0 -and $gpu -gt 0){ $ch += $k * ($pkgG/$gpu) * [double]$fe.cheapest }
-        else { $ch += $k * $pkgP }
+        # [int]$ing.grams ON PURPOSE: build-card2 emits the scaler data block with `[int]$ing.grams`, so
+        # the card's `required` is computed from the ROUNDED grams. Using the unrounded double here would
+        # put this number a cent off the card's on some recipes, which is exactly the kind of drift the
+        # cross-check below exists to catch.
+        $req = if($gpu -gt 0){ [double][int]$ing.grams / $gpu } else { 0.0 }
+        $fallback = if($gpu -gt 0 -and $pkgG -gt 0){ $pkgG/$gpu } else { 0.0 }
+        $cc = Get-CheapestCost $bid $req $fallback
+        # No priceable cell for this bid (no board price, or an allowlisted no-board-price ingredient):
+        # fall back to the recipe's own everyday package cost, exactly as before.
+        if($null -ne $cc){ $ch += $cc } else { $ch += $k * $pkgP }
       }
       $rows += [pscustomobject]@{
         slug=$spec.slug; name=$spec.name; run=$run; protein=$spec.protein
@@ -136,7 +178,8 @@ foreach($grp in ($rows | Group-Object protein)){
 }
 # block-before-ship: clamp any cheapest>everyday inversion to the valid bound BEFORE the manifest is
 # written, and collect real (beyond-rounding) inversions to alert triage.
-$inverted = Resolve-Inversions $rows 0.02 0.03
+$inverted = Resolve-Inversions $rows 0.02 0.50
+$clampedCount = @($rows | Where-Object { [double]$_.cheapest_ps -eq [double]$_.everyday_ps }).Count
 . (Join-Path $mp 'lib\json-db-io.ps1')
 # SNAPSHOT THE PRIOR MANIFEST BEFORE OVERWRITING IT (2026-08-07).
 # reanchor-moved-prose.ps1 needs the PRE-recompute manifest to diff against and refuses to run without one,
@@ -154,18 +197,66 @@ $evAll = $rows | ForEach-Object { $_.everyday_ps }; $chAll = $rows | ForEach-Obj
 Write-Output ("computed {0} recipes -> pipeline\v2-perserving.json" -f $rows.Count)
 Write-Output ("everyday_ps  range `${0}-`${1}  mean `${2}" -f ($evAll|Measure-Object -Minimum).Minimum,($evAll|Measure-Object -Maximum).Maximum,[math]::Round(($evAll|Measure-Object -Average).Average,2))
 Write-Output ("cheapest_ps  range `${0}-`${1}  mean `${2}" -f ($chAll|Measure-Object -Minimum).Minimum,($chAll|Measure-Object -Maximum).Maximum,[math]::Round(($chAll|Measure-Object -Average).Average,2))
+Write-Output ("cheapest_ps clamped to everyday_ps on {0} recipe(s) (expected: the store's smallest package can be bigger than the package the recipe assumed - see the note on Resolve-Inversions)" -f $clampedCount)
+# WRITE THE REPORT EVERY RUN, INCLUDING WHEN IT IS EMPTY. This file used to be written only when there was
+# something to say, so it could only ever grow: after the 2026-08-15 threshold change it sat on disk
+# holding 50 rows from the previous run while the current run had found none, which reads as 50 outstanding
+# price bugs. An uncleared output is only correct while output grows.
+# The empty case is written as a literal '[]': PS 5.1 turns `,@() | ConvertTo-Json` into
+# {"value":[],"Count":0}, which is not the empty LIST any reader of this file expects.
+$invJson = if($inverted.Count -eq 0){ '[]' } elseif($inverted.Count -eq 1){ '[' + ($inverted[0] | ConvertTo-Json -Depth 4) + ']' } else { $inverted.ToArray() | ConvertTo-Json -Depth 4 }
+Set-Content (Join-Path $here 'v2-inversions.json') -Value $invJson -Encoding utf8
 if($inverted.Count){
-  Write-Output ("BLOCK-BEFORE-SHIP: clamped {0} recipe(s) where cheapest_ps exceeded everyday_ps (root price bug - triage):" -f $inverted.Count)
+  Write-Output ("BLOCK-BEFORE-SHIP: {0} recipe(s) inverted by more than 50%, too much to be a packaging artifact (likely a wrong feed price or gpu - triage):" -f $inverted.Count)
   $inverted | ForEach-Object { Write-Output ("  {0}: everyday `${1} but feed-cheapest `${2} ({3:P0} over)" -f $_.slug,$_.everyday_ps,$_.raw_cheapest_ps,$_.over_frac) }
-  Set-Content (Join-Path $here 'v2-inversions.json') -Value (($inverted | ConvertTo-Json -Depth 4)) -Encoding utf8
   # Alerts go out through Send-Alert (grocery\alert-lib.ps1), never as `powershell -File send-alert.ps1
   # -Body $long`: Windows refuses to start a process whose command line passes 32767 chars, so an oversized
   # body did not arrive truncated - it did not arrive at all. See alert-lib.ps1.
   $alertLib = Join-Path $mp '..\grocery\alert-lib.ps1'
   if(Test-Path $alertLib){
     . $alertLib
-    $body = "compute-v2 found recipes whose 'cheapest everywhere' price computed HIGHER than the everyday price - impossible on an aligned product, so a feed price or gpu is wrong. The shipped number was clamped to everyday (safe), but the underlying price must be fixed. Rows: " + (($inverted | Select-Object -First 12 | ForEach-Object { "$($_.slug) ev=$($_.everyday_ps) ch=$($_.raw_cheapest_ps)" }) -join ' | ')
+    $body = "compute-v2 found recipes whose 'cheapest everywhere' price computed MORE THAN 50% HIGHER than the everyday price. Since 2026-08-15 a modest inversion is expected (cheapest_ps prices the STORE's package, everyday_ps the recipe's own authored package, so a store whose smallest pack is bigger than the assumed one legitimately costs more) - but an inversion this large is too big to be packaging and points at a wrong feed price or a wrong gpu. The shipped number was clamped to everyday (safe), but the underlying price must be fixed. Rows: " + (($inverted | Select-Object -First 12 | ForEach-Object { "$($_.slug) ev=$($_.everyday_ps) ch=$($_.raw_cheapest_ps)" }) -join ' | ')
     Send-Alert -Subject ("Recipe price inversion: {0} clamped" -f $inverted.Count) -Body $body -What 'v2 price inversion' | Out-Null
+  }
+}
+if($CrossCheck){
+  # Recompute each recipe's cheapest batch total from the BUILT CARD's baked data block - the exact bytes
+  # the browser reads - and compare to this manifest. The typed script tag is the anchor; do NOT search for
+  # the bare class name, the template's own JS contains that literal.
+  $re = [regex]'(?s)<script type="application/json" class="smp-sc-data">(.*?)</script>'
+  $builtDir = Join-Path $mp 'db\built'
+  $checked = 0; $mismatch = New-Object System.Collections.Generic.List[string]; $noCard = 0
+  foreach($r in $rows){
+    $cf = Join-Path $builtDir ($r.slug + '.body.html')
+    if(-not (Test-Path $cf)){ $noCard++; continue }
+    $m = $re.Match([IO.File]::ReadAllText($cf))
+    if(-not $m.Success){ $noCard++; continue }
+    try { $d = $m.Groups[1].Value | ConvertFrom-Json } catch { $noCard++; continue }
+    $tot = 0.0; $ok = $true
+    foreach($it in $d.ing){
+      $gpu = [double]$it.gpu
+      if($gpu -le 0){ $ok = $false; break }
+      $req = [double]$it.grams / $gpu
+      $fb = if([double]$it.pkg_g -gt 0){ [double]$it.pkg_g / $gpu } else { 0.0 }
+      $bid = [string]$it.bid
+      $cc = if($bid -and $piMap.ContainsKey($bid)){ Get-PkgCheapestAcross $piMap[$bid] $req $fb } else { $null }
+      # a line the card cannot price is a line this comparison cannot speak to
+      if($null -eq $cc){ $ok = $false; break }
+      $tot += [double]$cc.cost
+    }
+    if(-not $ok){ continue }
+    $checked++
+    $mine = [double]$r.cheapest_ps * 14
+    # tolerance covers the clamp (cheapest is pinned to everyday on inversions) and 2dp rounding
+    if([math]::Abs($mine - $tot) -gt 0.25 -and [double]$r.cheapest_ps -lt [double]$r.everyday_ps){
+      $mismatch.Add(("{0}: manifest `${1} vs card `${2}" -f $r.slug, [math]::Round($mine,2), [math]::Round($tot,2)))
+    }
+  }
+  Write-Output ("CROSS-CHECK vs built cards: {0} recipe(s) fully comparable, {1} disagreement(s), {2} card(s) not comparable" -f $checked, $mismatch.Count, $noCard)
+  foreach($x in ($mismatch | Select-Object -First 12)){ Write-Output ('  ' + $x) }
+  if($mismatch.Count){
+    Write-Output 'CROSS-CHECK FAILED: the manifest and the recipe cards are pricing the same basket differently.'
+    exit 2
   }
 }
 if($bad.Count){

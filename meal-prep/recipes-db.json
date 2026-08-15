@@ -4614,7 +4614,7 @@
                     {
                         "name":  "Slow Cooker Crack Chicken Bowls",
                         "slug":  "slow-cooker-crack-chicken-bowls",
-                        "visibility":  "paid",
+                        "visibility":"public",
                         "cuisine":  "American",
                         "method":  "slow cooker",
                         "servings":  14,
@@ -7286,7 +7286,7 @@
                     {
                         "name":  "Slow Cooker Filipino Pork Adobo Bowls",
                         "slug":  "slow-cooker-filipino-pork-adobo-bowls",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "Filipino",
                         "method":  "slow cooker",
                         "servings":  14,
@@ -12862,7 +12862,7 @@
                     {
                         "name":  "Buffalo Chicken Pasta Bake",
                         "slug":  "buffalo-chicken-pasta-bake",
-                        "visibility":  "paid",
+                        "visibility":"public",
                         "cuisine":  "American",
                         "servings":  14,
                         "ingredients":  [
@@ -13216,7 +13216,7 @@
                     {
                         "name":  "Cheesy Beef and Shells Casserole",
                         "slug":  "cheesy-beef-and-shells-casserole",
-                        "visibility":  "paid",
+                        "visibility":"public",
                         "cuisine":  "American",
                         "servings":  14,
                         "ingredients":  [
@@ -18520,7 +18520,7 @@
                     {
                         "name":  "John Wayne Casserole",
                         "slug":  "john-wayne-casserole",
-                        "visibility":  "paid",
+                        "visibility":"public",
                         "cuisine":  "American",
                         "servings":  14,
                         "ingredients":  [
@@ -25646,7 +25646,7 @@
                     {
                         "name":  "Bistek Tagalog (Filipino Beef and Onions over Rice)",
                         "slug":  "bistek-tagalog-filipino-beef-onion-rice",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "Filipino",
                         "servings":  14,
                         "ingredients":  [
@@ -28644,7 +28644,7 @@
                     {
                         "name":  "Chicken Pot Pie Casserole with Biscuits",
                         "slug":  "chicken-pot-pie-biscuit-casserole",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "American",
                         "servings":  14,
                         "ingredients":  [
@@ -30114,7 +30114,7 @@
                     {
                         "name":  "Claypot Chicken and Mushroom Rice",
                         "slug":  "claypot-chicken-mushroom-rice",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "Chinese",
                         "servings":  14,
                         "ingredients":  [
@@ -35400,7 +35400,7 @@
                     {
                         "name":  "Haluski and Kielbasa (Cabbage and Egg Noodles)",
                         "slug":  "haluski-and-kielbasa-cabbage-noodles",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "polish",
                         "servings":  14,
                         "ingredients":  [
@@ -41198,7 +41198,7 @@
                     {
                         "name":  "No-Peek Pork Chop and Rice Casserole",
                         "slug":  "no-peek-pork-chop-rice-casserole",
-                        "visibility":  "paid",
+                        "visibility":"public",
                         "cuisine":  "American",
                         "servings":  14,
                         "ingredients":  [
@@ -43762,7 +43762,7 @@
                     {
                         "name":  "Pork Egg Roll in a Bowl",
                         "slug":  "pork-egg-roll-in-a-bowl",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "Chinese-American",
                         "servings":  14,
                         "ingredients":  [
@@ -45000,7 +45000,7 @@
                     {
                         "name":  "Red Beans, Turkey Sausage and Rice",
                         "slug":  "red-beans-turkey-sausage-and-rice",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "Cajun",
                         "servings":  14,
                         "ingredients":  [
@@ -46528,7 +46528,7 @@
                     {
                         "name":  "Slow Cooker Beef and Noodles",
                         "slug":  "slow-cooker-beef-and-noodles",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "American",
                         "servings":  14,
                         "ingredients":  [
@@ -50612,7 +50612,7 @@
                     {
                         "name":  "Turkey Alfredo Rotini Bake",
                         "slug":  "turkey-alfredo-rotini-bake",
-                        "visibility":  "paid",
+                        "visibility":"public",
                         "cuisine":  "italian-american",
                         "servings":  14,
                         "ingredients":  [
@@ -52780,7 +52780,7 @@
                     {
                         "name":  "Turkey Maqluba (Upside-Down Rice Bake)",
                         "slug":  "turkey-maqluba-upside-down-rice-bake",
-                        "visibility":"paid",
+                        "visibility":"public",
                         "cuisine":  "palestinian",
                         "servings":  14,
                         "ingredients":  [
@@ -57278,7 +57278,7 @@
                     {
                         "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
                         "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
-                        "visibility":"paid",
+                        "visibility":"public",
                         "cuisine":  "Vietnamese",
                         "servings":  14,
                         "ingredients":  [

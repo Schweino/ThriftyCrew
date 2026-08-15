@@ -744,6 +744,21 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           try { Send-Alert -Subject "Cost engine: golden test failed" -Body ("meal-prep\engine\golden-test.ps1 failed after today's recost. A STRUCTURAL failure means db\costed.json disagrees with the specs or the ingredient db (usually a package/grams edit that never got a recost). A FROZEN failure means the engine's output over pinned inputs moved - if that change was intended, accept it with golden-test.ps1 -Rebaseline. Lines: " + (($gtFail | Select-Object -First 15) -join ' | ')) | Out-Null } catch {}
         } else { Log 'golden-test: clean' }
       } catch { Log ('golden-test threw: ' + $_.Exception.Message) }
+      # RECIPE-CARD PRICING RULE (2026-08-15). The golden test above pins the cost ENGINE; this pins the
+      # rule that decides every price a reader actually sees on a card, which is client JS and so was
+      # outside every existing guard. It runs the shipped template (minified, generated from the real file
+      # so there is no second copy of the rule to drift) against a frozen mini feed in jsdom, and demands
+      # BOTH verdicts: the live template must pass, and the same fixture with the cheapest lane reverted to
+      # minimum-per-unit selection must still fail on the butter assertions. A guard that only ever passes
+      # has not been shown to discriminate. Non-fatal; alerts.
+      try {
+        $sp = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\run-scaler-pricing-test.ps1') -Quiet 2>&1 | ForEach-Object { [string]$_ }
+        if ($LASTEXITCODE -ne 0) {
+          Log ('scaler-pricing FAILED: ' + (($sp | Select-Object -First 3) -join ' | '))
+          $summary += "REVIEW    scaler-pricing: the recipe cards' store-selection rule failed its fixture - run meal-prep\pipeline\run-scaler-pricing-test.ps1"
+          try { Send-Alert -Subject "Recipe cards: pricing rule guard failed" -Body ("meal-prep\pipeline\run-scaler-pricing-test.ps1 failed. This guard pins the rule that each ingredient is priced at the store where the PACKAGE YOU HAVE TO BUY costs least, not the store with the lowest per-unit price - the defect that once billed `$10.22 for 20 cents of butter and `$40.00 for a 50 lb sack of rice. A POSITIVE-lane failure means tpl2-scaler-prefix.html no longer satisfies the fixture. A NEGATIVE-lane failure means the fixture has stopped reproducing the founding bug, so it is no longer testing anything. Lines: " + (($sp | Select-Object -First 15) -join ' | ')) | Out-Null } catch {}
+        } else { Log 'scaler-pricing: clean' }
+      } catch { Log ('scaler-pricing threw: ' + $_.Exception.Message) }
       # drift guard: recipes-db index vs db\recipes specs vs db\ingredients (2026-07-26). Non-fatal; alerts.
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\audit-db-agreement.ps1') | Out-Null

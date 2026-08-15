@@ -38,59 +38,17 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $repo = Split-Path $root -Parent
 
 # ---------------------------------------------------------------------------------------------------
-# THE CARD'S OWN MATH, TRANSCRIBED. This mirrors price()/priceAtStores() in
-# meal-prep\pipeline\tpl2-scaler-prefix.html line for line, including the purchasePriceMinor preference
-# and the pkg_g/gpu fallback. If it drifts from the template the counts below are fiction, so both
-# fixtures below pin the exact shapes the template produces.
+# THE CARD'S MATH comes from meal-prep\lib\package-cost-lib.ps1, the ONE server-side mirror of
+# costAt()/cheapestAcross() in tpl2-scaler-prefix.html. compute-v2-perserving.ps1 uses the same lib. Do not
+# re-transcribe the JS here: a second PowerShell copy is how the counts below would quietly become fiction.
+# The fixtures below pin the exact cell shapes the template produces.
 # ---------------------------------------------------------------------------------------------------
-function Get-CellField($cell, [string]$name) {
-  if ($null -eq $cell) { return $null }
-  $p = $cell.PSObject.Properties[$name]
-  if ($null -eq $p) { return $null }
-  return $p.Value
-}
-function Get-CellCost($cell, [double]$required, [double]$fallbackBasis) {
-  $puRaw = Get-CellField $cell 'perUnitMicros'
-  $pu = if ($null -eq $puRaw) { 0.0 } else { [double]$puRaw }
-  if (-not ($pu -gt 0) -or -not ($required -gt 0)) { return $null }
-  $up = $pu / 1000000
-  $variable = ((Get-CellField $cell 'variableWeight') -eq $true)
-  $pbuRaw = Get-CellField $cell 'packageBasisUnits'
-  $pbu = if ($null -eq $pbuRaw) { 0.0 } else { [double]$pbuRaw }
-  $packageBasis = 0.0
-  if (-not $variable) { $packageBasis = if ($pbu -gt 0) { $pbu } else { $fallbackBasis } }
-  $k = 0
-  if ((-not $variable) -and $packageBasis -gt 0) { $k = [int][math]::Max(1, [math]::Ceiling($required / $packageBasis - 1e-9)) }
-  $ppmRaw = Get-CellField $cell 'purchasePriceMinor'
-  $ppm = if ($null -eq $ppmRaw) { 0.0 } else { [double]$ppmRaw }
-  $cost = $null
-  if ($variable) { $cost = $up * $required }
-  elseif ($pbu -gt 0 -and $ppm -gt 0 -and $k -gt 0) { $cost = $ppm * $k / 100 }
-  elseif ($packageBasis -gt 0 -and $k -gt 0) { $cost = $up * $packageBasis * $k }
-  if ($null -eq $cost) { return $null }
-  if (-not ([double]$cost -ge 0)) { return $null }
-  # own_basis = the feed knew this store's real package size. When it is false the line is priced against
-  # the RECIPE's authored pkg_g/gpu instead, which is a documented fallback and NOT this fix's invention -
-  # but the min-cost scan can now select such a cell where per-unit selection would not have, so the
-  # report counts them rather than leaving it to be noticed later.
-  return [pscustomobject]@{ cost=[double]$cost; k=[int]$k; up=$up; variable=$variable; packageBasis=[double]$packageBasis; own_basis=($pbu -gt 0) }
-}
-# NEW RULE: scan every store cell, keep the minimum COST. Strict -lt keeps the FIRST winner on a tie, which
-# is what the template's `cost<best` does, so the store NAME is reproducible run to run.
+. (Join-Path $repo 'meal-prep\lib\package-cost-lib.ps1')
+function Get-CellField($cell, [string]$name) { return (Get-PkgCellField $cell $name) }
+function Get-CellCost($cell, [double]$required, [double]$fallbackBasis) { return (Get-PkgCellCost $cell $required $fallbackBasis) }
 function Get-CheapestAcross($inputs, [double]$required, [double]$fallbackBasis, [bool]$NonSaleOnly) {
-  $stores = Get-CellField $inputs 'stores'
-  if ($null -eq $stores) { return $null }
-  $best = $null
-  foreach ($p in $stores.PSObject.Properties) {
-    $cell = $p.Value
-    if ($NonSaleOnly -and ((Get-CellField $cell 'sale') -eq $true)) { continue }
-    $r = Get-CellCost $cell $required $fallbackBasis
-    if ($null -eq $r) { continue }
-    if ($null -eq $best -or $r.cost -lt $best.cost) {
-      $best = [pscustomobject]@{ cost=$r.cost; k=$r.k; up=$r.up; variable=$r.variable; packageBasis=$r.packageBasis; own_basis=$r.own_basis; store=[string]$p.Name }
-    }
-  }
-  return $best
+  if ($NonSaleOnly) { return (Get-PkgCheapestAcross $inputs $required $fallbackBasis -NonSaleOnly) }
+  return (Get-PkgCheapestAcross $inputs $required $fallbackBasis)
 }
 
 # ---------------------------------------------------------------------------------------------------
