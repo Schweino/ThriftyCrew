@@ -48,6 +48,9 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 # The Freshop price rule lives in one place and is shared with pull-regular-familyfare.ps1. Its switch is
 # deliberately NOT named -SelfTest: a dot-sourced param() block runs in THIS scope and would reset ours.
 . (Join-Path $root 'ff-price-lib.ps1')
+# The retry ladder and the three-state verdict are shared with every other search lane (same reason, same
+# namespaced-switch discipline).
+. (Join-Path $root 'search-verdict-lib.ps1')
 
 # ---------------------------------------------------------------------------------------- pure helpers
 function Get-ProbeSize($Item) {
@@ -130,7 +133,7 @@ function Get-KrogerToken($Creds) {
   $script:KToken = [string]$r.access_token; $script:KTokenAt = [datetime]::Now
   return $script:KToken
 }
-function Probe-Bakers([string]$t) {
+function Probe-BakersOnce([string]$t) {
   $creds = Get-KrogerCreds
   if (-not $creds) { return @{ store = "Baker's"; state = 'NO-CREDENTIALS'; note = 'grocery\.krogerkey missing and KROGER_CLIENT_ID/SECRET unset'; hits = @() } }
   try {
@@ -155,7 +158,7 @@ function Probe-Bakers([string]$t) {
 }
 
 # --------------------------------------------------------------------------------------- Family Fare
-function Probe-FamilyFare([string]$t) {
+function Probe-FamilyFareOnce([string]$t) {
   $ak = 'family_fare'; $sid = '6401'; $b = 'https://api.freshop.ncrcloud.com/1'
   $UA = @{ 'User-Agent' = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
   try {
@@ -182,13 +185,80 @@ function Probe-FamilyFare([string]$t) {
   } catch { return @{ store = 'Family Fare'; state = 'ERROR'; note = $_.Exception.Message; hits = @() } }
 }
 
+# ------------------------------------------------------------------------------------- the ladder driver
+# R2. One query is not a search. A term that lands 0-1 hits walks Get-RetryLadder until a rung satisfies,
+# and EVERY rung is recorded in `attempts` - a false absence has to be auditable, so the reader can see that
+# 'chipotle powder' returned nothing and 'chipotle' returned the jar. The ladder widens the CANDIDATE POOL
+# only; it never widens the ruling. Adjudication still belongs to the pricer agent.
+function Invoke-ProbeLadder([string]$StoreKey, [string]$Term) {
+  $attempts = New-Object System.Collections.ArrayList
+  $last = $null
+  $lastRung = $Term
+  foreach ($rung in (Get-RetryLadder $Term)) {
+    $lastRung = $rung
+    $r = if ($StoreKey -eq 'bakers') { Probe-BakersOnce $rung } else { Probe-FamilyFareOnce $rung }
+    $last = $r
+    [void]$attempts.Add([pscustomobject]@{ term = $rung; state = [string]$r.state; hits = @($r.hits).Count })
+    # a store that cannot answer is UNUSABLE for this term - never keep laddering into a false absence
+    if ([string]$r.state -ne 'OK') {
+      # Freshop answers a rate-limited caller with a bare 400 on every query, which is indistinguishable
+      # from a bad request unless you say so. It is search-budget bound (its own puller carries a 45s
+      # cooldown after 15 empties), so a blanket 400 across unrelated terms means THROTTLED, not broken -
+      # and throttled is `blocked`, never `not-carried`.
+      $why = [string]$r.note
+      if ($why -match '\(400\)') { $why = $why + '  [likely Freshop throttling - it is search-budget bound; retry later. This is BLOCKED, not absence.]' }
+      return @{ store = $r.store; state = $r.state; note = $r.note
+                verdict = (New-SearchVerdict -State UNUSABLE -TermUsed $rung -Attempts $attempts.ToArray() -Reason $why)
+                hits = @() }
+    }
+    if (Test-LadderSatisfied @($r.hits)) {
+      return @{ store = $r.store; state = 'OK'; note = $r.note
+                verdict = (New-SearchVerdict -State MATCHES -TermUsed $rung -Attempts $attempts.ToArray() -Hits @($r.hits))
+                hits = @($r.hits) }
+    }
+  }
+  # every rung exhausted. A single surviving hit is reported as MATCHES-with-one (the caller sees hits=1 in
+  # attempts and can weigh it); zero across the whole ladder is the only honest EMPTY.
+  $finalHits = @($last.hits)
+  $state = if ($finalHits.Count -gt 0) { 'MATCHES' } else { 'EMPTY' }
+  $reason = if ($finalHits.Count -gt 0) { 'only one candidate survived the full ladder - weigh it, do not assume' }
+            else { ('no candidates on any of ' + @($attempts).Count + ' ladder rung(s)') }
+  return @{ store = $last.store; state = 'OK'; note = $last.note
+            verdict = (New-SearchVerdict -State $state -TermUsed $lastRung -Attempts $attempts.ToArray() -Hits $finalHits -Reason $reason)
+            hits = $finalHits }
+}
+
 # ------------------------------------------------------------------------------------------- drive it
 $stores = switch ($Store) { 'bakers' { @('bakers') } 'family-fare' { @('family-fare') } default { @('bakers', 'family-fare') } }
 $results = New-Object System.Collections.ArrayList
+# R5. The commodity's unit is load-bearing for adjudication and used to be invisible. `fennel (each)` means
+# the BULB, not an 11-strong shelf of fennel-SEED shakers; `coconut (each)` means the whole fruit, not
+# coconut milk. Two near-misses in the 2026-08-15 trial turned on the operator happening to know the unit
+# from somewhere else. Look it up once per term and print it beside the candidates.
+$unitIx = @{}
+try {
+  $cmF = Join-Path $root 'commodities.json'
+  if (Test-Path $cmF) {
+    $cmDoc = ([IO.File]::ReadAllText($cmF, [Text.Encoding]::UTF8) -replace '^﻿', '') | ConvertFrom-Json
+    foreach ($c in $cmDoc) { $unitIx[(($c.id -replace '[^A-Za-z0-9]+', '-').Trim('-').ToLowerInvariant())] = [string]$c.unit }
+  }
+} catch { }
+function Get-TermUnit([string]$t) {
+  # try the term as typed, then the spacing variants - 'corn meal' is the commodity 'cornmeal', and a
+  # missing unit is exactly the gap that let fennel-SEED shakers stand in for the fennel bulb.
+  $cands = @($t) + @(Get-SpacingVariants $t (@($t -split '\s+').Count -eq 1))
+  foreach ($c in $cands) {
+    $slug = (($c -replace '[^A-Za-z0-9]+', '-').Trim('-').ToLowerInvariant())
+    if ($unitIx.ContainsKey($slug)) { return $unitIx[$slug] }
+  }
+  return ''
+}
+
 foreach ($t in $Term) {
   $sw = [Diagnostics.Stopwatch]::StartNew()
+  $termUnit = Get-TermUnit $t
   $per = @()
-  foreach ($s in $stores) { $per += $(if ($s -eq 'bakers') { Probe-Bakers $t } else { Probe-FamilyFare $t }) }
+  foreach ($s in $stores) { $per += (Invoke-ProbeLadder $s $t) }
   $sw.Stop()
   # THIS SCRIPT DOES NOT RULE ON CARRIAGE, AND THE FIRST VERSION DID (2026-08-15).
   # It declared CARRIED whenever a hit scored >=100. Probing "saffron" at Baker's then returned
@@ -205,7 +275,10 @@ foreach ($t in $Term) {
     server_result = $(if ($withRows.Count -gt 0) { 'CANDIDATES-FOUND' } else { 'NO-CANDIDATES' })
     adjudication = 'REQUIRED - a candidate is not a carriage claim; the pricer agent decides which row, if any, is the ingredient'
     responded = @($withRows | ForEach-Object { $_.store })
+    unit = $termUnit
     stores = @($per | ForEach-Object { [pscustomobject]@{ store = $_.store; state = $_.state; note = $_.note
+                                                          verdict = $_.verdict.state; term_used = $_.verdict.term_used
+                                                          attempts = @($_.verdict.attempts); reason = $_.verdict.reason
                                                           hits = @($_.hits | Select-Object -First 8) } })
     ms = $sw.ElapsedMilliseconds })
 }
@@ -217,9 +290,17 @@ if ($Json) {
 
 foreach ($r in $results) {
   Write-Output ''
-  Write-Output ("{0}  '{1}'  [{2}ms]" -f $r.server_result, $r.term, $r.ms)
+  $unitNote = if ($r.unit) {
+    $extra = if ($r.unit -eq 'each') { ' - the WHOLE item, not a seed/ground/flake form' } else { '' }
+    ("  [unit: {0}{1}]" -f $r.unit, $extra)
+  } else { '  [unit: unknown - not a commodities.json id]' }
+  Write-Output ("{0}  '{1}'{2}  [{3}ms]" -f $r.server_result, $r.term, $unitNote, $r.ms)
   foreach ($s in $r.stores) {
     Write-Output ("   {0,-13} {1}   {2}" -f $s.store, $s.state, $s.note)
+    # the ladder, visible: a false absence must be auditable, so show which rungs were tried and what each returned
+    $lad = @($s.attempts | ForEach-Object { "'" + $_.term + "'=" + $_.hits })
+    Write-Output ("        verdict {0}  via '{1}'   ladder: {2}" -f $s.verdict, $s.term_used, ($lad -join ' -> '))
+    if ($s.reason) { Write-Output ("        reason: {0}" -f $s.reason) }
     if (-not $s.hits -or @($s.hits).Count -eq 0) { Write-Output '        (no rows returned)'; continue }
     foreach ($h in $s.hits | Select-Object -First 5) {
       $p = $(if ($null -eq $h.price) { 'no-honest-price' } else { '$' + $h.price })

@@ -195,6 +195,17 @@ function Get-CaptureRows {
   return $script:captureRows
 }
 
+# R5 helper: a commodity's unit even when it has no board cell. Reads the catalog and, for recipe-board-only
+# ids that live nowhere else (pork-loin), the board row itself.
+function Get-DefUnit($Res) {
+  if (-not $Res) { return $null }
+  $id = [string]$Res.id
+  $c = $commods | Where-Object { [string]$_.id -eq $id } | Select-Object -First 1
+  if ($c -and $c.unit) { return [string]$c.unit }
+  if ($boardIx.ContainsKey($id) -and $boardIx[$id].unit) { return [string]$boardIx[$id].unit }
+  return $null
+}
+
 $results = New-Object System.Collections.ArrayList
 foreach ($term in $Name) {
   $sw = [Diagnostics.Stopwatch]::StartNew()
@@ -235,14 +246,17 @@ foreach ($term in $Name) {
     [void]$results.Add([pscustomobject]@{
       term = $term; tier = 'CAPTURE'; commodity = $(if ($res) { $res.id } else { $null })
       resolved_by = $(if ($res) { $res.how + ' (commodity exists but has no priced board cell)' } else { 'no commodity claims this term' })
-      unit = $null; cheapest_store = $null; cheapest = $null
+      # the unit matters MOST here: this tier is where fennel-SEED shakers show up under a fennel (each)
+      # commodity, and where coconut milk shows up under coconut (each). It is not a board unit, so read it
+      # off the commodity definition.
+      unit = (Get-DefUnit $res); cheapest_store = $null; cheapest = $null
       coverage = ("{0} candidate product(s) across {1} store(s) in today's captures" -f $cands.Count, (@($cands | Select-Object -ExpandProperty store -Unique)).Count)
       stores = @($cands); ms = $sw.ElapsedMilliseconds })
   } else {
     [void]$results.Add([pscustomobject]@{
       term = $term; tier = 'ABSENT'; commodity = $(if ($res) { $res.id } else { $null })
       resolved_by = $(if ($res) { $res.how } else { 'no commodity claims this term' })
-      unit = $null; cheapest_store = $null; cheapest = $null
+      unit = (Get-DefUnit $res); cheapest_store = $null; cheapest = $null
       coverage = 'no board cell and no matching product in any capture'
       stores = @(); ms = $sw.ElapsedMilliseconds })
   }
@@ -257,7 +271,12 @@ if ($Json) {
 Write-Output ("price-ingredient: {0} (week {1}) + recipe-board (+{2} ids), {3} commodities indexed in {4}ms" -f (Split-Path $CompareFile -Leaf), [string]$cmpDoc.week_of, $rbCount, $boardIx.Count, $swLoad.ElapsedMilliseconds)
 foreach ($r in $results) {
   Write-Output ''
-  Write-Output ("{0}  '{1}'  [{2}ms]" -f $r.tier, $r.term, $r.ms)
+  # R5: print the unit. `fennel (each)` means the BULB, not a shelf of fennel-SEED shakers; `coconut (each)`
+  # means the whole fruit, not coconut milk. Both were near-misses in the 2026-08-15 trial purely because
+  # the unit was invisible here.
+  $u = [string]$r.unit
+  $uNote = if ($u) { $x = if ($u -eq 'each') { ' - the WHOLE item, not a seed/ground/flake form' } else { '' }; "  [unit: $u$x]" } else { '' }
+  Write-Output ("{0}  '{1}'{2}  [{3}ms]" -f $r.tier, $r.term, $uNote, $r.ms)
   if ($r.tier -eq 'MAPPED') {
     Write-Output ("   commodity {0}  ({1})" -f $r.commodity, $r.resolved_by)
     Write-Output ("   cheapest  {0} `${1}/{2}   -   {3}" -f $r.cheapest_store, $r.cheapest, $r.unit, $r.coverage)
