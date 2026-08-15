@@ -1,0 +1,92 @@
+{
+  "week_of": "2026-08-15",
+  "note": "Targeted board-collision adjudication (hunt-2026-08-15-shakedown mapping run), not a full-board weekly pass. Every entry below was ALSO fixed at match time (commodities.json excludes + GLOBAL_EXCLUDE naan + Meat snack_carrier) and recorded in known-wrong.json; these verdicts are the durable-suppression witness layer on top.",
+  "verdicts": [
+    {
+      "id": "bacon",
+      "entries": [
+        {
+          "store": "Aldi",
+          "item": "Clancy's Loaded Bacon & Cheddar Wavy Potato Chips",
+          "keep": false,
+          "annotation": null,
+          "reason": "Potato CHIPS, not bacon - 'Bacon' is a flavour descriptor. Held the cheapest bacon cell at $2.6779/lb, 29% under real cheapest bacon."
+        }
+      ]
+    },
+    {
+      "id": "garlic",
+      "entries": [
+        {
+          "store": "Walmart",
+          "item": "Marketside Tandoori Style Garlic Naan Bites, 7.05 oz, 15 Count",
+          "keep": false,
+          "annotation": null,
+          "reason": "NAAN bread bites, not fresh garlic bulbs - 'Garlic' is a flavour descriptor. Held the cheapest garlic cell at $0.268/each."
+        }
+      ]
+    },
+    {
+      "id": "parmesan",
+      "entries": [
+        {
+          "store": "Aldi",
+          "item": "Kirkwood Parmesan Chicken Tenders",
+          "keep": false,
+          "annotation": null,
+          "reason": "Breaded CHICKEN TENDERS, not parmesan cheese - 'Parmesan' is a flavour descriptor. Held the cheapest parmesan cell at $0.2956/oz."
+        }
+      ]
+    },
+    {
+      "id": "butter",
+      "entries": [
+        {
+          "store": "Family Fare",
+          "item": "Lettuce Red Butter",
+          "keep": false,
+          "annotation": null,
+          "reason": "Red butter LETTUCE (produce; store-mangled name for 'Red Butter Lettuce'), not butter."
+        },
+        {
+          "store": "Fareway",
+          "item": "Fareway Could It Be Butter",
+          "keep": false,
+          "annotation": null,
+          "reason": "Margarine-style vegetable-oil spread - the name itself is the disclaimer. Held the cheapest butter cell at $2.0053/lb, 21% under real cheapest butter."
+        }
+      ]
+    },
+    {
+      "id": "heavy-cream",
+      "entries": [
+        {
+          "store": "Aldi",
+          "item": "Friendly Farms Dairy Free Heavy Whipping Cream 169 FL OZ",
+          "keep": false,
+          "annotation": null,
+          "reason": "DAIRY FREE whipping-cream alternative, not heavy cream. The '169 FL OZ' in the name is a capture defect; the priced basis was 16.9 floz."
+        }
+      ]
+    },
+    {
+      "id": "spinach",
+      "entries": [
+        {
+          "store": "Walmart",
+          "item": "Popeye Leaf Spinach, 13.5 oz., Can",
+          "keep": false,
+          "annotation": null,
+          "reason": "CANNED spinach in the fresh-spinach commodity; bare 'Can' evaded the global canned token. Held the cheapest spinach cell at $0.1289/oz."
+        },
+        {
+          "store": "Fareway",
+          "item": "Del Monte Chopped Spinach",
+          "keep": false,
+          "annotation": null,
+          "reason": "CANNED spinach (Del Monte sells no fresh spinach; the same product's Walmart listing is a 13.5 oz can) in the fresh-spinach commodity."
+        }
+      ]
+    }
+  ]
+}

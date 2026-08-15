@@ -1273,7 +1273,14 @@ $GLOBAL_EXCLUDE = @(
   # Little Journey is Aldi's baby line and also sells wipes, diapers and formula, so baby-wipes, diapers and
   # baby-formula each relax_global this token - without that they lose their own products, the same eviction
   # the serenity\s*kids note warns about.
-'dog\s+food','dog\s+treats?','dog\s+biscuits?','cat\s+food','cat\s+litter','beech[\s-]?nut','gerber','happy\s*baby','happy\s*tot','baby\s+food','serenity\s*kids','cerebelly','little\s+journey','once\s+upon\s+a\s+farm','plum\s+organics'
+'dog\s+food','dog\s+treats?','dog\s+biscuits?','cat\s+food','cat\s+litter','beech[\s-]?nut','gerber','happy\s*baby','happy\s*tot','baby\s+food','serenity\s*kids','cerebelly','little\s+journey','once\s+upon\s+a\s+farm','plum\s+organics',
+  # 'naan' added 2026-08-15 (board-collision fix, hunt-2026-08-15-shakedown mapping): "Marketside Tandoori
+  # Style Garlic Naan Bites" held the WALMART CHEAPEST garlic cell at $0.268/each - naan bread priced as
+  # fresh garlic bulbs. No commodity owns naan (zero includes match it; measured over all 31,097 estate
+  # names: 13 naan products, 11 already <unmatched>), so no relax_global is needed anywhere. The other
+  # mapped one, "Stonefire Original Mini Naan Bread ... for Dipping & Pizza" -> frozen-pizza, is ALSO a
+  # wrong match (shelf-stable flatbread, not frozen pizza) and dropping it is intended.
+  '\bnaan\b'
 )
 # a wrapper rule-file can replace the global list (the recipe set relaxes sauce/canned/frozen/juice)
 if ($GEX_OVERRIDE) { $GLOBAL_EXCLUDE = $GEX_OVERRIDE }

@@ -1897,6 +1897,141 @@
                         "ruled_on":  "2026-08-14",
                         "ruled_by":  "claude",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "bacon|Aldi|clancys-loaded-bacon-cheddar-wavy-potato-chips",
+                        "commodity":  "bacon",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Clancy\u0027s Loaded Bacon \u0026 Cheddar Wavy Potato Chips"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Potato chips, not bacon. Held the Aldi CHEAPEST bacon cell at 2.6779/lb on comparison-2026-08-15, 29% under real cheapest bacon (Sam\u0027s 3.784/lb). Matched on the flavor word \u0027Bacon\u0027; Meat category lacked the snack_carrier excludes.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-15",
+                        "ruled_by":  "board-collision-fix-2026-08-15",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "garlic|Walmart|marketside-tandoori-style-garlic-naan-bites-7-05",
+                        "commodity":  "garlic",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Marketside Tandoori Style Garlic Naan Bites, 7.05 oz, 15 Count"
+                                  ],
+                        "product_id":  "7572466863",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Naan bread bites, not garlic bulbs. Held the Walmart CHEAPEST garlic cell at 0.268/each on comparison-2026-08-15. Matched on the flavor word \u0027Garlic\u0027; no naan token existed anywhere.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-15",
+                        "ruled_by":  "board-collision-fix-2026-08-15",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "parmesan|Aldi|kirkwood-parmesan-chicken-tenders",
+                        "commodity":  "parmesan",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Kirkwood Parmesan Chicken Tenders"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Breaded chicken tenders, not parmesan cheese. Held the Aldi CHEAPEST parmesan cell at 0.2956/oz on comparison-2026-08-15, under every real grated parmesan. Matched on the flavor word \u0027Parmesan\u0027.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-15",
+                        "ruled_by":  "board-collision-fix-2026-08-15",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "butter|FamilyFare|lettuce-red-butter",
+                        "commodity":  "butter",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Lettuce Red Butter"
+                                  ],
+                        "product_id":  "2310597",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Red butter LETTUCE (produce), not butter. Sat in the butter row at 2.49 on comparison-2026-08-15; the name is a store-mangled \u0027Red Butter Lettuce\u0027.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-15",
+                        "ruled_by":  "board-collision-fix-2026-08-15",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "butter|Fareway|fareway-could-it-be-butter",
+                        "commodity":  "butter",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Fareway Could It Be Butter"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Margarine-style vegetable-oil spread (the name is the disclaimer), not butter. Held the CHEAPEST butter cell at 2.0053/lb on comparison-2026-08-15, 21% under real cheapest butter (Sam\u0027s 2.555/lb).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-15",
+                        "ruled_by":  "board-collision-fix-2026-08-15",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "heavy-cream|Aldi|friendly-farms-dairy-free-heavy-whipping-cream-1",
+                        "commodity":  "heavy-cream",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Friendly Farms Dairy Free Heavy Whipping Cream 169 FL OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Dairy-free (coconut/oat) whipping-cream alternative, not heavy cream. Held the Aldi nomem heavy-cream cell at 0.1331/floz on comparison-2026-08-15. The 169 FL OZ in the name is a capture defect (real size 16.9 floz, which the basis used).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-15",
+                        "ruled_by":  "board-collision-fix-2026-08-15",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "spinach|Walmart|popeye-leaf-spinach-13-5-oz-can",
+                        "commodity":  "spinach",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Popeye Leaf Spinach, 13.5 oz., Can"
+                                  ],
+                        "product_id":  "10312200",
+                        "verdict":  "wrong-product",
+                        "evidence":  "CANNED spinach in the fresh-spinach commodity. Held the Walmart CHEAPEST spinach cell at 0.1289/oz on comparison-2026-08-15; bare \u0027Can\u0027 evaded the global canned token.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-15",
+                        "ruled_by":  "board-collision-fix-2026-08-15",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "spinach|Fareway|del-monte-chopped-spinach",
+                        "commodity":  "spinach",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Del Monte Chopped Spinach"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "CANNED spinach (Del Monte sells no fresh spinach; the same product\u0027s Walmart listing says 13.5 oz Can) in the fresh-spinach commodity at 0.1467/oz on comparison-2026-08-15.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-15",
+                        "ruled_by":  "board-collision-fix-2026-08-15",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "parmesan|Aldi|earthly-grains-parmesan-couscous-5-9-oz",
+                        "commodity":  "parmesan",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Earthly Grains Parmesan Couscous 5.9 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Couscous side-dish mix, not parmesan cheese. Surfaced as the Aldi CHEAPEST parmesan cell at 0.3034/oz the moment the Kirkwood chicken-tenders hijack above it was excluded - a layered collision.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-15",
+                        "ruled_by":  "board-collision-fix-2026-08-15",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

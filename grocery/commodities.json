@@ -1,4 +1,4 @@
-﻿[
+[
     {
         "id":  "chicken-breast",
         "label":  "Boneless Skinless Chicken Breast",
@@ -135,7 +135,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -256,7 +265,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -388,7 +406,15 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ],
         "relax_global":  [
                              "\\bmeal\\b"
@@ -507,7 +533,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -636,7 +671,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -755,7 +799,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -1108,7 +1161,9 @@
                         "\\bsyrup\\b",
                         "sunflower",
                         "sunbutter",
-                        "\\bsauced\\b"
+                        "\\bsauced\\b",
+                        "\\blettuce\\b",
+                        "could\\s+it\\s+be"
                     ]
     },
     {
@@ -4191,7 +4246,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -4320,7 +4384,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -4433,7 +4506,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -4559,7 +4641,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -4693,7 +4784,16 @@
                         "tampons?",
                         "lip\\s+balm",
                         "salmon,\\s*pink",
-                        "canned\\s+salmon"
+                        "canned\\s+salmon",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -4821,7 +4921,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -4954,7 +5063,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -5048,7 +5166,16 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -7363,7 +7490,10 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bcans?\\b",
+                        "\\bpopeye\\b",
+                        "\\bdel\\s*monte\\b"
                     ]
     },
     {
@@ -16474,7 +16604,15 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -16594,7 +16732,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -16713,7 +16860,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -16835,7 +16991,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -16948,7 +17113,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -17069,7 +17243,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -17192,7 +17375,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -17311,7 +17503,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ],
         "relax_global":  [
                              "\\bbeer\\b"
@@ -17436,7 +17637,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -17558,7 +17768,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -17684,7 +17903,16 @@
                         "tampons?",
                         "lip\\s+balm",
                         "lunch\\s*meat",
-                        "chicken\\s+breast"
+                        "chicken\\s+breast",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ],
         "relax_global":  [
                              "seasoned"
@@ -17808,7 +18036,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -17933,7 +18170,15 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -18060,7 +18305,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -18187,7 +18441,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -18307,7 +18570,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -18431,7 +18703,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -18547,7 +18828,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -18642,7 +18932,8 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "dairy[\\s-]*free"
                     ]
     },
     {
@@ -19216,7 +19507,11 @@
                         "mashed\\s+potatoes",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\btenders?\\b",
+                        "\\bchicken\\b",
+                        "\\bcouscous\\b",
+                        "\\bcrackers?\\b"
                     ]
     },
     {
@@ -42912,7 +43207,15 @@
                         "epsom",
                         "tampons?",
                         "lip\\s+balm",
-                        "smart\\s+ones"
+                        "smart\\s+ones",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -43359,7 +43662,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ],
         "relax_global":  [
                              "\\bwater\\b"
@@ -43870,7 +44182,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -44883,7 +45204,16 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -45981,7 +46311,15 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -46117,7 +46455,15 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -55132,7 +55478,16 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ],
         "band_min":  0.04,
         "band_max":  0.65
@@ -55534,7 +55889,16 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ],
         "band_min":  0.14,
         "band_max":  22.44
@@ -55650,7 +56014,16 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ],
         "band_min":  0.05,
         "band_max":  14.97
@@ -58310,7 +58683,16 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ],
         "band_min":  0.15,
         "band_max":  1.32
@@ -60182,7 +60564,16 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
@@ -60659,7 +61050,16 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bchips?\\b",
+                        "\\bcrisps?\\b",
+                        "\\bcrackers?\\b",
+                        "\\bpretzels?\\b",
+                        "\\bjerky\\b",
+                        "\\bpuffs?\\b",
+                        "fruit\\s+snacks?",
+                        "trail\\s+mix",
+                        "rice\\s+cakes?"
                     ]
     },
     {
