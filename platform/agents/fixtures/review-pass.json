@@ -1,5 +1,0 @@
-{
-  "case": "clean-review",
-  "input": { "releaseStatus": "published", "hardGuards": "pass", "evidenceComplete": true },
-  "expected": { "severity": "none", "needsOperator": false }
-}

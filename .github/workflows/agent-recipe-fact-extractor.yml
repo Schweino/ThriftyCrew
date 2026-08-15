@@ -1,8 +1,0 @@
-name: Agent - recipe fact extractor
-on: { workflow_dispatch: {} }
-permissions: { contents: read, id-token: write, actions: write }
-jobs:
-  call:
-    uses: ./.github/workflows/platform-agent-runner.yml
-    with: { agent_id: recipe-fact-extractor }
-    secrets: inherit

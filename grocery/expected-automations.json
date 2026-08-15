@@ -1,41 +1,80 @@
 {
-  "readme": "Registry of automations + critical outputs the health-heartbeat.ps1 watches for SILENT DEATH - an automation that stopped being scheduled (deleted/disabled), or an output that quietly went stale, WITHOUT a loud failure. Distinct from local-watchdog (browser-store staleness) and the GitHub Actions failure email (loud cloud failures). EVERY 'SMP *' Windows task belongs here - health-heartbeat's REGISTRY DRIFT check pages if one is missing. max_age_hours ~30 tolerates a late run + a weekend gap on a daily thing. Optional 'proves' (path or glob, repo-relative) names the output that shows the task's WORK actually landed: a nonzero exit whose proof output is fresh is reported as a warning, not paged as a death (2026-07-28 - the Baker's task was being terminated by a battery condition while its data refreshed fine, which paged Brad for a non-outage). Since 2026-08-06 the proof must ALSO be no older than the run it claims to prove, because max_age_hours is wider than a daily task's own period and yesterday's output was excusing a run that never happened at all.",
-  "windows_tasks": [
-    { "name": "SMP Grocery Daily Pipeline (local)", "max_age_hours": 30, "why": "daily 8:30 board pull -> compute -> publish -> feed" },
-    { "name": "SMP Bakers Daily Scan",              "max_age_hours": 30, "why": "daily 6:00 Kroger reprice of Baker's", "allow_pending": true, "proves": "grocery/out/regular/bakers-regular-*.json" },
-    { "name": "SMP Grocery Failure Watchdog",       "max_age_hours": 30, "why": "watches the pipeline for loud failures" },
-    { "name": "SMP Wake For Grocery Agents",        "max_age_hours": 30, "why": "wakes the PC for the 6am browser agents" },
-    { "name": "SMP Daily Facebook Reel",            "max_age_hours": 30, "why": "daily 10:00 reel build (headless Chrome + edge-tts + ffmpeg)", "proves": "reels/out/*.mp4" },
-    { "name": "SMP Family Fare Term Sweep",         "max_age_hours": 24, "why": "every-3h Freshop term sweep; one run a day can only reach ~60-130 of 526 terms, so if this dies Family Fare freezes within days", "proves": "grocery/out/regular/family-fare-regular-*.json" },
-    { "name": "SMP Friday Email (draft)",           "max_age_hours": 192, "why": "weekly Friday 7:15 member email draft; 192h = 8 days, one missed Friday", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Daily Engine",        "max_age_hours": 30, "why": "local V3 direct capture, immutable release, Ghost reconciliation, parity and evidence", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Promotion Boundary",  "max_age_hours": 1, "why": "15-minute promotion prefetch, activation, expiry, post-start verification, and release rollover", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Efficiency Budget",   "max_age_hours": 30, "why": "daily D1 query/write amplification budget with one durable incident", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Family Fare Paced",  "max_age_hours": 6, "why": "local three-hour Freshop pacing into the V3 capture ledger", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Accuracy Weekly",     "max_age_hours": 192, "why": "weekly deterministic blind accuracy draw", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Accuracy Agent",      "max_age_hours": 192, "why": "weekly local registered accuracy verdict agent", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Accuracy Revalidation Daily", "max_age_hours": 30, "why": "daily deterministic crown/challenger revalidation draw", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Accuracy Revalidation Agent", "max_age_hours": 30, "why": "daily independent crown/challenger verdict agent", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Triage Daily",        "max_age_hours": 30, "why": "daily deterministic triage seeding and reconciliation", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Ghost Reconcile",     "max_age_hours": 30, "why": "daily Ghost intent-versus-truth reconciliation", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Source Sentinel",     "max_age_hours": 30, "why": "daily local registered source-contract investigator", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Post Publish Review", "max_age_hours": 30, "why": "daily local registered post-publish reviewer", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Triage Agents",       "max_age_hours": 30, "why": "bounded daily local reviewer-to-developer triage drain", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Recipe Pack",         "max_age_hours": 192, "why": "weekly bounded local immutable recipe-content agent chain", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Restore Drill",       "max_age_hours": 2232, "why": "quarterly local trigger of the Cloudflare scratch restore workflow", "allow_pending": true }
-  ],
-  "startup_entries": [
-    { "name": "ThriftyCrew V3 Capture Controller", "why": "persistent per-user browser-capture lane coordinator and direct R2 queue drainer" },
-    { "name": "ThriftyCrew V3 Ingredient Pipeline", "why": "persistent event-driven discovery, seven-store pricing, QA, publication, and recipe-resume coordinator" }
-  ],
-  "output_files": [
-    { "path": "grocery/out/smp-feed.json",             "max_age_hours": 30, "why": "public price feed every card fetches" },
-    { "path": "public/smp-feed.json",                  "max_age_hours": 30, "why": "the SERVED feed (Cloudflare)" },
-    { "path": "public/free-dinners.json",              "max_age_hours": 30, "why": "this week's free-dinner rotation" },
-    { "path": "meal-prep/pipeline/v2-perserving.json", "max_age_hours": 30, "why": "recipe per-serving manifest (top5/rotation read it)" },
-    { "path": "meal-prep/ingredient-map.json",         "max_age_hours": 30, "why": "derived item->bid map (tools + top5 badges read it; regenerated daily)" }
-  ],
-  "output_globs": [
-    { "glob": "grocery/out/comparison-*.json", "max_age_hours": 30, "why": "the daily cross-store board" }
-  ]
+    "readme": "Registry of automations + critical outputs the health-heartbeat.ps1 watches for SILENT DEATH - an automation that stopped being scheduled (deleted/disabled), or an output that quietly went stale, WITHOUT a loud failure. Distinct from local-watchdog (browser-store staleness) and the GitHub Actions failure email (loud cloud failures). EVERY 'SMP *' Windows task belongs here - health-heartbeat's REGISTRY DRIFT check pages if one is missing. max_age_hours ~30 tolerates a late run + a weekend gap on a daily thing. Optional 'proves' (path or glob, repo-relative) names the output that shows the task's WORK actually landed: a nonzero exit whose proof output is fresh is reported as a warning, not paged as a death (2026-07-28 - the Baker's task was being terminated by a battery condition while its data refreshed fine, which paged Brad for a non-outage). Since 2026-08-06 the proof must ALSO be no older than the run it claims to prove, because max_age_hours is wider than a daily task's own period and yesterday's output was excusing a run that never happened at all.",
+    "windows_tasks": [
+        {
+            "name": "SMP Grocery Daily Pipeline (local)",
+            "max_age_hours": 30,
+            "why": "daily 8:30 board pull -> compute -> publish -> feed"
+        },
+        {
+            "name": "SMP Bakers Daily Scan",
+            "max_age_hours": 30,
+            "why": "daily 6:00 Kroger reprice of Baker's",
+            "allow_pending": true,
+            "proves": "grocery/out/regular/bakers-regular-*.json"
+        },
+        {
+            "name": "SMP Grocery Failure Watchdog",
+            "max_age_hours": 30,
+            "why": "watches the pipeline for loud failures"
+        },
+        {
+            "name": "SMP Wake For Grocery Agents",
+            "max_age_hours": 30,
+            "why": "wakes the PC for the 6am browser agents"
+        },
+        {
+            "name": "SMP Daily Facebook Reel",
+            "max_age_hours": 30,
+            "why": "daily 10:00 reel build (headless Chrome + edge-tts + ffmpeg)",
+            "proves": "reels/out/*.mp4"
+        },
+        {
+            "name": "SMP Family Fare Term Sweep",
+            "max_age_hours": 24,
+            "why": "every-3h Freshop term sweep; one run a day can only reach ~60-130 of 526 terms, so if this dies Family Fare freezes within days",
+            "proves": "grocery/out/regular/family-fare-regular-*.json"
+        },
+        {
+            "name": "SMP Friday Email (draft)",
+            "max_age_hours": 192,
+            "why": "weekly Friday 7:15 member email draft; 192h = 8 days, one missed Friday",
+            "allow_pending": true
+        }
+    ],
+    "startup_entries": [],
+    "output_files": [
+        {
+            "path": "grocery/out/smp-feed.json",
+            "max_age_hours": 30,
+            "why": "public price feed every card fetches"
+        },
+        {
+            "path": "public/smp-feed.json",
+            "max_age_hours": 30,
+            "why": "the SERVED feed (Cloudflare)"
+        },
+        {
+            "path": "public/free-dinners.json",
+            "max_age_hours": 30,
+            "why": "this week's free-dinner rotation"
+        },
+        {
+            "path": "meal-prep/pipeline/v2-perserving.json",
+            "max_age_hours": 30,
+            "why": "recipe per-serving manifest (top5/rotation read it)"
+        },
+        {
+            "path": "meal-prep/ingredient-map.json",
+            "max_age_hours": 30,
+            "why": "derived item->bid map (tools + top5 badges read it; regenerated daily)"
+        }
+    ],
+    "output_globs": [
+        {
+            "glob": "grocery/out/comparison-*.json",
+            "max_age_hours": 30,
+            "why": "the daily cross-store board"
+        }
+    ]
 }

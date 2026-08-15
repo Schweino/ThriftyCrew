@@ -1,3 +1,0 @@
-# Development-only example. Use `wrangler secret put MUTATION_KEYS` in deployed
-# environments; never commit real agent secrets.
-MUTATION_KEYS={"local-operator":{"secret":"replace-with-a-long-random-secret","role":"operator"}}
