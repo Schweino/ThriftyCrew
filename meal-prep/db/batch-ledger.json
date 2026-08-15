@@ -84,5 +84,39 @@
                          "detail":  "FIXED-AND-CLEAN; 2 fixes shipped"
                      }
                  ]
+  },
+  {
+      "batch":  "hunt-2026-08-15-shakedown-w1",
+      "opened":  "2026-08-15T12:30:39",
+      "last_activity":  "2026-08-15T12:30:40",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "chicken-florentine",
+                    "country-captain-chicken"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-15T12:30:40",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-15T12:30:40",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-15T12:30:40",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-15T12:30:40",
+                         "detail":  "streamed per-recipe before wave close"
+                     }
+                 ]
   }
 ]

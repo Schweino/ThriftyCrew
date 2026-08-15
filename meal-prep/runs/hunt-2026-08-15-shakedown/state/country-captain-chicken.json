@@ -3,10 +3,10 @@
     "title":  "Country Captain Chicken",
     "source_url":  "https://spicysouthernkitchen.com/country-captain-chicken/",
     "protein":  "chicken",
-    "state":  "written",
-    "wave":  null,
+    "state":  "waved",
+    "wave":  1,
     "created":  "2026-08-15T11:54:24",
-    "updated":  "2026-08-15T12:23:15",
+    "updated":  "2026-08-15T12:30:39",
     "terms":  [
 
               ],
@@ -56,6 +56,18 @@
                         "at":  "2026-08-15T12:23:15",
                         "by":  "recipe-writer",
                         "detail":  "prose in intake, card built"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-15T12:30:39",
+                        "by":  "recipe-source-qa",
+                        "detail":  "pass, both anchors; 2 notes, 0 blocking"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-15T12:30:39",
+                        "by":  "wave-close",
+                        "detail":  "wave 1"
                     }
                 ]
 }

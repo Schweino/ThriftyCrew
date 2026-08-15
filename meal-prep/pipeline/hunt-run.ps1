@@ -400,7 +400,12 @@ if ($runWaveClose) {
   }
   if (-not $runNoLedger) {
     $bl = Join-Path $here 'batch-ledger.ps1'
-    & powershell -NoProfile -ExecutionPolicy Bypass -File $bl -Start -Batch $batch -Slugs $slugs | Out-Null
+    # IN-PROCESS, never `powershell -File`, because -Slugs is [string[]]: the -File path marshals the array
+    # as ONE command-line string, so a 2-recipe wave opened a ledger row listing a single slug and the
+    # batch under-recorded itself silently. Caught by the wave-1 audit on 2026-08-15. Same trap the
+    # engine README documents for build-cards/publish, and the same one that made reanchor report
+    # "1 spec" for a 2-slug wave. A ledger that does not know what is in the batch cannot verify it.
+    & $bl -Start -Batch $batch -Slugs $slugs | Out-Null
     # the four stages that genuinely completed per-recipe upstream of the wave. Stamped only now, and
     # only because the wave proves they happened for every slug in it.
     foreach ($st in @('select', 'map', 'write', 'build-specs')) {

@@ -1,0 +1,24 @@
+{
+    "wave":  1,
+    "run":  "hunt-2026-08-15-shakedown",
+    "batch":  "hunt-2026-08-15-shakedown-w1",
+    "created":  "2026-08-15T12:30:39",
+    "slugs":  [
+                  "chicken-florentine",
+                  "country-captain-chicken"
+              ],
+    "recipes":  [
+                    {
+                        "slug":  "chicken-florentine",
+                        "title":  "Chicken Florentine",
+                        "source_url":  "https://www.smalltownwoman.com/chicken-florentine/",
+                        "protein":  "chicken"
+                    },
+                    {
+                        "slug":  "country-captain-chicken",
+                        "title":  "Country Captain Chicken",
+                        "source_url":  "https://spicysouthernkitchen.com/country-captain-chicken/",
+                        "protein":  "chicken"
+                    }
+                ]
+}
