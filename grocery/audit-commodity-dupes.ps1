@@ -47,6 +47,17 @@ function Get-PairKey([string]$a, [string]$b) {
   return ($b + '|' + $a)
 }
 
+# CATEGORY VOCABULARY, same audit, second founding case (2026-08-15, hours after the first): the recipe
+# board's rows carry free-text category strings from different seeding eras, and the page renders one
+# section header per DISTINCT string - so Brad's live page showed "Dairy & Cheese", "Dairy" AND
+# "Cheese & Dairy" as three separate sections, plus "Spices & Baking" beside the weekly "Baking & Spices".
+# The rule after canonicalization: every recipe-board category must be one of categories.json's labels.
+function Find-CategoryDrift($RowCategories, $ValidLabels) {
+  $valid = @{}
+  foreach ($l in @($ValidLabels)) { $valid[[string]$l] = $true }
+  return @(@($RowCategories) | Where-Object { $_ -and -not $valid.ContainsKey([string]$_) } | Select-Object -Unique)
+}
+
 # Pure so the self-test can freeze the founding cases without touching a single live file.
 function Find-DupeSuspects($Entries, $Allow) {
   # $Entries: array of @{ id; label; source }. $Allow: array of @{ a; b } reviewed pairs.
@@ -107,7 +118,12 @@ if ($SelfTest) {
   # same id in two namespaces is the design, never a finding
   $s3 = Find-DupeSuspects @(@{ id = 'butter'; label = 'Butter'; source = 'weekly' }, @{ id = 'butter'; label = 'Butter'; source = 'recipe-rules' }) @()
   if (@($s3).Count -ne 0) { Write-Output '  X the same id in two namespaces was flagged as its own duplicate'; $bad++ }
-  if ($bad -eq 0) { Write-Output 'audit-commodity-dupes SELF-TEST PASS (both founding dupes fire; pineapple/apple and canned/fresh stay clean; allowlist is pair-exact)'; exit 0 }
+  # MUST-FIRE: the three-dairy-headers page. Categories outside the canonical label set must be flagged.
+  $valid = @('Dairy & Eggs', 'Baking & Spices', 'Meat & Poultry')
+  $drift = Find-CategoryDrift @('Dairy & Eggs', 'Cheese & Dairy', 'Dairy', 'Dairy & Cheese', 'Spices & Baking') $valid
+  if (@($drift).Count -ne 4) { Write-Output ("  X MUST-FIRE: expected 4 drifted categories (Cheese & Dairy, Dairy, Dairy & Cheese, Spices & Baking), got {0}" -f @($drift).Count); $bad++ }
+  if (@(Find-CategoryDrift @('Dairy & Eggs', 'Meat & Poultry') $valid).Count -ne 0) { Write-Output '  X clean categories were flagged as drift'; $bad++ }
+  if ($bad -eq 0) { Write-Output 'audit-commodity-dupes SELF-TEST PASS (both founding dupes fire; pineapple/apple and canned/fresh stay clean; allowlist is pair-exact; three-dairy-headers category drift fires)'; exit 0 }
   Write-Output ("audit-commodity-dupes SELF-TEST FAIL ({0} problem(s))" -f $bad); exit 1
 }
 
@@ -144,18 +160,34 @@ if (Test-Path $mapF) {
 }
 
 $sus = Find-DupeSuspects $entries $allow
+
+# category drift: recipe-board categories must be a subset of categories.json's labels. The page renders one
+# section header per DISTINCT string, so a drifted spelling is a duplicate SECTION on the live page.
+$catDoc = Read-Utf8Json (Join-Path $Root 'categories.json')
+$catArr = if ($catDoc -is [array]) { $catDoc } else { $catDoc.categories }
+$validLabels = @($catArr | ForEach-Object { [string]$_.label })
+$rowCats = @()
+if (Test-Path $rbF) { $rowCats = @((Read-Utf8Json $rbF).comparison | ForEach-Object { [string]$_.category }) }
+$drift = Find-CategoryDrift $rowCats $validLabels
+
 $report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); entries_scanned = $entries.Count
                       namespaces = @('commodities.json', 'recipe-commodities.json', 'recipe-board-everyday.json')
-                      suspects = @($sus) }
+                      suspects = @($sus); category_drift = @($drift) }
 $report | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $OutDir 'commodity-dupes.json') -Encoding UTF8
 
-if (@($sus).Count -eq 0) {
-  Write-Output ("commodity-dupes: OK - {0} ids across 3 namespaces, no unreviewed near-duplicates" -f $entries.Count)
+if (@($sus).Count -eq 0 -and @($drift).Count -eq 0) {
+  Write-Output ("commodity-dupes: OK - {0} ids across 3 namespaces, no unreviewed near-duplicates, every recipe-board category inside the canonical {1}-label set" -f $entries.Count, @($validLabels).Count)
   Write-Output 'COMMODITY-DUPES-COMPLETE'
   exit 0
 }
-Write-Output ("commodity-dupes: {0} suspect pair(s) - the same food may be priced under two ids, which lets the two prices disagree while every per-file check reads green:" -f @($sus).Count)
-foreach ($x in $sus) { Write-Output ("  {0} ({1})  vs  {2} ({3})  - {4}" -f $x.a, $x.a_source, $x.b, $x.b_source, $x.reason) }
-Write-Output '  Review each: merge real duplicates (rebid consumers, drop the loser row), or record a written reason in commodity-dupe-allowlist.json.'
+if (@($sus).Count) {
+  Write-Output ("commodity-dupes: {0} suspect pair(s) - the same food may be priced under two ids, which lets the two prices disagree while every per-file check reads green:" -f @($sus).Count)
+  foreach ($x in $sus) { Write-Output ("  {0} ({1})  vs  {2} ({3})  - {4}" -f $x.a, $x.a_source, $x.b, $x.b_source, $x.reason) }
+  Write-Output '  Review each: merge real duplicates (rebid consumers, drop the loser row), or record a written reason in commodity-dupe-allowlist.json.'
+}
+if (@($drift).Count) {
+  Write-Output ("commodity-dupes: {0} recipe-board categor(y/ies) outside categories.json's label set - each renders as its own DUPLICATE SECTION on the live page (the three-dairy-headers bug): {1}" -f @($drift).Count, ($drift -join ' | '))
+  Write-Output '  Fix the rows in out\recipe-board-everyday.json to a canonical label, then re-run recipe-overlay.ps1.'
+}
 Write-Output 'COMMODITY-DUPES-COMPLETE'
 exit 2
