@@ -35,6 +35,7 @@ const KROGER_PAGE_SIZE = 50;
 const KROGER_MAX_START = 250;
 const KROGER_ABSOLUTE_START_CEILING = 299;
 const KROGER_BRANDS_PER_PARTITION = 20;
+const HYVEE_AMBIGUOUS_ENVELOPE_RECOVERY_ROUNDS = 5;
 
 export class HeadlessSourceLimitError extends Error {
   readonly code = "HEADLESS_SOURCE_LIMIT";
@@ -556,6 +557,8 @@ async function captureHyVee(query: string, observedAt: string, fetchImpl: FetchL
   const rawCount = completePages.reduce((sum, page) => sum + page.items.length, 0);
   const organicCount = organicPages.reduce((sum, page) => sum + page.items.length, 0);
   let additiveSponsored = false;
+  let stabilizedItems: Array<{ item: JsonRecord; page: number; index: number }> | null = null;
+  let stabilizationProof: JsonRecord | null = null;
   if (rawCount === first.total) {
     // Some search views count sponsored rows inside the reported envelope; they
     // consume ordinary page slots (e.g. Almonds 224 raw / 222 organic).
@@ -568,7 +571,49 @@ async function captureHyVee(query: string, observedAt: string, fetchImpl: FetchL
     assertCompleteResultEnvelope("Hy-Vee", first.total, organicPages.map((result) => ({ offset: result.offset,
       count: result.items.length, ids: result.items.map((item: JsonRecord) => String(item.id ?? "")) })), pageSize);
   } else {
-    throw new Error(`Hy-Vee pagination examined ${rawCount} raw/${organicCount} organic of ${first.total} reported results`);
+    // Hy-Vee can hydrate a stable result view with promoted rows that both
+    // displace organic slots and append outside the reported organic total.
+    // Re-read the exact same pageViewId and accept only when the union of
+    // independently marked organic identities proves the reported total.
+    const byId = new Map<string, { item: JsonRecord; page: number; index: number; organic: boolean }>();
+    const organicIds = new Set<string>();
+    const recordPages = (pages: typeof pageResults) => {
+      for (const result of pages) for (const [index, item] of result.items.entries()) {
+        const id = String(item.id ?? "");
+        if (!id) throw new Error("Hy-Vee stabilization result omitted stable product identity");
+        const organic = item.isSponsored !== true;
+        const stableFacts = JSON.stringify([id, item.description ?? null, item.unitOfMeasure ?? null,
+          item.pricing ?? null, item.isEcommerceActive ?? null]);
+        const prior = byId.get(id);
+        if (prior) {
+          const priorFacts = JSON.stringify([id, prior.item.description ?? null, prior.item.unitOfMeasure ?? null,
+            prior.item.pricing ?? null, prior.item.isEcommerceActive ?? null]);
+          if (priorFacts !== stableFacts) throw new Error(`Hy-Vee stabilization changed immutable product facts for ${id}`);
+          if (organic && !prior.organic) byId.set(id, { item, page: result.page, index, organic });
+        } else byId.set(id, { item, page: result.page, index, organic });
+        if (organic) organicIds.add(id);
+      }
+    };
+    recordPages(pageResults);
+    let recoveryRounds = 0;
+    while (organicIds.size < first.total && recoveryRounds < HYVEE_AMBIGUOUS_ENVELOPE_RECOVERY_ROUNDS) {
+      const repeated = await mapWithConcurrency(Array.from({ length: first.pagesTotal }, (_, index) => index + 1),
+        pageConcurrency, (page) => fetchPage(page));
+      if (repeated.some((page) => page.total !== first.total || page.pagesTotal !== first.pagesTotal)) {
+        throw new Error("Hy-Vee pagination totals changed during stabilization");
+      }
+      recordPages(repeated);
+      recoveryRounds += 1;
+    }
+    if (organicIds.size !== first.total) {
+      throw new Error(`Hy-Vee pagination examined ${rawCount} raw/${organicCount} organic of ${first.total} reported results`);
+    }
+    const sponsoredOnly = [...byId.entries()].filter(([id]) => !organicIds.has(id)).map(([, value]) => value);
+    stabilizedItems = [...byId.entries()].filter(([id]) => organicIds.has(id)).map(([, value]) => value)
+      .concat(sponsoredOnly).map(({ item, page, index }) => ({ item, page, index }));
+    stabilizationProof = { strategy: "stable_page_view_organic_union_plus_sponsored_only",
+      recoveryRounds, organicReportedTotal: first.total, organicUnique: organicIds.size,
+      sponsoredOnlyUnique: sponsoredOnly.length, authoritativeUniqueTotal: stabilizedItems.length };
   }
   const sponsored = new Map<string, { item: JsonRecord; page: number; index: number }>();
   for (const result of pageResults) for (const [index, item] of result.items.entries()) if (item.isSponsored === true) {
@@ -577,10 +622,10 @@ async function captureHyVee(query: string, observedAt: string, fetchImpl: FetchL
     if (prior && JSON.stringify(prior.item) !== JSON.stringify(item)) throw new Error("Hy-Vee sponsored result changed across pages");
     sponsored.set(id, { item, page: result.page, index });
   }
-  const capturedItems = additiveSponsored
+  const capturedItems = stabilizedItems ?? (additiveSponsored
     ? [...pageResults.flatMap((result) => result.items.map((item: JsonRecord, index: number) => ({ item, page: result.page, index })))
       .filter(({ item }) => item.isSponsored !== true), ...sponsored.values()]
-    : pageResults.flatMap((result) => result.items.map((item: JsonRecord, index: number) => ({ item, page: result.page, index })));
+    : pageResults.flatMap((result) => result.items.map((item: JsonRecord, index: number) => ({ item, page: result.page, index }))));
   for (const { item, page, index } of capturedItems) {
       const current = headlessPriceMinor(item.pricing?.tagPriceValue); const regular = headlessPriceMinor(item.pricing?.basePriceValue ?? item.pricing?.regularPriceValue);
       const name = stableProductName(item.description);
@@ -590,10 +635,11 @@ async function captureHyVee(query: string, observedAt: string, fetchImpl: FetchL
         rawAvailability: item.isEcommerceActive === true ? "Store 1465 ecommerce active" : "Store 1465 inactive" }, page - 1, index, observedAt);
       if (normalized) rows.push(normalized); else excludedResults.push({ productKey: String(item.id ?? ""), name, reason: "incomplete, ambiguous, discounted-without-dates, or unavailable Hy-Vee result" });
   }
-  const authoritativeTotal = first.total + (additiveSponsored ? sponsored.size : 0);
+  const authoritativeTotal = stabilizedItems?.length ?? first.total + (additiveSponsored ? sponsored.size : 0);
   return { rows, total: authoritativeTotal, examined: authoritativeTotal, pages: first.pagesTotal, excludedResults,
-    ...(additiveSponsored ? { partitionProof: [{ strategy: "organic_total_plus_sponsored", organicReportedTotal: first.total,
-      sponsoredUnique: sponsored.size, authoritativeUniqueTotal: authoritativeTotal }] } : {}) };
+    ...(stabilizationProof ? { partitionProof: [stabilizationProof] }
+      : additiveSponsored ? { partitionProof: [{ strategy: "organic_total_plus_sponsored", organicReportedTotal: first.total,
+        sponsoredUnique: sponsored.size, authoritativeUniqueTotal: authoritativeTotal }] } : {}) };
 }
 
 export async function captureHeadlessDiscovery(store: HeadlessStore, terms: string[], file: string,

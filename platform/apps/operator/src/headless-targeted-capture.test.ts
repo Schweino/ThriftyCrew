@@ -380,6 +380,31 @@ describe("headless targeted store capture", () => {
     } finally { await rm(directory, { recursive: true, force: true }); }
   });
 
+  it("proves an ambiguous Hy-Vee envelope by stabilizing the exact page-view organic union", async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), "tc-hyvee-sponsored-stabilized-test-"));
+    const output = path.join(directory, "capture.json");
+    const product = (id: string, isSponsored = false) => ({ id, description: `${id} All-Purpose Cleaner`, unitOfMeasure: "16 fl oz",
+      isSponsored, isEcommerceActive: true, pricing: { tagPriceValue: 2.99, basePriceValue: 2.99 } });
+    const base = Array.from({ length: 89 }, (_, index) => product(`o${index}`));
+    let calls = 0;
+    const fetchImpl = async () => {
+      calls += 1;
+      const results = calls === 1
+        ? [product("ad-only", true), ...base.slice(0, 4).map((row) => ({ ...row, isSponsored: true })), ...base.slice(4)]
+        : base;
+      return new Response(JSON.stringify({ results, meta: { pagination: { pagesTotal: 1, total: 89 } } }), { status: 200 });
+    };
+    try {
+      const chunk = await captureHeadlessDiscovery("hy-vee", ["All-Purpose Cleaner"], output, { fetchImpl });
+      expect(calls).toBe(2);
+      expect(chunk.rows).toHaveLength(90);
+      expect(chunk.terms?.[0]?.retrieval).toMatchObject({ loadedResultCount: 90, availableResultCount: 90,
+        partitionProof: [{ strategy: "stable_page_view_organic_union_plus_sponsored_only", recoveryRounds: 1,
+          organicReportedTotal: 89, organicUnique: 89, sponsoredOnlyUnique: 1, authoritativeUniqueTotal: 90 }] });
+      expect(new Set(chunk.rows?.map((row) => row.id)).size).toBe(90);
+    } finally { await rm(directory, { recursive: true, force: true }); }
+  });
+
   it("preserves a Hy-Vee raw result whose dedicated size contradicts its exact title suffix", async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), "tc-hyvee-size-test-"));
     const output = path.join(directory, "capture.json");
