@@ -25,9 +25,85 @@
 # allowlist entry added tomorrow could silently delete a fixture's gap and the test would pass by finding
 # nothing - the exact way the Lysol negative test stopped testing anything.
 param([string]$OutDir = "", [string]$CompareFile = "", [string]$CandidatesFile = "", [string]$ReportDir = "",
-      [string]$CommoditiesFile = "", [string]$AllowFile = "")
+      [string]$CommoditiesFile = "", [string]$AllowFile = "", [int]$MatchTimeoutMs = 250, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+
+# ---- BOUNDED-TIME MATCHING (2026-08-14) ----------------------------------------------------------
+# Every match in this script runs under a per-call timeout instead of PowerShell's -imatch, which has none.
+# WHY. The commodity loop rewrites each `\s` in an include into `.{0,25}`. A V4-generated include for
+# quinoa-uncooked nested a `+` inside a {0,6} group followed by a `*` group; once loosened those elements
+# overlap and the match goes exponential - measured at 396-405ms to FAIL a single product name, on every
+# name tried. Times 7 stores times thousands of names, one instance of this script consumed 829 CPU-MINUTES
+# on a pegged core, wrote nothing for over 24 hours, and blocked the daily pipeline for 11 hours; the board
+# went stale and every downstream guard went with it. A second instance of the SAME script finished in about
+# three minutes, because whether it hangs depends on which product names that day's capture holds.
+# A guard that can hang the pipeline it protects is a worse failure than the gap it looks for.
+# The offending pattern was fixed, but the bound stays: it is what makes the NEXT one survivable.
+# NOT RegexOptions::Compiled. There are ~49,500 pattern instances across the catalog (~3,200 distinct) and
+# Compiled emits IL per pattern at CONSTRUCTION, paid whether or not the pattern ever matches. Measured here
+# it was far worse than the interpreted engine it was meant to beat.
+# A timed-out match is NOT a silent no-match: it is counted, printed, and written to the report, because
+# "could not decide" is not the same answer as "no gap here".
+$reOpt = [Text.RegularExpressions.RegexOptions]::IgnoreCase
+$reSpan = [TimeSpan]::FromMilliseconds([Math]::Max(25, $MatchTimeoutMs))
+$MAXPATTERNTIMEOUTS = 3
+# No $script: prefixes: in PS 5.1 a function may MUTATE a parent-scope object (.Add, index assignment)
+# but a bare `$x =` inside the function would create a local instead. Both of these are mutated in place.
+$reCache = @{}
+$reTimeouts = New-Object System.Collections.ArrayList
+$reDead = @{}     # pattern -> timeout count; at MAXPATTERNTIMEOUTS the pattern is quarantined
+function New-Probe([string]$Pattern) {
+  if (-not $reCache.ContainsKey($Pattern)) {
+    try { $reCache[$Pattern] = New-Object Text.RegularExpressions.Regex($Pattern, $reOpt, $reSpan) }
+    catch { $reCache[$Pattern] = $null }   # illegal pattern: surfaced by the rule editor, not this audit
+  }
+  return $reCache[$Pattern]
+}
+# CIRCUIT BREAKER. A per-match timeout alone still costs $MatchTimeoutMs on EVERY name once a pattern is
+# pathological, and this loop sees commodities x stores x names - so the bound alone bought a slower hang,
+# not a fix. After MAXPATTERNTIMEOUTS timeouts a pattern is quarantined for the rest of the run.
+function Test-Probe($Rx, [string]$Name, [string]$Ctx) {
+  if (-not $Rx) { return $false }
+  $key = $Rx.ToString()
+  if ([int]$reDead[$key] -ge $MAXPATTERNTIMEOUTS) { return $false }
+  try { return $Rx.IsMatch($Name) }
+  catch [Text.RegularExpressions.RegexMatchTimeoutException] {
+    $reDead[$key] = [int]$reDead[$key] + 1
+    [void]$reTimeouts.Add([pscustomobject]@{ context = $Ctx; pattern = $key; name = $Name
+                                             quarantined = ([int]$reDead[$key] -ge $MAXPATTERNTIMEOUTS) })
+    return $false
+  }
+}
+
+if ($SelfTest) {
+  # Hermetic: reads no board, no capture, no commodities file. The founding bug is FROZEN here as the
+  # must-fire fixture - the exact loosened shape of the quinoa-uncooked include that burned 829 CPU-minutes
+  # on 2026-08-14 - beside a clean twin that must still match normally.
+  $bad = 0
+  $FOUNDING = '^(?:[\w&.-]+.{0,25}){0,6}(?:(?:organic|whole[- ]grain|white|red|black|tri[- ]?colou?r).{0,25})*quinoa$'
+  $VICTIM   = 'Just Bare boneless skinless chicken breasts, 18 oz., $4.99'
+  $rxBad = New-Probe $FOUNDING
+  $sw = [Diagnostics.Stopwatch]::StartNew()
+  $r1 = Test-Probe $rxBad $VICTIM 'selftest|founding'
+  $sw.Stop()
+  if ($reTimeouts.Count -lt 1) { Write-Output '  X MUST-FIRE: the founding ReDoS pattern did NOT time out - the bound is not armed'; $bad++ }
+  if ($r1) { Write-Output '  X the timed-out match returned TRUE; a match it could not decide must not read as a hit'; $bad++ }
+  if ($sw.ElapsedMilliseconds -gt ($MatchTimeoutMs * 4)) { Write-Output ("  X the bound did not hold: one match took {0}ms against a {1}ms timeout" -f $sw.ElapsedMilliseconds, $MatchTimeoutMs); $bad++ }
+  # circuit breaker: after MAXPATTERNTIMEOUTS the pattern is skipped, so the cost stops growing
+  for ($i = 0; $i -lt ($MAXPATTERNTIMEOUTS + 2); $i++) { $null = Test-Probe $rxBad $VICTIM 'selftest|founding' }
+  if ($reTimeouts.Count -gt $MAXPATTERNTIMEOUTS) { Write-Output ("  X the breaker never tripped: {0} timeouts recorded past a limit of {1}" -f $reTimeouts.Count, $MAXPATTERNTIMEOUTS); $bad++ }
+  $swQ = [Diagnostics.Stopwatch]::StartNew(); $null = Test-Probe $rxBad $VICTIM 'selftest|founding'; $swQ.Stop()
+  if ($swQ.ElapsedMilliseconds -ge $MatchTimeoutMs) { Write-Output '  X a quarantined pattern still paid the full timeout'; $bad++ }
+  # CLEAN TWIN: the shipped replacement must still decide normally and correctly
+  $rxOk = New-Probe '\bquinoa\b'
+  $beforeClean = $reTimeouts.Count
+  if (-not (Test-Probe $rxOk 'Simple Truth Organic Quinoa' 'selftest|clean')) { Write-Output '  X clean twin failed to match real quinoa'; $bad++ }
+  if (Test-Probe $rxOk $VICTIM 'selftest|clean') { Write-Output '  X clean twin matched a chicken breast'; $bad++ }
+  if ($reTimeouts.Count -ne $beforeClean) { Write-Output '  X clean twin recorded a timeout'; $bad++ }
+  if ($bad -eq 0) { Write-Output 'audit-coverage-gaps SELF-TEST PASS (founding ReDoS times out, breaker quarantines it, clean twin still decides)'; exit 0 }
+  Write-Output ("audit-coverage-gaps SELF-TEST FAIL ({0} problem(s))" -f $bad); exit 1
+}
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $ReportDir) { $ReportDir = $OutDir }
@@ -111,8 +187,8 @@ foreach ($c in $commods) {
   $id = [string]$c.id
   # loosen the include: allow up to 25 chars where it required whitespace. Handle \s* and \s+ BEFORE bare \s,
   # or "\s*" becomes ".{0,25}*" (a nested quantifier that throws). Order matters.
-  $probes = @($c.include | ForEach-Object { ((($_ -replace '\\s\*', '.{0,25}') -replace '\\s\+', '.{0,25}') -replace '\\s', '.{0,25}') })
-  $excl = @($c.exclude)
+  $probes = @($c.include | ForEach-Object { New-Probe(((($_ -replace '\\s\*', '.{0,25}') -replace '\\s\+', '.{0,25}') -replace '\\s', '.{0,25}')) })
+  $excl = @($c.exclude | Where-Object { $_ } | ForEach-Object { New-Probe ([string]$_) })
   foreach ($st in $stores) {
     if ($present.ContainsKey($id + '|' + $st)) { continue }
     if ($allow.ContainsKey($id + '|' + $st)) { continue }
@@ -126,15 +202,16 @@ foreach ($c in $commods) {
     # An allowlist decision is only as good as the evidence put in front of the reviewer.
     $MAXCAND = 5
     $found = New-Object System.Collections.Generic.List[string]
+    $relax = @($c.relax_global | Where-Object { $_ })
     foreach ($nm in $prodUniq[$st]) {
-      $hit = $false; foreach ($p in $probes) { if ($nm -imatch $p) { $hit = $true; break } }
+      $hit = $false; foreach ($p in $probes) { if (Test-Probe $p $nm ($id + '|include')) { $hit = $true; break } }
       if (-not $hit) { continue }
       $bad = $false
-      foreach ($x in $excl)   { if ($x -and $nm -imatch $x) { $bad = $true; break } }
+      foreach ($x in $excl)   { if (Test-Probe $x $nm ($id + '|exclude')) { $bad = $true; break } }
       # honor the commodity's relax_global waivers (pasta-sauce IS a sauce etc.) so those commodities still
       # get coverage-gap protection instead of every candidate being silently global-excluded
-      if (-not $bad) { $relax = @($c.relax_global | Where-Object { $_ }); foreach ($x in $GLOBAL) { if ($relax -notcontains $x -and $nm -imatch $x) { $bad = $true; break } } }
-      if (-not $bad) { $relax = @($c.relax_global | Where-Object { $_ }); foreach ($x in $ENGINE_GLOBAL) { if ($relax -notcontains $x -and $nm -imatch $x) { $bad = $true; break } } }
+      if (-not $bad) { foreach ($x in $GLOBAL) { if ($relax -notcontains $x -and (Test-Probe (New-Probe $x) $nm ($id + '|global'))) { $bad = $true; break } } }
+      if (-not $bad) { foreach ($x in $ENGINE_GLOBAL) { if ($relax -notcontains $x -and (Test-Probe (New-Probe $x) $nm ($id + '|engine-global'))) { $bad = $true; break } } }
       if ($bad) { continue }
       $found.Add($nm)
       if ($found.Count -ge $MAXCAND) { break }
@@ -238,11 +315,23 @@ $gaps = $classed
 $actionable = @($gaps | Where-Object { $_.actionable })
 $quiet      = @($gaps | Where-Object { -not $_.actionable })
 
+$timeouts = @($reTimeouts.ToArray())
 $report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); gap_count = $gaps.Count; actionable_count = $actionable.Count
                       classified_against = $(if ($classifiable) { Split-Path $CandidatesFile -Leaf } else { 'NOTHING - unclassified run' })
                       by_reason = @($gaps | Group-Object reason | ForEach-Object { [pscustomobject]@{ reason = $_.Name; count = @($_.Group).Count } })
+                      match_timeout_ms = $MatchTimeoutMs
+                      match_timeouts = $timeouts.Count
+                      match_timeout_detail = @($timeouts | Group-Object context | ForEach-Object { [pscustomobject]@{ context = $_.Name; count = @($_.Group).Count; sample_name = @($_.Group)[0].name; pattern = @($_.Group)[0].pattern } })
                       stores_scanned = @($stores | Where-Object { $prod.ContainsKey($_) }); stores_not_scanned = $noRaw; gaps = $gaps }
 $report | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $ReportDir 'coverage-gaps.json') -Encoding UTF8
+if ($timeouts.Count) {
+  # Loud on purpose. Each of these is a (pattern, product name) pair this audit could NOT decide, so the
+  # store may carry the commodity and this run cannot say. Silence here would read as "no gap".
+  Write-Output ("coverage-gaps: {0} match(es) hit the {1}ms regex timeout and were NOT decided - this is not a clean 'no gap'. Fix the commodity's include (a pattern with several \s becomes several .{{0,25}} and can backtrack exponentially):" -f $timeouts.Count, $MatchTimeoutMs)
+  foreach ($g in @($report.match_timeout_detail | Select-Object -First 10)) {
+    Write-Output ("  TIMEOUT  {0,-28} x{1,-5} e.g. '{2}'" -f $g.context, $g.count, ([string]$g.sample_name).Substring(0, [Math]::Min(60, ([string]$g.sample_name).Length)))
+  }
+}
 if ($gaps.Count) {
   Write-Output ("coverage-gaps: $($gaps.Count) store(s) absent from a commodity whose product they appear to carry - $($actionable.Count) actionable, $($quiet.Count) explained by the engine's own basis/band gates")
   foreach ($grp in @($gaps | Group-Object reason | Sort-Object Name)) { Write-Output ("  {0,-15} {1}" -f $grp.Name, @($grp.Group).Count) }
