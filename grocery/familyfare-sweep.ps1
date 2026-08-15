@@ -45,6 +45,21 @@ try {
   Log ('  THREW: ' + $_.Exception.Message)
 }
 
+# ---- REPAIR PACK SIZES ON WHAT THIS SWEEP JUST LANDED (2026-08-14) --------------------------------
+# check-ad-cycles repairs pack sizes immediately before compare-deals, and that ordering is correct - but it
+# only covers the captures that exist at 08:30. This sweep runs every 3 hours and rewrites
+# out\regular\family-fare-regular-<today>.json long after the daily has been through, so a row landing here
+# reaches the NEXT compare unrepaired. That is exactly what happened on 2026-08-14: the daily repaired at
+# 08:59 and found nothing, this sweep wrote "Heinz Tomato Ketchup, 2 Pack 50.5 Oz" with size "50.5 oz" at
+# 19:06, and guards then hard-failed the publish on a 2x per-unit price. Repairing where the rows LAND
+# closes it for every window, not just the 08:30 one. Idempotent (rows carry size_repaired), so a re-run is
+# free. Non-fatal and LOUD, same contract as the daily's copy: a repair that throws must not take the sweep
+# down, but must never pass silently either.
+try {
+  $mpOut = @(& powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'repair-multipack-sizes.ps1') -Apply)
+  foreach ($l in @($mpOut | Where-Object { $_ -match 'REPAIR |REFUSED |^repair-multipack-sizes:' })) { Log ('multipack-repair: ' + ([string]$l).Trim()) }
+} catch { Log ('multipack-repair THREW: ' + $_.Exception.Message + ' - any pack-size defect in this window is unrepaired and guard 5 will block the next publish') }
+
 $after = ''
 if (Test-Path $cursorF) { try { $after = [string]((Get-Content $cursorF -Raw | ConvertFrom-Json).next_index) } catch {} }
 # A cursor that did not move means the window bought NOTHING - the sweep is the one place that is visible.
