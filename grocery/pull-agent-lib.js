@@ -162,7 +162,7 @@ function pacedDelay(base, jitter) {
  * Aldi's is a product-slug lookup with a different loop shape. The MEASUREMENT is shared even where
  * the loop is not; forcing every store into one loop to share it would be the wrong kind of reuse.
  */
-function finishLedger({ t0, requests, delayMs, jitterMs, firstWallAfter, pausedMs = 0 }) {
+function finishLedger({ t0, requests, delayMs, jitterMs, firstWallAfter, pausedMs = 0, hiddenSamples = 0, totalSamples = 0 }) {
   const elapsedMs = Date.now() - t0;
   // Time spent waiting on a human is NOT part of our request cadence. Leaving it in would inflate
   // observedMeanIntervalMs by however long Brad took to clear a CAPTCHA, and that number is exactly
@@ -176,6 +176,14 @@ function finishLedger({ t0, requests, delayMs, jitterMs, firstWallAfter, pausedM
     requests,
     observedMeanIntervalMs: requests ? Math.round(activeMs / requests) : null,
     firstWallAfterTerms:    firstWallAfter,
+    /*
+      Was the tab hidden while we swept? Chrome throttles timers in hidden tabs, so a slow run has
+      two completely different explanations - the store was slow, or we were being throttled - and
+      without this the ledger cannot tell them apart. Measured 2026-08-15 rather than assumed: a
+      388-term sweep ran at 5.3-6.1s/term with the Chrome window unfocused the whole time, i.e. an
+      unfocused window did NOT throttle it. Keep recording it so that stays a fact, not a memory.
+    */
+    hiddenPct: totalSamples ? Math.round((hiddenSamples / totalSamples) * 100) : null,
     verdict: firstWallAfter === null || firstWallAfter === undefined
       ? 'CLEAN - no wall. Safe to promote to confidence:measured, recording observedMeanIntervalMs.'
       : `WALLED after ${firstWallAfter} settled item(s). A new ceiling, NOT a safe rate - raise the delay, keep confidence:proposed.`,
@@ -202,6 +210,7 @@ async function runPacedSweep(agent, worklist, opts = {}) {
   let firstWallAfter = null;                   // terms settled before the FIRST wall of this run
   let wallPauses = 0, pausedMs = 0;            // how often we had to hand off, and for how long
   let stopped = false;
+  let hiddenSamples = 0, totalSamples = 0;     // was the tab visible while we swept? (see finishLedger)
 
   // A term the operator cleared a wall for is worth retrying immediately rather than leaving
   // UNUSABLE for a later run - that is the whole point of waiting for them.
@@ -231,6 +240,9 @@ async function runPacedSweep(agent, worklist, opts = {}) {
       res[term] = { v: r.state, why: r.why || null, rows: r.rows || [] };
       settled = true;
     }
+
+    totalSamples++;
+    if (typeof document !== 'undefined' && document.visibilityState === 'hidden') hiddenSamples++;
 
     if (settled) { consecutiveWalls = 0; done++; }
     else         { consecutiveWalls++;   walled++; }
@@ -278,7 +290,7 @@ async function runPacedSweep(agent, worklist, opts = {}) {
       Paste them into stores.json -> <store> -> pull_profile.evidence. Only a CLEAN verdict
       licenses confidence:measured; a wall is another ceiling observation, not a safe rate.
     */
-    timing: finishLedger({ t0, requests, delayMs, jitterMs, firstWallAfter, pausedMs }),
+    timing: finishLedger({ t0, requests, delayMs, jitterMs, firstWallAfter, pausedMs, hiddenSamples, totalSamples }),
   };
   console.log(`${agent.storeName} sweep:`, summary);
   return summary;
