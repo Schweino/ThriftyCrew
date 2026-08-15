@@ -81,7 +81,15 @@ $script:NEXT = @{
   'qa-passed'  = @('waved')
   # an audit NO-GO trims a recipe back out of the wave, to repair or to rejection. It never publishes.
   'waved'      = @('published', 'rejected-audit', 'qa-passed', 'written')
-  'published'  = @('verified')
+  # `held` is a LIVE page deliberately taken down: a serveability rollback (wave-publish E7), or any manual
+  # takedown. It exists because on 2026-08-15 two recipes were set back to draft in Ghost by hand while
+  # their state files still read `published`, so the run record claimed live pages that were not live. A
+  # takedown with no state is indistinguishable from a publish that worked.
+  # held -> verified is REFUSED on purpose: a held recipe must go back through `published` (which means
+  # actually re-publishing it) before anyone can verify it. Verifying a drafted page is the exact lie this
+  # state exists to prevent.
+  'published'  = @('verified', 'held')
+  'held'       = @('published')
   'verified'   = @()
 }
 foreach ($r in $script:REJECTED_STATES) { $script:NEXT[$r] = @() }
@@ -236,6 +244,16 @@ if ($runSelfTest) {
   T 'CLEAN TWIN the normal path is legal'                              (Test-LegalTransition 'qa-passed' 'waved') 'refused'
   T 'CLEAN TWIN an audit NO-GO may trim a recipe back out of its wave' (Test-LegalTransition 'waved' 'qa-passed') 'refused'
   T 'CLEAN TWIN a QA failure may route back to extraction for repair'  (Test-LegalTransition 'written' 'extracted') 'refused'
+
+  # ---- FIXTURE 4b. THE `held` STATE, frozen at its founding bug. On 2026-08-15 two published recipes were
+  # set back to DRAFT in Ghost by hand because their cards could not price, and their state files went on
+  # reading `published` - the run record asserted two live pages that were not live. A takedown needs a
+  # state or it is invisible.
+  T 'CLEAN TWIN a published recipe can be held (a takedown is recordable)' (Test-LegalTransition 'published' 'held') 'refused'
+  T 'CLEAN TWIN a held recipe can go back to published once its dependency is fixed' (Test-LegalTransition 'held' 'published') 'refused'
+  T 'MUST FIRE  a held recipe cannot be VERIFIED without republishing first' `
+    (-not (Test-LegalTransition 'held' 'verified')) 'let a drafted page be verified as live'
+  T 'MUST FIRE  a held recipe cannot walk back into the pipeline' (-not (Test-LegalTransition 'held' 'written')) 'allowed'
 
   # ---- FIXTURE 5. The state file round-trips through the atomic write with its history intact. History
   # is what makes an interrupted run readable afterwards; losing it silently is the whole failure mode.
@@ -447,13 +465,17 @@ foreach ($e in $entries) { $s = [string]$e.state; if (-not $byState.ContainsKey(
 $published = @(@($entries | Where-Object { @('published', 'verified') -contains [string]$_.state }))
 $rejectedRows  = @(@($entries | Where-Object { @($script:REJECTED_STATES) -contains [string]$_.state }))
 $parked    = @(@($entries | Where-Object { [string]$_.state -eq 'parked' }))
-$inflight  = @(@($entries | Where-Object { @('published', 'verified', 'parked') -notcontains [string]$_.state -and @($script:REJECTED_STATES) -notcontains [string]$_.state }))
+# HELD IS ITS OWN LINE, never folded into "in flight". A held recipe is a page that WAS live and is down
+# now; burying it among recipes still being worked on is how a takedown gets forgotten.
+$held      = @(@($entries | Where-Object { [string]$_.state -eq 'held' }))
+$inflight  = @(@($entries | Where-Object { @('published', 'verified', 'parked', 'held') -notcontains [string]$_.state -and @($script:REJECTED_STATES) -notcontains [string]$_.state }))
 $waves = @(Get-ChildItem (Join-Path $RunDir 'waves\wave-*.json') -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^wave-\d+\.json$' })
 
 if ($runJson) {
   $o = [pscustomobject]@{
     run = (Split-Path $RunDir -Leaf); total = $entries.Count
     published = @($published | ForEach-Object { [string]$_.slug })
+    held = @($held | ForEach-Object { [string]$_.slug })
     parked = @($parked | ForEach-Object { [pscustomobject]@{ slug = [string]$_.slug; waiting_on = @($_.parked_on) } })
     rejected = @($rejectedRows | ForEach-Object { [pscustomobject]@{ slug = [string]$_.slug; state = [string]$_.state; reason = [string]$_.reject_reason } })
     in_flight = @($inflight | ForEach-Object { [pscustomobject]@{ slug = [string]$_.slug; state = [string]$_.state } })
@@ -467,6 +489,7 @@ Write-Output ''
 Write-Output ("  PUBLISHED  {0}" -f $published.Count)
 Write-Output ("  IN FLIGHT  {0}" -f $inflight.Count)
 Write-Output ("  PARKED     {0}   (waiting on a store, NOT rejected)" -f $parked.Count)
+if ($held.Count) { Write-Output ("  HELD       {0}   (WAS live, taken down - these are pages readers cannot see)" -f $held.Count) }
 Write-Output ("  REJECTED   {0}" -f $rejectedRows.Count)
 Write-Output ''
 foreach ($s in @($byState.Keys | Sort-Object)) { Write-Output ("  {0,-22} {1}" -f $s, @($byState[$s]).Count) }
@@ -474,6 +497,14 @@ if ($parked.Count) {
   Write-Output ''
   Write-Output '  PARKED detail (this is the resume worklist):'
   foreach ($p in $parked) { Write-Output ("    {0,-34} waiting on: {1}" -f $p.slug, $(if (@($p.parked_on).Count) { @($p.parked_on) -join ', ' } else { '(unknown - run -Derive)' })) }
+}
+if ($held.Count) {
+  Write-Output ''
+  Write-Output '  HELD detail (live pages that are DOWN - each needs a decision):'
+  foreach ($h in $held) {
+    $last = @(@($h.history) | Select-Object -Last 1)
+    Write-Output ("    {0,-34} {1}" -f $h.slug, $(if ($last.Count) { [string]$last[0].detail } else { '(no detail)' }))
+  }
 }
 if ($rejectedRows.Count) {
   Write-Output ''
