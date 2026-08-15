@@ -127,6 +127,23 @@ $cmpDoc = Read-Utf8Json $CompareFile
 $board = $cmpDoc.comparison
 $boardIx = @{}
 foreach ($r in $board) { $boardIx[[string]$r.id] = $r }
+# THERE ARE TWO BOARDS, AND READING ONLY THIS ONE IS A FALSE REJECTION MACHINE (2026-08-15).
+# out\recipe-board.json carries the recipe-side commodities the weekly comparison does not. Costed recipe
+# lines point at them explicitly: their basis reads board:pork-loin:recipeboard-walmart. Measured against
+# db\costed.json with only the weekly board loaded, 'pork-loin' and 'boneless-skinless-chicken-thigh' both
+# resolved to ZERO stores and 357 of 542 live recipes looked like they contained an unbuyable ingredient.
+# With both boards unioned, all 542 resolve. The Hunter would have sent already-priced ingredients to the
+# browser stage and rejected good recipes on ingredients the site is selling today.
+$recipeBoardFile = Join-Path $OutDir 'recipe-board.json'
+$rbCount = 0
+if (Test-Path $recipeBoardFile) {
+  $rbDoc = Read-Utf8Json $recipeBoardFile
+  foreach ($r in $rbDoc.comparison) {
+    $id = [string]$r.id
+    # the weekly board wins on a shared id: it is the one the public page publishes
+    if (-not $boardIx.ContainsKey($id)) { $boardIx[$id] = $r; $rbCount++ }
+  }
+}
 # NOT @(Read-Utf8Json ...). ConvertFrom-Json hands a JSON array back as ONE object, so the array subexpression
 # wraps it AGAIN: @() around this call yields a 1-element array whose single element is all 573 commodities.
 # `$_.id` on that element is then a 573-item array, `-eq $slug` returns the matching members (truthy), and the
@@ -136,6 +153,19 @@ $commods = Read-Utf8Json $CommoditiesFile
 if ($commods -isnot [array]) { $commods = ,$commods }
 $searchF = Join-Path $root 'commodity-search.json'
 $searchMap = if (Test-Path $searchF) { Read-Utf8Json $searchF } else { $null }
+
+# RESOLVE AGAINST THE BOARD ITSELF, NOT ONLY commodities.json - the same two-board bug one layer up.
+# Unioning recipe-board into the price index was not enough: the RESOLVER still only searched
+# commodities.json, so 'pork loin' fell through to a capture scan even though pork-loin sits on
+# recipe-board.json at 5 stores, cheapest Sam's Club $1.98/lb. It is in NEITHER commodities.json NOR
+# recipe-commodities.json - the recipe board is its only definition. The board is where prices live, so a
+# slug that IS a board id, or matches a board row's label, is a definitive hit and is checked first.
+$boardSlugIx = @{}
+foreach ($id in $boardIx.Keys) {
+  $boardSlugIx[(Get-Slug $id)] = $id
+  $lbl = [string]$boardIx[$id].commodity
+  if ($lbl) { $s = Get-Slug $lbl; if (-not $boardSlugIx.ContainsKey($s)) { $boardSlugIx[$s] = $id } }
+}
 $swLoad.Stop()
 
 # The raw-capture corpus is loaded ONCE, lazily, and only if some term actually falls through to tier 2.
@@ -168,7 +198,11 @@ function Get-CaptureRows {
 $results = New-Object System.Collections.ArrayList
 foreach ($term in $Name) {
   $sw = [Diagnostics.Stopwatch]::StartNew()
-  $res = Resolve-Commodity $term $commods $searchMap
+  # board first (it holds the prices, and it is the only definition some ids have), then the catalog
+  $res = $null
+  $tslug = Get-Slug $term
+  if ($boardSlugIx.ContainsKey($tslug)) { $res = @{ id = $boardSlugIx[$tslug]; how = 'board id/label' } }
+  if (-not $res) { $res = Resolve-Commodity $term $commods $searchMap }
   $row = $null
   if ($res) { $row = $boardIx[$res.id] }
 
@@ -220,7 +254,7 @@ if ($Json) {
   exit 0
 }
 
-Write-Output ("price-ingredient: {0} (week {1}), {2} commodities indexed in {3}ms" -f (Split-Path $CompareFile -Leaf), [string]$cmpDoc.week_of, $board.Count, $swLoad.ElapsedMilliseconds)
+Write-Output ("price-ingredient: {0} (week {1}) + recipe-board (+{2} ids), {3} commodities indexed in {4}ms" -f (Split-Path $CompareFile -Leaf), [string]$cmpDoc.week_of, $rbCount, $boardIx.Count, $swLoad.ElapsedMilliseconds)
 foreach ($r in $results) {
   Write-Output ''
   Write-Output ("{0}  '{1}'  [{2}ms]" -f $r.tier, $r.term, $r.ms)
