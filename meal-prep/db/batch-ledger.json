@@ -88,7 +88,7 @@
   {
       "batch":  "hunt-2026-08-15-shakedown-w1",
       "opened":  "2026-08-15T12:52:09",
-      "last_activity":  "2026-08-15T12:52:09",
+      "last_activity":  "2026-08-15T13:28:28",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -116,6 +116,11 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-15T12:52:09",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-08-15T13:28:28",
+                         "detail":  "2/2 GO on the third audit (2 prior NO-GOs, 5 blockers cleared)"
                      }
                  ]
   }
