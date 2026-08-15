@@ -58,6 +58,7 @@ $KNOWN = [ordered]@{
   'familyfare-sweep.ps1'             = 'scheduled task "SMP Family Fare Term Sweep", every 3h via run-hidden.vbs'
   'send-friday-email.ps1'            = 'scheduled task "SMP Friday Email (draft)", weekly via run-hidden.vbs; drafts unless -Send, and a week_of stamp stops a double-mail'
   # -- human entry points, run when a specific failure or a specific job shows up
+  'ingredient-queue.ps1'             = 'Recipe Hunter Rule B queue (an ingredient is CARRIED once ANY of the 7 stores has it; NOT-CARRIED only when all 7 were CHECKED and none do). Built 2026-08-15; stays uncalled until the Recipe Hunter runner is code rather than SKILL instructions. Delete this line the moment that runner lands.'
   'promote-verdicts.ps1'             = 'weekly by hand after audit-match-soundness; writes exclude-provenance.json'
   'adjudicate-blind-findings.ps1'    = 'weekly by hand inside the accuracy sample - opens the sealed key AFTER the blind findings are frozen, which is the whole point (a caller could run it early)'
   'new-commodity.ps1'                = 'by hand per commodity added - clones a sibling exclude and asks for the band, so it is an operator prompt, not a batch step'

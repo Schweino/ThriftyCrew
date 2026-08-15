@@ -62,16 +62,22 @@ function Get-Slug([string]$s) { return (($s -replace '[^A-Za-z0-9]+', '-').Trim(
 # ---- resolve one term to a commodity id --------------------------------------------------------------
 # Ordered most-certain first, and every hit records HOW it matched so a wrong answer is auditable rather
 # than mysterious. An include-pattern hit is last because it is the loosest and the likeliest to be wrong.
-function Resolve-Commodity($Term, $Commods, $SearchMap) {
+function Resolve-Commodity($Term, $Commods, $SearchPairs) {
   $slug = Get-Slug $Term
   $hit = $Commods | Where-Object { $_.id -eq $slug } | Select-Object -First 1
   if ($hit) { return @{ id = $hit.id; how = 'exact commodity id' } }
   $hit = $Commods | Where-Object { (Get-Slug ([string]$_.label)) -eq $slug } | Select-Object -First 1
   if ($hit) { return @{ id = $hit.id; how = 'commodity label' } }
-  if ($SearchMap) {
-    foreach ($p in $SearchMap.PSObject.Properties) {
-      $terms = @([string]$p.Value -split '\s*[|,]\s*' | Where-Object { $_ })
-      foreach ($t in $terms) { if ((Get-Slug $t) -eq $slug) { return @{ id = [string]$p.Name; how = "search term '$t'" } } }
+  # SearchPairs comes from Get-SearchTermPairs (search-terms-lib.ps1), which is the ONLY correct reader of
+  # commodity-search.json. Two bugs lived here before it was used:
+  #   1. this walked the FILE's top level, whose properties are 'note' and 'terms' - never the commodity map
+  #      underneath - so search-term resolution silently matched nothing at all;
+  #   2. it flattened the value with [string]$p.Value, which in PowerShell JOINS an array rather than failing,
+  #      turning a multi-term commodity ["popsicles","ice pops"] into the single dead search "popsicles ice pops".
+  # The lib's own header warns about (2) by name; the fix for both is to stop hand-rolling the read.
+  if ($SearchPairs) {
+    foreach ($pair in $SearchPairs) {
+      if ((Get-Slug $pair.term) -eq $slug) { return @{ id = [string]$pair.id; how = "search term '$($pair.term)'" } }
     }
   }
   foreach ($c in $Commods) {
@@ -152,7 +158,14 @@ if (Test-Path $recipeBoardFile) {
 $commods = Read-Utf8Json $CommoditiesFile
 if ($commods -isnot [array]) { $commods = ,$commods }
 $searchF = Join-Path $root 'commodity-search.json'
-$searchMap = if (Test-Path $searchF) { Read-Utf8Json $searchF } else { $null }
+# search-terms-lib.ps1 is THE reader of this file - it expands array values into real separate terms and
+# knows the map lives under .terms. It deliberately has no param() block, so dot-sourcing is safe here.
+. (Join-Path $root 'search-terms-lib.ps1')
+$searchPairs = @()
+if (Test-Path $searchF) {
+  $searchDoc = Read-Utf8Json $searchF
+  $searchPairs = @(Get-SearchTermPairs -Terms $(if ($searchDoc.PSObject.Properties.Name -contains 'terms') { $searchDoc.terms } else { $searchDoc }))
+}
 
 # RESOLVE AGAINST THE BOARD ITSELF, NOT ONLY commodities.json - the same two-board bug one layer up.
 # Unioning recipe-board into the price index was not enough: the RESOLVER still only searched
@@ -213,7 +226,7 @@ foreach ($term in $Name) {
   $res = $null
   $tslug = Get-Slug $term
   if ($boardSlugIx.ContainsKey($tslug)) { $res = @{ id = $boardSlugIx[$tslug]; how = 'board id/label' } }
-  if (-not $res) { $res = Resolve-Commodity $term $commods $searchMap }
+  if (-not $res) { $res = Resolve-Commodity $term $commods $searchPairs }
   $row = $null
   if ($res) { $row = $boardIx[$res.id] }
 

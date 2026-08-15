@@ -54,9 +54,17 @@ function assertInStore() {
   return { mode, store };
 }
 
+/*
+  Pacing MIRRORS stores.json -> Aldi -> pull_profile, which is the source of truth. The console has
+  no filesystem, so the numbers are duplicated here and audit-pull-profiles.ps1 fails if the two
+  ever disagree. Tune the registry first, then copy the value down.
+  jitterMs is 0: Aldi has held at a flat 900ms. If 403s reappear, add jitter (Sam's needed it).
+*/
+const ALDI_PROFILE = { delayMs: 900, jitterMs: 0, retries: 2, backoffMs: 4000 };
+
 async function pullAldiInStore(worklist, opts = {}) {
-  const delayMs = opts.delayMs ?? 900;   // Aldi 403s if we go faster
-  const retries = opts.retries ?? 2;
+  const delayMs = opts.delayMs ?? ALDI_PROFILE.delayMs;   // Aldi 403s if we go faster
+  const retries = opts.retries ?? ALDI_PROFILE.retries;
 
   const ctx = assertInStore();           // throws if not In-Store
   const res = JSON.parse(localStorage.getItem('TC_ALDI_INSTORE') || '{}');
@@ -69,7 +77,7 @@ async function pullAldiInStore(worklist, opts = {}) {
       try {
         const r = await fetch(ALDI_PRODUCT_BASE + item.s, { credentials: 'include' });
         if (r.status === 403) {          // rate limited - back off, do not record a price
-          await sleep(4000 * (attempt + 1));
+          await sleep(ALDI_PROFILE.backoffMs * (attempt + 1));
           continue;
         }
         const html = await r.text();

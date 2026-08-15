@@ -2612,3 +2612,4 @@
 [2026-08-15T07:06:49]   Family Fare: catalog healthy - 5103 items, 0 expired, 3923 re-verified in 48h (no alert)
 [2026-08-15T07:07:08] multipack-repair: repair-multipack-sizes: 137 file(s), 0 guard-5 reject(s) examined, 0 repairable, 0 REFUSED (need a human) - APPLIED
 [2026-08-15T07:07:08] sweep done rc=0 - cursor #573 -> #66
+[2026-08-15T10:00:01] sweep start (cursor before = #66, MaxMinutes=9)

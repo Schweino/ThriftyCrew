@@ -10,7 +10,20 @@
       "ad_cycle": "weekly",
       "capture": "server (Flipp SFML digital-flyers API) + browser price verification",
       "price_mode": "in-store",
-      "notes": "server pull via pull-grocery-ads.ps1"
+      "notes": "server pull via pull-grocery-ads.ps1",
+      "pull_profile": {
+        "agent": null,
+        "surface": "server API (no browser pacing applies)",
+        "delay_ms": null,
+        "jitter_ms": null,
+        "wall_limit": null,
+        "backoff_ms": null,
+        "retries": null,
+        "confidence": "n/a",
+        "evidence": "sanctioned/server feed - not rate-limited by a bot wall",
+        "identity_assert": null,
+        "wall_signals": []
+      }
     },
     {
       "name": "Aldi",
@@ -22,7 +35,22 @@
       "capture": "server (Flipp flyerkit JSON) + Instacart storefront for shelf prices",
       "walled": true,
       "price_mode": "in-store (Instacart serves marked-up DELIVERY prices by default - mode_verified required, audit-price-mode.ps1 guards)",
-      "notes": "server pull via pull-grocery-ads.ps1"
+      "notes": "server pull via pull-grocery-ads.ps1",
+      "pull_profile": {
+        "agent": "pull-aldi-instore.js",
+        "surface": "browser (Instacart storefront, same-origin fetch)",
+        "delay_ms": 900,
+        "jitter_ms": 0,
+        "wall_limit": null,
+        "backoff_ms": 4000,
+        "retries": 2,
+        "confidence": "measured",
+        "evidence": "Aldi returns 403 after a few hundred rapid requests; 900ms at concurrency 1 has held. Jitter never added - add it if 403s reappear.",
+        "identity_assert": "fulfillment mode must read In-Store AND the club line must read Omaha (a cold session defaults to Delivery, ~10% marked up)",
+        "wall_signals": [
+          "403"
+        ]
+      }
     },
     {
       "name": "Family Fare",
@@ -30,11 +58,26 @@
       "color": "#2e7d43",
       "regular_prefix": "family-fare",
       "urlkey": "familyfare",
-      "urlkey_aliases": ["ff"],
+      "urlkey_aliases": [
+        "ff"
+      ],
       "ad_cycle": "weekly",
       "capture": "server (Freshop circular API + pull-regular-familyfare.ps1)",
       "price_mode": "in-store",
-      "notes": "only store whose sale-fallback gaps self-heal headless (research-everyday.ps1)"
+      "notes": "only store whose sale-fallback gaps self-heal headless (research-everyday.ps1)",
+      "pull_profile": {
+        "agent": null,
+        "surface": "server API (no browser pacing applies)",
+        "delay_ms": null,
+        "jitter_ms": null,
+        "wall_limit": null,
+        "backoff_ms": null,
+        "retries": null,
+        "confidence": "n/a",
+        "evidence": "sanctioned/server feed - not rate-limited by a bot wall",
+        "identity_assert": null,
+        "wall_signals": []
+      }
     },
     {
       "name": "Fareway",
@@ -47,7 +90,20 @@
       "capture": "browser (Instacart storefront)",
       "walled": true,
       "price_mode": "in-store (Instacart delivery-price trap - mode_verified required)",
-      "notes": "was silently missing from the store-guide (07-12..07-26) and both publish gates - the drift that motivated this registry"
+      "notes": "was silently missing from the store-guide (07-12..07-26) and both publish gates - the drift that motivated this registry",
+      "pull_profile": {
+        "agent": null,
+        "surface": "browser (Instacart storefront)",
+        "delay_ms": null,
+        "jitter_ms": null,
+        "wall_limit": null,
+        "backoff_ms": null,
+        "retries": null,
+        "confidence": "unmeasured",
+        "evidence": "2026-08-15 sweep of 144 terms completed with 0 empties and no wall, so no rate limit has been observed yet. No agent module extracted; the sweep is still ad-hoc.",
+        "identity_assert": "read retailerLocation from __APOLLO_CLIENT__ cache, not the on-screen label - a fresh session read plausibly while sitting on Des Moines",
+        "wall_signals": []
+      }
     },
     {
       "name": "Baker's",
@@ -59,7 +115,20 @@
       "ad_cycle": "weekly (flips Wednesday)",
       "capture": "headless (sanctioned Kroger API, locationId 61500319; daily 6:00 via SMP Bakers Daily Scan)",
       "price_mode": "in-store",
-      "notes": "current+promo daily; links refresh by UPC"
+      "notes": "current+promo daily; links refresh by UPC",
+      "pull_profile": {
+        "agent": null,
+        "surface": "server API (no browser pacing applies)",
+        "delay_ms": null,
+        "jitter_ms": null,
+        "wall_limit": null,
+        "backoff_ms": null,
+        "retries": null,
+        "confidence": "n/a",
+        "evidence": "sanctioned/server feed - not rate-limited by a bot wall",
+        "identity_assert": null,
+        "wall_signals": []
+      }
     },
     {
       "name": "Sam's Club",
@@ -73,7 +142,25 @@
       "walled": true,
       "price_mode": "in-store (club 68137 preferred over national)",
       "membership": true,
-      "notes": "unit-price feed - ingest ONLY via build-sams-deals.ps1 (linePrice AND unitPrice) or recover-sams-quarantine.ps1; never write bare per-unit rows"
+      "notes": "unit-price feed - ingest ONLY via build-sams-deals.ps1 (linePrice AND unitPrice) or recover-sams-quarantine.ps1; never write bare per-unit rows",
+      "pull_profile": {
+        "agent": "pull-sams-instore.js",
+        "surface": "browser (owner Chrome, same-origin fetch)",
+        "delay_ms": 2600,
+        "jitter_ms": 1400,
+        "wall_limit": 3,
+        "backoff_ms": 20000,
+        "retries": 3,
+        "confidence": "proposed",
+        "evidence": "2026-08-15: an UNPACED sweep walled after 207 of 595 (id,term) pairs. The 2600+/-1400ms figure is a starting point chosen from that ceiling, NOT yet a measured safe rate. Downgrade to measured only after a full 595-pair run completes without a wall, and record the real number here.",
+        "identity_assert": "an Omaha club must be readable on the page (prices are per-club)",
+        "wall_signals": [
+          "bot interstitial phrases",
+          "403",
+          "429",
+          "missing __NEXT_DATA__"
+        ]
+      }
     },
     {
       "name": "Walmart",
@@ -86,24 +173,110 @@
       "walled": true,
       "price_mode": "in-store",
       "everyday_only": true,
-      "notes": "no ad cycle -> partial daily refreshes UNION with recent captures (EVERYDAY_ONLY_STORES in compare-deals) or the board collapses"
+      "notes": "no ad cycle -> partial daily refreshes UNION with recent captures (EVERYDAY_ONLY_STORES in compare-deals) or the board collapses",
+      "pull_profile": {
+        "agent": null,
+        "surface": "browser",
+        "delay_ms": null,
+        "jitter_ms": null,
+        "wall_limit": null,
+        "backoff_ms": null,
+        "retries": null,
+        "confidence": "unmeasured",
+        "evidence": "2026-08-15: hit a Robot or human? wall; the rate that triggered it was never recorded. Needs the same treatment as Sams.",
+        "identity_assert": "no store toggle; only the bot wall matters",
+        "wall_signals": [
+          "Robot or human?"
+        ]
+      }
     }
   ],
   "allowed_subsets": [
-    { "file": "audit-sale-fallback.ps1", "contains": "$browser = @(", "reason": "deliberately excludes Family Fare - the only store whose gaps self-heal headless" },
-    { "file": "compare-deals.ps1", "contains": "$EVERYDAY_ONLY_STORES", "reason": "walmart is the only store with no ad cycle whose partial pulls must union" },
-    { "file": "check-ad-cycles.ps1", "contains": "The daily server-side grocery pull", "reason": "alert body names only the three server-pull stores" },
-    { "file": "local-watchdog.ps1", "contains": "server stores Hy-Vee/Aldi/Family Fare", "reason": "comment-in-string: names only the server-pull stores" },
-    { "file": "build-deals-page.ps1", "contains": "neither posts everyday brand prices online", "reason": "site copy for the everyday-brand section, which by design excludes Aldi/Fareway" },
-    { "file": "check-ad-cycles.ps1", "contains": "The weekly Wednesday grocery browser refresh did not run", "reason": "alert body names only the browser-refresh stores" },
-    { "file": "import-browser-batch.ps1", "contains": "switch ($Store)", "reason": "store->prefix switch whose 'default' arm covers the unnamed stores" },
-    { "file": "sync-browser-links.ps1", "contains": "$hostOf = @{", "reason": "operates only on the 3 stores with direct product-URL hosts" },
-    { "file": "sync-browser-links.ps1", "contains": "$regGlob = @{", "reason": "operates only on the 3 stores with direct product-URL hosts" },
-    { "file": "sync-browser-links.ps1", "contains": "foreach ($store in @('Walmart'", "reason": "operates only on the 3 stores with direct product-URL hosts" },
-    { "file": "guards.ps1", "contains": "names guard 9 as the only staleness watch", "reason": "blind-message prose: names the 4 stores guard 9 is the sole staleness watch for, which is the point of the sentence" },
-    { "file": "test-auditors.ps1", "contains": "$asrFive", "reason": "deliberate 5-store MUST-FIRE fixture proving the drift scanner still fires on a genuine hardcoded subset; it must keep naming a strict subset forever. SELF-REFERENTIAL: any must-fire fixture for a code-scanning guard gets flagged by the live guard unless it is registered here - register yours when you write one" },
-    { "file": "add-known-wrong.ps1", "contains": "-Store is required (exact name from stores.json", "reason": "example store names inside an error prompt; the code immediately below validates -Store against stores.json itself" },
-    { "file": "add-known-wrong.ps1", "contains": "expected at Aldi, Sam", "reason": "prose naming only the three stores whose captures carry no product id" },
-    { "file": "test-auditors.ps1", "contains": "$cgQuiet", "reason": "frozen (l2) coverage-gap-alert fixture: the 3 quiet engine-explained rows. The region under test (check-ad-cycles.ps1 COVERAGE-GAP-ALERT) filters on the per-gap actionable flag only and never branches on store, so 3 stores prove the contract for all 7. SELF-REFERENTIAL like $asrFive: register any new multi-store fixture line here when you write it" }
-  ]
+    {
+      "file": "audit-sale-fallback.ps1",
+      "contains": "$browser = @(",
+      "reason": "deliberately excludes Family Fare - the only store whose gaps self-heal headless"
+    },
+    {
+      "file": "compare-deals.ps1",
+      "contains": "$EVERYDAY_ONLY_STORES",
+      "reason": "walmart is the only store with no ad cycle whose partial pulls must union"
+    },
+    {
+      "file": "check-ad-cycles.ps1",
+      "contains": "The daily server-side grocery pull",
+      "reason": "alert body names only the three server-pull stores"
+    },
+    {
+      "file": "local-watchdog.ps1",
+      "contains": "server stores Hy-Vee/Aldi/Family Fare",
+      "reason": "comment-in-string: names only the server-pull stores"
+    },
+    {
+      "file": "build-deals-page.ps1",
+      "contains": "neither posts everyday brand prices online",
+      "reason": "site copy for the everyday-brand section, which by design excludes Aldi/Fareway"
+    },
+    {
+      "file": "check-ad-cycles.ps1",
+      "contains": "The weekly Wednesday grocery browser refresh did not run",
+      "reason": "alert body names only the browser-refresh stores"
+    },
+    {
+      "file": "import-browser-batch.ps1",
+      "contains": "switch ($Store)",
+      "reason": "store->prefix switch whose 'default' arm covers the unnamed stores"
+    },
+    {
+      "file": "sync-browser-links.ps1",
+      "contains": "$hostOf = @{",
+      "reason": "operates only on the 3 stores with direct product-URL hosts"
+    },
+    {
+      "file": "sync-browser-links.ps1",
+      "contains": "$regGlob = @{",
+      "reason": "operates only on the 3 stores with direct product-URL hosts"
+    },
+    {
+      "file": "sync-browser-links.ps1",
+      "contains": "foreach ($store in @('Walmart'",
+      "reason": "operates only on the 3 stores with direct product-URL hosts"
+    },
+    {
+      "file": "guards.ps1",
+      "contains": "names guard 9 as the only staleness watch",
+      "reason": "blind-message prose: names the 4 stores guard 9 is the sole staleness watch for, which is the point of the sentence"
+    },
+    {
+      "file": "test-auditors.ps1",
+      "contains": "$asrFive",
+      "reason": "deliberate 5-store MUST-FIRE fixture proving the drift scanner still fires on a genuine hardcoded subset; it must keep naming a strict subset forever. SELF-REFERENTIAL: any must-fire fixture for a code-scanning guard gets flagged by the live guard unless it is registered here - register yours when you write one"
+    },
+    {
+      "file": "add-known-wrong.ps1",
+      "contains": "-Store is required (exact name from stores.json",
+      "reason": "example store names inside an error prompt; the code immediately below validates -Store against stores.json itself"
+    },
+    {
+      "file": "add-known-wrong.ps1",
+      "contains": "expected at Aldi, Sam",
+      "reason": "prose naming only the three stores whose captures carry no product id"
+    },
+    {
+      "file": "test-auditors.ps1",
+      "contains": "$cgQuiet",
+      "reason": "frozen (l2) coverage-gap-alert fixture: the 3 quiet engine-explained rows. The region under test (check-ad-cycles.ps1 COVERAGE-GAP-ALERT) filters on the per-gap actionable flag only and never branches on store, so 3 stores prove the contract for all 7. SELF-REFERENTIAL like $asrFive: register any new multi-store fixture line here when you write it"
+    },
+    {
+      "file": "probe-ingredient.ps1",
+      "contains": "browser_required",
+      "reason": "probe covers ONLY the 2 server-searchable stores (Bakers, Family Fare); this list is deliberately the other 5, which the probe cannot reach"
+    },
+    {
+      "file": "probe-ingredient.ps1",
+      "contains": "The five walled stores",
+      "reason": "operator note naming the 5 stores the probe cannot reach, so NO-CANDIDATES is never read as not-carried"
+    }
+  ],
+  "pull_profile_readme": "Per-store pull mechanics, read by that store's agent module so pacing is versioned data instead of a number retyped into a console snippet. RULES: (1) every value is MEASURED or marked proposed/unmeasured - never guess a safe rate, an unpaced Sams sweep walled at 207 of 595 terms on 2026-08-15; (2) this block records HOW to pull, never WHAT a store carries. Do not add learned empty/absent terms here. A term recorded as empty during a wall would silently stop being checked forever, which is the contested-flag-baselined-away class: unchecked is never not-carried."
 }

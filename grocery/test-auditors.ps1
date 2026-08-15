@@ -3604,6 +3604,24 @@ foreach ($p in @('pull-fareway-ads.ps1', 'pull-bakers.ps1')) {
   }
 }
 
+# (k1f) PULL PACING IS VERSIONED DATA, NOT A NUMBER IN A CONSOLE SNIPPET (2026-08-15). The Sam's sweep ran
+# unpaced and tripped the bot wall after 207 of 595 (id,term) pairs; the rate that would have prevented it
+# lived nowhere on disk. Pacing now lives in stores.json -> pull_profile and each walled store's browser
+# agent mirrors its own constants (the console cannot read a file). That duplication is only safe while
+# something compares the two, which is what audit-pull-profiles does - it caught Aldi's agent carrying an
+# unmirrored 900ms the first time it ran. It also blocks the dangerous shape: a profile must record HOW to
+# pull and never WHAT a store carries, because a term learned "empty" during a wall would stop being
+# checked forever, and unchecked is never not-carried.
+$r = RunPS 'audit-pull-profiles.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'MUST-FIRE' -and $r.text -match 'all self-tests pass') {
+  Ok 'audit-pull-profiles -SelfTest passes with its drift + carriage fixtures armed'
+} else {
+  Bad ('audit-pull-profiles -SelfTest failed or lost its founding-bug fixtures: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | '))
+}
+$r = RunPS 'audit-pull-profiles.ps1' @()
+if ($r.rc -eq 0) { Ok 'every store pull_profile agrees with its agent module' }
+else { Bad ('pull_profile drift or a profile encoding carriage: ' + ((($r.text -split "`n") | Select-Object -First 6) -join ' | ')) }
+
 # COMPLETION MARKER (2026-08-08). This file is the founding case for the whole contract: on 2026-08-08 it
 # threw 242 checks before this point, printed 176 lines of PASS, and exited 1 - indistinguishable from an
 # ordinary findings-exit. The exit code carries the VERDICT; this line carries the fact that the run

@@ -1412,13 +1412,6 @@
                                                 "size":  "5 ct",
                                                 "verified":  "2026-07-20 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
-                                 "Sam\u0027s Club":  {
-                                                         "url":  "https://www.samsclub.com/ip/13609008294",
-                                                         "name":  "Member\u0027s Mark Blueberry Sliced Bagels, 6 ct.",
-                                                         "price":  "$3.74",
-                                                         "size":  "6 ct",
-                                                         "verified":  "2026-08-13 DERIVED from the price row (same record the board priced)"
-                                                     },
                                  "Baker\u0027s":  {
                                                       "url":  "https://www.bakersplus.com/p/kroger-plain-bagels/0001111008416",
                                                       "name":  "Kroger Plain Bagels",
@@ -2398,13 +2391,6 @@
                                                           "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)",
                                                           "board_pu":  0.1786
                                                       },
-                                      "Sam\u0027s Club":  {
-                                                              "url":  "https://www.samsclub.com/ip/15007874527",
-                                                              "price":  5.92,
-                                                              "size":  "18 oz",
-                                                              "name":  "Organic Blueberries, 18 oz.",
-                                                              "board_pu":  0.3289
-                                                          },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/Fresh-Blueberries-18-oz-Container/161115457",
                                                       "name":  "Fresh Blueberries, 18 oz. Container",
@@ -7053,13 +7039,6 @@
                                                  "size":  "13 oz",
                                                  "verified":  "2026-08-10 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                              },
-                                  "Sam\u0027s Club":  {
-                                                          "url":  "https://www.samsclub.com/ip/13596802767",
-                                                          "name":  "Premier Protein 30g High Protein Shake, Cookies and Cream, 11 fl. oz., 15 pk.",
-                                                          "price":  "$26.64",
-                                                          "size":  "165 fl oz",
-                                                          "verified":  "2026-08-06 DERIVED from the price row (same record the board priced)"
-                                                      },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/Great-Value-Chocolate-Chip-Cookies-Family-Size-18-oz/818412157",
                                                   "name":  "Great Value Chocolate Chip Cookies, Family Size, 18 oz",
@@ -11159,13 +11138,6 @@
                                   },
                   "frozen-pizza":  {
                                        "commodity":  "frozen-pizza",
-                                       "Aldi":  {
-                                                    "url":  "https://www.aldi.us/store/aldi/products/79527116-breakfast-best-sausage-egg-cheese-breakfast-pizza-2pk-112-oz",
-                                                    "name":  "Breakfast Best Sausage Egg Cheese Breakfast Pizza 2pk 112 OZ",
-                                                    "price":  "$3.99",
-                                                    "size":  "2 pk 11.2 oz",
-                                                    "verified":  "2026-08-06 DERIVED from the price row (same record the board priced)"
-                                                },
                                        "Baker\u0027s":  {
                                                             "url":  "https://www.bakersplus.com/p/kroger-pepperoni-french-bread-frozen-pizza/0001111012782",
                                                             "name":  "Kroger Pepperoni French Bread Frozen Pizza",
@@ -14177,13 +14149,6 @@
                              },
                   "ice-cream":  {
                                     "commodity":  "ice-cream",
-                                    "Aldi":  {
-                                                 "url":  "https://www.aldi.us/store/aldi/products/19758271-belmont-butter-pecan-ice-cream-48-fl-oz",
-                                                 "name":  "Belmont Butter Pecan Ice Cream 48 FL OZ",
-                                                 "price":  "$2.49",
-                                                 "size":  "48 fl oz",
-                                                 "verified":  "2026-08-06 DERIVED from the price row (same record the board priced)"
-                                             },
                                     "Baker\u0027s":  {
                                                          "url":  "https://www.bakersplus.com/p/kroger-1883-vanilla-ice-cream-party-pail-big-deal-/0001111010960",
                                                          "name":  "Kroger 1883 Vanilla Ice Cream Party Pail BIG DEAL!",
@@ -16483,14 +16448,7 @@
                                                        "price":  5.99,
                                                        "size":  "6 pk 2 oz",
                                                        "verified":  "2026-08-15"
-                                                   },
-                                  "Sam\u0027s Club":  {
-                                                          "url":  "https://www.samsclub.com/ip/17237553169",
-                                                          "name":  "Member\u0027s Mark Blueberry Muffins, 6 ct.",
-                                                          "price":  "$6.74",
-                                                          "size":  "6 ct",
-                                                          "verified":  "2026-08-13 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                   }
                               },
                   "mushrooms":  {
                                     "commodity":  "mushrooms",
@@ -17705,13 +17663,6 @@
                                                               "name":  "Ragu Old World Style Traditional Pasta Sauce, 45 oz., 3 pk.",
                                                               "board_pu":  0.0591
                                                           },
-                                      "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21848727-fareway-pasta-sauce-traditional-24-oz",
-                                                      "name":  "Fareway Traditional Pasta Sauce",
-                                                      "price":  "$1.88",
-                                                      "size":  "24 oz",
-                                                      "verified":  "2026-08-09 DERIVED from the price row (same record the board priced)"
-                                                  },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/Great-Value-Tomato-Basil-Garlic-Pasta-Sauce-45-oz-Jar/5366440726",
                                                       "name":  "Great Value Tomato Basil Garlic Pasta Sauce, 45 oz Jar",
@@ -21952,13 +21903,6 @@
                                                              "name":  "Daisy Brand Pure and Natural Sour Cream, 48 oz.",
                                                              "board_pu":  0.1154
                                                          },
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24269937-fareway-sour-cream-8-oz",
-                                                     "name":  "Fareway Sour Cream",
-                                                     "price":  "$0.99",
-                                                     "size":  "8 oz",
-                                                     "verified":  "2026-08-09 DERIVED from the price row (same record the board priced)"
-                                                 },
                                      "Walmart":  {
                                                      "url":  "https://www.walmart.com/ip/Great-Value-Original-Sour-Cream-48-oz/47386251",
                                                      "name":  "Great Value Original Sour Cream, 48 oz",
@@ -22178,13 +22122,6 @@
                                                  "verified":  "2026-07-23 DERIVED from the price row (same record the board priced)",
                                                  "board_pu":  0.9967
                                              },
-                                  "Sam\u0027s Club":  {
-                                                          "url":  "https://www.samsclub.com/ip/17590304834",
-                                                          "name":  "Scrub Daddy Sponge Daddy Cleaning Sponges, Multi-Color, 12 ct.",
-                                                          "price":  "$8.98",
-                                                          "size":  "12 ct",
-                                                          "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                      },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/Great-Value-Heavy-Duty-Scrub-Sponges-8-Count/3342234359",
                                                   "name":  "Great Value Heavy Duty Scrub Sponges, 8 Count",
