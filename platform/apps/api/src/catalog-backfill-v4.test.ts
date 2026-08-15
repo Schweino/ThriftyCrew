@@ -3,6 +3,7 @@ import { deterministicId } from "@thriftycrew/domain";
 import { assertFreshBackfillEvidence, assertFrozenBackfillReproduction, assertIndependentBackfillEvidence, assertLegacyBoard,
   catalogBackfillPromotionAllowed, claimCatalogBackfillWorkItem, deriveCatalogBackfillCapture, heartbeatCatalogBackfillOwner } from "./catalog-backfill-v4";
 import { assertBackfillIdentityPatterns, compileKnownWrongBackfillProducts, correctCatalogBackfillDefinition, correctCatalogBackfillEvidence, requeueCatalogBackfillCell } from "./catalog-backfill-v4";
+import { compileAuthoritativeBackfillIdentity } from "./catalog-backfill-v4";
 
 const identity = { canonicalName: "Bananas", displayName: "Bananas", acceptedForms: ["Bananas"], excludedForms: ["chips"], basisUnit: "lb" };
 
@@ -41,6 +42,18 @@ describe("truthful V4 catalog backfill", () => {
       { id: "zucchini", label: "Zucchini", unit: "lb" },
       { id: "apples", label: "Apples", unit: "lb" },
     ] }).map((row) => row.id)).toEqual(["apples", "zucchini"]);
+  });
+
+  it("supersedes a stale Aluminum Foil count basis with the authored square-foot basis", () => {
+    const compiled = compileAuthoritativeBackfillIdentity("aluminum-foil", {
+      canonicalName: "Aluminum Foil", displayName: "Aluminum Foil", acceptedForms: ["Aluminum Foil"], excludedForms: [],
+      basisUnit: "each", unitDimension: "count", packageNormalizationRules: ["legacy board basis unit: each"],
+      aliases: [], requiredQualifiers: [], optionalQualifiers: [], queryTerms: ["Aluminum Foil"], storeQueryVariants: {},
+      sourceOccurrences: [{ recipeCandidateId: "legacy-board:test", sourceOccurrenceId: "aluminum-foil" }],
+      plannerRunId: "legacy-board-backfill:test", adjudication: null,
+    });
+    expect(compiled.identity).toMatchObject({ basisUnit: "sq_ft", unitDimension: "other",
+      packageNormalizationRules: ["authored catalog basis unit: sq_ft"] });
   });
 
   it("never promotes partial, mixed, or oversized evidence counts", () => {

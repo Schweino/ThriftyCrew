@@ -63,7 +63,10 @@ export function compileAuthoritativeBackfillIdentity(commodityId: string, prior:
   }]));
   const compiledKnownWrong = compileKnownWrongBackfillProducts((authoredKnownWrong as { entries?: KnownWrongEntry[] }).entries ?? [], commodityId);
   const knownWrongProducts = compiledKnownWrong.products;
+  const basisChanged = String(prior.basisUnit ?? "") !== commodity.unit;
   const identity = catalogIngredientIdentitySchema.parse({ ...prior,
+    ...(basisChanged ? { basisUnit: commodity.unit, unitDimension: unitDimension(commodity.unit),
+      packageNormalizationRules: [`authored catalog basis unit: ${commodity.unit}`] } : {}),
     includeNamePatterns: commodity.include ?? [commodity.label], excludeNamePatterns: commodity.exclude ?? [],
     ...(Object.keys(storeTaxonomyRules).length ? { storeTaxonomyRules } : {}),
     ...(knownWrongProducts.length ? { knownWrongProducts } : {}),
