@@ -63,7 +63,10 @@ export function compileAuthoritativeBackfillIdentity(commodityId: string, prior:
   }]));
   const compiledKnownWrong = compileKnownWrongBackfillProducts((authoredKnownWrong as { entries?: KnownWrongEntry[] }).entries ?? [], commodityId);
   const knownWrongProducts = compiledKnownWrong.products;
-  const basisChanged = String(prior.basisUnit ?? "") !== commodity.unit;
+  // Basis migrations affect pricing semantics and therefore require a separately
+  // audited, ingredient-wide correction. Aluminum Foil is the first approved
+  // migration; keep unrelated legacy bases stable until their own audit/correction.
+  const basisChanged = commodityId === "aluminum-foil" && String(prior.basisUnit ?? "") !== commodity.unit;
   const identity = catalogIngredientIdentitySchema.parse({ ...prior,
     ...(basisChanged ? { basisUnit: commodity.unit, unitDimension: unitDimension(commodity.unit),
       packageNormalizationRules: [`authored catalog basis unit: ${commodity.unit}`] } : {}),
