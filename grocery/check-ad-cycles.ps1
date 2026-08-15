@@ -567,6 +567,15 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         & powershell @srArgs | ForEach-Object { Log ('store-registry: ' + $_) }
         if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    store-registry drift: a hardcoded store list disagrees with stores.json - fix the script or document the subset in stores.json allowed_subsets' }
                   } catch { Log ('store-registry guard threw: ' + $_.Exception.Message) }
+      # Advisory: the same food priced under two ids lets the two prices DISAGREE while every per-file check
+      # reads green - bread-crumbs vs breadcrumbs sat 2.9x apart across the weekly and recipe boards until
+      # Brad spotted it by eye on 2026-08-15 (two recipes paid $0.218/oz against a live $0.0743/oz). The id
+      # namespace spans three files, so only a cross-namespace scan can see it. Review, not a gate: a suspect
+      # needs a human merge-or-allowlist ruling, and blocking the publish would not make that happen faster.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-commodity-dupes.ps1') | ForEach-Object { Log ('commodity-dupes: ' + $_) }
+        if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    commodity-dupes: the same food may be priced under two ids (see out\commodity-dupes.json) - merge the real ones, allowlist the reviewed ones' }
+      } catch { Log ('commodity-dupes audit threw: ' + $_.Exception.Message) }
       # ---- ARRIVALS DESK (REVIEW QUEUE, NEVER A GATE). The 47-of-99 bug class - a commodity's include regex
       # matching a product that is NOT the commodity - is invisible to every hard invariant above it: those
       # products carry a real first-party product id, a real price and a working link, so identity, basis,

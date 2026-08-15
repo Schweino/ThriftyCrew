@@ -1,0 +1,27 @@
+{
+    "readme":  "Reviewed near-duplicate commodity pairs for audit-commodity-dupes.ps1. An entry asserts a human checked BOTH ids and they are genuinely DIFFERENT PURCHASES, with the reason written down. NEVER add an entry to silence a finding - a real duplicate is merged (rebid the consumers, drop the loser row; see the 2026-08-15 bread-crumbs/breadcrumbs merge), not allowlisted. Pairs declared in recipe-floor-id-map.json are honored automatically and do NOT belong here (two copies of one ruling drift).",
+    "schema":  1,
+    "allow":  [
+                  {
+                      "a":  "broccoli",
+                      "b":  "broccolini",
+                      "reviewed":  "2026-08-15",
+                      "reviewed_by":  "claude, confirmed against both board rows",
+                      "reason":  "Different vegetables, not a spelling drift. Broccolini is a broccoli/gai-lan hybrid sold in bunches at a different price point; the suffix rule fires on the shared stem only."
+                  },
+                  {
+                      "a":  "honey",
+                      "b":  "honeydew",
+                      "reviewed":  "2026-08-15",
+                      "reviewed_by":  "claude",
+                      "reason":  "Honey is a sweetener, honeydew is a melon. The suffix rule fires on the shared stem only; the two never price the same food."
+                  },
+                  {
+                      "a":  "coconut",
+                      "b":  "coconut-oil",
+                      "reviewed":  "2026-08-15",
+                      "reviewed_by":  "claude",
+                      "reason":  "Whole coconut (produce, per each) versus coconut oil (pantry fat, per fl oz). Different foods, different aisles, different units."
+                  }
+              ]
+}
