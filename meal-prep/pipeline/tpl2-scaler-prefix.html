@@ -183,14 +183,15 @@ function esc(s){ var d=document.createElement('span'); d.textContent=s; return d
 function money(v){ return '$'+v.toFixed(2); }
 function rm(){ return (window.TC&&window.TC.rm)?window.TC.rm():false; }
 // THE DESTINATION IS WRITTEN FIRST, ALWAYS, and the animation is decoration on top of an already-correct
-// number. This used to hand the node to TC.tween and only fall back when TC.tween was ABSENT - but the
-// failure in the wild is a helper that is PRESENT and does nothing. Measured live 2026-08-15:
-// TC.tween(node,10,20,fmt) left the node reading "seed" two seconds later. The receipt seeds its total
-// cell with the PREVIOUS total so the tween has something to animate from, so a silent no-op left every
-// grand total reading exactly one interaction behind: untick a $32.79 ingredient and the total did not
-// move, then change the servings and it finally showed the untick's number. Present on live cards before
-// this repoint (verified on a card still served by the old feed), and it was invisible on the ~231 cards
-// whose total said "Unavailable". A displayed price must never depend on an animation having run.
+// number. Keep this write even though TC.tween now does the same thing internally: this branch also covers
+// TC being ABSENT entirely (a card built before the motion bundle, or the bundle failing to parse), which
+// the helper by definition cannot.
+// History, corrected 2026-08-15: this was first written to work around "TC.tween is present but does
+// nothing", measured as TC.tween(node,10,20,fmt) leaving a node reading "seed" two seconds later. That
+// measurement was an artifact, not a site bug - it was taken in a tab that was not compositing, where
+// requestAnimationFrame never fires, so NO rAF-driven animation on the page could have run. Driven with a
+// pumped rAF, TC.tween animates and lands exactly on its destination. The rule below stands on its own
+// merits regardless: a displayed price must never depend on an animation having run.
 function tween(el,from,to){ if(!el)return; el.textContent=money(to); if(window.TC&&window.TC.tween){ window.TC.tween(el,from,to,money); } }
 function tap(n){ if(window.TC&&window.TC.tap)window.TC.tap(n); }
 function wake(on){ if(window.TC&&window.TC.wake)window.TC.wake(on); }

@@ -294,7 +294,14 @@ function announce(t){try{if(!live){live=document.createElement('div');live.class
 // announces only the settled value so assistive tech hears "$47.30", not 18 intermediate numbers.
 TC.tween=function(el,from,to,fmt){
   if(!el)return; fmt=fmt||function(v){return '$'+v.toFixed(2);};
-  if(TC.rm()||from===to){el.textContent=fmt(to);announce(fmt(to));return;}
+  // Destination first, SYNCHRONOUSLY, before a single frame is scheduled: the number on screen is correct
+  // even if the animation never runs. rAF does not fire at all in a tab that is hidden or not compositing
+  // (a backgrounded tab, an automation pane, a headless check), and a tween that only wrote from inside
+  // step() would leave the PREVIOUS value sitting there indefinitely in exactly those environments. The
+  // first rAF callback lands before the next paint, so this write is never seen - no flash of the final
+  // number. Animation is decoration on top of an already-correct DOM, never the thing that produces it.
+  el.textContent=fmt(to);
+  if(TC.rm()||from===to){announce(fmt(to));return;}
   var t0=null,d=300;
   function step(ts){ if(t0===null)t0=ts; var p=Math.min(1,(ts-t0)/d); var e=1-Math.pow(1-p,3);
     el.textContent=fmt(from+(to-from)*e); if(p<1){requestAnimationFrame(step);} else {announce(fmt(to));} }
