@@ -83,34 +83,66 @@ async function samsProbe(term) {
   try { data = JSON.parse(m[1]); } catch (e) { return { state: 'UNUSABLE', rows: [], why: 'nextdata-unparseable' }; }
 
   /*
-    Walk the payload rather than pinning a path. Sam's reshapes the search response, and a pinned
-    path degrades to "no products" -- which, without the three-state verdict, is indistinguishable
-    from the store not carrying the item.
-    linePrice = what one package costs. unitPrice = Sam's own per-unit rate, the independent
-    cross-check audit-basis-reconcile uses. Capture BOTH or that guard has nothing to compare.
+    THE PRICE PAIR LIVES ON item.priceInfo, NOT ON THE ITEM (2026-08-15).
+    A first version walked for any node carrying a name + id and read `node.linePrice ?? node.price`.
+    `linePrice` is one level down under `priceInfo`, so that always fell through to `node.price` -- a
+    bare number -- and never captured `unitPrice` at all. The PRICES were right (item.price is exactly
+    priceInfo.linePrice, verified across a search page), but a capture with no unitPrice is WORTHLESS:
+    build-sams-deals derives size as lp/up and rejects every row with `err='no unitPrice'`. A whole
+    388-term sweep would have produced 7,298 rows and published nothing.
+
+    So: walk to the item nodes and read the pair off priceInfo, keeping Sam's OWN STRING FORMS
+    ("$6.22", "$1.55/lb"). The builder parses the "$n/unit" shape directly; converting to numbers here
+    would throw away the unit of measure, which is the whole point of capturing it.
+    unitPrice is also the independent cross-check audit-basis-reconcile uses. Capture BOTH or that
+    guard has nothing to compare.
   */
   const rows = [];
   const seen = new Set();
   (function walk(node, depth) {
-    if (!node || typeof node !== 'object' || depth > 12) return;
+    if (!node || typeof node !== 'object' || depth > 14) return;
     if (Array.isArray(node)) { for (const v of node) walk(v, depth + 1); return; }
-    const name = node.name || node.productName || node.title;
-    const id   = node.productId || node.itemNumber || node.id;
-    const lp   = node.linePrice ?? node.finalPrice?.unitPrice ?? node.price;
-    const up   = node.unitPrice ?? node.pricePerUnit ?? node.unitOfMeasure?.price;
-    if (name && id && lp != null && !seen.has(String(id))) {
-      seen.add(String(id));
-      rows.push({
-        n:  String(name).replace(/[|\r\n]+/g, ' ').trim(),
-        lp: typeof lp === 'object' ? (lp.amount ?? null) : lp,
-        up: typeof up === 'object' ? (up.amount ?? null) : (up ?? null),
-        id: String(id),
-      });
+
+    const pi = node.priceInfo;
+    if (pi && (pi.linePrice != null)) {
+      const name = node.name || node.productName || node.title;
+      const id   = node.productId || node.itemNumber || node.id;
+      if (name && id && !seen.has(String(id))) {
+        seen.add(String(id));
+        rows.push({
+          n:  String(name).replace(/[|\r\n]+/g, ' ').trim(),
+          lp: pi.linePrice,          // "$14.98" - keep the string, the builder parses it
+          up: pi.unitPrice ?? null,  // "$0.09/ea" - unit of measure must survive
+          id: String(id),
+        });
+      }
+      return;                        // do not descend into a priced item and re-match its children
     }
     for (const k of Object.keys(node)) walk(node[k], depth + 1);
   })(data, 0);
 
+  if (rows.length) assertSamsRowContract(rows[0]);
   return rows.length ? { state: 'MATCHES', rows } : { state: 'EMPTY', rows: [], why: 'store returned no products' };
+}
+
+/*
+  FAIL FAST ON A SHAPE THE BUILDER CANNOT EAT (2026-08-15).
+  The first version of this agent swept all 388 terms, produced 7,298 rows, and every one of them
+  would have been rejected by build-sams-deals with err='no unitPrice' - a 35-minute run worth
+  nothing, discovered only at build time. The capture contract is narrow and knowable, so check it on
+  the FIRST priced row and throw immediately rather than at the end of a sweep.
+  Contract (build-sams-deals.ps1 header): q|n|lp|up|id, lp = "$14.98", up = "$0.09/ea".
+*/
+function assertSamsRowContract(row) {
+  const lpOk = typeof row.lp === 'string' && /^\$\s*[\d,]+(\.\d{1,3})?$/.test(row.lp);
+  const upOk = row.up == null || (typeof row.up === 'string' && /^\$\s*[\d,]+(\.\d{1,3})?\s*\/\s*.+$/.test(row.up));
+  if (!lpOk || !upOk) {
+    throw new Error(
+      'ROW CONTRACT VIOLATED - build-sams-deals would reject this capture. ' +
+      `lp=${JSON.stringify(row.lp)} (want "$14.98"), up=${JSON.stringify(row.up)} (want "$0.09/ea"). ` +
+      'Fix the extractor before sweeping; a whole run of this shape publishes nothing.'
+    );
+  }
 }
 
 const samsAgent = {
