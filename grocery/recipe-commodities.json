@@ -1481,49 +1481,6 @@
                             "band_min":  0.01,
                             "band_max":  0.2,
                             "note":  "Distilled white vinegar is very cheap per oz; \u0027wine\u0027 excludes white/red wine vinegar."
-                        },
-                        {
-                            "id":  "zero-sugar-soda",
-                            "label":  "Zero-Sugar Soda",
-                            "unit":  "each",
-                            "include":  [
-                                            "zero\\s+sugar",
-                                            "coke\\s+zero",
-                                            "sprite\\s+zero",
-                                            "pepsi\\s+zero",
-                                            "diet\\s+(?:coke|pepsi|dew|mountain\\s+dew|mtn|sunkist|dr\\.?\\s*pepper|cola|sprite|fanta|sierra\\s+mist)",
-                                            "dr\\.?\\s*pepper\\s+zero",
-                                            "caffeine[\\s-]?free\\s+diet"
-                                        ],
-                            "exclude":  [
-                                            "energy",
-                                            "syrup",
-                                            "\\bmix\\b",
-                                            "hershey",
-                                            "candy",
-                                            "\\bbar\\b",
-                                            "\\bwater\\b",
-                                            "gatorade",
-                                            "powerade",
-                                            "\\btea\\b",
-                                            "monster",
-                                            "rockstar",
-                                            "celsius",
-                                            "alani",
-                                            "\\bbang\\b",
-                                            "\\breign\\b",
-                                            "red\\s*bull",
-                                            "\\bc4\\b",
-                                            "ghost",
-                                            "starbucks",
-                                            "\\bcookies?\\b",
-                                            "\\boreo\\b",
-                                            "\\bjerky\\b",
-                                            "\\bsandwich\\b"
-                                        ],
-                            "band_min":  0.5,
-                            "band_max":  12,
-                            "note":  "Diet/zero-sugar cola family; include targets brand+zero/diet phrasing (not the bare word \u0027soda\u0027, which GLOBAL_EXCLUDE drops). \u0027each\u0027 band spans single bottle up to a 12-pack."
                         }
                     ]
 }

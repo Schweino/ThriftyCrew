@@ -2997,47 +2997,6 @@
                                       ]
                        },
                        {
-                           "id":  "zero-sugar-soda",
-                           "commodity":  "Zero-Sugar Soda",
-                           "category":  "Sauces \u0026 Condiments",
-                           "unit":  "each",
-                           "cheapest_store":  "Family Fare",
-                           "stores":  [
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.8817,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Welch\u0027s Zero Sugar Concord Grape Drink 6 Ea",
-                                              "size":  "6 ea"
-                                          },
-                                          {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  1,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  1,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  2.15,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  3.49,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          }
-                                      ]
-                       },
-                       {
                            "id":  "93-7-ground-beef",
                            "commodity":  "93/7 Ground Beef",
                            "unit":  "lb",
@@ -8717,67 +8676,6 @@
                                       ],
                            "cheapest_store":  "Baker\u0027s",
                            "cheapest_price":  0.2139,
-                           "cheapest_type":  "everyday"
-                       },
-                       {
-                           "id":  "breadcrumbs",
-                           "commodity":  "Panko Breadcrumbs",
-                           "unit":  "oz",
-                           "category":  "Spices \u0026 Baking",
-                           "stores":  [
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.3488,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Our Family Bread Crumbs, Panko, Plain 8 Oz",
-                                              "size":  "8 oz"
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.218,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Kikkoman Panko Breadcrumbs 2pk, 16 oz",
-                                              "size":  ""
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.4983,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Hy-Vee Plain Panko Bread Crumbs",
-                                              "size":  "6 oz"
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.2563,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Chef\u0027s Cupboard Panko Breadcrumbs",
-                                              "size":  "8 oz"
-                                          },
-                                          {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.3113,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Kikkoman® Panko Japanese Style Bread Crumbs",
-                                              "size":  "8 oz"
-                                          }
-                                      ],
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  0.218,
                            "cheapest_type":  "everyday"
                        },
                        {
