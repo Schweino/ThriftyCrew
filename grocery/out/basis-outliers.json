@@ -17,6 +17,19 @@
                          "size_shape_mismatch":  true
                      },
                      {
+                         "id":  "dried-basil",
+                         "commodity":  "Basil (dried)",
+                         "unit":  "oz",
+                         "store":  "Family Fare",
+                         "per_unit":  21.3929,
+                         "median":  2.24,
+                         "mult":  9.55,
+                         "size":  "200 ml",
+                         "item":  "Litehouse Herb, Freeze  Dried Basil 0.28 Oz",
+                         "peers_packed":  "0 of 5",
+                         "size_shape_mismatch":  false
+                     },
+                     {
                          "id":  "bay-leaves",
                          "commodity":  "Bay Leaves",
                          "unit":  "oz",
@@ -96,7 +109,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-14T21:44:13",
+    "generated":  "2026-08-15T06:23:06",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -205,6 +218,18 @@
                               "item":  "Vlasic Mild Banana Pepper Rings, Keto Friendly",
                               "kind":  "weight",
                               "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "dried-basil",
+                              "commodity":  "Basil (dried)",
+                              "unit":  "oz",
+                              "store":  "Family Fare",
+                              "per_unit":  21.3929,
+                              "size":  "200 ml",
+                              "item":  "Litehouse Herb, Freeze  Dried Basil 0.28 Oz",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
                               "holds_crown":  false
                           },
                           {
@@ -971,6 +996,18 @@
                               "per_unit":  0.199,
                               "size":  "10 oz",
                               "item":  "Fareway Soy Sauce",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "sparkling-water",
+                              "commodity":  "Sparkling Water",
+                              "unit":  "floz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0818,
+                              "size":  "17 oz",
+                              "item":  "Sparkling Ice Zero Sugar Pink Grapefruit Flavored Sparkling Water 17 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false

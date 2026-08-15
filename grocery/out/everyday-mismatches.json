@@ -26,19 +26,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "aluminum-foil",
-        "store":  "Walmart",
-        "unit":  "each",
-        "board":  12.2,
-        "link":  10.99,
-        "ratio":  0.9,
-        "price":  10.99,
-        "size":  "each",
-        "boardItem":  "GARITIN Aluminum Foil Paper 223 Sq Ft, Heavy Duty Aluminum Foil, Non Stick Foil Roll with Cutter for Grilling, Cooking, Catering, Grill Foil Wraps for Food, 12 Inches Wide, Silver",
-        "linkItem":  "GARITIN Aluminum Foil Paper 223 Sq Ft, Heavy Duty Aluminum Foil, Non Stick Foil Roll with Cutter for Grilling, Cooking, Catering, Grill Foil Wraps for Food, 12 Inches Wide, Silver",
-        "board_src":  "main"
-    },
-    {
         "id":  "asparagus",
         "store":  "Aldi",
         "unit":  "lb",
@@ -234,6 +221,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "mac-and-cheese",
+        "store":  "Hy-Vee",
+        "unit":  "each",
+        "board":  0.976,
+        "link":  0.998,
+        "ratio":  1.02,
+        "price":  4.99,
+        "size":  "5 ct",
+        "boardItem":  "Kraft Original Mac \u0026 Cheese Macaroni and Cheese Dinner, 5 Pack \r\n",
+        "linkItem":  "Kraft Original Mac \u0026 Cheese Macaroni and Cheese Dinner, 5 Pack \r\n",
+        "board_src":  "main"
+    },
+    {
         "id":  "olive-oil",
         "store":  "Aldi",
         "unit":  "floz",
@@ -361,6 +361,19 @@
         "size":  "28.5 oz",
         "boardItem":  "Skintimate Summer Splash Shave Gel",
         "linkItem":  "Skintimate Skin Therapy Dry Skin Shave Gel, 9.5 oz., 3 pk.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "smoked-turkey-sausage",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  4.7289,
+        "link":  5.8785,
+        "ratio":  1.24,
+        "price":  4.96,
+        "size":  "13.5 oz",
+        "boardItem":  "Johnsonville Smoked Turkey Sausage, 6 Count, 13.5 oz",
+        "linkItem":  "Johnsonville Smoked Turkey Sausage, 6 Count, 13.5 oz",
         "board_src":  "main"
     },
     {
@@ -806,32 +819,6 @@
         "board_src":  "recipe"
     },
     {
-        "id":  "zero-sugar-soda",
-        "store":  "Family Fare",
-        "unit":  "each",
-        "board":  0.8817,
-        "link":  1.215,
-        "ratio":  1.38,
-        "price":  7.29,
-        "size":  "6 pk",
-        "boardItem":  "Welch\u0027s Zero Sugar Concord Grape Drink 6 Ea",
-        "linkItem":  "Coca Cola Zero Sugar Soda Bottles 6 Pk",
-        "board_src":  "recipe"
-    },
-    {
-        "id":  "zero-sugar-soda",
-        "store":  "Aldi",
-        "unit":  "each",
-        "board":  2.15,
-        "link":  0.3158,
-        "ratio":  0.15,
-        "price":  3.79,
-        "size":  "12 x 12 fl oz",
-        "boardItem":  "",
-        "linkItem":  "Summit Zero Sugar Cola 12pk",
-        "board_src":  "recipe"
-    },
-    {
         "id":  "sugar-free-bbq-sauce",
         "store":  "Baker\u0027s",
         "unit":  "oz",
@@ -901,9 +888,9 @@
         "store":  "Hy-Vee",
         "unit":  "oz",
         "board":  0.31,
-        "link":  0.2462,
-        "ratio":  0.79,
-        "price":  1.97,
+        "link":  0.2083,
+        "ratio":  0.67,
+        "price":  1.6667,
         "size":  "8 oz",
         "boardItem":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Natural Cheese",
         "linkItem":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Natural Cheese",
@@ -1076,19 +1063,6 @@
         "size":  "52 fl oz",
         "boardItem":  "Nature\u0027s Nectar Not From Concentrate Pineapple Juice",
         "linkItem":  "Nature\u0027s Nectar Not From Concentrate Pineapple Juice",
-        "board_src":  "recipe"
-    },
-    {
-        "id":  "breadcrumbs",
-        "store":  "Aldi",
-        "unit":  "oz",
-        "board":  0.2563,
-        "link":  0.2312,
-        "ratio":  0.9,
-        "price":  1.85,
-        "size":  "8 oz",
-        "boardItem":  "Chef\u0027s Cupboard Panko Breadcrumbs",
-        "linkItem":  "Chef\u0027s Cupboard Panko Breadcrumbs",
         "board_src":  "recipe"
     }
 ]

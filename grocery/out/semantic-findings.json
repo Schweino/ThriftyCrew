@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-14 20:08",
+    "generated":  "2026-08-15 06:16",
     "board":  "comparison-2026-08-14.json",
-    "sidecar_generated":  "2026-08-14 20:07:59",
+    "sidecar_generated":  "2026-08-15 06:16:01",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2883,
-                     "corpus":  35727,
-                     "rule_invisible":  6371
+                     "board_pairs":  2900,
+                     "corpus":  35766,
+                     "rule_invisible":  6428
                  },
     "identity_count":  0,
-    "coverage_count":  59,
+    "coverage_count":  56,
     "identity":  [
 
                  ],
@@ -31,7 +31,7 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ingredient-definition-cumin-seeds",
+                         "id":  "cumin-seeds",
                          "commodity":  "Cumin seeds",
                          "store":  "Walmart",
                          "product":  "Frontier Co-op Certified Organic Cumin Seed, Ground, 16 oz. Bag",
@@ -111,7 +111,7 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ingredient-definition-cumin-seeds",
+                         "id":  "cumin-seeds",
                          "commodity":  "Cumin seeds",
                          "store":  "Walmart",
                          "product":  "Simply Organic Ground Cumin Seed, Shelf-Stable, 2.31 oz Bottle",
@@ -151,7 +151,7 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ingredient-definition-cumin-seeds",
+                         "id":  "cumin-seeds",
                          "commodity":  "Cumin seeds",
                          "store":  "Walmart",
                          "product":  "Spice Islands Ground Cumin Seed, Kosher, 1.9 oz",
@@ -241,6 +241,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "cat-litter",
+                         "commodity":  "Cat Litter",
+                         "store":  "Baker\u0027s",
+                         "product":  "Tidy Cats LightWeight Instant Action, Odor control, Multi-Cat, Clumping",
+                         "cos":  0.7059,
+                         "score":  0.941591,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "ranch-seasoning-mix",
                          "commodity":  "Ranch Seasoning Mix (packet)",
                          "store":  "Walmart",
@@ -271,12 +281,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ingredient-definition-black-peppercorns",
-                         "commodity":  "Black peppercorns",
-                         "store":  "Baker\u0027s",
-                         "product":  "Private Selection Tellicherry Black Peppercorns Grinder",
-                         "cos":  0.6421,
-                         "score":  0.934837,
+                         "id":  "aluminum-foil",
+                         "commodity":  "Aluminum Foil",
+                         "store":  "Walmart",
+                         "product":  "Mainstays 2 lb. Aluminum Foil Loaf Pans, 3 Count, Disposable, Easy Cleaning",
+                         "cos":  0.6014,
+                         "score":  0.935655,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -287,16 +297,6 @@
                          "product":  "Ground Beef And Pork Blend Patties 80% Lean 20% Fat",
                          "cos":  0.7078,
                          "score":  0.933604,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "iced-tea",
-                         "commodity":  "Iced Tea (bottled/gallon)",
-                         "store":  "Walmart",
-                         "product":  "Red Diamond Unsweetened Tea, Gallon, 128 Fl Oz",
-                         "cos":  0.6264,
-                         "score":  0.932911,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -337,26 +337,6 @@
                          "product":  "Great Value Blueberries, 48 oz (Frozen)",
                          "cos":  0.6838,
                          "score":  0.926411,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "enchilada-sauce",
-                         "commodity":  "Enchilada Sauce",
-                         "store":  "Walmart",
-                         "product":  "Las Palmas Medium Red Chile Sauce, 28 oz",
-                         "cos":  0.6973,
-                         "score":  0.926097,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "garlic-infused-olive-oil",
-                         "commodity":  "Garlic-Infused Olive Oil",
-                         "store":  "Walmart",
-                         "product":  "McCormick Garlic and Olive Oil Seasoning Blend, 5.25 oz Bottle",
-                         "cos":  0.6411,
-                         "score":  0.925513,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -521,7 +501,17 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ingredient-definition-cumin-seeds",
+                         "id":  "taco-sauce",
+                         "commodity":  "Taco Sauce",
+                         "store":  "Walmart",
+                         "product":  "Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 8 oz",
+                         "cos":  0.6937,
+                         "score":  0.908269,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "cumin-seeds",
                          "commodity":  "Cumin seeds",
                          "store":  "Walmart",
                          "product":  "Pride of India Ground Cumin Seed, 8 oz Dual Sifter Bottle",
@@ -537,16 +527,6 @@
                          "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.85 - 3.5 lb Tray",
                          "cos":  0.764,
                          "score":  0.906656,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ingredient-definition-kalamata-olives",
-                         "commodity":  "Kalamata Olives",
-                         "store":  "Walmart",
-                         "product":  "Great Value Sliced Olives, 3.8 oz",
-                         "cos":  0.6604,
-                         "score":  0.906069,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -571,6 +551,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "enchilada-sauce",
+                         "commodity":  "Enchilada Sauce",
+                         "store":  "Walmart",
+                         "product":  "Las Palmas Medium Red Chile Sauce, 28 oz",
+                         "cos":  0.6431,
+                         "score":  0.903476,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "green-olives",
                          "commodity":  "Green Olives (stuffed)",
                          "store":  "Walmart",
@@ -581,32 +571,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ingredient-definition-frozen-cauliflower-florets",
+                         "id":  "frozen-cauliflower-florets",
                          "commodity":  "Frozen Cauliflower Florets",
                          "store":  "Walmart",
                          "product":  "Great Value Frozen Cauliflower, 12 oz Bag, No Added Preservatives",
                          "cos":  0.7151,
                          "score":  0.901266,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-pods",
-                         "commodity":  "Laundry Detergent Pods",
-                         "store":  "Walmart",
-                         "product":  "Tide Power PODS Laundry Detergent Soap Pacs with Odor Defense + Oxi, Original Scent, 45 Count",
-                         "cos":  0.7388,
-                         "score":  0.900907,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "turkey-lunchmeat",
-                         "commodity":  "Turkey (deli / sliced)",
-                         "store":  "Aldi",
-                         "product":  "Deli Sliced Honey Turkey 8 OZ",
-                         "cos":  0.666,
-                         "score":  0.900468,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

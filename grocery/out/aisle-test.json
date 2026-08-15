@@ -90,15 +90,6 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
-        "id":  "aluminum-foil",
-        "store":  "Family Fare",
-        "product":  "Our Family Aluminum Foil, 25 Square Feet 1 Ea",
-        "dept":  "household",
-        "aisle":  "household/food_storage",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
-    },
-    {
         "id":  "anaheim-peppers",
         "store":  "Family Fare",
         "product":  "Anaheim Peppers (Green And Red)",
@@ -173,7 +164,7 @@
     {
         "id":  "baby-back-ribs",
         "store":  "Family Fare",
-        "product":  "Open Acres Fresh Baby Back Pork Ribs",
+        "product":  "Fresh Pork Ribs, Baby Back",
         "dept":  "meat",
         "aisle":  "meat/pork",
         "verdict":  "ALLOW",
@@ -286,6 +277,15 @@
         "aisle":  "health_beauty/grooming_hygiene",
         "verdict":  "ALLOW",
         "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027personal\u0027"
+    },
+    {
+        "id":  "dried-basil",
+        "store":  "Family Fare",
+        "product":  "Litehouse Herb, Freeze  Dried Basil 0.28 Oz",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027fresh_fruits_vegetables\u0027; category \u0027baking\u0027 allows only: pantry"
     },
     {
         "id":  "fresh-basil",
@@ -585,6 +585,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
+        "id":  "canned-butter-beans",
+        "store":  "Family Fare",
+        "product":  "Our Family Butter Beans 15.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "canned-chicken",
         "store":  "Family Fare",
         "product":  "Swanson® White Premium Chunk Canned Chicken Breast In Water 25.000 Oz",
@@ -605,7 +614,7 @@
     {
         "id":  "canned-corn",
         "store":  "Family Fare",
-        "product":  "Our Family Sweet Whole Kernel Corn 15.25 Oz",
+        "product":  "Our Family No Salt Added Super Sweet Whole Kernel Corn 15.25 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -801,6 +810,15 @@
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
+        "id":  "cheddar-cheese-curds",
+        "store":  "Family Fare",
+        "product":  "Arthur Bay Mixed Cheese Curd",
+        "dept":  "dairy",
+        "aisle":  "dairy/ready_to_eat",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
+    },
+    {
         "id":  "cheese-crackers",
         "store":  "Family Fare",
         "product":  "Crav\u0027n Flavor Cheese Crackers, Cheddar, Family Size 21 Oz",
@@ -952,6 +970,15 @@
         "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "cinnamon-stick",
+        "store":  "Family Fare",
+        "product":  "Canela Entera Cinnamon Sticks",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027fresh_fruits_vegetables\u0027; category \u0027baking\u0027 allows only: pantry"
     },
     {
         "id":  "ground-cloves",
@@ -1109,7 +1136,7 @@
     {
         "id":  "crackers",
         "store":  "Family Fare",
-        "product":  "Our Family Saltine Original Crackers 16 Oz",
+        "product":  "Our Family Unsalted Tops Saltine Crackers 16 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/crackers",
         "verdict":  "ALLOW",
@@ -1424,7 +1451,7 @@
     {
         "id":  "fabric-softener",
         "store":  "Family Fare",
-        "product":  "Our Family Fabric Softener, Ultra Spring 51 Fl Oz",
+        "product":  "Free \u0026 Clear Fabric Softener Our Family",
         "dept":  "household",
         "aisle":  "household/laundry",
         "verdict":  "ALLOW",
@@ -1654,6 +1681,15 @@
         "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "garlic-herb-seasoning",
+        "store":  "Family Fare",
+        "product":  "Mc Cormick Roasted Garlic \u0026 Herb Seasoning 2.75 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "garlic-powder",
@@ -2061,6 +2097,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
+        "id":  "kalamata-olives",
+        "store":  "Family Fare",
+        "product":  "Pearls Pitted Greek Smoked Kalamata Olives 6 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
         "id":  "ketchup",
         "store":  "Family Fare",
         "product":  "Ketchup, Rich \u0026 Thick Our Family",
@@ -2095,6 +2140,15 @@
         "aisle":  "fresh_fruits_vegetables/tropical_fruits",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
+    },
+    {
+        "id":  "kosher-salt",
+        "store":  "Family Fare",
+        "product":  "Morton Coarse Kosher Salt 48 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "eggs",
@@ -2149,6 +2203,15 @@
         "aisle":  "beverages/fruit_vegetable_beverages",
         "verdict":  "ALLOW",
         "reason":  "\u0027beverages\u0027 is a reviewed exception department for \u0027lemon-juice\u0027"
+    },
+    {
+        "id":  "lemon-pepper-seasoning",
+        "store":  "Family Fare",
+        "product":  "Kinder\u0027s Lemon Pepper Seasoning 6.25 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "lemonade",
@@ -2261,7 +2324,7 @@
     {
         "id":  "milk",
         "store":  "Family Fare",
-        "product":  "Our Family Reduced Fat Milk 1 Gal",
+        "product":  "Whole Milk Vitamin D Our Family",
         "dept":  "dairy",
         "aisle":  "dairy/milk",
         "verdict":  "ALLOW",
@@ -2567,20 +2630,20 @@
     {
         "id":  "pickles",
         "store":  "Family Fare",
-        "product":  "Our Family Spears Polish Dill Pickles 24 Fl Oz",
+        "product":  "Our Family Reduced Sodium Kosher Dill Pickle Spears 24 Fl Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
-        "id":  "ingredient-definition-pistachios",
+        "id":  "pistachios",
         "store":  "Family Fare",
-        "product":  "Lindt Pistachio Milk Chocolate Truffles 5.1 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/candy",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
+        "product":  "Planters Dry Roasted Pistachios 12.75 Oz",
+        "dept":  "dairy",
+        "aisle":  "dairy/ready_to_eat",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027dairy\u0027; category \u0027snacks\u0027 allows only: pantry, beverages"
     },
     {
         "id":  "pita-bread",
@@ -2997,6 +3060,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
+        "id":  "sea-salt",
+        "store":  "Family Fare",
+        "product":  "Our Family Sea Salt, Coarse, Kosher 16 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
         "id":  "serrano-peppers",
         "store":  "Family Fare",
         "product":  "Serrano Peppers (Capsicums)",
@@ -3035,7 +3107,7 @@
     {
         "id":  "shampoo",
         "store":  "Family Fare",
-        "product":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
+        "product":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/grooming_hygiene",
         "verdict":  "ALLOW",
@@ -3062,7 +3134,7 @@
     {
         "id":  "shredded-cheese",
         "store":  "Family Fare",
-        "product":  "Our Family Natural Finely Cut Mexican Shredded Cheese 32 Oz",
+        "product":  "Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz",
         "dept":  "deli",
         "aisle":  "deli/cheese",
         "verdict":  "ALLOW",
@@ -3152,7 +3224,7 @@
     {
         "id":  "sparkling-water",
         "store":  "Family Fare",
-        "product":  "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz",
+        "product":  "Sparkling Ice Zero Sugar Pink Grapefruit Flavored Sparkling Water 17 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/soda_other_carbonated_beverages",
         "verdict":  "ALLOW",
@@ -3499,6 +3571,15 @@
         "aisle":  "pantry/broth_soups_stews_chili",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "vienna-sausage",
+        "store":  "Family Fare",
+        "product":  "Libby\u0027s Vienna Sausage 4.6 Oz",
+        "dept":  "meat",
+        "aisle":  "meat/sausage",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027meat\u0027; category \u0027canned\u0027 allows only: pantry"
     },
     {
         "id":  "walnuts",
