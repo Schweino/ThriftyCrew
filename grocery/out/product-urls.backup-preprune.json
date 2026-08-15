@@ -1352,14 +1352,6 @@
                                  },
                   "bacon":  {
                                 "commodity":  "Bacon",
-                                "Aldi":  {
-                                             "url":  "https://www.aldi.us/store/aldi/products/20047386-appleton-farms-lower-sodium-bacon-16-oz",
-                                             "name":  "Appleton Farms Lower Sodium Bacon 16 OZ",
-                                             "price":  "$3.99",
-                                             "size":  "16 oz",
-                                             "verified":  "2026-08-05 DERIVED from the price row (same record the board priced)",
-                                             "board_pu":  3.99
-                                         },
                                 "Baker\u0027s":  {
                                                      "url":  "https://www.bakersplus.com/p/kroger-naturally-hardwood-smoked-thick-cut-bacon/0001111065936",
                                                      "name":  "Kroger Naturally Hardwood Smoked Thick Cut Bacon",
@@ -1399,12 +1391,6 @@
                             },
                   "bagels":  {
                                  "commodity":  "bagels",
-                                 "Aldi":  {
-                                              "url":  "https://www.aldi.us/store/aldi/products/20230820-l-oven-fresh-plain-bagels-20-oz",
-                                              "price":  1.99,
-                                              "size":  "20 oz",
-                                              "name":  "L\u0027oven Fresh Plain Bagels"
-                                          },
                                  "Family Fare":  {
                                                      "url":  "https://www.shopfamilyfare.com/shop/dairy/breads_rolls_bagels/lender_s_pre_sliced_cinnamon_raisin_swirl_bagels_6_ea/p/296710",
                                                      "name":  "Lender\u0027s Pre Sliced Cinnamon Raisin Swirl Bagels 6 Ea",
@@ -3296,12 +3282,6 @@
                                                       "verified":  "2026-08-15",
                                                       "board_pu":  2.99
                                                   },
-                                 "Fareway":  {
-                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24451441-fareway-butter-salted-16-oz",
-                                                 "price":  3.48,
-                                                 "size":  "16 oz",
-                                                 "name":  "Fareway Solid Butter"
-                                             },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/57018/hy-vee-sweet-cream-salted-butter-quarters",
                                                 "name":  "Hy-Vee Sweet Cream Salted Butter Quarters",
@@ -3311,13 +3291,6 @@
                                                 "size":  "lb",
                                                 "verified":  "2026-07-27 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
-                                 "Sam\u0027s Club":  {
-                                                         "url":  "https://www.samsclub.com/ip/13902755772",
-                                                         "name":  "Carrington Farms Ghee, Clarified Butter, 54 oz.",
-                                                         "price":  "$20.98",
-                                                         "size":  "54 oz",
-                                                         "verified":  "2026-08-08 DERIVED from the price row (same record the board priced)"
-                                                     },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/Great-Value-Sweet-Cream-Salted-Butter-Twin-Pack-16-oz-Box-8-Sticks-Slow-Churned-Refrigerated/879148225",
                                                  "name":  "Great Value Sweet Cream Salted Butter Twin Pack, 16 oz Box, 8 Sticks, Slow Churned, Refrigerated",
@@ -3429,13 +3402,6 @@
                                        },
                   "cabbage":  {
                                   "commodity":  "cabbage",
-                                  "Aldi":  {
-                                               "url":  "https://www.aldi.us/store/aldi/products/25939587-cabbage-per-lb",
-                                               "price":  0.79,
-                                               "size":  "lb",
-                                               "name":  "Green Cabbage",
-                                               "board_pu":  0.79
-                                           },
                                   "Baker\u0027s":  {
                                                        "url":  "https://www.bakersplus.com/p/green-cabbage/0000000004069",
                                                        "price":  0.99,
@@ -3607,13 +3573,6 @@
                                                          "verified":  "2026-07-30 Hy-Vee search API (storeId 1465)",
                                                          "board_pu":  0.0833
                                                      },
-                                          "Sam\u0027s Club":  {
-                                                                  "url":  "https://www.samsclub.com/ip/13759561452",
-                                                                  "price":  4.58,
-                                                                  "size":  "16 oz",
-                                                                  "name":  "Slap Ya Mama Cajun Seasoning 16 oz.",
-                                                                  "board_pu":  0.2862
-                                                              },
                                           "Walmart":  {
                                                           "url":  "https://www.walmart.com/ip/588837447",
                                                           "name":  "(6 pack) Tony Chachere\u0027s, Seasoning, Original, Cajun, 32 oz",
@@ -4134,13 +4093,6 @@
                                                         "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)",
                                                         "board_pu":  0.1128
                                                     },
-                                         "Sam\u0027s Club":  {
-                                                                 "url":  "https://www.samsclub.com/ip/19269758979",
-                                                                 "price":  8.84,
-                                                                 "size":  "104 oz",
-                                                                 "name":  "Member\u0027s Mark Sliced Peaches in Extra Light Syrup, 104 oz.",
-                                                                 "board_pu":  0.085
-                                                             },
                                          "Walmart":  {
                                                          "url":  "https://www.walmart.com/ip/Great-Value-Sliced-Peaches-in-Juice-29-oz/10415385",
                                                          "name":  "Great Value Sliced Peaches in Juice, 29 oz",
@@ -8510,14 +8462,6 @@
                                    },
                   "dish-soap":  {
                                     "commodity":  "dish-soap",
-                                    "Aldi":  {
-                                                 "url":  "https://www.aldi.us/store/aldi/products/20960408-dawn-platinum-dish-spray-dish-soap-fresh-scent-16-0-oz",
-                                                 "name":  "Dawn Platinum Dish Spray Dish Soap Fresh Scent 16 0 OZ",
-                                                 "price":  "$4.94",
-                                                 "size":  "16 oz",
-                                                 "verified":  "2026-08-05 DERIVED from the price row (same record the board priced)",
-                                                 "board_pu":  0.3088
-                                             },
                                     "Family Fare":  {
                                                         "url":  "https://www.shopfamilyfare.com/shop/household/dishes/hand_soaps/ajax_triple_action_liquid_dish_soap_90_fl_oz/p/1280074",
                                                         "name":  "Ajax Triple Action Liquid Dish Soap 90 Fl Oz",
@@ -9378,12 +9322,6 @@
                                                     "verified":  "2026-08-15",
                                                     "board_pu":  1.75
                                                 },
-                               "Fareway":  {
-                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2915637-dutch-farms-18-grade-a-large-eggs-18-ct",
-                                               "price":  1.65,
-                                               "size":  "dozen",
-                                               "name":  "Dutch Farms 18 Grade A Large Eggs"
-                                           },
                                "Hy-Vee":  {
                                               "url":  "https://www.hy-vee.com/aisles-online/p/4143167/that-s-smart-large-eggs",
                                               "name":  "That\u0027s Smart! Large Eggs",
@@ -12729,14 +12667,6 @@
                                        },
                   "ground-cinnamon":  {
                                           "commodity":  "Ground Cinnamon",
-                                          "Aldi":  {
-                                                       "url":  "https://www.aldi.us/store/aldi/products/19688299-stonemill-ground-cinnamon-2-37-oz",
-                                                       "price":  0.99,
-                                                       "size":  "2.37 oz",
-                                                       "name":  "Stonemill Ground Cinnamon",
-                                                       "board_pu":  0.4177,
-                                                       "recipe_pu":  0.4599
-                                                   },
                                           "Baker\u0027s":  {
                                                                "url":  "https://www.bakersplus.com/p/smart-way-ground-cinnamon/0001111011748",
                                                                "name":  "Smart Way Ground Cinnamon",
@@ -15486,13 +15416,6 @@
                              },
                   "lettuce":  {
                                   "commodity":  "lettuce",
-                                  "Aldi":  {
-                                               "url":  "https://www.aldi.us/store/aldi/products/55594442-little-salad-bar-hearts-of-romaine-1-each",
-                                               "name":  "Little Salad Bar Hearts OF Romaine 1 Each",
-                                               "price":  "$1.99",
-                                               "size":  "each",
-                                               "verified":  "2026-08-06 DERIVED from the price row (same record the board priced)"
-                                           },
                                   "Baker\u0027s":  {
                                                        "url":  "https://www.bakersplus.com/p/private-selection-artisan-romaine-lettuce/0001111060336",
                                                        "name":  "Private Selection Artisan Romaine Lettuce",
@@ -15777,14 +15700,6 @@
                              },
                   "mac-and-cheese":  {
                                          "commodity":  "mac-and-cheese",
-                                         "Aldi":  {
-                                                      "url":  "https://www.aldi.us/store/aldi/products/21171567-cheese-club-express-mac-cheese-cups-8-2-oz",
-                                                      "name":  "Cheese Club Express Mac Cheese Cups 8 2 OZ",
-                                                      "price":  "$3.69",
-                                                      "size":  "4 ct",
-                                                      "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
-                                                      "board_pu":  0.9225
-                                                  },
                                          "Family Fare":  {
                                                              "url":  "https://www.shopfamilyfare.com/shop/dairy/ready_to_eat/heat_serve/bob_evans_macaroni_cheese_2_ea/p/44096",
                                                              "name":  "Bob Evans Macaroni \u0026 Cheese 2 Ea",
@@ -15823,14 +15738,6 @@
                                      },
                   "mandarin-oranges":  {
                                            "commodity":  "Canned Mandarin Oranges",
-                                           "Aldi":  {
-                                                        "url":  "https://www.aldi.us/store/aldi/products/20130671-sweet-harvest-mandarin-oranges-in-light-syrup-15-fl-oz",
-                                                        "name":  "Sweet Harvest Mandarin Oranges IN Light Syrup 15 FL OZ",
-                                                        "price":  "$1.49",
-                                                        "size":  "15 oz",
-                                                        "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
-                                                        "board_pu":  0.0993
-                                                    },
                                            "Baker\u0027s":  {
                                                                 "url":  "https://www.bakersplus.com/p/kroger-canned-mandarin-oranges-in-light-syrup/0001111004785",
                                                                 "name":  "Kroger Canned Mandarin Oranges in Light Syrup",
@@ -17430,13 +17337,6 @@
                                    },
                   "paper-towels":  {
                                        "commodity":  "paper-towels",
-                                       "Aldi":  {
-                                                    "url":  "https://www.aldi.us/store/aldi/products/43070165-boulder-sheets-paper-towel-6-ct",
-                                                    "price":  5.39,
-                                                    "size":  "6 ct",
-                                                    "name":  "Boulder 6 Roll Paper Towels (110 Sheets)",
-                                                    "board_pu":  0.8983
-                                                },
                                        "Family Fare":  {
                                                            "url":  "https://www.shopfamilyfare.com/shop/household/paper_towels/sparkle_pick_a_size_modern_white_2_ply_paper_towels_8_ea/p/1564405684704683873",
                                                            "name":  "Sparkle Pick A Size Modern White 2 Ply Paper Towels 8 Ea",
@@ -17975,13 +17875,6 @@
                               },
                   "pears":  {
                                 "commodity":  "pears",
-                                "Aldi":  {
-                                             "url":  "https://www.aldi.us/store/aldi/products/3255507-bartlett-pear-each",
-                                             "price":  3.79,
-                                             "size":  "3 lb",
-                                             "name":  "Anjou Pears, Bag",
-                                             "board_pu":  1.2633
-                                         },
                                 "Baker\u0027s":  {
                                                      "url":  "https://www.bakersplus.com/p/kroger-fresh-bartlett-pears-2-pound-bag/0001111018192",
                                                      "name":  "Kroger Fresh Bartlett Pears 2 Pound Bag",
@@ -18287,12 +18180,6 @@
                                                        "verified":  "2026-08-15",
                                                        "board_pu":  0.0934
                                                    },
-                                  "Fareway":  {
-                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25807192-fareway-pickle-spears-zesty-24-fl-oz",
-                                                  "price":  2.77,
-                                                  "size":  "24 fl oz",
-                                                  "name":  "Fareway Zesty Pickle Spears"
-                                              },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/22350/hy-vee-kosher-dill-pickle-spears",
                                                  "name":  "Hy-Vee Kosher Dill Pickle Spears",
@@ -18792,14 +18679,7 @@
                                                    "price":  2.98,
                                                    "size":  "12 ct",
                                                    "verified":  "2026-08-10 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                               },
-                                    "Sam\u0027s Club":  {
-                                                            "url":  "https://www.samsclub.com/ip/14976372156",
-                                                            "name":  "Outshine Strawberry, Tangerine, Grape Mini Fruit Ice Pops, Frozen, 36 ct.",
-                                                            "price":  "$9.98",
-                                                            "size":  "36 ct",
-                                                            "verified":  "2026-08-06 DERIVED from the price row (same record the board priced)"
-                                                        }
+                                               }
                                 },
                   "pork-chops":  {
                                      "commodity":  "Pork Chops",
@@ -19094,14 +18974,7 @@
                                                        "price":  "$2.50",
                                                        "size":  "13.5 oz",
                                                        "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                   },
-                                       "Sam\u0027s Club":  {
-                                                               "url":  "https://www.samsclub.com/ip/15292805810",
-                                                               "name":  "Boulder Canyon Avocado Oil Potato Chips, 18 oz.",
-                                                               "price":  "$6.48",
-                                                               "size":  "18 oz",
-                                                               "verified":  "2026-08-13 DERIVED from the price row (same record the board priced)"
-                                                           }
+                                                   }
                                    },
                   "potato-gnocchi":  {
                                          "commodity":  "Potato Gnocchi",
@@ -19257,13 +19130,6 @@
                                                   "size":  "15 oz",
                                                   "verified":  "2026-08-10 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                               },
-                                   "Sam\u0027s Club":  {
-                                                           "url":  "https://www.samsclub.com/ip/4178002240",
-                                                           "name":  "Utz Mini Twist Pretzels, 60 oz.",
-                                                           "price":  "$8.48",
-                                                           "size":  "60 oz",
-                                                           "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                       },
                                    "Fareway":  {
                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20207086-shultz-mini-pretzel-twists-16-oz",
                                                    "name":  "Shultz Mini Pretzel Twists",
@@ -21726,13 +21592,6 @@
                                                  "verified":  "2026-07-30 price-pull self-capture",
                                                  "board_pu":  6.76
                                              },
-                                 "Sam\u0027s Club":  {
-                                                         "url":  "https://www.samsclub.com/ip/13599361478",
-                                                         "name":  "Member\u0027s Mark Farm Raised Jumbo Raw Shrimp, Frozen, 21-25 ct. per pound, 2 lbs.",
-                                                         "price":  "$8.48",
-                                                         "size":  "lb",
-                                                         "verified":  "2026-08-13 DERIVED from the price row (same record the board priced)"
-                                                     },
                                  "Baker\u0027s":  {
                                                       "url":  "https://www.bakersplus.com/p/shrimp-raw-white-p-d-large-31-40-count-farm-raised-previously-frozen-/0026950600000",
                                                       "name":  "Shrimp Raw White P\u0026D Large 31/40 Count (Farm Raised Previously Frozen)",
@@ -22279,12 +22138,6 @@
                                                       "size":  "10 oz",
                                                       "board_pu":  0.499
                                                   },
-                                  "Fareway":  {
-                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17314695-dole-spinach-8-oz",
-                                                  "price":  3.49,
-                                                  "size":  "8 oz",
-                                                  "name":  "Dole Spinach"
-                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/13803520057",
                                                           "name":  "Organic Baby Spinach, 16 oz.",
@@ -22565,13 +22418,6 @@
                                                      "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                      "board_pu":  0.278
                                                  },
-                                      "Sam\u0027s Club":  {
-                                                              "url":  "https://www.samsclub.com/ip/5440020004",
-                                                              "price":  8.68,
-                                                              "size":  "30 oz",
-                                                              "name":  "A.1. Original Steak Sauce, 15 oz., 2 pk.",
-                                                              "board_pu":  0.2893
-                                                          },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/Great-Value-Savory-Steak-Sauce-10-oz/12157941",
                                                       "name":  "Great Value Savory Steak Sauce, 10 oz",
@@ -24380,13 +24226,6 @@
                                                     "size":  "box",
                                                     "verified":  "2026-07-19 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                 },
-                                     "Sam\u0027s Club":  {
-                                                             "url":  "https://www.samsclub.com/ip/13912815919",
-                                                             "name":  "Glad® ForceFlex Tall Kitchen Drawstring Trash Bags, Gain Original scent with Febreze Freshness, 13 Gallon, 160 ct.",
-                                                             "price":  "$14.98",
-                                                             "size":  "160 ct",
-                                                             "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                         },
                                      "Fareway":  {
                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3250558-hefty-scent-free-tall-drawstring-kitchen-bags-40-ea",
                                                      "name":  "Hefty Scent Free Tall Drawstring Kitchen Bags",

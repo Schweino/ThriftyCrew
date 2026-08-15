@@ -97,6 +97,32 @@ function Get-Size([string]$name, [string]$cardSize, [string]$unit) {
   $hasMeasure = $cardSize -match '(?i)\d\s*(fl\s*oz|floz|oz|ounces?|lbs?|pounds?|qt|quarts?|pt|pints?|liters?|litres?|ml|gal|gallons?|ct|count|pk|pack|dozen)\b'
   $hay = if ($cardSize -and $hasMeasure) { $cardSize } else { $name }
 
+  # 1c) BARE "oz" ON A LIQUID: the card wins over the name (above), but the card states only a MAGNITUDE - it
+  # drops the "fl". "Sundae Shoppe Vanilla Light Ice Cream, 1 Gal" carded as "128 oz" published a real $6.39
+  # gallon as a WEIGHT cell on a volume-priced row, and took the Ice Cream crown while measured in a different
+  # currency than every peer (guards.ps1 hard-fail, audit-unit-basis-outlier 2026-08-15). The number was right
+  # the whole time; only its KIND was wrong, which is why no price guard could see it.
+  # Relabel ONLY on arithmetic agreement: the NAME must state an explicit volume whose fl-oz value EQUALS the
+  # card's bare-oz number. That equality is the proof - a genuine weight-oz row (a 1 pt tomato package carded
+  # "10 oz") never satisfies it, so this cannot invent a volume where the item really is sold by weight.
+  if ($cardSize -and $hasMeasure -and $hay -match '(?i)^\s*(\d+(?:\.\d+)?)\s*(?:oz|ounces?)\s*$') {
+    $cardOz = [double]$Matches[1]
+    $volFlOz = 0.0
+    $nv = [regex]::Match($name, '(?i)(\d+(?:\.\d+)?)\s*(gal|gallons?|qt|quarts?|pt|pints?)\b')
+    if ($nv.Success) {
+      $volFlOz = switch -Regex ($nv.Groups[2].Value.ToLower()) {
+        '^gal'  { [double]$nv.Groups[1].Value * 128 }
+        '^qt'   { [double]$nv.Groups[1].Value * 32 }
+        '^pt'   { [double]$nv.Groups[1].Value * 16 }
+        default { 0.0 }
+      }
+    }
+    elseif ($name -match '(?i)\bhalf\s*gal') { $volFlOz = 64.0 }
+    if ($volFlOz -gt 0 -and [math]::Abs($cardOz - $volFlOz) -lt 0.01) {
+      return ('{0} fl oz' -f $volFlOz)
+    }
+  }
+
   # REFUSE TO GUESS A SLUG-COLLAPSED DECIMAL. Aldi names come from URL slugs, which cannot hold a '.', so
   # "10.4 OZ" arrives as "10 4 OZ". Repair-SlugDecimals fixes it only when the card size independently proves
   # the digits; when it cannot, reading the trailing number alone gives 4 oz for a 10.4 oz item - a 2.6x error
@@ -269,6 +295,18 @@ if ($SelfTest) {
     @{ n = 'ground beef patties 2 5 lb';                       s = '';         u = ''; want = '' }
     # a genuine pack form keeps working - the pack word separates the two numbers
     @{ n = 'purified water 24 pk 16.9 fl oz';                  s = '';         u = ''; want = '24 pk 16.9 fl oz' }
+    # FOUNDING BUG (2026-08-15): a liquid carded in bare "oz" took the Ice Cream crown measured as a WEIGHT on a
+    # volume-priced row. The name states the volume and the arithmetic agrees, so relabel the KIND - never the number.
+    @{ n = 'sundae shoppe vanilla flavored light ice cream, 1 gal'; s = '128 oz'; u = ''; want = '128 fl oz' }
+    @{ n = 'friendly farms half gal chocolate milk';                s = '64 oz';  u = ''; want = '64 fl oz' }
+    @{ n = 'store brand orange juice 2 qt';                        s = '64 oz';  u = ''; want = '64 fl oz' }
+    # CLEAN TWINS - the equality is the whole proof, so these must come through untouched:
+    # a real weight-oz item that merely ships in a pint-sized package keeps its WEIGHT
+    @{ n = 'organic tomato package 1 pt';                          s = '10 oz';  u = ''; want = '10 oz' }
+    # magnitude disagrees with the stated volume -> no proof, so no relabel
+    @{ n = 'mystery juice 1 gal';                                  s = '32 oz';  u = ''; want = '32 oz' }
+    # no volume in the name at all -> nothing to agree with
+    @{ n = 'appleton farms sliced bacon';                          s = '128 oz'; u = ''; want = '128 oz' }
   )
   $fail = 0
   foreach ($c in $cases) {

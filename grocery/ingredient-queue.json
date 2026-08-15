@@ -1,0 +1,695 @@
+﻿{
+    "readme":  "Recipe Hunter ingredient worklist. Written by ingredient-queue.ps1 only. An ingredient is CARRIED when ONE store carries it; NOT-CARRIED only when all seven have been CHECKED and none do. Unchecked is never not-carried.",
+    "items":  [
+                  {
+                      "term":  "cumin-seeds",
+                      "recipes":  [
+                                      "trial-run-2026-08-15"
+                                  ],
+                      "added":  "2026-08-15T06:45:46",
+                      "why":  "tier1 ABSENT: no board cell, nothing in captures",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.29,
+                                                         "size":  "2 oz",
+                                                         "item":  "Sugar \u0027N Spice Cumin Whole",
+                                                         "evidence":  "probe \u0027cumin seeds\u0027 returned zero at FF; re-probe \u0027cumin\u0027 returned Sugar \u0027N Spice Cumin Whole 2oz \\.29 and Comino Entero Whole Cumin \\.19. Whole cumin = seed form; ground-cumin jars ruled out.",
+                                                         "checked":  "2026-08-15T06:47:45"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                    "checked":  "2026-08-15T07:42:00"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                             "checked":  "2026-08-15T07:42:00"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                  "checked":  "2026-08-15T07:42:00"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.69,
+                                                          "size":  "1 oz",
+                                                          "item":  "Tampico Cumin Whole",
+                                                          "evidence":  "probe \u0027cumin seeds\u0027 returned only a Carols Daughter conditioner containing black cumin seed oil; re-probe \u0027cumin\u0027 returned Tampico Cumin Whole 1oz \\.69. Whole cumin = cumin seed. Ruled out all the ground-cumin jars as the wrong form.",
+                                                          "checked":  "2026-08-15T06:47:45"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "chili-garlic-sauce",
+                      "recipes":  [
+                                      "trial-run-2026-08-15"
+                                  ],
+                      "added":  "2026-08-15T06:45:46",
+                      "why":  "tier1 ABSENT: no board cell, nothing in captures",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  5.99,
+                                                         "size":  "8 oz",
+                                                         "item":  "Lee Kum Kee Chili Garlic Sauce",
+                                                         "evidence":  "probe \u0027chili garlic sauce\u0027 on Freshop 6401: Lee Kum Kee Chili Garlic Sauce 8oz \\.99, a true chili-garlic paste. Ruled out Badia Chili Sauce With Garlic Sriracha (a sriracha, different product).",
+                                                         "checked":  "2026-08-15T06:48:14"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                    "checked":  "2026-08-15T07:42:00"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                             "checked":  "2026-08-15T07:42:00"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                  "checked":  "2026-08-15T07:42:00"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.49,
+                                                          "size":  "8 oz",
+                                                          "item":  "Huy Fong Chili Garlic Sauce",
+                                                          "evidence":  "probe \u0027chili garlic sauce\u0027: Huy Fong Chili Garlic Sauce 8oz \\.49, the canonical product for this ingredient. Ruled out Cholula chili garlic HOT sauce, Kinder\u0027s sweet chili garlic wing dip and the Cholula taco recipe mix.",
+                                                          "checked":  "2026-08-15T06:48:14"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "chipotle-powder",
+                      "recipes":  [
+                                      "trial-run-2026-08-15"
+                                  ],
+                      "added":  "2026-08-15T06:45:46",
+                      "why":  "tier1 ABSENT: no board cell, nothing in captures",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "probed \u0027chipotle powder\u0027, \u0027chipotle\u0027, \u0027ground chipotle\u0027, \u0027chipotle chili powder\u0027, \u0027chipotle pepper powder\u0027 on Freshop 6401. All hits were sauces (La Costena, San Marcos, Sweet Baby Rays), peppers in adobo, a taco recipe mix, refried beans, a chicken bowl, and McCormick Chipotle \u0026 Roasted Garlic Seasoning (a blend, not pure chipotle powder). No jar of ground chipotle.",
+                                                         "checked":  "2026-08-15T06:47:45"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                    "checked":  "2026-08-15T07:42:00"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                             "checked":  "2026-08-15T07:42:00"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                  "checked":  "2026-08-15T07:42:00"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  14.49,
+                                                          "size":  "2.3 oz",
+                                                          "item":  "Spice Islands Ground Chipotle Chile",
+                                                          "evidence":  "probe \u0027chipotle powder\u0027 returned NO-CANDIDATES; re-probe \u0027ground chipotle\u0027 returned exactly one qualifying jar, Spice Islands Ground Chipotle Chile 2.3oz \\.49. Pure ground chipotle, not a sauce or blend. Price looks high for the size and should be re-verified before any board cell.",
+                                                          "checked":  "2026-08-15T06:47:45"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "fennel",
+                      "recipes":  [
+                                      "trial-run-2026-08-15"
+                                  ],
+                      "added":  "2026-08-15T06:45:46",
+                      "why":  "tier1 CAPTURE: 11 candidates but all are fennel SEED spice jars; commodity unit is each (fresh bulb)",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "probed \u0027fennel\u0027 and \u0027fennel bulb\u0027 on Freshop 6401: only McCormick/Finest Reserve/Sugar \u0027N Spice fennel SEED jars, no fresh bulb. FF\u0027s Freshop catalog does list fresh produce (control probes returned Yellow Bananas \\.65/lb, Green Cabbage \\.99/lb), so the absence of a fennel bulb is meaningful rather than a catalog gap. Commodity unit is \u0027each\u0027 = the bulb, so the seed jars do not qualify.",
+                                                         "checked":  "2026-08-15T06:47:54"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                    "checked":  "2026-08-15T07:42:00"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                             "checked":  "2026-08-15T07:42:00"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                  "checked":  "2026-08-15T07:42:00"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.99,
+                                                          "size":  "1 ct",
+                                                          "item":  "Fresh Fennel",
+                                                          "evidence":  "probe \u0027fennel\u0027: top hit is \u0027Fresh Fennel\u0027 1 ct \\.99, the produce bulb, which is what the commodity\u0027s \u0027each\u0027 unit means. Ruled out the fennel-seed shakers, fennel sausage, fennel salame and fennel tea.",
+                                                          "checked":  "2026-08-15T06:47:54"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "brown-lentils",
+                      "recipes":  [
+                                      "trial-run-2026-08-15"
+                                  ],
+                      "added":  "2026-08-15T06:45:46",
+                      "why":  "tier1 ABSENT: no board cell, nothing in captures",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.69,
+                                                         "size":  "1 lb",
+                                                         "item":  "Our Family Lentils",
+                                                         "evidence":  "probe \u0027brown lentils\u0027 returned zero at FF; re-probe \u0027lentils\u0027 returned Our Family Lentils 1 lb \\.69, the store-brand dry bag (standard brown lentil). Ruled out Progresso lentil soup, Barilla red lentil rotini and Amys lentil soup.",
+                                                         "checked":  "2026-08-15T06:48:04"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                    "checked":  "2026-08-15T07:42:00"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                             "checked":  "2026-08-15T07:42:00"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                  "checked":  "2026-08-15T07:42:00"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.99,
+                                                          "size":  "16 oz",
+                                                          "item":  "Goya Lentils",
+                                                          "evidence":  "probe \u0027brown lentils\u0027 returned only a Simple Truth grain blend; re-probe \u0027lentils\u0027 returned Goya Lentils 16oz \\.99 and La Preferida Lentils 16oz \\.99, both plain dry brown lentils. Ruled out Kroger RED Lentils and Simple Truth GREEN lentils as different varieties, and the Tasty Bite madras pouches as prepared meals.",
+                                                          "checked":  "2026-08-15T06:48:04"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "bean-sprouts",
+                      "recipes":  [
+                                      "trial-run-2026-08-15"
+                                  ],
+                      "added":  "2026-08-15T06:45:46",
+                      "why":  "tier1 ABSENT: no board cell, nothing in captures",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.79,
+                                                         "size":  "14.5 oz",
+                                                         "item":  "Geisha Bean Sprouts, In Water",
+                                                         "evidence":  "probed \u0027bean sprouts\u0027/\u0027bean sprout\u0027 on Freshop 6401: Geisha Bean Sprouts in water 14.5oz \\.79. Canned, not fresh, but it is the ingredient.",
+                                                         "checked":  "2026-08-15T06:47:54"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                    "checked":  "2026-08-15T07:42:00"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                             "checked":  "2026-08-15T07:42:00"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                  "checked":  "2026-08-15T07:42:00"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.19,
+                                                          "size":  "14 oz",
+                                                          "item":  "La Choy Bean Sprouts",
+                                                          "evidence":  "probed \u0027bean sprouts\u0027 and \u0027bean sprout\u0027: one qualifying hit, La Choy Bean Sprouts 14oz can \\.19. Canned mung bean sprouts, the ingredient itself. No fresh sprouts surfaced in the API produce results.",
+                                                          "checked":  "2026-08-15T06:47:54"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "coconut",
+                      "recipes":  [
+                                      "trial-run-2026-08-15"
+                                  ],
+                      "added":  "2026-08-15T06:45:46",
+                      "why":  "tier1 CAPTURE: 25 candidates but all coconut-flavored groceries; commodity unit is each (whole coconut)",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "probed \u0027coconut\u0027, \u0027whole coconut\u0027, \u0027fresh coconut\u0027 on Freshop 6401. Hits were coconut water, Electrolit, Almond Joy, coconut patties, Chobani coconut yogurt, Red Bull coconut, and Dove/Garnier coconut toiletries. No whole coconut. FF\u0027s catalog does carry fresh produce (bananas, cabbage returned by control probes), so this is a real absence for the \u0027each\u0027 whole-coconut unit.",
+                                                         "checked":  "2026-08-15T06:48:04"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                    "checked":  "2026-08-15T07:42:00"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                             "checked":  "2026-08-15T07:42:00"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                  "checked":  "2026-08-15T07:42:00"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.49,
+                                                          "size":  "1 ct",
+                                                          "item":  "Fresh Brown Coconuts",
+                                                          "evidence":  "probed \u0027coconut\u0027 and \u0027fresh coconut\u0027: \u0027Fresh Brown Coconuts\u0027 1 ct \\.49 and \u0027White Coconut\u0027 1 ct \\.49, the whole produce coconut matching the commodity\u0027s \u0027each\u0027 unit. Ruled out coconut milk, flakes, chips, water, cake and Dove coconut dry shampoo.",
+                                                          "checked":  "2026-08-15T06:48:04"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "dried-guajillo-chiles",
+                      "recipes":  [
+                                      "trial-run-2026-08-15"
+                                  ],
+                      "added":  "2026-08-15T06:45:46",
+                      "why":  "tier1 ABSENT: no board cell, nothing in captures",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.49,
+                                                         "size":  "3 oz",
+                                                         "item":  "Guajillo Chili",
+                                                         "evidence":  "probe \u0027guajillo\u0027 on Freshop 6401: \u0027Guajillo Chili\u0027 3oz \\.49. A 3oz packaged guajillo is the dried-pod bag (guajillo is essentially only sold dried; fresh it is the mirasol). Single qualifying hit.",
+                                                         "checked":  "2026-08-15T06:48:14"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                    "checked":  "2026-08-15T07:42:00"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                             "checked":  "2026-08-15T07:42:00"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                  "checked":  "2026-08-15T07:42:00"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  4.29,
+                                                          "size":  "2 oz",
+                                                          "item":  "Tampico Guajillo Chili Pods",
+                                                          "evidence":  "probe \u0027guajillo\u0027: Tampico Guajillo Chili Pods 2oz \\.29, a bag of dried whole pods. Ruled out Deli Kitchen Guajillo Pepper salsa. Probe of \u0027guajillo chile\u0027 returned NO-CANDIDATES at both stores, so the single-word term was what found it.",
+                                                          "checked":  "2026-08-15T06:48:14"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "avocado-oil",
+                      "recipes":  [
+                                      "trial-run-2026-08-15"
+                                  ],
+                      "added":  "2026-08-15T06:45:46",
+                      "why":  "tier1 ABSENT: no board cell, nothing in captures",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  13.99,
+                                                         "size":  "20.96 fl oz",
+                                                         "item":  "Our Family 100% Pure Avocado Oil",
+                                                         "evidence":  "probe \u0027avocado oil\u0027 Freshop store_id 6401: store-brand Our Family 100% pure avocado oil in pantry/baking/oils_sprays. Ruled out \u0027Aussie Conditioner With Avocado Oil\u0027 (hair product) and the 4.7oz spray.",
+                                                         "checked":  "2026-08-15T06:47:34"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                    "checked":  "2026-08-15T07:42:00"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                             "checked":  "2026-08-15T07:42:00"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                  "checked":  "2026-08-15T07:42:00"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  9.99,
+                                                          "size":  "17 fl oz",
+                                                          "item":  "Private Selection Avocado Oil",
+                                                          "evidence":  "probe \u0027avocado oil\u0027 via Kroger API loc 61500319: 8 hits, several pure avocado oils. Chose the store-brand bottle (Private Selection 17 fl oz \\.99); ruled out the Primal Kitchen 4.7oz spray as a cooking spray not bulk oil.",
+                                                          "checked":  "2026-08-15T06:47:34"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "cornmeal",
+                      "recipes":  [
+                                      "trial-run-2026-08-15"
+                                  ],
+                      "added":  "2026-08-15T06:45:46",
+                      "why":  "tier1 CAPTURE: only candidate is a Daves Killer Bread loaf topped with cornmeal, not cornmeal",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                     "checked":  "2026-08-15T07:42:00"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.29,
+                                                         "size":  "32 oz",
+                                                         "item":  "Our Family Yellow Enriched Pre Sifted Corn Meal",
+                                                         "evidence":  "probe \u0027cornmeal\u0027 returned zero at FF; re-probe \u0027corn meal\u0027 returned Our Family Yellow Enriched Pre Sifted Corn Meal 32oz \\.29. Ruled out Maseca masa flour (nixtamalized, different ingredient) and corned beef hash.",
+                                                         "checked":  "2026-08-15T06:47:34"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                    "checked":  "2026-08-15T07:42:00"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                             "checked":  "2026-08-15T07:42:00"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "NOT SEARCHED - second attempt 2026-08-15 confirms the block is not transient. (1) claude-in-chrome tabs_context_mcp returned \"Claude in Chrome is not connected\" on 3 more consecutive calls, createIfEmpty true and false; no tab could be opened. (2) The in-app browser pane (mcp__Claude_Browser__*) and list_connected_browsers were NOT present in this agent session toolset at all, so the second browser surface could not be tried. (3) chrome.exe is running but exposes no CDP endpoint (127.0.0.1:9222/json/version refused), so no scripted attach was possible. (4) Server-side fallback ruled out, not skipped: probe-ingredient.ps1 documents these five as browser-only, and a WebFetch of the Hy-Vee aisles-online search URL returned the documented client-rendered shell with zero product hrefs. Omaha store identity and In-Store price mode were therefore never verifiable and no search ran. UNCHECKED, not an absence.",
+                                                  "checked":  "2026-08-15T07:42:00"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.29,
+                                                          "size":  "24 oz",
+                                                          "item":  "Kroger Yellow Corn Meal",
+                                                          "evidence":  "probe \u0027cornmeal\u0027 returned only a Daves Killer Bread loaf; re-probed \u0027corn meal\u0027 and got Kroger Yellow Corn Meal 24oz \\.29 plus Quaker 24oz \\.59. Store-brand plain yellow cornmeal, ruled out the bread and the Andys fish-breading mix.",
+                                                          "checked":  "2026-08-15T06:47:34"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  }
+              ]
+}

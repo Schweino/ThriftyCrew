@@ -1,17 +1,6 @@
 ﻿{
     "kind_mismatch_crown":  [
-                                {
-                                    "id":  "ice-cream",
-                                    "commodity":  "Ice Cream",
-                                    "unit":  "floz",
-                                    "store":  "Aldi",
-                                    "per_unit":  0.0499,
-                                    "size":  "128 oz",
-                                    "item":  "Sundae Shoppe Vanilla Flavored Light Ice Cream, 1 Gal",
-                                    "kind":  "weight",
-                                    "row_kind":  "volume",
-                                    "holds_crown":  true
-                                }
+
                             ],
     "findings":  [
                      {
@@ -146,7 +135,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-15T09:18:02",
+    "generated":  "2026-08-15T09:25:45",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -736,18 +725,6 @@
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
-                          },
-                          {
-                              "id":  "ice-cream",
-                              "commodity":  "Ice Cream",
-                              "unit":  "floz",
-                              "store":  "Aldi",
-                              "per_unit":  0.0499,
-                              "size":  "128 oz",
-                              "item":  "Sundae Shoppe Vanilla Flavored Light Ice Cream, 1 Gal",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  true
                           },
                           {
                               "id":  "italian-dressing",
