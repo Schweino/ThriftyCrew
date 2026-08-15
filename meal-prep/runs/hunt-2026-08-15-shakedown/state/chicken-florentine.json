@@ -3,10 +3,10 @@
     "title":  "Chicken Florentine",
     "source_url":  "https://www.smalltownwoman.com/chicken-florentine/",
     "protein":  "chicken",
-    "state":  "published",
+    "state":  "verified",
     "wave":  1,
     "created":  "2026-08-15T11:54:24",
-    "updated":  "2026-08-15T13:53:59",
+    "updated":  "2026-08-15T17:38:00",
     "terms":  [
 
               ],
@@ -74,6 +74,12 @@
                         "at":  "2026-08-15T13:53:59",
                         "by":  "wave-publish",
                         "detail":  "wave 1, live and verified by engine publish"
+                    },
+                    {
+                        "state":  "verified",
+                        "at":  "2026-08-15T17:38:00",
+                        "by":  "v2.1-reconcile",
+                        "detail":  "live + feed-covers-published clean after the card repoint"
                     }
                 ]
 }
