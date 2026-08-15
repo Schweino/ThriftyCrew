@@ -27,11 +27,17 @@ $backup = Join-Path $root 'prompt-backup'
 $PROJ   = 'C:\Codex\.claude\agents'
 $USER   = 'C:\Users\Owner\.claude\agents'
 $TASKS  = 'C:\Users\Owner\.claude\scheduled-tasks'
+# PROJECT-SCOPE SKILLS, added 2026-08-15. This was a whole class the audit could not see: recipe-hunter,
+# lesson and meal-macro live here, and recipe-hunter\SKILL.md alone is 12KB of the flow's operating rules -
+# which stages stream, why the price lane is a singleton, which gate must never be weakened. None of it was
+# in git. It was found while looking for that file to edit it, not by this guard, which is the tell that a
+# coverage check enumerating three known directories can only ever be as complete as that list.
+$SKILLS = 'C:\Codex\.claude\skills'
 
 function FileHash1([string]$p) { if (Test-Path $p) { return (Get-FileHash $p -Algorithm MD5).Hash } return $null }
 
 function Compare-Prompts {
-  param([string]$Proj, [string]$UserDir, [string]$Tasks, [string]$Backup)
+  param([string]$Proj, [string]$UserDir, [string]$Tasks, [string]$Backup, [string]$Skills = '')
   $issues = New-Object System.Collections.Generic.List[string]
   $checked = 0
   $agentBk = Join-Path $Backup 'agents'
@@ -60,6 +66,18 @@ function Compare-Prompts {
     $b = Join-Path (Join-Path $taskBk $d.Name) 'SKILL.md'
     if (-not (Test-Path $b)) { $issues.Add("NO BACKUP  scheduled-tasks\$($d.Name)\SKILL.md") }
     elseif ((FileHash1 $s) -ne (FileHash1 $b)) { $issues.Add("STALE BACKUP  scheduled-tasks\$($d.Name)\SKILL.md") }
+  }
+  # project-scope skills: <skills>\<name>\SKILL.md, same shape as scheduled tasks
+  if ($Skills) {
+    $skillBk = Join-Path $Backup 'skills'
+    foreach ($d in @(Get-ChildItem $Skills -Directory -ErrorAction SilentlyContinue)) {
+      $s = Join-Path $d.FullName 'SKILL.md'
+      if (-not (Test-Path $s)) { continue }
+      $checked++
+      $b = Join-Path (Join-Path $skillBk $d.Name) 'SKILL.md'
+      if (-not (Test-Path $b)) { $issues.Add("NO BACKUP  skills\$($d.Name)\SKILL.md - the live skill exists only on this machine") }
+      elseif ((FileHash1 $s) -ne (FileHash1 $b)) { $issues.Add("STALE BACKUP  skills\$($d.Name)\SKILL.md - repo copy differs from the live skill") }
+    }
   }
   return @{ issues = $issues; checked = $checked }
 }
@@ -99,14 +117,34 @@ if ($SelfTest) {
     Set-Content (Join-Path $t 'demo-task\SKILL.md') "skill v2" -Encoding UTF8
     $r = Compare-Prompts $p $u $t $b
     _C 'must-fire: an edited scheduled-task SKILL with a stale backup is caught' (($r.issues -join ' ') -match 'STALE BACKUP  scheduled-tasks')
+    # MUST-FIRE 5: a project-scope SKILL with no backup. THE FOUNDING CASE of this class, frozen: on
+    # 2026-08-15 C:\Codex\.claude\skills held three live skills (recipe-hunter, lesson, meal-macro) and
+    # this audit reported "every live agent prompt and scheduled-task SKILL is backed up" - true, and
+    # blind, because the sentence enumerated only what the guard knew to look at.
+    Set-Content (Join-Path $t 'demo-task\SKILL.md') "skill v1" -Encoding UTF8
+    $sk = Join-Path $tmp 'skills'; New-Item -ItemType Directory -Force (Join-Path $sk 'demo-skill') | Out-Null
+    Set-Content (Join-Path $sk 'demo-skill\SKILL.md') "project skill v1" -Encoding UTF8
+    $r = Compare-Prompts $p $u $t $b $sk
+    _C 'must-fire: a project-scope SKILL with no backup is caught' (($r.issues -join ' ') -match 'NO BACKUP  skills\\demo-skill')
+    # ...and once backed up it goes quiet, then fires again when the live copy is edited
+    New-Item -ItemType Directory -Force (Join-Path $b 'skills\demo-skill') | Out-Null
+    Set-Content (Join-Path $b 'skills\demo-skill\SKILL.md') "project skill v1" -Encoding UTF8
+    $r = Compare-Prompts $p $u $t $b $sk
+    _C 'clean twin: a backed-up project-scope SKILL reports no issue' (($r.issues -join ' ') -notmatch 'skills\\demo-skill')
+    Set-Content (Join-Path $sk 'demo-skill\SKILL.md') "project skill v2 - edited live" -Encoding UTF8
+    $r = Compare-Prompts $p $u $t $b $sk
+    _C 'must-fire: an edited project-scope SKILL with a stale backup is caught' (($r.issues -join ' ') -match 'STALE BACKUP  skills\\demo-skill')
+    # and the skills dir counts toward `checked`, or a skills-only machine would report BLIND as clean
+    _C 'project-scope skills count toward the coverage tally' ($r.checked -ge 3)
+
     # BLIND: nothing to check is not a pass
     $empty = Join-Path $tmp 'empty'; New-Item -ItemType Directory -Force $empty | Out-Null
-    $r = Compare-Prompts $empty $empty $empty $b
+    $r = Compare-Prompts $empty $empty $empty $b $empty
     _C 'blind: zero prompts found is reported as checked=0, not as clean' ($r.checked -eq 0)
   } finally { Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue }
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
-  Write-Output 'SELF-TEST PASS (6 prompt-backup cases)'
+  Write-Output 'SELF-TEST PASS (10 prompt-backup cases)'
   exit 0
 }
 
@@ -134,16 +172,26 @@ if ($Sync) {
       Copy-Item $extra.FullName (Join-Path $dst $extra.Name) -Force   # e.g. SKILL.monolith-fallback.md
     }
   }
+  foreach ($d in @(Get-ChildItem $SKILLS -Directory -ErrorAction SilentlyContinue)) {
+    $s = Join-Path $d.FullName 'SKILL.md'
+    if (-not (Test-Path $s)) { continue }
+    $dst = Join-Path $backup ('skills\' + $d.Name)
+    New-Item -ItemType Directory -Force $dst | Out-Null
+    Copy-Item $s (Join-Path $dst 'SKILL.md') -Force; $n++
+    foreach ($extra in @(Get-ChildItem (Join-Path $d.FullName '*.md') -ErrorAction SilentlyContinue | Where-Object { $_.Name -ne 'SKILL.md' })) {
+      Copy-Item $extra.FullName (Join-Path $dst $extra.Name) -Force
+    }
+  }
   Write-Output ("prompt-backup: synced $n file(s) into ops\prompt-backup")
 }
 
-$res = Compare-Prompts $PROJ $USER $TASKS $backup
+$res = Compare-Prompts $PROJ $USER $TASKS $backup $SKILLS
 Write-Output ("prompt-backup: checked " + $res.checked + " live prompt(s) against ops\prompt-backup")
 if ($res.checked -eq 0) {
   Write-Output 'PROMPT-BACKUP BLIND: found ZERO live prompts to check. Either the .claude paths moved or this ran somewhere without them - a clean result here would mean nothing.'
   exit 3
 }
-if ($res.issues.Count -eq 0) { Write-Output '  ok - every live agent prompt and scheduled-task SKILL is backed up, current, and identical across scopes'; Write-GuardComplete -Name 'prompt-backup'; exit 0 }
+if ($res.issues.Count -eq 0) { Write-Output '  ok - every live agent prompt, scheduled-task SKILL and project-scope skill is backed up, current, and identical across scopes'; Write-GuardComplete -Name 'prompt-backup'; exit 0 }
 Write-Output ("  " + $res.issues.Count + " issue(s):")
 foreach ($i in $res.issues) { Write-Output ("    " + $i) }
 Write-Output '  Fix: run this with -Sync (live -> repo, and project scope -> user scope), then commit ops\prompt-backup.'

@@ -32,7 +32,21 @@ RAILS:
 
 MONEY IN PROSE: the only dollar figure prose may carry is the spec's own cost_ps (plus the site's "$1 a
 month" membership line). No per-line costs in shop_smart - reference package sizes instead (r300 made
-this uniform batch-wide).
+this uniform batch-wide). Where the catalog is templated, write the token (${{cost_ps}}, {{cal}},
+{{protein}}) rather than a literal; a BOUND ("under 600 calories") stays literal.
+
+EVERY CLAIM ABOUT A PACKAGE MUST TRACE TO A COST LINE, AND YOU NAME THE LINE. Before you finish, walk
+your shop_smart bullet by bullet and, for each one that asserts anything about what a shopper buys - it
+is cheaper per ounce, one bag lasts several batches, the carton is used up with nothing left - find the
+cost_lines entry that proves it and put the arithmetic in your report. If no line proves it, the claim
+does not ship.
+This is not hypothetical caution. On 2026-08-15 a two-recipe batch was blocked twice by the auditor for
+exactly this: a bullet said a parmesan block beats the pre-grated tub per ounce when the engine actually
+buys the tub, a bullet promised a cream carton with "nothing left" against a buy of 2 pints for 3.5 cups,
+and a bullet said one box of raisins "lasts several batches" when 340 g against 181 g used is 1.88. Each
+one is a promise the reader can check in the store and find false, which is the one thing this catalog
+cannot afford. Every one was fixed in seconds once the tracing was actually done - the cost was the two
+extra audit rounds, not the fix.
 
 REPORT - and treat this as half your job (r300 lesson: the 8 writer waves surfaced ~60 real data bugs
 the engines had passed): slugs completed, any recipe you could not complete and why, and EVERY piece of

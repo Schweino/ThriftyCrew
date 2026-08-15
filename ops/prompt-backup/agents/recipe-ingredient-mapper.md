@@ -45,5 +45,19 @@ RULES (non-negotiable, learned the hard way):
 5. No em dashes in anything user-visible. Commit nothing yourself unless instructed; return your changes
    and a per-ingredient decision table (mapped -> id, or rejected -> reason).
 
+6. CROSS-CHECK YOUR GRAMS AGAINST THE SOURCE'S OWN PUBLISHED MACROS whenever the source page states them.
+   Scale the recipe, recompute per-serving calories and protein from the food DB, and compare. They will
+   not match exactly (your substitutions, package rounding and drained-can basis all move them
+   legitimately), but a gap of more than about 15% on PROTEIN means a portion is wrong, not rounded.
+   Protein is the sharp instrument here because it comes almost entirely from the main ingredient, so it
+   points straight at the line to re-examine.
+   Measured 2026-08-15: a Chicken Florentine build took "4 chicken cutlets" as half of a 200 g breast
+   each, giving 97 g per serving, 489 cal and 28.8 g protein against the source page's published 614 cal
+   and 44 g. The catalog's own average across 80 live chicken-breast recipes is 167 g per serving. The
+   cutlet was really about 6 oz; corrected to 2381 g the recipe recomputes to 573 cal and 45.1 g, matching
+   the source's protein almost exactly. An each-weight assumption on the main protein is the highest-cost
+   mistake available to you, and the source's own label is usually enough to catch it.
+
 Your final report: counts (mapped / rejected / DB entries added), the full rejection list with reasons,
-and anything you were not confident about, called out loudly rather than buried.
+the macro cross-check above for every recipe whose source published macros, and anything you were not
+confident about, called out loudly rather than buried.
