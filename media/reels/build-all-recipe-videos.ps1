@@ -30,7 +30,7 @@ USAGE
 #>
 [CmdletBinding()]
 param(
-  [string] $OutDir  = 'C:\Codex\recipe_videos',
+  [string] $OutDir  = 'C:\Codex\ThriftyCrew\media\videos',
   [string] $Voice   = 'goku-podcast',
   [int]    $Limit   = 0,
   [switch] $OnlyFree,
