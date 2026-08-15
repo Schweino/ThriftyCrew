@@ -135,7 +135,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-15T09:57:43",
+    "generated":  "2026-08-15T11:47:27",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -559,6 +559,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "glass-cleaner",
+                              "commodity":  "Glass Cleaner",
+                              "unit":  "floz",
+                              "store":  "Sam\u0027s Club",
+                              "per_unit":  0.1445,
+                              "size":  "4 ct 19 oz",
+                              "item":  "Windex Fast Shine Foam Glass Cleaner, No-Drip Aerosol Cleaning Spray, 19 oz., 4 pk.",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "gochujang",
                               "commodity":  "Gochujang (Korean Chili Paste)",
                               "unit":  "oz",
@@ -961,7 +973,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0993,
                               "size":  "15 oz",
-                              "item":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
+                              "item":  "Alberto Vo5 Extra Body With Collagen Volumizing Shampoo For Body \u0026 Bounce Bonus Size 15 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -998,18 +1010,6 @@
                               "per_unit":  0.199,
                               "size":  "10 oz",
                               "item":  "Fareway Soy Sauce",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "sparkling-water",
-                              "commodity":  "Sparkling Water",
-                              "unit":  "floz",
-                              "store":  "Family Fare",
-                              "per_unit":  0.0818,
-                              "size":  "17 oz",
-                              "item":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false

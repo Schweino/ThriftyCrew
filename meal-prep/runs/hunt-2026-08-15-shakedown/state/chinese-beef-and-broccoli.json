@@ -1,0 +1,31 @@
+{
+    "slug":  "chinese-beef-and-broccoli",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T11:54:27",
+    "updated":  "2026-08-15T11:54:27",
+    "terms":  [
+
+              ],
+    "reject_reason":  "near-dupe of Ground Beef and Broccoli Bowls",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T11:54:27",
+                        "by":  "recipe-sourcer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T11:54:27",
+                        "by":  "recipe-dedup-selector",
+                        "detail":  "near-dupe of Ground Beef and Broccoli Bowls"
+                    }
+                ]
+}

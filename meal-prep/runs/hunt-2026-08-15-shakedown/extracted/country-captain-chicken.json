@@ -1,0 +1,51 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Country Captain",
+  "source_url": "https://spicysouthernkitchen.com/country-captain-chicken/",
+  "servings": 6,
+  "time_total": null,
+  "time_active": "15 minutes",
+  "orchestrator_note": "The extractor returned a 14th instructions entry that was its own note about the missing total time, and said so in its concerns. That entry was removed here because instructions must contain page steps only: source-QA anchors on this file, and a non-step in the step list would read as an invented step. The information it carried is preserved in concerns below. Page steps are entries 1 through 13, unchanged and verbatim.",
+  "ingredients": [
+    { "raw": "1 cup chicken broth", "item": "chicken broth", "qty": "1", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1/2 cup golden raisins", "item": "golden raisins", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tablespoon curry powder", "item": "curry powder", "qty": "1", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tablespoon garam masala", "item": "garam masala", "qty": "1", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "2 teaspoons salt,, divided", "item": "salt", "qty": "2", "unit": "teaspoon", "prep": "divided", "optional": false, "section": null },
+    { "raw": "1 teaspoon black pepper,, divided", "item": "black pepper", "qty": "1", "unit": "teaspoon", "prep": "divided", "optional": false, "section": null },
+    { "raw": "1/4 teaspoon cayenne pepper", "item": "cayenne pepper", "qty": "1/4", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "4 thick-cut bacon slices,, cut into 1/2-inch pieces", "item": "thick-cut bacon slices", "qty": "4", "unit": "each", "prep": "cut into 1/2-inch pieces", "optional": false, "section": null },
+    { "raw": "8 boneless, skinless chicken thighs", "item": "chicken thighs", "qty": "8", "unit": "each", "prep": null, "optional": false, "section": null },
+    { "raw": "1 cup sliced carrot", "item": "carrot", "qty": "1", "unit": "cup", "prep": "sliced", "optional": false, "section": null },
+    { "raw": "1 cup diced red, orange, or yellow bell pepper", "item": "red, orange, or yellow bell pepper", "qty": "1", "unit": "cup", "prep": "diced", "optional": false, "section": null },
+    { "raw": "1 cup diced onion", "item": "onion", "qty": "1", "unit": "cup", "prep": "diced", "optional": false, "section": null },
+    { "raw": "1 dried guajillo chile", "item": "dried guajillo chile", "qty": "1", "unit": "each", "prep": null, "optional": false, "section": null },
+    { "raw": "2 garlic cloves,, minced", "item": "garlic", "qty": "2", "unit": "clove", "prep": "minced", "optional": false, "section": null },
+    { "raw": "3 tablespoons tomato paste", "item": "tomato paste", "qty": "3", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tablespoon minced fresh ginger", "item": "fresh ginger", "qty": "1", "unit": "tablespoon", "prep": "minced", "optional": false, "section": null },
+    { "raw": "1 (14-ounce) can petite diced tomatoes,, undrained", "item": "petite diced tomatoes", "qty": "1", "unit": "can", "prep": "undrained", "optional": false, "section": null },
+    { "raw": "5 cups cooked white rice", "item": "white rice", "qty": "5", "unit": "cup", "prep": "cooked", "optional": false, "section": null },
+    { "raw": "1/3 cup toasted slivered almonds", "item": "slivered almonds", "qty": "1/3", "unit": "cup", "prep": "toasted", "optional": false, "section": null }
+  ],
+  "instructions": [
+    "Bring the broth to a simmer in a small saucepan. Add the raisins and remove from heat. Set aside.",
+    "In a small bowl, combine curry powder, garam masala, 1 teaspoon salt, 1/2 teaspoon pepper, and cayenne pepper. Set aside.",
+    "Preheat oven to 350 degrees F.",
+    "In a large Dutch oven, preferably enameled cast iron, cook the bacon until crispy. Remove it with a slotted spoon and set aside.",
+    "Drain off all but 2 tablespoons of bacon grease.",
+    "Season the chicken with the remaining 1 teaspoon of salt and 1/2 teaspoon pepper. In 2 batches, brown the chicken in hot bacon grease, about 5 minutes per side. Remove from Dutch oven and set aside.",
+    "Add the carrot, bell pepper, and onion to the grease. Cook for 5 minutes to soften, stirring occasionally.",
+    "Add the chile pepper and garlic and cook for 1 minute.",
+    "Stir in the curry powder mixture, the tomato paste, and ginger. Stir for 30 seconds.",
+    "Add the broth/raisin mixture and the diced tomatoes. Bring to a boil and simmer for 5 minutes.",
+    "Place chicken thighs in the sauce. Cover the Dutch oven and bake in the oven for 15 minutes.",
+    "Remove lid and bake for 15 more minutes. Discard the chile.",
+    "Serve with rice and top with slivered almonds and crumbled bacon."
+  ],
+  "concerns": [
+    "Several ingredient lines render with a double comma between the name and the prep note (e.g. 'salt,, divided'); this appears to be a recipe-card formatting artifact on the page, transcribed as displayed.",
+    "The page card title reads 'Country Captain' while the page/candidate title is 'Country Captain Chicken'.",
+    "No total time is displayed on the card; prep 15 minutes and cook 57 minutes are stated separately. time_active reflects the stated Prep Time; time_total left null rather than summed."
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Chicken Florentine Recipe",
+  "source_url": "https://www.smalltownwoman.com/chicken-florentine/",
+  "servings": 4,
+  "time_total": null,
+  "time_active": "10 minutes prep, 30 minutes cook",
+  "ingredients": [
+    { "raw": "4 chicken cutlets", "item": "chicken cutlets", "qty": "4", "unit": "each", "prep": null, "optional": false, "section": null },
+    { "raw": "1/4 cup all-purpose flour", "item": "all-purpose flour", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1 teaspoon salt", "item": "salt", "qty": "1", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1/2 teaspoon freshly ground black pepper", "item": "black pepper", "qty": "1/2", "unit": "teaspoon", "prep": "freshly ground", "optional": false, "section": null },
+    { "raw": "2 tablespoons unsalted butter", "item": "unsalted butter", "qty": "2", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tablespoon olive oil", "item": "olive oil", "qty": "1", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 shallot sliced", "item": "shallot", "qty": "1", "unit": "each", "prep": "sliced", "optional": false, "section": null },
+    { "raw": "3 cloves garlic minced", "item": "garlic", "qty": "3", "unit": "clove", "prep": "minced", "optional": false, "section": null },
+    { "raw": "3/4 cup dry white wine", "item": "dry white wine", "qty": "3/4", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1/4 cup low sodium chicken broth", "item": "low sodium chicken broth", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1/2 teaspoon Italian seasoning", "item": "Italian seasoning", "qty": "1/2", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 cup heavy cream", "item": "heavy cream", "qty": "1", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "4 cups baby spinach or about 4 ounces", "item": "baby spinach", "qty": "4", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1/2 cup freshly grated parmesan cheese", "item": "parmesan cheese", "qty": "1/2", "unit": "cup", "prep": "freshly grated", "optional": false, "section": null }
+  ],
+  "instructions": [
+    "Add the flour, salt, and freshly ground black pepper to a shallow bowl. Dredge the chicken cutlets in the flour mixture.",
+    "Melt 1 tablespoon butter and heat 1 tablespoon olive oil in a large skillet over medium-high heat. Add the chicken and cook until golden brown and cooked through. Plate the chicken and place it in the oven on low to keep it warm.",
+    "Melt another tablespoon of butter in the skillet over medium heat and cook the shallots for 2 minutes. Turn the heat down to low and add the garlic. Cook for 1 minute, stirring constantly. Add the white wine, chicken broth, Italian seasoning, and heavy cream. Bring the mixture to a simmer and reduce by a little more than half. This takes about 10-15 minutes.",
+    "Add the spinach and cook just until wilted. Add the chicken back to the pan and warm. Sprinkle with freshly grated Parmesan Cheese right before serving."
+  ],
+  "concerns": [
+    "Total time is not separately stated on the recipe card; only prep (10 minutes) and cook (30 minutes) are given, so time_total is left null rather than summed.",
+    "The baby spinach line carries an alternate measure as printed ('4 cups baby spinach or about 4 ounces'); transcribed with cups as the primary qty/unit and the alternate left in raw."
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "round": 1,
+  "selected_by": "recipe-dedup-selector",
+  "selected_at": "2026-08-15",
+  "target": 2,
+  "adjudicated_against": "pipeline/catalog-digest.json (542 recipes)",
+  "selection_note": "Only ONE candidate in the pool was both clean (zero unmapped) AND genuinely non-duplicate: Country Captain. Of the six 'clean' candidates the sourcer flagged as zero-unmapped, two are HARD catalog duplicates already live (Mississippi Pot Roast, Loco Moco), two are near-duplicates of live ground-beef dishes (Stroganoff, Beef and Broccoli), and the fifth (Marry Me Chicken) is a near-duplicate of the live creamy-sun-dried-tomato chicken cluster. Per this run's explicit 'ship two nobody can call duplicates over defending a borderline' directive, the #2 slot went to the strongest genuinely-distinct candidate (Chicken Florentine) even though it costs one new commodity (white wine), rather than shipping the zero-flag-but-callable-as-dupe Marry Me Chicken. No good cross-protein pair existed (the only non-chicken survivor, Pork Lo Mein, is flagged, weakest, and a 3rd-protein copy of an existing dish), so two chicken picks with maximal cuisine/flavor separation is the correct pairing.",
+  "selected": [
+    {
+      "name": "Country Captain Chicken",
+      "slug": "country-captain-chicken",
+      "protein": "chicken",
+      "cuisine": "Anglo-Indian / Southern",
+      "source_url": "https://spicysouthernkitchen.com/country-captain-chicken/",
+      "source_servings": 6,
+      "src_cal": 548,
+      "src_protein": null,
+      "method": "oven braise",
+      "unmapped": [],
+      "why": "Distinct cuisine the catalog lacks, curry-braise over rice, all commodities on hand.",
+      "selector_note": "Per-serving protein NOT published. Thighs plus bacon make 25g+ near-certain but unverified.",
+      "dedup_verdict": "SELECT. Genuinely distinct: no catalog neighbor. Nearest by ingredients are Chicken Kabsa and Chicken Maqluba (Middle-Eastern rice-cooked-in dishes, different plates) and the many catalog curries (Madras, Tikka Masala, Trinidadian, etc., all different profiles). Country Captain's curry-powder+garam braise with the raisin/almond/bell-pepper/bacon signature served OVER rice is its own dinner. Widens the American/Tex-Mex-skewed catalog the most (no Anglo-Indian entry exists). Clean (zero unmapped). Caveat carried: src_protein unpublished (thighs+bacon => 25g+ near-certain); 548 cal clears the 500 floor.",
+      "ingredients_verbatim": ["1 cup chicken broth", "1/2 cup golden raisins", "1 Tbsp curry powder", "1 Tbsp garam masala", "2 tsp salt, divided", "1 tsp black pepper, divided", "1/4 tsp cayenne", "4 thick-cut bacon slices", "8 boneless skinless chicken thighs", "1 cup sliced carrot", "1 cup diced bell pepper", "1 cup diced onion", "1 dried guajillo chile", "2 garlic cloves", "3 Tbsp tomato paste", "1 Tbsp fresh ginger", "1 (14oz) can petite diced tomatoes", "5 cups cooked rice", "1/3 cup slivered almonds"]
+    },
+    {
+      "name": "Chicken Florentine",
+      "slug": "chicken-florentine",
+      "protein": "chicken",
+      "cuisine": "Italian-American",
+      "source_url": "https://www.smalltownwoman.com/chicken-florentine/",
+      "source_servings": 4,
+      "src_cal": 614,
+      "src_protein": 44,
+      "method": "skillet",
+      "unmapped": ["white wine"],
+      "why": "Creamy spinach skillet; catalog has Turkey Florentine Rice Bake but no chicken skillet version. Strong macros.",
+      "selector_note": "FLAGGED: 3/4 cup dry white wine, omittable by swapping broth.",
+      "dedup_verdict": "SELECT. Least-duplicate of every remaining candidate. Its only namesake, Turkey Florentine Rice Bake, is a DIFFERENT protein (turkey) in a DIFFERENT format (rice-bake casserole vs a fresh skillet cutlet in cream sauce) — a genuinely different dinner by the judge-the-food rule. It carries NO sun-dried tomato, so unlike Marry Me it stays out of the live creamy-sun-dried-tomato chicken cluster (Tuscan Chicken Pasta / Italian Chicken Penne). Best macros of the flagged set (44g protein, 614 cal, no calorie caveat). Wins the #2 slot over the zero-flag Marry Me Chicken because this run weights 'nobody can call it a duplicate' above zero-flag when they conflict, and its single flag (white wine) is one clean new commodity (also omittable via broth).",
+      "ingredients_verbatim": ["4 chicken cutlets", "1/4 cup flour", "1 tsp salt", "1/2 tsp black pepper", "2 Tbsp unsalted butter", "1 Tbsp olive oil", "1 shallot", "3 cloves garlic", "3/4 cup dry white wine", "1/4 cup chicken broth", "1/2 tsp Italian seasoning", "1 cup heavy cream", "4 cups baby spinach (about 4 oz)", "1/2 cup parmesan"]
+    }
+  ],
+  "rejected_dupes": [
+    {
+      "name": "Mississippi Pot Roast",
+      "dupe_of": "Mississippi Pot Roast Bowls (live, beef)",
+      "reason": "HARD catalog duplicate. Same dish, same protein, same name. The candidate's 'absent from catalog' claim is factually wrong: the digest already lists 'Mississippi Pot Roast Bowls' under beef. Not a distinct variation of anything - it IS the live recipe."
+    },
+    {
+      "name": "Loco Moco",
+      "dupe_of": "Hawaiian Loco Moco Rice Bowls (live, beef)",
+      "reason": "HARD catalog duplicate. Same dish (ground-beef patty + brown gravy + fried egg over rice), same protein, same cuisine. Already live as 'Hawaiian Loco Moco Rice Bowls' under beef."
+    },
+    {
+      "name": "Classic Beef Stroganoff",
+      "dupe_of": "Ground Beef Stroganoff Pasta (live, beef)",
+      "reason": "Near-duplicate. Protein (beef), sauce family (sour-cream/mushroom stroganoff), starch (egg noodles), and method (skillet) all match the live ground-beef stroganoff - 4/4 on the dish axes, only ground vs sliced sirloin differs, which is not a distinct dinner. The catalog also already runs a whole-muscle stroganoff (Pork Tenderloin Stroganoff over Egg Noodles), so the 'whole-muscle is a new variation' argument is already spent. Callable as a dupe; benched per this run's bar."
+    },
+    {
+      "name": "Chinese Beef and Broccoli",
+      "dupe_of": "Ground Beef and Broccoli Bowls (live, beef)",
+      "reason": "Near-duplicate. Protein (beef), primary veg (broccoli), sauce family (soy/oyster Asian), and starch (rice bowl) all match the live 'Ground Beef and Broccoli Bowls'; only sliced flank vs ground differs. Same eaten plate. (Also adjacent to 'Cheesy Beef and Broccoli Rice Bowls', a different cheese-sauce build.) Callable as a dupe; benched per this run's bar."
+    }
+  ],
+  "borderline": [
+    {
+      "name": "Marry Me Chicken",
+      "protein": "chicken",
+      "unmapped": [],
+      "near_dupe_of": ["Slow Cooker Tuscan Chicken Pasta (live, chicken)", "Slow Cooker Italian Chicken Penne (live, chicken)", "Marry Me Pork Chops over Pasta (live, pork - same sauce)"],
+      "reason": "Zero unmapped flags, but a near-duplicate of the live creamy-sun-dried-tomato-parmesan chicken pasta cluster. Protein (chicken), sauce/flavor (cream + parmesan + sun-dried tomato), and starch (short pasta) all match Tuscan Chicken Pasta and Italian Chicken Penne (3/4 - only slow-cooker-vs-skillet and coconut-milk-vs-heavy-cream differ), and the identical sauce ships on Marry Me Pork Chops. The plate is already on the menu three ways. Held out (not selected, not hard-killed): a skeptic can absolutely call it a duplicate, which fails this run's 'nobody can call it a dupe' bar, but the fresh-skillet execution is a fair argument for a distinct build, so the audit stage should adjudicate rather than have me silently drop it."
+    },
+    {
+      "name": "Chicken Fricassee",
+      "protein": "chicken",
+      "unmapped": ["white wine"],
+      "near_dupe_of": ["Slow Cooker Creamy Chicken and Mushroom Bowls (live, chicken)"],
+      "reason": "Near-duplicate of the live 'Slow Cooker Creamy Chicken and Mushroom Bowls' on the 3/4 test (chicken + creamy-mushroom sauce + rice/noodle starch; only skillet-vs-slow-cooker and cream/wine-vs-cream-cheese differ). Also the French-chicken lane is already well-populated (Coq au Vin, Chicken Provencal, Chicken Normandy, Slow Cooker French Onion Chicken), so it widens cuisine little. Plus a white-wine flag. Lost the #2 slot to Chicken Florentine, which is genuinely distinct AND has stronger macros."
+    },
+    {
+      "name": "Pork Lo Mein",
+      "protein": "pork",
+      "unmapped": ["water chestnuts"],
+      "near_dupe_of": ["Chicken Lo Mein Noodle Bowls (live, chicken)", "Ground Turkey Lo Mein (live, turkey)"],
+      "reason": "Same dish (lo mein - noodles in soy/oyster/sesame with veg) as two live entries, just a third protein. The catalog demonstrably runs multi-protein lo mein already, so a pork version is a defensible protein-variant rather than a hard dupe - but it is the pool's weakest candidate on the merits: flagged (water chestnuts unmapped, one new commodity), sourcer-called-weakest, and borderline published calories. Only non-chicken survivor, but too weak to be a 'good cross-protein pair', so it does not unseat two-chicken selection. Held for the audit stage."
+    }
+  ],
+  "shortfall": {},
+  "shortfall_note": "No numeric shortfall: 2 selected against a target of 2. Flagging for the orchestrator that the NON-DUPE pool was thin - only 1 of 9 candidates was clean-AND-distinct (Country Captain); the #2 pick required accepting one new commodity (white wine) to stay non-dupe. If a stricter zero-new-commodity constraint is required, the run is 1 short and more sourcing should run. Same-dish-different-protein twins noted for a cross-protein pass: Pork Lo Mein <-> Chicken/Turkey Lo Mein; Marry Me Chicken <-> Marry Me Pork Chops (same sauce)."
+}

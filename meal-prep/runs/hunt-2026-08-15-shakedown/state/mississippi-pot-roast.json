@@ -1,0 +1,31 @@
+{
+    "slug":  "mississippi-pot-roast",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T11:54:25",
+    "updated":  "2026-08-15T11:54:25",
+    "terms":  [
+
+              ],
+    "reject_reason":  "HARD dupe of live Mississippi Pot Roast Bowls",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T11:54:25",
+                        "by":  "recipe-sourcer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T11:54:25",
+                        "by":  "recipe-dedup-selector",
+                        "detail":  "HARD dupe of live Mississippi Pot Roast Bowls"
+                    }
+                ]
+}

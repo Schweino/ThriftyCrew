@@ -318,13 +318,6 @@
                                                              "size":  "32 oz",
                                                              "verified":  "2026-08-03 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                          },
-                                              "Sam\u0027s Club":  {
-                                                                      "url":  "https://www.samsclub.com/ip/13597517906",
-                                                                      "price":  10.98,
-                                                                      "size":  "210 fl oz",
-                                                                      "name":  "Fabuloso 2X Concentrated Multi-Purpose Cleaner, Lavender 210 fl. oz.",
-                                                                      "board_pu":  0.0523
-                                                                  },
                                               "Walmart":  {
                                                               "url":  "https://www.walmart.com/ip/Great-Value-Clear-Ammonia-All-Purpose-Cleaners-64-fl-oz/642113336",
                                                               "name":  "Great Value Clear Ammonia All Purpose Cleaners, 64 fl oz",
@@ -345,7 +338,14 @@
                                                                    "price":  9.99,
                                                                    "size":  "128 fl oz",
                                                                    "verified":  "2026-08-15"
-                                                               }
+                                                               },
+                                              "Sam\u0027s Club":  {
+                                                                      "url":  "https://www.samsclub.com/ip/17449400028",
+                                                                      "name":  "Fabuloso 2X Concentrated Multi-Purpose Cleaner, Watermelon 210 fl. oz.",
+                                                                      "price":  "$10.98",
+                                                                      "size":  "210 fl oz",
+                                                                      "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
+                                                                  }
                                           },
                   "all-purpose-flour":  {
                                             "commodity":  "All-Purpose Flour",
@@ -1245,8 +1245,8 @@
                                                          "verified":  "2026-08-15"
                                                      },
                                     "Family Fare":  {
-                                                        "url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/gerber_sitter_2nd_foods_6_months_veggie_blends_carrot_sweet_potato_pea_2_ea/p/2050464",
-                                                        "name":  "Gerber Sitter 2nd Foods (6+ Months) Veggie Blends Carrot Sweet Potato Pea 2 Ea",
+                                                        "url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/gerber_prune_apple_sitter_2nd_foods_2_packs_2_ea/p/2468378",
+                                                        "name":  "Gerber Prune Apple, Sitter 2nd Foods, 2 Packs 2 Ea",
                                                         "price":  "$2.19",
                                                         "size":  "2pk 4oz",
                                                         "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
@@ -1283,13 +1283,6 @@
                                                        "size":  "33.2 oz",
                                                        "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                    },
-                                       "Sam\u0027s Club":  {
-                                                               "url":  "https://www.samsclub.com/ip/19382919454",
-                                                               "name":  "Bubs Goat Milk Infant Formula Powder With Iron, 20 oz., 2 pk.",
-                                                               "price":  "$57.78",
-                                                               "size":  "40 oz",
-                                                               "verified":  "2026-08-13 DERIVED from the price row (same record the board priced)"
-                                                           },
                                        "Baker\u0027s":  {
                                                             "url":  "https://www.bakersplus.com/p/comforts-advantage-premium-immune-support-non-gmo-baby-formula-with-iron-big-deal-/0004126001581",
                                                             "name":  "Comforts Advantage Premium Immune Support Non GMO Baby Formula with Iron BIG DEAL!",
@@ -1719,9 +1712,9 @@
                                                   "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                               },
                                   "Sam\u0027s Club":  {
-                                                          "url":  "https://www.samsclub.com/ip/13791069811",
-                                                          "name":  "Organic Bananas, 3 lbs.",
-                                                          "price":  "$2.16",
+                                                          "url":  "https://www.samsclub.com/ip/18638953319",
+                                                          "name":  "Bananas, 3 lbs.",
+                                                          "price":  "$1.47",
                                                           "size":  "3 lb",
                                                           "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
                                                       }
@@ -5508,13 +5501,6 @@
                                                         "size":  "lb",
                                                         "verified":  "2026-08-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
-                                         "Sam\u0027s Club":  {
-                                                                 "url":  "https://www.samsclub.com/ip/13972015589",
-                                                                 "price":  2.48,
-                                                                 "size":  "lb",
-                                                                 "name":  "Boneless Skinless Chicken Breast, Case, priced per pound",
-                                                                 "board_pu":  2.48
-                                                             },
                                          "Baker\u0027s":  {
                                                               "url":  "https://www.bakersplus.com/p/heritage-farm-boneless-skinless-chicken-breasts/0028334900000",
                                                               "name":  "Heritage Farm Boneless Skinless Chicken Breasts",
@@ -5528,7 +5514,14 @@
                                                          "price":  "$10.35",
                                                          "size":  "4.641 lb",
                                                          "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/13588173694",
+                                                                 "name":  "Member\u0027s Mark Boneless and Skinless Chicken Breast, priced per pound",
+                                                                 "price":  "$2.48",
+                                                                 "size":  "lb",
+                                                                 "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
+                                                             }
                                      },
                   "chicken-broth":  {
                                         "commodity":  "Chicken Broth",
@@ -5756,20 +5749,20 @@
                                                          "size":  "lb",
                                                          "name":  "Bone-In Chicken Thighs"
                                                      },
-                                         "Sam\u0027s Club":  {
-                                                                 "url":  "https://www.samsclub.com/ip/13608013618",
-                                                                 "price":  1.28,
-                                                                 "size":  "lb",
-                                                                 "name":  "Member\u0027s Mark Bone-In Chicken Thighs, priced per pound",
-                                                                 "board_pu":  1.28
-                                                             },
                                          "Walmart":  {
                                                          "url":  "https://www.walmart.com/ip/Tyson-All-Natural-Fresh-Chicken-Thighs-Family-Pack-4-75-6-0-lb-Tray/51259108",
                                                          "name":  "Tyson All Natural, Fresh Chicken Thighs, Family Pack, 4.75 - 6.0 lb Tray",
                                                          "price":  "$8.62",
                                                          "size":  "4.87 lb",
                                                          "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/13605458056",
+                                                                 "name":  "Member\u0027s Mark Chicken Thighs, Case, priced per pound",
+                                                                 "price":  "$1.28",
+                                                                 "size":  "lb",
+                                                                 "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
+                                                             }
                                      },
                   "chicken-wings":  {
                                         "commodity":  "chicken-wings",
@@ -5816,14 +5809,7 @@
                                                         "price":  "$11.96",
                                                         "size":  "4.53 lb",
                                                         "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                    },
-                                        "Sam\u0027s Club":  {
-                                                                "url":  "https://www.samsclub.com/ip/13610618777",
-                                                                "name":  "Member\u0027s Mark Bone-In Chicken Wings, priced per pound",
-                                                                "price":  "$2.77",
-                                                                "size":  "lb",
-                                                                "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
-                                                            }
+                                                    }
                                     },
                   "chickpeas":  {
                                     "commodity":  "Chickpeas",
@@ -6791,13 +6777,6 @@
                                                      "name":  "Dunkin\u0027 Donuts Original Blend K-Cup 10 Count",
                                                      "board_pu":  0.949
                                                  },
-                                      "Sam\u0027s Club":  {
-                                                              "url":  "https://www.samsclub.com/ip/16134252750",
-                                                              "price":  32.98,
-                                                              "size":  "100 ct",
-                                                              "name":  "Member\u0027s Mark French Roast Coffee Pods, 100 ct.",
-                                                              "board_pu":  0.3298
-                                                          },
                                       "Fareway":  {
                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/43979690-green-mountain-coffee-roasters-k-cup-pods-10-pack",
                                                       "name":  "Green Mountain Coffee Roasters French Vanilla K-Cup Pods",
@@ -6811,7 +6790,14 @@
                                                            "price":  15.99,
                                                            "size":  "48 ct",
                                                            "verified":  "2026-08-15"
-                                                       }
+                                                       },
+                                      "Sam\u0027s Club":  {
+                                                              "url":  "https://www.samsclub.com/ip/17618918401",
+                                                              "name":  "Member\u0027s Mark Classic Coffee Pods, Variety Pack, 100 ct.",
+                                                              "price":  "$32.98",
+                                                              "size":  "100 ct",
+                                                              "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
+                                                          }
                                   },
                   "coleslaw-mix":  {
                                        "commodity":  "Coleslaw Mix",
@@ -7144,14 +7130,7 @@
                                                      "price":  "$1.97",
                                                      "size":  "9.25 oz",
                                                      "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                 },
-                                     "Sam\u0027s Club":  {
-                                                             "url":  "https://www.samsclub.com/ip/15216422156",
-                                                             "name":  "Fritos Dips Variety Pack, 9 oz., 3 ct.",
-                                                             "price":  "$10.98",
-                                                             "size":  "27 oz",
-                                                             "verified":  "2026-08-13 DERIVED from the price row (same record the board priced)"
-                                                         }
+                                                 }
                                  },
                   "corn-dogs":  {
                                     "commodity":  "corn-dogs",
@@ -8146,13 +8125,6 @@
                                                    "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)",
                                                    "board_pu":  1.9192
                                                },
-                                    "Sam\u0027s Club":  {
-                                                            "url":  "https://www.samsclub.com/ip/19832016487",
-                                                            "price":  9.98,
-                                                            "size":  "13 oz",
-                                                            "name":  "Degree for Men Cool Rush Deodorant, 2.6 oz., 5 pk.",
-                                                            "board_pu":  0.7677
-                                                        },
                                     "Walmart":  {
                                                     "url":  "https://www.walmart.com/ip/ARM-HAMMER-ULTRA-MAX-Deodorant-Fresh-Scent-Solid-Stick-2-6-oz-Twin-Pack-Pack-of-Two/34495616",
                                                     "name":  "ARM \u0026 HAMMER ULTRA MAX Deodorant, Fresh Scent, Solid Stick 2.6 oz, Twin Pack (Pack of Two)",
@@ -8166,7 +8138,14 @@
                                                          "price":  2.79,
                                                          "size":  "3 oz",
                                                          "verified":  "2026-08-15"
-                                                     }
+                                                     },
+                                    "Sam\u0027s Club":  {
+                                                            "url":  "https://www.samsclub.com/ip/13893056731",
+                                                            "name":  "Degree Antiperspirant Deodorant, Shower Clean, 2.6 oz., 5 pk.",
+                                                            "price":  "$9.98",
+                                                            "size":  "13 oz",
+                                                            "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
+                                                        }
                                 },
                   "diapers":  {
                                   "commodity":  "diapers",
@@ -8469,8 +8448,8 @@
                                                          "verified":  "2026-08-15"
                                                      },
                                     "Sam\u0027s Club":  {
-                                                            "url":  "https://www.samsclub.com/ip/3500044481",
-                                                            "name":  "Palmolive Ultra Dishwashing Liquid, Original Scent, 102 oz.",
+                                                            "url":  "https://www.samsclub.com/ip/3500044479",
+                                                            "name":  "Palmolive Antibacterial Dishwashing Liquid Dish Soap, Orange 102 fl.oz.",
                                                             "price":  "$8.98",
                                                             "size":  "102 fl oz",
                                                             "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
@@ -8585,20 +8564,20 @@
                                                                      "name":  "Member\u0027s Mark Disinfecting Wipes, Variety Pack, 4 pk., 312 ct.",
                                                                      "board_pu":  0.0352
                                                                  },
-                                             "Family Fare":  {
-                                                                 "url":  "https://www.shopfamilyfare.com/shop/household/cleaners_air_fresheners/multi_purpose_specialty/clorox_grapefruit_orange_blossom_disinfecting_wipes_75_ea/p/1564405684711435100",
-                                                                 "name":  "Clorox Grapefruit \u0026 Orange Blossom Disinfecting Wipes 75 Ea",
-                                                                 "price":  "$6.99",
-                                                                 "size":  "75 ea",
-                                                                 "verified":  "2026-08-10 DERIVED from the price row (same record the board priced)"
-                                                             },
                                              "Walmart":  {
                                                              "url":  "https://www.walmart.com/ip/Great-Value-Disinfecting-Wipes-300-Count-4-Pack/423259576",
                                                              "name":  "Great Value Disinfecting Wipes, 300 Count, 4 Pack",
                                                              "price":  "$10.78",
                                                              "size":  "300 ct",
                                                              "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                         }
+                                                         },
+                                             "Family Fare":  {
+                                                                 "url":  "https://www.shopfamilyfare.com/shop/household/cleaners_air_fresheners/multi_purpose_specialty/clorox_3_in_1_crisp_lemon_disinfecting_wipes_75_ea/p/32215",
+                                                                 "name":  "Clorox 3 In 1 Crisp Lemon Disinfecting Wipes 75 Ea",
+                                                                 "price":  "$6.99",
+                                                                 "size":  "75 count",
+                                                                 "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
+                                                             }
                                          },
                   "dog-food":  {
                                    "commodity":  "dog-food",
@@ -8639,20 +8618,20 @@
                                                   "verified":  "2026-07-16 Hy-Vee search API (storeId 1465)",
                                                   "board_pu":  0.8638
                                               },
-                                   "Sam\u0027s Club":  {
-                                                           "url":  "https://www.samsclub.com/ip/14233259780",
-                                                           "price":  26.78,
-                                                           "size":  "48 lb",
-                                                           "name":  "Purina Dog Chow Complete, Chicken Flavor, Adult Dry Dog Food, 48 lbs.",
-                                                           "board_pu":  0.5579
-                                                       },
                                    "Walmart":  {
                                                    "url":  "https://www.walmart.com/ip/Kibbles-n-Bits-Original-Savory-Beef-Chicken-Flavors-Dry-Dog-Food-45-lb-Bag/17414612212",
                                                    "name":  "Kibbles \u0027n Bits Dry Dog Food, Original Savory Beef \u0026 Chicken Flavors, 45 lb. Bag",
                                                    "price":  "$26.97",
                                                    "size":  "45 lb",
                                                    "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                               }
+                                               },
+                                   "Sam\u0027s Club":  {
+                                                           "url":  "https://www.samsclub.com/ip/14251561615",
+                                                           "name":  "Purina, Dog Chow Complete, Beef Flavor, Adult Dry Dog Food, 48 lbs.",
+                                                           "price":  "$26.78",
+                                                           "size":  "48 lb",
+                                                           "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
+                                                       }
                                },
                   "dog-treats":  {
                                      "commodity":  "dog-treats",
@@ -9623,13 +9602,6 @@
                                                              "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                              "board_pu":  0.0143
                                                          },
-                                         "Sam\u0027s Club":  {
-                                                                 "url":  "https://www.samsclub.com/ip/7874205758",
-                                                                 "price":  13.98,
-                                                                 "size":  "1398 ct",
-                                                                 "name":  "Member\u0027s Mark Ultra Soft 3-Ply Facial Tissues, 12 Cube Boxes, 80 tissues/box",
-                                                                 "board_pu":  0.01
-                                                             },
                                          "Fareway":  {
                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26184494-kleenex-medium-count-flat-facial-tissue-160-ct",
                                                          "name":  "Kleenex Trusted Care Facial Tissues Flat Box 2 Ply",
@@ -9643,7 +9615,14 @@
                                                          "price":  "$26.32",
                                                          "size":  "3842 ct",
                                                          "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/7874225858",
+                                                                 "name":  "Member’s Mark Soft \u0026 Strong 2-Ply Premium Facial Tissues 12 Flat Boxes, 160 tissues/box",
+                                                                 "price":  "$14.98",
+                                                                 "size":  "1498 ct",
+                                                                 "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
+                                                             }
                                      },
                   "fajita-seasoning":  {
                                            "commodity":  "Fajita Seasoning Packet",
@@ -11153,11 +11132,11 @@
                                                            "board_pu":  3.6667
                                                        },
                                        "Sam\u0027s Club":  {
-                                                               "url":  "https://www.samsclub.com/ip/13860174379",
-                                                               "price":  11.88,
+                                                               "url":  "https://www.samsclub.com/ip/13563522163",
+                                                               "name":  "Jack\u0027s Original Thin Sausage Pepperoni Frozen Pizza 4 pk.",
+                                                               "price":  "$11.88",
                                                                "size":  "4 ct",
-                                                               "name":  "Jack\u0027s Original Thin Pepperoni Frozen Pizza 4 pk.",
-                                                               "board_pu":  2.97
+                                                               "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
                                                            }
                                    },
                   "frozen-vegetables":  {
@@ -13349,14 +13328,7 @@
                                                       "price":  "$3.42",
                                                       "size":  "32 oz",
                                                       "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                  },
-                                      "Sam\u0027s Club":  {
-                                                              "url":  "https://www.samsclub.com/ip/1114010373",
-                                                              "name":  "Golden Grill Hashbrown Potatoes, 33 oz.",
-                                                              "price":  "$8.98",
-                                                              "size":  "33 oz",
-                                                              "verified":  "2026-08-13 DERIVED from the price row (same record the board priced)"
-                                                          }
+                                                  }
                                   },
                   "heavy-cream":  {
                                       "commodity":  "heavy-cream",
@@ -13865,11 +13837,11 @@
                                                    "board_pu":  0.199
                                                },
                                     "Sam\u0027s Club":  {
-                                                            "url":  "https://www.samsclub.com/ip/7092047596",
-                                                            "price":  9.78,
+                                                            "url":  "https://www.samsclub.com/ip/709204765",
+                                                            "name":  "Swiss Miss Milk Chocolate Hot Cocoa Mix, 50 ct.",
+                                                            "price":  "$9.78",
                                                             "size":  "50 ct",
-                                                            "name":  "Swiss Miss Milk Chocolate Hot Cocoa Mix with Marshmallow, 50 ct.",
-                                                            "board_pu":  0.1956
+                                                            "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
                                                         }
                                 },
                   "hot-dog-buns":  {
@@ -16667,8 +16639,8 @@
                                                        "verified":  "2026-08-15"
                                                    },
                                   "Sam\u0027s Club":  {
-                                                          "url":  "https://www.samsclub.com/ip/3000031582",
-                                                          "name":  "Quaker Quick 1-Minute Oats, 160 oz.",
+                                                          "url":  "https://www.samsclub.com/ip/3000041000",
+                                                          "name":  "Quaker Old Fashioned Oats, 160 oz.",
                                                           "price":  "$7.98",
                                                           "size":  "160 oz",
                                                           "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
@@ -18154,8 +18126,8 @@
                                                   "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                               },
                                   "Family Fare":  {
-                                                      "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/pickles/our_family_reduced_sodium_kosher_dill_pickle_spears_24_fl_oz/p/5100004",
-                                                      "name":  "Our Family Reduced Sodium Kosher Dill Pickle Spears 24 Fl Oz",
+                                                      "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/pickles/our_family_spears_kosher_dill_pickles_24_fl_oz/p/6787056",
+                                                      "name":  "Our Family Spears Kosher Dill Pickles 24 Fl Oz",
                                                       "price":  "$2.79",
                                                       "size":  "24 fl oz",
                                                       "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
@@ -18544,14 +18516,7 @@
                                                        "price":  2.99,
                                                        "size":  "each",
                                                        "name":  "Old Orchard Healthy Balance Pomegranate Cranberry"
-                                                   },
-                                       "Sam\u0027s Club":  {
-                                                               "url":  "https://www.samsclub.com/ip/13612054807",
-                                                               "name":  "Humann SuperBeets Heart Chews, Pomegranate Berry 90 ct.",
-                                                               "price":  "$34.98",
-                                                               "size":  "90 ct",
-                                                               "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                           }
+                                                   }
                                    },
                   "poppy-seeds":  {
                                       "commodity":  "Poppy Seeds",
@@ -19574,11 +19539,11 @@
                                                               "verified":  "2026-08-15"
                                                           },
                                          "Family Fare":  {
-                                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/our_family_buttermilk_ranch_dressing_16_fl_oz/p/7081380",
-                                                             "name":  "Our Family Buttermilk Ranch Dressing 16 Fl Oz",
+                                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/our_family_spicy_ranch_dressing_16_fl_oz/p/1564405684713635004",
+                                                             "name":  "Our Family Spicy Ranch Dressing 16 Fl Oz",
                                                              "price":  "$2.79",
                                                              "size":  "16 fl oz",
-                                                             "verified":  "2026-08-14 DERIVED from the price row (same record the board priced)"
+                                                             "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
                                                          }
                                      },
                   "ranch-seasoning-mix":  {
@@ -21312,11 +21277,11 @@
                                                        "verified":  "2026-08-15"
                                                    },
                                   "Family Fare":  {
-                                                      "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/shampoo_conditioner/alberto_vo5_shampoo_clarifying_kiwi_lime_squeeze_15_fl_oz/p/453111",
-                                                      "name":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
+                                                      "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/shampoo_conditioner/alberto_vo5_extra_body_with_collagen_volumizing_shampoo_for_body_bounce_bonus_size_15_fl_oz/p/2458463",
+                                                      "name":  "Alberto Vo5 Extra Body With Collagen Volumizing Shampoo For Body \u0026 Bounce Bonus Size 15 Fl Oz",
                                                       "price":  "$1.49",
                                                       "size":  "15 oz",
-                                                      "verified":  "2026-08-14 DERIVED from the price row (same record the board priced)"
+                                                      "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
                                                   }
                               },
                   "shaving-cream":  {
@@ -21497,8 +21462,8 @@
                                                               "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
                                                           },
                                           "Sam\u0027s Club":  {
-                                                                  "url":  "https://www.samsclub.com/ip/13857173387",
-                                                                  "name":  "Member\u0027s Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+                                                                  "url":  "https://www.samsclub.com/ip/13844016358",
+                                                                  "name":  "Member\u0027s Mark Part-Skim Mozzarella Cheese 5 lbs.",
                                                                   "price":  "$12.17",
                                                                   "size":  "5 lb",
                                                                   "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
@@ -22036,13 +22001,6 @@
                                                                "size":  "33.8 fl oz",
                                                                "verified":  "2026-08-15"
                                                            },
-                                          "Family Fare":  {
-                                                              "url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/water/sparkling_ice_zero_sugar_orange_mango_sparkling_water_17_fl_oz/p/16401",
-                                                              "name":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
-                                                              "price":  "$1.39",
-                                                              "size":  "17 oz",
-                                                              "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
-                                                          },
                                           "Aldi":  {
                                                        "url":  "https://www.aldi.us/store/aldi/products/18647731-puraqua-black-cherry-sparkling-water-beverage-33-8-fl-oz",
                                                        "name":  "Puraqua Black Cherry Sparkling Water Beverage 33.8 FL OZ",
@@ -22056,7 +22014,14 @@
                                                           "price":  "$1.00",
                                                           "size":  "33.8 fl oz",
                                                           "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                      },
+                                          "Family Fare":  {
+                                                              "url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/water/sparkling_ice_zero_sugar_strawberry_watermelon_sparkling_water_17_fl_oz/p/9276",
+                                                              "name":  "Sparkling Ice Zero Sugar Strawberry Watermelon Sparkling Water 17 Fl Oz",
+                                                              "price":  "$1.39",
+                                                              "size":  "17 fl oz",
+                                                              "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
+                                                          }
                                       },
                   "spinach":  {
                                   "commodity":  "spinach",
@@ -24050,14 +24015,7 @@
                                                          "price":  "$1.43",
                                                          "size":  "10 oz",
                                                          "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                     },
-                                         "Sam\u0027s Club":  {
-                                                                 "url":  "https://www.samsclub.com/ip/13910572597",
-                                                                 "name":  "Doritos Spicy Sweet Chili Tortilla Chips, 18.375 oz.",
-                                                                 "price":  "$4.48",
-                                                                 "size":  "18.375 oz",
-                                                                 "verified":  "2026-08-13 DERIVED from the price row (same record the board priced)"
-                                                             }
+                                                     }
                                      },
                   "tortillas":  {
                                     "commodity":  "tortillas",
@@ -24536,13 +24494,6 @@
                                                         "size":  "128 oz",
                                                         "name":  "Fareway Vegetable Oil"
                                                     },
-                                        "Sam\u0027s Club":  {
-                                                                "url":  "https://www.samsclub.com/ip/7874222699",
-                                                                "price":  13.88,
-                                                                "size":  "192 fl oz",
-                                                                "name":  "Member\u0027s Mark Canola Oil, 192 fl. oz.",
-                                                                "board_pu":  0.0723
-                                                            },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/2916136/that-s-smart-pure-vegetable-oil",
                                                        "name":  "That\u0027s Smart! Pure Vegetable Oil",
@@ -24556,7 +24507,14 @@
                                                         "price":  "$8.74",
                                                         "size":  "128 fl oz",
                                                         "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                    },
+                                        "Sam\u0027s Club":  {
+                                                                "url":  "https://www.samsclub.com/ip/13588950739",
+                                                                "name":  "Member\u0027s Mark Vegetable Oil, 192 oz.",
+                                                                "price":  "$13.88",
+                                                                "size":  "192 fl oz",
+                                                                "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
+                                                            }
                                     },
                   "vegetable-soup":  {
                                          "commodity":  "Vegetable / Vegetable Beef Soup (canned)",

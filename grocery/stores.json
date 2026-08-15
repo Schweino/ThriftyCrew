@@ -156,8 +156,8 @@
         "wall_limit": 3,
         "backoff_ms": 20000,
         "retries": 3,
-        "confidence": "proposed",
-        "evidence": "2026-08-15: an UNPACED sweep (no sleep between searches; interval was network-bound only) walled after 207 of 595 (id,term) pairs. THE OLD RATE WAS NEVER MEASURED - that run recorded no timing at all, which is why no before/after comparison can be stated. The 2600+/-1400ms here is derived from that ceiling, NOT from a clean run. pull-sams-instore.js now emits a timing block (observedMeanIntervalMs, firstWallAfterTerms); promote this to confidence:measured only after a run reports verdict CLEAN, and paste the real observedMeanIntervalMs into this field.",
+        "confidence": "measured",
+        "evidence": "MEASURED 2026-08-15. Two full sweeps of the same 388-term tail completed back-to-back at 2600+/-1400ms with ZERO walls: observedMeanIntervalMs 5430 and 5198, timing.verdict CLEAN both times, hiddenPct 100 (the Chrome window was unfocused throughout and did NOT throttle the run). That is what promoted this from proposed. FOR CONTRAST, the ceiling: an UNPACED sweep the same morning walled after 207 of 595 pairs, and once walled the block held for over an hour. Do not lower this rate to finish faster.",
         "identity_assert": "an Omaha club must be readable on the page (prices are per-club)",
         "wall_signals": [
           "bot interstitial phrases",

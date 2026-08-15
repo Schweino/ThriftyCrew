@@ -59,7 +59,13 @@ $repo = Split-Path -Parent $mp                        # ...\income
 # THE STATE GRAPH. Forward skips are the thing this refuses: the reason a recipe cannot go straight from
 # `written` to `waved` is that qa-passed is the only door into a wave, and a wave is what publishes.
 # ---------------------------------------------------------------------------------------------------
-$script:REJECTED = @('rejected-dupe', 'rejected-unreadable', 'rejected-not-carried', 'rejected-qa', 'rejected-audit')
+# NAMED _STATES DELIBERATELY. As `$script:REJECTED` it was clobbered by a local `$rejected` holding the
+# status report's rejected ROWS - PowerShell variable names are case-insensitive, so the two were one
+# variable. The constant became a list of recipe objects, `-notcontains` then matched nothing, and the
+# status screen reported all 9 recipes in flight while also reporting 7 of them rejected. Second instance
+# of this class in this one file (see the self-test's $tRows note); same family as the $ppg/$ppG 250,000x
+# engine bug. Give a shared constant a name no local would ever take.
+$script:REJECTED_STATES = @('rejected-dupe', 'rejected-unreadable', 'rejected-not-carried', 'rejected-qa', 'rejected-audit')
 $script:NEXT = @{
   'sourced'    = @('selected', 'rejected-dupe')
   'selected'   = @('extracted', 'rejected-unreadable', 'rejected-dupe')
@@ -78,7 +84,7 @@ $script:NEXT = @{
   'published'  = @('verified')
   'verified'   = @()
 }
-foreach ($r in $script:REJECTED) { $script:NEXT[$r] = @() }
+foreach ($r in $script:REJECTED_STATES) { $script:NEXT[$r] = @() }
 $script:ALL_STATES = @($script:NEXT.Keys)
 
 function Test-LegalTransition {
@@ -327,7 +333,7 @@ if ($runAdvance) {
   }
   $e.state = $To
   $e.updated = Get-Stamp
-  if (@($script:REJECTED) -contains $To) { $e.reject_reason = $Detail }
+  if (@($script:REJECTED_STATES) -contains $To) { $e.reject_reason = $Detail }
   $e.history = @(@($e.history) + @([pscustomobject]@{ state = $To; at = (Get-Stamp); by = $By; detail = $Detail }))
   Write-JsonAtomic -Path $sp -Obj $e
   Write-Output ("hunt-run: {0}  {1}  ->  {2}{3}" -f $Slug, $from, $To, $(if ($Detail) { "   ($Detail)" } else { '' }))
@@ -355,7 +361,7 @@ if ($runDerive) {
     $from = [string]$e.state
     $e.state = $d.state; $e.updated = Get-Stamp
     $e.parked_on = @($d.pending)
-    if (@($script:REJECTED) -contains $d.state) { $e.reject_reason = $detail }
+    if (@($script:REJECTED_STATES) -contains $d.state) { $e.reject_reason = $detail }
     $e.history = @(@($e.history) + @([pscustomobject]@{ state = $d.state; at = (Get-Stamp); by = 'derive'; detail = $detail }))
     Write-JsonAtomic -Path (Get-StatePath $RunDir ([string]$e.slug)) -Obj $e
     $moved++; $lines += ("  {0}  {1} -> {2}   {3}" -f $e.slug, $from, $d.state, $detail)
@@ -412,9 +418,9 @@ $entries = @(Read-Entries $RunDir)
 $byState = @{}
 foreach ($e in $entries) { $s = [string]$e.state; if (-not $byState.ContainsKey($s)) { $byState[$s] = @() }; $byState[$s] += [string]$e.slug }
 $published = @(@($entries | Where-Object { @('published', 'verified') -contains [string]$_.state }))
-$rejected  = @(@($entries | Where-Object { @($script:REJECTED) -contains [string]$_.state }))
+$rejectedRows  = @(@($entries | Where-Object { @($script:REJECTED_STATES) -contains [string]$_.state }))
 $parked    = @(@($entries | Where-Object { [string]$_.state -eq 'parked' }))
-$inflight  = @(@($entries | Where-Object { @('published', 'verified', 'parked') -notcontains [string]$_.state -and @($script:REJECTED) -notcontains [string]$_.state }))
+$inflight  = @(@($entries | Where-Object { @('published', 'verified', 'parked') -notcontains [string]$_.state -and @($script:REJECTED_STATES) -notcontains [string]$_.state }))
 $waves = @(Get-ChildItem (Join-Path $RunDir 'waves\wave-*.json') -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^wave-\d+\.json$' })
 
 if ($runJson) {
@@ -422,7 +428,7 @@ if ($runJson) {
     run = (Split-Path $RunDir -Leaf); total = $entries.Count
     published = @($published | ForEach-Object { [string]$_.slug })
     parked = @($parked | ForEach-Object { [pscustomobject]@{ slug = [string]$_.slug; waiting_on = @($_.parked_on) } })
-    rejected = @($rejected | ForEach-Object { [pscustomobject]@{ slug = [string]$_.slug; state = [string]$_.state; reason = [string]$_.reject_reason } })
+    rejected = @($rejectedRows | ForEach-Object { [pscustomobject]@{ slug = [string]$_.slug; state = [string]$_.state; reason = [string]$_.reject_reason } })
     in_flight = @($inflight | ForEach-Object { [pscustomobject]@{ slug = [string]$_.slug; state = [string]$_.state } })
     by_state = $byState; waves = @($waves | ForEach-Object { $_.Name })
   }
@@ -434,7 +440,7 @@ Write-Output ''
 Write-Output ("  PUBLISHED  {0}" -f $published.Count)
 Write-Output ("  IN FLIGHT  {0}" -f $inflight.Count)
 Write-Output ("  PARKED     {0}   (waiting on a store, NOT rejected)" -f $parked.Count)
-Write-Output ("  REJECTED   {0}" -f $rejected.Count)
+Write-Output ("  REJECTED   {0}" -f $rejectedRows.Count)
 Write-Output ''
 foreach ($s in @($byState.Keys | Sort-Object)) { Write-Output ("  {0,-22} {1}" -f $s, @($byState[$s]).Count) }
 if ($parked.Count) {
@@ -442,10 +448,10 @@ if ($parked.Count) {
   Write-Output '  PARKED detail (this is the resume worklist):'
   foreach ($p in $parked) { Write-Output ("    {0,-34} waiting on: {1}" -f $p.slug, $(if (@($p.parked_on).Count) { @($p.parked_on) -join ', ' } else { '(unknown - run -Derive)' })) }
 }
-if ($rejected.Count) {
+if ($rejectedRows.Count) {
   Write-Output ''
   Write-Output '  REJECTED detail:'
-  foreach ($r in $rejected) { Write-Output ("    {0,-34} {1}  {2}" -f $r.slug, $r.state, [string]$r.reject_reason) }
+  foreach ($r in $rejectedRows) { Write-Output ("    {0,-34} {1}  {2}" -f $r.slug, $r.state, [string]$r.reject_reason) }
 }
 if ($waves.Count) {
   Write-Output ''
@@ -463,5 +469,5 @@ if ($waves.Count) {
     Write-Output ("    {0,-16} {1}" -f $w.BaseName, $verdict)
   }
 }
-Write-GuardComplete -Name 'hunt-run' -Summary ("status n={0} published={1} parked={2} rejected={3}" -f $entries.Count, $published.Count, $parked.Count, $rejected.Count)
+Write-GuardComplete -Name 'hunt-run' -Summary ("status n={0} published={1} parked={2} rejected={3}" -f $entries.Count, $published.Count, $parked.Count, $rejectedRows.Count)
 exit 0

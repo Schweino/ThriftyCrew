@@ -1,0 +1,37 @@
+{
+    "slug":  "country-captain-chicken",
+    "title":  "Country Captain Chicken",
+    "source_url":  "https://spicysouthernkitchen.com/country-captain-chicken/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-15T11:54:24",
+    "updated":  "2026-08-15T11:56:10",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T11:54:24",
+                        "by":  "recipe-sourcer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-15T11:54:24",
+                        "by":  "recipe-dedup-selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-15T11:56:10",
+                        "by":  "recipe-hunter-extractor",
+                        "detail":  ""
+                    }
+                ]
+}

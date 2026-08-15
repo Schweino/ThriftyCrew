@@ -1,0 +1,31 @@
+{
+    "slug":  "pork-lo-mein",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T11:54:28",
+    "updated":  "2026-08-15T11:54:29",
+    "terms":  [
+
+              ],
+    "reject_reason":  "same dish as live Chicken Lo Mein and Ground Turkey Lo Mein; weakest of the pool",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T11:54:28",
+                        "by":  "recipe-sourcer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T11:54:29",
+                        "by":  "recipe-dedup-selector",
+                        "detail":  "same dish as live Chicken Lo Mein and Ground Turkey Lo Mein; weakest of the pool"
+                    }
+                ]
+}

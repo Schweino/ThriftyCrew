@@ -1,0 +1,31 @@
+{
+    "slug":  "classic-beef-stroganoff",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T11:54:26",
+    "updated":  "2026-08-15T11:54:26",
+    "terms":  [
+
+              ],
+    "reject_reason":  "near-dupe of Ground Beef Stroganoff Pasta; catalog already has a whole-muscle Pork Tenderloin Stroganoff",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T11:54:26",
+                        "by":  "recipe-sourcer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T11:54:26",
+                        "by":  "recipe-dedup-selector",
+                        "detail":  "near-dupe of Ground Beef Stroganoff Pasta; catalog already has a whole-muscle Pork Tenderloin Stroganoff"
+                    }
+                ]
+}

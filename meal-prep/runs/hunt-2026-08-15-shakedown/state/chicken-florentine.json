@@ -1,0 +1,37 @@
+{
+    "slug":  "chicken-florentine",
+    "title":  "Chicken Florentine",
+    "source_url":  "https://www.smalltownwoman.com/chicken-florentine/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-15T11:54:24",
+    "updated":  "2026-08-15T11:56:10",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T11:54:24",
+                        "by":  "recipe-sourcer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-15T11:54:25",
+                        "by":  "recipe-dedup-selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-15T11:56:10",
+                        "by":  "recipe-hunter-extractor",
+                        "detail":  ""
+                    }
+                ]
+}
