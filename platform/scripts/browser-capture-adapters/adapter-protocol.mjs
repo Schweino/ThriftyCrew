@@ -21,6 +21,16 @@ async function appendEvent(file, event) {
   await appendFile(target, `${JSON.stringify(event)}\n`, { encoding: "utf8", flush: true });
 }
 
+async function assertControllerSessionInitialized(sessionDirectory, checkpointFile) {
+  const sessionFile = path.join(path.resolve(sessionDirectory), "session.json");
+  try {
+    await readFile(sessionFile, "utf8");
+  } catch (error) {
+    if (error?.code !== "ENOENT") throw error;
+    throw new Error(`capture session is not initialized at ${sessionFile}; immutable adapter checkpoint preserved at ${path.resolve(checkpointFile)}`);
+  }
+}
+
 async function ensureHeader(file, chunk) {
   try {
     const first = (await readFile(streamPath(file), "utf8")).split(/\r?\n/, 1)[0];
@@ -55,6 +65,13 @@ export async function checkpointAdapterChunk(file, chunk, previousCount = 0, ses
   await atomicJson(file, chunk);
   let controllerCommit;
   if (sessionDirectory) {
+    // Keep the append-only stream and compatibility mirror durable even when a
+    // caller accidentally supplies an uninitialized session directory. Avoid
+    // sending that known-invalid request to the controller, whose transport
+    // boundary intentionally redacts filesystem errors. The error text stays
+    // outside the retailer-challenge vocabulary, so Done callback semantics
+    // remain reserved for real challenge records.
+    await assertControllerSessionInitialized(sessionDirectory, file);
     const delta = chunk.phase === "discovery"
       ? { ...chunk, terms: chunk.terms.slice(previousCount), rows: chunk.rows.filter((row) => chunk.terms.slice(previousCount).some((term) => String(row[chunk.store === "walmart" || chunk.store === "sams" ? "q" : "term"] ?? "").trim() === term.query)) }
       : { ...chunk, verifications: chunk.verifications.slice(previousCount) };
