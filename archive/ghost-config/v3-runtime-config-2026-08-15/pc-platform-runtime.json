@@ -1,0 +1,83 @@
+﻿{
+    "version":  1,
+    "apiOrigin":  "https://tc-grocery-public.curly-unit-51a6.workers.dev",
+    "platformRoot":  "C:\\Codex\\income\\platform",
+    "incomeRoot":  "C:\\Codex\\income",
+    "pnpmPath":  "C:\\Users\\Owner\\AppData\\Local\\ThriftyCrew\\runtime\\node-v24.18.1-win-x64\\pnpm.cmd",
+    "runtimePath":  [
+                        "C:\\Users\\Owner\\AppData\\Local\\ThriftyCrew\\runtime\\node-v24.18.1-win-x64"
+                    ],
+    "logRoot":  "C:\\Users\\Owner\\AppData\\Local\\ThriftyCrew\\grocery-v3\\logs",
+    "credentials":  {
+                        "local-operator":  {
+                                               "role":  "operator",
+                                               "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e430000000002000000000010660000000100002000000012056f2bda265226b83b4bc720d145e2696cc44226457e5ecc11ce4f7092c570000000000e80000000020000200000004991f9a6e437763fb38f1f4858e7cc5f83e0da66e0506ae1c534fc3533dd5d2a60000000717b7b6f98bd0e33206ac4dbc2f1f92b8a491da9adc5a14f37fa91ed0567ba0530727bc59cf8d23e7374463757135c19cb9540ab176abe861f205bffa1b499b37eaac46f8c089c0f0ddee8fcac9cf622a6ac9acbccc92d8625702e5b3043291e400000003217fc81e54191d6c68cf65f65ca652e4564bf757ac3b315c3afb4af2d05b830f4ad9b0f539ba21cf8dbefddb103f9f82a436b0712d6ae8d5f27fdb34751e9ed"
+                                           },
+                        "post-publish-reviewer":  {
+                                                      "role":  "engine",
+                                                      "registeredAgent":  true,
+                                                      "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e430000000002000000000010660000000100002000000066b54e9c6f7c2dcaceaa86877daf761281a79d85beccb09d8db5decbbc61a0d8000000000e800000000200002000000054813aa9cab52e3a78fd634b5a27ad7d02a25cb80c254f2ec3fc6dae24de1b9460000000a6f4a11e932f9f8d649279bf30d4276ae3facdf3a450b2b183c8bdff3b2c4911841d33a1f5a6f945655ca7577d6d1369a09d5b7f3d0e9245b0436f008de9ca9b74b9f62a80c0fe071906f7361eb6d75eaf55a7332455db96771d381cd620180640000000f5b2428be28502638e65d2b051dd5601538415ad5eee02d7e6e75d1499d1b8211c43aa7172228f378493d3ac78d0c185396a542ed2538402acedfc461b5ee3e6"
+                                                  },
+                        "triage-reviewer":  {
+                                                "role":  "engine",
+                                                "registeredAgent":  true,
+                                                "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e43000000000200000000001066000000010000200000002be49921848d76d710f4942166542b8575942602b786d9f40a98db5016e4daee000000000e8000000002000020000000ea52ed740155a5564f71456aaf363e33192d403d1a99f60b45e83744894c959c600000000b6f41698d610f2c8b6f46f93816f42b71f6dc25e57fc89957ce170b0a243c9afd7306f77efc3670e4649a93c13e87505c0b2aadebe24a9dbbf8090d42e4e111d53d21f03624c1e825dbac31963eec149115a7cb1b3bacf7e492fd321d5a612840000000a870eb89aefd82f4a85f79c81bca9b9c9e24c74bd478016ba739464ec187eca546099e6ff138524568f1180010da607b2816235932d43e0b81a843db46f5adbb"
+                                            },
+                        "triage-developer":  {
+                                                 "role":  "engine",
+                                                 "registeredAgent":  true,
+                                                 "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e43000000000200000000001066000000010000200000006bc27844709da6a011667a0f3319bc2e26dbc9fe0c8011521d99f37e2718d78c000000000e80000000020000200000001370a155d4e392d8b43b7df70a57cebfce8ac9744cb7a7d738aa9b9fdf106ec760000000d7bfaf7aa1b02090a03f5a686379ac3e4336aeb5eef18fea97cc517299b1a2220745032f53ad10d0962a4f82b39beb5418333dab46a969e431a4e323ae5fc2763875271ae44cbb8834011184cbbc0f92d531e64850a840ff636bd49ed00a832540000000521001b895d8f74c5433935c1ce0aabee26f66375fb4f4611744c0111b319c5d6a99288086dd55419a904d7d04adcc82ced9ea7203b101f5de63d6d1b5f8515d"
+                                             },
+                        "accuracy-headless":  {
+                                                  "role":  "engine",
+                                                  "registeredAgent":  true,
+                                                  "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e43000000000200000000001066000000010000200000009a2aca37779e00b188979ab8feb7af7fbd8ab92dd9e5b08edc72d57fff3556c0000000000e800000000200002000000063a07dd47aa9ba61d74e49e4ba39529769a4897a8e6b2edf940eda43298d1bcd6000000030137421ad7d159e3a616f11449b625700c77ea5dd63f219eff94ffeedad504fa928937dcc123fb492e3d0cb5ce081255de616ca21c6a0e360e87082a0f785da550b5a5e86dcbe2c88858938c86b5ba7337a26d3a8ad7f353a769e5f6d9e031c40000000a03b1abaccc9f85298c57dac4a8962bebf5e7b60bae878ce5e4770106bdc3634f8f0d6762c958195462ac7625fc68f8b4b7b5b7849ab126c33de55ebd6cd3806"
+                                              },
+                        "recipe-sourcer":  {
+                                               "role":  "engine",
+                                               "registeredAgent":  true,
+                                               "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e4300000000020000000000106600000001000020000000a05d5672de0c05803b3e7a339a763942be555ad4b26a9088ec7ddd600c0775a2000000000e8000000002000020000000885c5f1aede93ca0b917bd134af7981007cbfe21ebab62440f2518e5daa43920600000004dbfac771c14993d8070768b28f11cfd7ca4f477f1795979ba0f448f5ecc3d72640089372169f2c32b4be069f11fb933676fb22c21a7264791cea13e75685311232e7d53cf1638271eb0bb58ba318ea2323992409672e14f6e404b6b0f4a134840000000efc908356f8b3c7fecca3c73d3754476e05e5b533f4027ac3c30d9caaacfdea4ef5ed682c66434d6691eac9842aa05d085c1ef90282a1eb76d755e7505b3ade1"
+                                           },
+                        "recipe-deduper":  {
+                                               "role":  "engine",
+                                               "registeredAgent":  true,
+                                               "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e4300000000020000000000106600000001000020000000c47c5576cec639f967e2ea931295db41fef408a3ffcf3452b855ede646086671000000000e8000000002000020000000f055ac82a5ddcf15081f5cda3606a8faf11b11d9d7085cab720f386c6f6df53460000000eae0b36fc00b4ebbb7e837ea342f6e7601633de0ac0e42c62fdbc3199c70f1dfe740b976588919384eca97873237775db5d0f1eb47faf445d601c0a03da4dd8710de6a28766e805a7cac943fa19e7035976d52ffaedded2e3fd72a975e97f98d40000000ec3d2dd7fa8088dc7bff67a7e7830ec2a672b2156c7613f3e6c2bae36c734dc9b81404965e593ef2105ad150f3cee80a832fb086665579d84287f7f93e5b705a"
+                                           },
+                        "recipe-fact-extractor":  {
+                                                      "role":  "engine",
+                                                      "registeredAgent":  true,
+                                                      "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e430000000002000000000010660000000100002000000085e66cdb03b7abc6a31baadba54794f3195425de02993f8b251d9348d0f82c82000000000e80000000020000200000008737292544d4b8f584db987430b268481e4f9ae73f20098f60fe44d66465a42860000000d7811e440f7263d201206a7ec132818b505918099e55f3e4d878815077f75dbbf1c475cbd3b5c31c16b1070141a97c0b57f210ad8758af6ff31d8029108e9bd94d46baeb1e30aa310afed7d100e72bb2df8f3f2e3e175825c18232c7bb91089840000000971da6a7ac027d38470a77bafafecd15becda1a98d0b61e1f64b37a3c8f64d61b27c53b30dff77421d7ede7eae670f380a7e3002ab611f6b74f442a8113f74d1"
+                                                  },
+                        "ingredient-price-researcher":  {
+                                                            "role":  "engine",
+                                                            "registeredAgent":  true,
+                                                            "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e43000000000200000000001066000000010000200000000fb4db6e324513d03ad752189ef1587c23b23274afc10042cb4501eaaf2ad06a000000000e8000000002000020000000da2dc22faa1f1622435f8a0403e83d624e1981dfe2880e76e1aa1ee66faf2f4b60000000e2fd29a9e8fd463cb02e1bef8ac5f30d7afdbcffabf742f68d55f3942fec77a8d4f3ff0066cb519bbc1eb1073920165077a393a4fd2ca9ee1f9cc80d8291849b10475e248e1dd15e98690c285132e8c0bc83e36b563feee37e900bf7599a2442400000007450ce39a4a65c5fb2f8de93a544f080a0d333cae6f4c0359324814bda8ecc9710b06c2ee6a7edc1db49c0e9e7b1dbb494d34ef61fe4900b49c78abf2d65e9d0"
+                                                        },
+                        "ingredient-definition-planner":  {
+                                                              "role":  "engine",
+                                                              "registeredAgent":  true,
+                                                              "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e4300000000020000000000106600000001000020000000246a4e0a5f48d4f89c15bb135725323d09bc774860dd6eff4242b9312565274d000000000e8000000002000020000000af348c070831e0ecf22ba1a8bc9097b6a355ed54521d11b441ea39c4d52471f8600000009ee501b38f7542311c5c5602ac5da94dfd3d5376945c3a26478addc02cb8f00b9359e535fa13c114077716e25a1359b0878b6bffca2ff1692b1fba76eefa2834b4558fe70462d79ff9d5790bd26577b58c491996fdcc0d9bdb9f118d79eec1ea4000000083489bbf66dfa6a3ffd16bea5cdcd8985f87a10b8a0e78019a4d80f102db06e9dd57b30d1541da28d9914fb9ec3a950fbb85bc358f30ce0fe6af4d049f2bfe8e"
+                                                          },
+                        "recipe-mapper":  {
+                                              "role":  "engine",
+                                              "registeredAgent":  true,
+                                              "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e4300000000020000000000106600000001000020000000b8020b3dedd7005474b39bc93060cfd85b17820ab9590aad7594be0812036439000000000e80000000020000200000004f1215c2cfbb3d35152b7062a361bf13cf85e63085e2eca0fb3682ab914ac329600000004779c645cdbe6072e20376b6406a198a32815a8ff519cae469b0638b6faf6ec911a68192b97ab0fb3f2d4b31fb9fafa56fd9345e086745a5f01323f91a6368b2c076d11c3619429815a666e9b47b43d4869cbbc5c3afb6ff59071df4ccc366b94000000061d977e66282d728e71bc9a47dd00157cf4409c764702c4e9749556d5b8244c3005fd840f3b2aa80f9bc98d6a267d1d557a6a8bf6a45977e332f5bad4a8673ed"
+                                          },
+                        "recipe-writer":  {
+                                              "role":  "engine",
+                                              "registeredAgent":  true,
+                                              "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e43000000000200000000001066000000010000200000001570fd5c3f5d114d872277b9deee0c6ec760b6cc6293c4684c486393bba9ba27000000000e80000000020000200000002f6f998f5b5a431a6058aa165040cbcd12eeade40f967f18ef5bae729cbd6da560000000c9d92e8c5ee856e10989692303be2019e3b5e2b95661e9a825a75333d1f92012eba032705241575f72d4434e28076ac31799c4e29170b30adc984a1510395a04fe56bb0a11ffebf8c36311448469042f819a523d250c8f96cdde50afb3869f9640000000137c437093077f0acad3c068dbf3866ccac3678dc11282b6983d4bc0f9f6815253951857ee216d8eec8447fa23c680ec7c85af4b02229a3ac116a6f07a8992e0"
+                                          },
+                        "recipe-auditor":  {
+                                               "role":  "engine",
+                                               "registeredAgent":  true,
+                                               "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e43000000000200000000001066000000010000200000004cdf2842b33c3d58e1e1f2ade82bc0026a9fc69e4ab6b980eb82c1306074ac69000000000e8000000002000020000000bd18dedc3816efe5868822490b2af6cb6d7ffeff2635366cc8e8311610e13d1f60000000b6b05f85e09503c807f679ebb8cd3a5ccfc353f372d7804ef985ba8a213d4284be5f3d63a391010fe091cfbac38178dee69534d9390202e85fab30468d7600f6431dd5e1c36cb125282ea3436a99e0855dbc3b045fd33af7c15da77c02525375400000002fb34ccc8d9a1c3f185e9fd7700263571fbf4d06eed48b8a8e084a180c334806f678f981301a12fd9acf1d543872042baa03b5475a0b89b9c693465e0e71db3c"
+                                           },
+                        "source-sentinel-investigator":  {
+                                                             "role":  "engine",
+                                                             "registeredAgent":  true,
+                                                             "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e4300000000020000000000106600000001000020000000fbfa687c9470c073a266aca342b2858fa5921fc9e7205e879b63457eff72a080000000000e8000000002000020000000af76ac93505dfd46e8c11c6e86bdfed4abe174a0734dde8a2707e5f2074b0cbe60000000f269f64ae3a5149f9450b17748d97f7e57ffee4d6aa727a907e9d18de84fd19a69870fddb482285ce70e74aaeb1cbf850b9887bd9cedb280b4857d0f022027c6f6f7aff237be170e45e692d830d27570f8a6dabccc98335d94bfc756524bfd3840000000b58e17a217fdb8cda77a11b16db3a5bed95d5b3ccfb4f908b04ce4aeb8e109fefdef46cb7f1fe0de905897afc68f837532e3bb3fbfbda3497570c73a995283b6"
+                                                         }
+                    },
+    "installedAt":  "2026-08-13T21:26:53.3436511Z"
+}

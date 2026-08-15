@@ -1,0 +1,3078 @@
+﻿diff --git a/grocery/local-daily-log.txt b/grocery/local-daily-log.txt
+index 8ad3ce67..4566bc18 100644
+--- a/grocery/local-daily-log.txt
++++ b/grocery/local-daily-log.txt
+@@ -20,3 +20,12 @@
+ [2026-07-31T08:30:04] pull: Already up to date.
+ [2026-07-31T08:30:04] running check-ad-cycles
+ [2026-07-31T09:16:41] check-ad-cycles exit 0
++[2026-07-31T09:16:41] add: warning: in the working copy of 'grocery/ad-cycle-log.txt', LF will be replaced by CRLF the next time Git touches it
++[2026-07-31T09:16:41] add: The following paths are ignored by one of your .gitignore files:
++[2026-07-31T09:16:41] add: grocery/sale-windows.json
++[2026-07-31T09:16:41] add: hint: Use -f if you really want to add them.
++[2026-07-31T09:16:41] add: hint: Disable this message with "git config set advice.addIgnoredFile false"
++[2026-07-31T09:16:41] commit: [main d10d9ec8] Daily pipeline: refresh prices + feed (2026-07-31) [local]
++[2026-07-31T09:16:41] commit:  36 files changed, 70370 insertions(+), 33202 deletions(-)
++[2026-07-31T09:16:41] commit:  create mode 100644 grocery/out/ads-2026-07-31.json
++[2026-07-31T09:16:41] commit:  create mode 100644 grocery/out/regular/hyvee-regular-2026-07-31.json
+diff --git a/meal-prep/db/costed.json b/meal-prep/db/costed.json
+index 98a31430..2ec9bf7d 100644
+--- a/meal-prep/db/costed.json
++++ b/meal-prep/db/costed.json
+@@ -2,12 +2,12 @@
+     {
+         "proposed_name":  "Al Pastor Pork Taco Bowl with Cilantro Lime Rice",
+         "slug":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice",
+-        "cost_batch":  39.97,
+-        "cost_per_serving":  2.86,
+-        "cost_batch_true":  48.47,
+-        "cost_per_serving_true":  3.46,
+-        "cost_pantry_add":  19.69,
+-        "cost_first_run":  68.16,
++        "cost_batch":  28.12,
++        "cost_per_serving":  2.01,
++        "cost_batch_true":  36.62,
++        "cost_per_serving_true":  2.62,
++        "cost_pantry_add":  16.69,
++        "cost_first_run":  53.31,
+         "lines_priced":  17,
+         "lines_unpriced":  0,
+         "lines":  [
+@@ -89,7 +89,7 @@
+                       {
+                           "item":  "Achiote Paste",
+                           "grams":  79,
+-                          "util_cost":  12.93,
++                          "util_cost":  1.08,
+                           "basis":  "board:achiote-paste:walmart",
+                           "bulk":  true,
+                           "buy_n":  null,
+@@ -97,7 +97,7 @@
+                           "pkg":  null,
+                           "pkg_g":  null,
+                           "starter_n":  1,
+-                          "starter_cost":  16.2,
++                          "starter_cost":  1.35,
+                           "starter_pkg":  "3.5oz box",
+                           "starter_pkg_g":  99
+                       },
+@@ -22533,12 +22533,12 @@
+     {
+         "proposed_name":  "Cochinita Pibil Pork Rice Bowls",
+         "slug":  "cochinita-pibil-pork-rice-bowls",
+-        "cost_batch":  27.82,
+-        "cost_per_serving":  1.99,
+-        "cost_batch_true":  33.95,
+-        "cost_per_serving_true":  2.43,
+-        "cost_pantry_add":  13.15,
+-        "cost_first_run":  47.1,
++        "cost_batch":  15.97,
++        "cost_per_serving":  1.14,
++        "cost_batch_true":  22.1,
++        "cost_per_serving_true":  1.58,
++        "cost_pantry_add":  10.15,
++        "cost_first_run":  32.25,
+         "lines_priced":  13,
+         "lines_unpriced":  0,
+         "lines":  [
+@@ -22560,7 +22560,7 @@
+                       {
+                           "item":  "Achiote Paste",
+                           "grams":  79,
+-                          "util_cost":  12.93,
++                          "util_cost":  1.08,
+                           "basis":  "board:achiote-paste:walmart",
+                           "bulk":  true,
+                           "buy_n":  null,
+@@ -22568,7 +22568,7 @@
+                           "pkg":  null,
+                           "pkg_g":  null,
+                           "starter_n":  1,
+-                          "starter_cost":  16.2,
++                          "starter_cost":  1.35,
+                           "starter_pkg":  "3.5oz box",
+                           "starter_pkg_g":  99
+                       },
+@@ -28253,12 +28253,12 @@
+     {
+         "proposed_name":  "Ecuadorian Hornado (Slow Roasted Pork) Bowls",
+         "slug":  "ecuadorian-hornado-pork-bowls",
+-        "cost_batch":  38.39,
+-        "cost_per_serving":  2.74,
+-        "cost_batch_true":  42.38,
+-        "cost_per_serving_true":  3.03,
+-        "cost_pantry_add":  14.7,
+-        "cost_first_run":  57.08,
++        "cost_batch":  31.18,
++        "cost_per_serving":  2.23,
++        "cost_batch_true":  35.17,
++        "cost_per_serving_true":  2.51,
++        "cost_pantry_add":  7.06,
++        "cost_first_run":  42.23,
+         "lines_priced":  10,
+         "lines_unpriced":  0,
+         "lines":  [
+@@ -28385,7 +28385,7 @@
+                       {
+                           "item":  "Achiote Paste",
+                           "grams":  48,
+-                          "util_cost":  7.86,
++                          "util_cost":  0.65,
+                           "basis":  "board:achiote-paste:walmart",
+                           "bulk":  true,
+                           "buy_n":  null,
+@@ -28393,7 +28393,7 @@
+                           "pkg":  null,
+                           "pkg_g":  null,
+                           "starter_n":  1,
+-                          "starter_cost":  16.2,
++                          "starter_cost":  1.35,
+                           "starter_pkg":  "3.5oz box",
+                           "starter_pkg_g":  99
+                       },
+@@ -28417,12 +28417,12 @@
+     {
+         "proposed_name":  "Ecuadorian Seco de Pollo",
+         "slug":  "ecuadorian-seco-de-pollo",
+-        "cost_batch":  40.99,
+-        "cost_per_serving":  2.93,
+-        "cost_batch_true":  45.84,
+-        "cost_per_serving_true":  3.27,
+-        "cost_pantry_add":  21.89,
+-        "cost_first_run":  67.73,
++        "cost_batch":  38.14,
++        "cost_per_serving":  2.72,
++        "cost_batch_true":  42.99,
++        "cost_per_serving_true":  3.07,
++        "cost_pantry_add":  9.89,
++        "cost_first_run":  52.88,
+         "lines_priced":  15,
+         "lines_unpriced":  0,
+         "lines":  [
+@@ -28459,7 +28459,7 @@
+                       {
+                           "item":  "Achiote Paste",
+                           "grams":  19,
+-                          "util_cost":  3.11,
++                          "util_cost":  0.26,
+                           "basis":  "board:achiote-paste:walmart",
+                           "bulk":  true,
+                           "buy_n":  null,
+@@ -28467,7 +28467,7 @@
+                           "pkg":  null,
+                           "pkg_g":  null,
+                           "starter_n":  1,
+-                          "starter_cost":  16.2,
++                          "starter_cost":  1.35,
+                           "starter_pkg":  "3.5oz box",
+                           "starter_pkg_g":  99
+                       },
+@@ -30522,12 +30522,12 @@
+     {
+         "proposed_name":  "Filipino Chicken Inasal Bowls",
+         "slug":  "filipino-chicken-inasal-bowls",
+-        "cost_batch":  39.62,
+-        "cost_per_serving":  2.83,
+-        "cost_batch_true":  42.65,
+-        "cost_per_serving_true":  3.05,
+-        "cost_pantry_add":  14.69,
+-        "cost_first_run":  57.34,
++        "cost_batch":  27.77,
++        "cost_per_serving":  1.98,
++        "cost_batch_true":  30.8,
++        "cost_per_serving_true":  2.2,
++        "cost_pantry_add":  11.69,
++        "cost_first_run":  42.49,
+         "lines_priced":  12,
+         "lines_unpriced":  0,
+         "lines":  [
+@@ -30684,7 +30684,7 @@
+                       {
+                           "item":  "Achiote Paste",
+                           "grams":  79,
+-                          "util_cost":  12.93,
++                          "util_cost":  1.08,
+                           "basis":  "board:achiote-paste:walmart",
+                           "bulk":  true,
+                           "buy_n":  null,
+@@ -30692,7 +30692,7 @@
+                           "pkg":  null,
+                           "pkg_g":  null,
+                           "starter_n":  1,
+-                          "starter_cost":  16.2,
++                          "starter_cost":  1.35,
+                           "starter_pkg":  "3.5oz box",
+                           "starter_pkg_g":  99
+                       },
+@@ -30970,12 +30970,12 @@
+     {
+         "proposed_name":  "Filipino Pork Menudo Rice Bowls",
+         "slug":  "filipino-pork-menudo-rice-bowls",
+-        "cost_batch":  32.07,
+-        "cost_per_serving":  2.29,
+-        "cost_batch_true":  37.26,
+-        "cost_per_serving_true":  2.66,
+-        "cost_pantry_add":  24.69,
+-        "cost_first_run":  61.95,
++        "cost_batch":  30.27,
++        "cost_per_serving":  2.16,
++        "cost_batch_true":  35.46,
++        "cost_per_serving_true":  2.53,
++        "cost_pantry_add":  11.64,
++        "cost_first_run":  47.1,
+         "lines_priced":  16,
+         "lines_unpriced":  0,
+         "lines":  [
+@@ -30997,7 +30997,7 @@
+                       {
+                           "item":  "Achiote Paste",
+                           "grams":  12,
+-                          "util_cost":  1.96,
++                          "util_cost":  0.16,
+                           "basis":  "board:achiote-paste:walmart",
+                           "bulk":  true,
+                           "buy_n":  null,
+@@ -31005,7 +31005,7 @@
+                           "pkg":  null,
+                           "pkg_g":  null,
+                           "starter_n":  1,
+-                          "starter_cost":  16.2,
++                          "starter_cost":  1.35,
+                           "starter_pkg":  "3.5oz box",
+                           "starter_pkg_g":  99
+                       },
+@@ -108345,12 +108345,12 @@
+     {
+         "proposed_name":  "Vietnamese Bo Kho (Lemongrass Beef Stew)",
+         "slug":  "vietnamese-bo-kho-lemongrass-beef-stew",
+-        "cost_batch":  58.16,
+-        "cost_per_serving":  4.15,
+-        "cost_batch_true":  64.2,
+-        "cost_per_serving_true":  4.59,
+-        "cost_pantry_add":  38.78,
+-        "cost_first_run":  102.98,
++        "cost_batch":  56.81,
++        "cost_per_serving":  4.06,
++        "cost_batch_true":  62.85,
++        "cost_per_serving_true":  4.49,
++        "cost_pantry_add":  25.28,
++        "cost_first_run":  88.13,
+         "lines_priced":  22,
+         "lines_unpriced":  0,
+         "lines":  [
+@@ -108552,7 +108552,7 @@
+                       {
+                           "item":  "Achiote Paste",
+                           "grams":  9,
+-                          "util_cost":  1.47,
++                          "util_cost":  0.12,
+                           "basis":  "board:achiote-paste:walmart",
+                           "bulk":  true,
+                           "buy_n":  null,
+@@ -108560,7 +108560,7 @@
+                           "pkg":  null,
+                           "pkg_g":  null,
+                           "starter_n":  1,
+-                          "starter_cost":  16.2,
++                          "starter_cost":  1.35,
+                           "starter_pkg":  "3.5oz box",
+                           "starter_pkg_g":  99
+                       },
+diff --git a/meal-prep/free-rotation.json b/meal-prep/free-rotation.json
+index bb1ab077..3092802e 100644
+--- a/meal-prep/free-rotation.json
++++ b/meal-prep/free-rotation.json
+@@ -1,42 +1,42 @@
+ ﻿{
+     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
+-    "week_of":  "2026-07-30",
+-    "rotated_at":  "2026-07-31T06:12:16",
++    "week_of":  "2026-07-31",
++    "rotated_at":  "2026-07-31T09:01:19",
+     "free":  [
+                  {
+                      "slug":  "chicken-bulgogi-rice-bowls",
+                      "protein":  "chicken",
+                      "rank":  1,
+                      "name":  "Chicken Bulgogi Rice Bowls",
+-                     "per_serving":  1.54
++                     "per_serving":  1.51
+                  },
+                  {
+                      "slug":  "claypot-chicken-mushroom-rice",
+                      "protein":  "chicken",
+                      "rank":  2,
+                      "name":  "Claypot Chicken and Mushroom Rice",
+-                     "per_serving":  1.74
++                     "per_serving":  1.71
+                  },
+                  {
+                      "slug":  "chicken-fried-rice-skillet",
+                      "protein":  "chicken",
+                      "rank":  3,
+                      "name":  "Chicken Fried Rice",
+-                     "per_serving":  1.75
++                     "per_serving":  1.72
+                  },
+                  {
+                      "slug":  "poppy-seed-chicken-and-rice-casserole",
+                      "protein":  "chicken",
+                      "rank":  4,
+                      "name":  "Poppy Seed Chicken and Rice Casserole",
+-                     "per_serving":  1.83
++                     "per_serving":  1.84
+                  },
+                  {
+-                     "slug":  "chicken-40-cloves-garlic",
++                     "slug":  "chicken-pot-pie-biscuit-casserole",
+                      "protein":  "chicken",
+                      "rank":  5,
+-                     "name":  "Chicken with 40 Cloves of Garlic",
+-                     "per_serving":  1.91
++                     "name":  "Chicken Pot Pie Casserole with Biscuits",
++                     "per_serving":  1.92
+                  },
+                  {
+                      "slug":  "turkey-huevos-rancheros-rice-bowls",
+@@ -50,7 +50,7 @@
+                      "protein":  "turkey",
+                      "rank":  2,
+                      "name":  "Haluski and Kielbasa (Cabbage and Egg Noodles)",
+-                     "per_serving":  1.91
++                     "per_serving":  1.92
+                  },
+                  {
+                      "slug":  "turkey-biscuit-pot-pie-casserole",
+@@ -71,14 +71,14 @@
+                      "protein":  "turkey",
+                      "rank":  5,
+                      "name":  "Red Beans, Turkey Sausage and Rice",
+-                     "per_serving":  2.08
++                     "per_serving":  2.09
+                  },
+                  {
+                      "slug":  "lebanese-hashweh",
+                      "protein":  "beef",
+                      "rank":  1,
+                      "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
+-                     "per_serving":  2.39
++                     "per_serving":  2.4
+                  },
+                  {
+                      "slug":  "beef-potato-au-gratin-casserole",
+@@ -120,7 +120,7 @@
+                      "protein":  "pork",
+                      "rank":  2,
+                      "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
+-                     "per_serving":  1.5
++                     "per_serving":  1.49
+                  },
+                  {
+                      "slug":  "slow-cooker-country-style-pork-ribs-rice",
+diff --git a/meal-prep/ingredient-map.json b/meal-prep/ingredient-map.json
+index 2237340b..56a827fa 100644
+--- a/meal-prep/ingredient-map.json
++++ b/meal-prep/ingredient-map.json
+@@ -1,6 +1,6 @@
+ {
+     "readme":  "DERIVED FILE - regenerated by pipeline\\regenerate-ingredient-map.ps1 from the db\\recipes spec scaler payloads + the live feed. Do NOT hand-edit; fix the specs (or the feed) and re-run. Maps recipe ingredient item names to feed/board commodity ids; grams_per_unit converts grams into the feed row\u0027s pricing unit; unit always matches the feed row. conflicts lists items whose specs disagree across eras (majority-feed-resolving wins here; the spec-side reconciliation worklist is db\\worklists\\bid-conflicts-2026-07-26.md).",
+-    "generated_at":  "2026-07-31T06:11:58",
++    "generated_at":  "2026-07-31T09:01:00",
+     "mappings":  [
+                      {
+                          "item":  "1/3 Fat Cream Cheese",
+diff --git a/meal-prep/pipeline/v2-perserving.json b/meal-prep/pipeline/v2-perserving.json
+index cae3f789..373e23e5 100644
+--- a/meal-prep/pipeline/v2-perserving.json
++++ b/meal-prep/pipeline/v2-perserving.json
+@@ -6,8 +6,8 @@
+       "protein":  "pork",
+       "protein_g":  50,
+       "old_ps":  4.44,
+-      "everyday_ps":  4.87,
+-      "cheapest_ps":  3.07,
++      "everyday_ps":  3.81,
++      "cheapest_ps":  3.81,
+       "protein_rank":  31,
+       "is_protein_rank1":  false
+   },
+@@ -43,7 +43,7 @@
+       "protein_g":  48,
+       "old_ps":  4.54,
+       "everyday_ps":  3.86,
+-      "cheapest_ps":  2.84,
++      "cheapest_ps":  2.81,
+       "protein_rank":  68,
+       "is_protein_rank1":  false
+   },
+@@ -79,7 +79,7 @@
+       "protein_g":  43,
+       "old_ps":  3.71,
+       "everyday_ps":  3.55,
+-      "cheapest_ps":  2.91,
++      "cheapest_ps":  2.89,
+       "protein_rank":  6,
+       "is_protein_rank1":  false
+   },
+@@ -103,7 +103,7 @@
+       "protein_g":  32,
+       "old_ps":  2.58,
+       "everyday_ps":  2.16,
+-      "cheapest_ps":  1.79,
++      "cheapest_ps":  1.72,
+       "protein_rank":  89,
+       "is_protein_rank1":  false
+   },
+@@ -115,7 +115,7 @@
+       "protein_g":  36,
+       "old_ps":  3.41,
+       "everyday_ps":  3.16,
+-      "cheapest_ps":  2.77,
++      "cheapest_ps":  2.72,
+       "protein_rank":  79,
+       "is_protein_rank1":  false
+   },
+@@ -151,7 +151,7 @@
+       "protein_g":  41,
+       "old_ps":  4.46,
+       "everyday_ps":  4.17,
+-      "cheapest_ps":  3.67,
++      "cheapest_ps":  3.68,
+       "protein_rank":  36,
+       "is_protein_rank1":  false
+   },
+@@ -175,7 +175,7 @@
+       "protein_g":  41,
+       "old_ps":  3.81,
+       "everyday_ps":  3.46,
+-      "cheapest_ps":  3,
++      "cheapest_ps":  2.97,
+       "protein_rank":  4,
+       "is_protein_rank1":  false
+   },
+@@ -187,7 +187,7 @@
+       "protein_g":  38,
+       "old_ps":  5.34,
+       "everyday_ps":  5.04,
+-      "cheapest_ps":  4.34,
++      "cheapest_ps":  4.35,
+       "protein_rank":  65,
+       "is_protein_rank1":  false
+   },
+@@ -199,7 +199,7 @@
+       "protein_g":  39,
+       "old_ps":  3.06,
+       "everyday_ps":  3.78,
+-      "cheapest_ps":  2.52,
++      "cheapest_ps":  2.53,
+       "protein_rank":  67,
+       "is_protein_rank1":  false
+   },
+@@ -223,7 +223,7 @@
+       "protein_g":  45,
+       "old_ps":  3.92,
+       "everyday_ps":  3.3,
+-      "cheapest_ps":  2.03,
++      "cheapest_ps":  2.02,
+       "protein_rank":  44,
+       "is_protein_rank1":  false
+   },
+@@ -235,7 +235,7 @@
+       "protein_g":  58,
+       "old_ps":  8.56,
+       "everyday_ps":  7.44,
+-      "cheapest_ps":  6.69,
++      "cheapest_ps":  6.68,
+       "protein_rank":  4,
+       "is_protein_rank1":  false
+   },
+@@ -259,7 +259,7 @@
+       "protein_g":  30,
+       "old_ps":  5,
+       "everyday_ps":  4.57,
+-      "cheapest_ps":  3.4,
++      "cheapest_ps":  3.32,
+       "protein_rank":  93,
+       "is_protein_rank1":  false
+   },
+@@ -283,7 +283,7 @@
+       "protein_g":  53,
+       "old_ps":  4.75,
+       "everyday_ps":  4.43,
+-      "cheapest_ps":  3.6,
++      "cheapest_ps":  3.61,
+       "protein_rank":  11,
+       "is_protein_rank1":  false
+   },
+@@ -295,7 +295,7 @@
+       "protein_g":  37,
+       "old_ps":  3.06,
+       "everyday_ps":  3.1,
+-      "cheapest_ps":  2.57,
++      "cheapest_ps":  2.58,
+       "protein_rank":  67,
+       "is_protein_rank1":  false
+   },
+@@ -319,7 +319,7 @@
+       "protein_g":  52,
+       "old_ps":  6.5,
+       "everyday_ps":  6.16,
+-      "cheapest_ps":  4.74,
++      "cheapest_ps":  4.71,
+       "protein_rank":  13,
+       "is_protein_rank1":  false
+   },
+@@ -331,7 +331,7 @@
+       "protein_g":  35,
+       "old_ps":  4.32,
+       "everyday_ps":  3.87,
+-      "cheapest_ps":  2.57,
++      "cheapest_ps":  2.58,
+       "protein_rank":  76,
+       "is_protein_rank1":  false
+   },
+@@ -355,7 +355,7 @@
+       "protein_g":  48,
+       "old_ps":  5.78,
+       "everyday_ps":  5.4,
+-      "cheapest_ps":  4.85,
++      "cheapest_ps":  4.76,
+       "protein_rank":  27,
+       "is_protein_rank1":  false
+   },
+@@ -367,7 +367,7 @@
+       "protein_g":  30,
+       "old_ps":  5.09,
+       "everyday_ps":  4.86,
+-      "cheapest_ps":  3.7,
++      "cheapest_ps":  3.66,
+       "protein_rank":  92,
+       "is_protein_rank1":  false
+   },
+@@ -379,7 +379,7 @@
+       "protein_g":  42,
+       "old_ps":  4.84,
+       "everyday_ps":  4.64,
+-      "cheapest_ps":  4.04,
++      "cheapest_ps":  4.03,
+       "protein_rank":  48,
+       "is_protein_rank1":  false
+   },
+@@ -415,7 +415,7 @@
+       "protein_g":  38,
+       "old_ps":  5.88,
+       "everyday_ps":  5.43,
+-      "cheapest_ps":  4.88,
++      "cheapest_ps":  4.86,
+       "protein_rank":  61,
+       "is_protein_rank1":  false
+   },
+@@ -427,7 +427,7 @@
+       "protein_g":  32,
+       "old_ps":  3.74,
+       "everyday_ps":  3.43,
+-      "cheapest_ps":  2.74,
++      "cheapest_ps":  2.75,
+       "protein_rank":  89,
+       "is_protein_rank1":  false
+   },
+@@ -439,7 +439,7 @@
+       "protein_g":  38,
+       "old_ps":  3.7,
+       "everyday_ps":  3.49,
+-      "cheapest_ps":  3.14,
++      "cheapest_ps":  3.15,
+       "protein_rank":  13,
+       "is_protein_rank1":  false
+   },
+@@ -451,7 +451,7 @@
+       "protein_g":  39,
+       "old_ps":  5.3,
+       "everyday_ps":  5.04,
+-      "cheapest_ps":  4.38,
++      "cheapest_ps":  4.39,
+       "protein_rank":  60,
+       "is_protein_rank1":  false
+   },
+@@ -463,7 +463,7 @@
+       "protein_g":  25,
+       "old_ps":  3.15,
+       "everyday_ps":  2.86,
+-      "cheapest_ps":  2.29,
++      "cheapest_ps":  2.27,
+       "protein_rank":  114,
+       "is_protein_rank1":  false
+   },
+@@ -499,7 +499,7 @@
+       "protein_g":  37,
+       "old_ps":  2.36,
+       "everyday_ps":  2.14,
+-      "cheapest_ps":  1.85,
++      "cheapest_ps":  1.86,
+       "protein_rank":  76,
+       "is_protein_rank1":  false
+   },
+@@ -547,7 +547,7 @@
+       "protein_g":  44,
+       "old_ps":  2.77,
+       "everyday_ps":  2.28,
+-      "cheapest_ps":  1.86,
++      "cheapest_ps":  1.87,
+       "protein_rank":  48,
+       "is_protein_rank1":  false
+   },
+@@ -583,7 +583,7 @@
+       "protein_g":  31,
+       "old_ps":  3.5,
+       "everyday_ps":  3.1,
+-      "cheapest_ps":  2.24,
++      "cheapest_ps":  2.25,
+       "protein_rank":  114,
+       "is_protein_rank1":  false
+   },
+@@ -595,7 +595,7 @@
+       "protein_g":  51,
+       "old_ps":  4.54,
+       "everyday_ps":  4.22,
+-      "cheapest_ps":  3.09,
++      "cheapest_ps":  3.08,
+       "protein_rank":  57,
+       "is_protein_rank1":  false
+   },
+@@ -631,7 +631,7 @@
+       "protein_g":  31,
+       "old_ps":  3.24,
+       "everyday_ps":  3.06,
+-      "cheapest_ps":  2.79,
++      "cheapest_ps":  2.76,
+       "protein_rank":  80,
+       "is_protein_rank1":  false
+   },
+@@ -667,7 +667,7 @@
+       "protein_g":  30,
+       "old_ps":  4.26,
+       "everyday_ps":  4.04,
+-      "cheapest_ps":  3.5,
++      "cheapest_ps":  3.48,
+       "protein_rank":  94,
+       "is_protein_rank1":  false
+   },
+@@ -679,7 +679,7 @@
+       "protein_g":  69,
+       "old_ps":  6.17,
+       "everyday_ps":  5.88,
+-      "cheapest_ps":  3.92,
++      "cheapest_ps":  3.9,
+       "protein_rank":  1,
+       "is_protein_rank1":  true
+   },
+@@ -691,7 +691,7 @@
+       "protein_g":  45,
+       "old_ps":  6.33,
+       "everyday_ps":  6.05,
+-      "cheapest_ps":  4.01,
++      "cheapest_ps":  3.99,
+       "protein_rank":  35,
+       "is_protein_rank1":  false
+   },
+@@ -715,7 +715,7 @@
+       "protein_g":  47,
+       "old_ps":  4.92,
+       "everyday_ps":  4.62,
+-      "cheapest_ps":  3.92,
++      "cheapest_ps":  3.93,
+       "protein_rank":  30,
+       "is_protein_rank1":  false
+   },
+@@ -727,7 +727,7 @@
+       "protein_g":  41,
+       "old_ps":  3.27,
+       "everyday_ps":  3.07,
+-      "cheapest_ps":  2.6,
++      "cheapest_ps":  2.61,
+       "protein_rank":  10,
+       "is_protein_rank1":  false
+   },
+@@ -763,7 +763,7 @@
+       "protein_g":  47,
+       "old_ps":  3.9,
+       "everyday_ps":  3.57,
+-      "cheapest_ps":  2.62,
++      "cheapest_ps":  2.63,
+       "protein_rank":  37,
+       "is_protein_rank1":  false
+   },
+@@ -775,7 +775,7 @@
+       "protein_g":  29,
+       "old_ps":  3.51,
+       "everyday_ps":  3.1,
+-      "cheapest_ps":  2.62,
++      "cheapest_ps":  2.63,
+       "protein_rank":  88,
+       "is_protein_rank1":  false
+   },
+@@ -799,7 +799,7 @@
+       "protein_g":  25,
+       "old_ps":  3.43,
+       "everyday_ps":  3.02,
+-      "cheapest_ps":  2.51,
++      "cheapest_ps":  2.46,
+       "protein_rank":  112,
+       "is_protein_rank1":  false
+   },
+@@ -823,7 +823,7 @@
+       "protein_g":  39,
+       "old_ps":  3.21,
+       "everyday_ps":  2.89,
+-      "cheapest_ps":  1.91,
++      "cheapest_ps":  1.96,
+       "protein_rank":  90,
+       "is_protein_rank1":  false
+   },
+@@ -835,7 +835,7 @@
+       "protein_g":  38,
+       "old_ps":  3.15,
+       "everyday_ps":  3.01,
+-      "cheapest_ps":  2.27,
++      "cheapest_ps":  2.26,
+       "protein_rank":  97,
+       "is_protein_rank1":  false
+   },
+@@ -847,7 +847,7 @@
+       "protein_g":  39,
+       "old_ps":  3.75,
+       "everyday_ps":  3.46,
+-      "cheapest_ps":  2.8,
++      "cheapest_ps":  2.77,
+       "protein_rank":  88,
+       "is_protein_rank1":  false
+   },
+@@ -859,7 +859,7 @@
+       "protein_g":  35,
+       "old_ps":  2.44,
+       "everyday_ps":  2.01,
+-      "cheapest_ps":  1.54,
++      "cheapest_ps":  1.51,
+       "protein_rank":  103,
+       "is_protein_rank1":  false
+   },
+@@ -895,7 +895,7 @@
+       "protein_g":  38,
+       "old_ps":  2,
+       "everyday_ps":  1.88,
+-      "cheapest_ps":  1.4,
++      "cheapest_ps":  1.38,
+       "protein_rank":  94,
+       "is_protein_rank1":  false
+   },
+@@ -907,7 +907,7 @@
+       "protein_g":  25,
+       "old_ps":  2.3,
+       "everyday_ps":  2.09,
+-      "cheapest_ps":  1.75,
++      "cheapest_ps":  1.72,
+       "protein_rank":  126,
+       "is_protein_rank1":  false
+   },
+@@ -943,7 +943,7 @@
+       "protein_g":  65,
+       "old_ps":  4.32,
+       "everyday_ps":  4.11,
+-      "cheapest_ps":  3.13,
++      "cheapest_ps":  3.15,
+       "protein_rank":  4,
+       "is_protein_rank1":  false
+   },
+@@ -955,7 +955,7 @@
+       "protein_g":  57,
+       "old_ps":  4.33,
+       "everyday_ps":  4.12,
+-      "cheapest_ps":  3.44,
++      "cheapest_ps":  3.4,
+       "protein_rank":  28,
+       "is_protein_rank1":  false
+   },
+@@ -967,7 +967,7 @@
+       "protein_g":  36,
+       "old_ps":  3.63,
+       "everyday_ps":  3.28,
+-      "cheapest_ps":  2.61,
++      "cheapest_ps":  2.6,
+       "protein_rank":  99,
+       "is_protein_rank1":  false
+   },
+@@ -979,7 +979,7 @@
+       "protein_g":  33,
+       "old_ps":  3.85,
+       "everyday_ps":  3.5,
+-      "cheapest_ps":  2.56,
++      "cheapest_ps":  2.55,
+       "protein_rank":  111,
+       "is_protein_rank1":  false
+   },
+@@ -991,7 +991,7 @@
+       "protein_g":  41,
+       "old_ps":  3.82,
+       "everyday_ps":  3.29,
+-      "cheapest_ps":  2.34,
++      "cheapest_ps":  2.33,
+       "protein_rank":  84,
+       "is_protein_rank1":  false
+   },
+@@ -1003,7 +1003,7 @@
+       "protein_g":  52,
+       "old_ps":  3.46,
+       "everyday_ps":  3.31,
+-      "cheapest_ps":  2.35,
++      "cheapest_ps":  2.33,
+       "protein_rank":  52,
+       "is_protein_rank1":  false
+   },
+@@ -1015,7 +1015,7 @@
+       "protein_g":  26,
+       "old_ps":  3.31,
+       "everyday_ps":  2.98,
+-      "cheapest_ps":  2.09,
++      "cheapest_ps":  2.1,
+       "protein_rank":  123,
+       "is_protein_rank1":  false
+   },
+@@ -1027,7 +1027,7 @@
+       "protein_g":  36,
+       "old_ps":  4.1,
+       "everyday_ps":  3.72,
+-      "cheapest_ps":  2.92,
++      "cheapest_ps":  2.88,
+       "protein_rank":  100,
+       "is_protein_rank1":  false
+   },
+@@ -1051,7 +1051,7 @@
+       "protein_g":  25,
+       "old_ps":  2.48,
+       "everyday_ps":  2.32,
+-      "cheapest_ps":  1.91,
++      "cheapest_ps":  1.92,
+       "protein_rank":  127,
+       "is_protein_rank1":  false
+   },
+@@ -1063,7 +1063,7 @@
+       "protein_g":  46,
+       "old_ps":  4.57,
+       "everyday_ps":  4.17,
+-      "cheapest_ps":  3.03,
++      "cheapest_ps":  3.04,
+       "protein_rank":  72,
+       "is_protein_rank1":  false
+   },
+@@ -1075,7 +1075,7 @@
+       "protein_g":  54,
+       "old_ps":  5.18,
+       "everyday_ps":  4.62,
+-      "cheapest_ps":  3.36,
++      "cheapest_ps":  3.35,
+       "protein_rank":  44,
+       "is_protein_rank1":  false
+   },
+@@ -1183,7 +1183,7 @@
+       "protein_g":  38,
+       "old_ps":  5.94,
+       "everyday_ps":  5.26,
+-      "cheapest_ps":  4.35,
++      "cheapest_ps":  4.36,
+       "protein_rank":  14,
+       "is_protein_rank1":  false
+   },
+@@ -1195,7 +1195,7 @@
+       "protein_g":  41,
+       "old_ps":  4.92,
+       "everyday_ps":  4.37,
+-      "cheapest_ps":  3.04,
++      "cheapest_ps":  3.03,
+       "protein_rank":  61,
+       "is_protein_rank1":  false
+   },
+@@ -1231,7 +1231,7 @@
+       "protein_g":  44,
+       "old_ps":  6.37,
+       "everyday_ps":  6.11,
+-      "cheapest_ps":  5.28,
++      "cheapest_ps":  5.27,
+       "protein_rank":  39,
+       "is_protein_rank1":  false
+   },
+@@ -1243,7 +1243,7 @@
+       "protein_g":  34,
+       "old_ps":  2.48,
+       "everyday_ps":  2.46,
+-      "cheapest_ps":  1.74,
++      "cheapest_ps":  1.71,
+       "protein_rank":  107,
+       "is_protein_rank1":  false
+   },
+@@ -1254,8 +1254,8 @@
+       "protein":  "pork",
+       "protein_g":  29,
+       "old_ps":  2.72,
+-      "everyday_ps":  3.36,
+-      "cheapest_ps":  1.7,
++      "everyday_ps":  2.3,
++      "cheapest_ps":  2.3,
+       "protein_rank":  100,
+       "is_protein_rank1":  false
+   },
+@@ -1279,7 +1279,7 @@
+       "protein_g":  51,
+       "old_ps":  3.99,
+       "everyday_ps":  3.79,
+-      "cheapest_ps":  2.71,
++      "cheapest_ps":  2.72,
+       "protein_rank":  58,
+       "is_protein_rank1":  false
+   },
+@@ -1303,7 +1303,7 @@
+       "protein_g":  35,
+       "old_ps":  5.08,
+       "everyday_ps":  4.79,
+-      "cheapest_ps":  3.88,
++      "cheapest_ps":  3.87,
+       "protein_rank":  77,
+       "is_protein_rank1":  false
+   },
+@@ -1315,7 +1315,7 @@
+       "protein_g":  32,
+       "old_ps":  3.82,
+       "everyday_ps":  3.55,
+-      "cheapest_ps":  2.81,
++      "cheapest_ps":  2.82,
+       "protein_rank":  90,
+       "is_protein_rank1":  false
+   },
+@@ -1339,7 +1339,7 @@
+       "protein_g":  43,
+       "old_ps":  2.6,
+       "everyday_ps":  2.41,
+-      "cheapest_ps":  2.01,
++      "cheapest_ps":  2.02,
+       "protein_rank":  53,
+       "is_protein_rank1":  false
+   },
+@@ -1351,7 +1351,7 @@
+       "protein_g":  44,
+       "old_ps":  3.82,
+       "everyday_ps":  3.53,
+-      "cheapest_ps":  2.53,
++      "cheapest_ps":  2.54,
+       "protein_rank":  76,
+       "is_protein_rank1":  false
+   },
+@@ -1375,7 +1375,7 @@
+       "protein_g":  42,
+       "old_ps":  4.49,
+       "everyday_ps":  4.06,
+-      "cheapest_ps":  3.72,
++      "cheapest_ps":  3.66,
+       "protein_rank":  2,
+       "is_protein_rank1":  false
+   },
+@@ -1411,7 +1411,7 @@
+       "protein_g":  26,
+       "old_ps":  4.54,
+       "everyday_ps":  4,
+-      "cheapest_ps":  3.34,
++      "cheapest_ps":  3.35,
+       "protein_rank":  102,
+       "is_protein_rank1":  false
+   },
+@@ -1447,7 +1447,7 @@
+       "protein_g":  28,
+       "old_ps":  2.71,
+       "everyday_ps":  2.43,
+-      "cheapest_ps":  1.93,
++      "cheapest_ps":  1.94,
+       "protein_rank":  103,
+       "is_protein_rank1":  false
+   },
+@@ -1471,7 +1471,7 @@
+       "protein_g":  27,
+       "old_ps":  4.63,
+       "everyday_ps":  4.4,
+-      "cheapest_ps":  3.03,
++      "cheapest_ps":  3.04,
+       "protein_rank":  100,
+       "is_protein_rank1":  false
+   },
+@@ -1495,7 +1495,7 @@
+       "protein_g":  29,
+       "old_ps":  4.09,
+       "everyday_ps":  3.69,
+-      "cheapest_ps":  3.06,
++      "cheapest_ps":  3.01,
+       "protein_rank":  89,
+       "is_protein_rank1":  false
+   },
+@@ -1519,7 +1519,7 @@
+       "protein_g":  51,
+       "old_ps":  4.34,
+       "everyday_ps":  4.09,
+-      "cheapest_ps":  3.63,
++      "cheapest_ps":  3.64,
+       "protein_rank":  10,
+       "is_protein_rank1":  false
+   },
+@@ -1554,8 +1554,8 @@
+       "protein":  "pork",
+       "protein_g":  46,
+       "old_ps":  3.6,
+-      "everyday_ps":  4.08,
+-      "cheapest_ps":  1.94,
++      "everyday_ps":  3.02,
++      "cheapest_ps":  2.94,
+       "protein_rank":  41,
+       "is_protein_rank1":  false
+   },
+@@ -1566,8 +1566,8 @@
+       "protein":  "chicken",
+       "protein_g":  56,
+       "old_ps":  4.01,
+-      "everyday_ps":  4.84,
+-      "cheapest_ps":  2.75,
++      "everyday_ps":  3.78,
++      "cheapest_ps":  3.75,
+       "protein_rank":  38,
+       "is_protein_rank1":  false
+   },
+@@ -1615,7 +1615,7 @@
+       "protein_g":  49,
+       "old_ps":  3.43,
+       "everyday_ps":  3.31,
+-      "cheapest_ps":  2.37,
++      "cheapest_ps":  2.38,
+       "protein_rank":  65,
+       "is_protein_rank1":  false
+   },
+@@ -1639,7 +1639,7 @@
+       "protein_g":  27,
+       "old_ps":  2.81,
+       "everyday_ps":  2.54,
+-      "cheapest_ps":  2.21,
++      "cheapest_ps":  2.2,
+       "protein_rank":  101,
+       "is_protein_rank1":  false
+   },
+@@ -1651,7 +1651,7 @@
+       "protein_g":  61,
+       "old_ps":  7.61,
+       "everyday_ps":  7.4,
+-      "cheapest_ps":  6.69,
++      "cheapest_ps":  6.7,
+       "protein_rank":  3,
+       "is_protein_rank1":  false
+   },
+@@ -1663,7 +1663,7 @@
+       "protein_g":  52,
+       "old_ps":  5.88,
+       "everyday_ps":  5.44,
+-      "cheapest_ps":  4.98,
++      "cheapest_ps":  4.97,
+       "protein_rank":  14,
+       "is_protein_rank1":  false
+   },
+@@ -1675,7 +1675,7 @@
+       "protein_g":  57,
+       "old_ps":  4.76,
+       "everyday_ps":  4.44,
+-      "cheapest_ps":  3.52,
++      "cheapest_ps":  3.5,
+       "protein_rank":  29,
+       "is_protein_rank1":  false
+   },
+@@ -1686,8 +1686,8 @@
+       "protein":  "chicken",
+       "protein_g":  49,
+       "old_ps":  3.56,
+-      "everyday_ps":  4.1,
+-      "cheapest_ps":  2.32,
++      "everyday_ps":  3.03,
++      "cheapest_ps":  3.03,
+       "protein_rank":  66,
+       "is_protein_rank1":  false
+   },
+@@ -1699,7 +1699,7 @@
+       "protein_g":  32,
+       "old_ps":  3.16,
+       "everyday_ps":  3,
+-      "cheapest_ps":  2.61,
++      "cheapest_ps":  2.59,
+       "protein_rank":  91,
+       "is_protein_rank1":  false
+   },
+@@ -1710,8 +1710,8 @@
+       "protein":  "pork",
+       "protein_g":  41,
+       "old_ps":  3.84,
+-      "everyday_ps":  4.43,
+-      "cheapest_ps":  2.5,
++      "everyday_ps":  3.36,
++      "cheapest_ps":  3.36,
+       "protein_rank":  62,
+       "is_protein_rank1":  false
+   },
+@@ -1735,7 +1735,7 @@
+       "protein_g":  53,
+       "old_ps":  5.6,
+       "everyday_ps":  5.46,
+-      "cheapest_ps":  4.93,
++      "cheapest_ps":  4.94,
+       "protein_rank":  12,
+       "is_protein_rank1":  false
+   },
+@@ -1759,7 +1759,7 @@
+       "protein_g":  56,
+       "old_ps":  4,
+       "everyday_ps":  3.7,
+-      "cheapest_ps":  2.62,
++      "cheapest_ps":  2.59,
+       "protein_rank":  39,
+       "is_protein_rank1":  false
+   },
+@@ -1771,7 +1771,7 @@
+       "protein_g":  52,
+       "old_ps":  7.19,
+       "everyday_ps":  6.97,
+-      "cheapest_ps":  6.19,
++      "cheapest_ps":  6.16,
+       "protein_rank":  15,
+       "is_protein_rank1":  false
+   },
+@@ -1795,7 +1795,7 @@
+       "protein_g":  36,
+       "old_ps":  4.66,
+       "everyday_ps":  4.15,
+-      "cheapest_ps":  3.12,
++      "cheapest_ps":  3.09,
+       "protein_rank":  80,
+       "is_protein_rank1":  false
+   },
+@@ -1807,7 +1807,7 @@
+       "protein_g":  44,
+       "old_ps":  5.48,
+       "everyday_ps":  5.22,
+-      "cheapest_ps":  3.77,
++      "cheapest_ps":  3.82,
+       "protein_rank":  5,
+       "is_protein_rank1":  false
+   },
+@@ -1819,7 +1819,7 @@
+       "protein_g":  30,
+       "old_ps":  3.95,
+       "everyday_ps":  3.5,
+-      "cheapest_ps":  2.65,
++      "cheapest_ps":  2.66,
+       "protein_rank":  17,
+       "is_protein_rank1":  false
+   },
+@@ -1843,7 +1843,7 @@
+       "protein_g":  44,
+       "old_ps":  6.9,
+       "everyday_ps":  6.59,
+-      "cheapest_ps":  5.57,
++      "cheapest_ps":  5.6,
+       "protein_rank":  40,
+       "is_protein_rank1":  false
+   },
+@@ -1855,7 +1855,7 @@
+       "protein_g":  30,
+       "old_ps":  3.71,
+       "everyday_ps":  3.28,
+-      "cheapest_ps":  2.76,
++      "cheapest_ps":  2.75,
+       "protein_rank":  85,
+       "is_protein_rank1":  false
+   },
+@@ -1867,7 +1867,7 @@
+       "protein_g":  62,
+       "old_ps":  6.04,
+       "everyday_ps":  5.65,
+-      "cheapest_ps":  3.86,
++      "cheapest_ps":  3.87,
+       "protein_rank":  1,
+       "is_protein_rank1":  true
+   },
+@@ -1891,7 +1891,7 @@
+       "protein_g":  29,
+       "old_ps":  5.07,
+       "everyday_ps":  4.77,
+-      "cheapest_ps":  3.94,
++      "cheapest_ps":  3.93,
+       "protein_rank":  90,
+       "is_protein_rank1":  false
+   },
+@@ -1903,7 +1903,7 @@
+       "protein_g":  34,
+       "old_ps":  4.07,
+       "everyday_ps":  3.64,
+-      "cheapest_ps":  2.9,
++      "cheapest_ps":  2.96,
+       "protein_rank":  67,
+       "is_protein_rank1":  false
+   },
+@@ -1915,7 +1915,7 @@
+       "protein_g":  42,
+       "old_ps":  3.98,
+       "everyday_ps":  3.74,
+-      "cheapest_ps":  3.08,
++      "cheapest_ps":  3.24,
+       "protein_rank":  31,
+       "is_protein_rank1":  false
+   },
+@@ -1939,7 +1939,7 @@
+       "protein_g":  39,
+       "old_ps":  3.13,
+       "everyday_ps":  2.94,
+-      "cheapest_ps":  2.25,
++      "cheapest_ps":  2.23,
+       "protein_rank":  68,
+       "is_protein_rank1":  false
+   },
+@@ -1951,7 +1951,7 @@
+       "protein_g":  45,
+       "old_ps":  4.57,
+       "everyday_ps":  4.15,
+-      "cheapest_ps":  3.81,
++      "cheapest_ps":  3.78,
+       "protein_rank":  36,
+       "is_protein_rank1":  false
+   },
+@@ -1975,7 +1975,7 @@
+       "protein_g":  46,
+       "old_ps":  4.57,
+       "everyday_ps":  4.35,
+-      "cheapest_ps":  3.98,
++      "cheapest_ps":  3.95,
+       "protein_rank":  31,
+       "is_protein_rank1":  false
+   },
+@@ -1987,7 +1987,7 @@
+       "protein_g":  46,
+       "old_ps":  4.94,
+       "everyday_ps":  4.78,
+-      "cheapest_ps":  3.9,
++      "cheapest_ps":  4,
+       "protein_rank":  32,
+       "is_protein_rank1":  false
+   },
+@@ -2011,7 +2011,7 @@
+       "protein_g":  52,
+       "old_ps":  4.59,
+       "everyday_ps":  4.4,
+-      "cheapest_ps":  3.7,
++      "cheapest_ps":  3.71,
+       "protein_rank":  16,
+       "is_protein_rank1":  false
+   },
+@@ -2023,7 +2023,7 @@
+       "protein_g":  44,
+       "old_ps":  5.79,
+       "everyday_ps":  5.24,
+-      "cheapest_ps":  4.69,
++      "cheapest_ps":  4.6,
+       "protein_rank":  41,
+       "is_protein_rank1":  false
+   },
+@@ -2059,7 +2059,7 @@
+       "protein_g":  32,
+       "old_ps":  3.27,
+       "everyday_ps":  3.05,
+-      "cheapest_ps":  2.54,
++      "cheapest_ps":  2.52,
+       "protein_rank":  77,
+       "is_protein_rank1":  false
+   },
+@@ -2071,7 +2071,7 @@
+       "protein_g":  51,
+       "old_ps":  4.1,
+       "everyday_ps":  3.84,
+-      "cheapest_ps":  3.43,
++      "cheapest_ps":  3.39,
+       "protein_rank":  11,
+       "is_protein_rank1":  false
+   },
+@@ -2107,7 +2107,7 @@
+       "protein_g":  35,
+       "old_ps":  3.8,
+       "everyday_ps":  3.5,
+-      "cheapest_ps":  2.78,
++      "cheapest_ps":  2.79,
+       "protein_rank":  59,
+       "is_protein_rank1":  false
+   },
+@@ -2119,7 +2119,7 @@
+       "protein_g":  51,
+       "old_ps":  5.57,
+       "everyday_ps":  4.84,
+-      "cheapest_ps":  4.37,
++      "cheapest_ps":  4.3,
+       "protein_rank":  12,
+       "is_protein_rank1":  false
+   },
+@@ -2155,7 +2155,7 @@
+       "protein_g":  40,
+       "old_ps":  3.79,
+       "everyday_ps":  3.52,
+-      "cheapest_ps":  2.97,
++      "cheapest_ps":  2.85,
+       "protein_rank":  87,
+       "is_protein_rank1":  false
+   },
+@@ -2191,7 +2191,7 @@
+       "protein_g":  25,
+       "old_ps":  2.4,
+       "everyday_ps":  2.08,
+-      "cheapest_ps":  1.91,
++      "cheapest_ps":  1.92,
+       "protein_rank":  113,
+       "is_protein_rank1":  false
+   },
+@@ -2203,7 +2203,7 @@
+       "protein_g":  33,
+       "old_ps":  3.11,
+       "everyday_ps":  2.96,
+-      "cheapest_ps":  2.56,
++      "cheapest_ps":  2.57,
+       "protein_rank":  85,
+       "is_protein_rank1":  false
+   },
+@@ -2215,7 +2215,7 @@
+       "protein_g":  32,
+       "old_ps":  3.09,
+       "everyday_ps":  2.92,
+-      "cheapest_ps":  2.51,
++      "cheapest_ps":  2.52,
+       "protein_rank":  92,
+       "is_protein_rank1":  false
+   },
+@@ -2227,7 +2227,7 @@
+       "protein_g":  28,
+       "old_ps":  2.69,
+       "everyday_ps":  2.48,
+-      "cheapest_ps":  2.36,
++      "cheapest_ps":  2.33,
+       "protein_rank":  104,
+       "is_protein_rank1":  false
+   },
+@@ -2239,7 +2239,7 @@
+       "protein_g":  43,
+       "old_ps":  3.9,
+       "everyday_ps":  3.94,
+-      "cheapest_ps":  2.87,
++      "cheapest_ps":  2.94,
+       "protein_rank":  78,
+       "is_protein_rank1":  false
+   },
+@@ -2263,7 +2263,7 @@
+       "protein_g":  38,
+       "old_ps":  4.6,
+       "everyday_ps":  3.95,
+-      "cheapest_ps":  3.44,
++      "cheapest_ps":  3.45,
+       "protein_rank":  7,
+       "is_protein_rank1":  false
+   },
+@@ -2299,7 +2299,7 @@
+       "protein_g":  50,
+       "old_ps":  5.41,
+       "everyday_ps":  5.23,
+-      "cheapest_ps":  4.75,
++      "cheapest_ps":  4.76,
+       "protein_rank":  20,
+       "is_protein_rank1":  false
+   },
+@@ -2335,7 +2335,7 @@
+       "protein_g":  61,
+       "old_ps":  4.38,
+       "everyday_ps":  4.08,
+-      "cheapest_ps":  3.03,
++      "cheapest_ps":  3.04,
+       "protein_rank":  15,
+       "is_protein_rank1":  false
+   },
+@@ -2371,7 +2371,7 @@
+       "protein_g":  33,
+       "old_ps":  4.4,
+       "everyday_ps":  4.38,
+-      "cheapest_ps":  3.61,
++      "cheapest_ps":  3.58,
+       "protein_rank":  22,
+       "is_protein_rank1":  false
+   },
+@@ -2419,7 +2419,7 @@
+       "protein_g":  38,
+       "old_ps":  2.42,
+       "everyday_ps":  2.75,
+-      "cheapest_ps":  1.88,
++      "cheapest_ps":  1.89,
+       "protein_rank":  73,
+       "is_protein_rank1":  false
+   },
+@@ -2431,7 +2431,7 @@
+       "protein_g":  33,
+       "old_ps":  4.5,
+       "everyday_ps":  4.53,
+-      "cheapest_ps":  3.53,
++      "cheapest_ps":  3.48,
+       "protein_rank":  86,
+       "is_protein_rank1":  false
+   },
+@@ -2443,7 +2443,7 @@
+       "protein_g":  23,
+       "old_ps":  2.02,
+       "everyday_ps":  2.1,
+-      "cheapest_ps":  1.55,
++      "cheapest_ps":  1.56,
+       "protein_rank":  118,
+       "is_protein_rank1":  false
+   },
+@@ -2491,7 +2491,7 @@
+       "protein_g":  49,
+       "old_ps":  5.13,
+       "everyday_ps":  4.98,
+-      "cheapest_ps":  4.33,
++      "cheapest_ps":  4.32,
+       "protein_rank":  3,
+       "is_protein_rank1":  false
+   },
+@@ -2539,7 +2539,7 @@
+       "protein_g":  40,
+       "old_ps":  4.09,
+       "everyday_ps":  3.93,
+-      "cheapest_ps":  2.81,
++      "cheapest_ps":  2.82,
+       "protein_rank":  39,
+       "is_protein_rank1":  false
+   },
+@@ -2563,7 +2563,7 @@
+       "protein_g":  38,
+       "old_ps":  4.27,
+       "everyday_ps":  3.79,
+-      "cheapest_ps":  3.26,
++      "cheapest_ps":  3.27,
+       "protein_rank":  15,
+       "is_protein_rank1":  false
+   },
+@@ -2599,7 +2599,7 @@
+       "protein_g":  28,
+       "old_ps":  4.7,
+       "everyday_ps":  4.47,
+-      "cheapest_ps":  3.4,
++      "cheapest_ps":  3.36,
+       "protein_rank":  99,
+       "is_protein_rank1":  false
+   },
+@@ -2611,7 +2611,7 @@
+       "protein_g":  35,
+       "old_ps":  4.95,
+       "everyday_ps":  4.97,
+-      "cheapest_ps":  4.35,
++      "cheapest_ps":  4.32,
+       "protein_rank":  79,
+       "is_protein_rank1":  false
+   },
+@@ -2623,7 +2623,7 @@
+       "protein_g":  38,
+       "old_ps":  5.76,
+       "everyday_ps":  5.83,
+-      "cheapest_ps":  4.84,
++      "cheapest_ps":  4.89,
+       "protein_rank":  64,
+       "is_protein_rank1":  false
+   },
+@@ -2647,7 +2647,7 @@
+       "protein_g":  30,
+       "old_ps":  3.04,
+       "everyday_ps":  2.72,
+-      "cheapest_ps":  2.33,
++      "cheapest_ps":  2.34,
+       "protein_rank":  86,
+       "is_protein_rank1":  false
+   },
+@@ -2659,7 +2659,7 @@
+       "protein_g":  38,
+       "old_ps":  4.77,
+       "everyday_ps":  4.52,
+-      "cheapest_ps":  3.83,
++      "cheapest_ps":  3.75,
+       "protein_rank":  16,
+       "is_protein_rank1":  false
+   },
+@@ -2671,7 +2671,7 @@
+       "protein_g":  36,
+       "old_ps":  6.35,
+       "everyday_ps":  6.15,
+-      "cheapest_ps":  4.4,
++      "cheapest_ps":  4.37,
+       "protein_rank":  73,
+       "is_protein_rank1":  false
+   },
+@@ -2683,7 +2683,7 @@
+       "protein_g":  55,
+       "old_ps":  4.56,
+       "everyday_ps":  4.1,
+-      "cheapest_ps":  3.09,
++      "cheapest_ps":  3.04,
+       "protein_rank":  41,
+       "is_protein_rank1":  false
+   },
+@@ -2695,7 +2695,7 @@
+       "protein_g":  26,
+       "old_ps":  3.11,
+       "everyday_ps":  2.93,
+-      "cheapest_ps":  2.54,
++      "cheapest_ps":  2.5,
+       "protein_rank":  108,
+       "is_protein_rank1":  false
+   },
+@@ -2707,7 +2707,7 @@
+       "protein_g":  50,
+       "old_ps":  4.59,
+       "everyday_ps":  4.33,
+-      "cheapest_ps":  4.01,
++      "cheapest_ps":  3.98,
+       "protein_rank":  22,
+       "is_protein_rank1":  false
+   },
+@@ -2719,7 +2719,7 @@
+       "protein_g":  52,
+       "old_ps":  4.98,
+       "everyday_ps":  4.31,
+-      "cheapest_ps":  3.82,
++      "cheapest_ps":  3.79,
+       "protein_rank":  8,
+       "is_protein_rank1":  false
+   },
+@@ -2731,7 +2731,7 @@
+       "protein_g":  29,
+       "old_ps":  4.57,
+       "everyday_ps":  4.11,
+-      "cheapest_ps":  3.65,
++      "cheapest_ps":  3.62,
+       "protein_rank":  91,
+       "is_protein_rank1":  false
+   },
+@@ -2755,7 +2755,7 @@
+       "protein_g":  25,
+       "old_ps":  2.95,
+       "everyday_ps":  2.8,
+-      "cheapest_ps":  2.39,
++      "cheapest_ps":  2.4,
+       "protein_rank":  26,
+       "is_protein_rank1":  false
+   },
+@@ -2767,7 +2767,7 @@
+       "protein_g":  52,
+       "old_ps":  5.73,
+       "everyday_ps":  5.55,
+-      "cheapest_ps":  4.49,
++      "cheapest_ps":  4.5,
+       "protein_rank":  17,
+       "is_protein_rank1":  false
+   },
+@@ -2791,7 +2791,7 @@
+       "protein_g":  37,
+       "old_ps":  4.15,
+       "everyday_ps":  3.81,
+-      "cheapest_ps":  3.01,
++      "cheapest_ps":  2.99,
+       "protein_rank":  49,
+       "is_protein_rank1":  false
+   },
+@@ -2803,7 +2803,7 @@
+       "protein_g":  26,
+       "old_ps":  3.79,
+       "everyday_ps":  3.37,
+-      "cheapest_ps":  2.72,
++      "cheapest_ps":  2.73,
+       "protein_rank":  101,
+       "is_protein_rank1":  false
+   },
+@@ -2815,7 +2815,7 @@
+       "protein_g":  25,
+       "old_ps":  3.32,
+       "everyday_ps":  3.07,
+-      "cheapest_ps":  2.47,
++      "cheapest_ps":  2.46,
+       "protein_rank":  114,
+       "is_protein_rank1":  false
+   },
+@@ -2827,7 +2827,7 @@
+       "protein_g":  41,
+       "old_ps":  4.46,
+       "everyday_ps":  4.25,
+-      "cheapest_ps":  3.43,
++      "cheapest_ps":  3.44,
+       "protein_rank":  85,
+       "is_protein_rank1":  false
+   },
+@@ -2839,7 +2839,7 @@
+       "protein_g":  45,
+       "old_ps":  4.11,
+       "everyday_ps":  3.78,
+-      "cheapest_ps":  2.5,
++      "cheapest_ps":  2.51,
+       "protein_rank":  45,
+       "is_protein_rank1":  false
+   },
+@@ -2851,7 +2851,7 @@
+       "protein_g":  46,
+       "old_ps":  7.62,
+       "everyday_ps":  7.46,
+-      "cheapest_ps":  6.63,
++      "cheapest_ps":  6.61,
+       "protein_rank":  33,
+       "is_protein_rank1":  false
+   },
+@@ -2863,7 +2863,7 @@
+       "protein_g":  30,
+       "old_ps":  4.48,
+       "everyday_ps":  4,
+-      "cheapest_ps":  3.14,
++      "cheapest_ps":  3.12,
+       "protein_rank":  116,
+       "is_protein_rank1":  false
+   },
+@@ -2887,7 +2887,7 @@
+       "protein_g":  51,
+       "old_ps":  4.88,
+       "everyday_ps":  4.73,
+-      "cheapest_ps":  3.84,
++      "cheapest_ps":  3.89,
+       "protein_rank":  13,
+       "is_protein_rank1":  false
+   },
+@@ -2899,7 +2899,7 @@
+       "protein_g":  29,
+       "old_ps":  3.98,
+       "everyday_ps":  3.47,
+-      "cheapest_ps":  2.85,
++      "cheapest_ps":  2.79,
+       "protein_rank":  92,
+       "is_protein_rank1":  false
+   },
+@@ -2911,7 +2911,7 @@
+       "protein_g":  47,
+       "old_ps":  4.65,
+       "everyday_ps":  4.25,
+-      "cheapest_ps":  2.64,
++      "cheapest_ps":  2.63,
+       "protein_rank":  38,
+       "is_protein_rank1":  false
+   },
+@@ -2971,7 +2971,7 @@
+       "protein_g":  43,
+       "old_ps":  6.29,
+       "everyday_ps":  5.74,
+-      "cheapest_ps":  5.12,
++      "cheapest_ps":  5.04,
+       "protein_rank":  47,
+       "is_protein_rank1":  false
+   },
+@@ -2983,7 +2983,7 @@
+       "protein_g":  25,
+       "old_ps":  3.09,
+       "everyday_ps":  2.75,
+-      "cheapest_ps":  2.21,
++      "cheapest_ps":  2.18,
+       "protein_rank":  117,
+       "is_protein_rank1":  false
+   },
+@@ -2995,7 +2995,7 @@
+       "protein_g":  48,
+       "old_ps":  4.38,
+       "everyday_ps":  3.72,
+-      "cheapest_ps":  2.36,
++      "cheapest_ps":  2.33,
+       "protein_rank":  36,
+       "is_protein_rank1":  false
+   },
+@@ -3007,7 +3007,7 @@
+       "protein_g":  55,
+       "old_ps":  7.06,
+       "everyday_ps":  6.49,
+-      "cheapest_ps":  5.68,
++      "cheapest_ps":  5.66,
+       "protein_rank":  6,
+       "is_protein_rank1":  false
+   },
+@@ -3019,7 +3019,7 @@
+       "protein_g":  35,
+       "old_ps":  3.85,
+       "everyday_ps":  3.47,
+-      "cheapest_ps":  2.88,
++      "cheapest_ps":  2.89,
+       "protein_rank":  60,
+       "is_protein_rank1":  false
+   },
+@@ -3031,7 +3031,7 @@
+       "protein_g":  42,
+       "old_ps":  6.13,
+       "everyday_ps":  5.83,
+-      "cheapest_ps":  4.85,
++      "cheapest_ps":  4.84,
+       "protein_rank":  50,
+       "is_protein_rank1":  false
+   },
+@@ -3043,7 +3043,7 @@
+       "protein_g":  42,
+       "old_ps":  4.48,
+       "everyday_ps":  4.19,
+-      "cheapest_ps":  3.16,
++      "cheapest_ps":  3.18,
+       "protein_rank":  81,
+       "is_protein_rank1":  false
+   },
+@@ -3067,7 +3067,7 @@
+       "protein_g":  29,
+       "old_ps":  5.24,
+       "everyday_ps":  4.85,
+-      "cheapest_ps":  4.18,
++      "cheapest_ps":  4.15,
+       "protein_rank":  96,
+       "is_protein_rank1":  false
+   },
+@@ -3091,7 +3091,7 @@
+       "protein_g":  43,
+       "old_ps":  2.7,
+       "everyday_ps":  2.46,
+-      "cheapest_ps":  1.86,
++      "cheapest_ps":  1.76,
+       "protein_rank":  54,
+       "is_protein_rank1":  false
+   },
+@@ -3127,7 +3127,7 @@
+       "protein_g":  51,
+       "old_ps":  4.18,
+       "everyday_ps":  4.02,
+-      "cheapest_ps":  2.95,
++      "cheapest_ps":  2.92,
+       "protein_rank":  60,
+       "is_protein_rank1":  false
+   },
+@@ -3151,7 +3151,7 @@
+       "protein_g":  38,
+       "old_ps":  4.28,
+       "everyday_ps":  4.07,
+-      "cheapest_ps":  3.48,
++      "cheapest_ps":  3.49,
+       "protein_rank":  8,
+       "is_protein_rank1":  false
+   },
+@@ -3163,7 +3163,7 @@
+       "protein_g":  31,
+       "old_ps":  3.76,
+       "everyday_ps":  3.55,
+-      "cheapest_ps":  3.26,
++      "cheapest_ps":  3.18,
+       "protein_rank":  16,
+       "is_protein_rank1":  false
+   },
+@@ -3199,7 +3199,7 @@
+       "protein_g":  48,
+       "old_ps":  3.28,
+       "everyday_ps":  3.11,
+-      "cheapest_ps":  2.39,
++      "cheapest_ps":  2.4,
+       "protein_rank":  69,
+       "is_protein_rank1":  false
+   },
+@@ -3211,7 +3211,7 @@
+       "protein_g":  40,
+       "old_ps":  4.59,
+       "everyday_ps":  4.62,
+-      "cheapest_ps":  3.65,
++      "cheapest_ps":  3.63,
+       "protein_rank":  54,
+       "is_protein_rank1":  false
+   },
+@@ -3223,7 +3223,7 @@
+       "protein_g":  26,
+       "old_ps":  3.87,
+       "everyday_ps":  3.91,
+-      "cheapest_ps":  3.22,
++      "cheapest_ps":  3.19,
+       "protein_rank":  102,
+       "is_protein_rank1":  false
+   },
+@@ -3235,7 +3235,7 @@
+       "protein_g":  26,
+       "old_ps":  3.9,
+       "everyday_ps":  3.86,
+-      "cheapest_ps":  3.12,
++      "cheapest_ps":  3.02,
+       "protein_rank":  124,
+       "is_protein_rank1":  false
+   },
+@@ -3283,7 +3283,7 @@
+       "protein_g":  44,
+       "old_ps":  6.65,
+       "everyday_ps":  6.12,
+-      "cheapest_ps":  5.1,
++      "cheapest_ps":  5.06,
+       "protein_rank":  42,
+       "is_protein_rank1":  false
+   },
+@@ -3295,7 +3295,7 @@
+       "protein_g":  56,
+       "old_ps":  6.16,
+       "everyday_ps":  5.73,
+-      "cheapest_ps":  4.61,
++      "cheapest_ps":  4.6,
+       "protein_rank":  1,
+       "is_protein_rank1":  true
+   },
+@@ -3307,7 +3307,7 @@
+       "protein_g":  44,
+       "old_ps":  6.58,
+       "everyday_ps":  6.04,
+-      "cheapest_ps":  4.49,
++      "cheapest_ps":  4.38,
+       "protein_rank":  43,
+       "is_protein_rank1":  false
+   },
+@@ -3319,7 +3319,7 @@
+       "protein_g":  34,
+       "old_ps":  3.93,
+       "everyday_ps":  3.72,
+-      "cheapest_ps":  2.38,
++      "cheapest_ps":  2.39,
+       "protein_rank":  108,
+       "is_protein_rank1":  false
+   },
+@@ -3343,7 +3343,7 @@
+       "protein_g":  53,
+       "old_ps":  4.5,
+       "everyday_ps":  4.31,
+-      "cheapest_ps":  3.69,
++      "cheapest_ps":  3.7,
+       "protein_rank":  2,
+       "is_protein_rank1":  false
+   },
+@@ -3367,7 +3367,7 @@
+       "protein_g":  39,
+       "old_ps":  4.4,
+       "everyday_ps":  4.11,
+-      "cheapest_ps":  3.2,
++      "cheapest_ps":  3.19,
+       "protein_rank":  91,
+       "is_protein_rank1":  false
+   },
+@@ -3379,7 +3379,7 @@
+       "protein_g":  34,
+       "old_ps":  3.76,
+       "everyday_ps":  3.31,
+-      "cheapest_ps":  2.35,
++      "cheapest_ps":  2.33,
+       "protein_rank":  109,
+       "is_protein_rank1":  false
+   },
+@@ -3391,7 +3391,7 @@
+       "protein_g":  62,
+       "old_ps":  7.69,
+       "everyday_ps":  7.14,
+-      "cheapest_ps":  5.28,
++      "cheapest_ps":  5.06,
+       "protein_rank":  2,
+       "is_protein_rank1":  false
+   },
+@@ -3403,7 +3403,7 @@
+       "protein_g":  41,
+       "old_ps":  4.54,
+       "everyday_ps":  4.23,
+-      "cheapest_ps":  3.56,
++      "cheapest_ps":  3.57,
+       "protein_rank":  52,
+       "is_protein_rank1":  false
+   },
+@@ -3415,7 +3415,7 @@
+       "protein_g":  44,
+       "old_ps":  6.34,
+       "everyday_ps":  6.06,
+-      "cheapest_ps":  5.19,
++      "cheapest_ps":  5.2,
+       "protein_rank":  44,
+       "is_protein_rank1":  false
+   },
+@@ -3439,7 +3439,7 @@
+       "protein_g":  26,
+       "old_ps":  3.54,
+       "everyday_ps":  3.15,
+-      "cheapest_ps":  2.89,
++      "cheapest_ps":  2.9,
+       "protein_rank":  105,
+       "is_protein_rank1":  false
+   },
+@@ -3451,7 +3451,7 @@
+       "protein_g":  25,
+       "old_ps":  2.7,
+       "everyday_ps":  2.56,
+-      "cheapest_ps":  1.83,
++      "cheapest_ps":  1.84,
+       "protein_rank":  128,
+       "is_protein_rank1":  false
+   },
+@@ -3487,7 +3487,7 @@
+       "protein_g":  32,
+       "old_ps":  2.52,
+       "everyday_ps":  2.31,
+-      "cheapest_ps":  1.96,
++      "cheapest_ps":  1.93,
+       "protein_rank":  93,
+       "is_protein_rank1":  false
+   },
+@@ -3499,7 +3499,7 @@
+       "protein_g":  26,
+       "old_ps":  2.63,
+       "everyday_ps":  2.43,
+-      "cheapest_ps":  2.19,
++      "cheapest_ps":  2.15,
+       "protein_rank":  109,
+       "is_protein_rank1":  false
+   },
+@@ -3523,7 +3523,7 @@
+       "protein_g":  49,
+       "old_ps":  4.57,
+       "everyday_ps":  4.22,
+-      "cheapest_ps":  3.42,
++      "cheapest_ps":  3.43,
+       "protein_rank":  34,
+       "is_protein_rank1":  false
+   },
+@@ -3535,7 +3535,7 @@
+       "protein_g":  28,
+       "old_ps":  4.2,
+       "everyday_ps":  3.5,
+-      "cheapest_ps":  2.8,
++      "cheapest_ps":  2.79,
+       "protein_rank":  105,
+       "is_protein_rank1":  false
+   },
+@@ -3547,7 +3547,7 @@
+       "protein_g":  44,
+       "old_ps":  3.92,
+       "everyday_ps":  3.25,
+-      "cheapest_ps":  2.01,
++      "cheapest_ps":  2.02,
+       "protein_rank":  51,
+       "is_protein_rank1":  false
+   },
+@@ -3571,7 +3571,7 @@
+       "protein_g":  33,
+       "old_ps":  4.36,
+       "everyday_ps":  3.84,
+-      "cheapest_ps":  2.7,
++      "cheapest_ps":  2.68,
+       "protein_rank":  88,
+       "is_protein_rank1":  false
+   },
+@@ -3583,7 +3583,7 @@
+       "protein_g":  46,
+       "old_ps":  4.63,
+       "everyday_ps":  3.95,
+-      "cheapest_ps":  2.7,
++      "cheapest_ps":  2.66,
+       "protein_rank":  42,
+       "is_protein_rank1":  false
+   },
+@@ -3619,7 +3619,7 @@
+       "protein_g":  31,
+       "old_ps":  2.85,
+       "everyday_ps":  2.47,
+-      "cheapest_ps":  2.08,
++      "cheapest_ps":  2.09,
+       "protein_rank":  83,
+       "is_protein_rank1":  false
+   },
+@@ -3691,7 +3691,7 @@
+       "protein_g":  36,
+       "old_ps":  3.01,
+       "everyday_ps":  2.82,
+-      "cheapest_ps":  2.15,
++      "cheapest_ps":  2.13,
+       "protein_rank":  102,
+       "is_protein_rank1":  false
+   },
+@@ -3703,7 +3703,7 @@
+       "protein_g":  47,
+       "old_ps":  3.55,
+       "everyday_ps":  3.27,
+-      "cheapest_ps":  2.36,
++      "cheapest_ps":  2.33,
+       "protein_rank":  70,
+       "is_protein_rank1":  false
+   },
+@@ -3727,7 +3727,7 @@
+       "protein_g":  29,
+       "old_ps":  3.51,
+       "everyday_ps":  3.29,
+-      "cheapest_ps":  3.03,
++      "cheapest_ps":  3.04,
+       "protein_rank":  93,
+       "is_protein_rank1":  false
+   },
+@@ -3739,7 +3739,7 @@
+       "protein_g":  39,
+       "old_ps":  4.52,
+       "everyday_ps":  5.03,
+-      "cheapest_ps":  3.37,
++      "cheapest_ps":  3.38,
+       "protein_rank":  70,
+       "is_protein_rank1":  false
+   },
+@@ -3799,7 +3799,7 @@
+       "protein_g":  45,
+       "old_ps":  5.26,
+       "everyday_ps":  4.87,
+-      "cheapest_ps":  4.18,
++      "cheapest_ps":  4.19,
+       "protein_rank":  38,
+       "is_protein_rank1":  false
+   },
+@@ -3835,7 +3835,7 @@
+       "protein_g":  39,
+       "old_ps":  4.26,
+       "everyday_ps":  4.03,
+-      "cheapest_ps":  3.54,
++      "cheapest_ps":  3.53,
+       "protein_rank":  59,
+       "is_protein_rank1":  false
+   },
+@@ -3883,7 +3883,7 @@
+       "protein_g":  55,
+       "old_ps":  3.75,
+       "everyday_ps":  3.23,
+-      "cheapest_ps":  2.68,
++      "cheapest_ps":  2.66,
+       "protein_rank":  15,
+       "is_protein_rank1":  false
+   },
+@@ -3907,7 +3907,7 @@
+       "protein_g":  57,
+       "old_ps":  4.87,
+       "everyday_ps":  4.45,
+-      "cheapest_ps":  3.39,
++      "cheapest_ps":  3.38,
+       "protein_rank":  31,
+       "is_protein_rank1":  false
+   },
+@@ -3919,7 +3919,7 @@
+       "protein_g":  34,
+       "old_ps":  6.12,
+       "everyday_ps":  5.71,
+-      "cheapest_ps":  4.26,
++      "cheapest_ps":  4.23,
+       "protein_rank":  83,
+       "is_protein_rank1":  false
+   },
+@@ -3931,7 +3931,7 @@
+       "protein_g":  55,
+       "old_ps":  3.52,
+       "everyday_ps":  3.21,
+-      "cheapest_ps":  3.12,
++      "cheapest_ps":  3.08,
+       "protein_rank":  16,
+       "is_protein_rank1":  false
+   },
+@@ -3943,7 +3943,7 @@
+       "protein_g":  64,
+       "old_ps":  3.25,
+       "everyday_ps":  2.87,
+-      "cheapest_ps":  2.15,
++      "cheapest_ps":  2.14,
+       "protein_rank":  9,
+       "is_protein_rank1":  false
+   },
+@@ -3967,7 +3967,7 @@
+       "protein_g":  52,
+       "old_ps":  4.23,
+       "everyday_ps":  3.94,
+-      "cheapest_ps":  2.83,
++      "cheapest_ps":  2.81,
+       "protein_rank":  56,
+       "is_protein_rank1":  false
+   },
+@@ -3991,7 +3991,7 @@
+       "protein_g":  65,
+       "old_ps":  4,
+       "everyday_ps":  3.76,
+-      "cheapest_ps":  2.65,
++      "cheapest_ps":  2.71,
+       "protein_rank":  5,
+       "is_protein_rank1":  false
+   },
+@@ -4003,7 +4003,7 @@
+       "protein_g":  57,
+       "old_ps":  3.71,
+       "everyday_ps":  3.32,
+-      "cheapest_ps":  2.5,
++      "cheapest_ps":  2.49,
+       "protein_rank":  32,
+       "is_protein_rank1":  false
+   },
+@@ -4015,7 +4015,7 @@
+       "protein_g":  55,
+       "old_ps":  3.96,
+       "everyday_ps":  3.71,
+-      "cheapest_ps":  2.7,
++      "cheapest_ps":  2.66,
+       "protein_rank":  42,
+       "is_protein_rank1":  false
+   },
+@@ -4027,7 +4027,7 @@
+       "protein_g":  59,
+       "old_ps":  3.3,
+       "everyday_ps":  3.42,
+-      "cheapest_ps":  2.53,
++      "cheapest_ps":  2.52,
+       "protein_rank":  22,
+       "is_protein_rank1":  false
+   },
+@@ -4099,7 +4099,7 @@
+       "protein_g":  57,
+       "old_ps":  3.77,
+       "everyday_ps":  3.57,
+-      "cheapest_ps":  2.67,
++      "cheapest_ps":  2.64,
+       "protein_rank":  33,
+       "is_protein_rank1":  false
+   },
+@@ -4171,7 +4171,7 @@
+       "protein_g":  56,
+       "old_ps":  2.38,
+       "everyday_ps":  2.2,
+-      "cheapest_ps":  1.88,
++      "cheapest_ps":  1.89,
+       "protein_rank":  9,
+       "is_protein_rank1":  false
+   },
+@@ -4195,7 +4195,7 @@
+       "protein_g":  67,
+       "old_ps":  3.51,
+       "everyday_ps":  3.35,
+-      "cheapest_ps":  2.5,
++      "cheapest_ps":  2.51,
+       "protein_rank":  2,
+       "is_protein_rank1":  false
+   },
+@@ -4207,7 +4207,7 @@
+       "protein_g":  57,
+       "old_ps":  3.69,
+       "everyday_ps":  3.18,
+-      "cheapest_ps":  2.5,
++      "cheapest_ps":  2.45,
+       "protein_rank":  35,
+       "is_protein_rank1":  false
+   },
+@@ -4243,7 +4243,7 @@
+       "protein_g":  57,
+       "old_ps":  3.25,
+       "everyday_ps":  2.86,
+-      "cheapest_ps":  2.28,
++      "cheapest_ps":  2.25,
+       "protein_rank":  36,
+       "is_protein_rank1":  false
+   },
+@@ -4255,7 +4255,7 @@
+       "protein_g":  36,
+       "old_ps":  3.52,
+       "everyday_ps":  3.43,
+-      "cheapest_ps":  3.12,
++      "cheapest_ps":  3.13,
+       "protein_rank":  75,
+       "is_protein_rank1":  false
+   },
+@@ -4315,7 +4315,7 @@
+       "protein_g":  60,
+       "old_ps":  3.65,
+       "everyday_ps":  3.5,
+-      "cheapest_ps":  2.74,
++      "cheapest_ps":  2.71,
+       "protein_rank":  20,
+       "is_protein_rank1":  false
+   },
+@@ -4339,7 +4339,7 @@
+       "protein_g":  54,
+       "old_ps":  3.71,
+       "everyday_ps":  3.42,
+-      "cheapest_ps":  2.93,
++      "cheapest_ps":  2.86,
+       "protein_rank":  23,
+       "is_protein_rank1":  false
+   },
+@@ -4351,7 +4351,7 @@
+       "protein_g":  58,
+       "old_ps":  4.58,
+       "everyday_ps":  4.01,
+-      "cheapest_ps":  3.03,
++      "cheapest_ps":  3.02,
+       "protein_rank":  25,
+       "is_protein_rank1":  false
+   },
+@@ -4399,7 +4399,7 @@
+       "protein_g":  63,
+       "old_ps":  3.95,
+       "everyday_ps":  3.63,
+-      "cheapest_ps":  3.11,
++      "cheapest_ps":  3.03,
+       "protein_rank":  12,
+       "is_protein_rank1":  false
+   },
+@@ -4411,7 +4411,7 @@
+       "protein_g":  57,
+       "old_ps":  3.99,
+       "everyday_ps":  3.42,
+-      "cheapest_ps":  2.73,
++      "cheapest_ps":  2.65,
+       "protein_rank":  37,
+       "is_protein_rank1":  false
+   },
+@@ -4423,7 +4423,7 @@
+       "protein_g":  44,
+       "old_ps":  3.89,
+       "everyday_ps":  3.46,
+-      "cheapest_ps":  2.51,
++      "cheapest_ps":  2.5,
+       "protein_rank":  52,
+       "is_protein_rank1":  false
+   },
+@@ -4447,7 +4447,7 @@
+       "protein_g":  55,
+       "old_ps":  4.23,
+       "everyday_ps":  4.08,
+-      "cheapest_ps":  3.39,
++      "cheapest_ps":  3.37,
+       "protein_rank":  17,
+       "is_protein_rank1":  false
+   },
+@@ -4459,7 +4459,7 @@
+       "protein_g":  56,
+       "old_ps":  3.72,
+       "everyday_ps":  3.42,
+-      "cheapest_ps":  2.91,
++      "cheapest_ps":  2.89,
+       "protein_rank":  13,
+       "is_protein_rank1":  false
+   },
+@@ -4471,7 +4471,7 @@
+       "protein_g":  42,
+       "old_ps":  2.24,
+       "everyday_ps":  2.02,
+-      "cheapest_ps":  1.77,
++      "cheapest_ps":  1.78,
+       "protein_rank":  58,
+       "is_protein_rank1":  false
+   },
+@@ -4495,7 +4495,7 @@
+       "protein_g":  54,
+       "old_ps":  6.7,
+       "everyday_ps":  6.43,
+-      "cheapest_ps":  5.57,
++      "cheapest_ps":  5.58,
+       "protein_rank":  9,
+       "is_protein_rank1":  false
+   },
+@@ -4579,7 +4579,7 @@
+       "protein_g":  29,
+       "old_ps":  4.3,
+       "everyday_ps":  3.92,
+-      "cheapest_ps":  3.55,
++      "cheapest_ps":  3.54,
+       "protein_rank":  97,
+       "is_protein_rank1":  false
+   },
+@@ -4591,7 +4591,7 @@
+       "protein_g":  40,
+       "old_ps":  4.32,
+       "everyday_ps":  4.13,
+-      "cheapest_ps":  2.74,
++      "cheapest_ps":  2.75,
+       "protein_rank":  55,
+       "is_protein_rank1":  false
+   },
+@@ -4615,7 +4615,7 @@
+       "protein_g":  34,
+       "old_ps":  4.39,
+       "everyday_ps":  4.21,
+-      "cheapest_ps":  3.81,
++      "cheapest_ps":  3.82,
+       "protein_rank":  84,
+       "is_protein_rank1":  false
+   },
+@@ -4627,7 +4627,7 @@
+       "protein_g":  58,
+       "old_ps":  4.04,
+       "everyday_ps":  3.6,
+-      "cheapest_ps":  2.86,
++      "cheapest_ps":  2.87,
+       "protein_rank":  7,
+       "is_protein_rank1":  false
+   },
+@@ -4639,7 +4639,7 @@
+       "protein_g":  63,
+       "old_ps":  3.47,
+       "everyday_ps":  3.16,
+-      "cheapest_ps":  2.53,
++      "cheapest_ps":  2.48,
+       "protein_rank":  13,
+       "is_protein_rank1":  false
+   },
+@@ -4651,7 +4651,7 @@
+       "protein_g":  57,
+       "old_ps":  4.47,
+       "everyday_ps":  4.34,
+-      "cheapest_ps":  3.12,
++      "cheapest_ps":  3.13,
+       "protein_rank":  2,
+       "is_protein_rank1":  false
+   },
+@@ -4663,7 +4663,7 @@
+       "protein_g":  54,
+       "old_ps":  5.28,
+       "everyday_ps":  5.04,
+-      "cheapest_ps":  4.16,
++      "cheapest_ps":  4.17,
+       "protein_rank":  6,
+       "is_protein_rank1":  false
+   },
+@@ -4687,7 +4687,7 @@
+       "protein_g":  25,
+       "old_ps":  4.08,
+       "everyday_ps":  3.55,
+-      "cheapest_ps":  2.9,
++      "cheapest_ps":  2.91,
+       "protein_rank":  116,
+       "is_protein_rank1":  false
+   },
+@@ -4711,7 +4711,7 @@
+       "protein_g":  65,
+       "old_ps":  3.99,
+       "everyday_ps":  3.82,
+-      "cheapest_ps":  2.77,
++      "cheapest_ps":  2.75,
+       "protein_rank":  8,
+       "is_protein_rank1":  false
+   },
+@@ -4723,7 +4723,7 @@
+       "protein_g":  53,
+       "old_ps":  3.86,
+       "everyday_ps":  3.72,
+-      "cheapest_ps":  2.58,
++      "cheapest_ps":  2.59,
+       "protein_rank":  51,
+       "is_protein_rank1":  false
+   },
+@@ -4747,7 +4747,7 @@
+       "protein_g":  55,
+       "old_ps":  7.98,
+       "everyday_ps":  7.74,
+-      "cheapest_ps":  7.07,
++      "cheapest_ps":  7.06,
+       "protein_rank":  8,
+       "is_protein_rank1":  false
+   },
+@@ -4759,7 +4759,7 @@
+       "protein_g":  44,
+       "old_ps":  6.04,
+       "everyday_ps":  5.45,
+-      "cheapest_ps":  4.58,
++      "cheapest_ps":  4.56,
+       "protein_rank":  46,
+       "is_protein_rank1":  false
+   },
+@@ -4771,7 +4771,7 @@
+       "protein_g":  46,
+       "old_ps":  3.45,
+       "everyday_ps":  3.42,
+-      "cheapest_ps":  2.28,
++      "cheapest_ps":  2.27,
+       "protein_rank":  73,
+       "is_protein_rank1":  false
+   },
+@@ -4783,7 +4783,7 @@
+       "protein_g":  45,
+       "old_ps":  3.09,
+       "everyday_ps":  2.91,
+-      "cheapest_ps":  2.02,
++      "cheapest_ps":  2.03,
+       "protein_rank":  46,
+       "is_protein_rank1":  false
+   },
+@@ -4819,7 +4819,7 @@
+       "protein_g":  26,
+       "old_ps":  2.47,
+       "everyday_ps":  2.41,
+-      "cheapest_ps":  1.88,
++      "cheapest_ps":  1.83,
+       "protein_rank":  111,
+       "is_protein_rank1":  false
+   },
+@@ -4855,7 +4855,7 @@
+       "protein_g":  32,
+       "old_ps":  5.58,
+       "everyday_ps":  5.31,
+-      "cheapest_ps":  3.81,
++      "cheapest_ps":  3.82,
+       "protein_rank":  90,
+       "is_protein_rank1":  false
+   },
+@@ -4879,7 +4879,7 @@
+       "protein_g":  49,
+       "old_ps":  6.42,
+       "everyday_ps":  5.93,
+-      "cheapest_ps":  4.9,
++      "cheapest_ps":  4.91,
+       "protein_rank":  24,
+       "is_protein_rank1":  false
+   },
+@@ -4927,7 +4927,7 @@
+       "protein_g":  54,
+       "old_ps":  5.41,
+       "everyday_ps":  4.64,
+-      "cheapest_ps":  4.15,
++      "cheapest_ps":  3.75,
+       "protein_rank":  46,
+       "is_protein_rank1":  false
+   },
+@@ -4963,7 +4963,7 @@
+       "protein_g":  31,
+       "old_ps":  5.89,
+       "everyday_ps":  5.13,
+-      "cheapest_ps":  4.55,
++      "cheapest_ps":  4.36,
+       "protein_rank":  23,
+       "is_protein_rank1":  false
+   },
+@@ -4975,7 +4975,7 @@
+       "protein_g":  30,
+       "old_ps":  4.09,
+       "everyday_ps":  3.4,
+-      "cheapest_ps":  3.15,
++      "cheapest_ps":  2.8,
+       "protein_rank":  117,
+       "is_protein_rank1":  false
+   },
+@@ -4987,7 +4987,7 @@
+       "protein_g":  37,
+       "old_ps":  3.83,
+       "everyday_ps":  3.46,
+-      "cheapest_ps":  3.21,
++      "cheapest_ps":  3.03,
+       "protein_rank":  78,
+       "is_protein_rank1":  false
+   },
+@@ -4999,7 +4999,7 @@
+       "protein_g":  34,
+       "old_ps":  3.68,
+       "everyday_ps":  3.51,
+-      "cheapest_ps":  2.7,
++      "cheapest_ps":  2.69,
+       "protein_rank":  110,
+       "is_protein_rank1":  false
+   },
+@@ -5011,7 +5011,7 @@
+       "protein_g":  37,
+       "old_ps":  4.47,
+       "everyday_ps":  4.04,
+-      "cheapest_ps":  3.68,
++      "cheapest_ps":  3.63,
+       "protein_rank":  9,
+       "is_protein_rank1":  false
+   },
+@@ -5023,7 +5023,7 @@
+       "protein_g":  26,
+       "old_ps":  4.78,
+       "everyday_ps":  4.29,
+-      "cheapest_ps":  3.63,
++      "cheapest_ps":  3.36,
+       "protein_rank":  125,
+       "is_protein_rank1":  false
+   },
+@@ -5035,7 +5035,7 @@
+       "protein_g":  42,
+       "old_ps":  5.51,
+       "everyday_ps":  5.2,
+-      "cheapest_ps":  4.56,
++      "cheapest_ps":  4.43,
+       "protein_rank":  82,
+       "is_protein_rank1":  false
+   },
+@@ -5059,7 +5059,7 @@
+       "protein_g":  31,
+       "old_ps":  4.36,
+       "everyday_ps":  4.08,
+-      "cheapest_ps":  3.68,
++      "cheapest_ps":  3.48,
+       "protein_rank":  96,
+       "is_protein_rank1":  false
+   },
+@@ -5071,7 +5071,7 @@
+       "protein_g":  45,
+       "old_ps":  3.87,
+       "everyday_ps":  3.5,
+-      "cheapest_ps":  2.82,
++      "cheapest_ps":  2.77,
+       "protein_rank":  75,
+       "is_protein_rank1":  false
+   },
+@@ -5083,7 +5083,7 @@
+       "protein_g":  50,
+       "old_ps":  4.96,
+       "everyday_ps":  4.62,
+-      "cheapest_ps":  4.19,
++      "cheapest_ps":  4.14,
+       "protein_rank":  14,
+       "is_protein_rank1":  false
+   },
+@@ -5095,7 +5095,7 @@
+       "protein_g":  30,
+       "old_ps":  4.2,
+       "everyday_ps":  3.81,
+-      "cheapest_ps":  2.98,
++      "cheapest_ps":  2.95,
+       "protein_rank":  118,
+       "is_protein_rank1":  false
+   },
+@@ -5107,7 +5107,7 @@
+       "protein_g":  58,
+       "old_ps":  4.07,
+       "everyday_ps":  3.83,
+-      "cheapest_ps":  2.61,
++      "cheapest_ps":  2.59,
+       "protein_rank":  26,
+       "is_protein_rank1":  false
+   },
+@@ -5119,7 +5119,7 @@
+       "protein_g":  30,
+       "old_ps":  4.59,
+       "everyday_ps":  4.55,
+-      "cheapest_ps":  3.9,
++      "cheapest_ps":  4.05,
+       "protein_rank":  95,
+       "is_protein_rank1":  false
+   },
+@@ -5131,7 +5131,7 @@
+       "protein_g":  40,
+       "old_ps":  4.57,
+       "everyday_ps":  4.35,
+-      "cheapest_ps":  3.1,
++      "cheapest_ps":  3.11,
+       "protein_rank":  40,
+       "is_protein_rank1":  false
+   },
+@@ -5143,7 +5143,7 @@
+       "protein_g":  33,
+       "old_ps":  4.3,
+       "everyday_ps":  4.17,
+-      "cheapest_ps":  3.56,
++      "cheapest_ps":  3.57,
+       "protein_rank":  74,
+       "is_protein_rank1":  false
+   },
+@@ -5179,7 +5179,7 @@
+       "protein_g":  29,
+       "old_ps":  5.04,
+       "everyday_ps":  4.9,
+-      "cheapest_ps":  4.23,
++      "cheapest_ps":  4.22,
+       "protein_rank":  94,
+       "is_protein_rank1":  false
+   },
+@@ -5203,7 +5203,7 @@
+       "protein_g":  34,
+       "old_ps":  3.4,
+       "everyday_ps":  3.1,
+-      "cheapest_ps":  2.57,
++      "cheapest_ps":  2.58,
+       "protein_rank":  69,
+       "is_protein_rank1":  false
+   },
+@@ -5215,7 +5215,7 @@
+       "protein_g":  26,
+       "old_ps":  3.63,
+       "everyday_ps":  3.28,
+-      "cheapest_ps":  2.71,
++      "cheapest_ps":  2.68,
+       "protein_rank":  107,
+       "is_protein_rank1":  false
+   },
+@@ -5239,7 +5239,7 @@
+       "protein_g":  34,
+       "old_ps":  3.89,
+       "everyday_ps":  3.91,
+-      "cheapest_ps":  3.3,
++      "cheapest_ps":  3.27,
+       "protein_rank":  70,
+       "is_protein_rank1":  false
+   },
+@@ -5263,7 +5263,7 @@
+       "protein_g":  56,
+       "old_ps":  4.99,
+       "everyday_ps":  4.66,
+-      "cheapest_ps":  3.93,
++      "cheapest_ps":  3.94,
+       "protein_rank":  4,
+       "is_protein_rank1":  false
+   },
+@@ -5275,7 +5275,7 @@
+       "protein_g":  37,
+       "old_ps":  4.13,
+       "everyday_ps":  3.86,
+-      "cheapest_ps":  3.02,
++      "cheapest_ps":  3.03,
+       "protein_rank":  50,
+       "is_protein_rank1":  false
+   },
+@@ -5323,7 +5323,7 @@
+       "protein_g":  30,
+       "old_ps":  4.99,
+       "everyday_ps":  4.5,
+-      "cheapest_ps":  3.94,
++      "cheapest_ps":  3.82,
+       "protein_rank":  18,
+       "is_protein_rank1":  false
+   },
+@@ -5335,7 +5335,7 @@
+       "protein_g":  25,
+       "old_ps":  2.9,
+       "everyday_ps":  2.45,
+-      "cheapest_ps":  2.26,
++      "cheapest_ps":  2.22,
+       "protein_rank":  117,
+       "is_protein_rank1":  false
+   },
+@@ -5347,7 +5347,7 @@
+       "protein_g":  43,
+       "old_ps":  3.65,
+       "everyday_ps":  3.62,
+-      "cheapest_ps":  3.37,
++      "cheapest_ps":  3.38,
+       "protein_rank":  27,
+       "is_protein_rank1":  false
+   },
+@@ -5383,7 +5383,7 @@
+       "protein_g":  42,
+       "old_ps":  6,
+       "everyday_ps":  5.89,
+-      "cheapest_ps":  4.16,
++      "cheapest_ps":  4.12,
+       "protein_rank":  33,
+       "is_protein_rank1":  false
+   },
+@@ -5395,7 +5395,7 @@
+       "protein_g":  36,
+       "old_ps":  3.62,
+       "everyday_ps":  3.56,
+-      "cheapest_ps":  2.89,
++      "cheapest_ps":  2.87,
+       "protein_rank":  10,
+       "is_protein_rank1":  false
+   },
+@@ -5419,7 +5419,7 @@
+       "protein_g":  41,
+       "old_ps":  4.45,
+       "everyday_ps":  4.12,
+-      "cheapest_ps":  3.56,
++      "cheapest_ps":  3.52,
+       "protein_rank":  37,
+       "is_protein_rank1":  false
+   },
+@@ -5443,7 +5443,7 @@
+       "protein_g":  38,
+       "old_ps":  4.01,
+       "everyday_ps":  3.66,
+-      "cheapest_ps":  3.19,
++      "cheapest_ps":  3.17,
+       "protein_rank":  45,
+       "is_protein_rank1":  false
+   },
+@@ -5455,7 +5455,7 @@
+       "protein_g":  26,
+       "old_ps":  2.58,
+       "everyday_ps":  2.37,
+-      "cheapest_ps":  2.1,
++      "cheapest_ps":  2.11,
+       "protein_rank":  108,
+       "is_protein_rank1":  false
+   },
+@@ -5467,7 +5467,7 @@
+       "protein_g":  37,
+       "old_ps":  4.44,
+       "everyday_ps":  4.12,
+-      "cheapest_ps":  3.61,
++      "cheapest_ps":  3.56,
+       "protein_rank":  51,
+       "is_protein_rank1":  false
+   },
+@@ -5479,7 +5479,7 @@
+       "protein_g":  57,
+       "old_ps":  5.04,
+       "everyday_ps":  4.75,
+-      "cheapest_ps":  4.07,
++      "cheapest_ps":  4.08,
+       "protein_rank":  3,
+       "is_protein_rank1":  false
+   },
+@@ -5491,7 +5491,7 @@
+       "protein_g":  55,
+       "old_ps":  4.86,
+       "everyday_ps":  4.59,
+-      "cheapest_ps":  4.29,
++      "cheapest_ps":  4.3,
+       "protein_rank":  5,
+       "is_protein_rank1":  false
+   },
+@@ -5503,7 +5503,7 @@
+       "protein_g":  32,
+       "old_ps":  3.13,
+       "everyday_ps":  2.86,
+-      "cheapest_ps":  2.52,
++      "cheapest_ps":  2.53,
+       "protein_rank":  78,
+       "is_protein_rank1":  false
+   },
+@@ -5515,7 +5515,7 @@
+       "protein_g":  38,
+       "old_ps":  3.18,
+       "everyday_ps":  2.99,
+-      "cheapest_ps":  2.73,
++      "cheapest_ps":  2.71,
+       "protein_rank":  46,
+       "is_protein_rank1":  false
+   },
+@@ -5527,7 +5527,7 @@
+       "protein_g":  39,
+       "old_ps":  4.27,
+       "everyday_ps":  4.02,
+-      "cheapest_ps":  2.97,
++      "cheapest_ps":  2.98,
+       "protein_rank":  42,
+       "is_protein_rank1":  false
+   },
+@@ -5539,7 +5539,7 @@
+       "protein_g":  39,
+       "old_ps":  3.94,
+       "everyday_ps":  3.77,
+-      "cheapest_ps":  2.78,
++      "cheapest_ps":  2.76,
+       "protein_rank":  43,
+       "is_protein_rank1":  false
+   },
+@@ -5575,7 +5575,7 @@
+       "protein_g":  47,
+       "old_ps":  3.26,
+       "everyday_ps":  3.12,
+-      "cheapest_ps":  2.99,
++      "cheapest_ps":  2.98,
+       "protein_rank":  17,
+       "is_protein_rank1":  false
+   },
+@@ -5587,7 +5587,7 @@
+       "protein_g":  47,
+       "old_ps":  6.4,
+       "everyday_ps":  5.7,
+-      "cheapest_ps":  4.32,
++      "cheapest_ps":  4.3,
+       "protein_rank":  18,
+       "is_protein_rank1":  false
+   },
+@@ -5611,7 +5611,7 @@
+       "protein_g":  52,
+       "old_ps":  4.87,
+       "everyday_ps":  4.57,
+-      "cheapest_ps":  3.96,
++      "cheapest_ps":  3.97,
+       "protein_rank":  9,
+       "is_protein_rank1":  false
+   },
+@@ -5635,7 +5635,7 @@
+       "protein_g":  32,
+       "old_ps":  3.84,
+       "everyday_ps":  3.36,
+-      "cheapest_ps":  2.91,
++      "cheapest_ps":  2.85,
+       "protein_rank":  79,
+       "is_protein_rank1":  false
+   },
+@@ -5659,7 +5659,7 @@
+       "protein_g":  26,
+       "old_ps":  4.52,
+       "everyday_ps":  4.03,
+-      "cheapest_ps":  3.32,
++      "cheapest_ps":  3.29,
+       "protein_rank":  109,
+       "is_protein_rank1":  false
+   },
+@@ -5719,7 +5719,7 @@
+       "protein_g":  26,
+       "old_ps":  4.18,
+       "everyday_ps":  3.96,
+-      "cheapest_ps":  3.18,
++      "cheapest_ps":  3.16,
+       "protein_rank":  110,
+       "is_protein_rank1":  false
+   },
+@@ -5743,7 +5743,7 @@
+       "protein_g":  38,
+       "old_ps":  3.55,
+       "everyday_ps":  3.24,
+-      "cheapest_ps":  2.78,
++      "cheapest_ps":  2.77,
+       "protein_rank":  47,
+       "is_protein_rank1":  false
+   },
+@@ -5755,7 +5755,7 @@
+       "protein_g":  37,
+       "old_ps":  3.64,
+       "everyday_ps":  3.12,
+-      "cheapest_ps":  2.26,
++      "cheapest_ps":  2.27,
+       "protein_rank":  54,
+       "is_protein_rank1":  false
+   },
+@@ -5779,7 +5779,7 @@
+       "protein_g":  34,
+       "old_ps":  3.99,
+       "everyday_ps":  3.66,
+-      "cheapest_ps":  3.05,
++      "cheapest_ps":  3.04,
+       "protein_rank":  72,
+       "is_protein_rank1":  false
+   },
+@@ -5791,7 +5791,7 @@
+       "protein_g":  46,
+       "old_ps":  5.19,
+       "everyday_ps":  4.93,
+-      "cheapest_ps":  3.9,
++      "cheapest_ps":  3.87,
+       "protein_rank":  20,
+       "is_protein_rank1":  false
+   },
+@@ -5827,7 +5827,7 @@
+       "protein_g":  31,
+       "old_ps":  4.11,
+       "everyday_ps":  3.74,
+-      "cheapest_ps":  2.84,
++      "cheapest_ps":  2.82,
+       "protein_rank":  84,
+       "is_protein_rank1":  false
+   },
+@@ -5851,7 +5851,7 @@
+       "protein_g":  42,
+       "old_ps":  4.86,
+       "everyday_ps":  4.59,
+-      "cheapest_ps":  3.26,
++      "cheapest_ps":  3.27,
+       "protein_rank":  35,
+       "is_protein_rank1":  false
+   },
+@@ -5863,7 +5863,7 @@
+       "protein_g":  43,
+       "old_ps":  4.61,
+       "everyday_ps":  4.18,
+-      "cheapest_ps":  3.89,
++      "cheapest_ps":  3.8,
+       "protein_rank":  30,
+       "is_protein_rank1":  false
+   },
+@@ -5899,7 +5899,7 @@
+       "protein_g":  25,
+       "old_ps":  3.36,
+       "everyday_ps":  3.2,
+-      "cheapest_ps":  2.92,
++      "cheapest_ps":  2.9,
+       "protein_rank":  118,
+       "is_protein_rank1":  false
+   },
+@@ -5923,7 +5923,7 @@
+       "protein_g":  50,
+       "old_ps":  5.85,
+       "everyday_ps":  5.44,
+-      "cheapest_ps":  4.57,
++      "cheapest_ps":  4.58,
+       "protein_rank":  23,
+       "is_protein_rank1":  false
+   },
+@@ -5935,7 +5935,7 @@
+       "protein_g":  29,
+       "old_ps":  4.05,
+       "everyday_ps":  4.03,
+-      "cheapest_ps":  3.01,
++      "cheapest_ps":  3,
+       "protein_rank":  102,
+       "is_protein_rank1":  false
+   },
+@@ -5947,7 +5947,7 @@
+       "protein_g":  49,
+       "old_ps":  4.95,
+       "everyday_ps":  4.66,
+-      "cheapest_ps":  3.92,
++      "cheapest_ps":  3.93,
+       "protein_rank":  25,
+       "is_protein_rank1":  false
+   },
+@@ -5959,7 +5959,7 @@
+       "protein_g":  46,
+       "old_ps":  5.11,
+       "everyday_ps":  4.77,
+-      "cheapest_ps":  4.09,
++      "cheapest_ps":  4.1,
+       "protein_rank":  34,
+       "is_protein_rank1":  false
+   },
+@@ -5970,8 +5970,8 @@
+       "protein":  "beef",
+       "protein_g":  33,
+       "old_ps":  6.83,
+-      "everyday_ps":  7.36,
+-      "cheapest_ps":  5.69,
++      "everyday_ps":  6.3,
++      "cheapest_ps":  6.3,
+       "protein_rank":  86,
+       "is_protein_rank1":  false
+   },
+@@ -5983,7 +5983,7 @@
+       "protein_g":  38,
+       "old_ps":  5.97,
+       "everyday_ps":  6.28,
+-      "cheapest_ps":  4.89,
++      "cheapest_ps":  4.84,
+       "protein_rank":  17,
+       "is_protein_rank1":  false
+   },
+@@ -5995,7 +5995,7 @@
+       "protein_g":  27,
+       "old_ps":  4.9,
+       "everyday_ps":  4.77,
+-      "cheapest_ps":  3.92,
++      "cheapest_ps":  3.93,
+       "protein_rank":  122,
+       "is_protein_rank1":  false
+   },
+@@ -6007,7 +6007,7 @@
+       "protein_g":  39,
+       "old_ps":  3.19,
+       "everyday_ps":  2.78,
+-      "cheapest_ps":  2.06,
++      "cheapest_ps":  2.02,
+       "protein_rank":  92,
+       "is_protein_rank1":  false
+   },
+@@ -6019,7 +6019,7 @@
+       "protein_g":  58,
+       "old_ps":  5.03,
+       "everyday_ps":  4.74,
+-      "cheapest_ps":  3.67,
++      "cheapest_ps":  3.58,
+       "protein_rank":  27,
+       "is_protein_rank1":  false
+   },
+@@ -6031,7 +6031,7 @@
+       "protein_g":  65,
+       "old_ps":  5.98,
+       "everyday_ps":  5.69,
+-      "cheapest_ps":  4.36,
++      "cheapest_ps":  4.33,
+       "protein_rank":  2,
+       "is_protein_rank1":  false
+   },
+@@ -6043,7 +6043,7 @@
+       "protein_g":  45,
+       "old_ps":  3.66,
+       "everyday_ps":  3.92,
+-      "cheapest_ps":  2.97,
++      "cheapest_ps":  2.93,
+       "protein_rank":  47,
+       "is_protein_rank1":  false
+   },
+@@ -6055,7 +6055,7 @@
+       "protein_g":  47,
+       "old_ps":  2.74,
+       "everyday_ps":  2.34,
+-      "cheapest_ps":  1.5,
++      "cheapest_ps":  1.49,
+       "protein_rank":  40,
+       "is_protein_rank1":  false
+   },
+@@ -6067,7 +6067,7 @@
+       "protein_g":  29,
+       "old_ps":  5.1,
+       "everyday_ps":  5.34,
+-      "cheapest_ps":  4.6,
++      "cheapest_ps":  4.44,
+       "protein_rank":  19,
+       "is_protein_rank1":  false
+   },
+@@ -6079,7 +6079,7 @@
+       "protein_g":  41,
+       "old_ps":  4.79,
+       "everyday_ps":  4.48,
+-      "cheapest_ps":  3.89,
++      "cheapest_ps":  3.88,
+       "protein_rank":  38,
+       "is_protein_rank1":  false
+   },
+@@ -6091,7 +6091,7 @@
+       "protein_g":  50,
+       "old_ps":  3.89,
+       "everyday_ps":  3.7,
+-      "cheapest_ps":  2.71,
++      "cheapest_ps":  2.68,
+       "protein_rank":  64,
+       "is_protein_rank1":  false
+   },
+@@ -6103,7 +6103,7 @@
+       "protein_g":  31,
+       "old_ps":  4.51,
+       "everyday_ps":  4.31,
+-      "cheapest_ps":  3.14,
++      "cheapest_ps":  3.08,
+       "protein_rank":  91,
+       "is_protein_rank1":  false
+   },
+@@ -6139,7 +6139,7 @@
+       "protein_g":  39,
+       "old_ps":  3.19,
+       "everyday_ps":  3,
+-      "cheapest_ps":  2.31,
++      "cheapest_ps":  2.3,
+       "protein_rank":  93,
+       "is_protein_rank1":  false
+   },
+@@ -6151,7 +6151,7 @@
+       "protein_g":  26,
+       "old_ps":  2.49,
+       "everyday_ps":  2.54,
+-      "cheapest_ps":  1.92,
++      "cheapest_ps":  1.93,
+       "protein_rank":  112,
+       "is_protein_rank1":  false
+   }
+diff --git a/meal-prep/recipes-db.json b/meal-prep/recipes-db.json
+index 2ad9a1d3..67d9059a 100644
+--- a/meal-prep/recipes-db.json
++++ b/meal-prep/recipes-db.json
+@@ -30469,7 +30469,7 @@
+                     {
+                         "name":  "Chicken with 40 Cloves of Garlic",
+                         "slug":  "chicken-40-cloves-garlic",
+-                        "visibility":"public",
++                        "visibility":"paid",
+                         "cuisine":  "French",
+                         "servings":  14,
+                         "ingredients":  [
+@@ -32056,7 +32056,7 @@
+                     {
+                         "name":  "Chicken Pot Pie Casserole with Biscuits",
+                         "slug":  "chicken-pot-pie-biscuit-casserole",
+-                        "visibility":  "paid",
++                        "visibility":"public",
+                         "cuisine":  "American",
+                         "servings":  14,
+                         "ingredients":  [

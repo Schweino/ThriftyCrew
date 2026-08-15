@@ -5,7 +5,7 @@
 # Data: newest out\comparison-<week>.json (prefer verified-<week>.json when at least as fresh,
 # same rule as build-deals-page.ps1) + out\recipe-board.json (weekly board wins on id collisions).
 # Output: sams-data.js  ->  splice into sams-tool-template.html at //__DATA__
-#         -> C:\Codex\ThriftyCrew\sams-worth-it-tool.html
+#         -> C:\Codex\ThriftyCrew\site\tools\sams-worth-it-tool.html
 $ErrorActionPreference = 'Stop'
 $root = 'C:\Codex\ThriftyCrew\grocery'
 $outDir = Join-Path $root 'out'
@@ -82,7 +82,7 @@ $tplPath = Join-Path $root 'sams-tool-template.html'
 if (Test-Path $tplPath) {
   $tpl = Get-Content $tplPath -Raw
   $html = $tpl.Replace('//__DATA__', $sb.ToString())
-  $toolPath = 'C:\Codex\ThriftyCrew\sams-worth-it-tool.html'
+  $toolPath = 'C:\Codex\ThriftyCrew\site\tools\sams-worth-it-tool.html'
   [IO.File]::WriteAllText($toolPath, $html, (New-Object System.Text.UTF8Encoding($false)))
   Write-Host ("WROTE " + $toolPath + "  (" + [math]::Round((Get-Item $toolPath).Length/1KB,1) + " KB)")
 } else {

@@ -2,7 +2,7 @@
 # Combines: the 29 weekly commodities (commodities.json + categories.json), the recipe-board
 # everyday items (recipe-board.json), record lows (price-history.json), trend-page slugs,
 # and bakes current feed prices as the offline fallback. Output: staples-data.js
-# Splice into my-staples-template.html at //__DATA__ -> C:\Codex\ThriftyCrew\my-staples-tool.html
+# Splice into my-staples-template.html at //__DATA__ -> C:\Codex\ThriftyCrew\site\tools\my-staples-tool.html
 $ErrorActionPreference = 'Stop'
 $root = 'C:\Codex\ThriftyCrew\grocery'
 # prefer the freshly-exported local feed (has the newest schema, e.g. sale_end) over the edge-cached worker copy

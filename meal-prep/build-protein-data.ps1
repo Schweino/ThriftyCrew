@@ -1,6 +1,6 @@
 # build-protein-data.ps1
 # Rebuilds the embedded JS data block for the Cheapest Protein leaderboard tool
-# (C:\Codex\ThriftyCrew\protein-leaderboard-tool.html).
+# (C:\Codex\ThriftyCrew\site\tools\protein-leaderboard-tool.html).
 #
 # Reads:
 #   - food-macros-db.json   (protein_g / serving_grams per item, label-accurate)

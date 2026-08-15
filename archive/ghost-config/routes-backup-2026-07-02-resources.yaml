@@ -1,0 +1,30 @@
+routes:
+  /financial-lessons/:
+    controller: channel
+    filter: 'tag:financial-lessons'
+    data: tag.financial-lessons
+    template: tag
+  /meal-prep/:
+    controller: channel
+    filter: 'tag:meal-prep'
+    data: tag.meal-prep
+    template: tag
+  /books/:
+    controller: channel
+    filter: 'tag:books'
+    data: tag.books
+    template: tag
+  /resources/:
+    controller: channel
+    filter: 'tag:resources'
+    data: tag.resources
+    template: tag
+
+collections:
+  /:
+    permalink: /{slug}/
+    template: index
+
+taxonomies:
+  tag: /tag/{slug}/
+  author: /author/{slug}/

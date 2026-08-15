@@ -68,7 +68,7 @@ if ($SelfTest) {
   T 'the shipped manifest parses and maps every local *-tool.html' `
     ($(if (Test-Path $manifestPath) {
         $m = @((Get-Content $manifestPath -Raw | ConvertFrom-Json).tools)
-        $localCount = @(Get-ChildItem (Join-Path $repo '*-tool.html') -File).Count
+        $localCount = @(Get-ChildItem (Join-Path $repo 'site\tools\*-tool.html') -File).Count
         ($m.Count -gt 0 -and $m.Count -eq $localCount)
       } else { $false })) 'manifest missing, unparseable, or out of step with the local sources'
 
@@ -190,7 +190,7 @@ if ($Discover) {
   Write-Output ("discover: {0} html-card post(s) fetched" -f $bodies.Count)
 
   $map = @()
-  foreach ($lf in (Get-ChildItem (Join-Path $repo '*-tool.html') -File | Sort-Object Name)) {
+  foreach ($lf in (Get-ChildItem (Join-Path $repo 'site\tools\*-tool.html') -File | Sort-Object Name)) {
     $local = [IO.File]::ReadAllText($lf.FullName)
     $probe = @()
     for ($i = 1; $i -le 7; $i++) {

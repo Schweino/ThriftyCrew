@@ -4,7 +4,7 @@
 #   2) Bulk spread: Sam's Club bulk price vs the average non-bulk store price, from the newest out\comparison-*.json
 # Emits out\freezer-data.json plus a ready-to-paste JS constants block.
 # When the history deepens (more weeks_on_record), rerun this and swap the DATA constant in
-# C:\Codex\ThriftyCrew\freezer-math-tool.html with the emitted block.
+# C:\Codex\ThriftyCrew\site\tools\freezer-math-tool.html with the emitted block.
 
 $ErrorActionPreference = 'Stop'
 $root = 'C:\Codex\ThriftyCrew\grocery'

@@ -20,7 +20,7 @@
 # not, so the only copy of a script running on every page of the site was one machine's disk plus a
 # minified blob inside Ghost settings. Same class as lib\ above.
 
-!/join-interstitial.html
+!/site/
 # The GPU semantic sidecar: SOURCE is tracked, the environment is not. .venv is several GB of wheels and
 # the model weights are another ~4.5 GB pulled from HuggingFace on first run; both are reproducible from
 # requirements.txt and the pinned model ids in lib_match.py. data\ and out\ are derived from the feeds.
@@ -39,24 +39,6 @@
 # The member-tool SOURCES and the build scripts that publish them. Same hole as lib\ and the interstitial:
 # these run on the live site, several are the only copy in existence, and none of them were versioned
 # while unrelated tool HTML at the same path was. Swept in 2026-08-01.
-!/budget-tracker-tool.html
-!/compound-interest-tool.html
-!/debt-payoff-tool.html
-!/freezer-math-tool.html
-!/meal-plan-builder-tool.html
-!/my-crew-template.html
-!/my-staples-tool.html
-!/price-widget-tool.html
-!/sams-worth-it-tool.html
-!/savings-goal-tool.html
-!/subscription-tracker-tool.html
-!/start-here.new.html
-!/build-budget-tracker.ps1
-!/build-compound-calculator.ps1
-!/build-debt-calculator.ps1
-!/build-mycrew.ps1
-!/build-new-foot.ps1
-!/build-savings-tracker.ps1
 # the agent prompts + scheduled-task SKILLs that DRIVE the estate, plus the audit that proves the backup is
 # current. They live under C:\Codex\.claude and C:\Users\Owner\.claude, neither of which is a repository, so
 # without this they were the only unversioned code in the system (2026-07-31).
@@ -66,8 +48,6 @@
 !/worker/
 !/wrangler.jsonc
 !/platform/
-!/meal-plan-builder-template.html
-!/build-meal-planner.ps1
 # THE 52-WEEK CURRICULUM AND ITS SUPPORTING DOCS (2026-08-08). lessons\ holds the local ORIGINAL of 55
 # pages that are live right now - the sitemap serves every one of them as week-N-<slug>. They were ignored
 # by the /* rule above and therefore existed on exactly one machine's disk, unversioned, while the tracked
@@ -76,26 +56,19 @@
 # matched repo BASENAMES (lesson-04-the-gap-is-the-score) against Ghost SLUGS (week-4-the-gap-is-the-score)
 # and scored zero, so 55 pages with a perfectly good local source were classified as Ghost-only. A
 # basename-equality scan cannot answer that question when the publisher renames.
-!/lessons/
+!/content/
 # CURRICULUM.md is the plan those 55 lessons implement and 13 of them cite it by name; STYLE-GUIDE.md is
 # the voice spec CURRICULUM.md and README.md both point at. Ignoring the spec while tracking nothing that
 # explains it is how the WHY gets lost - the same reason design\ is tracked.
-!/CURRICULUM.md
-!/STYLE-GUIDE.md
+!/docs/
 # The four downloadable workbooks. Each is READ (not generated) by a build-*.ps1 that is already tracked
 # above, so a fresh clone had the publisher and not the payload - the exact shape of the lib\ hole.
-!/Simple-Money-Playbook-Budget-Tracker.xlsx
-!/Simple-Money-Playbook-Compound-Calculator.xlsx
-!/Simple-Money-Playbook-Debt-Payoff-Calculator.xlsx
-!/Simple-Money-Playbook-Savings-Goal-Tracker.xlsx
 # get-starthere.ps1 reads this for the /start-here/ Ghost post id. 49 bytes of durable state that cannot
 # be recomputed from anything else in the repo.
-!/_starthere.id.txt
 # brand\ is the logo, cover art and social imagery - the visual identity, in one place, with no other copy.
 !/brand/
 # The pre-Ghost Substack archive: 71 posts, the published form of the same content lessons\ now carries
 # (word-for-word overlap on the weeks that exist in both). Superseded, never regenerable, cheap to keep.
-!/substack/
 
 # --- top-level paths left OUT of the allow-list ON PURPOSE. Recorded because the /* rule makes "ignored"
 #     and "nobody thought about it" look identical from the outside, which is how lessons\ and brand\ went
@@ -195,9 +168,9 @@ Thumbs.db
 .DS_Store
 grocery/out/captures/
 grocery/logs-archive/
-!/site-backups/
-site-backups/*
-!site-backups/ghost-export-*.zip
+!/archive/
+/archive/site-backups/*
+!/archive/site-backups/ghost-export-*.zip
 
 # tool-generated timestamped backups
 *.backup-*.json
@@ -241,8 +214,8 @@ site-backups/*
 # -> ffmpeg) plus the brand layout, it is scheduled to run every day, and it lived on one machine's disk.
 # reel-state.json is durable state - lose it and the rotation starts repeating recipes. out\ is rendered
 # MP4s and voice samples, reproducible from the specs and the board.
-!/reels/
-/reels/out/
+!/media/
+/media/reels/out/
 
 # Grocery platform v3: source is tracked; generated dependencies, builds, local
 # D1 state, coverage and evidence are machine-local.
@@ -266,3 +239,28 @@ site-backups/*
 meal-prep/db/thriftycrew.db
 meal-prep/db/thriftycrew.db.building
 meal-prep/db/*.db-journal
+# ---- 2026-08-15 RESTRUCTURE ------------------------------------------------------------------------------
+# The root moved from 46 loose files into site\ content\ docs\ media\ archive\. Every allow rule above that
+# named a root file was rewritten to the directory that now holds it. THIS FILE IS DENY-BY-DEFAULT from /*
+# on line 3: a new top-level directory is IGNORED, not untracked, so it never shows up in `git status` and
+# the guard that watches status is blind to it by construction. That is exactly how lessons\, brand\ and
+# substack\ sat unversioned for two months while the live site depended on them. Any new top level needs a
+# rule here or a line in IGNORED_BY_DECISION in check-uncommitted-source.ps1 - never neither.
+
+# Derived build output: deploy-interstitial.ps1 rebuilds it from the tracked site\pages\join-interstitial.html.
+/site/build/out/
+
+# media\ carries the reel GENERATOR (source, scheduled daily, one machine's disk) but not its renders.
+# videos\ is 1,072 files / ~2.1 GB of finished mp4s. *.mp4 is already ignored globally, but the .txt
+# narration sidecars beside them are not, and they are reproducible from the generator.
+/media/videos/
+
+# archive\ is the rollback path for the LIVE site, which is why it is tracked rather than ignored:
+#   site-backups\  - the three-rule dance above (allow dir, deny contents, allow the export zips) is
+#                    preserved verbatim; breaking it silently drops the Ghost exports.
+#   ghost-config\  - 138 codeinjection_head / routes.yaml backups. Given the 65,535-character ceiling and
+#                    the injection-edit history these are the only way back from a bad settings write, and
+#                    until this commit they existed on exactly one machine, unversioned.
+#   handoffs\      - 3 delivered docs.
+#   agent-runs\    - scratch from the deleted platform estate and the acceptance runs. Reproducible noise.
+/archive/agent-runs/

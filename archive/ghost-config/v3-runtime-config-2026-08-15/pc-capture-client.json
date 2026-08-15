@@ -1,0 +1,23 @@
+﻿{
+    "version":  3,
+    "agentId":  "pc-browser-capture",
+    "apiOrigin":  "https://tc-grocery-public.curly-unit-51a6.workers.dev",
+    "queueRoot":  "C:\\Users\\Owner\\AppData\\Local\\ThriftyCrew\\grocery-v3\\capture-queue",
+    "platformRoot":  "C:\\Codex\\income\\platform",
+    "pnpmPath":  "C:\\Users\\Owner\\AppData\\Local\\ThriftyCrew\\runtime\\node-v24.18.1-win-x64\\pnpm.cmd",
+    "nodePath":  "C:\\Users\\Owner\\AppData\\Local\\ThriftyCrew\\runtime\\node-v24.18.1-win-x64\\node.exe",
+    "runtimePath":  [
+                        "C:\\Users\\Owner\\AppData\\Local\\ThriftyCrew\\runtime\\node-v24.18.1-win-x64"
+                    ],
+    "encryptedSecret":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e43000000000200000000001066000000010000200000007b9a27809d6bf0e279e1893a89724ddc8950bef727f5a5c634067b016cf7dd83000000000e800000000200002000000074c410fb4876db4ad5a976bb727814258a9dba0ebe15f9fc5f0f668ad2cff1e36000000055ff2521e183883c39360ef6bdde396e3b7889b5e8227c27ec1c4893fb226668881d384c096c9df1619af56ea9e4670574d243084874e82c681464fc4141e764a757c5e7b638088f59c256598c96ba6fea561d4c1e8405c0df3b651376a5140a4000000059d8d98d59c794c39471bd843d56a43096160736b3c47b9817b47166c31ed56934ad3362ed2c1ed52fea87da74abf777f17a6103671edce13f3a26802e654292",
+    "encryptedJournalKey":  "01000000d08c9ddf0115d1118c7a00c04fc297eb0100000011acd546ad12bd498d97feeca1232e4300000000020000000000106600000001000020000000da7c16c9ce7a4d28d1c55d4ec66403bed2c52ae61f81a14c0bc9379250883eaa000000000e8000000002000020000000faf41d62a47700bda73d32fd03d1664d1e3691b5733ba9f40f80cbe17bdde875600000003202332d035909538670210762157216148dd0eb9893ce8936d4c35d3123700b61006054f15619779f33aa0a38f8a03c18954fc8a2c1f8482baceb481684813c94f90b365c1959f2fab245427de9d2e8aadaf93de098ce9e70cd2baed09a6e3c40000000eae4a8a131938e58cbed274aad27d64f15e79a47b820e1c60b4a42f7bd412dae45009a4e63d636f7be2747679ae1ebd7a27f13b93873afc27a55ef3c98da738e",
+    "controllerToken":  "tqDR3awudV3+BN/FQljeH0uFaMrmJ4HaULfhdNHXX58=",
+    "nodeVersion":  "v24.18.1",
+    "installedAt":  "2026-08-12T00:55:53.3676784Z",
+    "sourceIds":  [
+                      "direct-aldi-browser",
+                      "direct-fareway-browser",
+                      "direct-sams-browser",
+                      "direct-walmart-browser"
+                  ]
+}

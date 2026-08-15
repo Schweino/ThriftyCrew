@@ -53,9 +53,10 @@ $script:REGEN_RX = @(
 # adding it here with the reason. There is no third option that leaves this guard quiet.
 $script:IGNORED_BY_DECISION = @{
   '.claude'              = 'Claude worktree metadata and local agent state. The agent prompts that actually drive the estate are backed up under ops\, which is tracked.'
-  'facebook'             = 'Both PNGs are SHA-256 identical to brand\FBCover.png and brand\FBProfile.png, which ARE tracked. A second copy of a tracked file is not a second source.'
-  'out'                  = 'interstitial-deploy.html, rebuilt by deploy-interstitial.ps1 from the tracked join-interstitial.html. Derived output, same rule as grocery\out\.'
-  'seo-backlink-plan.md' = 'One-off plan doc from 2026-07-10. Nothing in the repo references it and no build step reads it. Notes, not source.'
+  # 2026-08-15 restructure: facebook\, out\ and seo-backlink-plan.md are no longer top-level entries.
+  # facebook\ folded into brand\social\, out\ became site\build\out\, the plan doc moved to docs\.
+  # They are kept out of this table deliberately - a decision recorded for a path that no longer exists
+  # is a rule that can never fire again, and this table's whole value is that every line is live.
   # Not present at this root today, listed so they never become a finding. These are covered by the
   # "never commit, anywhere in the tree" block in .gitignore; a guard that nags about a correctly
   # excluded secret is a guard people start ignoring, and secrets are the last thing that should train
