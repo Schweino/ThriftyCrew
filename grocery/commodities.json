@@ -2146,8 +2146,10 @@
       "rice\\s+cakes?",
       "\\bbomb\\s*pops?\\b",
       "\\bpops\\b",
-      "\\bfruit\\s+blend\\b"
-    ]
+      "\\bfruit\\s+blend\\b",
+      "\\biqf\\b",
+      "\\bunsweetened\\b"
+  ]
   },
   {
     "id": "avocados",
@@ -55650,8 +55652,23 @@
     ],
     "exclude": [
       "\\bpistachio[- ]flavored\\b",
-      "\\bpistachio\\s+(?:butter|cream|paste|pudding|ice cream|gelato|cookies?|cake|mix)\\b"
-    ]
+      "\\bpistachio\\s+(?:butter|cream|paste|pudding|ice cream|gelato|cookies?|cake|mix)\\b",
+      "\\bdelight\\b",
+      "truffles?",
+      "\\bchocolate\\b",
+      "\\bdessert\\b",
+      "\\bcake\\b",
+      "\\bpastr",
+      "\\bbaklava\\b",
+      "\\bhalva\\b",
+      "\\bgelato\\b",
+      "ice\\s+cream",
+      "\\bpesto\\b",
+      "\\bcookies?\\b",
+      "\\bbiscotti\\b",
+      "\\bpudding\\b",
+      "\\bcannoli\\b"
+  ]
   },
   {
     "id": "frozen-cauliflower-florets",
@@ -56031,7 +56048,23 @@
       "\\bsalt blend\\b",
       "\\bsalt grinder\\b",
       "\\bbath\\b",
-      "\\bscrub\\b"
-    ]
+      "\\bscrub\\b",
+      "\\bbroth\\b",
+      "\\bchips?\\b",
+      "\\bkettle\\b",
+      "\\bbuns?\\b",
+      "\\bbread\\b",
+      "\\bsnacks?\\b",
+      "\\bpopcorn\\b",
+      "\\bchickpeas?\\b",
+      "brussels",
+      "\\bcrackers?\\b",
+      "\\bpretzels?\\b",
+      "\\bseasoning\\b",
+      "\\bgrinder\\b",
+      "\\bbutter\\b",
+      "spreadable",
+      "\\bmargarine\\b"
+  ]
   }
 ]

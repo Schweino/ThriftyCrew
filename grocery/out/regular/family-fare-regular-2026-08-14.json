@@ -28675,7 +28675,7 @@
                       "store":  "Family Fare",
                       "item":  "Heinz Tomato Ketchup, 2 Pack 50.5 Oz",
                       "ad_price":  "$14.99",
-                      "size":  "50.5 oz",
+                      "size":  "2 pk 50.5 oz",
                       "regular":  14.99,
                       "source_ad":  "everyday shelf price",
                       "as_of":  "2026-08-14",
@@ -28684,7 +28684,8 @@
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/ketchup/heinz_tomato_ketchup_2_pack_50_5_oz/p/886",
                       "product_id":  "886",
                       "found_by_term":  "ketchup",
-                      "carried_forward":  true
+                      "carried_forward":  true,
+                      "size_repaired":  "50.5 oz"
                   },
                   {
                       "store":  "Family Fare",

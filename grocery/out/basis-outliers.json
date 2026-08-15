@@ -1,29 +1,6 @@
 ﻿{
     "kind_mismatch_crown":  [
-                                {
-                                    "id":  "blueberries",
-                                    "commodity":  "Blueberries",
-                                    "unit":  "oz",
-                                    "store":  "Walmart",
-                                    "per_unit":  0.1629,
-                                    "size":  "48 oz",
-                                    "item":  "Sunrise Growers 48 Oz Iqf Blueberries",
-                                    "kind":  "weight",
-                                    "row_kind":  "volume",
-                                    "holds_crown":  true
-                                },
-                                {
-                                    "id":  "teriyaki-sauce",
-                                    "commodity":  "Teriyaki Sauce / Marinade",
-                                    "unit":  "floz",
-                                    "store":  "Aldi",
-                                    "per_unit":  0.1579,
-                                    "size":  "14.5 oz",
-                                    "item":  "Fusia Teriyaki Sauce 14.5 OZ",
-                                    "kind":  "weight",
-                                    "row_kind":  "volume",
-                                    "holds_crown":  true
-                                }
+
                             ],
     "findings":  [
                      {
@@ -105,21 +82,21 @@
                          "size_shape_mismatch":  false
                      },
                      {
-                         "id":  "ingredient-definition-pistachios",
-                         "commodity":  "Pistachios",
+                         "id":  "sea-salt",
+                         "commodity":  "Sea salt",
                          "unit":  "oz",
-                         "store":  "Family Fare",
-                         "per_unit":  1.7627,
-                         "median":  0.4375,
-                         "mult":  4.03,
-                         "size":  "5.1 oz",
-                         "item":  "Lindt Pistachio Milk Chocolate Truffles 5.1 Oz",
+                         "store":  "Aldi",
+                         "per_unit":  0.5483,
+                         "median":  0.1342,
+                         "mult":  4.09,
+                         "size":  "6 oz",
+                         "item":  "Simply Nature Organic Sea Salt Pop Corn 6 OZ",
                          "peers_packed":  "0 of 4",
                          "size_shape_mismatch":  false
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-14T20:16:32",
+    "generated":  "2026-08-14T20:47:33",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -259,21 +236,9 @@
                               "commodity":  "Blueberries",
                               "unit":  "oz",
                               "store":  "Walmart",
-                              "per_unit":  0.1629,
-                              "size":  "48 oz",
-                              "item":  "Sunrise Growers 48 Oz Iqf Blueberries",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  true
-                          },
-                          {
-                              "id":  "blueberries",
-                              "commodity":  "Blueberries",
-                              "unit":  "oz",
-                              "store":  "Fareway",
-                              "per_unit":  0.3123,
-                              "size":  "48 oz",
-                              "item":  "Fareway Unsweetened Blueberries",
+                              "per_unit":  0.3178,
+                              "size":  "18 oz",
+                              "item":  "Fresh Blueberries, 18 oz. Container",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -286,6 +251,18 @@
                               "per_unit":  0.3289,
                               "size":  "18 oz",
                               "item":  "Organic Blueberries, 18 oz.",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "blueberries",
+                              "commodity":  "Blueberries",
+                              "unit":  "oz",
+                              "store":  "Fareway",
+                              "per_unit":  0.6,
+                              "size":  "9.8 oz",
+                              "item":  "Family Tree Farms Jumbo Blueberries",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -502,6 +479,18 @@
                               "per_unit":  0.1075,
                               "size":  "12 oz",
                               "item":  "KROGER Milk Substitutes Evaporated Milk 12floz Can",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "fabric-softener",
+                              "commodity":  "Fabric Softener (liquid)",
+                              "unit":  "floz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0978,
+                              "size":  "51 oz",
+                              "item":  "Free \u0026 Clear Fabric Softener Our Family",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -771,6 +760,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "bottled-marinade",
+                              "commodity":  "Meat Marinade (bottled)",
+                              "unit":  "floz",
+                              "store":  "Baker\u0027s",
+                              "per_unit":  0.2525,
+                              "size":  "15.8 oz",
+                              "item":  "Kinder\u0027s Grilled Chicken Marinade",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "miracle-whip",
                               "commodity":  "Miracle Whip (Salad Dressing Spread)",
                               "unit":  "oz",
@@ -933,7 +934,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0993,
                               "size":  "15 oz",
-                              "item":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
+                              "item":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -970,18 +971,6 @@
                               "per_unit":  0.199,
                               "size":  "10 oz",
                               "item":  "Fareway Soy Sauce",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "sparkling-water",
-                              "commodity":  "Sparkling Water",
-                              "unit":  "floz",
-                              "store":  "Family Fare",
-                              "per_unit":  0.0818,
-                              "size":  "17 oz",
-                              "item":  "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1045,18 +1034,6 @@
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
-                          },
-                          {
-                              "id":  "teriyaki-sauce",
-                              "commodity":  "Teriyaki Sauce / Marinade",
-                              "unit":  "floz",
-                              "store":  "Aldi",
-                              "per_unit":  0.1579,
-                              "size":  "14.5 oz",
-                              "item":  "Fusia Teriyaki Sauce 14.5 OZ",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  true
                           },
                           {
                               "id":  "teriyaki-sauce",

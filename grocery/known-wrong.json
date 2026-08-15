@@ -1873,7 +1873,7 @@
                         "commodity":  "cherries",
                         "store":  "Fareway",
                         "names":  [
-                                      "Fareway Unsweetened & Pitted Dark Sweet Cherries"
+                                      "Fareway Unsweetened \u0026 Pitted Dark Sweet Cherries"
                                   ],
                         "product_id":  "25841971",
                         "verdict":  "wrong-product",
@@ -1881,6 +1881,21 @@
                         "seen_on_board":  "2026-08-12",
                         "ruled_on":  "2026-08-12",
                         "ruled_by":  "blind-accuracy-2026-08-12",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "teriyaki-sauce|Aldi|fusia-teriyaki-sauce-14-5-oz",
+                        "commodity":  "teriyaki-sauce",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Fusia Teriyaki Sauce 14.5 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Basis unverifiable, and the crown turns on it. \u0027Fusia Teriyaki Sauce 14.5 OZ\u0027 is labelled by WEIGHT in a row priced per FL OZ. Aldi\u0027s own product page and URL say only \u002714.5 oz\u0027 - no \u0027fl\u0027, no ml - so the physical basis cannot be established from any source we hold. Teriyaki runs about 1.1-1.2 g/ml, so the two readings differ by ~16 percent: at 14.5 fl oz the cell wins at 0.1579/floz, at 14.5 oz by weight it is ~12.7 fl oz and 0.180/floz, which loses to Walmart\u0027s explicitly-labelled \u0027Great Value Teriyaki Sauce, 15 fl oz\u0027 at 0.1653. The allowlist requires proving the NUMBER is right; it cannot be proven, so the cell is withheld rather than blessed. Reverse this if an in-store label read settles the basis.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-14",
+                        "ruled_by":  "claude",
                         "retire_when":  "ruling-reversed"
                     }
                 ]
