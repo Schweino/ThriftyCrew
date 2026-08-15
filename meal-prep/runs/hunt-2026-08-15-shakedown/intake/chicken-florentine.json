@@ -1,0 +1,68 @@
+{
+  "name": "Chicken Florentine",
+  "slug": "chicken-florentine",
+  "protein": "chicken",
+  "cuisine": "Italian",
+  "source_url": "https://www.smalltownwoman.com/chicken-florentine/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Boneless Skinless Chicken Breast", "grams": 2381, "buy": "5.25 lb (14 cutlets, about 6 oz each)", "display_name": "Chicken Breast (cutlets)" },
+    { "item": "All-Purpose Flour", "grams": 94, "buy": "0.75 cups (for dredging)" },
+    { "item": "Salt", "grams": 23, "buy": "1.25 tbsp" },
+    { "item": "Black Pepper", "grams": 3, "buy": "0.5 tbsp, freshly ground" },
+    { "item": "Butter", "grams": 98, "buy": "7 tbsp unsalted" },
+    { "item": "Olive Oil", "grams": 47, "buy": "3.5 tbsp" },
+    { "item": "Shallots", "grams": 99, "buy": "3.5 oz, sliced (3 to 4 shallots)" },
+    { "item": "Garlic", "grams": 30, "buy": "10 cloves, minced" },
+    { "item": "Chicken Broth", "grams": 840, "buy": "3.5 cups" },
+    { "item": "White Wine Vinegar", "grams": 45, "buy": "3 tbsp" },
+    { "item": "Italian Seasoning", "grams": 2, "buy": "0.5 tbsp" },
+    { "item": "Heavy Cream", "grams": 833, "buy": "3.5 cups" },
+    { "item": "Spinach", "grams": 397, "buy": "14 cups fresh baby spinach (about 14 oz)", "display_name": "Baby Spinach" },
+    { "item": "Parmesan Cheese", "grams": 196, "buy": "1.75 cups grated" }
+  ],
+  "macros_per_serving": { "calories": 573, "protein_g": 45, "carbs_g": 14, "fat_g": 37 },
+  "writer_notes": [
+    "White wine has no board home; per stage-1 policy the 3/4 cup dry white wine was respec'd to additional Chicken Broth plus White Wine Vinegar (deglaze plus acid).",
+    "The vinegar goes in with the broth, before the cream, so it cooks into the sauce.",
+    "SOURCE YIELD: 4 servings, rebuilt to 14. Source cutlets respec'd to 14 pieces of about 6 oz cut from whole breasts (5.25 lb), per the mapper's macro-reconstructed cutlet weight.",
+    "Reader-facing wine win (skip a whole bottle for one pour) placed in shop_smart and echoed in the cost closing, mirroring senfbraten-german-mustard-pork-roast.",
+    "MAPPING FLAGS forwarded to repair (see report): Shallots bid is decision-needed (evidence bid 'shallots' vs canonical row pointing at 'onions'); Spinach priced on a frozen-chopped basis for a fresh baby-spinach recipe; board hijacks noted on parmesan (Aldi Kirkwood Parmesan Chicken Tenders), butter (Fareway spread, Family Fare butter lettuce), and heavy cream (Aldi dairy-free at a suspect 169 floz size)."
+  ],
+  "forbidden_prose_terms": [],
+  "prose": {
+    "intro_html": "Chicken Florentine is the restaurant plate you think you cannot make at home for cheap: golden chicken cutlets under a cream sauce loaded with spinach and parmesan. Florentine just means there is spinach in it, and the spinach is not a garnish, it is half the reason the sauce tastes like more than cream. We build it at 14 servings and it still lands at about <strong>{{cal}} calories</strong> with <strong>{{protein}} grams of protein</strong> a plate, staying under 600 calories while eating like it has no business being that lean.",
+    "shop_smart": [
+      "<strong>Buy whole chicken breasts and cut your own cutlets.</strong> A cutlet is just a breast sliced thin across the middle. The store charges extra for doing that knife work, so buy the whole breasts in the family pack and slice them yourself.",
+      "<strong>Skip the wine and keep the bottle.</strong> The classic version deglazes with dry white wine. We carry that job with a little extra chicken broth and a splash of white wine vinegar for the same bright edge, and that is one whole bottle you do not have to buy for one pour.",
+      "<strong>Grate parmesan off a wedge.</strong> A block costs less per ounce than the pre-grated tub and melts smoother into a pan sauce. Buy the wedge and grate what the recipe needs.",
+      "<strong>One carton of heavy cream covers the whole batch.</strong> This uses a full carton, so nothing is left to turn in the fridge door. Store brand cream behaves exactly like the name brand once it is reducing in a pan."
+    ],
+    "make_it": [
+      "Weigh your empty mixing pot or container and write the number down for portioning later.",
+      "In a shallow bowl, stir together the flour, salt, and freshly ground black pepper. Slice the chicken breasts into 14 cutlets of about 6 oz each if they did not come that way, then dredge each cutlet through the seasoned flour.",
+      "Melt about half the butter with the olive oil in a large skillet over medium-high heat. Sear the cutlets in batches so you never crowd the pan, cooking each until golden and cooked through, then move them to a sheet pan and hold them warm in a low oven while you finish the rest.",
+      "Melt the rest of the butter in the same skillet over medium heat and cook the sliced shallots for about two minutes. Turn the heat to low, add the minced garlic, and cook one more minute, stirring so it does not scorch.",
+      "Pour in the chicken broth and the white wine vinegar, add the Italian seasoning, and scrape the browned bits off the bottom of the pan. Stir in the heavy cream, bring it to a gentle simmer, and let it reduce by a little more than half, about 10 to 15 minutes.",
+      "Add the baby spinach a few handfuls at a time and cook just until it wilts down into the sauce.",
+      "Slide the cutlets back into the pan, turn them to coat, and warm them through. Stir in the grated parmesan right at the end so it melts into the sauce without breaking, then portion as below."
+    ],
+    "portion_html": "Set the full pan on your scale and subtract the empty weight from Step 1 to get your total. Give each of your 14 containers one cutlet so the protein lands even, then divide the sauce and spinach by 14 and spoon that much over each piece. Every plate comes in around <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a plate</strong> (at everyday cost) for chicken in a cream and parmesan sauce that tastes like a night out. Skipping the wine keeps a whole bottle out of your cart and does not cost the dish a thing.",
+    "upsell_html": "Restaurant plates on a weeknight budget, about ${{cost_ps}} a plate (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Chicken Florentine for meal prep: golden chicken cutlets in a creamy spinach and parmesan sauce, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving.",
+    "keywords": "chicken florentine, creamy chicken florentine, chicken florentine meal prep, high protein chicken dinner, budget chicken meal prep",
+    "prepTime": "PT20M",
+    "cookTime": "PT40M",
+    "totalTime": "PT1H",
+    "steps": [
+      "Stir the flour, salt, and black pepper together, slice the breasts into 14 cutlets, and dredge each one.",
+      "Sear the cutlets in batches in butter and olive oil until golden and cooked through, then hold them warm.",
+      "Cook the shallots in the rest of the butter, add the garlic, then pour in the chicken broth, white wine vinegar, and Italian seasoning.",
+      "Stir in the heavy cream and simmer until reduced by more than half, then wilt in the baby spinach.",
+      "Return the cutlets to coat, stir in the parmesan off the heat, weigh the pan, and divide across 14 containers."
+    ]
+  }
+}

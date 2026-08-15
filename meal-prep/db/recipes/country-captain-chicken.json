@@ -1,0 +1,380 @@
+{
+    "name":  "Country Captain Chicken",
+    "slug":  "country-captain-chicken",
+    "cuisine":  "Southern",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://spicysouthernkitchen.com/country-captain-chicken/",
+    "source_site":  "spicysouthernkitchen.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "RICE COOKED-TO-DRY: the source line is \u00275 cups cooked white rice\u0027. The mapped table stores rice DRY on the catalog cooked_to_dry basis (765 g, printed as 4.25 cups dry). So the buy string sells dry rice and the steps must cook it. I added a dedicated make_it step to simmer the 4.25 cups dry rice per package directions while the chicken bakes, and the serve step plates the chicken over that cooked rice. Buy string and steps are coherent: you buy dry, you cook it, you portion it.",
+                         "SCALE: source serves 6, this batch builds 14 (about 2.33x). All grams and buy strings are already at 14 servings from the mapped table. In prose I converted the source\u0027s counts to the batch counts (9 bacon slices, 4 lb / about 18 thighs, both cans of diced tomatoes) and told the cook to brown the chicken in three or four batches because four pounds will not fit a single layer.",
+                         "SALT AND PEPPER DIVIDED: source splits 2 tsp salt and 1 tsp pepper 50/50 (half into the spice blend, half onto the chicken). Buy strings are \u00271.5 tbsp, divided\u0027 and \u00270.75 tbsp, divided\u0027. I wrote \u0027half the salt / half the pepper\u0027 into the blend and \u0027the rest\u0027 onto the chicken so no per-step number is invented in prose.",
+                         "GUAJILLO discarded: source step 12 pulls the dried chiles out and throws them away after cooking. The steps say so, so the chile is bought, used, and removed, not orphaned.",
+                         "BELL PEPPER: source allows red, orange, or yellow; the mapped table prices red (a named source option). Prose says red bell pepper to match what is bought.",
+                         "MACROS transcribed as given (525 cal, 35 g protein, 66 g carbs, 12 g fat per serving); not recomputed. Cost is unknown to me and left as the ${{cost_ps}} token everywhere in prose."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "curry paste",
+                                  "seafood"
+                              ],
+    "stat":  {
+                 "cal":  525,
+                 "protein":  35,
+                 "carbs":  66,
+                 "fat":  12,
+                 "cost_ps":  "1.87"
+             },
+    "intro_html":  "\u003cp\u003eCountry Captain is a dish with a passport. It came ashore in the port of Savannah sometime in the 1800s, carried by the spice trade, and it has been warming Southern tables ever since. Chicken thighs braised down in a curry-spiced tomato sauce, sweetened with plump golden raisins, finished with toasted almonds and crispy bacon. It tastes like it simmered all afternoon. It did not.\u003c/p\u003e\u003cp\u003eHere is the math that matters. Every container lands at {{cal}} calories with {{protein}} grams of protein for ${{cost_ps}}. That is a restaurant plate for less than you would leave as the tip, and it stays under 600 calories the whole way.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.25 cups (540 g)",
+                                "\u003cstrong\u003eGolden Raisins (generic):\u003c/strong\u003e 1.25 cups (181 g)",
+                                "\u003cstrong\u003eCurry Powder (generic):\u003c/strong\u003e 2.25 tbsp (14 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 2.25 tbsp (14 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.5 tbsp, divided (27 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp, divided (5 g)",
+                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 0.5 tsp (1 g)",
+                                "\u003cstrong\u003ethick-cut bacon:\u003c/strong\u003e 9 thick-cut slices, cut into 1/2-inch pieces (108 g)",
+                                "\u003cstrong\u003eboneless skinless chicken thighs:\u003c/strong\u003e 4 lb (about 18 thighs) (1814 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2.25 cups sliced (248 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2.25 cups diced (207 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.25 cups diced (259 g)",
+                                "\u003cstrong\u003eDried Guajillo Chiles (generic (USDA)):\u003c/strong\u003e 0.5 oz (about 2 chiles) (14 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 cloves, minced (15 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7 tbsp (112 g)",
+                                "\u003cstrong\u003efresh ginger:\u003c/strong\u003e 2.25 tbsp minced (14 g)",
+                                "\u003cstrong\u003epetite diced tomatoes:\u003c/strong\u003e 2 (14.5 oz) cans, undrained (822 g)",
+                                "\u003cstrong\u003ewhite rice:\u003c/strong\u003e 4.25 cups dry (765 g)",
+                                "\u003cstrong\u003eslivered almonds:\u003c/strong\u003e 0.75 cups slivered, toasted (81 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Chicken Broth, 2.25 cups: ~$0.82. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Golden Raisins, 1.25 cups: ~$2.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "thick-cut bacon, 9 thick-cut slices, cut into 1/2-inch pieces: ~$0.94. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
+                       "boneless skinless chicken thighs, 4 lb (about 18 thighs): ~$12.88. \u003cstrong\u003eBuy 4 lbs: $12.88.\u003c/strong\u003e",
+                       "Carrots, 2.25 cups sliced: ~$0.52. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2.25 cups diced: ~$1.69. \u003cstrong\u003eBuy 2 each: $1.96.\u003c/strong\u003e",
+                       "Yellow Onion, 2.25 cups diced: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Dried Guajillo Chiles, 0.5 oz (about 2 chiles): ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 5 cloves, minced: ~$0.09. \u003cstrong\u003eBuy 1 head: $0.27.\u003c/strong\u003e",
+                       "Tomato Paste, 7 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
+                       "fresh ginger, 2.25 tbsp minced: ~$0.11. \u003cstrong\u003eBuy 1 piece: $0.80.\u003c/strong\u003e",
+                       "petite diced tomatoes, 2 (14.5 oz) cans, undrained: ~$1.53. \u003cstrong\u003eBuy 2 cans: $1.53.\u003c/strong\u003e",
+                       "white rice, 4.25 cups dry: ~$0.97. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "slivered almonds, 0.75 cups slivered, toasted: ~$1.03. \u003cstrong\u003eBuy 1 14oz bag: $5.02.\u003c/strong\u003e",
+                       "Pantry seasonings (curry powder, garam masala, salt, black pepper, cayenne pepper): ~$1.08. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.21 across 14 servings, so roughly $1.87 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.49 across 14 servings, roughly $2.54 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.71 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.20. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eAdd it all up and this comes in at ${{cost_ps}} a serving. A dish that traveled from the spice ports to a Georgia kitchen to your meal-prep stack, and it still costs less than the drive-thru. That is the whole point.\u003c/p\u003e",
+    "shop_smart":  "\u003cp\u003eThe chicken is the whole ballgame, so buy it right. Four pounds of boneless skinless thighs anchors this batch. Watch the board and buy your thighs when the price is working in your favor, because at four pounds even a small per-pound move adds up fast.\u003c/p\u003e\u003cp\u003eThe spice list looks long, but it is mostly jars you buy once and lean on for a year. Curry powder, garam masala, cayenne, and a couple of dried guajillo chiles do the heavy lifting on flavor and barely touch your grocery run. A standard pack of thick-cut bacon holds more than the nine slices this recipe needs, so plan breakfast around the rest. One bag of slivered almonds and one box of golden raisins will carry you through several batches of this.\u003c/p\u003e",
+    "make_it":  [
+                    "Bring the chicken broth to a simmer in a small saucepan. Stir in the golden raisins, pull it off the heat, and set it aside. The raisins plump while you work on everything else.",
+                    "In a small bowl, stir together the curry powder, garam masala, half the salt, half the black pepper, and all of the cayenne. That little bowl is your flavor base. Set it aside.",
+                    "Heat your oven to 350 degrees.",
+                    "In a large Dutch oven or any heavy oven-safe pot, cook the bacon over medium heat until it is crispy. Lift it out with a slotted spoon and set it aside, leaving the fat in the pot. Drain off all but about 2 tablespoons of that bacon grease.",
+                    "Season the chicken thighs with the rest of the salt and pepper. Working in batches so the pot is never crowded, brown the thighs in the hot bacon grease, about 5 minutes a side. Four pounds of thighs is three or four batches, and that is fine. Pull each batch out as it browns and set it aside.",
+                    "Add the sliced carrots, diced red bell pepper, and diced onion to the grease. Cook about 5 minutes, stirring now and then, until they soften.",
+                    "Add the dried guajillo chiles and the minced garlic. Cook for 1 minute, just until the garlic smells like dinner.",
+                    "Stir in the spice mixture, the tomato paste, and the minced fresh ginger. Keep it moving for about 30 seconds so the spices bloom and nothing scorches.",
+                    "Pour in the broth and raisins along with both cans of diced tomatoes and all their juice. Bring it to a boil, then let it simmer for 5 minutes.",
+                    "Nestle the browned chicken thighs back down into the sauce. Cover the pot and bake for 15 minutes. Take the lid off and bake 15 minutes more. Fish out the guajillo chiles and throw them away; they have given all they are going to give.",
+                    "While the chicken bakes, cook the rice. Simmer the 4.25 cups of dry rice in water per the package directions until it is tender and fluffy. This is the base under every container.",
+                    "Plate it up: spoon the chicken and sauce over the cooked rice, then scatter the toasted slivered almonds and the crumbled crispy bacon over the top."
+                ],
+    "portion_html":  "\u003cp\u003eHere is how you get fourteen honest, equal containers instead of eyeballing your way to a short Friday. Once the chicken and sauce are out of the oven and the rice is done, weigh your empty container and write that number down. Weigh the full pot of chicken and sauce, subtract the pot itself, and divide what is left by 14. That is your target grams of chicken and sauce per container. Do the same with the rice. Then scoop to the number, not to the eye.\u003c/p\u003e\u003cp\u003eThe scale does not play favorites, and neither should your Tuesday self at the expense of your Friday self. Top each one with its share of almonds and bacon and every container carries {{cal}} calories and {{protein}} grams of protein, locked in.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://spicysouthernkitchen.com/country-captain-chicken/\" target=\"_blank\" rel=\"noopener\"\u003espicysouthernkitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eWant the board that tells you the week thighs and bacon hit their low, so a batch like this costs even less? That is what the Thrifty Crew membership is, and it runs a dollar a month. One dollar to stop guessing at the meat counter.\u003c/p\u003e",
+    "cost_batch":  26.21,
+    "cost_batch_true":  35.49,
+    "cost_per_serving":  1.87,
+    "cost_per_serving_true":  2.54,
+    "cost_pantry_add":  16.71,
+    "cost_first_run":  52.2,
+    "scaler":  {
+                   "cost":  "35.49",
+                   "ing":  [
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  540,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Golden Raisins",
+                                   "canon":  "Golden Raisins",
+                                   "grams":  181,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "golden-raisins",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Curry Powder",
+                                   "canon":  "Curry Powder",
+                                   "grams":  14,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "curry-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  14,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  27,
+                                   "buy":  "1.5 tbsp, divided",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp, divided",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "canon":  "Cayenne Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.5 tsp",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "thick-cut bacon",
+                                   "canon":  "Hickory Smoked Bacon",
+                                   "grams":  108,
+                                   "buy":  "9 thick-cut slices, cut into 1/2-inch pieces",
+                                   "bid":  "bacon",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "boneless skinless chicken thighs",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  1814,
+                                   "buy":  "4 lb (about 18 thighs)",
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  248,
+                                   "buy":  "2.25 cups sliced",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  207,
+                                   "buy":  "2.25 cups diced",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  259,
+                                   "buy":  "2.25 cups diced",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dried Guajillo Chiles",
+                                   "canon":  "Dried Guajillo Chiles",
+                                   "grams":  14,
+                                   "buy":  "0.5 oz (about 2 chiles)",
+                                   "bid":  "dried-guajillo-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  15,
+                                   "buy":  "5 cloves, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  112,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "fresh ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  14,
+                                   "buy":  "2.25 tbsp minced",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "petite diced tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  822,
+                                   "buy":  "2 (14.5 oz) cans, undrained",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "white rice",
+                                   "canon":  "Rice",
+                                   "grams":  765,
+                                   "buy":  "4.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "slivered almonds",
+                                   "canon":  "Almonds",
+                                   "grams":  81,
+                                   "buy":  "0.75 cups slivered, toasted",
+                                   "bid":  "almonds",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Country Captain Chicken meal prep: curry-spiced braised chicken thighs with tomatoes, golden raisins, and toasted almonds over rice. A high-protein budget batch of 14 containers.",
+                 "keywords":  "country captain chicken, country captain recipe, meal prep, chicken thigh meal prep, curry chicken, high protein meal prep, budget meal prep",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT57M",
+                 "totalTime":  "PT1H12M",
+                 "costPerServing":  1.87,
+                 "recipeIngredient":  [
+                                          "Chicken Broth, 2.25 cups (540 g)",
+                                          "Golden Raisins, 1.25 cups (181 g)",
+                                          "Curry Powder, 2.25 tbsp (14 g)",
+                                          "Garam Masala, 2.25 tbsp (14 g)",
+                                          "Salt, 1.5 tbsp, divided (27 g)",
+                                          "Black Pepper, 0.75 tbsp, divided (5 g)",
+                                          "Cayenne Pepper, 0.5 tsp (1 g)",
+                                          "thick-cut bacon, 9 thick-cut slices, cut into 1/2-inch pieces (108 g)",
+                                          "boneless skinless chicken thighs, 4 lb (about 18 thighs) (1814 g)",
+                                          "Carrots, 2.25 cups sliced (248 g)",
+                                          "Red Bell Pepper, 2.25 cups diced (207 g)",
+                                          "Yellow Onion, 2.25 cups diced (259 g)",
+                                          "Dried Guajillo Chiles, 0.5 oz (about 2 chiles) (14 g)",
+                                          "Garlic, 5 cloves, minced (15 g)",
+                                          "Tomato Paste, 7 tbsp (112 g)",
+                                          "fresh ginger, 2.25 tbsp minced (14 g)",
+                                          "petite diced tomatoes, 2 (14.5 oz) cans, undrained (822 g)",
+                                          "white rice, 4.25 cups dry (765 g)",
+                                          "slivered almonds, 0.75 cups slivered, toasted (81 g)"
+                                      ],
+                 "steps":  [
+                               "Simmer the chicken broth, stir in the golden raisins, remove from heat, and set aside to plump.",
+                               "Mix the curry powder, garam masala, half the salt, half the black pepper, and the cayenne in a small bowl and set aside.",
+                               "Heat the oven to 350 degrees.",
+                               "Cook the bacon in a large Dutch oven until crispy, remove it, and drain off all but about 2 tablespoons of grease.",
+                               "Season the chicken thighs with the remaining salt and pepper and brown them in the bacon grease in three or four batches, then set aside.",
+                               "Soften the sliced carrots, diced red bell pepper, and diced onion in the grease for about 5 minutes.",
+                               "Add the dried guajillo chiles and minced garlic and cook 1 minute.",
+                               "Stir in the spice mixture, tomato paste, and fresh ginger for about 30 seconds.",
+                               "Add the broth and raisins and both cans of diced tomatoes, bring to a boil, and simmer 5 minutes.",
+                               "Return the chicken to the sauce, cover, and bake 15 minutes, then uncover and bake 15 minutes more; discard the chiles.",
+                               "Cook the dry rice per package directions while the chicken bakes.",
+                               "Serve the chicken and sauce over the rice, topped with toasted slivered almonds and crumbled bacon."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  540
+                              },
+                              {
+                                  "item":  "Golden Raisins",
+                                  "grams":  181
+                              },
+                              {
+                                  "item":  "Curry Powder",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  27
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Cayenne Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Hickory Smoked Bacon",
+                                  "grams":  108
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  1814
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  248
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  207
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  259
+                              },
+                              {
+                                  "item":  "Dried Guajillo Chiles",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  822
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  765
+                              },
+                              {
+                                  "item":  "Almonds",
+                                  "grams":  81
+                              }
+                          ]
+}

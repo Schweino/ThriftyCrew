@@ -3,10 +3,10 @@
     "title":  "Country Captain Chicken",
     "source_url":  "https://spicysouthernkitchen.com/country-captain-chicken/",
     "protein":  "chicken",
-    "state":  "priced",
+    "state":  "written",
     "wave":  null,
     "created":  "2026-08-15T11:54:24",
-    "updated":  "2026-08-15T12:10:27",
+    "updated":  "2026-08-15T12:23:15",
     "terms":  [
 
               ],
@@ -44,6 +44,18 @@
                         "at":  "2026-08-15T12:10:27",
                         "by":  "recipe-ingredient-mapper",
                         "detail":  "every term answered from disk by price-ingredient; no absent terms, pricing stage not needed"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-15T12:23:15",
+                        "by":  "build-v2-spec",
+                        "detail":  "spec + cost written to db\\recipes"
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-15T12:23:15",
+                        "by":  "recipe-writer",
+                        "detail":  "prose in intake, card built"
                     }
                 ]
 }

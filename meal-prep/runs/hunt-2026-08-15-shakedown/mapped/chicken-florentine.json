@@ -23,11 +23,11 @@
       "item": "Boneless Skinless Chicken Breast",
       "bid": "chicken-breast",
       "board": "weekly",
-      "grams": 1361,
-      "buy": "3 lb, halved into 14 thin cutlets",
+      "grams": 2381,
+      "buy": "5.25 lb (14 cutlets, about 6 oz each)",
       "display_name": "Chicken Breast (cutlets)",
       "decision": "mapped",
-      "notes": "a cutlet is a halved boneless skinless breast, same product concept and price class as the chicken-breast commodity. Densities each=200 g breast, so 14 cutlets = 7 breasts = 1400 g, printed at house quarter-lb as 3 lb (1361 g), -2.8%. One cutlet per serving preserved from source"
+      "notes": "RULED 2026-08-15 after coordinator macro check: the source's published nutrition (614 cal, 44 g protein per serving) reconstructs to ~161-170 g raw breast per serving, so the source's cutlet is a ~6 oz piece, not the 100 g a halved 200 g densities breast implies. Grams moved 1361 -> 2381 (5.25 lb x 453.592, measure and grams agree exactly). Same product concept and price class as the chicken-breast commodity. Recompute ~574 cal / ~45 g protein per serving, matching the source within rounding"
     },
     {
       "source_raw": "1/4 cup all-purpose flour",

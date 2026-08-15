@@ -87,9 +87,9 @@
       "bid": "bacon",
       "board": "weekly",
       "grams": 108,
-      "buy": "9 slices, cut into 1/2-inch pieces",
+      "buy": "9 thick-cut slices, cut into 1/2-inch pieces",
       "decision": "mapped",
-      "notes": "FLAGGED, see report: (1) source says thick-cut; board bacon commodity covers thick and classic cut at the same lb price class (Baker's and Hy-Vee rows are literally thick cut), so same id. (2) grams use the estate densities slice=12 g basis; a raw thick-cut slice is ~38 g, so if spec grams are meant to be RAW purchase weight this line under-states by roughly 3x. The catalog itself is split on bacon gram basis (a live line prints 0.5 lb against 280 g). Auditor should rule the basis before publish. (3) today's board cheapest cell for bacon at Aldi is a potato chips hijack."
+      "notes": "RULED 2026-08-15 (mapper, on coordinator request): stays on the estate densities slice=12 g constant; relitigating that constant inside one line is the two-copies-of-a-rule trap, and a change to it is a densities-file ruling for Brad. Scaled count 9.33 -> 9 slices, thick-cut restored to the tail so the cook buys what the source used; arithmetic check agrees (9 x 12 = 108). Residual ~15 cal/serving understatement vs true thick-cut cooked yield is disclosed here, not silently absorbed. Board bacon commodity covers thick and classic cut at the same lb price class (Baker's and Hy-Vee rows are literally thick cut), so same id. Separately: today's board cheapest cell for bacon at Aldi is a potato chips hijack (task chip filed)."
     },
     {
       "source_raw": "8 boneless, skinless chicken thighs",
@@ -196,10 +196,10 @@
       "item": "Almonds",
       "bid": "almonds",
       "board": "weekly",
-      "grams": 107,
+      "grams": 81,
       "buy": "0.75 cups slivered, toasted",
       "decision": "mapped",
-      "notes": "food-DB Almonds row states it covers slivered lines; densities cup=143 is the whole-almond figure (USDA slivered is ~108 g/cup), so grams may overstate a true slivered cup by ~30%. Followed the catalog authority; flagged in report"
+      "notes": "RULED 2026-08-15 (mapper, on coordinator request): grams moved 107 -> 81. densities cup=143 is the WHOLE-almond figure; a real 0.75 cup of slivered almonds is ~81 g (USDA slivered ~108 g/cup). Grams drive cost and macros, so they state what is in the pot, not the whole-form table figure (-10 cal/serving, ~-$0.35 vs the 107 g version). Against the whole-almond table the disagreement is 24.3%, inside the 25% arithmetic tolerance, so sweeps will not rewrite it. The food-DB Almonds MACRO row legitimately covers slivered (per-gram macros are form-independent); the DENSITY table lacks a slivered figure and deserves one eventually - flagged, not edited mid-run"
     }
   ],
   "rejected": [],

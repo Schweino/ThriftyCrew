@@ -1,0 +1,298 @@
+{
+    "name":  "Chicken Florentine",
+    "slug":  "chicken-florentine",
+    "cuisine":  "Italian",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.smalltownwoman.com/chicken-florentine/",
+    "source_site":  "smalltownwoman.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "White wine has no board home; per stage-1 policy the 3/4 cup dry white wine was respec\u0027d to additional Chicken Broth plus White Wine Vinegar (deglaze plus acid).",
+                         "The vinegar goes in with the broth, before the cream, so it cooks into the sauce.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14. Source cutlets respec\u0027d to 14 pieces of about 6 oz cut from whole breasts (5.25 lb), per the mapper\u0027s macro-reconstructed cutlet weight.",
+                         "Reader-facing wine win (skip a whole bottle for one pour) placed in shop_smart and echoed in the cost closing, mirroring senfbraten-german-mustard-pork-roast.",
+                         "MAPPING FLAGS forwarded to repair (see report): Shallots bid is decision-needed (evidence bid \u0027shallots\u0027 vs canonical row pointing at \u0027onions\u0027); Spinach priced on a frozen-chopped basis for a fresh baby-spinach recipe; board hijacks noted on parmesan (Aldi Kirkwood Parmesan Chicken Tenders), butter (Fareway spread, Family Fare butter lettuce), and heavy cream (Aldi dairy-free at a suspect 169 floz size)."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  573,
+                 "protein":  45,
+                 "carbs":  14,
+                 "fat":  37,
+                 "cost_ps":  "1.66"
+             },
+    "intro_html":  "Chicken Florentine is the restaurant plate you think you cannot make at home for cheap: golden chicken cutlets under a cream sauce loaded with spinach and parmesan. Florentine just means there is spinach in it, and the spinach is not a garnish, it is half the reason the sauce tastes like more than cream. We build it at 14 servings and it still lands at about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e with \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a plate, staying under 600 calories while eating like it has no business being that lean.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eChicken Breast (cutlets):\u003c/strong\u003e 5.25 lb (14 cutlets, about 6 oz each) (2381 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 0.75 cups (for dredging) (94 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (23 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp, freshly ground (3 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp unsalted (98 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)",
+                                "\u003cstrong\u003eShallots (fresh (USDA)):\u003c/strong\u003e 3.5 oz, sliced (3 to 4 shallots) (99 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 10 cloves, minced (30 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3.5 cups (840 g)",
+                                "\u003cstrong\u003eWhite Wine Vinegar (generic):\u003c/strong\u003e 3 tbsp (45 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.5 tbsp (2 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 3.5 cups (833 g)",
+                                "\u003cstrong\u003eBaby Spinach:\u003c/strong\u003e 14 cups fresh baby spinach (about 14 oz) (397 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1.75 cups grated (196 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Chicken Breast (cutlets), 5.25 lb (14 cutlets, about 6 oz each): ~$11.71. \u003cstrong\u003eBuy 6 lbs: $13.38.\u003c/strong\u003e",
+                       "All-Purpose Flour, 0.75 cups (for dredging): ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 7 tbsp unsalted: ~$0.64. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Olive Oil, 3.5 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Shallots, 3.5 oz, sliced (3 to 4 shallots): ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 10 cloves, minced: ~$0.19. \u003cstrong\u003eBuy 1 head: $0.27.\u003c/strong\u003e",
+                       "Chicken Broth, 3.5 cups: ~$1.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "White Wine Vinegar, 3 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 16.9floz bottle: $3.01.\u003c/strong\u003e",
+                       "Heavy Cream, 3.5 cups: ~$4.12. \u003cstrong\u003eBuy 2 pints: $4.68.\u003c/strong\u003e",
+                       "Baby Spinach, 14 cups fresh baby spinach (about 14 oz): ~$1.61. \u003cstrong\u003eBuy 2 10oz bags: $2.30.\u003c/strong\u003e",
+                       "Parmesan Cheese, 1.75 cups grated: ~$2.37. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, italian seasoning): ~$0.19. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.23 across 14 servings, so roughly $1.66 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.57 across 14 servings, roughly $2.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.14 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.71. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a plate\u003c/strong\u003e (at everyday cost) for chicken in a cream and parmesan sauce that tastes like a night out. Skipping the wine keeps a whole bottle out of your cart and does not cost the dish a thing.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy whole chicken breasts and cut your own cutlets.\u003c/strong\u003e A cutlet is just a breast sliced thin across the middle. The store charges extra for doing that knife work, so buy the whole breasts in the family pack and slice them yourself.",
+                       "\u003cstrong\u003eSkip the wine and keep the bottle.\u003c/strong\u003e The classic version deglazes with dry white wine. We carry that job with a little extra chicken broth and a splash of white wine vinegar for the same bright edge, and that is one whole bottle you do not have to buy for one pour.",
+                       "\u003cstrong\u003eGrate parmesan off a wedge.\u003c/strong\u003e A block costs less per ounce than the pre-grated tub and melts smoother into a pan sauce. Buy the wedge and grate what the recipe needs.",
+                       "\u003cstrong\u003eOne carton of heavy cream covers the whole batch.\u003c/strong\u003e This uses a full carton, so nothing is left to turn in the fridge door. Store brand cream behaves exactly like the name brand once it is reducing in a pan."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot or container and write the number down for portioning later.",
+                    "In a shallow bowl, stir together the flour, salt, and freshly ground black pepper. Slice the chicken breasts into 14 cutlets of about 6 oz each if they did not come that way, then dredge each cutlet through the seasoned flour.",
+                    "Melt about half the butter with the olive oil in a large skillet over medium-high heat. Sear the cutlets in batches so you never crowd the pan, cooking each until golden and cooked through, then move them to a sheet pan and hold them warm in a low oven while you finish the rest.",
+                    "Melt the rest of the butter in the same skillet over medium heat and cook the sliced shallots for about two minutes. Turn the heat to low, add the minced garlic, and cook one more minute, stirring so it does not scorch.",
+                    "Pour in the chicken broth and the white wine vinegar, add the Italian seasoning, and scrape the browned bits off the bottom of the pan. Stir in the heavy cream, bring it to a gentle simmer, and let it reduce by a little more than half, about 10 to 15 minutes.",
+                    "Add the baby spinach a few handfuls at a time and cook just until it wilts down into the sauce.",
+                    "Slide the cutlets back into the pan, turn them to coat, and warm them through. Stir in the grated parmesan right at the end so it melts into the sauce without breaking, then portion as below."
+                ],
+    "portion_html":  "Set the full pan on your scale and subtract the empty weight from Step 1 to get your total. Give each of your 14 containers one cutlet so the protein lands even, then divide the sauce and spinach by 14 and spoon that much over each piece. Every plate comes in around \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.smalltownwoman.com/chicken-florentine/\" target=\"_blank\" rel=\"noopener\"\u003esmalltownwoman.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Restaurant plates on a weeknight budget, about ${{cost_ps}} a plate (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  23.23,
+    "cost_batch_true":  32.57,
+    "cost_per_serving":  1.66,
+    "cost_per_serving_true":  2.33,
+    "cost_pantry_add":  13.14,
+    "cost_first_run":  45.71,
+    "scaler":  {
+                   "cost":  "32.57",
+                   "ing":  [
+                               {
+                                   "item":  "Chicken Breast (cutlets)",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  2381,
+                                   "buy":  "5.25 lb (14 cutlets, about 6 oz each)",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  94,
+                                   "buy":  "0.75 cups (for dredging)",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  23,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp, freshly ground",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  98,
+                                   "buy":  "7 tbsp unsalted",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Shallots",
+                                   "canon":  "Shallots",
+                                   "grams":  99,
+                                   "buy":  "3.5 oz, sliced (3 to 4 shallots)",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  30,
+                                   "buy":  "10 cloves, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  840,
+                                   "buy":  "3.5 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "White Wine Vinegar",
+                                   "canon":  "White Wine Vinegar",
+                                   "grams":  45,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "white-wine-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  2,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  833,
+                                   "buy":  "3.5 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Baby Spinach",
+                                   "canon":  "Spinach",
+                                   "grams":  397,
+                                   "buy":  "14 cups fresh baby spinach (about 14 oz)",
+                                   "bid":  "frozen-chopped-spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  196,
+                                   "buy":  "1.75 cups grated",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken Florentine for meal prep: golden chicken cutlets in a creamy spinach and parmesan sauce, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving.",
+                 "keywords":  "chicken florentine, creamy chicken florentine, chicken florentine meal prep, high protein chicken dinner, budget chicken meal prep",
+                 "image":  "",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  1.66,
+                 "recipeIngredient":  [
+                                          "Chicken Breast (cutlets), 5.25 lb (14 cutlets, about 6 oz each) (2381 g)",
+                                          "All-Purpose Flour, 0.75 cups (for dredging) (94 g)",
+                                          "Salt, 1.25 tbsp (23 g)",
+                                          "Black Pepper, 0.5 tbsp, freshly ground (3 g)",
+                                          "Butter, 7 tbsp unsalted (98 g)",
+                                          "Olive Oil, 3.5 tbsp (47 g)",
+                                          "Shallots, 3.5 oz, sliced (3 to 4 shallots) (99 g)",
+                                          "Garlic, 10 cloves, minced (30 g)",
+                                          "Chicken Broth, 3.5 cups (840 g)",
+                                          "White Wine Vinegar, 3 tbsp (45 g)",
+                                          "Italian Seasoning, 0.5 tbsp (2 g)",
+                                          "Heavy Cream, 3.5 cups (833 g)",
+                                          "Baby Spinach, 14 cups fresh baby spinach (about 14 oz) (397 g)",
+                                          "Parmesan Cheese, 1.75 cups grated (196 g)"
+                                      ],
+                 "steps":  [
+                               "Stir the flour, salt, and black pepper together, slice the breasts into 14 cutlets, and dredge each one.",
+                               "Sear the cutlets in batches in butter and olive oil until golden and cooked through, then hold them warm.",
+                               "Cook the shallots in the rest of the butter, add the garlic, then pour in the chicken broth, white wine vinegar, and Italian seasoning.",
+                               "Stir in the heavy cream and simmer until reduced by more than half, then wilt in the baby spinach.",
+                               "Return the cutlets to coat, stir in the parmesan off the heat, weigh the pan, and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  2381
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  94
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Shallots",
+                                  "grams":  99
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  30
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "White Wine Vinegar",
+                                  "grams":  45
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  833
+                              },
+                              {
+                                  "item":  "Spinach",
+                                  "grams":  397
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  196
+                              }
+                          ]
+}

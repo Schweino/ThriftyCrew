@@ -1,0 +1,81 @@
+{
+  "name": "Country Captain Chicken",
+  "slug": "country-captain-chicken",
+  "protein": "chicken",
+  "cuisine": "Southern",
+  "source_url": "https://spicysouthernkitchen.com/country-captain-chicken/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Chicken Broth", "grams": 540, "buy": "2.25 cups" },
+    { "item": "Golden Raisins", "grams": 181, "buy": "1.25 cups" },
+    { "item": "Curry Powder", "grams": 14, "buy": "2.25 tbsp" },
+    { "item": "Garam Masala", "grams": 14, "buy": "2.25 tbsp" },
+    { "item": "Salt", "grams": 27, "buy": "1.5 tbsp, divided" },
+    { "item": "Black Pepper", "grams": 5, "buy": "0.75 tbsp, divided" },
+    { "item": "Cayenne Pepper", "grams": 1, "buy": "0.5 tsp" },
+    { "item": "Hickory Smoked Bacon", "grams": 108, "buy": "9 thick-cut slices, cut into 1/2-inch pieces", "display_name": "thick-cut bacon" },
+    { "item": "Boneless Skinless Chicken Thigh", "grams": 1814, "buy": "4 lb (about 18 thighs)", "display_name": "boneless skinless chicken thighs" },
+    { "item": "Carrots", "grams": 248, "buy": "2.25 cups sliced" },
+    { "item": "Red Bell Pepper", "grams": 207, "buy": "2.25 cups diced" },
+    { "item": "Yellow Onion", "grams": 259, "buy": "2.25 cups diced" },
+    { "item": "Dried Guajillo Chiles", "grams": 14, "buy": "0.5 oz (about 2 chiles)" },
+    { "item": "Garlic", "grams": 15, "buy": "5 cloves, minced" },
+    { "item": "Tomato Paste", "grams": 112, "buy": "7 tbsp" },
+    { "item": "Ginger", "grams": 14, "buy": "2.25 tbsp minced", "display_name": "fresh ginger" },
+    { "item": "Diced Tomatoes", "grams": 822, "buy": "2 (14.5 oz) cans, undrained", "display_name": "petite diced tomatoes" },
+    { "item": "Rice", "grams": 765, "buy": "4.25 cups dry", "display_name": "white rice" },
+    { "item": "Almonds", "grams": 81, "buy": "0.75 cups slivered, toasted", "display_name": "slivered almonds" }
+  ],
+  "macros_per_serving": { "calories": 525, "protein_g": 35, "carbs_g": 66, "fat_g": 12 },
+  "writer_notes": [
+    "RICE COOKED-TO-DRY: the source line is '5 cups cooked white rice'. The mapped table stores rice DRY on the catalog cooked_to_dry basis (765 g, printed as 4.25 cups dry). So the buy string sells dry rice and the steps must cook it. I added a dedicated make_it step to simmer the 4.25 cups dry rice per package directions while the chicken bakes, and the serve step plates the chicken over that cooked rice. Buy string and steps are coherent: you buy dry, you cook it, you portion it.",
+    "SCALE: source serves 6, this batch builds 14 (about 2.33x). All grams and buy strings are already at 14 servings from the mapped table. In prose I converted the source's counts to the batch counts (9 bacon slices, 4 lb / about 18 thighs, both cans of diced tomatoes) and told the cook to brown the chicken in three or four batches because four pounds will not fit a single layer.",
+    "SALT AND PEPPER DIVIDED: source splits 2 tsp salt and 1 tsp pepper 50/50 (half into the spice blend, half onto the chicken). Buy strings are '1.5 tbsp, divided' and '0.75 tbsp, divided'. I wrote 'half the salt / half the pepper' into the blend and 'the rest' onto the chicken so no per-step number is invented in prose.",
+    "GUAJILLO discarded: source step 12 pulls the dried chiles out and throws them away after cooking. The steps say so, so the chile is bought, used, and removed, not orphaned.",
+    "BELL PEPPER: source allows red, orange, or yellow; the mapped table prices red (a named source option). Prose says red bell pepper to match what is bought.",
+    "MACROS transcribed as given (525 cal, 35 g protein, 66 g carbs, 12 g fat per serving); not recomputed. Cost is unknown to me and left as the ${{cost_ps}} token everywhere in prose."
+  ],
+  "forbidden_prose_terms": ["curry paste", "seafood"],
+  "prose": {
+    "intro_html": "<p>Country Captain is a dish with a passport. It came ashore in the port of Savannah sometime in the 1800s, carried by the spice trade, and it has been warming Southern tables ever since. Chicken thighs braised down in a curry-spiced tomato sauce, sweetened with plump golden raisins, finished with toasted almonds and crispy bacon. It tastes like it simmered all afternoon. It did not.</p><p>Here is the math that matters. Every container lands at {{cal}} calories with {{protein}} grams of protein for ${{cost_ps}}. That is a restaurant plate for less than you would leave as the tip, and it stays under 600 calories the whole way.</p>",
+    "shop_smart": "<p>The chicken is the whole ballgame, so buy it right. Four pounds of boneless skinless thighs anchors this batch. Watch the board and buy your thighs when the price is working in your favor, because at four pounds even a small per-pound move adds up fast.</p><p>The spice list looks long, but it is mostly jars you buy once and lean on for a year. Curry powder, garam masala, cayenne, and a couple of dried guajillo chiles do the heavy lifting on flavor and barely touch your grocery run. A standard pack of thick-cut bacon holds more than the nine slices this recipe needs, so plan breakfast around the rest. One bag of slivered almonds and one box of golden raisins will carry you through several batches of this.</p>",
+    "make_it": [
+      "Bring the chicken broth to a simmer in a small saucepan. Stir in the golden raisins, pull it off the heat, and set it aside. The raisins plump while you work on everything else.",
+      "In a small bowl, stir together the curry powder, garam masala, half the salt, half the black pepper, and all of the cayenne. That little bowl is your flavor base. Set it aside.",
+      "Heat your oven to 350 degrees.",
+      "In a large Dutch oven or any heavy oven-safe pot, cook the bacon over medium heat until it is crispy. Lift it out with a slotted spoon and set it aside, leaving the fat in the pot. Drain off all but about 2 tablespoons of that bacon grease.",
+      "Season the chicken thighs with the rest of the salt and pepper. Working in batches so the pot is never crowded, brown the thighs in the hot bacon grease, about 5 minutes a side. Four pounds of thighs is three or four batches, and that is fine. Pull each batch out as it browns and set it aside.",
+      "Add the sliced carrots, diced red bell pepper, and diced onion to the grease. Cook about 5 minutes, stirring now and then, until they soften.",
+      "Add the dried guajillo chiles and the minced garlic. Cook for 1 minute, just until the garlic smells like dinner.",
+      "Stir in the spice mixture, the tomato paste, and the minced fresh ginger. Keep it moving for about 30 seconds so the spices bloom and nothing scorches.",
+      "Pour in the broth and raisins along with both cans of diced tomatoes and all their juice. Bring it to a boil, then let it simmer for 5 minutes.",
+      "Nestle the browned chicken thighs back down into the sauce. Cover the pot and bake for 15 minutes. Take the lid off and bake 15 minutes more. Fish out the guajillo chiles and throw them away; they have given all they are going to give.",
+      "While the chicken bakes, cook the rice. Simmer the 4.25 cups of dry rice in water per the package directions until it is tender and fluffy. This is the base under every container.",
+      "Plate it up: spoon the chicken and sauce over the cooked rice, then scatter the toasted slivered almonds and the crumbled crispy bacon over the top."
+    ],
+    "portion_html": "<p>Here is how you get fourteen honest, equal containers instead of eyeballing your way to a short Friday. Once the chicken and sauce are out of the oven and the rice is done, weigh your empty container and write that number down. Weigh the full pot of chicken and sauce, subtract the pot itself, and divide what is left by 14. That is your target grams of chicken and sauce per container. Do the same with the rice. Then scoop to the number, not to the eye.</p><p>The scale does not play favorites, and neither should your Tuesday self at the expense of your Friday self. Top each one with its share of almonds and bacon and every container carries {{cal}} calories and {{protein}} grams of protein, locked in.</p>",
+    "cost_closing_html": "<p>Add it all up and this comes in at ${{cost_ps}} a serving. A dish that traveled from the spice ports to a Georgia kitchen to your meal-prep stack, and it still costs less than the drive-thru. That is the whole point.</p>",
+    "upsell_html": "<p>Want the board that tells you the week thighs and bacon hit their low, so a batch like this costs even less? That is what the Thrifty Crew membership is, and it runs a dollar a month. One dollar to stop guessing at the meat counter.</p>"
+  },
+  "head": {
+    "description": "Country Captain Chicken meal prep: curry-spiced braised chicken thighs with tomatoes, golden raisins, and toasted almonds over rice. A high-protein budget batch of 14 containers.",
+    "keywords": "country captain chicken, country captain recipe, meal prep, chicken thigh meal prep, curry chicken, high protein meal prep, budget meal prep",
+    "prepTime": "PT15M",
+    "cookTime": "PT57M",
+    "totalTime": "PT1H12M",
+    "steps": [
+      "Simmer the chicken broth, stir in the golden raisins, remove from heat, and set aside to plump.",
+      "Mix the curry powder, garam masala, half the salt, half the black pepper, and the cayenne in a small bowl and set aside.",
+      "Heat the oven to 350 degrees.",
+      "Cook the bacon in a large Dutch oven until crispy, remove it, and drain off all but about 2 tablespoons of grease.",
+      "Season the chicken thighs with the remaining salt and pepper and brown them in the bacon grease in three or four batches, then set aside.",
+      "Soften the sliced carrots, diced red bell pepper, and diced onion in the grease for about 5 minutes.",
+      "Add the dried guajillo chiles and minced garlic and cook 1 minute.",
+      "Stir in the spice mixture, tomato paste, and fresh ginger for about 30 seconds.",
+      "Add the broth and raisins and both cans of diced tomatoes, bring to a boil, and simmer 5 minutes.",
+      "Return the chicken to the sauce, cover, and bake 15 minutes, then uncover and bake 15 minutes more; discard the chiles.",
+      "Cook the dry rice per package directions while the chicken bakes.",
+      "Serve the chicken and sauce over the rice, topped with toasted slivered almonds and crumbled bacon."
+    ]
+  }
+}
