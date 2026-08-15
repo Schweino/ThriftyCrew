@@ -125,6 +125,17 @@ function Get-PkgBasis($s, [string]$rowUnit) {
   }
   return @{ variable = $false; basis = 0.0 }
 }
+# PER-STORE URLS ON THE LEAN ENTRIES: MEASURED AND REJECTED (2026-08-15). Once the card picks its winning
+# store by COST, a "See item" link may only be shown when it belongs to the store named on that line, and
+# the feed carries a url for the per-unit winner only. The two honest options were "ship every store's url"
+# or "suppress the link when the winner is not the url's store". Measured before choosing, on the real file:
+#   lean (this)          733.0 KB raw / 98.8 KB gzip
+#   with per-store urls 1026.9 KB raw / 158.6 KB gzip     (+294 KB raw, +59.6 KB gzip)
+# +59.6 KB gzipped on a file EVERY recipe page fetches, to keep a link on lines that already show the
+# store name and per-unit price, is not worth it - the threshold set when this was planned was about 20 KB.
+# So the card suppresses the link instead (tpl2-scaler-prefix.html, the `url` rule in price()). Flip this to
+# $true only with a fresh measurement; the plumbing below is already correct either way.
+$PER_STORE_URLS = $false
 # $Full=$false emits the lean per-store shape. THE CARD READS FOUR FIELDS off a `stores` entry
 # (perUnitMicros, packageBasisUnits, purchasePriceMinor, variableWeight) and takes the store NAME from the
 # key and the unit from the ingredients row, so store/unit/url on those entries are pure duplication - and
@@ -136,6 +147,11 @@ function New-PricingEntry($s, [double]$perUnit, [string]$rowUnit, [string]$id, [
   if ($Full) { $e['store'] = [string]$s.store; $e['unit'] = $rowUnit }
   $e['perUnitMicros']  = [int][math]::Round($perUnit * 1000000)
   $e['variableWeight'] = [bool]$pk.variable
+  # SALE FLAG ON THE CELL ITSELF (2026-08-15). The card's everyday tab needs the cheapest NON-SALE cell,
+  # and once the card picks its own winner by COST it can no longer learn sale-ness from
+  # ingredients[bid].type - that field describes the per-unit winner, which is a different cell. Emitted
+  # only on sale cells, so the size cost is a handful of entries rather than one per cell.
+  if (([string]$s.type) -eq 'sale') { $e['sale'] = $true }
   if ([double]$pk.basis -gt 0) {
     $e['packageBasisUnits'] = [math]::Round([double]$pk.basis, 6)
     $adMinor = 0
@@ -147,7 +163,7 @@ function New-PricingEntry($s, [double]$perUnit, [string]$rowUnit, [string]$id, [
     if ($adMinor -gt 0 -and $derived -gt 0 -and ([math]::Abs($adMinor - $derived) / [double]$derived) -le 0.02) { $e['purchasePriceMinor'] = $adMinor }
     else { $e['purchasePriceMinor'] = $derived; if ($adMinor -gt 0) { $script:pinDiverged++ } }
   } else { $script:pinNoBasis++ }
-  if ($Full -and $purl.ContainsKey($id) -and $purl[$id].ContainsKey([string]$s.store)) { $e['url'] = $purl[$id][[string]$s.store] }
+  if (($Full -or $PER_STORE_URLS) -and $purl.ContainsKey($id) -and $purl[$id].ContainsKey([string]$s.store)) { $e['url'] = $purl[$id][[string]$s.store] }
   return $e
 }
 
@@ -278,6 +294,13 @@ try {
   if($cmpF){ $boardItemCount = @(((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison)).Count }
 } catch {}
 $feed = [ordered]@{
+  # SCHEMA MARKER (2026-08-15). The card's everyday tab picks the cheapest NON-SALE cell by scanning
+  # `stores` for entries WITHOUT a `sale` flag. Absence of flags is ambiguous between "this feed predates
+  # sale flags" and "nothing is on sale this week", and the wrong reading lets a sale price masquerade as
+  # an everyday one - which matters because the feed is CDN-cached (30 min, worker max-age 60), so a new
+  # card can genuinely meet an old feed. The card enables the everyday scan only at schema>=2. The
+  # CHEAPEST scan needs no flag and is correct against a feed of any age.
+  schema      = 2
   generated   = (Get-Date).ToString('s')
   week_of     = $weekOf
   ingredient_count = $ing.Count
