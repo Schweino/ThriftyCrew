@@ -17,7 +17,7 @@
                          "SALT AND PEPPER DIVIDED: source splits 2 tsp salt and 1 tsp pepper 50/50 (half into the spice blend, half onto the chicken). Buy strings are \u00271.5 tbsp, divided\u0027 and \u00270.75 tbsp, divided\u0027. I wrote \u0027half the salt / half the pepper\u0027 into the blend and \u0027the rest\u0027 onto the chicken so no per-step number is invented in prose.",
                          "GUAJILLO discarded: source step 12 pulls the dried chiles out and throws them away after cooking. The steps say so, so the chile is bought, used, and removed, not orphaned.",
                          "BELL PEPPER: source allows red, orange, or yellow; the mapped table prices red (a named source option). Prose says red bell pepper to match what is bought.",
-                         "MACROS transcribed as given (525 cal, 35 g protein, 66 g carbs, 12 g fat per serving); not recomputed. Cost is unknown to me and left as the ${{cost_ps}} token everywhere in prose."
+                         "MACROS PROVENANCE: 525 cal, 35 g protein, 66 g carbs, 12 g fat per serving. These were COMPUTED from this recipe mapped grams against food-macros-db.json at 14 servings and transcribed here unchanged. They are NOT the source page figures: the source card publishes 548 cal at 6 servings, and this build differs from it deliberately because rice is stored on the dry basis, diced tomatoes round down to 2 whole 14.5 oz cans, and slivered almonds use a slivered density rather than the whole-almond cup figure. Cost is unknown to the writer and left as the ${{cost_ps}} token everywhere in prose."
                      ],
     "forbidden_prose_terms":  [
                                   "curry paste",
@@ -28,7 +28,7 @@
                  "protein":  35,
                  "carbs":  66,
                  "fat":  12,
-                 "cost_ps":  "1.87"
+                 "cost_ps":  "3.73"
              },
     "intro_html":  "\u003cp\u003eCountry Captain is a dish with a passport. It came ashore in the port of Savannah sometime in the 1800s, carried by the spice trade, and it has been warming Southern tables ever since. Chicken thighs braised down in a curry-spiced tomato sauce, sweetened with plump golden raisins, finished with toasted almonds and crispy bacon. It tastes like it simmered all afternoon. It did not.\u003c/p\u003e\u003cp\u003eHere is the math that matters. Every container lands at {{cal}} calories with {{protein}} grams of protein for ${{cost_ps}}. That is a restaurant plate for less than you would leave as the tip, and it stays under 600 calories the whole way.\u003c/p\u003e",
     "ingredients_display":  [
@@ -262,7 +262,7 @@
                  "prepTime":  "PT15M",
                  "cookTime":  "PT57M",
                  "totalTime":  "PT1H12M",
-                 "costPerServing":  1.87,
+                 "costPerServing":  3.73,
                  "recipeIngredient":  [
                                           "Chicken Broth, 2.25 cups (540 g)",
                                           "Golden Raisins, 1.25 cups (181 g)",

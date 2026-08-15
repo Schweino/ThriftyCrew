@@ -3,10 +3,10 @@
     "title":  "Chicken Florentine",
     "source_url":  "https://www.smalltownwoman.com/chicken-florentine/",
     "protein":  "chicken",
-    "state":  "written",
+    "state":  "qa-passed",
     "wave":  null,
     "created":  "2026-08-15T11:54:24",
-    "updated":  "2026-08-15T12:23:15",
+    "updated":  "2026-08-15T12:24:30",
     "terms":  [
 
               ],
@@ -56,6 +56,12 @@
                         "at":  "2026-08-15T12:23:15",
                         "by":  "recipe-writer",
                         "detail":  "prose in intake, card built"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-15T12:24:30",
+                        "by":  "recipe-source-qa",
+                        "detail":  "pass, both anchors; 4 notes, 0 blocking"
                     }
                 ]
 }

@@ -1,0 +1,20 @@
+{
+  "slug": "country-captain-chicken",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "scaling",
+      "severity": "note",
+      "detail": "Bacon grams look cooked-basis on a raw-buy line: 9 thick-cut slices are recorded as 108 g (12 g/slice), which is a cooked-slice weight; 9 raw thick-cut slices are roughly 300-400 g. The count scales on the correct ratio (4 -> 9 at 2.33x) and the buy string and steps match the source, so the cooked dish is faithful, but the gram figure feeds macros and per-use cost and understates bacon by roughly 3x unless the 12 g/slice density is a deliberate catalog basis.",
+      "owner": "mapper"
+    },
+    {
+      "check": "prose-numbers",
+      "severity": "note",
+      "detail": "writer_notes claim macros were 'transcribed as given (525 cal ...)', but the live source card shows 548 kcal per serving at 6 servings; the extraction carries no nutrition at all. The 525 may be a legitimate recompute (rice dry-basis, tomato round-down, almond correction change the composition), but the provenance claim 'transcribed as given' does not match either anchor. Prose itself is clean: literals ($26.21 / $1.87, $35.49 / $2.54, $16.71 / $52.20, 'under 600 calories') all agree with the spec's own stat and cost fields, and cal/protein/cost_ps travel as tokens.",
+      "owner": "writer"
+    }
+  ],
+  "notes": "Both anchors reached; live page matches the extraction verbatim (19 ingredients, 13 steps, serves 6). Ingredient coverage is exact in both directions: all 19 source lines map to spec lines, no inventions, no drops. Scaling is one consistent 2.333x ratio with the three pre-declared departures confirmed as described: diced tomatoes rounded down to 2 whole 14.5 oz cans (822 g, about -11%), whole-unit/friendly rounding on small quantities (cayenne 0.5 tsp, 2 guajillo chiles, 9 bacon slices, 5 garlic cloves), and slivered almonds at 81 g via slivered density rather than 107 g whole-cup. Rice dry-basis policy verified coherent: buy string sells 4.25 cups dry (765 g), make_it step 11 cooks it per package directions while the chicken bakes, and the serve step plates over it. Method survives intact: raisin plump, spice blend, bacon render + drain to 2 tbsp, season/brown (batches widened 2 -> 3-4 for 4 lb, appropriate), veg soften 5 min, chile+garlic 1 min, 30 s spice bloom, boil + 5 min simmer, 15 min covered + 15 min uncovered bake, chile discarded, served with rice/almonds/bacon. Title 'Country Captain Chicken' names the same dish as the source's 'Country Captain' (the source URL itself uses the longer name). Credit present in spec and built card, pointing at the correct URL. The orchestrator's removal of the extractor's 14th non-step entry is recorded in the anchor and matches the live page, which has exactly 13 steps."
+}

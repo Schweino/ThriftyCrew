@@ -92,6 +92,24 @@ function Test-LedgerStamped {
   return (@(@($Row.stages) | ForEach-Object { [string]$_.stage }) -contains $Stage)
 }
 
+# THE COST BASIS. Every live spec carries stat.cost_ps on the EVERYDAY basis (cost_first_run / servings),
+# which is what pipeline\v2-perserving.json publishes as everyday_ps. A brand-new recipe is not in that
+# manifest when build-v2-spec runs, so it silently falls back to batch/14 - roughly HALF. Shipping that
+# both understates the price to the reader and, because the free-dinner rotation and hub Top 5 rank a
+# pooled set, lets the wrongly-based recipe falsely dominate the cheapest lists.
+function Get-CostBasisProblems {
+  param($Specs, $ManifestRows, [double]$Tolerance = 0.02)
+  $problems = @()
+  foreach ($s in @($Specs)) {
+    $slug = [string]$s.slug
+    if (-not $ManifestRows.ContainsKey($slug)) { $problems += ("{0}: absent from v2-perserving.json" -f $slug); continue }
+    $want = [double]$ManifestRows[$slug].everyday_ps
+    $got  = [double]$s.cost_ps
+    if ([Math]::Abs($want - $got) -gt $Tolerance) { $problems += ("{0}: stat.cost_ps {1} but manifest everyday {2}" -f $slug, $got, $want) }
+  }
+  return @($problems)
+}
+
 # ===================================================================================================
 # SELF-TEST
 # ===================================================================================================
@@ -143,6 +161,23 @@ if ($runSelfTest) {
     (-not (Test-LedgerStamped ([pscustomobject]@{ stages = @([pscustomobject]@{ stage = 'select' }) }) 'audit')) 'allowed'
   T 'MUST FIRE  a batch with NO stages at all is refused' `
     (-not (Test-LedgerStamped ([pscustomobject]@{ stages = @() }) 'audit')) 'allowed'
+
+  # ---- THE COST BASIS, frozen from the 2026-08-15 shakedown. Both recipes built with stat.cost_ps on
+  # the batch/14 fallback because a new slug is not in the manifest yet: Country Captain would have
+  # published $1.87 against a real everyday cost of $3.73, Florentine $1.66 against $3.26.
+  $mrows = @{ 'country-captain-chicken' = [pscustomobject]@{ everyday_ps = 3.73 }
+              'chicken-florentine'      = [pscustomobject]@{ everyday_ps = 3.26 } }
+  $halfPriced = @([pscustomobject]@{ slug = 'country-captain-chicken'; cost_ps = 1.87 })
+  T 'MUST FIRE  a spec still on the batch/14 fallback is caught before publish' `
+    ((Get-CostBasisProblems $halfPriced $mrows).Count -eq 1) 'published at half price'
+  $corrected = @([pscustomobject]@{ slug = 'country-captain-chicken'; cost_ps = 3.73 },
+                 [pscustomobject]@{ slug = 'chicken-florentine';      cost_ps = 3.26 })
+  T 'CLEAN TWIN specs re-anchored to the everyday basis pass' `
+    ((Get-CostBasisProblems $corrected $mrows).Count -eq 0) 'spurious problem'
+  T 'MUST FIRE  a slug missing from the manifest entirely is caught' `
+    ((Get-CostBasisProblems @([pscustomobject]@{ slug = 'brand-new'; cost_ps = 2.00 }) $mrows).Count -eq 1) 'let an unmeasured slug through'
+  T 'penny rounding does not trip the basis check' `
+    ((Get-CostBasisProblems @([pscustomobject]@{ slug = 'chicken-florentine'; cost_ps = 3.27 }) $mrows).Count -eq 0) 'too strict'
 
   if ($f -eq 0) { Write-Output 'wave-publish SELF-TEST PASS'; exit 0 }
   Write-Output ("wave-publish SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
@@ -288,9 +323,10 @@ Write-Output ''
 if ($runDryRun) {
   Write-Output '== DRY RUN - every gate above passed. These steps were NOT run: ============'
   Write-Output ("  E1  migrate-prose-tokens.ps1 -Slugs <{0} slugs> -Apply" -f $slugs.Count)
-  Write-Output ("  E2  update-recipes-db.ps1 -SpecList {0}" -f (Split-Path $slugListPath -Leaf))
-  Write-Output '  E3  propagate-recipes.ps1  (recipes-db sync -> db-agreement gate -> planner -> cards -> publish)'
-  Write-Output '  E4  git add <scoped> && git commit && git push'
+  Write-Output "  E2  compute-v2-perserving.ps1 + reanchor-machine-fields.ps1 (everyday cost basis)"
+  Write-Output ("  E3  update-recipes-db.ps1 -SpecList {0}" -f (Split-Path $slugListPath -Leaf))
+  Write-Output '  E4  propagate-recipes.ps1  (recipes-db sync -> db-agreement gate -> planner -> cards -> publish)'
+  Write-Output '  E5  git add <scoped> && git commit && git push'
   Write-Output ''
   Write-Output '  Would publish:'
   foreach ($s in $slugs) { Write-Output ("    https://www.thriftycrew.com/{0}/" -f $s) }
@@ -314,19 +350,51 @@ $mig = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'm
 if ($LASTEXITCODE -ne 0) { @($mig | Select-Object -Last 15) | ForEach-Object { Write-Output ("    " + [string]$_) }; Fail 'migrate-prose-tokens failed' }
 Write-Output ("  E1  prose tokens           " + [string](@($mig | Select-Object -Last 1)))
 
-# ---- E2. recipes-db rows
+# ---- E2. THE COST BASIS. A NEW recipe is not in pipeline\v2-perserving.json yet, so build-v2-spec
+# stamps stat.cost_ps from batch/14 and WARNS. Every one of the 542 live specs instead carries the
+# EVERYDAY basis (cost_first_run/14), which is roughly double. Shipping the fallback would advertise a
+# recipe at about half its real price AND, because the free-dinner rotation and the hub Top 5 rank a
+# pooled set, let the wrongly-based recipe falsely dominate the cheapest lists - the mixed-basis trap
+# the 2026-07-26 cost redesign exists to prevent. Measured on the 2026-08-15 shakedown: Country Captain
+# would have published $1.87 instead of $3.73, Florentine $1.66 instead of $3.26.
+# propagate does NOT do this: it is built for spec EDITS, where cost has not moved.
+Write-Output '  E2  cost basis (new recipes are not in the manifest yet)'
+$cv = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'compute-v2-perserving.ps1') 2>&1
+if ($LASTEXITCODE -ne 0) { @($cv | Select-Object -Last 10) | ForEach-Object { Write-Output ("    " + [string]$_) }; Fail 'compute-v2-perserving failed' }
+# IN-PROCESS, never `powershell -File`: that path marshals a [string[]] as one command-line string, so a
+# multi-slug array binds as ONE slug and the script reports a cheerful "re-anchored 1 spec". That is
+# exactly what happened on the first shakedown attempt with a 2-slug wave.
+Push-Location $mp
+try { & '.\pipeline\reanchor-machine-fields.ps1' -Slugs $slugs | Select-Object -Last 1 | ForEach-Object { Write-Output ("      " + [string]$_) } }
+finally { Pop-Location }
+
+# VERIFY the basis actually landed, per slug. A silent fallback is the whole failure mode here.
+$manPath = Join-Path $here 'v2-perserving.json'
+$manRows = @{}
+foreach ($e in @(Read-Json $manPath)) { $manRows[[string]$e.slug] = $e }
+$specRows = @()
+foreach ($s in $slugs) {
+  $sp = Read-Json (Join-Path $mp ("db\recipes\{0}.json" -f $s))
+  $specRows += [pscustomobject]@{ slug = $s; cost_ps = [double]$sp.stat.cost_ps }
+}
+$badBasis = @(Get-CostBasisProblems $specRows $manRows)   # ONE implementation, the one the self-test pins
+if ($badBasis.Count) { $badBasis | ForEach-Object { Write-Output ("      ! " + $_) }; Fail 'cost basis did not land on every slug - refusing to publish a half-price recipe' }
+Write-Output ("      cost basis verified on {0}/{0} slug(s) against the everyday manifest" -f $slugs.Count)
+Stamp 'cost-basis' ("compute-v2-perserving + reanchor on {0} slug(s)" -f $slugs.Count)
+
+# ---- E3. recipes-db rows
 $upd = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'update-recipes-db.ps1') `
         -RunDir $RunDir -SpecsDir $specsDir -SpecList $slugListPath -RunLabel $batch 2>&1
 if ($LASTEXITCODE -ne 0) { @($upd | Select-Object -Last 20) | ForEach-Object { Write-Output ("    " + [string]$_) }; Fail 'update-recipes-db failed' }
-Write-Output ("  E2  recipes-db             " + [string](@($upd | Select-Object -Last 1)))
+Write-Output ("  E3  recipes-db             " + [string](@($upd | Select-Object -Last 1)))
 Stamp 'recipes-db' ("{0} row(s) via {1}" -f $slugs.Count, $batch)
 
-# ---- E3. what is dirty, and is any of it not ours?
+# ---- E4. what is dirty, and is any of it not ours?
 $pd = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'propagate-recipes.ps1') -DryRun 2>&1
 $dirty = @(@($pd) | ForEach-Object { [string]$_ } | Where-Object { $_ -match '^\s{2}\S' } | ForEach-Object { $_.Trim() })
 $foreign = @(Get-ForeignDirty $dirty $slugs)
 if ($foreign.Count) {
-  Write-Output ("  E3  NOTE {0} dirty spec(s) outside this wave will also be carried by propagate:" -f $foreign.Count)
+  Write-Output ("  E4  NOTE {0} dirty spec(s) outside this wave will also be carried by propagate:" -f $foreign.Count)
   @($foreign | Select-Object -First 10) | ForEach-Object { Write-Output ("        " + $_) }
 }
 
@@ -341,11 +409,11 @@ if (-not (@($prop | Where-Object { $_ -match 'propagate COMPLETE' }).Count)) {
 }
 Stamp 'build-cards' ("{0} card(s) rebuilt via propagate" -f $slugs.Count)
 Stamp 'publish' ("{0}/{0} published through engine\publish (visibility preserved)" -f $slugs.Count)
-Write-Output ("  E4  propagate               COMPLETE")
+Write-Output ("  E5  propagate               COMPLETE")
 
 # ---- E5. push. The push IS the deploy here. NEVER `git add -A`: it sweeps whatever else is in Brad's
 # real tree into this commit.
-if ($runSkipGit) { Write-Output '  E5  git                    SKIPPED (-SkipGit)' }
+if ($runSkipGit) { Write-Output '  E6  git                    SKIPPED (-SkipGit)' }
 else {
   $paths = @(
     ('meal-prep/runs/' + (Split-Path $RunDir -Leaf)),
@@ -367,7 +435,7 @@ else {
   }
   $push = & git -C $repo push 2>&1
   if ($LASTEXITCODE -ne 0) { @($push | Select-Object -Last 6) | ForEach-Object { Write-Output ("    " + [string]$_) }; Fail 'git push failed - the push IS the deploy, so this is not done' }
-  Write-Output ("  E5  git                    committed and pushed ({0} path(s))" -f $add.Count)
+  Write-Output ("  E6  git                    committed and pushed ({0} path(s))" -f $add.Count)
 }
 
 # ---- advance the recipes to `published`

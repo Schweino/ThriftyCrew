@@ -1,0 +1,32 @@
+{
+  "slug": "chicken-florentine",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "ingredient-coverage",
+      "severity": "note",
+      "detail": "Wine substitution confirmed as documented policy, not drift: source's 3/4 cup dry white wine is absent; broth line (3.5 cups) covers the source's 1/4 cup broth plus the wine's 3/4 cup at 3.5x (1 cup total liquid x 3.5 = 3.5 cups, exact), and White Wine Vinegar (3 tbsp) is the added acid. writer_notes records the ruling, shop_smart and cost_closing disclose it to readers, and no step reaches for wine. All other 13 source ingredients trace both directions with no inventions or drops.",
+      "owner": "mapper"
+    },
+    {
+      "check": "scaling",
+      "severity": "note",
+      "detail": "One consistent 3.5x ratio (4 -> 14) verified line by line: butter 2->7 tbsp, oil 1->3.5 tbsp, cream 1->3.5 cups, spinach 4->14 cups, parmesan 0.5->1.75 cups, salt/pepper/garlic/italian-seasoning within kitchen rounding. Sole departure is the documented dredging-flour quantization: 0.75 cups vs exact 0.875 (94 g vs ~109 g), deliberate because excess dredge is discarded. Confirmed, not re-discovered.",
+      "owner": "mapper"
+    },
+    {
+      "check": "scaling",
+      "severity": "note",
+      "detail": "Chicken portion ruling: the 2381 g (14 x ~6 oz cutlets) correction is APPROVED as faithful. Source states no cutlet weight, so its published nutrition is the only anchor for portion size: live page publishes 614 cal / 44 g protein / 14 g carbs per serving; the corrected build computes 573 cal / 45 g protein / 14 g carbs. Protein matches within 1 g, and the 41-calorie gap is almost exactly the removed wine (3/4 cup dry white wine at 4 servings is ~37 cal/serving; 614 - 37 = 577 vs 573). The prior 1361 g build (489 cal / 28.8 g protein) contradicted the source's own label; the re-rule reconciles it. 6 oz is large for a 'cutlet' in the abstract, but the source's macros, not the word, are the evidence, and they support it.",
+      "owner": "mapper"
+    },
+    {
+      "check": "method",
+      "severity": "note",
+      "detail": "Method survives: dredge, sear in fat, hold warm in low oven, shallots then garlic, deglaze liquid + seasoning, cream reduced by a little more than half (10-15 min), wilt spinach, return chicken. Vinegar enters with the broth before the cream, cooked into the sauce as writer_notes specifies. One minor drift: source sprinkles parmesan over the plated dish right before serving; spec/card stirs it into the sauce at the end. Same cheese, same quantity, same moment in the cook; for weighed 14-portion meal prep stirring it in is the coherent adaptation, and it does not change the dish. Times 20/40 vs source 10/30 ruled a FAIR batch-scale adjustment: 14 cutlets cannot sear in one pan, and the batching is written into the steps.",
+      "owner": "writer"
+    }
+  ],
+  "notes": "Both anchors held: extraction matched the live page line for line (14 ingredients, 4 servings, 10/30 min, published 614 cal / 44 g protein / 14 g carbs / 39 g fat). Title names the same dish. Credit block present in spec and built card, pointing at https://www.smalltownwoman.com/chicken-florentine/. Prose numbers clean: built card literals 573 cal / 45 g protein / 14 g carbs / 37 g fat all equal the spec stat, 'under 600 calories' is consistent, and cost literals reconcile ($23.23/14=$1.66, $32.57/14=$2.33, $32.57+$13.14=$45.71). The mapping flags in writer_notes (spinach priced on frozen-chopped bid for a fresh recipe, shallots bid pointing at onions, board hijacks on parmesan/butter/heavy cream) are commodity-id and pricing matters owned by the batch auditor, already forwarded there; they are not source-fidelity defects and did not factor into this verdict."
+}
