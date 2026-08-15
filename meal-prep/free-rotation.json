@@ -1,7 +1,7 @@
 ﻿{
     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
-    "week_of":  "2026-08-14",
-    "rotated_at":  "2026-08-14T20:13:25",
+    "week_of":  "2026-08-15",
+    "rotated_at":  "2026-08-15T09:09:55",
     "free":  [
                  {
                      "slug":  "chicken-bulgogi-rice-bowls",
@@ -22,7 +22,7 @@
                      "protein":  "chicken",
                      "rank":  3,
                      "name":  "Chicken Pot Pie Casserole with Biscuits",
-                     "per_serving":  1.77
+                     "per_serving":  1.72
                  },
                  {
                      "slug":  "claypot-chicken-mushroom-rice",
@@ -36,14 +36,14 @@
                      "protein":  "chicken",
                      "rank":  5,
                      "name":  "Poppy Seed Chicken and Rice Casserole",
-                     "per_serving":  1.85
+                     "per_serving":  1.82
                  },
                  {
                      "slug":  "haluski-and-kielbasa-cabbage-noodles",
                      "protein":  "turkey",
                      "rank":  1,
                      "name":  "Haluski and Kielbasa (Cabbage and Egg Noodles)",
-                     "per_serving":  1.79
+                     "per_serving":  1.77
                  },
                  {
                      "slug":  "turkey-biscuit-pot-pie-casserole",
@@ -53,39 +53,39 @@
                      "per_serving":  1.86
                  },
                  {
-                     "slug":  "turkey-huevos-rancheros-rice-bowls",
+                     "slug":  "scalloped-potato-turkey-casserole",
                      "protein":  "turkey",
                      "rank":  3,
+                     "name":  "Scalloped Potato Turkey Casserole",
+                     "per_serving":  1.88
+                 },
+                 {
+                     "slug":  "turkey-huevos-rancheros-rice-bowls",
+                     "protein":  "turkey",
+                     "rank":  4,
                      "name":  "Turkey Huevos Rancheros Rice Bowls",
                      "per_serving":  1.88
                  },
                  {
                      "slug":  "red-beans-turkey-sausage-and-rice",
                      "protein":  "turkey",
-                     "rank":  4,
+                     "rank":  5,
                      "name":  "Red Beans, Turkey Sausage and Rice",
                      "per_serving":  1.93
-                 },
-                 {
-                     "slug":  "scalloped-potato-turkey-casserole",
-                     "protein":  "turkey",
-                     "rank":  5,
-                     "name":  "Scalloped Potato Turkey Casserole",
-                     "per_serving":  1.98
                  },
                  {
                      "slug":  "beef-potato-au-gratin-casserole",
                      "protein":  "beef",
                      "rank":  1,
                      "name":  "Slow Cooker Beef and Potato Au Gratin Casserole",
-                     "per_serving":  2.34
+                     "per_serving":  2.27
                  },
                  {
                      "slug":  "lebanese-hashweh",
                      "protein":  "beef",
                      "rank":  2,
                      "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
-                     "per_serving":  2.41
+                     "per_serving":  2.38
                  },
                  {
                      "slug":  "slow-cooker-beef-and-noodles",
@@ -113,14 +113,14 @@
                      "protein":  "pork",
                      "rank":  1,
                      "name":  "Bratwurst and Sauerkraut with Potatoes",
-                     "per_serving":  1.32
+                     "per_serving":  1.25
                  },
                  {
                      "slug":  "orecchiette-italian-sausage-broccoli",
                      "protein":  "pork",
                      "rank":  2,
                      "name":  "Orecchiette with Italian Sausage and Broccoli",
-                     "per_serving":  1.6
+                     "per_serving":  1.57
                  },
                  {
                      "slug":  "slow-cooker-kalua-pork-bowls",

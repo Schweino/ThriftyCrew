@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-15 06:16",
-    "board":  "comparison-2026-08-14.json",
-    "sidecar_generated":  "2026-08-15 06:16:01",
+    "generated":  "2026-08-15 09:04",
+    "board":  "comparison-2026-08-15.json",
+    "sidecar_generated":  "2026-08-15 09:04:38",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,9 +9,9 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2900,
-                     "corpus":  35766,
-                     "rule_invisible":  6428
+                     "board_pairs":  2902,
+                     "corpus":  35780,
+                     "rule_invisible":  6430
                  },
     "identity_count":  0,
     "coverage_count":  56,

@@ -1,5 +1,44 @@
 ﻿[
     {
+        "id":  "pickled-jalapenos",
+        "store":  "Hy-Vee",
+        "product":  "La Costena Green Pickled Sliced Jalapeno Peppers",
+        "size":  "12 oz",
+        "price":  3.29,
+        "per_unit":  0.2742,
+        "unit":  "oz",
+        "held_per_unit":  0.2908,
+        "beats_by_pct":  5.7,
+        "product_id":  "64251",
+        "why":  "beats the held price"
+    },
+    {
+        "id":  "gochujang",
+        "store":  "Hy-Vee",
+        "product":  "O\u0027Food Gochujang Medium Hot Brown Rice Red Pepper Paste 17.6 oz",
+        "size":  "17.6 oz",
+        "price":  5.99,
+        "per_unit":  0.3403,
+        "unit":  "oz",
+        "held_per_unit":  0.4229,
+        "beats_by_pct":  19.5,
+        "product_id":  "3681583",
+        "why":  "beats the held price"
+    },
+    {
+        "id":  "mirin",
+        "store":  "Hy-Vee",
+        "product":  "Mizkan Mirin Sweet Cooking Seasoning",
+        "size":  "12 fl oz",
+        "price":  4.99,
+        "per_unit":  0.4158,
+        "unit":  "floz",
+        "held_per_unit":  0.699,
+        "beats_by_pct":  40.5,
+        "product_id":  "2913910",
+        "why":  "beats the held price"
+    },
+    {
         "id":  "furniture-polish",
         "store":  "Hy-Vee",
         "product":  "Behold Furniture Polish Lemon",
@@ -9149,32 +9188,6 @@
         "held_per_unit":  6.66,
         "beats_by_pct":  44.6,
         "product_id":  "31743",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "gochujang",
-        "store":  "Hy-Vee",
-        "product":  "O\u0027Food Gochujang Medium Hot Brown Rice Red Pepper Paste 17.6 oz",
-        "size":  "17.6 oz",
-        "price":  5.99,
-        "per_unit":  0.3403,
-        "unit":  "oz",
-        "held_per_unit":  0.4229,
-        "beats_by_pct":  19.5,
-        "product_id":  "3681583",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "mirin",
-        "store":  "Hy-Vee",
-        "product":  "Mizkan Mirin Sweet Cooking Seasoning",
-        "size":  "12 fl oz",
-        "price":  4.99,
-        "per_unit":  0.4158,
-        "unit":  "floz",
-        "held_per_unit":  0.699,
-        "beats_by_pct":  40.5,
-        "product_id":  "2913910",
         "why":  "beats the held price"
     },
     {

@@ -173,7 +173,7 @@
     {
         "id":  "baby-food",
         "store":  "Family Fare",
-        "product":  "Gerber Sitter 2nd Foods Nourishing Blends Sweet Potato Turkey With Oats 2 Ea",
+        "product":  "Gerber Sitter 2nd Foods (6+ Months) Veggie Blends Carrot Sweet Potato Pea 2 Ea",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/baby_child",
         "verdict":  "ALLOW",
@@ -349,6 +349,15 @@
         "aisle":  "pantry/mixes_spices_seasoning",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
+        "id":  "black-peppercorns",
+        "store":  "Family Fare",
+        "product":  "Sugar \u0027N Spice Black Peppercorns",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027fresh_fruits_vegetables\u0027; category \u0027baking\u0027 allows only: pantry"
     },
     {
         "id":  "blackberries",
@@ -614,7 +623,7 @@
     {
         "id":  "canned-corn",
         "store":  "Family Fare",
-        "product":  "Our Family No Salt Added Super Sweet Whole Kernel Corn 15.25 Oz",
+        "product":  "Our Family Super Sweet Whole Kernel Corn 15.25 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -3134,7 +3143,7 @@
     {
         "id":  "shredded-cheese",
         "store":  "Family Fare",
-        "product":  "Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz",
+        "product":  "Our Family Natural Finely Cut Mexican Shredded Cheese 32 Oz",
         "dept":  "deli",
         "aisle":  "deli/cheese",
         "verdict":  "ALLOW",
@@ -3224,7 +3233,7 @@
     {
         "id":  "sparkling-water",
         "store":  "Family Fare",
-        "product":  "Sparkling Ice Zero Sugar Pink Grapefruit Flavored Sparkling Water 17 Fl Oz",
+        "product":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/soda_other_carbonated_beverages",
         "verdict":  "ALLOW",
@@ -3636,6 +3645,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "whole-cloves",
+        "store":  "Family Fare",
+        "product":  "Mc Cormick Whole Cloves 0.62 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
         "id":  "watermelon",
         "store":  "Family Fare",
         "product":  "Fresh Watermelons, Seedless",
@@ -3724,15 +3742,6 @@
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "BLIND",
         "reason":  "\u0027honey-dijon-mustard\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "zero-sugar-soda",
-        "store":  "Family Fare",
-        "product":  "Welch\u0027s Zero Sugar Concord Grape Drink 6 Ea",
-        "dept":  "beverages",
-        "aisle":  "beverages/fruit_vegetable_beverages",
-        "verdict":  "BLIND",
-        "reason":  "\u0027zero-sugar-soda\u0027 is in no estate category - refused rather than guessed"
     },
     {
         "id":  "frozen-broccoli-florets",
@@ -3850,14 +3859,5 @@
         "aisle":  "pantry/mixes_spices_seasoning",
         "verdict":  "BLIND",
         "reason":  "\u0027white-wine-vinegar\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "breadcrumbs",
-        "store":  "Family Fare",
-        "product":  "Our Family Bread Crumbs, Panko, Plain 8 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/baking",
-        "verdict":  "BLIND",
-        "reason":  "\u0027breadcrumbs\u0027 is in no estate category - refused rather than guessed"
     }
 ]

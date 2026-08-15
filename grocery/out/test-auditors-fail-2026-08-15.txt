@@ -200,7 +200,7 @@ test-auditors: can each watcher still see the bug it was written for?
   PASS  run-daily-local still checks the weekly lock, stands down on HELD, and sweeps a stale one
   PASS  weekly-post-capture still takes the lock on every phase
   PASS  weekly-post-capture never hands the tree back mid-run (the lock expires on its own TTL)
-  FAIL  script-census fires on the live tree, or reported an EMPTY census (rc=2) - either a new orphan landed, or the self-exclusion that stops its own KNOWN table from marking everything "called" was removed: script-census: 199 script(s) + 37 under out\, read against 369 executable file(s); 33 uncalled, 42 recorded as deliberate
+  FAIL  script-census fires on the live tree, or reported an EMPTY census (rc=2) - either a new orphan landed, or the self-exclusion that stops its own KNOWN table from marking everything "called" was removed: script-census: 200 script(s) + 37 under out\, read against 370 executable file(s); 33 uncalled, 42 recorded as deliberate
   skipped nested checkout C:\Codex\income\.claude\worktrees\epic-ramanujan-c1e577 - a copy of this repo, not a second set of scripts
   skipped nested checkout C:\Codex\income\.claude\worktrees\festive-cannon-1b16a8 - a copy of this repo, not a second set of scripts
   note    10 recorded entries are no longer uncalled here - drop their KNOWN lines
@@ -393,7 +393,7 @@ script-census FAIL: 1 finding(s). Wire it in, move it to archive\one-off\, or re
   PASS  compare-deals and audit-capture-eviction still state the SAME coverage-depth eligibility rule
   PASS  compare-deals still emits src_date into candidates (the field the per-store ranking turns on)
   PASS  audit-capture-eviction is ROSTERED in check-ad-cycles - the eviction check runs on every board generation, not only when a human remembers it
-  PASS  capture-eviction roster is ARMED: capture-evictions.json (2026-08-15T06:23:58) post-dates the newest board comparison-2026-08-14.json (built_at 2026-08-15T06:11:35)
+  FAIL  capture-evictions.json is stamped 2026-08-15T09:13:15, OLDER than the comparison-2026-08-15.json generation it names (built_at 2026-08-15T09:17:22) - the rostered pass did not run on this board, so its zero findings describe a board that no longer exists
   FAIL  prompt-backup drift (rc=2) - run ops\audit-prompt-backup.ps1 -Sync and commit: prompt-backup: checked 19 live prompt(s) against ops\prompt-backup   3 issue(s):     NO BACKUP  agents\commodity-registrar.md - the live prompt exists only on this machine     NO BACKUP  agents\recipe-hunter-extractor.md - the live prompt exists only on this machine     NO BACKUP  agents\recipe-hunter-pricer.md - the live prompt exists only on this machine   Fix: run this with -Sync (live -> repo, and project scope -> user scope), then commit ops\prompt-backup. PROMPT-BACKUP-COMPLETE
   PASS  fmt-lib: per-unit display still rolls over at a dollar and still shows a real sub-cent price
   PASS  basis-outlier: still catches a pack price on a single-unit size, and still stays silent on an ordinary premium spread
@@ -431,5 +431,5 @@ script-census FAIL: 1 finding(s). Wire it in, move it to archive\one-off\, or re
   PASS  ad-page install: a 22-page ad over a 24-page one leaves NO orphan pages, and a partial download refuses to half-swap
   PASS  pull-fareway-ads.ps1 still stages its downloads and installs through adpages-lib (clear-then-swap intact)
   PASS  pull-bakers.ps1 still stages its downloads and installs through adpages-lib (clear-then-swap intact)
-test-auditors FAIL  (4 failed, 417 passed) - a watcher has gone blind. Fix it before trusting a quiet board.
-TEST-AUDITORS-COMPLETE pass=417 failed=4 skipped=0
+test-auditors FAIL  (5 failed, 416 passed) - a watcher has gone blind. Fix it before trusting a quiet board.
+TEST-AUDITORS-COMPLETE pass=416 failed=5 skipped=0

@@ -1,6 +1,17 @@
 ﻿{
     "kind_mismatch_crown":  [
-
+                                {
+                                    "id":  "ice-cream",
+                                    "commodity":  "Ice Cream",
+                                    "unit":  "floz",
+                                    "store":  "Aldi",
+                                    "per_unit":  0.0499,
+                                    "size":  "128 oz",
+                                    "item":  "Sundae Shoppe Vanilla Flavored Light Ice Cream, 1 Gal",
+                                    "kind":  "weight",
+                                    "row_kind":  "volume",
+                                    "holds_crown":  true
+                                }
                             ],
     "findings":  [
                      {
@@ -9,11 +20,11 @@
                          "unit":  "floz",
                          "store":  "Fareway",
                          "per_unit":  0.1395,
-                         "median":  0.0328,
-                         "mult":  4.25,
+                         "median":  0.0312,
+                         "mult":  4.47,
                          "size":  "20 fl oz",
                          "item":  "Coca-Cola Soda Bottle",
-                         "peers_packed":  "3 of 5",
+                         "peers_packed":  "3 of 6",
                          "size_shape_mismatch":  true
                      },
                      {
@@ -27,6 +38,32 @@
                          "size":  "200 ml",
                          "item":  "Litehouse Herb, Freeze  Dried Basil 0.28 Oz",
                          "peers_packed":  "0 of 5",
+                         "size_shape_mismatch":  false
+                     },
+                     {
+                         "id":  "razors",
+                         "commodity":  "Razors (disposable)",
+                         "unit":  "each",
+                         "store":  "Fareway",
+                         "per_unit":  2.3233,
+                         "median":  0.3317,
+                         "mult":  7,
+                         "size":  "3 ct",
+                         "item":  "Venus Tropical Women\u0027s Disposable Razor",
+                         "peers_packed":  "5 of 6",
+                         "size_shape_mismatch":  false
+                     },
+                     {
+                         "id":  "razors",
+                         "commodity":  "Razors (disposable)",
+                         "unit":  "each",
+                         "store":  "Hy-Vee",
+                         "per_unit":  1.9975,
+                         "median":  0.3317,
+                         "mult":  6.02,
+                         "size":  "4 ct",
+                         "item":  "Bic Soleil Razors, Lavender \u0026 Eucalyptus Scented, 4 Blades",
+                         "peers_packed":  "5 of 6",
                          "size_shape_mismatch":  false
                      },
                      {
@@ -109,7 +146,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-15T06:23:06",
+    "generated":  "2026-08-15T09:18:02",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -209,18 +246,6 @@
                               "holds_crown":  false
                           },
                           {
-                              "id":  "banana-peppers",
-                              "commodity":  "Banana Peppers / Pepperoncini",
-                              "unit":  "oz",
-                              "store":  "Fareway",
-                              "per_unit":  0.165,
-                              "size":  "12 oz",
-                              "item":  "Vlasic Mild Banana Pepper Rings, Keto Friendly",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
                               "id":  "dried-basil",
                               "commodity":  "Basil (dried)",
                               "unit":  "oz",
@@ -257,6 +282,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "bleach",
+                              "commodity":  "Bleach",
+                              "unit":  "floz",
+                              "store":  "Aldi",
+                              "per_unit":  0.0483,
+                              "size":  "121 oz",
+                              "item":  "Tandil 7.5 Percent Bleach",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "blueberries",
                               "commodity":  "Blueberries",
                               "unit":  "oz",
@@ -273,9 +310,9 @@
                               "commodity":  "Blueberries",
                               "unit":  "oz",
                               "store":  "Sam\u0027s Club",
-                              "per_unit":  0.3289,
-                              "size":  "18 oz",
-                              "item":  "Organic Blueberries, 18 oz.",
+                              "per_unit":  0.3469,
+                              "size":  "16 oz",
+                              "item":  "Jumbo Blueberries, 16 oz.",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -287,7 +324,7 @@
                               "store":  "Fareway",
                               "per_unit":  0.6,
                               "size":  "9.8 oz",
-                              "item":  "Family Tree Farms Jumbo Blueberries",
+                              "item":  "Jumbo Blueberries",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -401,18 +438,6 @@
                               "holds_crown":  false
                           },
                           {
-                              "id":  "cookies",
-                              "commodity":  "Cookies (packaged)",
-                              "unit":  "oz",
-                              "store":  "Sam\u0027s Club",
-                              "per_unit":  0.1615,
-                              "size":  "165 fl oz",
-                              "item":  "Premier Protein 30g High Protein Shake, Cookies and Cream, 11 fl. oz., 15 pk.",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  false
-                          },
-                          {
                               "id":  "cooking-spray",
                               "commodity":  "Cooking Spray",
                               "unit":  "oz",
@@ -461,18 +486,6 @@
                               "holds_crown":  false
                           },
                           {
-                              "id":  "dish-soap",
-                              "commodity":  "Dish Soap (liquid)",
-                              "unit":  "floz",
-                              "store":  "Aldi",
-                              "per_unit":  0.3088,
-                              "size":  "16 oz",
-                              "item":  "Dawn Platinum Dish Spray Dish Soap Fresh Scent 16 0 OZ",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
                               "id":  "disinfectant-spray",
                               "commodity":  "Disinfectant Spray",
                               "unit":  "oz",
@@ -483,18 +496,6 @@
                               "kind":  "volume",
                               "row_kind":  "weight",
                               "holds_crown":  true
-                          },
-                          {
-                              "id":  "disinfectant-spray",
-                              "commodity":  "Disinfectant Spray",
-                              "unit":  "oz",
-                              "store":  "Sam\u0027s Club",
-                              "per_unit":  0.156,
-                              "size":  "12 ct 32 fl oz",
-                              "item":  "Clorox Anywhere Daily Disinfectant \u0026 Sanitizing Spray 32 fl. oz., 12 ct.",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  false
                           },
                           {
                               "id":  "evaporated-milk",
@@ -597,9 +598,9 @@
                               "commodity":  "Hair Conditioner",
                               "unit":  "floz",
                               "store":  "Aldi",
-                              "per_unit":  0.551,
-                              "size":  "10.4 oz",
-                              "item":  "Pantene Daily Moisture Renewal Conditioner 10.4 OZ 308 ML 10.4 OZ",
+                              "per_unit":  0.4775,
+                              "size":  "12 oz",
+                              "item":  "Pantene Fine Volume Conditioner",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -737,6 +738,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "ice-cream",
+                              "commodity":  "Ice Cream",
+                              "unit":  "floz",
+                              "store":  "Aldi",
+                              "per_unit":  0.0499,
+                              "size":  "128 oz",
+                              "item":  "Sundae Shoppe Vanilla Flavored Light Ice Cream, 1 Gal",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  true
+                          },
+                          {
                               "id":  "italian-dressing",
                               "commodity":  "Italian Dressing",
                               "unit":  "floz",
@@ -849,9 +862,9 @@
                               "commodity":  "Orange Juice",
                               "unit":  "floz",
                               "store":  "Fareway",
-                              "per_unit":  0.0623,
-                              "size":  "128 oz",
-                              "item":  "Fareway Orange Juice, from Concentrate",
+                              "per_unit":  0.0765,
+                              "size":  "52 oz",
+                              "item":  "Fareway 100% Orange Juice",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -888,6 +901,18 @@
                               "per_unit":  0.1556,
                               "size":  "16 fl oz",
                               "item":  "Tuscan Garden Hot Jalapeno Slices 16 FL OZ",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "pickled-jalapenos",
+                              "commodity":  "Pickled Jalapenos (sliced)",
+                              "unit":  "oz",
+                              "store":  "Fareway",
+                              "per_unit":  0.2492,
+                              "size":  "12 fl oz",
+                              "item":  "Mt. Olive Jalapeno Slices",
                               "kind":  "volume",
                               "row_kind":  "weight",
                               "holds_crown":  false
@@ -969,9 +994,9 @@
                               "commodity":  "Shower / Bathroom Cleaner",
                               "unit":  "floz",
                               "store":  "Sam\u0027s Club",
-                              "per_unit":  0.1035,
-                              "size":  "96 oz",
-                              "item":  "Scrubbing Bubbles Flowers \u0026 Showers, Bathroom Grime Fighter Spray, Rainshower, Petal Paradise, and Floral Fusion, 32 oz., 3 pk.",
+                              "per_unit":  0.1,
+                              "size":  "99.4 oz",
+                              "item":  "Scrubbing Bubbles Flowers \u0026 Showers, Bathroom Grime Fighter Spray, Rainshower, Petal Parad",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1007,7 +1032,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0818,
                               "size":  "17 oz",
-                              "item":  "Sparkling Ice Zero Sugar Pink Grapefruit Flavored Sparkling Water 17 Fl Oz",
+                              "item":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1077,7 +1102,7 @@
                               "commodity":  "Teriyaki Sauce / Marinade",
                               "unit":  "floz",
                               "store":  "Sam\u0027s Club",
-                              "per_unit":  0.2102,
+                              "per_unit":  0.1738,
                               "size":  "27.5 oz",
                               "item":  "Kinder\u0027s Teriyaki Marinade Sauce, 27.5 oz.",
                               "kind":  "weight",
@@ -1169,5 +1194,5 @@
                               "holds_crown":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-08-14.json"
+    "compare_file":  "comparison-2026-08-15.json"
 }

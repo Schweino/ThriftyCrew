@@ -13,16 +13,29 @@
         "board_src":  "main"
     },
     {
-        "id":  "air-freshener",
-        "store":  "Sam\u0027s Club",
+        "id":  "almonds",
+        "store":  "Aldi",
         "unit":  "oz",
-        "board":  0.308,
-        "link":  0.2463,
-        "ratio":  0.8,
-        "price":  7.98,
-        "size":  "32.4 oz",
-        "boardItem":  "Febreze Air Mist Air Freshener Spray",
-        "linkItem":  "Febreze Air Mist Air Freshener Spray, Fall Mixed Scent, 4ct., 32.4 oz.",
+        "board":  0.425,
+        "link":  0.4421,
+        "ratio":  1.04,
+        "price":  6.19,
+        "size":  "14 oz",
+        "boardItem":  "Southern Grove Oil Roasted And Salted Almonds",
+        "linkItem":  "Southern Grove Oil Roasted Salted Almonds 14 OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "apple-cider-vinegar",
+        "store":  "Aldi",
+        "unit":  "floz",
+        "board":  0.1403,
+        "link":  0.1328,
+        "ratio":  0.95,
+        "price":  4.49,
+        "size":  "33.8 fl oz",
+        "boardItem":  "Simply Nature Organic Apple Cider Vinegar 33 8 FL OZ",
+        "linkItem":  "Simply Nature Organic Apple Cider Vinegar",
         "board_src":  "main"
     },
     {
@@ -36,6 +49,45 @@
         "size":  "1 lb",
         "boardItem":  "Asparagus 1 LB",
         "linkItem":  "Asparagus, Package",
+        "board_src":  "main"
+    },
+    {
+        "id":  "avocados",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  1.272,
+        "link":  1.046,
+        "ratio":  0.82,
+        "price":  5.23,
+        "size":  "5 ct",
+        "boardItem":  "Avocados, 5 ct.",
+        "linkItem":  "Avocados, 5 ct.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "bagels",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  0.5817,
+        "link":  0.6233,
+        "ratio":  1.07,
+        "price":  3.74,
+        "size":  "6 ct",
+        "boardItem":  "Thomas\u0027 Plain Bagels, 12 pk.",
+        "linkItem":  "Member\u0027s Mark Blueberry Sliced Bagels, 6 ct.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "beef-jerky",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  1.055,
+        "link":  1.18,
+        "ratio":  1.12,
+        "price":  18.88,
+        "size":  "16 oz",
+        "boardItem":  "Jack Link\u0027s Teriyaki Beef Jerky, 16 oz.",
+        "linkItem":  "Jack Link\u0027s Teriyaki Beef Jerky, 16 oz.",
         "board_src":  "main"
     },
     {
@@ -60,8 +112,34 @@
         "ratio":  0.94,
         "price":  2.15,
         "size":  "6 oz",
-        "boardItem":  "Blackberries 6 OZ",
+        "boardItem":  "Blackberries",
         "linkItem":  "Blackberries, Package",
+        "board_src":  "main"
+    },
+    {
+        "id":  "blueberries",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.3469,
+        "link":  0.3289,
+        "ratio":  0.95,
+        "price":  5.92,
+        "size":  "18 oz",
+        "boardItem":  "Jumbo Blueberries, 16 oz.",
+        "linkItem":  "Organic Blueberries, 18 oz.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "broccoli",
+        "store":  "Aldi",
+        "unit":  "lb",
+        "board":  2.09,
+        "link":  2.15,
+        "ratio":  1.03,
+        "price":  2.15,
+        "size":  "lb",
+        "boardItem":  "Broccoli Crowns, Per LB",
+        "linkItem":  "Broccoli Crowns",
         "board_src":  "main"
     },
     {
@@ -91,6 +169,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "celery",
+        "store":  "Aldi",
+        "unit":  "each",
+        "board":  1.99,
+        "link":  2.59,
+        "ratio":  1.3,
+        "price":  2.59,
+        "size":  "each",
+        "boardItem":  "Celery, Each",
+        "linkItem":  "Organic Celery Hearts Each",
+        "board_src":  "main"
+    },
+    {
         "id":  "cod",
         "store":  "Aldi",
         "unit":  "lb",
@@ -99,8 +190,60 @@
         "ratio":  0.91,
         "price":  15.99,
         "size":  "32 oz",
-        "boardItem":  "Fremont Fish Market Value Pack Cod Fillets 32 OZ",
+        "boardItem":  "Fremont Fish Market Value Pack Cod Fillets",
         "linkItem":  "Fremont Fish Market Value Pack Cod Fillets 32 OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "coffee",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.394,
+        "link":  0.4172,
+        "ratio":  1.06,
+        "price":  17.98,
+        "size":  "43.1 oz",
+        "boardItem":  "Maxwell House Original Roast Medium Ground Coffee, 43.1 oz.",
+        "linkItem":  "Maxwell House Original Roast Medium Ground Coffee, 43.1 oz.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "coffee-creamer",
+        "store":  "Aldi",
+        "unit":  "floz",
+        "board":  0.0747,
+        "link":  0.0841,
+        "ratio":  1.13,
+        "price":  2.69,
+        "size":  "32 fl oz",
+        "boardItem":  "Friendly Farms Half \u0026 Half Creamer",
+        "linkItem":  "Barissimo Coconut Creme Coffee Creamer 32 FL OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "cornstarch",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.1869,
+        "link":  0.2025,
+        "ratio":  1.08,
+        "price":  6.48,
+        "size":  "32 oz",
+        "boardItem":  "Clabber Girl Corn Starch, 16 oz., 2 pk.",
+        "linkItem":  "Clabber Girl Corn Starch, 16 oz., 2 pk.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "cottage-cheese",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.1512,
+        "link":  0.1367,
+        "ratio":  0.9,
+        "price":  6.56,
+        "size":  "3 lb",
+        "boardItem":  "Darigold Cottage Cheese, 3 lbs.",
+        "linkItem":  "Darigold Cottage Cheese, 3 lbs.",
         "board_src":  "main"
     },
     {
@@ -112,8 +255,34 @@
         "ratio":  0.87,
         "price":  0.65,
         "size":  "1 each",
-        "boardItem":  "Cucumber Each",
+        "boardItem":  "Cucumber, Each",
         "linkItem":  "Cucumber",
+        "board_src":  "main"
+    },
+    {
+        "id":  "deodorant",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  1.3133,
+        "link":  1.3533,
+        "ratio":  1.03,
+        "price":  4.06,
+        "size":  "3 oz",
+        "boardItem":  "Old Spice High Endurance Pure Sport Deodorant",
+        "linkItem":  "Old Spice Pure Sport Deodorant",
+        "board_src":  "main"
+    },
+    {
+        "id":  "sponges",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  0.9853,
+        "link":  0.7483,
+        "ratio":  0.76,
+        "price":  8.98,
+        "size":  "12 ct",
+        "boardItem":  "Mr. Clean Magic Eraser Extra Durable Scrubber Sponges 15ct.",
+        "linkItem":  "Scrub Daddy Sponge Daddy Cleaning Sponges, Multi-Color, 12 ct.",
         "board_src":  "main"
     },
     {
@@ -130,16 +299,42 @@
         "board_src":  "main"
     },
     {
+        "id":  "english-muffins",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  0.49,
+        "link":  0.4483,
+        "ratio":  0.91,
+        "price":  5.38,
+        "size":  "12 ct",
+        "boardItem":  "Thomas\u0027 Light Multi-Grain English Muffins 24 oz., 12 ct.",
+        "linkItem":  "Thomas\u0027 Original Nooks \u0026 Crannies English Muffins 12 ct.",
+        "board_src":  "main"
+    },
+    {
         "id":  "feta",
         "store":  "Aldi",
         "unit":  "oz",
-        "board":  0.4975,
+        "board":  0.4488,
         "link":  0.4725,
-        "ratio":  0.95,
+        "ratio":  1.05,
         "price":  1.89,
         "size":  "4 oz",
-        "boardItem":  "Emporium Selection Original Feta Cheese Crumbles 4 OZ",
+        "boardItem":  "Emporium Selection Feta Traditional Cheese",
         "linkItem":  "Emporium Selection Original Feta Cheese Crumbles",
+        "board_src":  "main"
+    },
+    {
+        "id":  "fish-sticks",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.2281,
+        "link":  0.2112,
+        "ratio":  0.93,
+        "price":  12.86,
+        "size":  "3.805 lb",
+        "boardItem":  "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
+        "linkItem":  "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
         "board_src":  "main"
     },
     {
@@ -151,7 +346,7 @@
         "ratio":  0.96,
         "price":  6.59,
         "size":  "48 oz",
-        "boardItem":  "Kirkwood Family Size Chicken Nuggets 48 OZ",
+        "boardItem":  "Kirkwood Family Size Chicken Nuggets",
         "linkItem":  "Kirkwood Family Pack Chicken Nuggets",
         "board_src":  "main"
     },
@@ -166,6 +361,45 @@
         "size":  "29 oz",
         "boardItem":  "Hy Vee Chicken Nuggets",
         "linkItem":  "Hy-Vee Chicken Nuggets",
+        "board_src":  "main"
+    },
+    {
+        "id":  "frozen-vegetables",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.0919,
+        "link":  0.0808,
+        "ratio":  0.88,
+        "price":  0.97,
+        "size":  "12 oz",
+        "boardItem":  "Fareway Mixed Vegetables",
+        "linkItem":  "Fareway Mixed Vegetables, Steamables",
+        "board_src":  "main"
+    },
+    {
+        "id":  "frozen-peas",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.0919,
+        "link":  0.0808,
+        "ratio":  0.88,
+        "price":  0.97,
+        "size":  "12 oz",
+        "boardItem":  "Fareway Green Peas",
+        "linkItem":  "Fareway Steamables Green Peas",
+        "board_src":  "main"
+    },
+    {
+        "id":  "frozen-pizza",
+        "store":  "Aldi",
+        "unit":  "each",
+        "board":  1.7475,
+        "link":  1.995,
+        "ratio":  1.14,
+        "price":  3.99,
+        "size":  "2 pk 11.2 oz",
+        "boardItem":  "Mama Cozzi\u0027s Pizza Kitchen Deep Dish Pizza Singles Pepperoni, 4 Count",
+        "linkItem":  "Breakfast Best Sausage Egg Cheese Breakfast Pizza 2pk 112 OZ",
         "board_src":  "main"
     },
     {
@@ -195,6 +429,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "conditioner",
+        "store":  "Aldi",
+        "unit":  "floz",
+        "board":  0.4775,
+        "link":  0.551,
+        "ratio":  1.15,
+        "price":  5.73,
+        "size":  "10.4 fl oz",
+        "boardItem":  "Pantene Fine Volume Conditioner",
+        "linkItem":  "Pantene Pro-V Daily Moisture Renewal Conditioner",
+        "board_src":  "main"
+    },
+    {
         "id":  "jalapenos",
         "store":  "Aldi",
         "unit":  "lb",
@@ -221,16 +468,29 @@
         "board_src":  "main"
     },
     {
-        "id":  "mac-and-cheese",
-        "store":  "Hy-Vee",
+        "id":  "mangoes",
+        "store":  "Aldi",
         "unit":  "each",
-        "board":  0.976,
-        "link":  0.998,
-        "ratio":  1.02,
-        "price":  4.99,
-        "size":  "5 ct",
-        "boardItem":  "Kraft Original Mac \u0026 Cheese Macaroni and Cheese Dinner, 5 Pack \r\n",
-        "linkItem":  "Kraft Original Mac \u0026 Cheese Macaroni and Cheese Dinner, 5 Pack \r\n",
+        "board":  1.15,
+        "link":  1.19,
+        "ratio":  1.03,
+        "price":  1.19,
+        "size":  "each",
+        "boardItem":  "Mango, Each",
+        "linkItem":  "Red Mango Each",
+        "board_src":  "main"
+    },
+    {
+        "id":  "muffins",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  0.896,
+        "link":  1.1233,
+        "ratio":  1.25,
+        "price":  6.74,
+        "size":  "6 ct",
+        "boardItem":  "Otis Spunkmeyer Variety Pack Muffins, 4 oz., 15 pk.",
+        "linkItem":  "Member\u0027s Mark Blueberry Muffins, 6 ct.",
         "board_src":  "main"
     },
     {
@@ -242,8 +502,21 @@
         "ratio":  1.03,
         "price":  11.29,
         "size":  "33.8 oz",
-        "boardItem":  "Carlini Pure Olive Oil 33.8 FL OZ",
+        "boardItem":  "Carlini Pure Olive Oil",
         "linkItem":  "Carlini Pure Olive Oil 33.8 FL OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "oranges",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  1.3217,
+        "link":  1.3617,
+        "ratio":  1.03,
+        "price":  8.17,
+        "size":  "6 lb",
+        "boardItem":  "Cara Cara Oranges, 6 lbs.",
+        "linkItem":  "Navel Oranges, 6 lbs.",
         "board_src":  "main"
     },
     {
@@ -257,6 +530,32 @@
         "size":  "16 ct",
         "boardItem":  "Member\u0027s Mark Select \u0026 Tear 2-Ply Paper Towels, 15 Rolls (150 Sheets/Roll)",
         "linkItem":  "Boardwalk Multifold 1-Ply Natural Paper Towels 16 pks., 250 towels/pk.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "parmesan",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.2956,
+        "link":  0.3034,
+        "ratio":  1.03,
+        "price":  1.79,
+        "size":  "5.9 oz",
+        "boardItem":  "Kirkwood Parmesan Chicken Tenders",
+        "linkItem":  "Earthly Grains Parmesan Couscous 5.9 OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "peanut-butter",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.0863,
+        "link":  0.0988,
+        "ratio":  1.14,
+        "price":  3.95,
+        "size":  "40 oz",
+        "boardItem":  "Peanut Delight Creamy Peanut Butter 40oz",
+        "linkItem":  "Peanut Delight Creamy Peanut Butter 40 oz",
         "board_src":  "main"
     },
     {
@@ -276,13 +575,104 @@
         "id":  "pork-chops",
         "store":  "Aldi",
         "unit":  "lb",
-        "board":  2.99,
+        "board":  2.9889,
         "link":  2.69,
         "ratio":  0.9,
         "price":  2.69,
         "size":  "per lb",
-        "boardItem":  "Bone IN Assorted Pork Chops Per LB",
+        "boardItem":  "Assorted Pork Chops",
         "linkItem":  "Premium Bone-In Assorted Pork Chops, per lb",
+        "board_src":  "main"
+    },
+    {
+        "id":  "pork-shoulder",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  1.94,
+        "link":  1.98,
+        "ratio":  1.02,
+        "price":  1.98,
+        "size":  "lb",
+        "boardItem":  "Bone-In Pork Boston Butt, Case, priced per pound",
+        "linkItem":  "Member\u0027s Mark Bone In Pork Boston Butt, Vacuum Pack, priced per pound",
+        "board_src":  "main"
+    },
+    {
+        "id":  "potato-chips",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.1674,
+        "link":  0.179,
+        "ratio":  1.07,
+        "price":  1.79,
+        "size":  "10 oz",
+        "boardItem":  "Clancy\u0027s Spicy Dill Pickle Flavored Wavy Potato Chips",
+        "linkItem":  "Clancy\u0027s Original Potato Chips",
+        "board_src":  "main"
+    },
+    {
+        "id":  "potato-chips",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.2488,
+        "link":  0.235,
+        "ratio":  0.94,
+        "price":  1.88,
+        "size":  "8 oz",
+        "boardItem":  "Fareway Wavy Potato Chips",
+        "linkItem":  "Lay\u0027s Potato Chips, Classic",
+        "board_src":  "main"
+    },
+    {
+        "id":  "queso",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.1413,
+        "link":  0.1735,
+        "ratio":  1.23,
+        "price":  7.98,
+        "size":  "46 oz",
+        "boardItem":  "Bay Valley White Queso Cheese Sauce, 106 oz.",
+        "linkItem":  "On The Border Queso, Variety Pack, 23 oz., 2 pk.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "raisins",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.163,
+        "link":  0.1332,
+        "ratio":  0.82,
+        "price":  7.99,
+        "size":  "60 oz",
+        "boardItem":  "Sun-Maid California Sun-Dried Raisins, 30 oz., 2 pk.",
+        "linkItem":  "Sun-Maid California Sun-Dried Raisins, 30 oz., 2 pk.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "ranch-dressing",
+        "store":  "Aldi",
+        "unit":  "floz",
+        "board":  0.1053,
+        "link":  0.1175,
+        "ratio":  1.12,
+        "price":  2.35,
+        "size":  "20 fl oz",
+        "boardItem":  "Tuscan Garden Ranch Dressing",
+        "linkItem":  "Tuscan Garden Avocado Ranch Dressing 20 FL OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "razors",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  0.2398,
+        "link":  0.1821,
+        "ratio":  0.76,
+        "price":  9.47,
+        "size":  "52 ct",
+        "boardItem":  "BIC Sensitive Men\u0027s Disposable Razor, Single Blade, 52 ct.",
+        "linkItem":  "BIC Sensitive Men\u0027s Disposable Razor, Single Blade, 52 ct.",
         "board_src":  "main"
     },
     {
@@ -325,6 +715,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "russet-potatoes",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  0.447,
+        "link":  0.456,
+        "ratio":  1.02,
+        "price":  4.56,
+        "size":  "10 lb",
+        "boardItem":  "Russet Potatoes, 10 lbs.",
+        "linkItem":  "Russet Potatoes, 10 lbs.",
+        "board_src":  "main"
+    },
+    {
         "id":  "salmon",
         "store":  "Aldi",
         "unit":  "lb",
@@ -333,7 +736,7 @@
         "ratio":  0.95,
         "price":  10.35,
         "size":  "32 oz",
-        "boardItem":  "Fremont Fish Market Value Pack Wild Caught Salmon 32 OZ",
+        "boardItem":  "Fremont Fish Market Value Pack Wild Caught Salmon",
         "linkItem":  "Fremont Fish Market Value Pack Wild Caught Salmon",
         "board_src":  "main"
     },
@@ -364,16 +767,29 @@
         "board_src":  "main"
     },
     {
-        "id":  "smoked-turkey-sausage",
-        "store":  "Hy-Vee",
+        "id":  "sirloin-steak",
+        "store":  "Sam\u0027s Club",
         "unit":  "lb",
-        "board":  4.7289,
-        "link":  5.8785,
-        "ratio":  1.24,
-        "price":  4.96,
-        "size":  "13.5 oz",
-        "boardItem":  "Johnsonville Smoked Turkey Sausage, 6 Count, 13.5 oz",
-        "linkItem":  "Johnsonville Smoked Turkey Sausage, 6 Count, 13.5 oz",
+        "board":  6.47,
+        "link":  6.97,
+        "ratio":  1.08,
+        "price":  6.97,
+        "size":  "lb",
+        "boardItem":  "Sirloin Tip, Case  priced per pound",
+        "linkItem":  "Member’s Mark USDA Choice Angus Beef Boneless Sirloin Tip Roast, priced per pound",
+        "board_src":  "main"
+    },
+    {
+        "id":  "sour-cream",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.1433,
+        "link":  0.1238,
+        "ratio":  0.86,
+        "price":  0.99,
+        "size":  "8 oz",
+        "boardItem":  "Daisy Sour Cream",
+        "linkItem":  "Fareway Sour Cream",
         "board_src":  "main"
     },
     {
@@ -390,6 +806,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "strawberries",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.1553,
+        "link":  0.1225,
+        "ratio":  0.79,
+        "price":  3.92,
+        "size":  "2 lb",
+        "boardItem":  "Strawberries, 2 lbs.",
+        "linkItem":  "Strawberries, 2 lbs.",
+        "board_src":  "main"
+    },
+    {
         "id":  "sweet-corn",
         "store":  "Walmart",
         "unit":  "each",
@@ -400,6 +829,19 @@
         "size":  "4 count",
         "boardItem":  "Fresh Sweet Corn on the Cob, 4 Count",
         "linkItem":  "Fresh Sweet Corn on the Cob, 4 Count",
+        "board_src":  "main"
+    },
+    {
+        "id":  "taco-seasoning",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.88,
+        "link":  0.6384,
+        "ratio":  0.73,
+        "price":  3.99,
+        "size":  "6.25 oz",
+        "boardItem":  "Fareway Taco Seasoning Mix",
+        "linkItem":  "Old El Paso Taco Seasoning, Original, Large Size",
         "board_src":  "main"
     },
     {
@@ -429,6 +871,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "teriyaki-sauce",
+        "store":  "Sam\u0027s Club",
+        "unit":  "floz",
+        "board":  0.1738,
+        "link":  0.2102,
+        "ratio":  1.21,
+        "price":  5.78,
+        "size":  "27.5 oz",
+        "boardItem":  "Kinder\u0027s Teriyaki Marinade Sauce, 27.5 oz.",
+        "linkItem":  "Kinder\u0027s Teriyaki Marinade Sauce, 27.5 oz.",
+        "board_src":  "main"
+    },
+    {
         "id":  "toaster-pastries",
         "store":  "Walmart",
         "unit":  "each",
@@ -452,6 +907,45 @@
         "size":  "8 ct",
         "boardItem":  "Oral-B ProHealth Advanced Manual Soft Toothbrushes",
         "linkItem":  "Oral-B ProHealth Advanced Manual Soft Toothbrush, 8 ct.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "tortillas",
+        "store":  "Aldi",
+        "unit":  "each",
+        "board":  0.2312,
+        "link":  0.2612,
+        "ratio":  1.13,
+        "price":  2.09,
+        "size":  "8 ct",
+        "boardItem":  "L\u0027oven Fresh Original Low Carb Tortillas, 8 Count",
+        "linkItem":  "Pueblo Lindo Burrito Flour Tortillas 8 CT",
+        "board_src":  "main"
+    },
+    {
+        "id":  "turkey-bacon",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.349,
+        "link":  0.325,
+        "ratio":  0.93,
+        "price":  3.25,
+        "size":  "10 oz",
+        "boardItem":  "Appleton Farms Uncured Turkey Bacon",
+        "linkItem":  "Appleton Farms Uncured Turkey Bacon",
+        "board_src":  "main"
+    },
+    {
+        "id":  "watermelon",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  5.22,
+        "link":  4.98,
+        "ratio":  0.95,
+        "price":  4.98,
+        "size":  "each",
+        "boardItem":  "Seedless Watermelon Quarter",
+        "linkItem":  "Seedless Watermelon Slices",
         "board_src":  "main"
     },
     {
@@ -567,7 +1061,7 @@
         "ratio":  0.93,
         "price":  8.98,
         "size":  "14 oz",
-        "boardItem":  "Emerald® Nuts Avocado Oil Roasted Hot Honey Cashews, 120-Calorie packs, 10ct",
+        "boardItem":  "EmeraldÂ® Nuts Avocado Oil Roasted Hot Honey Cashews, 120-Calorie packs, 10ct",
         "linkItem":  "Great Value Organic Raw Whole Cashews, 14 oz",
         "board_src":  "recipe"
     },
@@ -632,7 +1126,7 @@
         "ratio":  0.64,
         "price":  3.98,
         "size":  "15 oz",
-        "boardItem":  "Sun-Maid® California Golden Raisins, 12 oz Bag in a Box",
+        "boardItem":  "Sun-MaidÂ® California Golden Raisins, 12 oz Bag in a Box",
         "linkItem":  "Great Value Seedless Golden Raisins, 15 oz",
         "board_src":  "recipe"
     },
@@ -645,7 +1139,7 @@
         "ratio":  1.1,
         "price":  5.49,
         "size":  "12 oz",
-        "boardItem":  "Sun-Maid® California Golden Raisins Dried Fruit Snack",
+        "boardItem":  "Sun-MaidÂ® California Golden Raisins Dried Fruit Snack",
         "linkItem":  "Sun-Maid California Golden Raisins Dried Fruit Snack",
         "board_src":  "recipe"
     },
@@ -866,7 +1360,7 @@
         "ratio":  0.77,
         "price":  2.5,
         "size":  "12 fl oz",
-        "boardItem":  "Kroger® Mild Buffalo Wing Sauce",
+        "boardItem":  "KrogerÂ® Mild Buffalo Wing Sauce",
         "linkItem":  "Kroger Mild Buffalo Wing Sauce",
         "board_src":  "recipe"
     },
@@ -879,7 +1373,7 @@
         "ratio":  1.12,
         "price":  5.49,
         "size":  "16 oz",
-        "boardItem":  "Kroger® Hot Italian Sausage",
+        "boardItem":  "KrogerÂ® Hot Italian Sausage",
         "linkItem":  "Johnsonville Hot Italian Ground Sausage",
         "board_src":  "recipe"
     },
@@ -905,7 +1399,7 @@
         "ratio":  1.11,
         "price":  15.99,
         "size":  "10 lb",
-        "boardItem":  "Kroger® Jasmine Rice",
+        "boardItem":  "KrogerÂ® Jasmine Rice",
         "linkItem":  "Kroger Jasmine Rice",
         "board_src":  "recipe"
     },
@@ -931,7 +1425,7 @@
         "ratio":  0.92,
         "price":  2.5,
         "size":  "16 oz",
-        "boardItem":  "Herdez® Salsa Verde Mild",
+        "boardItem":  "HerdezÂ® Salsa Verde Mild",
         "linkItem":  "Herdez Salsa Verde Mild",
         "board_src":  "recipe"
     },
