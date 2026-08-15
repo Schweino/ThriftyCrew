@@ -146,10 +146,17 @@ h2[id]{scroll-margin-top:84px}
 <script>
 (function(){
 if(window.__smpScaler2)return; window.__smpScaler2=1;
-// Fetch only this recipe's content-addressed price slice. The legacy feed is a
-// rollback path during migration, never the normal 500-recipe page payload.
-var SMPRECIPE=(location.pathname||'').replace(/^\/+|\/+$/g,'').split('/').pop()||'recipe';
-var SMPFEED='https://www.thriftycrew.com/api/v2/recipe-feed/'+encodeURIComponent(SMPRECIPE)+'?contract=4',smpFeedP=null,feedData=null,feedFailed=false;
+// THE ONE FEED THIS ESTATE OWNS AND PUBLISHES DAILY (repointed 2026-08-15).
+// This used to fetch a per-slug slice from /api/v2/recipe-feed/<slug>?contract=4, served by the V3
+// platform that was deleted on 2026-08-14. That endpoint did not die cleanly: it kept answering from a
+// STORED release, so it returned 200 with FROZEN prices for any recipe that existed when the last release
+// was minted (butter served $3.99 against a real $2.555) and 404 for every recipe published after it. Two
+// recipes shipped that day showed "current release price loading" twice and an empty cost section. Nothing
+// in this repo produced that release and nobody here could regenerate it.
+// smp-feed.json is written by grocery\export-feed.ps1 on every daily run and deployed from public\. It is
+// one file for the whole catalogue rather than a slice per recipe, which is also why a NEW recipe can no
+// longer 404: a slug it has never heard of is not a lookup it performs. It keys on board commodity ids.
+var SMPFEED='https://feed.thriftycrew.com/smp-feed.json',smpFeedP=null,feedData=null,feedFailed=false;
 function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
 function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
 // Scale ONLY the leading quantity, and understand fractions while doing it.
@@ -175,7 +182,16 @@ function scaleBuy(buy,f){
 function esc(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
 function money(v){ return '$'+v.toFixed(2); }
 function rm(){ return (window.TC&&window.TC.rm)?window.TC.rm():false; }
-function tween(el,from,to){ if(window.TC&&window.TC.tween){ window.TC.tween(el,from,to,money); } else if(el){ el.textContent=money(to); } }
+// THE DESTINATION IS WRITTEN FIRST, ALWAYS, and the animation is decoration on top of an already-correct
+// number. This used to hand the node to TC.tween and only fall back when TC.tween was ABSENT - but the
+// failure in the wild is a helper that is PRESENT and does nothing. Measured live 2026-08-15:
+// TC.tween(node,10,20,fmt) left the node reading "seed" two seconds later. The receipt seeds its total
+// cell with the PREVIOUS total so the tween has something to animate from, so a silent no-op left every
+// grand total reading exactly one interaction behind: untick a $32.79 ingredient and the total did not
+// move, then change the servings and it finally showed the untick's number. Present on live cards before
+// this repoint (verified on a card still served by the old feed), and it was invisible on the ~231 cards
+// whose total said "Unavailable". A displayed price must never depend on an animation having run.
+function tween(el,from,to){ if(!el)return; el.textContent=money(to); if(window.TC&&window.TC.tween){ window.TC.tween(el,from,to,money); } }
 function tap(n){ if(window.TC&&window.TC.tap)window.TC.tap(n); }
 function wake(on){ if(window.TC&&window.TC.wake)window.TC.wake(on); }
 function modeFlag(on){ if(window.TC&&window.TC.mode)window.TC.mode(on); }
@@ -203,14 +219,33 @@ function init(box){
     if(p.packageBasis>0&&p.unit){ var one=fmtQty(p.packageBasis)+' '+p.unit; return p.k===1?'1 '+one:fmtQty(p.k)+' × '+one; }
     return pkgLabel(it,p.k);
   }
+  // THE STORE'S PACKAGE SIZE FIRST, THE RECIPE'S OWN SECOND. The feed carries a real package size wherever
+  // the board knows one. On the cells where it does not (a shelf tag we captured without a size), the spec's
+  // authored pkg_g IS a real package size for that ingredient - it is what this card priced against before
+  // any feed existed. Falling back to it keeps the whole-package model intact instead of dropping the line
+  // to "unavailable" and poisoning the batch total. What it must never do is invent one: a package size the
+  // feed guessed would be a wrong PRICE, which is why export-feed refuses rather than estimates.
+  function pkgBasis(it,source){
+    var b=Number(source.packageBasisUnits)||0;
+    if(b>0) return b;
+    return (it.pkg_g>0&&it.gpu>0)?(it.pkg_g/it.gpu):0;
+  }
   function price(it,nn,basis){
     var inputs=(feedData&&feedData.pricing_inputs&&it.bid)?feedData.pricing_inputs[it.bid]:null;
-    var source=inputs?(basis==='everyday'?inputs.everyday:inputs.current):null;
+    // `everyday` is OMITTED by the feed when it is the same cell as `current`, which is most commodities
+    // most weeks - nothing is on sale, so the cheapest price IS the everyday price. Absent means identical.
+    var source=inputs?((basis==='everyday')?(inputs.everyday||inputs.current):inputs.current):null;
     var required=(it.gpu>0)?it.grams*(nn/data.base)/it.gpu:0;
     if(!source||!(source.perUnitMicros>0)||!(required>0)) return {cost:null,live:false,k:0,unavailable:true};
-    var variable=source.variableWeight===true, packageBasis=Number(source.packageBasisUnits)||0;
+    var up=source.perUnitMicros/1000000;
+    var variable=source.variableWeight===true, packageBasis=variable?0:pkgBasis(it,source);
     var k=variable?0:(packageBasis>0?Math.max(1,Math.ceil(required/packageBasis-1e-9)):0);
-    var cost=variable?(source.perUnitMicros/1000000)*required:((source.purchasePriceMinor>0&&k>0)?source.purchasePriceMinor*k/100:null);
+    // purchasePriceMinor is the real shelf tag and rides with the feed's OWN package size. When the basis
+    // came from the fallback above, the tag belongs to a different package, so the cost has to be built
+    // from the per-unit price instead - never the tag times a count it was not measured against.
+    var cost=variable?up*required
+      :((Number(source.packageBasisUnits)>0&&source.purchasePriceMinor>0&&k>0)?source.purchasePriceMinor*k/100
+      :((packageBasis>0&&k>0)?up*packageBasis*k:null));
     if(!(cost>=0)) return {cost:null,live:false,k:k,unavailable:true};
     var e=(feedData&&feedData.ingredients&&it.bid)?feedData.ingredients[it.bid]:null;
     return {cost:cost,live:true,k:k,required:required,variable:variable,packageBasis:packageBasis,
@@ -411,11 +446,18 @@ function init(box){
   function priceAtStores(it,nn,sel){
     var inputs=(feedData&&feedData.pricing_inputs&&it.bid)?feedData.pricing_inputs[it.bid]:null;
     var required=(it.gpu>0)?it.grams*(nn/data.base)/it.gpu:0,best=null,bs=null,bp=null,sid;
+    // pricing_inputs.stores is keyed by the store's DISPLAY NAME, the same name ingredients.stores and the
+    // store picker use, so the key is the name; x.store is only carried on current/everyday.
     if(inputs&&inputs.stores&&required>0){ for(sid in inputs.stores){ var x=inputs.stores[sid],name=x.store||sid;
       if(!sel[name]||!(x.perUnitMicros>0))continue;
-      var packageBasis=Number(x.packageBasisUnits)||0,k=x.variableWeight?0:(packageBasis>0?Math.max(1,Math.ceil(required/packageBasis-1e-9)):0);
-      var cost=x.variableWeight?(x.perUnitMicros/1000000)*required:((x.purchasePriceMinor>0&&k>0)?x.purchasePriceMinor*k/100:null);
-      if(cost!==null&&(best===null||cost<best)){best=cost;bs=name;bp={k:k,up:x.perUnitMicros/1000000};}
+      var up=x.perUnitMicros/1000000;
+      var variable=x.variableWeight===true, packageBasis=variable?0:pkgBasis(it,x);
+      var k=variable?0:(packageBasis>0?Math.max(1,Math.ceil(required/packageBasis-1e-9)):0);
+      // same rule as price(): the shelf tag is only usable against the package it was measured on
+      var cost=variable?up*required
+        :((Number(x.packageBasisUnits)>0&&x.purchasePriceMinor>0&&k>0)?x.purchasePriceMinor*k/100
+        :((packageBasis>0&&k>0)?up*packageBasis*k:null));
+      if(cost!==null&&(best===null||cost<best)){best=cost;bs=name;bp={k:k,up:up};}
     }}
     if(bs){ return {k:bp.k,cost:best,store:bs,up:bp.up,unit:(feedOf(it)||{}).unit}; }
     return {k:0,cost:null,store:null};

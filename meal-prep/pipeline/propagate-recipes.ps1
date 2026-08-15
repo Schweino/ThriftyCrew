@@ -30,6 +30,10 @@ $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = if ($Root) { $Root } else { Split-Path -Parent $here }
 $stampPath = Join-Path $here 'propagate-stamps.json'
+# Test-GuardComplete, for the feed-coverage gate below. guard-contract.ps1 declares no param() block
+# precisely so dot-sourcing it cannot reset this script's own -SelfTest switch (PS 5.1 runs a dot-sourced
+# param block in the CALLER's scope); its own self-test pins that.
+. (Join-Path (Split-Path $mp -Parent) 'lib\guard-contract.ps1')
 
 function Get-SpecHash([string]$Path) {
   $sha = [System.Security.Cryptography.SHA1]::Create()
@@ -105,6 +109,26 @@ Push-Location $mp
 try {
   & '.\engine\build-cards.ps1' -Slugs $dirty | Select-Object -Last 1
   if ($LASTEXITCODE -ne 0 -and $null -ne $LASTEXITCODE) { throw 'propagate: build-cards failed - stamps NOT advanced' }
+} finally { Pop-Location }
+
+# HARD GATE, BEFORE PUBLISH. Every card fetches its live prices from smp-feed at view time, so a recipe can
+# publish perfectly and still render an empty cost section to the reader - which is exactly what happened on
+# 2026-08-15, and was found at post-publish review rather than here. This asks the only question that
+# matters to a reader (can the feed this card fetches actually price this recipe?) while the answer is still
+# free to act on. It runs on the ALREADY-BUILT cards, so it reads the exact bid list the browser will.
+Invoke-Stage 'feed-covers-published (hard gate)' {
+  $fcOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $here 'feed-covers-published.ps1') -Slugs $dirty
+  $fcRc = $LASTEXITCODE
+  $fcOut | ForEach-Object { Write-Output $_ }
+  # COMPLETION AND VERDICT ARE DIFFERENT QUESTIONS (lib\guard-contract.ps1). A guard that died mid-run
+  # exits non-zero with no marker and must not be read as "found nothing"; one that finished and found
+  # nothing exits 0 WITH the marker.
+  if (-not (Test-GuardComplete -Output $fcOut -Name 'FEEDCOV')) { $global:LASTEXITCODE = 2; return }
+  $global:LASTEXITCODE = $fcRc
+}
+
+Push-Location $mp
+try {
   Write-Output '-- publish (dirty slugs; hash-gated)'
   $pubOut = & '.\engine\publish.ps1' -Slugs $dirty
   $pubOut | Select-Object -Last 1
