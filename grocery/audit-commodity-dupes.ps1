@@ -58,6 +58,31 @@ function Find-CategoryDrift($RowCategories, $ValidLabels) {
   return @(@($RowCategories) | Where-Object { $_ -and -not $valid.ContainsKey([string]$_) } | Select-Object -Unique)
 }
 
+# CATEGORY LABELS need their own rule: the founding label dupes were a word PERMUTATION ("Cheese & Dairy" vs
+# "Dairy & Cheese") and a token SUBSET ("Dairy" vs "Dairy & Eggs") - neither is catchable by the id rules
+# above. Tokenize (drop &/and), stem plurals, compare as SETS: equal or strict-subset token sets are the
+# same shelf in two spellings. Verified against the real 16: no pair fires.
+function Get-LabelTokens([string]$s) {
+  $words = @(($s.ToLowerInvariant() -split '[^a-z0-9]+') | Where-Object { $_ -and $_ -ne 'and' })
+  return @($words | ForEach-Object { if ($_.Length -gt 3 -and $_.EndsWith('s')) { $_.Substring(0, $_.Length - 1) } else { $_ } } | Sort-Object -Unique)
+}
+function Find-LabelDupes($Labels) {
+  $list = @($Labels | Select-Object -Unique)
+  $found = New-Object System.Collections.ArrayList
+  for ($i = 0; $i -lt $list.Count; $i++) {
+    for ($j = $i + 1; $j -lt $list.Count; $j++) {
+      $ta = Get-LabelTokens $list[$i]; $tb = Get-LabelTokens $list[$j]
+      if (-not $ta.Count -or -not $tb.Count) { continue }
+      $inter = @($ta | Where-Object { $tb -contains $_ })
+      $why = $null
+      if ($inter.Count -eq $ta.Count -and $inter.Count -eq $tb.Count) { $why = 'same words in a different order' }
+      elseif ($inter.Count -eq $ta.Count -or $inter.Count -eq $tb.Count) { $why = 'one label is a subset of the other' }
+      if ($why) { [void]$found.Add([pscustomobject]@{ a = $list[$i]; b = $list[$j]; reason = $why }) }
+    }
+  }
+  return @($found)
+}
+
 # Pure so the self-test can freeze the founding cases without touching a single live file.
 function Find-DupeSuspects($Entries, $Allow) {
   # $Entries: array of @{ id; label; source }. $Allow: array of @{ a; b } reviewed pairs.
@@ -123,6 +148,18 @@ if ($SelfTest) {
   $drift = Find-CategoryDrift @('Dairy & Eggs', 'Cheese & Dairy', 'Dairy', 'Dairy & Cheese', 'Spices & Baking') $valid
   if (@($drift).Count -ne 4) { Write-Output ("  X MUST-FIRE: expected 4 drifted categories (Cheese & Dairy, Dairy, Dairy & Cheese, Spices & Baking), got {0}" -f @($drift).Count); $bad++ }
   if (@(Find-CategoryDrift @('Dairy & Eggs', 'Meat & Poultry') $valid).Count -ne 0) { Write-Output '  X clean categories were flagged as drift'; $bad++ }
+  # the REGISTRY itself must reject near-duplicate labels (Brad 2026-08-15: duplicate categories NEVER).
+  # MUST-FIRE on the two real shapes: permutation and subset.
+  $ld = Find-LabelDupes @('Dairy & Cheese', 'Cheese & Dairy')
+  if (@($ld).Count -ne 1 -or $ld[0].reason -notmatch 'different order') { Write-Output '  X MUST-FIRE: the word-permutation label pair (Cheese & Dairy vs Dairy & Cheese) was not flagged'; $bad++ }
+  $ld2 = Find-LabelDupes @('Dairy', 'Dairy & Eggs')
+  if (@($ld2).Count -ne 1 -or $ld2[0].reason -notmatch 'subset') { Write-Output '  X MUST-FIRE: the subset label pair (Dairy vs Dairy & Eggs) was not flagged'; $bad++ }
+  $ld3 = Find-LabelDupes @('Meats', 'Meat & Poultry')
+  if (@($ld3).Count -ne 1) { Write-Output '  X the stemmed-subset label pair (Meats vs Meat & Poultry) was not flagged'; $bad++ }
+  # CLEAN TWIN: the real 16 labels must produce zero findings, or the audit pages Brad every morning.
+  $real16 = @('Meat & Poultry','Dairy & Eggs','Fruit','Vegetables','Bread & Bakery','Canned & Soup','Sauces & Condiments','Baking & Spices','Pasta, Rice & Grains','Coffee, Oils & Spreads','Snacks & Drinks','Frozen','Household','Personal Care','Baby','Pet')
+  $ld4 = Find-LabelDupes $real16
+  if (@($ld4).Count -ne 0) { Write-Output ("  X FALSE-POSITIVE: the real 16 labels produced {0} finding(s): {1}" -f @($ld4).Count, (@($ld4 | ForEach-Object { $_.a + ' vs ' + $_.b }) -join '; ')); $bad++ }
   if ($bad -eq 0) { Write-Output 'audit-commodity-dupes SELF-TEST PASS (both founding dupes fire; pineapple/apple and canned/fresh stay clean; allowlist is pair-exact; three-dairy-headers category drift fires)'; exit 0 }
   Write-Output ("audit-commodity-dupes SELF-TEST FAIL ({0} problem(s))" -f $bad); exit 1
 }
@@ -169,14 +206,15 @@ $validLabels = @($catArr | ForEach-Object { [string]$_.label })
 $rowCats = @()
 if (Test-Path $rbF) { $rowCats = @((Read-Utf8Json $rbF).comparison | ForEach-Object { [string]$_.category }) }
 $drift = Find-CategoryDrift $rowCats $validLabels
+$labelDupes = Find-LabelDupes $validLabels
 
 $report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); entries_scanned = $entries.Count
                       namespaces = @('commodities.json', 'recipe-commodities.json', 'recipe-board-everyday.json')
-                      suspects = @($sus); category_drift = @($drift) }
+                      suspects = @($sus); category_drift = @($drift); category_label_dupes = @($labelDupes) }
 $report | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $OutDir 'commodity-dupes.json') -Encoding UTF8
 
-if (@($sus).Count -eq 0 -and @($drift).Count -eq 0) {
-  Write-Output ("commodity-dupes: OK - {0} ids across 3 namespaces, no unreviewed near-duplicates, every recipe-board category inside the canonical {1}-label set" -f $entries.Count, @($validLabels).Count)
+if (@($sus).Count -eq 0 -and @($drift).Count -eq 0 -and @($labelDupes).Count -eq 0) {
+  Write-Output ("commodity-dupes: OK - {0} ids across 3 namespaces, no unreviewed near-duplicates, every recipe-board category inside the canonical {1}-label set, no near-duplicate labels in the registry itself" -f $entries.Count, @($validLabels).Count)
   Write-Output 'COMMODITY-DUPES-COMPLETE'
   exit 0
 }
@@ -188,6 +226,10 @@ if (@($sus).Count) {
 if (@($drift).Count) {
   Write-Output ("commodity-dupes: {0} recipe-board categor(y/ies) outside categories.json's label set - each renders as its own DUPLICATE SECTION on the live page (the three-dairy-headers bug): {1}" -f @($drift).Count, ($drift -join ' | '))
   Write-Output '  Fix the rows in out\recipe-board-everyday.json to a canonical label, then re-run recipe-overlay.ps1.'
+}
+if (@($labelDupes).Count) {
+  Write-Output ("commodity-dupes: {0} near-duplicate LABEL pair(s) inside categories.json itself - Brad's rule is duplicate categories NEVER; a new category is only legitimate when no existing one fits:" -f @($labelDupes).Count)
+  foreach ($x in $labelDupes) { Write-Output ("  '{0}' vs '{1}' - {2}" -f $x.a, $x.b, $x.reason) }
 }
 Write-Output 'COMMODITY-DUPES-COMPLETE'
 exit 2

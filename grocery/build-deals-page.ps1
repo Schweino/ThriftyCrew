@@ -126,6 +126,14 @@ if (Test-Path $histFile) {
 $riDoc = $null; $riCats = @()
 $riFile = Join-Path $OutDir 'recipe-board.json'
 if (Test-Path $riFile) { $riDoc = Get-Content $riFile -Raw | ConvertFrom-Json; $riCats = @($riDoc.comparison | ForEach-Object { [string]$_.category } | Select-Object -Unique); $ovrN += (Apply-Overrides $riDoc.comparison) }
+# MERGED SECTIONS (2026-08-15, Brad's call). Recipe rows used to render as their OWN sections below the
+# staples, one <h2> per distinct category string - so the page showed "Meat & Poultry" twice ("Dairy & Eggs"
+# twice, and before the vocabulary was canonicalized, THREE dairy spellings at once). One category = one
+# section: recipe rows are grouped here by their (canonical) category label and rendered INSIDE the matching
+# weekly section, after its staple rows. $riRendered proves nothing fell through the merge.
+$riByCat = @{}
+$riRendered = @{}
+if ($riDoc) { foreach ($r in $riDoc.comparison) { $cl = [string]$r.category; if (-not $riByCat.ContainsKey($cl)) { $riByCat[$cl] = New-Object System.Collections.ArrayList }; [void]$riByCat[$cl].Add($r) } }
 
 # durable per-store product URLs (survives weekly regeneration). Keyed by commodity id -> store name -> {url,price,size,name}.
 $purls = @{}
@@ -454,6 +462,13 @@ if (-not $Embed) { [void]$sb.Append("<h1>Omaha's Cheapest Groceries This Week</h
 [void]$sb.Append("<details class='pg-how'><summary>How this board works</summary>")
 [void]$sb.Append("<p class='pg-note'>Lowest verified price at each store, sale or everyday, checked against the store's own ad or site. Sam's Club prices need a membership.</p>")
 [void]$sb.Append("<p class='pg-trust'>I'm Brad. I live here in Omaha, and I check these prices every morning before most people are awake. No store pays to be on this board, there are no affiliate links, and no one can buy the word 'cheapest.' If a store wins, it's because their shelf price won.</p>")
+# The recipe-ingredient honesty note lived above their own (now-removed) sections; merged rows carry a
+# per-row "shelf price" marker and the dated explanation moves here so nothing reads fresher than it is.
+if ($riDoc) {
+  $riDate = ''
+  try { $riBase = Join-Path $OutDir 'recipe-board-everyday.json'; $riStamp = if (Test-Path $riBase) { $riBase } else { $riFile }; $riDate = ([datetime](Get-Item $riStamp).LastWriteTime).ToString('MMM d, yyyy') } catch {}
+  [void]$sb.Append("<p class='pg-note'>Rows marked <strong>shelf price</strong> are recipe ingredients at their regular shelf price (checked " + (HtmlEnc $riDate) + ", re-checked monthly). When one goes on sale in a weekly ad, the sale price shows automatically with its end date.</p>")
+}
 [void]$sb.Append("</details>")
 # Both per-row features (the price-history chart and the price alert) are hidden until a row is opened,
 # so nothing on a first read reveals they exist. One sentence, above the first price.
@@ -661,66 +676,64 @@ foreach ($c in $cats) {
     $boardChips[[string]$r.id] = $cb.ToString()
     [void]$sb.Append("<div class='pg-stores' data-lazy='1' data-ck='" + (HtmlEnc ([string]$r.id)) + "'></div></article>")
   }
+  # ---- recipe-ingredient rows for THIS category, merged into the same section (2026-08-15) ----
+  # One category = one section. These rows keep their own chip-feed key (::r - the same id can exist as a
+  # weekly staple with a DIFFERENT unit) and carry a per-row "shelf price" marker because the old separate
+  # section's honesty note no longer sits above them; the dated explanation lives in "How this board works".
+  foreach ($r in @($(if ($riByCat.ContainsKey([string]$c.label)) { $riByCat[[string]$c.label] } else { @() }))) {
+    $ranked = @($r.stores | Where-Object { -not (IsNoneCarry ([string]$r.id) ([string]$_.store)) } | Sort-Object per_unit)
+    if ($ranked.Count -eq 0) { $riRendered[[string]$r.id] = $true; continue }
+    $totalCommodities++
+    $riRendered[[string]$r.id] = $true
+    $unit = [string]$r.unit
+    [void]$sb.Append("<article class='pg-row' data-cat='" + $c.key + "' data-id='" + [string]$r.id + "'>")
+    $sumHtml = SummaryHtml $ranked[0] $unit
+    $riMark = "<span class='pg-rec pg-ri' title='Regular shelf price for a recipe ingredient, re-checked monthly; a weekly-ad sale overrides it automatically.'>shelf price</span>"
+    [void]$sb.Append("<div class='pg-rowhead'><div class='pg-rh-top'>" + (PickBox) + "<span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span>" + $sumHtml + "</div><div class='pg-rh-bot'><span class='pg-unit'>" + (UnitLabel $unit) + "</span>" + $riMark + "</div></div>")
+    $cb = New-Object System.Text.StringBuilder
+    $i = 0
+    foreach ($s in $ranked) {
+      $totalPrices++
+      $isBest = ($i -eq 0)
+      $cls = 'pg-chip'; if ($isBest) { $cls += ' is-best' }
+      $notes = @()
+      if ([string]$s.store -eq "Sam's Club") { $notes += 'membership' }
+      if ($s.bulk) { $notes += 'bulk' }
+      [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "'>")
+      if ($isBest) { [void]$cb.Append("<span class='pg-best'>Cheapest</span>") }
+      [void]$cb.Append("<span class='pg-store'>" + (HtmlEnc $shortName[[string]$s.store]) + "</span>")
+      [void]$cb.Append("<span class='pg-price'>" + (Fmt-Price ([double]$s.per_unit) $unit) + "</span>")
+      $riTag = if ([string]$s.type -eq 'sale') { "<span class='pg-tag pg-tag-sale'>sale</span>" } else { "<span class='pg-tag'>everyday</span>" }
+      [void]$cb.Append("<span class='pg-meta'>" + $riTag + ($(if ($notes.Count) { " <span class='pg-note2'>" + (HtmlEnc ($notes -join ', ')) + "</span>" } else { '' })) + "</span>")
+      [void]$cb.Append((SaleBadge $s ([string]$s.store)))
+      [void]$cb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit ([string]$s.type)))
+      [void]$cb.Append("</div>")
+      $i++
+    }
+    if ($stapleIdSet.ContainsKey([string]$r.id) -and -not $stapleRendered.ContainsKey([string]$r.id)) {
+      [void]$cb.Append((MissingCells ([string]$r.id) (@($ranked | ForEach-Object { [string]$_.store }))))
+    } else {
+      [void]$cb.Append((NoneCells ([string]$r.id)))
+    }
+    $boardChips[([string]$r.id + '::r')] = $cb.ToString()
+    [void]$sb.Append("<div class='pg-stores' data-lazy='1' data-ck='" + (HtmlEnc ([string]$r.id)) + "::r'></div></article>")
+  }
   [void]$sb.Append("</section>")
 }
-
-# ---- recipe-ingredient sections (below the weekly staples), rendered when recipe-board.json is present ----
+# NOTHING FALLS THROUGH THE MERGE. A recipe row whose category is not one of categories.json's sections has
+# nowhere to render; silently dropping it would hide real prices, and rendering it as its own section is the
+# duplicate-header bug this merge exists to kill. Brad's rule (2026-08-15): duplicate categories must NEVER
+# happen; a genuinely new category is added to categories.json FIRST, which makes it a section here.
 if ($riDoc) {
-  # Honest label: these are EVERYDAY (non-sale) shelf prices for recipe ingredients, verified periodically -
-  # NOT this week's ad prices (unlike the staples above). Date-stamp so nothing reads as fresher than it is.
-  # date the FLOORS were verified = the monthly baseline's mtime, NOT the live board's (the daily ad-sale
-  # overlay rewrites recipe-board.json every morning, which would make this read "verified today" forever).
-  $riDate = ''
-  try { $riBase = Join-Path $OutDir 'recipe-board-everyday.json'; $riStamp = if (Test-Path $riBase) { $riBase } else { $riFile }; $riDate = ([datetime](Get-Item $riStamp).LastWriteTime).ToString('MMM d, yyyy') } catch {}
-  [void]$sb.Append("<div class='pg-refnote'>The prices below are <strong>regular shelf prices</strong> for recipe ingredients (checked " + (HtmlEnc $riDate) + ", re-checked monthly). When one goes on sale in a weekly ad, the <strong>sale price shows automatically</strong> with its end date. Ranked cheapest first, same as above.</div>")
-  foreach ($rc in $riCats) {
-    $riKey = RiCatKey $rc
-    [void]$sb.Append("<section class='pg-cat' data-cat='" + (HtmlEnc $riKey) + "'><h2 class='pg-cath'>" + (HtmlEnc $rc) + "</h2>")
-    foreach ($r in ($riDoc.comparison | Where-Object { [string]$_.category -eq $rc })) {
-      $ranked = @($r.stores | Where-Object { -not (IsNoneCarry ([string]$r.id) ([string]$_.store)) } | Sort-Object per_unit)
-      if ($ranked.Count -eq 0) { continue }
-      $totalCommodities++
-      $unit = [string]$r.unit
-      [void]$sb.Append("<article class='pg-row' data-cat='" + (HtmlEnc $riKey) + "' data-id='" + [string]$r.id + "'>")
-      $sumHtml = SummaryHtml $ranked[0] $unit
-      [void]$sb.Append("<div class='pg-rowhead'><div class='pg-rh-top'>" + (PickBox) + "<span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span>" + $sumHtml + "</div><div class='pg-rh-bot'><span class='pg-unit'>" + (UnitLabel $unit) + "</span></div></div>")
-      $cb = New-Object System.Text.StringBuilder
-      $i = 0
-      foreach ($s in $ranked) {
-        $totalPrices++
-        $isBest = ($i -eq 0)
-        $cls = 'pg-chip'; if ($isBest) { $cls += ' is-best' }
-        $notes = @()
-        if ([string]$s.store -eq "Sam's Club") { $notes += 'membership' }
-        if ($s.bulk) { $notes += 'bulk' }
-        [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "'>")
-        if ($isBest) { [void]$cb.Append("<span class='pg-best'>Cheapest</span>") }
-        [void]$cb.Append("<span class='pg-store'>" + (HtmlEnc $shortName[[string]$s.store]) + "</span>")
-        [void]$cb.Append("<span class='pg-price'>" + (Fmt-Price ([double]$s.per_unit) $unit) + "</span>")
-        $riTag = if ([string]$s.type -eq 'sale') { "<span class='pg-tag pg-tag-sale'>sale</span>" } else { "<span class='pg-tag'>everyday</span>" }
-        [void]$cb.Append("<span class='pg-meta'>" + $riTag + ($(if ($notes.Count) { " <span class='pg-note2'>" + (HtmlEnc ($notes -join ', ')) + "</span>" } else { '' })) + "</span>")
-        [void]$cb.Append((SaleBadge $s ([string]$s.store)))
-        [void]$cb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit ([string]$s.type)))
-        [void]$cb.Append("</div>")
-        $i++
-      }
-      # A commodities.json STAPLE priced only as a recipe ingredient (no staple row above) still owes shoppers
-      # all 7 stores: this is its one and only row, and the coverage gate holds every registered staple to that
-      # rule. Emit the full MissingCells set so every missing store shows an honest "No price yet"/"Doesn't carry"
-      # tile. Pure recipe-only ingredients stay exempt (NoneCells) - 7 mostly-empty cards on a niche item is noise.
-      if ($stapleIdSet.ContainsKey([string]$r.id) -and -not $stapleRendered.ContainsKey([string]$r.id)) {
-        [void]$cb.Append((MissingCells ([string]$r.id) (@($ranked | ForEach-Object { [string]$_.store }))))
-      } else {
-        [void]$cb.Append((NoneCells ([string]$r.id)))
-      }
-      # recipe rows get their own key (see the staple note): the same id can also exist as a weekly staple row
-      # with a DIFFERENT unit and price set, so the two must not share one chip-feed entry.
-      $boardChips[([string]$r.id + '::r')] = $cb.ToString()
-    [void]$sb.Append("<div class='pg-stores' data-lazy='1' data-ck='" + (HtmlEnc ([string]$r.id)) + "::r'></div></article>")
-    }
-    [void]$sb.Append("</section>")
+  $unplaced = @($riDoc.comparison | Where-Object { -not $riRendered.ContainsKey([string]$_.id) })
+  if ($unplaced.Count) {
+    throw ("build-deals-page: " + $unplaced.Count + " recipe row(s) have a category outside categories.json and cannot be placed: " + ((@($unplaced | ForEach-Object { [string]$_.id + ' [' + [string]$_.category + ']' }) | Select-Object -First 6) -join ', ') + ". Fix the rows in out\recipe-board-everyday.json (or register the genuinely new category in categories.json), then re-run recipe-overlay.ps1.")
   }
 }
+
+# The standalone recipe-ingredient sections were REMOVED 2026-08-15 (Brad: duplicate categories must NEVER
+# happen). Recipe rows now render inside their weekly category section (see the merge in the section loop
+# above), and the honesty note about everyday floors lives in "How this board works".
 
 # membership CTA: this page is the site's best proof asset - close the loop from free prices to the $1 offer.
 [void]$sb.Append("<div class='pg-cta'><h3>The prices are free. The dinners are about a dollar a month.</h3>")
@@ -830,6 +843,8 @@ html.tc-member .pg-bar,html.tc-member .pg-capture{display:none !important}
 .pg-note{font-size:.83em;color:var(--mut);opacity:.85;margin:.2em 0 0;max-width:66ch}
 /* record flags - the per-row badges (the top-of-page records band was removed 2026-08-09) */
 .pg-rec{display:inline-block;margin-left:0;padding:2px 9px 2px;border-radius:999px;font-size:.6em;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;vertical-align:2px}
+/* recipe-ingredient rows merged into the weekly sections (2026-08-15): muted marker, not a call to action */
+.pg-ri{background:#f1ede2;color:#8a6d1f;border:1px solid #e5dcc8}
 .pg-rec-low{background:var(--green);color:#fff}
 .pg-rec-tie{background:var(--green-t);color:var(--green-d);border:1px solid var(--green)}
 .pg-rec-dip{background:#fdf8ec;color:#8a6d1f;border:1px solid #ecd9ae}
