@@ -223,6 +223,20 @@ if ($SelfTest) {
   TT 'MUST FIRE  the guard runs BEFORE publish in that chain, not after' `
      ($src -match '(?s)feed-covers-published\.ps1.*publish\.ps1') 'the guard stage is not ordered before the publish stage'
 
+  # -- AND IT MUST BE CALLED IN-PROCESS. -Slugs is [string[]], and `powershell -File` passes only the
+  #    FIRST element (measured 2026-08-15): this gate ran over one dirty slug and reported the whole set
+  #    clean. A gate that silently narrows its own scope to n=1 is worse than no gate, because it is green.
+  #    Asserted in SOURCE against every production caller, because the defect is invocation shape and no
+  #    pure function can reproduce it.
+  foreach ($callerName in @('propagate-recipes.ps1', 'wave-publish.ps1')) {
+    $cp = Join-Path $here $callerName
+    if (-not (Test-Path $cp)) { continue }
+    $ctext = Get-Content $cp -Raw
+    $viaFile = [regex]::IsMatch($ctext, '-File[^\r\n]*feed-covers-published\.ps1[^\r\n]*-Slugs')
+    TT ("MUST FIRE  {0} calls this guard in-process, not via ``powershell -File``" -f $callerName) `
+       (-not $viaFile) 'called via -File, so only the first slug is ever checked'
+  }
+
   # -- the card parser has to survive the real artifact, or every bid list silently comes back empty and
   #    the guard reads green over a catalogue it never checked.
   $sample = Join-Path $mp 'db\built\american-goulash-pasta.body.html'

@@ -117,7 +117,11 @@ try {
 # matters to a reader (can the feed this card fetches actually price this recipe?) while the answer is still
 # free to act on. It runs on the ALREADY-BUILT cards, so it reads the exact bid list the browser will.
 Invoke-Stage 'feed-covers-published (hard gate)' {
-  $fcOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $here 'feed-covers-published.ps1') -Slugs $dirty
+  # IN-PROCESS, NEVER `powershell -File`. -Slugs is [string[]] and the -File path passes only the FIRST
+  # element (measured 2026-08-15), so this hard gate was checking ONE dirty slug and reporting the whole
+  # set clean - a 517-spec propagate verified one recipe. The gate built to stop the 2026-08-15 empty-cost
+  # failure was itself blind for the same structural reason the estate has now paid for five times.
+  $fcOut = & (Join-Path $here 'feed-covers-published.ps1') -Slugs $dirty
   $fcRc = $LASTEXITCODE
   $fcOut | ForEach-Object { Write-Output $_ }
   # COMPLETION AND VERDICT ARE DIFFERENT QUESTIONS (lib\guard-contract.ps1). A guard that died mid-run

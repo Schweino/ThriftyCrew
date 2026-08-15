@@ -772,7 +772,12 @@ try {
 # PS 5.1 redirecting a native command's stderr interleaves it into the same stream - one stray warning
 # after the marker and a guard that finished cleanly reads as one that died. (It is also the
 # NativeCommandError trap that killed a publish at its last step on the first live run.)
-$fcOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'feed-covers-published.ps1') -Slugs $slugs
+#
+# IN-PROCESS, NEVER `powershell -File`. -Slugs is [string[]], and measured 2026-08-15 the -File path
+# passes only the FIRST element: a 10-recipe wave would verify ONE recipe and report all ten clean. That
+# is worse than no gate, because it reads green. Fifth instance of this trap in this pipeline (ledger,
+# reanchor, migrate-prose-tokens, a probe, here).
+$fcOut = & (Join-Path $here 'feed-covers-published.ps1') -Slugs $slugs
 $fcRc = $LASTEXITCODE
 $fcLines = @($fcOut | ForEach-Object { [string]$_ })
 @($fcLines | Where-Object { $_ -match '^\s*X |^FEEDCOV' }) | ForEach-Object { Write-Output ("      " + $_) }
