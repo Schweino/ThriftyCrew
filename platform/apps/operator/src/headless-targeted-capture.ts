@@ -2,6 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { sourceNativeSizeConflict } from "@thriftycrew/engine";
 import type { AdapterChunk, ClaimedCheck } from "./ingredient-targeted-capture";
+import { findLatestRegularCapture } from "./current-captures";
 
 type HeadlessStore = "bakers" | "family-fare" | "hy-vee";
 type JsonRecord = Record<string, any>;
@@ -604,10 +605,11 @@ export async function captureHeadlessDiscovery(store: HeadlessStore, terms: stri
   const pageConcurrency = options.pageConcurrency ?? DEFAULT_PAGE_CONCURRENCY;
   const queries = [...new Set(terms.map((term) => term.trim()).filter(Boolean))];
   const token = store === "bakers" ? await krogerToken(options.krogerCredentialsFile ?? path.resolve("..", "grocery", ".krogerkey"), fetchImpl) : null;
+  const regularDirectory = path.resolve("..", "grocery", "out", "regular");
   const records: CaptureRecord[] = store === "family-fare"
     ? await captureFamilyFareBatch(queries, observedAt,
       await captureFamilyFareCatalog(options.familyFareCatalogFile
-        ?? path.resolve("..", "grocery", "out", "regular", `family-fare-regular-${new Date().toISOString().slice(0, 10)}.json`), fetchImpl),
+        ?? await findLatestRegularCapture(regularDirectory, "family-fare"), fetchImpl),
       fetchImpl, termConcurrency)
     : await mapWithConcurrency(queries, termConcurrency, async (query) => {
       try {
