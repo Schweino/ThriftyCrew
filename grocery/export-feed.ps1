@@ -52,30 +52,151 @@ $ovrFile = Join-Path $root 'board-price-overrides.json'
 if (Test-Path $ovrFile) { try { foreach ($c in (Get-Content $ovrFile -Raw | ConvertFrom-Json).cells) { $k=[string]$c.id; if (-not $ovr.ContainsKey($k)) { $ovr[$k]=@{} }; $ovr[$k][[string]$c.store]=[double]$c.per_unit } } catch {} }
 
 $ing = [ordered]@{}
+
+# ---- pricing_inputs: the WHOLE-PACKAGE basis the recipe cards price against ----
+# WHY THIS EXISTS (2026-08-15). The 544 recipe cards used to fetch this from the V3 platform's
+# /api/v2/recipe-feed/<slug>. That platform was deleted on 2026-08-14; the endpoint still answers from a
+# STORED release, so it returns 200 for anything that existed when the last release was minted and 404 for
+# everything newer, and its prices are frozen at whatever that release captured (butter served $3.99 against
+# a real $2.555). Nothing in this repo produces it and nobody here can regenerate it. The cards now read the
+# feed we DO own, and this block is the one thing that feed was missing.
+#
+# A per-unit price cannot answer the card's question. The card prices whole packages, because you cannot buy
+# 7.5 tbsp of vinegar, so it needs three more facts per commodity: how big the package is, what the package
+# costs, and whether the item is sold loose by weight instead of in a package at all. All three are already
+# in the board rows this pipeline produces:
+#   basis "size 4 lb"     -> packageBasisUnits 4, ALREADY IN THE ROW'S OWN UNIT (measured 2026-08-15: on
+#                            every one of the 2,428 weekly cells where ad and basis are both present, the
+#                            two reproduce the row's per_unit within 2%. Zero disagreements.)
+#   basis "per-lb marker" -> variableWeight: a meat-counter price, so the card charges the exact amount used
+#                            instead of rounding up to a package that does not exist
+#   ad    "$10.22"        -> purchasePriceMinor 1022
+# A cell with none of that carries perUnitMicros only. The card then falls back to the recipe's OWN authored
+# package size (pkg_g/gpu, which every spec already has) rather than this script inventing a package size -
+# a guessed package size is a wrong PRICE, which is worse than an honest per-unit one.
+$pin = [ordered]@{}
+$pinDiverged = 0        # cells where the shelf tag did not divide into its own per-unit price
+$pinNoBasis  = 0        # cells shipped per-unit-only, for the card's authored-package fallback
+
+# Size-string units, normalised. Only what the boards actually emit; an unrecognised token is refused, not guessed.
+$UNIT_ALIAS = @{
+  'oz'='oz'; 'ounce'='oz'; 'ounces'='oz'
+  'lb'='lb'; 'lbs'='lb'; 'pound'='lb'; 'pounds'='lb'
+  'floz'='floz'; 'fl oz'='floz'; 'fluid ounce'='floz'; 'fluid ounces'='floz'
+  'ct'='each'; 'count'='each'; 'ea'='each'; 'each'='each'; 'pk'='each'; 'pack'='each'
+  'g'='g'; 'gram'='g'; 'grams'='g'; 'kg'='kg'
+  'gal'='gal'; 'gallon'='gal'; 'qt'='qt'; 'quart'='qt'; 'pt'='pt'; 'pint'='pt'
+  'l'='l'; 'liter'='l'; 'litre'='l'; 'ml'='ml'
+}
+function ConvertTo-RowUnit([double]$mag, [string]$from, [string]$to) {
+  if ($from -eq $to) { return $mag }
+  switch ("$from>$to") {
+    'oz>lb'    { return $mag / 16 }
+    'lb>oz'    { return $mag * 16 }
+    'g>lb'     { return $mag / 453.59237 }
+    'g>oz'     { return $mag / 28.349523 }
+    'kg>lb'    { return $mag * 2.2046226 }
+    'kg>oz'    { return $mag * 35.273962 }
+    'gal>floz' { return $mag * 128 }
+    'qt>floz'  { return $mag * 32 }
+    'pt>floz'  { return $mag * 16 }
+    'l>floz'   { return $mag * 33.814023 }
+    'ml>floz'  { return $mag / 29.573530 }
+    # THE BOARD'S OWN CONVENTION, MIRRORED - not a new one. On a row already established as a liquid (unit
+    # floz), a package labelled "32 oz" is 32 fluid ounces, which is exactly what the board's own `basis`
+    # field emits for those cells ("size 32 floz" from size "32 oz"). Allowed in this one direction only:
+    # any other weight/volume crossing is refused below, because guessing one is a wrong price.
+    'oz>floz'  { return $mag }
+    default    { return 0 }
+  }
+}
+function Get-PkgBasis($s, [string]$rowUnit) {
+  $b = [string]$s.basis
+  if ($b -match 'per-lb marker') { return @{ variable = $true;  basis = 0.0 } }
+  if ($b -match 'size\s+([\d.]+)') { return @{ variable = $false; basis = [double]$Matches[1] } }   # already in the row's unit
+  $sz = [string]$s.size
+  if ($sz -match '^\s*([\d.]+)\s*([a-zA-Z][a-zA-Z.\s]*?)\s*$') {
+    $mag = [double]$Matches[1]
+    $u = ($Matches[2] -replace '\.','' -replace '\s+',' ').Trim().ToLower()
+    if ($UNIT_ALIAS.ContainsKey($u)) {
+      $v = ConvertTo-RowUnit $mag $UNIT_ALIAS[$u] $rowUnit
+      if ($v -gt 0) { return @{ variable = $false; basis = [double]$v } }
+    }
+  }
+  return @{ variable = $false; basis = 0.0 }
+}
+# $Full=$false emits the lean per-store shape. THE CARD READS FOUR FIELDS off a `stores` entry
+# (perUnitMicros, packageBasisUnits, purchasePriceMinor, variableWeight) and takes the store NAME from the
+# key and the unit from the ingredients row, so store/unit/url on those entries are pure duplication - and
+# there are ~3,200 of them. Carrying them cost 428 KB on a file every recipe page fetches. `current` and
+# `everyday` keep the full shape because the card does read store, unit and url off those two.
+function New-PricingEntry($s, [double]$perUnit, [string]$rowUnit, [string]$id, [bool]$Full) {
+  $pk = Get-PkgBasis $s $rowUnit
+  $e = [ordered]@{}
+  if ($Full) { $e['store'] = [string]$s.store; $e['unit'] = $rowUnit }
+  $e['perUnitMicros']  = [int][math]::Round($perUnit * 1000000)
+  $e['variableWeight'] = [bool]$pk.variable
+  if ([double]$pk.basis -gt 0) {
+    $e['packageBasisUnits'] = [math]::Round([double]$pk.basis, 6)
+    $adMinor = 0
+    if (([string]$s.ad) -match '^\s*\$\s*([\d,]+(?:\.\d+)?)\s*$') { $adMinor = [int][math]::Round(([double](($Matches[1]) -replace ',','')) * 100) }
+    $derived = [int][math]::Round($perUnit * [double]$pk.basis * 100)
+    # SHIP THE SHELF TAG WHEN IT DIVIDES INTO ITS OWN PER-UNIT PRICE, the derived figure when it does not.
+    # The card prints both on one receipt line ("$10.22" and "$2.56/lb"), so a pair that does not divide is
+    # the arithmetic-fingerprint defect printed straight at the reader.
+    if ($adMinor -gt 0 -and $derived -gt 0 -and ([math]::Abs($adMinor - $derived) / [double]$derived) -le 0.02) { $e['purchasePriceMinor'] = $adMinor }
+    else { $e['purchasePriceMinor'] = $derived; if ($adMinor -gt 0) { $script:pinDiverged++ } }
+  } else { $script:pinNoBasis++ }
+  if ($Full -and $purl.ContainsKey($id) -and $purl[$id].ContainsKey([string]$s.store)) { $e['url'] = $purl[$id][[string]$s.store] }
+  return $e
+}
+
 function AddBoard($rows) {
   foreach ($r in $rows) {
     $id = [string]$r.id
-    $lo = $null; $los = ''; $lot = ''; $nStores = 0
-    $st = [ordered]@{}   # per-store per-unit prices (same unit as the row) - the Meal Plan Builder's store split needs these
+    # weekly board wins ties for a shared id (it carries this week's ad price); don't overwrite it with recipe floor
+    if ($ing.Contains($id)) { continue }
+    $rowUnit = [string]$r.unit
+    $lo = $null; $los = ''; $lot = ''; $nStores = 0; $loCell = $null
+    $evLo = $null; $evStore = ''; $evCell = $null
+    $st = [ordered]@{}         # per-store per-unit prices (same unit as the row) - the Meal Plan Builder's store split needs these
+    $pinSt = [ordered]@{}      # per-store WHOLE-PACKAGE inputs, same cells, same override, same loop
     foreach ($s in $r.stores) {
       $p = [double]$s.per_unit
       if (([string]$s.type) -eq 'everyday' -and $ovr.ContainsKey($id) -and $ovr[$id].ContainsKey([string]$s.store)) { $ov=[double]$ovr[$id][[string]$s.store]; if ($ov -gt 0) { $p = $ov } }
-      if ($p -gt 0) { $nStores++; $st[[string]$s.store] = [math]::Round($p,4) }
-      if ($p -gt 0 -and ($null -eq $lo -or $p -lt $lo)) { $lo = $p; $los = [string]$s.store; $lot = [string]$s.type }
+      if ($p -le 0) { continue }
+      $nStores++; $st[[string]$s.store] = [math]::Round($p,4)
+      # ONE LOOP, ONE WINNER. The cheapest chip and the card's `current` pricing basis are picked here
+      # together on purpose: computed twice they can disagree, and a receipt whose store chip names a
+      # different store from the price beside it is the board-match-collision class, on a recipe page.
+      $pinSt[[string]$s.store] = (New-PricingEntry $s $p $rowUnit $id $false)
+      if ($null -eq $lo -or $p -lt $lo) { $lo = $p; $los = [string]$s.store; $lot = [string]$s.type; $loCell = $s }
+      if ((([string]$s.type) -eq 'everyday') -and ($null -eq $evLo -or $p -lt $evLo)) { $evLo = $p; $evStore = [string]$s.store; $evCell = $s }
     }
-    if ($null -ne $lo) {
-      # weekly board wins ties for a shared id (it carries this week's ad price); don't overwrite it with recipe floor
-      if (-not $ing.Contains($id)) {
-        $u = if ($purl.ContainsKey($id) -and $purl[$id].ContainsKey($los)) { $purl[$id][$los] } else { '' }
-        # n = how many of the 6 stores actually have a price for this ingredient - so the UI never overclaims
-        # "checked at 6 stores" for an item only 1-2 stores have been priced at yet (new adds, or an item some
-        # stores simply don't carry).
-        $row = [ordered]@{ unit=[string]$r.unit; cheapest=[math]::Round($lo,4); store=$los; type=$lot; url=$u; n=$nStores; stores=$st }
-        # attach the sale's end date when the winning chip IS the sale and its window is known
-        if ($lot -eq 'sale') { $sk = $id + '|' + $los; if ($saleEnd.ContainsKey($sk)) { $row['sale_end'] = $saleEnd[$sk] } }
-        $ing[$id] = $row
-      }
-    }
+    if ($null -eq $lo) { continue }
+    $u = if ($purl.ContainsKey($id) -and $purl[$id].ContainsKey($los)) { $purl[$id][$los] } else { '' }
+    # n = how many of the 6 stores actually have a price for this ingredient - so the UI never overclaims
+    # "checked at 6 stores" for an item only 1-2 stores have been priced at yet (new adds, or an item some
+    # stores simply don't carry).
+    $row = [ordered]@{ unit=$rowUnit; cheapest=[math]::Round($lo,4); store=$los; type=$lot; url=$u; n=$nStores; stores=$st }
+    # attach the sale's end date when the winning chip IS the sale and its window is known
+    if ($lot -eq 'sale') { $sk = $id + '|' + $los; if ($saleEnd.ContainsKey($sk)) { $row['sale_end'] = $saleEnd[$sk] } }
+    $ing[$id] = $row
+    # `everyday` is the cheapest NON-SALE cell, which is what the card's "everyday" tab means and what its
+    # savings delta subtracts from. With no everyday cell at all the two tabs collapse to the same number,
+    # which the card already detects and refuses to print twice under two labels.
+    # The per-unit-only counter is charged once per CELL, on the lean pass above; the two full entries below
+    # re-describe cells already counted, so they must not be counted again.
+    $seenNoBasis = $pinNoBasis; $seenDiv = $pinDiverged
+    $pinEntry = [ordered]@{ current = (New-PricingEntry $loCell $lo $rowUnit $id $true) }
+    # OMIT `everyday` WHEN IT IS THE SAME CELL AS `current`, which it is for most commodities most weeks
+    # (nothing is on sale, so the cheapest price IS the everyday price). The card reads
+    # `inputs.everyday||inputs.current`, so the absent case is the identical case, said once instead of
+    # twice. Worth 180 KB on a file every recipe page fetches.
+    if ($evCell -and $evStore -ne $los) { $pinEntry['everyday'] = (New-PricingEntry $evCell $evLo $rowUnit $id $true) }
+    $pinEntry['stores'] = $pinSt
+    $pin[$id] = $pinEntry
+    $pinNoBasis = $seenNoBasis; $pinDiverged = $seenDiv
   }
 }
 $cmpF = Get-ChildItem (Join-Path $out 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
@@ -118,6 +239,10 @@ if (Test-Path $idMapFile) {
       foreach ($f in @($ing[$wid].Keys)) { $clone[$f] = $ing[$wid][$f] }
       $clone['alias_of'] = $wid
       $ing[$rid] = $clone
+      # THE ALIAS HAS TO CARRY THE PACKAGE BASIS TOO. Aliasing only the per-unit row would leave the recipe
+      # spelling priceable by every surface except the recipe cards, which is the one surface this map was
+      # written for. Same unit gate above already applies: it is what makes this clone safe.
+      if ($pin.Contains($wid)) { $pin[$rid] = $pin[$wid] }
       $aliased++
     }
   } catch { Write-Output 'export-feed: WARNING - recipe-floor-id-map.json unreadable; recipe-spelling bids will NOT resolve' }
@@ -159,8 +284,10 @@ $feed = [ordered]@{
   recipe_count     = $rec.Count
   board_item_count = $boardItemCount
   ingredients = $ing
+  pricing_inputs = $pin
   recipes     = $rec
 }
+Write-Output ("export-feed: pricing_inputs for {0} commodities ({1} cell(s) per-unit-only -> card uses its authored package size; {2} cell(s) where the shelf tag did not divide into its per-unit price -> derived)" -f $pin.Count, $pinNoBasis, $pinDiverged)
 # Write to the repo-root public\ dir - this is the ONLY folder Cloudflare Pages serves, so nothing else
 # in the repo is exposed. _headers there sets CORS + cache. Keep a copy in out\ for local inspection.
 # -Compress (2026-07-26 scale hardening): the feed is fetched client-side by EVERY recipe card widget.
