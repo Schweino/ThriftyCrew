@@ -111,6 +111,58 @@ function Get-CostBasisProblems {
 }
 
 # ===================================================================================================
+# THE SERVEABILITY GATE (2026-08-15). Every gate above this line validates data against other data -
+# spec vs costed, spec vs recipes-db, prose vs stat. Not one of them asks whether the published page will
+# WORK for a reader. Both real failures of the v2 shakedown were external, and the second was findable
+# before publish: the cards fetched /api/v2/recipe-feed/<slug> from a platform deleted the day before, so
+# two audited, complete, GO recipes went live unable to price anything.
+#
+# WHY THIS PARSES AN ASSIGNMENT AND NEVER GREPS FOR A PATH. The correct post-repoint template STILL
+# CONTAINS the string `/api/v2/recipe-feed/` - in the comment block explaining this very bug, and
+# feed-covers-published.ps1's header quotes the old placeholder text for the same reason. A gate that
+# greps the template for the dead path refuses today's correct template because of its own history
+# lesson. That is the estate's guard-re-parses-prose trap, and here the prose is a comment ABOUT the bug
+# the guard exists to catch. The assignment is the only thing the browser executes, so it is the only
+# thing worth reading.
+# ---------------------------------------------------------------------------------------------------
+
+# The URL the browser will actually fetch. Anchored to a line that is NOT a `//` comment, so a commented
+# out or merely discussed URL can never be mistaken for the live one. Returns '' when there is no
+# assignment at all, and '' must always REFUSE: could-not-look is never a clean bill (the P6 rule).
+function Get-CardFeedUrl {
+  param([string]$TemplateText)
+  $m = [regex]::Match($TemplateText, "(?m)^(?!\s*//)\s*var\s+SMPFEED\s*=\s*'([^']+)'")
+  if (-not $m.Success) { return '' }
+  return $m.Groups[1].Value
+}
+
+# Exact match against the endpoints this estate genuinely produces. grocery\export-feed.ps1 writes
+# smp-feed.json to grocery\out\ and public\, deployed via Cloudflare Pages; measured 2026-08-15,
+# feed.thriftycrew.com serves it 200 and the www host 301s to the same asset. Anything else - including
+# any V3 platform path - is a URL nobody here can regenerate, which is exactly how the dead endpoint went
+# on answering 200 with frozen prices for a month.
+$script:PRODUCIBLE_FEEDS = @(
+  'https://feed.thriftycrew.com/smp-feed.json',
+  'https://www.thriftycrew.com/smp-feed.json'
+)
+function Test-FeedUrlProducible {
+  param([string]$Url, [string[]]$Allowlist)
+  if (-not $Url) { return $false }
+  return (@($Allowlist) -contains $Url)
+}
+
+# THE SECOND COPY. feed-covers-published.ps1 carries its own $FEED_URL literal for its -Live mode. Two
+# copies of "which feed do the cards read" is the two-copies-of-a-rule shape: repoint the template again
+# and that guard keeps validating the OLD endpoint while reading perfectly green. They must agree, and
+# this is the only place that can notice they do not.
+function Get-GuardFeedUrl {
+  param([string]$GuardText)
+  $m = [regex]::Match($GuardText, "(?m)^(?!\s*#)\s*\`$FEED_URL\s*=\s*'([^']+)'")
+  if (-not $m.Success) { return '' }
+  return $m.Groups[1].Value
+}
+
+# ===================================================================================================
 # SELF-TEST
 # ===================================================================================================
 if ($runSelfTest) {
@@ -178,6 +230,62 @@ if ($runSelfTest) {
     ((Get-CostBasisProblems @([pscustomobject]@{ slug = 'brand-new'; cost_ps = 2.00 }) $mrows).Count -eq 1) 'let an unmeasured slug through'
   T 'penny rounding does not trip the basis check' `
     ((Get-CostBasisProblems @([pscustomobject]@{ slug = 'chicken-florentine'; cost_ps = 3.27 }) $mrows).Count -eq 0) 'too strict'
+
+  # ---- THE SERVEABILITY GATE, frozen at its founding bug -------------------------------------------
+  # FIXTURE: the template exactly as it stood on 2026-08-15 before the repoint. This assignment is what
+  # made two audited recipes go live unable to price. With zero HTTP calls, this refuses that publish.
+  $tplDead = @'
+<script>
+var SMPFEED='https://www.thriftycrew.com/api/v2/recipe-feed/',smpFeedP=null;
+</script>
+'@
+  T 'MUST FIRE  a template whose SMPFEED points at the dead V3 endpoint is refused' `
+    (-not (Test-FeedUrlProducible (Get-CardFeedUrl $tplDead) $script:PRODUCIBLE_FEEDS)) 'would have published today''s failure again'
+
+  # THE CLEAN TWIN THAT MATTERS MOST. A frozen snippet of the REAL post-repoint template: its comment
+  # block quotes the dead path (that is what the comment is FOR), and its assignment is correct. A gate
+  # that greps for the path fails this case and refuses every publish forever. Do not delete this fixture
+  # to make a simpler implementation pass - the simpler implementation is the bug.
+  $tplLive = @'
+<script>
+(function(){
+// THE ONE FEED THIS ESTATE OWNS AND PUBLISHES DAILY (repointed 2026-08-15).
+// This used to fetch a per-slug slice from /api/v2/recipe-feed/<slug>?contract=4, served by the V3
+// platform that was deleted on 2026-08-14. That endpoint did not die cleanly: it kept answering from a
+// STORED release, so two recipes shipped showing "current release price loading" and an empty cost section.
+var SMPFEED='https://feed.thriftycrew.com/smp-feed.json',smpFeedP=null,feedData=null;
+'@
+  T 'CLEAN TWIN the correct template passes even though its COMMENTS quote the dead path' `
+    (Test-FeedUrlProducible (Get-CardFeedUrl $tplLive) $script:PRODUCIBLE_FEEDS) 'refused the correct template over its own history comment'
+  T '   and it reads the real URL, not something out of the comment' `
+    ((Get-CardFeedUrl $tplLive) -eq 'https://feed.thriftycrew.com/smp-feed.json') (Get-CardFeedUrl $tplLive)
+
+  # a template with no assignment at all: could-not-look is never a clean bill
+  T 'MUST FIRE  a template with no SMPFEED assignment is refused, not waved through' `
+    (-not (Test-FeedUrlProducible (Get-CardFeedUrl '<script>var x=1;</script>') $script:PRODUCIBLE_FEEDS)) 'passed on an unreadable template'
+  # a COMMENTED-OUT assignment is not the live one
+  $tplCommented = @'
+// var SMPFEED='https://feed.thriftycrew.com/smp-feed.json';
+var OTHER=1;
+'@
+  T 'MUST FIRE  a commented-out SMPFEED is not read as the live endpoint' `
+    (-not (Test-FeedUrlProducible (Get-CardFeedUrl $tplCommented) $script:PRODUCIBLE_FEEDS)) 'read a commented-out URL as live'
+
+  # ---- the second copy. feed-covers-published carries its own $FEED_URL for -Live mode.
+  $guardOk   = "`$FEED_URL = 'https://feed.thriftycrew.com/smp-feed.json'"
+  $guardStale= "`$FEED_URL = 'https://www.thriftycrew.com/api/v2/recipe-feed/'"
+  T 'CLEAN TWIN the coverage guard reading the same feed as the cards agrees' `
+    ((Get-GuardFeedUrl $guardOk) -eq (Get-CardFeedUrl $tplLive)) ((Get-GuardFeedUrl $guardOk) + ' vs ' + (Get-CardFeedUrl $tplLive))
+  T 'MUST FIRE  a coverage guard left pointing at the OLD feed is caught' `
+    ((Get-GuardFeedUrl $guardStale) -ne (Get-CardFeedUrl $tplLive)) 'a stale second copy read as agreeing'
+
+  # ---- THE SEAL. These predicates are worth nothing if the live path does not call them (the
+  # tested-is-not-run lesson: a guard whose only caller is its own test runs never).
+  $selfSrc = [IO.File]::ReadAllText($PSCommandPath)
+  T 'the live preflight actually calls the provenance check' `
+    ($selfSrc -match '(?m)^\s*\$cardFeedUrl\s*=\s*Get-CardFeedUrl') 'P8 does not call Get-CardFeedUrl'
+  T 'the live preflight actually compares the second copy' `
+    ($selfSrc -match '(?m)^\s*\$guardFeedUrl\s*=\s*Get-GuardFeedUrl') 'P8 never compares feed-covers-published'
 
   if ($f -eq 0) { Write-Output 'wave-publish SELF-TEST PASS'; exit 0 }
   Write-Output ("wave-publish SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
@@ -318,6 +426,45 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Output '  P7  recipes-db delta (dry run):'
 @($dry | Select-Object -Last 8) | ForEach-Object { Write-Output ("        " + [string]$_) }
+
+# ---- P8. THE SERVEABILITY GATE -------------------------------------------------------------------
+# Asks the question no other gate asks: will the page WORK for a reader. See the block above the
+# self-test for why this parses the SMPFEED assignment instead of grepping for a path.
+$tplPath = Join-Path $here 'tpl2-scaler-prefix.html'
+if (-not (Test-Path $tplPath)) { Fail ("no card template at {0} - cannot tell what feed the cards will fetch" -f $tplPath) }
+$cardFeedUrl = Get-CardFeedUrl ([IO.File]::ReadAllText($tplPath))
+if (-not $cardFeedUrl) {
+  Fail ("could not find a live `var SMPFEED='...'` assignment in {0}. Not publishing on a template whose price source cannot be read." -f (Split-Path $tplPath -Leaf))
+}
+if (-not (Test-FeedUrlProducible $cardFeedUrl $script:PRODUCIBLE_FEEDS)) {
+  Fail ("the cards fetch prices from '{0}', which is NOT an endpoint this estate produces.{1}   Producible: {2}{1}   Nothing here can regenerate that URL, so every recipe in this wave would go live unable to price. Repoint the template; do NOT add the URL to the allowlist to unblock." -f $cardFeedUrl, [Environment]::NewLine, ($script:PRODUCIBLE_FEEDS -join ', '))
+}
+Write-Output ("  P8  card price source      producible   ({0})" -f $cardFeedUrl)
+
+# the second copy must agree, or the coverage guard is validating an endpoint the cards no longer read
+$fcPath = Join-Path $here 'feed-covers-published.ps1'
+if (Test-Path $fcPath) {
+  $guardFeedUrl = Get-GuardFeedUrl ([IO.File]::ReadAllText($fcPath))
+  if ($guardFeedUrl -and $guardFeedUrl -ne $cardFeedUrl) {
+    Fail ("feed-covers-published.ps1 validates '{0}' but the cards fetch '{1}'. That guard is reading a different feed from the one readers get, so its green light means nothing. Point both at the same URL." -f $guardFeedUrl, $cardFeedUrl)
+  }
+  Write-Output ("  P8  coverage guard feed    agrees with the cards")
+}
+
+# liveness. A producible URL that is DOWN still ships a broken page; could-not-look is never a clean bill.
+if ($runSkipGhost) {
+  Write-Output '  P8  feed liveness          SKIPPED (-SkipGhostCheck)'
+} else {
+  . (Join-Path $repo 'lib\ghost-lib.ps1')
+  $feedDoc = $null
+  try { $feedDoc = Invoke-GhostApi -Uri $cardFeedUrl -TimeoutSec 40 }
+  catch { Fail ("the card price source {0} could not be fetched ({1}). Not publishing onto a feed that is not serving." -f $cardFeedUrl, $_.Exception.Message) }
+  if ($null -eq $feedDoc -or $null -eq $feedDoc.recipes -or $null -eq $feedDoc.ingredients) {
+    Fail ("{0} answered, but the body is not the price feed (no recipes/ingredients map). A 200 that is not the feed is still a broken card." -f $cardFeedUrl)
+  }
+  $feedRecipeCount = @($feedDoc.recipes.PSObject.Properties).Count
+  Write-Output ("  P8  feed liveness          200 + parseable   ({0} recipes, generated {1})" -f $feedRecipeCount, $feedDoc.generated)
+}
 
 Write-Output ''
 if ($runDryRun) {
