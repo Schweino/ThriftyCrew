@@ -353,11 +353,10 @@ else {
     'meal-prep/db/batch-ledger.json', 'meal-prep/pipeline/propagate-stamps.json',
     'meal-prep/pipeline/v2-perserving.json', 'meal-prep/planner-data.js'
   )
-  foreach ($s in $slugs) {
-    $paths += ('meal-prep/db/recipes/' + $s + '.json')
-    $paths += ('meal-prep/db/built/' + $s + '.body.html')
-    $paths += ('meal-prep/db/built/' + $s + '.head.html')
-  }
+  # db\built is DERIVED and gitignored on purpose - build-cards regenerates it from the spec, so staging
+  # it would only ever produce "paths are ignored by .gitignore" noise on every publish. The spec is the
+  # artifact worth committing; the card is a build product of it.
+  foreach ($s in $slugs) { $paths += ('meal-prep/db/recipes/' + $s + '.json') }
   $add = @($paths | Where-Object { Test-Path (Join-Path $repo ($_ -replace '/', '\')) })
   & git -C $repo add -- @add 2>&1 | Out-Null
   $msg = ("recipes: publish {0} ({1} recipes, audit GO)" -f $batch, $slugs.Count)
