@@ -259,6 +259,28 @@ if ($runSelfTest) {
     T 'MUST FIRE  a single-element array does not collapse to a scalar' (@($back.terms).Count -eq 1 -and $null -ne @($back.terms)[0].term) 'collapsed'
   } finally { Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 
+  # ---- FIXTURE 6. THE LEDGER MARSHALLING BUG, frozen. WaveClose opens the batch-ledger row that records
+  # which recipes are in the wave. Called through `powershell -File`, a [string[]] -Slugs marshals as ONE
+  # command-line string, so a 2-recipe wave opened a row naming a SINGLE slug and the batch under-recorded
+  # itself with nothing complaining. Caught by the wave-1 audit on 2026-08-15, not by a test - which is
+  # why this exists. It runs the real ledger against a temp file, because the bug IS invocation behaviour
+  # and no pure function can reproduce it.
+  $bl = Join-Path $here 'batch-ledger.ps1'
+  if (Test-Path $bl) {
+    $lt = Join-Path $env:TEMP ('huntrun-ledger-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.json')
+    try {
+      & powershell -NoProfile -ExecutionPolicy Bypass -File $bl -Start -Batch 'probe-file' -Slugs @('a', 'b') -LedgerPath $lt | Out-Null
+      & $bl -Start -Batch 'probe-inproc' -Slugs @('a', 'b') -LedgerPath $lt | Out-Null
+      $lrows = @(([IO.File]::ReadAllText($lt, [Text.Encoding]::UTF8) | ConvertFrom-Json))
+      $viaFile   = @($lrows | Where-Object { [string]$_.batch -eq 'probe-file' })[0]
+      $viaInProc = @($lrows | Where-Object { [string]$_.batch -eq 'probe-inproc' })[0]
+      T 'MUST FIRE  `powershell -File` still loses array slugs (the bug this guards against)' `
+        (@($viaFile.slugs).Count -eq 1) ("recorded " + @($viaFile.slugs).Count)
+      T 'CLEAN TWIN the in-process call WaveClose uses records every slug' `
+        (@($viaInProc.slugs).Count -eq 2) ("recorded " + @($viaInProc.slugs).Count)
+    } finally { if (Test-Path $lt) { Remove-Item $lt -Force -ErrorAction SilentlyContinue } }
+  }
+
   if ($f -eq 0) { Write-Output 'hunt-run SELF-TEST PASS'; exit 0 }
   Write-Output ("hunt-run SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
 }
