@@ -88,7 +88,7 @@
   {
       "batch":  "hunt-2026-08-15-shakedown-w1",
       "opened":  "2026-08-15T12:52:09",
-      "last_activity":  "2026-08-15T13:28:28",
+      "last_activity":  "2026-08-15T13:51:53",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -121,6 +121,26 @@
                          "stage":  "audit",
                          "at":  "2026-08-15T13:28:28",
                          "detail":  "2/2 GO on the third audit (2 prior NO-GOs, 5 blockers cleared)"
+                     },
+                     {
+                         "stage":  "cost-basis",
+                         "at":  "2026-08-15T13:41:04",
+                         "detail":  "compute-v2-perserving + reanchor on 2 slug(s)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-08-15T13:41:05",
+                         "detail":  "2 row(s) via hunt-2026-08-15-shakedown-w1"
+                     },
+                     {
+                         "stage":  "build-cards",
+                         "at":  "2026-08-15T13:51:53",
+                         "detail":  "2 card(s) rebuilt via propagate"
+                     },
+                     {
+                         "stage":  "publish",
+                         "at":  "2026-08-15T13:51:53",
+                         "detail":  "2/2 published through engine\\publish (visibility preserved)"
                      }
                  ]
   }

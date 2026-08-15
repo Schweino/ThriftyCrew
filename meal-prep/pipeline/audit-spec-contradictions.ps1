@@ -1,4 +1,4 @@
-<#
+﻿<#
   audit-spec-contradictions.ps1 - find recipe specs that contradict THEMSELVES.
 
   WHY. On 2026-07-26 five writer agents rewriting shop_smart prose kept tripping over content bugs that had
@@ -51,7 +51,7 @@
   Usage: .\audit-spec-contradictions.ps1 [-Baseline] [-Quiet] [-SelfTest]
 #>
 param([switch]$Baseline, [switch]$Quiet, [switch]$SelfTest, [switch]$IncludeArchive, [string]$Root = "")
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\guard-contract.ps1')
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
@@ -275,6 +275,71 @@ if ($SelfTest) {
   }
   $ph5 = @(Get-SpecContradictions $noise $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
   Chk 'CLEAN TWIN the eight live false-positive shapes all stay silent' ($ph5.Count -eq 0) (($ph5 | ForEach-Object { $_.why }) -join ' | ')
+
+  # ---- BUY-COVERAGE -------------------------------------------------------------------------------
+  # FROZEN FIXTURE (2026-08-15) - country-captain-chicken exactly as it shipped. This spec is the founding
+  # case BECAUSE this audit passed it: cost_lines called the raisin box a several-batch box while
+  # shop_smart, in the same file, said it was not. Both sentences are below, unedited, so the fixture
+  # fails the day the class stops reading one of them.
+  # FROZEN PACKAGE MAP - never read from db\ingredients.json, per the guard-fixture rule. A fixture that
+  # reads the live catalogue stops testing the bug the day someone redefines a package.
+  $pkgFx = @{
+    'Golden Raisins' = @{ g = 320;  label = 'box' }          # 170 g used  -> 1.88 batches
+    'Chicken Broth'  = @{ g = 907;  label = '32oz carton' }  # 532 g used  -> 1.70 batches
+    'Soy Sauce'      = @{ g = 444;  label = 'bottle' }       #  30 g used  -> 14.8 batches, genuinely several
+    'Diced Green Chiles' = @{ g = 113; label = '4oz can' }   # 396 g used  -> needs FOUR cans
+  }
+  $buyBad = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 520; protein = 44; cost_ps = '2.56' }
+    scaler = [pscustomobject]@{ ing = @(
+      [pscustomobject]@{ item = 'Golden Raisins'; grams = 170 },
+      [pscustomobject]@{ item = 'Chicken Broth';  grams = 532 },
+      [pscustomobject]@{ item = 'Soy Sauce';      grams = 30 }) }
+    cost_lines = @(
+      'Golden Raisins, 1.25 cups: ~$2.64. <strong>Buy 1 (lasts several batches).</strong>',
+      'Chicken Broth, 2.25 cups: ~$0.82. <strong>Buy 1 (lasts several batches).</strong>',
+      'Soy Sauce, 2 tbsp: ~$0.18. <strong>Buy 1 (lasts several batches).</strong>')
+    shop_smart = @('One box of golden raisins covers this batch and most of a second. Not several batches, but the box is not a one-and-done either.')
+  }
+  $bc1 = @(Get-BuyCoverageFindings $buyBad $pkgFx)
+  Chk 'MUST FIRE  BUY-COVERAGE raisin box: 1.88 batches is not "several"' (@($bc1 | Where-Object { $_.why -match 'Golden Raisins' }).Count -eq 1) (($bc1 | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'MUST FIRE  BUY-COVERAGE broth carton: 1.70 batches is not "several"' (@($bc1 | Where-Object { $_.why -match 'Chicken Broth' }).Count -eq 1) (($bc1 | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'CLEAN TWIN a 14.8-batch soy bottle in the SAME spec stays silent' (@($bc1 | Where-Object { $_.why -match 'Soy Sauce' }).Count -eq 0) (($bc1 | ForEach-Object { $_.why }) -join ' | ')
+
+  # MUST FIRE - green-chile-ground-turkey-skillet: the line states 3.5 cans and instructs Buy 1. This is
+  # the shape that is a wrong INSTRUCTION rather than wrong wording, so it must be reported even though
+  # the words in the parenthetical are the same ones a >= 3 batch pack would legitimately carry.
+  $buyCount = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 500; protein = 40; cost_ps = '2.00' }
+    scaler = [pscustomobject]@{ ing = @([pscustomobject]@{ item = 'Diced Green Chiles'; grams = 396 }) }
+    cost_lines = @('Diced Green Chiles, 3.5 cans: ~$5.13. <strong>Buy 1 (lasts several batches).</strong>')
+  }
+  $bc2 = @(Get-BuyCoverageFindings $buyCount $pkgFx)
+  Chk 'MUST FIRE  BUY-COVERAGE 3.5 cans but "Buy 1"' ($bc2.Count -eq 1 -and $bc2[0].why -match 'needs 4 4oz can') (($bc2 | ForEach-Object { $_.why }) -join ' | ')
+
+  # CLEAN TWIN - the corrected spec. Every line now says what its package actually covers, and the class
+  # must go completely silent. Without this twin the class could "pass" by firing on everything.
+  $buyGood = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 520; protein = 44; cost_ps = '2.56' }
+    scaler = [pscustomobject]@{ ing = @(
+      [pscustomobject]@{ item = 'Golden Raisins'; grams = 170 },
+      [pscustomobject]@{ item = 'Chicken Broth';  grams = 532 },
+      [pscustomobject]@{ item = 'Soy Sauce';      grams = 30 }) }
+    cost_lines = @(
+      'Golden Raisins, 1.25 cups: ~$2.64. <strong>Buy 1 (covers about two batches).</strong>',
+      'Chicken Broth, 2.25 cups: ~$0.82. <strong>Buy 1 (covers this batch with some left over).</strong>',
+      'Soy Sauce, 2 tbsp: ~$0.18. <strong>Buy 1 (lasts several batches).</strong>')
+  }
+  $bc3 = @(Get-BuyCoverageFindings $buyGood $pkgFx)
+  Chk 'CLEAN TWIN the repaired spec is silent on every line' ($bc3.Count -eq 0) (($bc3 | ForEach-Object { $_.why }) -join ' | ')
+
+  # CLEAN TWIN - no package map (repair-spec-contradictions reads one spec in isolation). The class must
+  # skip, not guess, exactly as PHANTOM does without a vocabulary.
+  $bc4 = @(Get-BuyCoverageFindings $buyBad $null)
+  Chk 'CLEAN TWIN no package map - the class skips rather than guesses' ($bc4.Count -eq 0) (($bc4 | ForEach-Object { $_.why }) -join ' | ')
+  $bc5 = @(Get-SpecContradictions $buyBad $vocabFx | Where-Object { $_.cls -eq 'BUY-COVERAGE' })
+  Chk 'CLEAN TWIN a 2-arg caller gets no BUY-COVERAGE findings' ($bc5.Count -eq 0) (($bc5 | ForEach-Object { $_.why }) -join ' | ')
+
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
@@ -291,11 +356,19 @@ foreach ($s in $specs) {
   $parsed.Add([pscustomobject]@{ run = $s.run; slug = $s.slug; spec = $spec })
 }
 $names = New-Object System.Collections.Generic.List[string]
+# BUY-COVERAGE needs the PACKAGE a bulk item is sold in, which lives only here. Built in the same pass as
+# the vocabulary so the file is read once. Only bulk rows with a real pantry package can be judged: a row
+# with no package definition has no ratio to state, and the class stays quiet on it.
+$pkgMap = @{}
 $ingDb = Join-Path $mp 'db\ingredients.json'
 if (Test-Path $ingDb) {
   foreach ($r in (Get-Content $ingDb -Raw | ConvertFrom-Json)) {
     $n = [string]$r.item
-    if ($n -and $n -notmatch '^_') { $names.Add($n) }
+    if (-not $n -or $n -match '^_') { continue }
+    $names.Add($n)
+    if ($r.PSObject.Properties.Name -contains 'pantry_pkg_g' -and [double]$r.pantry_pkg_g -gt 0) {
+      $pkgMap[$n] = @{ g = [double]$r.pantry_pkg_g; label = [string]$r.pantry_pkg_label }
+    }
   }
 }
 foreach ($p in $parsed) {
@@ -308,7 +381,7 @@ $vocab = New-FoodVocabulary $names.ToArray()
 $byClass = @{}
 $rows = New-Object System.Collections.Generic.List[object]
 foreach ($p in $parsed) {
-  foreach ($f in (Get-SpecContradictions $p.spec $vocab)) {
+  foreach ($f in (Get-SpecContradictions $p.spec $vocab $pkgMap)) {
     $byClass[$f.cls] = 1 + [int]$byClass[$f.cls]
     $rows.Add([pscustomobject]@{ run = $p.run; slug = $p.slug; cls = $f.cls; why = $f.why })
   }
@@ -320,7 +393,7 @@ New-Item -ItemType Directory -Force -Path (Split-Path $outPath) | Out-Null
 if (-not $Quiet) {
   Write-Output ("spec contradictions: {0} finding(s) across {1} spec(s)" -f $rows.Count, $specs.Count)
   foreach ($k in ($byClass.Keys | Sort-Object)) { Write-Output ("  {0,-12} {1}" -f $k, $byClass[$k]) }
-  foreach ($k in @('STAT-PROSE','UNMEASURABLE-QTY','STALE-MONEY','ABSURD-UNIT','HEAD-QTY','PHANTOM')) {
+  foreach ($k in @('STAT-PROSE','UNMEASURABLE-QTY','STALE-MONEY','ABSURD-UNIT','HEAD-QTY','PHANTOM','BUY-COVERAGE')) {
     $r = @($rows | Where-Object { $_.cls -eq $k })
     if ($r.Count -eq 0) { continue }
     Write-Output ("  --- $k")
@@ -340,7 +413,7 @@ if ($Baseline) {
 $base = @{}
 if (Test-Path $basePath) { try { $bd = Get-Content $basePath -Raw | ConvertFrom-Json; foreach ($p in $bd.PSObject.Properties) { $base[$p.Name] = [int]$p.Value } } catch {} }
 $worse = @()
-foreach ($k in @('STAT-PROSE','UNMEASURABLE-QTY','STALE-MONEY','ABSURD-UNIT','HEAD-QTY','PHANTOM')) {
+foreach ($k in @('STAT-PROSE','UNMEASURABLE-QTY','STALE-MONEY','ABSURD-UNIT','HEAD-QTY','PHANTOM','BUY-COVERAGE')) {
   $now = [int]$byClass[$k]
   $was = if ($base.ContainsKey($k)) { [int]$base[$k] } else { 0 }
   if ($now -gt $was) { $worse += ("{0}: {1} now, baseline {2}" -f $k, $now, $was) }
@@ -351,5 +424,6 @@ if ($worse.Count -gt 0) {
   Write-GuardComplete -Name 'spec-contradictions'; exit 1
 }
 Write-GuardComplete -Name 'spec-contradictions'; exit 0
+
 
 

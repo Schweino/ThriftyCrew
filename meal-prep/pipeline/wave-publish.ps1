@@ -346,9 +346,19 @@ function Stamp { param([string]$Stage, [string]$Detail)
 
 # ---- E1. prose tokens. Idempotent, and it only swaps a literal that PROVABLY equals the spec's own
 # stat, so running it here guarantees the templating rule holds for everything this wave publishes.
-$mig = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'migrate-prose-tokens.ps1') -Slugs $slugs -Apply 2>&1
-if ($LASTEXITCODE -ne 0) { @($mig | Select-Object -Last 15) | ForEach-Object { Write-Output ("    " + [string]$_) }; Fail 'migrate-prose-tokens failed' }
-Write-Output ("  E1  prose tokens           " + [string](@($mig | Select-Object -Last 1)))
+# IN-PROCESS: -Slugs is [string[]], and `powershell -File` marshals it as command-line strings. On the
+# first live run that made PowerShell try to load a slug as a MODULE and the publish died at E1. Fourth
+# instance of this trap in one session (ledger, reanchor, a probe, and here). Anything taking a
+# [string[]] parameter gets `&`, never `-File`.
+$mig = @()
+try {
+  Push-Location $mp
+  try { $mig = @(& '.\pipeline\migrate-prose-tokens.ps1' -Slugs $slugs -Apply) } finally { Pop-Location }
+} catch {
+  Write-Output ("    " + $_.Exception.Message)
+  Fail 'migrate-prose-tokens failed'
+}
+Write-Output ("  E1  prose tokens           " + [string](@($mig | Where-Object { "$_".Trim() -ne '' } | Select-Object -Last 1)))
 
 # ---- E2. THE COST BASIS. A NEW recipe is not in pipeline\v2-perserving.json yet, so build-v2-spec
 # stamps stat.cost_ps from batch/14 and WARNS. Every one of the 542 live specs instead carries the
@@ -391,11 +401,22 @@ Stamp 'recipes-db' ("{0} row(s) via {1}" -f $slugs.Count, $batch)
 
 # ---- E4. what is dirty, and is any of it not ours?
 $pd = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'propagate-recipes.ps1') -DryRun 2>&1
-$dirty = @(@($pd) | ForEach-Object { [string]$_ } | Where-Object { $_ -match '^\s{2}\S' } | ForEach-Object { $_.Trim() })
-$foreign = @(Get-ForeignDirty $dirty $slugs)
-if ($foreign.Count) {
-  Write-Output ("  E4  NOTE {0} dirty spec(s) outside this wave will also be carried by propagate:" -f $foreign.Count)
-  @($foreign | Select-Object -First 10) | ForEach-Object { Write-Output ("        " + $_) }
+$pdLines = @($pd | ForEach-Object { [string]$_ })
+# propagate's -DryRun LISTS only its first 30 slugs but reports the true total on its header line. Read the
+# TOTAL from there, never from the listing: counting the visible lines reported "30 dirty" on the first
+# live run when the real number was 517, which is the silent-cap shape the estate forbids - a truncated
+# listing read as a complete one. The header is authoritative; the listing is a sample.
+$dirtyTotal = 0
+foreach ($l in $pdLines) { if ($l -match 'propagate:\s+(\d+)\s+dirty spec') { $dirtyTotal = [int]$Matches[1]; break } }
+$dirtySample = @($pdLines | Where-Object { $_ -match '^\s{2}\S' } | ForEach-Object { $_.Trim() })
+$foreignSample = @(Get-ForeignDirty $dirtySample $slugs)
+$foreignTotal = [Math]::Max(0, $dirtyTotal - @($slugs).Count)
+if ($foreignTotal -gt 0) {
+  Write-Output ("  E4  NOTE propagate reports {0} dirty spec(s) in total, so about {1} OUTSIDE this wave will be" -f $dirtyTotal, $foreignTotal)
+  Write-Output ("        carried and republished with it. That is propagate's design (it is the one command after")
+  Write-Output ("        any spec edit), but this wave's ledger should not be read as having shipped only {0}." -f @($slugs).Count)
+  @($foreignSample | Select-Object -First 10) | ForEach-Object { Write-Output ("        " + $_) }
+  if ($foreignSample.Count -lt $foreignTotal) { Write-Output ("        ... listing truncated by propagate at 30; {0} more not shown" -f ($foreignTotal - $foreignSample.Count)) }
 }
 
 # ---- E4. THE CHAIN. sync-recipesdb-buy -> audit-db-agreement (hard gate) -> planner -> build-cards
@@ -426,16 +447,27 @@ else {
   # artifact worth committing; the card is a build product of it.
   foreach ($s in $slugs) { $paths += ('meal-prep/db/recipes/' + $s + '.json') }
   $add = @($paths | Where-Object { Test-Path (Join-Path $repo ($_ -replace '/', '\')) })
-  & git -C $repo add -- @add 2>&1 | Out-Null
-  $msg = ("recipes: publish {0} ({1} recipes, audit GO)" -f $batch, $slugs.Count)
-  $ci = & git -C $repo commit -m $msg 2>&1
-  if ($LASTEXITCODE -ne 0 -and -not (@($ci) -match 'nothing to commit')) {
-    @($ci | Select-Object -Last 6) | ForEach-Object { Write-Output ("    " + [string]$_) }
-    Fail 'git commit failed'
-  }
-  $push = & git -C $repo push 2>&1
-  if ($LASTEXITCODE -ne 0) { @($push | Select-Object -Last 6) | ForEach-Object { Write-Output ("    " + [string]$_) }; Fail 'git push failed - the push IS the deploy, so this is not done' }
-  Write-Output ("  E6  git                    committed and pushed ({0} path(s))" -f $add.Count)
+  # NEVER `2>&1` ON git HERE. In PS 5.1 redirecting a native command's stderr wraps every line in a
+  # NativeCommandError, and with $ErrorActionPreference='Stop' that THROWS - even when git exited 0. On
+  # the first live run git's routine "LF will be replaced by CRLF" WARNING killed this script at the last
+  # step, after all 359 recipes had already published and verified. A benign message on stderr must never
+  # be able to fail a publish that succeeded. Exit codes carry the verdict; stderr just prints.
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    & git -C $repo add -- @add | Out-Null
+    $staged = @(& git -C $repo diff --cached --name-only | Where-Object { "$_".Trim() -ne '' })
+    if (-not $staged.Count) {
+      Write-Output '  E6  git                    nothing staged (already committed on a previous run)'
+    } else {
+      $msg = ("recipes: publish {0} ({1} recipes in the wave, audit GO)" -f $batch, $slugs.Count)
+      & git -C $repo commit -m $msg | Out-Null
+      if ($LASTEXITCODE -ne 0) { Fail ("git commit failed AFTER a successful publish - the recipes ARE live, only the repo is behind") }
+      & git -C $repo push | Out-Null
+      if ($LASTEXITCODE -ne 0) { Fail ("git push failed AFTER a successful publish - the recipes ARE live, but the repo is unpushed and the push is the deploy for everything else") }
+      Write-Output ("  E6  git                    committed and pushed ({0} path(s))" -f $staged.Count)
+    }
+  } finally { $ErrorActionPreference = $prevEap }
 }
 
 # ---- advance the recipes to `published`

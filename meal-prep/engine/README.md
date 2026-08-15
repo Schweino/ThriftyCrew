@@ -27,6 +27,12 @@ engine\cost-recipes.ps1 [-Slugs ...]       specs + ingredients db + boards -> db
                                             golden test can run it over a frozen fixture; defaults are
                                             the live paths, so the daily call is unchanged)
 pipeline\compute-v2-perserving.ps1         costed + feed -> v2-perserving.json (everyday+cheapest)
+                                           WHICH feed is not this script's choice: pipeline\
+                                           feed-freshness.ps1 resolves it (canonical grocery\out\
+                                           smp-feed.json first, cached download only inside a 6h
+                                           window) and REFUSES with exit 2 rather than write a
+                                           manifest priced on a stale one. Pass -FeedPath to
+                                           override the source; you cannot override the check.
 pipeline\reanchor-machine-fields.ps1       manifest -> stat.cost_ps + head.costPerServing in specs
 pipeline\reanchor-moved-prose.ps1          manifest delta -> prose $ figures in specs
 engine\build-cards.ps1 [-Slugs ...]        specs + costed -> db\built (uses pipeline\build-card2.ps1)

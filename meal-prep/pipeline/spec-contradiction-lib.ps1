@@ -364,7 +364,66 @@ function Get-PhantomIngredients($spec, $vocab) {
   return $hits
 }
 
-function Get-SpecContradictions($spec, $vocab) {
+# ---- BUY-COVERAGE: the buy sentence disagrees with the package the recipe needs -------------------
+# THE HOLE THIS CLOSES (2026-08-15). country-captain-chicken carried, in ONE spec:
+#     cost_lines  "Golden Raisins, 1.25 cups: ... Buy 1 (lasts several batches)."
+#     shop_smart  "One box of golden raisins covers this batch and most of a second. ... Not several
+#                  batches, but the box is not a one-and-done either."
+# Two sentences about the same box, flatly opposed, and this audit walked straight past it - because every
+# class above reads NUMBERS against NUMBERS, and nothing read a buy instruction against the amount the
+# recipe uses. A self-contradiction gate that cannot see two sentences disagreeing about one box is only
+# checking the disagreements it was told about.
+#
+# WHY THIS ONE NEEDS EVIDENCE PASSED IN. The rest of this file judges a spec against itself, on purpose.
+# "Buy 1" beside "2.25 cups" is not decidable from the spec alone - cups are not cartons, and only the
+# package definition says how many cups a carton holds. So this follows the PHANTOM precedent exactly: the
+# caller supplies the map, and a caller that has none (repair-spec-contradictions, reading one spec in
+# isolation) skips the class rather than guessing. The one shape that IS decidable unaided - an amount
+# stated in packages, "3.5 cans ... Buy 1" - still needs the map to know 'cans' is this item's package noun.
+#
+# The thresholds are NOT redefined here. Get-BulkCoverageWords in cost-render-lib.ps1 is what the renderer
+# prints and what repair-bulk-buy-line writes, so the gate asks that same function what the line SHOULD
+# say and compares. A second copy of the ladder here is how a gate ends up certifying wording the renderer
+# never produces.
+. (Join-Path $PSScriptRoot 'cost-render-lib.ps1')
+
+function Get-BuyCoverageFindings($spec, $pkgMap) {
+  <# $pkgMap: canonical item name -> @{ g = pantry_pkg_g; label = pantry_pkg_label }. #>
+  $out = New-Object System.Collections.Generic.List[object]
+  if (-not $pkgMap) { return $out }
+  $disp = @{}
+  foreach ($se in @($spec.scaler.ing)) {
+    $nm = [string]$se.item
+    if (-not $nm) { continue }
+    $canon = if (($se.PSObject.Properties.Name -contains 'canon') -and $se.canon) { [string]$se.canon } else { $nm }
+    $disp[$nm] = @{ canon = $canon; grams = [double]$se.grams }
+  }
+  foreach ($li in @($spec.cost_lines)) {
+    $s = [string]$li
+    $m = [regex]::Match($s, '^(?<nm>[^,]+),\s.*?<strong>Buy 1 \((?<words>[^)]*)\)\.')
+    if (-not $m.Success) { $m = [regex]::Match($s, '^(?<nm>[^,]+),\s.*?Buy 1 \((?<words>[^)]*)\)\.') }
+    if (-not $m.Success) { continue }
+    $nm = $m.Groups['nm'].Value
+    if (-not $disp.ContainsKey($nm)) { continue }
+    $d = $disp[$nm]
+    if (-not $pkgMap.ContainsKey($d.canon)) { continue }
+    $pk = $pkgMap[$d.canon]
+    $pkgG = [double]$pk.g
+    if ($pkgG -le 0 -or $d.grams -le 0) { continue }
+    $need = Get-PackageBuyCount $d.grams $pkgG
+    if ($need -ge 2) {
+      $out.Add(@{ cls = 'BUY-COVERAGE'; why = ("'" + $nm + "' says Buy 1 but this batch needs " + $need + " " + [string]$pk.label + " (" + $d.grams + " g from a " + $pkgG + " g package)") })
+      continue
+    }
+    $want = Get-BulkCoverageWords ($pkgG / $d.grams)
+    if ($m.Groups['words'].Value -ne $want) {
+      $out.Add(@{ cls = 'BUY-COVERAGE'; why = ("'" + $nm + "' says '" + $m.Groups['words'].Value + "' but one " + [string]$pk.label + " covers " + ($pkgG / $d.grams).ToString('0.00') + " batches") })
+    }
+  }
+  return $out
+}
+
+function Get-SpecContradictions($spec, $vocab, $pkgMap) {
   <# Every finding for one spec: @{ cls, why }. Shared by the audit and the repair. #>
   $f = New-Object System.Collections.Generic.List[object]
   $cal = 0; $pro = 0
@@ -448,5 +507,8 @@ function Get-SpecContradictions($spec, $vocab) {
   foreach ($p in (Get-PhantomIngredients $spec $vocab)) {
     $f.Add(@{ cls = 'PHANTOM'; why = ("a step says '" + $p.said + "' but " + $p.name + " is in no ingredient line - it cannot be made as shopped") })
   }
+
+  # BUY-COVERAGE, like PHANTOM, runs only when the caller supplies the evidence it needs.
+  foreach ($b in (Get-BuyCoverageFindings $spec $pkgMap)) { $f.Add($b) }
   return $f
 }

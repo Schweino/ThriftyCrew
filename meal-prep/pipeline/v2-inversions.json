@@ -1,15 +1,63 @@
 ﻿[
     {
+        "slug":  "apple-cider-beef-pot-roast-bowls",
+        "everyday_ps":  4.81,
+        "raw_cheapest_ps":  4.97,
+        "over_frac":  0.033
+    },
+    {
+        "slug":  "beef-manhattan-bowls",
+        "everyday_ps":  4.66,
+        "raw_cheapest_ps":  4.87,
+        "over_frac":  0.045
+    },
+    {
+        "slug":  "filipino-beef-pares-rice-bowls",
+        "everyday_ps":  4.74,
+        "raw_cheapest_ps":  4.97,
+        "over_frac":  0.049
+    },
+    {
         "slug":  "five-spice-turkey-noodle-bowls",
-        "everyday_ps":  3.67,
+        "everyday_ps":  3.72,
         "raw_cheapest_ps":  3.97,
-        "over_frac":  0.082
+        "over_frac":  0.067
+    },
+    {
+        "slug":  "french-onion-pot-roast-bowls",
+        "everyday_ps":  4.68,
+        "raw_cheapest_ps":  4.92,
+        "over_frac":  0.051
     },
     {
         "slug":  "ghanaian-shoko-beef-spinach-stew",
-        "everyday_ps":  6.03,
+        "everyday_ps":  5.35,
         "raw_cheapest_ps":  6.23,
-        "over_frac":  0.033
+        "over_frac":  0.164
+    },
+    {
+        "slug":  "horseradish-pot-roast-bowls",
+        "everyday_ps":  4.58,
+        "raw_cheapest_ps":  4.74,
+        "over_frac":  0.035
+    },
+    {
+        "slug":  "mississippi-pot-roast-bowls",
+        "everyday_ps":  3.67,
+        "raw_cheapest_ps":  3.86,
+        "over_frac":  0.052
+    },
+    {
+        "slug":  "pizza-pasta-bowls",
+        "everyday_ps":  1.07,
+        "raw_cheapest_ps":  1.15,
+        "over_frac":  0.075
+    },
+    {
+        "slug":  "slow-cooker-beef-and-noodles",
+        "everyday_ps":  2.55,
+        "raw_cheapest_ps":  2.83,
+        "over_frac":  0.11
     },
     {
         "slug":  "slow-cooker-char-siu-pork-bowls",
@@ -18,9 +66,27 @@
         "over_frac":  0.179
     },
     {
+        "slug":  "slow-cooker-italian-beef-bowl",
+        "everyday_ps":  3.03,
+        "raw_cheapest_ps":  3.13,
+        "over_frac":  0.033
+    },
+    {
+        "slug":  "taiwanese-braised-beef-noodle-bowls",
+        "everyday_ps":  5.11,
+        "raw_cheapest_ps":  5.52,
+        "over_frac":  0.08
+    },
+    {
         "slug":  "taiwanese-lu-rou-fan-pork-rice-bowls",
-        "everyday_ps":  2.93,
+        "everyday_ps":  2.95,
         "raw_cheapest_ps":  3.1,
-        "over_frac":  0.058
+        "over_frac":  0.051
+    },
+    {
+        "slug":  "vietnamese-bo-kho-lemongrass-beef-stew",
+        "everyday_ps":  5.29,
+        "raw_cheapest_ps":  5.7,
+        "over_frac":  0.078
     }
 ]

@@ -4,7 +4,15 @@
 #   cheapest_ps  = sum(k * (pkg_g/gpu) * feed.cheapest, else k*pkg_p) / 14   (the headline "cheapest everywhere" number)
 # Emits pipeline/v2-perserving.json (manifest: slug,name,protein,protein_g,old_ps,everyday_ps,cheapest_ps,
 # protein_rank,is_protein_rank1) - the input for BOTH the prose writer wave and the site-surface switch.
-param([string]$FeedPath = 'C:\Codex\income\meal-prep\scratch-smpfeed.json', [switch]$SelfTest)
+# -FeedPath DEFAULTS TO EMPTY ON PURPOSE (2026-08-15). It used to default to meal-prep\scratch-smpfeed.json
+# and download to it only when that file was MISSING, so once the file existed it was never refreshed again
+# and the whole catalog was priced on a 2026-07-27 snapshot for nineteen days. Empty now means "resolve it",
+# and pipeline\feed-freshness.ps1 owns that rule: canonical feed on disk first, cache only inside a window
+# narrower than the daily export period. Callers with a feed of their own still pass -FeedPath.
+# -NoAlert exists so the REFUSAL PATH ITSELF is reachable by a test without mailing Brad and filing a
+# triage-queue entry. A safety branch nothing can exercise is a branch nothing has proved; test-auditors
+# runs the real script this way daily. No production caller passes it.
+param([string]$FeedPath = '', [switch]$SelfTest, [switch]$NoAlert)
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
@@ -43,10 +51,31 @@ if($SelfTest){
   Write-Output ("SELFTEST FAIL: clamped=[{0},{1},{2}] flagged={3}" -f $t[0].cheapest_ps,$t[1].cheapest_ps,$t[2].cheapest_ps,$fl.Count); exit 1
 }
 
-if(-not (Test-Path $FeedPath)){
-  Invoke-WebRequest -Uri 'https://feed.thriftycrew.com/smp-feed.json' -OutFile $FeedPath -TimeoutSec 40 -UseBasicParsing
+# ---- THE FEED THIS RUN IS ALLOWED TO PRICE ON (2026-08-15) -----------------------------------------
+# Was: `if(-not (Test-Path $FeedPath)){ download }` - which downloaded the feed exactly once, ever, and
+# then priced every recipe in the catalog against that first snapshot forever. Measured when it was found:
+# the snapshot was 19 days old, 264 of 564 shared prices had moved (mean 27%), and 534 of 544 recipes'
+# cheapest_ps was wrong on the manifest sitting on disk. Deleting the snapshot was NOT the fix - that makes
+# the next run correct and every later run silently wrong again, the same bug with a longer fuse.
+# The rule and the guard both live in feed-freshness.ps1; this is its production caller, and the verdict
+# line prints on EVERY run so a silent one is itself the failure.
+. (Join-Path $here 'feed-freshness.ps1')
+$feedInfo = Resolve-AndCheckFeed -Explicit $FeedPath
+Write-Output ("feed: {0}`n      source: {1}`n      freshness: {2} - {3}" -f $feedInfo.path, $feedInfo.source_why, $feedInfo.verdict, $feedInfo.reason)
+if(Test-FeedVerdictFatal $feedInfo.verdict){
+  # REFUSE, and leave the existing manifest alone. Writing a stale manifest is the harm: every surface
+  # (cards, hub grid, meal planner, top5, the free-dinner rotation, the daily reel) reads cheapest_ps out
+  # of it, and the last writer wins - which is exactly how a wave publish overwrote a correct morning
+  # manifest with July prices. A refused run keeps yesterday's numbers; it does not manufacture new ones.
+  Write-Output ("REFUSING TO WRITE THE MANIFEST: {0}" -f $feedInfo.reason)
+  $alertLib = Join-Path $mp '..\grocery\alert-lib.ps1'
+  if((-not $NoAlert) -and (Test-Path $alertLib)){
+    . $alertLib
+    Send-Alert -Subject 'Recipe per-serving manifest: REFUSED, stale price feed' -Body ("compute-v2-perserving.ps1 refused to recompute pipeline\v2-perserving.json because the feed it resolved is not current.`n`nfeed: $($feedInfo.path)`nsource: $($feedInfo.source_why)`nverdict: $($feedInfo.verdict)`nage: $($feedInfo.age_hours)h`n`n$($feedInfo.reason)`n`nThe manifest was NOT overwritten, so the surfaces keep their previous numbers rather than gaining wrong ones. Fix the feed (check the daily pipeline / grocery\out\smp-feed.json) and re-run.") -What 'v2 stale feed' | Out-Null
+  }
+  exit 2
 }
-$feed = (Get-Content $FeedPath -Raw -Encoding utf8 | ConvertFrom-Json).ingredients
+$feed = (Get-Content $feedInfo.path -Raw -Encoding utf8 | ConvertFrom-Json).ingredients
 $feedMap = @{}; foreach($p in $feed.PSObject.Properties){ $feedMap[$p.Name] = $p.Value }
 
 function Slugify([string]$s){ (($s.ToLower() -replace "[^a-z0-9]+","-").Trim('-')) }

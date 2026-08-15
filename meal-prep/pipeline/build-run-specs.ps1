@@ -56,6 +56,9 @@ $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path     # ...\meal-prep\pipeline
 $mp = Split-Path -Parent $here
 . (Join-Path $here 'friendly-amt-lib.ps1')                  # THE buy-label deriver (see the note where FriendlyAmt used to be)
+# THE bulk buy-sentence deriver, for the same reason FriendlyAmt moved out of this file. Only
+# Get-BulkBuyPhrase / Get-BulkCoverageWords are used here; the rest of the library is inert at load.
+. (Join-Path $here 'cost-render-lib.ps1')
 if(-not (Test-Path $RunDir)){ throw ("RunDir not found: $RunDir") }
 if(-not $ComputedFile){  $ComputedFile  = Join-Path $RunDir 'recipes-computed.json' }
 if(-not $CostedFile){    $CostedFile    = Join-Path $RunDir 'recipes-costed.json' }
@@ -297,10 +300,14 @@ foreach($r in $computed){
       # still take the utilization path in the true cost (documented 3-part model), but the line has to
       # tell the shopper how much this batch actually consumes. No dollar figure is added, so the
       # printed contributions still sum exactly to the true cost.
+      # THE SINGLE-PACKAGE CASE WAS STILL A CONSTANT until 2026-08-15, and this file held the SECOND copy
+      # of it - the multi-package arm above was fixed here and in cost-render-lib, the one-package arm in
+      # neither. That is the copy that shipped "lasts several batches" onto 537 lines covering under three
+      # batches. Both arms now come from the library, so the next full run cannot re-introduce the string.
       if($cl.starter_n -and [int]$cl.starter_n -ge 2 -and $cl.starter_pkg){
         $costHtml += ($nm + ', ' + $amt + ': ~$' + $util.ToString('0.00') + '. <strong>Pantry staple; this batch alone uses about ' + [int]$cl.starter_n + ' ' + (Plural ([string]$cl.starter_pkg) ([int]$cl.starter_n)) + '.</strong>')
       } else {
-        $costHtml += ($nm + ', ' + $amt + ': ~$' + $util.ToString('0.00') + '. <strong>Buy 1 (lasts several batches).</strong>')
+        $costHtml += ($nm + ', ' + $amt + ': ~$' + $util.ToString('0.00') + '. <strong>Buy 1 (' + (Get-BulkBuyPhrase $cl ([double]$ing.grams)) + ').</strong>')
       }
     } elseif($cl.buy_cost){
       $sumTrue += [double]$cl.buy_cost

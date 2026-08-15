@@ -229,15 +229,21 @@ if(-not $SkipMacroCheck){
   if([Math]::Abs($calPS - $stat.cal) -gt 5){ throw ("stat cal {0} != DB recompute {1} (tolerance 5)" -f $stat.cal,$calPS) }
   if([Math]::Abs($protPS - $stat.protein) -gt 2){ throw ("stat protein {0} != DB recompute {1} (tolerance 2)" -f $stat.protein,$protPS) }
 }
-# CAL FLOOR (2026-08-06): the house dinner floor is 550, but a FORMAT may declare its own. Wrapped
-# burritos are capped at 400 cal by design (fixed 90-cal high-fiber tortilla + 4 oz raw meat), so a
-# constant 550 would reject the entire category. An intake may carry cal_floor; spec-guards enforces the
-# same number and asserts a lowered floor only ever appears on a burrito slug. Default stays 550, so
-# every existing recipe is unaffected.
-$calFloor = 550
-if((IProp $intake 'cal_floor') -and $null -ne $intake.cal_floor){ $calFloor = [int]$intake.cal_floor }
-if($stat.cal -lt $calFloor){ Write-Warning ("CAL FLOOR: {0} cal/serving is under the declared floor {1} - spec-guards will fail this" -f $stat.cal,$calFloor) }
-if($stat.protein -lt 25){ Write-Warning ("PROTEIN FLOOR: {0} g/serving is under 25 g - spec-guards will fail this" -f $stat.protein) }
+# CAL FLOOR REMOVED 2026-08-15, BY PRODUCT DECISION, NOT TO LET ANYTHING THROUGH. Brad is expanding the
+# catalog beyond dinner to high-protein desserts and lunches, where a dinner-sized calorie minimum is
+# meaningless, and he specifies the calorie requirement per run as part of the hunt conditions instead.
+#
+# It was already a dead rule here, which is why removing it changes nothing in practice: the check only
+# ever emitted a WARNING on the v2 path (spec-guards, which enforced it, cannot run against db\recipes
+# specs), and 19 live non-burrito recipes sit under the old 550 with nothing declared and nothing firing.
+# A rule that 19 recipes violate and no gate enforces is worse than no rule: it reads as a standard while
+# guaranteeing nothing. If a calorie bound is ever wanted again it belongs in the run's conditions and in
+# the auditor's judgment, both of which can see the format.
+#
+# The PROTEIN floor stays. It is the catalog's actual identity and it applies to a dessert as much as a
+# dinner. The existing cal_floor field on the 29 burrito specs is left alone: it is inert data now, and
+# rewriting 29 specs to delete a field nothing reads would be churn for its own sake.
+if($stat.protein -lt 25){ Write-Warning ("PROTEIN FLOOR: {0} g/serving is under 25 g" -f $stat.protein) }
 
 # ---------------- prose ----------------
 $prose = if(IProp $intake 'prose'){ $intake.prose } else { [pscustomobject]@{} }

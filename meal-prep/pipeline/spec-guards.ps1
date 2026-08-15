@@ -282,7 +282,15 @@ foreach($sf in $specs){
     $sumU += $u; $parsed++
     $mb = [regex]::Match([string]$li,'<strong>Buy \d+ [^:<]*: \$(\d+\.\d{2})\.</strong>')
     if($mb.Success){ $sumT += [double]$mb.Groups[1].Value }
-    elseif($li -match '<strong>Buy 1 \(lasts several batches\)\.</strong>' -or $li -match '<strong>Buy as needed\.</strong>' -or $li -match '<strong>From jars you keep on hand\.</strong>' -or $li -match '<strong>Pantry staple; this batch alone uses about \d+ [^<]+\.</strong>'){ $sumT += $u }
+    # THE PARENTHETICAL IS NOW DERIVED, so this must not name one wording (2026-08-15). Until today
+    # cost-render-lib printed the constant "Buy 1 (lasts several batches)" for every single-package bulk
+    # line, and this arm matched that exact string. The sentence is now computed from
+    # pantry_pkg_g / grams_used - "covers this batch", "covers about two batches", and so on - so a literal
+    # match here would have failed the true-cost sum on the very first spec built after the fix, reporting
+    # "no recognizable Buy instruction" for a line that is perfectly well formed. A guard that re-parses
+    # rendered prose has to match the SHAPE the renderer guarantees, not the words it happened to use:
+    # see cost-render-lib.ps1's Get-BulkCoverageWords for the ladder this accepts.
+    elseif($li -match '<strong>Buy 1 \([^)<]+\)\.</strong>' -or $li -match '<strong>Buy as needed\.</strong>' -or $li -match '<strong>From jars you keep on hand\.</strong>' -or $li -match '<strong>Pantry staple; this batch alone uses about \d+ [^<]+\.</strong>'){ $sumT += $u }
     else { Fail $slug ("cost line has no recognizable Buy instruction: " + $li) }
   }
   if($parsed -lt 1){ Fail $slug 'no ingredient cost lines' }

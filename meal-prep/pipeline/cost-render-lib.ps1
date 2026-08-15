@@ -30,6 +30,63 @@ function Get-CostPlural([string]$label,[int]$n){
   return ($label + 's')
 }
 
+# ---- how many batches ONE pantry package covers, and what a shopper may be told about it ------------
+# THE BLANKET SENTENCE (fixed 2026-08-15). Until today every bulk line whose starter_n was under 2 printed
+# "Buy 1 (lasts several batches)" - a constant, never compared against the amount the recipe actually uses.
+# Measured across the 513 live specs carrying it: 1628 lines, of which 537 sat on a package covering FEWER
+# THAN THREE batches (342 recipes, 56 ingredients). country-captain-chicken is the case that names the bug:
+# its cost line said the raisin box "lasts several batches" while its OWN shop_smart paragraph, four fields
+# later, said "Not several batches, but the box is not a one-and-done either". One spec, one box, two
+# sentences, flatly opposed - and nothing read them together.
+#
+# THE THRESHOLDS, and why these and not others:
+#   3.0  "several". Plain English puts several at three or more, so below three the word is simply false.
+#        It is also where the wording STAYS BYTE-IDENTICAL: 1039 of the 1628 live lines are >= 3 and do not
+#        change at all. Same reasoning as the serving-noun fix below - derive the wrong cases, leave the
+#        right ones alone, and the republish is the size of the defect instead of the size of the catalogue.
+#   1.2  the smallest leftover worth mentioning. The engine's own buy-count tolerance is 2% (the -0.02 in
+#        cost-recipes' ceil), so by the engine's reckoning anything under ~1.02 IS exactly one batch. 1.2
+#        leaves a fifth of a batch in the package - the least that can honestly be called "some left over".
+#        Below it the true statement is that the pack covers this batch, and nothing more.
+#   1.75 / 2.5  round-to-nearest between the two named counts. "about two batches" for 1.75-2.5 and "about
+#        three" for 2.5-3.0 are the same claim a reader would make holding the box.
+#
+# WHAT THIS DOES NOT FIX, deliberately. A pack at 0.98-1.00 batches (7 live lines; the worst is
+# slow-cooker-beef-and-noodles at 924 g of broth from a 907 g carton) still prints "covers this batch",
+# because that is what the engine asserts: starter_n uses the IDENTICAL ceil(g/pkg - 0.02) that the non-bulk
+# branch uses at line 189 of cost-recipes, so the bulk branch is not bypassing any buy-count logic - the 2%
+# slack is a catalogue-wide rounding rule that keeps a recipe from buying a second 907 g carton for 17 g.
+# Tightening it would raise buy counts and true costs on the NON-bulk lines too, which is a pricing decision
+# and not this repair's to make.
+$script:BULK_SEVERAL_MIN  = 3.0
+$script:BULK_LEFTOVER_MIN = 1.2
+function Get-PackageBuyCount([double]$Grams,[double]$PkgG){
+  <# How many packages this batch needs. THE SAME ceil(g/pkg - 0.02) the engine applies at BOTH branches
+     of cost-recipes.ps1 (line 171 for the pantry package, line 189 for the buy package) - the bulk branch
+     is not a special case and never was. The 2% is deliberate slack so a batch needing 1005 g out of a
+     1000 g package does not tell a shopper to buy two. This function is the file's ONE copy: the
+     self-test below reconciles it against the engine's own buy_n on every render, so a drift between the
+     two throws rather than printing a buy count nobody checked. #>
+  if($PkgG -le 0){ return 1 }
+  return [Math]::Max(1,[Math]::Ceiling($Grams/$PkgG - 0.02))
+}
+function Get-BulkCoverageWords([double]$Cov){
+  if($Cov -ge $script:BULK_SEVERAL_MIN) { return 'lasts several batches' }
+  if($Cov -ge 2.5)                      { return 'covers about three batches' }
+  if($Cov -ge 1.75)                     { return 'covers about two batches' }
+  if($Cov -ge $script:BULK_LEFTOVER_MIN){ return 'covers this batch with some left over' }
+  return 'covers this batch'
+}
+function Get-BulkBuyPhrase($CostLine,[double]$Grams){
+  <# The parenthetical for a single-package bulk line, derived from pantry_pkg_g / grams. Returns the old
+     blanket wording when the row carries no package definition - with no package size there is no ratio to
+     state, and inventing one is worse than the vague sentence. (Measured 2026-08-15: zero live lines.) #>
+  if($null -eq $CostLine -or $Grams -le 0){ return 'lasts several batches' }
+  $pkg = $CostLine.starter_pkg_g
+  if($null -eq $pkg -or [double]$pkg -le 0){ return 'lasts several batches' }
+  return (Get-BulkCoverageWords ([double]$pkg / $Grams))
+}
+
 function Render-CostFields($cost,$GramsArr,$ScalerIng,[string]$slug){
   # ported from r300 build-specs (deltas 4/6 kept): pantry fold is EXACTNESS-GATED, printed
   # contributions sum EXACTLY to the printed true cost.
@@ -42,7 +99,7 @@ function Render-CostFields($cost,$GramsArr,$ScalerIng,[string]$slug){
     if($cl.buy_n -and $cl.pkg_g){ $pkgG=[double]$cl.pkg_g; $n=[int]$cl.buy_n }
     elseif($cl.starter_n -and $cl.starter_pkg_g){ $pkgG=[double]$cl.starter_pkg_g; $n=[int]$cl.starter_n }
     if($null -eq $pkgG -or $pkgG -le 0){ continue }
-    $chk = [Math]::Max(1,[Math]::Ceiling([double]$ig.grams/$pkgG - 0.02))
+    $chk = Get-PackageBuyCount ([double]$ig.grams) $pkgG
     if($chk -ne $n){ throw ("SELF-TEST: {0} ceil({1}g/{2}g)={3} != engine buy_n {4} - spec grams and costed row disagree (stale costed.json? run cost-recipes -Slugs {5})" -f $ig.item,$ig.grams,$pkgG,$chk,$n,$slug) }
   }
   $costHtml=@(); $sumUtil=0.0; $sumTrue=0.0
@@ -72,7 +129,7 @@ function Render-CostFields($cost,$GramsArr,$ScalerIng,[string]$slug){
       if($cl.starter_n -and [int]$cl.starter_n -ge 2 -and $cl.starter_pkg){
         $costHtml += ($nm + ', ' + $amt + ': ~$' + $util.ToString('0.00') + '. <strong>Pantry staple; this batch alone uses about ' + [int]$cl.starter_n + ' ' + (Get-CostPlural ([string]$cl.starter_pkg) ([int]$cl.starter_n)) + '.</strong>')
       } else {
-        $costHtml += ($nm + ', ' + $amt + ': ~$' + $util.ToString('0.00') + '. <strong>Buy 1 (lasts several batches).</strong>')
+        $costHtml += ($nm + ', ' + $amt + ': ~$' + $util.ToString('0.00') + '. <strong>Buy 1 (' + (Get-BulkBuyPhrase $cl ([double]$ig.grams)) + ').</strong>')
       }
     } elseif($cl.buy_cost){
       $sumTrue += [double]$cl.buy_cost
