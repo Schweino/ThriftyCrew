@@ -13,6 +13,9 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 # arrive truncated - it did not arrive at all, and the launch error read like the CHECK had crashed. Three
 # consecutive guard-blind days went unpaged that way on 2026-08-03/04/05. See alert-lib.ps1.
 . (Join-Path $root 'alert-lib.ps1')
+# The Freshop price rule (current-not-regular, and drop multi-buy offer text) is shared with
+# probe-ingredient.ps1 so both callers cannot drift. Has its own -SelfTest carrying the founding bug.
+. (Join-Path $root 'ff-price-lib.ps1')
 
 # ---------------------------------------------------------------------------------------------------------
 # THE PURE RULES, LIFTED OUT SO THEY CAN BE TESTED (2026-07-31, extended 2026-08-02).
@@ -404,13 +407,11 @@ function Ingest-Items($items, $term) {
     # keeps Walmart, Hy-Vee, Baker's and Fareway, and Walmart stays cheapest) and removes a 36x error.
     # If a later pass proves Family Fare honours the single price, read unit_price here and require
     # n * unit_price to reconcile with base_price before trusting it - do not simply divide.
-    $priceText = [string]$it.price
-    if ($priceText -and $priceText.Contains(' for ')) { continue }
-    $cur  = 0.0; [void][double]::TryParse(($priceText -replace '[^0-9.]',''), [ref]$cur)
-    $base = 0.0; [void][double]::TryParse((([string]$it.base_price) -replace '[^0-9.]',''), [ref]$base)
-    $val = $cur
-    if ($val -le 0) { $val = $base }
-    if ($val -le 0) { continue }
+    # The rule above now lives in ff-price-lib.ps1, because probe-ingredient.ps1 (the Recipe Hunter's
+    # targeted single-term probe) reads the same Freshop rows and has to make the same call. A second inline
+    # copy is how a corrected rule ships to one caller and not the other. $null means "no honest price".
+    $val = Get-FfPrice $it
+    if ($null -eq $val) { continue }
     $key = ([string]$it.name + '|' + [string]$it.size)
     if ($seen.ContainsKey($key)) { continue }
     $seen[$key] = $true
