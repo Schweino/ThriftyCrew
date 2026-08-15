@@ -45,6 +45,14 @@ describe("Fareway exact Omaha detail availability", () => {
       .toMatchObject({ status: "unavailable", eligible: false });
   });
 
+  it("accepts the exact canonical Instacart compound item id without accepting another item", () => {
+    const compound = state({ available: true, stockLevel: "inStock" });
+    compound.Items[exactKey].items[0].id = "items_531573-90266603";
+    expect(parseFarewayApolloAvailability(compound, "90266603")).toMatchObject({ status: "in_stock", eligible: true });
+    compound.Items[exactKey].items[0].id = "items_531573-other";
+    expect(parseFarewayApolloAvailability(compound, "90266603")).toMatchObject({ status: "unknown", eligible: false });
+  });
+
   it("decodes one percent-encoded real-shape Apollo state with immutable provenance", () => {
     const raw = encodeURIComponent(JSON.stringify(state({ available: true, stockLevel: "inStock" })));
     const decoded = decodeFarewayApolloState(raw);
@@ -103,6 +111,42 @@ describe("Fareway exact Omaha detail availability", () => {
       sourceBinding: { shopId: "16671402", retailerLocationId: "531573", serviceType: "instore",
         productId: "90266603", apolloEncoding: "percent-encoded-json" } });
     expect(result.sourceBinding.itemPaths).toHaveLength(1);
+  });
+
+  it("reconstructs a transport-truncated Apollo script twice before decoding exact availability", async () => {
+    const liveShape = state({ available: true, stockLevel: "inStock" });
+    liveShape.Items[exactKey].items[0].id = "items_531573-90266603";
+    liveShape.Metadata = { padding: "x".repeat(200_000) };
+    const raw = encodeURIComponent(JSON.stringify(liveShape));
+    const snapshot = { url: "https://shop.fareway.com/store/fareway/products/90266603-glade", challenge: false,
+      plainOmaha: true, apolloState: raw.slice(0, 200_000), apolloTextLength: raw.length };
+    let snapshotReads = 0;
+    const result = await waitForFarewayAvailabilityDetail({ playwright: {
+      waitForTimeout: async () => {},
+      evaluate: async (_pageFunction, range) => {
+        if (!range) { snapshotReads += 1; return snapshot; }
+        return { textLength: raw.length, chunk: raw.slice(range.start, range.end) };
+      },
+    } }, "90266603", { maximumPolls: 1, firstDelayMs: 1, pollDelayMs: 1 });
+    expect(snapshotReads).toBe(1);
+    expect(result).toMatchObject({ status: "in_stock", eligible: true,
+      sourceBinding: { productId: "90266603", apolloRawBytes: raw.length } });
+  });
+
+  it("fails closed when the Apollo script changes during bounded reconstruction", async () => {
+    const raw = encodeURIComponent(JSON.stringify(state({ available: true, stockLevel: "inStock" })));
+    const snapshot = { url: "https://shop.fareway.com/store/fareway/products/90266603-glade", challenge: false,
+      plainOmaha: true, apolloState: raw.slice(0, 10), apolloTextLength: raw.length };
+    let chunkRead = 0;
+    await expect(waitForFarewayAvailabilityDetail({ playwright: {
+      waitForTimeout: async () => {},
+      evaluate: async (_pageFunction, range) => {
+        if (!range) return snapshot;
+        chunkRead += 1;
+        return { textLength: raw.length, chunk: chunkRead === 1 ? raw.slice(range.start, range.end) : `${raw.slice(range.start, range.end - 1)}x` };
+      },
+    } }, "90266603", { maximumPolls: 1, firstDelayMs: 1, pollDelayMs: 1 }))
+      .rejects.toThrow(/Apollo state was not ready/);
   });
 
   it("keeps wrong-shop truth unavailable after the bounded readiness window", async () => {

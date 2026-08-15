@@ -7,6 +7,8 @@ const PRICE_MODE = "In-Store";
 const TARGET_RESULTS = 25;
 const FAREWAY_SHOP_ID = "16671402";
 const FAREWAY_RETAILER_LOCATION_ID = "531573";
+const APOLLO_MAX_BYTES = 5_000_000;
+const APOLLO_READ_CHARS = 96_000;
 
 function normalize(value) {
   return String(value ?? "").trim().toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
@@ -27,11 +29,11 @@ export function decodeFarewayApolloState(raw) {
   const text = String(raw ?? "");
   const rawBytes = Buffer.byteLength(text, "utf8");
   const provenance = { rawBytes, rawSha256: createHash("sha256").update(text, "utf8").digest("hex") };
-  if (!text || rawBytes > 5_000_000) return { state: null, encoding: "invalid", ...provenance };
+  if (!text || rawBytes > APOLLO_MAX_BYTES) return { state: null, encoding: "invalid", ...provenance };
   try { return { state: JSON.parse(text), encoding: "json", ...provenance }; } catch { /* encoded fallback */ }
   try {
     const decoded = decodeURIComponent(text);
-    if (decoded === text || Buffer.byteLength(decoded, "utf8") > 5_000_000) return { state: null, encoding: "invalid", ...provenance };
+    if (decoded === text || Buffer.byteLength(decoded, "utf8") > APOLLO_MAX_BYTES) return { state: null, encoding: "invalid", ...provenance };
     return { state: JSON.parse(decoded), encoding: "percent-encoded-json", ...provenance };
   } catch { return { state: null, encoding: "invalid", ...provenance }; }
 }
@@ -62,8 +64,9 @@ export function parseFarewayApolloAvailability(state, productId) {
     && Array.isArray(variables.ids) && variables.ids.map(String).includes(itemKey)
     && (variables.postalCode == null || String(variables.postalCode) === "68136")
     && (variables.zoneId == null || String(variables.zoneId) === "917"));
+  const exactProductIds = new Set([target, itemKey]);
   const facts = containers.flatMap(({ value, path }) => (Array.isArray(value.items) ? value.items : [])
-    .filter((item) => String(item?.id ?? item?.productId ?? item?.viewSection?.trackingProperties?.element_details?.product_id ?? "") === target
+    .filter((item) => exactProductIds.has(String(item?.id ?? item?.productId ?? item?.viewSection?.trackingProperties?.element_details?.product_id ?? ""))
       && item?.availability)
     .map((item, index) => ({ path: `${path}.items[${index}].availability`, available: item.availability.available,
       stockLevel: String(item.availability.stockLevel ?? ""), productId: target })));
@@ -82,7 +85,37 @@ async function readFarewayAvailabilityDetailSnapshot(tab) {
     challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied|robot or human/i.test(document.body.innerText),
     plainOmaha: [...document.querySelectorAll("button")].some((button) => /In-Store[\s\S]*Omaha/i.test(button.innerText || "") && !/Omaha (?:Meat Market|- North)/i.test(button.innerText || "")),
     apolloState: document.querySelector("script#node-apollo-state")?.textContent || "",
+    apolloTextLength: (document.querySelector("script#node-apollo-state")?.textContent || "").length,
   }));
+}
+
+async function readCompleteFarewayApolloState(tab, detail) {
+  const expectedLength = Number(detail.apolloTextLength);
+  const received = String(detail.apolloState ?? "");
+  if (!Number.isSafeInteger(expectedLength) || expectedLength < 0 || expectedLength === received.length) {
+    return received;
+  }
+  if (expectedLength < received.length) {
+    return "";
+  }
+  if (expectedLength > APOLLO_MAX_BYTES) return "";
+  const readPass = async () => {
+    const chunks = [];
+    for (let start = 0; start < expectedLength; start += APOLLO_READ_CHARS) {
+      const end = Math.min(start + APOLLO_READ_CHARS, expectedLength);
+      const part = await tab.playwright.evaluate((range) => {
+        const text = document.querySelector("script#node-apollo-state")?.textContent || "";
+        return { textLength: text.length, chunk: text.slice(range.start, range.end) };
+      }, { start, end });
+      const chunk = String(part?.chunk ?? "");
+      if (Number(part?.textLength) !== expectedLength || chunk.length !== end - start) return null;
+      chunks.push(chunk);
+    }
+    return chunks.join("");
+  };
+  const first = await readPass();
+  const second = first == null ? null : await readPass();
+  return first != null && first === second ? first : "";
 }
 
 export async function waitForFarewayAvailabilityDetail(tab, productId, options = {}) {
@@ -104,7 +137,7 @@ export async function waitForFarewayAvailabilityDetail(tab, productId, options =
       lastReason = "Fareway detail availability lost the Omaha/In-Store binding";
       continue;
     }
-    const decoded = decodeFarewayApolloState(detail.apolloState);
+    const decoded = decodeFarewayApolloState(await readCompleteFarewayApolloState(tab, detail));
     if (!decoded.state) {
       lastReason = "Fareway detail Apollo state was not ready";
       continue;
