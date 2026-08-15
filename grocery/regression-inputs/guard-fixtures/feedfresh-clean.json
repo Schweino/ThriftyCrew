@@ -1,0 +1,35 @@
+{
+  "_fixture": "FROZEN CLEAN TWIN for meal-prep\\pipeline\\feed-freshness.ps1 - the same feed shape as feedfresh-mustfire.json, stamped with the export that was actually live when the bug was found (2026-08-15T09:10:16). It must PASS at the same injected clock that refuses the must-fire twin, which is what proves the guard discriminates on staleness rather than simply refusing everything. The self-test injects $Now, so neither fixture ages into a false verdict as the calendar moves. NEVER regenerate from the live feed.",
+  "generated": "2026-08-15T09:10:16",
+  "week_of": "2026-08-15",
+  "ingredient_count": 3,
+  "recipe_count": 544,
+  "board_item_count": 500,
+  "ingredients": {
+    "ground-beef-8020": {
+      "unit": "lb",
+      "cheapest": 4.77,
+      "store": "Sam's Club",
+      "type": "everyday",
+      "n": 7,
+      "stores": { "Sam's Club": 4.77, "Walmart": 4.943, "Hy-Vee": 4.99, "Aldi": 6.19 }
+    },
+    "fresh-mint": {
+      "unit": "oz",
+      "cheapest": 3.56,
+      "store": "Walmart",
+      "type": "everyday",
+      "n": 2,
+      "stores": { "Walmart": 3.56, "Hy-Vee": 3.98 }
+    },
+    "long-grain-white-rice": {
+      "unit": "oz",
+      "cheapest": 0.0404,
+      "store": "Walmart",
+      "type": "everyday",
+      "n": 6,
+      "stores": { "Walmart": 0.0404, "Aldi": 0.0435, "Sam's Club": 0.0448 }
+    }
+  },
+  "recipes": []
+}

@@ -1,0 +1,35 @@
+{
+  "_fixture": "FROZEN MUST-FIRE for meal-prep\\pipeline\\feed-freshness.ps1. This is the founding bug of 2026-08-15: meal-prep\\scratch-smpfeed.json, present on disk since 2026-07-27, reused for nineteen days because compute-v2-perserving.ps1 only downloaded the feed when the file was MISSING. Stamps are the real ones the stale snapshot carried. NEVER regenerate this from the live feed - the staleness it encodes would vanish and the test would pass by finding nothing. The prices below are the real July 27 values for two items that moved hard by August 15 (ground beef 5.56 -> 4.77, fresh mint 0.5321 -> 3.56), so the fixture documents the consequence and not just the date.",
+  "generated": "2026-07-27T07:13:44",
+  "week_of": "2026-07-26",
+  "ingredient_count": 3,
+  "recipe_count": 513,
+  "board_item_count": 500,
+  "ingredients": {
+    "ground-beef-8020": {
+      "unit": "lb",
+      "cheapest": 5.56,
+      "store": "Sam's Club",
+      "type": "everyday",
+      "n": 7,
+      "stores": { "Sam's Club": 5.56, "Aldi": 5.99, "Fareway": 5.99, "Hy-Vee": 6.99 }
+    },
+    "fresh-mint": {
+      "unit": "oz",
+      "cheapest": 0.5321,
+      "store": "Baker's",
+      "type": "everyday",
+      "n": 3,
+      "stores": { "Baker's": 0.5321, "Hy-Vee": 0.89, "Walmart": 1.24 }
+    },
+    "long-grain-white-rice": {
+      "unit": "oz",
+      "cheapest": 0.0412,
+      "store": "Walmart",
+      "type": "everyday",
+      "n": 6,
+      "stores": { "Walmart": 0.0412, "Aldi": 0.0435, "Sam's Club": 0.0448 }
+    }
+  },
+  "recipes": []
+}
