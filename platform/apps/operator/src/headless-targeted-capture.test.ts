@@ -147,6 +147,30 @@ describe("headless targeted store capture", () => {
     }
   });
 
+  it("reconciles cross-window Kroger reorder duplicates instead of rejecting the readable capped prefix", async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), "tc-kroger-prefix-reorder-test-"));
+    const credentials = path.join(directory, "kroger.json"); const output = path.join(directory, "capture.json");
+    await writeFile(credentials, JSON.stringify({ client_id: "id", client_secret: "secret" }), "utf8");
+    const products = Array.from({ length: 305 }, (_, index) => ({ productId: `p${index.toString().padStart(3, "0")}`,
+      brand: `Brand ${index % 5}`, description: `Apples ${index}` }));
+    const fetchImpl = async (input: string | URL | Request) => {
+      const url = new URL(String(input));
+      if (url.pathname.endsWith("/token")) return new Response(JSON.stringify({ access_token: "token" }), { status: 200 });
+      const start = Number(url.searchParams.get("filter.start")); const brandFilter = url.searchParams.get("filter.brand");
+      const brands = new Set((brandFilter ?? "").split("|").filter(Boolean));
+      const selected = brandFilter ? products.filter((product) => brands.has(product.brand)) : products;
+      const page = selected.slice(start, start + 50);
+      if (!brandFilter && start === 50) page[0] = products[49]!;
+      return new Response(JSON.stringify({ data: page, meta: { pagination: { start, limit: 50, total: selected.length } } }), { status: 200 });
+    };
+    try {
+      const chunk = await captureHeadlessDiscovery("bakers", ["apples"], output,
+        { krogerCredentialsFile: credentials, fetchImpl, pageConcurrency: 8 });
+      expect(chunk.terms?.[0]).toMatchObject({ outcome: "success", retrieval: {
+        targetResultCount: 305, loadedResultCount: 305, availableResultCount: 305, termination: "end-of-results" } });
+    } finally { await rm(directory, { recursive: true, force: true }); }
+  });
+
   it("isolates one failed term without discarding successful sibling terms", async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), "tc-kroger-term-isolation-"));
     const credentials = path.join(directory, "kroger.json"); const output = path.join(directory, "capture.json");
@@ -263,6 +287,32 @@ describe("headless targeted store capture", () => {
       expect(chunk.rows?.[0]).toMatchObject({ id: "f1", size: "", _capture: { offer: {
         candidateIssues: ["invalid_package_basis"] }, parser: { status: "typed_unpriceable" } } });
       expect(chunk.terms?.[0]).toMatchObject({ rowCount: 1, retrieval: { loadedResultCount: 1, availableResultCount: 1 } });
+    } finally { await rm(directory, { recursive: true, force: true }); }
+  });
+
+  it("preserves indexed Family Fare identity as availability-unknown when the store detail is empty", async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), "tc-freshop-empty-detail-test-"));
+    const catalog = path.join(directory, "catalog.json"); const output = path.join(directory, "capture.json");
+    await writeFile(catalog, JSON.stringify({ deals: [
+      { product_id: "oil", item: "Chosen Foods Pure Avocado Oil", size: "16 oz", current_price: 12.99,
+        base_price: 12.99, canonical_url: "/product/oil" },
+      { product_id: "shampoo", item: "Suave Shampoo Avocado Oil", size: "28 oz", current_price: 5.99,
+        base_price: 5.99, canonical_url: "/product/shampoo" },
+    ] }), "utf8");
+    const fetchImpl = async (input: string | URL | Request) => {
+      const url = new URL(String(input));
+      if (url.pathname.endsWith("/stores/6401")) return new Response(JSON.stringify({ city: "Omaha" }), { status: 200 });
+      if (url.pathname.endsWith("/products/shampoo")) return new Response("{}", { status: 200 });
+      return new Response(JSON.stringify({ id: "oil", name: "Chosen Foods Pure Avocado Oil", size: "16 oz", price: 12.99,
+        base_price: 12.99, status: "available", canonical_url: "/product/oil" }), { status: 200 });
+    };
+    try {
+      const chunk = await captureHeadlessDiscovery("family-fare", ["avocado oil"], output,
+        { familyFareCatalogFile: catalog, fetchImpl });
+      expect(chunk.rows).toHaveLength(2);
+      expect(chunk.terms?.[0]?.excludedResults).toBeUndefined();
+      expect(chunk.rows?.find((row) => row.id === "shampoo")).toMatchObject({ _capture: { offer: { availability: {
+        status: "unknown", eligible: false, locationId: "6401" } } } });
     } finally { await rm(directory, { recursive: true, force: true }); }
   });
 

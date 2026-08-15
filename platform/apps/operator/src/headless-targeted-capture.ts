@@ -162,7 +162,8 @@ export function headlessPriceSemantics(current: number, regular: number | null, 
 }
 
 function capturedRow(store: HeadlessStore, query: string, item: { id: string; name: string; size: string; url: string;
-  price: number | null; regular: number | null; available: boolean; rawAvailability: string; effective?: string | null; expires?: string | null },
+  price: number | null; regular: number | null; available: boolean; availabilityStatus?: "in_stock" | "unavailable" | "unknown";
+  rawAvailability: string; effective?: string | null; expires?: string | null },
   pageIndex: number, resultIndex: number, observedAt: string): JsonRecord | null {
   if (!item.id || !item.name || !item.url) return null;
   const priceExact = Number.isSafeInteger(item.price) && Number(item.price) > 0;
@@ -176,8 +177,8 @@ function capturedRow(store: HeadlessStore, query: string, item: { id: string; na
   const offer = { version: 1, retailerProductId: item.id, productName: item.name, sizeText: packageExact ? item.size : "",
     ...(!packageExact ? { rawSizeText: item.size } : {}), ...(candidateIssues.length ? { candidateIssues } : {}),
     rawPriceText: priceExact ? `$${(Number(item.price) / 100).toFixed(2)}` : "", purchasePriceMinor: item.price, sellerName: config.seller,
-    availability: { status: item.available ? "in_stock" : "unavailable", rawText: item.rawAvailability,
-      fulfillmentMode: config.priceMode, locationId: config.locationId, eligible: item.available },
+    availability: { status: item.availabilityStatus ?? (item.available ? "in_stock" : "unavailable"), rawText: item.rawAvailability,
+      fulfillmentMode: config.priceMode, locationId: config.locationId, eligible: item.available && item.availabilityStatus !== "unknown" },
     priceSemantics: semantics, observedAt, sourceUrl: item.url };
   return { term: query, id: item.id, name: item.name, n: item.name, size: packageExact ? item.size : "", url: item.url,
     taxonomy_path: "Grocery", _capture: { capturedAt: observedAt, pageUrl: item.url, location: config.location,
@@ -275,9 +276,18 @@ async function captureBakers(query: string, token: string, observedAt: string, f
     const rest = await mapWithConcurrency(starts.slice(1), pageConcurrency, (start) => fetchPage(start, filters));
     const pageResults = [first, ...rest];
     if (pageResults.some((page) => page.total !== first.total)) throw new Error(`Baker's ${label} pagination total changed during capture`);
-    assertCompleteResultEnvelope(`Baker's ${label}`, readableTotal, pageResults.map((page) => ({ offset: page.start,
-      count: page.products.length, ids: page.products.map((product: JsonRecord) => String(product.productId ?? "")) })), KROGER_PAGE_SIZE);
-    const products = pageResults.flatMap((page, pageIndex) => page.products.map((product: JsonRecord, resultIndex: number) => ({ product, pageIndex, resultIndex })));
+    const expectedStarts = offsetPageStarts(readableTotal, KROGER_PAGE_SIZE);
+    if (pageResults.length !== expectedStarts.length
+      || pageResults.some((page, index) => page.start !== expectedStarts[index]
+        || page.products.length !== Math.min(KROGER_PAGE_SIZE, readableTotal - page.start)
+        || page.products.some((product: JsonRecord) => !String(product.productId ?? "")))) {
+      throw new HeadlessSourceLimitError(`Baker's ${label} did not return every readable offset with stable identities`);
+    }
+    // A relevance-ranked Kroger result can move between adjacent requests.
+    // Keep those repeated identities as an incomplete prefix and let the later
+    // overlapping-window/brand-facet union prove the authoritative set.
+    const products = unionProductHits(pageResults.flatMap((page, pageIndex) => page.products
+      .map((product: JsonRecord, resultIndex: number) => ({ product, pageIndex, resultIndex }))), `${label} windows`);
     return { label, filters, total: first.total, pages: pageResults.length, products,
       proof: { label, filters, reportedTotal: first.total, recoveredUnique: products.length,
         requestPages: pageResults.length, strategy: first.total === readableTotal ? "offset_complete" : "offset_prefix" } };
@@ -483,18 +493,30 @@ async function captureFamilyFareBatch(queries: string[], observedAt: string,
     const candidates = candidatesByQuery.get(query) ?? [];
     for (const [index, candidate] of candidates.entries()) {
       const item = detailById.get(String(candidate.product_id))!;
+      const detailIdentified = Boolean(item.id && item.name && item.canonical_url);
       const current = headlessPriceMinor(item.price); const regular = headlessPriceMinor(item.base_price);
-      const rawUrl = String(item.canonical_url ?? "");
+      const rawUrl = String((detailIdentified ? item.canonical_url : candidate.canonical_url) ?? "");
       const urlValue = rawUrl ? new URL(rawUrl, "https://www.shopfamilyfare.com").href : "";
       // Freshop's store-scoped /products endpoint is the active shoppable
       // pickup catalog; it omits a separate availability field. A row is
       // eligible only when that current store-6401 response supplies its own
       // stable identity, canonical product URL, and current package price.
-      const available = Boolean(item.id && urlValue && current !== null && /^available$/i.test(String(item.status ?? "")));
-      const normalized = capturedRow("family-fare", query, { id: String(item.id ?? ""), name: stableProductName(item.name),
-        size: String(item.size ?? ""), url: urlValue, price: current, regular, available,
-        rawAvailability: available ? "Freshop store 6401 available" : "Freshop did not prove current availability" }, 0, index, observedAt);
-      if (normalized) rows.push(normalized); else excludedResults.push({ productKey: String(item.id ?? ""), name: String(item.name ?? ""), reason: "incomplete, ambiguous, or unavailable Freshop result" });
+      const available = Boolean(detailIdentified && current !== null && /^available$/i.test(String(item.status ?? "")));
+      const normalized = capturedRow("family-fare", query, {
+        id: String((detailIdentified ? item.id : candidate.product_id) ?? ""),
+        name: stableProductName(detailIdentified ? item.name : candidate.item),
+        size: String((detailIdentified ? item.size : candidate.size) ?? ""), url: urlValue,
+        price: detailIdentified ? current : headlessPriceMinor(candidate.current_price ?? candidate.regular),
+        regular: detailIdentified ? regular : headlessPriceMinor(candidate.base_price ?? candidate.regular), available,
+        ...(detailIdentified ? {} : { availabilityStatus: "unknown" as const }),
+        rawAvailability: available ? "Freshop store 6401 available" : detailIdentified
+          ? "Freshop did not prove current availability"
+          : "Freshop store 6401 detail response omitted current identity and availability; indexed source facts preserved",
+      }, 0, index, observedAt);
+      if (normalized) rows.push(normalized); else excludedResults.push({
+        productKey: String(item.id ?? candidate.product_id ?? ""), name: String(item.name ?? candidate.item ?? ""),
+        reason: "Freshop result omitted stable identity or source URL",
+      });
     }
     // The local index lookup is still one complete examined result envelope when
     // no candidate IDs match. Coverage requires a positive page count so a true
