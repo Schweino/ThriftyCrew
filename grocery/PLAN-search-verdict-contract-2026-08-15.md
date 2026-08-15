@@ -147,7 +147,7 @@ Self-test fixtures (hermetic, must-fire + clean twin, per the estate's guard-fix
 - Print the unit beside MAPPED/CAPTURE/ABSENT lines (R5). One line per term. Nothing else changes - its
   two-board resolution was fixed 2026-08-15 and is correct.
 
-### 4. `C:\Codex\.claude\agents\recipe-hunter-pricer.md` (exists; modify prose)
+### 4. `C:\Codex\ThriftyCrew\.claude\agents\recipe-hunter-pricer.md` (exists; modify prose)
 
 The browser lanes cannot share PowerShell code, so the agent's instructions carry the SAME contract in
 prose. Add a section "The search-verdict contract" that states R1-R5 with the store-specific identity checks

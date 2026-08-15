@@ -3144,7 +3144,7 @@ if (Test-Path $pb) {
   $out = & powershell -NoProfile -ExecutionPolicy Bypass -File $pb 2>&1 | ForEach-Object { [string]$_ }
   $rc = $LASTEXITCODE; $txt = ($out -join "`n")
   # NOT EVERY MACHINE HOSTS THE PROMPTS (2026-08-08). audit-prompt-backup compares ops\prompt-backup against
-  # hardcoded live roots (C:\Codex\.claude\agents and friends). A CI runner has none of them, so it exits 3
+  # hardcoded live roots (C:\Codex\ThriftyCrew\.claude\agents and friends). A CI runner has none of them, so it exits 3
   # BLIND and this printed FAIL for a check that never ran. The roots are READ OUT OF THE AUDIT'S OWN SOURCE
   # rather than restated here - two copies of a path is how a rule silently stops matching. BLIND with the
   # roots present still FAILS: that is the real "the .claude paths moved" case.

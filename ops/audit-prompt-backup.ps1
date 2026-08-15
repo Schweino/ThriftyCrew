@@ -3,7 +3,7 @@
   the backup is current.
 
   WHY (2026-07-31): everything the triage agents depend on is versioned, self-tested and gated - and the
-  agents' own instructions were not in git at all. They live in C:\Codex\.claude\agents (project scope),
+  agents' own instructions were not in git at all. They live in C:\Codex\ThriftyCrew\.claude\agents (project scope),
   C:\Users\Owner\.claude\agents (user scope) and C:\Users\Owner\.claude\scheduled-tasks\<task>\SKILL.md,
   none of which is a repository. A machine failure, or one bad overwrite, and the reasoning is gone.
 
@@ -24,7 +24,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root   = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $backup = Join-Path $root 'prompt-backup'
-$PROJ   = 'C:\Codex\.claude\agents'
+$PROJ   = 'C:\Codex\ThriftyCrew\.claude\agents'
 $USER   = 'C:\Users\Owner\.claude\agents'
 $TASKS  = 'C:\Users\Owner\.claude\scheduled-tasks'
 # PROJECT-SCOPE SKILLS, added 2026-08-15. This was a whole class the audit could not see: recipe-hunter,
@@ -32,7 +32,7 @@ $TASKS  = 'C:\Users\Owner\.claude\scheduled-tasks'
 # which stages stream, why the price lane is a singleton, which gate must never be weakened. None of it was
 # in git. It was found while looking for that file to edit it, not by this guard, which is the tell that a
 # coverage check enumerating three known directories can only ever be as complete as that list.
-$SKILLS = 'C:\Codex\.claude\skills'
+$SKILLS = 'C:\Codex\ThriftyCrew\.claude\skills'
 
 function FileHash1([string]$p) { if (Test-Path $p) { return (Get-FileHash $p -Algorithm MD5).Hash } return $null }
 
@@ -118,7 +118,7 @@ if ($SelfTest) {
     $r = Compare-Prompts $p $u $t $b
     _C 'must-fire: an edited scheduled-task SKILL with a stale backup is caught' (($r.issues -join ' ') -match 'STALE BACKUP  scheduled-tasks')
     # MUST-FIRE 5: a project-scope SKILL with no backup. THE FOUNDING CASE of this class, frozen: on
-    # 2026-08-15 C:\Codex\.claude\skills held three live skills (recipe-hunter, lesson, meal-macro) and
+    # 2026-08-15 C:\Codex\ThriftyCrew\.claude\skills held three live skills (recipe-hunter, lesson, meal-macro) and
     # this audit reported "every live agent prompt and scheduled-task SKILL is backed up" - true, and
     # blind, because the sentence enumerated only what the guard knew to look at.
     Set-Content (Join-Path $t 'demo-task\SKILL.md') "skill v1" -Encoding UTF8

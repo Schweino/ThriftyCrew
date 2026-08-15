@@ -41,7 +41,7 @@ re-read.
 
 ## 0. What this is
 
-An upgrade to the existing `recipe-hunter` skill (C:\Codex\.claude\skills\recipe-hunter\SKILL.md).
+An upgrade to the existing `recipe-hunter` skill (C:\Codex\ThriftyCrew\.claude\skills\recipe-hunter\SKILL.md).
 Today the skill ends at "published-ready write-up; Brad approves, then publish runs separately."
 v2 carries every recipe all the way to LIVE on thriftycrew.com with no human in the loop, while
 keeping every existing gate. The flow, in one line:

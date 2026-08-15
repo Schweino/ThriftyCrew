@@ -26,7 +26,7 @@ Ask Brad and keep asking until you can write it truthfully:
 
 ## Step 2 — Write the lesson to spec
 
-**Read memory [[brand-voice-brad]] first (THE voice) and `C:\Codex\ThriftyCrew\docs\STYLE-GUIDE.md` (structure + hard rules).** Apply these **OVERRIDES** to the style guide (it is partly stale):
+**Read memory [[brand-voice-brad]] first (THE voice) and `C:\Codex\ThriftyCrew\STYLE-GUIDE.md` (structure + hard rules).** Apply these **OVERRIDES** to the style guide (it is partly stale):
 - Pricing is **$1/month or $10/year** (ignore the old "$5/mo").
 - The reader may be doing this **for themselves OR to teach a young person**. Write so both land.
 - **Always include the "For yourself:" question block** (added to every lesson in this project).
@@ -67,7 +67,7 @@ Ask Brad and keep asking until you can write it truthfully:
 - <2–4 questions tuned to this lesson>
 ```
 
-Save the source to **`C:\Codex\ThriftyCrew\content\lessons\<slug>.md`**. Then **show Brad the draft and iterate until he approves.**
+Save the source to **`C:\Codex\ThriftyCrew\lessons\<slug>.md`**. Then **show Brad the draft and iterate until he approves.**
 
 ## Step 2.5 — SEO pass (do this every time, before publishing)
 

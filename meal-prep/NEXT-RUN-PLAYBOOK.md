@@ -1,7 +1,7 @@
 # Recipe expansion run playbook (model-routed, zero /model flips)
 
 Brad's requirement (2026-07-25): he should never have to remember to flip models mid-run. The routing
-lives in the AGENT definitions (C:\Codex\.claude\agents\), each pinned to its model. Whatever model the
+lives in the AGENT definitions (C:\Codex\ThriftyCrew\.claude\agents\), each pinned to its model. Whatever model the
 main session is on, the orchestrator dispatches stages to these agents and each runs on its own brain.
 
 No seafood recipes: seafood is expensive per serving and nobody has asked (Brad, 2026-07-25).

@@ -147,7 +147,7 @@ The full fix for the unversioned agent and skill estate. Today it spans three ro
 
 | Root | Holds | In git? |
 |---|---|---|
-| `C:\Codex\.claude\` | 12 agents, 52 skill files, `settings.local.json` | no |
+| `C:\Codex\ThriftyCrew\.claude\` | 12 agents, 52 skill files, `settings.local.json` | no |
 | `C:\Users\Owner\.claude\` | 8 duplicate agents, 8 scheduled-task SKILLs | SKILLs only |
 | `income\.claude\` | `hooks\sync-main.sh`, `worktrees\` | no |
 
@@ -170,9 +170,9 @@ The full fix for the unversioned agent and skill estate. Today it spans three ro
    `ops\prompt-backup\agents\` already holds all 8.
 4. Extract the 6 credentials out of `skills\` to a machine-local secrets directory behind a resolver,
    matching the existing `.ghostkey` convention. Gitignore then becomes a backstop rather than the only control.
-5. Rewrite the 14 hardcoded `C:\Codex\.claude\skills\...` paths in `polish-*.ps1`, `snapshot-savings.ps1`,
+5. Rewrite the 14 hardcoded `C:\Codex\ThriftyCrew\.claude\skills\...` paths in `polish-*.ps1`, `snapshot-savings.ps1`,
    `verify-*.ps1`, the `meal-macro` scripts, and two `SKILL.md` docs.
-6. Fix `grocery\send-alert.ps1:337`, which dot-sources `C:\Codex\.claude\skills\lesson\google-token.ps1` from
+6. Fix `grocery\send-alert.ps1:337`, which dot-sources `C:\Codex\ThriftyCrew\.claude\skills\lesson\google-token.ps1` from
    outside the repo. **A fresh clone currently cannot send alerts** — the same `lib\` hole from 2026-07-31, on
    the path that reports every other hole. Make it repo-relative.
 7. Reduce `ops\audit-prompt-backup.ps1` to the 8 user-scope SKILLs it still legitimately mirrors, and add one
@@ -252,7 +252,7 @@ calls. About 15 scripts need a re-derived `$root`, **in the same commit as the m
 | `C:\Codex\recipe_videos\` | `media\videos\` | 1,072 (ignored) |
 | `C:\Codex\output\social\` | `brand\social\` | 13 |
 | `C:\Codex\deliverables\` | `archive\handoffs\` | 3 |
-| `C:\Codex\.claude\` | `ThriftyCrew\.claude\` | Stage 3 |
+| `C:\Codex\ThriftyCrew\.claude\` | `ThriftyCrew\.claude\` | Stage 3 |
 
 `backups\` is the priority. Given the injection-edit history and the 65,535-character ceiling, those files are
 the rollback path for the live site and they are currently unversioned on one machine.
@@ -390,7 +390,7 @@ scheduled Claude agents currently run with `cwd: C:\Codex` and would lose their 
 directory moves. The plan already gated this behind one deliberate isolated-worktree test run; that gate
 has not been satisfied, so the estate still spans three roots and the 6 credentials under `skills\` are
 still outside the repo. `grocery\send-alert.ps1` still dot-sources
-`C:\Codex\.claude\skills\lesson\google-token.ps1`, so a fresh clone still cannot send alerts.
+`C:\Codex\ThriftyCrew\.claude\skills\lesson\google-token.ps1`, so a fresh clone still cannot send alerts.
 
 ## Verification
 

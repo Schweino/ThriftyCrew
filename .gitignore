@@ -264,3 +264,21 @@ meal-prep/db/*.db-journal
 #   handoffs\      - 3 delivered docs.
 #   agent-runs\    - scratch from the deleted platform estate and the acceptance runs. Reproducible noise.
 /archive/agent-runs/
+# ---- .claude: the agent + skill estate, versioned in place (2026-08-15) -----------------------------------
+# 12 agent prompts and 52 skill files that drive the whole estate, previously living unversioned at
+# C:\Codex\.claude. They are code: they publish to the live site, price the board, and run the 6:30am
+# triage. A junction at the old path bridges sessions still launched from C:\Codex until the project root
+# is switched; the repo copy is the only real one.
+!/.claude/
+/.claude/worktrees/
+/.claude/settings.local.json
+/.claude/scheduled_tasks.lock
+
+# THE CREDENTIALS UNDER skills\ MUST NEVER COMMIT. Six live secret files sat in this directory. The
+# global secret rules did not cover all of them - .OLD-smp.json.bak matches neither *.backup-*.json nor
+# *.bak-*, so two would have committed the moment .claude\ became tracked. Belt AND braces, by name.
+/.claude/skills/**/*oauth-client*.json
+/.claude/skills/**/*oauth-token*.json
+/.claude/skills/**/*.bak
+/.claude/skills/**/ghost-config.ps1
+/.claude/skills/**/*sheet-id.txt

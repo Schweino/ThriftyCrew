@@ -1,5 +1,5 @@
 $ErrorActionPreference="Stop"
-. "C:\Codex\.claude\skills\lesson\ghost-config.ps1"
+. "C:\Codex\ThriftyCrew\.claude\skills\lesson\ghost-config.ps1"
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
   $sb=New-Object byte[] ($secretHex.Length/2)

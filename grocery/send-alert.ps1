@@ -334,7 +334,11 @@ if (-not $Force -and (Test-Path $sentFile) -and ((Get-Content $sentFile) -contai
 }
 
 try {
-  . "C:\Codex\.claude\skills\lesson\google-token.ps1"
+  # Repo-relative, not absolute. Until 2026-08-15 this dot-sourced C:\Codex\.claude\... - a path OUTSIDE
+  # the repo - so a fresh clone could not send a single alert. That is the same hole lib\ had, sitting on
+  # the one script whose job is to report every other hole. $PSScriptRoot is grocery\, so the repo root is
+  # its parent.
+  . (Join-Path (Split-Path -Parent $PSScriptRoot) '.claude\skills\lesson\google-token.ps1')
   $token = Get-GoogleAccessToken
   $raw = "To: $To`r`nSubject: $Subject`r`nContent-Type: text/plain; charset=UTF-8`r`n`r`n$Body`r`n`r`n(Automated alert from the Omaha grocery pipeline.)"
   $b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($raw)).Replace('+','-').Replace('/','_').TrimEnd('=')
