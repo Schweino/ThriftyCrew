@@ -1,0 +1,12 @@
+{
+  "muted": true,
+  "since": "2026-08-14",
+  "until": null,
+  "reason": "Brad asked to stop all email alerts (2026-08-14). This silences the inbox only - send-alert.ps1 still writes every alert to triage-queue.json, and the daily grocery-alert-triage agent still drains, diagnoses and fixes them.",
+  "how_to_resume_email": "Delete this file (or set muted to false). No code change or redeploy needed - send-alert.ps1 reads it on every call.",
+  "not_covered_by_this_file": [
+    "GitHub's own workflow-failure emails for daily.yml / heartbeat.yml (a GitHub account notification setting, not repo code)",
+    "The Cloudflare Worker /ops-alert relay (runs in the cloud, cannot see this file)",
+    "Member-facing mail: the /submit item-request form and the Friday email draft task - those are not alerts"
+  ]
+}

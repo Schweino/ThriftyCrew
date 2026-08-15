@@ -103,6 +103,46 @@ function Test-BodyThin([string]$Body) {
   return (-not $hasNum)
 }
 
+# ---- MUTE SWITCH (2026-08-14, Brad: "stop all email alerts") --------------------------------------------
+# Silences the INBOX, not the response system. The triage-queue write above still happens on every alert, so
+# grocery-alert-triage keeps draining and fixing exactly as before - the only thing that stops is the mail.
+# That ordering matters: the queue block runs BEFORE this gate on purpose, and moving this check earlier
+# would turn "stop emailing me" into "stop responding to failures", which is the opposite of Brad's standing
+# rule that an issue email must never wait for a human.
+#
+# The file is grocery\alerts-muted.json, and it is TRACKED (grocery\ is allow-listed) so the mute is visible
+# in git rather than being one machine's invisible silence. Turn mail back on by deleting it.
+#   { "muted": true, "since": "2026-08-14", "until": null, "reason": "..." }
+# 'until' is optional: an ISO date past which the mute expires by itself. A mute with no expiry is the thing
+# that can silently outlive its reason (see the rules-that-silently-disarm class), so every run logs the
+# suppression and triage-due.ps1 prints the mute banner where the daily agent will see it.
+function Get-MuteState {
+  param([string]$Path, [string]$Today)
+  if (-not (Test-Path $Path)) { return @{ muted = $false; why = 'no mute file' } }
+  $raw = ''
+  try { $raw = ((Get-Content $Path -Raw -ErrorAction Stop) + '') } catch {
+    # FAIL MUTED, deliberately. Someone put this file here to stop the mail; an unreadable copy of that
+    # instruction is still that instruction, and re-flooding the inbox is not the safe default here.
+    return @{ muted = $true; why = 'mute file present but unreadable - honouring it as a mute' }
+  }
+  $cfg = $null
+  if ($raw.Trim()) { try { $cfg = $raw | ConvertFrom-Json } catch { $cfg = $null } }
+  if (-not $cfg) { return @{ muted = $true; why = 'mute file present but unparseable - honouring it as a mute' } }
+  # an explicit false is the in-place off switch (keeps the reason/history without deleting the file)
+  if ($cfg.PSObject.Properties['muted'] -and -not $cfg.muted) { return @{ muted = $false; why = 'muted=false' } }
+  if ($cfg.PSObject.Properties['until'] -and [string]$cfg.until) {
+    $u = $null
+    try { $u = [datetime]([string]$cfg.until) } catch { $u = $null }
+    # an unparseable 'until' must NOT quietly become "muted forever" - that is the whole failure mode this
+    # field exists to bound, so a date nobody can read expires the mute now and says why.
+    if (-not $u) { return @{ muted = $false; why = ("until='" + [string]$cfg.until + "' is not a date - mute treated as EXPIRED") } }
+    if ($u -lt [datetime]$Today) { return @{ muted = $false; why = ('mute expired ' + $u.ToString('yyyy-MM-dd')) } }
+    return @{ muted = $true; why = ('muted until ' + $u.ToString('yyyy-MM-dd')) }
+  }
+  $since = if ($cfg.PSObject.Properties['since']) { [string]$cfg.since } else { 'unknown date' }
+  return @{ muted = $true; why = ('muted since ' + $since + ', no expiry') }
+}
+
 if ($SelfTest) {
   $fail = 0
   function _T($label, $got, $want) {
@@ -131,9 +171,32 @@ if ($SelfTest) {
   _T 'a same-size repeat does NOT churn the stored body'      ([bool]($short.Length -gt ($short.Length * 1.5))) 'False'
   _T 'thin body flagged'  (Test-BodyThin 'MULTIBUY|Hy-Vee|Soda (12-pack)') 'True'
   _T 'rich body not flagged' (Test-BodyThin 'These commodity+store cells are on SALE with no everyday item to revert to: bell-peppers @ Family Fare; plums @ Family Fare; sandwich-cookies @ Family Fare. Browser stores are queued in grocery/out/research-worklist.json.') 'False'
+  # ---- mute switch, against real temp files (no live path touched) ----
+  $mDir = Join-Path $env:TEMP ('smp-mute-selftest-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+  New-Item -ItemType Directory -Path $mDir -Force | Out-Null
+  try {
+    $mF = Join-Path $mDir 'alerts-muted.json'
+    # CLEAN TWIN: no file = mail flows, which is the state this estate ran in for its whole life before today
+    _T 'no mute file -> not muted' (Get-MuteState $mF '2026-08-14').muted 'False'
+    # MUST-FIRE: the founding case - Brad asked for silence on 2026-08-14 and the file says so
+    '{ "muted": true, "since": "2026-08-14", "until": null }' | Set-Content $mF -Encoding UTF8
+    _T 'mute file with no expiry -> muted' (Get-MuteState $mF '2026-08-14').muted 'True'
+    '{ "muted": false, "since": "2026-08-14" }' | Set-Content $mF -Encoding UTF8
+    _T 'muted=false -> not muted (in-place off switch)' (Get-MuteState $mF '2026-08-14').muted 'False'
+    '{ "muted": true, "until": "2026-08-20" }' | Set-Content $mF -Encoding UTF8
+    _T 'until in the future -> still muted' (Get-MuteState $mF '2026-08-14').muted 'True'
+    '{ "muted": true, "until": "2026-08-13" }' | Set-Content $mF -Encoding UTF8
+    _T 'until in the past -> mute expired, mail resumes' (Get-MuteState $mF '2026-08-14').muted 'False'
+    # a garbled instruction to be quiet is still an instruction to be quiet
+    'not json at all' | Set-Content $mF -Encoding UTF8
+    _T 'unparseable mute file -> muted (fails quiet, not loud)' (Get-MuteState $mF '2026-08-14').muted 'True'
+    # ...but an unreadable EXPIRY must not become a permanent mute
+    '{ "muted": true, "until": "whenever" }' | Set-Content $mF -Encoding UTF8
+    _T 'unparseable until -> mute EXPIRES rather than lasting forever' (Get-MuteState $mF '2026-08-14').muted 'False'
+  } finally { Remove-Item $mDir -Recurse -Force -ErrorAction SilentlyContinue }
   Write-Output ""
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
-  Write-Output 'SELF-TEST PASS (queue routing + body-thin)'
+  Write-Output 'SELF-TEST PASS (queue routing + body-thin + mute switch)'
   exit 0
 }
 
@@ -252,6 +315,16 @@ try {
 } finally {
   if ($qHeld) { try { $qMutex.ReleaseMutex() } catch {} }
   try { $qMutex.Dispose() } catch {}
+}
+
+# MUTED? The queue entry is already durable at this point, so triage still sees and works this alert; we
+# just do not mail it. -Force does NOT punch through: -Force exists to beat the once-a-day gate for a new
+# incident, and "stop all email alerts" outranks "this one is urgent enough to repeat today".
+$mute = Get-MuteState (Join-Path $root 'alerts-muted.json') $today
+if ($mute.muted) {
+  Log ("MUTED (" + $mute.why + ") - queued but NOT emailed: '$Subject' [type: $typeKey]")
+  Write-Output ("alert MUTED (" + $mute.why + ") - queued to triage-queue.json, no email sent. Delete grocery\alerts-muted.json to resume email.")
+  exit 0
 }
 
 if (-not $Force -and (Test-Path $sentFile) -and ((Get-Content $sentFile) -contains $typeKey)) {

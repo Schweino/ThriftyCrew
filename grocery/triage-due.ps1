@@ -7,6 +7,15 @@
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $qFile = Join-Path $root 'triage-queue.json'
+# EMAIL MUTED? (2026-08-14) Say so up front. With the inbox silenced, this guard and the agent behind it are
+# the ONLY thing that notices an alert, so the mute has to be visible exactly where the response happens -
+# an indefinite mute nobody is reminded of is how a rule silently outlives its reason.
+$muteFile = Join-Path $root 'alerts-muted.json'
+if (Test-Path $muteFile) {
+  $since = ''
+  try { $mc = (Get-Content $muteFile -Raw) | ConvertFrom-Json; if ($mc.PSObject.Properties['since']) { $since = ' since ' + [string]$mc.since } } catch {}
+  Write-Output ('MUTED  email alerts are OFF' + $since + ' (grocery\alerts-muted.json) - alerts still queue here and still get worked; only the mail stopped.')
+}
 if (-not (Test-Path $qFile)) { Write-Output 'IDLE  no triage queue file - no alert has ever fired'; exit 0 }
 # FAIL CLOSED. 2026-07-28: send-alert.ps1 rewrote this file in place, and a read landing inside that window
 # returned an empty string. '' | ConvertFrom-Json yields $null in PS 5.1 WITHOUT throwing, so the catch below
