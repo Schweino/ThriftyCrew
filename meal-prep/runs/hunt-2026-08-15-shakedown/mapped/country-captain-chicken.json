@@ -1,0 +1,212 @@
+{
+  "slug": "country-captain-chicken",
+  "title": "Country Captain Chicken",
+  "source_url": "https://spicysouthernkitchen.com/country-captain-chicken/",
+  "source_servings": 6,
+  "target_servings": 14,
+  "scale_factor": 2.3333,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-15",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters, drift from the exact 2.3333x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [],
+  "ingredients": [
+    {
+      "source_raw": "1 cup chicken broth",
+      "item": "Chicken Broth",
+      "bid": "chicken-broth",
+      "board": "recipe",
+      "grams": 540,
+      "buy": "2.25 cups",
+      "decision": "mapped",
+      "notes": "exact scale is 2.33 cups (560 g); quantized to 2.25 cups, -3.6%"
+    },
+    {
+      "source_raw": "1/2 cup golden raisins",
+      "item": "Golden Raisins",
+      "bid": "golden-raisins",
+      "board": "recipe",
+      "grams": 181,
+      "buy": "1.25 cups",
+      "decision": "mapped",
+      "notes": "exact scale is 1.17 cups (169 g); quantized to 1.25 cups, +7%"
+    },
+    {
+      "source_raw": "1 tablespoon curry powder",
+      "item": "Curry Powder",
+      "bid": "curry-powder",
+      "board": "weekly",
+      "grams": 14,
+      "buy": "2.25 tbsp",
+      "decision": "mapped",
+      "notes": ""
+    },
+    {
+      "source_raw": "1 tablespoon garam masala",
+      "item": "Garam Masala",
+      "bid": "garam-masala",
+      "board": "weekly",
+      "grams": 14,
+      "buy": "2.25 tbsp",
+      "decision": "mapped",
+      "notes": ""
+    },
+    {
+      "source_raw": "2 teaspoons salt,, divided",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 27,
+      "buy": "1.5 tbsp, divided",
+      "decision": "mapped",
+      "notes": "source double comma is a page formatting artifact; prep note kept"
+    },
+    {
+      "source_raw": "1 teaspoon black pepper,, divided",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 5,
+      "buy": "0.75 tbsp, divided",
+      "decision": "mapped",
+      "notes": ""
+    },
+    {
+      "source_raw": "1/4 teaspoon cayenne pepper",
+      "item": "Cayenne Pepper",
+      "bid": "cayenne-pepper",
+      "board": "weekly",
+      "grams": 1,
+      "buy": "0.5 tsp",
+      "decision": "mapped",
+      "notes": "exact scale is 0.58 tsp; quantized down, near-zero-macro spice"
+    },
+    {
+      "source_raw": "4 thick-cut bacon slices,, cut into 1/2-inch pieces",
+      "item": "Hickory Smoked Bacon",
+      "bid": "bacon",
+      "board": "weekly",
+      "grams": 108,
+      "buy": "9 slices, cut into 1/2-inch pieces",
+      "decision": "mapped",
+      "notes": "FLAGGED, see report: (1) source says thick-cut; board bacon commodity covers thick and classic cut at the same lb price class (Baker's and Hy-Vee rows are literally thick cut), so same id. (2) grams use the estate densities slice=12 g basis; a raw thick-cut slice is ~38 g, so if spec grams are meant to be RAW purchase weight this line under-states by roughly 3x. The catalog itself is split on bacon gram basis (a live line prints 0.5 lb against 280 g). Auditor should rule the basis before publish. (3) today's board cheapest cell for bacon at Aldi is a potato chips hijack."
+    },
+    {
+      "source_raw": "8 boneless, skinless chicken thighs",
+      "item": "Boneless Skinless Chicken Thigh",
+      "bid": "boneless-skinless-chicken-thigh",
+      "board": "recipe",
+      "grams": 1814,
+      "buy": "4 lb (about 18 thighs)",
+      "decision": "mapped",
+      "notes": "exact scale is 18.7 thighs at the densities 100 g each basis (1867 g); quantized to 4 lb, -2.9%. NOT mapped to the weekly bone-in chicken-thighs id: bone-in is not boneless (price class), the recipe-board boneless id has 6 of 7 store coverage"
+    },
+    {
+      "source_raw": "1 cup sliced carrot",
+      "item": "Carrots",
+      "bid": "carrots",
+      "board": "weekly",
+      "grams": 248,
+      "buy": "2.25 cups sliced",
+      "decision": "mapped",
+      "notes": ""
+    },
+    {
+      "source_raw": "1 cup diced red, orange, or yellow bell pepper",
+      "item": "Red Bell Pepper",
+      "bid": "red-bell-pepper",
+      "board": "recipe",
+      "grams": 207,
+      "buy": "2.25 cups diced",
+      "decision": "mapped",
+      "notes": "source allows red, orange, or yellow; red is the board-priced variety and is one of the source's named options. Green deliberately NOT used (green-pepper pricing is not red-bell-pepper, standing precedent)"
+    },
+    {
+      "source_raw": "1 cup diced onion",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 259,
+      "buy": "2.25 cups diced",
+      "decision": "mapped",
+      "notes": "unspecified onion maps to the yellow onion commodity, house default"
+    },
+    {
+      "source_raw": "1 dried guajillo chile",
+      "item": "Dried Guajillo Chiles",
+      "bid": "dried-guajillo-chiles",
+      "board": "weekly",
+      "grams": 14,
+      "buy": "0.5 oz (about 2 chiles)",
+      "decision": "mapped",
+      "notes": "exact scale is 2.33 chiles at 6 g each; house style prints dried chiles by weight. Chile is discarded after cooking per source step 12. Board coverage 1 of 7 stores (Sam's), one store is enough"
+    },
+    {
+      "source_raw": "2 garlic cloves,, minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 15,
+      "buy": "5 cloves, minced",
+      "decision": "mapped",
+      "notes": "clove=3 g per densities. FLAGGED in report: today's board cheapest cell for garlic at Walmart is a naan bites hijack"
+    },
+    {
+      "source_raw": "3 tablespoons tomato paste",
+      "item": "Tomato Paste",
+      "bid": "tomato-paste",
+      "board": "weekly",
+      "grams": 112,
+      "buy": "7 tbsp",
+      "decision": "mapped",
+      "notes": "112 g is 66% of a 170 g can, below the 85% whole-can threshold, so tbsp not can"
+    },
+    {
+      "source_raw": "1 tablespoon minced fresh ginger",
+      "item": "Ginger",
+      "bid": "fresh-ginger",
+      "board": "weekly",
+      "grams": 14,
+      "buy": "2.25 tbsp minced",
+      "decision": "mapped",
+      "notes": ""
+    },
+    {
+      "source_raw": "1 (14-ounce) can petite diced tomatoes,, undrained",
+      "item": "Diced Tomatoes",
+      "bid": "diced-tomatoes",
+      "board": "weekly",
+      "grams": 822,
+      "buy": "2 (14.5 oz) cans, undrained",
+      "decision": "mapped",
+      "notes": "petite diced and diced are the same commodity at the same price class (the board rows themselves include Petite Diced at Aldi, Baker's, Hy-Vee). Exact scale is 2.33 source cans (926 g); rounded to 2 whole 14.5 oz board cans (-11%), deliberate whole-can scaling so the printed measure is real"
+    },
+    {
+      "source_raw": "5 cups cooked white rice",
+      "item": "Rice",
+      "bid": "rice",
+      "board": "weekly",
+      "grams": 765,
+      "buy": "4.25 cups dry",
+      "decision": "mapped",
+      "notes": "source says cooked; we list DRY per densities cooked_to_dry Rice=0.36 (11.67 cups cooked x 180 x 0.36 = 756 g dry, printed as 4.25 cups dry = 765 g). Board rice is long grain white at all seven stores, matches"
+    },
+    {
+      "source_raw": "1/3 cup toasted slivered almonds",
+      "item": "Almonds",
+      "bid": "almonds",
+      "board": "weekly",
+      "grams": 107,
+      "buy": "0.75 cups slivered, toasted",
+      "decision": "mapped",
+      "notes": "food-DB Almonds row states it covers slivered lines; densities cup=143 is the whole-almond figure (USDA slivered is ~108 g/cup), so grams may overstate a true slivered cup by ~30%. Followed the catalog authority; flagged in report"
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [],
+  "board_defects_observed": [
+    "bacon commodity: Aldi cheapest cell is 'Clancy's Loaded Bacon & Cheddar Wavy Potato Chips' at $2.6779/lb, a match hijack; true cheapest real bacon is Sam's $3.784/lb",
+    "garlic commodity: Walmart cheapest cell is 'Marketside Tandoori Style Garlic Naan Bites' at $0.268/each, a match hijack"
+  ]
+}

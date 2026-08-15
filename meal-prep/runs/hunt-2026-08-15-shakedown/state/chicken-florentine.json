@@ -3,10 +3,10 @@
     "title":  "Chicken Florentine",
     "source_url":  "https://www.smalltownwoman.com/chicken-florentine/",
     "protein":  "chicken",
-    "state":  "extracted",
+    "state":  "priced",
     "wave":  null,
     "created":  "2026-08-15T11:54:24",
-    "updated":  "2026-08-15T11:56:10",
+    "updated":  "2026-08-15T12:10:28",
     "terms":  [
 
               ],
@@ -32,6 +32,18 @@
                         "at":  "2026-08-15T11:56:10",
                         "by":  "recipe-hunter-extractor",
                         "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-15T12:10:27",
+                        "by":  "recipe-ingredient-mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-15T12:10:28",
+                        "by":  "recipe-ingredient-mapper",
+                        "detail":  "every term answered from disk by price-ingredient; no absent terms, pricing stage not needed"
                     }
                 ]
 }

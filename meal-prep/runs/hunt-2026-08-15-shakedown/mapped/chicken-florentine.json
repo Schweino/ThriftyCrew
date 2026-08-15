@@ -1,0 +1,172 @@
+{
+  "slug": "chicken-florentine",
+  "title": "Chicken Florentine",
+  "source_url": "https://www.smalltownwoman.com/chicken-florentine/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-15",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    {
+      "source_raw": "3/4 cup dry white wine",
+      "ruling": "commodity-registrar 2026-08-15: reuse existing white-wine id NOT permitted into the recipe (priced at one store, zero comparison-board rows, no recipe-board row). Wine replaced with additional Chicken Broth plus a small acid per standing estate policy (precedent: ropa-vieja-beef-burrito writer_notes).",
+      "implemented_as": "0.75 cup (source scale) added to the Chicken Broth line, plus White Wine Vinegar at 6/7 tbsp source scale (inside the prescribed 2 tsp to 1 Tbsp range), scaled to 3 tbsp at 14 servings. Vinegar chosen over lemon juice to match the ropa vieja precedent.",
+      "writer_note": "add the vinegar with the broth before the cream goes in so it cooks into the sauce; taste at the end, the sauce should read bright, not sour"
+    }
+  ],
+  "ingredients": [
+    {
+      "source_raw": "4 chicken cutlets",
+      "item": "Boneless Skinless Chicken Breast",
+      "bid": "chicken-breast",
+      "board": "weekly",
+      "grams": 1361,
+      "buy": "3 lb, halved into 14 thin cutlets",
+      "display_name": "Chicken Breast (cutlets)",
+      "decision": "mapped",
+      "notes": "a cutlet is a halved boneless skinless breast, same product concept and price class as the chicken-breast commodity. Densities each=200 g breast, so 14 cutlets = 7 breasts = 1400 g, printed at house quarter-lb as 3 lb (1361 g), -2.8%. One cutlet per serving preserved from source"
+    },
+    {
+      "source_raw": "1/4 cup all-purpose flour",
+      "item": "All-Purpose Flour",
+      "bid": "flour",
+      "board": "weekly",
+      "grams": 94,
+      "buy": "0.75 cups (for dredging)",
+      "decision": "mapped",
+      "notes": "exact scale is 0.875 cups; dredging flour scales sublinearly (it coats the surface, excess is discarded), quantized down to 0.75 cups"
+    },
+    {
+      "source_raw": "1 teaspoon salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 23,
+      "buy": "1.25 tbsp",
+      "decision": "mapped",
+      "notes": ""
+    },
+    {
+      "source_raw": "1/2 teaspoon freshly ground black pepper",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 3,
+      "buy": "0.5 tbsp, freshly ground",
+      "decision": "mapped",
+      "notes": ""
+    },
+    {
+      "source_raw": "2 tablespoons unsalted butter",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "weekly",
+      "grams": 98,
+      "buy": "7 tbsp unsalted",
+      "decision": "mapped",
+      "notes": "unsalted and salted butter sit in the same commodity at the same price class (board rows include both). FLAGGED in report: today's butter board carries two suspect cells (Fareway 'Could It Be Butter' spread, Family Fare 'Lettuce Red Butter' produce hijack)"
+    },
+    {
+      "source_raw": "1 tablespoon olive oil",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 47,
+      "buy": "3.5 tbsp",
+      "decision": "mapped",
+      "notes": ""
+    },
+    {
+      "source_raw": "1 shallot sliced",
+      "item": "Shallots",
+      "bid": "shallots",
+      "board": "weekly",
+      "grams": 99,
+      "buy": "3.5 oz, sliced (3 to 4 shallots)",
+      "decision": "mapped-with-conflict",
+      "notes": "DECISION NEEDED, see report. The board has a dedicated shallots commodity, priced at 4 of 7 stores ($3.99 to $13.28/lb). But the canonical db\\ingredients.json row maps item Shallots to bid onions ($0.80/lb class), a variety-pricing stretch of exactly the red-onion-is-not-onions class, shipped before the shallots board id existed. This table records the evidence-correct bid (shallots); if the canonical row is not re-pointed through the proper gate before spec build, build-v2-spec will derive onions instead. Re-pointing recosts 5 live recipes. Grams: no densities row for Shallots (flagged); 1 medium shallot taken as 1 oz, weight-fallback buy string"
+    },
+    {
+      "source_raw": "3 cloves garlic minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 30,
+      "buy": "10 cloves, minced",
+      "decision": "mapped",
+      "notes": "exact scale is 10.5 cloves; quantized to 10"
+    },
+    {
+      "source_raw": "1/4 cup low sodium chicken broth PLUS the ruled wine replacement (3/4 cup at source scale)",
+      "item": "Chicken Broth",
+      "bid": "chicken-broth",
+      "board": "recipe",
+      "grams": 840,
+      "buy": "3.5 cups",
+      "decision": "mapped",
+      "notes": "source 0.25 cup low sodium broth plus 0.75 cup ruled wine replacement = 1 cup at source scale, 3.5 cups at 14 servings. Low sodium and regular broth are the same commodity price class; writer may note low sodium preferred"
+    },
+    {
+      "source_raw": "(ruled substitution for 3/4 cup dry white wine)",
+      "item": "White Wine Vinegar",
+      "bid": "white-wine-vinegar",
+      "board": "recipe",
+      "grams": 45,
+      "buy": "3 tbsp",
+      "decision": "ruled-substitution",
+      "notes": "registrar ruling 2026-08-15, not a mapping of white wine. 3 tbsp at 14 servings equals ~2.6 tsp at source scale, inside the prescribed 2 tsp to 1 Tbsp range. Board coverage 5 of 7 stores"
+    },
+    {
+      "source_raw": "1/2 teaspoon Italian seasoning",
+      "item": "Italian Seasoning",
+      "bid": "italian-seasoning",
+      "board": "weekly",
+      "grams": 2,
+      "buy": "0.5 tbsp",
+      "decision": "mapped",
+      "notes": ""
+    },
+    {
+      "source_raw": "1 cup heavy cream",
+      "item": "Heavy Cream",
+      "bid": "heavy-cream",
+      "board": "weekly",
+      "grams": 833,
+      "buy": "3.5 cups",
+      "decision": "mapped",
+      "notes": "observation for the board crew: Aldi's heavy-cream row is 'Friendly Farms Dairy Free Heavy Whipping Cream 169 FL OZ', dairy-free is not heavy cream and the size looks wrong; not the cheapest cell today so it does not move this recipe's cost"
+    },
+    {
+      "source_raw": "4 cups baby spinach or about 4 ounces",
+      "item": "Spinach",
+      "bid": "frozen-chopped-spinach",
+      "board": "recipe",
+      "grams": 397,
+      "buy": "14 cups fresh baby spinach (about 14 oz)",
+      "decision": "mapped-precedent",
+      "notes": "FLAGGED, see report. Followed the shipped canonical mapping (item Spinach -> frozen-chopped-spinach, documented in the food-DB Spinach row and used by slow-cooker-tuscan-chicken-pasta for fresh spinach; macros are form-independent, 23 cal/100g both rows). This is a fresh-on-frozen price basis, roughly 2.5x cheap for bagged baby spinach. The dedicated fresh spinach commodity exists but its board cells are form-polluted today (Walmart and Fareway cheapest rows are CANNED spinach), so re-pointing now would not price fresh either. Grams from the source's own equivalence, 4 cups = 4 oz, scaled to 14 cups = 14 oz = 397 g"
+    },
+    {
+      "source_raw": "1/2 cup freshly grated parmesan cheese",
+      "item": "Parmesan Cheese",
+      "bid": "parmesan",
+      "board": "weekly",
+      "grams": 196,
+      "buy": "1.75 cups grated",
+      "decision": "mapped",
+      "notes": "FLAGGED in report: today's parmesan cheapest cell at Aldi is 'Kirkwood Parmesan Chicken Tenders', a match hijack; true cheapest real parmesan is Sam's $0.3092/oz"
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [],
+  "board_defects_observed": [
+    "parmesan commodity: Aldi cheapest cell is 'Kirkwood Parmesan Chicken Tenders' at $0.2956/oz, a match hijack",
+    "butter commodity: Fareway cheapest cell 'Fareway Could It Be Butter' is a spread, and Family Fare 'Lettuce Red Butter' at $2.49 is red butter lettuce, a produce hijack",
+    "heavy-cream commodity: Aldi row is a dairy-free product at a suspect 169 floz size",
+    "spinach commodity (fresh label): Walmart and Fareway rows are canned spinach, form pollution"
+  ]
+}
