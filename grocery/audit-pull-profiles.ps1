@@ -105,6 +105,20 @@ function Test-PullProfiles {
         if ($src -notmatch 'finishLedger|observedMeanIntervalMs|runPacedSweep') {
           $problems.Add("$name : agent '$($p.agent)' emits no timing ledger - its runs cannot promote the profile past 'proposed'")
         }
+        # 5b) EVERY AGENT MUST HAND OFF ON A WALL. A CAPTCHA is the one obstacle an agent may never
+        # solve itself, so the only correct behaviour is to alert Brad and wait for an explicit
+        # go-ahead. An agent that just stops leaves a block nobody is told about, and its misses are
+        # indistinguishable from products the store does not stock.
+        if ($src -notmatch 'awaitWallCleared|runPacedSweep') {
+          $problems.Add("$name : agent '$($p.agent)' never hands off on a wall - it must alert and wait for the operator, not give up silently")
+        }
+        # 5c) THE ALERT MUST BE A WINDOWS ALERT (Brad, 2026-08-15: "It can't be a chrome alert - it
+        # must be a Windows System alert"). A page-origin Notification is a Chrome toast: per-site
+        # permission, dies with the tab, not system-level. notify-desktop.ps1 is the real mechanism
+        # and its Done click is the resume handshake. Reject any agent that reaches for the browser API.
+        if ($src -match 'new\s+Notification\s*\(|Notification\.requestPermission') {
+          $problems.Add("$name : agent '$($p.agent)' uses the browser Notification API - the wall alert must be a WINDOWS alert via notify-desktop.ps1, not a Chrome toast")
+        }
       }
     }
 
@@ -202,6 +216,29 @@ const X_PROFILE = { delayMs: 900, jitterMs: 0, retries: 2, backoffMs: 4000 };
         confidence = 'proposed'; evidence = 'x' } })
     $r7 = Test-PullProfiles -Stores $mute -Root $fixDir2
     Check "MUST-FIRE: an agent with no timing ledger is caught" (@($r7 | Where-Object { $_ -match 'no timing ledger' }).Count -eq 1)
+
+    # MUST-FIRE: an agent that measures itself but gives up silently on a wall.
+    Set-Content -Path (Join-Path $fixDir2 '__silent_agent.js') -Encoding UTF8 -Value @'
+const X_PROFILE = { delayMs: 900, jitterMs: 0, retries: 2, backoffMs: 4000 };
+const t = finishLedger({ t0, requests, delayMs, jitterMs });   // measures, but never hands off
+'@
+    $silent = @([pscustomobject]@{ name = 'SilentStore'; walled = $true; pull_profile = [pscustomobject]@{
+        agent = '__silent_agent.js'; delay_ms = 900; jitter_ms = 0; retries = 2; backoff_ms = 4000
+        confidence = 'proposed'; evidence = 'x' } })
+    $r8 = Test-PullProfiles -Stores $silent -Root $fixDir2
+    Check "MUST-FIRE: an agent that never hands off on a wall is caught" (@($r8 | Where-Object { $_ -match 'never hands off' }).Count -eq 1)
+
+    # MUST-FIRE: a Chrome toast standing in for the Windows alert.
+    Set-Content -Path (Join-Path $fixDir2 '__chrometoast_agent.js') -Encoding UTF8 -Value @'
+const X_PROFILE = { delayMs: 900, jitterMs: 0, retries: 2, backoffMs: 4000 };
+async function alertWall(s){ await Notification.requestPermission(); new Notification(s); }
+const r = await runPacedSweep(agent, wl);
+'@
+    $toast = @([pscustomobject]@{ name = 'ToastStore'; walled = $true; pull_profile = [pscustomobject]@{
+        agent = '__chrometoast_agent.js'; delay_ms = 900; jitter_ms = 0; retries = 2; backoff_ms = 4000
+        confidence = 'proposed'; evidence = 'x' } })
+    $r9 = Test-PullProfiles -Stores $toast -Root $fixDir2
+    Check "MUST-FIRE: a browser Notification standing in for the Windows alert is caught" (@($r9 | Where-Object { $_ -match 'Notification API' }).Count -eq 1)
   }
   finally { Remove-Item $fixDir2 -Recurse -Force -ErrorAction SilentlyContinue }
 

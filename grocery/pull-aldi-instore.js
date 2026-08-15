@@ -78,17 +78,20 @@ async function pullAldiInStore(worklist, opts = {}) {
   */
   const t0 = Date.now();
   let requests = 0, settledCount = 0, firstWall = null;
+  let consecutive403 = 0, pausedMs = 0;
 
   for (const item of worklist) {
     if (res[item.i]?.ok) continue;       // resumable: skip what we already have
 
     let got = false;
+    let wasBlocked = false;              // distinguishes "Aldi blocked us" from "no price on the page"
     for (let attempt = 0; attempt < retries && !got; attempt++) {
       try {
         requests++;
         const r = await fetch(ALDI_PRODUCT_BASE + item.s, { credentials: 'include' });
         if (r.status === 403) {          // rate limited - back off, do not record a price
           if (firstWall === null) firstWall = settledCount;
+          wasBlocked = true;
           await sleep(ALDI_PROFILE.backoffMs * (attempt + 1));
           continue;
         }
@@ -105,15 +108,39 @@ async function pullAldiInStore(worklist, opts = {}) {
       }
     }
     if (!got) res[item.i] = { p: null, z: null, n: null, ok: false };  // honest miss
-    else settledCount++;
+    else { settledCount++; consecutive403 = 0; }
 
     localStorage.setItem('TC_ALDI_INSTORE', JSON.stringify(res));      // persist every item
+
+    /*
+      THE HANDOFF (same contract as runPacedSweep - see pull-agent-lib.js). Aldi's block is a 403
+      rather than a CAPTCHA page, but the rule is identical: once retries with backoff have failed,
+      stop guessing and hand control to Brad. Without this the run just ends and a {ok:false} miss
+      is indistinguishable from a product Aldi genuinely does not stock.
+    */
+    if (!got && wasBlocked) {
+      consecutive403++;
+      if (consecutive403 >= (ALDI_PROFILE.wallLimit ?? 3)) {
+        const pauseAt = Date.now();
+        const answer = await awaitWallCleared('Aldi', item.s, 'http 403 (rate limited)');
+        pausedMs += Date.now() - pauseAt;
+        if (answer === 'stop') {
+          console.warn('Aldi: stopped by operator. Re-run the same worklist later to finish the tail.');
+          break;
+        }
+        consecutive403 = 0;
+        delete res[item.i];          // he cleared it - this item deserves a real look
+        worklist.push(item);
+        continue;
+      }
+    }
+
     await sleep(delayMs);
   }
 
   const ok = Object.values(res).filter(v => v.ok).length;
   const timing = finishLedger({
-    t0, requests, delayMs, jitterMs: ALDI_PROFILE.jitterMs, firstWallAfter: firstWall,
+    t0, requests, delayMs, jitterMs: ALDI_PROFILE.jitterMs, firstWallAfter: firstWall, pausedMs,
   });
   console.log('Aldi pull:', timing);
   return { context: ctx, ok, missing: Object.values(res).length - ok, timing, results: res };
