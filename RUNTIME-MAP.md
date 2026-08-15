@@ -1,9 +1,17 @@
 # Thrifty Crew runtime ownership map
 
-OVERHAUL-5 deliverable (2026-07-27). Maps the four runtimes and, critically, the **git-bus**:
-which files one runtime writes and another reads through the repo. That coupling is the reason
+OVERHAUL-5 deliverable (2026-07-27), corrected 2026-08-15. Maps the four runtimes and, critically, the
+**git-bus**: which files one runtime writes and another reads through the repo. That coupling is the reason
 regenerated data cannot simply leave git (OVERHAUL-4); this map is the classification the remaining
 untracking work runs against.
+
+**There is no fifth runtime.** A TypeScript/D1/R2 platform (`income/platform/`, "V3" then "V4") was built
+2026-08-09 as a parallel estate and deleted 2026-08-14 (commit `f5e187a0`) along with its 16
+`ThriftyCrew V3 *` scheduled tasks. It never became authoritative — the PowerShell estate below ran the live
+site the entire time — and its own exit gates stood at 1/14 parity days and 0/4 Chrome cycles when V4 was
+started on top of it. If you find a reference to it, that reference is stale. The code is recoverable with
+`git checkout pre-platform-removal -- platform/`; the Cloudflare workers `tc-grocery-v3` and
+`tc-grocery-public` may still be deployed but are no longer in any serving path.
 
 ## The four runtimes
 
@@ -15,12 +23,23 @@ untracking work runs against.
 | SMP Grocery Failure Watchdog | periodic | `local-watchdog.ps1` + `health-heartbeat.ps1` (silent-death detection) |
 | SMP Wake For Grocery Agents | early am | wakes the machine so the Claude agents can run |
 
-### 2. GitHub Actions (cloud) — BACKUP
-- **daily.yml**: stands down if a bot commit already landed today (the local run). If the local run was missed, it full-checks-out, runs the SAME `check-ad-cycles.ps1`, and `git add -A` commits everything back. It is a safety net for days the PC is off. It CANNOT replace local fully because the weekly browser captures need a real Chrome.
-- **heartbeat.yml** (10:00 Central): alerts if no pipeline commit landed recently. Alerting only, writes no data.
+### 2. GitHub Actions (cloud) — MANUAL FALLBACK ONLY (not a running backup)
+Both are `on: { workflow_dispatch: {} }` — **no cron, they never fire on their own.** GitHub-hosted
+Actions minutes were exhausted, so they are retained as operator-selected rollback artifacts. Do not
+describe them as a safety net: on a day the PC is off, nothing runs unless a human dispatches one.
+- **daily.yml**: stands down if a bot commit already landed today (the local run). If dispatched after a
+  missed local run, it full-checks-out, runs the SAME `check-ad-cycles.ps1`, and `git add -A` commits
+  everything back. It cannot replace local fully because the weekly browser captures need a real Chrome.
+- **heartbeat.yml**: alerts if no pipeline commit landed recently. Alerting only, writes no data.
 
 ### 3. Cloudflare Worker — SERVE + INGEST
 - Serves `public/` statically with per-path CORS (`public/_headers`): `smp-feed.json`, `board.json`, `free-dinners.json`, `planner-data.json`, `price-history.json`, `share/`.
+- `GET /smp-feed.json` is served **straight from the static asset**, with no upstream fetch and no fallback
+  branch (`X-TC-Feed-Source: static-asset`). From 2026-08-09 to 2026-08-14 it proxied a V3 "promoted
+  release" and kept the asset only as an outage fallback; when the V3 engine started crashing on 2026-08-12
+  the release pointer froze and the route served a stale, WRONG blueberries price for two days *after* the
+  pipeline had corrected it. The fallback never fired because V3 answered 200 — it served confidently, just
+  wrongly. The repo is the source of truth for this feed; read it directly.
 - POST endpoints: `/submit` (item request -> Gmail), `/submit-recipe` (recipe suggest, paid-gated), and the daily.yml failure relay -> Gmail.
 - Reads the served files **from the repo** (git is its deploy source). This is why `public/**` must stay tracked.
 
@@ -41,7 +60,11 @@ Files written by one runtime and read by another **through the committed repo**.
 - **Store captures** — `out/regular/**`, `out/bakers/**`, `out/sams/**`, `out/fareway/**`, hyvee/aldi ad pulls. Written by the local pipeline + the Wed browser agent; read by `compare-deals` on every local AND cloud run (union window). Durable INPUTS.
 - **Served data** — `public/**` (feed, board.json, free-dinners, planner-data, price-history). Written by the pipeline; served by the Worker off the repo.
 - **Durable caches / state read next run** — `product-urls.json`, `price-history.json`, `board-price-overrides.json`, `category-excludes.json`, `ad-schedule.json`, `meal-prep/db/published-hashes.json`, `meal-prep/ingredient-map.json`, `meal-prep/recipes-db.json` (holds visibility), `meal-prep/free-rotation.json`, `meal-prep/db/costed.json`, `meal-prep/pipeline/v2-perserving.json`.
-- **Logs + queue read by the triage agent** — `grocery/ad-cycle-log.txt`, `alert-log`, `local-daily-log`, `out/**` audit jsons, `triage-queue.json`.
+- **Logs read by the triage agent** — `grocery/ad-cycle-log.txt`, `alert-log`, `local-daily-log`, `out/**` audit jsons.
+  NOT `triage-queue.json`: it is deliberately ignored (`.gitignore:153`, an explicit rule, not the
+  deny-by-default `/*` catch-all) and has never been tracked. It is written by `send-alert.ps1` and read by
+  the triage agent on the SAME PC, so it never crosses the git-bus, and its bodies carry alert text. Listing
+  it here as must-stay-tracked was an over-claim.
 
 ## OVERHAUL-4 classification
 
