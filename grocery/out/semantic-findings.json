@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-13 09:01",
-    "board":  "comparison-2026-08-13.json",
-    "sidecar_generated":  "2026-08-13 09:01:16",
+    "generated":  "2026-08-14 20:08",
+    "board":  "comparison-2026-08-14.json",
+    "sidecar_generated":  "2026-08-14 20:07:59",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2828,
-                     "corpus":  35084,
-                     "rule_invisible":  6392
+                     "board_pairs":  2883,
+                     "corpus":  35727,
+                     "rule_invisible":  6371
                  },
     "identity_count":  0,
-    "coverage_count":  40,
+    "coverage_count":  59,
     "identity":  [
 
                  ],
@@ -27,6 +27,26 @@
                          "product":  "(6 pack) Bush\u0027s Chili Magic Beans, Slow Simmered White Beans in Mild Chili Sauce, 15.5 oz Can",
                          "cos":  0.7062,
                          "score":  0.986156,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ingredient-definition-cumin-seeds",
+                         "commodity":  "Cumin seeds",
+                         "store":  "Walmart",
+                         "product":  "Frontier Co-op Certified Organic Cumin Seed, Ground, 16 oz. Bag",
+                         "cos":  0.6967,
+                         "score":  0.984558,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "coconut-aminos",
+                         "commodity":  "Coconut Aminos",
+                         "store":  "Walmart",
+                         "product":  "Nutiva, Coconut Aminos Organic Soy Free Seasoning Sauce \u0026 Marinade, 8 fl oz",
+                         "cos":  0.5953,
+                         "score":  0.982896,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -51,6 +71,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "chili-garlic-sauce",
+                         "commodity":  "Chili Garlic Sauce",
+                         "store":  "Walmart",
+                         "product":  "Kinder\u0027s Gold Label Sweet Chili Garlic Dipping Sauce for Chicken and Wings, 16.1 oz Bottle",
+                         "cos":  0.6541,
+                         "score":  0.975425,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "quart-storage-bags",
                          "commodity":  "Food Storage Bags (quart)",
                          "store":  "Walmart",
@@ -61,12 +91,32 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "chili-garlic-sauce",
+                         "commodity":  "Chili Garlic Sauce",
+                         "store":  "Baker\u0027s",
+                         "product":  "Ox Brand Red Chili With Garlic Sauce",
+                         "cos":  0.6803,
+                         "score":  0.969741,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "quart-storage-bags",
                          "commodity":  "Food Storage Bags (quart)",
                          "store":  "Walmart",
                          "product":  "Great Value Slider Zipper Freezer Bags, Quart, 50 Count",
                          "cos":  0.7006,
                          "score":  0.968772,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ingredient-definition-cumin-seeds",
+                         "commodity":  "Cumin seeds",
+                         "store":  "Walmart",
+                         "product":  "Simply Organic Ground Cumin Seed, Shelf-Stable, 2.31 oz Bottle",
+                         "cos":  0.6799,
+                         "score":  0.966045,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -101,12 +151,32 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "ingredient-definition-cumin-seeds",
+                         "commodity":  "Cumin seeds",
+                         "store":  "Walmart",
+                         "product":  "Spice Islands Ground Cumin Seed, Kosher, 1.9 oz",
+                         "cos":  0.6818,
+                         "score":  0.958278,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "vegetable-soup",
                          "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
                          "store":  "Walmart",
                          "product":  "Progresso Minestrone Soup, Vegetable Classics Canned Soup, 19 oz",
                          "cos":  0.7472,
                          "score":  0.957623,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "coconut-aminos",
+                         "commodity":  "Coconut Aminos",
+                         "store":  "Baker\u0027s",
+                         "product":  "Bragg Organic Coconut Liquid Aminos Soy-Free Seasoning",
+                         "cos":  0.5762,
+                         "score":  0.957425,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -181,6 +251,36 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "deli-ham",
+                         "commodity":  "Ham (deli / sliced)",
+                         "store":  "Walmart",
+                         "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
+                         "cos":  0.6916,
+                         "score":  0.936467,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "chili-garlic-sauce",
+                         "commodity":  "Chili Garlic Sauce",
+                         "store":  "Baker\u0027s",
+                         "product":  "Kinder\u0027s Gold Label Sweet Chili Garlic Chicken \u0026 Wing Dipping Sauce",
+                         "cos":  0.6663,
+                         "score":  0.93629,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ingredient-definition-black-peppercorns",
+                         "commodity":  "Black peppercorns",
+                         "store":  "Baker\u0027s",
+                         "product":  "Private Selection Tellicherry Black Peppercorns Grinder",
+                         "cos":  0.6421,
+                         "score":  0.934837,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "ground-pork",
                          "commodity":  "Ground Pork",
                          "store":  "Baker\u0027s",
@@ -191,12 +291,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "fresh-cranberries",
-                         "commodity":  "Fresh Cranberries",
+                         "id":  "iced-tea",
+                         "commodity":  "Iced Tea (bottled/gallon)",
                          "store":  "Walmart",
-                         "product":  "Fresh Gourmet Dried \u0026 Sweet Cranberries \u0026 Sunflower Kernels Salad Topping, 4 oz Bag",
-                         "cos":  0.675,
-                         "score":  0.933385,
+                         "product":  "Red Diamond Unsweetened Tea, Gallon, 128 Fl Oz",
+                         "cos":  0.6264,
+                         "score":  0.932911,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -221,6 +321,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "chicken-breast",
+                         "commodity":  "Boneless Skinless Chicken Breast",
+                         "store":  "Baker\u0027s",
+                         "product":  "Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts",
+                         "cos":  0.7359,
+                         "score":  0.926702,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "frozen-fruit",
                          "commodity":  "Frozen Fruit / Berries",
                          "store":  "Walmart",
@@ -231,12 +341,42 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
-                         "store":  "Baker\u0027s",
-                         "product":  "Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts",
-                         "cos":  0.7355,
-                         "score":  0.926274,
+                         "id":  "enchilada-sauce",
+                         "commodity":  "Enchilada Sauce",
+                         "store":  "Walmart",
+                         "product":  "Las Palmas Medium Red Chile Sauce, 28 oz",
+                         "cos":  0.6973,
+                         "score":  0.926097,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "garlic-infused-olive-oil",
+                         "commodity":  "Garlic-Infused Olive Oil",
+                         "store":  "Walmart",
+                         "product":  "McCormick Garlic and Olive Oil Seasoning Blend, 5.25 oz Bottle",
+                         "cos":  0.6411,
+                         "score":  0.925513,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "creamy-cilantro-lime-dressing",
+                         "commodity":  "Creamy Cilantro Lime Dressing",
+                         "store":  "Family Fare",
+                         "product":  "Taylor Farms Southwest Chopped Kit With Creamy Cilantro Dressing 12.6 Oz",
+                         "cos":  0.6873,
+                         "score":  0.925325,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ready-to-serve-long-grain-wild-rice-pouch",
+                         "commodity":  "Ready-to-Serve Long Grain \u0026 Wild Rice Pouch",
+                         "store":  "Walmart",
+                         "product":  "Great Value Ready-to-Heat 90-Second Long Grain White Rice Pouch, 8.8 oz",
+                         "cos":  0.7627,
+                         "score":  0.924826,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -265,8 +405,18 @@
                          "commodity":  "Boneless Skinless Chicken Breast",
                          "store":  "Walmart",
                          "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
-                         "cos":  0.7652,
-                         "score":  0.924576,
+                         "cos":  0.7638,
+                         "score":  0.92368,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "hulled-pumpkin-seeds",
+                         "commodity":  "Hulled Pumpkin Seeds",
+                         "store":  "Aldi",
+                         "product":  "Southern Grove Pumpkin Seeds 6 OZ",
+                         "cos":  0.6622,
+                         "score":  0.923174,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -321,6 +471,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "red-wine",
+                         "commodity":  "Red Wine",
+                         "store":  "Baker\u0027s",
+                         "product":  "Kroger Red Cooking Wine",
+                         "cos":  0.705,
+                         "score":  0.913529,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "kidney-beans",
                          "commodity":  "Kidney Beans (canned)",
                          "store":  "Family Fare",
@@ -361,22 +521,32 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
+                         "id":  "ingredient-definition-cumin-seeds",
+                         "commodity":  "Cumin seeds",
                          "store":  "Walmart",
-                         "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.85 - 3.5 lb Tray",
-                         "cos":  0.7653,
-                         "score":  0.908725,
+                         "product":  "Pride of India Ground Cumin Seed, 8 oz Dual Sifter Bottle",
+                         "cos":  0.6362,
+                         "score":  0.906948,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "deli-ham",
-                         "commodity":  "Ham (deli / sliced)",
+                         "id":  "chicken-breast",
+                         "commodity":  "Boneless Skinless Chicken Breast",
                          "store":  "Walmart",
-                         "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
-                         "cos":  0.684,
-                         "score":  0.906507,
+                         "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.85 - 3.5 lb Tray",
+                         "cos":  0.764,
+                         "score":  0.906656,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ingredient-definition-kalamata-olives",
+                         "commodity":  "Kalamata Olives",
+                         "store":  "Walmart",
+                         "product":  "Great Value Sliced Olives, 3.8 oz",
+                         "cos":  0.6604,
+                         "score":  0.906069,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -401,22 +571,42 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "enchilada-sauce",
-                         "commodity":  "Enchilada Sauce",
-                         "store":  "Walmart",
-                         "product":  "Las Palmas Medium Red Chile Sauce, 28 oz",
-                         "cos":  0.6431,
-                         "score":  0.903476,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "green-olives",
                          "commodity":  "Green Olives (stuffed)",
                          "store":  "Walmart",
                          "product":  "Great Value Stuffed Queen Olives with Minced Pimento, 10 oz",
                          "cos":  0.6861,
                          "score":  0.901376,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ingredient-definition-frozen-cauliflower-florets",
+                         "commodity":  "Frozen Cauliflower Florets",
+                         "store":  "Walmart",
+                         "product":  "Great Value Frozen Cauliflower, 12 oz Bag, No Added Preservatives",
+                         "cos":  0.7151,
+                         "score":  0.901266,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "laundry-pods",
+                         "commodity":  "Laundry Detergent Pods",
+                         "store":  "Walmart",
+                         "product":  "Tide Power PODS Laundry Detergent Soap Pacs with Odor Defense + Oxi, Original Scent, 45 Count",
+                         "cos":  0.7388,
+                         "score":  0.900907,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "turkey-lunchmeat",
+                         "commodity":  "Turkey (deli / sliced)",
+                         "store":  "Aldi",
+                         "product":  "Deli Sliced Honey Turkey 8 OZ",
+                         "cos":  0.666,
+                         "score":  0.900468,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

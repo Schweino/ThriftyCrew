@@ -1,1 +1,1 @@
-﻿bell-peppers|Family Fare;cantaloupe|Aldi;garden-salad|Hy-Vee;watermelon|Fareway
+﻿bell-peppers|Family Fare;garden-salad|Hy-Vee;watermelon|Fareway

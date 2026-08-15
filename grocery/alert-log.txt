@@ -298,3 +298,477 @@
 [2026-08-13T09:08:52] SUPPRESSED (already sent this type today) 'Grocery: 4 NEW price flag(s) - 2026-08-13' [type: grocery new price flag s]
 [2026-08-13T09:09:32] QUEUE ABSORBED into open item 2026-08-10-740129 (day 3 of this condition, count now 6) - no new id minted
 [2026-08-13T09:09:32] SUPPRESSED (already sent this type today) 'Grocery: GUARDS FAILED - board not published - 2026-08-13' [type: grocery guards failed board not published]
+[2026-08-13T09:13:26] QUEUE ABSORBED into open item 2026-08-09-e547d0 (day 4 of this condition, count now 5) - no new id minted
+[2026-08-13T09:13:27] SENT 'smp-feed edge did not pick up today's push - 2026-08-13' -> schweino68@gmail.com (id 19ffb78828382397)
+[2026-08-13T09:23:58] QUEUE ABSORBED into open item 2026-08-11-35684e (day 2 of this condition, count now 10) - no new id minted
+[2026-08-13T09:23:58] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: family-fare-paced' [type: thriftycrew v local job failed family fare paced]
+[2026-08-13T09:39:35] SENT 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' -> schweino68@gmail.com (id 19ffb9072b9d2d72)
+[2026-08-13T10:30:21] QUEUE ABSORBED into open item 2026-08-12-e5ed72 (day 1 of this condition, count now 7) - no new id minted
+[2026-08-13T10:30:22] SENT 'ThriftyCrew V3 local agent cycle failed: Accuracy' -> schweino68@gmail.com (id 19ffbbeefa352460)
+[2026-08-13T10:33:01] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T10:34:44] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T10:34:48] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T10:35:23] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T10:35:41] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T10:37:30] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T10:37:38] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T10:38:20] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T10:44:47] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T10:48:11] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T11:05:26] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T11:05:29] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T11:05:32] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T11:05:35] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T11:05:37] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T11:05:40] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T11:05:43] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T11:05:46] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T11:05:48] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T11:05:54] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T11:13:24] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPricing' [type: thriftycrew v local agent cycle failed ingredientpricing]
+[2026-08-13T12:47:14] QUEUE ABSORBED into open item 2026-08-11-f57d80 (day 2 of this condition, count now 2) - no new id minted
+[2026-08-13T12:47:15] SENT 'ThriftyCrew V3 local agent cycle failed: PostPublish' -> schweino68@gmail.com (id 19ffc3c4338d3803)
+[2026-08-13T13:24:55] QUEUE ABSORBED into open item 2026-08-12-e3ce13 (day 1 of this condition, count now 4) - no new id minted
+[2026-08-13T13:24:55] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: promotion-boundary' [type: thriftycrew v local job failed promotion boundary]
+[2026-08-13T13:57:18] QUEUE ABSORBED into open item 2026-08-11-f80dc4 (day 2 of this condition, count now 2) - no new id minted
+[2026-08-13T13:57:19] SENT 'ThriftyCrew V3 local agent cycle failed: Triage' -> schweino68@gmail.com (id 19ffc7c66a08358f)
+[2026-08-13T14:05:10] SENT 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' -> schweino68@gmail.com (id 19ffc8394988f592)
+[2026-08-13T15:23:44] QUEUE ABSORBED into open item 2026-08-11-35684e (day 2 of this condition, count now 11) - no new id minted
+[2026-08-13T15:23:44] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: family-fare-paced' [type: thriftycrew v local job failed family fare paced]
+[2026-08-13T17:00:20] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 8) - no new id minted
+[2026-08-13T17:00:20] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T18:22:27] QUEUE ABSORBED into open item 2026-08-11-35684e (day 2 of this condition, count now 12) - no new id minted
+[2026-08-13T18:22:27] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: family-fare-paced' [type: thriftycrew v local job failed family fare paced]
+[2026-08-13T18:38:37] SENT 'ThriftyCrew ingredient campaign supervisor failed' -> schweino68@gmail.com (id 19ffd7def4a16eb3)
+[2026-08-13T21:23:06] QUEUE ABSORBED into open item 2026-08-11-35684e (day 2 of this condition, count now 13) - no new id minted
+[2026-08-13T21:23:06] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: family-fare-paced' [type: thriftycrew v local job failed family fare paced]
+[2026-08-13T22:44:37] SUPPRESSED (already sent this type today) 'ThriftyCrew ingredient campaign supervisor failed' [type: thriftycrew ingredient campaign supervisor failed]
+[2026-08-13T22:52:45] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 9) - no new id minted
+[2026-08-13T22:52:45] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:06:30] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 10) - no new id minted
+[2026-08-13T23:06:30] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:09:32] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 11) - no new id minted
+[2026-08-13T23:09:32] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:14:38] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 12) - no new id minted
+[2026-08-13T23:14:38] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:20:04] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 13) - no new id minted
+[2026-08-13T23:20:04] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:28:44] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 14) - no new id minted
+[2026-08-13T23:28:44] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:30:56] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 15) - no new id minted
+[2026-08-13T23:30:56] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:33:10] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 16) - no new id minted
+[2026-08-13T23:33:10] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:34:44] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 17) - no new id minted
+[2026-08-13T23:34:44] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:37:34] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 18) - no new id minted
+[2026-08-13T23:37:34] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:40:54] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 19) - no new id minted
+[2026-08-13T23:40:54] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:45:27] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 20) - no new id minted
+[2026-08-13T23:45:27] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:49:00] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 21) - no new id minted
+[2026-08-13T23:49:00] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:50:23] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 22) - no new id minted
+[2026-08-13T23:50:23] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:52:05] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 23) - no new id minted
+[2026-08-13T23:52:05] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:55:08] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 24) - no new id minted
+[2026-08-13T23:55:08] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T23:55:11] SENT 'ThriftyCrew V3 agent ledger finish failed: Recipe' -> schweino68@gmail.com (id 19ffe9fc2b728b72)
+[2026-08-14T00:19:14] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 2) - no new id minted
+[2026-08-14T00:19:15] SENT 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' -> schweino68@gmail.com (id 19ffeb5cb7468e25)
+[2026-08-14T00:20:15] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 3) - no new id minted
+[2026-08-14T00:20:15] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:21:17] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 4) - no new id minted
+[2026-08-14T00:21:17] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:21:58] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 25) - no new id minted
+[2026-08-14T00:22:00] SENT 'ThriftyCrew V3 local agent cycle failed: Recipe' -> schweino68@gmail.com (id 19ffeb84f440311c)
+[2026-08-14T00:22:19] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 5) - no new id minted
+[2026-08-14T00:22:19] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:22:55] QUEUE ABSORBED into open item 2026-08-11-35684e (day 3 of this condition, count now 14) - no new id minted
+[2026-08-14T00:22:56] SENT 'ThriftyCrew V3 local job failed: family-fare-paced' -> schweino68@gmail.com (id 19ffeb92b2f44d13)
+[2026-08-14T00:23:20] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 6) - no new id minted
+[2026-08-14T00:23:21] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:24:23] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 7) - no new id minted
+[2026-08-14T00:24:23] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:25:24] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 8) - no new id minted
+[2026-08-14T00:25:24] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:26:25] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 9) - no new id minted
+[2026-08-14T00:26:25] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:27:27] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 10) - no new id minted
+[2026-08-14T00:27:27] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:28:29] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 11) - no new id minted
+[2026-08-14T00:28:29] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:29:31] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 12) - no new id minted
+[2026-08-14T00:29:31] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:30:32] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 13) - no new id minted
+[2026-08-14T00:30:32] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:31:34] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 14) - no new id minted
+[2026-08-14T00:31:34] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:32:36] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 15) - no new id minted
+[2026-08-14T00:32:36] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:33:37] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 16) - no new id minted
+[2026-08-14T00:33:37] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:34:39] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 17) - no new id minted
+[2026-08-14T00:34:39] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:35:40] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 18) - no new id minted
+[2026-08-14T00:35:40] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:36:42] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 19) - no new id minted
+[2026-08-14T00:36:42] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:37:39] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 26) - no new id minted
+[2026-08-14T00:37:39] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T00:37:45] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 20) - no new id minted
+[2026-08-14T00:37:45] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:38:46] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 21) - no new id minted
+[2026-08-14T00:38:46] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:39:48] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 22) - no new id minted
+[2026-08-14T00:39:48] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T00:45:35] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 27) - no new id minted
+[2026-08-14T00:45:35] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T00:46:49] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 28) - no new id minted
+[2026-08-14T00:46:49] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T00:50:10] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 29) - no new id minted
+[2026-08-14T00:50:10] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T00:53:00] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 30) - no new id minted
+[2026-08-14T00:53:00] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T00:54:32] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 31) - no new id minted
+[2026-08-14T00:54:32] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T00:56:42] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 32) - no new id minted
+[2026-08-14T00:56:43] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T00:59:49] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 33) - no new id minted
+[2026-08-14T00:59:49] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T01:08:53] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 23) - no new id minted
+[2026-08-14T01:08:53] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T01:27:22] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 24) - no new id minted
+[2026-08-14T01:27:22] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T01:28:41] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 34) - no new id minted
+[2026-08-14T01:28:41] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T01:31:24] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 35) - no new id minted
+[2026-08-14T01:31:24] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T01:35:00] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 36) - no new id minted
+[2026-08-14T01:35:00] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T01:39:25] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 37) - no new id minted
+[2026-08-14T01:39:25] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T01:42:02] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 38) - no new id minted
+[2026-08-14T01:42:02] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T01:45:54] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 39) - no new id minted
+[2026-08-14T01:45:54] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T01:49:01] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 40) - no new id minted
+[2026-08-14T01:49:01] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T01:49:53] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 25) - no new id minted
+[2026-08-14T01:49:53] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T01:51:32] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 41) - no new id minted
+[2026-08-14T01:51:32] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T02:02:41] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 42) - no new id minted
+[2026-08-14T02:02:41] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T02:05:31] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 43) - no new id minted
+[2026-08-14T02:05:31] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T02:08:24] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 44) - no new id minted
+[2026-08-14T02:08:24] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T02:16:36] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 26) - no new id minted
+[2026-08-14T02:16:36] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T02:43:47] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 45) - no new id minted
+[2026-08-14T02:43:47] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T03:19:52] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 46) - no new id minted
+[2026-08-14T03:19:52] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T03:23:44] QUEUE ABSORBED into open item 2026-08-11-35684e (day 3 of this condition, count now 15) - no new id minted
+[2026-08-14T03:23:44] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: family-fare-paced' [type: thriftycrew v local job failed family fare paced]
+[2026-08-14T03:24:37] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 47) - no new id minted
+[2026-08-14T03:24:37] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T03:33:15] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 48) - no new id minted
+[2026-08-14T03:33:15] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T04:14:18] SENT 'Omaha pricing browser lanes are ready' -> schweino68@gmail.com (id 19fff8cfc013cc54)
+[2026-08-14T04:14:39] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T04:25:03] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 49) - no new id minted
+[2026-08-14T04:25:03] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T04:25:03] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 50) - no new id minted
+[2026-08-14T04:25:03] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T04:31:20] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T04:31:21] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 51) - no new id minted
+[2026-08-14T04:31:21] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T04:31:21] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 52) - no new id minted
+[2026-08-14T04:31:21] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T04:33:44] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T04:37:23] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T04:39:11] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 53) - no new id minted
+[2026-08-14T04:39:11] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T04:39:12] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 54) - no new id minted
+[2026-08-14T04:39:12] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T04:39:13] QUEUE ABSORBED into open item 2026-08-13-da6989 (day 1 of this condition, count now 2) - no new id minted
+[2026-08-14T04:39:14] SENT 'ThriftyCrew V3 agent ledger finish failed: Recipe' -> schweino68@gmail.com (id 19fffa3d13a48958)
+[2026-08-14T04:43:06] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T04:59:11] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 55) - no new id minted
+[2026-08-14T04:59:11] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:00:55] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T05:01:01] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 27) - no new id minted
+[2026-08-14T05:01:01] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T05:06:38] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 56) - no new id minted
+[2026-08-14T05:06:38] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:13:41] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T05:16:05] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T05:16:12] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T05:17:00] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T05:18:17] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 57) - no new id minted
+[2026-08-14T05:18:17] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:19:24] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 58) - no new id minted
+[2026-08-14T05:19:25] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:19:25] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 59) - no new id minted
+[2026-08-14T05:19:25] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:23:25] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 60) - no new id minted
+[2026-08-14T05:23:25] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:23:25] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 61) - no new id minted
+[2026-08-14T05:23:25] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:31:29] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 62) - no new id minted
+[2026-08-14T05:31:29] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:32:59] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 63) - no new id minted
+[2026-08-14T05:32:59] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:36:00] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 64) - no new id minted
+[2026-08-14T05:36:00] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:36:00] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 65) - no new id minted
+[2026-08-14T05:36:00] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:36:18] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T05:41:21] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 66) - no new id minted
+[2026-08-14T05:41:21] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:41:22] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 67) - no new id minted
+[2026-08-14T05:41:22] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:42:35] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T05:45:19] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 68) - no new id minted
+[2026-08-14T05:45:19] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:45:20] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 69) - no new id minted
+[2026-08-14T05:45:20] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:46:48] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 70) - no new id minted
+[2026-08-14T05:46:48] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:47:09] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 71) - no new id minted
+[2026-08-14T05:47:10] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:48:29] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 72) - no new id minted
+[2026-08-14T05:48:29] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:48:30] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 2 of this condition, count now 73) - no new id minted
+[2026-08-14T05:48:30] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-14T05:51:39] QUEUE ABSORBED into open item 2026-08-13-05d25e (day 1 of this condition, count now 3) - no new id minted
+[2026-08-14T05:51:40] SENT 'ThriftyCrew ingredient campaign supervisor failed' -> schweino68@gmail.com (id 19fffe61fe63a0fe)
+[2026-08-14T05:52:08] QUEUE ABSORBED into open item 2026-08-13-05d25e (day 1 of this condition, count now 4) - no new id minted
+[2026-08-14T05:52:08] SUPPRESSED (already sent this type today) 'ThriftyCrew ingredient campaign supervisor failed' [type: thriftycrew ingredient campaign supervisor failed]
+[2026-08-14T06:00:41] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T06:00:51] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 28) - no new id minted
+[2026-08-14T06:00:51] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T06:05:38] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T06:08:36] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T06:09:47] QUEUE ABSORBED into open item 2026-08-13-a5f563 (day 1 of this condition, count now 3) - no new id minted
+[2026-08-14T06:09:48] SENT 'Baker's ad window advanced with no capture behind it' -> schweino68@gmail.com (id 19ffff6b88bf9de3)
+[2026-08-14T06:12:42] QUEUE ABSORBED into open item 2026-08-12-e3ce13 (day 2 of this condition, count now 5) - no new id minted
+[2026-08-14T06:12:43] SENT 'ThriftyCrew V3 local job failed: promotion-boundary' -> schweino68@gmail.com (id 19ffff965310802f)
+[2026-08-14T06:15:03] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T06:23:06] QUEUE ABSORBED into open item 2026-08-11-35684e (day 3 of this condition, count now 16) - no new id minted
+[2026-08-14T06:23:06] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: family-fare-paced' [type: thriftycrew v local job failed family fare paced]
+[2026-08-14T06:23:13] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T06:45:10] QUEUE ABSORBED into open item 2026-08-12-87d03b (day 2 of this condition, count now 3) - no new id minted
+[2026-08-14T06:45:11] SENT 'Automation silent-death: 5 issue(s)' -> schweino68@gmail.com (id 1a000171e296f6da)
+[2026-08-14T06:48:00] SENT 'Grocery run blocked: ALDI bot wall' -> schweino68@gmail.com (id 1a00019b2ca38fd7)
+[2026-08-14T06:58:02] SUPPRESSED (already sent this type today) 'Grocery run blocked: ALDI bot wall' [type: grocery run blocked aldi bot wall]
+[2026-08-14T06:58:15] SUPPRESSED (already sent this type today) 'Grocery run blocked: ALDI bot wall' [type: grocery run blocked aldi bot wall]
+[2026-08-14T07:02:23] SUPPRESSED (already sent this type today) 'Grocery run blocked: ALDI bot wall' [type: grocery run blocked aldi bot wall]
+[2026-08-14T07:29:26] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T07:29:33] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T07:34:59] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T07:35:06] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T07:50:32] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T07:56:53] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T07:57:00] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T07:57:07] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T07:58:23] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T07:58:31] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T07:58:38] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T08:08:59] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T08:09:13] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T08:15:00] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T08:18:12] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T08:18:19] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T08:18:21] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 29) - no new id minted
+[2026-08-14T08:18:21] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T08:18:26] SUPPRESSED (already sent this type today) 'Omaha pricing browser lanes are ready' [type: omaha pricing browser lanes are ready]
+[2026-08-14T08:18:35] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 30) - no new id minted
+[2026-08-14T08:18:35] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T08:59:18] QUEUE ABSORBED into open item 2026-08-13-a5f563 (day 1 of this condition, count now 4) - no new id minted
+[2026-08-14T08:59:18] SUPPRESSED (already sent this type today) 'Baker's ad window advanced with no capture behind it' [type: baker s ad window advanced with no capture behind it]
+[2026-08-14T09:05:36] QUEUE ABSORBED into open item 2026-08-13-05d25e (day 1 of this condition, count now 5) - no new id minted
+[2026-08-14T09:05:36] SUPPRESSED (already sent this type today) 'ThriftyCrew ingredient campaign supervisor failed' [type: thriftycrew ingredient campaign supervisor failed]
+[2026-08-14T09:07:11] BODY THIN on 'Omaha ingredient pipeline has stalled' - the queue entry carries no store, commodity or number, so it cannot be classified without hunting the data. Fix the caller to include the identifying rows.
+[2026-08-14T09:07:12] SENT 'Omaha ingredient pipeline has stalled' -> schweino68@gmail.com (id 1a00099264b7682e)
+[2026-08-14T09:08:29] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T09:12:37] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T09:14:27] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T09:19:14] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 31) - no new id minted
+[2026-08-14T09:19:14] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T09:20:16] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T09:23:18] QUEUE ABSORBED into open item 2026-08-11-35684e (day 3 of this condition, count now 17) - no new id minted
+[2026-08-14T09:23:18] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: family-fare-paced' [type: thriftycrew v local job failed family fare paced]
+[2026-08-14T09:27:12] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T09:46:00] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 32) - no new id minted
+[2026-08-14T09:46:00] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T09:50:04] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 33) - no new id minted
+[2026-08-14T09:50:04] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T09:51:36] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 34) - no new id minted
+[2026-08-14T09:51:36] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T09:57:47] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 35) - no new id minted
+[2026-08-14T09:57:47] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:13:31] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 36) - no new id minted
+[2026-08-14T10:13:31] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:13:49] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 37) - no new id minted
+[2026-08-14T10:13:49] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:14:02] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 38) - no new id minted
+[2026-08-14T10:14:02] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:14:16] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 39) - no new id minted
+[2026-08-14T10:14:16] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:14:30] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 40) - no new id minted
+[2026-08-14T10:14:30] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:14:46] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 41) - no new id minted
+[2026-08-14T10:14:46] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:14:59] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 42) - no new id minted
+[2026-08-14T10:14:59] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:15:12] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 43) - no new id minted
+[2026-08-14T10:15:13] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:15:28] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 44) - no new id minted
+[2026-08-14T10:15:28] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:15:41] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 45) - no new id minted
+[2026-08-14T10:15:41] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:15:52] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 46) - no new id minted
+[2026-08-14T10:15:52] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:16:06] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 47) - no new id minted
+[2026-08-14T10:16:06] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:16:20] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 48) - no new id minted
+[2026-08-14T10:16:20] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:16:30] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 49) - no new id minted
+[2026-08-14T10:16:30] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:16:37] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 50) - no new id minted
+[2026-08-14T10:16:37] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:17:35] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:19:11] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:20:21] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:21:00] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 51) - no new id minted
+[2026-08-14T10:21:00] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:21:18] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 52) - no new id minted
+[2026-08-14T10:21:18] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:21:27] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:21:32] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 53) - no new id minted
+[2026-08-14T10:21:32] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:21:46] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 54) - no new id minted
+[2026-08-14T10:21:46] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:22:00] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 55) - no new id minted
+[2026-08-14T10:22:00] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:22:15] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 56) - no new id minted
+[2026-08-14T10:22:15] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:22:28] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 57) - no new id minted
+[2026-08-14T10:22:28] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:22:37] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:22:41] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 58) - no new id minted
+[2026-08-14T10:22:41] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:22:55] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 59) - no new id minted
+[2026-08-14T10:22:55] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:23:10] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 60) - no new id minted
+[2026-08-14T10:23:10] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:23:24] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 61) - no new id minted
+[2026-08-14T10:23:24] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:23:38] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 62) - no new id minted
+[2026-08-14T10:23:38] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:25:11] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:26:21] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:27:11] QUEUE ABSORBED into open item 2026-08-13-05d25e (day 1 of this condition, count now 6) - no new id minted
+[2026-08-14T10:27:11] SUPPRESSED (already sent this type today) 'ThriftyCrew ingredient campaign supervisor failed' [type: thriftycrew ingredient campaign supervisor failed]
+[2026-08-14T10:27:11] QUEUE ABSORBED into open item 2026-08-12-e3ce13 (day 2 of this condition, count now 6) - no new id minted
+[2026-08-14T10:27:11] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: promotion-boundary' [type: thriftycrew v local job failed promotion boundary]
+[2026-08-14T10:27:13] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 63) - no new id minted
+[2026-08-14T10:27:13] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:30:31] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:31:37] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:32:43] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:33:47] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:34:10] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 64) - no new id minted
+[2026-08-14T10:34:10] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:34:53] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:35:59] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:37:05] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:38:06] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 65) - no new id minted
+[2026-08-14T10:38:06] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:38:12] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:39:22] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:40:28] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:41:34] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:42:41] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:42:55] QUEUE ABSORBED into open item 2026-08-12-e3ce13 (day 2 of this condition, count now 7) - no new id minted
+[2026-08-14T10:42:55] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: promotion-boundary' [type: thriftycrew v local job failed promotion boundary]
+[2026-08-14T10:43:47] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:44:53] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:47:08] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:48:15] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:49:18] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 66) - no new id minted
+[2026-08-14T10:49:18] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:50:24] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:51:35] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:51:59] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 67) - no new id minted
+[2026-08-14T10:51:59] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:52:43] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T10:53:21] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 68) - no new id minted
+[2026-08-14T10:53:21] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T10:53:49] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T11:08:04] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T11:09:09] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T11:10:24] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T11:14:50] QUEUE ABSORBED into open item 2026-08-12-e3ce13 (day 2 of this condition, count now 8) - no new id minted
+[2026-08-14T11:14:50] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: promotion-boundary' [type: thriftycrew v local job failed promotion boundary]
+[2026-08-14T11:20:32] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T11:21:39] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T11:22:47] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T11:22:50] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 69) - no new id minted
+[2026-08-14T11:22:50] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T11:23:45] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 70) - no new id minted
+[2026-08-14T11:23:45] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T11:23:55] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T11:32:32] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T11:33:39] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T11:35:52] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T11:36:58] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T11:37:11] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 71) - no new id minted
+[2026-08-14T11:37:11] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T11:38:06] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 72) - no new id minted
+[2026-08-14T11:38:06] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T11:38:14] SUPPRESSED (already sent this type today) 'Omaha ingredient pipeline has stalled' [type: omaha ingredient pipeline has stalled]
+[2026-08-14T11:38:54] QUEUE ABSORBED into open item 2026-08-13-312f27 (day 1 of this condition, count now 73) - no new id minted
+[2026-08-14T11:38:54] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: IngredientPublication' [type: thriftycrew v local agent cycle failed ingredientpublication]
+[2026-08-14T12:29:21] QUEUE ABSORBED into open item 2026-08-12-e3ce13 (day 2 of this condition, count now 9) - no new id minted
+[2026-08-14T12:29:21] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: promotion-boundary' [type: thriftycrew v local job failed promotion boundary]
+[2026-08-14T12:44:49] QUEUE ABSORBED into open item 2026-08-12-fd096e (day 2 of this condition, count now 2) - no new id minted
+[2026-08-14T12:44:50] SENT 'ThriftyCrew V3 local job failed: daily-engine' -> schweino68@gmail.com (id 1a0016065a265c24)
+[2026-08-14T12:44:52] SENT 'ThriftyCrew V3 job ledger finish failed: daily-engine' -> schweino68@gmail.com (id 1a001606f65cc951)
+[2026-08-14T12:47:16] QUEUE ABSORBED into open item 2026-08-11-f57d80 (day 3 of this condition, count now 3) - no new id minted
+[2026-08-14T12:47:17] SENT 'ThriftyCrew V3 local agent cycle failed: PostPublish' -> schweino68@gmail.com (id 1a00162a33e2e028)
+[2026-08-14T13:57:17] QUEUE ABSORBED into open item 2026-08-11-f80dc4 (day 3 of this condition, count now 3) - no new id minted
+[2026-08-14T13:57:18] SENT 'ThriftyCrew V3 local agent cycle failed: Triage' -> schweino68@gmail.com (id 1a001a2bc7693d93)
+[2026-08-14T18:42:25] QUEUE ABSORBED into open item 2026-08-12-e3ce13 (day 2 of this condition, count now 10) - no new id minted
+[2026-08-14T18:42:25] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: promotion-boundary' [type: thriftycrew v local job failed promotion boundary]
+[2026-08-14T18:57:25] QUEUE ABSORBED into open item 2026-08-12-e3ce13 (day 2 of this condition, count now 11) - no new id minted
+[2026-08-14T18:57:25] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: promotion-boundary' [type: thriftycrew v local job failed promotion boundary]
+[2026-08-14T19:56:16] SENT 'Grocery run blocked: Chrome extension bot wall' -> schweino68@gmail.com (id 1a002eb60b730d25)
+[2026-08-14T20:08:01] QUEUE BODY UPGRADED on 2026-08-07-cac5f3 (759 -> 1233 chars) - a later occurrence carried fuller evidence
+[2026-08-14T20:08:02] QUEUE ABSORBED into open item 2026-08-07-cac5f3 (day 7 of this condition, count now 12) - no new id minted
+[2026-08-14T20:08:03] SENT 'Grocery: semantic sweep found 59 product(s) no rule can see - 2026-08-14' -> schweino68@gmail.com (id 1a002f628c8ce69e)
+[2026-08-14T20:08:04] QUEUE ABSORBED into open item 2026-08-07-323328 (day 7 of this condition, count now 5) - no new id minted
+[2026-08-14T20:08:05] SENT 'Grocery: 5 board cell(s) sit in the wrong store department - 2026-08-14' -> schweino68@gmail.com (id 1a002f6311a91654)
+[2026-08-14T20:09:46] QUEUE ABSORBED into open item 2026-08-07-79b768 (day 7 of this condition, count now 10) - no new id minted
+[2026-08-14T20:09:47] SENT 'Grocery matching soundness - review needed' -> schweino68@gmail.com (id 1a002f7c00f1d6b2)
+[2026-08-14T20:11:55] QUEUE ABSORBED into open item 2026-08-09-92a805 (day 5 of this condition, count now 5) - no new id minted
+[2026-08-14T20:11:56] SENT 'Grocery: 3 on-sale item(s) have no everyday fallback - 2026-08-14' -> schweino68@gmail.com (id 1a002f9b67fb0b9a)
+[2026-08-14T20:12:50] QUEUE ABSORBED into open item 2026-08-12-2f6bba (day 2 of this condition, count now 5) - no new id minted
+[2026-08-14T20:12:51] SENT 'Database constraint refused a write' -> schweino68@gmail.com (id 1a002fa918fddc6c)
+[2026-08-14T20:12:53] QUEUE ABSORBED into open item 2026-08-12-fb9d1d (day 2 of this condition, count now 5) - no new id minted
+[2026-08-14T20:12:54] SENT 'A write broke cross-store integrity' -> schweino68@gmail.com (id 1a002fa9bcf3162c)
+[2026-08-14T20:12:57] QUEUE ABSORBED into open item 2026-08-09-817ca5 (day 5 of this condition, count now 12) - no new id minted
+[2026-08-14T20:12:58] SENT 'Board prices aging inside a fresh file' -> schweino68@gmail.com (id 1a002faabbf02364)
+[2026-08-14T20:16:04] QUEUE ABSORBED into open item 2026-08-07-058ac6 (day 7 of this condition, count now 10) - no new id minted
+[2026-08-14T20:16:05] SENT 'Grocery: 39 NEW price flag(s) - 2026-08-14' -> schweino68@gmail.com (id 1a002fd861290b04)
+[2026-08-14T20:16:51] QUEUE ABSORBED into open item 2026-08-10-740129 (day 4 of this condition, count now 7) - no new id minted
+[2026-08-14T20:16:52] SENT 'Grocery: GUARDS FAILED - board not published - 2026-08-14' -> schweino68@gmail.com (id 1a002fe3cf9c9fea)
+[2026-08-14T20:16:57] QUEUE ABSORBED into open item 2026-08-07-fb1fee (day 7 of this condition, count now 12) - no new id minted
+[2026-08-14T20:16:57] SENT 'Grocery: Walmart full capture aging - 2026-08-14' -> schweino68@gmail.com (id 1a002fe53eb41c4e)
+[2026-08-14T20:19:28] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'MUTE VERIFICATION probe 2026-08-14 (ignore)' [type: mute verification probe ignore]
+[2026-08-14T20:20:30] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'bakers-daily-scan FAILED' [type: bakers daily scan failed]

@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-08-13T08:59:03",
+    "generated":  "2026-08-14T09:01:49",
     "note":  "winning history cells at a verdict-rejected (commodity,store) whose product could not be identified from any surviving board; neither purged nor cleared",
     "cells":  [
                   {
@@ -21,13 +21,6 @@
                       "store":  "Aldi",
                       "week":  "2026-07-12",
                       "price":  0.1375,
-                      "is_record_low":  false
-                  },
-                  {
-                      "id":  "raspberries",
-                      "store":  "Baker\u0027s",
-                      "week":  "2026-07-23",
-                      "price":  0.4167,
                       "is_record_low":  false
                   }
               ]

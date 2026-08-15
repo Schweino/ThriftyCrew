@@ -103,10 +103,23 @@
                          "item":  "Dove Nutritive Solutions Intensive Repair Shampoo",
                          "peers_packed":  "0 of 6",
                          "size_shape_mismatch":  false
+                     },
+                     {
+                         "id":  "ingredient-definition-pistachios",
+                         "commodity":  "Pistachios",
+                         "unit":  "oz",
+                         "store":  "Family Fare",
+                         "per_unit":  1.7627,
+                         "median":  0.4375,
+                         "mult":  4.03,
+                         "size":  "5.1 oz",
+                         "item":  "Lindt Pistachio Milk Chocolate Truffles 5.1 Oz",
+                         "peers_packed":  "0 of 4",
+                         "size_shape_mismatch":  false
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-13T09:09:16",
+    "generated":  "2026-08-14T20:16:32",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -920,7 +933,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0993,
                               "size":  "15 oz",
-                              "item":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
+                              "item":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -968,7 +981,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0818,
                               "size":  "17 oz",
-                              "item":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
+                              "item":  "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1142,5 +1155,5 @@
                               "holds_crown":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-08-13.json"
+    "compare_file":  "comparison-2026-08-14.json"
 }
