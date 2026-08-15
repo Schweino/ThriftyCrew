@@ -5,8 +5,5 @@
   "routes": [
     { "pattern": "feed.thriftycrew.com", "custom_domain": true }
   ],
-  "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": true },
-  "services": [
-    { "binding": "PUBLIC_API", "service": "tc-grocery-public" }
-  ]
+  "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": true }
 }

@@ -1,6 +1,9 @@
 // smp-feed Worker
-// - GET /smp-feed.json: compatibility view of the current promoted V3 release, with the last
-//   static asset retained strictly as an outage fallback for legacy recipe-page widgets.
+// - GET /smp-feed.json: served straight from the static ./public asset the daily pipeline writes.
+//   Until 2026-08-14 this proxied the "promoted V3 release" and kept the asset only as a fallback.
+//   That indirection outlived V3: the V3 engine had been crashing since 2026-08-12, so the route
+//   pinned a frozen release and served a WRONG blueberries price for two days after the pipeline
+//   had already corrected it. The repo is the source of truth for this feed; read it directly.
 // - Other GET paths: served from static ./public assets (ASSETS binding)
 // - POST /submit: item-request form handler -> emails admin@thriftycrew.com via Gmail API
 //   Reuses the Work Google OAuth (same refresh-token flow as send-alert.ps1).
@@ -15,7 +18,21 @@
 //   must not grant the paid feature. The daily pipeline emails label segments on record lows.
 //   Extra secret required: GHOST_ADMIN_KEY (same id:hexsecret Admin API key the pipeline uses)
 
-import { serveCompatibleFeed } from "./feed-compat.mjs";
+// The feed is a static asset written by the daily pipeline and deployed with the repo.
+// No upstream fetch, no release pointer, no fallback branch that can silently become the norm.
+async function serveCompatibleFeed(request, env) {
+  const res = await env.ASSETS.fetch(new Request(new URL("/smp-feed.json", request.url)));
+  const headers = new Headers(res.headers);
+  headers.set("Content-Type", "application/json; charset=utf-8");
+  headers.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
+  headers.set("X-TC-Feed-Source", "static-asset");
+  headers.set("Access-Control-Allow-Origin", "*");
+  return new Response(request.method === "HEAD" ? null : res.body, {
+    status: res.status,
+    statusText: res.statusText,
+    headers,
+  });
+}
 
 const ALLOWED_ORIGINS = [
   "https://www.thriftycrew.com",
