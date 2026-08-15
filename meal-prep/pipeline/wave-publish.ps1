@@ -288,6 +288,15 @@ if ($runSelfTest) {
     ((Get-StaleAuditProblems $auditAt @{ 'a' = [datetime]'2026-08-15T13:50:00'; 'b' = [datetime]'2026-08-15T14:01:00' }).Count -eq 1) 'missed a single stale spec'
   T 'a spec written in the same second as the audit is not stale' `
     ((Get-StaleAuditProblems $auditAt @{ 'a' = [datetime]'2026-08-15T14:00:00' }).Count -eq 0) 'too strict at the boundary'
+  # CARDINALITY, pinned at 0/1/2 through the EXACT access shape the live gate uses (bare assignment, then
+  # .Count). The first live dry run refused a 2-spec wave saying "1 spec(s)" and printed both on one line,
+  # because the call site wrapped the comma-return in @() and re-wrapped the array into a single element -
+  # which also made .Count read 1 for ZERO problems, a gate that could never pass. Do not add @() here.
+  $st0 = Get-StaleAuditProblems $auditAt @{ 'a' = [datetime]'2026-08-15T13:00:00' }
+  $st2 = Get-StaleAuditProblems $auditAt @{ 'a' = [datetime]'2026-08-15T14:01:00'; 'b' = [datetime]'2026-08-15T14:02:00' }
+  T 'MUST FIRE  a CLEAN wave counts ZERO stale specs (the gate must be able to pass)' ($st0.Count -eq 0) $st0.Count
+  T 'MUST FIRE  two stale specs count as TWO, not as one joined blob' ($st2.Count -eq 2) $st2.Count
+  T '   and each is its own line' ($st2[1] -match '^b:') ([string]$st2[1])
 
   # ---- THE SERVEABILITY GATE, frozen at its founding bug -------------------------------------------
   # FIXTURE: the template exactly as it stood on 2026-08-15 before the repoint. This assignment is what
@@ -410,7 +419,11 @@ foreach ($s in $slugs) {
   $sp = Join-Path $mp ("db\recipes\{0}.json" -f $s)
   if (Test-Path $sp) { $specTimes[$s] = (Get-Item $sp).LastWriteTime }
 }
-$stale = @(Get-StaleAuditProblems $auditWritten $specTimes)
+# NOT `@(Get-StaleAuditProblems ...)`. The function returns `,@(...)` so a single finding cannot unroll,
+# and wrapping THAT in @() re-wraps the whole array into one element: Count reads 1 for two problems and,
+# worse, 1 for ZERO problems - the gate would refuse every wave including a perfectly fresh one. Measured
+# 0/1/2 findings both ways. Assign it bare; the fixtures below pin all three cardinalities.
+$stale = Get-StaleAuditProblems $auditWritten $specTimes
 if ($stale.Count) {
   $stale | ForEach-Object { Write-Output ("      ! " + $_) }
   Fail ("{0} spec(s) were edited after the wave audit was written. That GO certifies bytes that no longer exist - re-audit the repaired slug(s) (scoped: recipe-local blockers do not need the whole wave) and re-run." -f $stale.Count)
