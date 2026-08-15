@@ -421,6 +421,14 @@ if ($runWaveClose) {
   if ($ready.Count -lt $size -and -not $runDrain) {
     Write-Output ("hunt-run: only {0} of {1} qa-passed - pass -Drain to close a short wave" -f $ready.Count, $size); exit 1
   }
+  # THE AUDIT IS PRICED PER WAVE, NOT PER RECIPE. The 2026-08-15 shakedown spent 31% of its tokens on three
+  # whole-wave audits over a 2-recipe wave. A short wave still pays that whole cost, so closing one should
+  # be a visible choice. It WARNS and proceeds - drain means drain, and a gate here would strand recipes at
+  # the end of a run, which is the one time a short wave is unavoidable.
+  if ($runDrain -and $ready.Count -lt 3) {
+    Write-Output ("hunt-run: NOTE a {0}-recipe wave pays the whole-wave audit alone (the auditor's cost is per WAVE)." -f $ready.Count)
+    Write-Output  '           If these are not time-sensitive, hold them for the next run and close a fuller wave.'
+  }
   $existing = @(Get-ChildItem (Join-Path $RunDir 'waves\wave-*.json') -File -ErrorAction SilentlyContinue |
                 Where-Object { $_.Name -match '^wave-(\d+)\.json$' })
   $k = 1
