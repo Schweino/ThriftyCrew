@@ -55,6 +55,22 @@ describe("Fareway exact Omaha detail availability", () => {
     expect(decodeFarewayApolloState("%7Bbroken")).toMatchObject({ state: null, encoding: "invalid" });
   });
 
+  it("allows literal percent escapes inside JSON string values after exactly one decode pass", () => {
+    const withEncodedUrl = state({ available: true, stockLevel: "inStock" });
+    withEncodedUrl.Metadata = { redirect: "https:%2F%2Fshop.fareway.com%2Fproduct" };
+    const raw = encodeURIComponent(JSON.stringify(withEncodedUrl));
+    const decoded = decodeFarewayApolloState(raw);
+    expect(decoded).toMatchObject({ encoding: "percent-encoded-json",
+      state: { Metadata: { redirect: "https:%2F%2Fshop.fareway.com%2Fproduct" } } });
+    expect(parseFarewayApolloAvailability(decoded.state, "90266603")).toMatchObject({ status: "in_stock", eligible: true });
+  });
+
+  it("rejects malformed and double-encoded documents without a second decode pass", () => {
+    const onceEncoded = encodeURIComponent(JSON.stringify(state({ available: true, stockLevel: "inStock" })));
+    expect(decodeFarewayApolloState(encodeURIComponent(onceEncoded))).toMatchObject({ state: null, encoding: "invalid" });
+    expect(decodeFarewayApolloState("%E0%A4%A")).toMatchObject({ state: null, encoding: "invalid" });
+  });
+
   it("fails closed on missing shop binding, missing item truth, or conflicting exact facts", () => {
     expect(parseFarewayApolloAvailability(state({ available: true, stockLevel: "inStock" }, []), "90266603"))
       .toMatchObject({ status: "unknown", eligible: false });

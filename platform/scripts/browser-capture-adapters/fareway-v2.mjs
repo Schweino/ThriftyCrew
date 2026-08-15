@@ -31,7 +31,7 @@ export function decodeFarewayApolloState(raw) {
   try { return { state: JSON.parse(text), encoding: "json", ...provenance }; } catch { /* encoded fallback */ }
   try {
     const decoded = decodeURIComponent(text);
-    if (decoded === text || /%[0-9a-f]{2}/i.test(decoded)) return { state: null, encoding: "invalid", ...provenance };
+    if (decoded === text || Buffer.byteLength(decoded, "utf8") > 5_000_000) return { state: null, encoding: "invalid", ...provenance };
     return { state: JSON.parse(decoded), encoding: "percent-encoded-json", ...provenance };
   } catch { return { state: null, encoding: "invalid", ...provenance }; }
 }
