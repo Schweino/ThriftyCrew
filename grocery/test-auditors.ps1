@@ -3413,6 +3413,63 @@ else {
   } else { Ok 'the founding download-only-if-missing branch has not returned to compute-v2-perserving' }
 }
 
+# ------------------------------------------------- feed COVERAGE of what is published (2026-08-15)
+# Sibling to the freshness gate above and a different question: freshness asks whether the feed a pricing
+# stage computes on is current, this asks whether the feed the READER'S CARD fetches can price the recipes
+# that are actually live.
+#
+# FOUNDING BUG. Every recipe card fetches prices at view time. Until 2026-08-15 that fetch went to the V3
+# platform's /api/v2/recipe-feed/<slug>, deleted 2026-08-14. It did not fail cleanly: it kept answering from
+# a STORED release, returning 200 with frozen prices for anything minted before that release and 404 for
+# everything newer. Two recipes published that day rendered an EMPTY cost section and were set back to
+# draft. Worse, V3's pricing_inputs never carried the recipe-spelling aliases, so a card whose spec says
+# 93-7-ground-beef found nothing under a feed that only knew ground-beef-93-7: measured live, american-
+# goulash-pasta showed "Price unavailable in this release" on its two biggest lines and a grand total of
+# "Unavailable". 231 of 544 cards use an alias-spelling bid. Nothing failed at publish time; the pages were
+# simply wrong once a reader opened them, and it was found at post-publish review instead of at publish.
+$fcp = Join-Path $mpPipe 'feed-covers-published.ps1'
+if (-not (Test-Path $fcp)) { Bad 'meal-prep\pipeline\feed-covers-published.ps1 is missing - nothing checks that the feed a published card FETCHES can actually price it, and a recipe can go live with an empty cost section again' }
+else {
+  $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $fcp -SelfTest 2>&1 | Out-String
+  # The count is pinned for the reason every count here is pinned: a case that silently stops running never
+  # errors, so the tally is the only thing that notices it went missing.
+  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 14/14 pass') {
+    Ok 'feed-covers-published -SelfTest passes with its founding-bug fixtures armed (a published slug the feed does not carry, a bid in ingredients but not pricing_inputs, a present-but-zero-priced entry, and the allowlist pardoning only its own bid)'
+  } else { Bad ('feed-covers-published -SelfTest failed or lost its founding-bug fixtures: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
+
+  # THE SEAL, asserted HERE so it is independent of the file being checked. The guard is worth nothing as a
+  # publish-day gate unless the publish chain actually runs it, and unless it runs BEFORE the publish stage:
+  # after it, the recipe is already live and the reader has already seen the broken cost section.
+  $prSrc = Get-Content (Join-Path $mpPipe 'propagate-recipes.ps1') -Raw
+  if ($prSrc -match 'feed-covers-published\.ps1' -and $prSrc -match '(?s)feed-covers-published\.ps1.*publish\.ps1') {
+    Ok 'the publish chain still runs feed-covers-published, and still runs it BEFORE publish'
+  } else { Bad 'propagate-recipes.ps1 no longer gates on feed-covers-published.ps1 before publishing - a recipe can go live again while the feed its own card fetches cannot price it' }
+
+  # COMPLETION AND VERDICT ARE DIFFERENT QUESTIONS (lib\guard-contract.ps1). The chain must reject a guard
+  # that died mid-run rather than read its silence as "found nothing".
+  if ($prSrc -match 'Test-GuardComplete' -and $prSrc -match "FEEDCOV") {
+    Ok 'the publish chain requires the FEEDCOV completion marker, so a guard that dies is not read as clean'
+  } else { Bad 'propagate-recipes.ps1 no longer checks the FEEDCOV completion marker - a feed-coverage guard that crashes mid-run would be indistinguishable from one that found nothing' }
+
+  # THE PRODUCTION REFUSAL, END TO END. Everything above tests judgement or source; this runs the REAL guard
+  # against a feed with pricing_inputs stripped and requires a findings exit that still carries the marker.
+  $fcTmp = Join-Path $env:TEMP ('feedcov-stripped-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')
+  $fcCanon = Join-Path $root 'out\smp-feed.json'
+  if (Test-Path $fcCanon) {
+    try {
+      $fcDoc = Get-Content $fcCanon -Raw -Encoding utf8 | ConvertFrom-Json
+      $fcDoc.PSObject.Properties.Remove('pricing_inputs')
+      [IO.File]::WriteAllText($fcTmp, ($fcDoc | ConvertTo-Json -Depth 8 -Compress))
+      $fcOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $fcp -FeedPath $fcTmp 2>&1 | Out-String
+      $fcRc = $LASTEXITCODE
+      if ($fcRc -eq 1 -and $fcOut -match 'FEEDCOV-COMPLETE') {
+        Ok 'feed-covers-published REFUSES a feed with pricing_inputs stripped end to end (exit 1) and still reports completion'
+      } else { Bad ("feed-covers-published did NOT refuse a feed stripped of pricing_inputs (exit $fcRc) - the check that a live card can be priced is not actually firing") }
+    } catch { Bad ('feed-covers-published end-to-end refusal could not be evaluated: ' + $_.Exception.Message) }
+    finally { Remove-Item $fcTmp -Force -ErrorAction SilentlyContinue }
+  } else { Skip 'feed-covers-published end-to-end refusal (no grocery\out\smp-feed.json on this machine)' }
+}
+
 # ---------------------------------------------------------------- specs\prose re-sync (2026-08-02, L4)
 # THE ONE WATCHER WHOSE FAILURE IS A REVERT RATHER THAN A WRONG NUMBER. spec-guards.ps1 full mode does not
 # read prose to CHECK it - it MERGES specs\prose\prose-<slug>.json INTO the spec and validates the result.
