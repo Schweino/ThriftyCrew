@@ -55735,8 +55735,15 @@
     ],
     "exclude": [
       "\\blemon pepper\\s+(?:sauce|marinade|dressing|wings?|chicken|fish|tuna|rice|pasta|chips?|crackers?|nuts?)\\b",
-      "\\blemon[\\s-]+peppercorn\\b"
-    ]
+      "\\blemon[\\s-]+peppercorn\\b",
+      "\\btuna\\b",
+      "starkist",
+      "\\bcreations\\b",
+      "\\bsalmon\\b",
+      "\\bpouch\\b",
+      "\\bfillets?\\b",
+      "\\bjerky\\b"
+  ]
   },
   {
     "id": "coconut-aminos",
