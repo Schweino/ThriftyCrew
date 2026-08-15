@@ -158,12 +158,26 @@ function submissionResults(result) {
   return result.submitted;
 }
 
+export function selectExactWorkChunk(chunk, workItem) {
+  const payload = JSON.parse(String(workItem.input_json ?? "{}"));
+  const queries = [...new Set((payload.queryTerms ?? []).map(normalize).filter(Boolean))];
+  if (queries.length === 0) throw new Error(`work item ${workItem.id} has no locked queries`);
+  const querySet = new Set(queries);
+  const terms = (chunk.terms ?? []).filter((term) => querySet.has(normalize(term.query)));
+  const observed = terms.map((term) => normalize(term.query));
+  if (terms.length !== queries.length || new Set(observed).size !== queries.length
+    || queries.some((query) => !observed.includes(query))) {
+    throw new Error(`capture chunk does not contain exactly the locked queries for ${workItem.id}`);
+  }
+  const rows = (chunk.rows ?? []).filter((row) => querySet.has(normalize(row.q ?? row.term)));
+  return { ...chunk, terms, rows };
+}
+
 async function runLane(plan, lane, driver, semanticGuard, globalStop) {
   await mkdir(lane.directory, { recursive: true });
   const store = HEADLESS_BACKFILL_STORES.find((candidate) => candidate.key === lane.key);
   const producerClaimFile = path.join(lane.directory, "producer-claim.json");
   const producerChunkFile = path.join(lane.directory, "producer-chunk.json");
-  const producerWrapperFile = path.join(lane.directory, "producer-wrappers.json");
   let producedCount = 0;
   let verified = 0;
   try {
@@ -174,23 +188,31 @@ async function runLane(plan, lane, driver, semanticGuard, globalStop) {
     await writeFile(producerClaimFile, `${JSON.stringify(producerClaim, null, 2)}\n`, "utf8");
     const producerChunk = assertCheckedHeadlessChunk(await driver.capture(store, producerClaim, producerChunkFile));
     if (globalStop.signal.aborted) throw globalStop.signal.reason;
-    const producerGeneration = `headless-${lane.key}-producer-generation-${plan.waveId}-${randomUUID()}`;
-    const producerSession = `headless-${lane.key}-producer-session-${plan.waveId}-${randomUUID()}`;
-    const producerSubmit = await driver.submit("producer", producerClaimFile, producerChunkFile, producerGeneration, producerSession, producerWrapperFile);
-    const produced = submissionResults(producerSubmit);
-    producedCount = produced.length;
-    const workById = new Map(producerClaim.workItems.map((work) => [work.id, work]));
-    for (const row of produced) {
-      const work = workById.get(row.producerWorkItemId ?? row.workItemId) ?? producerClaim.workItems.find((item) => item.id === row.workItemId);
-      const defect = semanticGuard({ store, workItem: work ?? producerClaim.workItems[0], submission: row });
-      if (defect) { globalStop.abort(new Error(`systematic semantic defect: ${JSON.stringify(defect)}`)); throw globalStop.signal.reason; }
-    }
-    for (const [index, row] of produced.entries()) {
+    for (const [index, work] of producerClaim.workItems.entries()) {
       if (globalStop.signal.aborted) throw globalStop.signal.reason;
+      const suffix = String(index).padStart(3, "0");
+      const singleProducerClaimFile = path.join(lane.directory, `producer-${suffix}-claim.json`);
+      const singleProducerChunkFile = path.join(lane.directory, `producer-${suffix}-chunk.json`);
+      const producerWrapperFile = path.join(lane.directory, `producer-${suffix}-wrapper.json`);
+      const singleProducerClaim = { ...producerClaim, workItems: [work] };
+      const singleProducerChunk = selectExactWorkChunk(producerChunk, work);
+      await Promise.all([
+        writeFile(singleProducerClaimFile, `${JSON.stringify(singleProducerClaim, null, 2)}\n`, "utf8"),
+        writeFile(singleProducerChunkFile, `${JSON.stringify(singleProducerChunk, null, 2)}\n`, "utf8"),
+      ]);
+      const producerGeneration = `headless-${lane.key}-producer-generation-${plan.waveId}-${randomUUID()}`;
+      const producerSession = `headless-${lane.key}-producer-session-${plan.waveId}-${randomUUID()}`;
+      const produced = submissionResults(await driver.submit("producer", singleProducerClaimFile, singleProducerChunkFile,
+        producerGeneration, producerSession, producerWrapperFile));
+      if (produced.length !== 1) throw new Error("single producer submission count mismatch");
+      const row = produced[0];
+      producedCount += 1;
+      const defect = semanticGuard({ store, workItem: work, submission: row });
+      if (defect) { globalStop.abort(new Error(`systematic semantic defect: ${JSON.stringify(defect)}`)); throw globalStop.signal.reason; }
       if (!row.verifierWorkItemId) throw new Error("producer result omitted exact verifier work item");
-      const verifierClaimFile = path.join(lane.directory, `verifier-${String(index).padStart(3, "0")}-claim.json`);
-      const verifierChunkFile = path.join(lane.directory, `verifier-${String(index).padStart(3, "0")}-chunk.json`);
-      const verifierWrapperFile = path.join(lane.directory, `verifier-${String(index).padStart(3, "0")}-wrapper.json`);
+      const verifierClaimFile = path.join(lane.directory, `verifier-${suffix}-claim.json`);
+      const verifierChunkFile = path.join(lane.directory, `verifier-${suffix}-chunk.json`);
+      const verifierWrapperFile = path.join(lane.directory, `verifier-${suffix}-wrapper.json`);
       const verifierClaimResult = await driver.claimVerifierExact(store, lane, row.verifierWorkItemId, index, verifierClaimFile);
       const verifierClaim = claimDocument(verifierClaimResult, lane, "verifier");
       if (!verifierClaim || verifierClaim.workItems.length !== 1 || verifierClaim.workItems[0].id !== row.verifierWorkItemId) throw new Error("exact verifier claim fence mismatch");
@@ -205,7 +227,7 @@ async function runLane(plan, lane, driver, semanticGuard, globalStop) {
       if (verifierSubmit.length !== 1) throw new Error("exact verifier submission count mismatch");
       verified += 1;
     }
-    return { store: lane.key, state: "complete", produced: produced.length, verified };
+    return { store: lane.key, state: "complete", produced: producedCount, verified };
   } catch (error) {
     return { store: lane.key, state: globalStop.signal.aborted ? "globally_stopped" : "stopped", produced: producedCount, verified,
       error: error instanceof Error ? error.message : String(error) };

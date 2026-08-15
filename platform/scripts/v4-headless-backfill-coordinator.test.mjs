@@ -8,6 +8,7 @@ import {
   createSemanticGuard,
   planHeadlessBackfill,
   runHeadlessBackfillCoordinator,
+  selectExactWorkChunk,
 } from "./v4-headless-backfill-coordinator.mjs";
 
 function work(store, index = 0, commodityId = `commodity-${index}`) {
@@ -32,21 +33,22 @@ function chunk(store, claim, observedAt, excluded = false) {
   };
 }
 
-function fakeDriver({ excludedStore, semanticStore, non200Store } = {}) {
+function fakeDriver({ excludedStore, semanticStore, non200Store, workCount = 1, needsOperatorAt = -1 } = {}) {
   let clock = Date.parse("2026-08-14T23:00:00.000Z");
   const calls = []; const active = new Map(); let globalActive = 0; let maximumGlobal = 0; const maximumByStore = new Map();
   const enter = async (store) => {
     const count = (active.get(store.key) ?? 0) + 1; active.set(store.key, count);
     globalActive += 1; maximumGlobal = Math.max(maximumGlobal, globalActive);
     maximumByStore.set(store.key, Math.max(maximumByStore.get(store.key) ?? 0, count));
-    await new Promise((resolve) => setTimeout(resolve, semanticStore && store.key !== semanticStore ? 15 : 1));
+    await new Promise((resolve) => setTimeout(resolve, semanticStore && store.key !== semanticStore ? 75 : 1));
   };
   const leave = (store) => { active.set(store.key, active.get(store.key) - 1); globalActive -= 1; };
   return {
     calls, maximumByStore, get maximumGlobal() { return maximumGlobal; },
     async claimProducer(store) {
       calls.push(["claim-producer", store.key]);
-      return { workItems: [work(store, 0, store.key === semanticStore ? "almonds" : `commodity-${store.key}`)] };
+      return { workItems: Array.from({ length: workCount }, (_, index) => work(store, index,
+        store.key === semanticStore && index === 0 ? "almonds" : `commodity-${store.key}-${index}`)) };
     },
     async capture(store, claim, file) {
       calls.push(["capture", store.key, claim.workItems[0].agent_id.includes("verifier") ? "verifier" : "producer"]);
@@ -60,8 +62,9 @@ function fakeDriver({ excludedStore, semanticStore, non200Store } = {}) {
       if (role === "verifier") return { ok: true, submitted: [{ outcome: "not_found", workItemId: claim.workItems[0].id }] };
       return { ok: true, submitted: claim.workItems.map((item) => ({
         ...(item.input_json.includes(non200Store ?? "\u0000") ? { httpStatus: 409 } : {}),
-        outcome: item.input_json.includes("almonds") ? "priced" : "not_found", workItemId: item.id,
-        verifierWorkItemId: `verifier-${item.id}`,
+        outcome: item.id.endsWith(`-${needsOperatorAt}`) ? "needs_operator" : item.input_json.includes("almonds") ? "priced" : "not_found",
+        workItemId: item.id,
+        ...(item.id.endsWith(`-${needsOperatorAt}`) ? {} : { verifierWorkItemId: `verifier-${item.id}` }),
         ...(item.input_json.includes("almonds") ? { winner: { productId: "4300002140", productName: "Honey Bunches of Oats with Crispy Almonds, 48 oz." } } : {}) })) };
     },
     async claimVerifierExact(store, lane, workItemId) {
@@ -123,6 +126,26 @@ describe("flags-off headless backfill coordinator", () => {
     expect(result.globallyStopped).toBe(true);
     expect(result.globalReason).toMatch(/systematic semantic defect/);
     expect(driver.calls.filter((call) => call[0] === "claim-verifier")).toHaveLength(0);
+  });
+
+  it("submits one producer at a time and leaves N+1 untouched after needs_operator", async () => {
+    const output = await mkdtemp(path.join(os.tmpdir(), "headless-stop-order-"));
+    const plan = planHeadlessBackfill({ runId: "run", outputDirectory: output, limit: 2, waveId: "wave", stores: "bakers" });
+    const driver = fakeDriver({ workCount: 2, needsOperatorAt: 0 });
+    const result = await runHeadlessBackfillCoordinator({ plan, driver, semanticGuard: () => null });
+    expect(result.lanes[0]).toMatchObject({ state: "stopped", produced: 0, verified: 0 });
+    expect(driver.calls.filter((call) => call[0] === "submit" && call[2] === "producer")).toHaveLength(1);
+    expect(driver.calls.filter((call) => call[0] === "claim-verifier")).toHaveLength(0);
+  });
+
+  it("slices the aggregate capture to one exact locked-query work item", () => {
+    const store = HEADLESS_BACKFILL_STORES[0];
+    const claim = { workItems: [work(store, 0), work(store, 1)] };
+    const aggregate = chunk(store, claim, new Date().toISOString());
+    aggregate.rows = [{ term: "Query bakers 0", id: "zero" }, { term: "Query bakers 1", id: "one" }];
+    expect(selectExactWorkChunk(aggregate, claim.workItems[1])).toMatchObject({
+      terms: [{ query: "Query bakers 1" }], rows: [{ id: "one" }],
+    });
   });
 
   it("rejects blocked, rejected, excluded, and incomplete chunks", () => {
