@@ -132,7 +132,7 @@ export interface WinnerCandidate {
   sourceIdentityConflict?: boolean;
 }
 
-const UNIT_TO_BASE: Readonly<Record<string, { family: "mass" | "volume" | "count"; unitsPerBase: number }>> = {
+const UNIT_TO_BASE: Readonly<Record<string, { family: "mass" | "volume" | "count" | "area"; unitsPerBase: number }>> = {
   gram: { family: "mass", unitsPerBase: 1 },
   kg: { family: "mass", unitsPerBase: 1000 },
   oz: { family: "mass", unitsPerBase: 28.349523125 },
@@ -145,6 +145,7 @@ const UNIT_TO_BASE: Readonly<Record<string, { family: "mass" | "volume" | "count
   gal: { family: "volume", unitsPerBase: 3785.411784 },
   each: { family: "count", unitsPerBase: 1 },
   dozen: { family: "count", unitsPerBase: 12 },
+  sq_ft: { family: "area", unitsPerBase: 1 },
 };
 
 export function convertUnitPriceMicros(perUnitMicros: number, fromUnit: string, toUnit: string): number | null {

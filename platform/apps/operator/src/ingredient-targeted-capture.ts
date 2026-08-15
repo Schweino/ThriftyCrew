@@ -58,8 +58,8 @@ function parsedPackage(sizeText: string): { unit: string; quantity: number } | n
   const normalized = sizeText.toLowerCase().replace(/fluid ounces?/g, "fl oz").replace(/ounces?/g, "oz")
     .replace(/pounds?/g, "lb").replace(/grams?/g, "g").replace(/kilograms?/g, "kg")
     .replace(/liters?/g, "l").replace(/gallons?/g, "gal").replace(/counts?/g, "ct").trim();
-  const pack = normalized.match(/^(\d+)\s*[x×]\s*([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|oz|lb|ml|l|g|kg|ct|ea|each|dozen|gal|qt|pt)\b/);
-  const match = pack ?? normalized.match(/([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|oz|lb|ml|l|g|kg|ct|ea|each|dozen|gal|qt|pt)\b/);
+  const pack = normalized.match(/^(\d+)\s*[x×]\s*([0-9]+(?:\.[0-9]+)?)\s*(sq\s*ft|square\s+feet|fl\s*oz|oz|lb|ml|l|g|kg|ct|ea|each|dozen|gal|qt|pt)\b/);
+  const match = pack ?? normalized.match(/([0-9]+(?:\.[0-9]+)?)\s*(sq\s*ft|square\s+feet|fl\s*oz|oz|lb|ml|l|g|kg|ct|ea|each|dozen|gal|qt|pt)\b/);
   if (!match) {
     if (/^(?:each|ea)$/.test(normalized)) return { unit: "each", quantity: 1 };
     if (normalized === "dozen") return { unit: "dozen", quantity: 1 };
@@ -68,7 +68,7 @@ function parsedPackage(sizeText: string): { unit: string; quantity: number } | n
   const count = pack ? Number(match[1]) : 1;
   const quantity = Number(match[pack ? 2 : 1]) * count;
   const raw = String(match[pack ? 3 : 2]).replace(/\s/g, "");
-  const unit = raw === "floz" ? "fl_oz" : raw === "l" ? "liter" : raw === "g" ? "gram"
+  const unit = ["sqft", "squarefeet"].includes(raw) ? "sq_ft" : raw === "floz" ? "fl_oz" : raw === "l" ? "liter" : raw === "g" ? "gram"
     : ["ct", "ea", "each"].includes(raw) ? "each" : raw;
   return Number.isFinite(quantity) && quantity > 0 ? { unit, quantity } : null;
 }

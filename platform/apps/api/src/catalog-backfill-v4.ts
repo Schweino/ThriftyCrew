@@ -658,11 +658,11 @@ function parsedBackfillPackage(value: string): { unit: string; quantityMicros: n
   const normalized = value.toLowerCase().replace(/fluid ounces?/g, "fl oz").replace(/ounces?/g, "oz")
     .replace(/pounds?/g, "lb").replace(/\blbs?\.?/g, "lb").replace(/grams?/g, "g").replace(/kilograms?/g, "kg")
     .replace(/liters?/g, "l").replace(/gallons?/g, "gal").replace(/counts?/g, "ct").trim();
-  const match = normalized.match(/^(?:(\d+)\s*[x×]\s*)?([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|oz|lb|ml|l|g|kg|ct|ea|each|dozen|gal|qt|pt)\b/);
+  const match = normalized.match(/^(?:(\d+)\s*[x×]\s*)?([0-9]+(?:\.[0-9]+)?)\s*(sq\s*ft|square\s+feet|fl\s*oz|oz|lb|ml|l|g|kg|ct|ea|each|dozen|gal|qt|pt)\b/);
   if (!match) return /^(?:each|ea)$/.test(normalized) ? { unit: "each", quantityMicros: 1_000_000 } : null;
   const count = Number(match[1] ?? 1); const quantity = Number(match[2]) * count;
   const raw = String(match[3]).replace(/\s/g, "");
-  const unit = raw === "floz" ? "fl_oz" : raw === "l" ? "liter" : raw === "g" ? "gram" : ["ct", "ea", "each"].includes(raw) ? "each" : raw;
+  const unit = ["sqft", "squarefeet"].includes(raw) ? "sq_ft" : raw === "floz" ? "fl_oz" : raw === "l" ? "liter" : raw === "g" ? "gram" : ["ct", "ea", "each"].includes(raw) ? "each" : raw;
   return Number.isFinite(quantity) && quantity > 0 ? { unit, quantityMicros: Math.round(quantity * 1_000_000) } : null;
 }
 

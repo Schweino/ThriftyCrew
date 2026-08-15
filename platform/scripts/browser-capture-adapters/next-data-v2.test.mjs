@@ -53,6 +53,7 @@ describe("source-native offer parsing", () => {
     expect(packageSizeFromName("Dave's Killer Bread, 20.5 oz Loaf")).toBe("20.5 oz");
     expect(packageSizeFromName("Wholesum Organic Mixed Squash, 3 lbs.")).toBe("3 lb");
     expect(packageSizeFromName("Jimmy Dean Turkey Sausage Patties 24 ct.")).toBe("24 ct");
+    expect(packageSizeFromName("Reynolds Heavy Duty Aluminum Foil, 18in x 120 sq. ft., 2pk")).toBe("2 x 120 sq ft");
     expect(packageSizeFromName("Member's Mark Tilapia Fillet, priced per pound")).toBe("");
     expect(packageSizeFromName("Lobster Tails, 4 ct., priced per pound")).toBe("");
     expect(packageSizeFromName("Mixed Squash, 3 lbs., priced per pound")).toBe("");

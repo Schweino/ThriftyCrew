@@ -60,8 +60,8 @@ export function packageSizeFromName(name) {
   // title also contains a merchandising weight or count.
   if (/priced\s+per\s+(?:pound|lb)\b/i.test(text)) return "";
   const unit = (value) => value.toLowerCase().replace(/\./g, "").replace(/\s+/g, " ")
-    .replace(/^lbs?$/, "lb").replace(/^gallons?$/, "gal").replace(/^liters?$/, "l");
-  const unitPattern = "fl\\.?\\s*oz\\.?|oz\\.?|lbs?\\.?|g|kg|ml|l|liters?|gal(?:lon)?s?|qt|pt";
+    .replace(/^lbs?$/, "lb").replace(/^gallons?$/, "gal").replace(/^liters?$/, "l").replace(/^sq(?:uare)? feet$/, "sq ft");
+  const unitPattern = "sq\\.?\\s*(?:ft\\.?|feet)|square\\s+feet|fl\\.?\\s*oz\\.?|oz\\.?|lbs?\\.?|g|kg|ml|l|liters?|gal(?:lon)?s?|qt|pt";
   // Retailer titles commonly put merchandising descriptors after the size
   // ("18 oz, Rye Bread, Bag"). Select the final source-native quantity/unit
   // token instead of requiring it to be the final title suffix.

@@ -66,6 +66,20 @@ describe("truthful V4 catalog backfill", () => {
     expect(derived).toMatchObject({ outcome: "priced", winner: { productId: "a", priceMinor: 200, quantityMicros: 2_000_000 } });
   });
 
+  it("prices an Aluminum Foil multipack by total square-foot material basis", async () => {
+    const chunk = walmartChunk() as Record<string, any>;
+    const row = chunk.rows[0];
+    row.term = chunk.terms[0].query = "Aluminum Foil";
+    row.name = row._capture.offer.productName = "Reynolds Heavy Duty Aluminum Foil, 18in x 120 sq. ft., 2pk";
+    row.size = row._capture.offer.sizeText = "2 x 120 sq ft";
+    chunk.rows = [row]; chunk.terms[0].rowCount = 1;
+    chunk.terms[0].retrieval.loadedResultCount = chunk.terms[0].retrieval.availableResultCount = 1;
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: ["Aluminum Foil"], identity: {
+      canonicalName: "Aluminum Foil", displayName: "Aluminum Foil", acceptedForms: ["Aluminum Foil"], excludedForms: [],
+      includeNamePatterns: ["aluminum\\s+foil"], excludeNamePatterns: [], basisUnit: "sq_ft",
+    }, document: chunk })).resolves.toMatchObject({ outcome: "priced", winner: { quantityMicros: 240_000_000 } });
+  });
+
   it.each([
     { ingredient: "Almonds", product: "Member's Mark Whole Natural Almonds, 48 oz.", include: ["\\balmonds\\b"], exclude: ["\\bcereals?\\b", "crackers?", "\\bcandy\\b", "trail\\s*mix"], outcome: "priced" },
     { ingredient: "Almonds", product: "Honey Bunches of Oats with Crispy Almonds Cereal, 48 oz.", include: ["\\balmonds\\b"], exclude: ["\\bcereals?\\b", "\\boats?\\b"], outcome: "not_found" },

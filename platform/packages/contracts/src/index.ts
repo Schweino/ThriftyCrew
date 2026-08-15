@@ -24,6 +24,7 @@ export const basisUnit = z.enum([
   "ml",
   "gram",
   "kg",
+  "sq_ft",
 ]);
 
 export const sourceSchemaFingerprintSchema = z.object({

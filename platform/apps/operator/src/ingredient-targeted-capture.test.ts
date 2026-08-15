@@ -73,6 +73,19 @@ describe("targeted ingredient capture bridge", () => {
     expect(payload.coverage).toMatchObject([{ normalizedQuery: "test spice", terminationReason: "end_of_results", resultCount: 1 }]);
   });
 
+  it("keeps Aluminum Foil multipacks on their square-foot material basis", async () => {
+    const foilClaim = { ...claim, commodity_proposal_json: JSON.stringify({ id: "aluminum-foil", label: "Aluminum Foil",
+      categoryId: "household", unit: "sq_ft", include: ["aluminum\\s+foil"], exclude: [], searchTerms: ["test spice"] }) };
+    const foil = structuredClone(chunk);
+    foil.rows![0]!.n = "Reynolds Heavy Duty Aluminum Foil, 18in x 120 sq. ft., 2pk";
+    foil.rows![0]!.size = "2 x 120 sq ft";
+    const offer = (foil.rows![0]!._capture as Record<string, any>).offer;
+    offer.productName = foil.rows![0]!.n; offer.sizeText = foil.rows![0]!.size;
+    const payload = await buildIngredientCapturePayload(foilClaim, [foil], evidence, new Date(observedAt));
+    expect(payload.result).toMatchObject({ outcome: "priced", normalizedBasisUnit: "sq_ft",
+      normalizedBasisQtyMicros: 240_000_000 });
+  });
+
   it("rejects a truncated producer search", async () => {
     const truncated = structuredClone(chunk);
     (truncated.terms![0]!.retrieval as Record<string, unknown>).hasMoreResults = true;

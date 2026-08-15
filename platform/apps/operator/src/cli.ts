@@ -676,7 +676,7 @@ interface CommodityAddition {
 
 async function commodityAddSpecification(incoming: CommodityAddition, generate = true, targetIncomeRoot = incomeRoot): Promise<unknown> {
   if (!incoming.id || !/^[a-z0-9][a-z0-9-]{1,79}$/.test(incoming.id) || !incoming.label?.trim() || !incoming.categoryId) throw new Error("commodity file needs a safe id, label, unit, and categoryId");
-  const allowedUnits = new Set(["lb", "oz", "fl_oz", "each", "dozen", "gal", "qt", "pt", "liter", "ml", "gram", "kg"]);
+  const allowedUnits = new Set(["lb", "oz", "fl_oz", "each", "dozen", "gal", "qt", "pt", "liter", "ml", "gram", "kg", "sq_ft"]);
   if (!incoming.unit || !allowedUnits.has(incoming.unit)) throw new Error(`commodity ${incoming.id} has an unsupported basis unit`);
   const include = [...new Set((incoming.include ?? []).map(normalizeCommodityRegexPattern).filter(Boolean))];
   const exclude = [...new Set((incoming.exclude ?? []).map(normalizeCommodityRegexPattern).filter(Boolean))];
