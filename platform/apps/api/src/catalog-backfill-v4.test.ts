@@ -69,6 +69,7 @@ describe("truthful V4 catalog backfill", () => {
   it.each([
     { ingredient: "Almonds", product: "Member's Mark Whole Natural Almonds, 48 oz.", include: ["\\balmonds\\b"], exclude: ["\\bcereals?\\b", "crackers?", "\\bcandy\\b", "trail\\s*mix"], outcome: "priced" },
     { ingredient: "Almonds", product: "Honey Bunches of Oats with Crispy Almonds Cereal, 48 oz.", include: ["\\balmonds\\b"], exclude: ["\\bcereals?\\b", "\\boats?\\b"], outcome: "not_found" },
+    { ingredient: "Almonds", product: "Planters Salted Mixed Nuts, Peanuts, Cashews, Almonds, 56 oz.", include: ["\\balmonds\\b"], exclude: ["\\bmixed\\s+nuts?\\b"], outcome: "not_found" },
     { ingredient: "Almonds", product: "Almond Flour Crackers with Sea Salt, 20 oz.", include: ["\\balmonds\\b"], exclude: ["crackers?", "\\bflour\\b"], outcome: "not_found" },
     { ingredient: "Apple Juice", product: "Apple Juice Flavored Breakfast Cereal, 18 oz.", include: ["apple\\s+juice"], exclude: ["\\bcereals?\\b", "flavored"], outcome: "not_found" },
     { ingredient: "Air Freshener", product: "Glade Air Freshener Spray, 8 oz.", include: ["air\\s+freshener"], exclude: ["candles?", "wax\\s+melts?"], outcome: "priced" },
