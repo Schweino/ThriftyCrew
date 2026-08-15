@@ -134,12 +134,26 @@ async function samsProbe(term) {
   Contract (build-sams-deals.ps1 header): q|n|lp|up|id, lp = "$14.98", up = "$0.09/ea".
 */
 function assertSamsRowContract(row) {
+  /*
+    Check the SHAPE, never the completeness. A blank unitPrice is real Sam's data - plenty of single
+    items carry `"unitPrice":""` - and build-sams-deals already handles that correctly by rejecting
+    just that ROW with err='no unitPrice'. A first version treated "" as a violation and threw, which
+    marked whole terms UNUSABLE ("ant roach killer spray", "arm and hammer detergent") purely because
+    their first row happened to lack a unit price. That is the guard inventing a blockage, and worse,
+    UNUSABLE is the state that means "we never got to look" - so an over-strict gate manufactures the
+    exact false signal the three-state contract exists to prevent.
+
+    The systematic failure this gate is FOR is `lp` arriving as a bare number instead of "$14.98",
+    which is what happens when the extractor reads node.price instead of node.priceInfo.linePrice.
+    So: lp must be a "$n" string. up may be absent, blank, or a well-formed "$n/unit".
+  */
   const lpOk = typeof row.lp === 'string' && /^\$\s*[\d,]+(\.\d{1,3})?$/.test(row.lp);
-  const upOk = row.up == null || (typeof row.up === 'string' && /^\$\s*[\d,]+(\.\d{1,3})?\s*\/\s*.+$/.test(row.up));
+  const upOk = row.up == null || row.up === '' ||
+               (typeof row.up === 'string' && /^\$\s*[\d,]+(\.\d{1,3})?\s*\/\s*.+$/.test(row.up));
   if (!lpOk || !upOk) {
     throw new Error(
-      'ROW CONTRACT VIOLATED - build-sams-deals would reject this capture. ' +
-      `lp=${JSON.stringify(row.lp)} (want "$14.98"), up=${JSON.stringify(row.up)} (want "$0.09/ea"). ` +
+      'ROW CONTRACT VIOLATED - build-sams-deals would reject this capture wholesale. ' +
+      `lp=${JSON.stringify(row.lp)} (want "$14.98"), up=${JSON.stringify(row.up)} (want "$0.09/ea", "" or null). ` +
       'Fix the extractor before sweeping; a whole run of this shape publishes nothing.'
     );
   }
