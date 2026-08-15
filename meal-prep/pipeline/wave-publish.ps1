@@ -204,26 +204,34 @@ if ($missing.Count) { Fail ("no v2 spec in db\recipes for: " + ($missing -join '
 Write-Output ("  P4  v2 specs               {0}/{0} present in db\recipes" -f $slugs.Count)
 
 # ---- P5. the v2 spec audits (NOT spec-guards full mode - see the header) ---------------------------
+# rc=0 is the VERDICT; the completion marker is COMPLETION, and the estate has been bitten five times by
+# conflating them - a detector that dies mid-run is silent, because "no findings" and "never ran" look
+# identical from outside. So a clean bill here needs both: exit 0 AND the guard's own end-of-run line.
 function Invoke-Gate {
-  param([string]$Label, [string]$Script, [string[]]$GateArgs = @())
+  param([string]$Label, [string]$Script, [string[]]$GateArgs = @(), [string]$Marker = '', [string]$MarkerText = '')
   $out = & powershell -NoProfile -ExecutionPolicy Bypass -File $Script @GateArgs 2>&1
   $rc = $LASTEXITCODE
-  if ($rc -ne 0) {
-    Write-Output ("      ! {0} exited {1}:" -f $Label, $rc)
-    @($out | Select-Object -Last 25) | ForEach-Object { Write-Output ("        " + [string]$_) }
+  $lines = @($out | ForEach-Object { [string]$_ })
+  $reason = ''
+  if ($rc -ne 0) { $reason = "exited $rc" }
+  elseif ($Marker -and -not (Test-GuardComplete $lines $Marker)) { $reason = "exited 0 but never printed $($Marker.ToUpper())-COMPLETE, so it did not finish" }
+  elseif ($MarkerText -and -not (@($lines | Where-Object { $_ -match [regex]::Escape($MarkerText) }).Count)) { $reason = "exited 0 but never printed '$MarkerText', so it did not finish" }
+  if ($reason) {
+    Write-Output ("      ! {0} {1}:" -f $Label, $reason)
+    @($lines | Select-Object -Last 25) | ForEach-Object { Write-Output ("        " + $_) }
     return $false
   }
   return $true
 }
 $gates = @(
-  @{ label = 'audit-spec-contradictions'; path = (Join-Path $here 'audit-spec-contradictions.ps1'); args = @('-Quiet') },
-  @{ label = 'audit-store-integrity';     path = (Join-Path $here 'audit-store-integrity.ps1');     args = @() },
-  @{ label = 'test-guards';               path = (Join-Path $here 'test-guards.ps1');               args = @() }
+  @{ label = 'audit-spec-contradictions'; path = (Join-Path $here 'audit-spec-contradictions.ps1'); args = @('-Quiet'); marker = 'spec-contradictions'; text = '' },
+  @{ label = 'audit-store-integrity';     path = (Join-Path $here 'audit-store-integrity.ps1');     args = @();         marker = 'store-integrity';     text = '' },
+  @{ label = 'test-guards';               path = (Join-Path $here 'test-guards.ps1');               args = @();         marker = '';                    text = 'ALL GUARD PREDICATE TESTS PASS' }
 )
 foreach ($g in $gates) {
   if (-not (Test-Path $g.path)) { Fail ("gate script missing: " + $g.path) }
-  if (-not (Invoke-Gate $g.label $g.path $g.args)) {
-    Fail ("{0} is red. Fix it through the owning stage - never weaken a gate to pass a wave." -f $g.label)
+  if (-not (Invoke-Gate $g.label $g.path $g.args $g.marker $g.text)) {
+    Fail ("{0} is not clean. Fix it through the owning stage - never weaken a gate to pass a wave." -f $g.label)
   }
   Write-Output ("  P5  {0,-26} clean" -f $g.label)
 }
