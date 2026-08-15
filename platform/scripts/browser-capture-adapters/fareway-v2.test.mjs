@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { buildFarewayRows, captureFarewayCanary, decodeFarewayApolloState, parseFarewayApolloAvailability, validatedRegularPrice } from "./fareway-v2.mjs";
+import { buildFarewayRows, captureFarewayCanary, decodeFarewayApolloState, parseFarewayApolloAvailability,
+  validatedRegularPrice, waitForFarewayAvailabilityDetail } from "./fareway-v2.mjs";
 
 it("emits the canonical Fareway policy key from a passing Omaha in-store canary", async () => {
   const canary = await captureFarewayCanary({ playwright: {
@@ -67,5 +68,46 @@ describe("Fareway exact Omaha detail availability", () => {
     const wrongKey = JSON.stringify({ ids: ["items_531573-90266603"], postalCode: "68136", shopId: "wrong-shop", zoneId: "917" });
     wrongShop.Items = { [wrongKey]: wrongShop.Items[exactKey] };
     expect(parseFarewayApolloAvailability(wrongShop, "90266603")).toMatchObject({ status: "unknown", eligible: false });
+  });
+
+  it("polls through transient detail hydration until the exact Omaha in-store Apollo item is ready", async () => {
+    const raw = encodeURIComponent(JSON.stringify(state({ available: true, stockLevel: "inStock" })));
+    const snapshots = [
+      { url: "https://shop.fareway.com/store/fareway/products/90266603-glade", challenge: false, plainOmaha: false, apolloState: "" },
+      { url: "https://shop.fareway.com/store/fareway/products/90266603-glade", challenge: false, plainOmaha: true, apolloState: "" },
+      { url: "https://shop.fareway.com/store/fareway/products/90266603-glade", challenge: false, plainOmaha: true, apolloState: raw },
+    ];
+    const waits = [];
+    const result = await waitForFarewayAvailabilityDetail({ playwright: {
+      waitForTimeout: async (delay) => waits.push(delay),
+      evaluate: async () => snapshots.shift(),
+    } }, "90266603", { maximumPolls: 3, firstDelayMs: 10, pollDelayMs: 20 });
+    expect(waits).toEqual([10, 20, 20]);
+    expect(result).toMatchObject({ challenge: false, status: "in_stock", eligible: true,
+      sourceBinding: { shopId: "16671402", retailerLocationId: "531573", serviceType: "instore",
+        productId: "90266603", apolloEncoding: "percent-encoded-json" } });
+    expect(result.sourceBinding.itemPaths).toHaveLength(1);
+  });
+
+  it("keeps wrong-shop truth unavailable after the bounded readiness window", async () => {
+    const wrongShop = state({ available: true, stockLevel: "inStock" });
+    wrongShop.ShopCollectionScoped.shops[0].id = "wrong-shop";
+    const snapshot = { url: "https://shop.fareway.com/store/fareway/products/90266603-glade", challenge: false,
+      plainOmaha: true, apolloState: JSON.stringify(wrongShop) };
+    await expect(waitForFarewayAvailabilityDetail({ playwright: {
+      waitForTimeout: async () => {}, evaluate: async () => snapshot,
+    } }, "90266603", { maximumPolls: 2, firstDelayMs: 1, pollDelayMs: 1 }))
+      .rejects.toThrow(/exact canonical Omaha in-store shop and item availability binding/);
+  });
+
+  it("does not poll past a changed product identity or retailer challenge", async () => {
+    await expect(waitForFarewayAvailabilityDetail({ playwright: {
+      waitForTimeout: async () => {}, evaluate: async () => ({ url: "https://shop.fareway.com/store/fareway/products/999-glade",
+        challenge: false, plainOmaha: true, apolloState: "{}" }),
+    } }, "90266603", { maximumPolls: 2, firstDelayMs: 1, pollDelayMs: 1 })).rejects.toThrow(/identity changed/);
+    await expect(waitForFarewayAvailabilityDetail({ playwright: {
+      waitForTimeout: async () => {}, evaluate: async () => ({ url: "https://shop.fareway.com/store/fareway/products/90266603-glade",
+        challenge: true, plainOmaha: false, apolloState: "" }),
+    } }, "90266603", { maximumPolls: 2, firstDelayMs: 1, pollDelayMs: 1 })).resolves.toEqual({ challenge: true });
   });
 });

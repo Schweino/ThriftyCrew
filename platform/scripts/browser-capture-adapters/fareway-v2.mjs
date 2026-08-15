@@ -76,21 +76,52 @@ export function parseFarewayApolloAvailability(state, productId) {
       productId: target, itemPaths: facts.map((fact) => fact.path) } };
 }
 
-async function readFarewayAvailabilityDetail(tab, productId) {
-  const detail = await tab.playwright.evaluate(() => ({
+async function readFarewayAvailabilityDetailSnapshot(tab) {
+  return tab.playwright.evaluate(() => ({
     url: location.href,
     challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied|robot or human/i.test(document.body.innerText),
     plainOmaha: [...document.querySelectorAll("button")].some((button) => /In-Store[\s\S]*Omaha/i.test(button.innerText || "") && !/Omaha (?:Meat Market|- North)/i.test(button.innerText || "")),
     apolloState: document.querySelector("script#node-apollo-state")?.textContent || "",
   }));
-  const observedId = new URL(detail.url).pathname.match(/\/products\/(\d+)(?:-|$)/)?.[1] || "";
-  if (observedId !== String(productId)) throw new Error("Fareway detail availability identity changed during capture");
-  if (detail.challenge) return { challenge: true };
-  if (!detail.plainOmaha) throw new Error("Fareway detail availability lost the Omaha/In-Store binding");
-  const decoded = decodeFarewayApolloState(detail.apolloState);
-  const availability = parseFarewayApolloAvailability(decoded.state, productId);
-  return { challenge: false, ...availability, sourceBinding: { ...availability.sourceBinding,
-    apolloEncoding: decoded.encoding, apolloRawSha256: decoded.rawSha256, apolloRawBytes: decoded.rawBytes } };
+}
+
+export async function waitForFarewayAvailabilityDetail(tab, productId, options = {}) {
+  const maximumPolls = Math.max(1, Math.min(24, Number(options.maximumPolls) || 16));
+  const firstDelayMs = Math.max(0, Math.min(2_000, Number(options.firstDelayMs) || 350));
+  const pollDelayMs = Math.max(0, Math.min(2_000, Number(options.pollDelayMs) || 250));
+  let lastReason = "Fareway detail availability was not ready";
+  for (let poll = 0; poll < maximumPolls; poll += 1) {
+    await tab.playwright.waitForTimeout(poll === 0 ? firstDelayMs : pollDelayMs);
+    const detail = await readFarewayAvailabilityDetailSnapshot(tab);
+    const observedId = new URL(detail.url).pathname.match(/\/products\/(\d+)(?:-|$)/)?.[1] || "";
+    if (detail.challenge) return { challenge: true };
+    if (!observedId) {
+      lastReason = "Fareway detail availability identity was not ready";
+      continue;
+    }
+    if (observedId !== String(productId)) throw new Error("Fareway detail availability identity changed during capture");
+    if (!detail.plainOmaha) {
+      lastReason = "Fareway detail availability lost the Omaha/In-Store binding";
+      continue;
+    }
+    const decoded = decodeFarewayApolloState(detail.apolloState);
+    if (!decoded.state) {
+      lastReason = "Fareway detail Apollo state was not ready";
+      continue;
+    }
+    const availability = parseFarewayApolloAvailability(decoded.state, productId);
+    if (!Array.isArray(availability.sourceBinding?.itemPaths) || availability.sourceBinding.itemPaths.length === 0) {
+      lastReason = "Fareway detail omitted the exact canonical Omaha in-store shop and item availability binding";
+      continue;
+    }
+    return { challenge: false, ...availability, sourceBinding: { ...availability.sourceBinding,
+      apolloEncoding: decoded.encoding, apolloRawSha256: decoded.rawSha256, apolloRawBytes: decoded.rawBytes } };
+  }
+  throw new Error(lastReason);
+}
+
+async function readFarewayAvailabilityDetail(tab, productId) {
+  return waitForFarewayAvailabilityDetail(tab, productId);
 }
 
 async function readPage(tab) {
@@ -273,7 +304,6 @@ async function captureTerm(tab, query) {
       const availabilityRows = [];
       for (const row of page.rows) {
         await tab.goto(row.href);
-        await tab.playwright.waitForTimeout(350);
         const availability = await readFarewayAvailabilityDetail(tab, row.id);
         if (availability.challenge) return { blocked: true, term: { query, outcome: "blocked", rowCount: 0, attempts,
           startedAt, finishedAt: new Date().toISOString(), retrieval: { targetResultCount: TARGET_RESULTS,
@@ -371,14 +401,11 @@ async function captureProductDetail(tab, target) {
       if (!page) throw new Error("Fareway product page produced no readable state");
       if (page.challenge) return { outcome: "blocked", reason: "Retailer challenge detected on the product-detail verification page." };
       if (page.unavailable) return { outcome: "missing", reason: "Fareway reports the product is unavailable or missing." };
-      if (!page.plainOmaha) throw new Error("Fareway product-detail page lost the Omaha/In-Store context");
       if (page.url !== target.productKey) return { outcome: "missing", reason: `product detail redirected from ${target.productKey} to ${page.url}` };
       if (!page.name || !page.size || !Number.isInteger(page.priceMinor) || !page.current) throw new Error("product detail lacked exact name, size, or Current price label");
       const observedAt = new Date().toISOString();
-      const decoded = decodeFarewayApolloState(page.apolloState);
-      const availability = parseFarewayApolloAvailability(decoded.state, page.productId);
-      availability.sourceBinding = { ...availability.sourceBinding, apolloEncoding: decoded.encoding,
-        apolloRawSha256: decoded.rawSha256, apolloRawBytes: decoded.rawBytes };
+      const availability = await waitForFarewayAvailabilityDetail(tab, page.productId);
+      if (availability.challenge) return { outcome: "blocked", reason: "Retailer challenge detected while waiting for exact product availability." };
       const regularPriceMinor = validatedRegularPrice(page.priceMinor, page.regularPriceMinor);
       const priceSemantics = {
         offerType: regularPriceMinor ? "sale" : "everyday",
