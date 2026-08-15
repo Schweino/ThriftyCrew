@@ -25,12 +25,12 @@ category of check, fixes the audit economics, and schedules the run that proves 
 
 ## 1. Coordination: work already in flight (do not redo, do not collide)
 
-- **task_7a2c86fe "Repoint recipe cards from the dead V3 feed to smp-feed"** is running in a separate
-  session. It will change tpl2-scaler-prefix.html's fetch URL, extend grocery\export-feed.ps1, and
-  rebuild/republish all 544 cards. Improvement A below MUST be built endpoint-agnostic (it reads the
-  URL out of the template rather than hardcoding either endpoint) precisely so it is correct before,
-  during, and after that repoint. If the repoint has landed by the time you build, test against the new
-  endpoint; the design does not change.
+- **task_7a2c86fe "Repoint recipe cards from the dead V3 feed to smp-feed" has LANDED** (verified
+  2026-08-15 ~16:00: tpl2-scaler-prefix.html line 159 reads `SMPFEED='https://feed.thriftycrew.com/smp-feed.json'`,
+  all 544 cards republished, both shakedown pages live and pricing, no placeholder text, feed carries
+  both new slugs). Improvement A stays endpoint-agnostic (parse the URL out of the template, never
+  hardcode either endpoint) so the gate survives any future repoint. Build and test against the
+  smp-feed endpoint.
 - Already DONE this session, do not redo: writer + mapper agent prompts hardened (trace claims to cost
   lines; macro cross-check), scoped re-audit rule written into the skill, calorie floor removed from
   build-v2-spec (product decision, protein floor stays), wave-publish git handling and foreign-dirty
@@ -66,8 +66,9 @@ verification is only possible after the publish - which means the gate needs a r
    repoint this is what makes new slugs serveable at all. It also closes the gap the reviewer found
    where smp-feed's recipes map was 2 slugs short because it was generated minutes before the rows
    landed.) Commit+push the regenerated public\ feed files as part of the wave's scoped path list.
-2. For EACH wave slug: fetch the card's actual price source (the URL parsed in A1, with the slug
-   substituted) and require 200 + JSON + the slug's data present. Then fetch the live page itself,
+2. Fetch the card's actual price source ONCE (the URL parsed in A1 - smp-feed is a single whole-feed
+   document, not a per-slug endpoint, so there is nothing to substitute) and require 200 + JSON; then
+   for EACH wave slug require its key present in the feed's `recipes` map. Then fetch each live page,
    cache-busted, and require: HTTP 200, and the page does NOT contain any hydration placeholder text.
    The placeholder strings to scan for live in the template; extract them at build time rather than
    hardcoding (today: "current release price loading").
@@ -83,18 +84,29 @@ verification is only possible after the publish - which means the gate needs a r
 hunt-run.ps1 state graph gains `held`: legal transitions `published -> held` (serveability rollback or
 any deliberate takedown) and `held -> published` (the flip back once the dependency is fixed). Terminal
 states unchanged. Self-test gains: MUST FIRE `published -> held -> published` legal both ways; MUST FIRE
-`held -> verified` refused (it must go back through published). Then reconcile the shakedown run's state
-files: country-captain-chicken and chicken-florentine currently read `published` while Ghost holds them
-as drafts; advance both to `held` with detail naming the repoint task.
+`held -> verified` refused (it must go back through published). NO backfill needed: the repoint landed
+and both shakedown recipes are live again, so their state files (`published`) and Ghost now AGREE -
+verify that with two page fetches, then leave them alone. `held` ships for future takedowns only.
 
 ### A4. Fixtures (guard-fixture rule, non-negotiable)
 
+**Implementation constraint that is easy to get wrong: provenance must PARSE the `SMPFEED='...'`
+assignment, never grep the template for a path.** The live, correct template still contains the literal
+strings `/api/v2/recipe-feed/` (line 150) and "current release price loading" (line 154) inside
+COMMENTS documenting the founding bug. A grep-based gate would refuse today's correct template because
+of its own history lesson - the guard-re-parses-prose trap, with the prose being a comment about the
+very bug the guard exists to catch. Same rule for the placeholder check: the placeholder strings are
+extracted from the template's placeholder MARKUP (or, if the markup no longer carries any, a frozen
+list in the script), never by scanning comments.
+
 wave-publish -SelfTest gains, all as pure predicates plus one parse test against a frozen template
-snippet: MUST FIRE a template pointing at `/api/v2/recipe-feed/` (the frozen founding bug) is refused by
-the allowlist; CLEAN TWIN the smp-feed URL passes; MUST FIRE a payload missing the slug fails the
+snippet: MUST FIRE a template whose `SMPFEED=` assignment points at `/api/v2/recipe-feed/` (the frozen
+founding bug) is refused by the allowlist; CLEAN TWIN the smp-feed URL passes; **CLEAN TWIN a template
+whose `SMPFEED=` is correct but whose COMMENTS mention the dead path still passes** (freeze a snippet of
+the real post-repoint template for this); MUST FIRE a feed payload missing a wave slug's key fails the
 per-slug check; MUST FIRE a page body containing the placeholder string fails; CLEAN TWIN a clean body
-passes. The placeholder-extraction from the template gets its own fixture so a template rewrite that
-renames the placeholder cannot silently disarm the check.
+passes. The placeholder-extraction gets its own fixture so a template rewrite that renames the
+placeholder cannot silently disarm the check.
 
 ## 3. Improvement B: AUDIT ECONOMICS
 
@@ -162,9 +174,10 @@ Before trusting any throughput or cost claim:
 
 ## 6. Also in scope for the new session (small, do while in the files)
 
-- **Reconcile the shakedown run**: A3's state fix, and once task_7a2c86fe lands, flip both drafts back
-  to published (Ghost PUT, then hunt-run -Advance to published, then a fresh post-publish check of both
-  pages, then -Advance to verified; the ledger batch is closed and stays closed).
+- **Reconcile the shakedown run**: DONE by the repoint task - both recipes are live and pricing, state
+  files already read `published` and now match Ghost. Remaining: verify both pages once with the A2
+  per-slug check when it exists, then hunt-run -Advance both to verified (the ledger batch is closed
+  and stays closed).
 - **wave-publish step renumbering**: adding P1b/P8/E7 shifts labels; keep the printed labels sequential
   and update the dry-run listing to match (the labels are load-bearing for humans reading transcripts,
   nothing parses them except the humans).
@@ -174,9 +187,10 @@ Before trusting any throughput or cost claim:
 
 ## 7. Explicitly out of scope
 
-- The repoint itself (task_7a2c86fe owns it). If it has NOT landed when you finish A, the serveability
-  gate will refuse every publish, and that is CORRECT: the Hunter genuinely cannot ship a working
-  recipe until the cards read a live feed. Do not weaken the gate to unblock; say so in your report.
+- The repoint itself (task_7a2c86fe - LANDED, see section 1). Nothing left to wait on. The standing
+  rule survives it: if the serveability gate ever refuses every publish because a template points
+  somewhere this estate does not produce, that refusal is CORRECT - do not weaken the gate to unblock;
+  say so in your report.
 - Reviving anything from the deleted V3 platform. Decision made 2026-08-15, recorded in the shakedown
   report and the triage queue item 2026-08-15-d933eb.
 - propagate changes beyond the stamp detail (section 4 decision).
@@ -185,8 +199,9 @@ Before trusting any throughput or cost claim:
 ## 8. Build order and acceptance
 
 1. A3 (held state + reconcile) -> hunt-run self-test green including the two new fixtures.
-2. A1 + A4 preflight -> wave-publish self-test green; live drill: with the template still pointing at
-   the dead endpoint, a -DryRun against a scratch wave must REFUSE at P8 naming the provenance rule.
+2. A1 + A4 preflight -> wave-publish self-test green; drill: point the parser at the frozen
+   dead-endpoint template snippet (the A4 must-fire fixture) and confirm a -DryRun against a scratch
+   wave REFUSES at P8 naming the provenance rule; then against the real template it must pass P8.
 3. B1 freshness gate + fixture; B3 warning; C stamp detail. Self-tests green.
 4. A2 rollback arm. Live drill for the rollback needs care: use a scratch Ghost draft (create a
    throwaway draft post via the API, run the per-slug page check against its preview state, prove the
