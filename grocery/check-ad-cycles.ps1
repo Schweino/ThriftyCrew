@@ -783,7 +783,17 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $cv2   = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\compute-v2-perserving.ps1') -FeedPath (Join-Path $OutDir 'smp-feed.json')
         $cv2Rc = $LASTEXITCODE
         $cv2Ok = ($cv2Rc -eq 0)
-        if ($cv2Rc -ne 0) {
+        # rc 2 is the 2026-08-15 staleness refusal, NOT a bad-recipe skip. It has to read as itself: the
+        # manifest was deliberately NOT rewritten (so the surfaces keep their previous numbers instead of
+        # gaining wrong ones), and the fix is upstream in the feed, not in any recipe's cost data. Reporting
+        # it as "skipped recipe(s) with bad cost data" would send triage looking at specs for a problem that
+        # is not there. compute-v2 alerts on its own for this case, so no second email from here.
+        if ($cv2Rc -eq 2) {
+          $cv2Why = (($cv2 | Where-Object { $_ -match 'REFUSING|freshness:' }) -join ' ')
+          Log ('compute-v2 REFUSED to recompute the manifest - stale price feed: ' + $cv2Why)
+          $summary += 'REVIEW    v2 per-serving manifest was NOT recomputed - the price feed it resolved is stale (surfaces keep their previous numbers; fix the feed, not the recipes)'
+        }
+        elseif ($cv2Rc -ne 0) {
           $cv2Bad = @($cv2 | Where-Object { $_ -match '^\s+\S' -or $_ -match 'SKIPPED' })
           Log ('compute-v2 SKIPPED recipe(s) with bad cost data: ' + (($cv2Bad | Select-Object -First 6) -join ' | '))
           $summary += 'REVIEW    v2 per-serving manifest skipped recipe(s) with bad cost data - top5/rotation may be stale for them (see compute-v2 output)'

@@ -3355,6 +3355,64 @@ foreach ($t in $formTwin) {
 if ($formTwinMiss.Count -eq 0) { Ok 'product-form CLEAN TWIN: the canned 15 oz mixed-veg SKU stays home behind the NARROWED brand exclude, and real basil / stir-fry / pizza / bleach / jalapenos / canned chicken / croissant sandwiches all keep their commodities' }
 else { Bad ('a form or ownership exclude has eaten a real product, or a widened include did not land: ' + ($formTwinMiss -join ' | ')) }
 
+# ---------------------------------------------------------------- stale price feed (2026-08-15)
+# THE WATCHER FOR THE FEED A PRICING STAGE COMPUTES ON. compute-v2-perserving.ps1 downloaded the feed only
+# when meal-prep\scratch-smpfeed.json was MISSING, so it downloaded once and then priced the entire catalog
+# against that snapshot forever. Nineteen days on: 264 of 564 shared prices had moved (mean 27%), 41 items
+# existed live that the snapshot had never heard of, and 534 of 544 rows of the manifest on disk matched the
+# JULY computation and none matched the live feed. It reached the site - cheapest_ps is what the cards, hub
+# grid, planner, Top 5, free-dinner rotation and the daily reel all read.
+# A present-but-old file is indistinguishable from a fresh one by inspection and the output is a plausible
+# dollar figure either way, so this is the class that only a fixture can hold down.
+$mpPipe = Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline'
+$ffs = Join-Path $mpPipe 'feed-freshness.ps1'
+if (-not (Test-Path $ffs)) { Bad 'meal-prep\pipeline\feed-freshness.ps1 is missing - nothing decides which feed a pricing stage may compute on, and the download-once-forever bug has nothing stopping it coming back' }
+else {
+  $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $ffs -SelfTest 2>&1 | Out-String
+  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 25/25 pass') {
+    Ok 'feed-freshness -SelfTest passes with its founding-bug fixtures armed (July 27 snapshot refused, fresh feed passes, mtime-laundering caught, an 8h cache refused against a 1h canonical feed, legitimate 23.5h aging not refused)'
+  } else { Bad ('feed-freshness -SelfTest failed or lost its founding-bug fixtures: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
+
+  # THE FROZEN FIXTURE FILES THEMSELVES. Same rule as every other fixture here: never regenerate them from
+  # the live feed, or the staleness they encode disappears and the test passes by finding nothing.
+  $ffMf = Join-Path $fix 'feedfresh-mustfire.json'
+  if ((Test-Path $ffMf) -and ((Get-Content $ffMf -Raw | ConvertFrom-Json).generated -eq '2026-07-27T07:13:44')) {
+    Ok 'the frozen stale-feed fixture still carries the real 2026-07-27 snapshot stamp it was built from'
+  } else { Bad 'guard-fixtures\feedfresh-mustfire.json is missing or has been regenerated - it must keep the July 27 stamp, which IS the bug' }
+
+  # THE SEAL. A guard cannot detect its own unsealing: if the production caller stops routing through
+  # feed-freshness, its self-test stays green forever while every run prices on whatever it likes again.
+  # feed-freshness -SelfTest asserts this too; asserting it HERE is what makes the check independent of the
+  # file being checked.
+  $cvSrc = Get-Content (Join-Path $mpPipe 'compute-v2-perserving.ps1') -Raw
+  if ($cvSrc -match 'feed-freshness\.ps1' -and $cvSrc -match 'Resolve-AndCheckFeed' -and $cvSrc -match 'Test-FeedVerdictFatal') {
+    Ok 'compute-v2-perserving still resolves its feed through feed-freshness and still refuses a fatal verdict'
+  } else { Bad 'compute-v2-perserving.ps1 no longer routes its feed through feed-freshness.ps1 - the freshness gate has been unsealed and the catalog can be priced on any snapshot that happens to be lying around' }
+
+  # THE PRODUCTION REFUSAL, END TO END. Everything above tests the judgement or the source; this runs the
+  # REAL compute-v2-perserving.ps1 against the frozen July fixture and requires exit 2 with the manifest
+  # untouched. It is the difference between "the library would refuse" and "the script does refuse" - and
+  # the manifest hash check is the part that matters, because the harm was never the exit code, it was a
+  # stale manifest reaching the cards, the planner, Top 5, the rotation and the daily reel.
+  # -NoAlert so a daily fixture run does not mail Brad and file a triage entry for a synthetic feed.
+  $cvMan = Join-Path $mpPipe 'v2-perserving.json'
+  if (Test-Path $cvMan) {
+    $cvHashBefore = (Get-FileHash $cvMan).Hash
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $mpPipe 'compute-v2-perserving.ps1') -FeedPath $ffMf -NoAlert 2>&1
+    $cvRc = $LASTEXITCODE
+    $cvHashAfter = (Get-FileHash $cvMan).Hash
+    if ($cvRc -eq 2 -and $cvHashAfter -eq $cvHashBefore) {
+      Ok 'compute-v2-perserving REFUSES the frozen July feed end to end (exit 2) and leaves the manifest untouched'
+    } else {
+      Bad ("compute-v2-perserving did NOT refuse the frozen stale feed as designed (exit $cvRc, manifest changed: $($cvHashAfter -ne $cvHashBefore)) - a stale feed can reach pipeline\v2-perserving.json again, and every cost surface reads that file")
+    }
+  } else { Skip 'compute-v2 end-to-end refusal (no v2-perserving.json on this machine)' }
+
+  if ($cvSrc -match '(?s)if\s*\(\s*-not\s*\(Test-Path\s+\$FeedPath\s*\)\s*\)\s*\{\s*[^}]*Invoke-WebRequest') {
+    Bad 'the founding "download the feed only if the file is missing" branch is back in compute-v2-perserving.ps1 - that is the exact code that froze the catalog on a July snapshot for nineteen days'
+  } else { Ok 'the founding download-only-if-missing branch has not returned to compute-v2-perserving' }
+}
+
 # ---------------------------------------------------------------- specs\prose re-sync (2026-08-02, L4)
 # THE ONE WATCHER WHOSE FAILURE IS A REVERT RATHER THAN A WRONG NUMBER. spec-guards.ps1 full mode does not
 # read prose to CHECK it - it MERGES specs\prose\prose-<slug>.json INTO the spec and validates the result.
@@ -3404,8 +3462,20 @@ else {
   $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $rsc -SelfTest 2>&1 | Out-String
   if ($r -match 'SELF-TEST PASS') { Ok 'contradiction repair: still refuses a two-quantity head line, "rice vinegar", and "wild rice" - and still matches "93/7 ground turkey" to its own line' }
   else { Bad ('repair-spec-contradictions -SelfTest failed - a head ingredient line can be rewritten to the WRONG ingredient''s amount: ' + ($r -replace "`n", ' ')) }
+  # BUY-COVERAGE's repair side (2026-08-15). The class fires on a cost line whose buy sentence disagrees
+  # with the package the batch needs; this is the script that rewrites those sentences, and its fixtures
+  # pin the two shapes plus the scope guard - a spec whose hand-written shop_smart uses the same words
+  # must keep them, because the repair edits one array span and never the whole file.
+  $rbb = Join-Path $mpPipe 'repair-bulk-buy-line.ps1'
+  if (-not (Test-Path $rbb)) { Bad 'repair-bulk-buy-line.ps1 is missing - bulk cost lines can go back to telling every shopper one package "lasts several batches"' }
+  else {
+    $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $rbb -SelfTest 2>&1 | Out-String
+    if ($r -match 'all green') { Ok 'bulk buy line: a 1.88-batch box no longer reads "lasts several batches", a 14.8-batch bottle still does, and writer prose is never rewritten' }
+    else { Bad ('repair-bulk-buy-line -SelfTest failed - the buy sentence can drift from the package the recipe actually needs: ' + ($r -replace "`n", ' ')) }
+  }
+
   $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $asc -Quiet 2>&1 | Out-String
-  if ($LASTEXITCODE -eq 0) { Ok 'no recipe spec contradicts itself worse than the recorded baseline (stat-vs-prose, stale money, head quantities all at ZERO)' }
+  if ($LASTEXITCODE -eq 0) { Ok 'no recipe spec contradicts itself worse than the recorded baseline (stat-vs-prose, stale money, head quantities, buy coverage all at ZERO)' }
   else { Bad ('a spec-contradiction class got WORSE: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL' }) -join ' ')) }
 
   # ------------------------------------------------- cook measures, not purchase labels (2026-08-02)
