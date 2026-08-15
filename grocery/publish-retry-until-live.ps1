@@ -12,8 +12,8 @@
   Remove manually with:  schtasks /Delete /TN "TC-BoardPublishRetry" /F
 #>
 $ErrorActionPreference = 'Continue'
-Set-Location 'C:\Codex\income\grocery'
-$log   = 'C:\Codex\income\grocery\out\publish-retry.log'
+Set-Location 'C:\Codex\ThriftyCrew\grocery'
+$log   = 'C:\Codex\ThriftyCrew\grocery\out\publish-retry.log'
 $stamp = (Get-Date -Format 'yyyy-MM-dd HH:mm')
 
 $out = & powershell -ExecutionPolicy Bypass -File publish-deals-page.ps1 2>&1

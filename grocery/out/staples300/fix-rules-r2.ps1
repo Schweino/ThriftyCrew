@@ -1,6 +1,6 @@
 # Round-2 fixes: remaining thefts/globals + unit-shape data fixes in store files.
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 $cf = Join-Path $root 'commodities.json'
 $tmp = ConvertFrom-Json ([IO.File]::ReadAllText($cf)); $commods = @($tmp)
 $byId = @{}; foreach ($c in $commods) { $byId[[string]$c.id] = $c }

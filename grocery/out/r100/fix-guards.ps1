@@ -1,5 +1,5 @@
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'
+$root='C:\Codex\ThriftyCrew\grocery'
 
 # 1) fence BUTTER against butter-FLAVORED products (my biscuit capture hijacked its Walmart cell)
 $commods = New-Object System.Collections.ArrayList

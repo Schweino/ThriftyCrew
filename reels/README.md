@@ -16,10 +16,10 @@ Install or repair the local daily task with `powershell -ExecutionPolicy Bypass 
 ## The demo reel
 
 ```bash
-powershell -File C:\Codex\income\reels\build-demo-reel.ps1
+powershell -File C:\Codex\ThriftyCrew\reels\build-demo-reel.ps1
 
 # Build the broader Page overview intended to stay pinned
-powershell -File C:\Codex\income\reels\build-demo-reel.ps1 -PinnedOverview
+powershell -File C:\Codex\ThriftyCrew\reels\build-demo-reel.ps1 -PinnedOverview
 ```
 
 Outputs into `reels\out\`:
@@ -231,7 +231,7 @@ the daily reel runs ~40s on words that took Goku 46s. If an HD voice reads rushe
 tunable; the only lever is writing longer sentences.
 
 ```bash
-powershell -File C:\Codex\income\reels\build-demo-reel.ps1 -SkipCapture -Voice Brian
+powershell -File C:\Codex\ThriftyCrew\reels\build-demo-reel.ps1 -SkipCapture -Voice Brian
 ```
 
 An unknown name fails immediately with the list of valid ones, rather than three minutes later as an

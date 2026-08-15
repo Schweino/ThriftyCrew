@@ -1,6 +1,6 @@
 $ErrorActionPreference='Stop'
-$here='C:\Codex\income\grocery'
-$adminKey = if (Test-Path (Join-Path $here '.ghostkey')) { (Get-Content (Join-Path $here '.ghostkey') -Raw).Trim() } else { (Get-Content 'C:\Codex\income\meal-prep\.ghostkey' -Raw).Trim() }
+$here='C:\Codex\ThriftyCrew\grocery'
+$adminKey = if (Test-Path (Join-Path $here '.ghostkey')) { (Get-Content (Join-Path $here '.ghostkey') -Raw).Trim() } else { (Get-Content 'C:\Codex\ThriftyCrew\meal-prep\.ghostkey' -Raw).Trim() }
 $apiUrl='https://map-to-success.ghost.io'
 $p=$adminKey -split ':'; $id=$p[0]; $secretHex=$p[1]
 $sb=New-Object byte[] ($secretHex.Length/2); for($i=0;$i -lt $sb.Length;$i++){ $sb[$i]=[Convert]::ToByte($secretHex.Substring($i*2,2),16) }

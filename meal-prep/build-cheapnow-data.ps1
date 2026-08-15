@@ -5,8 +5,8 @@
 # /*CN-DATA*/ ... /*CN-END*/ markers. Prints per-threshold counts at baked
 # (fallback) prices so you can sanity-check before publishing.
 $ErrorActionPreference = 'Stop'
-$dir  = 'C:\Codex\income\meal-prep'
-$tool = 'C:\Codex\income\cheap-dinners-tool.html'
+$dir  = 'C:\Codex\ThriftyCrew\meal-prep'
+$tool = 'C:\Codex\ThriftyCrew\cheap-dinners-tool.html'
 $db = (Get-Content "$dir\recipes-db.json" -Raw).TrimStart([char]0xFEFF) | ConvertFrom-Json
 # v2 manifest: current-cheapest whole-package per serving per slug (2026-07-26 basis switch)
 $script:cheapPs=@{}

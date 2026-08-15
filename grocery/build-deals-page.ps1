@@ -1956,7 +1956,7 @@ if ($histDoc) {
     # The history data is served from the feed Worker instead of inlined. Inlining it cost ~252 KB in EVERY
     # board post + every mobile page load, and pushed the Ghost upsert past its timeout (503 = unpublishable).
     # We still inline a tiny id index (TCH_IDS) so the "history" pills render at load with no fetch.
-    $histOut = Join-Path (Split-Path $root -Parent) 'public\price-history.json'   # C:\Codex\income\public\
+    $histOut = Join-Path (Split-Path $root -Parent) 'public\price-history.json'   # C:\Codex\ThriftyCrew\public\
     $histDir = Split-Path $histOut -Parent
     if (-not (Test-Path $histDir)) { New-Item -ItemType Directory -Force -Path $histDir | Out-Null }
     # BOM-LESS (L7, 2026-08-01). Set-Content -Encoding UTF8 emits a UTF-8 BOM in PS 5.1. Browsers strip it

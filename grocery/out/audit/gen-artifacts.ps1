@@ -1,6 +1,6 @@
 # Build the human/agent-readable audit artifacts from assignments.json + commodities.json.
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'; $out="$root\out\audit"
+$root='C:\Codex\ThriftyCrew\grocery'; $out="$root\out\audit"
 $tmp=ConvertFrom-Json ([IO.File]::ReadAllText("$root\commodities.json")); $commods=@($tmp)
 $cats=(ConvertFrom-Json ([IO.File]::ReadAllText("$root\categories.json"))).categories
 $ta=ConvertFrom-Json ([IO.File]::ReadAllText("$out\assignments.json")); $assign=@($ta)

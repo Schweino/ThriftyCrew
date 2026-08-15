@@ -1,7 +1,7 @@
 # publish-tool-post.ps1 - upserts a tool post's body from its local source html (the standard lexical
 # single-html-card method - NEVER ?source=html, it strips scripts). Visibility-PRESERVING on update.
 # Usage: .\publish-tool-post.ps1 -Slug money-leak-finder -File .\leak-finder-tool.html
-# (Recreates the never-committed update-tool-post flow; sources live at C:\Codex\income\*-tool.html.)
+# (Recreates the never-committed update-tool-post flow; sources live at C:\Codex\ThriftyCrew\*-tool.html.)
 param([Parameter(Mandatory)][string]$Slug,[Parameter(Mandatory)][string]$File,[switch]$Force)
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path

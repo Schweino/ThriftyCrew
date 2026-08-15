@@ -9,7 +9,7 @@
   board field: 'recipe' if the id is in grocery\recipe-commodities.json, else 'weekly' (staple board).
 #>
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income'
+$root = 'C:\Codex\ThriftyCrew'
 $mapFile = Join-Path $root 'meal-prep\ingredient-map.json'
 Copy-Item $mapFile ($mapFile + '.bak-idnorm') -Force
 $mp = Get-Content $mapFile -Raw | ConvertFrom-Json

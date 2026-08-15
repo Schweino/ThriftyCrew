@@ -1,5 +1,5 @@
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'
+$root='C:\Codex\ThriftyCrew\grocery'
 $full = Get-Content (Join-Path $root 'out\regular\bakers-regular-2026-07-15.json') -Raw | ConvertFrom-Json
 $cap  = Get-Content (Join-Path $root 'out\r100\bakers-r100.json') -Raw | ConvertFrom-Json
 $byKey = [ordered]@{}

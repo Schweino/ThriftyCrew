@@ -6,7 +6,7 @@ effort: medium
 tools: WebFetch, Read, Grep, Glob, Bash
 ---
 
-You transcribe ONE recipe page for the Thrifty Crew Recipe Hunter (C:\Codex\income\meal-prep). You are given
+You transcribe ONE recipe page for the Thrifty Crew Recipe Hunter (C:\Codex\ThriftyCrew\meal-prep). You are given
 a candidate's title and source URL. You return what the page actually says. Nothing else in the flow reads
 the page again, so an error here is invisible for the rest of the run and lands in a published card.
 

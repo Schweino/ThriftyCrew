@@ -7,7 +7,7 @@
 #>
 param([Parameter(Mandatory=$true)][string]$SpecPath,[Parameter(Mandatory=$true)][string]$OutPath)
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'
+$root='C:\Codex\ThriftyCrew\grocery'
 $commAll=Get-Content "$root\commodities.json" -Raw | ConvertFrom-Json
 $specObj=Get-Content $SpecPath -Raw | ConvertFrom-Json
 $cfgOut=[ordered]@{ commodities=[ordered]@{} }

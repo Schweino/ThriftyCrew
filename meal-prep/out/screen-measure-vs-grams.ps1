@@ -14,7 +14,7 @@
 # It also reports the band BELOW its own threshold. The 2x bar hides part of the same class: Rice "1 lb"
 # against 700 g is 1.54 and passes silently while the identical label against 1000 g is flagged.
 param([double]$Bar = 2.0)
-$mp = 'C:\Codex\income\meal-prep'
+$mp = 'C:\Codex\ThriftyCrew\meal-prep'
 . (Join-Path $mp 'pipeline\cook-measure-lib.ps1')
 $dens = (Get-Content "$mp\db\densities.json" -Raw | ConvertFrom-Json).items
 $LB = 453.592; $OZ = 28.3495

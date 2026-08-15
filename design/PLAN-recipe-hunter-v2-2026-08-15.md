@@ -127,7 +127,7 @@ a recipe.
 
 ### 2.3 Run directory
 
-    C:\Codex\income\meal-prep\runs\<run-id>\        run-id: hunt-YYYY-MM-DD[-suffix]
+    C:\Codex\ThriftyCrew\meal-prep\runs\<run-id>\        run-id: hunt-YYYY-MM-DD[-suffix]
       run.json                conditions, stop condition, wave size, started, digest date, board date
       state\<slug>.json       state machine files (2.1)
       candidates\<round>.json sourcer output per round

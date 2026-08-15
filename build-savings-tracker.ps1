@@ -16,7 +16,7 @@ $PCT='0%'
 $DATEIN='m/d/yyyy'
 $DATEOUT='mmm yyyy'
 
-$outPath = "C:\Codex\income\Simple-Money-Playbook-Savings-Goal-Tracker.xlsx"
+$outPath = "C:\Codex\ThriftyCrew\Simple-Money-Playbook-Savings-Goal-Tracker.xlsx"
 if (Test-Path $outPath) { Remove-Item $outPath -Force }
 $pkg = New-Object OfficeOpenXml.ExcelPackage
 

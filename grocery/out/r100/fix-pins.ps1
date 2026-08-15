@@ -1,5 +1,5 @@
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'
+$root='C:\Codex\ThriftyCrew\grocery'
 $f = Join-Path $root 'board-price-overrides.json'
 $doc = Get-Content $f -Raw | ConvertFrom-Json
 $before = @($doc.overrides).Count

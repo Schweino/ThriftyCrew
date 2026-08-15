@@ -1,5 +1,5 @@
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'
+$root='C:\Codex\ThriftyCrew\grocery'
 # standing full Aldi set (403 rows, in-store verified) + overlay today's 10 r100 rows + tortelloni
 $full = Get-Content (Join-Path $root 'out\regular\aldi-regular-2026-07-15.json') -Raw | ConvertFrom-Json
 $cap  = Get-Content (Join-Path $root 'out\r100\aldi-r100.json') -Raw | ConvertFrom-Json

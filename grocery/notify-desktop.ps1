@@ -40,7 +40,7 @@ param(
   [int]$TimeoutMin = 20
 )
 $ErrorActionPreference = 'Continue'   # a notifier must not throw into the caller
-$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 
 function New-Prompt([string]$store, [string]$detail, [string]$title, [string]$message, [string]$when) {
   $t = if ($title) { $title } elseif ($store) { "Grocery run blocked: $store bot wall" } else { 'Grocery run needs you' }

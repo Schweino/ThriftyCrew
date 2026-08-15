@@ -20,7 +20,7 @@
 #>
 param([switch]$ShowAll, [switch]$Baseline, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
-$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 $repo = Split-Path $root -Parent
 
 # A detector is a script whose product is a VERDICT. Named by prefix, plus the handful that do not follow it.

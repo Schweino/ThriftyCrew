@@ -26,7 +26,7 @@ $balFirst=ColL(2+3*$N); $balLast=ColL(1+4*$N)
 $AP=ColL(2+4*$N); $AQ=ColL(3+4*$N); $AR=ColL(4+4*$N); $AS=ColL(5+4*$N); $AT=ColL(6+4*$N); $AU=ColL(7+4*$N); $AV=ColL(8+4*$N); $AX=ColL(10+4*$N)
 $dLast=10+$N; $msgRow=$dLast+2; $noteRow=$dLast+4
 
-$outPath="C:\Codex\income\Simple-Money-Playbook-Debt-Payoff-Calculator.xlsx"
+$outPath="C:\Codex\ThriftyCrew\Simple-Money-Playbook-Debt-Payoff-Calculator.xlsx"
 if(Test-Path $outPath){ Remove-Item $outPath -Force }
 $pkg=New-Object OfficeOpenXml.ExcelPackage
 

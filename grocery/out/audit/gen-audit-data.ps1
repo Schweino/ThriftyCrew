@@ -2,7 +2,7 @@
 # Faithfully replicates compare-deals.ps1 Match-Category (include/exclude/GLOBAL/relax + FILE ORDER),
 # runs it over EVERY raw product across all store inputs, and validates against the engine's own candidates.
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'; $out="$root\out\audit"
+$root='C:\Codex\ThriftyCrew\grocery'; $out="$root\out\audit"
 $tmp=ConvertFrom-Json ([IO.File]::ReadAllText("$root\commodities.json")); $commods=@($tmp)
 
 # --- parse GLOBAL_EXCLUDE from compare-deals.ps1 (robust: whole-block regex, strip comments) ---

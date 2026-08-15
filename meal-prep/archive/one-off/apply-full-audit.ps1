@@ -8,8 +8,8 @@
 #>
 param([switch]$Apply)
 $ErrorActionPreference = 'Stop'
-$mp = 'C:\Codex\income\meal-prep'
-$g  = 'C:\Codex\income\grocery'
+$mp = 'C:\Codex\ThriftyCrew\meal-prep'
+$g  = 'C:\Codex\ThriftyCrew\grocery'
 $SP = 'C:\Users\Owner\AppData\Local\Temp\claude\C--Codex\f3644374-5e4d-4c5e-a7e6-7ac3b89873f9\scratchpad'
 
 # ---- DECISION TABLE ----------------------------------------------------------------
@@ -122,7 +122,7 @@ $RES = @{}
 foreach ($d in $DEF) { foreach ($n in $d.names) { $RES[$n.ToLower().Trim()] = $d } }
 
 # ---- load current data ----
-$feed = Get-Content 'C:\Codex\income\public\smp-feed.json' -Raw | ConvertFrom-Json
+$feed = Get-Content 'C:\Codex\ThriftyCrew\public\smp-feed.json' -Raw | ConvertFrom-Json
 $doc  = Get-Content (Join-Path $mp 'recipes-db.json') -Raw | ConvertFrom-Json
 $cons = Get-Content (Join-Path $SP 'audit2-consolidated.json') -Raw | ConvertFrom-Json
 

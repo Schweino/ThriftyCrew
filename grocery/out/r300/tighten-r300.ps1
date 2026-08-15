@@ -23,7 +23,7 @@
 #>
 param([switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 
 $ADD = @(
   # round 3: every remaining Family Fare match was DELI lunchmeat under a brand turkey-lunchmeat's include

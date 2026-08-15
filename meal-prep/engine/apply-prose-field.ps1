@@ -17,7 +17,7 @@ param(
   [switch]$DryRun
 )
 $ErrorActionPreference = 'Stop'
-$root = if ($PSScriptRoot) { Split-Path -Parent $PSScriptRoot } else { 'C:\Codex\income\meal-prep' }
+$root = if ($PSScriptRoot) { Split-Path -Parent $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\meal-prep' }
 $specDir = Join-Path $root 'db\recipes'
 if ($Field -notmatch '^[a-z_]+$') { throw "unsafe field name '$Field'" }
 

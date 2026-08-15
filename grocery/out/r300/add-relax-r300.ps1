@@ -11,7 +11,7 @@
 #>
 param([switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 
 $MIX   = '\bmix\b(?!\s*(?:&|and)\s*match)'   # VERBATIM from compare-deals $GLOBAL_EXCLUDE - must match char-for-char
 $RELAX = @(

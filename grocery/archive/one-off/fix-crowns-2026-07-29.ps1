@@ -24,11 +24,11 @@
 #>
 param([switch]$Apply)
 $ErrorActionPreference = 'Stop'
-$path = 'C:\Codex\income\grocery\commodities.json'
+$path = 'C:\Codex\ThriftyCrew\grocery\commodities.json'
 
 # --- proofs, run against the live feeds -------------------------------------------------------
 $names = New-Object System.Collections.Generic.List[string]
-foreach ($f in (Get-ChildItem 'C:\Codex\income\grocery\out\regular\*-regular-2026-07-*.json','C:\Codex\income\grocery\out\sams\sams-deals-2026-07-29.json' -ErrorAction SilentlyContinue)) {
+foreach ($f in (Get-ChildItem 'C:\Codex\ThriftyCrew\grocery\out\regular\*-regular-2026-07-*.json','C:\Codex\ThriftyCrew\grocery\out\sams\sams-deals-2026-07-29.json' -ErrorAction SilentlyContinue)) {
   try { $d = Get-Content $f.FullName -Raw -Encoding UTF8 | ConvertFrom-Json } catch { continue }
   foreach ($r in $d.deals) { if ($r.item) { $names.Add([string]$r.item) } }
 }

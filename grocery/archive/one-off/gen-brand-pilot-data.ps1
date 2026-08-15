@@ -1,5 +1,5 @@
 $ErrorActionPreference='Stop'
-$d = Get-Content 'C:\Codex\income\grocery\out\brands\ff-brands.json' -Raw | ConvertFrom-Json
+$d = Get-Content 'C:\Codex\ThriftyCrew\grocery\out\brands\ff-brands.json' -Raw | ConvertFrom-Json
 function R2($n){ [math]::Round([double]$n,2) }
 function R3($n){ [math]::Round([double]$n,3) }
 
@@ -28,7 +28,7 @@ foreach($it in $d.items){
 }
 $swaps = @($swaps | Sort-Object { -1 * $_.savePct })
 $out = [ordered]@{ store=$d.store; generated=$d.generated; swaps=$swaps; drill=$drill; varieties=$varieties }
-($out | ConvertTo-Json -Depth 9 -Compress) | Set-Content 'C:\Codex\income\grocery\out\brands\pilot-view.json' -Encoding UTF8
+($out | ConvertTo-Json -Depth 9 -Compress) | Set-Content 'C:\Codex\ThriftyCrew\grocery\out\brands\pilot-view.json' -Encoding UTF8
 Write-Output "wrote pilot-view.json"
 Write-Output ("swaps: " + $swaps.Count + "  drill: " + $drill.Keys.Count + "  varieties: " + $varieties.Keys.Count)
 foreach($s in $swaps){ Write-Output ("  {0,-22} store {1} ${2}/{5} vs {3} ${4}/{5}  = {6}%" -f $s.label, $s.store.brand, $s.store.per, $s.name.brand, $s.name.per, $s.unit, $s.savePct) }

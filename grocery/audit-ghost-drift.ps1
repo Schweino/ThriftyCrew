@@ -36,7 +36,7 @@
 param([switch]$ShowDiff, [switch]$Discover, [string]$Accept = '', [switch]$Recipes, [int]$Limit = 0, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
-$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 $repo = Split-Path $root -Parent
 $API  = 'https://map-to-success.ghost.io'
 $manifestPath  = Join-Path $root 'ghost-tool-manifest.json'

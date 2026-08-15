@@ -1,7 +1,7 @@
 ﻿# Fold the agent-collected store data (staples100 *-agent.json) into the engine:
 # per-store regular/deals files + url-inputs. Idempotent-ish (skips duplicate item names).
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 $s100 = Join-Path $root 'out\staples100'
 $today = '2026-07-12'
 

@@ -15,6 +15,6 @@ Write-Output "=== HIGH severity (all) ==="
 $conf | Where-Object{$_.severity -eq 'high'} | ForEach-Object { Write-Output ("  ["+$_.issue_type+"] "+$_.commodity+" | "+$_.summary) ; Write-Output ("      FIX: "+$_.suggested_fix+"   safe="+$_.fix_safe) }
 # dump a clean csv-ish list of ALL confirmed for review
 $rows=@($conf | ForEach-Object { [pscustomobject]@{sev=$_.severity;safe=$_.fix_safe;type=$_.issue_type;commodity=$_.commodity;fix=$_.suggested_fix;summary=$_.summary} })
-$rows | ConvertTo-Json -Depth 4 | Set-Content 'C:\Codex\income\grocery\out\audit\confirmed-clean.json' -Encoding UTF8
+$rows | ConvertTo-Json -Depth 4 | Set-Content 'C:\Codex\ThriftyCrew\grocery\out\audit\confirmed-clean.json' -Encoding UTF8
 Write-Output ""
 Write-Output ("wrote confirmed-clean.json ("+$rows.Count+" rows)")

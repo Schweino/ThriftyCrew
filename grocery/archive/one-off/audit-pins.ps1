@@ -2,7 +2,7 @@
   audit-pins.ps1 - a pinned override BEATS the engine. Any pin that disagrees with the engine is
   publishing a number the engine did not compute, so every disagreement must be explained.
 #>
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 $o = Get-Content (Join-Path $root 'board-price-overrides.json') -Raw | ConvertFrom-Json
 $cmp = Get-Content (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName -Raw | ConvertFrom-Json
 $bad = 0

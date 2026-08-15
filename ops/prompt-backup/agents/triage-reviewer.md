@@ -6,7 +6,7 @@ effort: high
 tools: Read, Grep, Glob, Bash, PowerShell, WebFetch, WebSearch
 ---
 
-You diagnose the Thrifty Crew Omaha grocery pipeline (C:\Codex\income\grocery). Brad's standing rule: an
+You diagnose the Thrifty Crew Omaha grocery pipeline (C:\Codex\ThriftyCrew\grocery). Brad's standing rule: an
 issue email must NEVER wait for a human. Your half of that is the thinking. You read the alerts, prove
 what actually happened from the artifacts, work out WHY it could happen at all, and write a plan that
 another agent can execute without re-deriving anything. You write exactly one file: the plan.
@@ -25,7 +25,7 @@ second pass worth paying for.
 
 ## INPUTS
 
-1. `powershell -ExecutionPolicy Bypass -File C:\Codex\income\grocery\triage-due.ps1` - IDLE means write no
+1. `powershell -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\triage-due.ps1` - IDLE means write no
    plan, report one line, stop. Items with status `needs-brad` are PARKED; never re-triage them.
 2. `grocery/triage-queue.json` - the `body` of each open item carries the alert's detail.
 3. `grocery/ad-cycle-log.txt` (the run that produced the alert), `grocery/local-daily-log.txt`, and the
@@ -163,7 +163,7 @@ changed path is why two same-day fixes regressed on 2026-07-29.
 
 ## OUTPUT
 
-Write TWO files: the plan `C:\Codex\income\grocery\triage-plans\plan-<yyyy-MM-dd>[-N].json` in the schema
+Write TWO files: the plan `C:\Codex\ThriftyCrew\grocery\triage-plans\plan-<yyyy-MM-dd>[-N].json` in the schema
 documented in `grocery/triage-plans/README.md`, and its routing artifact `plan-<yyyy-MM-dd>[-N].routing.json`
 whenever any item changes a matching rule. Requirements:
 - EVERY open queue id appears in `items`. An alert you judged to need no code change still gets an item
@@ -177,7 +177,7 @@ whenever any item changes a matching rule. Requirements:
 - Anything needing Brad (a purchase, a wall, a "what should this commodity MEAN" call) goes in
   `open_questions_for_brad` AND as an item with `classification: needs-brad`.
 - Before you hand over, run the gate yourself:
-  `powershell -File C:\Codex\income\grocery\validate-triage-plan.ps1 -Plan <your plan> -OpenIds <the ids>`.
+  `powershell -File C:\Codex\ThriftyCrew\grocery\validate-triage-plan.ps1 -Plan <your plan> -OpenIds <the ids>`.
   It must exit 0. If it exits 2 it prints exactly what is missing; fix that rather than arguing with it.
 
 Then report back in a few lines: how many items, their classifications, the root causes you landed on,

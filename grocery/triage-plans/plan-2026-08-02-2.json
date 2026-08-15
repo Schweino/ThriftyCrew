@@ -87,9 +87,9 @@
                                     "must_fire_case":  "frozen Pledge row: commodity furniture-polish, ad $12.52, size \u00273 ct 29 oz\u0027, peers with 12.5 oz and 9.7 oz singles -\u003e audit exits 2 naming furniture-polish and the 9.67-vs-9.7 fingerprint",
                                     "clean_twin":  "frozen hummus row: \u0027Member\u0027s Mark Classic Hummus Singles 2.5 oz., 16 ct.\u0027 $5.58 published 0.1395/oz -\u003e exit 0; and the 5 Sam\u0027s-validated live rows (Febreze/Clorox/Drano/Shearer\u0027s) must not appear in findings",
                                     "commands":  [
-                                                     "powershell -File C:\\Codex\\income\\grocery\\audit-pack-basis.ps1",
-                                                     "powershell -File C:\\Codex\\income\\grocery\\test-auditors.ps1",
-                                                     "powershell -File C:\\Codex\\income\\grocery\\compare-deals.ps1 -SelfTest"
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\audit-pack-basis.ps1",
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\test-auditors.ps1",
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\compare-deals.ps1 -SelfTest"
                                                  ]
                                 },
                       "rollback":  "remove the two known-wrong rulings and revert the audit-pack-basis + guards + test-auditors hunks; rebuild restores today\u0027s board exactly.",
@@ -152,9 +152,9 @@
                                     "must_fire_case":  "after the edits and rebuild, audit-match-soundness must report the 3 names moving OFF limes/peaches/cookies (visible in its moved list) and then be accepted; the routing artifact is the expected-set to diff against",
                                     "clean_twin":  "\u0027Deli Kitchen Jalapeno Pepper Hot Salsa\u0027 must stay routed to salsa; live cell rows must not move (live_board_rows_among_changes is empty)",
                                     "commands":  [
-                                                     "powershell -File C:\\Codex\\income\\grocery\\audit-match-soundness.ps1",
-                                                     "powershell -File C:\\Codex\\income\\grocery\\audit-match-soundness.ps1 -Accept",
-                                                     "powershell -File C:\\Codex\\income\\grocery\\guards.ps1"
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\audit-match-soundness.ps1",
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\audit-match-soundness.ps1 -Accept",
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\guards.ps1"
                                                  ]
                                 },
                       "rollback":  "revert the commodities.json hunks and re-accept the prior soundness baseline; no data migration.",
@@ -234,8 +234,8 @@
                                     "must_fire_case":  "the four frozen classification fixtures must each produce their verdict; RULE-INVISIBLE must page, BASIS-NULL must not",
                                     "clean_twin":  "post-fix live run of audit-coverage-gaps must show the berbere/hamburger-buns/canned-green-beans gaps GONE (admitted) and the bagged-produce gaps reclassified BASIS-NULL without paging",
                                     "commands":  [
-                                                     "powershell -File C:\\Codex\\income\\grocery\\audit-coverage-gaps.ps1",
-                                                     "powershell -File C:\\Codex\\income\\grocery\\test-auditors.ps1"
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\audit-coverage-gaps.ps1",
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\test-auditors.ps1"
                                                  ]
                                 },
                       "rollback":  "revert the commodities.json exclude hunks, the three band values, the allowlist entries, and the audit-coverage-gaps change; rebuild. All independent of each other.",
@@ -310,9 +310,9 @@
                                     "must_fire_case":  "post-rebuild, the 7 admitted names must appear as candidates of their commodities (explain-coverage-gap.ps1 flips their verdict to MATCHES); the next semantic sweep must NOT re-list any ruled name",
                                     "clean_twin":  "dry oven-ready lasagna noodle names must remain excluded from frozen-lasagna; pie filling/mix names must remain excluded from canned-pumpkin; the three drumstick names must remain UNRULED and re-appear in the next sweep until Brad answers",
                                     "commands":  [
-                                                     "powershell -File C:\\Codex\\income\\grocery\\explain-coverage-gap.ps1",
-                                                     "powershell -File C:\\Codex\\income\\grocery\\audit-match-soundness.ps1",
-                                                     "powershell -File C:\\Codex\\income\\grocery\\test-auditors.ps1"
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\explain-coverage-gap.ps1",
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\audit-match-soundness.ps1",
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\test-auditors.ps1"
                                                  ]
                                 },
                       "rollback":  "revert the four commodities.json hunks; rulings are individually removable from known-wrong.json. No migration.",

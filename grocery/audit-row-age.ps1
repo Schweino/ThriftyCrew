@@ -28,7 +28,7 @@
 param([switch]$SelfTest,[switch]$Baseline,[int]$MaxDays=14,[double]$Tolerance=2.0,[string]$OutDir)
 $ErrorActionPreference='Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
-$root = if($PSScriptRoot){ $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+$root = if($PSScriptRoot){ $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 if(-not $OutDir){ $OutDir = Join-Path $root 'out' }
 $baselinePath = Join-Path $OutDir 'row-age-baseline.json'
 

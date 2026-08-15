@@ -9,7 +9,7 @@
 #>
 param([switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 
 $RECIP = @(
   @{ id='deli-ham';      pats=@('\bdiced\b','\bcubed\b');                     why="bare '\bham\b' claimed 'Great Value Diced Ham' -> diced-ham" }

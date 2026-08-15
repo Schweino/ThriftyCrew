@@ -1,5 +1,5 @@
 $ErrorActionPreference='Stop'
-$here='C:\Codex\income\grocery\brands'
+$here='C:\Codex\ThriftyCrew\grocery\brands'
 $cfg = (Get-Content (Join-Path $here 'brand-config-7.json') -Raw | ConvertFrom-Json).commodities
 $ff = (Get-Content (Join-Path $here '..\out\brands\out-ff-buckets-g.json') -Raw | ConvertFrom-Json).items
 $wm = (Get-Content (Join-Path $here 'out-walmart-buckets-g.json') -Raw | ConvertFrom-Json).items

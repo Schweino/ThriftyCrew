@@ -4,7 +4,7 @@
 # classification review table on stdout. Also cross-checks every slug against
 # the live feed so the tool's live-price lookups will actually hit.
 $ErrorActionPreference = 'Stop'
-$dir = 'C:\Codex\income\meal-prep'
+$dir = 'C:\Codex\ThriftyCrew\meal-prep'
 $db  = Get-Content "$dir\recipes-db.json" -Raw | ConvertFrom-Json
 # v2 manifest: current-cheapest whole-package per serving per slug (2026-07-26 basis switch)
 $script:cheapPs=@{}

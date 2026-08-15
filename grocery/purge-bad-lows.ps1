@@ -19,7 +19,7 @@
 #>
 param([switch]$Apply, [double]$MinRatio = 2.0)
 $ErrorActionPreference = 'Stop'
-$path = 'C:\Codex\income\grocery\price-history.json'
+$path = 'C:\Codex\ThriftyCrew\grocery\price-history.json'
 $doc = Get-Content $path -Raw -Encoding UTF8 | ConvertFrom-Json
 
 $report = @()

@@ -8,10 +8,10 @@ Verify with a tiny dispatch first if unsure the registry loaded.
 
 ## Stage 1 - dispatch ALL TEN sourcers in ONE message, subagent_type=recipe-sourcer, background:
 
-Common to every prompt: "First Read C:\Codex\income\meal-prep\recipes-db.json and extract existing
+Common to every prompt: "First Read C:\Codex\ThriftyCrew\meal-prep\recipes-db.json and extract existing
 names/slugs so you never return a duplicate or near-duplicate. Follow your agent instructions
 (dinner over 500 cal, high protein, 14-serving batch-scalable, board-mappable ingredients, no seafood).
-Write JSON to C:\Codex\income\meal-prep\r300\candidates\<SLICE>.json with schema
+Write JSON to C:\Codex\ThriftyCrew\meal-prep\r300\candidates\<SLICE>.json with schema
 {"slice":"<SLICE>","candidates":[{"name","slug","protein","cuisine","source_url","est_cal",
 "main_ingredients":[],"unmapped_flags":[],"why"}]}. Return a short summary only."
 

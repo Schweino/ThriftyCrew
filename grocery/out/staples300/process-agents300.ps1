@@ -1,6 +1,6 @@
 # Fold the staples300 agent data into the engine (same pattern as staples100 process-agents, PS5.1-safe).
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 $s3 = Join-Path $root 'out\staples300'
 $today = '2026-07-13'
 

@@ -1,5 +1,5 @@
 $ErrorActionPreference='Stop'
-$adminKey=(Get-Content 'C:\Codex\income\meal-prep\.ghostkey' -Raw).Trim()
+$adminKey=(Get-Content 'C:\Codex\ThriftyCrew\meal-prep\.ghostkey' -Raw).Trim()
 $apiUrl='https://map-to-success.ghost.io'
 $p=$adminKey -split ':'; $id=$p[0]; $secretHex=$p[1]
 $sb=New-Object byte[] ($secretHex.Length/2); for($i=0;$i -lt $sb.Length;$i++){ $sb[$i]=[Convert]::ToByte($secretHex.Substring($i*2,2),16) }
@@ -19,6 +19,6 @@ Write-Output ("html length: "+([string]$post.html).Length)
 Write-Output ("feature_image: "+$post.feature_image)
 Write-Output ("excerpt: "+$post.custom_excerpt)
 # save current html as a backup
-[IO.File]::WriteAllText('C:\Codex\income\site-backups\start-here.before.html', [string]$post.html, (New-Object Text.UTF8Encoding($false)))
-[IO.File]::WriteAllText('C:\Codex\income\_starthere.id.txt', ($post.id+'|'+$post.updated_at), (New-Object Text.UTF8Encoding($false)))
+[IO.File]::WriteAllText('C:\Codex\ThriftyCrew\site-backups\start-here.before.html', [string]$post.html, (New-Object Text.UTF8Encoding($false)))
+[IO.File]::WriteAllText('C:\Codex\ThriftyCrew\_starthere.id.txt', ($post.id+'|'+$post.updated_at), (New-Object Text.UTF8Encoding($false)))
 Write-Output "backed up current html -> site-backups\start-here.before.html"

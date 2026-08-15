@@ -65,7 +65,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
-$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 # WHO AM I. This file is a fork of build-sams-deals.ps1 (capture-lib.ps1:14-19) and inherited that name in
 # every operator-facing string, so a Walmart failure sent you to the Sam's builder and the Sam's capture.
 # Read the name off the file itself so the next fork renames itself. Captured ONCE at script scope on

@@ -1,5 +1,5 @@
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'
+$root='C:\Codex\ThriftyCrew\grocery'
 $commodities = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
 function WhoClaims([string]$name){
   $n = $name.ToLower()

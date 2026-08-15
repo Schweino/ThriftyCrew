@@ -60,8 +60,8 @@ labelled "typical Omaha shelf prices". Fix both tabs or the card trades one absu
 
 ## 2. The two code paths that disagree (both in one file)
 
-File: `C:\Codex\income\meal-prep\pipeline\tpl2-scaler-prefix.html`. This template is baked verbatim
-into every built card (`C:\Codex\income\meal-prep\db\built\<slug>.body.html`; verified today that a
+File: `C:\Codex\ThriftyCrew\meal-prep\pipeline\tpl2-scaler-prefix.html`. This template is baked verbatim
+into every built card (`C:\Codex\ThriftyCrew\meal-prep\db\built\<slug>.body.html`; verified today that a
 built card carries the full script), rendered by `meal-prep\engine\build-cards.ps1`, published by
 `meal-prep\engine\publish.ps1`. A template change therefore requires rebuild + republish of all 544
 cards. There is no site-wide injection of this script; the copy in each post is the copy that runs.
@@ -375,9 +375,9 @@ the rotation all shift together via their normal producers; run them as a set, n
 
 ### Critical Files for Implementation
 
-- C:\Codex\income\meal-prep\pipeline\tpl2-scaler-prefix.html
-- C:\Codex\income\grocery\export-feed.ps1
-- C:\Codex\income\meal-prep\engine\build-cards.ps1
-- C:\Codex\income\meal-prep\engine\publish.ps1
-- C:\Codex\income\meal-prep\pipeline\feed-covers-published.ps1
-- C:\Codex\income\meal-prep\pipeline\compute-v2-perserving.ps1 (phase 2 only)
+- C:\Codex\ThriftyCrew\meal-prep\pipeline\tpl2-scaler-prefix.html
+- C:\Codex\ThriftyCrew\grocery\export-feed.ps1
+- C:\Codex\ThriftyCrew\meal-prep\engine\build-cards.ps1
+- C:\Codex\ThriftyCrew\meal-prep\engine\publish.ps1
+- C:\Codex\ThriftyCrew\meal-prep\pipeline\feed-covers-published.ps1
+- C:\Codex\ThriftyCrew\meal-prep\pipeline\compute-v2-perserving.ps1 (phase 2 only)

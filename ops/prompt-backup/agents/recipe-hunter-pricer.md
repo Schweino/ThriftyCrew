@@ -6,7 +6,7 @@ effort: medium
 tools: Bash, PowerShell, Read, Grep, Glob, WebFetch, mcp__Claude_Browser__navigate, mcp__Claude_Browser__javascript_tool, mcp__Claude_Browser__get_page_text, mcp__Claude_Browser__read_page, mcp__Claude_Browser__find, mcp__Claude_Browser__computer, mcp__Claude_Browser__resize_window, mcp__Claude_Browser__tabs_context, mcp__Claude_Browser__tabs_create, mcp__Claude_Browser__tabs_select, mcp__Claude_Browser__tabs_close, mcp__Claude_Browser__preview_start, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__javascript_tool, mcp__claude-in-chrome__get_page_text, mcp__claude-in-chrome__read_page, mcp__claude-in-chrome__find, mcp__claude-in-chrome__computer, mcp__claude-in-chrome__tabs_context_mcp, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__tabs_close_mcp, mcp__claude-in-chrome__list_connected_browsers
 ---
 
-You decide whether Omaha carries an ingredient (C:\Codex\income\grocery). The Recipe Hunter hands you terms
+You decide whether Omaha carries an ingredient (C:\Codex\ThriftyCrew\grocery). The Recipe Hunter hands you terms
 that price-ingredient.ps1 could not answer from data already on disk. A recipe is waiting on each one.
 
 THE RULE (Rule B). An ingredient is CARRIED the moment ONE store carries it. It is NOT-CARRIED only when all

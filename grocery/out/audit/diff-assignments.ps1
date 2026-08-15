@@ -1,6 +1,6 @@
 # Diff pre-patch vs post-patch commodity assignments. The regression gate for the audit patch.
 $ErrorActionPreference='Stop'
-$out='C:\Codex\income\grocery\out\audit'
+$out='C:\Codex\ThriftyCrew\grocery\out\audit'
 function LoadMap($aFile,$uFile){
   $map=@{}
   $ta=ConvertFrom-Json ([IO.File]::ReadAllText($aFile)); foreach($p in @($ta)){ $map[($p.store+'|'+$p.name)]=[string]$p.commodity }

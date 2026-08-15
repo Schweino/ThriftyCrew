@@ -7,7 +7,7 @@ description: Log a food nutrition label into the Thrifty Crew meal-prep macro da
 
 Brad and his wife meal prep. Instead of hand-entering macros in a spreadsheet, we keep a **local food macro database** and compute macros on demand. This skill covers three jobs: **logging a label**, **computing a recipe**, and **publishing a recipe to the site in the standard model**.
 
-**The database:** `C:\Codex\income\meal-prep\food-macros-db.json`
+**The database:** `C:\Codex\ThriftyCrew\meal-prep\food-macros-db.json`
 Shape: `{ "readme": "...", "items": [ ... ] }`
 
 **Per-item schema** (all macros are PER SERVING):
@@ -19,7 +19,7 @@ Shape: `{ "readme": "...", "items": [ ... ] }`
 - `brand` = empty string `""` **only** for fresh produce (e.g. shredded carrots, green peppers). Everything packaged has a brand.
 - `notes` = human context: raw vs cooked, dry vs cooked, "from label", package/packet size, any correction made.
 
-**The recipe database:** `C:\Codex\income\meal-prep\recipes-db.json` — one record per published recipe (see JOB 3).
+**The recipe database:** `C:\Codex\ThriftyCrew\meal-prep\recipes-db.json` — one record per published recipe (see JOB 3).
 
 ---
 
@@ -57,7 +57,7 @@ Exact-string `Edit` on the one item line. Fractions to decimals in `serving_qty`
 
 ### Step 5 — Validate
 ```
-powershell -Command "$db = Get-Content 'C:\Codex\income\meal-prep\food-macros-db.json' -Raw | ConvertFrom-Json; $db.items.Count"
+powershell -Command "$db = Get-Content 'C:\Codex\ThriftyCrew\meal-prep\food-macros-db.json' -Raw | ConvertFrom-Json; $db.items.Count"
 ```
 **Gotcha:** the LAST item has no trailing comma — don't add one.
 
@@ -83,7 +83,7 @@ It scales each item by `grams / serving_grams`, sums the batch, and divides by `
 > engine. **DO NOT publish via this section's flow or `publish-recipe.ps1`** — a card published this way
 > bypasses the canonical stores (`meal-prep\db\recipes\`, `db\costed.json`, the per-serving manifest,
 > top5/planner data) and lands as an orphan old-format page. THE current intake path is documented in
-> **`C:\Codex\income\meal-prep\engine\README.md`** ("Adding recipes"): write a v2 spec into
+> **`C:\Codex\ThriftyCrew\meal-prep\engine\README.md`** ("Adding recipes"): write a v2 spec into
 > `db\recipes\<slug>.json`, add any new ingredient rows to `db\ingredients.json` + canon rules, then run
 > `engine\cost-recipes.ps1 -Slugs`, `pipeline\compute-v2-perserving.ps1`, the reanchor scripts,
 > `engine\build-cards.ps1 -Slugs`, `engine\publish.ps1 -Slugs`, and add the recipes-db row. JOB 1/JOB 2
@@ -91,7 +91,7 @@ It scales each item by `grams / serving_grams`, sums the batch, and divides by `
 > of JOB 3 is kept as historical reference for the data standards (14 servings, grams=amount-used, sync
 > rules), which still apply.
 
-**Every Meal Prep recipe follows this exact model. Match it precisely so new recipes fit the set.** Recipe sources/scratch live under `C:\Codex\income\meal-prep\`. Confirm Brad's REAL cooking method before writing steps — never fabricate.
+**Every Meal Prep recipe follows this exact model. Match it precisely so new recipes fit the set.** Recipe sources/scratch live under `C:\Codex\ThriftyCrew\meal-prep\`. Confirm Brad's REAL cooking method before writing steps — never fabricate.
 
 ### A. The standard
 - **14 servings, always** (a week of dinners for two = 2 x 7). Scale any recipe to 14 by multiplying every ingredient's grams by `14 / current_servings`; per-serving macros and per-serving cost then stay constant, only batch totals grow.
@@ -143,7 +143,7 @@ Publish (upserts by slug; tags Meal Prep; paid by default). Invoke IN-SESSION wi
 ---
 
 ## Cheat-sheet
-- Food DB: `C:\Codex\income\meal-prep\food-macros-db.json`. Recipe DB: `C:\Codex\income\meal-prep\recipes-db.json`. Both local, not on Ghost.
+- Food DB: `C:\Codex\ThriftyCrew\meal-prep\food-macros-db.json`. Recipe DB: `C:\Codex\ThriftyCrew\meal-prep\recipes-db.json`. Both local, not on Ghost.
 - Macros are PER SERVING. Meats note raw/cooked; pasta/rice note dry/cooked. Blank brand = fresh produce only.
 - 1 lb = 453.592 g, 1 oz = 28.3495 g.
 - Standard package sizes: canned beans ~15.5 oz (drained ~255g), corn ~15.25 oz (drained ~300g), enchilada sauce 10 oz, tomato paste 6 oz, Barilla Protein Plus box 14.5 oz (411g), sauce jar 24 oz, cheese bag 8 oz, parmesan container ~8 oz, Taco Bell fajita packet 1.4 oz (~40g), taco packet ~1 oz (28g), broccoli bag ~12 oz, broth carton 32 oz.

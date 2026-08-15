@@ -6,7 +6,7 @@
 #>
 param([switch]$Strict)
 $ErrorActionPreference='Stop'
-$here='C:\Codex\income\grocery'
+$here='C:\Codex\ThriftyCrew\grocery'
 $bb = Get-Content (Join-Path $here 'out\brands\brands-board.json') -Raw | ConvertFrom-Json
 $com = Get-Content (Join-Path $here 'commodities.json') -Raw | ConvertFrom-Json
 $comById=@{}; foreach($x in $com){ $comById[[string]$x.id]=$x }

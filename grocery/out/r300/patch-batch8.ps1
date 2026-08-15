@@ -10,7 +10,7 @@
 #>
 param([switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 
 $RECIP = @(
   @{ id='tomatoes'; pats=@('\bcherry\b','\bgrape\b');                      why="bare '\btomato(?:es)?\b' claimed every cherry/grape clamshell - the proxy itself. Live cells are all roma/vine/beefsteak, so nothing drops -> cherry-tomatoes" }

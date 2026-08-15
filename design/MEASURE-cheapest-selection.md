@@ -1,7 +1,7 @@
 ﻿# Measured: cheapest-store selection, old rule vs min-cost rule
 
 Generated 2026-08-15 15:34 by `grocery\measure-cheapest-selection.ps1`. Read-only.
-Feed: `C:\Codex\income\public\smp-feed.json`, week of 2026-08-15, schema 2. Cards: 544.
+Feed: `C:\Codex\ThriftyCrew\public\smp-feed.json`, week of 2026-08-15, schema 2. Cards: 544.
 
 ## Cheapest lane, at each recipe base servings
 

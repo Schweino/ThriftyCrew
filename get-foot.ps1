@@ -1,5 +1,5 @@
 $ErrorActionPreference='Stop'
-$adminKey=(Get-Content 'C:\Codex\income\meal-prep\.ghostkey' -Raw).Trim()
+$adminKey=(Get-Content 'C:\Codex\ThriftyCrew\meal-prep\.ghostkey' -Raw).Trim()
 $apiUrl='https://map-to-success.ghost.io'
 $p=$adminKey -split ':'; $id=$p[0]; $secretHex=$p[1]
 $sb=New-Object byte[] ($secretHex.Length/2); for($i=0;$i -lt $sb.Length;$i++){ $sb[$i]=[Convert]::ToByte($secretHex.Substring($i*2,2),16) }
@@ -12,7 +12,7 @@ $hdr=@{ Authorization="Ghost $jwt"; 'Accept-Version'='v5.0' }
 $s=Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/settings/" -Headers $hdr -TimeoutSec 30
 $foot=($s.settings | Where-Object { $_.key -eq 'codeinjection_foot' }).value
 Write-Output ("foot length: "+([string]$foot).Length)
-[IO.File]::WriteAllText('C:\Codex\income\site-backups\codeinjection-foot-BEFORE-homepage-copy-2026-07-13.html', [string]$foot, (New-Object Text.UTF8Encoding($false)))
+[IO.File]::WriteAllText('C:\Codex\ThriftyCrew\site-backups\codeinjection-foot-BEFORE-homepage-copy-2026-07-13.html', [string]$foot, (New-Object Text.UTF8Encoding($false)))
 $targets=@(
  'We price-check six grocery stores every morning',
  'Every morning we check 90+ staples at six stores in Omaha',

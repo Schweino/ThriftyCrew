@@ -1,6 +1,6 @@
 # Apply the structured audit patch to commodities.json. Validates every regex; reports each change.
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'; $out="$root\out\audit"
+$root='C:\Codex\ThriftyCrew\grocery'; $out="$root\out\audit"
 Copy-Item "$root\commodities.json" "$out\commodities.before-patch.json" -Force
 $tmp=ConvertFrom-Json ([IO.File]::ReadAllText("$root\commodities.json")); $commods=@($tmp)
 $byId=@{}; foreach($c in $commods){ $byId[[string]$c.id]=$c }

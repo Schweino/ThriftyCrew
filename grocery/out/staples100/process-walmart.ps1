@@ -1,7 +1,7 @@
 # Fold the vetted Walmart winners (walmart-final.csv, pipe-delimited) into the engine:
 # out\regular\walmart-regular-2026-07-12.json (append; skip ids already present) + store-walmart7-urls.json
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 $rows = Import-Csv (Join-Path $root 'out\staples100\walmart-final.csv') -Delimiter '|'
 $rf = Join-Path $root 'out\regular\walmart-regular-2026-07-12.json'
 $doc = Get-Content $rf -Raw | ConvertFrom-Json

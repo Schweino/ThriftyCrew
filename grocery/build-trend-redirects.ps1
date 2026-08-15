@@ -13,8 +13,8 @@
   Settings -> Advanced -> Redirects (it replaces the whole redirect set, so this file must stay complete).
 #>
 param(
-  [string]$HistoryFile = 'C:\Codex\income\grocery\price-history.json',
-  [string]$OutFile     = 'C:\Codex\income\grocery\out\trend-redirects.json',
+  [string]$HistoryFile = 'C:\Codex\ThriftyCrew\grocery\price-history.json',
+  [string]$OutFile     = 'C:\Codex\ThriftyCrew\grocery\out\trend-redirects.json',
   [string]$Target      = '/omaha-grocery-prices/'
 )
 

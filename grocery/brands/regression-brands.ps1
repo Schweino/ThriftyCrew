@@ -7,7 +7,7 @@
 #>
 param([Parameter(Mandatory=$true)][string]$Baseline)
 $ErrorActionPreference='Stop'
-$here='C:\Codex\income\grocery'
+$here='C:\Codex\ThriftyCrew\grocery'
 $cur  = Get-Content "$here\out\brands\brands-board.json" -Raw | ConvertFrom-Json
 $base = Get-Content $Baseline -Raw | ConvertFrom-Json
 $fail=0

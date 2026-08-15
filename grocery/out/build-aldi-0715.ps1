@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
-$work = 'C:\Codex\income\grocery\out\aldi-work-0715.txt'
-$yesterdayPath = 'C:\Codex\income\grocery\out\regular\aldi-regular-2026-07-14.json'
-$outPath = 'C:\Codex\income\grocery\out\regular\aldi-regular-2026-07-15.json'
+$work = 'C:\Codex\ThriftyCrew\grocery\out\aldi-work-0715.txt'
+$yesterdayPath = 'C:\Codex\ThriftyCrew\grocery\out\regular\aldi-regular-2026-07-14.json'
+$outPath = 'C:\Codex\ThriftyCrew\grocery\out\regular\aldi-regular-2026-07-15.json'
 
 function Norm([string]$s){
   if(-not $s){return ''}

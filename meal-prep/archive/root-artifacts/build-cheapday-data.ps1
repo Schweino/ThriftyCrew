@@ -1,6 +1,6 @@
 # build-cheapday-data.ps1
 # Rebuilds the embedded JS data block for the Cheapest Full Day of Food page
-# (C:\Codex\income\cheap-day-tool.html).
+# (C:\Codex\ThriftyCrew\cheap-day-tool.html).
 #
 # Reads:
 #   - food-macros-db.json   (label-accurate calories / protein_g / serving_grams)

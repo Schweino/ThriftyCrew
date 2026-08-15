@@ -1,5 +1,5 @@
 ﻿$ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 $sf = Join-Path $root 'out\fareway\fareway-shop-verify.json'
 $tmp = ConvertFrom-Json ([IO.File]::ReadAllText($sf)); $shop = @($tmp)
 $haveIds = @{}; foreach ($s in $shop) { $haveIds[[string]$s.id] = $true }

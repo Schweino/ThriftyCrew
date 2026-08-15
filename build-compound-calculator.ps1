@@ -15,7 +15,7 @@ $MONEY='$#,##0;($#,##0);"-"'
 $NUM='0'
 $PCTNUM='0.0"%"'
 
-$outPath = "C:\Codex\income\Simple-Money-Playbook-Compound-Calculator.xlsx"
+$outPath = "C:\Codex\ThriftyCrew\Simple-Money-Playbook-Compound-Calculator.xlsx"
 if (Test-Path $outPath) { Remove-Item $outPath -Force }
 $pkg = New-Object OfficeOpenXml.ExcelPackage
 

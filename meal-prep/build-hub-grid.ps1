@@ -30,7 +30,7 @@ $ErrorActionPreference='Stop'
 # $PSScriptRoot, not a hard-coded path (2026-08-01): the rotation chain now calls this script wherever
 # check-ad-cycles runs, and the cloud runner's checkout is not C:\Codex. A hard-coded root here meant a
 # cloud-side rotation flip could never refresh the hub and would log INCOMPLETE on every flip.
-$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\meal-prep' }
+$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\meal-prep' }
 # stable local work dir (was hardcoded to a long-gone session scratchpad - ratchet-class bug)
 $scratch=Join-Path $env:TEMP 'tc-hub-work'
 New-Item -ItemType Directory -Force $scratch | Out-Null

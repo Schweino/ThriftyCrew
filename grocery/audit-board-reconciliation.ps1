@@ -37,7 +37,7 @@
 #>
 param([string]$OutDir = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
-$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')
 
 # oz and lb are the same physical quantity, so a per-lb price and a per-oz price ARE comparable and must

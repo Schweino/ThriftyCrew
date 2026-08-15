@@ -3,7 +3,7 @@ name: grocery-alert-triage
 description: Daily 6:30am drain of the grocery ops-alert triage queue (plus catch-up on app launch). Orchestrates two agents: a Fable/high READ-ONLY Triage Reviewer that diagnoses every alert, finds the holistic root cause and writes a plan, then an Opus/max Triage Developer that implements it, ships it through the gates and closes the items. IDLE-stops in seconds when clear.
 ---
 
-You are the ORCHESTRATOR for the Thrifty Crew grocery alert triage (C:\Codex\income\grocery). Brad's
+You are the ORCHESTRATOR for the Thrifty Crew grocery alert triage (C:\Codex\ThriftyCrew\grocery). Brad's
 standing rule (2026-07-25): an issue email must NEVER wait for a human. The email is visibility; these
 agents are the response.
 
@@ -28,11 +28,11 @@ had nowhere clean to write, because `-2` was already a different investigation. 
 plan: they are committed with their fixes and are the record of why a rule exists.
 
 STEP 0 - GUARD: run
-  powershell -ExecutionPolicy Bypass -File C:\Codex\income\grocery\triage-due.ps1
+  powershell -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\triage-due.ps1
 IDLE means report one line and STOP (no agents, no plan, no cost). DUE means proceed. Items with status
 'needs-brad' are PARKED - never re-triage them.
 
-STEP 0.5 - SYNC: powershell -Command "git -C C:\Codex\income pull --rebase --autostash origin main"
+STEP 0.5 - SYNC: powershell -Command "git -C C:\Codex\ThriftyCrew pull --rebase --autostash origin main"
 Then capture the current HEAD and `git status --porcelain`. Keep the list of FOREIGN uncommitted files:
 you pass it to both agents so neither reverts, commits or fights another session's in-flight work.
 
@@ -70,7 +70,7 @@ On 2026-07-31 this step would have taken a 14-item review down to 4 substantive 
 STEP 1 - DIAGNOSE: spawn the reviewer, synchronously (run_in_background: false), with subagent_type
 "triage-reviewer". Tell it: the open queue ids in priority order from STEP 0.75, which ones are one-liners
 or superseded, the foreign-dirty file list, the plan path to write
-(`C:\Codex\income\grocery\triage-plans\` plus the next free sequence name per the rule above, which is NOT
+(`C:\Codex\ThriftyCrew\grocery\triage-plans\` plus the next free sequence name per the rule above, which is NOT
 always the bare `plan-<today>.json`), that round = 1, and a per-item effort ceiling
 (a tool-call budget for any single item, past which it parks the item as `needs-more-time`). The ceiling is
 PER ITEM AND PER CLASS, not one number for the run: name the short wall budget from STEP 0.75 on the items
@@ -78,7 +78,7 @@ it applies to, and a real ceiling on the substantive ones. A single ceiling quot
 how a wall alert ends up costing what a wrong-product alert should.
 
 STEP 2 - GATE THE HANDOFF, DETERMINISTICALLY. Do not eyeball the plan; run:
-  powershell -ExecutionPolicy Bypass -File C:\Codex\income\grocery\validate-triage-plan.ps1 -Plan <plan> -OpenIds <every open id>
+  powershell -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\validate-triage-plan.ps1 -Plan <plan> -OpenIds <every open id>
 Exit 0 = hand it over. Exit 2 = it prints exactly what is missing; send the reviewer back ONCE with that
 text (SendMessage to the same agent). Exit 3 = BLIND (no plan, unparseable, zero items): treat like a
 second failure.
@@ -132,7 +132,7 @@ STEP 5 - VERIFY THE RUN, DO NOT TAKE ITS WORD FOR IT:
 - `triage-due.ps1` again: it should be IDLE, or list only needs-brad items, or list only the mid-run
   arrivals STEP 4.5 deliberately left for the next run. Those three are the ONLY clean endings. If it is
   DUE for anything else, that is an item the run dropped, and the report names it rather than closing quiet.
-- `git -C C:\Codex\income status --porcelain`: no .ps1, commodities.json, categories.json,
+- `git -C C:\Codex\ThriftyCrew status --porcelain`: no .ps1, commodities.json, categories.json,
   commodity-search.json, allowlist/config json, SKILL or plan file left uncommitted. Regenerated pipeline
   output (out\*, board.json, feed, logs) is the pipeline's, not ours.
 - HEAD == origin/main.

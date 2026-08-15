@@ -6,7 +6,7 @@
   product-urls.json (price+size from walmart-regular). ADD-only: never touches existing links or other stores.
 #>
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 
 $wl    = Get-Content (Join-Path $root 'out\url-worklist.json') -Raw | ConvertFrom-Json
 $chips = @($wl.stores.Walmart) | Where-Object { $_.reason -eq 'missing' }

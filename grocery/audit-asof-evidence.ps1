@@ -45,7 +45,7 @@
 #>
 param([switch]$Baseline, [switch]$Quiet, [switch]$SelfTest, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
-$root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+$root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 
 # The stores whose everyday prices come from DATED capture files. A store absent from this table is not
 # "clean", it is UNWATCHED, and the report says so by name rather than leaving a silent gap.

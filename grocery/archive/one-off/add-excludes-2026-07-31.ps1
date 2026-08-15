@@ -41,7 +41,7 @@
 #>
 param([switch]$Apply)
 $ErrorActionPreference = 'Stop'
-$path = 'C:\Codex\income\grocery\commodities.json'
+$path = 'C:\Codex\ThriftyCrew\grocery\commodities.json'
 
 # id -> file-escaped patterns to add
 $adds = [ordered]@{

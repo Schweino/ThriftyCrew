@@ -23,7 +23,7 @@ Fail either gate â†’ that store is flagged `BLOCKED` and contributes nothin
 ### 1) The three server-side stores (one command, no browser)
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File "C:\Codex\income\grocery\pull-grocery-ads.ps1"
+powershell -ExecutionPolicy Bypass -File "C:\Codex\ThriftyCrew\grocery\pull-grocery-ads.ps1"
 ```
 
 Prints a verification table (store, zip, ad dates, OMAHA, CURRENT, deals, status) and writes `out\ads-YYYY-MM-DD.json`. Only `PASS` stores contribute deals.
@@ -37,9 +37,9 @@ Kroger is Akamai bot-protected, so the discovery step runs in Chrome (the agent 
 3. Verify + download:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File "C:\Codex\income\grocery\pull-bakers.ps1" `
+powershell -ExecutionPolicy Bypass -File "C:\Codex\ThriftyCrew\grocery\pull-bakers.ps1" `
   -StoreLabel "Pickup at Saddlecreek" -AdFrom 2026-07-01 -AdTo 2026-07-07 `
-  -UrlsFile "C:\Codex\income\grocery\out\bakers\urls.txt"
+  -UrlsFile "C:\Codex\ThriftyCrew\grocery\out\bakers\urls.txt"
 ```
 
 It re-checks both gates, stages the pages, then installs them to `out\bakers\page-NN.jpg`, clearing the folder's old page files first. The agent vision-reads **the pages `meta.json` lists**, not a bare `page-*.jpg` glob, to extract deals (the front page prints the sale dates, which independently confirm the week).

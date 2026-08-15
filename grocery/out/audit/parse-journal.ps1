@@ -1,6 +1,6 @@
 $ErrorActionPreference='Stop'
 $j='C:\Users\Owner\.claude\projects\C--Codex\f3644374-5e4d-4c5e-a7e6-7ac3b89873f9\subagents\workflows\wf_118ee387-f57\journal.jsonl'
-$out='C:\Codex\income\grocery\out\audit'
+$out='C:\Codex\ThriftyCrew\grocery\out\audit'
 $res=@(Get-Content $j | ForEach-Object { try{ $o=ConvertFrom-Json $_; if($o.type -eq 'result'){$o} }catch{} })
 $verify=New-Object System.Collections.Generic.List[object]
 $auditCount=0

@@ -3,7 +3,7 @@
 # + the live feed (to verify board_ids). Output: dinner-data.js (a JS const)
 # and a category review table on stdout.
 $ErrorActionPreference = 'Stop'
-$dir = 'C:\Codex\income\meal-prep'
+$dir = 'C:\Codex\ThriftyCrew\meal-prep'
 $db  = Get-Content "$dir\recipes-db.json" -Raw | ConvertFrom-Json
 # v2 manifest: current-cheapest whole-package per serving per slug (2026-07-26 basis switch)
 $script:cheapPs=@{}

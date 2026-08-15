@@ -18,7 +18,7 @@
 #>
 param([switch]$Verify)
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income'
+$root = 'C:\Codex\ThriftyCrew'
 $dbFile = Join-Path $root 'meal-prep\recipes-db.json'
 
 $mp = Get-Content (Join-Path $root 'meal-prep\ingredient-map.json') -Raw | ConvertFrom-Json

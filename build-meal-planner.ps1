@@ -6,7 +6,7 @@
 # data was heading toward (815 KB at 513 recipes, ~2.35 MB at 1500). The //__DATA__ marker is retired to
 # a harmless comment; if still present it is replaced with nothing meaningful.
 $ErrorActionPreference='Stop'
-$dir='C:\Codex\income'
+$dir='C:\Codex\ThriftyCrew'
 $tpl=[IO.File]::ReadAllText((Join-Path $dir 'meal-plan-builder-template.html'))
 $out=$tpl.Replace('//__DATA__','// planner data fetched from the Worker at runtime (see gen-planner-data.ps1)')
 # sanity: the tool must fetch the served data, and must NOT carry an embedded MPP array (the thing we removed)

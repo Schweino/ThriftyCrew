@@ -7,10 +7,10 @@
   the hand-off: per store, the ids still missing a cell, with the search term, the include patterns the
   in-browser reducer needs, and the unit the row must be able to price in.
 
-  Written to C:\Codex\income\meal-prep\r300\board-capture-worklist.json for the MAIN session.
+  Written to C:\Codex\ThriftyCrew\meal-prep\r300\board-capture-worklist.json for the MAIN session.
 #>
 $ErrorActionPreference = 'Stop'
-$g = 'C:\Codex\income\grocery'
+$g = 'C:\Codex\ThriftyCrew\grocery'
 $ids = @()
 foreach ($f in @('out\r300\r300-ids.txt','out\r300\batch8-ids.txt')) { $fp = Join-Path $g $f; if (Test-Path $fp) { $ids += ((Get-Content $fp -Raw).Trim() -split ',') } }
 $ids = @($ids | Where-Object { $_ })
@@ -66,7 +66,7 @@ $doc = [ordered]@{
   importers = @{ walmart = 'grocery\import-walmart-batch.ps1'; sams = 'grocery\import-sams-prices.ps1 / build-sams-deals.ps1'; aldi = 'grocery\import-aldi-batch.ps1'; fareway = 'grocery\import-instacart-batch.ps1 -Store Fareway' }
   stores = $out.ToArray()
 }
-$target = 'C:\Codex\income\meal-prep\r300\board-capture-worklist.json'
+$target = 'C:\Codex\ThriftyCrew\meal-prep\r300\board-capture-worklist.json'
 ($doc | ConvertTo-Json -Depth 8) | Set-Content $target -Encoding UTF8
 $null = Get-Content $target -Raw | ConvertFrom-Json
 foreach ($s in $out) { Write-Output ("  {0,-12} {1} id(s) to capture" -f $s.store, $s.missing) }

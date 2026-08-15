@@ -19,7 +19,7 @@
 #>
 param([switch]$Apply)
 $ErrorActionPreference = 'Stop'
-$path = 'C:\Codex\income\grocery\coverage-gap-allowlist.json'
+$path = 'C:\Codex\ThriftyCrew\grocery\coverage-gap-allowlist.json'
 $today = '2026-07-31'
 $src = 'REVIEWED 2026-07-31 against out\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)'
 

@@ -10,7 +10,7 @@
 #>
 param([switch]$WhatIf, [string]$IdsFile = 'out\r300\r300-ids.txt')
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 $today = (Get-Date).ToString('yyyy-MM-dd')
 # every registered batch id must be considered, not just the batch being purged: a row primed for batch A that
 # legitimately belongs to batch B must not be deleted as "off-target".

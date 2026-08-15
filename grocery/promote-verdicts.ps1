@@ -44,7 +44,7 @@ param(
   [string[]]$Ids = @()
 )
 $ErrorActionPreference = 'Stop'
-$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
 # Words that can never carry product identity on their own. Brand names are deliberately NOT here: a brand

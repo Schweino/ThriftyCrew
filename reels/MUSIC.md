@@ -37,7 +37,7 @@ Rules for us, regardless of source:
 ## Mixing it in
 
 ```bash
-powershell -File C:\Codex\income\reels\build-demo-reel.ps1 -Music C:\Codex\income\assets\music\bed.mp3
+powershell -File C:\Codex\ThriftyCrew\reels\build-demo-reel.ps1 -Music C:\Codex\ThriftyCrew\assets\music\bed.mp3
 ```
 
 The track is looped to length, faded in and out, mixed at `-MusicGain 0.09` (about 9% under the

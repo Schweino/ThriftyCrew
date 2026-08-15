@@ -1,7 +1,7 @@
 # Find Family Fare PULL-DROP victims: commodities where FF is missing on the board but the Freshop API
 # DOES return a real matching product (so the pull silently dropped it). Read-only diagnosis.
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'
+$root='C:\Codex\ThriftyCrew\grocery'
 $tmp=ConvertFrom-Json ([IO.File]::ReadAllText("$root\commodities.json")); $commods=@($tmp)
 $byId=@{}; foreach($c in $commods){ $byId[[string]$c.id]=$c }
 $terms=(ConvertFrom-Json ([IO.File]::ReadAllText("$root\commodity-search.json"))).terms

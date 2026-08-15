@@ -4,10 +4,10 @@
 #   2) Bulk spread: Sam's Club bulk price vs the average non-bulk store price, from the newest out\comparison-*.json
 # Emits out\freezer-data.json plus a ready-to-paste JS constants block.
 # When the history deepens (more weeks_on_record), rerun this and swap the DATA constant in
-# C:\Codex\income\freezer-math-tool.html with the emitted block.
+# C:\Codex\ThriftyCrew\freezer-math-tool.html with the emitted block.
 
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 
 # The freezables. Things a chest freezer actually lets you stockpile.
 $freezables = @('chicken-breast','chicken-thighs','ground-beef-8020','ground-turkey','bacon','pork-chops','butter','shredded-cheese','bread')

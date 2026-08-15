@@ -12,7 +12,7 @@ $PCT_FMT = '0.0%;(0.0%);"-"'
 $NUM1_FMT = '0.0;-0.0;"-"'
 $PCTNUM_FMT = '0.0"%";-0.0"%";"-"'
 
-$outPath = "C:\Codex\income\Simple-Money-Playbook-Budget-Tracker.xlsx"
+$outPath = "C:\Codex\ThriftyCrew\Simple-Money-Playbook-Budget-Tracker.xlsx"
 if (Test-Path $outPath) { Remove-Item $outPath -Force }
 $pkg = New-Object OfficeOpenXml.ExcelPackage
 

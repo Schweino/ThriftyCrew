@@ -171,7 +171,7 @@ if ($SelfTest) {
 }
 
 # --- main -------------------------------------------------------------------------------------------
-$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income' }
+$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew' }
 $r = Get-UncommittedSource -Root $root
 $ignored = @(Find-UnclassifiedIgnored -Root $root -Allow $script:IGNORED_BY_DECISION)
 

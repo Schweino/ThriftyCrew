@@ -30,7 +30,7 @@
 #>
 param([string]$NewBase, [switch]$Apply, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
-$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 $repo = Split-Path $root -Parent
 
 function Get-CanonicalBase { param([string]$RepoRoot)

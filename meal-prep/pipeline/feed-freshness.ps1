@@ -65,7 +65,7 @@ $script:FEED_MAX_AGE_HOURS     = 30    # floor, not proof - see the block commen
 # A worktree session that resolved the canonical feed to the MAIN tree would be checking one tree's
 # freshness while pricing another's - and this estate has already been bitten by paths that silently
 # reached across trees. $PSScriptRoot is the dot-sourced file's own directory, which is what we want here.
-$script:FEED_ROOT              = if ($PSScriptRoot) { Split-Path (Split-Path $PSScriptRoot -Parent) -Parent } else { 'C:\Codex\income' }
+$script:FEED_ROOT              = if ($PSScriptRoot) { Split-Path (Split-Path $PSScriptRoot -Parent) -Parent } else { 'C:\Codex\ThriftyCrew' }
 $script:FEED_CANONICAL_PATH    = Join-Path $script:FEED_ROOT 'grocery\out\smp-feed.json'
 $script:FEED_CACHE_PATH        = Join-Path $script:FEED_ROOT 'meal-prep\scratch-smpfeed.json'
 $script:FEED_URL               = 'https://feed.thriftycrew.com/smp-feed.json'
@@ -217,7 +217,7 @@ if ($__ffSelfTest) {
   # test-auditors additionally pins the EXPECTED COUNT, so a case that silently stops running is caught
   # there too even if it never errors.
   $ErrorActionPreference = 'Stop'
-  $fx = 'C:\Codex\income\grocery\regression-inputs\guard-fixtures'
+  $fx = 'C:\Codex\ThriftyCrew\grocery\regression-inputs\guard-fixtures'
   $n = 0; $bad = 0
   function TT($m, $cond, $got) { $script:n++; if ($cond) { Write-Output ("  ok    " + $m) } else { Write-Output ("  FAIL  " + $m + "   got: " + $got); $script:bad++ } }
 
@@ -335,7 +335,7 @@ if ($__ffSelfTest) {
   # -- the seal: the production caller must still ROUTE THROUGH this file. A guard cannot detect its own
   # unsealing, so assert the precondition in source (the regression-test.ps1 lesson). test-auditors runs
   # this daily, which is what makes this file's only caller not be its own test.
-  $prod = 'C:\Codex\income\meal-prep\pipeline\compute-v2-perserving.ps1'
+  $prod = 'C:\Codex\ThriftyCrew\meal-prep\pipeline\compute-v2-perserving.ps1'
   $src = if (Test-Path $prod) { Get-Content $prod -Raw } else { '' }
   TT 'the production caller dot-sources this file' ($src -match 'feed-freshness\.ps1') 'not dot-sourced'
   TT 'the production caller calls Resolve-AndCheckFeed' ($src -match 'Resolve-AndCheckFeed') 'not called'

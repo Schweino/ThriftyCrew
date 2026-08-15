@@ -1,5 +1,5 @@
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'
+$root='C:\Codex\ThriftyCrew\grocery'
 $full = Get-Content (Join-Path $root 'out\regular\fareway-regular-2026-07-15.json') -Raw | ConvertFrom-Json
 $r100 = Get-Content (Join-Path $root 'out\regular\fareway-regular-2026-07-18.json') -Raw | ConvertFrom-Json
 # overlay by item-name key: r100 rows win where they overlap; everything else from the full set stays

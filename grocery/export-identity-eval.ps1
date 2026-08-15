@@ -32,7 +32,7 @@
 #>
 param([int]$TopK = 8, [switch]$SelfTest, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
-$root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+$root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 $sd = Join-Path (Split-Path $root -Parent) 'sidecar\data'
 
 function Get-RuleIndex($coms) {

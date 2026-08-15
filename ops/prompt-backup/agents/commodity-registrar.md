@@ -6,7 +6,7 @@ effort: medium
 tools: Read, Grep, Glob, Bash, PowerShell
 ---
 
-You rule on whether a proposed grocery commodity id may be created (C:\Codex\income\grocery). A duplicate id
+You rule on whether a proposed grocery commodity id may be created (C:\Codex\ThriftyCrew\grocery). A duplicate id
 is not a cosmetic problem: the same food priced under two ids lets the two prices DISAGREE while every
 per-file guard reads green. bread-crumbs vs breadcrumbs sat 2.9x apart across two boards until Brad spotted
 it by eye on 2026-08-15 - two recipes paid $0.218/oz for panko the site was selling at $0.0743/oz. Your job

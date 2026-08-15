@@ -1,6 +1,6 @@
 # Round-1 rule fixes from the staples300 drop diagnostic (real store names vs authored rules).
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 $cf = Join-Path $root 'commodities.json'
 $tmp = ConvertFrom-Json ([IO.File]::ReadAllText($cf)); $commods = @($tmp)
 $byId = @{}; foreach ($c in $commods) { $byId[[string]$c.id] = $c }

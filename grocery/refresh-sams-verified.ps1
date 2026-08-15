@@ -50,7 +50,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
-$root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+$root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 
 # count-ish units that mean the same thing on a Sam's pack. "2 pk" in our size and "2 rolls" in Sam's name
 # are one fact spelled two ways, and refusing over the spelling would reject every paper good we track.

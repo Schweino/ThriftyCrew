@@ -5,7 +5,7 @@ description: Weekly (Sunday 8am) out-of-band accuracy measurement: draw a blind 
 
 You are running the weekly out-of-band accuracy measurement for the Thrifty Crew grocery board.
 
-Working directory: C:\Codex\income\grocery
+Working directory: C:\Codex\ThriftyCrew\grocery
 
 ## Why this exists (read this, it changes how you behave)
 
@@ -16,7 +16,7 @@ The task has been failing quietly in one specific way: the sampler draws 100 cel
 ## Step 1: draw the sample
 
 ```
-cd C:\Codex\income\grocery
+cd C:\Codex\ThriftyCrew\grocery
 powershell -NoProfile -ExecutionPolicy Bypass -File .\build-verification-sample.ps1 -N 100
 ```
 
@@ -66,7 +66,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\add-known-wrong.ps1 -Commo
 
 Then commit and push. The standing rule in this repo is that a commit which is not pushed is not done, so push immediately rather than batching:
 ```
-cd C:\Codex\income
+cd C:\Codex\ThriftyCrew
 git add -A
 git commit -m "weekly accuracy sample <DATE>: <n> verified, whole-board rate <lo>% to <hi>%"
 git push

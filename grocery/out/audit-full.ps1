@@ -1,6 +1,6 @@
 # Deep data-quality audit of the 301-commodity board. Read-only; prints findings by section.
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 $tmpC = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'commodities.json'))); $commods = @($tmpC)
 $cats = (ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'categories.json')))).categories
 $terms = (ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'commodity-search.json')))).terms

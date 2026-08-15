@@ -39,7 +39,7 @@ $ErrorActionPreference = 'Stop'
 # never once run - the "a fix needs a reachable self-test" class, found the day a change-time gate was added
 # and 4 of 80 self-tests turned out to be unreachable for exactly this reason. Enforced explicitly instead.
 if (-not $SelfTest -and -not $Store) { throw '-Store is required (fareway|aldi)' }
-$root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+$root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 
 $SRC = @{
   fareway = @{ glob = 'out\fareway\fareway-shop-*.json'; kind = 'json' }

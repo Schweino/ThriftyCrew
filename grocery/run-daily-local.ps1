@@ -250,7 +250,7 @@ foreach ($attempt in 1..4) {
 }
 if (-not $pushed) {
   Log "PUSH FAILED after 4 attempts - the run's data is committed locally but NOT on main"
-  try { Send-Alert -Subject "Grocery local pipeline could not push - $today" -Body "run-daily-local.ps1 committed today's refresh locally but could not push to main after 4 rebase attempts. The cloud backup will regenerate at 16:00 UTC, but check for a rebase conflict in C:\Codex\income (see grocery/local-daily-log.txt)." | Out-Null } catch {}
+  try { Send-Alert -Subject "Grocery local pipeline could not push - $today" -Body "run-daily-local.ps1 committed today's refresh locally but could not push to main after 4 rebase attempts. The cloud backup will regenerate at 16:00 UTC, but check for a rebase conflict in C:\Codex\ThriftyCrew (see grocery/local-daily-log.txt)." | Out-Null } catch {}
 }
 
 # ---- READ-AFTER-WRITE: prove the EDGE actually serves what we just pushed (added 2026-08-07) --------

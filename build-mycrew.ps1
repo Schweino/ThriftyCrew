@@ -3,10 +3,10 @@
 #   grocery\staples-data.js  (var ST=...)
 #   meal-prep\dinner-data.js (var DIN=...)
 # replacing the //__DATA__ marker, and writes my-crew-tool.html (UTF-8, no BOM).
-# Usage: powershell -File C:\Codex\income\build-mycrew.ps1
+# Usage: powershell -File C:\Codex\ThriftyCrew\build-mycrew.ps1
 
 $ErrorActionPreference = 'Stop'
-$dir = 'C:\Codex\income'
+$dir = 'C:\Codex\ThriftyCrew'
 
 $tplPath = Join-Path $dir 'my-crew-template.html'
 $stPath  = Join-Path $dir 'grocery\staples-data.js'

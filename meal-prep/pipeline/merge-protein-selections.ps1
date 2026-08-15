@@ -8,7 +8,7 @@
 # candidate) for the main session to resolve. Cross-protein twins vs the LIVE catalog are already each
 # selector's job; only candidate-vs-candidate twins need this pass.
 #
-# Usage: .\merge-protein-selections.ps1 -RunDir C:\Codex\income\meal-prep\r400
+# Usage: .\merge-protein-selections.ps1 -RunDir C:\Codex\ThriftyCrew\meal-prep\r400
 param([Parameter(Mandatory)][string]$RunDir)
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot '..\lib\json-db-io.ps1')

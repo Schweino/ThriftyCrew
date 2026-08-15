@@ -155,7 +155,7 @@ if ($__gdSelfTest) {
   # than importing it, so the only thing keeping them honest is this case. It reads publish.ps1's actual
   # function text, runs it, and asserts both produce the same digest for the same four fields. Change the
   # hash in either place and this goes red instead of the audit quietly reporting 542 false drifts.
-  # DERIVED, NOT HARDCODED (2026-08-08). This was the literal C:\Codex\income\... path, so the case passed on
+  # DERIVED, NOT HARDCODED (2026-08-08). This was the literal C:\Codex\ThriftyCrew\... path, so the case passed on
   # Brad's box and failed everywhere else - on the runner the checkout is D:\a\SimpleMoneyPlaybook\..., the
   # file was "not found", and gates run #2 went red over a path rather than a hash disagreement. publish.ps1
   # IS tracked, so the repo-relative path is the honest one.

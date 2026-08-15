@@ -1,6 +1,6 @@
 # Split the 81-item 'pantry' category into 5 shopper-friendly sub-departments (display only; matching unaffected).
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'; $path="$root\categories.json"
+$root='C:\Codex\ThriftyCrew\grocery'; $path="$root\categories.json"
 Copy-Item $path "$root\out\audit\categories.before-split.json" -Force
 $doc=ConvertFrom-Json ([IO.File]::ReadAllText($path))
 $cats=@($doc.categories)

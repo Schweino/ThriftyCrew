@@ -2,7 +2,7 @@
 # Family Fare regular file so the board is correct NOW (the IP is temporarily 400-blocked from diagnostics, so a
 # live re-pull must wait). compare-deals' matcher still gates correctness (over-broad captures get excluded).
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'; $reg="$root\out\regular"
+$root='C:\Codex\ThriftyCrew\grocery'; $reg="$root\out\regular"
 $prev=Get-ChildItem "$reg\family-fare-regular-*.json" | Sort-Object Name -Descending | Select-Object -First 1
 $doc=ConvertFrom-Json ([IO.File]::ReadAllText($prev.FullName))
 $deals=New-Object System.Collections.Generic.List[object]

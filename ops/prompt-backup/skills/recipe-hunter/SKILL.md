@@ -85,7 +85,7 @@ output file already exists, so a killed run re-enters and continues.
 
 ## Before the first round
 
-1. **Refresh the dedup digest.** `powershell -File C:\Codex\income\meal-prep\pipeline\make-catalog-digest.ps1`
+1. **Refresh the dedup digest.** `powershell -File C:\Codex\ThriftyCrew\meal-prep\pipeline\make-catalog-digest.ps1`
    The digest is what both the sourcer and the dedup-selector judge "already have it" against. A stale
    digest means re-finding recipes you already published. `-Init` records its date; check it.
 2. **Confirm the board is current.** `grocery\out\comparison-<today>.json` should exist. Pricing reads it.

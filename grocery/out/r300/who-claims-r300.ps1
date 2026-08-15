@@ -7,7 +7,7 @@
 #>
 param([string]$NamesFile = 'out\r300\testnames.txt', [string]$CommoditiesFile = 'commodities.json')
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 
 # parse GLOBAL_EXCLUDE straight out of compare-deals.ps1 (never copy-paste: rules must not drift)
 $src = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw

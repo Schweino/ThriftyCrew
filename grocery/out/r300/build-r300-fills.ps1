@@ -9,7 +9,7 @@
   "Marie Callender's Turkey Breast & Stuffing" reached the STUFFING-MIX cell.
 #>
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 $today = (Get-Date).ToString('yyyy-MM-dd')
 $ids = @()
 foreach ($f in @('out\r300\r300-ids.txt','out\r300\batch8-ids.txt')) { $fp = Join-Path $root $f; if (Test-Path $fp) { $ids += ((Get-Content $fp -Raw).Trim() -split ',') } }

@@ -15,7 +15,7 @@
 # Usage: .\prune-out.ps1 [-Apply] | -SelfTest
 param([switch]$Apply, [switch]$SelfTest, [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
-$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
 # glob (relative to out\), keep-window in days, and a MINIMUM generation count kept regardless of age -

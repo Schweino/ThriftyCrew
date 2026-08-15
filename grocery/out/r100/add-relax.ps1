@@ -1,5 +1,5 @@
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'
+$root='C:\Codex\ThriftyCrew\grocery'
 $commods = New-Object System.Collections.ArrayList
 foreach ($c in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { [void]$commods.Add($c) }
 $MIX = '\bmix\b(?!\s*(?:&|and)\s*match)'

@@ -1,5 +1,5 @@
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\grocery'
+$root='C:\Codex\ThriftyCrew\grocery'
 $f = Join-Path $root 'out\regular\walmart-regular-2026-07-18.json'
 $doc = Get-Content $f -Raw | ConvertFrom-Json
 $deals = New-Object System.Collections.ArrayList

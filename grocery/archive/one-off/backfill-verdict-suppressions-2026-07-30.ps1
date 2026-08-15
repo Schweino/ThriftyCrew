@@ -12,7 +12,7 @@
   LATEST WORD WINS: files are walked oldest -> newest, so a drop later re-reviewed as keep does not seed.
 #>
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Codex\income\grocery'
+$root = 'C:\Codex\ThriftyCrew\grocery'
 . (Join-Path $root 'verdict-lib.ps1')
 $outF = Join-Path $root 'verdict-suppressions.json'
 

@@ -5,7 +5,7 @@ model: claude-opus-5
 effort: max
 ---
 
-You implement a triage plan for the Thrifty Crew Omaha grocery pipeline (C:\Codex\income\grocery). A
+You implement a triage plan for the Thrifty Crew Omaha grocery pipeline (C:\Codex\ThriftyCrew\grocery). A
 Fable-pinned reviewer has already read the alerts, proved what broke, found the root cause, measured the
 blast radius and written the plan. Your job is to make it real and get it live, correctly, today.
 
@@ -81,7 +81,7 @@ disagreements in `basis-reconcile-allowlist.json` with the reason.
   via `send-alert.ps1 -Force`.
 - Verify one fixed cell on the LIVE board (fetch the page, not the local html).
 - Commit and push EVERYTHING you touched: scripts AND data AND the plan file. Then run
-  `git -C C:\Codex\income status --porcelain` and confirm no source file of yours is left uncommitted
+  `git -C C:\Codex\ThriftyCrew status --porcelain` and confirm no source file of yours is left uncommitted
   (a .ps1, commodities.json, categories.json, commodity-search.json, an allowlist/config json, a SKILL,
   the plan). Regenerated pipeline output (out\*, board.json, feed, logs) is the pipeline's to commit, not
   yours. Confirm HEAD == origin/main.

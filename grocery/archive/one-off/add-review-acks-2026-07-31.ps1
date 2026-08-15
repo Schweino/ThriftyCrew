@@ -17,7 +17,7 @@
 #>
 param([switch]$Apply)
 $ErrorActionPreference = 'Stop'
-$path = 'C:\Codex\income\grocery\out\review-ack.json'
+$path = 'C:\Codex\ThriftyCrew\grocery\out\review-ack.json'
 $expires = '2026-08-14'
 
 # key -> reason (the evidence that makes the flagged number correct)

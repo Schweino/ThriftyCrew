@@ -15,7 +15,7 @@
 #   .\deploy-interstitial.ps1 -ShowPayload also print the payload
 param([switch]$ShowPayload)
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income'
+$root='C:\Codex\ThriftyCrew'
 . (Join-Path $root 'lib\ghost-lib.ps1')
 . (Join-Path $root 'lib\design-tokens.ps1')
 
