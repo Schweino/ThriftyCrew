@@ -1,0 +1,9 @@
+ticket,seq,verdict,found_product,found_price,note
+79E4D6DAC2,15,ok,"Broccoli Florettes (fresh, sold by lb, id 8801)",2.69,"sold by weight $2.69/lb; store price API storeId 1465 price=2.69 soldBy=LB. Fresh Broccoli Crowns (id 93513) $2.99/lb (was $3.99/lb)"
+D5F8F498EE,16,ok,"Croissants 6 Count (bakery, 17 oz pkg, id 74585)",0.998,"6 ct $5.99 (base $6.99) = $0.998 each. Mini Croissants 12 Count 19 oz $5.99 = $0.499 ea if minis count as the commodity"
+A66CF30C1E,18,ok,"Hy-Vee 100% Apple Juice No Sugar Added, 64 fl oz (id 24371)",0.0311,"64 fl oz $1.99 (base $2.99 = 0.0467/floz). Next 100% juice: Old Orchard 64 oz $2.99 = 0.0467; Hy-Vee 96 oz $4.79 = 0.0499"
+C0E2ADA8E8,33,ok,"Kiwi Fruit, sold each (id 37185)",0.79,"1 ct $0.79 (base $0.99). Bagged Zespri green kiwifruit 1 lb $4.99 is the only alternative"
+057FB57E50,41,ok,"That's Smart! Chicken Noodle Condensed Soup, 10.5 oz can (id 2967942)",0.0667,"10.5 oz $0.70. Hy-Vee condensed 10.5 oz $1.19 = 0.113; Campbell's 10.75 oz $1.28 = 0.119"
+749C875000,48,ok,"Easy-Off Fume Free Lemon Scent Oven Cleaner Spray, 14.5 oz (id 338640)",0.4131,"14.5 oz $5.99. Only 2 oven cleaners in the whole catalog - both Easy-Off 14.5 oz $5.99 (heavy duty id 297153 same price)"
+5DBB0B3925,49,ok,"Hy-Vee Double Acting Baking Powder, 10 oz (id 56005)",0.299,"10 oz $2.99. Clabber Girl 8.1 oz $3.99 = 0.493; Bob's Red Mill 14 oz $4.99 = 0.356. No That's Smart! baking powder stocked"
+7B728DB815,70,ok,"That's Smart! Sweet Peas, 12 oz frozen bag (id 2969855)",0.0783,"12 oz bag $0.94. Hy-Vee Fresh Steam Peas 10 oz $1.39 = 0.139; Hy-Vee Frozen Sweet Peas 24 oz $3.49 = 0.145. (CANNED That's Smart 15 oz $0.76 excluded - not frozen)"
