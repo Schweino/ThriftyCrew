@@ -3,10 +3,10 @@
     "title":  "",
     "source_url":  "",
     "protein":  "",
-    "state":  "waved",
+    "state":  "published",
     "wave":  4,
     "created":  "2026-08-15T21:00:41",
-    "updated":  "2026-08-16T12:00:27",
+    "updated":  "2026-08-16T16:03:28",
     "terms":  [
 
               ],
@@ -85,6 +85,12 @@
                         "state":  "waved",
                         "at":  "2026-08-16T14:05:00",
                         "by":  "wave-close",
+                        "detail":  "wave 4"
+                    },
+                    {
+                        "state":  "published",
+                        "at":  "2026-08-16T16:03:28",
+                        "by":  "wave-publish",
                         "detail":  "wave 4"
                     }
                 ]

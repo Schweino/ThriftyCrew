@@ -13,28 +13,28 @@
                ],
     "writer_notes":  [
                          "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Every gram and buy string transcribed from mapped\\keto-cheeseburger-skillet.json; no number computed in prose.",
-                         "MACROS transcribed from the build\u0027s own food-macros-db recompute at 14 servings: 538.2 cal, 31.1 g protein, 5.3 g carbs, 42.3 g fat per serving. In band for this run (400 to 650 cal, 35 g carb or less). NOTE the mapper\u0027s cross-check reported 511.5 cal / 29.5 P / 40.2 F for the same grams; the current food-DB rows recompute 26.7 cal higher, driven by the beef and cheddar rows. The build recompute is authoritative and is what the stat carries. The source\u0027s own published card is separately inconsistent by 59 cal (documented in the mapper cross-check); none of these are the source card\u0027s numbers.",
-                         "BEEF FAT CLASS is load-bearing on the floor: the mapper booked 80/20 (the cheeseburger title protein, nearest carried class to the source\u0027s ~90/10 label). At 80/20 the dish computes 511.5 cal PASS; the house 93/7 row would compute 394.6 cal and FAIL the 400 floor by 5 cal. Flagged loud in the mapper and echoed in the run report; if the house prefers lean beef here the recipe is a marginal floor-fail and must be re-based or dropped, not fudged.",
+                         "MACROS transcribed from the build\u0027s own food-macros-db recompute at 14 servings: 538.2 cal, 31.1 g protein, 5.3 g carbs, 42.3 g fat per serving. In band for this run (400 to 650 cal, 35 g carb or less). NOTE the mapper\u0027s cross-check reported 511.5 cal / 29.5 P / 40.2 F for the same grams; the current food-DB rows recompute 26.7 cal higher, driven by the beef and cheddar rows. The build recompute is authoritative and is what the stat carries. The source\u0027s own published card is separately inconsistent by 59 cal (documented in the mapper cross-check); none of these are the source card\u0027s numbers. RESOLVED 2026-08-16 (Brad ruling): this recipe is now built on the 1/3 Fat Cream Cheese (Great Value Neufchatel) food-DB row, not the full-fat USDA row. Brad ruled the recipes should USE the lower-calorie product, which made the PRICE correct all along (the bid was already 1-3-fat-cream-cheese) and the macros and copy the wrong fields. Any calorie, fat or basis figure stated above predates that rebase - read the spec stat block, not this note.",
+                         "BEEF FAT CLASS is load-bearing on the floor: the mapper booked 80/20 (the cheeseburger title protein, nearest carried class to the source\u0027s ~90/10 label). At 80/20 the dish computes 511.5 cal PASS; the house 93/7 row would compute 394.6 cal and FAIL the 400 floor by 5 cal. Flagged loud in the mapper and echoed in the run report; if the house prefers lean beef here the recipe is a marginal floor-fail and must be re-based or dropped, not fudged. RESOLVED 2026-08-16: both figures predate the cream-cheese rebase, which took 14.1 cal per serving off either basis. At 80/20 the dish now computes 524 cal (was 511.5), and the house 93/7 row would now land near 380 rather than 394.6 - so the note conclusion is unchanged and in fact stronger: lean beef would miss the 400 floor by more, not less. CORRECTION 2026-08-16 (the RESOLVED sentence above mixes two bases - source-QA caught it): 511.5 and 394.6 are MAPPER-basis figures; 524 is the BUILD-basis figure. The build basis runs about 26.7 cal per serving higher (538.2 vs 511.5 pre-rebase), so the honest statement is: post-rebase, 80/20 computes 524 on the build basis (was 538.2), and a 93/7 swap would land near 380 on the MAPPER basis but near 407 on the BUILD basis - i.e. it would clear the 400 floor, not miss it. The shipped card is unaffected (80/20 at 524, in band), but whether lean beef breaches the floor is basis-dependent and remains OPEN arithmetic, not settled by this note.",
                          "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked the costed list against the steps both directions: bacon (steps 3,6), ground beef (4), onion (2,4), tomato paste (5), mustard (5), cream cheese (5), chicken broth (5), onion powder (5), garlic powder (5), salt (5), pepper (5), cheddar (6). Salt and pepper ARE booked cost lines on this card (unlike the to-taste line on other recipes), so the sauce step names them explicitly. The source\u0027s \u0027and spices\u0027 shorthand in step 4 is unpacked into the four named seasonings. The retained tablespoon of bacon fat is the mapper\u0027s standing canon folded INTO the bacon line, not a separate ingredient, so step 3 leaves it in the pan without buying anything extra.",
                          "SHOP_SMART makes NO leftover, per-ounce, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount. Re-walk the bullets against cost_lines once costed before publish.",
                          "SUBSTITUTIONS recorded by the mapper, unpriced and NOT in the build: ground turkey for the beef, and beef broth for the chicken broth (macro difference under 2 cal per serving). Prose names beef and does not offer the turkey swap as a headline since it changes the floor math."
                      ],
     "cal_floor":  null,
     "stat":  {
-                 "cal":  538,
+                 "cal":  524,
                  "protein":  31,
-                 "carbs":  5,
-                 "fat":  42,
+                 "carbs":  6,
+                 "fat":  40,
                  "cost_ps":  "2.66"
              },
-    "intro_html":  "A bacon cheeseburger is one of the best things you can eat and one of the worst things you can build a budget around, so this takes the whole flavor and throws out the bun and the drive-through. You crisp the bacon, brown the beef with onion, and melt a quick sauce of cream cheese, broth, tomato paste, and mustard right in the pan, then blanket the whole thing with cheddar. It eats like a cheeseburger you can portion into containers. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 6 grams of carbs. That is a burger night that does not fight your macros or your wallet.",
+    "intro_html":  "A bacon cheeseburger is one of the best things you can eat and one of the worst things you can build a budget around, so this takes the whole flavor and throws out the bun and the drive-through. You crisp the bacon, brown the beef with onion, and melt a quick sauce of cream cheese, broth, tomato paste, and mustard right in the pan, then blanket the whole thing with cheddar. It eats like a cheeseburger you can portion into containers. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with 6 grams of carbs or less. That is a burger night that does not fight your macros or your wallet.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 14 slices, chopped into small pieces (168 g)",
                                 "\u003cstrong\u003e80/20 Ground Beef (generic (USDA)):\u003c/strong\u003e 3 1/2 lb (80/20) (1588 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 3/4 cups chopped (about 2 medium) (201 g)",
                                 "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7 tbsp (a bit under 1/2 cup) (112 g)",
                                 "\u003cstrong\u003eYellow Mustard (generic (USDA)):\u003c/strong\u003e 3 1/2 tsp (18 g)",
-                                "\u003cstrong\u003eCream Cheese (generic (USDA)):\u003c/strong\u003e 7 oz, softened (198 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 7 oz, softened (198 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 3/4 cups (420 g)",
                                 "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1 3/4 tsp (4 g)",
                                 "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 3/4 tsp (5 g)",
@@ -49,7 +49,7 @@
                        "Yellow Onion, 1 3/4 cups chopped (about 2 medium): ~$0.51. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Tomato Paste, 7 tbsp (a bit under 1/2 cup): ~$0.40. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
                        "Yellow Mustard, 3 1/2 tsp: ~$0.03. \u003cstrong\u003eBuy 1 20oz bottle: $1.00.\u003c/strong\u003e",
-                       "Cream Cheese, 7 oz, softened: ~$1.61. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
+                       "1/3 Fat Cream Cheese, 7 oz, softened: ~$1.61. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
                        "Chicken Broth, 1 3/4 cups: ~$0.64. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 3 1/2 cups shredded: ~$2.12. \u003cstrong\u003eBuy 2 8oz bags: $2.44.\u003c/strong\u003e",
                        "Pantry seasonings (onion powder, garlic powder, salt, black pepper): ~$0.16. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
@@ -61,7 +61,7 @@
     "shop_smart":  [
                        "\u003cstrong\u003eThree and a half pounds of ground beef is the anchor.\u003c/strong\u003e Reach for the 80/20 so the skillet tastes like an actual cheeseburger, and buy the big family pack instead of the little trays so you are paying for beef, not packaging. This is where most of the money and most of the protein live.",
                        "\u003cstrong\u003eBacon and cheddar are what make it a cheeseburger.\u003c/strong\u003e You want fourteen slices of bacon chopped small and three and a half cups of shredded cheddar. The bacon crisps up first and its rendered fat browns the beef, and the cheddar melts over the top at the end. Buy a block-shredded bag of real full-fat cheddar rather than the low-fat kind, because the fat is what melts smooth.",
-                       "\u003cstrong\u003eCream cheese and broth build the sauce with no flour.\u003c/strong\u003e A block of full-fat cream cheese and a cup and three quarters of chicken broth melt together into the creamy sauce that holds it all, which is how you get burger-and-cheese richness without a bun or a thickener. Buy the real full-fat brick, not the light tub.",
+                       "\u003cstrong\u003eCream cheese and broth build the sauce with no flour.\u003c/strong\u003e An eight ounce brick of 1/3 less fat cream cheese and a cup and three quarters of chicken broth melt together into the creamy sauce that holds it all, which is how you get burger-and-cheese richness without a bun or a thickener. Buy the brick, not the whipped tub: a brick melts down smooth into the pan, where whipped cream cheese is full of air and goes thin on you.",
                        "\u003cstrong\u003eTomato paste, mustard, onion, and the spice rack carry the burger flavor.\u003c/strong\u003e A little tomato paste and yellow mustard stand in for ketchup and mustard on the bun, a couple of chopped onions cook down into the beef, and onion powder, garlic powder, salt, and pepper season the whole pan. These are backbone items you buy once and cook with for a long time."
                    ],
     "make_it":  [
@@ -126,8 +126,8 @@
                                    "gpu":  "28.350"
                                },
                                {
-                                   "item":  "Cream Cheese",
-                                   "canon":  "Cream Cheese",
+                                   "item":  "1/3 Fat Cream Cheese",
+                                   "canon":  "1/3 Fat Cream Cheese",
                                    "grams":  198,
                                    "buy":  "7 oz, softened",
                                    "bid":  "1-3-fat-cream-cheese",
@@ -184,7 +184,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Keto bacon cheeseburger skillet for meal prep: browned 80/20 beef and crisp bacon in a creamy cream-cheese sauce under melted cheddar, no bun, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 6 grams of carbs.",
+                 "description":  "Keto bacon cheeseburger skillet for meal prep: browned 80/20 beef and crisp bacon in a creamy cream-cheese sauce under melted cheddar, no bun, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with 6 grams of carbs or less.",
                  "keywords":  "keto cheeseburger skillet, bacon cheeseburger casserole, low carb ground beef dinner, keto meal prep, high protein beef skillet",
                  "image":  "",
                  "prepTime":  "PT5M",
@@ -197,7 +197,7 @@
                                           "Yellow Onion, 1 3/4 cups chopped (about 2 medium) (201 g)",
                                           "Tomato Paste, 7 tbsp (a bit under 1/2 cup) (112 g)",
                                           "Yellow Mustard, 3 1/2 tsp (18 g)",
-                                          "Cream Cheese, 7 oz, softened (198 g)",
+                                          "1/3 Fat Cream Cheese, 7 oz, softened (198 g)",
                                           "Chicken Broth, 1 3/4 cups (420 g)",
                                           "Onion Powder, 1 3/4 tsp (4 g)",
                                           "Garlic Powder, 1 3/4 tsp (5 g)",
@@ -236,7 +236,7 @@
                                   "grams":  18
                               },
                               {
-                                  "item":  "Cream Cheese",
+                                  "item":  "1/3 Fat Cream Cheese",
                                   "grams":  198
                               },
                               {

@@ -255,7 +255,7 @@
   {
       "batch":  "hunt-2026-08-15-lowcarb-100-w3",
       "opened":  "2026-08-16T12:35:08",
-      "last_activity":  "2026-08-16T14:06:02",
+      "last_activity":  "2026-08-16T16:04:29",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -310,13 +310,33 @@
                          "stage":  "recipes-db",
                          "at":  "2026-08-16T14:06:02",
                          "detail":  "9 row(s) via hunt-2026-08-15-lowcarb-100-w3"
+                     },
+                     {
+                         "stage":  "cost-basis",
+                         "at":  "2026-08-16T16:04:06",
+                         "detail":  "compute-v2-perserving + reanchor on 9 slug(s)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-08-16T16:04:06",
+                         "detail":  "9 row(s) via hunt-2026-08-15-lowcarb-100-w3"
+                     },
+                     {
+                         "stage":  "build-cards",
+                         "at":  "2026-08-16T16:04:29",
+                         "detail":  "9 card(s) rebuilt via propagate"
+                     },
+                     {
+                         "stage":  "publish",
+                         "at":  "2026-08-16T16:04:29",
+                         "detail":  "9/9 wave slug(s) published through engine\\publish (visibility preserved) + 11 collateral spec(s) carried by propagate (total dirty 20)"
                      }
                  ]
   },
   {
       "batch":  "hunt-2026-08-15-lowcarb-100-w4",
       "opened":  "2026-08-16T14:20:09",
-      "last_activity":  "2026-08-16T16:03:23",
+      "last_activity":  "2026-08-16T16:03:30",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -349,6 +369,11 @@
                          "stage":  "publish",
                          "at":  "2026-08-16T16:03:23",
                          "detail":  "2/2 wave slug(s) published through engine\\publish (visibility preserved) + 20 collateral spec(s) carried by propagate (total dirty 22)"
+                     },
+                     {
+                         "stage":  "serveability",
+                         "at":  "2026-08-16T16:03:30",
+                         "detail":  "2/2 wave slug(s) verified against the rebuilt feed"
                      }
                  ]
   }
