@@ -944,7 +944,11 @@ async function qaLane() {
       const c = await qaCh.take()
       if (c === null) return
       if (halted()) return
-      const p = (attempt) => `${attempt === 1 ? laneLog('qa', c.slug, [c.slug]) : ''}
+      // Log EVERY attempt, not just the first. Suppressing the retry's laneLog was hiding the
+      // most expensive QA calls in the run - a retry re-reads the whole spec and the whole
+      // transcription, so attempt 2 costs more than attempt 1, and it was landing under
+      // `unattributed`. The attempt number rides in the label so the pairing stays unique.
+      const p = (attempt) => `${laneLog('qa', attempt === 1 ? c.slug : `${c.slug}:attempt${attempt}`, [c.slug])}
 Fidelity check on ONE built recipe: ${c.slug}.
 Built spec: C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\${c.slug}.json
 Transcription it came from: ${RUN}\\extracted\\${c.slug}.json
