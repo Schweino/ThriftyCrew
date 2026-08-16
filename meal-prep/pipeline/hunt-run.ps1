@@ -28,7 +28,8 @@
 # Usage:
 #   .\hunt-run.ps1 -Init -RunDir <p> -Conditions '20 high-protein slow cooker' -Stop '20 accepted' [-WaveSize 10]
 #   .\hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To selected -By dedup-selector [-Detail '...']
-#   .\hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To pricing -By mapper -Terms 'saffron,achiote paste' -OptionalTerms 'cilantro'
+#   .\hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To pricing -By mapper -Terms 'saffron','achiote paste' -OptionalTerms 'cilantro'
+#     ^ EACH term its own quoted string. -Terms 'saffron,achiote paste' is ONE element to PowerShell and is REFUSED.
 #   .\hunt-run.ps1 -Derive -RunDir <p> [-Slug <s>]
 #   .\hunt-run.ps1 -Lane -RunDir <p> -LaneName price -Label 'pricer batch 1' -Items 'saffron,achiote paste'
 #   .\hunt-run.ps1 -WaveClose -RunDir <p> [-Drain] [-NoLedger]
@@ -124,6 +125,35 @@ function Get-DerivedPricingState {
   }
   $state = if ($failed.Count) { 'rejected-not-carried' } elseif ($pending.Count) { 'parked' } else { 'priced' }
   return [pscustomobject]@{ state = $state; pending = @($pending); failed = @($failed); carried = @($carried) }
+}
+
+# ---------------------------------------------------------------------------------------------------
+# THE COMPOSITE TERM GUARD.
+#
+# FOUNDING BUG (2026-08-16, run hunt-2026-08-15-lowcarb-100). PowerShell binds `-Terms 'a,b'` to a
+# [string[]] of ONE element whose value is the literal string "a,b". It is not an error and it is not
+# visible: -Advance wrote that composite straight into the recipe's state file as a single term row.
+# ingredient-queue.ps1 is keyed by INDIVIDUAL TERM, so "green bell pepper,shaved beef steak" can never
+# match a queue entry; Get-DerivedPricingState above scores an unknown term PENDING (section 2.2: an
+# ingredient nobody answered for must not ship), so -Derive parked the recipe on every pass, forever,
+# with no error anywhere. philly-cheesesteak-stuffed-peppers sat in `parked` while BOTH of its blocking
+# ingredients were already recorded CARRIED - publishable and invisible. thai-coconut-curry-pork-shoulder
+# had three terms joined the same way. A recipe with exactly ONE term is unaffected, which is why this
+# survived a whole run undetected.
+#
+# REFUSED, NOT AUTO-SPLIT. A term that legitimately contains a comma is not a thing this estate has, and
+# silently rewriting a caller's argument hides the caller's bug - the same call the -Lane branch already
+# makes when it refuses an unknown -LaneName instead of logging it.
+function Find-CompositeTerms {
+  param($Values)
+  return @(@($Values) | Where-Object { $_ } | ForEach-Object { [string]$_ } | Where-Object { $_.Contains(',') })
+}
+
+function Get-CompositeTermMessage {
+  param([string]$ParamName, [string]$Offender)
+  $parts = @(([string]$Offender -split ',') | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+  $fixed = (@($parts | ForEach-Object { "'" + $_ + "'" }) -join ',')
+  return ("hunt-run: term '{0}' contains a comma. Pass each term as its own quoted string: -{1} {2} - PowerShell binds -{1} 'a,b' to ONE element, and a composite term can never match an ingredient-queue entry, so the recipe parks forever." -f $Offender, $ParamName, $fixed)
 }
 
 # Only qa-passed recipes are eligible for a wave, FIFO by when they got there. Nothing else is a door.
@@ -410,6 +440,54 @@ if ($runSelfTest) {
     T 'a missing lane log reads as empty, not as an error' ((@(Read-LaneLog (Join-Path $env:TEMP 'no-such-lane-log.jsonl'))).Count -eq 0) 'threw'
   } finally { if (Test-Path $lt2) { Remove-Item $lt2 -Force -ErrorAction SilentlyContinue } }
 
+  # ---- FIXTURE 8. THE COMPOSITE TERM. Founding bug 2026-08-16, run hunt-2026-08-15-lowcarb-100:
+  # `-Terms 'green bell pepper,shaved beef steak'` binds to ONE element, went into the state file as one
+  # term row, and could never match an ingredient-queue entry - so -Derive scored it PENDING on every pass
+  # and philly-cheesesteak-stuffed-peppers parked FOREVER while both of its ingredients were already
+  # CARRIED. Publishable and invisible. The clean twins assert the ROW COUNT, because the count is the
+  # thing that was wrong: one row where there should have been two.
+  $badTerms = @(Find-CompositeTerms @('green bell pepper,shaved beef steak'))
+  T 'MUST FIRE  a comma inside a term element is detected' ($badTerms.Count -eq 1) $badTerms.Count
+  T 'CLEAN TWIN properly separated terms are not composite' `
+    ((@(Find-CompositeTerms @('green bell pepper', 'shaved beef steak'))).Count -eq 0) 'flagged a clean list'
+  $msg = Get-CompositeTermMessage 'Terms' 'green bell pepper,shaved beef steak'
+  T '   and the message shows the caller the CORRECT form to retype' `
+    ($msg -match "-Terms 'green bell pepper','shaved beef steak'") $msg
+
+  # The guard runs against the REAL -Advance branch, in-process (never `powershell -File`, which would
+  # marshal [string[]] as one string - fixture 6 - and could not tell a refusal from that marshalling).
+  $ct = Join-Path $env:TEMP ('huntrun-comma-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    New-Item -ItemType Directory -Force (Join-Path $ct 'state') | Out-Null
+    & $PSCommandPath -Advance -RunDir $ct -Slug 'philly' -To sourced -By 'test' | Out-Null
+    $sp8 = Join-Path $ct 'state\philly.json'
+
+    & $PSCommandPath -Advance -RunDir $ct -Slug 'philly' -To selected -By 'test' -Terms 'green bell pepper,shaved beef steak' | Out-Null
+    T 'MUST FIRE  -Advance REFUSES a -Terms element containing a comma' ($LASTEXITCODE -eq 1) ("exit " + $LASTEXITCODE)
+    T '   and it refuses BEFORE writing, so no composite row reaches the state file' `
+      ((Read-Json $sp8).state -eq 'sourced' -and (@((Read-Json $sp8).terms)).Count -eq 0) ([string](Read-Json $sp8).state)
+
+    & $PSCommandPath -Advance -RunDir $ct -Slug 'philly' -To selected -By 'test' -OptionalTerms 'cilantro,parsley' | Out-Null
+    T 'MUST FIRE  -Advance REFUSES the same in -OptionalTerms' ($LASTEXITCODE -eq 1) ("exit " + $LASTEXITCODE)
+
+    & $PSCommandPath -Advance -RunDir $ct -Slug 'philly' -To selected -By 'test' `
+      -Terms 'green bell pepper', 'shaved beef steak' -OptionalTerms 'cilantro' | Out-Null
+    $back8 = Read-Json $sp8
+    T 'CLEAN TWIN separately quoted terms are accepted' ($LASTEXITCODE -eq 0 -and [string]$back8.state -eq 'selected') ("exit " + $LASTEXITCODE)
+    T 'CLEAN TWIN and they produce ONE ROW EACH (the count is what the bug got wrong)' `
+      ((@($back8.terms)).Count -eq 3) (@($back8.terms)).Count
+    T '   each row holding a single whole term, none of them composite' `
+      ((@(Find-CompositeTerms @(@($back8.terms) | ForEach-Object { $_.term }))).Count -eq 0 -and `
+       (@(@($back8.terms) | Where-Object { [string]$_.term -eq 'shaved beef steak' })).Count -eq 1) `
+      ((@($back8.terms) | ForEach-Object { $_.term }) -join '|')
+
+    & $PSCommandPath -Advance -RunDir $ct -Slug 'philly' -To extracted -By 'test' -Terms 'saffron' | Out-Null
+    $back9 = Read-Json $sp8
+    T 'CLEAN TWIN a single term with no comma still works, exactly one row' `
+      ($LASTEXITCODE -eq 0 -and (@($back9.terms)).Count -eq 1 -and [string]@($back9.terms)[0].term -eq 'saffron') `
+      ((@($back9.terms)).Count.ToString() + ' rows')
+  } finally { Remove-Item $ct -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($f -eq 0) { Write-Output 'hunt-run SELF-TEST PASS'; exit 0 }
   Write-Output ("hunt-run SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
 }
@@ -472,6 +550,10 @@ if ($runLane) {
 # ---- -Advance -------------------------------------------------------------------------------------
 if ($runAdvance) {
   if (-not $Slug -or -not $To) { Write-Output 'hunt-run: -Advance needs -Slug and -To'; exit 1 }
+  # BEFORE anything is read or written: a composite term must never reach a state file. See the
+  # Find-CompositeTerms note above - a term row the queue cannot be keyed by parks the recipe forever.
+  foreach ($bad in @(Find-CompositeTerms $Terms))         { Write-Output (Get-CompositeTermMessage 'Terms' $bad); exit 1 }
+  foreach ($bad in @(Find-CompositeTerms $OptionalTerms)) { Write-Output (Get-CompositeTermMessage 'OptionalTerms' $bad); exit 1 }
   if (@($script:ALL_STATES) -notcontains $To) {
     Write-Output ("hunt-run: '{0}' is not a state. One of: {1}" -f $To, (@($script:ALL_STATES | Sort-Object) -join ', ')); exit 1
   }
@@ -521,6 +603,20 @@ if ($runDerive) {
   $entries = @(Read-Entries $RunDir)
   if ($Slug) { $entries = @($entries | Where-Object { [string]$_.slug -eq $Slug }) }
   $moved = 0; $lines = @()
+  # THE RETROSPECTIVE HALF OF THE COMPOSITE-TERM GUARD. The -Advance guard closes the door; state files
+  # written BEFORE it existed (older run dirs) still hold composite rows, and their failure mode is exactly
+  # silence - the term is unknown to the queue, section 2.2 scores unknown as PENDING, and the recipe parks
+  # on every -Derive with nothing distinguishing it from a genuinely unpriced one. -Derive is the reader of
+  # term rows, so it is the place that can say so. It WARNS and still derives: the derivation is correct
+  # for the rows it has, and refusing here would strand every other recipe in the run dir.
+  $composite = @()
+  foreach ($e in $entries) {
+    foreach ($t in @($e.terms)) {
+      if ([string]$t.term -and ([string]$t.term).Contains(',')) {
+        $composite += [pscustomobject]@{ slug = [string]$e.slug; state = [string]$e.state; term = [string]$t.term }
+      }
+    }
+  }
   foreach ($e in $entries) {
     if (@('pricing', 'parked') -notcontains [string]$e.state) { continue }
     $d = Get-DerivedPricingState $e.terms $map
@@ -541,6 +637,14 @@ if ($runDerive) {
   }
   Write-Output ("hunt-run derive: {0} recipe(s) moved" -f $moved)
   $lines | ForEach-Object { Write-Output $_ }
+  if ($composite.Count) {
+    Write-Output ''
+    Write-Output ("  WARNING {0} COMPOSITE TERM ROW(S) - these can never match an ingredient-queue entry:" -f $composite.Count)
+    foreach ($c in $composite) { Write-Output ("    {0,-34} [{1}]  '{2}'" -f $c.slug, $c.state, $c.term) }
+    Write-Output  "           A comma inside one term row means it was passed as -Terms 'a,b' (ONE element to PowerShell)."
+    Write-Output  '           Such a term is scored PENDING forever, so the recipe parks silently however well it priced.'
+    Write-Output  "           Repair: re-advance the recipe with each term as its own quoted string (-Terms 'a','b')."
+  }
   Write-GuardComplete -Name 'hunt-run' -Summary ("derive moved={0}" -f $moved); exit 0
 }
 

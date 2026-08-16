@@ -116,7 +116,9 @@ not in the order they entered it.
 ```
 hunt-run.ps1 -Init -RunDir <p> -Conditions '...' -Stop '...' [-WaveSize 10]
 hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To <state> -By <stage> [-Detail '...']
-hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To pricing -By mapper -Terms 'saffron,achiote paste' -OptionalTerms 'cilantro'
+hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To pricing -By mapper -Terms 'saffron','achiote paste' -OptionalTerms 'cilantro'
+    ^ EACH term its own quoted string. -Terms 'a,b' is ONE element to PowerShell and is REFUSED (unlike
+      -Items below, which IS comma-separated). A composite term can never match an ingredient-queue entry.
 hunt-run.ps1 -Derive -RunDir <p>          after EVERY pricer invocation
 hunt-run.ps1 -Lane -RunDir <p> -LaneName price -Label '...' -Items '<comma-separated>' -By orchestrator
 hunt-run.ps1 -WaveClose -RunDir <p> [-Drain]

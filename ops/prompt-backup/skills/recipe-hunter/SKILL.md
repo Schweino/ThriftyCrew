@@ -116,7 +116,7 @@ not in the order they entered it.
 ```
 hunt-run.ps1 -Init -RunDir <p> -Conditions '...' -Stop '...' [-WaveSize 10]
 hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To <state> -By <stage> [-Detail '...']
-hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To pricing -By mapper -Terms 'saffron,achiote paste' -OptionalTerms 'cilantro'
+hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To pricing -By mapper -Terms 'saffron','achiote paste' -OptionalTerms 'cilantro'
 hunt-run.ps1 -Derive -RunDir <p>          after EVERY pricer invocation
 hunt-run.ps1 -Lane -RunDir <p> -LaneName price -Label '...' -Items '<comma-separated>' -By orchestrator
 hunt-run.ps1 -WaveClose -RunDir <p> [-Drain]
@@ -128,6 +128,14 @@ hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To held -By <who> -Detail 'why it c
 Legal both ways between `published` and `held`; `held -> verified` is refused. It exists because on
 2026-08-15 two recipes were set back to draft by hand while their state files still read `published`, and
 the run record asserted two live pages that were not live.
+
+**Pass `-Terms` as separate quoted strings, never as one comma-joined string.** PowerShell binds
+`-Terms 'a,b'` to a `[string[]]` of ONE element - the literal `"a,b"` - not two terms. That composite
+never matches a queue entry, so `-Derive` scores it PENDING forever and the recipe parks permanently and
+silently. On 2026-08-16 `philly-cheesesteak-stuffed-peppers` sat parked with BOTH its ingredients already
+CARRIED, because its two terms had been stored as one joined string. `-Terms 'green bell pepper','shaved
+beef steak'` is right; `-Terms 'green bell pepper,shaved beef steak'` is the bug. Same rule for
+`-OptionalTerms`. Recipes with a single term are unaffected, which is why this hid for a whole run.
 
 **Pending counts are derived, never stored.** A recipe is `priced` when zero blocking ingredients are
 PENDING and zero are NOT-CARRIED, recomputed from `ingredient-queue.ps1`'s own verdicts every time it is
