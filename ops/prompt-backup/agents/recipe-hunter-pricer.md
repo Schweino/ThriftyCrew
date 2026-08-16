@@ -143,14 +143,29 @@ defaulted to Des Moines once, with plausible-looking wrong prices.
 
 **Walmart** - https://www.walmart.com/ . Browser only; walmart.com 403s server-side. Same Next.js stack as
   Sam's, so the same `__NEXT_DATA__` approach applies.
-  - The price lives at `priceInfo.priceDetails.priceLines`. It MOVED from `priceInfo.linePrice`; code reading
-    the old path returns nothing and looks like "no price" rather than erroring.
+  - **THE PRICE SHAPE DIFFERS BY ENDPOINT. Try both, and never read a null as "no price".**
+    - `/search?q=<term>` returns the FLAT shape: `priceInfo.linePrice` + `priceInfo.unitPrice`
+      (confirmed 2026-08-16 across a 19-term capture).
+    - Product/item responses use the NESTED shape: `priceInfo.priceDetails.priceLines`.
+    Read whichever is present. A missing path yields `null`, which looks EXACTLY like "this product has
+    no price" rather than erroring - and that reads downstream as NOT-CARRIED, which rejects a whole
+    recipe over a JSON path. If both paths are absent on a row that clearly shows a price in the page,
+    that is a TOOLING finding to report, never a carriage verdict.
+  - Capture BOTH the line price and the unit price wherever the shape offers them. Taking unitPrice
+    alone caused the 2026-07-15 quarantine.
 
 **Hy-Vee** - https://www.hy-vee.com/aisles-online/search?search=<term> . First-party, NOT Instacart.
   - Store selector button must read "Omaha #1, NE".
   - An in-page fetch returns a client-rendered shell with zero product hrefs. Use get_page_text / read_page
     on the RENDERED page.
   - Roughly 100s per term. Fine for one ingredient; never attempt a sweep.
+  - **HY-VEE'S OWN SEARCH MISSES STOCKED ITEMS. One empty query is NOT a not-carried.** Searching
+    `beef base` returned only broths and cubes; searching the BRAND, `better than bouillon`, proved
+    Better Than Bouillon Beef Base 8 oz is stocked at $6.49 (2026-08-16). Before recording anything
+    negative at Hy-Vee, try a second rung: the dominant brand name, a synonym, or the category term.
+    A single-rung Hy-Vee query producing "not carried" is a finding about the search box, not about the
+    shelf - and the same discipline as `unchecked is never not-carried` applies to a search that simply
+    did not surface the item.
 
 ## Adjudication is the part only you can do
 
