@@ -1,0 +1,278 @@
+{
+    "name":  "Italian Ground Turkey and White Bean Skillet",
+    "slug":  "italian-ground-turkey-white-bean-skillet",
+    "cuisine":  "Italian",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.familyfoodonthetable.com/italian-ground-turkey-skillet/",
+    "source_site":  "familyfoodonthetable.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Every gram and buy string transcribed from mapped\\italian-ground-turkey-white-bean-skillet.json; no number computed in prose.",
+                         "MACROS transcribed from the mapper\u0027s food-macros-db recompute at 14 servings and re-verified by the writer against the build guard\u0027s own formula: batch 5268 cal / 465.5 P / 334.7 C / 216.5 F, per serving 376.3 cal / 33.3 P / 23.9 C / 15.5 F, which rounds to 376 / 33 / 24 / 15. The intake grams are integer-rounded (892, 1438, 47, 7, 16, 4) from the mapper\u0027s fractional grams; the macro recompute lands identically to the sub-gram figures (build guard passes at 376 cal / 33 P).",
+                         "BAND FLAG, LOUD, CARRIED FROM THE MAPPER: 376 cal per serving is BELOW this run\u0027s 400 cal floor by 24 cal. Carbs 24 g are comfortably under the 35 g gate (PASS). This is the honest label-accurate number and it is NOT adjustable: every quantity is an absolute printed amount (1 lb turkey, one 14.5 oz can of each, 1/2 cup parmesan), so there is no each-weight assumption to correct upward. The source\u0027s own auto-calculated 422 cal / 41 g protein is inflated (protein -18.9% vs our recompute, outside the 15% instrument) and is not reproducible from the printed quantities: turkey 297.9 g + parmesan 70 g + cannellini 69.6 g + the rest sums to 465.5 g protein batch = 33.3/serving, versus the source\u0027s implied 164 g. Numbers here are transcribed, not tuned. Do not retire on this number without a product call on the band; see report.",
+                         "SPINACH is FRESH per the source and the mapper (macro row \u0027Spinach\u0027 is the fresh USDA row, 23 cal/100 g, brand \u0027fresh\u0027). Prose names fresh spinach, the recipe of record. The legacy db\\ingredients.json bid for item \u0027Spinach\u0027 still points at frozen-chopped-spinach, a fresh-to-frozen price-class defect the mapper re-flagged (same defect logged by creamy-tuscan-chicken-skillet); the bid needs correcting to the live fresh \u0027spinach\u0027 commodity through the match-soundness gate before this recipe stamps. Macro side is unaffected (fresh and frozen rows are per-gram identical).",
+                         "GREEN BELL PEPPERS: the mapper repoints the stale ingredient-map id green-bell-pepper (no longer in commodities.json) to the live bell-peppers commodity, whose cheapest cells are green bells (6 of 7 stores). Class-sound for a green line. Flagged for the map repoint through the gate.",
+                         "CANNELLINI: the weekly resolver claims \u0027cannellini\u0027 for the canned-white-beans commodity (white kidney bean class, 6 of 7 stores) while the ingredient-map carries a cannellini-beans id; same product concept, one id should own it at the gate. Flagged.",
+                         "FIRE-ROASTED tomatoes book to the diced-tomatoes commodity per the DB row\u0027s own note (fire-roasted equivalent, high conf) - an estate precedent, same price class, not a variety stretch.",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked both directions: olive oil (step 3), onion (3), green pepper (3), garlic (3), turkey (4), Italian seasoning (5), salt (5), black pepper (5), cannellini beans (6), fire-roasted tomatoes (6), spinach (6), parmesan (7).",
+                         "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet needs a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount and the product form. Re-walk the bullets against cost_lines once the recipe costs.",
+                         "SPINACH \u0027big handful\u0027 has no densities row (mapper flagged): booked 1 handful = 1 USDA cup x2 = 60 g source, 210 g scaled. Macro stakes ~3.5 cal/serving either way, form-independent."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "frozen spinach",
+                                  "em dash"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  376,
+                 "protein":  33,
+                 "carbs":  24,
+                 "fat":  15,
+                 "cost_ps":  "2.11"
+             },
+    "intro_html":  "Ground turkey has a reputation for being the protein you tolerate on a diet rather than the one you look forward to. This skillet quietly fixes that. You brown lean turkey with onion, green pepper and garlic, then fold in white beans, fire-roasted tomatoes and a couple of big handfuls of spinach, and finish the whole thing with parmesan. One pan, about twenty-five minutes, and it eats like it asked more of you than it did. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 25 grams of carbs. That is a filling, low-carb dinner that leans on the cheapest honest protein at the meat case.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3 1/2 lb lean (93/7) ground turkey (1589 g)",
+                                "\u003cstrong\u003eCannellini Beans (generic):\u003c/strong\u003e 3 1/2 (14.5 oz) cans cannellini beans, rinsed and drained (about 5 1/4 cups drained) (892 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3 1/2 (14.5 oz) cans fire-roasted diced tomatoes (1438 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 1/2 green bell peppers, chopped (420 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 1/2 medium onions, chopped (385 g)",
+                                "\u003cstrong\u003eSpinach:\u003c/strong\u003e 7 cups fresh baby spinach (about 7 oz) (210 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 3/4 cups grated Parmesan (196 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 1/2 tbsp extra-virgin olive oil (47 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 7 cloves garlic, minced (21 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 3/4 tbsp dried Italian seasoning (7 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 1/2 tsp kosher salt (16 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 3/4 tsp black pepper (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 3 1/2 lb lean (93/7) ground turkey: ~$15.94. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
+                       "Cannellini Beans, 3 1/2 (14.5 oz) cans cannellini beans, rinsed and drained (about 5 1/4 cups drained): ~$2.87. \u003cstrong\u003eBuy 4 cans: $3.29.\u003c/strong\u003e",
+                       "Diced Tomatoes, 3 1/2 (14.5 oz) cans fire-roasted diced tomatoes: ~$2.68. \u003cstrong\u003eBuy 4 cans: $3.07.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3 1/2 green bell peppers, chopped: ~$2.70. \u003cstrong\u003eBuy 4 each: $3.08.\u003c/strong\u003e",
+                       "Yellow Onion, 3 1/2 medium onions, chopped: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Spinach, 7 cups fresh baby spinach (about 7 oz): ~$0.85. \u003cstrong\u003eBuy 1 10oz bag: $1.15.\u003c/strong\u003e",
+                       "Parmesan Cheese, 1 3/4 cups grated Parmesan: ~$2.37. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
+                       "Olive Oil, 3 1/2 tbsp extra-virgin olive oil: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 7 cloves garlic, minced: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Pantry seasonings (italian seasoning, salt, black pepper): ~$0.38. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.56 across 14 servings, so roughly $2.11 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.14 across 14 servings, roughly $2.44 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.79 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.93. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a hearty Italian skillet that tastes like it took all afternoon. The turkey and the beans carry the plate; the tomatoes, spinach and parmesan just make it taste like more than it cost.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eLean ground turkey is the backbone, so buy it right.\u003c/strong\u003e Three and a half pounds of 93/7 is where most of the money and all of the protein live. Reach for the big family roll instead of the little one-pound trays so you are paying for turkey, not packaging. The 93/7 blend keeps it lean without cooking up dry and chalky the way the 99 percent breast can.",
+                       "\u003cstrong\u003eWhite beans do the stretching.\u003c/strong\u003e Cannellini beans are what make this cheap and filling at the same time, about three and a half cans, rinsed and drained. Any white kidney bean on the shelf works, and the store brand behaves exactly the same once it hits a hot pan.",
+                       "\u003cstrong\u003eFire-roasted diced tomatoes bring the smoke and the sauce both.\u003c/strong\u003e You want about three and a half cans, poured in with their juice. Fire-roasted is worth reaching for over plain diced because the char does flavor work that would otherwise cost you a longer simmer and a fuller spice rack.",
+                       "\u003cstrong\u003eFresh spinach folds in green at the end.\u003c/strong\u003e About seven cups sounds like a mountain in the bag, but it cooks down to almost nothing, so do not let the pile scare you. This is fresh spinach, not the frozen block. A few onions, a few green bell peppers and a small head of garlic round out the vegetables.",
+                       "\u003cstrong\u003eParmesan and pantry staples finish it.\u003c/strong\u003e About one and three quarter cups of grated parmesan melts over the top, and a little olive oil to start the pan plus Italian seasoning, salt and pepper are backbone staples you most likely already have, so they barely move the cart."
+                   ],
+    "make_it":  [
+                    "Weigh your empty skillet or pot and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every single container.",
+                    "Chop the onions and green peppers, mince the garlic, and rinse and drain the beans so everything is ready before the pan gets hot.",
+                    "Heat the olive oil in a large skillet over medium heat. Add the chopped onion and green pepper and saute about 5 minutes, until they soften. Stir in the garlic and cook another 30 seconds, just until you can smell it.",
+                    "Add the ground turkey and cook, breaking it up with a spoon, until it is browned and cooked through, about 10 minutes at this batch size. Work in two batches if the pan looks crowded, so the turkey browns instead of steaming.",
+                    "Stir in the Italian seasoning, kosher salt and black pepper and mix well to coat the turkey.",
+                    "Add the beans and the fire-roasted tomatoes with their juice and stir to combine. Pile in the spinach and stir until it wilts down into the turkey mixture, about 2 to 3 minutes.",
+                    "Sprinkle the parmesan over the top and stir it through so every serving gets its share of cheese.",
+                    "Weigh the full pan and subtract the empty weight from Step 1 to get the cooked total. Divide that number by 14 and spoon that weight into each container so every serving lands the same."
+                ],
+    "portion_html":  "Set the full pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Give each container an even share of the turkey, beans, tomatoes and spinach, aiming for that weight, and it lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.familyfoodonthetable.com/italian-ground-turkey-skillet/\" target=\"_blank\" rel=\"noopener\"\u003efamilyfoodonthetable.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  29.56,
+    "cost_batch_true":  34.14,
+    "cost_per_serving":  2.11,
+    "cost_per_serving_true":  2.44,
+    "cost_pantry_add":  10.79,
+    "cost_first_run":  44.93,
+    "scaler":  {
+                   "cost":  "34.14",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1589,
+                                   "buy":  "3 1/2 lb lean (93/7) ground turkey",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cannellini Beans",
+                                   "canon":  "Cannellini Beans",
+                                   "grams":  892,
+                                   "buy":  "3 1/2 (14.5 oz) cans cannellini beans, rinsed and drained (about 5 1/4 cups drained)",
+                                   "bid":  "cannellini-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1438,
+                                   "buy":  "3 1/2 (14.5 oz) cans fire-roasted diced tomatoes",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  420,
+                                   "buy":  "3 1/2 green bell peppers, chopped",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3 1/2 medium onions, chopped",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Spinach",
+                                   "canon":  "Spinach",
+                                   "grams":  210,
+                                   "buy":  "7 cups fresh baby spinach (about 7 oz)",
+                                   "bid":  "frozen-chopped-spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  196,
+                                   "buy":  "1 3/4 cups grated Parmesan",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3 1/2 tbsp extra-virgin olive oil",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  21,
+                                   "buy":  "7 cloves garlic, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  7,
+                                   "buy":  "1 3/4 tbsp dried Italian seasoning",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  16,
+                                   "buy":  "2 1/2 tsp kosher salt",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "1 3/4 tsp black pepper",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Italian ground turkey and white bean skillet for meal prep: lean turkey browned with peppers and onion, then simmered with cannellini beans, fire-roasted tomatoes, spinach and parmesan, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 25 grams of carbs.",
+                 "keywords":  "italian ground turkey skillet, ground turkey white bean skillet, low carb meal prep, high protein turkey dinner, fire roasted tomato skillet",
+                 "image":  "",
+                 "prepTime":  "PT5M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT25M",
+                 "costPerServing":  2.11,
+                 "recipeIngredient":  [
+                                          "93/7 Ground Turkey, 3 1/2 lb lean (93/7) ground turkey (1589 g)",
+                                          "Cannellini Beans, 3 1/2 (14.5 oz) cans cannellini beans, rinsed and drained (about 5 1/4 cups drained) (892 g)",
+                                          "Diced Tomatoes, 3 1/2 (14.5 oz) cans fire-roasted diced tomatoes (1438 g)",
+                                          "Green Bell Peppers, 3 1/2 green bell peppers, chopped (420 g)",
+                                          "Yellow Onion, 3 1/2 medium onions, chopped (385 g)",
+                                          "Spinach, 7 cups fresh baby spinach (about 7 oz) (210 g)",
+                                          "Parmesan Cheese, 1 3/4 cups grated Parmesan (196 g)",
+                                          "Olive Oil, 3 1/2 tbsp extra-virgin olive oil (47 g)",
+                                          "Garlic, 7 cloves garlic, minced (21 g)",
+                                          "Italian Seasoning, 1 3/4 tbsp dried Italian seasoning (7 g)",
+                                          "Salt, 2 1/2 tsp kosher salt (16 g)",
+                                          "Black Pepper, 1 3/4 tsp black pepper (4 g)"
+                                      ],
+                 "steps":  [
+                               "Chop the onions and green peppers, mince the garlic, and rinse and drain the beans.",
+                               "Saute the onion and green pepper in olive oil until soft, then add the garlic for 30 seconds.",
+                               "Add the ground turkey and cook, breaking it up, until browned and cooked through.",
+                               "Stir in the Italian seasoning, salt and black pepper.",
+                               "Add the beans and fire-roasted tomatoes, then stir in the spinach until wilted.",
+                               "Stir the parmesan through, then weigh the pan, subtract the empty weight, and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1589
+                              },
+                              {
+                                  "item":  "Cannellini Beans",
+                                  "grams":  892
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1438
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Spinach",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

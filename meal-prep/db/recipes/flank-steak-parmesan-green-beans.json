@@ -1,0 +1,233 @@
+{
+    "name":  "Marinated Flank Steak with Parmesan Green Beans",
+    "slug":  "flank-steak-parmesan-green-beans",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.momsintofitness.com/recipes/flank-steak-green-beans/",
+    "source_site":  "momsintofitness.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Every gram and buy string transcribed from mapped\\flank-steak-parmesan-green-beans.json; no number computed in prose.",
+                         "MACROS transcribed from the mapper\u0027s food-DB recompute (543.3 cal, 31.7 g protein, 22.6 g carbs, 37.6 g fat per serving), reported as stat 543 / 32 / 23 / 38 and re-verified by build-v2-spec\u0027s food-macros-db recompute at 14 servings. In band for this run (400 to 650 cal, 35 g carb or less): 543 cal sits inside the window and carbs 22.6 g leave about 12 g under the ceiling.",
+                         "OLIVE OIL COMBINED: the source lists two oil lines, 1/4 cup in the marinade and 1/4 cup in the green-bean dressing. To a shopper that is one bottle, so they are booked as a single 378 g line (1 3/4 cups, divided) exactly as the chimichurri build did this batch. The mapper kept them separate (189 g + 189 g) to trace to the extraction; the sum is identical and the steps divide it (about 7/8 cup into the marinade, about 7/8 cup reserved for the beans).",
+                         "RED WINE VINEGAR COMBINED for the same reason: source marinade 2 tbsp scaled to 105 g plus dressing 1 tbsp scaled to 53 g, one bottle to a shopper, booked as one 158 g line (10 1/2 tbsp, divided). Steps split it, 7 tbsp into the marinade and about 3 1/2 tbsp into the dressing.",
+                         "COCONUT AMINOS -\u003e SOY SAUCE is source-sanctioned: the source line itself prints \u00271/4 CUP COCONUT AMINOS (OR SOY SAUCE)\u0027. Coconut aminos has no board commodity; soy sauce is carried 7 of 7. Transcribed straight from the mapper\u0027s ruled_substitutions; the macro delta is small and honest.",
+                         "SALT AND PEPPER is the source\u0027s unmeasured to-taste line, mapped optional-pantry at zero grams and NOT booked as a cost line, so no step names it as an ingredient. Steps say \u0027season to taste\u0027 only. This keeps the reverse-orphan rail clean (no step uses anything the shopper did not buy).",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked the costed list against the steps both directions: flank steak (make_it 2,3,4,5), olive oil (2 marinade + 7 dressing, divided), garlic (2), honey (2), red wine vinegar (2 marinade + 7 dressing, divided), soy sauce (2), green beans (6,7), dijon mustard (7), parmesan (7).",
+                         "GREEN BEANS fresh-or-frozen is source-sanctioned (\u002716 OUNCES FRESH OR FROZEN GREEN BEANS\u0027), not a writer form-flip. The ingredient-map routes Green Beans to frozen-green-beans (recipe board, 5 of 7); the fresh commodity is also carried (6 of 7) if the cook prefers fresh. Either satisfies the source line; the buy string says \u0027fresh or frozen\u0027 so the shopper picks.",
+                         "HONEY is the marinade sugar and it is the single biggest carb line: 221 g books about 12.8 g of the 22.6 g carbs per serving. The macro basis counts the full marinade because that is the basis the source\u0027s own published nutrition uses (their 15 g sugars per serving is the whole honey). Real absorbed honey is lower since most marinade is discarded, but discounting it would be a guess, so it is counted in full and flagged in the report rather than trimmed.",
+                         "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it. Every statement is grounded in the recipe\u0027s own buy amount, package sizes referenced generically and never with a per-line cost. Parmesan is named as grated to match the commodity the engine actually buys (grated parmesan), so there is no block-beats-tub trap. Re-walk the bullets against cost_lines once costed before publish.",
+                         "PORTION METHOD adapted to a two-component plate: combine the sliced steak and the dressed green beans in one bowl, weigh it full, subtract the empty weight, divide by 14. Both components are counted in the portion, which is the honest weigh-the-pot method for a mixed batch."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  543,
+                 "protein":  32,
+                 "carbs":  23,
+                 "fat":  38,
+                 "cost_ps":  "3.10"
+             },
+    "intro_html":  "Flank steak has a reputation for being the cheap cut, and that reputation is exactly why you want it. Marinate it, sear it hot and fast, then slice it thin across the grain and it eats like a cut that costs twice as much. The marinade does the heavy lifting here, a mix of soy sauce, honey, garlic, and red wine vinegar that tenderizes a lean cut and gives it a sweet and savory edge. Next to it sits a pile of green beans tossed in a sharp dijon dressing with a good handful of parmesan, which is a lot more interesting than a plain steamed side. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 35 grams of carbs. That is a steakhouse plate for meal-prep money.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 3 1/2 lb flank steak (1588 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 3/4 cups, divided (378 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 1/2 cloves, minced (11 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 10 1/2 tbsp (about 2/3 cup) (221 g)",
+                                "\u003cstrong\u003eRed Wine Vinegar (generic):\u003c/strong\u003e 10 1/2 tbsp (about 2/3 cup), divided (158 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 3/4 cup plus 2 tbsp (223 g)",
+                                "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 3 1/2 lb, fresh or frozen (1588 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 3 1/2 tsp (18 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 cup plus 2 3/4 tbsp, grated (131 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Flank/Sirloin Steak, 3 1/2 lb flank steak: ~$30.87. \u003cstrong\u003eBuy 4 lbs: $35.27.\u003c/strong\u003e",
+                       "Olive Oil, 1 3/4 cups, divided: ~$4.11. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Garlic, 3 1/2 cloves, minced: ~$0.15. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Honey, 10 1/2 tbsp (about 2/3 cup): ~$1.75. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Red Wine Vinegar, 10 1/2 tbsp (about 2/3 cup), divided: ~$0.64. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Soy Sauce, 3/4 cup plus 2 tbsp: ~$0.84. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Green Beans, 3 1/2 lb, fresh or frozen: ~$3.42. \u003cstrong\u003eBuy 5 12oz bags: $3.66.\u003c/strong\u003e",
+                       "Dijon Mustard, 3 1/2 tsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Parmesan Cheese, 1 cup plus 2 3/4 tbsp, grated: ~$1.58. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $43.45 across 14 servings, so roughly $3.10 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.68 across 14 servings, roughly $3.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.60 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.28. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a marinated flank steak dinner with a real side, not a sad scoop of plain vegetables. The steak carries the plate, and the marinade is what makes a cheap cut taste like a splurge.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThree and a half pounds of flank steak is the anchor.\u003c/strong\u003e This is where most of the money and all of the protein live, so buy the one big cut and slice it yourself instead of paying extra for pre-cut strips. If the case has sirloin cheaper the week you shop, grab that instead, because the two cook and slice the same way and sit in the same price class.",
+                       "\u003cstrong\u003eThree and a half pounds of green beans fill out the plate.\u003c/strong\u003e Fresh or frozen both work here, so buy whichever is cheaper when you shop. Frozen beans come trimmed and cook straight from the bag, and fresh beans just need the ends snapped off. Either one holds its crunch under the dressing.",
+                       "\u003cstrong\u003eThe marinade is built from pantry backbone.\u003c/strong\u003e Soy sauce, honey, red wine vinegar, garlic, and olive oil are the whole mix, and most of them are already in your kitchen. That is what makes a lean cut taste rich without a pricey bottled marinade off the shelf. The coconut aminos the original recipe calls for swaps cleanly to soy sauce, which every store carries and costs less.",
+                       "\u003cstrong\u003eParmesan and dijon dress the green beans.\u003c/strong\u003e A little grated parmesan and a spoon of dijon mustard are what turn plain steamed beans into a side you actually look forward to. You use only a small amount of each across the whole batch, all whisked into the dressing, so they barely move the cart."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing bowl or storage pan and write the number down. At the end you will weigh it full and divide by 14, which is the only honest way to split a batch this size into even servings.",
+                    "Make the marinade. In a large bowl whisk together about seven-eighths of a cup of the olive oil, the garlic, the honey, seven tablespoons of the red wine vinegar, and the soy sauce, holding back the rest of the oil and vinegar for the green beans. Season to taste.",
+                    "Add the flank steak to the bowl and turn it to coat, then cover and refrigerate at least an hour and up to overnight. The longer it sits the more tender it comes out.",
+                    "Heat a grill or a heavy pan hot. Sear the steak about two minutes a side to build a crust, then keep cooking to the doneness you like. Work in batches if the pan is crowded, because crowded meat steams instead of searing.",
+                    "Let the steak rest ten minutes, then slice it thin across the grain on a diagonal. Resting first is what keeps the juice in the meat instead of running out on the board.",
+                    "While the steak rests, cook the green beans. Put them in a large skillet, cover with water, and boil about four to five minutes for fresh beans or until just tender for frozen. Drain them well.",
+                    "Whisk the reserved olive oil, the reserved red wine vinegar, and the dijon mustard into a quick dressing. Pour it over the drained green beans and toss to coat, then sprinkle the parmesan over the top and toss again.",
+                    "Combine the sliced steak and the dressed green beans in the bowl from Step 1, weigh it full, and subtract the empty weight. Divide that number by 14 and give each container that exact weight, aiming for an even share of steak and beans in every one."
+                ],
+    "portion_html":  "Set the full bowl on your scale and subtract the empty weight you noted in Step 1 to get the cooked total, steak and beans together. Divide that number by 14 and give each container that exact weight. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.momsintofitness.com/recipes/flank-steak-green-beans/\" target=\"_blank\" rel=\"noopener\"\u003emomsintofitness.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  43.45,
+    "cost_batch_true":  49.68,
+    "cost_per_serving":  3.1,
+    "cost_per_serving_true":  3.55,
+    "cost_pantry_add":  7.6,
+    "cost_first_run":  57.28,
+    "scaler":  {
+                   "cost":  "49.68",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1588,
+                                   "buy":  "3 1/2 lb flank steak",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  378,
+                                   "buy":  "1 3/4 cups, divided",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  11,
+                                   "buy":  "3 1/2 cloves, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  221,
+                                   "buy":  "10 1/2 tbsp (about 2/3 cup)",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Wine Vinegar",
+                                   "canon":  "Red Wine Vinegar",
+                                   "grams":  158,
+                                   "buy":  "10 1/2 tbsp (about 2/3 cup), divided",
+                                   "bid":  "red-wine-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  223,
+                                   "buy":  "3/4 cup plus 2 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Green Beans",
+                                   "canon":  "Green Beans",
+                                   "grams":  1588,
+                                   "buy":  "3 1/2 lb, fresh or frozen",
+                                   "bid":  "frozen-green-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  18,
+                                   "buy":  "3 1/2 tsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  131,
+                                   "buy":  "1 cup plus 2 3/4 tbsp, grated",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Marinated flank steak with parmesan green beans for meal prep: lean flank steak in a soy, honey, and garlic marinade, seared and sliced thin, served with dijon-dressed green beans and parmesan, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 35 grams of carbs.",
+                 "keywords":  "flank steak meal prep, marinated flank steak, steak and green beans, low carb steak dinner, high protein beef meal prep",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT15M",
+                 "totalTime":  "PT1H30M",
+                 "costPerServing":  3.1,
+                 "recipeIngredient":  [
+                                          "Beef Flank/Sirloin Steak, 3 1/2 lb flank steak (1588 g)",
+                                          "Olive Oil, 1 3/4 cups, divided (378 g)",
+                                          "Garlic, 3 1/2 cloves, minced (11 g)",
+                                          "Honey, 10 1/2 tbsp (about 2/3 cup) (221 g)",
+                                          "Red Wine Vinegar, 10 1/2 tbsp (about 2/3 cup), divided (158 g)",
+                                          "Soy Sauce, 3/4 cup plus 2 tbsp (223 g)",
+                                          "Green Beans, 3 1/2 lb, fresh or frozen (1588 g)",
+                                          "Dijon Mustard, 3 1/2 tsp (18 g)",
+                                          "Parmesan Cheese, 1 cup plus 2 3/4 tbsp, grated (131 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh the empty bowl and note the number for portioning later.",
+                               "Whisk the olive oil, garlic, honey, red wine vinegar, and soy sauce into a marinade, holding back oil and vinegar for the beans.",
+                               "Add the flank steak, coat, and refrigerate at least an hour.",
+                               "Sear the steak about two minutes a side, then cook to your doneness, in batches if needed.",
+                               "Rest the steak ten minutes and slice it thin across the grain.",
+                               "Boil the green beans until just tender and drain.",
+                               "Toss the beans with a dijon dressing and sprinkle on the parmesan.",
+                               "Combine steak and beans, weigh the bowl, and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  378
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  221
+                              },
+                              {
+                                  "item":  "Red Wine Vinegar",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  223
+                              },
+                              {
+                                  "item":  "Green Beans",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  131
+                              }
+                          ]
+}

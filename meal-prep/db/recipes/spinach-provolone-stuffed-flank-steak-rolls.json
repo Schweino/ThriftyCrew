@@ -1,0 +1,229 @@
+{
+    "name":  "Spinach Provolone Stuffed Flank Steak Rolls",
+    "slug":  "spinach-provolone-stuffed-flank-steak-rolls",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://gimmedelicious.com/spinach-cheese-stuffed-flank-steak-rolls/",
+    "source_site":  "gimmedelicious.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 4 (2 pinwheel rolls per serving from a 1 lb flank), rebuilt to 14 at the mapper\u0027s 3.5x scale, which is 28 rolls and about 113 g of raw flank per serving. Every gram and buy string transcribed from mapped\\spinach-provolone-stuffed-flank-steak-rolls.json; no number computed in prose.",
+                         "MACROS transcribed from the mapper\u0027s food-DB recompute (546.2 cal, 42.2 g protein, 5.4 g carbs, 40.1 g fat per serving), reported as stat 546 / 42 / 5 / 40 and re-verified by build-v2-spec\u0027s food-macros-db recompute at 14 servings. In band for this run (400 to 650 cal, 35 g carb or less): 546 cal sits inside the window with about 104 cal of ceiling headroom, and carbs at 5.4 g are nowhere near the 35 g limit.",
+                         "VEGETABLE OIL is the source\u0027s bare \u0027oil\u0027 line, booked to the house vegetable-oil generic per the mapper\u0027s ruled_substitutions (the recipe names no oil type). It fries the onion and garlic base that goes into the filling, so it is counted in full and named in the filling step.",
+                         "PROVOLONE is the primary of the source\u0027s own \u0027or mozzarella or your favorite melting cheese\u0027 line, so booking provolone matches the source\u0027s published nutrition basis. The buy string names it as sliced to match the sliced-provolone commodity the engine buys; no slice-weight assumption exists because the source states a weight (8 oz scaled to 28 oz).",
+                         "CREAM CHEESE is full-fat, matching the mapper\u0027s deliberate choice (the 1/3-fat map entry would deflate calories). Booked at 14 oz / 397 g and named in the filling step.",
+                         "SPINACH is FRESH baby spinach, matching the source and the buy string. The mapper flagged a stamp-time hazard: the ingredient map routes the item name \u0027Spinach\u0027 to frozen-chopped-spinach, so pricing and item_id resolve to the frozen commodity even though the dish is fresh. Macros are unaffected (fresh and frozen rows are per-gram identical); the price class is wrong. Left as the mapper mapped it and flagged in the report, not fixed here.",
+                         "SALT AND PEPPER is the source\u0027s unmeasured to-taste line (source states NO quantity); booked here at a smallest-defensible to-taste minimum (Salt 2 tsp, Black Pepper 1 tsp per 14-serving batch, both zero/near-zero macro) so the \u0027season with salt and pepper\u0027 steps (make_it 2, 3, 4) are cook-as-shopped and clear the PHANTOM buy-coverage gate (2026-08-16 repair). Grams are macro-immaterial.",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked the costed list against the steps both directions: flank steak (make_it 2, 4, 5, 6), vegetable oil (3), onion (3), garlic (3), cream cheese (3, 4), provolone (4), spinach (4).",
+                         "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it. Every statement is grounded in the recipe\u0027s own buy amount, with package sizes referenced generically and never with a per-line cost. Provolone is named as sliced to match the commodity the engine buys, so there is no block-beats-tub trap. Re-walk the bullets against cost_lines once costed before publish.",
+                         "PORTION METHOD: the rolls are one component, so weigh the full baking dish of cooked pinwheels, subtract the empty weight noted in Step 1, and divide by 14. Two rolls per serving is the source\u0027s own portion; the scale weight is the honest tie-breaker when rolls vary in size.",
+                         "COST NOTE for the repair pass: db\\ingredients.json has no \u0027Cream Cheese\u0027 row (only \u00271/3 Fat Cream Cheese\u0027), so the item may resolve with no bid and cost as zero even though the cream-cheese commodity is on the feed. Flagged in the report; a real bought ingredient must not cost nothing."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  546,
+                 "protein":  42,
+                 "carbs":  5,
+                 "fat":  40,
+                 "cost_ps":  "2.77"
+             },
+    "intro_html":  "Flank steak is the cut that rewards a little knife work. Butterfly it open, spread it with a warm cream cheese and garlic filling, lay down fresh spinach and slices of provolone, then roll it up and slice it into pinwheels. What comes out of the oven looks like something off a steakhouse menu, and it costs a fraction of one. The filling does the heavy lifting here, turning a lean cut into something rich without a pile of added carbs, which is why this plate lands around \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving with under 10 grams of carbs. Sear the rolls to build a crust, finish them in the oven, and you have two weeks of dinners that eat like a splurge.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 3 1/2 lb flank steak, butterflied (1588 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 7 tbsp vegetable oil (98 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 3/4 cups chopped onion (about 2 medium) (201 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 12 cloves garlic, minced (about 1 head) (36 g)",
+                                "\u003cstrong\u003eCream Cheese (generic (USDA)):\u003c/strong\u003e 14 oz cream cheese (one and three-quarter 8 oz bricks) (397 g)",
+                                "\u003cstrong\u003eProvolone Cheese (generic):\u003c/strong\u003e 28 oz sliced provolone (1 3/4 lb) (794 g)",
+                                "\u003cstrong\u003eSpinach:\u003c/strong\u003e 7 cups baby spinach (about 7 oz) (210 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Flank/Sirloin Steak, 3 1/2 lb flank steak, butterflied: ~$30.87. \u003cstrong\u003eBuy 4 lbs: $35.27.\u003c/strong\u003e",
+                       "Vegetable Oil, 7 tbsp vegetable oil: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1 3/4 cups chopped onion (about 2 medium): ~$0.51. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 12 cloves garlic, minced (about 1 head): ~$0.49. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Provolone Cheese, 28 oz sliced provolone (1 3/4 lb): ~$5.85. \u003cstrong\u003eBuy 4 8oz packs: $6.69.\u003c/strong\u003e",
+                       "Spinach, 7 cups baby spinach (about 7 oz): ~$0.85. \u003cstrong\u003eBuy 1 10oz bag: $1.15.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.00. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $38.81 across 14 servings, so roughly $2.77 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.07 across 14 servings, roughly $3.22 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.95 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.02. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a stuffed flank steak dinner that looks like a restaurant plate. The steak carries the protein, the cream cheese and provolone carry the richness, and the whole thing stays under 10 grams of carbs a serving.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThree and a half pounds of flank steak is the anchor.\u003c/strong\u003e This is where most of the money and nearly all of the protein live, so buy the one big cut and butterfly it yourself instead of paying extra for anything pre-cut. If the case has sirloin cheaper the week you shop, grab that instead, because the two cook and slice the same way and sit in the same price class.",
+                       "\u003cstrong\u003eThe cheese is the whole point of the filling.\u003c/strong\u003e Cream cheese whipped with sauteed onion and garlic gives the rolls their richness, and the sliced provolone melts into every pinwheel. Buy the provolone sliced from the deli or the pre-sliced pack, whichever is cheaper the day you shop, since both melt the same once they hit the oven.",
+                       "\u003cstrong\u003eSpinach and aromatics round it out for pocket change.\u003c/strong\u003e A few big handfuls of fresh baby spinach, a couple of onions, and a head of garlic are the rest of the build, and they barely move the cart. The spinach wilts down to almost nothing inside the roll, so do not be shy piling it on the steak before you roll it.",
+                       "\u003cstrong\u003eKitchen twine or toothpicks are the only special gear.\u003c/strong\u003e You need something to hold the rolls together while they sear and bake, and kitchen twine or a box of toothpicks both do the job. Most kitchens already have one or the other, so this is not a real add to the cart."
+                   ],
+    "make_it":  [
+                    "Weigh your empty baking dish or storage pan and write the number down. At the end you will weigh it full and divide by 14, which is the only honest way to split a batch this size into even servings.",
+                    "Heat the oven to 375 degrees. Butterfly each flank steak by slicing it open horizontally and pounding it flat, then season both sides with salt and pepper and set them aside.",
+                    "Make the filling. Heat the vegetable oil in a skillet over medium-high, add the chopped onion, and cook two to three minutes until soft and almost golden. Add the garlic and cook another minute, then pull the pan off the heat and stir in the cream cheese until it melts into a smooth spread. Season with salt and pepper.",
+                    "Build the rolls. Spread the cream cheese filling over the opened steaks, then layer on the spinach and the provolone slices. Roll each steak up snug and tie it with kitchen twine or pin it with toothpicks, then slice between the ties into pinwheels and season the cut faces lightly with salt and pepper.",
+                    "Sear the pinwheels. Heat a large heavy pan hot, add the rolls, and sear two to three minutes per side to build a crust. Work in batches so the pan stays hot, because crowded meat steams instead of searing.",
+                    "Transfer the seared rolls to your baking dish and bake ten minutes, until the cheese is molten and the beef is done to your liking. Pull them out, tent with foil, and rest five minutes before portioning.",
+                    "Weigh the full dish, subtract the empty weight from Step 1, and divide by 14. Give each container that exact weight, aiming for two rolls in every one so the servings come out even."
+                ],
+    "portion_html":  "Set the full baking dish on your scale and subtract the empty weight you noted in Step 1 to get the cooked total. Divide that number by 14 and give each container that exact weight, which works out to about two pinwheels apiece. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://gimmedelicious.com/spinach-cheese-stuffed-flank-steak-rolls/\" target=\"_blank\" rel=\"noopener\"\u003egimmedelicious.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  38.81,
+    "cost_batch_true":  45.07,
+    "cost_per_serving":  2.77,
+    "cost_per_serving_true":  3.22,
+    "cost_pantry_add":  2.95,
+    "cost_first_run":  48.02,
+    "scaler":  {
+                   "cost":  "45.07",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1588,
+                                   "buy":  "3 1/2 lb flank steak, butterflied",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  98,
+                                   "buy":  "7 tbsp vegetable oil",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  201,
+                                   "buy":  "1 3/4 cups chopped onion (about 2 medium)",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  36,
+                                   "buy":  "12 cloves garlic, minced (about 1 head)",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Cream Cheese",
+                                   "canon":  "Cream Cheese",
+                                   "grams":  397,
+                                   "buy":  "14 oz cream cheese (one and three-quarter 8 oz bricks)",
+                                   "bid":  "1-3-fat-cream-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Provolone Cheese",
+                                   "canon":  "Provolone Cheese",
+                                   "grams":  794,
+                                   "buy":  "28 oz sliced provolone (1 3/4 lb)",
+                                   "bid":  "provolone-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Spinach",
+                                   "canon":  "Spinach",
+                                   "grams":  210,
+                                   "buy":  "7 cups baby spinach (about 7 oz)",
+                                   "bid":  "frozen-chopped-spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "2 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Spinach and provolone stuffed flank steak rolls for meal prep: butterflied flank steak spread with a cream cheese and garlic filling, layered with fresh spinach and provolone, rolled and sliced into pinwheels, seared and baked, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 10 grams of carbs.",
+                 "keywords":  "stuffed flank steak, flank steak pinwheels, spinach provolone steak rolls, low carb steak dinner, high protein beef meal prep",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT30M",
+                 "costPerServing":  2.77,
+                 "recipeIngredient":  [
+                                          "Beef Flank/Sirloin Steak, 3 1/2 lb flank steak, butterflied (1588 g)",
+                                          "Vegetable Oil, 7 tbsp vegetable oil (98 g)",
+                                          "Yellow Onion, 1 3/4 cups chopped onion (about 2 medium) (201 g)",
+                                          "Garlic, 12 cloves garlic, minced (about 1 head) (36 g)",
+                                          "Cream Cheese, 14 oz cream cheese (one and three-quarter 8 oz bricks) (397 g)",
+                                          "Provolone Cheese, 28 oz sliced provolone (1 3/4 lb) (794 g)",
+                                          "Spinach, 7 cups baby spinach (about 7 oz) (210 g)",
+                                          "Salt, 2 tsp (12 g)",
+                                          "Black Pepper, 1 tsp (2 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh the empty baking dish and note the number for portioning later.",
+                               "Heat the oven to 375 degrees, butterfly and pound the flank steak, and season with salt and pepper.",
+                               "Saute the onion and garlic in the oil, then stir in the cream cheese off the heat to make the filling.",
+                               "Spread the filling on the steak, layer on spinach and provolone, roll and tie, then slice into pinwheels.",
+                               "Sear the pinwheels two to three minutes a side in batches.",
+                               "Bake the rolls ten minutes, then tent and rest five minutes.",
+                               "Weigh the full dish, subtract the empty weight, and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  201
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  36
+                              },
+                              {
+                                  "item":  "Cream Cheese",
+                                  "grams":  397
+                              },
+                              {
+                                  "item":  "Provolone Cheese",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Spinach",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              }
+                          ]
+}

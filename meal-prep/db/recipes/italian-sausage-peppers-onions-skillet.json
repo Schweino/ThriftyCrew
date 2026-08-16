@@ -1,0 +1,177 @@
+{
+    "name":  "Italian Sausage, Peppers and Onions with Sauce",
+    "slug":  "italian-sausage-peppers-onions-skillet",
+    "cuisine":  "Italian",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.lowcarbmaven.com/sausage-peppers-onions/",
+    "source_site":  "lowcarbmaven.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Grams and buy strings transcribed from the mapped file; no number computed in prose.",
+                         "Rao\u0027s Marinara (source brand) books to the house marinara commodity and the Great Value marinara label row per the mapper\u0027s ruled_substitutions. Same product concept; the Rao\u0027s premium is a brand, not a different food.",
+                         "The source\u0027s traditional method browns the sliced sausage with 1 1/2 tsp oil, and the mapper booked only the listed 1 tbsp olive oil (x3.5 = 3 1/2 tbsp) for the vegetable saute, matching the source\u0027s own nutrition basis. The make-it steps therefore brown the sausage in its own rendered fat (no orphan oil line) and spend the full 3 1/2 tbsp olive oil on the peppers, onion, and garlic. Every bought ingredient is used by a step and no step calls for anything unbought.",
+                         "Salt and pepper are the source\u0027s to-taste line, mapped optional-pantry at zero grams and NOT booked as a cost line. The steps say only \u0027taste and adjust the seasoning\u0027 so no step names an ingredient the shopper did not buy.",
+                         "BAND FLAG (carried from the mapper, LOUD): the label-accurate recompute lands at 382 cal per serving on the current house Hot Italian Sausage row, which is BELOW this run\u0027s 400 cal floor by 18 cal. The mapper flagged the sausage row\u0027s serving basis (raw vs cooked 70 g) as ambiguous and band-deciding; on a raw-pork basis the honest compute is ~460-470 cal and the recipe passes. Numbers here are transcribed from the DB, not adjusted. See report; do not retire on this number until the sausage row basis is pinned."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  382,
+                 "protein":  22,
+                 "carbs":  11,
+                 "fat":  27,
+                 "cost_ps":  "1.30"
+             },
+    "intro_html":  "Sausage and peppers is street-fair food, the kind of smell that reaches you before the stand does. The good news for your wallet is that it was never fancy to begin with. Sweet peppers, an onion, a little garlic, a spoon of marinara, and a good Italian sausage doing most of the work. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 15 grams of carbs. That is a low-carb dinner that eats like a holiday and costs like a Tuesday.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHot Italian Sausage (Johnsonville):\u003c/strong\u003e 3 1/2 lb links (about 17 links), sliced into rounds (1588 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2 lb mixed-color, sliced into strips (about 7 large) (907 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 7 oz, sliced (about 1 3/4 cups) (198 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 1/2 tbsp (47 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 1/2 tsp minced (about 3 cloves) (10 g)",
+                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 1 3/4 cups (431 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Hot Italian Sausage, 3 1/2 lb links (about 17 links), sliced into rounds: ~$8.75. \u003cstrong\u003eBuy 4 lbs: $10.00.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2 lb mixed-color, sliced into strips (about 7 large): ~$7.41. \u003cstrong\u003eBuy 8 each: $7.84.\u003c/strong\u003e",
+                       "Yellow Onion, 7 oz, sliced (about 1 3/4 cups): ~$0.50. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Olive Oil, 3 1/2 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 3 1/2 tsp minced (about 3 cloves): ~$0.14. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Marinara Sauce, 1 3/4 cups: ~$0.90. \u003cstrong\u003eBuy 1 24oz jar: $1.42.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $18.21 across 14 servings, so roughly $1.30 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $21.49 across 14 servings, roughly $1.54 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.00 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $28.49. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for sausage and peppers that would run you three or four times as much at a street fair. The sausage does the heavy lifting and the peppers stretch it.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThe sausage is the whole meal, so buy it right.\u003c/strong\u003e You want three and a half pounds of Italian links, which is most of the plan on one line. Hot or mild is your call; they cost the same and cook the same.",
+                       "\u003cstrong\u003eMixed color peppers are the color and the sweetness both.\u003c/strong\u003e Grab about seven large ones, roughly two pounds, in whatever red, yellow, and orange the produce case has. Buy them loose rather than in a shrink-wrapped tray and you pay for peppers, not packaging.",
+                       "\u003cstrong\u003eOne onion covers the whole batch.\u003c/strong\u003e Seven ounces is a single medium yellow onion, and it is here for backbone, not bulk. The rest of the bag keeps for the next thing you cook.",
+                       "\u003cstrong\u003eOne jar of marinara carries it with sauce to spare.\u003c/strong\u003e The batch uses under two cups, so a standard jar does the job and leaves you a good pour for pasta night. Store brand behaves the same once it hits a hot pan.",
+                       "\u003cstrong\u003eOlive oil and garlic are pantry backbone.\u003c/strong\u003e Three and a half tablespoons of oil and three cloves of garlic are staples you likely already have, so they barely move the cart."
+                   ],
+    "make_it":  [
+                    "Weigh your empty skillet or pot and write the number down. You will use it at the end to split this into 14 even servings by weight, which beats eyeballing every single container.",
+                    "Slice the sausage into rounds about half an inch thick. Cut the peppers into strips, slice the onion thin, and mince the garlic.",
+                    "Set a large skillet over medium heat and brown the sausage rounds, working in batches so the pan is not crowded, about 8 to 10 minutes. The sausage gives up plenty of its own fat, so you do not need to add oil yet. Lift the browned rounds out and set them aside.",
+                    "Add the olive oil to the same pan and let it warm in the drippings. Saute the peppers, onion, and garlic until they soften and pick up a little color, about 10 minutes.",
+                    "Return the sausage and any collected juices to the pan, stir in the marinara, and cook another 2 to 3 minutes until everything is hot and coated. Taste and adjust the seasoning, then weigh and portion as below."
+                ],
+    "portion_html":  "Set the full skillet on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.lowcarbmaven.com/sausage-peppers-onions/\" target=\"_blank\" rel=\"noopener\"\u003elowcarbmaven.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  18.21,
+    "cost_batch_true":  21.49,
+    "cost_per_serving":  1.3,
+    "cost_per_serving_true":  1.54,
+    "cost_pantry_add":  7,
+    "cost_first_run":  28.49,
+    "scaler":  {
+                   "cost":  "21.49",
+                   "ing":  [
+                               {
+                                   "item":  "Hot Italian Sausage",
+                                   "canon":  "Hot Italian Sausage",
+                                   "grams":  1588,
+                                   "buy":  "3 1/2 lb links (about 17 links), sliced into rounds",
+                                   "bid":  "italian-sausage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  907,
+                                   "buy":  "2 lb mixed-color, sliced into strips (about 7 large)",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  198,
+                                   "buy":  "7 oz, sliced (about 1 3/4 cups)",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3 1/2 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  10,
+                                   "buy":  "3 1/2 tsp minced (about 3 cloves)",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Marinara Sauce",
+                                   "canon":  "Marinara Sauce",
+                                   "grams":  431,
+                                   "buy":  "1 3/4 cups",
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Italian sausage with peppers and onions for meal prep: browned sausage rounds, sweet peppers, and a little marinara, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
+                 "keywords":  "italian sausage and peppers, sausage peppers onions, low carb meal prep, high protein dinner, budget sausage recipe",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT40M",
+                 "costPerServing":  1.3,
+                 "recipeIngredient":  [
+                                          "Hot Italian Sausage, 3 1/2 lb links (about 17 links), sliced into rounds (1588 g)",
+                                          "Red Bell Pepper, 2 lb mixed-color, sliced into strips (about 7 large) (907 g)",
+                                          "Yellow Onion, 7 oz, sliced (about 1 3/4 cups) (198 g)",
+                                          "Olive Oil, 3 1/2 tbsp (47 g)",
+                                          "Garlic, 3 1/2 tsp minced (about 3 cloves) (10 g)",
+                                          "Marinara Sauce, 1 3/4 cups (431 g)"
+                                      ],
+                 "steps":  [
+                               "Slice the sausage into rounds and cut the peppers and onion, then mince the garlic.",
+                               "Brown the sausage rounds in a large skillet over medium heat, about 8 to 10 minutes, then remove them.",
+                               "Saute the peppers, onion, and garlic in the olive oil and drippings until softened, about 10 minutes.",
+                               "Return the sausage, stir in the marinara, and cook 2 to 3 minutes until hot, then taste and adjust the seasoning.",
+                               "Weigh the skillet, subtract the empty weight, and divide the total across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Hot Italian Sausage",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  907
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  198
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Marinara Sauce",
+                                  "grams":  431
+                              }
+                          ]
+}

@@ -1,0 +1,301 @@
+{
+    "name":  "Low-Carb Turkey Cauliflower Mushroom Casserole",
+    "slug":  "low-carb-turkey-cauliflower-mushroom-casserole",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://kalynskitchen.com/low-carb-turkey-casserole-with-cauliflower-rice/",
+    "source_site":  "kalynskitchen.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 8, rebuilt to 14 at the mapper\u0027s 1.75x scale. Every gram and buy string transcribed from mapped\\low-carb-turkey-cauliflower-mushroom-casserole.json; no number computed in prose.",
+                         "MACROS transcribed from the mapper\u0027s food-DB recompute at 14 servings and re-verified line by line against food-macros-db: build recompute lands at 431 cal and 35 g protein per serving (the tool\u0027s own cal/protein check passed at write time). Carbs 13 and fat 27 per serving carried from the same recompute. In band for this run (400 to 650 cal, 35 g carb or less): 431 cal clears the floor by 31 and sits well under the ceiling, carbs 13 is well under half the carb gate. Bound used in prose is \u0027under 15 grams of carbs\u0027.",
+                         "SAME-ITEM LINES COMBINED (keto-turkey-broccoli cheddar precedent): the source lists Mozzarella twice (1 cup layer topping + 1 cup in the sauce) and thyme and poultry seasoning twice each (main + sauce). Combined into one line apiece with total grams and a \u0027divided\u0027 buy string, so the ingredient list reads clean and the steps split them. Mozzarella 198 + 198 = 396 g (half into the sauce, half on top). Dried Thyme 1.8 g + 0.9 g = 2.7 g rounded to 3 g int. Poultry Seasoning 2.6 g + 1.3 g = 3.9 g rounded to 4 g int. (REPAIRED 2026-08-16: the first build carried both lines at 3.5x instead of 1.75x, the source-QA blocking finding; rescaled in mapped and here.) Grams store as int in the build; the sub-gram rounding on the two seasonings is macro-immaterial.",
+                         "TURKEY grams book the RAW purchase weight (3 lb = 1361 g) against the raw Turkey Breast food-DB row, per the mapper: the source calls for 4 cups cooked leftover turkey, scaled to 7 cups, roasted from about 3 lb raw at a ~70% yield. Cost and macros share the one raw basis. The source\u0027s \u0027or chicken\u0027 alternative is recorded by the mapper, unpriced, and left out of the build to avoid double-counting.",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked the costed list against the steps both directions: turkey (make_it 2, 7), sour cream / mayo / Dijon / parmesan / half the mozzarella / the smaller share of thyme and poultry seasoning (3, the sauce), mushrooms + olive oil (4), onion + olive oil (5), cauliflower + olive oil + the larger share of thyme and poultry seasoning (6), remaining mozzarella on top (7), bake (8). Salt and pepper are the source\u0027s to-taste line (source states NO quantity); booked here at a smallest-defensible to-taste minimum (Salt 2 tsp, Black Pepper 1 tsp per 14-serving batch, both zero/near-zero macro) so the \u0027season with salt and pepper\u0027 steps are cook-as-shopped and clear the PHANTOM buy-coverage gate (2026-08-16 repair). Grams are macro-immaterial.",
+                         "BLOCKER FLAG for the repair pass (map-wiring gap, mapper stage\u0027s domain, NOT edited here): three canonical items carry NO row in db\\ingredients.json, so the spec build emits no bid for them and they price unpriced/pantry-static, understating cost_ps by roughly the whole cauliflower, mushroom, and sour cream spend. All three bids are LIVE on smp-feed.json, so each is a single missing map row: (1) \u0027Cauliflower\u0027 needs a row -\u003e bid \u0027cauliflower\u0027 (weekly board, fresh each, mapper\u0027s cheapest Fareway $1.98/each); the only cauliflower rows in db\\ingredients.json today are none at all. (2) \u0027Baby Bella (Crimini) Mushrooms\u0027 needs a row -\u003e bid \u0027mushrooms\u0027; today only \u0027White Mushrooms\u0027 -\u003e mushrooms exists, a different item name, so my crimini line does not resolve. (3) \u0027Sour Cream\u0027 (full-fat) needs a row -\u003e bid \u0027sour-cream\u0027; today only \u0027Light Sour Cream\u0027 -\u003e sour-cream exists. This is the keto-turkey-broccoli Broccoli situation, three times over: cost_ps reported below is a FLOOR understated by those three lines until the map rows are added, then re-cost. I did not rename the items to the existing rows because the mapper deliberately chose full-fat Sour Cream (the Light row would deflate a calorie-floor recipe) and the crimini food-DB row, and food-macros-db keys on these exact names.",
+                         "MUSHROOM PRICE-CLASS TENSION carried from the mapper (board_defects_observed): the mushrooms commodity\u0027s 7 priced cells are all WHITE mushrooms while this line is crimini, which retails above white, so once wired the mushroom cost is optimistic. Disclosed, not silently absorbed; flagged for the match-soundness gate.",
+                         "MOZZARELLA ROUTING carried from the mapper: the mozzarella-cheese id has no cell on either board file and the term prices via the shredded-cheese commodity\u0027s include pattern (standing turkey-zucchini defect). Re-flagged for the match-soundness gate.",
+                         "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount. This keeps clear of the 2026-08-15 audit failures. Re-walk the bullets against cost_lines once the three map rows are added and the recipe is re-costed.",
+                         "PORTION METHOD: weigh the empty dish first, then weigh full and subtract, divide by 14. Standard house method."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  431,
+                 "protein":  35,
+                 "carbs":  13,
+                 "fat":  27,
+                 "cost_ps":  "1.40"
+             },
+    "intro_html":  "Casserole usually starts with a can of cream-of-something soup and ends with a sleeve of crackers on top, and both of those are just cheap carbs in a dinner costume. This one earns the name the honest way. Roasted turkey breast, browned mushrooms, softened onion, and riced cauliflower get folded into a real sauce built from sour cream, mayo, Dijon, and two kinds of cheese, then the whole thing bakes under a blanket of mozzarella until it browns. No soup can, no breadcrumbs, no flour. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 15 grams of carbs. That is comfort food that works for your body and your wallet at the same time.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e about 3 lb, roasted and diced (about 7 cups cooked) (1361 g)",
+                                "\u003cstrong\u003eCauliflower (generic (USDA)):\u003c/strong\u003e 10 1/2 cups chopped (about 2 medium heads) (1124 g)",
+                                "\u003cstrong\u003eBaby Bella (Crimini) Mushrooms (fresh (USDA)):\u003c/strong\u003e 1 3/4 lb, sliced (794 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 3/4 medium, chopped (193 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 1/2 tbsp, divided (47 g)",
+                                "\u003cstrong\u003eSour Cream (generic (USDA)):\u003c/strong\u003e 1 3/4 cups full-fat (403 g)",
+                                "\u003cstrong\u003eMayonnaise (Great Value):\u003c/strong\u003e 3/4 cup plus 2 tbsp (182 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 3 1/2 tbsp (53 g)",
+                                "\u003cstrong\u003eMozzarella Cheese (generic (USDA)):\u003c/strong\u003e 3 1/2 cups grated, divided (396 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 7 tbsp coarsely grated (49 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 2 5/8 tsp, divided (3 g)",
+                                "\u003cstrong\u003ePoultry Seasoning (generic (USDA)):\u003c/strong\u003e 2 5/8 tsp, divided (4 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Turkey Breast, about 3 lb, roasted and diced (about 7 cups cooked): ~$14.44. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
+                       "Yellow Onion, 1 3/4 medium, chopped: ~$0.49. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Olive Oil, 3 1/2 tbsp, divided: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Mayonnaise, 3/4 cup plus 2 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Dijon Mustard, 3 1/2 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Mozzarella Cheese, 3 1/2 cups grated, divided: ~$2.12. \u003cstrong\u003eBuy 2 8oz bags: $2.44.\u003c/strong\u003e",
+                       "Parmesan Cheese, 7 tbsp coarsely grated: ~$0.59. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
+                       "Pantry seasonings (dried thyme, poultry seasoning, salt, black pepper): ~$0.54. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $19.60 across 14 servings, so roughly $1.40 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $22.72 across 14 servings, roughly $1.62 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.24 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $34.96. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a baked, bubbling casserole that eats like the soup-can version and skips the carbs. The turkey and the cheese carry the protein; the cauliflower and mushrooms do the job the rice and the noodles used to, for a lot less.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eAbout three pounds of turkey breast is the anchor.\u003c/strong\u003e The source leans on leftover holiday turkey, but you do not have to wait for a holiday. Buy a raw turkey breast, roast it yourself, and dice it into bite-sized pieces. This is where most of the protein and most of the money live, so buy the plain breast and skip the pre-seasoned deli stuff you would pay extra for.",
+                       "\u003cstrong\u003eTwo heads of cauliflower do the job the rice used to.\u003c/strong\u003e You want fresh heads chopped and pulsed into a rice texture, which browns up in the pan and carries the bulk of the dish without carrying the carbs. Frozen riced cauliflower works too if that is what your store keeps stocked, and it saves you the food processor.",
+                       "\u003cstrong\u003eMushrooms and onion build the base.\u003c/strong\u003e Just under two pounds of sliced crimini mushrooms and a couple of onions get browned down first and layered in the bottom of the dish. Cooking the water out of the mushrooms before they go in is what keeps the finished casserole from turning soupy.",
+                       "\u003cstrong\u003eSour cream, mayo, and Dijon make the sauce, not a soup can.\u003c/strong\u003e Full-fat sour cream and mayo bring the richness, the Dijon brings the tang, and grated mozzarella and a little parmesan melt in to bind it. Reach for full-fat here on purpose; the light versions water the sauce down and this dish is built to hold its calories.",
+                       "\u003cstrong\u003eThyme and poultry seasoning are the whole spice rack you need.\u003c/strong\u003e A few teaspoons of each, split between the cauliflower and the sauce, is what makes a pile of turkey and vegetables taste like Thanksgiving dinner. These are jars you buy once and cook with all season long."
+                   ],
+    "make_it":  [
+                    "Weigh your empty baking dish and write the number down. You will need it at the end to split this into 14 even servings by weight, which is the only honest way to portion one big bake.",
+                    "Rub the turkey breast with a little salt and pepper and roast it at 375 degrees F until the center reads 165, about 45 minutes for a 3 pound breast. Let it rest, then dice it into bite-sized pieces, about 7 cups.",
+                    "Make the sauce while the turkey rests. In a big bowl, stir together the sour cream, mayo, and Dijon with the smaller share of the thyme and poultry seasoning, half of the grated mozzarella, and all of the parmesan until it is smooth.",
+                    "Heat a third of the olive oil in your largest skillet over medium-high heat and cook the sliced mushrooms until the liquid cooks off and they brown, about 6 to 8 minutes. Spread them across the bottom of the baking dish.",
+                    "Add another third of the oil and cook the chopped onion until it softens and starts to color, about 5 minutes. Scatter it over the mushrooms.",
+                    "Add the last of the oil and cook the riced cauliflower over medium-high heat, stirring often, until it softens and barely browns, about 4 minutes. Stir in the larger share of the thyme and poultry seasoning and a good pinch of salt and pepper, cook one more minute, then layer it into the dish.",
+                    "Scatter the diced turkey over the vegetables and fold everything together, then spread the sauce over the top and fold again until every piece is coated. Level it off and blanket it with the rest of the mozzarella.",
+                    "Bake uncovered at 375 degrees F until it is bubbling and the top is nicely browned, about 40 minutes. Let it rest a few minutes so it firms up, then weigh the dish and portion as below."
+                ],
+    "portion_html":  "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://kalynskitchen.com/low-carb-turkey-casserole-with-cauliflower-rice/\" target=\"_blank\" rel=\"noopener\"\u003ekalynskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  19.6,
+    "cost_batch_true":  22.72,
+    "cost_per_serving":  1.4,
+    "cost_per_serving_true":  1.62,
+    "cost_pantry_add":  12.24,
+    "cost_first_run":  34.96,
+    "scaler":  {
+                   "cost":  "22.72",
+                   "ing":  [
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1361,
+                                   "buy":  "about 3 lb, roasted and diced (about 7 cups cooked)",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cauliflower",
+                                   "canon":  "Cauliflower",
+                                   "grams":  1124,
+                                   "buy":  "10 1/2 cups chopped (about 2 medium heads)",
+                                   "bid":  "cauliflower",
+                                   "gpu":  "588.000"
+                               },
+                               {
+                                   "item":  "Baby Bella (Crimini) Mushrooms",
+                                   "canon":  "Baby Bella (Crimini) Mushrooms",
+                                   "grams":  794,
+                                   "buy":  "1 3/4 lb, sliced",
+                                   "bid":  "mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  193,
+                                   "buy":  "1 3/4 medium, chopped",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3 1/2 tbsp, divided",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Sour Cream",
+                                   "canon":  "Sour Cream",
+                                   "grams":  403,
+                                   "buy":  "1 3/4 cups full-fat",
+                                   "bid":  "sour-cream",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mayonnaise",
+                                   "canon":  "Mayonnaise",
+                                   "grams":  182,
+                                   "buy":  "3/4 cup plus 2 tbsp",
+                                   "bid":  "mayonnaise",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  53,
+                                   "buy":  "3 1/2 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mozzarella Cheese",
+                                   "canon":  "Mozzarella Cheese",
+                                   "grams":  396,
+                                   "buy":  "3 1/2 cups grated, divided",
+                                   "bid":  "mozzarella-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  49,
+                                   "buy":  "7 tbsp coarsely grated",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  3,
+                                   "buy":  "2 5/8 tsp, divided",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Poultry Seasoning",
+                                   "canon":  "Poultry Seasoning",
+                                   "grams":  4,
+                                   "buy":  "2 5/8 tsp, divided",
+                                   "bid":  "poultry-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "2 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Low-carb turkey cauliflower mushroom casserole for meal prep: roasted turkey breast, riced cauliflower, and browned mushrooms baked in a real sour cream and mozzarella sauce with no soup can and no flour, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
+                 "keywords":  "turkey cauliflower casserole, low carb turkey casserole, keto casserole, cauliflower rice casserole, mushroom casserole, high protein meal prep",
+                 "image":  "",
+                 "prepTime":  "PT45M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT1H25M",
+                 "costPerServing":  1.4,
+                 "recipeIngredient":  [
+                                          "Turkey Breast, about 3 lb, roasted and diced (about 7 cups cooked) (1361 g)",
+                                          "Cauliflower, 10 1/2 cups chopped (about 2 medium heads) (1124 g)",
+                                          "Baby Bella (Crimini) Mushrooms, 1 3/4 lb, sliced (794 g)",
+                                          "Yellow Onion, 1 3/4 medium, chopped (193 g)",
+                                          "Olive Oil, 3 1/2 tbsp, divided (47 g)",
+                                          "Sour Cream, 1 3/4 cups full-fat (403 g)",
+                                          "Mayonnaise, 3/4 cup plus 2 tbsp (182 g)",
+                                          "Dijon Mustard, 3 1/2 tbsp (53 g)",
+                                          "Mozzarella Cheese, 3 1/2 cups grated, divided (396 g)",
+                                          "Parmesan Cheese, 7 tbsp coarsely grated (49 g)",
+                                          "Dried Thyme, 2 5/8 tsp, divided (3 g)",
+                                          "Poultry Seasoning, 2 5/8 tsp, divided (4 g)",
+                                          "Salt, 2 tsp (12 g)",
+                                          "Black Pepper, 1 tsp (2 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh the empty baking dish and note the number for portioning later.",
+                               "Roast the turkey breast at 375 degrees F to 165 in the center, rest, and dice into about 7 cups.",
+                               "Stir together the sour cream, mayo, Dijon, some of the thyme and poultry seasoning, half the mozzarella, and all the parmesan to make the sauce.",
+                               "Brown the sliced mushrooms in olive oil and spread them in the bottom of the dish.",
+                               "Soften the chopped onion in olive oil and scatter it over the mushrooms.",
+                               "Cook the riced cauliflower in olive oil with the rest of the thyme and poultry seasoning, salt, and pepper, then layer it in.",
+                               "Fold in the diced turkey and the sauce, top with the rest of the mozzarella, and bake at 375 degrees F for about 40 minutes until bubbling, then rest, weigh, and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1361
+                              },
+                              {
+                                  "item":  "Cauliflower",
+                                  "grams":  1124
+                              },
+                              {
+                                  "item":  "Baby Bella (Crimini) Mushrooms",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  193
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Sour Cream",
+                                  "grams":  403
+                              },
+                              {
+                                  "item":  "Mayonnaise",
+                                  "grams":  182
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  53
+                              },
+                              {
+                                  "item":  "Mozzarella Cheese",
+                                  "grams":  396
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Poultry Seasoning",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              }
+                          ]
+}

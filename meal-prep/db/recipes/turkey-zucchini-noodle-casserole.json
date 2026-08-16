@@ -1,0 +1,256 @@
+{
+    "name":  "Turkey and Zucchini Noodle Casserole",
+    "slug":  "turkey-zucchini-noodle-casserole",
+    "cuisine":  "Italian",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.theharvestskillet.com/italian-zucchini-noodle-casserole/",
+    "source_site":  "theharvestskillet.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Grams and buy strings transcribed from the mapped file; no number computed in prose.",
+                         "Olive oil is a LIST ADDITION. The source\u0027s printed ingredient list omits it, but step 2 of the source says \u0027Cook ground turkey in a pan with 1 tablespoon of oil.\u0027 The mapper booked 3 1/2 tbsp so the card\u0027s cost and macros state what actually goes in the pan. It is bought and it is used (browning the turkey), so the every-ingredient rule holds.",
+                         "Italian seasoning fix: the source lists 1 tsp Italian seasoning but its steps never say when to add it (step 3 names only garlic powder and salt). Folded into the seasoning step with the garlic powder and salt so the bought ingredient is used.",
+                         "Cheese grams follow the printed MEASURE, not the source\u0027s parenthetical. 7 cups shredded mozzarella at the label-accurate 113 g/cup = 791 g; the source\u0027s (250 g for 2 cups) runs heavier than any shredded-cheese label. Same for Parmesan (label 1/4 cup = 28 g). Delta noted by the mapper, not adopted.",
+                         "MACROS: transcribed from the food-DB recompute at 14 servings: 522 cal, 41 g protein, 19 g carbs, 31 g fat per serving. In band (400 to 650 cal, 35 g carb or less). The mapper\u0027s own compute matched (522.6 / 41.1 / 19.4 / 30.4).",
+                         "WATERY-DISH note: the source flags liquid pooling at the bottom of the dish. Scaled to 14 servings that only grows, so the make-it salts and drains the spiralized zucchini before it goes in, using a little of the bought salt. No new ingredient.",
+                         "BUTTER PLACEMENT: source step 3 mixes the cubed butter INTO the zucchini mixture. The card now folds it into the combine step to match the source; an earlier draft dotted it on top under the cheese, an undocumented deviation with no reason behind it, so it was reverted rather than justified. Same ingredient, same 98 g, no macro or cost change.",
+                         "BAKE TIME: source bakes 15 to 20 min for its 4-serving pan; scaled to a 14-serving batch in a larger, deeper dish, the card bakes 30 to 40 min to heat through and get the edges bubbling. A method time, not a transcribed macro or cost number.",
+                         "PORTION METHOD: weigh the empty dish first, then weigh full and subtract, divide by 14. Standard house method."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  522,
+                 "protein":  41,
+                 "carbs":  19,
+                 "fat":  31,
+                 "cost_ps":  "2.58"
+             },
+    "intro_html":  "Pasta is what makes most casseroles cheap and also what makes them a carb bomb. This one swaps the noodles for spiralized zucchini and lets lean ground turkey, canned tomatoes, and melted cheese do the comfort-food work instead. You keep the baked, bubbly, cheese-on-top payoff and you drop the flour entirely. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 20 grams of carbs, which puts it well inside a low-carb dinner and a long way from a boxed pasta bake.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3 1/2 lb (1588 g)",
+                                "\u003cstrong\u003eZucchini:\u003c/strong\u003e 14 medium, spiralized (2744 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3 1/2 14-oz cans, undrained (about 5 3/4 cups) (1389 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 3 1/2 8-oz cans (about 3 1/4 cups) (794 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 1/2 tbsp (47 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp, cut into small cubes (98 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 3/4 tsp (10 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 3 1/2 tsp (5 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 3/4 tsp (5 g)",
+                                "\u003cstrong\u003eMozzarella Cheese (generic (USDA)):\u003c/strong\u003e 7 cups shredded (791 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 3/4 cup plus 2 tbsp (98 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 3 1/2 lb: ~$15.93. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
+                       "Zucchini, 14 medium, spiralized: ~$9.20. \u003cstrong\u003eBuy 7 lbs: $10.64.\u003c/strong\u003e",
+                       "Diced Tomatoes, 3 1/2 14-oz cans, undrained (about 5 3/4 cups): ~$2.59. \u003cstrong\u003eBuy 4 cans: $3.07.\u003c/strong\u003e",
+                       "Tomato Sauce, 3 1/2 8-oz cans (about 3 1/4 cups): ~$1.57. \u003cstrong\u003eBuy 2 15oz cans: $1.68.\u003c/strong\u003e",
+                       "Olive Oil, 3 1/2 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 7 tbsp, cut into small cubes: ~$0.64. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Mozzarella Cheese, 7 cups shredded: ~$4.24. \u003cstrong\u003eBuy 4 8oz bags: $4.87.\u003c/strong\u003e",
+                       "Parmesan Cheese, 3/4 cup plus 2 tbsp: ~$1.18. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, italian seasoning, garlic powder): ~$0.22. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $36.08 across 14 servings, so roughly $2.58 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $44.91 across 14 servings, roughly $3.21 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.13 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.04. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a baked, cheesy casserole that eats like a pasta bake and skips the pasta. The turkey and the cheese carry it; the zucchini does the job the noodles used to, for less.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThree and a half pounds of 93/7 ground turkey is the anchor.\u003c/strong\u003e That is where most of the money and all of the protein live. Buy the four-pound family pack instead of the little one-pound trays so you are paying for turkey and not packaging, and you will have about half a pound left to fold into eggs the next morning. Reach for the 93/7 lean so the casserole bakes up meaty instead of greasy.",
+                       "\u003cstrong\u003eAbout seven pounds of zucchini stands in for the pasta.\u003c/strong\u003e That is roughly fourteen medium ones, spiralized into noodles. Buy them whole by the pound and run them through a spiralizer or a julienne peeler yourself, which takes about ten minutes and is the whole reason this bake is low-carb. Salt the noodles and let them drain before they go in, because a batch this size sheds a lot of water.",
+                       "\u003cstrong\u003eThe cheese is what makes it eat like a casserole.\u003c/strong\u003e You need four eight-ounce bags of shredded mozzarella, which leaves you about a cup for the next thing you melt cheese on, plus one eight-ounce tub of grated parmesan that you will use less than half of. The mozzarella melts into the body and the parmesan sharpens the top.",
+                       "\u003cstrong\u003eCanned tomatoes do the saucing for pennies.\u003c/strong\u003e Grab four fourteen-ounce cans of diced tomatoes, which leaves you half a can, and two fifteen-ounce cans of tomato sauce, which this batch uses down to a splash. Both are pantry cheap and they are a big part of why the cost per bowl lands where it does.",
+                       "\u003cstrong\u003eButter, a little oil, and three spices finish it.\u003c/strong\u003e The bake uses seven tablespoons of butter, just under one stick out of the one-pound box, a few tablespoons of olive oil from a bottle that lasts several batches, and salt, Italian seasoning, and garlic powder from jars you already keep on hand. None of it moves the total much."
+                   ],
+    "make_it":  [
+                    "Weigh your empty baking dish and write the number down. You will need it at the end to portion by weight, which is the only honest way to get 14 even servings out of one bake.",
+                    "Spiralize the zucchini, toss it with about half of the salt, and let it sit in a colander for 15 minutes. Zucchini is mostly water, and a 14-serving batch dumps a lot of it into the dish if you skip this. Squeeze the drained noodles in a clean towel and set them aside.",
+                    "Heat the olive oil in a large skillet and brown the ground turkey over medium-high heat until it is no longer pink, breaking it up as it cooks. Drain off any excess liquid.",
+                    "In your biggest bowl, combine the drained zucchini, the cooked turkey, the diced tomatoes with their juice, the tomato sauce, the cubed butter, the Italian seasoning, the garlic powder, and the rest of the salt. Fold until everything is coated and evenly mixed.",
+                    "Spread the mixture into the baking dish and level it off, then blanket the whole thing with the shredded mozzarella and the Parmesan.",
+                    "Bake at 375 degrees F for 30 to 40 minutes, until the cheese is melted and the edges are bubbling. Run it under the broiler for the last minute if you want the top browned. Let it rest 10 minutes so it firms up and the liquid settles, then weigh and portion as below."
+                ],
+    "portion_html":  "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theharvestskillet.com/italian-zucchini-noodle-casserole/\" target=\"_blank\" rel=\"noopener\"\u003etheharvestskillet.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  36.08,
+    "cost_batch_true":  44.91,
+    "cost_per_serving":  2.58,
+    "cost_per_serving_true":  3.21,
+    "cost_pantry_add":  9.13,
+    "cost_first_run":  54.04,
+    "scaler":  {
+                   "cost":  "44.91",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1588,
+                                   "buy":  "3 1/2 lb",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Zucchini",
+                                   "canon":  "Zucchini",
+                                   "grams":  2744,
+                                   "buy":  "14 medium, spiralized",
+                                   "bid":  "zucchini",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1389,
+                                   "buy":  "3 1/2 14-oz cans, undrained (about 5 3/4 cups)",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "canon":  "Tomato Sauce",
+                                   "grams":  794,
+                                   "buy":  "3 1/2 8-oz cans (about 3 1/4 cups)",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3 1/2 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  98,
+                                   "buy":  "7 tbsp, cut into small cubes",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "1 3/4 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  5,
+                                   "buy":  "3 1/2 tsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  5,
+                                   "buy":  "1 3/4 tsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mozzarella Cheese",
+                                   "canon":  "Mozzarella Cheese",
+                                   "grams":  791,
+                                   "buy":  "7 cups shredded",
+                                   "bid":  "mozzarella-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  98,
+                                   "buy":  "3/4 cup plus 2 tbsp",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey and zucchini noodle casserole for meal prep: lean ground turkey, canned tomatoes, and melted mozzarella baked over spiralized zucchini instead of pasta, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, under 20 grams of carbs.",
+                 "keywords":  "zucchini noodle casserole, turkey zucchini casserole, low carb casserole, high protein meal prep, ground turkey casserole",
+                 "image":  "",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  2.58,
+                 "recipeIngredient":  [
+                                          "93/7 Ground Turkey, 3 1/2 lb (1588 g)",
+                                          "Zucchini, 14 medium, spiralized (2744 g)",
+                                          "Diced Tomatoes, 3 1/2 14-oz cans, undrained (about 5 3/4 cups) (1389 g)",
+                                          "Tomato Sauce, 3 1/2 8-oz cans (about 3 1/4 cups) (794 g)",
+                                          "Olive Oil, 3 1/2 tbsp (47 g)",
+                                          "Butter, 7 tbsp, cut into small cubes (98 g)",
+                                          "Salt, 1 3/4 tsp (10 g)",
+                                          "Italian Seasoning, 3 1/2 tsp (5 g)",
+                                          "Garlic Powder, 1 3/4 tsp (5 g)",
+                                          "Mozzarella Cheese, 7 cups shredded (791 g)",
+                                          "Parmesan Cheese, 3/4 cup plus 2 tbsp (98 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh the empty baking dish and note the number for portioning later.",
+                               "Spiralize the zucchini, salt it, let it drain 15 minutes, then squeeze it dry.",
+                               "Brown the ground turkey in the olive oil until no longer pink and drain it.",
+                               "Combine the drained zucchini, turkey, diced tomatoes, tomato sauce, cubed butter, Italian seasoning, garlic powder, and remaining salt in a large bowl.",
+                               "Spread into the dish and top with mozzarella and Parmesan.",
+                               "Bake at 375 degrees F for 30 to 40 minutes until bubbling, broil the top if you like, rest 10 minutes, then weigh the dish and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Zucchini",
+                                  "grams":  2744
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1389
+                              },
+                              {
+                                  "item":  "Tomato Sauce",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Mozzarella Cheese",
+                                  "grams":  791
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  98
+                              }
+                          ]
+}

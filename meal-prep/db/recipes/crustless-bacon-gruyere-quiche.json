@@ -1,0 +1,220 @@
+{
+    "name":  "Bacon and Gruyere Crustless Quiche",
+    "slug":  "crustless-bacon-gruyere-quiche",
+    "cuisine":  "French",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://reluctantentertainer.com/crustless-bacon-gruyere-cheese-quiche/",
+    "source_site":  "reluctantentertainer.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 6, rebuilt to 14 at the mapper\u0027s 2.3333x scale. Grams and buy strings transcribed from the mapped file; no number computed in prose.",
+                         "The source greases the pan with cooking spray, which is not a purchased line on this recipe. Per the every-ingredient-must-be-bought rule, the make-it step greases the dish with a little of the reserved bacon fat instead (bacon grease is canon-folded into the Hickory Smoked Bacon line), so no step calls for anything the shopper did not buy.",
+                         "A 9-inch pie plate holds the 6-serving original; scaled to 14 it moves to a 9 by 13 inch baking dish. Bake time nudged from the source\u0027s 30 minutes to a 35 to 45 minute window for the larger, deeper dish; doneness is called by the set center, not the clock.",
+                         "Gruyere is item_id null pending the commodity registrar (mapper ruling). It is bought and used, but it has no price basis yet, so cost-recipes will drop it as NO PRICE BASIS and the built cost EXCLUDES the main cheese. No shop_smart bullet makes a package claim about gruyere for that reason. See report.",
+                         "CALORIE BAND: the label-accurate recompute lands at 369 cal per serving, BELOW this run\u0027s 400 floor. Carried the mapper\u0027s escalation forward. Numbers are transcribed, not adjusted."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "cooking spray"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  369,
+                 "protein":  24,
+                 "carbs":  2,
+                 "fat":  28,
+                 "cost_ps":  "0.40"
+             },
+    "intro_html":  "A quiche without the crust is the thrifty cook\u0027s quiet trick: you skip the pie shell, the flour, and the blind baking, and you keep every gram of protein the eggs and cheese were going to give you anyway. This one leans on nutty Gruyere and smoky bacon, set soft with eggs and a little half and half. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 5 grams of carbs, which makes it a low-carb bake that eats like comfort food.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 14 large eggs (700 g)",
+                                "\u003cstrong\u003eHalf and Half (Great Value):\u003c/strong\u003e 1 3/4 cups (414 g)",
+                                "\u003cstrong\u003eGruyere Cheese (generic (USDA)):\u003c/strong\u003e 4 3/4 cups, shredded (about 19 oz) (537 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 1/4 tsp (8 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eDried Basil (Great Value):\u003c/strong\u003e 2 1/4 tbsp (7 g)",
+                                "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 19 slices, cooked and crumbled (about 1/2 lb) (228 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 2 stalks, sliced (about 1/2 cup) (30 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 cloves, minced (15 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Eggs, 14 large eggs: ~$1.89. \u003cstrong\u003eBuy 2 dozens: $3.25.\u003c/strong\u003e",
+                       "Half and Half, 1 3/4 cups: ~$1.09. \u003cstrong\u003eBuy 1 pint: $1.24.\u003c/strong\u003e",
+                       "Hickory Smoked Bacon, 19 slices, cooked and crumbled (about 1/2 lb): ~$1.99. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
+                       "Green Onions, 2 stalks, sliced (about 1/2 cup): ~$0.26. \u003cstrong\u003eBuy 1 bunch: $0.79.\u003c/strong\u003e",
+                       "Garlic, 5 cloves, minced: ~$0.20. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, red pepper flakes, dried basil): ~$0.24. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $5.67 across 14 servings, so roughly $0.40 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $10.06 across 14 servings, roughly $0.72 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $1.95 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $12.01. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a slice of bacon and Gruyere quiche that skips the crust and the restaurant markup both. Eggs and bacon do the heavy lifting.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThis is an egg recipe first, so one dozen will not cover it.\u003c/strong\u003e Fourteen eggs means two cartons. The ten you do not crack keep just fine in the fridge for breakfast, so nothing goes to waste.",
+                       "\u003cstrong\u003eOne pint of half and half carries the whole custard.\u003c/strong\u003e The batch uses most of a pint and leaves you a splash, which is exactly enough for your morning coffee. Store brand behaves the same as the name brand once it is whisked into eggs.",
+                       "\u003cstrong\u003eHalf a pound of bacon is a seasoning here, not the main event.\u003c/strong\u003e Buy the one pound package, cook off what the recipe needs, and stash the rest for another meal this week. The rendered fat does double duty: it sautes the green onions and garlic, and a little of it greases the dish.",
+                       "\u003cstrong\u003eCrustless is the budget move, not a compromise.\u003c/strong\u003e There is no pie shell to buy and no dough to roll, and the eggs and cheese set into their own soft edge. That is one whole ingredient off your cart before you start."
+                   ],
+    "make_it":  [
+                    "Weigh your empty baking dish and write the number down. You will use it at the end to portion by weight, which is the only way to get 14 even servings out of one bake.",
+                    "Whisk the eggs and half and half together in a large bowl until they are fully blended. Stir in the shredded Gruyere, the salt, the red pepper flakes, and the dried basil, then set the bowl aside.",
+                    "Fry the bacon in a skillet until crisp, lift it out onto paper towels to drain, and crumble it once it cools. Pour off most of the grease but leave about 2 tablespoons in the pan, then saute the sliced green onions and minced garlic in that fat for 1 to 2 minutes, just until fragrant.",
+                    "Fold the crumbled bacon and the green onion and garlic mixture into the egg bowl and stir gently so everything is spread through.",
+                    "Rub a 9 by 13 inch baking dish with a little of the reserved bacon fat, then pour in the egg mixture and spread it level.",
+                    "Bake at 375 degrees F for about 35 to 45 minutes, until the center is just set and no longer jiggles. Let it stand 10 minutes so it firms up, then weigh and portion as below."
+                ],
+    "portion_html":  "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://reluctantentertainer.com/crustless-bacon-gruyere-cheese-quiche/\" target=\"_blank\" rel=\"noopener\"\u003ereluctantentertainer.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein bake for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  5.67,
+    "cost_batch_true":  10.06,
+    "cost_per_serving":  0.4,
+    "cost_per_serving_true":  0.72,
+    "cost_pantry_add":  1.95,
+    "cost_first_run":  12.01,
+    "scaler":  {
+                   "cost":  "10.06",
+                   "ing":  [
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  700,
+                                   "buy":  "14 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Half and Half",
+                                   "canon":  "Half and Half",
+                                   "grams":  414,
+                                   "buy":  "1 3/4 cups",
+                                   "bid":  "half-and-half",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Gruyere Cheese",
+                                   "canon":  "Gruyere Cheese",
+                                   "grams":  537,
+                                   "buy":  "4 3/4 cups, shredded (about 19 oz)"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  8,
+                                   "buy":  "1 1/4 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "canon":  "Red Pepper Flakes",
+                                   "grams":  2,
+                                   "buy":  "1 1/4 tsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Basil",
+                                   "canon":  "Dried Basil",
+                                   "grams":  7,
+                                   "buy":  "2 1/4 tbsp",
+                                   "bid":  "dried-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hickory Smoked Bacon",
+                                   "canon":  "Hickory Smoked Bacon",
+                                   "grams":  228,
+                                   "buy":  "19 slices, cooked and crumbled (about 1/2 lb)",
+                                   "bid":  "bacon",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  30,
+                                   "buy":  "2 stalks, sliced (about 1/2 cup)",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  15,
+                                   "buy":  "5 cloves, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Crustless bacon and Gruyere quiche for meal prep: eggs, nutty Gruyere, and smoky bacon baked soft, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 5 grams of carbs.",
+                 "keywords":  "crustless quiche, bacon gruyere quiche, low carb quiche, high protein egg bake, budget meal prep quiche",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  0.4,
+                 "recipeIngredient":  [
+                                          "Eggs, 14 large eggs (700 g)",
+                                          "Half and Half, 1 3/4 cups (414 g)",
+                                          "Gruyere Cheese, 4 3/4 cups, shredded (about 19 oz) (537 g)",
+                                          "Salt, 1 1/4 tsp (8 g)",
+                                          "Red Pepper Flakes, 1 1/4 tsp (2 g)",
+                                          "Dried Basil, 2 1/4 tbsp (7 g)",
+                                          "Hickory Smoked Bacon, 19 slices, cooked and crumbled (about 1/2 lb) (228 g)",
+                                          "Green Onions, 2 stalks, sliced (about 1/2 cup) (30 g)",
+                                          "Garlic, 5 cloves, minced (15 g)"
+                                      ],
+                 "steps":  [
+                               "Whisk the eggs and half and half, then stir in the shredded Gruyere, salt, red pepper flakes, and dried basil.",
+                               "Fry and crumble the bacon, then saute the green onions and garlic in a little of the reserved bacon fat.",
+                               "Fold the bacon and the green onion mixture into the egg bowl and stir gently.",
+                               "Grease a 9 by 13 inch baking dish with reserved bacon fat and pour in the egg mixture.",
+                               "Bake at 375 degrees F for 35 to 45 minutes until the center is set, rest 10 minutes, then weigh the dish and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Half and Half",
+                                  "grams":  414
+                              },
+                              {
+                                  "item":  "Gruyere Cheese",
+                                  "grams":  537
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Red Pepper Flakes",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Dried Basil",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Hickory Smoked Bacon",
+                                  "grams":  228
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  30
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  15
+                              }
+                          ]
+}

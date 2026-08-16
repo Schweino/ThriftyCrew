@@ -1,0 +1,256 @@
+{
+    "name":  "Low Carb Ground Beef Stroganoff Skillet",
+    "slug":  "low-carb-ground-beef-stroganoff-skillet",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.lowcarbmaven.com/low-carb-beef-stroganoff-ground-beef-stroganoff/",
+    "source_site":  "lowcarbmaven.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Every gram and buy string transcribed from mapped\\low-carb-ground-beef-stroganoff-skillet.json; no number computed in prose.",
+                         "MACROS transcribed from the mapper\u0027s food-DB recompute at 14 servings: 464.2 cal, 28.7 g protein, 11.1 g carbs, 32.9 g fat per serving, reported here as 464 / 29 / 11 / 33. In band for this run (400 to 650 cal, 35 g carb or less). The source\u0027s published 5.86 g carbs is a NET figure that excludes the serve-over base; our 11.1 g is gross carbs including the cabbage and stays well under the 35 g ceiling.",
+                         "SERVE-OVER: the source\u0027s own section heading makes cabbage noodles and cauliflower rice EITHER/OR alternatives (extractor concern: do not sum both). The mapper booked GREEN CABBAGE as the primary base (cheapest, carried, existing map entry); cauliflower rice is the source\u0027s recorded alternative, unpriced and excluded from macros. Prose names cabbage as the base and mentions cauliflower rice only as the one-for-one swap. No step calls for cauliflower rice.",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought: ground beef (steps 4,5), mushrooms (4), onion (4), butter (4), brandy (5), beef base (5), Worcestershire (5), nutmeg (6), cream cheese (6), sour cream (6), parsley (6), cabbage (3,7). Walked the costed list against the steps both directions. Salt and pepper are the source\u0027s to-taste line, mapped optional-pantry at zero grams and NOT booked as a cost line, so no step names them; steps say \u0027season to taste\u0027 only.",
+                         "SHOP_SMART makes NO leftover, per-ounce, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount. Re-walk the bullets against cost_lines once costed before publish.",
+                         "BLOCKER FLAGS for the repair pass are in the run report. BRANDY is item_id null with a blocking price term (deglaze spirit, no board cell or capture; Omaha grocers do sell spirits so it needs a real carriage verdict, not a rejection). Five booked items are unwired in db\\ingredients.json (Brandy, Beef Base, Cream Cheese, Sour Cream, Fresh Parsley) so they price pantry-static / unpriced in this build and the cost_ps is a FLOOR until they are wired. Beef Base food-DB row is flagged needs_verify (panel not re-fetchable) but is macro-immaterial at 21 g across 14 servings. The intake is complete and ready to build the moment those close."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  464,
+                 "protein":  29,
+                 "carbs":  11,
+                 "fat":  33,
+                 "cost_ps":  "2.02"
+             },
+    "intro_html":  "Stroganoff has a reputation as fussy Sunday food, but the ground beef version is a Tuesday and always was. You brown the beef, build a quick pan sauce out of mushrooms, a little brandy, and sour cream, and you are done in about half an hour. The only trick for keeping it low carb is what goes underneath. Instead of egg noodles, this one rides on cabbage cut into thin strips and fried soft in the pan, so it eats like noodles without the carbs. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 15 grams of carbs. That is comfort food that does not fight your macros or your wallet.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3 1/2 lb lean (93/7) (1588 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 14 oz, sliced (about 5 2/3 cups) (397 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3/4 cup plus 2 tbsp, chopped (101 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 10 1/2 tbsp, divided (147 g)",
+                                "\u003cstrong\u003eBrandy (generic (USDA)):\u003c/strong\u003e 7 tbsp (a bit under 1/2 cup) (97 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 3 1/2 tbsp (60 g)",
+                                "\u003cstrong\u003eBeef Base (Better Than Bouillon):\u003c/strong\u003e 3 1/2 tsp (21 g)",
+                                "\u003cstrong\u003eCream Cheese (generic (USDA)):\u003c/strong\u003e 7 oz (about 3/4 cup plus 2 tbsp), softened (198 g)",
+                                "\u003cstrong\u003eSour Cream (generic (USDA)):\u003c/strong\u003e 3 1/2 cups full-fat (805 g)",
+                                "\u003cstrong\u003eGround Nutmeg (Great Value):\u003c/strong\u003e 1 tsp, grated (2 g)",
+                                "\u003cstrong\u003eFresh Parsley (fresh (USDA)):\u003c/strong\u003e 3 1/2 tbsp, chopped (13 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 2 5/8 lb, cut into thin strips (about 1 1/3 heads) (1191 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 3 1/2 lb lean (93/7): ~$21.25. \u003cstrong\u003eBuy 4 lbs: $24.28.\u003c/strong\u003e",
+                       "White Mushrooms, 14 oz, sliced (about 5 2/3 cups): ~$3.30. \u003cstrong\u003eBuy 2 8oz packs: $3.77.\u003c/strong\u003e",
+                       "Yellow Onion, 3/4 cup plus 2 tbsp, chopped: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Butter, 10 1/2 tbsp, divided: ~$0.96. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 3 1/2 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Cabbage, 2 5/8 lb, cut into thin strips (about 1 1/3 heads): ~$2.23. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
+                       "Pantry seasonings (ground nutmeg, fresh parsley): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.29 across 14 servings, so roughly $2.02 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.84 across 14 servings, roughly $2.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.31 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.15. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a creamy beef stroganoff that most people think of as restaurant food. The beef and the cabbage carry it; the sour cream and the brandy just make it taste like more.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThree and a half pounds of lean ground beef is the anchor.\u003c/strong\u003e Reach for the 93/7 so the sauce does not turn greasy, and buy the big family pack instead of the little trays so you are paying for beef, not packaging. This is where most of the money and all of the protein live.",
+                       "\u003cstrong\u003eA pound of cabbage per few servings is the noodle.\u003c/strong\u003e You want about two and a half pounds of green cabbage, roughly one and a third heads, sliced into thin strips and fried until tender. If you would rather, riced cauliflower is the classic low-carb swap and goes in one for one; the recipe is built on cabbage because it is cheaper and it is on the shelf.",
+                       "\u003cstrong\u003eFourteen ounces of white mushrooms and one onion carry the flavor.\u003c/strong\u003e Sliced mushrooms browned in butter give the sauce its body, and a little chopped onion rounds it out. Both are cheap staples that stretch across everything else you cook.",
+                       "\u003cstrong\u003eFull-fat sour cream and cream cheese make it creamy.\u003c/strong\u003e Buy the real full-fat sour cream and a block of cream cheese rather than the light versions, because the fat is what keeps the sauce smooth and rich instead of thin. Together they are the whole point of stroganoff.",
+                       "\u003cstrong\u003eButter, brandy, Worcestershire, beef base, nutmeg, and parsley are the seasoning.\u003c/strong\u003e The brandy deglazes the pan and the beef base and Worcestershire deepen the sauce; a pinch of nutmeg and a little fresh parsley finish it. These are backbone items you buy once and cook with for a long time."
+                   ],
+    "make_it":  [
+                    "Weigh your empty pot or the biggest skillet you own and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+                    "Slice the mushrooms, chop the onion, and chop the parsley. Cut the cabbage into thin strips so it cooks down like noodles.",
+                    "Set a large skillet over medium heat and fry the cabbage strips until tender, about 8 to 10 minutes. Move the cooked cabbage to a bowl and keep it warm while you build the sauce.",
+                    "In the same skillet, melt most of the butter and brown the mushrooms without crowding them, about 4 minutes, then push them to the side and saute the onion in the rest of the butter until soft. Scoop the mushrooms and onion out and set them aside, then brown the ground beef in the pan, breaking it into small pieces until just cooked through.",
+                    "Pour in the brandy, stir in the beef base and the Worcestershire, and scrape the browned bits up off the bottom of the pan.",
+                    "Return the mushrooms and onion and any juices to the pan, sprinkle over the nutmeg, and let the liquid simmer down for a minute. Stir in the cream cheese until it melts, then stir in the sour cream and simmer gently until the sauce thickens. Stir in the parsley and season to taste.",
+                    "Fold the cooked cabbage back into the sauce so every strand is coated, then weigh the pot and portion as below."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.lowcarbmaven.com/low-carb-beef-stroganoff-ground-beef-stroganoff/\" target=\"_blank\" rel=\"noopener\"\u003elowcarbmaven.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  28.29,
+    "cost_batch_true":  35.84,
+    "cost_per_serving":  2.02,
+    "cost_per_serving_true":  2.56,
+    "cost_pantry_add":  3.31,
+    "cost_first_run":  39.15,
+    "scaler":  {
+                   "cost":  "35.84",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1588,
+                                   "buy":  "3 1/2 lb lean (93/7)",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "canon":  "White Mushrooms",
+                                   "grams":  397,
+                                   "buy":  "14 oz, sliced (about 5 2/3 cups)",
+                                   "bid":  "mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  101,
+                                   "buy":  "3/4 cup plus 2 tbsp, chopped",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  147,
+                                   "buy":  "10 1/2 tbsp, divided",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Brandy",
+                                   "canon":  "Brandy",
+                                   "grams":  97,
+                                   "buy":  "7 tbsp (a bit under 1/2 cup)"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "canon":  "Worcestershire Sauce",
+                                   "grams":  60,
+                                   "buy":  "3 1/2 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Beef Base",
+                                   "canon":  "Beef Base",
+                                   "grams":  21,
+                                   "buy":  "3 1/2 tsp"
+                               },
+                               {
+                                   "item":  "Cream Cheese",
+                                   "canon":  "Cream Cheese",
+                                   "grams":  198,
+                                   "buy":  "7 oz (about 3/4 cup plus 2 tbsp), softened"
+                               },
+                               {
+                                   "item":  "Sour Cream",
+                                   "canon":  "Sour Cream",
+                                   "grams":  805,
+                                   "buy":  "3 1/2 cups full-fat"
+                               },
+                               {
+                                   "item":  "Ground Nutmeg",
+                                   "canon":  "Ground Nutmeg",
+                                   "grams":  2,
+                                   "buy":  "1 tsp, grated",
+                                   "bid":  "ground-nutmeg",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Parsley",
+                                   "canon":  "Fresh Parsley",
+                                   "grams":  13,
+                                   "buy":  "3 1/2 tbsp, chopped"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "canon":  "Green Cabbage",
+                                   "grams":  1191,
+                                   "buy":  "2 5/8 lb, cut into thin strips (about 1 1/3 heads)",
+                                   "bid":  "cabbage",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Low carb ground beef stroganoff for meal prep: browned lean beef in a creamy mushroom and sour cream sauce served over fried cabbage noodles, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
+                 "keywords":  "ground beef stroganoff, low carb stroganoff, cabbage noodles, low carb meal prep, high protein beef dinner",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT30M",
+                 "costPerServing":  2.02,
+                 "recipeIngredient":  [
+                                          "93/7 Ground Beef, 3 1/2 lb lean (93/7) (1588 g)",
+                                          "White Mushrooms, 14 oz, sliced (about 5 2/3 cups) (397 g)",
+                                          "Yellow Onion, 3/4 cup plus 2 tbsp, chopped (101 g)",
+                                          "Butter, 10 1/2 tbsp, divided (147 g)",
+                                          "Brandy, 7 tbsp (a bit under 1/2 cup) (97 g)",
+                                          "Worcestershire Sauce, 3 1/2 tbsp (60 g)",
+                                          "Beef Base, 3 1/2 tsp (21 g)",
+                                          "Cream Cheese, 7 oz (about 3/4 cup plus 2 tbsp), softened (198 g)",
+                                          "Sour Cream, 3 1/2 cups full-fat (805 g)",
+                                          "Ground Nutmeg, 1 tsp, grated (2 g)",
+                                          "Fresh Parsley, 3 1/2 tbsp, chopped (13 g)",
+                                          "Green Cabbage, 2 5/8 lb, cut into thin strips (about 1 1/3 heads) (1191 g)"
+                                      ],
+                 "steps":  [
+                               "Slice the mushrooms and cabbage, and chop the onion and parsley.",
+                               "Fry the cabbage strips until tender, then set aside and keep warm.",
+                               "Brown the mushrooms and onion in butter, remove them, then brown the ground beef.",
+                               "Add the brandy, beef base, and Worcestershire and scrape up the browned bits.",
+                               "Return the mushrooms and onion with the nutmeg, melt in the cream cheese, stir in the sour cream, and simmer until thick, then stir in the parsley.",
+                               "Fold the cabbage back in, weigh the pot, subtract the empty weight, and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "White Mushrooms",
+                                  "grams":  397
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  101
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  147
+                              },
+                              {
+                                  "item":  "Brandy",
+                                  "grams":  97
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  60
+                              },
+                              {
+                                  "item":  "Beef Base",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Cream Cheese",
+                                  "grams":  198
+                              },
+                              {
+                                  "item":  "Sour Cream",
+                                  "grams":  805
+                              },
+                              {
+                                  "item":  "Ground Nutmeg",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Fresh Parsley",
+                                  "grams":  13
+                              },
+                              {
+                                  "item":  "Green Cabbage",
+                                  "grams":  1191
+                              }
+                          ]
+}

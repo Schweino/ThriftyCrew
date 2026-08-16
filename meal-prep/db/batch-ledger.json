@@ -148,5 +148,47 @@
                          "detail":  "NEEDS-BRAD: recipes live and correct in data, but the card pricing endpoint (deleted V3 worker) 404s new slugs"
                      }
                  ]
+  },
+  {
+      "batch":  "hunt-2026-08-15-lowcarb-100-w1",
+      "opened":  "2026-08-16T06:07:43",
+      "last_activity":  "2026-08-16T06:07:44",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "low-carb-ground-beef-stroganoff-skillet",
+                    "creamy-tuscan-chicken-skillet",
+                    "turkey-zucchini-noodle-casserole",
+                    "keto-turkey-broccoli-cheddar-casserole",
+                    "baked-cauliflower-mac-smoked-sausage",
+                    "slow-cooker-boneless-beef-short-ribs",
+                    "chimichurri-steak-sheet-pan",
+                    "french-chicken-fricassee",
+                    "chicken-piccata-skillet",
+                    "hatch-green-chile-chicken-casserole"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-16T06:07:43",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-16T06:07:43",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-16T06:07:44",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-16T06:07:44",
+                         "detail":  "streamed per-recipe before wave close"
+                     }
+                 ]
   }
 ]

@@ -1,0 +1,254 @@
+{
+    "name":  "Chimichurri Steak Sheet Pan Dinner",
+    "slug":  "chimichurri-steak-sheet-pan",
+    "cuisine":  "Argentine",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://fedandfit.com/chimichurri-beef-sheet-pan-dinner/",
+    "source_site":  "fedandfit.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 6, rebuilt to 14 at the mapper\u0027s 2.3333x scale. Every gram and buy string transcribed from mapped\\chimichurri-steak-sheet-pan.json; no number computed in prose.",
+                         "MACROS transcribed from the mapper\u0027s food-DB recompute and INDEPENDENTLY re-run by the writer line by line against food-macros-db at 14 servings: 428.0 cal, 28.9 g protein, 30.6 g carbs, 21.46 g fat per serving, reported as stat 428 / 29 / 31 / 21. In band for this run (400 to 650 cal, 35 g carb or less): 428 cal sits 28 cal above the floor and carbs 31 g leave 4 g under the ceiling.",
+                         "CALORIE FLOOR DEPENDS ON THE SWEET-POTATO SIZE RULING, carried loudly from the mapper. The source prints \u0027small\u0027 sweet potatoes but its OWN published nutrition (491 cal, 31 g carbs, 21683 IU vitamin A per serving x 6) forces about 225 g per potato, not the densities.json 130 g medium default. Two independent nutrient lines (carbs and vitamin A) converge on ~225 g each. Booked at 225 g each (2081 g total for 9.25 potatoes). At the 130 g default the recipe recomputes to about 380 cal and FAILS the 400 floor, contradicting the source\u0027s own 491/31. Buy string says \u0027about 1/2 lb each\u0027 so the cook picks the right size. This is the mapper\u0027s ruling transcribed, not the writer\u0027s; QA should eyeball it before publish.",
+                         "SKIPMACROCHECK USED, and why it is sanctioned here: Fresh Oregano has NO food-macros-db row (the mapper refused to invent one per rule 2, no verifiable label exists anywhere for fresh oregano, USDA has only the dried record). With one intake item legitimately absent from the DB, build-v2-spec\u0027s food-macros recompute cannot run, so -SkipMacroCheck was passed. The macros are NOT unverified: the writer recomputed all 10 DB-backed lines by hand against food-macros-db and matched the mapper to the decimal (428.0/28.9/30.6/21.46). Fresh oregano is booked at 0 macros with the mapper\u0027s disclosed ceiling of under 0.25 cal/serving, so the zero-booking cannot move the card.",
+                         "SALT CANONICALIZED at build, same as french-chicken-fricassee this run: the mapper\u0027s item name \u0027Sea Salt\u0027 lives in NEITHER food-macros-db NOR db\\ingredients.json and would hard-fail the build. Rewrote to the batch-canonical \u0027Salt\u0027 (bid salt, brand Morton), buy string \u00272 1/4 tsp fine sea salt, divided\u0027, which keeps the prose truthful. Salt is zero-macro so no stat number moved. The two source salt lines (chimichurri 3 g fine sea salt + sheet pan 11 g) are combined into one 14 g shopping line, divided in the steps.",
+                         "OLIVE OIL COMBINED: the source\u0027s two oil lines (chimichurri 125 g + sheet pan 64 g) are one bottle to a shopper, so they are booked as a single 189 g line (7/8 cup, divided). Grams and macros are the exact sum; the steps divide it (about 9 tbsp into the chimichurri, about 5 tbsp reserved for the vegetables). EVOO and pure olive oil share the olive-oil commodity per the mapper.",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked both directions: steak (make_it 4, 7), sweet potatoes (5, 6), broccolini (6), olive oil (3 chimichurri + 5 potatoes + 6 broccolini, divided), red wine vinegar (3), fresh cilantro (3), fresh parsley (3), garlic (3), fresh oregano (3), red pepper flakes (3), salt (3 chimichurri + 5,6 vegetables, divided). The \u00271/2 cup chimichurri divided\u0027 source line is the sub-recipe yield of the herb section, not a purchased ingredient (mapper confirmed the scaled component mass matches the call); it is NOT a shopping line, it is made in step 3 and divided across steps 4 and 8. No separate chimichurri is bought.",
+                         "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount, package sizes referenced generically and never with a per-line cost. Clear of the 2026-08-15 audit failures. Re-walk the bullets against cost_lines once costed before publish.",
+                         "BROCCOLI SWAP is a source-sanctioned WRITER OPTION, mentioned in shop_smart only. Broccolini maps to its own broccolini commodity (carried per Rule B, Baker\u0027s only, 1 of 7 stores); the source\u0027s comment section sanctions plain broccoli as an equal swap. Prose names broccolini as the ingredient and offers plain broccoli as the stand-in if a store does not carry broccolini. No step calls for broccoli; the bought and cooked vegetable is broccolini.",
+                         "COST UNDERSTATED - repair-pass flag. Two real cost lines are unwired: \u0027Broccolini\u0027 and \u0027Fresh Parsley\u0027 have NO row in db\\ingredients.json and NO entry in ingredient-map.json, even though both commodities (broccolini $3.99/each, fresh-parsley $0.99/each) DO exist on the live feed. cost-recipes reads item knowledge from db\\ingredients.json, so it cannot connect the item to the bid and will DROP both from the costed row at $0.00. Broccolini is MATERIAL (2 1/4 bunches at $3.99 is roughly $9 per batch, about $0.64 per serving); Fresh Parsley is minor (about $2 per batch). The rendered cost_ps in this build is therefore a FLOOR, understated by broccolini and parsley until the mapper/registrar wires the two item-\u003ebid rows and the recipe is recosted. Deliberately NOT invented here; bids and prices are not the writer\u0027s to mint. Fresh Oregano also prices null (pantry-static, immaterial at 1 g).",
+                         "PORTION METHOD adapted to a sheet pan: weigh the empty pan first, weigh it loaded at the end, subtract, divide by 14. The chimichurri drizzle is added before the final weigh so it is counted in the portion."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  428,
+                 "protein":  29,
+                 "carbs":  31,
+                 "fat":  21,
+                 "cost_ps":  "2.89"
+             },
+    "intro_html":  "Chimichurri is what happens when a steak decides to dress up. It is nothing fancier than fresh herbs, garlic, red wine vinegar, and good olive oil buzzed into a bright green sauce, and it pulls a double shift here. Half of it marinates the steak before it hits the pan, and the other half gets spooned over the top at the end. Everything roasts on one sheet pan next to sweet potatoes and broccolini, so there is one pan to wash and nothing to stand over. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 35 grams of carbs. That is a steakhouse plate that fits inside a meal-prep container.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 3 1/2 lb sirloin or flank steak (1588 g)",
+                                "\u003cstrong\u003eSweet Potatoes:\u003c/strong\u003e 9 1/4 sweet potatoes, about 1/2 lb each (2081 g)",
+                                "\u003cstrong\u003eBroccolini (Mann\u0027s):\u003c/strong\u003e 2 1/4 bunches (about 18 oz) (511 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7/8 cup extra virgin, divided (189 g)",
+                                "\u003cstrong\u003eRed Wine Vinegar (generic):\u003c/strong\u003e 5 3/4 tbsp (86 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1/2 cup plus 1 1/2 tbsp, stems and leaves (10 g)",
+                                "\u003cstrong\u003eFresh Parsley (fresh (USDA)):\u003c/strong\u003e 1/2 cup plus 1 1/2 tbsp, stems and leaves (36 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 3/4 cloves, minced (14 g)",
+                                "\u003cstrong\u003eFresh Oregano:\u003c/strong\u003e 1 1/4 tbsp, leaves stripped (1 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/2 tsp (1 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 1/4 tsp fine sea salt, divided (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Flank/Sirloin Steak, 3 1/2 lb sirloin or flank steak: ~$30.87. \u003cstrong\u003eBuy 4 lbs: $35.27.\u003c/strong\u003e",
+                       "Sweet Potatoes, 9 1/4 sweet potatoes, about 1/2 lb each: ~$6.79. \u003cstrong\u003eBuy 5 lbs: $7.40.\u003c/strong\u003e",
+                       "Olive Oil, 7/8 cup extra virgin, divided: ~$2.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Red Wine Vinegar, 5 3/4 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Cilantro, 1/2 cup plus 1 1/2 tbsp, stems and leaves: ~$0.16. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Garlic, 4 3/4 cloves, minced: ~$0.19. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Pantry seasonings (fresh parsley, fresh oregano, red pepper flakes, salt): ~$0.04. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $40.46 across 14 servings, so roughly $2.89 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $46.59 across 14 servings, roughly $3.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.91. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a chimichurri steak dinner that most people only order out. The steak and the sweet potatoes carry the plate, and the green sauce is what makes it taste like more than the sum of its parts.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThree and a half pounds of steak is the anchor.\u003c/strong\u003e Sirloin or flank both work, so buy whichever the case has cheaper that week, and reach for the big family pack instead of the small trays so you are paying for beef and not for packaging. This is where most of the money and all of the protein live.",
+                       "\u003cstrong\u003eAbout nine sweet potatoes carry the plate.\u003c/strong\u003e Size matters here more than usual. Reach for potatoes around a half pound each, not the little ones, because that heft is what fills out the serving and keeps this from eating like a light lunch. Roasted whole and then split, they turn sweet and creamy with no peeling.",
+                       "\u003cstrong\u003eA couple bunches of broccolini round out the pan.\u003c/strong\u003e Broccolini roasts fast and crisps at the tips, which is exactly what you want next to a rich steak. If your store does not carry it, plain broccoli cut into spears works the same way and roasts on the same pan.",
+                       "\u003cstrong\u003eFresh herbs are the whole point of the sauce.\u003c/strong\u003e You want a bunch each of cilantro and parsley and a little fresh oregano, all blended down into the chimichurri. Buy them fresh, not dried, because dried herbs turn this sauce muddy and flat. You use only a small handful of each, all blended down into the green sauce.",
+                       "\u003cstrong\u003eOlive oil, red wine vinegar, garlic, red pepper flakes, and sea salt finish it.\u003c/strong\u003e These are pantry and produce backbone you most likely already keep on hand, so they barely move the cart. The vinegar and the garlic are what give chimichurri its bite, and a pinch of red pepper flakes brings just enough heat to notice."
+                   ],
+    "make_it":  [
+                    "Weigh your empty sheet pan and write the number down. You will weigh it loaded at the end to split this into 14 even servings by weight, which is the only honest way to portion a whole pan of food.",
+                    "Heat the oven to 350 degrees F.",
+                    "Make the chimichurri first. Put the red wine vinegar, cilantro, parsley, garlic, fresh oregano, red pepper flakes, a half teaspoon of the fine sea salt, and about nine tablespoons of the olive oil in a blender, holding back the rest of the oil for the vegetables. Blend until it is smooth and bright green, then set it aside. You will divide it in two directions.",
+                    "Slice the steak into half-inch strips, drop them in a large bowl, and toss with about a third of the chimichurri to marinate while the potatoes get going.",
+                    "Rub the whole sweet potatoes with a couple tablespoons of the reserved olive oil and a little of the sea salt, lay them on the sheet pan, and bake for 45 minutes.",
+                    "Pull the pan out and cut each sweet potato in half, spreading the halves across the pan. Toss the broccolini with the last of the reserved olive oil and sprinkle the potatoes and broccolini with the rest of the sea salt.",
+                    "Lift the steak out of its marinade and lay the strips on the pan among the vegetables. Slide it back in and bake for 30 minutes, until the steak is cooked the way you like it and the broccolini tips are crisp.",
+                    "Drizzle the remaining chimichurri over the steak and vegetables, then weigh the loaded pan and portion as below."
+                ],
+    "portion_html":  "Set the loaded sheet pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total, steak and vegetables and sauce together. Divide that number by 14 and give each container that exact weight, aiming for an even share of steak, sweet potato, and broccolini. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://fedandfit.com/chimichurri-beef-sheet-pan-dinner/\" target=\"_blank\" rel=\"noopener\"\u003efedandfit.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  40.46,
+    "cost_batch_true":  46.59,
+    "cost_per_serving":  2.89,
+    "cost_per_serving_true":  3.33,
+    "cost_pantry_add":  8.32,
+    "cost_first_run":  54.91,
+    "scaler":  {
+                   "cost":  "46.59",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1588,
+                                   "buy":  "3 1/2 lb sirloin or flank steak",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sweet Potatoes",
+                                   "canon":  "Sweet Potatoes",
+                                   "grams":  2081,
+                                   "buy":  "9 1/4 sweet potatoes, about 1/2 lb each",
+                                   "bid":  "sweet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Broccolini",
+                                   "canon":  "Broccolini",
+                                   "grams":  511,
+                                   "buy":  "2 1/4 bunches (about 18 oz)"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  189,
+                                   "buy":  "7/8 cup extra virgin, divided",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Red Wine Vinegar",
+                                   "canon":  "Red Wine Vinegar",
+                                   "grams":  86,
+                                   "buy":  "5 3/4 tbsp",
+                                   "bid":  "red-wine-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  10,
+                                   "buy":  "1/2 cup plus 1 1/2 tbsp, stems and leaves",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Fresh Parsley",
+                                   "canon":  "Fresh Parsley",
+                                   "grams":  36,
+                                   "buy":  "1/2 cup plus 1 1/2 tbsp, stems and leaves"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  14,
+                                   "buy":  "4 3/4 cloves, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Fresh Oregano",
+                                   "canon":  "Fresh Oregano",
+                                   "grams":  1,
+                                   "buy":  "1 1/4 tbsp, leaves stripped"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "canon":  "Red Pepper Flakes",
+                                   "grams":  1,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "2 1/4 tsp fine sea salt, divided",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chimichurri steak sheet pan dinner for meal prep: sirloin or flank steak marinated in a fresh herb chimichurri and roasted with sweet potatoes and broccolini, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 35 grams of carbs.",
+                 "keywords":  "chimichurri steak, sheet pan steak dinner, chimichurri sheet pan, low carb meal prep, high protein beef dinner",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT1H15M",
+                 "totalTime":  "PT1H25M",
+                 "costPerServing":  2.89,
+                 "recipeIngredient":  [
+                                          "Beef Flank/Sirloin Steak, 3 1/2 lb sirloin or flank steak (1588 g)",
+                                          "Sweet Potatoes, 9 1/4 sweet potatoes, about 1/2 lb each (2081 g)",
+                                          "Broccolini, 2 1/4 bunches (about 18 oz) (511 g)",
+                                          "Olive Oil, 7/8 cup extra virgin, divided (189 g)",
+                                          "Red Wine Vinegar, 5 3/4 tbsp (86 g)",
+                                          "Fresh Cilantro, 1/2 cup plus 1 1/2 tbsp, stems and leaves (10 g)",
+                                          "Fresh Parsley, 1/2 cup plus 1 1/2 tbsp, stems and leaves (36 g)",
+                                          "Garlic, 4 3/4 cloves, minced (14 g)",
+                                          "Fresh Oregano, 1 1/4 tbsp, leaves stripped (1 g)",
+                                          "Red Pepper Flakes, 1/2 tsp (1 g)",
+                                          "Salt, 2 1/4 tsp fine sea salt, divided (14 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh the empty sheet pan and note the number for portioning later.",
+                               "Heat the oven to 350 degrees F.",
+                               "Blend the red wine vinegar, cilantro, parsley, garlic, fresh oregano, red pepper flakes, some of the fine sea salt, and most of the olive oil into a smooth chimichurri, holding back oil for the vegetables.",
+                               "Slice the steak into half-inch strips and toss with about a third of the chimichurri to marinate.",
+                               "Rub the sweet potatoes with reserved olive oil and sea salt and bake for 45 minutes.",
+                               "Cut the potatoes, toss the broccolini with the last of the oil and salt, and add both to the pan.",
+                               "Lay the marinated steak on the pan and bake for 30 minutes.",
+                               "Drizzle the remaining chimichurri over everything, then weigh the pan and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Sweet Potatoes",
+                                  "grams":  2081
+                              },
+                              {
+                                  "item":  "Broccolini",
+                                  "grams":  511
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  189
+                              },
+                              {
+                                  "item":  "Red Wine Vinegar",
+                                  "grams":  86
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Fresh Parsley",
+                                  "grams":  36
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Fresh Oregano",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Red Pepper Flakes",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              }
+                          ]
+}

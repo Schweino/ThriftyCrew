@@ -1,0 +1,317 @@
+{
+    "name":  "Southwest Ground Turkey and Cauliflower Rice Skillet",
+    "slug":  "southwest-ground-turkey-cauliflower-rice-skillet",
+    "cuisine":  "Southwestern",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://upnorthnosh.com/low-carb-ground-turkey-skillet-with-cauliflower-rice/",
+    "source_site":  "upnorthnosh.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 3, rebuilt to 14 at the mapper\u0027s 4.6667x scale. Every gram and buy string transcribed from mapped\\southwest-ground-turkey-cauliflower-rice-skillet.json; no number computed in prose.",
+                         "MACROS transcribed from the mapper\u0027s food-macros-db recompute and re-verified by the writer at 14 servings against the same rows: batch 5041 cal / 442 P / 129 C / 287 F, per serving 360.1 cal / 31.6 P / 9.2 C / 20.5 F, which rounds to 360 / 32 / 9 / 20. The build guard\u0027s cal+protein recompute lands on the same 360 cal / 32 P.",
+                         "BAND FLAG, LOUD, CARRIED FROM THE MAPPER: 360 cal per serving is BELOW this run\u0027s 400 cal floor by 40 cal. Carbs 9.2 g are well under the 35 g gate (PASS). This is the honest, label-accurate number as built and it is NOT the writer\u0027s to adjust. The protein cross-check agrees within 4% (their 33 g vs our 31.6), so the portions are sound and no each-weight error exists; the gap is FAT and topping-counting, not portion. The source\u0027s own 476 cal / 33 g fat figure implies a fattier turkey (85/15) and/or counts the optional sriracha mayo their step 8 applies. Three honest paths the mapper laid out, none of them mine to rule: (1) capture a real 85/15 ground-turkey label and re-map to the generic ground-turkey commodity (7 of 7, $2.6633/lb) for about 432 cal PASS; (2) promote the source\u0027s step-8 toppings to counted for about 463 cal PASS; (3) reject at the gate. Parked in QA, not fudged here.",
+                         "TURKEY FAT CLASS is load-bearing on the floor. Booked 93/7 following the two in-run precedents for the identical source phrase \u00271 lb ground turkey\u0027 (keto-turkey-broccoli-cheddar-casserole, turkey-zucchini-noodle-casserole). Jennie-O 93/7 label row (170 cal/112 g). If the house prefers the generic 85/15 blend here, the dish clears the band, but there is NO verifiable 85/15 label on disk (rule 2 forbids inventing one), so the 93/7 build is what ships honestly.",
+                         "OPTIONAL TOPPINGS NOT BOUGHT, NOT COSTED, NOT STAGED IN THE BUILD, following the taco-cabbage-beef precedent in this run. The source marks sriracha mayo, shredded lettuce and pico de gallo optional; the mapper mapped them optional-excluded-from-band, and pico returns no commodity (CAPTURE). Prose names them as the cook\u0027s own table add-on only; no build step calls for them, so nothing unbought is used and no orphan cost line exists. Band macros are the non-optional skillet.",
+                         "CAULIFLOWER RICE is FRESH cauliflower riced at home, not the bagged riced product (mapper ruled_substitutions: the board carries no riced/frozen-cauliflower id, home ricing is the budget-house equivalent, and the resolver\u0027s \u0027cauliflower rice\u0027 match to the white-rice commodity is a false product-concept match). Prose names ricing a fresh head. Macros identical (same raw vegetable). Every bought ingredient is used and no step uses anything unbought: olive oil (step 4), turkey (4), the nine seasonings mixed in the cup (step 3, added step 5), red bell pepper + shallot (step 6), frozen spinach (step 7), riced cauliflower (step 8).",
+                         "BLOCKER FLAG for the repair pass: item \u0027Cauliflower\u0027 has NO row in db\\ingredients.json (the price map), so as shipped this build prices the cauliflower unwired/pantry-static and the cost_ps is a FLOOR until it is wired. The mapper cites board bid \u0027cauliflower\u0027, 4 of 7 stores, cheapest Fareway $1.98/each. Same unwired-item pattern the stroganoff and taco-cabbage intakes documented. The writer does not touch db\\ingredients.json; wiring \u0027Cauliflower\u0027 -\u003e bid cauliflower belongs to the repair pass before the audit gate.",
+                         "SHALLOTS priced as onions (bid onions) per the STANDING BRAD RULING recorded in the shakedown wave-1 audit and the ingredient-map\u0027s own Shallots -\u003e onions entry. A separate live shallots commodity (4 of 7, $3.99/lb, a 5x price class) exists and the mapper flagged it for the match-soundness gate, but the standing ruling governs; disclosed, not changed. Grams on the sanctioned densities route (no Shallots row; USDA small-bulb basis), flagged by the mapper. Shallot line is about 7 cal/serving either way.",
+                         "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount and the product form. Re-walk the bullets against cost_lines once costed before publish.",
+                         "TITLE NOTE (cosmetic, carried from extractor + mapper): the source page title is \u0027Low Carb Ground Turkey Skillet with Cauliflower Rice\u0027 and does not say \u0027southwest\u0027; the slug does. The seasoning profile (cumin, coriander, paprika, cayenne, plus the source\u0027s pico and sriracha finish) is genuinely southwestern, so the name is honest to the dish. Flagged for the auditor to confirm the naming call."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "em dash",
+                                  "en dash"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  360,
+                 "protein":  32,
+                 "carbs":  9,
+                 "fat":  20,
+                 "cost_ps":  "2.17"
+             },
+    "intro_html":  "Ground turkey has a reputation as the protein you put up with on a diet, not the one you look forward to. Season it like the Southwest and it stops apologizing. You brown lean turkey with a full spice cup of cumin, coriander, paprika and cayenne, fold in sweet red bell pepper, shallot and spinach, then stir riced cauliflower right into the pan where the rice bowl used to be. One skillet, about twenty-five minutes, and it portions clean into containers. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 10 grams of carbs. The original finishes each bowl with shredded lettuce, pico de gallo and a swipe of sriracha mayo. Those are yours to add at the table if you want them; the build here is just the seasoned skillet, so the macros on the label are the macros in your container.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 4 3/4 lb lean (93/7) ground turkey (2155 g)",
+                                "\u003cstrong\u003eCauliflower (generic (USDA)):\u003c/strong\u003e 7 cups riced (from about 1 1/2 medium heads) (749 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 4 1/2 red bell peppers, finely diced (540 g)",
+                                "\u003cstrong\u003eShallots (fresh (USDA)):\u003c/strong\u003e 5 small shallots, finely diced (150 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 4 3/4 cups frozen chopped spinach (404 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 9 1/4 tbsp (a bit over 1/2 cup) (125 g)",
+                                "\u003cstrong\u003eDried Parsley (Great Value):\u003c/strong\u003e 4 3/4 tbsp dried parsley (7 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 2 1/4 tsp garlic powder (7 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 2 1/4 tsp onion powder (5 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 2 1/4 tsp paprika (5 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2 1/4 tsp ground cumin (5 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 2 1/4 tsp ground coriander (4 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 4 3/4 tsp salt (28 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 1/4 tsp black pepper (3 g)",
+                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 1 1/4 tsp cayenne (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 4 3/4 lb lean (93/7) ground turkey: ~$21.62. \u003cstrong\u003eBuy 5 lbs: $22.75.\u003c/strong\u003e",
+                       "Red Bell Pepper, 4 1/2 red bell peppers, finely diced: ~$4.41. \u003cstrong\u003eBuy 5 each: $4.90.\u003c/strong\u003e",
+                       "Shallots, 5 small shallots, finely diced: ~$0.38. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Frozen Chopped Spinach, 4 3/4 cups frozen chopped spinach: ~$1.64. \u003cstrong\u003eBuy 2 10oz boxes: $2.30.\u003c/strong\u003e",
+                       "Olive Oil, 9 1/4 tbsp (a bit over 1/2 cup): ~$1.36. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (dried parsley, garlic powder, onion powder, paprika, ground cumin, ground coriander, salt, black pepper, cayenne pepper): ~$0.93. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $30.34 across 14 servings, so roughly $2.17 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.38 across 14 servings, roughly $2.38 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.24 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.62. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a Southwest turkey skillet that eats like a rice bowl without the rice. The turkey carries the protein; the riced cauliflower, peppers and spice rack turn it into a full container for almost nothing.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eLean ground turkey is the backbone, so buy it right.\u003c/strong\u003e About four and three quarter pounds of 93/7 is where most of the money and all of the protein live. Reach for the big family roll instead of the little one-pound trays so you are paying for turkey, not packaging. The 93/7 blend stays lean without cooking up dry and chalky the way the 99 percent breast can.",
+                       "\u003cstrong\u003eRice a fresh head of cauliflower instead of buying the bag.\u003c/strong\u003e About a head and a half, broken into florets and pulsed in a food processor until it looks like rice, does the same job as the pre-riced product. A box grater works too if you do not have a processor. This is what fills the bowl where a cup of rice used to sit, with a fraction of the carbs.",
+                       "\u003cstrong\u003eRed bell pepper and shallot are the fresh aromatics.\u003c/strong\u003e You want about four and a half red bell peppers and a handful of small shallots, all finely diced so they melt into the turkey instead of standing out. The pepper brings the sweetness and color; the shallot brings a softer, rounder onion note than a raw yellow onion would.",
+                       "\u003cstrong\u003eFrozen chopped spinach folds in green at the end.\u003c/strong\u003e A few cups from the freezer stirs straight into the hot pan and thaws as it goes, so there is nothing to thaw ahead. It cooks down to almost nothing, which is exactly what you want it to do.",
+                       "\u003cstrong\u003eThe spice rack does the heavy lifting.\u003c/strong\u003e Cumin, coriander, paprika and cayenne carry the Southwest flavor, with onion powder, garlic powder, dried parsley, salt and pepper rounding it out. These are backbone staples you most likely already have, so they barely move the cart while doing most of the talking."
+                   ],
+    "make_it":  [
+                    "Weigh your empty skillet or the biggest pan you own and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+                    "Break the cauliflower into florets and pulse it in a food processor until it is riced into fine grains, or run it across a box grater. Finely dice the red bell peppers and the shallots and set everything by the stove.",
+                    "In a small cup, stir together the cumin, paprika, coriander, onion powder, garlic powder, cayenne, dried parsley, salt and black pepper so the seasoning goes in all at once.",
+                    "Heat the olive oil in a large skillet over medium-high heat. Add the ground turkey and break it up with the back of a wooden spoon as it browns. Work in two batches if the pan looks crowded, so the turkey browns instead of steaming.",
+                    "Pour the seasoning cup over the turkey and cook, stirring occasionally, until the meat is no longer pink.",
+                    "Add the diced red bell pepper and shallot and stir them in. Cook a few minutes over medium heat until they soften.",
+                    "Add the frozen spinach and stir; it thaws the rest of the way in the hot pan. Keep cooking 2 to 3 minutes until everything is combined and warmed through.",
+                    "Stir in the riced cauliflower and cook another 4 to 5 minutes, until it is tender but not mushy.",
+                    "Weigh the full pan and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container so every serving lands the same."
+                ],
+    "portion_html":  "Set the full pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container. Give each one an even share of the turkey, pepper, spinach and cauliflower, and every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://upnorthnosh.com/low-carb-ground-turkey-skillet-with-cauliflower-rice/\" target=\"_blank\" rel=\"noopener\"\u003eupnorthnosh.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  30.34,
+    "cost_batch_true":  33.38,
+    "cost_per_serving":  2.17,
+    "cost_per_serving_true":  2.38,
+    "cost_pantry_add":  16.24,
+    "cost_first_run":  49.62,
+    "scaler":  {
+                   "cost":  "33.38",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  2155,
+                                   "buy":  "4 3/4 lb lean (93/7) ground turkey",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cauliflower",
+                                   "canon":  "Cauliflower",
+                                   "grams":  749,
+                                   "buy":  "7 cups riced (from about 1 1/2 medium heads)",
+                                   "bid":  "cauliflower",
+                                   "gpu":  "588.000"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  540,
+                                   "buy":  "4 1/2 red bell peppers, finely diced",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Shallots",
+                                   "canon":  "Shallots",
+                                   "grams":  150,
+                                   "buy":  "5 small shallots, finely diced",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Frozen Chopped Spinach",
+                                   "canon":  "Frozen Chopped Spinach",
+                                   "grams":  404,
+                                   "buy":  "4 3/4 cups frozen chopped spinach",
+                                   "bid":  "frozen-chopped-spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  125,
+                                   "buy":  "9 1/4 tbsp (a bit over 1/2 cup)",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Dried Parsley",
+                                   "canon":  "Dried Parsley",
+                                   "grams":  7,
+                                   "buy":  "4 3/4 tbsp dried parsley",
+                                   "bid":  "dried-parsley",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  7,
+                                   "buy":  "2 1/4 tsp garlic powder",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  5,
+                                   "buy":  "2 1/4 tsp onion powder",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  5,
+                                   "buy":  "2 1/4 tsp paprika",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  5,
+                                   "buy":  "2 1/4 tsp ground cumin",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  4,
+                                   "buy":  "2 1/4 tsp ground coriander",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  28,
+                                   "buy":  "4 3/4 tsp salt",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "1 1/4 tsp black pepper",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "canon":  "Cayenne Pepper",
+                                   "grams":  2,
+                                   "buy":  "1 1/4 tsp cayenne",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Southwest ground turkey and cauliflower rice skillet for meal prep: lean turkey browned with cumin, coriander, paprika and cayenne, folded with red bell pepper, shallot, spinach and riced cauliflower, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 10 grams of carbs.",
+                 "keywords":  "southwest ground turkey skillet, cauliflower rice skillet, low carb ground turkey meal prep, high protein turkey dinner, keto turkey skillet",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT30M",
+                 "costPerServing":  2.17,
+                 "recipeIngredient":  [
+                                          "93/7 Ground Turkey, 4 3/4 lb lean (93/7) ground turkey (2155 g)",
+                                          "Cauliflower, 7 cups riced (from about 1 1/2 medium heads) (749 g)",
+                                          "Red Bell Pepper, 4 1/2 red bell peppers, finely diced (540 g)",
+                                          "Shallots, 5 small shallots, finely diced (150 g)",
+                                          "Frozen Chopped Spinach, 4 3/4 cups frozen chopped spinach (404 g)",
+                                          "Olive Oil, 9 1/4 tbsp (a bit over 1/2 cup) (125 g)",
+                                          "Dried Parsley, 4 3/4 tbsp dried parsley (7 g)",
+                                          "Garlic Powder, 2 1/4 tsp garlic powder (7 g)",
+                                          "Onion Powder, 2 1/4 tsp onion powder (5 g)",
+                                          "Paprika, 2 1/4 tsp paprika (5 g)",
+                                          "Ground Cumin, 2 1/4 tsp ground cumin (5 g)",
+                                          "Ground Coriander, 2 1/4 tsp ground coriander (4 g)",
+                                          "Salt, 4 3/4 tsp salt (28 g)",
+                                          "Black Pepper, 1 1/4 tsp black pepper (3 g)",
+                                          "Cayenne Pepper, 1 1/4 tsp cayenne (2 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh the empty pan and write the number down, then rice the cauliflower and dice the red bell pepper and shallot.",
+                               "Stir the cumin, paprika, coriander, onion powder, garlic powder, cayenne, parsley, salt and black pepper together in a cup.",
+                               "Brown the ground turkey in olive oil, breaking it up as it cooks.",
+                               "Stir in the seasoning and cook until the turkey is no longer pink.",
+                               "Add the red bell pepper and shallot and cook until softened, then stir in the frozen spinach until warmed through.",
+                               "Stir in the riced cauliflower and cook until tender, then weigh the pan, subtract the empty weight, and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  2155
+                              },
+                              {
+                                  "item":  "Cauliflower",
+                                  "grams":  749
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  540
+                              },
+                              {
+                                  "item":  "Shallots",
+                                  "grams":  150
+                              },
+                              {
+                                  "item":  "Frozen Chopped Spinach",
+                                  "grams":  404
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  125
+                              },
+                              {
+                                  "item":  "Dried Parsley",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Cayenne Pepper",
+                                  "grams":  2
+                              }
+                          ]
+}

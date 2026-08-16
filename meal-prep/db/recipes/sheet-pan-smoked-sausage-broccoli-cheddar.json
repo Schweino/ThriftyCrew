@@ -1,0 +1,161 @@
+{
+    "name":  "Sheet Pan Smoked Sausage, Broccoli, and Cheddar",
+    "slug":  "sheet-pan-smoked-sausage-broccoli-cheddar",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thebestketorecipes.com/sausage-broccoli-cheddar-sheet-pan/",
+    "source_site":  "thebestketorecipes.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Every gram and buy string transcribed from mapped\\sheet-pan-smoked-sausage-broccoli-cheddar.json; no number computed in prose.",
+                         "MACROS transcribed from the mapper\u0027s food-DB recompute at 14 servings and re-verified line by line against food-macros-db (Broccoli USDA 34 cal/100 g row, Andouille Smoked Sausage Johnsonville 160 cal/56 g row, Cheddar Cheese Shredded GV 110 cal/28 g row): batch 6253 cal, 322 g protein, 196 g carbs, 477 g fat; per serving 446.7 cal / 23.0 g protein / 14.0 g carbs / 34.1 g fat, reported here as 447 / 23 / 14 / 34. In band for this run (400 to 650 cal, 35 g carb or less): 47 cal above the floor, 203 below the ceiling, carbs at 40 percent of the carb gate. Under-15-grams-of-carbs is the literal bound used in prose. Report the BUILT spec\u0027s numbers, not these.",
+                         "SOURCE MACRO CROSS-CHECK (flag, not fixed): the source page prints 472 cal / 24.7 g protein / 10.6 g gross carbs (6.6 g net) / 35.7 g fat per serving at its 4-serving yield. Our label recompute lands at 446.7 cal / 23.0 P / 14.0 C / 34.1 F. Calories -5.4 percent and protein -7.0 percent are inside the instrument; the small downward drift is the -2.0 percent sausage quantization (3.0625 lb exact 3.5x quantized to 3 lb) plus the Johnsonville panel running lighter than whatever generic sausage the source calculator used. Our 14.0 g gross carbs against their 10.6 g gross is the fresh-broccoli USDA row counting the full 170 g of broccoli per serving; their 4 g fiber figure undercounts it. Band holds under either reading. Nothing to re-examine.",
+                         "BLOCKER FLAG for the repair pass (carried forward from the mapper and shared with sibling keto-turkey-broccoli-cheddar-casserole this run): item \u0027Broccoli\u0027 has NO usable row in ingredient-map / db\\ingredients.json. The only broccoli entry there is \u0027Broccoli Florets\u0027 -\u003e frozen-broccoli-florets, an id that exists in neither commodity file, and the fresh \u0027broccoli\u0027 board commodity (7 of 7 stores, cheapest Hy-Vee $1.8533/lb per the mapper) has no map row. The fresh bid IS on the live feed, so this is a single missing map row, the map owner\u0027s domain, not edited here. In this build Broccoli emits no priced bid and costs pantry-static, so cost_ps is a FLOOR understated by roughly a batch of fresh broccoli (about 5.25 lb) until the map row (Broccoli -\u003e broccoli, weekly board) lands. Re-cost and re-walk shop_smart once it is wired.",
+                         "INGREDIENT-USE CHECK done both directions. Three bought lines, all used by a step: broccoli florets and sliced sausage roast together on the pans (make_it 3 and 4), shredded cheddar goes on the last 1 to 2 minutes to melt (make_it 5). No step names anything unbought: the sausage renders its own fat over the broccoli as it roasts, so there is NO oil, butter, or cooking-spray line to strand, and the pan is prepped only by lining it with foil or parchment (equipment, not a costed ingredient). Salt and pepper are the source\u0027s optional to-taste line (source states NO quantity); booked here at a smallest-defensible to-taste minimum (Salt 2 tsp, Black Pepper 1 tsp per 14-serving batch, both zero/near-zero macro) so make_it 5\u0027s \u0027season with salt and pepper to taste\u0027 is cook-as-shopped and clears the PHANTOM buy-coverage gate (2026-08-16 repair). Grams are macro-immaterial. The extractor\u0027s noted cooking-spray step line is dropped in favor of the source\u0027s own foil/parchment option, matching the source\u0027s nutrition basis (spray not booked).",
+                         "SHOP_SMART cost-line discipline: NO bullet makes a per-ounce, leftover, or lasts-several-batches claim, so no bullet needs a cost_lines entry to prove it (deliberate, to stay clear of the 2026-08-15 audit failures, and because broccoli is UNPRICED here so a broccoli price comparison could not be traced anyway). Every statement is grounded in the recipe\u0027s own buy amount or in cooking behavior (fresh roasts and caramelizes where frozen steams; block or bag cheddar both melt). Package sizes are referenced as sizes (the 14 oz rope), never as per-line costs. Re-walk the bullets against cost_lines once broccoli is wired and the recipe is re-costed.",
+                         "PORTION METHOD: sheet-pan food is loose, so weigh a large empty bowl first, tip all the roasted food into it after the cheese melts, weigh full, subtract the empty weight, divide by 14. Standard house weigh-the-pot method adapted to a bowl."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  447,
+                 "protein":  23,
+                 "carbs":  14,
+                 "fat":  34,
+                 "cost_ps":  "0.15"
+             },
+    "intro_html":  "Most weeknight dinners that come off one pan lean on a starch to fill the plate, and that starch is usually the cheapest, emptiest thing in the cart. This one skips it entirely. Sliced andouille smoked sausage and fresh broccoli florets go on the sheet pan together, and as the sausage roasts it renders its own fat right down over the broccoli, so the florets caramelize instead of steam. A handful of sharp cheddar over the top in the last couple of minutes ties it together. No oil to buy, no rice, no potatoes, just three things that roast into a real dinner. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 15 grams of carbs. That is a full sheet pan of dinner working for your body and your wallet at the same time.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBroccoli (fresh (USDA)):\u003c/strong\u003e 28 cups broccoli florets (about 5 1/4 lb, 8 medium heads) (2380 g)",
+                                "\u003cstrong\u003eAndouille Smoked Sausage (Johnsonville):\u003c/strong\u003e 3 lb andouille smoked sausage, sliced into rounds (about three and a half 14 oz ropes) (1361 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 3 1/2 cups shredded cheddar, added the last 2 minutes (396 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Cheddar Cheese, Shredded, 3 1/2 cups shredded cheddar, added the last 2 minutes: ~$2.12. \u003cstrong\u003eBuy 2 8oz bags: $2.44.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.00. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $2.12 across 14 servings, so roughly $0.15 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $2.44 across 14 servings, roughly $0.17 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a full sheet pan of roasted sausage and broccoli under melted cheddar. The sausage and the cheese carry the flavor and the protein; the broccoli does the job the rice or the potatoes used to, with none of the carbs and none of the cost.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThe sausage is the anchor, so buy the rope.\u003c/strong\u003e You want three pounds of andouille smoked sausage, which is about three and a half of the standard fourteen ounce ropes. A pork rope slices into rounds that brown with real color and give up enough of their own fat to cook the broccoli, so you are not buying oil on top of it. Andouille brings a little Cajun heat; a plain smoked rope works the same way if that is what is on the shelf.",
+                       "\u003cstrong\u003eFresh broccoli, about eight medium heads.\u003c/strong\u003e Roughly five and a quarter pounds, bought as whole heads and cut down into florets at home, about twenty-eight cups all told. It has to be fresh, not frozen: fresh florets roast and caramelize at the edges where frozen ones just weep water and steam. This is the vegetable doing the work a pile of rice or potatoes usually does.",
+                       "\u003cstrong\u003eCheddar is the finish, so buy enough for a good blanket.\u003c/strong\u003e Three and a half cups of shredded cheddar goes on for just the last minute or two, long enough to melt and pull everything together. Shredded off a block or straight from the bag both melt fine here; the sharp stuff pays you back in more flavor.",
+                       "\u003cstrong\u003eSalt and pepper are the only seasoning this needs.\u003c/strong\u003e The sausage and the roasted cheddar carry the flavor, so all you add at the end is salt and pepper to taste. Those are staples you already own, which is part of why a pan this simple lands so cheap."
+                   ],
+    "make_it":  [
+                    "Weigh a large empty mixing bowl and write the number down. Sheet-pan food comes off loose, so this is how you will split the batch into 14 even servings by weight at the end instead of eyeballing every container.",
+                    "Heat the oven to 400 degrees F. Line two large sheet pans with foil or parchment for easy cleanup. Slice the smoked sausage into rounds and cut the broccoli into bite-sized florets.",
+                    "Spread the broccoli and sausage across the two pans in a single layer, splitting them evenly. A 14-serving batch will not fit on one pan, and crowding is what makes broccoli steam instead of roast. Roast for 15 minutes.",
+                    "Pull the pans and flip the sausage and toss the broccoli so the other side colors. Roast another 5 to 10 minutes, until the broccoli is as tender as you like it and the edges have caramelized.",
+                    "Scatter the shredded cheddar over both pans and return them to the oven for 1 to 2 minutes, just until the cheese melts. Season with salt and pepper to taste.",
+                    "Tip everything into the mixing bowl you weighed in Step 1. Weigh it full, subtract the empty weight to get the cooked total, divide by 14, and scoop that exact weight into each container."
+                ],
+    "portion_html":  "Tip all the roasted sausage, broccoli, and melted cheddar into the bowl you weighed in Step 1, then subtract that empty weight to get the cooked total. Divide by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thebestketorecipes.com/sausage-broccoli-cheddar-sheet-pan/\" target=\"_blank\" rel=\"noopener\"\u003ethebestketorecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  2.12,
+    "cost_batch_true":  2.44,
+    "cost_per_serving":  0.15,
+    "cost_per_serving_true":  0.17,
+    "cost_pantry_add":  0,
+    "cost_first_run":  2.44,
+    "scaler":  {
+                   "cost":  "2.44",
+                   "ing":  [
+                               {
+                                   "item":  "Broccoli",
+                                   "canon":  "Broccoli",
+                                   "grams":  2380,
+                                   "buy":  "28 cups broccoli florets (about 5 1/4 lb, 8 medium heads)",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Andouille Smoked Sausage",
+                                   "canon":  "Andouille Smoked Sausage",
+                                   "grams":  1361,
+                                   "buy":  "3 lb andouille smoked sausage, sliced into rounds (about three and a half 14 oz ropes)",
+                                   "bid":  "kielbasa",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  396,
+                                   "buy":  "3 1/2 cups shredded cheddar, added the last 2 minutes",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "2 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Sheet pan smoked sausage, broccoli, and cheddar for meal prep: sliced andouille sausage and fresh broccoli roasted together under melted cheddar with no oil and no starch, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
+                 "keywords":  "sheet pan sausage and broccoli, smoked sausage broccoli cheddar, low carb sheet pan dinner, keto meal prep, high protein dinner",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT40M",
+                 "costPerServing":  0.15,
+                 "recipeIngredient":  [
+                                          "Broccoli, 28 cups broccoli florets (about 5 1/4 lb, 8 medium heads) (2380 g)",
+                                          "Andouille Smoked Sausage, 3 lb andouille smoked sausage, sliced into rounds (about three and a half 14 oz ropes) (1361 g)",
+                                          "Cheddar Cheese, Shredded, 3 1/2 cups shredded cheddar, added the last 2 minutes (396 g)",
+                                          "Salt, 2 tsp (12 g)",
+                                          "Black Pepper, 1 tsp (2 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh a large empty mixing bowl and note the number for portioning later.",
+                               "Heat the oven to 400 degrees F, line two sheet pans, slice the sausage into rounds, and cut the broccoli into florets.",
+                               "Spread the broccoli and sausage across the two pans in a single layer and roast 15 minutes.",
+                               "Flip the sausage and toss the broccoli, then roast another 5 to 10 minutes until the broccoli caramelizes.",
+                               "Scatter the cheddar over both pans and roast 1 to 2 minutes until melted, then season with salt and pepper.",
+                               "Tip everything into the weighed bowl, subtract the empty weight, and divide the total across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Broccoli",
+                                  "grams":  2380
+                              },
+                              {
+                                  "item":  "Andouille Smoked Sausage",
+                                  "grams":  1361
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  396
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              }
+                          ]
+}

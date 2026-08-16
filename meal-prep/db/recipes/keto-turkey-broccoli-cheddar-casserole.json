@@ -1,0 +1,242 @@
+{
+    "name":  "Keto Turkey Broccoli Cheddar Casserole",
+    "slug":  "keto-turkey-broccoli-cheddar-casserole",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.grazewithme.com/keto-ground-turkey-broccoli-casserole-low-carb-recipe-guide/",
+    "source_site":  "grazewithme.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Every gram and buy string transcribed from mapped\\keto-turkey-broccoli-cheddar-casserole.json; no number computed in prose.",
+                         "MACROS transcribed from the mapper\u0027s food-DB recompute at 14 servings and re-verified line by line against food-macros-db: 580.9 cal, 30.0 g protein, 13.1 g carbs, 44.1 g fat per serving, reported here as 581 / 30 / 13 / 44. In band for this run (400 to 650 cal, 35 g carb or less), with 69 cal of headroom to the ceiling and carbs less than half the carb gate. Under-15-grams-of-carbs is the literal bound used in prose.",
+                         "SOURCE MACRO MISMATCH (flag, not fixed): the source page prints 450 cal / 35 g protein / 8 g gross carbs per serving. Our label recompute lands at 581 cal / 30 g protein / 13 g carbs. The source\u0027s 30 g total fat is internally inconsistent with its own ingredient list (1 cup heavy cream alone across 4 servings is ~20 g fat/serving before any cheese, turkey, or oil), and its 35 g protein would need about 1.25 lb of turkey against the 1 lb it lists. Our portions match the source\u0027s printed measures line for line; the gap is the source calculator\u0027s fat and protein arithmetic, not our build. Band holds under either reading.",
+                         "OLIVE OIL grams: mapper booked 94.5 g (7 tbsp at 13.5 g/tbsp); rounded to 94 g integer for the intake since the build stores grams as int. Macro-immaterial (0.5 g oil across 14 servings).",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought: olive oil (make_it 2), onion (2), garlic (2), ground turkey (3), broccoli (4), chicken broth (5), heavy cream (5), cheddar (5 into the sauce, 6 on top). Walked the costed list against the steps both directions. Salt and pepper are the source\u0027s to-taste line (source states NO quantity); booked here at a smallest-defensible to-taste minimum (Salt 2 tsp, Black Pepper 1 tsp per 14-serving batch, both zero/near-zero macro) so step 3\u0027s \u0027season with salt and pepper to taste\u0027 is cook-as-shopped and clears the PHANTOM buy-coverage gate (2026-08-16 repair). Grams are macro-immaterial.",
+                         "BLOCKER FLAG for the repair pass: item \u0027Broccoli\u0027 has NO row in db\\ingredients.json (the only broccoli row there is \u0027Broccoli Florets\u0027 -\u003e frozen-broccoli-florets, the GV frozen bag). The fresh \u0027broccoli\u0027 bid IS on the live feed, so the wiring gap is a single missing map row, flagged by the mapper for the map\u0027s owner. In this build Broccoli emits no bid and prices unpriced/pantry-static, so cost_ps is a FLOOR understated by roughly a batch of fresh broccoli (about 2.3 lb) until the map row (Broccoli -\u003e broccoli, weekly board) is added. Not edited here; ingredient-map/ingredients wiring is the mapper stage\u0027s domain.",
+                         "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount. The cheddar bullet explicitly says block or bag both work (no per-ounce winner claimed) and the cream/broth bullet makes no carton-count promise, both to stay clear of the 2026-08-15 audit failures. Re-walk the bullets against cost_lines once broccoli is wired and the recipe is re-costed.",
+                         "PORTION METHOD: weigh the empty dish first, then weigh full and subtract, divide by 14. Standard house method."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  581,
+                 "protein":  30,
+                 "carbs":  13,
+                 "fat":  44,
+                 "cost_ps":  "1.79"
+             },
+    "intro_html":  "Casserole usually means a can of soup and a sleeve of crushed crackers doing the heavy lifting, and both of those are just cheap carbs wearing a dinner costume. This one throws that playbook out. Lean ground turkey and blanched broccoli get folded into a real cheese sauce built from heavy cream, chicken broth, and sharp cheddar, then the whole thing bakes under one more layer of cheddar until it bubbles. No soup can, no breadcrumbs, no flour. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 15 grams of carbs. That is comfort food that works for your body and your wallet at the same time.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3 1/2 lb (1588 g)",
+                                "\u003cstrong\u003eBroccoli (fresh (USDA)):\u003c/strong\u003e 3 1/2 heads, cut into florets (about 12 1/2 cups) (1050 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 3 1/2 cups shredded (396 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 3 1/2 cups (833 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 7 cloves, minced (21 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 1/2 medium, finely chopped (385 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7 tbsp (94 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 3/4 cups (420 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 3 1/2 lb: ~$15.93. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 3 1/2 cups shredded: ~$2.12. \u003cstrong\u003eBuy 2 8oz bags: $2.44.\u003c/strong\u003e",
+                       "Heavy Cream, 3 1/2 cups: ~$4.12. \u003cstrong\u003eBuy 2 pints: $4.68.\u003c/strong\u003e",
+                       "Garlic, 7 cloves, minced: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Yellow Onion, 3 1/2 medium, finely chopped: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Olive Oil, 7 tbsp: ~$1.02. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1 3/4 cups: ~$0.64. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.00. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.09 across 14 servings, so roughly $1.79 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $28.70 across 14 servings, roughly $2.05 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.23 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.93. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a baked, bubbling casserole that eats like the soup-can version and skips the carbs. The turkey and the cheese carry it; the broccoli does the job the noodles or the cracker topping used to, for a lot less.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThree and a half pounds of ground turkey is the anchor.\u003c/strong\u003e Reach for the 93/7 lean so the casserole stays rich without turning greasy, and buy the big family pack instead of the little trays, because you are paying for turkey, not packaging. This is where most of the protein and most of the money live.",
+                       "\u003cstrong\u003eThree and a half heads of broccoli do the work the pasta used to.\u003c/strong\u003e You want fresh broccoli cut into florets, blanched just until bright green so it keeps its bite through the bake. It carries the bulk and the fiber without carrying the carbs a noodle or a cracker topping would.",
+                       "\u003cstrong\u003eCheddar shows up twice, so buy enough to cover both jobs.\u003c/strong\u003e Half melts into the sauce and half blankets the top, about three and a half cups of shredded cheddar all told. Shredded off a block or straight from the bag both work fine; the sharp stuff just pays you back in more flavor.",
+                       "\u003cstrong\u003eHeavy cream and chicken broth make the sauce, not a soup can.\u003c/strong\u003e The cream brings the richness and the broth keeps it from going heavy, and together they melt the cheddar into something that actually coats the turkey and the broccoli. This is the step that turns a pile of ingredients into a casserole.",
+                       "\u003cstrong\u003eOnion, garlic, and a little olive oil are the backbone.\u003c/strong\u003e The oil softens the onion and garlic before the turkey goes in, and that base is what keeps the whole dish from tasting flat. These are staples you buy once and cook with all week long."
+                   ],
+    "make_it":  [
+                    "Weigh your empty baking dish and write the number down. You will need it at the end to split this into 14 even servings by weight, which is the only honest way to portion one big bake.",
+                    "Heat the olive oil in your largest skillet over medium heat. Add the chopped onion and the minced garlic and cook until the onion turns soft and translucent, about 4 to 5 minutes.",
+                    "Add the ground turkey and break it up with a spoon as it cooks. Brown it until it is no longer pink and cooked all the way through, about 7 to 8 minutes, then season it with salt and pepper to taste and pull the pan off the heat.",
+                    "While the turkey cooks, bring a large pot of water to a boil and blanch the broccoli florets for 2 to 3 minutes, just until they turn bright green and barely tender. Drain them well so they do not water down the sauce.",
+                    "In a saucepan, warm the chicken broth and heavy cream together over medium heat until the mixture just begins to simmer. Stir in half of the shredded cheddar and keep stirring until it melts into a smooth sauce.",
+                    "Combine the browned turkey, the blanched broccoli, and the cheese sauce in your biggest bowl, folding until everything is evenly coated. Spread it level in the baking dish and scatter the rest of the cheddar over the top.",
+                    "Bake at 375 degrees F for 20 to 25 minutes, until the cheese on top is melted and bubbling. Let it rest a few minutes so it firms up, then weigh the dish and portion as below."
+                ],
+    "portion_html":  "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.grazewithme.com/keto-ground-turkey-broccoli-casserole-low-carb-recipe-guide/\" target=\"_blank\" rel=\"noopener\"\u003egrazewithme.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  25.09,
+    "cost_batch_true":  28.7,
+    "cost_per_serving":  1.79,
+    "cost_per_serving_true":  2.05,
+    "cost_pantry_add":  7.23,
+    "cost_first_run":  35.93,
+    "scaler":  {
+                   "cost":  "28.70",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1588,
+                                   "buy":  "3 1/2 lb",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Broccoli",
+                                   "canon":  "Broccoli",
+                                   "grams":  1050,
+                                   "buy":  "3 1/2 heads, cut into florets (about 12 1/2 cups)",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  396,
+                                   "buy":  "3 1/2 cups shredded",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  833,
+                                   "buy":  "3 1/2 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  21,
+                                   "buy":  "7 cloves, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3 1/2 medium, finely chopped",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  94,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  420,
+                                   "buy":  "1 3/4 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "2 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Keto turkey broccoli cheddar casserole for meal prep: lean ground turkey and fresh broccoli baked in a real cheddar cream sauce with no soup can and no flour, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
+                 "keywords":  "turkey broccoli casserole, keto casserole, low carb casserole, cheddar broccoli casserole, high protein meal prep",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT40M",
+                 "costPerServing":  1.79,
+                 "recipeIngredient":  [
+                                          "93/7 Ground Turkey, 3 1/2 lb (1588 g)",
+                                          "Broccoli, 3 1/2 heads, cut into florets (about 12 1/2 cups) (1050 g)",
+                                          "Cheddar Cheese, Shredded, 3 1/2 cups shredded (396 g)",
+                                          "Heavy Cream, 3 1/2 cups (833 g)",
+                                          "Garlic, 7 cloves, minced (21 g)",
+                                          "Yellow Onion, 3 1/2 medium, finely chopped (385 g)",
+                                          "Olive Oil, 7 tbsp (94 g)",
+                                          "Chicken Broth, 1 3/4 cups (420 g)",
+                                          "Salt, 2 tsp (12 g)",
+                                          "Black Pepper, 1 tsp (2 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh the empty baking dish and note the number for portioning later.",
+                               "Saute the chopped onion and minced garlic in the olive oil until soft.",
+                               "Brown the ground turkey, season with salt and pepper, and pull it off the heat.",
+                               "Blanch the broccoli florets for 2 to 3 minutes and drain them well.",
+                               "Warm the chicken broth and heavy cream, then melt in half the cheddar to make the sauce.",
+                               "Fold the turkey, broccoli, and sauce together, spread in the dish, and top with the rest of the cheddar.",
+                               "Bake at 375 degrees F for 20 to 25 minutes until bubbling, rest, then weigh the dish and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Broccoli",
+                                  "grams":  1050
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  396
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  833
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  94
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              }
+                          ]
+}

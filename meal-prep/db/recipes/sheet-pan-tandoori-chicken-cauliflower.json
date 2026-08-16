@@ -1,0 +1,223 @@
+{
+    "name":  "Sheet Pan Tandoori Chicken and Cauliflower",
+    "slug":  "sheet-pan-tandoori-chicken-cauliflower",
+    "cuisine":  "Indian",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://nomnompaleo.com/sheet-pan-tandoori-chicken",
+    "source_site":  "nomnompaleo.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Grams and buy strings transcribed from the mapped file; no number computed in prose.",
+                         "Avocado oil -\u003e olive oil is source-sanctioned: the source line prints \u00271 tablespoon avocado oil or fat of choice\u0027. The avocado-oil commodity is capture-tier (no priced board cell today); olive oil is priced 7 of 7 and is a sanctioned fat of choice. Full text preserved in the mapped file.",
+                         "Coconut milk is the primary of the source\u0027s \u0027coconut milk or plain coconut yogurt\u0027 line, matching the source\u0027s own nutrition basis. Full-fat canned, not the dairy-milk board id.",
+                         "INGREDIENT-USE CHECK done both directions: all nine bought lines are used by a step (chicken tossed in half the marinade and roasted, cauliflower and onion tossed in the other half and roasted, coconut milk + tandoori + salt + lemon juice whisked into the marinade, olive oil brushed on the pans, cilantro sprinkled at the end). No step names anything unbought.",
+                         "OPTIONAL LEMON WEDGES DROPPED from the build on purpose, disclosed loudly: the source\u0027s optional serve-with \u0027lemon cut into wedges\u0027 has no food-macros-db row under the mapped item name \u0027Lemon (wedges)\u0027 (I cannot add a food-DB row) and no db\\ingredients.json map row, so it can be neither macro-verified nor costed. A \u0027lemons\u0027 board id exists at $0.4533/each, so the fix is a food-DB row plus an ingredients.json row mapping to bid \u0027lemons\u0027; flagged for the repair pass. It is an optional garnish, so dropping it does not change the dish as cooked.",
+                         "BAND is AT-FLOOR and called out loud: the honest DB recompute lands at 401 cal per serving against the run\u0027s 400 floor, ~1 cal of headroom, on cauliflower florets booked at 540 g per small head (the ~2 lb-head yield the source\u0027s own bound implies). Genuinely smaller heads move the serving under the floor. Carbs 11 g are well under the 35 g ceiling with room to spare. Numbers transcribed from the built spec, not adjusted to fit.",
+                         "COST IS UNDERSTATED by two unpriced lines and this is flagged, not hidden: Cauliflower has no db\\ingredients.json row (the board carries a \u0027cauliflower\u0027 id at $1.98/each but the item-\u003ebid map row is missing, a systemic gap this batch already ships, e.g. southwest-ground-turkey-cauliflower-rice), and Tandoori Masala has no commodity at all (registrar proposal tandoori-masala PENDING). Both drop out of the costed row as NO PRICE BASIS. The rendered cost covers the chicken, coconut milk, onion, and the pantry staples only."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  401,
+                 "protein":  37,
+                 "carbs":  11,
+                 "fat":  22,
+                 "cost_ps":  "1.60"
+             },
+    "intro_html":  "Tandoori chicken is one of those dinners that tastes like somebody fussed over it, and it never did. The spice blend does all the work. You whisk it into coconut milk with a little salt and lemon, coat the chicken and a pile of cauliflower, and let one hot oven turn it into dinner. No frying, no babysitting, just a sheet pan and a timer. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 15 grams of carbs. That is a warm, spiced, weeknight-easy dinner that portions straight into your containers for the week.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 5 1/4 lb boneless skinless chicken thighs (2381 g)",
+                                "\u003cstrong\u003eCauliflower (generic (USDA)):\u003c/strong\u003e 3 1/2 small heads (2 lb or less each), cut into florets (1890 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 3 1/2 cups full-fat coconut milk (about two 13.5 oz cans plus a third) (840 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 3 1/2 small red onions, cut into thin wedges (245 g)",
+                                "\u003cstrong\u003eTandoori Masala (Shan (USDA branded)):\u003c/strong\u003e 7 tbsp tandoori spice mix (no salt added) (56 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 3 1/2 tbsp lemon juice (53 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 1/2 tbsp olive oil, for the pans (47 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 3 1/2 tbsp Diamond Crystal kosher salt (or 5 1/4 tsp fine salt) (32 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 3/4 cup plus 2 tbsp minced fresh cilantro (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 5 1/4 lb boneless skinless chicken thighs: ~$16.90. \u003cstrong\u003eBuy 6 lbs: $19.32.\u003c/strong\u003e",
+                       "Coconut Milk, 3 1/2 cups full-fat coconut milk (about two 13.5 oz cans plus a third): ~$3.86. \u003cstrong\u003eBuy 3 13.5oz cans: $5.51.\u003c/strong\u003e",
+                       "Red Onion, 3 1/2 small red onions, cut into thin wedges: ~$0.72. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
+                       "Lemon Juice, 3 1/2 tbsp lemon juice: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 3 1/2 tbsp olive oil, for the pans: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Cilantro, 3/4 cup plus 2 tbsp minced fresh cilantro: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Pantry seasonings (tandoori masala, salt): ~$0.04. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $22.38 across 14 servings, so roughly $1.60 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.74 across 14 servings, roughly $1.98 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.01 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.75. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a spiced, roasted sheet pan dinner that eats like takeout and preps in one pass. The chicken does the heavy lifting; the cauliflower and one jar of spice stretch it into 14 real dinners.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eChicken thighs are the anchor, so buy the boneless skinless.\u003c/strong\u003e You want about five and a quarter pounds, which is a couple of the big family packs from the meat case. Thighs stay juicy through a hot roast in a way breasts do not, and they take the tandoori marinade beautifully.",
+                       "\u003cstrong\u003eBuy whole heads of cauliflower and cut them down yourself.\u003c/strong\u003e Three or four small heads, two pounds or less each, cut into florets at home. Whole heads give the marinade the most surface to cling to, and cutting your own florets is a two-minute job with a knife.",
+                       "\u003cstrong\u003eTandoori masala is the whole identity of this dish.\u003c/strong\u003e Look in the international aisle for a jar of tandoori spice blend, the no-salt-added kind if the shelf has it, since we salt the marinade ourselves. It is the one ingredient you cannot swap out and still call this tandoori.",
+                       "\u003cstrong\u003eFull-fat coconut milk carries the marinade.\u003c/strong\u003e The batch uses three and a half cups, so pick up three of the standard 13.5 ounce cans and you will have it covered with a little left over. Full-fat is the one you want here for body; the light cans thin the marinade out.",
+                       "\u003cstrong\u003eSalt, lemon juice, and olive oil are pantry backbone.\u003c/strong\u003e A few tablespoons of each is all the batch asks, so a single bottle or box of each does this dinner and plenty more. Store brand does the same job as the name on the label."
+                   ],
+    "make_it":  [
+                    "Weigh your empty containers (or the storage dish you will pack into) and write the number down. You will use it at the end to split this into 14 even servings by weight, which beats eyeballing every container.",
+                    "Heat the oven to 450 degrees, or 425 convection, with a rack in the middle. Cut the cauliflower into florets and the red onions into thin wedges.",
+                    "Whisk the coconut milk, tandoori masala, salt, and lemon juice together in a large measuring cup or bowl until it is an even, rusty-orange marinade.",
+                    "Brush your sheet pans with the olive oil. This is a big batch, so plan on two or three rimmed pans; crowding one pan steams the food instead of roasting it.",
+                    "Put the cauliflower and onions in a large bowl, pour in about half the marinade, and toss to coat. Shake off the excess and spread them out on the oiled pans.",
+                    "Add the chicken thighs to the same bowl, pour in the rest of the marinade, and toss to coat. Lay the thighs in a single layer on the pans alongside the vegetables.",
+                    "Roast 25 to 35 minutes, flipping the cauliflower and rotating the pans about halfway through, until the cauliflower is tender and browned and the chicken reads 165 degrees at the thickest part of a thigh.",
+                    "Sprinkle the minced cilantro over everything, then weigh and portion as below."
+                ],
+    "portion_html":  "Set your container on the scale and subtract the empty weight you wrote down in Step 1 to get the cooked total across all the pans. Divide that number by 14 and pack that exact weight into each container, giving each one some chicken and some cauliflower. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://nomnompaleo.com/sheet-pan-tandoori-chicken\" target=\"_blank\" rel=\"noopener\"\u003enomnompaleo.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  22.38,
+    "cost_batch_true":  27.74,
+    "cost_per_serving":  1.6,
+    "cost_per_serving_true":  1.98,
+    "cost_pantry_add":  10.01,
+    "cost_first_run":  37.75,
+    "scaler":  {
+                   "cost":  "27.74",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  2381,
+                                   "buy":  "5 1/4 lb boneless skinless chicken thighs",
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cauliflower",
+                                   "canon":  "Cauliflower",
+                                   "grams":  1890,
+                                   "buy":  "3 1/2 small heads (2 lb or less each), cut into florets"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "canon":  "Coconut Milk",
+                                   "grams":  840,
+                                   "buy":  "3 1/2 cups full-fat coconut milk (about two 13.5 oz cans plus a third)",
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  245,
+                                   "buy":  "3 1/2 small red onions, cut into thin wedges",
+                                   "bid":  "red-onion",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Tandoori Masala",
+                                   "canon":  "Tandoori Masala",
+                                   "grams":  56,
+                                   "buy":  "7 tbsp tandoori spice mix (no salt added)"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  53,
+                                   "buy":  "3 1/2 tbsp lemon juice",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3 1/2 tbsp olive oil, for the pans",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  32,
+                                   "buy":  "3 1/2 tbsp Diamond Crystal kosher salt (or 5 1/4 tsp fine salt)",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  14,
+                                   "buy":  "3/4 cup plus 2 tbsp minced fresh cilantro",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Sheet pan tandoori chicken and cauliflower for meal prep: chicken thighs and cauliflower roasted in a coconut milk tandoori marinade, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
+                 "keywords":  "tandoori chicken, sheet pan chicken, low carb meal prep, high protein dinner, cauliflower dinner, keto tandoori chicken",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  1.6,
+                 "recipeIngredient":  [
+                                          "Boneless Skinless Chicken Thigh, 5 1/4 lb boneless skinless chicken thighs (2381 g)",
+                                          "Cauliflower, 3 1/2 small heads (2 lb or less each), cut into florets (1890 g)",
+                                          "Coconut Milk, 3 1/2 cups full-fat coconut milk (about two 13.5 oz cans plus a third) (840 g)",
+                                          "Red Onion, 3 1/2 small red onions, cut into thin wedges (245 g)",
+                                          "Tandoori Masala, 7 tbsp tandoori spice mix (no salt added) (56 g)",
+                                          "Lemon Juice, 3 1/2 tbsp lemon juice (53 g)",
+                                          "Olive Oil, 3 1/2 tbsp olive oil, for the pans (47 g)",
+                                          "Salt, 3 1/2 tbsp Diamond Crystal kosher salt (or 5 1/4 tsp fine salt) (32 g)",
+                                          "Fresh Cilantro, 3/4 cup plus 2 tbsp minced fresh cilantro (14 g)"
+                                      ],
+                 "steps":  [
+                               "Heat the oven to 450 degrees, cut the cauliflower into florets, and cut the red onions into thin wedges.",
+                               "Whisk the coconut milk, tandoori masala, salt, and lemon juice into an even marinade.",
+                               "Brush two or three sheet pans with olive oil.",
+                               "Toss the cauliflower and onions in half the marinade and spread them on the pans.",
+                               "Toss the chicken thighs in the rest of the marinade and lay them on the pans in a single layer.",
+                               "Roast 25 to 35 minutes, flipping the cauliflower and rotating the pans halfway, until the chicken reads 165 degrees.",
+                               "Sprinkle with cilantro, then weigh the total and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  2381
+                              },
+                              {
+                                  "item":  "Cauliflower",
+                                  "grams":  1890
+                              },
+                              {
+                                  "item":  "Coconut Milk",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  245
+                              },
+                              {
+                                  "item":  "Tandoori Masala",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  53
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  14
+                              }
+                          ]
+}

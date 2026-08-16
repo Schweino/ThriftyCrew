@@ -1,5 +1,5 @@
 ﻿{
-    "specs":  544,
+    "specs":  568,
     "findings":  [
                      {
                          "run":  "live",
@@ -21,15 +21,27 @@
                      },
                      {
                          "run":  "live",
-                         "slug":  "chili-lime-chicken-burrito",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cherry tomatoes\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "cornbread-topped-turkey-casserole",
                          "cls":  "UNMEASURABLE-QTY",
                          "why":  "a line asks for \u00270.11 oz\u0027, which no kitchen measure shows: Poultry Seasoning (generic (USDA)): 0.11 oz (3 g)"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "french-chicken-fricassee",
+                         "cls":  "PHANTOM",
+                         "why":  "a step says \u0027hot sauce\u0027 but Hot Sauce is in no ingredient line - it cannot be made as shopped"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "hatch-green-chile-chicken-casserole",
+                         "cls":  "PHANTOM",
+                         "why":  "a step says \u0027green chile sauce\u0027 but Green Chile Sauce is in no ingredient line - it cannot be made as shopped"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "hatch-green-chile-chicken-casserole",
+                         "cls":  "PHANTOM",
+                         "why":  "a step says \u0027salt\u0027 but Salt is in no ingredient line - it cannot be made as shopped"
                      },
                      {
                          "run":  "live",
@@ -72,6 +84,12 @@
                          "slug":  "pozole-rojo-pork-hominy-bowls",
                          "cls":  "UNMEASURABLE-QTY",
                          "why":  "a line asks for \u00270.08 cups\u0027, which no kitchen measure shows: Dried Arbol Chiles (generic (USDA)): 0.08 cups (2 g)"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-boneless-beef-short-ribs",
+                         "cls":  "PHANTOM",
+                         "why":  "a step says \u0027salt\u0027 but Salt is in no ingredient line - it cannot be made as shopped"
                      },
                      {
                          "run":  "live",
@@ -137,6 +155,6 @@
     "generated":  "see git",
     "by_class":  {
                      "UNMEASURABLE-QTY":  21,
-                     "UNUSED":  1
+                     "PHANTOM":  4
                  }
 }

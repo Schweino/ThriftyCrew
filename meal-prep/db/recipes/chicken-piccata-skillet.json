@@ -1,0 +1,272 @@
+{
+    "name":  "Chicken Piccata Skillet",
+    "slug":  "chicken-piccata-skillet",
+    "cuisine":  "Italian",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.cookedbyjulie.com/low-carb-chicken-piccata/",
+    "source_site":  "cookedbyjulie.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 2, rebuilt to 14 at the mapper\u0027s 7x scale. Every gram and buy string transcribed from mapped\\chicken-piccata-skillet.json; no number computed in prose.",
+                         "MACROS transcribed from the mapper\u0027s food-macros-db recompute at 14 servings and independently re-verified by the writer with the same formula the build guard uses: 467.5 cal, 55.6 g protein, 5.4 g carbs, 24.9 g fat per serving (rounds to 468 / 56 / 5 / 25). In band for this run: 468 cal inside [400, 650] with 182 cal of ceiling headroom, and about 5 g carbs well under the 35 g gate. The source\u0027s own published 465 cal / 60 g protein / 9 g carbs / 19 g fat tracks calories within 0.5 percent; our protein books 7.3 percent lower on the house 200 g each-weight, inside the 15 percent instrument. Fat runs high and carbs low against the source label, but the source label is internally loose (its printed macros sum to about 447 cal against its printed 465) and protein is the instrument the mapper arbitrated on.",
+                         "RULED FRYING-OIL ADDITION, carried from the mapper: the source\u0027s fry step (step 4) lists no fat, and its 1 tbsp butter is consumed later by the sauce. Adding 1 tbsp olive oil per 2-serving source batch (7 tbsp at 14 servings) reconciles the recompute to the source\u0027s published 465 cal within 0.5 percent and is the physical minimum for a shallow fry. Documented as an addition, not silently blended. WITHOUT the oil the recipe computes 408 cal, only 8 above the 400 floor, so the addition is what holds the floor margin; if a later stage strips it the band claim must be rechecked.",
+                         "PARSLEY LEFT OUT ON PURPOSE: source step 10 stirs in parsley, but parsley appears in NO source ingredient line, so nobody buys it. Per the rails a step may not use an unbought ingredient, so no step and no shop_smart bullet names parsley. It is a garnish with zero macro stakes; leaving it out ships a recipe that can be cooked exactly as shopped.",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought: chicken (steps 2,3,4,8), paprika (2), dried oregano (2), salt (2), black pepper (2), parmesan (3), olive oil (4), butter (5), garlic (5), chicken stock (6), lemon juice (6), capers (7). Walked the costed list against the steps both directions.",
+                         "SHOP_SMART makes NO leftover, per-ounce, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount and package form. Re-walk the bullets against cost_lines once the recipe costs.",
+                         "PARMESAN is a heavy line for a coating: 392 g (3 1/2 cups grated) is about 28 g per serving, but that is exactly the source ratio (1/2 cup for 2 servings) transcribed to 14, and it is the crust that makes this dish, not a garnish. Flagged in the run report as the second cost driver behind the chicken; transcribed faithfully, not adjusted.",
+                         "LEMON JUICE books as juice, not whole lemons: the pot receives the juice at step 8 of the source (add stock and lemon juice), so the line is Lemon Juice at 164.5 g. Buy string still reads \u0027juice of 3 1/2 lemons\u0027 so the shopper buys whole lemons and squeezes them."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  468,
+                 "protein":  56,
+                 "carbs":  5,
+                 "fat":  25,
+                 "cost_ps":  "1.86"
+             },
+    "intro_html":  "Chicken piccata sounds like a restaurant order, but it is really just seared chicken finished in a bright lemon and caper pan sauce. No long braise, no special cut, no equipment you do not already own. You season the cutlets, press them in grated parmesan, fry them crisp, then build the sauce right in the same pan and let the two finish together. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 10 grams of carbs. That is a tangy, restaurant-style chicken dinner that still lands inside a low-carb week.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 14 boneless chicken breasts (about 6.2 lb) (2800 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 3 1/2 tsp (8 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 2 tbsp plus 1 tsp dried oregano (7 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 3 1/2 cups grated parmesan (for coating) (392 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 14 cloves garlic, minced (42 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 7 cups chicken stock (1680 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp butter (98 g)",
+                                "\u003cstrong\u003eCapers (generic (USDA)):\u003c/strong\u003e 7 tbsp capers, drained (56 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e juice of 3 1/2 lemons (about 2/3 cup) (164 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7 tbsp olive oil, for frying (94 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e salt, to taste (about 1 tsp) (6 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e black pepper, to taste (about 1 tsp) (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 14 boneless chicken breasts (about 6.2 lb): ~$13.77. \u003cstrong\u003eBuy 7 lbs: $15.61.\u003c/strong\u003e",
+                       "Parmesan Cheese, 3 1/2 cups grated parmesan (for coating): ~$4.74. \u003cstrong\u003eBuy 2 8oz tubs: $5.48.\u003c/strong\u003e",
+                       "Garlic, 14 cloves garlic, minced: ~$0.57. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Chicken Broth, 7 cups chicken stock: ~$2.56. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Butter, 7 tbsp butter: ~$0.64. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Capers, 7 tbsp capers, drained: ~$1.94. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Lemon Juice, juice of 3 1/2 lemons (about 2/3 cup): ~$0.39. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 7 tbsp olive oil, for frying: ~$1.02. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (paprika, dried oregano, salt, black pepper): ~$0.42. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.05 across 14 servings, so roughly $1.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $30.98 across 14 servings, roughly $2.21 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.03 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.01. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a chicken piccata that tastes like it came off a restaurant menu. The chicken and the parmesan carry it; the lemon and capers just make it taste expensive.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eFourteen boneless chicken breasts are the backbone.\u003c/strong\u003e That is about six and a quarter pounds, one breast per serving, and it is where most of the money and all of the protein live. Reach for the big family pack of boneless skinless breasts instead of the small trays so you are paying for chicken, not packaging, and slice any thick breasts flat yourself so they cook through fast.",
+                       "\u003cstrong\u003eGrated parmesan is the coating, not a garnish.\u003c/strong\u003e You need about three and a half cups to press onto both sides of the cutlets, and that crust is what gives this dish its edge. Buy the grated parmesan so it presses on and crisps up in the pan.",
+                       "\u003cstrong\u003eLemon and capers are the piccata signature.\u003c/strong\u003e Grab three or four lemons for the juice and a jar of capers. That sharp, briny pair is the whole point of piccata, and there is no swapping around it.",
+                       "\u003cstrong\u003eChicken stock is the base of the sauce.\u003c/strong\u003e You need about seven cups to build the pan sauce after the chicken comes out. Regular boxed chicken stock or broth is exactly right here.",
+                       "\u003cstrong\u003eButter, olive oil, garlic, and two pantry spices round it out.\u003c/strong\u003e Olive oil to fry in, a little butter and some garlic to start the sauce, and paprika and oregano for the rub. These are backbone staples you most likely already have, so they barely move the cart."
+                   ],
+    "make_it":  [
+                    "Weigh your empty skillet and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+                    "Season the chicken cutlets on both sides with the paprika, oregano, and black pepper, then salt them on one side.",
+                    "Press the cutlets on both sides into the grated parmesan so it coats them evenly.",
+                    "Heat the olive oil in a large skillet over medium-high heat. Working in batches so the pan is not crowded, fry the cutlets about 3 to 4 minutes a side until the parmesan is golden and the chicken is cooked through. Move the chicken to a plate and set it aside.",
+                    "Add the butter to the same pan, stir in the minced garlic, and cook about 10 seconds until fragrant.",
+                    "Pour in the chicken stock and the lemon juice, raise the heat to high, and let the sauce cook down and thicken.",
+                    "Stir in the drained capers and taste the sauce for salt and pepper.",
+                    "Return the chicken and any collected juices to the pan and cook about a minute more, turning each piece to coat it in the sauce.",
+                    "Weigh the full pan and subtract the empty weight from Step 1 to get the cooked total. Divide by 14 and give each container one cutlet and an even share of the lemon-caper sauce, aiming for that weight."
+                ],
+    "portion_html":  "Set the full pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Each container gets one parmesan-crusted cutlet and an even spoonful of the lemon-caper sauce, landing near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.cookedbyjulie.com/low-carb-chicken-piccata/\" target=\"_blank\" rel=\"noopener\"\u003ecookedbyjulie.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  26.05,
+    "cost_batch_true":  30.98,
+    "cost_per_serving":  1.86,
+    "cost_per_serving_true":  2.21,
+    "cost_pantry_add":  15.03,
+    "cost_first_run":  46.01,
+    "scaler":  {
+                   "cost":  "30.98",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  2800,
+                                   "buy":  "14 boneless chicken breasts (about 6.2 lb)",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  8,
+                                   "buy":  "3 1/2 tsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  7,
+                                   "buy":  "2 tbsp plus 1 tsp dried oregano",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  392,
+                                   "buy":  "3 1/2 cups grated parmesan (for coating)",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  42,
+                                   "buy":  "14 cloves garlic, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1680,
+                                   "buy":  "7 cups chicken stock",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  98,
+                                   "buy":  "7 tbsp butter",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Capers",
+                                   "canon":  "Capers",
+                                   "grams":  56,
+                                   "buy":  "7 tbsp capers, drained",
+                                   "bid":  "capers",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  164,
+                                   "buy":  "juice of 3 1/2 lemons (about 2/3 cup)",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  94,
+                                   "buy":  "7 tbsp olive oil, for frying",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  6,
+                                   "buy":  "salt, to taste (about 1 tsp)",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "black pepper, to taste (about 1 tsp)",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken piccata for meal prep: parmesan-crusted chicken cutlets finished in a bright lemon and caper pan sauce, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 10 grams of carbs.",
+                 "keywords":  "chicken piccata, low carb chicken piccata, low carb meal prep, high protein chicken dinner, lemon caper chicken skillet",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT30M",
+                 "costPerServing":  1.86,
+                 "recipeIngredient":  [
+                                          "Boneless Skinless Chicken Breast, 14 boneless chicken breasts (about 6.2 lb) (2800 g)",
+                                          "Paprika, 3 1/2 tsp (8 g)",
+                                          "Dried Oregano, 2 tbsp plus 1 tsp dried oregano (7 g)",
+                                          "Parmesan Cheese, 3 1/2 cups grated parmesan (for coating) (392 g)",
+                                          "Garlic, 14 cloves garlic, minced (42 g)",
+                                          "Chicken Broth, 7 cups chicken stock (1680 g)",
+                                          "Butter, 7 tbsp butter (98 g)",
+                                          "Capers, 7 tbsp capers, drained (56 g)",
+                                          "Lemon Juice, juice of 3 1/2 lemons (about 2/3 cup) (164 g)",
+                                          "Olive Oil, 7 tbsp olive oil, for frying (94 g)",
+                                          "Salt, salt, to taste (about 1 tsp) (6 g)",
+                                          "Black Pepper, black pepper, to taste (about 1 tsp) (2 g)"
+                                      ],
+                 "steps":  [
+                               "Season the chicken cutlets with the paprika, oregano, black pepper, and salt.",
+                               "Press the cutlets into the grated parmesan to coat both sides.",
+                               "Fry the cutlets in the olive oil until the parmesan is golden and the chicken is cooked through, then set them aside.",
+                               "Melt the butter in the pan, stir in the garlic, then add the chicken stock and lemon juice and let the sauce thicken.",
+                               "Stir in the capers, return the chicken, and coat it in the sauce.",
+                               "Weigh the pan, subtract the empty weight, and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  2800
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  392
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1680
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Capers",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  164
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  94
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              }
+                          ]
+}
