@@ -1,0 +1,31 @@
+{
+    "slug":  "cheese-smothered-pork-chops",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T21:00:55",
+    "updated":  "2026-08-15T21:00:56",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Pool dupe of accepted creamy-garlic-herb-wine-pork-chops: same protein (pork chops), same starch (none/low-carb), same smothered/creamy method - 3 of 4 identity axes; only sauce sub-type differs (mayo-cheddar bake vs garlic-herb-wine cream). Generic American, widens nothing; keep the stronger wine plate, not two smothered pork chops.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T21:00:55",
+                        "by":  "sourcer",
+                        "detail":  "https://delightfullylowcarb.com/cheese-smothered-pork-chops/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T21:00:56",
+                        "by":  "selector",
+                        "detail":  "Pool dupe of accepted creamy-garlic-herb-wine-pork-chops: same protein (pork chops), same starch (none/low-carb), same smothered/creamy method - 3 of 4 identity axes; only sauce sub-type differs (mayo-cheddar bake vs garlic-herb-wine cream). Generic American, widens nothing; keep the stronger wine plate, not two smothered pork chops."
+                    }
+                ]
+}

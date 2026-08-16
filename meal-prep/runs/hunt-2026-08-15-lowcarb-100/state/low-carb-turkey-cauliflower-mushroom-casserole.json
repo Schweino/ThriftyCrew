@@ -1,0 +1,103 @@
+{
+    "slug":  "low-carb-turkey-cauliflower-mushroom-casserole",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "qa-passed",
+    "wave":  2,
+    "created":  "2026-08-16T01:26:17",
+    "updated":  "2026-08-16T12:10:51",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:26:17",
+                        "by":  "sourcer",
+                        "detail":  "https://kalynskitchen.com/low-carb-turkey-casserole-with-cauliflower-rice/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T01:26:17",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T01:27:55",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T06:02:53",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T06:02:53",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T06:19:10",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T06:19:10",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T06:22:58",
+                        "by":  "mapper",
+                        "detail":  "source-QA fail repair: both seasoning lines scaled 3.5x instead of 1.75x; rescaling thyme + poultry seasoning in mapped + intake, then rebuild"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T06:23:37",
+                        "by":  "mapper",
+                        "detail":  "repair rescale only; no new terms, dried-thyme and poultry-seasoning already priced"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T06:24:06",
+                        "by":  "mapper",
+                        "detail":  "spec rebuilt via build-v2-spec.ps1 -RunCost with corrected 1.75x seasoning lines (thyme 2 5/8 tsp 3 g, poultry seasoning 2 5/8 tsp 4 g)"
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T06:24:06",
+                        "by":  "mapper",
+                        "detail":  "repair cycle complete; ready for source-QA re-verify (second failure is terminal)"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-16T06:25:14",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T11:40:51",
+                        "by":  "wave-close",
+                        "detail":  "wave 2"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-16T12:10:51",
+                        "by":  "auditor",
+                        "detail":  "audit-clean, trimmed out of blocked wave 2"
+                    }
+                ]
+}

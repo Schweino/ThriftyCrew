@@ -1,0 +1,31 @@
+{
+    "slug":  "senegalese-poulet-yassa",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T20:30:32",
+    "updated":  "2026-08-15T20:30:32",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Catalog dupe of senegalese-chicken-yassa: poulet yassa IS chicken yassa; identical lemon-onion-dijon braised chicken thigh.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:30:32",
+                        "by":  "sourcer",
+                        "detail":  "https://lowcarbafrica.com/poulet-yassa-senegalese-chicken-recipe/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T20:30:32",
+                        "by":  "selector",
+                        "detail":  "Catalog dupe of senegalese-chicken-yassa: poulet yassa IS chicken yassa; identical lemon-onion-dijon braised chicken thigh."
+                    }
+                ]
+}

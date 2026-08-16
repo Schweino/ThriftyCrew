@@ -1,0 +1,31 @@
+{
+    "slug":  "spinach-artichoke-chicken-bake",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-16T01:35:18",
+    "updated":  "2026-08-16T01:35:18",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Cross-lane dupe of accepted spinach-artichoke-chicken-casserole (adjudicator did not check the accepted list). Same protein/flavor-family/method/low-carb 4-of-4; source page is literally the same spinach-artichoke-chicken-casserole recipe.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:35:18",
+                        "by":  "sourcer",
+                        "detail":  "https://www.wholesomelicious.com/spinach-artichoke-chicken-casserole/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-16T01:35:18",
+                        "by":  "selector",
+                        "detail":  "Cross-lane dupe of accepted spinach-artichoke-chicken-casserole (adjudicator did not check the accepted list). Same protein/flavor-family/method/low-carb 4-of-4; source page is literally the same spinach-artichoke-chicken-casserole recipe."
+                    }
+                ]
+}

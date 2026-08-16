@@ -1,0 +1,73 @@
+{
+    "slug":  "chicken-piccata-skillet",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "waved",
+    "wave":  1,
+    "created":  "2026-08-16T01:05:37",
+    "updated":  "2026-08-16T06:07:43",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:05:37",
+                        "by":  "sourcer",
+                        "detail":  "https://www.cookedbyjulie.com/low-carb-chicken-piccata/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T01:05:37",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T01:08:41",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T01:36:16",
+                        "by":  "mapper",
+                        "detail":  "mapped 12 lines incl ruled frying-oil addition; all terms answered from disk; 467.5 cal/serv, protein -7.3% vs source, band PASS"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T01:36:17",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T05:44:35",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T05:44:36",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-16T05:47:49",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T06:07:43",
+                        "by":  "wave-close",
+                        "detail":  "wave 1"
+                    }
+                ]
+}

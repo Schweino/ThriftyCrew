@@ -1,0 +1,31 @@
+{
+    "slug":  "creamy-garlic-parmesan-mushroom-chicken-skillet",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T20:44:01",
+    "updated":  "2026-08-15T20:44:01",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Dupe of accepted creamy-tuscan-chicken-skillet family: seared chicken breast in garlic-parmesan cream skillet, no starch; mushroom/onion adds no distinct plate. Re-anchored from adjudicator ref creamy-garlic-parmesan-chicken-skillet (not in accepted-slugs) to the accepted tuscan skillet.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:44:01",
+                        "by":  "sourcer",
+                        "detail":  "https://example.com/creamy-garlic-parmesan-mushroom-chicken"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T20:44:01",
+                        "by":  "selector",
+                        "detail":  "Dupe of accepted creamy-tuscan-chicken-skillet family: seared chicken breast in garlic-parmesan cream skillet, no starch; mushroom/onion adds no distinct plate. Re-anchored from adjudicator ref creamy-garlic-parmesan-chicken-skillet (not in accepted-slugs) to the accepted tuscan skillet."
+                    }
+                ]
+}

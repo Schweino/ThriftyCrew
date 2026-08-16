@@ -1,0 +1,67 @@
+{
+    "slug":  "keto-crustless-pizza-casserole",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-qa",
+    "wave":  null,
+    "created":  "2026-08-16T01:35:04",
+    "updated":  "2026-08-16T06:14:38",
+    "terms":  [
+
+              ],
+    "reject_reason":  "macro gate: 391 cal / 9g carbs per serving",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:35:04",
+                        "by":  "sourcer",
+                        "detail":  "https://drdavinahseats.com/low-carb-keto-crustless-pizza-casserole-recipe"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T01:35:04",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T01:36:25",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T06:02:16",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T06:02:23",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T06:13:54",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T06:13:54",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "rejected-qa",
+                        "at":  "2026-08-16T06:14:38",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate: 391 cal / 9g carbs per serving"
+                    }
+                ]
+}

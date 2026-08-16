@@ -1,0 +1,31 @@
+{
+    "slug":  "slow-cooker-beef-barbacoa",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-16T01:23:47",
+    "updated":  "2026-08-16T01:23:47",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Duplicates catalog slow-cooker-barbacoa-bowl: identical chuck-roast chipotle-adobo/lime/ACV slow-cooker barbacoa braise, 3-of-4 axes match; dropping the rice/beans is a low-carb re-plating, not a distinct dinner. Agrees with adjudicator DUPE verdict.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:23:47",
+                        "by":  "sourcer",
+                        "detail":  "https://downshiftology.com/recipes/barbacoa/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-16T01:23:47",
+                        "by":  "selector",
+                        "detail":  "Duplicates catalog slow-cooker-barbacoa-bowl: identical chuck-roast chipotle-adobo/lime/ACV slow-cooker barbacoa braise, 3-of-4 axes match; dropping the rice/beans is a low-carb re-plating, not a distinct dinner. Agrees with adjudicator DUPE verdict."
+                    }
+                ]
+}

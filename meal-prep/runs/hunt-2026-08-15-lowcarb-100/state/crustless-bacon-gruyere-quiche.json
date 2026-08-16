@@ -1,0 +1,82 @@
+{
+    "slug":  "crustless-bacon-gruyere-quiche",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-qa",
+    "wave":  null,
+    "created":  "2026-08-15T20:32:42",
+    "updated":  "2026-08-15T20:56:47",
+    "terms":  [
+                  {
+                      "term":  "gruyere",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  "macro gate: 369 cal / 2g carbs per serving",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:32:42",
+                        "by":  "sourcer",
+                        "detail":  "https://reluctantentertainer.com/crustless-bacon-gruyere-cheese-quiche/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-15T20:32:42",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-15T20:35:21",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-15T20:42:40",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-15T20:42:45",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-15T20:43:29",
+                        "by":  "derive",
+                        "detail":  "waiting on: gruyere"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-15T20:46:55",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-15T20:55:49",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-15T20:55:49",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "rejected-qa",
+                        "at":  "2026-08-15T20:56:47",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate: 369 cal / 2g carbs per serving"
+                    }
+                ]
+}

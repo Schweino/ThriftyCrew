@@ -1,0 +1,67 @@
+{
+    "slug":  "southwest-ground-turkey-cauliflower-rice-skillet",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-qa",
+    "wave":  null,
+    "created":  "2026-08-16T01:20:25",
+    "updated":  "2026-08-16T06:22:11",
+    "terms":  [
+
+              ],
+    "reject_reason":  "macro gate: 360 cal / 9g carbs per serving",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:20:25",
+                        "by":  "sourcer",
+                        "detail":  "https://upnorthnosh.com/low-carb-ground-turkey-skillet-with-cauliflower-rice/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T01:20:25",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T01:23:12",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T06:02:53",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T06:02:53",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T06:21:27",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T06:21:28",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "rejected-qa",
+                        "at":  "2026-08-16T06:22:11",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate: 360 cal / 9g carbs per serving"
+                    }
+                ]
+}

@@ -1,0 +1,72 @@
+{
+    "slug":  "chicken-chasseur",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-not-carried",
+    "wave":  null,
+    "created":  "2026-08-16T01:15:20",
+    "updated":  "2026-08-16T06:34:09",
+    "terms":  [
+                  {
+                      "term":  "dry white wine",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "fresh tarragon",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "marsala wine",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  "not carried in Omaha: fresh tarragon",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:15:20",
+                        "by":  "sourcer",
+                        "detail":  "https://www.akitchenhoorsadventures.com/chicken-chasseur/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T01:15:20",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T01:16:44",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T06:24:58",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-16T06:24:58",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-16T06:31:55",
+                        "by":  "derive",
+                        "detail":  "waiting on: fresh tarragon"
+                    },
+                    {
+                        "state":  "rejected-not-carried",
+                        "at":  "2026-08-16T06:34:09",
+                        "by":  "derive",
+                        "detail":  "not carried in Omaha: fresh tarragon"
+                    }
+                ]
+}

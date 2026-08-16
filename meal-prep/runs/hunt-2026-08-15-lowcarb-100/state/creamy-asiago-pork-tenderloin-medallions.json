@@ -1,0 +1,31 @@
+{
+    "slug":  "creamy-asiago-pork-tenderloin-medallions",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T20:32:43",
+    "updated":  "2026-08-15T20:32:43",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Cross-lane dupe of accepted creamy-tuscan-chicken-skillet: same Tuscan/Marry-Me cream + sun-dried tomato + spinach no-starch skillet; only protein (pork vs chicken) and asiago-vs-parmesan differ (3/4 match).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:32:43",
+                        "by":  "sourcer",
+                        "detail":  "https://mylifecookbook.com/tomato-asiago-pork-tenderloin-skillet/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T20:32:43",
+                        "by":  "selector",
+                        "detail":  "Cross-lane dupe of accepted creamy-tuscan-chicken-skillet: same Tuscan/Marry-Me cream + sun-dried tomato + spinach no-starch skillet; only protein (pork vs chicken) and asiago-vs-parmesan differ (3/4 match)."
+                    }
+                ]
+}

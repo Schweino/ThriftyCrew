@@ -1,0 +1,31 @@
+{
+    "slug":  "beef-egg-roll-in-a-bowl",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T20:40:29",
+    "updated":  "2026-08-15T20:40:29",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Third protein-swap of an existing catalog dish: pork-egg-roll-in-a-bowl and turkey-egg-roll-in-a-bowl-over-rice both live. Same identity (ground meat + cabbage + soy/hoisin/sesame/ginger stir-fry); beef adds no new dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:40:29",
+                        "by":  "sourcer",
+                        "detail":  "https://thefoodcharlatan.com/egg-roll-in-a-bowl/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T20:40:29",
+                        "by":  "selector",
+                        "detail":  "Third protein-swap of an existing catalog dish: pork-egg-roll-in-a-bowl and turkey-egg-roll-in-a-bowl-over-rice both live. Same identity (ground meat + cabbage + soy/hoisin/sesame/ginger stir-fry); beef adds no new dinner."
+                    }
+                ]
+}

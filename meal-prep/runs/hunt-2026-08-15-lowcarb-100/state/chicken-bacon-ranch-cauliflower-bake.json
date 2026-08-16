@@ -1,0 +1,64 @@
+{
+    "slug":  "chicken-bacon-ranch-cauliflower-bake",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-15T20:27:49",
+    "updated":  "2026-08-16T06:37:03",
+    "terms":  [
+                  {
+                      "term":  "bacon bits",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:27:49",
+                        "by":  "sourcer",
+                        "detail":  "https://www.creationsbykara.com/keto-chicken-bacon-ranch-casserole/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-15T20:27:49",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-15T20:29:14",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-15T20:40:50",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-15T20:40:54",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-15T20:43:29",
+                        "by":  "derive",
+                        "detail":  "waiting on: bacon bits"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T06:37:03",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    }
+                ]
+}

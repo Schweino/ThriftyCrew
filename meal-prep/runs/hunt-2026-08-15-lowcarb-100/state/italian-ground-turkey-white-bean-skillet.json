@@ -1,0 +1,67 @@
+{
+    "slug":  "italian-ground-turkey-white-bean-skillet",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-qa",
+    "wave":  null,
+    "created":  "2026-08-16T01:05:37",
+    "updated":  "2026-08-16T05:44:26",
+    "terms":  [
+
+              ],
+    "reject_reason":  "macro gate: 376 cal / 24g carbs per serving",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:05:37",
+                        "by":  "sourcer",
+                        "detail":  "https://www.familyfoodonthetable.com/italian-ground-turkey-skillet/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T01:05:37",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T01:08:47",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T01:36:17",
+                        "by":  "mapper",
+                        "detail":  "mapped 12 lines, all terms answered from disk; MACRO BAND FAIL: computed 376.3 cal/serv below the 400 floor, source published 422 not reproducible (protein -18.9 pct break); spec/QA must reject on band"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T01:36:17",
+                        "by":  "mapper",
+                        "detail":  "priced from disk; carriage clean but the mapped file carries a band_check FAIL (376.3 cal under the 400 floor) - do not spec past it"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T05:43:53",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T05:43:53",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "rejected-qa",
+                        "at":  "2026-08-16T05:44:26",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate: 376 cal / 24g carbs per serving"
+                    }
+                ]
+}

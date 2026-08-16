@@ -1,0 +1,64 @@
+{
+    "slug":  "jalapeno-popper-chicken-casserole",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-15T20:57:11",
+    "updated":  "2026-08-16T06:37:03",
+    "terms":  [
+                  {
+                      "term":  "bacon bits",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:57:11",
+                        "by":  "sourcer",
+                        "detail":  "https://joyfilledeats.com/jalapeno-popper-chicken-casserole/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-15T20:57:11",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-15T20:59:35",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T06:31:50",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-16T06:31:51",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-16T06:31:55",
+                        "by":  "derive",
+                        "detail":  "waiting on: bacon bits"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T06:37:03",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    }
+                ]
+}

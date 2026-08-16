@@ -1,0 +1,82 @@
+{
+    "slug":  "low-carb-ground-beef-stroganoff-skillet",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "waved",
+    "wave":  1,
+    "created":  "2026-08-15T20:36:51",
+    "updated":  "2026-08-16T06:07:43",
+    "terms":  [
+                  {
+                      "term":  "brandy",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:36:51",
+                        "by":  "sourcer",
+                        "detail":  "https://www.lowcarbmaven.com/low-carb-beef-stroganoff-ground-beef-stroganoff/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-15T20:36:51",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-15T20:39:22",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-15T20:57:32",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-15T20:57:39",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-15T20:59:54",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T01:04:18",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T01:04:18",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-16T01:06:50",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T06:07:43",
+                        "by":  "wave-close",
+                        "detail":  "wave 1"
+                    }
+                ]
+}

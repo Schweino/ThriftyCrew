@@ -1,0 +1,58 @@
+{
+    "slug":  "turkey-parmesan-meatball-bake",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-16T01:20:25",
+    "updated":  "2026-08-16T11:55:34",
+    "terms":  [
+                  {
+                      "term":  "ground chicken",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:20:25",
+                        "by":  "sourcer",
+                        "detail":  "https://www.sugarfreemom.com/recipes/easy-low-carb-keto-chicken-parmesan-meatballs-recipe/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T01:20:25",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T01:22:16",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T11:53:24",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-16T11:53:24",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T11:55:34",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    }
+                ]
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "bacon-cheeseburger-egg-casserole",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-16T01:23:46",
+    "updated":  "2026-08-16T01:23:47",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Same cheeseburger-beef dinner as accepted keto-cheeseburger-skillet; egg-custard bake vs skillet is a format re-plating, not a new dish. Second American low-carb cheeseburger beef entry in one run; catalog already American-heavy.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:23:46",
+                        "by":  "sourcer",
+                        "detail":  "https://lowcarb-ology.com/cheeseburger-casserole/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-16T01:23:47",
+                        "by":  "selector",
+                        "detail":  "Same cheeseburger-beef dinner as accepted keto-cheeseburger-skillet; egg-custard bake vs skillet is a format re-plating, not a new dish. Second American low-carb cheeseburger beef entry in one run; catalog already American-heavy."
+                    }
+                ]
+}

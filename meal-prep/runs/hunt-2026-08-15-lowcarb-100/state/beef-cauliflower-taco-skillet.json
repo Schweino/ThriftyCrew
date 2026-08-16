@@ -1,0 +1,31 @@
+{
+    "slug":  "beef-cauliflower-taco-skillet",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T20:37:03",
+    "updated":  "2026-08-15T20:37:03",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Near-dupe of catalog loaded-beef-taco-skillet-bowls: shares protein (ground beef), Tex-Mex taco flavor family, and skillet method; cauliflower-rice swap is the only structural change. Catalog Tex-Mex beef lane is already dense (loaded-beef-taco-skillet-bowls, tex-mex-beef-rice-skillet-bowls, beef-enchilada-skillet-bowls) so it deepens not widens; plus 34g carbs sits ~1g under the ceiling and a label-accurate recompute (15oz black beans) risks breaching 35g. Cut - run does not need padding.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:37:03",
+                        "by":  "sourcer",
+                        "detail":  "https://www.budgetbytes.com/beef-and-cauliflower-taco-skillet/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T20:37:03",
+                        "by":  "selector",
+                        "detail":  "Near-dupe of catalog loaded-beef-taco-skillet-bowls: shares protein (ground beef), Tex-Mex taco flavor family, and skillet method; cauliflower-rice swap is the only structural change. Catalog Tex-Mex beef lane is already dense (loaded-beef-taco-skillet-bowls, tex-mex-beef-rice-skillet-bowls, beef-enchilada-skillet-bowls) so it deepens not widens; plus 34g carbs sits ~1g under the ceiling and a label-accurate recompute (15oz black beans) risks breaching 35g. Cut - run does not need padding."
+                    }
+                ]
+}

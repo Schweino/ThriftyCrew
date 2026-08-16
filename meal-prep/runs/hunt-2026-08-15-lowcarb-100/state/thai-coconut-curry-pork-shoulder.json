@@ -1,0 +1,84 @@
+{
+    "slug":  "thai-coconut-curry-pork-shoulder",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-not-carried",
+    "wave":  null,
+    "created":  "2026-08-15T20:57:11",
+    "updated":  "2026-08-16T05:49:55",
+    "terms":  [
+                  {
+                      "term":  "thai chiles",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "cardamom pods",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "creamed coconut",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  "not carried in Omaha: creamed coconut",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:57:11",
+                        "by":  "sourcer",
+                        "detail":  "https://yummyforadam.ca/instant-pot-thai-pork-coconut-curry/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-15T20:57:11",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-15T20:58:57",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T01:36:05",
+                        "by":  "mapper",
+                        "detail":  "mapped 24 lines; 3 blocking terms absent (thai chiles, cardamom pods, creamed coconut); computed 433.8 cal/serv, protein break explained (source cooked-basis pork)"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-16T01:36:05",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-16T05:36:49",
+                        "by":  "derive",
+                        "detail":  "waiting on: thai chiles,cardamom pods,creamed coconut"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-16T05:37:48",
+                        "by":  "repair",
+                        "detail":  "repair: terms were stored as one joined string by the -Terms csv marshalling bug"
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-16T05:37:53",
+                        "by":  "derive",
+                        "detail":  "waiting on: thai chiles, cardamom pods, creamed coconut"
+                    },
+                    {
+                        "state":  "rejected-not-carried",
+                        "at":  "2026-08-16T05:49:55",
+                        "by":  "derive",
+                        "detail":  "not carried in Omaha: creamed coconut"
+                    }
+                ]
+}

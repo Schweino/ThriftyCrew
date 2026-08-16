@@ -1,0 +1,31 @@
+{
+    "slug":  "thai-basil-ground-beef-pad-kra-pao",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T21:00:55",
+    "updated":  "2026-08-15T21:00:55",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Catalog already carries pad kra pao in pork (thai-basil-pork-pad-kra-pao-bowls) and chicken (thai-basil-chicken-pad-krapow); a beef version is a third-protein of the same dish. Thai not a widening cuisine here (run also accepted thai-coconut-curry-pork-shoulder); near-ceiling 632/650 cal + highest carbs in batch (15g); beef lane already heavy.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T21:00:55",
+                        "by":  "sourcer",
+                        "detail":  "https://gypsyplate.com/thai-basil-beef/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T21:00:55",
+                        "by":  "selector",
+                        "detail":  "Catalog already carries pad kra pao in pork (thai-basil-pork-pad-kra-pao-bowls) and chicken (thai-basil-chicken-pad-krapow); a beef version is a third-protein of the same dish. Thai not a widening cuisine here (run also accepted thai-coconut-curry-pork-shoulder); near-ceiling 632/650 cal + highest carbs in batch (15g); beef lane already heavy."
+                    }
+                ]
+}

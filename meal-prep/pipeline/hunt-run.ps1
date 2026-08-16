@@ -36,7 +36,7 @@
 #   .\hunt-run.ps1 -SelfTest
 param(
   [switch]$Init, [switch]$Advance, [switch]$Derive, [switch]$WaveClose, [switch]$Status, [switch]$SelfTest,
-  [switch]$Lane, [switch]$LaneSummary,
+  [switch]$Lane, [switch]$LaneSummary, [switch]$WaveSync, [int]$Wave = 0,
   [int]$InputTokens = -1, [int]$OutputTokens = -1,   # -1 = not reported (older lines, or a lane that cannot see usage)
   [ValidateSet('', 'start', 'end')][string]$Event = '',   # pair start/end on the same lane+label to get duration
   [string]$RunDir = '', [string]$Slug = '', [string]$To = '', [string]$By = '', [string]$Detail = '',
@@ -54,7 +54,7 @@ $ErrorActionPreference = 'Stop'
 $runLaneSummary = [bool]$LaneSummary
 $runSelfTest = [bool]$SelfTest; $runInit = [bool]$Init; $runAdvance = [bool]$Advance
 $runDerive = [bool]$Derive; $runWaveClose = [bool]$WaveClose; $runStatus = [bool]$Status
-$runLane = [bool]$Lane
+$runLane = [bool]$Lane; $runWaveSync = [bool]$WaveSync
 $runDrain = [bool]$Drain; $runNoLedger = [bool]$NoLedger; $runJson = [bool]$Json
 
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -135,12 +135,62 @@ function Get-DerivedPricingState {
   return [pscustomobject]@{ state = $state; pending = @($pending); failed = @($failed); carried = @($carried) }
 }
 
+# Every slug named by a wave manifest that has not published yet. A recipe listed here is SPOKEN FOR:
+# some wave already carries it, and a second wave claiming it double-books the most expensive stage in
+# the estate.
+function Get-ClaimedSlugs {
+  param([string]$RunDir)
+  $claimed = @{}
+  foreach ($f in @(Get-ChildItem (Join-Path $RunDir 'waves\wave-*.json') -File -ErrorAction SilentlyContinue |
+                   Where-Object { $_.Name -match '^wave-(\d+)\.json$' })) {
+    $doc = Read-Json $f.FullName
+    if (-not $doc) { continue }
+    if ([string]$doc.published_at) { continue }   # a closed wave releases nothing; it already shipped
+    foreach ($s in @($doc.slugs)) { if ($s) { $claimed[[string]$s] = [int]$doc.wave } }
+  }
+  return $claimed
+}
+
 # Only qa-passed recipes are eligible for a wave, FIFO by when they got there. Nothing else is a door.
+#
+# AND NOT ONE ALREADY CLAIMED BY AN OPEN WAVE. An audit NO-GO trims recipes back to `qa-passed` so they
+# can be repaired - but the trimmed wave's manifest still lists them, because -WaveClose only ever mints
+# a NEW wave and cannot rewrite an old one. So the very next close swept them straight into another wave
+# while the first still claimed them. On 2026-08-16 that put 5 recipes in BOTH wave 2 and wave 3: 30
+# manifest slots over 25 distinct recipes, with every wave paying a full whole-wave audit. It also made
+# wave 2 permanently unpublishable, because wave-publish P3 demands every manifest slug be in state
+# `waved` and the trim had moved them out. Three consecutive NO-GOs, none of them about a recipe.
 function Select-WaveSlugs {
-  param($Entries, [int]$Size)
-  $ready = @(@($Entries) | Where-Object { [string]$_.state -eq 'qa-passed' } | Sort-Object { [string]$_.updated })
+  param($Entries, [int]$Size, [hashtable]$Claimed = @{})
+  $ready = @(@($Entries) |
+    Where-Object { [string]$_.state -eq 'qa-passed' -and -not $Claimed.ContainsKey([string]$_.slug) } |
+    Sort-Object { [string]$_.updated })
   if ($Size -gt 0 -and $ready.Count -gt $Size) { $ready = @($ready[0..($Size - 1)]) }
   return @($ready)
+}
+
+# Rewrite a wave manifest to the slugs it ACTUALLY still holds. The counterpart to a trim: the trim moves
+# recipes out of `waved` via the state machine, which has no idea it was part of a wave, so without this
+# the manifest keeps asserting a batch that no longer exists. Returns the dropped slugs.
+function Sync-WaveManifest {
+  param([string]$RunDir, [int]$Wave)
+  $path = Join-Path $RunDir ("waves\wave-{0}.json" -f $Wave)
+  if (-not (Test-Path $path)) { throw "no such wave manifest: $path" }
+  $doc = Read-Json $path
+  if ([string]$doc.published_at) { throw "wave $Wave already published - its manifest is the shipping record and is not rewritten" }
+  $entries = @{}
+  foreach ($e in @(Read-Entries $RunDir)) { $entries[[string]$e.slug] = $e }
+  $keep = @(); $dropped = @()
+  foreach ($s in @($doc.slugs)) {
+    $e = $entries[[string]$s]
+    if ($e -and [string]$e.state -eq 'waved' -and [int]$e.wave -eq $Wave) { $keep += [string]$s }
+    else { $dropped += [string]$s }
+  }
+  $doc.slugs = @($keep)
+  $doc.recipes = @(@($doc.recipes) | Where-Object { $keep -contains [string]$_.slug })
+  $doc | Add-Member -NotePropertyName reconciled -NotePropertyValue (Get-Stamp) -Force
+  Write-JsonAtomic -Path $path -Obj $doc
+  return @($dropped)
 }
 
 # ---------------------------------------------------------------------------------------------------
@@ -342,6 +392,56 @@ if ($runSelfTest) {
   T 'MUST FIRE  a macro rejection is reachable from mapped'            (Test-LegalTransition 'mapped' 'rejected-macros') 'refused'
   T 'MUST FIRE  a macro rejection is terminal like every other reject' (-not (Test-LegalTransition 'rejected-macros' 'mapped')) 'allowed'
   T 'CLEAN TWIN rejected-macros counts as a rejection, not as in-flight' ($script:REJECTED_STATES -contains 'rejected-macros') 'missing from REJECTED_STATES'
+
+  # ---- FIXTURE 4c. THE DOUBLE-BOOKED WAVE, frozen. A trim returns recipes to `qa-passed` so they can be
+  # repaired, but -WaveClose only ever mints a NEW wave and cannot rewrite the old manifest, so the next
+  # close swept the same recipes into a second wave while the first still claimed them. On 2026-08-16 that
+  # put 5 recipes in BOTH wave 2 and wave 3 - 30 manifest slots over 25 recipes, each wave paying a full
+  # whole-wave audit - and left wave 2 permanently unpublishable, because P3 demands every manifest slug
+  # be `waved` and the trim had moved them out. Three NO-GOs, none of them about a recipe.
+  $wRows = @(
+    [pscustomobject]@{ slug = 'alpha'; state = 'qa-passed'; updated = '2026-08-16 01:00' }
+    [pscustomobject]@{ slug = 'bravo'; state = 'qa-passed'; updated = '2026-08-16 02:00' }
+  )
+  # @(...) ON EVERY CALL. PowerShell unwraps a single-element array on return, so a one-recipe result
+  # comes back as a bare PSCustomObject whose .Count is $null - the assertion then compares $null to 1
+  # and fails while the value is right. Same family as the @(pipeline | ConvertFrom-Json) collapse.
+  $noClaim = @(Select-WaveSlugs $wRows 10 @{})
+  T 'CLEAN TWIN an unclaimed qa-passed recipe is eligible for a wave' ($noClaim.Count -eq 2) $noClaim.Count
+  $withClaim = @(Select-WaveSlugs $wRows 10 @{ 'alpha' = 2 })
+  T 'MUST FIRE  a recipe an open wave still claims is NOT swept into a second wave' `
+    ($withClaim.Count -eq 1 -and ([string]($withClaim[0].slug)) -eq 'bravo') (@($withClaim | ForEach-Object { $_.slug }) -join ',')
+
+  # Sync-WaveManifest drops exactly what the trim removed, and keeps what the wave still holds.
+  $syncDir = Join-Path ([System.IO.Path]::GetTempPath()) ('hr-sync-' + [guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path (Join-Path $syncDir 'waves') -Force | Out-Null
+  New-Item -ItemType Directory -Path (Join-Path $syncDir 'state') -Force | Out-Null
+  Write-JsonAtomic -Path (Join-Path $syncDir 'waves\wave-2.json') -Obj ([pscustomobject]@{
+      wave = 2; run = 'r'; batch = 'r-w2'; created = 'x'; slugs = @('kept', 'trimmed')
+      recipes = @([pscustomobject]@{ slug = 'kept' }, [pscustomobject]@{ slug = 'trimmed' })
+    })
+  Write-JsonAtomic -Path (Join-Path $syncDir 'state\kept.json')    -Obj ([pscustomobject]@{ slug = 'kept'; state = 'waved'; wave = 2; history = @() })
+  Write-JsonAtomic -Path (Join-Path $syncDir 'state\trimmed.json') -Obj ([pscustomobject]@{ slug = 'trimmed'; state = 'qa-passed'; wave = 2; history = @() })
+  $dropped = @(Sync-WaveManifest $syncDir 2)
+  $after = Read-Json (Join-Path $syncDir 'waves\wave-2.json')
+  T 'MUST FIRE  reconciling drops the slug the trim pulled out of the wave' `
+    ($dropped.Count -eq 1 -and $dropped[0] -eq 'trimmed') ($dropped -join ',')
+  T 'CLEAN TWIN reconciling keeps the slug still sitting in the wave' `
+    (@($after.slugs).Count -eq 1 -and [string]@($after.slugs)[0] -eq 'kept') (@($after.slugs) -join ',')
+  T 'CLEAN TWIN the recipes block is trimmed alongside the slug list' `
+    (@($after.recipes).Count -eq 1) @($after.recipes).Count
+  # A published manifest is the shipping record. Rewriting one would erase what actually went live.
+  Write-JsonAtomic -Path (Join-Path $syncDir 'waves\wave-1.json') -Obj ([pscustomobject]@{
+      wave = 1; run = 'r'; batch = 'r-w1'; created = 'x'; published_at = '2026-08-16'; slugs = @('shipped'); recipes = @()
+    })
+  $refused = $false
+  try { Sync-WaveManifest $syncDir 1 | Out-Null } catch { $refused = $true }
+  T 'MUST FIRE  a PUBLISHED wave manifest is never rewritten' $refused 'allowed'
+  # ...and a published wave releases its slugs, so they are not claimed forever.
+  $claims = Get-ClaimedSlugs $syncDir
+  T 'CLEAN TWIN a published wave stops claiming its slugs' (-not $claims.ContainsKey('shipped')) 'still claimed'
+  T 'MUST FIRE  an open wave still claims the slug it holds' ($claims.ContainsKey('kept')) 'not claimed'
+  Remove-Item $syncDir -Recurse -Force -ErrorAction SilentlyContinue
 
   # ---- FIXTURE 4b. THE `held` STATE, frozen at its founding bug. On 2026-08-15 two published recipes were
   # set back to DRAFT in Ghost by hand because their cards could not price, and their state files went on
@@ -644,12 +744,34 @@ if ($runDerive) {
 }
 
 # ---- -WaveClose -----------------------------------------------------------------------------------
+if ($runWaveSync) {
+  if ($Wave -le 0) { throw '-WaveSync needs -Wave <k>' }
+  $dropped = @(Sync-WaveManifest $RunDir $Wave)
+  if ($dropped.Count) {
+    Write-Output ("hunt-run: wave {0} manifest reconciled - dropped {1} slug(s) the trim removed:" -f $Wave, $dropped.Count)
+    $dropped | ForEach-Object { Write-Output "  - $_" }
+  }
+  else { Write-Output ("hunt-run: wave {0} manifest already matches state - nothing dropped" -f $Wave) }
+  Write-GuardComplete 'hunt-run' ("wave-sync {0} dropped={1}" -f $Wave, $dropped.Count)
+  exit 0
+}
+
 if ($runWaveClose) {
   $runDoc = Read-Json (Join-Path $RunDir 'run.json')
   $size = if ($WaveSize -gt 0 -and $PSBoundParameters.ContainsKey('WaveSize')) { $WaveSize } else { [int]$runDoc.wave_size }
   $entries = @(Read-Entries $RunDir)
-  $ready = @(Select-WaveSlugs $entries $size)
-  if (-not $ready.Count) { Write-Output 'hunt-run: no qa-passed recipes waiting - nothing to close'; exit 1 }
+  $claimed = Get-ClaimedSlugs $RunDir
+  $ready = @(Select-WaveSlugs $entries $size $claimed)
+  if (-not $ready.Count) {
+    $waiting = @(@($entries) | Where-Object { [string]$_.state -eq 'qa-passed' })
+    if ($waiting.Count) {
+      Write-Output ("hunt-run: {0} qa-passed recipe(s) are waiting but ALL are already claimed by an open wave." -f $waiting.Count)
+      Write-Output  '           They were trimmed out of that wave by an audit NO-GO and its manifest still lists them.'
+      Write-Output  '           Run -WaveSync -Wave <k> to reconcile that manifest, then close again.'
+      exit 1
+    }
+    Write-Output 'hunt-run: no qa-passed recipes waiting - nothing to close'; exit 1
+  }
   if ($ready.Count -lt $size -and -not $runDrain) {
     Write-Output ("hunt-run: only {0} of {1} qa-passed - pass -Drain to close a short wave" -f $ready.Count, $size); exit 1
   }

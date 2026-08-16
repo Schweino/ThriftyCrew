@@ -1,0 +1,73 @@
+{
+    "slug":  "hatch-green-chile-chicken-casserole",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "waved",
+    "wave":  1,
+    "created":  "2026-08-16T01:05:38",
+    "updated":  "2026-08-16T06:07:43",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:05:38",
+                        "by":  "sourcer",
+                        "detail":  "https://www.ruled.me/hatch-chile-casserole/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T01:05:38",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T01:09:01",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T01:36:17",
+                        "by":  "mapper",
+                        "detail":  "mapped 15 lines; 543.8 cal/serv matches source within 0.1%, band PASS; 2 new DB rows"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T01:36:18",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T05:45:16",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T05:45:16",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-16T05:48:31",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T06:07:43",
+                        "by":  "wave-close",
+                        "detail":  "wave 1"
+                    }
+                ]
+}

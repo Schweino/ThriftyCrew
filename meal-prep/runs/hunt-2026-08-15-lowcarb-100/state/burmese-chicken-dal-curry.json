@@ -1,0 +1,68 @@
+{
+    "slug":  "burmese-chicken-dal-curry",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-not-carried",
+    "wave":  null,
+    "created":  "2026-08-15T20:36:51",
+    "updated":  "2026-08-16T01:11:30",
+    "terms":  [
+                  {
+                      "term":  "yellow split peas",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "thai chiles",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  "not carried in Omaha: yellow split peas",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:36:51",
+                        "by":  "sourcer",
+                        "detail":  "https://www.skinnytaste.com/burma-superstar-chicken-dal-curry/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-15T20:36:51",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-15T20:39:29",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-15T20:58:55",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-15T20:58:56",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-15T20:59:54",
+                        "by":  "derive",
+                        "detail":  "waiting on: yellow split peas"
+                    },
+                    {
+                        "state":  "rejected-not-carried",
+                        "at":  "2026-08-16T01:11:30",
+                        "by":  "derive",
+                        "detail":  "not carried in Omaha: yellow split peas"
+                    }
+                ]
+}

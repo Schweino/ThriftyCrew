@@ -1,0 +1,31 @@
+{
+    "slug":  "slow-cooker-cuban-mojo-pork",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T20:30:32",
+    "updated":  "2026-08-15T20:30:32",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Catalog dupe of slow-cooker-cuban-mojo-pork-bowls: same Cuban garlic-citrus mojo slow-cooker pork.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:30:32",
+                        "by":  "sourcer",
+                        "detail":  "https://www.hotrodsrecipes.com/slow-cooker-cuban-mojo-pork/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T20:30:32",
+                        "by":  "selector",
+                        "detail":  "Catalog dupe of slow-cooker-cuban-mojo-pork-bowls: same Cuban garlic-citrus mojo slow-cooker pork."
+                    }
+                ]
+}

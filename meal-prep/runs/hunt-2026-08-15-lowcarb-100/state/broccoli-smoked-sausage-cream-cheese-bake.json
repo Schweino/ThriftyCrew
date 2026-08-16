@@ -1,0 +1,31 @@
+{
+    "slug":  "broccoli-smoked-sausage-cream-cheese-bake",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-16T01:15:30",
+    "updated":  "2026-08-16T01:15:30",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Pool twin of kept sheet-pan-smoked-sausage-broccoli-cheddar (same protein+broccoli+cheddar, method differs) AND cross-protein twin of accepted keto-turkey-broccoli-cheddar-casserole (same rice-free creamy broccoli-cheddar oven bake); weaker at 20g protein. Ship only the dry sheet-pan.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:15:30",
+                        "by":  "sourcer",
+                        "detail":  "https://thatlowcarblife.com/broccoli-smoked-sausage-casserole/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-16T01:15:30",
+                        "by":  "selector",
+                        "detail":  "Pool twin of kept sheet-pan-smoked-sausage-broccoli-cheddar (same protein+broccoli+cheddar, method differs) AND cross-protein twin of accepted keto-turkey-broccoli-cheddar-casserole (same rice-free creamy broccoli-cheddar oven bake); weaker at 20g protein. Ship only the dry sheet-pan."
+                    }
+                ]
+}

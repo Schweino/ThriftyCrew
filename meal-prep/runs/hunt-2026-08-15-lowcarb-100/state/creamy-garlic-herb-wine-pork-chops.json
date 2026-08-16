@@ -1,0 +1,62 @@
+{
+    "slug":  "creamy-garlic-herb-wine-pork-chops",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-15T20:43:52",
+    "updated":  "2026-08-16T06:31:55",
+    "terms":  [
+                  {
+                      "term":  "dry white wine",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "almond flour",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:43:52",
+                        "by":  "sourcer",
+                        "detail":  "https://whatsinthepan.com/pork-chops-garlic-herb-wine-sauce/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-15T20:43:52",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-15T20:47:38",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T06:25:05",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-16T06:25:05",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T06:31:55",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    }
+                ]
+}

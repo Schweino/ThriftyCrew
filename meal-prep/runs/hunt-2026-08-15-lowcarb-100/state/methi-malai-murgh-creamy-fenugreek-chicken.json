@@ -1,0 +1,43 @@
+{
+    "slug":  "methi-malai-murgh-creamy-fenugreek-chicken",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-macros",
+    "wave":  null,
+    "created":  "2026-08-16T01:30:32",
+    "updated":  "2026-08-16T12:24:34",
+    "terms":  [
+
+              ],
+    "reject_reason":  "every label-accurate basis computes BELOW the 400-cal floor; single cream has no US retail equivalent on the board",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:30:32",
+                        "by":  "sourcer",
+                        "detail":  "https://kitchenofdebjani.com/2018/11/methi-murgh-malai/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T01:30:32",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T01:32:19",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-16T12:24:34",
+                        "by":  "mapper",
+                        "detail":  "every label-accurate basis computes BELOW the 400-cal floor; single cream has no US retail equivalent on the board"
+                    }
+                ]
+}

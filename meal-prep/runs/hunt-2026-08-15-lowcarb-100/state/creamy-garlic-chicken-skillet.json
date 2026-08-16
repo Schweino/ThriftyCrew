@@ -1,0 +1,31 @@
+{
+    "slug":  "creamy-garlic-chicken-skillet",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T20:44:01",
+    "updated":  "2026-08-15T20:44:01",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Dupe of accepted creamy-tuscan-chicken-skillet: same seared chicken-breast + garlic cream skillet, no starch. Tuscan version (fully mapped) holds the slot.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:44:01",
+                        "by":  "sourcer",
+                        "detail":  "https://cafedelites.com/creamy-garlic-chicken/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T20:44:01",
+                        "by":  "selector",
+                        "detail":  "Dupe of accepted creamy-tuscan-chicken-skillet: same seared chicken-breast + garlic cream skillet, no starch. Tuscan version (fully mapped) holds the slot."
+                    }
+                ]
+}

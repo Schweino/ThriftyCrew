@@ -1,0 +1,31 @@
+{
+    "slug":  "broccoli-smoked-sausage-cheddar-bake",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-16T01:20:25",
+    "updated":  "2026-08-16T01:20:25",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Dupe of accepted baked-cauliflower-mac-smoked-sausage: same smoked-sausage + cruciferous-floret + cheddar/cream low-carb oven bake (floret swap only). Also collides with accepted sheet-pan-smoked-sausage-broccoli-cheddar and keto-turkey-broccoli-cheddar-casserole.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:20:25",
+                        "by":  "sourcer",
+                        "detail":  "https://thatlowcarblife.com/broccoli-smoked-sausage-casserole/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-16T01:20:25",
+                        "by":  "selector",
+                        "detail":  "Dupe of accepted baked-cauliflower-mac-smoked-sausage: same smoked-sausage + cruciferous-floret + cheddar/cream low-carb oven bake (floret swap only). Also collides with accepted sheet-pan-smoked-sausage-broccoli-cheddar and keto-turkey-broccoli-cheddar-casserole."
+                    }
+                ]
+}

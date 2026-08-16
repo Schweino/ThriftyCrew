@@ -1,0 +1,31 @@
+{
+    "slug":  "doro-wat-ethiopian-chicken-stew",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T20:51:36",
+    "updated":  "2026-08-15T20:51:36",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Catalog dup of ethiopian-doro-wat-chicken-bowls: same Doro Wat (berbere, browned onions, chicken thighs, tomato paste, eggs, lemon).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:51:36",
+                        "by":  "sourcer",
+                        "detail":  "https://www.africanbites.com/doro-wat-ethiopian-chicken-stew/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T20:51:36",
+                        "by":  "selector",
+                        "detail":  "Catalog dup of ethiopian-doro-wat-chicken-bowls: same Doro Wat (berbere, browned onions, chicken thighs, tomato paste, eggs, lemon)."
+                    }
+                ]
+}

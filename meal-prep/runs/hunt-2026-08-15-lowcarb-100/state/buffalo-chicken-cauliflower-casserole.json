@@ -1,0 +1,31 @@
+{
+    "slug":  "buffalo-chicken-cauliflower-casserole",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-16T01:05:38",
+    "updated":  "2026-08-16T01:05:38",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Near-dupe of accepted chicken-bacon-ranch-cauliflower-bake: chicken+cauliflower+creamy-cheese-bacon bake, only sauce differs (buffalo vs ranch)",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:05:38",
+                        "by":  "sourcer",
+                        "detail":  "https://hip2keto.com/recipes/low-carb-buffalo-chicken-cauliflower-casserole/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-16T01:05:38",
+                        "by":  "selector",
+                        "detail":  "Near-dupe of accepted chicken-bacon-ranch-cauliflower-bake: chicken+cauliflower+creamy-cheese-bacon bake, only sauce differs (buffalo vs ranch)"
+                    }
+                ]
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "coq-au-vin-braised-chicken",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T20:51:36",
+    "updated":  "2026-08-15T20:51:36",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Catalog dup of coq-au-vin: same chicken-thigh + bacon + mushroom + carrot red-wine braise, near-identical name.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:51:36",
+                        "by":  "sourcer",
+                        "detail":  "https://healthyrecipes101.com/chicken/recipe/coq-au-vin/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T20:51:36",
+                        "by":  "selector",
+                        "detail":  "Catalog dup of coq-au-vin: same chicken-thigh + bacon + mushroom + carrot red-wine braise, near-identical name."
+                    }
+                ]
+}

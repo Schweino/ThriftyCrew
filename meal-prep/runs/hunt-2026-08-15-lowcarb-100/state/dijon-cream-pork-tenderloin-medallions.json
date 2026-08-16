@@ -1,0 +1,31 @@
+{
+    "slug":  "dijon-cream-pork-tenderloin-medallions",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-16T01:35:17",
+    "updated":  "2026-08-16T01:35:18",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Dupe of accepted creamy-garlic-herb-wine-pork-chops: both low-carb creamy white-wine seared-pork skillets, no starch (3/4 axes). Dijon-vs-garlic-herb is too thin to ship a second creamy-wine pork plate; pork already well-represented.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:35:17",
+                        "by":  "sourcer",
+                        "detail":  "https://www.seasonsandsuppers.ca/pork-medallions-with-dijon-sauce/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-16T01:35:18",
+                        "by":  "selector",
+                        "detail":  "Dupe of accepted creamy-garlic-herb-wine-pork-chops: both low-carb creamy white-wine seared-pork skillets, no starch (3/4 axes). Dijon-vs-garlic-herb is too thin to ship a second creamy-wine pork plate; pork already well-represented."
+                    }
+                ]
+}

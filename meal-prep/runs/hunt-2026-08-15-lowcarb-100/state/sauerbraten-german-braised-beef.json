@@ -1,0 +1,31 @@
+{
+    "slug":  "sauerbraten-german-braised-beef",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T20:30:31",
+    "updated":  "2026-08-15T20:30:31",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Catalog dupe of slow-cooker-sauerbraten-bowls: same German sweet-sour red-wine-vinegar/gingersnap braised beef chuck.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:30:31",
+                        "by":  "sourcer",
+                        "detail":  "https://www.sipandfeast.com/sauerbraten/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T20:30:31",
+                        "by":  "selector",
+                        "detail":  "Catalog dupe of slow-cooker-sauerbraten-bowls: same German sweet-sour red-wine-vinegar/gingersnap braised beef chuck."
+                    }
+                ]
+}

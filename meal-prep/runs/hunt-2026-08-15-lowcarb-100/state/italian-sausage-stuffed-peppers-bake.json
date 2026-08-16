@@ -1,0 +1,58 @@
+{
+    "slug":  "italian-sausage-stuffed-peppers-bake",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-16T01:30:32",
+    "updated":  "2026-08-16T06:31:55",
+    "terms":  [
+                  {
+                      "term":  "green bell pepper",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:30:32",
+                        "by":  "sourcer",
+                        "detail":  "https://remakemyplate.com/lazy-keto-italian-stuffed-sausage-peppers/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T01:30:32",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T01:32:13",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T06:31:48",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-16T06:31:48",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T06:31:55",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    }
+                ]
+}

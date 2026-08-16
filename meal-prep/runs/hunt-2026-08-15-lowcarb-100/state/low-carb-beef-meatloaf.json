@@ -1,0 +1,80 @@
+{
+    "slug":  "low-carb-beef-meatloaf",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-16T01:10:02",
+    "updated":  "2026-08-16T11:37:33",
+    "terms":  [
+                  {
+                      "term":  "90/10 ground beef",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "unsweetened ketchup",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:10:02",
+                        "by":  "sourcer",
+                        "detail":  "https://www.freshfitkitchen.com/the-best-easy-low-carb-meatloaf-recipe-with-beef/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T01:10:02",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T01:12:52",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T06:02:16",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-16T06:02:24",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-16T06:03:27",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-16T06:03:34",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-16T06:04:16",
+                        "by":  "derive",
+                        "detail":  "waiting on: 90/10 ground beef, unsweetened ketchup"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T11:37:33",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    }
+                ]
+}

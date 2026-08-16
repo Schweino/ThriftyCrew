@@ -1,0 +1,31 @@
+{
+    "slug":  "creamy-mushroom-spinach-pork-chops-skillet",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-16T01:10:10",
+    "updated":  "2026-08-16T01:10:10",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Dupe of catalog creamy-mushroom-pork-chops-over-mashed-potatoes: same white heavy-cream mushroom pork chop, seared+simmered skillet; dropping mash + adding spinach are side tweaks not a new dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:10:10",
+                        "by":  "sourcer",
+                        "detail":  "https://greenandketo.com/mushroom-gravy-recipe"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-16T01:10:10",
+                        "by":  "selector",
+                        "detail":  "Dupe of catalog creamy-mushroom-pork-chops-over-mashed-potatoes: same white heavy-cream mushroom pork chop, seared+simmered skillet; dropping mash + adding spinach are side tweaks not a new dinner."
+                    }
+                ]
+}

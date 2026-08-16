@@ -1,0 +1,64 @@
+{
+    "slug":  "pork-chile-verde-stew",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-16T01:26:17",
+    "updated":  "2026-08-16T11:58:56",
+    "terms":  [
+                  {
+                      "term":  "chipotle powder",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:26:17",
+                        "by":  "sourcer",
+                        "detail":  "https://farmtojar.com/pork-chile-verde/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T01:26:17",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T01:27:56",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T11:52:54",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-16T11:53:00",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-16T11:55:34",
+                        "by":  "derive",
+                        "detail":  "waiting on: chipotle powder"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T11:58:56",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    }
+                ]
+}

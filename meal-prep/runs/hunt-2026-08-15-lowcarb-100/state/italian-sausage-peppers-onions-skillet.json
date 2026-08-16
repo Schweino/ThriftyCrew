@@ -1,0 +1,67 @@
+{
+    "slug":  "italian-sausage-peppers-onions-skillet",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-qa",
+    "wave":  null,
+    "created":  "2026-08-15T20:32:43",
+    "updated":  "2026-08-16T00:47:35",
+    "terms":  [
+
+              ],
+    "reject_reason":  "macro gate: 382 cal / 11g carbs per serving",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:32:43",
+                        "by":  "sourcer",
+                        "detail":  "https://www.lowcarbmaven.com/sausage-peppers-onions/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-15T20:32:43",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-15T20:36:53",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-15T20:57:31",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-15T20:57:38",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T00:45:37",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T00:45:37",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "rejected-qa",
+                        "at":  "2026-08-16T00:47:35",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate: 382 cal / 11g carbs per serving"
+                    }
+                ]
+}

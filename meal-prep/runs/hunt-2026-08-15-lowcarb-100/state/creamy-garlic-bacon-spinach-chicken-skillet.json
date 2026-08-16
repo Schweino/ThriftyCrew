@@ -1,0 +1,31 @@
+{
+    "slug":  "creamy-garlic-bacon-spinach-chicken-skillet",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-16T01:33:18",
+    "updated":  "2026-08-16T01:33:18",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Dupe of accepted creamy-tuscan-chicken-skillet: same one-skillet creamy garlic chicken + spinach, no starch (4/4 protein/sauce/starch/method); bacon-vs-sundried-tomato is garnish-level. Tuscan is stronger (published macros).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:33:18",
+                        "by":  "sourcer",
+                        "detail":  "https://www.eatwell101.com/creamy-garlic-chicken-spinach-bacon"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-16T01:33:18",
+                        "by":  "selector",
+                        "detail":  "Dupe of accepted creamy-tuscan-chicken-skillet: same one-skillet creamy garlic chicken + spinach, no starch (4/4 protein/sauce/starch/method); bacon-vs-sundried-tomato is garnish-level. Tuscan is stronger (published macros)."
+                    }
+                ]
+}

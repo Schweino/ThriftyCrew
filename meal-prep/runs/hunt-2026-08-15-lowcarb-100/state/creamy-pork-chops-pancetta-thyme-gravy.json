@@ -1,0 +1,31 @@
+{
+    "slug":  "creamy-pork-chops-pancetta-thyme-gravy",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-16T01:17:57",
+    "updated":  "2026-08-16T01:17:57",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Overrule adjudicator KEEP: run-dupe of accepted creamy-garlic-herb-wine-pork-chops (creamy skillet pork chops, no starch, differ only in aromatic); pork/creamy-skillet slice saturated, cuisine not widened",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:17:57",
+                        "by":  "sourcer",
+                        "detail":  "https://www.thelittlepine.com/keto-pork-chops/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-16T01:17:57",
+                        "by":  "selector",
+                        "detail":  "Overrule adjudicator KEEP: run-dupe of accepted creamy-garlic-herb-wine-pork-chops (creamy skillet pork chops, no starch, differ only in aromatic); pork/creamy-skillet slice saturated, cuisine not widened"
+                    }
+                ]
+}

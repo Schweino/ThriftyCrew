@@ -1,0 +1,85 @@
+{
+    "slug":  "sheet-pan-smoked-sausage-broccoli-cheddar",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "waved",
+    "wave":  3,
+    "created":  "2026-08-16T01:15:20",
+    "updated":  "2026-08-16T12:35:08",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:15:20",
+                        "by":  "sourcer",
+                        "detail":  "https://thebestketorecipes.com/sausage-broccoli-cheddar-sheet-pan/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T01:15:20",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T01:16:57",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T06:02:16",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T06:02:24",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T06:18:20",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T06:18:24",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-16T06:19:49",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T11:40:51",
+                        "by":  "wave-close",
+                        "detail":  "wave 2"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-16T12:10:50",
+                        "by":  "auditor",
+                        "detail":  "audit-clean, trimmed out of blocked wave 2"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T12:35:08",
+                        "by":  "wave-close",
+                        "detail":  "wave 3"
+                    }
+                ]
+}

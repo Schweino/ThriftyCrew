@@ -1,0 +1,82 @@
+{
+    "slug":  "chimichurri-steak-sheet-pan",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "waved",
+    "wave":  1,
+    "created":  "2026-08-16T01:10:02",
+    "updated":  "2026-08-16T06:07:43",
+    "terms":  [
+                  {
+                      "term":  "fresh oregano",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:10:02",
+                        "by":  "sourcer",
+                        "detail":  "https://fedandfit.com/chimichurri-beef-sheet-pan-dinner/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T01:10:02",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T01:12:43",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T01:24:40",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-16T01:24:48",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T01:27:32",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T01:36:55",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T01:36:56",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-16T05:41:24",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T06:07:43",
+                        "by":  "wave-close",
+                        "detail":  "wave 1"
+                    }
+                ]
+}

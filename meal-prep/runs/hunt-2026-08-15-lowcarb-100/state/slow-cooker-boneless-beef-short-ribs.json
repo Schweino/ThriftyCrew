@@ -1,0 +1,88 @@
+{
+    "slug":  "slow-cooker-boneless-beef-short-ribs",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "waved",
+    "wave":  1,
+    "created":  "2026-08-16T00:55:48",
+    "updated":  "2026-08-16T06:07:43",
+    "terms":  [
+                  {
+                      "term":  "boneless beef short ribs",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T00:55:48",
+                        "by":  "sourcer",
+                        "detail":  "https://jenniferbanz.com/crockpot-short-ribs-5-ingredients"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-16T00:55:48",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-16T00:58:02",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T01:03:57",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-16T01:04:01",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-16T01:11:30",
+                        "by":  "derive",
+                        "detail":  "waiting on: boneless beef short ribs"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T01:14:20",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T01:19:13",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T01:19:16",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-16T01:26:17",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T06:07:43",
+                        "by":  "wave-close",
+                        "detail":  "wave 1"
+                    }
+                ]
+}

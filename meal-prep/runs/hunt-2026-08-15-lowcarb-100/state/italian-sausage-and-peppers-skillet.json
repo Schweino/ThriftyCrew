@@ -1,0 +1,31 @@
+{
+    "slug":  "italian-sausage-and-peppers-skillet",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T20:48:17",
+    "updated":  "2026-08-15T20:48:17",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Pool dupe of accepted italian-sausage-peppers-onions-skillet: identical Italian sausage + peppers + onions no-starch skillet (4 of 4 axes); weaker numbers (476 cal/12g vs 420/8g). Keep the twin.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:48:17",
+                        "by":  "sourcer",
+                        "detail":  "https://thekelliekitchen.com/keto-sausage-and-peppers/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T20:48:17",
+                        "by":  "selector",
+                        "detail":  "Pool dupe of accepted italian-sausage-peppers-onions-skillet: identical Italian sausage + peppers + onions no-starch skillet (4 of 4 axes); weaker numbers (476 cal/12g vs 420/8g). Keep the twin."
+                    }
+                ]
+}

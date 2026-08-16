@@ -1,0 +1,31 @@
+{
+    "slug":  "crustless-ham-gruyere-quiche",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-16T01:17:57",
+    "updated":  "2026-08-16T01:17:57",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Near-duplicate of accepted crustless-bacon-gruyere-quiche: same crustless gruyere egg-cream custard oven bake, only cured-pork cut differs (ham vs bacon)",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:17:57",
+                        "by":  "sourcer",
+                        "detail":  "https://suebeehomemaker.com/crustless-ham-and-cheese-quiche/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-16T01:17:57",
+                        "by":  "selector",
+                        "detail":  "Near-duplicate of accepted crustless-bacon-gruyere-quiche: same crustless gruyere egg-cream custard oven bake, only cured-pork cut differs (ham vs bacon)"
+                    }
+                ]
+}

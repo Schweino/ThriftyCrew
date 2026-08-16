@@ -1,0 +1,31 @@
+{
+    "slug":  "creamy-parmesan-garlic-pork-chops-skillet",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T20:44:01",
+    "updated":  "2026-08-15T20:44:01",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Within-pool dupe of accepted creamy-garlic-herb-wine-pork-chops: same pork-chop / garlic-parmesan cream / skillet / no-starch dinner; the wine-herb sibling won on distinctness + macros.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:44:01",
+                        "by":  "sourcer",
+                        "detail":  "https://example.com/creamy-parmesan-garlic-pork-chops"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T20:44:01",
+                        "by":  "selector",
+                        "detail":  "Within-pool dupe of accepted creamy-garlic-herb-wine-pork-chops: same pork-chop / garlic-parmesan cream / skillet / no-starch dinner; the wine-herb sibling won on distinctness + macros."
+                    }
+                ]
+}

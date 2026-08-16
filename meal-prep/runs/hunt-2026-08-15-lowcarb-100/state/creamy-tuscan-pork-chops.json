@@ -1,0 +1,31 @@
+{
+    "slug":  "creamy-tuscan-pork-chops",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T20:51:36",
+    "updated":  "2026-08-15T20:51:36",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Catalog dup of marry-me-pork-chops-over-pasta: same sun-dried-tomato parmesan cream chop (Marry Me / Creamy Tuscan are the canonical same-dish pair); pork+sauce+skillet all match.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:51:36",
+                        "by":  "sourcer",
+                        "detail":  "https://avenuefood.com/keto-creamy-tuscan-pork-chops/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T20:51:36",
+                        "by":  "selector",
+                        "detail":  "Catalog dup of marry-me-pork-chops-over-pasta: same sun-dried-tomato parmesan cream chop (Marry Me / Creamy Tuscan are the canonical same-dish pair); pork+sauce+skillet all match."
+                    }
+                ]
+}

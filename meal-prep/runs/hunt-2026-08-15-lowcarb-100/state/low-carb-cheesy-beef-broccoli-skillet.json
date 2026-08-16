@@ -1,0 +1,31 @@
+{
+    "slug":  "low-carb-cheesy-beef-broccoli-skillet",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-16T01:26:25",
+    "updated":  "2026-08-16T01:26:25",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Cross-lane same-dinner twin of accepted keto-turkey-broccoli-cheddar-casserole (ground protein + broccoli + cheddar cream sauce, no starch); beef lane already runaway",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:26:25",
+                        "by":  "sourcer",
+                        "detail":  "https://optimalrecipes.com/keto-cheesy-ground-beef-skillet-low-carb-meal/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-16T01:26:25",
+                        "by":  "selector",
+                        "detail":  "Cross-lane same-dinner twin of accepted keto-turkey-broccoli-cheddar-casserole (ground protein + broccoli + cheddar cream sauce, no starch); beef lane already runaway"
+                    }
+                ]
+}

@@ -1,0 +1,98 @@
+{
+    "slug":  "low-carb-steak-fajita-skillet",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "qa-passed",
+    "wave":  2,
+    "created":  "2026-08-15T21:00:41",
+    "updated":  "2026-08-16T12:32:12",
+    "terms":  [
+                  {
+                      "term":  "green bell pepper",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "guacamole",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T21:00:41",
+                        "by":  "sourcer",
+                        "detail":  "https://domesticallycreative.com/low-carb-steak-fajita-skillet/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-15T21:00:42",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-15T21:02:00",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T06:02:48",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-16T06:02:48",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T06:04:16",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T06:13:08",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T06:13:08",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-16T06:14:23",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T11:40:51",
+                        "by":  "wave-close",
+                        "detail":  "wave 2"
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T12:11:01",
+                        "by":  "auditor",
+                        "detail":  "wave-2 trim: NOT a defect. Re-audit certified the cost repair sound (batch 70.72 / ps 5.05 / true 76.06) and the yellow-bell-pepper line now real in cost_lines, scaler, head and card; macros recomputed 541/56.5/7/29.7 vs stat. Sole blocker is a stale process gate: qa\\fajita (06:14:23) predates the 11:58 re-render. Returned to written for source-QA re-stamp on current bytes, per the audit report. Not rejected-audit - its one repair cycle PASSED."
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-16T12:32:12",
+                        "by":  "source-qa",
+                        "detail":  "Re-QA PASS on current 11:58:58 bytes: source fidelity unchanged from live-page QA, cost re-render (yellow pepper now a real produce line) independently reconciled, orphan-clean both directions, optional toppings correctly excluded, prose tokens/literals match spec cost fields, zero em dashes, macros 541/56/7/30 in band. Supersedes the 06:14:23 stamp."
+                    }
+                ]
+}

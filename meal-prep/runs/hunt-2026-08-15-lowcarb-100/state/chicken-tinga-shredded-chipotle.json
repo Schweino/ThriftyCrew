@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-tinga-shredded-chipotle",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-16T01:35:18",
+    "updated":  "2026-08-16T01:35:18",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Catalog dupe of slow-cooker-chicken-tinga-bowls: literally chicken tinga, chipotle-tomato-onion braised shredded chicken, same dish/name/sauce/method.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:35:18",
+                        "by":  "sourcer",
+                        "detail":  "https://www.kitchensanctuary.com/chicken-tinga/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-16T01:35:18",
+                        "by":  "selector",
+                        "detail":  "Catalog dupe of slow-cooker-chicken-tinga-bowls: literally chicken tinga, chipotle-tomato-onion braised shredded chicken, same dish/name/sauce/method."
+                    }
+                ]
+}

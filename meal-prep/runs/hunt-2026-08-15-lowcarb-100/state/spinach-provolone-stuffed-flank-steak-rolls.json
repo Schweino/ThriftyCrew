@@ -1,0 +1,79 @@
+{
+    "slug":  "spinach-provolone-stuffed-flank-steak-rolls",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-audit",
+    "wave":  2,
+    "created":  "2026-08-15T21:00:41",
+    "updated":  "2026-08-16T12:00:27",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Fresh baby spinach (7 cups) prices and ids as FROZEN: ingredient-map/db\\ingredients.json route Spinach -\u003e frozen-chopped-spinach (0.85/210g frozen basis) and no fresh-spinach commodity exists anywhere. Form trap: costed line and item_id are the wrong price class (~2.2-2.6x under fresh shelf). Not a writer-lane fix - needs pricer to capture fresh baby spinach or a Brad-adjudicated disclosed form-flip alias, then registrar/map-owner to land the map row, then recost + recost-spec-cost-block + re-QA. Upstream map correction has not landed; writer lane cannot mint a commodity or edit the map. Rejecting so the rest of wave 2 can proceed; re-hunt once fresh spinach is priced.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T21:00:41",
+                        "by":  "sourcer",
+                        "detail":  "https://gimmedelicious.com/spinach-cheese-stuffed-flank-steak-rolls/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-15T21:00:41",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-15T21:02:00",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T06:02:15",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T06:02:23",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T06:23:04",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T06:23:08",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-16T06:25:12",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T11:40:51",
+                        "by":  "wave-close",
+                        "detail":  "wave 2"
+                    },
+                    {
+                        "state":  "rejected-audit",
+                        "at":  "2026-08-16T12:00:27",
+                        "by":  "auditor",
+                        "detail":  "Fresh baby spinach (7 cups) prices and ids as FROZEN: ingredient-map/db\\ingredients.json route Spinach -\u003e frozen-chopped-spinach (0.85/210g frozen basis) and no fresh-spinach commodity exists anywhere. Form trap: costed line and item_id are the wrong price class (~2.2-2.6x under fresh shelf). Not a writer-lane fix - needs pricer to capture fresh baby spinach or a Brad-adjudicated disclosed form-flip alias, then registrar/map-owner to land the map row, then recost + recost-spec-cost-block + re-QA. Upstream map correction has not landed; writer lane cannot mint a commodity or edit the map. Rejecting so the rest of wave 2 can proceed; re-hunt once fresh spinach is priced."
+                    }
+                ]
+}

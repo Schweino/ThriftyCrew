@@ -1,0 +1,82 @@
+{
+    "slug":  "garlic-butter-steak-bites-zucchini",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "waved",
+    "wave":  3,
+    "created":  "2026-08-15T20:57:11",
+    "updated":  "2026-08-16T12:35:08",
+    "terms":  [
+                  {
+                      "term":  "avocado-oil",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:57:11",
+                        "by":  "sourcer",
+                        "detail":  "https://blackberrybabe.com/2026/02/02/garlic-butter-steak-bites/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-15T20:57:11",
+                        "by":  "selector",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-15T20:58:32",
+                        "by":  "extractor",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-16T06:31:42",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-16T06:31:42",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-16T06:31:55",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-16T11:51:44",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-16T11:51:45",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-16T11:54:21",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T12:35:08",
+                        "by":  "wave-close",
+                        "detail":  "wave 3"
+                    }
+                ]
+}

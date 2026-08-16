@@ -1,0 +1,31 @@
+{
+    "slug":  "chimichurri-flank-steak",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-16T01:26:25",
+    "updated":  "2026-08-16T01:26:25",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Dupe of accepted chimichurri-steak-sheet-pan (same Argentine chimichurri whole-muscle beef); flank vs skirt/sheet-pan is not a distinguishing plate; adjudicator concurred",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-16T01:26:25",
+                        "by":  "sourcer",
+                        "detail":  "https://www.lecremedelacrumb.com/flank-steak-with-chimichurri-sauce/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-16T01:26:25",
+                        "by":  "selector",
+                        "detail":  "Dupe of accepted chimichurri-steak-sheet-pan (same Argentine chimichurri whole-muscle beef); flank vs skirt/sheet-pan is not a distinguishing plate; adjudicator concurred"
+                    }
+                ]
+}

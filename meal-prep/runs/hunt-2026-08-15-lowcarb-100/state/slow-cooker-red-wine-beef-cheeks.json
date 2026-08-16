@@ -1,0 +1,31 @@
+{
+    "slug":  "slow-cooker-red-wine-beef-cheeks",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-15T20:40:29",
+    "updated":  "2026-08-15T20:40:29",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Near-duplicate of catalog beef-bourguignon-bowls: same dinner (beef braised in red wine, slow method); only the cut (cheeks vs chuck) differs. Adjudicator missed beef-bourguignon-bowls. French red-wine-braise niche already filled.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-15T20:40:29",
+                        "by":  "sourcer",
+                        "detail":  "https://www.recipetineats.com/slow-cooker-red-wine-beef-cheeks/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-15T20:40:29",
+                        "by":  "selector",
+                        "detail":  "Near-duplicate of catalog beef-bourguignon-bowls: same dinner (beef braised in red wine, slow method); only the cut (cheeks vs chuck) differs. Adjudicator missed beef-bourguignon-bowls. French red-wine-braise niche already filled."
+                    }
+                ]
+}
