@@ -1449,6 +1449,7 @@
                         "cheese[^,]*(cheddar|mozzarella|colby)"
                     ],
         "exclude":  [
+                        "\\bmac\\s*(?:&|and|n)?\\s*cheese\\b",
                         "\\bcheese\\s+curds?\\b",
                         "\\b(?:burritos?|feta)\\b",
                         "cottage",
@@ -5293,6 +5294,7 @@
                         "\\boranges?\\b"
                     ],
         "exclude":  [
+                        "\\bhabanero\\b",
                         "\\bcarrots?\\b",
                         "\\bpolish\\b",
                         "\\bpledge\\b",
@@ -7508,6 +7510,7 @@
                         "cremini"
                     ],
         "exclude":  [
+                        "\\bport(?:o|a)bell[ao]\\s+mushroom(?:s|\\s+caps?)?\\b",
                         "\\bport(?:o|a)bella?\\s+mushroom(?:s|\\s+caps?)?\\b",
                         "pieces\\s+stems",
                         "stems\\s+pieces",
@@ -8522,6 +8525,7 @@
                         "mac(?:aroni)?\\s*(?:\u0026|and)?\\s*cheese"
                     ],
         "exclude":  [
+                        "\\bbob\\s+evans\\b",
                         "\\bfrozen\\b",
                         "\\bbites\\b",
                         "\\bcup\\b.{0,10}\\b4\\b",
@@ -17795,6 +17799,7 @@
                         "hot\\s+whole\\s+chicken"
                     ],
         "exclude":  [
+                        "\\bshredded\\b",
                         "seasoning",
                         "\\bsalad\\b",
                         "\\bsoup\\b",
@@ -22903,6 +22908,7 @@
                         "relish"
                     ],
         "exclude":  [
+                        "\\bdill\\b",
                         "cranberry",
                         "beech\\s*nut",
                         "\\bgerber\\b",
@@ -29276,6 +29282,7 @@
                              "\\bfrozen\\b"
                          ],
         "include":  [
+                        "\\bfrozen\\s+(?:sweet\\s+)?garden\\s+peas\\b",
                         "frozen\\s+(?:sweet\\s+|green\\s+)?peas",
                         "steamable\\s+peas",
                         "(?:sweet|green)\\s+peas\\b.{0,20}\\b(?:frozen|bag|steam)",
@@ -35998,6 +36005,7 @@
                         "\\bgravy\\b"
                     ],
         "exclude":  [
+                        "\\b(?:and|&|n)\\s+gravy\\b",
                         "\\bbowl\\b",
                         "breakfast",
                         "jimmy\\s+dean",
@@ -55780,6 +55788,7 @@
         "label":  "Cooked Shredded Chicken",
         "unit":  "oz",
         "include":  [
+                        "\\bpulled\\s+roasted\\s+chicken\\b",
                         "\\b(?:(?:fully\\s+cooked|unsauced|oven[-\\s]roasted|rotisserie(?:[-\\s]style)?|simply\\s+seasoned|seasoned|hardwood[-\\s]smoked|applewood[-\\s]smoked|grilled(?:\\s*\u0026\\s*ready)?)\\s+)*(?:shredded|pulled|hand[-\\s]pulled|picked)\\s+chicken(?:\\s+breast)?\\b"
                     ],
         "exclude":  [
@@ -56033,6 +56042,7 @@
         "label":  "Fresh Sage",
         "unit":  "oz",
         "include":  [
+                        "\\bfresh\\s+og\\s+sage\\b",
                         "\\bfresh\\s+(?:organic\\s+)?sage\\b",
                         "\\bsage\\s+fresh\\s+herbs?\\b",
                         "\\b(?:simple truth organic|crazy fresh|johnson family farm)\\s+(?:fresh\\s+)?sage\\b"
@@ -61720,6 +61730,7 @@
                         "\\bport(?:o|a)bella\\s+mushrooms?\\b"
                     ],
         "exclude":  [
+                        "\\bcans?\\b",
                         "\\bstuffed\\b",
                         "\\bdried\\b",
                         "\\bpowder\\b",

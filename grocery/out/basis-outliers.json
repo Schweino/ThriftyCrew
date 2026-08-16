@@ -95,19 +95,6 @@
                          "size_shape_mismatch":  false
                      },
                      {
-                         "id":  "jarred-gravy",
-                         "commodity":  "Jarred / Canned Gravy",
-                         "unit":  "oz",
-                         "store":  "Family Fare",
-                         "per_unit":  0.766,
-                         "median":  0.1658,
-                         "mult":  4.62,
-                         "size":  "15 oz",
-                         "item":  "Hormel Square Table Sliced Roast Turkey Breast And Gravy",
-                         "peers_packed":  "0 of 5",
-                         "size_shape_mismatch":  false
-                     },
-                     {
                          "id":  "shampoo",
                          "commodity":  "Shampoo",
                          "unit":  "floz",
@@ -135,7 +122,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-15T13:58:59",
+    "generated":  "2026-08-16T07:46:53",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -242,6 +229,18 @@
                               "per_unit":  21.3929,
                               "size":  "200 ml",
                               "item":  "Litehouse Herb, Freeze  Dried Basil 0.28 Oz",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "bbq-sauce",
+                              "commodity":  "BBQ Sauce",
+                              "unit":  "oz",
+                              "store":  "Baker\u0027s",
+                              "per_unit":  0.1106,
+                              "size":  "18 fl oz",
+                              "item":  "Kraft Sweet Honey Slow-Simmered BBQ Sauce",
                               "kind":  "volume",
                               "row_kind":  "weight",
                               "holds_crown":  false
@@ -787,18 +786,6 @@
                               "holds_crown":  false
                           },
                           {
-                              "id":  "bottled-marinade",
-                              "commodity":  "Meat Marinade (bottled)",
-                              "unit":  "floz",
-                              "store":  "Baker\u0027s",
-                              "per_unit":  0.2525,
-                              "size":  "15.8 oz",
-                              "item":  "Kinder\u0027s Grilled Chicken Marinade",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
                               "id":  "miracle-whip",
                               "commodity":  "Miracle Whip (Salad Dressing Spread)",
                               "unit":  "oz",
@@ -1010,6 +997,18 @@
                               "per_unit":  0.199,
                               "size":  "10 oz",
                               "item":  "Fareway Soy Sauce",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "sparkling-water",
+                              "commodity":  "Sparkling Water",
+                              "unit":  "floz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0818,
+                              "size":  "17 oz",
+                              "item":  "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false

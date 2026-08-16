@@ -2032,6 +2032,21 @@
                         "ruled_on":  "2026-08-15",
                         "ruled_by":  "board-collision-fix-2026-08-15",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "egg-noodles|Walmart|12-pack-manischewitz-fine-egg-noodles-12-oz-bag",
+                        "commodity":  "egg-noodles",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "(12 pack) Manischewitz Fine Egg Noodles, 12 oz bag"
+                                  ],
+                        "product_id":  "150098585",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Walmart marketplace pack listing carries the SINGLE-bag price. Verified in out\\regular\\walmart-regular-2026-08-06.json: item 150098585 \u0027(12 pack) Manischewitz Fine Egg Noodles, 12 oz bag\u0027 is $7.89 / 144 oz with Walmart\u0027s OWN stated unit price 5.5 c/oz, while the identical single 12 oz bag (item 10448207) is also $7.89 with Walmart\u0027s OWN stated 65.8 c/oz. Same price for 1x and 12x of the same product, so the pack listing\u0027s price is the single-bag price. Our capture reproduces Walmart\u0027s stated numbers faithfully (guard 10 green), which is why no price-verification guard can see it: the wrongness is in the store\u0027s catalog. RETIRE WHEN: item 150098585\u0027s listed price no longer equals item 10448207\u0027s listed price at Walmart. Re-check both ids together; if they diverge, the pack listing has been repriced and this ruling must be reversed.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-16",
+                        "ruled_by":  "triage-developer 2026-08-16 (plan-2026-08-16, queue 2026-08-07-058ac6)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

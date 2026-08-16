@@ -821,3 +821,42 @@
 [2026-08-15T12:49:14] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe price inversion: 15 clamped' [type: recipe price inversion clamped]
 [2026-08-15T12:51:09] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe price inversion: 15 clamped' [type: recipe price inversion clamped]
 [2026-08-15T16:22:16] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe price inversion: 50 clamped' [type: recipe price inversion clamped]
+[2026-08-16T06:09:10] QUEUE ABSORBED into open item 2026-08-13-a5f563 (day 3 of this condition, count now 7) - no new id minted
+[2026-08-16T06:09:10] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Baker's ad window advanced with no capture behind it' [type: baker s ad window advanced with no capture behind it]
+[2026-08-16T06:12:54] QUEUE ABSORBED into open item 2026-08-07-9d0317 (day 9 of this condition, count now 9) - no new id minted
+[2026-08-16T06:12:54] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 28 store(s) dropped from a commodity they carry - 2026-08-16' [type: grocery store s dropped from a commodity they carry]
+[2026-08-16T06:15:12] QUEUE ABSORBED into open item 2026-08-07-cac5f3 (day 9 of this condition, count now 14) - no new id minted
+[2026-08-16T06:15:12] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: semantic sweep found 67 product(s) no rule can see - 2026-08-16' [type: grocery semantic sweep found product s no rule can see]
+[2026-08-16T06:15:13] QUEUE ABSORBED into open item 2026-08-07-323328 (day 9 of this condition, count now 8) - no new id minted
+[2026-08-16T06:15:13] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 9 board cell(s) sit in the wrong store department - 2026-08-16' [type: grocery board cell s sit in the wrong store department]
+[2026-08-16T06:17:03] QUEUE ABSORBED into open item 2026-08-07-79b768 (day 9 of this condition, count now 12) - no new id minted
+[2026-08-16T06:17:04] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery matching soundness - review needed' [type: grocery matching soundness review needed]
+[2026-08-16T06:17:06] QUEUE ABSORBED into open item 2026-08-15-3d6050 (day 1 of this condition, count now 3) - no new id minted
+[2026-08-16T06:17:06] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: store-registry drift - 1 issue(s)' [type: grocery store registry drift issue s]
+[2026-08-16T06:19:06] QUEUE ABSORBED into open item 2026-08-09-92a805 (day 7 of this condition, count now 7) - no new id minted
+[2026-08-16T06:19:06] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 2 on-sale item(s) have no everyday fallback - 2026-08-16' [type: grocery on sale item s have no everyday fallback]
+[2026-08-16T06:19:22] QUEUE ABSORBED into open item 2026-08-09-3e7a0c (day 7 of this condition, count now 3) - no new id minted
+[2026-08-16T06:19:22] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe pricing: 40 unpriced ingredient line(s)' [type: recipe pricing unpriced ingredient line s]
+[2026-08-16T06:19:30] QUEUE ABSORBED into open item 2026-08-09-e8ea1d (day 7 of this condition, count now 7) - no new id minted
+[2026-08-16T06:19:30] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe db drift (index vs specs)' [type: recipe db drift index vs specs]
+[2026-08-16T06:19:41] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe spec contradictions got worse' [type: recipe spec contradictions got worse]
+[2026-08-16T06:19:46] QUEUE BODY UPGRADED on 2026-08-09-96a277 (807 -> 1217 chars) - a later occurrence carried fuller evidence
+[2026-08-16T06:19:46] QUEUE ABSORBED into open item 2026-08-09-96a277 (day 7 of this condition, count now 6) - no new id minted
+[2026-08-16T06:19:46] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe per-serving manifest: skipped recipe(s)' [type: recipe per serving manifest skipped recipe s]
+[2026-08-16T06:19:49] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Ingredient stores disagree: 12 hard finding(s)' [type: ingredient stores disagree hard finding s]
+[2026-08-16T06:19:55] QUEUE ABSORBED into open item 2026-08-12-2f6bba (day 4 of this condition, count now 8) - no new id minted
+[2026-08-16T06:19:55] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Database constraint refused a write' [type: database constraint refused a write]
+[2026-08-16T06:19:56] QUEUE BODY UPGRADED on 2026-08-12-fb9d1d (488 -> 979 chars) - a later occurrence carried fuller evidence
+[2026-08-16T06:19:56] QUEUE ABSORBED into open item 2026-08-12-fb9d1d (day 4 of this condition, count now 8) - no new id minted
+[2026-08-16T06:19:57] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'A write broke cross-store integrity' [type: a write broke cross store integrity]
+[2026-08-16T06:20:00] QUEUE ABSORBED into open item 2026-08-09-817ca5 (day 7 of this condition, count now 15) - no new id minted
+[2026-08-16T06:20:00] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Board prices aging inside a fresh file' [type: board prices aging inside a fresh file]
+[2026-08-16T06:22:31] QUEUE ABSORBED into open item 2026-08-07-058ac6 (day 9 of this condition, count now 12) - no new id minted
+[2026-08-16T06:22:31] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 22 NEW price flag(s) - 2026-08-16' [type: grocery new price flag s]
+[2026-08-16T06:23:41] QUEUE ABSORBED into open item 2026-08-07-fb1fee (day 9 of this condition, count now 15) - no new id minted
+[2026-08-16T06:23:41] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: Walmart full capture aging - 2026-08-16' [type: grocery walmart full capture aging]
+[2026-08-16T06:30:41] QUEUE ABSORBED into open item 2026-08-15-817b20 (day 1 of this condition, count now 3) - no new id minted
+[2026-08-16T06:30:41] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: a GUARD has gone blind (test-auditors failed)' [type: grocery a guard has gone blind test auditors failed]
+[2026-08-16T06:33:01] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Tools: ghost-drift could not evaluate (no key, or a page could not be read)' [type: tools ghost drift could not evaluate no key or a page could not be read]
+[2026-08-16T06:33:02] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Ops: an agent prompt is not backed up' [type: ops an agent prompt is not backed up]
+[2026-08-16T06:33:09] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Baker's ad rolled (ADFLIP) on a Sunday - flyer capture needed' [type: baker s ad rolled adflip on a sunday flyer capture needed]

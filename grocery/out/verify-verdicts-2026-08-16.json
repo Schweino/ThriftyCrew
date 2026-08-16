@@ -1,0 +1,18 @@
+{
+  "week_of": "2026-08-16",
+  "note": "Single re-review recorded by the 2026-08-16 triage (plan-2026-08-16). Not a board pass. This exists ONLY to correct a false block in audit-match-soundness's verdict gate, and the underlying gate defect is bounced back for a proper fix - see plan-2026-08-16 item 2026-08-07-79b768.",
+  "verdicts": [
+    {
+      "id": "garlic",
+      "entries": [
+        {
+          "store": "Aldi",
+          "item": "Garlic",
+          "keep": true,
+          "annotation": "re-review of the key the 2026-08-15 verdict produced, not of the product it judged",
+          "reason": "'Garlic' (Aldi, $0.5633/lb, whole garlic; peer cells Kroger Whole Garlic Bulbs $0.498/lb and Walmart Fresh Garlic Sleeve $0.58/lb) is correctly matched to the garlic commodity and is KEPT. This entry is needed because audit-match-soundness's verdict gate recovers the judged item from the first quoted string in a verdict's reason text instead of from the entry's own 'item' field. The 2026-08-15 verdict judged 'Marketside Tandoori Style Garlic Naan Bites, 7.05 oz, 15 Count' and its reason quotes the bare word 'Garlic' as a flavour descriptor, so the gate built key garlic|garlic and refused -Accept by naming this real product. The actually-judged naan bites remain DROPPED: they are suppressed by GLOBAL_EXCLUDE 'naan', carry a known-wrong entry, and hold no cell on the 2026-08-16 board. Nothing about that ruling is reversed here."
+        }
+      ]
+    }
+  ]
+}

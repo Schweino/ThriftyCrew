@@ -211,7 +211,8 @@
                   {
                       "term":  "fennel",
                       "recipes":  [
-                                      "trial-run-2026-08-15"
+                                      "trial-run-2026-08-15",
+                                      "braised-pork-shoulder-fennel-tomato"
                                   ],
                       "added":  "2026-08-15T06:45:46",
                       "why":  "tier1 CAPTURE: 11 candidates but all are fennel SEED spice jars; commodity unit is each (fresh bulb)",
@@ -556,7 +557,8 @@
                   {
                       "term":  "avocado-oil",
                       "recipes":  [
-                                      "trial-run-2026-08-15"
+                                      "trial-run-2026-08-15",
+                                      "garlic-butter-steak-bites-zucchini"
                                   ],
                       "added":  "2026-08-15T06:45:46",
                       "why":  "tier1 ABSENT: no board cell, nothing in captures",
@@ -582,9 +584,9 @@
                                                          "state":  "carried",
                                                          "price":  13.99,
                                                          "size":  "20.96 fl oz",
-                                                         "item":  "Our Family 100% Pure Avocado Oil",
-                                                         "evidence":  "probe \u0027avocado oil\u0027 Freshop store_id 6401: store-brand Our Family 100% pure avocado oil in pantry/baking/oils_sprays. Ruled out \u0027Aussie Conditioner With Avocado Oil\u0027 (hair product) and the 4.7oz spray.",
-                                                         "checked":  "2026-08-15T06:47:34"
+                                                         "item":  "Our Family 100% Pure Avocado Oil 20.96 Fl Oz",
+                                                         "evidence":  "probe-ingredient rung 1 \u0027avocado oil\u0027 on Freshop store_id 6401 Omaha: 12 hits, no no-results banner. Ruled out Aussie Conditioner With Avocado Oil (hair care) and the Pam/Chosen 4.7-5 oz cooking SPRAYS. Ruled in Our Family 100% Pure Avocado Oil 20.96 fl oz \\.99 from pantry/baking/oils_sprays; Chosen Foods 100% Pure 16.9 fl oz \\.99 corroborates.",
+                                                         "checked":  "2026-08-16T06:36:20"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -615,8 +617,8 @@
                                                           "price":  9.99,
                                                           "size":  "17 fl oz",
                                                           "item":  "Private Selection Avocado Oil",
-                                                          "evidence":  "probe \u0027avocado oil\u0027 via Kroger API loc 61500319: 8 hits, several pure avocado oils. Chose the store-brand bottle (Private Selection 17 fl oz \\.99); ruled out the Primal Kitchen 4.7oz spray as a cooking spray not bulk oil.",
-                                                          "checked":  "2026-08-15T06:47:34"
+                                                          "evidence":  "probe-ingredient rung 1 \u0027avocado oil\u0027 on kroger-public-api locationId 61500319: 25 hits, no no-results banner. Unit is fl_oz = bottled oil, so the 4.7 oz Primal Kitchen aerosol SPRAY rows were ruled out. Ruled in Private Selection Avocado Oil 17 fl oz \\.99 (store-brand bottled oil); also Chosen Foods 100% Pure 16.9 fl oz \\.99 and BetterBody Refined 16.9 fl oz \\.99.",
+                                                          "checked":  "2026-08-16T06:36:20"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -689,6 +691,939 @@
                                                       }
                                  },
                       "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "bacon bits",
+                      "recipes":  [
+                                      "chicken-bacon-ranch-cauliflower-bake",
+                                      "jalapeno-popper-chicken-casserole"
+                                  ],
+                      "added":  "2026-08-15T20:40:46",
+                      "why":  "stirred through the casserole and 11-12 g of its per-recipe protein; board resolution to raw bacon rejected on price-class evidence (bacon rule itself excludes bits), needs a real carriage/price verdict",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  3.784,
+                                                             "size":  "per lb (10 lb pack)",
+                                                             "item":  "Member\u0027s Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.",
+                                                             "evidence":  "price-ingredient tier 1: \u0027bacon bits\u0027 MAPS to the existing priced commodity \u0027bacon\u0027 (include pattern /\\bbacon\\b/), which has a published board cell at 7 of 7 stores on week 2026-08-15. Sam\u0027s Club is the cheapest at \\.784/lb. Already priced on the board, so no browser lookup was warranted.",
+                                                             "checked":  "2026-08-16T06:36:43"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  3.95,
+                                                  "size":  "per lb",
+                                                  "item":  "Appleton Farms Lower Sodium Bacon",
+                                                  "evidence":  "price-ingredient tier 1: \u0027bacon bits\u0027 resolves to board commodity \u0027bacon\u0027, priced at all 7 stores on week 2026-08-15. Aldi\u0027s board cell is Appleton Farms Lower Sodium Bacon at \\.95/lb (first-party Omaha in-store price). Board-published, not a candidate row.",
+                                                  "checked":  "2026-08-16T06:36:43"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  4.4444,
+                                                          "size":  "per lb",
+                                                          "item":  "Kroger Naturally Hardwood Smoked Thick Cut Bacon",
+                                                          "evidence":  "price-ingredient tier 1: \u0027bacon bits\u0027 resolves to board commodity \u0027bacon\u0027 (7 of 7 stores priced, week 2026-08-15). Baker\u0027s board cell is Kroger Naturally Hardwood Smoked Thick Cut Bacon at \\.4444/lb.",
+                                                          "checked":  "2026-08-16T06:36:43"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "gruyere",
+                      "recipes":  [
+                                      "crustless-bacon-gruyere-quiche",
+                                      "hunt-2026-08-15-lowcarb-100",
+                                      "batch3"
+                                  ],
+                      "added":  "2026-08-15T20:41:55",
+                      "why":  "main cheese, 4.75 cups shredded (537 g); no gruyere commodity in any namespace; NOTE today Sams capture already shows Alpenhaus French Gruyere Semi-Hard Cheese Wedge 1 lb $11.87 ($0.74/oz) under a pecorino search row - Rule B evidence for the pricer to confirm",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  {
+                                                         "state":  "error",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop server lane returned HTTP 400 Bad Request on \u0027gruyere\u0027 on two attempts 8s apart (probe-ingredient.ps1 -Store family-fare). Verdict UNUSABLE, likely search-budget throttling. No result grid ever rendered, so this is blocked, not absence.",
+                                                         "checked":  "2026-08-15T20:45:15"
+                                                     },
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  8.49,
+                                                          "size":  "8 oz",
+                                                          "item":  "Boar\u0027s Head Blanc Grue Gruyere Cheese",
+                                                          "evidence":  "kroger-public-api locationId 61500319 Omaha, searched \u0027gruyere\u0027 rung 1, 9 hits, MATCHES. Adjudicated: Boar\u0027s Head Blanc Grue Gruyere Cheese 8 oz \\.49 is plain gruyere cheese in block form, exactly what a quiche needs. Also genuine: Murray\u0027s Gruyere Shredded 8 oz \\.99 and Murray\u0027s Cave Aged Gruyere Wedge 1 lb \\.99. Rejected as not-the-ingredient: Private Selection Cheddar-Gruyere slices/block (blend), ham+gruyere egg bites, gruyere chopped salad kit, gruyere-bacon mac and cheese.",
+                                                          "checked":  "2026-08-15T20:45:15"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "dry white wine",
+                      "recipes":  [
+                                      "french-chicken-fricassee",
+                                      "creamy-garlic-herb-wine-pork-chops",
+                                      "hunt-2026-08-15-lowcarb-100",
+                                      "chicken-chasseur",
+                                      "basque-chicken-peppers-chilindron"
+                                  ],
+                      "added":  "2026-08-15T20:57:25",
+                      "why":  "fricassee needs it for the deglaze/sauce base (3/4 cup plus 2 tbsp at 14 servings); board and captures carry no white-wine cell but several Omaha stores stock wine",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  5.69,
+                                                         "size":  "500 ml",
+                                                         "item":  "Vendange Pinot Grigio White Wine 500 Ml",
+                                                         "evidence":  "probe-ingredient rung 1 \u0027dry white wine\u0027 on Freshop store_id 6401 Omaha (pickup = shelf price, not Instacart): 25 hits, no no-results banner. Vendange Pinot Grigio 500ml \\.69 sits in catalog path beer_wine_spirits/wines_champagnes/pinot_grigio_bone_dry - a still bone-dry white wine, exactly the cooking ingredient. Corroborated by Vendange Sauvignon Blanc 1.5L \\.99 in sauvignon_blanc_dry and Carlo Rossi Chablis 4L \\.99.",
+                                                         "checked":  "2026-08-16T06:36:12"
+                                                     },
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  10.99,
+                                                          "size":  "750 ml",
+                                                          "item":  "Chateau Ste. Michelle Dry Riesling Washington White Wine",
+                                                          "evidence":  "probe-ingredient rung 1 \u0027dry white wine\u0027 on kroger-public-api locationId 61500319 (Omaha Baker\u0027s): 4 hits, no no-results banner. Ruled out the two Cook\u0027s Extra Dry sparkling/champagne rows (sparkling, not a still cooking wine). Ruled in Chateau Ste. Michelle Dry Riesling 750ml \\.99 - a still, explicitly dry white wine a cook would buy; Drylands Sauvignon Blanc 750ml \\.99 is a second genuine hit.",
+                                                          "checked":  "2026-08-16T06:36:11"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "brandy",
+                      "recipes":  [
+                                      "low-carb-ground-beef-stroganoff-skillet",
+                                      "chicken-marsala-skillet",
+                                      "hunt-2026-08-15-lowcarb-100"
+                                  ],
+                      "added":  "2026-08-15T20:57:25",
+                      "why":  "stroganoff needs it for the deglaze (7 tbsp at 14 servings, listed non-optional by the source); no board cell or capture but Omaha grocers such as Hy-Vee sell spirits",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  {
+                                                         "state":  "error",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "probe-ingredient server lane: Freshop returned HTTP 400 Bad Request on the single query for \u0027brandy\u0027; search-budget throttling, no result grid ever rendered. UNUSABLE, not absence.",
+                                                         "checked":  "2026-08-15T20:59:34"
+                                                     },
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  12.49,
+                                                          "size":  "750 ml",
+                                                          "item":  "E\u0026J VS Brandy",
+                                                          "evidence":  "kroger-public-api locationId 61500319, searched \u0027brandy\u0027, 25 hits, top 8 all genuine brandy bottles (E\u0026J VS / VSOP / XO) at relevance 134-137, no brand-name-collision rows. Ruled IN E\u0026J VS Brandy 750ml at 12.49 as the base standard-size bottle a cook would buy; 50ml/200ml/375ml minis and the 1.75L handle are the same product at other sizes, XO/VSOP are premium tiers.",
+                                                          "checked":  "2026-08-15T20:59:34"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "yellow split peas",
+                      "recipes":  [
+                                      "burmese-chicken-dal-curry",
+                                      "hunt-2026-08-15-lowcarb-100",
+                                      "batch3"
+                                  ],
+                      "added":  "2026-08-15T20:58:47",
+                      "why":  "the dal itself, 343 g dry; ABSENT - no commodity claims the term; registrar proposal split-peas pending",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Omaha 68144 zip confirmed in header. __NEXT_DATA__ search \u0027yellow split peas\u0027 returned 21 tiles, aggregatedCount 54, no no-results banner - but EVERY tile is fulfillmentType FC (ship-from-fulfillment-center) or MARKETPLACE third-party: Geusi Vounou 500g, Rani/Aiva/Palouse bulk, Goya 16oz 3-pack, Sadaf 24oz, and \u0027(18 pack) Great Value Yellow Split Peas 1 lb\u0027 \\.16 as a shipped multipack. Confirming search \u0027great value yellow split peas\u0027 returned that 18-pack alone. No single-unit item available at the Omaha store (no pickup/in-store shelf item). Ruling the Omaha store shelf does not carry it; ship-only marketplace listings are not a shelf price.",
+                                                     "checked":  "2026-08-16T01:06:04"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Identity verified by Apollo cache GetRetailerLocationAddress: retailerLocation 531573, lineOne \u002717070 Audrey Street\u0027, lineTwo \u0027Omaha, NE 68136\u0027; header mode In-Store. (The in-app pane session was on 513473 \u0027100 Euclid Avenue, Des Moines, IA 50313\u0027 and could not be switched, so this reading was taken in the connected Chrome, which held the Omaha store.) rung 1 \u0027yellow split peas\u0027: literal \u0027No results for \"yellow split peas\"\u0027 + \u0027Browse related items\u0027 with 108 SUGGESTION tiles (Brown\u0027s Best Green Splits, garbanzos, lentils, canned sweet peas). rung 2 \u0027split peas\u0027: exactly 1 genuine hit, \u0027Brown\u0027s Best Peas Green Splits 16 oz\u0027 - GREEN split peas, not yellow. No yellow split peas.",
+                                                     "checked":  "2026-08-16T01:09:13"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "rung 1 \u0027yellow split peas\u0027 threw 400 on first pass (Freshop throttle) then rung 2 \u0027split peas\u0027 returned 4 tiles: Our Family Peas Green Split 1lb \\.99 (GREEN), and 3 Campbell\u0027s/Progresso split pea WITH HAM soups. No yellow split peas.",
+                                                         "checked":  "2026-08-16T01:02:26"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "not-carried",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "Store selector confirmed \u0027Omaha #01, NE\u0027. Rendered-page read (in-page fetch returns an empty shell, so get_page_text was used). rung 1 \u0027yellow split peas\u0027: \u00271 - 1 of 1 Results\u0027 and the single hit is Hy-Vee All Natural Nine Bean Soup Mix 16 oz \\.48 - a bean soup mix, not the ingredient; one hit is never a conclusion. rung 2 \u0027split peas\u0027: \u00271 - 7 of 7 Results\u0027 - Hy-Vee All Natural GREEN Split Peas 16 oz \\.99 (green, not yellow), Progresso/Campbell\u0027s/Amy\u0027s split-pea SOUPS, plus sponsored popcorn. No yellow split peas at either rung.",
+                                                    "checked":  "2026-08-16T01:07:51"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Club identity confirmed \u0027Omaha Sam\u0027s Club\u0027, Omaha 68144. __NEXT_DATA__ search rung 1 \u0027yellow split peas\u0027: itemStacks[0] title \u0027\"yellow split peas\"\u0027 count 11 - every tile is canned beans/peas (Isadora refried, Stubb\u0027s baked beans, Del Monte Sweet Peas 105oz, Camellia Red Kidney 4lb, Le Sueur sweet peas, Bush\u0027s kidney/chili, Goya pinto); second stack is \u0027Canned Fruits \u0026 Vegetables\u0027 substitutions. rung 2 \u0027split peas\u0027: count 11, all Bush\u0027s/Rosarita/Old El Paso canned beans plus a \u0027Beans\u0027 category stack. Zero dry split-pea product of any color on either rung.",
+                                                             "checked":  "2026-08-16T01:07:26"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "Store ALDI - OLA 42 - Omaha, header switched from cold-session Delivery to In-Store (open 9am-8pm) and re-read to confirm. rung 1 \u0027yellow split peas\u0027: page renders literal \u0027No results for \"yellow split peas\"\u0027 + \u0027Browse related items\u0027; the 46 product links are SUGGESTIONS (carrots, chickpeas, kidney beans, frozen sweet peas). rung 2 \u0027split peas\u0027: same literal \u0027No results for \"split peas\"\u0027 banner, 13 suggestion tiles (Campbell\u0027s chicken noodle soup, great northern beans, sweet peas). EMPTY on both rungs, zero genuine hits.",
+                                                  "checked":  "2026-08-16T01:06:04"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "rung 1 \u0027yellow split peas\u0027 0 hits, rung 1b \u0027yellowsplitpeas\u0027 0 hits; rung 2 head-noun \u0027split peas\u0027 returned 8 tiles, no no-results banner: only Kroger Green Split Peas 16oz \\.69 (GREEN, not yellow) plus 7 canned/boxed split-pea SOUPS (Amy\u0027s, Progresso, Campbell\u0027s, Dr McDougall\u0027s, Tasty Bite curry). No yellow split peas in any form.",
+                                                          "checked":  "2026-08-16T01:02:26"
+                                                      }
+                                 },
+                      "verdict":  "NOT-CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "thai chiles",
+                      "recipes":  [
+                                      "burmese-chicken-dal-curry",
+                                      "thai-coconut-curry-pork-shoulder",
+                                      "batch6"
+                                  ],
+                      "added":  "2026-08-15T20:58:47",
+                      "why":  "OPTIONAL heat garnish only, 35 g - must not park the recipe; ABSENT - no commodity claims the term",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  3.38,
+                                                     "size":  "1.37 oz",
+                                                     "item":  "McCormick Crushed Thai Style Chili Pepper, 1.37 oz Bottle",
+                                                     "evidence":  "Store header \u0027Omaha L St Supercenter\u0027, 12812 S 38TH St, signed in. __NEXT_DATA__ parse with sellerName captured. Search \u0027thai chiles\u0027 returned ~20 tiles; nearly all whole-thai-chile listings are third-party marketplace ship items (Revstar Direct Red Thai Chili Peppers 5 oz \\.97, NY Spice Shop Birdseye Chiles \\.99/\\.99, Country Creek Thai Pepper 1 oz \\.99, EZ THAI GROCERY \\.35) and I excluded all of those as not-the-Omaha-store. The one sellerName=\u0027Walmart.com\u0027 first-party thai-chile item is McCormick Crushed Thai Style Chili Pepper 1.37 oz \\.38 - the same crushed-dried thai chile Hy-Vee stocks. Same caveat as Hy-Vee: crushed dried form, not whole pods.",
+                                                     "checked":  "2026-08-16T05:48:55"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Apollo cache confirms retailerLocation 531573, \u002717070 Audrey Street\u0027, \u0027Omaha, NE 68136\u0027; header \u0027In-Store\u0027. Rung 1 \u0027thai chiles\u0027: literal \u0027No results for \\",
+                                                     "checked":  "2026-08-16T05:48:55"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog store_id 6401 Omaha. Ladder: rung1 \u0027thai chiles\u0027=0; \u0027thai chile\u0027=0; rung2 \u0027thai\u0027=14 hits, all Amy\u0027s Pad Thai, Veetee jasmine rice, Annie Chun\u0027s pad thai noodles, Ka-Me thai ribbon noodles, Bumble Bee Thai Chili Tuna, Thai Kitchen pad thai sauce/fish sauce; head-noun rung \u0027chiles\u0027=25 hits, all canned diced green chiles (Hatch, Our Family 4/7 oz) and Old El Paso green-chile refried beans. No no-results banner - these are real grids. Nothing is a whole thai/bird chile.",
+                                                         "checked":  "2026-08-16T05:42:16"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  5.99,
+                                                    "size":  "1.37 oz",
+                                                    "item":  "McCormick Crushed Thai Style Chili Pepper",
+                                                    "evidence":  "Store selector \u0027Omaha #1, NE\u0027. Rendered search \u0027thai chiles\u0027 returned \u00271 - 2 of 2 Results for thai chiles\u0027 - a real result count line, no no-results banner. Hits: McCormick Crushed Thai Style Chili Pepper 1.37 oz \\.99, and Don Enrique De Arbol Dried Chile Peppers 0.5 oz \\.99. The De Arbol is a different chile so it does not qualify. The McCormick item IS thai chile (bird\u0027s-eye) sold as crushed dried pepper - the recipe uses 1-3 thai chiles purely for heat, so the crushed dried form is what a cook would buy here. Recorded as carried on that form; if the run requires WHOLE thai chiles specifically, this store should be re-ruled.",
+                                                    "checked":  "2026-08-16T05:48:55"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Club \u0027Omaha Sam\u0027s Club\u0027, 15429 Blackwell Dr, member session active. __NEXT_DATA__ searchResult parse. Rung 1 \u0027thai chiles\u0027 = 11 tiles, none a chile: Nongshim hot and spicy ramen, Samyang Buldak, Member\u0027s Mark Hatch chile and chicken enchiladas, mashed potatoes, cream of mushroom soup. Rung 4 \u0027chiles\u0027 = 16 tiles, all canned chili and snacks (Ro-Tel diced tomatoes with green chilies, Hormel/Stagg/Nalley chili, Takis, Corn Nuts chile picante) plus one dried-chile bag, Orale Guajillo Peppers 12 oz \\.18 - guajillo is a mild Mexican chile, not a thai/bird\u0027s-eye. Also ran \u0027chili pepper\u0027 = ramen and prepared foods. No thai chile in the club assortment.",
+                                                             "checked":  "2026-08-16T05:48:55"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "Header \u0027In-Store . open 9am - 8pm / ALDI - OLA 48 - Omaha\u0027. Rung 1 \u0027thai chiles\u0027: literal \u0027No results for \\",
+                                                  "checked":  "2026-08-16T05:48:55"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "kroger-public-api locationId 61500319. Ladder: rung1 \u0027thai chiles\u0027=0; rung \u0027thai chile\u0027=5 hits, all sauces/tuna pouches (Melindas Thai Sweet Chili Sauce, Blue Dragon, Bumble Bee Spicy Thai Chili Tuna); rung \u0027thai\u0027=25 hits, all coconut milk/pad thai sauce/noodles; head-noun rung \u0027chiles\u0027=25 hits, all CANNED diced green chiles (Hatch, La Preferida, Ortega, Kroger 4 oz cans) plus Cholula chili crisp. No fresh or dried Thai/bird\u0027s-eye chile pepper in any rung. Sauces flavored with thai chili and canned mild green chiles are not the whole hot chile the recipe calls for.",
+                                                          "checked":  "2026-08-16T05:42:16"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "green bell pepper",
+                      "recipes":  [
+                                      "philly-cheesesteak-stuffed-peppers",
+                                      "hunt-2026-08-15-lowcarb-100",
+                                      "batch3",
+                                      "low-carb-steak-fajita-skillet",
+                                      "italian-sausage-stuffed-peppers-bake"
+                                  ],
+                      "added":  "2026-08-15T20:58:49",
+                      "why":  "the vessel of the dish, 7 peppers; commodity id exists but no priced board cell (CAPTURE) - 8 capture candidates across 6 stores need the pricer rule",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  2.96,
+                                                     "size":  "8 oz / 2 ct",
+                                                     "item":  "Marketside Organic Green Bell Pepper, 8 oz, 2 Count",
+                                                     "evidence":  "price-ingredient tier 1 on today\u0027s captures: Walmart \u0027Marketside Organic Green Bell Pepper, 8 oz, 2 Count\u0027 \\.96 - fresh whole green bell peppers (organic packaged, the only green-bell row Walmart returned in today\u0027s capture). Carriage is clear; a cheaper conventional loose row may exist but was not in the capture.",
+                                                     "checked":  "2026-08-16T06:36:33"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  0.77,
+                                                     "size":  "each",
+                                                     "item":  "Green Bell Pepper",
+                                                     "evidence":  "price-ingredient tier 1 on today\u0027s captures (comparison-2026-08-15): Fareway \u0027Green Bell Pepper\u0027 \\.77 each, plain fresh produce row, exact ingredient. No adjudication ambiguity.",
+                                                     "checked":  "2026-08-16T06:36:32"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  1.29,
+                                                         "size":  "1 ct",
+                                                         "item":  "Fresh Green Peppers",
+                                                         "evidence":  "Freshop store_id 6401 Omaha. rung 1 \u0027green bell pepper\u0027: 1 hit and it was Our Family diced tomatoes with green bell pepper - NOT the ingredient. rung \u0027bell pepper\u0027: 6 hits, none a fresh green one (yellow bell, organic red, Mezzetta roasted red, Spanish rice, McCormick seasoning, diced tomatoes). rung \u0027green pepper\u0027: 21 hits, MATCHES - \u0027Fresh Green Peppers\u0027 1 ct 1.29 in fresh_fruits_vegetables/peppers is the whole fresh green bell pepper. Fresh Divide cut/diced trays 5.99/lb skipped as prepared.",
+                                                         "checked":  "2026-08-15T21:01:57"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  0.79,
+                                                    "size":  "lb",
+                                                    "item":  "Green Bell Pepper",
+                                                    "evidence":  "price-ingredient tier 1 on today\u0027s captures: Hy-Vee \u0027Green Bell Pepper\u0027 \\.79/lb fresh produce row, exact ingredient. Already on disk, so no browser lookup was needed.",
+                                                    "checked":  "2026-08-16T06:36:33"
+                                                },
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  2.69,
+                                                  "size":  "3 ct",
+                                                  "item":  "Green Bell Pepper 3 CT",
+                                                  "evidence":  "price-ingredient tier 1 on today\u0027s captures: Aldi \u0027Green Bell Pepper 3 CT\u0027 \\.69 (first-party Omaha in-store capture), a 3-pack of the fresh pepper - the exact ingredient.",
+                                                  "checked":  "2026-08-16T06:36:33"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  0.99,
+                                                          "size":  "1 ct",
+                                                          "item":  "Fresh Large Green Bell Pepper",
+                                                          "evidence":  "price-ingredient tier 1 on comparison-2026-08-15 (today\u0027s captures): commodity exists but has no priced board cell; 8 candidates across 6 stores. Baker\u0027s row \u0027Fresh Large Green Bell Pepper\u0027 \\.99 each is the whole fresh pepper a cook would buy. Ruled out the Baker\u0027s \u0027Green Giant SteamCrisp Mexicorn ... with Red \u0026 Green Bell Peppers\u0027 11 oz can - a corn dish, not the pepper.",
+                                                          "checked":  "2026-08-16T06:36:32"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "shaved beef steak",
+                      "recipes":  [
+                                      "philly-cheesesteak-stuffed-peppers",
+                                      "hunt-2026-08-15-lowcarb-100",
+                                      "batch3"
+                                  ],
+                      "added":  "2026-08-15T20:58:50",
+                      "why":  "the title protein, 1361 g; ABSENT - no commodity claims the term; registrar proposal shaved-beef-steak pending",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop store_id 6401 Omaha. rung 1 \u0027shaved beef steak\u0027: 0 hits; rung \u0027shavedbeefsteak\u0027: 0 hits; rung \u0027shaved steak\u0027: 0 then 0 then a widened 25-hit pool that was shaved deli TURKEY, Hawaiian shaved ice and eight shaving creams - zero beef. No shaved/sandwich-steak beef SKU in the Omaha catalog.",
+                                                         "checked":  "2026-08-15T21:01:58"
+                                                     },
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  7.99,
+                                                          "size":  "14 oz",
+                                                          "item":  "Kroger Beef Shaved Steak",
+                                                          "evidence":  "kroger-public-api locationId 61500319. rung 1 \u0027shaved beef steak\u0027: 5 hits, no no-results banner. Kroger Beef Shaved Steak 14 oz 7.99 is exactly the cheesesteak cut, plain/unseasoned base label. Also 1.5 lb 11.99 and Wagyu 9.99/10 oz; the salt-pepper-garlic seasoned version and the Land O\u0027Frost shaved TURKEY ruled out.",
+                                                          "checked":  "2026-08-15T21:01:57"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "boneless beef short ribs",
+                      "recipes":  [
+                                      "slow-cooker-boneless-beef-short-ribs",
+                                      "batch-4"
+                                  ],
+                      "added":  "2026-08-16T01:03:52",
+                      "why":  "main protein, 7 lb at 14 servings; no commodity claims the term and no capture matches",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  {
+                                                         "state":  "blocked",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop server lane returned HTTP 400 Bad Request on all three rungs (\u0027boneless beef short ribs\u0027, \u0027beef short ribs\u0027, \u0027short ribs\u0027) - search-budget throttling, not absence. No result grid ever rendered, so UNUSABLE, recorded blocked not not-carried.",
+                                                         "checked":  "2026-08-16T01:13:04"
+                                                     },
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  11.99,
+                                                          "size":  "1 lb",
+                                                          "item":  "Boneless Short Beef Ribs (About 4 per Pack)",
+                                                          "evidence":  "kroger-public-api locationId 61500319. Rung 1 \u0027boneless beef short ribs\u0027 returned 1 hit (below threshold); rung \u0027beef short ribs\u0027 and rung \u0027short ribs\u0027 each returned 4 hits, no no-results banner. Hits: Beef Bone In Flanken Style Short Ribs 9.99/lb (bone-in, wrong cut), Beef Choice Bone-In Short Ribs 10.99/lb (bone-in), Boneless Short Beef Ribs About 4 per Pack 11.99/lb (EXACT match, boneless beef short ribs, raw meat counter cut), Giovanni Rana Beef Short Rib Ravioli 6.79 (prepared pasta, rejected). Ruled carried on the boneless raw cut at 11.99 per lb.",
+                                                          "checked":  "2026-08-16T01:13:00"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "fresh oregano",
+                      "recipes":  [
+                                      "chimichurri-steak-sheet-pan",
+                                      "hunt-2026-08-15-lowcarb-100"
+                                  ],
+                      "added":  "2026-08-16T01:24:44",
+                      "why":  "required chimichurri component (1 1/4 tbsp at 14 servings); board only answers via dried-oregano include pattern which is a form-flip - needs a real fresh-herb carriage/price verdict",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  {
+                                                         "state":  "error",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "probe-ingredient.ps1 Freshop catalog (store_id 6401 Omaha) returned HTTP 400 Bad Request on both attempts (\u0027fresh oregano\u0027 and \u0027oregano herb\u0027), consistent with Freshop search-budget throttling. Verdict UNUSABLE - no grid was ever rendered, so this is BLOCKED, not absence.",
+                                                         "checked":  "2026-08-16T01:27:09"
+                                                     },
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.49,
+                                                          "size":  "0.5 oz",
+                                                          "item":  "Simple Truth Organic Oregano",
+                                                          "evidence":  "Kroger public API locationId 61500319 (Bakers Omaha). Rung 1 \u0027fresh oregano\u0027 returned exactly 1 hit: Simple Truth Organic Oregano 0.5 oz $2.49, productId 0001111001859. Rung 2 \u0027oregano\u0027 returned 19 hits; product categories disambiguate them - every other oregano SKU is categorized Baking Goods or International (Kroger/Smart Way/Private Selection/Spice Islands/McCormick \u0027Oregano Leaves\u0027 and \u0027Oregano Leaves Shaker\u0027, Tampico Whole/Ground/Cut) i.e. the dried spice aisle, plus 6 false positives that merely contain the word (diced tomatoes with basil garlic and oregano, Kroger Basil and Oregano grated parmesan, Sargento oregano crackers). 0001111001859 is the ONLY oregano item with categories \u0027Natural \u0026 Organic,Produce\u0027. A control query \u0027fresh herbs\u0027 returns it inside the fresh-clamshell cluster alongside Simple Truth Organic Thyme/Rosemary/Sage/Mint/Tarragon/Chives/Baby Dill, all 0.5 oz at $2.49, which is the store\u0027s fresh cut-herb clamshell line. Note it is the organic label only because that is the only fresh cut-herb line Bakers stocks, not a preference upgrade over a base private label.",
+                                                          "checked":  "2026-08-16T01:27:04"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "cardamom pods",
+                      "recipes":  [
+                                      "thai-coconut-curry-pork-shoulder",
+                                      "batch6",
+                                      "kerala-chicken-curry-nadan-kozhi",
+                                      "slow-cooker-beef-nihari"
+                                  ],
+                      "added":  "2026-08-16T01:35:57",
+                      "why":  "whole cardamom pods for the curry, 7 pods scaled; ABSENT on board and captures",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Store header reads \u0027Omaha L St Supercenter\u0027, 12812 S 38TH St, signed in as Brad S. Parsed __NEXT_DATA__, price read from priceInfo.linePrice, and captured sellerName per tile. Rung 1 \u0027cardamom pods\u0027 and rung 2 \u0027cardamom\u0027 both returned real grids (~20 tiles). Every WHOLE-POD tile is a third-party marketplace listing shipped by an outside seller, not the Omaha store: Rani Green Cardamom Pods 1.4oz \\.99 / 2oz \\.99 / 3.5oz \\.99 (seller \u0027Rani Brand Authentic Indian Products\u0027), iSpice Cardamom Seed Whole 3.9 oz \\.99 (seller iSpiceFoods), Natruen Black Cardamom Pods Whole \\.99 (Natural Plus Green), The Spice Way Cardamom Pods (THE SPICE WAY LLC), all fulfillmentType FC. The only sellerName=\u0027Walmart.com\u0027 cardamom item is McCormick Gourmet Organic GROUND Cardamom 1.75 oz \\.97, which is ground, not pods. No pods on the Omaha shelf.",
+                                                     "checked":  "2026-08-16T05:48:32"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Identity verified via Apollo cache: retailerLocation 531573, address lineOne \u002717070 Audrey Street\u0027, lineTwo \u0027Omaha, NE 68136\u0027. Header reads \u0027In-Store . closed / Omaha\u0027. Rung 1 \u0027cardamom pods\u0027: literal \u0027No results for \\",
+                                                     "checked":  "2026-08-16T05:48:32"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog store_id 6401 Omaha. Ladder: \u0027cardamom pods\u0027=0 -\u003e \u0027cardamompods\u0027=0 -\u003e rung2 \u0027cardamom\u0027=3 hits total, all shown: Sugar \u0027N Spice Cardamom Ground Pp 1 oz \\.99, Old Spice Cardamom \u0026 Amber Wood Shampoo, Yogi Cozy Cardamom tea bags. Only ground cardamom plus two non-food items; no whole pods.",
+                                                         "checked":  "2026-08-16T05:42:29"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  13.99,
+                                                    "size":  "0.9 oz",
+                                                    "item":  "Morton \u0026 Bassett Cardamom",
+                                                    "evidence":  "Store selector reads \u0027Omaha #1, NE\u0027. Rendered search \u0027cardamom\u0027 = \u00271 - 6 of 6 Results\u0027, Form facet shows Ground (3) / Whole (1). Opened the single Whole item /aisles-online/p/40087/morton-and-bassett-cardamom: product description reads \u0027These pods are the premier cardamom. Split the pod and drop the aromatic black seeds into... curry dishes\u0027, confirming WHOLE GREEN PODS, not ground. \\.99, Pantry/Herbs \u0026 Spices/Dried Spices, UPC 0016291441090. Note: listing size line says \u00279 oz Bottle\u0027 but the details panel says Weight 0.9 Ounces - 0.9 oz is the real M\u0026B jar size, so I recorded 0.9 oz. The other 3 cardamom foods (McCormick Gourmet Organic Ground 1.75 oz \\.99, M\u0026B Ground 1.9 oz \\.99, Hy-Vee Ground 0.45 oz \\.99) are ground and do not qualify.",
+                                                    "checked":  "2026-08-16T05:48:32"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Club header reads \u0027Omaha Sam\u0027s Club\u0027, 15429 Blackwell Dr, member session signed in (Hi, Brad). In-page fetch of /search parsed from __NEXT_DATA__ props.pageProps.initialData.searchResult. Rung 1 \u0027cardamom pods\u0027 returned 8 hits, ALL COFFEE PODS (Member\u0027s Mark Caramel Vanilla Cream coffee pods 60 ct, McCafe K-Cup 94 ct, Caribou Blend 80 ct) - a false match on the word \u0027pods\u0027. Rung 2 \u0027cardamom\u0027 returned a real 20-item grid of bulk seasonings (Member\u0027s Mark granulated garlic, Montreal steak seasoning, coarse black pepper 5 lbs, taco seasoning) with no cardamom product of any form. Warehouse spice assortment does not include cardamom.",
+                                                             "checked":  "2026-08-16T05:48:32"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "In-app store header read \u0027In-Store . open 9am - 8pm / ALDI - OLA 48 - Omaha\u0027 (In-Store price mode confirmed, not Delivery/Pickup). Rung 1 \u0027cardamom pods\u0027: literal banner \u0027No results for \\",
+                                                  "checked":  "2026-08-16T05:48:32"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "kroger-public-api locationId 61500319. Ladder: \u0027cardamom pods\u0027=0 -\u003e \u0027cardamompods\u0027=0 -\u003e rung2 \u0027cardamom\u0027=5 hits total, all shown: Private Selection Ground Cardamom Shaker 2.01 oz \\.99, Simple Truth Organic Ground Cardamom Powder 1.41 oz \\.99, House of Velas Cardamom Oak candle, Dove Men+Care Sandalwood+Cardamom body wash, Yogi Cozy Cardamom tea. Real grid, no no-results banner. Only GROUND cardamom - no whole green cardamom pods, which is what the recipes call for (4 whole pods / 2-3 green pods).",
+                                                          "checked":  "2026-08-16T05:42:29"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "creamed coconut",
+                      "recipes":  [
+                                      "thai-coconut-curry-pork-shoulder",
+                                      "batch6"
+                                  ],
+                      "added":  "2026-08-16T01:35:57",
+                      "why":  "finishing coconut block, 105 g scaled; ABSENT on board and captures; source note sanctions coconut cream / full-fat coconut milk fallback if not carried, so a not-carried verdict should route to substitution, not auto-reject",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Store header \u0027Omaha L St Supercenter\u0027, 12812 S 38TH St, signed in. __NEXT_DATA__ parse filtered to sellerName=\u0027Walmart.com\u0027 first-party tiles. \u0027creamed coconut\u0027 and rung \u0027coconut cream\u0027 both returned real grids. First-party coconut items: Coco Lopez Real Cream of Coconut 15 oz \\.47, Coco Real Cream of Coconut 16.9 oz \\.17, Goya Cream of Coconut 15 oz 2-pack \\.92, Thai Kitchen Gluten Free Unsweetened Coconut Cream 13.66 oz \\.76, Thai Kitchen Sweetened Coconut Whipping Cream \\.76, Kara Natural Coconut Cream 6.8 fl oz, Blue Elephant coconut cream. All are canned/bottled liquid coconut cream or sweetened cream-of-coconut mixer. No creamed-coconut solid block from any first-party listing.",
+                                                     "checked":  "2026-08-16T05:49:15"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Apollo cache retailerLocation 531573, \u002717070 Audrey Street\u0027, \u0027Omaha, NE 68136\u0027; In-Store header. Search \u0027creamed coconut\u0027 returned a REAL grid (no no-results banner) of exactly 3 tiles: Coco Real Gourmet Cream of Coconut 22 oz, Goya Coconut Milk 13.5 fl oz, A Taste of Thai Unsweetened Coconut Milk 13.5 fl oz. Cream of coconut is a sweetened cocktail mixer and coconut milk is a separate board item; neither is the solid creamed-coconut block.",
+                                                     "checked":  "2026-08-16T05:49:15"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog store_id 6401 Omaha. \u0027creamed coconut\u0027=8 hits and \u0027coconut cream\u0027=8 hits: Marie Callender\u0027s Coconut Cream Pie 30.3 oz, its mini pies, Almond Joy ice cream bars, Jell-O Instant Coconut Cream pudding mix, Real Infused Exotics Cream of Coconut 22 oz (sweetened cocktail mixer), Dove beauty bar. Real grid, no no-results banner. No solid creamed-coconut block; sweetened cream of coconut is a cocktail mixer, not the ingredient.",
+                                                         "checked":  "2026-08-16T05:42:29"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "not-carried",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "Store selector \u0027Omaha #1, NE\u0027. Rendered search \u0027creamed coconut\u0027 returned \u00271 - 12 of 12 Results\u0027 - a real grid, no no-results banner. All 12: Thai Kitchen Unsweetened Coconut Cream 13.66 fl oz \\.49, Thai Kitchen Sweetened Coconut Whipping Cream \\.49, Coffee Mate Coconut Creme creamer 32 fl oz x2, Yoplait Whips coconut creme yogurt, Marie Callender\u0027s coconut cream pie and mini pies, Malk coconut/almond/oat milks, Real Infused Exotics Cream of Coconut. None is CREAMED COCONUT - the solid dehydrated block (Grace / Let\u0027s Do Organic style) that \u00274 tablespoons creamed coconut\u0027 means. Canned liquid coconut cream and sweetened cream-of-coconut cocktail mixer are different products, and the recipe already lists a separate can of full-fat coconut milk.",
+                                                    "checked":  "2026-08-16T05:49:15"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Club \u0027Omaha Sam\u0027s Club\u0027, 15429 Blackwell Dr, member session active. __NEXT_DATA__ searchResult parse. \u0027creamed coconut\u0027 = 12 tiles: NatureWell coconut oil moisturizing cream, Shea Moisture curl cream, So Delicious coconut milk 32 fl oz, Thai Kitchen Unsweetened Coconut Milk 13.66 fl oz, dry/evaporated/condensed milks, Bob\u0027s Red Mill shredded unsweetened coconut 24 oz. Retry rung \u0027coconut cream\u0027 returned the same non-qualifying pool (body creams, coconut milk). No creamed-coconut block; the closest food items are coconut milk and shredded coconut, which are different commodities.",
+                                                             "checked":  "2026-08-16T05:49:15"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "Header \u0027In-Store . open 9am - 8pm / ALDI - OLA 48 - Omaha\u0027. Search \u0027creamed coconut\u0027: literal \u0027No results for \\",
+                                                  "checked":  "2026-08-16T05:49:15"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "kroger-public-api locationId 61500319. Searched \u0027creamed coconut\u0027=25 hits (all body lotion, shave gel, curl cream, Marie Callender\u0027s coconut cream PIE) and \u0027coconut cream\u0027=25 hits (Marie Callender\u0027s pie, Thai Kitchen Unsweetened Coconut Cream 13.66 fl oz \\.29 canned, fragrance mist, Dr Pepper creamy coconut soda). Real grids, no no-results banner. No creamed-coconut block (Grace / Let\u0027s Do Organic style dehydrated solid block) which is what \u00274 tablespoons creamed coconut\u0027 means; canned liquid coconut cream is a different product and the recipe already lists a separate can of full-fat coconut milk.",
+                                                          "checked":  "2026-08-16T05:42:29"
+                                                      }
+                                 },
+                      "verdict":  "NOT-CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "90/10 ground beef",
+                      "recipes":  [
+                                      "low-carb-beef-meatloaf",
+                                      "hunt-2026-08-15-lowcarb-100"
+                                  ],
+                      "added":  "2026-08-16T06:02:09",
+                      "why":  "main protein, 3 1/2 lb; author pins the 85-90 lean point and board has only 80/20 and 93/7 ids; registrar proposal ground-beef-90-10 pending",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog store_id 6401 Omaha. Full ladder on two phrasings, 8 rungs total, all 0 hits and no error: \u002790/10 ground beef\u0027,\u002790/10 beef\u0027,\u002790/10groundbeef\u0027,\u002790/10beef\u0027,\u002790% lean ground beef\u0027,\u002790% lean beef\u0027,\u002790%leangroundbeef\u0027,\u002790%leanbeef\u0027. Family Fare\u0027s lean ground beef line is 93/7 (Our Certified 93% Lean Ground Beef Roll) - no 90/10 SKU.",
+                                                         "checked":  "2026-08-16T06:09:03"
+                                                     },
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  8.99,
+                                                          "size":  "1 lb",
+                                                          "item":  "Simple Truth Organic 90/10 Grass Fed Ground Beef Pack 1 LB",
+                                                          "evidence":  "probe-ingredient kroger-public-api locationId 61500319, rung 1 \u002790/10 ground beef\u0027: 2 hits, both genuine 90/10 ground beef (1 lb .99; 3 lb .00). Confirming probe \u002790% lean ground beef\u0027 returned Sterling Silver Ground Sirloin 90% Lean 1 lb .49. Cheapest true 90/10 is the Simple Truth 1 lb at .99.",
+                                                          "checked":  "2026-08-16T06:09:02"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "unsweetened ketchup",
+                      "recipes":  [
+                                      "low-carb-beef-meatloaf"
+                                  ],
+                      "added":  "2026-08-16T06:02:09",
+                      "why":  "topping, 1 1/4 cups; no-sugar-added ketchup is a separate product and price class from regular ketchup (sugar-free-bbq split precedent); registrar proposal unsweetened-ketchup pending",
+                      "status":  "pending",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "PENDING",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "tandoori spice mix",
+                      "recipes":  [
+                                      "sheet-pan-tandoori-chicken-cauliflower",
+                                      "hunt-2026-08-15-lowcarb-100"
+                                  ],
+                      "added":  "2026-08-16T06:02:09",
+                      "why":  "the marinade identity and dish name, 7 tbsp; ABSENT on board and captures; registrar proposal tandoori-masala pending",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "walmart.com signed in, store \u0027Omaha L St Supercenter\u0027. __NEXT_DATA__ searchResult.itemStacks: \u0027tandoori spice mix\u0027 count 0 (48 tiles are related-item suggestions - McCormick Indian Style, bettergoods Shawarma/Tikka Masala, none tandoori); \u0027tandoori seasoning\u0027 count 0, 48 suggestions, zero name contains \u0027tandoori\u0027; \u0027tandoori masala\u0027 count 1, 37 tiles, zero name contains \u0027tandoori\u0027; bare \u0027tandoori\u0027 returned 1 item, Deep Indian Kitchen Chicken Tikka Masala frozen meal - a dish, not the spice.",
+                                                     "checked":  "2026-08-16T06:14:19"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "shop.fareway.com, Apollo cache verified retailerLocationId 531573, lineOneString 17070 Audrey Street, lineTwoString Omaha NE 68136; header In-Store. Widest rung tandoori rendered the literal banner: No results for tandoori - plus 108 suggestion links. Per R1 that is EMPTY, not 108 hits. No tandoori spice blend.",
+                                                     "checked":  "2026-08-16T06:14:28"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog store_id 6401 Omaha. \u0027tandoori spice mix\u0027 0 hits, \u0027tandoorispicemix\u0027 0 hits, rung 2 \u0027tandoori\u0027 0 hits, \u0027tand oori\u0027 0 hits. No no-results-plus-suggestions pattern; catalog returns literally nothing for tandoori.",
+                                                         "checked":  "2026-08-16T06:09:03"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  2.49,
+                                                    "size":  "0.88 oz",
+                                                    "item":  "Patak\u0027s BBQ Tandoori Chicken Seasoning Rub 0.88 oz",
+                                                    "evidence":  "hy-vee.com/aisles-online, store selector reads \u0027Omaha #1, NE\u0027. Rendered page (not in-page fetch) for \u0027tandoori\u0027: \u00271 - 19 of 19 Results\u0027, facet \u0027Category: Seasoning Mixes (1)\u0027 / \u0027Section: Pantry (1)\u0027. That one seasoning-mix hit is Patak\u0027s BBQ Tandoori Chicken Seasoning Rub 0.88 oz at \\.49 - a dry tandoori spice blend, the form a cook buys for tandoori chicken. The other 18 hits are naan breads and prepared items, ruled out.",
+                                                    "checked":  "2026-08-16T06:14:18"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "samsclub.com signed in, club reads \u0027Omaha Sam\u0027s Club\u0027, 15429 Blackwell Dr. __NEXT_DATA__ parse: \u0027tandoori spice mix\u0027 aggregatedCount 12, all generic seasonings (Montreal Steak, Member\u0027s Mark Taco, Tone\u0027s Pickling Spice, pumpkin pie spice), zero item name contains \u0027tandoori\u0027. Rung \u0027tandoori\u0027 aggregatedCount 6 / 20 items: Member\u0027s Mark Tandoori Style Naan Bites and other breads - a flavored bread is not a spice mix. No tandoori seasoning SKU.",
+                                                             "checked":  "2026-08-16T06:14:19"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "aldi.us storefront, header In-Store, store ALDI - OLA 48 - Omaha (Omaha store, in-store mode verified before reading). Widest rung tandoori rendered the literal banner: No results for tandoori - followed by 73 SUGGESTION product links (Stonemill grilling blends, Cook House tikka masala simmer sauce, Specially Selected naan, cilantro). Per R1 the banner governs, so 0 genuine hits. No tandoori seasoning in the Aldi assortment.",
+                                                  "checked":  "2026-08-16T06:14:28"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "kroger-public-api locationId 61500319. Rung 1 \u0027tandoori spice mix\u0027 0 hits, rung spacing variant 0 hits, rung 2 \u0027tandoori\u0027 3 hits: Jabsons Tandoori Roasted Peanuts 4.94oz (snack flavored), Patak\u0027s Tandoori Simmer Sauce 15oz (wet sauce, not a dry spice blend), Jabsons Tandoori Roasted Chana. No jarred/boxed tandoori masala or tandoori seasoning blend.",
+                                                          "checked":  "2026-08-16T06:09:03"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "guacamole",
+                      "recipes":  [
+                                      "low-carb-steak-fajita-skillet"
+                                  ],
+                      "added":  "2026-08-16T06:02:41",
+                      "why":  "OPTIONAL topping only, 14 tbsp; no commodity claims the term (25 capture candidates); never blocking",
+                      "status":  "pending",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "PENDING",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "pico de gallo",
+                      "recipes":  [
+                                      "southwest-ground-turkey-cauliflower-rice-skillet"
+                                  ],
+                      "added":  "2026-08-16T06:02:41",
+                      "why":  "OPTIONAL garnish only, 28 tbsp; no commodity claims the term (2 capture candidates); never blocking",
+                      "status":  "pending",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "PENDING",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "fresh tarragon",
+                      "recipes":  [
+                                      "chicken-chasseur",
+                                      "french-chicken-fricassee"
+                                  ],
+                      "added":  "2026-08-16T06:24:32",
+                      "why":  "signature chasseur herb, 2 1/4 tbsp, non-optional with no source-sanctioned fallback; ABSENT board-wide",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "walmart.com __NEXT_DATA__ searchResult.itemStacks. Rung 1 \u0027fresh tarragon\u0027 48 items, rung 2 \u0027tarragon\u0027 65 items - no no-results banner, real grids both times. Every tarragon SKU is DRIED leaf: McCormick Gourmet 0.37 oz, Spice Islands 0.5 oz, Morton \u0026 Bassett Organic 0.3 oz, Frontier cut-and-sifted, The Spice Way pouches, Its Delish bulk bags up to 20 lbs, Fresco Flavors freeze-dried. Zero fresh-herb clamshell/produce tarragon. Ruled out on form.",
+                                                     "checked":  "2026-08-16T06:29:01"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "shop.fareway.com via real Chrome. R4 identity verified from Apollo cache GetRetailerLocationAddress: retailerLocation 531573, lineOne 17070 Audrey Street, lineTwo Omaha NE 68136 - the correct Omaha store. Header mode reads In-Store. (The in-app pane session was on retailerLocation 513473 / 100 Euclid Avenue Des Moines IA in Pickup mode and rendered no grid at all, so it was discarded, not read.) Rung 2 tarragon returned the LITERAL banner: No results for tarragon / Browse related items. The 9 tiles after it are SUGGESTIONS per R1 - Spice World Fresh Shallots 3 oz $2.49, Baby Dill 1 bunch $3.99, Curly Parsley $1.49, Green Onions, Shallot 1 lb, Crazy Fresh Mint 0.75 oz, Badia spices. Zero genuine hits: EMPTY.",
+                                                     "checked":  "2026-08-16T06:33:35"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog store_id 6401 Omaha. Full ladder walked: rung 1 \u0027fresh tarragon\u0027 0 hits, rung 2 \u0027tarragon\u0027 1 hit, rung 3 \u0027freshtarragon\u0027 0 hits. No no-results banner issue (server API, explicit zero counts). The single \u0027tarragon\u0027 hit did not survive as a candidate row. Nothing fresh or dried qualifying returned.",
+                                                         "checked":  "2026-08-16T06:27:31"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "not-carried",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "Aisles Online rendered page, store selector read \u0027Shopping Omaha #01, NE\u0027. Rung 2 \u0027tarragon\u0027 (broader pool, subsumes rung 1): banner read \u00271 - 4 of 4 Results for tarragon\u0027, no no-results phrase. All four: McCormick Tarragon Leaves 0.2 oz \\.99 (dried), Morton \u0026 Bassett Tarragon 0.3 oz \\.99 (dried), Heinz Tarragon Vinegar 12 fl oz \\.99 (vinegar), Max Mix Chicken \u0026 Fish Mix 5 oz \\.11 (seasoning blend). No fresh-herb tarragon in produce; ruled out on form.",
+                                                    "checked":  "2026-08-16T06:29:00"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "samsclub.com via real Chrome session, club header reads Omaha Sams Club, page JSON city=Omaha, linePrice/unitPrice both resolving (e.g. McCormick Grill Mates Montreal Steak Seasoning 29 oz $7.48 / $0.26/oz) so the club context is live. Ladder rung 1 fresh tarragon: 17 items, all PRODUCE fallback (Plums 3.5 lbs, Limes 3 lbs, Bartlett Pears, Blackberries) - zero contain the word tarragon. Rung 2 tarragon: 21 items, all seasoning/prepared-food fallback (Montreal Steak Seasoning, granulated garlic, bacon crumbles, chicken bites, Members Mark Dried Cilantro) - zero contain the word tarragon. Both grids are relevance fallbacks with no genuine hit, R1 shape. Sams warehouse packs do not include tarragon in any form.",
+                                                             "checked":  "2026-08-16T06:32:50"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "aldi.us in-app pane, header read In-Store open 9am-8pm / ALDI - OLA 42 - Omaha (in-store mode verified, not Delivery). Rung 2 tarragon (broader pool, subsumes rung 1) returned the LITERAL banner: No results for tarragon / Browse related items. The 5 product tiles that follow are SUGGESTIONS not results - Parsley each $0.95, Green Onions 5.5 oz $1.05, Fresh Thyme 0.5 oz $1.59, Asparagus 1 lb, Cilantro each. R1 applies: EMPTY, zero genuine hits. First attempt rendered no grid at all; re-navigated and got the explicit no-results banner.",
+                                                  "checked":  "2026-08-16T06:30:12"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "kroger-public-api locationId 61500319; ladder rung 1 \u0027fresh tarragon\u0027 1 hit, rung 2 (qualifier \u0027fresh\u0027 stripped) \u0027tarragon\u0027 2 hits. Both hits are DRIED spice-jar tarragon: Simple Truth Organic Tarragon 0.5 oz \\.49 and Spice Islands Tarragon Kosher 0.5 oz \\.49. No fresh-herb clamshell / produce-department tarragon in the catalog. A 0.5 oz dried spice jar is not fresh tarragon, so ruled out on form; noting the dried substitute exists here if the recipe can accept it.",
+                                                          "checked":  "2026-08-16T06:27:31"
+                                                      }
+                                 },
+                      "verdict":  "NOT-CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "marsala wine",
+                      "recipes":  [
+                                      "chicken-chasseur",
+                                      "chicken-marsala-skillet"
+                                  ],
+                      "added":  "2026-08-16T06:24:40",
+                      "why":  "chasseur sauce, 1/2 cup plus 1 1/4 tbsp; no commodity claims marsala, only capture is Holland House cooking marsala at Walmart",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  5.49,
+                                                         "size":  "16 fl oz",
+                                                         "item":  "Holland House Marsala Cooking Wine 16 Fl Oz",
+                                                         "evidence":  "Freshop catalog store_id 6401 Omaha, pickup = store shelf price. Ladder rung 1 \u0027marsala wine\u0027 1 hit, rung 3 0, rung 2 \u0027marsala\u0027 1 hit - same SKU both rungs. Single candidate weighed: Holland House Marsala Cooking Wine 16 fl oz \\.49, shelved under pantry/mixes_spices_seasoning/cooking_wines_vinegars. That is the cooking marsala itself, not a dish.",
+                                                         "checked":  "2026-08-16T06:27:16"
+                                                     },
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  4.99,
+                                                          "size":  "16 fl oz",
+                                                          "item":  "Holland House Marsala Cooking Wine",
+                                                          "evidence":  "kroger-public-api locationId 61500319; ladder rung 1 \u0027marsala wine\u0027 1 hit, rung 3 \u0027marsalawine\u0027 1, rung 2 \u0027marsala\u0027 4 hits. Adjudicated: Holland House Marsala Cooking Wine 16 fl oz \\.99 IS the ingredient (grocery-aisle cooking marsala, the form a cook buys for chicken marsala). Ruled OUT: Rana Chicken Marsala Linguine meal kit, Private Selection Savory Marsala Cooking Sauce, Healthy Choice Chicken Marsala frozen meal - all prepared dishes containing marsala, not marsala.",
+                                                          "checked":  "2026-08-16T06:27:16"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "almond flour",
+                      "recipes":  [
+                                      "creamy-garlic-herb-wine-pork-chops",
+                                      "keto-turkey-meatloaf"
+                                  ],
+                      "added":  "2026-08-16T06:24:40",
+                      "why":  "gluten-free dredge, 1 cup plus 2 3/4 tbsp; flour-commodity include hijack rejected (wheat price class under an almond line), needs its own carriage verdict",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  9.99,
+                                                         "size":  "16 oz",
+                                                         "item":  "Blue Diamond Finely Sifted Almond Flour 16 Oz",
+                                                         "evidence":  "Freshop catalog store_id 6401 Omaha, pickup = store shelf price. Rung 1 \u0027almond flour\u0027 returned 6 hits. Adjudicated: Blue Diamond Finely Sifted Almond Flour 16 oz \\.99 and Bob\u0027s Red Mill Almond Flour Super Fine 16 oz \\.19, both shelved pantry/baking/flour - plain almond flour. Ruled OUT: Simple Mills pancake/waffle mix, protein pancake mix and the two Simple Mills cracker SKUs - finished foods made with almond flour.",
+                                                         "checked":  "2026-08-16T06:27:24"
+                                                     },
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  7.49,
+                                                          "size":  "16 oz",
+                                                          "item":  "Simple Truth Gluten Free Superfine Almond Flour",
+                                                          "evidence":  "kroger-public-api locationId 61500319; rung 1 \u0027almond flour\u0027 returned 19 hits, no ladder needed. Adjudicated: Simple Truth Gluten Free Superfine Almond Flour 16 oz \\.49 (base private label, cheapest true almond flour) and Bob\u0027s Red Mill Almond Flour 16 oz \\.79 and Blue Diamond Gluten Free Almond Flour 1lb \\.79 are all plain almond flour. Ruled OUT: Simple Mills pizza-dough/brownie/bread/cookie baking mixes and Siete almond-flour tortillas - products MADE WITH almond flour, not the flour.",
+                                                          "checked":  "2026-08-16T06:27:23"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "korean-rice-cakes",
+                      "recipes":  [
+                                      "dak-galbi-chicken-cabbage-skillet"
+                                  ],
+                      "added":  "2026-08-16T07:50:18",
+                      "why":  "tier1 MIS-MAPPED: price-ingredient maps to commodity \u0027rice\u0027 via /\\brice\\b/ at \\.4396/lb long-grain white rice; commodity \u0027rice-cakes\u0027 is the puffed Quaker snack. Neither is tteok. Needs a live per-store carriage check for plain ~600g tteok.",
+                      "status":  "pending",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "PENDING",
                       "notes":  null
                   }
               ]

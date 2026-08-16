@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-08-15T12:52:06",
+    "generated":  "2026-08-16T06:11:08",
     "note":  "winning history cells at a verdict-rejected (commodity,store) whose product could not be identified from any surviving board; neither purged nor cleared",
     "cells":  [
                   {
@@ -8,13 +8,6 @@
                       "week":  "2026-07-17",
                       "price":  0.3827,
                       "is_record_low":  true
-                  },
-                  {
-                      "id":  "cherries",
-                      "store":  "Aldi",
-                      "week":  "2026-07-20",
-                      "price":  2.49,
-                      "is_record_low":  false
                   },
                   {
                       "id":  "dijon-mustard",

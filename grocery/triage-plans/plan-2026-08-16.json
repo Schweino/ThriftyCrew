@@ -1,0 +1,1190 @@
+{
+    "generated":  "2026-08-16T07:05:00",
+    "round":  1,
+    "board_week":  "2026-08-15",
+    "board_built_at":  "2026-08-16T06:10:58",
+    "queue_ids_seen":  [
+                           "2026-08-07-9d0317",
+                           "2026-08-07-cac5f3",
+                           "2026-08-07-323328",
+                           "2026-08-07-79b768",
+                           "2026-08-07-058ac6",
+                           "2026-08-07-fb1fee",
+                           "2026-08-09-6d10d3",
+                           "2026-08-09-817ca5",
+                           "2026-08-09-3e7a0c",
+                           "2026-08-09-92a805",
+                           "2026-08-09-e8ea1d",
+                           "2026-08-09-96a277",
+                           "2026-08-09-e547d0",
+                           "2026-08-10-740129",
+                           "2026-08-11-c7515c",
+                           "2026-08-12-2f6bba",
+                           "2026-08-12-fb9d1d",
+                           "2026-08-12-744e93",
+                           "2026-08-12-e3adcb",
+                           "2026-08-13-a5f563",
+                           "2026-08-13-af4d74",
+                           "2026-08-13-102940",
+                           "2026-08-13-056051",
+                           "2026-08-14-84daea",
+                           "2026-08-14-89d97b",
+                           "2026-08-15-3d6050",
+                           "2026-08-15-817b20",
+                           "2026-08-15-68ab6e",
+                           "2026-08-15-9ee54e",
+                           "2026-08-15-1a1109",
+                           "2026-08-16-586f23",
+                           "2026-08-16-d908d3",
+                           "2026-08-16-179ae3",
+                           "2026-08-16-cce9d1",
+                           "2026-08-16-951948"
+                       ],
+    "routing_artifact":  "plan-2026-08-16.routing.json",
+    "shared_tree_note":  "A recipe-hunter run is LIVE in meal-prep\\ (last write 06:29:25). ALL meal-prep edits in this plan are DEFERRED (publish_batch 3) until that run completes; the grocery chain is fully separable and ships without touching meal-prep. Foreign uncommitted files (24 untracked recipes, modified food-macros-db/ingredient-map/costed/batch-ledger/cost-flags/spec-contradictions/v2-perserving, .claude skills SKILL.md, design PLAN-token-efficiency) are the running session\u0027s - never revert, never commit.",
+    "items":  [
+                  {
+                      "deviation":  null,
+                      "publish_batch":  2,
+                      "rollback":  "revert the test-auditors.ps1 hunks; no data or board involved",
+                      "proof":  {
+                                    "commands":  [
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\test-auditors.ps1"
+                                                 ],
+                                    "must_fire_case":  "temporarily break one feed-covers-published fixture in a scratch copy: the harness must still FAIL it (the pin update must not have widened the acceptance)",
+                                    "clean_twin":  "a clean run reports the remaining live-data findings under the new PRODUCTION FINDING label and zero blind watchers",
+                                    "guard_or_fixture":  "test-auditors.ps1 itself, re-run after the pin fix"
+                                },
+                      "evidence":  [
+                                       "FAIL 1 (test-auditors line 413): \u0027feed-covers-published -SelfTest failed or lost its founding-bug fixtures\u0027 while the captured output in the SAME line reads \u0027SELFTEST: 16/16 pass\u0027. test-auditors.ps1:3436 pins $LASTEXITCODE -eq 0 AND \u0027SELFTEST: 14/14 pass\u0027. Commit d69fd9a0 (2026-08-15 17:37, \u0027fix the hard gate that was checking ONE slug\u0027) grew the guard 14 -\u003e 16 cases and never updated the pin. The guard got BETTER and the harness reports it blind.",
+                                       "FAIL 2 (line 392): prompt-backup rc=2 is a REAL drift finding - skills\\recipe-hunter\\SKILL.md is git-modified RIGHT NOW by the live recipe-hunter session (commits 3afa5e1b/70843818 tuned it 19:44-19:50 on 08-15, and the run kept editing). A production finding, not a blind watcher.",
+                                       "FAIL 3 (line 423): spec-contradictions \u0027got WORSE: PHANTOM: 9 now, baseline 0\u0027 is a LIVE-DATA check (test-auditors.ps1:3534 runs audit-spec-contradictions -Quiet against live specs). PHANTOM read 7 at 06:19:40, 9 at 06:30:41, and 0 in the file at ~06:55 - the count moves with the in-flight recipe-hunter writes.",
+                                       "FAIL 4 (line 425): cook-measures \u00271 ingredient line again states a package quantity\u0027 is also a live-data dry run (test-auditors.ps1:3551) over specs the running session is writing.",
+                                       "Net: ZERO watchers are actually blind. One stale pin plus three live-data findings, two of them in-flight contamination, all filed under the subject \u0027a GUARD has gone blind\u0027."
+                                   ],
+                      "classification":  "infra",
+                      "queue_id":  "2026-08-15-817b20",
+                      "root_cause":  "test-auditors runs two different KINDS of check under one FAIL tally and one alert subject: (a) fixture replays that prove a watcher can still see its founding bug, and (b) live-data production sweeps (prompt-backup, spec-contradictions -Quiet, cook-measures dry run). A FAIL from (b) is a production defect - possibly someone else\u0027s in-flight work - not a blind guard, and while 3-4 (b)-failures are red, a genuinely blind watcher in (a) would be invisible in the noise. That is the exact condition the alert exists to prevent.",
+                      "premise_verified":  null,
+                      "shipped_commit":  null,
+                      "subject":  "Grocery: a GUARD has gone blind (test-auditors failed)",
+                      "surface_fix":  {
+                                          "files":  [
+                                                        "grocery/test-auditors.ps1"
+                                                    ],
+                                          "exact_change":  "line 3436: \u0027SELFTEST: 14/14 pass\u0027 -\u003e \u0027SELFTEST: 16/16 pass\u0027 (keep the pin - the pin is the point; verify the +2 cases by reading meal-prep\\pipeline\\feed-covers-published.ps1\u0027s fixture block first)",
+                                          "what":  "update the feed-covers-published pin to 16/16 after confirming the two new cases are the 08-15 hard-gate fixtures (the ONE-slug founding bug and its twin)"
+                                      },
+                      "do_not_touch":  [
+                                           "meal-prep\\out\\spec-contradictions-baseline.json",
+                                           "ops\\prompt-backup (no -Sync while the recipe session is live)",
+                                           "any fixture"
+                                       ],
+                      "resolution_note":  "No watcher is blind. feed-covers-published grew 14-\u003e16 self-test cases on 08-15 (commit d69fd9a0) and the test-auditors pin was stale - pin updated. The other 3 FAILs are live-data production findings (2 of them in-flight recipe-hunter contamination), now reported as findings instead of blindness so a real blind watcher cannot hide among them.",
+                      "blast_radius":  {
+                                           "measured_by":  "the 4 FAIL lines of grocery\\out\\test-auditors-fail-2026-08-16.txt classified one by one against their source blocks in test-auditors.ps1 (3430-3438, 3142-3160, 3509-3536, 3544-3556) and against git state of the files they read",
+                                           "affected_now":  4,
+                                           "measured_as":  "rows",
+                                           "risk":  "reporting-only change plus a pin bump; every fixture replay is untouched. The risk to avoid: do NOT re-baseline spec-contradictions or -Sync the prompt backup to make the live findings green - both are owned by the running recipe-hunter session (items 2026-08-16-586f23 / 2026-08-16-cce9d1).",
+                                           "names":  [
+                                                         "feed-covers-published pin",
+                                                         "prompt-backup live drift",
+                                                         "spec-contradictions live PHANTOM",
+                                                         "cook-measures live label"
+                                                     ]
+                                       },
+                      "status":  "planned",
+                      "freshness":  "classified against test-auditors-fail-2026-08-16.txt (run 06:30:41) and the live tree at ~06:55; the PHANTOM count will keep moving until the recipe-hunter run ends",
+                      "root_fix":  {
+                                       "files":  [
+                                                     "grocery/test-auditors.ps1"
+                                                 ],
+                                       "exact_change":  "tag the (b)-class blocks (prompt-backup at ~3159, spec-contradictions -Quiet at ~3536, cook-measures live run at ~3556) with a distinct Bad-variant (e.g. Finding) and emit both counts in the summary + alert body",
+                                       "what":  "split the tally: live-data checks report as \u0027PRODUCTION FINDING\u0027 lines with their own count, fixture replays keep the FAIL/blind vocabulary; the alert subject says which kind fired (\u0027watcher blind\u0027 vs \u0027watchers found live defects\u0027). No check is weakened - every current FAIL still fails."
+                                   }
+                  },
+                  {
+                      "deviation":  null,
+                      "publish_batch":  2,
+                      "rollback":  "revert the two hunks; the rolling basis-outliers.json path is unchanged",
+                      "proof":  {
+                                    "commands":  [
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\audit-unit-basis-outlier.ps1 -SelfTest",
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\guards.ps1"
+                                                 ],
+                                    "must_fire_case":  "the existing must-fire fixtures still exit 2 AND now leave a dated report naming the row",
+                                    "clean_twin":  "a clean run writes no dated file",
+                                    "guard_or_fixture":  "audit-unit-basis-outlier.ps1 -SelfTest (3 must-fire, 5 clean twins) plus a guards.ps1 run"
+                                },
+                      "evidence":  [
+                                       "ad-cycle-log: the unit-basis HARD FAIL (\u0027volume among weights\u0027) was red 08-10 (06:20, 09:06), ok 08-11, red 08-12/08-13 (both runs), red 08-14 20:16, then OK from 08-15 06:23 onward. Today 06:22:57: \u0027ok no cell wins a row while measured in a different KIND of quantity than the row\u0027. The invariant holds on the pinned board; guards hard=0 and the board published 06:23:38.",
+                                       "The offending ROW is not recoverable: guards logs only the invariant text, out\\basis-outliers.json is overwritten every run (today: kind=88, crown=0), and a hermetic scratch re-run of audit-unit-basis-outlier.ps1 against today\u0027s copy of comparison-2026-08-14.json returns rc=0 with 0 unreviewed crowns (file mtimes were reset by the 08-15 restructure move - 95 out\\*.json share 18:13:34).",
+                                       "The flapping pattern tracks capture freshness: it cleared exactly when the 08-15 Aldi (2217 rows) and Sams (2999 rows) refreshes landed, so the mismatched-kind crown lived in stale store data."
+                                   ],
+                      "classification":  "capture-gap",
+                      "queue_id":  "2026-08-13-102940",
+                      "root_cause":  "a hard-fail guard that names its invariant but not its rows, plus a single overwritten report file, makes any failure that self-heals un-diagnosable after the fact. Five red days produced zero durable evidence of WHICH cell was wrong, so we cannot rule on whether a wrong crown reached readers between publishes.",
+                      "premise_verified":  null,
+                      "shipped_commit":  null,
+                      "subject":  "Grocery: test-guards could not evaluate (guards already red on the unmutated board)",
+                      "surface_fix":  {
+                                          "files":  [
+
+                                                    ],
+                                          "exact_change":  "n/a",
+                                          "what":  "none needed for the invariant itself - it is green on the pinned board. The fix is for the DIAGNOSABILITY gap this item exposed."
+                                      },
+                      "do_not_touch":  [
+                                           "the exit-2 gate condition",
+                                           "basis-kind-allowlist.json"
+                                       ],
+                      "resolution_note":  "The unit-basis invariant self-healed on 08-15 when the Aldi/Sams refreshes landed; green on the pinned board, test-guards can evaluate again at its next weekly window. The offending row was unrecoverable because neither guards nor the audit persist finding rows - that gap is now closed (dated report + logged rows on any future exit 2).",
+                      "blast_radius":  {
+                                           "measured_by":  "hermetic scratch re-run of audit-unit-basis-outlier.ps1 (script + lib\\guard-contract.ps1 + basis-kind-allowlist.json copied to the scratchpad) against comparison-2026-08-14.json: 530 rows, 449 eligible, 88 kind mismatches, 0 unreviewed crowns, 5 reviewed",
+                                           "affected_now":  0,
+                                           "measured_as":  "rows",
+                                           "risk":  "additive logging only; the exit codes and thresholds are untouched. A dated report file per red day is bounded by red days.",
+                                           "names":  [
+
+                                                     ]
+                                       },
+                      "status":  "planned",
+                      "freshness":  "measured against comparison-2026-08-15 (built 2026-08-16T06:10:58, the pinned BOARD line) and captures read ~06:55; family-fare-regular-2026-08-16.json / bakers-regular-2026-08-16.json are live 3-hourly sweep outputs, so re-verify cell numbers on the rebuilt board before accepting",
+                      "root_fix":  {
+                                       "files":  [
+                                                     "grocery/audit-unit-basis-outlier.ps1",
+                                                     "grocery/guards.ps1"
+                                                 ],
+                                       "exact_change":  "audit: on $kindCrown.Count -gt 0 also Set-Content basis-outliers-$(date).json; guards: capture and log the audit output lines on the exit-2 branch",
+                                       "what":  "persist the finding rows: when audit-unit-basis-outlier exits 2, guards.ps1 logs the [CROWN ON A ... ROW] lines into ad-cycle-log, and the audit writes a dated basis-outliers-\u003cyyyy-MM-dd\u003e.json beside the rolling one on any non-zero crown count"
+                                   }
+                  },
+                  {
+                      "resolution_note":  "Superseded by 2026-08-13-102940 - one investigation, resolved there. Board republishes resumed 08-15 06:23.",
+                      "root_cause":  "same condition as 2026-08-13-102940 (unit-basis kind-mismatch crown, red 08-10 through 08-14, self-healed 08-15)",
+                      "subject":  "Grocery: GUARDS FAILED - board not published - 2026-08-10",
+                      "classification":  "superseded",
+                      "evidence":  [
+                                       "ad-cycle-log 2026-08-10T06:20:04 and 09:06:13: the ONLY hard fail both runs is \u0027no cell wins a row while measured in a different KIND of quantity than the row (volume among weights)\u0027 - the same invariant item 2026-08-13-102940 owns."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-10-740129"
+                  },
+                  {
+                      "resolution_note":  "Brad: open the Claude side panel in Chrome and sign in, then click Done on the alert. Deadline that makes it urgent: Walmart cells start leaving the 14-day union window 2026-08-20 (37 cells, 22 crowns - see 2026-08-07-fb1fee).",
+                      "root_cause":  "the extension session itself needs a human sign-in; nothing headless can or should clear it",
+                      "subject":  "Grocery run blocked: Chrome extension bot wall",
+                      "classification":  "needs-brad",
+                      "evidence":  [
+                                       "Extension unreachable since Fri 2026-08-14 19:56; blocks Baker\u0027s flyer + Sam\u0027s/Walmart/Aldi/Fareway browser passes. The dispatch question - does a check own \u0027the browser refresh did not run\u0027, and did it run - YES: the Wednesday-missed watcher fired on schedule (2026-08-13-af4d74) and the ADFLIP watcher fired 3 times (08-13/15/16), so the condition is rostered and alive, not silently unwatched."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-14-89d97b"
+                  },
+                  {
+                      "resolution_note":  "No code change. Run the weekly browser refresh when the extension is back; Walmart must run the FULL commodity worklist (the 08-20 expiry wave is the clock).",
+                      "root_cause":  "owned by the weekly browser agent once the extension is restored",
+                      "subject":  "Grocery: Wednesday browser refresh MISSED - week of 2026-08-12",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "Downstream of the extension wall (2026-08-14-89d97b). Partial self-healing since: sams-deals-2026-08-15 (594 terms) and aldi-regular-2026-08-15 (2217 rows) landed 08-15; still outstanding: Bakers flyer, Walmart full worklist (walmart-regular-2026-08-11, 5d old), Fareway ad for the window starting 08-16."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-13-af4d74"
+                  },
+                  {
+                      "resolution_note":  "No code change. Weekly SKILL step A flyer capture for Baker\u0027s (bakersplus.com/weeklyad, Pickup at Saddlecreek) when the extension is back, then update ad-schedule.json.",
+                      "root_cause":  "flyer capture requires the browser agent; blocked by 2026-08-14-89d97b",
+                      "subject":  "Baker\u0027s ad rolled (ADFLIP) on a Thursday - flyer capture needed",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "Primary of the ADFLIP trio. Headless Kroger prices kept flowing (bakers-regular-2026-08-16: 7265 deals) but the flyer vision-read is missing; row-age confirms the cost: Baker\u0027s 39 sale rows excluded since bakers-deals-2026-08-05 closed 08-11."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-13-056051"
+                  },
+                  {
+                      "resolution_note":  "Superseded by 2026-08-13-056051.",
+                      "root_cause":  "same as 2026-08-13-056051",
+                      "subject":  "Baker\u0027s ad rolled (ADFLIP) on a Saturday - flyer capture needed",
+                      "classification":  "superseded",
+                      "evidence":  [
+                                       "Same unresolved condition as 2026-08-13-056051 (same guard, same missing flyer), one re-fire later."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-15-68ab6e"
+                  },
+                  {
+                      "resolution_note":  "Superseded by 2026-08-13-056051. Queue body verified present - no alert-hygiene defect found here.",
+                      "root_cause":  "same as 2026-08-13-056051",
+                      "subject":  "Baker\u0027s ad rolled (ADFLIP) on a Sunday - flyer capture needed",
+                      "classification":  "superseded",
+                      "evidence":  [
+                                       "Same condition as 2026-08-13-056051. Hygiene check the dispatch asked for: the queue BODY is present and normal (standard ADFLIP text) - the empty-body concern did not reproduce in triage-queue.json."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-16-951948"
+                  },
+                  {
+                      "resolution_note":  "No code change. The designed valve held (expired ad rows excluded, everyday fallback). Flyer capture restores the 39 sale cells - same browser pass as 2026-08-13-056051.",
+                      "root_cause":  "flyer capture blocked by the extension wall; the expired-ad refusal worked as designed",
+                      "subject":  "Baker\u0027s ad window advanced with no capture behind it",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "ad-schedule says window ends 08-18; newest capture bakers-deals-2026-08-05 closed 08-11. REAL consequence already accounted: compare-deals refuses expired ads, so the 39 Baker\u0027s sale rows fell back to everyday prices on 08-12 (row-age line, item 2026-08-09-817ca5c) - stale sales are NOT being published, coverage is just thinner."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-13-a5f563"
+                  },
+                  {
+                      "resolution_note":  "No code change. Premise corrected in-queue: 08-10..08-15 WAS captured (15 of 22 pages). Next Fareway flyer rides the same browser pass; ask the agent to finish all 22 pages this time.",
+                      "root_cause":  "the 08-10 capture landed a day after the alert fired; the new window needs the browser agent (extension wall)",
+                      "subject":  "Fareway ad window advanced with no capture behind it",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "The alert\u0027s premise is stale: a newer capture EXISTS - out\\fareway\\fareway-deals-2026-08-10.json (window 08-10..08-15, vision-read 08-09, pages 1-15 of 22; p16-22 never read). The alert fired 08-09 before it landed. The CURRENT gap is the window starting 08-16 (yesterday\u0027s window just closed)."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-09-6d10d3"
+                  },
+                  {
+                      "resolution_note":  "Depth RECOVERED, not halved - the dispatch\u0027s 787 was measured mid-recovery. Board cost: 6 Aldi cells vs the 08-10 board, queued for rescue. Brad: clear the Aldi challenge in Chrome and click Done so the next pull does not repeat the interruption.",
+                      "root_cause":  "the wall interrupted the 08-14 pull mid-run (\u0027pricing mace blades\u0027); the 08-15 re-pull walked back in and finished after the guard refused its partial state. The wall itself needs a human.",
+                      "subject":  "Grocery run blocked: ALDI bot wall",
+                      "classification":  "needs-brad",
+                      "evidence":  [
+                                       "The thin-capture risk was contained by the guards, measured end to end: 08-15 09:13:08 guard 6 HARD-FAILED the partial (\u0027aldi-regular-2026-08-15.json has 787 rows vs 1772 recently\u0027) and the board was left at last good state; the pull then resumed and the SAME file reached 2217 rows by 09:23:26 - MORE than the 08-05 file\u0027s 1772.",
+                                       "Today\u0027s board ADMITS the 2217-row capture: Aldi 336 priced cells vs 329 on the 08-10 board (crowns 91 vs 94). Cells lost vs 08-10: exactly 6 - aluminum-foil, cantaloupe, energy-drinks, frozen-waffles, red-wine-vinegar, teriyaki-sauce; rescue-worklist lists Aldi DROPPED 5 for the next browser pass.",
+                                       "audit-capture-eviction 06:23:44 (post-board): 0 cells dearer than the eligibility rule allows - no thin-evicts-rich event. src_date: file-dated 08-15, rows 0% re-verified today (standard guard warn), guard 9 ages the file."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-14-84daea"
+                  },
+                  {
+                      "deviation":  null,
+                      "publish_batch":  3,
+                      "rollback":  "n/a - captures are additive; the union window keeps prior files",
+                      "proof":  {
+                                    "commands":  [
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\guards.ps1"
+                                                 ],
+                                    "must_fire_case":  "n/a - no code change; the existing watcher is the proof",
+                                    "clean_twin":  "after the pulls: fullpull [Walmart] cells ok and the sams-regular-2026-08-01 warn gone",
+                                    "guard_or_fixture":  "audit-walmart-fullpull (rostered) - its warn lines are the measurement; test-auditors keeps its fixtures (walmart-fullpull FIRES on a cell leaving the union window)"
+                                },
+                      "evidence":  [
+                                       "The predicted Sam\u0027s harm was AVERTED at the last day: the warning escalated to \u0027283 of 283 attributed cells (100%, 106 CROWNS), first goes 2026-08-16\u0027 on 08-14 20:16, then sams-deals-2026-08-15.json (594 terms, 2999 rows) landed 08-15 11:45. Today: fullpull [Sam\u0027s Club] ok, 1 of 352 cells expiring, Sam\u0027s board cells 363 (346 on 08-10), crowns 141.",
+                                       "RESIDUE 1: today\u0027s guards warn - 23 live board cells still trace to out\\regular\\sams-regular-2026-08-01.json (15 days old, 60 rows, nothing writes it, guard 9\u0027s \u003e14d HARD FAIL structurally cannot reach those rows and the file must NOT be deleted or the store leaves guard 9). Fix per the warn: refresh those 60 items into the store\u0027s own feed.",
+                                       "RESIDUE 2 (the successor deadline): fullpull [Walmart] cells WARNING - 37 of 470 cells (7.9%, 22 CROWNS) are priced from a capture whose only copy leaves the window starting 2026-08-20; newest comprehensive walmart-regular-2026-08-11 (525 terms) is 5d old. Blocked on the extension wall."
+                                   ],
+                      "classification":  "capture-gap",
+                      "queue_id":  "2026-08-07-fb1fee",
+                      "root_cause":  "browser-store comprehensive captures age on a 14-day cliff while the browser is walled; the estate\u0027s watchers (walmart-fullpull, rescue-worklist, guard 6/9) all fired correctly - the constraint is the human unlock, and the sams-regular-2026-08-01 orphan is a standing hole guard 9 itself documents",
+                      "premise_verified":  null,
+                      "shipped_commit":  null,
+                      "subject":  "Grocery: Walmart full capture aging - 2026-08-07",
+                      "surface_fix":  {
+                                          "files":  [
+
+                                                    ],
+                                          "exact_change":  "worklists already exist: out\\rescue-terms-sams.txt (STALE 11), out\\rescue-terms-walmart.txt (EXPIRING 37), plus the standing search-term list the full pull always uses",
+                                          "what":  "browser passes, not code: (a) fold the 60 sams-regular-2026-08-01 items in the next Sam\u0027s pull so the orphan file can retire; (b) full-worklist Walmart pull before 2026-08-20"
+                                      },
+                      "do_not_touch":  [
+                                           "out\\regular\\sams-regular-2026-08-01.json (deleting it drops Sams out of guard 9 - the guard warn says so explicitly)"
+                                       ],
+                      "resolution_note":  "Sam\u0027s predicted 64-cell loss (later 283) was averted by the 08-15 refresh; 363 cells live. Residue: 23 cells pinned to the unrefreshable sams-regular-2026-08-01 file (refresh those 60 items into the store feed), and the SUCCESSOR deadline is Walmart - 37 cells / 22 crowns start expiring 2026-08-20, browser pull required before then.",
+                      "blast_radius":  {
+                                           "measured_by":  "board cell counts diffed comparison-2026-08-10 vs comparison-2026-08-15 (Sam\u0027s 346-\u003e363 cells, 122-\u003e141 crowns); today\u0027s guards warn for the 23 orphan-file cells; today\u0027s walmart-fullpull line for the 37-cell/22-crown 08-20 wave",
+                                           "affected_now":  60,
+                                           "measured_as":  "cells",
+                                           "risk":  "data capture only, no code; the union window keeps serving current cells until each expiry date",
+                                           "names":  [
+                                                         "23 cells on sams-regular-2026-08-01 (unrefreshable)",
+                                                         "37 Walmart cells expiring from 2026-08-20"
+                                                     ]
+                                       },
+                      "status":  "planned",
+                      "freshness":  "measured against comparison-2026-08-15 (built 2026-08-16T06:10:58, the pinned BOARD line) and captures read ~06:55; family-fare-regular-2026-08-16.json / bakers-regular-2026-08-16.json are live 3-hourly sweep outputs, so re-verify cell numbers on the rebuilt board before accepting",
+                      "root_fix":  null
+                  },
+                  {
+                      "resolution_note":  "In-flight contamination, owner: the running recipe-hunter session. Re-run audit-store-integrity after the hunt run completes; escalate only findings that survive on a settled tree.",
+                      "root_cause":  "audit ran mid-batch against in-flight recipes; the running session owns closing its own ingredient/macro rows before publish",
+                      "subject":  "Ingredient stores disagree: 12 hard finding(s)",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "Separation test: every named slug (baked-cauliflower-mac-smoked-sausage, chimichurri-steak-sheet-pan, creamy-tuscan-chicken-skillet, crustless-bacon-gruyere-quiche, french-chicken-fricassee, ...) is one of the 24 UNTRACKED meal-prep\\db\\recipes\\*.json the live recipe-hunter run is writing, and every MISSING-SIDE row (Gruyere Cheese, Broccolini, Sun-Dried Tomatoes...) is absent from HEAD\u0027s ingredients.json/food-macros-db.json - the finding reads a half-written batch."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-16-d908d3"
+                  },
+                  {
+                      "resolution_note":  "In-flight contamination, owner: the running recipe-hunter session. After the run ends, re-run audit-spec-contradictions; do NOT touch the baseline to green it - if PHANTOM is still above 0 on a settled tree it is a real regression to fix in the specs.",
+                      "root_cause":  "live-data audit racing an in-flight writer",
+                      "subject":  "Recipe spec contradictions got worse",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "PHANTOM read 7 at 06:19:40 (alert), 9 at 06:30:41 (test-auditors), and 0 in meal-prep\\out\\spec-contradictions.json when read at ~06:55 (31 findings, none PHANTOM) - the count moved three times in 36 minutes while the recipe-hunter run wrote the specs and the out file. Not adjudicable mid-write."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-16-586f23"
+                  },
+                  {
+                      "resolution_note":  "In-flight contamination, owner: the running recipe-hunter session. The skip path worked as designed; re-run compute-v2 after the batch lands.",
+                      "root_cause":  "compute-v2 ran against the in-flight batch; the manifest correctly skipped rather than shipping bad numbers",
+                      "subject":  "Recipe per-serving manifest: skipped recipe(s)",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "All 16 skipped slugs (baked-cauliflower-mac-smoked-sausage ... low-carb-taco-cabbage-beef-skillet) are untracked in-flight recipe files; each skip reason is a missing costed line for an ingredient the same run has not landed yet. The other 549 recipes computed."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-09-96a277"
+                  },
+                  {
+                      "deviation":  null,
+                      "publish_batch":  3,
+                      "rollback":  "revert the ingredients.json hunks",
+                      "proof":  {
+                                    "commands":  [
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\meal-prep\\pipeline\\audit-schema-constraints.ps1"
+                                                 ],
+                                    "must_fire_case":  "existing: the guard already fires on these rows",
+                                    "clean_twin":  "a settled tree with the 4 bids resolved reports only the baseline",
+                                    "guard_or_fixture":  "audit-schema-constraints (the alerting guard) - re-run after the deferred fix expects the four rows gone and the baseline untouched"
+                                },
+                      "evidence":  [
+                                       "SPLIT, as measured against HEAD: the four bid rows PRE-DATE the run - HEAD meal-prep/db/ingredients.json carries \u0027Bulgur Wheat\u0027 (bid bulgur-wheat), \u0027Keto Bun\u0027 (keto-bun), \u0027Korean Rice Cakes\u0027 (korean-rice-cakes), \u0027Sumac\u0027 (sumac), and none of those ids exist in grocery/commodities.json (573 ids checked). Standing defect since at least 08-12.",
+                                       "The macro rows (Red Wine, Gruyere Cheese, Roasted Chicken Breast (meat only), Cauliflower, Cream Cheese, Bacon Bits) are NOT in HEAD food-macros-db.json - they are being written by the live run. In-flight, owner recipe-hunter session."
+                                   ],
+                      "classification":  "infra",
+                      "queue_id":  "2026-08-12-fb9d1d",
+                      "root_cause":  "ingredient rows can be minted with bids that name no commodity and nothing blocks the mint - the schema audit catches it a day later. The right root fix is a mint-time check in the ingredient writer, which is meal-prep code and rides the deferred batch.",
+                      "premise_verified":  null,
+                      "shipped_commit":  null,
+                      "subject":  "A write broke cross-store integrity",
+                      "surface_fix":  {
+                                          "files":  [
+                                                        "meal-prep/db/ingredients.json",
+                                                        "meal-prep/db/no-board-price-ok.json"
+                                                    ],
+                                          "exact_change":  "DEFERRED until the recipe-hunter run completes - meal-prep is frozen for this triage. Adjudicate each of the 4 bids: remap, allowlist with reason, or (only if a store row exists) register a commodity via the standard batch gate.",
+                                          "what":  "for the four standing rows: register the commodity or remap the bid to an existing one (keto-bun and korean-rice-cakes have no plausible store coverage; a bid remap or an explicit no-board-price allowlist entry is likelier right than four new commodities nobody can price)"
+                                      },
+                      "do_not_touch":  [
+                                           "meal-prep\\* until the recipe-hunter run completes",
+                                           "the audit baseline"
+                                       ],
+                      "resolution_note":  "Split: 4 bid rows (bulgur-wheat, keto-bun, korean-rice-cakes, sumac) are a standing pre-run defect - adjudicate remap/allowlist/register AFTER the recipe run completes; the 6 macro rows are in-flight and owned by the running session. Root fix queued: mint-time bid validation.",
+                      "blast_radius":  {
+                                           "measured_by":  "the 10 alert rows checked one by one against git show HEAD:meal-prep/db/ingredients.json, HEAD:meal-prep/food-macros-db.json, and grocery/commodities.json ids",
+                                           "affected_now":  4,
+                                           "measured_as":  "rows",
+                                           "risk":  "deferred meal-prep edits only; nothing in this plan touches the files while the run is live",
+                                           "names":  [
+                                                         "bulgur-wheat",
+                                                         "keto-bun",
+                                                         "korean-rice-cakes",
+                                                         "sumac"
+                                                     ]
+                                       },
+                      "status":  "planned",
+                      "freshness":  "HEAD compared at ~06:55 2026-08-16; the in-flight half will churn until the run ends",
+                      "root_fix":  {
+                                       "files":  [
+                                                     "meal-prep pipeline ingredient writer (locate: the script that mints db\\ingredients.json rows)"
+                                                 ],
+                                       "exact_change":  "DEFERRED - same freeze",
+                                       "what":  "mint-time validation: refuse (or auto-allowlist-with-reason) a new ingredients.json row whose bid resolves to no commodity"
+                                   }
+                  },
+                  {
+                      "deviation":  null,
+                      "publish_batch":  3,
+                      "rollback":  "revert the message hunk",
+                      "proof":  {
+                                    "commands":  [
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\test-auditors.ps1"
+                                                 ],
+                                    "must_fire_case":  "the refusal alert body must carry at least one named row",
+                                    "clean_twin":  "a clean db build sends nothing",
+                                    "guard_or_fixture":  "send-alert body-thin fixtures (test-auditors: queue routing + body-thin detection)"
+                                },
+                      "evidence":  [
+                                       "body_thin PROVEN with the mechanism: today\u0027s log shows \u0027db-build REFUSED: ! a write was REFUSED by a database constraint - see the named row above\u0027 at 06:19:55, while the rows it means print at 06:19:56 from the NEXT audit (schema-constraints). The refusal message references output that has not printed yet and that travels in a DIFFERENT alert (2026-08-12-fb9d1d), so this alert can never be classified from its own body."
+                                   ],
+                      "classification":  "infra",
+                      "queue_id":  "2026-08-12-2f6bba",
+                      "root_cause":  "an alert body written to depend on another checks output ordering - an alert nobody can classify from its own body is itself a defect (send-alert even has a body-thin detector; this body passes it only because it carries the pointer sentence)",
+                      "premise_verified":  null,
+                      "shipped_commit":  null,
+                      "subject":  "Database constraint refused a write",
+                      "surface_fix":  {
+                                          "files":  [
+                                                        "meal-prep db build script (the one logging db-build REFUSED)"
+                                                    ],
+                                          "exact_change":  "DEFERRED until the recipe-hunter run completes (meal-prep freeze); the refusal message must carry the foreign-key row(s) the constraint rejected",
+                                          "what":  "make the db-build refusal name its own violating row(s) in its message/alert body instead of pointing at a sibling audit"
+                                      },
+                      "do_not_touch":  [
+                                           "meal-prep\\* until the recipe-hunter run completes"
+                                       ],
+                      "resolution_note":  "The refused write itself is item 2026-08-12-fb9d1d (the 4 standing bids). THIS item is the alert-hygiene defect: the refusal says \"see the named row above\" but the rows print afterwards from a different audit into a different alert. Fix (deferred, meal-prep freeze): name the rejected row in the refusal itself.",
+                      "blast_radius":  {
+                                           "measured_by":  "log ordering at 06:19:55/56 on 2026-08-16 plus the queue body (identical thin shape on every fire since 08-12)",
+                                           "affected_now":  1,
+                                           "measured_as":  "callers",
+                                           "risk":  "message-content change only, deferred",
+                                           "names":  [
+                                                         "db-build refusal alert"
+                                                     ]
+                                       },
+                      "status":  "planned",
+                      "freshness":  "log read ~06:55 2026-08-16; the underlying constraint rows are item 2026-08-12-fb9d1d",
+                      "root_fix":  null
+                  },
+                  {
+                      "resolution_note":  "No action while the run is live. After the recipe-hunter run completes and its skill edits are committed, run ops\\audit-prompt-backup.ps1 -Sync and commit ops\\prompt-backup. Do NOT -Sync mid-run.",
+                      "root_cause":  "the backup audit compared against a file another session is actively editing",
+                      "subject":  "Ops: an agent prompt is not backed up",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "skills\\recipe-hunter\\SKILL.md is git-modified in the working tree by the live recipe-hunter session (last skill commits 3afa5e1b/70843818 on 08-15 19:44-19:50; the run kept editing after). A -Sync now would snapshot a mid-edit file."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-16-cce9d1"
+                  },
+                  {
+                      "resolution_note":  "In-flight contamination (likely), owner: the running recipe-hunter session. Re-run meal-prep\\engine\\audit-db-agreement.ps1 on the settled tree; if drift survives, fix the lagging side then. Also note the row-less body as part of the alert-hygiene follow-up.",
+                      "root_cause":  "index-vs-specs drift measured against a tree the running session is mid-way through changing",
+                      "subject":  "Recipe db drift (index vs specs)",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "Fired at 06:19:29 today (\u0027db-agreement guard found DRIFT\u0027) while the recipe-hunter run was actively writing recipes-db.json\u0027s inputs (24 untracked specs, modified costed.json/batch-ledger.json). The alert body names zero rows (same hygiene class as 2026-08-12-2f6bba), so nothing here is adjudicable mid-write."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-09-e8ea1d"
+                  },
+                  {
+                      "resolution_note":  "Parked with findings: the 489 list is gone (file now empty), Baker\u0027s ad expiry on 08-12 is the leading cause. Do not republish or lift the cap. After the Baker\u0027s flyer recapture lands and the board settles, re-run the reanchor and review the fresh count; if over-cap events matter, have the developer make reanchor-stale-cards.txt dated instead of overwritten (small meal-prep change, deferred).",
+                      "root_cause":  "unproven (list unrecoverable); leading hypothesis is the Baker\u0027s ad expiry repricing wave. Secondary lesson: the reanchor worklist is a single overwritten file, so an over-cap event loses its evidence by the next run.",
+                      "subject":  "Recipe cards: 489 moved, over the daily cap",
+                      "classification":  "needs-more-time",
+                      "evidence":  [
+                                       "meal-prep\\pipeline\\reanchor-stale-cards.txt is now EMPTY (0 lines) - the 489-slug list was overwritten by a later run, so the moved set cannot be reconstructed.",
+                                       "Most plausible shared cause by timing: Baker\u0027s ad coverage loss - bakers-deals-2026-08-05 closed 08-11, its 39 sale rows fell back to everyday on 08-12 (the alert is dated 08-12), and Baker\u0027s is a frequent cheapest-store, so one shared price basis moving touches hundreds of cards. Unproven because the slug list is gone; said loudly rather than smoothed over.",
+                                       "The 150-cap held the publish, which is the designed behaviour for a shared-row move."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-12-744e93"
+                  },
+                  {
+                      "deviation":  null,
+                      "claimed_by_earlier":  [
+
+                                             ],
+                      "publish_batch":  1,
+                      "rollback":  "remove the known-wrong entry + revert the relish exclude hunk; rebuild the board",
+                      "proof":  {
+                                    "commands":  [
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\test-auditors.ps1",
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\guards.ps1"
+                                                 ],
+                                    "must_fire_case":  "the 150098585 row re-appearing on the board must exit 2 and name the ruling",
+                                    "clean_twin":  "the single-bag Manischewitz (10448207) and the Gia Russa 12-pack stay unblocked",
+                                    "guard_or_fixture":  "audit-known-wrong fixtures (test-auditors: known-wrong FIRES when an adjudicated-wrong product is priced again; retire trigger evaluable or the schema refuses the entry)"
+                                },
+                      "evidence":  [
+                                       "REAL-ECONOMICS (verified against the winning rows + the store\u0027s own unit prices): Bay Leaves Walmart .4369/oz = \u0027Soeos Bay Leaves 16 oz\u0027 bulk bag .99 vs 2oz/0.375oz shakers; Canned Hominy Walmart .0402/oz = \u0027Great Value White Hominy, 110.4 oz\u0027 .44 with Walmart\u0027s own \u00274.0 c/oz\u0027; Parsley (dried) .4394/oz = Frontier 16oz bulk .03; Popsicles .127/each = GV 20-pack .54; Shower/Bathroom Cleaner .0544/floz = GV 32floz .74. All real.",
+                                       "SELF-RESOLVED (flagged rows no longer on the board): Ginger Root (.39 gone; today .6255/lb consistent with peers), Sweet Relish Walmart .06 (gone; Walmart cell now GV Sweet Relish .155/oz), the .02 hominy shape.",
+                                       "STORE-DATA BUG (the one hard finding): Egg Noodles Walmart .0548/oz = \u0027(12 pack) Manischewitz Fine Egg Noodles, 12 oz bag\u0027 item_id 150098585, .89 / size 144 oz, Walmart\u0027s own unit price 5.5 c/oz - while the IDENTICAL single bag (id 10448207) is ALSO .89 at Walmart\u0027s own 65.8 c/oz. Same price for 1x and 12x of the same product: the pack listing\u0027s price is the single-bag price. Our capture reproduces Walmart\u0027s claim faithfully (guard 10 green), so the fix is an adjudicated ruling, not a parser change: add-known-wrong on item 150098585.",
+                                       "STALE-UNVERIFIED: Cajun/Creole Hy-Vee .0833/oz = \u0027Chophouse Cajun Seasoning with Jalapeno\u0027 12 oz at  - capture row says as_of 2026-07-29, not_reverified: true. An 18-day-old unverified closeout price is publishing as today\u0027s crown; this is item 2026-08-09-817ca5\u0027s Hy-Vee ratchet reaching a crown. Action: put this item in the next Hy-Vee re-verify worklist.",
+                                       "UNVERIFIABLE-HEADLESS: Chinese Five Spice Walmart .279/oz = \u0027Spice Supreme oriental five spices, 3.5-oz. plastic shaker\u0027 - qty_basis says \u0027qty derived lp/up; no name quantity (3.5) reproduces Walmart\u0027s 0.279\u0027: the 42.007 oz size was DERIVED from Walmart\u0027s own unit price and the name says 3.5 oz. Could be a real 12-shaker case (.98/shaker, plausible for this dollar brand) or a scalper single at .72 with a wrong catalog content-size. Cannot be adjudicated without reading the live page - browser walled. Queue it for the Wednesday browser verification pass; do NOT block it on suspicion (accuracy over safe cuts both ways).",
+                                       "SWEET RELISH wrong-product found during review: today\u0027s crown is Aldi \u0027Dill Relish\u0027 .69/16floz on the Sweet Relish commodity - a dill relish is not sweet relish. relish.exclude += \u0027\\\\bdill\\\\b\u0027; Aldi also carries \u0027Great Gherkins Sweet Relish 16 FL OZ\u0027 at the SAME .69, so the per-unit does not move, only the item corrects."
+                                   ],
+                      "classification":  "parse-basis-bug",
+                      "queue_id":  "2026-08-07-058ac6",
+                      "root_cause":  "two mechanisms: (a) Walmart marketplace pack listings can carry the single-unit price with a multiplied size, and because the capture reproduces Walmart\u0027s OWN stated unit price, every price-verification guard reads green - the wrongness lives in the store\u0027s catalog, so only an adjudicated blocklist ruling (or a same-name-same-price pack fingerprint check) can catch the class; (b) rows whose quantity is DERIVED from lp/up while the name states a DIFFERENT quantity are published crown-eligible even though the engine records the disagreement in qty_basis.",
+                      "premise_verified":  "TRUE, re-measured against the pinned board (comparison-2026-08-15, built 06:10:58) before editing. egg-noodles/Walmart cell WAS 0.0548 on \u0027(12 pack) Manischewitz Fine Egg Noodles, 12 oz bag\u0027 AND held the crown. relish/Aldi cell WAS 0.1056 on \u0027Dill Relish\u0027 AND held the crown. Correction to the plan\u0027s numbers: the plan writes the price as \u0027.89\u0027; the capture (walmart-regular-2026-08-06.json) states $7.89 for BOTH item 150098585 (144 oz, Walmart\u0027s own 5.5 c/oz, engine 0.0548/oz) and item 10448207 (12 oz, Walmart\u0027s own 65.8 c/oz, engine 0.6575/oz). The leading digit was lost in the plan text; the structural claim (identical product, 1x and 12x, same price) is exactly right and the ruling uses the real number.",
+                      "shipped_commit":  null,
+                      "subject":  "Grocery: 17 NEW price flag(s) - 2026-08-07",
+                      "surface_fix":  {
+                                          "files":  [
+                                                        "grocery/known-wrong (via add-known-wrong.ps1)",
+                                                        "grocery/commodities.json"
+                                                    ],
+                                          "exact_change":  "add-known-wrong: id 150098585 / \u0027(12 pack) Manischewitz Fine Egg Noodles, 12 oz bag\u0027 on egg-noodles, reason \u0027pack listing carries the single-bag price - Walmart states 5.5c/oz on the 12-pack and 65.8c/oz on the identical single at the same .89\u0027, retire when the listing price diverges from the single\u0027s; relish exclude per plan-2026-08-16.routing.json",
+                                          "what":  "two adjudications: (1) add-known-wrong.ps1 ruling on Walmart item_id 150098585 (mispriced marketplace pack listing) with an evaluable retire trigger; (2) relish.exclude += dill (in the batch-1 commodities.json edit)"
+                                      },
+                      "do_not_touch":  [
+                                           "the sanity-band thresholds",
+                                           "the five-spice row (unverified, queued for the browser pass - do not block on suspicion)"
+                                       ],
+                      "resolution_note":  "Of the 08-07 flags: 5 real-economics (bulk/institutional sizes, verified against store-stated unit prices), 3 self-resolved off the board, 1 stale-unverified Hy-Vee closeout routed to the re-verify worklist, 1 unverifiable-headless (five spice) queued for browser verification, and 1 store-side pricing bug (Walmart 12-pack egg noodles at the single-bag price) blocked by known-wrong ruling - cell moves 0.0548 -\u003e 0.1088/oz. Bonus finding fixed: a Dill Relish was crowning Sweet Relish at Aldi; excluded, price unchanged.",
+                      "blast_radius":  {
+                                           "affected_now":  6,
+                                           "measured_as":  "routing",
+                                           "cell_effects":  [
+                                                                {
+                                                                    "commodity":  "egg-noodles",
+                                                                    "before":  0.0548,
+                                                                    "store":  "Walmart",
+                                                                    "after":  0.1088
+                                                                },
+                                                                {
+                                                                    "commodity":  "relish",
+                                                                    "before":  0.1056,
+                                                                    "store":  "Aldi",
+                                                                    "after":  0.1056
+                                                                },
+                                                                {
+                                                                    "commodity":  "relish",
+                                                                    "before":  0.155,
+                                                                    "store":  "Walmart",
+                                                                    "after":  0.155
+                                                                }
+                                                            ],
+                                           "risk":  "the Gia Russa and other legitimate multi-packs are untouched (known-wrong is id-keyed); dill pickles/relish products at stores with no sweet relish could lose a cell - measured: no store cell was priced from a dill row except the corrected Aldi one",
+                                           "names":  [
+                                                         "(12 pack) Manischewitz Fine Egg Noodles, 12 oz bag",
+                                                         "Dill Relish",
+                                                         "Vlasic Dill Relish, Keto Friendly, 10 fl. oz.",
+                                                         "Great Value Dill Relish, 12 fl oz",
+                                                         "Great Value Dill Squeeze Relish, 10 fl oz Bottle",
+                                                         "Heinz Dill Relish, 12.7 oz Bottle"
+                                                     ],
+                                           "measured_by":  "plan-2026-08-16.routing.json: 34,807 distinct names over 13 files, 1,053 in prefilter scope, 22 routing changes, positive control reproduced. The known-wrong ruling changes NO routing (blocklist, not a rule); the relish exclude unmatches 5 dill-relish names (Aldi Dill Relish + 4 Walmart dill rows, none of which win a cell except the Aldi crown being corrected)."
+                                       },
+                      "status":  "done",
+                      "freshness":  "measured against comparison-2026-08-15 (built 2026-08-16T06:10:58, the pinned BOARD line) and captures read ~06:55; family-fare-regular-2026-08-16.json / bakers-regular-2026-08-16.json are live 3-hourly sweep outputs, so re-verify cell numbers on the rebuilt board before accepting",
+                      "root_fix":  {
+                                       "files":  [
+                                                     "grocery/audit-pack-basis.ps1 or a sibling advisory audit"
+                                                 ],
+                                       "exact_change":  "developer sizes it; must ship with a frozen must-fire (the Manischewitz pair) and a clean twin (the Gia Russa 12-pack, $23.02 = a REAL pack at 16c/oz)",
+                                       "what":  "class detector for (a)+(b), advisory first: flag a row when (name states \u0027(N pack)\u0027 AND another row with the same normalized name has the same price) OR (qty_basis says derived-lp/up AND the name quantity disagrees with the derived one). Route to the review queue, never a hard gate, until precision is measured."
+                                   }
+                  },
+                  {
+                      "resolution_note":  "The 08-07 change set is baselined (drops reviewed here as correct rejections; 3 named for re-check). Developer: (1) confirm the 08-15 baseline refresh was a reviewed accept, and if it cannot be attributed, re-run audit-match-soundness against the pre-08-15 baseline copy in git history and diff; (2) adjudicate the 6 contested names via the verdict flow - the EOS shave cream first (a toiletry two food commodities can claim wants a category-exclude, not an order accident); (3) NO blanket -Accept beyond the reviewed set.",
+                      "root_cause":  "the alerted condition was consumed by an accept this triage cannot attribute; the live remainder is 6 contested names",
+                      "subject":  "Grocery matching soundness - review needed",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "The 08-07 sweep (MOVED=12 DROPPED=34 new-contested=132) is no longer pending: out\\audit\\soundness-report.json now reads MOVED=0 DROPPED=0, i.e. a baseline refresh happened between 08-14 20:09 (still 2 moves logged) and 08-15 06:18 (clean run). The alerted DROPPED rows reviewed line by line read as the guard WORKING: candies/sodas/energy-shots/yogurt off fruit commodities (Claeys watermelon candy, Salsagheti, Charms Fluffy Stuff, Alani/Summit/ICEE drinks, Chobani on cherries), seasoning blends off black-pepper, drink concentrates off mangoes.",
+                                       "Three drops worth a second look at adjudication time (real food forms, possibly meaning calls): \u0027Watermelon Spears 16 OZ\u0027 and the two fresh-cut mango trays (cut fruit off whole-fruit commodities), and the two turkey breakfast-sausage drops (Butterball/Johnsonville - if breakfast-sausage means pork only, fine; if not, a real loss).",
+                                       "OPEN work: today\u0027s new-contested = 6 order-dependence rows to adjudicate: Bellwether Farms Whole Milk Basket Ricotta | EOS Pomegranate Raspberry Shave Cream (a TOILETRY matched by 2+ food commodities - the one to take seriously) | Kroger Salsa Style Fire Roasted Diced Tomatoes | New York Style Bagel Crisps | Organic Yams, Red, Small | Quaker Simply Granola Honey Raisins and Almonds.",
+                                       "PROVENANCE GAP said loudly: I could not establish from the logs WHO ran the accept between 08-14 20:09 and 08-15 06:18. The developer must confirm it was a reviewed accept (check the shell history / the 08-15 morning session) before trusting the new baseline - a blanket -Accept blesses every pending flag (this estate has been burned once)."
+                                   ],
+                      "status":  "bounced",
+                      "queue_id":  "2026-08-07-79b768",
+                      "premise_verified":  "TRUE - the provenance gap the plan said loudly is now closed. The accept between 2026-08-14 20:09 and 2026-08-15 06:18 was commit dd4fd0f3 (2026-08-14 20:54:01, \u0027Unblock the board: fix 4 wrong-product cells, publish 2026-08-14\u0027), the only commit in that window touching grocery/out/audit/match-baseline.json (+8367/-7613). Its commit message documents the review in the reviewer\u0027s own words: \u0027match-baseline.json was 4 days stale (2026-08-10), predating V4\u0027s 66 added commodities and four days of rule fixes... Reviewed the 63 moves / 38 drops before -Accept: they are improvements (watermelon candy and energy shots dropped, almonds -\u003e mixed-nuts, ground-cloves -\u003e whole-cloves, turkey sausage dropped per its deliberate exclude).\u0027 A second, smaller accept followed at 4161dea1 (21:46:51) whose message records \u0027verified DROPPED=2, MOVED=0\u0027. The named rows match the plan\u0027s own line-by-line reading of the DROPPED list, so the baseline was reviewed and is safe to build on. No blanket -Accept was issued this run: all 20 regressions (15 DROPPED + 5 MOVED) were read line by line and every one is an intended effect of this plan\u0027s edits.",
+                      "deviation":  "The -Accept that this board needed necessarily blessed the same 6 contested names into the baseline (682 contested total), so they will NOT re-alert as \u0027new-contested\u0027 on the next run. They are not lost - they are named here, in the resolution note, and in the baseline\u0027s own contested list: Bellwether Farms Whole Milk Basket Ricotta | EOS Pomegranate Raspberry Shave Cream | Kroger Salsa Style Fire Roasted Diced Tomatoes | New York Style Bagel Crisps, Sea Salt 7.2 Oz | Organic Yams, Red, Small | Quaker Simply Granola Honey Raisins and Almonds Granola. The EOS shave cream is still the one to take seriously (a toiletry two food commodities can claim). audit-match-soundness has no partial-accept mode, so this was unavoidable once the board had to ship; flagging it rather than letting it go quiet.",
+                      "bounce":  "NEW FAILURE CLASS, with the measurement. audit-match-soundness\u0027s -Accept verdict gate FALSE-BLOCKS on a real, correctly-matched product, and it blocked today\u0027s publish (publish-deals-page.ps1 gates on match-soundness even though guards.ps1 does not). MECHANISM: the gate recovers the item a DROP verdict judged from the FIRST QUOTED STRING inside the verdict\u0027s free-text \u0027reason\u0027 (audit-match-soundness.ps1:200-203), ignoring the entry\u0027s own structured \u0027item\u0027 field, which current verdict files do carry. MEASUREMENT: the 2026-08-15 verdict judged item=\u0027Marketside Tandoori Style Garlic Naan Bites, 7.05 oz, 15 Count\u0027 on commodity garlic, and its reason reads \"NAAN bread bites, not fresh garlic bulbs - \u0027Garlic\u0027 is a flavour descriptor...\". Get-VerdictQuotePattern applied to that reason returns \u0027Garlic\u0027, so the gate builds key garlic|garlic, matches Aldi\u0027s plain product literally named \u0027Garlic\u0027 ($0.5633/lb, genuine whole garlic, peers Kroger Whole Garlic Bulbs $0.498/lb and Walmart Fresh Garlic Sleeve $0.58/lb), and refuses the accept while naming store \u0027Walmart\u0027 (the store is read off the VERDICT, not off the blocked product, so the message misidentifies that too). The actually-judged naan bites are already honoured: suppressed by GLOBAL_EXCLUDE \u0027naan\u0027, carrying a known-wrong entry, and holding no cell. So the gate blocked a correct mapping and let nothing wrong through. IMPACT: any verdict whose reason quotes something other than the product name can permanently block -Accept on an innocent product, and the documented escape is -ForceAccept, which is exactly what the gate\u0027s own comment says must not become a habit. SUGGESTED FIX (not made here - a guard change to unblock my own publish is the conflict of interest this split exists to avoid): prefer $ve.item when present and fall back to the quote recovery, shipped with a must-fire fixture (a verdict whose item still maps to the commodity it was dropped from MUST still block) and a clean twin (this garlic row MUST NOT block). WHAT I DID INSTEAD: used the gate\u0027s own documented override - \u0027LATEST WORD WINS ... a drop that was re-reviewed and kept stops blocking\u0027 - and recorded a dated re-review at grocery/out/verify-verdicts-2026-08-16.json that keeps the plain \u0027Garlic\u0027 product, states the whole mechanism in its reason text, and explicitly does not reverse the naan-bites ruling. No -Force was used anywhere.",
+                      "shipped_commit":  "PENDING"
+                  },
+                  {
+                      "deviation":  "9 of the 11 measured cell_effects landed EXACTLY as the artifact says. Two did not, both run down and measured:  (1) portobello-mushrooms/Walmart - the artifact predicted the cell would DROP (after=null). It did not: it re-priced to \u0027Fresh Whole Portabella Mushroom Caps, 6 oz\u0027 at $8.32/lb, a genuine FRESH portobello that already routed to this commodity before the change and was simply losing to the $4.88 can. The artifact\u0027s cell_effects missed the runner-up behind the row it removed. Outcome is favourable and in the right direction (canned wrong-form out, fresh in) and the crown still moves to Aldi 6.64 exactly as measured.  (2) cooked-shredded-chicken/Walmart - the artifact predicted a NEW cell at 0.4838 from \u0027Marketside Simply Seasoned Rotisserie Shredded Chicken, 16 oz (Refrigerated)\u0027. It did NOT appear. Measured cause: compare-deals.ps1\u0027s $GLOBAL_EXCLUDE (83 patterns) contains the token \u0027seasoned\u0027, which suppresses that row estate-wide BEFORE any commodity rule is consulted. Proof: the commodity\u0027s own include matches the name and none of its excludes fire, yet audit-match-soundness reports it \u0027\u003cunmatched\u003e\u0027 with drift-vs-engine=0, so the matcher and the engine agree; and the Buddig row, which carries no \u0027seasoned\u0027 token, landed normally. The reviewer\u0027s routing simulator does not model the GLOBAL_EXCLUDE layer, so the artifact can over-predict an admit. No harm: the row priced nothing before and prices nothing now, and the crown is unmoved (Aldi 0.3744).  FOLLOW-UP WORTH A LOOK (not fixed here, not measured by the reviewer): cooked-shredded-chicken\u0027s own include lists \u0027simply seasoned\u0027 and \u0027seasoned\u0027 among its valid prefixes, so those authored prefixes can never fire while GLOBAL_EXCLUDE holds \u0027seasoned\u0027 - an authored rule that is structurally dead.  Also of note: the board diff carried 10 same-price Family Fare item-name swaps on commodities this plan never touched (baby-food, breakfast-sandwiches, brussels-sprouts, butter, disinfecting-wipes, pickles, potato-chips, ranch-dressing, sparkling-water, toaster-pastries). All are byte-identical in per_unit; they are tie-breaks moving because the FF 3-hourly sweep appended between the 06:10:58 board build and the rebuild, exactly as the plan\u0027s freshness line predicted. Not cell moves.",
+                      "claimed_by_earlier":  [
+                                                 {
+                                                     "claimed_by":  "oranges",
+                                                     "release_needed":  "oranges.exclude += \u0027\\\\bhabanero\\\\b\u0027",
+                                                     "name":  "Fresh Orange Habanero Peppers, 4 oz",
+                                                     "index":  39
+                                                 },
+                                                 {
+                                                     "claimed_by":  "mushrooms",
+                                                     "release_needed":  "mushrooms.exclude += \u0027\\\\bport(?:o|a)bell[ao]\\\\s+mushroom(?:s|\\\\s+caps?)?\\\\b\u0027 (existing exclude only covers -bella spellings)",
+                                                     "name":  "Portabello Mushroom Package 6 OZ",
+                                                     "index":  51
+                                                 },
+                                                 {
+                                                     "claimed_by":  "rotisserie-chicken",
+                                                     "release_needed":  "rotisserie-chicken.exclude += \u0027\\\\bshredded\\\\b\u0027",
+                                                     "name":  "Buddig Rotisserie Style Shredded Chicken 6 Oz",
+                                                     "index":  137
+                                                 },
+                                                 {
+                                                     "claimed_by":  "rotisserie-chicken",
+                                                     "release_needed":  "same shredded release as Buddig",
+                                                     "name":  "Marketside Simply Seasoned Rotisserie Shredded Chicken, 16 oz (Refrigerated)",
+                                                     "index":  137
+                                                 },
+                                                 {
+                                                     "claimed_by":  "\u003cunmatched\u003e",
+                                                     "release_needed":  "none - rule-invisible today, verified in the sim",
+                                                     "name":  "Season\u0027s Choice Steamable Frozen Sweet Garden Peas",
+                                                     "index":  -1
+                                                 },
+                                                 {
+                                                     "claimed_by":  "\u003cunmatched\u003e",
+                                                     "release_needed":  "none",
+                                                     "name":  "Fresh Og Sage",
+                                                     "index":  -1
+                                                 },
+                                                 {
+                                                     "claimed_by":  "\u003cunmatched\u003e",
+                                                     "release_needed":  "none",
+                                                     "name":  "Private Selection Garlic and Herb Pulled Roasted Chicken Cold",
+                                                     "index":  -1
+                                                 }
+                                             ],
+                      "publish_batch":  1,
+                      "rollback":  "revert the commodities.json hunks and rebuild; no data migration",
+                      "proof":  {
+                                    "commands":  [
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\compare-deals.ps1 -MinStores 1",
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\audit-match-soundness.ps1",
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\guards.ps1"
+                                                 ],
+                                    "must_fire_case":  "after rebuild: habanero-peppers, frozen-peas@Aldi, fresh-sage@FF, cooked-shredded-chicken@FF/Bakers/Walmart cells EXIST and match plan-2026-08-16.routing.json cell_effects; any cell outside the artifact that moved = stop and bounce",
+                                    "clean_twin":  "oranges/mushrooms/rotisserie-chicken cells byte-identical to the pinned board",
+                                    "guard_or_fixture":  "the rule-batch gate (apply-coverage-batch class checks live in test-auditors: rule-batch gate rebuilds the board BEFORE freezing its theft baseline) + audit-match-soundness reviewed line by line + audit-capture-eviction"
+                                },
+                      "evidence":  [
+                                       "Worked from out\\coverage-gaps.json (89 gaps, 28 actionable, classified per candidate). GENUINE first-match hijacks fixed in this batch: habanero-peppers@Walmart (\u0027Fresh Orange Habanero Peppers, 4 oz\u0027 claimed by oranges idx 39 - the commodity currently has ZERO stores and returns to the board); portobello-mushrooms@Aldi (\u0027Portabello Mushroom Package 6 OZ\u0027 claimed by mushrooms idx 51 - the existing exclude only spells -bella, Aldi spells -bello); cooked-shredded-chicken@Family Fare (\u0027Buddig Rotisserie Style Shredded Chicken 6 Oz\u0027 claimed by rotisserie-chicken idx 137).",
+                                       "GENUINE rule-invisible products fixed in this batch: frozen-peas@Aldi (\u0027Season\u0027\u0027s Choice Steamable Frozen Sweet Garden Peas\u0027 - \u0027garden\u0027 breaks every include), fresh-sage@Family Fare (\u0027Fresh Og Sage\u0027 - \u0027Og\u0027 is the store\u0027s organic abbreviation), cooked-shredded-chicken@Baker\u0027s (\u0027Private Selection Garlic and Herb Pulled Roasted Chicken Cold\u0027 - include requires pulled+chicken adjacent). Bonus admit measured in the same sim: cooked-shredded-chicken@Walmart (Marketside Rotisserie Shredded Chicken releases from rotisserie-chicken).",
+                                       "BOGUS candidates - the audit counted a wrong-product candidate as proof the store carries the commodity; correctly owned elsewhere, no rule change: plums@Fareway (Red Plum JELLY, owned by jelly), green-onions@Walmart (canned diced tomatoes), cilantro@Walmart (ROTEL), french-bread@Walmart (sourdough), pomegranates@Walmart (DISH LIQUID, owned by dish-soap), papaya@Walmart (canned tropical fruit), prunes@Sam\u0027s (dried peach/plum mix), cornmeal@Baker\u0027s (Dave\u0027s Killer BREAD), quinoa-uncooked@Walmart (quinoa-rice blend), coleslaw-mix@Hy-Vee (compound ad string owned by garden-salad), canned-butter-beans@Hy-Vee + beets@FF + pistachios@Aldi + green-chilli@Aldi/Walmart (blends/prepared/sauces that do not win their claimers\u0027 cells either), teriyaki-sauce@Aldi (teriyaki PORK; the real sauce row expired - rescue list has it), avocado-oil@Baker\u0027s (basis: 16.9 fl oz on a weight commodity - engine-explained).",
+                                       "Remaining includes-too-strict pairs not measured this round (daiya-mozzarella@Bakers, coleslaw-mix@Walmart, cooked-jasmine-rice@Walmart, disinfectant-spray@Fareway, baked-beans@Hy-Vee compound ad string): routed to the standing coverage-backlog process (explain-coverage-gap.ps1 + apply-coverage-batch.ps1) which carries its own gate."
+                                   ],
+                      "classification":  "wrong-product",
+                      "queue_id":  "2026-08-07-9d0317",
+                      "root_cause":  "two mechanisms, both measured: (a) first-match-wins lets an early broad include (oranges, mushrooms idx 39/51) claim a later commodity\u0027s product, and a spelling variant (portabello vs portabella) defeats the release exclude that was supposed to prevent exactly this; (b) includes written to one store\u0027s phrasing go blind to another store\u0027s (Og, garden, pulled-roasted). Third finding: audit-coverage-gaps\u0027 actionable list treats ANY matching candidate as proof the store carries the commodity, so 60 percent of its pages are wrong-product candidates - it needs a candidate-sanity pass (future work, noted for the backlog, not this run).",
+                      "premise_verified":  "TRUE for every evidence row, re-measured on the pinned board before editing: habanero-peppers had ZERO cells; portobello-mushrooms had exactly one cell (Walmart 4.88, \u0027Giorgio Chunky Style Portabella Mushrooms, 4oz Can\u0027) and it was the crown; cooked-shredded-chicken had one cell (Aldi 0.3744); frozen-peas had no Aldi cell; fresh-sage had one cell (Baker\u0027s 4.98). Array indexes confirmed as stated: oranges 39, mushrooms 51, rotisserie-chicken 137. Artifact freshness holds: it was generated 07:10:30, after the last FF sweep write at 07:06:20.",
+                      "shipped_commit":  "PENDING",
+                      "subject":  "Grocery: 6 store(s) dropped from a commodity they carry - 2026-08-07",
+                      "surface_fix":  {
+                                          "files":  [
+                                                        "grocery/commodities.json"
+                                                    ],
+                                          "exact_change":  "oranges.exclude += \u0027\\\\bhabanero\\\\b\u0027; mushrooms.exclude += \u0027\\\\bport(?:o|a)bell[ao]\\\\s+mushroom(?:s|\\\\s+caps?)?\\\\b\u0027; rotisserie-chicken.exclude += \u0027\\\\bshredded\\\\b\u0027; cooked-shredded-chicken.include += \u0027\\\\bpulled\\\\s+roasted\\\\s+chicken\\\\b\u0027; frozen-peas.include += \u0027\\\\bfrozen\\\\s+(?:sweet\\\\s+)?garden\\\\s+peas\\\\b\u0027; fresh-sage.include += \u0027\\\\bfresh\\\\s+og\\\\s+sage\\\\b\u0027 (plus the relish/shredded-cheese/mac/portobello edits carried by items 21 and 25)",
+                                          "what":  "the measured 7-edit rule batch (4 release excludes + 3 widened includes) in plan-2026-08-16.routing.json"
+                                      },
+                      "do_not_touch":  [
+                                           "any commodity not named in the artifact",
+                                           "coverage-gap-allowlist.json beyond the bogus-candidate entries the developer chooses to record"
+                                       ],
+                      "resolution_note":  "Measured 7-edit rule batch (artifact: plan-2026-08-16.routing.json, 22 routing changes, positive control reproduced): habanero-peppers returns to the board (Walmart), portobello gets Aldi\u0027s FRESH package while the canned Walmart row leaves, cooked-shredded-chicken gains FF/Bakers/Walmart cells, frozen-peas gains Aldi, fresh-sage gains FF. 15+ remaining audit pages were wrong-product candidates (no rule change; the audit needs a candidate-sanity pass - backlog) and 5 includes-too-strict pairs went to the standing coverage-backlog process.",
+                      "blast_radius":  {
+                                           "affected_now":  22,
+                                           "measured_as":  "routing",
+                                           "cell_effects":  [
+                                                                {
+                                                                    "commodity":  "habanero-peppers",
+                                                                    "before":  0,
+                                                                    "store":  "Walmart",
+                                                                    "after":  12.64
+                                                                },
+                                                                {
+                                                                    "commodity":  "oranges",
+                                                                    "before":  1.13,
+                                                                    "store":  "Walmart",
+                                                                    "after":  1.13
+                                                                },
+                                                                {
+                                                                    "commodity":  "portobello-mushrooms",
+                                                                    "before":  0,
+                                                                    "store":  "Aldi",
+                                                                    "after":  6.64
+                                                                },
+                                                                {
+                                                                    "commodity":  "portobello-mushrooms",
+                                                                    "before":  4.88,
+                                                                    "store":  "Walmart",
+                                                                    "after":  0
+                                                                },
+                                                                {
+                                                                    "commodity":  "mushrooms",
+                                                                    "before":  0.1862,
+                                                                    "store":  "Aldi",
+                                                                    "after":  0.1862
+                                                                },
+                                                                {
+                                                                    "commodity":  "rotisserie-chicken",
+                                                                    "before":  7.99,
+                                                                    "store":  "Family Fare",
+                                                                    "after":  7.99
+                                                                },
+                                                                {
+                                                                    "commodity":  "cooked-shredded-chicken",
+                                                                    "before":  0,
+                                                                    "store":  "Family Fare",
+                                                                    "after":  0.8317
+                                                                },
+                                                                {
+                                                                    "commodity":  "cooked-shredded-chicken",
+                                                                    "before":  0,
+                                                                    "store":  "Baker\u0027s",
+                                                                    "after":  0.6869
+                                                                },
+                                                                {
+                                                                    "commodity":  "cooked-shredded-chicken",
+                                                                    "before":  0,
+                                                                    "store":  "Walmart",
+                                                                    "after":  0.4838
+                                                                },
+                                                                {
+                                                                    "commodity":  "frozen-peas",
+                                                                    "before":  0,
+                                                                    "store":  "Aldi",
+                                                                    "after":  0.0808
+                                                                },
+                                                                {
+                                                                    "commodity":  "fresh-sage",
+                                                                    "before":  0,
+                                                                    "store":  "Family Fare",
+                                                                    "after":  5.98
+                                                                }
+                                                            ],
+                                           "risk":  "reviewed collateral, all favourable: Smithfield PORK LOIN unmatches from mushrooms; Bertolli alfredo SAUCE re-lands at alfredo-sauce (does not win its cell); no legitimate product loses its commodity",
+                                           "names":  [
+                                                         "see plan-2026-08-16.routing.json changes[] - 22 names"
+                                                     ],
+                                           "measured_by":  "plan-2026-08-16.routing.json: full first-match-wins simulation, 34,807 distinct names over 13 named files (ONE corpus), prefilter = union of touched-commodity includes before+after (1,053 names, exact by construction: only touched rules changed), 22 routing changes, every one reviewed in the artifact; positive control reproduced (Kraft Deluxe shredded-cheese -\u003e mac-and-cheese)"
+                                       },
+                      "status":  "deviated",
+                      "freshness":  "measured against comparison-2026-08-15 (built 2026-08-16T06:10:58, the pinned BOARD line) and captures read ~06:55; family-fare-regular-2026-08-16.json / bakers-regular-2026-08-16.json are live 3-hourly sweep outputs, so re-verify cell numbers on the rebuilt board before accepting",
+                      "root_fix":  null
+                  },
+                  {
+                      "deviation":  null,
+                      "publish_batch":  2,
+                      "rollback":  "revert the filter hunk",
+                      "proof":  {
+                                    "commands":  [
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\test-auditors.ps1"
+                                                 ],
+                                    "must_fire_case":  "a pseudo-id in the input universe must be skipped AND noted, never scored",
+                                    "clean_twin":  "real commodities keep their findings",
+                                    "guard_or_fixture":  "semantic-identity self-test (test-auditors: the actionable filter still admits fresh findings and still suppresses settled rulings)"
+                                },
+                      "evidence":  [
+                                       "4 of the listed \u0027commodities\u0027 are not commodities at all: ingredient-definition-black-peppercorns, ingredient-definition-cumin-seeds, ingredient-definition-frozen-cauliflower-florets, ingredient-definition-kalamata-olives appear in NO commodities.json id (573 checked) - the sweep\u0027s commodity universe is leaking recipe-side pseudo-ids, so it asks for matching rules on things that cannot have them.",
+                                       "The real-commodity remainder (baby-back-ribs, chicken-breast, chili-beans, coconut-oil, ...) is the standing semantic coverage backlog, already owned by the weekly explain-coverage-gap + apply-coverage-batch process (backlog previously worked 88 -\u003e 27)."
+                                   ],
+                      "classification":  "infra",
+                      "queue_id":  "2026-08-07-cac5f3",
+                      "root_cause":  "the sweep builds its commodity list from a source that includes recipe ingredient-definition pseudo-ids, so its findings mix actionable rule gaps with impossible ones and the count can never reach zero",
+                      "premise_verified":  null,
+                      "shipped_commit":  null,
+                      "subject":  "Grocery: semantic sweep found 23 product(s) no rule can see - 2026-08-07",
+                      "surface_fix":  {
+                                          "files":  [
+                                                        "the semantic sweep writer of out\\semantic-findings.json (locate via the writer; grocery-side)"
+                                                    ],
+                                          "exact_change":  "universe = the tracked-commodity id registry only; report skipped pseudo-ids as a note line",
+                                          "what":  "filter the semantic sweep\u0027s commodity universe to real tracked-commodity ids (drop ingredient-definition-* before scoring)"
+                                      },
+                      "do_not_touch":  [
+                                           "the semantic model/thresholds",
+                                           "the backlog process"
+                                       ],
+                      "resolution_note":  "Split: 4 ingredient-definition-* pseudo-ids leak into the sweep universe - filtered at the source; the 34 real rule-invisible products stay with the standing weekly coverage-backlog process (explain-coverage-gap -\u003e apply-coverage-batch), not this run.",
+                      "blast_radius":  {
+                                           "measured_by":  "the 38 listed commodity ids checked against commodities.json (573 ids): 4 pseudo-ids, 34 real",
+                                           "affected_now":  4,
+                                           "measured_as":  "rows",
+                                           "risk":  "filter-only change to a reporting sweep; no matching rule touched",
+                                           "names":  [
+                                                         "ingredient-definition-black-peppercorns",
+                                                         "ingredient-definition-cumin-seeds",
+                                                         "ingredient-definition-frozen-cauliflower-florets",
+                                                         "ingredient-definition-kalamata-olives"
+                                                     ]
+                                       },
+                      "status":  "planned",
+                      "freshness":  "semantic-findings.json as alerted (fires since 08-07, last 06:15 today); commodities.json read ~06:55",
+                      "root_fix":  null
+                  },
+                  {
+                      "deviation":  "Reviewed all 9 BLOCK rows one by one against the board. SEVEN are the known department-map false positives the alert body itself names - Family Fare files shelf-stable spices under fresh_fruits_vegetables/fresh_spices_herbs (dried-basil, black-peppercorns, cinnamon-stick, dried-ancho-chiles), grated parmesan under pantry/crackers, and pistachios / vienna-sausage under its dairy and meat aisles. Every one of those is the CORRECT product for its commodity (this plan\u0027s own item 2026-08-09-3e7a0c independently confirms the Zamora ancho row is right), so they are store-taxonomy noise and were left alone.  ONE is a genuine second instance of the exact class this item is about: jarred-gravy/Family Fare was pricing \u0027Hormel Square Table Sliced Roast Turkey Breast And Gravy\u0027 - a refrigerated meat entree, not gravy - at 0.766/oz. Fixed, and the fix itself deviated once: a brand-level exclude (\u0027\\\\bsquare\\\\s+table\\\\b\u0027) was too narrow and a same-price successor took the cell immediately on rebuild (\u0027Hormel Slice Roasted Turkey Breast And Gravy 15 Oz\u0027, also 0.766), which is precisely the per-SKU mistake this item\u0027s own root_cause describes. Replaced it with a form-based exclude measured over the SAME 13-file corpus the routing artifact uses: jarred-gravy.exclude += \u0027\\\\b(?:and|\u0026|n)\\\\s+gravy\\\\b\u0027. Measurement: 12 distinct names in the corpus match it and NOT ONE is a jarred or canned gravy - 4 Purina cat foods and 3 Gerber baby purees (both already excluded by other tokens) plus the 5 Hormel meat entrees. Every real gravy on the board is named \u0027\u003cflavour\u003e Gravy\u0027 and none of them matches. Cell effect: jarred-gravy/Family Fare drops (its only candidates were those entrees); crown unmoved at Sam\u0027s Club 0.0912; Baker\u0027s/Fareway/Hy-Vee/Walmart cells byte-identical.  The planned mac-and-cheese effect landed exactly: Family Fare 2.995 -\u003e cell gone, crown unmoved at Fareway 0.54, and all 5 Bob Evans names dropped as the artifact listed.",
+                      "claimed_by_earlier":  [
+
+                                             ],
+                      "publish_batch":  1,
+                      "rollback":  "revert the exclude hunk, rebuild",
+                      "proof":  {
+                                    "commands":  [
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\compare-deals.ps1 -MinStores 1",
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\test-auditors.ps1"
+                                                 ],
+                                    "must_fire_case":  "the frozen Bob Evans 2 Ea row against the new rules must not match mac-and-cheese",
+                                    "clean_twin":  "Kraft/GV/Annie boxed macs keep their cells byte-identical",
+                                    "guard_or_fixture":  "aisle-test itself (rostered daily): after rebuild it must report 0 BLOCK; its -SelfTest fixtures stay armed"
+                                },
+                      "evidence":  [
+                                       "out\\aisle-test.json (416 rows): exactly ONE BLOCK verdict - mac-and-cheese @ Family Fare, product \u0027Bob Evans Macaroni \u0026 Cheese 2 Ea\u0027, dept dairy/ready_to_eat, \u0027category grains allows only: pantry\u0027. It is on today\u0027s board at .995/each. The standing ~22 known false positives are ALLOW\u0027d exception rows (coffee-creamer in beverages etc.) - this is not one of them.",
+                                       "The commodity is \u0027Macaroni \u0026 Cheese (boxed)\u0027; Bob Evans is a refrigerated prepared tray line - the store\u0027s own shelf placement (dairy) is telling us the product form is wrong, which is exactly what aisle-test was built for. A prior rule pass already unmatched \u0027Bob Evans Macaroni \u0026 Cheese, 20 oz Tray\u0027 (plan-2026-08-08 routing artifact); the \u00272 Ea\u0027 variant survived it."
+                                   ],
+                      "classification":  "wrong-product",
+                      "queue_id":  "2026-08-07-323328",
+                      "root_cause":  "the earlier fix excluded one SKU shape (\u002720 oz Tray\u0027) instead of the product line, so every other Bob Evans mac variant (\u00272 Ea\u0027, \u0027Family Size 28 Oz\u0027) stayed matchable - a per-SKU exclude on a brand-wide form problem",
+                      "premise_verified":  "FALSE as stated, and the error is in the COUNT, not the finding. The plan says out\\aisle-test.json (416 rows) carries \u0027exactly ONE BLOCK verdict\u0027. Measured on the same file (written 06:15:13 today, before the reviewer\u0027s ~06:55 read): 416 rows, ALLOW=391, BLIND=16, BLOCK=9 - and all NINE BLOCK rows are live Family Fare board cells, not candidates. The plan\u0027s substantive claim still holds: the mac-and-cheese BLOCK is real (\u0027Bob Evans Macaroni \u0026 Cheese 2 Ea\u0027, dept dairy/ready_to_eat, live at 2.995/each) and is not one of the standing department-map false positives.",
+                      "shipped_commit":  "PENDING",
+                      "subject":  "Grocery: 1 board cell(s) sit in the wrong store department - 2026-08-07",
+                      "surface_fix":  {
+                                          "files":  [
+                                                        "grocery/commodities.json"
+                                                    ],
+                                          "exact_change":  "mac-and-cheese.exclude += \u0027\\\\bbob\\\\s+evans\\\\b\u0027 (also removes the two Walmart tray variants that are currently matched but not winning)",
+                                          "what":  "brand-level exclude: the whole Bob Evans line is refrigerated sides"
+                                      },
+                      "do_not_touch":  [
+                                           "the aisle-test exception list (the ~22 reviewed ALLOW rows)"
+                                       ],
+                      "resolution_note":  "aisle-test\u0027s one BLOCK is real: Bob Evans refrigerated mac (dairy case) publishing on the BOXED commodity at FF. Brand exclude added (the earlier fix only killed one SKU shape); FF drops off the commodity deliberately - it stocks no boxed mac we capture. Aisle-test expected clean after rebuild.",
+                      "blast_radius":  {
+                                           "affected_now":  5,
+                                           "measured_as":  "routing",
+                                           "cell_effects":  [
+                                                                {
+                                                                    "commodity":  "mac-and-cheese",
+                                                                    "before":  2.995,
+                                                                    "store":  "Family Fare",
+                                                                    "after":  0
+                                                                },
+                                                                {
+                                                                    "commodity":  "mac-and-cheese",
+                                                                    "before":  0.8725,
+                                                                    "store":  "Walmart",
+                                                                    "after":  0.8725
+                                                                }
+                                                            ],
+                                           "risk":  "Family Fare LOSES its mac-and-cheese cell (its only candidates are Bob Evans) - a deliberate decision: no boxed mac in FF\u0027s capture beats publishing a refrigerated tray as boxed. Crown (Fareway .54) unmoved.",
+                                           "names":  [
+                                                         "Bob Evans Macaroni \u0026 Cheese 2 Ea",
+                                                         "Bob Evans Macaroni \u0026 Cheese 20 Oz",
+                                                         "Bob Evans Macaroni \u0026 Cheese, Family Size 28 Oz",
+                                                         "Bob Evans Macaroni \u0026 Cheese, 20 oz Tray",
+                                                         "Bob Evans Family Size Macaroni \u0026 Cheese, 28 oz Tray"
+                                                     ],
+                                           "measured_by":  "plan-2026-08-16.routing.json (same ONE simulation as item 23): 5 Bob Evans names unmatch (2 Ea, 20 Oz, Family Size 28 Oz at FF; 20 oz + 28 oz trays at Walmart); nothing else contains the token"
+                                       },
+                      "status":  "deviated",
+                      "freshness":  "measured against comparison-2026-08-15 (built 2026-08-16T06:10:58, the pinned BOARD line) and captures read ~06:55; family-fare-regular-2026-08-16.json / bakers-regular-2026-08-16.json are live 3-hourly sweep outputs, so re-verify cell numbers on the rebuilt board before accepting",
+                      "root_fix":  null
+                  },
+                  {
+                      "deviation":  null,
+                      "publish_batch":  2,
+                      "rollback":  "revert the audit hunk; no data touched",
+                      "proof":  {
+                                    "commands":  [
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\audit-row-age.ps1 -SelfTest",
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\audit-row-age.ps1"
+                                                 ],
+                                    "must_fire_case":  "existing: a regular file with no dates still fires (\u0027Walmart, 11,092 rows\u0027 fixture)",
+                                    "clean_twin":  "NEW frozen fixture: an ad file with ad_from/ad_to and zero as_of reports 0 undated and its window age instead",
+                                    "guard_or_fixture":  "audit-row-age -SelfTest (has MUST FIRE undated-store and CLEAN TWIN fixtures; add one)"
+                                },
+                      "evidence":  [
+                                       "UNDATED GREW is a measurement artifact, not a stopped writer - measured per file: EVERY undated row lives in a WINDOW-dated ad file. ads-2026-08-15.json (header ad_from 2026-08-10 / ad_to 2026-08-16): Hy-Vee 705/705 undated, Aldi 98/98, Family Fare 1200/1200. fareway-deals-2026-08-10.json (window 08-10..08-15): 183/183. Meanwhile every regular capture has ZERO undated rows (fareway-regular-2026-08-15: 590/0, aldi-regular-2026-08-15: 2217/0, hyvee-regular-2026-08-15: 1552/0; the only exceptions are July 12/13 relics).",
+                                       "audit-row-age\u0027s own comment (line 59) says weekly-ad files are aged by their window, not per-row - but the UNDATED counter does not exempt them, so the counts track ad-file SIZE (Fareway 11 -\u003e 183 = the new 183-row ad file) and the alert\u0027s \u0027a writer that was stamping as_of has stopped\u0027 is a canned misdiagnosis.",
+                                       "The RATCHET half is REAL: Hy-Vee 33.1 percent older than 14d (oldest 29d). hyvee-regular-2026-08-15 header: refreshed_today=513, not_reverified=1039, cap_skipped=26; coverage-ledger REGRESSED \u0027pull-regular-hyvee examined 513, baseline 1010 (49.2 percent fewer)\u0027. The Chophouse Cajun  crown (as_of 07-29, item 21) is this class reaching a shopper-facing verdict.",
+                                       "AD COVERAGE GONE (Baker\u0027s 39 sale rows) is real and owned by the flyer items (056051/a5f563)."
+                                   ],
+                      "classification":  "parse-basis-bug",
+                      "queue_id":  "2026-08-09-817ca5",
+                      "root_cause":  "the audit duplicates the board\u0027s file map faithfully but applies the per-row as_of rule to file classes whose dating contract is the WINDOW header; the mismatch between its own documentation (line 59) and its counter turned every ad refresh into a false \u0027writer stopped\u0027 page. The real signal underneath (Hy-Vee re-verification coverage halved) needs its own answer: WHY pull-regular-hyvee refreshes only 513 of 1552 is unproven here - cap_skipped is only 26, so the worklist selection or wall-clock cap shrank; parked for the developer with the header numbers.",
+                      "premise_verified":  null,
+                      "shipped_commit":  null,
+                      "subject":  "Board prices aging inside a fresh file",
+                      "surface_fix":  {
+                                          "files":  [
+                                                        "grocery/audit-row-age.ps1"
+                                                    ],
+                                          "exact_change":  "in the per-store scan, when the source glob is an ad file AND the doc carries ad_from/ad_to, date its rows from the window instead of counting them undated; report ad-window rows as their own line",
+                                          "what":  "exempt window-dated ad files from the UNDATED counter (age them by ad_from/ad_to as the doc already claims) and keep the counter strict for regular files"
+                                      },
+                      "do_not_touch":  [
+                                           "the Hy-Vee ratchet threshold",
+                                           "the STORE_FILES map (it is drift-checked against build-deals-page)"
+                                       ],
+                      "resolution_note":  "UNDATED GREW was the audit miscounting window-dated ad rows (2,186 of them; every regular capture is fully dated) - counter now exempts window-dated ad files, with a frozen fixture. The REAL finding stands separately: Hy-Vee re-verification halved (513 of 1552, baseline 1010) and an 18-day-old closeout crowned Cajun seasoning - developer investigates pull-regular-hyvee\u0027s worklist cap and re-runs it; coverage-ledger keeps tracking it (REGRESSED line).",
+                      "blast_radius":  {
+                                           "measured_by":  "undated counts measured directly per capture file (16 files listed in evidence); 2,186 ad rows currently miscounted undated (705+98+1200+183); zero undated rows in any current regular file",
+                                           "affected_now":  2186,
+                                           "measured_as":  "rows",
+                                           "risk":  "audit-reporting change only; the ratchet and the regular-file undated counter stay strict. Risk to avoid: do not let the exemption swallow a regular file - key it on the ad glob AND the window header both.",
+                                           "names":  [
+                                                         "ads-2026-08-15.json rows (Hy-Vee/Aldi/Family Fare)",
+                                                         "fareway-deals-2026-08-10.json rows"
+                                                     ]
+                                       },
+                      "status":  "planned",
+                      "freshness":  "measured against comparison-2026-08-15 (built 2026-08-16T06:10:58, the pinned BOARD line) and captures read ~06:55; family-fare-regular-2026-08-16.json / bakers-regular-2026-08-16.json are live 3-hourly sweep outputs, so re-verify cell numbers on the rebuilt board before accepting",
+                      "root_fix":  null
+                  },
+                  {
+                      "deviation":  null,
+                      "publish_batch":  3,
+                      "rollback":  "the clamp is already the safe state; revert any comparison change to return to it",
+                      "proof":  {
+                                    "commands":  [
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\meal-prep\\pipeline\\compute-v2-perserving.ps1 (after the freeze lifts)"
+                                                 ],
+                                    "must_fire_case":  "a frozen copy of pizza-pasta-bowls inputs must reproduce the inversion under current code and not under the fix",
+                                    "clean_twin":  "non-inverted recipes keep byte-identical numbers",
+                                    "guard_or_fixture":  "compute-v2-perserving self-checks + the inversion clamp itself (it must report 0 clamped after the basis reconciliation, or each remaining row must trace to a real price defect)"
+                                },
+                      "evidence":  [
+                                       "Timing evidence: the alert was born 2026-08-15 (count 4 since), the SAME afternoon commits changed what \u0027cheapest\u0027 means: b45127cc 15:48 \u0027cards: price each ingredient at the store that is cheapest to BUY at\u0027 and 18d8a526 16:27 \u0027phase 2: cheapest_ps prices the store\u0027s package\u0027. cheapest_ps now prices the WHOLE PACKAGE at the cheapest-to-buy store while everyday remains unit-price based - on that basis ev \u003c= ch is no longer an invariant, and the clamp is masking a basis mismatch, not a wrong feed price.",
+                                       "Shape evidence: all 12 listed rows invert by small margins (pizza-pasta-bowls ev=1.07 ch=1.15, mississippi-pot-roast-bowls 3.67 vs 3.86, ...) - consistent with package-rounding deltas, not with a wrong store price (a real feed error skews one recipe hard, not 17 recipes gently).",
+                                       "Feed spot-check: chuck-roast pricing_inputs are coherent (Sams 6.64/lb \u003c Walmart 7.9689/lb with packageBasisUnits) - no smoking-gun wrong price on the shared pot-roast ingredient."
+                                   ],
+                      "classification":  "parse-basis-bug",
+                      "queue_id":  "2026-08-15-1a1109",
+                      "root_cause":  "HYPOTHESIS with commit evidence, stated as such: the 08-15 phase-2 change made ev (unit-priced) and ch (package-priced-at-cheapest-buy-store) different bases, so their ordering invariant broke by design and the inversion detector is now testing a contract that no longer holds. If the recompute falsifies this, bounce the item back to a feed-price hunt.",
+                      "premise_verified":  null,
+                      "shipped_commit":  null,
+                      "subject":  "Recipe price inversion: 17 clamped",
+                      "surface_fix":  {
+                                          "files":  [
+                                                        "meal-prep/pipeline/compute-v2-perserving.ps1 (or the clamp site)"
+                                                    ],
+                                          "exact_change":  "developer derives after verification; the clamp stays until the semantics are reconciled",
+                                          "what":  "verify-then-fix, DEFERRED (meal-prep freeze): recompute pizza-pasta-bowls (ev=1.07 ch=1.15) with pre-b45127cc semantics; if the inversion vanishes, the fix is the COMPARISON (compare like bases, or rename/re-derive the clamped number), not the feed"
+                                      },
+                      "do_not_touch":  [
+                                           "meal-prep\\* until the recipe-hunter run completes",
+                                           "the clamp (never remove it before the invariant is re-established)"
+                                       ],
+                      "resolution_note":  "Root is most likely NOT a wrong price: the 08-15 cheapest_ps redesign (b45127cc/18d8a526) made everyday and cheapest different bases (unit vs whole-package), so 17 small inversions appeared the same day and the clamp is papering over a semantics mismatch. Deferred to after the recipe run: recompute one row under old semantics to confirm, then reconcile the comparison. If falsified, bounce to a feed-price hunt.",
+                      "blast_radius":  {
+                                           "measured_by":  "the 12 alerted recipe rows + the two 08-15 commits + chuck-roast/beef-chuck-roast pricing_inputs read from out\\smp-feed.json",
+                                           "affected_now":  17,
+                                           "measured_as":  "rows",
+                                           "risk":  "shipped numbers are clamped safe today; the deferred fix only changes which number is derived, behind the existing compute gates",
+                                           "names":  [
+                                                         "17 clamped recipes (12 named in the alert body)"
+                                                     ]
+                                       },
+                      "status":  "planned",
+                      "freshness":  "alert rows from the 08-15 fires; feed read out\\smp-feed.json generated 2026-08-16T06:20:14",
+                      "root_fix":  null
+                  },
+                  {
+                      "resolution_note":  "Self-healed: dried-ancho-chiles now prices from FF Zamora ($0.5619/oz) and the 16 recipe lines cost again (cost-flags clean of ancho today). Watch: single-store cell - if FF drops the product the class returns; the rescue worklist will catch it.",
+                      "root_cause":  "the commodity was registered but no store capture carried a matching product until the FF sweep found Zamora on 08-12; the alert body is the 08-09 snapshot",
+                      "subject":  "Recipe pricing: 16 unpriced ingredient line(s)",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "Resolved by data since the alert: dried-ancho-chiles is ON today\u0027s weekly board - Family Fare \u0027Zamora Ancho Chile Peppers\u0027 .99 / 1 lb = .5619/oz (first captured 08-12, routes to the commodity with NO rule change - verified in the routing sim), it is in out\\smp-feed.json pricing_inputs, and today\u0027s meal-prep\\db\\cost-flags.txt contains ZERO ancho lines (only 2 flags, both on an in-flight tandoori recipe)."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-09-3e7a0c"
+                  },
+                  {
+                      "deviation":  null,
+                      "publish_batch":  2,
+                      "rollback":  "revert the timeout hunk; behaviour returns to wait-forever",
+                      "proof":  {
+                                    "commands":  [
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\ops\\health-heartbeat.ps1"
+                                                 ],
+                                    "must_fire_case":  "simulated: a wall-wait in scheduled mode must exit into quarantine within the bound and the run must complete",
+                                    "clean_twin":  "an interactive run still waits for the Done callback",
+                                    "guard_or_fixture":  "health-heartbeat.ps1 (the alerting watcher) plus the weekly-lock fixtures already in test-auditors (stale lock expiry/takeover)"
+                                },
+                      "evidence":  [
+                                       "267014 = 0x41306 = SCHED_S_TASK_TERMINATED: the 08-14 08:30 daily was killed, not crashed. local-daily-log: 08-14 run starts 08:30:04 (\u0027running check-ad-cycles\u0027) and never logs completion; ad-cycle-log shows it still mid-run at 20:16 (guards pass ~12h in); 08-15 08:30 logs \u0027stale lock (24h) - taking over\u0027 and completes exit 0.",
+                                       "Get-ScheduledTaskInfo now: LastRun 08-15 08:30, LastTaskResult 0, next 08-16 08:30 - the task is healthy again; the alert reported the terminated 08-14 instance.",
+                                       "The stall window matches the walled Friday (Aldi wall 06:47, the pull \u0027stops here\u0027 pending a human Done callback) - a wall-wait inside a scheduled run held the task far past its window."
+                                   ],
+                      "classification":  "infra",
+                      "queue_id":  "2026-08-15-9ee54e",
+                      "root_cause":  "a store-wall callback wait has no timeout inside the scheduled daily, so one walled store can hold the whole task \u003e24h until the scheduler terminates it; the next day\u0027s stale-lock takeover is the only recovery path",
+                      "premise_verified":  null,
+                      "shipped_commit":  null,
+                      "subject":  "Automation silent-death: 1 issue(s)",
+                      "surface_fix":  {
+                                          "files":  [
+
+                                                    ],
+                                          "exact_change":  "n/a",
+                                          "what":  "none for the task itself - it self-recovered and the stale-lock takeover worked"
+                                      },
+                      "do_not_touch":  [
+                                           "guard 6 collapse thresholds",
+                                           "the wall alert/Done callback flow for interactive sessions"
+                                       ],
+                      "resolution_note":  "Not a dead automation: the 08-14 daily hung on the walled-Friday pull (wall-wait has no scheduled-mode timeout), was terminated by the scheduler (0x41306), and the 08-15 run took the stale lock and completed exit 0. Task healthy now. Root fix queued: bounded wall-wait -\u003e quarantine in scheduled runs.",
+                      "blast_radius":  {
+                                           "measured_by":  "Get-ScheduledTaskInfo + local-daily-log 08-14/08-15 + ad-cycle-log timestamps; one task affected, one occurrence",
+                                           "affected_now":  1,
+                                           "measured_as":  "schedule",
+                                           "risk":  "the root fix touches the wall-wait only in scheduled mode; the interactive callback flow is untouched",
+                                           "names":  [
+                                                         "SMP Grocery Daily Pipeline (local)"
+                                                     ]
+                                       },
+                      "status":  "planned",
+                      "freshness":  "task info + logs read ~06:55 2026-08-16; the 08-16 08:30 run has not started yet",
+                      "root_fix":  {
+                                       "files":  [
+                                                     "the store-pull wall-wait site (grocery pull chain)"
+                                                 ],
+                                       "exact_change":  "developer locates the wait loop and adds a scheduled-mode timeout that exits into the existing quarantine path - never into publishing thin data (guard 6 already proved it holds that line)",
+                                       "what":  "bound the wall-wait in scheduled (non-interactive) runs: after N minutes, quarantine the store (walls are UNUSABLE, never EMPTY - the existing rule) and let the rest of the cycle finish; the alert + Done callback flow stays for interactive sessions"
+                                   }
+                  },
+                  {
+                      "deviation":  null,
+                      "publish_batch":  2,
+                      "rollback":  "remove the allowed_subsets entry",
+                      "proof":  {
+                                    "commands":  [
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\audit-store-registry.ps1",
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\test-auditors.ps1"
+                                                 ],
+                                    "must_fire_case":  "existing fixture: an unregistered 5-store list still fires",
+                                    "clean_twin":  "the registered probe-ingredient subset is silent",
+                                    "guard_or_fixture":  "audit-store-registry.ps1 re-run (expect 0 issues) + test-auditors store-registry fixtures (the genuine 5-store hardcode must still fire)"
+                                },
+                      "evidence":  [
+                                       "The flagged 5-store lists in probe-ingredient.ps1 are the DESIGNED complement, not drift: the script probes the two headless stores (line ~232: $stores = @(\u0027bakers\u0027,\u0027family-fare\u0027)) and reports the other five as browser_required (line 287: Hy-Vee, Aldi, Fareway, Sam\u0027s Club, Walmart - exactly the 7-store registry minus the probed pair). The audit sees a 5-store list missing FF/Baker\u0027s and cannot know it is intentional."
+                                   ],
+                      "classification":  "infra",
+                      "queue_id":  "2026-08-15-3d6050",
+                      "root_cause":  "a legitimate designed subset with no registration; the audit is working as built",
+                      "premise_verified":  null,
+                      "shipped_commit":  null,
+                      "subject":  "Grocery: store-registry drift - 2 issue(s)",
+                      "surface_fix":  {
+                                          "files":  [
+                                                        "grocery/stores.json"
+                                                    ],
+                                          "exact_change":  "allowed_subsets += { script: \u0027probe-ingredient.ps1\u0027, stores: [\u0027Hy-Vee\u0027,\u0027Aldi\u0027,\u0027Fareway\u0027,\u0027Sam\u0027\u0027s Club\u0027,\u0027Walmart\u0027], reason: \u0027browser_required = registry minus the two headless-probed stores (Baker\u0027\u0027s, Family Fare)\u0027 }",
+                                          "what":  "record the subset where the audit looks: stores.json allowed_subsets entry for probe-ingredient\u0027s browser_required complement (the valve the alert itself names)"
+                                      },
+                      "do_not_touch":  [
+                                           "probe-ingredient.ps1 store lists (they are correct)"
+                                       ],
+                      "resolution_note":  "probe-ingredient\u0027s 5-store lists are the designed browser_required complement of its two headless-probed stores - registered in stores.json allowed_subsets with the reason, so the drift guard stays armed for real drift.",
+                      "blast_radius":  {
+                                           "measured_by":  "probe-ingredient.ps1 read at the flagged sites (5-store lists at lines 7/287/313); audit-store-registry alert text",
+                                           "affected_now":  2,
+                                           "measured_as":  "callers",
+                                           "risk":  "data-only change to stores.json documentation field; the drift guard keeps firing on any UNREGISTERED subset (test-auditors keeps both store-registry fixtures)",
+                                           "names":  [
+                                                         "probe-ingredient.ps1 flagged line pair"
+                                                     ]
+                                       },
+                      "status":  "planned",
+                      "freshness":  "probe-ingredient.ps1 + stores.json read ~06:55 2026-08-16",
+                      "root_fix":  null
+                  },
+                  {
+                      "deviation":  null,
+                      "publish_batch":  2,
+                      "rollback":  "revert the one-line hunk",
+                      "proof":  {
+                                    "commands":  [
+                                                     "powershell -File C:\\Codex\\ThriftyCrew\\grocery\\audit-ghost-drift.ps1"
+                                                 ],
+                                    "must_fire_case":  "a deliberately edited scratch copy compared as drift still reports DRIFT",
+                                    "clean_twin":  "matching pages report clean, count 16",
+                                    "guard_or_fixture":  "audit-ghost-drift.ps1 itself: a run with the Ghost key must evaluate 16 of 16 (any real drift it then finds is handled per its own flow); the exit-3 blind branch must survive (no key still exits 3)"
+                                },
+                      "evidence":  [
+                                       "Exact bug found: grocery\\audit-ghost-drift.ps1:235 checks Test-Path (Join-Path $repo $t.file) where the manifest stores BARE filenames (budget-tracker-tool.html), i.e. it looks at the repo ROOT - while the discovery path (line 193) reads $repo\\site\\tools\\*-tool.html. The 08-15 restructure (commit 9f85a311, \u0027strays brought in\u0027) moved the 16 tool htmls into site\\tools\\, discovery kept working, the drift check went blind on all 16 at once.",
+                                       "All 16 files verified present: C:\\Codex\\ThriftyCrew\\site\\tools\\*-tool.html (budget-tracker-tool.html confirmed by direct Test-Path). Commit df5ad0b7 (\u0027repoint the two paths the folder moves left behind\u0027) missed this third one."
+                                   ],
+                      "classification":  "infra",
+                      "queue_id":  "2026-08-16-179ae3",
+                      "root_cause":  "discovery and drift-check derive the tool path independently; the restructure moved the files and only discovery followed - the classic two-copies-of-one-truth path split",
+                      "premise_verified":  null,
+                      "shipped_commit":  null,
+                      "subject":  "Tools: ghost-drift could not evaluate (no key, or a page could not be read)",
+                      "surface_fix":  {
+                                          "files":  [
+                                                        "grocery/audit-ghost-drift.ps1"
+                                                    ],
+                                          "exact_change":  "line 235: $lf = Join-Path $repo (Join-Path \u0027site\\tools\u0027 $t.file)  - or store repo-relative paths in the manifest and join from $repo; either way discovery and check must share ONE path derivation (two copies of a path is how this broke)",
+                                          "what":  "point the drift check at the same directory discovery reads"
+                                      },
+                      "do_not_touch":  [
+                                           "the manifest slugs",
+                                           "live Ghost pages"
+                                       ],
+                      "resolution_note":  "ghost-drift went blind on all 16 tools because the restructure moved *-tool.html into site\\tools\\ and the drift check still joins repo-root + bare filename (line 235) while discovery already reads site\\tools. One-line path fix; re-run expects 16 evaluated.",
+                      "blast_radius":  {
+                                           "measured_by":  "16 manifest entries vs Get-ChildItem site\\tools (16 files present); the audit currently reports 0 of 16 evaluable",
+                                           "affected_now":  16,
+                                           "measured_as":  "rows",
+                                           "risk":  "path fix only; the -Accept/allow flow and exit-3 semantics unchanged. Until it ships the guard is blind to direct Ghost-admin edits on 16 live tool pages.",
+                                           "names":  [
+                                                         "all 16 mapped tool pages"
+                                                     ]
+                                       },
+                      "status":  "planned",
+                      "freshness":  "files + script read ~06:55 2026-08-16",
+                      "root_fix":  null
+                  },
+                  {
+                      "resolution_note":  "HANDS OFF this run (shared dirty tree, live session). Brad/developer, on a quiet tree: git stash show -p stash@{0}, diff it against HEAD grocery/build-sams-deals.ps1; apply deliberately if it is unshipped work, else drop; then sweep the 7 log-only stashes after the same check each. Nothing may be popped while the recipe-hunter session holds modified files.",
+                      "root_cause":  "daily git pull --rebase --autostash conflicts against a dirty shared tree leave stashes behind; they accumulate silently",
+                      "subject":  "Daily run: autostash not restored",
+                      "classification":  "needs-brad",
+                      "evidence":  [
+                                       "Now 8 autostash entries (5 at alert time; 08-15 09:20:09 added another with a logged conflict). Inspected READ-ONLY: stash@{0} carries REAL CODE - grocery/build-sams-deals.ps1 (+14/-2) plus local-daily-log noise; stash@{7} (oldest checked) is log-only. The Sam\u0027s verified-refresh work shipped to HEAD separately, so the stashed edit may be an already-superseded draft - or an unshipped improvement."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-12-e3adcb"
+                  },
+                  {
+                      "resolution_note":  "Resolved: edge == HEAD (generated 2026-08-15T15:33:54 both sides, cache-busted read). The existing read-after-write check keeps watching; if a lag ever persists past a day, that is the moment for a CF build-log look, not now.",
+                      "root_cause":  "Cloudflare deploy latency after a push; self-healing, already watched",
+                      "subject":  "smp-feed edge did not pick up today\u0027s push - 2026-08-09",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "Checked live with a cache-busting query: https://feed.thriftycrew.com/smp-feed.json serves generated 2026-08-15T15:33:54 - EXACTLY the feed in HEAD public/smp-feed.json (commit 423232f9). The edge is current with the last push; today\u0027s 06:20 local feed is uncommitted until the 08:30 daily pushes it. The 08-09 and 08-15-morning fires were real transient CF deploy lag that landed later the same day; the read-after-write watcher in run-daily-local.ps1 already owns this condition."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-09-e547d0"
+                  },
+                  {
+                      "resolution_note":  "No code change - the Wednesday browser agent owns both rows (research-worklist), FF self-heals daily. Rides the same unlock as the rest of group B.",
+                      "root_cause":  "sale rows without everyday twins at walled stores; owned by the weekly browser research pass",
+                      "subject":  "Grocery: 2 on-sale item(s) have no everyday fallback - 2026-08-09",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "bell-peppers @ Family Fare and cantaloupe @ Aldi: browser stores are queued in out\\research-worklist.json for the weekly agent; Family Fare self-heals daily per the alert body. Cantaloupe@Aldi already shows in the Aldi lost-cells list (item 11) and the rescue worklist."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-09-92a805"
+                  },
+                  {
+                      "resolution_note":  "Closed: the live page has published cleanly twice since (latest 2026-08-16 06:23:38). No action.",
+                      "root_cause":  "coverage gate held a thin refresh; later refreshes passed",
+                      "subject":  "Grocery page HELD (coverage) - 2026-08-11",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "Resolved by later publishes: AUTO-PUBLISH 08-15 06:23:53 and 08-16 06:23:38 (guards hard=0 both). The 08-11 hold was the coverage gate doing its job during the thin-capture window."
+                                   ],
+                      "status":  "planned",
+                      "queue_id":  "2026-08-11-c7515c"
+                  }
+              ],
+    "ship_sequence":  [
+                          "BATCH 1 (board correction, grocery only): edit grocery\\commodities.json - the 7 rule edits of plan-2026-08-16.routing.json (items 21/23/25: relish dill, shredded-cheese mac, oranges habanero, mushrooms portabello-spelling, portobello-mushrooms cans, rotisserie-chicken shredded, cooked-shredded-chicken pulled-roasted include, frozen-peas garden include, fresh-sage og include, mac-and-cheese bob-evans)",
+                          "add-known-wrong.ps1: Walmart item 150098585 (12-pack Manischewitz at the single-bag price) with the evaluable retire trigger from item 21",
+                          "compare-deals.ps1 -MinStores 1 (rebuild)",
+                          "DIFF the rebuilt board against plan-2026-08-16.routing.json cell_effects: every listed cell must land where measured (habanero 12.64 new, portobello Aldi 6.64 / Walmart gone, cooked-shredded FF 0.8317 + Bakers 0.6869 + Walmart 0.4838, frozen-peas Aldi 0.0808, fresh-sage FF 5.98, egg-noodles Walmart 0.1088, relish Aldi item swap at 0.1056, mac FF gone). ANY cell outside the artifact that moved = stop, record deviation, bounce if it is a new class",
+                          "audit-food-category (expect 0) + audit-match-soundness (review the sweep line by line - the 10 edits WILL show as moves/drops; accept only the reviewed set, no blanket -Accept) + audit-capture-eviction (expect 0)",
+                          "guards.ps1 (MUST be hard=0) + audit-basis-reconcile + audit-pack-basis",
+                          "publish-deals-page.ps1, then verify ONE fixed cell live with a fresh cache-busting query (portobello or habanero; 30-min edge cache)",
+                          "BATCH 2 (grocery code, no board effect): test-auditors pin 16/16 + finding/blind split (item 1); unit-basis finding persistence (item 2); audit-row-age ad-window exemption + fixture (item 26); semantic sweep universe filter (item 24); stores.json allowed_subsets for probe-ingredient (item 30); audit-ghost-drift path fix (item 31); scheduled-mode wall-wait bound (item 29, if sized safely - else park it as a follow-up with a note)",
+                          "test-auditors.ps1 after batch 2: expect the blind count at 0 and only the live-data meal-prep findings reported (as findings)",
+                          "audit-store-registry (0) + audit-ghost-drift with the key (16 evaluated) + audit-row-age (UNDATED lines gone, Hy-Vee ratchet still red on purpose)",
+                          "commit + push (push immediately; the push is the deploy), plan file + routing artifact ride the same commit",
+                          "BATCH 3 (DEFERRED until the recipe-hunter run completes and its tree settles): item 16 bid adjudication (4 standing bids), item 17 refusal-names-its-row, item 27 inversion semantics verification, item 20 dated reanchor worklist, re-run audit-store-integrity / audit-spec-contradictions / audit-db-agreement on the settled tree, then ops\\audit-prompt-backup.ps1 -Sync (item 18)",
+                          "BROWSER PASS (whenever Brad restores the extension, before 2026-08-20): Walmart FULL worklist, Bakers flyer + ad-schedule, Fareway flyer all 22 pages, Sams rescue-terms (STALE 11 incl. the 60 sams-regular-2026-08-01 items), Aldi rescue-terms 5, five-spice listing verification (item 21), EOS shave cream + 6 contested adjudication if it needs a page read (item 22)"
+                      ],
+    "open_questions_for_brad":  [
+                                    "CHROME EXTENSION (blocking, dated): the extension has been signed out since Fri 19:56. 37 Walmart cells (22 crowns) start losing their prices 2026-08-20 when their only capture leaves the 14-day window. Options: (a) sign the extension back in and let the weekly agent run the passes, (b) tell us to accept the cell loss and let the rescue worklists rebuild after, (c) a manual pull session. (a) before 08-19 avoids all loss.",
+                                    "ALDI WALL: alert 2026-08-14-84daea is still open awaiting your Done click. The pull already recovered (2217 rows on 08-15), so this is a 30-second cleanup: clear the challenge in the Aldi tab if it still shows, then click Done so the callback closes.",
+                                    "STASH stash@{0}: holds edits to grocery/build-sams-deals.ps1 (+14/-2) that never landed (autostash conflict 08-15 09:20). Keep or drop? The developer can diff it against HEAD on a quiet tree; nothing is lost either way, but 8 stashes are accumulating.",
+                                    "COMMODITY MEANING (veto window, default = ship): this plan makes two meaning calls - portobello-mushrooms stops accepting CANNED (crown moves $4.88 -\u003e $6.64/lb, now the fresh Aldi package), and mac-and-cheese (boxed) drops Family Fare\u0027s refrigerated Bob Evans tray (FF leaves that commodity). Both follow the fresh/boxed labels the commodities already carry; say the word if either should stay as-was."
+                                ]
+}
