@@ -1,6 +1,6 @@
 ---
 name: recipe-hunter
-description: Hunt new dinner recipes to Brad's conditions and carry each one all the way to LIVE on the site, running the stages concurrently so hunting never waits on pricing. Per-recipe stages stream (hunt, extract, map, price, spec+write, source-QA); QA-passed recipes accumulate into waves that publish automatically once the batch auditor returns GO. Invoke when Brad wants new recipes; he supplies the conditions and a stop condition.
+description: Hunt new dinner recipes to Brad's conditions and carry each one all the way to LIVE on the site, running the lanes concurrently so hunting never waits on pricing. Recipes stream between lanes (hunt, select, extract, map, price, spec+write, source-QA) with no barriers; QA-passed recipes accumulate into waves that publish automatically once the batch auditor returns GO. Orchestration must be built from design\PLAN-recipe-hunter-v2 section 2.4, not from the skill file alone. Invoke when Brad wants new recipes; he supplies the conditions and a stop condition.
 ---
 
 # Recipe Hunter
@@ -9,6 +9,24 @@ Brad gives conditions ("high-protein, under $2.50 a serving, slow cooker, 20 of 
 condition. You hunt recipes, prove every ingredient is buyable in Omaha, write them in his voice, and
 publish them. **Publishing is automatic.** Brad is not a gate any more; the batch auditor and the
 post-publish reviewer are.
+
+## READ THE DESIGN BEFORE YOU ORCHESTRATE. This file is not the spec.
+
+This file is the operator's reminder card. The architecture of record is:
+
+- `design\PLAN-recipe-hunter-v2-2026-08-15.md` - **section 2.4 is the concurrency model** (the lane
+  definitions and their caps), section 2.2 is the race-free pending-count semantics, section 3 is the
+  per-stage contract, section 0a is the list of plan instructions that were WRONG and are corrected in
+  the built code.
+- `design\PLAN-recipe-hunter-v2.1-2026-08-15.md` - the serveability gate, the audit economics, and
+  section 5, the proving-run instrumentation every real run owes.
+
+**This is a LANE model, not a per-recipe pipeline.** The diagram below is shorthand and has misled at
+least one session into reading every line as a per-recipe stage. It is not: `pipeline()` carries a recipe
+through extract and QA, while MAP batches recipes and PRICE drains a term-keyed queue that spans them.
+If you are about to write orchestration code, read section 2.4 first. Recorded because on 2026-08-15 a
+session built the whole flow off this file alone, made pricing a per-recipe stage, and threw away the
+cross-recipe term dedup the ingredient queue exists to provide.
 
 ## The two rules that decide everything
 
@@ -28,23 +46,38 @@ round **without waiting**. A candidate can be in source-QA while another is stil
 Workflow tool's `pipeline()` so there is no barrier between per-recipe stages, and loop the producer until
 Brad's stop condition is met.
 
+Lanes, with the caps from section 2.4. Global cap 12 concurrent agents. Note carefully which lanes are
+per-recipe, which BATCH recipes, and which drain a queue that spans recipes:
+
 ```
-HUNT lane (1 at a time)     recipe-sourcer            loop rounds until the stop condition
-SELECT (1 per round)        recipe-dedup-selector     vs catalog digest AND accepted-slugs.json
+HUNT    lane   1 at a time   recipe-sourcer          loop rounds until the stop condition
+SELECT  lane   1 per round   recipe-dedup-selector   vs catalog digest AND accepted-slugs.json;
+                                                     the SINGLE writer of accepted-slugs.json
                                     |
-pipeline(), no barriers:            v
-  extract                   recipe-hunter-extractor   page -> ingredients + measures + steps
-  map                       recipe-ingredient-mapper  ingredient -> commodity id, food-DB rows
-  price   [SINGLETON LANE]  recipe-hunter-pricer      only ABSENT terms; 7 stores per invocation
-  spec+write                recipe-writer             intake JSON -> build-v2-spec -> db\recipes
-  source-QA                 recipe-source-qa          the card vs the page it came from
+                                    v
+EXTRACT lane   up to 3       recipe-hunter-extractor   PER RECIPE. page -> ingredients + steps
+MAP     lane   up to 2       recipe-ingredient-mapper  MICRO-BATCHES OF UP TO 5 RECIPES.
+                                                       ingredient -> commodity id, food-DB rows;
+                                                       runs price-ingredient.ps1, enqueues absent
+                                                       terms, THEN sets state=pricing
+PRICE   lane   SINGLETON     recipe-hunter-pricer      NOT A PER-RECIPE STAGE. A self-looping queue
+                                                       drainer: snapshot pending terms -> ONE pricer
+                                                       per <=10 terms ACROSS RECIPES -> record ->
+                                                       -Derive -> repeat until the queue drains and
+                                                       no recipe upstream can add more
+WRITE   lane   up to 3       recipe-writer             PER RECIPE. intake -> build-v2-spec -> db\recipes
+QA      lane   up to 2       recipe-source-qa          PER RECIPE. the card vs the page it came from
                                     |
-WAVE lane (serial)                  v
+                                    v
+WAVE    lane   serial
   wave close -> recipe-batch-auditor -> GO -> wave-publish.ps1 -> post-publish-reviewer -> ledger close
                                               (gates, publish, then serveability
                                                verify; a slug that cannot price
                                                is drafted and moved to `held`)
 ```
+
+Recipes flow BETWEEN lanes without barriers - one can be in QA while another is still being extracted.
+That is what "no barriers" means. It does not mean every lane processes one recipe at a time.
 
 **The price lane is a singleton, deliberately.** Exactly ONE pricer alive at a time, each invocation taking
 up to ~10 absent terms and opening its proven-safe shape: two server stores plus one tab per browser store,
@@ -73,6 +106,8 @@ state files, the queue, the waves and the ledger all record the RESULT, so a run
 sessions and one that priced them in a single batch leave byte-identical evidence without it.
 `audit-lane-shape.ps1` judges that log, and **a run that priced while logging nothing is a finding, not a
 pass** - could-not-look is never a clean bill.
+Recipes leave the price lane as `-Derive` resolves them, in whatever order their terms happen to clear -
+not in the order they entered it.
 
 ## State, waves and resuming
 
@@ -266,6 +301,8 @@ without the finding, and never edit the lane log to make it pass. The log is app
   batches 5 recipes per invocation. Build both from the plan's section 2.4 and S4, not from this card alone.
 - Do not dispatch a lane agent without recording it with `-Lane`, and do not hand-edit `lane-log.jsonl`.
   An unrecorded run is an unauditable run, and `audit-lane-shape.ps1` treats it as one.
+- Do not deviate from section 2.4 silently. A deliberate deviation is fine and Brad has directed several;
+  record it in the run dir BEFORE the run starts, not in the report afterwards.
 - Do not write board cells. If an ingredient deserves a permanent cell, say so; the capture pipeline adds it.
 - Do not weaken a guard to get a recipe through. A recipe that needs a gate turned off is a rejected recipe.
 - Do not add a URL to the P8 allowlist to unblock a publish. The allowlist is "endpoints this estate
