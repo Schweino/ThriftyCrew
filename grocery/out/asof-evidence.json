@@ -11,18 +11,6 @@
                        "detail":  [
 
                                   ]
-                   },
-                   {
-                       "store":  "Aldi",
-                       "file":  "aldi-regular-2026-08-15.json",
-                       "rows":  2217,
-                       "checked":  2217,
-                       "unbacked":  0,
-                       "capture_files":  4,
-                       "violations":  0,
-                       "detail":  [
-
-                                  ]
                    }
                ],
     "unwatched":  [
@@ -33,6 +21,6 @@
                       "Walmart (dated-file union ranked by freshness, guard 6 owns it)"
                   ],
     "blind":  [
-
+                  "Aldi: no dated capture files matched out\\captures\\aldi-capture-*.csv - this store\u0027s dates are unchecked, NOT clean"
               ]
 }

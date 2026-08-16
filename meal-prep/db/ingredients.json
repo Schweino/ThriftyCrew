@@ -1,4 +1,4 @@
-﻿[
+[
     {
         "item":  "_r300_note",
         "pantry_pkg_g":  0,
@@ -2619,10 +2619,10 @@
     },
     {
         "item":  "Dry White Wine",
-        "bid":  "dry-white-wine",
+        "bid":  "white-wine",
         "gpu":  29.57,
         "unit":  "floz",
-        "board":  "recipe",
+        "board":  "weekly",
         "buy_pkg_g":  742,
         "buy_pkg_label":  "750ml bottle",
         "note":  "NOT White Wine Vinegar. Added on Brad ruling 2026-08-16 despite the deliberate Red Wine deletion in 4056603f - revisit if wine proves out of scope."
@@ -2656,10 +2656,10 @@
     },
     {
         "item":  "80/20 Ground Beef",
-        "bid":  "80-20-ground-beef",
+        "bid":  "ground-beef-8020",
         "gpu":  453.592,
         "unit":  "lb",
-        "board":  "recipe",
+        "board":  "weekly",
         "buy_pkg_g":  453.592,
         "buy_pkg_label":  "lb",
         "note":  "Genuinely cheaper than 93/7; ruled its own row rather than an alias."
@@ -2676,10 +2676,10 @@
     },
     {
         "item":  "Pork Smoked Sausage",
-        "bid":  "pork-smoked-sausage",
-        "gpu":  28.3495,
-        "unit":  "oz",
-        "board":  "recipe",
+        "bid":  "kielbasa",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
         "buy_pkg_g":  382.7,
         "buy_pkg_label":  "13.5oz rope",
         "note":  "PORK, not turkey. Aliasing to Smoked Turkey Sausage would corrupt protein stamping and the free-dinner rotation.",
@@ -2692,9 +2692,9 @@
     {
         "item":  "Portobello Mushrooms",
         "bid":  "portobello-mushrooms",
-        "gpu":  28.3495,
-        "unit":  "oz",
-        "board":  "recipe",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
         "buy_pkg_g":  170.1,
         "buy_pkg_label":  "6oz pack",
         "note":  "Dearer than button/crimini; one recipe uses 1588 g so the error would compound."
@@ -2729,20 +2729,20 @@
     },
     {
         "item":  "Egg Yolk",
-        "bid":  "egg-yolk",
-        "gpu":  17,
-        "unit":  "each",
-        "board":  "recipe",
+        "bid":  "eggs",
+        "gpu":  204,
+        "unit":  "dozen",
+        "board":  "weekly",
         "buy_pkg_g":  204,
         "buy_pkg_label":  "12ct eggs",
         "note":  "gpu = yolk grams per egg (~17 g). Priced per egg PURCHASED - you buy whole eggs to get yolks, so that is the real cost."
     },
     {
         "item":  "Sun-Dried Tomatoes (Oil-Packed)",
-        "bid":  "sun-dried-tomatoes-oil-packed",
+        "bid":  "sun-dried-tomatoes",
         "gpu":  28.3495,
         "unit":  "oz",
-        "board":  "recipe",
+        "board":  "weekly",
         "buy_pkg_g":  680,
         "buy_pkg_label":  "24oz jar",
         "note":  "GROSS jar weight incl. packing oil (Brad, 2026-08-16). Do not correct to drained weight - that would be a guess. DISTINCT from the dry-packed Sun-Dried Tomatoes row."
@@ -2773,10 +2773,10 @@
     },
     {
         "item":  "Yellow Mustard",
-        "bid":  "yellow-mustard",
+        "bid":  "mustard",
         "gpu":  28.3495,
         "unit":  "oz",
-        "board":  "recipe",
+        "board":  "weekly",
         "buy_pkg_g":  567,
         "buy_pkg_label":  "20oz bottle",
         "note":  "Markedly cheaper than Dijon; ruled its own row."

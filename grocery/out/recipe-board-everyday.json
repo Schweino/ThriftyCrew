@@ -8872,6 +8872,350 @@
                     "size": "0.5 oz"
                 }
             ]
+        },
+        {
+            "id":  "monterey-jack-cheese",
+            "commodity":  "Monterey Jack Cheese",
+            "category":  "Dairy \u0026 Eggs",
+            "unit":  "oz",
+            "cheapest_store":  "Aldi",
+            "stores":  [
+                           {
+                               "store":  "Aldi",
+                               "per_unit":  0.2188,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Happy Farms Monterey Jack Cheese Block",
+                               "size":  "8 oz"
+                           },
+                           {
+                               "store":  "Walmart",
+                               "per_unit":  0.2238,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Great Value Monterey Jack Block Cheese",
+                               "size":  "16 oz"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.2306,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Kroger Monterey Jack Block Cheese",
+                               "size":  "16 oz"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  0.31,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Fareway Monterey Jack Cheese",
+                               "size":  "8 oz"
+                           },
+                           {
+                               "store":  "Hy-Vee",
+                               "per_unit":  0.3975,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Kraft Monterey Jack Cheese",
+                               "size":  "8 oz"
+                           }
+                       ]
+        },
+        {
+            "id":  "pepper-jack-cheese",
+            "commodity":  "Pepper Jack Cheese",
+            "category":  "Dairy \u0026 Eggs",
+            "unit":  "oz",
+            "cheapest_store":  "Aldi",
+            "stores":  [
+                           {
+                               "store":  "Aldi",
+                               "per_unit":  0.2188,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Happy Farms Pepper Jack Cheese Block",
+                               "size":  "8 oz"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.2306,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Kroger Pepper Jack Block Cheese",
+                               "size":  "16 oz"
+                           },
+                           {
+                               "store":  "Walmart",
+                               "per_unit":  0.2338,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Great Value Pepper Jack Block Cheese",
+                               "size":  "8 oz"
+                           },
+                           {
+                               "store":  "Hy-Vee",
+                               "per_unit":  0.2462,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Hy-Vee Pepper Jack Cheese",
+                               "size":  "8 oz"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  0.2488,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Fareway Pepper Jack Cheese",
+                               "size":  "16 oz"
+                           },
+                           {
+                               "store":  "Sam\u0027s Club",
+                               "per_unit":  0.2535,
+                               "type":  "everyday",
+                               "bulk":  true,
+                               "item":  "Tillamook Pepper Jack Cheese",
+                               "size":  "2.5 lbs"
+                           }
+                       ]
+        },
+        {
+            "id":  "gruyere-cheese",
+            "commodity":  "Gruyere Cheese",
+            "category":  "Dairy \u0026 Eggs",
+            "unit":  "oz",
+            "cheapest_store":  "Walmart",
+            "stores":  [
+                           {
+                               "store":  "Walmart",
+                               "per_unit":  0.3713,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "bettergoods Gruyere Cheese Block",
+                               "size":  "8 oz"
+                           },
+                           {
+                               "store":  "Hy-Vee",
+                               "per_unit":  0.7129,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Red Apple Cheese Gruyere Cheese",
+                               "size":  "7 oz"
+                           },
+                           {
+                               "store":  "Sam\u0027s Club",
+                               "per_unit":  0.7419,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Alpenhaus French Gruyere Semi-Hard Cheese Wedge",
+                               "size":  "1 lb"
+                           },
+                           {
+                               "store":  "Aldi",
+                               "per_unit":  0.9483,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Specially Selected Le Gruyere Cheese",
+                               "size":  "6 oz"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  1.0612,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Boar\u0027s Head Blanc Grue Gruyere Cheese",
+                               "size":  "8 oz"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  1.7488,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Grand Suisse Le Gruyere Cheese",
+                               "size":  "8 oz"
+                           }
+                       ]
+        },
+        {
+            "id":  "shaved-beef-steak",
+            "commodity":  "Shaved Beef Steak",
+            "category":  "Meat \u0026 Poultry",
+            "unit":  "oz",
+            "cheapest_store":  "Aldi",
+            "stores":  [
+                           {
+                               "store":  "Aldi",
+                               "per_unit":  0.4607,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Old Neighborhood USDA Beef Shaved Steak",
+                               "size":  "14 oz"
+                           },
+                           {
+                               "store":  "Sam\u0027s Club",
+                               "per_unit":  0.5459,
+                               "type":  "everyday",
+                               "bulk":  true,
+                               "item":  "Demakes Bros. Choice Beef Shaved Steak",
+                               "size":  "16 oz x 2 pk (32 oz)"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.5707,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Kroger Beef Shaved Steak",
+                               "size":  "14 oz"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  0.7861,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Gary\u0027s Quick Steak Thinly Sliced Sirloin Beef",
+                               "size":  "10.8 oz"
+                           },
+                           {
+                               "store":  "Hy-Vee",
+                               "per_unit":  0.9158,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Heritage Shaved Ribeye",
+                               "size":  "12 oz"
+                           }
+                       ]
+        },
+        {
+            "id":  "boneless-beef-short-ribs",
+            "commodity":  "Boneless Beef Short Ribs",
+            "category":  "Meat \u0026 Poultry",
+            "unit":  "lb",
+            "cheapest_store":  "Baker\u0027s",
+            "stores":  [
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  11.99,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Boneless Short Beef Ribs (About 4 per Pack)",
+                               "size":  "1 lb"
+                           }
+                       ]
+        },
+        {
+            "id":  "yellow-bell-pepper",
+            "commodity":  "Yellow Bell Pepper",
+            "category":  "Vegetables",
+            "unit":  "each",
+            "cheapest_store":  "Walmart",
+            "stores":  [
+                           {
+                               "store":  "Walmart",
+                               "per_unit":  1.46,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Fresh Yellow Bell Pepper, Each",
+                               "size":  "1 each"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  1.67,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Fresh Yellow Bell Pepper",
+                               "size":  "1 ct"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  1.99,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Yellow Bell Pepper",
+                               "size":  "1 each"
+                           },
+                           {
+                               "store":  "Hy-Vee",
+                               "per_unit":  1.99,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Yellow Bell Pepper",
+                               "size":  "1 ct"
+                           }
+                       ]
+        },
+        {
+            "id":  "beef-base",
+            "commodity":  "Beef Base",
+            "category":  "Canned \u0026 Soup",
+            "unit":  "oz",
+            "cheapest_store":  "Walmart",
+            "stores":  [
+                           {
+                               "store":  "Walmart",
+                               "per_unit":  0.3506,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Knorr Shelf Stable Paste Beef Bouillon",
+                               "size":  "7.9 oz"
+                           },
+                           {
+                               "store":  "Sam\u0027s Club",
+                               "per_unit":  0.3738,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Member\u0027s Mark Beef Base",
+                               "size":  "16 oz"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.7488,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Better Than Bouillon Roasted Beef Base",
+                               "size":  "8 oz"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  0.7488,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Better Than Bouillon Roasted Beef Base",
+                               "size":  "8 oz"
+                           },
+                           {
+                               "store":  "Hy-Vee",
+                               "per_unit":  0.8112,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Better Than Bouillon Beef Base",
+                               "size":  "8 oz"
+                           }
+                       ]
+        },
+        {
+            "id":  "fresh-oregano",
+            "commodity":  "Fresh Oregano (clamshell)",
+            "category":  "Vegetables",
+            "unit":  "oz",
+            "cheapest_store":  "Hy-Vee",
+            "stores":  [
+                           {
+                               "store":  "Hy-Vee",
+                               "per_unit":  3.9867,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Johnson Family Farm Fresh Oregano",
+                               "size":  "0.75 oz"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  4.98,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Simple Truth Organic Oregano",
+                               "size":  "0.5 oz"
+                           }
+                       ]
         }
     ],
     "built_at": "2026-08-02T08:27:09",
