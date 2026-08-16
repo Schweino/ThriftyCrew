@@ -85,15 +85,29 @@ one search per term. N concurrent pricers means N tabs per store domain, which i
 walled Walmart at 55 of 526 terms and Sam's at 205. Throughput comes from batching terms inside one pricer,
 never from more pricers. If that is ever too slow, it is a measured decision for Brad, not a default.
 
-**And those ~10 terms come from ACROSS RECIPES, not from one.** `ingredient-queue.ps1` is keyed by TERM,
-with the recipes that need it attached to the item - that is the whole reason it exists. The lane loops:
-snapshot the queue's pending terms, spawn one pricer for up to 10 of them, record the verdicts, run
-`-Derive`, repeat until the queue drains and no recipe upstream can still add a term. Recipes leave the
-lane as `-Derive` resolves them, in whatever order their terms happen to clear.
+**THE PRICE LANE IS NOT A PER-RECIPE STAGE. It is a queue drainer.** This is the single easiest thing in the
+whole flow to build wrong, and it was built wrong on 2026-08-15. `ingredient-queue.ps1` is keyed by **TERM**,
+not by recipe, precisely so a term two recipes both want is priced ONCE. The lane loops: snapshot the pending
+terms across every recipe -> spawn one pricer with up to 10 of them -> `-Derive` -> repeat until the queue
+drains and nothing upstream can add more. Wiring pricing as a `pipeline()` stage after `map` looks natural
+and is wrong twice over: it throws away the cross-recipe dedup, and it opens seven store sessions per RECIPE
+instead of per 10-term batch. The mapper batches too, at 5 recipes per invocation.
 
-Pricing one recipe at a time is the mistake this paragraph exists to prevent. It re-prices a term that two
-recipes share, and it opens seven store sessions to answer two or three terms instead of ten - more store
-traffic for less work, in the one lane where store traffic is the thing that gets you walled.
+**Record every lane invocation as you dispatch it**, one call per agent, with the items that invocation
+actually took (terms for `price`, slugs for `map` / `extract` / `write` / `qa`):
+
+```
+hunt-run.ps1 -Lane -RunDir <p> -LaneName price -Label 'queue batch 1' -Items 'harissa,gochujang,...' -By orchestrator
+hunt-run.ps1 -Lane -RunDir <p> -LaneName map   -Label 'micro-batch 1' -Items 'slug-a,slug-b,...'     -By orchestrator
+```
+
+This writes append-only `runs\<id>\lane-log.jsonl`, and it is the ONLY record of the shape of the work: the
+state files, the queue, the waves and the ledger all record the RESULT, so a run that priced 9 terms in 8
+sessions and one that priced them in a single batch leave byte-identical evidence without it.
+`audit-lane-shape.ps1` judges that log, and **a run that priced while logging nothing is a finding, not a
+pass** - could-not-look is never a clean bill.
+Recipes leave the price lane as `-Derive` resolves them, in whatever order their terms happen to clear -
+not in the order they entered it.
 
 ## State, waves and resuming
 
@@ -104,6 +118,7 @@ hunt-run.ps1 -Init -RunDir <p> -Conditions '...' -Stop '...' [-WaveSize 10]
 hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To <state> -By <stage> [-Detail '...']
 hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To pricing -By mapper -Terms 'saffron,achiote paste' -OptionalTerms 'cilantro'
 hunt-run.ps1 -Derive -RunDir <p>          after EVERY pricer invocation
+hunt-run.ps1 -Lane -RunDir <p> -LaneName price -Label '...' -Items '<comma-separated>' -By orchestrator
 hunt-run.ps1 -WaveClose -RunDir <p> [-Drain]
 hunt-run.ps1 -Status -RunDir <p>          the resume entry point
 hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To held -By <who> -Detail 'why it came down'
@@ -133,7 +148,7 @@ output file already exists, so a killed run re-enters and continues.
    digest means re-finding recipes you already published. `-Init` records its date; check it.
 2. **Confirm the board is current.** `grocery\out\comparison-<today>.json` should exist. Pricing reads it.
 3. **Self-tests green:** `hunt-run.ps1 -SelfTest`, `wave-publish.ps1 -SelfTest`, `ingredient-queue.ps1 -SelfTest`,
-   `feed-covers-published.ps1 -SelfTest`.
+   `feed-covers-published.ps1 -SelfTest`, `audit-lane-shape.ps1 -SelfTest`.
 4. **Ask Brad for the stop condition** if he did not give one: a target count, a time box, or a protein mix.
 
 ## Stage notes that are easy to get wrong
@@ -264,17 +279,30 @@ Report the three buckets separately, never rounding PENDING up into accepted or 
 
 Plus: registrar rulings and their follow-ups, and the ledger status of every wave.
 
+**Before you write the report, audit your own lane shape and put the result in it:**
+
+```bash
+powershell -File C:\Codex\ThriftyCrew\meal-prep\pipeline\audit-lane-shape.ps1 -RunDir <p>
+```
+
+It reads `lane-log.jsonl` and reports what the run ACTUALLY did against what the design specifies: pricer
+invocations versus `ceil(distinct terms / 10)`, mapper invocations versus `ceil(recipes / 5)`, any term that
+went to the pricer twice, and whether every pricer invocation stayed inside one recipe. Exit 1 means the
+lanes were driven in the wrong shape - report it as a finding about the run, do not quietly rerun the audit
+without the finding, and never edit the lane log to make it pass. The log is append-only for that reason.
+
 ## Do not
 
 - Do not publish any way except `wave-publish.ps1` after a GO. Never call `publish-recipe.ps1` or
   `engine\publish.ps1` directly from this flow.
 - Do not run `spec-guards.ps1` full mode against `db\recipes` specs.
 - Do not run more than one pricer at a time.
-- Do not invoke the pricer per recipe. It drains the shared term queue in batches across recipes; a
-  per-recipe pricer throws away the queue's dedup and multiplies store sessions (see the price lane above).
-- Do not run the mapper one recipe at a time either. It takes micro-batches of up to 5 (section S4).
-- Do not build orchestration from this file alone. Read section 2.4 of the v2 plan first, and record any
-  deviation from it in the run dir before the run starts, not after.
+- Do not make pricing a per-recipe pipeline stage. The price lane batches terms ACROSS recipes; the mapper
+  batches 5 recipes per invocation. Build both from the plan's section 2.4 and S4, not from this card alone.
+- Do not dispatch a lane agent without recording it with `-Lane`, and do not hand-edit `lane-log.jsonl`.
+  An unrecorded run is an unauditable run, and `audit-lane-shape.ps1` treats it as one.
+- Do not deviate from section 2.4 silently. A deliberate deviation is fine and Brad has directed several;
+  record it in the run dir BEFORE the run starts, not in the report afterwards.
 - Do not write board cells. If an ingredient deserves a permanent cell, say so; the capture pipeline adds it.
 - Do not weaken a guard to get a recipe through. A recipe that needs a gate turned off is a rejected recipe.
 - Do not add a URL to the P8 allowlist to unblock a publish. The allowlist is "endpoints this estate
