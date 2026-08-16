@@ -710,6 +710,17 @@ $prop = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here '
 $propRc = $LASTEXITCODE
 @($prop | ForEach-Object { Write-Output ("    " + [string]$_) })
 if ($propRc -ne 0) { Fail 'propagate-recipes failed - nothing was stamped, the next run retries the same slugs' }
+# A WAVE SLUG THAT DID NOT PUBLISH IS A FAILED WAVE, not a retry. propagate withholds its stamp so it stays
+# dirty, which is right for collateral - but this wave is about to stamp the ledger and advance these slugs
+# to `published`. Doing that for a slug that was refused or failed would assert a live page that is not
+# there, which is the exact lie the `held` state was invented to prevent.
+$unstampLine = @($prop | Where-Object { $_ -match 'PUBLISH-UNSTAMPABLE:' } | Select-Object -First 1)
+if (-not $unstampLine.Count) { Fail 'propagate did not surface publish''s PUBLISH-UNSTAMPABLE line - cannot prove every wave slug actually published' }
+$notPublished = @(([string]$unstampLine[0] -replace '^.*PUBLISH-UNSTAMPABLE:', '').Split(',') | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+$waveMissing = @($slugs | Where-Object { $notPublished -contains $_ })
+if ($waveMissing.Count) {
+  Fail ("{0} wave slug(s) did NOT publish and must not be recorded as live: {1}" -f $waveMissing.Count, ($waveMissing -join ', '))
+}
 if (-not (@($prop | Where-Object { $_ -match 'propagate COMPLETE' }).Count)) {
   Fail 'propagate did not report COMPLETE - treating an unfinished chain as unfinished'
 }

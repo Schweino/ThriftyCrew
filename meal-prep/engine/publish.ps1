@@ -185,3 +185,13 @@ if($refusedCreate){
   Write-Output ("REFUSED CREATE (" + $refusedCreate.Count + " slug(s) had no live post and no -AllowCreate authority): " + ($refusedCreate -join ', '))
   Write-Output ("  These were NOT published. If they should exist, pass them in -AllowCreate deliberately.")
 }
+# THE MACHINE LINE. Emitted ALWAYS, even empty, so a caller can depend on its presence rather than on the
+# absence of a warning. It names every slug this run did NOT successfully publish - failures and refused
+# creates alike - because the caller's job is to withhold their stamps.
+#
+# It exists because the loud refusal above was not enough. propagate gated only on the "published+verified
+# OK" line, which this script prints unconditionally, and then stamped EVERY dirty slug clean - including
+# the 21 it had just refused. The refusal would have fired exactly once and then those specs would have
+# been propagate-clean forever: the silent skip reborn one layer up, with three rejected recipes in it.
+$unstampable = @(@($failed) + @($refusedCreate) | Sort-Object -Unique)
+Write-Output ("PUBLISH-UNSTAMPABLE: " + ($unstampable -join ','))

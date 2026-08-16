@@ -93,6 +93,33 @@ if ($SelfTest) {
       if (-not (Test-Path $missing)) { throw "propagate: -AllowCreateFile named $missing but it does not exist" }
     } catch { $threw = $true }
     T 'MUST FIRE  a named-but-missing allowlist file throws rather than silently allowing nothing' $threw 'silent'
+
+    # ---- STAMP WITHHOLDING. publish.ps1 prints "published+verified OK" whether or not individual slugs
+    # failed or were refused, so gating on that line alone stamped EVERYTHING clean - including 21 refused
+    # creates, three of them recipes rejected hours earlier. One loud refusal, then propagate-clean forever.
+    # The PUBLISH-UNSTAMPABLE contract line names who must not be stamped.
+    function Parse-Unstampable([string[]]$Lines) {
+      $l = @($Lines | Where-Object { $_ -match '^PUBLISH-UNSTAMPABLE:' } | Select-Object -First 1)
+      if (-not $l.Count) { return $null }   # null means CONTRACT MISSING, which is not the same as empty
+      # `,` ON THE RETURN, deliberately. `return @()` unwraps an EMPTY array to $null on the way out, which
+      # would collide with the missing-contract sentinel above - a clean publish would then read as
+      # "publish.ps1 never emitted the line" and throw. Same unwrap family as a one-element array losing
+      # its .Count. The comma operator returns the array itself.
+      return , @(([string]$l[0] -replace '^PUBLISH-UNSTAMPABLE:', '').Split(',') | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+    }
+    $u1 = Parse-Unstampable @('published+verified OK: 9 / 30', 'PUBLISH-UNSTAMPABLE: alpha,bravo')
+    T 'MUST FIRE  refused and failed slugs are parsed out of the contract line' ($u1.Count -eq 2 -and $u1 -contains 'bravo') ($u1 -join '|')
+    $u2 = Parse-Unstampable @('published+verified OK: 30 / 30', 'PUBLISH-UNSTAMPABLE: ')
+    T 'CLEAN TWIN a clean run yields an EMPTY list, and stamps everything' ($null -ne $u2 -and $u2.Count -eq 0) "$u2"
+    # A missing contract line must be distinguishable from "nothing was refused" - otherwise an older
+    # publish.ps1, or one that died before its summary, reads as a perfect run and stamps the lot.
+    $u3 = Parse-Unstampable @('published+verified OK: 30 / 30')
+    T 'MUST FIRE  a MISSING contract line is not read as "nothing refused"' ($null -eq $u3) "$u3"
+    # And the withholding itself: a dirty slug on the list keeps its old stamp, so it stays dirty and retries.
+    $dirtySet = @('alpha', 'bravo', 'charlie'); $unst = @('bravo')
+    $stamped = @($dirtySet | Where-Object { $unst -notcontains $_ })
+    T 'MUST FIRE  an unstampable slug is withheld while its neighbours advance' `
+      ($stamped.Count -eq 2 -and $stamped -notcontains 'bravo') ($stamped -join ',')
     # the founding class: an edit AFTER stamping is dirt, byte-precise
     Set-Content (Join-Path $tmp 'a.json') '{"x":1,"y":3}' -Encoding UTF8
     $d = Get-DirtySlugs $stamps @(Get-ChildItem "$tmp\*.json")
@@ -175,12 +202,27 @@ try {
   else { Write-Output '   create authority: NONE - every slug with no live post will be refused' }
   # In-process call operator, so the array reaches publish.ps1 as an array.
   $pubOut = & '.\engine\publish.ps1' -Slugs $dirty -AllowCreate $allowCreate
-  $pubOut | Select-Object -Last 1
+  $pubOut | Select-Object -Last 2
   if (@($pubOut | Where-Object { $_ -match 'published\+verified OK' }).Count -eq 0) { throw 'propagate: publish did not report its verified-OK line - stamps NOT advanced' }
+  # A STAMP IS A CLAIM THAT THE SPEC IS LIVE AS WRITTEN. publish.ps1 prints its verified-OK line whether or
+  # not individual slugs failed or were refused, so gating on that line alone stamped everything clean -
+  # including 21 refused creates, three of them rejected recipes. They would have been propagate-clean
+  # forever after one loud refusal. Its PUBLISH-UNSTAMPABLE line names exactly who must not be stamped.
+  $unstampLine = @($pubOut | Where-Object { $_ -match '^PUBLISH-UNSTAMPABLE:' } | Select-Object -First 1)
+  if (-not $unstampLine.Count) { throw 'propagate: publish did not emit its PUBLISH-UNSTAMPABLE line - refusing to stamp, because a missing contract line is indistinguishable from "nothing was refused"' }
+  $script:unstampable = @(([string]$unstampLine[0] -replace '^PUBLISH-UNSTAMPABLE:', '').Split(',') | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 } finally { Pop-Location }
 
-# stamps advance ONLY here, after every stage above succeeded.
-foreach ($x in $files) { if ($dirty -contains $x.BaseName) { $stamps[$x.BaseName] = Get-SpecHash $x.FullName } }
+# stamps advance ONLY here, after every stage above succeeded - and never for a slug publish did not land.
+$withheld = @()
+foreach ($x in $files) {
+  if ($dirty -notcontains $x.BaseName) { continue }
+  if ($script:unstampable -contains $x.BaseName) { $withheld += $x.BaseName; continue }
+  $stamps[$x.BaseName] = Get-SpecHash $x.FullName
+}
 ($stamps | ConvertTo-Json -Depth 3) | Out-File $stampPath -Encoding utf8
-Write-Output ("propagate COMPLETE: {0} spec(s) carried through recipes-db, planner, cards and publish; stamps advanced" -f $dirty.Count)
+if ($withheld.Count) {
+  Write-Output ("propagate: STAMPS WITHHELD from {0} spec(s) that did not publish - they stay dirty and will be retried: {1}" -f $withheld.Count, ($withheld -join ', '))
+}
+Write-Output ("propagate COMPLETE: {0} spec(s) carried through recipes-db, planner, cards and publish; {1} stamp(s) advanced" -f $dirty.Count, ($dirty.Count - $withheld.Count))
 exit 0
