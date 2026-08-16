@@ -130,6 +130,28 @@ if($SelfTest){
   }
   Write-Output 'recost-spec-cost-block self-test'
 
+  # ---- Get-PkgLabel. costed.json carries package labels straight off the board row and some already count
+  # themselves, so the buy line prefixed its own count onto them: "Buy " + 3 + " " + "1 head" rendered
+  # "Buy 3 1 heads" across ten specs on 2026-08-16. Stripping a leading "1 " fixes that - but only when the
+  # 1 is a redundant COUNT. In "1 lb bag" it is the package SIZE, and stripping it would render three
+  # one-pound bags as "Buy 3 lb bags". A wave auditor flagged that as latent and measured it: today the only
+  # leading-"1 " labels among all 172 distinct package labels are "1 bunch" and "1 head", so it has never
+  # fired. That is precisely when it is cheap to close.
+  #
+  # The distinction is whether the unit token carries its own number. A BARE unit after the 1 means size
+  # ("1 lb bag"). A token that already has digits is itself a size, so the 1 is a count ("1 0.75oz clamshell"
+  # is one clamshell holding 0.75 oz, and reads "Buy 1 0.75oz clamshell").
+  Chk 'MUST FIRE  a redundant count of one is stripped'            ((Get-PkgLabel '1 bunch') -eq 'bunch')        (Get-PkgLabel '1 bunch')
+  Chk 'MUST FIRE  and for heads, the other live case'              ((Get-PkgLabel '1 head') -eq 'head')          (Get-PkgLabel '1 head')
+  Chk 'MUST FIRE  a one-POUND bag keeps its 1 (size, not count)'   ((Get-PkgLabel '1 lb bag') -eq '1 lb bag')    (Get-PkgLabel '1 lb bag')
+  Chk 'MUST FIRE  nor is a one-gallon jug stripped'                ((Get-PkgLabel '1 gal jug') -eq '1 gal jug')  (Get-PkgLabel '1 gal jug')
+  Chk 'MUST FIRE  nor a one-ounce packet'                          ((Get-PkgLabel '1 oz packet') -eq '1 oz packet') (Get-PkgLabel '1 oz packet')
+  Chk 'CLEAN TWIN a sized token after the 1 IS a count and strips' ((Get-PkgLabel '1 0.75oz clamshell') -eq '0.75oz clamshell') (Get-PkgLabel '1 0.75oz clamshell')
+  Chk 'CLEAN TWIN so does a 750ml bottle'                          ((Get-PkgLabel '1 750ml bottle') -eq '750ml bottle') (Get-PkgLabel '1 750ml bottle')
+  Chk 'CLEAN TWIN a non-one count is never touched'                ((Get-PkgLabel '2 lb bag') -eq '2 lb bag')    (Get-PkgLabel '2 lb bag')
+  Chk 'CLEAN TWIN a spaceless size label is never touched'         ((Get-PkgLabel '12oz bag') -eq '12oz bag')    (Get-PkgLabel '12oz bag')
+  Chk 'CLEAN TWIN a bare unit is never touched'                    ((Get-PkgLabel 'each') -eq 'each')            (Get-PkgLabel 'each')
+
   # --- the splice keeps the file's own indentation and rewrites only the named array
   $sample = @'
 {

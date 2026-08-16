@@ -30,8 +30,29 @@
 #
 # Only a leading "1 " is stripped. "2 lb bag" keeps its count, because there the number is part of the
 # package SIZE ("buy 3 of the 2 lb bag") rather than a redundant quantity of one.
+# THE STRIP IS UNIT-AWARE, and it has to be. A leading "1 " is redundant in "1 bunch" and "1 head" - the
+# buy line supplies its own count - but in "1 lb bag" or "1 gal jug" the number is part of the package SIZE,
+# and stripping it renders "Buy 3 lb bags" for what is actually three one-pound bags. A wave-3 auditor
+# flagged this as latent on 2026-08-16 and measured it: the only leading-"1 " labels across all 574 costed
+# recipes are "1 bunch" (7) and "1 head" (4), with zero "1 <unit>" labels anywhere. So it has never fired -
+# which is exactly when a trap is cheapest to close, and exactly when nobody remembers to.
+$script:PKG_SIZE_UNITS = @('lb','lbs','oz','floz','fl','g','kg','ml','l','liter','litre','gal','gallon',
+                           'qt','quart','pt','pint','ct','count','pk','pack','in','inch','cm')
 function Get-PkgLabel([string]$label){
-  if($label -match '^\s*1\s+(?<rest>\S.*)$'){ return $Matches['rest'].Trim() }
+  if($label -match '^\s*1\s+(?<rest>\S.*)$'){
+    $rest = $Matches['rest'].Trim()
+    # If the very next token is a BARE unit of measure, the 1 belongs to the SIZE and must stay:
+    # "1 lb bag" is a one-pound bag, and stripping it renders three of them as "Buy 3 lb bags".
+    # But a unit token carrying its OWN number is already a size, so the leading 1 is a redundant count:
+    # "1 0.75oz clamshell" is one clamshell that happens to hold 0.75 oz, and reads "Buy 1 0.75oz clamshell".
+    # The digit test is the whole distinction between those two.
+    $firstTok = ($rest -split '\s+')[0]
+    if($firstTok -notmatch '\d'){
+      $letters = ($firstTok -replace '[^A-Za-z]','').ToLower()
+      if($script:PKG_SIZE_UNITS -contains $letters){ return $label }
+    }
+    return $rest
+  }
   return $label
 }
 
