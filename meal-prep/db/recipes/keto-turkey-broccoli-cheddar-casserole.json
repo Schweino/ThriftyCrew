@@ -17,7 +17,7 @@
                          "SOURCE MACRO MISMATCH (flag, not fixed): the source page prints 450 cal / 35 g protein / 8 g gross carbs per serving. Our label recompute lands at 581 cal / 30 g protein / 13 g carbs. The source\u0027s 30 g total fat is internally inconsistent with its own ingredient list (1 cup heavy cream alone across 4 servings is ~20 g fat/serving before any cheese, turkey, or oil), and its 35 g protein would need about 1.25 lb of turkey against the 1 lb it lists. Our portions match the source\u0027s printed measures line for line; the gap is the source calculator\u0027s fat and protein arithmetic, not our build. Band holds under either reading.",
                          "OLIVE OIL grams: mapper booked 94.5 g (7 tbsp at 13.5 g/tbsp); rounded to 94 g integer for the intake since the build stores grams as int. Macro-immaterial (0.5 g oil across 14 servings).",
                          "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought: olive oil (make_it 2), onion (2), garlic (2), ground turkey (3), broccoli (4), chicken broth (5), heavy cream (5), cheddar (5 into the sauce, 6 on top). Walked the costed list against the steps both directions. Salt and pepper are the source\u0027s to-taste line (source states NO quantity); booked here at a smallest-defensible to-taste minimum (Salt 2 tsp, Black Pepper 1 tsp per 14-serving batch, both zero/near-zero macro) so step 3\u0027s \u0027season with salt and pepper to taste\u0027 is cook-as-shopped and clears the PHANTOM buy-coverage gate (2026-08-16 repair). Grams are macro-immaterial.",
-                         "BLOCKER FLAG for the repair pass: item \u0027Broccoli\u0027 has NO row in db\\ingredients.json (the only broccoli row there is \u0027Broccoli Florets\u0027 -\u003e frozen-broccoli-florets, the GV frozen bag). The fresh \u0027broccoli\u0027 bid IS on the live feed, so the wiring gap is a single missing map row, flagged by the mapper for the map\u0027s owner. In this build Broccoli emits no bid and prices unpriced/pantry-static, so cost_ps is a FLOOR understated by roughly a batch of fresh broccoli (about 2.3 lb) until the map row (Broccoli -\u003e broccoli, weekly board) is added. Not edited here; ingredient-map/ingredients wiring is the mapper stage\u0027s domain.",
+                         "BLOCKER FLAG for the repair pass: item \u0027Broccoli\u0027 has NO row in db\\ingredients.json (the only broccoli row there is \u0027Broccoli Florets\u0027 -\u003e frozen-broccoli-florets, the GV frozen bag). The fresh \u0027broccoli\u0027 bid IS on the live feed, so the wiring gap is a single missing map row, flagged by the mapper for the map\u0027s owner. In this build Broccoli emits no bid and prices unpriced/pantry-static, so cost_ps is a FLOOR understated by roughly a batch of fresh broccoli (about 2.3 lb) until the map row (Broccoli -\u003e broccoli, weekly board) is added. Not edited here; ingredient-map/ingredients wiring is the mapper stage\u0027s domain. RESOLVED 2026-08-16: superseded. The fresh weekly commodity broccoli was already priced 7/7 stores; commodity-registrar ruled REUSE, the vocabulary gained a fresh Broccoli row (bid broccoli, lb, gpu 453.592), and Brad\u0027s 0c #4 alias to the frozen row was retired. This recipe now costs off FRESH broccoli and the cost block has been re-rendered. Nothing here is unpriced.",
                          "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount. The cheddar bullet explicitly says block or bag both work (no per-ounce winner claimed) and the cream/broth bullet makes no carton-count promise, both to stay clear of the 2026-08-15 audit failures. Re-walk the bullets against cost_lines once broccoli is wired and the recipe is re-costed.",
                          "PORTION METHOD: weigh the empty dish first, then weigh full and subtract, divide by 14. Standard house method."
                      ],
@@ -27,7 +27,7 @@
                  "protein":  30,
                  "carbs":  13,
                  "fat":  44,
-                 "cost_ps":  "3.15"
+                 "cost_ps":  "3.27"
              },
     "intro_html":  "Casserole usually means a can of soup and a sleeve of crushed crackers doing the heavy lifting, and both of those are just cheap carbs wearing a dinner costume. This one throws that playbook out. Lean ground turkey and blanched broccoli get folded into a real cheese sauce built from heavy cream, chicken broth, and sharp cheddar, then the whole thing bakes under one more layer of cheddar until it bubbles. No soup can, no breadcrumbs, no flour. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 15 grams of carbs. That is comfort food that works for your body and your wallet at the same time.",
     "ingredients_display":  [
@@ -45,7 +45,7 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 3 1/2 lb: ~$15.93. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
-                       "Broccoli, 3 1/2 heads, cut into florets (about 12 1/2 cups): ~$3.59. \u003cstrong\u003eBuy 4 12oz bags: $4.65.\u003c/strong\u003e",
+                       "Broccoli, 3 1/2 heads, cut into florets (about 12 1/2 cups): ~$4.91. \u003cstrong\u003eBuy 3 lbs: $6.36.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 3 1/2 cups shredded: ~$2.12. \u003cstrong\u003eBuy 2 8oz bags: $2.44.\u003c/strong\u003e",
                        "Heavy Cream, 3 1/2 cups: ~$4.12. \u003cstrong\u003eBuy 2 pints: $4.68.\u003c/strong\u003e",
                        "Garlic, 7 cloves, minced: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
@@ -53,9 +53,9 @@
                        "Olive Oil, 7 tbsp: ~$1.02. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 1 3/4 cups: ~$0.64. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.08. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $28.76 across 14 servings, so roughly $2.05 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $33.43 across 14 servings, roughly $2.39 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.04. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $30.08 across 14 servings, so roughly $2.15 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.14 across 14 servings, roughly $2.51 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.75. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a baked, bubbling casserole that eats like the soup-can version and skips the carbs. The turkey and the cheese carry it; the broccoli does the job the noodles or the cracker topping used to, for a lot less.",
     "shop_smart":  [
@@ -77,14 +77,14 @@
     "portion_html":  "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.grazewithme.com/keto-ground-turkey-broccoli-casserole-low-carb-recipe-guide/\" target=\"_blank\" rel=\"noopener\"\u003egrazewithme.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  28.76,
-    "cost_batch_true":  33.43,
-    "cost_per_serving":  2.05,
-    "cost_per_serving_true":  2.39,
+    "cost_batch":  30.08,
+    "cost_batch_true":  35.14,
+    "cost_per_serving":  2.15,
+    "cost_per_serving_true":  2.51,
     "cost_pantry_add":  10.61,
-    "cost_first_run":  44.04,
+    "cost_first_run":  45.75,
     "scaler":  {
-                   "cost":  "33.43",
+                   "cost":  "35.14",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -99,8 +99,8 @@
                                    "canon":  "Broccoli",
                                    "grams":  1050,
                                    "buy":  "3 1/2 heads, cut into florets (about 12 1/2 cups)",
-                                   "bid":  "frozen-broccoli-florets",
-                                   "gpu":  "28.350"
+                                   "bid":  "broccoli",
+                                   "gpu":  "453.592"
                                },
                                {
                                    "item":  "Cheddar Cheese, Shredded",
@@ -175,7 +175,7 @@
                  "prepTime":  "PT15M",
                  "cookTime":  "PT25M",
                  "totalTime":  "PT40M",
-                 "costPerServing":  3.15,
+                 "costPerServing":  3.27,
                  "recipeIngredient":  [
                                           "93/7 Ground Turkey, 3 1/2 lb (1588 g)",
                                           "Broccoli, 3 1/2 heads, cut into florets (about 12 1/2 cups) (1050 g)",

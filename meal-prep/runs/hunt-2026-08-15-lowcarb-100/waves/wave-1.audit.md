@@ -1,87 +1,93 @@
 GO
 
-# Wave 1 audit, round 7 (scoped re-audit of the three B5/ruling-#18 slugs) - hunt-2026-08-15-lowcarb-100 (2026-08-16, ~14:55)
+# Wave 1 audit, round 8 (post-partial-publish re-audit authorizing the hatch retry) - hunt-2026-08-15-lowcarb-100 (2026-08-16, ~16:06)
 
-Auditor: batch audit gate. Scope per the prior round's own prescription: cert freshness on
-low-carb-ground-beef-stroganoff-skillet, baked-cauliflower-mac-smoked-sausage,
-hatch-green-chile-chicken-casserole, plus the hatch carb-copy prose field, plus the estate-level
-audit-store-integrity.ps1 alias change. The wave's numerics (macros, costs, mapping, protein, cards,
-gates) were fully verified against these same bytes in rounds 5-6 and were not re-derived here; the
-only reader-facing change since is the hatch prose fix verified below.
+Auditor: batch audit gate. Scope: the two changes since the 14:55:56 GO (the E2 reanchor re-stamp at
+15:52:33 across all 9 specs; the hatch head.description trim at 15:56:57), independent live verification
+of the 8 published slugs, and retry-path soundness for hatch-green-chile-chicken-casserole. The wave's
+numerics were certified in rounds 5-7 against these same content bytes and were not re-derived.
 
-## B1 (stale certs): RESOLVED, verified on mtimes and content
+## The 15:52:33 reanchor re-stamp: VALUE-NEUTRAL, verified on all 9
 
-- Freshness sweep across ALL 9 manifest slugs at 14:54: every cert postdates its spec. The three
-  scoped: specs 14:40:00, certs 14:45:55 / 14:45:55 / 14:46:26.
-- Cert content is re-derived, not inherited: each cert states an independent food-DB recompute on
-  current bytes (stroganoff 450.0/28.9/11.3/31.1 vs stat 450/29/11/31; cauliflower-mac
-  628.3/25.0/16.2/50.9 vs 628/25/16/51; hatch 529.7/40.7/14.5/32.9 vs 530/41/15/33) - figures
-  identical to round 6's independent recompute of the 13:58 bytes, confirming no numeric drift.
-  Cost literals in the certs match costed.json line for line (stroganoff Sour Cream util 2.91,
-  batch_ps 2.50; cauliflower-mac batch_ps 1.38; hatch batch_ps 2.59, cost_ps 4.18 = 58.50/14).
-- Verdict pass, both anchors (extraction + live page) on all three.
+reanchor-machine-fields.ps1 is key-scoped regex on exactly stat.cost_ps and head.costPerServing with a
+parse-verify; nothing else in a spec can move through it. Verified per slug against BOTH the pre-16:04
+manifest and the freshly recomputed one (v2-perserving.json, 16:04:06): stat.cost_ps ==
+head.costPerServing == manifest everyday_ps == cost_first_run/14, delta 0.00 on all 9. The re-stamped
+values equal the certified literals (hatch 4.18 = 58.50/14, stroganoff batch 2.50/everyday 4.28,
+cauliflower-mac batch 1.38/everyday 1.77). Tier ordering batch < true-shopping < everyday holds on all 9.
 
-## B2 (hatch carb copy): RESOLVED, verified on bytes
+## The 8 published slugs: GENUINELY LIVE AND CORRECT, verified independently
 
-stat.carbs 15 (14.5 unrounded); intro_html and head.description both read "15 grams of carbs or
-less" (2 occurrences); zero instances of "under N grams" remain anywhere in the spec. The claim is
-true beside the unrounded 14.5.
+Fetched all 8 public pages at ~16:02: HTTP 200, title present, meta/og description equals the spec's
+expanded head.description, Recipe JSON-LD present, and no paid-content leak ("What This Batch Costs"
+absent from every anonymous fetch). Spot-checked stroganoff's live Recipe JSON-LD field by field against
+the spec: 450 cal / 29 P / 11 C / 31 F, 14 servings, 12 ingredients - exact. All 8 are in
+db\published-hashes.json (published by this pipeline, so the retry's P6 dedup guard and hash change-gate
+treat them correctly: unchanged specs will skip as UNCHANGED).
 
-## Writer_note corrections: present
+## hatch head.description trim: ACCURATE, IN LIMIT, verified
 
-Stroganoff carries 2 dated RESOLVED 2026-08-16 annotations (the false all-five-unwired/floor claim -
-all five bids verified live in db\ingredients.json, brandy carries a real cost line); cauliflower-mac
-2 (the 642/8-headroom BAND figures, now 628/22 matching stat); hatch 2 RESOLVED + 1 NOTE (543.8 ->
-530). Original text preserved. Voice: zero em/en dashes, zero swearing in all three specs.
+- Raw 305 chars; expanded (cal=530, protein=41) is 292 chars, under Ghost's 300-char custom_excerpt
+  limit that caused the 422. Confirmed by recount, not by trusting the dispatch.
+- Accuracy against the spec, claim by claim: pulled rotisserie chicken (ingredient 1, 1439 g);
+  spiralized zucchini (1029 g); roasted-chile cream sauce with pepper jack (steps 4-6 build the sauce
+  from blended chiles, cream, pepper jack; the "roasted" framing matches the certified intro); "no soup
+  can and no flour" (true; neither appears anywhere in the build); 14 servings (spec); 530 cal / 41 g
+  protein (stat block); "15 grams of carbs or less" (stat.carbs 15, unrounded 14.5). Dropping "real" and
+  "and cream cheese" removes emphasis, not truth - nothing in the trimmed text is now false or
+  misleading. Voice clean: no em/en dashes, no swearing.
+- The other 8 expanded descriptions measured 220-267 chars - none near the limit, so the retry cannot
+  trip the same 422 on a collateral republish.
 
-## N-A / N-C: fixed
+## hatch retry path: SOUND
 
-qa\creamy-tuscan-chicken-skillet.json parses (verdict pass; cert 14:21 still newer than spec 13:44).
-food-macros-db.json Spinach note now records the fresh `spinach` bid with a dated correction;
-macros untouched.
+- Live check at ~16:02: https://www.thriftycrew.com/hatch-green-chile-chicken-casserole/ is a clean 404.
+  No half-created post, no <slug>-2 orphan; the retry is a clean create, and hatch is in the wave
+  manifest so wave-publish's allow-create file will carry it.
+- hatch is absent from published-hashes.json and unstamped in propagate-stamps.json, so it is dirty and
+  the chain will rebuild + publish it. Its built card was in fact already rebuilt at 16:03:14 (collateral
+  of wave-4's propagate) and now matches the trimmed spec exactly: JSON-LD name, keywords, 530/41/15/33,
+  14 servings, all 14 ingredient lines and all 7 steps byte-equal to head.*, description 292 chars (the
+  new text). The wave-4 run correctly REFUSED CREATE on hatch (not in its allow-create), which is the
+  create guard doing its job.
+- All 9 state files read state=waved wave=1 (P3 passes; the 8 live ones re-advance on this retry).
+  Ledger row hunt-2026-08-15-lowcarb-100-w1 carries audit/cost-basis/recipes-db stamps; build-cards,
+  publish, serveability correctly still owed. This audit file is written after the newest wave-1 spec
+  (hatch, 15:56:57), so P1b freshness holds.
 
-## audit-store-integrity.ps1 alias change: A TIGHTENING-SHAPED CORRECTION, NOT A WEAKENING - proven by A/B
+## Process findings (for the orchestrator, non-blocking for this retry)
 
-Ran the pristine HEAD version and the fixed version against the SAME current data:
-- HEAD: 8 HARD (all MISSING-SIDE for the 7 adjudicated aliases), 13 WARN, exit 1.
-- Fixed: 0 HARD, 13 WARN, exit 0.
-- The WARN sets are byte-identical (13 BASE-DRIFT rows). The fix removed exactly the 8 false HARDs
-  and nothing else. Every one of those 8 lines is genuinely priced: costed.json books real board
-  bases (e.g. Smoked Sausage via kielbasa/walmart util 7.01; Sour Cream via sour-cream/walmart
-  util 2.91) because the cost engine has resolved aliases since f60ede7f, as does
-  engine\audit-db-agreement.ps1. The guard was the laggard; it now mirrors actual resolution.
-- Alias data audited: 10 aliases on 302 rows, zero collisions with item names, zero duplicate
-  aliases, so the first-wins indexing cannot shadow a real row today.
-- Self-test 20/20 including the clean twin (an unmapped name still fails to resolve) and a new
-  parse-sanity floor (index < 200 names refuses hard). Detection of genuine dropped lines is intact.
-- Discrepancy with the dispatch, non-material: the dispatch said "the 19 WARNs intact"; the real
-  count is 13 both before and after. The substance (WARN set unchanged) is proven above; the number
-  19 appears to be a miscount (possibly from the self-test fixture's "19 unmapped names" wording).
-
-## Non-blocking notes
-
-- N-D restated: the estate root still carries broad uncommitted changes (14 recipe specs including
-  live pages, the guard, engine files) by Brad's explicit choice while a concurrent session edits the
-  publish chain. wave-publish names foreign dirty by design and propagate carries it; the live-page
-  republish still needs its own QA pass per round 6's N-K, and an untimely crash loses real work.
-  Commit remains the right next act after publish.
-- Round 6's N-G (audit-cost-line-coverage -Slugs comma vacuity), N-H (known-wrong frozen broccoli
-  row still cheapest on the feed tile), N-J (nested-paren display nit) remain open and non-blocking.
-- Process finding stands: three consecutive rounds found mid-audit estate writes. This round the
-  window stayed still (verified by an end-of-audit mtime sweep at 14:54), but freeze estate-writing
-  sessions during audit windows as policy.
+- P-1 DESIGN TRAP, E2 self-invalidation: wave-publish E2 mutates every wave spec mid-publish
+  (reanchor-machine-fields re-stamps two fields), so ANY partial failure leaves every spec newer than the
+  GO that authorized the run, and P1b then rightly demands a fresh audit before retry. The mutation was
+  value-neutral this time and P1b caught it, which is the system working - but a publish path that
+  invalidates its own authorization on every run guarantees a re-audit round-trip on every partial
+  failure. File: meal-prep\pipeline\wave-publish.ps1 (E2). Fix direction: run the reanchor + freshness
+  re-check BEFORE P1b judges (or exempt the two machine fields from freshness by re-anchoring pre-audit),
+  decided by the pipeline owner, never by weakening P1b.
+- P-2 VALIDATION GAP, Ghost custom_excerpt limit: nothing in the estate validates head.description's
+  EXPANDED length against Ghost's 300-char custom_excerpt cap, so the first place a long description
+  fails is the final POST with an opaque 422. Cheap fix at either build-v2-spec write-time or as a P5
+  check in wave-publish: expand {{tokens}} from stat and refuse > 300. Files:
+  meal-prep\pipeline\build-v2-spec* / meal-prep\pipeline\wave-publish.ps1; engine\publish.ps1 line 63 is
+  where the expanded $desc becomes custom_excerpt.
+- P-3 restated from round 7: the estate is being written during audit windows (wave-3 and wave-4
+  published at 16:03-16:04 while this audit ran; hatch's built card changed under this auditor's feet
+  mid-read). Nothing wave-1-material moved - all 9 wave-1 spec mtimes re-verified unchanged at the end of
+  this audit (8 at 15:52:33, hatch 15:56:57) - but the freeze-during-audit policy from round 7 stands.
 
 ## Category verdicts
 
 | Category | Verdict |
 |---|---|
-| 1. Macros | CLEAN. Stats unchanged since round 6's exact recompute; certs re-derived them independently on current bytes and agree to the decimal. |
-| 2. Costs | CLEAN. Unchanged since round 6 (penny-exact); alias-named lines verified priced on real board bases. |
-| 3. Mapping | CLEAN. Unchanged; alias table audited collision-free, same-concept per the recorded adjudications. |
-| 4. Protein + rotation | CLEAN. Untouched this round. |
-| 5. Cards | CLEAN for this stage. Cards build at publish through the gates; no new visual surface, no new 375px obligation. |
-| 6. Voice + copy | CLEAN. Hatch copy now truthful against the unrounded figure; no em/en dashes, no swearing in the three touched specs. |
-| 7. Gates | INTACT and one gate REPAIRED: store-integrity's alias fix is a false-positive correction proven by A/B with an identical WARN set, self-tests 20/20, plus a new hard parse-sanity floor. Nothing weakened. |
+| 1. Macros | CLEAN. Untouched since the round 5-7 recompute; live JSON-LD spot-check agrees to the gram. |
+| 2. Costs | CLEAN. Reanchor re-stamp verified value-neutral on all 9 against both manifest generations; tiers ordered; literals match the certified figures. |
+| 3. Mapping | CLEAN. Untouched since round 7. |
+| 4. Protein + rotation | CLEAN. Untouched; recipes-db rows already stamped for the batch. |
+| 5. Cards | CLEAN. 8 verified live (title, description, JSON-LD, paywall); hatch's rebuilt card verified byte-consistent with the trimmed spec. |
+| 6. Voice + copy | CLEAN. Trimmed description accurate, 292/300 expanded, zero em/en dashes; remaining 8 descriptions 220-267. |
+| 7. Gates | INTACT. Nothing weakened; P1b, the create guard, and the hash change-gate all observed doing their jobs during this window. |
 
-GO. All 9 certs fresh in mtime and content, both prior blockers closed on bytes, the guard repair is
-sound, and nothing moved during the audit window.
+GO. The 8 published slugs are live and correct, the reanchor re-stamp changed no value, hatch's trimmed
+description is accurate and inside the Ghost limit, and its retry path (clean 404, dirty spec, fresh
+card, allow-create coverage, waved state, stamped ledger) is sound. Retry wave 1 to publish hatch.

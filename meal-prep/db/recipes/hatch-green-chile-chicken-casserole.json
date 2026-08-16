@@ -13,10 +13,10 @@
                ],
     "writer_notes":  [
                          "SOURCE YIELD 8, rebuilt to 14 at the mapper\u0027s 1.75x scale. Every gram and buy string transcribed from mapped\\hatch-green-chile-chicken-casserole.json; no number computed in prose.",
-                         "MACROS transcribed from the mapper\u0027s food-DB recompute at 14 servings (macro_cross_check.computed_per_serving): 543.8 cal, 40.6 g protein, 14.3 g carbs, 34.8 g fat, reported here as 544 / 41 / 14 / 35. In band for this run (400 to 650 cal, 35 g carb or less): 144 cal above the floor, 106 below the ceiling, carbs less than half the carb gate. Under-15-grams-of-carbs is the literal bound used in prose (built carbs = 14).",
-                         "SOURCE MACRO NOTE (flag, not fixed): ruled.me prints 543 cal / 40.6 P / 10.4 gross carbs / 37.2 fat per serving. Our recompute lands 543.8 cal / 40.6 P / 14.3 C / 34.8 F. Protein is near-exact (-0.1%), calories near-exact (+0.1%). The carb gap (14.3 vs 10.4) is the source card printing total carbs equal to net carbs (extractor flagged it), so its 10.4 is likely net; our 14.3 is the conservative total-carb figure and still clears the 35 g gate with 20 g to spare. Fat -6.5%. Band holds under either reading.",
+                         "MACROS transcribed from the mapper\u0027s food-DB recompute at 14 servings (macro_cross_check.computed_per_serving): 543.8 cal, 40.6 g protein, 14.3 g carbs, 34.8 g fat, reported here as 544 / 41 / 14 / 35. In band for this run (400 to 650 cal, 35 g carb or less): 144 cal above the floor, 106 below the ceiling, carbs less than half the carb gate. Under-15-grams-of-carbs is the literal bound used in prose (built carbs = 14). RESOLVED 2026-08-16 (Brad ruling): this recipe is now built on the 1/3 Fat Cream Cheese (Great Value Neufchatel) food-DB row, not the full-fat USDA row. Brad ruled the recipes should USE the lower-calorie product, which made the PRICE correct all along (the bid was already 1-3-fat-cream-cheese) and the macros and copy the wrong fields. Any calorie, fat or basis figure stated above predates that rebase - read the spec stat block, not this note.",
+                         "SOURCE MACRO NOTE (flag, not fixed): ruled.me prints 543 cal / 40.6 P / 10.4 gross carbs / 37.2 fat per serving. Our recompute lands 543.8 cal / 40.6 P / 14.3 C / 34.8 F. Protein is near-exact (-0.1%), calories near-exact (+0.1%). The carb gap (14.3 vs 10.4) is the source card printing total carbs equal to net carbs (extractor flagged it), so its 10.4 is likely net; our 14.3 is the conservative total-carb figure and still clears the 35 g gate with 20 g to spare. Fat -6.5%. Band holds under either reading. NOTE 2026-08-16: our side of this comparison predates the cream-cheese rebase. The spec now computes 530 cal per serving (was 544), so the gap to the source page widens slightly; the note conclusion is unaffected and the direction stays conservative.",
                          "GRAMS rounded to int for the intake (build stores grams as int): 1339.5-\u003e1340 chiles, 1438.8-\u003e1439 chicken, 416.5-\u003e417 cream, 198.4-\u003e198 cream cheese, 15.75-\u003e16 oil, 5.4-\u003e5 garlic powder. Each shift is sub-gram-per-serving and macro-immaterial; buy strings are the mapper\u0027s exact printed measures so the display amounts are unchanged.",
-                         "BID-MAP BLOCKER for the repair pass (three lines, mapper-stage/map-owner domain, NOT edited here): db\\ingredients.json has NO item row for \u0027Pepper Jack Cheese\u0027 (mapper bid shredded-cheese), \u0027Yellow Bell Pepper\u0027 (mapper bid bell-peppers), or full-fat \u0027Cream Cheese\u0027 (mapper bid cream-cheese). All three HAVE food-macros-db rows (macro check passes) but no bid map row, so in this build they emit no bid and price pantry-static. cost_ps is therefore a FLOOR understated by roughly a pound of shredded pepper jack, a 7 oz cream-cheese brick, and ~1.75 yellow bells until the map rows are wired. I did NOT swap Cream Cheese to the existing \u00271/3 Fat Cream Cheese\u0027 row: the mapper explicitly warned that deflates a keto card\u0027s calorie floor, and it would change macros. bell-peppers bid also has no item row at all in ingredients.json (only \u0027Green Bell Peppers\u0027 and \u0027Red Bell Pepper\u0027 exist); shredded-cheese resolves only from \u0027Mexican Cheese Blend\u0027. Re-cost after the three map rows land.",
+                         "BID-MAP BLOCKER for the repair pass (three lines, mapper-stage/map-owner domain, NOT edited here): db\\ingredients.json has NO item row for \u0027Pepper Jack Cheese\u0027 (mapper bid shredded-cheese), \u0027Yellow Bell Pepper\u0027 (mapper bid bell-peppers), or full-fat \u0027Cream Cheese\u0027 (mapper bid cream-cheese). All three HAVE food-macros-db rows (macro check passes) but no bid map row, so in this build they emit no bid and price pantry-static. cost_ps is therefore a FLOOR understated by roughly a pound of shredded pepper jack, a 7 oz cream-cheese brick, and ~1.75 yellow bells until the map rows are wired. I did NOT swap Cream Cheese to the existing \u00271/3 Fat Cream Cheese\u0027 row: the mapper explicitly warned that deflates a keto card\u0027s calorie floor, and it would change macros. bell-peppers bid also has no item row at all in ingredients.json (only \u0027Green Bell Peppers\u0027 and \u0027Red Bell Pepper\u0027 exist); shredded-cheese resolves only from \u0027Mexican Cheese Blend\u0027. Re-cost after the three map rows land. RESOLVED 2026-08-16 (Brad ruling): this recipe is now built on the 1/3 Fat Cream Cheese (Great Value Neufchatel) food-DB row, not the full-fat USDA row. Brad ruled the recipes should USE the lower-calorie product, which made the PRICE correct all along (the bid was already 1-3-fat-cream-cheese) and the macros and copy the wrong fields. Any calorie, fat or basis figure stated above predates that rebase - read the spec stat block, not this note.",
                          "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked both directions: olive oil (make_it 3 and 4, divided), zucchini (3), yellow onion (2, blended), green chiles (2 blended + 4 into sauce + 7 reserved garnish), yellow bell + red bell (4 into pan + 7 reserved garnish), garlic powder (4), heavy cream (5), pepper jack (6 into sauce + 7 on top, divided), cream cheese (6), rotisserie chicken (7), sharp cheddar (7 on top). The \u0027water or chile liquid\u0027 line is the mapper\u0027s mapped-free zero-cost item (chile-can liquid or tap water), NOT a booked ingredient, so it is excluded from the ingredient list and step 2 references the chile-can liquid; no orphan either direction. Salt and pepper are the source\u0027s to-taste line (source states NO quantity); booked here at a smallest-defensible to-taste minimum (Salt 2 tsp, Black Pepper 1 tsp per 14-serving batch, both zero/near-zero macro) so make_it 6\u0027s \u0027season with salt and pepper to taste\u0027 is cook-as-shopped and clears the PHANTOM buy-coverage gate (2026-08-16 repair). Grams are macro-immaterial.",
                          "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet needs a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount (matching the keto-turkey card\u0027s approach and steering clear of the 2026-08-15 audit failures). No per-line dollar figures; only ${{cost_ps}} and the $1/month membership line carry money.",
                          "PORTION METHOD: weigh the empty dish first, then weigh full and subtract, divide by 14. Standard house method.",
@@ -25,13 +25,13 @@
                      ],
     "cal_floor":  null,
     "stat":  {
-                 "cal":  544,
+                 "cal":  530,
                  "protein":  41,
-                 "carbs":  14,
-                 "fat":  35,
+                 "carbs":  15,
+                 "fat":  33,
                  "cost_ps":  "4.18"
              },
-    "intro_html":  "Green chile casserole in most kitchens means a can of cream-of-something soup, a bag of tortilla chips, and a prayer. This one earns its name instead. Roasted hatch green chiles get blended into a real cream sauce built from heavy cream, pepper jack, and a brick of cream cheese, then folded over pulled rotisserie chicken and a bed of spiralized zucchini that does the job the tortillas or the rice used to do. No soup can, no chips, no flour. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 15 grams of carbs. That is Southwestern comfort food that works for your body and your wallet at the same time.",
+    "intro_html":  "Green chile casserole in most kitchens means a can of cream-of-something soup, a bag of tortilla chips, and a prayer. This one earns its name instead. Roasted hatch green chiles get blended into a real cream sauce built from heavy cream, pepper jack, and a brick of cream cheese, then folded over pulled rotisserie chicken and a bed of spiralized zucchini that does the job the tortillas or the rice used to do. No soup can, no chips, no flour. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with 15 grams of carbs or less. That is Southwestern comfort food that works for your body and your wallet at the same time.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eRotisserie Chicken (generic (USDA)):\u003c/strong\u003e 50 3/4 oz shredded rotisserie chicken meat (about 3.2 lb, roughly 2 birds) (1439 g)",
                                 "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 47 1/4 oz canned whole hatch green chiles (1340 g)",
@@ -40,7 +40,7 @@
                                 "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 1 3/4 cups heavy whipping cream (417 g)",
                                 "\u003cstrong\u003eYellow Bell Pepper (fresh (USDA)):\u003c/strong\u003e 1 3/4 medium yellow bell peppers, diced (210 g)",
                                 "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 1 3/4 medium red bell peppers, diced (210 g)",
-                                "\u003cstrong\u003eCream Cheese (generic (USDA)):\u003c/strong\u003e 7 oz cream cheese, softened (198 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 7 oz cream cheese, softened (198 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1/2 medium onion (55 g)",
                                 "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 7 tbsp shredded sharp cheddar (49 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 1/2 tsp olive oil, divided (16 g)",
@@ -57,7 +57,7 @@
                        "Heavy Cream, 1 3/4 cups heavy whipping cream: ~$2.06. \u003cstrong\u003eBuy 1 pint: $2.34.\u003c/strong\u003e",
                        "Yellow Bell Pepper, 1 3/4 medium yellow bell peppers, diced: ~$1.65. \u003cstrong\u003eBuy 2 each: $2.92.\u003c/strong\u003e",
                        "Red Bell Pepper, 1 3/4 medium red bell peppers, diced: ~$1.72. \u003cstrong\u003eBuy 2 each: $1.96.\u003c/strong\u003e",
-                       "Cream Cheese, 7 oz cream cheese, softened: ~$1.61. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
+                       "1/3 Fat Cream Cheese, 7 oz cream cheese, softened: ~$1.61. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
                        "Yellow Onion, 1/2 medium onion: ~$0.14. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 7 tbsp shredded sharp cheddar: ~$0.26. \u003cstrong\u003eBuy 1 8oz bag: $1.22.\u003c/strong\u003e",
                        "Olive Oil, 3 1/2 tsp olive oil, divided: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -153,8 +153,8 @@
                                    "gpu":  "120.000"
                                },
                                {
-                                   "item":  "Cream Cheese",
-                                   "canon":  "Cream Cheese",
+                                   "item":  "1/3 Fat Cream Cheese",
+                                   "canon":  "1/3 Fat Cream Cheese",
                                    "grams":  198,
                                    "buy":  "7 oz cream cheese, softened",
                                    "bid":  "1-3-fat-cream-cheese",
@@ -211,7 +211,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Hatch green chile chicken casserole for meal prep: pulled rotisserie chicken and spiralized zucchini baked in a real roasted-chile cream sauce with pepper jack and cream cheese, no soup can and no flour, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
+                 "description":  "Hatch green chile chicken casserole for meal prep: pulled rotisserie chicken and spiralized zucchini baked in a roasted-chile cream sauce with pepper jack, no soup can and no flour, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with 15 grams of carbs or less.",
                  "keywords":  "hatch green chile casserole, green chile chicken casserole, keto casserole, low carb casserole, high protein meal prep",
                  "image":  "",
                  "prepTime":  "PT20M",
@@ -226,7 +226,7 @@
                                           "Heavy Cream, 1 3/4 cups heavy whipping cream (417 g)",
                                           "Yellow Bell Pepper, 1 3/4 medium yellow bell peppers, diced (210 g)",
                                           "Red Bell Pepper, 1 3/4 medium red bell peppers, diced (210 g)",
-                                          "Cream Cheese, 7 oz cream cheese, softened (198 g)",
+                                          "1/3 Fat Cream Cheese, 7 oz cream cheese, softened (198 g)",
                                           "Yellow Onion, 1/2 medium onion (55 g)",
                                           "Cheddar Cheese, Shredded, 7 tbsp shredded sharp cheddar (49 g)",
                                           "Olive Oil, 3 1/2 tsp olive oil, divided (16 g)",
@@ -274,7 +274,7 @@
                                   "grams":  210
                               },
                               {
-                                  "item":  "Cream Cheese",
+                                  "item":  "1/3 Fat Cream Cheese",
                                   "grams":  198
                               },
                               {

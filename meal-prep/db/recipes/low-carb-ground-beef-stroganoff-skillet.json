@@ -13,18 +13,18 @@
                ],
     "writer_notes":  [
                          "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Every gram and buy string transcribed from mapped\\low-carb-ground-beef-stroganoff-skillet.json; no number computed in prose.",
-                         "MACROS transcribed from the mapper\u0027s food-DB recompute at 14 servings: 464.2 cal, 28.7 g protein, 11.1 g carbs, 32.9 g fat per serving, reported here as 464 / 29 / 11 / 33. In band for this run (400 to 650 cal, 35 g carb or less). The source\u0027s published 5.86 g carbs is a NET figure that excludes the serve-over base; our 11.1 g is gross carbs including the cabbage and stays well under the 35 g ceiling.",
+                         "MACROS transcribed from the mapper\u0027s food-DB recompute at 14 servings: 464.2 cal, 28.7 g protein, 11.1 g carbs, 32.9 g fat per serving, reported here as 464 / 29 / 11 / 33. In band for this run (400 to 650 cal, 35 g carb or less). The source\u0027s published 5.86 g carbs is a NET figure that excludes the serve-over base; our 11.1 g is gross carbs including the cabbage and stays well under the 35 g ceiling. RESOLVED 2026-08-16 (Brad ruling): this recipe is now built on the 1/3 Fat Cream Cheese (Great Value Neufchatel) food-DB row, not the full-fat USDA row. Brad ruled the recipes should USE the lower-calorie product, which made the PRICE correct all along (the bid was already 1-3-fat-cream-cheese) and the macros and copy the wrong fields. Any calorie, fat or basis figure stated above predates that rebase - read the spec stat block, not this note.",
                          "SERVE-OVER: the source\u0027s own section heading makes cabbage noodles and cauliflower rice EITHER/OR alternatives (extractor concern: do not sum both). The mapper booked GREEN CABBAGE as the primary base (cheapest, carried, existing map entry); cauliflower rice is the source\u0027s recorded alternative, unpriced and excluded from macros. Prose names cabbage as the base and mentions cauliflower rice only as the one-for-one swap. No step calls for cauliflower rice.",
                          "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought: ground beef (steps 4,5), mushrooms (4), onion (4), butter (4), brandy (5), beef base (5), Worcestershire (5), nutmeg (6), cream cheese (6), sour cream (6), parsley (6), cabbage (3,7). Walked the costed list against the steps both directions. Salt and pepper are the source\u0027s to-taste line, mapped optional-pantry at zero grams and NOT booked as a cost line, so no step names them; steps say \u0027season to taste\u0027 only.",
                          "SHOP_SMART makes NO leftover, per-ounce, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount. Re-walk the bullets against cost_lines once costed before publish.",
-                         "BLOCKER FLAGS for the repair pass are in the run report. BRANDY is item_id null with a blocking price term (deglaze spirit, no board cell or capture; Omaha grocers do sell spirits so it needs a real carriage verdict, not a rejection). Five booked items are unwired in db\\ingredients.json (Brandy, Beef Base, Cream Cheese, Sour Cream, Fresh Parsley) so they price pantry-static / unpriced in this build and the cost_ps is a FLOOR until they are wired. Beef Base food-DB row is flagged needs_verify (panel not re-fetchable) but is macro-immaterial at 21 g across 14 servings. The intake is complete and ready to build the moment those close."
+                         "BLOCKER FLAGS for the repair pass are in the run report. BRANDY is item_id null with a blocking price term (deglaze spirit, no board cell or capture; Omaha grocers do sell spirits so it needs a real carriage verdict, not a rejection). Five booked items are unwired in db\\ingredients.json (Brandy, Beef Base, Cream Cheese, Sour Cream, Fresh Parsley) so they price pantry-static / unpriced in this build and the cost_ps is a FLOOR until they are wired. Beef Base food-DB row is flagged needs_verify (panel not re-fetchable) but is macro-immaterial at 21 g across 14 servings. The intake is complete and ready to build the moment those close. RESOLVED 2026-08-16: none of this is true any more. All five items are wired in db\\ingredients.json and priced in this spec cost block - Brandy $1.49 used / $10.93 bottle, Beef Base $0.26 / $2.77 jar, 1/3 Fat Cream Cheese $1.61 / $1.84 brick, Sour Cream $2.91 / 2 tubs $3.28, Fresh Parsley $0.42 / $1.93 bunch. Brandy carries a real board cell (it was captured live off the Kroger public API on 2026-08-16 and escapes the global alcohol exclude). cost_per_serving 2.50 is a real figure, not a floor."
                      ],
     "cal_floor":  null,
     "stat":  {
-                 "cal":  464,
+                 "cal":  450,
                  "protein":  29,
                  "carbs":  11,
-                 "fat":  33,
+                 "fat":  31,
                  "cost_ps":  "4.28"
              },
     "intro_html":  "Stroganoff has a reputation as fussy Sunday food, but the ground beef version is a Tuesday and always was. You brown the beef, build a quick pan sauce out of mushrooms, a little brandy, and sour cream, and you are done in about half an hour. The only trick for keeping it low carb is what goes underneath. Instead of egg noodles, this one rides on cabbage cut into thin strips and fried soft in the pan, so it eats like noodles without the carbs. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 15 grams of carbs. That is comfort food that does not fight your macros or your wallet.",
@@ -36,7 +36,7 @@
                                 "\u003cstrong\u003eBrandy (generic (USDA)):\u003c/strong\u003e 7 tbsp (a bit under 1/2 cup) (97 g)",
                                 "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 3 1/2 tbsp (60 g)",
                                 "\u003cstrong\u003eBeef Base (Better Than Bouillon):\u003c/strong\u003e 3 1/2 tsp (21 g)",
-                                "\u003cstrong\u003eCream Cheese (generic (USDA)):\u003c/strong\u003e 7 oz (about 3/4 cup plus 2 tbsp), softened (198 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 7 oz (about 3/4 cup plus 2 tbsp), softened (198 g)",
                                 "\u003cstrong\u003eSour Cream (generic (USDA)):\u003c/strong\u003e 3 1/2 cups full-fat (805 g)",
                                 "\u003cstrong\u003eGround Nutmeg (Great Value):\u003c/strong\u003e 1 tsp, grated (2 g)",
                                 "\u003cstrong\u003eFresh Parsley (fresh (USDA)):\u003c/strong\u003e 3 1/2 tbsp, chopped (13 g)",
@@ -51,7 +51,7 @@
                        "Brandy, 7 tbsp (a bit under 1/2 cup): ~$1.49. \u003cstrong\u003eBuy 1 750ml bottle: $10.93.\u003c/strong\u003e",
                        "Worcestershire Sauce, 3 1/2 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Beef Base, 3 1/2 tsp: ~$0.26. \u003cstrong\u003eBuy 1 7.9oz jar: $2.77.\u003c/strong\u003e",
-                       "Cream Cheese, 7 oz (about 3/4 cup plus 2 tbsp), softened: ~$1.61. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
+                       "1/3 Fat Cream Cheese, 7 oz (about 3/4 cup plus 2 tbsp), softened: ~$1.61. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
                        "Sour Cream, 3 1/2 cups full-fat: ~$2.91. \u003cstrong\u003eBuy 2 16oz tubs: $3.28.\u003c/strong\u003e",
                        "Fresh Parsley, 3 1/2 tbsp, chopped: ~$0.42. \u003cstrong\u003eBuy 1 bunch: $1.93.\u003c/strong\u003e",
                        "Green Cabbage, 2 5/8 lb, cut into thin strips (about 1 1/3 heads): ~$2.23. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
@@ -65,7 +65,7 @@
                        "\u003cstrong\u003eThree and a half pounds of lean ground beef is the anchor.\u003c/strong\u003e Reach for the 93/7 so the sauce does not turn greasy, and buy the big family pack instead of the little trays so you are paying for beef, not packaging. This is where most of the money and all of the protein live.",
                        "\u003cstrong\u003eA pound of cabbage per few servings is the noodle.\u003c/strong\u003e You want about two and a half pounds of green cabbage, roughly one and a third heads, sliced into thin strips and fried until tender. If you would rather, riced cauliflower is the classic low-carb swap and goes in one for one; the recipe is built on cabbage because it is cheaper and it is on the shelf.",
                        "\u003cstrong\u003eFourteen ounces of white mushrooms and one onion carry the flavor.\u003c/strong\u003e Sliced mushrooms browned in butter give the sauce its body, and a little chopped onion rounds it out. Both are cheap staples that stretch across everything else you cook.",
-                       "\u003cstrong\u003eFull-fat sour cream and cream cheese make it creamy.\u003c/strong\u003e Buy the real full-fat sour cream and a block of cream cheese rather than the light versions, because the fat is what keeps the sauce smooth and rich instead of thin. Together they are the whole point of stroganoff.",
+                       "\u003cstrong\u003eSour cream and cream cheese make it creamy.\u003c/strong\u003e Buy the real full-fat sour cream, and a brick of 1/3 less fat cream cheese rather than a whipped tub. The sour cream is what keeps the sauce smooth and rich instead of thin, and the lighter cream cheese still melts in clean behind it. Together they are the whole point of stroganoff.",
                        "\u003cstrong\u003eButter, brandy, Worcestershire, beef base, nutmeg, and parsley are the seasoning.\u003c/strong\u003e The brandy deglazes the pan and the beef base and Worcestershire deepen the sauce; a pinch of nutmeg and a little fresh parsley finish it. These are backbone items you buy once and cook with for a long time."
                    ],
     "make_it":  [
@@ -146,8 +146,8 @@
                                    "gpu":  "28.350"
                                },
                                {
-                                   "item":  "Cream Cheese",
-                                   "canon":  "Cream Cheese",
+                                   "item":  "1/3 Fat Cream Cheese",
+                                   "canon":  "1/3 Fat Cream Cheese",
                                    "grams":  198,
                                    "buy":  "7 oz (about 3/4 cup plus 2 tbsp), softened",
                                    "bid":  "1-3-fat-cream-cheese",
@@ -203,7 +203,7 @@
                                           "Brandy, 7 tbsp (a bit under 1/2 cup) (97 g)",
                                           "Worcestershire Sauce, 3 1/2 tbsp (60 g)",
                                           "Beef Base, 3 1/2 tsp (21 g)",
-                                          "Cream Cheese, 7 oz (about 3/4 cup plus 2 tbsp), softened (198 g)",
+                                          "1/3 Fat Cream Cheese, 7 oz (about 3/4 cup plus 2 tbsp), softened (198 g)",
                                           "Sour Cream, 3 1/2 cups full-fat (805 g)",
                                           "Ground Nutmeg, 1 tsp, grated (2 g)",
                                           "Fresh Parsley, 3 1/2 tbsp, chopped (13 g)",
@@ -248,7 +248,7 @@
                                   "grams":  21
                               },
                               {
-                                  "item":  "Cream Cheese",
+                                  "item":  "1/3 Fat Cream Cheese",
                                   "grams":  198
                               },
                               {

@@ -14,16 +14,16 @@
     "writer_notes":  [
                          "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Grams and buy strings transcribed from the mapped file; no number computed in prose.",
                          "Smoked sausage maps to the board Kielbasa / Smoked Sausage (pork-beef rope) class, cheapest cell the exact 14 oz Eckrich skinless rope this recipe names. Deliberately NOT the Smoked Turkey Sausage entry: turkey is a different variety at roughly half the calories per ounce and would deflate a card that must land in a 400-650 band.",
-                         "Cream cheese maps to full-fat, cheddar to the shredded-cheese commodity, monterey jack to the board\u0027s own shredded/block class that includes monterey and jack by rule. All label-accurate rows; no lightened substitutes.",
+                         "Cream cheese maps to full-fat, cheddar to the shredded-cheese commodity, monterey jack to the board\u0027s own shredded/block class that includes monterey and jack by rule. All label-accurate rows; no lightened substitutes. RESOLVED 2026-08-16 (Brad ruling): this recipe is now built on the 1/3 Fat Cream Cheese (Great Value Neufchatel) food-DB row, not the full-fat USDA row. Brad ruled the recipes should USE the lower-calorie product, which made the PRICE correct all along (the bid was already 1-3-fat-cream-cheese) and the macros and copy the wrong fields. Any calorie, fat or basis figure stated above predates that rebase - read the spec stat block, not this note.",
                          "INGREDIENT-USE CHECK done: all seven bought lines are used by a step (cauliflower boiled, sausage browned then folded, cream + cream cheese + 3 1/2 cups cheddar + all monterey jack + Cajun melted into the sauce, remaining 1 3/4 cups cheddar on top). No step names anything unbought: the source browns the sausage in its own rendered fat, so no orphan oil line, and no salt or pepper line exists to strand.",
-                         "BAND is TIGHT and sausage-row sensitive (carried LOUD from the mapper): the honest DB recompute lands at 642 cal per serving against a 650 ceiling, 8 cal of headroom, on the Eckrich 180 cal / 2 oz row. That row is the right anchor (the named product in 3 of 7 board cells including the exact 14 oz rope), but a heavier andouille-class label would breach the band. Numbers here are transcribed from the built spec, not adjusted."
+                         "BAND is TIGHT and sausage-row sensitive (carried LOUD from the mapper): the honest DB recompute lands at 642 cal per serving against a 650 ceiling, 8 cal of headroom, on the Eckrich 180 cal / 2 oz row. That row is the right anchor (the named product in 3 of 7 board cells including the exact 14 oz rope), but a heavier andouille-class label would breach the band. Numbers here are transcribed from the built spec, not adjusted. RESOLVED 2026-08-16: the figures above predate the cream-cheese rebase. The spec now recomputes to 628 cal per serving, so headroom under the 650 ceiling is 22 cal, not 8. The sausage-row sensitivity the note describes still stands and is still worth watching; only the numbers moved."
                      ],
     "cal_floor":  null,
     "stat":  {
-                 "cal":  642,
+                 "cal":  628,
                  "protein":  25,
                  "carbs":  16,
-                 "fat":  53,
+                 "fat":  51,
                  "cost_ps":  "1.77"
              },
     "intro_html":  "Macaroni and cheese with sausage in it is the dinner a lot of us grew up on, and it never needed to be expensive to feel like a treat. Swap the noodles for cauliflower and the same comfort comes back with almost none of the carbs. Cauliflower boiled just tender, a cream and cheddar sauce with a little cream cheese for body, a whisper of Cajun seasoning, and enough smoked sausage that every bite finds some. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 20 grams of carbs. That is a bake that eats like the childhood version and costs like a Tuesday.",
@@ -31,7 +31,7 @@
                                 "\u003cstrong\u003eCauliflower (generic (USDA)):\u003c/strong\u003e 3 1/2 lb, chopped into macaroni-sized pieces (about 3 medium heads) (1588 g)",
                                 "\u003cstrong\u003eSmoked Sausage (Eckrich (Armour-Eckrich)):\u003c/strong\u003e 3 lb, sliced into thin rounds (about three 14 oz ropes and part of a fourth) (1361 g)",
                                 "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 3/4 cup plus 2 tbsp (210 g)",
-                                "\u003cstrong\u003eCream Cheese (generic (USDA)):\u003c/strong\u003e 7 oz, room temperature (an 8 oz brick minus 2 tbsp) (198 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 7 oz, room temperature (an 8 oz brick minus 2 tbsp) (198 g)",
                                 "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 5 1/4 cups grated, divided (3 1/2 cups in, 1 3/4 cups on top) (593 g)",
                                 "\u003cstrong\u003eMonterey Jack Cheese (generic (USDA)):\u003c/strong\u003e 1 cup plus 3 tbsp grated (134 g)",
                                 "\u003cstrong\u003eCajun Seasoning (Tony Chachere\u0027s):\u003c/strong\u003e 3 1/2 tsp (11 g)"
@@ -41,7 +41,7 @@
                        "Cauliflower, 3 1/2 lb, chopped into macaroni-sized pieces (about 3 medium heads): ~$5.35. \u003cstrong\u003eBuy 3 heads: $5.94.\u003c/strong\u003e",
                        "Smoked Sausage, 3 lb, sliced into thin rounds (about three 14 oz ropes and part of a fourth): ~$7.01. \u003cstrong\u003eBuy 4 13.5oz ropes: $7.88.\u003c/strong\u003e",
                        "Heavy Cream, 3/4 cup plus 2 tbsp: ~$1.04. \u003cstrong\u003eBuy 1 pint: $2.34.\u003c/strong\u003e",
-                       "Cream Cheese, 7 oz, room temperature (an 8 oz brick minus 2 tbsp): ~$1.61. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
+                       "1/3 Fat Cream Cheese, 7 oz, room temperature (an 8 oz brick minus 2 tbsp): ~$1.61. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 5 1/4 cups grated, divided (3 1/2 cups in, 1 3/4 cups on top): ~$3.18. \u003cstrong\u003eBuy 3 8oz bags: $3.65.\u003c/strong\u003e",
                        "Monterey Jack Cheese, 1 cup plus 3 tbsp grated: ~$1.06. \u003cstrong\u003eBuy 1 8oz block: $1.79.\u003c/strong\u003e",
                        "Pantry seasonings (cajun seasoning): ~$0.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
@@ -103,8 +103,8 @@
                                    "gpu":  "29.800"
                                },
                                {
-                                   "item":  "Cream Cheese",
-                                   "canon":  "Cream Cheese",
+                                   "item":  "1/3 Fat Cream Cheese",
+                                   "canon":  "1/3 Fat Cream Cheese",
                                    "grams":  198,
                                    "buy":  "7 oz, room temperature (an 8 oz brick minus 2 tbsp)",
                                    "bid":  "1-3-fat-cream-cheese",
@@ -148,7 +148,7 @@
                                           "Cauliflower, 3 1/2 lb, chopped into macaroni-sized pieces (about 3 medium heads) (1588 g)",
                                           "Smoked Sausage, 3 lb, sliced into thin rounds (about three 14 oz ropes and part of a fourth) (1361 g)",
                                           "Heavy Cream, 3/4 cup plus 2 tbsp (210 g)",
-                                          "Cream Cheese, 7 oz, room temperature (an 8 oz brick minus 2 tbsp) (198 g)",
+                                          "1/3 Fat Cream Cheese, 7 oz, room temperature (an 8 oz brick minus 2 tbsp) (198 g)",
                                           "Cheddar Cheese, Shredded, 5 1/4 cups grated, divided (3 1/2 cups in, 1 3/4 cups on top) (593 g)",
                                           "Monterey Jack Cheese, 1 cup plus 3 tbsp grated (134 g)",
                                           "Cajun Seasoning, 3 1/2 tsp (11 g)"
@@ -176,7 +176,7 @@
                                   "grams":  210
                               },
                               {
-                                  "item":  "Cream Cheese",
+                                  "item":  "1/3 Fat Cream Cheese",
                                   "grams":  198
                               },
                               {

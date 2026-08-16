@@ -152,7 +152,7 @@
   {
       "batch":  "hunt-2026-08-15-lowcarb-100-w1",
       "opened":  "2026-08-16T06:07:43",
-      "last_activity":  "2026-08-16T15:52:34",
+      "last_activity":  "2026-08-16T16:06:57",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -207,6 +207,26 @@
                          "stage":  "recipes-db",
                          "at":  "2026-08-16T15:52:34",
                          "detail":  "9 row(s) via hunt-2026-08-15-lowcarb-100-w1"
+                     },
+                     {
+                         "stage":  "cost-basis",
+                         "at":  "2026-08-16T16:06:45",
+                         "detail":  "compute-v2-perserving + reanchor on 9 slug(s)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-08-16T16:06:46",
+                         "detail":  "9 row(s) via hunt-2026-08-15-lowcarb-100-w1"
+                     },
+                     {
+                         "stage":  "build-cards",
+                         "at":  "2026-08-16T16:06:57",
+                         "detail":  "9 card(s) rebuilt via propagate"
+                     },
+                     {
+                         "stage":  "publish",
+                         "at":  "2026-08-16T16:06:57",
+                         "detail":  "9/9 wave slug(s) published through engine\\publish (visibility preserved) + 2 collateral spec(s) carried by propagate (total dirty 11)"
                      }
                  ]
   },
@@ -255,7 +275,7 @@
   {
       "batch":  "hunt-2026-08-15-lowcarb-100-w3",
       "opened":  "2026-08-16T12:35:08",
-      "last_activity":  "2026-08-16T16:04:29",
+      "last_activity":  "2026-08-16T16:04:36",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -330,6 +350,11 @@
                          "stage":  "publish",
                          "at":  "2026-08-16T16:04:29",
                          "detail":  "9/9 wave slug(s) published through engine\\publish (visibility preserved) + 11 collateral spec(s) carried by propagate (total dirty 20)"
+                     },
+                     {
+                         "stage":  "serveability",
+                         "at":  "2026-08-16T16:04:36",
+                         "detail":  "9/9 wave slug(s) verified against the rebuilt feed"
                      }
                  ]
   },

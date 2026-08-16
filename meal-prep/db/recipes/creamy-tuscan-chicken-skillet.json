@@ -15,7 +15,7 @@
                          "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Every gram and buy string transcribed from mapped\\creamy-tuscan-chicken-skillet.json; no number computed in prose.",
                          "MACROS transcribed from the mapper\u0027s food-macros-db recompute at 14 servings and re-verified by the writer with the build guard\u0027s own formula: 518 cal, 46 g protein, 9 g carbs, 33 g fat per serving (raw 517.8 / 45.9 / 8.8 / 32.9). In band for this run: 518 cal inside [400, 650] with 132 cal of ceiling headroom, and 9 g carbs well under the 35 g gate. The source\u0027s own published 485 cal / 42 g protein / 8 g carbs / 32 g fat tracks these within the 15 percent instrument (our chicken books at the house 200 g each-weight versus the source\u0027s implied ~173 g/serving).",
                          "SUN-DRIED TOMATOES BASIS: the line books to the NEW oil-packed food-macros-db row (Sun-Dried Tomatoes (Oil-Packed), USDA 11955 drained, 213 cal / 23.3 C per 100 g, cup = 110 g), which the mapper added and used for its verified numbers. The DRY row (Sun-Dried Tomatoes, cup = 54 g, ~257 cal / 55.7 C per 100 g) would halve the grams and nearly double the carb density and is REFUTED by the mapper for this carb-gated run. The oil-packed item name has a macro row but NO db\\ingredients.json bid row, so the price side is BLOCKED (see run report); the plain-name bid sun-dried-tomatoes is the correct board commodity and must be wired to the oil-packed item name through the match-soundness gate before this recipe can cost and publish.",
-                         "SPINACH is FRESH per the source and the mapper (macro row \u0027Spinach\u0027 is the fresh USDA row, 23 cal / 100 g). The legacy db\\ingredients.json bid for item \u0027Spinach\u0027 still points at frozen-chopped-spinach, a fresh-to-frozen price-class defect the mapper flagged; prose names fresh spinach (the recipe of record) and the bid needs correcting to the live fresh \u0027spinach\u0027 commodity through the gate. Macro side is unaffected (fresh and frozen rows are per-gram identical).",
+                         "SPINACH is FRESH per the source and the mapper (macro row \u0027Spinach\u0027 is the fresh USDA row, 23 cal / 100 g). The legacy db\\ingredients.json bid for item \u0027Spinach\u0027 still points at frozen-chopped-spinach, a fresh-to-frozen price-class defect the mapper flagged; prose names fresh spinach (the recipe of record) and the bid needs correcting to the live fresh \u0027spinach\u0027 commodity through the gate. Macro side is unaffected (fresh and frozen rows are per-gram identical). RESOLVED 2026-08-16: the bid was corrected. Item Spinach now bids the fresh weekly commodity spinach (priced 7/7 stores, cheapest Walmart $0.20/oz, a 10 oz bag of fresh leaf); the frozen recipes keep the separate Frozen Chopped Spinach row. Cost block re-rendered off the fresh basis.",
                          "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought: chicken (steps 2,3,6,7), paprika (2), garlic powder (2), salt (2), butter (3), heavy cream (4), sun-dried tomatoes (4), garlic (4), spinach (5). Walked the costed list against the steps both directions.",
                          "SHOP_SMART makes NO leftover, per-ounce, or lasts-several-batches claim, so no bullet needs a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount and package form. Re-walk the bullets against cost_lines once the recipe costs.",
                          "GARLIC POWDER grams 10.9 rounds to 11 g at build (int); a fractional gram is not a cook measure and the macro impact is under 1 cal/serving."
@@ -26,7 +26,7 @@
                  "protein":  46,
                  "carbs":  9,
                  "fat":  33,
-                 "cost_ps":  "3.02"
+                 "cost_ps":  "3.08"
              },
     "intro_html":  "Tuscan chicken sounds like a restaurant order, but it is really just seared chicken finished in a cream sauce with sun-dried tomatoes and spinach. No long braise, no special cut, no equipment you do not already own. You season the cutlets, brown them in butter, then build the sauce right in the same pan and let the two finish together. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 10 grams of carbs. That is a creamy, rich-tasting dinner that still lands inside a low-carb week.",
     "ingredients_display":  [
@@ -47,11 +47,11 @@
                        "Heavy Cream, 3 1/2 cups: ~$4.12. \u003cstrong\u003eBuy 2 pints: $4.68.\u003c/strong\u003e",
                        "Sun-Dried Tomatoes (Oil-Packed), 1 3/4 cups oil-packed, drained: ~$4.15. \u003cstrong\u003eBuy 1 24oz jar: $14.62.\u003c/strong\u003e",
                        "Garlic, 7 cloves, minced: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Spinach, 3 1/2 cups chopped: ~$0.43. \u003cstrong\u003eBuy 1 10oz bag: $1.15.\u003c/strong\u003e",
+                       "Spinach, 3 1/2 cups chopped: ~$0.74. \u003cstrong\u003eBuy 1 10oz bag: $2.00.\u003c/strong\u003e",
                        "Pantry seasonings (paprika, garlic powder, salt): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $23.63 across 14 servings, so roughly $1.69 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $39.85 across 14 servings, roughly $2.85 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.49 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.34. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $23.94 across 14 servings, so roughly $1.71 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.70 across 14 servings, roughly $2.91 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.49 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.19. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a creamy Tuscan chicken dinner that tastes like it came off a restaurant menu. The chicken and the cream carry it; the sun-dried tomatoes and spinach just make it look and taste expensive.",
     "shop_smart":  [
@@ -73,14 +73,14 @@
     "portion_html":  "Set the full pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Each container gets one chicken cutlet and an even spoonful of the creamy tomato and spinach sauce, landing near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thatlowcarblife.com/creamy-tuscan-chicken/\" target=\"_blank\" rel=\"noopener\"\u003ethatlowcarblife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  23.63,
-    "cost_batch_true":  39.85,
-    "cost_per_serving":  1.69,
-    "cost_per_serving_true":  2.85,
+    "cost_batch":  23.94,
+    "cost_batch_true":  40.7,
+    "cost_per_serving":  1.71,
+    "cost_per_serving_true":  2.91,
     "cost_pantry_add":  2.49,
-    "cost_first_run":  42.34,
+    "cost_first_run":  43.19,
     "scaler":  {
-                   "cost":  "39.85",
+                   "cost":  "40.70",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -151,7 +151,7 @@
                                    "canon":  "Spinach",
                                    "grams":  105,
                                    "buy":  "3 1/2 cups chopped",
-                                   "bid":  "frozen-chopped-spinach",
+                                   "bid":  "spinach",
                                    "gpu":  "28.350"
                                }
                            ]
@@ -163,7 +163,7 @@
                  "prepTime":  "PT10M",
                  "cookTime":  "PT20M",
                  "totalTime":  "PT30M",
-                 "costPerServing":  3.02,
+                 "costPerServing":  3.08,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Breast, 14 thin sliced chicken breasts (about 6.2 lb) (2800 g)",
                                           "Paprika, 3 1/2 tsp (8 g)",
