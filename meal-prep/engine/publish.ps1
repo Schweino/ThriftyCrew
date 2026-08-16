@@ -12,7 +12,17 @@
 #    verify (db\published-hashes.json). A re-run skips slugs whose built bytes are unchanged, so an
 #    interrupted 1000-post run just re-runs (done slugs skip, failed/changed ones republish). -Force
 #    republishes regardless; -Resume is an alias kept for discoverability (the hash gate already resumes).
-param([string[]]$Slugs, [switch]$All, [switch]$VerifyOnly, [switch]$Force, [switch]$Resume)
+#  - CREATE IS NOT REPUBLISH (2026-08-16). Creating a live paid post is irreversible in a way updating one
+#    is not, and until today both went through the same door. propagate-recipes.ps1 carries every DIRTY
+#    spec by design, and a wave-3 audit measured that set at 49: 9 wave slugs, 19 republishes, and 21
+#    specs that have never been published, which this script would have POSTed into existence as live paid
+#    posts. Three of them had been REJECTED hours earlier - a retired $6.71/serving recipe, a held recipe
+#    whose fresh/frozen contradiction was deliberately restored, and a spinach recipe rejected over
+#    pricing. audit-db-agreement.ps1 skips specs with no index row, so nothing caught it.
+#    -AllowCreate names the slugs permitted to be CREATED. Anything else that 404s is REFUSED and reported,
+#    never POSTed. Republishing an existing post is unaffected: that is what the dirty set is for.
+param([string[]]$Slugs, [switch]$All, [switch]$VerifyOnly, [switch]$Force, [switch]$Resume,
+      [string[]]$AllowCreate, [switch]$AllowCreateAll)
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $root = Split-Path $here -Parent
@@ -39,7 +49,7 @@ $hashFile = Join-Path $root 'db\published-hashes.json'
 $pubHashes = @{}
 if(Test-Path $hashFile){ try { $o=(Get-Content $hashFile -Raw | ConvertFrom-Json); foreach($p in $o.PSObject.Properties){ $pubHashes[$p.Name]=[string]$p.Value } } catch {} }
 
-$ok=0; $skipped=0; $failed=@()
+$ok=0; $skipped=0; $failed=@(); $refusedCreate=@()
 foreach($slug in $Slugs){
   $spec = Get-Content (Join-Path $root "db\recipes\$slug.json") -Raw | ConvertFrom-Json
   # expand {{stat}} tokens BEFORE any field leaves this script: $desc feeds custom_excerpt, meta_description
@@ -64,6 +74,14 @@ foreach($slug in $Slugs){
       $code = 0; try { $code = [int]$_.Exception.Response.StatusCode } catch {}
       if($code -eq 404){ $existing = $null }
       else { $failed += $slug; Write-Output ("GET FAIL  $slug  (existence check errored $code - skipped so no duplicate is created)"); continue }
+    }
+    # THE CREATE GUARD. A 404 means this slug would be born here as a live paid post. That needs explicit
+    # authority, because propagate hands this script every dirty spec and "dirty" includes recipes that were
+    # rejected an hour ago. Refusing costs a re-run; creating costs a live page nobody approved.
+    if(-not $existing -and -not $AllowCreateAll -and ($AllowCreate -notcontains $slug)){
+      $refusedCreate += $slug
+      Write-Output ("REFUSED CREATE  $slug  (no live post exists and it is not in -AllowCreate; pass it explicitly to create it)")
+      continue
     }
     # CHANGE GATE: an existing post whose content bytes match the last verified publish is skipped
     # (visibility is deliberately NOT in the hash - the rotation owns it and its flip is not a content change).
@@ -162,3 +180,8 @@ foreach($slug in $Slugs){
 if(-not $VerifyOnly){ ($pubHashes | ConvertTo-Json) | Set-Content $hashFile -Encoding UTF8 }
 Write-Output ("published+verified OK: $ok / $($Slugs.Count)   (skipped-unchanged: $skipped)")
 if($failed){ Write-Output ("FAILED (" + $failed.Count + "): " + ($failed -join ', ')) }
+# Refusals are LOUD. A silently-skipped create is how 21 unaudited specs nearly became live paid posts.
+if($refusedCreate){
+  Write-Output ("REFUSED CREATE (" + $refusedCreate.Count + " slug(s) had no live post and no -AllowCreate authority): " + ($refusedCreate -join ', '))
+  Write-Output ("  These were NOT published. If they should exist, pass them in -AllowCreate deliberately.")
+}

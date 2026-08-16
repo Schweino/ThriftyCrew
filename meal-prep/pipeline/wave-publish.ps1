@@ -697,7 +697,16 @@ if ($foreignTotal -gt 0) {
 
 # ---- E4. THE CHAIN. sync-recipesdb-buy -> audit-db-agreement (hard gate) -> planner -> build-cards
 # -> engine\publish (hash-gated, visibility-preserving, live-verified). Stamps advance only on success.
-$prop = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'propagate-recipes.ps1') 2>&1
+# CREATE AUTHORITY. propagate carries every DIRTY spec, which is right for republishing and wrong for
+# creating: on 2026-08-16 the dirty set was 49, of which 21 had never been published and would have been
+# POSTed into existence as live paid posts - three of them recipes rejected hours earlier. Only THIS WAVE's
+# slugs may be created. Everything else dirty may be updated, never born.
+# Written to a file because this call is `powershell -File`, which would marshal a [string[]] into one
+# comma-joined string.
+$allowFile = Join-Path $RunDir ("waves\wave-{0}.allow-create.txt" -f $Wave)
+Set-Content -Path $allowFile -Value ($slugs -join "`n") -Encoding UTF8
+Write-Output ("  E4  create authority: {0} wave slug(s) may be created; any other new slug is refused" -f $slugs.Count)
+$prop = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'propagate-recipes.ps1') -AllowCreateFile $allowFile 2>&1
 $propRc = $LASTEXITCODE
 @($prop | ForEach-Object { Write-Output ("    " + [string]$_) })
 if ($propRc -ne 0) { Fail 'propagate-recipes failed - nothing was stamped, the next run retries the same slugs' }

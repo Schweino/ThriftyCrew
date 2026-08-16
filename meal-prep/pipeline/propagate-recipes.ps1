@@ -25,7 +25,18 @@
 #         .\propagate-recipes.ps1 -Baseline  stamp the current state WITHOUT running (first arming only,
 #                                            on a catalog independently verified in sync - as on 2026-08-08)
 #         .\propagate-recipes.ps1 -SelfTest
-param([switch]$DryRun, [switch]$Baseline, [switch]$SelfTest, [string]$Root = "")
+# -AllowCreate passes THROUGH to engine\publish.ps1 and names the only slugs allowed to be born as live
+# paid posts. It exists because `dirty` is the wrong authority for creation: propagate carries every dirty
+# spec by design, which is right for republishing and dangerous for creating. On 2026-08-16 the dirty set
+# was 49, of which 21 had never been published - including three recipes rejected hours earlier. Without
+# this, a 9-recipe wave publish would have minted 21 live pages nobody audited.
+#
+# IT IS A FILE PATH, NOT AN ARRAY, ON PURPOSE. wave-publish invokes this script with `powershell -File`,
+# which marshals a [string[]] into ONE comma-joined string - the same trap that made a 2-recipe wave open a
+# ledger row listing a single slug. An array parameter here would silently collapse the create-authority
+# list to one unmatched name and refuse every legitimate create. A newline-delimited file crosses the
+# process boundary intact.
+param([switch]$DryRun, [switch]$Baseline, [switch]$SelfTest, [string]$Root = "", [string]$AllowCreateFile = "")
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = if ($Root) { $Root } else { Split-Path -Parent $here }
@@ -61,6 +72,27 @@ if ($SelfTest) {
     T 'MUST FIRE  with no stamps, every spec is dirty' ((Get-DirtySlugs $stamps $files).Count -eq 2) 'missed'
     foreach ($x in $files) { $stamps[$x.BaseName] = Get-SpecHash $x.FullName }
     T 'CLEAN TWIN stamped specs are clean' ((Get-DirtySlugs $stamps $files).Count -eq 0) 'spurious dirt'
+
+    # ---- CREATE AUTHORITY. `dirty` is the wrong authority for CREATING a live post: propagate carries
+    # every dirty spec by design, and on 2026-08-16 that set was 49, of which 21 had never been published
+    # and would have been POSTed into existence - three of them recipes rejected hours earlier. The
+    # allowlist crosses the process boundary as a FILE because wave-publish calls this script with
+    # `powershell -File`, which would marshal a [string[]] into one comma-joined string.
+    $allowPath = Join-Path $tmp 'allow.txt'
+    Set-Content $allowPath "alpha`nbravo`n`n  charlie  " -Encoding UTF8
+    $parsedAllow = @(Get-Content $allowPath | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+    T 'MUST FIRE  the create allowlist survives the file round-trip as MANY slugs, not one string' `
+      ($parsedAllow.Count -eq 3) $parsedAllow.Count
+    T 'CLEAN TWIN blank lines are dropped and surrounding whitespace trimmed' `
+      ($parsedAllow -contains 'charlie' -and $parsedAllow -notcontains '') ($parsedAllow -join '|')
+    # An allowlist naming a file that is not there is a broken contract, not an empty allowlist. Treating
+    # it as empty would refuse every create and read as "nothing to publish" instead of a wiring bug.
+    $threw = $false
+    try {
+      $missing = Join-Path $tmp 'nope.txt'
+      if (-not (Test-Path $missing)) { throw "propagate: -AllowCreateFile named $missing but it does not exist" }
+    } catch { $threw = $true }
+    T 'MUST FIRE  a named-but-missing allowlist file throws rather than silently allowing nothing' $threw 'silent'
     # the founding class: an edit AFTER stamping is dirt, byte-precise
     Set-Content (Join-Path $tmp 'a.json') '{"x":1,"y":3}' -Encoding UTF8
     $d = Get-DirtySlugs $stamps @(Get-ChildItem "$tmp\*.json")
@@ -134,7 +166,15 @@ Invoke-Stage 'feed-covers-published (hard gate)' {
 Push-Location $mp
 try {
   Write-Output '-- publish (dirty slugs; hash-gated)'
-  $pubOut = & '.\engine\publish.ps1' -Slugs $dirty
+  $allowCreate = @()
+  if ($AllowCreateFile) {
+    if (-not (Test-Path $AllowCreateFile)) { throw "propagate: -AllowCreateFile named $AllowCreateFile but it does not exist - refusing to publish with unknown create authority" }
+    $allowCreate = @(Get-Content $AllowCreateFile | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+    Write-Output ("   create authority: {0} slug(s) may be created; any other new slug is refused" -f $allowCreate.Count)
+  }
+  else { Write-Output '   create authority: NONE - every slug with no live post will be refused' }
+  # In-process call operator, so the array reaches publish.ps1 as an array.
+  $pubOut = & '.\engine\publish.ps1' -Slugs $dirty -AllowCreate $allowCreate
   $pubOut | Select-Object -Last 1
   if (@($pubOut | Where-Object { $_ -match 'published\+verified OK' }).Count -eq 0) { throw 'propagate: publish did not report its verified-OK line - stamps NOT advanced' }
 } finally { Pop-Location }
