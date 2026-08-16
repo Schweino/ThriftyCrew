@@ -212,8 +212,13 @@ if ($runSelfTest) {
   # inverted, so the alias cannot be silently dropped from the vocabulary later.
   $cc = Test-Resolves 'Cream Cheese' $real
   T 'MUST FIRE  the "Cream Cheese" alias resolves to the 1/3-fat row (the founding case, ruled)' ($cc -and [string]$cc.item -eq '1/3 Fat Cream Cheese') $(if($cc){[string]$cc.item}else{'does not resolve'})
-  $unruled = Test-Resolves 'Portobello Mushrooms' $real
-  T 'MUST FIRE  an UNRULED name still does not resolve (aliases are rulings, not a free-for-all)' ($null -eq $unruled) 'resolved without a ruling'
+  # A NEAR MISS must still miss. "Green Bell Peppers" is a real row; the singular is not, and nothing
+  # may quietly bridge that gap - not plural-stripping, not stemming, not "close enough". Every bridge
+  # is an adjudicated alias or it does not exist. (The previous fixture used Portobello Mushrooms, which
+  # stopped being unruled the moment it was captured and given a row - a fixture has to name something
+  # that stays true.)
+  $unruled = Test-Resolves 'Green Bell Pepper' $real
+  T 'MUST FIRE  a NEAR-MISS name does not resolve without a ruling (singular vs the real plural row)' ($null -eq $unruled) 'resolved without a ruling'
   T 'CLEAN TWIN a known-good name resolves against the live vocabulary' ((Test-Resolves 'Black Pepper' $real) -ne $null) 'Black Pepper missing'
 
   if ($bad -gt 0) { Write-Output ("ingredient-vocab SELF-TEST FAIL ({0})" -f $bad); exit 2 }

@@ -2586,5 +2586,199 @@
         "gpu":  28.3495,
         "unit":  "oz",
         "board":  "recipe"
+    },
+    {
+        "item":  "Cauliflower",
+        "bid":  "cauliflower",
+        "gpu":  588,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  588,
+        "buy_pkg_label":  "1 head",
+        "note":  "gpu = whole medium head, USDA 588 g. Recipes call for florets but you buy the head - costing the head is the honest basis (Brad, 2026-08-16), same convention as the Avocado row."
+    },
+    {
+        "item":  "Fresh Parsley",
+        "bid":  "fresh-parsley",
+        "gpu":  60,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  60,
+        "buy_pkg_label":  "1 bunch",
+        "note":  "DISTINCT from Dried Parsley - roughly 10x different concentration by weight, sold as a bunch not a jar."
+    },
+    {
+        "item":  "Fresh Oregano",
+        "bid":  "fresh-oregano",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  21.3,
+        "buy_pkg_label":  "0.75oz clamshell",
+        "note":  "DISTINCT from Dried Oregano."
+    },
+    {
+        "item":  "Dry White Wine",
+        "bid":  "dry-white-wine",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "buy_pkg_g":  742,
+        "buy_pkg_label":  "750ml bottle",
+        "note":  "NOT White Wine Vinegar. Added on Brad ruling 2026-08-16 despite the deliberate Red Wine deletion in 4056603f - revisit if wine proves out of scope."
+    },
+    {
+        "item":  "Monterey Jack Cheese",
+        "bid":  "monterey-jack-cheese",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  226.8,
+        "buy_pkg_label":  "8oz block"
+    },
+    {
+        "item":  "Pepper Jack Cheese",
+        "bid":  "pepper-jack-cheese",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  226.8,
+        "buy_pkg_label":  "8oz block"
+    },
+    {
+        "item":  "Gruyere Cheese",
+        "bid":  "gruyere-cheese",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  226.8,
+        "buy_pkg_label":  "8oz block"
+    },
+    {
+        "item":  "80/20 Ground Beef",
+        "bid":  "80-20-ground-beef",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb",
+        "note":  "Genuinely cheaper than 93/7; ruled its own row rather than an alias."
+    },
+    {
+        "item":  "Shaved Beef Steak",
+        "bid":  "shaved-beef-steak",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  396.9,
+        "buy_pkg_label":  "14oz pack",
+        "note":  "Pre-sliced product priced well above sirloin."
+    },
+    {
+        "item":  "Pork Smoked Sausage",
+        "bid":  "pork-smoked-sausage",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  382.7,
+        "buy_pkg_label":  "13.5oz rope",
+        "note":  "PORK, not turkey. Aliasing to Smoked Turkey Sausage would corrupt protein stamping and the free-dinner rotation.",
+        "aliases":  [
+                        "Smoked Sausage",
+                        "Andouille Smoked Sausage"
+                    ],
+        "alias_ruling":  "Brad, 2026-08-16 (ruling 9): Andouille and generic smoked sausage alias to the PORK row, never to Smoked Turkey Sausage - that would corrupt protein stamping."
+    },
+    {
+        "item":  "Portobello Mushrooms",
+        "bid":  "portobello-mushrooms",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  170.1,
+        "buy_pkg_label":  "6oz pack",
+        "note":  "Dearer than button/crimini; one recipe uses 1588 g so the error would compound."
+    },
+    {
+        "item":  "Brandy",
+        "bid":  "brandy",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "buy_pkg_g":  712,
+        "buy_pkg_label":  "750ml bottle"
+    },
+    {
+        "item":  "Broccolini",
+        "bid":  "broccolini",
+        "gpu":  200,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  200,
+        "buy_pkg_label":  "1 bunch"
+    },
+    {
+        "item":  "Beef Base",
+        "bid":  "beef-base",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  224,
+        "buy_pkg_label":  "7.9oz jar",
+        "note":  "Knorr paste - cheapest per ounce AND cheapest package (Brad, 2026-08-16). Used in teaspoons, so a small jar lasts."
+    },
+    {
+        "item":  "Egg Yolk",
+        "bid":  "egg-yolk",
+        "gpu":  17,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  204,
+        "buy_pkg_label":  "12ct eggs",
+        "note":  "gpu = yolk grams per egg (~17 g). Priced per egg PURCHASED - you buy whole eggs to get yolks, so that is the real cost."
+    },
+    {
+        "item":  "Sun-Dried Tomatoes (Oil-Packed)",
+        "bid":  "sun-dried-tomatoes-oil-packed",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  680,
+        "buy_pkg_label":  "24oz jar",
+        "note":  "GROSS jar weight incl. packing oil (Brad, 2026-08-16). Do not correct to drained weight - that would be a guess. DISTINCT from the dry-packed Sun-Dried Tomatoes row."
+    },
+    {
+        "item":  "Boneless Beef Short Ribs",
+        "bid":  "boneless-beef-short-ribs",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb",
+        "note":  "Carried at 1 of 7 (Bakers) - Rule B, same as achiote-paste.",
+        "aliases":  [
+                        "Country Style Boneless Beef Ribs"
+                    ],
+        "alias_ruling":  "Brad, 2026-08-16; design\\PLAN-ingredient-vocabulary-2026-08-16.md section 0c"
+    },
+    {
+        "item":  "Yellow Bell Pepper",
+        "bid":  "yellow-bell-pepper",
+        "gpu":  186,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  186,
+        "buy_pkg_label":  "each",
+        "note":  "Ruled its own row rather than an alias to Red Bell Pepper."
+    },
+    {
+        "item":  "Yellow Mustard",
+        "bid":  "yellow-mustard",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  567,
+        "buy_pkg_label":  "20oz bottle",
+        "note":  "Markedly cheaper than Dijon; ruled its own row."
     }
 ]
