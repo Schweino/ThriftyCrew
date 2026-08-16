@@ -186,9 +186,29 @@ function Test-IngredientNamedInSteps {
         return ($Steps -match ('\b' + [regex]::Escape($Key)))
     }
     foreach ($t in $usable) {
-        if ($Steps -match ('\b' + [regex]::Escape($t))) { return $true }
+        if ($Steps -match ('\b' + (Get-PluralPattern $t))) { return $true }
     }
     return $false
+}
+
+# SINGULAR/PLURAL. "Cherry Tomatoes" is bought and every step says "dice the TOMATO" - the verbatim
+# match failed on the final 's' and the ingredient read as never used, on a live recipe that plainly
+# uses it (chili-lime-chicken-burrito, found 2026-08-16). This is UNUSED-only: PHANTOM has its own
+# matcher (PHANTOM_TAIL / PHANTOM_FREE / PHANTOM_MADE below) and is untouched by this, so the gate that
+# just caught nine real defects keeps exactly the strictness it had.
+#
+# Deliberately NOT a stemmer. Only the regular English plural endings, and only as an OPTIONAL suffix,
+# so the match can gain "tomato"<->"tomatoes" without gaining "rice"<->"riced" - the simile that already
+# produced a false phantom the same day. A looser rule here forgives an ingredient that is genuinely
+# never used, which is the one thing this class exists to find.
+function Get-PluralPattern {
+    param([string]$Token)
+    $t = [regex]::Escape($Token)
+    if ($Token -match '(?i)ies$')      { return ('(?:' + $t + '|' + [regex]::Escape($Token.Substring(0, $Token.Length - 3)) + 'y)') }
+    if ($Token -match '(?i)(ss|us)$')  { return $t }                       # 'grass', 'hummus' - the s is not a plural
+    if ($Token -match '(?i)es$')       { return ('(?:' + [regex]::Escape($Token.Substring(0, $Token.Length - 2)) + '(?:es)?)') }
+    if ($Token -match '(?i)s$')        { return ('(?:' + [regex]::Escape($Token.Substring(0, $Token.Length - 1)) + 's?)') }
+    return ('(?:' + $t + '(?:e?s)?)')
 }
 
 # ---- PHANTOM: a step names an ingredient the recipe never buys -----------------------------------

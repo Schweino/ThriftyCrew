@@ -488,6 +488,13 @@ $gates = @(
   # prices" that were never missing. Both run; unbid is the narrow subset.
   @{ label = 'audit-vocab-integrity';     path = (Join-Path $here 'audit-vocab-integrity.ps1');     args = @('-Slugs', ($slugs -join ',')); marker = ''; text = 'ok - every canon name resolves to a row' },
   @{ label = 'audit-unbid-ingredients';   path = (Join-Path $here 'audit-unbid-ingredients.ps1');   args = @('-Slugs', ($slugs -join ',')); marker = ''; text = 'ok - every scaler ingredient carries a bid' },
+  # The three name/price guards above all check whether a price COULD be found. This one checks the
+  # number that actually got published. On 2026-08-16 a recipe shipped at $0.15/serving for 3 lb of
+  # sausage and 5.25 lb of broccoli: the bid existed, the name resolved, the bid was on the feed - and
+  # the cost engine still dropped both lines, because it had never learned the ingredient aliases that
+  # build-v2-spec had. Every "could it be priced" gate passed. Only the number was absurd, and nothing
+  # was looking at the number.
+  @{ label = 'audit-cost-plausibility';   path = (Join-Path $here 'audit-cost-plausibility.ps1');   args = @('-Slugs', ($slugs -join ',')); marker = ''; text = 'ok - every recipe prices every line' },
   @{ label = 'test-guards';               path = (Join-Path $here 'test-guards.ps1');               args = @();         marker = '';                    text = 'ALL GUARD PREDICATE TESTS PASS' }
 )
 foreach ($g in $gates) {

@@ -43,7 +43,25 @@ $computed = foreach($sf in $specFiles){
 
 # ---- item knowledge ----
 $ITEMS=@{}
-foreach($row in (Get-Content (Join-Path $db 'ingredients.json') -Raw | ConvertFrom-Json)){ $ITEMS[[string]$row.item]=$row }
+$ALIASES=@{}
+foreach($row in (Get-Content (Join-Path $db 'ingredients.json') -Raw | ConvertFrom-Json)){
+  $ITEMS[[string]$row.item]=$row
+  # ALIASES MUST RESOLVE HERE TOO. build-v2-spec.ps1 learned adjudicated aliases on 2026-08-16; this
+  # engine did not, and the split was invisible in the worst possible way: the SPEC built fine (the
+  # alias resolved, the bid was written in) while THIS file looked up the raw canon name, found no row,
+  # and silently dropped the line as NO PRICE BASIS. sheet-pan-smoked-sausage-broccoli-cheddar came out
+  # at $2.12 for the batch - 15 cents a serving for 3 lb of andouille and 5.25 lb of broccoli - because
+  # "Broccoli" and "Andouille Smoked Sausage" are aliases and this lookup could not see them.
+  # A resolver that exists in one half of a pipeline and not the other is not a resolver.
+  if($row.PSObject.Properties.Name -contains 'aliases'){
+    foreach($a in @($row.aliases)){ $an=[string]$a; if($an){ $ALIASES[$an]=$row } }
+  }
+}
+function Resolve-ItemRow([string]$name){
+  if($ITEMS.ContainsKey($name)){ return $ITEMS[$name] }
+  if($ALIASES.ContainsKey($name)){ return $ALIASES[$name] }
+  return $null
+}
 function Has($row,[string]$p){ $row.PSObject.Properties.Name -contains $p -and $null -ne $row.$p -and "$($row.$p)" -ne '' }
 
 # ---- price boards (identical resolution order to the per-run engines) ----
@@ -131,7 +149,7 @@ foreach($r in $computed){
   foreach($ing in $r.ingredients){
     $g=[double]$ing.grams
     if($g -le 0){ continue }
-    $row = if($ITEMS.ContainsKey($ing.item)){ $ITEMS[$ing.item] } else { $null }
+    $row = Resolve-ItemRow ([string]$ing.item)
     $ppg=$null; $basis=''
     if($row -and (Has $row 'bid')){
       $bid=[string]$row.bid; $gpu=[double]$row.gpu; $mu=if(Has $row 'unit'){ [string]$row.unit } else { '' }

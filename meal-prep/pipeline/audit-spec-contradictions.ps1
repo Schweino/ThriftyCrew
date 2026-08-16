@@ -178,6 +178,22 @@ if ($SelfTest) {
   Chk 'MUST FIRE  UNUSED     sesame oil is bought and never named at all'              (@($un | Where-Object { $_ -match 'sesame oil' }).Count -eq 1) ($un -join ' | ')
   Chk 'CLEAN TWIN plain Rice itself is not reported - the step cooks it'               (@($un | Where-Object { $_ -match "^'rice'" }).Count -eq 0) ($un -join ' | ')
 
+  # ---- singular/plural, added 2026-08-16 after a live recipe read as never using its tomatoes ----
+  $pluralFx = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 500; protein = 30; cost_ps = '2.00' }
+    ingredients_display = @(
+      '<strong>Cherry Tomatoes (generic):</strong> 1 cup (149 g)',
+      '<strong>Boneless Skinless Chicken Breast (Member''s Mark):</strong> 2 lb (907 g)',
+      '<strong>Sesame Oil (Kadoya):</strong> 1 tbsp (14 g)')
+    make_it = @('Dice the tomato and set it aside.', 'Grill the chicken.')
+  }
+  $rp = @(Get-SpecContradictions $pluralFx $null)
+  $unp = @($rp | Where-Object { $_.cls -eq 'UNUSED' } | ForEach-Object { $_.why })
+  Chk 'MUST FIRE  singular "tomato" in a step USES plural "Cherry Tomatoes" (the live false positive)' (@($unp | Where-Object { $_ -match 'tomato' }).Count -eq 0) ($unp -join ' | ')
+  Chk 'CLEAN TWIN a genuinely unused ingredient is STILL caught alongside it'                          (@($unp | Where-Object { $_ -match 'sesame oil' }).Count -eq 1) ($unp -join ' | ')
+  Chk 'MUST FIRE  plural matching does NOT forgive "rice" via "riced" (the simile trap)'               ((Get-PluralPattern 'rice') -notmatch 'd') (Get-PluralPattern 'rice')
+  Chk 'CLEAN TWIN a word ending in ss is not treated as a plural (grass, hummus)'                      ((Get-PluralPattern 'hummus') -eq [regex]::Escape('hummus')) (Get-PluralPattern 'hummus')
+
   # ---- PHANTOM: the founding case and its real twin -----------------------------------------------
   # FROZEN FIXTURE - the ingredient list and steps of slow-cooker-dr-pepper-pulled-pork-bowls as they
   # shipped: seven lines, not one of them a soda, and a step that pours one. Its CLEAN TWIN is a real
