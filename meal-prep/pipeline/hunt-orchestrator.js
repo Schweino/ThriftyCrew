@@ -363,6 +363,12 @@ const AUDIT = { type: 'object', properties: { verdict: { type: 'string' },
   blocking_slugs: { type: 'array', items: { type: 'string' } }, blocker_kind: { type: 'string' },
   owner: { type: 'string' }, summary: { type: 'string' } }, required: ['verdict'] }
 
+const REPAIRCHECK = { type: 'object', properties: {
+  changed_count: { type: 'number', description: 'how many wave specs are NEWER than the audit file' },
+  changed: { type: 'array', items: { type: 'string' } },
+  untouched: { type: 'array', items: { type: 'string' } },
+  detail: { type: 'string' } }, required: ['changed_count'] }
+
 const PUB = { type: 'object', properties: { ok: { type: 'boolean' }, published: { type: 'array', items: { type: 'string' } },
   held: { type: 'array', items: { type: 'string' } }, collateral: { type: 'number' }, refusal: { type: 'string' } },
   required: ['ok'] }
@@ -384,6 +390,48 @@ function maybeCloseWave(force) {
   const k = waveNo
   const drain = !!force
   waveChain = waveChain.then(() => runWave(k, drain)).catch(e => log(`wave ${k} threw: ${String(e).slice(0, 300)}`))
+}
+
+// -----------------------------------------------------------------------------------------------
+// A4 / PLAN SECTION S8. A wave that cannot publish must NOT strand its recipes. On 2026-08-16 a
+// double NO-GO left ten recipes sitting in `waved` - a state whose only exits are published,
+// rejected-audit, qa-passed and written - and nothing ever picked them up again, because WaveClose
+// only gathers `qa-passed`. Two of those ten were audit-clean and publishable, held hostage by eight
+// that were not. Blocking slugs leave the wave; the clean remainder goes back in line for the next one.
+// -----------------------------------------------------------------------------------------------
+async function trimWave(wk, slugs, audit, batch, repairSpent) {
+  const blockers = ((audit && audit.blocking_slugs) || []).filter(Boolean)
+  const perSlug = {}
+  slugs.forEach(s => { perSlug[s] = blockers.includes(s) ? 'BLOCK' : 'GO' })
+  // If the auditor named nobody, every slug is blocked: a NO-GO that blames the wave as a whole is
+  // not a licence to publish any of it.
+  const allBlocked = blockers.length === 0
+  const clean = allBlocked ? [] : slugs.filter(s => !blockers.includes(s))
+  const blocked = allBlocked ? slugs.slice() : blockers.filter(s => slugs.includes(s))
+
+  log(`WAVE ${wk}: trimming - ${blocked.length} blocked, ${clean.length} clean${allBlocked ? ' (auditor named no slugs, so the whole wave is blocked)' : ''}`)
+
+  await agent(`${SHELL}
+Wave ${wk} of run ${RUNID} could not publish. Trim it per plan section S8 so nothing strands in \`waved\`.
+
+BLOCKED (${blocked.length}): ${blocked.join(', ') || '(none)'}
+CLEAN   (${clean.length}): ${clean.join(', ') || '(none)'}
+
+For each BLOCKED slug - it has ${repairSpent ? 'ALREADY had its one repair cycle, so it is terminal' : 'not yet been repaired'}:
+${repairSpent
+  ? `  ${HR} -Advance -RunDir ${RUN} -Slug <s> -To rejected-audit -By auditor -Detail '<the auditor's reason>'`
+  : `  ${HR} -Advance -RunDir ${RUN} -Slug <s> -To qa-passed -By auditor -Detail 'trimmed out of wave ${wk} for repair'`}
+
+For each CLEAN slug, return it to the pool so a later wave can carry it:
+  ${HR} -Advance -RunDir ${RUN} -Slug <s> -To qa-passed -By auditor -Detail 'audit-clean, trimmed out of blocked wave ${wk}'
+
+A clean recipe must NEVER be rejected for its neighbours' defects. Report what you advanced, per slug.`,
+    { label: `wave-${wk}:trim`, phase: 'Wave' })
+
+  // The clean ones rejoin the in-memory wave queue too, or they would sit in `qa-passed` on disk while
+  // this process believes they are still waved and never closes another wave over them.
+  clean.forEach(s => { if (!qaPassed.includes(s)) qaPassed.push(s) })
+  log(`WAVE ${wk}: ${clean.length} clean recipe(s) returned to the pool for the next wave`)
 }
 
 async function runWave(k, drain) {
@@ -434,14 +482,48 @@ Repair through the sanctioned path: rebuild via
   pipeline\\build-v2-spec.ps1 -InFile ${RUN}\\intake\\<slug>.json -RunCost
 Never hand-edit a spec. Do not weaken any gate. If a recipe cannot be repaired:
   ${HR} -Advance -RunDir ${RUN} -Slug <s> -To rejected-audit -By auditor -Detail '<why>'
-Report exactly what you changed, per slug.`,
+Report exactly what you changed, per slug. If nothing needed changing, SAY SO explicitly - that is a
+legitimate answer and is treated differently from claiming a change that did not happen.
+List the files you changed, one per line, under a final line reading "CHANGED FILES:".`,
       { agentType: owner, label: `wave-${wk}:repair`, phase: 'Wave' })
 
-    // section B2: the scope declaration is required, and it is the orchestrator's judgment
+    // ---------------------------------------------------------------------------------------------
+    // A3 POSTCONDITION. On 2026-08-16 a repair agent reported success on wave 1 having changed
+    // nothing at all - the specs and db\ingredients.json were untouched since before the first audit.
+    // The ONLY thing that caught it was paying for a second full audit, the most expensive agent in
+    // the flow. Verifying the claim costs one cheap shell call. "Nothing needed changing" is fine;
+    // "I changed X" with X untouched is not, and must not buy a re-audit.
+    // ---------------------------------------------------------------------------------------------
+    const post = await agent(`${SHELL}
+Verify what the repair actually changed for wave ${wk}, before we pay for a re-audit.
+
+For each wave slug, report the LastWriteTime of C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\<slug>.json
+and of C:\\Codex\\ThriftyCrew\\meal-prep\\db\\ingredients.json. Compare against the audit file's own
+LastWriteTime (${RUN}\\waves\\wave-${wk}.audit.md).
+
+Report: which specs are NEWER than the audit (genuinely repaired), and which are OLDER (untouched).
+Report honestly - a repair that changed nothing is a finding, not something to smooth over. This exact
+check is what exposed a false repair claim on 2026-08-16.`,
+      { label: `wave-${wk}:verify-repair`, phase: 'Wave', schema: REPAIRCHECK })
+
+    if (post && post.changed_count === 0) {
+      log(`WAVE ${wk}: the repair changed NOTHING (${post.detail || 'no files newer than the audit'}) - not paying for a re-audit`)
+      waveResults.push({ wave: wk, slugs, published: [], held: [], verdict: 'NO-GO', note: 'repair claim did not hold: no file changed' })
+      await trimWave(wk, slugs, audit, batch, true)
+      return
+    }
+
+    // B-4 SCOPE GATE. Recipe-local blockers re-audit only the repaired slugs; a shared-data fix moved
+    // every recipe's numbers and REQUIRES the whole wave. Declaring the scope is mandatory - the
+    // 2026-08-15 shakedown spent 31% of its tokens on three audits, one of which re-verified a whole
+    // wave after a single prose field changed in a single spec.
     const scope = (audit.blocker_kind === 'shared-data' || blockers.length === 0) ? 'whole-wave' : blockers.join(',')
     const why = audit.blocker_kind === 'shared-data'
       ? 'the fix moved shared data (map entry / DB row / cost basis), so every recipe in the wave has new numbers'
       : 'the blocker was recipe-local, so nothing outside the repaired slugs moved'
+    if (audit.blocker_kind === 'shared-data' && scope !== 'whole-wave') {
+      throw new Error(`scope gate: a shared-data blocker may not re-audit narrowly (got '${scope}')`)
+    }
     log(`WAVE ${wk}: re-audit scope: ${scope} (${audit.blocker_kind})`)
     audit = await agent(`Re-audit wave ${wk} of run ${RUNID} AFTER the repair.
 Run dir: ${RUN}. Wave file: ${RUN}\\waves\\wave-${wk}.json.
@@ -456,8 +538,9 @@ certifies (wave-publish P1b refuses a stale GO). On GO run:
   }
 
   if (!audit || !isGo(audit.verdict)) {
-    log(`WAVE ${wk}: still NO-GO after one repair cycle - not publishing`)
+    log(`WAVE ${wk}: still NO-GO after one repair cycle`)
     waveResults.push({ wave: wk, slugs, published: [], held: [], verdict: 'NO-GO' })
+    await trimWave(wk, slugs, audit, batch, true)
     return
   }
 

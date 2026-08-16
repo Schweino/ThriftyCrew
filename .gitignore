@@ -282,3 +282,6 @@ meal-prep/db/*.db-journal
 /.claude/skills/**/*.bak
 /.claude/skills/**/ghost-config.ps1
 /.claude/skills/**/*sheet-id.txt
+
+# fetch-recipe.ps1 page cache - regenerable, and one page is ~0.5 MB
+meal-prep/db/page-cache/
