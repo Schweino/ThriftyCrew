@@ -139,6 +139,11 @@ a recipe.
       qa\<slug>.json          source-QA verdicts
       waves\wave-<k>.json     wave manifest: slugs + per-slug {title, excerpt, metaTitle, metaDesc, visibility, htmlfile}
       waves\wave-<k>.audit.md auditor report (verdict must be parseable: first line GO or NO-GO)
+      lane-log.jsonl          append-only, one line per agent invocation: {at, lane, label, count, items}.
+                              ADDED 2026-08-15 after an orchestrator built the price lane per-recipe (2.4)
+                              and nothing could tell afterwards, because every other artifact here records
+                              the RESULT of the work and none records its SHAPE. Written by hunt-run -Lane,
+                              judged by pipeline\audit-lane-shape.ps1.
       report.md               final run report (three buckets)
 
 The run dir is committed to the repo with each wave's publish commit. It lives under meal-prep\

@@ -30,14 +30,17 @@
 #   .\hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To selected -By dedup-selector [-Detail '...']
 #   .\hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To pricing -By mapper -Terms 'saffron,achiote paste' -OptionalTerms 'cilantro'
 #   .\hunt-run.ps1 -Derive -RunDir <p> [-Slug <s>]
+#   .\hunt-run.ps1 -Lane -RunDir <p> -LaneName price -Label 'pricer batch 1' -Items 'saffron,achiote paste'
 #   .\hunt-run.ps1 -WaveClose -RunDir <p> [-Drain] [-NoLedger]
 #   .\hunt-run.ps1 -Status -RunDir <p> [-Json]
 #   .\hunt-run.ps1 -SelfTest
 param(
   [switch]$Init, [switch]$Advance, [switch]$Derive, [switch]$WaveClose, [switch]$Status, [switch]$SelfTest,
+  [switch]$Lane,
   [string]$RunDir = '', [string]$Slug = '', [string]$To = '', [string]$By = '', [string]$Detail = '',
   [string]$Title = '', [string]$SourceUrl = '', [string]$Protein = '',
   [string[]]$Terms = @(), [string[]]$OptionalTerms = @(),
+  [string]$LaneName = '', [string]$Label = '', [string[]]$Items = @(),
   [string]$Conditions = '', [string]$Stop = '', [int]$WaveSize = 10,
   [string]$QueueScript = '', [switch]$Drain, [switch]$NoLedger, [switch]$Json
 )
@@ -48,6 +51,7 @@ $ErrorActionPreference = 'Stop'
 # migrate-prose-tokens' first -SelfTest run execute the LIVE path instead of its fixtures.
 $runSelfTest = [bool]$SelfTest; $runInit = [bool]$Init; $runAdvance = [bool]$Advance
 $runDerive = [bool]$Derive; $runWaveClose = [bool]$WaveClose; $runStatus = [bool]$Status
+$runLane = [bool]$Lane
 $runDrain = [bool]$Drain; $runNoLedger = [bool]$NoLedger; $runJson = [bool]$Json
 
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -179,6 +183,76 @@ function Get-TermVerdictMap {
   return $map
 }
 
+# ---------------------------------------------------------------------------------------------------
+# THE LANE LOG. One append-only line per agent invocation, in `<RunDir>\lane-log.jsonl`.
+#
+# WHY (2026-08-15). A session built the hunt orchestration off SKILL.md alone instead of the plan's
+# section 2.4 and made PRICING a per-recipe pipeline stage. The price lane is a SINGLETON QUEUE DRAINER
+# that batches up to 10 terms ACROSS recipes - ingredient-queue.ps1 is keyed by TERM, not by recipe - so
+# per-recipe pricing throws away the cross-recipe dedup and opens 7 store sessions per RECIPE instead of
+# per 10-term batch. That is the exact sweep shape that walled Walmart at 55 of 526 terms. Nothing caught
+# it: every artifact the run left behind (states, queue, waves) is identical whether the lane batched or
+# not, because they all record the RESULT and none records the SHAPE OF THE WORK.
+#
+# So the shape gets written down as it happens. This file is what audit-lane-shape.ps1 reads, and it is
+# also the honest source for the v2.1 section 5.2 usage instrumentation and the 5.3 singleton check, both
+# of which otherwise have to be reconstructed by re-reading workflow transcripts.
+#
+# APPEND-ONLY AND NEVER REWRITTEN, deliberately: a lane log that can be edited after the fact certifies
+# nothing. JSONL rather than a JSON array for the same reason - a killed run leaves every completed line
+# readable, where a truncated array is unparseable in full.
+$script:LANES = @('hunt', 'select', 'extract', 'map', 'price', 'write', 'qa', 'audit', 'publish', 'review')
+
+# Items arrive either as a real array (in-process) or as ONE comma-joined string, because `powershell -File`
+# marshals a [string[]] as a single command-line argument - the frozen ledger bug in fixture 6 below. Both
+# shapes must produce the same rows or the audit under-counts exactly the runs it exists to judge.
+function Split-LaneItems {
+  param($Raw)
+  $out = @()
+  foreach ($chunk in @($Raw)) {
+    foreach ($piece in ([string]$chunk -split ',')) {
+      $t = $piece.Trim()
+      if ($t) { $out += $t }
+    }
+  }
+  return @($out)
+}
+
+function New-LaneLine {
+  param([string]$LaneName, [string]$Label, $ItemList, [string]$By, [string]$Detail, [string]$At)
+  $rows = @(Split-LaneItems $ItemList)
+  return [pscustomobject]@{
+    at = $At; lane = $LaneName; label = $Label; count = $rows.Count; items = @($rows)
+    by = $By; detail = $Detail
+  }
+}
+
+function Add-LaneLine {
+  param([string]$Path, $Line)
+  # -Compress so one invocation is one line. A pretty-printed object would span lines and JSONL would stop
+  # being JSONL the moment anything read it a line at a time.
+  $json = ($Line | ConvertTo-Json -Depth 6 -Compress)
+  for ($i = 0; $i -lt 3; $i++) {
+    try { [IO.File]::AppendAllText($Path, ($json + "`r`n"), $script:UTF8); return }
+    catch {
+      if ($i -eq 2) { throw ("hunt-run: could not append to '{0}' after 3 attempts: {1}" -f $Path, $_.Exception.Message) }
+      Start-Sleep -Milliseconds (150 * ($i + 1))
+    }
+  }
+}
+
+function Read-LaneLog {
+  param([string]$Path)
+  if (-not (Test-Path $Path)) { return @() }
+  $out = @()
+  foreach ($ln in @([IO.File]::ReadAllLines($Path, [Text.Encoding]::UTF8))) {
+    $t = ([string]$ln -replace "^﻿", '').Trim()
+    if (-not $t) { continue }
+    $out += ($t | ConvertFrom-Json)
+  }
+  return @($out)
+}
+
 # ===================================================================================================
 # SELF-TEST. Every check is a must-fire fixture of a founding bug plus a clean twin, per the estate's
 # guard-fixture rule: a guard with no must-fire case is indistinguishable from a guard that is broken.
@@ -299,6 +373,43 @@ if ($runSelfTest) {
     } finally { if (Test-Path $lt) { Remove-Item $lt -Force -ErrorAction SilentlyContinue } }
   }
 
+  # ---- FIXTURE 7. THE LANE LOG. It records the SHAPE of the work, which every other artifact throws away.
+  # Founding bug, 2026-08-15: an orchestrator built from SKILL.md alone made pricing a per-recipe stage
+  # instead of the singleton cross-recipe queue drainer section 2.4 specifies, and nothing in the run dir
+  # could tell afterwards. audit-lane-shape.ps1 judges this file; these cases guard the WRITE side.
+  T 'MUST FIRE  a typo lane name is not a lane (it would file pricing where no audit looks)' `
+    (@($script:LANES) -notcontains 'pricer') 'accepted "pricer"'
+  T 'CLEAN TWIN the real lane names are lanes' `
+    ((@($script:LANES) -contains 'price') -and (@($script:LANES) -contains 'map')) 'missing a lane'
+
+  # The `powershell -File` marshalling shape, frozen: -Items 'a,b,c' arrives as ONE string. If it were
+  # stored as one item, an 8-invocation run would look like 8 batches of 1 term whatever it really did,
+  # and the audit would fire on correct runs and pass on broken ones. Both call shapes must agree.
+  $viaString = @(Split-LaneItems @('saffron,achiote paste, ras el hanout'))
+  $viaArray  = @(Split-LaneItems @('saffron', 'achiote paste', 'ras el hanout'))
+  T 'MUST FIRE  a comma-joined -Items string splits into its terms, not one item' ($viaString.Count -eq 3) $viaString.Count
+  T '   and it trims, so " ras el hanout" is not a different term' (@($viaString) -contains 'ras el hanout') (@($viaString) -join '|')
+  T 'CLEAN TWIN an in-process array gives the identical rows' `
+    ((@($viaArray) -join '|') -eq (@($viaString) -join '|')) ((@($viaArray) -join '|') + ' vs ' + (@($viaString) -join '|'))
+  T 'empty and whitespace items are dropped, never counted as work' ((@(Split-LaneItems @('a', '', '  ', 'b'))).Count -eq 2) (@(Split-LaneItems @('a', '', '  ', 'b'))).Count
+
+  $lt2 = Join-Path $env:TEMP ('huntrun-lane-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.jsonl')
+  try {
+    Add-LaneLine -Path $lt2 -Line (New-LaneLine -LaneName 'price' -Label 'batch 1' -ItemList @('saffron,achiote paste') -By 'orchestrator' -Detail '' -At (Get-Stamp))
+    Add-LaneLine -Path $lt2 -Line (New-LaneLine -LaneName 'map' -Label 'micro-batch 1' -ItemList @('a', 'b', 'c', 'd', 'e') -By 'orchestrator' -Detail '' -At (Get-Stamp))
+    $rawLines = @([IO.File]::ReadAllLines($lt2, [Text.Encoding]::UTF8) | Where-Object { $_.Trim() })
+    # ONE invocation is ONE line. A pretty-printed writer spans lines, and then a line-at-a-time reader
+    # counts a single 10-term batch as ten invocations - the audit's headline number, inverted.
+    T 'MUST FIRE  one invocation writes exactly one line' ($rawLines.Count -eq 2) $rawLines.Count
+    $lg = @(Read-LaneLog $lt2)
+    T 'the lane log round-trips'                    (@($lg).Count -eq 2 -and [string]$lg[0].lane -eq 'price') 'lost lines'
+    T 'the item list survives with its count'       ([int]$lg[0].count -eq 2 -and @($lg[0].items) -contains 'achiote paste') ([int]$lg[0].count)
+    T 'MUST FIRE  a 5-item list does not collapse'  (@($lg[1].items).Count -eq 5) (@($lg[1].items).Count)
+    # append-only: the second write must not disturb the first. A log that can be rewritten certifies nothing.
+    T 'MUST FIRE  appending does not rewrite the earlier line' ([string]$lg[0].label -eq 'batch 1') ([string]$lg[0].label)
+    T 'a missing lane log reads as empty, not as an error' ((@(Read-LaneLog (Join-Path $env:TEMP 'no-such-lane-log.jsonl'))).Count -eq 0) 'threw'
+  } finally { if (Test-Path $lt2) { Remove-Item $lt2 -Force -ErrorAction SilentlyContinue } }
+
   if ($f -eq 0) { Write-Output 'hunt-run SELF-TEST PASS'; exit 0 }
   Write-Output ("hunt-run SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
 }
@@ -334,6 +445,28 @@ if ($runInit) {
   if (-not $board.Count) { Write-Output '  WARNING no grocery\out\comparison-*.json - pricing reads it' }
   else { Write-Output ("  board: {0} (written {1})" -f $board[0].Name, $board[0].LastWriteTime.ToString('yyyy-MM-dd HH:mm')) }
   Write-GuardComplete -Name 'hunt-run' -Summary ("init {0}" -f $runId); exit 0
+}
+
+# ---- -Lane ----------------------------------------------------------------------------------------
+# Record ONE agent invocation. Call it as the invocation is dispatched, once per agent, with the items
+# that invocation actually took: terms for `price`, slugs for `map` / `extract` / `write` / `qa`.
+if ($runLane) {
+  if (-not $LaneName) { Write-Output ("hunt-run: -Lane needs -LaneName. One of: {0}" -f (@($script:LANES) -join ', ')); exit 1 }
+  $ln = $LaneName.ToLower()
+  # An unknown lane name is REFUSED rather than logged. A typo'd lane ('pricer' for 'price') would file
+  # every pricer invocation under a lane no audit knows to look at, which reads afterwards as a run that
+  # never priced anything - a silent pass, the exact shape this log exists to prevent.
+  if (@($script:LANES) -notcontains $ln) {
+    Write-Output ("hunt-run: '{0}' is not a lane. One of: {1}" -f $LaneName, (@($script:LANES) -join ', ')); exit 1
+  }
+  if (-not (Test-Path $RunDir)) { Write-Output ("hunt-run: no such run dir '{0}'" -f $RunDir); exit 1 }
+  $line = New-LaneLine -LaneName $ln -Label $Label -ItemList $Items -By $By -Detail $Detail -At (Get-Stamp)
+  Add-LaneLine -Path (Join-Path $RunDir 'lane-log.jsonl') -Line $line
+  Write-Output ("hunt-run lane: {0}  {1} item(s){2}" -f $ln, $line.count, $(if ($Label) { "   ($Label)" } else { '' }))
+  if ($line.count -eq 0) {
+    Write-Output '  NOTE no items recorded. An invocation with no item list cannot be audited for batch shape.'
+  }
+  Write-GuardComplete -Name 'hunt-run' -Summary ("lane {0} n={1}" -f $ln, $line.count); exit 0
 }
 
 # ---- -Advance -------------------------------------------------------------------------------------

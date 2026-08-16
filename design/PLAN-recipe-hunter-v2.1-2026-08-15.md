@@ -165,9 +165,41 @@ Before trusting any throughput or cost claim:
 2. Instrument: record per-stage subagent token totals in the run dir (the orchestrator sees them in
    every Agent result; append to runs\<id>\usage.jsonl as they arrive). Target from the retrospective:
    200-250k tokens per recipe at wave size 10, against the shakedown's 786k.
+   **LANDED 2026-08-15, and it is the substrate for both this and 5.3 below:** `hunt-run.ps1 -Lane` writes
+   append-only `runs\<id>\lane-log.jsonl`, one line per agent invocation `{at, lane, label, count, items}`.
+   usage.jsonl is now a per-line join onto that log rather than a second reconstruction of the same events,
+   and neither has to be recovered by re-reading workflow transcripts.
 3. Specifically verify during the run: (a) the pricer lane stays a singleton and its per-store tabs
    behave per its definition; (b) hunt-run -Derive moves recipes parked/priced correctly off REAL queue
    verdicts, not just the self-test fixtures; (c) a mid-run resume via -Status after killing the session.
+   (a) is now mechanical: `pipeline\audit-lane-shape.ps1 -RunDir <p>` reads the lane log and reports
+   pricer invocations against ceil(distinct terms / 10) and mapper invocations against ceil(recipes / 5).
+
+### D-bis. THE LANE SHAPE GATE (landed 2026-08-15, ahead of the proving run)
+
+Founding bug: a session built the hunt orchestration from SKILL.md alone instead of v2 section 2.4 and made
+pricing a per-recipe pipeline stage. The PRICE lane is a singleton queue drainer batching up to 10 terms
+ACROSS recipes (ingredient-queue.ps1 is keyed by TERM), so per-recipe pricing discards the cross-recipe
+dedup and opens 7 store sessions per recipe instead of per 10-term batch - the sweep shape that walled
+Walmart at 55 of 526. SKILL.md was corrected the same day, but no gate would have caught the run, and a
+correction with no mechanical check behind it is documentation.
+
+`audit-lane-shape.ps1` reports the shape the run actually used and exits 1 on:
+- `<lane>-lane-not-batched`: invocations exceed ceil(distinct items / batch size) AND the mean items per
+  invocation is under half the batch size. Both clauses matter - a streamed drainer legitimately runs many
+  times, so only under-filled batches convict. Small-n noise (under 3 invocations) never fires.
+- `<lane>-lane-duplicate-items`: a term went to the pricer in two invocations, i.e. the queue's term-level
+  dedup was discarded. No threshold needed; this one is direct evidence.
+- `price-lane-per-recipe`: every attributable invocation stayed inside one recipe across 3+ recipes. Two
+  recipes is reported as suspect and NOT ruled on, because two can arrive far enough apart to drain
+  separately - never convict on evidence with an innocent reading.
+- `price-lane-unlogged`: the run priced and recorded no invocation at all. This is what stops the check
+  being opt-in; an orchestrator that ignores `-Lane` fails rather than passes.
+
+Fixtures shipped in the same commit per section 8: 8 invocations for 9 terms MUST FIRE, 1 invocation for the
+same 9 terms is the clean twin; the same pair at the mapper's size of 5; four FULL 10-term batches and four
+half-full ones are clean twins that prove the gate does not fire on a correct streamed drainer; and an
+end-to-end pair over real temp run dirs, because a pure predicate cannot catch a mis-parsed file.
 4. Success criteria, written before the run starts: 2 waves published with zero rolled-back slugs,
    pricer verdicts recorded with evidence for every absent term, per-recipe token cost measured, and
    any new defect class frozen as a fixture the same day.
