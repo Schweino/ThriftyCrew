@@ -141,6 +141,116 @@ Mushrooms · Tandoori Masala -> Garam Masala · Pepperoni -> Turkey Pepperoni
 Bulgur Wheat, Korean Rice Cakes, Sumac, Keto Bun - the four LIVE recipes. Their rows and bids already
 exist; the specs predate them.
 
+## 0d. EXECUTION, 2026-08-16 - what the capture list actually cost, and the ten rows that already existed
+
+Section 0c's capture list said nineteen terms needed board commodities. **Ten of them already had one.**
+That is the finding worth keeping; the prices were the easy part.
+
+### The four that were already registered AND already priced
+
+`cauliflower`, `fresh-parsley`, `broccolini`, `portobello-mushrooms` were live commodities in
+commodities.json with real feed cells before this task started. Three matched the pricer's cheapest to the
+cent. Section 0b classed cauliflower a GENUINE-GAP and "the single largest blocker"; it had been on the
+board the whole time. **The sweep that produced the worklist never checked commodities.json** - it compared
+canon names against ingredients.json only, so an ingredient row missing its bid looked identical to a food
+the estate had never priced.
+
+### The six that were duplicates under another spelling
+
+| the plan's proposed id | already existed as | already priced |
+|---|---|---|
+| `80-20-ground-beef` | `ground-beef-8020` (label *is* "80/20 Ground Beef") | $4.77/lb Sam's, n=7 |
+| `yellow-mustard` | `mustard` (label *is* "Yellow Mustard") | $0.0495/oz Aldi, n=7 |
+| `egg-yolk` | `eggs` | $1.46/dozen Aldi, n=7 |
+| `pork-smoked-sausage` | `kielbasa` ("Kielbasa / Smoked Sausage") | $2.336/lb Walmart, n=7 |
+| `sun-dried-tomatoes-oil-packed` | `sun-dried-tomatoes` | $0.4158/oz Sam's, n=7 |
+| `dry-white-wine` | `white-wine` | existed, unpriced |
+
+In five of the six, the pricer's freshly captured cheapest was the *same store at the same price* as the
+existing crown. Minting them would have been the bread-crumbs failure six times over.
+
+**None of these pairs fires mechanically.** `80-20-ground-beef` vs `ground-beef-8020` is a word-order flip;
+`pork-smoked-sausage` vs `kielbasa` shares zero tokens; `egg-yolk` vs `eggs` is a yield convention against a
+purchase. audit-commodity-dupes normalizes and compares strings, so it can never see any of them. **The only
+thing standing between this catalog and six permanent duplicates was the commodity-registrar gate** -
+which is the argument for keeping it mandatory even when a plan has already "decided" an id is new.
+
+Ruling 9's protection held: `kielbasa` is NOT `smoked-turkey-sausage`. It structurally excludes turkey and
+chicken, so protein stamping and the free-dinner rotation are unaffected by the reuse.
+
+### Why wine had never been priced - and it was never the band
+
+`compare-deals.ps1` carries a **global alcohol exclude** in `$GLOBAL_EXCLUDE` (`\bwine\b`, `liquor`,
+`vodka`, `whiskey`, `tequila`, `bourbon`, `\bbeer\b`, `\bale\b`) applied to *every* commodity. `white-wine`
+could therefore never produce a single candidate no matter how good its rule was - and its band, 1.11-14.4
+per fl oz, was authored per BOTTLE and would have rejected every real wine ($0.16-0.41/floz) even without
+the global. Two independent blocks, either one fatal.
+
+The documented escape hatch is `relax_global` on the commodity entry. `white-wine` and `red-wine` now carry
+`relax_global: ["\bwine\b"]`, unit `fl_oz` -> `floz` (the spelling every other consumer uses), and a
+recalibrated 0.08-1.0 band. **`brandy` escaped the filter only by accident** - "brandy" is simply not in the
+list. Anything alcoholic minted in future needs `relax_global` or it will silently price nothing forever.
+
+### Three wrong products the rebuild surfaced, all one class
+
+Same substring-match class the pricer caught six times in the 0c capture pass:
+
+- **Hy-Vee Dijon Mustard "with White Wine"** crowned `white-wine` -> excluded `\bmustard\b`
+- **Wish-Bone Red Wine Vinaigrette Salad Dressing** crowned `red-wine` -> excluded `vinaigrette`, `\bdressing\b`
+- **Franzia 5 L / Carlo Rossi 4 L box wine** crowned `white-wine` on per-ounce price
+
+### Box wine, and the 375 ml question - measured, not assumed
+
+Cheapest-per-unit is the board's rule, and box wine wins it: Franzia 5 L at $0.0945/floz against a 750 ml
+bottle at $0.157. For a recipe needing half a cup that is the wrong answer - the reader is told to buy five
+litres. Brad asked whether smaller bottles (375 ml splits) were the fix. **Measured across 49 wine rows at
+Baker's: 42 are 750 ml, exactly ONE is 375 ml, one is 500 ml.** The lone 375 ml runs $0.629/floz - about
+4x the per-ounce cost of a 750 ml bottle. Splits are neither stocked nor cheap; chasing them was the wrong
+instinct. The fix that worked was excluding box/jug formats, after which `white-wine` crowns a real $3.99
+bottle (Baker's Bay Bridge 750 ml, $0.1571/floz).
+
+### Alcohol is no longer respec'd to broth
+
+`meal-prep\canon-rules-standing.json` silently rewrote `white wine`, `brandy` and `red wine` to Chicken or
+Beef Broth. That is why no wine had ever *needed* a price, and it meant a recipe calling for wine cooked
+with broth. Brad ruled 2026-08-16 that a recipe calling for wine or brandy must use wine or brandy; those
+three respecs are retired. `sake`, `shaoxing`, `chinese cooking wine`, `dashi`, the broths and **every
+wine-VINEGAR rule** are deliberately untouched - `red-wine` remains unpriced by choice of scope.
+
+### The gated writer the recipe board never had
+
+`out\recipe-board-everyday.json` is the everyday floor baseline for recipe-only ids - the commodities that
+must NOT live on the weekly board because a broader staples row steals their cells under first-match-wins
+(`bell-peppers` has no yellow exclude; `bouillon`'s include literally contains `beef\s+base`; `sirloin-steak`
+and `ribeye-steak` both claim shaved steak; `shredded-cheese` claims the jacks). All 156 existing rows
+arrived by hand: `derive-recipe-floors.ps1 -Apply` can only REFRESH an existing row, never add one. So the
+one operation that file needs most had no gated path and no proof contract.
+
+`grocery\add-recipe-board-rows.ps1` is that path, carrying new-commodity.ps1's contract: text-level append
+(the file's `\uXXXX`-escaped store names do not survive a ConvertTo-Json round trip), re-parse, every
+pre-existing row proved byte-identical, +N exactly, and a **refusal** for any size it cannot resolve into
+the row's unit rather than guessing a basis. It also refuses an id already priced on the weekly board,
+because recipe-overlay would drop that row on its next run. 8 self-tests, 3 must-fire.
+
+### Collateral finding: the live board was crowning a known-wrong row
+
+Rebuilding the board re-picked Walmart's `five-spice-powder` winner, which exposed that
+`walmart-regular-2026-08-06.json` records *"Spice Supreme oriental five spices, 3.5-oz. plastic shaker"* at
+**size 42.007 oz** - a 12-pack total against a single-shaker price - yielding $0.279/oz against a real
+~$4.75/oz. That row held the live crown and understated the commodity ~12x. It was **already ruled in
+known-wrong.json** and was being published anyway. The rebuild dropped it; the stale Walmart link was
+withdrawn (Walmart has no headless resolver) and guards returned to hard=0.
+
+### Measured outcome
+
+24 in-flight intakes went **11 building / 13 CHEAPEST-FALLBACK -> 24 building / 0 fallback**. All 19 bids
+resolve on the feed. audit-vocab-integrity clean over 544 specs; audit-commodity-dupes clean over 797 ids
+across 3 namespaces; audit-food-category clean over 2,816 priced cells; guards hard=0.
+
+Nine ids were genuinely new: `fresh-oregano`, `monterey-jack-cheese`, `pepper-jack-cheese`, `gruyere-cheese`,
+`shaved-beef-steak`, `boneless-beef-short-ribs`, `yellow-bell-pepper`, `beef-base` (recipe-board rows), and
+`brandy` (weekly, captured live off the Kroger public API - 595 terms, 7,286 rows, headless).
+
 ## 1. The three namespaces, and the invariant nobody enforced
 
 | namespace | lives in | governed by |
@@ -219,6 +329,23 @@ different product, different price; needs its own row and a capture"). The intak
 resolved names, so the writer cannot inherit an invented one. The registrar's remit explicitly grows
 to cover vocabulary rows: minting a name and minting an id are the same act of extending a controlled
 namespace, and they get the same gate.
+
+**AMENDED 2026-08-16, after this paragraph was tested in anger and proved insufficient.** As written above,
+V4 checks NAMES against the vocabulary. That is necessary and not sufficient: six proposed ids resolved
+perfectly well as names and were still duplicates as IDS, because `80-20-ground-beef` and
+`ground-beef-8020` are two strings for one commodity. A name-resolution contract alone would have passed
+every one of them. So the contract carries **two** obligations, and the second is the expensive one:
+
+1. **Resolve the NAME** against `db\ingredients.json` (item or adjudicated alias), via `ingredient-vocab.ps1`.
+2. **Prove the ID is not already priced under another spelling**, across all four of `commodities.json`,
+   `recipe-commodities.json`, `out\recipe-board-everyday.json` and the live `out\smp-feed.json` - searching
+   by FOOD and reading the LABELS of near rows, not by slug. `mustard`'s label is literally "Yellow
+   Mustard"; `kielbasa` shares zero tokens with "pork smoked sausage"; a word-order flip defeats every
+   normalization audit-commodity-dupes runs. No mechanical sweep reaches these, which is precisely why the
+   obligation sits on the mapper and the registrar rather than on a script.
+
+Both obligations are now written into `.claude\agents\recipe-ingredient-mapper.md` (rule 1b) and
+`.claude\agents\commodity-registrar.md` (the fourth-namespace section). See 0d for the measurement.
 
 ### V5. Estate-wide reconciliation - the remediation, shaped as an adjudication worklist  (fixes the damage)
 

@@ -32,6 +32,29 @@ RULES (non-negotiable, learned the hard way):
    dried (form-flip), leg quarters are not thighs, juice DRINK is not juice, corn chips are not
    tortilla-chips, filled pasta (tortellini) is not dry pasta. When in doubt: item_id = null with a one-line
    reason. Null means pantry-static pricing, which is safe; a stretched mapping publishes a wrong price.
+1b. THE INGREDIENT VOCABULARY IS CLOSED, AND SO IS THE ID NAMESPACE. You do not invent either one.
+   Using an existing name costs nothing; extending the vocabulary is a deliberate, recorded act.
+   RESOLVE FIRST: for every ingredient run `meal-prep\pipeline\ingredient-vocab.ps1 -Query '<name>'`. If it
+   resolves (by item name OR adjudicated alias), use that row's exact name. Never free-text a canon name,
+   never fuzzy-match one yourself: "Dry White Wine" auto-matching "White Wine Vinegar" is a wrong dinner and
+   "Fresh Parsley" matching "Dried Parsley" is a wrong gram weight AND a wrong price.
+   IF IT WILL NOT RESOLVE, choose explicitly and say which: (a) propose a RENAME of the intake to the
+   vocabulary's name, (b) propose an ALIAS with same-item evidence, or (c) propose a NEW row through the
+   commodity-registrar gate with the different-form case made in writing.
+   NAME RESOLUTION IS NOT SUFFICIENT ON ITS OWN - this is the part that has actually cost money. Before you
+   propose ANY new id, prove the food is not already priced under a different spelling across ALL FOUR:
+   grocery\commodities.json, grocery\recipe-commodities.json, grocery\out\recipe-board-everyday.json, and
+   the live feed grocery\out\smp-feed.json. Search by FOOD, not by string: check the label text and the
+   obvious word-order variants, not just the slug you have in mind.
+   Measured 2026-08-16, and it is the whole reason this rule exists: nineteen "new" ingredients went to a
+   full seven-store pricing run; TEN of them were already on the board. Four were live priced commodities
+   (cauliflower, fresh-parsley, broccolini, portobello-mushrooms) and six were duplicates under another
+   spelling - `80-20-ground-beef` vs the existing `ground-beef-8020`, `yellow-mustard` vs `mustard` (whose
+   label IS "Yellow Mustard"), `egg-yolk` vs `eggs`, `pork-smoked-sausage` vs `kielbasa`,
+   `sun-dried-tomatoes-oil-packed` vs `sun-dried-tomatoes`, `dry-white-wine` vs `white-wine`. In five of the
+   six the freshly captured cheapest was the SAME store at the SAME price as the existing crown. None of
+   those pairs can be caught mechanically - a word-order flip and a zero-token-overlap synonym both defeat
+   audit-commodity-dupes - so this check is yours to make, by hand, every time.
 2. Food-DB entries are 100% LABEL-ACCURATE: transcribe the actual nutrition label (serving size in BOTH the
    household measure and grams, all macro fields). Never estimate, never average two products, never trust
    a website summary over label data. If no label is verifiable, flag the ingredient instead of inventing.
