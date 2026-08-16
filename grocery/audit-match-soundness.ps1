@@ -24,7 +24,7 @@ param([switch]$Accept, [switch]$Alert, [string]$OutDir = "",
   # made them permanently invisible to this audit - and they published as crowns. Forcing must be a loud,
   # deliberate act, never the default.
   [switch]$ForceAccept)
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
@@ -175,32 +175,40 @@ if ($Accept -or $ForceAccept) {
   # into "reviewed and correct". That happened: bacon/Sam's and broccoli/Sam's were dropped by the verify pass
   # in THREE separate weeks, got baselined anyway, and sailed through publish as crowns on 2026-07-29.
   #
-  # A verdict names (commodity, store) but NOT the item - the judged item has to be recovered from the quote
-  # inside the reason text. Two hard-won details in that recovery:
+  # WHICH ITEM a verdict judged comes from Get-VerdictIdentity in verdict-lib: the entry's own 'item' field
+  # first, the name quoted in its reason only as a fallback. This gate used to read the quote ONLY, and that
+  # premise expired on 2026-08-05 when verdict files started carrying a structured item field:
+  #  * FALSE BLOCK - the 2026-08-15 garlic verdict judged 'Marketside Tandoori Style Garlic Naan Bites,
+  #    7.05 oz, 15 Count' while its reason quotes the flavour word 'Garlic'. Key garlic|garlic resolved to
+  #    Aldi's real Garlic and this gate refused -Accept naming an innocent product (and, from the verdict's
+  #    own store field, the wrong store). A false block is how people learn to reach for -ForceAccept.
+  #  * SILENT UNDER-BLOCK - a quote can capture a SIZE ('169 FL OZ') or a reordered name ('red butter
+  #    lettuce' vs the feed's 'Lettuce Red Butter'), matching no feed name at all, so a reviewed DROP was
+  #    never enforced and nothing said so.
+  # Two hard-won details survive in the fallback:
   #  * The closing quote is only a closing quote when followed by space/punctuation/end. Product names carry
   #    apostrophes ("Member's Mark ..."), and a naive [^']+ capture truncates at the possessive - which fails
   #    SILENT (the truncated name matches nothing, the drop is skipped, the gate under-blocks on exactly the
   #    Member's Mark rows the founding bug was about).
   #  * Matching is on a NORMALISED name (lowercase, alphanumerics only), because the feed and the reason
   #    spell the same product with and without commas ("Pinto Beans, 12 lbs." vs "Pinto Beans 12 lbs.").
-  # A drop with NO recoverable quote is skipped rather than guessed at: this gate blocks a human action, so a
-  # false block teaches people to reach for -ForceAccept, which un-teaches the whole gate.
+  # A verdict with NO identity at all (no item field, no recoverable quote - 352 of 407 stored entries, all
+  # pre-2026-08-05) is skipped rather than guessed at.
   # LATEST WORD WINS: files are walked oldest -> newest, so a later verdict on the same (commodity, item)
   # overrides an earlier one - a drop that was re-reviewed and kept stops blocking.
   # Normalisation + quote recovery live in verdict-lib.ps1, SHARED with verify-apply's suppression logic.
   # Both must agree on what "the same item" means, or a product suppressed by one is invisible to the other.
   . (Join-Path $root 'verdict-lib.ps1')
-  $quotePat = Get-VerdictQuotePattern
   function NormName2([string]$s) { return (Get-VerdictNorm $s) }
   $verdictByKey = @{}   # "<commodity>|<normalised item>" -> latest verdict info
   foreach ($vf in (Get-ChildItem (Join-Path $OutDir 'verify-verdicts-*.json') -EA SilentlyContinue | Sort-Object Name)) {
     try { $vj = ConvertFrom-Json ([IO.File]::ReadAllText($vf.FullName)) } catch { continue }
     foreach ($vc in @($vj.verdicts)) {
       foreach ($ve in @($vc.entries)) {
-        $qm = [regex]::Match([string]$ve.reason, $quotePat)
-        if (-not $qm.Success) { continue }
-        $vkey = ([string]$vc.id) + '|' + (NormName2 $qm.Groups[1].Value)
-        $verdictByKey[$vkey] = @{ keep = ($ve.keep -ne $false); week = [string]$vj.week_of; store = [string]$ve.store; judged = $qm.Groups[1].Value }
+        $vident = Get-VerdictIdentity $ve
+        if (-not $vident) { continue }
+        $vkey = ([string]$vc.id) + '|' + (NormName2 $vident)
+        $verdictByKey[$vkey] = @{ keep = ($ve.keep -ne $false); week = [string]$vj.week_of; store = [string]$ve.store; judged = $vident }
       }
     }
   }

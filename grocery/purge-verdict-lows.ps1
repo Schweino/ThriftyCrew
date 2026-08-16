@@ -243,8 +243,8 @@ function Get-Rejects([string]$suppFile, [string]$outDir) {
     if (-not $vd) { continue }
     foreach ($cv in @($vd.verdicts)) {
       foreach ($e in @($cv.entries)) {
-        $judged = ''
-        if ($e.PSObject.Properties['item'] -and $e.item) { $judged = [string]$e.item } else { $judged = Get-VerdictQuotedItem ([string]$e.reason) }
+        # item-first identity, one definition, in verdict-lib (this was an inline third copy until 2026-08-16)
+        $judged = Get-VerdictIdentity $e
         if (-not $judged) { continue }
         if ($e.keep -eq $false) { AddRej $rej $cv.id $e.store $judged $vd.week_of $e.reason }
         else { $overturns[([string]$cv.id) + '|' + ([string]$e.store) + '|' + (Get-VerdictNorm $judged)] = [string]$e.reason }

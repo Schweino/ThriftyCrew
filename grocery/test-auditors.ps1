@@ -592,6 +592,9 @@ else {
   if ($ms -match 'verdict-lib\.ps1') { Ok 'the -Accept gate sources verdict-lib (one definition of item identity)' }
   else { Bad 'audit-match-soundness no longer sources verdict-lib - the gate and verify-apply can disagree on what "the same item" means' }
 }
+# The END-TO-END half of this section (does the gate block the item the verdict actually JUDGED?) runs as
+# fixture case (m) further down, because NewFxDir/RunPSAt are not defined until line ~621. Search
+# 'verdict identity MUST-FIRE'.
 
 # ---------------------------------------------------------------- N+4. the Walmart batch importer's invariants
 # 2026-07-25: import-walmart-batch.ps1 was a SECOND Walmart writer with its own weaker size math (backed the
@@ -1609,6 +1612,51 @@ else {
   else { Bad ('-Accept baselined an EMPTY sweep (rc=' + $r.rc + ', baseline now ' + (Get-Item (Join-Path $fxMs 'out\audit\match-baseline.json')).Length + ' bytes) - this audit is blinded permanently and the empty map is a TRACKED file') }
 }
 Remove-Item $fxMs -Recurse -Force -ErrorAction SilentlyContinue
+
+# ---- (m) verdict IDENTITY: which item did the verdict judge? (the N+3 behavioural half) ----------------
+# FOUNDING BUG (2026-08-16, queue 2026-08-07-79b768), frozen from the real 2026-08-15 verdict row and never
+# regenerated from the live board: the garlic verdict judged 'Marketside Tandoori Style Garlic Naan Bites,
+# 7.05 oz, 15 Count' while its reason quotes the bare flavour word 'Garlic'. The gate keyed off that quote,
+# so it resolved the drop to Aldi's real Garlic ($1.69 / 3 ct = $0.5633/each) and refused -Accept naming an
+# innocent product, under the verdict's store rather than the row's. verify-apply and purge-verdict-lows had
+# both been reading the entry's own 'item' field since 2026-08-05; only this gate was still re-parsing prose,
+# so the rule had three homes and the third one kept an expired premise.
+# Both directions live here: it must block the NAAN, and it must NOT block Garlic. The legacy no-item-field
+# entry is the third case, because hoisting identity to a field that older files do not have is exactly how a
+# fix like this silently disarms every pre-2026-08-05 verdict.
+$fxVi = NewFxDir 'verdict-identity'
+New-Item -ItemType Directory -Force (Join-Path $fxVi 'out\audit') | Out-Null
+New-Item -ItemType Directory -Force (Join-Path $fxVi 'out\regular') | Out-Null
+foreach ($lf in @('audit-match-soundness.ps1', 'verdict-lib.ps1', 'alert-lib.ps1')) { Copy-Item (Join-Path $root $lf) (Join-Path $fxVi $lf) }
+Set-Content (Join-Path $fxVi 'commodities.json') '[{"id":"garlic","include":["garlic"],"exclude":[]},{"id":"pinto-beans","include":["pinto bean"],"exclude":[]}]' -Encoding UTF8
+Set-Content (Join-Path $fxVi 'out\regular\hyvee-regular-2026-01-01.json') '{"deals":[{"item":"Marketside Tandoori Style Garlic Naan Bites, 7.05 oz, 15 Count"},{"item":"Garlic"},{"item":"Member''s Mark Pinto Beans 12 lbs."}]}' -Encoding UTF8
+Set-Content (Join-Path $fxVi 'out\audit\match-baseline.json') '{"generated":"2026-01-01 00:00","names":{"Garlic":"garlic"},"contested":[]}' -Encoding UTF8
+# The judged item is in the item field; the reason quotes a DIFFERENT real commodity. Frozen verbatim.
+$viVerdict = '{"week_of":"2026-08-15","verdicts":[{"id":"garlic","entries":[{"store":"Walmart","keep":false,' +
+  '"item":"Marketside Tandoori Style Garlic Naan Bites, 7.05 oz, 15 Count",' +
+  '"reason":"NAAN bread bites, not fresh garlic bulbs - ''Garlic'' is a flavour descriptor. Held the cheapest garlic cell at $0.268/each."}]}]}'
+# The pre-2026-08-05 shape: NO item field at all, identity recoverable only from the quote, apostrophe and all.
+$viLegacy = '{"week_of":"2026-07-17","verdicts":[{"id":"pinto-beans","entries":[{"store":"Sam''s Club","keep":false,' +
+  '"reason":"''Member''s Mark Pinto Beans 12 lbs.'' is a 12-lb bag of DRY pinto beans, not the canned commodity."}]}]}'
+Set-Content (Join-Path $fxVi 'out\verify-verdicts-2026-07-17.json') $viLegacy -Encoding UTF8
+Set-Content (Join-Path $fxVi 'out\verify-verdicts-2026-08-15.json') $viVerdict -Encoding UTF8
+Set-Content (Join-Path $fxVi 'compare-deals.ps1') "`$GLOBAL_EXCLUDE = @(`n  'scented candle'`n)`n" -Encoding UTF8
+$r = RunPSAt $fxVi 'audit-match-soundness.ps1' @('-Accept')
+if ($r.rc -eq 2 -and $r.text -match "ACCEPT REFUSED" -and $r.text -match "\[garlic\] 'Marketside Tandoori Style Garlic Naan Bites, 7\.05 oz, 15 Count'") {
+  Ok 'verdict identity MUST-FIRE: the gate blocks the NAAN BITES the verdict actually judged (item field wins over the quoted flavour word)'
+} else { Bad ('the -Accept gate did not block the judged naan item (rc=' + $r.rc + ') - it is not reading the entry item field: ' + $r.text) }
+if ($r.text -notmatch "\[garlic\] 'Garlic'") { Ok "verdict identity: Aldi's real 'Garlic' is NOT blocked by a verdict that only mentioned garlic as a flavour (no false block)" }
+else { Bad "the -Accept gate blocked the innocent 'Garlic' row again - prose re-parsing is back, and a false block is what teaches people to reach for -ForceAccept" }
+if ($r.text -match "\[pinto-beans\] 'Member's Mark Pinto Beans 12 lbs\.'") { Ok 'verdict identity FALLBACK: a pre-2026-08-05 entry with no item field still keys off the quoted name, apostrophe intact' }
+else { Bad 'an entry with no item field no longer blocks - hoisting identity to the item field silently disarmed every legacy verdict file: ' + $r.text }
+# CLEAN TWIN: the live 2026-08-15 situation - the naan is GLOBAL_EXCLUDEd (so the drop was already honoured)
+# and only the real Garlic remains. Nothing outstanding, so -Accept must go through at exit 0.
+Set-Content (Join-Path $fxVi 'compare-deals.ps1') "`$GLOBAL_EXCLUDE = @(`n  'naan'`n)`n" -Encoding UTF8
+Remove-Item (Join-Path $fxVi 'out\verify-verdicts-2026-07-17.json') -Force
+$r = RunPSAt $fxVi 'audit-match-soundness.ps1' @('-Accept')
+if ($r.rc -eq 0 -and $r.text -match 'baseline ACCEPTED' -and $r.text -notmatch 'ACCEPT REFUSED') { Ok 'verdict identity CLEAN TWIN: with the judged naan item unmatched, -Accept passes and the real Garlic is baselined normally' }
+else { Bad ('the clean twin was REFUSED (rc=' + $r.rc + ') - the gate now blocks on a verdict whose product no longer routes there: ' + $r.text) }
+Remove-Item $fxVi -Recurse -Force -ErrorAction SilentlyContinue
 
 # ---- (l) the weekly-run lock (added 2026-07-30) --------------------------------------------------------
 # FOUNDING BUG: on 2026-07-29 the 8:30 daily job ran a full 46m42s cycle (ad-cycle-log 08:31:06 ->

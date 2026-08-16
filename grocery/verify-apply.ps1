@@ -57,11 +57,9 @@ if (Test-Path $SuppressionsFile) {
           $supp[(([string]$se.id) + '|' + ([string]$se.store) + '|' + ([string]$se.item_norm))] = $se } }
   catch { Write-Warning ("verdict-suppressions.json unreadable - persistence is OFF this run: " + $_.Exception.Message) }
 }
-function Get-VerdictIdentity($entry) {
-  # the judged item, best evidence first: an explicit item field, else the name quoted in the reason.
-  if ($entry.PSObject.Properties['item'] -and $entry.item) { return [string]$entry.item }
-  return (Get-VerdictQuotedItem ([string]$entry.reason))
-}
+# Get-VerdictIdentity used to be re-defined right here, AFTER the dot-source above, so this local copy
+# shadowed the lib and the rule had three homes. Hoisted into verdict-lib.ps1 on 2026-08-16 so the -Accept
+# gate shares it (queue 2026-08-07-79b768); the dot-source on line 51 is where it comes from now.
 $suppApplied = 0; $suppAdded = 0; $suppRemoved = 0; $driftSkipped = 0
 
 $verified = New-Object System.Collections.Generic.List[object]

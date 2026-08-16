@@ -42,3 +42,27 @@ function Get-VerdictQuotedItem([string]$reason) {
   if ($m.Success) { return $m.Groups[1].Value }
   return ''
 }
+
+function Get-VerdictIdentity($entry) {
+  <#
+    THE judged item of a verdict entry, best evidence first: the entry's own 'item' field, else the name
+    quoted in its reason, else '' (and '' means SKIP - an unverifiable identity is never guessed at).
+
+    WHY THIS IS HERE AND NOT INLINE (2026-08-16, queue 2026-08-07-79b768): verdict files gained a structured
+    'item' field on 2026-08-05. The item-first refinement was then written inline in verify-apply.ps1 and
+    purge-verdict-lows.ps1 and never hoisted, so the -Accept gate kept identifying its subject by re-parsing
+    rendered prose - and its founding premise ("a verdict names the commodity and store but NOT the item")
+    had silently stopped being true. It cut both ways:
+      * FALSE BLOCK - the 2026-08-15 garlic verdict judged 'Marketside Tandoori Style Garlic Naan Bites,
+        7.05 oz, 15 Count' but its reason quotes the flavour word 'Garlic', so the gate keyed garlic|garlic,
+        resolved that to Aldi's real Garlic ($1.69 / 3 ct = $0.5633/each) and refused -Accept naming an
+        innocent product, under the wrong store. Same shape sat live on bacon and parmesan.
+      * SILENT UNDER-BLOCK - a quote that captures a SIZE ('169 FL OZ') or a reordered name ('red butter
+        lettuce' vs the feed's 'Lettuce Red Butter') matches no feed name, so a reviewed DROP was never
+        enforced and nobody could see it.
+    A shared-lib fix ships nothing while callers keep their own copy, so all three consumers call THIS.
+  #>
+  if ($null -eq $entry) { return '' }
+  if ($entry.PSObject.Properties['item'] -and $entry.item) { return [string]$entry.item }
+  return (Get-VerdictQuotedItem ([string]$entry.reason))
+}
