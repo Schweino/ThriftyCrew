@@ -28,6 +28,38 @@ If you are about to write orchestration code, read section 2.4 first. Recorded b
 session built the whole flow off this file alone, made pricing a per-recipe stage, and threw away the
 cross-recipe term dedup the ingredient queue exists to provide.
 
+## The orchestrator is a repo artifact now, not something you re-derive
+
+`pipeline\hunt-orchestrator.js` is the workflow script. `pipeline\hunt-lib.js` holds its decision logic
+with the reasoning behind each rule, and `pipeline\hunt-lib.selftest.js` runs 41 fixtures with **zero
+agent calls** (run it through the Workflow tool; it costs nothing and takes milliseconds).
+
+**Run the self-test before any run, and extend the artifact rather than rewriting one from this file.**
+Eleven of the twelve defects in the 2026-08-15/16 runs were re-derivation bugs in a throwaway script -
+a null result read as a rejection, retry budgets keyed by batch shape (657 failed calls, ~10M tokens,
+zero progress), `"pass"` compared against `'PASS'` (every wave stalled while QA was passing), a
+comma-joined `-Terms` string parking recipes forever. Each is now a fixture. A rewrite from prose
+re-earns all of them.
+
+## Efficiency scripts the run is expected to use
+
+Measured on run `wf_11382034-6fd` with `pipeline\lane-tokens.ps1`: **hunt and select together were
+75.5% of all tokens** (325M + 242M of 751M). These exist to attack that, and the prompts should call
+them rather than loading files:
+
+- `find-similar.ps1 -Name '<dish>' -Protein <p>` - the ~1KB dedup shortlist. **Sourcers and adjudicators
+  must use this instead of reading `catalog-digest.json`**, which is 111,942 bytes per read.
+- `considered-dishes.ps1 -Query -Name '<dish>' -Protein <p> -Method <m>` - has this dish already been
+  ruled on? Advisory: you may still bring it, but say why it is distinct. `-Record` is the DECIDER's
+  alone.
+- `source-domains.ps1 -Brief` - blocked / unreliable / reliable publishers, learned automatically from
+  fetch outcomes. Replaces the prose lists that used to be duplicated in two agent prompts.
+- `make-saturation.ps1 -Brief` - which (protein x sauce-family) regions the catalog has already filled.
+- `ingredient-resolutions.ps1 -Query -Term '<ingredient>'` - the mapper's memory, including whether a
+  bid is wired.
+- `hunt-run.ps1 -LaneSummary -RunDir <p>` and `lane-tokens.ps1 -TranscriptDir <d> -PerRecipe <n>` - where
+  the tokens actually went.
+
 ## The two rules that decide everything
 
 **Rule B - one store is enough.** An ingredient is fine if ONE of the seven Omaha stores carries it. A
@@ -116,7 +148,7 @@ not in the order they entered it.
 ```
 hunt-run.ps1 -Init -RunDir <p> -Conditions '...' -Stop '...' [-WaveSize 10]
 hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To <state> -By <stage> [-Detail '...']
-hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To pricing -By mapper -Terms 'saffron,achiote paste' -OptionalTerms 'cilantro'
+hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To pricing -By mapper -Terms 'saffron','achiote paste' -OptionalTerms 'cilantro'
 hunt-run.ps1 -Derive -RunDir <p>          after EVERY pricer invocation
 hunt-run.ps1 -Lane -RunDir <p> -LaneName price -Label '...' -Items '<comma-separated>' -By orchestrator
 hunt-run.ps1 -WaveClose -RunDir <p> [-Drain]
@@ -128,6 +160,14 @@ hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To held -By <who> -Detail 'why it c
 Legal both ways between `published` and `held`; `held -> verified` is refused. It exists because on
 2026-08-15 two recipes were set back to draft by hand while their state files still read `published`, and
 the run record asserted two live pages that were not live.
+
+**Pass `-Terms` as separate quoted strings, never as one comma-joined string.** PowerShell binds
+`-Terms 'a,b'` to a `[string[]]` of ONE element - the literal `"a,b"` - not two terms. That composite
+never matches a queue entry, so `-Derive` scores it PENDING forever and the recipe parks permanently and
+silently. On 2026-08-16 `philly-cheesesteak-stuffed-peppers` sat parked with BOTH its ingredients already
+CARRIED, because its two terms had been stored as one joined string. `-Terms 'green bell pepper','shaved
+beef steak'` is right; `-Terms 'green bell pepper,shaved beef steak'` is the bug. Same rule for
+`-OptionalTerms`. Recipes with a single term are unaffected, which is why this hid for a whole run.
 
 **Pending counts are derived, never stored.** A recipe is `priced` when zero blocking ingredients are
 PENDING and zero are NOT-CARRIED, recomputed from `ingredient-queue.ps1`'s own verdicts every time it is
@@ -303,6 +343,15 @@ without the finding, and never edit the lane log to make it pass. The log is app
   An unrecorded run is an unauditable run, and `audit-lane-shape.ps1` treats it as one.
 - Do not deviate from section 2.4 silently. A deliberate deviation is fine and Brad has directed several;
   record it in the run dir BEFORE the run starts, not in the report afterwards.
+- Do not resume a stopped run by cold-restarting it. Use `resumeFromRunId` so completed agents replay
+  from cache, or drain mode (seed the lanes from `-Status`) to clear what is already in flight. Two full
+  restarts on 2026-08-15 re-bought sourcing that was already paid for.
+- Do not treat a null agent result as a verdict. It means the call never completed; retry it, and record
+  the recipe STUCK - never rejected - if it never resolves. Nobody ruled on it.
+- Do not believe a repair agent that says it changed files. Check the mtimes before paying for the
+  re-audit; one claimed a repair it never made and cost a whole audit cycle to catch.
+- Do not let a NO-GO strand a wave. Blocking slugs leave it (plan S8); the audit-clean remainder still
+  publishes. Ten recipes sat in `waved` with no exit because this was never implemented.
 - Do not write board cells. If an ingredient deserves a permanent cell, say so; the capture pipeline adds it.
 - Do not weaken a guard to get a recipe through. A recipe that needs a gate turned off is a rejected recipe.
 - Do not add a URL to the P8 allowlist to unblock a publish. The allowlist is "endpoints this estate

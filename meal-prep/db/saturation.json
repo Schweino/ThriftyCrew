@@ -1,0 +1,399 @@
+﻿{
+    "_doc":  "Crowding per (protein x sauce-family), derived from the catalog digest. Fed to sourcers so they stop hunting regions the catalog has already filled - the 2026-08-15 run fetched and adjudicated five creamy pork-chop skillets and four creamy chicken skillets before rejecting them all.",
+    "_rule":  "GUIDANCE, not a filter. A dish from a saturated region is allowed if the sourcer names the distinguishing axis.",
+    "generated":  "2026-08-16T07:33:10",
+    "recipe_count":  544,
+    "crowded_at":  8,
+    "regions":  [
+                    {
+                        "protein":  "beef",
+                        "family":  "plain",
+                        "count":  103,
+                        "examples":  [
+                                         "american-goulash-pasta",
+                                         "apple-cider-beef-pot-roast-bowls",
+                                         "arroz-con-carne-molida",
+                                         "baked-ziti-with-ground-beef",
+                                         "balsamic-beef-pot-roast-bowls"
+                                     ]
+                    },
+                    {
+                        "protein":  "turkey",
+                        "family":  "plain",
+                        "count":  102,
+                        "examples":  [
+                                         "baked-turkey-kibbeh-casserole",
+                                         "baked-ziti-with-ground-turkey-and-ricotta",
+                                         "bigos-polish-hunters-stew",
+                                         "buffalo-turkey-potato-bowls",
+                                         "cantonese-turkey-rice-bowls"
+                                     ]
+                    },
+                    {
+                        "protein":  "chicken",
+                        "family":  "plain",
+                        "count":  99,
+                        "examples":  [
+                                         "arroz-con-pollo-bowls",
+                                         "brazilian-galinhada",
+                                         "buffalo-chicken-burrito",
+                                         "buffalo-chicken-pasta-bake",
+                                         "chicken-40-cloves-garlic"
+                                     ]
+                    },
+                    {
+                        "protein":  "pork",
+                        "family":  "plain",
+                        "count":  91,
+                        "examples":  [
+                                         "ants-climbing-a-tree-pork-noodles",
+                                         "asado-de-puerco-red-chile-pork-bowls",
+                                         "asian-ground-pork-meatball-rice-bowls",
+                                         "baked-sausage-egg-breakfast-hash",
+                                         "bangers-and-mash-onion-gravy"
+                                     ]
+                    },
+                    {
+                        "protein":  "chicken",
+                        "family":  "curry",
+                        "count":  15,
+                        "examples":  [
+                                         "cape-malay-chicken-curry",
+                                         "chicken-katsu-curry-rice-bowls",
+                                         "chicken-madras-curry",
+                                         "chicken-tikka-masala-burrito",
+                                         "chicken-vindaloo"
+                                     ]
+                    },
+                    {
+                        "protein":  "beef",
+                        "family":  "spice",
+                        "count":  12,
+                        "examples":  [
+                                         "albondigas-en-chipotle-rice-bowls",
+                                         "beef-burrito-tex-mex",
+                                         "carne-guisada-beef-potato-stew",
+                                         "cheesy-taco-spaghetti",
+                                         "chipotle-steak-burrito"
+                                     ]
+                    },
+                    {
+                        "protein":  "turkey",
+                        "family":  "cream",
+                        "count":  9,
+                        "examples":  [
+                                         "creamy-ground-turkey-and-chorizo-pasta",
+                                         "creamy-ground-turkey-shell-pasta",
+                                         "creamy-ground-turkey-tortellini-skillet",
+                                         "creamy-kielbasa-potato-soup",
+                                         "creamy-tomato-ground-turkey-gnocchi"
+                                     ]
+                    },
+                    {
+                        "protein":  "chicken",
+                        "family":  "spice",
+                        "count":  9,
+                        "examples":  [
+                                         "cajun-chicken-and-sausage-jambalaya",
+                                         "cajun-chicken-etouffee-rice-bowls",
+                                         "fajita-chicken-rice-bowl",
+                                         "filipino-adobo-chicken-burrito",
+                                         "harissa-chicken-rice-bowls"
+                                     ]
+                    },
+                    {
+                        "protein":  "turkey",
+                        "family":  "tomato",
+                        "count":  7,
+                        "examples":  [
+                                         "ground-turkey-enchilada-skillet-bowls",
+                                         "slow-cooker-turkey-chili-bowls",
+                                         "turkey-bolognese-penne",
+                                         "turkey-chili-mac",
+                                         "turkey-chili-verde-white-beans"
+                                     ]
+                    },
+                    {
+                        "protein":  "beef",
+                        "family":  "curry",
+                        "count":  6,
+                        "examples":  [
+                                         "beef-keema-curry-rice-bowls",
+                                         "caribbean-curry-beef-potatoes",
+                                         "indian-keema-matar-bowls",
+                                         "japanese-ground-beef-curry",
+                                         "massaman-beef-curry-potatoes"
+                                     ]
+                    },
+                    {
+                        "protein":  "turkey",
+                        "family":  "spice",
+                        "count":  6,
+                        "examples":  [
+                                         "chipotle-turkey-burrito",
+                                         "turkey-cajun-dirty-rice-skillet",
+                                         "turkey-fajita-rice-bowls",
+                                         "turkey-taco-casserole",
+                                         "turkey-taco-rice-skillet"
+                                     ]
+                    },
+                    {
+                        "protein":  "pork",
+                        "family":  "cream",
+                        "count":  6,
+                        "examples":  [
+                                         "creamy-mushroom-pork-chops-over-mashed-potatoes",
+                                         "creamy-pork-stew-potatoes-carrots",
+                                         "creamy-pork-tenderloin-tagliatelle",
+                                         "marry-me-pork-chops-over-pasta",
+                                         "pasta-alla-norcina-creamy-sausage-pasta"
+                                     ]
+                    },
+                    {
+                        "protein":  "turkey",
+                        "family":  "curry",
+                        "count":  6,
+                        "examples":  [
+                                         "curry-ground-turkey-bowls",
+                                         "indian-turkey-kofta-meatball-curry",
+                                         "oneskillet-ground-turkey-thai-curry-with-rice",
+                                         "thai-coconut-curry-turkey-meatballs",
+                                         "turkey-keema-curry-with-peas"
+                                     ]
+                    },
+                    {
+                        "protein":  "beef",
+                        "family":  "tomato",
+                        "count":  5,
+                        "examples":  [
+                                         "beef-chili-mac",
+                                         "beef-chili-rice-bowls",
+                                         "beef-enchilada-skillet-bowls",
+                                         "cantonese-beef-tomato-egg-rice",
+                                         "chili-cornbread-casserole"
+                                     ]
+                    },
+                    {
+                        "protein":  "beef",
+                        "family":  "soy",
+                        "count":  5,
+                        "examples":  [
+                                         "beef-bulgogi-rice-bowls",
+                                         "ground-beef-teriyaki-bowls",
+                                         "japanese-soboro-don-beef-egg-rice-bowls",
+                                         "korean-beef-japchae-noodle-bowls",
+                                         "korean-bulgogi-beef-burrito"
+                                     ]
+                    },
+                    {
+                        "protein":  "pork",
+                        "family":  "bbq",
+                        "count":  5,
+                        "examples":  [
+                                         "bbq-pulled-pork-stuffed-sweet-potatoes",
+                                         "slow-cooker-country-style-pork-ribs-rice",
+                                         "slow-cooker-honey-garlic-pork-bowls",
+                                         "slow-cooker-pulled-pork-bowl",
+                                         "slow-cooker-sweet-and-sour-pork-bowls"
+                                     ]
+                    },
+                    {
+                        "protein":  "chicken",
+                        "family":  "cream",
+                        "count":  5,
+                        "examples":  [
+                                         "creamy-cajun-chicken-penne-skillet-bowls",
+                                         "creamy-chicken-and-gnocchi-skillet",
+                                         "creamy-chicken-fajita-burrito",
+                                         "slow-cooker-creamy-chicken-mushroom-bowls",
+                                         "slow-cooker-tuscan-chicken-pasta"
+                                     ]
+                    },
+                    {
+                        "protein":  "chicken",
+                        "family":  "soy",
+                        "count":  5,
+                        "examples":  [
+                                         "andong-jjimdak-braised-chicken",
+                                         "chicken-bulgogi-rice-bowls",
+                                         "chicken-lo-mein-noodle-bowls",
+                                         "slow-cooker-honey-sesame-chicken-bowls",
+                                         "teriyaki-chicken-bowl"
+                                     ]
+                    },
+                    {
+                        "protein":  "pork",
+                        "family":  "tomato",
+                        "count":  4,
+                        "examples":  [
+                                         "chipotle-sweet-potato-pork-chili",
+                                         "pulled-pork-enchilada-bake",
+                                         "slow-cooker-pork-green-chili-bowls",
+                                         "slow-cooker-pork-tinga-bowls"
+                                     ]
+                    },
+                    {
+                        "protein":  "chicken",
+                        "family":  "tomato",
+                        "count":  4,
+                        "examples":  [
+                                         "chicken-enchilada-rice-bowls",
+                                         "chili-lime-chicken-burrito",
+                                         "slow-cooker-chicken-tinga-bowls",
+                                         "slow-cooker-white-chicken-chili-bowls"
+                                     ]
+                    },
+                    {
+                        "protein":  "turkey",
+                        "family":  "cheese",
+                        "count":  4,
+                        "examples":  [
+                                         "ground-turkey-broccoli-cheddar-rice-skillet",
+                                         "kielbasa-mac-and-cheese-bake",
+                                         "pizza-pasta-bowls",
+                                         "turkey-mac-and-cheese-bake"
+                                     ]
+                    },
+                    {
+                        "protein":  "pork",
+                        "family":  "spice",
+                        "count":  4,
+                        "examples":  [
+                                         "al-pastor-pork-taco-bowl-with-cilantro-lime-rice",
+                                         "mexican-chipotle-pork-and-beans",
+                                         "panseared-pork-chops-with-cajun-dirty-rice",
+                                         "slow-cooker-filipino-pork-adobo-bowls"
+                                     ]
+                    },
+                    {
+                        "protein":  "turkey",
+                        "family":  "soy",
+                        "count":  4,
+                        "examples":  [
+                                         "ground-turkey-lo-mein",
+                                         "ground-turkey-stir-fry-bowls",
+                                         "korean-turkey-japchae",
+                                         "turkey-egg-roll-in-a-bowl-over-rice"
+                                     ]
+                    },
+                    {
+                        "protein":  "beef",
+                        "family":  "cheese",
+                        "count":  4,
+                        "examples":  [
+                                         "beef-potato-au-gratin-casserole",
+                                         "cheeseburger-pasta",
+                                         "cheeseburger-rice-bowls",
+                                         "philly-cheesesteak-skillet-bowls"
+                                     ]
+                    },
+                    {
+                        "protein":  "chicken",
+                        "family":  "bbq",
+                        "count":  4,
+                        "examples":  [
+                                         "baked-sweet-and-sour-chicken-rice-bowls",
+                                         "bbq-chicken-burrito",
+                                         "bbq-chicken-rice-bowls",
+                                         "slow-cooker-bbq-pulled-chicken-bowls"
+                                     ]
+                    },
+                    {
+                        "protein":  "chicken",
+                        "family":  "herb",
+                        "count":  3,
+                        "examples":  [
+                                         "chicken-bacon-ranch-burrito",
+                                         "ranch-chicken-burrito",
+                                         "slow-cooker-king-ranch-chicken-bowls"
+                                     ]
+                    },
+                    {
+                        "protein":  "pork",
+                        "family":  "soy",
+                        "count":  3,
+                        "examples":  [
+                                         "pork-egg-roll-in-a-bowl",
+                                         "slow-cooker-brown-sugar-sesame-pork-bowls",
+                                         "slow-cooker-teriyaki-pork-bowls"
+                                     ]
+                    },
+                    {
+                        "protein":  "beef",
+                        "family":  "bbq",
+                        "count":  2,
+                        "examples":  [
+                                         "honey-garlic-steak-bites-potatoes",
+                                         "slow-cooker-bbq-shredded-beef-bowls"
+                                     ]
+                    },
+                    {
+                        "protein":  "pork",
+                        "family":  "cheese",
+                        "count":  2,
+                        "examples":  [
+                                         "ham-and-potato-cheddar-casserole",
+                                         "pulled-pork-baked-mac-and-cheese"
+                                     ]
+                    },
+                    {
+                        "protein":  "chicken",
+                        "family":  "cheese",
+                        "count":  2,
+                        "examples":  [
+                                         "chicken-divan-broccoli-bake",
+                                         "hunters-chicken-bbq-bacon-bake"
+                                     ]
+                    },
+                    {
+                        "protein":  "turkey",
+                        "family":  "herb",
+                        "count":  2,
+                        "examples":  [
+                                         "turkey-huevos-rancheros-rice-bowls",
+                                         "turkey-pesto-pasta-kale"
+                                     ]
+                    },
+                    {
+                        "protein":  "pork",
+                        "family":  "curry",
+                        "count":  2,
+                        "examples":  [
+                                         "goan-pork-vindaloo-rice-bowls",
+                                         "japanese-pork-katsu-curry-rice"
+                                     ]
+                    },
+                    {
+                        "protein":  "beef",
+                        "family":  "wine",
+                        "count":  1,
+                        "examples":  [
+                                         "beef-bourguignon-bowls"
+                                     ]
+                    },
+                    {
+                        "protein":  "chicken",
+                        "family":  "wine",
+                        "count":  1,
+                        "examples":  [
+                                         "coq-au-vin"
+                                     ]
+                    },
+                    {
+                        "protein":  "turkey",
+                        "family":  "bbq",
+                        "count":  1,
+                        "examples":  [
+                                         "sheet-pan-bbq-turkey-meatballs-over-rice"
+                                     ]
+                    },
+                    {
+                        "protein":  "pork",
+                        "family":  "herb",
+                        "count":  1,
+                        "examples":  [
+                                         "slow-cooker-ranch-pork-potato-bowls"
+                                     ]
+                    }
+                ]
+}

@@ -1,0 +1,818 @@
+﻿{
+    "_doc":  "Dishes this estate has already ruled on. Read by sourcers BEFORE fetching and by adjudicators as prior art. Written by the DECIDER only - it is already the single writer of selection state. Advisory: a sourcer may return a previously-rejected dish with a stated reason.",
+    "_key":  "protein|method|sauce-family - identity, not slug, because slugs vary by publisher and the same dinner recurs under many names.",
+    "updated":  "2026-08-16T07:30:14",
+    "count":  54,
+    "dishes":  [
+                   {
+                       "key":  "any|casserole|cheese",
+                       "slug":  "bacon-cheeseburger-egg-casserole",
+                       "name":  "Bacon Cheeseburger Egg Casserole",
+                       "protein":  "any",
+                       "method":  "casserole",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same cheeseburger-beef dinner as accepted keto-cheeseburger-skillet; egg-custard bake vs skillet is a format re-plating, not a new dish. Second American low-carb cheeseburger beef entry in one run; catalog already American-heavy.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "beef|skillet|spice",
+                       "slug":  "beef-cauliflower-taco-skillet",
+                       "name":  "Beef Cauliflower Taco Skillet",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Near-dupe of catalog loaded-beef-taco-skillet-bowls: shares protein (ground beef), Tex-Mex taco flavor family, and skillet method; cauliflower-rice swap is the only structural change. Catalog Tex-Mex beef lane is already dense (loaded-beef-taco-skillet-bowls, tex-mex-beef-rice-skillet-bowls, beef-enchilada-skillet-bowls) so it deepens not widens; plus 34g carbs sits ~1g under the ceiling and a label-accurate recompute (15oz black beans) risks breaching 35g. Cut - run does not need padding.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "beef|any|soy",
+                       "slug":  "beef-egg-roll-in-a-bowl",
+                       "name":  "Beef Egg Roll In A Bowl",
+                       "protein":  "beef",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Third protein-swap of an existing catalog dish: pork-egg-roll-in-a-bowl and turkey-egg-roll-in-a-bowl-over-rice both live. Same identity (ground meat + cabbage + soy/hoisin/sesame/ginger stir-fry); beef adds no new dinner.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "sausage|bake|cheese",
+                       "slug":  "broccoli-smoked-sausage-cheddar-bake",
+                       "name":  "Broccoli Smoked Sausage Cheddar Bake",
+                       "protein":  "sausage",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Dupe of accepted baked-cauliflower-mac-smoked-sausage: same smoked-sausage + cruciferous-floret + cheddar/cream low-carb oven bake (floret swap only). Also collides with accepted sheet-pan-smoked-sausage-broccoli-cheddar and keto-turkey-broccoli-cheddar-casserole.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "sausage|bake|cream",
+                       "slug":  "broccoli-smoked-sausage-cream-cheese-bake",
+                       "name":  "Broccoli Smoked Sausage Cream Cheese Bake",
+                       "protein":  "sausage",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Pool twin of kept sheet-pan-smoked-sausage-broccoli-cheddar (same protein+broccoli+cheddar, method differs) AND cross-protein twin of accepted keto-turkey-broccoli-cheddar-casserole (same rice-free creamy broccoli-cheddar oven bake); weaker at 20g protein. Ship only the dry sheet-pan.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "chicken|casserole|plain",
+                       "slug":  "buffalo-chicken-cauliflower-casserole",
+                       "name":  "Buffalo Chicken Cauliflower Casserole",
+                       "protein":  "chicken",
+                       "method":  "casserole",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Near-dupe of accepted chicken-bacon-ranch-cauliflower-bake: chicken+cauliflower+creamy-cheese-bacon bake, only sauce differs (buffalo vs ranch)",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "chicken|any|curry",
+                       "slug":  "burmese-chicken-dal-curry",
+                       "name":  "Burmese Chicken Dal Curry",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-not-carried",
+                       "reason":  "not carried in Omaha: yellow split peas",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "pork|any|cheese",
+                       "slug":  "cheese-smothered-pork-chops",
+                       "name":  "Cheese Smothered Pork Chops",
+                       "protein":  "pork",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Pool dupe of accepted creamy-garlic-herb-wine-pork-chops: same protein (pork chops), same starch (none/low-carb), same smothered/creamy method - 3 of 4 identity axes; only sauce sub-type differs (mayo-cheddar bake vs garlic-herb-wine cream). Generic American, widens nothing; keep the stronger wine plate, not two smothered pork chops.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "chicken|any|wine",
+                       "slug":  "chicken-chasseur",
+                       "name":  "Chicken Chasseur",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-not-carried",
+                       "reason":  "not carried in Omaha: fresh tarragon",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "chicken|any|tomato",
+                       "slug":  "chicken-tinga-shredded-chipotle",
+                       "name":  "Chicken Tinga Shredded Chipotle",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Catalog dupe of slow-cooker-chicken-tinga-bowls: literally chicken tinga, chipotle-tomato-onion braised shredded chicken, same dish/name/sauce/method.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "any|any|herb",
+                       "slug":  "chimichurri-flank-steak",
+                       "name":  "Chimichurri Flank Steak",
+                       "protein":  "any",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Dupe of accepted chimichurri-steak-sheet-pan (same Argentine chimichurri whole-muscle beef); flank vs skirt/sheet-pan is not a distinguishing plate; adjudicator concurred",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "chicken|braised|wine",
+                       "slug":  "coq-au-vin-braised-chicken",
+                       "name":  "Coq Au Vin Braised Chicken",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Catalog dup of coq-au-vin: same chicken-thigh + bacon + mushroom + carrot red-wine braise, near-identical name.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "pork|any|cream",
+                       "slug":  "creamy-asiago-pork-tenderloin-medallions",
+                       "name":  "Creamy Asiago Pork Tenderloin Medallions",
+                       "protein":  "pork",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Cross-lane dupe of accepted creamy-tuscan-chicken-skillet: same Tuscan/Marry-Me cream + sun-dried tomato + spinach no-starch skillet; only protein (pork vs chicken) and asiago-vs-parmesan differ (3/4 match).",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "chicken|skillet|cream",
+                       "slug":  "creamy-garlic-bacon-spinach-chicken-skillet",
+                       "name":  "Creamy Garlic Bacon Spinach Chicken Skillet",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Dupe of accepted creamy-tuscan-chicken-skillet: same one-skillet creamy garlic chicken + spinach, no starch (4/4 protein/sauce/starch/method); bacon-vs-sundried-tomato is garnish-level. Tuscan is stronger (published macros).",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "chicken|skillet|cream",
+                       "slug":  "creamy-garlic-chicken-skillet",
+                       "name":  "Creamy Garlic Chicken Skillet",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Dupe of accepted creamy-tuscan-chicken-skillet: same seared chicken-breast + garlic cream skillet, no starch. Tuscan version (fully mapped) holds the slot.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "pork|any|cream",
+                       "slug":  "creamy-garlic-herb-pork-chops",
+                       "name":  "Creamy Garlic Herb Pork Chops",
+                       "protein":  "pork",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Cross-lane dup of accepted creamy-garlic-herb-wine-pork-chops: identical source URL, servings, macros and ingredient list - same recipe scraped twice. Adjudicator KEEP overruled (it never saw the sibling accepted from another lane).",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "chicken|skillet|cream",
+                       "slug":  "creamy-garlic-parmesan-mushroom-chicken-skillet",
+                       "name":  "Creamy Garlic Parmesan Mushroom Chicken Skillet",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Dupe of accepted creamy-tuscan-chicken-skillet family: seared chicken breast in garlic-parmesan cream skillet, no starch; mushroom/onion adds no distinct plate. Re-anchored from adjudicator ref creamy-garlic-parmesan-chicken-skillet (not in accepted-slugs) to the accepted tuscan skillet.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "pork|skillet|cream",
+                       "slug":  "creamy-mushroom-spinach-pork-chops-skillet",
+                       "name":  "Creamy Mushroom Spinach Pork Chops Skillet",
+                       "protein":  "pork",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Dupe of catalog creamy-mushroom-pork-chops-over-mashed-potatoes: same white heavy-cream mushroom pork chop, seared+simmered skillet; dropping mash + adding spinach are side tweaks not a new dinner.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "pork|skillet|cream",
+                       "slug":  "creamy-parmesan-garlic-pork-chops-skillet",
+                       "name":  "Creamy Parmesan Garlic Pork Chops Skillet",
+                       "protein":  "pork",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Within-pool dupe of accepted creamy-garlic-herb-wine-pork-chops: same pork-chop / garlic-parmesan cream / skillet / no-starch dinner; the wine-herb sibling won on distinctness + macros.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "chicken|skillet|cream",
+                       "slug":  "creamy-pesto-chicken-pepper-skillet",
+                       "name":  "Creamy Pesto Chicken Pepper Skillet",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Dupe of accepted creamy-tuscan-chicken-skillet: both creamy sun-dried-tomato chicken-breast skillets, no starch (4/4 but pesto+peppers vs spinach). Adjudicator recommended dupe; catalog already Italian-American-heavy.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "pork|any|cream",
+                       "slug":  "creamy-pork-chops-pancetta-thyme-gravy",
+                       "name":  "Creamy Pork Chops Pancetta Thyme Gravy",
+                       "protein":  "pork",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Overrule adjudicator KEEP: run-dupe of accepted creamy-garlic-herb-wine-pork-chops (creamy skillet pork chops, no starch, differ only in aromatic); pork/creamy-skillet slice saturated, cuisine not widened",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "pork|skillet|cream",
+                       "slug":  "creamy-smothered-onion-pork-chops-skillet",
+                       "name":  "Creamy Smothered Onion Pork Chops Skillet",
+                       "protein":  "pork",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Dupe of catalog southern-smothered-pork-chops-and-rice: seared pork chops in onion-cream-broth smother; only the rice starch is dropped",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "pork|any|cream",
+                       "slug":  "creamy-spinach-mushroom-pork-chops",
+                       "name":  "Creamy Spinach Mushroom Pork Chops",
+                       "protein":  "pork",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Low-carb spinach re-plating of catalog creamy-mushroom-pork-chops (identical mushroom-cream sauce, minus starch, plus spinach) - same re-plating pattern the barbacoa was cut for; also a second creamy pan-sauce pork chop after accepted creamy-garlic-herb-wine-pork-chops. American, no cuisine widening.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "pork|any|cream",
+                       "slug":  "creamy-tuscan-pork-chops",
+                       "name":  "Creamy Tuscan Pork Chops",
+                       "protein":  "pork",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Catalog dup of marry-me-pork-chops-over-pasta: same sun-dried-tomato parmesan cream chop (Marry Me / Creamy Tuscan are the canonical same-dish pair); pork+sauce+skillet all match.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "any|any|cheese",
+                       "slug":  "crustless-bacon-gruyere-quiche",
+                       "name":  "Crustless Bacon Gruyere Quiche",
+                       "protein":  "any",
+                       "method":  "any",
+                       "verdict":  "rejected-qa",
+                       "reason":  "macro gate: 369 cal / 2g carbs per serving",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "any|any|cheese",
+                       "slug":  "crustless-ham-gruyere-quiche",
+                       "name":  "Crustless Ham Gruyere Quiche",
+                       "protein":  "any",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Near-duplicate of accepted crustless-bacon-gruyere-quiche: same crustless gruyere egg-cream custard oven bake, only cured-pork cut differs (ham vs bacon)",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "pork|any|cream",
+                       "slug":  "dijon-cream-pork-tenderloin-medallions",
+                       "name":  "Dijon Cream Pork Tenderloin Medallions",
+                       "protein":  "pork",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Dupe of accepted creamy-garlic-herb-wine-pork-chops: both low-carb creamy white-wine seared-pork skillets, no starch (3/4 axes). Dijon-vs-garlic-herb is too thin to ship a second creamy-wine pork plate; pork already well-represented.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "chicken|stew|plain",
+                       "slug":  "doro-wat-ethiopian-chicken-stew",
+                       "name":  "Doro Wat Ethiopian Chicken Stew",
+                       "protein":  "chicken",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Catalog dup of ethiopian-doro-wat-chicken-bowls: same Doro Wat (berbere, browned onions, chicken thighs, tomato paste, eggs, lemon).",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "pork|skillet|plain",
+                       "slug":  "greek-pork-chops-zucchini-feta-skillet",
+                       "name":  "Greek Pork Chops Zucchini Feta Skillet",
+                       "protein":  "pork",
+                       "method":  "skillet",
+                       "verdict":  "rejected-unreadable",
+                       "reason":  "HTTP 404 at source URL; site search on themediterraneandish.com finds no matching recipe - page does not exist",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "turkey|skillet|plain",
+                       "slug":  "italian-ground-turkey-white-bean-skillet",
+                       "name":  "Italian Ground Turkey White Bean Skillet",
+                       "protein":  "turkey",
+                       "method":  "skillet",
+                       "verdict":  "rejected-qa",
+                       "reason":  "macro gate: 376 cal / 24g carbs per serving",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "sausage|skillet|plain",
+                       "slug":  "italian-sausage-and-peppers-skillet",
+                       "name":  "Italian Sausage And Peppers Skillet",
+                       "protein":  "sausage",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Pool dupe of accepted italian-sausage-peppers-onions-skillet: identical Italian sausage + peppers + onions no-starch skillet (4 of 4 axes); weaker numbers (476 cal/12g vs 420/8g). Keep the twin.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "sausage|skillet|plain",
+                       "slug":  "italian-sausage-peppers-onions-skillet",
+                       "name":  "Italian Sausage Peppers Onions Skillet",
+                       "protein":  "sausage",
+                       "method":  "skillet",
+                       "verdict":  "rejected-qa",
+                       "reason":  "macro gate: 382 cal / 11g carbs per serving",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "jalapeno-popper-chicken-cauliflower-bake",
+                       "name":  "Jalapeno Popper Chicken Cauliflower Bake",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Near-dupe of accepted chicken-bacon-ranch-cauliflower-bake: same chicken + cauliflower + cream-cheese/cheddar/bacon oven bake; only the jalapeno-popper vs ranch accent differs (3-4 of 4 axes).",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "beef|stew|plain",
+                       "slug":  "jamaican-brown-stew-beef",
+                       "name":  "Jamaican Brown Stew Beef",
+                       "protein":  "beef",
+                       "method":  "stew",
+                       "verdict":  "rejected-unreadable",
+                       "reason":  "Source URL 404s; no matching recipe found on thespruceeats.com via site search or external search",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "any|casserole|cheese",
+                       "slug":  "keto-crustless-pizza-casserole",
+                       "name":  "Keto Crustless Pizza Casserole",
+                       "protein":  "any",
+                       "method":  "casserole",
+                       "verdict":  "rejected-qa",
+                       "reason":  "macro gate: 391 cal / 9g carbs per serving",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "any|skillet|plain",
+                       "slug":  "keto-salisbury-steak-mushroom-gravy-skillet",
+                       "name":  "Keto Salisbury Steak Mushroom Gravy Skillet",
+                       "protein":  "any",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Dupe of live catalog salisbury-steak-potato-bowls: same ground-beef Salisbury patties in mushroom-onion gravy; keto framing only drops the potato side and swaps binder. Not a distinct plate.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "turkey|any|plain",
+                       "slug":  "keto-turkey-meatloaf",
+                       "name":  "Keto Turkey Meatloaf",
+                       "protein":  "turkey",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Upholding adjudicator DUPE of catalog turkey-meatloaf-with-mashed-potatoes (verified present): same protein, ketchup-glazed American meatloaf, oven bake, baked-loaf form - 4/4 identity. Keto binder swap + dropping the starchy side does not change the entree. Borderline low-carb-variant angle noted for audit; run has turkey coverage, not promoting.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "beef|skillet|plain",
+                       "slug":  "low-carb-cheesy-beef-broccoli-skillet",
+                       "name":  "Low Carb Cheesy Beef Broccoli Skillet",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Cross-lane same-dinner twin of accepted keto-turkey-broccoli-cheddar-casserole (ground protein + broccoli + cheddar cream sauce, no starch); beef lane already runaway",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "low-carb-chicken-bacon-broccoli-cauliflower-bake",
+                       "name":  "Low Carb Chicken Bacon Broccoli Cauliflower Bake",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "CROSS-LANE dupe of chicken-bacon-ranch-cauliflower-bake (accepted earlier THIS run - invisible to the adjudicator, whose accepted_slugs_checked listed only creamy-tuscan). Both are low-carb crustless CHICKEN + BACON + CAULIFLOWER + CHEDDAR oven bakes with no starch: same protein, same method, same base, same bacon+cheddar signature - four of four structural axes. Difference is only binder (egg custard vs cream/cream-cheese), added broccoli, and garlic-mustard vs ranch seasoning - a seasoning/veg nuance, not a distinct plate. The ranch bake was accepted first and its own selection note pre-flagged this exact slug as the near-duplicate to reject. Cut.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "beef|any|soy",
+                       "slug":  "low-carb-korean-beef-bulgogi",
+                       "name":  "Low Carb Korean Beef Bulgogi",
+                       "protein":  "beef",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Dupe of catalog beef-bulgogi-rice-bowls: same sliced-steak protein, same soy/sesame/sweet-fruit bulgogi marinade, same sear method; only the rice starch is dropped (rubric: same protein+sauce minus starch = one dish). Korean already covered by accepted slow-cooker-korean-galbi-jjim-short-ribs.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "beef|skillet|plain",
+                       "slug":  "low-carb-unstuffed-cabbage-beef-skillet",
+                       "name":  "Low Carb Unstuffed Cabbage Beef Skillet",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Dupe of catalog unstuffed-cabbage-roll-bowls: same ground-beef + cabbage + tomato deconstructed cabbage-roll skillet; dropping rice + adding cheddar-jack are formulation tweaks. Also pool-dupe of beef-unstuffed-cabbage-skillet.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "beef|braised|plain",
+                       "slug":  "sauerbraten-german-braised-beef",
+                       "name":  "Sauerbraten German Braised Beef",
+                       "protein":  "beef",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Catalog dupe of slow-cooker-sauerbraten-bowls: same German sweet-sour red-wine-vinegar/gingersnap braised beef chuck.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "sausage|bake|cheese",
+                       "slug":  "sausage-cottage-cheese-egg-bake",
+                       "name":  "Sausage Cottage Cheese Egg Bake",
+                       "protein":  "sausage",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "OVERRULE of adjudicator KEEP. Cross-lane borderline-dupe of accepted crustless-bacon-gruyere-quiche: both crustless oven-baked pork + egg + cheese no-starch bakes (3-4 of 4 axes; adjudicator could not see that pork acceptance). Also pork was already tied for most-represented protein (4 of 13) with more pork candidates streaming in - not padding a second pork egg bake.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "sausage|any|cheese",
+                       "slug":  "sausage-spinach-crustless-quiche",
+                       "name":  "Sausage Spinach Crustless Quiche",
+                       "protein":  "sausage",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Pool dupe of sausage-cottage-cheese-egg-bake and cross-lane dupe of accepted crustless-bacon-gruyere-quiche: crustless pork + egg + cheese no-starch bake, fat-forward 18g protein (weakest of the three). Only one crustless pork egg bake survives this run (the accepted gruyere quiche).",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "any|any|plain",
+                       "slug":  "senegalese-poulet-yassa",
+                       "name":  "Senegalese Poulet Yassa",
+                       "protein":  "any",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Catalog dupe of senegalese-chicken-yassa: poulet yassa IS chicken yassa; identical lemon-onion-dijon braised chicken thigh.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "beef|any|spice",
+                       "slug":  "slow-cooker-beef-barbacoa",
+                       "name":  "Slow Cooker Beef Barbacoa",
+                       "protein":  "beef",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Duplicates catalog slow-cooker-barbacoa-bowl: identical chuck-roast chipotle-adobo/lime/ACV slow-cooker barbacoa braise, 3-of-4 axes match; dropping the rice/beans is a low-carb re-plating, not a distinct dinner. Agrees with adjudicator DUPE verdict.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "beef|any|plain",
+                       "slug":  "slow-cooker-beef-short-ribs",
+                       "name":  "Slow Cooker Beef Short Ribs",
+                       "protein":  "beef",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Pool-dupe of the braised-beef-in-dark-sauce slice; defer to French slow-cooker-red-wine-beef-cheeks (scarcer cuisine) per adjudicator recommendation; American braise over-indexed.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "pork|any|plain",
+                       "slug":  "slow-cooker-cuban-mojo-pork",
+                       "name":  "Slow Cooker Cuban Mojo Pork",
+                       "protein":  "pork",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Catalog dupe of slow-cooker-cuban-mojo-pork-bowls: same Cuban garlic-citrus mojo slow-cooker pork.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "beef|any|wine",
+                       "slug":  "slow-cooker-red-wine-beef-cheeks",
+                       "name":  "Slow Cooker Red Wine Beef Cheeks",
+                       "protein":  "beef",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Near-duplicate of catalog beef-bourguignon-bowls: same dinner (beef braised in red wine, slow method); only the cut (cheeks vs chuck) differs. Adjudicator missed beef-bourguignon-bowls. French red-wine-braise niche already filled.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "turkey|skillet|plain",
+                       "slug":  "southwest-ground-turkey-cauliflower-rice-skillet",
+                       "name":  "Southwest Ground Turkey Cauliflower Rice Skillet",
+                       "protein":  "turkey",
+                       "method":  "skillet",
+                       "verdict":  "rejected-qa",
+                       "reason":  "macro gate: 360 cal / 9g carbs per serving",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "spinach-artichoke-chicken-bake",
+                       "name":  "Spinach Artichoke Chicken Bake",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Cross-lane dupe of accepted spinach-artichoke-chicken-casserole (adjudicator did not check the accepted list). Same protein/flavor-family/method/low-carb 4-of-4; source page is literally the same spinach-artichoke-chicken-casserole recipe.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "beef|any|plain",
+                       "slug":  "thai-basil-ground-beef-pad-kra-pao",
+                       "name":  "Thai Basil Ground Beef Pad Kra Pao",
+                       "protein":  "beef",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Catalog already carries pad kra pao in pork (thai-basil-pork-pad-kra-pao-bowls) and chicken (thai-basil-chicken-pad-krapow); a beef version is a third-protein of the same dish. Thai not a widening cuisine here (run also accepted thai-coconut-curry-pork-shoulder); near-ceiling 632/650 cal + highest carbs in batch (15g); beef lane already heavy.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "pork|any|curry",
+                       "slug":  "thai-coconut-curry-pork-shoulder",
+                       "name":  "Thai Coconut Curry Pork Shoulder",
+                       "protein":  "pork",
+                       "method":  "any",
+                       "verdict":  "rejected-not-carried",
+                       "reason":  "not carried in Omaha: creamed coconut",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "turkey|skillet|plain",
+                       "slug":  "turkey-unstuffed-pepper-skillet",
+                       "name":  "Turkey Unstuffed Pepper Skillet",
+                       "protein":  "turkey",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "OVERRULE KEEP: catalog dupe of unstuffed-pepper-skillet-bowls (adjudicator only checked turkey-stuffed-pepper-soup and missed this). Same deconstructed stuffed-pepper skillet; cauliflower-for-rice + turkey-for-beef (candidate line says or lean ground beef) is a low-carb reskin, not a different dinner.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-15-lowcarb-100",
+                       "by":  "backfill",
+                       "at":  "2026-08-16T07:30:14"
+                   }
+               ]
+}

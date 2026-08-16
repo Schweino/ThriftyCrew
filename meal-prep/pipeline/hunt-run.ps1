@@ -36,7 +36,8 @@
 #   .\hunt-run.ps1 -SelfTest
 param(
   [switch]$Init, [switch]$Advance, [switch]$Derive, [switch]$WaveClose, [switch]$Status, [switch]$SelfTest,
-  [switch]$Lane,
+  [switch]$Lane, [switch]$LaneSummary,
+  [int]$InputTokens = -1, [int]$OutputTokens = -1,   # -1 = not reported (older lines, or a lane that cannot see usage)
   [string]$RunDir = '', [string]$Slug = '', [string]$To = '', [string]$By = '', [string]$Detail = '',
   [string]$Title = '', [string]$SourceUrl = '', [string]$Protein = '',
   [string[]]$Terms = @(), [string[]]$OptionalTerms = @(),
@@ -49,6 +50,7 @@ $ErrorActionPreference = 'Stop'
 # CAPTURE EVERY SWITCH BEFORE DOT-SOURCING ANYTHING. A dot-sourced script runs its own param() block in
 # THIS scope, so a lib declaring [switch]$SelfTest silently resets ours to $false - that PS 5.1 trap made
 # migrate-prose-tokens' first -SelfTest run execute the LIVE path instead of its fixtures.
+$runLaneSummary = [bool]$LaneSummary
 $runSelfTest = [bool]$SelfTest; $runInit = [bool]$Init; $runAdvance = [bool]$Advance
 $runDerive = [bool]$Derive; $runWaveClose = [bool]$WaveClose; $runStatus = [bool]$Status
 $runLane = [bool]$Lane
@@ -219,11 +221,15 @@ function Split-LaneItems {
 }
 
 function New-LaneLine {
-  param([string]$LaneName, [string]$Label, $ItemList, [string]$By, [string]$Detail, [string]$At)
+  param([string]$LaneName, [string]$Label, $ItemList, [string]$By, [string]$Detail, [string]$At,
+        [int]$In = -1, [int]$Out = -1)
   $rows = @(Split-LaneItems $ItemList)
+  # in/out are the agent's reported token usage for THIS invocation. -1 means "not reported" and is
+  # kept distinct from 0: a stage that genuinely returned nothing is not the same as a stage whose
+  # usage the orchestrator could not see, and a summary that averages them together lies about both.
   return [pscustomobject]@{
     at = $At; lane = $LaneName; label = $Label; count = $rows.Count; items = @($rows)
-    by = $By; detail = $Detail
+    by = $By; detail = $Detail; in = $In; out = $Out
   }
 }
 
@@ -450,6 +456,51 @@ if ($runInit) {
 # ---- -Lane ----------------------------------------------------------------------------------------
 # Record ONE agent invocation. Call it as the invocation is dispatched, once per agent, with the items
 # that invocation actually took: terms for `price`, slugs for `map` / `extract` / `write` / `qa`.
+# ---- -LaneSummary ---------------------------------------------------------------------------------
+# The cost breakdown this estate has never actually seen. v2.1 section 5.2 asked for usage.jsonl written
+# at the END of a run; no run has ever reached its final phase, so the number was never produced. This
+# reads the append-only lane log instead, so the answer survives any halt.
+if ($runLaneSummary) {
+  $lp = Join-Path $RunDir 'lane-log.jsonl'
+  if (-not (Test-Path $lp)) { Write-Output ("hunt-run: no lane log at {0}" -f $lp); exit 1 }
+  $rows = @()
+  foreach ($l in (Get-Content $lp -Encoding utf8)) {
+    if (-not $l -or -not $l.Trim()) { continue }
+    try { $rows += ($l | ConvertFrom-Json) } catch { }
+  }
+  if (-not $rows.Count) { Write-Output 'hunt-run lane summary: lane log is empty'; exit 0 }
+
+  $agg = @{}
+  foreach ($r in $rows) {
+    $ln = [string]$r.lane
+    if (-not $agg.ContainsKey($ln)) { $agg[$ln] = [pscustomobject]@{ lane=$ln; calls=0; items=0; in=0; out=0; measured=0 } }
+    $a = $agg[$ln]; $a.calls++; $a.items += [int]$r.count
+    $ri = if ($r.PSObject.Properties.Name -contains 'in') { [int]$r.in } else { -1 }
+    $ro = if ($r.PSObject.Properties.Name -contains 'out') { [int]$r.out } else { -1 }
+    if ($ri -ge 0 -or $ro -ge 0) { $a.measured++; if ($ri -gt 0) { $a.in += $ri }; if ($ro -gt 0) { $a.out += $ro } }
+  }
+  $tot = ($agg.Values | Measure-Object -Property in -Sum).Sum + ($agg.Values | Measure-Object -Property out -Sum).Sum
+  if ($runJson) {
+    ([pscustomobject]@{ run=(Split-Path $RunDir -Leaf); total_tokens=$tot; lanes=@($agg.Values | Sort-Object { -($_.in + $_.out) }) } | ConvertTo-Json -Depth 5)
+    exit 0
+  }
+  Write-Output ("hunt-run lane summary: {0}" -f (Split-Path $RunDir -Leaf))
+  Write-Output ("  {0,-9} {1,6} {2,7} {3,12} {4,12} {5,12} {6,7}" -f 'lane','calls','items','input','output','total','share')
+  foreach ($a in ($agg.Values | Sort-Object { -($_.in + $_.out) })) {
+    $lt = $a.in + $a.out
+    $share = if ($tot -gt 0) { '{0:N1}%' -f (100.0 * $lt / $tot) } else { '-' }
+    $note = if ($a.measured -lt $a.calls) { (' [{0}/{1} measured]' -f $a.measured, $a.calls) } else { '' }
+    Write-Output ("  {0,-9} {1,6} {2,7} {3,12:N0} {4,12:N0} {5,12:N0} {6,7}{7}" -f $a.lane,$a.calls,$a.items,$a.in,$a.out,$lt,$share,$note)
+  }
+  Write-Output ("  {0,-9} {1,6} {2,7} {3,12} {4,12} {5,12:N0}" -f 'TOTAL',($rows.Count),(($agg.Values|Measure-Object -Property items -Sum).Sum),'','',$tot)
+  $unmeasured = @($rows | Where-Object { -not ($_.PSObject.Properties.Name -contains 'in') -or [int]$_.in -lt 0 }).Count
+  if ($unmeasured -gt 0) {
+    Write-Output ("  NOTE {0} of {1} invocations carry no token figures - treat every number above as a LOWER BOUND." -f $unmeasured, $rows.Count)
+  }
+  Write-GuardComplete -Name 'hunt-run' -Summary ("lane-summary lanes={0} tokens={1}" -f $agg.Count, $tot)
+  exit 0
+}
+
 if ($runLane) {
   if (-not $LaneName) { Write-Output ("hunt-run: -Lane needs -LaneName. One of: {0}" -f (@($script:LANES) -join ', ')); exit 1 }
   $ln = $LaneName.ToLower()
@@ -460,7 +511,7 @@ if ($runLane) {
     Write-Output ("hunt-run: '{0}' is not a lane. One of: {1}" -f $LaneName, (@($script:LANES) -join ', ')); exit 1
   }
   if (-not (Test-Path $RunDir)) { Write-Output ("hunt-run: no such run dir '{0}'" -f $RunDir); exit 1 }
-  $line = New-LaneLine -LaneName $ln -Label $Label -ItemList $Items -By $By -Detail $Detail -At (Get-Stamp)
+  $line = New-LaneLine -LaneName $ln -Label $Label -ItemList $Items -By $By -Detail $Detail -At (Get-Stamp) -In $InputTokens -Out $OutputTokens
   Add-LaneLine -Path (Join-Path $RunDir 'lane-log.jsonl') -Line $line
   Write-Output ("hunt-run lane: {0}  {1} item(s){2}" -f $ln, $line.count, $(if ($Label) { "   ($Label)" } else { '' }))
   if ($line.count -eq 0) {

@@ -1,0 +1,278 @@
+﻿{
+    "_doc":  "Ingredient string -\u003e commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.",
+    "_rule":  "Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.",
+    "updated":  "2026-08-16T07:34:22",
+    "count":  30,
+    "resolutions":  [
+                        {
+                            "key":  "portobello mushrooms",
+                            "term":  "Portobello Mushrooms",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "dry white wine",
+                            "term":  "Dry White Wine",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "sour cream",
+                            "term":  "Sour Cream",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "egg yolk",
+                            "term":  "Egg Yolk",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "fresh parsley",
+                            "term":  "Fresh Parsley",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "brandy",
+                            "term":  "Brandy",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "beef base",
+                            "term":  "Beef Base",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "cream cheese",
+                            "term":  "Cream Cheese",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "cauliflower",
+                            "term":  "Cauliflower",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "smoked sausage",
+                            "term":  "Smoked Sausage",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "monterey jack cheese",
+                            "term":  "Monterey Jack Cheese",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "broccolini",
+                            "term":  "Broccolini",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "fresh oregano",
+                            "term":  "Fresh Oregano",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "pepper jack cheese",
+                            "term":  "Pepper Jack Cheese",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "yellow bell pepper",
+                            "term":  "Yellow Bell Pepper",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "broccoli",
+                            "term":  "Broccoli",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "baby bella crimini mushrooms",
+                            "term":  "Baby Bella (Crimini) Mushrooms",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "80 20 ground beef",
+                            "term":  "80/20 Ground Beef",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "yellow mustard",
+                            "term":  "Yellow Mustard",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "andouille smoked sausage",
+                            "term":  "Andouille Smoked Sausage",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "bulgur wheat",
+                            "term":  "Bulgur Wheat",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "korean rice cakes",
+                            "term":  "Korean Rice Cakes",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "sumac",
+                            "term":  "Sumac",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "keto bun",
+                            "term":  "Keto Bun",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "shaved beef steak",
+                            "term":  "Shaved Beef Steak",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "tandoori masala",
+                            "term":  "Tandoori Masala",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "pepperoni",
+                            "term":  "Pepperoni",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "sun dried tomatoes oil packed",
+                            "term":  "Sun-Dried Tomatoes (Oil-Packed)",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "gruyere cheese",
+                            "term":  "Gruyere Cheese",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        },
+                        {
+                            "key":  "boneless beef short ribs",
+                            "term":  "Boneless Beef Short Ribs",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "no bid in db\\ingredients.json as of 2026-08-16 unbid sweep",
+                            "by":  "backfill",
+                            "at":  "2026-08-16T07:34:22"
+                        }
+                    ]
+}

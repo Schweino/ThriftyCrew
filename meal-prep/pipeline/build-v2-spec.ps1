@@ -71,6 +71,7 @@ param(
   [string]$EachNounsFile,   # default <meal-prep>\db\each-nouns.json
   [string]$FeedFile,        # default <estate>\grocery\out\smp-feed.json
   [string]$NoBoardOkFile,   # default <meal-prep>\db\no-board-price-ok.json
+  [string]$NotTrackedOkFile,# default <meal-prep>\db\not-price-tracked-ok.json (canon items allowed to carry NO bid)
   [string]$ManifestFile,    # default <meal-prep>\pipeline\v2-perserving.json (everyday_ps basis for stat.cost_ps)
   [switch]$RunCost,         # invoke engine\cost-recipes.ps1 -Slugs <slug> to cost a NEW recipe (writes db\costed.json; only valid when OutDir is the real db\recipes)
   [switch]$AllowUncosted,   # emit the spec with zeroed cost fields when no costed row exists yet
@@ -91,6 +92,7 @@ if(-not $DensitiesFile){ $DensitiesFile = Join-Path $mp 'db\densities.json' }
 if(-not $EachNounsFile){ $EachNounsFile = Join-Path $mp 'db\each-nouns.json' }
 if(-not $FeedFile){      $FeedFile      = Join-Path (Split-Path $mp -Parent) 'grocery\out\smp-feed.json' }
 if(-not $NoBoardOkFile){ $NoBoardOkFile = Join-Path $mp 'db\no-board-price-ok.json' }
+if(-not $NotTrackedOkFile){ $NotTrackedOkFile = Join-Path $mp 'db\not-price-tracked-ok.json' }
 if(-not $ManifestFile){  $ManifestFile  = Join-Path $mp 'pipeline\v2-perserving.json' }
 
 
@@ -118,6 +120,9 @@ foreach($i in ((Get-Content $FoodDb -Raw -Encoding utf8 | ConvertFrom-Json).item
 Initialize-FriendlyAmt -DensitiesFile $DensitiesFile -EachNounsFile $EachNounsFile -Root $mp   # densities + each-nouns now load INSIDE the label library
 $noBoardOk=@{}
 if(Test-Path $NoBoardOkFile){ foreach($b in ((Get-Content $NoBoardOkFile -Raw -Encoding utf8 | ConvertFrom-Json).bids)){ $noBoardOk[[string]$b]=1 } }
+# Canon items deliberately carrying NO bid. Keyed by canon item name (not bid - these HAVE no bid).
+$notTrackedOk=@{}
+if(Test-Path $NotTrackedOkFile){ foreach($i in ((Get-Content $NotTrackedOkFile -Raw -Encoding utf8 | ConvertFrom-Json).items)){ $notTrackedOk[[string]$i]=1 } }
 
 # ---- units of the LIVE price sources the scaler widget reads (feed first, board fallback) --------
 $feedUnit=@{}; $feedKeys=@{}
@@ -192,6 +197,21 @@ foreach($ing in $intake.ingredients){
 }
 if(@($display).Count -ne @($scalerIng).Count -or @($display).Count -ne @($gramsArr).Count){
   throw ("parallel array bug: display {0} / scaler {1} / grams {2}" -f @($display).Count,@($scalerIng).Count,@($gramsArr).Count)
+}
+
+# ---------------------------------------------------------------------------------------------------
+# UNBID GUARD. An ingredient with NO bid is silently costed at $0.00 by cost-recipes, so the recipe
+# ships a cost that excludes it. Until 2026-08-16 this printed a report line AFTER the spec was already
+# written, while the LESSER defect - a bid that resolves to nothing on the feed - threw and blocked the
+# build (CHEAPEST-FALLBACK, just below). That inversion put 23 specs on disk carrying $0.00 ingredients
+# and shipped FOUR of them live: turkey-meatball-sub-bake (Keto Bun, 1320 g), dak-galbi (Korean Rice
+# Cakes, 1300 g), baked-turkey-kibbeh (Bulgur Wheat, 957 g) and musakhan (Sumac). Readers budget off
+# those numbers. A missing price is not a smaller problem than a wrong one - it is the same problem,
+# silent. The escape is an explicit allowlist entry, exactly as no-board-price-ok.json is for bids.
+# ---------------------------------------------------------------------------------------------------
+$unbidBlocking = @($notPriced | Select-Object -Unique | Where-Object { -not $notTrackedOk.ContainsKey([string]$_) })
+if($unbidBlocking.Count -gt 0){
+  throw ("UNBID INGREDIENT: " + ($unbidBlocking -join '; ') + " carry no bid in db\ingredients.json, so cost-recipes would price them at `$0.00 and this recipe would claim a cost that excludes them. Wire the bid(s), or - only if the item genuinely has no cost to the reader - add the canon name to " + (Split-Path -Leaf $NotTrackedOkFile) + ".")
 }
 
 # ---- CHEAPEST-FALLBACK guard (fail-fast at intake, same rule audit-db-agreement enforces) --------

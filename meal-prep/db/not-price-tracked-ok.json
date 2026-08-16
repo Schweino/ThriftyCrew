@@ -1,0 +1,8 @@
+{
+  "_doc": "Canon ingredient names deliberately allowed to carry NO bid in db\\ingredients.json. build-v2-spec.ps1 REFUSES to build a spec containing an unbid ingredient unless its canon name is listed here, because cost-recipes silently prices an unbid line at $0.00 and the recipe then claims a cost that excludes it. On 2026-08-16 that inversion had put 23 specs on disk with $0.00 ingredients and shipped four of them live (Keto Bun 1320 g, Korean Rice Cakes 1300 g, Bulgur Wheat 957 g, Sumac).",
+  "_rule": "An entry here is a claim that the item costs the reader NOTHING - tap water, or a component already priced under another line. It is NOT a place to park an ingredient whose bid has not been wired yet: that recipe should hold at `mapped` until the bid exists. If you are tempted to add a food here, wire the bid instead.",
+  "_sibling": "db\\no-board-price-ok.json does the analogous job for bids that resolve but carry no first-party board price. Different failure, different file: that one has a bid, this one has none.",
+  "items": [
+    "Water"
+  ]
+}
