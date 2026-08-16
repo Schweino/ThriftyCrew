@@ -331,6 +331,23 @@ went to the pricer twice, and whether every pricer invocation stayed inside one 
 lanes were driven in the wrong shape - report it as a finding about the run, do not quietly rerun the audit
 without the finding, and never edit the lane log to make it pass. The log is append-only for that reason.
 
+## Nothing else may write the tree while a wave is being verified
+
+A QA cert, a wave audit and `wave-publish`'s P1b freshness gate are all claims about BYTES AT A MOMENT.
+Any concurrent writer to the same tree voids them - including a writer doing correct, wanted work.
+
+**Spawn tasks with REPO-RELATIVE paths.** A background task runs in its own worktree under
+`.claude\worktrees\`, but that isolation only holds if the prompt says `meal-prep\db\recipes\<slug>.json`.
+An absolute `C:\Codex\ThriftyCrew\meal-prep\...` reaches past the worktree and writes the main tree
+silently. On 2026-08-16 three tasks spawned with absolute paths rewrote nine wave-3 specs ninety seconds
+after that wave reached GO; P1b correctly refused, and it happened four times in one afternoon. Zero
+recipes published that day out of eighteen that were audit-clean, and every audit cost real budget.
+
+Before dispatching an audit or a publish, check `list_sessions` for other running sessions in this repo and
+wait, or `send_message` asking them to hold. If a task must touch the main tree, let it finish and commit
+FIRST. And when a cert goes stale, diff the specs against HEAD before re-running anything: on the last
+occurrence only one of nine specs had actually changed, so the honest repair was one re-QA, not nine.
+
 ## Do not
 
 - Do not publish any way except `wave-publish.ps1` after a GO. Never call `publish-recipe.ps1` or
