@@ -114,7 +114,35 @@ function IProp($o,[string]$p){ $o.PSObject.Properties.Name -contains $p -and $nu
 
 # ---------------- canonical stores ----------------
 $ITEMS=@{}
-foreach($row in (Get-Content $IngredientsDb -Raw -Encoding utf8 | ConvertFrom-Json)){ $ITEMS[[string]$row.item]=$row }
+$ALIASES=@{}
+foreach($row in (Get-Content $IngredientsDb -Raw -Encoding utf8 | ConvertFrom-Json)){
+  $ITEMS[[string]$row.item]=$row
+  # ALIASES: one purchasable item, many accepted names. Each alias is an ADJUDICATED RULING recorded on
+  # the row (see design\PLAN-ingredient-vocabulary-2026-08-16.md section 0c), never a heuristic and never
+  # a fuzzy match. On 2026-08-16 recipes wrote "Cream Cheese", "Sour Cream" and "Broccoli" while the
+  # vocabulary stocked "1/3 Fat Cream Cheese", "Light Sour Cream" and "Broccoli Florets"; every one
+  # missed by a word and silently costed $0.00, and four such pages went live understating cost.
+  if($row.PSObject.Properties.Name -contains 'aliases'){
+    foreach($a in @($row.aliases)){
+      $an=[string]$a
+      if(-not $an){ continue }
+      if($ALIASES.ContainsKey($an) -and $ALIASES[$an].item -ne $row.item){
+        throw ("ALIAS COLLISION: '" + $an + "' is claimed by both '" + $ALIASES[$an].item + "' and '" + $row.item + "'. An alias must resolve to exactly one row.")
+      }
+      if($ITEMS.ContainsKey($an) -and $an -ne [string]$row.item){
+        throw ("ALIAS COLLISION: '" + $an + "' is an alias on '" + $row.item + "' but is also a real item name. Rename one of them.")
+      }
+      $ALIASES[$an]=$row
+    }
+  }
+}
+# Resolve a canon name to its row: exact item first, then an adjudicated alias. Nothing else - no
+# normalisation, no fuzzy match, ever. "Dry White Wine" must never quietly become "White Wine Vinegar".
+function Resolve-ItemRow([string]$name){
+  if($ITEMS.ContainsKey($name)){ return $ITEMS[$name] }
+  if($ALIASES.ContainsKey($name)){ return $ALIASES[$name] }
+  return $null
+}
 $dbm=@{}
 foreach($i in ((Get-Content $FoodDb -Raw -Encoding utf8 | ConvertFrom-Json).items)){ $dbm[[string]$i.item]=$i }
 Initialize-FriendlyAmt -DensitiesFile $DensitiesFile -EachNounsFile $EachNounsFile -Root $mp   # densities + each-nouns now load INSIDE the label library
@@ -168,7 +196,7 @@ function Resolve-ScalerGpu([string]$item,[string]$bid,[double]$gpu,[string]$mapU
 function GpuStr([double]$v){ $v.ToString('0.000') }
 
 # ---------------- parallel ingredient arrays ----------------
-$display=@(); $scalerIng=@(); $gramsArr=@(); $notPriced=@()
+$display=@(); $scalerIng=@(); $gramsArr=@(); $notPriced=@(); $unknownName=@()
 foreach($ing in $intake.ingredients){
   $item = [string]$ing.item
   $g = [int][Math]::Round([double]$ing.grams,0)
@@ -186,12 +214,17 @@ foreach($ing in $intake.ingredients){
   $gramsArr += [pscustomobject]@{ item=$item; grams=$g }
   # scaler entry: item is reader-facing, canon is the machine identity (r300 convention)
   $se = [ordered]@{ item=$dispItem; canon=$item; grams=$g; buy=$buy }
-  if($ITEMS.ContainsKey($item) -and (IProp $ITEMS[$item] 'bid') -and $ITEMS[$item].bid){
-    $mrow = $ITEMS[$item]
+  $mrow = Resolve-ItemRow $item
+  if($mrow -and (IProp $mrow 'bid') -and $mrow.bid){
     $se.bid = [string]$mrow.bid
     $se.gpu = GpuStr (Resolve-ScalerGpu $item ([string]$mrow.bid) ([double]$mrow.gpu) $(if(IProp $mrow 'unit'){ [string]$mrow.unit } else { '' }))
+  } elseif($mrow){
+    # KNOWN NAME, NO BID. The row exists and is deliberately bid-less (6 such rows today).
+    $notPriced += $item
   } else {
-    $notPriced += $item   # widget will show "not price-tracked" - allowed, but surfaced
+    # UNKNOWN NAME. The dominant failure of 2026-08-16 and a completely different problem: the price is
+    # not missing, the NAME is wrong. Kept separate so the error names the right fix and the right owner.
+    $unknownName += $item
   }
   $scalerIng += [pscustomobject]$se
 }
@@ -209,9 +242,28 @@ if(@($display).Count -ne @($scalerIng).Count -or @($display).Count -ne @($gramsA
 # those numbers. A missing price is not a smaller problem than a wrong one - it is the same problem,
 # silent. The escape is an explicit allowlist entry, exactly as no-board-price-ok.json is for bids.
 # ---------------------------------------------------------------------------------------------------
+# UNKNOWN NAME is checked FIRST and reported separately, because it is a different problem with a
+# different owner. On 2026-08-16 both cases threw one message reading "no bid", and four layers - the
+# auditor, the unbid sweep, the efficiency plan and a dispatched remediation task - all repeated "the
+# price is missing" when the truth was "the name is wrong and the price is right there". The error text
+# below does the diagnosis so nobody has to guess again.
+$unknownBlocking = @($unknownName | Select-Object -Unique | Where-Object { -not $notTrackedOk.ContainsKey([string]$_) })
+if($unknownBlocking.Count -gt 0){
+  $hint = ''
+  $vocabTool = Join-Path $PSScriptRoot 'ingredient-vocab.ps1'
+  foreach($u in ($unknownBlocking | Select-Object -First 3)){
+    $near = @($ITEMS.Keys | Where-Object { $_ -and (@(($u.ToLower() -split '\s+')) | Where-Object { $_.Length -gt 3 -and $_ -ne 'fresh' -and $_ -ne 'dried' } | Where-Object { $_ -and ($_.ToLower() -split '\s+') } | ForEach-Object { $_ }) } )
+    $tok = @($u.ToLower() -replace '[^a-z0-9 ]',' ' -split '\s+' | Where-Object { $_.Length -gt 3 })
+    $cand = @($ITEMS.Keys | Where-Object { $k=$_.ToLower(); @($tok | Where-Object { $k -like ('*'+$_+'*') }).Count -gt 0 } | Select-Object -First 3)
+    if($cand.Count){ $hint += ("`n    '" + $u + "' -> nearest rows: " + ($cand -join ' | ')) }
+    else { $hint += ("`n    '" + $u + "' -> no row shares a word; this looks like a genuine gap") }
+  }
+  throw ("UNKNOWN INGREDIENT NAME: " + ($unknownBlocking -join '; ') + " are not in the ingredient vocabulary (db\ingredients.json). THE PRICE IS PROBABLY NOT MISSING - THE NAME IS WRONG." + $hint + "`n  Fix: rename the intake to the vocabulary's name, add an adjudicated alias to the row, or register a NEW row via commodity-registrar. Run `"" + $vocabTool + "`" -Query '<name>' for the full candidate list. Never invent a canon name.")
+}
+
 $unbidBlocking = @($notPriced | Select-Object -Unique | Where-Object { -not $notTrackedOk.ContainsKey([string]$_) })
 if($unbidBlocking.Count -gt 0){
-  throw ("UNBID INGREDIENT: " + ($unbidBlocking -join '; ') + " carry no bid in db\ingredients.json, so cost-recipes would price them at `$0.00 and this recipe would claim a cost that excludes them. Wire the bid(s), or - only if the item genuinely has no cost to the reader - add the canon name to " + (Split-Path -Leaf $NotTrackedOkFile) + ".")
+  throw ("UNBID INGREDIENT: " + ($unbidBlocking -join '; ') + " resolve to a real row in db\ingredients.json but that row carries NO bid, so cost-recipes would price them at `$0.00 and this recipe would claim a cost that excludes them. Wire the bid(s), or - only if the item genuinely has no cost to the reader - add the canon name to " + (Split-Path -Leaf $NotTrackedOkFile) + ".")
 }
 
 # ---- CHEAPEST-FALLBACK guard (fail-fast at intake, same rule audit-db-agreement enforces) --------

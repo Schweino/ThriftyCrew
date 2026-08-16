@@ -1,2564 +1,2590 @@
-[
-  {
-      "item":  "_r300_note",
-      "pantry_pkg_g":  0,
-      "pantry_pkg_label":  "R300 additions below (2026-07-25): container sizes from board comparison rows / walmart-r300-raw.txt / labels-r300.json. Sweet Soy uses the map\u0027s 38 g/floz density (kecap manis is syrup-dense), so 20.2 floz = 768 g. Jerk Seasoning deliberately ABSENT: no sourced container size - engine flags it rather than guessing."
-  },
-  {
-      "item":  "1/3 Fat Cream Cheese",
-      "bid":  "1-3-fat-cream-cheese",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz brick"
-  },
-  {
-      "item":  "93/7 Ground Beef",
-      "bid":  "93-7-ground-beef",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "93/7 Ground Turkey",
-      "bid":  "93-7-ground-turkey",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "99/1 Ground Turkey"
-  },
-  {
-      "item":  "Achiote Paste",
-      "bid":  "achiote-paste",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  99,
-      "pantry_pkg_label":  "3.5oz box",
-      "bulk":  true
-  },
-  {
-      "item":  "Aji Amarillo Paste",
-      "bid":  "aji-amarillo-paste",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  298,
-      "pantry_pkg_label":  "10.5oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Alfredo Sauce",
-      "bid":  "alfredo-sauce",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  425,
-      "buy_pkg_label":  "15oz jar"
-  },
-  {
-      "item":  "All-Purpose Flour",
-      "bid":  "flour",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "pantry_pkg_g":  2268,
-      "pantry_pkg_label":  "5lb bag",
-      "bulk":  true
-  },
-  {
-      "item":  "Almonds",
-      "bid":  "almonds",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  397,
-      "buy_pkg_label":  "14oz bag"
-  },
-  {
-      "item":  "Apple",
-      "bid":  "apples",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "weekly",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Apple Cider",
-      "bid":  "apple-cider",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "buy_pkg_g":  1890,
-      "buy_pkg_label":  "64floz jug"
-  },
-  {
-      "item":  "Apple Cider Vinegar",
-      "bid":  "apple-cider-vinegar",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  946,
-      "pantry_pkg_label":  "32floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Apple Juice",
-      "bid":  "apple-juice",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "buy_pkg_g":  1893,
-      "buy_pkg_label":  "64floz bottle"
-  },
-  {
-      "item":  "Artichoke Hearts",
-      "bid":  "artichoke-hearts",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  391,
-      "buy_pkg_label":  "13.8oz can"
-  },
-  {
-      "item":  "Avocado",
-      "bid":  "avocados",
-      "gpu":  150,
-      "unit":  "each",
-      "board":  "weekly",
-      "buy_pkg_g":  150,
-      "buy_pkg_label":  "each",
-      "note":  "gpu = edible flesh per medium avocado, FDA NLEA basis (label serving 1/3 medium = 50 g). Grams in recipes are flesh grams."
-  },
-  {
-      "item":  "Au Jus Gravy Mix",
-      "bid":  "au-jus-gravy-mix",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  28,
-      "buy_pkg_label":  "1oz packet"
-  },
-  {
-      "item":  "Baked Beans",
-      "bid":  "baked-beans",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  794,
-      "buy_pkg_label":  "28oz can"
-  },
-  {
-      "item":  "Baking Powder",
-      "bid":  "baking-powder",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  230,
-      "pantry_pkg_label":  "8.1oz can",
-      "bulk":  true
-  },
-  {
-      "item":  "Baking Soda",
-      "bid":  "baking-soda",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  454,
-      "pantry_pkg_label":  "16oz box",
-      "bulk":  true
-  },
-  {
-      "item":  "Balsamic Vinegar",
-      "bid":  "balsamic-vinegar",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  500,
-      "pantry_pkg_label":  "500ml bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Basil Pesto",
-      "bid":  "pesto",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  624,
-      "buy_pkg_label":  "22oz jar"
-  },
-  {
-      "item":  "Bay Leaves",
-      "bid":  "bay-leaves",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  6,
-      "pantry_pkg_label":  "0.2oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "BBQ Sauce",
-      "bid":  "bbq-sauce",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "pantry_pkg_g":  510,
-      "pantry_pkg_label":  "18oz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "BBQ Sauce (Sugar Free)",
-      "bid":  "sugar-free-bbq-sauce",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  510,
-      "pantry_pkg_label":  "18oz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Beef Broth",
-      "bid":  "beef-broth",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  907,
-      "pantry_pkg_label":  "32oz carton",
-      "bulk":  true
-  },
-  {
-      "item":  "Beef Chuck Roast",
-      "bid":  "beef-chuck-roast",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Beef Flank/Sirloin Steak",
-      "bid":  "sirloin-steak",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Berbere Seasoning",
-      "bid":  "berbere-seasoning",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "pantry_pkg_g":  37,
-      "pantry_pkg_label":  "1.3oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Black Pepper",
-      "bid":  "black-pepper",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  85,
-      "pantry_pkg_label":  "3oz shaker",
-      "bulk":  true
-  },
-  {
-      "item":  "Blackberries",
-      "bid":  "blackberries",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  170,
-      "buy_pkg_label":  "6oz clamshell"
-  },
-  {
-      "item":  "Boneless Skinless Chicken Breast",
-      "bid":  "chicken-breast",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "weekly",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Boneless Skinless Chicken Thigh",
-      "bid":  "boneless-skinless-chicken-thigh",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Bratwurst",
-      "bid":  "bratwurst",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "buy_pkg_g":  539,
-      "buy_pkg_label":  "19oz 5-pack"
-  },
-  {
-      "item":  "Bread Crumbs",
-      "bid":  "bread-crumbs",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  425,
-      "pantry_pkg_label":  "15oz canister",
-      "bulk":  true
-  },
-  {
-      "item":  "Broccoli Florets",
-      "bid":  "frozen-broccoli-florets",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  340,
-      "buy_pkg_label":  "12oz bag"
-  },
-  {
-      "item":  "Brown Gravy Mix",
-      "bid":  "brown-gravy-mix",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  25,
-      "pantry_pkg_label":  "0.87oz packet",
-      "bulk":  true
-  },
-  {
-      "item":  "Brown Sugar",
-      "bid":  "brown-sugar",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  907,
-      "pantry_pkg_label":  "2lb bag",
-      "bulk":  true
-  },
-  {
-      "item":  "Brussels Sprouts",
-      "bid":  "brussels-sprouts",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Buffalo Wing Sauce",
-      "bid":  "buffalo-wing-sauce",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  340,
-      "pantry_pkg_label":  "12floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Bulgur Wheat",
-      "bid":  "bulgur-wheat",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  907.2,
-      "pantry_pkg_label":  "32oz bag",
-      "bulk":  true
-  },
-  {
-      "item":  "Butter",
-      "bid":  "butter",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb box"
-  },
-  {
-      "item":  "Butter Crackers",
-      "bid":  "crackers",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "pantry_pkg_g":  382,
-      "pantry_pkg_label":  "13.5oz box",
-      "bulk":  true
-  },
-  {
-      "item":  "Cajun Seasoning",
-      "bid":  "cajun-seasoning",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "pantry_pkg_g":  227,
-      "pantry_pkg_label":  "8oz shaker",
-      "bulk":  true
-  },
-  {
-      "item":  "Canned Black Beans",
-      "bid":  "canned-black-beans",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  425,
-      "buy_pkg_label":  "15oz can",
-      "note":  "plain canned black beans - deliberately distinct from Seasoned Black Beans (denser macro row); do not consolidate"
-  },
-  {
-      "item":  "Canned Pinto Beans",
-      "bid":  "canned-pinto-beans",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  439,
-      "buy_pkg_label":  "15.5oz can"
-  },
-  {
-      "item":  "Cannellini Beans",
-      "bid":  "cannellini-beans",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  425,
-      "buy_pkg_label":  "can"
-  },
-  {
-      "item":  "Capers",
-      "bid":  "capers",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  104,
-      "pantry_pkg_label":  "3.5floz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Caraway Seeds",
-      "bid":  "caraway-seeds",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  50,
-      "pantry_pkg_label":  "1.75oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Carrots",
-      "bid":  "carrots",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Cashews",
-      "bid":  "cashews",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz can"
-  },
-  {
-      "item":  "Cayenne Pepper",
-      "bid":  "cayenne-pepper",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  64,
-      "pantry_pkg_label":  "2.25oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Celery",
-      "bid":  "celery",
-      "gpu":  450,
-      "unit":  "each",
-      "board":  "recipe",
-      "buy_pkg_g":  450,
-      "buy_pkg_label":  "bunch"
-  },
-  {
-      "item":  "Celery Salt",
-      "bid":  "celery-salt",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  142,
-      "buy_pkg_label":  "5oz canister"
-  },
-  {
-      "item":  "Cheddar Cheese",
-      "bid":  "cheddar-cheese",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz block"
-  },
-  {
-      "item":  "Cheddar Cheese, Shredded",
-      "bid":  "cheddar-cheese-shredded",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz bag"
-  },
-  {
-      "item":  "Cheese Tortellini",
-      "bid":  "cheese-tortellini",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  539,
-      "buy_pkg_label":  "19oz bag"
-  },
-  {
-      "item":  "Cherry Tomatoes",
-      "bid":  "cherry-tomatoes",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  283,
-      "buy_pkg_label":  "10oz clamshell"
-  },
-  {
-      "item":  "Chicken Broth",
-      "bid":  "chicken-broth",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  907,
-      "pantry_pkg_label":  "32oz carton",
-      "bulk":  true
-  },
-  {
-      "item":  "Chicken Livers",
-      "bid":  "chicken-livers",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "buy_pkg_g":  567,
-      "buy_pkg_label":  "1.25lb tub"
-  },
-  {
-      "item":  "Chickpeas",
-      "bid":  "chickpeas",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  425,
-      "buy_pkg_label":  "can"
-  },
-  {
-      "item":  "Chili Crisp",
-      "bid":  "chili-crisp",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "pantry_pkg_g":  190,
-      "pantry_pkg_label":  "6.7oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Chili Crisp / Chili Oil"
-  },
-  {
-      "item":  "Chili Powder",
-      "bid":  "chili-powder",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  71,
-      "pantry_pkg_label":  "2.5oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Chipotle in Adobo",
-      "bid":  "chipotle-adobo",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  198,
-      "pantry_pkg_label":  "7oz can",
-      "bulk":  true
-  },
-  {
-      "item":  "Cocoa Powder",
-      "bid":  "cocoa-powder",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  227,
-      "pantry_pkg_label":  "8oz canister",
-      "bulk":  true
-  },
-  {
-      "item":  "Coconut Milk",
-      "bid":  "coconut-milk-canned",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "buy_pkg_g":  400,
-      "buy_pkg_label":  "13.5oz can"
-  },
-  {
-      "item":  "Condensed French Onion Soup",
-      "bid":  "condensed-french-onion-soup",
-      "gpu":  298,
-      "unit":  "each",
-      "board":  "recipe",
-      "buy_pkg_g":  298,
-      "buy_pkg_label":  "10.5oz can"
-  },
-  {
-      "item":  "Corn Chips",
-      "bid":  "corn-chips",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  262,
-      "buy_pkg_label":  "9.25oz bag"
-  },
-  {
-      "item":  "Corn Muffin Mix",
-      "bid":  "corn-muffin-mix",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  241,
-      "buy_pkg_label":  "box"
-  },
-  {
-      "item":  "Corn Tortillas",
-      "bid":  "corn-tortillas",
-      "gpu":  23.5,
-      "unit":  "each",
-      "board":  "recipe",
-      "buy_pkg_g":  1880,
-      "buy_pkg_label":  "80ct pack"
-  },
-  {
-      "item":  "Corned Beef Brisket",
-      "bid":  "corned-beef-brisket",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Cornstarch",
-      "bid":  "cornstarch",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  454,
-      "pantry_pkg_label":  "16oz box",
-      "bulk":  true
-  },
-  {
-      "item":  "Cottage Cheese",
-      "bid":  "cottage-cheese",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  680,
-      "buy_pkg_label":  "24oz tub"
-  },
-  {
-      "item":  "Cream of Chicken Soup",
-      "bid":  "cream-of-chicken-soup",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  298,
-      "buy_pkg_label":  "10.5oz can"
-  },
-  {
-      "item":  "Cream of Mushroom Soup",
-      "bid":  "cream-of-mushroom-soup",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  298,
-      "buy_pkg_label":  "10.5oz can"
-  },
-  {
-      "item":  "Crushed Tomatoes",
-      "bid":  "crushed-tomatoes",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  794,
-      "buy_pkg_label":  "28oz can"
-  },
-  {
-      "item":  "Cucumber",
-      "bid":  "cucumbers",
-      "gpu":  300,
-      "unit":  "each",
-      "board":  "recipe",
-      "buy_pkg_g":  300,
-      "buy_pkg_label":  "each"
-  },
-  {
-      "item":  "Curry Powder",
-      "bid":  "curry-powder",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  57,
-      "pantry_pkg_label":  "2oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Diced Green Chiles",
-      "bid":  "canned-green-chilies",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  113,
-      "pantry_pkg_label":  "4oz can",
-      "bulk":  true
-  },
-  {
-      "item":  "Diced Ham",
-      "bid":  "diced-ham",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  454,
-      "buy_pkg_label":  "16oz pack"
-  },
-  {
-      "item":  "Diced Tomatoes",
-      "bid":  "diced-tomatoes",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  411,
-      "buy_pkg_label":  "can"
-  },
-  {
-      "item":  "Diced Tomatoes \u0026 Green Chilies",
-      "bid":  "tomatoes-green-chilies",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  283,
-      "buy_pkg_label":  "10oz can"
-  },
-  {
-      "item":  "Dijon Mustard",
-      "bid":  "dijon-mustard",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  340,
-      "pantry_pkg_label":  "12oz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Dill Pickles",
-      "bid":  "pickles",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "pantry_pkg_g":  907,
-      "pantry_pkg_label":  "32oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Doubanjiang",
-      "bid":  "doubanjiang",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  227,
-      "pantry_pkg_label":  "8oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Dried Ancho Chiles",
-      "bid":  "dried-ancho-chiles",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  454,
-      "pantry_pkg_label":  "1lb bag (board capture)",
-      "bulk":  true
-  },
-  {
-      "item":  "Dried Arbol Chiles",
-      "bid":  "dried-arbol-chiles",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  113,
-      "pantry_pkg_label":  "4oz bag",
-      "bulk":  true
-  },
-  {
-      "item":  "Dried Basil",
-      "bid":  "dried-basil",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  14,
-      "pantry_pkg_label":  "0.5oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Dried Dill",
-      "bid":  "dried-dill",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  14,
-      "pantry_pkg_label":  "0.5oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Dried Guajillo Chiles",
-      "bid":  "dried-guajillo-chiles",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  113,
-      "pantry_pkg_label":  "4oz bag",
-      "bulk":  true
-  },
-  {
-      "item":  "Dried Oregano",
-      "bid":  "dried-oregano",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  21,
-      "pantry_pkg_label":  "0.75oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Dried Parsley",
-      "bid":  "dried-parsley",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  14,
-      "pantry_pkg_label":  "0.5oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Dried Rosemary",
-      "bid":  "dried-rosemary",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  20,
-      "buy_pkg_label":  "0.7oz jar"
-  },
-  {
-      "item":  "Dried Thyme",
-      "bid":  "dried-thyme",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  14,
-      "pantry_pkg_label":  "0.5oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Egg Noodles",
-      "bid":  "egg-noodles",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  340,
-      "buy_pkg_label":  "12oz bag"
-  },
-  {
-      "item":  "Eggplant",
-      "bid":  "eggplant",
-      "gpu":  548,
-      "unit":  "each",
-      "buy_pkg_g":  548,
-      "buy_pkg_label":  "each"
-  },
-  {
-      "item":  "Eggs",
-      "bid":  "eggs",
-      "gpu":  600,
-      "unit":  "dozen",
-      "board":  "recipe",
-      "buy_pkg_g":  600,
-      "buy_pkg_label":  "dozen"
-  },
-  {
-      "item":  "Enchilada Sauce",
-      "bid":  "enchilada-sauce",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  283,
-      "buy_pkg_label":  "10oz can"
-  },
-  {
-      "item":  "Fajita Seasoning",
-      "bid":  "fajita-seasoning",
-      "gpu":  35.44,
-      "unit":  "each",
-      "board":  "recipe",
-      "pantry_pkg_g":  28,
-      "pantry_pkg_label":  "1oz packet",
-      "bulk":  true
-  },
-  {
-      "item":  "Fat Free Cheddar",
-      "bid":  "fat-free-cheddar",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz bag"
-  },
-  {
-      "item":  "Fat Free Cottage Cheese",
-      "bid":  "cottage-cheese",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  680,
-      "buy_pkg_label":  "24oz tub",
-      "note":  "same cottage-cheese board id as the regular row: store lines price regular and fat free at the same shelf price class"
-  },
-  {
-      "item":  "Fat Free Mozzarella"
-  },
-  {
-      "item":  "Feta Cheese",
-      "bid":  "feta",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  170,
-      "buy_pkg_label":  "6oz tub"
-  },
-  {
-      "item":  "Fettuccine",
-      "bid":  "pasta",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  454,
-      "buy_pkg_label":  "16oz box"
-  },
-  {
-      "item":  "Fish Sauce",
-      "bid":  "fish-sauce",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  200,
-      "pantry_pkg_label":  "6.76floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Five-Spice Powder",
-      "bid":  "five-spice-powder",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  53,
-      "pantry_pkg_label":  "1.87oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Fresh Basil",
-      "bid":  "fresh-basil",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  14,
-      "buy_pkg_label":  "0.5oz pack"
-  },
-  {
-      "item":  "Fresh Cilantro",
-      "bid":  "cilantro",
-      "gpu":  57,
-      "unit":  "each",
-      "board":  "recipe",
-      "buy_pkg_g":  57,
-      "buy_pkg_label":  "bunch"
-  },
-  {
-      "item":  "Fresh Mint",
-      "bid":  "fresh-mint",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  14,
-      "buy_pkg_label":  "0.5oz pack"
-  },
-  {
-      "item":  "Fries",
-      "bid":  "fries",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  907,
-      "buy_pkg_label":  "32oz bag"
-  },
-  {
-      "item":  "Frozen Chopped Spinach",
-      "bid":  "frozen-chopped-spinach",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  284,
-      "buy_pkg_label":  "10oz box"
-  },
-  {
-      "item":  "Frozen Green Peas",
-      "bid":  "frozen-peas",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  340,
-      "buy_pkg_label":  "12oz bag"
-  },
-  {
-      "item":  "Frozen Hash Browns",
-      "bid":  "hash-browns",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  737,
-      "buy_pkg_label":  "26oz bag"
-  },
-  {
-      "item":  "Frozen Peas",
-      "bid":  "frozen-peas",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  340,
-      "buy_pkg_label":  "12oz bag"
-  },
-  {
-      "item":  "Garam Masala",
-      "bid":  "garam-masala",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  57,
-      "pantry_pkg_label":  "2oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Garlic",
-      "bid":  "garlic",
-      "gpu":  42.6,
-      "unit":  "each",
-      "board":  "recipe",
-      "buy_pkg_g":  42.6,
-      "buy_pkg_label":  "head"
-  },
-  {
-      "item":  "Garlic Powder",
-      "bid":  "garlic-powder",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  92,
-      "pantry_pkg_label":  "3.25oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Ginger",
-      "bid":  "fresh-ginger",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  100,
-      "buy_pkg_label":  "piece"
-  },
-  {
-      "item":  "Gingersnap Cookies",
-      "bid":  "gingersnaps",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  312,
-      "buy_pkg_label":  "11oz box"
-  },
-  {
-      "item":  "Gochujang",
-      "bid":  "gochujang",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  500,
-      "pantry_pkg_label":  "500g tub",
-      "bulk":  true
-  },
-  {
-      "item":  "Golden Raisins",
-      "bid":  "golden-raisins",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  340,
-      "pantry_pkg_label":  "12oz bag",
-      "bulk":  true
-  },
-  {
-      "item":  "Greek Yogurt",
-      "bid":  "greek-yogurt",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  907,
-      "buy_pkg_label":  "32oz tub"
-  },
-  {
-      "item":  "Green Beans",
-      "bid":  "frozen-green-beans",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  340,
-      "buy_pkg_label":  "12oz bag"
-  },
-  {
-      "item":  "Green Bell Peppers",
-      "bid":  "green-bell-pepper",
-      "gpu":  120,
-      "unit":  "each",
-      "board":  "recipe",
-      "buy_pkg_g":  120,
-      "buy_pkg_label":  "each"
-  },
-  {
-      "item":  "Green Cabbage",
-      "bid":  "cabbage",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  900,
-      "buy_pkg_label":  "head"
-  },
-  {
-      "item":  "Green Chile Sauce",
-      "bid":  "salsa-verde",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  454,
-      "buy_pkg_label":  "16oz can"
-  },
-  {
-      "item":  "Green Olives",
-      "bid":  "olives",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  163,
-      "buy_pkg_label":  "5.75oz jar"
-  },
-  {
-      "item":  "Green Onions",
-      "bid":  "green-onions",
-      "gpu":  90,
-      "unit":  "each",
-      "board":  "recipe",
-      "buy_pkg_g":  90,
-      "buy_pkg_label":  "bunch"
-  },
-  {
-      "item":  "Grits",
-      "bid":  "grits",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  680,
-      "buy_pkg_label":  "24oz canister",
-      "pantry_pkg_g":  680,
-      "pantry_pkg_label":  "24oz canister",
-      "bulk":  true
-  },
-  {
-      "item":  "Ground Allspice",
-      "bid":  "ground-allspice",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  47,
-      "pantry_pkg_label":  "1.65oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Ground Cinnamon",
-      "bid":  "ground-cinnamon",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  74,
-      "pantry_pkg_label":  "2.6oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Ground Cloves",
-      "bid":  "ground-cloves",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "pantry_pkg_g":  42,
-      "pantry_pkg_label":  "1.5oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Ground Coriander",
-      "bid":  "ground-coriander",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  45,
-      "pantry_pkg_label":  "1.6oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Ground Cumin",
-      "bid":  "ground-cumin",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  71,
-      "pantry_pkg_label":  "2.5oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Ground Fennel",
-      "bid":  "ground-fennel",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  227,
-      "pantry_pkg_label":  "8oz jar (board capture)",
-      "bulk":  true
-  },
-  {
-      "item":  "Ground Ginger",
-      "bid":  "ground-ginger",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  45,
-      "pantry_pkg_label":  "1.6oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Ground Nutmeg",
-      "bid":  "ground-nutmeg",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  54,
-      "pantry_pkg_label":  "1.9oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Ground Pork",
-      "bid":  "ground-pork",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "weekly",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Ground Turmeric",
-      "bid":  "ground-turmeric",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  57,
-      "pantry_pkg_label":  "2oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Half and Half",
-      "bid":  "half-and-half",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "buy_pkg_g":  473,
-      "buy_pkg_label":  "pint"
-  },
-  {
-      "item":  "Harissa Paste",
-      "bid":  "harissa-paste",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "pantry_pkg_g":  283,
-      "pantry_pkg_label":  "10oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Heavy Cream",
-      "bid":  "heavy-cream",
-      "gpu":  29.8,
-      "unit":  "floz",
-      "board":  "weekly",
-      "buy_pkg_g":  473,
-      "buy_pkg_label":  "pint"
-  },
-  {
-      "item":  "Hickory Smoked Bacon",
-      "bid":  "bacon",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "High Fiber Tortilla",
-      "bid":  "high-fiber-tortillas",
-      "gpu":  65,
-      "unit":  "each",
-      "board":  "weekly",
-      "buy_pkg_g":  388,
-      "buy_pkg_label":  "6ct pack"
-  },
-  {
-      "item":  "Hoisin Sauce",
-      "bid":  "hoisin-sauce",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  425,
-      "pantry_pkg_label":  "15oz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Hominy",
-      "bid":  "hominy",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  425,
-      "buy_pkg_label":  "can"
-  },
-  {
-      "item":  "Honey",
-      "bid":  "honey",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  340,
-      "pantry_pkg_label":  "12oz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Honey Dijon Mustard",
-      "bid":  "honey-dijon-mustard",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  340,
-      "buy_pkg_label":  "12oz bottle"
-  },
-  {
-      "item":  "Horseradish Sauce",
-      "bid":  "horseradish-sauce",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  340,
-      "pantry_pkg_label":  "12oz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Hot Honey",
-      "bid":  "hot-honey",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  340,
-      "pantry_pkg_label":  "12oz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Hot Italian Sausage",
-      "bid":  "italian-sausage",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Hot Sauce",
-      "bid":  "hot-sauce",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  355,
-      "pantry_pkg_label":  "12floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Hummus",
-      "bid":  "hummus",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  283,
-      "buy_pkg_label":  "10oz tub"
-  },
-  {
-      "item":  "Italian Seasoning",
-      "bid":  "italian-seasoning",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  21,
-      "pantry_pkg_label":  "0.75oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Jalapeno",
-      "bid":  "jalapenos",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Japanese Curry Roux",
-      "bid":  "japanese-curry-roux",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  92,
-      "buy_pkg_label":  "3.2oz box"
-  },
-  {
-      "item":  "Jerk Seasoning",
-      "bid":  "jerk-seasoning",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  283,
-      "pantry_pkg_label":  "10 oz jar (Walkerswood, Walmart $4.52 captured 2026-07-25)",
-      "bulk":  true
-  },
-  {
-      "item":  "Kale",
-      "bid":  "kale",
-      "gpu":  250,
-      "unit":  "each",
-      "buy_pkg_g":  250,
-      "buy_pkg_label":  "bunch"
-  },
-  {
-      "item":  "Ketchup",
-      "bid":  "ketchup",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  567,
-      "pantry_pkg_label":  "20oz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Keto Bun",
-      "bid":  "keto-bun",
-      "gpu":  50,
-      "unit":  "each",
-      "board":  "recipe",
-      "buy_pkg_g":  400,
-      "buy_pkg_label":  "8 buns"
-  },
-  {
-      "item":  "Kidney Beans",
-      "bid":  "kidney-beans",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  425,
-      "buy_pkg_label":  "can"
-  },
-  {
-      "item":  "Korean Rice Cakes",
-      "bid":  "korean-rice-cakes",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  599.9,
-      "buy_pkg_label":  "21.16oz bag"
-  },
-  {
-      "item":  "Lemon Juice",
-      "bid":  "lemon-juice",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  946,
-      "pantry_pkg_label":  "32floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Lemongrass Paste",
-      "bid":  "lemongrass-paste",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "pantry_pkg_g":  113,
-      "pantry_pkg_label":  "4oz tube",
-      "bulk":  true
-  },
-  {
-      "item":  "Light Sour Cream",
-      "bid":  "sour-cream",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  454,
-      "buy_pkg_label":  "16oz tub"
-  },
-  {
-      "item":  "Lime Juice",
-      "bid":  "limes",
-      "gpu":  30,
-      "unit":  "each",
-      "board":  "recipe",
-      "pantry_pkg_g":  237,
-      "pantry_pkg_label":  "8floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Liquid Smoke",
-      "bid":  "liquid-smoke",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  103,
-      "pantry_pkg_label":  "3.5floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Lo Mein Noodles",
-      "bid":  "egg-noodles",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  397,
-      "buy_pkg_label":  "14oz pack"
-  },
-  {
-      "item":  "Mango",
-      "bid":  "mangoes",
-      "gpu":  336,
-      "unit":  "each",
-      "board":  "weekly",
-      "buy_pkg_g":  336,
-      "buy_pkg_label":  "each",
-      "note":  "gpu = edible flesh per fruit (USDA FDC: mangos, raw, 1 fruit = 336 g). Grams in recipes are flesh grams."
-  },
-  {
-      "item":  "Marinara Sauce",
-      "bid":  "marinara-sauce",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  680,
-      "buy_pkg_label":  "24oz jar"
-  },
-  {
-      "item":  "Mayonnaise",
-      "bid":  "mayonnaise",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  850,
-      "pantry_pkg_label":  "30oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Mexican Cheese Blend",
-      "bid":  "shredded-cheese",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz bag"
-  },
-  {
-      "item":  "Milk",
-      "bid":  "milk",
-      "gpu":  3785,
-      "unit":  "gallon",
-      "board":  "weekly",
-      "buy_pkg_g":  3785,
-      "buy_pkg_label":  "gallon"
-  },
-  {
-      "item":  "Mirin",
-      "bid":  "mirin",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "weekly",
-      "pantry_pkg_g":  296,
-      "pantry_pkg_label":  "10floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Miso Paste",
-      "bulk":  true
-  },
-  {
-      "item":  "Mole Paste",
-      "buy_pkg_g":  234,
-      "buy_pkg_label":  "8.25oz jar"
-  },
-  {
-      "item":  "Mozzarella Cheese",
-      "bid":  "mozzarella-cheese",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz bag"
-  },
-  {
-      "item":  "Olive Oil",
-      "bid":  "olive-oil",
-      "gpu":  28,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  690,
-      "pantry_pkg_label":  "25.5floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Olives",
-      "bid":  "green-olives",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  170,
-      "buy_pkg_label":  "6oz can"
-  },
-  {
-      "item":  "Onion Powder",
-      "bid":  "onion-powder",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  79,
-      "pantry_pkg_label":  "2.79oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Onion Soup Mix",
-      "bid":  "onion-soup-mix",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  62,
-      "pantry_pkg_label":  "2.2oz 2ct box",
-      "bulk":  true
-  },
-  {
-      "item":  "Orange Juice",
-      "bid":  "orange-juice",
-      "gpu":  31,
-      "unit":  "floz",
-      "board":  "weekly",
-      "buy_pkg_g":  1560,
-      "buy_pkg_label":  "52floz carton"
-  },
-  {
-      "item":  "Orange Zest",
-      "bid":  "orange-juice",
-      "gpu":  31,
-      "unit":  "floz",
-      "board":  "recipe",
-      "buy_pkg_g":  131,
-      "buy_pkg_label":  "each"
-  },
-  {
-      "item":  "Orzo Pasta",
-      "bid":  "pasta",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  454,
-      "buy_pkg_label":  "16oz box"
-  },
-  {
-      "item":  "Oyster Sauce",
-      "bid":  "oyster-sauce",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "weekly",
-      "pantry_pkg_g":  255,
-      "pantry_pkg_label":  "9oz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Panko Breadcrumbs",
-      "bid":  "bread-crumbs",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz box"
-  },
-  {
-      "item":  "Paprika",
-      "bid":  "paprika",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  71,
-      "pantry_pkg_label":  "2.5oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Parmesan Cheese",
-      "bid":  "parmesan",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz tub"
-  },
-  {
-      "item":  "Pasta Shells",
-      "bid":  "pasta",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  340,
-      "buy_pkg_label":  "12oz box"
-  },
-  {
-      "item":  "Pasta Shells - jumbo",
-      "bid":  "jumbo-pasta-shells",
-      "gpu":  28.3495,
-      "unit":  "oz"
-  },
-  {
-      "item":  "Peanut Butter",
-      "bid":  "peanut-butter",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  462,
-      "pantry_pkg_label":  "16.3oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Peanuts",
-      "bid":  "peanuts",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  454,
-      "buy_pkg_label":  "16oz jar"
-  },
-  {
-      "item":  "Penne Pasta",
-      "bid":  "penne-pasta",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  454,
-      "buy_pkg_label":  "16oz box"
-  },
-  {
-      "item":  "Pepperoncini",
-      "bid":  "banana-peppers",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "pantry_pkg_g":  355,
-      "pantry_pkg_label":  "12floz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Pigeon Peas",
-      "bid":  "pigeon-peas",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  425,
-      "buy_pkg_label":  "15oz can"
-  },
-  {
-      "item":  "Pineapple Chunks",
-      "bid":  "canned-pineapple",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  567,
-      "buy_pkg_label":  "20oz can"
-  },
-  {
-      "item":  "Pineapple Juice",
-      "bid":  "pineapple-juice",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "buy_pkg_g":  1360,
-      "buy_pkg_label":  "46floz can"
-  },
-  {
-      "item":  "Plain Yogurt",
-      "bid":  "greek-yogurt",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  907,
-      "buy_pkg_label":  "32oz tub"
-  },
-  {
-      "item":  "Poblano Peppers",
-      "bid":  "poblano-peppers",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Pomegranate Molasses",
-      "bid":  "pomegranate-molasses",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "weekly",
-      "pantry_pkg_g":  296,
-      "pantry_pkg_label":  "10floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Poppy Seeds",
-      "bid":  "poppy-seeds",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "pantry_pkg_g":  60,
-      "pantry_pkg_label":  "2.12oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Pork Chops",
-      "bid":  "pork-chops",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "weekly",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Pork Chorizo",
-      "bid":  "ground-pork",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "buy_pkg_g":  255,
-      "buy_pkg_label":  "9oz tube"
-  },
-  {
-      "item":  "Pork Loin",
-      "bid":  "pork-loin",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Pork Shoulder",
-      "bid":  "pork-shoulder",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Pork Tenderloin",
-      "bid":  "pork-tenderloin",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Potato",
-      "bid":  "russet-potatoes",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Potato Gnocchi",
-      "bid":  "potato-gnocchi",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  499,
-      "buy_pkg_label":  "17.6oz pack"
-  },
-  {
-      "item":  "Poultry Seasoning",
-      "bid":  "poultry-seasoning",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  43,
-      "pantry_pkg_label":  "1.5oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Provolone Cheese",
-      "bid":  "provolone-cheese",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz pack"
-  },
-  {
-      "item":  "Pumpkin Puree",
-      "bid":  "canned-pumpkin",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  822,
-      "buy_pkg_label":  "29oz can"
-  },
-  {
-      "item":  "Ranch Dressing",
-      "bid":  "ranch-dressing",
-      "gpu":  28,
-      "unit":  "floz",
-      "board":  "weekly",
-      "buy_pkg_g":  448,
-      "buy_pkg_label":  "16floz bottle",
-      "note":  "gpu 28 g/floz from the GV Classic Ranch label (2 tbsp = 28 g)"
-  },
-  {
-      "item":  "Ranch Seasoning Mix",
-      "bid":  "ranch-seasoning-mix",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  28,
-      "pantry_pkg_label":  "1oz packet",
-      "bulk":  true
-  },
-  {
-      "item":  "Red Bell Pepper",
-      "bid":  "red-bell-pepper",
-      "gpu":  120,
-      "unit":  "each",
-      "board":  "recipe",
-      "buy_pkg_g":  120,
-      "buy_pkg_label":  "each"
-  },
-  {
-      "item":  "Red Curry Paste",
-      "bid":  "red-curry-paste",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  113,
-      "buy_pkg_label":  "4oz jar"
-  },
-  {
-      "item":  "Red Onion",
-      "bid":  "red-onion",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Red Pepper Flakes",
-      "bid":  "red-pepper-flakes",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  39,
-      "pantry_pkg_label":  "1.375oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Red Wine Vinegar",
-      "bid":  "red-wine-vinegar",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  355,
-      "pantry_pkg_label":  "12floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Reduced Fat Mozzarella",
-      "bid":  "reduced-fat-mozzarella",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz bag"
-  },
-  {
-      "item":  "Refried Beans",
-      "bid":  "refried-beans",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  454,
-      "buy_pkg_label":  "16oz can"
-  },
-  {
-      "item":  "Refrigerated Biscuits",
-      "bid":  "refrigerated-biscuits",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  462,
-      "buy_pkg_label":  "8ct can"
-  },
-  {
-      "item":  "Rice",
-      "bid":  "rice",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "pantry_pkg_g":  907,
-      "pantry_pkg_label":  "2lb bag",
-      "bulk":  true
-  },
-  {
-      "item":  "Rice Noodles",
-      "bid":  "rice-noodles",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  397,
-      "buy_pkg_label":  "14oz box"
-  },
-  {
-      "item":  "Rice Vinegar",
-      "bid":  "rice-vinegar",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  355,
-      "pantry_pkg_label":  "12floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Ricotta Cheese",
-      "bid":  "ricotta",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  425,
-      "buy_pkg_label":  "15oz tub"
-  },
-  {
-      "item":  "Roasted Red Peppers",
-      "bid":  "roasted-red-peppers",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  340,
-      "buy_pkg_label":  "12oz jar"
-  },
-  {
-      "item":  "Rotini Pasta",
-      "bid":  "rotini-pasta",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  454,
-      "buy_pkg_label":  "16oz box"
-  },
-  {
-      "item":  "Rotisserie Chicken",
-      "bid":  "rotisserie-chicken",
-      "gpu":  700,
-      "unit":  "each",
-      "board":  "weekly",
-      "buy_pkg_g":  700,
-      "buy_pkg_label":  "whole bird",
-      "note":  "gpu = pulled skinless meat per bird. Board cheapest is the Sam's Club warehouse-class bird (5-6 cups / 700-840 g yield); 700 is the LOW end so cost is not understated. Recipe grams are COOKED pulled meat."
-  },
-  {
-      "item":  "Rye Bread",
-      "bid":  "rye-bread",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  683,
-      "buy_pkg_label":  "24oz loaf"
-  },
-  {
-      "item":  "Salsa",
-      "bid":  "salsa",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  454,
-      "buy_pkg_label":  "16oz jar"
-  },
-  {
-      "item":  "Salsa Verde",
-      "bid":  "salsa-verde",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  454,
-      "buy_pkg_label":  "16oz jar"
-  },
-  {
-      "item":  "Salt",
-      "bid":  "salt",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  737,
-      "pantry_pkg_label":  "26oz canister",
-      "bulk":  true
-  },
-  {
-      "item":  "Sandwich Bread",
-      "bid":  "bread",
-      "gpu":  567,
-      "unit":  "each",
-      "buy_pkg_g":  567,
-      "buy_pkg_label":  "20oz loaf"
-  },
-  {
-      "item":  "Sauerkraut",
-      "bid":  "sauerkraut",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  411,
-      "buy_pkg_label":  "14.5oz can"
-  },
-  {
-      "item":  "Sazon Seasoning",
-      "bid":  "sazon-seasoning",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "pantry_pkg_g":  40,
-      "pantry_pkg_label":  "1.41oz 8ct box",
-      "bulk":  true
-  },
-  {
-      "item":  "Seasoned Black Beans",
-      "bid":  "seasoned-black-beans",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  425,
-      "buy_pkg_label":  "can"
-  },
-  {
-      "item":  "Sesame Oil",
-      "bid":  "sesame-oil",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  136,
-      "pantry_pkg_label":  "5floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Shallots",
-      "bid":  "onions",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Shredded Carrots",
-      "bid":  "shredded-carrots",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  283,
-      "buy_pkg_label":  "10oz bag"
-  },
-  {
-      "item":  "Smoked Paprika",
-      "bid":  "smoked-paprika",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  49,
-      "pantry_pkg_label":  "1.75oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Smoked Turkey Sausage",
-      "bid":  "smoked-turkey-sausage",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "buy_pkg_g":  368,
-      "buy_pkg_label":  "13oz rope"
-  },
-  {
-      "item":  "Snow Peas",
-      "bid":  "snow-peas",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz bag"
-  },
-  {
-      "item":  "Soy Sauce",
-      "bid":  "soy-sauce",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  444,
-      "pantry_pkg_label":  "15floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Spaghetti",
-      "bid":  "pasta",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  454,
-      "buy_pkg_label":  "16oz box"
-  },
-  {
-      "item":  "Spinach",
-      "bid":  "frozen-chopped-spinach",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  283,
-      "buy_pkg_label":  "10oz bag"
-  },
-  {
-      "item":  "Sriracha",
-      "bid":  "sriracha",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  481,
-      "pantry_pkg_label":  "17oz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Stuffing Mix",
-      "bid":  "stuffing-mix",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  170,
-      "buy_pkg_label":  "6oz box"
-  },
-  {
-      "item":  "Sugar",
-      "bid":  "sugar",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "pantry_pkg_g":  1814,
-      "pantry_pkg_label":  "4lb bag",
-      "bulk":  true
-  },
-  {
-      "item":  "Sugar-Free Maple Syrup",
-      "bid":  "sugar-free-maple-syrup",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  355,
-      "pantry_pkg_label":  "12floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Sumac",
-      "bid":  "sumac",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  227,
-      "pantry_pkg_label":  "8oz jar (label capture)",
-      "bulk":  true
-  },
-  {
-      "item":  "Sun-Dried Tomatoes",
-      "bid":  "sun-dried-tomatoes",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  198,
-      "pantry_pkg_label":  "7oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Sweet Chili Sauce",
-      "bid":  "sweet-chili-sauce",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  355,
-      "pantry_pkg_label":  "12floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Sweet Potatoes",
-      "bid":  "sweet-potatoes",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "weekly",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Sweet Soy Sauce",
-      "bid":  "sweet-soy-sauce",
-      "gpu":  38,
-      "unit":  "floz",
-      "pantry_pkg_g":  768,
-      "pantry_pkg_label":  "20.2floz bottle (600ml)",
-      "bulk":  true
-  },
-  {
-      "item":  "Sweet Whole Kernel Corn",
-      "bid":  "canned-corn",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  432,
-      "buy_pkg_label":  "can"
-  },
-  {
-      "item":  "Swiss Cheese",
-      "bid":  "swiss-cheese",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz"
-  },
-  {
-      "item":  "Taco Seasoning",
-      "bid":  "taco-seasoning",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  28,
-      "pantry_pkg_label":  "1oz packet",
-      "bulk":  true
-  },
-  {
-      "item":  "Tahini",
-      "bid":  "tahini",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  454,
-      "pantry_pkg_label":  "16oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Tater Tots",
-      "bid":  "tater-tots",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  2268,
-      "buy_pkg_label":  "80oz bag"
-  },
-  {
-      "item":  "Teriyaki Sauce",
-      "bid":  "teriyaki-sauce",
-      "gpu":  34,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  444,
-      "pantry_pkg_label":  "15floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Toasted Sesame Seeds",
-      "bid":  "toasted-sesame-seeds",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  104,
-      "pantry_pkg_label":  "3.66oz jar",
-      "bulk":  true
-  },
-  {
-      "item":  "Tomatillos",
-      "bid":  "tomatillos",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Tomato Paste",
-      "bid":  "tomato-paste",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  170,
-      "buy_pkg_label":  "6oz can"
-  },
-  {
-      "item":  "Tomato Sauce",
-      "bid":  "tomato-sauce",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  425,
-      "buy_pkg_label":  "15oz can"
-  },
-  {
-      "item":  "Tortilla",
-      "bid":  "tortillas",
-      "gpu":  36.85,
-      "unit":  "each",
-      "buy_pkg_g":  737,
-      "buy_pkg_label":  "20ct pack"
-  },
-  {
-      "item":  "Traditional Pasta Sauce",
-      "bid":  "traditional-pasta-sauce",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  680,
-      "buy_pkg_label":  "24oz jar"
-  },
-  {
-      "item":  "Turkey Bacon",
-      "bid":  "turkey-bacon",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  340,
-      "buy_pkg_label":  "12oz pack",
-      "note":  "bid corrected 2026-08-06: was 'bacon' (PORK by the lb) - turkey bacon is its own board commodity at its own price class"
-  },
-  {
-      "item":  "Turkey Breast",
-      "bid":  "turkey-breast",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "buy_pkg_g":  1361,
-      "buy_pkg_label":  "3lb frozen roast"
-  },
-  {
-      "item":  "Turkey Pepperoni",
-      "bid":  "turkey-pepperoni",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  142,
-      "buy_pkg_label":  "5oz pack"
-  },
-  {
-      "item":  "Vegetable Oil",
-      "bid":  "vegetable-oil",
-      "gpu":  28,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  1306,
-      "pantry_pkg_label":  "48floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Walnuts",
-      "bid":  "walnuts",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz bag"
-  },
-  {
-      "item":  "White Mushrooms",
-      "bid":  "mushrooms",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "buy_pkg_g":  227,
-      "buy_pkg_label":  "8oz pack"
-  },
-  {
-      "item":  "White Vinegar",
-      "bid":  "white-vinegar",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe",
-      "pantry_pkg_g":  946,
-      "pantry_pkg_label":  "32floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "White Wine Vinegar",
-      "bid":  "white-wine-vinegar",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "buy_pkg_g":  500,
-      "buy_pkg_label":  "16.9floz bottle"
-  },
-  {
-      "item":  "Wild Rice",
-      "bid":  "wild-rice",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "buy_pkg_g":  454,
-      "buy_pkg_label":  "16oz bag"
-  },
-  {
-      "item":  "Worcestershire Sauce",
-      "bid":  "worcestershire",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "pantry_pkg_g":  296,
-      "pantry_pkg_label":  "10floz bottle",
-      "bulk":  true
-  },
-  {
-      "item":  "Yellow Onion",
-      "bid":  "onions",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "weekly",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Zero-Sugar Soda",
-      "bid":  "zero-sugar-soda-2l",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
-      "buy_pkg_g":  2000,
-      "buy_pkg_label":  "2L bottle"
-  },
-  {
-      "item":  "Ziti Pasta",
-      "bid":  "pasta",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "weekly",
-      "buy_pkg_g":  454,
-      "buy_pkg_label":  "16oz box"
-  },
-  {
-      "item":  "Zucchini",
-      "bid":  "zucchini",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
-      "buy_pkg_g":  453.592,
-      "buy_pkg_label":  "lb"
-  },
-  {
-      "item":  "Korean glass noodles (dangmyeon)",
-      "bid":  "rice-noodles",
-      "gpu":  28.3495,
-      "unit":  "oz",
-      "board":  "recipe"
-  }
+﻿[
+    {
+        "item":  "_r300_note",
+        "pantry_pkg_g":  0,
+        "pantry_pkg_label":  "R300 additions below (2026-07-25): container sizes from board comparison rows / walmart-r300-raw.txt / labels-r300.json. Sweet Soy uses the map\u0027s 38 g/floz density (kecap manis is syrup-dense), so 20.2 floz = 768 g. Jerk Seasoning deliberately ABSENT: no sourced container size - engine flags it rather than guessing."
+    },
+    {
+        "item":  "1/3 Fat Cream Cheese",
+        "bid":  "1-3-fat-cream-cheese",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz brick",
+        "aliases":  [
+                        "Cream Cheese"
+                    ],
+        "alias_ruling":  "Brad, 2026-08-16; see design\\PLAN-ingredient-vocabulary-2026-08-16.md section 0c"
+    },
+    {
+        "item":  "93/7 Ground Beef",
+        "bid":  "93-7-ground-beef",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "93/7 Ground Turkey",
+        "bid":  "93-7-ground-turkey",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "99/1 Ground Turkey"
+    },
+    {
+        "item":  "Achiote Paste",
+        "bid":  "achiote-paste",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  99,
+        "pantry_pkg_label":  "3.5oz box",
+        "bulk":  true
+    },
+    {
+        "item":  "Aji Amarillo Paste",
+        "bid":  "aji-amarillo-paste",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  298,
+        "pantry_pkg_label":  "10.5oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Alfredo Sauce",
+        "bid":  "alfredo-sauce",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  425,
+        "buy_pkg_label":  "15oz jar"
+    },
+    {
+        "item":  "All-Purpose Flour",
+        "bid":  "flour",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "pantry_pkg_g":  2268,
+        "pantry_pkg_label":  "5lb bag",
+        "bulk":  true
+    },
+    {
+        "item":  "Almonds",
+        "bid":  "almonds",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  397,
+        "buy_pkg_label":  "14oz bag"
+    },
+    {
+        "item":  "Apple",
+        "bid":  "apples",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Apple Cider",
+        "bid":  "apple-cider",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "buy_pkg_g":  1890,
+        "buy_pkg_label":  "64floz jug"
+    },
+    {
+        "item":  "Apple Cider Vinegar",
+        "bid":  "apple-cider-vinegar",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  946,
+        "pantry_pkg_label":  "32floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Apple Juice",
+        "bid":  "apple-juice",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "buy_pkg_g":  1893,
+        "buy_pkg_label":  "64floz bottle"
+    },
+    {
+        "item":  "Artichoke Hearts",
+        "bid":  "artichoke-hearts",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  391,
+        "buy_pkg_label":  "13.8oz can"
+    },
+    {
+        "item":  "Avocado",
+        "bid":  "avocados",
+        "gpu":  150,
+        "unit":  "each",
+        "board":  "weekly",
+        "buy_pkg_g":  150,
+        "buy_pkg_label":  "each",
+        "note":  "gpu = edible flesh per medium avocado, FDA NLEA basis (label serving 1/3 medium = 50 g). Grams in recipes are flesh grams."
+    },
+    {
+        "item":  "Au Jus Gravy Mix",
+        "bid":  "au-jus-gravy-mix",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  28,
+        "buy_pkg_label":  "1oz packet"
+    },
+    {
+        "item":  "Baked Beans",
+        "bid":  "baked-beans",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  794,
+        "buy_pkg_label":  "28oz can"
+    },
+    {
+        "item":  "Baking Powder",
+        "bid":  "baking-powder",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  230,
+        "pantry_pkg_label":  "8.1oz can",
+        "bulk":  true
+    },
+    {
+        "item":  "Baking Soda",
+        "bid":  "baking-soda",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  454,
+        "pantry_pkg_label":  "16oz box",
+        "bulk":  true
+    },
+    {
+        "item":  "Balsamic Vinegar",
+        "bid":  "balsamic-vinegar",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  500,
+        "pantry_pkg_label":  "500ml bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Basil Pesto",
+        "bid":  "pesto",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  624,
+        "buy_pkg_label":  "22oz jar"
+    },
+    {
+        "item":  "Bay Leaves",
+        "bid":  "bay-leaves",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  6,
+        "pantry_pkg_label":  "0.2oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "BBQ Sauce",
+        "bid":  "bbq-sauce",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  510,
+        "pantry_pkg_label":  "18oz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "BBQ Sauce (Sugar Free)",
+        "bid":  "sugar-free-bbq-sauce",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  510,
+        "pantry_pkg_label":  "18oz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Beef Broth",
+        "bid":  "beef-broth",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  907,
+        "pantry_pkg_label":  "32oz carton",
+        "bulk":  true
+    },
+    {
+        "item":  "Beef Chuck Roast",
+        "bid":  "beef-chuck-roast",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Beef Flank/Sirloin Steak",
+        "bid":  "sirloin-steak",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Berbere Seasoning",
+        "bid":  "berbere-seasoning",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  37,
+        "pantry_pkg_label":  "1.3oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Black Pepper",
+        "bid":  "black-pepper",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  85,
+        "pantry_pkg_label":  "3oz shaker",
+        "bulk":  true
+    },
+    {
+        "item":  "Blackberries",
+        "bid":  "blackberries",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  170,
+        "buy_pkg_label":  "6oz clamshell"
+    },
+    {
+        "item":  "Boneless Skinless Chicken Breast",
+        "bid":  "chicken-breast",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Boneless Skinless Chicken Thigh",
+        "bid":  "boneless-skinless-chicken-thigh",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Bratwurst",
+        "bid":  "bratwurst",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "buy_pkg_g":  539,
+        "buy_pkg_label":  "19oz 5-pack"
+    },
+    {
+        "item":  "Bread Crumbs",
+        "bid":  "bread-crumbs",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  425,
+        "pantry_pkg_label":  "15oz canister",
+        "bulk":  true
+    },
+    {
+        "item":  "Broccoli Florets",
+        "bid":  "frozen-broccoli-florets",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  340,
+        "buy_pkg_label":  "12oz bag",
+        "aliases":  [
+                        "Broccoli"
+                    ],
+        "alias_ruling":  "Brad, 2026-08-16; see design\\PLAN-ingredient-vocabulary-2026-08-16.md section 0c"
+    },
+    {
+        "item":  "Brown Gravy Mix",
+        "bid":  "brown-gravy-mix",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  25,
+        "pantry_pkg_label":  "0.87oz packet",
+        "bulk":  true
+    },
+    {
+        "item":  "Brown Sugar",
+        "bid":  "brown-sugar",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  907,
+        "pantry_pkg_label":  "2lb bag",
+        "bulk":  true
+    },
+    {
+        "item":  "Brussels Sprouts",
+        "bid":  "brussels-sprouts",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Buffalo Wing Sauce",
+        "bid":  "buffalo-wing-sauce",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  340,
+        "pantry_pkg_label":  "12floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Bulgur Wheat",
+        "bid":  "bulgur-wheat",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  907.2,
+        "pantry_pkg_label":  "32oz bag",
+        "bulk":  true
+    },
+    {
+        "item":  "Butter",
+        "bid":  "butter",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb box"
+    },
+    {
+        "item":  "Butter Crackers",
+        "bid":  "crackers",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  382,
+        "pantry_pkg_label":  "13.5oz box",
+        "bulk":  true
+    },
+    {
+        "item":  "Cajun Seasoning",
+        "bid":  "cajun-seasoning",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  227,
+        "pantry_pkg_label":  "8oz shaker",
+        "bulk":  true
+    },
+    {
+        "item":  "Canned Black Beans",
+        "bid":  "canned-black-beans",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  425,
+        "buy_pkg_label":  "15oz can",
+        "note":  "plain canned black beans - deliberately distinct from Seasoned Black Beans (denser macro row); do not consolidate"
+    },
+    {
+        "item":  "Canned Pinto Beans",
+        "bid":  "canned-pinto-beans",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  439,
+        "buy_pkg_label":  "15.5oz can"
+    },
+    {
+        "item":  "Cannellini Beans",
+        "bid":  "cannellini-beans",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  425,
+        "buy_pkg_label":  "can"
+    },
+    {
+        "item":  "Capers",
+        "bid":  "capers",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  104,
+        "pantry_pkg_label":  "3.5floz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Caraway Seeds",
+        "bid":  "caraway-seeds",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  50,
+        "pantry_pkg_label":  "1.75oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Carrots",
+        "bid":  "carrots",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Cashews",
+        "bid":  "cashews",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz can"
+    },
+    {
+        "item":  "Cayenne Pepper",
+        "bid":  "cayenne-pepper",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  64,
+        "pantry_pkg_label":  "2.25oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Celery",
+        "bid":  "celery",
+        "gpu":  450,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  450,
+        "buy_pkg_label":  "bunch"
+    },
+    {
+        "item":  "Celery Salt",
+        "bid":  "celery-salt",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  142,
+        "buy_pkg_label":  "5oz canister"
+    },
+    {
+        "item":  "Cheddar Cheese",
+        "bid":  "cheddar-cheese",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz block"
+    },
+    {
+        "item":  "Cheddar Cheese, Shredded",
+        "bid":  "cheddar-cheese-shredded",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz bag"
+    },
+    {
+        "item":  "Cheese Tortellini",
+        "bid":  "cheese-tortellini",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  539,
+        "buy_pkg_label":  "19oz bag"
+    },
+    {
+        "item":  "Cherry Tomatoes",
+        "bid":  "cherry-tomatoes",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  283,
+        "buy_pkg_label":  "10oz clamshell"
+    },
+    {
+        "item":  "Chicken Broth",
+        "bid":  "chicken-broth",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  907,
+        "pantry_pkg_label":  "32oz carton",
+        "bulk":  true
+    },
+    {
+        "item":  "Chicken Livers",
+        "bid":  "chicken-livers",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "buy_pkg_g":  567,
+        "buy_pkg_label":  "1.25lb tub"
+    },
+    {
+        "item":  "Chickpeas",
+        "bid":  "chickpeas",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  425,
+        "buy_pkg_label":  "can"
+    },
+    {
+        "item":  "Chili Crisp",
+        "bid":  "chili-crisp",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  190,
+        "pantry_pkg_label":  "6.7oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Chili Crisp / Chili Oil"
+    },
+    {
+        "item":  "Chili Powder",
+        "bid":  "chili-powder",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  71,
+        "pantry_pkg_label":  "2.5oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Chipotle in Adobo",
+        "bid":  "chipotle-adobo",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  198,
+        "pantry_pkg_label":  "7oz can",
+        "bulk":  true
+    },
+    {
+        "item":  "Cocoa Powder",
+        "bid":  "cocoa-powder",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  227,
+        "pantry_pkg_label":  "8oz canister",
+        "bulk":  true
+    },
+    {
+        "item":  "Coconut Milk",
+        "bid":  "coconut-milk-canned",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "buy_pkg_g":  400,
+        "buy_pkg_label":  "13.5oz can"
+    },
+    {
+        "item":  "Condensed French Onion Soup",
+        "bid":  "condensed-french-onion-soup",
+        "gpu":  298,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  298,
+        "buy_pkg_label":  "10.5oz can"
+    },
+    {
+        "item":  "Corn Chips",
+        "bid":  "corn-chips",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  262,
+        "buy_pkg_label":  "9.25oz bag"
+    },
+    {
+        "item":  "Corn Muffin Mix",
+        "bid":  "corn-muffin-mix",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  241,
+        "buy_pkg_label":  "box"
+    },
+    {
+        "item":  "Corn Tortillas",
+        "bid":  "corn-tortillas",
+        "gpu":  23.5,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  1880,
+        "buy_pkg_label":  "80ct pack"
+    },
+    {
+        "item":  "Corned Beef Brisket",
+        "bid":  "corned-beef-brisket",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Cornstarch",
+        "bid":  "cornstarch",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  454,
+        "pantry_pkg_label":  "16oz box",
+        "bulk":  true
+    },
+    {
+        "item":  "Cottage Cheese",
+        "bid":  "cottage-cheese",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  680,
+        "buy_pkg_label":  "24oz tub"
+    },
+    {
+        "item":  "Cream of Chicken Soup",
+        "bid":  "cream-of-chicken-soup",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  298,
+        "buy_pkg_label":  "10.5oz can"
+    },
+    {
+        "item":  "Cream of Mushroom Soup",
+        "bid":  "cream-of-mushroom-soup",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  298,
+        "buy_pkg_label":  "10.5oz can"
+    },
+    {
+        "item":  "Crushed Tomatoes",
+        "bid":  "crushed-tomatoes",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  794,
+        "buy_pkg_label":  "28oz can"
+    },
+    {
+        "item":  "Cucumber",
+        "bid":  "cucumbers",
+        "gpu":  300,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  300,
+        "buy_pkg_label":  "each"
+    },
+    {
+        "item":  "Curry Powder",
+        "bid":  "curry-powder",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  57,
+        "pantry_pkg_label":  "2oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Diced Green Chiles",
+        "bid":  "canned-green-chilies",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  113,
+        "pantry_pkg_label":  "4oz can",
+        "bulk":  true
+    },
+    {
+        "item":  "Diced Ham",
+        "bid":  "diced-ham",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz pack"
+    },
+    {
+        "item":  "Diced Tomatoes",
+        "bid":  "diced-tomatoes",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  411,
+        "buy_pkg_label":  "can"
+    },
+    {
+        "item":  "Diced Tomatoes \u0026 Green Chilies",
+        "bid":  "tomatoes-green-chilies",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  283,
+        "buy_pkg_label":  "10oz can"
+    },
+    {
+        "item":  "Dijon Mustard",
+        "bid":  "dijon-mustard",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  340,
+        "pantry_pkg_label":  "12oz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Dill Pickles",
+        "bid":  "pickles",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  907,
+        "pantry_pkg_label":  "32oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Doubanjiang",
+        "bid":  "doubanjiang",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  227,
+        "pantry_pkg_label":  "8oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Dried Ancho Chiles",
+        "bid":  "dried-ancho-chiles",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  454,
+        "pantry_pkg_label":  "1lb bag (board capture)",
+        "bulk":  true
+    },
+    {
+        "item":  "Dried Arbol Chiles",
+        "bid":  "dried-arbol-chiles",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  113,
+        "pantry_pkg_label":  "4oz bag",
+        "bulk":  true
+    },
+    {
+        "item":  "Dried Basil",
+        "bid":  "dried-basil",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  14,
+        "pantry_pkg_label":  "0.5oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Dried Dill",
+        "bid":  "dried-dill",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  14,
+        "pantry_pkg_label":  "0.5oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Dried Guajillo Chiles",
+        "bid":  "dried-guajillo-chiles",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  113,
+        "pantry_pkg_label":  "4oz bag",
+        "bulk":  true
+    },
+    {
+        "item":  "Dried Oregano",
+        "bid":  "dried-oregano",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  21,
+        "pantry_pkg_label":  "0.75oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Dried Parsley",
+        "bid":  "dried-parsley",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  14,
+        "pantry_pkg_label":  "0.5oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Dried Rosemary",
+        "bid":  "dried-rosemary",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  20,
+        "buy_pkg_label":  "0.7oz jar"
+    },
+    {
+        "item":  "Dried Thyme",
+        "bid":  "dried-thyme",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  14,
+        "pantry_pkg_label":  "0.5oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Egg Noodles",
+        "bid":  "egg-noodles",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  340,
+        "buy_pkg_label":  "12oz bag"
+    },
+    {
+        "item":  "Eggplant",
+        "bid":  "eggplant",
+        "gpu":  548,
+        "unit":  "each",
+        "buy_pkg_g":  548,
+        "buy_pkg_label":  "each"
+    },
+    {
+        "item":  "Eggs",
+        "bid":  "eggs",
+        "gpu":  600,
+        "unit":  "dozen",
+        "board":  "recipe",
+        "buy_pkg_g":  600,
+        "buy_pkg_label":  "dozen"
+    },
+    {
+        "item":  "Enchilada Sauce",
+        "bid":  "enchilada-sauce",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  283,
+        "buy_pkg_label":  "10oz can"
+    },
+    {
+        "item":  "Fajita Seasoning",
+        "bid":  "fajita-seasoning",
+        "gpu":  35.44,
+        "unit":  "each",
+        "board":  "recipe",
+        "pantry_pkg_g":  28,
+        "pantry_pkg_label":  "1oz packet",
+        "bulk":  true
+    },
+    {
+        "item":  "Fat Free Cheddar",
+        "bid":  "fat-free-cheddar",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz bag"
+    },
+    {
+        "item":  "Fat Free Cottage Cheese",
+        "bid":  "cottage-cheese",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  680,
+        "buy_pkg_label":  "24oz tub",
+        "note":  "same cottage-cheese board id as the regular row: store lines price regular and fat free at the same shelf price class"
+    },
+    {
+        "item":  "Fat Free Mozzarella"
+    },
+    {
+        "item":  "Feta Cheese",
+        "bid":  "feta",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  170,
+        "buy_pkg_label":  "6oz tub"
+    },
+    {
+        "item":  "Fettuccine",
+        "bid":  "pasta",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz box"
+    },
+    {
+        "item":  "Fish Sauce",
+        "bid":  "fish-sauce",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  200,
+        "pantry_pkg_label":  "6.76floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Five-Spice Powder",
+        "bid":  "five-spice-powder",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  53,
+        "pantry_pkg_label":  "1.87oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Fresh Basil",
+        "bid":  "fresh-basil",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  14,
+        "buy_pkg_label":  "0.5oz pack"
+    },
+    {
+        "item":  "Fresh Cilantro",
+        "bid":  "cilantro",
+        "gpu":  57,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  57,
+        "buy_pkg_label":  "bunch"
+    },
+    {
+        "item":  "Fresh Mint",
+        "bid":  "fresh-mint",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  14,
+        "buy_pkg_label":  "0.5oz pack"
+    },
+    {
+        "item":  "Fries",
+        "bid":  "fries",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  907,
+        "buy_pkg_label":  "32oz bag"
+    },
+    {
+        "item":  "Frozen Chopped Spinach",
+        "bid":  "frozen-chopped-spinach",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  284,
+        "buy_pkg_label":  "10oz box"
+    },
+    {
+        "item":  "Frozen Green Peas",
+        "bid":  "frozen-peas",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  340,
+        "buy_pkg_label":  "12oz bag"
+    },
+    {
+        "item":  "Frozen Hash Browns",
+        "bid":  "hash-browns",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  737,
+        "buy_pkg_label":  "26oz bag"
+    },
+    {
+        "item":  "Frozen Peas",
+        "bid":  "frozen-peas",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  340,
+        "buy_pkg_label":  "12oz bag"
+    },
+    {
+        "item":  "Garam Masala",
+        "bid":  "garam-masala",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  57,
+        "pantry_pkg_label":  "2oz jar",
+        "bulk":  true,
+        "aliases":  [
+                        "Tandoori Masala"
+                    ],
+        "alias_ruling":  "Brad, 2026-08-16; see design\\PLAN-ingredient-vocabulary-2026-08-16.md section 0c"
+    },
+    {
+        "item":  "Garlic",
+        "bid":  "garlic",
+        "gpu":  42.6,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  42.6,
+        "buy_pkg_label":  "head"
+    },
+    {
+        "item":  "Garlic Powder",
+        "bid":  "garlic-powder",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  92,
+        "pantry_pkg_label":  "3.25oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Ginger",
+        "bid":  "fresh-ginger",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  100,
+        "buy_pkg_label":  "piece"
+    },
+    {
+        "item":  "Gingersnap Cookies",
+        "bid":  "gingersnaps",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  312,
+        "buy_pkg_label":  "11oz box"
+    },
+    {
+        "item":  "Gochujang",
+        "bid":  "gochujang",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  500,
+        "pantry_pkg_label":  "500g tub",
+        "bulk":  true
+    },
+    {
+        "item":  "Golden Raisins",
+        "bid":  "golden-raisins",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  340,
+        "pantry_pkg_label":  "12oz bag",
+        "bulk":  true
+    },
+    {
+        "item":  "Greek Yogurt",
+        "bid":  "greek-yogurt",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  907,
+        "buy_pkg_label":  "32oz tub"
+    },
+    {
+        "item":  "Green Beans",
+        "bid":  "frozen-green-beans",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  340,
+        "buy_pkg_label":  "12oz bag"
+    },
+    {
+        "item":  "Green Bell Peppers",
+        "bid":  "green-bell-pepper",
+        "gpu":  120,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  120,
+        "buy_pkg_label":  "each"
+    },
+    {
+        "item":  "Green Cabbage",
+        "bid":  "cabbage",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  900,
+        "buy_pkg_label":  "head"
+    },
+    {
+        "item":  "Green Chile Sauce",
+        "bid":  "salsa-verde",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz can"
+    },
+    {
+        "item":  "Green Olives",
+        "bid":  "olives",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  163,
+        "buy_pkg_label":  "5.75oz jar"
+    },
+    {
+        "item":  "Green Onions",
+        "bid":  "green-onions",
+        "gpu":  90,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  90,
+        "buy_pkg_label":  "bunch"
+    },
+    {
+        "item":  "Grits",
+        "bid":  "grits",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  680,
+        "buy_pkg_label":  "24oz canister",
+        "pantry_pkg_g":  680,
+        "pantry_pkg_label":  "24oz canister",
+        "bulk":  true
+    },
+    {
+        "item":  "Ground Allspice",
+        "bid":  "ground-allspice",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  47,
+        "pantry_pkg_label":  "1.65oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Ground Cinnamon",
+        "bid":  "ground-cinnamon",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  74,
+        "pantry_pkg_label":  "2.6oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Ground Cloves",
+        "bid":  "ground-cloves",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  42,
+        "pantry_pkg_label":  "1.5oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Ground Coriander",
+        "bid":  "ground-coriander",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  45,
+        "pantry_pkg_label":  "1.6oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Ground Cumin",
+        "bid":  "ground-cumin",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  71,
+        "pantry_pkg_label":  "2.5oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Ground Fennel",
+        "bid":  "ground-fennel",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  227,
+        "pantry_pkg_label":  "8oz jar (board capture)",
+        "bulk":  true
+    },
+    {
+        "item":  "Ground Ginger",
+        "bid":  "ground-ginger",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  45,
+        "pantry_pkg_label":  "1.6oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Ground Nutmeg",
+        "bid":  "ground-nutmeg",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  54,
+        "pantry_pkg_label":  "1.9oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Ground Pork",
+        "bid":  "ground-pork",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Ground Turmeric",
+        "bid":  "ground-turmeric",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  57,
+        "pantry_pkg_label":  "2oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Half and Half",
+        "bid":  "half-and-half",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "buy_pkg_g":  473,
+        "buy_pkg_label":  "pint"
+    },
+    {
+        "item":  "Harissa Paste",
+        "bid":  "harissa-paste",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  283,
+        "pantry_pkg_label":  "10oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Heavy Cream",
+        "bid":  "heavy-cream",
+        "gpu":  29.8,
+        "unit":  "floz",
+        "board":  "weekly",
+        "buy_pkg_g":  473,
+        "buy_pkg_label":  "pint"
+    },
+    {
+        "item":  "Hickory Smoked Bacon",
+        "bid":  "bacon",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "High Fiber Tortilla",
+        "bid":  "high-fiber-tortillas",
+        "gpu":  65,
+        "unit":  "each",
+        "board":  "weekly",
+        "buy_pkg_g":  388,
+        "buy_pkg_label":  "6ct pack"
+    },
+    {
+        "item":  "Hoisin Sauce",
+        "bid":  "hoisin-sauce",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  425,
+        "pantry_pkg_label":  "15oz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Hominy",
+        "bid":  "hominy",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  425,
+        "buy_pkg_label":  "can"
+    },
+    {
+        "item":  "Honey",
+        "bid":  "honey",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  340,
+        "pantry_pkg_label":  "12oz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Honey Dijon Mustard",
+        "bid":  "honey-dijon-mustard",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  340,
+        "buy_pkg_label":  "12oz bottle"
+    },
+    {
+        "item":  "Horseradish Sauce",
+        "bid":  "horseradish-sauce",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  340,
+        "pantry_pkg_label":  "12oz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Hot Honey",
+        "bid":  "hot-honey",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  340,
+        "pantry_pkg_label":  "12oz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Hot Italian Sausage",
+        "bid":  "italian-sausage",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Hot Sauce",
+        "bid":  "hot-sauce",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  355,
+        "pantry_pkg_label":  "12floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Hummus",
+        "bid":  "hummus",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  283,
+        "buy_pkg_label":  "10oz tub"
+    },
+    {
+        "item":  "Italian Seasoning",
+        "bid":  "italian-seasoning",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  21,
+        "pantry_pkg_label":  "0.75oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Jalapeno",
+        "bid":  "jalapenos",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Japanese Curry Roux",
+        "bid":  "japanese-curry-roux",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  92,
+        "buy_pkg_label":  "3.2oz box"
+    },
+    {
+        "item":  "Jerk Seasoning",
+        "bid":  "jerk-seasoning",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  283,
+        "pantry_pkg_label":  "10 oz jar (Walkerswood, Walmart $4.52 captured 2026-07-25)",
+        "bulk":  true
+    },
+    {
+        "item":  "Kale",
+        "bid":  "kale",
+        "gpu":  250,
+        "unit":  "each",
+        "buy_pkg_g":  250,
+        "buy_pkg_label":  "bunch"
+    },
+    {
+        "item":  "Ketchup",
+        "bid":  "ketchup",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  567,
+        "pantry_pkg_label":  "20oz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Keto Bun",
+        "bid":  "keto-bun",
+        "gpu":  50,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  400,
+        "buy_pkg_label":  "8 buns"
+    },
+    {
+        "item":  "Kidney Beans",
+        "bid":  "kidney-beans",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  425,
+        "buy_pkg_label":  "can"
+    },
+    {
+        "item":  "Korean Rice Cakes",
+        "bid":  "korean-rice-cakes",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  599.9,
+        "buy_pkg_label":  "21.16oz bag"
+    },
+    {
+        "item":  "Lemon Juice",
+        "bid":  "lemon-juice",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  946,
+        "pantry_pkg_label":  "32floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Lemongrass Paste",
+        "bid":  "lemongrass-paste",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  113,
+        "pantry_pkg_label":  "4oz tube",
+        "bulk":  true
+    },
+    {
+        "item":  "Light Sour Cream",
+        "bid":  "sour-cream",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz tub",
+        "aliases":  [
+                        "Sour Cream"
+                    ],
+        "alias_ruling":  "Brad, 2026-08-16; see design\\PLAN-ingredient-vocabulary-2026-08-16.md section 0c"
+    },
+    {
+        "item":  "Lime Juice",
+        "bid":  "limes",
+        "gpu":  30,
+        "unit":  "each",
+        "board":  "recipe",
+        "pantry_pkg_g":  237,
+        "pantry_pkg_label":  "8floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Liquid Smoke",
+        "bid":  "liquid-smoke",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  103,
+        "pantry_pkg_label":  "3.5floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Lo Mein Noodles",
+        "bid":  "egg-noodles",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  397,
+        "buy_pkg_label":  "14oz pack"
+    },
+    {
+        "item":  "Mango",
+        "bid":  "mangoes",
+        "gpu":  336,
+        "unit":  "each",
+        "board":  "weekly",
+        "buy_pkg_g":  336,
+        "buy_pkg_label":  "each",
+        "note":  "gpu = edible flesh per fruit (USDA FDC: mangos, raw, 1 fruit = 336 g). Grams in recipes are flesh grams."
+    },
+    {
+        "item":  "Marinara Sauce",
+        "bid":  "marinara-sauce",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  680,
+        "buy_pkg_label":  "24oz jar"
+    },
+    {
+        "item":  "Mayonnaise",
+        "bid":  "mayonnaise",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  850,
+        "pantry_pkg_label":  "30oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Mexican Cheese Blend",
+        "bid":  "shredded-cheese",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz bag"
+    },
+    {
+        "item":  "Milk",
+        "bid":  "milk",
+        "gpu":  3785,
+        "unit":  "gallon",
+        "board":  "weekly",
+        "buy_pkg_g":  3785,
+        "buy_pkg_label":  "gallon"
+    },
+    {
+        "item":  "Mirin",
+        "bid":  "mirin",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "weekly",
+        "pantry_pkg_g":  296,
+        "pantry_pkg_label":  "10floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Miso Paste",
+        "bulk":  true
+    },
+    {
+        "item":  "Mole Paste",
+        "buy_pkg_g":  234,
+        "buy_pkg_label":  "8.25oz jar"
+    },
+    {
+        "item":  "Mozzarella Cheese",
+        "bid":  "mozzarella-cheese",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz bag"
+    },
+    {
+        "item":  "Olive Oil",
+        "bid":  "olive-oil",
+        "gpu":  28,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  690,
+        "pantry_pkg_label":  "25.5floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Olives",
+        "bid":  "green-olives",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  170,
+        "buy_pkg_label":  "6oz can"
+    },
+    {
+        "item":  "Onion Powder",
+        "bid":  "onion-powder",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  79,
+        "pantry_pkg_label":  "2.79oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Onion Soup Mix",
+        "bid":  "onion-soup-mix",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  62,
+        "pantry_pkg_label":  "2.2oz 2ct box",
+        "bulk":  true
+    },
+    {
+        "item":  "Orange Juice",
+        "bid":  "orange-juice",
+        "gpu":  31,
+        "unit":  "floz",
+        "board":  "weekly",
+        "buy_pkg_g":  1560,
+        "buy_pkg_label":  "52floz carton"
+    },
+    {
+        "item":  "Orange Zest",
+        "bid":  "orange-juice",
+        "gpu":  31,
+        "unit":  "floz",
+        "board":  "recipe",
+        "buy_pkg_g":  131,
+        "buy_pkg_label":  "each"
+    },
+    {
+        "item":  "Orzo Pasta",
+        "bid":  "pasta",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz box"
+    },
+    {
+        "item":  "Oyster Sauce",
+        "bid":  "oyster-sauce",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "weekly",
+        "pantry_pkg_g":  255,
+        "pantry_pkg_label":  "9oz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Panko Breadcrumbs",
+        "bid":  "bread-crumbs",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz box"
+    },
+    {
+        "item":  "Paprika",
+        "bid":  "paprika",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  71,
+        "pantry_pkg_label":  "2.5oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Parmesan Cheese",
+        "bid":  "parmesan",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz tub"
+    },
+    {
+        "item":  "Pasta Shells",
+        "bid":  "pasta",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  340,
+        "buy_pkg_label":  "12oz box"
+    },
+    {
+        "item":  "Pasta Shells - jumbo",
+        "bid":  "jumbo-pasta-shells",
+        "gpu":  28.3495,
+        "unit":  "oz"
+    },
+    {
+        "item":  "Peanut Butter",
+        "bid":  "peanut-butter",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  462,
+        "pantry_pkg_label":  "16.3oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Peanuts",
+        "bid":  "peanuts",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz jar"
+    },
+    {
+        "item":  "Penne Pasta",
+        "bid":  "penne-pasta",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz box"
+    },
+    {
+        "item":  "Pepperoncini",
+        "bid":  "banana-peppers",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  355,
+        "pantry_pkg_label":  "12floz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Pigeon Peas",
+        "bid":  "pigeon-peas",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  425,
+        "buy_pkg_label":  "15oz can"
+    },
+    {
+        "item":  "Pineapple Chunks",
+        "bid":  "canned-pineapple",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  567,
+        "buy_pkg_label":  "20oz can"
+    },
+    {
+        "item":  "Pineapple Juice",
+        "bid":  "pineapple-juice",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "buy_pkg_g":  1360,
+        "buy_pkg_label":  "46floz can"
+    },
+    {
+        "item":  "Plain Yogurt",
+        "bid":  "greek-yogurt",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  907,
+        "buy_pkg_label":  "32oz tub"
+    },
+    {
+        "item":  "Poblano Peppers",
+        "bid":  "poblano-peppers",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Pomegranate Molasses",
+        "bid":  "pomegranate-molasses",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "weekly",
+        "pantry_pkg_g":  296,
+        "pantry_pkg_label":  "10floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Poppy Seeds",
+        "bid":  "poppy-seeds",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  60,
+        "pantry_pkg_label":  "2.12oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Pork Chops",
+        "bid":  "pork-chops",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Pork Chorizo",
+        "bid":  "ground-pork",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "buy_pkg_g":  255,
+        "buy_pkg_label":  "9oz tube"
+    },
+    {
+        "item":  "Pork Loin",
+        "bid":  "pork-loin",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Pork Shoulder",
+        "bid":  "pork-shoulder",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Pork Tenderloin",
+        "bid":  "pork-tenderloin",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Potato",
+        "bid":  "russet-potatoes",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Potato Gnocchi",
+        "bid":  "potato-gnocchi",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  499,
+        "buy_pkg_label":  "17.6oz pack"
+    },
+    {
+        "item":  "Poultry Seasoning",
+        "bid":  "poultry-seasoning",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  43,
+        "pantry_pkg_label":  "1.5oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Provolone Cheese",
+        "bid":  "provolone-cheese",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz pack"
+    },
+    {
+        "item":  "Pumpkin Puree",
+        "bid":  "canned-pumpkin",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  822,
+        "buy_pkg_label":  "29oz can"
+    },
+    {
+        "item":  "Ranch Dressing",
+        "bid":  "ranch-dressing",
+        "gpu":  28,
+        "unit":  "floz",
+        "board":  "weekly",
+        "buy_pkg_g":  448,
+        "buy_pkg_label":  "16floz bottle",
+        "note":  "gpu 28 g/floz from the GV Classic Ranch label (2 tbsp = 28 g)"
+    },
+    {
+        "item":  "Ranch Seasoning Mix",
+        "bid":  "ranch-seasoning-mix",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  28,
+        "pantry_pkg_label":  "1oz packet",
+        "bulk":  true
+    },
+    {
+        "item":  "Red Bell Pepper",
+        "bid":  "red-bell-pepper",
+        "gpu":  120,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  120,
+        "buy_pkg_label":  "each"
+    },
+    {
+        "item":  "Red Curry Paste",
+        "bid":  "red-curry-paste",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  113,
+        "buy_pkg_label":  "4oz jar"
+    },
+    {
+        "item":  "Red Onion",
+        "bid":  "red-onion",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Red Pepper Flakes",
+        "bid":  "red-pepper-flakes",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  39,
+        "pantry_pkg_label":  "1.375oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Red Wine Vinegar",
+        "bid":  "red-wine-vinegar",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  355,
+        "pantry_pkg_label":  "12floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Reduced Fat Mozzarella",
+        "bid":  "reduced-fat-mozzarella",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz bag"
+    },
+    {
+        "item":  "Refried Beans",
+        "bid":  "refried-beans",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz can"
+    },
+    {
+        "item":  "Refrigerated Biscuits",
+        "bid":  "refrigerated-biscuits",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  462,
+        "buy_pkg_label":  "8ct can"
+    },
+    {
+        "item":  "Rice",
+        "bid":  "rice",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "pantry_pkg_g":  907,
+        "pantry_pkg_label":  "2lb bag",
+        "bulk":  true
+    },
+    {
+        "item":  "Rice Noodles",
+        "bid":  "rice-noodles",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  397,
+        "buy_pkg_label":  "14oz box"
+    },
+    {
+        "item":  "Rice Vinegar",
+        "bid":  "rice-vinegar",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  355,
+        "pantry_pkg_label":  "12floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Ricotta Cheese",
+        "bid":  "ricotta",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  425,
+        "buy_pkg_label":  "15oz tub"
+    },
+    {
+        "item":  "Roasted Red Peppers",
+        "bid":  "roasted-red-peppers",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  340,
+        "buy_pkg_label":  "12oz jar"
+    },
+    {
+        "item":  "Rotini Pasta",
+        "bid":  "rotini-pasta",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz box"
+    },
+    {
+        "item":  "Rotisserie Chicken",
+        "bid":  "rotisserie-chicken",
+        "gpu":  700,
+        "unit":  "each",
+        "board":  "weekly",
+        "buy_pkg_g":  700,
+        "buy_pkg_label":  "whole bird",
+        "note":  "gpu = pulled skinless meat per bird. Board cheapest is the Sam\u0027s Club warehouse-class bird (5-6 cups / 700-840 g yield); 700 is the LOW end so cost is not understated. Recipe grams are COOKED pulled meat."
+    },
+    {
+        "item":  "Rye Bread",
+        "bid":  "rye-bread",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  683,
+        "buy_pkg_label":  "24oz loaf"
+    },
+    {
+        "item":  "Salsa",
+        "bid":  "salsa",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz jar"
+    },
+    {
+        "item":  "Salsa Verde",
+        "bid":  "salsa-verde",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz jar"
+    },
+    {
+        "item":  "Salt",
+        "bid":  "salt",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  737,
+        "pantry_pkg_label":  "26oz canister",
+        "bulk":  true
+    },
+    {
+        "item":  "Sandwich Bread",
+        "bid":  "bread",
+        "gpu":  567,
+        "unit":  "each",
+        "buy_pkg_g":  567,
+        "buy_pkg_label":  "20oz loaf"
+    },
+    {
+        "item":  "Sauerkraut",
+        "bid":  "sauerkraut",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  411,
+        "buy_pkg_label":  "14.5oz can"
+    },
+    {
+        "item":  "Sazon Seasoning",
+        "bid":  "sazon-seasoning",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "pantry_pkg_g":  40,
+        "pantry_pkg_label":  "1.41oz 8ct box",
+        "bulk":  true
+    },
+    {
+        "item":  "Seasoned Black Beans",
+        "bid":  "seasoned-black-beans",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  425,
+        "buy_pkg_label":  "can"
+    },
+    {
+        "item":  "Sesame Oil",
+        "bid":  "sesame-oil",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  136,
+        "pantry_pkg_label":  "5floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Shallots",
+        "bid":  "onions",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Shredded Carrots",
+        "bid":  "shredded-carrots",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  283,
+        "buy_pkg_label":  "10oz bag"
+    },
+    {
+        "item":  "Smoked Paprika",
+        "bid":  "smoked-paprika",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  49,
+        "pantry_pkg_label":  "1.75oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Smoked Turkey Sausage",
+        "bid":  "smoked-turkey-sausage",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "buy_pkg_g":  368,
+        "buy_pkg_label":  "13oz rope"
+    },
+    {
+        "item":  "Snow Peas",
+        "bid":  "snow-peas",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz bag"
+    },
+    {
+        "item":  "Soy Sauce",
+        "bid":  "soy-sauce",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  444,
+        "pantry_pkg_label":  "15floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Spaghetti",
+        "bid":  "pasta",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz box"
+    },
+    {
+        "item":  "Spinach",
+        "bid":  "frozen-chopped-spinach",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  283,
+        "buy_pkg_label":  "10oz bag"
+    },
+    {
+        "item":  "Sriracha",
+        "bid":  "sriracha",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  481,
+        "pantry_pkg_label":  "17oz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Stuffing Mix",
+        "bid":  "stuffing-mix",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  170,
+        "buy_pkg_label":  "6oz box"
+    },
+    {
+        "item":  "Sugar",
+        "bid":  "sugar",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "pantry_pkg_g":  1814,
+        "pantry_pkg_label":  "4lb bag",
+        "bulk":  true
+    },
+    {
+        "item":  "Sugar-Free Maple Syrup",
+        "bid":  "sugar-free-maple-syrup",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  355,
+        "pantry_pkg_label":  "12floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Sumac",
+        "bid":  "sumac",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  227,
+        "pantry_pkg_label":  "8oz jar (label capture)",
+        "bulk":  true
+    },
+    {
+        "item":  "Sun-Dried Tomatoes",
+        "bid":  "sun-dried-tomatoes",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  198,
+        "pantry_pkg_label":  "7oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Sweet Chili Sauce",
+        "bid":  "sweet-chili-sauce",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  355,
+        "pantry_pkg_label":  "12floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Sweet Potatoes",
+        "bid":  "sweet-potatoes",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Sweet Soy Sauce",
+        "bid":  "sweet-soy-sauce",
+        "gpu":  38,
+        "unit":  "floz",
+        "pantry_pkg_g":  768,
+        "pantry_pkg_label":  "20.2floz bottle (600ml)",
+        "bulk":  true
+    },
+    {
+        "item":  "Sweet Whole Kernel Corn",
+        "bid":  "canned-corn",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  432,
+        "buy_pkg_label":  "can"
+    },
+    {
+        "item":  "Swiss Cheese",
+        "bid":  "swiss-cheese",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz"
+    },
+    {
+        "item":  "Taco Seasoning",
+        "bid":  "taco-seasoning",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  28,
+        "pantry_pkg_label":  "1oz packet",
+        "bulk":  true
+    },
+    {
+        "item":  "Tahini",
+        "bid":  "tahini",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  454,
+        "pantry_pkg_label":  "16oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Tater Tots",
+        "bid":  "tater-tots",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  2268,
+        "buy_pkg_label":  "80oz bag"
+    },
+    {
+        "item":  "Teriyaki Sauce",
+        "bid":  "teriyaki-sauce",
+        "gpu":  34,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  444,
+        "pantry_pkg_label":  "15floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Toasted Sesame Seeds",
+        "bid":  "toasted-sesame-seeds",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  104,
+        "pantry_pkg_label":  "3.66oz jar",
+        "bulk":  true
+    },
+    {
+        "item":  "Tomatillos",
+        "bid":  "tomatillos",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Tomato Paste",
+        "bid":  "tomato-paste",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  170,
+        "buy_pkg_label":  "6oz can"
+    },
+    {
+        "item":  "Tomato Sauce",
+        "bid":  "tomato-sauce",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  425,
+        "buy_pkg_label":  "15oz can"
+    },
+    {
+        "item":  "Tortilla",
+        "bid":  "tortillas",
+        "gpu":  36.85,
+        "unit":  "each",
+        "buy_pkg_g":  737,
+        "buy_pkg_label":  "20ct pack"
+    },
+    {
+        "item":  "Traditional Pasta Sauce",
+        "bid":  "traditional-pasta-sauce",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  680,
+        "buy_pkg_label":  "24oz jar"
+    },
+    {
+        "item":  "Turkey Bacon",
+        "bid":  "turkey-bacon",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  340,
+        "buy_pkg_label":  "12oz pack",
+        "note":  "bid corrected 2026-08-06: was \u0027bacon\u0027 (PORK by the lb) - turkey bacon is its own board commodity at its own price class"
+    },
+    {
+        "item":  "Turkey Breast",
+        "bid":  "turkey-breast",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "buy_pkg_g":  1361,
+        "buy_pkg_label":  "3lb frozen roast"
+    },
+    {
+        "item":  "Turkey Pepperoni",
+        "bid":  "turkey-pepperoni",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  142,
+        "buy_pkg_label":  "5oz pack",
+        "aliases":  [
+                        "Pepperoni"
+                    ],
+        "alias_ruling":  "Brad, 2026-08-16; see design\\PLAN-ingredient-vocabulary-2026-08-16.md section 0c"
+    },
+    {
+        "item":  "Vegetable Oil",
+        "bid":  "vegetable-oil",
+        "gpu":  28,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  1306,
+        "pantry_pkg_label":  "48floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Walnuts",
+        "bid":  "walnuts",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz bag"
+    },
+    {
+        "item":  "White Mushrooms",
+        "bid":  "mushrooms",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz pack",
+        "aliases":  [
+                        "Baby Bella (Crimini) Mushrooms",
+                        "Crimini Mushrooms",
+                        "Baby Bella Mushrooms"
+                    ],
+        "alias_ruling":  "Brad, 2026-08-16; see design\\PLAN-ingredient-vocabulary-2026-08-16.md section 0c"
+    },
+    {
+        "item":  "White Vinegar",
+        "bid":  "white-vinegar",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  946,
+        "pantry_pkg_label":  "32floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "White Wine Vinegar",
+        "bid":  "white-wine-vinegar",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "buy_pkg_g":  500,
+        "buy_pkg_label":  "16.9floz bottle"
+    },
+    {
+        "item":  "Wild Rice",
+        "bid":  "wild-rice",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz bag"
+    },
+    {
+        "item":  "Worcestershire Sauce",
+        "bid":  "worcestershire",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "pantry_pkg_g":  296,
+        "pantry_pkg_label":  "10floz bottle",
+        "bulk":  true
+    },
+    {
+        "item":  "Yellow Onion",
+        "bid":  "onions",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Zero-Sugar Soda",
+        "bid":  "zero-sugar-soda-2l",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "buy_pkg_g":  2000,
+        "buy_pkg_label":  "2L bottle"
+    },
+    {
+        "item":  "Ziti Pasta",
+        "bid":  "pasta",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz box"
+    },
+    {
+        "item":  "Zucchini",
+        "bid":  "zucchini",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb"
+    },
+    {
+        "item":  "Korean glass noodles (dangmyeon)",
+        "bid":  "rice-noodles",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe"
+    }
 ]

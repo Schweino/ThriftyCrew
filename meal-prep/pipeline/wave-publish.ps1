@@ -482,6 +482,11 @@ function Invoke-Gate {
 $gates = @(
   @{ label = 'audit-spec-contradictions'; path = (Join-Path $here 'audit-spec-contradictions.ps1'); args = @('-Quiet'); marker = 'spec-contradictions'; text = '' },
   @{ label = 'audit-store-integrity';     path = (Join-Path $here 'audit-store-integrity.ps1');     args = @();         marker = 'store-integrity';     text = '' },
+  # vocab-integrity is the BROADER check and names the right fix: an unresolvable canon name means the
+  # NAME is wrong (the price is usually right there), while unbid means the name resolved to a row that
+  # genuinely has no bid. Conflating them on 2026-08-16 sent four layers of remediation after "missing
+  # prices" that were never missing. Both run; unbid is the narrow subset.
+  @{ label = 'audit-vocab-integrity';     path = (Join-Path $here 'audit-vocab-integrity.ps1');     args = @('-Slugs', ($slugs -join ',')); marker = ''; text = 'ok - every canon name resolves to a row' },
   @{ label = 'audit-unbid-ingredients';   path = (Join-Path $here 'audit-unbid-ingredients.ps1');   args = @('-Slugs', ($slugs -join ',')); marker = ''; text = 'ok - every scaler ingredient carries a bid' },
   @{ label = 'test-guards';               path = (Join-Path $here 'test-guards.ps1');               args = @();         marker = '';                    text = 'ALL GUARD PREDICATE TESTS PASS' }
 )
