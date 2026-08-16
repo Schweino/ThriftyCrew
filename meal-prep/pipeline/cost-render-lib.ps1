@@ -23,6 +23,18 @@
   Returns @{ lines; batch; trueC; cps; cpsTrue; pantryAdd; firstRun }.
 #>
 
+# A package label that already counts itself. costed.json carries pkg labels like "1 bunch" and "1 head"
+# straight off the board row, and the buy line then prefixes ITS OWN count: "Buy " + 3 + " " + "1 head"
+# renders "Buy 3 1 heads". Found 2026-08-16 across 10 specs in two waves; zero of the 1,088 live cards
+# carry the pattern, so this wave would have introduced it to the site.
+#
+# Only a leading "1 " is stripped. "2 lb bag" keeps its count, because there the number is part of the
+# package SIZE ("buy 3 of the 2 lb bag") rather than a redundant quantity of one.
+function Get-PkgLabel([string]$label){
+  if($label -match '^\s*1\s+(?<rest>\S.*)$'){ return $Matches['rest'].Trim() }
+  return $label
+}
+
 function Get-CostPlural([string]$label,[int]$n){
   if($n -le 1){ return $label }
   if($label -match '(?i)each$'){ return $label }            # "Buy 3 each", never "3 eachs"
@@ -134,7 +146,7 @@ function Render-CostFields($cost,$GramsArr,$ScalerIng,[string]$slug){
     } elseif($cl.buy_cost){
       $sumTrue += [double]$cl.buy_cost
       $pkgTxt = $cl.pkg; if(-not $pkgTxt){ $pkgTxt='pack' }
-      $costHtml += ($nm + ', ' + $amt + ': ~$' + $util.ToString('0.00') + '. <strong>Buy ' + $cl.buy_n + ' ' + (Get-CostPlural $pkgTxt ([int]$cl.buy_n)) + ': $' + ([double]$cl.buy_cost).ToString('0.00') + '.</strong>')
+      $costHtml += ($nm + ', ' + $amt + ': ~$' + $util.ToString('0.00') + '. <strong>Buy ' + $cl.buy_n + ' ' + (Get-CostPlural (Get-PkgLabel $pkgTxt) ([int]$cl.buy_n)) + ': $' + ([double]$cl.buy_cost).ToString('0.00') + '.</strong>')
     } else {
       $sumTrue += $util
       $costHtml += ($nm + ', ' + $amt + ': ~$' + $util.ToString('0.00') + '. <strong>Buy as needed.</strong>')

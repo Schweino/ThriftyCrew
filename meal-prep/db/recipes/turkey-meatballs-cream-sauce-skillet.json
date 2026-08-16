@@ -1,0 +1,331 @@
+{
+    "name":  "Turkey Meatballs in Cream Sauce Skillet",
+    "slug":  "turkey-meatballs-cream-sauce-skillet",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.smalltownwoman.com/turkey-meatballs-in-easy-cream-sauce/",
+    "source_site":  "smalltownwoman.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Every gram and buy string transcribed from mapped\\turkey-meatballs-cream-sauce-skillet.json; no number computed in prose.",
+                         "MACROS transcribed from the mapper\u0027s food-macros-db recompute at 14 servings: 492.5 cal, 31.2 g protein, 17.2 g carbs, 30.8 g fat per serving (stat rounds to 492 / 31 / 17 / 31). In band for this run: 492 cal inside [400, 650] (92 above the floor, 158 below the ceiling) and 17 g carbs under the 35 g gate. The added to-taste salt, pepper, and optional parsley move the recompute under 1 cal/serving and were flagged zero/near-zero by the mapper.",
+                         "PROTEIN CROSS-CHECK GAP, carried LOUD from the mapper and accepted knowingly: the card publishes about 31 g protein where the source page prints 38 g. The gap is not a portion error. The protein is weight-anchored (source prints 1.25 lb ground turkey; our only drift is +2.9% quantization to 4 1/2 lb, which pushes protein UP, the wrong direction to open this gap). The mapper showed the source\u0027s own published macros reconstruct almost exactly on a 99/1 extra-lean turkey (120 cal / 26 P per 112 g), while our build books the house 93/7 item, the standing in-run generic-ground-turkey booking with a wired bid (three prior recipes ruled the identical phrase the same way). The 99/1 vocab row carries NO bid, so booking it would hold the recipe for wiring it has never had. The 93/7 build is internally consistent and is what publishes; if the gate owner prefers the source-matching lean number the fix is wiring a 99/1 bid upstream, not remapping here. QA should accept the divergence with eyes open.",
+                         "SALT AND PEPPER booked at the batch-standard to-taste minimum, a writer-lane choice that DIFFERS from the mapper: the mapper booked the source\u0027s \u0027salt and pepper to taste\u0027 line at zero grams (optional-note, macro-immaterial). The source\u0027s own step 5 names salt and pepper, so to keep that season step cook-as-shopped and clear the PHANTOM buy-coverage gate I booked Salt 12 g (2 tsp) and Black Pepper 2 g (1 tsp) per 14-serving batch, matching the 2026-08-16 repair convention already applied this batch to keto-turkey-broccoli-cheddar-casserole, sheet-pan-smoked-sausage-broccoli-cheddar, and hatch-green-chile-chicken-casserole. Both are zero/near-zero macro; no band number moves. Flagged in the run report as a writer choice, not a silent change.",
+                         "DUPLICATE SOURCE LINES CONSOLIDATED per batch convention (the marsala/fricassee precedent): the mapper split garlic powder, Worcestershire sauce, and dried oregano into separate meatball and sauce lines for section clarity. Merged each to one bought line with a \u0027divided\u0027 buy string so the shop list shows one entry per item. Garlic Powder 2.7 + 2.7 = 5.4 -\u003e 5 g; Dried Oregano 3.5 + 1.8 = 5.3 -\u003e 5 g; Worcestershire 119 + 89 = 208 g. Onion powder stays single (sauce only).",
+                         "WORCESTERSHIRE TOTAL is large but faithful, carried from the mapper\u0027s loud flag: 12 1/4 tbsp (about 3/4 cup) across the two sections is exactly the printed 3 1/2 tbsp per 4 source servings scaled 3.5x. Not changed. The buy string and step 2 both say \u0027divided\u0027 so the reader splits it between the meatball mix and the sauce.",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked the costed list against the steps both directions: ground turkey (make_it 2, 3, 5), panko (2), yellow onion (2), eggs (2), Worcestershire divided (2 into the mix, 4 into the sauce), garlic powder divided (2 and 4), dried oregano divided (2 and 4), olive oil (3), butter (4), flour (4), chicken broth (4), onion powder (4), heavy cream (4), salt and black pepper (6), parsley (6).",
+                         "PARSLEY is the source\u0027s optional end-of-cook garnish (extractor marked it optional on the sprinkle basis). It IS a bought line here (mapper mapped it, bid fresh-parsley), so step 6 may name it. Immaterial to macros (~0.3 cal/serving). Prose stages it as an optional finishing sprinkle, never as load-bearing.",
+                         "STARCH LEFT OUT ON PURPOSE: the source serves these over mashed potatoes, egg noodles, or rice. This is the low-carb rebuild, so no starch is bought and no step stages one; the meatballs and sauce stand on their own and the intro notes the reader can spoon them over their own low-carb base if they want. Keeping a starch out is what holds carbs at 17 g.",
+                         "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, and no package-adequacy claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount, package form, and store aisle. Re-walked the five bullets against this rule before finishing.",
+                         "PANKO DENSITIES FLAG carried from the mapper: \u0027Panko Breadcrumbs\u0027 has no densities row, so the cup weight was taken from the Kikkoman label (1/2 cup = 30 g -\u003e cup = 60 g) rather than the denser plain Bread Crumbs row (cup = 108 g). The mapper proposed a panko densities row. Immaterial to the card; noted for the data owner."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  492,
+                 "protein":  31,
+                 "carbs":  17,
+                 "fat":  31,
+                 "cost_ps":  "3.66"
+             },
+    "intro_html":  "Turkey meatballs get a bad name for being dry, but that is only true when you skip the sauce. Here you do not skip the sauce. You mix lean ground turkey with panko, an egg, and a little onion, roll it into meatballs, brown them, then build a quick cream gravy right in the same skillet and let the meatballs finish cooking in it. One pan, no oven, comfort food that eats rich. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 20 grams of carbs. The source spoons these over mashed potatoes or noodles; leave the starch off and you have a low-carb dinner that still tastes like Sunday.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 4 1/2 lb ground turkey (93/7) (2041 g)",
+                                "\u003cstrong\u003ePanko Breadcrumbs (Kikkoman):\u003c/strong\u003e 2 1/3 cups panko bread crumbs (140 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3/4 cup plus 2 tbsp minced (about 1 small onion) (101 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 4 large (200 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 12 1/4 tbsp, divided (meatballs and sauce) (208 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 3/4 tsp, divided (meatballs and sauce) (5 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 5 1/4 tsp, divided (meatballs and sauce) (5 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 1/2 tbsp, for browning (47 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp (98 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 7 tbsp (56 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3 1/2 cups low sodium (840 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 3/4 tsp plus a pinch (sauce) (2 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 1 3/4 cups (417 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e salt and pepper, to taste (about 2 tsp salt) (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e about 1 tsp (2 g)",
+                                "\u003cstrong\u003eFresh Parsley (fresh (USDA)):\u003c/strong\u003e 3 1/2 tbsp chopped (optional garnish) (13 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 4 1/2 lb ground turkey (93/7): ~$20.47. \u003cstrong\u003eBuy 5 lbs: $22.75.\u003c/strong\u003e",
+                       "Panko Breadcrumbs, 2 1/3 cups panko bread crumbs: ~$0.40. \u003cstrong\u003eBuy 1 8oz box: $0.65.\u003c/strong\u003e",
+                       "Yellow Onion, 3/4 cup plus 2 tbsp minced (about 1 small onion): ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Eggs, 4 large: ~$0.54. \u003cstrong\u003eBuy 1 dozen: $1.62.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 12 1/4 tbsp, divided (meatballs and sauce): ~$0.70. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Olive Oil, 3 1/2 tbsp, for browning: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 7 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "All-Purpose Flour, 7 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 3 1/2 cups low sodium: ~$1.28. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Heavy Cream, 1 3/4 cups: ~$2.06. \u003cstrong\u003eBuy 1 pint: $2.34.\u003c/strong\u003e",
+                       "Fresh Parsley, 3 1/2 tbsp chopped (optional garnish): ~$0.42. \u003cstrong\u003eBuy 1 bunch: $1.93.\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, dried oregano, onion powder, salt, black pepper): ~$0.31. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.63 across 14 servings, so roughly $1.97 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.26 across 14 servings, roughly $2.59 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.24. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a skillet of turkey meatballs in cream gravy. The turkey and the cream carry the plate; the panko, the broth, and the spice rack just round it out.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eFour and a half pounds of ground turkey is the backbone.\u003c/strong\u003e Reach for the 93/7 lean, and buy the big family pack instead of the small trays so you are paying for turkey, not packaging. This is where most of the money and nearly all of the protein live.",
+                       "\u003cstrong\u003eHeavy cream is what turns the pan drippings into gravy.\u003c/strong\u003e You need about one and three quarter cups. Regular heavy or whipping cream from the dairy case is exactly right; nothing lighter will give you the same silk.",
+                       "\u003cstrong\u003ePanko, one small onion, and a few eggs hold the meatballs together.\u003c/strong\u003e You need about two and a third cups of panko bread crumbs, a small yellow onion minced fine, and four large eggs. These are the binder, so do not skip them or the meatballs fall apart in the pan.",
+                       "\u003cstrong\u003eWorcestershire sauce carries the savory backbone.\u003c/strong\u003e Grab a bottle from the condiment aisle; you use about three quarters of a cup across the recipe, split between the meatball mix and the sauce, so the buy string says divided.",
+                       "\u003cstrong\u003eChicken broth, butter, and flour build the gravy, and the spice rack finishes it.\u003c/strong\u003e A carton of low sodium chicken broth, a stick or so of butter, a little flour to thicken, plus garlic powder, onion powder, and dried oregano. These are backbone staples you most likely already have, so they barely move the cart."
+                   ],
+    "make_it":  [
+                    "Weigh your empty skillet and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+                    "In a large bowl, mix the ground turkey, panko, minced onion, eggs, about half the garlic powder, about half the oregano, and the meatball share of the Worcestershire (roughly 7 tablespoons). Shape into meatballs about an inch and a half across.",
+                    "Heat the olive oil in a large skillet over medium heat. Working in batches so the pan is not crowded, brown the meatballs on all sides. They will not be cooked through yet. Move them to a plate and set them aside.",
+                    "Melt the butter in the same skillet over medium-low heat. Whisk in the flour and cook 2 to 3 minutes, whisking constantly, until it smells nutty. Whisk in the chicken broth, the rest of the garlic powder, the onion powder, the rest of the Worcestershire, the heavy cream, and the rest of the oregano. Cook, whisking, until the sauce thickens.",
+                    "Return the meatballs and any juices to the skillet and spoon the sauce over them. Simmer about 15 minutes, until the meatballs are cooked through to 165 degrees F and the sauce clings.",
+                    "Season with salt and pepper to taste and sprinkle with the chopped parsley.",
+                    "Weigh the full skillet and subtract the empty weight from Step 1 to get the cooked total. Divide by 14 and give each container an even share of meatballs and sauce, aiming for that weight."
+                ],
+    "portion_html":  "Set the full skillet on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Each container gets an even share of the meatballs and the cream sauce spooned over, landing near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.smalltownwoman.com/turkey-meatballs-in-easy-cream-sauce/\" target=\"_blank\" rel=\"noopener\"\u003esmalltownwoman.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  27.63,
+    "cost_batch_true":  36.26,
+    "cost_per_serving":  1.97,
+    "cost_per_serving_true":  2.59,
+    "cost_pantry_add":  14.98,
+    "cost_first_run":  51.24,
+    "scaler":  {
+                   "cost":  "36.26",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  2041,
+                                   "buy":  "4 1/2 lb ground turkey (93/7)",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Panko Breadcrumbs",
+                                   "canon":  "Panko Breadcrumbs",
+                                   "grams":  140,
+                                   "buy":  "2 1/3 cups panko bread crumbs",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  101,
+                                   "buy":  "3/4 cup plus 2 tbsp minced (about 1 small onion)",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  200,
+                                   "buy":  "4 large",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "canon":  "Worcestershire Sauce",
+                                   "grams":  208,
+                                   "buy":  "12 1/4 tbsp, divided (meatballs and sauce)",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  5,
+                                   "buy":  "1 3/4 tsp, divided (meatballs and sauce)",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  5,
+                                   "buy":  "5 1/4 tsp, divided (meatballs and sauce)",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3 1/2 tbsp, for browning",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  98,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  56,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  840,
+                                   "buy":  "3 1/2 cups low sodium",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  2,
+                                   "buy":  "3/4 tsp plus a pinch (sauce)",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  417,
+                                   "buy":  "1 3/4 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "salt and pepper, to taste (about 2 tsp salt)",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "about 1 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Parsley",
+                                   "canon":  "Fresh Parsley",
+                                   "grams":  13,
+                                   "buy":  "3 1/2 tbsp chopped (optional garnish)",
+                                   "bid":  "fresh-parsley",
+                                   "gpu":  "60.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey meatballs in cream sauce for meal prep: lean turkey meatballs browned and simmered in a quick skillet cream gravy, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 20 grams of carbs.",
+                 "keywords":  "turkey meatballs, turkey meatballs cream sauce, low carb turkey meatballs, turkey meatballs meal prep, high protein meatballs",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  3.66,
+                 "recipeIngredient":  [
+                                          "93/7 Ground Turkey, 4 1/2 lb ground turkey (93/7) (2041 g)",
+                                          "Panko Breadcrumbs, 2 1/3 cups panko bread crumbs (140 g)",
+                                          "Yellow Onion, 3/4 cup plus 2 tbsp minced (about 1 small onion) (101 g)",
+                                          "Eggs, 4 large (200 g)",
+                                          "Worcestershire Sauce, 12 1/4 tbsp, divided (meatballs and sauce) (208 g)",
+                                          "Garlic Powder, 1 3/4 tsp, divided (meatballs and sauce) (5 g)",
+                                          "Dried Oregano, 5 1/4 tsp, divided (meatballs and sauce) (5 g)",
+                                          "Olive Oil, 3 1/2 tbsp, for browning (47 g)",
+                                          "Butter, 7 tbsp (98 g)",
+                                          "All-Purpose Flour, 7 tbsp (56 g)",
+                                          "Chicken Broth, 3 1/2 cups low sodium (840 g)",
+                                          "Onion Powder, 3/4 tsp plus a pinch (sauce) (2 g)",
+                                          "Heavy Cream, 1 3/4 cups (417 g)",
+                                          "Salt, salt and pepper, to taste (about 2 tsp salt) (12 g)",
+                                          "Black Pepper, about 1 tsp (2 g)",
+                                          "Fresh Parsley, 3 1/2 tbsp chopped (optional garnish) (13 g)"
+                                      ],
+                 "steps":  [
+                               "Mix the ground turkey, panko, onion, eggs, half the garlic powder and oregano, and the meatball share of the Worcestershire, then shape into meatballs.",
+                               "Brown the meatballs in olive oil in a large skillet, working in batches, then set them aside.",
+                               "Make a roux with the butter and flour in the same pan, then whisk in the broth, cream, the rest of the Worcestershire, and the remaining seasonings and cook until thickened.",
+                               "Return the meatballs to the sauce and simmer until cooked through to 165 degrees F.",
+                               "Season with salt and pepper, sprinkle with parsley, then weigh the pan, subtract the empty weight, and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  2041
+                              },
+                              {
+                                  "item":  "Panko Breadcrumbs",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  101
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  200
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  208
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  417
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Fresh Parsley",
+                                  "grams":  13
+                              }
+                          ]
+}

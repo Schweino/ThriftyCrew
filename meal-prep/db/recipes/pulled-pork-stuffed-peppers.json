@@ -1,0 +1,167 @@
+{
+    "name":  "Pulled Pork Stuffed Peppers",
+    "slug":  "pulled-pork-stuffed-peppers",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.lowcarbmaven.com/pulled-pork-stuffed-peppers/",
+    "source_site":  "lowcarbmaven.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 4 (1/2 stuffed pepper each), rebuilt to 14 at the mapper\u0027s 3.5x scale. Serving anchor: 7 whole peppers halved = 14 boats = 14 servings. Every gram and buy string transcribed from mapped\\pulled-pork-stuffed-peppers.json; no number computed in prose.",
+                         "MACROS transcribed from the mapper\u0027s food-DB recompute at 14 servings, which I independently re-derived to the gram and matched: 504.9 cal, 35.6 g protein, 17.4 g carbs, 32.1 g fat per serving, reported as 505 / 36 / 17 / 32. In band for this run (400 to 650 cal, 35 g carb or less): 505 cal PASS, 17.4 g carbs PASS. The source\u0027s published 7 g carbs (5 net) is LOWER because the author used a keto sugar-free BBQ sauce; the mapper booked regular BBQ sauce off the page\u0027s own \u0027(or your favorite)\u0027 alternative, which honestly adds carbs (+10.2 g/serving). Intro says \u0027under 20 grams of carbs\u0027, a true bound at 17.4. Card carbs must NOT copy the source\u0027s 5-net-carb claim (mapper loud flag).",
+                         "CHEESE ITEM NAME CORRECTED to the buildable canonical row. The mapper wrote item \u0027Cheddar Cheese\u0027 (the block row, bid cheddar-cheese) but its OWN macro basis is the shredded label (110 cal / 6 P per 28 g) and its buy string is \u0027shredded cheddar\u0027, and plain \u0027Cheddar Cheese\u0027 has NO food-macros-db row (macro check would throw). I used \u0027Cheddar Cheese, Shredded\u0027 (bid cheddar-cheese-shredded, on the feed), which matches the mapper\u0027s macro basis, the buy string, and the shredded form the recipe uses. Not a number invented; the same 110/6/1/9 per-28-g row the mapper cited. Flagged for QA in my report.",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. peppers (steps 3, 6), pork shoulder (step 2, cooked and pulled), shredded cheddar (steps 5 and 7, divided), BBQ sauce (step 5), cilantro (step 8, optional garnish). Walked the costed list against the steps both directions. NOTE: the source assumed pre-made pulled pork and bought no oil, salt or pepper; we buy raw pork shoulder and cook it, so the steps cook and shred the shoulder but reference NO oil, salt or pepper because none is bought.",
+                         "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet needs a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount (7 peppers, 4 1/2 lb shoulder, 21 oz cheddar, 1 1/4 cups sauce). Re-walk the bullets against cost_lines once costed before publish.",
+                         "TIME rebuilt for the real build. The source\u0027s 30-minute total assumed store-bought pulled pork; we start from a raw 4 1/2 lb shoulder, so cook time is dominated by the braise. prepTime 20 min, cookTime ~4 h, totalTime ~4 h 20 m. Flagged that this is a longer build than the source states.",
+                         "BELL PEPPER color is UNSPECIFIED by the source (mapper re-checked the live page); booked green as the base variety per the mapper ruling. A reader who buys red or yellow pays more than the card estimate."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  505,
+                 "protein":  36,
+                 "carbs":  17,
+                 "fat":  32,
+                 "cost_ps":  "1.99"
+             },
+    "intro_html":  "Pulled pork is one of the best things you can meal prep, and this takes it low carb without losing a thing. A pork shoulder cooked low and slow until it falls apart, tossed with barbecue sauce and sharp cheddar, then piled into a roasted bell pepper and baked until the cheese melts over the top. You get the smoke and the sweet tang and the melted cheese of a barbecue plate, and the pepper does the job the bun used to do. Built at 14 servings it lands around \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 20 grams of carbs. That is a barbecue dinner that works with your macros instead of against them.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 7 green bell peppers (about 3 1/2 lb), halved and seeded (1588 g)",
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 4 1/2 lb pork shoulder, cooked and pulled (2041 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 5 1/4 cups shredded cheddar (21 oz), divided (595 g)",
+                                "\u003cstrong\u003eBBQ Sauce (generic):\u003c/strong\u003e 1 1/4 cups BBQ sauce (356 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 7 tbsp chopped fresh cilantro (optional garnish) (7 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Green Bell Peppers, 7 green bell peppers (about 3 1/2 lb), halved and seeded: ~$10.19. \u003cstrong\u003eBuy 14 each: $10.78.\u003c/strong\u003e",
+                       "Pork Shoulder, 4 1/2 lb pork shoulder, cooked and pulled: ~$10.08. \u003cstrong\u003eBuy 5 lbs: $11.20.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 5 1/4 cups shredded cheddar (21 oz), divided: ~$3.19. \u003cstrong\u003eBuy 3 8oz bags: $3.65.\u003c/strong\u003e",
+                       "BBQ Sauce, 1 1/4 cups BBQ sauce: ~$0.96. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Fresh Cilantro, 7 tbsp chopped fresh cilantro (optional garnish): ~$0.11. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.53 across 14 servings, so roughly $1.75 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.48 across 14 servings, roughly $1.96 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $0.41 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $27.89. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e at everyday prices for a barbecue dinner you can eat all week. One pork shoulder and seven peppers turn into fourteen full plates.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eA four and a half pound pork shoulder is the anchor.\u003c/strong\u003e Buy it bone in or boneless, whatever your store has cheaper. This is the cut that turns tender and shreds when you cook it long and slow, and it carries the protein in every serving. Cook it a day ahead if that fits your week better.",
+                       "\u003cstrong\u003eSeven green bell peppers are the bowls.\u003c/strong\u003e Each one gets halved and seeded, which gives you fourteen boats, one per serving. Pick peppers that are firm and sit fairly flat so they hold the filling without tipping over. The color is up to you, but green is the cheapest of the bunch.",
+                       "\u003cstrong\u003eTwenty one ounces of shredded cheddar ties it together.\u003c/strong\u003e Some goes into the pork and the rest melts over the top. Sharp cheddar gives you the most flavor for the money here, and you can buy it already shredded to save the grating.",
+                       "\u003cstrong\u003eOne and a quarter cups of barbecue sauce brings the flavor.\u003c/strong\u003e Use whatever sauce you already like. If you are watching carbs closely, a sugar-free barbecue sauce swaps in with no change to the method and drops the carbs even lower than the number on this card.",
+                       "\u003cstrong\u003eA little chopped cilantro at the end is optional.\u003c/strong\u003e It is a fresh, bright finish over the melted cheese, but the dish is complete without it. Skip it if cilantro is not your thing."
+                   ],
+    "make_it":  [
+                    "Weigh your empty baking dish or mixing bowl and write the number down. You will use it at the end to split the pork filling evenly across all fourteen peppers instead of guessing.",
+                    "Cook the pork shoulder low and slow until it pulls apart easily with two forks. A covered pot at 300 degrees for about four hours does it, or a slow cooker on low for eight to ten. Let it rest until you can handle it, then shred the whole thing and discard any large pieces of fat.",
+                    "Heat the oven to 375 degrees. Halve the bell peppers the long way and pull out the seeds and ribs. Set them cut side up in a baking dish and steam or bake them for about 15 minutes to soften while you build the filling. Pour off any water that collects.",
+                    "Set aside about one and a quarter cups of the shredded cheddar for the tops. That is the cheese you will melt over the peppers at the end.",
+                    "Stir the barbecue sauce and the rest of the shredded cheddar into the pulled pork until everything is coated and the cheese is starting to hold it together.",
+                    "Weigh the loaded bowl of filling, subtract the empty weight you wrote down in Step 1, and divide the total by 14. Mound that exact amount into each roasted pepper half. They should be very full. Bake for about 20 minutes, until the peppers are hot and the filling is bubbling.",
+                    "Scatter the cheese you set aside over the tops and return the dish to the oven until it melts, about 5 minutes more.",
+                    "Garnish with the chopped cilantro if you are using it, then portion into your containers and you are done."
+                ],
+    "portion_html":  "The honest way to make fourteen even servings is by weight. Weigh the loaded bowl of filling, subtract the empty weight from Step 1, and that is your total. Divide it by 14 and mound that exact amount into each pepper half before the top cheese goes on. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.lowcarbmaven.com/pulled-pork-stuffed-peppers/\" target=\"_blank\" rel=\"noopener\"\u003elowcarbmaven.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low carb, high protein dinner for about ${{cost_ps}} a serving at everyday prices. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  24.53,
+    "cost_batch_true":  27.48,
+    "cost_per_serving":  1.75,
+    "cost_per_serving_true":  1.96,
+    "cost_pantry_add":  0.41,
+    "cost_first_run":  27.89,
+    "scaler":  {
+                   "cost":  "27.48",
+                   "ing":  [
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  1588,
+                                   "buy":  "7 green bell peppers (about 3 1/2 lb), halved and seeded",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  2041,
+                                   "buy":  "4 1/2 lb pork shoulder, cooked and pulled",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  595,
+                                   "buy":  "5 1/4 cups shredded cheddar (21 oz), divided",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "BBQ Sauce",
+                                   "canon":  "BBQ Sauce",
+                                   "grams":  356,
+                                   "buy":  "1 1/4 cups BBQ sauce",
+                                   "bid":  "bbq-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  7,
+                                   "buy":  "7 tbsp chopped fresh cilantro (optional garnish)",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Pulled pork stuffed peppers for meal prep: a pork shoulder cooked low and slow, tossed with barbecue sauce and cheddar, and piled into roasted bell peppers under melted cheese, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 20 grams of carbs.",
+                 "keywords":  "pulled pork stuffed peppers, low carb pulled pork, bbq pork meal prep, stuffed bell peppers, high protein low carb dinner",
+                 "image":  "",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT4H",
+                 "totalTime":  "PT4H20M",
+                 "costPerServing":  1.99,
+                 "recipeIngredient":  [
+                                          "Green Bell Peppers, 7 green bell peppers (about 3 1/2 lb), halved and seeded (1588 g)",
+                                          "Pork Shoulder, 4 1/2 lb pork shoulder, cooked and pulled (2041 g)",
+                                          "Cheddar Cheese, Shredded, 5 1/4 cups shredded cheddar (21 oz), divided (595 g)",
+                                          "BBQ Sauce, 1 1/4 cups BBQ sauce (356 g)",
+                                          "Fresh Cilantro, 7 tbsp chopped fresh cilantro (optional garnish) (7 g)"
+                                      ],
+                 "steps":  [
+                               "Cook the pork shoulder low and slow until it shreds easily, then pull it apart and discard large pieces of fat.",
+                               "Halve and seed the bell peppers and soften them in the oven for about 15 minutes, pouring off any water.",
+                               "Set aside cheddar for the tops, then stir the barbecue sauce and the rest of the cheddar into the pulled pork.",
+                               "Weigh the filling, subtract the empty bowl weight, and divide it across fourteen roasted pepper halves, then bake until bubbling.",
+                               "Melt the reserved cheddar over the tops, garnish with cilantro if using, and portion into containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  2041
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  595
+                              },
+                              {
+                                  "item":  "BBQ Sauce",
+                                  "grams":  356
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  7
+                              }
+                          ]
+}

@@ -1,0 +1,309 @@
+{
+    "name":  "Mexican Chorizo and Egg Casserole",
+    "slug":  "mexican-chorizo-egg-casserole",
+    "cuisine":  "Mexican",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.thegraciouswife.com/mexican-breakfast-casserole/",
+    "source_site":  "thegraciouswife.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 10, rebuilt to 14 at the mapper\u0027s 1.4x scale. Every gram and buy string transcribed from mapped\\mexican-chorizo-egg-casserole.json; no number computed in prose.",
+                         "MACROS transcribed from the mapper\u0027s food-DB recompute and independently re-summed line by line against food-macros-db for the exact integer gram set build-v2-spec uses: batch cal 7447.7 / 14 = 531.98 -\u003e 532; protein 378.6 / 14 = 27.04 -\u003e 27; carbs 235.5 / 14 = 16.83 -\u003e 17; fat 552.4 / 14 = 39.45 -\u003e 39. In band for this run (400 to 650 cal, 35 g carb or less): 132 cal above the floor, 118 below the ceiling; carbs 17 is about half the carb gate. The literal built carb figure (17 g) is what the prose states.",
+                         "SOURCE MACRO DIVERGENCE (documented, accept knowingly - do NOT re-portion): the source page prints 612 cal / 33 P / 17 C / 46 F per serving. Our honest fresh-Mexican-chorizo build lands 532 / 27 / 17 / 39. The mapper pins the entire gap on the source\u0027s nutrition plugin booking DRY SPANISH chorizo (455 cal / 24.1 P / 38.3 F per 100 g) for the string \u0027chorizo sausage\u0027, while the dish as written - skillet-browned, a Mexican breakfast/dinner casserole - uses FRESH Mexican chorizo (the Cacique label row, 190 cal / 9 P / 16 F per 70 g raw), which is the product the board prices. The main protein is WEIGHT-anchored (1 lb printed, our only drift is -1.8% quantization to 22 oz), so no each-weight assumption exists to be wrong. Rebuilding our exact line set on the dry-Spanish basis reproduces the source\u0027s figures within 6% on all four macros. Protein cross-check gap is -17.9% (outside the 15% instrument) and is kept, not fixed, because the identical-basis reconstruction explains it. If QA disagrees, the line to re-examine is the chorizo row, not the portion. Southwest documented-divergence precedent.",
+                         "BUTTER NOT BOOKED (source defect, transcribed as printed): the source lists butter for greasing the 9x13 dish only in its instructions, never in its ingredient list. The mapper did not book it (a greasing film is sub-10-cal per serving and the printed list governs). The make_it steps therefore say \u0027grease\u0027 / \u0027nonstick spray or a little oil\u0027 and never name butter, keeping greasing a pantry-static gimme, not a shopping line - the jalapeno-popper-chicken-casserole precedent. No make_it step names an ingredient that is not on the buy list.",
+                         "OPTIONAL TOPPINGS NOT COSTED, NOT STEPPED: the source\u0027s final line suggests serving with pico de gallo, sour cream, and avocado or guacamole. These are unquantified optional garnishes with no gram basis; the mapper excluded them from band macros and pico de gallo has no commodity (enqueued OPTIONAL). They appear ONLY as an optional \u0027if you like\u0027 aside in the intro, never as a numbered make_it step and never on the buy list, so no step touches an unbought ingredient and the per-serving numbers do not silently absorb an uncosted line.",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked both directions: chorizo, yellow onion, red bell pepper, garlic (make_it 3 - the browned base); pepper jack, cheddar, cilantro, green onions, jalapeno (make_it 4 - the cheese mix); corn tortillas (make_it 5 - the layers); eggs, half and half, hot sauce, black pepper (make_it 6 - the custard). All 14 costed lines are used; the only thing a step names that is not a costed line is greasing the dish, treated pantry-static.",
+                         "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet needs a cost_lines entry to prove it. Every statement is grounded in the recipe\u0027s own buy amount or in product-type / cooking guidance (fresh vs dry chorizo, corn vs flour tortillas, half-and-half vs milk set). No per-line dollar figures; only ${{cost_ps}} and the $1/month membership line carry money; {{cal}} and {{protein}} are tokens, the 17 g carb figure is the literal built stat.",
+                         "BOARD DEFECTS carried from the mapper (flag, not fixed): (1) the vocab row \u0027Pork Chorizo\u0027 routes bid -\u003e ground-pork (plain unseasoned ground pork, 6 of 7, cheapest Hy-Vee $2.99/lb) while the board also carries a dedicated mexican-chorizo-fresh commodity (2 of 7, Walmart $2.6786/lb, Cacique 9 oz - the exact DB-label product). Seasoned chorizo priced as plain ground pork is a product-concept stretch; flagged for the registrar / match-soundness gate to consider repointing the row\u0027s bid. Cost will price against ground-pork today. (2) The bare term \u0027cheddar cheese\u0027 resolves via a generic shredded-cheese include whose cheapest cell is a Member\u0027s Mark MOZZARELLA product; the canonical \u0027Cheddar Cheese, Shredded\u0027 [bid cheddar-cheese-shredded] used here answers correctly. (3) jalapenos commodity: Walmart cheapest cell is a canned EMBASA escabeche product inside the fresh-pepper commodity; fresh cells exist at 5 of 7 stores so pricing stands, cell wants a capture exclude.",
+                         "DENSITIES FOLLOWUPS carried from the mapper (flag, not fixed): Half and Half has no densities row and was booked at cup = 240 g from the GV label 2 tbsp = 30 g (propose cup 240 / tbsp 15 / floz 30); Pepper Jack Cheese shredded cup = 113 g still has no densities row (re-flag of the hatch-green-chile proposal).",
+                         "COSMETIC (source defect, for the writer only): the source\u0027s stated total time (2h30m) excludes its own 6-hour refrigeration step. The head totalTime here is set honestly to PT8H (about 30 min hands-on, up to 90 min bake, 6 hr overnight rest).",
+                         "GRAMS are the mapper\u0027s: chorizo 624 (1 lb 6 oz, weight-anchored), onion 113, red bell 90, garlic 21, pepper jack 319, cheddar 319 (both weight-anchored at 11 1/4 oz), green onions 90, cilantro 5.3, jalapeno 42, eggs 850 (17 large), half and half 1020, hot sauce 3.8, black pepper 1.7, corn tortillas 306 (13). Each buy string is the mapper\u0027s printed measure so reader-facing amounts are unchanged; build-v2-spec rounds the sub-6-gram herb/spice/hot-sauce lines to int (5, 4, 2), a macro-trivial change.",
+                         "PORTION METHOD: weigh the empty dish first, then weigh full and subtract, divide by 14. Standard house method."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  532,
+                 "protein":  27,
+                 "carbs":  17,
+                 "fat":  39,
+                 "cost_ps":  "2.42"
+             },
+    "intro_html":  "Chorizo and eggs is a breakfast a lot of us grew up on, and this casserole takes that same skillet and stretches it into a week of dinners. Fresh Mexican chorizo browns down with onion, sweet red pepper, and garlic. That gets layered between quartered corn tortillas and a double hit of pepper jack and sharp cheddar, then the whole pan is flooded with an egg and half and half custard shot through with jalapeno, green onion, and cilantro. It rests overnight so the tortillas drink up the custard, then bakes into something you can cut into fourteen honest squares. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with about 17 grams of carbs. That is a low-carb dinner that eats like a lazy weekend breakfast. Dress a square with a spoon of pico, sour cream, or avocado if you like, though the numbers above are the casserole on its own.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Chorizo (Cacique):\u003c/strong\u003e 1 lb 6 oz Mexican pork chorizo (624 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3/4 large yellow onion, finely chopped (113 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3/4 red bell pepper, finely chopped (90 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 7 cloves garlic, minced (21 g)",
+                                "\u003cstrong\u003ePepper Jack Cheese (generic (USDA)):\u003c/strong\u003e 11 1/4 oz pepper jack cheese, shredded (about 2 3/4 cups) (319 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 11 1/4 oz shredded cheddar cheese (about 2 3/4 cups) (319 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 6 green onions, finely sliced (90 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1/3 cup fresh cilantro, finely chopped (5 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 3 jalapenos, seeded, deveined, and finely chopped (42 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 17 large eggs (850 g)",
+                                "\u003cstrong\u003eHalf and Half (Great Value):\u003c/strong\u003e 4 1/4 cups half and half (1020 g)",
+                                "\u003cstrong\u003eHot Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 3/4 tsp hot sauce (4 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 3/4 tsp ground black pepper (2 g)",
+                                "\u003cstrong\u003eCorn Tortillas (Guerrero):\u003c/strong\u003e 13 corn tortillas, quartered (306 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Chorizo, 1 lb 6 oz Mexican pork chorizo: ~$5.43. \u003cstrong\u003eBuy 3 9oz tubes: $6.66.\u003c/strong\u003e",
+                       "Yellow Onion, 3/4 large yellow onion, finely chopped: ~$0.28. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Red Bell Pepper, 3/4 red bell pepper, finely chopped: ~$0.73. \u003cstrong\u003eBuy 1 each: $0.98.\u003c/strong\u003e",
+                       "Garlic, 7 cloves garlic, minced: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Pepper Jack Cheese, 11 1/4 oz pepper jack cheese, shredded (about 2 3/4 cups): ~$2.63. \u003cstrong\u003eBuy 2 8oz blocks: $3.74.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 11 1/4 oz shredded cheddar cheese (about 2 3/4 cups): ~$1.71. \u003cstrong\u003eBuy 2 8oz bags: $2.44.\u003c/strong\u003e",
+                       "Green Onions, 6 green onions, finely sliced: ~$0.79. \u003cstrong\u003eBuy 1 bunch: $0.79.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1/3 cup fresh cilantro, finely chopped: ~$0.08. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Jalapeno, 3 jalapenos, seeded, deveined, and finely chopped: ~$0.13. \u003cstrong\u003eBuy 1 lb: $1.43.\u003c/strong\u003e",
+                       "Eggs, 17 large eggs: ~$2.30. \u003cstrong\u003eBuy 2 dozens: $3.25.\u003c/strong\u003e",
+                       "Half and Half, 4 1/4 cups half and half: ~$2.68. \u003cstrong\u003eBuy 3 pints: $3.73.\u003c/strong\u003e",
+                       "Corn Tortillas, 13 corn tortillas, quartered: ~$0.73. \u003cstrong\u003eBuy 1 80ct pack: $4.49.\u003c/strong\u003e",
+                       "Pantry seasonings (hot sauce, black pepper): ~$0.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $17.85 across 14 servings, so roughly $1.28 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $30.19 across 14 servings, roughly $2.16 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.87. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a baked chorizo and egg casserole that cuts into fourteen square, protein-heavy dinners. The chorizo, cheese, and eggs carry it; the peppers, onion, and herbs do the bright work, and the whole thing costs less than the drive-through breakfast it out-eats.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy FRESH Mexican chorizo, not the dry cured kind.\u003c/strong\u003e You want about a pound and a half of the soft, uncooked chorizo that lives in tubes in the refrigerated case, the stuff that browns like loose sausage. The hard, dry-cured Spanish sausage on the shelf is a different animal and will not melt into the base the way this dish needs. This is the flavor of the whole casserole and a real share of the protein.",
+                       "\u003cstrong\u003eTwo cheeses, about eleven ounces of each.\u003c/strong\u003e Pepper jack brings the gentle heat and cheddar brings the sharp, and you need roughly the same amount of each, shredded. Buy blocks and shred them yourself, or grab the pre-shredded bags if you would rather trade a little money for time. Either way this is a low-carb, calorie-honest dinner, so reach for the full-fat cheese the numbers are built on.",
+                       "\u003cstrong\u003eSeventeen eggs and about a quart of half and half are the custard.\u003c/strong\u003e This is what sets the whole pan, so do not swap the half and half for milk, which sets thinner and looser. Whisk them together with the hot sauce and black pepper until it is a little bubbly, and let the raw pan rest overnight so the tortillas soften into the egg instead of staying dry.",
+                       "\u003cstrong\u003eThirteen corn tortillas are the structure and nearly all the carbs.\u003c/strong\u003e Quarter them and they become the layers that hold everything together. Keep them corn, not flour, both for the flavor that makes this taste Mexican and because flour would push the carb count up. This is where most of the 17 grams a serving comes from.",
+                       "\u003cstrong\u003eThe fresh crew does the loud work for pennies.\u003c/strong\u003e Onion, red bell pepper, garlic, a bundle of green onions, a handful of cilantro, and a few jalapenos are cheap produce that carry most of the flavor. Seed and devein the jalapenos so you get steady warmth instead of a surprise, and slice the green onions and chop the cilantro fresh so they stay bright in the finished bake."
+                   ],
+    "make_it":  [
+                    "Weigh your empty baking dish and write the number down. You will need it at the end to split this into 14 even servings by weight, which is the only honest way to portion one big casserole.",
+                    "In a large skillet, brown the fresh chorizo with the chopped onion, red bell pepper, and garlic over medium heat until the chorizo is cooked through and the vegetables are soft. Pull it off the heat and set it aside.",
+                    "In a medium bowl, toss the shredded pepper jack and cheddar together with the cilantro, sliced green onions, and chopped jalapenos until the cheese is evenly flecked with green. Set it aside.",
+                    "Grease a large, deep baking dish, or split the recipe across two dishes if yours is a standard 9 by 13, since 14 servings is a lot of casserole. Nonstick spray or a light film of oil is all you need.",
+                    "Spread a third of the quartered tortillas across the bottom, then a third of the chorizo mixture, then a third of the cheese mixture. Repeat the layers twice more, finishing with a cheese layer on top.",
+                    "In a large bowl, whisk the eggs with the half and half, hot sauce, and black pepper until fully combined and a little bubbly. Pour it evenly over the layered dish so it soaks down through the tortillas.",
+                    "Cover and refrigerate at least 6 hours or overnight so the tortillas drink up the custard. This rest is not optional; it is what turns loose layers into a sliceable casserole.",
+                    "Bake at 350 degrees F for 60 to 90 minutes, until the top is golden and a fork slid into the center comes out clean, like testing a cake. Let it rest 10 minutes, then weigh the dish, subtract the empty weight from Step 1, and divide across 14 containers."
+                ],
+    "portion_html":  "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.thegraciouswife.com/mexican-breakfast-casserole/\" target=\"_blank\" rel=\"noopener\"\u003ethegraciouswife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  17.85,
+    "cost_batch_true":  30.19,
+    "cost_per_serving":  1.28,
+    "cost_per_serving_true":  2.16,
+    "cost_pantry_add":  3.68,
+    "cost_first_run":  33.87,
+    "scaler":  {
+                   "cost":  "30.19",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Chorizo",
+                                   "canon":  "Pork Chorizo",
+                                   "grams":  624,
+                                   "buy":  "1 lb 6 oz Mexican pork chorizo",
+                                   "bid":  "ground-pork",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  113,
+                                   "buy":  "3/4 large yellow onion, finely chopped",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  90,
+                                   "buy":  "3/4 red bell pepper, finely chopped",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  21,
+                                   "buy":  "7 cloves garlic, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Pepper Jack Cheese",
+                                   "canon":  "Pepper Jack Cheese",
+                                   "grams":  319,
+                                   "buy":  "11 1/4 oz pepper jack cheese, shredded (about 2 3/4 cups)",
+                                   "bid":  "pepper-jack-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  319,
+                                   "buy":  "11 1/4 oz shredded cheddar cheese (about 2 3/4 cups)",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  90,
+                                   "buy":  "6 green onions, finely sliced",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  5,
+                                   "buy":  "1/3 cup fresh cilantro, finely chopped",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  42,
+                                   "buy":  "3 jalapenos, seeded, deveined, and finely chopped",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  850,
+                                   "buy":  "17 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Half and Half",
+                                   "canon":  "Half and Half",
+                                   "grams":  1020,
+                                   "buy":  "4 1/4 cups half and half",
+                                   "bid":  "half-and-half",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Hot Sauce",
+                                   "canon":  "Hot Sauce",
+                                   "grams":  4,
+                                   "buy":  "3/4 tsp hot sauce",
+                                   "bid":  "hot-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "3/4 tsp ground black pepper",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Corn Tortillas",
+                                   "canon":  "Corn Tortillas",
+                                   "grams":  306,
+                                   "buy":  "13 corn tortillas, quartered",
+                                   "bid":  "corn-tortillas",
+                                   "gpu":  "23.500"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Mexican chorizo and egg casserole for meal prep: fresh chorizo browned with onion, pepper, and garlic, layered with corn tortillas, pepper jack, and cheddar, then flooded with an egg and half and half custard with jalapeno, green onion, and cilantro and baked, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with about 17 grams of carbs.",
+                 "keywords":  "mexican chorizo egg casserole, chorizo breakfast casserole, low carb casserole, high protein meal prep, egg casserole",
+                 "image":  "",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT1H30M",
+                 "totalTime":  "PT8H",
+                 "costPerServing":  2.42,
+                 "recipeIngredient":  [
+                                          "Pork Chorizo, 1 lb 6 oz Mexican pork chorizo (624 g)",
+                                          "Yellow Onion, 3/4 large yellow onion, finely chopped (113 g)",
+                                          "Red Bell Pepper, 3/4 red bell pepper, finely chopped (90 g)",
+                                          "Garlic, 7 cloves garlic, minced (21 g)",
+                                          "Pepper Jack Cheese, 11 1/4 oz pepper jack cheese, shredded (about 2 3/4 cups) (319 g)",
+                                          "Cheddar Cheese, Shredded, 11 1/4 oz shredded cheddar cheese (about 2 3/4 cups) (319 g)",
+                                          "Green Onions, 6 green onions, finely sliced (90 g)",
+                                          "Fresh Cilantro, 1/3 cup fresh cilantro, finely chopped (5 g)",
+                                          "Jalapeno, 3 jalapenos, seeded, deveined, and finely chopped (42 g)",
+                                          "Eggs, 17 large eggs (850 g)",
+                                          "Half and Half, 4 1/4 cups half and half (1020 g)",
+                                          "Hot Sauce, 3/4 tsp hot sauce (4 g)",
+                                          "Black Pepper, 3/4 tsp ground black pepper (2 g)",
+                                          "Corn Tortillas, 13 corn tortillas, quartered (306 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh the empty baking dish and note the number for portioning later.",
+                               "Brown the fresh chorizo with the onion, red bell pepper, and garlic until cooked through, then set aside.",
+                               "Toss the shredded pepper jack and cheddar with the cilantro, green onions, and jalapenos.",
+                               "Grease a large deep dish, or split across two, using nonstick spray or a little oil.",
+                               "Layer a third of the quartered tortillas, chorizo, and cheese mixture, then repeat twice, ending with cheese.",
+                               "Whisk the eggs, half and half, hot sauce, and black pepper and pour evenly over the layers.",
+                               "Cover and refrigerate at least 6 hours or overnight so the tortillas soak up the custard.",
+                               "Bake at 350 degrees F for 60 to 90 minutes until golden and clean-forked, rest, then weigh and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Chorizo",
+                                  "grams":  624
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  113
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  90
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Pepper Jack Cheese",
+                                  "grams":  319
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  319
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  90
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  850
+                              },
+                              {
+                                  "item":  "Half and Half",
+                                  "grams":  1020
+                              },
+                              {
+                                  "item":  "Hot Sauce",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Corn Tortillas",
+                                  "grams":  306
+                              }
+                          ]
+}

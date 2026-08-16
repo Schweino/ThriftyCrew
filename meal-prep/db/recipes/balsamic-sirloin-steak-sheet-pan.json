@@ -1,0 +1,321 @@
+{
+    "name":  "Balsamic Steak \u0026 Veggie Sheet Pan",
+    "slug":  "balsamic-sirloin-steak-sheet-pan",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://lifewithjanet.com/2026/05/15/balsamic-steak-veggie-sheet-pan/",
+    "source_site":  "lifewithjanet.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s exact 3.5x scale. Every gram and buy string transcribed from mapped\\balsamic-sirloin-steak-sheet-pan.json; no number computed in prose.",
+                         "MACROS transcribed from the mapper\u0027s food-DB recompute at 14 servings: 503.8 cal, 40.8 g protein, 18.8 g carbs, 29.1 g fat per serving, reported as the stat the build renders. In band for this run (400 to 650 cal, 35 g carb or less): 503.8 cal sits mid-band and carbs 18.8 g leave a wide 16 g under the ceiling.",
+                         "CALORIE BASIS carried loudly from the mapper: the source publishes 412 cal because it pours half the marinade over the steak and then PATS THE STEAK DRY (step 6), discarding most of that half, which its own calculator never booked. We book the FULL marinade (all of it is poured over food; the absorbed vs discarded fraction is unknowable and estimating it would be inventing data), so 503.8 is the ceiling-safe upper bound. Even fully booked it sits mid-band; on the source\u0027s discard basis it lands near 412. Both are inside [400, 650].",
+                         "OLIVE OIL COMBINED: the source lists two oil lines (2 tbsp for the vegetables at 94.5 g + 3 tbsp for the marinade at 141.75 g). To a shopper that is one bottle, so they are booked as a single 236 g line (about 1 cup plus 1 1/2 tbsp, divided) exactly as the chimichurri-steak-sheet-pan build this batch did. Grams are the rounded sum (94.5 + 141.75 = 236.25, booked 236); the steps divide it, about 10 1/2 tbsp into the marinade and about 7 tbsp reserved for the vegetables.",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked both directions: sirloin steak (make_it 4, 8), broccoli florets (5, 6), red bell pepper (5, 6), yellow bell pepper (5, 6), red onion (5, 6), olive oil (3 marinade + 5 vegetables, divided), balsamic vinegar (3), soy sauce (3), Worcestershire (3), honey (3), Dijon mustard (3), garlic (3), black pepper (3), salt (5, to-taste seasoning), fresh parsley (9 garnish, optional). Nothing orphaned in either direction.",
+                         "SALT and FRESH PARSLEY are the source\u0027s own optional lines. Salt is a to-taste, zero-macro seasoning; fresh parsley is an optional garnish (mapper\u0027s band sensitivity +0.2 cal/serving). Both are genuinely bought and both are used by a step, so both are booked as shopping lines rather than dropped.",
+                         "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount, with package sizes referenced generically and never with a per-line cost. Clear of the 2026-08-15 audit failures. Re-walk the bullets against cost_lines once costed before publish.",
+                         "BELL-PEPPER CLASS CAVEAT carried from the mapper for the auditor: the board\u0027s bell-peppers commodity that prices the yellow line has its cheapest cells on GREEN bells, so the derived cost of the yellow-only basket is understated. Variety-correct per the standing green-is-not-red rejection; the yellow line is booked to the hatch-precedent bell-peppers commodity, not silently swapped to green. Cost impact flagged, not fixed.",
+                         "PORTION METHOD is the sheet-pan weigh: weigh the empty pan first, weigh it loaded at the end, subtract, divide by 14. The parsley garnish is added before the final weigh so it is counted in the portion."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  504,
+                 "protein":  41,
+                 "carbs":  19,
+                 "fat":  29,
+                 "cost_ps":  "4.53"
+             },
+    "intro_html":  "A good balsamic marinade does two jobs at once. It tenderizes the steak and it caramelizes on the edges of the vegetables, so you get a browned, glossy sheet pan out of one bowl of whisking. Sirloin gets sliced thin and soaked in balsamic vinegar, soy sauce, a little honey, and Dijon, while broccoli, red and yellow peppers, and red onion roast alongside it. One pan goes in the oven, dinner comes out, and the only thing you stood over was the whisk. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 35 grams of carbs. That is a steakhouse plate that portions straight into a meal-prep container.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 5 1/4 lb, sliced against the grain into 1/2-inch strips (2381 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 7 cups florets (about 1 1/3 lb) (595 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3 1/2 red bell peppers, sliced into strips (420 g)",
+                                "\u003cstrong\u003eYellow Bell Pepper (fresh (USDA)):\u003c/strong\u003e 3 1/2 yellow bell peppers, sliced into strips (420 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 3 1/2 medium, sliced into wedges (385 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 cup plus 1 1/2 tbsp, divided (236 g)",
+                                "\u003cstrong\u003eBalsamic Vinegar (generic):\u003c/strong\u003e 1 cup plus 2 3/4 tbsp (298 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 7 tbsp low-sodium (112 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 3 1/2 tbsp (60 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 3 1/2 tbsp (74 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 3 1/2 tbsp (52 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 11 cloves, minced (33 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 3/4 tsp (4 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e salt, to taste (about 1 tsp) (6 g)",
+                                "\u003cstrong\u003eFresh Parsley (fresh (USDA)):\u003c/strong\u003e 2 tbsp chopped, for garnish (optional) (8 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Flank/Sirloin Steak, 5 1/4 lb, sliced against the grain into 1/2-inch strips: ~$46.29. \u003cstrong\u003eBuy 6 lbs: $52.91.\u003c/strong\u003e",
+                       "Broccoli Florets, 7 cups florets (about 1 1/3 lb): ~$2.04. \u003cstrong\u003eBuy 2 12oz bags: $2.33.\u003c/strong\u003e",
+                       "Red Bell Pepper, 3 1/2 red bell peppers, sliced into strips: ~$3.43. \u003cstrong\u003eBuy 4 each: $3.92.\u003c/strong\u003e",
+                       "Yellow Bell Pepper, 3 1/2 yellow bell peppers, sliced into strips: ~$3.30. \u003cstrong\u003eBuy 3 each: $4.38.\u003c/strong\u003e",
+                       "Red Onion, 3 1/2 medium, sliced into wedges: ~$1.14. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
+                       "Olive Oil, 1 cup plus 1 1/2 tbsp, divided: ~$2.57. \u003cstrong\u003eBuy 1 (covers about three batches).\u003c/strong\u003e",
+                       "Balsamic Vinegar, 1 cup plus 2 3/4 tbsp: ~$2.31. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Soy Sauce, 7 tbsp low-sodium: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Worcestershire Sauce, 3 1/2 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 3 1/2 tbsp: ~$0.59. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Dijon Mustard, 3 1/2 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 11 cloves, minced: ~$0.45. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Fresh Parsley, 2 tbsp chopped, for garnish (optional): ~$0.26. \u003cstrong\u003eBuy 1 bunch: $1.93.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$0.13. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $63.39 across 14 servings, so roughly $4.53 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $73.87 across 14 servings, roughly $5.28 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.45 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $89.32. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a balsamic steak dinner most people only order out. The sirloin carries the plate and the protein, and a bowl of pantry bottles turns it into something that tastes like it took all afternoon.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eA little over five pounds of sirloin is the anchor.\u003c/strong\u003e This is where the money and nearly all the protein live, so reach for the big family pack over the small trays and you are paying for beef instead of packaging. Buy it whole and slice it thin against the grain yourself; pre-sliced stir-fry beef costs more for the same meat.",
+                       "\u003cstrong\u003eBroccoli, two peppers, and a red onion fill the pan.\u003c/strong\u003e You want about seven cups of broccoli florets, a few red bell peppers and a few yellow, and a red onion cut into wedges. The yellow and red peppers are worth buying on purpose here, because they roast up sweeter than the green ones and they make the pan look like a plate you would pay for.",
+                       "\u003cstrong\u003eThe marinade is mostly pantry.\u003c/strong\u003e Balsamic vinegar, low-sodium soy sauce, Worcestershire, honey, and Dijon mustard are shelf-stable bottles you buy once and use across a lot of dinners, so they barely move the cart. The balsamic and the soy do the heavy lifting; the honey and Dijon round off the sharp edges.",
+                       "\u003cstrong\u003eOlive oil ties it together.\u003c/strong\u003e One bottle covers both jobs, the marinade and the drizzle over the vegetables, so buy the size you would keep on the counter anyway. Everyday olive oil is fine here; the balsamic is what you taste.",
+                       "\u003cstrong\u003eFresh parsley at the end is optional.\u003c/strong\u003e A little chopped parsley over the top brightens the whole pan and makes it look finished, but skip it with a clear conscience if it is not in the cart. It changes nothing about how the steak eats."
+                   ],
+    "make_it":  [
+                    "Weigh your empty sheet pan and write the number down. You will weigh it loaded at the end to split this into 14 even servings by weight, which is the only honest way to portion a whole pan of food.",
+                    "Heat the oven to 425 degrees F. Line a large rimmed baking sheet with foil and give it a generous coat of nonstick spray.",
+                    "Whisk the marinade in a medium bowl: balsamic vinegar, about 10 tablespoons of the olive oil, the soy sauce, Worcestershire, honey, Dijon mustard, minced garlic, and black pepper, until it is fully combined. Hold back the rest of the oil, about 7 tablespoons, for the vegetables.",
+                    "Slice the sirloin against the grain into half-inch strips, put them in a zip-top bag or shallow dish, and pour about half the marinade over. Toss to coat and let it sit at least 15 minutes while the vegetables get going.",
+                    "Pile the broccoli florets, sliced red and yellow peppers, and red onion wedges onto the pan. Drizzle with the rest of the marinade and the reserved olive oil, season with a little salt, and toss to coat. Spread everything into a single even layer.",
+                    "Roast the vegetables for 12 to 15 minutes, until they are just starting to caramelize and go tender at the edges.",
+                    "While they roast, lift the steak out of the marinade and pat the strips lightly with a paper towel to take off the surface moisture so they sear instead of steam.",
+                    "Pull the pan out, push the vegetables to the outer edges, and lay the steak strips in a single layer down the center. Slide it back in and roast another 8 to 10 minutes, until the steak reaches 145 degrees F for medium and the vegetables are tender and caramelized.",
+                    "Let the pan rest 5 minutes, scatter the chopped parsley over the top, then weigh the loaded pan and portion as below."
+                ],
+    "portion_html":  "Set the loaded sheet pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total, steak and vegetables and every drop of pan sauce together. Divide that number by 14 and give each container that exact weight, aiming for an even share of steak, broccoli, peppers, and onion. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://lifewithjanet.com/2026/05/15/balsamic-steak-veggie-sheet-pan/\" target=\"_blank\" rel=\"noopener\"\u003elifewithjanet.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  63.39,
+    "cost_batch_true":  73.87,
+    "cost_per_serving":  4.53,
+    "cost_per_serving_true":  5.28,
+    "cost_pantry_add":  15.45,
+    "cost_first_run":  89.32,
+    "scaler":  {
+                   "cost":  "73.87",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  2381,
+                                   "buy":  "5 1/4 lb, sliced against the grain into 1/2-inch strips",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "canon":  "Broccoli Florets",
+                                   "grams":  595,
+                                   "buy":  "7 cups florets (about 1 1/3 lb)",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  420,
+                                   "buy":  "3 1/2 red bell peppers, sliced into strips",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Yellow Bell Pepper",
+                                   "canon":  "Yellow Bell Pepper",
+                                   "grams":  420,
+                                   "buy":  "3 1/2 yellow bell peppers, sliced into strips",
+                                   "bid":  "yellow-bell-pepper",
+                                   "gpu":  "186.000"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  385,
+                                   "buy":  "3 1/2 medium, sliced into wedges",
+                                   "bid":  "red-onion",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  236,
+                                   "buy":  "1 cup plus 1 1/2 tbsp, divided",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Balsamic Vinegar",
+                                   "canon":  "Balsamic Vinegar",
+                                   "grams":  298,
+                                   "buy":  "1 cup plus 2 3/4 tbsp",
+                                   "bid":  "balsamic-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  112,
+                                   "buy":  "7 tbsp low-sodium",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "canon":  "Worcestershire Sauce",
+                                   "grams":  60,
+                                   "buy":  "3 1/2 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  74,
+                                   "buy":  "3 1/2 tbsp",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  52,
+                                   "buy":  "3 1/2 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  33,
+                                   "buy":  "11 cloves, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "1 3/4 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  6,
+                                   "buy":  "salt, to taste (about 1 tsp)",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Parsley",
+                                   "canon":  "Fresh Parsley",
+                                   "grams":  8,
+                                   "buy":  "2 tbsp chopped, for garnish (optional)",
+                                   "bid":  "fresh-parsley",
+                                   "gpu":  "60.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Balsamic steak and veggie sheet pan dinner for meal prep: sirloin marinated in balsamic, soy, honey, and Dijon and roasted with broccoli, bell peppers, and red onion, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 35 grams of carbs.",
+                 "keywords":  "balsamic steak sheet pan, sheet pan steak dinner, balsamic marinated sirloin, low carb meal prep, high protein beef dinner",
+                 "image":  "",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  4.53,
+                 "recipeIngredient":  [
+                                          "Beef Flank/Sirloin Steak, 5 1/4 lb, sliced against the grain into 1/2-inch strips (2381 g)",
+                                          "Broccoli Florets, 7 cups florets (about 1 1/3 lb) (595 g)",
+                                          "Red Bell Pepper, 3 1/2 red bell peppers, sliced into strips (420 g)",
+                                          "Yellow Bell Pepper, 3 1/2 yellow bell peppers, sliced into strips (420 g)",
+                                          "Red Onion, 3 1/2 medium, sliced into wedges (385 g)",
+                                          "Olive Oil, 1 cup plus 1 1/2 tbsp, divided (236 g)",
+                                          "Balsamic Vinegar, 1 cup plus 2 3/4 tbsp (298 g)",
+                                          "Soy Sauce, 7 tbsp low-sodium (112 g)",
+                                          "Worcestershire Sauce, 3 1/2 tbsp (60 g)",
+                                          "Honey, 3 1/2 tbsp (74 g)",
+                                          "Dijon Mustard, 3 1/2 tbsp (52 g)",
+                                          "Garlic, 11 cloves, minced (33 g)",
+                                          "Black Pepper, 1 3/4 tsp (4 g)",
+                                          "Salt, salt, to taste (about 1 tsp) (6 g)",
+                                          "Fresh Parsley, 2 tbsp chopped, for garnish (optional) (8 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh the empty sheet pan and note the number for portioning later.",
+                               "Heat the oven to 425 degrees F and line a rimmed baking sheet with foil and nonstick spray.",
+                               "Whisk balsamic vinegar, most of the olive oil, soy sauce, Worcestershire, honey, Dijon, garlic, and black pepper into a marinade, reserving some oil for the vegetables.",
+                               "Slice the sirloin into half-inch strips and marinate in about half the marinade for at least 15 minutes.",
+                               "Toss the broccoli, bell peppers, and red onion with the rest of the marinade and the reserved oil and roast for 12 to 15 minutes.",
+                               "Pat the steak dry, lay it down the center of the pan among the vegetables, and roast another 8 to 10 minutes to 145 degrees F.",
+                               "Rest 5 minutes, garnish with parsley, then weigh the pan and divide across 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  2381
+                              },
+                              {
+                                  "item":  "Broccoli Florets",
+                                  "grams":  595
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Yellow Bell Pepper",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  236
+                              },
+                              {
+                                  "item":  "Balsamic Vinegar",
+                                  "grams":  298
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  60
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  74
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  33
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Fresh Parsley",
+                                  "grams":  8
+                              }
+                          ]
+}

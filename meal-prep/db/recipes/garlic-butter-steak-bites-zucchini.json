@@ -1,0 +1,213 @@
+{
+    "name":  "Garlic Butter Steak Bites and Zucchini",
+    "slug":  "garlic-butter-steak-bites-zucchini",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://blackberrybabe.com/2026/02/02/garlic-butter-steak-bites/",
+    "source_site":  "blackberrybabe.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SOURCE YIELD 2, rebuilt to 14 at the mapper\u0027s 7.0x scale. Every gram and buy string transcribed from mapped\\garlic-butter-steak-bites-zucchini.json; no number computed in prose.",
+                         "AVOCADO OIL DROPPED as a source erratum, and its calories dropped WITH it, never one without the other. The source\u0027s printed ingredient list carries \u00271 tablespoon avocado oil\u0027 but NO instruction ever uses it: the steak dry-sears (pat extremely dry, high heat) and the only fat that enters the pan is the butter in the garlic-butter step. Both the extractor and the mapper flagged this line as listed-but-never-used, and the mapper explicitly sanctioned the spec/write lane to drop it \u0027if it also drops the 62 cal, either consistently, never one without the other.\u0027 Dropping the line from the booked ingredients does exactly that by construction: build-v2-spec recomputes macros FROM the booked list, so the ~62 cal/serving the oil would have carried is gone in the same stroke. This keeps the card free of an orphaned ingredient (bought but used by no step), which spec-guards now hard-fails, while keeping the recipe cookable exactly as shopped, a dry-sear needs no oil. Avocado Oil is also absent from db\\ingredients.json (no bid), so booking it would have hard-failed the build\u0027s unknown-name guard regardless.",
+                         "MACROS transcribed from the mapper\u0027s food-DB recompute and INDEPENDENTLY re-run by the writer line by line against food-macros-db at 14 servings, WITHOUT the dropped avocado oil: 544.4 cal, 52.9 g protein, 8.6 g carbs, 33.5 g fat per serving, reported as stat 544 / 53 / 9 / 34 and re-verified by build-v2-spec\u0027s food-macros-db recompute (tolerance 5 cal / 2 g protein). This matches the mapper\u0027s own without-oil reading (~543 cal / 33.5 F). In band for this run (400 to 650 cal, 35 g carb or less): 544 cal PASS with 106 cal of ceiling headroom, carbs 8.6 g PASS with a lot of room. Intro says \u0027under 10 grams of carbs\u0027, a true tighter bound at 8.6.",
+                         "KOSHER SALT CANONICALIZED at build to \u0027Salt\u0027 (bid salt), the same move as french-chicken-fricassee and chimichurri-steak-sheet-pan this run. The mapper\u0027s item name \u0027Kosher Salt\u0027 lives in NEITHER food-macros-db NOR db\\ingredients.json and would hard-fail the build twice (macro recompute and unknown-name guard). Rewrote to the batch-canonical \u0027Salt\u0027, keeping the buy string truthful (\u00277 tsp kosher salt, divided\u0027). Salt is zero-macro so no stat number moved. The one source salt line is divided in the steps, most on the steak, the rest on the zucchini, mirroring the source\u0027s 3/4 tsp + 1/4 tsp split.",
+                         "FRESH PARSLEY BOOKED (not dropped). Unlike the avocado oil, parsley IS used by a step (the finishing garnish in make_it 5), so it is a real bought-and-used ingredient, not an orphan. It carries a bid (fresh-parsley, board 3 of 7) and a food-macros-db row (this run\u0027s addition), so it costs and macro-checks cleanly. The mapper marked it optional and excluded it from the band macros; booked here it adds under 1 cal/serving, immaterial, and the stat above INCLUDES it. An optional garnish that the shopper buys is still a line the steps must use, and step 5 uses it.",
+                         "FLAKED SEA SALT kept OUT of the booked build and out of every make_it step. It has item_id NULL (mapper: specialty finishing flake, Maldon class, not a board commodity, and flattening it to table salt is a price-class stretch in the wrong direction), no db\\ingredients.json row and no food-macros-db row, so booking it would hard-fail the build; and putting it in a step while not buying it would be the reverse orphan (a step using something unbought). It is an optional, no-quantity finishing flourish, so it is handled the same way low-carb-steak-fajita-skillet handled its optional toppings: named in shop_smart ONLY as a day-of finish the shopper can add separately, never a booked ingredient and never a make_it step. The recipe cooks complete exactly as shopped without it.",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked the booked list against the steps both directions: steak (make_it 2 season, 3 sear, 5 combine), zucchini (4 saute), salt (2 on steak + 4 on zucchini, divided), black pepper (2), butter (5 garlic-butter), garlic (5 garlic-butter), lemon juice (6 finish), fresh parsley (6 garnish). Nothing else is named in a step. The dropped avocado oil is used by no step (correct, it is not bought); flaked sea salt is named only in shop_smart as an optional extra, not in a step.",
+                         "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount, with package sizes referenced generically and never with a per-line cost. Clear of the 2026-08-15 audit failures (the block-beats-tub, the nothing-left carton, the lasts-several-batches box). Re-walk the bullets against cost_lines once costed before publish.",
+                         "PORTION METHOD is the house weigh-the-pot: weigh the empty skillet in Step 1, weigh it loaded at the end, subtract, divide by 14. The steak sears in batches but everything comes back together in the one skillet for the garlic butter, so the single-pot weigh is honest here.",
+                         "COST NOTE for the repair pass: all eight booked bids resolve (sirloin-steak, zucchini, salt, black-pepper, butter, garlic, lemon-juice, fresh-parsley). No unwired material line is expected. Confirm cost_lines after -RunCost."
+                     ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  544,
+                 "protein":  53,
+                 "carbs":  9,
+                 "fat":  34,
+                 "cost_ps":  "6.01"
+             },
+    "intro_html":  "Steak bites are the kind of dinner that feels like a splurge and cooks like a weeknight. You cut sirloin into cubes, pat them bone dry, and sear them hard in a screaming hot pan so they build a real crust, no oil needed because a dry surface and a hot skillet do that work on their own. Zucchini goes in next and cooks just to the edge of tender, then everything comes back together in a garlic butter that melts down over the meat with a squeeze of lemon to keep it from getting heavy. There is no breading, no starch, and nothing standing between you and the steak. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 10 grams of carbs. That is a steakhouse plate portioned into a meal-prep container.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 7 lb sirloin steak, cut into 1-inch cubes (3175 g)",
+                                "\u003cstrong\u003eZucchini:\u003c/strong\u003e 14 medium zucchini, sliced into half-moons (2744 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 7 tsp kosher salt, divided (2 tbsp plus 1 tsp) (42 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 3 1/2 tsp, freshly cracked (8 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1 cup plus 5 tbsp salted (2 sticks plus 5 tbsp) (294 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 28 cloves, minced (about 2 heads) (84 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 2 tbsp plus 1 tsp (35 g)",
+                                "\u003cstrong\u003eFresh Parsley (fresh (USDA)):\u003c/strong\u003e 7 tbsp chopped (about half a bunch) (27 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Flank/Sirloin Steak, 7 lb sirloin steak, cut into 1-inch cubes: ~$61.72. \u003cstrong\u003eBuy 7 lbs: $61.73.\u003c/strong\u003e",
+                       "Zucchini, 14 medium zucchini, sliced into half-moons: ~$9.20. \u003cstrong\u003eBuy 7 lbs: $10.64.\u003c/strong\u003e",
+                       "Butter, 1 cup plus 5 tbsp salted (2 sticks plus 5 tbsp): ~$1.93. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Garlic, 28 cloves, minced (about 2 heads): ~$1.14. \u003cstrong\u003eBuy 2 heads: $1.16.\u003c/strong\u003e",
+                       "Lemon Juice, 2 tbsp plus 1 tsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Parsley, 7 tbsp chopped (about half a bunch): ~$0.87. \u003cstrong\u003eBuy 1 bunch: $1.93.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.29. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $75.23 across 14 servings, so roughly $5.37 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $78.81 across 14 servings, roughly $5.63 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.33 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $84.14. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e at everyday prices for garlic butter steak bites you would pay three times as much for out. The sirloin carries the plate and the zucchini stretches it, and that garlic butter is what makes the whole thing taste like more than it cost.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eSeven pounds of sirloin is the anchor.\u003c/strong\u003e This is where most of the money and all of the protein live, so buy one big cut and cube it yourself into one-inch pieces instead of paying extra for pre-cut steak tips. Reach for the family pack over the little trays so you are paying for beef and not for packaging. Cubing goes easier if you firm the steak in the freezer for about twenty minutes first.",
+                       "\u003cstrong\u003eFourteen zucchini stretch the plate and keep it light.\u003c/strong\u003e Zucchini is cheap summer produce that cooks down fast and soaks up the garlic butter, which is exactly what you want next to a rich steak. Pick firm medium ones of about the same size so they cook evenly, and slice them into half-moons so every piece gets an edge on the pan.",
+                       "\u003cstrong\u003eButter and a couple heads of garlic are the whole sauce.\u003c/strong\u003e Salted butter and a real pile of minced garlic melt together at the end into the glaze that carries this dish, so do not skimp on either. Both are backbone you likely already keep on hand, and fresh garlic beats the jarred stuff here because it goes in raw at the finish where you taste it plainly.",
+                       "\u003cstrong\u003eLemon, salt, pepper, and a little parsley finish it.\u003c/strong\u003e A squeeze of lemon at the end cuts the richness so the butter does not sit heavy, and the parsley is a fresh green garnish, so buy it fresh, not dried. If you like a coarse flaked sea salt to sprinkle over the top the way a steakhouse would, grab a little separately as a day-of finish. It is not in the fourteen-serving build or the cost below, so add it only if you want it."
+                   ],
+    "make_it":  [
+                    "Weigh your biggest skillet empty and write the number down. At the end you will weigh it loaded and subtract, which is the only honest way to split a batch this size into fourteen even servings.",
+                    "Pat the steak cubes extremely dry with paper towels, which is what lets them brown instead of steam, then toss them in a bowl with about three-quarters of the kosher salt and all of the black pepper right before they hit the pan.",
+                    "Heat the skillet over high heat with nothing in it and sear the steak in a single layer, working in batches so the pan is never crowded, because crowded meat steams instead of searing. Give each batch about two minutes without moving it to build a crust, then flip and go about one more minute. Scoop each batch onto a plate as it finishes.",
+                    "Turn the heat down to medium high and add the zucchini to the same pan without cleaning it, along with the rest of the salt. Saute for four to five minutes until the edges start to brown but the zucchini still has some bite, not soggy.",
+                    "Turn the heat to low and return the steak and any juices to the pan. Add the butter and the minced garlic and toss everything constantly for about a minute, just until the butter melts and the garlic smells sweet, not browned.",
+                    "Pull the skillet off the heat and stir in the lemon juice to brighten it. Weigh the loaded skillet, subtract the empty weight from Step 1, and divide by 14 to find your serving weight. Scatter the chopped parsley over the top and portion that exact weight into each of your fourteen containers.",
+                    "For a steakhouse finish, sprinkle a little flaked sea salt over each container as you eat it if you picked some up. That step is optional and not counted in the numbers."
+                ],
+    "portion_html":  "The honest way to make fourteen even servings is by weight. Weigh the loaded skillet after the garlic butter goes on, subtract the empty weight you noted in Step 1, and that is your cooked total, steak and zucchini and sauce together. Divide it by 14 and give each container that exact amount, aiming for an even share of steak and zucchini in every one. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://blackberrybabe.com/2026/02/02/garlic-butter-steak-bites/\" target=\"_blank\" rel=\"noopener\"\u003eblackberrybabe.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A low carb, high protein dinner for about ${{cost_ps}} a serving at everyday prices. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  75.23,
+    "cost_batch_true":  78.81,
+    "cost_per_serving":  5.37,
+    "cost_per_serving_true":  5.63,
+    "cost_pantry_add":  5.33,
+    "cost_first_run":  84.14,
+    "scaler":  {
+                   "cost":  "78.81",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  3175,
+                                   "buy":  "7 lb sirloin steak, cut into 1-inch cubes",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Zucchini",
+                                   "canon":  "Zucchini",
+                                   "grams":  2744,
+                                   "buy":  "14 medium zucchini, sliced into half-moons",
+                                   "bid":  "zucchini",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  42,
+                                   "buy":  "7 tsp kosher salt, divided (2 tbsp plus 1 tsp)",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  8,
+                                   "buy":  "3 1/2 tsp, freshly cracked",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  294,
+                                   "buy":  "1 cup plus 5 tbsp salted (2 sticks plus 5 tbsp)",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  84,
+                                   "buy":  "28 cloves, minced (about 2 heads)",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  35,
+                                   "buy":  "2 tbsp plus 1 tsp",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Fresh Parsley",
+                                   "canon":  "Fresh Parsley",
+                                   "grams":  27,
+                                   "buy":  "7 tbsp chopped (about half a bunch)",
+                                   "bid":  "fresh-parsley",
+                                   "gpu":  "60.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Garlic butter steak bites and zucchini for meal prep: sirloin cubed and seared hard, then folded with zucchini in a lemony garlic butter, no oil and no starch, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 10 grams of carbs.",
+                 "keywords":  "garlic butter steak bites, steak bites and zucchini, low carb steak meal prep, keto steak bites, high protein beef dinner",
+                 "image":  "",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  6.01,
+                 "recipeIngredient":  [
+                                          "Beef Flank/Sirloin Steak, 7 lb sirloin steak, cut into 1-inch cubes (3175 g)",
+                                          "Zucchini, 14 medium zucchini, sliced into half-moons (2744 g)",
+                                          "Salt, 7 tsp kosher salt, divided (2 tbsp plus 1 tsp) (42 g)",
+                                          "Black Pepper, 3 1/2 tsp, freshly cracked (8 g)",
+                                          "Butter, 1 cup plus 5 tbsp salted (2 sticks plus 5 tbsp) (294 g)",
+                                          "Garlic, 28 cloves, minced (about 2 heads) (84 g)",
+                                          "Lemon Juice, 2 tbsp plus 1 tsp (35 g)",
+                                          "Fresh Parsley, 7 tbsp chopped (about half a bunch) (27 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh the empty skillet and note the number for portioning later.",
+                               "Pat the steak cubes very dry and toss with most of the kosher salt and all the black pepper.",
+                               "Sear the steak in a dry, screaming hot skillet in batches, then set it aside.",
+                               "Saute the zucchini in the same pan with the rest of the salt until just tender.",
+                               "Turn the heat low, return the steak, and toss with the butter and minced garlic into a garlic butter.",
+                               "Stir in the lemon juice off the heat, weigh the skillet, divide by 14, garnish with parsley, and portion into fourteen containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  3175
+                              },
+                              {
+                                  "item":  "Zucchini",
+                                  "grams":  2744
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  294
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Fresh Parsley",
+                                  "grams":  27
+                              }
+                          ]
+}
