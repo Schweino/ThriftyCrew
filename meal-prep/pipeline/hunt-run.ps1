@@ -72,12 +72,18 @@ $repo = Split-Path -Parent $mp                        # ...\income
 # status screen reported all 9 recipes in flight while also reporting 7 of them rejected. Second instance
 # of this class in this one file (see the self-test's $tRows note); same family as the $ppg/$ppG 250,000x
 # engine bug. Give a shared constant a name no local would ever take.
-$script:REJECTED_STATES = @('rejected-dupe', 'rejected-unreadable', 'rejected-not-carried', 'rejected-qa', 'rejected-audit')
+$script:REJECTED_STATES = @('rejected-dupe', 'rejected-unreadable', 'rejected-not-carried', 'rejected-qa', 'rejected-audit', 'rejected-macros')
 $script:NEXT = @{
   'sourced'    = @('selected', 'rejected-dupe')
   'selected'   = @('extracted', 'rejected-unreadable', 'rejected-dupe')
-  'extracted'  = @('mapped', 'rejected-unreadable', 'rejected-dupe')
-  'mapped'     = @('pricing', 'priced', 'rejected-not-carried')
+  # `rejected-macros`: the recipe is readable, not a dupe, and its ingredients are buyable - it simply
+  # cannot land inside the run's macro window on any label-accurate reading. Added 2026-08-16, when the
+  # mapper rejected two recipes on exactly those grounds and had nowhere to put the verdict: from
+  # `extracted` the only exits were dupe and unreadable, and both would have been false. The mapper
+  # refused to force it, correctly, and the recipes sat at `extracted` looking stuck to everyone
+  # watching. A verdict a state machine cannot express is a verdict that gets faked or lost.
+  'extracted'  = @('mapped', 'rejected-unreadable', 'rejected-dupe', 'rejected-macros')
+  'mapped'     = @('pricing', 'priced', 'rejected-not-carried', 'rejected-macros')
   'pricing'    = @('priced', 'parked', 'rejected-not-carried')
   'parked'     = @('pricing', 'priced', 'parked', 'rejected-not-carried')
   'priced'     = @('spec-built')
@@ -328,6 +334,14 @@ if ($runSelfTest) {
   T 'CLEAN TWIN the normal path is legal'                              (Test-LegalTransition 'qa-passed' 'waved') 'refused'
   T 'CLEAN TWIN an audit NO-GO may trim a recipe back out of its wave' (Test-LegalTransition 'waved' 'qa-passed') 'refused'
   T 'CLEAN TWIN a QA failure may route back to extraction for repair'  (Test-LegalTransition 'written' 'extracted') 'refused'
+
+  # ---- FIXTURE 4b. A macro rejection has somewhere to go. On 2026-08-16 it did not: the mapper ruled
+  # two recipes outside the run's calorie/carb window, and `extracted` offered only dupe and unreadable.
+  # Both would have been false, so the mapper refused to advance them at all and they read as stuck.
+  T 'MUST FIRE  a macro rejection is reachable from extracted'         (Test-LegalTransition 'extracted' 'rejected-macros') 'refused'
+  T 'MUST FIRE  a macro rejection is reachable from mapped'            (Test-LegalTransition 'mapped' 'rejected-macros') 'refused'
+  T 'MUST FIRE  a macro rejection is terminal like every other reject' (-not (Test-LegalTransition 'rejected-macros' 'mapped')) 'allowed'
+  T 'CLEAN TWIN rejected-macros counts as a rejection, not as in-flight' ($script:REJECTED_STATES -contains 'rejected-macros') 'missing from REJECTED_STATES'
 
   # ---- FIXTURE 4b. THE `held` STATE, frozen at its founding bug. On 2026-08-15 two published recipes were
   # set back to DRAFT in Ghost by hand because their cards could not price, and their state files went on
