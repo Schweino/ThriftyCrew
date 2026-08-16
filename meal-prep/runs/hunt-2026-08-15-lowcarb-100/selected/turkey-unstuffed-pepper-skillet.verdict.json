@@ -1,0 +1,23 @@
+{
+  "slug": "turkey-unstuffed-pepper-skillet",
+  "name": "Ground Turkey Unstuffed Pepper Skillet (Low-Carb)",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "pass": true,
+    "cal": 441,
+    "carbs": 16,
+    "evidence": "441 cal within 400-650 band; 16 g carbs under 35 g cap; no seafood; cauliflower-rice stovetop skillet, budget meal-prep dinner, scales 4->14 by weigh-and-divide."
+  },
+  "dupe_of": null,
+  "dupe_evidence": "Not a live-catalog duplicate. Only turkey pepper entry in the 544-recipe digest is turkey-stuffed-pepper-soup, a rice-based SOUP (different method and starch); no ground-turkey unstuffed-pepper skillet exists in the catalog. Fresh accepted-slugs.json holds philly-cheesesteak-stuffed-peppers (beef Philly, distinct flavor family) - not the same dish.",
+  "pool_notes": "Turkey pool also carries two BAKED stuffed-pepper candidates (ground-turkey-stuffed-peppers-bake, classic tomato-rice, 25g carb; ground-turkey-taco-stuffed-peppers, taco-flavored). This candidate is a rice-free cauliflower-rice UNSTUFFED skillet - different format (skillet vs baked-in-pepper) and different starch, so 2-of-4 vs each: NOT a pool dupe. But three turkey bell-pepper dishes now sit in the pool (unstuffed cauliflower skillet + two stuffed bakes) - a catalog-spread consideration for the decider, not a dedup call.",
+  "cross_protein_collisions": [
+    {
+      "protein": "beef",
+      "note": "Structurally the same 'unstuffed pepper skillet' dish; a beef version (e.g. unstuffed-pepper-skillet-bowls) is typically rice-based while this turkey candidate is low-carb cauliflower-rice. Protein AND starch differ, so KEEP under my scope, but flag for the cross-protein merge pass so the decider can decide whether it wants both the rice beef skillet and the low-carb cauliflower turkey skillet."
+    }
+  ],
+  "borderline": false,
+  "checked_against": {"accepted_slugs_read_fresh": true, "catalog_digest_544": true}
+}

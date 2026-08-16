@@ -1,0 +1,21 @@
+{
+  "slug": "creamy-spinach-mushroom-pork-chops",
+  "name": "Creamy Spinach Mushroom Pork Chops",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "borderline": true,
+  "fit": {
+    "ok": true,
+    "cal": 469,
+    "carbs": 6,
+    "notes": "469 cal is inside 400-650; 6g carb clears <=35; pork (no seafood); budget skillet, weigh-and-divide, scales to 14. FIT."
+  },
+  "dupe_check": {
+    "catalog": "Nearest is creamy-mushroom-pork-chops-over-mashed-potatoes (pork-chops + heavy-cream + mushrooms + chicken-broth + flour): shares protein + creamy-mushroom sauce family + pan-sear method (3 of 4), but that one is plated over mashed potatoes (high-carb comfort plate) while this drops the starch entirely and folds spinach into the sauce, making it a distinct low-carb no-starch skillet the catalog lacks.",
+    "pool_and_accepted": "creamy-garlic-herb-wine-pork-chops is already in accepted-slugs.json - also a creamy skillet pork chop but a garlic-herb-white-wine sauce, no mushroom/spinach/cream-mushroom base, so a different sauce family, not a dupe. No other pork collision."
+  },
+  "borderline_reason": "Near-duplicate on protein+sauce+method with creamy-mushroom-pork-chops-over-mashed-potatoes; ruled KEEP because the no-starch spinach-cream low-carb format is plausibly a wanted variant for this low-carb run, but the decider should confirm the catalog wants a second creamy-mushroom pork chop entry rather than treat these as the same dinner.",
+  "cross_protein_collisions": [
+    "Structurally a 'creamy spinach/mushroom skillet' template that exists across proteins: creamy-tuscan-chicken-skillet (accepted) is the chicken cream+spinach skillet twin (flavor differs: tuscan sun-dried-tomato/parmesan vs mushroom here), and french-chicken-fricassee (accepted) / slow-cooker-creamy-chicken-mushroom-bowls are chicken creamy-mushroom twins. Watch for any turkey 'creamy spinach mushroom' or creamy-mushroom skillet in other selectors' pools - same dish, different protein."
+  ]
+}

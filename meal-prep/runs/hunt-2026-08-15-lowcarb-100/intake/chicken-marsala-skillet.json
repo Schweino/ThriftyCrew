@@ -1,0 +1,69 @@
+{
+  "name": "Chicken Marsala Skillet",
+  "slug": "chicken-marsala-skillet",
+  "protein": "chicken",
+  "cuisine": "Italian",
+  "source_url": "https://www.saltandlavender.com/chicken-in-a-mushroom-and-marsala-sauce/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Boneless Skinless Chicken Breast", "grams": 1575, "buy": "3 1/2 lb boneless skinless (7 large breasts, halved lengthwise into 14 cutlets)" },
+    { "item": "Salt", "grams": 6, "buy": "salt and pepper, to taste (about 1 tsp salt)" },
+    { "item": "Garlic Powder", "grams": 3, "buy": "7/8 tsp" },
+    { "item": "All-Purpose Flour", "grams": 105, "buy": "3/4 cup plus 2 tbsp, for dredging" },
+    { "item": "Olive Oil", "grams": 47, "buy": "3 1/2 tbsp" },
+    { "item": "Butter", "grams": 147, "buy": "10 1/2 tbsp, divided" },
+    { "item": "Baby Bella (Crimini) Mushrooms", "grams": 794, "buy": "28 oz, sliced fairly thin (three and a half 8-oz tubs)" },
+    { "item": "Garlic", "grams": 15, "buy": "5 cloves, minced" },
+    { "item": "Marsala Wine", "grams": 617, "buy": "2 1/2 cups plus 2 tbsp" },
+    { "item": "Heavy Cream", "grams": 420, "buy": "1 3/4 cups" }
+  ],
+  "macros_per_serving": { "calories": 444.6, "protein_g": 27.6, "carbs_g": 15.9, "fat_g": 25.0 },
+  "writer_notes": [
+    "SOURCE YIELD 4, rebuilt to 14 at the mapper's 3.5x scale. Every gram and buy string transcribed from mapped\\chicken-marsala-skillet.json; no number computed in prose.",
+    "MACROS transcribed from the mapper's food-macros-db recompute at 14 servings: 444.6 cal, 27.6 g protein, 15.9 g carbs, 25.0 g fat per serving (rounds to 445 / 28 / 16 / 25). In band for this run: 445 cal inside [400, 650] and about 16 g carbs under the 35 g gate. This is the floor-side recipe of the batch, 45 cal above the 400 floor. The source's own published 428 cal / 26 g protein / 11 g carbs / 26 g fat tracks calories +3.9 percent and protein +6.2 percent, inside the 15 percent instrument. The +4.9 g carbs comes from the marsala carb basis (booked at the conservative-high USDA dessert-wine figure) and the standard dredge allowance; both were called out on their lines by the mapper and both push UP, so the floor margin is if anything understated.",
+    "BLOCKED ON MARSALA-WINE COMMODITY: 'Marsala Wine' has a food-macros-db row (macros are solid) but NO row and NO alias in db\\ingredients.json, so it carries no bid. The mapper booked it item_id null with the commodity proposal flagged to the registrar (shared with chicken-chasseur) and the ruling PENDING. build-v2-spec.ps1 refuses to resolve an unknown item name, so this recipe CANNOT be assembled or costed until the registrar mints the marsala-wine commodity and the ingredient map is repointed. This intake is complete and build-ready for that moment; nothing here may be dropped or renamed to force it through (dropping the marsala ships a chicken marsala with no marsala; renaming it mis-costs the sauce).",
+    "MUSHROOM VARIETY SPLIT, resolved by alias: item is 'Baby Bella (Crimini) Mushrooms' so the macro recompute reads the crimini row, while db\\ingredients.json carries that string as an adjudicated alias on the 'White Mushrooms' row (bid mushrooms). Same path the sibling low-carb-turkey-cauliflower-mushroom-casserole builds on. The mapper re-flagged the class caveat: visible cheapest board cells are white-mushroom products, macros are on the crimini DB row.",
+    "PEPPER FOLDED INTO THE SALT LINE: the source prints one 'Salt & pepper to taste' line; the mapper mapped a single 'Salt' ingredient whose buy string names both ('salt and pepper, to taste'). There is no separate Black Pepper line to cost. The season step says salt and pepper because the Salt line's buy explicitly names pepper, so no step uses an unbought item. Flagged in the run report as a mapper choice, not changed here.",
+    "DREDGE ALLOWANCE: 'flour for dredging' prints no amount in the source; the mapper booked the standard 1/4 cup per 4 cutlets allowance scaled 3.5x to 105 g and called it out. It is the one assigned quantity in the build; the source's published 11 g carbs back-solves consistent with it.",
+    "PARSLEY LEFT OUT ON PURPOSE: the source's final step stirs in an optional pinch of parsley, but parsley appears in NO source ingredient line, so nobody buys it. Per the rails a step may not use an unbought ingredient, so no step and no shop_smart bullet names parsley. Zero macro stakes; leaving it out ships a recipe cooked exactly as shopped.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought: chicken (steps 2,3,6), salt+pepper and garlic powder and flour (step 2), olive oil (step 3), butter divided (steps 3,4), mushrooms (step 4), garlic and marsala (step 5), heavy cream (step 6). Walked the list against the steps both directions.",
+    "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount and package form. This is doubly necessary here because the recipe cannot cost yet (no marsala bid), so no cost_lines exist to trace against. Re-walk the bullets against cost_lines once the marsala commodity lands and the recipe costs."
+  ],
+  "prose": {
+    "intro_html": "Chicken marsala sounds like something you order out, but it is really just floured chicken cutlets seared in butter and finished in a mushroom and marsala pan sauce that goes silky with a little cream. No long braise, no special equipment, one skillet start to finish. You dredge the cutlets, sear them golden, brown the mushrooms in the same pan, then pour in the marsala and cream and let the chicken finish right in the sauce. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 20 grams of carbs. That is a rich, restaurant-style chicken dinner that still lands inside a low-carb week.",
+    "shop_smart": [
+      "<strong>Seven large chicken breasts are the backbone.</strong> That is about three and a half pounds, and you slice each breast flat into two thin cutlets to land 14 servings. This is where most of the money and all of the protein live, so reach for the big family pack of boneless skinless breasts instead of the small trays and you are paying for chicken, not packaging.",
+      "<strong>Cremini mushrooms are the heart of the sauce.</strong> You need about 28 ounces, roughly three and a half of the 8-ounce tubs, sliced fairly thin so they brown instead of steam. Cremini, sometimes labeled baby bella, carry more flavor than plain white buttons, but if white is what your store has that is a fine swap.",
+      "<strong>Marsala wine is the whole point.</strong> You need about two and a half cups, so grab a bottle of dry marsala. It sits with the cooking wines or in the wine aisle depending on the store, and it is what gives this dish its name and its deep, slightly sweet edge. There is no faking it with something else.",
+      "<strong>Heavy cream smooths the sauce out.</strong> You need about one and three quarter cups to turn the marsala into something rich enough to coat the chicken. Regular heavy or whipping cream is exactly right.",
+      "<strong>Butter, olive oil, flour, garlic, and a little garlic powder round it out.</strong> Butter and a splash of oil to sear in, flour to dredge the cutlets, fresh garlic and a pinch of garlic powder to season. These are backbone staples you most likely already have, so they barely move the cart."
+    ],
+    "make_it": [
+      "Weigh your empty skillet and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+      "Slice each chicken breast flat into two thin cutlets so you have 14. Season them on both sides with the salt, pepper, and garlic powder, then dredge each one in the flour so it is lightly coated all over.",
+      "Heat the olive oil and about a third of the butter in a large skillet over medium-high heat. Working in batches so the pan is not crowded, sear the cutlets about 4 to 5 minutes a side until golden. Move the chicken to a plate and set it aside; it will finish cooking in the sauce.",
+      "Add the rest of the butter and the sliced mushrooms to the same pan and cook about 5 to 7 minutes, stirring now and then, until they are browned and the liquid they give off has cooked away.",
+      "Stir in the minced garlic, then pour in the marsala wine and let it bubble 2 to 3 minutes to cook off the sharp edge and pick up the browned bits from the bottom of the pan.",
+      "Pour in the heavy cream and return the chicken and any juices to the pan. Simmer about 5 minutes until the chicken is cooked through and the sauce has thickened enough to coat a spoon. Taste and add a little more salt and pepper if it needs it.",
+      "Weigh the full pan and subtract the empty weight from Step 1 to get the cooked total. Divide by 14 and give each container one cutlet and an even share of the mushroom marsala sauce, aiming for that weight."
+    ],
+    "portion_html": "Set the full pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Each container gets one chicken cutlet and an even spoonful of the mushroom and marsala sauce, landing near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a chicken marsala that tastes like it came off a restaurant menu. The chicken and the mushrooms carry it; the marsala and cream just make it taste expensive.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Chicken marsala for meal prep: floured chicken cutlets seared and finished in a mushroom and marsala cream sauce, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 20 grams of carbs.",
+    "keywords": "chicken marsala, low carb chicken marsala, chicken marsala meal prep, mushroom marsala chicken, high protein chicken dinner",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "totalTime": "PT30M",
+    "steps": [
+      "Slice the chicken breasts into 14 thin cutlets, season with salt, pepper, and garlic powder, and dredge in flour.",
+      "Sear the cutlets in olive oil and butter until golden, then set them aside.",
+      "Brown the sliced mushrooms in the remaining butter in the same pan.",
+      "Stir in the garlic, add the marsala wine, and let it bubble a few minutes.",
+      "Add the heavy cream, return the chicken, and simmer until cooked through and the sauce thickens.",
+      "Weigh the pan, subtract the empty weight, and divide across 14 containers."
+    ]
+  }
+}

@@ -3,17 +3,17 @@
     "title":  "",
     "source_url":  "",
     "protein":  "",
-    "state":  "waved",
+    "state":  "rejected-audit",
     "wave":  1,
     "created":  "2026-08-16T00:55:48",
-    "updated":  "2026-08-16T06:07:43",
+    "updated":  "2026-08-16T13:10:39",
     "terms":  [
                   {
                       "term":  "boneless beef short ribs",
                       "optional":  false
                   }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "retired on Brad ruling 2026-08-16: honest $6.71/serving would be the priciest recipe on the site; selected into this batch only because its cost misread as $0.30",
     "parked_on":  [
 
                   ],
@@ -83,6 +83,12 @@
                         "at":  "2026-08-16T06:07:43",
                         "by":  "wave-close",
                         "detail":  "wave 1"
+                    },
+                    {
+                        "state":  "rejected-audit",
+                        "at":  "2026-08-16T13:10:39",
+                        "by":  "auditor",
+                        "detail":  "retired on Brad ruling 2026-08-16: honest $6.71/serving would be the priciest recipe on the site; selected into this batch only because its cost misread as $0.30"
                     }
                 ]
 }

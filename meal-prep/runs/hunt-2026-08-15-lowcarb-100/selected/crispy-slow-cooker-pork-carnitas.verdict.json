@@ -1,0 +1,21 @@
+{
+  "slug": "crispy-slow-cooker-pork-carnitas",
+  "name": "Crispy Slow Cooker Pork Carnitas",
+  "protein": "pork",
+  "cuisine": "Mexican",
+  "verdict": "DUPE",
+  "dupe_of": "slow-cooker-pork-carnitas-bowl",
+  "pool_dupe_of": "crispy-pork-carnitas",
+  "fit": {
+    "src_cal": 578,
+    "src_carbs": 1.7,
+    "band_400_650": true,
+    "carbs_le_35": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "fit_ruling": "FIT on numbers (578 cal in band, 1.7g carbs well under 35, no seafood, shredded pork weighs-and-divides to 14) but killed as DUPE"
+  },
+  "evidence": "Duplicates the catalog's slow-cooker-pork-carnitas-bowl (Pork Carnitas Burrito Bowl): identical Mexican carnitas prep - slow-cooked pork with orange juice, cumin, oregano and jalapeno, then shredded and crisped - matching on protein, sauce/flavor family and method (3 of 4); dropping the cilantro-lime rice base is a starch swap under a low-carb framing, not a different dinner. Also an exact pool twin of crispy-pork-carnitas (same RecipeTin Eats recipe/name), already ruled DUPE of the same catalog bowl.",
+  "cross_protein_note": "If the decider were to override the dupe, this citrus-cumin shredded-and-crisped concept would structurally collide with a beef barbacoa / Mexican shredded-beef, a chicken carnitas/tinga-style shredded dish, and the catalog's cochinita-pibil (achiote citrus pork-shoulder) in other pools - flagging for the cross-protein merge pass.",
+  "confidence": "high on nutrition fit; high on dedup - carnitas already in catalog and an identical pool twin was already ruled DUPE"
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "chicken-piccata-skillet",
+  "name": "Chicken Piccata Skillet (Low-Carb Lemon-Caper)",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": "PASS",
+  "band_check": "465 cal (400-650 OK) / 9g carbs (<=35 OK) / no seafood / skillet dinner scalable to 14 by weight - PASS",
+  "dupe_evidence": "No catalog or accepted-slug duplicate. Catalog has Chicken Scampi (garlic-butter-wine), Chicken Florentine (spinach-cream) and accepted chicken-marsala-skillet (marsala-mushroom); piccata's lemon-caper pan-sauce profile is a distinct dish from all three - only shares the pan-seared-breast method, not the sauce/flavor family. Piccata niche is open.",
+  "borderline": false,
+  "cross_protein_collision_notes": "Piccata is a sauce template applied across proteins - if another selector's pool holds a pork-piccata, turkey-piccata, or veal-piccata (same lemon-caper pan sauce, same method), those would be structurally the same dish differing only by protein; decider should check the pork/turkey pools for a piccata twin.",
+  "unmapped": ["capers"],
+  "ruled_by": "adjudicator (parallel, chicken lane: chicken-skillet)"
+}

@@ -1,0 +1,23 @@
+{
+  "slug": "red-wine-braised-beef-short-ribs",
+  "name": "Red Wine Braised Beef Short Ribs",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "borderline": true,
+  "fit": {
+    "pass": true,
+    "src_cal": 535,
+    "src_carbs": 12,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "535 cal / 12g carbs per serving clears the 400-650 cal and <=35g carb band; no seafood; slow-cooker braise scales cleanly to 14 servings. Short ribs run pricey but cost is not a fit gate and this run deliberately wants unmapped/absent-ingredient picks for the pricer lane."
+  },
+  "catalog_dupe": null,
+  "accepted_slug_dupe": null,
+  "evidence": "Not an outright catalog dupe: the only existing braised-beef recipe is taiwanese-braised-beef-noodle-bowls (soy/star-anise braise over noodles - different sauce family and starch). Closest match is beef-bourguignon-bowls (chuck), which shares protein + red-wine-braise sauce family + slow-braise method (3 of 4 core dimensions); it is distinguished only by its bacon/mushroom/carrot/pearl-onion garnish and diced-stew format vs. this plate's plain aromatics braise of whole bone-in short ribs.",
+  "borderline_reason": "Structurally a red-wine beef braise, which the catalog already carries as beef-bourguignon-bowls. Flagging rather than silently keeping or cutting: the decider should judge whether a short-rib red-wine braise reads as a distinct plate from bourguignon (leaner-garnished, whole-cut, no bacon/mushroom) or as a near-duplicate red-wine braise. Recommend KEEP only if bourguignon is treated as the vegetable-garnished stew variant and this as the plated braised-rib variant.",
+  "cross_protein_collisions": [
+    "Any red-wine braise in another selector's pool would collide on sauce+method - most likely a lamb-shank / lamb red-wine braise or a generic 'red wine braised [protein]'; if a lamb selector holds one, this and it are the same dish minus the protein swap.",
+    "Also watch pot-roast-adjacent beef braises already in catalog (french-onion-pot-roast, apple-cider-pot-roast, classic-beef-stew) - different sauce bases (onion/cider/plain) so not dupes, but same braise format family."
+  ]
+}

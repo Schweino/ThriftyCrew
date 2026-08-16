@@ -1,0 +1,13 @@
+{
+  "slug": "pulled-pork-stuffed-peppers",
+  "name": "BBQ Pulled Pork Stuffed Peppers",
+  "protein": "pork",
+  "cuisine": "American (BBQ)",
+  "decision": "ACCEPT",
+  "source_url": "https://www.lowcarbmaven.com/pulled-pork-stuffed-peppers/",
+  "fit": { "calories": 426, "carbs_g": 7, "in_band": true },
+  "cross_lane_dupe_check": "Checked against accepted-slugs.json fresh. Only stuffed-pepper accepted is philly-cheesesteak-stuffed-peppers (beef + cheesesteak) - format collision only, different protein and sauce family, not a dish dupe. Nearest catalog neighbor bbq-pulled-pork-stuffed-sweet-potatoes shares 3/4 axes (pulled pork + BBQ + stuffed-and-baked) but rides a starchy sweet-potato vessel that fails this low-carb run; the low-carb bell-pepper vessel is the genuinely different, run-appropriate plate.",
+  "note": "Accepted as borderline against the catalog sweet-potato version. For a low-carb hunt the vessel/carb swap is the whole point, so it is a distinct plate - KEEP. Cross-protein watch: a beef/turkey BBQ or buffalo stuffed pepper in another lane would be the same-dish-different-protein twin; flagged for the merge pass.",
+  "decided_by": "selector",
+  "decided_at": "2026-08-16"
+}

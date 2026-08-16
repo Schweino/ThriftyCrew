@@ -1,0 +1,34 @@
+{
+  "slug": "keto-turkey-green-bean-cranberry-casserole",
+  "name": "Keto Turkey and Green Bean Casserole",
+  "protein": "turkey",
+  "cuisine": "American",
+  "verdict": "DUPE",
+  "dupe_scope": "pool",
+  "fit": {
+    "status": "FIT",
+    "cal": 416,
+    "carbs": 12.5,
+    "evidence": "416 cal sits inside the 400-650 band (near the floor), 12.5g total carb (9g net) clears the <=35g cap, no seafood, budget mix-and-bake casserole that scales to 14 by weigh-and-divide. FIT on the source's own published numbers - dupe is the reason for the cut, not fitness."
+  },
+  "dupe_check": {
+    "catalog_dupe": null,
+    "catalog_evidence": "No live-catalog dupe: the only green-bean turkey dishes in the 544-recipe digest (middle-eastern-turkey-green-bean-stew, persian-turkey-loobia-polo, greek-turkey-fasolakia-rice-bowls, japanese-turkey-nikujaga) are all rice/potato-based stews or pilafs, not a rice-free baked cheddar-mayo casserole; turkey-divan-broccoli-rice-bake shares cheddar+mayo+bake but is broccoli and rice-based.",
+    "accepted_dupe": null,
+    "accepted_evidence": "Not a dupe of anything in accepted-slugs.json. Nearest accepted is keto-turkey-broccoli-cheddar-casserole: same protein (turkey-breast), same method (oven bake), same none/none starch, but the vegetable (green bean vs broccoli) and the entire flavor family (sugar-free cranberry sauce + goat cheese + walnuts = sweet-tangy-nutty Thanksgiving-leftover profile vs a savory cream+cheddar comfort bake) genuinely distinguish the plate - clears the 3-of-4 bar against the accepted item.",
+    "pool_dupe": true,
+    "pool_dupe_of": ["low-carb-turkey-green-bean-casserole", "leftover-turkey-green-bean-cheddar-casserole"],
+    "pool_evidence": "Same dish as two verdicts already landed in selected/. All three are the SAME wholesomeyum 'easy leftover turkey casserole' source recipe: identical published numbers (416 cal / 12.5g total carb), identical signature (whole-muscle/leftover turkey + green beans + shredded cheddar + mayo + sugar-free cranberry sauce + goat cheese + optional walnuts, baked). low-carb-turkey-green-bean-casserole is a name-for-name match on the cranberry/goat-cheese/walnut profile; leftover-turkey-green-bean-cheddar-casserole is the same green-bean-cheddar-mayo bake. Three identical casseroles must not all ship - decider should keep exactly ONE."
+  },
+  "recommendation": "Keep one of the three green-bean turkey casseroles and cut the other two. This slug (keto-turkey-green-bean-cranberry-casserole) is the most descriptive of the actual plate (captures the cranberry signature), so it is a reasonable survivor, but any single one satisfies the gap - the choice is the decider's. Ruling this one DUPE because two twins already landed KEEP verdicts and are being consumed; do not let a third copy through.",
+  "borderline": {
+    "flag": true,
+    "note": "Two axes of concern for the decider: (1) POOL - the three-way green-bean-turkey-casserole collision above, the primary reason for this DUPE ruling. (2) CATALOG-ADJACENT - keto-turkey-broccoli-cheddar-casserole is already accepted this run; the surviving green-bean casserole is a second low-carb oven-baked turkey-cheddar casserole in the same run. My read is the catalog wants it (distinct vegetable + Thanksgiving cranberry/goat-cheese/walnut plate), but flagging so the audit stage can confirm it wants both."
+  },
+  "cross_protein_collisions": [
+    "This is structurally a 'leftover roast protein + green bean + cheddar + mayo bake' (a green-bean-casserole-with-protein). A chicken, ham, or pork 'green bean cheddar casserole' in another selector's pool would be the same dish with a swapped protein - decider should watch the chicken/ham/pork pools for a green-bean-cheddar-mayo bake twin. Accepted chicken-bacon-ranch-cauliflower-bake and low-carb-chicken-bacon-broccoli-cauliflower-bake are cousins of the template but distinct (ranch/bacon/cauliflower).",
+    "The cranberry + goat cheese + walnut Thanksgiving-leftover signature is fairly unique and less likely to collide across proteins - though a 'leftover turkey' framing is inherently turkey-specific."
+  ],
+  "unmapped": ["cranberry-sauce", "goat-cheese"],
+  "unmapped_note": "cranberry-sauce and goat-cheese have no board home - deliberate board-absent picks that feed the pricer lane, not a penalty (v2.1 5.1). NOTE for pricer: the low published carb depends on a SUGAR-FREE cranberry sauce (wholesomeyum is a keto source); if cranberry-sauce maps to a full-sugar row the computed carbs could rise materially, though headroom to the 35g cap is large."
+}

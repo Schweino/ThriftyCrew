@@ -1,0 +1,25 @@
+{
+  "slug": "brown-gravy-smothered-pork-chops-skillet",
+  "name": "Smothered Pork Chops in Brown Herb Gravy",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "borderline": true,
+  "fit": {
+    "pass": true,
+    "src_cal": 497,
+    "src_carbs": 15,
+    "cal_ok": "497 within 400-650",
+    "carb_ok": "15g <= 35g",
+    "no_seafood": true,
+    "scalable_14": "yes - sear chops in batches, one big pan gravy",
+    "budget_meal_prep": "yes - pork chops + pantry staples, weigh-and-divide"
+  },
+  "dedup": {
+    "catalog": "NOT a dupe. Closest catalog neighbor is southern-smothered-pork-chops-and-rice, but that is a creamy (heavy-cream) ONION white gravy served over rice; this is a plain BROWN herb gravy (beef bouillon + soy + Kitchen Bouquet browning + thyme/rosemary/sage, roux, only 1/3 cup half-and-half) with no starch. Same protein + skillet-gravy method but sauce family (brown-herb vs creamy-onion) and starch (none vs rice) both differ = 2 of 4, under the near-dupe threshold. Also distinct from creamy-mushroom-pork-chops-over-mashed-potatoes (mushroom), countryfried-pork-chops-with-bacon-gravy (breaded/bacon), marry-me-pork-chops-over-pasta (cream/sun-dried-tomato), and accepted creamy-garlic-herb-wine-pork-chops (creamy garlic-wine).",
+    "pool": "No other pork-chop candidate in front of me to collide with."
+  },
+  "borderline_reason": "Name 'smothered pork chops' collides with catalog southern-smothered-pork-chops-and-rice and the pork-chop-gravy shelf is already crowded (5 catalog + 1 accepted this run). Ruling KEEP because the food genuinely differs (brown herb gravy, no starch, low-carb) but flagging so the decider can weigh shelf saturation.",
+  "cross_protein_collisions": "This brown-gravy-smothered-protein-in-skillet is structurally the same plate as: a BEEF Salisbury steak or cube-steak/country-fried-steak in brown gravy, a CHICKEN 'smothered chicken in brown gravy', and a TURKEY equivalent. Decider should check other selectors' pools for a beef Salisbury/cube-steak brown-gravy or smothered-chicken brown-gravy twin, since the gravy build (broth + bouillon + browning + herbs + roux) would be nearly identical across proteins.",
+  "unmapped_note": "Carries Kitchen Bouquet (no board home - clean pricer-lane specimen) and dried-rosemary/dried-sage edge cases (board has fresh forms + dried-thyme). Not penalized per v2.1 5.1.",
+  "evidence_sentence": "KEEP: a plain brown herb gravy pork chop that does not duplicate the catalog's creamy-onion southern-smothered-pork-chops-and-rice nor any mushroom/bacon/cream-wine chop, but flagged borderline for name-adjacency on an already-crowded pork-chop-gravy shelf."
+}

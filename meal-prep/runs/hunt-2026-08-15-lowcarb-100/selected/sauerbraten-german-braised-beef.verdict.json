@@ -1,0 +1,12 @@
+{
+  "slug": "sauerbraten-german-braised-beef",
+  "name": "Sauerbraten (German Braised Beef Pot Roast)",
+  "protein": "beef",
+  "verdict": "DUPE",
+  "dupe_of": "slow-cooker-sauerbraten-bowls",
+  "reason": "Literally the same dish, Sauerbraten, already in the live catalog as 'Slow Cooker Sauerbraten Bowls' (beef-chuck-roast, red-wine-vinegar, gingersnaps, onions, beef-broth): identical protein (chuck/rump roast), identical sweet-sour red-wine-vinegar braise thickened with crushed gingersnaps, identical braise method. Candidate is served as a pot roast rather than a rice bowl, but the plate is the same German braise - a near-duplicate that would embarrass the catalog.",
+  "fit": "PASS",
+  "fit_note": "Published numbers 590 cal / 29.6g carb clear the 400-650 cal and <=35g carb band; low-carb braise, scalable to 14 servings, no seafood - fit is fine, but it loses on duplication.",
+  "cross_protein_collisions": [],
+  "condition_check": {"cal": 590, "carbs": 29.6, "cal_ok": true, "carbs_ok": true, "seafood": false, "scalable_14": true}
+}

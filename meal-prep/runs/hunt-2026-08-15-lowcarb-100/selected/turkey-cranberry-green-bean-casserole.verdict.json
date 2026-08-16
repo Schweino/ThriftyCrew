@@ -1,0 +1,20 @@
+{
+  "slug": "turkey-cranberry-green-bean-casserole",
+  "name": "Turkey, Green Bean and Goat Cheese Casserole",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "fit_evidence": "Published 416 cal / 12.5g total carbs (9g net) / 23.6g protein per serving clears the 400-650 cal and <=35g carb band; no seafood; casserole is weigh-and-divide scalable to 14; budget meal-prep dinner.",
+  "dupe_evidence": "No dish-twin in live catalog. Nearest catalog turkey casseroles are distinct dishes: 'turkey-and-stuffing-casserole' is stuffing-mix/cream-sauce bread-based (different starch+structure) and 'middle-eastern-turkey-green-bean-stew' is a tomato stew over rice (different method+flavor). Shares green beans with the latter but nothing else.",
+  "collisions_same_protein": [
+    {
+      "slug": "keto-turkey-broccoli-cheddar-casserole",
+      "note": "Accepted this run. Structural cousin: both are baked turkey + green-vegetable + shredded cheddar casseroles (protein + method + cheddar match). Kept as distinct because the flavor family differs materially: this one is a Thanksgiving-leftovers concept bound with mayo + cranberry sauce + crumbled goat cheese + walnuts, versus a savory broccoli-cheese-sauce bake. Decider should confirm it wants both turkey+veg+cheddar bakes in one wave; if only one turkey-veg-cheddar casserole is wanted, these two are the pair to choose between."
+    }
+  ],
+  "collisions_cross_protein": [
+    "This is structurally a 'leftover/whole-muscle protein + green bean + cheese Thanksgiving-leftovers bake'. A chicken version (chicken green bean casserole / chicken cranberry leftover bake) would be the same dish with the protein swapped - decider should watch other-protein pools for a green-bean + cheese casserole twin."
+  ],
+  "cuisine": "American",
+  "notes": "Sits near the calorie floor (416) and protein (23.6g) is just under the ~25g catalog ideal; cuisine is American (does not widen the American-skewed catalog). Numbers clear, dish is non-duplicate; catalog fit is moderate (holiday-leftovers concept rather than year-round staple) but that is a decider preference call, not a NOT-FIT."
+}

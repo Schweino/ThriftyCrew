@@ -1,0 +1,28 @@
+{
+  "slug": "creamy-parmesan-pork-chops-skillet",
+  "name": "Creamy Parmesan Pork Chops Skillet",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "conditions_fit": {
+    "calories": 571,
+    "carbs": 7,
+    "in_band": true,
+    "note": "571 cal within 400-650; 7g carbs well under 35g; whole-muscle pork chops in parmesan-cream pan sauce, no starch base; budget pantry ingredients, weigh-and-divide scalable to 14; no seafood. FIT."
+  },
+  "dupe_check": {
+    "catalog_nearest": [
+      {
+        "slug": "creamy-mushroom-pork-chops-over-mashed-potatoes",
+        "reason": "Same protein (pork chops) but sauce is mushroom cream (no parmesan) served OVER MASHED POTATOES - different sauce family and a starch base this candidate lacks. 2/4 match. Not a dupe."
+      },
+      {
+        "slug": "marry-me-pork-chops-over-pasta",
+        "reason": "Closest adjacency: pork chops + parmesan + heavy cream. But Marry Me is a sun-dried-tomato cream (that tomato base is its signature) served over pasta/rice, i.e. tomato-cream flavor family and a high-carb starch. This candidate is a plain onion-garlic-parmesan cream, basil, NO tomato, NO starch. Different dinner - flag as borderline-adjacent for the decider."
+      }
+    ],
+    "verdict": "Not a catalog duplicate. No creamy-parmesan pork chop skillet without a starch base exists in the pork lane."
+  },
+  "cross_protein_collision": "Structurally 'creamy parmesan [protein] skillet, no starch.' A chicken or turkey 'creamy parmesan skillet' candidate in another lane would be the same dish with a swapped protein - decider should watch the chicken/turkey pools. Note: accepted creamy-tuscan-chicken-skillet is sun-dried-tomato/spinach cream, a different sauce, so no collision there.",
+  "borderline": true,
+  "borderline_reason": "Adjacent to marry-me-pork-chops-over-pasta on the parmesan-cream axis; distinguished by absence of sun-dried tomato and absence of pasta/rice starch. Kept flagged for audit rather than silently cut."
+}

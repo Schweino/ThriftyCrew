@@ -1,0 +1,28 @@
+{
+  "name": "Cheesy Cauliflower Mac and Cheese with Smoked Sausage",
+  "slug": "cheesy-cauliflower-mac-smoked-sausage-bake",
+  "protein": "pork",
+  "cuisine": "American",
+  "method": "oven bake",
+  "source_url": "https://thatlowcarblife.com/baked-cauliflower-mac-and-cheese-with-smoked-sausage/",
+  "source_servings": 4,
+  "src_cal": 588,
+  "src_carbs": 10,
+  "src_protein": 26,
+  "ingredients_verbatim": [
+    "16 ounces cauliflower chopped into macaroni sized pieces",
+    "14 ounces smoked sausage",
+    "1/4 cup heavy cream",
+    "2 ounces cream cheese room temperature",
+    "1 1/2 cups grated cheddar cheese divided",
+    "1/3 cup grated Monterey jack cheese",
+    "1 teaspoon Cajun seasoning"
+  ],
+  "unmapped": [
+    "smoked sausage (andouille / Johnsonville pork smoked sausage) - no board home; board carries breakfast-sausage, bacon, salt-pork only",
+    "heavy cream - not on board (milk/butter/sour cream/cream cheese are)",
+    "Monterey jack cheese - board has shredded-cheese/sliced-cheese; jack specifically absent"
+  ],
+  "why": "Sausage-forward cauliflower bake that lands mid-high band on the source's own numbers (588 cal, 26g protein, 10g carbs) - clears the 400-650/<=35 carb gate with real published nutrition. Cauliflower + cheese + smoked pork sausage, no rice/pasta/potato base, so structurally low-carb and batch-scalable in a hotel pan. Confidence high on qualification; note 588 sits near the ceiling so our label-DB recompute could drift over 650 - selector should watch that.",
+  "confidence": "high on nutrition (read from recipe card); flag that source cal is near the 650 ceiling"
+}

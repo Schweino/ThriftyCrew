@@ -1,0 +1,25 @@
+{
+  "slug": "low-carb-cheesy-beef-broccoli-skillet",
+  "name": "Low-Carb Cheesy Ground Beef & Broccoli Skillet",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "borderline": true,
+  "fit": {
+    "cal_per_serving": 430,
+    "carbs_per_serving": 8,
+    "in_band": true,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "430 cal sits inside 400-650 and 8g carb is far under the 35g ceiling; ground beef + broccoli + cream/cheese emulsion, no rice/pasta/potato, scales to 14 by weigh-and-divide in a large skillet."
+  },
+  "dupe_of": null,
+  "evidence": "Not an outright catalog dupe: the two catalog cheesy/beef+broccoli entries are both RICE dishes - cheesy-beef-broccoli-bowls (93-7-ground-beef, beef-broth, fat-free-cheddar, frozen-broccoli, RICE) and ground-beef-and-broccoli-bowls (ground beef, brown-sugar, broccoli, soy, RICE). This candidate is a no-starch keto skillet with a heavy-cream + cream-cheese + cheddar + mozzarella sauce, a materially different plate and the low-carb variant this run exists to add.",
+  "borderline_reason": "Core dinner identity (cheesy ground beef + broccoli + cheddar) overlaps strongly with catalog cheesy-beef-broccoli-bowls; the only distinguishers are the absence of rice and a richer cream sauce. Flagged borderline so the decider owns the final same-dinner call rather than it being silently included.",
+  "cross_protein_collision_flags": [
+    "STRONG: keto-turkey-broccoli-cheddar-casserole is ALREADY in accepted-slugs.json (read fresh) - it is the same dish on turkey (ground protein + broccoli + cheddar cream sauce, no starch). This is a same-dish-different-protein twin; the decider's cross-protein merge should decide whether the catalog wants both the beef skillet and the turkey casserole.",
+    "A cheesy ground-CHICKEN or ground-PORK broccoli keto skillet in another selector's pool would be structurally identical - flag for cross-protein merge."
+  ],
+  "cuisine": "American",
+  "widens_catalog": false,
+  "unmapped_note": "unmapped=[] per candidate; all items map to the Omaha board. No penalty either way per v2.1 5.1."
+}

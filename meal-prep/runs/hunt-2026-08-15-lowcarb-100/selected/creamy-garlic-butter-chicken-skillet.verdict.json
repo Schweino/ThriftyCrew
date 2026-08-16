@@ -1,0 +1,29 @@
+{
+  "slug": "creamy-garlic-butter-chicken-skillet",
+  "name": "Creamy Garlic Butter Chicken Skillet",
+  "protein": "chicken",
+  "verdict": "BORDERLINE",
+  "borderline": true,
+  "lean": "DUPE",
+  "dupe_of": "creamy-tuscan-chicken-skillet",
+  "fit": {
+    "calories": 518,
+    "carbs": 9,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "note": "Published 518 cal / 9g carb clears both bands; scales to 14 by multiplying breasts and sauce. Fit is not the issue - duplication is."
+  },
+  "dupe_check": {
+    "catalog": "No live-catalog dupe. Closest catalog entries all differ on a load-bearing axis: chicken-40-cloves-garlic (thigh, garlic+broth over rice, NO cream - different flavor family and starch), creamy-chicken-and-gnocchi-skillet (gnocchi starch base + spinach + parmesan - different plate), smothered-chicken-onion-gravy (onion/milk gravy over rice - different sauce family and starch), slow-cooker-creamy-chicken-mushroom-bowls (mushroom cream-cheese slow-cooker rice bowl - different method and mushroom identity).",
+    "accepted_slugs": "Collides with this run's already-accepted creamy-tuscan-chicken-skillet on 3-4 of 4 identity axes: chicken-breast protein MATCH, skillet-sear-plus-cream-pan-sauce method MATCH, no-starch (low-carb) MATCH, cream-sauce family MATCH at the base. The ONLY separator is aromatics/veg add-ins: Tuscan carries sun-dried tomato + spinach + paprika; this candidate is a plain garlic-butter cream with no vegetables. Both occupy the same 'creamy chicken-breast skillet, no starch, weeknight dinner' slot.",
+    "why_borderline": "Recipe sites sell 'creamy garlic chicken' and 'creamy Tuscan chicken' as separate recipes, so the sun-dried-tomato/spinach differentiator is real - but for a lean catalog these are the same technique filling the same slot, and this is the plainer, more-generic (American) version while the accepted Tuscan is the more distinctive regional take that widens cuisine spread more. My lean is DUPE (cut this one, keep Tuscan), but flagging BORDERLINE so the audit stage rules rather than silently excluding a possible wanted variant."
+  },
+  "cross_protein_collision_notes": [
+    "The 'seared protein in a garlic-butter cream pan-sauce, no starch' template maps directly onto pork and beef. This run has ALREADY accepted creamy-garlic-herb-wine-pork-chops (creamy garlic pork chop) - same sauce family, different protein; the decider should confirm the catalog is not accumulating one creamy-garlic-cream skillet per protein.",
+    "Any 'creamy garlic butter steak/sirloin skillet' or 'creamy garlic pork chop skillet' in another selector's pool is structurally the same plate as this - flag for the cross-protein merge pass.",
+    "Distinct from accepted garlic-butter-steak-bites-zucchini (garlic butter but NO cream) and turkey-meatballs-cream-sauce-skillet (cream sauce but meatball, not seared whole-muscle) - those are not the same dish."
+  ],
+  "evidence_one_line": "BORDERLINE leaning DUPE of creamy-tuscan-chicken-skillet: same chicken-breast + skillet + cream-pan-sauce + no-starch slot, separated only by plain garlic-butter vs sun-dried-tomato/spinach; fit passes (518 cal / 9g carb), cut left to audit."
+}

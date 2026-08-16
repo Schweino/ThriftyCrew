@@ -1,0 +1,20 @@
+{
+  "slug": "broccoli-cheddar-sausage-egg-bake",
+  "name": "Broccoli Cheddar Sausage Egg Bake",
+  "protein": "pork",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "borderline": true,
+  "fit": {
+    "pass": true,
+    "cal": 463,
+    "carbs": 4,
+    "band": "463 cal in 400-650 band; 4g carbs under 35g cap; 8-serving weigh-and-divide crustless bake scales cleanly to 14; budget egg/sausage bake; no seafood. Clears the run band on every axis."
+  },
+  "dupe_of": null,
+  "dupe_type": null,
+  "catalog_check": "NOT a live-catalog duplicate. Every catalog sausage+egg bake carries a starch base and is a different dinner: 'Sausage Hash Brown and Egg Casserole' (ground-pork + eggs + cheddar + HASH-BROWNS + milk), 'Turkey Sausage Hash Brown Breakfast Bake' (HASH-BROWNS), 'Baked Sausage and Egg Breakfast Hash' (RUSSET-POTATOES), 'Turkey Sausage Gravy Biscuit Bake' (BREAD/biscuit). This candidate is crustless, no-starch (eggs + heavy-cream custard), so no catalog recipe matches.",
+  "accepted_slugs_check": "Against accepted-slugs (read fresh): the only overlap is crustless-bacon-gruyere-quiche, ALREADY ACCEPTED - also a crustless egg+cream+cheese+pork custard bake. 3-of-4 core axes match (egg-custard protein, no starch, crustless oven bake) but the flavor family genuinely differs: French bacon+gruyere quiche vs American breakfast-sausage+cheddar+broccoli casserole, and the substantial broccoli component changes the plate. Judged distinguishable -> not a dupe, but flagged borderline for the decider.",
+  "pool_collision": "STRONG same-protein (pork) pool twin: sausage-cottage-cheese-egg-bake (the surviving anchor the decider kept). Both are crustless, no-starch, oven-baked pork-breakfast-sausage + egg + cheese bakes (protein + method + structure all match). They differ in binder (heavy-cream custard vs cottage cheese) AND lead vegetable (broccoli vs spinach+red-pepper) AND cheese (cheddar vs colby jack). Note: the decider already DUPE'd sausage-spinach-crustless-quiche INTO sausage-cottage-cheese-egg-bake, treating binder as a mere variant and consolidating crustless sausage egg bakes to one - so a strict decider could fold this candidate in too. Counter-argument for keeping THIS one over/alongside the anchor: broccoli-cheddar is a recognizably distinct flavor plate from spinach-cottage-cheese, and this is the strongest of the trio on the run's own axes - lowest carbs (4g vs 8g), clears the 25g+ protein identity (26g), and ZERO unmapped ingredients (the cottage-cheese bake carries colby-jack + avocado-oil unmapped). Decider owns the final keep-one-or-both call.",
+  "cross_protein_collision": "The egg custard is the real identity, so this collides structurally with any crustless egg bake in other protein lanes regardless of the meat: a turkey-sausage broccoli-cheddar egg bake, a bacon or ham crustless egg bake, or a vegetarian crustless quiche would be the SAME plate. Decider should watch turkey and chicken-sausage lanes for a broccoli/cheddar crustless egg bake twin the per-protein adjudicators cannot see."
+}

@@ -1,0 +1,59 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Creamy Low Carb Pork Chops (Gluten Free)",
+  "source_url": "https://whatsinthepan.com/pork-chops-garlic-herb-wine-sauce/",
+  "servings": 4,
+  "time_total": "30 minutes",
+  "time_active": "10 minutes prep, 20 minutes cook",
+  "ingredients": [
+    { "raw": "4 boneless pork chops", "item": "pork chops", "qty": "4", "unit": null, "prep": null, "optional": false, "section": null },
+    { "raw": "2 tablespoons butter", "item": "butter", "qty": "2", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "\u2153 cup Blanched Almond Flour", "item": "blanched almond flour", "qty": "1/3", "unit": "cup", "prep": null, "optional": false, "section": "Dredging Mixture for Pork Chops" },
+    { "raw": "\u00bd teaspoon garlic powder", "item": "garlic powder", "qty": "1/2", "unit": "teaspoon", "prep": null, "optional": false, "section": "Dredging Mixture for Pork Chops" },
+    { "raw": "\u00bd teaspoon onion powder", "item": "onion powder", "qty": "1/2", "unit": "teaspoon", "prep": null, "optional": false, "section": "Dredging Mixture for Pork Chops" },
+    { "raw": "1 teaspoon Italian seasoning", "item": "Italian seasoning", "qty": "1", "unit": "teaspoon", "prep": null, "optional": false, "section": "Dredging Mixture for Pork Chops" },
+    { "raw": "Salt and freshly ground pepper to taste", "item": "salt and freshly ground pepper", "qty": null, "unit": null, "prep": null, "optional": true, "section": "Dredging Mixture for Pork Chops" },
+    { "raw": "2 tablespoons butter", "item": "butter", "qty": "2", "unit": "tablespoon", "prep": null, "optional": false, "section": "Sauce" },
+    { "raw": "2 cloves garlic minced", "item": "garlic", "qty": "2", "unit": "clove", "prep": "minced", "optional": false, "section": "Sauce" },
+    { "raw": "\u00bd cup Parmesan cheese (or \u00bc cup almond flour, or \u00bc teaspoon Xanthan Gum)", "item": "Parmesan cheese", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": "Sauce" },
+    { "raw": "\u00bd cup dry white wine", "item": "dry white wine", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": "Sauce" },
+    { "raw": "\u00bc lemon", "item": "lemon", "qty": "1/4", "unit": null, "prep": null, "optional": false, "section": "Sauce" },
+    { "raw": "\u00bd cup chicken stock (sodium free)", "item": "chicken stock", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": "Sauce" },
+    { "raw": "\u00bd cup heavy cream", "item": "heavy cream", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": "Sauce" },
+    { "raw": "1 teaspoon Italian seasoning", "item": "Italian seasoning", "qty": "1", "unit": "teaspoon", "prep": null, "optional": false, "section": "Sauce" },
+    { "raw": "4 sprigs fresh thyme leaves only", "item": "fresh thyme", "qty": "4", "unit": "sprig", "prep": "leaves only", "optional": false, "section": "Sauce" }
+  ],
+  "instructions": [
+    "In a large bowl, whisk together almond flour, garlic powder, onion powder, Italian seasoning.",
+    "First, season pork chops generously with salt and pepper. Then dredge them thoroughly in dry mixture. Heat 2 tablespoons butter in a large skillet over medium-high heat.",
+    "Once the pan is hot, add pork chops. Now sear them by cooking for 3-4 minutes per side for a total of 6-8 minutes. First side is cooked on medium high. But when cooking on the second side, reduce the heat to medium. After searing is done, remove pork from heat and transfer to a plate. Cover to keep warm.",
+    "Return skillet to heat and add butter and minced garlic. Cook for 1-2 minutes on medium heat.",
+    "Next ad wine and squeeze lemon into the pan while still on medium heat. Now add chicken stock and heavy cream. Bring to a boiling point and lower heat.",
+    "Add fresh thyme and Italian seasoning, season with salt and pepper (to taste). Also add Parmesan cheese and then simmer for 2-3 minutes. Next taste the sauce and add more seasoning, if necessary.",
+    "Adding pork chops to the sauce. Reduce heat to low and return pork chops to pan. Depending on the thickness of your pork chops, you might just need to heat them up a bit to make sure they are done.",
+    "Drizzle some of the sauce over pork chops and reheat on low for 2-3 minutes or until pork chops are done."
+  ],
+  "nutrition_per_serving_as_stated": {
+    "calories": "497 kcal",
+    "fat": "35 g",
+    "saturated_fat": "17 g",
+    "cholesterol": "161 mg",
+    "sodium": "223 mg",
+    "potassium": "593 mg",
+    "carbohydrates": "7 g",
+    "fiber": "1 g",
+    "sugar": "1 g",
+    "protein": "32 g",
+    "vitamin_a": "835 IU",
+    "vitamin_c": "9.2 mg",
+    "calcium": "72 mg",
+    "iron": "1.7 mg"
+  },
+  "concerns": [
+    "Recipe card title on the page is 'Creamy Low Carb Pork Chops (Gluten Free)', which differs from the candidate slug 'creamy-garlic-herb-wine-pork-chops'; the URL and page content match the candidate (garlic herb wine sauce pork chops), so this appears to be the same recipe under its card title.",
+    "The Parmesan line carries printed substitution alternatives in parentheses ('or 1/4 cup almond flour, or 1/4 teaspoon Xanthan Gum'); transcribed as one line as printed.",
+    "'Next ad wine' typo in step 5 is as printed on the page, not a transcription error.",
+    "'4 boneless pork chops' and '1/4 lemon' have no printed unit; unit left null rather than invented."
+  ]
+}

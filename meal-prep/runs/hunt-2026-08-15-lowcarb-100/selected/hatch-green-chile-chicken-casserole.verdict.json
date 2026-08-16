@@ -1,0 +1,14 @@
+{
+  "slug": "hatch-green-chile-chicken-casserole",
+  "name": "Hatch Green Chile Chicken Casserole",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": "PASS",
+  "band_check": "543 cal (400-650 OK) / 11.7g carbs (<=35 OK) / no seafood / oven bake scalable to 14 by weight - PASS",
+  "dupe_evidence": "No true duplicate. Catalog green-chile chicken items are all rice/tortilla-based (Cheesy Green Chile Rotisserie Chicken Burrito, Salsa Verde Chicken Burrito/Bowl, Slow Cooker Chicken Chile Verde Bowls - burritos/bowls/stew), not a crustless zucchini-and-pepper cream-cheese-bound casserole. Adds a genuine low-carb Southwestern casserole the catalog lacks and widens cuisine spread (catalog skews American/Tex-Mex bowls, not baked green-chile).",
+  "borderline": true,
+  "borderline_reason": "Shares the cream-cheese-bound baked-chicken-with-chiles frame with accepted-slug jalapeno-popper-chicken-casserole, but distinguished by a substantial zucchini + bell-pepper vegetable body and roasted hatch/green-chile flavor (vs jalapeno-popper's bacon + jalapeno + no vegetable base). I judge them distinct dinners but flag the shared frame so the decider can confirm against the full accepted set.",
+  "cross_protein_collision_notes": "Cross-protein twins likely: catalog has Green Chile Ground Turkey Skillet and Turkey Chile Relleno Casserole Skillet; a green-chile/hatch turkey or pork casserole in another selector's pool would be structurally the same green-chile-cream-cheese cheese bake differing only by protein - decider should scan turkey and pork pools for a green-chile casserole twin.",
+  "unmapped": ["pepper-jack (maps to generic shredded-cheese; no exact board row)"],
+  "ruled_by": "adjudicator (parallel, chicken lane: chicken-bake)"
+}

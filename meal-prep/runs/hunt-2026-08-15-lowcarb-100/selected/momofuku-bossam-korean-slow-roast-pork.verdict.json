@@ -1,0 +1,26 @@
+{
+  "slug": "momofuku-bossam-korean-slow-roast-pork",
+  "name": "Momofuku Bossam (Korean Slow-Roasted Pork Shoulder)",
+  "protein": "pork",
+  "cuisine": "Korean",
+  "verdict": "KEEP",
+  "gate": {
+    "calories": 626,
+    "carbs_g": 18,
+    "cal_in_band": true,
+    "carbs_in_band": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "notes": "626 cal clears the 650 ceiling and 18g carbs clears the 35g cap on published numbers; optional raw-oyster garnish is dropped for the no-seafood rule; weigh-and-divide roast scales cleanly to 14."
+  },
+  "dupe_check": {
+    "is_dupe": false,
+    "evidence": "Not a duplicate of the catalog's Korean pork bowls (slow-cooker-korean-gochujang-pork-bowls, korean-gochujang-ground-pork-rice-bowls, slow-cooker-korean-shredded-pork-bowls), which are all shredded/ground pork over rice in a gochujang braise: bossam differs on 3 of 4 axes (salt+sugar dry cure vs gochujang braise, lettuce-wrap/no-starch vs rice, oven low-and-slow roast + crust vs slow-cook-and-shred). Closest salt-roast concept slow-cooker-kalua-pork-bowls is Hawaiian and a rice bowl, not a Korean lettuce-wrap plate.",
+    "checked_against_accepted_slugs": true,
+    "accepted_slug_collision": false
+  },
+  "cross_protein_watch": "The Korean gochujang/ssamjang flavor family is common enough to recur in the beef, chicken, or turkey pools, but bossam's defining format (a salt/sugar dry-cured whole-muscle slow-roast served as lettuce ssam wraps with no starch) is distinctive; watch only for a same-format salt-cured roasted-and-wrapped dish under another protein (e.g. a Korean lettuce-wrap roast beef), which would be a structural twin.",
+  "borderline": false,
+  "unmapped_ingredients_ok": ["soy-sauce", "ssamjang", "gochujang", "sherry-vinegar", "kimchi"],
+  "confidence": "high"
+}

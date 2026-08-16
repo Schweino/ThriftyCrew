@@ -1,0 +1,27 @@
+{
+  "name": "Italian Mozzarella-Stuffed Turkey Meatloaf",
+  "slug": "italian-mozzarella-stuffed-turkey-meatloaf",
+  "protein": "turkey",
+  "cuisine": "Italian",
+  "method": "oven bake",
+  "source_url": "https://joyfilledeats.com/ground-turkey-meatloaf/",
+  "source_servings": 8,
+  "src_cal": 400,
+  "src_carbs": 4,
+  "src_protein": 46,
+  "ingredients": [
+    "2 lb ground turkey",
+    "1 lb mozzarella cut into cubes",
+    "1 cup cottage cheese",
+    "1/2 cup marinara sauce no sugar added",
+    "1/2 cup grated parmesan cheese",
+    "1/4 cup basil pesto",
+    "2 eggs",
+    "2 tsp Italian seasoning",
+    "1 tsp salt"
+  ],
+  "unmapped": [
+    "mozzarella (block/cubed) - no exact board id; nearest proxy is generic shredded-cheese"
+  ],
+  "why": "Turkey OVEN BAKE (meatloaf/casserole) squarely in the low-carb band: source 400 cal / 4 g carbs / 46 g protein per 8-serving pan. My rough label-accurate recompute (2 lb 93% turkey + 1 lb mozzarella + cottage + parm + pesto + eggs over 8) lands ~435 cal / ~42 g protein - mid-band, not at the 400 edge, so it should clear our gate. Structurally low-carb: turkey + cheeses + a little marinara, zero rice/pasta/potato/bread. Cuisine variety plus (Italian). DEDUP FLAG: conceptually overlaps the existing pool entry keto-turkey-meatloaf.json (different source ketodietyum, plain American keto loaf at 489/6.4) - this is a distinct Italian mozzarella-STUFFED recipe with pesto/marinara/cottage cheese, submitted for the adjudicator to rule. Board mapping is clean except cubed block mozzarella (marinara->pasta-sauce, pesto/cottage-cheese/parmesan/ground-turkey/eggs/italian-seasoning all have homes)."
+}

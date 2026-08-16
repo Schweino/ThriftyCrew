@@ -1,0 +1,36 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Crockpot Short Ribs - 5 Ingredients!",
+  "source_url": "https://jenniferbanz.com/crockpot-short-ribs-5-ingredients",
+  "servings": 6,
+  "time_total": "4 hours 10 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    { "raw": "3 pounds boneless short ribs", "item": "boneless short ribs", "qty": "3", "unit": "pound", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tablespoon minced garlic", "item": "minced garlic", "qty": "1", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1/2 onion, chopped", "item": "onion", "qty": "1/2", "unit": "each", "prep": "chopped", "optional": false, "section": null },
+    { "raw": "1 teaspoon thyme", "item": "thyme", "qty": "1", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "28 ounces fire roasted diced tomatoes", "item": "fire roasted diced tomatoes", "qty": "28", "unit": "ounce", "prep": null, "optional": false, "section": null },
+    { "raw": "kosher salt and pepper", "item": "kosher salt and pepper", "qty": null, "unit": null, "prep": null, "optional": true, "section": null }
+  ],
+  "instructions": [
+    "Season both sides of the short ribs with salt and pepper, then place in slow cooker.",
+    "Top the short ribs with garlic, thyme, onion, then layer with roasted diced tomatoes.",
+    "Cook on high for 4 hours or low for 8 hours.",
+    "Serve with a delicious sidedish."
+  ],
+  "nutrition": {
+    "calories": 581,
+    "carbohydrates_g": 8,
+    "protein_g": 39,
+    "fat_g": 42,
+    "fiber_g": 1,
+    "sugar_g": 5
+  },
+  "concerns": [
+    "Total time stated as 4 hours 10 minutes reflects the high-heat option; the low option is 8 hours.",
+    "Onion line uses no explicit unit ('1/2 onion'); unit recorded as 'each'.",
+    "'kosher salt and pepper' has no stated quantity; marked optional per to-taste seasoning rule."
+  ]
+}

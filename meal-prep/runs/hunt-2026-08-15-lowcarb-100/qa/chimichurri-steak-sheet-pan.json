@@ -1,0 +1,16 @@
+﻿{
+  "slug": "chimichurri-steak-sheet-pan",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    { "check": "method",
+      "severity": "note",
+      "detail": "Marinade split: source uses 1/4 cup of its 1/2 cup chimichurri (half) to marinate; spec steps say 'about a third of the chimichurri'. The mapper's actual blended yield exceeds the source's stated 1/2 cup (scaled components ~275 g), so 'a third' of the real yield approximates the source's absolute 1/4-cup-scaled amount. Marinate-then-drizzle method survives intact; flagging the fraction wording only.",
+      "owner": "writer" },
+    { "check": "prose-numbers",
+      "severity": "note",
+      "detail": "stat.cost_ps 5.13 (and head.costPerServing 5.13) differs from cost_per_serving 3.71 / cost_per_serving_true 4.54. No prose literal is affected: 5.13 appears only via {{cost_ps}} tokens, which are correct by construction. Writer notes disclose cost_ps is deliberately re-anchored above the understated machine floor (broccolini/parsley item->bid rows unwired). Cost-field consistency is the batch auditor's call; carried forward, not a fidelity defect.",
+      "owner": "mapper" }
+  ],
+  "notes": "Both anchors held: extraction and live fedandfit.com page agree line-for-line on title, 6 servings, all 14 ingredient lines, and steps. Spec is a clean 6->14 (2.3333x) rebuild: steak 1588 g = 3.5 lb (source low end of 1.5-2 lb range x2.333), vinegar 86 g, olive oil 189 g (two source oil lines legitimately combined, divided in steps), salt 14 g (two source salt lines combined, divided in steps), garlic 14 g, herbs/flakes all on the same ratio with ordinary rounding. Sweet potatoes booked at 225 g each per the mapper's disclosed ruling reconciling the source's own nutrition (491 cal/31 g carbs) against 'small'; 9 1/4 x 225 g = 2081 g, ratio-consistent. 'Chimichurri' spec-side is correctly treated as the sub-recipe yield, not a purchased line, matching the extraction's own concern note. Coverage walked both directions: no invented or dropped ingredient. Title names the same dish; credit URL matches source_url. Prose cost literals (30.87/35.27, 6.79/7.40, 10.19/11.97 'Buy 3 bunches', 0.89/1.93 'Buy 1 bunch', 51.95, 3.71, 63.49, 4.54, 8.32, 71.81) each match the spec's own machine cost fields, and both batch sums foot exactly. No built body.html exists yet (db/built/ has no file for this slug); judged spec only."
+}

@@ -1,0 +1,227 @@
+{
+  "slug": "pork-chile-verde-stew",
+  "title": "Mexican Chile Verde Stew: Slow Cooked",
+  "source_url": "https://farmtojar.com/pork-chile-verde/",
+  "source_servings": 6,
+  "target_servings": 14,
+  "scale_factor": 2.3333,
+  "protein": "pork",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters, drift from the exact 2.3333x scale noted per line where it exceeds 5%. Serving anchor: 6 source servings -> 14.",
+  "ruled_substitutions": [
+    { "source": "2 tablespoons olive oil or lard", "ruling": "olive oil (first-printed option); lard not taken" },
+    { "source": "3 pounds pork shoulder or chuck roast", "ruling": "pork shoulder (first-printed option and the title protein of a CHILE VERDE); standing canon maps 'pork shoulder' -> Pork Shoulder" },
+    { "source": "1 tablespoon cumin seeds or 1 teaspoon dried cumin", "ruling": "the printed ALTERNATIVE (1 tsp dried/ground cumin) is taken because Ground Cumin is the stocked vocab row; Cumin Seeds has no row (vocab exit 3, nearest rows are different seed foods). Not a guess: the author printed the equivalence herself." },
+    { "source": "2-3 green chiles mild or medium- I used 1 Anaheim and 2 poblanos", "ruling": "booked as 3 poblanos: the author's own stated mix is majority poblano, the printed range allows 3, Poblano Peppers is a stocked vocab row and board commodity (4 of 7 stores), and Anaheim has no row. Same product class and price class (mild fresh green chile, both $3-5/lb retail), so this is not a variety-pricing stretch; NOT mapped to Diced Green Chiles (canned form-flip, standing rejection class)." }
+  ],
+  "registrar_rulings": [
+    {
+      "proposed_id": "chipotle-powder",
+      "for_item": "Chipotle Powder",
+      "status": "PENDING - proposal drafted, registrar not yet consulted (mapper lane cannot invoke the registrar agent; orchestrator must route it)",
+      "mapper_sweep_evidence": "ingredient-vocab exit 3 GENUINE GAP (no row shares a core word); price-ingredient verdict ABSENT ('no board cell and nothing in any capture matches'). NOT mapped to Chili Powder (a cumin/oregano/paprika BLEND, different food) and NOT Smoked Paprika (different pepper) - both would be the plausible-wrong-match failure the vocab tool warns about. Chipotle powder is a standard spice-aisle item (McCormick class), so carriage is plausible; the pricer rules.",
+      "meanwhile": "ingredient maps bid null (safe pantry-static pricing); term 'chipotle powder' enqueued BLOCKING (printed non-optional). Macro impact of the unbooked row is bounded at ~1.5 cal/serving (2 1/4 tsp across 14 servings), so the macro figures below are not hostage to it, but rule 2 forbids inventing a label row."
+    }
+  ],
+  "ingredients": [
+    {
+      "source_raw": "1.5 pounds tomatillos husked, rinsed and coarsely chopped",
+      "item": "Tomatillos",
+      "bid": "tomatillos",
+      "board": "recipe",
+      "grams": 1587.6,
+      "buy": "3 1/2 lb tomatillos, husked, rinsed and coarsely chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 3.5 lb = 1587.6 g; printed weight and grams agree. DB per-100g USDA row. Board 5 of 7, cheapest Family Fare $2.49/lb."
+    },
+    {
+      "source_raw": "5-6 cloves garlic peeled",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 39,
+      "buy": "13 cloves garlic, peeled",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "range midpoint 5.5 x 2.3333 = 12.83 quantized to 13 cloves (+1.3%) x densities clove=3 g = 39 g. Source instruction step says '6 unpeeled cloves' vs the line's '5-6 peeled'; the midpoint covers both readings and the delta is sub-gram. Board 5 of 7, cheapest Baker's $0.498/each."
+    },
+    {
+      "source_raw": "1 bunch cilantro reserve some for garnish if desired",
+      "item": "Fresh Cilantro",
+      "bid": "cilantro",
+      "board": "weekly",
+      "grams": 114,
+      "buy": "2 bunches fresh cilantro (reserve some for garnish)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 2.33 bunches quantized to 2 whole bunches (-14.3% drift, noted; bunches are indivisible at purchase and the row is near-zero macro: 28.5 cal TOTAL across 14 servings) x densities bunch=57 g = 114 g. Vocab: bare 'Cilantro' is exit 3; 'Fresh Cilantro' is the canon row and the recipe's bunch IS fresh - form matches the food, not a near-match pick. Board 5 of 7, cheapest Aldi $0.89/each."
+    },
+    {
+      "source_raw": "1 bunch green onions",
+      "item": "Green Onions",
+      "bid": "green-onions",
+      "board": "weekly",
+      "grams": 180,
+      "buy": "2 bunches green onions",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 2.33 bunches quantized to 2 whole bunches (-14.3% drift, noted; near-zero macro, 60 cal total) x densities bunch=90 g = 180 g. Board 4 of 7, cheapest Family Fare $0.79/each."
+    },
+    {
+      "source_raw": "2-3 green chiles mild or medium- I used 1 Anaheim and 2 poblanos",
+      "item": "Poblano Peppers",
+      "bid": "poblano-peppers",
+      "board": "recipe",
+      "grams": 595,
+      "buy": "7 poblano peppers",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "3 chiles (author's actual count, top of printed range) x 2.3333 = 7.0 exact x densities each=85 g = 595 g. See ruled_substitutions for the Anaheim/poblano ruling. Board 4 of 7, cheapest Walmart $3.26/lb."
+    },
+    {
+      "source_raw": "1 cup unsalted chicken broth can add more if needed",
+      "item": "Chicken Broth",
+      "bid": "chicken-broth",
+      "board": "weekly",
+      "grams": 540,
+      "buy": "2 1/4 cups chicken broth (for the sauce)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 2.33 cups quantized to 2 1/4 cups (-3.6%) x densities cup=240 g = 540 g. 'Unsalted' is the same product concept and price class as the board's broth cells (fat-free/regular variants share the commodity); DB row Swanson regular, 10 cal/cup. Board 7 of 7, cheapest Aldi $0.0373/floz."
+    },
+    {
+      "source_raw": "2 tablespoons olive oil or lard",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 64.1,
+      "buy": "4 3/4 tbsp olive oil",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 4.67 tbsp quantized to 4 3/4 tbsp (+1.8%) x densities tbsp=13.5 g = 64.1 g. Browning oil; all of it stays in the pot and all of it is counted. Board 7 of 7, cheapest Sam's $0.1879/floz."
+    },
+    {
+      "source_raw": "3 pounds pork shoulder or chuck roast cut into fairly large cubes (about 1 1/2 inches)",
+      "item": "Pork Shoulder",
+      "bid": "pork-shoulder",
+      "board": "weekly",
+      "grams": 3175.1,
+      "buy": "7 lb pork shoulder, cut into 1 1/2 inch cubes",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "MAIN PROTEIN, weight-anchored by the source (3 lb stated), so no each-weight risk (florentine failure mode does not apply). Exact scale 7 lb = 3175.1 g; printed weight and grams agree. DB row USDA Boston butt raw, lean and fat (186 cal / 17.4 P per 100 g) - the whole cube goes in the stew and the braise keeps its fat, so lean-and-fat is the honest basis. Board 7 of 7, cheapest Sam's $1.94/lb."
+    },
+    {
+      "source_raw": "1 large onion coarsely chopped",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 375,
+      "buy": "2 1/2 large yellow onions, coarsely chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 2.33 large quantized to 2 1/2 large (+7.1% drift, noted; 150 cal total so the drift is ~1 cal/serving) x densities large=150 g = 375 g. Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "1 tablespoon cumin seeds or 1 teaspoon dried cumin",
+      "item": "Ground Cumin",
+      "bid": "ground-cumin",
+      "board": "weekly",
+      "grams": 4.7,
+      "buy": "2 1/4 tsp ground cumin",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "printed alternative taken (see ruled_substitutions): 1 tsp x 2.3333 = 2.33 quantized 2 1/4 tsp (-3.6%) x densities tsp=2.1 g = 4.7 g. Board 7 of 7, cheapest Aldi $0.495/oz."
+    },
+    {
+      "source_raw": "1 teaspoon smoked chipotle spice",
+      "item": "Chipotle Powder",
+      "bid": null,
+      "board": null,
+      "grams": 4.5,
+      "buy": "2 1/4 tsp chipotle powder",
+      "optional": false,
+      "decision": "mapped-null-pending-registrar",
+      "notes": "exact 2.33 tsp quantized 2 1/4 tsp x defaults spice_tsp=2 g = 4.5 g. bid null: vocab GENUINE GAP and board ABSENT - no stage mints an id; registrar proposal chipotle-powder recorded above, term enqueued BLOCKING. NO food-DB row added: no label in hand to transcribe (rule 2 forbids inventing one); macros for this line are booked ZERO with the error bound stated loudly in loud_flags (~1.5 cal/serving ceiling, immaterial to the band)."
+    },
+    {
+      "source_raw": "1 teaspoon cinnamon",
+      "item": "Ground Cinnamon",
+      "bid": "ground-cinnamon",
+      "board": "weekly",
+      "grams": 5.85,
+      "buy": "2 1/4 tsp ground cinnamon",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "1 tsp cinnamon in a spice rub list is ground cinnamon (the stick form would say sticks); canon row Ground Cinnamon. 2 1/4 tsp (-3.6%) x densities tsp=2.6 g = 5.85 g. Board 7 of 7 (note the Aldi cheapest cell is a cereal capture, 'Millville Cinnamon Crunch Squares' - flagged in board_defects_observed). "
+    },
+    {
+      "source_raw": "1 teaspoon oregano",
+      "item": "Dried Oregano",
+      "bid": "dried-oregano",
+      "board": "weekly",
+      "grams": 2.25,
+      "buy": "2 1/4 tsp dried oregano",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "1 tsp oregano in a dry-spice add is the dried form (Fresh Oregano is the other row; a fresh add would print sprigs/chopped). 2 1/4 tsp (-3.6%) x densities tsp=1 g = 2.25 g. Board 7 of 7, cheapest Hy-Vee $0.9307/oz."
+    },
+    {
+      "source_raw": "1.5 teaspoon salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 21,
+      "buy": "3 1/2 tsp salt",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 3.5 tsp x densities tsp=6 g = 21 g; zero-macro. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 cup chicken broth may need more broth to thin the stew",
+      "item": "Chicken Broth",
+      "bid": "chicken-broth",
+      "board": "weekly",
+      "grams": 540,
+      "buy": "2 1/4 cups chicken broth (for the stew)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "second broth line (stew body), same quantization as the sauce line: 2 1/4 cups (-3.6%) = 540 g. 'May need more to thin' is cook's discretion, not booked."
+    }
+  ],
+  "rejected": [],
+  "dropped_lines": [
+    { "source": "serving accompaniments in the final instruction step (sour cream, cilantro sprigs, avocados, limes)", "reason": "instruction-only serve-with items, never in the ingredient list; standing canon drops garnish/for-serving lines" }
+  ],
+  "db_entries_added": [],
+  "pricing_terms_needed": [
+    { "term": "chipotle powder", "blocking": true, "why": "printed non-optional spice; vocab genuine gap + board ABSENT; registrar proposal chipotle-powder pending; standard spice-aisle item so carriage is plausible and the pricer rules" }
+  ],
+  "new_commodity_proposals": [
+    {
+      "proposed_id": "chipotle-powder",
+      "for_item": "Chipotle Powder",
+      "status": "flagged-for-registrar",
+      "registrar_ruling": "NOT YET OBTAINED - see registrar_rulings; item maps null meanwhile (pantry-static, safe). Proposal includes the missing vocab row (db\\ingredients.json 'Chipotle Powder') as well as the commodity id."
+    }
+  ],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 471, "protein_g": 47, "carbs_g": 11, "fat_g": 28 },
+    "recomputed_per_serving_from_food_db": { "calories": 533.7, "protein_g": 41.8, "carbs_g": 13.7, "fat_g": 34.0 },
+    "protein_gap_pct": -11.1,
+    "calorie_gap_pct": 13.3,
+    "verdict": "PASS - protein -11.1% is inside tolerance and the main protein is weight-anchored by the source (3 lb stated), so no portion re-examination is triggered. The gap direction is the familiar raw-basis-vs-lean-record split: identical 227 g raw pork per serving on both sides, but their calculator evidently booked a leaner pork record (47 P from 227 g raw implies 20.7 P/100 g vs USDA lean-and-fat 17.4) which also explains our +6 g fat and +13% calories. Carbs 13.7 vs 11 is densities-scale rounding on the vegetable lines.",
+    "band_check": "computed 533.7 cal in [400, 650] PASS (134 above floor, 116 of ceiling headroom); carbs 13.7 g <= 35 PASS. Chipotle line booked zero pending its DB row; ceiling of that omission ~1.5 cal/serving, not band-relevant. No optional macro lines."
+  },
+  "loud_flags": [
+    "Chipotle Powder is the recipe's only unresolved line: vocab gap + board ABSENT + no label to transcribe, so it ships bid-null with ZERO booked macros (ceiling ~1.5 cal/serving). Recipe parks in 'pricing' on that single blocking term; everything else answered from disk.",
+    "The stew's two broth lines quantize to 2 1/4 cups each; the page's own 'add more if needed / to thin' discretion is not booked."
+  ],
+  "board_defects_observed": [
+    "ground-cinnamon: the Aldi cheapest cell ($0.1497/oz) is 'Millville Cinnamon Crunch Squares' - a breakfast cereal capture inside the spice commodity; flagged for the match-soundness gate. Coverage claim rests on the six real spice cells.",
+    "yellow onion: Baker's cell is 'Jumbo Sweet Onions' and Fareway's is 'Vidalia Onion' - sweet-onion varieties priced inside the yellow-onion commodity; same aisle and price class but noted for the gate."
+  ],
+  "densities_followups": []
+}

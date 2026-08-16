@@ -1,0 +1,24 @@
+{
+  "slug": "beef-big-mac-salad-bowl",
+  "name": "Big Mac Salad Bowl (Cheeseburger in a Bowl)",
+  "protein": "beef",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "fit": {
+    "cal": 491,
+    "carbs": 9,
+    "in_cal_band": true,
+    "in_carb_band": true,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "491 cal within 400-650; 9g carbs well under 35g; no seafood; brown-beef skillet + weigh-and-divide bowl scales cleanly."
+  },
+  "dupe_check": {
+    "catalog_nearest": ["cheeseburger-rice-bowls", "cheeseburger-pasta"],
+    "reason": "Distinct from cheeseburger-rice-bowls (93-7 ground beef + cheddar + ketchup cooked over rice) and cheeseburger-pasta (penne bake): this is a cold-assembled special-sauce salad over shredded lettuce with no cooked starch, different sauce profile (mayo-ketchup-relish Big Mac sauce vs plain cheeseburger seasoning) and different method (raw bowl assembly vs skillet). Only protein+cheddar overlap (1-2 of 4 axes); starch, sauce, and method all diverge. No Big Mac / cheeseburger-salad bowl exists in the beef catalog."
+  },
+  "cross_protein_collisions": [
+    "A ground-turkey or ground-chicken 'Big Mac / cheeseburger salad bowl' would be structurally the same plate (special sauce + lettuce + cheddar + pickles, protein swapped) - decider should check turkey/chicken pools for a burger-salad twin.",
+    "Also watch for a generic 'burger bowl' or 'bunless cheeseburger bowl' in any protein lane."
+  ]
+}

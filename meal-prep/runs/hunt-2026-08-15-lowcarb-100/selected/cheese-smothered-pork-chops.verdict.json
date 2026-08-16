@@ -1,0 +1,22 @@
+{
+  "slug": "cheese-smothered-pork-chops",
+  "name": "Cheese Smothered Pork Chops",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "conditions_fit": {
+    "calories": 489,
+    "carbs_g": 2,
+    "cal_in_band_400_650": true,
+    "carbs_at_or_under_35": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "fit": true
+  },
+  "dupe_check": {
+    "against_catalog": "Not a dupe. Nearest names are 'Southern Smothered Pork Chops and Rice' (an onion-gravy-over-rice Southern braise with a rice starch base and gravy sauce, a different technique and plate) and 'Cheesy Pork Chop and Hash Brown Casserole' (built on a hash-brown potato base as a casserole); this candidate is a starchless mayo-and-cheddar oven bake, so it matches neither on sauce-family + starch + method.",
+    "against_accepted_slugs": "No collision; accepted-slugs holds only creamy-tuscan-chicken-skillet and chicken-bacon-ranch-cauliflower-bake."
+  },
+  "cross_protein_collision_watch": "Structurally this is a generic mayo-plus-shredded-cheddar low-carb protein bake; the decider should watch for a chicken twin (a 'cheese smothered chicken' / mayo-cheddar baked chicken) or a turkey-chop version in other selectors' pools, which would be the same dish on a different protein.",
+  "cuisine": "American",
+  "notes": "Widens nothing on cuisine (American, catalog's dominant skew) but is a clean starchless low-carb pick with all ingredients board-mappable (pork-chops, onions, mayonnaise, shredded cheddar); unmapped list empty."
+}

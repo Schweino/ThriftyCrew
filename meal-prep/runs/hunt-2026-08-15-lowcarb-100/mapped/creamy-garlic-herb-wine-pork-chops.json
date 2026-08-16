@@ -1,0 +1,225 @@
+{
+  "slug": "creamy-garlic-herb-wine-pork-chops",
+  "title": "Creamy Low Carb Pork Chops (Gluten Free)",
+  "source_url": "https://whatsinthepan.com/pork-chops-garlic-herb-wine-sauce/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "pork",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters, drift noted per line where it exceeds 5%.",
+  "ruled_substitutions": [],
+  "ingredients": [
+    {
+      "source_raw": "4 boneless pork chops",
+      "item": "Pork Chops",
+      "bid": "pork-chops",
+      "board": "weekly",
+      "grams": 1680,
+      "buy": "14 thin-cut boneless pork chops (about 4 1/4 oz / 120 g each; roughly 3 3/4 lb)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "MAIN-PROTEIN EACH-WEIGHT, WORKED NOT ASSUMED (florentine rule): '4 boneless pork chops' has no printed weight and the house densities default (each=170 g) FAILS the source's own protein - 170 g chops recompute to 42 g protein/serving against the printed 32 (+31%, the exact florentine failure signature, just inverted in cost direction). Back-solving the source's 32 g protein (minus ~7.2 g from parmesan + almond flour) gives ~121 g/chop; booked 120 g (a thin-cut 4-oz chop, the source's 3-4 min/side sear time is itself thin-cut evidence), recomputing to +0.6% protein. DEVIATION FROM densities each=170 NOTED AND DELIBERATE. Board pork-chops 7 of 7 (boneless cells at Family Fare/Hy-Vee/Fareway), cheapest Sam's $2.52/lb."
+    },
+    {
+      "source_raw": "2 tablespoons butter",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "weekly",
+      "grams": 98,
+      "buy": "7 tbsp (for searing)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 14 g/tbsp, exact 3.5x. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/3 cup Blanched Almond Flour",
+      "item": "Blanched Almond Flour",
+      "bid": null,
+      "board": null,
+      "grams": 130.7,
+      "buy": "1 cup plus 2 3/4 tbsp, for dredging",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "item_id NULL with reason and a BOARD MATCH REJECTED: price-ingredient maps 'almond flour' onto the wheat flour commodity via include /\\bflour\\b/ - a wrong-food, wrong-price-class hijack (~$0.34/lb wheat vs ~$6-10/lb almond; publishing wheat pricing under an almond line is exactly the stretched-mapping failure rule 1 exists to stop). REJECTED that match; term ENQUEUED blocking and a new-commodity proposal filed. Null = pantry-static meanwhile. NEW DB row Blanched Almond Flour (Blue Diamond label class, 1/4 cup = 28 g, 160 cal). Exact 1.1667 cups quantized 18.75 tbsp (+0.4%) at cup = 112 g. This is also the recipe's gluten-free identity - all-purpose flour is NOT a substitute here.",
+      "match_soundness_flag": "flour commodity include /\\bflour\\b/ claims 'almond flour' (and would claim coconut/oat flour the same way) - flagged for the match-soundness gate; NO rule change made by this run (rule 4: intended fix is an exclusion for '(almond|coconut|oat)\\s+flour', listed here so the reviewer can accept or reject the baseline knowingly)."
+    },
+    {
+      "source_raw": "1/2 teaspoon garlic powder",
+      "item": "Garlic Powder",
+      "bid": "garlic-powder",
+      "board": "weekly",
+      "grams": 5.4,
+      "buy": "1 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 3.1 g/tsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/2 teaspoon onion powder",
+      "item": "Onion Powder",
+      "bid": "onion-powder",
+      "board": "weekly",
+      "grams": 4.2,
+      "buy": "1 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 2.4 g/tsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 teaspoon Italian seasoning (dredge)",
+      "item": "Italian Seasoning",
+      "bid": "italian-seasoning",
+      "board": "weekly",
+      "grams": 3.5,
+      "buy": "3 1/2 tsp (for the dredge)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 1 g/tsp herb blend. Board 7 of 7."
+    },
+    {
+      "source_raw": "Salt and freshly ground pepper to taste",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 6,
+      "buy": "salt and freshly ground pepper, to taste (about 1 tsp salt)",
+      "optional": true,
+      "decision": "mapped-optional",
+      "notes": "To-taste, optional per source. Zero-macro nominal. Board 7 of 7. NOT enqueued."
+    },
+    {
+      "source_raw": "2 tablespoons butter (sauce)",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "weekly",
+      "grams": 98,
+      "buy": "7 tbsp (for the sauce)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 14 g/tbsp, exact 3.5x. Board 7 of 7."
+    },
+    {
+      "source_raw": "2 cloves garlic minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 21,
+      "buy": "7 cloves, minced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities clove=3 g, exact 3.5x. Board 5 of 7."
+    },
+    {
+      "source_raw": "1/2 cup Parmesan cheese (or 1/4 cup almond flour, or 1/4 teaspoon Xanthan Gum)",
+      "item": "Parmesan Cheese",
+      "bid": "parmesan",
+      "board": "weekly",
+      "grams": 196,
+      "buy": "1 3/4 cups grated (about 7 oz)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "PRIMARY option booked (parmesan); the parenthetical almond-flour/xanthan alternates are the source's thickener fallbacks, not additional ingredients - kept in prose only. densities Parmesan cup=112 g (label-reconciled 2026-08-07), exact 3.5x = 1.75 cups = 196 g. Board parmesan 7 of 7, cheapest Sam's $0.3092/oz."
+    },
+    {
+      "source_raw": "1/2 cup dry white wine",
+      "item": "Dry White Wine",
+      "bid": null,
+      "board": null,
+      "grams": 411,
+      "buy": "1 3/4 cups",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "item_id NULL with reason: white wine commodity exists but has NO priced board cell - price-ingredient cannot answer. Term 'dry white wine' was ALREADY QUEUED WITH THIS SLUG ATTACHED (by the fricassee-era enqueue) and has since scored CARRIED (Baker's Chateau Ste. Michelle Dry Riesling $10.99); re-add is an idempotent no-op for the term set. Null = pantry-static until the pricer writes the cell. DB row Dry White Wine (USDA, 82 cal/100 g). Exact 1.75 cups at 235 g/cup, zero drift."
+    },
+    {
+      "source_raw": "1/4 lemon",
+      "item": "Lemon Juice",
+      "bid": "lemons",
+      "board": "weekly",
+      "grams": 41,
+      "buy": "juice of 1 small lemon (about 2 3/4 tbsp)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Squeezed into the pan (step 5), so the food is the JUICE: densities lemon each = 47 g juice, 1/4 lemon = 11.75 g, exact 3.5x = 41 g = 2.75 tbsp. Purchase maps to the lemons commodity (fresh fruit squeezed in, not bottled juice), 5 of 7 stores. Macros on the Lemon Juice DB row (3 cal/tbsp). See board_defects_observed for the Walmart cell hijack on this commodity."
+    },
+    {
+      "source_raw": "1/2 cup chicken stock (sodium free)",
+      "item": "Chicken Broth",
+      "bid": "chicken-broth",
+      "board": "weekly",
+      "grams": 420,
+      "buy": "1 3/4 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "stock -> broth standing house equivalence; 'sodium free' is a sodium note, not a macro or price-class change. densities 240 g/cup, exact 3.5x. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/2 cup heavy cream",
+      "item": "Heavy Cream",
+      "bid": "heavy-cream",
+      "board": "weekly",
+      "grams": 420,
+      "buy": "1 3/4 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities tbsp=15 g, exact 3.5x = 28 tbsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 teaspoon Italian seasoning (sauce)",
+      "item": "Italian Seasoning",
+      "bid": "italian-seasoning",
+      "board": "weekly",
+      "grams": 3.5,
+      "buy": "3 1/2 tsp (for the sauce)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 1 g/tsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "4 sprigs fresh thyme leaves only",
+      "item": "Fresh Thyme",
+      "bid": "fresh-thyme",
+      "board": "weekly",
+      "grams": 14,
+      "buy": "14 sprigs, leaves only",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "fresh-thyme commodity 3 of 7 stores (partial coverage is an answer), cheapest Aldi $3.18/oz. NEW DB row Fresh Thyme (USDA, shared addition with chicken-chasseur) - not the Dried Thyme row (form-flip). sprig = 1 g, exact 3.5x = 14 sprigs."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Blanched Almond Flour (Blue Diamond / Great Value label class, 1/4 cup = 28 g: 160 cal / 6 P / 6 C / 14 F; cup = 112 g)",
+    "Fresh Thyme (shared addition with chicken-chasseur, USDA fresh, per 100 g: 101 cal / 5.6 P / 24.5 C / 1.7 F; sprig = 1 g)"
+  ],
+  "pricing_terms_needed": [
+    { "term": "dry white wine", "blocking": true, "why": "1 3/4 cups is the sauce base; white wine commodity has no priced cell - queue entry already CARRIED (Baker's) with this slug already attached, re-added idempotently for the record" },
+    { "term": "almond flour", "blocking": true, "why": "the gluten-free dredge, 1 cup plus 2 3/4 tbsp; the flour commodity's include /\\bflour\\b/ hijack was REJECTED (wheat pricing under an almond line, ~15x price-class gap) so the term needs its own carriage/price verdict" }
+  ],
+  "new_commodity_proposals": [
+    {
+      "proposed_id": "almond-flour",
+      "for_item": "Blanched Almond Flour",
+      "status": "flagged-for-registrar",
+      "registrar_ruling": "NOT YET OBTAINED - the map lane cannot invoke the commodity-registrar agent; item maps null meanwhile (pantry-static, safe). Evidence: cannot share the flour id (different food, ~$0.34/lb vs ~$6-10/lb price class - the bacon-bits 3-4x precedent bars far smaller gaps); almond flour is a shelf-stable staple at Walmart/Sam's/Baker's class stores, so the pricer should find real cells once a rule exists."
+    }
+  ],
+  "registrar_rulings": "PENDING for almond-flour - proposal recorded for the commodity-registrar agent (this run edits no commodity files); ingredient maps item_id: null (pantry-static) until the registrar rules.",
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 497, "protein_g": 32, "carbs_g": 7, "fat_g": 35 },
+    "computed_per_serving": { "calories": 524.0, "protein_g": 32.2, "carbs_g": 7.7, "fat_g": 38.1 },
+    "protein_gap_pct": 0.6,
+    "calorie_gap_pct": 5.4,
+    "verdict": "PASS - protein +0.6%, calories +5.4%, carbs +0.7 g, fat +3.1 g: every instrument inside noise, and it validates the DERIVED 120 g thin-cut chop (see the chop line - the densities default of 170 g/chop would have failed this check at +31% protein and published a 42 g protein claim the source never made).",
+    "band_check": "computed 524.0 cal in [400, 650] PASS (comfortable on both sides); carbs 7.7 g <= 35 PASS - the lowest-carb recipe in the batch"
+  },
+  "board_defects_observed": [
+    "lemons commodity: the Walmart cell is 'Tastykake Glazed Lemon Blueberry Dipp'n Sticks' ($0.4533/each, a snack cake) sitting as the commodity's cheapest cell - a match-rule hijack on a fresh-produce commodity (concept is right, cell is wrong; same shape as the fricassee portobello canned-cell defect). Flagged for the match-soundness/capture pipeline, not changed by this run. Real lemon coverage is 4 of 7 (Baker's/Hy-Vee/Family Fare/Fareway)."
+  ],
+  "densities_followups": [
+    "Blanched Almond Flour: no densities row - propose cup=112, tbsp=7 (label 1/4 cup = 28 g)",
+    "Pork Chops: existing each=170 is a bone-in/thick-cut norm; propose adding thin_cut=120 so the next thin-cut source does not have to re-derive it"
+  ]
+}

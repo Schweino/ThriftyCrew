@@ -1,0 +1,20 @@
+{
+  "slug": "crispy-pork-carnitas",
+  "name": "Crispy Slow Cooker Pork Carnitas",
+  "protein": "pork",
+  "cuisine": "Mexican",
+  "verdict": "DUPE",
+  "dupe_of": "slow-cooker-pork-carnitas-bowl",
+  "fit": {
+    "src_cal": 578,
+    "src_carbs": 2,
+    "band_400_650": true,
+    "carbs_le_35": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "fit_ruling": "FIT on numbers, but killed as DUPE"
+  },
+  "evidence": "Same dish as the catalog's slow-cooker-pork-carnitas-bowl (Pork Carnitas Burrito Bowl): identical Mexican carnitas protein prep - slow-cooked pork shoulder with orange juice, cumin, oregano and jalapeno then shredded/crisped - matching on protein, sauce/flavor family, and method (3 of 4); the only difference is the serving base (no rice vs cilantro-lime rice), a starch swap that does not make carnitas a different dinner, so this is the identical seasoned pork under a low-carb framing.",
+  "cross_protein_note": "Not selected, but if a twin surfaces this concept could collide with a beef barbacoa / Mexican shredded-beef or a chicken carnitas-style dish in other pools.",
+  "confidence": "high on nutrition fit; high on dedup - carnitas concept is already in catalog"
+}

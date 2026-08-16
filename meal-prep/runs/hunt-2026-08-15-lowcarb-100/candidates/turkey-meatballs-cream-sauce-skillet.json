@@ -1,0 +1,41 @@
+{
+  "name": "Turkey Meatballs in Cream Sauce Skillet",
+  "slug": "turkey-meatballs-cream-sauce-skillet",
+  "protein": "turkey",
+  "method": "skillet",
+  "cuisine": "American",
+  "source_url": "https://www.smalltownwoman.com/turkey-meatballs-in-easy-cream-sauce/",
+  "source_servings": 4,
+  "src_cal": 433,
+  "src_carbs": 16,
+  "src_protein": 38,
+  "src_fat": 24,
+  "ingredients": [
+    "1 1/4 lbs ground turkey",
+    "2/3 cup panko bread crumbs",
+    "1 teaspoon dried oregano",
+    "1/4 teaspoon garlic powder",
+    "1/4 cup minced onion",
+    "1 egg",
+    "2 tablespoons Worcestershire sauce",
+    "1 tablespoon olive oil",
+    "2 tablespoons butter",
+    "2 tablespoons all-purpose flour",
+    "1 cup low sodium chicken broth",
+    "1/4 teaspoon garlic powder",
+    "1/4 teaspoon onion powder",
+    "1 1/2 tablespoons Worcestershire sauce",
+    "1/2 cup heavy cream",
+    "1/2 teaspoon dried oregano",
+    "salt and pepper to taste",
+    "1 tablespoon chopped fresh parsley"
+  ],
+  "unmapped": [
+    "panko bread crumbs (breadcrumb; closest board home is 'bread', not a true panko row)",
+    "fresh parsley (no board row)",
+    "dried oregano (spice, not tracked on board)",
+    "garlic powder / onion powder (spices, not tracked; board tracks fresh garlic/onions only)"
+  ],
+  "why": "Pure ground-turkey stovetop meatball skillet in a cream/broth sauce - no rice/pasta/potato base, structurally low-carb. Published nutrition clears the band: 433 cal, 16 g carbs, 38 g protein per serving (dish only; the blog's mashed-potato/noodle 'serve over' is an optional side we drop). Scales cleanly to 14 servings via weigh-and-divide. Not a catalog duplicate - existing turkey meatball entries are marinara/wedding-soup/sub-bake/a-la-king, none a creamy cream-sauce skillet.",
+  "confidence": "high; nutrition read directly from the source recipe card. Note cal sits near the 400 floor (source counts no starch side), so our label-DB recompute should stay in band but has less headroom above the floor than a mid-band pick."
+}

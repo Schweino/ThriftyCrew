@@ -1,0 +1,41 @@
+{
+  "slug": "methi-malai-murgh-creamy-fenugreek-chicken",
+  "title": "Methi Murgh Malai",
+  "source_url": "https://kitchenofdebjani.com/2018/11/methi-murgh-malai/",
+  "source_servings": 6,
+  "target_servings": 14,
+  "scale_factor": 2.3333,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "mapper_verdict": "REJECTED - unmappable without guessing; every label-accurate basis consistent with estate canon computes BELOW the run's 400-calorie floor",
+  "rejection_evidence": {
+    "summary": "Three independent problems compound: (1) the dairy backbone ('single cream', 300 ml across 6 servings) has no US retail equivalent on the board - USDA light cream (the honest single-cream basis, verified 2026-08-16: 197 cal / 3.0 P / 3.7 C / 19.1 F per 100 g) is not a board commodity, and the two carried neighbors bracket the calorie floor: booking half-and-half computes the dish to ~306 cal/serving and heavy cream to ~405, so the MAPPER'S product choice - not the recipe - would decide whether the recipe passes the 400 floor, which is exactly the adjust-to-fit sin the run brief forbids; (2) on the honest bases the recipe computes ~335 cal/serving, 16% below the floor: 1 kg bone-in 'curry cut' chicken rebuilt per the estate's standing skinless canon (burmese ruling, 70% yield -> 700 g BSCT = 117 g/serving = 146 cal) + 50 g light cream (98) + 7 g butter (50) + 17 g hung curd (12) + 55 g onion (22) + pastes/spices (~7) = ~335 cal / 26.6 P / 8.5 C; even the most generous defensible reading (boneless interpretation of 'curry cut', 167 g/serving) reaches only ~395; (3) the source's published nutrition cannot arbitrate any of it because it is internally impossible - 52.3 g protein per serving from at most 167 g of raw bone-in chicken per serving is unreachable (ceiling ~33 P even if the kilo were all boneless meat), and the stated 150 g serving size is inconsistent with the recipe's own ~267 g/serving cooked mass (1.6 kg batch across 6). The only paths into the band are guesses AGAINST the printed recipe: booking skin-on macros on a cut Bengali curry preparation customarily skins, or silently upgrading single cream to heavy whipping cream (+70 cal/serving). REFUSAL beats guessing.",
+    "computed_per_serving_honest_basis": { "calories": 335, "protein_g": 26.6, "carbs_g": 8.5, "fat_g": 19.5, "note": "skinless-canon chicken + USDA light cream; spread across all defensible bases 306-475, with every non-guess reading below 400" },
+    "band_check": "FAIL floor: ~335 cal vs the 400 minimum (-16%); carbs pass trivially (~8.5 g) but the floor miss is structural - the dish is a light 6-serving curry, not a 400+ cal dinner plate, and its own (impossible) label only claims 418",
+    "source_macro_status": "UNRELIABLE: published 418 cal / 52.3 P / 11.6 C / 17.2 F per '150 g serving' is internally impossible against the printed ingredient list (protein ceiling ~33 P/serving; fat from cream+butter alone exceeds 17.2 on any cream reading heavier than half-and-half); the protein instrument cannot be used on this source"
+  },
+  "carriage_notes_not_ruled": "Carriage was NOT ruled on and no terms were enqueued - a rejected recipe must not spend the singleton pricer's store time. For the record, the board answers observed from disk: kasuri methi / dried fenugreek leaves / fenugreek all ABSENT (no commodity, no capture - the dish's namesake herb would have been a blocking enqueue had the recipe survived); light cream not a commodity; hung curd would book to Greek Yogurt / Plain Yogurt (greek-yogurt, carried); garlic paste and ginger paste resolve to the fresh garlic / fresh-ginger commodities (carried); butter, onions, salt, black pepper all carried 7 of 7. Per Rule B nothing here is a carriage rejection - the rejection is macro-structural, not availability.",
+  "state_machine_note": "FLAGGED FOR THE ORCHESTRATOR: hunt-run.ps1 has no mapper-level content-rejection state - from 'extracted' the only rejections are 'rejected-unreadable' and 'rejected-dupe' (both false here), 'rejected-not-carried' requires a zero-store queue verdict this recipe does not have, and 'rejected-qa' is only reachable from spec-built/written. This dossier therefore leaves the run state at 'extracted' rather than force a false state; the orchestrator should route the retirement (the success-criteria macro-gate note contemplates rejected-qa with the miss named).",
+  "ingredients": [],
+  "rejected": [
+    { "source_raw": "200 ml + 100 ml Single Cream", "reason": "no same-price-class board commodity; the two carried neighbors (half-and-half, heavy cream) sit on opposite sides of the run's calorie floor, so any mapping is an outcome-deciding guess" },
+    { "source_raw": "1 kg Chicken curry cut", "reason": "estate skinless canon computes 146 cal/serving; only an unsanctioned skin-on booking rescues the floor, against Bengali curry-cut custom and with no source label to arbitrate (published macros internally impossible)" },
+    { "source_raw": "1 tablespoon + 1 teaspoon Kasuri Methi", "reason": "ABSENT board-wide (no commodity, no capture) and no verifiable label found for a DB row; moot under the structural floor failure, so deliberately NOT enqueued" }
+  ],
+  "db_entries_added": [],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 418, "protein_g": 52.3, "carbs_g": 11.6, "fat_g": 17.2 },
+    "computed_per_serving": { "calories": 335, "protein_g": 26.6, "carbs_g": 8.5, "fat_g": 19.5 },
+    "protein_gap_pct": -49.1,
+    "calorie_gap_pct": -19.9,
+    "verdict": "Instrument inapplicable: the source's 52.3 P/serving is physically impossible from its own printed 1 kg of bone-in chicken across 6 servings (ceiling ~33 P), so the -49% gap indicts the source label, not a portion. See rejection_evidence.",
+    "band_check": "FAIL: ~335 cal below the 400 floor on every non-guess basis (spread 306-475 across all bases, with only unsanctioned guesses reaching 400+)"
+  },
+  "board_defects_observed": [
+    "No light-cream commodity and no fenugreek/kasuri-methi commodity - recorded for visibility if future Indian-cuisine hunts recur; kasuri methi is a candidate for the commodity-registrar only when a surviving recipe actually needs it."
+  ],
+  "densities_followups": []
+}

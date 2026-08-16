@@ -1,0 +1,20 @@
+{
+  "slug": "pork-chops-pizzaiola-skillet",
+  "name": "Pork Chops alla Pizzaiola (Skillet)",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "cal": 446,
+    "carbs": 15,
+    "cal_ok": true,
+    "carbs_ok": true,
+    "seafood": false,
+    "scalable_14": true,
+    "within_conditions": true
+  },
+  "dupe_of": null,
+  "evidence": "No catalog pork dish is a starch-free Italian tomato braise of the chops: the tomato-forward pork chops present (chuletas-guisadas-stewed-pork-chops-and-rice with sazon/salsa/olives over rice, hong-kongstyle-baked-pork-chop-rice with ketchup/egg/cheese over rice) are both rice-served and differently flavored, while every other catalog chop is creamy/gravy/breaded/casserole; braised-pork-ragu-over-pappardelle is a shredded pork-loin ragu over pasta and slow-cooker-italian-pork-loin-bowls adds white beans - neither is a seared chop in a chunky pizzaiola sauce. Accepted-slugs (read fresh) contains no pork-chop or pizzaiola entry.",
+  "cross_protein_watch": "Pizzaiola is a protein-agnostic Italian dish - a seared cutlet/steak in a tomato-onion-garlic braise. The decider should watch other lanes for a structurally identical twin: beef 'steak pizzaiola', chicken 'chicken pizzaiola', or the very close chicken/beef cacciatore (protein braised in tomato-onion-garlic Italian sauce, no starch). Same-dish-different-protein risk is real here.",
+  "unmapped": [],
+  "notes": "Zero unmapped ingredients (all map to Omaha board). Distinct Italian tomato-braise angle widens a pork-chop lane otherwise crowded with creamy/parmesan/gravy chops."
+}

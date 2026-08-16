@@ -1,0 +1,16 @@
+{
+  "slug": "sheet-pan-smoked-sausage-broccoli-cheddar",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    { "check": "scaling",
+      "severity": "note",
+      "detail": "One 3.5x ratio (4 -> 14) holds across the card: broccoli 8 cups -> 28 cups (2380 g, 85 g/cup), cheddar 1 cup -> 3.5 cups (396 g), salt/pepper a disclosed to-taste minimum. Sausage is the one disclosed departure: exact 3.5x of one 14 oz rope is 3.0625 lb, booked 3 lb (1361 g, -2 percent), recorded in writer_notes as quantization. Acceptable rounding, carried for the auditor.",
+      "owner": "mapper" },
+    { "check": "prose-numbers",
+      "severity": "note",
+      "detail": "Sausage package size drifts between prose and buy line: ingredients_display and shop_smart bullet 1 describe 'three and a half 14 oz ropes' (the Johnsonville rope the source names) while the cost line buys '4 13.5oz ropes: $7.88' (the priced kielbasa commodity package). Both cover the same 3 lb need (4 x 13.5 oz = 3.375 lb), so nothing is under-bought; it is a package-size wording mismatch, not a class mismatch. Cosmetic.",
+      "owner": "writer" }
+  ],
+  "notes": "RE-QA after the fresh-broccoli pricing fix; prior fail is cleared. Both anchors reached: live page agrees with the extraction line for line (4 servings, 8 cups broccoli florets, one 14 oz Johnsonville andouille rope, 1 cup shredded cheddar, salt/pepper to taste; roast 15, flip, 5-10 more, cheese 1-2 min). Ingredient coverage passes both directions. The prior blocking finding - prose arguing fresh while the buy line sold frozen bags - is resolved: bid is now the fresh weekly commodity broccoli (gpu 453.592), the cost line reads 'Buy 6 lbs: $12.72' in pounds of fresh, and intro, shop_smart bullet 2 (8 heads, 5 1/4 lb, 28 cups), make_it (cut into florets), and head.description all say fresh consistently. The fresh-vs-frozen contrast in bullet 2 now matches the shopping list AND the source's own note that fresh works best. Macros held through the re-cost: recompute on the cited rows (broccoli 34 cal/100 g x 2380 g = 809, sausage 160/56 x 1361 = 3889, cheddar 110/28 x 396 = 1556) gives 6254 batch, 446.7/serving = stat 447; identical to the pre-fix stat, so the change moved price only. All prose cost literals (20.34, 1.45, 23.12, 1.65, 3.38, 26.50) match the spec's own cost fields; cal/protein/cost_ps appear as tokens; 'under 15 g carbs' agrees with stat carbs 14. No shop_smart bullet makes a cost claim needing cost_lines support. Stale UNPRICED writer_notes carry RESOLVED annotations and no longer misdescribe the build. stat.cost_ps 1.89 sits above cost_per_serving 1.45/1.65 but that gap matches the estate-wide anchor convention (e.g. chicken-divan 2.41 vs 1.60/2.32) and cost anchoring is the batch auditor's domain. Method survives (spray-prep line dropped in favor of the source's own foil/parchment option, disclosed; two pans is scale adaptation). Title same dish; credit points at the exact source URL. No built body.html exists for this slug yet, so card checks ran against the spec fields."
+}

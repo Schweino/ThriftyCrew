@@ -1,0 +1,21 @@
+{
+  "slug": "slow-cooker-beef-nihari",
+  "name": "Slow Cooker Beef Nihari (Pakistani Beef Stew)",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "dupe_of": null,
+  "evidence": "No nihari in the 138-recipe beef digest or in accepted-slugs; the catalog's nearest South-Asian beef dishes are all a different dish - pakistani-beef-kofta-curry (ground-beef meatballs in gravy), beef-keema-curry-rice-bowls and indian-keema-matar-bowls (ground-beef keema), kerala-beef-ularthiyathu (dry South-Indian fry), caribbean-curry-beef-potatoes and massaman-beef-curry-potatoes (potato curries) - none is a slow-braised whole beef-shank nihari thickened with atta, so protein cut, form, and dish identity all differ.",
+  "conditions": {
+    "calories": 437,
+    "carbs_g": 18,
+    "cal_in_band_400_650": true,
+    "carbs_at_or_below_35": true,
+    "budget_meal_prep": true,
+    "scalable_to_14": true,
+    "no_seafood": true,
+    "fit": true
+  },
+  "cuisine": "Pakistani",
+  "cross_protein_collision_notes": "Nihari is traditionally made with lamb/goat/mutton and also appears as chicken nihari - a lamb-nihari, goat-nihari, or chicken-nihari candidate in another selector's pool would be structurally the SAME dish (same nihari masala + slow-braised gravy thickened with atta, only the protein swapped). Decider should check lamb/goat/mutton and chicken pools for any nihari twin before final merge.",
+  "notes": "437 cal sits in the lower third of the band; label-DB recompute has limited headroom above the 400 floor. Real pricer-lane material: boneless beef shank, nihari masala blend, star anise, green cardamom, fennel seeds, whole cloves, durum atta flour are genuine unmapped ingredients (not penalized per v2.1 5.1)."
+}

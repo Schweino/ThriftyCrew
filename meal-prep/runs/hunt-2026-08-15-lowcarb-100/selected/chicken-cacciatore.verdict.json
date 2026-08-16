@@ -1,0 +1,17 @@
+{
+  "slug": "chicken-cacciatore",
+  "name": "Chicken Cacciatore",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "conditions_check": {
+    "calories": "495 (within 400-650)",
+    "carbs": "15g (<=35g)",
+    "scalable_14": "yes - straight braise, weigh-and-divide",
+    "budget_meal_prep": "yes - bone-in thighs/drumsticks, pantry tomato base",
+    "no_seafood": "clears - anchovy is explicitly optional flavor base and can be omitted; not seafood-forward",
+    "fit": true
+  },
+  "dupe_evidence": "Not a dupe. Nearest catalog namesake is slow-cooker-chicken-cacciatore-pasta (chicken-breast, green-bell-pepper, mushrooms, onions, penne-pasta, traditional-pasta-sauce) which is a penne PASTA dish; this candidate is a low-carb bone-in braise in a from-scratch wine/tomato/olive sauce with no starch base - different plate and different carb class (chili vs chili-mac distinction). No other catalog chicken braise matches the cacciatore flavor family (chicken-normandy is apple-cream, fricassee is cream, italian-chicken-penne is sun-dried-tomato/coconut pasta).",
+  "cross_protein_flags": "Cacciatore is a structural template - a braised protein in tomato/pepper/mushroom/olive/wine sauce. A turkey cacciatore or an Italian-sausage/pork cacciatore in another selector's pool would be the same dish in a different protein; decider should check for a turkey- or sausage-cacciatore twin.",
+  "notes": "Unmapped board gaps (dry red wine, fresh rosemary, bay leaves, kalamata olives, anchovy) are wanted for the pricer lane per run intent, not a penalty. Anchovy flagged only for the no-seafood condition - resolved by its optional status."
+}

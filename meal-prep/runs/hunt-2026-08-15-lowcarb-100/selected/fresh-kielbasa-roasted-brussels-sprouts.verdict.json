@@ -1,0 +1,18 @@
+{
+  "slug": "fresh-kielbasa-roasted-brussels-sprouts",
+  "name": "Fresh Kielbasa and Roasted Brussels Sprouts",
+  "protein": "pork-sausage",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 426,
+    "carbs": 15,
+    "in_band": true,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "426 cal / 15g carbs sits mid-band; sheet-pan sausage + brussels sprouts scales cleanly to 14 servings; no seafood; budget meal-prep dinner. FIT."
+  },
+  "dupe_of": null,
+  "evidence": "No catalog match: every roasted/sheet-pan sausage recipe in the pork group carries potatoes as a starch and different veg (Sheet-Pan Bratwurst with Peppers and Potatoes, One-Pan Sausage Bake with Potatoes and Onion Gravy, Sheet-Pan Sausage Meatballs with Kale and Potatoes, Bratwurst and Sauerkraut with Potatoes) - none is sausage + brussels sprouts with no starch. Accepted-pool italian-sausage-peppers-onions-skillet is a peppers/onions skillet (Italian), a different vegetable and method, not a dupe (2/4 match at most: sausage + no-starch).",
+  "cross_protein_collision": "Structurally a 'smoked/roasted sausage + roasted brussels sprouts sheet pan' - could collide with a turkey-sausage or chicken-sausage version, or a generic 'sausage and roasted vegetables' sheet-pan bake in another protein lane. Decider should watch for a same-dish-different-sausage twin.",
+  "borderline": false
+}

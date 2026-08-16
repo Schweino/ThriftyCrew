@@ -1,0 +1,20 @@
+{
+  "slug": "braised-beef-short-ribs-red-wine",
+  "name": "Braised Beef Short Ribs in Red Wine Sauce",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "borderline": false,
+  "fit": {
+    "pass": true,
+    "src_cal": 545,
+    "src_carbs": 9,
+    "no_seafood": true,
+    "scalable_14": true,
+    "note": "545 cal is mid-band (400-650); 9g carbs well under 35g; pure meat + aromatics + wine braise, scales cleanly to 14."
+  },
+  "dupe_of": null,
+  "evidence": "No short-rib or red-wine braise exists in the catalog; the nearest beef braises (beef-bourguignon-bowls, apple-cider/balsamic/mississippi/french-onion pot-roast bowls, classic-beef-stew) are all chuck-roast stews/pot-roasts plated over rice or potatoes, whereas this is a bone-in short-rib red-wine reduction with no starch base - different cut, different sauce, different plate.",
+  "catalog_neighbors": ["beef-bourguignon-bowls (chuck stew w/ bacon+mushroom over starch; distinct cut & no-starch plating)"],
+  "cross_protein_collision_notes": "None expected - short rib is a beef-specific cut; no pork/chicken/turkey structural twin of this dish is plausible.",
+  "unmapped": ["beef-short-ribs"]
+}

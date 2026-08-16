@@ -1,0 +1,42 @@
+{
+  "name": "Sauerbraten (German Braised Beef Pot Roast)",
+  "slug": "sauerbraten-german-braised-beef",
+  "protein": "beef",
+  "method": "slow braise (oven, 300F) - adaptable to slow cooker",
+  "cuisine": "German",
+  "source_url": "https://www.sipandfeast.com/sauerbraten/",
+  "source_servings": 6,
+  "src_cal": 590,
+  "src_carbs": 29.6,
+  "src_protein": 60.9,
+  "src_fat": 20.1,
+  "ingredients_verbatim": [
+    "1 large onion, chopped",
+    "2 medium carrots, chopped",
+    "1 large leek, chopped",
+    "1 1/2 cups red wine vinegar",
+    "1 750ml bottle dry red wine",
+    "1 cup low-sodium beef stock",
+    "2 tablespoons granulated sugar",
+    "1/4 cup golden raisins",
+    "3 large bay leaves",
+    "10 whole juniper berries",
+    "8 whole cloves",
+    "1 tablespoon Diamond Crystal Kosher salt",
+    "1 teaspoon black pepper",
+    "3 1/2 pounds rump roast",
+    "1/2 cup all-purpose flour for dredging",
+    "Salt and pepper to taste",
+    "1/4 cup lard or vegetable oil",
+    "8 gingersnap cookies, crushed",
+    "1/4 cup golden raisins (optional)"
+  ],
+  "unmapped": [
+    "juniper berries (no board home)",
+    "rump roast (board tracks chuck-roast/sirloin/ribeye, not rump roast - closest home is chuck-roast)",
+    "golden raisins (board tracks raisins, not golden specifically - minor)",
+    "lard (recipe offers vegetable-oil alternative which IS on board)"
+  ],
+  "board_mapped_core": ["chuck-roast (for rump-roast)", "onions", "carrots", "leeks", "red-wine-vinegar", "red-wine", "beef-broth", "sugar", "bay-leaves", "whole-cloves", "kosher-salt", "black-pepper", "flour", "vegetable-oil", "gingersnaps"],
+  "why": "Verified published nutrition (READ from page): 590 cal, 29.6g carb, 60.9g protein per serving - squarely in the 400-650 cal / <=35g carb band with elite protein-to-calorie ratio. German cuisine is absent from the catalog (which skews American/Tex-Mex), and there is no existing sauerbraten. Structurally low-carb: beef + aromatics in a sweet-sour braise, no rice/pasta/potato base; the only carb sources are a little sugar, raisins, and 8 crushed gingersnaps for the gravy. A whole-muscle beef braise scales cleanly to 14 servings with weigh-and-divide. Good pricer-lane specimen: juniper berries are genuinely off the board and rump roast needs a cut mapping (chuck-roast is the sane home)."
+}

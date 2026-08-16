@@ -1,0 +1,22 @@
+{
+  "slug": "jalapeno-popper-chicken-casserole",
+  "name": "Jalapeno Popper Chicken Casserole",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 418,
+    "carbs_g": 2,
+    "in_band": true,
+    "reason": "418 cal is inside 400-650; 2g carbs is well under 35g; no seafood; whole-muscle chicken breast bake, weigh-and-divide scalable to 14."
+  },
+  "dupe_check": {
+    "catalog": "No duplicate. No 'popper' dish exists in the catalog. Nearest neighbor slow-cooker-crack-chicken-bowls shares cream-cheese+bacon+cheddar+chicken but is ranch-flavored crack chicken served as saucy bowls with russet potatoes (different flavor family, different starch, different method); chicken-cordon-bleu-casserole and chicken-divan-broccoli-bake are rice-based and unrelated in flavor.",
+    "accepted_slugs": "Distinct from the run's already-accepted chicken-bacon-ranch-cauliflower-bake (that is ranch + cauliflower; this is jalapeno-forward, no ranch, no cauliflower) and creamy-tuscan-chicken-skillet (tomato-cream skillet).",
+    "pool": "No colliding chicken candidate seen in the chicken-bake lane handed to me."
+  },
+  "evidence": "Cream-cheese/sour-cream/cheddar-bound crustless chicken bake with jalapeno as the signature flavor; no starch. Nothing in the 544-recipe digest matches the jalapeno-popper profile.",
+  "cross_protein_flag": "Jalapeno popper casserole is a portable format: a ground-turkey or ground-beef 'jalapeno popper' bake would be structurally the SAME dish (cream cheese + bacon + cheddar + jalapeno bound casserole, protein swapped). Decider should check other-protein pools for a jalapeno-popper twin before final accept.",
+  "cuisine": "tex-mex",
+  "unmapped": ["shredded cheddar cheese (board has cheddar-cheese-shredded per digest; verify id mapping at map lane)"],
+  "adjudicated_by": "select adjudicator (adjudicate 1)"
+}

@@ -1,0 +1,32 @@
+{
+  "slug": "slow-cooker-tuscan-chicken-pasta",
+  "verdict": "fail",
+  "anchors": ["live-page", "spec", "built-card", "costed.json", "food-macros-db"],
+  "findings": [
+    {
+      "check": "prose-numbers",
+      "severity": "blocking",
+      "detail": "STALE BUILT CARD: db\\built\\slow-cooker-tuscan-chicken-pasta.body.html (built 2026-08-15 15:49, before the 2026-08-16 rebid) still embeds bid frozen-chopped-spinach in its SMP-SCALER2 payload, while the spec scaler correctly bids spinach. The card cost list hydrates live from that bid, so republishing this artifact re-ships the frozen-price defect. The spec itself is correct: Spinach, 3 cups fresh, chopped: ~$1.41, Buy 1 10oz bag: $2.00 is the fresh basis (200 g = 7.05 oz x $0.20/oz = $1.41). Remedy: rebuild the card from the current spec before publishing; no spec repair needed.",
+      "owner": "writer"
+    },
+    {
+      "check": "prose-numbers",
+      "severity": "note",
+      "detail": "Independent macro recompute from food-macros-db rows: 598.6 cal / 68.2 P / 52.2 C / 14.3 F per serving vs stat 599/68/52/14 - exact within rounding. Fresh and frozen spinach DB rows are per-gram identical, so the rebid correctly moved price only. cost_ps 3.37 = cost_first_run 47.21 / 14 and matches v2-perserving everyday_ps. All cost_lines literals and cost_* fields match db\\costed.json exactly (batch 26.83 sums line-by-line; true 32.21; pantry_add 15.00 reproduced component-by-component; first_run 47.21).",
+      "owner": "writer"
+    },
+    {
+      "check": "scaling",
+      "severity": "note",
+      "detail": "Pre-existing, already live: this is a credited loose rebuild of kristineskitchenblog.com 6-serving Tuscan chicken THIGHS (no pasta in the source dish): thighs swapped to 8 lb breast (protein deliberately boosted beyond the 14/6 = 2.33x ratio, which would give 4.7 lb), 840 g penne added (source serves pasta only as a suggestion), coconut milk chosen from the source own stated dairy-free option, sun-dried tomatoes roughly doubled beyond ratio (source 1/2 cup -> ~63 g scaled vs 140 g spec). Grams for garlic (25 g), shallots (180 g), and spinach (200 g) DO scale cleanly at 2.33x, but the display text kept unscaled source phrasing: Garlic 2 cloves (25 g) - 25 g is ~8 cloves; Shallots 1/2 cup chopped (180 g) - 1/2 cup is ~80 g; Spinach 3 cups fresh, chopped (200 g) - 3 cups chopped is ~90 g. The grams (which drive macros, cost, and the scaler) are the consistent set; the household measures are the stale ones. Not introduced by this change and identical on the live page today.",
+      "owner": "writer"
+    },
+    {
+      "check": "prose-numbers",
+      "severity": "note",
+      "detail": "shop_smart internal contradictions, pre-existing: (1) buy the bag, not the oil-packed jar for sun-dried tomatoes, but the costed basis (starter_pkg) is a 7oz jar at $4.26 - the advice and the priced basis disagree; (2) buy a wedge or shaker for parmesan, but the cost line prices an 8oz grated tub ($2.74), and the sibling chicken-florentine card explicitly says the tub beats the wedge per ounce; (3) Sun-dried tomatoes are the priciest item here - chicken ($16.22) is; SDT is only the priciest non-protein line. All live today; cosmetic, forwarded.",
+      "owner": "writer"
+    }
+  ],
+  "notes": "No extraction exists for this older catalog recipe; anchored on the live source page (fetched successfully) plus the spec, built card, costed.json, and food-macros-db. THE SPEC IS FULLY CERTIFIED for the change under review: every card-visible spinach mention says fresh, the cost line prices the fresh 10oz bag, macros are exact and unmoved, and all cost literals reconcile to the engine. Title honestly names the rebuilt dish (Tuscan chicken pasta, credited as adapted from), so the thigh->breast/pasta rebuild is disclosure, not misrepresentation - and it is what is already live. The single blocker is the stale built HTML still bidding the frozen commodity. REPUBLISH GUIDANCE: rebuild first, then republishing is an unambiguous improvement over the live page; pushing the 8/15 build as-is would keep the frozen-price defect live."
+}

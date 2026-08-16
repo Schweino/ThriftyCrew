@@ -1,0 +1,20 @@
+{
+  "slug": "low-carb-turkey-cauliflower-mushroom-casserole",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "method",
+      "severity": "note",
+      "detail": "Source assumes 4 cups cooked leftover turkey on hand; the card adds a roast-a-raw-breast step (3 lb raw at 375F to 165F, ~7 cups diced) to produce that input. Sourcing adaptation, disclosed in writer_notes; the casserole method itself (saute mushrooms/onion/cauliflower, sour cream-mayo-Dijon-cheese sauce, top with mozzarella, bake uncovered ~40 min at 375F) is intact.",
+      "owner": "writer"
+    },
+    {
+      "check": "ingredient-coverage",
+      "severity": "note",
+      "detail": "Source's 'or chicken' alternative deliberately omitted (disclosed, avoids double-counting); salt and pepper kept as the source's to-taste line, unmeasured. Duplicate mozzarella/thyme/poultry-seasoning lines combined with 'divided' and split correctly in the steps.",
+      "owner": "mapper"
+    }
+  ],
+  "notes": "RE-QA after repair. Both anchors reached; live page matches the extraction line for line. The prior blocking finding (mozzarella and seasonings scaled at 3.5x instead of 1.75x) is fixed: all 12 lines now sit on one consistent 1.75x ratio (8 -> 14 servings) within rounding, e.g. mozzarella 2 cups -> 3.5 cups / 396 g. Prose literals match the spec stat (carbs 13 vs 'under 15 g'; 3 lb, 7 cups, 375F, 40 min, cost figures). Credit URL correct. Writer_notes carry an open mapper wiring gap (cauliflower/crimini/sour-cream have no db\\ingredients.json rows, so cost_ps is a disclosed floor) - cost/mapping territory owned by the batch auditor, not a source-fidelity defect."
+}

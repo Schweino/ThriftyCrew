@@ -1,0 +1,16 @@
+{
+  "slug": "chicken-tinga-shredded-chipotle",
+  "name": "Chicken Tinga (Mexican Chipotle Shredded Chicken)",
+  "protein": "chicken",
+  "verdict": "DUPE",
+  "dupe_of": "slow-cooker-chicken-tinga-bowls",
+  "reason": "Duplicates the live catalog recipe 'Slow Cooker Chicken Tinga Bowls' (chicken + chipotle-adobo + diced-tomatoes + onions) - identical dish: it IS chicken tinga, shredded chicken braised in a chipotle-tomato-onion sauce. Same name, same protein, same chipotle-adobo sauce family, same braise-and-shred method (3 of 4 identity axes plus the literal dish name match); chicken-breast vs thigh does not make it a different dinner.",
+  "conditions_check": {
+    "calories": 478,
+    "carbs": 26,
+    "in_band": true,
+    "note": "Would clear the 400-650 cal / <=35g carb / no-seafood / scalable gates on its own, but is killed as a catalog duplicate before selection."
+  },
+  "cross_protein_collision": "Catalog also carries 'slow-cooker-pork-tinga-bowls' (same dish, pork) - this candidate is the chicken twin of that pork tinga, so any pork-tinga candidate in another selector's pool is structurally the same dinner as this one.",
+  "adjudicated_against": ["catalog-digest.json (544 recipes)", "accepted-slugs.json (fresh read, no tinga present there)"]
+}

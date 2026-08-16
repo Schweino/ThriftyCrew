@@ -1,0 +1,20 @@
+{
+  "slug": "keto-broccoli-cheddar-quiche",
+  "name": "Keto Broccoli Cheddar Quiche",
+  "protein": "vegetarian",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "borderline": true,
+  "fit": {
+    "pass": true,
+    "src_cal": 573,
+    "src_carbs": 13.3,
+    "evidence": "573 cal is inside 400-650; 13.3g carbs is well under the 35g cap; vegetarian (no seafood); egg-custard quiche scales cleanly to 14 servings as multiple pans. Ruling on published numbers per instructions; the candidate's own note that computed macros could push past 650 is a downstream risk, not a published-number failure."
+  },
+  "dupe_of": null,
+  "evidence": "No quiche or frittata exists anywhere in the 544-recipe catalog digest; the catalog's broccoli-cheddar dishes (Chicken Divan / Broccoli Cheese Bake, Turkey Divan Broccoli Rice Bake, Ground Turkey Broccoli Cheddar Rice Skillet) all carry a poultry protein over a rice/cream bake, not a vegetarian egg custard, so none is the same dish.",
+  "borderline_reason": "This run's accepted-slugs already contains crustless-bacon-gruyere-quiche, also a quiche (egg-custard bake). Three of four identity axes touch (main=eggs, method=bake, flavor-family=savory custard), but the filling is entirely different (vegetarian broccoli+cheddar with an almond-flour crust vs meat bacon+gruyere, crustless) and one is vegetarian while the other is meat - these read as two distinct menu quiches a catalog would want both of. Flagged so the decider can collapse to one quiche slot if it wants a tighter dedup.",
+  "cross_protein_collision_note": "As an egg-custard broccoli-cheddar dish, structurally the same plate could surface as meat versions - and this run has already accepted keto-turkey-broccoli-cheddar-casserole and sheet-pan-smoked-sausage-broccoli-cheddar. Those share the broccoli+cheddar flavor but are meat-protein cream/sheet bakes, not egg quiche, so not the same dish; noted so the decider watching all proteins can confirm the egg-custard base is what keeps this distinct. Also watch for any other egg/quiche/frittata candidate in the egg-cheese lane colliding with this and with crustless-bacon-gruyere-quiche.",
+  "unmapped_ok": true,
+  "unmapped": ["almond-flour"]
+}

@@ -1,0 +1,24 @@
+{
+  "slug": "philly-cheesesteak-stuffed-peppers",
+  "name": "Philly Cheesesteak Stuffed Peppers",
+  "protein": "beef",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "fit": {
+    "cal": 535,
+    "carbs": 9,
+    "in_cal_band": true,
+    "in_carb_band": true,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "535 cal within 400-650; 9g carbs well under 35g; no seafood; oven-baked stuffed peppers weigh-and-divide to 14. Fat is heavy (44g) but calories still sit mid-band."
+  },
+  "dupe_check": {
+    "catalog_nearest": ["philly-cheesesteak-skillet-bowls", "unstuffed-pepper-skillet-bowls"],
+    "reason": "Shares the philly flavor family with philly-cheesesteak-skillet-bowls (Ground Beef Philly Cheesesteak Bowls) but differs on 3 of 4 axes: protein (shaved steak vs 93-7 ground beef), starch (bell-pepper vessel, no starch vs rice), and method (oven-baked stuffed pepper vs skillet rice bowl). Only the provolone/onion/mushroom flavor profile overlaps. Distinct from unstuffed-pepper-skillet-bowls, which is a tomato-sauce Italian ground-beef skillet, not a cheesesteak. No stuffed-pepper cheesesteak exists in the beef catalog."
+  },
+  "cross_protein_collisions": [
+    "A chicken or turkey 'philly cheesesteak stuffed peppers' would be the same construction (steak/meat + onion + mushroom + provolone baked in a pepper half) with the protein swapped - decider should check chicken/turkey/pork pools for a stuffed-pepper cheesesteak twin.",
+    "Also watch for any 'stuffed peppers' in another protein sharing the pepper-vessel + cheese format even under a different flavor."
+  ]
+}

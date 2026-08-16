@@ -1,0 +1,18 @@
+{
+  "slug": "garlic-butter-steak-mushroom-skillet",
+  "name": "Garlic Butter Steak and Mushroom Skillet",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 423,
+    "carbs": 4,
+    "in_band": true,
+    "reason": "423 cal is within 400-650; 4g carbs is under 35g; no seafood; whole-muscle weigh-and-divide skillet scales cleanly to 14 servings; budget meal-prep dinner."
+  },
+  "dupe_check": {
+    "against_catalog": "Not a duplicate. Closest catalog steak entries differ on sauce+starch: honey-garlic-steak-bites-potatoes (sweet honey-garlic sauce over a potato base), beef-mushroom-stir-fry-rice-plate (Asian soy stir-fry over rice), slow-cooker-steak-and-onions-rice and pepper-steak-with-rice (braised/rice-based). This is a savory garlic-herb-butter sear with mushrooms and no starch - only protein+method align, sauce and starch diverge.",
+    "against_accepted_slugs": "Not a duplicate. low-carb-ground-beef-stroganoff-skillet shares mushrooms but is ground beef in a cream/sour-cream sauce; flank-steak-parmesan-green-beans is a parmesan-crusted steak with green beans; keto-cheeseburger-skillet is ground beef. Different dishes."
+  },
+  "cross_protein_watch": "Garlic-butter + mushroom skillet is a portable template - the decider should watch other protein pools for a structurally identical 'garlic butter chicken and mushroom skillet' or a pork-chop-and-mushroom-in-garlic-butter version, which would be the same plate with the protein swapped.",
+  "evidence": "Whole-muscle sirloin/ribeye cubes seared in garlic-herb butter with 8oz mushrooms; published 423 cal / 4g carbs / 38.9g protein at 4 servings, read directly from source page. All ingredients map to the Omaha board (no unmapped)."
+}

@@ -1,0 +1,45 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Turkey Meatballs Recipe",
+  "source_url": "https://www.smalltownwoman.com/turkey-meatballs-in-easy-cream-sauce/",
+  "servings": 4,
+  "time_total": "45 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    { "raw": "1 1/4 lbs ground turkey", "item": "ground turkey", "qty": "1 1/4", "unit": "lb", "prep": null, "optional": false, "section": "Meatballs" },
+    { "raw": "2/3 cup panko bread crumbs", "item": "panko bread crumbs", "qty": "2/3", "unit": "cup", "prep": null, "optional": false, "section": "Meatballs" },
+    { "raw": "1 teaspoons dried oregano", "item": "dried oregano", "qty": "1", "unit": "teaspoons", "prep": null, "optional": false, "section": "Meatballs" },
+    { "raw": "1/4 teaspoon garlic powder", "item": "garlic powder", "qty": "1/4", "unit": "teaspoon", "prep": null, "optional": false, "section": "Meatballs" },
+    { "raw": "1/4 cup minced onion", "item": "onion", "qty": "1/4", "unit": "cup", "prep": "minced", "optional": false, "section": "Meatballs" },
+    { "raw": "1 egg", "item": "egg", "qty": "1", "unit": null, "prep": null, "optional": false, "section": "Meatballs" },
+    { "raw": "2 tablespoons Worcestershire sauce", "item": "Worcestershire sauce", "qty": "2", "unit": "tablespoon", "prep": null, "optional": false, "section": "Meatballs" },
+    { "raw": "1 tablespoon olive oil", "item": "olive oil", "qty": "1", "unit": "tablespoon", "prep": null, "optional": false, "section": "Meatballs" },
+    { "raw": "2 tablespoons butter", "item": "butter", "qty": "2", "unit": "tablespoon", "prep": null, "optional": false, "section": "Cream Sauce" },
+    { "raw": "2 tablespoons all-purpose flour", "item": "all-purpose flour", "qty": "2", "unit": "tablespoon", "prep": null, "optional": false, "section": "Cream Sauce" },
+    { "raw": "1 cup low sodium chicken broth", "item": "low sodium chicken broth", "qty": "1", "unit": "cup", "prep": null, "optional": false, "section": "Cream Sauce" },
+    { "raw": "1/4 teaspoon garlic powder", "item": "garlic powder", "qty": "1/4", "unit": "teaspoon", "prep": null, "optional": false, "section": "Cream Sauce" },
+    { "raw": "1/4 teaspoon onion powder", "item": "onion powder", "qty": "1/4", "unit": "teaspoon", "prep": null, "optional": false, "section": "Cream Sauce" },
+    { "raw": "1 1/2 tablespoons Worcestershire sauce", "item": "Worcestershire sauce", "qty": "1 1/2", "unit": "tablespoon", "prep": null, "optional": false, "section": "Cream Sauce" },
+    { "raw": "1/2 cup heavy cream", "item": "heavy cream", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": "Cream Sauce" },
+    { "raw": "1/2 teaspoon dried oregano", "item": "dried oregano", "qty": "1/2", "unit": "teaspoon", "prep": null, "optional": false, "section": "Cream Sauce" },
+    { "raw": "salt and pepper to taste", "item": "salt and pepper", "qty": null, "unit": null, "prep": null, "optional": true, "section": "Cream Sauce" },
+    { "raw": "1 tablespoon chopped fresh parsley", "item": "fresh parsley", "qty": "1", "unit": "tablespoon", "prep": "chopped", "optional": true, "section": "Cream Sauce" }
+  ],
+  "instructions": [
+    "In a large bowl, mix ground turkey, breadcrumbs, dried oregano, garlic powder, minced onion, egg, and Worcestershire sauce. Shape into 1 1/2 inch meatballs.",
+    "Heat olive oil over medium heat in a large skillet. Add meatballs and cook until browned on all sides. Do not crowd the skillet. If necessary, work in batches. Remove the meatballs to a plate.",
+    "Melt butter in the same skillet over medium-low heat. Whisk in the flour and cook for 2-3 minutes, whisking constantly. Whisk in the chicken broth, garlic powder, onion powder, Worcestershire sauce, cream, and oregano. Cook until thickened.",
+    "Add the meatballs to the skillet and spoon the sauce over them. Simmer for 15 minutes.",
+    "Season with salt and pepper to taste and sprinkle with fresh parsley. Serve over mashed potatoes, egg noodles, or rice."
+  ],
+  "nutrition": {
+    "as_stated": "Calories: 433kcal | Carbohydrates: 16g | Protein: 38g | Fat: 24g | Saturated Fat: 12g | Polyunsaturated Fat: 2g | Monounsaturated Fat: 8g | Trans Fat: 0.3g | Cholesterol: 169mg | Sodium: 628mg | Potassium: 657mg | Fiber: 1g | Sugar: 4g | Vitamin A: 901IU | Vitamin C: 6mg | Calcium: 87mg | Iron: 3mg",
+    "per": "serving"
+  },
+  "concerns": [
+    "Page prints '1 teaspoons dried oregano' (singular quantity with plural unit) in the meatball section; transcribed as printed.",
+    "Fresh parsley (1 tablespoon, chopped) is sprinkled at the end as a garnish; marked optional on that basis though the page does not label it optional.",
+    "Times as displayed on the page read '15 minutes minutes' / '30 minutes minutes' / '45 minutes minutes' (template duplication); recorded as 15/30/45 minutes."
+  ]
+}

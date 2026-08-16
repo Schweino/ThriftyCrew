@@ -1,0 +1,19 @@
+{
+  "slug": "greek-chicken-tomato-feta-skillet",
+  "name": "Greek Chicken Tomato-Feta Skillet",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 491,
+    "carbs": 16,
+    "in_band": true,
+    "note": "491 cal is inside 400-650; 16g carbs is well under the 35g ceiling; no seafood; weigh-and-divide skillet scales cleanly to 14 servings. FIT."
+  },
+  "dupe_evidence": "Not a duplicate. Every Greek chicken dish in the digest is a rice-bowl or slow-cooker format (Chicken Souvlaki Rice Bowls, Slow Cooker Chicken Gyro Bowls, Slow Cooker Greek Chicken Bowls, Slow Cooker Mediterranean Chicken Bowls); this is a starch-free seared-breast pan sauce (cherry tomato + Kalamata + feta), a different plate on method and carb profile. Nearest accepted-slug neighbor, creamy-tuscan-chicken-skillet, is a Tuscan cream sauce, not a Greek tomato/olive/feta one.",
+  "cross_protein_collisions": "Structurally a 'Greek tomato-Kalamata-feta skillet' that transfers directly to another protein. Watch for a Greek pork or Greek turkey tomato-feta skillet in those selectors' pools (protein-swap twin). The catalog's Greek Turkey Spanakorizo Skillet and Greek Pork Souvlaki are rice-based and do NOT collide, but a pooled starch-free turkey/pork Greek skillet would be the same dinner.",
+  "unmapped_flag": "Greek seasoning blend has no board home - useful pricer-lane exercise, not a penalty per v2.1 5.1.",
+  "adjudicated_against": {
+    "catalog_digest": "544 recipes",
+    "accepted_slugs_snapshot": ["creamy-tuscan-chicken-skillet","chicken-bacon-ranch-cauliflower-bake","turkey-zucchini-noodle-casserole","crustless-bacon-gruyere-quiche","french-chicken-fricassee","italian-sausage-peppers-onions-skillet","flank-steak-parmesan-green-beans","low-carb-ground-beef-stroganoff-skillet","burmese-chicken-dal-curry"]
+  }
+}

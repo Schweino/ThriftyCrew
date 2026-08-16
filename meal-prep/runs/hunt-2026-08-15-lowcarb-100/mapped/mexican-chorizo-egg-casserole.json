@@ -1,0 +1,213 @@
+{
+  "slug": "mexican-chorizo-egg-casserole",
+  "title": "Mexican Breakfast Casserole",
+  "source_url": "https://www.thegraciouswife.com/mexican-breakfast-casserole/",
+  "source_servings": 10,
+  "target_servings": 14,
+  "scale_factor": 1.4,
+  "protein": "pork",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters (whole-count lines to whole or half items), drift from the exact 1.4x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "'1 pound chorizo sausage' is booked to the existing vocab row Pork Chorizo (bid ground-pork) - fresh MEXICAN chorizo, the Cacique-label DB row (190 cal / 70 g raw), which is what a skillet-browned breakfast casserole uses. The source's own published macros were computed on a DRY SPANISH chorizo basis (see macro_cross_check); the cooking-correct fresh-Mexican basis governs. The vocab bid routes to ground-pork while a dedicated mexican-chorizo-fresh commodity also claims the term (2 of 7, Walmart $2.6786/lb, Cacique 9 oz - the exact DB-label product); split flagged in board_defects_observed, standing vocab wiring not changed by this lane.",
+    "'ground black pepper' -> Black Pepper row: the vocab near-miss flag on 'ground' is spurious here - the Black Pepper row and its DB entry are the ground spice (row note says ground; jalapeno-popper precedent).",
+    "Toppings line ('Pico de gallo, sour cream, and avocado or guacamole') is an unquantified optional serving suggestion; booked as a single optional note line with no grams, excluded from band macros. Sour cream (7 of 7) and avocado (7 of 7) are board-priced if a cook adds them; pico de gallo has no commodity and is enqueued OPTIONAL (southwest precedent, queue already carries the term)."
+  ],
+  "registrar_rulings": [],
+  "ingredients": [
+    {
+      "source_raw": "1 pound chorizo sausage",
+      "item": "Pork Chorizo",
+      "bid": "ground-pork",
+      "board": "weekly",
+      "grams": 624,
+      "buy": "1 lb 6 oz Mexican pork chorizo",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by explicit source WEIGHT (1 lb). Exact 1.4x = 1.4 lb = 22.4 oz, quantized 1 lb 6 oz = 22 oz = 624 g (-1.8%) - closer than either quarter-lb point (1 1/4 = -10.7%, 1 1/2 = +7.1%). Cacique Pork Chorizo label row (190 cal / 9 P / 3 C / 16 F per 70 g RAW; 9 oz tube = 245 g, so 22 oz is about 2 1/2 tubes). Vocab bid ground-pork prices 6 of 7, cheapest Hy-Vee $2.99/lb; the term itself also answers MAPPED via mexican-chorizo-fresh (2 of 7, Walmart $2.6786/lb Cacique) - split flagged, not re-ruled here."
+    },
+    {
+      "source_raw": "½ large onion finely chopped",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 113,
+      "buy": "3/4 large yellow onion, finely chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.4x = 0.7 large, quantized 3/4 large (+7.1% DRIFT NOTED, a 45-cal batch line) x densities large = 150 g -> 112.5 -> 113 g. Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "½ red bell pepper finely chopped",
+      "item": "Red Bell Pepper",
+      "bid": "red-bell-pepper",
+      "board": "recipe",
+      "grams": 90,
+      "buy": "3/4 red bell pepper, finely chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.4x = 0.7, quantized 3/4 pepper (+7.1% DRIFT NOTED, 28-cal batch line) x densities each = 120 g -> 90 g. Board (recipe) 6 of 7, cheapest Sam's Club $0.83/each."
+    },
+    {
+      "source_raw": "5 cloves garlic minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "recipe",
+      "grams": 21,
+      "buy": "7 cloves garlic, minced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.4x = 7 cloves, zero drift, x densities clove = 3 g -> 21 g. Board (recipe) 5 of 7, cheapest Baker's $0.498/each bulb."
+    },
+    {
+      "source_raw": "8 ounces Pepper Jack cheese shredded",
+      "item": "Pepper Jack Cheese",
+      "bid": "pepper-jack-cheese",
+      "board": "weekly",
+      "grams": 319,
+      "buy": "11 1/4 oz pepper jack cheese, shredded (about 2 3/4 cups)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Weight-anchored. Exact 1.4x = 11.2 oz, quantized 11 1/4 oz = 319 g (+0.4%). USDA monterey-class row (373 cal / 24.5 P / 0.7 C / 30.3 F per 100 g; hatch-green-chile precedent). Board 6 of 7, cheapest Aldi $0.2188/oz block."
+    },
+    {
+      "source_raw": "8 ounces cheddar cheese shredded",
+      "item": "Cheddar Cheese, Shredded",
+      "bid": "cheddar-cheese-shredded",
+      "board": "recipe",
+      "grams": 319,
+      "buy": "11 1/4 oz shredded cheddar cheese (about 2 3/4 cups)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Weight-anchored. Exact 1.4x = 11.2 oz, quantized 11 1/4 oz = 319 g (+0.4%). GV full-fat shred label row (110 cal / 28 g). Recipe-board id answers directly; the bare term 'cheddar cheese' resolves via generic shredded-cheese whose cheapest cell is a mozzarella product - term-vs-map split re-flagged (jalapeno-popper precedent)."
+    },
+    {
+      "source_raw": "4 green onions finely sliced",
+      "item": "Green Onions",
+      "bid": "green-onions",
+      "board": "weekly",
+      "grams": 90,
+      "buy": "6 green onions, finely sliced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.4x = 5.6 stalks, quantized 6 whole (+7.1% DRIFT NOTED - a 30-cal batch line; fractional scallions are not a cook measure) x densities stalk = 15 g -> 90 g. Board 4 of 7, cheapest Family Fare $0.79/each bunch."
+    },
+    {
+      "source_raw": "¼ cup cilantro finely chopped",
+      "item": "Fresh Cilantro",
+      "bid": "cilantro",
+      "board": "weekly",
+      "grams": 5.3,
+      "buy": "1/3 cup fresh cilantro, finely chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.4x = 0.35 cup, quantized 1/3 cup (-4.8%) x densities cup = 16 g -> 5.3 g. Near-zero macro herb. Board 5 of 7, cheapest Aldi $0.89/each bunch."
+    },
+    {
+      "source_raw": "2 jalapeno peppers seeded, deveined, and finely chopped",
+      "item": "Jalapeno",
+      "bid": "jalapenos",
+      "board": "weekly",
+      "grams": 42,
+      "buy": "3 jalapenos, seeded, deveined, and finely chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.4x = 2.8, quantized 3 whole (+7.1% DRIFT NOTED, 12-cal batch line) x densities each = 14 g -> 42 g. Board 6 of 7; the Walmart cheapest cell is the canned EMBASA escabeche product inside the fresh commodity - defect re-flag (jalapeno-popper precedent), fresh cells exist at 5 stores."
+    },
+    {
+      "source_raw": "12 large eggs",
+      "item": "Eggs",
+      "bid": "eggs",
+      "board": "weekly",
+      "grams": 850,
+      "buy": "17 large eggs",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.4x = 16.8, quantized 17 eggs (+1.2%) x densities each = 50 g -> 850 g; printed count and grams agree at the GV label 50 g / 70 cal large egg. Board 7 of 7, cheapest Aldi $1.46/dozen."
+    },
+    {
+      "source_raw": "3 cups half-and-half",
+      "item": "Half and Half",
+      "bid": "half-and-half",
+      "board": "weekly",
+      "grams": 1020,
+      "buy": "4 1/4 cups half and half",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.4x = 4.2 cups, quantized 4 1/4 cups (+1.2%) x cup = 240 g (GV label 2 tbsp = 30 g; NO densities row - FLAGGED) -> 1020 g. DB row 40 cal / 30 g, NOT the Heavy Cream row. Board 7 of 7, cheapest Sam's Club $0.07/floz."
+    },
+    {
+      "source_raw": "½ teaspoon hot sauce",
+      "item": "Hot Sauce",
+      "bid": "hot-sauce",
+      "board": "weekly",
+      "grams": 3.8,
+      "buy": "3/4 tsp hot sauce",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.4x = 0.7 tsp, quantized 3/4 tsp (+7.1% drift noted; zero-cal Frank's label row) x densities tsp = 5 g -> 3.8 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "½ teaspoon ground black pepper",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 1.7,
+      "buy": "3/4 tsp ground black pepper",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.4x = 0.7 tsp, quantized 3/4 tsp (+7.1% drift noted, spice-class) x densities tsp = 2.3 g -> 1.7 g. See ruled_substitutions: the row IS the ground spice. Board 7 of 7."
+    },
+    {
+      "source_raw": "9 corn tortillas quartered",
+      "item": "Corn Tortillas",
+      "bid": "corn-tortillas",
+      "board": "weekly",
+      "grams": 306,
+      "buy": "13 corn tortillas, quartered",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.4x = 12.6, quantized 13 tortillas (+3.2%) x gpu 23.5 g (Guerrero 80-ct pack basis carried by the map) -> 305.5 -> 306 g. Macros on the row's own count basis (label 2 tortillas = 100 cal -> 50 cal each; label 25 g vs pack 23.5 g is label rounding per the row note). Board 3 of 7, cheapest Baker's $0.0561/each."
+    },
+    {
+      "source_raw": "Toppings: Pico de gallo, sour cream, and avocado or guacamole",
+      "item": "Toppings (pico de gallo, sour cream, avocado) - optional serving suggestion",
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "pico de gallo, sour cream, and avocado or guacamole, to serve (optional)",
+      "optional": true,
+      "decision": "optional-note",
+      "notes": "Unquantified optional toppings, excluded from band macros (no gram basis exists to count them honestly). Sour cream 7 of 7 (full-fat commodity) and avocado 7 of 7 are board-priced if added; pico de gallo has no commodity (CAPTURE, 2 candidates across 2 stores) and the term is on the queue as OPTIONAL with this slug attached. No food-DB row invented for pico (southwest precedent)."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [
+    { "term": "pico de gallo", "blocking": false, "why": "unquantified optional topping; no commodity claims the term (CAPTURE, 2 candidates across 2 stores); optional lines are never enqueued blocking (queue entry exists from southwest-ground-turkey-cauliflower-rice-skillet; this slug attached)" }
+  ],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 612, "protein_g": 33, "carbs_g": 17, "fat_g": 46 },
+    "recomputed_per_serving_from_food_db": { "calories": 534.7, "protein_g": 27.1, "carbs_g": 17.4, "fat_g": 39.5 },
+    "protein_gap_pct": -17.9,
+    "calorie_gap_pct": -12.6,
+    "verdict": "PROTEIN GAP EXCEEDS THE 15% INSTRUMENT AND IS EXPLAINED, NOT A PORTION ERROR. The main protein is weight-anchored (1 lb printed; our only drift is -1.8% quantization), so no each-weight assumption exists to be wrong. Rebuilding OUR EXACT line set with USDA dry SPANISH chorizo (455 cal / 24.1 P / 38.3 F / 1.9 C per 100 g) in place of the fresh Mexican Cacique row reproduces the source's published figures almost exactly: 615.6 cal (+0.6%), 32.2 P (-2.4%), 46.4 F (+0.9%), ~15.9 C (-6%). Their nutrition plugin booked dry-cured Spanish chorizo for the string 'chorizo sausage'; the dish as written (browned in a skillet, Mexican breakfast casserole) uses fresh Mexican chorizo, which is the Cacique label row and the product the board prices. Our lower calories and protein are the honest fresh-chorizo build. Southwest documented-divergence precedent; QA should accept this knowingly rather than 'fix' a portion.",
+    "band_check": "computed 534.7 cal in [400, 650] PASS with 115 cal of headroom; carbs 17.4 g <= 35 PASS. The +7.1% quantization drifts sit on sub-50-cal vegetable lines and move the serving by under 8 cal combined."
+  },
+  "loud_flags": [
+    "Protein cross-check gap -17.9% is OUTSIDE the 15% instrument; kept because the identical-basis reconstruction above pins the entire gap on the source's Spanish-vs-Mexican chorizo database mismatch (all four macros reconcile within 6% on their basis). If QA disagrees with that reading, the line to re-examine is the chorizo row, not the portion.",
+    "Butter for greasing the 9x13 dish appears only in the source's instructions, never in its ingredient list (extractor concern); not booked - a greasing film is sub-10-cal per serving and the printed list governs (rule 0, transcribed as printed).",
+    "Source's stated total time excludes its own 6-hour refrigeration step (extractor concern, cosmetic - for the writer)."
+  ],
+  "board_defects_observed": [
+    "Vocab row Pork Chorizo routes bid -> ground-pork (plain unseasoned ground pork, 6 of 7, $2.99/lb) while the board carries a dedicated mexican-chorizo-fresh commodity (2 of 7, Walmart $2.6786/lb, Cacique 9 oz - the exact product of the Cacique DB label row). Seasoned chorizo priced as plain ground pork is a product-concept stretch of exactly the kind rule 1 rejects; flagged for the registrar / match-soundness gate to consider repointing the row's bid to mexican-chorizo-fresh. Standing wiring left unchanged by this lane.",
+    "Term 'cheddar cheese' resolves via the generic shredded-cheese include whose cheapest cell is a Member's Mark MOZZARELLA product - re-flag of the standing term-vs-map split; the cheddar-cheese-shredded recipe-board id answers correctly.",
+    "jalapenos commodity: Walmart cheapest cell is the canned EMBASA escabeche product inside the fresh-pepper commodity (re-flag from jalapeno-popper-chicken-casserole)."
+  ],
+  "densities_followups": [
+    "Half and Half: no densities row; booked at cup = 240 g from the GV label 2 tbsp = 30 g - propose cup 240 / tbsp 15 / floz 30.",
+    "Pepper Jack Cheese: shredded cup = 113 g still has no densities row (re-flag of the hatch-green-chile proposal)."
+  ]
+}

@@ -1,0 +1,241 @@
+{
+  "slug": "southwest-ground-turkey-cauliflower-rice-skillet",
+  "title": "Low Carb Ground Turkey Skillet with Cauliflower Rice",
+  "source_url": "https://upnorthnosh.com/low-carb-ground-turkey-skillet-with-cauliflower-rice/",
+  "source_servings": 3,
+  "target_servings": 14,
+  "scale_factor": 4.6667,
+  "protein": "turkey",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 4.6667x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "Generic '1 lb ground turkey' is booked as the house 93/7 item (93-7-ground-turkey, recipe board, 6 of 7 stores, cheapest Aldi $3.9083/lb) following the two in-run precedents that ruled the IDENTICAL source phrase (keto-turkey-broccoli-cheddar-casserole, turkey-zucchini-noodle-casserole): the only ground-turkey DB row is the 93/7 label, and booking the generic 85/15 commodity's price against 93/7 macros would mismatch both directions. THIS CHOICE IS NOT NEUTRAL HERE - see loud_flags: the source's own fat figure implies 85/15, and the 93/7 booking puts the dish under the calorie floor.",
+    "'1.5 cups cauliflower rice' (a packaged riced product per the source's 'cook per package instructions') is booked as FRESH cauliflower riced at home (cauliflower commodity, 4 of 7 stores, cheapest Fareway $1.98/each) - the board carries no riced/frozen-cauliflower id, home ricing is the budget-house equivalent (the sibling kalyn casserole in this batch rices fresh cauliflower explicitly), and the term resolver's answer for 'cauliflower rice' is a FALSE match to the white-rice commodity (see board_defects_observed). Substitution disclosed; macros identical (same raw vegetable).",
+    "'3 T siracha mayo' (optional) is a two-component house-made topping; booked on the dominant component's bid (mayonnaise, 7 of 7) at mayo density, with the sriracha squeeze (~1 part in 6, sriracha priced 4 of 7) noted rather than split into a second line. Optional, excluded from band macros."
+  ],
+  "registrar_rulings": [],
+  "ingredients": [
+    {
+      "source_raw": "1 lb ground turkey",
+      "item": "93/7 Ground Turkey",
+      "bid": "93-7-ground-turkey",
+      "board": "recipe",
+      "grams": 2155,
+      "buy": "4 3/4 lb (93/7)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by explicit source WEIGHT (1 lb); exact 4.6667x = 4.667 lb quantized to 4 3/4 lb = 2155 g (+1.8%). Jennie-O 93/7 label row (170 cal/112 g). Board (recipe) 6 of 7, cheapest Aldi $3.9083/lb. See ruled_substitutions and loud_flags: the fat-class choice is load-bearing for the calorie floor."
+    },
+    {
+      "source_raw": "2 T olive oil",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 125,
+      "buy": "9 1/4 tbsp (a bit over 1/2 cup)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 4.6667x = 9.33 tbsp quantized to 9 1/4 tbsp x densities 13.5 g/tbsp = 124.9 -> 125 g (-0.9%). Board 7 of 7, cheapest Sam's $0.1879/floz."
+    },
+    {
+      "source_raw": "1 cup frozen spinach",
+      "item": "Frozen Chopped Spinach",
+      "bid": "frozen-chopped-spinach",
+      "board": "recipe",
+      "grams": 404,
+      "buy": "4 3/4 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 4.6667x = 4.67 cups quantized to 4 3/4 cups x densities 85 g/cup = 403.75 -> 404 g (+1.8%). Frozen stays frozen (no form-flip); board (recipe) per ingredient-map, term also priced 7 of 7 via the spinach commodity - both real coverage. USDA row 23 cal/100 g."
+    },
+    {
+      "source_raw": ".5 t cumin",
+      "item": "Ground Cumin",
+      "bid": "ground-cumin",
+      "board": "weekly",
+      "grams": 4.7,
+      "buy": "2 1/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 4.6667x = 2.33 tsp quantized to 2 1/4 tsp x densities 2.1 g/tsp = 4.7 g (-3.6%). Board 7 of 7."
+    },
+    {
+      "source_raw": ".5 t paprika",
+      "item": "Paprika",
+      "bid": "paprika",
+      "board": "recipe",
+      "grams": 5.2,
+      "buy": "2 1/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "2 1/4 tsp x densities 2.3 g/tsp = 5.2 g (-3.6%). Board 7 of 7."
+    },
+    {
+      "source_raw": ".5 t coriander",
+      "item": "Ground Coriander",
+      "bid": "ground-coriander",
+      "board": "weekly",
+      "grams": 4.1,
+      "buy": "2 1/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "2 1/4 tsp x densities 1.8 g/tsp = 4.1 g (-3.6%). Board 4 of 7, cheapest Walmart $0.7331/oz."
+    },
+    {
+      "source_raw": ".5 t onion powder",
+      "item": "Onion Powder",
+      "bid": "onion-powder",
+      "board": "weekly",
+      "grams": 5.4,
+      "buy": "2 1/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "2 1/4 tsp x densities 2.4 g/tsp = 5.4 g (-3.6%). Board 7 of 7."
+    },
+    {
+      "source_raw": ".5 t garlic powder",
+      "item": "Garlic Powder",
+      "bid": "garlic-powder",
+      "board": "weekly",
+      "grams": 7,
+      "buy": "2 1/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "2 1/4 tsp x densities 3.1 g/tsp = 7.0 g (-3.6%). Board 7 of 7."
+    },
+    {
+      "source_raw": "1/4 t cayenne",
+      "item": "Cayenne Pepper",
+      "bid": "cayenne-pepper",
+      "board": "weekly",
+      "grams": 2.3,
+      "buy": "1 1/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.17 tsp quantized to 1 1/4 tsp x densities 1.8 g/tsp = 2.3 g (+7.1% drift noted; sub-1-cal line). Board 6 of 7."
+    },
+    {
+      "source_raw": "1 T dried parsley",
+      "item": "Dried Parsley",
+      "bid": "dried-parsley",
+      "board": "weekly",
+      "grams": 7.1,
+      "buy": "4 3/4 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "4 3/4 tbsp x densities 1.5 g/tbsp = 7.1 g (+1.8%). Board 7 of 7."
+    },
+    {
+      "source_raw": "1 t salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 28.5,
+      "buy": "4 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "4 3/4 tsp x densities 6 g/tsp = 28.5 g (+1.8%). Zero-macro. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/4 t black pepper",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 2.9,
+      "buy": "1 1/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.17 tsp quantized to 1 1/4 tsp x densities 2.3 g/tsp = 2.9 g (+7.1% drift noted; immaterial). Board 7 of 7."
+    },
+    {
+      "source_raw": "1 red bell pepper",
+      "item": "Red Bell Pepper",
+      "bid": "red-bell-pepper",
+      "board": "recipe",
+      "grams": 540,
+      "buy": "4 1/2 red bell peppers, finely diced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 4.67 peppers quantized to 4 1/2 x densities each=120 g = 540 g (-3.6%). Board (recipe) 6 of 7, cheapest Sam's $0.83/each. USDA row 31 cal/100 g."
+    },
+    {
+      "source_raw": "1 small shallot",
+      "item": "Shallots",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 150,
+      "buy": "5 small shallots, finely diced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 4.67 quantized to 5 small (+7.1% drift noted on a 7-cal-per-serving line). Grams at small=30 g - densities.json has NO Shallots row, USDA small-bulb basis, FLAGGED for the sanctioned densities route. bid onions per the STANDING BRAD RULING recorded in the shakedown wave-1 audit ('shallots priced as onions', disclosed) and the ingredient-map's own Shallots -> onions entry; the separate shallots commodity (4 of 7, $3.99/lb - a 5x price class) exists and is noted for the match-soundness gate, but the standing ruling governs. DB row USDA shallots 72 cal/100 g."
+    },
+    {
+      "source_raw": "1.5 cups cauliflower rice",
+      "item": "Cauliflower",
+      "bid": "cauliflower",
+      "board": "weekly",
+      "grams": 749,
+      "buy": "7 cups riced (from about 1 1/2 medium heads)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 4.6667x = 7 cups x USDA 107 g/cup = 749 g. See ruled_substitutions for the fresh-riced booking and board_defects_observed for the resolver's false rice match. Extractor concern acknowledged: the source's step 8 ('scoop 1 cup per bowl') implies 3 cups, not the printed 1.5; the PRINTED ingredient line governs (rule 0 - transcribed as printed), and the delta is a 13-cal-per-serving question either way. Board 4 of 7, cheapest Fareway $1.98/each."
+    },
+    {
+      "source_raw": "3 T siracha mayo (optional)",
+      "item": "Sriracha Mayo (optional topping)",
+      "bid": "mayonnaise",
+      "board": "weekly",
+      "grams": 182,
+      "buy": "14 tbsp sriracha mayo (mayo with a squeeze of sriracha), optional",
+      "optional": true,
+      "decision": "mapped-optional",
+      "notes": "OPTIONAL topping, excluded from band macros. exact 4.6667x = 14 tbsp x mayo densities 13 g/tbsp = 182 g on the dominant component (see ruled_substitutions). If counted: roughly +88 cal / +10 g fat per serving - the single biggest lever in the source's own published figures, see the cross-check."
+    },
+    {
+      "source_raw": "3/4 cup shredded lettuce (optional)",
+      "item": "Lettuce (optional garnish)",
+      "bid": "lettuce",
+      "board": "weekly",
+      "grams": 252,
+      "buy": "3 1/2 cups shredded, optional",
+      "optional": true,
+      "decision": "mapped-optional",
+      "notes": "OPTIONAL garnish, excluded from band macros. exact 4.6667x = 3.5 cups x USDA 72 g/cup shredded iceberg = 252 g (no densities row - FLAGGED). lettuce commodity 6 of 7, cheapest Family Fare $0.9975/each. NO food-DB row added (optional-only line, ~2.5 cal/serving if counted; flagged rather than invented)."
+    },
+    {
+      "source_raw": "6 T pico de gallo (optional)",
+      "item": "Pico de Gallo (optional garnish)",
+      "bid": null,
+      "board": null,
+      "grams": 420,
+      "buy": "1 3/4 cups, optional",
+      "optional": true,
+      "decision": "optional-null",
+      "notes": "OPTIONAL garnish, excluded from band macros. bid null: price-ingredient returns CAPTURE - no commodity claims the term, 2 candidates across 2 stores; term enqueued OPTIONAL (never blocking). grams at salsa-class 15 g/tbsp (no densities row - FLAGGED). NO food-DB row added; ~10 cal/serving on a salsa-class basis if counted."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [
+    { "term": "pico de gallo", "blocking": false, "why": "optional garnish, 28 tbsp at 14 servings; no commodity claims the term (CAPTURE, 2 candidates across 2 stores); optional lines are never enqueued blocking" }
+  ],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 476, "protein_g": 33, "carbs_g": 15, "fat_g": 33 },
+    "recomputed_per_serving_from_food_db": { "calories": 360.1, "protein_g": 31.7, "carbs_g": 9.2, "fat_g": 20.2 },
+    "protein_gap_pct": -3.9,
+    "calorie_gap_pct": -24.3,
+    "verdict": "PROTEIN PASSES (-3.9%), so per rule 6 the portions are sound - no each-weight error exists (the protein is weight-anchored at 1 lb / 3 servings). The 116-cal gap is FAT, not portion: their 33 g fat vs our 20.2 g. Two identifiable, compatible explanations on their side: (a) fattier turkey - 85/15 raw carries ~8 g more fat per 151 g serving (~72 cal) than the house 93/7 booked here; (b) their figure counts the 'optional' sriracha mayo (+10 g fat, +88 cal), which their own step 8 applies without qualification. Either alone roughly closes the gap; both together overshoot slightly. Their carbs 15 vs our 9.2 likewise suggests they counted the pico/lettuce garnishes. Our recompute stands as the honest non-optional 93/7 build.",
+    "band_check": "computed 360.1 cal in [400, 650] FAIL - 40 cal UNDER the floor. Carbs 9.2 g <= 35 PASS. Alternates for the gate's owner: counting the source-intended toppings gives ~463 cal (PASS); an 85/15 ground-turkey build gives ~432 cal without toppings (PASS) but has NO food-DB row (no verifiable 85/15 label on disk; rule 2 forbids inventing one). See loud_flags."
+  },
+  "loud_flags": [
+    "BAND FAIL AS MAPPED: 360 cal vs the 400 floor. This is a fat-class and topping-counting question, not a portion error (protein cross-check agrees within 4%). The in-run precedent for the identical generic phrase ('1 lb ground turkey' -> 93/7) was followed for consistency, but here the choice is decisive: the source's own fat figure implies 85/15 turkey and/or counted toppings. THREE honest paths, none of them mine to rule: (1) capture a real 85/15 ground-turkey label (meal-macro lane / Brad) and re-map to the generic ground-turkey commodity (7 of 7, $2.6633/lb - CHEAPER than 93/7, and arguably the truer generic-term match) -> ~432 cal PASS; (2) promote the source's step-8 toppings from optional -> ~463 cal PASS; (3) reject the recipe at the gate. Parking this decision in QA rather than silently fudging a row.",
+    "densities.json follow-ups (sanctioned route): Shallots small=30/each=40, Lettuce cup shredded=72, Pico de Gallo tbsp=15.",
+    "Title note: candidate slug says 'southwest'; the source page title does not (extractor concern) - cosmetic, for the writer."
+  ],
+  "board_defects_observed": [
+    "Term 'cauliflower rice' resolves to the RICE commodity (include /\\brice\\b/) - a false product-concept match (white rice is not cauliflower); the cauliflower commodity's include /cauliflower/ also claims the sibling phrasings 'riced cauliflower' and 'frozen cauliflower', so resolver priority hands the worse answer to the most common phrasing. Flagged for the match-soundness gate.",
+    "Shallots price-routing split: ingredient-map (and the standing Brad ruling) route Shallots -> onions ($0.7967/lb class) while a live shallots commodity prices 4 of 7 at $3.99/lb. If variety pricing is meant to govern (red-onion precedent), the standing ruling deserves a re-look; recorded, not changed."
+  ]
+}

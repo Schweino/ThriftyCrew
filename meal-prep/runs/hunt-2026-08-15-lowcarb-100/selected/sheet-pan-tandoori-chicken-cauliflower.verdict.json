@@ -1,0 +1,15 @@
+{
+  "slug": "sheet-pan-tandoori-chicken-cauliflower",
+  "name": "Sheet-Pan Tandoori Chicken and Cauliflower",
+  "protein": "chicken",
+  "cuisine": "Indian",
+  "verdict": "KEEP",
+  "dupe_of": null,
+  "fit": "PASS",
+  "fit_evidence": "590 cal / 20g carb per serving sits inside the 400-650 cal band and under the 35g carb ceiling; oven sheet-pan dinner (no rice/pasta/potato/bread), scales to 14 with weigh-and-divide across sheet pans, no seafood.",
+  "evidence": "No catalog or accepted-slugs duplicate. The catalog's Indian/South-Asian chicken dishes are all saucy braised curries (chicken-tikka-masala-burrito, slow-cooker-chicken-tikka-masala-rice-bowls, chicken-madras-curry, cape-malay-chicken-curry). This is a dry-roasted yogurt/coconut-marinated tandoori sheet-pan bake - a different method and plate from a simmered masala curry.",
+  "cross_protein_collision_notes": [
+    "Structurally 'yogurt/coconut tandoori-marinade + cauliflower + onion roasted on a sheet pan' - would collide with any sheet-pan tandoori TURKEY, PORK, or PANEER version in another selector's pool. Decider should watch for a same-dish-different-protein tandoori sheet-pan twin.",
+    "Only near-neighbor by spice is a tandoori/tikka chicken curry; distinct here because it is dry-roasted, not sauced - flag only if a second tandoori CHICKEN candidate (curry or sheet-pan) also lands."
+  ]
+}

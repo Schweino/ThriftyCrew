@@ -4,9 +4,9 @@
     "source_url":  "",
     "protein":  "",
     "state":  "waved",
-    "wave":  3,
+    "wave":  4,
     "created":  "2026-08-16T01:15:20",
-    "updated":  "2026-08-16T12:35:08",
+    "updated":  "2026-08-16T13:24:18",
     "terms":  [
 
               ],
@@ -58,7 +58,7 @@
                         "detail":  ""
                     },
                     {
-                        "state":  "qa-passed",
+                        "state":  "waved",
                         "at":  "2026-08-16T06:19:49",
                         "by":  "source-qa",
                         "detail":  ""
@@ -70,7 +70,7 @@
                         "detail":  "wave 2"
                     },
                     {
-                        "state":  "qa-passed",
+                        "state":  "waved",
                         "at":  "2026-08-16T12:10:50",
                         "by":  "auditor",
                         "detail":  "audit-clean, trimmed out of blocked wave 2"
@@ -80,6 +80,24 @@
                         "at":  "2026-08-16T12:35:08",
                         "by":  "wave-close",
                         "detail":  "wave 3"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T13:24:18",
+                        "by":  "auditor",
+                        "detail":  "held on Brad ruling 2026-08-16: the board carries no FRESH broccoli price, only frozen florets. The dish is a sheet-pan roast whose prose correctly argues fresh caramelizes where frozen steams, so pricing it off frozen either understates cost ~9% or forces a worse recipe. Returns when a fresh-broccoli board price exists."
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T13:50:00",
+                        "by":  "source-qa",
+                        "detail":  "re-QA PASS after the fresh-produce bid fix: commodity-registrar ruled REUSE of the already-priced weekly ids broccoli and spinach (7/7 stores each), vocabulary rebid, spec re-costed and re-anchored. Prose and buy line now agree; macros unchanged."
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T14:05:00",
+                        "by":  "wave-close",
+                        "detail":  "wave 4"
                     }
                 ]
 }

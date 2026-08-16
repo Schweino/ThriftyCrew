@@ -1,0 +1,21 @@
+{
+  "slug": "low-carb-ground-beef-stroganoff-skillet",
+  "name": "Low-Carb Ground Beef Stroganoff Skillet (Noodleless)",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "borderline": true,
+  "fit": {
+    "status": "FIT",
+    "src_cal": 466,
+    "src_carbs": 5.86,
+    "evidence": "466 cal sits mid-band (400-650); 5.86g total carbs for the stroganoff alone, ~8g net even served over fried cabbage or cauliflower rice - deep under the 35g ceiling with headroom. Weigh-and-divide skillet scales cleanly to 14 servings; no seafood; budget meal-prep dinner. Clears every condition."
+  },
+  "dupe_check": {
+    "closest_catalog": "ground-beef-stroganoff-pasta (Ground Beef Stroganoff Pasta)",
+    "reason": "Matches on three of four axes vs the catalog dish - protein (ground beef), sauce family (sour-cream/mushroom/Worcestershire stroganoff), and skillet method - differing only on starch: the catalog recipe is pasta-based, this is noodleless served over cabbage/cauliflower rice. Ruled KEEP because the noodleless low-carb reformulation is exactly what this run adds and the carb profile is a different plate (5.86g here vs a pasta dinner), analogous to 'beef chili' vs 'beef chili mac'. Flagged BORDERLINE because the protein+sauce core is genuinely identical to the existing pasta stroganoff and a reasonable reviewer could call it the same dinner minus the noodles - the decider should confirm the noodleless-vs-pasta distinction is enough to seat both."
+  },
+  "cross_protein_twins": [
+    "onepot-ground-turkey-stroganoff (turkey) is already in the catalog as the same-dish-different-protein twin; any low-carb/noodleless TURKEY stroganoff in another selector's pool would be structurally identical to this candidate - flag for the cross-protein merge pass.",
+    "pork-tenderloin-stroganoff-over-egg-noodles (pork) also exists but is a noodle-based tenderloin medallion dish, not a ground-meat structural twin of this skillet."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "chicken-bacon-ranch-cauliflower-bake",
+  "verdict": "fail",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "ingredient-coverage",
+      "severity": "blocking",
+      "detail": "RE-QA: the prior blocking finding is unresolved. The built spec (db\recipes\\chicken-bacon-ranch-cauliflower-bake.json) and card (db\built\\chicken-bacon-ranch-cauliflower-bake.body.html) still do not exist anywhere in db\\. The one repair cycle that ran between the two QA passes was the pricing unpark only (state history: parked 'waiting on: bacon bits' 2026-08-15 20:43 -> priced 2026-08-16 06:37, by derive); the writer/build stage the prior fail was routed to never executed, so there is no spec or card to attest against the source. Passing would advance a recipe with no card into the wave; that cannot be a pass. For the record, both anchors were available and agree verbatim (title 'Keto Chicken Bacon Ranch Casserole', 3 servings, all 8 ingredient lines, all 6 steps, 584 kcal / 42 g protein), and the mapped file covers all 8 source ingredients at one consistent 4.6667x ratio with per-line quantization drift under 5%. Everything upstream of the missing spec is faithful.",
+      "owner": "writer"
+    }
+  ],
+  "notes": "Live page (creationsbykara.com) fetched successfully on this re-QA and matches the extraction exactly, so both anchors were in hand. This is the second consecutive fail for the same defect: the spec/card were never built. The extraction and mapping are sound; if the terminal rejected-qa outcome can be overridden by the orchestrator, the only work actually needed is running the writer/build stage, after which fidelity can finally be checked for real."
+}

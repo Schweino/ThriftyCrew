@@ -1,0 +1,12 @@
+{
+  "slug": "creamy-smothered-onion-pork-chops-skillet",
+  "name": "Creamy Smothered Onion Pork Chops (Keto Skillet)",
+  "protein": "pork",
+  "verdict": "DUPE",
+  "condition_fit": "FIT",
+  "condition_notes": "483 cal (in 400-650 band), 4g carbs (<=35g), pork/no seafood, weigh-and-divide skillet scales to 14 - clears all conditions; disposition is dedup, not fit.",
+  "dupe_of": "southern-smothered-pork-chops-and-rice",
+  "reason": "Same dinner as the catalog's Southern Smothered Pork Chops and Rice - seared pork chops smothered in an onion + heavy-cream + chicken-broth gravy; 3 of 4 identity axes match (pork chops, onion-cream smother sauce, skillet-sear method), and the only difference is dropping the rice starch to make it low-carb, which is the run's premise rather than a distinguishing plate.",
+  "cross_protein_collision_notes": "Structurally identical to any 'smothered onion' treatment on another protein - a smothered-onion-gravy chicken, cube steak/salisbury beef, or turkey version in another selector's pool would be the same plate with the protein swapped; flag for the cross-protein merge pass.",
+  "borderline": false
+}

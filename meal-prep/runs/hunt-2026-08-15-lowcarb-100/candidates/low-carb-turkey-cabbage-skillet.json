@@ -1,0 +1,31 @@
+{
+  "name": "Low-Carb Turkey and Cabbage Skillet",
+  "slug": "low-carb-turkey-cabbage-skillet",
+  "protein": "ground-turkey",
+  "cuisine": "American",
+  "method": "skillet",
+  "source_url": "https://www.carbmanager.com/recipe-detail/ug:349e45ef-151f-b3fe-1c9c-c02e445f080a/low-carb-turkey-and-cabbage-skillet",
+  "source_servings": 4,
+  "src_cal": 469,
+  "src_carbs": 8.7,
+  "src_protein": 35.8,
+  "src_fat": 33,
+  "ingredients": [
+    "Ground Turkey: 14 ounce",
+    "Bacon: 4 slice - 6\" long",
+    "Cabbage: 3 cup",
+    "Olive Oil: 1 tablespoon",
+    "Garlic: 1 clove",
+    "Red Onion: 1 tablespoon",
+    "Cheddar Cheese: 1 cup, grated",
+    "Scallions: 1 large",
+    "Smoked Paprika: 1 tsp",
+    "Cilantro: 1 tablespoon",
+    "Vegetable Broth: 2/3 cup",
+    "Black Pepper: 1/8 teaspoon",
+    "Salt: 1/8 teaspoon"
+  ],
+  "unmapped": ["scallions", "smoked-paprika", "cilantro", "vegetable-broth"],
+  "why": "Ground-turkey stovetop skillet dead-center in band on the source's own numbers: 469 cal / 8.7g carbs / 35.8g protein per serving. Structurally low-carb - turkey + bacon + cabbage + melted cheddar, no rice/pasta/potato/bean base - so the 35g carb ceiling is cleared with huge margin while calories land in the 450-600 sweet spot. High protein for the calories fits the catalog identity. Weigh-and-divide skillet scales cleanly from 14 oz turkey to ~3 lb for 14 servings. Distinct from the existing turkey-cabbage-roll-soup (a tomato-rice soup); this is a dry cheesy cabbage saute. PRICER-LANE value: carries four genuinely-absent board ingredients (scallions, smoked paprika, cilantro, vegetable broth) to prove the new-commodity queue.",
+  "confidence": "high on nutrition and ingredients - read the published macros and full ingredient list from the source page. MEDIUM on source_servings: Carb Manager did not surface an explicit yield on the fetched page; 4 is the best estimate from the ingredient quantities (14 oz turkey), so treat servings as needing a re-check at spec time."
+}

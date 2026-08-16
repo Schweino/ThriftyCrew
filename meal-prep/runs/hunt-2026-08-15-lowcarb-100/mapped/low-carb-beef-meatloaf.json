@@ -1,0 +1,254 @@
+{
+  "slug": "low-carb-beef-meatloaf",
+  "title": "The Best Easy Low Carb Meatloaf (with Beef)",
+  "source_url": "https://www.freshfitkitchen.com/the-best-easy-low-carb-meatloaf-recipe-with-beef/",
+  "source_servings": 6,
+  "target_servings": 14,
+  "scale_factor": 2.3333,
+  "protein": "beef",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or label unit weights) so the two agree by construction; quantities quantized to house quarters, drift from the exact 2.3333x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "Coconut Sugar -> Brown Sugar, SOURCE-SANCTIONED: the line itself prints '2 tbsp. Coconut Sugar (Brown sugar also fine)'. Coconut sugar has no board commodity (the term resolver would misfire it into plain granulated sugar's price class); brown-sugar is a real commodity, 6 of 7 stores, with a label-accurate DB row. Macro effect is nil (both ~98 C/100 g).",
+    "Instructions-only olive oil BOOKED: step 1 sautes the vegetables in 1 tbsp olive oil that never appears on the ingredient list (extractor concern). It goes in the pot, so it is counted and printed (2 1/4 tbsp scaled); the source's own calculator almost certainly omitted it (+19 cal/serving on our side, disclosed in the cross-check)."
+  ],
+  "registrar_rulings": [
+    {
+      "proposed_id": "ground-beef-90-10",
+      "for_item": "90/10 Ground Beef",
+      "status": "PENDING - proposal drafted, registrar not yet consulted (mapper lane cannot invoke the registrar agent; orchestrator must route it)",
+      "mapper_sweep_evidence": "Board carries ground-beef-8020 and ground-beef-93-7 but NOTHING between: term '90/10 ground beef' is ABSENT, 'lean ground beef' is CAPTURE (17 candidates across 4 stores in today's captures), plain 'ground beef' is CAPTURE (25 candidates, 2 stores). The recipe's author explicitly pins the lean point: '90% lean - do not use leaner than 90% or higher fat than 85%'. Mapping to 93-7-ground-beef would defy the author's own instruction AND deflate the main protein 15% (170 vs 200 cal/4 oz); mapping to 8020 defies it the other way (+43%). Lean-point flips are the leg-quarters-are-not-thighs rejection class.",
+      "meanwhile": "ingredient maps item_id null (safe pantry-static pricing); term '90/10 ground beef' enqueued BLOCKING - it is the main protein. 90/10 is a standard meat-case lean point at Walmart/Sam's/Hy-Vee class stores, so carriage is plausible; the pricer rules."
+    },
+    {
+      "proposed_id": "unsweetened-ketchup",
+      "for_item": "Unsweetened Ketchup",
+      "status": "PENDING - proposal drafted, registrar not yet consulted",
+      "mapper_sweep_evidence": "The term resolver claims 'unsweetened ketchup' via the generic ketchup commodity's /ketchup/ include, but that is a price-class stretch, not coverage: regular ketchup prices $0.05/oz while the no-sugar-added class (Primal Kitchen, the source's named brand; Heinz No Sugar Added) sells at a multiple of that. The estate has ALREADY split exactly this concept once: BBQ Sauce (Sugar Free) -> sugar-free-bbq-sauce is its own recipe-board commodity, separate from bbq-sauce. Sugar-content flips are the juice-drink-is-not-juice rejection class - and this one is also a macro flip (2 C vs 27 C per 100 g would move the topping's carbs 3.5 g/serving).",
+      "meanwhile": "ingredient maps item_id null; term 'unsweetened ketchup' enqueued BLOCKING (the topping is 1 1/4 cups, not garnish). Heinz No Sugar Added is a mainstream shelf item, so carriage is plausible; the pricer rules."
+    }
+  ],
+  "ingredients": [
+    {
+      "source_raw": "1/2 cup Onion finely chopped",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 144,
+      "buy": "1 1/4 cups finely chopped onion",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 2.3333x = 1.167 cups, quantized 1 1/4 cups (+7.1% drift, noted) x densities 115 g/cup = 143.75 -> 144 g. Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "1/2 cup carrot finely grated",
+      "item": "Carrots",
+      "bid": "carrots",
+      "board": "weekly",
+      "grams": 138,
+      "buy": "1 1/4 cups finely grated carrot",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "quantized 1 1/4 cups (+7.1%, noted) x densities 110 g/cup = 137.5 -> 138 g. Board 7 of 7, cheapest Sam's $0.912/lb. DB row Carrots (USDA raw, 41 cal/100 g)."
+    },
+    {
+      "source_raw": "1 tbsp. garlic minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 19,
+      "buy": "2 1/4 tbsp minced garlic (about 6 cloves)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "quantized 2 1/4 tbsp (-3.6%) x densities 8.5 g/tbsp = 19.1 -> 19 g. Board 5 of 7."
+    },
+    {
+      "source_raw": "1.5 lb Ground Beef 90% lean- do not use leaner than 90% or higher fat than 85%",
+      "item": "90/10 Ground Beef",
+      "bid": null,
+      "board": null,
+      "grams": 1588,
+      "buy": "3 1/2 lb 90% lean (90/10) ground beef",
+      "optional": false,
+      "decision": "mapped-null-pending-registrar",
+      "notes": "Main protein anchored by source WEIGHT, exact 2.3333x = 3.5 lb = 1588 g, zero drift; printed weight and grams agree. bid null: no commodity covers the 90/10 lean point and no stage mints an id - registrar proposal ground-beef-90-10 recorded above, term enqueued BLOCKING. Deliberately NOT ground-beef-93-7 (author forbids leaner than 90; -15% calories on the main protein) and NOT ground-beef-8020 (author forbids fattier than 85; +43%). NEW DB row 90/10 Ground Beef (Member's Mark label 4 oz raw = 200 cal / 23 P / 0 C / 11 F; USDA generic agrees within rounding)."
+    },
+    {
+      "source_raw": "1/2 cup Quick Oats",
+      "item": "Quick Oats",
+      "bid": "oatmeal",
+      "board": "weekly",
+      "grams": 100,
+      "buy": "1 1/4 cups quick oats",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "The oatmeal commodity's own include pattern /quick\\s+oats/ claims the term (board-sanctioned, monterey-jack precedent), 7 of 7 stores, cheapest Sam's $0.0499/oz. Quantized 1 1/4 cups (+7.1%, noted) at the label 1/2 cup = 40 g -> cup = 80 g -> 100 g. NEW DB row Quick Oats (Quaker label, 150 cal / 5 P / 27 C / 3 F per 40 g). This one line is 4.8 g of the 15.8 g carbs/serving - it is why the page's 'low carb' title carries a 19 g label, transcribed as printed by the extractor."
+    },
+    {
+      "source_raw": "1/4 cup Milk",
+      "item": "Milk",
+      "bid": "milk",
+      "board": "weekly",
+      "grams": 138,
+      "buy": "1/2 cup plus 1 tbsp milk",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 2.3333x = 0.583 cup = 9.33 tbsp, printed as the composite 1/2 cup plus 1 tbsp = 9 tbsp (-3.6%) x densities 245 g/cup basis = 137.8 -> 138 g. Board 7 of 7, cheapest Walmart $2.816/gallon. FLAG: the estate's only Milk DB row is the Fairlife FAT-FREE ultrafiltered label (80 cal/cup, 13 P); whole milk would book ~150 cal/cup. Stakes here are 9 tbsp across 14 servings (about 3 cal/serving either way), macro-immaterial, so the existing row is used as siblings did - but the row's skim basis is worth a house decision someday."
+    },
+    {
+      "source_raw": "1 tsp. Worcestershire",
+      "item": "Worcestershire Sauce",
+      "bid": "worcestershire",
+      "board": "weekly",
+      "grams": 13,
+      "buy": "2 1/4 tsp Worcestershire",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "quantized 2 1/4 tsp (-3.6%) x densities 5.7 g/tsp = 12.8 -> 13 g. Board 6 of 7, cheapest Hy-Vee $0.10/floz."
+    },
+    {
+      "source_raw": "1 tbsp. Dijon",
+      "item": "Dijon Mustard",
+      "bid": "dijon-mustard",
+      "board": "weekly",
+      "grams": 34,
+      "buy": "2 1/4 tbsp Dijon mustard",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "quantized 2 1/4 tbsp (-3.6%) x densities 15 g/tbsp = 33.75 -> 34 g. Board 6 of 7, cheapest Aldi $0.1242/oz. DB row Dijon (USDA, 66 cal/100 g)."
+    },
+    {
+      "source_raw": "1 tbsp. Tomato Paste",
+      "item": "Tomato Paste",
+      "bid": "tomato-paste",
+      "board": "weekly",
+      "grams": 36,
+      "buy": "2 1/4 tbsp tomato paste",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "quantized 2 1/4 tbsp (-3.6%) x densities 16 g/tbsp = 36 g. Board 7 of 7, cheapest Walmart $0.1017/oz. DB row GV label (30 cal/33 g)."
+    },
+    {
+      "source_raw": "2 tsp. Salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 29,
+      "buy": "4 3/4 tsp salt",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "quantized 4 3/4 tsp (+1.8%) x densities 6 g/tsp = 28.5 -> 29 g. Zero-macro. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 tsp. Pepper",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 5,
+      "buy": "2 1/4 tsp black pepper",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "quantized 2 1/4 tsp (-3.6%) x densities 2.3 g/tsp = 5.2 -> 5 g (13 cal batch, immaterial). Board 7 of 7."
+    },
+    {
+      "source_raw": "1 large Egg",
+      "item": "Eggs",
+      "bid": "eggs",
+      "board": "weekly",
+      "grams": 100,
+      "buy": "2 large eggs",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 2.3333x = 2.33 eggs; eggs are integers, printed 2 (-14.3% drift, noted - binder line, 140 vs 163 cal batch, 1.6 cal/serving, macro-immaterial and the printed measure and grams agree at 2 x 50 g = 100 g). Board 7 of 7, cheapest Aldi $1.46/dozen."
+    },
+    {
+      "source_raw": "1/2 cup Unsweetened Ketchup (Primal Kitchen Brand recommended)",
+      "item": "Unsweetened Ketchup",
+      "bid": null,
+      "board": null,
+      "grams": 340,
+      "buy": "1 1/4 cups unsweetened ketchup (For Topping)",
+      "optional": false,
+      "decision": "mapped-null-pending-registrar",
+      "notes": "quantized 1 1/4 cups (+7.1%, noted) at the Primal Kitchen label 17 g/tbsp = 20 tbsp = 340 g; printed measure and grams agree on the label basis. bid null: see registrar_rulings (unsweetened-ketchup) - the generic ketchup commodity's include claims the term but regular ketchup is a different price class AND a different food (27 C vs 2 C per 100 g; booking regular ketchup here would add ~3.5 g carbs/serving to a recipe sold as low carb). Term enqueued BLOCKING. NEW DB row Unsweetened Ketchup (Primal Kitchen label, 10 cal / 2 C per tbsp)."
+    },
+    {
+      "source_raw": "1 tbsp. Dijon Mustard (For Topping)",
+      "item": "Dijon Mustard",
+      "bid": "dijon-mustard",
+      "board": "weekly",
+      "grams": 34,
+      "buy": "2 1/4 tbsp Dijon mustard (For Topping)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "second Dijon line (topping section), kept separate to trace to the extraction. Same basis as the binder line: 34 g."
+    },
+    {
+      "source_raw": "2 tbsp. Coconut Sugar (Brown sugar also fine)",
+      "item": "Brown Sugar",
+      "bid": "brown-sugar",
+      "board": "weekly",
+      "grams": 64,
+      "buy": "4 3/4 tbsp brown sugar (For Topping)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "SOURCE-SANCTIONED substitution, see ruled_substitutions. Quantized 4 3/4 tbsp (+1.8%) x densities 13.5 g/tbsp = 64.1 -> 64 g. Board 6 of 7, cheapest Aldi $0.925/lb. DB row Brown Sugar (USDA, 380 cal / 98 C per 100 g). This line is 4.5 g of the 15.8 g carbs/serving."
+    },
+    {
+      "source_raw": "(instructions step 1) 1 tbsp. olive oil",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 30,
+      "buy": "2 1/4 tbsp olive oil (for sauteing the vegetables)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Instructions-only line booked deliberately, see ruled_substitutions - it goes in the pot. Quantized 2 1/4 tbsp (-3.6%) x densities 13.5 g/tbsp = 30.4 -> 30 g. Board 7 of 7."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "90/10 Ground Beef (Member's Mark label, 4 oz raw / 113 g = 200 cal / 23 P / 0 C / 11 F; USDA generic 90/10 raw agrees within rounding)",
+    "Quick Oats (Quaker label, 1/2 cup dry / 40 g = 150 cal / 5 P / 27 C / 3 F)",
+    "Unsweetened Ketchup (Primal Kitchen label, 1 tbsp / 17 g = 10 cal / 0 P / 2 C / 0 F; distinct from the regular Ketchup row, BBQ-sugar-free split precedent)"
+  ],
+  "pricing_terms_needed": [
+    { "term": "90/10 ground beef", "blocking": true, "why": "the main protein, 3 1/2 lb; board has 80/20 and 93/7 ids but nothing covering the author's mandated 85-90% lean point; registrar proposal ground-beef-90-10 pending" },
+    { "term": "unsweetened ketchup", "blocking": true, "why": "the topping, 1 1/4 cups; generic ketchup include claims the term but the no-sugar-added class is a different product and price class (sugar-free-bbq-sauce split precedent); registrar proposal unsweetened-ketchup pending" }
+  ],
+  "new_commodity_proposals": [
+    {
+      "proposed_id": "ground-beef-90-10",
+      "for_item": "90/10 Ground Beef",
+      "status": "flagged-for-registrar",
+      "registrar_ruling": "NOT YET OBTAINED - see registrar_rulings; item maps null meanwhile (pantry-static, safe)."
+    },
+    {
+      "proposed_id": "unsweetened-ketchup",
+      "for_item": "Unsweetened Ketchup",
+      "status": "flagged-for-registrar",
+      "registrar_ruling": "NOT YET OBTAINED - see registrar_rulings; item maps null meanwhile (pantry-static, safe)."
+    }
+  ],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 585, "protein_g": 49, "carbs_g": 19, "fat_g": 29 },
+    "computed_per_serving": { "calories": 308.6, "protein_g": 25.9, "carbs_g": 15.8, "fat_g": 14.6 },
+    "protein_gap_pct": -47.1,
+    "calorie_gap_pct": -47.2,
+    "verdict": "PROTEIN GAP -47.1%, far outside the 15% instrument - but every portion here is an explicit printed source measure (1.5 lb beef stated by weight; no each-weight assumption exists to re-examine), and the SOURCE'S OWN LABEL IS INTERNALLY IMPOSSIBLE: 49 g protein x 6 servings = 294 g protein from a batch whose entire ingredient list contains ~155 g (1.5 lb of 90/10 beef carries 138 g protein; oats, egg, milk and everything else add ~17 g). Their 585 cal x 6 = 3,510 cal likewise cannot be assembled from these ingredients even booking 80/20 beef (~2,350 cal max). The published figures would fit a DOUBLED 3 lb meat loaf; the printed recipe is 1.5 lb. Our computed numbers are the honest read of the page's printed measures, cross-footed line by line above.",
+    "band_check": "computed 308.6 cal FAILS the [400, 650] floor by 91 cal. No honest row choice closes it: even the author's fattiest sanctioned beef (85/15) adds only ~35 cal/serving (~344). Carbs 15.8 g <= 35 PASS but irrelevant. Do NOT adjust numbers to fit - this recipe as printed cannot meet the run's calorie floor at the source's own serving size, and RETIREMENT VIA rejected-qa IS RECOMMENDED once the auditor confirms. Mapped and enqueued per lane mechanics; flagged here so no writer effort is wasted."
+  },
+  "loud_flags": [
+    "BAND FAIL, called out loudly: 308.6 cal/serving vs a 400 floor, with the source's published 585/49P shown to be internally impossible arithmetic (see macro_cross_check). Recommend rejected-qa retirement; the two blocking queue terms (90/10 ground beef, unsweetened ketchup) are still real term-gaps whose verdicts benefit future recipes, which is why they were enqueued rather than skipped.",
+    "Milk DB row is the Fairlife fat-free label serving as the house generic milk row - immaterial here (3 cal/serving) but a standing basis question worth settling."
+  ],
+  "board_defects_observed": [
+    "Term resolver misfire: 'coconut sugar' answers via the granulated sugar commodity (/\\bsugar\\b/ include) - coconut sugar is a premium product at several times granulated's price class; any future recipe writing that term un-substituted would misprice. Not exercised here (source sanctioned brown sugar).",
+    "Plain 'ground beef' and 'lean ground beef' are both CAPTURE-tier terms claimed by no commodity while ground-beef-8020 and ground-beef-93-7 both exist - a term-resolution gap around the highest-volume protein in American recipes; an include-pattern review on the two existing ids (plus the proposed 90/10 id) would close it, via the match-soundness gate, not this run."
+  ],
+  "densities_followups": [
+    "Quick Oats: no densities row; propose cup 80 / tbsp 5 (Quaker label 1/2 cup = 40 g).",
+    "Unsweetened Ketchup: no densities row; propose tbsp 17 / cup 272 (Primal Kitchen label)."
+  ]
+}

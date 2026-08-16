@@ -1,0 +1,149 @@
+{
+  "slug": "garlic-butter-steak-bites-zucchini",
+  "title": "Garlic Butter Steak Bites and Zucchini",
+  "source_url": "https://blackberrybabe.com/2026/02/02/garlic-butter-steak-bites/",
+  "source_servings": 2,
+  "target_servings": 14,
+  "scale_factor": 7.0,
+  "protein": "beef",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 7.0x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [],
+  "ingredients": [
+    {
+      "source_raw": "1 pound sirloin steak, cut into 1-inch cubes",
+      "item": "Beef Flank/Sirloin Steak",
+      "bid": "sirloin-steak",
+      "board": "weekly",
+      "grams": 3175,
+      "buy": "7 lb sirloin steak, cut into 1-inch cubes",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by explicit source WEIGHT (1 lb), exact 7.0x = 7 lb = 3175 g, zero drift. 226.8 g raw/serving is hefty but the source's own published 53 g protein DEMANDS it: our recompute lands 52.9 P (-0.2%, essentially exact), so the portions stand (fricassee explicit-weight rule; no florentine each-weight assumption in play). DB row Beef Flank/Sirloin Steak (USDA lean raw, 155 cal/100 g). Board sirloin-steak 7 of 7, cheapest Family Fare $5.49/lb."
+    },
+    {
+      "source_raw": "2 zucchini, medium, sliced into half-moons",
+      "item": "Zucchini",
+      "bid": "zucchini",
+      "board": "weekly",
+      "grams": 2744,
+      "buy": "14 medium zucchini, sliced into half-moons",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 7.0x = 14 each x densities 196 g = 2744 g. Board 6 of 7, cheapest Aldi $1.1867/lb."
+    },
+    {
+      "source_raw": "1 tablespoon avocado oil",
+      "item": "Avocado Oil",
+      "bid": "avocado-oil",
+      "board": "weekly",
+      "grams": 98,
+      "buy": "7 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 7.0x = 7 tbsp x USDA 14 g = 98 g. CALLED OUT: the extractor's concern stands - this line appears in the source's ingredient list but is NEVER used in the instructions (the steak dry-sears, the butter arrives in step 4). Transcription rules keep it; booked as listed and COUNTED in the macros (62 cal/serving) because the source's own 563-cal figure evidently counts it - excluding it computes 543 vs their 563, including it 605; both in band, see cross-check. NOT relabeled to olive oil: no 'or fat of choice' sanction here (unlike the tandoori precedent). NEW DB row Avocado Oil (USDA FDC 173573, verified). avocado-oil commodity exists but is CAPTURE-tier (25 candidates, 2 stores, no priced cell) - term 'avocado-oil' ENQUEUED (queue already holds a resolved CARRIED verdict from trial-run-2026-08-15; slug attached). Spec/write lane may drop the line as a source erratum if it also drops the 62 cal - either consistently, never one without the other."
+    },
+    {
+      "source_raw": "1 teaspoon kosher salt, divided",
+      "item": "Kosher Salt",
+      "bid": "kosher-salt",
+      "board": "weekly",
+      "grams": 42,
+      "buy": "7 tsp, divided (2 tbsp plus 1 tsp)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 7.0x = 7 tsp = 42 g at table-salt 6 g/tsp (coarse kosher runs lighter - zero-macro, immaterial; fricassee precedent). kosher-salt commodity 3 of 7, cheapest Walmart $0.0629/oz. No Kosher Salt DB row (re-flag); zero-macro."
+    },
+    {
+      "source_raw": "1/2 teaspoon black pepper, freshly cracked",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 8,
+      "buy": "3 1/2 tsp, freshly cracked",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 7.0x = 3.5 tsp x densities 2.3 g = 8.05 -> 8 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "3 tablespoons butter, salted",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "weekly",
+      "grams": 294,
+      "buy": "1 cup plus 5 tbsp salted (2 sticks plus 5 tbsp)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 7.0x = 21 tbsp x densities 14 g = 294 g, zero drift. 150.6 cal/serving - the dish's second-biggest line, printed measure and grams agree. Board 7 of 7, cheapest Sam's Club $2.555/lb."
+    },
+    {
+      "source_raw": "4 cloves garlic, minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 84,
+      "buy": "28 cloves, minced (about 2 heads)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 7.0x = 28 cloves x densities 3 g = 84 g, zero drift. Board 5 of 7, cheapest Baker's $0.498/each."
+    },
+    {
+      "source_raw": "1 teaspoon lemon juice",
+      "item": "Lemon Juice",
+      "bid": "lemon-juice",
+      "board": "weekly",
+      "grams": 35,
+      "buy": "2 tbsp plus 1 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 7.0x = 7 tsp x densities 5 g = 35 g. Board 7 of 7, cheapest Sam's Club $0.0675/floz."
+    },
+    {
+      "source_raw": "1 tablespoon parsley, fresh, chopped",
+      "item": "Fresh Parsley",
+      "bid": "fresh-parsley",
+      "board": "weekly",
+      "grams": 27,
+      "buy": "7 tbsp chopped (about half a bunch)",
+      "optional": true,
+      "decision": "mapped",
+      "notes": "OPTIONAL garnish (step-5 only, extractor's ruling) - excluded from the band macros; if counted, +0.7 cal/serving. Exact 7.0x = 7 tbsp x USDA 3.8 g = 26.6 -> 27 g. Fresh Parsley DB row (this run's addition). Board 3 of 7, cheapest Hy-Vee $0.99/each."
+    },
+    {
+      "source_raw": "flaked sea salt",
+      "item": "Flaked Sea Salt",
+      "bid": null,
+      "board": null,
+      "grams": 2,
+      "buy": "a finishing pinch or two",
+      "optional": true,
+      "decision": "mapped-null",
+      "notes": "item_id NULL with reason: specialty finishing flake salt (Maldon class) is not a board commodity, and flattening it to table salt would be a price-class stretch in the wrong direction. OPTIONAL garnish, zero-macro, no printed quantity - null = pantry-static pricing, safe, and an optional line is never enqueued as blocking."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Avocado Oil (USDA FDC 173573, 1 tbsp = 14 g: 124 cal / 0 P / 0 C / 14 F)"
+  ],
+  "pricing_terms_needed": [
+    { "term": "avocado-oil", "blocking": true, "why": "listed ingredient (7 tbsp at 14 servings); board answer is CAPTURE-tier only (no priced cell) - queue already holds a resolved CARRIED verdict from trial-run-2026-08-15, slug attached for the derive. Term string kept EXACTLY 'avocado-oil' (hyphenated) to match the existing queue entry - the queue matches by exact string." }
+  ],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 563, "protein_g": 53, "carbs_g": 9, "fat_g": 35 },
+    "computed_per_serving": { "calories": 605.2, "protein_g": 52.9, "carbs_g": 8.2, "fat_g": 40.5 },
+    "protein_gap_pct": -0.2,
+    "calorie_gap_pct": 7.5,
+    "verdict": "PASS: protein -0.2% - essentially exact, the 1 lb/2-serving sirloin portion is validated outright. Calories +7.5%, carbs -8.9%. Fat +15.7% is the one loose number: their calculator most plausibly excluded the never-used avocado oil line (our compute WITHOUT it lands 543 cal / 33.5 F, i.e. -3.5% cal / -4% fat vs published) or trimmed steak fat. Both with-oil and without-oil readings sit in band, so the discrepancy is disclosed rather than band-deciding; the mapped file books the oil because the printed ingredient list carries it.",
+    "band_check": "computed 605.2 cal in [400, 650] PASS (45 cal of ceiling headroom - the tightest ceiling margin in this batch; if the spec lane drops the unused avocado-oil line the recipe moves to 543 and the margin relaxes to 107); carbs 8.2 g <= 35 PASS"
+  },
+  "board_defects_observed": [
+    "avocado-oil commodity still has no priced board cell (25 capture candidates across 2 stores, several of them potato chips matched by the include) - re-flag of the sheet-pan-tandoori observation; a real cell would end the repeated CAPTURE answers and the chip noise needs an exclude.",
+    "sirloin-steak board spread is 2x (Family Fare whole sirloin tip $5.49/lb vs Fareway/Hy-Vee $10.99/lb steak-cut cells) - one commodity carrying both whole-primal and steak-cut price classes; not a mapping blocker (cheapest cell is the honest budget answer) but worth a match-soundness look."
+  ],
+  "densities_followups": [
+    "Avocado Oil: no densities row; USDA tbsp = 14 g (matches Vegetable Oil) - propose explicit row.",
+    "Beef Flank/Sirloin Steak: no densities row (lb-anchored lines only so far); no action needed until a count/cup line appears."
+  ]
+}

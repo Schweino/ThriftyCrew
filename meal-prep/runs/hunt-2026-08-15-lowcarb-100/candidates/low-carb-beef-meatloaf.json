@@ -1,0 +1,33 @@
+{
+  "name": "Low-Carb Beef Meatloaf",
+  "slug": "low-carb-beef-meatloaf",
+  "protein": "beef",
+  "method": "oven bake",
+  "cuisine": "American",
+  "source_url": "https://www.freshfitkitchen.com/the-best-easy-low-carb-meatloaf-recipe-with-beef/",
+  "source_servings": 6,
+  "src_cal": 585,
+  "src_carbs": 19,
+  "src_protein": 49,
+  "src_fat": 29,
+  "ingredients_verbatim": [
+    "1.5 lb ground beef (90% lean)",
+    "1/2 cup onion, finely chopped",
+    "1/2 cup carrot, finely grated",
+    "1 tbsp. garlic, minced",
+    "1/2 cup quick oats",
+    "1/4 cup milk",
+    "1 tsp. Worcestershire sauce",
+    "1 tbsp. Dijon mustard",
+    "1 tbsp. tomato paste",
+    "2 tsp. salt",
+    "1 tsp. pepper",
+    "1 large egg",
+    "1/2 cup unsweetened ketchup",
+    "1 tbsp. Dijon mustard",
+    "2 tbsp. coconut sugar"
+  ],
+  "unmapped": ["coconut-sugar"],
+  "why": "Verified 585 cal / 19g carb / 49g protein per 6-oz serving straight off the source page - dead center of the identity (protein-dense, low-carb) and inside the 400-650 / <=35g band. Meatloaf-style oven bake, explicitly in-lane. No beef meatloaf exists in the pool yet (only keto-turkey-meatloaf), so not a dupe. Scales cleanly to 14 as loaves and weigh-and-divide. Coconut sugar in the glaze has no board home (sugar/brown-sugar are tracked) - flagged as an intentional pricer-lane probe; 90% ground beef maps to ground-beef-93-7/8020.",
+  "confidence": "high - nutrition and full ingredient list read directly from the source page"
+}

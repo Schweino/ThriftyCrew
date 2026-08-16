@@ -1,0 +1,16 @@
+{
+  "slug": "chicken-marsala-skillet",
+  "name": "Chicken Marsala Skillet",
+  "protein": "chicken",
+  "cuisine": "Italian-American",
+  "method": "skillet",
+  "source_url": "https://www.saltandlavender.com/chicken-in-a-mushroom-and-marsala-sauce/",
+  "source_servings": 4,
+  "src_cal": 428,
+  "src_carbs": 11,
+  "src_protein": 26,
+  "unmapped": ["marsala wine"],
+  "decision": "ACCEPT",
+  "note": "Distinct named Italian-American dish; no chicken marsala and no marsala wine anywhere in the catalog. Borderline vs the already-accepted french-chicken-fricassee (both creamy-mushroom chicken-in-wine, no starch), but genuinely different dinners: sweet fortified marsala + quick sear-and-reduce skillet (Italian-American) vs dry-white velouté braise (French). Also distinct from creamy-tuscan-chicken-skillet (sun-dried-tomato/spinach cream). Widens cuisine spread; carries one deliberate pricer-lane flag (marsala wine). Cross-lane check: no pork/turkey marsala twin exists in the accepted list; a same-dish-different-protein twin would only be a future-lane concern.",
+  "cross_lane_checked": true
+}

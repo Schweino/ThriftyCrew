@@ -1,0 +1,28 @@
+{
+  "name": "Creamy Garlic Chicken Skillet",
+  "slug": "creamy-garlic-chicken-skillet",
+  "protein": "chicken",
+  "cuisine": "American",
+  "method": "skillet",
+  "source_url": "https://jenniferbanz.com/creamy-garlic-chicken",
+  "source_servings": 4,
+  "src_cal": 435,
+  "src_carbs": 3,
+  "src_protein": 30,
+  "src_fat": 34,
+  "ingredients": [
+    "3 tablespoons butter",
+    "2 chicken breasts, cut into chunks (about 1 pound)",
+    "1/2 teaspoon kosher salt",
+    "1/4 teaspoon black pepper",
+    "1 tablespoon roasted garlic",
+    "1/2 cup chicken broth",
+    "1 cup heavy cream",
+    "1/2 teaspoon xanthan gum",
+    "1/4 cup shredded parmesan cheese"
+  ],
+  "main_ingredients": ["chicken-breast", "butter", "heavy-cream", "chicken-broth", "garlic", "parmesan"],
+  "unmapped": ["xanthan gum"],
+  "why": "One-pan seared chicken in a garlic-parmesan cream pan sauce; no rice/pasta/potato base. Published nutrition 435 cal / 3g carb / 30g protein per serving clears the 400-650 cal and <=35g carb band with margin. Structurally low-carb (chicken + butter + cream). Xanthan gum thickener has no board home - flagged for pricer lane (trivial/optional, swappable for a cornstarch slurry which is on-board).",
+  "confidence": "high - nutrition read directly from source page"
+}

@@ -1,0 +1,46 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Mexican Breakfast Casserole",
+  "source_url": "https://www.thegraciouswife.com/mexican-breakfast-casserole/",
+  "servings": 10,
+  "time_total": "2 hours 30 minutes",
+  "time_active": "1 hour prep; 1 hour 30 minutes cook; 6 hours resting",
+  "ingredients": [
+    { "raw": "1 pound chorizo sausage", "item": "chorizo sausage", "qty": "1", "unit": "pound", "prep": null, "optional": false, "section": null },
+    { "raw": "\u00bd large onion finely chopped", "item": "onion", "qty": "1/2", "unit": "large", "prep": "finely chopped", "optional": false, "section": null },
+    { "raw": "\u00bd red bell pepper finely chopped", "item": "red bell pepper", "qty": "1/2", "unit": "each", "prep": "finely chopped", "optional": false, "section": null },
+    { "raw": "5 cloves garlic minced", "item": "garlic", "qty": "5", "unit": "clove", "prep": "minced", "optional": false, "section": null },
+    { "raw": "8 ounces Pepper Jack cheese shredded", "item": "Pepper Jack cheese", "qty": "8", "unit": "ounce", "prep": "shredded", "optional": false, "section": null },
+    { "raw": "8 ounces cheddar cheese shredded", "item": "cheddar cheese", "qty": "8", "unit": "ounce", "prep": "shredded", "optional": false, "section": null },
+    { "raw": "4 green onions finely sliced", "item": "green onions", "qty": "4", "unit": "each", "prep": "finely sliced", "optional": false, "section": null },
+    { "raw": "\u00bc cup cilantro finely chopped", "item": "cilantro", "qty": "1/4", "unit": "cup", "prep": "finely chopped", "optional": false, "section": null },
+    { "raw": "2 jalapeno peppers seeded, deveined, and finely chopped", "item": "jalapeno peppers", "qty": "2", "unit": "each", "prep": "seeded, deveined, and finely chopped", "optional": false, "section": null },
+    { "raw": "12 large eggs", "item": "eggs", "qty": "12", "unit": "large", "prep": null, "optional": false, "section": null },
+    { "raw": "3 cups half-and-half", "item": "half-and-half", "qty": "3", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "\u00bd teaspoon hot sauce", "item": "hot sauce", "qty": "1/2", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "\u00bd teaspoon ground black pepper", "item": "ground black pepper", "qty": "1/2", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "9 corn tortillas quartered", "item": "corn tortillas", "qty": "9", "unit": "each", "prep": "quartered", "optional": false, "section": null },
+    { "raw": "Toppings: Pico de gallo, sour cream, and avocado or guacamole", "item": "pico de gallo, sour cream, and avocado or guacamole", "qty": null, "unit": null, "prep": null, "optional": true, "section": "Toppings" }
+  ],
+  "instructions": [
+    "In a large skillet, brown chorizo with onions, bell peppers, and garlic until chorizo is cooked through. Remove from heat, and set aside.",
+    "In a medium mixing bowl, combine cheeses, cilantro, green onions, and jalapenos. Stir until combined. Set aside.",
+    "Butter a 9\"x13\" baking dish.",
+    "Spread a third (\u2153) of the tortilla pieces into the bottom of the dish (12 pieces). Then spoon \u2153 of the chorizo mixture and \u2153 of the cheese mixture on top. Repeat layers twice more, ending with the cheese layer.",
+    "In a separate large mixing bowl, whisk together eggs, half & half, hot sauce, and black pepper until fully combined and a little bit bubbly. Pour egg mixture on top of tortilla layers.",
+    "Cover and refrigerate for at least 6 hours or overnight.",
+    "Bake at 350\u00b0 for 60-90 minutes, until golden brown. You can test done-ness the same way you would with a cake. Simply insert a fork, and if it comes out clean it's ready.",
+    "Let set for 10 minutes before serving. Serve with fresh pico de gallo, sour cream, and avocado."
+  ],
+  "nutrition_per_serving": {
+    "calories": "612kcal", "carbohydrates": "17g", "protein": "33g", "fat": "46g",
+    "saturated_fat": "23g", "cholesterol": "307mg", "sodium": "945mg", "potassium": "479mg",
+    "fiber": "2g", "sugar": "1g", "vitamin_a": "1235IU", "vitamin_c": "14mg",
+    "calcium": "469mg", "iron": "2mg"
+  },
+  "concerns": [
+    "Page's stated total time (2 hours 30 minutes) does not include the stated 6-hour resting/refrigeration time; transcribed as printed.",
+    "Butter for greasing the 9x13 dish appears only in the instructions, not in the ingredient list; transcribed as printed."
+  ]
+}

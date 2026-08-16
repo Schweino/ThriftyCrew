@@ -1,0 +1,19 @@
+{
+  "slug": "kerala-chicken-curry-nadan-kozhi",
+  "name": "Kerala Chicken Curry (Nadan Kozhi Curry)",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "pass": true,
+    "src_cal": 610,
+    "src_carbs": 14,
+    "reason": "610 cal is within 400-650, 14g carbs is well under 35g, no seafood, chicken braise scales to 14. Published numbers clear the band (note: 610 sits at the top edge from 3 tbsp coconut oil over 3 servings, so recompute could approach the ceiling, but as published it passes)."
+  },
+  "duplicate": {
+    "is_dupe": false,
+    "nearest_catalog": "chicken-madras-curry (South Indian chicken + coconut milk + tomato + onion) and kuku-paka-swahili-coconut-chicken-curry (coconut+tomato chicken-thigh curry)",
+    "evidence": "Distinct dish: Madras is a curry-powder-based South Indian curry with carrots/bell pepper served over rice; Kuku Paka is East African Swahili. Kerala Nadan Kozhi is set apart by thin coconut milk + a curry-leaf / fennel-seed / pearl-onion tempering and a toasted whole-spice masala, and carries no starch in the plate. Also not a dupe of accepted burmese-chicken-dal-curry (dal-based) or thai-coconut-curry-pork-shoulder (Thai, pork). Three-of-four overlap with Madras (chicken/braise/coconut) but starch and spice profile genuinely differ, so kept as a distinct Kerala regional take that widens the catalog's South Indian coverage."
+  },
+  "cross_protein_watch": "Coconut-braise curries collide across proteins by structure. Decider should watch other selectors' pools for a Kerala/South-Indian coconut-tempering braise in pork, beef, or lamb (nadan varieties exist), and for any generic 'coconut curry' in turkey that shares the coconut-milk + onion + tomato + toasted-spice profile - those would be the same dinner in a different protein.",
+  "cuisine": "Indian (Kerala / South Indian)"
+}

@@ -1,0 +1,247 @@
+{
+  "slug": "chicken-chasseur",
+  "title": "Chicken Chasseur",
+  "source_url": "https://www.akitchenhoorsadventures.com/chicken-chasseur/",
+  "source_servings": 6,
+  "target_servings": 14,
+  "scale_factor": 2.3333,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift noted per line where it exceeds 5%.",
+  "ruled_substitutions": [],
+  "ingredients": [
+    {
+      "source_raw": "4 slices bacon",
+      "item": "Hickory Smoked Bacon",
+      "bid": "bacon",
+      "board": "weekly",
+      "grams": 108,
+      "buy": "9 slices, cut into bite-sized pieces",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 9.33 slices quantized to 9 (-3.6%); 12 g/slice per densities (quiche-precedent basis). Rendered fat stays in the pot per standing canon. Board 7 of 7, cheapest Sam's $3.784/lb."
+    },
+    {
+      "source_raw": "6 chicken thighs",
+      "item": "Chicken Thigh (Bone-In, Skin-On)",
+      "bid": "chicken-thighs",
+      "board": "weekly",
+      "grams": 2590,
+      "buy": "14 bone-in skin-on chicken thighs (about 8 oz each with bone; roughly 7 lb)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "MAIN-PROTEIN EACH-WEIGHT, WORKED NOT ASSUMED (florentine rule): the source cooks thighs 'skin side down' to crispy so these are bone-in skin-on, matching the chicken-thighs commodity's own cells (Baker's 'Bone In Skin On', 7 of 7 stores, cheapest Sam's $1.28/lb) - NOT the boneless-skinless recipe-board commodity and NOT leg quarters (standing rejection). Weight derived from the source's own 36 g protein/serving: meat+skin at USDA 16.5 P/100 g plus ~4.3 g from bacon/mushrooms/flour requires ~190 g edible per thigh; booked 185 g edible (a ~230 g / 8 oz family-pack thigh), recomputing to -3.1% protein vs source. grams = EDIBLE meat+skin (bone excluded) on the NEW DB row Chicken Thigh (Bone-In, Skin-On) (USDA meat+skin raw, 221 cal/100 g); the buy string states the bone-in purchase (~7 lb)."
+    },
+    {
+      "source_raw": "1 tablespoon olive oil",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 30.4,
+      "buy": "2 1/4 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 13.5 g/tbsp. Exact 2.333 quantized 2.25 (-3.6%). Board 7 of 7."
+    },
+    {
+      "source_raw": "1 tablespoon butter",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "weekly",
+      "grams": 31.5,
+      "buy": "2 1/4 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 14 g/tbsp. Exact 2.333 quantized 2.25 (-3.6%). Board 7 of 7."
+    },
+    {
+      "source_raw": "1 cup chopped shallots",
+      "item": "Shallots",
+      "bid": "shallots",
+      "board": "weekly",
+      "grams": 360,
+      "buy": "2 1/4 cups chopped (about 12 shallots)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Dedicated shallots commodity - NOT flattened to onions (variety-pricing precedent). 4 of 7 stores, cheapest Baker's $3.99/lb. DB row Shallots (USDA 72 cal/100 g). densities has NO Shallots row (FLAGGED); USDA cup chopped = 160 g. Exact 2.333 cups quantized 2.25 (-3.6%)."
+    },
+    {
+      "source_raw": "2 teaspoons minced garlic",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 13.3,
+      "buy": "4 3/4 tsp minced (about 5 cloves)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 2.8 g/tsp. Exact 4.667 tsp quantized 4.75 (+1.8%). Board 5 of 7."
+    },
+    {
+      "source_raw": "8 ounces quartered cremini mushrooms",
+      "item": "Baby Bella (Crimini) Mushrooms",
+      "bid": "mushrooms",
+      "board": "weekly",
+      "grams": 531.6,
+      "buy": "18 3/4 oz, quartered (two 8-oz tubs plus a handful)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "EXACT keto-crustless-pizza-casserole precedent: the mushrooms commodity's include /mushrooms?/ claims the term (board-sanctioned class), 7 of 7 stores, cheapest Sam's $0.1654/oz. CLASS CAVEAT re-flagged: today's cheapest visible cells are white-mushroom products; baby bella tubs typically price a step higher. Macros on the Baby Bella (Crimini) DB row (USDA, 22 cal/100 g), NOT the White Mushrooms row (variety split). Exact 18.67 oz quantized 18.75 (+0.4%)."
+    },
+    {
+      "source_raw": "1/2 cup white wine",
+      "item": "Dry White Wine",
+      "bid": null,
+      "board": null,
+      "grams": 275,
+      "buy": "1 cup plus 2 3/4 tbsp dry white wine",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "item_id NULL with reason: the white wine commodity exists but has NO priced board cell (today's captures show real bottles at Baker's only) - price-ingredient cannot answer. Term 'dry white wine' is ALREADY QUEUED (fricassee/pork-chops) and scored CARRIED (Baker's Chateau Ste. Michelle Dry Riesling $10.99); this slug attached. Null = pantry-static pricing until the pricer writes the cell. DB row Dry White Wine (USDA, 82 cal/100 g; cup = 235 g Red Wine basis). Exact 1.1667 cups = 18.67 tbsp quantized 18.75 (+0.4%)."
+    },
+    {
+      "source_raw": "2 tablespoons tomato paste",
+      "item": "Tomato Paste",
+      "bid": "tomato-paste",
+      "board": "weekly",
+      "grams": 76,
+      "buy": "4 3/4 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 16 g/tbsp. Exact 4.667 quantized 4.75 (+1.8%). Board 7 of 7."
+    },
+    {
+      "source_raw": "1 tablespoon fresh tarragon",
+      "item": "Fresh Tarragon",
+      "bid": null,
+      "board": null,
+      "grams": 4,
+      "buy": "2 1/4 tbsp chopped",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "item_id NULL with reason: price-ingredient answers ABSENT - no commodity claims fresh tarragon, no cell, nothing in today's captures (matches the fricassee board-wide observation; fricassee escaped via its source's own parsley fallback, THIS source names no fallback and tarragon is the chasseur signature herb, so no substitution is booked without sanction). Term ENQUEUED blocking; carriage is the pricer's ruling, and the fricassee note predicted this herb gap would bite. MACROS BOOKED ZERO AND FLAGGED: USDA has no fresh-tarragon entry and no package label exists to transcribe, so per rule 2 the line is flagged rather than invented - true value is under 0.3 cal/serving (about 4 g of leaves across 14 servings), immaterial to the band. New-commodity proposal filed (fresh-oregano chimichurri precedent)."
+    },
+    {
+      "source_raw": "1/4 cup marsala",
+      "item": "Marsala Wine",
+      "bid": null,
+      "board": null,
+      "grams": 136,
+      "buy": "1/2 cup plus 1 1/4 tbsp",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "item_id NULL with reason: no commodity claims marsala; today's single capture is Holland House Marsala Cooking Wine (Walmart, 13 fl oz $3.48) - capture evidence, not a price. Term ENQUEUED blocking (shared with chicken-marsala-skillet); new-commodity proposal filed. NEW DB row Marsala Wine (USDA dessert-wine-dry class, 152 cal/100 g, carb figure flagged needs_verify - see db notes). Exact 0.5833 cup = 9.33 tbsp quantized 9.25 (-0.9%) at the Red Wine 235 g/cup basis."
+    },
+    {
+      "source_raw": "1/2 cup crushed tomatoes",
+      "item": "Crushed Tomatoes",
+      "bid": "crushed-tomatoes",
+      "board": "weekly",
+      "grams": 283,
+      "buy": "1 cup plus 2 3/4 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities cup=242 g. Exact 1.1667 cups quantized 18.75 tbsp (+0.4%). Board 7 of 7."
+    },
+    {
+      "source_raw": "1 1/4 cups chicken broth",
+      "item": "Chicken Broth",
+      "bid": "chicken-broth",
+      "board": "weekly",
+      "grams": 720,
+      "buy": "3 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 240 g/cup. Exact 2.917 cups quantized 3 (+2.9%). Board 7 of 7."
+    },
+    {
+      "source_raw": "3 sprigs fresh thyme",
+      "item": "Fresh Thyme",
+      "bid": "fresh-thyme",
+      "board": "weekly",
+      "grams": 7,
+      "buy": "7 sprigs",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "fresh-thyme commodity 3 of 7 stores (partial coverage is an answer), cheapest Aldi $3.18/oz. NEW DB row Fresh Thyme (USDA 101 cal/100 g) - not the Dried Thyme row (form-flip); sprig = 1 g per the established sprig basis. Exact 7.0 sprigs."
+    },
+    {
+      "source_raw": "1 bay leaf",
+      "item": "Bay Leaves",
+      "bid": "bay-leaves",
+      "board": "weekly",
+      "grams": 1.2,
+      "buy": "2 bay leaves",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 2.333 leaves rounded to 2 whole leaves (-14.3% DRIFT NOTED on a removed-before-serving zero-macro line). densities leaf=0.6 g. Board 6 of 7."
+    },
+    {
+      "source_raw": "2 tablespoons softened butter",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "weekly",
+      "grams": 66.5,
+      "buy": "4 3/4 tbsp, softened (for the beurre manie)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 14 g/tbsp. Exact 4.667 quantized 4.75 (+1.8%). Board 7 of 7."
+    },
+    {
+      "source_raw": "2 tablespoons flour",
+      "item": "All-Purpose Flour",
+      "bid": "flour",
+      "board": "weekly",
+      "grams": 38,
+      "buy": "4 3/4 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 8 g/tbsp. Exact 4.667 quantized 4.75 (+1.8%). Board 7 of 7. 2.1 g carbs/serving - the largest single carb line, total still 12.7 g."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Chicken Thigh (Bone-In, Skin-On) (USDA thigh meat+skin raw, per 100 g: 221 cal / 16.5 P / 0 C / 16.6 F; house each = 185 g edible from a ~230 g bone-in thigh)",
+    "Fresh Thyme (USDA fresh, per 100 g: 101 cal / 5.6 P / 24.5 C / 1.7 F; sprig = 1 g)",
+    "Marsala Wine (USDA dessert-wine-dry class, per 100 g: 152 cal / 0.2 P / 11.7 C / 0 F; carb field flagged needs_verify)"
+  ],
+  "pricing_terms_needed": [
+    { "term": "dry white wine", "blocking": true, "why": "chasseur deglaze, 1 cup plus 2 3/4 tbsp at 14 servings; white wine commodity has no priced cell - queue entry already CARRIED (Baker's), slug attached for the cell-write" },
+    { "term": "fresh tarragon", "blocking": true, "why": "the chasseur signature herb, 2 1/4 tbsp; ABSENT board-wide with no source-sanctioned fallback - needs a real carriage verdict, not a silent substitution" },
+    { "term": "marsala wine", "blocking": true, "why": "1/2 cup plus 1 1/4 tbsp in the sauce; no commodity claims marsala, single Walmart capture (Holland House cooking marsala $3.48/13 floz) is evidence not a price" }
+  ],
+  "new_commodity_proposals": [
+    {
+      "proposed_id": "fresh-tarragon",
+      "for_item": "Fresh Tarragon",
+      "status": "flagged-for-registrar",
+      "registrar_ruling": "NOT YET OBTAINED - the map lane cannot invoke the commodity-registrar agent; item maps null meanwhile (pantry-static, safe). Evidence: term absent board-wide (second recipe to hit the gap after fricassee); fresh-herb commodity family already splits parsley/thyme/cilantro/basil, so tarragon joining it is the established shape."
+    },
+    {
+      "proposed_id": "marsala-wine",
+      "for_item": "Marsala Wine",
+      "status": "flagged-for-registrar",
+      "registrar_ruling": "NOT YET OBTAINED - see registrar_rulings; item maps null meanwhile (pantry-static, safe). Evidence: Walmart capture 'Holland House Marsala Cooking Wine, 13 fl oz $3.48'; needed by two recipes in this batch alone; cannot share the (unpriced) white-wine commodity - fortified vs table wine is a different product and price class."
+    }
+  ],
+  "registrar_rulings": "PENDING for fresh-tarragon and marsala-wine - proposals recorded for the commodity-registrar agent (this run edits no commodity files); both ingredients map item_id: null (pantry-static) until the registrar rules.",
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 459, "protein_g": 36, "carbs_g": 13, "fat_g": 29 },
+    "computed_per_serving": { "calories": 590.4, "protein_g": 34.9, "carbs_g": 12.7, "fat_g": 41.0 },
+    "protein_gap_pct": -3.1,
+    "calorie_gap_pct": 28.6,
+    "verdict": "PASS on the protein instrument (-3.1%), which is what sized the thigh (see the thigh line - the each-weight was DERIVED from the source's protein, then cross-checked, so the real content of this check is that 185 g edible is the unique weight class that satisfies it; 145 g family thighs would sit -20% and fail). CALLED OUT LOUDLY: the +28.6% calorie gap is entirely FAT (41.0 computed vs 29 published) and the source's own numbers cannot coexist - 36 g protein from skin-on thighs necessarily carries ~31 g thigh fat alone before bacon and 3 tbsp butter (their 29 g total fat is arithmetically impossible for the ingredient list they printed; they most plausibly booked skinless meat for fat but skin-on for protein). Our label-accurate figure stands.",
+    "band_check": "computed 590.4 cal in [400, 650] PASS - NOTE THE MARGIN, 59.6 cal below the ceiling, and the thigh line dominates it; if QA re-sizes the thigh upward this is the first recipe in the batch to threaten 650. Carbs 12.7 g <= 35 PASS."
+  },
+  "board_defects_observed": [
+    "white wine commodity: exists, zero priced cells, real bottle captures at Baker's only (re-flag of the fricassee observation; queue has since ruled CARRIED).",
+    "mushrooms commodity class caveat (pizza-casserole precedent re-flag): include claims all mushroom varieties while visible cheapest cells are white-mushroom products; a baby-bella-only basket prices a step higher."
+  ],
+  "densities_followups": [
+    "Shallots: no densities row - propose cup (chopped)=160, tbsp=10, each=30 (USDA)",
+    "Fresh Thyme: no densities row - propose sprig=1, tsp (leaves)=0.8 (USDA; Dried Thyme's sprig=1 can then retire)",
+    "Marsala Wine: no densities row - propose cup=235, floz=29.4 mirroring Red Wine",
+    "Fresh Tarragon: no densities row and no DB row (flagged, not invented) - tbsp chopped ~ 1.8 g if a row is ever sourced",
+    "Chicken Thigh (Bone-In, Skin-On): propose each=185 (edible meat+skin; ~230 g with bone) alongside the boneless thigh's each=100"
+  ]
+}

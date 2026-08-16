@@ -1,0 +1,35 @@
+{
+  "slug": "dijon-cream-pork-tenderloin-medallions",
+  "name": "Pork Tenderloin Medallions with Creamy Dijon Sauce",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "ok": true,
+    "cal": 470,
+    "carbs": 7,
+    "band": "400-650 cal / <=35g carb",
+    "seafood": false,
+    "scalable_to_14": true,
+    "note": "470 cal and 7g carbs sit dead-center of the band; tenderloin scales by weigh-and-divide, cream pan-sauce scales linearly. Budget meal-prep dinner, no starch base."
+  },
+  "dupe": {
+    "is_dupe": false,
+    "closest_live_twin": "creamy-garlic-herb-wine-pork-chops",
+    "evidence": "creamy-garlic-herb-wine-pork-chops (accepted this run) is also a creamy white-wine pan-sauce seared-pork skillet with no starch; matches 3 of 4 axes (pork / skillet wine-cream reduction / low-carb no-starch). Distinguished here by cut (tenderloin medallions vs chops) and signature flavor (Dijon mustard cream vs garlic-herb cream) - a real plate-level distinction akin to steak Diane vs au poivre, so ruled KEEP not DUPE.",
+    "other_pork_checked": [
+      "creamy-pork-tenderloin-tagliatelle (over pasta, bacon+mushroom Castellana, high-carb - different dish)",
+      "creamy-mushroom-pork-chops-over-mashed-potatoes (chops, mushroom cream, mashed-potato starch base - different)",
+      "senfbraten-german-mustard-pork-roast (pork-loin mustard ROAST over rice, beef-broth gravy not cream - mustard overlap only, different plate)",
+      "slow-cooker-maple-dijon-pork-bowls / slow-cooker-apple-cider-pork-bowls / marry-me-pork-chops-over-pasta (all differ on method, sauce, or starch)"
+    ]
+  },
+  "borderline": true,
+  "borderline_reason": "High adjacency to accepted creamy-garlic-herb-wine-pork-chops. Both are low-carb creamy-wine seared-pork skillets; the catalog likely wants only ONE creamy-wine-pan-sauce pork plate. Decider should choose between these two on cuisine spread (this one is explicitly French/Dijon) and board-coverage. Also a within-pool adjacency to creamy-asiago-pork-tenderloin-medallions (cheese cream vs Dijon cream, same cut+method) flagged by the sourcer.",
+  "cross_protein_collisions": [
+    "chicken dijonnaise / creamy Dijon chicken skillet - structurally identical dish (seared protein in Dijon-white-wine cream); watch chicken pool.",
+    "turkey medallions / cutlets in Dijon cream sauce - same technique on turkey; watch turkey pool.",
+    "any 'creamy Dijon pork chops' candidate - same sauce, different cut."
+  ],
+  "unmapped": [],
+  "adjudicator": "select-adjudicate-1"
+}

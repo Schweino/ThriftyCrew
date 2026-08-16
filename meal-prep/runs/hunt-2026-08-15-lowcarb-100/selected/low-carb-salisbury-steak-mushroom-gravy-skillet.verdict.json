@@ -1,0 +1,19 @@
+{
+  "slug": "low-carb-salisbury-steak-mushroom-gravy-skillet",
+  "name": "Low-Carb Salisbury Steak with Mushroom Gravy Skillet",
+  "protein": "beef",
+  "verdict": "DUPE",
+  "dupe_of": "salisbury-steak-potato-bowls",
+  "reason": "Same dish as the catalog's Salisbury Steak and Potato Bowls: identical ground-beef patty in mushroom-onion beef-broth gravy, sharing ground-beef, beef-broth, bread-crumbs, mushrooms, and onions - the only difference is this candidate drops the russet-potato starch to be low-carb, which is a de-sided variant of the same dinner, not a distinct dish.",
+  "fit": {
+    "cal": 444,
+    "carbs": 22,
+    "within_conditions": true,
+    "note": "Nutrition clears the band (400-650 cal, <=35g carb) and it is a scalable no-seafood budget skillet; rejected purely on dedup, not on fit."
+  },
+  "cross_protein_collisions": [
+    "A turkey Salisbury / turkey-patty-in-mushroom-gravy version in another selector's pool would be structurally this same dish (patty + mushroom-onion gravy) differing only in protein - flag for the cross-protein merge pass.",
+    "Distinct from catalog turkey-meatballs-cream-sauce-skillet and swedish-meatball-potato-bowls (cream/Swedish sauce, meatball form), so those are NOT collisions."
+  ],
+  "adjudicator_note": "Candidate's own why-field flagged this relationship at medium confidence; digest comparison confirms it as a full dupe."
+}

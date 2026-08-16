@@ -1,0 +1,51 @@
+{
+  "slug": "slow-cooker-korean-galbi-jjim-short-ribs",
+  "title": "Slow Cooker Galbi Jjim (Korean Short Ribs)",
+  "source_url": "https://butfirstwebrunch.com/slow-cooker-galbi-jjim-korean-short-ribs/",
+  "source_servings": 6,
+  "target_servings": 14,
+  "scale_factor": 2.3333,
+  "protein": "beef",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "mapper_verdict": "REJECTED - macro-structural: every label-accurate reading of the printed ingredient list computes 37 to 46 g carbs per serving against the run's 35 g ceiling, and the source's published 22 g cannot arbitrate because it is internally impossible against its own list",
+  "rejection_evidence": {
+    "summary": "The carb gate, not carriage, kills this recipe. Summed from the printed list at label-accurate bases, per SOURCE serving (all 14-serving scaling cancels out): soy sauce 1 cup = 2.1 C + gochujang 4 tbsp = 5.7 + honey 1 tbsp = 2.8 + Mizkan mirin 1/4 cup = 6.0 + pear ~4.5 + apple 4.2 + carrots 2.3 + onion 2.3 + green onions 0.7 + turnip ~1.3 + shiitake ~0.4 + gochugaru ~1 + Korean rice cakes 1 cup (~150 g tteok at the DB's 52 C/100 g) = 13.0 -> ~46 g carbs/serving. The two lines without DB rows (pear, rice cakes) cannot rescue it: even EXCLUDING both entirely the rest sums ~29, and any honest booking of a cup of tteok alone adds 9-13 g and a pear 4-5 g, so the defensible spread is 37-46 - every point of it above the 35 gate. The only paths under the gate are guesses AGAINST the printed recipe (booking 'rice cakes' as puffed rice-cake discs, or a dry-sake mirin nobody's board carries). REFUSAL beats guessing.",
+    "computed_per_serving_honest_basis": { "calories": 568, "protein_g": 42.6, "carbs_g": 46, "fat_g": 27, "note": "lean-basis short ribs + label rows; carbs spread 37-46 across all defensible readings, all above 35" },
+    "band_check": "FAIL carb gate: ~46 g vs the 35 maximum (+31%) with no defensible reading under it; calories ~568 would pass the [400,650] band on the lean short-rib basis, but the carb ceiling is structural - this is a sweet-sauced dish over rice cakes, printed by a runner's blog that gates nothing on carbs",
+    "source_macro_status": "UNRELIABLE: published 22 g carbs / 13 g sugar per serving is internally impossible - computed SUGARS alone from its own printed honey + mirin + pear + apple + gochujang run ~19-25 g/serving before the rice cakes' 13 g of starch are even counted. Published protein 44 g is reachable only on a lean-meat reading of the 4 lb bone-in ribs (our lean-basis recompute lands 42.6, -3.2%), which validates the PORTIONS while confirming the carb figure indicts the label, not our arithmetic."
+  },
+  "carriage_notes_not_ruled": "Carriage was NOT ruled on and NO terms were enqueued - a rejected recipe must not spend the singleton pricer's store time (methi precedent). For the record, the board answers observed from disk: gochugaru has no commodity and its single capture is a DIFFERENT product (bettergoods 'Gochugaru Sesame Lemon Seasoning', a blend, not Korean chili flakes - not carriage evidence); 'korean rice cakes' has a vocab row and bid but NO board cell, and the term resolver falls back to the RICE commodity's /\\brice\\b/ include pattern, which would price tteok as dry long-grain rice (match-soundness defect, flagged below); 'shiitake mushrooms' resolves to the white-mushroom commodity by pattern (variety-pricing stretch, cherry-tomato precedent - would have been rejected); bone-in beef short ribs ABSENT (vocab and board stock only boneless-beef-short-ribs, 1 of 7 at $11.99/lb - bone-in is a different product and price class, leg-quarters precedent); pear and turnip price fine via the pears (6 of 7) and turnips (3 of 7) commodities but have NO vocabulary rows. Per Rule B nothing here is a carriage rejection; the rejection is macro-structural.",
+  "vocabulary_gaps_observed_not_filed": [
+    "Pear: board commodity 'pears' exists and prices 6 of 7, but db\\ingredients.json has no row - a future fruit recipe needs a registrar rename/new-row before it can map",
+    "Turnip: same shape - 'turnips' commodity prices 3 of 7, no vocab row",
+    "Gochugaru: no vocab row, no commodity, no true capture",
+    "Shiitake Mushrooms: no vocab row; the white-mushroom pattern stretch is not a mapping",
+    "Bone-In Beef Short Ribs: vocab stocks only the boneless chuck-cut row; bone-in is a different product and price class",
+    "alias candidate: 'Rice Wine Vinegar' -> Rice Vinegar (same product, exact synonym; vocab exit 3 today with white/red wine vinegar as the dangerous near rows)"
+  ],
+  "state_machine_note": "FLAGGED FOR THE ORCHESTRATOR: same gap methi-malai-murgh hit - hunt-run.ps1 has no mapper-level content-rejection state reachable from 'extracted' ('rejected-not-carried' needs a zero-store queue verdict, 'rejected-qa' needs spec-built/written). This dossier leaves the state at 'extracted' rather than force a false state; the orchestrator routes the retirement. Korean-cuisine slot note: the hunt lane's dupe rubric already retired low-carb-korean-beef-bulgogi in favor of THIS recipe; with this rejection the run currently has no Korean dish, which may matter to the selector.",
+  "ingredients": [],
+  "rejected": [
+    { "source_raw": "1 cup rice cakes", "reason": "structural carb load (~13 g/serving at any honest tteok booking) on a dish already over the gate without it; also unpriceable today - the bid korean-rice-cakes has no board cell and the term resolver's fallback to dry long-grain rice is a false match" },
+    { "source_raw": "1/4 cup Mirin (rice wine)", "reason": "6 g carbs/serving at the DB's own Mizkan Honteri label row - the only mirin the board carries is the sweet syrupy class" },
+    { "source_raw": "4 lb beef short ribs", "reason": "bone-in short ribs: no vocab row, no commodity (boneless-beef-short-ribs is a different product and price class, 1 of 7 at $11.99/lb); no label-accurate bone-in DB basis exists either (USDA lean-and-fat rib-section basis computes the dish past the calorie ceiling, lean-only lands 568 - a 400+ cal/serving spread no label in hand can pin)" }
+  ],
+  "db_entries_added": [],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 481, "protein_g": 44, "carbs_g": 22, "fat_g": 24 },
+    "computed_per_serving": { "calories": 568, "protein_g": 42.6, "carbs_g": 46, "fat_g": 27 },
+    "protein_gap_pct": -3.2,
+    "calorie_gap_pct": 18.1,
+    "verdict": "Protein instrument PASSES (-3.2% on the lean-rib basis), so the portions are right and the source's carb label is what fails: computed carbs run 2.1x their published 22 g, and their own stated 13 g sugar is exceeded by the printed honey+mirin+fruit sugars alone. See rejection_evidence.",
+    "band_check": "FAIL: carbs 37-46 g > 35 on every defensible basis; calories in band only on the lean-meat reading"
+  },
+  "board_defects_observed": [
+    "MATCH-SOUNDNESS: the rice commodity's include pattern /\\brice\\b/ claims the term 'korean rice cakes' and would price refrigerated tteok at dry long-grain rice $/lb (Sam's $0.4396/lb). The korean-rice-cakes bid exists in the vocab with no board cell behind it - any future Korean recipe will hit this trap; flagged for the match-soundness gate.",
+    "MATCH-SOUNDNESS: the mushrooms commodity's /mushrooms?/ pattern claims 'shiitake mushrooms' (white-mushroom pricing for a specialty variety, cherry-tomato precedent).",
+    "gochugaru's only capture (bettergoods Gochugaru Sesame Lemon Seasoning, Walmart) is a seasoning BLEND; if a registrar proposal is ever filed for real gochugaru this capture must not be its evidence."
+  ],
+  "densities_followups": []
+}

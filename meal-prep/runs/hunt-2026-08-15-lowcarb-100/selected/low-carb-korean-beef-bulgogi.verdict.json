@@ -1,0 +1,20 @@
+{
+  "slug": "low-carb-korean-beef-bulgogi",
+  "name": "Low-Carb Korean Beef Bulgogi",
+  "protein": "beef",
+  "verdict": "DUPE",
+  "dupe_of": "beef-bulgogi-rice-bowls",
+  "fit": {
+    "calories": 507,
+    "carbs_g": 2.3,
+    "in_band": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "note": "507 cal / 2.3g carb clears the 400-650 cal, <=35g carb, no-seafood, scalable-to-14 band - passes conditions, but rejected on duplication grounds below."
+  },
+  "dupe_evidence": "Catalog beef-bulgogi-rice-bowls IS this dish: Korean bulgogi = sliced whole-muscle beef steak in a soy/sesame/sweet-fruit marinade. Catalog uses sirloin-steak + soy-sauce + sesame-oil + apple; this candidate uses ribeye (its own note says sirloin works) + tamari(=soy) + sesame-oil + pear + monk-fruit - same protein cut category, same sauce/flavor family, same sear method. Three of four axes (protein, sauce, method) match; only the starch differs (catalog serves over rice, this drops it for low-carb). Per the rubric that same protein+sauce with only the starch removed is one dinner, and the chipotle-adobo tweak is a minor marinade twist that does not make a genuinely different plate.",
+  "borderline": true,
+  "borderline_note": "Flagged borderline for the audit stage: the low-carb framing plus the chipotle-in-adobo fusion give it SOME distinction from the plain rice-bowl bulgogi, and this is a dedicated low-carb run whose purpose is starch-free versions. If the catalog wants a distinct low-carb bulgogi entry, this is the candidate - but on pure dish identity it duplicates beef-bulgogi-rice-bowls.",
+  "pool_collisions": [],
+  "cross_protein_twins": []
+}

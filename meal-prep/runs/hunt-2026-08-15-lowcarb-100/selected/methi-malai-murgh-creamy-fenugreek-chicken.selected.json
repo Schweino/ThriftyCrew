@@ -1,0 +1,11 @@
+{
+  "slug": "methi-malai-murgh-creamy-fenugreek-chicken",
+  "name": "Methi Malai Murgh (Creamy Fenugreek Chicken)",
+  "protein": "chicken",
+  "cuisine": "Indian (North Indian)",
+  "source_url": "https://kitchenofdebjani.com/2018/11/methi-murgh-malai/",
+  "decision": "ACCEPT",
+  "decided_by": "decider",
+  "cross_lane_dupe_check": "No collision with accepted-slugs.json (read fresh, 41 slugs). Catalog Indian chicken creams are all tomato/coconut/cashew based (butter-chicken, korma, chettinad) - no white kasuri-methi cream gravy exists in catalog or accepted list. Adjudicator's cross-protein watch (a methi/malai turkey or paneer braise) has no twin in the accepted list; noted for orchestrator cross-protein merge.",
+  "note": "Widens catalog cuisine spread to a scarce North Indian slot - the strongest of the two chicken candidates in this batch on the run's cuisine-spread objective. In-band 418 cal / 11.6g carb, cream+butter braise so the near-floor calorie count is structurally fat-rich; one unmapped signature item (kasuri-methi) is wanted, not penalized."
+}

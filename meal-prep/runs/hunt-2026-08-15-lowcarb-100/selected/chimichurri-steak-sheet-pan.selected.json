@@ -1,0 +1,13 @@
+{
+  "slug": "chimichurri-steak-sheet-pan",
+  "name": "Chimichurri Steak Sheet Pan Dinner",
+  "protein": "beef",
+  "cuisine": "Latin American (Argentine-inspired)",
+  "decision": "ACCEPT",
+  "source_url": "https://fedandfit.com/chimichurri-beef-sheet-pan-dinner/",
+  "fit": { "calories": 491, "carbs_g": 31, "in_band": true },
+  "cross_lane_dupe_check": "Checked against accepted-slugs.json fresh (25 slugs) and catalog digest. No chimichurri dish anywhere; the 8 accepted beef dishes share no sauce/starch/method with chimichurri + roasted veg sheet pan. Note: pool holds sibling chimichurri steak candidates (chimichurri-flank-steak, chimichurri-skirt-steak, skirt-steak-chimichurri) - none accepted; this sheet-pan version is the dispatched one and does not collide with the accepted list.",
+  "note": "Clear keep - strongly widens the American/Tex-Mex-skewed catalog; chimichurri absent entirely. 31g carbs is near the 35g ceiling but in-band. Cross-protein watch: a chicken or pork-tenderloin chimichurri sheet-pan would be the same format on a different protein - flagged for the orchestrator's cross-protein merge pass.",
+  "decided_by": "selector",
+  "decided_at": "2026-08-16"
+}

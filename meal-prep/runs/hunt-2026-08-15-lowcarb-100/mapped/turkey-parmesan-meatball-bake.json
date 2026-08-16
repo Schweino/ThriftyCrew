@@ -1,0 +1,212 @@
+{
+  "slug": "turkey-parmesan-meatball-bake",
+  "title": "Easy Keto Chicken Parmesan Low Carb Meatballs",
+  "source_url": "https://www.sugarfreemom.com/recipes/easy-low-carb-keto-chicken-parmesan-meatballs-recipe/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%. HOUSE BUILD BAKES (the source's primary path); the fry-path lines (ground almonds, olive oil) are optional per the source's own '(Optional, if frying)' labels and are excluded from band macros.",
+  "ruled_substitutions": [
+    "'kosher salt' -> Salt row (zero-macro, burmese-chicken-dal-curry precedent): today's vocabulary has no Kosher Salt row, the line is zero-macro on any salt basis, and the printed 'kosher salt' is preserved in the buy string; grams at the table-salt 6 g/tsp basis (coarse kosher runs lighter - macro- and cost-immaterial, fricassee disclosure). A kosher-salt commodity exists on the board (3 of 7, cheapest Walmart $0.0629/oz) and is noted for whoever re-adds the vocab row.",
+    "'16 ounces low carb homemade marinara sauce' -> house Marinara Sauce row (GV jarred label, 70 cal / 2 P / 9 C / 2.5 F per 123 g): the vocabulary has no low-carb-marinara row and the budget-house equivalent of 'homemade' is the priced jar (cauliflower-rice home-equivalent precedent). Substitution disclosed; the jarred sauce adds ~2 g carbs per serving over a typical no-sugar marinara and the recipe still sits at 13.9 g carbs, far under the 35 g gate.",
+    "'fresh herbs, like fresh basil or fresh parsley' (optional, to serve) booked on the FIRST-NAMED alternative (Fresh Basil, 5 of 7); parsley (3 of 7) equally board-priced if swapped. Optional, excluded from band macros.",
+    "'fresh garlic' -> Garlic row: the vocab near-miss flag on 'fresh' is spurious - the Garlic row IS fresh whole bulbs (Baker's Kroger Whole Garlic Bulbs)."
+  ],
+  "registrar_rulings": [
+    "PENDING - new-commodity proposal 'ground chicken' filed to the commodity-registrar by this mapping (see new_commodity_proposals); no ruling exists yet. The recipe parks on the pricing queue term and cannot reach the writer until the registrar mints the commodity, the vocabulary gains a Ground Chicken row wired to it, and a verified label lands in the food DB."
+  ],
+  "ingredients": [
+    {
+      "source_raw": "1 pound ground chicken (or chicken breast or thighs in a food processor)",
+      "item": "Ground Chicken",
+      "bid": null,
+      "board": null,
+      "grams": 1588,
+      "buy": "3 1/2 lb ground chicken",
+      "optional": false,
+      "decision": "unresolved-hold",
+      "notes": "MAIN PROTEIN, UNRESOLVED: 'ground chicken' is not in the 300-row vocabulary (genuine gap - nearest rows are all different forms: rotisserie, breast, thigh), no commodity claims the term (price-ingredient: CAPTURE, 6 candidate products across 4 stores, e.g. Aldi Perdue 92/8 Ground Chicken 1 lb $3.39), and the food DB has no ground-chicken label row. Weight-anchored 1 lb x exact 3.5 = 3.5 lb = 1588 g, zero drift. THE SOURCE'S OWN PRINTED ALTERNATIVES WERE TESTED AND REFUTED by its published macros: a Boneless Skinless Chicken Breast build computes 41.5 g protein (+18.6% vs their 35, outside the instrument) and 378 cal (FAILS the 400 floor); the BSCT thigh build computes 388 cal (also under the floor). Only a real ground-chicken basis (USDA generic 143 cal / 17.44 P / 8.1 F per 100 g, used PROVISIONALLY for the cross-check below, never booked to the DB) reconciles their protein to +3.4%. So the recipe genuinely needs the ground-chicken row: term enqueued BLOCKING, commodity proposed to the registrar, DB row deferred to a verified label (rule 2 - no label on disk, none invented). item_id null = pantry-static pricing meanwhile."
+    },
+    {
+      "source_raw": "1 large egg",
+      "item": "Eggs",
+      "bid": "eggs",
+      "board": "weekly",
+      "grams": 200,
+      "buy": "4 large eggs",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 3.5 eggs, quantized 4 whole (+14.3% DRIFT NOTED - half an egg is not a cook measure; binder line, +2.5 cal/serving) x densities each = 50 g -> 200 g; printed count and grams agree at the GV 50 g / 70 cal large-egg label. Board 7 of 7, cheapest Aldi $1.46/dozen."
+    },
+    {
+      "source_raw": "2 cloves fresh garlic minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "recipe",
+      "grams": 21,
+      "buy": "7 cloves garlic, minced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 7 cloves, zero drift, x densities clove = 3 g -> 21 g. Board (recipe) 5 of 7, cheapest Baker's $0.498/each bulb."
+    },
+    {
+      "source_raw": "1 teaspoon onion powder",
+      "item": "Onion Powder",
+      "bid": "onion-powder",
+      "board": "weekly",
+      "grams": 8.4,
+      "buy": "3 1/2 tsp onion powder",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 3.5 tsp x densities tsp = 2.4 g -> 8.4 g. Board 7 of 7, cheapest Walmart $0.3323/oz."
+    },
+    {
+      "source_raw": "1/4 cup grated parmesan cheese",
+      "item": "Parmesan Cheese",
+      "bid": "parmesan",
+      "board": "weekly",
+      "grams": 98,
+      "buy": "3/4 cup plus 2 tbsp grated parmesan cheese",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 0.875 cup (zero drift, jalapeno-popper phrasing precedent) x densities cup = 112 g -> 98 g. GV label row (110 cal / 28 g). Board 7 of 7, cheapest Sam's Club $0.3092/oz."
+    },
+    {
+      "source_raw": "3 tablespoon almonds ground (Optional, if frying)",
+      "item": "Almonds",
+      "bid": "almonds",
+      "board": "weekly",
+      "grams": 74,
+      "buy": "10 1/2 tbsp ground almonds (about 2/3 cup), only if frying (optional)",
+      "optional": true,
+      "decision": "mapped-optional",
+      "notes": "OPTIONAL per the source's own '(Optional, if frying)' label; the house build bakes, so excluded from band macros (+30.5 cal/serving if counted). Exact 3.5x = 10.5 tbsp x 7 g/tbsp (almond-meal class, Blanched Almond Flour cup = 112 g basis; NO densities row for ground almonds - FLAGGED) -> 73.5 -> 74 g. USDA Almonds row (579 cal/100 g) - the row's own note says it covers ground/slivered lines. Board 7 of 7, cheapest Sam's Club $0.2871/oz."
+    },
+    {
+      "source_raw": "1/4 cup parsley fresh, chopped",
+      "item": "Fresh Parsley",
+      "bid": "fresh-parsley",
+      "board": "weekly",
+      "grams": 53,
+      "buy": "3/4 cup plus 2 tbsp chopped fresh parsley",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "NON-optional (mixed into the meatballs per step 1). Exact 3.5x = 0.875 cup x USDA cup chopped = 60 g (NO densities row - re-FLAG) -> 52.5 -> 53 g. USDA fresh-parsley row (36 cal/100 g). Board 3 of 7, cheapest Hy-Vee $0.99/each."
+    },
+    {
+      "source_raw": "2 teaspoon dried Italian seasoning",
+      "item": "Italian Seasoning",
+      "bid": "italian-seasoning",
+      "board": "weekly",
+      "grams": 9.8,
+      "buy": "2 tbsp plus 1 tsp Italian seasoning",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 7 tsp = 2 1/3 tbsp (zero drift) x densities tsp = 1.4 g -> 9.8 g; macros on the DB row's 1 tsp = 1 g / 4 cal basis (near-zero line). 'dried Italian seasoning' -> Italian Seasoning: the row IS the dried herb blend (creamy-garlic-herb precedent). Board 7 of 7, cheapest Hy-Vee $0.698/oz."
+    },
+    {
+      "source_raw": "1 teaspoon salt kosher",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 21,
+      "buy": "3 1/2 tsp kosher salt",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 3.5 tsp x table-salt densities tsp = 6 g -> 21 g (coarse kosher runs lighter; zero-macro so only the printed measure matters, and it is preserved). See ruled_substitutions. Board 7 of 7, cheapest Aldi $0.0304/oz; separate kosher-salt commodity 3 of 7 noted."
+    },
+    {
+      "source_raw": "1/2 teaspoon black pepper",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 4,
+      "buy": "1 3/4 tsp black pepper",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 1.75 tsp x densities tsp = 2.3 g -> 4.0 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "2 tablespoon olive oil (Optional, if frying)",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 95,
+      "buy": "7 tbsp olive oil, only if frying (optional)",
+      "optional": true,
+      "decision": "mapped-optional",
+      "notes": "OPTIONAL per the source's own '(Optional, if frying)' label; house build bakes, excluded from band macros (+59.5 cal / +6.75 g fat per serving if counted). Exact 3.5x = 7 tbsp x densities tbsp = 13.5 g -> 94.5 -> 95 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "16 ounces low carb homemade marinara sauce",
+      "item": "Marinara Sauce",
+      "bid": "marinara-sauce",
+      "board": "recipe",
+      "grams": 1588,
+      "buy": "56 oz marinara sauce (about 6 1/3 cups)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Weight-anchored. Exact 3.5x = 56 oz = 1588 g, zero drift. House GV jarred label row per ruled_substitutions (70 cal / 123 g). Recipe-board marinara-sauce id answers; the bare term 'marinara sauce' resolves via the pasta-sauce commodity (7 of 7, cheapest Sam's Club $0.0591/oz) - term-vs-map split noted."
+    },
+    {
+      "source_raw": "1.5 cup mozzarella cheese shredded",
+      "item": "Mozzarella Cheese",
+      "bid": "mozzarella-cheese",
+      "board": "weekly",
+      "grams": 593,
+      "buy": "5 1/4 cups shredded mozzarella cheese",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 5.25 cups (zero drift) x shred cup = 113 g (Reduced Fat Mozzarella densities row basis; NO row for the generic shred - FLAGGED) -> 593.3 -> 593 g. USDA low-moisture part-skim SHREDDED row (304 cal/100 g), the form the priced package describes. Term answers 7 of 7 via shredded-cheese (cheapest Sam's Club $0.1521/oz, a mozzarella product this time, so the cell class matches)."
+    },
+    {
+      "source_raw": "2 tablespoons fresh herbs, like fresh basil or fresh parsley chopped, to serve",
+      "item": "Fresh Basil",
+      "bid": "fresh-basil",
+      "board": "weekly",
+      "grams": 11,
+      "buy": "7 tbsp chopped fresh basil (or parsley), to serve (optional)",
+      "optional": true,
+      "decision": "mapped-optional",
+      "notes": "OPTIONAL garnish, excluded from band macros (~0.2 cal/serving). Exact 3.5x = 7 tbsp x densities tbsp = 1.5 g -> 10.5 -> 11 g. First-named alternative booked per ruled_substitutions. Board 5 of 7, cheapest Walmart $2.42/oz clamshell."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [
+    { "term": "ground chicken", "blocking": true, "why": "main protein, 3 1/2 lb at 14 servings; no commodity claims the term (CAPTURE - 6 candidate products across 4 stores in today's captures, e.g. Aldi Perdue 92/8 $3.39/lb, so carriage looks likely but the verdict is the pricer's); commodity proposed to the registrar in parallel; recipe parks on this term" }
+  ],
+  "new_commodity_proposals": [
+    {
+      "proposal": "ground chicken",
+      "to": "commodity-registrar",
+      "status": "pending",
+      "evidence": "Today's captures show 6 ground-chicken products across 4 of 7 stores (cheapest observed Aldi Perdue Fresh 92% Lean 8% Fat Ground Chicken, 1 lb, $3.39). Distinct price class from chicken-breast ($1.99/lb board cheapest) and from ground-turkey ($2.6633/lb): none of the existing poultry commodities cover the product concept. Ask: (1) mint a ground-chicken commodity, (2) add vocabulary row 'Ground Chicken' wired to it, (3) meal-macro lane captures a verified label (Perdue 92/8 or store brand) for the food DB - NO row was invented meanwhile (rule 2). The USDA generic basis (143 cal / 17.44 P / 0.04 C / 8.1 F per 100 g) used provisionally in this file's cross-check is NOT in the DB and must not ship."
+    }
+  ],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 466, "protein_g": 35, "carbs_g": 9, "fat_g": 33 },
+    "recomputed_per_serving_from_food_db": { "calories": 411.1, "protein_g": 36.2, "carbs_g": 13.9, "fat_g": 23.1 },
+    "basis_caveat": "PROVISIONAL: the ground-chicken line is computed on the USDA generic ground-chicken basis (143 cal / 17.44 P / 8.1 F per 100 g) because no verified label row exists yet; every other line is on its DB row. The final recompute must be redone against the verified label the registrar/label lane lands.",
+    "protein_gap_pct": 3.4,
+    "calorie_gap_pct": -11.8,
+    "verdict": "PROTEIN PASSES (+3.4%) on the ground-chicken basis - which is precisely the point: the same rebuild with the source's own printed chicken-breast alternative lands +18.6% protein and 378 cal, failing both the instrument and the calorie floor, so the parenthetical substitute is REFUTED and the recipe genuinely requires ground chicken (this is why it holds rather than remaps). The calorie gap -11.8% and fat gap (23.1 vs 33) close almost exactly when the source's fry-path olive oil and ground almonds are counted (+66 cal / +8.4 F per serving -> 477 cal / 31.5 F): their published figures include the optional fry lines; our bake build honestly excludes them.",
+    "band_check": "PROVISIONAL: 411.1 cal in [400, 650] PASS by only 11 cal - the thinnest floor margin in this batch, and it hangs on an unverified basis. If the verified label runs leaner (a 98-99% lean ground chicken breast product, ~120 cal/112 g class, computes ~371 cal and FAILS the floor), this recipe dies at the gate; a Perdue 92/8-class label (~170 cal/112 g) computes ~440 cal and passes comfortably. The label choice decides the recipe - flagged loudly for the registrar and QA. Carbs 13.9 g <= 35 PASS on any basis."
+  },
+  "loud_flags": [
+    "SLUG MISLABELS THE PROTEIN: slug and working title say 'turkey' but the source is a CHICKEN recipe (1 lb ground chicken; no turkey anywhere on the page - extractor concern confirmed). Protein field recorded as chicken. The writer/QA must not let a 'turkey' title ship over a chicken build, and the run's protein rotation tallies should count this as chicken.",
+    "HOLD AT MAPPED-PARKED: main protein has no vocabulary row, no commodity, and no DB label. Recipe advances to pricing PARKED on 'ground chicken' (blocking); it must not reach the spec/writer until the registrar mints the commodity, the vocab gains the wired row, and a verified label lands. Every derived number for the chicken line is marked provisional.",
+    "BAND MARGIN IS 11 CAL on the provisional basis and the verified label decides pass/fail (see band_check). Do not treat this recipe's band as settled."
+  ],
+  "board_defects_observed": [
+    "No poultry commodity claims 'ground chicken' despite 4 of 7 stores capturing the product today - a genuine catalog gap rather than an include defect; registrar proposal filed."
+  ],
+  "densities_followups": [
+    "Ground almonds: no densities row; booked at 7 g/tbsp (almond-meal class, Blanched Almond Flour cup = 112 g). Propose Almonds ground_tbsp = 7.",
+    "Mozzarella Cheese (generic shred): no densities row; booked at cup = 113 g via the Reduced Fat Mozzarella row. Propose an explicit cup key.",
+    "Fresh Parsley: still no densities row (cup chopped = 60 g, tbsp = 3.8 g USDA) - re-flag."
+  ]
+}

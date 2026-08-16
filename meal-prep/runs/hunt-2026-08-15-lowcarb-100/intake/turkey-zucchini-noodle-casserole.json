@@ -1,0 +1,69 @@
+{
+  "name": "Turkey and Zucchini Noodle Casserole",
+  "slug": "turkey-zucchini-noodle-casserole",
+  "protein": "turkey",
+  "cuisine": "Italian",
+  "source_url": "https://www.theharvestskillet.com/italian-zucchini-noodle-casserole/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "93/7 Ground Turkey", "grams": 1588, "buy": "3 1/2 lb" },
+    { "item": "Zucchini", "grams": 2744, "buy": "14 medium, spiralized" },
+    { "item": "Diced Tomatoes", "grams": 1389, "buy": "3 1/2 14-oz cans, undrained (about 5 3/4 cups)" },
+    { "item": "Tomato Sauce", "grams": 794, "buy": "3 1/2 8-oz cans (about 3 1/4 cups)" },
+    { "item": "Olive Oil", "grams": 47, "buy": "3 1/2 tbsp" },
+    { "item": "Butter", "grams": 98, "buy": "7 tbsp, cut into small cubes" },
+    { "item": "Salt", "grams": 10, "buy": "1 3/4 tsp" },
+    { "item": "Italian Seasoning", "grams": 5, "buy": "3 1/2 tsp" },
+    { "item": "Garlic Powder", "grams": 5, "buy": "1 3/4 tsp" },
+    { "item": "Mozzarella Cheese", "grams": 791, "buy": "7 cups shredded" },
+    { "item": "Parmesan Cheese", "grams": 98, "buy": "3/4 cup plus 2 tbsp" }
+  ],
+  "macros_per_serving": { "calories": 522, "protein_g": 41, "carbs_g": 19, "fat_g": 31 },
+  "writer_notes": [
+    "SOURCE YIELD 4, rebuilt to 14 at the mapper's 3.5x scale. Grams and buy strings transcribed from the mapped file; no number computed in prose.",
+    "Olive oil is a LIST ADDITION. The source's printed ingredient list omits it, but step 2 of the source says 'Cook ground turkey in a pan with 1 tablespoon of oil.' The mapper booked 3 1/2 tbsp so the card's cost and macros state what actually goes in the pan. It is bought and it is used (browning the turkey), so the every-ingredient rule holds.",
+    "Italian seasoning fix: the source lists 1 tsp Italian seasoning but its steps never say when to add it (step 3 names only garlic powder and salt). Folded into the seasoning step with the garlic powder and salt so the bought ingredient is used.",
+    "Cheese grams follow the printed MEASURE, not the source's parenthetical. 7 cups shredded mozzarella at the label-accurate 113 g/cup = 791 g; the source's (250 g for 2 cups) runs heavier than any shredded-cheese label. Same for Parmesan (label 1/4 cup = 28 g). Delta noted by the mapper, not adopted.",
+    "MACROS: transcribed from the food-DB recompute at 14 servings: 522 cal, 41 g protein, 19 g carbs, 31 g fat per serving. In band (400 to 650 cal, 35 g carb or less). The mapper's own compute matched (522.6 / 41.1 / 19.4 / 30.4).",
+    "WATERY-DISH note: the source flags liquid pooling at the bottom of the dish. Scaled to 14 servings that only grows, so the make-it salts and drains the spiralized zucchini before it goes in, using a little of the bought salt. No new ingredient.",
+    "BUTTER PLACEMENT: source step 3 mixes the cubed butter INTO the zucchini mixture. The card now folds it into the combine step to match the source; an earlier draft dotted it on top under the cheese, an undocumented deviation with no reason behind it, so it was reverted rather than justified. Same ingredient, same 98 g, no macro or cost change.",
+    "BAKE TIME: source bakes 15 to 20 min for its 4-serving pan; scaled to a 14-serving batch in a larger, deeper dish, the card bakes 30 to 40 min to heat through and get the edges bubbling. A method time, not a transcribed macro or cost number.",
+    "PORTION METHOD: weigh the empty dish first, then weigh full and subtract, divide by 14. Standard house method."
+  ],
+  "prose": {
+    "intro_html": "Pasta is what makes most casseroles cheap and also what makes them a carb bomb. This one swaps the noodles for spiralized zucchini and lets lean ground turkey, canned tomatoes, and melted cheese do the comfort-food work instead. You keep the baked, bubbly, cheese-on-top payoff and you drop the flour entirely. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 20 grams of carbs, which puts it well inside a low-carb dinner and a long way from a boxed pasta bake.",
+    "shop_smart": [
+      "<strong>Three and a half pounds of 93/7 ground turkey is the anchor.</strong> That is where most of the money and all of the protein live. Buy the four-pound family pack instead of the little one-pound trays so you are paying for turkey and not packaging, and you will have about half a pound left to fold into eggs the next morning. Reach for the 93/7 lean so the casserole bakes up meaty instead of greasy.",
+      "<strong>About seven pounds of zucchini stands in for the pasta.</strong> That is roughly fourteen medium ones, spiralized into noodles. Buy them whole by the pound and run them through a spiralizer or a julienne peeler yourself, which takes about ten minutes and is the whole reason this bake is low-carb. Salt the noodles and let them drain before they go in, because a batch this size sheds a lot of water.",
+      "<strong>The cheese is what makes it eat like a casserole.</strong> You need four eight-ounce bags of shredded mozzarella, which leaves you about a cup for the next thing you melt cheese on, plus one eight-ounce tub of grated parmesan that you will use less than half of. The mozzarella melts into the body and the parmesan sharpens the top.",
+      "<strong>Canned tomatoes do the saucing for pennies.</strong> Grab four fourteen-ounce cans of diced tomatoes, which leaves you half a can, and two fifteen-ounce cans of tomato sauce, which this batch uses down to a splash. Both are pantry cheap and they are a big part of why the cost per bowl lands where it does.",
+      "<strong>Butter, a little oil, and three spices finish it.</strong> The bake uses seven tablespoons of butter, just under one stick out of the one-pound box, a few tablespoons of olive oil from a bottle that lasts several batches, and salt, Italian seasoning, and garlic powder from jars you already keep on hand. None of it moves the total much."
+    ],
+    "make_it": [
+      "Weigh your empty baking dish and write the number down. You will need it at the end to portion by weight, which is the only honest way to get 14 even servings out of one bake.",
+      "Spiralize the zucchini, toss it with about half of the salt, and let it sit in a colander for 15 minutes. Zucchini is mostly water, and a 14-serving batch dumps a lot of it into the dish if you skip this. Squeeze the drained noodles in a clean towel and set them aside.",
+      "Heat the olive oil in a large skillet and brown the ground turkey over medium-high heat until it is no longer pink, breaking it up as it cooks. Drain off any excess liquid.",
+      "In your biggest bowl, combine the drained zucchini, the cooked turkey, the diced tomatoes with their juice, the tomato sauce, the cubed butter, the Italian seasoning, the garlic powder, and the rest of the salt. Fold until everything is coated and evenly mixed.",
+      "Spread the mixture into the baking dish and level it off, then blanket the whole thing with the shredded mozzarella and the Parmesan.",
+      "Bake at 375 degrees F for 30 to 40 minutes, until the cheese is melted and the edges are bubbling. Run it under the broiler for the last minute if you want the top browned. Let it rest 10 minutes so it firms up and the liquid settles, then weigh and portion as below."
+    ],
+    "portion_html": "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a baked, cheesy casserole that eats like a pasta bake and skips the pasta. The turkey and the cheese carry it; the zucchini does the job the noodles used to, for less.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Turkey and zucchini noodle casserole for meal prep: lean ground turkey, canned tomatoes, and melted mozzarella baked over spiralized zucchini instead of pasta, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, under 20 grams of carbs.",
+    "keywords": "zucchini noodle casserole, turkey zucchini casserole, low carb casserole, high protein meal prep, ground turkey casserole",
+    "prepTime": "PT20M",
+    "cookTime": "PT40M",
+    "totalTime": "PT1H",
+    "steps": [
+      "Weigh the empty baking dish and note the number for portioning later.",
+      "Spiralize the zucchini, salt it, let it drain 15 minutes, then squeeze it dry.",
+      "Brown the ground turkey in the olive oil until no longer pink and drain it.",
+      "Combine the drained zucchini, turkey, diced tomatoes, tomato sauce, cubed butter, Italian seasoning, garlic powder, and remaining salt in a large bowl.",
+      "Spread into the dish and top with mozzarella and Parmesan.",
+      "Bake at 375 degrees F for 30 to 40 minutes until bubbling, broil the top if you like, rest 10 minutes, then weigh the dish and divide across 14 containers."
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "slug": "cajun-andouille-sausage-vegetable-skillet",
+  "name": "Cajun Andouille Sausage and Vegetable Skillet",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "conditions_check": {
+    "calories": 440,
+    "carbs_g": 9,
+    "in_cal_band_400_650": true,
+    "carbs_at_or_under_35": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "fit": true
+  },
+  "dupe_of": null,
+  "evidence": "No catalog collision: every Cajun sausage dish in the catalog carries a starch base (cajun-chicken-and-sausage-jambalaya, one-pot-creamy-cajun-sausage-pasta, panseared-pork-chops-with-cajun-dirty-rice), whereas this is a starch-free non-starchy-veg skillet (zucchini, yellow squash, bell pepper, onion); the nearest sausage-and-peppers skillets differ in flavor family or base (accepted italian-sausage-peppers-onions-skillet is Italian herb not Cajun and adds no squash; turkey-sausage-and-peppers-rice-skillet is rice-based).",
+  "cross_protein_collision_watch": "Structural twin risk in the TURKEY lane: a smoked-turkey-sausage + non-starchy-veg no-starch Cajun/skillet version would be the same dish with a different protein (catalog already has smoked-turkey-sausage as the andouille stand-in). Also watch a CHICKEN-sausage-and-vegetables skillet in another selector's pool. Distinct-but-adjacent: accepted italian-sausage-peppers-onions-skillet (same sausage+peppers skillet chassis, different flavor family) - flagged, judged a different dinner, decider's call.",
+  "notes": "Andouille is unmapped (nearest board items: smoked-turkey-sausage / italian-sausage / kielbasa) - retained per v2.1 5.1 invert-the-bias, not penalized. Source protein 21g/serving is slightly under the catalog's 25g ideal but conditions do not gate on protein."
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Pork Sausage and Cauliflower Cheese Bake",
+  "slug": "pork-sausage-cauliflower-cheese-bake",
+  "protein": "pork",
+  "cuisine": "British",
+  "method": "oven bake",
+  "source_url": "https://www.fatsoflife.co.uk/low-carb-sausage-and-cauliflower-bake/",
+  "source_servings": 4,
+  "src_cal": 407,
+  "src_carbs": 6.6,
+  "src_protein": 25,
+  "ingredients_verbatim": [
+    "650 g (22.9 oz) cauliflower florets",
+    "85 g (3 oz) full-fat cream cheese (soft cheese)",
+    "salt and white pepper",
+    "6 pork sausages, gluten-free",
+    "55 g (1.9 oz) Gruyere cheese, finely grated",
+    "pink Himalayan salt",
+    "freshly ground black pepper",
+    "2 tsp chives, snipped to garnish"
+  ],
+  "unmapped": [
+    "fresh pork sausages (links) - borderline vs board breakfast-sausage; distinct SKU, flag for pricer",
+    "Gruyere cheese - board has shredded-cheese/sliced-cheese/cream-cheese; Gruyere absent"
+  ],
+  "why": "British sausage-and-cauliflower-cheese bake, published at 407 cal / 25g protein / 6.6g carbs - a clean low-carb (meat + cream cheese + cauliflower + gruyere, no starch base) sausage-forward bake, scalable to 14 in a bake dish. Adds cuisine variety off the American/Tex-Mex skew. Confidence high on macros (read from card); flag that 407 cal sits at the floor so a label-DB recompute could dip under 400.",
+  "confidence": "high on nutrition (read from recipe card); flag that source cal is near the 400 floor"
+}

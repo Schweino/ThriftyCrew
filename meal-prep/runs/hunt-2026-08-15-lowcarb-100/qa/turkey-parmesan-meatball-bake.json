@@ -1,0 +1,20 @@
+{
+  "slug": "turkey-parmesan-meatball-bake",
+  "verdict": "fail",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "ingredient-coverage",
+      "severity": "blocking",
+      "detail": "RE-QA, UNREPAIRED: the v2 spec (db\recipes\turkey-parmesan-meatball-bake.json) and built card (db\built\turkey-parmesan-meatball-bake.body.html) still do not exist - identical to the first-cycle blocking finding. State remains 'priced', parked BLOCKING on the 'ground chicken' pricing term with the commodity-registrar proposal still pending; no writer/build stage has run since the first fail (state history shows nothing after 'priced' at 2026-08-16T11:55:34). There is still nothing to verify against the source.",
+      "owner": "writer"
+    },
+    {
+      "check": "title",
+      "severity": "blocking",
+      "detail": "RE-QA, UNREPAIRED: slug/working title still says 'turkey-parmesan-meatball-bake' but both anchors (extraction and live page, re-fetched this cycle and in exact agreement) are a CHICKEN recipe - 'Easy Low Carb Keto Chicken Parmesan Meatballs', 1 lb ground chicken, no turkey anywhere on the page. A turkey-named card from this source is a re-classed dish. The extractor concern, the mapper loud flag, and the first QA fail all recorded this; the slug was not corrected in the repair cycle.",
+      "owner": "writer"
+    }
+  ],
+  "notes": "Second FAIL - terminal per the one-repair-cycle rule (rejected-qa). Both anchors reached: the live page re-fetch matches the extraction exactly (14/14 ingredient lines, servings 4, bake-or-fry then sauce+mozzarella melt, nutrition 466/35/9/33), and the mapped file remains faithful at one consistent 3.5x ratio with optionals honored. Upstream transcription and mapping are sound; the recipe never reached the build stage because it is legitimately parked on the ground-chicken registrar hold, and neither first-cycle blocking finding (missing spec/card; turkey-vs-chicken slug) was addressed in the repair window. If the recipe is ever revived: re-slug as a chicken dish, resolve the ground-chicken commodity/vocab/label hold, build the spec and card, then re-run source QA fresh. The mapper's provisional 411-cal band margin (11 cal over the 400 floor on an unverified label basis) also travels with any revival."
+}

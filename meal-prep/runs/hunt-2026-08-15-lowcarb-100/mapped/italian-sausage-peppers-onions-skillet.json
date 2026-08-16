@@ -1,0 +1,112 @@
+{
+  "slug": "italian-sausage-peppers-onions-skillet",
+  "title": "Italian Sausage, Peppers and Onions with Sauce",
+  "source_url": "https://www.lowcarbmaven.com/sausage-peppers-onions/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "pork",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-15",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "Rao's Marinara (brand-named by the source) books to the house marinara commodity class and the Great Value marinara label row. Same product concept (marinara pasta sauce); the Rao's premium is a brand, not a different food. Macro effect of the label swap: +1.1 g carbs/serving vs the Rao's panel, recipe stays ~24 g under the carb ceiling."
+  ],
+  "ingredients": [
+    {
+      "source_raw": "1 pound Italian sausage links",
+      "item": "Hot Italian Sausage",
+      "bid": "italian-sausage",
+      "board": "weekly",
+      "grams": 1588,
+      "buy": "3 1/2 lb links (about 17 links), sliced into rounds",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by an explicit source WEIGHT (1 lb), exact 3.5x, zero drift. italian-sausage commodity covers hot and mild in one price class (today's cells are mostly mild - same concept, heat variant); 6 of 7 stores, cheapest Aldi $2.4842/lb. Link count from densities each=90 g. SEE macro_cross_check: the Hot Italian Sausage DB row's raw-vs-cooked serving basis is ambiguous and this recipe's band verdict swings on it."
+    },
+    {
+      "source_raw": "9 oz mixed color bell pepper, sliced into strips (about 2 large peppers)",
+      "item": "Red Bell Pepper",
+      "bid": "red-bell-pepper",
+      "board": "recipe",
+      "grams": 907,
+      "buy": "2 lb mixed-color, sliced into strips (about 7 large)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Mixed-color (red/yellow/orange) peppers sit in the COLORED price class; mapping to green-bell-pepper would replay the rejected green-is-not-red stretch in the cheap direction. red-bell-pepper 6 of 7 stores, cheapest Sam's $0.83/each. Exact 3.5x = 31.5 oz = 893 g; quantized to the 2 lb cook weight = 907 g (+1.6%); count parenthetical 7 large from densities each=120 g."
+    },
+    {
+      "source_raw": "2 oz sliced onion (about 1/2 cup)",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 198,
+      "buy": "7 oz, sliced (about 1 3/4 cups)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 7 oz = 198 g. Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "1 tbsp olive oil (or more to taste)",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 47,
+      "buy": "3 1/2 tbsp (or more to taste)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Only the listed 1 tbsp (x3.5) is counted, matching the source's own nutrition basis. The skillet method's optional extra 1.5 tsp browning oil and the 'or more to taste' latitude are NOT booked; noted for the writer. densities 13.5 g/tbsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 tsp minced garlic",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 9.8,
+      "buy": "3 1/2 tsp minced (about 3 cloves)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 2.8 g/tsp. Board 5 of 7."
+    },
+    {
+      "source_raw": "1/2 cup Rao's Marinara Sauce",
+      "item": "Marinara Sauce",
+      "bid": "marinara-sauce",
+      "board": "weekly",
+      "grams": 431,
+      "buy": "1 3/4 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "bid from ingredient-map (Marinara Sauce -> marinara-sauce, weekly); the TERM resolver instead answers via the pasta-sauce commodity (include /marinara/, 7 of 7, cheapest Sam's $0.0591/oz) - either path prices, see board_defects_observed for the split. Brand ruling in ruled_substitutions. Label 1/2 cup = 123 g -> 1.75 cups = 431 g, exact 3.5x."
+    },
+    {
+      "source_raw": "salt and pepper to taste",
+      "item": "Salt and Pepper (to taste)",
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "to taste",
+      "optional": true,
+      "decision": "optional-pantry",
+      "notes": "Unmeasured to-taste line, optional per the source. Zero grams booked; both salt and black-pepper are 7 of 7 on the board if the writer wants a cost line. NOT enqueued (never enqueue an optional line)."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 420, "protein_g": 23.5, "carbs_g": 8, "fat_g": 32.5 },
+    "computed_per_serving": { "calories": 381.9, "protein_g": 22.4, "carbs_g": 10.9, "fat_g": 26.9 },
+    "protein_gap_pct": -4.6,
+    "calorie_gap_pct": -9.1,
+    "verdict": "Protein PASS (-4.6%), portions are right. BAND FAIL CALLED OUT LOUDLY - see band_check. The 38-cal shortfall vs the source traces to one row: the house Hot Italian Sausage row (Johnsonville, 190 cal per 2.5 oz/70 g, i.e. 2.71 cal/g) applied to 454 g RAW per 4 servings. The row does not say whether its 70 g serving is raw or cooked; if it is a cooked-link basis (USDA raw pork Italian sausage runs 3.46 cal/g; the row's own note says it replaced an 82 g/260 cal figure that matches Johnsonville's COOKED-link panel), the honest raw-basis compute is ~460-470 cal/serving and the recipe passes comfortably. NOT resolved here: the row carries a deliberate house correction note and overriding it would be exactly the guess this gate exists to prevent. Flagged for the batch auditor / meal-macro label verification; the recipe should not be retired on this number until the sausage row's basis is pinned.",
+    "band_check": "computed 381.9 cal FAILS the [400, 650] floor by 18 cal on the current Hot Italian Sausage row; carbs 10.9 g <= 35 PASS. Do not adjust numbers to fit - resolve the sausage row basis first."
+  },
+  "board_defects_observed": [
+    "Term-vs-map split on marinara: ingredient-map routes Marinara Sauce to the marinara-sauce id, but the term resolver answers 'marinara' / 'marinara sauce' via the pasta-sauce commodity - two ids claiming one concept; downstream pricing should confirm which id the feed actually prices."
+  ],
+  "densities_followups": [
+    "Hot Italian Sausage food-DB row: serving basis (raw vs cooked 70 g) is ambiguous and band-deciding for this recipe - needs the physical Johnsonville label (meal-macro skill) before the auditor rules."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Crustless Bacon & Gruyere Quiche",
+  "slug": "crustless-bacon-gruyere-quiche",
+  "protein": "pork",
+  "cuisine": "French",
+  "method": "oven bake",
+  "source_url": "https://reluctantentertainer.com/crustless-bacon-gruyere-cheese-quiche/",
+  "source_servings": 6,
+  "src_cal": 416,
+  "src_carbs": 4,
+  "src_protein": 24,
+  "src_fat": 34,
+  "ingredients_verbatim": [
+    "6 large eggs",
+    "3/4 cup half and half (or whole milk)",
+    "2 cups Gruyere cheese, shredded",
+    "1/2 tsp. salt",
+    "1/2 tsp. crushed red pepper flakes",
+    "1 Tbsp. dried basil",
+    "8 slices bacon, cooked and crumbled",
+    "1/4 cup sliced green onions",
+    "2 cloves garlic, minced"
+  ],
+  "unmapped": ["Gruyere cheese"],
+  "why": "Egg-and-cheese-identity crustless quiche (the bake IS the dish, bacon is a component). Published 416 cal / 4g carbs / 24g protein clears the 400-650 cal, <=35g carb band on the source's own numbers. Naturally low-carb (no crust, no starch base). NOTE: 416 cal sits near the floor - moderate confidence it stays >=400 after our label-DB recompute; protein 24g is just shy of the 25g ideal but is a high protein-to-cal ratio. Gruyere has no board home (flagged) - deliberately kept per the pricer-lane exercise; substitutes cleanly to shredded-cheese if the selector prefers."
+}

@@ -1,0 +1,18 @@
+{
+  "slug": "jamaican-brown-stew-beef",
+  "name": "Jamaican Brown Stew Beef",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 450,
+    "carbs": 20,
+    "within_conditions": true,
+    "notes": "450 cal is inside 400-650; 20g carb is under the 35g ceiling; no seafood; braise scales to 14 and weigh-divides; no starch base."
+  },
+  "dupe_check": {
+    "catalog": "Not a duplicate of any catalog beef recipe. Nearest is caribbean-curry-beef-potatoes (also Caribbean beef braise) but that is a curry-powder + tomato + russet-potato dish; brown stew beef is a soy/allspice/thyme/brown-sugar browned-gravy braise with no starch base and no curry/tomato - different sauce family and different starch, so a distinct dinner. Other braised-beef entries (classic-beef-stew, carne-guisada, nigerian-beef-stew, filipino-beef-caldereta, picadinho) are tomato- or western-stew based, none share the brown-stew flavor profile.",
+    "accepted_slugs": "No collision with the current accepted-slugs list (no Caribbean/brown-stew beef accepted)."
+  },
+  "cross_protein_watch": "Brown stew is classically also made with chicken (Jamaican brown stew chicken) and sometimes pork - a chicken or pork brown-stew candidate in another selector's pool would be structurally the SAME dish (same browned-sugar/soy/allspice/thyme gravy and method), differing only in protein. Decider should catch a same-dish-different-protein twin.",
+  "evidence": "Distinct Jamaican brown-stew braise (browned beef in caramelized soy/allspice/thyme gravy, carrots + bell peppers, no potato/rice); catalog has no brown-stew dish in any form."
+}

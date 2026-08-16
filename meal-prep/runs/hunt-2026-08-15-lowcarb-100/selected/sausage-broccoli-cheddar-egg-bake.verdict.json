@@ -1,0 +1,20 @@
+{
+  "slug": "sausage-broccoli-cheddar-egg-bake",
+  "name": "Sausage, Broccoli & Cheddar Egg Bake",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "fit_evidence": "463 cal (400-650 band) and 4.2 g carbs (<=35 band) per serving; no seafood; one-dish oven bake, scalable from 8 to 14 servings by weigh-and-divide.",
+  "catalog_dupe_of": null,
+  "dupe_evidence": "Nearest catalog dish is 'Sausage Hash Brown and Egg Casserole' (sausage-hash-brown-egg-casserole): same sausage+egg+cheddar egg-bound bake, but that one is potato/hash-brown-based while this is crustless, broccoli-and-heavy-cream, low-carb -- starch base differs so it is a distinct plate, not a duplicate. Distinct from accepted crustless-bacon-gruyere-quiche (bacon/gruyere, no sausage/broccoli).",
+  "cross_protein_collisions": [
+    "keto-turkey-broccoli-cheddar-casserole (ACCEPTED, turkey): structurally the same broccoli+cheddar low-carb casserole idea but different protein (pork sausage vs turkey) and different binder (12-egg + heavy cream egg bake vs cream/cheese-sauce casserole, and turkey version is 450cal/8g carb) -- not a dupe under my pork scope, flagged so the decider can weigh the broccoli-cheddar-casserole slot across proteins."
+  ],
+  "pool_collisions_same_protein": [
+    "broccoli-cheddar-sausage-egg-bake (pork, 463 cal/4g): near-identical name and macros -- almost certainly the same dish/source, strong pool near-dupe.",
+    "keto-sausage-broccoli-egg-casserole (pork, 463 cal/4.2g): identical macros to this candidate -- same sausage+broccoli egg bake, strong pool near-dupe.",
+    "broccoli-smoked-sausage-cream-cheese-casserole (pork): broccoli+sausage but cream-cheese casserole not egg-bound -- borderline, likely distinct.",
+    "sheet-pan-smoked-sausage-broccoli-cheddar (pork): same three components but sheet-pan method not egg bake -- distinct dish."
+  ],
+  "note_to_decider": "KEEP against live catalog and current accepted-slugs (neither pork pool twin is accepted yet). But three pork candidates in the pool (this one, broccoli-cheddar-sausage-egg-bake, keto-sausage-broccoli-egg-casserole) share the sausage+broccoli+cheddar egg-bake dish and two carry identical 463-cal macros -- only ONE should ship; the concurrent pork adjudications need cross-checking before accept."
+}

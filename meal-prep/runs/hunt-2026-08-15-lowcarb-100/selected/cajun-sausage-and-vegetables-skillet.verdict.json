@@ -1,0 +1,16 @@
+{
+  "slug": "cajun-sausage-and-vegetables-skillet",
+  "name": "Cajun Sausage and Vegetables Skillet",
+  "protein": "pork-sausage",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "fit_evidence": "440 cal (in 400-650), 9 g carb (<=35), budget one-pan skillet, no seafood, scales to 14 by weigh-and-divide.",
+  "dedup_evidence": "No catalog collision: the nearest sausage-skillet catalog recipes (cheesy-smoked-sausage-rice-skillet, turkey-sausage-and-peppers-rice-skillet, polish-leczo-kielbasa-peppers-stew) are all rice/tomato-starch based, whereas this is a starch-free Cajun andouille + zucchini/squash/pepper/onion skillet; no starch-free Cajun sausage-and-vegetables dish exists in the 544-recipe digest.",
+  "cuisine": "Cajun / Creole (American South) - widens the American/Tex-Mex-skewed catalog.",
+  "cross_protein_collision_flags": [
+    "Same-dish-different-protein risk with a smoked-turkey-sausage version in the turkey lane (a 'Cajun turkey sausage and vegetables skillet') - board carries smoked-turkey-sausage, and rebuilding this on that item would make it structurally identical; decider should check the turkey pool.",
+    "Also collides in spirit with a chicken-sausage Cajun veggie skillet if one surfaces.",
+    "Within this pork-sausage lane, note italian-sausage-peppers-onions-skillet (already accepted) is a sibling starch-free sausage skillet but a DIFFERENT dish - Italian flavor + italian sausage vs Cajun flavor + andouille, distinct dinner (paprikash-vs-goulash rule); not a dupe, flagged for decider awareness."
+  ],
+  "notes": "Andouille is unmapped (board has kielbasa, italian-sausage, smoked-turkey-sausage, bratwurst); per v2.1 5.1 the unmapped pick is wanted for the pricer lane, not penalized."
+}

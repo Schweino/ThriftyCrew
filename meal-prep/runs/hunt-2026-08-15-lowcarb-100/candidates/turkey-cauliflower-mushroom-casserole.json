@@ -1,0 +1,33 @@
+{
+  "name": "Low-Carb Turkey and Cauliflower Casserole with Mushrooms",
+  "slug": "turkey-cauliflower-mushroom-casserole",
+  "protein": "turkey",
+  "method": "oven bake",
+  "cuisine": "American",
+  "source_url": "https://kalynskitchen.com/low-carb-turkey-casserole-with-cauliflower-rice/",
+  "source_servings": 8,
+  "src_cal": 472,
+  "src_carbs": 8.6,
+  "src_protein": 33,
+  "ingredients": [
+    "6 cups chopped cauliflower",
+    "1 pound Crimini mushrooms, washed and sliced",
+    "4 cups cooked leftover turkey or chicken",
+    "1 onion, chopped",
+    "2 tablespoons olive oil, divided",
+    "1 teaspoon dried thyme",
+    "1 teaspoon dried Poultry Seasoning",
+    "Salt and fresh-ground black pepper to taste",
+    "1 cup coarsely grated Mozzarella",
+    "1 cup sour cream",
+    "1/2 cup mayo",
+    "2 tablespoons Dijon mustard",
+    "1/2 teaspoon dried thyme",
+    "1/2 teaspoon dried Poultry seasoning",
+    "1 cup grated Mozzarella",
+    "1/4 cup coarsely grated Parmesan cheese"
+  ],
+  "main_ingredients": ["turkey-breast", "cauliflower", "mushrooms", "onions", "sour-cream", "mayonnaise", "dijon-mustard", "parmesan"],
+  "unmapped": ["mozzarella"],
+  "why": "Squarely mid-band on the source's own numbers: 472 cal, 8.6 g total carbs (5.6 g net), 33 g protein per serving across 8 servings, oven-baked 375F for 40 min. Structurally low-carb (turkey + cauliflower + mushroom + cheese/sour-cream sauce, zero rice/pasta/potato). Uses cooked/diced turkey breast (whole-muscle, board-mapped) rather than ground, and scales cleanly to 14 by weight. Not a catalog duplicate: existing turkey bakes are rice- or broccoli-rice-based; none is a cauliflower-mushroom casserole. Mozzarella is the only ingredient with no dedicated board id (nearest home is generic shredded-cheese) - flagged for the pricer lane."
+}

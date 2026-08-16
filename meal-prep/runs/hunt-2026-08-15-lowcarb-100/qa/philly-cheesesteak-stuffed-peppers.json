@@ -1,0 +1,16 @@
+{
+  "slug": "philly-cheesesteak-stuffed-peppers",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page", "prior-qa-2026-08-16T06:01:53"],
+  "findings": [
+    { "check": "scaling",
+      "severity": "note",
+      "detail": "Shaved beef: exact 3.5x of the source 14 oz is 49 oz (1389 g); spec books 3 lb (1361 g), implied ratio 3.43x. Buy-friendly rounding of about -2%, not a hand-adjusted line; every other line sits on the 3.5x ratio. Unchanged from the prior QA.",
+      "owner": "mapper" },
+    { "check": "condition-flag",
+      "severity": "note",
+      "detail": "Worcestershire Sauce (Lea & Perrins, 60 g, used in make_it step 4) contains anchovy; the run condition reads 'no seafood'. Auditor read the condition as recipe-class and did NOT block. Carried as an open adjudication question for Brad, not a source-fidelity defect. Same flag applies to balsamic-sirloin-steak-sheet-pan.",
+      "owner": "brad" }
+  ],
+  "notes": "RE-QA on the current 11:58:52 spec bytes (the prior pass at 06:01:53 certified pre-cost-repair bytes; the 11:58 delta is the cost re-render after the registrar minted and priced the shaved-beef-steak commodity, documented in writer_notes and independently reconciled by the batch auditor to batch 42.39 / ps 3.03 / true 50.46 / pantry 7.52 / first run 57.98). Source-fidelity is unchanged from the prior live-budgetbytes.com fetch: same 11 ingredients, same dish, one consistent 3.5x scale (4 -> 14 servings, 7 peppers halved = 14 boats), method preserved with the weigh-the-skillet portioning aid added. Re-walked the costed list against make_it both directions on current bytes: every bought line is used by a step (peppers 2,6; shaved beef 5; onion 3; mushrooms 4; provolone 7; butter 3,5; vegetable oil 2,3,5; Worcestershire 4; garlic powder 4; salt 2,3,4; black pepper 2,4) and no step names anything unbought - zero orphans both ways. Prose money: intro/portion/head carry {{cal}}/{{protein}} tokens and cost_closing/upsell carry ${{cost_ps}}; the only literal dollar figures live in the 3-part cost section and equal the spec's own cost fields. shop_smart makes no per-ounce, leftover, or lasts-several-batches claim, so no bullet needs a cost_lines proof. Zero em/en dashes. Macros 521/31/17/38 in the run window. Clear to re-enter the wave."
+}

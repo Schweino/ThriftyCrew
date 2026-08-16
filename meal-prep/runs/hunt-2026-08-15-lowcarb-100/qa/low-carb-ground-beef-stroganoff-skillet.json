@@ -1,0 +1,20 @@
+{
+  "slug": "low-carb-ground-beef-stroganoff-skillet",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    { "check": "prose-numbers",
+      "severity": "note",
+      "detail": "PRIOR BLOCKING FINDING CLOSED, VERIFIED FROM THE BYTES: the BLOCKER writer_note now carries the dated RESOLVED 2026-08-16 sentence, and every figure in that annotation matches the spec's own cost block exactly - Brandy ~$1.49 used / $10.93 bottle, Beef Base ~$0.26 / $2.77 jar, 1/3 Fat Cream Cheese ~$1.61 / $1.84 brick, Sour Cream ~$2.91 / 2 tubs $3.28, Fresh Parsley ~$0.42 / $1.93 bunch, cost_per_serving 2.50 vs spec 2.5. The wiring claim was verified independently: all five bids (brandy, beef-base, 1-3-fat-cream-cheese, sour-cream, fresh-parsley) have live rows in db ingredients.json, and brandy carries a real cost line, so cost_ps is not a floor. No writer_note on this spec now asserts a false wiring claim or an un-annotated stale figure.",
+      "owner": "writer" },
+    { "check": "ingredient-coverage",
+      "severity": "note",
+      "detail": "CREAM-CHEESE DIVERGENCE RE-RULED ON CURRENT BYTES (not inherited) AND IT HOLDS: source (lowcarbmaven.com, re-fetched live 2026-08-16, matches extraction) calls for 2 oz Philadelphia Cream Cheese, softened (regular); the card ships 1/3 Fat Cream Cheese (Great Value), 7 oz (198 g) = exact 3.5x, bid 1-3-fat-cream-cheese, per Brad's 2026-08-16 ruling. Disclosed in ingredients_display, head.recipeIngredient, cost_lines, and the shop_smart bullet ('a brick of 1/3 less fat cream cheese'). SOUR CREAM legitimately stays full-fat: display and recipeIngredient read '3 1/2 cups full-fat', matching the source's 'full fat sour cream', and the macro row used is the full-fat basis. Independent recompute against the food DB on current bytes: 450.0 cal / 28.9 P / 11.3 C / 31.1 F vs stat 450/29/11/31, exact; in band (400-650, 35 g carb or less). 'Under 15 grams of carbs' true beside carbs 11.",
+      "owner": "writer" },
+    { "check": "ingredient-coverage",
+      "severity": "note",
+      "detail": "Carried forward for the batch auditor, unchanged and not a fidelity defect: the sour-cream bid still resolves to an item named 'Light Sour Cream' in db ingredients.json while the card sells and computes full-fat sour cream. Macros are correct on the full-fat basis; this is a pricing-identity question in the auditor's cost domain.",
+      "owner": "mapper" }
+  ],
+  "notes": "Re-cert 2026-08-16, third pass. Both anchors reached: live lowcarbmaven.com fetch matched the extraction (4 servings, all lines, method identical). Only writer_notes moved since my prior fail; every reader-facing field re-verified anyway. Coverage traces both directions at one consistent 3.5x ratio (beef 1lb-3.5lb, mushrooms 4oz-14oz, brandy 2tbsp-7tbsp, cream cheese 2oz-7oz, sour cream 1c-3.5c, cabbage 12oz-2 5/8lb). Cauliflower rice remains the source's own either/or alternative, unbooked, offered as a one-for-one swap in prose; salt/pepper is the to-taste line, unbooked, steps season to taste. Method faithful, title and credit correct. Cost literals: batch 34.98/2.50 and true 56.59/4.04 are internally consistent, and stat cost_ps 4.28 follows the house first-run convention (cost_first_run 59.90 / 14 = 4.28), same as the other three cards, with prose carrying it only as the {{cost_ps}} token. The blocking item from my prior cert is closed with figures that check against the spec's own cost block."
+}

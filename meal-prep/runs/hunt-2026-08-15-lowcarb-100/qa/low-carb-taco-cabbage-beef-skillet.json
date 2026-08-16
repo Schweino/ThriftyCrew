@@ -1,0 +1,14 @@
+﻿{
+  "slug": "low-carb-taco-cabbage-beef-skillet",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "scaling",
+      "severity": "note",
+      "detail": "Beef booked at 2155 g (4 3/4 lb) vs the exact 14/3 scale of 1 lb = 2117 g, an implied ratio of 4.75x vs the recipe's 4.667x (+1.8%). All other lines sit on the 4.667x ratio exactly (salsa 2 1/3 cups/560 g, cabbage 9 1/3 cups/653 g, cheese 3 1/2 cups/396 g, chili powder 3 tbsp/24 g). Consistent with rounding the beef to a purchasable quarter-pound increment, not a per-line guess; noting for the auditor.",
+      "owner": "mapper"
+    }
+  ],
+  "notes": "Re-certification against current spec bytes; prior 06:16 cert void. Both anchors reached: extraction and live heyketomama.com page agree exactly (title, 3 servings, all 7 ingredient lines, 5 steps). Ingredient coverage clean both directions: 5 non-optional source lines all present in spec; salt/pepper (to taste) covered by 'season to taste' in step 5 uncosted; optional garnishes deliberately unbought and prose frames toppings as the cook's own add-on. Method preserved: brown/drain, salsa+chili+cabbage to low boil, covered 10-12 min, cheese off heat; added weigh-and-portion steps are house framing, not a technique change. Title names the same dish. Credit links the exact source URL. Prose cost literals all match the spec's own cost fields: batch $30.44 / $2.17 = cost_batch/cost_per_serving; true $34.09 / $2.44 = cost_batch_true/cost_per_serving_true; pantry add $0.58 = cost_pantry_add; first run $34.67 = cost_first_run; scaler.cost 34.09 matches. cal/protein/cost_ps appear only as tokens, correct by construction; 'under 10 grams of carbs' agrees with stat.carbs 8. stat.cost_ps 2.48 vs cost_per_serving 2.17 is the known everyday-basis difference, per dispatch not a defect. Macro divergence from the source card (532/33 vs published 576/50) is documented in writer_notes as a defensible recompute of a source-side error and is the auditor's domain, not a fidelity defect."
+}

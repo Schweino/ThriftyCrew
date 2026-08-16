@@ -1,0 +1,11 @@
+{
+  "slug": "turkey-parmesan-meatball-bake",
+  "name": "Turkey Parmesan Meatball Bake",
+  "protein": "turkey",
+  "cuisine": "Italian",
+  "source_url": "https://www.sugarfreemom.com/recipes/easy-low-carb-keto-chicken-parmesan-meatballs-recipe/",
+  "decision": "ACCEPT",
+  "decided_by": "decider",
+  "cross_lane_dupe_check": "No collision with accepted-slugs.json (read fresh). Accepted turkey-meatballs-cream-sauce-skillet is a cream-sauce skillet, not a marinara+mozzarella oven bake - different sauce/method. No beef or pork meatball-parmesan bake in the accepted list. Adjudicator flagged the source is a keto CHICKEN parm-meatball recipe rebuilt to turkey; a chicken 'parm meatball bake' twin in the chicken pool would be the same dish - noted for orchestrator cross-protein merge, not present in accepted state.",
+  "note": "Ground-chicken -> ground-turkey rebuild (no-ground-chicken rule); optional almond-flour/fry oil dropped for oven-bake path. Turkey is underrepresented in the run vs beef/chicken/pork, so this improves protein balance. Fit: 466 cal / 9g carb (7g net). Unmapped marinara/parsley/Italian-seasoning/basil are pricer-lane exercises, not penalties."
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "italian-sausage-stuffed-peppers-bake",
+  "verdict": "fail",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "ingredient-coverage",
+      "severity": "blocking",
+      "detail": "RE-QA after the writer-routed repair cycle: the built spec (db\recipes\\italian-sausage-stuffed-peppers-bake.json) and built card (db\built\\italian-sausage-stuffed-peppers-bake.body.html) still do not exist. The state file shows no event after 'priced' (derive, 2026-08-16T06:31:55) - the repair never ran. There is no card to compare against the source, so fidelity cannot be attested. Same defect as the first QA fail; this is the second fail (terminal, rejected-qa). For the record, both anchors were re-verified this cycle and agree exactly: 6 ingredients (1 onion; 8 oz bell peppers; 5 Italian sausage links ~1.5-2 lb; 5 cheese sticks; 1 cup marinara; 1 cup mozzarella), 5 servings, same 400F stuff-and-bake method, nutrition 561 kcal / 28 P / 8 C / 46 F. Upstream extraction is clean; the sole and repeated defect is the missing build artifact.",
+      "owner": "writer"
+    }
+  ],
+  "notes": "Live page https://remakemyplate.com/lazy-keto-italian-stuffed-sausage-peppers/ was fetchable this cycle and matches the extraction line for line, so both anchors were available. If this recipe is ever revived, the extraction and mapping need no rework - only the build/write stage was never executed. The prior QA also relayed the mapper's own publish-hold note (Hot Italian Sausage raw-vs-cooked DB basis could push calories ~665, over the 650 ceiling); preserved here for the batch auditor should the recipe return."
+}

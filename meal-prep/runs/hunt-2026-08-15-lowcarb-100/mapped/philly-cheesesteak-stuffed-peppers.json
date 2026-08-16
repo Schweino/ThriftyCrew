@@ -1,0 +1,176 @@
+{
+  "slug": "philly-cheesesteak-stuffed-peppers",
+  "title": "Philly Cheesesteak Stuffed Peppers",
+  "source_url": "https://www.budgetbytes.com/philly-cheesesteak-stuffed-peppers/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "beef",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-15",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%. Serving anchor: source serving is 1/2 stuffed pepper; 14 servings = 7 peppers, 14 halves.",
+  "ruled_substitutions": [],
+  "registrar_rulings": [
+    {
+      "proposed_id": "shaved-beef-steak",
+      "for_item": "Shaved Beef Steak",
+      "status": "PENDING - proposal drafted, registrar not yet consulted (mapper lane cannot invoke the registrar agent; orchestrator must route it)",
+      "mapper_sweep_evidence": "price-ingredient.ps1 verdict ABSENT ('no commodity claims this term'); no shaved-beef id in commodities.json, recipe-commodities.json, or the recipe-board (+45 ids). NOT mapped to sirloin-steak or ribeye-steak: a retail shaved-steak tray is a different product and price class from a whole steak (leg-quarters-are-not-thighs precedent), and the sirloin commodity's own rules exclude 'shaved' (commodities.json line ~43064 carries a 'shaved' exclude). Shaved beef trays are a standard meat-case item (Walmart/Hy-Vee class), so carriage is plausible; the pricer rules.",
+      "meanwhile": "ingredient maps item_id null (safe pantry-static pricing); term 'shaved beef steak' enqueued BLOCKING - it is the title protein. FALLBACK note for the writer if the pricer returns not-carried: thin-sliced sirloin (freeze 20 min, slice thin) is the classic home substitution and sirloin-steak IS priced on the weekly board - but that is a spec-lane ruling, not made here."
+    }
+  ],
+  "ingredients": [
+    {
+      "source_raw": "2 green bell peppers (halved)",
+      "item": "Green Bell Peppers",
+      "bid": "green-bell-pepper",
+      "board": "weekly",
+      "grams": 840,
+      "buy": "7 green bell peppers, halved and seeded",
+      "optional": false,
+      "decision": "mapped-pending-price",
+      "notes": "exact scale 7 peppers x map/densities each=120 g = 840 g. The green-bell-pepper id exists (ingredient-map + price-ingredient both know it) but price-ingredient returns CAPTURE: 'commodity exists but has no priced board cell', with 8 candidate products across 6 stores in today's captures (Baker's $0.99/ct, Fareway $0.77/each, Hy-Vee $0.79/lb, Aldi 3ct $2.69...). Writing a price from captures is the pricer's job, not the mapper's - term enqueued BLOCKING. Deliberately NOT the red-bell-pepper id (standing rejection: green-pepper pricing is not red-bell-pepper) and NOT the mixed bell-peppers weekly commodity for the same variety-pricing reason. DB row exists (1 medium = 119 g, 24 cal)."
+    },
+    {
+      "source_raw": "1/4 tsp salt (divided)",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 6,
+      "buy": "1 tsp, divided",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 0.875 tsp quantized to 1 tsp (+14.3% drift, noted; zero-macro so harmless) = 6 g at densities 6 g/tsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/4 tsp freshly cracked black pepper (divided)",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 2,
+      "buy": "1 tsp, divided",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 0.875 tsp quantized to 1 tsp (+14.3% drift, noted; 6 cal/tsp, immaterial) = 2.3 -> 2 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 yellow onion (sliced thin, (mine was just under 1lb))",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 1588,
+      "buy": "3 1/2 lb yellow onions, sliced thin (3 to 4 very large)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "WEIGHT-ANCHORED, not count-anchored: the author states her one onion weighed just under 1 lb, and the dish is a caramelized-onion filling where that quantity is structural. Booking the densities default each=110 g would understate the author's own stated amount 4x. 454 g x 3.5 = 1588 g; printed weight and grams agree. This is the main driver of our carb figure exceeding the source's published 9 g (their calculator evidently booked a ~120 g default onion - see macro_cross_check). Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "4 Tbsp butter (divided)",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "weekly",
+      "grams": 196,
+      "buy": "14 tbsp (1 3/4 sticks), divided",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 14 tbsp x densities 14 g/tbsp = 196 g. Board 7 of 7, cheapest Sam's $2.555/lb."
+    },
+    {
+      "source_raw": "1/4 cup vegetable oil (divided)",
+      "item": "Vegetable Oil",
+      "bid": "vegetable-oil",
+      "board": "weekly",
+      "grams": 196,
+      "buy": "14 tbsp (3/4 cup plus 2 tbsp), divided",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 0.875 cup = 14 tbsp x densities 14 g/tbsp = 196 g; printed as tbsp because 0.875 cup is not a house quarter. Part is brushed on the peppers, part fries the filling; all of it lands in the dish and all of it is counted. Board 7 of 7, cheapest Hy-Vee $0.0666/floz."
+    },
+    {
+      "source_raw": "8 oz white mushrooms (sliced thin)",
+      "item": "White Mushrooms",
+      "bid": "mushrooms",
+      "board": "weekly",
+      "grams": 794,
+      "buy": "1 3/4 lb, sliced thin (about 11 cups)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 28 oz = 1.75 lb = 794 g; printed weight and grams agree (cups parenthetical from densities cup=70: 11.3). Existing map entry White Mushrooms -> mushrooms (weekly); the recipe board also carries a white-mushrooms id, map-entry continuity kept, both are real coverage. Board 7 of 7, cheapest Sam's $0.1654/oz."
+    },
+    {
+      "source_raw": "1 tsp garlic powder",
+      "item": "Garlic Powder",
+      "bid": "garlic-powder",
+      "board": "weekly",
+      "grams": 11,
+      "buy": "3 1/2 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 3.5 tsp x densities 3.1 g/tsp = 10.85 -> 11 g. Board 7 of 7, cheapest Walmart $0.216/oz."
+    },
+    {
+      "source_raw": "1 Tbsp Worcestershire sauce",
+      "item": "Worcestershire Sauce",
+      "bid": "worcestershire",
+      "board": "weekly",
+      "grams": 60,
+      "buy": "3 1/2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 3.5 tbsp x densities 17 g/tbsp = 59.5 -> 60 g (DB label basis 5.7 g/tsp agrees at 17.1/tbsp). Board 6 of 7, cheapest $0.10/floz."
+    },
+    {
+      "source_raw": "14 oz shaved beef steak",
+      "item": "Shaved Beef Steak",
+      "bid": null,
+      "board": null,
+      "grams": 1361,
+      "buy": "3 lb shaved beef steak",
+      "optional": false,
+      "decision": "mapped-null-pending-registrar",
+      "notes": "exact scale 49 oz = 3.06 lb, quantized 3 lb = 1361 g (-2.0%); printed weight and grams agree. bid null: no commodity claims the term and no stage mints an id - registrar proposal shaved-beef-steak recorded above, term enqueued BLOCKING. NOT mapped to sirloin-steak/ribeye-steak (different product and price class; a sirloin commodity rule carries a 'shaved' exclude). NEW food-DB row added (shares the estate's USDA lean raw sirloin/flank record, disclosed not averaged - guajillo precedent; validated by the protein cross-check landing +9.6% of the source's own label)."
+    },
+    {
+      "source_raw": "4 slices Provolone cheese",
+      "item": "Provolone Cheese",
+      "bid": "provolone-cheese",
+      "board": "recipe",
+      "grams": 294,
+      "buy": "14 slices",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 14 slices, no quantization. FLAGGED: densities.json has NO Provolone Cheese row; grams at 21 g/slice, the retail deli-slice class the board's own cells actually are (Aldi Happy Farms deli sliced, Hy-Vee 10 ct, Member's Mark 2 lb slices; retail slice labels run 19-23 g). USDA's household '1 slice = 1 oz = 28 g' was REJECTED against the cross-check: at 28 g/slice recomputed protein lands +17.9% over the source's label (outside tolerance), at 21 g it lands +9.6% (inside) - the source melted retail slices, not USDA ounces. Follow-up: add Provolone Cheese slice=21 to densities via the sanctioned route. Board: recipe board, priced 6 of 7, cheapest Aldi $0.1862/oz. Existing DB row (USDA per 100 g: 350 cal / 26 P)."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Shaved Beef Steak (shares USDA lean raw sirloin/flank record, per 100 g: 155 cal / 22 P / 0 C / 7 F; disclosed share, no USDA 'shaved steak' record exists)"
+  ],
+  "pricing_terms_needed": [
+    { "term": "green bell pepper", "blocking": true, "why": "the vessel of the dish, 7 peppers; commodity id exists but has NO priced board cell (CAPTURE verdict); 8 capture candidates across 6 stores await the pricer's rule" },
+    { "term": "shaved beef steak", "blocking": true, "why": "the title protein, 1361 g; no commodity claims the term; registrar proposal shaved-beef-steak pending" }
+  ],
+  "new_commodity_proposals": [
+    {
+      "proposed_id": "shaved-beef-steak",
+      "for_item": "Shaved Beef Steak",
+      "status": "flagged-for-registrar",
+      "registrar_ruling": "NOT YET OBTAINED - see registrar_rulings; item maps null meanwhile (pantry-static, safe)."
+    }
+  ],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 535, "protein_g": 28, "carbs_g": 9, "fat_g": 44 },
+    "recomputed_per_serving_from_food_db": { "calories": 521, "protein_g": 30.7, "carbs_g": 17.2, "fat_g": 38.3 },
+    "protein_gap_pct": 9.6,
+    "calorie_gap_pct": -2.6,
+    "verdict": "PASS - protein +9.6% and calories -2.6% are inside tolerance, so portions stand; the beef line is weight-anchored by the source (14 oz stated), not each-assumed, so the florentine failure mode does not apply. The one visible divergence is CARBS: ours 17.2 vs their 9, and it is fully explained by the onion line - their calculator booked '1 yellow onion' at a ~120 g default while the author's own parenthetical says just under 1 lb; we booked the author's pound (see the onion note). Direction is safe: carbs stay well under the 35 g gate either way, and honoring the author's weight is the honest reading of the recipe as cooked.",
+    "band_check": "computed 521 cal in [400, 650] PASS; carbs 17.2 g <= 35 PASS. No optional lines."
+  },
+  "loud_flags": [
+    "Two of the recipe's three defining components (the pepper vessel and the shaved beef) are awaiting pricer verdicts - this recipe parks in 'pricing' and cannot reach 'priced' from disk today. Both terms carry real capture/plausibility evidence; neither is a rejection.",
+    "densities.json follow-up (sanctioned route, not edited by this run): Provolone Cheese slice=21, oz=28.35."
+  ],
+  "board_defects_observed": [
+    "provolone-cheese (recipe board): Walmart, Baker's and Family Fare cells carry a price but an EMPTY item name in the price-ingredient output - a capture with no product evidence behind the cell; flagged for the match-soundness gate, coverage claim here rests on the named cells (Aldi/Sam's/Hy-Vee)."
+  ]
+}

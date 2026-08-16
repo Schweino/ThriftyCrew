@@ -1,0 +1,19 @@
+{
+  "slug": "greek-pork-chops-zucchini-feta-skillet",
+  "name": "Greek Pork Chops with Zucchini, Tomatoes and Feta",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "pass": true,
+    "cal": 482,
+    "carbs": 9,
+    "reason": "482 cal is inside 400-650; 9g carbs is well under the 35g cap; no seafood; skillet sear-then-braise scales to 14 by weigh-and-divide; budget meal-prep dinner."
+  },
+  "duplicate_check": {
+    "is_dupe": false,
+    "evidence": "Not a duplicate. Closest catalog Greek/pork entry is greek-pork-souvlaki-rice-bowls, but that is marinated grilled pork tenderloin over rice (different cut, method, and starch) rather than seared bone-in chops braised with zucchini, tomatoes, olives and feta. The catalog's ~15 pork-chop dishes are all creamy/cheesy/gravy/rice/potato builds (creamy-mushroom-pork-chops, marry-me-pork-chops, southern-smothered, no-peek-rice, cheesy-hash-brown, etc.) with none carrying the Greek zucchini-tomato-feta-olive profile. accepted-slugs pork entries (creamy-garlic-herb-wine-pork-chops, thai-coconut-curry-pork-shoulder) are unrelated flavor families."
+  },
+  "cross_protein_collision": "Structurally this is a Greek/Mediterranean protein-over-non-starchy-veg skillet finished with feta, cherry tomatoes, olives and oregano. The decider should watch other proteins' pools for the same dish built on chicken or turkey (e.g. a 'Greek chicken skillet with zucchini, tomatoes and feta' or a baked-feta chicken), which would be the same dinner with the protein swapped.",
+  "cuisine_note": "Greek / Mediterranean widens a catalog that skews American/Tex-Mex; distinct angle from all existing creamy/cheese pork-chop pan-sauces.",
+  "unmapped": []
+}

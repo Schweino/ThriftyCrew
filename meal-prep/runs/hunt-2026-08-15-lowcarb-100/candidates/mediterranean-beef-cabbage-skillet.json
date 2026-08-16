@@ -1,0 +1,33 @@
+{
+  "name": "Mediterranean Ground Beef and Cabbage Skillet",
+  "slug": "mediterranean-beef-cabbage-skillet",
+  "protein": "beef",
+  "cuisine": "Middle Eastern",
+  "method": "skillet",
+  "source_url": "https://www.themediterraneandish.com/ground-beef-and-cabbage-skillet/",
+  "source_servings": 4,
+  "src_cal": 419,
+  "src_carbs": 22,
+  "src_protein": 27,
+  "src_fat": 26,
+  "ingredients_verbatim": [
+    "1 large yellow onion",
+    "4 tablespoons extra virgin olive oil, divided",
+    "2 garlic cloves, minced",
+    "1 pound lean ground beef",
+    "1 teaspoon cumin, divided",
+    "1/2 teaspoon baharat",
+    "1/2 teaspoon coriander",
+    "1/4 teaspoon paprika",
+    "Kosher salt",
+    "Freshly-ground black pepper",
+    "1 small green cabbage, cored and shredded",
+    "3 carrots, shredded",
+    "1 teaspoon white wine vinegar",
+    "2 scallions, trimmed and chopped (both whites and green parts)",
+    "3 tablespoons chopped parsley"
+  ],
+  "main_ingredients": ["ground-beef-93-7", "onions", "olive-oil", "garlic", "ground-cumin", "ground-coriander", "paprika", "cabbage", "carrots", "white-vinegar", "green-onions", "fresh-parsley", "kosher-salt", "black-pepper"],
+  "unmapped": ["baharat (Middle Eastern warm-spice blend; no board id - closest analog is shawarma-spice-blend but not equivalent; this is the signature spice and a genuine new-commodity flag for the pricer lane)"],
+  "why": "Ground beef + shredded cabbage + carrots seared in a skillet, spiced with baharat/cumin/coriander - structurally low-carb (no rice/pasta/potato/bread) and Middle Eastern, adding cuisine variety to a catalog that skews American/Tex-Mex. Published nutrition 418.5 cal / 21.6g carbs / 26.8g protein clears the 400-650 cal and <=35g carb band on the source's own numbers. Big skillet, weigh-and-divide, scales cleanly to 14. CONFIDENCE/FLAGS: (1) calories sit near the 400 floor - if our label-DB macros drift down it risks failing our own gate; (2) potential near-duplicate of the existing beef-unstuffed-cabbage-skillet (this differs by Middle Eastern spicing, carrots, and no tomato base) - flagged for the dedup adjudicators to rule. baharat flagged unmapped per the pricer-lane exercise."
+}

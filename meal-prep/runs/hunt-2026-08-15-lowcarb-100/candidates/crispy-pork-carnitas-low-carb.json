@@ -1,0 +1,27 @@
+{
+  "name": "Crispy Pork Carnitas (Low-Carb, No Rice)",
+  "slug": "crispy-pork-carnitas-low-carb",
+  "protein": "pork",
+  "cuisine": "Mexican",
+  "method": "slow cooker, then pan-fry to crisp",
+  "source_url": "https://www.recipetineats.com/pork-carnitas-mexican-slow-cooker-pulled-pork/",
+  "source_servings": 12,
+  "src_cal": 578,
+  "src_protein": 45,
+  "src_carbs": 1.7,
+  "ingredients": [
+    "2 kg (4 lb) pork shoulder, skinless, boneless",
+    "2 1/2 tsp salt",
+    "1 tsp black pepper",
+    "1 onion, chopped",
+    "1 jalapeno, deseeded, chopped",
+    "4 cloves garlic, minced",
+    "3/4 cup orange juice",
+    "1 tbsp dried oregano",
+    "2 tsp ground cumin",
+    "1 tbsp olive oil"
+  ],
+  "unmapped": [],
+  "why": "Fully verified mid-band: 578 cal / 45g protein / 1.7g carbs per serving (pork-only, 12 servings) - squarely in the sweet spot and essentially zero-carb, meat+fat+aromatics with no starch base. Every main ingredient maps to the board (pork-shoulder, onions, jalapenos, garlic, orange-juice, olive-oil). DEDUP RISK: catalog already has slow-cooker-pork-carnitas-bowl and al-pastor-pork-taco-bowl - this differs by being a crisped low-carb plate with no rice, but it is the same core carnitas prep, so adjudicators may rule it a near-duplicate. Submitting as a clean in-band backstop.",
+  "confidence": "high on nutrition (read from page); low on dedup survival (carnitas already in catalog as a bowl)"
+}

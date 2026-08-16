@@ -1,0 +1,25 @@
+{
+  "name": "Swiss and Mushroom Stuffed Pork Chops",
+  "slug": "swiss-mushroom-stuffed-pork-chops",
+  "protein": "pork",
+  "cuisine": "American",
+  "method": "oven bake",
+  "source_url": "https://www.wholesomeyum.com/stuffed-pork-chops/",
+  "source_servings": 2,
+  "src_cal": 593,
+  "src_carbs": 3,
+  "src_protein": 58,
+  "src_fat": null,
+  "ingredients_verbatim": [
+    "2 8-oz boneless pork chops",
+    "1 tsp sea salt",
+    "1/4 tsp black pepper",
+    "1/2 cup sauteed mushrooms",
+    "2 oz Swiss cheese (chopped)",
+    "1 tbsp fresh parsley (chopped)",
+    "1 tbsp olive oil"
+  ],
+  "unmapped": ["swiss cheese (board likely tracks cheddar/mozzarella/parmesan/cream-cheese, not swiss - flag for pricer lane)"],
+  "why": "Whole-muscle boneless pork chops pocket-stuffed with sauteed mushroom, Swiss and parsley, baked then seared - meat + cheese + mushroom, zero rice/pasta/potato/bread base, so structurally low-carb. Published nutrition 593 cal / 2.9g total carbs / 58g protein per serving clears the 400-650 cal, <=35g carb band with elite protein density; carbs are near zero so no ceiling risk. Sits toward the top of the calorie band (593) but well inside. Oven-bake-and-sear scales cleanly to 14 chops with weigh-and-divide portioning. Distinct from every taken pork slug: no existing stuffed pork chop, and all taken chops are creamy-skillet or gravy-smothered, not a cheese-stuffed bake. Board covers pork-chops, mushrooms, olive-oil, dried/fresh-parsley; Swiss cheese flagged as the one likely-unmapped signature ingredient.",
+  "confidence": "high - read published nutrition (593 cal, 2.9g carb, 58g protein) and full ingredient list directly from the source page"
+}

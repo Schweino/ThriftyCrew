@@ -1,0 +1,20 @@
+{
+  "slug": "malaysian-chicken-satay-curry",
+  "name": "Malaysian Chicken Satay Curry",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 600,
+    "carbs_g": 17,
+    "conditions_pass": true,
+    "note": "600 cal within 400-650; 17g carbs <=35; no seafood; chicken-thigh braise scales to 14 servings; budget meal-prep dinner."
+  },
+  "dupe_check": {
+    "duplicates_catalog": false,
+    "evidence": "Nearest catalog neighbor slow-cooker-thai-peanut-chicken-bowls shares peanut+coconut+chicken but is a mild Thai slow-cooker peanut-soy-rice-vinegar sauce over rice; this candidate is a spice-forward Malaysian satay curry (toasted coriander/cumin/turmeric/curry powder + kecap manis + birds-eye chilli), seared and braised, curry-only - different cuisine, spicing, and method. malaysian-chicken-rendang-bowls is same cuisine but lemongrass/coconut dry curry with no peanut. senegalese-chicken-mafe-peanut-stew is a tomato-based peanut stew, no coconut/satay. cape-malay-chicken-curry is tomato-onion, no peanut. Not in accepted-slugs (nearest there is burmese-chicken-dal-curry, a lentil-based dal curry - distinct)."
+  },
+  "cuisine": "Malaysian",
+  "cuisine_value": "Widens catalog toward Malaysian/satay; peanut-coconut satay profile not currently held for chicken.",
+  "cross_protein_collision_note": "A peanut-coconut satay curry could plausibly recur in beef/pork/turkey pools as a 'satay curry' or peanut-coconut braise. Catalog already carries thai-peanut-pork-tenderloin-rice-bowl and thai-coconut-curry-turkey-meatballs (both distinct - rice-bowl and meatball formats), but the decider should watch other selectors' pools for a same-dish satay/peanut-coconut braise in beef or pork before finalizing.",
+  "unmapped_ok": ["makrut lime leaves / lemongrass (flavor infusion; likely no board home - fine per v2.1 5.1, wanted for pricer lane)"]
+}

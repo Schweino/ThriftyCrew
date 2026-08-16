@@ -1,0 +1,18 @@
+{
+  "slug": "southwest-ground-turkey-cauliflower-rice-skillet",
+  "name": "Southwest Ground Turkey and Cauliflower Rice Skillet",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "pass": true,
+    "src_cal": 476,
+    "src_carbs": 15,
+    "reason": "476 cal is inside 400-650; 15g carbs clears the <=35g cap; no seafood; pure brown-season-simmer skillet, weigh-and-divide scalable to 14; budget meal-prep dinner."
+  },
+  "dedupe": {
+    "catalog_dupe_of": null,
+    "evidence": "No catalog turkey recipe matches. The nearest Tex-Mex ground-turkey skillets all sit on a real starch + beans + a wet sauce and diverge on 3 of 4 attributes: green-chile-ground-turkey-skillet (rice base, corn, black beans, salsa-verde/green-chile sauce), ground-turkey-calabacitas-skillet (rice, corn, beans, zucchini), turkey-taco-rice-skillet (rice base, corn, beans, salsa), turkey-chile-relleno-casserole-skillet (rice, green chile). This candidate is a low-carb cauliflower-rice base with a dry southwest spice blend (cumin/paprika/coriander/cayenne) and no rice/beans/corn/wet sauce - different starch and different flavor delivery, only protein+method shared. Not present in accepted-slugs.json (turkey entries there are zucchini-noodle casserole, broccoli-cheddar casserole, meatballs-cream-sauce skillet, unstuffed-pepper skillet - all distinct dishes)."
+  },
+  "cross_protein_watch": "Generic template = ground protein + dry southwest/taco spices + cauliflower-rice skillet. The decider should check other selectors' pools for a same-dish-different-protein twin, most likely a 'Southwest Ground Beef Cauliflower Rice Skillet' or a ground-chicken low-carb cauliflower-rice taco/southwest skillet; those would be structurally the same plate with the protein swapped.",
+  "notes": "Unmapped 'sriracha' rides only in an optional sriracha-mayo garnish; per v2.1 s5.1 not a penalty and the pricer lane wants it."
+}

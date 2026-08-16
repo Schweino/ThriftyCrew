@@ -1,0 +1,20 @@
+{
+  "slug": "sausage-cottage-cheese-egg-bake",
+  "name": "Sausage and Cottage Cheese Egg Bake",
+  "protein": "pork",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "fit": {
+    "pass": true,
+    "cal": 445,
+    "carbs": 8,
+    "evidence": "445 cal within 400-650 band; 8 g carbs under 35 g cap; no seafood; 9-serving crustless no-starch bake, budget meal-prep, scales 9->14 by weigh-and-divide."
+  },
+  "dupe_of": null,
+  "dupe_evidence": "Not a live-catalog duplicate. Closest catalog dishes carry a starch base and are different dinners: sausage-hash-brown-egg-casserole (hash-brown/potato), baked-sausage-egg-breakfast-hash (russet potatoes). This candidate is crustless, no-starch, cottage-cheese + colby-jack bound with spinach and red bell pepper - the no-potato profile is a genuine distinguisher on a low-carb run. Against fresh accepted-slugs.json, crustless-bacon-gruyere-quiche is a bacon+gruyere French quiche (different meat, different cheese, no sausage/spinach/pepper) - distinguishable, not the same plate.",
+  "pool_notes": "This is the surviving ANCHOR of the crustless-sausage-egg-bake cluster in this run: sausage-spinach-crustless-quiche was already DUPE'd into it (keep-the-stronger, protein-forward 30g vs the quiche's 18g). Separate broccoli-cheddar variants exist in the pool (broccoli-cheddar-sausage-egg-bake, sausage-broccoli-cheddar-egg-bake, keto-sausage-broccoli-egg-casserole) - same crustless-sausage-egg-bake FORMAT but different lead vegetable (broccoli vs spinach+red-pepper) and binder (heavy-cream vs cottage-cheese); I judge this cottage-cheese/spinach plate distinct from the broccoli-cheddar ones, but a strict decider could fold the whole crustless-sausage-egg-bake cluster to one or two - this is the decider's keep-how-many call and it should cross-check all four against each other.",
+  "cross_protein_collisions": "Identity is the crustless egg-cheese custard bake carried by its sausage. A turkey-sausage crustless egg bake, a bacon/ham egg bake, or a vegetarian cottage-cheese egg bake in another selector's pool is the SAME dish with the protein swapped - decider should watch turkey and other pork-cut lanes for an egg-bake / crustless-quiche twin and keep only one.",
+  "unmapped": ["colby-jack-cheese", "avocado-oil"],
+  "unmapped_note": "Unmapped picks are wanted per v2.1 5.1 (pricer-lane exercise), NOT a penalty.",
+  "checked_against": {"accepted_slugs_read_fresh": true, "catalog_digest_544": true}
+}

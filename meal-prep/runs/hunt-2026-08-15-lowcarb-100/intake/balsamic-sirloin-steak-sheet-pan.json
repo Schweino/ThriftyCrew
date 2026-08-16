@@ -1,0 +1,77 @@
+{
+  "name": "Balsamic Steak & Veggie Sheet Pan",
+  "slug": "balsamic-sirloin-steak-sheet-pan",
+  "protein": "beef",
+  "cuisine": "American",
+  "source_url": "https://lifewithjanet.com/2026/05/15/balsamic-steak-veggie-sheet-pan/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Beef Flank/Sirloin Steak", "grams": 2381, "buy": "5 1/4 lb, sliced against the grain into 1/2-inch strips" },
+    { "item": "Broccoli Florets", "grams": 595, "buy": "7 cups florets (about 1 1/3 lb)" },
+    { "item": "Red Bell Pepper", "grams": 420, "buy": "3 1/2 red bell peppers, sliced into strips" },
+    { "item": "Yellow Bell Pepper", "grams": 420, "buy": "3 1/2 yellow bell peppers, sliced into strips" },
+    { "item": "Red Onion", "grams": 385, "buy": "3 1/2 medium, sliced into wedges" },
+    { "item": "Olive Oil", "grams": 236, "buy": "1 cup plus 1 1/2 tbsp, divided" },
+    { "item": "Balsamic Vinegar", "grams": 298, "buy": "1 cup plus 2 3/4 tbsp" },
+    { "item": "Soy Sauce", "grams": 112, "buy": "7 tbsp low-sodium" },
+    { "item": "Worcestershire Sauce", "grams": 59.5, "buy": "3 1/2 tbsp" },
+    { "item": "Honey", "grams": 73.5, "buy": "3 1/2 tbsp" },
+    { "item": "Dijon Mustard", "grams": 52.5, "buy": "3 1/2 tbsp" },
+    { "item": "Garlic", "grams": 33, "buy": "11 cloves, minced" },
+    { "item": "Black Pepper", "grams": 4, "buy": "1 3/4 tsp" },
+    { "item": "Salt", "grams": 6, "buy": "salt, to taste (about 1 tsp)" },
+    { "item": "Fresh Parsley", "grams": 7.6, "buy": "2 tbsp chopped, for garnish (optional)" }
+  ],
+  "macros_per_serving": { "calories": 503.8, "protein_g": 40.8, "carbs_g": 18.8, "fat_g": 29.1 },
+  "writer_notes": [
+    "SOURCE YIELD 4, rebuilt to 14 at the mapper's exact 3.5x scale. Every gram and buy string transcribed from mapped\\balsamic-sirloin-steak-sheet-pan.json; no number computed in prose.",
+    "MACROS transcribed from the mapper's food-DB recompute at 14 servings: 503.8 cal, 40.8 g protein, 18.8 g carbs, 29.1 g fat per serving, reported as the stat the build renders. In band for this run (400 to 650 cal, 35 g carb or less): 503.8 cal sits mid-band and carbs 18.8 g leave a wide 16 g under the ceiling.",
+    "CALORIE BASIS carried loudly from the mapper: the source publishes 412 cal because it pours half the marinade over the steak and then PATS THE STEAK DRY (step 6), discarding most of that half, which its own calculator never booked. We book the FULL marinade (all of it is poured over food; the absorbed vs discarded fraction is unknowable and estimating it would be inventing data), so 503.8 is the ceiling-safe upper bound. Even fully booked it sits mid-band; on the source's discard basis it lands near 412. Both are inside [400, 650].",
+    "OLIVE OIL COMBINED: the source lists two oil lines (2 tbsp for the vegetables at 94.5 g + 3 tbsp for the marinade at 141.75 g). To a shopper that is one bottle, so they are booked as a single 236 g line (about 1 cup plus 1 1/2 tbsp, divided) exactly as the chimichurri-steak-sheet-pan build this batch did. Grams are the rounded sum (94.5 + 141.75 = 236.25, booked 236); the steps divide it, about 10 1/2 tbsp into the marinade and about 7 tbsp reserved for the vegetables.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked both directions: sirloin steak (make_it 4, 8), broccoli florets (5, 6), red bell pepper (5, 6), yellow bell pepper (5, 6), red onion (5, 6), olive oil (3 marinade + 5 vegetables, divided), balsamic vinegar (3), soy sauce (3), Worcestershire (3), honey (3), Dijon mustard (3), garlic (3), black pepper (3), salt (5, to-taste seasoning), fresh parsley (9 garnish, optional). Nothing orphaned in either direction.",
+    "SALT and FRESH PARSLEY are the source's own optional lines. Salt is a to-taste, zero-macro seasoning; fresh parsley is an optional garnish (mapper's band sensitivity +0.2 cal/serving). Both are genuinely bought and both are used by a step, so both are booked as shopping lines rather than dropped.",
+    "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount, with package sizes referenced generically and never with a per-line cost. Clear of the 2026-08-15 audit failures. Re-walk the bullets against cost_lines once costed before publish.",
+    "BELL-PEPPER CLASS CAVEAT carried from the mapper for the auditor: the board's bell-peppers commodity that prices the yellow line has its cheapest cells on GREEN bells, so the derived cost of the yellow-only basket is understated. Variety-correct per the standing green-is-not-red rejection; the yellow line is booked to the hatch-precedent bell-peppers commodity, not silently swapped to green. Cost impact flagged, not fixed.",
+    "PORTION METHOD is the sheet-pan weigh: weigh the empty pan first, weigh it loaded at the end, subtract, divide by 14. The parsley garnish is added before the final weigh so it is counted in the portion."
+  ],
+  "prose": {
+    "intro_html": "A good balsamic marinade does two jobs at once. It tenderizes the steak and it caramelizes on the edges of the vegetables, so you get a browned, glossy sheet pan out of one bowl of whisking. Sirloin gets sliced thin and soaked in balsamic vinegar, soy sauce, a little honey, and Dijon, while broccoli, red and yellow peppers, and red onion roast alongside it. One pan goes in the oven, dinner comes out, and the only thing you stood over was the whisk. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 35 grams of carbs. That is a steakhouse plate that portions straight into a meal-prep container.",
+    "shop_smart": [
+      "<strong>A little over five pounds of sirloin is the anchor.</strong> This is where the money and nearly all the protein live, so reach for the big family pack over the small trays and you are paying for beef instead of packaging. Buy it whole and slice it thin against the grain yourself; pre-sliced stir-fry beef costs more for the same meat.",
+      "<strong>Broccoli, two peppers, and a red onion fill the pan.</strong> You want about seven cups of broccoli florets, a few red bell peppers and a few yellow, and a red onion cut into wedges. The yellow and red peppers are worth buying on purpose here, because they roast up sweeter than the green ones and they make the pan look like a plate you would pay for.",
+      "<strong>The marinade is mostly pantry.</strong> Balsamic vinegar, low-sodium soy sauce, Worcestershire, honey, and Dijon mustard are shelf-stable bottles you buy once and use across a lot of dinners, so they barely move the cart. The balsamic and the soy do the heavy lifting; the honey and Dijon round off the sharp edges.",
+      "<strong>Olive oil ties it together.</strong> One bottle covers both jobs, the marinade and the drizzle over the vegetables, so buy the size you would keep on the counter anyway. Everyday olive oil is fine here; the balsamic is what you taste.",
+      "<strong>Fresh parsley at the end is optional.</strong> A little chopped parsley over the top brightens the whole pan and makes it look finished, but skip it with a clear conscience if it is not in the cart. It changes nothing about how the steak eats."
+    ],
+    "make_it": [
+      "Weigh your empty sheet pan and write the number down. You will weigh it loaded at the end to split this into 14 even servings by weight, which is the only honest way to portion a whole pan of food.",
+      "Heat the oven to 425 degrees F. Line a large rimmed baking sheet with foil and give it a generous coat of nonstick spray.",
+      "Whisk the marinade in a medium bowl: balsamic vinegar, about 10 tablespoons of the olive oil, the soy sauce, Worcestershire, honey, Dijon mustard, minced garlic, and black pepper, until it is fully combined. Hold back the rest of the oil, about 7 tablespoons, for the vegetables.",
+      "Slice the sirloin against the grain into half-inch strips, put them in a zip-top bag or shallow dish, and pour about half the marinade over. Toss to coat and let it sit at least 15 minutes while the vegetables get going.",
+      "Pile the broccoli florets, sliced red and yellow peppers, and red onion wedges onto the pan. Drizzle with the rest of the marinade and the reserved olive oil, season with a little salt, and toss to coat. Spread everything into a single even layer.",
+      "Roast the vegetables for 12 to 15 minutes, until they are just starting to caramelize and go tender at the edges.",
+      "While they roast, lift the steak out of the marinade and pat the strips lightly with a paper towel to take off the surface moisture so they sear instead of steam.",
+      "Pull the pan out, push the vegetables to the outer edges, and lay the steak strips in a single layer down the center. Slide it back in and roast another 8 to 10 minutes, until the steak reaches 145 degrees F for medium and the vegetables are tender and caramelized.",
+      "Let the pan rest 5 minutes, scatter the chopped parsley over the top, then weigh the loaded pan and portion as below."
+    ],
+    "portion_html": "Set the loaded sheet pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total, steak and vegetables and every drop of pan sauce together. Divide that number by 14 and give each container that exact weight, aiming for an even share of steak, broccoli, peppers, and onion. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a balsamic steak dinner most people only order out. The sirloin carries the plate and the protein, and a bowl of pantry bottles turns it into something that tastes like it took all afternoon.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Balsamic steak and veggie sheet pan dinner for meal prep: sirloin marinated in balsamic, soy, honey, and Dijon and roasted with broccoli, bell peppers, and red onion, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 35 grams of carbs.",
+    "keywords": "balsamic steak sheet pan, sheet pan steak dinner, balsamic marinated sirloin, low carb meal prep, high protein beef dinner",
+    "prepTime": "PT20M",
+    "cookTime": "PT25M",
+    "totalTime": "PT45M",
+    "steps": [
+      "Weigh the empty sheet pan and note the number for portioning later.",
+      "Heat the oven to 425 degrees F and line a rimmed baking sheet with foil and nonstick spray.",
+      "Whisk balsamic vinegar, most of the olive oil, soy sauce, Worcestershire, honey, Dijon, garlic, and black pepper into a marinade, reserving some oil for the vegetables.",
+      "Slice the sirloin into half-inch strips and marinate in about half the marinade for at least 15 minutes.",
+      "Toss the broccoli, bell peppers, and red onion with the rest of the marinade and the reserved oil and roast for 12 to 15 minutes.",
+      "Pat the steak dry, lay it down the center of the pan among the vegetables, and roast another 8 to 10 minutes to 145 degrees F.",
+      "Rest 5 minutes, garnish with parsley, then weigh the pan and divide across 14 containers."
+    ]
+  }
+}

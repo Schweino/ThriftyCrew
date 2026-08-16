@@ -1,0 +1,13 @@
+{
+  "slug": "turkey-meatball-marinara-mozzarella-skillet",
+  "name": "Turkey Meatball Marinara Mozzarella Skillet",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "fit_evidence": "533 cal / 5.2g total carbs per serving (source, 8 svg): inside the 400-650 cal band and well under the 35g carb ceiling; stovetop one-skillet, no seafood, batch-scales to 14 (bulk meatballs, simmer, divide).",
+  "dupe_of": null,
+  "evidence": "Closest catalog dish is turkey-meatball-marinara-pasta (turkey/eggs/marinara/mozzarella/parmesan/penne); this shares protein+marinara+mozzarella but drops the penne starch entirely and is a stovetop mozzarella-gratin skillet, not a pasta dish - the pasta-vs-no-pasta split is the chili/chili-mac distinction, so a distinct low-carb plate the pasta version cannot serve under this run's carb ceiling.",
+  "borderline": true,
+  "borderline_reason": "Flavor core (turkey meatballs + marinara + mozzarella) is identical to catalog turkey-meatball-marinara-pasta; distinguished only by absence of pasta + skillet method. Kept because starch and method both differ and this fills the low-carb niche, but flagged so the decider can second-guess if the catalog does not want a starchless twin of the pasta dish. Not a dupe of accepted turkey-meatballs-cream-sauce-skillet (cream vs tomato/marinara sauce family - different dinner).",
+  "cross_protein_collision": "HIGH risk with a BEEF version: the source recipe (ketofocus keto-skillet-meatballs) DEFAULTS to ground beef/sausage and only names turkey as an option, so a beef selector could easily have sourced this exact same URL as a beef meatball marinara mozzarella skillet - structurally the identical dish, different protein. Also watch for a pork/Italian-sausage meatball marinara mozzarella skillet in other pools. Decider should run the cross-protein merge on 'meatball + marinara + mozzarella + no-starch skillet'."
+}

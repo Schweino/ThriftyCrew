@@ -1,0 +1,14 @@
+{
+  "slug": "pork-chile-verde-stew",
+  "verdict": "fail",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "ingredient-coverage",
+      "severity": "blocking",
+      "detail": "RE-QA, second fail (terminal). The repair routed to the writer after the first fail was never performed: the built spec (db\recipes\\pork-chile-verde-stew.json) and card (db\built\\pork-chile-verde-stew.body.html) still do not exist anywhere in meal-prep\\db, and the state file remains at 'priced' (updated 2026-08-16T11:58:56) with no build/QA-repair entry in its history. There is no card to certify against the source, so ingredient coverage, scaling of the spec, method, title, credit and prose cannot be attested.",
+      "owner": "writer"
+    }
+  ],
+  "notes": "Upstream fidelity remains clean and both anchors were reached again on this pass: the live page https://farmtojar.com/pork-chile-verde/ was fetched and agrees in full with the extraction (all 15 ingredient lines, sauce+stew method, servings 6, nutrition 471 cal / 47g protein). If the pipeline chooses to override the terminal rejection, the only missing work is the build stage; nothing found suggests the extraction or mapping needs repair. The fail is exclusively the absent deliverable, owner writer, unchanged from the first cycle."
+}

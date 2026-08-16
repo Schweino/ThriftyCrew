@@ -1,0 +1,20 @@
+{
+  "slug": "baked-cauliflower-mac-smoked-sausage",
+  "name": "Baked Cauliflower Mac and Cheese with Smoked Sausage",
+  "protein": "pork-sausage",
+  "verdict": "KEEP",
+  "fit": {
+    "in_band": true,
+    "cal": 588,
+    "carbs": 10,
+    "note": "588 cal within 400-650; 10g carbs well under 35g (cauliflower stands in for pasta); no seafood; weigh-and-divide oven bake scales to 14; budget meal-prep dinner. FIT."
+  },
+  "catalog_dupe_check": "Not a catalog duplicate. Nearest catalog item is 'pulled-pork-baked-mac-and-cheese' - but that is real-pasta mac with pulled pork, not a cauliflower-for-pasta bake and not sausage; different starch and different pork cut. No cauliflower-mac and no smoked-sausage-cheese bake exists in the catalog digest.",
+  "accepted_slugs_dupe_check": "Not a duplicate of anything in accepted-slugs.json; this slug IS itself accepted (line 13).",
+  "pool_collision_flags": [
+    "STRONG same-protein pool collisions the decider MUST resolve - the pool contains at least three near-identical siblings of this exact dish: 'baked-cauliflower-mac-and-cheese-smoked-sausage', 'cheesy-cauliflower-mac-smoked-sausage-bake', and 'pork-sausage-cauliflower-cheese-bake'. All four are the same dinner (smoked sausage + cauliflower-as-pasta + cheese sauce, oven-baked). Only one should survive; flagging the cluster for the decider's merge, not resolving it here."
+  ],
+  "cross_protein_collision_flags": [
+    "Cauliflower-mac-and-cheese cheese bake could collide with a chicken/turkey/beef cauliflower-cheese bake; note pool siblings 'cauliflower-rice-italian-sausage-casserole' and 'keto-sausage-broccoli-egg-casserole' are distinct (rice-form / egg-bake) but the decider should confirm no other-protein cauliflower-cheese-bake twin."
+  ]
+}

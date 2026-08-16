@@ -1,0 +1,25 @@
+{
+  "slug": "creamy-tuscan-pork-chops",
+  "name": "Creamy Tuscan Pork Chops",
+  "protein": "pork",
+  "verdict": "DUPE",
+  "fit": {
+    "in_band": true,
+    "src_cal": 520,
+    "src_carbs": 3,
+    "seafood": false,
+    "scalable_to_14": true,
+    "note": "Clears all conditions (400-650 cal, <=35g carbs, no seafood, skillet weigh-and-divide scales to 14). NOT-FIT does not apply; this is a pure duplicate ruling."
+  },
+  "dupe_of": "marry-me-pork-chops-over-pasta",
+  "reason": "Same dinner as the catalog's Marry Me Pork Chops over Pasta: identical sauce (pork-chops + heavy-cream + chicken-broth + parmesan + garlic + sun-dried-tomatoes); the candidate only adds a handful of spinach and drops the starch base. 'Marry Me' and 'Creamy Tuscan' are the canonical name-different-dish-same pair (both are the sun-dried-tomato parmesan cream chop). Protein + sauce family + skillet method all match; only the starch base differs, which does not make it a genuinely different plate.",
+  "secondary_neighbors": [
+    "creamy-mushroom-pork-chops-over-mashed-potatoes (NOT a dupe - mushroom cream sauce, distinct flavor family)",
+    "creamy-pork-tenderloin-tagliatelle (NOT a dupe - tenderloin + mushroom/bacon cream over pasta)"
+  ],
+  "cross_protein_collisions": [
+    "creamy-tuscan-chicken-skillet - ACCEPTED this run in the chicken lane; structurally the same Tuscan sun-dried-tomato cream dish, chicken vs pork. Decider should confirm the run isn't shipping the same Tuscan cream plate across two proteins.",
+    "catalog slow-cooker-tuscan-chicken-pasta and chicken-florentine (spinach + parmesan cream) are the chicken-side relatives of this sauce family.",
+    "Any turkey/beef 'Marry Me' or 'Tuscan' cream cutlet in another selector's pool would be the same dish - flagging for the cross-protein merge pass."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "slug": "senegalese-poulet-yassa",
+  "name": "Senegalese Poulet Yassa (Braised Chicken with Onions and Lemon)",
+  "protein": "chicken",
+  "verdict": "DUPE",
+  "dupe_of": "senegalese-chicken-yassa",
+  "reason": "Same dish as catalog 'Senegalese Chicken Yassa (Lemon Onion Chicken)' - poulet yassa IS chicken yassa; 4/4 match on protein (chicken thigh), sauce/flavor family (lemon-onion-dijon braise), cuisine (Senegalese), and method (sear-then-braise), with catalog ingredients chicken-thigh/chicken-broth/dijon-mustard/lemon-juice/onions all present in the candidate.",
+  "fit": "n/a - superseded by dupe ruling (also sits at 403 cal floor / 21g protein, would be at gate edge if it had survived)",
+  "cross_protein_collision": null
+}

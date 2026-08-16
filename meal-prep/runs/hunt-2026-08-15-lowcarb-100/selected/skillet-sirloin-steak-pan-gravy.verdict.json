@@ -1,0 +1,21 @@
+{
+  "slug": "skillet-sirloin-steak-pan-gravy",
+  "name": "Skillet Sirloin Steak with Pan Gravy",
+  "protein": "beef",
+  "verdict": "DUPE",
+  "dupe_of": "seared-sirloin-steak-white-wine-gravy",
+  "dupe_scope": "pool",
+  "fit": {
+    "calories": 490,
+    "carbs": 8,
+    "in_band": true,
+    "note": "490 cal inside 400-650; 8 g carbs under the 35 g ceiling; whole-muscle top sirloin batch-scales to 14; no seafood. Fit is fine - it is killed on duplication, not fitness."
+  },
+  "dupe_check": {
+    "pool": "Same dish as pool candidate seared-sirloin-steak-white-wine-gravy (already ruled KEEP, landed first). Both are whole top sirloin seared in a skillet then sliced, finished in a flour-roux brown gravy built on dry white wine + beef broth + Worcestershire, with the identical off-board seasoning set (mustard powder, ground sage, gravy master/kitchen bouquet). Both carry identical published macros (490 cal / 8 g carb) - this is the same source recipe (thecozycook.com steak-with-gravy) sourced twice under two slugs. All four axes match (protein=beef sirloin, sauce=white-wine beef roux gravy, starch=none/low-carb side, method=skillet sear). Keeper is the earlier-landed seared-sirloin-steak-white-wine-gravy.",
+    "catalog": "Independently also clears the catalog: nearest live dish beef-tips-and-gravy-mashed-potatoes is cubed chuck slow-braised over rice, differing on cut+method+gravy; not the reason for the DUPE call."
+  },
+  "cross_protein_flag": "Structurally a seared whole-muscle protein finished in a wine/brown pan gravy - would collide with any chicken/pork/turkey candidate framed as 'in pan gravy' or 'white wine gravy', and is adjacent to accepted creamy-garlic-herb-wine-pork-chops (pork, seared, wine pan sauce - stays distinct there on cream vs brown roux). Moot for selection since this loses the pool-dupe to its twin, but the decider should still confirm no same-structure twin lands in another protein's pool for the surviving seared-sirloin keeper.",
+  "unmapped_ok": true,
+  "unmapped": ["dry-white-wine", "chicken-bouillon-cube", "gravy-master-kitchen-bouquet", "mustard-powder", "ground-sage"]
+}

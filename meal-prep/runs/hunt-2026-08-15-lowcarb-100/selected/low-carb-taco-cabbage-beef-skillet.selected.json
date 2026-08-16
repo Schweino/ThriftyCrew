@@ -1,0 +1,11 @@
+{
+  "slug": "low-carb-taco-cabbage-beef-skillet",
+  "name": "Low Carb Taco Cabbage Beef Skillet",
+  "protein": "beef",
+  "cuisine": "Tex-Mex",
+  "source_url": "https://www.heyketomama.com/low-carb-taco-cabbage-skillet/",
+  "decision": "ACCEPT",
+  "decided_by": "decider",
+  "cross_lane_dupe_check": "No collision with accepted-slugs.json (read fresh). Catalog taco/tex-mex beef skillets are all rice-based (loaded-beef-taco-skillet-bowls, tex-mex-beef-rice-skillet-bowls); no low-carb cabbage-base taco beef skillet accepted. Pool sibling beef-cauliflower-taco-skillet is NOT accepted (confirmed) - adjudicator rates this cabbage version the stronger of the two (11g vs 34g carb, cabbage cheaper), so accepting it here is the dedup resolution: the cauliflower sibling should be cut as a pool-dupe of this when it reaches the decider. Cross-protein turkey twins (low-carb-turkey-taco-skillet / -cabbage-skillet) not in accepted list; noted for orchestrator merge.",
+  "note": "Kept as the stronger of the two taco-skillet pool siblings, not because Tex-Mex widens the catalog (it does not). Clean fit: 576 cal / 11g carb, single-skillet weigh-and-divide, zero unmapped."
+}

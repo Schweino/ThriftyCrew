@@ -1,0 +1,67 @@
+{
+  "name": "Keto Crustless Pizza Casserole",
+  "slug": "keto-crustless-pizza-casserole",
+  "protein": "pork",
+  "cuisine": "Italian",
+  "source_url": "https://drdavinahseats.com/low-carb-keto-crustless-pizza-casserole-recipe",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Hot Italian Sausage", "grams": 1021, "buy": "2 1/4 lb Italian sausage (hot or mild), casings removed" },
+    { "item": "Pepperoni", "grams": 163, "buy": "5 3/4 oz sliced pepperoni" },
+    { "item": "Mozzarella Cheese", "display_name": "Pizza Blend Cheese", "grams": 396, "buy": "3 1/2 cups, shredded" },
+    { "item": "Marinara Sauce", "grams": 554, "buy": "2 1/4 cups tomato basil pasta sauce" },
+    { "item": "Red Bell Pepper", "grams": 150, "buy": "1 1/4 large bell peppers (red and/or green), sliced" },
+    { "item": "Yellow Onion", "grams": 138, "buy": "1 1/4 medium, sliced thin" },
+    { "item": "Olive Oil", "grams": 30, "buy": "2 1/4 tbsp" },
+    { "item": "Salt", "grams": 3, "buy": "1/2 tsp" },
+    { "item": "Black Pepper", "grams": 1, "buy": "1/2 tsp" }
+  ],
+  "macros_per_serving": { "calories": 391, "protein_g": 23, "carbs_g": 9, "fat_g": 29 },
+  "writer_notes": [
+    "SOURCE YIELD 12, rebuilt to 14 at the mapper's 1.1667x scale. Every gram and buy string transcribed from mapped\\keto-crustless-pizza-casserole.json; no number computed in prose.",
+    "MACROS transcribed from the mapper's food-DB recompute at 14 servings and re-verified line by line against food-macros-db: 391.0 cal, 23.0 g protein, 8.8 g carbs, 28.6 g fat per serving, reported as 391 / 23 / 9 / 29. Carbs 9 g are far under this run's 35 g carb gate. See the BAND FLAG below on the calorie floor.",
+    "BAND FLAG (carried LOUD from the mapper, not fixed here): the label-accurate recompute lands at 391 cal per serving, which is BELOW this run's 400 cal floor by 9 cal. The single row that decides it is the house Hot Italian Sausage entry (Johnsonville, 190 cal per 70 g = 2.71 cal/g) applied to raw pounds; the mapper flags its 70 g serving basis as ambiguously raw-vs-cooked. On a USDA raw-pork basis (about 3.46 cal/g) the honest compute is roughly 445 cal and the recipe clears the floor, which is also what the source's own printed 436 cal implies. This is the SECOND recipe in this run whose band verdict hangs on that one row (after italian-sausage-peppers-onions-skillet). Numbers here are transcribed from the DB, not adjusted to fit; the physical Johnsonville label settles both recipes at once and is flagged for the repair pass / meal-macro verification before any band ruling.",
+    "OPTIONAL MUSHROOMS DROPPED: the source's 8 oz baby bella mushrooms line is marked optional by the source itself, and the mapper mapped it optional and EXCLUDED it from the band computation (not enqueued anywhere, +4.0 cal/serving if included). It is left out of the ingredient list AND out of every step so both orphan rails stay clean: no bought line goes unused and no step names an unbought ingredient. Not a form-flip or a silent drop; it follows the source's own optional flag and the mapper's disposition.",
+    "PEPPERONI PRICING GAP (flag for the map owner, not fixed here): db\\ingredients.json has NO row wiring the item 'Pepperoni' to the pepperoni commodity; the only pepperoni row is 'Turkey Pepperoni' -> turkey-pepperoni, which the mapper deliberately rejected (turkey pepperoni is about half the calories per oz and would deflate a calorie-floor card). With no map row the build emits no bid for pepperoni and it prices pantry-static, so cost_ps is a FLOOR understated by roughly one batch of pepperoni (163 g / about 5.75 oz at the feed's $0.295/oz on the pepperoni commodity, about $1.70 batch / $0.12 per serving). Needs a map row 'Pepperoni -> pepperoni' (weekly board, on the feed 7 of 7) before this recipe's cost is real. Mapper/ingredient-map domain, not edited here.",
+    "CHEESE BID: item 'Mozzarella Cheese' resolves to bid mozzarella-cheese, which IS on the live feed at $0.1521/oz, the SAME price as the shredded-cheese commodity the mapper preferred, so the mapper's 'dead id' concern does not block or misprice here; the two bids cost identically. Display renamed to 'Pizza Blend Cheese' to match the dish and the source. Booked on the Mozzarella Cheese DB row (USDA low-moisture part-skim shredded), shared-record disclosure for the retail blend.",
+    "SALT AND BLACK PEPPER are SOURCE-MEASURED (1/2 tsp each), not a to-taste line, so they are booked as real cost lines with the mapper's grams (salt 3 g, black pepper 1.2 g rounded to 1 g for the int-grams intake, 3 cal across the batch and macro-immaterial) and both are used by the vegetable saute step. No unbought seasoning is named by any step.",
+    "TOMATO BASIL SAUCE -> house Marinara Sauce (Great Value label) is the mapper's flavor-class ruling: marinara IS a tomato-basil-garlic sauce, one jarred pasta-sauce class at one price, the Rao's-to-house precedent. Transcribed from ruled_substitutions; the macro spread across the class is about 10 cal per half cup.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked the costed list against the steps both directions: Italian sausage (make_it 2, 4), olive oil (3), yellow onion (3), red bell pepper (3), salt (3), black pepper (3), pepperoni (4), tomato basil sauce (4), pizza blend cheese (4). Nothing else is named by any step.",
+    "SHOP_SMART TRACING: no bullet makes a per-ounce, per-serving, or lasts-several-batches claim. The sauce bullet's 'a standard jar covers it' is a single-package coverage claim traced to the marinara-sauce cost line, whose package is a 24 oz (about 2.8 cups) jar against the 2 1/4 cups (554 g) the batch uses, so one jar covers the batch with a little left; arithmetic in the report. Every other bullet is grounded only in the recipe's own buy amount and needs no cost line to prove it.",
+    "PORTION METHOD: weigh the empty dish first, then weigh full and subtract, divide by 14. Standard house method. This is a 14-serving batch, so it wants a large deep casserole or two 9x13 pans, not the source's single 9x13."
+  ],
+  "prose": {
+    "intro_html": "Pizza night is usually the crust doing the damage. Take the crust away and what is left is the part you actually came for: browned Italian sausage, crisped pepperoni, a layer of tomato basil sauce, and melted cheese, all baked together until the top browns and bubbles. No dough, no cardboard-and-cheese delivery box, no carb hangover an hour later. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 10 grams of carbs. That is Friday-night flavor on a Tuesday-night budget.",
+    "shop_smart": [
+      "<strong>Two and a quarter pounds of Italian sausage is the engine of this bake.</strong> Hot or mild is your call, they cost the same and cook the same, and the casings slip off easy with a knife tip run down one side. This single line is most of the protein and most of the flavor, so buy it right.",
+      "<strong>A few ounces of pepperoni does the pizza-parlor work.</strong> You want about five and three quarter ounces of sliced pepperoni, layered through the middle and scattered across the top where it crisps and renders that peppery fat down into the cheese. Reach for the pork slices, not the turkey, so the flavor and the richness both show up.",
+      "<strong>Pizza blend cheese ties it all together, about three and a half cups shredded.</strong> Any bag labeled pizza blend or Italian blend works, mostly low-moisture mozzarella with a little provolone. Shredded off a block or straight from the bag both melt fine here.",
+      "<strong>A jar of tomato basil pasta sauce stands in for pizza sauce.</strong> The batch uses a bit over two cups, so a standard jar covers it. Store brand behaves the same once it hits a hot pan, and tomato basil, marinara, or plain all land in the same place in a dish like this.",
+      "<strong>An onion, a bell pepper, and a little olive oil are the backbone.</strong> One onion and one bell pepper sliced thin, softened in a couple tablespoons of oil with a pinch of salt and pepper, is the vegetable layer that keeps the whole thing from tasting like just meat and cheese. These are staples you cook with all week long."
+    ],
+    "make_it": [
+      "Weigh your empty baking dish and write the number down. You will need it at the end to split this into 14 even servings by weight, which is the only honest way to portion one big bake. This is a big batch, so reach for a large deep casserole or two 9x13 pans, and heat the oven to 425 degrees F.",
+      "Set your largest skillet over medium-high heat and brown the Italian sausage, breaking it up with a spoon as it goes, until there is no pink left. Lift it out and set it aside, leaving the rendered fat in the pan.",
+      "In that same pan, warm the olive oil, then add the sliced onion and bell pepper. Season with the salt and black pepper and saute until the vegetables are soft and just translucent, about 6 to 8 minutes.",
+      "Build the casserole in two layers. Spread half the browned sausage, then half the tomato basil sauce, half the vegetables, half the pizza blend cheese, and half the pepperoni. Repeat with the rest in the same order, finishing with pepperoni on top.",
+      "Bake at 425 degrees F until the top is browned and the cheese is fully melted and bubbling, about 15 to 20 minutes. Let it rest a few minutes so it firms up, then weigh the dish and portion as below."
+    ],
+    "portion_html": "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a baked pizza casserole that eats like the real thing and skips the crust entirely. The sausage, pepperoni, and cheese carry it; the crust never did anything for you but run up the carbs.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Keto crustless pizza casserole for meal prep: browned Italian sausage, pepperoni, tomato basil sauce, and melted pizza blend cheese baked with no crust, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 10 grams of carbs.",
+    "keywords": "crustless pizza casserole, keto pizza casserole, low carb pizza bake, sausage pepperoni casserole, high protein meal prep",
+    "prepTime": "PT10M",
+    "cookTime": "PT35M",
+    "totalTime": "PT45M",
+    "steps": [
+      "Weigh the empty baking dish and note the number for portioning later, then heat the oven to 425 degrees F.",
+      "Brown the Italian sausage in your largest skillet, break it up, and set it aside in the rendered fat.",
+      "Saute the sliced onion and bell pepper in the olive oil with the salt and black pepper until soft, about 6 to 8 minutes.",
+      "Layer half the sausage, sauce, vegetables, cheese, and pepperoni in the dish, then repeat and finish with pepperoni on top.",
+      "Bake at 425 degrees F for 15 to 20 minutes until browned and bubbling, rest, then weigh the dish and divide across 14 containers."
+    ]
+  }
+}

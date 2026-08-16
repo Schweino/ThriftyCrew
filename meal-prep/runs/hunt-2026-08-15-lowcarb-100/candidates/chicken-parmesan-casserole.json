@@ -1,0 +1,27 @@
+{
+  "name": "Keto Chicken Parmesan Casserole",
+  "slug": "chicken-parmesan-casserole",
+  "protein": "chicken",
+  "method": "oven bake",
+  "cuisine": "Italian-American",
+  "source_url": "https://joyfilledeats.com/keto-chicken-parmesan-casserole/",
+  "source_servings": 6,
+  "src_cal": 609,
+  "src_carbs": 6.5,
+  "src_protein": 61.4,
+  "src_fat": 36.6,
+  "ingredients_verbatim": [
+    "3 chicken breasts cooked and cut into cubes (about 2 pounds)",
+    "1 cup marinara sauce",
+    "1/2 cup parmesan",
+    "1/2 cup pork rinds",
+    "1 tsp italian seasoning",
+    "1 tsp garlic powder",
+    "1/2 tsp salt",
+    "1/2 tsp black pepper",
+    "2 tbsp olive oil",
+    "2 cups shredded mozzarella (8 oz)"
+  ],
+  "unmapped": ["pork rinds", "shredded mozzarella"],
+  "why": "Oven/broiler bake, low-carb chicken parm (6.5g carbs, 61g protein) with no breaded/fried cutlet - cubed cooked chicken breast under marinara, parmesan and mozzarella with a pork-rind crumb top. Maps to board (chicken-breast, pasta-sauce as marinara, parmesan, garlic-powder, italian-seasoning, olive-oil); shredded mozzarella has only generic shredded-cheese home and pork rinds have no board home (flagged - a good pricer-lane test). CONFIDENCE CAVEAT: at 609 cal it sits near the 650 ceiling, so our label-DB recompute could push it over the gate; selector should weigh that. In band on source numbers."
+}

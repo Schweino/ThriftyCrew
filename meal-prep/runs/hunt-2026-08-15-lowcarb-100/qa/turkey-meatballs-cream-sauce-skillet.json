@@ -1,0 +1,21 @@
+{
+  "slug": "turkey-meatballs-cream-sauce-skillet",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "ingredient-coverage",
+      "severity": "note",
+      "detail": "Spec adds Salt 12 g and Black Pepper 2 g as bought lines where the source lists 'salt and pepper to taste' (optional). Documented writer-lane batch convention (2026-08-16 repair convention); source's own step 5 names the season step, macro-immaterial. Not a fidelity break.",
+      "owner": "writer"
+    },
+    {
+      "check": "scaling",
+      "severity": "note",
+      "detail": "Two deliberate quantizations off the uniform 3.5x ratio, both documented in writer_notes: ground turkey 1.25 lb x3.5 = 4.375 lb bought as 4 1/2 lb (+2.9%), and 1 egg x3.5 = 3.5 bought as 4 large. All other lines sit exactly on 3.5x (panko 2/3->2 1/3 cups, Worcestershire 3.5 tbsp total->12 1/4 tbsp, oregano 1.5 tsp->5 1/4 tsp, garlic powder 0.5 tsp->1 3/4 tsp, onion 1/4 cup->3/4 cup + 2 tbsp, olive oil 1->3.5 tbsp, butter/flour 2->7 tbsp, broth 1->3.5 cups, cream 0.5->1.75 cups, onion powder 0.25->0.875 tsp, parsley 1->3.5 tbsp).",
+      "owner": "mapper"
+    }
+  ],
+  "notes": "Re-QA after the 2026-08-15 re-render voided the prior cert. Both anchors reached: live page at smalltownwoman.com confirms the extraction line for line (servings 4, both sections, all quantities, 5-step skillet method). No card exists in db\built yet, so the spec's own cost_lines are the prose of record: literals $27.63/$1.97 batch, $36.26/$2.59 true, $14.98 pantry add, $51.24 first run all equal the spec's cost_batch/cost_per_serving/cost_batch_true/cost_per_serving_true/cost_pantry_add/cost_first_run fields; the parsley line reads 'Buy 1 bunch: $1.93' (renderer fix present). stat figures appear in prose only as {{cal}}/{{protein}}/{{cost_ps}} tokens. Method survives intact (mix, brown in batches, roux, whisk-in sauce, 15-min simmer, season and garnish); the meal-prep additions (weigh-and-portion steps 1 and 7, 165F doneness cue, starch deliberately omitted for the low-carb rebuild) are framework, not technique swaps. Title names the same dish; credit_html points at the exact source URL. Large Worcestershire total (12 1/4 tbsp) is faithful to the printed 3.5 tbsp per 4 servings and flagged loudly in writer_notes. The known 31 g vs source 38 g protein divergence is a macro/booking matter owned by the batch auditor, documented in writer_notes, and not a source-fidelity defect.",
+  "qa_date": "2026-08-16"
+}

@@ -1,0 +1,22 @@
+{
+  "slug": "french-onion-chicken-casserole",
+  "name": "French Onion Chicken Casserole",
+  "protein": "chicken",
+  "cuisine": "French",
+  "verdict": "KEEP",
+  "band_fit": {
+    "calories": 410,
+    "carbs_g": 28,
+    "cal_ok": true,
+    "carbs_ok": true,
+    "seafood": false,
+    "note": "Published 410 cal (within 400-650) and 28g carbs (<=35g) both clear the band; no seafood; scalable to 14 by weigh-and-divide. Ruled on published numbers as instructed. Sits at the low-cal edge (410) with the baguette croutons as the sole carb load, but published figures clear the gate."
+  },
+  "dupe_check": {
+    "vs_catalog": "NOT a duplicate. Nearest catalog match is 'slow-cooker-french-onion-chicken-bowls' (chicken-breast + condensed-french-onion-soup + rice + swiss-cheese). Shares protein (chicken) and flavor family (French onion) but differs on starch (rice bowl vs baguette-crouton crust) and method (slow-cooker bowl served over rice vs oven-baked, cheese-gratineed casserole) - only 2 of 4 axes match, and the plates are genuinely different (a soupy rice bowl vs a gratineed bistro bake). 'smothered-chicken-onion-gravy' and 'french-chicken-fricassee' (accepted) are unrelated (pan-smothered / white braise).",
+    "vs_accepted_slugs": "No collision; read fresh, no french-onion chicken bake present."
+  },
+  "cross_protein_flags": "Structurally a French-onion + caramelized-onion + Gruyere/bread-gratin BAKE. Catalog already has a BEEF French-onion (french-onion-pot-roast-bowls, a rice bowl) and the candidate's own note cites a PORK french-onion-chops dish - a beef or pork 'French onion <protein> casserole/gratin' in another selector's pool would be the same plate with a swapped protein; decider should watch for a beef/pork/turkey French-onion baked-gratin twin.",
+  "evidence": "French bistro oven bake: diced chicken breast + deeply caramelized onions + garlic + balsamic + broth, topped with toasted baguette and Gruyere and baked - bound by cheese, not pasta; distinct from the catalog's slow-cooker french-onion chicken RICE BOWL.",
+  "confidence": "high on numbers (read from source recipe card); keep is solid on dish-identity grounds"
+}

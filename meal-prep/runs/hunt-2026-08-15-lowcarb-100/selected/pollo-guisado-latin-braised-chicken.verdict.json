@@ -1,0 +1,11 @@
+{
+  "slug": "pollo-guisado-latin-braised-chicken",
+  "name": "Pollo Guisado (Latin Braised Chicken)",
+  "protein": "chicken",
+  "verdict": "DUPE",
+  "dupe_of": "puerto-rican-pollo-guisado",
+  "reason": "Literally the same dish as catalog recipe 'Puerto Rican Pollo Guisado' (slug puerto-rican-pollo-guisado): identical protein (chicken), sauce/flavor family (Latin sofrito + sazon + tomato-sauce braise with green olives), starch (russet potatoes), and method (bone-in/thigh chicken browned then simmered in broth). Four-of-four match plus shared name; the catalog entry even carries the same signature items (green-olives, russet-potatoes, sazon-seasoning, tomato-sauce, chicken-broth, onions, garlic).",
+  "fit": "in-band but moot (451 cal, 26 g carbs, no seafood, scalable) - dupe supersedes",
+  "cross_protein_collision": "n/a - dropped as dupe; if kept it would structurally mirror any beef 'guisada' stew (e.g. catalog carne-guisada-beef-potato-stew) but that is a different protein and not a concern here",
+  "adjudicator": "orchestrator"
+}

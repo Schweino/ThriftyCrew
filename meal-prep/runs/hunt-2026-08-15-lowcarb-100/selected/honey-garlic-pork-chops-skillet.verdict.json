@@ -1,0 +1,17 @@
+{
+  "slug": "honey-garlic-pork-chops-skillet",
+  "name": "Honey Garlic Pork Chops Skillet",
+  "protein": "pork",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "fit": {
+    "in_band": true,
+    "evidence": "Published 483 cal / 7g carb / 49g protein per serving is inside 400-650 cal and <=35g carb. Even the candidate's own real-honey rebuild estimate (~543 cal / ~19g carb) stays comfortably in band. Budget pork-chop skillet dinner, weigh-and-divide scalable to 14, no seafood. FIT."
+  },
+  "borderline": true,
+  "catalog_collision": "Shares the honey-garlic-pork FLAVOR identity with catalog 'slow-cooker-honey-garlic-pork-bowls' (garlic,honey,pork-loin,soy-sauce,rice,broccoli). Ruled KEEP not DUPE: only 2 of 4 axes match (protein + sauce family). Method differs (quick skillet sear vs slow-cooker braise), format/starch differs (whole boneless chop, no starch, butter+ACV pan glaze vs shredded pork loin over rice with broccoli in a soy-honey-garlic bowl). Different dinner despite near-identical name -- flagged borderline so the audit stage sees the flavor overlap.",
+  "pool_collision_note": "Only my one candidate in front of me; no pork pool-mate to compare.",
+  "cross_protein_watch": "Honey-garlic glaze is protein-agnostic: a 'honey garlic chicken thighs skillet' or 'honey garlic chicken' in the chicken selector's pool would be structurally the SAME plate with poultry swapped -- decider should check other-protein pools for a honey-garlic skillet twin, since the sauce is the dish identity here.",
+  "unmapped_ok": "Carries branded 'Wholesome Yum Zero Sugar Honey' -> rebuild on real honey; honey may lack a board id. Not penalized per v2.1 5.1 (pricer-lane exercise wanted).",
+  "one_sentence": "KEEP-borderline: FIT on macros (483/7g, in band even rebuilt at ~543/19g), and though it shares the honey-garlic-pork flavor with catalog slow-cooker-honey-garlic-pork-bowls it is a distinct skillet whole-chop no-starch dinner (only 2 of 4 dish axes match)."
+}

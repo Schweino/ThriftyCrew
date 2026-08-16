@@ -1,0 +1,20 @@
+{
+  "slug": "spinach-provolone-stuffed-flank-steak-rolls",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    { "check": "ingredient-coverage",
+      "severity": "note",
+      "detail": "CREAM-CHEESE RULING RULED ON CURRENT BYTES AND IT HOLDS: source (gimmedelicious.com, re-fetched live 2026-08-16, matches extraction) calls for 4 ounces cream cheese (regular); the card ships 1/3 Fat Cream Cheese (Great Value), 14 oz (397 g), bid 1-3-fat-cream-cheese, per Brad's 2026-08-16 ruling. Disclosed in ingredients_display, head.recipeIngredient, and cost_lines; the shop_smart filling bullet is fat-level-silent and does not contradict it. Macros match the shipped product: independent recompute against the cited food-DB rows (Beef Flank/Sirloin 155/22/0/7 per 100g, Provolone 350/26/2/27 per 100g, 1/3 Fat Cream Cheese 70/2/2/6 per 28g, plus oil, onion, garlic, spinach, pepper rows) gives 518.2 cal / 42.5 P / 5.9 C / 36.4 F per serving vs stat 518/42/6/36, exact. In band (400-650, 35 g carb or less). 'Under 10 grams of carbs' in intro, cost_closing, and head.description is true at 5.9.",
+      "owner": "writer" },
+    { "check": "prose-numbers",
+      "severity": "note",
+      "detail": "All four annotation targets verified present in the bytes: the MACROS note (546.2 pre-rebase figures) carries RESOLVED 2026-08-16 (Brad ruling); the CREAM CHEESE is full-fat note carries the same, so it no longer instructs the wrong basis; the SPINACH note carries RESOLVED 2026-08-16: the bid was corrected (fresh commodity, frozen retired for this card); the COST NOTE carries RESOLVED 2026-08-16: no longer true, with the real prices ($3.22 used / $3.68 bought, matching cost_lines). No writer_note asserts a falsehood without its correction. One item for Brad's queue, preserved verbatim in the COST NOTE annotation: the writer flags that the full-fat cream-cheese commodity is live and CHEAPER per oz than the 1/3-fat one, questioning a price-based premise; Brad's ruling as relayed is calorie-based (use the lower-calorie product), so the ruling stands and the flag is a routed question, not a defect.",
+      "owner": "writer" },
+    { "check": "title",
+      "severity": "note",
+      "detail": "Source title is Spinach Stuffed Flank Steak Rolls (URL says spinach-cheese); the card's Spinach Provolone Stuffed Flank Steak Rolls names the same dish with the source's own primary cheese - a rename, not a re-class. The scaler prices the steak on the sirloin-steak bid under the item Beef Flank/Sirloin Steak; the display and steps name flank throughout and shop_smart discloses the sirloin swap as a same-price-class option, so the dish cooked is the source's dish.",
+      "owner": "writer" }
+  ],
+  "notes": "First cert for this slug in the re-QA cycle (prior cert predated the annotation bytes). Both anchors reached: live gimmedelicious.com fetch matched the extraction (4 servings, all 8 lines, method identical). Coverage traces both directions at one consistent 3.5x ratio (4 to 14): flank 1lb-3.5lb, oil 2tbsp-7tbsp, onion 0.5c-1.75c, garlic 3-4 cloves to 12 (midpoint x3.5, ordinary rounding on a ranged line), cream cheese 4oz-14oz, provolone 8oz-28oz, spinach 2c-7c; salt/pepper booked at the documented to-taste minimum and named in the steps. Method faithful: butterfly and pound, saute onion and garlic, stir in cream cheese off heat, spread, layer spinach and provolone, roll, tie, slice, season, sear 2-3 min per side in batches, bake 375F 10 min, tent and rest 5. Provolone is the source's own primary of its or-mozzarella line. Credit points at the true source URL. shop_smart makes no cost claim cost_lines cannot support. No blocking findings."
+}

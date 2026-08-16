@@ -1,0 +1,27 @@
+{
+  "name": "Keto Broccoli Cheddar Quiche",
+  "slug": "keto-broccoli-cheddar-quiche",
+  "protein": "vegetarian",
+  "cuisine": "American",
+  "method": "oven bake",
+  "source_url": "https://www.wholesomeyum.com/keto-quiche/",
+  "source_servings": 6,
+  "src_cal": 573,
+  "src_carbs": 13.3,
+  "src_protein": 23.2,
+  "src_fat": 51.5,
+  "ingredients_verbatim": [
+    "1 recipe Almond flour pie crust (omit sweetener, use extra salt)",
+    "1 tbsp Olive oil",
+    "2 cloves Garlic (minced)",
+    "2 cups Broccoli (cut into small florets)",
+    "1/4 cup Water",
+    "5 large Eggs",
+    "1/3 cup Heavy cream",
+    "1/2 tsp Sea salt",
+    "1/4 tsp Black pepper",
+    "1 cup Cheddar cheese (shredded)"
+  ],
+  "unmapped": ["almond-flour"],
+  "why": "Egg + cheddar custard quiche, vegetarian, published 573 cal / 23.2g protein / 13.3g total carbs (6.5g net) - inside the band though at the upper-calorie edge (our computed macros could push past 650, note as a risk). Almond-flour pie crust is the deliberate unmapped ingredient to exercise the pricer lane; it is also the one part that makes this quiche-with-crust rather than a pure crustless bake. Everything else maps (broccoli, eggs, heavy-cream, shredded cheddar, garlic). Included flagged so the selector can decide."
+}

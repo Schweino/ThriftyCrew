@@ -1,0 +1,14 @@
+﻿{
+  "slug": "basque-chicken-peppers-chilindron",
+  "verdict": "fail",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "ingredient-coverage",
+      "severity": "blocking",
+      "detail": "RE-QA after the writer-routed repair: the built v2 spec (db\\recipes\\basque-chicken-peppers-chilindron.json) and card (db\\built\\basque-chicken-peppers-chilindron.body.html) STILL do not exist. Run state remains 'priced' (last updated 2026-08-16T06:31:55), unchanged since before the first FAIL at 11:41:41 - the repair cycle produced nothing to certify. There is no card to compare against the source, so fidelity cannot be attested. Upstream artifacts remain clean: the live page was re-fetched this cycle and matches the extraction verbatim (all 14 ingredient lines, 4 steps, 6 servings, 452.5 cal / 23.7 P / 6.6 C / 35.1 F), and the mapped file scales every line on one consistent 2.3333 ratio with disclosed quantization drift only.",
+      "owner": "writer"
+    }
+  ],
+  "notes": "Second consecutive FAIL for the same cause - terminal per dispatch (rejected-qa). Nothing upstream needs repair: extraction is a faithful transcription of https://www.themediterraneandish.com/basque-chicken-and-peppers-pollo-al-chilindron/ (verified against the live page this cycle), the bacon-for-jamon substitution is source-sanctioned by the ingredient line itself, and the mapping's assumed quantities for the three unquantified lines (kosher salt, black pepper, fresh thyme) are disclosed and macro-irrelevant. If the pipeline ever builds the spec and card from these artifacts, the fidelity check should be trivial to pass."
+}

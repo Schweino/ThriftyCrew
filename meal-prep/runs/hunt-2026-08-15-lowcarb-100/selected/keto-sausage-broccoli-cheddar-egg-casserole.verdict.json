@@ -1,0 +1,38 @@
+{
+  "slug": "keto-sausage-broccoli-cheddar-egg-casserole",
+  "name": "Keto Sausage, Broccoli and Cheddar Egg Casserole",
+  "protein": "pork",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "conditions_fit": {
+    "calories_per_serving": 463,
+    "carbs_per_serving": 4.2,
+    "cal_in_band_400_650": true,
+    "carbs_at_or_below_35": true,
+    "scalable_to_14": true,
+    "no_seafood": true,
+    "budget_meal_prep_dinner": true,
+    "result": "FIT"
+  },
+  "dupe_evidence": "No egg-set pork sausage/broccoli/cheddar casserole exists in the live catalog or in accepted-slugs (read fresh); the nearest catalog dish, pork 'sausage-hash-brown-egg-casserole', is a potato hash-brown breakfast bake with milk (carb-heavy, no broccoli) and eats as a different plate, so this is not a catalog duplicate.",
+  "cross_protein_twins": [
+    {
+      "slug": "keto-turkey-broccoli-cheddar-casserole",
+      "status": "already accepted (turkey)",
+      "note": "Structurally the SAME dish - broccoli + cheddar + egg-set casserole - with turkey instead of breakfast sausage. Decider must decide whether both a turkey and a pork version earn catalog slots or one collapses. I cannot resolve cross-protein; flagging per scale rule."
+    },
+    {
+      "slug": "mexican-chorizo-egg-casserole",
+      "status": "already accepted (pork)",
+      "note": "Also a pork egg-set casserole, but Mexican chorizo flavor family + peppers vs American breakfast-sausage/broccoli/cheddar - two axes differ (flavor + veg), so a distinct dinner, NOT a dupe. Flagged only so decider confirms the pork egg-casserole shelf is not overloaded."
+    },
+    {
+      "slug": "sheet-pan-smoked-sausage-broccoli-cheddar",
+      "status": "already accepted (pork)",
+      "note": "Shares smoked-sausage + broccoli + cheddar flavor but is a SHEET-PAN roast with no egg custard - different format, not a dupe. Adjacent on flavor; decider may weigh whether two sausage-broccoli-cheddar dishes is redundant."
+    }
+  ],
+  "pool_collision_warning": "This candidate sits inside a dense cluster of near-identical pool twins being adjudicated in parallel (broccoli-cheddar-sausage-egg-bake, sausage-broccoli-cheddar-egg-casserole, sausage-broccoli-cheddar-egg-bake, keto-sausage-broccoli-cheddar-egg-bake, keto-sausage-broccoli-egg-casserole, sausage-egg-cheddar-crustless-bake, broccoli-cheddar-keto-quiche, broccoli-smoked-sausage-cheddar-bake). These are ONE dish. The decider must keep exactly one. This candidate is a strong representative: Wholesome Yum source, macros verified from the source nutrition card and dead-center of the band (463 cal / 25.7g protein / 4.2g carb), every main ingredient board-mapped (zero unmapped), clean 9x13 weigh-and-divide scale to 14.",
+  "unmapped_ingredients": [],
+  "notes": "Egg custard (12 eggs + 1/2 cup heavy cream + 2 cups cheddar) sets the dish; sausage and broccoli are components. American cuisine (does not widen the catalog's American/Tex-Mex skew, but fits the low-carb egg-cheese lane)."
+}

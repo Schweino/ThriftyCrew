@@ -1,0 +1,28 @@
+{
+  "slug": "italian-sausage-peppers-onions-skillet",
+  "name": "Italian Sausage, Peppers and Onions (No-Rice Skillet)",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 420,
+    "carbs_g": 8,
+    "band_ok": true,
+    "note": "420 cal in [400,650]; 8g carb <=35g; no seafood; skillet/sheet-pan scales to 14; budget pork-sausage + non-starchy veg. FIT."
+  },
+  "dupe_check": {
+    "catalog_nearest": "italian-sausage-penne",
+    "evidence": "Catalog 'Italian Sausage Penne with Peppers' shares protein (italian sausage), sauce (marinara) and veg (bell pepper + onion), but it is a penne PASTA dinner; this candidate is a deliberately no-starch skillet plate, so the starch/plate differs and it survives as a distinct low-carb dinner rather than a dupe.",
+    "also_considered": [
+      "turkey-sausage-and-peppers-rice-skillet (different protein=turkey AND rice-based)",
+      "polish-leczo-kielbasa-peppers-stew (smoked turkey kielbasa, tomato stew, not italian-sausage skillet)"
+    ]
+  },
+  "borderline": {
+    "flag": true,
+    "reason": "Against italian-sausage-penne this is arguably 'sausage and peppers' with vs without pasta (protein+sauce+veg identical, only starch/method distinguish). Kept because the no-starch plate is a genuinely different dinner and is the whole point of a low-carb run, but decider should confirm the catalog wants both the pasta and the no-starch take."
+  },
+  "cross_protein_collisions": [
+    "Structurally identical to any low-carb TURKEY sausage + peppers + onions skillet another selector may hold (catalog already has rice-based turkey-sausage-and-peppers-rice-skillet; a no-rice turkey twin would collide with this).",
+    "Also collides with any chicken-sausage peppers-and-onions skillet in another pool. Same-dish-different-protein - orchestrator merge pass should pick one."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "slug": "chimichurri-flank-steak",
+  "name": "Chimichurri Flank Steak",
+  "protein": "beef",
+  "verdict": "DUPE",
+  "dupe_class": "pool",
+  "fit": {
+    "cal_per_serving": 538,
+    "carbs_per_serving": 3,
+    "in_band": true,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "Numbers themselves clear the band (538 cal in 400-650, 3g carb under 35g) - this is a DUPE ruling on dish identity, not a NOT-FIT."
+  },
+  "dupe_of": "chimichurri-skirt-steak",
+  "also_collides_with": ["skirt-steak-chimichurri", "chimichurri-steak-sheet-pan"],
+  "evidence": "NOT a catalog dupe - the 138-recipe beef catalog has zero chimichurri / herb-oil seared steak. It IS a pool near-duplicate: chimichurri-skirt-steak and skirt-steak-chimichurri (both 491 cal / 2g carb, and near-certainly the same source plate as each other) were already ruled KEEP by other adjudicators. This candidate is the identical dinner - Argentine seared whole-muscle beef with a chimichurri herb-oil sauce and no starch. Skirt vs flank is an interchangeable thin-steak cut, not a distinguishing plate difference; that is a 4-of-4 match (protein / sauce family / starch / method).",
+  "recommendation": "The pool holds FOUR chimichurri steaks (this flank + two skirt + one sheet-pan). The decider should collapse the plain-seared chimichurri steaks to ONE. The two skirt verdicts landed first and are themselves duplicates of each other; the chimichurri-steak-sheet-pan is the most differentiated of the set (roasted sheet-pan format with sweet potato + broccolini, 31g carbs) and may coexist. Logging this flank version as the pool-dupe loser; if the decider prefers flank over skirt, swap the winner but ship only one.",
+  "cross_protein_collision_flags": [
+    "Chimichurri is a sauce-first, protein-agnostic identity: a chimichurri chicken or chimichurri pork plate in another selector's pool is the same dish on a different protein - flag for cross-protein merge (already noted by the skirt-steak adjudicators)."
+  ],
+  "cuisine": "Latin American (Argentine)",
+  "widens_catalog": true,
+  "unmapped_note": "unmapped=[flank steak]; flank has no board home (board carries sirloin/ribeye/chuck) - a deliberate pricer-lane test pick, not penalized per v2.1 5.1. Note: whichever chimichurri steak the decider keeps carries the same unmapped-cut pricer exercise."
+}

@@ -1,0 +1,26 @@
+{
+  "slug": "keto-sausage-broccoli-cheddar-egg-bake",
+  "name": "Sausage, Broccoli & Cheddar Crustless Egg Bake",
+  "protein": "pork",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "borderline": true,
+  "fit": {
+    "pass": true,
+    "cal": 463,
+    "carbs": 4.2,
+    "band": "463 cal in 400-650 band; 4.2 g carbs under the 35 g cap; no seafood; crustless no-starch oven bake, 8-serving weigh-and-divide scales cleanly to 14; budget meal-prep dinner. Clears every condition."
+  },
+  "catalog_dupe_of": null,
+  "catalog_check": "NOT a live-catalog duplicate. Nearest catalog neighbor is 'Sausage Hash Brown and Egg Casserole' (sausage-hash-brown-egg-casserole: ground-pork + eggs + cheddar + HASH-BROWNS + milk); that plate is potato/starch-forward while this is crustless, no-starch, heavy-cream-custard, broccoli-forward and low-carb (4.2 g) -- starch base differs, distinct dinner. Also unlike catalog baked-sausage-egg-breakfast-hash (russet potatoes). Distinct from accepted crustless-bacon-gruyere-quiche (bacon/gruyere, no sausage/broccoli).",
+  "accepted_slugs_check": "Read fresh. No sausage-broccoli-cheddar egg bake is in accepted-slugs, so not a dupe of any accepted slug. The one accepted structural neighbor is crustless-bacon-gruyere-quiche (crustless egg+cream+cheese pork custard bake) -- different cured pork (bacon vs breakfast sausage), cheese (gruyere vs cheddar), and a defining broccoli load, so a different plate, consistent with how the other crustless-egg-bake verdicts in this run were ruled.",
+  "pool_collisions_same_protein": [
+    "STRONG pool near-duplicate cluster: this is the same wholesomeyum 'Sausage, Broccoli & Cheddar Crustless Egg Bake' with IDENTICAL published macros (463 cal / 4.2 g carbs) as several pork candidates already ruled KEEP by other adjudicators -- sausage-egg-cheddar-crustless-bake (literally titled 'Sausage, Broccoli and Cheddar Crustless Egg Bake', 463/4.2), sausage-broccoli-cheddar-egg-bake (463/4.2), broccoli-cheddar-sausage-egg-bake (463/4g), keto-sausage-broccoli-egg-casserole (463/4.2). Same dish, same source, same numbers.",
+    "sausage-cottage-cheese-egg-bake (pork): a decider-noted surviving anchor for the crustless-sausage-egg-bake slice (binder = cottage cheese) -- same custard-bake identity.",
+    "sheet-pan-smoked-sausage-broccoli-cheddar (ACCEPTED, pork): same sausage+broccoli+cheddar flavor trio but sheet-pan roast, not an egg bake -- distinct method/dish, not a dupe."
+  ],
+  "cross_protein_collisions": [
+    "The egg-cheddar custard is the real identity and sausage is a swappable component, so this is structurally the SAME plate as any crustless broccoli-cheddar egg bake made with turkey or chicken sausage. Note keto-turkey-broccoli-cheddar-casserole (ACCEPTED, turkey) already owns the broccoli+cheddar low-carb-casserole idea in the turkey lane (different binder). Decider should watch turkey/chicken lanes for a broccoli-cheddar crustless egg-bake twin per-protein adjudicators cannot see."
+  ],
+  "note_to_decider": "KEEP is correct against the two required anchors (live catalog + accepted-slugs), but this candidate is REDUNDANT: it is the identical 463-cal/4.2 g wholesomeyum sausage-broccoli-cheddar crustless egg bake that at least four other pork candidates already carry, several already ruled KEEP. Only ONE of that cluster should ship. Recommend the decider fold this instance into the chosen anchor rather than accept it as a separate recipe; if picking the strongest of the cluster, prefer whichever has the cleanest costing/mapping, not necessarily this one."
+}

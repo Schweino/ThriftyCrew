@@ -1,0 +1,42 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Low Carb Chicken Piccata",
+  "source_url": "https://www.cookedbyjulie.com/low-carb-chicken-piccata/",
+  "servings": 2,
+  "time_total": "20 minutes",
+  "time_active": "5 minutes prep, 15 minutes cook",
+  "ingredients": [
+    { "raw": "2 boneless chicken breast", "item": "chicken breast", "qty": "2", "unit": "each", "prep": "boneless", "optional": false, "section": null },
+    { "raw": "1/2 tsp paprika", "item": "paprika", "qty": "1/2", "unit": "tsp", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tsp oregano", "item": "oregano", "qty": "1", "unit": "tsp", "prep": null, "optional": false, "section": null },
+    { "raw": "1/2 cup parmesan cheese", "item": "parmesan cheese", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "2 garlic cloves", "item": "garlic", "qty": "2", "unit": "clove", "prep": null, "optional": false, "section": null },
+    { "raw": "1 cup chicken stock", "item": "chicken stock", "qty": "1", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tbsp butter", "item": "butter", "qty": "1", "unit": "tbsp", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tbsp capers", "item": "capers", "qty": "1", "unit": "tbsp", "prep": null, "optional": false, "section": null },
+    { "raw": "1/2 lemon", "item": "lemon", "qty": "1/2", "unit": "each", "prep": null, "optional": false, "section": null },
+    { "raw": "Salt and pepper to taste", "item": "salt and pepper", "qty": null, "unit": null, "prep": null, "optional": true, "section": null }
+  ],
+  "instructions": [
+    "Season the chicken on both sides with paprika, oregano, and black pepper.",
+    "Season the chicken with salt on one side.",
+    "Coat the chicken on both sides with parmesan cheese.",
+    "Fry the chicken breasts over medium-high heat for 3-4 minutes on each side or until fully cooked through.",
+    "Remove the chicken from the skillet and set aside.",
+    "Add some butter to the skillet.",
+    "Stir in the garlic and cook for 10 seconds.",
+    "Add the chicken stock and lemon juice.",
+    "Increase the heat to high and let the sauce thicken.",
+    "Add the capers, parsley, and check for seasoning.",
+    "Place the chicken back in the skillet and cook for an additional minute.",
+    "Serve immediately and enjoy!"
+  ],
+  "nutrition": {
+    "as_stated_per_serving": "Calories: 465kcal | Carbohydrates: 9g | Protein: 60g | Fat: 19g | Saturated Fat: 9g | Cholesterol: 180mg | Sodium: 1005mg | Potassium: 1022mg | Fiber: 1g | Sugar: 2g"
+  },
+  "concerns": [
+    "Instructions mention parsley (step 10) but parsley does not appear in the ingredient list; not added as an ingredient line.",
+    "Instructions imply frying but no oil or fat for frying is listed beyond the 1 tbsp butter used later for the sauce."
+  ]
+}

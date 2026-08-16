@@ -1,0 +1,12 @@
+{
+  "slug": "creamy-pork-chops-pancetta-thyme-gravy",
+  "name": "Creamy Pork Chops with Pancetta-Thyme Gravy",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "condition_fit": "FIT",
+  "condition_notes": "564 cal (in 400-650 band), 5g total carbs (4g net, <=35g), pork/no seafood, method scales linearly to 14 - clears all conditions. Carries wanted pricer-lane flags: pancetta and xanthan gum (no board home).",
+  "dupe_of": null,
+  "reason": "No catalog collision: the pancetta + fresh-thyme + cream reduction is a distinct Italian-leaning flavor with no equivalent among the pork-chop set. Nearest neighbors are different plates - creamy-mushroom-pork-chops (mushroom, not pancetta/thyme; over mashed potato), countryfried-pork-chops-with-bacon-gravy (breaded/fried with a Southern milk-flour white gravy, not a cream reduction), and southern-smothered (onion cream). Pancetta-thyme cream distinguishes it on the sauce axis.",
+  "cross_protein_collision_notes": "Watch for a creamy chicken with pancetta/bacon + thyme cream sauce (Marry-Me-style or 'creamy bacon thyme chicken') in the chicken pool, or a creamy-thyme turkey cutlet - same pancetta/cured-pork + thyme-cream gravy structure with the protein swapped. Also note pool-adjacent to candidate creamy-smothered-onion-pork-chops-skillet (both creamy skillet pork chops, no starch), but the flavor drivers differ (onion-cream vs pancetta-thyme) so not a pool-dupe; that sibling is separately ruled DUPE against the catalog.",
+  "borderline": false
+}

@@ -1,0 +1,25 @@
+{
+  "slug": "low-carb-beef-meatloaf",
+  "name": "Low-Carb Beef Meatloaf",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "ok": true,
+    "calories": 585,
+    "carbs_g": 19,
+    "note": "585 cal within 400-650; 19g carb under the 35g cap; beef, no seafood; oven-baked loaves weigh-and-divide cleanly to 14 servings."
+  },
+  "dedup": {
+    "catalog": "KEEP - no beef meatloaf exists in the 544-recipe digest. Closest is turkey-meatloaf-with-mashed-potatoes, which differs on protein (turkey vs beef) AND is a high-carb mashed-potato plate; a low-carb baked beef meatloaf is not present. Not a catalog dupe.",
+    "accepted_slugs": "Read fresh (21 slugs); no meatloaf of any protein is accepted yet."
+  },
+  "borderline": {
+    "flag": true,
+    "reason": "Structurally this is ketchup/tomato-glazed baked meatloaf - a protein-swappable frame. It is the same-dish-different-protein twin of the pool's keto-turkey-meatloaf (already ruled DUPE of catalog turkey-meatloaf-with-mashed-potatoes). Kept because it is a distinct protein and fills a low-carb-beef-meatloaf slot the catalog lacks, but flagging so the audit stage can confirm the beef slot is wanted rather than collapsed into the meatloaf cluster."
+  },
+  "cross_protein_collision": "Ketchup-glazed baked meatloaf cluster: catalog turkey-meatloaf-with-mashed-potatoes (high-carb) + pool keto-turkey-meatloaf (DUPE). The cross-protein merge should keep only ONE low-carb meatloaf across the beef/turkey cluster; recommend this beef entry as the low-carb meatloaf the catalog currently has no version of. Watch for any pork meatloaf too.",
+  "unmapped_ingredients": ["coconut-sugar"],
+  "source_url": "https://www.freshfitkitchen.com/the-best-easy-low-carb-meatloaf-recipe-with-beef/",
+  "ruled_by": "adjudicate-3",
+  "ruled_at": "2026-08-15"
+}

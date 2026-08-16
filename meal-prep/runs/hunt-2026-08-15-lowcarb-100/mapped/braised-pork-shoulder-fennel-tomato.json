@@ -1,0 +1,149 @@
+{
+  "slug": "braised-pork-shoulder-fennel-tomato",
+  "title": "Keto Braised Pork Shoulder",
+  "source_url": "https://www.carbmanager.com/recipe-detail/ug:e7fabfd2af844317a0ca32dd5fedccd9/keto-braised-pork-shoulder",
+  "source_servings": 3,
+  "source_servings_basis": "DERIVED, NOT PRINTED - called out loudly: the page states nutrition per 'bowl' with no servings count (extractor reported null, correctly). Deriving from the source's OWN per-bowl macros against the label-computed batch totals: batch protein 144.5 g / 49.8 g per bowl = 2.90 bowls; batch calories 1741 / 622 = 2.80; batch fat 112.7 / 42.5 = 2.65 - the three instruments cluster at 3 servings (carbs, the blunt instrument at these magnitudes, says 4). Booked servings=3; at 3 the recompute lands -2% protein and -5% calories vs the page, which no other integer achieves (2 or 4 miss protein by +/-45%).",
+  "target_servings": 14,
+  "scale_factor": 4.6667,
+  "protein": "pork",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters, drift noted per line where it exceeds 5%.",
+  "ruled_substitutions": [],
+  "ingredients": [
+    {
+      "source_raw": "Pork roast, shoulder, fresh, visible fat eaten - 28 ounce",
+      "item": "Pork Shoulder",
+      "bid": "pork-shoulder",
+      "board": "weekly",
+      "grams": 3742,
+      "buy": "8 1/4 lb boneless pork shoulder",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by an explicit source WEIGHT (28 oz = 794 g for 3 = 265 g/serving raw; a braise loses ~30% water so the cooked portion is ordinary). Exact 4.6667x = 8.167 lb, quantized 8 1/4 lb (+1.0%). DB row Pork Shoulder (USDA Boston butt, separable lean and fat, raw 186 cal/100 g) matches the source's own 'visible fat eaten' basis. Board pork-shoulder 7 of 7, cheapest Sam's $1.94/lb (bone-in cells and boneless cells share the commodity; buy string says boneless to match the 28-oz edible basis)."
+    },
+    {
+      "source_raw": "Chicken broth, bouillon or consomme, homemade - 2 cup",
+      "item": "Chicken Broth",
+      "bid": "chicken-broth",
+      "board": "weekly",
+      "grams": 2220,
+      "buy": "9 1/4 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "'homemade' is a Carb Manager database label flourish, not a product; carton broth is the house basis (fricassee stock->broth precedent). densities 240 g/cup. Exact 9.333 cups quantized 9 1/4 (-0.9%). Board 7 of 7."
+    },
+    {
+      "source_raw": "Tomato paste - 1.5 tablespoon",
+      "item": "Tomato Paste",
+      "bid": "tomato-paste",
+      "board": "weekly",
+      "grams": 112,
+      "buy": "7 tbsp (about a 6-oz can plus 1 tbsp)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 16 g/tbsp, exact 7.0 tbsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "Apple cider vinegar - 1 tablespoon",
+      "item": "Apple Cider Vinegar",
+      "bid": "apple-cider-vinegar",
+      "board": "weekly",
+      "grams": 71,
+      "buy": "4 3/4 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 15 g/tbsp. Exact 4.667 quantized 4.75 (+1.8%). Board 6 of 7."
+    },
+    {
+      "source_raw": "Thyme, dried - 1 teaspoon",
+      "item": "Dried Thyme",
+      "bid": "dried-thyme",
+      "board": "weekly",
+      "grams": 4.75,
+      "buy": "4 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 1 g/tsp. Board 5 of 7."
+    },
+    {
+      "source_raw": "Mustard - 1 teaspoon",
+      "item": "Yellow Mustard",
+      "bid": "mustard",
+      "board": "weekly",
+      "grams": 24,
+      "buy": "4 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Unqualified 'mustard' = the board's mustard commodity (prepared yellow, its own cells). DB row Yellow Mustard (USDA prepared, added by keto-cheeseburger-skillet). 5 g/tsp prepared-mustard basis. Board 7 of 7. Under 1.5 cal/serving."
+    },
+    {
+      "source_raw": "Extra virgin olive oil - 1 tablespoon",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 64,
+      "buy": "4 3/4 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 13.5 g/tbsp. Board 7 of 7 (EVOO cells present at 5 stores)."
+    },
+    {
+      "source_raw": "Fennel bulb, raw - 1 each",
+      "item": "Fennel Bulb",
+      "bid": null,
+      "board": null,
+      "grams": 1170,
+      "buy": "5 medium fennel bulbs, quartered",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "item_id NULL with reason: the fennel commodity EXISTS (unit 'each' = the whole fresh bulb) but has NO priced board cell - today's only capture candidates are fennel SEED jars, which the commodity's own unit note disqualifies (form-flip: fresh is not dried/seed). price-ingredient cannot answer, so the term rides the queue: 'fennel' is ALREADY QUEUED and scored CARRIED (Baker's Fresh Fennel $3.99, Family Fare ruled not-carried on a meaningful probe) - this recipe's slug attached to that entry. Null = pantry-static pricing until the pricer writes the cell. NEW DB row Fennel Bulb (USDA raw, 31 cal/100 g; bulb = 234 g). Exact 4.667 bulbs rounded UP to 5 whole bulbs (+7.1% DRIFT NOTED, +1.9 cal/serving - a two-thirds bulb is not a cook measure and bulbs vary more than that anyway)."
+    },
+    {
+      "source_raw": "Garlic - 1 clove",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 15,
+      "buy": "5 cloves, thinly sliced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities clove=3 g. Exact 4.667 rounded UP to 5 (+7.1% on a 4-cal line). Board 5 of 7."
+    },
+    {
+      "source_raw": "Red onion - 0.5 medium (2 1/2\" diameter)",
+      "item": "Red Onion",
+      "bid": "red-onion",
+      "board": "weekly",
+      "grams": 275,
+      "buy": "2 1/2 medium, thinly sliced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Dedicated red-onion commodity (variety precedent). densities each=110 g. Exact 2.333 quantized 2.5 (+7.1% DRIFT NOTED, +0.8 cal/serving). Board 5 of 7, cheapest Aldi $1.095/lb."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Fennel Bulb (USDA raw, per 100 g: 31 cal / 1.2 P / 7.3 C / 0.2 F; medium bulb = 234 g, cup sliced = 87 g)"
+  ],
+  "pricing_terms_needed": [
+    { "term": "fennel", "blocking": true, "why": "5 fennel bulbs are the vegetable body of this braise; commodity exists (unit each = the bulb) but has no priced cell - queue entry already CARRIED via Baker's Fresh Fennel $3.99, this slug attached for the pricer's cell-write" }
+  ],
+  "new_commodity_proposals": [],
+  "registrar_rulings": "None needed - no new commodity id; the existing fennel commodity covers the bulb concept and only lacks a priced cell (pricer lane work, not registrar work).",
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 622, "protein_g": 49.8, "carbs_g": 7.7, "fat_g": 42.5, "basis": "per 'bowl' as printed; servings derived = 3, see source_servings_basis" },
+    "computed_per_serving": { "calories": 588.6, "protein_g": 48.8, "carbs_g": 10.8, "fat_g": 37.9 },
+    "protein_gap_pct": -2.0,
+    "calorie_gap_pct": -5.4,
+    "verdict": "PASS - protein -2.0% and calories -5.4% against the source's own per-bowl figures at the derived 3 servings; the derivation and the cross-check are the same computation seen from two ends, so the real assurance is that ONE integer serving count satisfies protein, calories and fat simultaneously. Carbs computed 10.8 vs published 7.7 total (page prints 7.7 total / 5.2 net): our fennel is booked at the full USDA 234 g/bulb while Carb Manager's '1 each' bulb runs lighter - conservative in the safe direction for a carb ceiling.",
+    "band_check": "computed 588.6 cal in [400, 650] PASS (61 cal below the ceiling); carbs 10.8 g <= 35 PASS"
+  },
+  "board_defects_observed": [
+    "fennel commodity: exists with unit 'each' (the bulb) but zero priced cells; today's capture candidates are all fennel SEED spice jars that the unit note itself disqualifies. The queue's carriage ruling (CARRIED, Baker's) is done; the cell write is still owed."
+  ],
+  "densities_followups": [
+    "Fennel Bulb: no densities row - propose each=234, cup (sliced)=87 (USDA)"
+  ]
+}

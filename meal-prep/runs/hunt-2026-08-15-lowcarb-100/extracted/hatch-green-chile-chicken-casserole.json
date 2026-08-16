@@ -1,0 +1,52 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Hatch Chile Casserole",
+  "source_url": "https://www.ruled.me/hatch-chile-casserole/",
+  "servings": 8,
+  "time_total": "1 hour",
+  "time_active": "20 minutes",
+  "ingredients": [
+    { "raw": "1/4 medium onion", "item": "onion", "qty": "1/4", "unit": "medium", "prep": null, "optional": false, "section": null },
+    { "raw": "1/4 cup water or chile liquid", "item": "water or chile liquid", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "27 ounce canned whole hatch green chiles", "item": "canned whole hatch green chiles", "qty": "27", "unit": "ounce", "prep": null, "optional": false, "section": null },
+    { "raw": "2 teaspoon olive oil", "item": "olive oil", "qty": "2", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "3 medium zucchini, spiralized or cut into thin strips", "item": "zucchini", "qty": "3", "unit": "medium", "prep": "spiralized or cut into thin strips", "optional": false, "section": null },
+    { "raw": "1 medium yellow bell pepper, diced", "item": "yellow bell pepper", "qty": "1", "unit": "medium", "prep": "diced", "optional": false, "section": null },
+    { "raw": "1 medium red bell pepper, diced", "item": "red bell pepper", "qty": "1", "unit": "medium", "prep": "diced", "optional": false, "section": null },
+    { "raw": "1 teaspoon garlic powder", "item": "garlic powder", "qty": "1", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 cup heavy whipping cream", "item": "heavy whipping cream", "qty": "1", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "2 1/4 cup pepper jack cheese, shredded", "item": "pepper jack cheese", "qty": "2 1/4", "unit": "cup", "prep": "shredded", "optional": false, "section": null },
+    { "raw": "4 ounce cream cheese, softened", "item": "cream cheese", "qty": "4", "unit": "ounce", "prep": "softened", "optional": false, "section": null },
+    { "raw": "salt and pepper, to taste", "item": "salt and pepper", "qty": null, "unit": null, "prep": "to taste", "optional": true, "section": null },
+    { "raw": "29 ounce rotisserie chicken, shredded", "item": "rotisserie chicken", "qty": "29", "unit": "ounce", "prep": "shredded", "optional": false, "section": null },
+    { "raw": "1/4 cup sharp cheddar cheese, shredded", "item": "sharp cheddar cheese", "qty": "1/4", "unit": "cup", "prep": "shredded", "optional": false, "section": null }
+  ],
+  "instructions": [
+    "Preheat oven to 350F. Blend together the white onion, water, and most of the diced green chiles, reserving a small amount for garnish. Alternatively, use the juice from the can of green chiles instead of water.",
+    "Heat half of the olive oil in a skillet over medium heat. Add the spiralized zucchini and saute until beginning to soften. Transfer to a casserole dish.",
+    "Wipe the skillet clean and return to the heat. Add the remaining teaspoon of olive oil to the pan. Once hot, add most of the diced yellow and red bell pepper, reserving some for garnish. Cook until beginning to soften and then add the teaspoon of garlic powder. Add the blended green chiles to the pan.",
+    "Once the sauce starts to bubble, stir in the heavy whipping cream. The sauce will thin and look a lot lighter.",
+    "Stir in the pepper jack cheese, reserving a small amount for topping.",
+    "Cube up the softened cream cheese and whisk it into the sauce. If the cream cheese isn't soft enough, place it in a separate bowl and mix with large spoonfuls of the sauce from the pan until it's fully incorporated and ready to stir into the full batch.",
+    "Season the sauce with salt and pepper.",
+    "Layer the shredded chicken over the zoodles.",
+    "Pour the green chile cream sauce over the casserole. Gently prod the chicken and veggies to spread the sauce throughout the dish.",
+    "Sprinkle the reserved chopped bell peppers and green chiles on top of the casserole.",
+    "Sprinkle with the cheddar and remaining pepper jack cheese.",
+    "Bake for 30 minutes, or until the cheese is melted and the casserole is bubbling.",
+    "Remove from the oven and let cool for 10 minutes. Serve and enjoy!"
+  ],
+  "nutrition_as_stated": {
+    "per_serving": true,
+    "calories": "543",
+    "fat": "37.2g",
+    "protein": "40.6g",
+    "carbohydrates": "10.4g",
+    "net_carbs": "10.4g"
+  },
+  "concerns": [
+    "Page lists prep 20 minutes + cook 40 minutes; time_active recorded from the stated prep time.",
+    "Nutrition page text gives 10.4g as net carbs; total carbohydrates figure was shown as the same 10.4g in the recipe card."
+  ]
+}

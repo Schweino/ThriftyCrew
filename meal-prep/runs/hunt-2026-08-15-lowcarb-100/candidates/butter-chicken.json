@@ -1,0 +1,33 @@
+{
+  "name": "Butter Chicken (Murgh Makhani)",
+  "slug": "butter-chicken",
+  "protein": "chicken",
+  "method": "braise (chicken simmered in cream-tomato sauce ~20 min)",
+  "cuisine": "Indian",
+  "source_url": "https://www.recipetineats.com/butter-chicken/",
+  "source_servings": 4,
+  "src_cal": 402,
+  "src_carbs": 9.8,
+  "src_protein": 39.8,
+  "ingredients": [
+    "1/2 cup plain yoghurt (full fat)",
+    "1 tbsp lemon juice",
+    "1 tsp turmeric powder",
+    "2 tsp garam masala",
+    "1/2 tsp chilli powder or cayenne pepper powder",
+    "1 tsp ground cumin",
+    "1 tbsp ginger (freshly grated)",
+    "2 cloves garlic (crushed)",
+    "1.5 lb / 750 g chicken thigh fillets (cut into bite size pieces)",
+    "2 tbsp (30 g) ghee or butter, OR 1 tbsp vegetable oil",
+    "1 cup tomato passata (tomato puree)",
+    "1 cup heavy / thickened cream",
+    "1 tbsp sugar",
+    "1 1/4 tsp salt",
+    "Basmati rice (to serve)",
+    "Coriander/cilantro (optional)"
+  ],
+  "unmapped": ["garam masala", "ghee (butter maps as substitute)", "tomato passata (maps to tomato-sauce/crushed-tomatoes)"],
+  "why": "Clean, clearly-distinct chicken cream braise not in the catalog (only chicken tikka masala is, a separate British-Indian dish). Published 402 cal / 39.8g protein / 9.8g carbs excluding rice sits inside the band with excellent protein-to-cal and very low carbs. Thighs + cream + tomato, no starch base, scales cleanly to 14 as a simmered braise. Note: 402 cal is near the floor; rich cream/ghee/thigh base should hold on our label-DB. Serves the pricer-lane exercise via garam masala (no board home).",
+  "why_confidence": "high - read published nutrition directly from source page; only caution is the 402 cal figure sitting near the 400 floor"
+}

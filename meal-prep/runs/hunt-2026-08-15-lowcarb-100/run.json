@@ -1,0 +1,12 @@
+{
+    "run":  "hunt-2026-08-15-lowcarb-100",
+    "created":  "2026-08-15T20:01:44",
+    "conditions":  "Dinner recipes: 400-650 calories per serving AND 35g or less carbohydrate per serving. Budget meal-prep, 14-serving scalable, no seafood.",
+    "stop":  "100 recipes carried to a terminal state, targeting 100 PUBLISHED.",
+    "wave_size":  10,
+    "auto_publish":  true,
+    "catalog_digest":  "C:\\Codex\\ThriftyCrew\\meal-prep\\pipeline\\catalog-digest.json",
+    "catalog_digest_written":  "2026-08-15T19:00:57",
+    "board_file":  "comparison-2026-08-15.json",
+    "board_written":  "2026-08-15T18:13:34"
+}

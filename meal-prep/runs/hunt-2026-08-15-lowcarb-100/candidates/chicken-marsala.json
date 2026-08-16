@@ -1,0 +1,33 @@
+{
+  "name": "Chicken Marsala (Creamy Mushroom Marsala Braise)",
+  "slug": "chicken-marsala",
+  "protein": "chicken",
+  "cuisine": "Italian-American",
+  "method": "cream braise (chicken browned, then simmered in marsala-mushroom cream sauce)",
+  "source_url": "https://www.recipetineats.com/chicken-marsala/",
+  "source_servings": 4,
+  "src_cal": 524,
+  "src_protein": 36,
+  "src_carbs": 16,
+  "src_fat": 28,
+  "ingredients_verbatim": [
+    "2 large chicken breasts (300g/10oz each), cut in half horizontally (or 4 thighs)",
+    "1/2 tsp cooking salt / kosher salt",
+    "1/2 tsp black pepper",
+    "1/4 cup flour, plain/all-purpose",
+    "2 tbsp extra virgin olive oil",
+    "2 tbsp / 30g unsalted butter",
+    "2 eschalots (US: shallots), peeled and cut into 1cm squares",
+    "1 garlic clove, finely minced",
+    "2 cups white mushrooms, sliced 0.5cm thick",
+    "1 cup dry marsala wine",
+    "1/2 cup chicken stock/broth, low sodium",
+    "1/2 cup thickened / heavy cream",
+    "1/4 tsp cooking salt / kosher salt",
+    "1/8 tsp black pepper",
+    "1 tbsp finely chopped parsley, for garnish (optional)"
+  ],
+  "main_ingredients": ["chicken-breast (or boneless-skinless-chicken-thigh)", "shallots", "garlic", "mushrooms", "marsala wine", "chicken-broth", "heavy-cream", "butter", "olive-oil", "flour"],
+  "unmapped": ["marsala wine (no board home - grep miss in commodities.json; a genuinely-absent ingredient for the pricer-lane exercise)"],
+  "why": "Creamy mushroom marsala braise: chicken browned then returned and simmered in a marsala-stock-cream pan sauce. Published 524 cal / 36g protein / 16g carbs per serving - middle of the band, well under both ceilings, strong protein. Structurally low-carb (meat + mushrooms + cream, only 1/4 cup flour to dredge). Carries one genuinely-absent signature ingredient (marsala wine) which is a FEATURE for this proving run - it exercises the new-commodity queue. Medium confidence on LANE FIT: RTE labels the method 'Pan-fry' and it leans toward a saute-with-pan-sauce; I judge it a cream braise (explicitly in-scope) but flagging so the selector can rule if the skillet-saute worker has better claim. Nutrition read directly from source page."
+}

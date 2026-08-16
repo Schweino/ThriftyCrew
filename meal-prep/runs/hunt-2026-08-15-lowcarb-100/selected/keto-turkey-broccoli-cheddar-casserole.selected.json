@@ -1,0 +1,14 @@
+{
+  "slug": "keto-turkey-broccoli-cheddar-casserole",
+  "name": "Keto Ground Turkey and Broccoli Cheddar Casserole",
+  "protein": "turkey",
+  "cuisine": "American",
+  "method": "oven bake",
+  "source_url": "https://www.grazewithme.com/keto-ground-turkey-broccoli-casserole-low-carb-recipe-guide/",
+  "src_cal": 450,
+  "src_carbs": 8,
+  "decision": "ACCEPT",
+  "note": "Rice-free keto ground-turkey + broccoli + cheddar + heavy-cream oven bake (450 cal / 8g carbs, all 8 mains board-mapped, unmapped=[]). Catalog dedup: nearest is ground-turkey-broccoli-cheddar-rice-skillet, but that is a RICE skillet with a milk/parmesan/breadcrumb sauce - starch presence and method both differ (2 of 4 axes), so not a near-dupe; turkey-divan-broccoli-rice-bake is a mayo/cream-of-chicken divan on rice with turkey breast - different sauce/starch/protein-form. Cross-lane check vs accepted-slugs.json (fresh read): no broccoli-cheddar-cream bake accepted; closest accepted turkey is turkey-zucchini-noodle-casserole (Italian tomato-mozzarella zucchini bake) - different dish. ACCEPT also improves balance: turkey was the thinnest protein (1 of 13 accepted) while pork/beef/chicken each sat at 4. CROSS-PROTEIN WATCH: a keto chicken- or beef- broccoli-cheddar-cream bake with no starch is the SAME plate - reject such a twin against this acceptance.",
+  "adjudicator_verdict": "KEEP",
+  "overruled": false
+}

@@ -1,0 +1,23 @@
+{
+  "slug": "cajun-sausage-and-vegetable-skillet",
+  "name": "Cajun Sausage and Vegetable Skillet",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "conditions_check": {
+    "calories_per_serving": 440,
+    "carbs_per_serving": 9,
+    "in_calorie_band_400_650": true,
+    "under_35g_carb": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "result": "FIT"
+  },
+  "dupe_of": null,
+  "evidence": "No catalog or accepted-slugs near-duplicate: this is the only smoked-sausage skillet with NO starch base (zucchini/yellow-squash/bell-pepper/onion, non-starchy). The accepted italian-sausage-peppers-onions-skillet shares the sausage-skillet format but is Italian flavor with peppers/onions, not Cajun andouille with squash - different dinner; every catalog smoked-sausage skillet (Cheesy Smoked Sausage and Rice Skillet, Turkey Sausage and Peppers Rice Skillet, Polish Leczo) carries a rice/pasta/potato base, and One-Pot Creamy Cajun Sausage Pasta shares only the Cajun+sausage flavor but is a high-carb creamy pasta.",
+  "cross_protein_collision_flags": [
+    "STRUCTURAL TWIN RISK: a turkey-protein 'Cajun/smoked turkey sausage and (non-starchy) vegetable skillet' would be the same dish with a swapped protein - catalog already leans heavily on smoked-turkey-sausage skillets, so if another selector's pool holds a low-carb no-starch Cajun turkey-sausage skillet, decider should treat it as the same plate and keep only one.",
+    "Weaker/non-dupe flavor overlap with live catalog One-Pot Creamy Cajun Sausage Pasta (turkey) - same Cajun+sausage flavor family but different starch/format, not a merge."
+  ],
+  "pool_watch": "Within pork-sausage pool, watch for any other andouille/kielbasa non-starchy-veg skillet (e.g. a 'smoked sausage and cabbage/zucchini skillet') - would collide with this one.",
+  "notes": "Andouille is unmapped (rebuilds on kielbasa/smoked-turkey-sausage) - deliberate pricer-lane flag per v2.1 5.1, not penalized. Protein 21g/serving is under the 25g catalog ideal but not a run gate."
+}

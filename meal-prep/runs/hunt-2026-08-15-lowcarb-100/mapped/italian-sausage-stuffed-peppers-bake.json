@@ -1,0 +1,109 @@
+{
+  "slug": "italian-sausage-stuffed-peppers-bake",
+  "title": "Cheese Stuffed Italian Sausage and Peppers (Lazy Keto, Low Carb)",
+  "source_url": "https://remakemyplate.com/lazy-keto-italian-stuffed-sausage-peppers/",
+  "source_servings": 5,
+  "target_servings": 14,
+  "scale_factor": 2.8,
+  "protein": "pork",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 2.8x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "'5 Cheese Stick' (instructions: mozzarella stick) -> String Cheese: the instructions name a mozzarella stick and retail 1 oz string cheese IS the low-moisture part-skim mozzarella stick; booked to the string-cheese commodity (its own price class, individually wrapped) and a NEW Frigo-label DB row, not to shredded mozzarella."
+  ],
+  "ingredients": [
+    {
+      "source_raw": "1 Onions",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 330,
+      "buy": "3 medium onions, sliced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 2.8x = 2.8 each, quantized 3 whole onions (+7.1% DRIFT NOTED - onions cut as counts; +0.7 cal/serving) x densities 110 g = 330 g. Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "8 ounces Green Bell Pepper green, red, yellow or orange cut into slices",
+      "item": "Green Bell Peppers",
+      "bid": "green-bell-pepper",
+      "board": "weekly",
+      "grams": 638,
+      "buy": "22 1/2 oz bell peppers (about 5 medium, any color), cut into slices",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Anchored by source WEIGHT (8 oz), exact 2.8x = 22.4 oz, quantized 22 1/2 oz = 638 g (+0.4%). Primary noun is GREEN bell pepper -> green-bell-pepper commodity per the standing green-is-not-red price-class split (the source's any-color sanction is prose freedom for the cook, not a license to price green at red-bell rates). Commodity exists but has NO priced cell (CAPTURE, 8 candidates across 6 stores) - term 'green bell pepper' ENQUEUED (queue already resolved CARRIED via philly-cheesesteak; slug attached). DB row Green Bell Peppers (label, 24 cal/119 g)."
+    },
+    {
+      "source_raw": "5 Italian Sausage links, about 1.5-2 pounds",
+      "item": "Hot Italian Sausage",
+      "bid": "italian-sausage",
+      "board": "weekly",
+      "grams": 1905,
+      "buy": "14 Italian sausage links (about 4 1/4 lb)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "MAIN PROTEIN, and the batch's loudest line - read the cross-check. Source prints BOTH a count (5 links) and a weight range ('about 1.5-2 pounds' = 136-181 g/link). Booked at the LOW END of the printed range: 1.5 lb x 2.8 = 4.2 lb = 1905 g (14 links at 136 g), because (a) an explicit printed weight outranks every other basis (fricassee/tandoori rule), and (b) the source's own published 561 cal recomputes to +0.6% on exactly this reading. CONFLICTING BASES DISCLOSED: densities each = 90 g (14 links = 1260 g -> 439 cal/serving) matches the source's published 28 g protein instead; today's board captures say retail 5-link packs are 19 oz (Walmart Marketside '5 Links, 1 lb 3 oz', Aldi 19 oz) = 108 g/link -> 1512 g -> 488 cal/serving. All three readings land in band; the printed-weight anchor is the ruling. italian-sausage commodity covers hot and mild in one price class, 6 of 7 stores, cheapest Aldi $2.4842/lb. The Hot Italian Sausage DB row's raw-vs-cooked basis ambiguity (flagged by italian-sausage-peppers-onions-skillet, unresolved) applies here too: a raw-basis correction would ADD roughly 100 cal/serving and push this recipe to ~665, just OVER the 650 ceiling - this recipe must not publish until that row's basis is pinned by the meal-macro label check the skillet batch requested."
+    },
+    {
+      "source_raw": "5 Cheese Stick",
+      "item": "String Cheese",
+      "bid": "string-cheese",
+      "board": "weekly",
+      "grams": 392,
+      "buy": "14 mozzarella string cheese sticks",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 2.8x = 14 sticks x 28 g = 392 g, zero drift (see ruled_substitutions for the stick-to-string-cheese identity). NEW DB row String Cheese (Frigo Cheese Heads label, 80 cal / 6 P / 1 C / 6 F per 28 g stick, verified). string-cheese commodity 6 of 7 stores, cheapest Sam's Club $0.1973/oz - its OWN price class, deliberately not shredded-cheese."
+    },
+    {
+      "source_raw": "1 cup marinara sauce",
+      "item": "Marinara Sauce",
+      "bid": "marinara-sauce",
+      "board": "recipe",
+      "grams": 677,
+      "buy": "2 3/4 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 2.8x = 2.8 cups, quantized 2 3/4 cups (-1.8%) x GV label 246 g/cup (label 1/2 cup = 123 g; label wins over densities 250 per basis-reconciliation) = 676.5 -> 677 g. bid from ingredient-map (marinara-sauce); the TERM resolver answers via the weekly pasta-sauce commodity (include /marinara/, 7 of 7, cheapest Sam's $0.0591/oz) - the standing one-concept-two-ids split, re-flagged in board_defects_observed. Either path prices."
+    },
+    {
+      "source_raw": "1 cup mozzarella cheese",
+      "item": "Mozzarella Cheese",
+      "bid": "mozzarella-cheese",
+      "board": "weekly",
+      "grams": 311,
+      "buy": "2 3/4 cups shredded",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 2.8x = 2.8 cups, quantized 2 3/4 cups (-1.8%) x 113 g/cup (label figure, turkey-zucchini precedent; no Mozzarella Cheese densities row - re-flag) = 310.75 -> 311 g. bid from ingredient-map (mozzarella-cheese, weekly) which has NO cell in comparison-2026-08-15.json and is not on the recipe board; the term only prices via the shredded-cheese commodity's include (7 of 7, cheapest Sam's $0.1521/oz part-skim mozzarella) - standing defect re-flagged. DB row Mozzarella Cheese (USDA low-moisture part-skim shredded, 304 cal/100 g)."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "String Cheese (Frigo Cheese Heads label, 1 stick = 28 g: 80 cal / 6 P / 1 C / 6 F)"
+  ],
+  "pricing_terms_needed": [
+    { "term": "green bell pepper", "blocking": true, "why": "22 1/2 oz of the recipe's vegetable base at 14 servings; commodity exists with no priced cell (CAPTURE only) - queue already resolved CARRIED via philly-cheesesteak-stuffed-peppers, slug attached for the derive" }
+  ],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 561, "protein_g": 28, "carbs_g": 8, "fat_g": 46 },
+    "computed_per_serving": { "calories": 565.0, "protein_g": 37.9, "carbs_g": 14.7, "fat_g": 38.6 },
+    "protein_gap_pct": 35.4,
+    "calorie_gap_pct": 0.7,
+    "verdict": "CALLED OUT LOUDLY - the protein instrument BREAKS at +35.4%, and for once the finding is against the SOURCE, not a portion: their own printed sausage line ('5 links, about 1.5-2 pounds') makes 28 g protein/serving unreachable - 1.5 lb of Italian sausage plus a full stick and an ounce of mozzarella per serving computes 37.9 P minimum, while their 28 P back-solves to ~85-90 g links, flatly contradicting their own printed weight. Their calories agree with their printed weight (our 565.0 vs their 561, +0.7% on the 1.5 lb low end), so the incoherence lives in their protein/fat fields (fat 46 likewise fits no consistent reading). Portions here follow the printed weight; the published protein figure is recorded as unreliable. Every candidate basis (90/108/136 g links) computes in-band: 439/488/565.",
+    "band_check": "computed 565.0 cal in [400, 650] PASS (85 of ceiling headroom) - BUT CONDITIONAL: the Hot Italian Sausage DB row's unresolved raw-vs-cooked basis (see sausage line note) would add ~100 cal/serving on the raw-basis reading and breach the ceiling at ~665. Do not publish until the sausage row's basis is pinned; carbs 14.7 g <= 35 PASS either way."
+  },
+  "board_defects_observed": [
+    "Marinara term-vs-map split re-observed (one concept, two ids: marinara-sauce map entry vs pasta-sauce term resolver) - first logged by italian-sausage-peppers-onions-skillet.",
+    "mozzarella-cheese id has no cell on either board and only prices via the shredded-cheese include - re-flag of turkey-zucchini-noodle-casserole / low-carb-turkey-cauliflower-mushroom-casserole.",
+    "densities Hot Italian Sausage each=90 g disagrees with today's own board captures (two stores' 5-link packs at 19 oz = 108 g/link) AND with this source's printed 136-181 g/link range - the each-weight needs a documented basis; logged as a densities follow-up, not edited by this run."
+  ],
+  "densities_followups": [
+    "Hot Italian Sausage: each=90 g carries no recorded basis and contradicts current retail captures (~108 g/link); propose re-basing with citation once the meal-macro label check pins the row's raw-vs-cooked basis (same worklist item as the skillet batch's flag).",
+    "Mozzarella Cheese: still no densities row (cup 113 used from the label figure) - re-flag of turkey-zucchini proposal (cup 113, tbsp 7).",
+    "Marinara Sauce: densities cup=250 vs GV label 246 (label 1/2 cup = 123 g); basis-reconciliation candidate, label wins when they collide."
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "slug": "sausage-cheddar-breakfast-strata",
+  "name": "Sausage Cheddar Breakfast Strata",
+  "protein": "pork",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 442,
+    "carbs": 18,
+    "in_band": true,
+    "note": "442 cal (400-650 band) and 18g carbs (<=35g) both clear; pork, no seafood; scales to 14 as a pan bake."
+  },
+  "dupe_check": {
+    "catalog": "No pork duplicate. Catalog's baked-sausage-egg-breakfast-hash shares pork sausage + eggs but is a potato hash (russet/no dairy custard, no cheese, no bread) - different dish. crustless-bacon-gruyere-quiche (accepted this run) is bacon/gruyere and crustless - different component protein, cheese, and no bread starch.",
+    "pool": "No colliding pork candidate seen in this adjudication."
+  },
+  "cross_protein_flags": [
+    "Structurally the same dish as the catalog's turkey-sausage-hash-brown-breakfast-bake (TURKEY): a sausage + egg + cheddar milk-custard breakfast bake. Differs by protein (pork vs turkey) and starch (bread cubes vs hash browns), so not a same-protein dupe, but a turkey/egg-cheese selector could surface a near-identical plate - decider should cross-check.",
+    "Adjacent to any other 'egg-custard breakfast bake / strata / frittata' candidates in the egg-cheese lane regardless of meat; if two bread-bound stratas land, they collide on dish identity."
+  ],
+  "evidence": "Custard-soaked bread strata bound by egg/cheddar; dish identity is the bread-and-egg bake with sausage as a component. Closest catalog neighbor is a turkey-protein bake, not a pork one, so no in-lane duplicate."
+}

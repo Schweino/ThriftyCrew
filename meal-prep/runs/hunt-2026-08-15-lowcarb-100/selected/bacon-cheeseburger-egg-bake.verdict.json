@@ -1,0 +1,24 @@
+{
+  "slug": "bacon-cheeseburger-egg-bake",
+  "name": "Bacon Cheeseburger Egg Bake",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 503,
+    "carbs_g": 5,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "seafood": false,
+    "scalable_to_14": true,
+    "note": "9x13 weigh-and-divide bake, scales cleanly; published macros sit dead-center of both bands."
+  },
+  "dupe_check": {
+    "against_catalog": "NOT a dupe. Nearest catalog beef bakes are cheeseburger-pasta (penne base) and cheeseburger-rice-bowls (rice base) - both carb-based, neither egg-bound. The only other beef egg-custard bake is south-african-bobotie-beef-bake, which shares protein+method+low-carb but is a curry/raisin/bread Cape Malay custard - a genuinely different flavor family and dinner. accepted-slugs holds crustless-bacon-gruyere-quiche (pork/bacon quiche, no beef).",
+    "against_pool": "No competing beef egg-bake seen among the candidates I was handed (single candidate)."
+  },
+  "cross_protein_collisions": [
+    "Structurally an egg-custard casserole over browned beef+bacon topped with cheddar. A pork or turkey 'bacon cheeseburger egg bake' / breakfast-sausage egg bake in another selector's pool would be the same dish with a swapped protein - decider should merge-check.",
+    "Catalog already carries sausage-hash-brown-egg-casserole (pork) and turkey-sausage-hash-brown-breakfast-bake (turkey); those differ by hash-brown starch + sausage seasoning, but any low-carb crustless egg-bake candidate in another protein lane is worth a same-dish look."
+  ],
+  "borderline_flag": "south-african-bobotie-beef-bake shares 3 of 4 axes (beef / egg-custard bake / no starch); kept KEEP because cheeseburger flavor (ketchup, mustard, cheddar, bacon) vs curried-raisin-bread bobotie is a real distinction, but the decider sees the flag."
+}

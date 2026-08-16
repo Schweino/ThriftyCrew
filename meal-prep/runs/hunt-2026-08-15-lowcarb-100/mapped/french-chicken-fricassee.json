@@ -1,0 +1,224 @@
+{
+  "slug": "french-chicken-fricassee",
+  "title": "Chicken Fricassee",
+  "source_url": "https://foolproofliving.com/chicken-fricassee/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-15",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "Tarragon -> fresh parsley, SOURCE-SANCTIONED: the source's own ingredient line reads 'If you can't find tarragon, you can use parsley'. Tarragon is ABSENT on the board (no cell, no capture); fresh-parsley is carried 3 of 7. Booking the source's stated fallback is not a mapping stretch."
+  ],
+  "ingredients": [
+    {
+      "source_raw": "2 pounds boneless chicken breasts",
+      "item": "Boneless Skinless Chicken Breast",
+      "bid": "chicken-breast",
+      "board": "weekly",
+      "grams": 3175,
+      "buy": "7 lb boneless skinless (about 14 breasts)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by an explicit source WEIGHT (2 lb = 1 breast per serving at ~227 g raw), exact 3.5x, zero drift. That is above the catalog's 167 g/serving chicken-breast average, but the source's own published 54 g protein/serving demands it and our recompute lands at 55.3 g (+2.4%) - the florentine each-weight failure mode does not apply when the source states pounds and its protein confirms them. Board 6 of 7, cheapest Baker's $1.99/lb."
+    },
+    {
+      "source_raw": "1 teaspoon kosher salt",
+      "item": "Kosher Salt",
+      "bid": "kosher-salt",
+      "board": "weekly",
+      "grams": 21,
+      "buy": "3 1/2 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "kosher-salt commodity exists, 3 of 7 stores, cheapest Walmart $0.0629/oz - no need to flatten to table salt. Zero-macro; grams on the table-salt 6 g/tsp basis (coarse kosher runs lighter; gram error here is macro- and cost-irrelevant)."
+    },
+    {
+      "source_raw": "1/2 teaspoon black pepper",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 4,
+      "buy": "1 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 2.3 g/tsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 tablespoon butter",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "weekly",
+      "grams": 49,
+      "buy": "3 1/2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 14 g/tbsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 tablespoon olive oil",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 47,
+      "buy": "3 1/2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 13.5 g/tbsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 onion, finely chopped - (about to 1 cup)",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 385,
+      "buy": "3 1/2 medium, finely chopped (about 3 1/2 cups)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities each=110 g. The source line's '(about to 1 cup)' typo (extractor concern) does not change the count basis. Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "1 lbs. Portobello mushrooms, cleaned, trimmed, and sliced",
+      "item": "Portobello Mushrooms",
+      "bid": "portobello-mushrooms",
+      "board": "weekly",
+      "grams": 1588,
+      "buy": "3 1/2 lb, cleaned, trimmed and sliced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "The board HAS a portobello-mushrooms commodity (variety split from mushrooms, mirroring the red-onion precedent), so no white-mushroom stretch is needed. BUT its only cell today is a Walmart CANNED product (Giorgio Chunky Style Portabella, 4 oz can, $4.88/lb-normalized) - a form defect in the cell, not in the mapping; see board_defects_observed. 1 of 7 store coverage is still coverage (partial coverage is an answer). NEW food-DB row added (USDA portabella raw, 22 cal/100 g). densities has NO Portobello row (FLAGGED); grams are straight lb weight."
+    },
+    {
+      "source_raw": "1/4 cup dry white wine, such as Sauvignon blanc",
+      "item": "Dry White Wine",
+      "bid": null,
+      "board": null,
+      "grams": 206,
+      "buy": "3/4 cup plus 2 tbsp",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "item_id NULL with reason: price-ingredient answers ABSENT - no commodity claims /\\bwhite\\s+wine\\b/, no board cell, nothing in today's captures (several of the seven Omaha stores do sell wine, so absence-of-capture is exactly the unresolved case the queue exists for). Term ENQUEUED blocking; carriage is the pricer's ruling. Null = pantry-static pricing meanwhile, safe. NEW food-DB row added (USDA white table wine). 0.875 cup at 235 g/cup (Red Wine densities basis) = 206 g, quantized 18.75-tbsp-equivalent drift 0%."
+    },
+    {
+      "source_raw": "1 tablespoon all-purpose flour",
+      "item": "All-Purpose Flour",
+      "bid": "flour",
+      "board": "weekly",
+      "grams": 28,
+      "buy": "3 1/2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 8 g/tbsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "2 cloves garlic, minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 21,
+      "buy": "7 cloves, minced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities clove=3 g. Board 5 of 7."
+    },
+    {
+      "source_raw": "1 1/2 cup chicken stock - I used my homemade chicken stock recipe.",
+      "item": "Chicken Broth",
+      "bid": "chicken-broth",
+      "board": "weekly",
+      "grams": 1260,
+      "buy": "5 1/4 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "stock -> broth is the standing house equivalence (same commodity price class and same label row; the 'homemade' aside is a blog flourish, not a product). densities 240 g/cup. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/3 cup sour cream",
+      "item": "Sour Cream",
+      "bid": "sour-cream",
+      "board": "weekly",
+      "grams": 270,
+      "buy": "1 cup plus 2 3/4 tbsp full-fat",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FULL-FAT sour cream; deliberately NOT the Light Sour Cream DB row (140 vs 198 cal/100 g - deflating a row fails a calorie-floor gate as surely as inflating fails the ceiling, and this recipe computes near the floor). Board commodity sour-cream carries full-fat product (GV Original, Daisy) so the price class matches; 7 of 7 stores, cheapest Walmart $0.1025/oz. NEW food-DB row added (USDA full-fat cultured, cup = 230 g). Exact scale 1.167 cups = 18.67 tbsp, quantized 18.75 tbsp (+0.4%) = 270 g."
+    },
+    {
+      "source_raw": "1 egg yolk",
+      "item": "Egg Yolk",
+      "bid": "eggs",
+      "board": "weekly",
+      "grams": 68,
+      "buy": "4 large yolks",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "DRIFT NOTED: exact 3.5x = 3.5 yolks, rounded UP to 4 whole yolks (+14.3% on this line; +2 cal/serving - a half yolk is not a cook measure). Purchase maps to the eggs commodity (7 of 7, whole eggs); macros book to the NEW Egg Yolk DB row (USDA, 17 g/yolk), not the whole-egg row, because the yolk carries nearly all the fat."
+    },
+    {
+      "source_raw": "1/2 teaspoon freshly ground nutmeg",
+      "item": "Ground Nutmeg",
+      "bid": "ground-nutmeg",
+      "board": "weekly",
+      "grams": 3.9,
+      "buy": "1 3/4 tsp, freshly ground",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 2.2 g/tsp. Board 5 of 7."
+    },
+    {
+      "source_raw": "2 teaspoons lemon juice, freshly squeezed",
+      "item": "Lemon Juice",
+      "bid": "lemon-juice",
+      "board": "weekly",
+      "grams": 35,
+      "buy": "2 tbsp plus 1 tsp, freshly squeezed",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 5 g/tsp. Bottled-juice commodity for pricing; the 'freshly squeezed' flourish stays in the prose. Board 7 of 7."
+    },
+    {
+      "source_raw": "2 teaspoons tarragon, minced (If you can't find tarragon, you can use parsley)",
+      "item": "Fresh Parsley",
+      "bid": "fresh-parsley",
+      "board": "weekly",
+      "grams": 9,
+      "buy": "2 1/4 tbsp minced (tarragon if you can find it)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "SOURCE-SANCTIONED substitution, see ruled_substitutions: tarragon is ABSENT on the board and the source itself names parsley as the fallback. fresh-parsley commodity 3 of 7 stores, cheapest Hy-Vee $0.99/each. NEW food-DB row added (USDA raw parsley; tbsp chopped = 3.8 g). Exact 3.5x = 7 tsp = 2.33 tbsp, quantized 2.25 tbsp (-3.6%)."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Sour Cream (USDA full-fat cultured, per 100 g: 198 cal / 2.4 P / 4.6 C / 19.4 F; cup = 230 g)",
+    "Egg Yolk (USDA, 1 large yolk = 17 g: 55 cal / 2.7 P / 0.6 C / 4.5 F)",
+    "Dry White Wine (USDA white table wine, per 100 g: 82 cal / 0.1 P / 2.6 C / 0 F)",
+    "Fresh Parsley (USDA raw, per 100 g: 36 cal / 3 P / 6.3 C / 0.8 F; tbsp chopped = 3.8 g)",
+    "Portobello Mushrooms (USDA portabella raw, per 100 g: 22 cal / 2.1 P / 3.9 C / 0.4 F; cup diced = 86 g)"
+  ],
+  "pricing_terms_needed": [
+    { "term": "dry white wine", "blocking": true, "why": "fricassee deglaze/sauce base, 3/4 cup plus 2 tbsp at 14 servings; board and captures have no white-wine cell anywhere, yet several Omaha stores stock wine - needs a real carriage/price verdict" }
+  ],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 569, "protein_g": 54, "carbs_g": 14, "fat_g": 31 },
+    "computed_per_serving": { "calories": 436.1, "protein_g": 55.3, "carbs_g": 11.3, "fat_g": 17.9 },
+    "protein_gap_pct": 2.4,
+    "calorie_gap_pct": -23.4,
+    "verdict": "PASS on the protein instrument (+2.4%), which validates every portion including the 2 lb main protein. CALLED OUT LOUDLY: the calorie gap is -23.4%, entirely a FAT gap (17.9 computed vs 31 published). The listed quantities cannot produce 31 g fat/serving from label rows: chicken breast 3 g/112 g raw, 1 tbsp butter + 1 tbsp olive oil + 1/3 cup sour cream + 1 yolk across 4 servings totals ~18 g/serving. Their calculator most plausibly booked skin-on breast or double-counted the sauce dairy. Our label-accurate figure stands; if QA prefers the source's calories the recipe would still sit in band, but no label-supported path reaches 569.",
+    "band_check": "computed 436.1 cal in [400, 650] PASS (36 cal above the floor - note the margin); carbs 11.3 g <= 35 PASS"
+  },
+  "board_defects_observed": [
+    "portobello-mushrooms commodity: the single populated cell is a CANNED product (Walmart 'Giorgio Chunky Style Portabella Mushrooms, 4oz Can' normalized to $4.88/lb) on a commodity whose concept is fresh portobello - a form-flip inside the cell. The mapping targets the id (right concept); the cell needs a capture-rule fix. Flagged for the match-soundness/capture pipeline, not changed by this run.",
+    "Term 'tarragon' is ABSENT board-wide; recorded here so the herb gap is visible if future recipes need it (this recipe resolved via the source's own parsley fallback)."
+  ],
+  "densities_followups": [
+    "Portobello Mushrooms: no densities row; USDA cup diced = 86 g, whole cap ~ 84 g (proposed row: cup 86, each 84)",
+    "Sour Cream (full fat): no densities row (only Light Sour Cream cup 230); USDA full-fat cup = 230 g, tbsp = 12 g - propose explicit row",
+    "Dry White Wine: no densities row; used the Red Wine basis (cup 235, floz 29.4) - propose mirroring row",
+    "Fresh Parsley: no densities row; USDA tbsp chopped = 3.8 g, cup chopped = 60 g, bunch ~ 60 g",
+    "Kosher Salt: no densities row; booked at table-salt 6 g/tsp (coarse kosher runs ~4.8 g/tsp Morton, 2.8 g/tsp Diamond) - zero-macro so immaterial, but a row would end the ambiguity"
+  ]
+}

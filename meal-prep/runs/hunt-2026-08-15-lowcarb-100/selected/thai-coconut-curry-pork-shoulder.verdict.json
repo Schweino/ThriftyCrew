@@ -1,0 +1,20 @@
+{
+  "slug": "thai-coconut-curry-pork-shoulder",
+  "name": "Thai Coconut Curry Pork Shoulder",
+  "protein": "pork-shoulder",
+  "verdict": "KEEP",
+  "fit": {
+    "in_band": true,
+    "cal": 548,
+    "carbs": 6.1,
+    "note": "548 cal within 400-650; 6.1g carbs (4.6g net) well under 35g; no seafood; big-braise / slow-cooker weigh-and-divide scales to 14; budget meal-prep dinner (pork shoulder is a cheap cut). FIT."
+  },
+  "catalog_dupe_check": "Not a catalog duplicate. Catalog Thai pork is thai-basil-pork-pad-kra-pao-bowls (basil stir-fry, no coconut), thai-peanut-pork-tenderloin-rice-bowl (peanut + rice), and thai-pork-drunken-noodles (noodles) - none is a coconut-milk curry braise. filipino-pork-adobo-sa-gata is coconut-braised pork but adobo (vinegar/soy), a different flavor family. Widens catalog with a coconut-curry pork it lacks and adds scarce Thai cuisine.",
+  "accepted_slugs_dupe_check": "Not a duplicate of anything in accepted-slugs.json; this slug IS itself accepted (line 19).",
+  "pool_collision_flags": [
+    "No strong same-protein (pork) coconut-curry twin visible in the pool. filipino-pork-adobo-sa-gata (pool) shares coconut braise but is adobo, distinct."
+  ],
+  "cross_protein_collision_flags": [
+    "Coconut/red-curry braise could collide with other-protein coconut-curry dishes. Pool contains turkey coconut/red-curry siblings: 'ground-turkey-thai-red-curry-cauliflower-skillet' and 'thai-red-curry-ground-turkey-cauliflower-zucchini-skillet' - those are ground-turkey stir-fry skillets (different cut/method) but share the Thai-coconut-curry flavor family; decider should confirm the run is not shipping the same coconut-curry sauce across pork + turkey. Also watch for any chicken/beef coconut/massaman curry in other lanes."
+  ]
+}

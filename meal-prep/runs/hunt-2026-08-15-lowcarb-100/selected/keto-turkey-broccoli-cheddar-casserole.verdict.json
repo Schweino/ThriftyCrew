@@ -1,0 +1,18 @@
+{
+  "slug": "keto-turkey-broccoli-cheddar-casserole",
+  "name": "Keto Ground Turkey and Broccoli Cheddar Casserole",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "borderline": true,
+  "fit": {
+    "pass": true,
+    "cal": 450,
+    "carbs": 8,
+    "evidence": "450 cal within 400-650 band; 8 g carbs under 35 g cap; no seafood; rice-free heavy-cream-and-cheddar oven bake, budget meal-prep, scales 4->14 by weight."
+  },
+  "dupe_of": null,
+  "dupe_evidence": "Not a live-catalog duplicate. Closest catalog dishes: (1) ground-turkey-broccoli-cheddar-rice-skillet - same turkey+broccoli+cheddar trio but a RICE skillet (starch + method both differ) = 2-of-4, distinct. (2) turkey-divan-broccoli-rice-bake - creamy broccoli turkey bake, 3-of-4 axes (turkey / creamy-broccoli / oven-bake) BUT it is rice-based and uses sliced turkey breast with a mayo/cream-of-chicken divan sauce, whereas this is rice-free ground-turkey with a heavy-cream-cheddar sauce; the starch and turkey form genuinely distinguish the plate. Borderline flagged on the divan overlap.",
+  "cross_protein_and_pool_watch": "This candidate occupies the 'low-carb broccoli-cheddar bake' slot. Structurally-adjacent candidates already in the select dir across proteins: the PORK crustless sausage+broccoli+cheddar egg bakes (broccoli-cheddar-sausage-egg-bake, sausage-broccoli-cheddar-egg-bake, keto-sausage-broccoli-egg-casserole) share the broccoli-cheddar-low-carb-bake axis but are EGG-custard-bound + pork sausage (different binder + protein) = not dupes under my turkey scope, but the decider should weigh how many broccoli-cheddar low-carb bakes ship across proteins. A CHICKEN or BEEF keto broccoli-cheddar-cream bake would be the same dish with the protein swapped - watch those pools.",
+  "notes": "All 8 main ingredients board-mapped (unmapped=[]); fresh broccoli maps to frozen-broccoli-florets. This slug already appears in accepted-slugs.json (self); ruled on merits against the rest of the catalog.",
+  "checked_against": {"accepted_slugs_read_fresh": true, "catalog_digest_544": true}
+}

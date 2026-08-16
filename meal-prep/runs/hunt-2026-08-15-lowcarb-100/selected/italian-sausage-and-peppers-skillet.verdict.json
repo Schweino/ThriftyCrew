@@ -1,0 +1,26 @@
+{
+  "slug": "italian-sausage-and-peppers-skillet",
+  "name": "Italian Sausage and Peppers Skillet",
+  "protein": "pork",
+  "verdict": "DUPE",
+  "fit": {
+    "calories": 476,
+    "carbs_g": 12,
+    "band_ok": true,
+    "note": "Numbers themselves clear the band: 476 cal in [400,650]; 12g carb <=35g; no seafood; skillet scales to 14 by weigh-and-divide; budget pork-sausage plate. FIT on conditions, but killed as a pool-dupe below."
+  },
+  "dupe_check": {
+    "dupe_type": "pool",
+    "dupe_of": "italian-sausage-peppers-onions-skillet",
+    "catalog_nearest": "italian-sausage-penne",
+    "evidence": "Structurally identical to pool candidate 'italian-sausage-peppers-onions-skillet' (already ruled KEEP by another adjudicator, verdict landed): both are Italian sausage links + bell peppers + onions, no starch base, cooked in a skillet with garlic/herb/vinegar seasoning. All four identity axes match - protein (italian sausage), flavor family (Italian), starch (none), method (skillet). This is the same dinner. Against the live catalog it is NOT a dupe (catalog only has sausage-and-peppers on a pasta base: italian-sausage-penne, orecchiette-italian-sausage-broccoli, spicy-italian-sausage-orzo), so the collision is purely with the pool twin.",
+    "loser_rationale": "This slice is the weaker of the twin pair: 476 cal / 12g carb vs the twin's 420 cal / 8g carb, and it carries no distinguishing feature (same source-type single-skillet keto plate). Keep the twin, cut this one."
+  },
+  "borderline": {
+    "flag": false,
+    "reason": "Not borderline against the catalog. The only issue is the exact pool duplicate, and the tie-break is clear (twin has better numbers), so this is a clean pool-dupe cut, not a borderline hold."
+  },
+  "cross_protein_collisions": [
+    "Same-dish-different-protein risk: any low-carb TURKEY sausage + peppers + onions skillet, or CHICKEN sausage + peppers + onions skillet, in another selector's pool is the same plate as the surviving twin. Catalog already has rice-based turkey-sausage-and-peppers; a no-rice turkey/chicken twin would collide with italian-sausage-peppers-onions-skillet. Orchestrator merge pass should keep only one 'sausage and peppers no-starch skillet' across all proteins."
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "name": "Italian Sausage, Peppers and Onions with Sauce",
+  "slug": "italian-sausage-peppers-onions-skillet",
+  "protein": "pork",
+  "cuisine": "Italian",
+  "source_url": "https://www.lowcarbmaven.com/sausage-peppers-onions/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Hot Italian Sausage", "grams": 1588, "buy": "3 1/2 lb links (about 17 links), sliced into rounds" },
+    { "item": "Red Bell Pepper", "grams": 907, "buy": "2 lb mixed-color, sliced into strips (about 7 large)" },
+    { "item": "Yellow Onion", "grams": 198, "buy": "7 oz, sliced (about 1 3/4 cups)" },
+    { "item": "Olive Oil", "grams": 47, "buy": "3 1/2 tbsp" },
+    { "item": "Garlic", "grams": 10, "buy": "3 1/2 tsp minced (about 3 cloves)" },
+    { "item": "Marinara Sauce", "grams": 431, "buy": "1 3/4 cups" }
+  ],
+  "macros_per_serving": { "calories": 382, "protein_g": 22, "carbs_g": 11, "fat_g": 27 },
+  "writer_notes": [
+    "SOURCE YIELD 4, rebuilt to 14 at the mapper's 3.5x scale. Grams and buy strings transcribed from the mapped file; no number computed in prose.",
+    "Rao's Marinara (source brand) books to the house marinara commodity and the Great Value marinara label row per the mapper's ruled_substitutions. Same product concept; the Rao's premium is a brand, not a different food.",
+    "The source's traditional method browns the sliced sausage with 1 1/2 tsp oil, and the mapper booked only the listed 1 tbsp olive oil (x3.5 = 3 1/2 tbsp) for the vegetable saute, matching the source's own nutrition basis. The make-it steps therefore brown the sausage in its own rendered fat (no orphan oil line) and spend the full 3 1/2 tbsp olive oil on the peppers, onion, and garlic. Every bought ingredient is used by a step and no step calls for anything unbought.",
+    "Salt and pepper are the source's to-taste line, mapped optional-pantry at zero grams and NOT booked as a cost line. The steps say only 'taste and adjust the seasoning' so no step names an ingredient the shopper did not buy.",
+    "BAND FLAG (carried from the mapper, LOUD): the label-accurate recompute lands at 382 cal per serving on the current house Hot Italian Sausage row, which is BELOW this run's 400 cal floor by 18 cal. The mapper flagged the sausage row's serving basis (raw vs cooked 70 g) as ambiguous and band-deciding; on a raw-pork basis the honest compute is ~460-470 cal and the recipe passes. Numbers here are transcribed from the DB, not adjusted. See report; do not retire on this number until the sausage row basis is pinned."
+  ],
+  "prose": {
+    "intro_html": "Sausage and peppers is street-fair food, the kind of smell that reaches you before the stand does. The good news for your wallet is that it was never fancy to begin with. Sweet peppers, an onion, a little garlic, a spoon of marinara, and a good Italian sausage doing most of the work. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 15 grams of carbs. That is a low-carb dinner that eats like a holiday and costs like a Tuesday.",
+    "shop_smart": [
+      "<strong>The sausage is the whole meal, so buy it right.</strong> You want three and a half pounds of Italian links, which is most of the plan on one line. Hot or mild is your call; they cost the same and cook the same.",
+      "<strong>Mixed color peppers are the color and the sweetness both.</strong> Grab about seven large ones, roughly two pounds, in whatever red, yellow, and orange the produce case has. Buy them loose rather than in a shrink-wrapped tray and you pay for peppers, not packaging.",
+      "<strong>One onion covers the whole batch.</strong> Seven ounces is a single medium yellow onion, and it is here for backbone, not bulk. The rest of the bag keeps for the next thing you cook.",
+      "<strong>One jar of marinara carries it with sauce to spare.</strong> The batch uses under two cups, so a standard jar does the job and leaves you a good pour for pasta night. Store brand behaves the same once it hits a hot pan.",
+      "<strong>Olive oil and garlic are pantry backbone.</strong> Three and a half tablespoons of oil and three cloves of garlic are staples you likely already have, so they barely move the cart."
+    ],
+    "make_it": [
+      "Weigh your empty skillet or pot and write the number down. You will use it at the end to split this into 14 even servings by weight, which beats eyeballing every single container.",
+      "Slice the sausage into rounds about half an inch thick. Cut the peppers into strips, slice the onion thin, and mince the garlic.",
+      "Set a large skillet over medium heat and brown the sausage rounds, working in batches so the pan is not crowded, about 8 to 10 minutes. The sausage gives up plenty of its own fat, so you do not need to add oil yet. Lift the browned rounds out and set them aside.",
+      "Add the olive oil to the same pan and let it warm in the drippings. Saute the peppers, onion, and garlic until they soften and pick up a little color, about 10 minutes.",
+      "Return the sausage and any collected juices to the pan, stir in the marinara, and cook another 2 to 3 minutes until everything is hot and coated. Taste and adjust the seasoning, then weigh and portion as below."
+    ],
+    "portion_html": "Set the full skillet on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for sausage and peppers that would run you three or four times as much at a street fair. The sausage does the heavy lifting and the peppers stretch it.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Italian sausage with peppers and onions for meal prep: browned sausage rounds, sweet peppers, and a little marinara, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
+    "keywords": "italian sausage and peppers, sausage peppers onions, low carb meal prep, high protein dinner, budget sausage recipe",
+    "prepTime": "PT15M",
+    "cookTime": "PT25M",
+    "totalTime": "PT40M",
+    "steps": [
+      "Slice the sausage into rounds and cut the peppers and onion, then mince the garlic.",
+      "Brown the sausage rounds in a large skillet over medium heat, about 8 to 10 minutes, then remove them.",
+      "Saute the peppers, onion, and garlic in the olive oil and drippings until softened, about 10 minutes.",
+      "Return the sausage, stir in the marinara, and cook 2 to 3 minutes until hot, then taste and adjust the seasoning.",
+      "Weigh the skillet, subtract the empty weight, and divide the total across 14 containers."
+    ]
+  }
+}

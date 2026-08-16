@@ -1,0 +1,23 @@
+{
+  "slug": "turkey-swedish-meatballs-skillet",
+  "name": "Turkey Swedish Meatballs Skillet",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "cal": 445,
+    "carbs": 15.2,
+    "in_band": true,
+    "reason": "445 cal is inside 400-650; 15.2g carbs is under the 35g cap; ground-turkey skillet meatballs, no seafood, weigh-and-divide scalable to 14 servings."
+  },
+  "dupe_check": {
+    "against_turkey_catalog": "No turkey duplicate. Nearest turkey entries are onepot-ground-turkey-stroganoff (mushroom/sour-cream gravy over noodles) and turkey-meatloaf-with-mashed-potatoes / turkey-tsukune-meatball-rice-bowls / indian-turkey-kofta-meatball-curry - all different flavor families or starch-based, none is a Swedish-spiced (allspice/nutmeg/cardamom/clove) creamy-gravy meatball.",
+    "against_accepted_slugs": "No collision; none of the 9 accepted slugs (creamy-tuscan-chicken, chicken-bacon-ranch-cauliflower-bake, turkey-zucchini-noodle-casserole, crustless-bacon-gruyere-quiche, french-chicken-fricassee, italian-sausage-peppers-onions, flank-steak-parmesan-green-beans, low-carb-ground-beef-stroganoff-skillet, burmese-chicken-dal-curry) is a Swedish meatball."
+  },
+  "cross_protein_flag": {
+    "collides_with": "swedish-meatball-potato-bowls (beef)",
+    "note": "Structurally the same dish as the catalog's BEEF Swedish Meatball and Potato Bowls (93/7 ground beef, beef broth, sour cream, creamy Swedish gravy) - same signature Swedish-spiced creamy-gravy meatball. Differs only in protein (turkey vs beef) and plating (skillet, no counted starch vs potato bowls). Cross-protein twin - flagged for the decider to weigh whether the catalog wants a turkey Swedish meatball alongside the beef one; NOT resolved here per per-protein scope.",
+    "secondary": "Also adjacent to beef salisbury-steak-potato-bowls and pork country-pork-meatballs-onion-gravy (both creamy/brown-gravy meatball-and-potato dishes), but those are distinct gravy profiles, not the same dish."
+  },
+  "unmapped": ["ground-cardamom"],
+  "evidence_sentence": "Turkey Swedish Meatballs Skillet has no turkey-protein duplicate in the catalog or accepted list, but is the same signature dish as the beef swedish-meatball-potato-bowls and is flagged as a cross-protein twin for the decider's merge pass."
+}

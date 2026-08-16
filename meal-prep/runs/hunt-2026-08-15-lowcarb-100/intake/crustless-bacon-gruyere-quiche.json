@@ -1,0 +1,62 @@
+{
+  "name": "Bacon and Gruyere Crustless Quiche",
+  "slug": "crustless-bacon-gruyere-quiche",
+  "protein": "pork",
+  "cuisine": "French",
+  "source_url": "https://reluctantentertainer.com/crustless-bacon-gruyere-cheese-quiche/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Eggs", "grams": 700, "buy": "14 large eggs" },
+    { "item": "Half and Half", "grams": 414, "buy": "1 3/4 cups" },
+    { "item": "Gruyere Cheese", "grams": 537, "buy": "4 3/4 cups, shredded (about 19 oz)" },
+    { "item": "Salt", "grams": 8, "buy": "1 1/4 tsp" },
+    { "item": "Red Pepper Flakes", "grams": 2, "buy": "1 1/4 tsp" },
+    { "item": "Dried Basil", "grams": 7, "buy": "2 1/4 tbsp" },
+    { "item": "Hickory Smoked Bacon", "grams": 228, "buy": "19 slices, cooked and crumbled (about 1/2 lb)" },
+    { "item": "Green Onions", "grams": 30, "buy": "2 stalks, sliced (about 1/2 cup)" },
+    { "item": "Garlic", "grams": 15, "buy": "5 cloves, minced" }
+  ],
+  "macros_per_serving": { "calories": 369, "protein_g": 24, "carbs_g": 2, "fat_g": 28 },
+  "writer_notes": [
+    "SOURCE YIELD 6, rebuilt to 14 at the mapper's 2.3333x scale. Grams and buy strings transcribed from the mapped file; no number computed in prose.",
+    "The source greases the pan with cooking spray, which is not a purchased line on this recipe. Per the every-ingredient-must-be-bought rule, the make-it step greases the dish with a little of the reserved bacon fat instead (bacon grease is canon-folded into the Hickory Smoked Bacon line), so no step calls for anything the shopper did not buy.",
+    "A 9-inch pie plate holds the 6-serving original; scaled to 14 it moves to a 9 by 13 inch baking dish. Bake time nudged from the source's 30 minutes to a 35 to 45 minute window for the larger, deeper dish; doneness is called by the set center, not the clock.",
+    "Gruyere is item_id null pending the commodity registrar (mapper ruling). It is bought and used, but it has no price basis yet, so cost-recipes will drop it as NO PRICE BASIS and the built cost EXCLUDES the main cheese. No shop_smart bullet makes a package claim about gruyere for that reason. See report.",
+    "CALORIE BAND: the label-accurate recompute lands at 369 cal per serving, BELOW this run's 400 floor. Carried the mapper's escalation forward. Numbers are transcribed, not adjusted."
+  ],
+  "forbidden_prose_terms": ["cooking spray"],
+  "prose": {
+    "intro_html": "A quiche without the crust is the thrifty cook's quiet trick: you skip the pie shell, the flour, and the blind baking, and you keep every gram of protein the eggs and cheese were going to give you anyway. This one leans on nutty Gruyere and smoky bacon, set soft with eggs and a little half and half. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 5 grams of carbs, which makes it a low-carb bake that eats like comfort food.",
+    "shop_smart": [
+      "<strong>This is an egg recipe first, so one dozen will not cover it.</strong> Fourteen eggs means two cartons. The ten you do not crack keep just fine in the fridge for breakfast, so nothing goes to waste.",
+      "<strong>One pint of half and half carries the whole custard.</strong> The batch uses most of a pint and leaves you a splash, which is exactly enough for your morning coffee. Store brand behaves the same as the name brand once it is whisked into eggs.",
+      "<strong>Half a pound of bacon is a seasoning here, not the main event.</strong> Buy the one pound package, cook off what the recipe needs, and stash the rest for another meal this week. The rendered fat does double duty: it sautes the green onions and garlic, and a little of it greases the dish.",
+      "<strong>Crustless is the budget move, not a compromise.</strong> There is no pie shell to buy and no dough to roll, and the eggs and cheese set into their own soft edge. That is one whole ingredient off your cart before you start."
+    ],
+    "make_it": [
+      "Weigh your empty baking dish and write the number down. You will use it at the end to portion by weight, which is the only way to get 14 even servings out of one bake.",
+      "Whisk the eggs and half and half together in a large bowl until they are fully blended. Stir in the shredded Gruyere, the salt, the red pepper flakes, and the dried basil, then set the bowl aside.",
+      "Fry the bacon in a skillet until crisp, lift it out onto paper towels to drain, and crumble it once it cools. Pour off most of the grease but leave about 2 tablespoons in the pan, then saute the sliced green onions and minced garlic in that fat for 1 to 2 minutes, just until fragrant.",
+      "Fold the crumbled bacon and the green onion and garlic mixture into the egg bowl and stir gently so everything is spread through.",
+      "Rub a 9 by 13 inch baking dish with a little of the reserved bacon fat, then pour in the egg mixture and spread it level.",
+      "Bake at 375 degrees F for about 35 to 45 minutes, until the center is just set and no longer jiggles. Let it stand 10 minutes so it firms up, then weigh and portion as below."
+    ],
+    "portion_html": "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a slice of bacon and Gruyere quiche that skips the crust and the restaurant markup both. Eggs and bacon do the heavy lifting.",
+    "upsell_html": "A low-carb, high-protein bake for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Crustless bacon and Gruyere quiche for meal prep: eggs, nutty Gruyere, and smoky bacon baked soft, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 5 grams of carbs.",
+    "keywords": "crustless quiche, bacon gruyere quiche, low carb quiche, high protein egg bake, budget meal prep quiche",
+    "prepTime": "PT15M",
+    "cookTime": "PT45M",
+    "totalTime": "PT1H",
+    "steps": [
+      "Whisk the eggs and half and half, then stir in the shredded Gruyere, salt, red pepper flakes, and dried basil.",
+      "Fry and crumble the bacon, then saute the green onions and garlic in a little of the reserved bacon fat.",
+      "Fold the bacon and the green onion mixture into the egg bowl and stir gently.",
+      "Grease a 9 by 13 inch baking dish with reserved bacon fat and pour in the egg mixture.",
+      "Bake at 375 degrees F for 35 to 45 minutes until the center is set, rest 10 minutes, then weigh the dish and divide across 14 containers."
+    ]
+  }
+}

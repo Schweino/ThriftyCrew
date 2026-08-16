@@ -1,0 +1,26 @@
+{
+  "slug": "pork-chops-au-poivre-peppercorn-cream",
+  "name": "Pork Chops au Poivre (Creamy Peppercorn Sauce)",
+  "protein": "pork",
+  "cuisine": "French",
+  "verdict": "KEEP",
+  "fit": {
+    "status": "FIT",
+    "calories": 515,
+    "carbs": 4,
+    "evidence": "515 cal is inside the 400-650 band; 4g carbs is well under the 35g ceiling; seared pork chop with a pan sauce, no rice/potato/pasta/bread base; scales to 14 via sear-and-weigh-divide in a skillet; no seafood."
+  },
+  "dupe_of": null,
+  "catalog_check": "No catalog pork dish shares the au poivre flavor family. Nearest live catalog chops are creamy-mushroom-pork-chops-over-mashed-potatoes (mushroom cream + mashed-potato base), marry-me-pork-chops-over-pasta (sun-dried-tomato cream over pasta), countryfried-pork-chops-with-bacon-gravy (breaded + bacon gravy), and pork-tenderloin-stroganoff-over-egg-noodles (sour-cream mushroom, tenderloin + noodles) - all differ in sauce family and all carry a starch base this one lacks. Nothing in the 118-recipe pork catalog is a peppercorn/brandy/beef-broth cream pan sauce.",
+  "borderline": {
+    "collides_with": "creamy-garlic-herb-wine-pork-chops",
+    "where": "accepted-slugs.json (in-run accept, not yet in catalog digest)",
+    "reason": "3-of-4 structural match: same protein (pork chop), same starch (none), same method (skillet sear + creamy alcohol-deglazed pan sauce). The differing axis is the sauce/flavor family - au poivre's cracked-peppercorn + brandy + beef-broth cream vs the accepted dish's garlic-herb-white-wine cream. Au poivre is a named, iconic French preparation whose peppercorn-brandy signature genuinely distinguishes the plate (paprikash-vs-goulash logic), so I rule KEEP - but the 'creamy skillet pork chop' slot is now doubling up, so I flag it for the decider to make the final catalog-fit call rather than silently seat two."
+  },
+  "cross_protein_twins": [
+    "Steak au poivre (BEEF) is the classic canonical form of this exact dish - a beef selector may hold a structurally identical peppercorn-brandy-cream seared-steak candidate; flag for the orchestrator's cross-protein merge.",
+    "Any 'creamy peppercorn chicken' or 'creamy peppercorn turkey' cutlet in the chicken/turkey pools would be the same dinner on a different protein - same sauce, same method, no starch."
+  ],
+  "pricer_flags": ["brandy (no obvious board home)", "shallot (may map to onion or need new commodity)"],
+  "notes": "Candidate's own 'why' references a pool candidate 'peppercorn-crusted-pork-rib-chops' (dry cracked-pepper crust, no cream) - that is a pool item, not in the live catalog, and is a genuinely different dish (crust vs cream sauce), so not a catalog dupe. Left-in unmapped ingredients are intentional per the pricer-lane exercise and were not penalized."
+}

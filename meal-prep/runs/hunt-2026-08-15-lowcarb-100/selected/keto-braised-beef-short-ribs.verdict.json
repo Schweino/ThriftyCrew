@@ -1,0 +1,23 @@
+{
+  "slug": "keto-braised-beef-short-ribs",
+  "name": "Keto Braised Beef Short Ribs",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "conditions_check": {
+    "calories_per_serving": 412,
+    "carbs_per_serving": 1.5,
+    "in_cal_band_400_650": true,
+    "carbs_le_35": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "meal_prep_dinner": true,
+    "fit": true
+  },
+  "dupe_of": null,
+  "evidence": "No short-rib or keto whole-muscle braise exists in the 138-recipe beef catalog; every catalog braise is beef-chuck-roast or sirloin served over a starch base (rice/potato/noodle bowls). The nearest red-wine braise, beef-bourguignon-bowls, is a distinct dish (bacon, mushrooms, carrots, flour, starch-bowl format) versus this bare aromatics + broth + wine + rosemary short-rib braise with no starch base and a different cut (bone-in short ribs). 412 cal / 1.5g carbs clears the 400-650 cal and <=35g carb band.",
+  "notes": "Calories sit near the 400 floor (412) with a fatty profile (25g fat) -- watch the recompute/repricing so the label-accurate short-rib rows keep it in band. Carries wanted unmapped picks (bone-in-beef-short-ribs, red-wine, avocado-oil, fresh-rosemary) for the pricer lane.",
+  "cross_protein_collision_watch": [
+    "A pork or lamb red-wine/rosemary whole-muscle braise (e.g. braised pork shoulder / lamb shanks in red wine) would be structurally the same dish -- a bare-aromatic wine braise of a fatty cut with no starch base -- differing only in protein; flag if such a candidate exists in the pork/lamb pools.",
+    "Any other 'braised beef in red wine' candidate in a parallel beef selector's pool could twin this if it likewise omits the vegetable garnish and starch base."
+  ]
+}

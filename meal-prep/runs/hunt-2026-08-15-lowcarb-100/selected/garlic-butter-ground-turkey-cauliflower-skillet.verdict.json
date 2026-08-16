@@ -1,0 +1,30 @@
+{
+  "slug": "garlic-butter-ground-turkey-cauliflower-skillet",
+  "name": "Garlic Butter Ground Turkey with Cauliflower Skillet",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "calories_per_serving": 430,
+    "carbs_per_serving": 6,
+    "in_range": true,
+    "caveat": "Nutrition is NOT published on the source page (site's card is a blank beta field); 430 cal / 6g are the sourcer's structural estimates, not read numbers. Carbs unambiguously clear the 35g ceiling (cauliflower base, zero rice/pasta/potato/bread/bean). Calorie estimate (1 lb ground turkey + 3T butter + 2T oil + 2t sesame oil / 4 servings) is plausibly within the 400-650 band. Kept on structural-low-carb grounds per run rules; decider should weigh that the calorie figure is estimated, not published."
+  },
+  "conditions_check": {
+    "cal_400_650": "pass (estimated 430)",
+    "carbs_le_35": "pass (structural, ~6g)",
+    "budget_meal_prep_dinner": "pass (ground turkey + cauliflower, cheap)",
+    "scalable_to_14": "pass (skillet, linearly scalable)",
+    "no_seafood": "pass"
+  },
+  "dedup": {
+    "vs_catalog": "KEEP - no duplicate. No turkey recipe in the 544-recipe catalog uses cauliflower as a base, and none is a garlic-butter/soy/sriracha skillet. Closest catalog flavor-neighbors are soy-based ground-turkey skillets served over RICE (korean-ground-turkey-bowls, turkey-egg-roll-in-a-bowl-over-rice, ground-turkey-stir-fry-bowls) - all differ on starch (rice vs cauliflower) and lack the garlic-butter profile. keto-turkey-broccoli-cheddar-casserole (in accepted-slugs) is a broccoli/cheddar casserole, different dish.",
+    "vs_accepted_slugs": "KEEP - checked accepted-slugs.json fresh; no turkey entry, no garlic-butter or cauliflower-turkey collision."
+  },
+  "pool_near_neighbor_flag": {
+    "candidate": "ground-turkey-thai-red-curry-cauliflower-skillet",
+    "note": "Present in this run's pool. Shares 3 of 4 dims with mine: protein (ground turkey), starch base (cauliflower), method (skillet). Distinguishing dim is the sauce/flavor family: garlic-butter + soy + sriracha (Chinese/general Asian) here vs Thai red curry paste + coconut milk there. I judge them DIFFERENT dinners, but they are structurally adjacent - decider should confirm the catalog wants both cauliflower-base ground-turkey skillets rather than only one."
+  },
+  "cross_protein_collision_note": "This is a garlic-butter/soy/sriracha ground-meat + cauliflower skillet. Source recipe itself offers 'or ground chicken' as a swap. Structurally the SAME dish could appear in another selector's pool as a ground-chicken, ground-beef, or ground-pork version. Decider: watch for a same-dish-different-protein twin (e.g. 'garlic butter ground chicken cauliflower skillet') in the chicken/beef/pork pools.",
+  "unmapped_ingredients": [],
+  "evidence_sentence": "No catalog turkey recipe is a garlic-butter/soy/sriracha cauliflower skillet (nearest are rice-based soy ground-turkey bowls), so it duplicates nothing live or accepted; kept, with the caveat that its macros are estimated rather than published."
+}

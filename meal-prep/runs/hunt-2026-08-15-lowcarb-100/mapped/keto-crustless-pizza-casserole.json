@@ -1,0 +1,155 @@
+{
+  "slug": "keto-crustless-pizza-casserole",
+  "title": "Keto Pizza Casserole (Crustless Pizza)",
+  "source_url": "https://drdavinahseats.com/low-carb-keto-crustless-pizza-casserole-recipe",
+  "source_servings": 12,
+  "target_servings": 14,
+  "scale_factor": 1.1667,
+  "protein": "pork",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 1.1667x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "'Tomato Basil Sauce' books to the house Marinara Sauce item and its GV label row: tomato-basil is a flavor variant inside the one jarred pasta-sauce class (marinara IS a tomato-basil-garlic sauce), same product concept at the same price class - a brand/flavor ruling like the Rao's-to-house-marinara precedent, not a food swap. Macro spread across marinara-class labels is ~10 cal/half-cup.",
+    "'Pizza Blend Cheese' books to the house Mozzarella Cheese DB row (USDA low-moisture part-skim shredded) against the shredded-cheese board commodity: retail pizza blend is predominantly low-moisture mozzarella (plus provolone/cheddar), shared record disclosed not averaged (guajillo precedent), and the shredded-cheese commodity's own include puts mozzarella-class shreds in one price class (monterey-jack precedent)."
+  ],
+  "ingredients": [
+    {
+      "source_raw": "2 lbs Italian Sausage, hot or mild, casing removed",
+      "item": "Hot Italian Sausage",
+      "bid": "italian-sausage",
+      "board": "weekly",
+      "grams": 1021,
+      "buy": "2 1/4 lb Italian sausage (hot or mild), casings removed",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by an explicit source WEIGHT (2 lb); exact 1.1667x = 2.333 lb, quantized 2 1/4 lb = 1021 g (-3.6%). italian-sausage commodity covers hot and mild in one price class, 6 of 7 stores, cheapest Aldi $2.4842/lb. Books the Hot Italian Sausage DB row (Johnsonville 190 cal/70 g) - SEE macro_cross_check: this row's raw-vs-cooked serving basis is ambiguous (flagged first by italian-sausage-peppers-onions-skillet) and this recipe's band verdict swings on it exactly as that sibling's did."
+    },
+    {
+      "source_raw": "2 tbsp Olive Oil",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 30,
+      "buy": "2 1/4 tbsp olive oil",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "quantized 2 1/4 tbsp (-3.6%) x densities 13.5 g/tbsp = 30.4 -> 30 g. Board 7 of 7, cheapest Sam's $0.1879/floz."
+    },
+    {
+      "source_raw": "1 medium Yellow Onion, sliced thinly",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 138,
+      "buy": "1 1/4 medium yellow onions, sliced thin",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.1667 onions = 128 g at densities each = 110 g; quantized 1 1/4 medium = 137.5 -> 138 g (+7.1% drift, noted). Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "1 large bell pepper, I used red and green bell peppers, but you can use whatever you have on hand",
+      "item": "Red Bell Pepper",
+      "bid": "red-bell-pepper",
+      "board": "recipe",
+      "grams": 150,
+      "buy": "1 1/4 large bell peppers (red and/or green), sliced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Mixed-color use ('red and green') books the COLORED price class per the italian-sausage-peppers-onions precedent - mapping to green-bell-pepper would replay the rejected green-is-not-red stretch in the cheap direction (and green-bell-pepper is itself CAPTURE-tier unpriced, per philly). red-bell-pepper: recipe board, 6 of 7 stores, cheapest Sam's $0.83/each. Quantized 1 1/4 peppers x house bell each = 120 g -> 150 g (+7.1%, noted). DB row Red Bell Pepper (USDA, 31 cal/100 g); the 'whatever you have' latitude makes the color macro spread (24-31 cal/100 g) source-sanctioned noise."
+    },
+    {
+      "source_raw": "8 oz baby bella mushrooms, optional",
+      "item": "Baby Bella (Crimini) Mushrooms",
+      "bid": "mushrooms",
+      "board": "weekly",
+      "grams": 255,
+      "buy": "9 oz baby bella mushrooms, sliced (optional)",
+      "optional": true,
+      "decision": "mapped-optional",
+      "notes": "OPTIONAL per the source's own line. The mushrooms commodity's include /mushrooms?/ claims the term (board-sanctioned class), 7 of 7 stores, cheapest Sam's $0.1654/oz; today's cheapest cells include baby bella tubs, so the price class holds without stretching to the separate portobello-mushrooms commodity (mature caps). Quantized 9 oz = 255 g (-3.6% vs exact 9.33 oz). NEW DB row Baby Bella (Crimini) Mushrooms (USDA crimini raw, 22 cal/100 g) - not the White Mushrooms row (variety split). NOT enqueued anywhere and excluded from the band computation (optional line); sensitivity +4.0 cal/serving if included."
+    },
+    {
+      "source_raw": "1/2 tsp Natural Ancient Sea Salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 3,
+      "buy": "1/2 tsp sea salt",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Sea salt books to the salt commodity (same food; 'natural ancient' is branding). Exact 1.1667x = 0.58 tsp, quantized 1/2 tsp (-14.3% drift, noted; zero-macro so harmless) = 3 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/2 tsp Black Pepper",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 1.2,
+      "buy": "1/2 tsp black pepper",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "quantized 1/2 tsp (-14.3%, noted; 3 cal batch, immaterial) x densities 2.3 g/tsp = 1.2 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "5 oz Uncured Pepperoni",
+      "item": "Pepperoni",
+      "bid": "pepperoni",
+      "board": "weekly",
+      "grams": 163,
+      "buy": "5 3/4 oz pepperoni slices",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "PORK pepperoni to the pepperoni commodity (7 of 7 stores, cheapest Sam's $0.295/oz) - deliberately NOT the Turkey Pepperoni map item / turkey-pepperoni id (variety split, and the turkey label is HALF the calories per oz; mapping to it would deflate a calorie-floor card - the smoked-turkey-sausage rejection class). 'Uncured' is a curing-agent label claim, same product and price class. Exact 1.1667x = 5.83 oz, quantized 5 3/4 oz = 163 g (-1.4%). NEW DB row Pepperoni (Hormel Original label, 150 cal / 5 P / 0 C / 14 F per 30 g)."
+    },
+    {
+      "source_raw": "2 cups Tomato Basil Sauce",
+      "item": "Marinara Sauce",
+      "bid": "marinara-sauce",
+      "board": "recipe",
+      "grams": 554,
+      "buy": "2 1/4 cups tomato basil pasta sauce",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Flavor-class ruling in ruled_substitutions. bid from ingredient-map (Marinara Sauce -> marinara-sauce; recipe-board member). Exact 1.1667x = 2.333 cups, quantized 2 1/4 cups (-3.6%) at the GV Marinara label basis 123 g/half-cup = 553.5 -> 554 g. NOTE the term resolver misfires 'tomato basil sauce' into the FRESH tomatoes commodity (see board_defects_observed); the generic 'pasta sauce' term answers 7 of 7 (cheapest Sam's $0.0591/oz), so pricing coverage is real on either id path."
+    },
+    {
+      "source_raw": "3 cups Pizza Blend Cheese",
+      "item": "Mozzarella Cheese",
+      "bid": "shredded-cheese",
+      "board": "weekly",
+      "grams": 396,
+      "buy": "3 1/2 cups shredded pizza blend cheese",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Class ruling in ruled_substitutions: shredded-cheese commodity (include sanctions mozzarella-class shreds; 7 of 7 stores, cheapest Sam's $0.1521/oz), the monterey-jack precedent from baked-cauliflower-mac. Deliberately NOT the ingredient-map's Mozzarella Cheese -> mozzarella-cheese id: that id exists on NEITHER board today (stale feed id, see board_defects_observed) - the scaler bid here is the priced commodity. Exact 1.1667x = 3.5 cups, quarter-clean, zero drift; 396 g at densities 113 g/cup. DB row Mozzarella Cheese (USDA low-moisture part-skim shredded, 304 cal/100 g), shared-record disclosure for the blend."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Pepperoni (Hormel Original label, 15 slices / 30 g = 150 cal / 5 P / 0 C / 14 F; the PORK row the estate lacked - only Turkey Pepperoni existed)",
+    "Baby Bella (Crimini) Mushrooms (USDA crimini raw, per 100 g: 22 cal / 2.5 P / 4.3 C / 0.1 F; variety split from White Mushrooms and Portobello)"
+  ],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 436, "protein_g": 23, "carbs_g": 7, "fat_g": 36 },
+    "computed_per_serving": { "calories": 391.0, "protein_g": 23.0, "carbs_g": 8.9, "fat_g": 28.6 },
+    "protein_gap_pct": 0.2,
+    "calorie_gap_pct": -10.3,
+    "verdict": "Protein PASS dead-on (+0.2%) - portions are right; the main protein and pepperoni are explicit source weights, no each-weight assumptions anywhere. The -10.3% calorie gap traces to ONE row, and it is the same row italian-sausage-peppers-onions-skillet flagged: the house Hot Italian Sausage entry (Johnsonville, 190 cal per 70 g = 2.71 cal/g) applied to raw pounds. If that 70 g serving is a COOKED-link basis (USDA raw pork Italian sausage runs 3.46 cal/g; the row's own note says it replaced a figure matching Johnsonville's cooked-link panel), the honest raw compute is 445.4 cal/serving and the recipe passes comfortably - which is also what the source's own 436 implies their calculator booked. NOT resolved here: the row carries a deliberate house correction note and overriding it would be a guess. Same disposition as the sibling: flagged for the batch auditor / meal-macro label verification before any band ruling.",
+    "band_check": "computed 391.0 cal FAILS the [400, 650] floor by 9 cal on the current Hot Italian Sausage row; on the USDA raw-basis reading it computes 445.4 and PASSES. Optional mushrooms add +4.0 cal/serving (395.0 / 449.4). Carbs 8.9 g <= 35 PASS (9.7 with mushrooms). Do not adjust numbers to fit - resolve the sausage row's raw/cooked basis first; this is now the SECOND recipe in this run whose band verdict hangs on that one row."
+  },
+  "loud_flags": [
+    "Band verdict is hostage to the Hot Italian Sausage DB row's unresolved raw-vs-cooked serving basis (391 FAIL vs 445 PASS) - second occurrence in this run after italian-sausage-peppers-onions-skillet; the physical Johnsonville label (meal-macro skill) settles both recipes at once and should be treated as this batch's highest-value label errand."
+  ],
+  "board_defects_observed": [
+    "Term resolver misfire: 'tomato basil sauce' answers via the FRESH tomatoes commodity (include /\\btomato(?:es)?\\b/) at $/lb produce pricing - a jarred sauce priced as raw tomatoes; the pasta-sauce commodity is the correct claimant. Not exercised here (bid goes to marinara-sauce/pasta-sauce path) but any future recipe writing the bare term would misprice.",
+    "Term resolver misfire: 'pizza blend cheese' answers via the frozen-pizza commodity (include /\\bpizza\\b/) - a bag of shredded cheese priced as a frozen pizza. Bid routed to shredded-cheese instead.",
+    "ingredient-map's 'Mozzarella Cheese' -> mozzarella-cheese entry points at an id that exists in NEITHER commodities.json nor recipe-commodities.json (stale feed id, same defect class as the frozen-broccoli-florets entry keto-turkey-broccoli flagged); stamp-time the map would override this file's shredded-cheese bid with a dead id - needs a map correction before this recipe's stamp pass."
+  ],
+  "densities_followups": [
+    "Pepperoni: no densities row; propose oz 28.35 / slice 2 (Hormel 15 slices = 30 g).",
+    "Baby Bella (Crimini) Mushrooms: no densities row; propose cup sliced 72 (USDA) / pkg 227 (8 oz tub)."
+  ]
+}

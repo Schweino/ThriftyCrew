@@ -1,0 +1,18 @@
+{
+  "slug": "chicken-parmesan-casserole",
+  "name": "Keto Chicken Parmesan Casserole",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "dupe_of": null,
+  "evidence": "Nearest catalog neighbor is chicken-parmesan-pasta, but that is a penne pasta dinner (penne-pasta + breadcrumbs + marinara + mozzarella); this candidate is a pasta-less low-carb casserole (cubed chicken under marinara/mozzarella/parmesan with a pork-rind crumb, no noodles), so it matches on protein and chicken-parm flavor family but diverges on both starch and format - by the chili vs chili-mac rule the presence/absence of the pasta makes them different plates.",
+  "fit": {
+    "in_band": true,
+    "cal": 609,
+    "carbs_g": 6.5,
+    "note": "609 cal (<=650 ok on published numbers), 6.5g carbs (<=35 ok), no seafood, scalable to 14. Candidate flags that a label-DB recompute could nudge it past 650 near the ceiling - decider/extractor should re-check the recomputed calorie count against the gate."
+  },
+  "cross_protein_collisions": [
+    "A keto/low-carb turkey-parmesan casserole (cubed turkey under marinara + mozzarella + parmesan) in another selector's pool would be the same dish, different protein.",
+    "Watch for an eggplant-parm or meatball-parm casserole and for turkey-meatball-marinara variants; catalog already holds turkey-meatball-marinara-pasta (pasta dish, distinct) - the decider should catch a same-dish-different-protein parm-casserole twin I cannot see."
+  ]
+}

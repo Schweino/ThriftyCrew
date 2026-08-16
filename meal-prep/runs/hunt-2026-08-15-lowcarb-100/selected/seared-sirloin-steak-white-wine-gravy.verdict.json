@@ -1,0 +1,19 @@
+{
+  "slug": "seared-sirloin-steak-white-wine-gravy",
+  "name": "Seared Sirloin Steak with White Wine Gravy",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 490,
+    "carbs": 8,
+    "in_band": true,
+    "note": "490 cal is inside 400-650; 8 g carbs well under the 35 g ceiling; no seafood; whole-muscle sirloin batch-scales to 14 by searing in batches and pooling the gravy."
+  },
+  "dupe_check": {
+    "catalog": "Not a duplicate. Nearest live beef dish is beef-tips-and-gravy-mashed-potatoes (Slow Cooker Beef Tips and Gravy over Rice), but it differs on 3 of 4 axes: cubed chuck roast vs whole seared top sirloin, slow-cooker braise vs skillet sear, plain beef gravy over rice vs white-wine roux gravy on a low-carb side. Also distinct from salisbury-steak-potato-bowls (ground patties), slow-cooker-steak-and-onions-rice (slow-cooked steak+onions over rice, no roux/wine gravy), and honey-garlic-steak-bites-potatoes (cubed bites, sweet soy glaze).",
+    "accepted_slugs_pool": "No collision. Accepted beef entries (garlic-butter-steak-bites-zucchini, flank-steak-parmesan-green-beans, low-carb-steak-fajita-skillet, spinach-provolone-stuffed-flank-steak-rolls, low-carb-ground-beef-stroganoff-skillet, keto-cheeseburger-skillet, slow-cooker-boneless-beef-short-ribs, philly-cheesesteak-stuffed-peppers) are all different cut/sauce/method; none is a seared whole steak in a roux-and-white-wine brown gravy."
+  },
+  "cross_protein_flag": "Structurally a seared whole-muscle protein finished in a wine pan gravy. Watch for collision with the already-accepted creamy-garlic-herb-wine-pork-chops (pork, seared whole-muscle, wine-based pan sauce) and with any chicken/pork/turkey candidate framed as 'in white wine gravy' or 'pan gravy'. This one stays distinct on being a brown roux BEEF gravy (Worcestershire + beef broth) rather than a cream sauce, but the decider should confirm no same-structure twin lands in another protein's pool.",
+  "unmapped_ok": true,
+  "unmapped": ["mustard powder", "ground sage", "gravy master/kitchen bouquet (optional)"]
+}

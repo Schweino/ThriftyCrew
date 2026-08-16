@@ -1,0 +1,20 @@
+﻿{
+  "slug": "garlic-butter-steak-bites-zucchini",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    { "check": "ingredient-coverage",
+      "severity": "note",
+      "detail": "Source lists '1 tablespoon avocado oil' but no instruction uses it (confirmed on live page). Spec drops it deliberately as a source erratum with macros recomputed without it (writer_notes). Correct handling, recorded for the auditor. Flaked sea salt (optional, no quantity) is handled as an unbooked day-of finish in shop_smart, also correct.",
+      "owner": "writer" },
+    { "check": "method",
+      "severity": "note",
+      "detail": "Zucchini saute time is 3-4 minutes in the source vs 4-5 minutes in make_it step 4; a minor, defensible adjustment at 7x batch volume, not a technique change.",
+      "owner": "writer" },
+    { "check": "prose-numbers",
+      "severity": "note",
+      "detail": "All literal cost figures in cost_lines match the spec's own cost fields exactly (batch $75.23/$5.37, true $78.81/$5.63, pantry add $5.33, first run $84.14). Prose per-serving figures elsewhere are {{cost_ps}} tokens, correct by construction. Observed but not ruled on (cost internals are the auditor's): stat.cost_ps '6.01' and head.costPerServing 6.01 differ from cost_per_serving 5.37 and cost_per_serving_true 5.63; the token will render 6.01 next to a cost block saying 5.37/5.63.",
+      "owner": "writer" }
+  ],
+  "notes": "Both anchors reached: extraction plus a successful live-page fetch of blackberrybabe.com, which matches the extraction line for line (10 ingredients, 2 servings, same 5-step method). Scaling is one clean 7.0x ratio on every booked line; grams all consistent (e.g. 3175 g = 7 lb, 294 g = 21 tbsp butter, 84 g = 28 cloves). Title, dish class, and credit URL all match. No built body.html exists yet at db/built, so this verdict covers extraction, spec, and live page only. Splurge framing verified per the dispatch: intro opens 'feels like a splurge', closing frames value against restaurant prices ('pay three times as much for out'); no bullet or line claims the dish is cheap, and shop_smart's 'cheap' refers only to zucchini as an ingredient."
+}

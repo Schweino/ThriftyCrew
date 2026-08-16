@@ -1,0 +1,14 @@
+{
+  "slug": "keto-turkey-broccoli-cheddar-casserole",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "ingredient-coverage",
+      "severity": "note",
+      "detail": "Salt (2 tsp) and Black Pepper (1 tsp) are booked quantities for the source's unquantified 'salt and pepper to taste' line; documented in writer_notes as a smallest-defensible to-taste minimum for buy-coverage. Macro-immaterial and traceable to a source line, so not a defect.",
+      "owner": "mapper"
+    }
+  ],
+  "notes": "Re-QA after the fresh-Broccoli vocabulary row landed and the spec was re-bid/re-rendered. Both anchors reached; live page matches the extraction line for line (fresh head of broccoli, 4 servings). The prior fresh/frozen tension is RESOLVED, not merely re-priced: scaler bid is 'broccoli' at gpu 453.592 (per-lb fresh), the cost line reads 'Broccoli, 3 1/2 heads... Buy 3 lbs: $6.36' ($2.12/lb, no bag/frozen language), ingredients_display says 'fresh (USDA)' heads, and shop_smart argues fresh -- all four surfaces describe the same fresh item. Scaling is one consistent 3.5x ratio (4 -> 14) on every line. Prose cost literals 2.15, 2.51, 30.08, 35.14, 10.61, 45.75 all equal the spec's own cost fields; cost_ps 3.27 appears only via {{cost_ps}} tokens qualified 'at everyday cost' (known, not a finding). Method, title, and credit match the source. db/built body.html does not exist yet for this slug, so the card could not be checked; judged from spec + extraction + live page."
+}

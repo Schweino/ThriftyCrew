@@ -1,0 +1,16 @@
+{
+  "slug": "chicken-chasseur",
+  "name": "Chicken Chasseur (French Hunter's Chicken)",
+  "protein": "chicken",
+  "cuisine": "French",
+  "method": "braise (Dutch oven / stovetop, browned then simmered)",
+  "source_url": "https://www.akitchenhoorsadventures.com/chicken-chasseur/",
+  "source_servings": 6,
+  "src_cal": 459,
+  "src_carbs": 13,
+  "src_protein": 36,
+  "unmapped": ["white-wine", "marsala-wine", "fresh-tarragon"],
+  "decision": "ACCEPT",
+  "note": "In-band (459 cal / 13g carbs / 36g protein), a French chicken-thigh hunter's braise in a WHITE-wine + fresh-crushed-tomato + tarragon sauce, no starch base. Kept over its batch-mate creamy-garlic-parmesan-mushroom-chicken-skillet because it is the more distinctive of the two chicken candidates: it widens the American-skewed catalog with a French classic and is TOMATO-based, so distinct from every accepted creamy chicken dish (creamy-tuscan-chicken-skillet, chicken-marsala-skillet's marsala reduction) and from accepted french-chicken-fricassee (a cream braise, not tomato). Cross-lane check against fresh accepted-slugs.json: the only French chicken braise accepted is fricassee (cream) - chasseur's tomato/tarragon sauce is a recognizably different dinner. Chicken is already the joint-largest lane (8), so I took only one chicken from this batch to protect the beef/chicken/turkey/pork balance.",
+  "cross_lane_checked": true
+}

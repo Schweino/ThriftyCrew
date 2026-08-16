@@ -1,0 +1,19 @@
+{
+  "slug": "caprese-chicken-skillet",
+  "name": "Caprese Chicken Skillet",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "cal": 419,
+    "carbs": 21,
+    "in_band": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "note": "419 cal / 21g carbs clears 400-650 cal and <=35g carb; seared chicken breast, no rice/pasta/potato; weigh-and-divide scales to 14."
+  },
+  "dupe_evidence": "No catalog collision: nearest chicken-skillet in the accepted list, creamy-tuscan-chicken-skillet, is a cream + sun-dried-tomato + spinach sauce, whereas this is a no-cream balsamic-glaze + fresh-tomato + fresh-mozzarella + basil caprese plate (different sauce family); no caprese/balsamic-tomato-mozzarella chicken exists in the digest.",
+  "cuisine": "Italian",
+  "cross_protein_flags": [
+    "Caprese format (balsamic glaze + tomato + fresh mozzarella + basil over a seared protein) is the same dish idea as a caprese/balsamic pork chop, caprese turkey cutlet, or balsamic-caprese steak - decider should scan other-protein pools for a caprese or balsamic-tomato-mozzarella twin."
+  ]
+}

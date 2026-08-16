@@ -1,0 +1,24 @@
+{
+  "name": "Italian Sausage Stuffed Peppers with Marinara and Mozzarella",
+  "slug": "italian-sausage-stuffed-peppers-bake",
+  "protein": "pork-sausage",
+  "cuisine": "Italian-American",
+  "method": "oven bake",
+  "source_url": "https://remakemyplate.com/lazy-keto-italian-stuffed-sausage-peppers/",
+  "source_servings": 5,
+  "src_cal": 561,
+  "src_carbs": 8,
+  "src_protein": 28,
+  "src_fat": 46,
+  "ingredients_verbatim": [
+    "1 Onion",
+    "8 ounces Green Bell Pepper",
+    "5 Italian Sausage links",
+    "5 Cheese Stick",
+    "1 cup marinara sauce",
+    "1 cup mozzarella cheese"
+  ],
+  "unmapped": [],
+  "why": "Sausage-forward baked stuffed pepper that lands squarely mid-band on the source's own numbers: 561 cal, 8 g carb, 28 g protein per serving - high protein for the calories, well under the 35 g carb ceiling. Whole-pepper bake scales cleanly to 14 with weigh-and-divide. Fills a real gap: catalog has beef/turkey/pork-shoulder stuffed peppers but no Italian-sausage version. Every main ingredient maps to the board (italian-sausage, green-bell-pepper, onions, marinara, mozzarella); 'cheese stick' is just string cheese and normalizes to mozzarella. Distinct dish FORM from the existing italian-sausage-peppers skillets (stuffed-and-baked, not sliced-and-sauteed). Verified: nutrition read directly from the recipe card.",
+  "confidence": "high on nutrition (read from card); note flavor adjacency to existing italian-sausage-peppers skillets - dedup should confirm the stuffed-pepper form reads as distinct"
+}

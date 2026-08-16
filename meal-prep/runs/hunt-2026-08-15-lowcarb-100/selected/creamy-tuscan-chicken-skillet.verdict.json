@@ -1,0 +1,15 @@
+{
+  "slug": "creamy-tuscan-chicken-skillet",
+  "name": "Creamy Tuscan Chicken Skillet",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "fit_evidence": "Published 485 cal / 8g carbs per serving sits mid-band on both axes (400-650 cal, <=35g carb). No seafood, batch-cook skillet, scales to 14 by weigh-and-divide.",
+  "dupe_evidence": "No catalog duplicate: the only Tuscan match in the digest is slow-cooker-tuscan-chicken-pasta (and slow-cooker-italian-chicken-penne) which are penne-pasta slow-cooker bowls; this candidate is a starch-free seared-breast skillet, differing on both starch (none vs penne) and method (skillet vs slow cooker). chicken-florentine is spinach-cream but lacks the defining sun-dried tomato and is flour-thickened. Not a dupe of anything in accepted-slugs.json.",
+  "cross_protein_flags": [
+    "STRONG same-protein pool-dupe risk: marry-me-chicken (present in the pool as a verdict file) is chicken breast seared in a heavy-cream + sun-dried-tomato + parmesan sauce - arguably the SAME dish as this Tuscan skillet. Decider should adjudicate these two head-to-head and keep only one.",
+    "Same-dish-different-protein twin: creamy-tuscan-pork-chops (in pool) is the identical sun-dried-tomato spinach cream sauce rebuilt on pork - decider's cross-protein merge should catch it.",
+    "Softer: caprese-chicken-skillet and the creamy-garlic-parmesan-chicken family are adjacent creamy-chicken-skillets but differ in flavor base (caprese/garlic-parm vs Tuscan sun-dried tomato) - likely distinct."
+  ],
+  "notes": "All ingredients map to tracked commodities; unmapped is empty."
+}

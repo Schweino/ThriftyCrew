@@ -1,0 +1,76 @@
+{
+  "name": "Low-Carb Turkey Cauliflower Mushroom Casserole",
+  "slug": "low-carb-turkey-cauliflower-mushroom-casserole",
+  "protein": "turkey",
+  "cuisine": "American",
+  "source_url": "https://kalynskitchen.com/low-carb-turkey-casserole-with-cauliflower-rice/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Turkey Breast", "grams": 1361, "buy": "about 3 lb, roasted and diced (about 7 cups cooked)" },
+    { "item": "Cauliflower", "grams": 1124, "buy": "10 1/2 cups chopped (about 2 medium heads)" },
+    { "item": "Baby Bella (Crimini) Mushrooms", "grams": 794, "buy": "1 3/4 lb, sliced" },
+    { "item": "Yellow Onion", "grams": 193, "buy": "1 3/4 medium, chopped" },
+    { "item": "Olive Oil", "grams": 47, "buy": "3 1/2 tbsp, divided" },
+    { "item": "Sour Cream", "grams": 403, "buy": "1 3/4 cups full-fat" },
+    { "item": "Mayonnaise", "grams": 182, "buy": "3/4 cup plus 2 tbsp" },
+    { "item": "Dijon Mustard", "grams": 53, "buy": "3 1/2 tbsp" },
+    { "item": "Mozzarella Cheese", "grams": 396, "buy": "3 1/2 cups grated, divided" },
+    { "item": "Parmesan Cheese", "grams": 49, "buy": "7 tbsp coarsely grated" },
+    { "item": "Dried Thyme", "grams": 3, "buy": "2 5/8 tsp, divided" },
+    { "item": "Poultry Seasoning", "grams": 4, "buy": "2 5/8 tsp, divided" },
+    { "item": "Salt", "grams": 12, "buy": "2 tsp" },
+    { "item": "Black Pepper", "grams": 2, "buy": "1 tsp" }
+  ],
+  "macros_per_serving": { "calories": 431, "protein_g": 35, "carbs_g": 13, "fat_g": 27 },
+  "writer_notes": [
+    "SOURCE YIELD 8, rebuilt to 14 at the mapper's 1.75x scale. Every gram and buy string transcribed from mapped\\low-carb-turkey-cauliflower-mushroom-casserole.json; no number computed in prose.",
+    "MACROS transcribed from the mapper's food-DB recompute at 14 servings and re-verified line by line against food-macros-db: build recompute lands at 431 cal and 35 g protein per serving (the tool's own cal/protein check passed at write time). Carbs 13 and fat 27 per serving carried from the same recompute. In band for this run (400 to 650 cal, 35 g carb or less): 431 cal clears the floor by 31 and sits well under the ceiling, carbs 13 is well under half the carb gate. Bound used in prose is 'under 15 grams of carbs'.",
+    "SAME-ITEM LINES COMBINED (keto-turkey-broccoli cheddar precedent): the source lists Mozzarella twice (1 cup layer topping + 1 cup in the sauce) and thyme and poultry seasoning twice each (main + sauce). Combined into one line apiece with total grams and a 'divided' buy string, so the ingredient list reads clean and the steps split them. Mozzarella 198 + 198 = 396 g (half into the sauce, half on top). Dried Thyme 1.8 g + 0.9 g = 2.7 g rounded to 3 g int. Poultry Seasoning 2.6 g + 1.3 g = 3.9 g rounded to 4 g int. (REPAIRED 2026-08-16: the first build carried both lines at 3.5x instead of 1.75x, the source-QA blocking finding; rescaled in mapped and here.) Grams store as int in the build; the sub-gram rounding on the two seasonings is macro-immaterial.",
+    "TURKEY grams book the RAW purchase weight (3 lb = 1361 g) against the raw Turkey Breast food-DB row, per the mapper: the source calls for 4 cups cooked leftover turkey, scaled to 7 cups, roasted from about 3 lb raw at a ~70% yield. Cost and macros share the one raw basis. The source's 'or chicken' alternative is recorded by the mapper, unpriced, and left out of the build to avoid double-counting.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked the costed list against the steps both directions: turkey (make_it 2, 7), sour cream / mayo / Dijon / parmesan / half the mozzarella / the smaller share of thyme and poultry seasoning (3, the sauce), mushrooms + olive oil (4), onion + olive oil (5), cauliflower + olive oil + the larger share of thyme and poultry seasoning (6), remaining mozzarella on top (7), bake (8). Salt and pepper are the source's to-taste line (source states NO quantity); booked here at a smallest-defensible to-taste minimum (Salt 2 tsp, Black Pepper 1 tsp per 14-serving batch, both zero/near-zero macro) so the 'season with salt and pepper' steps are cook-as-shopped and clear the PHANTOM buy-coverage gate (2026-08-16 repair). Grams are macro-immaterial.",
+    "BLOCKER FLAG for the repair pass (map-wiring gap, mapper stage's domain, NOT edited here): three canonical items carry NO row in db\\ingredients.json, so the spec build emits no bid for them and they price unpriced/pantry-static, understating cost_ps by roughly the whole cauliflower, mushroom, and sour cream spend. All three bids are LIVE on smp-feed.json, so each is a single missing map row: (1) 'Cauliflower' needs a row -> bid 'cauliflower' (weekly board, fresh each, mapper's cheapest Fareway $1.98/each); the only cauliflower rows in db\\ingredients.json today are none at all. (2) 'Baby Bella (Crimini) Mushrooms' needs a row -> bid 'mushrooms'; today only 'White Mushrooms' -> mushrooms exists, a different item name, so my crimini line does not resolve. (3) 'Sour Cream' (full-fat) needs a row -> bid 'sour-cream'; today only 'Light Sour Cream' -> sour-cream exists. This is the keto-turkey-broccoli Broccoli situation, three times over: cost_ps reported below is a FLOOR understated by those three lines until the map rows are added, then re-cost. I did not rename the items to the existing rows because the mapper deliberately chose full-fat Sour Cream (the Light row would deflate a calorie-floor recipe) and the crimini food-DB row, and food-macros-db keys on these exact names.",
+    "MUSHROOM PRICE-CLASS TENSION carried from the mapper (board_defects_observed): the mushrooms commodity's 7 priced cells are all WHITE mushrooms while this line is crimini, which retails above white, so once wired the mushroom cost is optimistic. Disclosed, not silently absorbed; flagged for the match-soundness gate.",
+    "MOZZARELLA ROUTING carried from the mapper: the mozzarella-cheese id has no cell on either board file and the term prices via the shredded-cheese commodity's include pattern (standing turkey-zucchini defect). Re-flagged for the match-soundness gate.",
+    "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount. This keeps clear of the 2026-08-15 audit failures. Re-walk the bullets against cost_lines once the three map rows are added and the recipe is re-costed.",
+    "PORTION METHOD: weigh the empty dish first, then weigh full and subtract, divide by 14. Standard house method."
+  ],
+  "prose": {
+    "intro_html": "Casserole usually starts with a can of cream-of-something soup and ends with a sleeve of crackers on top, and both of those are just cheap carbs in a dinner costume. This one earns the name the honest way. Roasted turkey breast, browned mushrooms, softened onion, and riced cauliflower get folded into a real sauce built from sour cream, mayo, Dijon, and two kinds of cheese, then the whole thing bakes under a blanket of mozzarella until it browns. No soup can, no breadcrumbs, no flour. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 15 grams of carbs. That is comfort food that works for your body and your wallet at the same time.",
+    "shop_smart": [
+      "<strong>About three pounds of turkey breast is the anchor.</strong> The source leans on leftover holiday turkey, but you do not have to wait for a holiday. Buy a raw turkey breast, roast it yourself, and dice it into bite-sized pieces. This is where most of the protein and most of the money live, so buy the plain breast and skip the pre-seasoned deli stuff you would pay extra for.",
+      "<strong>Two heads of cauliflower do the job the rice used to.</strong> You want fresh heads chopped and pulsed into a rice texture, which browns up in the pan and carries the bulk of the dish without carrying the carbs. Frozen riced cauliflower works too if that is what your store keeps stocked, and it saves you the food processor.",
+      "<strong>Mushrooms and onion build the base.</strong> Just under two pounds of sliced crimini mushrooms and a couple of onions get browned down first and layered in the bottom of the dish. Cooking the water out of the mushrooms before they go in is what keeps the finished casserole from turning soupy.",
+      "<strong>Sour cream, mayo, and Dijon make the sauce, not a soup can.</strong> Full-fat sour cream and mayo bring the richness, the Dijon brings the tang, and grated mozzarella and a little parmesan melt in to bind it. Reach for full-fat here on purpose; the light versions water the sauce down and this dish is built to hold its calories.",
+      "<strong>Thyme and poultry seasoning are the whole spice rack you need.</strong> A few teaspoons of each, split between the cauliflower and the sauce, is what makes a pile of turkey and vegetables taste like Thanksgiving dinner. These are jars you buy once and cook with all season long."
+    ],
+    "make_it": [
+      "Weigh your empty baking dish and write the number down. You will need it at the end to split this into 14 even servings by weight, which is the only honest way to portion one big bake.",
+      "Rub the turkey breast with a little salt and pepper and roast it at 375 degrees F until the center reads 165, about 45 minutes for a 3 pound breast. Let it rest, then dice it into bite-sized pieces, about 7 cups.",
+      "Make the sauce while the turkey rests. In a big bowl, stir together the sour cream, mayo, and Dijon with the smaller share of the thyme and poultry seasoning, half of the grated mozzarella, and all of the parmesan until it is smooth.",
+      "Heat a third of the olive oil in your largest skillet over medium-high heat and cook the sliced mushrooms until the liquid cooks off and they brown, about 6 to 8 minutes. Spread them across the bottom of the baking dish.",
+      "Add another third of the oil and cook the chopped onion until it softens and starts to color, about 5 minutes. Scatter it over the mushrooms.",
+      "Add the last of the oil and cook the riced cauliflower over medium-high heat, stirring often, until it softens and barely browns, about 4 minutes. Stir in the larger share of the thyme and poultry seasoning and a good pinch of salt and pepper, cook one more minute, then layer it into the dish.",
+      "Scatter the diced turkey over the vegetables and fold everything together, then spread the sauce over the top and fold again until every piece is coated. Level it off and blanket it with the rest of the mozzarella.",
+      "Bake uncovered at 375 degrees F until it is bubbling and the top is nicely browned, about 40 minutes. Let it rest a few minutes so it firms up, then weigh the dish and portion as below."
+    ],
+    "portion_html": "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a baked, bubbling casserole that eats like the soup-can version and skips the carbs. The turkey and the cheese carry the protein; the cauliflower and mushrooms do the job the rice and the noodles used to, for a lot less.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Low-carb turkey cauliflower mushroom casserole for meal prep: roasted turkey breast, riced cauliflower, and browned mushrooms baked in a real sour cream and mozzarella sauce with no soup can and no flour, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
+    "keywords": "turkey cauliflower casserole, low carb turkey casserole, keto casserole, cauliflower rice casserole, mushroom casserole, high protein meal prep",
+    "prepTime": "PT45M",
+    "cookTime": "PT40M",
+    "totalTime": "PT1H25M",
+    "steps": [
+      "Weigh the empty baking dish and note the number for portioning later.",
+      "Roast the turkey breast at 375 degrees F to 165 in the center, rest, and dice into about 7 cups.",
+      "Stir together the sour cream, mayo, Dijon, some of the thyme and poultry seasoning, half the mozzarella, and all the parmesan to make the sauce.",
+      "Brown the sliced mushrooms in olive oil and spread them in the bottom of the dish.",
+      "Soften the chopped onion in olive oil and scatter it over the mushrooms.",
+      "Cook the riced cauliflower in olive oil with the rest of the thyme and poultry seasoning, salt, and pepper, then layer it in.",
+      "Fold in the diced turkey and the sauce, top with the rest of the mozzarella, and bake at 375 degrees F for about 40 minutes until bubbling, then rest, weigh, and divide across 14 containers."
+    ]
+  }
+}

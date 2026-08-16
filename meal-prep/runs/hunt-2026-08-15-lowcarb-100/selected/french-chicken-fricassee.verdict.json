@@ -1,0 +1,10 @@
+{
+  "slug": "french-chicken-fricassee",
+  "name": "French Chicken Fricassee",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "dupe_of": null,
+  "evidence": "No catalog duplicate. Closest neighbor is 'slow-cooker-creamy-chicken-and-mushroom-bowls' (chicken + creamy mushroom) but distinct plate: French white-wine cream braise finished with egg-yolk liaison, tarragon and nutmeg, no starch base, vs an American slow-cooker creamy-mushroom rice bowl (2/4 - starch and method differ, technique wholly different). Also distinct from coq-au-vin (red-wine braise), chicken-florentine (spinach, no mushroom), and chicken-normandy (apple-cider cream braise).",
+  "fit_note": "FIT: 569 cal (within 400-650), 14g carbs (<=35), no seafood, batch-scales in a braiser to 14 servings.",
+  "cross_protein_note": "Watch for a same-dish twin in other selectors' pools: a turkey or pork 'fricassee' / white-wine creamy-mushroom braise would be structurally the same dinner (protein + cream-mushroom sauce + no starch + braise). Flag to the cross-protein merge pass."
+}

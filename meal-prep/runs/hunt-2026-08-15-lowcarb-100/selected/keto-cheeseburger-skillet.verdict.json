@@ -1,0 +1,25 @@
+{
+  "slug": "keto-cheeseburger-skillet",
+  "name": "Cheeseburger Skillet (Low-Carb)",
+  "protein": "beef",
+  "cuisine": "American",
+  "verdict": "DUPE",
+  "fit": {
+    "cal": 423,
+    "carbs": 5.3,
+    "in_cal_band": true,
+    "in_carb_band": true,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "Conditions themselves are met (423 cal within 400-650; 5.3g carbs under 35g; no seafood; weigh-and-divide skillet scales to 14). Ruling is DUPE on grounds of already-accepted state, not on fit. Note it sits near the 400 floor - label-DB compute could land slightly under; decider/QA should watch the gate."
+  },
+  "dupe_check": {
+    "catalog_nearest": ["cheeseburger-rice-bowls", "cheeseburger-pasta"],
+    "accepted_nearest": ["keto-cheeseburger-skillet"],
+    "reason": "DUPE: this exact slug is ALREADY present in accepted-slugs.json (accepted earlier this run) - re-adding would double it. (Against the live catalog it would otherwise be distinct: cheeseburger-rice-bowls and cheeseburger-pasta both carry a cooked starch base, whereas this is a bunless skillet - but the already-accepted state controls.) Also note the pool's beef-big-mac-salad-bowl is a separate no-starch cheeseburger plate that the decider already flagged as distinct."
+  },
+  "cross_protein_collisions": [
+    "The source itself lists 'ground beef OR ground turkey' - a turkey cheeseburger skillet is the identical dinner; decider should ensure no turkey-lane cheeseburger-skillet twin also gets accepted.",
+    "Adjacent to the already-flagged beef-big-mac-salad-bowl (special-sauce salad) and to any bunless-burger-bowl in any protein lane."
+  ]
+}

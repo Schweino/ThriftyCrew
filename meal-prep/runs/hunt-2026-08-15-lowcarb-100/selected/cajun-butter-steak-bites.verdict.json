@@ -1,0 +1,21 @@
+{
+  "slug": "cajun-butter-steak-bites",
+  "name": "Cajun Butter Steak Bites",
+  "protein": "beef",
+  "verdict": "DUPE",
+  "dupe_of": "garlic-butter-steak-bites-zucchini",
+  "dupe_scope": "accepted",
+  "fit": {
+    "calories": 492,
+    "carbs": 4,
+    "in_band": true,
+    "note": "492 cal inside 400-650; 4 g carbs well under the 35 g ceiling; sirloin cubes batch-scale to 14; no seafood. Fit is fine - killed on duplication, not fitness."
+  },
+  "dupe_check": {
+    "accepted_slugs_pool": "Same dish as the already-accepted garlic-butter-steak-bites-zucchini. Three-plus of four axes match: protein = sirloin cut into 2-inch cubes (same), method = pan-seared in a garlic-butter fond (same), core plate = butter-seared steak bites with no starch (same). The only real difference is a Cajun spice rub (paprika/cayenne/thyme/oregano/chili) swapped for the garlic-butter seasoning, plus dropping the zucchini side - a seasoning reskin of the same dinner, not a new plate. The catalog already carries TWO steak-bite entries in this family (garlic-butter-steak-bites-zucchini and honey-garlic-steak-bites-potatoes); a third butter-steak-bites reskin would embarrass the catalog. Sourcer honestly self-flagged this risk.",
+    "catalog_digest": "Confirms the crowding: honey-garlic-steak-bites-potatoes is the live steak-bites cousin; nothing else in the digest is a butter-seared steak-cube dish, but the accepted garlic-butter version is the direct twin."
+  },
+  "cross_protein_flag": "Cajun butter + seared cubes structure could recur as a chicken or pork 'Cajun butter bites' candidate; if the garlic-butter keeper ever falls out, a Cajun steak-bites slot could be reconsidered, but as things stand it loses to the accepted garlic-butter twin. Note the Cajun/Creole cuisine tag would have widened the American-skewed catalog - a point for the decider only if it wants to trade the garlic-butter version out, not a reason to ship both.",
+  "unmapped_ok": true,
+  "unmapped": []
+}

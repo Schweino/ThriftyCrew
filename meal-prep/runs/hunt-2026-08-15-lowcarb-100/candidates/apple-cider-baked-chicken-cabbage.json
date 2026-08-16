@@ -1,0 +1,29 @@
+{
+  "name": "Apple Cider Baked Chicken and Cabbage",
+  "slug": "apple-cider-baked-chicken-cabbage",
+  "protein": "chicken",
+  "cuisine": "American (rustic/European)",
+  "method": "oven bake (marinate, then bake chicken with cabbage and apple in a 9x13 dish)",
+  "source_url": "https://www.skinnytaste.com/baked-apple-cider-chicken-and-cabbage/",
+  "source_servings": 4,
+  "src_cal": 418,
+  "src_carbs": 20,
+  "src_protein": 52.5,
+  "ingredients_verbatim": [
+    "4 skinless, bone-in chicken legs (thighs and drumsticks), trimmed",
+    "1/2 tablespoon olive oil",
+    "1-1/4 cups apple cider",
+    "1/4 cup apple cider vinegar",
+    "1 tsp kosher salt",
+    "1/4 tsp fresh black pepper",
+    "4 sprigs fresh thyme",
+    "1-1/2 tablespoons fresh rosemary, finely chopped",
+    "4 garlic cloves, chopped",
+    "1/2 medium head red cabbage, cored and sliced into 8 wedges",
+    "1 large granny smith apple, peeled, cored and cut into 8 wedges",
+    "3 tablespoons Dijon mustard"
+  ],
+  "unmapped": ["apple-cider (beverage; board has apple-juice, applesauce, apple-cider-vinegar but not fresh apple cider)", "bone-in chicken legs/drumsticks (no exact board id; chicken-thighs / whole-chicken are the closest homes)", "red-cabbage (board carries generic cabbage; red may want its own id)"],
+  "why": "Oven-only baked chicken dinner (marinate then bake bone-in legs with cabbage and apple), squarely in the low-carb band on published numbers: 418 cal / 20g carb / 52.5g protein per serving. Structurally low-carb (meat + cabbage + one apple, no rice/pasta/potato/bread base). Distinct from every catalog chicken bake (no apple-cider or chicken-and-cabbage entry) and from this run's accepted bakes (bacon-ranch-cauliflower, jalapeno-popper). Scales cleanly to 14 servings in sheet/hotel pans, weigh-and-divide. GOOD pricer-lane specimen: 'apple cider' the beverage is genuinely absent from the board (flagged) - exactly the unmapped case this proving run wants surfaced. Note: 418 cal sits toward the 400 floor, so our recomputed macros could drift slightly under - flagging for the selector; carbs at 20g have comfortable ceiling headroom.",
+  "confidence": "high on source numbers (read from page nutrition card); low-cal-floor drift risk flagged"
+}

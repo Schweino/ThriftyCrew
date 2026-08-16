@@ -1,0 +1,31 @@
+{
+  "name": "Mexican Chorizo Egg Casserole",
+  "slug": "mexican-chorizo-egg-casserole",
+  "protein": "pork",
+  "cuisine": "Mexican",
+  "method": "oven bake",
+  "source_url": "https://www.thegraciouswife.com/mexican-breakfast-casserole/",
+  "source_servings": 10,
+  "src_cal": 612,
+  "src_carbs": 17,
+  "src_protein": 33,
+  "src_fat": 46,
+  "ingredients": [
+    "1 pound chorizo sausage",
+    "1/2 large onion, finely chopped",
+    "1/2 red bell pepper, finely chopped",
+    "5 cloves garlic, minced",
+    "8 ounces Pepper Jack cheese, shredded",
+    "8 ounces cheddar cheese, shredded",
+    "4 green onions, finely sliced",
+    "1/4 cup cilantro, finely chopped",
+    "2 jalapeno peppers, seeded, deveined, and finely chopped",
+    "12 large eggs",
+    "3 cups half-and-half",
+    "1/2 teaspoon hot sauce",
+    "1/2 teaspoon ground black pepper",
+    "9 corn tortillas, quartered"
+  ],
+  "unmapped": ["chorizo sausage", "pepper jack cheese"],
+  "why": "Egg-bound Tex-Mex bake (12 eggs + half-and-half custard) whose identity is the casserole; chorizo is a component. Published 612 cal / 33g protein / 17g carb clears the band on the source's numbers, though calories sit near the 650 ceiling so my confidence it survives our label-DB gate is only moderate - selector should weigh that. Deliberately carries two unmapped flags (chorizo, pepper jack) to exercise the pricer lane per the run brief. Corn tortillas keep carbs modest at 17g. Scales to 14 easily. Verified: read the recipe card nutrition directly."
+}

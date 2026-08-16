@@ -1,0 +1,67 @@
+{
+  "name": "Philly Cheesesteak Stuffed Peppers",
+  "slug": "philly-cheesesteak-stuffed-peppers",
+  "protein": "beef",
+  "cuisine": "American",
+  "source_url": "https://www.budgetbytes.com/philly-cheesesteak-stuffed-peppers/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Green Bell Peppers", "grams": 840, "buy": "7 green bell peppers, halved and seeded" },
+    { "item": "Shaved Beef Steak", "grams": 1361, "buy": "3 lb shaved beef steak" },
+    { "item": "Yellow Onion", "grams": 1588, "buy": "3 1/2 lb yellow onions, sliced thin (3 to 4 very large)" },
+    { "item": "White Mushrooms", "grams": 794, "buy": "1 3/4 lb, sliced thin (about 11 cups)" },
+    { "item": "Provolone Cheese", "grams": 294, "buy": "14 slices" },
+    { "item": "Butter", "grams": 196, "buy": "14 tbsp (1 3/4 sticks), divided" },
+    { "item": "Vegetable Oil", "grams": 196, "buy": "14 tbsp (3/4 cup plus 2 tbsp), divided" },
+    { "item": "Worcestershire Sauce", "grams": 60, "buy": "3 1/2 tbsp" },
+    { "item": "Garlic Powder", "grams": 11, "buy": "3 1/2 tsp" },
+    { "item": "Salt", "grams": 6, "buy": "1 tsp, divided" },
+    { "item": "Black Pepper", "grams": 2, "buy": "1 tsp, divided" }
+  ],
+  "macros_per_serving": { "calories": 521, "protein_g": 30.7, "carbs_g": 17.2, "fat_g": 38.3 },
+  "writer_notes": [
+    "SOURCE YIELD 4 (1/2 stuffed pepper each), rebuilt to 14 at the mapper's 3.5x scale. Serving anchor: 7 whole peppers halved = 14 boats = 14 servings. Every gram and buy string transcribed from mapped\\philly-cheesesteak-stuffed-peppers.json; no number computed in prose.",
+    "MACROS transcribed from the mapper's food-DB recompute at 14 servings, which I independently re-derived and matched to the gram: 520.9 cal, 30.7 g protein, 17.2 g carbs, 38.3 g fat per serving, reported as 521 / 31 / 17 / 38. In band for this run (400 to 650 cal, 35 g carb or less): 521 cal PASS, 17.2 g carbs PASS. The source's published 9 g carbs is lower because their calculator booked a ~120 g default onion; the author's own parenthetical says her one onion was just under 1 lb, and the mapper weight-anchored to the author's pound (1588 g at 14 servings). Either reading stays well under the 35 g gate. Intro says 'under 20 grams of carbs', a true bound at 17.2.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. peppers (steps 2,6), shaved beef (5), onion (3), mushrooms (4), provolone (7), butter (3,5), vegetable oil (2,3,5), Worcestershire (4), garlic powder (4), salt (2,3,4), black pepper (2,4). Walked the costed list against the steps both directions.",
+    "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet needs a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount. Re-walk the bullets against cost_lines once costed before publish.",
+    "COST CLOSED 2026-08-16 (was: COST IS A FLOOR). Shaved Beef Steak is the title protein and the dominant line (3 lb / 1361 g). At first build it had no commodity id and no bid, so cost-recipes.ps1 had no price basis, skipped it, and the built cost_ps was a hard floor that EXCLUDED the beef. The registrar has since minted the shaved-beef-steak commodity and priced it (basis board:shaved-beef-steak:recipeboard-cheapest:Aldi, the Aldi 14 oz capture), db\\ingredients.json now wires the bid, and db\\costed.json books the wave with the beef included and lines_unpriced 0. This spec's cost block was re-rendered from that current engine row on 2026-08-16, so cost_ps is the real number and the recipe is clear to publish. No id minted in this lane, no price invented, no silent sirloin remap - the registrar minted the id.",
+    "Salt and black pepper are booked as real cost lines here (the mapper mapped them, board 7 of 7), not as a to-taste pantry line, so the steps name them where they go.",
+    "REPAIR PASS 2026-08-16: pulled the two beef-cost-dominance claims that no cost line proves and the built cost contradicts. costed.json books lines_priced 10 / lines_unpriced 1 with Shaved Beef Steak absent from the lines array, so cost_batch 20.27 and cost_ps 1.45 EXCLUDE the beef; the largest priced line is White Mushrooms (util 6.60, buy 7.55), then Green Bell Peppers 5.39, then Yellow Onion 3.99 - beef contributes 0. Old shop_smart[0] tail 'this is where the protein and most of the money live' -> 'this is where the protein in every serving comes from' (macro-true, cost-neutral). Old cost_closing_html 'The beef carries the cost, and the peppers, onions and mushrooms stretch it' -> 'The peppers, onions and mushrooms stretch three pounds of beef into fourteen full plates' (drops the unprovable cost claim, keeps the yield claim). COST FLOOR NOW CLOSED (2026-08-16, repair pass 2): the registrar priced shaved beef and this spec's cost block was re-rendered from the current costed.json row, so cost_ps now INCLUDES the title protein. The two prose edits above stand; the beef-carries-the-cost claim was left dropped rather than restored, keeping shop_smart[0] and cost_closing_html cost-neutral and provable from the buy amounts alone."
+  ],
+  "prose": {
+    "intro_html": "A Philly cheesesteak is one of the great sandwiches, and the only thing standing between it and a clean meal-prep dinner is the roll. So we lose the roll. Thin shaved beef, onions and mushrooms cooked all the way down soft, piled into a roasted bell pepper and capped with a slice of melting provolone. You get every part of the cheesesteak you actually came for, the beef and the cheese and the sweet onion, and none of the bread that runs up the carbs. Built at 14 servings it lands around <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 20 grams of carbs. That is a steak-and-cheese dinner that works with your macros instead of against them.",
+    "shop_smart": [
+      "<strong>Three pounds of shaved beef steak is the anchor.</strong> This is the thin sliced beef sold in trays in the meat case, the same cut that builds a real cheesesteak. If your store does not stock it, buy a sirloin steak, freeze it for about 20 minutes until it is firm, and slice it as thin as you can against the grain. This is where the protein in every serving comes from.",
+      "<strong>Seven green bell peppers are the bowls.</strong> Each one gets halved and seeded, which gives you fourteen boats, one per serving. Pick peppers that are firm and sit fairly flat so they hold the filling without tipping over.",
+      "<strong>Three and a half pounds of onions and close to two pounds of mushrooms do the heavy lifting.</strong> They cook all the way down into the soft, sweet, savory filling that makes a cheesesteak taste like a cheesesteak, and they stretch three pounds of beef across fourteen full servings. Both are cheap staples you can always use.",
+      "<strong>Fourteen slices of provolone finish it.</strong> One slice melted over each stuffed pepper. Deli sliced provolone from the cheese case is all you need.",
+      "<strong>Butter, vegetable oil, Worcestershire, garlic powder, salt and pepper are the seasoning.</strong> The butter and oil caramelize the onions and mushrooms and brown the beef, and the Worcestershire and garlic powder give the filling that deep, meaty savor. These are backbone items you cook with all the time."
+    ],
+    "make_it": [
+      "Weigh your biggest skillet empty and write the number down. You will use it at the end to split the filling evenly across all fourteen peppers instead of guessing.",
+      "Heat the oven to 350 degrees. Halve the bell peppers the long way and pull out the seeds and ribs. Brush the cut sides with a little of the vegetable oil and a pinch of the salt and pepper, set them cut side up on a sheet pan, and bake for 25 minutes to soften them while you build the filling.",
+      "Melt about half the butter with a couple spoons of the oil in the skillet over medium high heat. Add the sliced onions and a pinch of the salt and cook them down until they are very soft and starting to caramelize, about 10 minutes.",
+      "Add the sliced mushrooms, the garlic powder, the rest of the salt and pepper, and the Worcestershire sauce. Keep cooking until the mushrooms are soft and the liquid has cooked off, about 8 minutes, scraping up the browned bits as you go. Turn the heat down if things start to scorch.",
+      "Push the vegetables to the side of the pan, add the rest of the butter and oil, and lay in the shaved beef. Break it apart with your spatula as it cooks so it browns evenly, then stir it together with the onions and mushrooms.",
+      "Weigh the full skillet, subtract the empty weight you wrote down in Step 1, and divide the filling by 14. Mound that amount into each roasted pepper half. They should be very full.",
+      "Lay a slice of provolone over each stuffed pepper and return them to the oven for about 20 minutes, until the cheese is melted and bubbling. Portion into your containers and you are done."
+    ],
+    "portion_html": "The honest way to make fourteen even servings is by weight. Weigh the loaded skillet, subtract the empty weight from Step 1, and that is your total filling. Divide it by 14 and spoon that exact amount into each pepper half before the cheese goes on. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> at everyday prices for a cheesesteak dinner you can eat all week. The peppers, onions and mushrooms stretch three pounds of beef into fourteen full plates.",
+    "upsell_html": "A low carb, high protein dinner for about ${{cost_ps}} a serving at everyday prices. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Philly cheesesteak stuffed peppers for meal prep: shaved beef, onions and mushrooms cooked down and piled into roasted bell peppers under melted provolone, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 20 grams of carbs.",
+    "keywords": "philly cheesesteak stuffed peppers, low carb cheesesteak, shaved beef meal prep, stuffed bell peppers, high protein low carb dinner",
+    "prepTime": "PT20M",
+    "cookTime": "PT45M",
+    "totalTime": "PT1H5M",
+    "steps": [
+      "Halve and seed the bell peppers, brush with oil, and bake at 350 degrees for 25 minutes to soften.",
+      "Caramelize the sliced onions in butter and oil, then add the mushrooms, garlic powder, Worcestershire, salt and pepper and cook until soft.",
+      "Add the rest of the butter and oil and brown the shaved beef, then stir it into the vegetables.",
+      "Weigh the skillet, subtract the empty weight, and divide the filling across fourteen roasted pepper halves.",
+      "Top each with a slice of provolone and bake 20 minutes until melted, then portion into containers."
+    ]
+  }
+}

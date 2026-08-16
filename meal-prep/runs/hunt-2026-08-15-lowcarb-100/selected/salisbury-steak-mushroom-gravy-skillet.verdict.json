@@ -1,0 +1,24 @@
+{
+  "slug": "salisbury-steak-mushroom-gravy-skillet",
+  "name": "Low-Carb Salisbury Steak with Mushroom Gravy",
+  "protein": "beef",
+  "verdict": "DUPE",
+  "dupe_of": "salisbury-steak-potato-bowls",
+  "fit": {
+    "calories": 409,
+    "carbs_g": 7.2,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "seafood": false,
+    "scalable_to_14": true,
+    "note": "Published macros clear both bands (409 cal is near the 400 floor, watch computed drift). Fit is NOT the reason for the cut - it is a dupe."
+  },
+  "dupe_check": {
+    "against_catalog": "DUPE of catalog salisbury-steak-potato-bowls ('Salisbury Steak and Potato Bowls'): identical dish name 'Salisbury Steak', same protein (ground beef), same method (browned patties simmered in gravy), same gravy family (beef-broth + mushrooms + onions). Only the starch differs - catalog serves it over russet potatoes, candidate drops potato and enriches the same mushroom gravy with cream cheese. That is a side/low-carb reframe of one dinner, not a distinct plate (3 of 4 axes match + name identity).",
+    "against_pool": "Single candidate handed to me; no competing beef Salisbury/patty-in-gravy candidate seen in my slice."
+  },
+  "cross_protein_collisions": [
+    "Structurally 'ground-meat patties in a savory mushroom/onion gravy' - a turkey Salisbury steak or a low-carb turkey/pork patty-in-mushroom-gravy in another selector's pool would be the same dish with a swapped protein; decider should merge-check. Catalog already carries swedish-meatball-potato-bowls (beef) which is a close meatball-in-cream-gravy cousin."
+  ],
+  "borderline_flag": "The catalog twin (salisbury-steak-potato-bowls) is itself carb-heavy and would NOT satisfy this run's low-carb condition, so if the decider specifically wants a low-carb Salisbury steak for the site, this is the natural candidate to promote over the potato version. Ruled DUPE rather than borderline because the dish name is identical and 3 of 4 axes match, but flagging the low-carb/no-potato distinction so the decider can override."
+}

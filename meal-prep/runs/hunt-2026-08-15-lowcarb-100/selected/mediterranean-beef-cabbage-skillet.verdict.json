@@ -1,0 +1,19 @@
+{
+  "slug": "mediterranean-beef-cabbage-skillet",
+  "name": "Mediterranean Ground Beef and Cabbage Skillet",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "cal": 419,
+    "carbs": 22,
+    "in_band": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "note": "419 cal / 22g carbs clears 400-650 cal and <=35g carb; ground beef + shredded cabbage/carrots, no rice/pasta/potato/bread; big skillet weigh-and-divide scales to 14. baharat unmapped is wanted for the pricer lane, not penalised."
+  },
+  "dupe_evidence": "Not a dupe of the catalog's ground-beef+cabbage dish: unstuffed-cabbage-roll-bowls is a crushed-tomato + rice cabbage-roll bowl (tomato sauce base, rice starch, Eastern-European), while this is a no-tomato, no-rice Middle Eastern skillet spiced with baharat/cumin/coriander, finished with vinegar and carrots - only protein+cabbage+skillet-method overlap (2 of 4); sauce/flavor family and starch both differ. The sourcer-flagged 'beef-unstuffed-cabbage-skillet' does not exist in the digest.",
+  "cuisine": "Middle Eastern",
+  "cross_protein_flags": [
+    "Structurally the same dinner as a ground-turkey-and-cabbage skillet or ground-lamb-and-cabbage skillet with the same Middle Eastern (baharat/cumin/coriander) spicing - decider should check the turkey and lamb pools for a same-dish-different-protein twin."
+  ]
+}

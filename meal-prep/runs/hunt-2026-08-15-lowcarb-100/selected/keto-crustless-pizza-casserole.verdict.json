@@ -1,0 +1,18 @@
+{
+  "slug": "keto-crustless-pizza-casserole",
+  "name": "Keto Crustless Pizza Casserole",
+  "protein": "pork",
+  "cuisine": "Italian-American",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 436,
+    "carbs_g": 7,
+    "servings": 12,
+    "conditions_pass": true,
+    "note": "436 cal sits mid-low in the 400-650 band; 7g carbs well under the 35g ceiling; pork, no seafood; oven-bake casserole weigh-and-divides and scales past 14 servings; budget meal-prep dinner."
+  },
+  "catalog_dupe_check": "Not a duplicate. The only pizza dish in the 544-recipe catalog is pizza-pasta-bowls (turkey pepperoni + marinara + mozzarella + rotini PASTA bowl) - shares only the pizza flavor family but differs on protein (Italian sausage+pepperoni vs turkey pepperoni), starch (crustless/none vs rotini pasta), and method (oven-baked casserole vs pasta bowl); 1-of-4 match, different dinner.",
+  "accepted_slugs_dupe_check": "Not a duplicate of any accepted slug. Closest is italian-sausage-peppers-onions-skillet (accepted) which shares the sausage+peppers+onions components but is a stovetop skillet with no pepperoni, no melted pizza-cheese bind, and no tomato-sauce/pizza identity - different method and different dish.",
+  "cross_protein_collision_note": "This is structurally a 'crustless pizza bake' (pepperoni + 3 cups melted pizza cheese + tomato sauce baked over sausage/veg). Decider should watch for the same dish surfacing in other protein pools: a turkey-pepperoni pizza casserole, a ground-beef pizza casserole, or a chicken pizza bake would all be the same dinner with the protein swapped - the pizza-cheese-and-pepperoni bake identity is what collides, not the sausage.",
+  "confidence": "HIGH on numbers (read from recipe card), verdict KEEP"
+}

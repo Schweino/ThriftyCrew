@@ -1,0 +1,16 @@
+﻿{
+  "slug": "braised-pork-shoulder-fennel-tomato",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    { "check": "scaling",
+      "severity": "note",
+      "detail": "One consistent ratio 4.6667x (derived 3 servings -> 14) across all 10 lines. Fennel (4.667 -> 5 bulbs), garlic (4.667 -> 5 cloves) and red onion (2.333 -> 2.5 medium) up-round +7.1% under the house quarter/cook-measure convention; drift was self-declared by the mapper with calorie impact (+1.9 and +0.8 cal/serving). No hand-adjusted line signature.",
+      "owner": "mapper" },
+    { "check": "ingredient-coverage",
+      "severity": "note",
+      "detail": "Source servings are NOT printed on the page (nutrition per adjustable 'bowl'); extractor correctly reported null and the mapper derived 3 servings from the source's own per-bowl macros (protein 2.90, calories 2.80, fat 2.65 all cluster at 3; no other integer fits). Derivation is documented and internally consistent, carried here for the auditor's awareness.",
+      "owner": "mapper" }
+  ],
+  "notes": "Live page (carbmanager.com) fetched successfully and matches the extraction exactly: same title, all 10 ingredients with identical quantities, same 5 steps, same times (15 min / 2 h 20 min / 2 h 35 min) and same per-bowl nutrition (622 cal / 49.8 P / 42.5 F / 7.7 C total / 5.2 net). Coverage is clean both directions; 'Mustard' -> prepared yellow mustard is a mapper identity ruling, not an invention. Method survives intact (brown, sweat fennel+onion, aromatics+paste, boil, braise covered 1 h + covered 30 + uncovered 30 at 375 F); the added chunk-before-brown and shred-and-portion steps are the declared 14-serving scale adaptation and the source itself says 'slice or shred'. Title renames but does not re-class the dish. source_url in the spec matches the page transcribed. Prose carries {{cal}}/{{protein}}/{{cost_ps}} tokens plus literals that all match the spec's own numbers (under 12 g carbs vs stat 10.8; 8 1/4 lb pork, 5 fennel bulbs, 2 1/2 red onions, 9 1/4 cups broth, 375 F, 14 servings). CAVEAT FOR THE ORCHESTRATOR: db\\recipes\\braised-pork-shoulder-fennel-tomato.json and db\\built\\...body.html do NOT exist yet - build-v2-spec is blocked on the fennel-bulb pricing cell (documented in writer_notes and mapped pricing_terms_needed; queue term already CARRIED at Baker's $3.99). This verdict judges the full writer spec in runs\\hunt-2026-08-15-lowcarb-100\\intake\\braised-pork-shoulder-fennel-tomato.json, which contains all card content. Fidelity is clean; the missing build artifact is a pipeline-sequencing fact, not a source-fidelity defect. Re-verify credit rendering once the card is built."
+}

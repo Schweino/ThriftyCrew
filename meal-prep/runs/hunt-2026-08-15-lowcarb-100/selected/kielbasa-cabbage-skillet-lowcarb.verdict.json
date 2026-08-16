@@ -1,0 +1,23 @@
+{
+  "slug": "kielbasa-cabbage-skillet-lowcarb",
+  "name": "Cabbage and Sausage Skillet (Kielbasa)",
+  "protein": "pork",
+  "verdict": "DUPE",
+  "fit": {
+    "calories": 435,
+    "carbs_g": 14,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "seafood": false,
+    "scalable_to_14": true,
+    "budget_meal_prep": true,
+    "result": "FITS"
+  },
+  "fit_evidence": "Numbers clear the gates (435 cal / 14g carb, no seafood, scalable) - but it is ruled DUPE, not on fitness.",
+  "dupe_of": "cabbage-and-sausage-skillet",
+  "dupe_evidence": "POOL duplicate: this is the identical recipe already ruled KEEP as cabbage-and-sausage-skillet in this same run - same source (thecozycook.com/cabbage-and-sausage/), same dish (sliced kielbasa + cabbage + onion + carrots + mustard/broth pan sauce, skillet), same published 435 cal / 14g carb / 16g protein. Only the slug differs. Shipping both would ship the same dinner twice; the already-ruled cabbage-and-sausage-skillet is the surviving entry.",
+  "catalog_note": "Independently also borderline-tight against catalog kielbasa-cabbage-potato-skillet (shares protein + cabbage-onion base + skillet method, differing only by dropping the potato starch), but the operative ruling is the exact pool duplicate above.",
+  "cross_protein_watch": "The cabbage-sausage-skillet family in the catalog lives under the turkey protein group (smoked-turkey-sausage proxy); a plain no-starch smoked-turkey-sausage cabbage skillet in another lane would also be this same dish - already flagged on the surviving cabbage-and-sausage-skillet verdict.",
+  "borderline": false,
+  "borderline_reason": "Clear pool duplicate of an already-KEPT identical recipe."
+}

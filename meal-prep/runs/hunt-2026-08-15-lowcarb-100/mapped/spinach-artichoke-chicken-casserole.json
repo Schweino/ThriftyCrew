@@ -1,0 +1,184 @@
+{
+  "slug": "spinach-artichoke-chicken-casserole",
+  "title": "Spinach Artichoke Chicken Casserole",
+  "source_url": "https://kicking-carbs.com/spinach-artichoke-chicken-casserole/",
+  "source_servings": 8,
+  "target_servings": 14,
+  "scale_factor": 1.75,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    { "source": "8 ounces cream cheese cubed", "ruling": "1/3 Fat Cream Cheese - the closed vocabulary's stocked cream cheese row (the 2026-08-16 lesson item: bare 'Cream Cheese' aliases to this row, it is not a mapper invention). Macro effect of the lighter product is booked honestly: about -27 cal and -3.5 g fat per serving vs a full-fat brick, and it is the main driver of the fat gap in the cross-check." },
+    { "source": "1/2 teaspoon sea salt", "ruling": "Salt (zero-macro, same aisle commodity; the vocabulary stocks no separate sea-salt row)" }
+  ],
+  "registrar_rulings": [],
+  "ingredients": [
+    {
+      "source_raw": "1/2 cup heavy cream",
+      "item": "Heavy Cream",
+      "bid": "heavy-cream",
+      "board": "weekly",
+      "grams": 210,
+      "buy": "3/4 cup plus 2 tbsp heavy cream",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 0.875 cup = 14 tbsp x densities tbsp=15 g = 210 g (not a house quarter as a cup figure, so printed as the philly-style compound measure). GV label row 50 cal/tbsp. Board 7 of 7, cheapest Sam's $0.1162/floz."
+    },
+    {
+      "source_raw": "1/2 cup chicken broth",
+      "item": "Chicken Broth",
+      "bid": "chicken-broth",
+      "board": "weekly",
+      "grams": 207.2,
+      "buy": "3/4 cup plus 2 tbsp chicken broth (7 fl oz)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 0.875 cup = 7 floz x 29.6 g = 207.2 g. Board 7 of 7, cheapest Aldi $0.0373/floz."
+    },
+    {
+      "source_raw": "1/4 cup butter",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "recipe",
+      "grams": 98,
+      "buy": "7 tbsp butter (3/4 stick plus 1 tbsp)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 0.4375 cup = 7 tbsp x densities tbsp=14 g = 98 g. Board field 'recipe': butter is now an id on the recipe board (recipe-commodities.json), which postdates the earlier wave's weekly stamping. Board 7 of 7, cheapest Sam's $2.555/lb."
+    },
+    {
+      "source_raw": "8 ounces cream cheese cubed",
+      "item": "1/3 Fat Cream Cheese",
+      "bid": "1-3-fat-cream-cheese",
+      "board": "recipe",
+      "grams": 396.9,
+      "buy": "14 oz cream cheese (1 3/4 bricks), cubed",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 14 oz = 396.9 g; printed weight and grams agree. Vocab alias resolves bare 'Cream Cheese' to this row (exit 0) - see ruled_substitutions for the macro disclosure. GV Neufchatel label 70 cal / 2 P per 28 g. Board 6 of 7, cheapest Aldi $0.1862/oz."
+    },
+    {
+      "source_raw": "1 teaspoon garlic powder",
+      "item": "Garlic Powder",
+      "bid": "garlic-powder",
+      "board": "weekly",
+      "grams": 5.4,
+      "buy": "1 3/4 tsp garlic powder",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.75 tsp x densities tsp=3.1 g = 5.4 g. Board 7 of 7, cheapest Walmart $0.216/oz."
+    },
+    {
+      "source_raw": "1/2 teaspoon sea salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 6,
+      "buy": "1 tsp salt",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 0.875 tsp quantized to 1 tsp (+14.3% drift, noted; zero-macro so harmless - philly precedent quantization) x densities tsp=6 g = 6 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/4 teaspoon fresh ground black pepper",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 1.15,
+      "buy": "1/2 tsp black pepper",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 0.4375 tsp quantized to 1/2 tsp (+14.3%, ~0.2 cal/serving) x densities tsp=2.3 g = 1.15 g. Board 7 of 7, cheapest Hy-Vee $0.4167/oz."
+    },
+    {
+      "source_raw": "8 ounces frozen chopped spinach thawed and excess moisture pressed out",
+      "item": "Frozen Chopped Spinach",
+      "bid": "frozen-chopped-spinach",
+      "board": "recipe",
+      "grams": 396.9,
+      "buy": "14 oz frozen chopped spinach, thawed and squeezed dry",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 14 oz = 396.9 g; printed weight and grams agree (grams are package weight pre-squeeze, matching both the price unit and the USDA frozen-spinach row basis). Board 5 of 7, cheapest Walmart $0.115/oz."
+    },
+    {
+      "source_raw": "10 ounces quartered artichoke hearts drained",
+      "item": "Artichoke Hearts",
+      "bid": "artichoke-hearts",
+      "board": "weekly",
+      "grams": 496.1,
+      "buy": "17 1/2 oz quartered artichoke hearts, drained (about 1 1/4 of the 13.75 oz cans)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 17.5 oz = 496.1 g; printed weight and grams agree. DB row is canned quartered WITH LIQUID (40 cal/130 g); the recipe drains, so the booked basis runs slightly light on a per-gram basis - spread is under 1 cal/serving either way and disclosed rather than re-derived (rule 2: no invented drained row without a label). Board 7 of 7, cheapest Walmart $0.1615/oz."
+    },
+    {
+      "source_raw": "3 1/2 cups cooked cubed chicken",
+      "item": "Boneless Skinless Chicken Breast",
+      "bid": "chicken-breast",
+      "board": "weekly",
+      "grams": 1134,
+      "buy": "2 1/2 lb chicken breast, cooked and cubed (about 6 cups)",
+      "display_name": "Chicken Breast (cooked, cubed)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "grams are RAW purchase weight matching the raw DB row (chicken-bacon-ranch precedent): source 3.5 cups COOKED x 1.75 = 6.125 cups x densities cup=140 g = 857.5 g cooked; at the DB's 3 oz cooked = 4 oz raw factor that is 1143.3 g raw, quantized 2 1/2 lb = 1134 g (-0.8%). Printed 2 1/2 lb and grams agree. NOT an each-weight assumption: the cup measure is the source's own and converts through the estate's standing 140 g/cup row. Board 6 of 7, cheapest Baker's $1.99/lb."
+    },
+    {
+      "source_raw": "2 cups shredded mozzarella",
+      "item": "Mozzarella Cheese",
+      "bid": "mozzarella-cheese",
+      "board": "weekly",
+      "grams": 395.5,
+      "buy": "3 1/2 cups shredded mozzarella (14 oz)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5 cups x the label-accurate 113 g/cup (turkey-zucchini precedent; densities has no Mozzarella Cheese row - follow-up still open) = 395.5 g. DB row low-moisture part-skim shredded (USDA 304 cal / 23.6 P per 100 g) - the form the priced bag rows describe. bid from ingredient-map; the TERM resolver answers via the shredded-cheese commodity (7 of 7, cheapest Sam's $0.1521/oz), same split as prior waves."
+    },
+    {
+      "source_raw": "1 cup shredded parmesan",
+      "item": "Parmesan Cheese",
+      "bid": "parmesan",
+      "board": "weekly",
+      "grams": 196,
+      "buy": "1 3/4 cups shredded parmesan (7 oz)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.75 cups x densities cup=112 g (label 1/4 cup = 28 g) = 196 g. Vocab: bare 'Shredded Parmesan' has no row; 'Parmesan Cheese' is the canon row this run has used for every shredded-parmesan line (flank-steak, chicken-piccata, turkey-zucchini precedents). Board 7 of 7, cheapest Sam's $0.3092/oz."
+    },
+    {
+      "source_raw": "1/2 cup crumbled feta",
+      "item": "Feta Cheese",
+      "bid": "feta",
+      "board": "weekly",
+      "grams": 98,
+      "buy": "3/4 cup plus 2 tbsp crumbled feta",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 0.875 cup = 14 tbsp x densities tbsp=7 g = 98 g. GV/Athenos crumbled label row 70 cal / 5 P per 28 g. Board 7 of 7, cheapest Sam's $0.3033/oz."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 451.47, "protein_g": 29.85, "carbs_g": 6.08, "fat_g": 34.19 },
+    "recomputed_per_serving_from_food_db": { "calories": 443.0, "protein_g": 34.6, "carbs_g": 9.9, "fat_g": 29.6 },
+    "protein_gap_pct": 15.9,
+    "calorie_gap_pct": -1.9,
+    "verdict": "PASS AFTER RE-EXAMINATION, flagged loudly because +15.9% protein sits just past the ~15% tripwire. The re-examination the rule demands was done line by line: the main protein is NOT each-assumed - it is the source's own 3.5-cup cooked measure through the estate's standing 140 g/cup densities row (the same row chicken-bacon-ranch validated to 0.1% against ITS source) and the DB's 3:4 cooked-to-raw factor, and every other line is weight- or measure-anchored. Calories agree within 1.9%, which a wrong portion would not allow. The gap decomposes into named product-form differences, not portions: (1) our part-skim mozzarella row (23.6 P/100 g) vs their evident whole-milk basis, (2) our 1/3-fat cream cheese (disclosed substitution: +0.3 P, -3.5 F) vs their full-fat, (3) their calculator's lighter cooked-chicken cup (their 34.19 F with 29.85 P is the fattier-dairy signature; our fat runs 4.6 g lighter for the same reason). Direction is safe for the run's claims: if anything the card understates nothing - protein is computed from labels, and the calorie band verdict is identical on either side of every named difference.",
+    "band_check": "computed 443.0 cal in [400, 650] PASS (43 above the floor; the floor margin survives every named product-form difference - swapping in full-fat cream cheese would RAISE it to ~470); carbs 9.9 g <= 35 PASS. No optional lines."
+  },
+  "loud_flags": [
+    "Protein cross-check +15.9% is past the 15% tripwire; kept after the line-by-line re-examination documented in the cross-check verdict (portions measure-anchored, calories within 2%, gap fully attributed to disclosed product-form substitutions). If QA prefers, the single change that would close most of it is booking whole-milk mozzarella - but that row does not exist in the vocabulary and inventing it is forbidden.",
+    "All terms answered from the board on disk - recipe advances straight to 'priced'; no queue items, no registrar items.",
+    "densities follow-up (sanctioned route): Mozzarella Cheese cup=113 still missing from densities.json (second recipe in this run to need it)."
+  ],
+  "board_defects_observed": [],
+  "densities_followups": [
+    "Mozzarella Cheese: cup=113 (label 1/4 cup = 28 g class); flagged by turkey-zucchini-noodle-casserole first, re-hit here."
+  ]
+}

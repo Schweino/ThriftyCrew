@@ -1,0 +1,29 @@
+{
+  "name": "Braised Pork Shoulder with Fennel and Tomato",
+  "slug": "braised-pork-shoulder-fennel-tomato",
+  "protein": "pork",
+  "method": "braise (Dutch oven 375F; slow-cooker alt on source)",
+  "cuisine": "Italian-style",
+  "source_url": "https://www.carbmanager.com/recipe-detail/ug:e7fabfd2af844317a0ca32dd5fedccd9/keto-braised-pork-shoulder",
+  "source_servings": 4,
+  "src_cal": 622,
+  "src_carbs": 8,
+  "ingredients_verbatim": [
+    "Pork roast, shoulder, fresh, visible fat eaten - 28 ounces",
+    "Chicken broth, bouillon or consomme, homemade - 2 cups",
+    "Tomato paste - 1.5 tablespoon",
+    "Apple cider vinegar - 1 tablespoon",
+    "Thyme, dried - 1 teaspoon",
+    "Mustard - 1 teaspoon",
+    "Extra virgin olive oil - 1 tablespoon",
+    "Fennel bulb, raw - 1 each",
+    "Garlic - 1 clove",
+    "Red onion - 0.5 medium (2 1/2 inch diameter)"
+  ],
+  "src_protein_g": 49.8,
+  "src_fat_g": 42.5,
+  "src_carbs_exact": 7.7,
+  "unmapped": ["fennel bulb"],
+  "why": "Verified in-band (622 cal / 49.8g protein / 7.7g carbs published) whole-muscle pork shoulder braise, structurally low-carb (meat + fennel/onion + tomato paste, no starch). Distinct from the catalog's rice-bowl pork lineup. NOTE: source calorie is high because nutrition counts visible fat eaten (42.5g fat); a trimmed food-DB row should compute LOWER, moving it toward mid-band, so drift is favorable. Fennel is a good pricer-lane probe (likely no board home). Lower confidence on scaling: source servings not explicitly stated, estimated 4 from 28oz pork.",
+  "confidence": "medium - nutrition read directly from page, but user-submitted source, high-cal, servings inferred"
+}

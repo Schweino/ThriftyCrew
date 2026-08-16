@@ -1,0 +1,196 @@
+{
+  "slug": "low-carb-ground-beef-stroganoff-skillet",
+  "title": "Low Carb Beef Stroganoff (ground beef stroganoff)",
+  "source_url": "https://www.lowcarbmaven.com/low-carb-beef-stroganoff-ground-beef-stroganoff/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "beef",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-15",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "Serve-over base: the source's own section heading makes cabbage noodles and cauliflower rice EITHER/OR alternatives (extractor concern says do not sum both). House books CABBAGE as the primary (cheapest, 6 of 7 stores, existing map entry); cauliflower rice is recorded as the source's alternative, unpriced and excluded from macros to avoid double-counting."
+  ],
+  "ingredients": [
+    {
+      "source_raw": "1 pound ground beef, lean",
+      "item": "93/7 Ground Beef",
+      "bid": "93-7-ground-beef",
+      "board": "weekly",
+      "grams": 1588,
+      "buy": "3 1/2 lb lean (93/7)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by source WEIGHT, exact 3.5x. 'Lean' maps to the house 93/7 item and its label row (Member's Mark 170 cal/4 oz). bid from ingredient-map (93-7-ground-beef, weekly); NOTE the pricer's commodity index answers the term via an id spelled 'ground-beef-93-7' - same concept, two id spellings, see board_defects_observed. 6 of 7 stores, cheapest Sam's $6.07/lb."
+    },
+    {
+      "source_raw": "4 oz mushrooms, sliced",
+      "item": "White Mushrooms",
+      "bid": "mushrooms",
+      "board": "weekly",
+      "grams": 397,
+      "buy": "14 oz, sliced (about 5 2/3 cups)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "generic 'mushrooms' = white mushrooms, the commodity's own cells (no portobello stretch in either direction). densities cup sliced=70 g. Board 7 of 7, cheapest Sam's $0.1654/oz."
+    },
+    {
+      "source_raw": "1/4 cup onions, chopped or sliced (1 ounce)",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 101,
+      "buy": "3/4 cup plus 2 tbsp, chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 0.875 cup at densities 115 g/cup = 101 g; source's own '1 ounce' x 3.5 = 99 g agrees within rounding. Board 7 of 7."
+    },
+    {
+      "source_raw": "3 tbsp butter, divided",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "weekly",
+      "grams": 147,
+      "buy": "10 1/2 tbsp, divided",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 14 g/tbsp; exact 3.5x. Board 7 of 7."
+    },
+    {
+      "source_raw": "2 tbsp brandy",
+      "item": "Brandy",
+      "bid": null,
+      "board": null,
+      "grams": 97,
+      "buy": "7 tbsp (a bit under 1/2 cup)",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "item_id NULL with reason: price-ingredient answers ABSENT - no commodity, no board cell, no capture match. Hy-Vee (at least) sells spirits in Omaha, so absence-of-capture is the unresolved case, not a rejection: term ENQUEUED blocking, carriage is the pricer's ruling. Null = pantry-static pricing meanwhile. Listed non-optional by the source (deglaze), so it is not downgraded to optional. NEW food-DB row added (USDA 80-proof distilled spirits, 231 cal/100 g; 13.9 g/tbsp; no cook-off discount taken)."
+    },
+    {
+      "source_raw": "1 tbsp Worcestershire sauce",
+      "item": "Worcestershire Sauce",
+      "bid": "worcestershire",
+      "board": "weekly",
+      "grams": 60,
+      "buy": "3 1/2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 17 g/tbsp; 59.5 rounded 60. Board 6 of 7."
+    },
+    {
+      "source_raw": "1 tsp beef base (I like Better than Bouillon)",
+      "item": "Beef Base",
+      "bid": "bouillon",
+      "board": "weekly",
+      "grams": 21,
+      "buy": "3 1/2 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "The bouillon commodity's own include pattern /(?:chicken|beef|vegetable|ham)\\s+base\\b/ explicitly claims 'beef base', so this is the board's designed home for the concentrate class (NOT beef-broth - that is the diluted form, a form-flip). 6 of 7 stores, cheapest Sam's $0.1419/oz. NEW food-DB row added (Better Than Bouillon Roasted Beef Base, 1 tsp = 6 g, 15 cal) - row is flagged needs_verify because the panel could not be re-fetched from disk; macro-immaterial at under 4 cal/serving (Berbere spice-exempt precedent), CALLED OUT in the run report."
+    },
+    {
+      "source_raw": "2 oz Philadelphia Cream Cheese, softened",
+      "item": "Cream Cheese",
+      "bid": "cream-cheese",
+      "board": "weekly",
+      "grams": 198,
+      "buy": "7 oz (about 3/4 cup plus 2 tbsp), softened",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FULL-FAT brick cream cheese to the cream-cheese commodity and the full-fat USDA DB row added earlier in this run (chicken-bacon-ranch precedent) - NOT the 1/3 Fat Cream Cheese item, which would deflate a calorie-floor recipe. Exact 3.5x = 7 oz = 198 g. Board 7 of 7, cheapest Sam's $0.1381/oz."
+    },
+    {
+      "source_raw": "1 cup full fat sour cream",
+      "item": "Sour Cream",
+      "bid": "sour-cream",
+      "board": "weekly",
+      "grams": 805,
+      "buy": "3 1/2 cups full-fat",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FULL-FAT explicitly per the source line; NEW Sour Cream DB row (USDA full-fat cultured, 198 cal/100 g, cup = 230 g) added this batch - the Light Sour Cream row would understate 1593 of this dish's calories by ~29%. sour-cream commodity carries full-fat product; 7 of 7 stores, cheapest Walmart $0.1025/oz. Exact 3.5x."
+    },
+    {
+      "source_raw": "1-2 pinches grated nutmeg",
+      "item": "Ground Nutmeg",
+      "bid": "ground-nutmeg",
+      "board": "weekly",
+      "grams": 2.2,
+      "buy": "1 tsp, grated",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "source range 1-2 pinches read at 2 (x3.5 = 7 pinches ~ 2.1 g), quantized to the 1 tsp cook measure = 2.2 g (+4.8%). Board 5 of 7."
+    },
+    {
+      "source_raw": "1 tbsp chopped parsley",
+      "item": "Fresh Parsley",
+      "bid": "fresh-parsley",
+      "board": "weekly",
+      "grams": 13.3,
+      "buy": "3 1/2 tbsp, chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FRESH parsley (stirred in at the finish); the Dried Parsley item would be a form-flip. fresh-parsley commodity 3 of 7 stores, cheapest Hy-Vee $0.99/each. NEW food-DB row added this batch (USDA raw, tbsp chopped = 3.8 g)."
+    },
+    {
+      "source_raw": "salt and pepper to taste",
+      "item": "Salt and Pepper (to taste)",
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "to taste",
+      "optional": true,
+      "decision": "optional-pantry",
+      "notes": "Unmeasured to-taste line, optional per the source; zero grams booked, NOT enqueued."
+    },
+    {
+      "source_raw": "12 oz cabbage, cut into thin strips then fried in a pan until tender (8.3 g net carbs per serving with the cabbage)",
+      "item": "Green Cabbage",
+      "bid": "cabbage",
+      "board": "weekly",
+      "grams": 1191,
+      "buy": "2 5/8 lb, cut into thin strips (about 1 1/3 heads)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "chosen serve-over base, see ruled_substitutions. Exact 3.5x = 42 oz = 1191 g; head count from densities head=900 g. Board 6 of 7, cheapest Fareway $0.768/lb."
+    },
+    {
+      "source_raw": "12 oz cauliflower rice (raw weight), fried in a pan or steamed (7.87 g net carbs per serving with the cauliflower rice)",
+      "item": "Cauliflower Rice (alternative)",
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "alternative base: 2 5/8 lb cauliflower rice instead of the cabbage",
+      "optional": true,
+      "decision": "alternative-not-mapped",
+      "notes": "The source's either/or alternative to the cabbage base (extractor concern: pricing should not sum both). Excluded from grams, macros and pricing; recorded so the writer can mention the swap. Macro symmetry is tight anyway (source's own net carbs: 8.3 cabbage vs 7.87 cauliflower). NOT enqueued (optional alternative)."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Brandy (USDA 80-proof distilled spirits, per 100 g: 231 cal / 0 P / 0 C / 0 F; fl oz = 27.8 g)",
+    "Beef Base (Better Than Bouillon Roasted Beef Base, 1 tsp = 6 g: 15 cal / 1 P / 1 C / 0.5 F; needs_verify=true, panel not re-fetchable from disk, macro-immaterial at usage)",
+    "Sour Cream and Fresh Parsley rows shared with french-chicken-fricassee (listed there)"
+  ],
+  "pricing_terms_needed": [
+    { "term": "brandy", "blocking": true, "why": "stroganoff deglaze, 7 tbsp at 14 servings, listed non-optional by the source; no board cell or capture anywhere but Omaha grocers (Hy-Vee) do sell spirits - needs a real carriage/price verdict" }
+  ],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 466, "protein_g": 26.5, "carbs_g": 5.86, "fat_g": 36.6 },
+    "computed_per_serving": { "calories": 464.2, "protein_g": 28.7, "carbs_g": 11.1, "fat_g": 32.9 },
+    "protein_gap_pct": 8.3,
+    "calorie_gap_pct": -0.4,
+    "verdict": "PASS - protein +8.3%, calories within half a percent of the source's 466. Carbs 11.1 vs their 5.86 because theirs is a NET figure excluding the serve-over base (their own parenthetical says 8.3 g net WITH the cabbage); our 11.1 is gross carbs including the cabbage and stays ~24 g under the ceiling. Source's stated 21 mg sodium is plainly wrong for a dish with beef base and Worcestershire (extractor concern) but sodium is not a gated field.",
+    "band_check": "computed 464.2 cal in [400, 650] PASS; carbs 11.1 g <= 35 PASS"
+  },
+  "board_defects_observed": [
+    "Ground-beef id spelling split: ingredient-map routes 93/7 Ground Beef to '93-7-ground-beef' (weekly) while the pricer's commodity index resolves the term to 'ground-beef-93-7' (include /93\\s*\\/\\s*7/) - one concept, two id spellings across authorities; downstream pricing should confirm which id the feed prices before the spec stamps item_id."
+  ],
+  "densities_followups": [
+    "Brandy: no densities row; USDA fl oz = 27.8 g, tbsp = 13.9 g",
+    "Beef Base: no densities row; label tsp = 6 g (needs_verify with the DB row)"
+  ]
+}

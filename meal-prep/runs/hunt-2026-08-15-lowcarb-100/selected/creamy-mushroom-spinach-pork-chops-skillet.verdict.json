@@ -1,0 +1,23 @@
+{
+  "slug": "creamy-mushroom-spinach-pork-chops-skillet",
+  "name": "Creamy Mushroom and Spinach Pork Chops (Skillet)",
+  "protein": "pork",
+  "verdict": "DUPE",
+  "dupe_of": "creamy-mushroom-pork-chops-over-mashed-potatoes",
+  "fit_check": {
+    "calories": 465,
+    "carbs_g": 8,
+    "conditions_pass": true,
+    "note": "465 cal / 8g carb clears the 400-650 cal, <=35g carb, no-seafood, scalable band; rejected as a catalog duplicate, NOT on fit."
+  },
+  "reason": "Same dish as catalog creamy-mushroom-pork-chops-over-mashed-potatoes: pork chops seared and simmered in a WHITE heavy-cream mushroom sauce. Three-of-four identity axes match (protein=pork chop, sauce family=white heavy-cream + mushroom, method=skillet sear+simmer); the only differences are dropping the mashed-potato base and adding spinach + parmesan - formulation/side tweaks, not a different dinner. Notably the pool's mushroom-gravy-pork-chops-skillet was KEPT precisely because it is a BROWN broth gravy distinct from the catalog's white cream sauce; this candidate is the white-cream version, i.e. the exact sauce the catalog already carries, so that same distinction condemns it.",
+  "borderline": {
+    "flag": true,
+    "reason": "Genuine tension for audit: catalog entry is the high-carb over-mashed-potatoes plate, while this is a starchless low-carb take. If the decider explicitly wants a low-carb creamy-mushroom pork chop slot, this is the candidate to promote - but as a DISH it is the same white-cream mushroom pork chop, so ruling DUPE per 'only one survives.' Also adjacent to the pool's creamy-tuscan-pork-chops (cream + spinach + parmesan) - overlapping cream-sauce pork-chop cluster."
+  },
+  "cross_protein_collision": "White creamy-mushroom(-spinach) skillet is protein-swappable: same dish exists as chicken (catalog/pool creamy-mushroom-chicken and creamy-garlic-parmesan-mushroom-chicken variants) and turkey. Decider's cross-protein merge should watch the chicken lane for a creamy-mushroom-spinach twin.",
+  "unmapped_ingredients": [],
+  "source_url": "https://greenandketo.com/mushroom-gravy-recipe",
+  "ruled_by": "adjudicate-3",
+  "ruled_at": "2026-08-15"
+}

@@ -1,0 +1,96 @@
+{
+  "slug": "pulled-pork-stuffed-peppers",
+  "title": "Pulled Pork Stuffed Peppers",
+  "source_url": "https://www.lowcarbmaven.com/pulled-pork-stuffed-peppers/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "pork",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters, drift noted per line where it exceeds 5%. Serving anchor: source serving is 1/2 stuffed pepper; 14 servings = 7 peppers, 14 halves.",
+  "ruled_substitutions": [
+    { "source": "1 1/2 cups Gouda cheese (6 oz) (or use cheddar)", "ruling": "cheddar, taken from the page's OWN printed alternative '(or use cheddar)'. Gouda has no vocab row and no board commodity (vocab exit 3, nearest rows are different cheeses); the author sanctioned the swap in the ingredient line itself, so this is not a mapper guess. Macro delta gouda->cheddar is ~+3 cal/serving on labels." },
+    { "source": "1/3 cup Sugar-free BBQ sauce (or your favorite)", "ruling": "regular BBQ Sauce, taken from the page's OWN printed alternative '(or your favorite)' (the page note says the author used a prepackaged keto sauce 'for convenience, but you can make your own if you prefer'). Sugar-Free BBQ Sauce has no vocab row and no board commodity. The swap is honestly booked at the regular-sauce label: +10.2 g carbs/serving vs the source's sugar-free figure, moving our carbs to 17.4 g - still comfortably under the 35 g gate. NOT silently priced at sugar-free macros." },
+    { "source": "2 large Bell peppers (about 1 pound)", "ruling": "Green Bell Peppers: the page specifies no color anywhere (re-verified on the live page 2026-08-16), the unmarked US retail default for 'bell pepper' is green, and green is the base price class - booking red or yellow pricing for an unspecified pepper would be the variety-pricing stretch the standing rejections forbid, in the expensive direction. Noted for QA: a reader who buys red pays more than the card's estimate." }
+  ],
+  "registrar_rulings": [],
+  "ingredients": [
+    {
+      "source_raw": "2 large Bell peppers (about 1 pound)",
+      "item": "Green Bell Peppers",
+      "bid": "green-bell-pepper",
+      "board": "weekly",
+      "grams": 1587.6,
+      "buy": "7 bell peppers (about 3 1/2 lb), halved and seeded",
+      "optional": false,
+      "decision": "mapped-pending-price",
+      "notes": "WEIGHT-ANCHORED by the author's parenthetical (2 large = about 1 lb, i.e. 227 g each - bigger than the densities each=120 medium): 1 lb x 3.5 = 3.5 lb = 1587.6 g; printed weight and grams agree, pepper count kept at the serving anchor's 7. DB row 24 cal/119 g. green-bell-pepper commodity exists but STILL has no priced board cell (CAPTURE verdict, 8 candidates across 6 stores - same state philly-cheesesteak-stuffed-peppers found); term enqueued BLOCKING, queue dedupes onto the existing item. Halving/seeding step missing from source instructions is noted by extraction; the buy string restores it."
+    },
+    {
+      "source_raw": "12 oz Pulled pork, warmed (about 2 cups)",
+      "item": "Pork Shoulder",
+      "bid": "pork-shoulder",
+      "board": "weekly",
+      "grams": 2041.2,
+      "buy": "4 1/2 lb pork shoulder, cooked and pulled (about 8 1/2 cups; makes the 2 5/8 lb pulled pork the pot needs)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Standing canon maps 'pulled pork' -> Pork Shoulder. Source is COOKED weight (12 oz x 3.5 = 42 oz = 1190.7 g cooked, 8.5 cups at densities Pork Shoulder cup=140); converted to RAW purchase at a 60% pulled yield -> 1984.7 g raw, quantized 4 1/2 lb = 2041.2 g (+2.8%), and grams book the RAW weight against the raw USDA lean-and-fat DB row (186 cal / 17.4 P per 100 g) so cost and macros share one basis (chicken-bacon-ranch precedent). The 60% yield is VALIDATED by the source's own label, not assumed: at 60% recomputed protein lands +6.6% of their published 33.4 g; at 70% it lands -8%, at 50% it breaches +16.5%. Sensitivity across 50-70% spans 460-560 cal/serving - every reading inside the band, so the yield choice is not band-deciding. Board 7 of 7, cheapest Sam's $1.94/lb."
+    },
+    {
+      "source_raw": "1 1/2 cups Gouda cheese (6 oz) (or use cheddar)",
+      "item": "Cheddar Cheese",
+      "bid": "cheddar-cheese",
+      "board": "weekly",
+      "grams": 595.4,
+      "buy": "5 1/4 cups shredded cheddar (21 oz)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "printed alternative taken (see ruled_substitutions). WEIGHT-ANCHORED by the source's own parenthetical (6 oz): 21 oz = 595.4 g; cups follow at the label 1/4 cup = 28 g (5.25 cups). DB row 'Cheddar Cheese, Shredded' (GV label 110 cal / 6 P per 28 g). bid from the vocab row (cheddar-cheese); note the TERM resolver answers via the shredded-cheese commodity instead (include pattern), 7 of 7, cheapest Sam's $0.1521/oz - same resolver-vs-map split turkey-zucchini-noodle-casserole recorded for mozzarella."
+    },
+    {
+      "source_raw": "1/3 cup Sugar-free BBQ sauce (or your favorite)",
+      "item": "BBQ Sauce",
+      "bid": "bbq-sauce",
+      "board": "weekly",
+      "grams": 356.25,
+      "buy": "1 1/4 cups BBQ sauce",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "printed alternative taken (see ruled_substitutions). Exact 1.17 cups quantized to 1 1/4 cups (+7.1% drift, noted) x densities cup=285 g = 356.25 g. Booked at the regular-sauce USDA row (172 cal / 40 C per 100 g) - the carb cost of the swap is taken honestly, not hidden. Board 7 of 7, cheapest Sam's $0.07/oz."
+    },
+    {
+      "source_raw": "2 tbsp Cilantro, chopped",
+      "item": "Fresh Cilantro",
+      "bid": "cilantro",
+      "board": "weekly",
+      "grams": 7,
+      "buy": "7 tbsp chopped fresh cilantro",
+      "optional": true,
+      "decision": "mapped",
+      "notes": "OPTIONAL garnish (extraction marked it optional; 'Garnish with cilantro' step). Exact 7 tbsp x densities tbsp=1 g = 7 g, ~0 macro. Board 5 of 7, cheapest Aldi $0.89/each. Not enqueued as blocking anywhere; answers from disk anyway."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [
+    { "term": "green bell pepper", "blocking": true, "why": "the vessel of the dish, 7 peppers / 3.5 lb; commodity id exists but has NO priced board cell (CAPTURE verdict, 8 candidates across 6 stores); queue dedupes onto the existing philly-cheesesteak-stuffed-peppers item" }
+  ],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 426, "protein_g": 33.4, "carbs_g": 7, "fat_g": 30 },
+    "recomputed_per_serving_from_food_db": { "calories": 504.9, "protein_g": 35.6, "carbs_g": 17.4, "fat_g": 32.1 },
+    "protein_gap_pct": 6.6,
+    "calorie_gap_pct": 18.5,
+    "verdict": "PASS on the protein instrument (+6.6%), which also validates the pulled-pork 60% cooked-to-raw yield (see the pork line). The calorie and carb gaps are fully accounted for by two DISCLOSED substitutions, both in the honest direction: regular BBQ sauce for the author's keto sugar-free sauce (+10.2 g carbs, ~+41 cal/serving - the entire 7 -> 17.4 carb move) and raw-basis lean-and-fat pork vs their cooked-basis figure (the flank-steak precedent gap direction). Neither is a portion error; portions are weight-anchored on all three macro-bearing lines (1 lb peppers, 12 oz pork, 6 oz cheese).",
+    "band_check": "computed 504.9 cal in [400, 650] PASS; carbs 17.4 g <= 35 PASS. Optional cilantro adds ~0.1 cal/serving."
+  },
+  "loud_flags": [
+    "Recipe parks in 'pricing' on the single green-bell-pepper term - the same unpriced-commodity state philly-cheesesteak-stuffed-peppers hit; one pricer ruling clears both recipes.",
+    "Bell pepper color is UNSPECIFIED by the source (page re-checked); booked green as the base variety per the ruling. If QA or the writer prefers 'any color' phrasing on the card, the cost estimate stays green-based.",
+    "Published card carbs will read ~17 g, not the source's 7 g, because we book regular BBQ sauce off the page's '(or your favorite)'; do not copy the source's 5-net-carb claim onto the card."
+  ],
+  "board_defects_observed": [],
+  "densities_followups": []
+}

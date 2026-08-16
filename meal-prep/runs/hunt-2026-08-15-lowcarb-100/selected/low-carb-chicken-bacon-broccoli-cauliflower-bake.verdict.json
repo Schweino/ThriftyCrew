@@ -1,0 +1,16 @@
+{
+  "slug": "low-carb-chicken-bacon-broccoli-cauliflower-bake",
+  "name": "Low-Carb Chicken, Bacon and Broccoli Cauliflower Bake",
+  "protein": "chicken",
+  "verdict": "DUPE",
+  "dupe_of": "chicken-bacon-ranch-cauliflower-bake",
+  "fit": {
+    "calories": 457,
+    "carbs_g": 6,
+    "within_band": true,
+    "note": "Macros FIT (457 cal in-band, 6g carbs under ceiling, no seafood, scales to 14) - the cut is on duplication, not fitness."
+  },
+  "dupe_evidence": "Near-duplicate of the already-accepted chicken-bacon-ranch-cauliflower-bake (accepted-slugs.json): both are chicken + bacon + cauliflower + cheddar low-carb oven bakes - the same 'chicken bacon ... cauliflower bake' spine names both dishes. Shared attributes are protein (chicken), second protein (bacon), starch-replacement base (cauliflower), cheese (cheddar), and method (oven bake). The differences - adding broccoli and binding with eggs/cheddar instead of ranch-cream - are a variant tweak, not a different dinner.",
+  "borderline_flag": "BORDERLINE dupe, not a slam-dunk: the egg-custard binding makes this a crustless-frittata-style bake (closer to the accepted crustless-bacon-gruyere-quiche in format), and the broccoli broadens the veg base. If the decider/audit wants the egg-bound chicken-broccoli take as a distinct plate, this could be promoted; I cut it because bacon + cauliflower + cheddar chicken bake is the whole identity and that slice is already saturated this run (bacon-ranch and jalapeno-popper-chicken cauliflower bakes both accepted).",
+  "cross_protein_collision": "If kept, would collide with any turkey or sausage broccoli-cauliflower cheddar egg bake - the pool already holds keto-turkey-broccoli-cheddar-casserole, keto-sausage-broccoli-egg-casserole, sausage-broccoli-cheddar-egg-bake, and broccoli-cheddar-sausage-egg-bake, all the same crustless cheesy broccoli/cauliflower egg-bake structure across proteins. The decider should ensure only a minimal set of these cheesy egg-bound veg bakes survives the cross-protein merge."
+}

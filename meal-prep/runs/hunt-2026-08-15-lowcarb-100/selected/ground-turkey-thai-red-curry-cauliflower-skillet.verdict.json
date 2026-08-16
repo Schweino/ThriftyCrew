@@ -1,0 +1,25 @@
+{
+  "slug": "ground-turkey-thai-red-curry-cauliflower-skillet",
+  "name": "One-Pan Ground Turkey Thai Red Curry with Cauliflower Rice",
+  "protein": "turkey",
+  "cuisine": "Thai",
+  "verdict": "DUPE",
+  "dupe_of": "oneskillet-ground-turkey-thai-curry-with-rice",
+  "fit": {
+    "calories": 407,
+    "carbs_g": 13,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "seafood": false,
+    "scalable_to_14": true,
+    "note": "Numbers CLEAR the gate (407 cal near the floor but inside 400-650, 13 g carb well under 35, no seafood, brown-and-simmer skillet scales ~2.3x to 14). Fit is not the reason for the cut - the dupe is."
+  },
+  "dupe_evidence": "Live catalog already carries 'oneskillet-ground-turkey-thai-curry-with-rice' (items: 93-7-ground-turkey, coconut-milk-canned, chicken-broth, zucchini, fish-sauce, soy-sauce, carrots, rice). On the 4-axis test this candidate matches THREE: protein (ground turkey = ground turkey), sauce/flavor family (Thai coconut curry = Thai coconut curry), method (one-skillet brown-and-simmer = one-skillet). The ONLY differing axis is the starch base - cauliflower rice vs rice - plus a minor veg swap (adds red bell pepper, drops carrots; both keep zucchini and coconut milk). A rice->cauliflower-rice base swap on an otherwise identical ground-turkey Thai coconut curry skillet is a low-carb reskin of a dish the catalog already owns, not a genuinely distinct dinner; shipping both puts two near-identical ground-turkey Thai curries side by side.",
+  "borderline": true,
+  "borderline_reason": "Flagged for the audit/decider rather than silently killed. Rescue-to-KEEP argument exists and is honest: the catalog's only ground-turkey Thai curry is the WITH-RICE (high-carb) build, which cannot serve a <=35 g low-carb run, so a cauliflower-rice version arguably fills a low-carb slot the catalog lacks (this run has been rescuing cauliflower-for-starch swaps on that logic, e.g. baked-cauliflower-mac-smoked-sausage). I still rule DUPE because, unlike those rescues, here ONLY the starch differs - protein, sauce, and method are all identical - which is a materially stronger overlap than the mac case (where protein also differed). Decider owns the final call.",
+  "cross_protein_collisions": [
+    "Ground-turkey Thai red curry over cauliflower rice is a protein-agnostic chassis. A ground-beef or ground-chicken 'Thai red curry cauliflower skillet' in another selector's pool would be the same dish minus the protein - decider should scan beef/chicken pools.",
+    "Same-run Thai-coconut-curry twin already in verdicts: thai-coconut-curry-pork-shoulder (pork). Catalog also holds thai-coconut-curry-turkey-meatballs (turkey, meatball format + rice), thai-red-curry-chicken-rice-bowls, thai-green-curry-chicken, panang-chicken-curry, massaman-chicken-curry - the Thai-coconut-curry flavor family is already well represented across proteins; decider should weigh saturation, not just the single with-rice twin."
+  ],
+  "accepted_slugs_checked": "Read fresh at ruling time (13 slugs); none is a Thai/turkey curry - no conflict there, the dupe is against the live catalog digest."
+}

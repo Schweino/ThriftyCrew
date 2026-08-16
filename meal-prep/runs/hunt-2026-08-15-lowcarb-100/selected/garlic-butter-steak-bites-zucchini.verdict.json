@@ -1,0 +1,15 @@
+{
+  "slug": "garlic-butter-steak-bites-zucchini",
+  "name": "Garlic Butter Steak Bites and Zucchini",
+  "protein": "beef",
+  "lane": "beef-roast",
+  "verdict": "KEEP",
+  "condition_fit": "FIT",
+  "condition_evidence": "563 cal / 9g carb / 53g protein per serving - inside 400-650 cal and well under the 35g carb ceiling; no seafood; whole-muscle sirloin seared in a skillet, scales to 14 by weigh-and-divide batching.",
+  "dupe_of": null,
+  "dupe_evidence": "Not a catalog duplicate. Nearest beef neighbor 'honey-garlic-steak-bites-potatoes' shares cut (steak bites) and method (skillet) = 2 of 4, but differs on sauce family (savory garlic-butter vs sweet honey-garlic glaze) and on starch/veg (non-starchy zucchini, no starch base vs potatoes) - the two low-carb-vs-starchy plates read as different dinners. No garlic-butter steak-and-zucchini dish exists in the 544-recipe catalog.",
+  "cross_protein_collision_watch": "Structure is 'seared protein cubes + non-starchy veg in garlic butter, no starch.' A garlic-butter chicken-bites-and-zucchini or garlic-butter pork-bites version in another selector's pool would be the same plate the decider should watch for; shrimp version is out of scope (seafood).",
+  "pool_collision_watch": "No collision found among beef verdicts written so far (checked flank-steak-parmesan-green-beans and the steak-bites-potatoes catalog entry) - distinct on the garlic-butter/zucchini combination.",
+  "unmapped_note": "Carries unmapped avocado-oil and fresh-parsley; per v2.1 5.1 a wanted pricer-lane signal, not a penalty. Sirloin/zucchini/garlic/butter/lemon all board-resident.",
+  "borderline": false
+}

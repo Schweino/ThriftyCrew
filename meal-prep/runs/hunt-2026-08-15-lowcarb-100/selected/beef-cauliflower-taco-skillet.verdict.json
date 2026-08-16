@@ -1,0 +1,16 @@
+{
+  "slug": "beef-cauliflower-taco-skillet",
+  "name": "Beef and Cauliflower Taco Skillet",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 464,
+    "carbs_g": 34,
+    "within_band": true,
+    "note": "464 cal is inside 400-650; 34g carbs clears the 35g ceiling with 1g margin on the source's published numbers; no seafood; skillet scales to 14 servings. FIT on published macros."
+  },
+  "dupe_evidence": "Not a duplicate. Closest catalog neighbors are loaded-beef-taco-skillet-bowls and tex-mex-beef-rice-skillet-bowls, but both are rice-based taco/Tex-Mex ground-beef skillets; this dish swaps the starch for riced cauliflower, which is the distinguishing low-carb plate the catalog lacks (no beef recipe among 138 uses cauliflower). Shares protein+flavor+method with loaded-beef-taco-skillet-bowls (3 of 4) but the starch swap genuinely distinguishes it for a low-carb run.",
+  "borderline_flag": "Adjacent to loaded-beef-taco-skillet-bowls on protein+Tex-Mex flavor+skillet method; kept because the cauliflower-rice starch is the deliberate low-carb differentiator this run targets. Also carries a thin macro margin (34/35g carbs, 24g protein just under the catalog 25g identity) - a label-accurate recompute could push carbs over, worth the decider's eye.",
+  "cross_protein_collision": "Would be structurally the same dish as a ground-turkey or ground-chicken cauliflower taco skillet (same riced-cauliflower + taco-seasoning + beans/cheese/avocado build). If another selector's pool holds a turkey/chicken cauliflower taco skillet, only one such plate should survive the cross-protein merge.",
+  "unmapped_note": "Carries 'diced tomatoes with green chiles' as a near-map to board diced-tomatoes; per v2.1 5.1 not penalised - wanted for the pricer lane."
+}

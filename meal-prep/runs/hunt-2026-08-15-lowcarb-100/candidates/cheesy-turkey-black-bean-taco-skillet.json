@@ -1,0 +1,27 @@
+{
+  "name": "Cheesy Turkey and Black Bean Taco Skillet",
+  "slug": "cheesy-turkey-black-bean-taco-skillet",
+  "protein": "turkey",
+  "method": "skillet",
+  "cuisine": "Tex-Mex",
+  "source_url": "https://thecozycook.com/turkey-taco-lettuce-wraps/",
+  "source_servings": 4,
+  "src_cal": 521,
+  "src_carbs": 32,
+  "src_protein": 48,
+  "ingredients_verbatim": [
+    "1 lb. ground turkey",
+    "3/4 cup chicken broth (can substitute water)",
+    "2 Tablespoons Taco Seasoning",
+    "15 oz. black beans, drained and rinsed",
+    "2 Roma tomatoes, diced",
+    "1/2 cup red onion, diced",
+    "1/2 cup Sour Cream",
+    "1 1/2 cups Cheese, shredded",
+    "8 romaine lettuce leaves",
+    "Fresh Cilantro, roughly chopped, for garnish"
+  ],
+  "unmapped": [],
+  "why": "Ground turkey stovetop taco filling (browned turkey simmered with broth, taco seasoning, black beans, tomato, onion, then finished with shredded cheese + sour cream) served in romaine leaves. Published nutrition 521 cal / 48g protein / 32g carbs clears the 400-650 band and stays under the 35g carb ceiling. Every ingredient maps to the board (ground-turkey, chicken-broth, taco-seasoning, canned-black-beans, tomatoes, red-onion, sour-cream, shredded-cheese, lettuce, cilantro). Cheese + sour cream are the calorie drivers that lift it above the 400 floor where plain turkey-veg skillets (~230 cal) fall short. Scales cleanly to 14 via weigh-and-divide of the skillet filling.",
+  "confidence": "verified from source page nutrition; two caveats: (1) 32g carbs sits near the ceiling and our label-accurate recompute could nudge it over 35 (black beans are the carb driver); (2) DEDUP RISK - concept overlaps low-carb-turkey-taco-skillet and ground-turkey-taco-stuffed-peppers, but this version is differentiated by black beans + cheese/sour-cream finish and the lettuce-wrap format. Selector should weigh both."
+}

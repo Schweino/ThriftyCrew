@@ -1,0 +1,24 @@
+{
+  "slug": "chicken-philly-cheesesteak-casserole",
+  "name": "Chicken Philly Cheesesteak Casserole",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "cal": 403,
+    "carbs_g": 4.5,
+    "band": "400-650 cal / <=35g carb",
+    "pass": true,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "403 cal clears the 400 floor; calorie-dense build (mayo + sour cream + 8oz provolone over 6 cups chicken) so label rows are more likely to compute above 403 than below. 4.5g carb sits deep under the 35g ceiling."
+  },
+  "dupe_check": {
+    "catalog_result": "not a duplicate",
+    "evidence": "Only Philly item in the catalog is 'philly-cheesesteak-skillet-bowls' (Ground Beef Philly Cheesesteak Bowls) - BEEF protein, rice starch, skillet method; shares only the onion+provolone flavor family (1 of 4 axes). This is whole-muscle shredded chicken, no starch base, oven-bake bound in mayo/sour-cream/provolone cream. Chicken casseroles in catalog (cordon-bleu, divan, pot-pie, hunters-bbq, loaded-potato, poppy-seed-rice) are all different flavor builds.",
+    "accepted_slugs_result": "not a duplicate",
+    "accepted_evidence": "accepted-slugs carries 'philly-cheesesteak-stuffed-peppers' (BEEF, stuffed-pepper vessel) and two chicken casseroles 'jalapeno-popper-chicken-casserole' + 'hatch-green-chile-chicken-casserole' - none is a chicken philly / onion-provolone cream bake."
+  },
+  "cross_protein_watch": "Structurally this is the chicken version of the catalog's ground-beef Philly bowls and the accepted beef Philly stuffed peppers - same onion+provolone cheesesteak flavor family. Decider should watch for a TURKEY or GROUND-CHICKEN 'philly cheesesteak' casserole/bake in another selector's pool, which would be a same-dish twin. Also flag any 'chicken cheesesteak bake' variant regardless of protein string.",
+  "unmapped_note": "Carries provolone-cheese flag (catalog provolone appears only in the beef philly bowls); left unmapped deliberately per v2.1 5.1 to exercise the pricer lane - not penalized.",
+  "confidence": "high"
+}

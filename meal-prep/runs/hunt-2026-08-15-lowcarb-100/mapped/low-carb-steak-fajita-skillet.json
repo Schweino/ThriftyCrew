@@ -1,0 +1,159 @@
+{
+  "slug": "low-carb-steak-fajita-skillet",
+  "title": "Low Carb Steak Fajita Skillet",
+  "source_url": "https://domesticallycreative.com/low-carb-steak-fajita-skillet/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "beef",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "'2 lbs skirt or flank steak' maps to the estate's Beef Flank/Sirloin Steak item -> sirloin-steak board id: this is the ingredient-map's OWN entry (Beef Flank/Sirloin Steak -> sirloin-steak, weekly) and the in-run flank-steak-parmesan-green-beans precedent, not a fresh stretch. The bare terms 'flank steak' (CAPTURE, 1 candidate) and 'skirt steak' (ABSENT) have no commodity of their own; sirloin-steak is priced 7 of 7 at the same whole-steak price class and the DB row is the USDA lean flank/top-sirloin record, so macros and price describe the same product concept."
+  ],
+  "registrar_rulings": [],
+  "ingredients": [
+    {
+      "source_raw": "2 tbsp butter divided",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "weekly",
+      "grams": 98,
+      "buy": "7 tbsp, divided",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 7 tbsp x densities 14 g/tbsp = 98 g. Board 7 of 7, cheapest Sam's $2.555/lb."
+    },
+    {
+      "source_raw": "1/2 cup red pepper sliced into strips",
+      "item": "Red Bell Pepper",
+      "bid": "red-bell-pepper",
+      "board": "recipe",
+      "grams": 161,
+      "buy": "1 3/4 cups sliced into strips (about 1 1/2 peppers)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 1.75 cups x densities 92 g/cup = 161 g. Own variety id per the standing green-is-not-red rejection; board (recipe) 6 of 7, cheapest Sam's $0.83/each. DB row USDA 31 cal/100 g."
+    },
+    {
+      "source_raw": "1/2 cup green pepper sliced into strips",
+      "item": "Green Bell Peppers",
+      "bid": "green-bell-pepper",
+      "board": "weekly",
+      "grams": 161,
+      "buy": "1 3/4 cups sliced into strips (about 1 1/2 peppers)",
+      "optional": false,
+      "decision": "mapped-pending-price",
+      "notes": "exact 3.5x = 1.75 cups x 92 g/cup = 161 g. The green-bell-pepper id exists (ingredient-map entry) but price-ingredient still returns CAPTURE: commodity exists with NO priced board cell, 8 capture candidates across 6 stores. Same situation philly-cheesesteak-stuffed-peppers hit; the queue already carries the term with a pricer verdict of CARRIED, so this should clear fast. Term enqueued BLOCKING for this recipe. Deliberately NOT red-bell-pepper and NOT the mixed bell-peppers id (variety-pricing standing rejections)."
+    },
+    {
+      "source_raw": "1/2 cup yellow pepper sliced into strips",
+      "item": "Yellow Bell Pepper",
+      "bid": "bell-peppers",
+      "board": "weekly",
+      "grams": 161,
+      "buy": "1 3/4 cups sliced into strips (about 1 1/2 peppers)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 1.75 cups x 92 g/cup = 161 g. Yellow maps to the mixed bell-peppers commodity per the in-run hatch-green-chile precedent (its include /bell\\s+peppers?/ claims the term; multi-color pepper price class covers yellow, unlike green). Board 6 of 7, cheapest Fareway $0.77/each. DB row Yellow Bell Pepper (USDA 27 cal/100 g, added by hatch)."
+    },
+    {
+      "source_raw": "1/2 cup red onion sliced into strips",
+      "item": "Red Onion",
+      "bid": "red-onion",
+      "board": "weekly",
+      "grams": 201,
+      "buy": "1 3/4 cups sliced into strips (about 1 large)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 1.75 cups x densities 115 g/cup = 201 g. Own red-onion id per the standing red-onion-is-not-onions rejection; board 5 of 7, cheapest Aldi $1.095/lb. DB row 44 cal/110 g."
+    },
+    {
+      "source_raw": "1 tsp minced garlic",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 9.8,
+      "buy": "3 1/2 tsp minced (about 3 cloves)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 3.5 tsp x densities 2.8 g/tsp = 9.8 g. Board 5 of 7, cheapest Baker's $0.498/each."
+    },
+    {
+      "source_raw": "2 lbs skirt or flank steak sliced into thin pieces",
+      "item": "Beef Flank/Sirloin Steak",
+      "bid": "sirloin-steak",
+      "board": "weekly",
+      "grams": 3175,
+      "buy": "7 lb, sliced into thin strips",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by explicit source WEIGHT (2 lbs), exact 3.5x = 7 lb = 3175 g; printed weight and grams agree. bid via the ingredient-map's Beef Flank/Sirloin Steak entry + in-run flank-steak-parmesan precedent (see ruled_substitutions). Board 7 of 7, cheapest Family Fare $5.49/lb. DB row USDA lean raw flank/top-sirloin 155 cal / 22 P per 100 g - validated below by the protein cross-check landing +0.8% of the source's label."
+    },
+    {
+      "source_raw": "2 tbsp fajita seasoning",
+      "item": "Fajita Seasoning",
+      "bid": "fajita-seasoning",
+      "board": "recipe",
+      "grams": 56,
+      "buy": "7 tbsp (about 1 1/2 packets)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 7 tbsp x densities 8 g/tbsp = 56 g (56/35 g packet = 1.6 packets; the DB row's own warning about not confusing packets with tbsp heeded). Board (recipe) 4 of 7, cheapest Walmart $0.64/each. Label row Taco Bell 25 cal/tbsp."
+    },
+    {
+      "source_raw": "1 cup shredded cheese",
+      "item": "Mexican Cheese Blend",
+      "bid": "shredded-cheese",
+      "board": "weekly",
+      "grams": 396,
+      "buy": "3 1/2 cups shredded",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Generic 'shredded cheese' in a fajita dish = the house Mexican blend, the ingredient-map's own Mexican Cheese Blend -> shredded-cheese entry. exact 3.5x = 3.5 cups x densities 113 g/cup = 395.5 -> 396 g. Board 7 of 7, cheapest Sam's $0.1521/oz. GV label 110 cal/28 g."
+    },
+    {
+      "source_raw": "4 tbsp guacamole for topping",
+      "item": "Guacamole (optional topping)",
+      "bid": null,
+      "board": null,
+      "grams": 210,
+      "buy": "14 tbsp, for topping (optional)",
+      "optional": true,
+      "decision": "optional-null",
+      "notes": "OPTIONAL topping, excluded from the band macros. bid null: price-ingredient returns CAPTURE - no commodity claims the term, 25 candidate products across 3 stores in today's captures, so carriage is plausible but unruled; term enqueued OPTIONAL (never blocking). grams at ~15 g/tbsp (no densities row - FLAGGED). NO food-DB row added: no verifiable label on disk and rule 2 says flag, not invent; if counted the topping adds roughly +23 cal / +2 g fat per serving on an avocado-class basis (approximation, not booked)."
+    },
+    {
+      "source_raw": "4 tbsp sour cream for topping",
+      "item": "Sour Cream (optional topping)",
+      "bid": "sour-cream",
+      "board": "weekly",
+      "grams": 168,
+      "buy": "14 tbsp (a bit under 1 cup), for topping (optional)",
+      "optional": true,
+      "decision": "mapped-optional",
+      "notes": "OPTIONAL topping, excluded from the band macros; mapped so cost can include it if the card counts toppings. exact 3.5x = 14 tbsp x USDA 12 g/tbsp = 168 g. FULL-FAT Sour Cream row (198 cal/100 g, this run's addition); board 7 of 7, cheapest Walmart $0.1025/oz. If counted: +23.8 cal per serving."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [
+    { "term": "green bell pepper", "blocking": true, "why": "one of the three fajita peppers, 161 g; commodity id exists but has NO priced board cell (CAPTURE verdict, 8 capture candidates across 6 stores); queue already holds a CARRIED pricer verdict for the term from philly-cheesesteak-stuffed-peppers" },
+    { "term": "guacamole", "blocking": false, "why": "optional topping, 14 tbsp; no commodity claims the term (CAPTURE, 25 candidates across 3 stores); optional lines are never enqueued blocking" }
+  ],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 517, "protein_g": 56, "carbs_g": 7, "fat_g": 28 },
+    "recomputed_per_serving_from_food_db": { "calories": 540.9, "protein_g": 56.5, "carbs_g": 7.0, "fat_g": 30.0 },
+    "protein_gap_pct": 0.8,
+    "calorie_gap_pct": 4.6,
+    "verdict": "PASS - protein +0.8% and calories +4.6%, an unusually clean match. The main protein is weight-anchored by the source (2 lbs stated), so no each-weight assumption exists to audit. Carbs agree exactly at 7 g. The small calorie/fat surplus is the whole-milk cheese blend and USDA steak record vs whatever their calculator used; immaterial.",
+    "band_check": "computed 540.9 cal in [400, 650] PASS; carbs 7.0 g <= 35 PASS. Optional toppings (guacamole + sour cream) excluded; if the card counts them they add roughly +47 cal / +6 g fat / +2 g carbs per serving: ~588 cal, still PASS both."
+  },
+  "loud_flags": [
+    "green bell pepper again has no priced board cell (the philly situation, unresolved on today's board) - recipe parks in 'pricing' on that one term; the queue's existing CARRIED verdict means the pricer should clear it quickly.",
+    "densities.json follow-up (sanctioned route, not edited by this run): Guacamole tbsp=15."
+  ],
+  "board_defects_observed": []
+}

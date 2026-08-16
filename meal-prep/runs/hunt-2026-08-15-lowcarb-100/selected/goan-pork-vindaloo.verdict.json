@@ -1,0 +1,18 @@
+{
+  "slug": "goan-pork-vindaloo",
+  "name": "Goan Pork Vindaloo",
+  "protein": "pork",
+  "verdict": "DUPE",
+  "dupe_of": "goan-pork-vindaloo-rice-bowls",
+  "reason": "Live catalog already ships 'Goan Pork Vindaloo Rice Bowls' (slug goan-pork-vindaloo-rice-bowls) - identical dish: same protein (pork shoulder), same sauce/flavor family (Goan vindaloo vinegar-chili-spice braise), same method (braise); the only difference is the catalog plates it over rice, which does not make it a different dinner.",
+  "fit": {
+    "passes_conditions": true,
+    "note": "Source numbers 631 cal / 7g carb clear the 400-650 cal and <=35g carb band, no seafood, braise scales to 14 - so it is condition-fit, but killed as a catalog duplicate regardless."
+  },
+  "cross_protein_collisions": [],
+  "checked_against": {
+    "catalog_digest": "544 recipes",
+    "accepted_slugs_read_fresh": true,
+    "accepted_slugs_had_vindaloo": false
+  }
+}

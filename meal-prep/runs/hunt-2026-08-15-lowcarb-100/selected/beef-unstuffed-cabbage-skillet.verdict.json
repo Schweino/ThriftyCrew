@@ -1,0 +1,19 @@
+{
+  "slug": "beef-unstuffed-cabbage-skillet",
+  "name": "Unstuffed Cabbage Roll Skillet (Ground Beef)",
+  "protein": "beef",
+  "verdict": "DUPE",
+  "dupe_of": "unstuffed-cabbage-roll-bowls",
+  "reason": "Same dish as catalog's 'Unstuffed Cabbage Roll Bowls' (93-7-ground-beef + cabbage + tomatoes + onions): identical deconstructed-cabbage-roll identity, same protein, same tomato flavor family, same core vegetable; the only differences are dropping the rice for low-carb and adding cheddar-jack, which are formulation tweaks, not a different dinner. Name is near-identical too (Skillet vs Bowls).",
+  "fit_check": {
+    "calories": 453,
+    "carbs": 13,
+    "conditions_pass": true,
+    "note": "Numbers clear the 400-650 cal / <=35g carb / no-seafood / scalable band; rejected solely as a catalog duplicate, not on fit."
+  },
+  "cross_protein_collision_note": "If any selector's pool carries a turkey (or pork) unstuffed-cabbage-roll / cabbage-roll skillet, it is the structurally same dish as this and as catalog's turkey-cabbage-roll-soup family; flag for the cross-protein merge pass.",
+  "checked_against": {
+    "accepted_slugs_read": true,
+    "catalog_digest": "544 recipes; searched all cabbage dishes across proteins"
+  }
+}

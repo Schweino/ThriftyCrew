@@ -1,0 +1,24 @@
+{
+  "slug": "balsamic-sirloin-steak-sheet-pan",
+  "name": "Balsamic Sirloin Steak & Veggie Sheet Pan",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "cal_per_serving": 412,
+    "carbs_per_serving": 18,
+    "in_band": true,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "412 cal clears the 400 floor (thin margin - label-accurate macros could dip; extract lane should watch this) and 18g carb is well under the 35g ceiling. Sirloin strips + non-starchy roasted veg on a sheet pan scales to 14 by tray count / weigh-and-divide."
+  },
+  "dupe_of": null,
+  "evidence": "Not a catalog dupe: the only balsamic beef entry is balsamic-beef-pot-roast-bowls (beef-CHUCK-roast, slow-cooker braise, over RICE) - different cut, method, and starch. Sharing the balsamic anchor alone does not make the same dinner (goulash/paprikash principle); this is a sheet-pan roast of sirloin strips + broccoli/bell-peppers/red-onion with a balsamic-soy-worcestershire-honey-dijon glaze, only 2-of-4 matching (beef + balsamic; method, cut, starch, veg all differ). Also distinct from honey-garlic-steak-bites-potatoes (honey-soy + potatoes) and steak-fajita bowls (Tex-Mex peppers over rice).",
+  "pool_note": "Only other sheet-pan steak in the pool is chimichurri-steak-sheet-pan - different sauce family (chimichurri herb-oil vs balsamic glaze) and different veg (sweet potato/broccolini vs broccoli/peppers/onion), so a distinct dinner, not a pool dupe.",
+  "cross_protein_collision_flags": [
+    "Balsamic protein + roasted veg sheet pan is a highly portable format: a balsamic chicken sheet pan or balsamic pork sheet pan in another selector's pool would be structurally the same dish on a different protein - flag for cross-protein merge.",
+    "The generic 'sheet-pan steak & veggies' format could also collide with another beef sheet-pan candidate carrying a different glaze; decider should ensure sauce family differs before shipping two."
+  ],
+  "cuisine": "American",
+  "widens_catalog": false,
+  "unmapped_note": "unmapped=[] per candidate; all items map (sirloin-steak, balsamic-vinegar, soy-sauce, worcestershire, honey, dijon-mustard, broccoli, bell-peppers, red-onion)."
+}

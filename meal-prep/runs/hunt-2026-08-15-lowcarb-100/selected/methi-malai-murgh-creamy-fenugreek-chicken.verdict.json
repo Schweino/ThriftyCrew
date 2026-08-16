@@ -1,0 +1,17 @@
+{
+  "slug": "methi-malai-murgh-creamy-fenugreek-chicken",
+  "name": "Methi Malai Murgh (Creamy Fenugreek Chicken)",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "band_fit": {
+    "calories": 418,
+    "carbs_g": 11.6,
+    "in_band": true,
+    "note": "418 cal within 400-650; 11.6g carbs within 35g cap; no seafood; scalable to 14 via braising pot + weigh-and-divide. src_cal sits near the 400 floor but dish is cream+butter fat-rich so a label-accurate recompute is unlikely to drop below 400."
+  },
+  "duplicate_of": null,
+  "evidence": "No catalog analog: the signature is a white cream + hung-curd gravy scented with dried fenugreek (kasuri methi) and black pepper, with no tomato, coconut, or nuts. Closest catalog Indian chicken creams are distinct - slow-cooker-butter-chicken-rice-bowls is tomato-sauce based (makhani), slow-cooker-chicken-korma-rice-bowls is cashew+coconut-milk+tomato-paste, slow-cooker-creamy-chicken-mushroom-bowls is western, and south-indian-chettinad-pepper-chicken-bowls is a dry pepper fry with no cream. Fenugreek-cream braise fills a scarce North Indian slot and widens the American/Tex-Mex-skewing catalog.",
+  "cross_protein_collision_watch": "The malai (cream + kasuri methi + black pepper) gravy is structurally protein-agnostic - a 'methi malai' turkey or paneer braise in another selector's pool would be the same plate with the protein swapped. Decider should check other-protein pools for any methi/malai/fenugreek-cream braise. No such twin is visible in the beef/pork/turkey catalog rows (those Indian entries are tomato keema/kofta curries, not white cream gravies), so catalog collision risk is low; the watch is for the candidate pool only.",
+  "unmapped_note": "kasuri-methi is the one signature unmapped ingredient - wanted, not penalized (exercises the pricer lane per v2.1 5.1).",
+  "borderline": false
+}

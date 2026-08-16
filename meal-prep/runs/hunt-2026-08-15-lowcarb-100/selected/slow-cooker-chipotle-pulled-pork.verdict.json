@@ -1,0 +1,31 @@
+{
+  "slug": "slow-cooker-chipotle-pulled-pork",
+  "name": "Slow Cooker Chipotle Pulled Pork",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "borderline": true,
+  "conditions_check": {
+    "calories_per_serving": 428,
+    "carbs_per_serving": 3,
+    "in_cal_band_400_650": true,
+    "carbs_at_or_under_35": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "budget_meal_prep": true,
+    "fit": "FIT"
+  },
+  "evidence": "Clears all conditions (428 cal / 3g carb per serving, zero seafood, whole pork shoulder scales cleanly to 14). Not a strict duplicate of any single catalog dish: the nearest chipotle+pork-shoulder entry is 'mexican-chipotle-pork-and-beans' (chipotle-adobo + pork-shoulder + orange-juice) but that is a saucy pork-AND-BEANS braise, and 'slow-cooker-pork-tinga-bowls' is a tomato-based tinga over rice - this candidate is a DRY shredded chipotle-rub pulled pork (no beans, no tomato, no starch, served in lettuce/cauli), so protein+flavor match but starch+plate-format differ (2 of 4).",
+  "catalog_nearest": [
+    {"slug": "mexican-chipotle-pork-and-beans", "why_not_dupe": "saucy pork+beans stew with orange juice; candidate is dry pulled pork, no beans"},
+    {"slug": "slow-cooker-pork-tinga-bowls", "why_not_dupe": "tomato-forward tinga over rice; candidate has no tomato and no rice"},
+    {"slug": "slow-cooker-pork-birria-bowls", "why_not_dupe": "chile birria stew with broth/salsa/tortillas; candidate is a dry rub pulled pork"}
+  ],
+  "pool_dupe": null,
+  "pool_note": "No other chipotle pulled pork shoulder in this run's pool. Nearest pool pork-shoulders are differently flavored: coffee-rubbed-slow-cooker-pork-shoulder (coffee), crispy-pork-carnitas (citrus), pork-chile-verde-stew (tomatillo-verde), korean/momofuku bossam - none collide.",
+  "cross_protein_collision_flags": [
+    "chicken-tinga-shredded-chipotle (THIS run, chicken lane) and catalog slow-cooker-chicken-tinga-bowls / chipotle-turkey-burrito are the structural chipotle-shredded twins in other proteins - decider should confirm this dry chipotle pulled pork is not merely the pork cast of a shredded-chipotle dish already selected in another protein.",
+    "A 'chipotle shredded chicken' or 'chipotle turkey' dry version would be the same dinner with the protein swapped - flag for cross-protein merge."
+  ],
+  "borderline_reason": "Chipotle content is minimal (1/2 Tbsp adobo across a 10-serving batch) so the plate reads as a near-plain slow-cooker pulled pork, and the catalog is already heavily saturated with slow-cooker/Mexican-Tex-Mex pork; it widens cuisine spread only marginally. Distinct enough to KEEP, but audit should weigh it against catalog saturation.",
+  "unmapped_note": "coconut-sugar is a genuine board gap (tiny, 1 Tbsp/batch); smoked-paprika maps to board 'paprika'. Per v2.1 5.1 not penalized - wanted for pricer lane exercise."
+}

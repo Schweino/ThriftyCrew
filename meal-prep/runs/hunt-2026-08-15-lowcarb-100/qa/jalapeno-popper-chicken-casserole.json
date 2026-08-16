@@ -1,0 +1,14 @@
+﻿{
+  "slug": "jalapeno-popper-chicken-casserole",
+  "verdict": "fail",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "ingredient-coverage",
+      "severity": "blocking",
+      "detail": "RE-QA after the repair cycle: the built spec (db\\recipes\\jalapeno-popper-chicken-casserole.json) and card (db\\built\\jalapeno-popper-chicken-casserole.body.html) STILL do not exist - the writer repair the first fail routed was never performed. State file's last event is unchanged ('priced', 2026-08-16T06:37:03, the same state the first QA saw). There is no card to compare to the source, so no fidelity pass can be issued. Upstream is verified clean against BOTH anchors this cycle: live page re-fetched and matches the extraction verbatim (13 ingredient lines across both sections, 4 steps, 8 servings, identical title), and the mapped file applies one consistent 1.75x ratio (8 -> 14) on every line with only quantized house-measure drift noted per line (black pepper and the optional topping jalapeno, both +14.3%, both flagged by the mapper itself). The sole defect, twice now, is the absent build artifact.",
+      "owner": "writer"
+    }
+  ],
+  "notes": "Second consecutive fail for the identical cause: dispatch to source-QA ahead of the build. Nothing about the RECIPE is defective - extraction is a faithful transcription of https://joyfilledeats.com/jalapeno-popper-chicken-casserole/ (fetched successfully both cycles), source credit URL is correct, and mapping is one-ratio consistent. Per protocol a second fail is terminal (rejected-qa), but the reviewer should know this terminality would discard a clean recipe over a workflow sequencing error, not a fidelity defect; the orchestrator may want to treat the first cycle as void since the routed repair (build the spec) was never attempted."
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "ground-turkey-stuffed-peppers-bake",
+  "name": "Ground Turkey Stuffed Peppers",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "fit_evidence": "Published 411 cal / 25g carbs per serving clears the 400-650 cal and <=35g carb band; no seafood; oven-baked stuffed peppers scale cleanly to 14 servings as a budget meal-prep dinner.",
+  "dupe_of": null,
+  "dupe_evidence": "Not a catalog duplicate: the only turkey stuffed-pepper entry is turkey-stuffed-pepper-soup (a deconstructed SOUP, not a baked stuffed pepper); turkey-sausage-and-peppers-rice-skillet and polish-leczo-kielbasa-peppers-stew use sausage in a skillet/stew, different dish. No baked ground-turkey stuffed pepper exists in the 544-recipe catalog.",
+  "accepted_slugs_check": "philly-cheesesteak-stuffed-peppers is in accepted-slugs but is beef Philly (steak + cheese, no rice/tomato base) - a distinct flavor family, not the same dish as Italian-seasoned tomato-rice turkey stuffed peppers.",
+  "cross_protein_collision_note": "Structurally this is the classic protein-swappable stuffed-pepper bake (rice + diced tomato + cheddar stuffed in bell peppers, oven-baked). The decider should watch for a BEEF or CHICKEN stuffed-pepper-bake twin in other selectors' pools - a beef version would be nearly identical in format and flavor and should be treated as a same-dish-different-protein collision. Also note the catalog already ships philly-cheesesteak-stuffed-peppers (beef) and beef unstuffed-pepper-skillet-bowls; two+ 'stuffed pepper' plates is a spread consideration for the decider.",
+  "unmapped": ["tomato-paste"],
+  "unmapped_note": "Carrying an unmapped ingredient is expected/wanted per v2.1 5.1 (pricer-lane exercise) and is NOT a penalty."
+}

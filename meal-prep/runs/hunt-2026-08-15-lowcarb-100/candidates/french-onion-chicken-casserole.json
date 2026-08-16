@@ -1,0 +1,30 @@
+{
+  "name": "French Onion Chicken Casserole",
+  "slug": "french-onion-chicken-casserole",
+  "protein": "chicken",
+  "cuisine": "French",
+  "method": "oven bake",
+  "source_url": "https://thebigmansworld.com/french-onion-chicken-casserole/",
+  "source_servings": 6,
+  "src_cal": 410,
+  "src_carbs": 28,
+  "src_protein_g": 35,
+  "src_fat_g": 17,
+  "ingredients_verbatim": [
+    "1 pound chicken breast diced into 1-inch pieces",
+    "1 teaspoon salt",
+    "1/2 teaspoon pepper",
+    "1/2 teaspoon dried thyme",
+    "1/2 teaspoon paprika",
+    "3 tablespoons butter",
+    "14 ounces onion thinly sliced",
+    "1 tablespoon balsamic vinegar",
+    "2 cloves garlic minced",
+    "1 cup chicken broth",
+    "8 slices baguette toasted and chopped",
+    "1 cup Gruyere cheese grated"
+  ],
+  "unmapped": ["Gruyere cheese (no board home; substitutable with shredded-cheese or sliced-cheese)", "dried thyme (spice, not tracked)"],
+  "why": "Distinct French-bistro oven bake: diced chicken breast + deeply caramelized onions + garlic + balsamic, topped with toasted baguette and Gruyere and baked until the cheese melts - bound by cheese, not pasta. Published 410 cal / 28g carbs / 35g protein per serving clears the 400-650 / <=35g band on the source's own numbers and is high-protein for the calories. No french-onion CHICKEN bake exists in catalog or run (only french-onion PORK chops), so not a duplicate. Gruyere is the deliberate unmapped flag for the pricer-lane exercise. Scales cleanly to 14 by weigh-and-divide. CAVEAT: at 410 cal it sits at the LOW edge of the band and carries a baguette-crouton topping (the only carb source, ~28g) - label-accurate rows could drift it below 400 or the bread could push carbs up; flag for the selector.",
+  "confidence": "high on the numbers (read the recipe-card nutrition + full ingredient list directly); medium on band-fit because 410 cal is a low-edge value that our own gate could push under 400"
+}

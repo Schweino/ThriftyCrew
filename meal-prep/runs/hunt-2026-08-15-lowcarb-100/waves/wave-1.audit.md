@@ -1,90 +1,87 @@
-NO-GO
-scope: whole-wave
+GO
 
-# Wave 1 RE-audit - hunt-2026-08-15-lowcarb-100 (re-audited 2026-08-16, after the claimed repair)
+# Wave 1 audit, round 7 (scoped re-audit of the three B5/ruling-#18 slugs) - hunt-2026-08-15-lowcarb-100 (2026-08-16, ~14:55)
 
-Auditor: batch audit gate, second audit of this wave. Requested scope: whole-wave, on the premise that
-"the fix moved shared data (map entry / DB row / cost basis), so every recipe in the wave has new
-numbers." Every category was re-verified against current bytes.
+Auditor: batch audit gate. Scope per the prior round's own prescription: cert freshness on
+low-carb-ground-beef-stroganoff-skillet, baked-cauliflower-mac-smoked-sausage,
+hatch-green-chile-chicken-casserole, plus the hatch carb-copy prose field, plus the estate-level
+audit-store-integrity.ps1 alias change. The wave's numerics (macros, costs, mapping, protein, cards,
+gates) were fully verified against these same bytes in rounds 5-6 and were not re-derived here; the
+only reader-facing change since is the hatch prose fix verified below.
 
-## The finding that decides this audit
+## B1 (stale certs): RESOLVED, verified on mtimes and content
 
-THE REPAIR NEVER LANDED. The premise of this re-audit is false: no repair artifact for wave 1 exists
-anywhere in the repo. Evidence, all from current bytes:
+- Freshness sweep across ALL 9 manifest slugs at 14:54: every cert postdates its spec. The three
+  scoped: specs 14:40:00, certs 14:45:55 / 14:45:55 / 14:46:26.
+- Cert content is re-derived, not inherited: each cert states an independent food-DB recompute on
+  current bytes (stroganoff 450.0/28.9/11.3/31.1 vs stat 450/29/11/31; cauliflower-mac
+  628.3/25.0/16.2/50.9 vs 628/25/16/51; hatch 529.7/40.7/14.5/32.9 vs 530/41/15/33) - figures
+  identical to round 6's independent recompute of the 13:58 bytes, confirming no numeric drift.
+  Cost literals in the certs match costed.json line for line (stroganoff Sour Cream util 2.91,
+  batch_ps 2.50; cauliflower-mac batch_ps 1.38; hatch batch_ps 2.59, cost_ps 4.18 = 58.50/14).
+- Verdict pass, both anchors (extraction + live page) on all three.
 
-- db\ingredients.json (the cost engine's wiring file, fix step 1 of the first audit) is untouched:
-  mtime 2026-08-15 12:29, before the run even started. All 18 unwired item names are still absent.
-- The 10 wave-1 specs in db\recipes are untouched since before the first audit (newest 05:44; the
-  first audit was written 06:19). The short-ribs spec still claims stat.cost_ps "0.30" and its own
-  writer_notes still carry the "BLOCKER FLAG for the repair pass".
-- db\costed.json rows for the wave are numerically identical to the first audit: stroganoff $2.02
-  (5 unpriced lines), tuscan $1.39 (1), keto-broccoli $1.79 (1), cauliflower-mac $0.31 (4 unpriced,
-  3 of 7 priced), short-ribs $0.30 (main protein at zero), chimichurri $2.89 (3), fricassee $1.43 (5),
-  hatch $2.08 (3). costed.json's newer mtime (06:28) comes from targeted recosts of WAVE-2 slugs;
-  those runs also overwrote db\cost-flags.txt, which is why it looks quiet.
-- A full sweep of every file modified after the 06:19 first audit shows only concurrent wave-2 lane
-  traffic (other slugs' mapped/intake/state/spec/qa files) and grocery board machinery. Nothing
-  touches wave-1 data. No board (comparison-2026-08-15, recipe-board) carries a cell for the blocking
-  commodities; the registrar ruling on the boneless-beef-short-ribs proposal is still pending.
-- The 8 blocking slugs' QA files all predate the first audit. Nothing was re-QA'd.
-- batch-ledger: hunt-2026-08-15-lowcarb-100-w1 still owes audit onward; the short-ribs state history
-  ends at "waved 06:07:43" with no repair event.
+## B2 (hatch carb copy): RESOLVED, verified on bytes
 
-Mechanical proof, re-run in full: all 10 cards rebuilt from current bytes through
-pipeline\build-card2.ps1. The SAME 8 of 10 hard-fail with the same refusal, first failing item named:
+stat.carbs 15 (14.5 unrounded); intro_html and head.description both read "15 grams of carbs or
+less" (2 occurrences); zero instances of "under N grams" remain anywhere in the spec. The claim is
+true beside the unrounded 14.5.
 
-| Slug | Result |
-|---|---|
-| low-carb-ground-beef-stroganoff-skillet | FAIL: no costed line for 'Brandy' |
-| creamy-tuscan-chicken-skillet | FAIL: no costed line for 'Sun-Dried Tomatoes (Oil-Packed)' |
-| turkey-zucchini-noodle-casserole | BUILDS |
-| keto-turkey-broccoli-cheddar-casserole | FAIL: no costed line for 'Broccoli' |
-| baked-cauliflower-mac-smoked-sausage | FAIL: no costed line for 'Cauliflower' |
-| slow-cooker-boneless-beef-short-ribs | FAIL: no costed line for 'Boneless Beef Short Ribs' |
-| chimichurri-steak-sheet-pan | FAIL: no costed line for 'Broccolini' |
-| french-chicken-fricassee | FAIL: no costed line for 'Portobello Mushrooms' |
-| chicken-piccata-skillet | BUILDS |
-| hatch-green-chile-chicken-casserole | FAIL: no costed line for 'Pepper Jack Cheese' |
+## Writer_note corrections: present
 
-## Verdict summary
+Stroganoff carries 2 dated RESOLVED 2026-08-16 annotations (the false all-five-unwired/floor claim -
+all five bids verified live in db\ingredients.json, brandy carries a real cost line); cauliflower-mac
+2 (the 642/8-headroom BAND figures, now 628/22 matching stat); hatch 2 RESOLVED + 1 NOTE (543.8 ->
+530). Original text preserved. Voice: zero em/en dashes, zero swearing in all three specs.
+
+## N-A / N-C: fixed
+
+qa\creamy-tuscan-chicken-skillet.json parses (verdict pass; cert 14:21 still newer than spec 13:44).
+food-macros-db.json Spinach note now records the fresh `spinach` bid with a dated correction;
+macros untouched.
+
+## audit-store-integrity.ps1 alias change: A TIGHTENING-SHAPED CORRECTION, NOT A WEAKENING - proven by A/B
+
+Ran the pristine HEAD version and the fixed version against the SAME current data:
+- HEAD: 8 HARD (all MISSING-SIDE for the 7 adjudicated aliases), 13 WARN, exit 1.
+- Fixed: 0 HARD, 13 WARN, exit 0.
+- The WARN sets are byte-identical (13 BASE-DRIFT rows). The fix removed exactly the 8 false HARDs
+  and nothing else. Every one of those 8 lines is genuinely priced: costed.json books real board
+  bases (e.g. Smoked Sausage via kielbasa/walmart util 7.01; Sour Cream via sour-cream/walmart
+  util 2.91) because the cost engine has resolved aliases since f60ede7f, as does
+  engine\audit-db-agreement.ps1. The guard was the laggard; it now mirrors actual resolution.
+- Alias data audited: 10 aliases on 302 rows, zero collisions with item names, zero duplicate
+  aliases, so the first-wins indexing cannot shadow a real row today.
+- Self-test 20/20 including the clean twin (an unmapped name still fails to resolve) and a new
+  parse-sanity floor (index < 200 names refuses hard). Detection of genuine dropped lines is intact.
+- Discrepancy with the dispatch, non-material: the dispatch said "the 19 WARNs intact"; the real
+  count is 13 both before and after. The substance (WARN set unchanged) is proven above; the number
+  19 appears to be a miscount (possibly from the self-test fixture's "19 unmapped names" wording).
+
+## Non-blocking notes
+
+- N-D restated: the estate root still carries broad uncommitted changes (14 recipe specs including
+  live pages, the guard, engine files) by Brad's explicit choice while a concurrent session edits the
+  publish chain. wave-publish names foreign dirty by design and propagate carries it; the live-page
+  republish still needs its own QA pass per round 6's N-K, and an untimely crash loses real work.
+  Commit remains the right next act after publish.
+- Round 6's N-G (audit-cost-line-coverage -Slugs comma vacuity), N-H (known-wrong frozen broccoli
+  row still cheapest on the feed tile), N-J (nested-paren display nit) remain open and non-blocking.
+- Process finding stands: three consecutive rounds found mid-audit estate writes. This round the
+  window stayed still (verified by an end-of-audit mtime sweep at 14:54), but freeze estate-writing
+  sessions during audit windows as policy.
+
+## Category verdicts
 
 | Category | Verdict |
 |---|---|
-| 1. Macros vs food DB | CLEAN - all 10 recomputed against the CURRENT food-macros-db (which did move at 06:20/06:27 for wave-2 rows); every recompute matches the spec stat within rounding (max drift 0.5 cal). The shared-DB movement did not touch any row wave 1 depends on. |
-| 2. Costs | ISSUES FOUND - BLOCKING, unchanged from audit 1. Eight recipes still bake zero-priced non-optional lines into their published cost claims, short-ribs still 21x understated against the pricer's own $11.99/lb evidence. |
-| 3. Mapping / item_ids | CLEAN (carried) - wave-1 mapped files untouched since audit 1; ingredient-map gained only wave-2 entries; the derivation still yields the same 23 nulls, i.e. no wiring arrived via the map either. |
-| 4. Protein + rotation | CLEAN on labels (specs unchanged; update-recipes-db -DryRun re-run: 10 rows build, 80 map ids, 0 fallbacks, 23 nulls, matching audit 1). Rotation exposure stands: $0.30-0.31 false costs would top the Top 5 cheapest surface. |
-| 5. Cards | ISSUES FOUND - BLOCKING - 8 of 10 cannot render (proof above). The 2 that build are the same 2 as audit 1. |
-| 6. Voice + copy | CLEAN (carried) - all 10 spec bytes identical to what audit 1 swept. |
-| 7. Gates | INTACT - wave-publish.ps1 unchanged, ledger stamps in order, no gate weakened. This NO-GO is the gate doing its job a second time. |
+| 1. Macros | CLEAN. Stats unchanged since round 6's exact recompute; certs re-derived them independently on current bytes and agree to the decimal. |
+| 2. Costs | CLEAN. Unchanged since round 6 (penny-exact); alias-named lines verified priced on real board bases. |
+| 3. Mapping | CLEAN. Unchanged; alias table audited collision-free, same-concept per the recorded adjudications. |
+| 4. Protein + rotation | CLEAN. Untouched this round. |
+| 5. Cards | CLEAN for this stage. Cards build at publish through the gates; no new visual surface, no new 375px obligation. |
+| 6. Voice + copy | CLEAN. Hatch copy now truthful against the unrounded figure; no em/en dashes, no swearing in the three touched specs. |
+| 7. Gates | INTACT and one gate REPAIRED: store-integrity's alias fix is a false-positive correction proven by A/B with an identical WARN set, self-tests 20/20, plus a new hard parse-sanity floor. Nothing weakened. |
 
-## What blocks, exactly (unchanged from audit 1 - none of its fix steps were executed)
-
-1. Wire the 18 item names into db\ingredients.json. The evidence is already on file in
-   grocery\ingredient-queue.json (brandy: E&J VS 750 ml $12.49 Baker's; boneless beef short ribs:
-   $11.99/lb Baker's; dry white wine: $10.99/750 ml Baker's; fresh oregano: $2.49/0.5 oz Baker's, all
-   CARRIED). Names: Brandy, Beef Base, Cream Cheese, Sour Cream, Fresh Parsley, Boneless Beef Short
-   Ribs, Cauliflower, Smoked Sausage, Monterey Jack Cheese, Broccoli, Broccolini, Fresh Oregano,
-   Sun-Dried Tomatoes (Oil-Packed), Portobello Mushrooms, Dry White Wine, Egg Yolk, Pepper Jack
-   Cheese, Yellow Bell Pepper.
-2. Registrar ruling on the boneless-beef-short-ribs commodity proposal
-   (mapped\slow-cooker-boneless-beef-short-ribs.json, new_commodity_proposals). Still pending.
-3. Re-run engine\cost-recipes.ps1 for the 8 slugs, re-render spec cost blocks
-   (pipeline\recost-spec-cost-block.ps1), confirm the three tiers sum sensibly.
-4. Re-QA the 8 (every prose cost literal changes), then request a fresh audit.
-5. Budget re-review of slow-cooker-boneless-beef-short-ribs with its honest ~$6.30/serving number
-   (run condition is "budget meal-prep dinner"). Retire or accept deliberately - never adjust it.
-6. The defect class is still open and ALREADY BITING WAVE 2: db\cost-flags.txt (written 06:28 by a
-   wave-2 recost) shows "Spinach Provolone Stuffed Flank Steak Rolls :: Cream Cheese :: NO PRICE
-   BASIS" - the same unwired Cream Cheese silently zero-pricing a new recipe. The write-time refusal
-   fixture (audit 1, fix step 6) is needed before more specs bake floors in.
-
-## Freshness note for wave-publish P1b
-
-This file is newer than every wave-1 spec (newest spec 05:44, this audit later on 2026-08-16), so a
-GO here would satisfy the freshness gate mechanically. That is exactly why it must read NO-GO: the
-bytes it certifies are the same broken bytes audit 1 refused.
-
-NO-GO. Nothing in fix steps 1-6 of the first audit has happened. The wave returns when the wiring
-lands in db\ingredients.json, the 8 are recosted and their specs re-rendered and re-QA'd, the
-short-rib recipe survives an honest budget review, and a fresh audit reads genuinely new bytes.
+GO. All 9 certs fresh in mtime and content, both prior blockers closed on bytes, the guard repair is
+sound, and nothing moved during the audit window.

@@ -1,0 +1,21 @@
+{
+  "slug": "keto-sausage-broccoli-egg-casserole",
+  "name": "Low-Carb Sausage, Broccoli and Cheddar Egg Casserole",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "borderline": true,
+  "fit": {
+    "pass": true,
+    "src_cal": 463,
+    "src_carbs": 4.2,
+    "no_seafood": true,
+    "scalable_14": true,
+    "note": "463 cal mid-band; 4.2g carbs; crustless egg-custard bake, weigh-and-divide scales to 14."
+  },
+  "dupe_of": null,
+  "evidence": "Not a catalog dupe: the only catalog sausage+egg bake, sausage-hash-brown-egg-casserole, is potato/hash-brown based (carby); this is crustless and starch-free. BUT it collides with TWO already-accepted slugs in THIS run - see borderline note - so decider should make the final cut.",
+  "borderline_reason": "Candidate self-defines its identity as 'the custard bake, not the meat', which is structurally the same identity as accepted crustless-bacon-gruyere-quiche (crustless egg+cheese+pork custard bake, no starch): 3-of-4 match on protein-family(pork)/method(crustless egg bake)/starch(none), differing only on flavor family (cheddar-sausage-broccoli American vs gruyere-bacon French). Distinguishable but close. Separately, accepted keto-turkey-broccoli-cheddar-casserole is a broccoli+cheddar+heavy-cream bake (cream-bound, no eggs) - same broccoli-cheddar-cream axis with protein swapped to turkey; candidate differs by being egg-custard-bound. Two adjacent accepted neighbors mean the decider may reasonably fold this in.",
+  "run_collision_slugs": ["crustless-bacon-gruyere-quiche", "keto-turkey-broccoli-cheddar-casserole"],
+  "cross_protein_collision_notes": "HIGH cross-protein risk: identity is the custard/cheese bake not the meat, so any turkey-sausage or chicken-sausage 'broccoli-cheddar egg casserole' in another selector's pool is the same dish - decider should merge across proteins. keto-turkey-broccoli-cheddar-casserole (turkey) already occupies the broccoli-cheddar-cream-bake slot.",
+  "unmapped": []
+}

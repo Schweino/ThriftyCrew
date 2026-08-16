@@ -1,0 +1,138 @@
+{
+  "slug": "keto-turkey-broccoli-cheddar-casserole",
+  "title": "Keto Ground Turkey Broccoli Casserole: Low Carb Recipe Guide",
+  "source_url": "https://www.grazewithme.com/keto-ground-turkey-broccoli-casserole-low-carb-recipe-guide/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "turkey",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters; exact 3.5x scale, zero drift on every line.",
+  "ruled_substitutions": [
+    "Source says plain 'ground turkey'; house books 93/7 Ground Turkey per the turkey-zucchini-noodle-casserole precedent in this run - it has its own priced recipe-board id and label-accurate DB row, where the generic ground-turkey commodity's cells are 85/15 product (booking 85/15 price against 93/7 macros would mismatch both directions)."
+  ],
+  "ingredients": [
+    {
+      "source_raw": "1 lb ground turkey",
+      "item": "93/7 Ground Turkey",
+      "bid": "93-7-ground-turkey",
+      "board": "recipe",
+      "grams": 1588,
+      "buy": "3 1/2 lb",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by an explicit source WEIGHT (1 lb), not an each-count; exact 3.5x = 3.5 x 453.592 = 1588 g. Board 6 of 7 stores, cheapest Aldi $3.9083/lb (93/7-specific id, not the 85/15 generic)."
+    },
+    {
+      "source_raw": "1 large head broccoli, cut into florets",
+      "item": "Broccoli",
+      "bid": "broccoli",
+      "board": "weekly",
+      "grams": 1050,
+      "buy": "3 1/2 heads, cut into florets (about 12 1/2 cups)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FRESH broccoli head, blanched in step 5 - maps to the fresh 'broccoli' commodity (7 of 7, cheapest Hy-Vee $1.8533/lb), NOT frozen-broccoli (fresh is not frozen, form-flip). New DB row 'Broccoli' (USDA 11090 raw, 34 cal/100 g) added; the existing Broccoli Florets row is the GV frozen-bag label. densities 'Broccoli Florets' head = 300 g florets; the source's 'large' modifier has no densities key, so the standard head weight is used - flagged below, worst case ~+9 cal/serving so the band is safe either way."
+    },
+    {
+      "source_raw": "1 cup shredded cheddar cheese",
+      "item": "Cheddar Cheese, Shredded",
+      "bid": "cheddar-cheese-shredded",
+      "board": "recipe",
+      "grams": 396,
+      "buy": "3 1/2 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities cup = 113 g; 3.5 cups = 395.5 -> 396 g. DB row is the full-fat GV label (1/4 cup 28 g = 110 cal). Recipe-board id cheddar-cheese-shredded answers directly; note the bare TERM 'shredded cheddar cheese' resolves via the generic shredded-cheese commodity (7 of 7, cheapest Sam's $0.1521/oz) whose Walmart cell is still the Kraft Deluxe Mac and Cheese boxed-dinner defect prior mappings recorded."
+    },
+    {
+      "source_raw": "1 cup heavy cream",
+      "item": "Heavy Cream",
+      "bid": "heavy-cream",
+      "board": "weekly",
+      "grams": 833,
+      "buy": "3 1/2 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities cup = 238 g. DB row is the GV heavy whipping cream label (1 tbsp 15 g = 50 cal / 5 F / 1 C). Board 7 of 7, cheapest Sam's Club $0.1162/floz."
+    },
+    {
+      "source_raw": "2 cloves garlic, minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 21,
+      "buy": "7 cloves, minced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities clove = 3 g (USDA-corrected 2026-08-08). Board 5 of 7, cheapest Baker's $0.498/each."
+    },
+    {
+      "source_raw": "1 onion, finely chopped",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 385,
+      "buy": "3 1/2 medium, finely chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Plain 'onion' books Yellow Onion per house precedent (ingredient-map Yellow Onion -> onions); densities each = 110 g medium. Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "2 tablespoon olive oil",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 94.5,
+      "buy": "7 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities tbsp = 13.5 g; exact 3.5x = 7 tbsp. Board 7 of 7, cheapest Sam's $0.1879/floz."
+    },
+    {
+      "source_raw": "1/2 cup chicken broth",
+      "item": "Chicken Broth",
+      "bid": "chicken-broth",
+      "board": "weekly",
+      "grams": 420,
+      "buy": "1 3/4 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities cup = 240 g. DB row Swanson regular (1 cup = 10 cal). Board 7 of 7, cheapest Aldi $0.0373/floz."
+    },
+    {
+      "source_raw": "Salt and pepper to taste",
+      "item": "Salt and Pepper (to taste)",
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "to taste",
+      "optional": true,
+      "decision": "optional-pantry",
+      "notes": "Unmeasured to-taste line, optional per the source. Zero grams booked; both salt and black-pepper are 7 of 7 on the board if the writer wants a cost line. NOT enqueued (never enqueue an optional line)."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Broccoli (fresh, USDA FDC 11090 raw, per 100 g: 34 cal / 2.8 P / 6.6 C / 0.4 F) - the estate's only broccoli row was the GV FROZEN bag label; fresh recipe lines now have a form-correct row to book against the fresh 'broccoli' commodity."
+  ],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 450, "protein_g": 35, "carbs_g": 8, "fat_g": 30, "net_carbs_g": 6, "fiber_g": 2 },
+    "computed_per_serving": { "calories": 580.9, "protein_g": 30.0, "carbs_g": 13.1, "fat_g": 44.1 },
+    "protein_gap_pct": -14.3,
+    "calorie_gap_pct": 29.1,
+    "verdict": "PASS on the protein instrument, but barely, and called out loudly: -14.3% sits just inside the 15% tolerance. The main protein is anchored by an explicit source weight (1 lb ground turkey), so no each-weight assumption exists to be wrong; every other line is a printed volume measure converted at densities figures. The source's own macro set is internally inconsistent with its ingredient list: 1 cup heavy cream across 4 servings is 59.5 g/serving = 19.8 g fat from cream alone, plus 9.1 (cheddar) + 8.1 (turkey) + 6.75 (oil) = 44 g fat, yet the page prints 30 g total fat while its 18 g SATURATED fat matches our build almost exactly (cream ~14 sat + cheddar ~5 sat) - their 'unsaturated 12g' line is the undercount, and 4x9 on the missing ~14 g fat is precisely the 130-cal calorie gap. Their 35 g protein would need ~1.25 lb of turkey; the page prints 1 lb. Conclusion: the source calculator's totals are off, our portions match the source's printed measures line for line, and the gap points at their fat arithmetic rather than any portion of ours.",
+    "carb_note": "Our 13.1 g is gross carbs from label/USDA rows; the source's 8 g gross / 6 g net with only 2 g fiber undercounts the broccoli (75 g fresh broccoli alone is 5 g gross, 2 g fiber) plus cream 4 g and onion 2.5 g. Still far under the 35 g gate either way.",
+    "band_check": "computed 580.9 cal in [400, 650] PASS (headroom 69 cal to the ceiling); carbs 13.1 g <= 35 PASS. Sensitivity: if 'large head' really means ~400 g of florets instead of the densities 300 g, the serving moves +8.5 cal / +0.7 P / +1.7 C - the band holds under either reading."
+  },
+  "board_defects_observed": [
+    "ingredient-map.json's only broccoli entry (item 'Broccoli Florets' -> board_id 'frozen-broccoli-florets') points at an id that is not a commodity id in commodities.json (the frozen commodity's id is 'frozen-broccoli'); the fresh commodity 'broccoli' has no map entry at all. This mapping carries bid 'broccoli' in the mapped file so the scaler-bid fallback books it; a map entry (Broccoli -> broccoli, weekly) and a correction of the frozen row's id are flagged for the map's owner, not edited here.",
+    "Term-vs-map split on cheddar persists (recorded by earlier batches): bare term 'shredded cheddar cheese' answers via generic shredded-cheese whose Walmart cell is a Kraft boxed mac-and-cheese dinner, while the recipe-board id cheddar-cheese-shredded is the correctly-classed product."
+  ],
+  "densities_followups": [
+    "Broccoli: densities carries head=300 / cup=85 only under 'Broccoli Florets'; propose a 'Broccoli' alias row (head 300, cup 85) so the fresh item name resolves, and consider a 'large' key (~400) since recipe sources routinely size broccoli heads."
+  ]
+}

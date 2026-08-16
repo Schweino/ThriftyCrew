@@ -1,0 +1,28 @@
+{
+  "name": "Philly Cheesesteak Ground Beef Skillet",
+  "slug": "philly-cheesesteak-ground-beef-skillet",
+  "protein": "beef",
+  "cuisine": "American",
+  "method": "skillet (browned and simmered stovetop, finished with a 10-15 min oven cheese-melt)",
+  "source_url": "https://www.wholesomeyum.com/philly-cheesesteak-casserole-recipe/",
+  "source_servings": 6,
+  "src_cal": 493,
+  "src_carbs": 9.6,
+  "src_protein": 35.5,
+  "ingredients_verbatim": [
+    "2 lb Ground beef",
+    "2 tsp Sea salt",
+    "1/2 tsp Black pepper",
+    "3 large Bell peppers (sliced into thin strips)",
+    "1 large Onion (sliced into thin slices)",
+    "1/2 tbsp Italian seasoning",
+    "1 tsp Smoked paprika",
+    "1/2 tsp Garlic powder",
+    "4 oz Cream cheese (softened)",
+    "1/4 cup Chicken broth (reduced sodium)",
+    "6 slices Provolone cheese (~4 oz)"
+  ],
+  "unmapped": ["provolone-cheese (no exact board id; sliced-cheese is the nearest home)", "smoked-paprika (board carries paprika only)"],
+  "why": "Lands dead-center of the band on the source's own numbers: 493 cal, 9.6 g carb, 35.5 g protein per serving. Ground-beef-and-cheese skillet base (no rice/pasta/potato/bread), weigh-and-divide friendly, trivially scaled to 14 servings by multiplying the pan. Distinct dish format from the accepted philly-cheesesteak-stuffed-peppers (a skillet-bake vs individually stuffed peppers), and adds cuisine value with a genuine unmapped item (provolone) for the pricer lane to prove out.",
+  "confidence": "high on nutrition (read from the recipe card); flag: brief oven cheese-melt at the end and a flavor overlap with an accepted stuffed-pepper item -- let the adjudicator rule the format-distinctness."
+}

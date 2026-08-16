@@ -1,0 +1,18 @@
+{
+  "slug": "mexican-chorizo-egg-casserole",
+  "name": "Mexican Chorizo Egg Casserole",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "dupe_of": null,
+  "fit": {
+    "in_band": true,
+    "src_cal": 612,
+    "src_carbs": 17,
+    "no_seafood": true,
+    "scalable_14": true,
+    "note": "Clears all conditions on published numbers (612 cal sits under the 650 ceiling, 17g carb under 35g). CAUTION: only ~38 cal of headroom to the ceiling, so if the label-DB recompute at extract/map runs hot this could tip NOT-FIT; decider/extractor should watch it."
+  },
+  "evidence": "No catalog duplicate. Nearest neighbor is the pork sausage-hash-brown-egg-casserole, but that is an American breakfast bake (plain ground-pork sausage + hash-brown potato starch + cheddar/milk) whereas this is a Mexican chorizo bake (chorizo + jalapeno + pepper jack + corn tortilla + cilantro): different flavor family and different starch, only method (egg bake) shared - a different dinner. Also distinct from chorizo-and-potato-bowls (a skillet bowl, not a custard bake).",
+  "borderline": false,
+  "cross_protein_collision": "Watch for a same-dish twin in the turkey pool: a Mexican/Tex-Mex baked egg casserole with turkey chorizo or turkey sausage would be structurally identical (baked egg custard + Mexican spice + tortilla + melting cheese) - collapse to one if it surfaces. Adjacent-but-distinct existing turkey Tex-Mex egg dishes are turkey-migas-skillet and turkey-huevos-rancheros-rice-bowls, but those are skillet/bowl formats, not baked casseroles, so they do not collide; a genuine turkey *casserole* version would."
+}

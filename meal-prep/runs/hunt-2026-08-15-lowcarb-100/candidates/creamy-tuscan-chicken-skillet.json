@@ -1,0 +1,27 @@
+{
+  "name": "Creamy Tuscan Chicken Skillet",
+  "slug": "creamy-tuscan-chicken-skillet",
+  "protein": "chicken",
+  "method": "skillet",
+  "cuisine": "Italian-American",
+  "source_url": "https://thatlowcarblife.com/creamy-tuscan-chicken/",
+  "source_servings": 4,
+  "src_cal": 485,
+  "src_carbs": 8,
+  "src_protein": 42,
+  "src_fat": 32,
+  "ingredients_verbatim": [
+    "4 thin sliced chicken breasts",
+    "1 teaspoon paprika",
+    "1 teaspoon garlic powder",
+    "1 teaspoon salt",
+    "2 tablespoons butter",
+    "1 cup heavy cream",
+    "1/2 cup sun-dried tomatoes oil-packed, but drain the oil",
+    "2 cloves garlic minced",
+    "1 cup chopped spinach"
+  ],
+  "unmapped": [],
+  "why": "Classic one-skillet chicken-breast saute in a sun-dried-tomato/spinach cream pan sauce, no rice/pasta/potato base. Published nutrition 485 cal / 42g protein / 8g carbs sits mid-band on both axes. Every ingredient maps to a tracked commodity (chicken-breast, paprika, garlic-powder, salt, butter, heavy-cream, sun-dried-tomatoes, garlic, spinach). Scales cleanly to 14 via weigh-and-divide. No catalog duplicate: existing Tuscan chicken entries are all slow-cooker pasta bowls.",
+  "confidence": "high - nutrition and full ingredient list read directly from source page"
+}

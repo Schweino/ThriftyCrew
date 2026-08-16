@@ -1,0 +1,72 @@
+{
+  "name": "Marinated Flank Steak with Parmesan Green Beans",
+  "slug": "flank-steak-parmesan-green-beans",
+  "protein": "beef",
+  "cuisine": "American",
+  "source_url": "https://www.momsintofitness.com/recipes/flank-steak-green-beans/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Beef Flank/Sirloin Steak", "grams": 1588, "buy": "3 1/2 lb flank steak" },
+    { "item": "Olive Oil", "grams": 378, "buy": "1 3/4 cups, divided" },
+    { "item": "Garlic", "grams": 11, "buy": "3 1/2 cloves, minced" },
+    { "item": "Honey", "grams": 221, "buy": "10 1/2 tbsp (about 2/3 cup)" },
+    { "item": "Red Wine Vinegar", "grams": 158, "buy": "10 1/2 tbsp (about 2/3 cup), divided" },
+    { "item": "Soy Sauce", "grams": 223, "buy": "3/4 cup plus 2 tbsp" },
+    { "item": "Green Beans", "grams": 1588, "buy": "3 1/2 lb, fresh or frozen" },
+    { "item": "Dijon Mustard", "grams": 18, "buy": "3 1/2 tsp" },
+    { "item": "Parmesan Cheese", "grams": 131, "buy": "1 cup plus 2 3/4 tbsp, grated" }
+  ],
+  "macros_per_serving": { "calories": 543, "protein_g": 31.7, "carbs_g": 22.6, "fat_g": 37.6 },
+  "writer_notes": [
+    "SOURCE YIELD 4, rebuilt to 14 at the mapper's 3.5x scale. Every gram and buy string transcribed from mapped\\flank-steak-parmesan-green-beans.json; no number computed in prose.",
+    "MACROS transcribed from the mapper's food-DB recompute (543.3 cal, 31.7 g protein, 22.6 g carbs, 37.6 g fat per serving), reported as stat 543 / 32 / 23 / 38 and re-verified by build-v2-spec's food-macros-db recompute at 14 servings. In band for this run (400 to 650 cal, 35 g carb or less): 543 cal sits inside the window and carbs 22.6 g leave about 12 g under the ceiling.",
+    "OLIVE OIL COMBINED: the source lists two oil lines, 1/4 cup in the marinade and 1/4 cup in the green-bean dressing. To a shopper that is one bottle, so they are booked as a single 378 g line (1 3/4 cups, divided) exactly as the chimichurri build did this batch. The mapper kept them separate (189 g + 189 g) to trace to the extraction; the sum is identical and the steps divide it (about 7/8 cup into the marinade, about 7/8 cup reserved for the beans).",
+    "RED WINE VINEGAR COMBINED for the same reason: source marinade 2 tbsp scaled to 105 g plus dressing 1 tbsp scaled to 53 g, one bottle to a shopper, booked as one 158 g line (10 1/2 tbsp, divided). Steps split it, 7 tbsp into the marinade and about 3 1/2 tbsp into the dressing.",
+    "COCONUT AMINOS -> SOY SAUCE is source-sanctioned: the source line itself prints '1/4 CUP COCONUT AMINOS (OR SOY SAUCE)'. Coconut aminos has no board commodity; soy sauce is carried 7 of 7. Transcribed straight from the mapper's ruled_substitutions; the macro delta is small and honest.",
+    "SALT AND PEPPER is the source's unmeasured to-taste line, mapped optional-pantry at zero grams and NOT booked as a cost line, so no step names it as an ingredient. Steps say 'season to taste' only. This keeps the reverse-orphan rail clean (no step uses anything the shopper did not buy).",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked the costed list against the steps both directions: flank steak (make_it 2,3,4,5), olive oil (2 marinade + 7 dressing, divided), garlic (2), honey (2), red wine vinegar (2 marinade + 7 dressing, divided), soy sauce (2), green beans (6,7), dijon mustard (7), parmesan (7).",
+    "GREEN BEANS fresh-or-frozen is source-sanctioned ('16 OUNCES FRESH OR FROZEN GREEN BEANS'), not a writer form-flip. The ingredient-map routes Green Beans to frozen-green-beans (recipe board, 5 of 7); the fresh commodity is also carried (6 of 7) if the cook prefers fresh. Either satisfies the source line; the buy string says 'fresh or frozen' so the shopper picks.",
+    "HONEY is the marinade sugar and it is the single biggest carb line: 221 g books about 12.8 g of the 22.6 g carbs per serving. The macro basis counts the full marinade because that is the basis the source's own published nutrition uses (their 15 g sugars per serving is the whole honey). Real absorbed honey is lower since most marinade is discarded, but discounting it would be a guess, so it is counted in full and flagged in the report rather than trimmed.",
+    "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it. Every statement is grounded in the recipe's own buy amount, package sizes referenced generically and never with a per-line cost. Parmesan is named as grated to match the commodity the engine actually buys (grated parmesan), so there is no block-beats-tub trap. Re-walk the bullets against cost_lines once costed before publish.",
+    "PORTION METHOD adapted to a two-component plate: combine the sliced steak and the dressed green beans in one bowl, weigh it full, subtract the empty weight, divide by 14. Both components are counted in the portion, which is the honest weigh-the-pot method for a mixed batch."
+  ],
+  "prose": {
+    "intro_html": "Flank steak has a reputation for being the cheap cut, and that reputation is exactly why you want it. Marinate it, sear it hot and fast, then slice it thin across the grain and it eats like a cut that costs twice as much. The marinade does the heavy lifting here, a mix of soy sauce, honey, garlic, and red wine vinegar that tenderizes a lean cut and gives it a sweet and savory edge. Next to it sits a pile of green beans tossed in a sharp dijon dressing with a good handful of parmesan, which is a lot more interesting than a plain steamed side. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 35 grams of carbs. That is a steakhouse plate for meal-prep money.",
+    "shop_smart": [
+      "<strong>Three and a half pounds of flank steak is the anchor.</strong> This is where most of the money and all of the protein live, so buy the one big cut and slice it yourself instead of paying extra for pre-cut strips. If the case has sirloin cheaper the week you shop, grab that instead, because the two cook and slice the same way and sit in the same price class.",
+      "<strong>Three and a half pounds of green beans fill out the plate.</strong> Fresh or frozen both work here, so buy whichever is cheaper when you shop. Frozen beans come trimmed and cook straight from the bag, and fresh beans just need the ends snapped off. Either one holds its crunch under the dressing.",
+      "<strong>The marinade is built from pantry backbone.</strong> Soy sauce, honey, red wine vinegar, garlic, and olive oil are the whole mix, and most of them are already in your kitchen. That is what makes a lean cut taste rich without a pricey bottled marinade off the shelf. The coconut aminos the original recipe calls for swaps cleanly to soy sauce, which every store carries and costs less.",
+      "<strong>Parmesan and dijon dress the green beans.</strong> A little grated parmesan and a spoon of dijon mustard are what turn plain steamed beans into a side you actually look forward to. You use only a small amount of each across the whole batch, all whisked into the dressing, so they barely move the cart."
+    ],
+    "make_it": [
+      "Weigh your empty mixing bowl or storage pan and write the number down. At the end you will weigh it full and divide by 14, which is the only honest way to split a batch this size into even servings.",
+      "Make the marinade. In a large bowl whisk together about seven-eighths of a cup of the olive oil, the garlic, the honey, seven tablespoons of the red wine vinegar, and the soy sauce, holding back the rest of the oil and vinegar for the green beans. Season to taste.",
+      "Add the flank steak to the bowl and turn it to coat, then cover and refrigerate at least an hour and up to overnight. The longer it sits the more tender it comes out.",
+      "Heat a grill or a heavy pan hot. Sear the steak about two minutes a side to build a crust, then keep cooking to the doneness you like. Work in batches if the pan is crowded, because crowded meat steams instead of searing.",
+      "Let the steak rest ten minutes, then slice it thin across the grain on a diagonal. Resting first is what keeps the juice in the meat instead of running out on the board.",
+      "While the steak rests, cook the green beans. Put them in a large skillet, cover with water, and boil about four to five minutes for fresh beans or until just tender for frozen. Drain them well.",
+      "Whisk the reserved olive oil, the reserved red wine vinegar, and the dijon mustard into a quick dressing. Pour it over the drained green beans and toss to coat, then sprinkle the parmesan over the top and toss again.",
+      "Combine the sliced steak and the dressed green beans in the bowl from Step 1, weigh it full, and subtract the empty weight. Divide that number by 14 and give each container that exact weight, aiming for an even share of steak and beans in every one."
+    ],
+    "portion_html": "Set the full bowl on your scale and subtract the empty weight you noted in Step 1 to get the cooked total, steak and beans together. Divide that number by 14 and give each container that exact weight. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a marinated flank steak dinner with a real side, not a sad scoop of plain vegetables. The steak carries the plate, and the marinade is what makes a cheap cut taste like a splurge.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Marinated flank steak with parmesan green beans for meal prep: lean flank steak in a soy, honey, and garlic marinade, seared and sliced thin, served with dijon-dressed green beans and parmesan, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 35 grams of carbs.",
+    "keywords": "flank steak meal prep, marinated flank steak, steak and green beans, low carb steak dinner, high protein beef meal prep",
+    "prepTime": "PT15M",
+    "cookTime": "PT15M",
+    "totalTime": "PT1H30M",
+    "steps": [
+      "Weigh the empty bowl and note the number for portioning later.",
+      "Whisk the olive oil, garlic, honey, red wine vinegar, and soy sauce into a marinade, holding back oil and vinegar for the beans.",
+      "Add the flank steak, coat, and refrigerate at least an hour.",
+      "Sear the steak about two minutes a side, then cook to your doneness, in batches if needed.",
+      "Rest the steak ten minutes and slice it thin across the grain.",
+      "Boil the green beans until just tender and drain.",
+      "Toss the beans with a dijon dressing and sprinkle on the parmesan.",
+      "Combine steak and beans, weigh the bowl, and divide across 14 containers."
+    ]
+  }
+}

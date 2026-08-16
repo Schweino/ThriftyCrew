@@ -1,0 +1,13 @@
+{
+  "slug": "philly-cheesesteak-ground-beef-skillet",
+  "protein": "beef",
+  "verdict": "DUPE",
+  "fit": "FIT",
+  "fit_evidence": "493 cal / 9.6g carbs / 35.5g protein per serving - inside the 400-650 cal band and well under the 35g carb gate; no seafood; browned-and-simmered skillet with an oven cheese-melt scales cleanly to 14. Nutrition clears the conditions; the block is duplication, not fit.",
+  "dupe_of": "philly-cheesesteak-skillet-bowls",
+  "dupe_evidence": "The live catalog already ships 'Ground Beef Philly Cheesesteak Bowls' (philly-cheesesteak-skillet-bowls): 93-7-ground-beef + green-bell-pepper + onions + provolone-cheese in a skillet. This candidate is the same dinner - ground beef, bell peppers, onions, provolone, philly-cheesesteak flavor, skillet method - matching on protein + flavor family + cheese + method (3 of 4); the only divergence is dropping rice/mushrooms and adding cream cheese for a low-carb creamy bake, which is a variation of the plate, not a different dish (the Korean-beef-vs-Mongolian-beef-rice-bowl case). A creamy low-carb cheesesteak skillet next to the catalog's cheesesteak rice bowl reads as the same ground-beef cheesesteak twice.",
+  "pool_watch": "Secondary in-run collision: philly-cheesesteak-stuffed-peppers is already ACCEPTED in this run (accepted-slugs.json) - same philly-cheesesteak-beef flavor, different format (individually stuffed peppers). Even setting aside the catalog bowls, the run already carries an accepted philly-cheesesteak beef item, so this is the third philly-cheesesteak-beef plate in play.",
+  "cross_protein_watch": "A steak-based philly cheesesteak skillet is also in another selector's pool - steak-philly-cheesesteak-skillet.verdict.json exists in selected/. Same philly-cheesesteak flavor family and skillet format, differing only by cut (sliced steak vs ground beef). Flag for the orchestrator's cross-protein merge: the run may be accumulating multiple philly-cheesesteak plates across the ground-beef and steak lanes.",
+  "borderline": false,
+  "borderline_reason": "Not borderline - the catalog's ground-beef philly cheesesteak plus an already-accepted philly-cheesesteak stuffed-peppers make this a clear near-duplicate; the low-carb reformat (no rice, add cream cheese) does not make it a distinct dinner."
+}

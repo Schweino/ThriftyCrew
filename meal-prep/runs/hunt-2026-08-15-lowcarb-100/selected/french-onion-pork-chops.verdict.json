@@ -1,0 +1,22 @@
+{
+  "slug": "french-onion-pork-chops",
+  "name": "French Onion Pork Chops",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "cal": 406,
+    "carbs": 14,
+    "in_band": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "note": "Published 406 cal / 14g carb clears the 400-650 cal and <=35g carb gate; 406 sits right on the 400 floor so a label-accurate recompute could dip under 400 - flagged for extract/map, but ruled on published numbers per instruction."
+  },
+  "catalog_dupe": null,
+  "evidence": "No catalog pork-chop recipe carries a French-onion profile (caramelized onions + beef stock + thyme + melted Swiss): the closest, 'southern-smothered-pork-chops-and-rice', is a cream-and-flour onion gravy served over rice with no beef stock or cheese, and 'creamy-mushroom-pork-chops', 'cheesy-pork-chop-and-hash-brown-casserole', 'no-peek-pork-chop-rice-casserole', 'marry-me-pork-chops' are all distinct sauce families - so this is not a duplicate of any live pork recipe.",
+  "accepted_slugs_dupe": null,
+  "accepted_slugs_checked": ["creamy-tuscan-chicken-skillet", "chicken-bacon-ranch-cauliflower-bake"],
+  "cross_protein_flags": [
+    "Structurally the SAME French-onion treatment (caramelized onion + beef broth + Swiss/gruyere) already lives in the catalog on OTHER proteins: 'slow-cooker-french-onion-chicken-bowls' (chicken) and 'slow-cooker-french-onion-pot-roast-bowls' (beef). Different protein AND different format (slow-cooker bowls vs seared skillet chops), so not a dupe under my scope, but the decider should weigh whether a third French-onion entry over-clusters that flavor family.",
+    "Also note a possible POOL collision I cannot fully adjudicate: another verdict file 'cheese-smothered-pork-chops.verdict.json' exists in this run's selected/ dir - a cheese-topped pork chop that could overlap the melted-Swiss angle; decider should compare the two pork-chop candidates head-to-head."
+  ]
+}

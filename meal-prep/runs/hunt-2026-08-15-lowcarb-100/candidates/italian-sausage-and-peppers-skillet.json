@@ -1,0 +1,30 @@
+{
+  "name": "Italian Sausage and Peppers Skillet",
+  "slug": "italian-sausage-and-peppers-skillet",
+  "protein": "pork",
+  "cuisine": "Italian-American",
+  "method": "skillet",
+  "source_url": "https://thekelliekitchen.com/keto-sausage-and-peppers/",
+  "source_servings": 4,
+  "src_cal": 476,
+  "src_carbs": 12,
+  "src_protein": 18,
+  "ingredients_verbatim": [
+    "1 lb Italian sausage links (mild or hot)",
+    "1 tbsp olive oil",
+    "1 cup yellow onion, sliced",
+    "1 cup red onion, sliced",
+    "1 red bell pepper, sliced",
+    "1 green bell pepper, sliced",
+    "1/2 tsp salt",
+    "1/2 tsp garlic powder",
+    "1/2 tsp black pepper",
+    "1/4 tsp red pepper flakes",
+    "2 tbsp red wine vinegar",
+    "2 tbsp water",
+    "1/4 cup fresh chopped parsley"
+  ],
+  "unmapped": [],
+  "why": "Sausage-forward, structurally low-carb (Italian sausage + peppers + onions, no rice/pasta/potato base). Published nutrition 476 cal / 12g carb per serving sits squarely mid-band. All ingredients map to board ids (italian-sausage, bell-peppers, red-onion, onions, olive-oil, garlic-powder, red-wine-vinegar, fresh-parsley). Not a duplicate: catalog only has sausage-and-peppers with a rice or penne base, never the plain skillet. Skillet scales cleanly to 14 servings with weigh-and-divide.",
+  "confidence": "high on cal/carb (read from source nutrition card); protein 18g/serving is lean for the 25g+ catalog identity - a heavier sausage-to-veg ratio at batch portioning would raise it."
+}

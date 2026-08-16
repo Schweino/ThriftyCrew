@@ -1,0 +1,21 @@
+{
+  "slug": "slow-cooker-boneless-beef-short-ribs",
+  "name": "Slow Cooker Boneless Beef Short Ribs",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "in_band": true,
+    "calories": 581,
+    "carbs": 8,
+    "notes": "581 cal within [400,650]; 8 g carbs <=35; no seafood; slow-cooker beef braise, no starch base, scales to 14 by weigh-and-divide. Budget meal-prep dinner. FIT."
+  },
+  "dupe_of": null,
+  "evidence": "Not a duplicate. Closest catalog neighbor is slow-cooker-swiss-steak-rice (also slow-cooker tomato-braised beef), but Swiss steak is a distinct named dish served over rice with an onion/pepper/celery gravy; this is a bare 5-ingredient fire-roasted-tomato + thyme short-rib braise with no starch and a fattier cut, so different plate on 2 of 4 axes (starch, cut/aromatics). Other slow-cooker beef braises in catalog carry distinct flavor identities (bourguignon=wine, chile-colorado/birria=chile, taiwanese=soy, italian-beef=giardiniera, the pot-roast family=gravy/onion-soup) - none is a plain tomato short-rib braise. No collision with accepted-slugs (accepted beef are skillets and steaks: flank-steak-parmesan, ground-beef-stroganoff, philly-stuffed-peppers, keto-cheeseburger, steak-bites-zucchini, stuffed-flank-rolls, steak-fajita - zero slow-cooker tomato braises).",
+  "cross_protein_collision_watch": "Structural twin risk for the decider: a plain 'slow cooker [protein] braised in fire-roasted/diced tomato + thyme' would collide across proteins - watch for a braised PORK shoulder in tomato (pork ragu-style) or a CHICKEN cacciatore-style tomato braise in other selectors' pools; those would be the same dinner with the protein swapped. Accepted thai-coconut-curry-pork-shoulder is NOT a twin (coconut curry, not tomato).",
+  "flags": {
+    "unmapped_ingredients": ["boneless short ribs"],
+    "note": "Short ribs likely absent from board (board tracks beef-chuck-roast); wanted for pricer-lane exercise per run brief, not a penalty. Could be rebuilt on chuck roast if selector prefers."
+  },
+  "cuisine": "American",
+  "cuisine_spread_note": "American - does not widen the catalog's American/Tex-Mex skew, but distinct as a bare low-carb slow-cooker braise format (most catalog beef braises are rice/potato bowls)."
+}

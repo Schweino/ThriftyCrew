@@ -1,0 +1,30 @@
+{
+  "slug": "greek-turkey-cauliflower-feta-casserole",
+  "name": "Greek Ground Turkey and Cauliflower Rice Casserole with Feta",
+  "protein": "turkey",
+  "cuisine": "Greek / Mediterranean",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 499,
+    "carbs_g": 11,
+    "in_calorie_band": true,
+    "in_carb_band": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "batch_format": "oven bake",
+    "note": "499 cal sits mid-band (400-650); 11g total carbs well under the 35g cap; ground turkey scales by weigh-and-divide; budget meal-prep casserole."
+  },
+  "dedup": {
+    "catalog": "DISTINCT - no catalog recipe uses cauliflower at all (0 hits in digest), and every Greek/Mediterranean turkey dish in the catalog (greek-ground-turkey-lemon-rice-bowls, greek-turkey-spanakorizo-skillet, greek-turkey-fasolakia-rice-bowls, greek-turkey-moussaka, mediterranean-ground-turkey-bowls) is a rice/orzo/eggplant/potato dish, not a low-carb cauliflower-rice bake; different starch and structure.",
+    "accepted_slugs": "DISTINCT - closest accepted-this-run collisions are southwest-ground-turkey-cauliflower-rice-skillet (same protein+cauliflower rice but Southwest flavor + skillet method, not Greek + oven bake: 3 of 4 axes differ) and keto-turkey-broccoli-cheddar-casserole (turkey bake but broccoli-cheddar American, not cauliflower-feta Greek). Neither is the same dinner."
+  },
+  "cross_protein_flags": [
+    "Structurally a low-carb Greek ground-meat + cauliflower-rice + feta/Monterey Jack oven bake. Could collide with a chicken or beef version of the same plate in another selector's pool (e.g. 'Greek chicken cauliflower feta casserole' or a Greek ground-beef cauliflower-feta bake): same cauliflower-rice + feta + Greek-seasoning skeleton with the protein swapped. Decider should check the chicken and beef pools for a same-dish-different-protein twin."
+  ],
+  "pricer_lane": {
+    "unmapped": ["Greek Seasoning", "Spike Seasoning", "Monterey Jack cheese"],
+    "note": "3 unmapped ingredients retained per v2.1 5.1 - wanted for the pricer lane, not a mark against the candidate."
+  },
+  "adjudicated_by": "orchestrator/select-adjudicator",
+  "source_url": "https://kalynskitchen.com/casserole-brown-rice-turkey-mushrooms-feta/"
+}

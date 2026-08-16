@@ -1,0 +1,12 @@
+{
+  "slug": "beef-egg-roll-in-a-bowl",
+  "name": "Beef Egg Roll in a Bowl",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "conditions_fit": true,
+  "conditions_evidence": "Published 584 cal (within 400-650) and 19g carbs (under 35g ceiling); budget ground-beef cabbage skillet, weigh-and-divide scales to 14, no seafood.",
+  "dupe_of": null,
+  "evidence": "No egg-roll-in-a-bowl / crack-slaw dish exists in the BEEF catalog; distinct from Unstuffed Cabbage Roll Bowls (tomato-braised, not soy/hoisin/sesame stir-fry).",
+  "cross_protein_flags": "STRONG cross-protein twin: the catalog ALREADY carries this exact dish in two other proteins - 'Pork Egg Roll in a Bowl' and 'Turkey Egg Roll in a Bowl over Rice'. Same protein-free identity (ground meat + shredded cabbage + soy/hoisin/sesame/ginger stir-fry). Adding beef makes a THIRD egg-roll-in-a-bowl variant; the orchestrator's cross-protein merge should decide whether the catalog wants a beef version alongside the pork and turkey ones. Ruling KEEP only against the beef catalog per my per-protein scope - flagging, not resolving.",
+  "notes": "Sriracha carried as possibly-unmapped (recipe marks it optional) - kept per v2.1 5.1 pricer-lane exercise, not a defect."
+}

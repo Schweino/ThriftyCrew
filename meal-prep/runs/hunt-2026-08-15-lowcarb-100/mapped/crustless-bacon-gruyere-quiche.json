@@ -1,0 +1,131 @@
+{
+  "slug": "crustless-bacon-gruyere-quiche",
+  "title": "Bacon & Gruyere Crustless Quiche",
+  "source_url": "https://reluctantentertainer.com/crustless-bacon-gruyere-cheese-quiche/",
+  "source_servings": 6,
+  "target_servings": 14,
+  "scale_factor": 2.3333,
+  "protein": "pork",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-15",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters, drift from the exact 2.3333x scale noted per line where it exceeds 5%. Protein tag 'pork' (bacon is the meat; no eggs tag exists in the estate, closest precedent is the bacon+pork breakfast hash).",
+  "ruled_substitutions": [],
+  "registrar_rulings": [
+    {
+      "proposed_id": "gruyere",
+      "status": "PENDING - proposal drafted, registrar not yet consulted (mapper lane cannot invoke the registrar agent; orchestrator must route it)",
+      "mapper_sweep_evidence": "no 'gruyere' in commodities.json ids/labels/rules, recipe-commodities.json, or the recipe-board baseline; price-ingredient.ps1 verdict ABSENT ('no commodity claims this term'). Nearest neighbor is swiss-cheese (recipe board), rejected as a mapping by the variety-pricing precedent (red onion is not onions): gruyere is a distinct, materially pricier cheese and a different USDA item (413 vs 393 cal/100g). Today's Sam's capture ALREADY contains a true gruyere product: 'Alpenhaus French Gruyere Semi-Hard Cheese Wedge, 1 lb.' $11.87, $0.74/oz (found under a pecorino-romano search row in sams-capture-2026-08-15.csv line 6612), so Rule B carriage evidence exists on disk for the pricer.",
+      "meanwhile": "ingredient maps item_id null (safe pantry-static pricing); term 'gruyere' enqueued blocking for the pricer lane"
+    }
+  ],
+  "ingredients": [
+    {
+      "source_raw": "6 large eggs",
+      "item": "Eggs",
+      "bid": "eggs",
+      "board": "weekly",
+      "grams": 700,
+      "buy": "14 large eggs",
+      "decision": "mapped",
+      "notes": "exact scale 14.0 eggs, no quantization needed; 50 g each per DB/densities"
+    },
+    {
+      "source_raw": "3/4 cup half and half, or whole milk",
+      "item": "Half and Half",
+      "bid": "half-and-half",
+      "board": "weekly",
+      "grams": 414,
+      "buy": "1 3/4 cups",
+      "decision": "mapped",
+      "notes": "exact scale 1.75 cups; 14 floz x 29.57 = 414 g (map gpu convention; DB label 2 tbsp = 30 g agrees within 1.5%). Source allows whole milk as alternative; milk commodity exists if the writer wants to mention it, but half and half is the mapped line"
+    },
+    {
+      "source_raw": "2 cups Gruyere cheese, shredded",
+      "item": "Gruyere Cheese",
+      "bid": null,
+      "board": null,
+      "grams": 537,
+      "buy": "4 3/4 cups, shredded (about 19 oz)",
+      "decision": "mapped-null-pending-registrar",
+      "notes": "item_id null: no gruyere commodity exists in any of the three namespaces and no stage mints an id; registrar proposal recorded above, term enqueued blocking. NOT mapped to swiss-cheese (variety-pricing stretch, precedent red-onion-is-not-onions; Sam's real gruyere is $0.74/oz vs commodity swiss class). Exact scale 4.667 cups quantized to 4.75 (+1.8%); grams at the uniform shredded-cheese cup weight 113 g every cheese row in densities.json uses (cheddar/mozzarella/mexican/swiss all 113). FLAGGED: densities.json has no Gruyere Cheese row yet; follow-up should add cup=113, tbsp=7 through the sanctioned route or spec build will not derive these grams. Food-DB entry added this run: USDA FDC 171242 (SR Legacy), fetched from the FDC portal API 2026-08-15"
+    },
+    {
+      "source_raw": "1/2 tsp. salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 8,
+      "buy": "1 1/4 tsp",
+      "decision": "mapped",
+      "notes": "exact scale 1.167 tsp quantized to 1.25 (+7.1% drift, noted; zero-macro so harmless). 6 g/tsp per DB label basis"
+    },
+    {
+      "source_raw": "1/2 tsp. crushed red pepper flakes",
+      "item": "Red Pepper Flakes",
+      "bid": "red-pepper-flakes",
+      "board": "weekly",
+      "grams": 2,
+      "buy": "1 1/4 tsp",
+      "decision": "mapped",
+      "notes": "exact scale 1.167 tsp quantized to 1.25 (+7.1% drift, noted). 1.8 g/tsp per DB"
+    },
+    {
+      "source_raw": "1 Tbsp. dried basil",
+      "item": "Dried Basil",
+      "bid": "dried-basil",
+      "board": "weekly",
+      "grams": 7,
+      "buy": "2 1/4 tbsp",
+      "decision": "mapped",
+      "notes": "exact scale 2.333 tbsp quantized to 2.25 (-3.6%). 1 g/tsp per DB label basis. Carrying the extractor's concern forward: 1 Tbsp for a 6-serving quiche reads high on the source page but was transcribed as printed; writer may soften to taste without changing cost or macros (2 cal/tsp)"
+    },
+    {
+      "source_raw": "8 slices bacon, cooked and crumbled",
+      "item": "Hickory Smoked Bacon",
+      "bid": "bacon",
+      "board": "weekly",
+      "grams": 228,
+      "buy": "19 slices, cooked and crumbled (about 1/2 lb)",
+      "decision": "mapped",
+      "notes": "exact scale 18.67 slices quantized to 19 (+1.8%); 12 g/slice per densities.json (the estate's bacon slice basis, validated below by the source-macro protein cross-check landing within 0.4%). Standing canon folds 'bacon grease' into this item, so the 2 Tbsp of grease the source keeps in the pan for the saute is NOT a separate line; see report note on the calorie floor"
+    },
+    {
+      "source_raw": "1/4 cup sliced green onions",
+      "item": "Green Onions",
+      "bid": "green-onions",
+      "board": "weekly",
+      "grams": 30,
+      "buy": "2 stalks, sliced (about 1/2 cup)",
+      "decision": "mapped",
+      "notes": "exact scale 0.583 cup = 29 g (densities cup=50); countable preferred, 2 stalks x 15 g = 30 g (+2.9%)"
+    },
+    {
+      "source_raw": "2 cloves garlic, minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 15,
+      "buy": "5 cloves, minced",
+      "decision": "mapped",
+      "notes": "exact scale 4.667 cloves quantized to 5 (+7.1% drift, noted); 3 g/clove per DB"
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Gruyere Cheese: USDA FDC 171242 (SR Legacy) Cheese, gruyere; 100 g = 413 cal, 29.8 P, 0.36 C, 32.3 F; fetched from the FDC portal API 2026-08-15, Atwater 411 vs 413 ok"
+  ],
+  "pricing_terms_needed": [
+    { "term": "gruyere", "blocking": true, "why": "main cheese, 537 g; no commodity claims the term; Sam's capture evidence noted for the pricer" }
+  ],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 416, "protein_g": 24, "carbs_g": 4, "fat_g": 34 },
+    "recomputed_per_serving_from_food_db": { "calories": 369, "protein_g": 23.9, "carbs_g": 1.7, "fat_g": 28.4 },
+    "protein_gap_pct": -0.4,
+    "calorie_gap_pct": -11.3,
+    "verdict": "PASS on the protein instrument (-0.4%, essentially exact, so no portion error); the -11.3% calorie gap is fat-side (source 34 g vs label-recomputed 28.4 g), consistent with nutrition-software bacon/cheese values and the retained saute grease, not a portion mistake",
+    "run_gate_warning": "LOUD FLAG: this run's gate is 400-650 cal per serving. The label-accurate recompute lands at ~369 cal, BELOW the 400 floor, even though the source page claims 416. Crediting the retained bacon grease (source keeps 2 Tbsp in the pan; ~4.7 tbsp at scale, ~520 cal batch) only reaches ~406. The card will compute from our DB numbers, so this recipe is at real risk of failing the calorie floor at audit. Not the mapper's call to reject; escalated for the orchestrator/auditor to rule before spec+write effort is spent"
+  },
+  "board_defects_observed": [
+    "price-ingredient.ps1's ABSENT wording ('nothing in any capture matches') is misleading for gruyere: sams-capture-2026-08-15.csv line 6612 contains a true gruyere product captured under a pecorino-romano search row; the script matches commodity rules, not capture free text"
+  ]
+}

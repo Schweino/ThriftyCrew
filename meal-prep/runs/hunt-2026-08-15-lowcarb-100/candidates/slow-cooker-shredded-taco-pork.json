@@ -1,0 +1,22 @@
+{
+  "name": "Slow Cooker Shredded Taco Pork",
+  "slug": "slow-cooker-shredded-taco-pork",
+  "protein": "pork",
+  "cuisine": "Tex-Mex",
+  "method": "slow cooker",
+  "source_url": "https://peaceloveandlowcarb.com/shredded-taco-pork-low-carb-paleo-gluten-free/",
+  "source_servings": 10,
+  "src_cal": 411,
+  "src_carbs": 1.6,
+  "src_protein": 33,
+  "src_fat": 29,
+  "ingredients": [
+    "2 cups chicken stock",
+    "4 pounds pork roast (also called pork butt, pork shoulder, or pork shoulder roast)",
+    "1/4 cup grass-fed butter, ghee, or butter flavored coconut oil",
+    "1 batch homemade taco seasoning"
+  ],
+  "board_ingredients": ["pork-shoulder", "chicken-broth", "butter"],
+  "unmapped": ["homemade taco seasoning spices (chili powder, cumin, paprika, garlic powder, oregano) - no single board home; pantry-spice blend, negligible per-serving cost"],
+  "why": "Verified published macros clear the band: 411 cal / 33g protein / 1.6g carbs per serving. Pork shoulder/butt slow-cooked and shredded, structurally low-carb (meat + butter + spice, zero rice/beans/potato). Scales cleanly to 14 servings by weigh-and-divide. Sits near the calorie floor (411) so our label-DB recompute could drift under 400 - medium confidence on clearing our own gate, high confidence it is in-lane and low-carb. Not a duplicate: catalog pork-shoulder dishes are all rice bowls; no plain low-carb taco pork base exists."
+}

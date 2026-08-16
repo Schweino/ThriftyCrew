@@ -1,0 +1,30 @@
+{
+  "name": "Senegalese Poulet Yassa (Braised Chicken with Onions and Lemon)",
+  "slug": "senegalese-poulet-yassa",
+  "protein": "chicken",
+  "cuisine": "West African / Senegalese",
+  "method": "braise (sear then braise in skillet/Dutch oven)",
+  "source_url": "https://lowcarbafrica.com/poulet-yassa-senegalese-chicken-recipe/",
+  "source_servings": 4,
+  "src_cal": 403,
+  "src_carbs": 14,
+  "src_protein": 21,
+  "src_fat": 30,
+  "ingredients_verbatim": [
+    "4 chicken thighs",
+    "3 tablespoon olive oil",
+    "2 large onions thinly sliced",
+    "3 garlic cloves minced",
+    "2 tablespoon dijon mustard",
+    "1 cup chicken broth",
+    "1/4 cup lemon juice",
+    "1 teaspoon smoked paprika",
+    "1/2 teaspoon cayenne pepper",
+    "1 teaspoon bouillon powder",
+    "1/2 teaspoon salt or to taste"
+  ],
+  "main_ingredients": ["chicken-thighs", "onions", "garlic", "dijon-mustard", "chicken-broth", "lemon-juice", "paprika", "cayenne-pepper", "bouillon", "olive-oil"],
+  "unmapped": [],
+  "why": "Onion-and-lemon braise, structurally low-carb (14g, no starch base) and a West-African cuisine the catalog thins on. All ingredients map to the board. CAVEAT: source lands at the 400-cal floor and only 21g protein, below the 25g+ identity; likely to sit at the risky edge of our own gate. Secondary candidate.",
+  "confidence": "low - nutrition read from source, but sits at floor (403 cal) with sub-target protein (21g); may fail computed gate"
+}

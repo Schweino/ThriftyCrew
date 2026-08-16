@@ -1,0 +1,30 @@
+{
+  "name": "Sausage and Cottage Cheese Egg Bake",
+  "slug": "sausage-cottage-cheese-egg-bake",
+  "protein": "pork",
+  "cuisine": "American",
+  "method": "oven bake",
+  "source_url": "https://www.theroastedroot.net/cottage-cheese-breakfast-casserole/",
+  "source_servings": 9,
+  "src_cal": 445,
+  "src_carbs": 8,
+  "src_protein": 30,
+  "src_fat": 32,
+  "ingredients": [
+    "1 Tbsp avocado oil",
+    "1/2 yellow onion, diced",
+    "3 cloves garlic, minced",
+    "1 pound breakfast sausage",
+    "1 red bell pepper, diced",
+    "6 cups baby spinach, chopped",
+    "1 tsp sea salt, to taste",
+    "1/4 tsp black pepper",
+    "1/4 cup all-purpose flour",
+    "12 large eggs",
+    "16 ounces cottage cheese",
+    "8 ounces colby jack cheese, grated",
+    "1 bunch green onions, chopped"
+  ],
+  "unmapped": ["colby-jack-cheese", "avocado-oil"],
+  "why": "Egg + cottage cheese + colby jack bound crustless bake; identity is the bake, sausage is a component. Published 445 cal / 30g protein / 8g carbs sits mid-band on calories, clears the 25g+ protein identity, and rock-bottom on carbs. No bread/potato/rice. Weigh-and-divide bake, scales cleanly to 14. colby-jack has no exact board home (maps to shredded/cheddar); avocado-oil swaps to vegetable-oil - flagged for the pricer lane."
+}

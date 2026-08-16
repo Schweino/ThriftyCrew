@@ -1,0 +1,27 @@
+{
+  "name": "Chicken Kolhapuri",
+  "slug": "chicken-kolhapuri",
+  "protein": "chicken",
+  "cuisine": "Indian (Maharashtrian)",
+  "method": "braise (stovetop simmer)",
+  "source_url": "https://www.indianhealthyrecipes.com/kolhapuri-chicken-recipe/",
+  "source_servings": 3,
+  "src_cal": 604,
+  "src_protein": 35,
+  "src_carbs": 19,
+  "ingredients": [
+    "500 g chicken (bone-in or boneless)",
+    "3/4-1 cup onions, thinly sliced",
+    "3 tablespoons oil (divided 1+2)",
+    "3/4 cup tomatoes, deseeded & chopped",
+    "1/4 teaspoon turmeric",
+    "3/4 tablespoon ginger, peeled & chopped",
+    "3/4 tablespoon garlic, peeled & chopped",
+    "1/2 teaspoon salt",
+    "1/4 cup coriander leaves, chopped",
+    "Kolhapuri masala (roast & grind): nutmeg powder, cloves, mace, white poppy seeds, white sesame seeds, peppercorns, dried red chilies, dried coconut, coriander seeds, cinnamon, green cardamom, black cardamom, cumin seeds"
+  ],
+  "unmapped": ["white poppy seeds", "dried/desiccated coconut", "mace", "nutmeg", "black cardamom", "white sesame seeds", "dried red chilies"],
+  "why": "604 cal / 19g carbs / 35g protein per source, structurally low-carb braise (chicken + onion + tomato + oil + toasted-spice masala, no rice/potato in the dish). Distinctly Maharashtrian - no Kolhapuri or comparable dry-spice braise in catalog or pool, adds real cuisine spread. The freshly-ground Kolhapuri masala carries several genuinely off-board spices (poppy seeds, mace, nutmeg, dried coconut, black cardamom) - a deliberate pricer-lane exercise. Verified from published nutrition on the page.",
+  "confidence": "medium-high - read published nutrition directly; carbs (19g) sit safely mid-band but calories (604) are at the top edge, driven by 3 tbsp oil over 3 servings, so our label-accurate recompute could brush the 650 ceiling. Ground-masala sub-ingredients were published without individual quantities (a later parse stage will need the source's spice table)."
+}

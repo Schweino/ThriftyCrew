@@ -1,0 +1,27 @@
+{
+  "name": "Chicken Philly Cheesesteak Casserole",
+  "slug": "chicken-philly-cheesesteak-casserole",
+  "protein": "chicken",
+  "cuisine": "American",
+  "method": "oven bake",
+  "source_url": "https://joyfilledeats.com/keto-philly-cheesesteak-chicken-casserole/",
+  "source_servings": 8,
+  "src_cal": 403,
+  "src_carbs": 4.5,
+  "src_protein_g": 42.1,
+  "src_fat_g": 23.3,
+  "ingredients_verbatim": [
+    "6 cups shredded chicken",
+    "1 tbsp oil",
+    "4 sliced onions",
+    "1/4 cup mayo",
+    "1/4 cup sour cream",
+    "2 cloves garlic finely minced",
+    "1 tsp salt",
+    "1/2 tsp pepper",
+    "8 oz provolone sliced"
+  ],
+  "unmapped": ["provolone-cheese (flag: verify board home; catalog uses swiss/cheddar/mozzarella/parmesan - provolone appears in one claimed beef recipe, may need a row or sub with sliced-cheese)"],
+  "why": "Genuinely distinct oven bake: every 'philly cheesesteak' item in catalog + run is BEEF/STEAK (stuffed-peppers, ground-beef-skillet, steak-skillet) - this is the chicken version, whole-muscle shredded chicken breast (not ground chicken), roasted onions and garlic bound by a mayo/sour-cream/provolone cream rather than pasta. Published 403 cal / 4.5g total carbs (3.9 net) / 42.1g protein per serving clears the 400-650 / <=35g band on the source's own recipe-card numbers, sits low-carb-deep at 4.5g, and is very high-protein for the calories (catalog identity). Structurally low-carb: meat + onion + cheese/dairy, zero rice/pasta/tortilla/potato base. Mix-and-bake casserole, scales cleanly to 14 by weigh-and-divide. Ingredients map to board (chicken-breast, onions, mayonnaise, sour-cream, garlic, vegetable-oil) except provolone, flagged deliberately for the pricer-lane exercise.",
+  "confidence": "high on the numbers (read the recipe-card nutrition + full ingredient list directly). Band-fit note: 403 cal is just above the 400 floor, but this is a calorie-DENSE build (mayo + sour cream + 8 oz provolone over 6 cups chicken) so label-accurate rows are more likely to compute ABOVE 403 than below - low risk of undershooting the floor, watch the ceiling only if portions shrink."
+}

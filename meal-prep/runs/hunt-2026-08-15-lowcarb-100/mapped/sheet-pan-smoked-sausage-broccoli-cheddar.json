@@ -1,0 +1,82 @@
+{
+  "slug": "sheet-pan-smoked-sausage-broccoli-cheddar",
+  "title": "Sausage Broccoli Cheddar Sheet Pan",
+  "source_url": "https://thebestketorecipes.com/sausage-broccoli-cheddar-sheet-pan/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "pork",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged label unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [],
+  "ingredients": [
+    {
+      "source_raw": "8 cups broccoli florets",
+      "item": "Broccoli",
+      "bid": "broccoli",
+      "board": "weekly",
+      "grams": 2380,
+      "buy": "28 cups broccoli florets (about 5 1/4 lb, 8 medium heads)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FRESH broccoli roasted on the sheet pan - maps to the fresh 'broccoli' commodity (7 of 7 stores, cheapest Hy-Vee $1.8533/lb), NOT frozen-broccoli (fresh-is-not-frozen form-flip; frozen florets steam rather than roast, and nothing on the page sanctions frozen). Exact 3.5x = 28 cups x densities Broccoli Florets cup = 85 g -> 2380 g; head count from the 300 g/head florets figure. Books the FRESH Broccoli DB row (USDA raw 34 cal/100 g, added by keto-turkey-broccoli this run), not the GV frozen-bag Broccoli Florets label row. Same map-defect caveat as that sibling: ingredient-map's only broccoli entry points at the dead frozen-broccoli-florets id, so the scaler bid here must survive the stamp pass."
+    },
+    {
+      "source_raw": "1 14 ounce package Johnsonville Andouille Smoked Sausage",
+      "item": "Andouille Smoked Sausage",
+      "bid": "kielbasa",
+      "board": "weekly",
+      "grams": 1361,
+      "buy": "3 lb andouille smoked sausage, sliced into rounds (about three and a half 14 oz ropes)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "The kielbasa board commodity's own include /smoked\\s+sausage/ claims 'andouille smoked sausage' (board-sanctioned class match - andouille is a seasoning variant of the same pork/beef rope product at the same price class, unlike the excluded turkey variety), 7 of 7 stores, cheapest Walmart $2.336/lb. Main protein anchored by an explicit package WEIGHT (14 oz), not an each-count; exact 3.5x = 49 oz = 3.0625 lb, quantized 3 lb = 1361 g (-2.0%, the baked-cauliflower-mac quantization). NEW food-DB row added from the MANUFACTURER'S OWN current panel (johnsonville.com: 2 oz = 160 cal / 7 P / 1 C / 14 F) - deliberately NOT the Eckrich Smoked Sausage row (180 cal/2 oz, different brand; the 20 cal/2 oz spread is band-material at 24 servings-of-2-oz per batch) and NOT Smoked Turkey Sausage (half the calories, variety flip)."
+    },
+    {
+      "source_raw": "1 cup shredded cheddar cheese",
+      "item": "Cheddar Cheese, Shredded",
+      "bid": "cheddar-cheese-shredded",
+      "board": "recipe",
+      "grams": 396,
+      "buy": "3 1/2 cups shredded cheddar, added the last 2 minutes",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities cup = 113 g; exact 3.5x = 3.5 cups = 395.5 -> 396 g, quarter-clean, zero drift. Recipe-board id cheddar-cheese-shredded (membership rule; board 'recipe' per the baked-cauliflower-mac correction). DB row is the full-fat GV label (110 cal/28 g). The bare TERM 'shredded cheddar cheese' resolves via the generic shredded-cheese commodity (7 of 7, cheapest Sam's $0.1521/oz) whose Walmart boxed-mac-and-cheese defect cell prior batches recorded - still present, see board_defects_observed."
+    },
+    {
+      "source_raw": "salt and pepper to taste",
+      "item": "Salt and Pepper (to taste)",
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "to taste",
+      "optional": true,
+      "decision": "optional-pantry",
+      "notes": "Unmeasured to-taste line, optional per the source. Zero grams booked; salt and black-pepper are both 7 of 7 if the writer wants a cost line. NOT enqueued (never enqueue an optional line). The extractor's noted cooking-spray step line is pan-prep with no listed quantity and is not booked, matching the source's own nutrition basis."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Andouille Smoked Sausage (Johnsonville, manufacturer's current panel: 2 oz / 56 g = 160 cal / 7 P / 1 C / 14 F, 500 mg Na; 14 oz rope = 7 servings)"
+  ],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 472, "protein_g": 24.7, "carbs_g": 10.6, "fat_g": 35.7, "fiber_g": 4, "net_carbs_g": 6.6 },
+    "computed_per_serving": { "calories": 446.7, "protein_g": 23.0, "carbs_g": 14.0, "fat_g": 34.1 },
+    "protein_gap_pct": -7.0,
+    "calorie_gap_pct": -5.4,
+    "verdict": "PASS - protein -7.0%, calories -5.4%, fat -4.5%: all inside the instrument and all lines are explicit source measures (package weight for the protein, cups at densities for the produce and cheese) - no each-weight assumptions anywhere. The small downward drift is the -2% sausage quantization plus the Johnsonville panel being lighter than whatever generic entry their calculator used; the carb overage (14.0 vs 10.6 gross) is our fresh-broccoli USDA row counting the full 170 g of broccoli per serving that their 4 g fiber figure undercounts. Nothing to re-examine.",
+    "band_check": "computed 446.7 cal in [400, 650] PASS (47 above the floor, 203 below the ceiling); carbs 14.0 g <= 35 PASS. Optional lines carry zero grams."
+  },
+  "loud_flags": [],
+  "board_defects_observed": [
+    "shredded-cheese commodity (weekly): Walmart cheapest cell for the bare cheddar term path is still the Kraft Deluxe Mac and Cheese boxed-dinner match hijack (re-observed 2026-08-16, first logged in chicken-bacon-ranch-cauliflower-bake).",
+    "ingredient-map's 'Broccoli Florets' -> frozen-broccoli-florets entry still points at an id that exists in neither commodity file, and the fresh 'broccoli' commodity still has no map entry (re-observed; first logged by keto-turkey-broccoli-cheddar-casserole). Stamp-time hazard for this recipe's fresh-broccoli line."
+  ],
+  "densities_followups": [
+    "Broccoli (fresh): the proposed 'Broccoli' alias densities row (head 300, cup 85) from keto-turkey-broccoli stands - second fresh-broccoli recipe this run to lean on the Broccoli Florets keys.",
+    "Andouille Smoked Sausage: no densities row; propose pkg/each 397 (14 oz rope), matching the Smoked Sausage followup already filed."
+  ]
+}

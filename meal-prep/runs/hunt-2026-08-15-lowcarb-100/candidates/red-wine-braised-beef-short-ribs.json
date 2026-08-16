@@ -1,0 +1,29 @@
+{
+  "name": "Red Wine Braised Beef Short Ribs",
+  "slug": "red-wine-braised-beef-short-ribs",
+  "protein": "beef",
+  "cuisine": "American/French",
+  "method": "slow cooker (braise)",
+  "source_url": "https://www.foxvalleyfoodie.com/slow-cooker-beef-short-ribs/",
+  "source_servings": 6,
+  "src_cal": 535,
+  "src_carbs": 12,
+  "src_protein": 43,
+  "src_fat": 27,
+  "ingredients_verbatim": [
+    "4 lbs Beef Short Ribs (bone in or boneless)",
+    "2 tablespoons Cooking Oil",
+    "1 Onion (chopped)",
+    "4 cloves Garlic (minced)",
+    "1 cup Beef Broth (divided)",
+    "2 cups Dry Red Wine (ex. Cabernet Sauvignon)",
+    "3 tablespoons Flour",
+    "2 tablespoons Tomato Paste",
+    "2 tablespoons Brown Sugar",
+    "2 sprigs fresh Rosemary",
+    "Salt and Pepper to taste"
+  ],
+  "unmapped": ["beef short ribs (no board home; board has chuck-roast but not short ribs)"],
+  "why": "Verified published nutrition 535 cal / 12g carbs / 43g protein per serving - dead center of the 400-650 / <=35g band. Classic red-wine slow-braise (meat + wine + broth + tomato paste, no rice/potato/bean base), structurally low-carb and batch-scalable in a slow cooker. Not a catalog dupe: no short-rib braise exists (bourguignon is chuck). Signature ingredient beef short ribs has no board home - flagged as an intentional pricer-lane test case.",
+  "confidence": "high - read servings, full ingredient list, and per-serving cal/carb/protein/fat directly from the recipe card"
+}

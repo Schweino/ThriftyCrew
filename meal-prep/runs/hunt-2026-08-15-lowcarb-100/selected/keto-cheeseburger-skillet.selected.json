@@ -1,0 +1,19 @@
+{
+  "slug": "keto-cheeseburger-skillet",
+  "name": "Cheeseburger Skillet (Low-Carb)",
+  "protein": "beef",
+  "cuisine": "American",
+  "method": "skillet",
+  "source_url": "https://thebestketorecipes.com/one-pan-keto-bacon-cheeseburger-skillet/",
+  "src_cal": 423,
+  "src_carbs": 5.3,
+  "src_protein": 25,
+  "src_fat": 27,
+  "unmapped": [],
+  "decision": "ACCEPT",
+  "decided_by": "decider",
+  "run": "hunt-2026-08-15-lowcarb-100",
+  "adjudicator_verdict": "KEEP",
+  "overruled": false,
+  "note": "Starchless bunless cheeseburger skillet (beef + bacon + cheddar + cream cheese), 423 cal / 5.3g carbs - clears the band, carbs deep under the ceiling, exactly the low-carb take this run wants. Cross-lane dedup against fresh accepted-slugs (9) and catalog digest: catalog's only cheeseburger dishes are cheeseburger-pasta and cheeseburger-rice-bowls, both with a starch base; this has none, differing on the defining low-carb axis. Only 2 of 4 axes overlap (protein, flavor). Distinct from the two accepted beef dishes (flank-steak plate; ground-beef stroganoff skillet - creamy mushroom, no cheeseburger profile). Note: sits near the 400-cal floor - a label-DB recompute could dip under 400, flag for the pricer/spec lane. Cross-protein watch (unresolved): recipe lists ground turkey as a swap; watch other pools for a turkey/bacon cheeseburger skillet."
+}

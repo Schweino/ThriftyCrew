@@ -1,0 +1,10 @@
+{
+  "slug": "doro-wat-ethiopian-chicken-stew",
+  "name": "Doro Wat (Ethiopian Berbere Chicken Stew)",
+  "protein": "chicken",
+  "verdict": "DUPE",
+  "dupe_of": "ethiopian-doro-wat-chicken-bowls",
+  "reason": "Catalog already carries 'Ethiopian Doro Wat Chicken Bowls' (slug ethiopian-doro-wat-chicken-bowls) - the same Doro Wat: berbere + deep-browned onions + chicken thighs + tomato paste + hard-boiled eggs + lemon, finished in butter/oil. Identical dish by name and every signature ingredient.",
+  "conditions_note": "Would otherwise FIT (567 cal / 8 g carbs, no seafood, scalable), but moot against the catalog dupe.",
+  "cross_protein_collisions": ["Ethiopian berbere line exists in beef too (catalog 'Ethiopian Berbere Ground Beef / Minchet Abish') - different dish (ground beef, no eggs), noted only so the decider sees the shared berbere signature."]
+}

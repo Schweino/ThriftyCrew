@@ -1,0 +1,23 @@
+{
+  "slug": "broccoli-cheddar-keto-quiche",
+  "name": "Broccoli Cheddar Keto Quiche",
+  "verdict": "KEEP",
+  "protein": "vegetarian",
+  "cuisine": "American",
+  "fit": {
+    "calories": 573,
+    "carbs": 13.3,
+    "in_band": true,
+    "note": "573 cal within 400-650; 13.3g carbs well under 35g; vegetarian, no seafood; almond-flour-crust quiche scales to 14 servings as a batch bake. Upper-half on calories but clears the ceiling."
+  },
+  "dupe_of": null,
+  "dupe_evidence": "No egg/quiche/frittata dish exists in the catalog digest (only chicken/beef/pork/turkey groups). Catalog 'Ground Turkey Broccoli Cheddar Rice Skillet' and 'Turkey Sausage Hash Brown Breakfast Bake' are turkey rice-skillet/hash-brown-bake dishes, not egg quiches. Not a duplicate.",
+  "borderline_flags": [
+    "Adjacent to accepted 'crustless-bacon-gruyere-quiche' (also a keto quiche), but filling differs materially: bacon+gruyere non-vegetarian vs broccoli+cheddar vegetarian, plus almond-flour crust vs crustless. Judged different dinners, KEEP, but flagged so the decider can confirm the catalog wants two keto quiches.",
+    "Shares the broccoli-cheddar flavor with accepted 'keto-turkey-broccoli-cheddar-casserole', but that is a turkey casserole vs this egg quiche - different structure and protein."
+  ],
+  "cross_protein_collisions": [
+    "Structurally a crustless/low-carb egg bake; a sausage, ham, or turkey version of the same broccoli-cheddar quiche/egg-bake could exist in another selector's pool - decider should watch for a meat-added twin of this exact dish.",
+    "Broccoli-cheddar flavor overlaps turkey items already accepted (keto-turkey-broccoli-cheddar-casserole) and catalog (Ground Turkey Broccoli Cheddar Rice Skillet); this is the meatless egg-quiche take, distinct format."
+  ]
+}

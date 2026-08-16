@@ -1,0 +1,18 @@
+{
+  "slug": "classic-chicken-cacciatore-braise",
+  "name": "Classic Chicken Cacciatore (Braised)",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 495,
+    "carbs": 15,
+    "in_band": true,
+    "reason": "495 cal is within 400-650; 15g carb is <=35g; scalable braise; budget meal-prep; not a seafood dish."
+  },
+  "dupe_check": {
+    "catalog": "NOT a dupe of slow-cooker-chicken-cacciatore-pasta (that is a slow-cooker PASTA dish: chicken breast + penne + jarred pasta sauce, high-carb). This is the classic low-carb braise: bone-in thighs/drumsticks simmered in tomato-wine sauce with mushrooms/peppers/olives, no pasta or rice. Only 1 of 4 axes (Italian tomato flavor family) overlaps; protein cut, method, and starch all differ.",
+    "pool": "No other cacciatore or Italian tomato-braised chicken among accepted-slugs read fresh; french-chicken-fricassee (cream/white-wine) and chicken-marsala-skillet (marsala, no tomato) are distinct."
+  },
+  "seafood_note": "Recipe lists 3 optional anchovy fillets as an omittable umami booster (already flagged unmapped). The dish is a chicken braise, not seafood; anchovy can be dropped at spec. Flagging for decider awareness.",
+  "cross_protein_collisions": "Structurally this is an Italian tomato-wine braise with peppers/mushrooms/olives. Watch for a same-dish twin in other proteins: a turkey-thigh cacciatore, a pork or sausage cacciatore, or a 'hunter-style' braised turkey/pork with the same tomato-wine + olive + pepper profile would be the same dinner with a swapped protein. Decider should cross-check turkey/pork pools for any cacciatore / 'hunter's' / 'chasseur' braise."
+}

@@ -1,0 +1,18 @@
+{
+  "slug": "chicken-cordon-bleu-bake",
+  "name": "Chicken Cordon Bleu Bake",
+  "protein": "chicken",
+  "verdict": "DUPE",
+  "dupe_of": "chicken-cordon-bleu-casserole",
+  "evidence": "Catalog already carries chicken-cordon-bleu-casserole (chicken-breast + diced-ham + swiss-cheese + sour-cream), the same protein, the same cordon-bleu ham+swiss flavor family, and the same oven-bake method; only the starch differs (catalog has rice, this low-carb version drops it and swaps cream-of-chicken soup for a cream-cheese/parmesan/mayo sauce), which is 3-of-4 match with rice as mere filler, not a distinct dinner.",
+  "fit": {
+    "in_band": true,
+    "cal": 480,
+    "carbs_g": 5,
+    "note": "480 cal (400-650 ok), 5g carbs (<=35 ok), no seafood, scalable to 14 as a weigh-and-divide bake - clears the gate, but killed as a catalog duplicate regardless."
+  },
+  "cross_protein_collisions": [
+    "Structurally identical to the catalog's turkey-cordon-bleu-casserole (turkey-breast + diced-ham + swiss-cheese) - same cordon-bleu dish, different protein.",
+    "Any turkey- or pork-cordon-bleu bake in another selector's pool is the same dish; decider should watch for a turkey/pork cordon-bleu twin."
+  ]
+}

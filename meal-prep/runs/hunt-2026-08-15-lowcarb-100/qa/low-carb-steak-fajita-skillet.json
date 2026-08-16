@@ -1,0 +1,12 @@
+{
+  "slug": "low-carb-steak-fajita-skillet",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page", "prior-qa-2026-08-16T06:14:23"],
+  "findings": [
+    { "check": "prose-numbers",
+      "severity": "note",
+      "detail": "writer_notes reports stat protein as 57 while spec stat.protein is 56 (recompute 56.5, a half-gram rounding seam that understates the benefit). Notes-only; all published prose uses tokens or figures consistent with the stat. Unchanged from the prior QA; reconcile at the next touch.",
+      "owner": "writer" }
+  ],
+  "notes": "RE-QA on the current 11:58:58 spec bytes (the prior pass at 06:14:23 certified pre-cost-repair bytes; the 11:58 delta is the cost re-render after the map/registrar wired Yellow Bell Pepper -> yellow-bell-pepper so the yellow pepper books as a real produce line instead of a pantry jar, documented in writer_notes and independently reconciled by the batch auditor to batch 70.72 / ps 5.05 / true 76.06, lines_unpriced 0). Source-fidelity is unchanged from the prior live-domesticallycreative.com fetch: same 9 core ingredients, same dish, one consistent 3.5x scale (4 -> 14). Optional guacamole and sour cream and the tortilla-chip serving suggestion remain deliberately out of the costed build and the make_it steps, disclosed in shop_smart[4], so the recipe cooks complete exactly as shopped. Re-walked the costed list against make_it both directions on current bytes: every bought line is used by a step (beef 2,4,5,6; fajita seasoning 2; butter 3,4; red/green/yellow peppers 3; red onion 3; garlic 3; Mexican cheese blend 7) and no step names anything unbought - zero orphans both ways. Prose money: {{cal}}/{{protein}} tokens and ${{cost_ps}} in cost_closing/upsell; literal dollars only in the 3-part cost section and equal to the spec's own cost fields. Cheese is named as the shredded Mexican blend to match the commodity the engine buys (shredded-cheese), so no block-beats-tub trap. shop_smart makes no per-ounce or leftover claim. Zero em/en dashes. Macros 541/56/7/30 in the run window. Clear to re-enter the wave."
+}

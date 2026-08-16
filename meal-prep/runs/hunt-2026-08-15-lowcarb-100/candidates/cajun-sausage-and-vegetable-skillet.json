@@ -1,0 +1,31 @@
+{
+  "name": "Cajun Sausage and Vegetable Skillet",
+  "slug": "cajun-sausage-and-vegetable-skillet",
+  "protein": "pork",
+  "cuisine": "Cajun/Creole",
+  "method": "skillet",
+  "source_url": "https://www.budgetbytes.com/cajun-sausage-and-vegetables/",
+  "source_servings": 4,
+  "src_cal": 440,
+  "src_carbs": 9,
+  "src_protein": 21,
+  "src_fat": 36,
+  "ingredients_verbatim": [
+    "1 zucchini (1/2 lb.)",
+    "1 yellow squash (1/2 lb.)",
+    "1 red bell pepper",
+    "1 red onion",
+    "14 oz. Andouille sausage",
+    "2 Tbsp cooking oil, divided",
+    "1/2 tsp smoked paprika",
+    "1/4 tsp garlic powder",
+    "1/4 tsp cayenne pepper",
+    "1/4 tsp salt",
+    "1/4 tsp freshly cracked black pepper",
+    "2 Tbsp chopped fresh parsley"
+  ],
+  "main_ingredients": ["kielbasa", "zucchini", "yellow-squash", "red-bell-pepper", "onions", "vegetable-oil"],
+  "unmapped": ["andouille-sausage (no exact board id; rebuild on kielbasa or smoked-turkey-sausage)", "yellow-squash (verify board home)"],
+  "why": "Smoked-sausage-forward skillet, all non-starchy veg with no rice/pasta/potato/bean base, so it sits solidly low-carb at a PUBLISHED 440 cal / 9g carbs - dead-middle on calories, far under the 35g carb ceiling. Weigh-and-divide friendly, scales cleanly to 14. Andouille is the only ingredient without a board home (a deliberate pricer-lane flag); it rebuilds directly on kielbasa. Confidence high on band clearance; protein is a modest 21g/serving (below the 25g catalog ideal but not a run gate) - bumping sausage share on scale-up lifts it.",
+  "confidence": "high on nutrition (read from source page); protein slightly under catalog 25g ideal"
+}

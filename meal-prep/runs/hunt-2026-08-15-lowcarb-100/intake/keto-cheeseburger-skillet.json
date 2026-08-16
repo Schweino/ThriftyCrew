@@ -1,0 +1,67 @@
+{
+  "name": "Keto Cheeseburger Casserole Skillet",
+  "slug": "keto-cheeseburger-skillet",
+  "protein": "beef",
+  "cuisine": "American",
+  "source_url": "https://thebestketorecipes.com/one-pan-keto-bacon-cheeseburger-skillet/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Hickory Smoked Bacon", "grams": 168, "buy": "14 slices, chopped into small pieces" },
+    { "item": "80/20 Ground Beef", "grams": 1588, "buy": "3 1/2 lb (80/20)" },
+    { "item": "Yellow Onion", "grams": 201, "buy": "1 3/4 cups chopped (about 2 medium)" },
+    { "item": "Tomato Paste", "grams": 112, "buy": "7 tbsp (a bit under 1/2 cup)" },
+    { "item": "Yellow Mustard", "grams": 18, "buy": "3 1/2 tsp" },
+    { "item": "Cream Cheese", "grams": 198, "buy": "7 oz, softened" },
+    { "item": "Chicken Broth", "grams": 420, "buy": "1 3/4 cups" },
+    { "item": "Onion Powder", "grams": 4, "buy": "1 3/4 tsp" },
+    { "item": "Garlic Powder", "grams": 5, "buy": "1 3/4 tsp" },
+    { "item": "Salt", "grams": 6, "buy": "1 tsp" },
+    { "item": "Black Pepper", "grams": 2, "buy": "1 tsp" },
+    { "item": "Cheddar Cheese, Shredded", "grams": 396, "buy": "3 1/2 cups shredded" }
+  ],
+  "macros_per_serving": { "calories": 538.2, "protein_g": 31.1, "carbs_g": 5.3, "fat_g": 42.3 },
+  "writer_notes": [
+    "SOURCE YIELD 4, rebuilt to 14 at the mapper's 3.5x scale. Every gram and buy string transcribed from mapped\\keto-cheeseburger-skillet.json; no number computed in prose.",
+    "MACROS transcribed from the build's own food-macros-db recompute at 14 servings: 538.2 cal, 31.1 g protein, 5.3 g carbs, 42.3 g fat per serving. In band for this run (400 to 650 cal, 35 g carb or less). NOTE the mapper's cross-check reported 511.5 cal / 29.5 P / 40.2 F for the same grams; the current food-DB rows recompute 26.7 cal higher, driven by the beef and cheddar rows. The build recompute is authoritative and is what the stat carries. The source's own published card is separately inconsistent by 59 cal (documented in the mapper cross-check); none of these are the source card's numbers.",
+    "BEEF FAT CLASS is load-bearing on the floor: the mapper booked 80/20 (the cheeseburger title protein, nearest carried class to the source's ~90/10 label). At 80/20 the dish computes 511.5 cal PASS; the house 93/7 row would compute 394.6 cal and FAIL the 400 floor by 5 cal. Flagged loud in the mapper and echoed in the run report; if the house prefers lean beef here the recipe is a marginal floor-fail and must be re-based or dropped, not fudged.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked the costed list against the steps both directions: bacon (steps 3,6), ground beef (4), onion (2,4), tomato paste (5), mustard (5), cream cheese (5), chicken broth (5), onion powder (5), garlic powder (5), salt (5), pepper (5), cheddar (6). Salt and pepper ARE booked cost lines on this card (unlike the to-taste line on other recipes), so the sauce step names them explicitly. The source's 'and spices' shorthand in step 4 is unpacked into the four named seasonings. The retained tablespoon of bacon fat is the mapper's standing canon folded INTO the bacon line, not a separate ingredient, so step 3 leaves it in the pan without buying anything extra.",
+    "SHOP_SMART makes NO leftover, per-ounce, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount. Re-walk the bullets against cost_lines once costed before publish.",
+    "SUBSTITUTIONS recorded by the mapper, unpriced and NOT in the build: ground turkey for the beef, and beef broth for the chicken broth (macro difference under 2 cal per serving). Prose names beef and does not offer the turkey swap as a headline since it changes the floor math."
+  ],
+  "prose": {
+    "intro_html": "A bacon cheeseburger is one of the best things you can eat and one of the worst things you can build a budget around, so this takes the whole flavor and throws out the bun and the drive-through. You crisp the bacon, brown the beef with onion, and melt a quick sauce of cream cheese, broth, tomato paste, and mustard right in the pan, then blanket the whole thing with cheddar. It eats like a cheeseburger you can portion into containers. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 6 grams of carbs. That is a burger night that does not fight your macros or your wallet.",
+    "shop_smart": [
+      "<strong>Three and a half pounds of ground beef is the anchor.</strong> Reach for the 80/20 so the skillet tastes like an actual cheeseburger, and buy the big family pack instead of the little trays so you are paying for beef, not packaging. This is where most of the money and most of the protein live.",
+      "<strong>Bacon and cheddar are what make it a cheeseburger.</strong> You want fourteen slices of bacon chopped small and three and a half cups of shredded cheddar. The bacon crisps up first and its rendered fat browns the beef, and the cheddar melts over the top at the end. Buy a block-shredded bag of real full-fat cheddar rather than the low-fat kind, because the fat is what melts smooth.",
+      "<strong>Cream cheese and broth build the sauce with no flour.</strong> A block of full-fat cream cheese and a cup and three quarters of chicken broth melt together into the creamy sauce that holds it all, which is how you get burger-and-cheese richness without a bun or a thickener. Buy the real full-fat brick, not the light tub.",
+      "<strong>Tomato paste, mustard, onion, and the spice rack carry the burger flavor.</strong> A little tomato paste and yellow mustard stand in for ketchup and mustard on the bun, a couple of chopped onions cook down into the beef, and onion powder, garlic powder, salt, and pepper season the whole pan. These are backbone items you buy once and cook with for a long time."
+    ],
+    "make_it": [
+      "Weigh your empty skillet or the biggest pot you own and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+      "Chop the bacon into small pieces and chop the onion.",
+      "Set a large skillet over medium heat and cook the chopped bacon until crisp. Scoop the bacon out and set it aside, then pour off the fat until only about a tablespoon is left in the pan.",
+      "Add the ground beef and the onion to that tablespoon of bacon fat and brown the meat, breaking it into small pieces until it is cooked through, then drain off any extra grease.",
+      "Stir in the tomato paste, mustard, cream cheese, chicken broth, onion powder, garlic powder, salt, and pepper. Keep stirring until the cream cheese melts in and the whole thing pulls together into a sauce.",
+      "Turn the heat to low, scatter the crisp bacon and the shredded cheddar over the top, cover the pan, and cook for 5 to 7 minutes until the cheese is fully melted, then stir it through.",
+      "Weigh the full pot, subtract the empty weight you wrote down in Step 1, divide by 14, and spoon that exact weight into each container."
+    ],
+    "portion_html": "Set the full pot on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a bacon cheeseburger you eat with a fork. The beef, bacon, and cheddar carry it; the cream cheese and broth just turn it into a sauce that coats every bite.",
+    "upsell_html": "A low-carb, high-protein cheeseburger dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Keto bacon cheeseburger skillet for meal prep: browned 80/20 beef and crisp bacon in a creamy cream-cheese sauce under melted cheddar, no bun, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 6 grams of carbs.",
+    "keywords": "keto cheeseburger skillet, bacon cheeseburger casserole, low carb ground beef dinner, keto meal prep, high protein beef skillet",
+    "prepTime": "PT5M",
+    "cookTime": "PT15M",
+    "totalTime": "PT20M",
+    "steps": [
+      "Weigh the empty pot and write the number down, then chop the bacon and onion.",
+      "Cook the chopped bacon until crisp, set it aside, and leave about a tablespoon of the fat in the pan.",
+      "Brown the ground beef with the onion in the bacon fat, then drain off any extra grease.",
+      "Stir in the tomato paste, mustard, cream cheese, broth, onion powder, garlic powder, salt, and pepper until the cream cheese melts into a sauce.",
+      "Top with the bacon and cheddar, cover on low for 5 to 7 minutes until the cheese melts, and stir it through.",
+      "Weigh the pot, subtract the empty weight, and divide across 14 containers."
+    ]
+  }
+}

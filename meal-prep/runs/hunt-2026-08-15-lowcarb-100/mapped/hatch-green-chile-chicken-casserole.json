@@ -1,0 +1,206 @@
+{
+  "slug": "hatch-green-chile-chicken-casserole",
+  "title": "Hatch Chile Casserole",
+  "source_url": "https://www.ruled.me/hatch-chile-casserole/",
+  "source_servings": 8,
+  "target_servings": 14,
+  "scale_factor": 1.75,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or flagged USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift over 5% noted per line.",
+  "ruled_substitutions": [],
+  "registrar_rulings": [],
+  "ingredients": [
+    {
+      "source_raw": "1/4 medium onion",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 55,
+      "buy": "1/2 medium onion",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 0.4375 medium quantized to 1/2 (+14.3%, noted; 4 cal of drift across the batch). densities each = 110 g. Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "1/4 cup water or chile liquid",
+      "item": null,
+      "bid": null,
+      "board": null,
+      "grams": 118,
+      "buy": "1/2 cup water or liquid from the chile can",
+      "optional": false,
+      "decision": "mapped-free",
+      "notes": "Zero-cost, zero-macro (the chile-liquid option's macros are already inside the chile line's as-packed weight). Exact 0.4375 cup quantized to 1/2."
+    },
+    {
+      "source_raw": "27 ounce canned whole hatch green chiles",
+      "item": "Diced Green Chiles",
+      "bid": "canned-green-chilies",
+      "board": "weekly",
+      "grams": 1339.5,
+      "buy": "47 1/4 oz canned whole hatch green chiles (blended into the sauce)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Books to the canned-green-chilies commodity ('Canned Diced Green Chilies'): the DB row's own note says 'Hatch equivalent' - estate precedent that hatch is the pepper these cans contain, not a separate price class. Whole vs diced is not a form-flip here (both are canned roasted green chiles and the recipe immediately blends them). Absolute printed weight: 27 oz x 1.75 = 47.25 oz = 1339.5 g as-packed. Board 6 of 7, cheapest Walmart $0.191/oz - note the board class is built on 4 oz cans; a 27 oz can typically prices BETTER per oz, so the cost estimate is conservative."
+    },
+    {
+      "source_raw": "2 teaspoon olive oil",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 15.75,
+      "buy": "3 1/2 tsp olive oil, divided",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities tsp = 4.5 g. Board 7 of 7, cheapest Sam's Club $0.1879/floz."
+    },
+    {
+      "source_raw": "3 medium zucchini, spiralized or cut into thin strips",
+      "item": "Zucchini",
+      "bid": "zucchini",
+      "board": "weekly",
+      "grams": 1029,
+      "buy": "5 1/4 medium zucchini, spiralized or cut into thin strips",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities each = 196 g. Board 6 of 7, cheapest Aldi $1.1867/lb."
+    },
+    {
+      "source_raw": "1 medium yellow bell pepper, diced",
+      "item": "Yellow Bell Pepper",
+      "bid": "bell-peppers",
+      "board": "weekly",
+      "grams": 210,
+      "buy": "1 3/4 medium yellow bell peppers, diced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "The board's own bell-peppers commodity claims yellow (its cell set includes Family Fare 'Yellow Bell Pepper' $1.50) - a board-sanctioned class match per the shredded-cheese/monterey precedent, so this is the board's ruling, not a mapper variety stretch. CLASS CAVEAT flagged below: the commodity's cheapest cell is a GREEN bell at $0.77, so the derived price will understate a yellow-only basket; red-bell-pepper ($0.83-2.50 each) brackets what a dedicated yellow class would cost. NEW food-DB row (USDA sweet yellow pepper, mirror-verified); booked at the house bell each = 120 g (densities row proposed)."
+    },
+    {
+      "source_raw": "1 medium red bell pepper, diced",
+      "item": "Red Bell Pepper",
+      "bid": "red-bell-pepper",
+      "board": "recipe",
+      "grams": 210,
+      "buy": "1 3/4 medium red bell peppers, diced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Dedicated red-bell-pepper commodity (recipe board), 6 of 7 stores, cheapest Sam's Club $0.83/each - the variety-correct class per the green-is-not-red standing rejection. densities each = 120 g."
+    },
+    {
+      "source_raw": "1 teaspoon garlic powder",
+      "item": "Garlic Powder",
+      "bid": "garlic-powder",
+      "board": "weekly",
+      "grams": 5.4,
+      "buy": "1 3/4 tsp garlic powder",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities tsp = 3.1 g. Board 7 of 7, cheapest Walmart $0.216/oz."
+    },
+    {
+      "source_raw": "1 cup heavy whipping cream",
+      "item": "Heavy Cream",
+      "bid": "heavy-cream",
+      "board": "weekly",
+      "grams": 416.5,
+      "buy": "1 3/4 cups heavy whipping cream",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities cup = 238 g. DB row is the GV heavy whipping cream label. Board 7 of 7, cheapest Sam's Club $0.1162/floz."
+    },
+    {
+      "source_raw": "2 1/4 cup pepper jack cheese, shredded",
+      "item": "Pepper Jack Cheese",
+      "bid": "shredded-cheese",
+      "board": "weekly",
+      "grams": 452,
+      "buy": "4 cups shredded pepper jack (about 1 lb), divided",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "No dedicated pepper-jack commodity; the board's shredded-cheese commodity explicitly includes /(cheddar|mozzarella|colby|monterey|jack)\\s+cheese/ in one price class, so this is a board-sanctioned class match (the exact monterey-jack precedent from baked-cauliflower-mac-smoked-sausage). 7 of 7 stores, cheapest Sam's $0.1521/oz. Exact 3.9375 cups quantized to 4 (+1.6%) at the shred cup = 113 g. NEW food-DB row (USDA monterey record class, pepper variant disclosed; kept separate from the Monterey Jack row per its NOT-pepper-jack warning). Known cell hijacks on this commodity re-flagged below."
+    },
+    {
+      "source_raw": "4 ounce cream cheese, softened",
+      "item": "Cream Cheese",
+      "bid": "cream-cheese",
+      "board": "weekly",
+      "grams": 198.4,
+      "buy": "7 oz cream cheese, softened",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FULL-FAT brick, keto source; books to the full-fat Cream Cheese DB row added earlier this run (do NOT swap to the 1/3 Fat house row - a keto card with a calorie floor deflates exactly the way that row's note warns). Board cream-cheese carries full-fat product, 7 of 7 stores, cheapest Sam's Club $0.1381/oz. 4 oz x 1.75 = 7 oz = 198.4 g."
+    },
+    {
+      "source_raw": "salt and pepper, to taste",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 6,
+      "buy": "salt, to taste (about 1 tsp)",
+      "optional": true,
+      "decision": "mapped",
+      "notes": "To-taste line split into its two pantry items; nominal 1 tsp, zero-macro."
+    },
+    {
+      "source_raw": "salt and pepper, to taste (pepper half)",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 2.3,
+      "buy": "black pepper, to taste (about 1 tsp)",
+      "optional": true,
+      "decision": "mapped",
+      "notes": "Nominal 1 tsp = 2.3 g, 6 cal batch."
+    },
+    {
+      "source_raw": "29 ounce rotisserie chicken, shredded",
+      "item": "Rotisserie Chicken",
+      "bid": "rotisserie-chicken",
+      "board": "weekly",
+      "grams": 1438.8,
+      "buy": "50 3/4 oz shredded rotisserie chicken meat (about 3.2 lb, roughly 2 birds)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein on an ABSOLUTE weight (29 oz x 1.75 = 50.75 oz = 1438.8 g), so no each-weight risk; the bird count in the buy string is informational (densities each = 700 g pulled skinless meat -> 2.06 birds). DB row is the whole-bird COOKED pulled meat, skin removed (190 cal / 28.9 P per 100 g) - matches 'rotisserie chicken, shredded' exactly. The source's published protein confirms the basis to within 0.1%, see cross-check. Board 4 of 7, cheapest Sam's Club $4.98/each."
+    },
+    {
+      "source_raw": "1/4 cup sharp cheddar cheese, shredded",
+      "item": "Cheddar Cheese, Shredded",
+      "bid": "cheddar-cheese-shredded",
+      "board": "recipe",
+      "grams": 49,
+      "buy": "7 tbsp shredded sharp cheddar",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 0.4375 cup = 7 tbsp exactly, zero drift. densities tbsp = 7 g. Sharpness is not a price class on this board (sharp cheddar shreds sit in the same store-brand cells; captures confirm Kroger/Happy Farms sharp shreds in the ordinary shred class). Booked per ingredient-map entry and the baked-cauliflower-mac precedent; note price-ingredient does not resolve the bare id string but resolves 'shredded cheddar cheese' to the weekly shredded-cheese class at 7 of 7, so coverage is proven either way."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Pepper Jack Cheese (USDA Cheese, monterey record class, pepper variant disclosed, per 100 g: 373 cal / 24.5 P / 0.7 C / 30.3 F)",
+    "Yellow Bell Pepper (USDA Peppers, sweet, yellow, raw, per 100 g: 27 cal / 1 P / 6.3 C / 0.2 F; mirror-verified 2026-08-16)"
+  ],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 543, "protein_g": 40.6, "carbs_g": 10.4, "fat_g": 37.2 },
+    "computed_per_serving": { "calories": 543.8, "protein_g": 40.6, "carbs_g": 14.3, "fat_g": 34.8 },
+    "protein_gap_pct": -0.1,
+    "calorie_gap_pct": 0.1,
+    "verdict": "PASS, near-exact: protein -0.1% and calories +0.1% against the source's published label - the strongest confirmation available that the rotisserie whole-bird cooked-meat basis and every portion are right. Fat -6.5% tracks. Carbs +37% relative (14.3 vs 10.4 g) comes from booking the full 47 oz of canned chiles at the DB row's as-packed carb density plus USDA veg values; the source card printed total carbs equal to net carbs (extractor flagged it), so its 10.4 is likely net - our total-carb figure is the conservative one and clears the gate with 20 g to spare.",
+    "band_check": "computed 543.8 cal in [400, 650] PASS (144 above the floor, 106 below the ceiling); carbs 14.3 g <= 35 PASS."
+  },
+  "board_defects_observed": [
+    "bell-peppers commodity mixes color classes (green cells at 5 stores + a Family Fare yellow at ~2x the green price); the yellow line here is board-sanctioned but will be priced at the green-cell cheapest, understating cost. A yellow-bell split (or folding premium colors into red-bell-pepper's class) belongs at the match-soundness gate.",
+    "shredded-cheese commodity: Walmart cheapest cell is 'Kraft Deluxe Mac and Cheese ... 14 oz' at $0.1771/oz, a boxed-dinner match hijack (re-observed 2026-08-16, first logged in chicken-bacon-ranch-cauliflower-bake).",
+    "shredded-cheese commodity: Sam's cheapest cell for a jack-class query is 'Member's Mark Part-Skim Mozzarella 5 lbs' - real shredded-cheese price class, wrong flavor for the term (re-observed 2026-08-16).",
+    "price-ingredient does not resolve the literal term 'cheddar-cheese-shredded' (ABSENT) even though the id exists in recipe-commodities.json and ingredient-map.json points at it; natural-language 'shredded cheddar cheese' resolves fine. Resolver/id gap, flagged for the gate."
+  ],
+  "densities_followups": [
+    "Pepper Jack Cheese: no row; propose cup 113 / tbsp 7 (USDA, identical to the cheddar shred row; same ask as Monterey Jack from baked-cauliflower-mac)",
+    "Yellow Bell Pepper: no row; propose each 120 / cup 92 to match the red/green convention (USDA large = 186 noted in the DB row)"
+  ]
+}

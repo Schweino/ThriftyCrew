@@ -1,0 +1,28 @@
+{
+  "name": "Crispy Slow Cooker Pork Carnitas",
+  "slug": "crispy-pork-carnitas",
+  "protein": "pork",
+  "cuisine": "Mexican",
+  "method": "slow cooker then pan-crisp",
+  "source_url": "https://www.recipetineats.com/pork-carnitas-mexican-slow-cooker-pulled-pork/",
+  "source_servings": 12,
+  "src_cal": 578,
+  "src_carbs": 2,
+  "src_protein": 45,
+  "src_fat": 42,
+  "ingredients_verbatim": [
+    "2 kg / 4 lb pork shoulder, skinless boneless (or 2.5 kg / 5 lb bone in)",
+    "2 1/2 tsp salt",
+    "1 tsp black pepper",
+    "1 onion, chopped",
+    "1 jalapeno, deseeded, chopped",
+    "4 cloves garlic, minced",
+    "3/4 cup orange juice",
+    "1 tbsp dried oregano",
+    "2 tsp ground cumin",
+    "1 tbsp olive oil"
+  ],
+  "unmapped": [],
+  "why": "Pork shoulder slow-cooked with onion, jalapeno, garlic and orange juice, then shredded and pan-crisped in its own juices - a classic weigh-and-divide shredded-pork batch that scales cleanly to 14. Published 578 cal / 45g protein / 1.7g carbs (rounded 2) sits inside the 400-650 band with 45g protein far above the 25g identity, and carbs are essentially nil, giving huge headroom under the 35g ceiling (our fattier board pork-shoulder row is unlikely to add carbs). Structurally low-carb: meat + aromatics + citrus, no rice/bean/tortilla base. Every ingredient maps to the board (pork-shoulder, onions, jalapenos, garlic, orange-juice, dried-oregano, ground-cumin, olive-oil, salt, black-pepper) - zero unmapped, high confidence. DEDUP NOTE: catalog has 'slow-cooker-pork-carnitas-bowl' which is a RICE bowl; this is the low-carb, no-rice crispy-carnitas protein served over slaw/lettuce. Near-dup risk on the carnitas concept - flagging for the adjudicator, but it is a legitimately distinct low-carb dinner for this run.",
+  "confidence": "high on nutrition (read from source recipe card); medium on dedup (carnitas concept overlaps existing rice bowl)"
+}

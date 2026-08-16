@@ -1,0 +1,78 @@
+{
+  "name": "Southwest Ground Turkey and Cauliflower Rice Skillet",
+  "slug": "southwest-ground-turkey-cauliflower-rice-skillet",
+  "protein": "turkey",
+  "cuisine": "Southwestern",
+  "source_url": "https://upnorthnosh.com/low-carb-ground-turkey-skillet-with-cauliflower-rice/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "93/7 Ground Turkey", "grams": 2155, "buy": "4 3/4 lb lean (93/7) ground turkey" },
+    { "item": "Cauliflower", "grams": 749, "buy": "7 cups riced (from about 1 1/2 medium heads)" },
+    { "item": "Red Bell Pepper", "grams": 540, "buy": "4 1/2 red bell peppers, finely diced" },
+    { "item": "Shallots", "grams": 150, "buy": "5 small shallots, finely diced" },
+    { "item": "Frozen Chopped Spinach", "grams": 404, "buy": "4 3/4 cups frozen chopped spinach" },
+    { "item": "Olive Oil", "grams": 125, "buy": "9 1/4 tbsp (a bit over 1/2 cup)" },
+    { "item": "Dried Parsley", "grams": 7.1, "buy": "4 3/4 tbsp dried parsley" },
+    { "item": "Garlic Powder", "grams": 7, "buy": "2 1/4 tsp garlic powder" },
+    { "item": "Onion Powder", "grams": 5.4, "buy": "2 1/4 tsp onion powder" },
+    { "item": "Paprika", "grams": 5.2, "buy": "2 1/4 tsp paprika" },
+    { "item": "Ground Cumin", "grams": 4.7, "buy": "2 1/4 tsp ground cumin" },
+    { "item": "Ground Coriander", "grams": 4.1, "buy": "2 1/4 tsp ground coriander" },
+    { "item": "Salt", "grams": 28.5, "buy": "4 3/4 tsp salt" },
+    { "item": "Black Pepper", "grams": 2.9, "buy": "1 1/4 tsp black pepper" },
+    { "item": "Cayenne Pepper", "grams": 2.3, "buy": "1 1/4 tsp cayenne" }
+  ],
+  "macros_per_serving": { "calories": 360.1, "protein_g": 31.6, "carbs_g": 9.2, "fat_g": 20.5 },
+  "writer_notes": [
+    "SOURCE YIELD 3, rebuilt to 14 at the mapper's 4.6667x scale. Every gram and buy string transcribed from mapped\\southwest-ground-turkey-cauliflower-rice-skillet.json; no number computed in prose.",
+    "MACROS transcribed from the mapper's food-macros-db recompute and re-verified by the writer at 14 servings against the same rows: batch 5041 cal / 442 P / 129 C / 287 F, per serving 360.1 cal / 31.6 P / 9.2 C / 20.5 F, which rounds to 360 / 32 / 9 / 20. The build guard's cal+protein recompute lands on the same 360 cal / 32 P.",
+    "BAND FLAG, LOUD, CARRIED FROM THE MAPPER: 360 cal per serving is BELOW this run's 400 cal floor by 40 cal. Carbs 9.2 g are well under the 35 g gate (PASS). This is the honest, label-accurate number as built and it is NOT the writer's to adjust. The protein cross-check agrees within 4% (their 33 g vs our 31.6), so the portions are sound and no each-weight error exists; the gap is FAT and topping-counting, not portion. The source's own 476 cal / 33 g fat figure implies a fattier turkey (85/15) and/or counts the optional sriracha mayo their step 8 applies. Three honest paths the mapper laid out, none of them mine to rule: (1) capture a real 85/15 ground-turkey label and re-map to the generic ground-turkey commodity (7 of 7, $2.6633/lb) for about 432 cal PASS; (2) promote the source's step-8 toppings to counted for about 463 cal PASS; (3) reject at the gate. Parked in QA, not fudged here.",
+    "TURKEY FAT CLASS is load-bearing on the floor. Booked 93/7 following the two in-run precedents for the identical source phrase '1 lb ground turkey' (keto-turkey-broccoli-cheddar-casserole, turkey-zucchini-noodle-casserole). Jennie-O 93/7 label row (170 cal/112 g). If the house prefers the generic 85/15 blend here, the dish clears the band, but there is NO verifiable 85/15 label on disk (rule 2 forbids inventing one), so the 93/7 build is what ships honestly.",
+    "OPTIONAL TOPPINGS NOT BOUGHT, NOT COSTED, NOT STAGED IN THE BUILD, following the taco-cabbage-beef precedent in this run. The source marks sriracha mayo, shredded lettuce and pico de gallo optional; the mapper mapped them optional-excluded-from-band, and pico returns no commodity (CAPTURE). Prose names them as the cook's own table add-on only; no build step calls for them, so nothing unbought is used and no orphan cost line exists. Band macros are the non-optional skillet.",
+    "CAULIFLOWER RICE is FRESH cauliflower riced at home, not the bagged riced product (mapper ruled_substitutions: the board carries no riced/frozen-cauliflower id, home ricing is the budget-house equivalent, and the resolver's 'cauliflower rice' match to the white-rice commodity is a false product-concept match). Prose names ricing a fresh head. Macros identical (same raw vegetable). Every bought ingredient is used and no step uses anything unbought: olive oil (step 4), turkey (4), the nine seasonings mixed in the cup (step 3, added step 5), red bell pepper + shallot (step 6), frozen spinach (step 7), riced cauliflower (step 8).",
+    "BLOCKER FLAG for the repair pass: item 'Cauliflower' has NO row in db\\ingredients.json (the price map), so as shipped this build prices the cauliflower unwired/pantry-static and the cost_ps is a FLOOR until it is wired. The mapper cites board bid 'cauliflower', 4 of 7 stores, cheapest Fareway $1.98/each. Same unwired-item pattern the stroganoff and taco-cabbage intakes documented. The writer does not touch db\\ingredients.json; wiring 'Cauliflower' -> bid cauliflower belongs to the repair pass before the audit gate.",
+    "SHALLOTS priced as onions (bid onions) per the STANDING BRAD RULING recorded in the shakedown wave-1 audit and the ingredient-map's own Shallots -> onions entry. A separate live shallots commodity (4 of 7, $3.99/lb, a 5x price class) exists and the mapper flagged it for the match-soundness gate, but the standing ruling governs; disclosed, not changed. Grams on the sanctioned densities route (no Shallots row; USDA small-bulb basis), flagged by the mapper. Shallot line is about 7 cal/serving either way.",
+    "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount and the product form. Re-walk the bullets against cost_lines once costed before publish.",
+    "TITLE NOTE (cosmetic, carried from extractor + mapper): the source page title is 'Low Carb Ground Turkey Skillet with Cauliflower Rice' and does not say 'southwest'; the slug does. The seasoning profile (cumin, coriander, paprika, cayenne, plus the source's pico and sriracha finish) is genuinely southwestern, so the name is honest to the dish. Flagged for the auditor to confirm the naming call."
+  ],
+  "forbidden_prose_terms": ["em dash", "en dash"],
+  "prose": {
+    "intro_html": "Ground turkey has a reputation as the protein you put up with on a diet, not the one you look forward to. Season it like the Southwest and it stops apologizing. You brown lean turkey with a full spice cup of cumin, coriander, paprika and cayenne, fold in sweet red bell pepper, shallot and spinach, then stir riced cauliflower right into the pan where the rice bowl used to be. One skillet, about twenty-five minutes, and it portions clean into containers. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 10 grams of carbs. The original finishes each bowl with shredded lettuce, pico de gallo and a swipe of sriracha mayo. Those are yours to add at the table if you want them; the build here is just the seasoned skillet, so the macros on the label are the macros in your container.",
+    "shop_smart": [
+      "<strong>Lean ground turkey is the backbone, so buy it right.</strong> About four and three quarter pounds of 93/7 is where most of the money and all of the protein live. Reach for the big family roll instead of the little one-pound trays so you are paying for turkey, not packaging. The 93/7 blend stays lean without cooking up dry and chalky the way the 99 percent breast can.",
+      "<strong>Rice a fresh head of cauliflower instead of buying the bag.</strong> About a head and a half, broken into florets and pulsed in a food processor until it looks like rice, does the same job as the pre-riced product. A box grater works too if you do not have a processor. This is what fills the bowl where a cup of rice used to sit, with a fraction of the carbs.",
+      "<strong>Red bell pepper and shallot are the fresh aromatics.</strong> You want about four and a half red bell peppers and a handful of small shallots, all finely diced so they melt into the turkey instead of standing out. The pepper brings the sweetness and color; the shallot brings a softer, rounder onion note than a raw yellow onion would.",
+      "<strong>Frozen chopped spinach folds in green at the end.</strong> A few cups from the freezer stirs straight into the hot pan and thaws as it goes, so there is nothing to thaw ahead. It cooks down to almost nothing, which is exactly what you want it to do.",
+      "<strong>The spice rack does the heavy lifting.</strong> Cumin, coriander, paprika and cayenne carry the Southwest flavor, with onion powder, garlic powder, dried parsley, salt and pepper rounding it out. These are backbone staples you most likely already have, so they barely move the cart while doing most of the talking."
+    ],
+    "make_it": [
+      "Weigh your empty skillet or the biggest pan you own and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+      "Break the cauliflower into florets and pulse it in a food processor until it is riced into fine grains, or run it across a box grater. Finely dice the red bell peppers and the shallots and set everything by the stove.",
+      "In a small cup, stir together the cumin, paprika, coriander, onion powder, garlic powder, cayenne, dried parsley, salt and black pepper so the seasoning goes in all at once.",
+      "Heat the olive oil in a large skillet over medium-high heat. Add the ground turkey and break it up with the back of a wooden spoon as it browns. Work in two batches if the pan looks crowded, so the turkey browns instead of steaming.",
+      "Pour the seasoning cup over the turkey and cook, stirring occasionally, until the meat is no longer pink.",
+      "Add the diced red bell pepper and shallot and stir them in. Cook a few minutes over medium heat until they soften.",
+      "Add the frozen spinach and stir; it thaws the rest of the way in the hot pan. Keep cooking 2 to 3 minutes until everything is combined and warmed through.",
+      "Stir in the riced cauliflower and cook another 4 to 5 minutes, until it is tender but not mushy.",
+      "Weigh the full pan and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container so every serving lands the same."
+    ],
+    "portion_html": "Set the full pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container. Give each one an even share of the turkey, pepper, spinach and cauliflower, and every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a Southwest turkey skillet that eats like a rice bowl without the rice. The turkey carries the protein; the riced cauliflower, peppers and spice rack turn it into a full container for almost nothing.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Southwest ground turkey and cauliflower rice skillet for meal prep: lean turkey browned with cumin, coriander, paprika and cayenne, folded with red bell pepper, shallot, spinach and riced cauliflower, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 10 grams of carbs.",
+    "keywords": "southwest ground turkey skillet, cauliflower rice skillet, low carb ground turkey meal prep, high protein turkey dinner, keto turkey skillet",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "totalTime": "PT30M",
+    "steps": [
+      "Weigh the empty pan and write the number down, then rice the cauliflower and dice the red bell pepper and shallot.",
+      "Stir the cumin, paprika, coriander, onion powder, garlic powder, cayenne, parsley, salt and black pepper together in a cup.",
+      "Brown the ground turkey in olive oil, breaking it up as it cooks.",
+      "Stir in the seasoning and cook until the turkey is no longer pink.",
+      "Add the red bell pepper and shallot and cook until softened, then stir in the frozen spinach until warmed through.",
+      "Stir in the riced cauliflower and cook until tender, then weigh the pan, subtract the empty weight, and divide across 14 containers."
+    ]
+  }
+}

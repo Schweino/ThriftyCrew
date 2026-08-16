@@ -1,0 +1,19 @@
+{
+  "slug": "slow-cooker-red-wine-beef-cheeks",
+  "name": "Slow Cooker Beef Cheeks in Red Wine Sauce",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "conditions_check": {
+    "calories": "586 (within 400-650) PASS",
+    "carbs": "6 g (<= 35 g) PASS",
+    "seafood": "none PASS",
+    "meal_prep_scalable_14": "slow-braise, scales cleanly PASS"
+  },
+  "dupe_of": null,
+  "evidence": "Closest catalog neighbour is 'Beef Bourguignon Bowls' (beef-chuck-roast, bacon, mushrooms, beef-broth, over starch) - same beef + slow-braise but a genuinely different plate: distinct cut (beef cheeks, which the catalog has zero of), no bacon/mushroom bourguignon garniture, red-wine-forward sauce (bourguignon entry lists beef broth not wine), and no starch base vs the bowl format. Other beef braises (Classic Beef Stew=potatoes, Greek Stifado=onion/tomato, Irish=Guinness stout, Bo Kho=lemongrass) are unrelated flavor families. Not present in accepted-slugs.json.",
+  "borderline_note": "Adjacent to beef-bourguignon-bowls on the red-wine-braise axis; kept because cut + garniture + starch-format + no-mushroom/bacon distinguish the dinner. Decider may downgrade if it wants only one French red-wine beef braise in the catalog.",
+  "cross_protein_collision": "A red-wine slow-braise of pork cheeks or lamb shanks (mirepoix + wine + thyme/bay, no starch) would be structurally the same dish under a different protein - flag for the merge pass if a pork-cheek or lamb-shank red-wine braise appears in another selector's pool.",
+  "cuisine": "European (French-style braise)",
+  "unmapped": ["beef-cheeks"]
+}

@@ -1,0 +1,20 @@
+{
+  "slug": "cabbage-and-sausage-skillet",
+  "name": "Cabbage and Kielbasa Skillet",
+  "protein": "pork-sausage",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 435,
+    "carbs_g": 14,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "seafood": false,
+    "scalable_to_14": true,
+    "budget_meal_prep": true,
+    "result": "FITS"
+  },
+  "dupe_evidence": "Not a duplicate. Closest catalog dishes are all cabbage+sausage skillets carrying a defining starch/fruit that this one lacks: kielbasa-cabbage-potato-skillet (adds potato), sausage-cabbage-apple-skillet (adds apple + rice), and haluski-and-kielbasa-cabbage-noodles (adds egg noodles). Per the 'beef chili vs beef chili mac are different dishes' rule, this plain no-starch skillet (cabbage + kielbasa + carrots + mustard/broth pan sauce, 14g carb) is a distinct plate, and it is the only low-carb entry of the group since every catalog version's starch would exceed the 35g carb condition.",
+  "cross_protein_collision_note": "HIGH ATTENTION for the decider: this dish is fully protein-swappable and the catalog's entire cabbage-sausage-skillet family lives under the TURKEY protein group (smoked-turkey-sausage proxy), not pork. Watch other lanes for a same-dish twin: a smoked-turkey-sausage or generic smoked-sausage 'cabbage and sausage skillet' (no potato/noodle/apple) would be structurally identical to this and should collapse to one. If a turkey-sausage plain-cabbage-skillet candidate appears, keep the stronger single entry.",
+  "in_run_notes": "No collision with pork-sausage items already in accepted-slugs.json: italian-sausage-peppers-onions-skillet (peppers/onions, no cabbage) and baked-cauliflower-mac-smoked-sausage (cauliflower-mac bake) are different dishes.",
+  "flag": "borderline-tight against kielbasa-cabbage-potato-skillet on the protein+method+cabbage-base axis; distinguished by dropping the potato starch and the low-carb positioning. Audit-visible."
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Creamy Garlic Chicken with Spinach and Bacon Skillet",
+  "slug": "creamy-garlic-bacon-spinach-chicken-skillet",
+  "protein": "chicken",
+  "method": "skillet",
+  "cuisine": "American",
+  "source_url": "https://www.eatwell101.com/garlic-butter-chicken-spinach-bacon-recipe",
+  "source_servings": 6,
+  "src_cal": 540,
+  "src_carbs": 7,
+  "src_protein": 38,
+  "src_fat": 40,
+  "ingredients_verbatim": [
+    "6 chicken thighs, boneless and skin off (or chicken breast)",
+    "2 teaspoons olive oil",
+    "2 tablespoons butter",
+    "6 cloves garlic, finely diced",
+    "1 small yellow onion, diced",
+    "1/3 cup chicken broth (or dry white wine)",
+    "1/2 cup crispy bacon, chopped",
+    "1 3/4 cups half and half",
+    "3 cups baby spinach leaves",
+    "Salt and fresh cracked pepper",
+    "1 teaspoon Italian seasoning",
+    "1/2 cup fresh grated Parmesan cheese",
+    "Crushed chili pepper flakes, optional",
+    "1 teaspoon cornstarch (cornflour) mixed with 1 tablespoon of water (optional, if you like a thicker sauce)"
+  ],
+  "unmapped": ["half and half (board may track heavy cream/milk instead)"],
+  "why": "One-pan chicken saute in a garlic/half-and-half cream sauce with crispy bacon, spinach and parmesan; no starch base, structurally low-carb. NOTE: source page publishes NO per-serving nutrition, so src_cal/src_carbs here are a STRUCTURAL ESTIMATE (chicken + butter + bacon + half-and-half + parmesan over 6 servings ~= 520-560 cal, ~7g carbs) - it qualifies under the no-nutrition-but-structurally-low-carb rule, not on verified numbers. Bacon distinguishes it from catalog chicken-florentine (which is the same cream+spinach base). Chicken thighs/breast, olive oil, butter, garlic, onion, bacon, parmesan, spinach all map; half-and-half is the only ingredient needing a board decision. Scales to 14 by weigh-and-divide.",
+  "confidence": "low on nutrition - NO published macros, values estimated from structure; high on ingredient list (read from source). Dedup risk vs chicken-florentine mitigated by bacon."
+}

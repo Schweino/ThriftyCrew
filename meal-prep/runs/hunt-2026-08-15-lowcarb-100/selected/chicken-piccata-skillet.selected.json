@@ -1,0 +1,17 @@
+{
+  "slug": "chicken-piccata-skillet",
+  "name": "Chicken Piccata Skillet (Low-Carb Lemon-Caper)",
+  "protein": "chicken",
+  "cuisine": "Italian-American",
+  "method": "skillet",
+  "source_url": "https://www.cookedbyjulie.com/low-carb-chicken-piccata/",
+  "source_servings": 2,
+  "src_cal": 465,
+  "src_carbs": 9,
+  "src_protein": 60,
+  "src_fat": 19,
+  "unmapped": ["capers"],
+  "decision": "ACCEPT",
+  "note": "Pan-seared breast + lemon-caper pan sauce, same skillet, no starch. Distinct sauce/flavor family from every accepted chicken skillet: marsala (marsala-mushroom), creamy-tuscan (sun-dried-tomato cream), french-fricassee (white-wine velvet cream) - only the pan-seared-breast method is shared, and piccata's bright lemon-caper profile is an open niche the catalog lacks. Cross-lane checked against fresh accepted-slugs.json: no piccata of any protein accepted. Carries capers as a pricer-lane flag. Cross-protein note (not resolved): pork/turkey/veal piccata would be the same dish minus protein - future-lane merge concern only; none accepted.",
+  "cross_lane_checked": true
+}

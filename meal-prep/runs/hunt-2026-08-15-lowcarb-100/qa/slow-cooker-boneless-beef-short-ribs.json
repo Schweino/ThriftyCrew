@@ -1,0 +1,12 @@
+﻿{
+  "slug": "slow-cooker-boneless-beef-short-ribs",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    { "check": "prose-numbers",
+      "severity": "note",
+      "detail": "head.cookTime PT8H / totalTime PT8H10M reflects the low setting while the source headline time (4h10m) reflects the high setting; both options are stated in the steps, so this is a consistent editorial choice, not drift.",
+      "owner": "writer" }
+  ],
+  "notes": "Live page fetched and matches the extraction verbatim (6 servings, 5 ingredients plus to-taste salt/pepper, 4 steps). All five spec ingredients scale on one consistent 2.3333x ratio (6 -> 14): short ribs 3175 g and tomatoes 1852 g exact, garlic 20 g, onion 138 g, thyme 2 g within rounding. No invented or dropped ingredients; salt/pepper correctly handled as unmeasured to-taste seasoning. Method preserved (season, layer aromatics then tomatoes, high 4h / low 8h); added weigh-and-portion steps are house meal-prep framing, not a technique change. Title names the same dish; credit links the exact source URL. All prose literals match the spec stat and cost fields. The writer_notes pricing blocker (short ribs commodity not yet wired, cost_ps a floor) is the batch auditor/pricer lane, not source fidelity."
+}

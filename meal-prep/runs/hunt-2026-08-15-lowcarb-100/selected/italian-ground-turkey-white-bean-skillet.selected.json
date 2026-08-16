@@ -1,0 +1,16 @@
+{
+  "slug": "italian-ground-turkey-white-bean-skillet",
+  "name": "Italian Ground Turkey White Bean Skillet",
+  "protein": "turkey",
+  "cuisine": "Italian",
+  "method": "skillet",
+  "source_url": "https://www.familyfoodonthetable.com/italian-ground-turkey-skillet/",
+  "source_servings": 4,
+  "src_cal": 422,
+  "src_carbs": 21,
+  "src_protein": 41,
+  "unmapped": ["cannellini-beans", "italian-seasoning"],
+  "decision": "ACCEPT",
+  "note": "Dry one-pan Italian ground-turkey + cannellini + fire-roasted-tomato + spinach + parmesan skillet, no broth/starch. Cross-lane checked against fresh accepted-slugs.json: no turkey (or any protein) white-bean skillet accepted; accepted italian-sausage-peppers-onions-skillet is sausage+peppers with no beans, creamy-tuscan-chicken-skillet is a cream sauce - distinct dinners. Widens the turkey lane (turkey at 3 accepted) with an Italian bean skillet. Carries cannellini-beans + italian-seasoning as deliberate pricer-lane flags. Cross-protein note (not resolved here): a ground-beef/chicken/sausage Tuscan white-bean skillet would be the same dish minus protein - a future-lane merge concern only; none accepted yet.",
+  "cross_lane_checked": true
+}

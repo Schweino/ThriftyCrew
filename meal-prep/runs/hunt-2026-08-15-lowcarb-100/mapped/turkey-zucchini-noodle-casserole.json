@@ -1,0 +1,156 @@
+{
+  "slug": "turkey-zucchini-noodle-casserole",
+  "title": "Italian Zucchini Noodle Casserole (Low-Carb, Gluten-Free)",
+  "source_url": "https://www.theharvestskillet.com/italian-zucchini-noodle-casserole/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "turkey",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-15",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "Source offers 'ground turkey, chicken or beef'; house books 93/7 Ground Turkey (the title dish), which has its own priced board id and label row. Not a stretch - the source's own primary."
+  ],
+  "ingredients": [
+    {
+      "source_raw": "1 lb ground turkey, chicken or beef (0.45 kg)",
+      "item": "93/7 Ground Turkey",
+      "bid": "93-7-ground-turkey",
+      "board": "recipe",
+      "grams": 1588,
+      "buy": "3 1/2 lb",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by an explicit source WEIGHT (1 lb), not an each-count; exact 3.5x scale, zero drift. Board 6 of 7 stores, cheapest Aldi $3.9083/lb. Deliberately the 93-7-ground-turkey id (matches the 93/7 DB row), NOT the generic ground-turkey commodity whose cells are 85/15 product - booking 85/15 price against 93/7 macros would mismatch both directions."
+    },
+    {
+      "source_raw": "4 medium zucchini spiralized",
+      "item": "Zucchini",
+      "bid": "zucchini",
+      "board": "weekly",
+      "grams": 2744,
+      "buy": "14 medium, spiralized",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities each=196 g; 14 medium = 2744 g, exact 3.5x. Board 6 of 7, cheapest Aldi $1.1867/lb."
+    },
+    {
+      "source_raw": "1 14 oz. can diced tomatoes (400 g)",
+      "item": "Diced Tomatoes",
+      "bid": "diced-tomatoes",
+      "board": "weekly",
+      "grams": 1389,
+      "buy": "3 1/2 14-oz cans, undrained (about 5 3/4 cups)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Whole cans genuinely used, so the can noun is the honest cook measure (rule 0 exception); 14 oz = 397 g/can x 3.5 = 1389 g. Source's parenthetical (400 g) is the same figure rounded. Board 7 of 7, cheapest Walmart $0.0529/oz."
+    },
+    {
+      "source_raw": "1 8 oz. can tomato sauce (225 g)",
+      "item": "Tomato Sauce",
+      "bid": "tomato-sauce",
+      "board": "weekly",
+      "grams": 794,
+      "buy": "3 1/2 8-oz cans (about 3 1/4 cups)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "8 oz = 227 g/can x 3.5 = 794 g; source parenthetical 225 g agrees. Board 7 of 7, cheapest Sam's $0.0489/oz."
+    },
+    {
+      "source_raw": "(instructions step 2: 'Cook ground turkey in a pan with 1 tablespoon of oil')",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 47,
+      "buy": "3 1/2 tbsp (for browning the turkey)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "NOT in the source's printed ingredient list - the extractor flagged that step 2 uses 1 tbsp oil the list omits. Included so the card's cost and macros state what actually goes in the pan (+30 cal/serving); flagged for the writer/QA to present as a list addition with the step-2 citation. 3.5 tbsp at densities 13.5 g/tbsp = 47 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "2 tablespoons butter cut into small cubes",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "weekly",
+      "grams": 98,
+      "buy": "7 tbsp, cut into small cubes",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 7 tbsp at densities 14 g/tbsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/2 teaspoon Salt I love this Himalayan pink salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 10.5,
+      "buy": "1 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "plain salt commodity; the Himalayan brand plug is not a product requirement. Zero-macro. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 teaspoon Italian seasoning",
+      "item": "Italian Seasoning",
+      "bid": "italian-seasoning",
+      "board": "weekly",
+      "grams": 4.9,
+      "buy": "3 1/2 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Extractor concern preserved: the source's steps never say when to add it (step 3 lists only garlic powder and salt); writer should fold it into step 3 with the other seasonings. densities 1.4 g/tsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/2 teaspoon garlic powder",
+      "item": "Garlic Powder",
+      "bid": "garlic-powder",
+      "board": "weekly",
+      "grams": 5.4,
+      "buy": "1 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 3.1 g/tsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "2 cups shredded mozzarella cheese (250 g)",
+      "item": "Mozzarella Cheese",
+      "bid": "mozzarella-cheese",
+      "board": "weekly",
+      "grams": 791,
+      "buy": "7 cups shredded",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "grams from the printed measure: 7 cups at the label-accurate 113 g/cup = 791 g. The source's parenthetical (250 g for 2 cups = 125 g/cup) is a heavier cup than any shredded-cheese label prints; the printed MEASURE governs (rule 0) and the delta is noted rather than adopted. DB row Mozzarella Cheese is low-moisture part-skim shredded (USDA 304 cal/100 g) - the form the priced bag rows describe. bid from ingredient-map (Mozzarella Cheese -> mozzarella-cheese, weekly); note the TERM resolver instead answers via the shredded-cheese commodity (7 of 7, cheapest Sam's $0.1521/oz), see board_defects_observed."
+    },
+    {
+      "source_raw": "1/4 cup Parmesan cheese (35 g)",
+      "item": "Parmesan Cheese",
+      "bid": "parmesan",
+      "board": "weekly",
+      "grams": 98,
+      "buy": "3/4 cup plus 2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "label 1/4 cup = 28 g (densities cup 112); exact 3.5x = 0.875 cup = 98 g. Source's parenthetical 35 g per 1/4 cup again runs heavier than the label; printed measure governs, delta noted. Board 7 of 7, cheapest Sam's $0.3092/oz."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 462, "protein_g": 39, "carbs_g": 14, "fat_g": 28 },
+    "computed_per_serving": { "calories": 522.6, "protein_g": 41.1, "carbs_g": 19.4, "fat_g": 30.4 },
+    "protein_gap_pct": 5.5,
+    "calorie_gap_pct": 13.1,
+    "verdict": "PASS - protein gap +5.5% is well inside the 15% tolerance; the main protein is anchored by a source-stated weight, so no each-weight assumption exists to be wrong. The calorie gap is fully explained by the step-2 browning oil the source's list (and, evidently, its calculator) omits: without that line the compute is 493 cal (+6.7%). Carbs run 19.4 vs their 14 because their cups of cheese were counted at the heavier parenthetical grams while their carb entry looks net-carb flavored (they print 3 g fiber separately); our figure is the label-accurate gross.",
+    "band_check": "computed 522.6 cal in [400, 650] PASS; carbs 19.4 g <= 35 PASS"
+  },
+  "board_defects_observed": [
+    "Term-vs-map split on mozzarella: ingredient-map routes item Mozzarella Cheese to the mozzarella-cheese id (weekly), but price-ingredient's term resolver answers 'mozzarella cheese' via the generic shredded-cheese commodity (whose Walmart cell is still the Kraft Deluxe Mac and Cheese boxed dinner defect recorded by the chicken-bacon-ranch mapping). Bare term 'mozzarella' resolves to NO commodity at all (CAPTURE tier) despite the mozzarella-cheese id existing - the include rule requires the word 'cheese'."
+  ],
+  "densities_followups": [
+    "Mozzarella (shredded, part-skim): densities carries only Reduced Fat Mozzarella cup=113; the generic Mozzarella Cheese item has no densities row and this mapping used the same 113 g/cup label figure - propose a Mozzarella Cheese row (cup 113, tbsp 7) so the pair exists explicitly."
+  ]
+}

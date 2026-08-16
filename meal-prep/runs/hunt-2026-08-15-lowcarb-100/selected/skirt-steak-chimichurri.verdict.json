@@ -1,0 +1,20 @@
+{
+  "slug": "skirt-steak-chimichurri",
+  "name": "Skirt Steak with Chimichurri Sauce",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 491,
+    "carbs_g": 2,
+    "protein_g": 38,
+    "within_calorie_band": true,
+    "within_carb_ceiling": true,
+    "no_seafood": true,
+    "scalable_to_14": true
+  },
+  "dupe_of": null,
+  "evidence": "No chimichurri or Argentine seared-steak dish exists in the 544-recipe catalog digest; the eight steak slugs present (chipotle-steak-burrito, honey-garlic-steak-bites-potatoes, pepper-steak-with-rice, philly-cheesesteak-skillet-bowls, salisbury-steak-potato-bowls, slow-cooker-steak-and-onions-rice, slow-cooker-swiss-steak-rice, steak-fajita-rice-bowls) are all steak-plus-starch dishes with unrelated sauce profiles. Accepted flank-steak-parmesan-green-beans is a parmesan-crusted flank plate, a different sauce and method. Not a duplicate.",
+  "cross_protein_collision_watch": "Chimichurri is a protein-agnostic herb-oil sauce over a seared protein; a chicken chimichurri (e.g. grilled chimichurri chicken) or pork chimichurri version would be structurally the same dish. Decider should check other-protein pools for any chimichurri/herb-oil-over-seared-protein twin before final selection.",
+  "unmapped_note": "Carries unmapped cuts/items (skirt-steak, flat-iron-steak, fresh-parsley, fresh-oregano, red-wine-vinegar, red-pepper-flakes); not penalised per v2.1 5.1 pricer-lane exercise.",
+  "confidence": "high on source numbers, read directly from recipe card"
+}

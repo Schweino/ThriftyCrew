@@ -1,0 +1,16 @@
+{
+  "slug": "italian-sausage-stuffed-peppers-bake",
+  "name": "Italian Sausage Stuffed Peppers with Marinara and Mozzarella",
+  "protein": "pork-sausage",
+  "cuisine": "Italian-American",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "fit_evidence": "561 cal (within 400-650), 8g carb (<=35g), no seafood, budget baked meal-prep entree, whole-pepper bake scales to 14 by weigh-and-divide.",
+  "dupe_evidence": "Not a duplicate. Closest catalog flavor-neighbor is italian-sausage-penne (Italian Sausage Penne with Peppers) and the accepted-this-run italian-sausage-peppers-onions-skillet, but both are sliced-and-sauteed / pasta dishes; this is a stuffed-and-baked whole-pepper entree (different method + form). Closest form-neighbor is the accepted philly-cheesesteak-stuffed-peppers, but that is beef with cheesesteak flavor vs pork sausage + marinara + mozzarella (only 2 of 4: same low-carb starch + same bake-stuffed method; different protein + different sauce family) = different dinner.",
+  "cross_protein_collision_notes": [
+    "SAME-DISH-DIFFERENT-PROTEIN RISK: classic 'Italian stuffed peppers with marinara + mozzarella' is most often made with ground beef or ground turkey. If a beef or turkey selector's pool holds a marinara-and-mozzarella baked stuffed pepper, it is structurally the SAME plate as this one - decider should run the cross-protein merge and keep only one.",
+    "SAME-FORM-DIFFERENT-FILLING: already in catalog/accepted are philly-cheesesteak-stuffed-peppers (beef) and turkey-stuffed-pepper-soup (turkey, soup form). Neither collides on filling/flavor, but decider should confirm the catalog wants a third baked stuffed-pepper entree."
+  ],
+  "borderline": false,
+  "note": "Sourcer flagged flavor adjacency to italian-sausage-peppers-onions-skillet; confirmed the stuffed-and-baked form reads as a distinct dish from the sliced-saute skillet, so not borderline."
+}

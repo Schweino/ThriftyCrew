@@ -1,0 +1,31 @@
+{
+  "name": "Cajun Butter Steak Bites",
+  "slug": "cajun-butter-steak-bites",
+  "protein": "beef",
+  "method": "skillet",
+  "cuisine": "Cajun/Creole",
+  "source_url": "https://cafedelites.com/cajun-butter-steak-bites/",
+  "source_servings": 4,
+  "src_cal": 492,
+  "src_carbs": 4,
+  "src_protein": 34,
+  "ingredients_verbatim": [
+    "1 tablespoon mild paprika",
+    "1 1/2 teaspoons salt",
+    "1 1/2 teaspoons garlic powder",
+    "1 teaspoon onion powder",
+    "1 teaspoon chili powder",
+    "3/4 teaspoon dried thyme",
+    "1/2 teaspoon dried oregano",
+    "1/2 teaspoon brown sugar",
+    "1/2-3/4 teaspoon cayenne pepper",
+    "1/4 teaspoon cracked pepper",
+    "23 oz steak (sirloin, rump, New York strip, porterhouse or ribeye), cut into 2-inch cubes",
+    "1-2 tablespoons canola oil (divided)",
+    "1/4 cup butter",
+    "4 cloves garlic, finely chopped"
+  ],
+  "unmapped": [],
+  "why": "Squarely in-band on source numbers: 492 cal / 4 g carb / 34 g protein per serving. Sirloin cubes (board: sirloin-steak) seared in Cajun butter - meat + fat, structurally low-carb, batch-scalable. All main ingredients map to the board. HONEST FLAG: near-duplicate risk against the already-accepted 'garlic-butter-steak-bites-zucchini' (both are steak cubes pan-seared in butter); this one differs by a Cajun spice rub and no vegetable. Leaving the dedup call to the adjudicator rather than dropping it - it is the cleanest mid-band macro fit I verified.",
+  "confidence": "high on numbers; medium on dedup - flagged as possible near-dup of accepted garlic-butter-steak-bites-zucchini"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Methi Malai Murgh (Creamy Fenugreek Chicken)",
+  "slug": "methi-malai-murgh-creamy-fenugreek-chicken",
+  "protein": "chicken",
+  "cuisine": "Indian (North Indian)",
+  "method": "braise (marinate, then brown aromatics and simmer chicken covered in a cream-yogurt gravy until reduced)",
+  "source_url": "https://kitchenofdebjani.com/2018/11/methi-murgh-malai/",
+  "source_servings": 6,
+  "src_cal": 418,
+  "src_carbs": 11.6,
+  "src_protein": 52.3,
+  "src_fat": 17.2,
+  "ingredients_verbatim": [
+    "1 kg Chicken curry cut",
+    "200 ml Single Cream",
+    "1 tablespoon Garlic paste",
+    "1/2 tablespoon Ginger paste",
+    "1 tablespoon Kasuri Methi",
+    "1 tablespoon Black Pepper Powder",
+    "3 Onions",
+    "100 g Hung Curd",
+    "100 ml Single Cream",
+    "1 teaspoon Kasuri Methi",
+    "3 tablespoon Butter",
+    "1.5 teaspoon Salt or to taste"
+  ],
+  "main_ingredients": ["chicken-breast", "heavy-cream", "greek-yogurt", "onions", "butter", "garlic", "fresh-ginger"],
+  "unmapped": ["kasuri-methi"],
+  "why": "Distinctive North Indian cream braise (chicken simmered covered in a hung-curd/cream gravy scented with dried fenugreek until the gravy reduces) with no analog in the catalog - not another tomato curry (madras/jalfrezi/rogan josh) or coconut curry (korma/kadai/rendang). Published recipe-card nutrition sits in-band and very low carb: 418 cal / 52.3g protein / 11.6g carbs / 17.2g fat per serving - meat + dairy fat, no rice/potato/bread/bean base, so the low-carb, high-protein profile is structural as well as published. Batch-scalable to 14 in a braising pot with weigh-and-divide. Kasuri methi (dried fenugreek leaves) is the one signature ingredient with likely no board home - flagged to exercise the pricer lane; cream/yogurt/onion/butter/garlic/ginger all map. Bone-in curry-cut would rebuild on chicken breast (or boneless thigh) for weigh-and-divide portioning.",
+  "confidence": "high on band-fit - read the recipe-card nutrition (418 cal / 11.6g carbs / 52.3g protein) and full ingredient list directly. Note src_cal 418 sits toward the floor; the dish is fat-rich (cream + butter) so our label-accurate recompute is unlikely to drop below 400, but flagging for the selector."
+}

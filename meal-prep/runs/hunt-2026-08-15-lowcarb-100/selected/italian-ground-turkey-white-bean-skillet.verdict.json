@@ -1,0 +1,24 @@
+{
+  "slug": "italian-ground-turkey-white-bean-skillet",
+  "name": "Italian Ground Turkey White Bean Skillet",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "src_cal": 422,
+    "src_carbs": 21,
+    "cal_ok": true,
+    "carbs_ok": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "budget": true,
+    "note": "422 cal / 21g carbs per serving clears the 400-650 cal and <=35g carb band; ground turkey + canned cannellini + canned tomatoes is a cheap weigh-and-divide skillet with no seafood."
+  },
+  "dupe_of": null,
+  "evidence": "Not a duplicate of any turkey white-bean catalog entry: mediterranean-turkey-white-bean-stew-bowls is a broth stew served over rice with olives+kale, turkey-chili-verde-white-beans is a salsa/sour-cream chili over rice, turkey-sausage-kale-white-bean-soup and turkey-minestrone are soups (the latter with pasta), and turkey-white-bean-cassoulet is a bacon/sausage French braise over rice; this candidate is a dry one-pan Italian skillet (Italian seasoning + parmesan + spinach + fire-roasted tomato, NO broth, NO starch), so it shares only the bean+tomato base while differing on starch and method.",
+  "cross_protein_collisions": [
+    "Structurally this is an 'Italian ground-meat + white bean + tomato + spinach + parmesan dry skillet'. A ground-beef, ground-chicken, or Italian-sausage/pork version of the same Tuscan white-bean skillet would be the same dish under a different protein - decider should watch the pork/sausage and chicken lanes for a 'Tuscan/Italian white bean [sausage|chicken] skillet' twin. (Accepted italian-sausage-peppers-onions-skillet is sausage+peppers with no beans - NOT this dish.)"
+  ],
+  "borderline": false,
+  "unmapped": ["cannellini-beans", "italian-seasoning"],
+  "unmapped_note": "Carrying unmapped ingredients is wanted per run v2.1 5.1 (pricer-lane exercise); not penalized."
+}

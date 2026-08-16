@@ -1,0 +1,27 @@
+{
+  "slug": "creamy-garlic-herb-pork-chops",
+  "name": "Creamy Garlic Herb Pork Chops",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 497,
+    "carbs_g": 7,
+    "within_calorie_band": true,
+    "within_carb_cap": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "batch_format": "skillet pan-sauce chops, no starch base - scales cleanly for meal prep"
+  },
+  "dup_check": {
+    "catalog_nearest": "creamy-mushroom-pork-chops-over-mashed-potatoes",
+    "evidence": "Nearest catalog pork-chop cream dish is Creamy Mushroom Pork Chops, but that is a mushroom-cream/broth sauce (flour-thickened) served over mashed russet potatoes; this candidate is a garlic-herb white-wine + parmesan + lemon cream pan sauce with an almond-flour dredge and NO starch base - different sauce flavor family and different plate, so not a duplicate.",
+    "other_catalog_chops_ruled_out": "marry-me-pork-chops-over-pasta is a sun-dried-tomato cream sauce over pasta; countryfried-pork-chops-with-bacon-gravy is a breaded fried chop with bacon gravy - neither matches this garlic-herb-wine no-starch chop.",
+    "accepted_slugs_checked": ["creamy-tuscan-chicken-skillet", "chicken-bacon-ranch-cauliflower-bake"],
+    "accepted_slugs_conflict": "none"
+  },
+  "cross_protein_flags": [
+    "Structurally this is a 'creamy garlic-herb white-wine pan sauce over a pan-seared cutlet, no starch' dish - the SAUCE is protein-agnostic. Watch for a chicken-lane 'creamy garlic herb chicken skillet' or a turkey/pork-tenderloin cutlet in the same garlic-herb-cream/wine sauce; those would be same-dish-different-protein twins. Distinct from the already-accepted creamy-tuscan-chicken-skillet (that is sun-dried-tomato + spinach Tuscan, a different sauce)."
+  ],
+  "unmapped_ingredients": ["almond-flour", "dry-white-wine"],
+  "notes": "Widens spread as a low-carb non-Tuscan cream chop; carries two genuine unmapped signature ingredients (almond-flour dredge, dry white wine) that exercise the pricer lane as intended."
+}

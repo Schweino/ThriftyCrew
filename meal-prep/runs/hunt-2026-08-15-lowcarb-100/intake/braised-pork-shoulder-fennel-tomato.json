@@ -1,0 +1,68 @@
+{
+  "name": "Braised Pork Shoulder with Fennel and Tomato",
+  "slug": "braised-pork-shoulder-fennel-tomato",
+  "protein": "pork",
+  "cuisine": "Mediterranean",
+  "source_url": "https://www.carbmanager.com/recipe-detail/ug:e7fabfd2af844317a0ca32dd5fedccd9/keto-braised-pork-shoulder",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Pork Shoulder", "grams": 3742, "buy": "8 1/4 lb boneless pork shoulder" },
+    { "item": "Chicken Broth", "grams": 2220, "buy": "9 1/4 cups" },
+    { "item": "Tomato Paste", "grams": 112, "buy": "7 tbsp (about a 6-oz can plus 1 tbsp)" },
+    { "item": "Apple Cider Vinegar", "grams": 71, "buy": "4 3/4 tbsp" },
+    { "item": "Dried Thyme", "grams": 4.75, "buy": "4 3/4 tsp" },
+    { "item": "Yellow Mustard", "grams": 24, "buy": "4 3/4 tsp yellow" },
+    { "item": "Olive Oil", "grams": 64, "buy": "4 3/4 tbsp extra virgin" },
+    { "item": "Fennel Bulb", "grams": 1170, "buy": "5 medium fennel bulbs, quartered" },
+    { "item": "Garlic", "grams": 15, "buy": "5 cloves, thinly sliced" },
+    { "item": "Red Onion", "grams": 275, "buy": "2 1/2 medium, thinly sliced" }
+  ],
+  "macros_per_serving": { "calories": 588.6, "protein_g": 48.7, "carbs_g": 10.8, "fat_g": 37.9 },
+  "writer_notes": [
+    "SOURCE YIELD derived = 3 (mapper source_servings_basis: page prints nutrition per 'bowl' with no count; protein, calories and fat cluster at 3 servings). Rebuilt to 14 at the mapper's 4.6667x scale. Every gram and buy string transcribed from mapped\\braised-pork-shoulder-fennel-tomato.json; no number computed in prose.",
+    "MACROS transcribed from the food-macros-db recompute at 14 servings, re-verified by the writer with the same formula the build guard uses: batch 8239.9 cal / 682.2 P / 151.2 C / 531.1 F over 14 = 588.6 cal, 48.7 g protein, 10.8 g carbs, 37.9 g fat per serving. Build rounds to 589 / 49 / 11 / 38. In band for this run (400 to 650 cal PASS at 589; 35 g carb or less PASS at 11). Matches the mapper computed_per_serving exactly (588.6 / 48.7 / 10.8 / 37.9).",
+    "CARB NOTE from the mapper: computed 10.8 g total per serving vs the source's printed 7.7 g total / 5.2 g net. Our fennel is booked at the full USDA 234 g/bulb while Carb Manager's '1 each' bulb runs lighter. Conservative in the safe direction for a carb ceiling; still well under the 35 g cap.",
+    "FENNEL IS A BLOCKING PRICING GAP, carried from the mapper (item_id NULL). 'Fennel Bulb' is a NEW food-macros-db row (USDA raw, 31 cal/100 g) but is NOT in the pricing vocab db\\ingredients.json (only 'Ground Fennel', a spice, which is a form-flip and disqualified). The fresh-fennel commodity has zero priced board cells today; the queue term 'fennel' is already scored CARRIED (Baker's Fresh Fennel $3.99) but the priced cell is still owed by the pricer lane. Consequence: build-v2-spec throws UNKNOWN INGREDIENT NAME on 'Fennel Bulb' and no db\\recipes spec can be assembled until a fennel-bulb pricing row lands. Not a writer-lane fix (never mint a canon name, never weaken a guard). See report.",
+    "FENNEL QUANTITY drift, carried from the mapper: exact 4.6667 bulbs rounded UP to 5 whole bulbs (+7.1%, +1.9 cal/serving). A two-thirds bulb is not a cook measure. Same +7.1% up-rounding on garlic (5 cloves, 4-cal line) and red onion (2 1/2 medium, +0.8 cal/serving), all noted by the mapper.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked the costed list against the steps both directions: olive oil (step 2), pork shoulder (2, 5, 6), fennel (3), red onion (3), garlic (4), apple cider vinegar (4), dried thyme (4), yellow mustard (4), tomato paste (4), chicken broth (5). All 10 used; no step calls for anything off the list.",
+    "SCALE ADAPTATION: the source browns one 28-oz shoulder whole; at 8 1/4 lb for 14 servings the pork is cut into large chunks so it browns and braises evenly, then shredded. No ingredient added or dropped by the change.",
+    "SHOP_SMART makes NO leftover, per-ounce, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount. Re-walk the bullets against cost_lines once costed before publish."
+  ],
+  "prose": {
+    "intro_html": "Pork shoulder is one of the great bargains in the meat case. It is the cut butchers cannot charge much for because it needs time, and time is free. You brown it, build a quick pan of fennel, onion, garlic, and tomato paste under it, then let the oven do the work while you go do something else. The fennel cooks down soft and sweet and loses its sharp edge, the pork pulls apart with a fork, and the whole thing tastes like it came out of a restaurant kitchen. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 12 grams of carbs. That is a slow Sunday braise priced like a weeknight.",
+    "shop_smart": [
+      "<strong>Eight and a quarter pounds of pork shoulder is the whole game.</strong> This is where nearly all of the money and all of the protein live, and it is still one of the cheapest cuts you can buy because it rewards patience instead of a fancy grade. Reach for a big boneless shoulder, sometimes labeled Boston butt, rather than the small trimmed roasts so you are paying for pork, not packaging.",
+      "<strong>Five fennel bulbs and a couple of red onions are the vegetable body of the braise.</strong> The fennel is the whole point of this dish, so buy the firm bulbs with the fronds still attached and trim them down at home. They cook low and slow into something soft and sweet, and the two and a half red onions melt right in beside them.",
+      "<strong>Nine and a quarter cups of chicken broth carries the braise.</strong> This is the liquid the pork cooks in and the pan juices you spoon over every container, so a couple of the big cartons covers it. Any plain chicken broth works here, so skip the fancy bone broth and buy the everyday one.",
+      "<strong>Tomato paste, garlic, cider vinegar, mustard, thyme, and olive oil build the flavor.</strong> A little tomato paste and a splash of cider vinegar give the braise its backbone, and the garlic, mustard, and thyme round it out. These are pantry and produce staples you buy once and cook with for a long time."
+    ],
+    "make_it": [
+      "Weigh your empty Dutch oven or the biggest oven-safe pot you own and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+      "Heat the oven to 375 degrees F. Cut the pork shoulder into large chunks about 3 inches across. Heat the olive oil in the pot over medium-high heat and brown the pork on all sides, working in batches so the pot is not crowded. Move the browned pork to a plate and set it aside.",
+      "Quarter the fennel bulbs and thinly slice the red onion. Add both to the same pot and cook gently for a few minutes, stirring now and then, until they start to soften.",
+      "Thinly slice the garlic. Stir the garlic, apple cider vinegar, dried thyme, yellow mustard, and tomato paste into the pot and cook one minute more, scraping the browned bits up off the bottom.",
+      "Return the pork and any collected juices to the pot. Pour in the chicken broth and bring it up to a boil. Cover the pot and move it to the oven for 1 hour.",
+      "Take the pot out, stir, and turn the pork. Return it covered for 30 minutes, then uncovered for 30 minutes more, until the pork is fork-tender and the fennel is soft. If the pan looks dry along the way, top it up with a little extra broth. Shred the pork with two forks and stir it back through the vegetables and pan juices.",
+      "Weigh the full pot and subtract the empty weight from Step 1 to get the cooked total. Divide by 14 and spoon that exact weight into each container, giving every one an even share of pork, fennel, and juices."
+    ],
+    "portion_html": "Set the full pot on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container, sharing the pork, fennel, and juices evenly. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a fork-tender pork braise that eats like a restaurant plate. The pork shoulder carries it; the fennel, onion, and tomato paste just make it taste like you spent all day.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Braised pork shoulder with fennel and tomato for meal prep: browned pork shoulder slow-cooked with fennel, red onion, garlic, and tomato paste in chicken broth, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 12 grams of carbs.",
+    "keywords": "braised pork shoulder, pork shoulder fennel, low carb pork dinner, high protein meal prep, keto pork braise",
+    "prepTime": "PT15M",
+    "cookTime": "PT2H20M",
+    "totalTime": "PT2H35M",
+    "steps": [
+      "Weigh the empty pot and write the number down.",
+      "Cut the pork into large chunks and brown it in the olive oil, then set it aside.",
+      "Soften the quartered fennel and sliced red onion in the same pot.",
+      "Stir in the garlic, cider vinegar, thyme, mustard, and tomato paste and cook one minute.",
+      "Return the pork, add the chicken broth, bring to a boil, cover, and braise at 375 degrees F.",
+      "Braise covered then uncovered until fork-tender, shred the pork, and stir it back through.",
+      "Weigh the pot, subtract the empty weight, and divide across 14 containers."
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "sheet-pan-tandoori-chicken-cauliflower",
+  "name": "Sheet-Pan Tandoori Chicken and Cauliflower",
+  "protein": "chicken",
+  "cuisine": "Indian",
+  "source_url": "https://nomnompaleo.com/sheet-pan-tandoori-chicken",
+  "decision": "ACCEPT",
+  "decided_by": "decider",
+  "cross_lane_dupe_check": "No collision with accepted-slugs.json (read fresh, 34 slugs). Catalog/accepted Indian and chicken dishes are saucy braised curries (tikka/madras/burmese-dal); this is a dry-roasted yogurt/coconut tandoori sheet-pan bake - distinct method and plate. Adjudicator flagged a possible same-dish tandoori twin in another protein pool; none present in accepted list, noted for orchestrator cross-protein merge.",
+  "note": "Widens catalog cuisine spread to Indian (catalog skews American/Tex-Mex). Passes fit: 590 cal / 20g carb, oven sheet-pan, scales to 14, no seafood. Two soft unmapped flags (tandoori spice mix, avocado oil) for the pricer lane."
+}

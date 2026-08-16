@@ -1,0 +1,19 @@
+{
+  "slug": "low-carb-ground-beef-stroganoff-skillet",
+  "name": "Low-Carb Ground Beef Stroganoff Skillet (Noodleless)",
+  "protein": "beef",
+  "cuisine": "Eastern European",
+  "method": "skillet",
+  "source_url": "https://www.lowcarbmaven.com/low-carb-beef-stroganoff-ground-beef-stroganoff/",
+  "src_cal": 466,
+  "src_carbs": 5.86,
+  "src_protein": 26.5,
+  "src_fat": 36.6,
+  "unmapped": ["brandy", "beef base / bouillon paste"],
+  "decision": "ACCEPT",
+  "decided_by": "decider",
+  "run": "hunt-2026-08-15-lowcarb-100",
+  "adjudicator_verdict": "KEEP",
+  "overruled": false,
+  "note": "Noodleless sour-cream/mushroom stroganoff over fried cabbage or cauliflower rice - 466 cal, 5.86g carbs (~8g net served), a showcase low-carb number with deep headroom. Adjudicator flagged BORDERLINE vs catalog ground-beef-stroganoff-pasta (shares protein+sauce+method, differs on starch). Confirmed KEEP: unlike the taco-skillet candidate I cut this decision, stroganoff has only ONE catalog neighbor (not a crowded lane), the noodle->cabbage/cauliflower swap changes the plate and carb profile materially (5.86g vs a pasta dinner), and it broadens the mix AWAY from the American/Tex-Mex skew. Cross-lane dedup vs fresh accepted-slugs: no stroganoff or ground-beef skillet accepted; distinct from the flank-steak whole-muscle beef accepted alongside it. Cross-protein watch: a low-carb/noodleless turkey stroganoff would be the structural twin (catalog already has onepot-ground-turkey-stroganoff) - flagging for the merge pass, not resolving."
+}

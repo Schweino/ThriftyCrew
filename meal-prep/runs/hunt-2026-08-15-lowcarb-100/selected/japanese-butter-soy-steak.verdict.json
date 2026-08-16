@@ -1,0 +1,17 @@
+{
+  "slug": "japanese-butter-soy-steak",
+  "name": "Japanese Butter-Soy Pan Steak",
+  "protein": "beef",
+  "cuisine": "Japanese",
+  "verdict": "KEEP",
+  "conditions_check": {
+    "calories": "506/serving, published and machine-read from source text; within 400-650",
+    "carbs": "~4g/serving structural estimate; the only carb sources are 2 tbsp mirin + 3 tbsp sake across 2 servings, which cannot approach the 35g cap even if the estimate is loose - clears",
+    "seafood": "none - beef",
+    "scalable_14": "pan-seared whole-muscle steak scales linearly (more steaks, same pan sauce); yes",
+    "budget_meal_prep": "source specs tenderloin but explicitly allows flank/skirt/flat-iron; candidate flags rebuild on board sirloin-steak, so cost is plausible"
+  },
+  "dupe_evidence": "No catalog duplicate. Japanese beef dishes in the catalog (gyudon-japanese-beef-onion-rice-bowls, japanese-ground-beef-curry, japanese-soboro-don-beef-egg-rice-bowls) are all thin-sliced or ground beef served over rice - none is a pan-seared whole-muscle steak. Catalog steak dishes differ by method/flavor: pepper-steak-with-rice (Chinese stir-fry), honey-garlic-steak-bites-potatoes (honey-garlic + potato), slow-cooker-steak-and-onions-rice (braised over rice). Nearest neighbor in accepted-slugs is garlic-butter-steak-bites-zucchini, which shares beef+butter+skillet+low-carb but has a Western garlic-butter sauce and cubed-bites-with-zucchini format vs this candidate's Japanese soy-mirin-sake butter pan sauce on a whole steak - distinct flavor family, kept as distinct. Widens catalog with its only Japanese whole-muscle steak.",
+  "cross_protein_watch": "Structurally this is a whole-muscle protein pan-seared in a Japanese butter-soy-mirin-sake (wafu) pan sauce with no starch base. The decider should watch other selectors' pools for the same plate on a different protein: a chicken wafu/butter-soy pan cutlet or a pork butter-soy chop would be the same dinner with the protein swapped. Also flag any 'teriyaki steak' or 'wafu steak' beef candidate elsewhere in the beef pool as a potential twin.",
+  "borderline": false
+}

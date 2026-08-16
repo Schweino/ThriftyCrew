@@ -1,0 +1,15 @@
+{
+  "slug": "buffalo-chicken-cauliflower-casserole",
+  "name": "Buffalo Chicken & Cauliflower Casserole",
+  "protein": "chicken",
+  "verdict": "BORDERLINE",
+  "recommendation": "DUPE",
+  "fit": "PASS",
+  "band_check": "453 cal (400-650 OK) / 7g carbs (<=35 OK) / no seafood / oven bake scalable to 14 by weight - PASS on conditions",
+  "dupe_evidence": "Near-duplicate of accepted-slug chicken-bacon-ranch-cauliflower-bake: both are shredded chicken + cauliflower florets bound in cream cheese/heavy cream/shredded cheese + bacon, baked. Three of four axes match (protein=chicken, starch/base=cauliflower, method=bake); only the sauce/flavor family differs (buffalo hot sauce vs ranch). The plate a diner sees - a creamy bacon-and-cheese cauliflower chicken bake - is essentially the same dinner, so I flag it rather than silently keep. Distinct from catalog Buffalo Chicken Pasta Bake (pasta, high-carb) and Buffalo Chicken Burrito - the collision is with the ranch cauliflower bake, not the buffalo-named catalog items.",
+  "borderline": true,
+  "borderline_reason": "Buffalo is an iconic, assertive flavor and a diner may read buffalo-vs-ranch as two dinners; but structurally the bake is near-identical to the accepted chicken-bacon-ranch-cauliflower-bake. Audit stage with full pool view should make the final call.",
+  "cross_protein_collision_notes": "Also collides within the chicken pool with other creamy chicken-cauliflower bakes visible as sibling verdicts: jalapeno-popper-chicken-cauliflower-bake and low-carb-chicken-bacon-broccoli-cauliflower-bake (same cream-cheese/cheddar cauliflower chicken bake body). Cross-protein: catalog has Buffalo Turkey and Potato Bowls; a buffalo-turkey-cauliflower-bake twin in the turkey pool would be the same dish minus protein - decider should scan turkey pool.",
+  "unmapped": [],
+  "ruled_by": "adjudicator (parallel, chicken lane: chicken-bake)"
+}

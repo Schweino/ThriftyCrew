@@ -1,0 +1,27 @@
+{
+  "name": "Skirt Steak with Chimichurri Sauce",
+  "slug": "skirt-steak-chimichurri",
+  "protein": "beef",
+  "cuisine": "Argentine",
+  "method": "skillet sear + food-processor herb sauce",
+  "source_url": "https://www.recipetineats.com/skirt-steak-with-chimichurri-sauce/",
+  "source_servings": 4,
+  "src_cal": 491,
+  "src_carbs": 2,
+  "src_protein": 38,
+  "ingredients_verbatim": [
+    "1 cup parsley leaves",
+    "1 tbsp oregano leaves",
+    "4 garlic cloves, minced",
+    "0-2 tsp red pepper flakes",
+    "1/4 cup red wine vinegar",
+    "1/2 tsp salt",
+    "Black pepper",
+    "1/2 cup extra virgin olive oil",
+    "700g flat iron, flank, or skirt steak",
+    "Salt and pepper"
+  ],
+  "unmapped": ["skirt-steak", "flat-iron-steak", "fresh-parsley", "fresh-oregano", "red-wine-vinegar", "red-pepper-flakes"],
+  "why": "Squarely mid-band on the source's own numbers: 491 cal / 2g carb / 38g protein per serving. Whole-muscle beef (skirt/flank/flat-iron) + herb-oil sauce is structurally near-zero-carb (no rice/pasta/potato/bread/bean), so it clears the 35g carb ceiling with huge margin and the calories sit right in the 450-600 sweet spot. Sear-and-slice skillet method scales cleanly to 14 with weigh-and-divide; chimichurri batches trivially. Distinct from flank-steak-parmesan-green-beans (already taken this run) and no chimichurri/skirt dish in the 544-recipe catalog. Board tracks sirloin/ribeye/chuck but not skirt/flank/flat-iron cut - flagged as unmapped per the pricer-lane exercise (the recipe rebuilds fine on sirloin-steak if the board prefers, but the cut is left flagged for the selector). Fresh parsley/oregano, red wine vinegar, and red pepper flakes also flagged as possible board gaps.",
+  "confidence": "high on source numbers - nutrition read directly from the recipe card"
+}

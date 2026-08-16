@@ -1,0 +1,15 @@
+{
+  "slug": "butter-chicken",
+  "name": "Butter Chicken (Murgh Makhani)",
+  "protein": "chicken",
+  "verdict": "DUPE",
+  "dupe_of": "slow-cooker-butter-chicken-rice-bowls",
+  "fit": {
+    "in_band": true,
+    "cal": 402,
+    "carbs": 9.8,
+    "note": "Published 402 cal / 9.8g carbs (excl. rice) clears the 400-650 cal / <=35g carb band; no seafood; braise scales cleanly to 14. Meets CONDITIONS, but killed on duplication."
+  },
+  "evidence": "Catalog recipe 'Slow Cooker Butter Chicken Rice Bowls' (slow-cooker-butter-chicken-rice-bowls) is the identical dish - chicken thigh braised in a cream-tomato makhani sauce; 3 of 4 axes match (protein=chicken, sauce=makhani cream-tomato, method=slow braise), the only difference being the catalog plates it over rice while this serves rice on the side, which is not a distinguishing plate. Also adjacent (not dupes): chicken-tikka-masala and chicken-korma rice bowls are separate British-Indian/korma dishes.",
+  "cross_protein_watch": "If a beef, turkey, or paneer 'makhani/butter masala' candidate exists in another selector's pool it would be the same sauce-family dish on a different protein; those are distinct proteins so not this selector's dupes, but flagging structural collision for the decider's cross-protein merge."
+}

@@ -1,0 +1,22 @@
+{
+  "slug": "greek-turkey-spinach-feta-meatball-bake",
+  "name": "Greek Turkey Spinach & Feta Meatball Bake",
+  "protein": "turkey",
+  "cuisine": "Greek",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 404,
+    "carbs": 13,
+    "in_band": true,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "404 cal (>=400), 13 g carb (<=35), no seafood, batch-form meatballs in a 9x13 and multiply x3.5 for 14 servings; clears all conditions."
+  },
+  "dupe_evidence": "Not a duplicate of any live-catalog turkey meatball dish. Closest neighbor greek-turkey-meatballs-with-lemon-orzo shares the Greek+feta+turkey-meatball flavor family but is a meatball-over-pasta plate (orzo starch base, higher carb) whereas this is a starchless baked meatball dish; greek-turkey-spanakorizo-skillet shares turkey+feta+spinach but is a rice skillet, not meatballs; greek-turkey-youvarlakia is an egg-lemon meatball-and-rice braise. Three distinct plates, none is this starchless spinach-in-the-meatball bake.",
+  "cross_protein_collision_flags": [
+    "Structurally this is 'spinach + feta meatballs, starchless bake' in Greek/Mediterranean flavor. A beef, pork, or chicken Greek/Mediterranean spinach-feta meatball (e.g. a chicken 'Greek meatball bake' or beef keftedes-style spinach-feta meatball) in another selector's pool would be the same dish in a different protein - decider should check for a same-dish-different-protein twin.",
+    "Milder overlap with any 'Mediterranean feta meatball' candidate regardless of starch; the low-carb starchless format is the distinguishing hook, so a version served over orzo/rice/potato is a different plate and should not be merged against this one."
+  ],
+  "accepted_slugs_checked": ["creamy-tuscan-chicken-skillet","chicken-bacon-ranch-cauliflower-bake","turkey-zucchini-noodle-casserole","crustless-bacon-gruyere-quiche","french-chicken-fricassee","italian-sausage-peppers-onions-skillet","flank-steak-parmesan-green-beans","low-carb-ground-beef-stroganoff-skillet","burmese-chicken-dal-curry"],
+  "accepted_slugs_conflict": false
+}

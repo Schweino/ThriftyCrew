@@ -1,0 +1,237 @@
+{
+  "slug": "burmese-chicken-dal-curry",
+  "title": "Burma Superstar Chicken Dal Curry",
+  "source_url": "https://www.skinnytaste.com/burma-superstar-chicken-dal-curry/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-15",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    {
+      "from": "2 1/2 lbs (8) bone-in chicken thighs, skin removed",
+      "to": "Boneless Skinless Chicken Thigh, 28 thighs (2800 g)",
+      "basis": "Established estate precedent: chicken-provencal and korean-braised-chicken-potatoes-dakdoritang both rebuilt bone-in-thigh sources onto the Boneless Skinless Chicken Thigh item at the densities each=100 g weight (provencal: 8 bone-in thighs x 3.5 = 28 -> 2800 g, the identical shape to this recipe). The spec engine drives cost AND macros from one grams number, so bone-in purchase grams would corrupt macros with ~30% inedible bone; the estate's answer is the substitution, not a bone-in DB row. Yield check: source 1134 g bone-in skin-on at the USDA ~70% meat yield after bone and skin is ~800 g meat = 8 x 100 g, so the substitution preserves the source's actual meat quantity."
+    }
+  ],
+  "registrar_rulings": [
+    {
+      "proposed_id": "split-peas",
+      "for_item": "Yellow Split Peas",
+      "status": "PENDING - proposal drafted, registrar not yet consulted (mapper lane cannot invoke the registrar agent; orchestrator must route it)",
+      "mapper_sweep_evidence": "price-ingredient.ps1 verdict ABSENT ('no commodity claims this term'); no split-pea id in commodities.json, recipe-commodities.json, or the recipe-board (+45 ids). Nearest neighbors chickpeas / pigeon-peas / frozen-peas are all different products (frozen-peas would additionally be a form-flip: fresh-frozen vegetable vs dry legume). Dry split peas are a standard dry-bean-aisle staple in the same aisle class as the existing chickpeas commodity, so carriage is plausible; the pricer rules.",
+      "meanwhile": "ingredient maps item_id null (safe pantry-static pricing); term 'yellow split peas' enqueued BLOCKING - it is the dal, a title ingredient"
+    }
+  ],
+  "ingredients": [
+    {
+      "source_raw": "1/2 cup yellow split peas",
+      "item": "Yellow Split Peas",
+      "bid": null,
+      "board": null,
+      "grams": 343,
+      "buy": "1 3/4 cups dry",
+      "optional": false,
+      "decision": "mapped-null-pending-registrar",
+      "notes": "exact scale 1.75 cups, no quantization needed. densities.json has NO Yellow Split Peas row (FLAGGED); grams from the USDA record's own portion, 1 cup dry = 196 g -> 343 g. NEW food-DB row added (USDA FDC 172428, 364 cal/100 g dry; yellow shares the green-split-pea record, disclosed). bid null pending registrar; term enqueued blocking."
+    },
+    {
+      "source_raw": "2 1/2 lbs (8) bone-in chicken thighs, skin removed",
+      "item": "Boneless Skinless Chicken Thigh",
+      "bid": "boneless-skinless-chicken-thigh",
+      "board": "recipe",
+      "grams": 2800,
+      "buy": "28 boneless skinless chicken thighs (about 6 1/4 lb)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "RULED SUBSTITUTION, see ruled_substitutions: source's 8 bone-in thighs -> 28 boneless-skinless at the estate's densities each=100 g. Countable-first grams: 28 x 100 = 2800; the lb parenthetical (6.25 lb = 2835 g) sits +1.2% under 'about'. Serving anchor preserved: source serving is 2 thighs -> 200 g raw BS thigh per serving, ABOVE the catalog's 167 g/serving chicken average, so no florentine-class underweight. Board: recipe board 6 of 7 stores, cheapest Aldi $2.43/lb (the weekly-only trap named in the run brief avoided: this id lives on the recipe board). Existing DB row (Member's Mark raw label, 4 oz = 140 cal / 22 P)."
+    },
+    {
+      "source_raw": "1 tablespoon paprika",
+      "item": "Paprika",
+      "bid": "paprika",
+      "board": "weekly",
+      "grams": 24,
+      "buy": "3 1/2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 3.5 tbsp x densities 6.9 g/tbsp = 24.15 -> 24 g. Board 7 of 7, cheapest Walmart $0.432/oz."
+    },
+    {
+      "source_raw": "1/2 teaspoon turmeric",
+      "item": "Ground Turmeric",
+      "bid": "ground-turmeric",
+      "board": "weekly",
+      "grams": 5,
+      "buy": "1 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 1.75 tsp x densities 3 g/tsp = 5.25 -> 5 g. Board 7 of 7, cheapest Sam's $0.399/oz."
+    },
+    {
+      "source_raw": "1 3/4 teaspoon kosher salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 36,
+      "buy": "2 tbsp kosher salt",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 6.125 tsp = 2.04 tbsp, quantized 2 tbsp (-2.0%) = 36 g at densities 18 g/tbsp. Mapped to the existing Salt item/DB row (zero-macro); a kosher-salt commodity ALSO exists on the board (3 of 7, cheapest Walmart $0.0629/oz) if the writer prefers the variety-exact line - both price classes are pantry-cheap, salt commodity chosen for map-entry continuity. Kosher vs table density difference is zero-macro and cost-immaterial."
+    },
+    {
+      "source_raw": "1 tablespoon olive oil",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 47,
+      "buy": "3 1/2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 3.5 tbsp x densities 13.5 g/tbsp = 47.25 -> 47 g. Board 7 of 7, cheapest Sam's $0.1879/floz."
+    },
+    {
+      "source_raw": "1 ounce piece ginger",
+      "item": "Ginger",
+      "bid": "fresh-ginger",
+      "board": "weekly",
+      "grams": 99,
+      "buy": "3 1/2 oz piece, sliced (browned whole, discarded before serving)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 3.5 oz = 99.2 -> 99 g; printed weight and grams agree by construction. FRESH ginger root commodity (form gate: NOT ground-ginger). Board 6 of 7, cheapest Walmart $3.6255/lb. Source discards the piece before serving; macros conservatively COUNTED anyway (5.7 cal/serving) since the spec engine computes from grams - direction is safe against the 650 ceiling and immaterial against the 400 floor."
+    },
+    {
+      "source_raw": "2 1/2 cups minced yellow onion",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 1006,
+      "buy": "8 3/4 cups minced (about 9 medium onions)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 8.75 cups x densities cup=115 g = 1006 g (about 9 onions at each=110). Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "1/3 cup minced garlic",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 170,
+      "buy": "1 1/4 cups minced (about 4 heads)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 1.167 cups quantized to 1.25 cups (+7.1% drift, noted) x densities cup=136 g = 170 g (about 4.25 heads at head=40). Board 5 of 7, cheapest Baker's $0.498/each."
+    },
+    {
+      "source_raw": "1 to 3 Thai chiles, optional",
+      "item": "Thai Chiles",
+      "bid": null,
+      "board": null,
+      "grams": 35,
+      "buy": "7 thai chiles (from 2 per batch at source scale; use 4 to 10 to taste)",
+      "optional": true,
+      "decision": "mapped-null",
+      "notes": "OPTIONAL heat line. bid null: price-ingredient ABSENT, no commodity claims the term; serrano-peppers exists but thai/bird's-eye is not serrano (variety precedent, red-onion-is-not-onions class). Term enqueued as OPTIONAL - it can never park the recipe. Source range 1-3 booked at midpoint 2 x 3.5 = 7 chiles; per-chile weight ~5 g FLAGGED (no USDA portion for thai specifically; macro-immaterial, 14 cal across the whole batch). NEW food-DB row added (USDA FDC 170106 generic hot red chili, disclosed)."
+    },
+    {
+      "source_raw": "2 bay leaves",
+      "item": "Bay Leaves",
+      "bid": "bay-leaves",
+      "board": "weekly",
+      "grams": 4,
+      "buy": "7 leaves (discarded before serving)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 7 leaves x densities leaf=0.6 g = 4.2 -> 4 g. Board 6 of 7, cheapest Walmart $1.4369/oz."
+    },
+    {
+      "source_raw": "2 1/4 cups water",
+      "item": "Water",
+      "bid": null,
+      "board": null,
+      "grams": 1892,
+      "buy": "8 cups (2 quarts), plus more as needed",
+      "optional": false,
+      "decision": "mapped-free",
+      "notes": "TAP WATER: zero cost, zero macros, not a grocery term - deliberately NOT enqueued (the queue is for store-carriage questions; water has none). bid null is not pantry-static here, it is free. Exact scale 7.875 cups quantized to 8 cups (+1.6%) = 64 floz x 29.57 = 1892 g. FLAG for the spec lane: food-macros-db has NO Water row; either add a zero-macro row or carry the water in instructions only - do not let the line silently vanish from the cook's view, the dal needs the liquid."
+    },
+    {
+      "source_raw": "1 teaspoon Madras curry",
+      "item": "Curry Powder",
+      "bid": "curry-powder",
+      "board": "weekly",
+      "grams": 7,
+      "buy": "3 1/2 tsp (Madras-style if available)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 3.5 tsp x densities 2 g/tsp = 7 g. Madras curry powder IS curry powder at the same shelf price class (a hotter blend of the same product concept, routinely labeled 'curry powder'); this is NOT a variety-pricing stretch of the red-onion class - the board's own include /curry\\s+powder/ claims the term 'madras curry powder' and priced it 6 of 7, cheapest Sam's $0.4989/oz. Display keeps the Madras callout for the cook."
+    },
+    {
+      "source_raw": "1/2 teaspoon Garam Masala",
+      "item": "Garam Masala",
+      "bid": "garam-masala",
+      "board": "weekly",
+      "grams": 4,
+      "buy": "1 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 1.75 tsp x densities 2 g/tsp = 3.5 -> 4 g. Board 5 of 7, cheapest Walmart $0.9943/oz. DB row is the McCormick label (prints 0 cal at its spice serving), so the line is macro-zero regardless."
+    },
+    {
+      "source_raw": "1 cup cilantro sprigs for garnish",
+      "item": "Fresh Cilantro",
+      "bid": "cilantro",
+      "board": "weekly",
+      "grams": 57,
+      "buy": "1 bunch, sprigs picked (about 3 1/2 cups)",
+      "optional": true,
+      "decision": "mapped",
+      "notes": "OPTIONAL garnish. Exact scale 3.5 cups x densities herb cup=16 g = 56 g; countable-first as 1 bunch = 57 g (+1.8%). Board 5 of 7, cheapest Aldi $0.89/each."
+    },
+    {
+      "source_raw": "1 lime, cut into wedges for garnish",
+      "item": "Lime",
+      "bid": "limes",
+      "board": "weekly",
+      "grams": 268,
+      "buy": "4 limes, cut into wedges",
+      "optional": true,
+      "decision": "mapped",
+      "notes": "OPTIONAL garnish. Exact scale 3.5 limes quantized to 4 (+14.3% drift, noted; countable garnish, macro- and cost-immaterial at $0.69 each). Grams 4 x 67 (USDA fruit weight, NEW food-DB row - the existing Lime Juice row is the juice, different basis). limes commodity priced 4 of 7, cheapest Baker's $0.69/each."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Yellow Split Peas (USDA FDC 172428 SR 16085 dry raw, per 100 g: 364 cal / 23.12 P / 61.63 C / 3.89 F; cup dry = 196 g; yellow shares the green-split record, disclosed)",
+    "Lime (USDA FDC 168155 raw, per 100 g: 30 cal / 0.7 P / 10.5 C / 0.2 F; 1 fruit = 67 g)",
+    "Thai Chiles (USDA FDC 170106 hot red chili raw, per 100 g: 40 cal / 1.87 P / 8.81 C / 0.44 F; per-chile ~5 g flagged, macro-immaterial)"
+  ],
+  "pricing_terms_needed": [
+    { "term": "yellow split peas", "blocking": true, "why": "the dal itself, 343 g; no commodity claims the term; registrar proposal split-peas pending" },
+    { "term": "thai chiles", "blocking": false, "why": "OPTIONAL heat garnish, 35 g; no commodity claims the term; recipe must not park on it" }
+  ],
+  "new_commodity_proposals": [
+    {
+      "proposed_id": "split-peas",
+      "for_item": "Yellow Split Peas",
+      "status": "flagged-for-registrar",
+      "registrar_ruling": "NOT YET OBTAINED - see registrar_rulings; item maps null meanwhile (pantry-static, safe)."
+    }
+  ],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 529, "protein_g": 64, "carbs_g": 31, "fat_g": 16 },
+    "recomputed_per_serving_from_food_db": { "calories": 427, "protein_g": 47.0, "carbs_g": 28.5, "fat_g": 12.8 },
+    "protein_gap_pct": -26.6,
+    "calorie_gap_pct": -19.3,
+    "verdict": "EXPLAINED, NOT A PORTION ERROR - the gap exceeds 15% so the main protein line was re-examined per rule 6, and the source's own numbers are arithmetically reproduced by one identifiable calculator mistake ON THEIR SIDE: booking the full 2.5 lb BONE-IN weight as edible boneless meat. 1134 g x USDA thigh meat-only raw (19.7 P/100 g) = 55.9 g protein/serving, + peas 6.0 + aromatics ~2 = ~64 g - exactly their published 64. Calories reproduce the same way (1134 x 1.19 = 337/serving from chicken + peas 84 + oil 30 + onion 40 + garlic 15 + spices ~10 = ~516 vs their 529). A 142 g bone-in thigh cannot physically yield the 145 g of pure meat their figure requires. Our side is weight-anchored, not each-assumed: 8 thighs x the estate's 100 g BS weight = the source's own 1134 g bone-in at the ~70% USDA meat yield, and 200 g BS thigh/serving sits ABOVE the catalog's 167 g chicken average - the anti-florentine direction. Adjusting our grams upward to match their label would bake their refuse error into a published card.",
+    "band_check": "computed 427 cal in [400, 650] PASS (floor margin 27 cal - see loud flag); carbs 28.5 g <= 35 PASS. Optional garnish lines (cilantro + lime + chiles) add ~7.6 cal / 2.4 g C per serving if the card counts them: 435 cal / 30.9 C, still PASS both."
+  },
+  "loud_flags": [
+    "CALORIE FLOOR MARGIN: recomputed 427 cal/serving is only 27 cal above the run's 400 floor. Any downstream trim (smaller thighs, oil reduction, dropping the discarded-ginger calories) risks a band failure at audit. The source's 529 headline is inflated by its own bone-in arithmetic (see macro_cross_check) and must not be relied on for the gate.",
+    "densities.json follow-ups (sanctioned route, not edited by this run): Yellow Split Peas cup=196; Lime each=67; Thai Chiles each~5 (unverified, macro-immaterial)."
+  ],
+  "board_defects_observed": []
+}

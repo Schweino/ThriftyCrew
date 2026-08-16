@@ -1,0 +1,31 @@
+{
+  "name": "Cheesy Mexican Ground Beef & Cauliflower Rice Skillet",
+  "slug": "cheesy-mexican-ground-beef-cauliflower-skillet",
+  "protein": "beef",
+  "method": "skillet (browned + short cheese-melt finish)",
+  "cuisine": "Tex-Mex",
+  "source_url": "https://www.wholesomeyum.com/mexican-ground-beef-casserole-recipe/",
+  "source_servings": 9,
+  "src_cal": 414,
+  "src_protein": 27.6,
+  "src_carbs": 11.2,
+  "ingredients": [
+    "4 cups cooked cauliflower rice (or cooked white or brown rice)",
+    "1 10-oz can diced tomatoes with green chilies (drained very well)",
+    "1 tbsp avocado oil",
+    "2 large bell peppers (diced)",
+    "1/2 large onion (diced)",
+    "1/2 tsp sea salt (to taste)",
+    "1/4 tsp black pepper (to taste)",
+    "1 cup sour cream",
+    "2 lb ground beef",
+    "1/2 cup water",
+    "1/4 cup taco seasoning",
+    "2 cups Mexican cheese blend (shredded)",
+    "Optional toppings: tomatoes (diced), jalapenos (sliced), avocados (sliced), fresh cilantro (chopped)"
+  ],
+  "unmapped": ["tomatoes-green-chilies is on board; cauliflower-rice maps to cauliflower; Mexican cheese blend maps to shredded-cheese"],
+  "why": "Ground-beef skillet on a cauliflower-rice base, cheese-finished. Published 414 cal / 27.6 g protein / 11.2 g carb per serving is inside the band and comfortably under the 35 g carb ceiling. Structurally low-carb (no rice/beans). Note: calories sit near the 400 floor, so our label-accurate recompute could dip slightly below; flag for the gate. Scales cleanly to 14 (2 lb feeds 9, so ~3 lb for 14).",
+  "src_confidence": "high - read published nutrition on page",
+  "board_notes": "ground-beef-8020, bell-peppers, onions, sour-cream, shredded-cheese, tomatoes-green-chilies, cauliflower, taco-seasoning all on board"
+}

@@ -1,0 +1,20 @@
+{
+  "slug": "leftover-turkey-green-bean-cheddar-casserole",
+  "name": "Leftover Turkey Green Bean Cheddar Casserole",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 416,
+    "carbs": 12.5,
+    "in_cal_band": true,
+    "under_carb_ceiling": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "note": "416 cal is at the low end of the 400-650 band but inside it; 12.5g carbs well under the 35g ceiling; structurally low-carb (turkey + green beans + cheddar + mayo, no rice/pasta/potato); source states sugar-free cranberry sauce for the carb figure. FIT on published numbers."
+  },
+  "dupe_of": null,
+  "dupe_evidence": "No catalog dupe. Nearest turkey neighbors: middle-eastern-turkey-green-bean-stew shares turkey+green-bean but is a tomato-based stew (different method + flavor family, not a cheddar-mayo bake); turkey casseroles in the catalog (turkey-and-stuffing-casserole, turkey-divan-broccoli-rice-bake, turkey-wild-rice-casserole, cornbread-topped-turkey-casserole, scalloped-potato-turkey-casserole, southwestern-turkey-rice-casserole) all carry a starch/different vegetable and none is a green-bean-cheddar-mayo bake.",
+  "cross_protein_collisions": "Structurally a 'leftover roast meat + green bean + cheddar + mayo casserole' (a green-bean-casserole-with-protein). A chicken or ham 'green bean cheddar casserole' in another selector's pool would be the same dish with a swapped protein - decider should watch chicken/ham/pork pools for a green-bean-cheddar-mayo bake twin.",
+  "unmapped": ["goat cheese"],
+  "unmapped_note": "goat cheese has no board home - deliberate unmapped pick for the pricer lane, not a penalty per v2.1 5.1."
+}

@@ -1,0 +1,48 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Garlic Butter Steak Bites and Zucchini",
+  "source_url": "https://blackberrybabe.com/2026/02/02/garlic-butter-steak-bites/",
+  "servings": 2,
+  "time_total": null,
+  "time_active": null,
+  "time_prep": "30 minutes",
+  "time_cook": "10 minutes",
+  "ingredients": [
+    { "raw": "1 pound sirloin steak, cut into 1-inch cubes", "item": "sirloin steak", "qty": "1", "unit": "pound", "prep": "cut into 1-inch cubes", "optional": false, "section": null },
+    { "raw": "2 zucchini, medium, sliced into half-moons", "item": "zucchini", "qty": "2", "unit": "each", "prep": "medium, sliced into half-moons", "optional": false, "section": null },
+    { "raw": "1 tablespoon avocado oil", "item": "avocado oil", "qty": "1", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 teaspoon kosher salt, divided", "item": "kosher salt", "qty": "1", "unit": "teaspoon", "prep": "divided", "optional": false, "section": null },
+    { "raw": "1/2 teaspoon black pepper, freshly cracked", "item": "black pepper", "qty": "1/2", "unit": "teaspoon", "prep": "freshly cracked", "optional": false, "section": null },
+    { "raw": "3 tablespoons butter, salted", "item": "butter", "qty": "3", "unit": "tablespoons", "prep": "salted", "optional": false, "section": null },
+    { "raw": "4 cloves garlic, minced", "item": "garlic", "qty": "4", "unit": "cloves", "prep": "minced", "optional": false, "section": null },
+    { "raw": "1 teaspoon lemon juice", "item": "lemon juice", "qty": "1", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tablespoon parsley, fresh, chopped", "item": "parsley", "qty": "1", "unit": "tablespoon", "prep": "fresh, chopped", "optional": true, "section": null },
+    { "raw": "flaked sea salt", "item": "flaked sea salt", "qty": null, "unit": null, "prep": null, "optional": true, "section": null }
+  ],
+  "instructions": [
+    "Remove the steak from the fridge 20 minutes before cooking to take the chill off. Pat the steak cubes extremely dry with paper towels. This is crucial for browning. Toss them in a bowl with 3/4 teaspoon of salt and the black pepper just before cooking.",
+    "Seat the steak: Heat a large skillet over high heat. Add the steak in a single layer. Tip: Do not overcrowd the pan; cook in two batches if necessary. Sear for 2 minutes without moving them to get a crust, then flip and cook for 1 more minute. I like to use tongs for flipping. Remove to a paper-towel-lined plate.",
+    "Cook the zucchini: Reduce the heat to medium-high. Do not clean the pan. In the same pan, add the zucchini and the remaining 1/4 teaspoon of salt. Saute for 3-4 minutes until the edges start to brown, but the zucchini is still crisp, not soggy!",
+    "Make the Garlic Butter Sauce: Turn the heat down to low. Return the steak and its juices to the pan. Add the butter and the minced garlic. Toss everything constantly for 1 minute until the butter melts and the garlic is fragrant.",
+    "Finish & Serve: Remove from heat immediately. Stir in the lemon juice to cut the richness. Garnish with fresh parsley and sprinkle with flaked sea salt."
+  ],
+  "nutrition": {
+    "per": "serving",
+    "calories": "563kcal",
+    "carbohydrates": "9g",
+    "protein": "53g",
+    "fat": "35g",
+    "saturated_fat": "16g",
+    "cholesterol": "183mg",
+    "sodium": "1445mg",
+    "fiber": "2g",
+    "sugar": "5g"
+  },
+  "concerns": [
+    "1 tablespoon avocado oil is listed in the ingredients but never referenced in the instructions.",
+    "Step 2 heading reads 'Seat the steak' on the page (likely a typo for 'Sear'); transcribed as printed.",
+    "Parsley (1 tablespoon) is used only as a garnish in step 5; line marked optional on that basis though the ingredient list does not label it.",
+    "flaked sea salt has no stated quantity; used as a finishing garnish, marked optional."
+  ]
+}

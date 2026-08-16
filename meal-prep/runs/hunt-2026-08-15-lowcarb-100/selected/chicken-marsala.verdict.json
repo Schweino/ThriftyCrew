@@ -1,0 +1,17 @@
+{
+  "slug": "chicken-marsala",
+  "name": "Chicken Marsala (Creamy Mushroom Marsala Braise)",
+  "protein": "chicken",
+  "verdict": "DUPE",
+  "dupe_of": "chicken-marsala-skillet",
+  "dupe_source": "accepted-slugs.json",
+  "evidence": "Already-accepted 'chicken-marsala-skillet' is the identical dish: chicken browned then simmered in a marsala-mushroom cream pan sauce, no starch - protein, sauce/flavor family (marsala + mushroom + cream), and method all match, so this is a near-duplicate plate, not a distinct regional take.",
+  "fit_check": {
+    "calories": 524,
+    "carbs": 16,
+    "within_band": true,
+    "note": "Published 524 cal / 16g carbs clears the 400-650 cal and <=35g carb conditions; no seafood; scalable to 14. FIT on conditions but killed as a catalog duplicate."
+  },
+  "cross_protein_collision_notes": "N/A for a DUPE, but for the decider's awareness: marsala-mushroom-cream braises exist in other proteins (a pork or turkey marsala would be the same sauce/method on a different protein). Not selecting this, so no cross-protein flag needed.",
+  "borderline": false
+}

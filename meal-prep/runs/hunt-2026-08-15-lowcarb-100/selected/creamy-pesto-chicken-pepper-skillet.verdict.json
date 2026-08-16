@@ -1,0 +1,37 @@
+{
+  "slug": "creamy-pesto-chicken-pepper-skillet",
+  "name": "Creamy Pesto Chicken and Pepper Skillet",
+  "protein": "chicken",
+  "adjudicator": "adjudicate-1",
+  "verdict": "borderline",
+  "recommendation": "dupe",
+  "fit": {
+    "pass": true,
+    "cal": 425,
+    "carbs": 15,
+    "band": "400-650 cal / <=35g carb",
+    "seafood": false,
+    "scalable_14": true,
+    "note": "Published 425 cal / 15g carb clears both axes with headroom; no rice/pasta/potato base; weigh-and-divide scalable; budget skillet dinner. FIT."
+  },
+  "catalog_dupe_of": null,
+  "accepted_dupe_of": "creamy-tuscan-chicken-skillet",
+  "evidence": "Near-duplicate of the ACCEPTED creamy-tuscan-chicken-skillet: both are boneless chicken-breast skillet sautés in a heavy-cream pan sauce built on sun-dried tomatoes with no starch base (4/4 on protein/method/starch/creamy-sun-dried-tomato sauce family). The only divergence is added pesto and bell-peppers+onion in place of spinach - a hero-flavor/vegetable shift, not a different dinner. Sitting next to 'Creamy Tuscan Chicken Skillet' in an already Italian-American-heavy catalog, two creamy sun-dried-tomato chicken-breast skillets read as the same plate. Pesto is a genuine basil-forward distinguisher, so this is flagged borderline rather than a hard kill, but I lean DUPE.",
+  "catalog_check": "Only pesto recipe in the 544-recipe catalog digest is turkey-pesto-pasta-kale (turkey + pesto + rotini pasta) - a different protein and a pasta dish, NOT a collision. No creamy-tuscan/marry-me/pesto chicken skillet exists in the live catalog; the collision is entirely with this run's accepted/pool set.",
+  "pool_collisions": [
+    {
+      "slug": "pesto-mozzarella-chicken-skillet",
+      "relation": "Shares the pesto + chicken-breast + skillet + Italian hero. Distinguished by sauce: mine is a heavy-cream sauce with sun-dried tomatoes + bell peppers; theirs is oil-based jarred pesto with cherry tomato + zucchini + a fresh-mozzarella melt (no cream, no sun-dried tomato). Moderate collision - the two pesto chicken skillets should not both ship.",
+      "note_for_decider": "If the decider keeps a pesto chicken skillet, pick ONE of {this, pesto-mozzarella-chicken-skillet}. pesto-mozzarella is the cleaner 'pesto chicken' (5g carb, 44g protein, no cream-vs-tuscan overlap); this candidate collides harder with the accepted tuscan skillet."
+    },
+    {
+      "slug": "marry-me-chicken",
+      "relation": "Also a creamy sun-dried-tomato Parmesan chicken-breast skillet (half-and-half + sun-dried tomato + parmesan, no pesto, no peppers). Three-way creamy-sun-dried-tomato-chicken-skillet cluster with this candidate and the accepted creamy-tuscan-chicken-skillet - the catalog wants at most one or two of these, not all three."
+    }
+  ],
+  "cross_protein_twins": [
+    "A pesto/creamy chicken breast skillet has an obvious turkey twin (turkey cutlets in pesto cream) - and turkey-pesto-pasta-kale already lives in the catalog (turkey+pesto, pasta form). Also a pork twin: creamy-tuscan-pork-chops has a verdict in this run and is the same sauce family on pork. Decider should check the pesto-cream sauce family across turkey/pork selectors.",
+    "ground-beef-zucchini-pesto-skillet and pesto-beef-zucchini-skillet in the pool are the beef pesto twins (different base - zucchini, not cream)."
+  ],
+  "confidence": "high on FIT and ingredient profile (read from candidate + source); moderate on the borderline call - reasonable adjudicators could rule this a hard DUPE of creamy-tuscan-chicken-skillet or a KEEP on the pesto distinguisher, which is why it is flagged for the decider."
+}

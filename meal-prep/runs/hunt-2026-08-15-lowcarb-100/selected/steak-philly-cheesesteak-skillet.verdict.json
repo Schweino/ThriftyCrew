@@ -1,0 +1,12 @@
+{
+  "slug": "steak-philly-cheesesteak-skillet",
+  "name": "Low-Carb Steak Philly Cheesesteak Skillet",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "fit_evidence": "Published 438 cal / 10 g carbs / 44 g protein per serving: inside 400-650 cal and well under the 35 g carb ceiling; no seafood; sliced-steak-and-veg skillet scales cleanly to 14 by weight; budget meal-prep dinner.",
+  "dupe_evidence": "Nearest catalog item is 'philly-cheesesteak-skillet-bowls' (Ground Beef Philly Cheesesteak Bowls) - shares only the Philly/provolone flavor family and skillet method (2 of 4). Differs on protein form (sliced whole-muscle flank/skirt steak vs ground beef) and plate (low-carb no-starch skillet vs rice bowls), so it is a different dinner, not a near-dupe. Not colliding with steak-fajita-rice-bowls (fajita/Tex-Mex over rice) or pepper-steak-with-rice (Chinese-American soy, over rice) - different flavor families and both carry a rice base. Not colliding with accepted flank-steak-parmesan-green-beans (parmesan/green-bean plate, different flavor).",
+  "cross_protein_collisions": "Structurally a 'Philly cheesesteak' skillet - watch for a chicken-philly (sliced chicken + peppers + provolone skillet) or turkey-philly version in other selectors' pools; those would be the same dish on a different protein. The ground-beef Philly already lives in the live catalog, so any ground-beef Philly candidate in the beef-ground lane is the real twin to catch.",
+  "unmapped_note": "flank/skirt steak has no board commodity id (only sirloin-steak, ribeye-steak) - intentional pricer-lane exercise per v2.1 5.1, not a penalty.",
+  "borderline": false
+}

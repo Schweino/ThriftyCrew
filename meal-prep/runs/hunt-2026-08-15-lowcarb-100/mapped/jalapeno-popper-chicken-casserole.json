@@ -1,0 +1,181 @@
+{
+  "slug": "jalapeno-popper-chicken-casserole",
+  "title": "Jalapeno Popper Chicken Casserole",
+  "source_url": "https://joyfilledeats.com/jalapeno-popper-chicken-casserole/",
+  "source_servings": 8,
+  "target_servings": 14,
+  "scale_factor": 1.75,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 1.75x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [],
+  "ingredients": [
+    {
+      "source_raw": "2 lb chicken breasts cooked and chopped",
+      "item": "Boneless Skinless Chicken Breast",
+      "bid": "chicken-breast",
+      "board": "weekly",
+      "grams": 1588,
+      "buy": "3 1/2 lb boneless skinless chicken breasts, cooked and chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by explicit source WEIGHT (2 lb RAW basis - '2 lb chicken breasts, cooked and chopped' is a buy-then-cook line, not a cooked-weight spec), exact 1.75x = 3.5 lb = 1588 g, zero drift. The source's own published 30 g protein arbitrates the raw-vs-cooked reading: raw 2 lb computes 25.3 P from the chicken line alone -> 34.3 total (+14.3%, inside the instrument); a COOKED-weight reading would need ~2.9 lb raw and blow protein past +55% - refuted. Board 6 of 7, cheapest Baker's $1.99/lb."
+    },
+    {
+      "source_raw": "8 oz cream cheese",
+      "item": "Cream Cheese",
+      "bid": "cream-cheese",
+      "board": "weekly",
+      "grams": 397,
+      "buy": "14 oz, softened",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FULL-FAT brick to the full-fat USDA row added this run (chicken-bacon-ranch precedent) - NOT the 1/3 Fat map entry, which deflates a calorie-floor recipe. Exact 1.75x = 14 oz = 397 g, zero drift; printed weight and grams agree. Board 7 of 7, cheapest Sam's Club $0.1381/oz."
+    },
+    {
+      "source_raw": "1/2 cup mayo",
+      "item": "Mayonnaise",
+      "bid": "mayonnaise",
+      "board": "weekly",
+      "grams": 182,
+      "buy": "3/4 cup plus 2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.75x = 0.875 cup = 14 tbsp x GV label 13 g = 182 g, zero drift. 90 cal/serving on the full-fat GV label row. Board 7 of 7, cheapest Sam's Club $0.0936/oz."
+    },
+    {
+      "source_raw": "1/2 cup sour cream",
+      "item": "Sour Cream",
+      "bid": "sour-cream",
+      "board": "weekly",
+      "grams": 201,
+      "buy": "3/4 cup plus 2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FULL-FAT Sour Cream row (198 cal/100 g, this run's addition) - the Light row would deflate a calorie-floor recipe. Exact 1.75x = 0.875 cup x USDA 230 g/cup = 201.25 -> 201 g. Board 7 of 7, cheapest Walmart $0.1025/oz."
+    },
+    {
+      "source_raw": "1/2 cup shredded cheddar",
+      "item": "Cheddar Cheese, Shredded",
+      "bid": "cheddar-cheese-shredded",
+      "board": "recipe",
+      "grams": 99,
+      "buy": "3/4 cup plus 2 tbsp shredded cheddar",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.75x = 0.875 cup x densities 113 g = 98.9 -> 99 g. Full-fat GV label row (110 cal/28 g). Recipe-board id answers directly; the bare TERM 'shredded cheddar' reads ABSENT and 'shredded cheddar cheese' resolves via generic shredded-cheese with the standing Walmart Kraft-boxed-dinner cell hijack - term-vs-map split re-flagged."
+    },
+    {
+      "source_raw": "1/2 cup bacon crumbles",
+      "item": "Bacon Bits",
+      "bid": null,
+      "board": null,
+      "grams": 98,
+      "buy": "3/4 cup plus 2 tbsp real bacon crumbles",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "item_id NULL with reason: real bacon crumbles/bits are a COOKED shelf-stable product; the board's only claim on the term is the raw bacon commodity via include /\\bbacon\\b/ - the price-class stretch chicken-bacon-ranch already rejected, with the resolver-ignores-excludes defect logged. Term 'bacon bits' remains PENDING on the queue (still 0 of 7 checked); slug ATTACHED - this recipe PARKS on the pricer's verdict, exactly as designed. Null = pantry-static pricing meanwhile. Macros book to the Bacon Bits row (Hormel label, 25 cal / 3 P per 7 g tbsp - pre-cooked, so ~3x raw bacon's per-gram protein). Exact 1.75x = 0.875 cup x 112 g/cup = 98 g."
+    },
+    {
+      "source_raw": "1/2 cup jalapeno or poblano pepper seeded and diced",
+      "item": "Jalapeno",
+      "bid": "jalapenos",
+      "board": "weekly",
+      "grams": 126,
+      "buy": "3/4 cup plus 2 tbsp seeded and diced (about 9 jalapenos)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "PRIMARY noun booked (jalapeno - it is the dish's namesake; poblano is the source's mildness alternative, already board-priced 6 of 7 if a cook swaps). Exact 1.75x = 0.875 cup = 14 tbsp x densities 9 g = 126 g. USDA row 29 cal/100 g -> 2.6 cal/serving. jalapenos commodity 6 of 7, cheapest fresh cell Aldi $1.98/lb (the Walmart 'cheapest' cell is a canned escabeche product - see board_defects_observed)."
+    },
+    {
+      "source_raw": "1 tsp garlic powder",
+      "item": "Garlic Powder",
+      "bid": "garlic-powder",
+      "board": "weekly",
+      "grams": 5.4,
+      "buy": "1 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.75x = 1.75 tsp x densities 3.1 g = 5.4 g. Board 7 of 7, cheapest Walmart $0.216/oz."
+    },
+    {
+      "source_raw": "1/2 tsp salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 5.3,
+      "buy": "3/4 tsp plus a pinch",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.75x = 0.875 tsp x densities 6 g = 5.25 -> 5.3 g. Zero-macro. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/4 tsp black pepper",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 1.2,
+      "buy": "1/2 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.75x = 0.4375 tsp, quantized 1/2 tsp (+14.3% DRIFT NOTED - spice-class, +0.15 cal/serving) = 1.15 -> 1.2 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/4 cup shredded cheddar",
+      "item": "Cheddar Cheese, Shredded",
+      "bid": "cheddar-cheese-shredded",
+      "board": "recipe",
+      "grams": 49,
+      "buy": "1/4 cup plus 3 tbsp shredded cheddar (topping)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Topping line kept separate per source sections. Exact 1.75x = 0.4375 cup = 7 tbsp x densities 7 g = 49 g."
+    },
+    {
+      "source_raw": "1/4 cup crumbled bacon",
+      "item": "Bacon Bits",
+      "bid": null,
+      "board": null,
+      "grams": 49,
+      "buy": "1/4 cup plus 3 tbsp real bacon crumbles (topping)",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "Same ruling as the casserole bacon-crumbles line (null pending the 'bacon bits' pricer verdict; Hormel label row). Exact 1.75x = 7 tbsp x 7 g = 49 g."
+    },
+    {
+      "source_raw": "1 thinly sliced and seeded jalapeno optional",
+      "item": "Jalapeno",
+      "bid": "jalapenos",
+      "board": "weekly",
+      "grams": 28,
+      "buy": "2 jalapenos, thinly sliced and seeded (optional topping)",
+      "optional": true,
+      "decision": "mapped",
+      "notes": "OPTIONAL per the source's own word - excluded from band macros (+0.6 cal/serving if counted). Exact 1.75x = 1.75, quantized 2 whole peppers (+14.3% DRIFT NOTED, a quarter jalapeno is not a cook measure) x densities 14 g = 28 g."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [
+    { "term": "bacon bits", "blocking": true, "why": "3/4 cup plus 2 tbsp in the casserole and 7 more tbsp on top at 14 servings - a real macro and cost line (37.5 cal/serving); board's only answer maps bits to raw bacon, the rejected price-class stretch, so the recipe parks on the pricer's store verdict (queue entry already PENDING from chicken-bacon-ranch-cauliflower-bake, 0 of 7 checked; slug attached)" }
+  ],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 418, "protein_g": 30, "carbs_g": 2, "fat_g": 31 },
+    "computed_per_serving": { "calories": 432.7, "protein_g": 34.3, "carbs_g": 3.6, "fat_g": 31.6 },
+    "protein_gap_pct": 14.3,
+    "calorie_gap_pct": 3.5,
+    "verdict": "PASS: protein +14.3% (inside the 15% instrument, direction consistent with our full-fat dairy rows and the raw-weight chicken basis their own 30 g figure validates), calories +3.5%, fat +2.0%. Carbs 3.6 vs their 2 - keto-blog rounding on a trivial absolute gap. Nothing to re-examine.",
+    "band_check": "computed 432.7 cal in [400, 650] PASS - 33 cal above the floor, the tightest floor margin in this batch: the full-fat Cream Cheese / Sour Cream rows are load-bearing (swapping either to a light row drops the recipe below 400); carbs 3.6 g <= 35 PASS with room to spare"
+  },
+  "board_defects_observed": [
+    "Term resolver ignores commodity excludes for 'bacon bits' (resolves to raw bacon against the bacon rule's own 'bits' exclude) - re-flag of the chicken-bacon-ranch finding; the queue entry it forced is still PENDING at 0 of 7 checked after two batches, so the pricer lane has not yet reached it.",
+    "jalapenos commodity: the board-cheapest cell is 'EMBASA Whole Jalapenos in Escabeche, 26 oz Steel Can' - a canned pickled product inside a fresh-pepper commodity (form mix inside the cell class); fresh cells exist at 5 stores so pricing stands, but the cell wants a capture exclude.",
+    "Term-vs-map split on cheddar re-observed ('shredded cheddar' ABSENT as a bare term; generic shredded-cheese path still carries the Walmart Kraft boxed-dinner hijack)."
+  ],
+  "densities_followups": [
+    "Jalapeno: densities tbsp=9 implies cup=144 g (minced-dense basis) vs USDA sliced cup ~90 g; booked on densities (higher-gram, ceiling-conservative and macro-trivial at 29 cal/100 g) - propose an explicit cup figure to end the ambiguity.",
+    "Bacon Bits: cup = 112 g via label tbsp = 7 g (re-flag of chicken-bacon-ranch proposal)."
+  ]
+}

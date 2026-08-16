@@ -1,0 +1,17 @@
+{
+  "slug": "sausage-spinach-crustless-quiche",
+  "name": "Sausage and Spinach Crustless Quiche",
+  "protein": "pork",
+  "cuisine": "American",
+  "verdict": "DUPE",
+  "fit": {
+    "pass": true,
+    "cal": 429,
+    "carbs": 2,
+    "band": "429 cal sits in the 400-650 band; 2g carbs is under the 35g cap; the 10-serving crustless custard bake scales cleanly to 14; no seafood; budget meal-prep dinner. Clears the run band on published numbers - this reject is a DEDUP call, NOT a fit failure."
+  },
+  "dupe_of": "crustless-bacon-gruyere-quiche",
+  "dupe_type": "accepted-state",
+  "evidence": "Duplicate of the ALREADY-ACCEPTED crustless-bacon-gruyere-quiche (present in accepted-slugs.json). Both are the identical crustless-quiche dish on all four identity axes: pork protein (breakfast sausage vs bacon), egg + heavy-cream baked custard flavor family, zero starch (both crustless/low-carb), and the same oven-bake method - 4-of-4 match. They differ only in mix-ins (sausage + spinach + cheddar/cream-cheese vs bacon + gruyere + green onion), which is a filling swap, not a different dinner; per the aggressive-dedup mandate two crustless quiches leave one survivor and the bacon-gruyere version is already accepted. SECOND collision: also a pool near-duplicate of the KEEP candidate sausage-cottage-cheese-egg-bake (crustless no-starch pork-sausage egg-cheese bake) - that verdict already logs this quiche as the weaker loser of that pair (fat-forward 18g protein / 38g fat vs the cottage bake's protein-forward 30g), and the sourcer's own note flags this one as the weaker pick. Not a live-catalog dupe: the digest's only near egg dishes are sausage-hash-brown-egg-casserole and baked-sausage-egg-breakfast-hash, both potato/hash-brown starch bakes, structurally different.",
+  "cross_protein_collision": "Identity here is egg+cream+cheese custard carried by pork, not the pork itself - a turkey-sausage, ham, or vegetarian (plain spinach) crustless quiche/egg bake in another selector's pool would be the SAME dish with the protein swapped; decider should keep only one crustless-quiche/egg-custard-bake across all proteins. This candidate is the third in a tight pork egg-bake cluster (crustless-bacon-gruyere-quiche [accepted], sausage-cottage-cheese-egg-bake [KEEP], this [DUPE]) - retain only as a fallback if either sibling is dropped."
+}

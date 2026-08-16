@@ -1,0 +1,17 @@
+{
+  "slug": "slow-cooker-corned-beef-and-cabbage",
+  "name": "Slow Cooker Corned Beef and Cabbage",
+  "protein": "beef",
+  "lane": "beef-slow",
+  "verdict": "KEEP",
+  "fit": "PASS",
+  "fit_evidence": "Clears the band on both sourced reads: this pass's thecozycook.com source is 551 cal / 34g carbs / 34g protein, and the prior adjudicator's read of the same dish was 592 cal / 32g carbs - both inside 400-650 cal and at/under the 35g carb ceiling. No seafood; whole-brisket slow-cooker braise scales to 14 by weigh-and-divide. Carbs sit near the top of the band from the ~2 lb potato load; label-accurate DB rebuild could nudge over, so rewrite should be ready to trim/drop the potato - but as published it PASSES.",
+  "dupe_of": null,
+  "dupe_scope": null,
+  "dupe_evidence": "No corned-beef or brisket braise exists in the 544-recipe catalog; the only cabbage-forward beef recipe is unstuffed-cabbage-roll-bowls (ground beef + crushed tomatoes + rice), a different dinner in cut, sauce, and method. Not in the fresh accepted-slugs.json.",
+  "duplicate_verdict_warning": "An identical-slug verdict for slow-cooker-corned-beef-and-cabbage already exists in this selected/ dir (another adjudicator ruled it KEEP, 592 cal / 32g carbs). This is the SAME candidate/dish re-dispatched, not a second recipe. Decider MUST count it as ONE - do not ship two corned-beef-and-cabbage recipes. This file re-affirms that KEEP and adds this pass's alternate source read.",
+  "cross_protein_collisions": "None expected - corned-beef brisket is a distinctive cured cut with no chicken/pork/turkey analogue. Closest cross-protein cousin would be a ham-and-cabbage boiled dinner in a pork selector's pool (New England boiled dinner family); flag if one appears, but the cure/cut make it a different dinner.",
+  "cuisine": "Irish / Irish-American",
+  "borderline": false,
+  "notes": "Widens the American/Tex-Mex-skewed catalog; one unmapped ingredient (beer, no board id) is a wanted pricer-lane signal per v2.1 5.1, not a penalty."
+}

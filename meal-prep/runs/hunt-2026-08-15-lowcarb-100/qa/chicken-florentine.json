@@ -1,0 +1,32 @@
+{
+  "slug": "chicken-florentine",
+  "verdict": "fail",
+  "anchors": ["live-page", "spec", "built-card", "costed.json", "food-macros-db"],
+  "findings": [
+    {
+      "check": "prose-numbers",
+      "severity": "blocking",
+      "detail": "STALE BUILT CARD: db\\built\\chicken-florentine.body.html (built 2026-08-15 15:49, before the 2026-08-16 rebid) still embeds bid frozen-chopped-spinach in its SMP-SCALER2 payload for Baby Spinach, while the spec scaler correctly bids spinach. The card cost list hydrates live from that bid, so republishing this artifact re-ships the exact frozen-price defect this change was supposed to fix. The spec itself is correct end to end (cost line Baby Spinach ~$2.80, Buy 2 10oz bags $3.99 is the fresh 10oz-bag basis at $0.20/oz, 397 g = 14.0 oz). Remedy: rebuild the card from the current spec before publishing; no spec repair needed.",
+      "owner": "writer"
+    },
+    {
+      "check": "scaling",
+      "severity": "note",
+      "detail": "Source (smalltownwoman.com, 4 servings) scales to 14 at one clean 3.5x ratio on every line (butter 2->7 tbsp, cream 1->3.5 cups, spinach 4 cups/4oz -> 14 cups/14oz, parmesan 0.5->1.75 cups, garlic 3->10 cloves). Wine respec (3/4 cup wine -> extra broth + 3 tbsp white wine vinegar) is documented in writer_notes and shop_smart, and the broth math is exact: (0.25 broth + 0.75 wine) x 3.5 = 3.5 cups. Only flour departs slightly (0.25 cup -> 0.75 cup, ratio 3.0 vs 3.5) - dredging flour, immaterial.",
+      "owner": "extractor"
+    },
+    {
+      "check": "prose-numbers",
+      "severity": "note",
+      "detail": "Independent macro recompute from food-macros-db rows: 573.2 cal / 45.1 P / 13.5 C / 37.0 F per serving vs stat 573/45/14/37. Carbs land at 13.5 and the spec rounds up to 14 - half-gram rounding, immaterial. Fresh Spinach and Frozen Chopped Spinach DB rows are per-gram identical (23/2.9/3.6/0.4 per 100 g), confirming the rebid moved price only; the stat correctly did not move. cost_ps 3.41 = cost_first_run 47.71 / 14 per schema and matches v2-perserving everyday_ps 3.41. All cost_lines literals and cost_* fields match db\\costed.json exactly (batch 24.64 sums line-by-line; true 34.57; pantry_add 13.14; first_run 47.71).",
+      "owner": "writer"
+    },
+    {
+      "check": "ingredient-coverage",
+      "severity": "note",
+      "detail": "Pre-existing and openly flagged in writer_notes: Shallots bid onions - 3.5 oz shallots priced at the onion board price ($1.14/lb), which likely understates real shallot cost by well under $1 on a $24.64 batch. Already live this way; forwarded, not blocking.",
+      "owner": "mapper"
+    }
+  ],
+  "notes": "No extraction exists for this older catalog recipe; anchored on the live source page (fetched successfully) plus the spec, built card, costed.json, and food-macros-db. THE SPEC IS FULLY CERTIFIED: prose, ingredient display, buy line, and priced basis all agree on FRESH baby spinach; zero frozen language anywhere card-visible (the writer_note mentioning the frozen history is marked RESOLVED and is not rendered). Title, method, and credit all match the source. The single blocker is that the built HTML predates the fix and still bids the frozen commodity in its live-pricing payload. REPUBLISH GUIDANCE: rebuild first, then republishing is an unambiguous improvement over the live page (which carries the same frozen bid today); republishing the 8/15 build as-is would change nothing and keep the defect live."
+}

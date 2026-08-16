@@ -1,0 +1,209 @@
+{
+  "slug": "chimichurri-steak-sheet-pan",
+  "title": "Chimichurri Sheet Pan Dinner",
+  "source_url": "https://fedandfit.com/chimichurri-beef-sheet-pan-dinner/",
+  "source_servings": 6,
+  "target_servings": 14,
+  "scale_factor": 2.3333,
+  "protein": "beef",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 2.3333x scale noted per line where it exceeds 5%. Steak range '1.5 to 2 pounds' booked at the 1.5 lb END because the source's own published protein (25 g/serving x 6 = 150 g) IS the 1.5 lb figure - see macro_cross_check. The '1/2 cup chimichurri divided' line is the sub-recipe made from the chimichurri section (component grams already booked; scaled component mass 275 g = 1.19 cups confirms the sub-recipe yield matches the call).",
+  "ruled_substitutions": [],
+  "registrar_rulings": [
+    {
+      "proposed_id": "fresh-oregano",
+      "for_item": "Fresh Oregano",
+      "status": "PENDING - proposal drafted, registrar not yet consulted (mapper lane cannot invoke the registrar agent; orchestrator must route it)",
+      "rationale": "No commodity claims fresh oregano; the term matcher's only answer is dried-oregano via include pattern /\\boregano\\b/, a form-flip (fresh is not dried, standing rejection). Fresh herb clamshells/bunches are a real Omaha retail category and the board already carries the parallel fresh-parsley and cilantro commodities.",
+      "meanwhile": "ingredient maps item_id null (safe pantry-static pricing); term 'fresh oregano' enqueued BLOCKING - it is a required chimichurri component"
+    }
+  ],
+  "ingredients": [
+    {
+      "source_raw": "1/4 cup olive oil (For the Chimichurri)",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 125,
+      "buy": "1/2 cup plus 1 1/4 tbsp (chimichurri)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 2.3333x = 0.583 cup = 9.33 tbsp, quantized 9.25 tbsp (-0.9%) at densities 13.5 g/tbsp = 124.9, rounded 125. Counted in full per the source's own nutrition basis (blended into the chimichurri, all of it eaten). Board 7 of 7, cheapest Sam's Club $0.1879/floz."
+    },
+    {
+      "source_raw": "2 1/2 tablespoons red wine vinegar",
+      "item": "Red Wine Vinegar",
+      "bid": "red-wine-vinegar",
+      "board": "weekly",
+      "grams": 86,
+      "buy": "5 3/4 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 2.3333x = 5.83 tbsp, quantized 5.75 tbsp (-1.4%) at densities 15 g/tbsp = 86.25, rounded 86. Board 5 of 7, cheapest Walmart $0.1192/floz."
+    },
+    {
+      "source_raw": "1/4 cup fresh cilantro stems and leaves",
+      "item": "Fresh Cilantro",
+      "bid": "cilantro",
+      "board": "weekly",
+      "grams": 9.5,
+      "buy": "1/2 cup plus 1 1/2 tbsp, stems and leaves",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 2.3333x = 0.583 cup, printed 0.594 cup (+1.8%) at densities Fresh Cilantro cup = 16 g (loose sprig basis, matching the raw line's 'stems and leaves') = 9.5 g. Board 5 of 7, cheapest Aldi $0.89/each; one 57 g bunch covers it. DB row Fresh Cilantro (1/4 cup = 4 g, near-zero macros)."
+    },
+    {
+      "source_raw": "1/4 cup fresh flat-leaf parsley stems and leaves",
+      "item": "Fresh Parsley",
+      "bid": "fresh-parsley",
+      "board": "weekly",
+      "grams": 36,
+      "buy": "1/2 cup plus 1 1/2 tbsp, stems and leaves",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FRESH parsley; the Dried Parsley item would be a form-flip. Printed 0.594 cup (+1.8% vs exact 0.583). Grams at the DB row's USDA cup chopped = 60 g basis = 35.6, rounded 36; the raw line is LOOSE stems and leaves, which runs lighter than chopped, so this is the upper reading - booked because it is the only flagged authority (densities has no Fresh Parsley row, flagged AGAIN). Basis asymmetry vs the cilantro line (16 g/cup sprig basis) is acknowledged; worst-case macro effect is under 1 cal/serving, immaterial. fresh-parsley 3 of 7 stores, cheapest Hy-Vee $0.99/each. DB row added earlier this run (USDA FDC/SR 11297)."
+    },
+    {
+      "source_raw": "2 garlic cloves minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 14,
+      "buy": "4 3/4 cloves, minced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 2.3333x = 4.67 cloves, quantized 4.75 (+1.8%) at densities clove = 3 g = 14.25, rounded 14. Board 5 of 7, cheapest Baker's $0.498/each."
+    },
+    {
+      "source_raw": "1/2 tablespoon fresh oregano",
+      "item": "Fresh Oregano",
+      "bid": null,
+      "board": null,
+      "grams": 1,
+      "buy": "1 1/4 tbsp, leaves stripped",
+      "optional": false,
+      "decision": "flagged-no-label-and-no-commodity",
+      "notes": "TWO independent gaps, both flagged loudly. (1) COMMODITY: no board id covers fresh oregano; the term matcher's answer routes to dried-oregano via include pattern /\\boregano\\b/, which is a form-flip (fresh is not dried, standing rejection) and was REFUSED; bid null = safe pantry-static pricing; term enqueued BLOCKING and registrar proposal fresh-oregano drafted PENDING. (2) MACROS: no verifiable label exists anywhere - USDA FDC has NO fresh oregano record (SR 171328 is dried; searched FDC generic + branded 2026-08-16) - so per rule 2 NO food-DB row was invented. The line is booked at 0 macros with the bound disclosed: 1.25 tbsp fresh oregano is about 1.3 g (densities default herb tbsp = 1 g, flagged); even priced at the DRIED record's 265 cal/100 g ceiling that is 3.4 cal for the whole 14-serving batch, under 0.25 cal/serving, so the zero-booking cannot move the card. Quantized 1.25 tbsp vs exact 1.17 (+7.1%, NOTED - above the 5% line, macro-immaterial per the same bound)."
+    },
+    {
+      "source_raw": "1/4 teaspoon red pepper flakes",
+      "item": "Red Pepper Flakes",
+      "bid": "red-pepper-flakes",
+      "board": "weekly",
+      "grams": 1,
+      "buy": "1/2 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 2.3333x = 0.58 tsp, quantized 1/2 tsp (-14.3%, NOTED - above the 5% line; at 6 cal/tsp the whole line is 3 cal per batch, macro-immaterial). densities 1.8 g/tsp = 0.9, rounded 1. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/4 teaspoon fine sea salt",
+      "item": "Sea Salt",
+      "bid": "sea-salt",
+      "board": "weekly",
+      "grams": 3,
+      "buy": "1/2 tsp fine sea salt (chimichurri)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "sea-salt commodity exists, 5 of 7 stores, cheapest Sam's Club $0.1106/oz - no need to flatten to table salt (kosher-salt precedent, french-chicken-fricassee). Zero-macro, booked via the Salt DB row basis (disclosed); grams at table-salt 6 g/tsp. Quantized 1/2 tsp vs exact 0.58 (-14.3%, NOTED - zero-macro, immaterial)."
+    },
+    {
+      "source_raw": "4 small sweet potatoes",
+      "item": "Sweet Potatoes",
+      "bid": "sweet-potatoes",
+      "board": "weekly",
+      "grams": 2081,
+      "buy": "9 1/4 sweet potatoes, about 1/2 lb each",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "LOUD FLAG - each-weight ruling decides this recipe's calorie-floor pass, read before QA. The page prints 'small' but the source's OWN nutrition proves its calculator used ~225-230 g potatoes: published carbs (31 g/serving x 6 = 186 g total, of which non-potato lines supply ~11 g) imply ~870-900 g of sweet potato, and published vitamin A (21683 IU/serving x 6 = 130098 IU at USDA 14187 IU/100 g) independently implies ~917 g - two separate nutrient lines converging on ~225 g each for the 4 potatoes. Booking the densities.json each = 130 g medium instead would recompute the recipe to ~380 cal/serving (BELOW the 400 floor) and 18.5 g carbs, contradicting the source's own 491/31 - the very numbers selection accepted this recipe on. So: 225 g each, disclosed, buy string says 'about 1/2 lb each' so the cook picks the right size. Exact 2.3333x = 9.33 potatoes, quantized 9.25 (-0.9%) = 2081 g. Board 7 of 7, cheapest Sam's Club $0.974/lb. DB row Sweet Potatoes (FDA label, 130 g = 100 cal / 2 P / 24 C)."
+    },
+    {
+      "source_raw": "2 tablespoons extra virgin olive oil divided",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 64,
+      "buy": "4 3/4 tbsp extra virgin, divided",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "second listed oil line (sheet pan section), kept separate to trace to the extraction. Exact 2.3333x = 4.67 tbsp, quantized 4.75 (+1.8%) at 13.5 g/tbsp = 64.1, rounded 64. EVOO and pure olive oil share the olive-oil commodity (board cells span both). Board 7 of 7."
+    },
+    {
+      "source_raw": "3/4 teaspoon sea salt divided",
+      "item": "Sea Salt",
+      "bid": "sea-salt",
+      "board": "weekly",
+      "grams": 11,
+      "buy": "1 3/4 tsp, divided",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 2.3333x = 1.75 tsp, zero drift. Zero-macro; grams at 6 g/tsp = 10.5, rounded 11. Board 5 of 7."
+    },
+    {
+      "source_raw": "1 head broccolini",
+      "item": "Broccolini",
+      "bid": "broccolini",
+      "board": "weekly",
+      "grams": 511,
+      "buy": "2 1/4 bunches (about 18 oz)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Broccolini maps to its OWN broccolini commodity - 1 of 7 stores (Baker's $3.99/each) and Rule B says one store is carriage, so no substitution is needed and none was booked. NOT mapped to broccoli or frozen-broccoli-florets (different vegetable and price class - the variety-pricing standing rejection). The source's comment section sanctions plain broccoli as an equal swap ('It should be the same!' - author reply), recorded here as a WRITER OPTION if Baker's-only sourcing is a problem, not used in this map. 'Head' read as bunch (broccolini has no head form; it is sold in bunches). Exact 2.3333x = 2.33 bunches, quantized 2.25 (-3.6%); bunch weight 227 g (nominal 8 oz retail bunch - NO densities row, FLAGGED; macro sensitivity across the realistic 6-10 oz bunch range is under 4 cal/serving) = 511 g. NEW food-DB row added this batch (Mann's branded label via FDC 2424770, 85 g = 35 cal / 3.5 P / 5.9 C / 0 F)."
+    },
+    {
+      "source_raw": "1.5 to 2 pounds steak – sirloin or flank steak recommended",
+      "item": "Beef Flank/Sirloin Steak",
+      "bid": "sirloin-steak",
+      "board": "weekly",
+      "grams": 1588,
+      "buy": "3 1/2 lb sirloin or flank steak, sliced into 1/2-inch strips",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Existing ingredient-map authority: 'Beef Flank/Sirloin Steak' and 'Sirloin Steak' both -> sirloin-steak (weekly); the house has already ruled flank and sirloin one price class (flank-steak-parmesan-green-beans precedent). Board 7 of 7, cheapest Family Fare $5.49/lb. The printed range '1.5 to 2 pounds' is booked at the 1.5 lb end: the source's published 25 g protein/serving x 6 = 150 g total, which is exactly 680 g (1.5 lb) of raw steak protein - their own nutrition used the low end, so booking higher would fabricate macros the source never claimed. 1.5 lb x 2.3333 = 3.5 lb = 1588 g, zero drift. DB row Beef Flank/Sirloin Steak (USDA lean raw, 155 cal/100 g)."
+    },
+    {
+      "source_raw": "1/2 cup chimichurri divided",
+      "item": "Chimichurri (sub-recipe)",
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "1 cup plus 2 3/4 tbsp of the chimichurri above, divided",
+      "optional": false,
+      "decision": "sub-recipe",
+      "notes": "Extractor concern confirmed: this is the yield of the 'For the Chimichurri' section, not a purchased ingredient - zero grams booked here because every component is already booked above. Consistency check: scaled component mass 275 g is about 1.19 cups of emulsified sauce vs the 1.17 cups called for - the sub-recipe yield matches the call. NOT enqueued."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Broccolini (Mann's branded label via USDA FDC Branded 2424770; 85 g serving = 35 cal / 3.5 P / 5.9 C / 0 F; broccolini has no USDA generic record - see the row's verify_source)"
+  ],
+  "db_entries_refused": [
+    "Fresh Oregano - NO row added: no USDA record exists (SR 171328 is dried) and no verifiable branded label was found (FDC generic + branded searched 2026-08-16). Rule 2 forbids inventing one. The recipe line is booked at zero macros with a disclosed ceiling bound of under 0.25 cal/serving, so the card cannot be moved by the gap; the flag stands until a real clamshell label is transcribed."
+  ],
+  "pricing_terms_needed": [
+    { "term": "fresh oregano", "blocking": true, "why": "required chimichurri component, 1 1/4 tbsp at 14 servings; the board's only answer routes the term to DRIED oregano via include pattern (form-flip, refused); Omaha stores do sell fresh herb clamshells - needs a real carriage/price verdict from the pricer lane" }
+  ],
+  "new_commodity_proposals": [
+    "fresh-oregano (see registrar_rulings - PENDING, orchestrator to route to the commodity-registrar agent)"
+  ],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 491, "protein_g": 25, "carbs_g": 31, "fat_g": 30 },
+    "computed_per_serving": { "calories": 428.0, "protein_g": 28.9, "carbs_g": 30.6, "fat_g": 21.5 },
+    "protein_gap_pct": 15.6,
+    "calorie_gap_pct": -12.8,
+    "verdict": "PASS WITH THE INSTRUMENT FORMALLY TRIPPED - read this in full, do not skim. Protein computes +15.6%, just over the ~15% line, so per rule the main-protein portion was re-examined rather than waved through: the steak line ALONE recomputes to 24.95 g/serving (1588 g x 22 P/100 g / 14), matching the source's published 25 g protein EXACTLY - the strongest available confirmation that the steak portion (1.5 lb basis, their own nutrition basis) is right, not wrong. The entire overage is vegetable protein the source's calculator visibly did not credit: our potato line adds 32 g and the broccolini label 21 g per batch (53 g = 3.8 g/serving = the whole gap), while their published 25 g is bare steak. Carbs corroborate the portions independently: computed 30.6 vs published 31 (-1.4%), which pins the sweet-potato mass (the only large carb line) at their own basis. Calories -12.8% comes from the estate's LEAN raw sirloin/flank row (155 cal/100 g) vs their fattier flank basis (fat 21.5 vs 30 published, same direction and cause as the accepted flank-steak-parmesan-green-beans gap). Conclusion: no portion is wrong; the gap is a disclosed basis artifact with the sharp instrument (main protein) anchored dead-on. QA should still eyeball this file's sweet-potato flag before publish.",
+    "band_check": "computed 428.0 cal in [400, 650] PASS (floor margin 28 cal - LOUD FLAG: the pass depends on the 225 g sweet-potato each-weight ruling; at the densities 130 g medium default the recipe computes ~380 cal and FAILS the floor - the sweet-potato line's notes carry the two-nutrient derivation from the source's own label); carbs 30.6 g <= 35 PASS (margin 4.4 g)"
+  },
+  "board_defects_observed": [
+    "Term 'fresh-oregano' resolves via dried-oregano's include pattern /\\boregano\\b/ - a form-flip inside the term matcher: any recipe writing a fresh-oregano line will silently price as dried spice. A fresh-form exclude (or a fresh-oregano commodity, proposed via registrar) would close it; that is a commodities.json matching change and goes through the match-soundness gate, not this run.",
+    "broccolini commodity is 1 of 7 (Baker's only) - carried per Rule B, but single-store; the source's own broccoli sanction is recorded on the ingredient line as a writer fallback if coverage matters."
+  ],
+  "densities_followups": [
+    "Broccolini: no densities row; proposed bunch = 227 g (nominal 8 oz retail bunch), cup chopped ~ 85 g (label serving)",
+    "Fresh Oregano: no densities row; defaults herb tbsp = 1 g used, flagged",
+    "Fresh Parsley: STILL no densities row (third recipe this run to flag it); proposed tbsp chopped = 3.8, cup chopped = 60, bunch = 60",
+    "Sweet Potatoes: row has each = 130 (FDA medium) only; this recipe needed a size ruling and derived 225 g from the source's own nutrition - proposed adding small = 100, medium = 130, large = 225 so future 'small/large' lines stop hinging on per-recipe derivations"
+  ]
+}

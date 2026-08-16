@@ -1,0 +1,19 @@
+{
+  "slug": "creamy-garlic-bacon-spinach-chicken-skillet",
+  "name": "Creamy Garlic Chicken with Spinach and Bacon Skillet",
+  "protein": "chicken",
+  "verdict": "DUPE",
+  "fit": {
+    "calories": 540,
+    "carbs_g": 7,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "meal_prep_dinner": true,
+    "note": "Passes all CONDITIONS on published/estimated numbers (540 cal, 7g carbs, no seafood, skillet scales by weigh-and-divide). Fit is not the issue; it is a duplicate. Nutrition is a STRUCTURAL ESTIMATE - source publishes no macros - which also makes it the weaker of the colliding candidates."
+  },
+  "dupe_of": "creamy-tuscan-chicken-skillet",
+  "reason": "Structurally the same dinner as the already-accepted creamy-tuscan-chicken-skillet: both are a one-skillet creamy garlic chicken saute with spinach, no starch base - 4/4 on protein (chicken), sauce family (garlic cream + parmesan), starch (none), and method (skillet). The only difference is a garnish-level accent swap (crispy bacon here vs sun-dried tomato there), which does not make a distinct plate. It ALSO duplicates catalog chicken-florentine (butter/chicken/cream/spinach/parmesan skillet) - the candidate's own note concedes it is the florentine base plus bacon. Between the two colliding chicken-skillet candidates, the accepted creamy-tuscan-chicken-skillet is stronger (published nutrition, high confidence) vs this one's structural estimate with no published macros, so this is the loser.",
+  "cross_protein_collision_note": "This creamy-spinach-cream-skillet template recurs across proteins in the pool/catalog. The pork lane has creamy-mushroom-spinach-pork-chops / creamy-spinach-mushroom-pork-chops (same cream+spinach skillet on pork), and catalog has turkey-florentine-rice-bake (turkey cream+spinach, but starched with rice). The decider should watch this shared 'creamy garlic + spinach cream skillet' family across chicken/pork/turkey - only one no-starch instance per protein should survive, and chicken's slot is already taken by creamy-tuscan-chicken-skillet."
+}

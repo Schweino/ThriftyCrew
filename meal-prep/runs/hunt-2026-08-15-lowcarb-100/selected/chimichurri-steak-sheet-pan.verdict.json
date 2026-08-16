@@ -1,0 +1,21 @@
+{
+  "slug": "chimichurri-steak-sheet-pan",
+  "name": "Chimichurri Steak Sheet Pan Dinner",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 491,
+    "carbs": 31,
+    "in_band": true,
+    "notes": "491 cal is within 400-650; 31g carbs is under the 35g ceiling; no seafood; whole-muscle sirloin/flank roasted on a sheet pan scales to 14 servings by weigh-and-divide."
+  },
+  "catalog_dupe_evidence": "No duplicate: grep of catalog-digest.json returns zero chimichurri dishes and no sheet-pan steak; the catalog's beef steak entries are all distinct dinners (chipotle-steak-burrito, honey-garlic-steak-bites-potatoes, pepper-steak-with-rice, salisbury-steak-potato-bowls, slow-cooker steak/swiss-steak over rice, steak-fajita-rice-bowls) - different sauce family, starch, and method.",
+  "pool_accepted_dupe_evidence": "No collision in accepted-slugs.json (read fresh): the four accepted beef/steak dishes (flank-steak-parmesan-green-beans, low-carb-ground-beef-stroganoff-skillet, garlic-butter-steak-bites-zucchini, spinach-provolone-stuffed-flank-steak-rolls, low-carb-steak-fajita-skillet) share no sauce/starch/method with chimichurri + sweet potato + broccolini sheet pan.",
+  "cross_protein_watch": [
+    "A chicken chimichurri sheet-pan or the catalog's Peruvian green-sauce chicken / sheet-pan-chicken-sweet-potato-brussels shares the sheet-pan + sweet-potato + green-herb-sauce structure - a chicken-chimichurri candidate in another selector's pool would be near-identical in format.",
+    "A pork tenderloin chimichurri sheet-pan (cf. sheet-pan-pork-tenderloin-potatoes-green-beans) would be the same dish on a different protein; flag for the cross-protein merge pass."
+  ],
+  "cuisine": "Latin American (Argentine-inspired)",
+  "cuisine_value": "Widens the American/Tex-Mex-skewed catalog; chimichurri is absent entirely.",
+  "unmapped": []
+}

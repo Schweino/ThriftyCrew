@@ -1,0 +1,20 @@
+{
+  "slug": "hungarian-beef-goulash",
+  "name": "Hungarian Beef Goulash",
+  "protein": "beef",
+  "verdict": "DUPE",
+  "dupe_of": "hungarian-beef-goulash",
+  "dupe_scope": "catalog",
+  "reason": "Exact duplicate of live catalog recipe 'hungarian-beef-goulash' (Hungarian Beef Goulash): identical dish (beef chuck + Hungarian paprika sauce + potato/carrot braise) with matching slug, name, and near-identical ingredient board (beef-chuck-roast, onions, bell peppers, tomatoes, carrots, potatoes, broth, paprika, butter, garlic). Four-of-four match on protein/sauce/starch/method.",
+  "fit": {
+    "cal_per_serving": 574,
+    "carbs_per_serving": 31,
+    "band": "within 400-650 cal and <=35g carb on published numbers, but moot given catalog dupe; carb sits near ceiling with 2 potatoes so DB compute could drift over 35g",
+    "no_seafood": true,
+    "scalable_14": true
+  },
+  "cross_protein_collision_note": "N/A (rejected as catalog dupe); the dish has no obvious same-recipe twin in other proteins, though a paprika-forward chicken paprikash would be a distinct dinner, not a twin.",
+  "adjudicator": "orchestrator",
+  "run": "hunt-2026-08-15-lowcarb-100",
+  "lane_source": "beef-slow"
+}

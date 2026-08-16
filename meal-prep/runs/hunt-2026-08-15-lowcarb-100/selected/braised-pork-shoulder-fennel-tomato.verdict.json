@@ -1,0 +1,17 @@
+{
+  "slug": "braised-pork-shoulder-fennel-tomato",
+  "name": "Braised Pork Shoulder with Fennel and Tomato",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "ok": true,
+    "cal": 622,
+    "carbs_g": 7.7,
+    "note": "622 cal sits inside the 400-650 band (under the 650 ceiling); 7.7g carbs far under 35g; no seafood; whole-muscle braise scales cleanly to 14 (braise a butt). FIT. Source cal is high only because it counts visible fat eaten; a trimmed row would drift lower, safely inward."
+  },
+  "dupe_evidence": "Not a duplicate. No Italian-style whole-muscle pork-shoulder braise with fennel + tomato exists in the pork catalog. Closest is braised-pork-ragu-over-pappardelle, but that is a shredded tomato RAGU served over pasta (starch dish), not a low-carb roast with fennel. Thai-coconut-curry-pork-shoulder (accepted) is a different flavor family; creamy-garlic-herb-wine-pork-chops (accepted) is a different cut and sauce.",
+  "nearest_neighbor": "braised-pork-ragu-over-pappardelle (catalog): shares protein (braised pork shoulder) + tomato, but differs on format (whole-muscle plate vs shredded ragu), starch (none vs pappardelle), and finish (fennel-forward vs pasta sauce) = only 2 of 4 axes. Distinct dinner.",
+  "cross_protein_collision": "A fennel + tomato braise is a portable Italian template. Watch other selectors for a braised beef short-rib or chicken-thigh (Tuscan) version with fennel + tomato that would be the same dish in a different protein.",
+  "confidence": "medium",
+  "flag": "Source is user-submitted (carbmanager) with servings inferred as 4 from 28oz pork, not stated. Numbers read directly off the page, but downstream extract should re-confirm serving count."
+}

@@ -1,0 +1,25 @@
+{
+  "slug": "thai-red-curry-ground-turkey-cauliflower-skillet",
+  "name": "Thai Red Curry Ground Turkey and Cauliflower Rice Skillet",
+  "protein": "turkey",
+  "verdict": "DUPE",
+  "dupe_of": "oneskillet-ground-turkey-thai-curry-with-rice",
+  "fit": {
+    "calories": 407,
+    "carbs": 13,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "note": "Published 407 cal / 13g carb clears both bands (cal sits on the low edge but is inside); one-skillet ground turkey scales cleanly to 14. Fit is fine - this is rejected on dedup, not on conditions."
+  },
+  "dupe_check": {
+    "catalog": "DUPE of 'One-Skillet Ground Turkey Thai Curry with Rice' (oneskillet-ground-turkey-thai-curry-with-rice): same protein (ground turkey), same sauce/flavor family (Thai coconut curry - coconut-milk + chicken-broth + curry), same method (one skillet), same signature vegetable (zucchini); the ONLY difference is starch, rice vs cauliflower rice. Four-factor test scores protein+sauce+method identical and even a shared veg overlap - a cauliflower-rice swap is the low-carb rendition of the same dinner, not a distinct plate. Also near 'Thai Coconut Curry Turkey Meatballs' (same red-curry+coconut+ground-turkey) but that is meatball format, so the rice-skillet catalog recipe is the true twin.",
+    "accepted_slugs": "No collision in this run's accepted-slugs (read fresh): the only Thai-coconut-curry entry is thai-coconut-curry-pork-shoulder, a different protein and a braise, not a turkey skillet. Collision is purely with the live catalog."
+  },
+  "cross_protein_collision_notes": [
+    "This Thai-red-curry + coconut-milk + skillet template is protein-swappable: catalog already carries it as chicken (thai-red-curry-chicken-rice-bowls, thai-green-curry-chicken), beef (thai-basil-beef-bowls-with-coconut-rice), and pork (thai-coconut-curry-pork-shoulder). If another selector's pool holds a 'Thai red curry ground beef/chicken cauliflower skillet', it is structurally the same low-carb plate as this - flag for the cross-protein merge pass."
+  ],
+  "borderline": false,
+  "evidence_one_line": "DUPE of One-Skillet Ground Turkey Thai Curry with Rice - identical ground-turkey Thai coconut-curry skillet with shared zucchini; cauliflower-rice-for-rice is a starch swap, not a different dinner. Fit clears the bands but the dish already exists in catalog."
+}

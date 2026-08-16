@@ -1,0 +1,22 @@
+{
+  "slug": "cauliflower-rice-italian-sausage-casserole",
+  "name": "Cauliflower Rice Italian Sausage Casserole",
+  "protein": "pork-sausage",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 506,
+    "carbs_g": 8.5,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "result": "FIT"
+  },
+  "dupe_check": {
+    "catalog": "Not a catalog duplicate. All catalog pork/Italian-sausage dishes are pasta, soup, or potato based (Italian Sausage Penne with Peppers, Italian Sausage Minestrone, Sausage Bake with Potatoes, etc.); none is a grain-free cauliflower-rice + mushroom + mozzarella bake.",
+    "pool": "No colliding pork-sausage candidate in my three-item set.",
+    "accepted_slugs": "Checked fresh - 'italian-sausage-peppers-onions-skillet' (accepted) is a peppers/onions skillet with no cauliflower-rice bake base; 'chicken-bacon-ranch-cauliflower-bake' (accepted) is a different protein and ranch/bacon flavor. Neither is this dish."
+  },
+  "cross_protein_collisions": "Structural cousin to catalog 'Cheesy Turkey Sausage and Vegetable Rice Casserole' - same sausage + veg + cheese casserole concept, but that is turkey sausage on a real-rice base while this is pork Italian sausage on cauliflower rice. Different protein and different starch. Decider should watch for another selector proposing a turkey-Italian-sausage cauliflower-rice bake, which WOULD be a near-duplicate.",
+  "evidence": "506 cal / 8.5g carbs from source card; catalog Italian-sausage dishes are all pasta/potato/soup; the only sausage cauliflower/veg casserole cousin is turkey + real rice."
+}

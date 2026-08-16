@@ -1,0 +1,19 @@
+{
+  "slug": "korean-bossam-slow-roasted-pork-lettuce-wraps",
+  "name": "Korean Bossam (Slow-Roasted Pork with Lettuce Wraps)",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 626,
+    "carbs_g": 18,
+    "in_band": true,
+    "seafood": false,
+    "notes": "626 cal is within 400-650 and 18g carbs clears <=35g. Optional raw oysters are seafood but flagged optional and dropped per no-seafood rule; rice side omitted for low-carb (already reflected in the 18g figure). Scales as a single large pork-shoulder roast, weigh-and-divide to 14. NOT-FIT does not apply. Note the 'why' flags 626 sits near the ceiling and a label-DB recompute could drift over 650 - band-clearance is from the published source; decider/extractor should watch the recompute."
+  },
+  "dupe_evidence": "No bossam in the catalog. Nearest Korean pork entries are slow-cooker-korean-shredded-pork-bowls, slow-cooker-korean-gochujang-pork-bowls, and korean-gochujang-ground-pork-rice-bowls - all gochujang-glazed saucy rice BOWLS made in a slow cooker; nearest slow-roasted shredded pork is slow-cooker-kalua-pork-bowls (Hawaiian) and ecuadorian-hornado-pork-bowls. Bossam differs on sauce family (ssamjang/ginger-shallot ssam, not gochujang glaze), starch (butter-lettuce wraps, no rice) and method (oven roast + sugar/salt cure, not slow cooker). Only the protein and the broad 'Korean' tag overlap (1-2 of 4) - distinct plate, not a near-duplicate.",
+  "cross_protein_watch": "The lettuce-wrap 'ssam' presentation (cured/roasted meat + ssamjang + kimchi in butter lettuce) is a format that could structurally collide with a beef bulgogi/galbi lettuce-wrap or a Korean ground-beef/ground-pork lettuce-wrap in another selector's pool - same eating experience, different protein. Decider should check the beef and any ground-meat pools for a Korean lettuce-wrap twin.",
+  "adjudicated_against": {
+    "catalog_digest_recipe_count": 544,
+    "accepted_slugs_seen": 22
+  }
+}

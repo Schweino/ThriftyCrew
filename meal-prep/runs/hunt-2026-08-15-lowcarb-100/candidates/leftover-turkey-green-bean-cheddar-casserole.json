@@ -1,0 +1,24 @@
+{
+  "name": "Leftover Turkey Green Bean Cheddar Casserole",
+  "slug": "leftover-turkey-green-bean-cheddar-casserole",
+  "protein": "turkey",
+  "method": "oven bake",
+  "cuisine": "American",
+  "source_url": "https://www.wholesomeyum.com/recipes/easy-leftover-turkey-casserole-recipe/",
+  "source_servings": 8,
+  "src_cal": 416,
+  "src_carbs": 12.5,
+  "src_protein": 23.6,
+  "ingredients_verbatim": [
+    "3 cups leftover turkey (cubed or shredded)",
+    "4 cups cooked green beans",
+    "1 cup shredded cheddar cheese",
+    "2 cloves minced garlic",
+    "1/2 cup mayonnaise (or Greek yogurt)",
+    "1 1/2 cups cranberry sauce",
+    "1/2 cup crumbled goat cheese",
+    "1/2 cup chopped walnuts (optional)"
+  ],
+  "unmapped": ["goat cheese"],
+  "why": "Oven-baked casserole, 416 cal / 12.5g carbs (9g net) per serving on the source's numbers - low end of the cal band but comfortably inside it, well under the carb ceiling. Structurally low-carb (turkey + green beans + cheese + mayo, no rice/pasta/potato). Whole-muscle turkey maps to turkey-breast; green beans, shredded cheddar, garlic, mayonnaise, cranberry-sauce, walnuts all map to the board. Goat cheese has NO board home - flagged for the pricer lane (a deliberate unmapped case to prove the queue). Protein is 23.6g, a touch under the 25g identity ideal, so lower confidence than the stuffed peppers; source uses sugar-free cranberry sauce for the stated carbs. Scales to 14 as a bake."
+}

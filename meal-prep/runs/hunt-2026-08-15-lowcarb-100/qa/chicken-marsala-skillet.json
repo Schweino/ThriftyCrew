@@ -1,0 +1,26 @@
+{
+  "slug": "chicken-marsala-skillet",
+  "verdict": "fail",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "ingredient-coverage",
+      "severity": "blocking",
+      "detail": "RE-QA after the writer-routed repair cycle: the built spec (db/recipes/chicken-marsala-skillet.json) and card (db/built/chicken-marsala-skillet.body.html) STILL do not exist. State file remains 'priced' (updated 2026-08-16 06:31:55, before the first QA fail) with no build/write entry in history. The repair that the first fail asked for - build the spec and card - was never performed, so every card-side check (spec ingredient coverage both directions, scaling in the spec, method, title, credit, prose numbers) remains unverifiable. This is the second fail on the same absent artifact.",
+      "owner": "writer"
+    },
+    {
+      "check": "method",
+      "severity": "note",
+      "detail": "Live page re-fetched cleanly on 2026-08-16 and matches the extraction exactly: title 'Easy Chicken Marsala', 4 servings, all 10 ingredient lines, all 5 steps, stated macros 428 cal / 26 P / 11 C / 26 F. The transcription is a faithful anchor; no extractor repair needed.",
+      "owner": "extractor"
+    },
+    {
+      "check": "scaling",
+      "severity": "note",
+      "detail": "Mapped file applies one consistent 3.5x ratio (4 -> 14) on every line; the two derived quantities (chicken weight back-solved from the source's own 26 g protein/serving, dredging-flour allowance at 30 g per 4 cutlets scaled to 105 g) are documented derivations, not per-line drift. Whenever the spec IS built it should inherit these grams unchanged.",
+      "owner": "mapper"
+    }
+  ],
+  "notes": "Anchors: extraction AND live page (saltandlavender.com fetched cleanly both cycles); they agree completely, so everything that exists upstream is faithful to the source. The terminal fail is not a fidelity defect in the recipe - it is that the artifact under review was never produced, in either cycle. Marsala-wine commodity registrar ruling still pending (shared with chicken-chasseur), which is the likely reason the build never ran; that blocker belongs to the mapper/registrar lane, but the routed owner for the missing card remains the writer. Dispatch rule: second FAIL is terminal (rejected-qa)."
+}

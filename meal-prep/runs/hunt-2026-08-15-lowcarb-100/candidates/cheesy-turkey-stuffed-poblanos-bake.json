@@ -1,0 +1,29 @@
+{
+  "name": "Cheesy Turkey Stuffed Poblanos (Baked)",
+  "slug": "cheesy-turkey-stuffed-poblanos-bake",
+  "protein": "turkey",
+  "method": "oven bake",
+  "cuisine": "Tex-Mex",
+  "source_url": "https://kalynskitchen.com/cheesy-stuffed-poblanos-with-turkey/",
+  "source_servings": 4,
+  "src_cal": 480,
+  "src_carbs": 6.5,
+  "src_protein": 39,
+  "src_fat": 31,
+  "ingredients_verbatim": [
+    "1 lb. ground turkey",
+    "2 tsp. olive oil",
+    "1 10 oz. can Green Chile Enchilada Sauce, gluten-free if needed",
+    "1 T minced garlic",
+    "2 tsp. ground cumin",
+    "salt and fresh-ground black pepper to taste",
+    "2 T fresh or fresh-frozen lime juice",
+    "2 large Poblano Chiles + 1/2 cup chopped poblano pepper",
+    "1 1/4 cups grated Mozzarella cheese",
+    "1/2 cup sliced green onion"
+  ],
+  "main_ingredients": ["ground-turkey", "olive-oil", "enchilada-sauce", "garlic", "limes", "poblano-peppers", "reduced-fat-mozzarella", "green-onions"],
+  "unmapped": ["ground-cumin (spice - verify board id)"],
+  "why": "Verified from the source's own nutrition card: 480 cal / 6.5g total carbs / 39g protein per serving - squarely mid-band and extremely low-carb (structurally meat + cheese + poblano + green-chile sauce, zero rice/pasta/potato/bean base). Excellent protein-to-calorie ratio. Straight oven bake at 375F, weigh-and-divide filling, scales cleanly to 14. Nearly everything maps to the board (ground-turkey, olive-oil, enchilada-sauce, garlic, limes, poblano-peppers, mozzarella->reduced-fat-mozzarella, green-onions); only ground cumin is a possible unmapped spice - a good light pricer-lane flag. DISTINCT: catalog/pool stuffed-pepper bakes all use BELL peppers (ground-turkey-stuffed-peppers-bake, ground-turkey-taco-stuffed-peppers) and the only turkey chile-relleno entry is a SKILLET - this is whole baked stuffed poblanos, a different dish.",
+  "confidence": "high - read the page's own nutrition card and full ingredient list directly"
+}

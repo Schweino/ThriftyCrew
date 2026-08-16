@@ -1,0 +1,16 @@
+{
+  "slug": "braised-pork-shoulder-fennel-tomato",
+  "name": "Braised Pork Shoulder with Fennel and Tomato",
+  "protein": "pork",
+  "cuisine": "Italian-style",
+  "method": "braise (Dutch oven 375F; slow-cooker alt)",
+  "source_url": "https://www.carbmanager.com/recipe-detail/ug:e7fabfd2af844317a0ca32dd5fedccd9/keto-braised-pork-shoulder",
+  "source_servings": 4,
+  "src_cal": 622,
+  "src_carbs": 7.7,
+  "src_protein": 49.8,
+  "unmapped": ["fennel bulb"],
+  "decision": "ACCEPT",
+  "note": "In-band (622 cal under the 650 ceiling / 7.7g carbs), whole-muscle pork-shoulder braise with fennel + tomato paste, no starch base. Widens the American/Tex-Mex-skewed catalog with an Italian-style braise and adds pork, an underrepresented lane (beef leads the run). Cross-lane merge check against fresh accepted-slugs.json: adjudicator flagged a portable fennel+tomato braise template that could recur in beef/chicken. No accepted dish is a fennel+tomato braise - slow-cooker-boneless-beef-short-ribs and thai-coconut-curry-pork-shoulder are different flavor families; no collision blocks this keep. Confidence medium: user-submitted source, servings inferred as 4 from 28oz pork, source cal high because it counts visible fat eaten (a trimmed row drifts favorably inward) - extract lane should re-confirm serving count.",
+  "cross_lane_checked": true
+}

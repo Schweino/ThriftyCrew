@@ -1,0 +1,38 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Basque Chicken and Peppers (Pollo al Chilindrón)",
+  "source_url": "https://www.themediterraneandish.com/basque-chicken-and-peppers-pollo-al-chilindron/",
+  "servings": 6,
+  "time_total": "1 hour 10 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    { "raw": "2 pounds bone-in skin-on chicken thighs, drumsticks, or both", "item": "bone-in skin-on chicken thighs, drumsticks, or both", "qty": "2", "unit": "pound", "prep": null, "optional": false, "section": null },
+    { "raw": "Kosher salt", "item": "kosher salt", "qty": null, "unit": null, "prep": null, "optional": false, "section": null },
+    { "raw": "Freshly ground black pepper", "item": "black pepper", "qty": null, "unit": null, "prep": null, "optional": false, "section": null },
+    { "raw": "3 tablespoons extra virgin olive oil", "item": "extra virgin olive oil", "qty": "3", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 onion, thinly sliced", "item": "onion", "qty": "1", "unit": "each", "prep": "thinly sliced", "optional": false, "section": null },
+    { "raw": "2 red bell peppers, thinly sliced", "item": "red bell peppers", "qty": "2", "unit": "each", "prep": "thinly sliced", "optional": false, "section": null },
+    { "raw": "3 1/2 ounces diced jamón Serrano, pancetta, or bacon (100g)", "item": "jamón Serrano, pancetta, or bacon", "qty": "3 1/2", "unit": "ounce", "prep": "diced", "optional": false, "section": null },
+    { "raw": "4 garlic cloves thinly sliced", "item": "garlic", "qty": "4", "unit": "clove", "prep": "thinly sliced", "optional": false, "section": null },
+    { "raw": "1/2 teaspoon smoked Spanish paprika", "item": "smoked Spanish paprika", "qty": "1/2", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 (14.5-ounce) can fire-roasted crushed or diced tomatoes", "item": "fire-roasted crushed or diced tomatoes", "qty": "1", "unit": "14.5-ounce can", "prep": null, "optional": false, "section": null },
+    { "raw": "1/2 cup dry white wine", "item": "dry white wine", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1 teaspoon sugar", "item": "sugar", "qty": "1", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 bay leaf", "item": "bay leaf", "qty": "1", "unit": "each", "prep": null, "optional": false, "section": null },
+    { "raw": "Fresh thyme", "item": "fresh thyme", "qty": null, "unit": null, "prep": null, "optional": false, "section": null }
+  ],
+  "instructions": [
+    "Brown the chicken. Season the chicken pieces all over with salt and pepper. In a large skillet, heat the olive oil over medium-high heat. Add the chicken and sear until golden, 3 to 4 minutes per side. The chicken doesn't need to be cooked through at this point. Transfer to a plate.",
+    "Cook the onions and peppers. Reduce the heat to medium. Add the onion, peppers, jamón, and garlic. Cook, stirring occasionally, until the onion is translucent, 8 to 10 minutes. Add the paprika and cook for an additional 30 seconds.",
+    "Braise the chicken. Add the tomatoes, white wine, sugar, bay leaf, and thyme. Scrape the bottom of the pan to loosen any browned bits and incorporate them into the sauce. Nestle the chicken into the sauce. Bring to a boil, then reduce the heat to low to maintain a gentle simmer. Cook, uncovered, for 35 minutes or until the chicken is tender and the internal temperature registers 190 to 195°F on an instant-read thermometer.",
+    "Serve. Remove from the heat and serve immediately."
+  ],
+  "nutrition": {
+    "as_stated": "Calories: 452.5kcal | Carbohydrates: 6.6g | Protein: 23.7g | Fat: 35.1g | Saturated Fat: 9g | Cholesterol: 136.9mg | Sodium: 212.6mg | Fiber: 1.3g | Sugar: 3.3g"
+  },
+  "concerns": [
+    "Kosher salt, black pepper, and fresh thyme are listed with no quantity on the page; qty/unit left null, not marked optional because the page does not say 'to taste' or 'garnish' and all three are used in the instructions.",
+    "Prep time 10 minutes and cook time 1 hour as stated; time_active recorded from stated prep time."
+  ]
+}

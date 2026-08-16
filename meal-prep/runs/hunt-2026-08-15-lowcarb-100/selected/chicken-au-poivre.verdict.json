@@ -1,0 +1,21 @@
+{
+  "slug": "chicken-au-poivre",
+  "name": "Chicken au Poivre (Creamy Peppercorn Sauce)",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "ok": true,
+    "src_cal": 442,
+    "src_carbs": 3,
+    "reason": "442 cal (within 400-650), 3g carbs (<=35), chicken/no seafood, meat+fat+broth so no starch to scale, weigh-and-divide skillet scales cleanly to 14."
+  },
+  "dupe_check": {
+    "catalog": "No peppercorn/au-poivre dish in the 544-recipe digest (searched poivre/peppercorn/cream). Nearest French entries are french-chicken-fricassee (white wine + mushroom cream braise) and coq-au-vin (red-wine braise) - different sauce families entirely; the crushed-black-peppercorn + brandy/cognac + beef-stock + cream pan sauce is a distinct flavor family. Other catalog creamy-chicken dishes (cajun penne, gnocchi, fajita burrito, slow-cooker mushroom bowls) share only the word 'cream' and are starched/different-flavored. Not a duplicate.",
+    "accepted_slugs": "french-chicken-fricassee (accepted) is a different dinner (white-wine mushroom cream, no peppercorn/brandy); creamy-garlic-herb-wine-pork-chops (accepted) is a creamy pork pan-sauce but garlic-herb-wine, not peppercorn - no collision. No dupe against the live accepted list."
+  },
+  "cross_protein_watch": "HIGH collision risk with BEEF: 'steak au poivre' is the canonical version of this exact peppercorn-brandy-cream pan sauce - a beef/steak au poivre in the beef pool would be the same dinner with the protein swapped. A pork au poivre is also plausible. Decider must scan beef (and pork) pools for any '*au poivre' or 'peppercorn cream' before accepting more than one.",
+  "cuisine_note": "French, peppercorn-brandy cream - widens the catalog's American/Tex-Mex skew; genuinely additive.",
+  "unmapped_note": "brandy/cognac has no board home (deliberate pricer-lane test flag per v2.1 5.1) - wanted, not penalized.",
+  "borderline": false,
+  "by": "adjudicator (orchestrator dispatch: adjudicate 2)"
+}

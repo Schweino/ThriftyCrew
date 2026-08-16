@@ -1,0 +1,20 @@
+{
+  "slug": "spinach-artichoke-chicken-casserole",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "method",
+      "severity": "note",
+      "detail": "Bake time extended from source's 20 min to 25-30 min for the deeper 14-serving dish; disclosed in make_it and writer_notes as a deliberate scale adaptation, not drift.",
+      "owner": "writer"
+    },
+    {
+      "check": "scaling",
+      "severity": "note",
+      "detail": "Salt 0.875 tsp -> 1 tsp and black pepper 0.4375 tsp -> 1/2 tsp quantization (+14.3% each), disclosed by the mapper; zero/near-zero macro effect. All other lines sit on one clean 1.75x ratio (8 -> 14 servings).",
+      "owner": "mapper"
+    }
+  ],
+  "notes": "Re-QA after reanchor-machine-fields.ps1. Both anchors reached; live page matches the extraction ingredient-for-ingredient and step-for-step. FRESH-SPINACH CHECK: source explicitly calls for 8 oz FROZEN chopped spinach, so the frozen-chopped-spinach bid is a literal match, not a substitution - no finding. Cost re-anchor confirmed as the only move: stat.cost_ps 2.61 = head.costPerServing 2.61; prose money is tokens ({{cost_ps}}) except cost_lines literals 21.76/1.55/31.40/2.24/5.14/36.54, which all equal the spec's own cost_batch/cost_per_serving/cost_batch_true/cost_per_serving_true/cost_pantry_add/cost_first_run. Intro's 'under 12 grams of carbs' agrees with stat carbs 10. Chicken 3.5 cups cooked -> 2.5 lb raw at 1.75x via the standing 140 g/cup and 3oz-cooked=4oz-raw factors checks out (1143 g vs booked 1134 g, ordinary rounding). Title, dish class, and credit URL all match the source."
+}

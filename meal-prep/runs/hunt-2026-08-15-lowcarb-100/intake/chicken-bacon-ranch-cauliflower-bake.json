@@ -1,0 +1,69 @@
+{
+  "name": "Keto Chicken Bacon Ranch Casserole",
+  "slug": "chicken-bacon-ranch-cauliflower-bake",
+  "protein": "chicken",
+  "cuisine": "American",
+  "source_url": "https://www.creationsbykara.com/keto-chicken-bacon-ranch-casserole/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Boneless Skinless Chicken Breast", "grams": 1361, "buy": "3 lb, cooked and shredded (about 7 cups)", "display_name": "Chicken Breast (cooked, shredded)" },
+    { "item": "Butter", "grams": 67, "buy": "4.75 tbsp salted" },
+    { "item": "Cauliflower", "grams": 990, "buy": "9.25 cups chopped (about 2 medium heads)" },
+    { "item": "Cream Cheese", "grams": 262, "buy": "9.25 oz (an 8 oz brick plus 2.5 tbsp)" },
+    { "item": "Heavy Cream", "grams": 357, "buy": "1.5 cups" },
+    { "item": "Cheddar Cheese, Shredded", "grams": 537, "buy": "4.75 cups shredded, divided (half in, half on top)" },
+    { "item": "Ranch Seasoning Mix", "grams": 11, "buy": "1.5 tbsp dry mix" },
+    { "item": "Bacon Bits", "grams": 133, "buy": "1 cup plus 3 tbsp" }
+  ],
+  "macros_per_serving": { "calories": 503, "protein_g": 37, "carbs_g": 8, "fat_g": 36 },
+  "writer_notes": [
+    "SOURCE YIELD 3, rebuilt to 14 at the mapper's 4.6667x scale. Every gram and buy string transcribed from mapped\\chicken-bacon-ranch-cauliflower-bake.json; no number computed in prose.",
+    "MACROS transcribed from the mapper's food-DB recompute at 14 servings (macro_cross_check.computed_per_serving: 503 cal, 36.5 g protein, 8.2 g carbs, 36.0 g fat) and independently re-summed line by line against food-macros-db: cal 7035.9/14 = 502.6 -> 503; protein 511.5/14 = 36.5 -> 37 (int); carbs 114.3/14 = 8.2 -> 8; fat 503.9/14 = 36.0 -> 36. In band for this run (400 to 650 cal, 35 g carb or less): 103 cal above the floor, 147 below the ceiling, carbs a small fraction of the carb gate. Under-10-grams-of-carbs is the literal bound used in prose (built carbs = 8).",
+    "SOURCE MACRO NOTE (flag, not fixed): creationsbykara.com prints 584 cal / 42 g protein / 13 g carbs / 41 g fat per serving. Our recompute lands 503 / 36.5 / 8.2 / 36.0. Gap is +13.9% cal and +13.0% protein on the SOURCE side (mapper verdict PASS, inside the 15% tolerance, portions stand). The main protein line is anchored by an explicit source WEIGHT (8 oz cooked chicken), not an each-count, so the florentine each-weight failure mode does not apply. The gap is explained by (a) quantize-down on chicken and cream (-3.6% each) and (b) the source calculator booking heavier cup-equivalents for the cheese; band holds under either reading.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked both directions: butter (make_it 3), cauliflower (3), cream cheese (4), heavy cream (4), chicken (5), cheddar (5 into the mix + 6 on top, divided), ranch seasoning (5), bacon bits (5 most in + 6 held-back on top). The source lists NO salt or pepper and states no to-taste line, so none is booked and no step seasons with an unbought item; the card stays cook-as-shopped with zero phantom buys either direction.",
+    "BLOCKER (hard, spec cannot build today): item 'Bacon Bits' has NO row in db\\ingredients.json and NO alias, and the feed has no 'bacon-bits' bid. build-v2-spec's UNKNOWN-INGREDIENT-NAME guard (hardened 2026-08-16) therefore hard-blocks the build. The run state is 'priced' (derive: 'all 1 blocking ingredient(s) carried'), i.e. the pricer ruled bacon bits IS carried in Omaha under rule B, but carriage is not price-wiring: the bacon-bits commodity is still un-minted (mapper mapped it item_id=null, pantry-static, and filed a commodity-registrar proposal). It is NOT mapped to the raw 'bacon' bid on purpose (commodities' bacon rule EXCLUDES 'bits'; bits are pre-cooked and ~3x the per-lb price class, mapper rejection). It is NOT added to not-price-tracked-ok.json (that file's own rule forbids parking an un-wired bid there and would falsely claim the line costs the reader nothing, understating cost by a whole bacon line). It is NOT dropped (it is the 'bacon' in chicken-bacon-ranch and is non-optional). Intake authored complete so the repair/registrar pass can rebuild the moment the bacon-bits vocabulary + feed row lands. This is the writer stage flagging a genuine wiring gap, not editing vocabulary/commodity files.",
+    "COST-WIRING SMELL (does NOT block the build, flag for the map owner): there is no db\\ingredients.json row named 'Cream Cheese' mapping to the full-fat 'cream-cheese' bid (which DOES exist on the feed). The only cream-cheese vocab row is '1/3 Fat Cream Cheese' (bid 1-3-fat-cream-cheese), which carries an adjudicated alias 'Cream Cheese'. So the name 'Cream Cheese' resolves for COST to the 1/3-FAT light product while its MACROS are computed from the full-fat USDA food-DB row (350 cal/100 g) the mapper added. Same BID-MAP class the mapper and the hatch-green-chile card flagged: the vocabulary needs a 'Cream Cheese' -> cream-cheese row so full-fat costs against full-fat. Not editable at the writer stage.",
+    "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet needs a cost_lines entry to prove it (there is no costed row yet regardless, since the build is blocked); every statement is grounded in the recipe's own buy amount, matching the keto-turkey and hatch cards and steering clear of the 2026-08-15 audit failures. No per-line dollar figures; only ${{cost_ps}} and the $1/month membership line carry money.",
+    "DATA SMELLS carried from the mapper (flag, not fixed): (1) shredded-cheese/cheddar-cheese-shredded board cells include boxed-dinner and part-skim MOZZARELLA hijacks (Walmart Kraft Deluxe Mac and Cheese cheapest cell; Sam's/Family Fare/Hy-Vee mozzarella on a cheddar id) - a pricing-quality flag for the match-soundness gate, cheddar coverage is real either way. (2) Ranch Seasoning Mix density disagreement: densities 7 g/tbsp vs food-DB ~9 g/tbsp; macro impact under 3 cal/serving, mapper left it; DB row's own note asks for packet verification. (3) bacon-bits carriage evidence exists (Hy-Vee 3.25 oz $2.59 recurring; Walmart Oscar Mayer/Hormel Real Bacon Bits) at roughly $12.75/lb, ~3x raw bacon, which is why it cannot share the bacon id.",
+    "GRAMS are the mapper's, rounded to int where needed (build stores grams as int): 1361 chicken (3 lb raw purchase weight matching the RAW db row; cooked yield ~7 cups is the display), 67 butter, 990 cauliflower, 262 cream cheese, 357 heavy cream, 537 cheddar, 11 ranch, 133 bacon bits. Each buy string is the mapper's exact printed measure so the reader-facing amounts are unchanged.",
+    "PORTION METHOD: weigh the empty dish first, then weigh full and subtract, divide by 14. Standard house method."
+  ],
+  "prose": {
+    "intro_html": "Chicken bacon ranch usually shows up as a pile of pasta or a stack of tortillas wearing a ranch-flavored disguise, and the carbs do most of the talking. This version cuts them out and lets the good stuff carry the plate. Tender chicken and chopped cauliflower get folded into a real sauce built from cream cheese, heavy cream, and sharp cheddar, seasoned with dry ranch, then baked under one more layer of cheddar and a scatter of bacon until it bubbles. No pasta, no cream-of-something can, no flour. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 10 grams of carbs. That is comfort food that works for your body and your wallet at the same time.",
+    "shop_smart": [
+      "<strong>Three pounds of chicken breast is the anchor.</strong> Cook it and shred it down to about seven cups of tender meat to fold through the bake. Reach for the big family pack of boneless skinless breasts instead of the little trays, because you are paying for chicken, not packaging. This is where most of the protein and most of the money live.",
+      "<strong>About two medium heads of cauliflower do the work the pasta used to.</strong> Chop them into small pieces, roughly nine cups, and saute them in a little butter until they are crisp-tender so they hold their bite through the bake. They carry the bulk and the fiber without dragging in the carbs a noodle or a cracker topping would.",
+      "<strong>Cream cheese and heavy cream build the sauce, not a soup can.</strong> Grab an eight ounce brick of cream cheese and about a cup and a half of heavy cream and melt them together into a smooth base. This is the step that turns a pile of ingredients into a casserole instead of a dry bake.",
+      "<strong>Cheddar shows up twice, so buy enough to cover both jobs.</strong> You want about four and three quarter cups of shredded cheddar all told, divided, half melted into the sauce and half blanketing the top. Shredded off a block or straight from the bag both work fine; the sharp stuff just pays you back in more flavor.",
+      "<strong>Dry ranch mix and bacon are the flavor that names the dish.</strong> A tablespoon and a half of the dry ranch seasoning does more work than any bottle of dressing, and a generous cup of bacon bits gets stirred through and scattered over the top. Together they are what make it taste like chicken bacon ranch and not just a cheesy bake."
+    ],
+    "make_it": [
+      "Weigh your empty baking dish and write the number down. You will need it at the end to split this into 14 even servings by weight, which is the only honest way to portion one big bake.",
+      "Heat the oven to 350 degrees F and grease a large baking dish. If your chicken is not already cooked, poach or roast it now, then shred or dice it and set it aside. Chop the cauliflower into small, even pieces.",
+      "In your largest skillet or pot over medium heat, melt the butter and add the chopped cauliflower. Saute until it turns crisp-tender, about 8 to 10 minutes, stirring now and then so it cooks evenly.",
+      "Turn the heat to low. Add the cream cheese and the heavy cream and stir until the cream cheese melts completely and the sauce is smooth.",
+      "Stir in the shredded chicken, half of the cheddar, the dry ranch seasoning, and most of the bacon, holding back a handful of bacon for the top. Fold until everything is evenly coated.",
+      "Spread the mixture level in the baking dish. Scatter the remaining cheddar over the top, then finish with the bacon you held back.",
+      "Bake at 350 degrees F for about 30 minutes, until the cheese is melted and the casserole is hot and bubbling. Let it rest a few minutes so it firms up, then weigh the dish, subtract the empty weight from Step 1, and divide across 14 containers."
+    ],
+    "portion_html": "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a baked, bubbling chicken bacon ranch casserole that eats like the pasta version and skips the carbs. The chicken and the cheese carry it; the cauliflower does the job the noodles used to, for a lot less.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Keto chicken bacon ranch cauliflower casserole for meal prep: shredded chicken and cauliflower baked in a real cream cheese and cheddar sauce with dry ranch and bacon, no pasta and no flour, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 10 grams of carbs.",
+    "keywords": "chicken bacon ranch casserole, keto casserole, low carb casserole, cauliflower casserole, high protein meal prep",
+    "prepTime": "PT15M",
+    "cookTime": "PT30M",
+    "totalTime": "PT45M",
+    "steps": [
+      "Weigh the empty baking dish and note the number for portioning later.",
+      "Heat the oven to 350 degrees F, cook and shred the chicken if needed, and chop the cauliflower.",
+      "Saute the chopped cauliflower in the butter until crisp-tender.",
+      "Turn the heat to low and melt the cream cheese and heavy cream into a smooth sauce.",
+      "Stir in the chicken, half the cheddar, the dry ranch, and most of the bacon.",
+      "Spread in the dish, top with the remaining cheddar, and finish with the reserved bacon.",
+      "Bake at 350 degrees F for about 30 minutes until bubbling, rest, then weigh the dish and divide across 14 containers."
+    ]
+  }
+}

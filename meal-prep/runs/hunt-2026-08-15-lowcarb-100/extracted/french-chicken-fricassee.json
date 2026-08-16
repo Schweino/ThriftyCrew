@@ -1,0 +1,63 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Chicken Fricassee Recipe",
+  "source_url": "https://foolproofliving.com/chicken-fricassee/",
+  "servings": 4,
+  "time_total": "50 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    { "raw": "2 pounds boneless chicken breasts", "item": "boneless chicken breasts", "qty": "2", "unit": "pound", "prep": null, "optional": false, "section": null },
+    { "raw": "1 teaspoon kosher salt", "item": "kosher salt", "qty": "1", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1/2 teaspoon black pepper", "item": "black pepper", "qty": "1/2", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tablespoon butter", "item": "butter", "qty": "1", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tablespoon olive oil", "item": "olive oil", "qty": "1", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 onion, finely chopped - (about to 1 cup)", "item": "onion", "qty": "1", "unit": "each", "prep": "finely chopped", "optional": false, "section": null },
+    { "raw": "1 lbs. Portobello mushrooms, cleaned, trimmed, and sliced", "item": "Portobello mushrooms", "qty": "1", "unit": "lbs.", "prep": "cleaned, trimmed, and sliced", "optional": false, "section": null },
+    { "raw": "1/4 cup dry white wine, such as Sauvignon blanc", "item": "dry white wine", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tablespoon all-purpose flour", "item": "all-purpose flour", "qty": "1", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "2 cloves garlic, minced", "item": "garlic", "qty": "2", "unit": "clove", "prep": "minced", "optional": false, "section": null },
+    { "raw": "1 1/2 cup chicken stock - I used my homemade chicken stock recipe.", "item": "chicken stock", "qty": "1 1/2", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1/3 cup sour cream", "item": "sour cream", "qty": "1/3", "unit": "cup", "prep": null, "optional": false, "section": "For the sauce" },
+    { "raw": "1 egg yolk", "item": "egg yolk", "qty": "1", "unit": "each", "prep": null, "optional": false, "section": "For the sauce" },
+    { "raw": "1/2 teaspoon freshly ground nutmeg", "item": "nutmeg", "qty": "1/2", "unit": "teaspoon", "prep": "freshly ground", "optional": false, "section": "For the sauce" },
+    { "raw": "2 teaspoons lemon juice, freshly squeezed", "item": "lemon juice", "qty": "2", "unit": "teaspoon", "prep": "freshly squeezed", "optional": false, "section": "For the sauce" },
+    { "raw": "2 teaspoons tarragon, minced (If you can't find tarragon, you can use parsley)", "item": "tarragon", "qty": "2", "unit": "teaspoon", "prep": "minced", "optional": false, "section": "For the sauce" }
+  ],
+  "instructions": [
+    "Pat dry chicken breasts with paper towels and season them generously with 1 teaspoon salt and 1/2 teaspoon black pepper.",
+    "Heat butter and olive oil in a large skillet. Place chicken breasts and cook each side for 4 minutes, in medium high heat. At this point they will not be cooked thoroughly.",
+    "Place them on a plate, cover with aluminum foil and set aside.",
+    "Add the mushrooms, onions, and white wine to same skillet and cook for 8-10 minutes, stirring occasionally, until mushrooms are browned.",
+    "Add garlic and flour and give it a generous stir. Cook for 1 minute.",
+    "Add chicken broth; scrape the bottom to loosen the brown bits and cook until the broth is boiling.",
+    "Add the chicken and all the juices in the plate and cover it with a lid. Cook in medium heat, until the chicken registers 160 F. degrees when a thermometer is inserted in the middle. This will take 5 to 10 minutes.",
+    "In the meantime, whisk the egg yolk and sour cream in a small bowl.",
+    "Take the chicken breasts out and place it on a platter. Cover it with aluminum foil. Set aside.",
+    "Measure 1/2 cup of the mushroom sauce and stir it into the sour cream and egg mixture. Mix.",
+    "Stirring constantly, slowly pour the mixture into the skillet. Stir in the lemon juice, tarragon, and nutmeg. Let it simmer for 5 minutes.",
+    "Taste it for seasoning and add more, if necessary.",
+    "To serve, place a chicken breast on a plate and pour the sauce over it. Sprinkle it with more tarragon."
+  ],
+  "nutrition": {
+    "per": "serving",
+    "calories": "569kcal",
+    "carbohydrates": "14g",
+    "protein": "54g",
+    "fat": "31g",
+    "saturated_fat": "10g",
+    "cholesterol": "207mg",
+    "sodium": "887mg",
+    "potassium": "1114mg",
+    "fiber": "2g",
+    "sugar": "6g",
+    "vitamin_a": "415IU",
+    "vitamin_c": "4mg",
+    "calcium": "83mg",
+    "iron": "3mg"
+  },
+  "concerns": [
+    "Onion line reads '(about to 1 cup)' on the page - apparent typo, likely 'about 3/4 to 1 cup'; transcribed as printed.",
+    "Mushroom line uses '1 lbs.' (singular quantity with plural abbreviation) as printed on the page."
+  ]
+}

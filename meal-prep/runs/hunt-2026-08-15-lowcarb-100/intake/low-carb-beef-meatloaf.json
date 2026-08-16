@@ -1,0 +1,74 @@
+{
+  "name": "Low Carb Beef Meatloaf",
+  "slug": "low-carb-beef-meatloaf",
+  "protein": "beef",
+  "cuisine": "American",
+  "source_url": "https://www.freshfitkitchen.com/the-best-easy-low-carb-meatloaf-recipe-with-beef/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Olive Oil", "grams": 30, "buy": "2 1/4 tbsp" },
+    { "item": "Yellow Onion", "grams": 144, "buy": "1 1/4 cups finely chopped" },
+    { "item": "Carrots", "grams": 138, "buy": "1 1/4 cups finely grated" },
+    { "item": "Garlic", "grams": 19, "buy": "2 1/4 tbsp minced (about 6 cloves)" },
+    { "item": "Quick Oats", "grams": 100, "buy": "1 1/4 cups" },
+    { "item": "Milk", "grams": 138, "buy": "1/2 cup plus 1 tbsp" },
+    { "item": "Worcestershire Sauce", "grams": 13, "buy": "2 1/4 tsp" },
+    { "item": "Dijon Mustard", "grams": 34, "buy": "2 1/4 tbsp" },
+    { "item": "Tomato Paste", "grams": 36, "buy": "2 1/4 tbsp" },
+    { "item": "Salt", "grams": 29, "buy": "4 3/4 tsp" },
+    { "item": "Black Pepper", "grams": 5, "buy": "2 1/4 tsp" },
+    { "item": "Eggs", "grams": 100, "buy": "2 large" },
+    { "item": "90/10 Ground Beef", "grams": 1588, "buy": "3 1/2 lb (90/10)" },
+    { "item": "Unsweetened Ketchup", "grams": 340, "buy": "1 1/4 cups" },
+    { "item": "Dijon Mustard", "grams": 34, "buy": "2 1/4 tbsp" },
+    { "item": "Brown Sugar", "grams": 64, "buy": "4 3/4 tbsp" }
+  ],
+  "macros_per_serving": { "calories": 308.6, "protein_g": 25.9, "carbs_g": 15.8, "fat_g": 14.6 },
+  "writer_notes": [
+    "SOURCE YIELD 6, rebuilt to 14 at the mapper's 2.3333x scale. Every gram and buy string transcribed from mapped\\low-carb-beef-meatloaf.json; no number computed in prose.",
+    "MACROS transcribed from the mapper's line-by-line food-macros-db recompute at 14 servings: 308.6 cal, 25.9 g protein, 15.8 g carbs, 14.6 g fat per serving. The build could not be run to confirm these independently (see BLOCKER below). None of these are the source card's numbers; the source published 585 cal / 49 g protein, and the mapper showed those are arithmetically impossible for the source's own 1.5 lb batch: 49 g x 6 servings = 294 g protein, but the whole ingredient list carries about 155 g (1.5 lb of 90/10 beef is about 138 g protein, everything else about 17 g). The source figures fit a doubled 3 lb loaf; the printed recipe is 1.5 lb. Our figures are the defensible recompute.",
+    "BAND FAIL, called out loudly. This run's condition is 400 to 650 calories per serving. The honest recompute is 308.6 cal, which fails the 400 floor by about 91 cal. Carbs 15.8 g pass the 35 g ceiling but that is moot. The beef fat class cannot save it: the source pins the lean point ('do not use leaner than 90 or fattier than 85'), and even the fattiest sanctioned choice, 85/15, adds only about 35 cal/serving to roughly 344, still under 400. There is no honest row choice that closes the gap. Recommend rejected-qa retirement, per the mapper, once the auditor confirms. Do NOT adjust a number to hit the floor.",
+    "BLOCKER, spec cannot be built: THREE ingredient names have no row in the vocabulary db\\ingredients.json, so build-v2-spec.ps1 hard-fails at ingredient resolution (UNKNOWN INGREDIENT NAME) and no spec is written. (1) '90/10 Ground Beef', the main protein: the vocabulary carries 93/7 and 80/20 only, nothing at the author-mandated 85 to 90 percent lean point; commodity id ground-beef-90-10 is a registrar proposal, still PENDING. (2) 'Unsweetened Ketchup', the topping: the vocabulary carries plain 'Ketchup' only; the no-sugar-added class is a different product and price class (27 C vs 2 C per 100 g; the sugar-free-bbq-sauce split is the precedent); commodity id unsweetened-ketchup is a registrar proposal, still PENDING. (3) 'Quick Oats': the vocabulary has NO oats row at all. The mapper mapped it to board commodity 'oatmeal' (a board fact, decision 'mapped'), but that never became a db\\ingredients.json row, so the build cannot resolve it. The food-macros-db rows for all three exist (the mapper added them); it is the price/vocabulary registration that is missing. The writer does not touch db\\ingredients.json and no stage mints a commodity id. These belong to the commodity-registrar before this recipe can build. Not allowlistable in not-price-tracked-ok.json: two of the three are the main protein and the topping, which carry real cost and must not be zeroed.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked the list against the steps both directions: olive oil (step 2), yellow onion (2), carrots (2), garlic (2), quick oats (3), milk (3), Worcestershire (3), Dijon binder (3), tomato paste (3), salt (3), black pepper (3), eggs (3), 90/10 ground beef (4), unsweetened ketchup (6), Dijon topping (6), brown sugar (6). Two Dijon lines are booked (binder and topping) exactly as the source and the mapper split them; both are used. Olive oil is an instructions-only line the source omitted from its ingredient block; the mapper booked it because it goes in the pot (step 2), so it is bought and used.",
+    "SHOP_SMART makes NO leftover, per-ounce, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount. This is doubly true here because the recipe cannot be costed at all while the three items are unregistered, so there are no cost_lines to trace against.",
+    "COST is unknowable at this stage: the two highest-value items (beef, ketchup) and the oats are unregistered, so cost-recipes cannot price them. cost_ps in any built spec would be a floor excluding the main protein. Reported as not-computable, not as a number."
+  ],
+  "prose": {
+    "intro_html": "Meatloaf is one of the great cheap-dinner workhorses, and this one keeps the comfort while trimming the carbs down to size. You saute onion, carrot, and garlic to build the base, bind the beef with a little oats, egg, and milk instead of a pile of breadcrumbs, and finish it with a no-sugar ketchup glaze cut with a spoon of brown sugar and Dijon. It bakes as one long loaf, slices clean, and portions into containers for the week. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 20 grams of carbs. Plain comfort food that eats like meatloaf and does not wreck your macros.",
+    "shop_smart": [
+      "<strong>Three and a half pounds of ground beef is the anchor.</strong> The recipe leans on 90/10, lean enough to slice clean but with enough fat to stay moist, and the author is firm about it: no leaner than 90 and no fattier than 85. Buy the big family pack rather than the small trays so you are paying for beef, not packaging. This is where most of the money and nearly all of the protein live.",
+      "<strong>Onion, carrot, and garlic are the flavor base for pennies.</strong> A cup and a quarter each of chopped onion and grated carrot plus a couple tablespoons of garlic get sauteed down soft before they go in the mix, which is what keeps a lean loaf from tasting flat. These are the cheapest things in the cart and they do a lot of the work.",
+      "<strong>Oats, egg, and milk are the binder.</strong> A little quick oats with two eggs and a splash of milk hold the loaf together in place of a whole sleeve of breadcrumbs, which is what keeps the carbs down. You already have most of this on the shelf.",
+      "<strong>The glaze is no-sugar ketchup, Dijon, and a spoon of brown sugar.</strong> Unsweetened ketchup carries the tomato tang without the added sugar that regular ketchup rides in on, and a little brown sugar and Dijon stirred in give it the sweet-sharp glaze meatloaf is supposed to have. That is the whole topping."
+    ],
+    "make_it": [
+      "Weigh your empty sheet tray and write the number down. You will use it at the end to split the loaf into 14 even servings by weight instead of eyeballing the slices.",
+      "Heat the oven to 375. Warm the olive oil in a pan over medium heat and saute the chopped onion, grated carrot, and minced garlic for 5 to 7 minutes, until the onion turns translucent and the carrot softens, then let it cool for a minute.",
+      "In a large bowl, whisk together the quick oats, milk, Worcestershire, Dijon mustard, tomato paste, salt, black pepper, and the eggs, then stir in the cooled vegetables.",
+      "Add the ground beef and mix it in gently with your hands or a fork, just until it comes together. Do not overwork it.",
+      "Turn the mixture out onto the oiled sheet tray and shape it into one long loaf about 13 to 14 inches long and 6 inches wide.",
+      "Bake for 30 minutes. While it bakes, stir together the topping: the unsweetened ketchup, another 2 1/4 tablespoons of Dijon mustard, and the brown sugar.",
+      "Spread the topping over the loaf and return it to the oven for another 10 to 15 minutes, until a thermometer in the center reads 160 degrees.",
+      "Let the loaf rest 20 to 30 minutes so it holds together, then weigh the whole loaf on the tray, subtract the empty tray weight from Step 1, divide by 14, and cut each slice to that weight into your containers."
+    ],
+    "portion_html": "Weigh the rested loaf on its tray and subtract the empty tray weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and cut each slice to that weight into your containers. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a real sliced meatloaf you can portion for the week. The beef carries it and the vegetables and glaze finish it for almost nothing.",
+    "upsell_html": "A low-carb, high-protein meatloaf for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Low carb beef meatloaf for meal prep: 90/10 ground beef bound with a little oats, egg, and sauteed onion, carrot, and garlic, finished with a no-sugar ketchup glaze and built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 20 grams of carbs.",
+    "keywords": "low carb meatloaf, beef meatloaf meal prep, keto meatloaf, high protein meatloaf, no sugar ketchup glaze",
+    "prepTime": "PT20M",
+    "cookTime": "PT45M",
+    "totalTime": "PT1H5M",
+    "steps": [
+      "Weigh the empty sheet tray and write the number down.",
+      "Saute the onion, carrot, and garlic in olive oil until soft, then let cool.",
+      "Whisk the oats, milk, Worcestershire, Dijon, tomato paste, salt, pepper, and eggs, then stir in the vegetables.",
+      "Mix in the ground beef gently, just until it comes together.",
+      "Shape into one long loaf on the oiled tray and bake 30 minutes.",
+      "Stir the unsweetened ketchup, Dijon, and brown sugar into a glaze, spread it on, and bake 10 to 15 minutes more to 160 degrees.",
+      "Rest 20 to 30 minutes, then weigh the loaf, subtract the tray weight, and cut across 14 containers by weight."
+    ]
+  }
+}

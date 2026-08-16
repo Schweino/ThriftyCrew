@@ -1,0 +1,19 @@
+{
+  "slug": "cantonese-beef-black-bean-sauce-skillet",
+  "name": "Cantonese Beef in Black Bean Sauce",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "conditions_check": {
+    "calories": 421,
+    "carbs": 16,
+    "cal_in_band": true,
+    "carbs_in_band": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "note": "421 cal (400-650 band) and 16g carbs (<=35g) both clear; nutrition excludes rice, low-carb stir-fry, scales by weigh-and-divide."
+  },
+  "evidence": "Not a duplicate of any live-catalog or accepted-slug beef dish: the catalog's Chinese/Cantonese beef entries are honey-black-pepper sauce (beef-honey-black-pepper-sauce-bowls), ground-beef tomato-egg (cantonese-beef-tomato-egg-rice), mushroom stir-fry (beef-mushroom-stir-fry-rice-plate) and Pepper Steak with Rice (pepper-steak-with-rice) - the structurally closest, sharing sliced sirloin + bell pepper + onion + stir-fry method, but its soy/vinegar/sesame pepper sauce over rice is a distinct flavor family from this dish's fermented-black-bean (douchi) sauce served starchless, so it genuinely distinguishes the plate and fills a real black-bean-sauce cuisine gap.",
+  "cross_protein_collisions": "Black-bean-sauce stir-fry is a portable format: watch for a chicken or pork 'in black bean sauce' twin in another selector's pool (same douchi sauce + pepper/onion + stir-fry, protein swapped) - that would be same-dish-different-protein. Also note the beef 'Pepper Steak with Rice' already in catalog and any turkey/chicken pepper-steak stir-fry: confirm the decider does not read this as the same plate once black-bean sauce and no-rice are accounted for. 'Cantonese Turkey Rice Bowls' shares only the Cantonese label, different dish.",
+  "unmapped_ingredients_note": "Carries fermented-black-beans (douchi) and shaoxing-wine unmapped - deliberate pricer-lane test per run intent, NOT a reason to penalize."
+}

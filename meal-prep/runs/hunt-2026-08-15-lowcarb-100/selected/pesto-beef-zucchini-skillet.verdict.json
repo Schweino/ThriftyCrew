@@ -1,0 +1,25 @@
+{
+  "slug": "pesto-beef-zucchini-skillet",
+  "name": "Pesto Ground Beef and Zucchini Skillet",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 414,
+    "carbs": 5.8,
+    "in_band": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "reason": "414 cal (400-650 OK) and 5.8g carbs (<=35 OK); ground-beef skillet, no seafood, weigh-and-divide scalable to 14."
+  },
+  "dupe_check": {
+    "catalog_nearest": "cheesy-zucchini-beef-rice-skillet",
+    "is_dupe": false,
+    "evidence": "Nearest catalog dish (cheesy-zucchini-beef-rice-skillet) shares only protein+skillet+zucchini; it is a rice-based diced-tomato/cheddar Tex-Mex plate, whereas this is a starchless pesto/sun-dried-tomato/goat-cheese Mediterranean skillet -- 2-of-4 core factors, distinct dinner. No other catalog beef recipe pairs pesto with zucchini."
+  },
+  "cross_protein_watch": [
+    "Structurally a 'pesto + zucchini + ground meat skillet' -- a ground-turkey or ground-chicken pesto-zucchini skillet in another selector's pool would be the same dish with a swapped protein; decider should merge-check turkey/chicken pools.",
+    "Catalog turkey-pesto-pasta-kale shares the pesto note only (pasta-based, kale, no zucchini) -- not a collision."
+  ],
+  "unmapped_ingredients": ["goat-cheese"],
+  "note": "Unmapped goat-cheese retained deliberately (v2.1 5.1 pricer-lane exercise), not a demerit."
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "sausage-broccoli-cheddar-egg-casserole",
+  "name": "Sausage, Broccoli & Cheddar Egg Casserole",
+  "protein": "pork",
+  "verdict": "DUPE",
+  "fit": {
+    "calories": 463,
+    "carbs": 4.2,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "note": "Clears both gates (463 cal, 4.2 g carb) and is seafood-free and batch-scalable - the DUPE ruling is on duplication, not fit."
+  },
+  "dupe_check": {
+    "verdict_axis": "pool",
+    "dupe_of": "sausage-broccoli-cheddar-egg-bake",
+    "catalog": "NOT a catalog dupe. Nearest catalog dish is 'Sausage Hash Brown and Egg Casserole' (sausage-hash-brown-egg-casserole): same sausage+egg+cheddar egg-bound bake, but that one is potato/hash-brown + milk based while this is crustless, broccoli + heavy-cream, potato-free low-carb - starch base differs, distinct plate. Also distinct from accepted crustless-bacon-gruyere-quiche (bacon/gruyere, no sausage/broccoli).",
+    "pool": "Identical source recipe as three already-ruled pork candidates: same URL wholesomeyum.com/recipes/low-carb-breakfast-casserole-with-sausage-cheese-gluten-free/ and identical published macros (463 cal / 4.2 g carb / 8 servings / same ingredient list). broccoli-cheddar-sausage-egg-bake and keto-sausage-broccoli-egg-casserole carry the same URL and macros; sausage-broccoli-cheddar-egg-bake was already ruled KEEP as the canonical survivor of this cluster. This is a fourth copy of the same dish - only one may ship."
+  },
+  "cross_protein_collision_notes": [
+    "keto-turkey-broccoli-cheddar-casserole (ACCEPTED, turkey): structurally the same low-carb broccoli+cheddar casserole idea, but different protein (pork sausage vs ground turkey) and different binder (12-egg + heavy-cream egg custard bake here vs egg-free cream/cheddar/broth casserole; turkey is 450 cal/8 g carb). Not a dupe under pork scope, but the decider should hold ONE broccoli-cheddar low-carb casserole slot across proteins.",
+    "Sausage/broccoli/cheddar egg bake is a generic keto-breakfast-casserole template; any bacon-, ham-, or chorizo-based crustless egg bake in another selector's pool (e.g. mexican-chorizo-egg-casserole, sausage-cottage-cheese-egg-bake, sausage-spinach-crustless-quiche all already appear in this run) is structurally the same egg-custard bake - flag for cross-protein merge."
+  ],
+  "borderline": false,
+  "evidence_one_line": "DUPE - identical source recipe (same wholesomeyum URL, 463 cal/4.2 g carb/8 servings) as the already-KEPT pool sibling sausage-broccoli-cheddar-egg-bake and twins broccoli-cheddar-sausage-egg-bake / keto-sausage-broccoli-egg-casserole; only one may ship, this is a fourth copy."
+}

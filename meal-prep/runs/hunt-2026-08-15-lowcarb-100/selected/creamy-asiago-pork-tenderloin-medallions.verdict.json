@@ -1,0 +1,21 @@
+{
+  "slug": "creamy-asiago-pork-tenderloin-medallions",
+  "name": "Creamy Asiago and Sun-Dried Tomato Pork Tenderloin Medallions",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 421,
+    "carbs": 4.7,
+    "in_band": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "note": "421 cal clears the 400 floor and is well under the 650 ceiling; 4.7g carbs far under 35g. No-starch cream/cheese skillet (meat + heavy cream + asiago + sun-dried tomato + spinach), scales to 14 by weigh-and-divide. Asiago is board-absent but flagged for the pricer lane per 5.1, not penalized."
+  },
+  "dupe_check": {
+    "catalog": "Not a duplicate of any pork recipe. Nearest is 'marry-me-pork-chops-over-pasta' which shares the cream + sun-dried-tomato sauce family but is pork CHOPS served OVER PASTA (starch base) - different cut, different starch, different plate; mine is a bare low-carb tenderloin skillet. 'creamy-pork-tenderloin-tagliatelle' and 'creamy-mushroom-pork-chops-over-mashed-potatoes' both differ on sauce and/or starch.",
+    "accepted_slugs": "Fresh read of accepted-slugs.json: [creamy-tuscan-chicken-skillet]. No accepted PORK slug to collide with. The accepted chicken slug is the cross-protein Tuscan twin flagged below - same dinner, different protein - for the decider's merge pass, not a within-pork dupe."
+  },
+  "cross_protein_flags": "STRONG TWIN: this is the 'Marry Me / Tuscan cream' template (heavy cream + sun-dried tomato + spinach, no starch) applied to pork tenderloin with asiago in place of parmesan. The chicken selector's already-KEPT 'creamy-tuscan-chicken-skillet' is the SAME dinner on a different protein - decider must adjudicate the cross-protein merge (keep both as protein variants, or drop one). Only the protein and the asiago-vs-parmesan cheese distinguish the two plates.",
+  "ruled_by": "adjudicator",
+  "run": "hunt-2026-08-15-lowcarb-100"
+}

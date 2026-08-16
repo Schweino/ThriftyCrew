@@ -1,0 +1,20 @@
+{
+  "slug": "slow-cooker-beef-barbacoa",
+  "name": "Slow Cooker Beef Barbacoa",
+  "protein": "beef",
+  "verdict": "DUPE",
+  "dupe_of": "slow-cooker-barbacoa-bowl",
+  "fit": {
+    "calories": 430,
+    "carbs_g": 5,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "result": "FIT (macros clear the band, but rejected as a duplicate)"
+  },
+  "dupe_evidence": "Duplicates catalog 'slow-cooker-barbacoa-bowl' (Slow Cooker Barbacoa Burrito Bowl). Same dish on 3-of-4 axes and near-identical core: protein = beef-chuck-roast (match), sauce/flavor = chipotle-adobo + lime + apple-cider-vinegar + beef-broth barbacoa (match - catalog items literally include chipotle-adobo, apple-cider-vinegar, limes, beef-broth, onions), method = slow cooker (match). The only difference is the starch/format - the catalog serves the same barbacoa meat over rice + seasoned black beans, this candidate serves it grain-free. Per the rule that a 3-of-4 match survives only if something genuinely distinguishes the PLATE, dropping the rice/beans does not make it a different dinner: it is the identical shredded chipotle barbacoa braise, just re-plated. The candidate's own why-note concedes this is a 'low-carb conversion' of the existing catalog barbacoa bowl - i.e. the near-duplicate that would embarrass the catalog, not a distinct regional take.",
+  "borderline_flag": "Not treated as borderline. The dish name is 'barbacoa' in both and the meat build is the same; the low-carb re-plating is a format change, not a new dinner. If the decider weighs the low-carb-catalog-gap argument and disagrees, this is the single point of contention - but the shredded barbacoa itself is already in the catalog.",
+  "cross_protein_collision": "None material for beef. Barbacoa is definitionally beef (cheek/chuck); a pork version would be carnitas (a different dish), so no clean same-dish-different-protein twin is expected in another selector's pool.",
+  "unmapped_note": "Carries 'chipotles in adobo sauce' as the flagged unmapped ingredient - but the catalog's own barbacoa bowl already maps it as 'chipotle-adobo', reinforcing the duplication rather than adding pricer-lane novelty."
+}

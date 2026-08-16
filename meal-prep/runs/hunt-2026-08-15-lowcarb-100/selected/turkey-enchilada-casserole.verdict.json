@@ -1,0 +1,21 @@
+{
+  "slug": "turkey-enchilada-casserole",
+  "name": "Low-Carb Turkey Enchilada Casserole",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "in_band": true,
+    "src_cal": 538,
+    "src_carbs": 10.7,
+    "notes": "538 cal (within 400-650) and 10.7 g carb (<=35) per serving on source; no seafood; budget ground-turkey bake; source 8 servings scales cleanly to 14 by weight."
+  },
+  "dupe_check": {
+    "is_dupe": false,
+    "closest_catalog_recipe": "crockpot-mexican-turkey-casserole",
+    "evidence": "Closest turkey neighbor crockpot-mexican-turkey-casserole shares protein+enchilada-sauce but is a rice+black-bean+corn+bell-pepper crockpot casserole, whereas this is a crustless LOW-CARB oven bake with no rice/beans/corn/tortilla (whole green chiles stand in for tortillas) - only 2 of 4 axes (protein, sauce) match, starch and method differ, so a distinct plate.",
+    "other_turkey_texmex_ruled_out": "ground-turkey-enchilada-skillet-bowls (skillet rice+bean bowl, not casserole), turkey-taco-casserole (taco/salsa+tortillas+beans), loaded-ground-turkey-nacho-bake (salsa+chips), turkey-tamale-pie (grits/cornbread crust+corn), turkey-chile-relleno-casserole-skillet (rice skillet, broth-based)."
+  },
+  "cross_protein_collision_note": "The source recipe explicitly offers ground beef as a swap, so this could collide with any low-carb crustless BEEF enchilada casserole another selector may hold; also structurally adjacent to chile-relleno-casserole-ground-beef (poblano+cheese) though that is an egg-custard rice bake. Decider should watch for a same-dish beef twin.",
+  "borderline": false,
+  "confidence": "high"
+}

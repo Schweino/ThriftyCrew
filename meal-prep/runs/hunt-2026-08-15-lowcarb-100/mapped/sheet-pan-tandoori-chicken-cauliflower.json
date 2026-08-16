@@ -1,0 +1,174 @@
+{
+  "slug": "sheet-pan-tandoori-chicken-cauliflower",
+  "title": "Sheet Pan Tandoori Chicken (Keto, Whole30)",
+  "source_url": "https://nomnompaleo.com/sheet-pan-tandoori-chicken",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%. Marinade counted in full, matching the source's own nutrition basis.",
+  "ruled_substitutions": [
+    "Avocado oil -> Olive Oil, SOURCE-SANCTIONED: the line itself prints '1 tablespoon avocado oil or fat of choice'. The avocado-oil commodity exists but is CAPTURE-tier (no priced board cell today, 25 capture candidates); olive-oil is priced 7 of 7 and is a sanctioned 'fat of choice'. Fat macros are within 1 cal/tbsp. This avoids parking the recipe on a 1-tbsp pan-greasing line the source itself makes fungible.",
+    "Coconut milk line offers 'or plain coconut yogurt'; the PRIMARY (full-fat canned coconut milk) is booked, matching the recipe's Whole30 framing and the source's nutrition basis."
+  ],
+  "registrar_rulings": [
+    {
+      "proposed_id": "tandoori-masala",
+      "for_item": "Tandoori Masala",
+      "status": "PENDING - proposal drafted, registrar not yet consulted (mapper lane cannot invoke the registrar agent; orchestrator must route it)",
+      "mapper_sweep_evidence": "price-ingredient.ps1 verdict ABSENT for both 'tandoori spice mix' and 'tandoori seasoning' ('no board cell and nothing in any capture matches'). No tandoori id in commodities.json or recipe-commodities.json. NOT mapped to any existing spice commodity: tandoori masala is a distinct multi-spice blend product (a curry-powder-class shelf item, not paprika or garam masala re-labeled); nearest-neighbor spice mapping is the variety-pricing rejection class. Shan/Rani/McCormick tandoori blends are standard international-aisle items at Walmart/Hy-Vee class stores, so carriage is plausible; the pricer rules.",
+      "meanwhile": "ingredient maps item_id null (safe pantry-static pricing); term 'tandoori spice mix' enqueued BLOCKING - it is the marinade's identity and the dish's name."
+    }
+  ],
+  "ingredients": [
+    {
+      "source_raw": "1 cup full-fat coconut milk or plain coconut yogurt",
+      "item": "Coconut Milk",
+      "bid": "coconut-milk-canned",
+      "board": "weekly",
+      "grams": 840,
+      "buy": "3 1/2 cups full-fat coconut milk (about two 13.5 oz cans plus 1/3 can)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Primary option booked (see ruled_substitutions). Exact 3.5x = 3.5 cups x densities/label 240 g/cup = 840 g, zero drift. bid from ingredient-map (Coconut Milk -> coconut-milk-canned, weekly), 5 of 7 stores, cheapest Walmart $0.1358/floz. NOTE the bare term 'coconut milk' misfires into the DAIRY milk commodity (see board_defects_observed); 'canned coconut milk' answers correctly - queue phrasing matters. DB row Thai Kitchen full-fat label (140 cal/80 g). Marinade counted in full: the veg is tossed in half, the chicken in the rest, and all of it roasts on the one pan."
+    },
+    {
+      "source_raw": "2 tablespoons tandoori spice mix (no salt added)",
+      "item": "Tandoori Masala",
+      "bid": null,
+      "board": null,
+      "grams": 56,
+      "buy": "7 tbsp tandoori spice mix (no salt added)",
+      "optional": false,
+      "decision": "mapped-null-pending-registrar",
+      "notes": "Exact 3.5x = 7 tbsp x label 8 g/tbsp = 56 g; printed measure and grams agree on the Shan label basis. bid null: no commodity claims any tandoori phrasing and no stage mints an id - registrar proposal tandoori-masala recorded above, term enqueued BLOCKING. NEW DB row Tandoori Masala (USDA branded Shan record, 25 cal / 1 P / 2 C / 1 F per 8 g tbsp); the source asks for a no-salt-added blend, which differs from Shan's only in sodium - a field this DB does not track (disclosed, not averaged)."
+    },
+    {
+      "source_raw": "1 tablespoon Diamond Crystal kosher salt or 1 1/2 teaspoons fine grain salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 32,
+      "buy": "3 1/2 tbsp Diamond Crystal kosher salt (or 5 1/4 tsp fine salt)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Both printed alternatives scaled (3.5 tbsp DC kosher / 5.25 tsp fine); grams from the fine-salt equivalent 5.25 tsp x densities 6 g/tsp = 31.5 -> 32 g (Diamond Crystal's own ~9.6 g/tbsp basis lands 33.6 g, agreeing within 5%). Zero-macro. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 tablespoon lemon juice",
+      "item": "Lemon Juice",
+      "bid": "lemon-juice",
+      "board": "weekly",
+      "grams": 53,
+      "buy": "3 1/2 tbsp lemon juice",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 3.5 tbsp x densities 15 g/tbsp = 52.5 -> 53 g. Board 7 of 7, cheapest Sam's $0.0675/floz."
+    },
+    {
+      "source_raw": "1 tablespoon avocado oil or fat of choice",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 47,
+      "buy": "3 1/2 tbsp olive oil (or fat of choice), for the pan",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "SOURCE-SANCTIONED substitution, see ruled_substitutions. Exact 3.5x = 3.5 tbsp x densities 13.5 g/tbsp = 47.25 -> 47 g, counted in full (brushed on the pan the food roasts on). Board 7 of 7. The avocado-oil commodity's CAPTURE status (exists, unpriced, 25 candidates) is recorded for the match-soundness gate but deliberately NOT enqueued - the sanctioned substitute prices today."
+    },
+    {
+      "source_raw": "1 small cauliflower 2 pounds or less, cut into florets",
+      "item": "Cauliflower",
+      "bid": "cauliflower",
+      "board": "weekly",
+      "grams": 1890,
+      "buy": "3 1/2 small heads cauliflower (2 lb or less each), cut into florets",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FRESH cauliflower to the fresh commodity (4 of 7 stores, cheapest Fareway $1.98/each); frozen would be a form-flip. Exact 3.5 heads; florets booked at the run's proposed ~540 g/head figure (chicken-bacon-ranch + baked-cauliflower-mac precedent - the floret yield of a ~2 lb head, which is exactly the source's own stated bound) -> 1890 g. densities.json STILL has no Cauliflower row (fourth recipe in this run to need one). DB row Cauliflower (USDA raw, 25 cal/100 g). SENSITIVITY flagged in band_check: 'small' heads below the 540 g figure move the serving under the calorie floor."
+    },
+    {
+      "source_raw": "1 small red onion cut into thin wedges",
+      "item": "Red Onion",
+      "bid": "red-onion",
+      "board": "weekly",
+      "grams": 245,
+      "buy": "3 1/2 small red onions, cut into thin wedges",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "RED onion to the dedicated red-onion commodity (5 of 7 stores, cheapest Aldi $1.095/lb) - the red-onion-is-not-onions standing rejection is honored by the board's own id here, no stretch needed. Exact 3.5 small x densities small = 70 g -> 245 g. DB row Red Onion (USDA, 44 cal/110 g)."
+    },
+    {
+      "source_raw": "1 1/2 pounds chicken thighs boneless and skinless",
+      "item": "Boneless Skinless Chicken Thigh",
+      "bid": "boneless-skinless-chicken-thigh",
+      "board": "recipe",
+      "grams": 2381,
+      "buy": "5 1/4 lb boneless skinless chicken thighs",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by source WEIGHT (1.5 lb), exact 3.5x = 5.25 lb = 2381 g, quarter-clean, zero drift; printed weight and grams agree. bid from ingredient-map (recipe board), 6 of 7 stores, cheapest Aldi $2.43/lb - the RECIPE-BOARD id, per this run's standing warning that reading only the weekly board makes this id look like zero coverage. Deliberately NOT the weekly chicken-thighs commodity ($1.28/lb): its include also captures bone-in thighs/drumsticks/leg quarters - the leg-quarters-are-not-thighs price class, and skin-on macros would misstate fat by ~2x (which is precisely the gap in the source's own published fat, see cross-check). DB row Member's Mark BSCT label (140 cal / 22 P / 4.5 F per 4 oz raw)."
+    },
+    {
+      "source_raw": "1/4 cup minced fresh cilantro optional",
+      "item": "Fresh Cilantro",
+      "bid": "cilantro",
+      "board": "weekly",
+      "grams": 14,
+      "buy": "3/4 cup plus 2 tbsp minced fresh cilantro (optional)",
+      "optional": true,
+      "decision": "mapped-optional",
+      "notes": "OPTIONAL garnish per the source. Exact 3.5x = 0.875 cup, printed composite (0.75 or 1.0 both drift ~14%); densities Fresh Cilantro cup = 16 g -> 14 g, ~3.5 cal batch. Board 5 of 7, cheapest Aldi $0.89/each. NOT enqueued (optional), excluded from band computation."
+    },
+    {
+      "source_raw": "1 lemon cut into wedges (optional)",
+      "item": "Lemon (wedges)",
+      "bid": "lemons",
+      "board": "weekly",
+      "grams": 165,
+      "buy": "3 1/2 lemons, cut into wedges (optional)",
+      "optional": true,
+      "decision": "mapped-optional",
+      "notes": "OPTIONAL serve-alongside garnish. The lemons commodity's include claims the term, 5 of 7 stores, cheapest Walmart $0.4533/each. Grams booked at the juice-equivalent (densities Lemon Juice each = 47 g -> 165 g, ~33 cal batch if fully squeezed, 2.4 cal/serving) - macro-immaterial and excluded from band computation as an optional line. NOT enqueued."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Tandoori Masala (USDA branded Shan record FDC 2666734, 1 tbsp / 8 g = 25 cal / 1 P / 2 C / 1 F)"
+  ],
+  "pricing_terms_needed": [
+    { "term": "tandoori spice mix", "blocking": true, "why": "the marinade's identity and the dish's name, 7 tbsp; no commodity claims any tandoori phrasing (ABSENT verdict); registrar proposal tandoori-masala pending" }
+  ],
+  "new_commodity_proposals": [
+    {
+      "proposed_id": "tandoori-masala",
+      "for_item": "Tandoori Masala",
+      "status": "flagged-for-registrar",
+      "registrar_ruling": "NOT YET OBTAINED - see registrar_rulings; item maps null meanwhile (pantry-static, safe)."
+    }
+  ],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 590, "protein_g": 33, "carbs_g": 20, "fat_g": 45, "fiber_g": 7 },
+    "computed_per_serving": { "calories": 401.2, "protein_g": 37.4, "carbs_g": 11.1, "fat_g": 21.6 },
+    "protein_gap_pct": 13.3,
+    "calorie_gap_pct": -32.0,
+    "verdict": "Protein PASS at +13.3% (inside the 15% instrument, direction consistent with our raw-weight basis) - the main protein is an explicit source weight (1.5 lb), so portions stand. The -32% calorie gap is FAT-shaped (theirs 45 g vs ours 21.6 g) and back-computes cleanly to one explanation: their calculator booked SKIN-ON thigh macros (~2.2 cal/g raw; 1.5 lb skin-on = ~1,500 cal vs our 850 from the label-accurate boneless-skinless row - a ~163 cal/serving gap, plus their avocado-oil entry) while the printed ingredient is 'boneless and skinless'. Booking skin-on macros against a skinless ingredient would be the false claim; our row matches the printed food.",
+    "band_check": "computed 401.2 cal PASSES the [400, 650] floor BY 1.2 CAL - razor thin and called out loudly. Sensitivity, honestly stated: (a) cauliflower heads booked at 540 g florets each (the ~2 lb-head yield the source's own bound implies); genuinely smaller 'small' heads at ~450 g compute 393.2 and FAIL; (b) the Shan tandoori row at 25 cal/tbsp contributes 12.5 cal/serving - a lighter blend basis (some labels print ~10 cal/tsp on 2 g teaspoons) moves the serving about -2 to +6 cal. The honest range straddles the floor, so the auditor should treat this as AT-FLOOR pending the pricer's tandoori verdict and any head-weight ruling; do not adjust numbers to fit. Carbs 11.1 g <= 35 PASS with room throughout the range. Optional lines excluded (cilantro + lemon add ~2.6 cal/serving if counted - which would coincidentally clear the floor, and is exactly the kind of convenient counting this gate exists to refuse)."
+  },
+  "loud_flags": [
+    "AT-FLOOR: 401.2 cal vs the 400 floor, inside any honest error bar (cauliflower head weight, tandoori blend basis). Auditor should rule with eyes open rather than trust the fourth significant figure.",
+    "Recipe PARKS in 'pricing' on one term (tandoori spice mix) that is also a pending registrar proposal - the dish cannot honestly ship without a tandoori price, it is the name of the recipe.",
+    "Source's published fat (45 g) matches skin-on thighs while its printed ingredient says skinless - their label, not ours, carries the internal contradiction; documented in the cross-check."
+  ],
+  "board_defects_observed": [
+    "Term resolver misfire: bare 'coconut milk' answers via the DAIRY milk commodity (/\\bmilk\\b/ include) at $/gallon - a canned pantry item priced as fresh dairy; 'canned coconut milk' resolves correctly to coconut-milk-canned. Queue/spec phrasing must use the qualified term.",
+    "avocado-oil commodity exists with NO priced board cell (CAPTURE, 25 candidates across 2 stores) - a real gap for the growing share of recipes that name avocado oil; flagged for the pricer/match-soundness gate, not exercised here thanks to the source's 'fat of choice' sanction."
+  ],
+  "densities_followups": [
+    "Cauliflower: STILL no densities row (fourth recipe in this run to need one); proposed cup 107 / head ~540 medium stands, and a 'small' key would have decided this recipe's floor question cleanly.",
+    "Tandoori Masala: no densities row; propose tbsp 8 / tsp 2.7 (Shan USDA-branded basis).",
+    "Kosher salt: densities Salt row is fine-salt basis (6 g/tsp); a kosher_tsp ~3 g key would remove the manual halving every Diamond-Crystal line requires."
+  ]
+}

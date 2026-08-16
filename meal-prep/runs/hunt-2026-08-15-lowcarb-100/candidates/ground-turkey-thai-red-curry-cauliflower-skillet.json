@@ -1,0 +1,36 @@
+{
+  "name": "One-Pan Ground Turkey Thai Red Curry with Cauliflower Rice",
+  "slug": "ground-turkey-thai-red-curry-cauliflower-skillet",
+  "protein": "turkey",
+  "cuisine": "Thai",
+  "method": "skillet",
+  "source_url": "https://kalynskitchen.com/one-pan-ground-turkey-curry/",
+  "source_servings": 6,
+  "src_cal": 407,
+  "src_carbs": 13,
+  "ingredients_verbatim": [
+    "2 T peanut oil, divided (see notes)",
+    "1 1/2 lbs. ground turkey",
+    "1 onion, cut into slivers",
+    "4 T Thai Red Curry Paste (more or less to taste)",
+    "one 13.6 oz. can unsweetened coconut milk",
+    "1 cup chicken broth",
+    "1 large red bell pepper, seeds removed and cut into strips",
+    "2 medium zucchini, but into half-moon slices",
+    "16 oz. frozen cauliflower rice, thawed",
+    "1 bunch cilantro, chopped (see notes)",
+    "1-2 T fresh-squeezed lime juice",
+    "fresh lime pieces to squeeze on at the table (optional)"
+  ],
+  "src_protein": 32,
+  "src_fat": 26,
+  "src_fiber": null,
+  "unmapped": [
+    "Thai Red Curry Paste (signature ingredient; likely no Omaha board home - flag for pricer lane)",
+    "unsweetened coconut milk, canned (likely no board home)",
+    "peanut oil (board may track a generic cooking oil instead)",
+    "frozen cauliflower rice (board may track fresh cauliflower head instead)"
+  ],
+  "why": "Crumbled ground turkey braised in a one-pan Thai red curry with coconut milk, bell pepper, zucchini and cauliflower rice - meat + fat + non-starchy veg, no rice/pasta/potato/bread/bean base, so structurally low-carb and the published 407 cal / 13g carbs / 32g protein / 26g fat clears the 400-650 & <=35 band on the source's own numbers. Skillet-only (no bake), brown-and-simmer, scales cleanly to 14 servings (~2.3x). Adds Thai cuisine variety to a catalog that skews American/Tex-Mex. DEDUP NOTE: catalog has 'oneskillet-ground-turkey-thai-curry-with-rice' (a WITH-RICE, high-carb dish) - this is the cauliflower-rice low-carb build with different veg, and the rice version could not qualify in a low-carb run; I judge it a distinct low-carb dish but flag the overlap honestly for the adjudicators.",
+  "confidence": "verified nutrition read directly from page. Two caveats: 407 cal sits near the band floor so our label-DB recompute could dip under 400 (26g fat gives some cushion); and there is a same-cuisine near-neighbor (thai-curry-with-rice) in the catalog - moderate confidence on both dedup and floor."
+}

@@ -1,0 +1,79 @@
+{
+  "name": "French Chicken Fricassee",
+  "slug": "french-chicken-fricassee",
+  "protein": "chicken",
+  "cuisine": "French",
+  "source_url": "https://foolproofliving.com/chicken-fricassee/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Boneless Skinless Chicken Breast", "grams": 3175, "buy": "7 lb boneless skinless (about 14 breasts)" },
+    { "item": "Salt", "grams": 21, "buy": "3 1/2 tsp kosher" },
+    { "item": "Black Pepper", "grams": 4, "buy": "1 3/4 tsp" },
+    { "item": "Butter", "grams": 49, "buy": "3 1/2 tbsp" },
+    { "item": "Olive Oil", "grams": 47, "buy": "3 1/2 tbsp" },
+    { "item": "Yellow Onion", "grams": 385, "buy": "3 1/2 medium, finely chopped (about 3 1/2 cups)" },
+    { "item": "Portobello Mushrooms", "grams": 1588, "buy": "3 1/2 lb, cleaned, trimmed and sliced" },
+    { "item": "Dry White Wine", "grams": 206, "buy": "3/4 cup plus 2 tbsp" },
+    { "item": "All-Purpose Flour", "grams": 28, "buy": "3 1/2 tbsp" },
+    { "item": "Garlic", "grams": 21, "buy": "7 cloves, minced" },
+    { "item": "Chicken Broth", "grams": 1260, "buy": "5 1/4 cups" },
+    { "item": "Sour Cream", "grams": 270, "buy": "1 cup plus 2 3/4 tbsp full-fat" },
+    { "item": "Egg Yolk", "grams": 68, "buy": "4 large yolks" },
+    { "item": "Ground Nutmeg", "grams": 4, "buy": "1 3/4 tsp, freshly ground" },
+    { "item": "Lemon Juice", "grams": 35, "buy": "2 tbsp plus 1 tsp, freshly squeezed" },
+    { "item": "Fresh Parsley", "grams": 9, "buy": "2 1/4 tbsp minced (tarragon if you can find it)" }
+  ],
+  "macros_per_serving": { "calories": 436, "protein_g": 55, "carbs_g": 11, "fat_g": 18 },
+  "writer_notes": [
+    "SOURCE YIELD 4, rebuilt to 14 at the mapper's 3.5x scale. Every gram and buy string transcribed from mapped\\french-chicken-fricassee.json; no number computed in prose.",
+    "MACROS transcribed from the food-macros-db recompute at 14 servings and independently re-verified by the writer with the same formula the build guard uses: 436 cal, 55 g protein, 11 g carbs, 18 g fat per serving. In band for this run (400 to 650 cal, 35 g carb or less). The mapper's own compute matched (436.1 / 55.3 / 11.3 / 17.9). Note the calorie margin: 436 sits 36 cal above the 400 floor. The mapper LOUDLY flagged that the source's published 569 cal / 31 g fat cannot be reproduced from label rows (our fat lands at 17.9 g); the -23.4% calorie gap is entirely a fat gap and our label-accurate figure stands.",
+    "TARRAGON -> FRESH PARSLEY is a SOURCE-SANCTIONED substitution: the source's own ingredient line reads 'If you can't find tarragon, you can use parsley.' Tarragon is absent board-wide (mapper board_defects_observed); parsley is carried. Prose names parsley as the herb and mentions tarragon only as the classic option a shopper may or may not find. No step calls for tarragon.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought: chicken (steps 2,3,7,10), kosher salt (2,9), black pepper (2), butter (3), olive oil (3), portobello (4), onion (4), white wine (4), garlic (5), flour (5), chicken broth (6), egg yolk (8), sour cream (8), lemon juice (9), nutmeg (9), parsley (9). Walked the costed list against the steps both directions.",
+    "EGG YOLK drift, carried from the mapper: exact 3.5x = 3.5 yolks, rounded UP to 4 whole yolks (+14.3% on the line, +2 cal/serving). A half yolk is not a cook measure. Purchase maps to the whole-egg commodity; macros book to the Egg Yolk food-DB row because the yolk carries nearly all the fat.",
+    "SHOP_SMART makes NO leftover, per-ounce, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount. Once the recipe is costed, re-walk the bullets against cost_lines before publish.",
+    "SALT FLATTENED at build: the mapper minted a non-canonical item 'Kosher Salt' (bid kosher-salt) that lives in NEITHER food-macros-db NOR db\\ingredients.json, so the build hard-failed the food-macros check. Rewrote the intake item to the batch-canonical 'Salt' (bid salt, brand Morton), buy string '3 1/2 tsp kosher', matching every other recipe in the batch (e.g. curry-ground-turkey-bowls displays 'Salt (Morton): ... kosher'). Salt is zero-macro so no stat number moved; salt now prices at util 0.03. Prose still reads 'kosher salt', which the kosher buy string keeps truthful.",
+    "COST UNDERSTATED - repair-pass flag: five items are unwired in db\\ingredients.json (no bid), so cost-recipes silently DROPPED four of them from the costed row at $0.00: Portobello Mushrooms 3.5 lb (1588 g), Dry White Wine 206 g, Sour Cream 270 g full-fat, Egg Yolk 4 large. Fresh Parsley (9 g) also unbid but immaterial. The 11 priced lines sum to exactly the batch total, so the headline 20.07 batch / 1.43 ps / 23.19 true / 1.66 true-ps EXCLUDES those four ingredients and is materially low (portobello alone would roughly double the batch at retail). Dry White Wine is the mapper's item_id null / blocking-term case; the portobello board cell is a canned-product form defect. These need bids wired (mapper/registrar) and a recost BEFORE this recipe enters a wave. Not a writer-lane fix; numbers are not mine to invent.",
+    "PHANTOM REPAIR 2026-08-16: the tempering step read 'Stir a ladle of the hot sauce into the bowl', where 'hot sauce' meant the hot pan sauce (temperature adjective), but it collided with the condiment vocab name Hot Sauce and hard-failed audit-spec-contradictions PHANTOM. Source foolproofliving.com uses no hot-sauce condiment; the tempering is with the warm mushroom sauce. Reworded to 'hot pan sauce' in make_it and head.steps. No ingredient added. NOTE: this intake cannot rebuild into db\\recipes yet because Dry White Wine (bid white-wine) is not on the live feed (known CHEAPEST-FALLBACK blocker); the db\\recipes spec still carries the phantom until white-wine lands and this is rebuilt."
+  ],
+  "prose": {
+    "intro_html": "Fricassee is a fancy French word for a plain good idea. You brown the chicken, build a pan sauce out of everything stuck to the bottom, then let the two finish cooking together. No special cut, no long braise, no equipment you do not already own. Boneless breasts, sliced portobello, an onion, a splash of white wine, and a little sour cream and egg yolk whisked in at the end to pull the sauce together. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 15 grams of carbs. That is a white-tablecloth dinner priced like a weeknight.",
+    "shop_smart": [
+      "<strong>Seven pounds of boneless breasts is the backbone.</strong> That is about fourteen breasts, one per serving, and it is where most of the money and all of the protein live. Reach for the big family pack instead of the small trays so you are paying for chicken, not packaging.",
+      "<strong>Three and a half pounds of portobello do the heavy flavor work.</strong> Sliced portobello browns deep and meaty, and that is what gives this sauce its body. If your store sells whole caps, buy them by weight and slice them at home.",
+      "<strong>A few onions and a head of garlic are the aromatics.</strong> You need about three and a half onions chopped fine and seven cloves of garlic. Both are cheap staples that stretch across everything else you cook.",
+      "<strong>A splash of dry white wine deglazes the pan.</strong> You only need just under a cup to lift the browned bits off the bottom. Any dry white you would actually drink works here, so skip the bottle labeled cooking wine.",
+      "<strong>Full-fat sour cream and a few egg yolks finish the sauce.</strong> Buy the real full-fat tub rather than light, because the fat is what keeps the sauce from breaking, and a carton of eggs gives you the four yolks the recipe asks for.",
+      "<strong>Butter, olive oil, flour, nutmeg, lemon, and parsley round it out.</strong> These are pantry and produce backbone you most likely already have, so they barely move the cart. Tarragon is the classic herb for fricassee if your store carries it, and parsley is the everyday stand-in when it does not."
+    ],
+    "make_it": [
+      "Weigh your empty Dutch oven or deep skillet and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+      "Pat the chicken breasts dry with paper towels and season them all over with the kosher salt and black pepper.",
+      "Melt the butter with the olive oil in the pot over medium-high heat. Working in batches so the pot is not crowded, sear the breasts about 4 minutes a side until browned. They will not be cooked through yet. Move them to a plate and cover with foil.",
+      "Add the sliced portobello, the chopped onion, and the white wine to the same pot. Cook 8 to 10 minutes, stirring now and then, until the mushrooms are browned and the pan is nearly dry.",
+      "Stir in the garlic and the flour and cook one minute, scraping the browned bits up off the bottom.",
+      "Pour in the chicken broth, bring it to a boil, and let it loosen everything stuck to the pot.",
+      "Nestle the chicken and any collected juices back in, cover, and cook over medium heat until a thermometer in the thickest breast reads 160 degrees F, about 5 to 10 minutes. Move the chicken to a clean platter and cover it again.",
+      "Whisk the egg yolks and sour cream together in a small bowl. Stir a ladle of the hot pan sauce into the bowl first to warm it, then pour that mixture back into the pot, stirring the whole time so the sauce stays smooth and does not curdle.",
+      "Stir in the lemon juice, the nutmeg, and the minced parsley and let the sauce simmer 5 minutes. Taste and adjust the salt. Return the chicken to the pot and turn each piece to coat.",
+      "Weigh the full pot and subtract the empty weight from Step 1 to get the cooked total. Divide by 14 and give each container one breast and an even share of the mushroom sauce, aiming for that weight."
+    ],
+    "portion_html": "Set the full pot on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Each container gets one chicken breast and an even ladle of the mushroom sauce, landing near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a French chicken dinner that reads like a restaurant plate. The chicken and the mushrooms carry it; the wine and the sour cream just make it taste expensive.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "French chicken fricassee for meal prep: seared boneless chicken breasts finished in a creamy mushroom pan sauce with white wine, sour cream, and egg yolk, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
+    "keywords": "chicken fricassee, french chicken fricassee, low carb meal prep, high protein chicken dinner, creamy mushroom chicken",
+    "prepTime": "PT15M",
+    "cookTime": "PT35M",
+    "totalTime": "PT50M",
+    "steps": [
+      "Pat the chicken dry and season it with the kosher salt and black pepper.",
+      "Sear the breasts in the butter and olive oil until browned but not cooked through, then set them aside.",
+      "Cook the portobello, onion, and white wine until browned, then stir in the garlic and flour.",
+      "Add the chicken broth, bring to a boil, return the chicken, and cook to 160 degrees F.",
+      "Temper the egg yolks and sour cream with the hot pan sauce, stir the mixture back in, then add the lemon juice, nutmeg, and parsley and simmer.",
+      "Weigh the pot, subtract the empty weight, and divide across 14 containers."
+    ]
+  }
+}

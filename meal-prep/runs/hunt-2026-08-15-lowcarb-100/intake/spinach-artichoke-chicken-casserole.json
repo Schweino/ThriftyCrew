@@ -1,0 +1,74 @@
+{
+  "name": "Spinach Artichoke Chicken Casserole",
+  "slug": "spinach-artichoke-chicken-casserole",
+  "protein": "chicken",
+  "cuisine": "American",
+  "source_url": "https://kicking-carbs.com/spinach-artichoke-chicken-casserole/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Boneless Skinless Chicken Breast", "grams": 1134, "buy": "2 1/2 lb chicken breast, cooked and cubed (about 6 cups)", "display_name": "Chicken Breast (cooked, cubed)" },
+    { "item": "1/3 Fat Cream Cheese", "grams": 397, "buy": "14 oz cream cheese (1 3/4 bricks), cubed" },
+    { "item": "Heavy Cream", "grams": 210, "buy": "3/4 cup plus 2 tbsp heavy cream" },
+    { "item": "Chicken Broth", "grams": 207, "buy": "3/4 cup plus 2 tbsp chicken broth (7 fl oz)" },
+    { "item": "Butter", "grams": 98, "buy": "7 tbsp butter (3/4 stick plus 1 tbsp)" },
+    { "item": "Frozen Chopped Spinach", "grams": 397, "buy": "14 oz frozen chopped spinach, thawed and squeezed dry" },
+    { "item": "Artichoke Hearts", "grams": 496, "buy": "17 1/2 oz quartered artichoke hearts, drained (about 1 1/4 of the 13.75 oz cans)" },
+    { "item": "Mozzarella Cheese", "grams": 396, "buy": "3 1/2 cups shredded mozzarella (14 oz)" },
+    { "item": "Parmesan Cheese", "grams": 196, "buy": "1 3/4 cups shredded parmesan (7 oz)" },
+    { "item": "Feta Cheese", "grams": 98, "buy": "3/4 cup plus 2 tbsp crumbled feta" },
+    { "item": "Garlic Powder", "grams": 5, "buy": "1 3/4 tsp garlic powder" },
+    { "item": "Salt", "grams": 6, "buy": "1 tsp salt" },
+    { "item": "Black Pepper", "grams": 1, "buy": "1/2 tsp black pepper" }
+  ],
+  "macros_per_serving": { "calories": 443, "protein_g": 35, "carbs_g": 10, "fat_g": 30 },
+  "writer_notes": [
+    "SOURCE YIELD 8, rebuilt to 14 at the mapper's 1.75x scale. Every gram and buy string transcribed from mapped\\spinach-artichoke-chicken-casserole.json; no number computed in prose. Grams rounded to int where the build requires it (207.2->207, 396.9->397 for cream cheese and spinach, 496.1->496, 395.5->396, 5.4->5, 1.15->1); buy strings are the mapper's printed measures so reader-facing amounts are unchanged.",
+    "MACROS transcribed from the mapper's food-DB recompute (recomputed_per_serving_from_food_db): cal 443, protein 34.6, carbs 9.9, fat 29.6; declared here as 443 / 35 / 10 / 30 for the build's stat cross-check tolerance. Report the BUILT numbers, not these. In band for this run (400 to 650 cal, 35 g carb or less): computed 443 sits 43 cal above the floor and well under the ceiling; carbs 9.9 are comfortably inside the 35 g gate. Prose carb bound is written as a literal 'under 12 grams of carbs' (build carbs ~10).",
+    "PROTEIN CROSS-CHECK FLAG carried from the mapper (kept, not fixed): recompute protein +15.9% vs the source's published 29.85 g, which sits just past the ~15% tripwire. The mapper did the line-by-line re-examination the rule demands and PASSED it: the main protein is the source's own 3.5-cup COOKED measure through the estate's standing 140 g/cup densities row and the DB's 3 oz cooked = 4 oz raw factor (chicken-bacon-ranch precedent, RAW purchase weight against the RAW db row), not an each-weight assumption; calories agree within 1.9%, which a wrong portion would not allow; the gap decomposes into named product-form differences (part-skim mozzarella row vs their whole-milk basis, the disclosed 1/3-fat cream cheese vs their full-fat, their lighter cooked-chicken cup). Direction is safe: protein is computed from labels and the calorie band verdict is identical on either side of every named difference.",
+    "CREAM CHEESE PRODUCT-FORM (disclosed substitution, consistent across macro AND cost): the mapper booked '1/3 Fat Cream Cheese' (bid 1-3-fat-cream-cheese, GV Neufchatel 70 cal/2 P per 28 g), which is the closed vocabulary's stocked cream cheese row - bare 'Cream Cheese' aliases to it per the 2026-08-16 alias ruling (design\\PLAN-ingredient-vocabulary-2026-08-16.md section 0c). Macro effect vs a full-fat brick is booked honestly (about -27 cal, -3.5 g fat per serving) and is the main driver of the fat gap. UNLIKE the jalapeno/chicken-bacon-ranch cards, there is NO macro-vs-cost mismatch here: both the macro recompute and the cost price against the same 1/3-fat row. Prose keeps the reader-facing line generic ('cream cheese', matching the 14 oz buy string) and does not promise a fat level the cost was not run against.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked both directions: heavy cream, chicken broth, butter (make_it 3 - the sauce base); cream cheese, garlic powder, salt, black pepper (make_it 4 - whisked into the sauce); spinach, artichokes, chicken (make_it 5 - folded in); mozzarella, parmesan, feta (make_it 6 - the cheese blanket). The only thing a step names that is not a costed line is greasing the dish, treated as pantry-static (a spray/oil gimme, not a shopping line) exactly as the chicken-bacon-ranch and jalapeno cards treated it; flagged here rather than costed.",
+    "SHOP_SMART makes NO per-ounce, per-line-cost, leftover, or lasts-several-batches claim, so no bullet needs a cost_lines entry to prove it. Every statement is grounded in the recipe's own buy amount and package references only (a bit over one can of artichokes is read straight off the mapper's buy note, not a coverage economics claim). No per-line dollar figures; only ${{cost_ps}} and the $1/month membership line carry money.",
+    "DATA SMELLS carried from the mapper (flag, not fixed): (1) Artichoke Hearts DB row is canned quartered WITH LIQUID (40 cal/130 g); the recipe drains, so the booked basis runs slightly light per gram - spread under 1 cal/serving, disclosed rather than re-derived (no invented drained row without a label). (2) densities.json still has NO 'Mozzarella Cheese' cup row - booked on the label-accurate 113 g/cup (turkey-zucchini precedent); densities follow-up is open and re-hit here. (3) Salt quantized 0.875 tsp -> 1 tsp (+14.3%, zero-macro harmless) and Black Pepper 0.4375 tsp -> 1/2 tsp (+14.3%, ~0.2 cal/serving); both noted by the mapper.",
+    "PORTION METHOD: weigh the empty dish first, then weigh full and subtract, divide by 14. Standard house method. Source uses an 8x8 dish at yield 8; the 14-serving build wants a 9x13 (or two 8x8s), noted in make_it, and a deeper dish may want a few extra minutes in the oven - go by the bubble, not the clock."
+  ],
+  "prose": {
+    "intro_html": "Spinach artichoke dip is a party favorite that usually arrives with a basket of bread and a carb bill to match. This casserole keeps the creamy, cheesy heart of that dip and turns it into a real dinner. Cooked chicken gets folded into a sauce built from heavy cream, chicken broth, butter, and cream cheese, then loaded up with spinach and quartered artichoke hearts. It bakes under a blanket of mozzarella, parmesan, and feta until the whole dish is melted and bubbling. No bread, no crumb, no flour. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 12 grams of carbs. That is the dip you love, turned into a dinner that feeds you all week and respects your wallet.",
+    "shop_smart": [
+      "<strong>Two and a half pounds of chicken breast is the anchor.</strong> Cook it and cube it into bite-sized pieces to fold through the bake. Reach for the big family pack of boneless skinless breasts instead of the little trays, because you are paying for chicken, not packaging. This is where most of the protein in the dish lives.",
+      "<strong>Cream, broth, butter, and cream cheese make the sauce.</strong> Heavy cream, chicken broth, butter, and a fourteen ounce measure of cream cheese melt down into the creamy base that carries every bite. Cube the cream cheese so it melts smooth instead of fighting you in the pan. This is what makes the casserole taste like the dip instead of a dry chicken bake.",
+      "<strong>Frozen spinach and canned artichokes do the vegetable work.</strong> A fourteen ounce box of frozen chopped spinach, thawed and squeezed dry, keeps the dish from going watery, so do not skip the squeeze. You want a bit more than one can of quartered artichoke hearts, drained, for that tender, briny bite that names the dish. Both are pantry-steady and there is no fresh produce to race against the clock.",
+      "<strong>Three cheeses go on top, and each one earns its spot.</strong> Shredded mozzarella melts into the stretch, parmesan browns and sharpens, and a little crumbled feta brings the tang. Shred your own off the block if you like, but a bag of each is the fast lane and melts just fine.",
+      "<strong>Garlic powder, salt, and pepper are the whole spice list.</strong> A couple of teaspoons of garlic powder with a little salt and black pepper is all the seasoning this needs, because the cream cheese, artichokes, and feta are already doing the loud work. Nothing exotic to hunt down."
+    ],
+    "make_it": [
+      "Weigh your empty baking dish and write the number down. You will need it at the end to split this into 14 even servings by weight, which is the only honest way to portion one big bake.",
+      "Heat the oven to 350 degrees F and grease a 9 by 13 baking dish (two 8 by 8 dishes also work). If your chicken is not already cooked, poach or roast it now, then cube it and set it aside. Thaw the spinach and squeeze it as dry as you can, and drain the artichokes.",
+      "In a large saucepan over medium heat, warm the heavy cream, chicken broth, and butter until the butter melts.",
+      "Add the cubed cream cheese along with the garlic powder, salt, and black pepper. Whisk until the cream cheese melts into a smooth sauce, about 5 to 7 minutes.",
+      "Stir in the spinach, artichokes, and chicken until everything is coated in the sauce.",
+      "Transfer the mixture to the baking dish and spread it level. Scatter the mozzarella, parmesan, and feta evenly over the top.",
+      "Bake at 350 degrees F for about 25 to 30 minutes, until the cheese is melted and the casserole is hot and bubbling. A deeper 14-serving dish runs longer than the original, so go by the bubble, not just the clock.",
+      "Let it rest a few minutes so it firms up, then weigh the dish, subtract the empty weight from Step 1, and divide across 14 containers."
+    ],
+    "portion_html": "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a baked, bubbling spinach artichoke chicken casserole that eats like the dip and skips the bread. The chicken and the cheese carry it; the spinach and artichokes do the flavor the crackers used to, for a lot less.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Spinach artichoke chicken casserole for meal prep: cubed chicken folded into a cream cheese, heavy cream, and broth sauce with frozen spinach and quartered artichoke hearts, baked under mozzarella, parmesan, and feta, no bread and no flour, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 12 grams of carbs.",
+    "keywords": "spinach artichoke chicken casserole, keto casserole, low carb casserole, chicken casserole, high protein meal prep",
+    "prepTime": "PT15M",
+    "cookTime": "PT30M",
+    "totalTime": "PT45M",
+    "steps": [
+      "Weigh the empty baking dish and note the number for portioning later.",
+      "Heat the oven to 350 degrees F, grease a 9 by 13 dish, cook and cube the chicken if needed, and thaw and squeeze the spinach and drain the artichokes.",
+      "Warm the heavy cream, chicken broth, and butter in a large saucepan until the butter melts.",
+      "Whisk in the cubed cream cheese, garlic powder, salt, and pepper until the sauce is smooth, about 5 to 7 minutes.",
+      "Stir in the spinach, artichokes, and chicken until coated.",
+      "Spread in the dish and top with the mozzarella, parmesan, and feta.",
+      "Bake at 350 degrees F for about 25 to 30 minutes until melted and bubbling, going by the bubble on a deeper dish.",
+      "Rest, then weigh the dish and divide across 14 containers."
+    ]
+  }
+}

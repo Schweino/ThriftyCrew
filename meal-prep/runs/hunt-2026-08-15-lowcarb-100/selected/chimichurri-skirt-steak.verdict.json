@@ -1,0 +1,23 @@
+{
+  "slug": "chimichurri-skirt-steak",
+  "name": "Chimichurri Skirt Steak",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "cal_per_serving": 491,
+    "carbs_per_serving": 2,
+    "in_band": true,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "491 cal / 2g carb is dead-center of 400-650 cal and far under the 35g carb ceiling; whole-muscle steak + oil-herb sauce, no starch, scales by weigh-and-divide."
+  },
+  "dupe_of": null,
+  "evidence": "No chimichurri or herb-oil-sauced whole-muscle steak exists in the 138-recipe beef catalog; the only whole-steak entries (carne-asada-rice-bowls, steak-fajita-rice-bowls, chipotle-steak-burrito, slow-cooker-steak-and-onions-rice) are all starch-based Mexican/Asian bowls or burritos with a different flavor family, and the accepted flank-steak-parmesan-green-beans is a parmesan-crust Italian plate, not an Argentine chimichurri sauce.",
+  "cross_protein_collision_flags": [
+    "Chimichurri is a sauce-first identity: a chimichurri CHICKEN (thigh/breast) or chimichurri PORK plate in another selector's pool would be structurally the same dish (seared protein + herb-oil sauce, no starch) and should be caught by the decider's cross-protein merge.",
+    "Lower-priority twin: any 'grilled steak with chimichurri' beef candidate from a different lane is a direct duplicate of this one."
+  ],
+  "cuisine": "Argentine / Latin",
+  "widens_catalog": true,
+  "unmapped_note": "Carries unmapped skirt/flank/flat-iron and fresh-oregano; per run intent this is wanted, not penalized (pricer-lane exercise)."
+}

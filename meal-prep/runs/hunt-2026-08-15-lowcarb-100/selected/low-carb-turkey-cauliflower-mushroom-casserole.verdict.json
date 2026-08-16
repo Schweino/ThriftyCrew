@@ -1,0 +1,21 @@
+{
+  "slug": "low-carb-turkey-cauliflower-mushroom-casserole",
+  "name": "Low-Carb Turkey and Cauliflower Rice Casserole with Mushrooms",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 472,
+    "carbs_g": 8.6,
+    "in_band": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "note": "472 cal is inside 400-650; 8.6g carbs well under 35g cap; turkey, no seafood; weigh-and-divide cauliflower-rice bake scales cleanly from 8 to 14 servings."
+  },
+  "dupe_check": {
+    "catalog": "No turkey recipe in the 544-recipe catalog uses cauliflower rice. Nearest low-carb turkey bakes keto-turkey-broccoli-cheddar-casserole (broccoli + cheddar) and turkey-zucchini-noodle-casserole (zoodles) differ in vegetable base AND sauce (this uses mozzarella + sour cream + mayo + Dijon); creamy-turkey-rice-mushroom-soup and turkey-tetrazzini share mushrooms only and are a soup and a pasta dish respectively. Not a duplicate.",
+    "is_dupe": false,
+    "dupe_of": null
+  },
+  "cross_protein_collision": "Source recipe explicitly says 'turkey OR chicken' - this is structurally a creamy low-carb poultry + cauliflower-rice + crimini mushroom bake. A chicken version would be the same dish. Decider should check the chicken pool for any 'low-carb chicken and cauliflower rice casserole with mushrooms / creamy sauce'.",
+  "borderline": false
+}

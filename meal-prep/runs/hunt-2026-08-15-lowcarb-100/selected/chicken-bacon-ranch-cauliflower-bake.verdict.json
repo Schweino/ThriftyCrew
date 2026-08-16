@@ -1,0 +1,24 @@
+{
+  "slug": "chicken-bacon-ranch-cauliflower-bake",
+  "name": "Chicken Bacon Ranch Cauliflower Bake",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "pass": true,
+    "cal": 584,
+    "carbs": 13,
+    "seafood": false,
+    "batch_scalable_14": true,
+    "note": "584 cal in 400-650 band; 13g carbs <= 35; oven-bake weigh-and-divide casserole scales cleanly to 14; no seafood. Clears all conditions."
+  },
+  "dupe_check": {
+    "catalog": "Not a catalog dupe. Nearest live entries are chicken-bacon-ranch-burrito (a rice+tortilla wrapped burrito, different format/dish) and chicken-cordon-bleu-casserole (ham+swiss flavor) - neither shares this cauliflower-bound bacon-ranch cheese bake.",
+    "pool": "BORDERLINE against accepted-slug jalapeno-popper-chicken-casserole: both are chicken-breast + cream-cheese + cheddar + bacon oven bakes with no starch (3 of 4 structural facets match). Distinguished by (a) flavor identity - bacon-ranch vs spicy jalapeno-popper - and (b) cauliflower as the structural vegetable body here vs a pure creamy chicken bake there. Ruling KEEP as a genuinely distinct plate, but flagging the collision for the decider to confirm the catalog wants both."
+  },
+  "cross_protein_collisions": [
+    "A turkey / ground-turkey 'bacon ranch cauliflower (or broccoli) bake' would be structurally the same dish - watch other-protein pools for a turkey twin.",
+    "Sits in the same creamy-cheddar-cruciferous-casserole family as accepted keto-turkey-broccoli-cheddar-casserole (different flavor - cheddar-broccoli vs bacon-ranch-cauliflower - but adjacent; decider should confirm spread is wide enough)."
+  ],
+  "borderline": true,
+  "borderline_reason": "Shares the creamy cheddar-bacon chicken-bake base with jalapeno-popper-chicken-casserole; kept on distinct ranch flavor + cauliflower body."
+}

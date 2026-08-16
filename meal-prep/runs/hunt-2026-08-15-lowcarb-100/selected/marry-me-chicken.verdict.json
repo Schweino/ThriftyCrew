@@ -1,0 +1,24 @@
+{
+  "slug": "marry-me-chicken",
+  "name": "Marry Me Chicken",
+  "protein": "chicken",
+  "verdict": "DUPE",
+  "dupe_of": "creamy-tuscan-chicken-skillet",
+  "dupe_scope": "run-accepted",
+  "reason": "Near-duplicate of creamy-tuscan-chicken-skillet (already in accepted-slugs.json this run): both are one-pan seared chicken-breast in a Parmesan cream pan sauce whose signature element is SUN-DRIED TOMATOES, no starch base - identical on all four axes (protein, sun-dried-tomato-Parmesan-cream sauce family, no-starch, skillet method). Marry Me Chicken is the Tuscan skillet minus spinach; the accepted Tuscan verdict itself named sun-dried tomatoes as its distinguishing signature, which this candidate fully shares. This run already ruled the plainer creamy-garlic-chicken-skillet a DUPE of the same Tuscan slug for matching all four axes, so this closer match cannot earn a second slot.",
+  "conditions_check": {
+    "calories": "437 - within 400-650 band",
+    "carbs": "26g - within <=35g band",
+    "seafood": "none",
+    "scalable": "yes - sear-then-simmer skillet scales to 14 by weigh-and-divide",
+    "fit_verdict": "FIT on conditions, but rejected as DUPE"
+  },
+  "catalog_neighbors_cleared": [
+    "marry-me-pork-chops-over-pasta (same marry-me sun-dried-tomato cream sauce but PORK and served OVER PASTA - different protein and starch format, not this dish)",
+    "slow-cooker-tuscan-chicken-pasta (penne pasta base, slow cooker)",
+    "creamy-chicken-and-gnocchi-skillet (gnocchi starch + spinach)",
+    "chicken-parmesan-pasta (breaded/pasta, different dish)"
+  ],
+  "cross_protein_collision_note": "The marry-me / creamy-Tuscan sun-dried-tomato Parmesan cream sauce is protein-agnostic. The catalog already carries marry-me-pork-chops-over-pasta (pork, over pasta). A no-starch 'marry me pork chops' skillet, a 'creamy Tuscan turkey cutlet' skillet, or a steak-bites version in another selector's pool would be the same-dish-different-protein twin of the accepted creamy-tuscan-chicken-skillet - the merge pass should treat any such entry as a twin of that accepted slug, not a distinct plate.",
+  "adjudicator": "select/adjudicate-1"
+}

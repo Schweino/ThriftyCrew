@@ -1,0 +1,45 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Mexican Chile Verde Stew: Slow Cooked",
+  "source_url": "https://farmtojar.com/pork-chile-verde/",
+  "servings": 6,
+  "time_total": null,
+  "time_active": "45 minutes (prep); cook time 2 hours 30 minutes",
+  "ingredients": [
+    { "raw": "1.5 pounds tomatillos husked, rinsed and coarsely chopped", "item": "tomatillos", "qty": "1.5", "unit": "pound", "prep": "husked, rinsed and coarsely chopped", "optional": false, "section": "Homemade Chile Verde Sauce (can sub in pre-made)" },
+    { "raw": "5-6 cloves garlic peeled", "item": "garlic", "qty": "5-6", "unit": "clove", "prep": "peeled", "optional": false, "section": "Homemade Chile Verde Sauce (can sub in pre-made)" },
+    { "raw": "1 bunch cilantro reserve some for garnish if desired", "item": "cilantro", "qty": "1", "unit": "bunch", "prep": "reserve some for garnish if desired", "optional": false, "section": "Homemade Chile Verde Sauce (can sub in pre-made)" },
+    { "raw": "1 bunch green onions", "item": "green onions", "qty": "1", "unit": "bunch", "prep": null, "optional": false, "section": "Homemade Chile Verde Sauce (can sub in pre-made)" },
+    { "raw": "2-3 green chiles mild or medium- I used 1 Anaheim and 2 poblanos", "item": "green chiles", "qty": "2-3", "unit": "each", "prep": "mild or medium- I used 1 Anaheim and 2 poblanos", "optional": false, "section": "Homemade Chile Verde Sauce (can sub in pre-made)" },
+    { "raw": "1 cup unsalted chicken broth can add more if needed", "item": "unsalted chicken broth", "qty": "1", "unit": "cup", "prep": "can add more if needed", "optional": false, "section": "Homemade Chile Verde Sauce (can sub in pre-made)" },
+    { "raw": "2 tablespoons olive oil or lard", "item": "olive oil or lard", "qty": "2", "unit": "tablespoon", "prep": null, "optional": false, "section": "For the Stew" },
+    { "raw": "3 pounds pork shoulder or chuck roast cut into fairly large cubes (about 1 1/2 inches)", "item": "pork shoulder or chuck roast", "qty": "3", "unit": "pound", "prep": "cut into fairly large cubes (about 1 1/2 inches)", "optional": false, "section": "For the Stew" },
+    { "raw": "1 large onion coarsely chopped", "item": "onion", "qty": "1", "unit": "large", "prep": "coarsely chopped", "optional": false, "section": "For the Stew" },
+    { "raw": "1 tablespoon cumin seeds or 1 teaspoon dried cumin", "item": "cumin seeds or dried cumin", "qty": "1", "unit": "tablespoon", "prep": "or 1 teaspoon dried cumin", "optional": false, "section": "For the Stew" },
+    { "raw": "1 teaspoon smoked chipotle spice", "item": "smoked chipotle spice", "qty": "1", "unit": "teaspoon", "prep": null, "optional": false, "section": "For the Stew" },
+    { "raw": "1 teaspoon cinnamon", "item": "cinnamon", "qty": "1", "unit": "teaspoon", "prep": null, "optional": false, "section": "For the Stew" },
+    { "raw": "1 teaspoon oregano", "item": "oregano", "qty": "1", "unit": "teaspoon", "prep": null, "optional": false, "section": "For the Stew" },
+    { "raw": "1.5 teaspoon salt", "item": "salt", "qty": "1.5", "unit": "teaspoon", "prep": null, "optional": false, "section": "For the Stew" },
+    { "raw": "1 cup chicken broth may need more broth to thin the stew", "item": "chicken broth", "qty": "1", "unit": "cup", "prep": "may need more broth to thin the stew", "optional": false, "section": "For the Stew" }
+  ],
+  "instructions": [
+    "To make the verde sauce: Heat oven to broil. Cut tomatillos in half and place with 6 unpeeled garlic cloves on a baking sheet; broil 5-6 minutes.",
+    "In a food processor or blender, add half the roasted tomatillos, all roasted garlic cloves, cilantro, coarsely chopped green onions and peppers, and 1 cup chicken broth. Puree until chunky or smooth as preferred. Set aside. (Prepared salsa verde may substitute this step.)",
+    "For the pork stew: Cut meat into 1-2 inch pieces, removing excess fat if very fatty. Heat 2 tablespoons olive oil in a Dutch oven or large skillet over high heat. Sprinkle meat with salt while waiting for oil to heat.",
+    "Add pork or beef pieces to the heated pot, working in batches without crowding. Cook until each side browns, turning to brown the opposite side. Remove meat to a plate with a slotted spoon or tongs and cook the remaining batch.",
+    "When all meat is browned and removed, lower heat to medium and add chopped onion to the leftover oil; cook about 5 minutes until translucent.",
+    "Add spices, stir and cook 1 minute. Return pork to pot with any plate juices. Add 2 cups salsa verde (purchased or homemade) and 1 cup broth; stir and bring to a gentle boil.",
+    "Reduce heat to low, cover pot and simmer over medium-low heat about 2 to 2 1/2 hours. Check occasionally and thin with chicken broth if needed.",
+    "Serve with accompaniments including sour cream, cilantro sprigs, avocados and limes."
+  ],
+  "nutrition": {
+    "as_stated": "Calories: 471 | Carbohydrates: 11g | Protein: 47g | Fat: 28g | Saturated Fat: 12g | Cholesterol: 156mg | Sodium: 999mg | Potassium: 1123mg | Fiber: 3g | Sugar: 5g"
+  },
+  "concerns": [
+    "Ingredient list section headers group sauce vs stew; sauce section is headed 'Homemade Chile Verde Sauce (can sub in pre-made)' - a store-bought salsa verde substitution is allowed by the page.",
+    "Instruction step 2 references '6 unpeeled garlic cloves' while ingredient line says '5-6 cloves garlic peeled' - transcribed both as printed.",
+    "Step 6 calls for '2 cups salsa verde' which is the yield of the sauce sub-recipe, not a separate ingredient line.",
+    "Serving accompaniments (sour cream, cilantro sprigs, avocados, limes) appear only in the final instruction step, not in the ingredient list."
+  ]
+}

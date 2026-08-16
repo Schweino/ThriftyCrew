@@ -1,0 +1,13 @@
+{
+  "slug": "creamy-cajun-chicken-skillet",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "fit_evidence": "481 cal / 18g carbs / 21g protein per serving (published) - inside the 400-650 cal band and comfortably under the 35g carb gate; no seafood; sear-then-simmer skillet with a cream/broth pan sauce and no rice or pasta base scales cleanly to 14. Source protein is light at 21g (~4oz chicken/serving) but that does not breach any fit condition.",
+  "dupe_of": null,
+  "dupe_evidence": "No catalog creamy-Cajun chicken skillet without a starch base exists. Nearest neighbor is creamy-cajun-chicken-penne-skillet-bowls (chicken + creamy-Cajun sauce + skillet all match, 3 of 4), but that is a penne PASTA bowl and this candidate carries no pasta/rice - a low-carb saucy-chicken plate, the same starch-vs-no-starch split the run treats as distinct (cf. chili vs chili mac). Also distinct from the taken creamy chicken skillets in flavor family: creamy-garlic-chicken, creamy-garlic-parmesan-chicken, creamy-mushroom-chicken, creamy-tuscan-chicken, pesto-mozzarella-chicken - none are Cajun/Rotel-based.",
+  "borderline": true,
+  "borderline_evidence": "Flagging borderline against creamy-cajun-chicken-penne-skillet-bowls: identical protein + sauce family + method, separated only by the absence of penne. Reads as a genuinely different (low-carb, no-pasta) dinner and this is a low-carb run, but the flavor overlap is strong enough that the audit stage should confirm the catalog wants both.",
+  "pool_watch": "Watch against any other creamy/Cajun chicken skillet in the chicken pool - a 'cajun cream chicken' or 'blackened chicken alfredo skillet' slice would collide on protein+sauce+method+starch-absence.",
+  "cross_protein_watch": "Structurally the same dish as a creamy-Cajun pork chop or creamy-Cajun turkey/sausage skillet finished in the same Rotel-cream pan sauce with no starch. Catalog already holds one-pot-creamy-cajun-sausage-pasta (turkey) and cajun-sausage-and-vegetables-skillet is a KEEP in the pool - both differ (pasta base / vegetable skillet, no cream-Rotel sauce) but the decider should catch any no-starch creamy-Cajun sausage/pork/turkey twin another selector may hold."
+}

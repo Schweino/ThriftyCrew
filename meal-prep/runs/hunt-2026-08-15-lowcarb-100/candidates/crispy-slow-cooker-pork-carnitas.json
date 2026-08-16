@@ -1,0 +1,28 @@
+{
+  "name": "Crispy Slow Cooker Pork Carnitas",
+  "slug": "crispy-slow-cooker-pork-carnitas",
+  "protein": "pork",
+  "method": "slow cooker + pan-fry/broil to crisp",
+  "cuisine": "Mexican",
+  "source_url": "https://www.recipetineats.com/pork-carnitas-mexican-slow-cooker-pulled-pork/",
+  "source_servings": 12,
+  "src_cal": 578,
+  "src_carbs": 1.7,
+  "src_protein": 45,
+  "src_fat": 42,
+  "ingredients": [
+    "2 kg / 4 lb pork shoulder (pork butt), skinless, boneless",
+    "2 1/2 tsp salt",
+    "1 tsp black pepper",
+    "1 onion, chopped",
+    "1 jalapeno, deseeded, chopped",
+    "4 cloves garlic, minced",
+    "3/4 cup orange juice (2 oranges)",
+    "1 tbsp dried oregano",
+    "2 tsp ground cumin",
+    "1 tbsp olive oil"
+  ],
+  "unmapped": [],
+  "why": "Pork-shoulder lane, slow-cooked and shredded then crisped. Published macros land squarely in-band: 578 cal, 45 g protein, 1.7 g carb per serving over 12 servings - essentially zero-carb, high-protein, real dinner calories. All main ingredients map to the board (pork-shoulder, onions, jalapenos, garlic, orange-juice, olive-oil). Scales trivially to 14 (weigh-and-divide shredded pork). DEDUP RISK: catalog already has 'slow-cooker-pork-carnitas-bowl' (carnitas over rice); this is the low-carb, no-rice crisped version - same flavor family, so adjudicators may rule it a near-duplicate. Flagging honestly rather than dropping.",
+  "confidence": "high on numbers (read from the recipe card nutrition block); MEDIUM overall due to carnitas dedup overlap with the existing rice-bowl entry"
+}

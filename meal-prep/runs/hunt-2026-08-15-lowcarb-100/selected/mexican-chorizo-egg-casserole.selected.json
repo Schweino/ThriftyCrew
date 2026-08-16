@@ -1,0 +1,31 @@
+{
+  "name": "Mexican Chorizo Egg Casserole",
+  "slug": "mexican-chorizo-egg-casserole",
+  "protein": "pork",
+  "cuisine": "Mexican",
+  "method": "oven bake",
+  "source_url": "https://www.thegraciouswife.com/mexican-breakfast-casserole/",
+  "source_servings": 10,
+  "src_cal": 612,
+  "src_carbs": 17,
+  "src_protein": 33,
+  "src_fat": 46,
+  "ingredients": [
+    "1 pound chorizo sausage",
+    "1/2 large onion, finely chopped",
+    "1/2 red bell pepper, finely chopped",
+    "5 cloves garlic, minced",
+    "8 ounces Pepper Jack cheese, shredded",
+    "8 ounces cheddar cheese, shredded",
+    "4 green onions, finely sliced",
+    "1/4 cup cilantro, finely chopped",
+    "2 jalapeno peppers, seeded, deveined, and finely chopped",
+    "12 large eggs",
+    "3 cups half-and-half",
+    "1/2 teaspoon hot sauce",
+    "1/2 teaspoon ground black pepper",
+    "9 corn tortillas, quartered"
+  ],
+  "unmapped": ["chorizo sausage", "pepper jack cheese"],
+  "selection_note": "ACCEPT (concur with adjudicator KEEP). No catalog or run collision: distinct from the American pork sausage/hash-brown egg bake (different flavor family and starch) and from turkey-migas/huevos-rancheros (skillet/bowl, not a baked custard). Widens the American-skewed catalog with a Mexican dinner and exercises the pricer lane with two unmapped flags. WATCH: 612 cal sits ~38 cal under the 650 ceiling, so the extract/map label-DB recompute must be checked for a hot recompute that could tip it NOT-FIT. Cross-lane: collapse to one survivor if a turkey-chorizo/turkey-sausage baked Mexican egg casserole surfaces in the turkey lane."
+}

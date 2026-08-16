@@ -1,0 +1,23 @@
+{
+  "slug": "cheesy-turkey-stuffed-poblanos-bake",
+  "name": "Cheesy Turkey Stuffed Poblanos (Baked)",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 480,
+    "carbs_g": 6.5,
+    "within_calorie_band": true,
+    "within_carb_cap": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "budget_meal_prep_dinner": true,
+    "result": "FIT"
+  },
+  "dupe_check": {
+    "against_catalog": "NOT a dupe. Nearest catalog entry is turkey-chile-relleno-casserole-skillet, but that recipe uses green BELL pepper + RICE + chicken broth (a rice skillet, not low-carb and not poblano-based); this candidate is whole POBLANO chiles stuffed with turkey+mozzarella+green-chile-enchilada-sauce, oven-baked, zero starch. Also distinct from chile-relleno-casserole-ground-beef (beef, egg/flour/milk custard casserole), turkey-stuffed-pepper-soup (soup + rice + bell pepper), green-chile-ground-turkey-skillet (rice/black-bean/corn skillet), and the Mexican-turkey bakes (nacho/enchilada/burrito). No catalog recipe is a whole baked stuffed poblano.",
+    "against_pool": "No colliding turkey candidate observed in the handful in front of me."
+  },
+  "cross_protein_collision_note": "Structurally this is 'ground meat + poblano + cheese, oven-baked whole-stuffed-poblano, low-carb Mexican / chile-relleno format.' The decider should watch other proteins for the same dish: a beef 'cheesy beef stuffed poblanos' or chicken 'stuffed poblano' would be same-dish-different-protein. Note the catalog already holds chile-relleno-casserole-ground-beef (beef) but as an egg-custard casserole, a different format, not a blocker here.",
+  "evidence": "Source nutrition card: 480 cal / 6.5g carbs / 39g protein per serving (kalynskitchen.com). Ingredient set maps cleanly (ground-turkey, olive-oil, enchilada-sauce, garlic, limes, poblano-peppers, mozzarella, green-onions); ground-cumin is an unmapped spice flag, which is wanted this run.",
+  "confidence": "high"
+}

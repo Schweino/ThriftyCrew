@@ -1,0 +1,25 @@
+{
+  "slug": "chicken-zucchini-gruyere-bake",
+  "name": "Chicken Zucchini Casserole (Creamy Gruyere Bake)",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 451,
+    "carbs_g": 9,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "budget_meal_prep_dinner": true,
+    "not_fit": false
+  },
+  "dupe_check": {
+    "catalog": "No duplicate. Nearest catalog dish is 'chicken-divan-broccoli-bake' (chicken + cream-of-mushroom + cheddar + sour cream + rice), but that is a broccoli+rice divan; this is a starchless zucchini/mushroom bake with gruyere/swiss + fresh cream, so vegetable, cheese, and starch axes all differ. 'chicken-cordon-bleu-casserole' shares swiss+sour cream but is defined by ham+rice.",
+    "pool": "Only candidate ruled in this chicken-bake lane; against accepted-slugs the creamy-chicken picks (jalapeno-popper-chicken-casserole = jalapeno/cream-cheese/bacon; chicken-bacon-ranch-cauliflower-bake = ranch/bacon/cauliflower) are different flavor families, not duplicates.",
+    "is_dupe": false
+  },
+  "cuisine": "American",
+  "widens_catalog": "Yes - starchless (no-rice) creamy chicken bake with gruyere; catalog's chicken bakes skew rice-based (divan, cordon bleu, poppy seed).",
+  "cross_protein_collision_note": "Structurally a 'protein + vegetable + creamy melted cheese, baked low-carb' template. Strongest cross-protein twin is the ACCEPTED 'keto-turkey-broccoli-cheddar-casserole' (turkey analog of the same creamy-cheese-veg-bake construction) - decider should confirm the zucchini/gruyere vs broccoli/cheddar differentiation holds. Also watch any pork or turkey creamy zucchini/mushroom gratin in other selectors' pools; 'turkey-zucchini-noodle-casserole' (accepted) shares zucchini+casserole but is a zucchini-noodle build, not the same dish.",
+  "unmapped_note": "Carries 'gruyere/swiss cheese blend' with no dedicated board id (generic shredded-cheese exists) - retained per v2.1 5.1 to exercise the pricer lane, not penalized."
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "french-onion-smothered-pork-chops",
+  "name": "French Onion Smothered Pork Chops",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 464,
+    "carbs_g": 8,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "budget_meal_prep": true,
+    "result": "FIT"
+  },
+  "dupe_check": {
+    "against_catalog_digest": "Not a dupe. Nearest pork neighbor is 'southern-smothered-pork-chops-and-rice' (chicken-broth, flour, heavy-cream, onions, pork-chops, rice): that is a Southern flour/cream onion-gravy chop served over rice, a starch-based dinner. This candidate is caramelized-onion + beef stock + sherry + melted Swiss with no starch (8g carbs). Same protein and skillet method, but different sauce family (French onion caramelized+cheese vs Southern cream gravy) and different starch (none vs rice) - distinct dish.",
+    "against_accepted_slugs": "No collision; accepted-slugs.json holds no pork chop and no French onion dish as of this reading.",
+    "against_pork_pool": "No other French onion or smothered-cheese pork chop seen in this adjudicator's handful."
+  },
+  "cross_protein_collision_flags": [
+    "French-onion flavor family already lives in the catalog as OTHER proteins: 'slow-cooker-french-onion-chicken-bowls' (chicken) and 'french-onion-pot-roast-bowls' (beef). Both are bowl/starch formats; this is a low-carb bone-in chop, so not a dupe - but decider should watch for a same-dish French-onion-PORK twin (e.g. a French onion pork chop or French onion pork bowl) arriving from another selector's pool.",
+    "Structurally this is the 'protein + caramelized onion + beef stock + melted cheese' French-onion template; the chicken-bowls version is its closest cross-protein cousin."
+  ],
+  "unmapped_ingredients_note": "sherry and swiss cheese flagged unmapped - intentionally kept per v2.1 5.1 to exercise the pricer lane; not a rejection reason.",
+  "by": "adjudicator"
+}

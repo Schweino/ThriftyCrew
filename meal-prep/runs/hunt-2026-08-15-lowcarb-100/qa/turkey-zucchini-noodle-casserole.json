@@ -1,0 +1,21 @@
+﻿{
+  "slug": "turkey-zucchini-noodle-casserole",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    { "check": "ingredient-coverage",
+      "severity": "note",
+      "detail": "Olive oil (3 1/2 tbsp) is a spec-only line, but it traces to source step 2 ('with 1 tablespoon of oil') and is documented as a list addition in writer_notes; scaled on the same 3.5x ratio. Not invented.",
+      "owner": "mapper" },
+    { "check": "scaling",
+      "severity": "note",
+      "detail": "Mozzarella (791 g) and Parmesan (98 g) follow the printed measure at label weights (7 cups x 113 g; 0.875 cup x 112 g/cup-equivalent) rather than the source parentheticals (250 g/2 cups -> 875 g; 35 g/quarter-cup -> 122 g). Deviation is deliberate and documented in writer_notes; measures themselves scale at exactly 3.5x.",
+      "owner": "mapper" },
+    { "check": "prose-numbers",
+      "severity": "note",
+      "detail": "stat.cost_ps = 3.86 while cost_per_serving = 2.58 and cost_per_serving_true = 3.21; the {{cost_ps}} token in cost_closing_html ('at everyday cost') will render 3.86 next to a cost line calling 2.58 the everyday per-bowl figure. Tokens are correct by construction and all prose LITERALS (36.08, 2.58, 44.91, 3.21, 9.13, 54.04) match their machine fields exactly, so this is not blocking here; flagging for the batch auditor who owns cost anchoring.",
+      "owner": "mapper" }
+  ],
+  "notes": "Both anchors reached; live page matches the extraction line for line (10 ingredients, 4 servings, 4 steps). All 10 source ingredients present in spec at a single consistent 3.5x ratio (4 -> 14 servings): turkey 1 lb -> 3.5 lb, zucchini 4 -> 14, tomatoes 1 -> 3.5 cans, sauce 1 -> 3.5 cans, butter 2 -> 7 tbsp, salt 0.5 -> 1.75 tsp, Italian seasoning 1 -> 3.5 tsp, garlic powder 0.5 -> 1.75 tsp, mozzarella 2 -> 7 cups, Parmesan 0.25 -> 0.875 cup. Method survives: brown-in-oil, mix-all-in-dish with butter folded in (matches source step 3), cheese on top, 375F bake with optional broil. Additions are documented and defensible: zucchini salt-and-drain answers the source's own liquid warning using bought salt; Italian seasoning folded into the combine step fixes the source's orphaned ingredient; 30-40 min bake is a scaled method time. Title names the same dish with the turkey option the spec builds. Credit points at the correct URL. Prose cost literals all match the spec's machine cost fields.",
+  "checked_at": "2026-08-16"
+}

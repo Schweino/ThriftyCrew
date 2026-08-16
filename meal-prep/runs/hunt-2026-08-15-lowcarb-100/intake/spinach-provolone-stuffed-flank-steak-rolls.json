@@ -1,0 +1,70 @@
+{
+  "name": "Spinach Provolone Stuffed Flank Steak Rolls",
+  "slug": "spinach-provolone-stuffed-flank-steak-rolls",
+  "protein": "beef",
+  "cuisine": "American",
+  "source_url": "https://gimmedelicious.com/spinach-cheese-stuffed-flank-steak-rolls/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Beef Flank/Sirloin Steak", "grams": 1588, "buy": "3 1/2 lb flank steak, butterflied" },
+    { "item": "Vegetable Oil", "grams": 98, "buy": "7 tbsp vegetable oil" },
+    { "item": "Yellow Onion", "grams": 201, "buy": "1 3/4 cups chopped onion (about 2 medium)" },
+    { "item": "Garlic", "grams": 36, "buy": "12 cloves garlic, minced (about 1 head)" },
+    { "item": "Cream Cheese", "grams": 397, "buy": "14 oz cream cheese (one and three-quarter 8 oz bricks)" },
+    { "item": "Provolone Cheese", "grams": 794, "buy": "28 oz sliced provolone (1 3/4 lb)" },
+    { "item": "Spinach", "grams": 210, "buy": "7 cups baby spinach (about 7 oz)" },
+    { "item": "Salt", "grams": 12, "buy": "2 tsp" },
+    { "item": "Black Pepper", "grams": 2, "buy": "1 tsp" }
+  ],
+  "macros_per_serving": { "calories": 546, "protein_g": 42.2, "carbs_g": 5.4, "fat_g": 40.1 },
+  "writer_notes": [
+    "SOURCE YIELD 4 (2 pinwheel rolls per serving from a 1 lb flank), rebuilt to 14 at the mapper's 3.5x scale, which is 28 rolls and about 113 g of raw flank per serving. Every gram and buy string transcribed from mapped\\spinach-provolone-stuffed-flank-steak-rolls.json; no number computed in prose.",
+    "MACROS transcribed from the mapper's food-DB recompute (546.2 cal, 42.2 g protein, 5.4 g carbs, 40.1 g fat per serving), reported as stat 546 / 42 / 5 / 40 and re-verified by build-v2-spec's food-macros-db recompute at 14 servings. In band for this run (400 to 650 cal, 35 g carb or less): 546 cal sits inside the window with about 104 cal of ceiling headroom, and carbs at 5.4 g are nowhere near the 35 g limit.",
+    "VEGETABLE OIL is the source's bare 'oil' line, booked to the house vegetable-oil generic per the mapper's ruled_substitutions (the recipe names no oil type). It fries the onion and garlic base that goes into the filling, so it is counted in full and named in the filling step.",
+    "PROVOLONE is the primary of the source's own 'or mozzarella or your favorite melting cheese' line, so booking provolone matches the source's published nutrition basis. The buy string names it as sliced to match the sliced-provolone commodity the engine buys; no slice-weight assumption exists because the source states a weight (8 oz scaled to 28 oz).",
+    "CREAM CHEESE is full-fat, matching the mapper's deliberate choice (the 1/3-fat map entry would deflate calories). Booked at 14 oz / 397 g and named in the filling step.",
+    "SPINACH is FRESH baby spinach, matching the source and the buy string. The mapper flagged a stamp-time hazard: the ingredient map routes the item name 'Spinach' to frozen-chopped-spinach, so pricing and item_id resolve to the frozen commodity even though the dish is fresh. Macros are unaffected (fresh and frozen rows are per-gram identical); the price class is wrong. Left as the mapper mapped it and flagged in the report, not fixed here.",
+    "SALT AND PEPPER is the source's unmeasured to-taste line (source states NO quantity); booked here at a smallest-defensible to-taste minimum (Salt 2 tsp, Black Pepper 1 tsp per 14-serving batch, both zero/near-zero macro) so the 'season with salt and pepper' steps (make_it 2, 3, 4) are cook-as-shopped and clear the PHANTOM buy-coverage gate (2026-08-16 repair). Grams are macro-immaterial.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked the costed list against the steps both directions: flank steak (make_it 2, 4, 5, 6), vegetable oil (3), onion (3), garlic (3), cream cheese (3, 4), provolone (4), spinach (4).",
+    "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it. Every statement is grounded in the recipe's own buy amount, with package sizes referenced generically and never with a per-line cost. Provolone is named as sliced to match the commodity the engine buys, so there is no block-beats-tub trap. Re-walk the bullets against cost_lines once costed before publish.",
+    "PORTION METHOD: the rolls are one component, so weigh the full baking dish of cooked pinwheels, subtract the empty weight noted in Step 1, and divide by 14. Two rolls per serving is the source's own portion; the scale weight is the honest tie-breaker when rolls vary in size.",
+    "COST NOTE for the repair pass: db\\ingredients.json has no 'Cream Cheese' row (only '1/3 Fat Cream Cheese'), so the item may resolve with no bid and cost as zero even though the cream-cheese commodity is on the feed. Flagged in the report; a real bought ingredient must not cost nothing."
+  ],
+  "prose": {
+    "intro_html": "Flank steak is the cut that rewards a little knife work. Butterfly it open, spread it with a warm cream cheese and garlic filling, lay down fresh spinach and slices of provolone, then roll it up and slice it into pinwheels. What comes out of the oven looks like something off a steakhouse menu, and it costs a fraction of one. The filling does the heavy lifting here, turning a lean cut into something rich without a pile of added carbs, which is why this plate lands around <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving with under 10 grams of carbs. Sear the rolls to build a crust, finish them in the oven, and you have two weeks of dinners that eat like a splurge.",
+    "shop_smart": [
+      "<strong>Three and a half pounds of flank steak is the anchor.</strong> This is where most of the money and nearly all of the protein live, so buy the one big cut and butterfly it yourself instead of paying extra for anything pre-cut. If the case has sirloin cheaper the week you shop, grab that instead, because the two cook and slice the same way and sit in the same price class.",
+      "<strong>The cheese is the whole point of the filling.</strong> Cream cheese whipped with sauteed onion and garlic gives the rolls their richness, and the sliced provolone melts into every pinwheel. Buy the provolone sliced from the deli or the pre-sliced pack, whichever is cheaper the day you shop, since both melt the same once they hit the oven.",
+      "<strong>Spinach and aromatics round it out for pocket change.</strong> A few big handfuls of fresh baby spinach, a couple of onions, and a head of garlic are the rest of the build, and they barely move the cart. The spinach wilts down to almost nothing inside the roll, so do not be shy piling it on the steak before you roll it.",
+      "<strong>Kitchen twine or toothpicks are the only special gear.</strong> You need something to hold the rolls together while they sear and bake, and kitchen twine or a box of toothpicks both do the job. Most kitchens already have one or the other, so this is not a real add to the cart."
+    ],
+    "make_it": [
+      "Weigh your empty baking dish or storage pan and write the number down. At the end you will weigh it full and divide by 14, which is the only honest way to split a batch this size into even servings.",
+      "Heat the oven to 375 degrees. Butterfly each flank steak by slicing it open horizontally and pounding it flat, then season both sides with salt and pepper and set them aside.",
+      "Make the filling. Heat the vegetable oil in a skillet over medium-high, add the chopped onion, and cook two to three minutes until soft and almost golden. Add the garlic and cook another minute, then pull the pan off the heat and stir in the cream cheese until it melts into a smooth spread. Season with salt and pepper.",
+      "Build the rolls. Spread the cream cheese filling over the opened steaks, then layer on the spinach and the provolone slices. Roll each steak up snug and tie it with kitchen twine or pin it with toothpicks, then slice between the ties into pinwheels and season the cut faces lightly with salt and pepper.",
+      "Sear the pinwheels. Heat a large heavy pan hot, add the rolls, and sear two to three minutes per side to build a crust. Work in batches so the pan stays hot, because crowded meat steams instead of searing.",
+      "Transfer the seared rolls to your baking dish and bake ten minutes, until the cheese is molten and the beef is done to your liking. Pull them out, tent with foil, and rest five minutes before portioning.",
+      "Weigh the full dish, subtract the empty weight from Step 1, and divide by 14. Give each container that exact weight, aiming for two rolls in every one so the servings come out even."
+    ],
+    "portion_html": "Set the full baking dish on your scale and subtract the empty weight you noted in Step 1 to get the cooked total. Divide that number by 14 and give each container that exact weight, which works out to about two pinwheels apiece. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a stuffed flank steak dinner that looks like a restaurant plate. The steak carries the protein, the cream cheese and provolone carry the richness, and the whole thing stays under 10 grams of carbs a serving.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Spinach and provolone stuffed flank steak rolls for meal prep: butterflied flank steak spread with a cream cheese and garlic filling, layered with fresh spinach and provolone, rolled and sliced into pinwheels, seared and baked, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 10 grams of carbs.",
+    "keywords": "stuffed flank steak, flank steak pinwheels, spinach provolone steak rolls, low carb steak dinner, high protein beef meal prep",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "totalTime": "PT30M",
+    "steps": [
+      "Weigh the empty baking dish and note the number for portioning later.",
+      "Heat the oven to 375 degrees, butterfly and pound the flank steak, and season with salt and pepper.",
+      "Saute the onion and garlic in the oil, then stir in the cream cheese off the heat to make the filling.",
+      "Spread the filling on the steak, layer on spinach and provolone, roll and tie, then slice into pinwheels.",
+      "Sear the pinwheels two to three minutes a side in batches.",
+      "Bake the rolls ten minutes, then tent and rest five minutes.",
+      "Weigh the full dish, subtract the empty weight, and divide across 14 containers."
+    ]
+  }
+}

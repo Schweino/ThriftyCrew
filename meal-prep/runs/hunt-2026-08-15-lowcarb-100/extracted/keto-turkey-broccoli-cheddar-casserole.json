@@ -1,0 +1,38 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Keto Ground Turkey Broccoli Casserole: Low Carb Recipe Guide",
+  "source_url": "https://www.grazewithme.com/keto-ground-turkey-broccoli-casserole-low-carb-recipe-guide/",
+  "servings": 4,
+  "time_total": null,
+  "time_active": null,
+  "ingredients": [
+    { "raw": "1 lb ground turkey", "item": "ground turkey", "qty": "1", "unit": "lb", "prep": null, "optional": false, "section": null },
+    { "raw": "1 large head broccoli, cut into florets", "item": "broccoli", "qty": "1", "unit": "large head", "prep": "cut into florets", "optional": false, "section": null },
+    { "raw": "1 cup shredded cheddar cheese", "item": "shredded cheddar cheese", "qty": "1", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1 cup heavy cream", "item": "heavy cream", "qty": "1", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "2 cloves garlic, minced", "item": "garlic", "qty": "2", "unit": "clove", "prep": "minced", "optional": false, "section": null },
+    { "raw": "1 onion, finely chopped", "item": "onion", "qty": "1", "unit": "each", "prep": "finely chopped", "optional": false, "section": null },
+    { "raw": "2 tablespoon olive oil", "item": "olive oil", "qty": "2", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1/2 cup chicken broth", "item": "chicken broth", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "Salt and pepper to taste", "item": "salt and pepper", "qty": null, "unit": null, "prep": null, "optional": true, "section": null }
+  ],
+  "instructions": [
+    "Preheat your oven to 375 degrees Fahrenheit.",
+    "In a large pan, heat the olive oil over medium heat. Add the onion and garlic, and saute until the onions become translucent, about 4-5 minutes.",
+    "Add the ground turkey to the pan, breaking it up with a wooden spoon. Cook until the turkey is browned and fully cooked, about 7-8 minutes.",
+    "Season the turkey mixture with salt and pepper to taste. Remove from the heat and set aside.",
+    "In a large pot of boiling water, blanch the broccoli florets for 2-3 minutes, until they become bright green and slightly tender. Drain and set aside.",
+    "In a saucepan, heat the chicken broth and heavy cream, stirring until the mixture begins to simmer. Add half of the shredded cheddar cheese and stir until melted and smooth.",
+    "Combine the turkey mixture, blanched broccoli, and cheese sauce in a large casserole dish, mixing until everything is evenly coated.",
+    "Sprinkle the remaining cheddar cheese over the top of the casserole.",
+    "Place the casserole dish in the preheated oven and bake for 20-25 minutes, or until the cheese on top is melted and bubbly.",
+    "Remove the casserole from the oven and let it sit for a few minutes before serving."
+  ],
+  "nutrition": {
+    "as_stated_per_serving": "Calories: 450 | Total Fat: 30g | Saturated Fat: 18g | Trans Fat: 0g | Unsaturated Fat: 12g | Cholesterol: 120mg | Sodium: 320mg | Carbohydrates: 8g | Net Carbohydrates: 6g | Fiber: 2g | Sugar: 3g | Protein: 35g"
+  },
+  "concerns": [
+    "Prep/cook time not visibly stated on the page (only in schema metadata), so time_total left null."
+  ]
+}

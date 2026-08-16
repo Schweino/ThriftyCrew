@@ -1,0 +1,21 @@
+{
+  "slug": "keto-turkey-meatloaf",
+  "name": "Keto Turkey Meatloaf",
+  "protein": "turkey",
+  "verdict": "DUPE",
+  "dupe_of": "turkey-meatloaf-with-mashed-potatoes",
+  "fit": {
+    "calories": 489,
+    "carbs_g": 6.4,
+    "in_cal_band_400_650": true,
+    "under_35g_carb": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "fit_ok": true
+  },
+  "evidence": "Duplicates catalog turkey recipe 'turkey-meatloaf-with-mashed-potatoes' (Turkey Meatloaf with Mashed Potatoes): same protein (ground turkey), same flavor family (ketchup-glazed American meatloaf), same method (oven bake), same form (baked loaf) - four of four identity axes match; the only differences are a keto binder swap (almond flour for bread crumbs) and dropping the starchy side, neither of which changes the dish - the entree IS the same dinner.",
+  "borderline_note": "Genuine tension for the decider: this is a LOW-CARB run and the existing catalog meatloaf is the high-carb plate (bread crumbs + potato/rice starch side, not low-carb-fit). If the decider wants a low-carb meatloaf slot the catalog currently lacks, this is the candidate to promote - but as a DISH it is the same turkey meatloaf, so shipping both reads as redundant. Ruling DUPE per 'only one survives'; flagging so the audit stage can override if a low-carb variant is explicitly wanted.",
+  "cross_protein_collision": "Structurally this is 'ketchup-glazed baked meatloaf'. A beef meatloaf or pork meatloaf in another selector's pool would be the same-dish-different-protein twin - not a dupe of this turkey entry, but the decider's cross-protein merge should watch for a cluster of near-identical meatloaves across proteins.",
+  "ruled_by": "adjudicate-1",
+  "ruled_at": "2026-08-15"
+}

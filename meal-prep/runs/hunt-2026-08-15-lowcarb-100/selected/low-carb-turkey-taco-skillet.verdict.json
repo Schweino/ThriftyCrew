@@ -1,0 +1,22 @@
+{
+  "slug": "low-carb-turkey-taco-skillet",
+  "name": "Low Carb Turkey Taco Skillet",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "borderline": true,
+  "conditions_check": {
+    "calories": 446,
+    "carbs_g": 6,
+    "in_calorie_band_400_650": true,
+    "carbs_le_35": true,
+    "budget_mealprep": true,
+    "scalable_to_14": "yes, source 2 servings x7 = 7 lb ground turkey",
+    "no_seafood": true,
+    "fit": "FIT - published 446 cal / 6g carbs clears both gates"
+  },
+  "catalog_dupe": null,
+  "evidence": "Nearest catalog turkey taco dishes are all starch- or liquid-based - turkey-taco-rice-skillet (rice base), turkey-taco-casserole, turkey-taco-soup, and green-chile-ground-turkey-skillet (green-chile flavor, not classic taco); this candidate is a no-starch low-carb skillet (ground turkey + bell pepper + Mexican cheese, no rice/bean/pasta), so it differs on the starch axis that defines those plates and is not a duplicate.",
+  "borderline_reason": "Structurally adjacent to turkey-taco-rice-skillet - same protein, taco/Tex-Mex spice family, skillet method; distinguished only by the absence of the rice base. Flagged so the decider can confirm the low-carb no-starch version is wanted as a distinct plate rather than a rice-skillet twin.",
+  "cross_protein_collision": "This is structurally a generic low-carb taco-meat skillet (ground protein + taco spice + bell pepper + cheese, no starch). Watch other-protein pools for a low-carb ground-beef taco skillet or low-carb chicken taco skillet - any of those would be the same dinner with the protein swapped. Also note keto-cheeseburger-skillet is already accepted (different flavor family, cheeseburger not taco - not a collision).",
+  "unmapped_ok": "Carries 'shredded Mexican blend cheese' as unmapped; per v2.1 5.1 this is wanted for the pricer lane, not a penalty."
+}

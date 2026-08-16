@@ -1,0 +1,35 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Flank Steak & Green Beans",
+  "source_url": "https://www.momsintofitness.com/recipes/flank-steak-green-beans/",
+  "servings": 4,
+  "time_total": null,
+  "time_active": null,
+  "ingredients": [
+    { "raw": "1 LB. FLANK STEAK", "item": "flank steak", "qty": "1", "unit": "lb", "prep": null, "optional": false, "section": null },
+    { "raw": "1/4 CUP OLIVE OIL", "item": "olive oil", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1 CLOVE GARLIC, MINCED", "item": "garlic", "qty": "1", "unit": "clove", "prep": "minced", "optional": false, "section": null },
+    { "raw": "3 TBSP HONEY", "item": "honey", "qty": "3", "unit": "tbsp", "prep": null, "optional": false, "section": null },
+    { "raw": "2 TBSP RED WINE VINEGAR", "item": "red wine vinegar", "qty": "2", "unit": "tbsp", "prep": null, "optional": false, "section": null },
+    { "raw": "1/4 CUP COCONUT AMINOS (OR SOY SAUCE)", "item": "coconut aminos (or soy sauce)", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "SALT AND PEPPER", "item": "salt and pepper", "qty": null, "unit": null, "prep": null, "optional": true, "section": null },
+    { "raw": "16 OUNCES FRESH OR FROZEN GREEN BEANS", "item": "green beans, fresh or frozen", "qty": "16", "unit": "oz", "prep": null, "optional": false, "section": "Green Beans" },
+    { "raw": "1/4 CUP OLIVE OIL", "item": "olive oil", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": "Green Beans" },
+    { "raw": "1 TBSP RED WINE VINEGAR", "item": "red wine vinegar", "qty": "1", "unit": "tbsp", "prep": null, "optional": false, "section": "Green Beans" },
+    { "raw": "1 TSP DIJON MUSTARD", "item": "dijon mustard", "qty": "1", "unit": "tsp", "prep": null, "optional": false, "section": "Green Beans" },
+    { "raw": "1/3 CUP GRATED PARMESAN", "item": "parmesan", "qty": "1/3", "unit": "cup", "prep": "grated", "optional": false, "section": "Green Beans" }
+  ],
+  "instructions": [
+    "Marinate flank steak for at least 1 hour (up to overnight). Place olive oil, garlic, honey, vinegar, coconut aminos and salt & pepper in a bowl; add steak, then cover and refrigerate.",
+    "Grill each side 2 minutes on hot to create a sear, then continue to cook until your desired doneness. Let steak rest 10 minutes before slicing across the width of the steak at a diagonal.",
+    "In a large skillet cook green beans covered with water, usually 4-5 minutes for fresh beans. Drain.",
+    "Mix olive oil, vinegar and mustard. Pour over green beans and toss. Sprinkle with parmesan cheese.",
+    "Serve 4 ounces of steak with 1 cup cooked vegetables."
+  ],
+  "nutrition_per_serving": { "calories": 516, "total_fat_g": 38, "carbs_g": 18, "protein_g": 28, "fiber_g": 2, "sugars_g": 15 },
+  "concerns": [
+    "\"SALT AND PEPPER\" has no quantity on the page; marked optional as an unmeasured to-taste seasoning line.",
+    "Page prints fractions as unicode (\u00bc, 1/3); transcribed as ascii fractions without changing values."
+  ]
+}

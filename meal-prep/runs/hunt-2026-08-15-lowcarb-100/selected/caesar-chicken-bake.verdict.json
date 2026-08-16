@@ -1,0 +1,22 @@
+{
+  "slug": "caesar-chicken-bake",
+  "name": "Caesar Chicken Bake",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 581,
+    "carbs_g": 9,
+    "in_band": true,
+    "note": "581 cal is inside 400-650; 9g carb is well under the 35g ceiling; oven-bake casserole, weigh-and-divide scalable to 14; no seafood as a dish."
+  },
+  "dupe_check": {
+    "catalog": "No Caesar dish exists in the 544-recipe digest. Nearest chicken bakes are chicken-cordon-bleu-casserole (ham+swiss), chicken-divan-broccoli-bake (broccoli+cream-of), hunters-chicken-bbq-bacon-bake (BBQ+bacon), and loaded-chicken-and-potato-casserole (potato base) - all a different sauce/flavor family, so not a duplicate.",
+    "accepted_slugs": "Read fresh: closest live entry is chicken-bacon-ranch-cauliflower-bake, but that is a ranch-and-bacon cauliflower bake, a different sauce family and different base from a Caesar-dressing-bound chicken bake - not a dupe."
+  },
+  "evidence": "Distinguishing element is the Caesar dressing binding (garlic/parmesan/lemon profile); no catalog or accepted recipe uses it, so no near-duplicate.",
+  "flags": [
+    "Caesar dressing traditionally contains anchovy; treated as a trace seasoning, not a seafood dish - decider may want to confirm against the 'no seafood' condition.",
+    "unmapped ingredient: croutons (topping) - wanted for the pricer lane, not a reason to drop."
+  ],
+  "cross_protein_collision": "Structure is protein baked under a creamy dressing + shredded cheese + crumb topping. Could collide with a turkey version (e.g. 'Caesar turkey bake' or a creamy/ranch turkey bake) or a pork-chop creamy-cheese bake in another selector's pool. Decider should watch for a same-structure Caesar/creamy-dressing bake under turkey or pork."
+}

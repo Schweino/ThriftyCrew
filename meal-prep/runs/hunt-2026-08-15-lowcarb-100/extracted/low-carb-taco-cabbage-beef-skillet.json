@@ -1,0 +1,41 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Low Carb Taco Cabbage Skillet",
+  "source_url": "https://www.heyketomama.com/low-carb-taco-cabbage-skillet/",
+  "servings": 3,
+  "time_total": "35 minutes",
+  "time_active": "15 minutes prep, 20 minutes cook",
+  "ingredients": [
+    { "raw": "1 pound of ground beef", "item": "ground beef", "qty": "1", "unit": "pound", "prep": null, "optional": false, "section": null },
+    { "raw": "\u00bd cup of salsa", "item": "salsa", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "2 cups of cabbage, shredded", "item": "cabbage", "qty": "2", "unit": "cup", "prep": "shredded", "optional": false, "section": null },
+    { "raw": "2 Teaspoons of chili powder", "item": "chili powder", "qty": "2", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "\u00be cup of cheese, shredded", "item": "cheese", "qty": "3/4", "unit": "cup", "prep": "shredded", "optional": false, "section": null },
+    { "raw": "Salt and pepper to taste", "item": "salt and pepper", "qty": null, "unit": null, "prep": null, "optional": true, "section": null },
+    { "raw": "Optional garnishes: sour cream and green onions", "item": "sour cream and green onions", "qty": null, "unit": null, "prep": null, "optional": true, "section": null }
+  ],
+  "instructions": [
+    "Brown ground beef in skillet and drain fat.",
+    "Add salsa, seasoning, and cabbage to pan and bring to low boil.",
+    "Cover and reduce heat to medium and cook for 10-12 minutes or until cabbage is soft.",
+    "Turn off heat and mix in cheese until melted.",
+    "Garnish, if desired with sour cream, green onions, avocado or favorite toppings."
+  ],
+  "nutrition_per_serving": {
+    "calories": 576,
+    "total_fat": "37g",
+    "saturated_fat": "16g",
+    "trans_fat": "1g",
+    "unsaturated_fat": "16g",
+    "cholesterol": "165mg",
+    "sodium": "789mg",
+    "carbohydrates": "11g",
+    "fiber": "3g",
+    "sugar": "5g",
+    "protein": "50g"
+  },
+  "concerns": [
+    "Instructions mention avocado as a garnish option but it does not appear in the ingredient list."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "slug": "crustless-bacon-gruyere-quiche",
+  "name": "Crustless Bacon & Gruyere Quiche",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "fit_evidence": "Published 416 cal / 4g carbs per serving clears the band on the source's own numbers (>=400 cal floor, <=35g carb). No seafood, oven-bake scales to 14. CAUTION: 416 cal sits just above the 400 floor - flag for the decider that a label-DB recompute could dip it below 400; on published numbers it is FIT.",
+  "dupe_evidence": "No catalog duplicate: the digest has no quiche/frittata/crustless egg custard. Nearest egg bakes are baked-sausage-egg-breakfast-hash and turkey-sausage-hash-brown-breakfast-bake, both potato/hash-brown starch hashes, not a crustless gruyere custard. No accepted-slugs.json match.",
+  "cross_protein_flags": [
+    "STRONG same-format pool-dupe risk: sausage-spinach-crustless-quiche (present in the pool as a verdict file) is the same crustless-quiche identity - egg custard bake, no crust - differing only in mix-ins (pork sausage + spinach vs bacon + gruyere + green onion). Decider should adjudicate these two head-to-head; they may be one dish with two garnishes.",
+    "Broader egg-bake family in the pool to distinguish from (custard quiche vs looser egg bakes/casseroles): bacon-cheeseburger-egg-bake, broccoli-cheddar-sausage-egg-bake, sausage-broccoli-cheddar-egg-bake, keto-sausage-broccoli-egg-casserole, sausage-cottage-cheese-egg-bake, beef-chile-relleno-egg-bake. These read as distinct dinners but share the egg-cheese-bake board - decider should confirm no two collapse into one.",
+    "Identity is egg+cheese, not pork - classed pork only for the bacon; a ham-and-gruyere or plain spinach-gruyere crustless quiche elsewhere would be a twin."
+  ],
+  "notes": "Gruyere flagged unmapped (no board home) - kept deliberately per v2.1 5.1 pricer-lane exercise; substitutes to shredded-cheese if needed."
+}

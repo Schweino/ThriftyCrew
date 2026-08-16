@@ -1,0 +1,19 @@
+{
+  "slug": "ground-beef-zucchini-pesto-skillet",
+  "name": "Ground Beef and Zucchini Pesto Skillet",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "status": "FIT",
+    "src_cal": 414,
+    "src_carbs": 5.8,
+    "evidence": "414 cal is within the 400-650 band; 5.8g total carbs clears the 35g ceiling; pure stovetop skillet, weigh-and-divide scalable to 14 servings; no seafood. All conditions met."
+  },
+  "catalog_dupe": null,
+  "catalog_evidence": "Closest catalog beef dish is cheesy-zucchini-beef-rice-skillet (ground beef + zucchini + skillet), but it is rice-based with a diced-tomato/cheddar profile - different starch (rice vs none) and different sauce family (tomato-broth vs basil pesto + goat cheese), so only 2 of 4 axes match. No pesto or goat-cheese ground-beef dish exists in the catalog; the Mediterranean beef entries (gyro/hummus/kofta bowls) are all rice-based yogurt/feta profiles. Not a duplicate.",
+  "accepted_dupe": null,
+  "accepted_evidence": "Among accepted beef slugs, only garlic-butter-steak-bites-zucchini shares zucchini, but it is steak chunks in garlic butter, not ground beef in pesto - different protein form and sauce. No collision.",
+  "cross_protein_watch": "Structurally a ground-protein + zucchini + pesto + soft-cheese skillet with no starch base. Decider should watch for a same-dish twin under another protein - a ground-turkey or ground-chicken zucchini-pesto skillet, or a chicken-pesto-zucchini skillet, would be the same dinner. Flagging for the cross-protein merge pass.",
+  "adjudicated_by": "select-adjudicator",
+  "adjudicated_at": "2026-08-16"
+}

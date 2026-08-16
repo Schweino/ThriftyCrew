@@ -1,0 +1,211 @@
+{
+  "slug": "balsamic-sirloin-steak-sheet-pan",
+  "title": "Balsamic Steak & Veggie Sheet Pan",
+  "source_url": "https://lifewithjanet.com/2026/05/15/balsamic-steak-veggie-sheet-pan/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "beef",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters, drift noted per line where it exceeds 5%.",
+  "ruled_substitutions": [],
+  "ingredients": [
+    {
+      "source_raw": "1 1/2 lbs sirloin steak, sliced against the grain into 1/2-inch strips",
+      "item": "Beef Flank/Sirloin Steak",
+      "bid": "sirloin-steak",
+      "board": "weekly",
+      "grams": 2381,
+      "buy": "5 1/4 lb, sliced against the grain into 1/2-inch strips",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by an explicit source WEIGHT (1.5 lb for 4 = 170 g/serving raw, right on the catalog's protein-per-serving norm), exact 3.5x, zero drift. DB row Beef Flank/Sirloin Steak (USDA lean raw 155 cal/100 g). Board sirloin-steak 7 of 7, cheapest Family Fare $5.49/lb."
+    },
+    {
+      "source_raw": "2 cups broccoli florets",
+      "item": "Broccoli Florets",
+      "bid": "broccoli",
+      "board": "weekly",
+      "grams": 595,
+      "buy": "7 cups florets (about 1 1/3 lb)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities cup=85 g, exact 3.5x. Board broccoli 7 of 7, cheapest Hy-Vee $1.8533/lb."
+    },
+    {
+      "source_raw": "1 large red bell pepper, sliced into strips",
+      "item": "Red Bell Pepper",
+      "bid": "red-bell-pepper",
+      "board": "recipe",
+      "grams": 420,
+      "buy": "3 1/2 red bell peppers, sliced into strips",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Dedicated red-bell-pepper commodity (recipe board), variety-correct per the green-is-not-red standing rejection. 6 of 7 stores, cheapest Sam's $0.83/each. Booked at the house bell each = 120 g (source says 'large'; house table has no large for bells - hatch-casserole precedent booked yellow the same way; the gap is under 2 cal/serving)."
+    },
+    {
+      "source_raw": "1 large yellow bell pepper, sliced into strips",
+      "item": "Yellow Bell Pepper",
+      "bid": "bell-peppers",
+      "board": "weekly",
+      "grams": 420,
+      "buy": "3 1/2 yellow bell peppers, sliced into strips",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "EXACT hatch-green-chile-chicken-casserole precedent: the board's bell-peppers commodity claims yellow (its cell set includes Family Fare 'Yellow Bell Pepper' $1.50) - a board-sanctioned class match, not a mapper variety stretch. SAME CLASS CAVEAT re-flagged: the commodity's cheapest cells are GREEN bells ($0.77-0.99), so the derived price understates a yellow-only basket. DB row Yellow Bell Pepper (USDA, added by hatch). House each = 120 g."
+    },
+    {
+      "source_raw": "1 medium red onion, sliced into wedges",
+      "item": "Red Onion",
+      "bid": "red-onion",
+      "board": "weekly",
+      "grams": 385,
+      "buy": "3 1/2 medium, sliced into wedges",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Dedicated red-onion commodity (the variety-pricing precedent itself), 5 of 7 stores, cheapest Aldi $1.095/lb. densities each=110 g."
+    },
+    {
+      "source_raw": "2 tablespoons olive oil (for vegetables)",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 94.5,
+      "buy": "7 tbsp (for vegetables)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 13.5 g/tbsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "Salt and black pepper, to taste",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 6,
+      "buy": "salt and black pepper, to taste (about 1 tsp salt)",
+      "optional": true,
+      "decision": "mapped-optional",
+      "notes": "To-taste seasoning, optional per source. Zero-macro; nominal 1 tsp = 6 g. Pepper half rides the marinade's black-pepper line commodity-wise. Board 7 of 7."
+    },
+    {
+      "source_raw": "Fresh parsley, chopped, for garnish (optional)",
+      "item": "Fresh Parsley",
+      "bid": "fresh-parsley",
+      "board": "weekly",
+      "grams": 7.6,
+      "buy": "2 tbsp chopped, for garnish (optional)",
+      "optional": true,
+      "decision": "mapped-optional",
+      "notes": "OPTIONAL garnish per the source's own line; excluded from the band computation (sensitivity +0.2 cal/serving). Nominal 2 tbsp chopped = 7.6 g (USDA 3.8 g/tbsp). fresh-parsley 3 of 7 stores, cheapest Hy-Vee $0.99/each. NOT enqueued (never enqueue an optional line as blocking)."
+    },
+    {
+      "source_raw": "1/3 cup balsamic vinegar",
+      "item": "Balsamic Vinegar",
+      "bid": "balsamic-vinegar",
+      "board": "weekly",
+      "grams": 298,
+      "buy": "1 cup plus 2 3/4 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities cup=255 g. Exact 3.5x = 1.1667 cups = 18.67 tbsp, quantized 18.75 tbsp (+0.4%) - the fricassee 1/3-cup pattern. Board 6 of 7, cheapest Fareway $0.1704/floz."
+    },
+    {
+      "source_raw": "3 tablespoons olive oil",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 141.75,
+      "buy": "10 1/2 tbsp (2/3 cup, for marinade)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 13.5 g/tbsp, exact 3.5x. Board 7 of 7."
+    },
+    {
+      "source_raw": "2 tablespoons low-sodium soy sauce",
+      "item": "Soy Sauce",
+      "bid": "soy-sauce",
+      "board": "weekly",
+      "grams": 112,
+      "buy": "7 tbsp low-sodium",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 16 g/tbsp. DB row is USDA low-sodium soy sauce - matches the source's low-sodium call. Board 7 of 7 (Aldi cell is itself reduced-sodium)."
+    },
+    {
+      "source_raw": "1 tablespoon Worcestershire sauce",
+      "item": "Worcestershire Sauce",
+      "bid": "worcestershire",
+      "board": "weekly",
+      "grams": 59.5,
+      "buy": "3 1/2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 17 g/tbsp. Board 6 of 7."
+    },
+    {
+      "source_raw": "1 tablespoon honey",
+      "item": "Honey",
+      "bid": "honey",
+      "board": "weekly",
+      "grams": 73.5,
+      "buy": "3 1/2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 21 g/tbsp. Board 7 of 7. Carb-heaviest marinade line (4.25 g C/serving) - kept, total still 18.8 g."
+    },
+    {
+      "source_raw": "1 tablespoon Dijon mustard",
+      "item": "Dijon Mustard",
+      "bid": "dijon-mustard",
+      "board": "weekly",
+      "grams": 52.5,
+      "buy": "3 1/2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 15 g/tbsp. Board 6 of 7."
+    },
+    {
+      "source_raw": "3 cloves garlic, minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 33,
+      "buy": "11 cloves, minced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities clove=3 g. Exact 3.5x = 10.5 cloves, rounded UP to 11 whole cloves (+4.8% on a 4-cal line - a half clove is not a cook measure). Board 5 of 7."
+    },
+    {
+      "source_raw": "1/2 teaspoon black pepper",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 4,
+      "buy": "1 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 2.3 g/tsp. Board 7 of 7."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "registrar_rulings": "None needed - every non-optional term answered from the board.",
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 412, "protein_g": 38, "carbs_g": 18, "fat_g": 21 },
+    "computed_per_serving": { "calories": 503.8, "protein_g": 40.8, "carbs_g": 18.8, "fat_g": 29.1 },
+    "protein_gap_pct": 7.4,
+    "calorie_gap_pct": 22.3,
+    "verdict": "PASS on the protein instrument (+7.4%), validating the 1.5 lb steak weight and every portion. CALLED OUT: the +22.3% calorie gap is a MARINADE-BASIS difference, not a portion error - the source pours half the marinade over the steak, then removes the steak and PATS IT DRY (step 6), discarding most of that half; their calculator plainly did not book it. We book the full marinade (all of it is poured over food; absorption is unknowable and estimating a discard fraction would be inventing data), so our figure is the ceiling-safe upper bound. Even fully booked the recipe sits mid-band; on the source's discard basis it would sit near 412 - both in [400, 650].",
+    "band_check": "computed 503.8 cal in [400, 650] PASS; carbs 18.8 g <= 35 PASS (honey and balsamic booked in full)"
+  },
+  "board_defects_observed": [
+    "bell-peppers commodity class caveat re-flagged (hatch precedent): cheapest cells are green bells while the commodity also claims yellow; a yellow-only basket costs nearer the red-bell-pepper class ($0.83-2.50 each)."
+  ],
+  "densities_followups": [
+    "Bell peppers: no 'large' weight (each=120 only); source 'large' booked at 120 g - propose large=150 g for Red Bell Pepper / Green Bell Peppers / (new) Yellow Bell Pepper rows",
+    "Yellow Bell Pepper: still no densities row at all (flagged by hatch too) - propose each=120, cup=92 mirroring red/green"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "name": "Kung Pao Chicken Skillet",
+  "slug": "kung-pao-chicken-skillet",
+  "protein": "chicken",
+  "method": "stir-fry (skillet/wok)",
+  "cuisine": "Chinese (Sichuan)",
+  "source_url": "https://www.recipetineats.com/kung-pao-chicken/",
+  "source_servings": 4,
+  "src_cal": 555,
+  "src_carbs": 18,
+  "src_protein": 28,
+  "ingredients": [
+    "1 lb / 500g chicken thigh, cut into bite size pieces",
+    "2 tsp cornflour / cornstarch",
+    "1 tbsp light soy sauce",
+    "1.5 tbsp dark soy sauce",
+    "2 tbsp Chinese black vinegar",
+    "1 tbsp Chinese cooking wine",
+    "3 tbsp sugar",
+    "1/2 tsp sesame oil",
+    "1/3 cup water",
+    "2 tbsp peanut oil",
+    "2 garlic cloves, minced",
+    "1 tsp ginger, finely chopped",
+    "6-10 dried chillies, cut into 2cm pieces, most seeds discarded",
+    "3 green onions, cut into 2cm pieces, white parts separated from green",
+    "1.5 tsp ground sichuan peppercorns",
+    "3/4 cup whole peanuts (or 1/2 cup halved), roasted unsalted"
+  ],
+  "unmapped": [
+    "Chinese black vinegar (Chinkiang) - no board id; nearest is rice-vinegar/balsamic but distinct. Signature ingredient, good pricer-lane probe.",
+    "Chinese cooking wine (Shaoxing) - no board id; loosely white-wine/mirin but neither is a true match.",
+    "ground Sichuan peppercorns - no board id (board has black-peppercorns only); signature Sichuan flavor, deliberate board gap.",
+    "dark soy sauce - board has soy-sauce and sweet-soy-sauce; dark soy is a near-substitute, flagged as a soft gap."
+  ],
+  "why": "Skillet/wok stir-fry chicken with NO rice base - the published card macros are dish-only (rice served separately). Read straight off the recipe card: 555 cal / 28 g protein / 18 g carb per serving, sitting mid-band on calories and comfortably under the 35 g carb ceiling even with the 3 tbsp sugar in the sauce. Chicken thighs (board id chicken-thighs) flash-fried with peanuts, dried chilies, garlic and ginger in a soy/vinegar pan sauce. Adds Chinese/Sichuan breadth to a chicken-skillet pool otherwise thick with creamy-Italian pan sauces; distinct from the existing Thai cashew stir-fry (different cuisine, aromatics, and nut). Batch-scales to 14 as ~3.5x done in wok shifts, weigh-and-divide. Three genuinely-unmapped signature ingredients (Sichuan peppercorns, Shaoxing wine, black vinegar) make it a strong pricer-lane probe. Confidence high - nutrition verified on the source page."
+}

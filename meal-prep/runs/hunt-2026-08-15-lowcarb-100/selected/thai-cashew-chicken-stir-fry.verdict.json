@@ -1,0 +1,19 @@
+{
+  "slug": "thai-cashew-chicken-stir-fry",
+  "name": "Thai Cashew Chicken Stir Fry",
+  "protein": "chicken",
+  "verdict": "DUPE",
+  "dupe_of": "thai-cashew-chicken",
+  "dupe_scope": "catalog",
+  "reason": "Structurally identical to the live catalog recipe 'Thai Cashew Chicken' (slug thai-cashew-chicken): same protein (chicken), same signature ingredient (cashews), same Thai fish-sauce/soy stir-fry flavor family, same wok/skillet method - four of four dimensions match; thigh-vs-breast and serving-without-rice do not make it a distinct dinner.",
+  "conditions_check": {
+    "calories": 454,
+    "carbs_g": 17,
+    "cal_in_band": true,
+    "carbs_under_ceiling": true,
+    "no_seafood": true,
+    "note": "Numbers clear 400-650 cal and <=35g carb; fish sauce/oyster sauce are condiments, not a seafood main. Conditions pass but candidate is rejected as a catalog duplicate regardless."
+  },
+  "cross_protein_collisions": [],
+  "borderline": false
+}

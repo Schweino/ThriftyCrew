@@ -1,0 +1,72 @@
+{
+  "name": "Chicken Piccata Skillet",
+  "slug": "chicken-piccata-skillet",
+  "protein": "chicken",
+  "cuisine": "Italian",
+  "source_url": "https://www.cookedbyjulie.com/low-carb-chicken-piccata/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Boneless Skinless Chicken Breast", "grams": 2800, "buy": "14 boneless chicken breasts (about 6.2 lb)" },
+    { "item": "Paprika", "grams": 8, "buy": "3 1/2 tsp" },
+    { "item": "Dried Oregano", "grams": 7, "buy": "2 tbsp plus 1 tsp dried oregano" },
+    { "item": "Parmesan Cheese", "grams": 392, "buy": "3 1/2 cups grated parmesan (for coating)" },
+    { "item": "Garlic", "grams": 42, "buy": "14 cloves garlic, minced" },
+    { "item": "Chicken Broth", "grams": 1680, "buy": "7 cups chicken stock" },
+    { "item": "Butter", "grams": 98, "buy": "7 tbsp butter" },
+    { "item": "Capers", "grams": 56, "buy": "7 tbsp capers, drained" },
+    { "item": "Lemon Juice", "grams": 164.5, "buy": "juice of 3 1/2 lemons (about 2/3 cup)" },
+    { "item": "Olive Oil", "grams": 94.5, "buy": "7 tbsp olive oil, for frying" },
+    { "item": "Salt", "grams": 6, "buy": "salt, to taste (about 1 tsp)" },
+    { "item": "Black Pepper", "grams": 2.3, "buy": "black pepper, to taste (about 1 tsp)" }
+  ],
+  "macros_per_serving": { "calories": 467.5, "protein_g": 55.6, "carbs_g": 5.4, "fat_g": 24.9 },
+  "writer_notes": [
+    "SOURCE YIELD 2, rebuilt to 14 at the mapper's 7x scale. Every gram and buy string transcribed from mapped\\chicken-piccata-skillet.json; no number computed in prose.",
+    "MACROS transcribed from the mapper's food-macros-db recompute at 14 servings and independently re-verified by the writer with the same formula the build guard uses: 467.5 cal, 55.6 g protein, 5.4 g carbs, 24.9 g fat per serving (rounds to 468 / 56 / 5 / 25). In band for this run: 468 cal inside [400, 650] with 182 cal of ceiling headroom, and about 5 g carbs well under the 35 g gate. The source's own published 465 cal / 60 g protein / 9 g carbs / 19 g fat tracks calories within 0.5 percent; our protein books 7.3 percent lower on the house 200 g each-weight, inside the 15 percent instrument. Fat runs high and carbs low against the source label, but the source label is internally loose (its printed macros sum to about 447 cal against its printed 465) and protein is the instrument the mapper arbitrated on.",
+    "RULED FRYING-OIL ADDITION, carried from the mapper: the source's fry step (step 4) lists no fat, and its 1 tbsp butter is consumed later by the sauce. Adding 1 tbsp olive oil per 2-serving source batch (7 tbsp at 14 servings) reconciles the recompute to the source's published 465 cal within 0.5 percent and is the physical minimum for a shallow fry. Documented as an addition, not silently blended. WITHOUT the oil the recipe computes 408 cal, only 8 above the 400 floor, so the addition is what holds the floor margin; if a later stage strips it the band claim must be rechecked.",
+    "PARSLEY LEFT OUT ON PURPOSE: source step 10 stirs in parsley, but parsley appears in NO source ingredient line, so nobody buys it. Per the rails a step may not use an unbought ingredient, so no step and no shop_smart bullet names parsley. It is a garnish with zero macro stakes; leaving it out ships a recipe that can be cooked exactly as shopped.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought: chicken (steps 2,3,4,8), paprika (2), dried oregano (2), salt (2), black pepper (2), parmesan (3), olive oil (4), butter (5), garlic (5), chicken stock (6), lemon juice (6), capers (7). Walked the costed list against the steps both directions.",
+    "SHOP_SMART makes NO leftover, per-ounce, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount and package form. Re-walk the bullets against cost_lines once the recipe costs.",
+    "PARMESAN is a heavy line for a coating: 392 g (3 1/2 cups grated) is about 28 g per serving, but that is exactly the source ratio (1/2 cup for 2 servings) transcribed to 14, and it is the crust that makes this dish, not a garnish. Flagged in the run report as the second cost driver behind the chicken; transcribed faithfully, not adjusted.",
+    "LEMON JUICE books as juice, not whole lemons: the pot receives the juice at step 8 of the source (add stock and lemon juice), so the line is Lemon Juice at 164.5 g. Buy string still reads 'juice of 3 1/2 lemons' so the shopper buys whole lemons and squeezes them."
+  ],
+  "prose": {
+    "intro_html": "Chicken piccata sounds like a restaurant order, but it is really just seared chicken finished in a bright lemon and caper pan sauce. No long braise, no special cut, no equipment you do not already own. You season the cutlets, press them in grated parmesan, fry them crisp, then build the sauce right in the same pan and let the two finish together. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 10 grams of carbs. That is a tangy, restaurant-style chicken dinner that still lands inside a low-carb week.",
+    "shop_smart": [
+      "<strong>Fourteen boneless chicken breasts are the backbone.</strong> That is about six and a quarter pounds, one breast per serving, and it is where most of the money and all of the protein live. Reach for the big family pack of boneless skinless breasts instead of the small trays so you are paying for chicken, not packaging, and slice any thick breasts flat yourself so they cook through fast.",
+      "<strong>Grated parmesan is the coating, not a garnish.</strong> You need about three and a half cups to press onto both sides of the cutlets, and that crust is what gives this dish its edge. Buy the grated parmesan so it presses on and crisps up in the pan.",
+      "<strong>Lemon and capers are the piccata signature.</strong> Grab three or four lemons for the juice and a jar of capers. That sharp, briny pair is the whole point of piccata, and there is no swapping around it.",
+      "<strong>Chicken stock is the base of the sauce.</strong> You need about seven cups to build the pan sauce after the chicken comes out. Regular boxed chicken stock or broth is exactly right here.",
+      "<strong>Butter, olive oil, garlic, and two pantry spices round it out.</strong> Olive oil to fry in, a little butter and some garlic to start the sauce, and paprika and oregano for the rub. These are backbone staples you most likely already have, so they barely move the cart."
+    ],
+    "make_it": [
+      "Weigh your empty skillet and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+      "Season the chicken cutlets on both sides with the paprika, oregano, and black pepper, then salt them on one side.",
+      "Press the cutlets on both sides into the grated parmesan so it coats them evenly.",
+      "Heat the olive oil in a large skillet over medium-high heat. Working in batches so the pan is not crowded, fry the cutlets about 3 to 4 minutes a side until the parmesan is golden and the chicken is cooked through. Move the chicken to a plate and set it aside.",
+      "Add the butter to the same pan, stir in the minced garlic, and cook about 10 seconds until fragrant.",
+      "Pour in the chicken stock and the lemon juice, raise the heat to high, and let the sauce cook down and thicken.",
+      "Stir in the drained capers and taste the sauce for salt and pepper.",
+      "Return the chicken and any collected juices to the pan and cook about a minute more, turning each piece to coat it in the sauce.",
+      "Weigh the full pan and subtract the empty weight from Step 1 to get the cooked total. Divide by 14 and give each container one cutlet and an even share of the lemon-caper sauce, aiming for that weight."
+    ],
+    "portion_html": "Set the full pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Each container gets one parmesan-crusted cutlet and an even spoonful of the lemon-caper sauce, landing near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a chicken piccata that tastes like it came off a restaurant menu. The chicken and the parmesan carry it; the lemon and capers just make it taste expensive.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Chicken piccata for meal prep: parmesan-crusted chicken cutlets finished in a bright lemon and caper pan sauce, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 10 grams of carbs.",
+    "keywords": "chicken piccata, low carb chicken piccata, low carb meal prep, high protein chicken dinner, lemon caper chicken skillet",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "totalTime": "PT30M",
+    "steps": [
+      "Season the chicken cutlets with the paprika, oregano, black pepper, and salt.",
+      "Press the cutlets into the grated parmesan to coat both sides.",
+      "Fry the cutlets in the olive oil until the parmesan is golden and the chicken is cooked through, then set them aside.",
+      "Melt the butter in the pan, stir in the garlic, then add the chicken stock and lemon juice and let the sauce thicken.",
+      "Stir in the capers, return the chicken, and coat it in the sauce.",
+      "Weigh the pan, subtract the empty weight, and divide across 14 containers."
+    ]
+  }
+}

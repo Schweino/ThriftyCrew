@@ -1,0 +1,69 @@
+{
+  "name": "Sheet Pan Tandoori Chicken and Cauliflower",
+  "slug": "sheet-pan-tandoori-chicken-cauliflower",
+  "protein": "chicken",
+  "cuisine": "Indian",
+  "source_url": "https://nomnompaleo.com/sheet-pan-tandoori-chicken",
+  "source_site": "nomnompaleo.com",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Boneless Skinless Chicken Thigh", "grams": 2381, "buy": "5 1/4 lb boneless skinless chicken thighs" },
+    { "item": "Cauliflower", "grams": 1890, "buy": "3 1/2 small heads (2 lb or less each), cut into florets" },
+    { "item": "Coconut Milk", "grams": 840, "buy": "3 1/2 cups full-fat coconut milk (about two 13.5 oz cans plus a third)" },
+    { "item": "Red Onion", "grams": 245, "buy": "3 1/2 small red onions, cut into thin wedges" },
+    { "item": "Tandoori Masala", "grams": 56, "buy": "7 tbsp tandoori spice mix (no salt added)" },
+    { "item": "Lemon Juice", "grams": 53, "buy": "3 1/2 tbsp lemon juice" },
+    { "item": "Olive Oil", "grams": 47, "buy": "3 1/2 tbsp olive oil, for the pans" },
+    { "item": "Salt", "grams": 32, "buy": "3 1/2 tbsp Diamond Crystal kosher salt (or 5 1/4 tsp fine salt)" },
+    { "item": "Fresh Cilantro", "grams": 14, "buy": "3/4 cup plus 2 tbsp minced fresh cilantro" }
+  ],
+  "macros_per_serving": { "calories": 401, "protein_g": 37, "carbs_g": 11, "fat_g": 22 },
+  "writer_notes": [
+    "SOURCE YIELD 4, rebuilt to 14 at the mapper's 3.5x scale. Grams and buy strings transcribed from the mapped file; no number computed in prose.",
+    "Avocado oil -> olive oil is source-sanctioned: the source line prints '1 tablespoon avocado oil or fat of choice'. The avocado-oil commodity is capture-tier (no priced board cell today); olive oil is priced 7 of 7 and is a sanctioned fat of choice. Full text preserved in the mapped file.",
+    "Coconut milk is the primary of the source's 'coconut milk or plain coconut yogurt' line, matching the source's own nutrition basis. Full-fat canned, not the dairy-milk board id.",
+    "INGREDIENT-USE CHECK done both directions: all nine bought lines are used by a step (chicken tossed in half the marinade and roasted, cauliflower and onion tossed in the other half and roasted, coconut milk + tandoori + salt + lemon juice whisked into the marinade, olive oil brushed on the pans, cilantro sprinkled at the end). No step names anything unbought.",
+    "OPTIONAL LEMON WEDGES DROPPED from the build on purpose, disclosed loudly: the source's optional serve-with 'lemon cut into wedges' has no food-macros-db row under the mapped item name 'Lemon (wedges)' (I cannot add a food-DB row) and no db\\ingredients.json map row, so it can be neither macro-verified nor costed. A 'lemons' board id exists at $0.4533/each, so the fix is a food-DB row plus an ingredients.json row mapping to bid 'lemons'; flagged for the repair pass. It is an optional garnish, so dropping it does not change the dish as cooked.",
+    "BAND is AT-FLOOR and called out loud: the honest DB recompute lands at 401 cal per serving against the run's 400 floor, ~1 cal of headroom, on cauliflower florets booked at 540 g per small head (the ~2 lb-head yield the source's own bound implies). Genuinely smaller heads move the serving under the floor. Carbs 11 g are well under the 35 g ceiling with room to spare. Numbers transcribed from the built spec, not adjusted to fit.",
+    "COST IS UNDERSTATED by two unpriced lines and this is flagged, not hidden: Cauliflower has no db\\ingredients.json row (the board carries a 'cauliflower' id at $1.98/each but the item->bid map row is missing, a systemic gap this batch already ships, e.g. southwest-ground-turkey-cauliflower-rice), and Tandoori Masala has no commodity at all (registrar proposal tandoori-masala PENDING). Both drop out of the costed row as NO PRICE BASIS. The rendered cost covers the chicken, coconut milk, onion, and the pantry staples only."
+  ],
+  "prose": {
+    "intro_html": "Tandoori chicken is one of those dinners that tastes like somebody fussed over it, and it never did. The spice blend does all the work. You whisk it into coconut milk with a little salt and lemon, coat the chicken and a pile of cauliflower, and let one hot oven turn it into dinner. No frying, no babysitting, just a sheet pan and a timer. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 15 grams of carbs. That is a warm, spiced, weeknight-easy dinner that portions straight into your containers for the week.",
+    "shop_smart": [
+      "<strong>Chicken thighs are the anchor, so buy the boneless skinless.</strong> You want about five and a quarter pounds, which is a couple of the big family packs from the meat case. Thighs stay juicy through a hot roast in a way breasts do not, and they take the tandoori marinade beautifully.",
+      "<strong>Buy whole heads of cauliflower and cut them down yourself.</strong> Three or four small heads, two pounds or less each, cut into florets at home. Whole heads give the marinade the most surface to cling to, and cutting your own florets is a two-minute job with a knife.",
+      "<strong>Tandoori masala is the whole identity of this dish.</strong> Look in the international aisle for a jar of tandoori spice blend, the no-salt-added kind if the shelf has it, since we salt the marinade ourselves. It is the one ingredient you cannot swap out and still call this tandoori.",
+      "<strong>Full-fat coconut milk carries the marinade.</strong> The batch uses three and a half cups, so pick up three of the standard 13.5 ounce cans and you will have it covered with a little left over. Full-fat is the one you want here for body; the light cans thin the marinade out.",
+      "<strong>Salt, lemon juice, and olive oil are pantry backbone.</strong> A few tablespoons of each is all the batch asks, so a single bottle or box of each does this dinner and plenty more. Store brand does the same job as the name on the label."
+    ],
+    "make_it": [
+      "Weigh your empty containers (or the storage dish you will pack into) and write the number down. You will use it at the end to split this into 14 even servings by weight, which beats eyeballing every container.",
+      "Heat the oven to 450 degrees, or 425 convection, with a rack in the middle. Cut the cauliflower into florets and the red onions into thin wedges.",
+      "Whisk the coconut milk, tandoori masala, salt, and lemon juice together in a large measuring cup or bowl until it is an even, rusty-orange marinade.",
+      "Brush your sheet pans with the olive oil. This is a big batch, so plan on two or three rimmed pans; crowding one pan steams the food instead of roasting it.",
+      "Put the cauliflower and onions in a large bowl, pour in about half the marinade, and toss to coat. Shake off the excess and spread them out on the oiled pans.",
+      "Add the chicken thighs to the same bowl, pour in the rest of the marinade, and toss to coat. Lay the thighs in a single layer on the pans alongside the vegetables.",
+      "Roast 25 to 35 minutes, flipping the cauliflower and rotating the pans about halfway through, until the cauliflower is tender and browned and the chicken reads 165 degrees at the thickest part of a thigh.",
+      "Sprinkle the minced cilantro over everything, then weigh and portion as below."
+    ],
+    "portion_html": "Set your container on the scale and subtract the empty weight you wrote down in Step 1 to get the cooked total across all the pans. Divide that number by 14 and pack that exact weight into each container, giving each one some chicken and some cauliflower. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a spiced, roasted sheet pan dinner that eats like takeout and preps in one pass. The chicken does the heavy lifting; the cauliflower and one jar of spice stretch it into 14 real dinners.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Sheet pan tandoori chicken and cauliflower for meal prep: chicken thighs and cauliflower roasted in a coconut milk tandoori marinade, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
+    "keywords": "tandoori chicken, sheet pan chicken, low carb meal prep, high protein dinner, cauliflower dinner, keto tandoori chicken",
+    "prepTime": "PT15M",
+    "cookTime": "PT35M",
+    "totalTime": "PT50M",
+    "steps": [
+      "Heat the oven to 450 degrees, cut the cauliflower into florets, and cut the red onions into thin wedges.",
+      "Whisk the coconut milk, tandoori masala, salt, and lemon juice into an even marinade.",
+      "Brush two or three sheet pans with olive oil.",
+      "Toss the cauliflower and onions in half the marinade and spread them on the pans.",
+      "Toss the chicken thighs in the rest of the marinade and lay them on the pans in a single layer.",
+      "Roast 25 to 35 minutes, flipping the cauliflower and rotating the pans halfway, until the chicken reads 165 degrees.",
+      "Sprinkle with cilantro, then weigh the total and divide across 14 containers."
+    ]
+  }
+}

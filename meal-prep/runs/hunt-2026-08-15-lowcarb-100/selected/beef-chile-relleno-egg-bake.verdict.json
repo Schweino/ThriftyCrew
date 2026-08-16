@@ -1,0 +1,17 @@
+{
+  "slug": "beef-chile-relleno-egg-bake",
+  "name": "Beef Chile Relleno Egg Bake",
+  "protein": "beef",
+  "verdict": "DUPE",
+  "dupe_of": "chile-relleno-casserole-ground-beef",
+  "reason": "Near-identical to live catalog beef recipe 'Chile Relleno Casserole with Ground Beef' (chile-relleno-casserole-ground-beef): all four identity axes match - ground beef protein, chile-relleno/green-chile+cheese+egg-custard flavor family, no real starch base (light flour binder only), and oven-bake casserole method. Same dinner under a different name.",
+  "conditions_fit": {
+    "calories": 464,
+    "carbs": 9,
+    "within_band": true,
+    "note": "Numbers clear the 400-650 cal / <=35g carb gate; rejected on duplication, not fit."
+  },
+  "cross_protein_collisions": [
+    "turkey-chile-relleno-casserole-skillet (Turkey Chile Relleno Casserole Skillet) - structurally the same chile-relleno cheese-egg bake with turkey swapped for beef; the catalog already carries both a beef and a turkey take, so this candidate adds nothing."
+  ]
+}

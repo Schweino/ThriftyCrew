@@ -1,0 +1,22 @@
+{
+  "slug": "pesto-chicken-cauliflower-bake",
+  "name": "Pesto Chicken and Cauliflower Bake",
+  "protein": "chicken",
+  "cuisine": "Italian",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 563,
+    "carbs_g": 11.8,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "seafood": false,
+    "scalable_to_14": true,
+    "result": "FIT"
+  },
+  "dupe_of": null,
+  "evidence": "No pesto or Italian-cream cauliflower/chicken bake exists in the 544-recipe catalog; the only cauliflower bakes are the accepted chicken-bacon-ranch-cauliflower-bake (bacon-ranch sauce family) and beef/turkey pasta-and-potato casseroles, and the nearest catalog chicken bakes (chicken-cordon-bleu-casserole, chicken-divan-broccoli-bake) use ham/Swiss and broccoli-mornay respectively, so pesto-mozzarella cream over roasted cauliflower is a distinct dish.",
+  "borderline_note": "Shares protein (chicken), method (bake), and cauliflower base with the accepted chicken-bacon-ranch-cauliflower-bake, but the pesto-mozzarella Italian sauce family genuinely distinguishes the plate from bacon-ranch; three-of-four overlap resolved on the differentiating sauce, so KEEP not DUPE.",
+  "cross_protein_collision_watch": "Structurally this is a sauce-bound, starch-free cauliflower-and-shredded-protein bake; a pesto turkey cauliflower bake (or pesto pork/ground-turkey version) in another selector's pool would be a same-dish-different-protein twin. Note also catalog turkey-pesto-pasta-kale shares the pesto flavor but is a pasta dish, not a collision. Decider should check turkey/pork pools for a pesto cauliflower bake.",
+  "ruled_by": "adjudicator",
+  "ruled_at": "2026-08-15"
+}

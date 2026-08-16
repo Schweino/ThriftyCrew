@@ -1,0 +1,26 @@
+{
+  "slug": "jalapeno-popper-turkey-meatballs",
+  "name": "Jalapeno Popper Turkey Meatballs",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 432,
+    "carbs": 3,
+    "within_calorie_band": true,
+    "within_carb_cap": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "meal_prep_dinner": true,
+    "note": "432 cal / 3g carb per serving clears the 400-650 cal and <=35g carb conditions; oven meatball tray-bake batches cleanly to 14 servings; no seafood."
+  },
+  "dupe_check": {
+    "catalog": "No catalog dupe. The 11 turkey-meatball entries in the digest are all distinct flavor families (greek-turkey-meatballs-with-lemon-orzo, indian-turkey-kofta-meatball-curry, izmir-kofte-turkey-meatball-potato-bake, sheet-pan-bbq-turkey-meatballs-over-rice, thai-coconut-curry-turkey-meatballs, turkey-meatball-italian-wedding-soup, turkey-meatball-marinara-pasta, turkey-meatball-sub-bake, turkey-tsukune-meatball-rice-bowls, vietnamese-turkey-xiu-mai-meatballs, spanish-turkey-albondigas-over-rice); none carry the jalapeno-popper cream-cheese + bacon + parmesan + jalapeno profile, and none is a bare low-carb tray-bake.",
+    "accepted_slugs": "No dupe against accepted-slugs.json (read fresh). Note jalapeno-popper-chicken-casserole is present but it is a chicken casserole, a different protein and a different plate format (creamy casserole vs discrete oven meatballs)."
+  },
+  "cross_protein_collisions": [
+    "jalapeno-popper-chicken-casserole (already accepted, chicken): shares the jalapeno-popper flavor family but differs in protein and format (casserole vs meatballs) - decider should confirm the catalog wants both the casserole and the meatball takes on this flavor.",
+    "A jalapeno-popper meatball built on ground beef, pork, or chicken in another selector's pool would be structurally the SAME dish (same binder-cream-cheese-bacon-jalapeno-parmesan meatball, only the protein swapped) - decider should watch for a same-dish-different-protein twin."
+  ],
+  "unmapped_ok": ["pork-rinds"],
+  "evidence": "Source thatlowcarblife.com publishes 432 cal / 3g carb / 44g protein per 3-meatball serving; flavor profile (cream cheese, bacon, minced jalapeno, parmesan, pork-rind binder) is absent from every turkey meatball recipe in the 544-recipe catalog digest."
+}

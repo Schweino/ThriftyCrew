@@ -1,0 +1,47 @@
+{
+  "name": "Greek Turkey Spinach & Feta Meatball Bake",
+  "slug": "greek-turkey-spinach-feta-meatball-bake",
+  "protein": "turkey",
+  "cuisine": "Greek",
+  "method": "oven bake",
+  "source_url": "https://letsdishrecipes.com/greek-turkey-meatballs-with-spinach-and-feta/",
+  "source_servings": 5,
+  "src_cal": 404,
+  "src_carbs": 13,
+  "src_protein": 34,
+  "ingredients_verbatim": [
+    "2 pounds ground turkey",
+    "4 ounces crumbled feta cheese",
+    "1 cup chopped fresh spinach",
+    "1/4 cup chopped fresh parsley",
+    "1 egg beaten",
+    "1 cup seasoned breadcrumbs",
+    "1 teaspoon onion powder",
+    "1 1/2 teaspoons salt",
+    "1 teaspoon pepper",
+    "1 teaspoon oregano",
+    "1/2 teaspoon cumin",
+    "1 tablespoon chopped fresh mint",
+    "Zest of one lemon"
+  ],
+  "mapped_ingredients": [
+    "ground-turkey",
+    "feta",
+    "spinach",
+    "eggs",
+    "bread-crumbs",
+    "onion-powder",
+    "salt",
+    "black-pepper",
+    "ground-cumin"
+  ],
+  "unmapped": [
+    "fresh parsley",
+    "dried oregano",
+    "fresh mint",
+    "lemon (zest)"
+  ],
+  "why": "Distinct Greek/Mediterranean oven bake (no orzo/rice/potato base) adding cuisine variety to an American-skewed catalog; PUBLISHED nutrition clears the band at 404 cal / 34 g protein / 13 g carb per serving (4-serving basis). High protein relative to calories, structurally low-carb, and batch-scalable: form meatballs, bake in a 9x13 pan; multiply x3.5 for 14 servings. Not a duplicate of the pool's turkey meatloaf, enchilada, zucchini-noodle, cauliflower-mushroom or broccoli-cheddar bakes, nor of catalog greek-turkey-meatballs-with-lemon-orzo (orzo, high-carb) or greek-turkey-youvarlakia (soup).",
+  "confidence": "high on numbers (read from page); note calories at 404 sit near the 400 floor, so our label-DB compute could drift just under - the feta and egg fat give some cushion",
+  "verified": true
+}

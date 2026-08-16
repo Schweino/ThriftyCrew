@@ -1,0 +1,48 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Spinach Artichoke Chicken Casserole",
+  "source_url": "https://kicking-carbs.com/spinach-artichoke-chicken-casserole/",
+  "servings": 8,
+  "time_total": "45 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    { "raw": "1/2 cup heavy cream", "item": "heavy cream", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1/2 cup chicken broth", "item": "chicken broth", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1/4 cup butter", "item": "butter", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "8 ounces cream cheese cubed", "item": "cream cheese", "qty": "8", "unit": "ounces", "prep": "cubed", "optional": false, "section": null },
+    { "raw": "1 teaspoon garlic powder", "item": "garlic powder", "qty": "1", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1/2 teaspoon sea salt", "item": "sea salt", "qty": "1/2", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1/4 teaspoon fresh ground black pepper", "item": "fresh ground black pepper", "qty": "1/4", "unit": "teaspoon", "prep": null, "optional": false, "section": null },
+    { "raw": "8 ounces frozen chopped spinach thawed and excess moisture pressed out", "item": "frozen chopped spinach", "qty": "8", "unit": "ounces", "prep": "thawed and excess moisture pressed out", "optional": false, "section": null },
+    { "raw": "10 ounces quartered artichoke hearts drained", "item": "quartered artichoke hearts", "qty": "10", "unit": "ounces", "prep": "drained", "optional": false, "section": null },
+    { "raw": "3 1/2 cups cooked cubed chicken", "item": "cooked cubed chicken", "qty": "3 1/2", "unit": "cups", "prep": null, "optional": false, "section": null },
+    { "raw": "2 cups shredded mozzarella", "item": "shredded mozzarella", "qty": "2", "unit": "cups", "prep": null, "optional": false, "section": null },
+    { "raw": "1 cup shredded parmesan", "item": "shredded parmesan", "qty": "1", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1/2 cup crumbled feta", "item": "crumbled feta", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": null }
+  ],
+  "instructions": [
+    "Preheat oven to 350\u00b0 F. Spray 8 x 8 casserole dish with cooking spray.",
+    "Heat cream, chicken broth, and butter in large saucepan over medium heat until butter melts.",
+    "Add cream cheese, garlic powder, salt, and pepper.",
+    "Whisk until cream cheese melts, about 5 to 7 minutes.",
+    "Stir in spinach, artichokes, and chicken.",
+    "Transfer to prepared baking dish.",
+    "Top with mozzarella, parmesan, and feta.",
+    "Cook for 20 minutes until cheese is melted and bubbly."
+  ],
+  "nutrition": {
+    "per_serving": {
+      "calories_kcal": 451.47,
+      "carbohydrates_g": 6.08,
+      "protein_g": 29.85,
+      "fat_g": 34.19,
+      "saturated_fat_g": 20.17,
+      "fiber_g": 1.22,
+      "sugar_g": 2.29,
+      "sodium_mg": 1001.86,
+      "cholesterol_mg": 141.66
+    }
+  },
+  "concerns": []
+}

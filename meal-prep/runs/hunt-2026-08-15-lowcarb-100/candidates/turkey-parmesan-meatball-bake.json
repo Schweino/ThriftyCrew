@@ -1,0 +1,50 @@
+{
+  "name": "Turkey Parmesan Meatball Bake",
+  "slug": "turkey-parmesan-meatball-bake",
+  "protein": "turkey",
+  "cuisine": "Italian",
+  "method": "oven bake",
+  "source_url": "https://www.sugarfreemom.com/recipes/easy-low-carb-keto-chicken-parmesan-meatballs-recipe/",
+  "source_servings": 4,
+  "src_cal": 466,
+  "src_carbs": 9,
+  "src_protein": 35,
+  "src_net_carbs": 7,
+  "src_fat": 33,
+  "ingredients_verbatim": [
+    "1 pound ground chicken",
+    "1 large egg",
+    "2 cloves fresh garlic, minced",
+    "1 teaspoon onion powder",
+    "1/4 cup grated parmesan cheese",
+    "3 tablespoon ground almonds (optional, if frying)",
+    "1/4 cup fresh parsley, chopped",
+    "2 teaspoon dried Italian seasoning",
+    "1 teaspoon kosher salt",
+    "1/2 teaspoon black pepper",
+    "2 tablespoon olive oil (optional, if frying)",
+    "16 ounces low carb homemade marinara sauce",
+    "1.5 cup shredded mozzarella cheese",
+    "2 tablespoons fresh herbs (basil or parsley) for serving"
+  ],
+  "rebuild_note": "SOURCE PROTEIN IS GROUND CHICKEN - rebuilt on GROUND TURKEY per the standing no-ground-chicken rule. Ground turkey (93%) macros track ground chicken closely, so the published 466 cal / 35 g protein / 9 g carb basis holds under the swap. The optional ground almonds + olive oil are for the fry variant only and are DROPPED for the oven-bake path (bake meatballs 25 min, then add sauce + mozzarella and bake to melt).",
+  "mapped_ingredients": [
+    "ground-turkey",
+    "eggs",
+    "garlic",
+    "onion-powder",
+    "parmesan",
+    "mozzarella",
+    "salt",
+    "black-pepper"
+  ],
+  "unmapped": [
+    "marinara sauce (may need a board home vs. canned tomatoes/tomato sauce)",
+    "fresh parsley",
+    "dried Italian seasoning",
+    "fresh basil"
+  ],
+  "why": "Fills a real gap: the turkey-meatball dishes already in the pool are all skillet/cream-sauce, Greek-feta, jalapeno-popper or Swedish - there is NO turkey meatball PARMESAN bake, and this is a clean oven-only version (bake meatballs, blanket with marinara + mozzarella, bake to melt). PUBLISHED nutrition lands dead-center of the band at 466 cal / 35 g protein / 9 g total carb (7 g net) / 33 g fat per serving on a 4-serving basis - high protein relative to calories and comfortably clear of both the 400 floor and the 35 g carb ceiling with our compute-drift cushion. Structurally low-carb (meatballs + marinara + cheese, no pasta/rice/bread base). Batch-scalable: form meatballs, bake in sheet/9x13 pans, weigh-and-divide; multiply x3.5 for 14 servings. Proves the rebuild path (ground chicken -> ground turkey) for the pricer lane.",
+  "confidence": "high on numbers - read directly from the published recipe card (466 cal / 35 g protein / 9 g total carb / 33 g fat). One caveat: nutrition is calculated on ground chicken; the ground-turkey rebuild shifts it only marginally.",
+  "verified": true
+}

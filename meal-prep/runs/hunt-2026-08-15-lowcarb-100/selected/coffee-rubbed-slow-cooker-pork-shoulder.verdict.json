@@ -1,0 +1,21 @@
+{
+  "slug": "coffee-rubbed-slow-cooker-pork-shoulder",
+  "name": "Coffee-Rubbed Slow Cooker Pork Shoulder",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "cal_per_serving": 588,
+    "carbs_per_serving": 20.52,
+    "in_cal_band_400_650": true,
+    "in_carb_band_max35": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "meal_prep_dinner": true,
+    "result": "FIT"
+  },
+  "dupe_of": null,
+  "evidence": "Not a duplicate: this is a DRY coffee-and-brown-sugar RUBBED whole pork shoulder, slow-cooked and shredded with no sauce or braising liquid, whereas every catalog pork-shoulder pulled-pork entry is sauce/liquid-driven (bbq-pulled-pork-stuffed-sweet-potatoes uses bbq-sauce, slow-cooker-country-style-pork-ribs-rice is bbq-sauce+ribs, slow-cooker-dr-pepper/root-beer/pulled-pork-bowls are soda/bbq-sauce, slow-cooker-cuban-mojo/pork-birria/pork-tinga are citrus/chile braises); no catalog dish uses a coffee-spice rub as its flavor concept.",
+  "cross_protein_collision_notes": "Watch for a structurally identical DRY-RUBBED shredded roast in other protein pools the decider may hold: a coffee-rubbed or brown-sugar-spice-rubbed beef chuck/brisket, or a dry-rubbed slow-cooker turkey/pork-loin roast, would be the same plate (rub + slow-cook + shred) differing only in protein. This coffee-rub concept is distinct within pork but is the kind of rubbed-roast that recurs across proteins.",
+  "cuisine": "American BBQ",
+  "notes": "unmapped[] is empty per candidate; all rub ingredients (coffee, brown-sugar, cayenne, smoked-paprika, garlic) map to the board. No penalty either way per v2.1 5.1."
+}

@@ -1,0 +1,23 @@
+{
+  "slug": "sirloin-steak-kabob-bowls",
+  "name": "Sirloin Steak Kabob Bowls (Marinated Sirloin with Peppers, Onion & Mushrooms)",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 482,
+    "carbs_g": 24,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "seafood": false,
+    "scalable_to_14": true,
+    "budget_meal_prep": true,
+    "result": "FITS"
+  },
+  "fit_evidence": "Published 482 cal / 24g carb / 49g protein per serving - mid-band on calories, comfortably under the 35g carb gate; no seafood; whole-muscle sirloin cubes + non-starchy veg tray-roast and weigh-and-divide to 14.",
+  "dupe_of": null,
+  "dupe_evidence": "Not a catalog duplicate. Every catalog sirloin dish carries a starch base this one lacks and a different flavor family: steak-fajita-rice-bowls (rice + Tex-Mex chili-lime), pepper-steak-with-rice (rice + Chinese sesame-soy stir-fry), honey-garlic-steak-bites-potatoes (potatoes + honey-garlic skillet bites). This is a no-starch soy-honey-marinated sirloin + peppers/onion/mushroom sheet-pan bake - a distinct plate.",
+  "pool_watch": "COLLISION FLAG for the decider vs the already-KEPT low-carb-steak-fajita-skillet: both are sirloin + bell peppers + onions with no starch (protein + veg base + starch-absence all shared). Distinguished by flavor family and method - this one is a soy-sauce-dominant honey-garlic kabob marinade (1/3 cup soy + honey, chili/cumin only accents) plus mushrooms, roasted on a sheet pan, vs a chili-lime Tex-Mex fajita seasoning in a skillet. Genuinely different plates, but the decider should confirm the run wants two low-carb sirloin-with-peppers-and-onions dinners. Minor secondary overlap with garlic-butter-steak-mushroom-skillet on the steak+mushroom+garlic axis, but that one is a garlic-butter skillet with no peppers/onions and no soy-honey glaze - different dinner.",
+  "cross_protein_watch": "Structurally a marinated-protein-cubes + peppers/onion/mushroom roast, fully protein-swappable: a soy-honey chicken kabob or pork kabob bowl in another selector's pool would be the same dish and should collapse to one. Flag a possible chicken- or pork-kabob twin.",
+  "borderline": true,
+  "borderline_reason": "Not a catalog dupe, but the pool overlap with low-carb-steak-fajita-skillet (both low-carb sirloin + peppers + onions) makes this a decider call on whether both ship. Kept on the soy-honey-kabob-marinade + mushrooms + sheet-pan distinction."
+}

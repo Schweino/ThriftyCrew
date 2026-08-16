@@ -1,0 +1,21 @@
+{
+  "slug": "cheesy-turkey-black-bean-taco-skillet",
+  "name": "Cheesy Turkey and Black Bean Taco Skillet",
+  "protein": "turkey",
+  "verdict": "DUPE",
+  "fit": {
+    "cal": 521,
+    "carbs": 32,
+    "verdict": "FIT",
+    "note": "521 cal in the 400-650 band, 32g carbs under the 35g ceiling, no seafood, scales to 14 by weigh-and-divide; passes conditions but loses on dedup."
+  },
+  "dupe_of": "turkey-taco-rice-skillet",
+  "reason": "Same dish as the live catalog's Turkey Taco Rice Skillet: identical ground turkey + taco seasoning + black beans + shredded cheese + chicken-broth skillet base; the candidate only swaps the rice/corn for a lettuce-wrap-and-sour-cream finish, which is the low-carb version of the same taco-skillet dinner, not a distinct plate (protein + flavor family + skillet method all match; starch is the sole differentiator and both still carry black beans).",
+  "also_overlaps": [
+    "turkey-taco-casserole (same ground turkey + black beans + shredded cheese + sour cream Tex-Mex taco profile, baked-casserole method with tortillas rather than skillet)"
+  ],
+  "cross_protein_collisions": [
+    "loaded-beef-taco-skillet-bowls (catalog) - structurally the same cheesy taco-and-black-bean skillet in beef; the beef twin already exists",
+    "any beef/chicken 'taco skillet' or 'taco lettuce wrap' candidate in a parallel pool would be the same dinner in a different protein - flag for the merge pass"
+  ]
+}

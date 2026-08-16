@@ -1,0 +1,57 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Chicken Chasseur",
+  "source_url": "https://www.akitchenhoorsadventures.com/chicken-chasseur/",
+  "servings": 6,
+  "time_total": "50 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    { "raw": "4 slices bacon", "item": "bacon", "qty": "4", "unit": "slice", "prep": null, "optional": false, "section": null },
+    { "raw": "6 chicken thighs", "item": "chicken thighs", "qty": "6", "unit": "each", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tablespoon olive oil", "item": "olive oil", "qty": "1", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tablespoon butter", "item": "butter", "qty": "1", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 cup chopped shallots", "item": "shallots", "qty": "1", "unit": "cup", "prep": "chopped", "optional": false, "section": null },
+    { "raw": "2 teaspoons minced garlic", "item": "garlic", "qty": "2", "unit": "teaspoon", "prep": "minced", "optional": false, "section": null },
+    { "raw": "8 ounces quartered cremini mushrooms", "item": "cremini mushrooms", "qty": "8", "unit": "ounce", "prep": "quartered", "optional": false, "section": null },
+    { "raw": "1/2 cup white wine", "item": "white wine", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "2 tablespoons tomato paste", "item": "tomato paste", "qty": "2", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1 tablespoon fresh tarragon", "item": "fresh tarragon", "qty": "1", "unit": "tablespoon", "prep": null, "optional": false, "section": null },
+    { "raw": "1/4 cup marsala", "item": "marsala", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1/2 cup crushed tomatoes", "item": "crushed tomatoes", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "1 1/4 cups chicken broth", "item": "chicken broth", "qty": "1 1/4", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": "3 sprigs fresh thyme", "item": "fresh thyme", "qty": "3", "unit": "sprig", "prep": null, "optional": false, "section": null },
+    { "raw": "1 bay leaf", "item": "bay leaf", "qty": "1", "unit": "each", "prep": null, "optional": false, "section": null },
+    { "raw": "2 tablespoons softened butter", "item": "butter", "qty": "2", "unit": "tablespoon", "prep": "softened", "optional": false, "section": null },
+    { "raw": "2 tablespoons flour", "item": "flour", "qty": "2", "unit": "tablespoon", "prep": null, "optional": false, "section": null }
+  ],
+  "instructions": [
+    "Cut the bacon into bite-sized pieces and plate in a Dutch oven. Turn the heat to medium-high and cook the bacon until brown and crispy. Remove the bacon from the pan an put in a paper towel lined plate. Set it aside.",
+    "Season the chicken thighs with salt and pepper and cook, skin side down, for 4 to 5 minutes or until the skin is brown and crispy. Turn the chicken over and cook for 4 to 5 minutes. Place the browned chicken on a plate and tent with foil to keep warm.",
+    "Add the butter and olive oil to the pan and stir until the butter is melted before adding the shallots and garlic to the pan. Cook until fragrant, about 2 to 3 minutes.",
+    "Stir in the mushrooms and cook until they begin to brown.",
+    "Deglaze the pan with the white wine, scraping to loosen any browned bits from the bottom of the pan.",
+    "Move the vegetables to the side of the pan and add the tomato paste. Cook the tomato paste for 1 to 2 minutes or until it darkens in color. Stir in the tarragon, marsala, tomatoes, and chicken broth. Add the thyme and bay leaf before returning the chicken and its juices back to the pan along with the bacon.",
+    "Place the thyme sprigs in bay leaf in the sauce.",
+    "Cover and simmer 15 to 20 minutes or until the chicken is cooked through and reaches 170 F in the thickest part of the thigh.",
+    "Combine the softened butter with the flour and stir into the sauce with a whisk. Simmer until the sauce thickens. Season with salt and pepper to taste before serving the chicken with the chasseur sauce over mashed potatoes."
+  ],
+  "nutrition": {
+    "per_serving": true,
+    "calories": "459",
+    "total_fat": "29g",
+    "saturated_fat": "10g",
+    "trans_fat": "0g",
+    "unsaturated_fat": "18g",
+    "cholesterol": "190mg",
+    "sodium": "702mg",
+    "carbohydrates": "13g",
+    "fiber": "2g",
+    "sugar": "5g",
+    "protein": "36g"
+  },
+  "concerns": [
+    "Instructions call for salt and pepper (steps 2 and 9) but the ingredient list does not include them; they are seasoning to taste and were not added as ingredient lines.",
+    "Recipe card yield is stated as '6' with no explicit unit; recorded as servings 6."
+  ]
+}

@@ -1,0 +1,168 @@
+{
+  "slug": "italian-ground-turkey-white-bean-skillet",
+  "title": "Italian Ground Turkey Skillet",
+  "source_url": "https://www.familyfoodonthetable.com/italian-ground-turkey-skillet/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "turkey",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters, drift over 5% noted per line.",
+  "ruled_substitutions": [],
+  "registrar_rulings": [],
+  "ingredients": [
+    {
+      "source_raw": "1 tablespoon extra-virgin olive oil",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 47.25,
+      "buy": "3 1/2 tbsp extra-virgin olive oil",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities tbsp = 13.5 g. Board 7 of 7, cheapest Sam's Club $0.1879/floz."
+    },
+    {
+      "source_raw": "1 medium onion, chopped",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 385,
+      "buy": "3 1/2 medium onions, chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities each = 110 g. Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "1 green bell pepper, chopped",
+      "item": "Green Bell Peppers",
+      "bid": "bell-peppers",
+      "board": "weekly",
+      "grams": 420,
+      "buy": "3 1/2 green bell peppers, chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "The ingredient-map's legacy board_id green-bell-pepper no longer exists in commodities.json; the live bell-peppers commodity's cheapest cells are all GREEN bell peppers (Fareway $0.77/each, 6 of 7 stores), so the class matches a green line exactly. densities each = 120 g. Map repoint flagged in board_defects_observed."
+    },
+    {
+      "source_raw": "2 cloves garlic, minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 21,
+      "buy": "7 cloves garlic, minced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities clove = 3 g. Board 5 of 7, cheapest Baker's $0.498/each."
+    },
+    {
+      "source_raw": "1 lb. lean ground turkey",
+      "item": "93/7 Ground Turkey",
+      "bid": "93-7-ground-turkey",
+      "board": "recipe",
+      "grams": 1589,
+      "buy": "3 1/2 lb lean (93/7) ground turkey",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "'Lean ground turkey' books to the house 93/7 item (label 170 cal / 21 P per 4 oz raw); the 99/1 breast reading was tested in the cross-check and fails the source's own calories harder, see verdict. Absolute printed weight, no each-weight risk. Board 6 of 7, cheapest Aldi $3.9083/lb."
+    },
+    {
+      "source_raw": "1 1/2 teaspoons dried Italian seasoning",
+      "item": "Italian Seasoning",
+      "bid": "italian-seasoning",
+      "board": "weekly",
+      "grams": 7.35,
+      "buy": "1 3/4 tbsp dried Italian seasoning",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 5.25 tsp = 1.75 tbsp, quarter-clean. densities tsp = 1.4 g. Board 7 of 7, cheapest Hy-Vee $0.698/oz."
+    },
+    {
+      "source_raw": "3/4 teaspoon kosher salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 15.75,
+      "buy": "2 1/2 tsp kosher salt",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 2.625 tsp quantized to 2.5 (-4.8%). Booked at the table-salt density (tsp 6 g); kosher crystals run lighter per tsp but the line is zero-macro so only the printed measure matters, and that is preserved. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/2 teaspoon black pepper",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 4.03,
+      "buy": "1 3/4 tsp black pepper",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities tsp = 2.3 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 (14.5 oz.) can cannellini beans, rinsed and drained",
+      "item": "Cannellini Beans",
+      "bid": "canned-white-beans",
+      "board": "weekly",
+      "grams": 892.5,
+      "buy": "3 1/2 (14.5 oz) cans cannellini beans, rinsed and drained (about 5 1/4 cups drained)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "price-ingredient resolves 'cannellini' to the live canned-white-beans commodity (white kidney bean class, 6 of 7 stores, cheapest Aldi $0.0548/oz); the ingredient-map's cannellini-beans id is the recipe-board rule set, resolver takes the weekly claim first - both are the same product concept, no stretch. DRAINED basis: densities can = 255 g drained (the as-packed label cup is deliberately not reconciled, per the file's own readme). DB row is USDA drained cannellini per 100 g."
+    },
+    {
+      "source_raw": "1 (14.5 oz.) can fire-roasted diced tomatoes",
+      "item": "Diced Tomatoes",
+      "bid": "diced-tomatoes",
+      "board": "weekly",
+      "grams": 1438.5,
+      "buy": "3 1/2 (14.5 oz) cans fire-roasted diced tomatoes",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Fire-roasted books to the diced-tomatoes commodity per the existing DB row's own note ('fire-roasted equivalent; high conf') - an estate precedent, same product concept and price class, not a variety stretch. densities can = 411 g. Board 7 of 7, cheapest Walmart $0.0529/oz."
+    },
+    {
+      "source_raw": "2 big handfuls fresh baby spinach",
+      "item": "Spinach",
+      "bid": "spinach",
+      "board": "weekly",
+      "grams": 210,
+      "buy": "7 cups fresh baby spinach (about 7 oz)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FRESH spinach mapped to the board's FRESH 'spinach' commodity (7 of 7, cheapest Walmart $0.20/oz), NOT frozen-chopped-spinach - fresh-is-not-frozen standing rejection; the stale ingredient-map entry 'Spinach' -> frozen-chopped-spinach is re-flagged below (same defect creamy-tuscan-chicken-skillet logged). 'Big handful' has no densities row (FLAGGED): booked 1 big handful = 1 USDA cup x2 = 30 g each -> 60 g source, 210 g scaled. Macro stakes ~3.5 cal/serving either way. DB row is the fresh USDA Spinach row (per-gram identical to frozen, so the macro side is form-independent)."
+    },
+    {
+      "source_raw": "1/2 cup grated Parmesan cheese",
+      "item": "Parmesan Cheese",
+      "bid": "parmesan",
+      "board": "weekly",
+      "grams": 196,
+      "buy": "1 3/4 cups grated Parmesan",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities cup = 112 g. Board 7 of 7, cheapest Sam's Club $0.3092/oz."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 422, "protein_g": 41, "carbs_g": 21, "fat_g": 21 },
+    "computed_per_serving": { "calories": 376.3, "protein_g": 33.3, "carbs_g": 23.9, "fat_g": 15.5 },
+    "protein_gap_pct": -18.9,
+    "calorie_gap_pct": -10.8,
+    "verdict": "BREAK, CALLED OUT LOUDLY - AND THE RECIPE FAILS THE RUN'S CALORIE FLOOR. Protein -18.9% is outside the 15% instrument, so every line was re-examined: ALL quantities are absolute printed amounts (1 lb, one 14.5 oz can, 1/2 cup) - no each-weight assumption exists to correct. The published 41 g/serving x 4 = 164 g protein is UNREACHABLE from the printed quantities: turkey 85 g (93/7 label) + parmesan 20 g + drained cannellini 20 g + everything else ~8 g = ~133 g max (33.3/serving). Reading 'lean' as 99/1 turkey breast raises protein to only 38.4/serving (-6.3%) while dropping calories to ~326 (-22.7%), reproducing the label even worse. The source's auto-calculated label is inflated across the board (its own macro line sums to ~437 cal); our label-accurate recompute is the honest number, and that number is 376 cal.",
+    "band_check": "FAIL: computed 376.3 cal/serving is BELOW the run's 400-cal floor (and the alternative 99/1 turkey reading is 326, further below). Carbs 23.9 g <= 35 PASS. This recipe cannot meet the [400, 650] band from its printed quantities under label-accurate math; the published 422 that got it selected is not reproducible. Mapping and pricing are complete and sound, but spec/QA must treat the band as failing - flagged here so the failure is caught at the gate, not on a published card."
+  },
+  "board_defects_observed": [
+    "ingredient-map.json entry 'Spinach' -> frozen-chopped-spinach is a FRESH->FROZEN form-flip that predates the board's fresh 'spinach' commodity; update-recipes-db.ps1 stamps from ingredient-map first, so at stamp time the fresh line would be re-priced as frozen. Same defect logged by creamy-tuscan-chicken-skillet; needs the map correction through the match-soundness gate BEFORE this recipe's stamp pass.",
+    "ingredient-map.json entry 'Green Bell Peppers' -> green-bell-pepper references an id that no longer exists in commodities.json; live id is bell-peppers (cheapest cells are green bells, class-sound for green lines). Map repoint needed through the gate.",
+    "ingredient-map.json entry 'Cannellini Beans' -> cannellini-beans, but the weekly resolver claims the term for canned-white-beans; one id should own the concept at the gate."
+  ],
+  "densities_followups": [
+    "Spinach (fresh): still no densities row (flagged before by creamy-tuscan-chicken-skillet); this file adds the 'big handful' unit to the ask - propose handful 30 alongside cup 30 whole/loose."
+  ]
+}

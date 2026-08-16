@@ -1,0 +1,14 @@
+﻿{
+  "slug": "creamy-garlic-herb-wine-pork-chops",
+  "verdict": "fail",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "ingredient-coverage",
+      "severity": "blocking",
+      "detail": "RE-QA, same defect as cycle 1: the artifact under review still does not exist. No v2 spec at db\\recipes\\creamy-garlic-herb-wine-pork-chops.json and no built card at db\\built\\ (verified by glob on 2026-08-16). The prior fail was routed to the writer, but the state file remains at 'priced' (last updated 2026-08-16T06:31:55 by derive) with no build/write history entry after the first QA - the repair cycle never produced the spec. With no ingredients_display, no steps, no title, no credit and no prose, none of the six fidelity checks can be answered yes. Everything upstream that DOES exist is faithful: the live page was fetched this cycle and confirms the extraction verbatim (16/16 ingredient lines, 4 servings, dredge/sear/pan-sauce method, title 'Creamy Low Carb Pork Chops (Gluten Free)'), and the mapped file carries all 16 lines on one uniform 3.5x ratio (4 -> 14) with the chop each-weight back-solve documented and macro-validated (+0.6% protein).",
+      "owner": "writer"
+    }
+  ],
+  "notes": "Second consecutive fail, which the dispatch says is terminal (rejected-qa). A reviewer should know this is a pipeline-sequencing defect, not a source-fidelity defect: the recipe was dispatched to source-QA twice without the writer/build stage ever running. The extraction and mapping are both clean against the live page (whatsinthepan.com was fetchable both cycles). If the orchestrator rejects, it is rejecting a missing build, not a bad recipe - the upstream artifacts are reusable as-is if the recipe is re-attempted."
+}

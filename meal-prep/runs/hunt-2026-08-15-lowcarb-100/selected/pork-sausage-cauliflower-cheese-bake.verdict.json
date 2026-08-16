@@ -1,0 +1,16 @@
+{
+  "slug": "pork-sausage-cauliflower-cheese-bake",
+  "name": "Pork Sausage and Cauliflower Cheese Bake",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": "PASS",
+  "fit_evidence": "Published 407 cal / 6.6g carbs / 25g protein per serving - inside 400-650 cal and <=35g carb; no seafood; cream-cheese-and-gruyere-bound cauliflower bake with no starch base scales cleanly to 14 in a hotel pan. Flag: 407 sits at the floor, a label-DB recompute could dip under 400.",
+  "dupe_of": null,
+  "catalog_evidence": "No in-protein (pork) collision in the 544-recipe digest. Nearest catalog neighbor is cheesy-smoked-sausage-rice-skillet, which is a rice skillet with broccoli - different starch base and different dish. Not a catalog duplicate.",
+  "pool_note": "Chosen as the survivor of an in-batch collision with cheesy-cauliflower-mac-smoked-sausage-bake (both are pork-sausage + cauliflower + cheese oven bakes - same four axes). Kept this one over the American mac version because British cauliflower-cheese widens the catalog's American/Tex-Mex skew and it carries lower carbs (6.6 vs 10) with more calorie headroom.",
+  "cross_protein_collisions": [
+    "Structurally this is a sausage-and-cauliflower-cheese bake; a turkey- or chicken-sausage version of the same casserole in another selector's pool would be the same dinner. Decider should watch for a *-sausage-cauliflower-cheese-bake twin.",
+    "Also collides in silhouette with any crustless cauliflower-cheese bake carrying a different pork cut (bacon/ham) - e.g. accepted chicken-bacon-ranch-cauliflower-bake is a different flavor family (bacon-ranch chicken) so NOT a dupe, but flagging the cauliflower-cheese-bake cluster for the cross-protein merge pass."
+  ],
+  "unmapped_ok": "Carries fresh pork sausage links and Gruyere as unmapped - per v2.1 5.1 these absent-ingredient picks are wanted for the pricer lane, not penalized."
+}

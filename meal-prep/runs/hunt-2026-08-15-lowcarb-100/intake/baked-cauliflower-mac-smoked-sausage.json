@@ -1,0 +1,62 @@
+{
+  "name": "Baked Cauliflower Mac and Cheese with Smoked Sausage",
+  "slug": "baked-cauliflower-mac-smoked-sausage",
+  "protein": "pork",
+  "cuisine": "American",
+  "source_url": "https://thatlowcarblife.com/baked-cauliflower-mac-and-cheese-with-smoked-sausage/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Cauliflower", "grams": 1588, "buy": "3 1/2 lb, chopped into macaroni-sized pieces (about 3 medium heads)" },
+    { "item": "Smoked Sausage", "grams": 1361, "buy": "3 lb, sliced into thin rounds (about three 14 oz ropes and part of a fourth)" },
+    { "item": "Heavy Cream", "grams": 210, "buy": "3/4 cup plus 2 tbsp" },
+    { "item": "Cream Cheese", "grams": 198, "buy": "7 oz, room temperature (an 8 oz brick minus 2 tbsp)" },
+    { "item": "Cheddar Cheese, Shredded", "grams": 593, "buy": "5 1/4 cups grated, divided (3 1/2 cups in, 1 3/4 cups on top)" },
+    { "item": "Monterey Jack Cheese", "grams": 134, "buy": "1 cup plus 3 tbsp grated" },
+    { "item": "Cajun Seasoning", "grams": 11, "buy": "3 1/2 tsp" }
+  ],
+  "macros_per_serving": { "calories": 642, "protein_g": 25, "carbs_g": 16, "fat_g": 53 },
+  "writer_notes": [
+    "SOURCE YIELD 4, rebuilt to 14 at the mapper's 3.5x scale. Grams and buy strings transcribed from the mapped file; no number computed in prose.",
+    "Smoked sausage maps to the board Kielbasa / Smoked Sausage (pork-beef rope) class, cheapest cell the exact 14 oz Eckrich skinless rope this recipe names. Deliberately NOT the Smoked Turkey Sausage entry: turkey is a different variety at roughly half the calories per ounce and would deflate a card that must land in a 400-650 band.",
+    "Cream cheese maps to full-fat, cheddar to the shredded-cheese commodity, monterey jack to the board's own shredded/block class that includes monterey and jack by rule. All label-accurate rows; no lightened substitutes.",
+    "INGREDIENT-USE CHECK done: all seven bought lines are used by a step (cauliflower boiled, sausage browned then folded, cream + cream cheese + 3 1/2 cups cheddar + all monterey jack + Cajun melted into the sauce, remaining 1 3/4 cups cheddar on top). No step names anything unbought: the source browns the sausage in its own rendered fat, so no orphan oil line, and no salt or pepper line exists to strand.",
+    "BAND is TIGHT and sausage-row sensitive (carried LOUD from the mapper): the honest DB recompute lands at 642 cal per serving against a 650 ceiling, 8 cal of headroom, on the Eckrich 180 cal / 2 oz row. That row is the right anchor (the named product in 3 of 7 board cells including the exact 14 oz rope), but a heavier andouille-class label would breach the band. Numbers here are transcribed from the built spec, not adjusted."
+  ],
+  "prose": {
+    "intro_html": "Macaroni and cheese with sausage in it is the dinner a lot of us grew up on, and it never needed to be expensive to feel like a treat. Swap the noodles for cauliflower and the same comfort comes back with almost none of the carbs. Cauliflower boiled just tender, a cream and cheddar sauce with a little cream cheese for body, a whisper of Cajun seasoning, and enough smoked sausage that every bite finds some. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 20 grams of carbs. That is a bake that eats like the childhood version and costs like a Tuesday.",
+    "shop_smart": [
+      "<strong>The sausage is the anchor, so buy the rope, not the packet.</strong> You want three pounds of smoked sausage, which is three of the standard fourteen ounce ropes plus part of a fourth. A pork and beef rope browns up with real flavor and costs a fraction of the fancy links.",
+      "<strong>Fresh cauliflower, about three medium heads.</strong> Three and a half pounds of it, bought as whole heads and chopped down to macaroni size at home. Heads run cheaper than the pre-cut floret trays, and you are paying for cauliflower instead of the plastic clamshell.",
+      "<strong>Two cheeses do the sauce, and shredded is fine.</strong> The cheddar is the workhorse at a little over five cups, and the monterey jack is a supporting cup and change for meltiness. Buy them already grated to save the knuckle work; the bags melt the same as a block.",
+      "<strong>One brick of cream cheese and a small carton of cream.</strong> The bake uses seven ounces of cream cheese, so a single eight ounce brick covers it with a spoonful to spare, and it needs under a cup of heavy cream, well inside the smallest carton on the shelf.",
+      "<strong>Cajun seasoning is pantry backbone.</strong> Three and a half teaspoons is all the whole batch asks, so one jar seasons this and a long line of dinners after it. Store brand Cajun blend does the same job as the name on the shelf."
+    ],
+    "make_it": [
+      "Weigh your empty baking dish (or dishes, if you are splitting the batch across two) and write the number down. You will use it at the end to split this into 14 even servings by weight, which beats eyeballing every container.",
+      "Heat the oven to 350 degrees. Chop the cauliflower into macaroni-sized pieces and slice the smoked sausage into thin rounds.",
+      "Bring a large pot of water to a boil, add the cauliflower, and boil 4 minutes until just tender. Drain it well and return the pot to low heat.",
+      "While the cauliflower boils, brown the sausage rounds in a large skillet over high heat until they take good color. The sausage gives up plenty of its own fat, so you do not need to add any oil. Lift the rounds out onto a paper-towel-lined plate to drain.",
+      "To the drained cauliflower over low heat, add the heavy cream, cream cheese, 3 1/2 cups of the cheddar, all of the monterey jack, and the Cajun seasoning. Stir until the cheese melts into a smooth sauce, about 3 to 4 minutes.",
+      "Fold the browned sausage into the cheesy cauliflower, then spread it out in your baking dish. Scatter the remaining 1 3/4 cups of cheddar over the top.",
+      "Bake 15 to 20 minutes, until the top is melted and the edges are bubbling. Then weigh and portion as below."
+    ],
+    "portion_html": "Set the baking dish on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a cheesy, sausage-loaded bake that tastes like the boxed stuff never could. The sausage and the cheddar do the heavy lifting; the cauliflower stretches it into 14 real dinners.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Baked cauliflower mac and cheese with smoked sausage for meal prep: tender cauliflower in a cheddar cream sauce with browned sausage, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 20 grams of carbs.",
+    "keywords": "cauliflower mac and cheese, low carb mac and cheese, smoked sausage casserole, low carb meal prep, high protein dinner",
+    "prepTime": "PT15M",
+    "cookTime": "PT25M",
+    "totalTime": "PT40M",
+    "steps": [
+      "Heat the oven to 350 degrees, chop the cauliflower into macaroni-sized pieces, and slice the sausage into rounds.",
+      "Boil the cauliflower 4 minutes until just tender, then drain and return it to low heat.",
+      "Brown the sausage rounds in a large skillet in their own fat, then set aside to drain.",
+      "Stir the cream, cream cheese, 3 1/2 cups cheddar, monterey jack, and Cajun seasoning into the cauliflower until smooth.",
+      "Fold in the sausage, spread into a baking dish, top with the remaining cheddar, and bake 15 to 20 minutes.",
+      "Weigh the dish, subtract the empty weight, and divide the total across 14 containers."
+    ]
+  }
+}

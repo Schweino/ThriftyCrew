@@ -1,0 +1,19 @@
+{
+  "slug": "low-carb-turkey-cabbage-skillet",
+  "name": "Low-Carb Turkey and Cabbage Skillet",
+  "protein": "ground-turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 469,
+    "carbs": 8.7,
+    "in_band": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "reason": "469 cal is inside 400-650; 8.7g carbs is far under the 35g ceiling; dry cheesy skillet with no rice/pasta/potato base; weigh-and-divide scales cleanly from 14 oz turkey to ~3 lb for 14 servings."
+  },
+  "duplicate_of": null,
+  "dedup_evidence": "Not a dupe. The only ground-turkey+cabbage catalog recipe, turkey-cabbage-roll-soup, is a tomato-rice-broth soup (carrots, celery, diced-tomatoes, rice); this is a dry cheddar-melted saute with bacon and no starch. The kielbasa/haluski/sausage-cabbage catalog skillets all use smoked-turkey-sausage plus noodles/potato/rice, a different protein form and starch. No accepted-slug touches turkey-cabbage.",
+  "cross_protein_collision": "Structurally 'ground protein + cabbage + bacon + melted cheddar, dry low-carb skillet, no starch'. A ground-beef version (e.g. a low-carb cheeseburger/cabbage skillet or unstuffed-cabbage-in-a-skillet) or a ground-pork/ground-chicken cabbage-cheddar skillet in another selector's pool would be the same dish under a different protein. Decider should check beef/pork/chicken pools for a low-carb cabbage-cheddar skillet twin. Note the catalog's beef unstuffed-cabbage-roll-bowls is tomato-rice, so it does NOT collide.",
+  "pricer_note": "Carries four genuinely-absent board ingredients (scallions, smoked-paprika, cilantro, vegetable-broth) - wanted for the pricer lane per v2.1 5.1.",
+  "confidence": "high on nutrition/ingredients; source_servings=4 is a medium-confidence estimate (no explicit yield on the Carb Manager page) and should be re-checked at spec time."
+}

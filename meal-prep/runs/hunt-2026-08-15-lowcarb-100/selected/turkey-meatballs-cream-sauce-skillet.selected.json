@@ -1,0 +1,16 @@
+{
+  "slug": "turkey-meatballs-cream-sauce-skillet",
+  "name": "Turkey Meatballs in Cream Sauce Skillet",
+  "protein": "turkey",
+  "cuisine": "American",
+  "method": "skillet",
+  "source_url": "https://www.smalltownwoman.com/turkey-meatballs-in-easy-cream-sauce/",
+  "source_servings": 4,
+  "src_cal": 433,
+  "src_carbs": 16,
+  "src_protein": 38,
+  "unmapped": ["panko bread crumbs", "fresh parsley", "dried oregano", "garlic powder / onion powder"],
+  "decision": "ACCEPT",
+  "note": "In-band (433 cal / 16g carbs), no-starch turkey meatball skillet in a broth-and-cream gravy; fills an open slot - catalog has no turkey cream-gravy meatball. Cross-lane merge resolved: the pending pool candidate turkey-swedish-meatballs-skillet is the SAME dish family (turkey meatballs in creamy gravy) and additionally re-skins the live catalog beef Swedish-meatball-potato-bowls across protein + adds no new flavor the catalog lacks; this plain cream-gravy version is the distinct keep, so turkey-swedish-meatballs-skillet will be rejected as a pool-dupe when it reaches me. Cross-protein twins (beef swedish-meatball-potato-bowls, pork country-pork-meatballs-onion-gravy) are catalog/other-protein plates with a potato base this bare skillet lacks - not collisions.",
+  "cross_lane_checked": true
+}

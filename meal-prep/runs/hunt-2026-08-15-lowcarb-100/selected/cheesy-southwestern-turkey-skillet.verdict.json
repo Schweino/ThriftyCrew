@@ -1,0 +1,28 @@
+{
+  "slug": "cheesy-southwestern-turkey-skillet",
+  "name": "Cheesy Southwestern Ground Turkey Skillet",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "conditions_check": {
+    "calories": 434,
+    "cal_in_band": true,
+    "carbs": 9,
+    "carbs_under_ceiling": true,
+    "budget_meal_prep": true,
+    "scalable_to_14": true,
+    "no_seafood": true
+  },
+  "dedup": {
+    "against_catalog": "KEEP - not a near-duplicate of any catalog turkey dish. Nearest are southwestern-turkey-rice-casserole (creamy rice/corn-chip BAKE with turkey breast + cream-of-chicken - different method, starch base, wet binder), green-chile-ground-turkey-skillet (salsa-verde + rice + black beans + corn), and turkey-taco-rice-skillet (salsa + rice + beans). All carry a rice/bean/corn/tortilla starch base and a wet sauce; this candidate is a dry-spice, no-grain, no-bean skillet (cheddar + black olives), so only protein+method match (<=2 of 4 axes). Distinct low-carb plate.",
+    "against_accepted_slugs": "No collision - accepted-slugs.json (read fresh) contains no Southwestern/Mexican/taco turkey skillet; nearest low-carb skillets accepted are keto-cheeseburger-skillet and low-carb-steak-fajita-skillet (different protein and flavor family)."
+  },
+  "evidence": "Duplicates NO catalog recipe: the closest name-match, southwestern-turkey-rice-casserole, is a rice+corn-chip creamy casserole (different dish, similar name); every Mexican/Southwestern catalog turkey dish uses rice, beans, corn, or tortillas whereas this is a starch-free cheddar-and-olive skillet.",
+  "cross_protein_collision_flags": [
+    "Structurally a 'no-starch cheesy Southwestern/taco ground-meat skillet' - a ground-BEEF Southwestern/taco low-carb cheese skillet (or a keto-cheeseburger-adjacent taco skillet) in another selector's pool would be the same dish with beef swapped in; decider should merge-check.",
+    "A ground-CHICKEN Southwestern/taco no-base cheese skillet would likewise be structurally identical."
+  ],
+  "same_protein_pool_notes": [
+    "Candidate JSON self-flags two turkey pool items: southwest-ground-turkey-cauliflower-rice-skillet (has a cauliflower-rice base - distinguishable) and low-carb-turkey-taco-skillet (taco/salsa profile - decider should rule pool dedup since both are turkey)."
+  ]
+}

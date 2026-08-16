@@ -1,0 +1,18 @@
+{
+  "slug": "turkey-cauliflower-mushroom-casserole",
+  "name": "Low-Carb Turkey and Cauliflower Casserole with Mushrooms",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "status": "FIT",
+    "src_cal": 472,
+    "src_carbs": 8.6,
+    "evidence": "472 cal (within 400-650) and 8.6 g carbs (<=35 g) per serving on the source's own numbers; no seafood; oven-baked casserole is a budget meal-prep dinner that scales by weight from 8 to 14 servings."
+  },
+  "dupe": {
+    "is_dupe": false,
+    "evidence": "No catalog recipe uses cauliflower at all (grep of catalog-digest.json = 0 matches), and the defining feature here is cauliflower standing in for starch. The nearest turkey casseroles are all starch-based and thus different dinners: turkey-wild-rice-casserole (turkey/mushroom/cream/cheese on wild rice), turkey-florentine-rice-bake (turkey/mushroom/spinach on rice), turkey-tetrazzini (turkey/mushroom on pasta), and creamy-turkey-rice-mushroom-soup (a soup). Not present in accepted-slugs.json (only creamy-tuscan-chicken-skillet)."
+  },
+  "cross_protein_watch": "Structurally this is a low-carb [protein] + cauliflower + mushroom + cheese/sour-cream/mayo baked casserole with no starch. The source recipe itself says 'turkey OR chicken,' so a chicken version would be the SAME dish - decider should watch the chicken pool for any cheesy chicken-cauliflower-mushroom bake or 'cauliflower rice' casserole, and any other protein pool for a low-carb cauliflower-mushroom cream casserole. Milder overlap risk with the creamy-chicken-and-mushroom family if someone swaps rice for cauliflower.",
+  "notes": "Uses whole-muscle cooked turkey-breast (board-mapped), not ground. Only unmapped ingredient is mozzarella (nearest home: shredded-cheese) - flagged for the pricer lane, not penalized per v2.1 section 5.1."
+}

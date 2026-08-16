@@ -1,0 +1,27 @@
+{
+  "slug": "golden-coconut-chicken-curry",
+  "name": "Golden Coconut Chicken Curry",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 517,
+    "carbs_g": 16,
+    "protein_g": 27,
+    "within_band": true,
+    "band": "400-650 cal AND <=35g carb",
+    "seafood": false,
+    "scalable_14": true,
+    "batch_format": "stovetop simmer braise, coconut-cream sauce holds and reheats well",
+    "note": "517/16g is the curry-only figure (jasmine/basmati listed as optional for-serving and excluded); clears the band comfortably even if the source figure carries a little rice."
+  },
+  "duplicate_check": {
+    "catalog_dupe": false,
+    "evidence": "Nearest catalog coconut-chicken neighbors are Kuku Paka (Swahili, tomato/lime spicing), Cape Malay Chicken Curry (South African, tomato/potato base), Malaysian Chicken Rendang (same cuisine + protein but dry-braised to a thick kerisik/lemongrass/galangal paste, opposite method), and Vietnamese Ca Ri Ga (lemongrass + potato/carrot). This candidate is a saucy Malaysian golden aromatic-spice curry (star anise + cinnamon + garam masala + coriander + cumin + fennel + turmeric) over chicken thigh + broccoli in coconut cream. Protein and coconut-sauce overlap with several, but flavor family and method distinguish it from each - no three-of-four match to any single catalog dish.",
+    "pool_dupe": null
+  },
+  "cross_protein_watch": "Structurally a golden coconut-cream spice-braise. Coconut-curry-braise family already in play across proteins: thai-coconut-curry-pork-shoulder (accepted) and Thai Coconut Curry Turkey Meatballs / One-Skillet Ground Turkey Thai Curry are the neighbors, but those are Thai curry-paste flavor family, not the same dish. Decider should specifically watch for a beef/turkey/pork twin carrying the SAME Malaysian golden-spice profile (star anise + cinnamon + garam masala + fennel/coriander/cumin in coconut cream) - that would be a same-dish-different-protein collision I cannot see from a single-candidate view.",
+  "unmapped_ok": ["star anise", "coconut cream", "crispy fried shallots (garnish)"],
+  "confidence": "high",
+  "adjudicated_by": "select adjudicator (single-candidate)",
+  "adjudicated_at": "2026-08-16"
+}

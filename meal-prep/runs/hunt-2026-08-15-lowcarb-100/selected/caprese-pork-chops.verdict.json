@@ -1,0 +1,23 @@
+{
+  "slug": "caprese-pork-chops",
+  "name": "Caprese Pork Chops",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 496,
+    "carbs_g": 6,
+    "in_calorie_band": true,
+    "under_carb_ceiling": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "batch_format": "sear-then-oven-finish, weigh-and-divide - batches cleanly"
+  },
+  "dupe_check": {
+    "vs_catalog": "No caprese / tomato-mozzarella-basil pork chop in the 21 catalog pork-chop recipes (all are gravy, mushroom, country-fried, smothered, marry-me-over-pasta, scalloped/hash-brown/stuffing casserole, or rice builds). Only balsamic pork is slow-cooker-balsamic-pork-bowls, a shredded-pork-over-rice bowl with no mozzarella or tomato caprese profile - different dish.",
+    "vs_accepted_slugs": "No collision; nearest accepted pork is creamy-garlic-herb-wine-pork-chops (cream/wine sauce, distinct flavor family) and pulled-pork-stuffed-peppers.",
+    "result": "distinct"
+  },
+  "cross_protein_collision_note": "Structurally this is protein + fresh mozzarella + sliced tomato + fresh basil + balsamic reduction. A caprese chicken cutlet or caprese turkey cutlet would be the SAME DISH in a different protein - decider should watch other selectors' pools for a caprese/tomato-mozzarella-basil chicken or turkey candidate and dedupe cross-protein.",
+  "notes": "One deliberate unmapped ingredient (sliced fresh mozzarella - board only tracks daiya-mozzarella-style-shreds); per v2.1 5.1 not penalized, routed to pricer queue. Widens catalog's thin Italian/caprese pork coverage.",
+  "evidence": "Published recipe card: 496 cal / 56 g protein / 6 g carb per serving - dead-center calorie band, far under 35 g carb ceiling."
+}

@@ -1,0 +1,216 @@
+{
+  "slug": "low-carb-turkey-cauliflower-mushroom-casserole",
+  "title": "Low-Carb Turkey Casserole (with Cauliflower Rice and Mushrooms)",
+  "source_url": "https://kalynskitchen.com/low-carb-turkey-casserole-with-cauliflower-rice/",
+  "source_servings": 8,
+  "target_servings": 14,
+  "scale_factor": 1.75,
+  "protein": "turkey",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 1.75x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "'4 cups cooked leftover turkey or chicken' is booked as TURKEY (the title protein), bought RAW as turkey-breast (6 of 7 stores, cheapest Fareway $2.99/lb), roasted and diced by the cook. Grams book the raw purchase weight (3 lb = 1361 g) against the raw Turkey Breast DB row; at the ~70% roast yield that gives 953 g = 6.8 cups diced vs the 980 g the exact 1.75x asks (-2.9%, inside quantize tolerance). The 'or chicken' alternative is recorded, unpriced, to avoid double-counting (either/or precedent from the stroganoff serve-over base).",
+    "'1 pound Crimini mushrooms' keeps its own Baby Bella (Crimini) Mushrooms DB row (USDA 22 cal/100 g, added 2026-08-16 by the keto-crustless-pizza-casserole lane) but PRICES via the generic mushrooms commodity, whose include /mushrooms?/ is the board's own designed claim on the term (bouillon-claims-beef-base precedent). Price-class tension disclosed: all 7 cells behind that commodity are WHITE mushrooms and retail baby bella typically runs above white - flagged for the match-soundness gate rather than silently absorbed, see board_defects_observed."
+  ],
+  "registrar_rulings": [],
+  "ingredients": [
+    {
+      "source_raw": "6 cups chopped cauliflower (see notes)",
+      "item": "Cauliflower",
+      "bid": "cauliflower",
+      "board": "weekly",
+      "grams": 1124,
+      "buy": "10 1/2 cups chopped (about 2 medium heads)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.75x = 10.5 cups x USDA 107 g/cup chopped = 1123.5 -> 1124 g (densities.json still has NO Cauliflower row - FLAGGED, chicken-bacon-ranch precedent basis). FRESH cauliflower to the fresh cauliflower commodity (unit each, 4 of 7 stores, cheapest Fareway $1.98/each); the source's frozen-riced alternative is a form-flip and is not priced. DB row USDA raw 25 cal/100 g."
+    },
+    {
+      "source_raw": "1 pound Crimini mushrooms, washed and sliced",
+      "item": "Baby Bella (Crimini) Mushrooms",
+      "bid": "mushrooms",
+      "board": "weekly",
+      "grams": 794,
+      "buy": "1 3/4 lb, washed and sliced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.75x = 1.75 lb = 794 g; printed weight and grams agree. bid mushrooms: the commodity's own include pattern claims the term (see ruled_substitutions for the disclosed white-vs-crimini price-class tension). Board 7 of 7, cheapest Sam's $0.1654/oz. DB row USDA crimini 22 cal/100 g."
+    },
+    {
+      "source_raw": "4 cups cooked leftover turkey or chicken",
+      "item": "Turkey Breast",
+      "bid": "turkey-breast",
+      "board": "weekly",
+      "grams": 1361,
+      "buy": "7 cups diced cooked turkey breast (from about 3 lb raw)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by the source's cooked-cup measure: 4 cups x 1.75 = 7 cups x densities Turkey Breast cup=140 = 980 g cooked -> raw purchase 1400 g at ~70% roast yield, quantized 3 lb = 1361 g (-2.9%). grams book the RAW purchase weight against the raw Turkey Breast DB row (USDA 114 cal / 23.7 P per 100 g), so cost and macros share one basis. Board 6 of 7, cheapest Fareway $2.99/lb. See ruled_substitutions for the 'or chicken' alternative."
+    },
+    {
+      "source_raw": "1 onion, chopped",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 193,
+      "buy": "1 3/4 medium yellow onions, chopped (about 1 3/4 cups)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.75x = 1.75 onions x densities each=110 g = 192.5 -> 193 g. No author weight parenthetical here (unlike the philly onion), so the densities medium-each basis stands. Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "2 T olive oil, divided (more or less depending on your pan)",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 47,
+      "buy": "3 1/2 tbsp, divided",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.75x = 3.5 tbsp x densities 13.5 g/tbsp = 47.25 -> 47 g. Extractor concern noted (ingredient list says 2 T, instructions sum 6 tsp = 2 T; they reconcile, transcribed as printed). Board 7 of 7, cheapest Sam's $0.1879/floz."
+    },
+    {
+      "source_raw": "1 tsp. dried thyme",
+      "item": "Dried Thyme",
+      "bid": "dried-thyme",
+      "board": "weekly",
+      "grams": 1.8,
+      "buy": "1 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.75x = 1.75 tsp x densities 1 g/tsp = 1.75 -> 1.8 g. Board 5 of 7. REPAIRED 2026-08-16: originally scaled 3.5x (3 1/2 tsp / 3.5 g), the source-QA blocking finding."
+    },
+    {
+      "source_raw": "1 tsp. dried Poultry Seasoning",
+      "item": "Poultry Seasoning",
+      "bid": "poultry-seasoning",
+      "board": "weekly",
+      "grams": 2.6,
+      "buy": "1 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.75x = 1.75 tsp x DB ~1.5 g/tsp = 2.6 g. Board 4 of 7, cheapest Walmart $0.6753/oz. REPAIRED 2026-08-16: originally scaled 3.5x (3 1/2 tsp / 5.25 g), the source-QA blocking finding."
+    },
+    {
+      "source_raw": "salt and fresh-ground black pepper to taste",
+      "item": "Salt and Pepper (to taste)",
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "to taste",
+      "optional": true,
+      "decision": "optional-pantry",
+      "notes": "Unmeasured to-taste line, optional per the source; zero grams booked, NOT enqueued."
+    },
+    {
+      "source_raw": "1 cup coarsely grated Mozzarella (or more)",
+      "item": "Mozzarella Cheese",
+      "bid": "mozzarella-cheese",
+      "board": "weekly",
+      "grams": 198,
+      "buy": "1 3/4 cups coarsely grated",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.75x = 1.75 cups x 113 g/cup (label-accurate shredded-cheese cup, turkey-zucchini precedent) = 197.75 -> 198 g; the '(or more)' is read at the printed 1 cup. bid from ingredient-map (Mozzarella Cheese -> mozzarella-cheese, weekly); NOTE the term resolver instead answers via the shredded-cheese commodity (7 of 7, cheapest Sam's $0.1521/oz) and the mozzarella-cheese id has no cell on either board file read directly - the standing turkey-zucchini board defect, re-flagged below. DB row low-moisture part-skim shredded, USDA 304 cal/100 g."
+    },
+    {
+      "source_raw": "1 cup sour cream",
+      "item": "Sour Cream",
+      "bid": "sour-cream",
+      "board": "weekly",
+      "grams": 403,
+      "buy": "1 3/4 cups full-fat",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.75x = 1.75 cups x USDA 230 g/cup = 402.5 -> 403 g. FULL-FAT Sour Cream row (198 cal/100 g, this run's addition) - the Light row would deflate a calorie-floor recipe. Board 7 of 7, cheapest Walmart $0.1025/oz."
+    },
+    {
+      "source_raw": "1/2 cup mayo",
+      "item": "Mayonnaise",
+      "bid": "mayonnaise",
+      "board": "weekly",
+      "grams": 182,
+      "buy": "3/4 cup plus 2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.75x = 0.875 cup = 14 tbsp x densities 13 g/tbsp = 182 g; printed as tbsp-composed measure because 0.875 cup is not a house quarter. Board 7 of 7, cheapest Sam's $0.0936/oz. GV label 90 cal/tbsp."
+    },
+    {
+      "source_raw": "2 T Dijon mustard",
+      "item": "Dijon Mustard",
+      "bid": "dijon-mustard",
+      "board": "recipe",
+      "grams": 53,
+      "buy": "3 1/2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.75x = 3.5 tbsp x densities 15 g/tbsp = 52.5 -> 53 g. Board 6 of 7, cheapest Aldi $0.1242/oz."
+    },
+    {
+      "source_raw": "1/2 tsp. dried thyme",
+      "item": "Dried Thyme",
+      "bid": "dried-thyme",
+      "board": "weekly",
+      "grams": 0.9,
+      "buy": "7/8 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Sauce-section thyme kept as its own line mirroring the source. exact 1.75x = 0.875 tsp x 1 g/tsp = 0.875 -> 0.9 g. REPAIRED 2026-08-16: originally scaled 3.5x (1 3/4 tsp / 1.8 g), the source-QA blocking finding."
+    },
+    {
+      "source_raw": "1/2 tsp. dried Poultry seasoning",
+      "item": "Poultry Seasoning",
+      "bid": "poultry-seasoning",
+      "board": "weekly",
+      "grams": 1.3,
+      "buy": "7/8 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Sauce-section line kept separate. exact 1.75x = 0.875 tsp x ~1.5 g/tsp = 1.3 g. REPAIRED 2026-08-16: originally scaled 3.5x (1 3/4 tsp / 2.6 g), the source-QA blocking finding."
+    },
+    {
+      "source_raw": "1 cup grated Mozzarella",
+      "item": "Mozzarella Cheese",
+      "bid": "mozzarella-cheese",
+      "board": "weekly",
+      "grams": 198,
+      "buy": "1 3/4 cups grated",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Sauce-section mozzarella, same basis as the layer line: 1.75 cups x 113 = 198 g."
+    },
+    {
+      "source_raw": "1/4 cup coarsely grated Parmesan cheese",
+      "item": "Parmesan Cheese",
+      "bid": "parmesan",
+      "board": "weekly",
+      "grams": 49,
+      "buy": "7 tbsp coarsely grated (a bit under 1/2 cup)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 1.75x = 0.4375 cup = 7 tbsp x densities 7 g/tbsp = 49 g. Board 7 of 7, cheapest Sam's $0.3092/oz. GV label 110 cal/28 g."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 472, "protein_g": 33, "carbs_g": 8.6, "fat_g": 33 },
+    "recomputed_per_serving_from_food_db": { "calories": 432.3, "protein_g": 35.6, "carbs_g": 12.1, "fat_g": 27.2 },
+    "protein_gap_pct": 7.9,
+    "calorie_gap_pct": -8.4,
+    "verdict": "PASS - protein +7.9% and calories -8.4%, both inside tolerance, so portions stand. The turkey line is measure-anchored by the source's own 4 cooked cups, not each-assumed, and our 70-g-cooked-per-serving basis reproduces their protein within 8%. The fat shortfall (27.2 vs 33) is the identifiable divergence: their calculator most plausibly booked whole-milk mozzarella and a heavier mayo cup where ours books the low-moisture part-skim shredded row that matches the priced bags; direction is calorie-DOWN and the floor still clears by 32 cal. Carbs 12.1 vs their 8.6 is +3.5 g absolute on gross-vs-net counting, far under the 35 g gate either way.",
+    "band_check": "computed 432.3 cal in [400, 650] PASS (floor margin 32 cal); carbs 12.1 g <= 35 PASS. Only optional line is unmeasured salt-and-pepper (zero-booked)."
+  },
+  "loud_flags": [
+    "REPAIR 2026-08-16 (source-QA blocking finding, owner mapper): all four seasoning lines were scaled 3.5x instead of 1.75x and have been rescaled - main thyme 3.5 g -> 1.8 g, sauce thyme 1.8 g -> 0.9 g, main poultry seasoning 5.25 g -> 2.6 g, sauce poultry seasoning 2.6 g -> 1.3 g. The macro_cross_check recompute above predates the repair; the correction removes about 19 cal from the batch (~1.4 cal/serving, recompute ~430.9 vs 432.3), immaterial to the PASS verdict and the band check either way.",
+    "Floor margin is 32 cal and our recompute sits BELOW the source's own 472; if the spec lane re-bases any dairy line lighter (e.g. reduced-fat mozzarella) this recipe slides under 400. The full-fat rows booked here are load-bearing.",
+    "densities.json follow-ups (sanctioned route, not edited by this run): Cauliflower cup chopped=107 (re-flag of chicken-bacon-ranch), Mozzarella Cheese cup=113, Turkey Breast raw-to-roast yield note (0.70 used here)."
+  ],
+  "board_defects_observed": [
+    "mozzarella-cheese id (ingredient-map board=weekly) has no cell in comparison-2026-08-15.json and is not on recipe-board.json; the term only prices via the shredded-cheese commodity's include pattern. Re-flag of the turkey-zucchini-noodle-casserole defect - one concept, two routing answers; the match-soundness gate should reconcile before the spec stamps item_id.",
+    "mushrooms commodity: include /mushrooms?/ claims every mushroom variety ('crimini mushrooms', 'baby bella mushrooms' both resolve here) while all 7 priced cells are WHITE mushrooms; baby bella retail typically prices above white, so the claim is optimistic for crimini lines. Disclosed here (ruled_substitutions) rather than silently accepted; flagged for the match-soundness gate."
+  ]
+}

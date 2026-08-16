@@ -1,0 +1,20 @@
+{
+  "slug": "slow-cooker-shredded-taco-pork",
+  "name": "Slow Cooker Shredded Taco Pork",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "ok": true,
+    "cal": 411,
+    "carbs_g": 1.6,
+    "notes": "Published 411 cal (within 400-650) / 1.6g carbs (<=35). Pork shoulder slow-cooker, budget, scales to 14 by weigh-and-divide, no seafood. FLOOR RISK: 411 sits ~11 cal above the 400 floor; a label-DB recompute could drift under 400. Ruled FIT on published numbers as instructed; flag for extract lane to re-verify against the 400 floor."
+  },
+  "dupe_check": {
+    "against_catalog": "Not a duplicate. Every Mexican/shredded pork in the 118-recipe pork catalog is a defined regional flavor served over a starch as a rice/burrito bowl (al-pastor-pork-taco-bowl w/ cilantro-lime rice, slow-cooker-pork-carnitas-bowl burrito bowl, pork-tinga/birria/salsa-verde/green-chili bowls, cochinita-pibil, carne-adovada). This candidate is a generic taco-seasoning shredded pork with NO starch (meat+butter+spice) - differs on starch and on flavor family from each. No plain low-carb taco pork base exists in catalog.",
+    "against_accepted_slugs": "No collision. Read accepted-slugs.json fresh (33 slugs); pork accepts are thai-coconut-curry-pork-shoulder, creamy-garlic-herb-wine-pork-chops, pulled-pork-stuffed-peppers, braised-pork-shoulder-fennel-tomato - none Mexican/taco shredded pork.",
+    "duplicates": null
+  },
+  "cross_protein_collision_flags": [
+    "'Shredded taco <protein>' is a format that recurs across proteins. Decider should watch other selectors' pools for a structurally identical dish with a different protein - specifically a 'slow cooker shredded taco chicken' or a shredded/barbacoa-style 'taco-seasoned shredded beef' base (same method: slow-cooked, shredded, generic taco seasoning, no starch). If such a twin lands, this pork base and that twin are the same dinner in a different meat and only one plate-format should ship."
+  ]
+}

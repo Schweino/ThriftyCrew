@@ -1,0 +1,23 @@
+{
+  "slug": "mushroom-gravy-pork-chops-skillet",
+  "name": "Mushroom Gravy Pork Chops",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "ok": true,
+    "calories": 582,
+    "carbs_g": 18,
+    "note": "582 cal is within 400-650; 18g carb is under the 35g cap; pork, no seafood; sear-and-simmer skillet scales cleanly to 14 servings."
+  },
+  "dedup": {
+    "catalog": "KEEP - closest catalog dish is creamy-mushroom-pork-chops-over-mashed-potatoes (pork chops + mushroom sauce + skillet), but that one is a white heavy-cream sauce served OVER MASHED POTATOES; this is a starchless low-carb BROWN mushroom gravy (chicken broth + beef bouillon + Worcestershire + Kitchen Bouquet browning, only 1/3 cup half-and-half). Brown-gravy vs cream-sauce plus no-starch vs mashed-potato genuinely distinguish the plate for a low-carb run.",
+    "pool": "Distinct from already-accepted creamy-garlic-herb-wine-pork-chops (line 13 of accepted-slugs): that shares wine+cream+garlic+herb+skillet+pork, but it is a clear garlic-herb white-wine CREAM sauce with NO mushrooms; this candidate's identity is 8 oz mushrooms in a brown gravy. Different plate."
+  },
+  "borderline": {
+    "flag": true,
+    "reason": "3-of-4 structural overlap (protein=pork chop, method=skillet sear+simmer, mushroom sauce family) with catalog creamy-mushroom-pork-chops-over-mashed-potatoes. Kept as distinct on brown-gravy-vs-cream and starchless-vs-mashed-potato, but flagging for audit to confirm it reads as a separate catalog entry rather than a near-dup."
+  },
+  "cross_protein_collision": "A brown mushroom-gravy sear-and-simmer skillet is a protein-swappable frame: the same dish exists with beef, turkey, or chicken. Watch for a same-sauce twin - notably salisbury-steak-mushroom-gravy-skillet is in this run's pool (beef + mushroom brown gravy; distinct only by ground-patty format), and any 'turkey/chicken mushroom gravy skillet' would be structurally identical. Decider should cross-check the beef/turkey lanes.",
+  "unmapped_ingredients": ["kitchen-bouquet (optional browning sauce)", "mustard-powder"],
+  "source_url": "https://thecozycook.com/mushroom-pork-chops/"
+}

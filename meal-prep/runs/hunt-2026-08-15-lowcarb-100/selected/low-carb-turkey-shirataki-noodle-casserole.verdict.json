@@ -1,0 +1,19 @@
+{
+  "slug": "low-carb-turkey-shirataki-noodle-casserole",
+  "name": "Low-Carb Turkey Noodle Casserole",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "cal": 462,
+    "carbs": 5.5,
+    "in_band": true,
+    "reason": "462 cal sits mid-band (400-650); 5.5 g total carbs is far under the 35 g ceiling; oven-baked weigh-and-divide casserole scales cleanly to 14; no seafood."
+  },
+  "dupe_check": {
+    "is_dupe": false,
+    "closest_catalog": "turkey-noodle-casserole",
+    "evidence": "Catalog turkey-noodle-casserole is a milk/cheddar egg-noodle bake with canned corn and frozen peas; this shares only protein (turkey breast) and method (oven bake) but differs on starch (shirataki 'Wonder Noodles' vs egg noodles) and sauce family (cream-cheese/heavy-cream/gruyere/parmesan Alfredo with pork-rind crumb vs milk-cheddar-corn-peas) - 2 of 4, a distinct low-carb dish, not a near-dupe. Accepted turkey-zucchini-noodle-casserole uses zucchini noodles and keto-turkey-broccoli-cheddar-casserole is a broccoli-cheddar bake; neither collides."
+  },
+  "cross_protein_watch": "Structurally a creamy shirataki-noodle cheese bake with chopped cooked protein - a chicken 'low-carb chicken noodle casserole' over shirataki with an alfredo/cream-cheese sauce would be the same dish with the protein swapped. Decider should watch the chicken pool for a shirataki creamy-noodle bake. (Tuna-noodle version is the classic ancestor but seafood is excluded.)",
+  "unmapped_note": "Carries shirataki 'Wonder Noodles', gruyere, and pork rinds unmapped - wanted per v2.1 5.1 to exercise the pricer lane, not penalised."
+}

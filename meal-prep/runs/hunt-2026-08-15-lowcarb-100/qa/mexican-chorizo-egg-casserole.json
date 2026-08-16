@@ -1,0 +1,7 @@
+﻿{
+  "slug": "mexican-chorizo-egg-casserole",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [],
+  "notes": "Re-QA after reanchor-machine-fields.ps1. Live page fetched and matches the extraction exactly (title, 10 servings, all 15 ingredient lines, method, nutrition). Spec is a clean 1.4x (10->14) build: every gram checks against the single ratio; chorizo 624 g is the documented 22 oz quantization (-1.8%). Prose cost literals equal the spec's own fields (batch 17.85/1.28, true 30.19/2.16, pantry add 3.68, first run 33.87); cost_ps 2.42 = head.costPerServing and appears in prose only as the {{cost_ps}} token qualified 'at everyday cost' -- the everyday-basis divergence from cost_per_serving 1.28 is deliberate per dispatch, not a finding. 17 g carb literal matches stat.carbs. Butter-greasing and optional toppings handled per the spec's documented precedents; source-macro divergence (dry vs fresh chorizo basis) is documented in writer_notes and belongs to the batch auditor, not fidelity. Confirmed: the cost reanchor is the only movement since the prior cert."
+}

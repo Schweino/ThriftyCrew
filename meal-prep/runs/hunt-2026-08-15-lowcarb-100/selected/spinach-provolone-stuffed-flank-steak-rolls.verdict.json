@@ -1,0 +1,19 @@
+{
+  "slug": "spinach-provolone-stuffed-flank-steak-rolls",
+  "name": "Spinach and Provolone Stuffed Flank Steak Rolls",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 528,
+    "carbs": 5,
+    "in_band": true,
+    "note": "528 cal is inside 400-650; 5g carbs is well under the 35g ceiling; no seafood; sliceable weigh-and-divide roast scales cleanly to 14 servings."
+  },
+  "dupe_evidence": "No catalog collision. Grepped the full digest for flank/stuffed/roll/braciole/pinwheel: the only beef 'stuffed' hit is Beef Stuffed Shells (ground beef in pasta) and the only beef 'roll' is Unstuffed Cabbage Roll Bowls (ground beef, no steak) - neither is a rolled/stuffed whole-muscle steak. No braciole, no beef pinwheel, no stuffed flank steak exists in the 544-recipe catalog or in accepted-slugs.json (only two chicken slugs accepted so far). Distinct Italian-American dish that widens a catalog skewed American/Tex-Mex.",
+  "cross_protein_collision_watch": "Structurally this is 'whole-muscle protein butterflied, rolled around spinach + cream cheese + provolone, seared then oven-baked and sliced into pinwheels.' The decider should watch other proteins for the same plate: a spinach-and-cheese stuffed pork loin/tenderloin roll, or a spinach-provolone stuffed chicken breast roll - same filling, same sear-then-bake-and-slice method, different protein. If such a twin surfaces in the pork or chicken lane, this is the same dinner with the meat swapped.",
+  "unmapped_note": "Carries flank-steak (board tracks only sirloin-steak and ribeye-steak) and provolone-cheese as unmapped - per v2.1 5.1 this is wanted, not penalised; exercises the pricer lane.",
+  "adjudicated_against": {
+    "catalog_digest": "544 recipes",
+    "accepted_slugs": ["creamy-tuscan-chicken-skillet", "chicken-bacon-ranch-cauliflower-bake"]
+  }
+}

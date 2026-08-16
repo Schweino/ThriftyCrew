@@ -1,0 +1,32 @@
+{
+  "name": "Low-Carb Steak Philly Cheesesteak Skillet",
+  "slug": "steak-philly-cheesesteak-skillet",
+  "protein": "beef",
+  "method": "skillet",
+  "cuisine": "American",
+  "source_url": "https://diethood.com/philly-cheesesteak-skillet/",
+  "source_servings": 4,
+  "src_cal": 438,
+  "src_carbs": 10,
+  "src_protein": 44,
+  "src_fat": 24,
+  "ingredients_verbatim": [
+    "1.5 pounds skirt or flank steak, cut against the grain into thin slices",
+    "2 teaspoons salt",
+    "1 teaspoon fresh ground black pepper",
+    "3 tablespoons olive oil, divided",
+    "1 small yellow onion, thinly sliced",
+    "4 cloves garlic, minced or pressed",
+    "1 green bell pepper, thinly sliced",
+    "1 orange bell pepper, thinly sliced",
+    "8 ounces sliced baby portobello mushrooms",
+    "1 teaspoon Italian Seasoning",
+    "4 slices provolone cheese",
+    "Sliced green onions, for garnish",
+    "Chopped fresh parsley, for garnish"
+  ],
+  "main_ingredients": ["flank/skirt steak", "bell peppers", "onion", "mushrooms", "provolone cheese", "olive oil", "garlic"],
+  "unmapped": ["flank/skirt steak (no flank-steak or skirt-steak commodity id on the board; only sirloin-steak and ribeye-steak exist)"],
+  "why": "Whole-muscle steak (flank/skirt), skillet method - squarely in the beef-roast/steak lane, not a ground-beef skillet or braise. Published nutrition 438 cal / 10 g carbs / 44 g protein per serving lands mid-band and well under the 35 g carb ceiling with excellent protein-per-calorie. Steak + peppers + onion + mushroom + cheese is structurally low-carb (no rice/pasta/potato/bread base). Distinct from the existing ground-beef philly-cheesesteak-skillet-bowls. Scales cleanly to 14 by weight. Flank/skirt steak is a genuine no-board-home flag for the pricer-lane exercise (sub sirloin, or add the cut).",
+  "confidence": "high - read published nutrition and full ingredient list directly from the source page"
+}

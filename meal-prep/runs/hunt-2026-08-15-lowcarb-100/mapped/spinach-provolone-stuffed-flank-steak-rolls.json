@@ -1,0 +1,128 @@
+{
+  "slug": "spinach-provolone-stuffed-flank-steak-rolls",
+  "title": "Spinach Stuffed Flank Steak Rolls",
+  "source_url": "https://gimmedelicious.com/spinach-cheese-stuffed-flank-steak-rolls/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "beef",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged USDA/label unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%. Serving anchor: source serving is 2 pinwheel rolls (4 servings from a 1 lb flank); 14 servings = 28 rolls, 113 g raw flank per serving.",
+  "ruled_substitutions": [
+    "Generic 'oil' (saute line) books to the house Vegetable Oil item - the recipe names no oil type and vegetable-oil is the house generic (7 of 7 stores); olive-oil would be an upgrade the source does not ask for. Fat macros are within 1 cal/tbsp of any liquid oil, so the ruling is price-side only.",
+    "Provolone line itself sanctions 'or mozzarella or your favorite melting cheese'; the PRIMARY (provolone) is booked, matching the source's own nutrition basis."
+  ],
+  "ingredients": [
+    {
+      "source_raw": "1 lb. flank steak, butterflied",
+      "item": "Beef Flank/Sirloin Steak",
+      "bid": "sirloin-steak",
+      "board": "weekly",
+      "grams": 1588,
+      "buy": "3 1/2 lb flank steak, butterflied",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Existing ingredient-map authority: item 'Beef Flank/Sirloin Steak' -> sirloin-steak (weekly) - the house has already ruled flank and sirloin one price class (flank-steak-parmesan-green-beans precedent, this run). Main protein anchored by source WEIGHT (1 lb), exact 3.5x = 1588 g, zero drift. sirloin-steak 7 of 7 stores, cheapest Family Fare $5.49/lb. The bare TERM 'flank steak' remains unclaimed by any commodity (CAPTURE, 1 Walmart candidate) - same term-resolution gap that sibling recorded; NOT enqueued because the item's board id is priced 7 of 7. DB row Beef Flank/Sirloin Steak (USDA lean raw, 155 cal/100 g)."
+    },
+    {
+      "source_raw": "2 tablespoons oil",
+      "item": "Vegetable Oil",
+      "bid": "vegetable-oil",
+      "board": "weekly",
+      "grams": 98,
+      "buy": "7 tbsp vegetable oil",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Generic 'oil' -> house Vegetable Oil (see ruled_substitutions). Exact 3.5x = 7 tbsp x densities 14 g/tbsp = 98 g. Counted in full (it fries the onion/garlic base that goes into the filling). Board 7 of 7, cheapest Hy-Vee $0.0666/floz."
+    },
+    {
+      "source_raw": "1/2 cup onion, chopped",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 201,
+      "buy": "1 3/4 cups chopped onion (about 2 medium)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Plain 'onion' books Yellow Onion per house precedent. Exact 3.5x = 1.75 cups, quarter-clean, zero drift; densities cup=115 g -> 201 g. Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "3-4 cloves garlic, minced or crushed",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 36,
+      "buy": "12 cloves garlic, minced (about 1 head)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Source gives a RANGE 3-4; midpoint 3.5 x 3.5 = 12.25, printed as the whole-clove count 12 (-2.0%, inside the source's own 10.5-14 range). densities clove=3 g -> 36 g. Board 5 of 7, cheapest Baker's $0.498/each."
+    },
+    {
+      "source_raw": "4 ounces cream cheese",
+      "item": "Cream Cheese",
+      "bid": "cream-cheese",
+      "board": "weekly",
+      "grams": 397,
+      "buy": "14 oz cream cheese (one and three-quarter 8 oz bricks)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FULL-FAT cream cheese; deliberately NOT the 1/3 Fat Cream Cheese map entry (deflating calories fails a calorie-floor gate - baked-cauliflower-mac precedent). Exact 3.5x = 14 oz = 397 g, zero drift; printed weight and grams agree. cream-cheese 7 of 7 stores, cheapest Sam's $0.1381/oz. DB row Cream Cheese (USDA full-fat, 350 cal/100 g, added 2026-08-15 this run)."
+    },
+    {
+      "source_raw": "8 ounces sliced Provolone cheese, or mozzarella or your favorite melting cheese",
+      "item": "Provolone Cheese",
+      "bid": "provolone-cheese",
+      "board": "recipe",
+      "grams": 794,
+      "buy": "28 oz sliced provolone (1 3/4 lb)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Primary option booked (see ruled_substitutions). Source states a WEIGHT (8 oz), so no slice-weight assumption is needed (the philly-cheesesteak 21 g/slice question does not arise). Exact 3.5x = 28 oz = 794 g, zero drift. provolone-cheese: recipe board, 6 of 7 stores, cheapest Aldi $0.1862/oz. DB row Provolone Cheese (USDA, 350 cal / 26 P per 100 g). Prior batch flagged empty-name cells on 3 stores for this id - coverage claim rests on the named cells (Aldi/Sam's/Hy-Vee), still >= 3 stores."
+    },
+    {
+      "source_raw": "2 cups baby spinach",
+      "item": "Spinach",
+      "bid": "spinach",
+      "board": "weekly",
+      "grams": 210,
+      "buy": "7 cups baby spinach (about 7 oz)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FRESH baby spinach -> the board's FRESH 'spinach' commodity (7 of 7, cheapest Walmart $0.20/oz), NOT frozen-chopped-spinach (fresh-is-not-frozen standing rejection; the legacy map entry Spinach -> frozen-chopped-spinach is the known defect creamy-tuscan-chicken-skillet flagged - same stamp-time hazard applies here, see loud_flags). Exact 3.5x = 7 cups at the USDA raw-leaves cup = 30 g -> 210 g (densities has no fresh-spinach row; followup already proposed by sibling). DB row Spinach fresh (USDA 23 cal/100 g)."
+    },
+    {
+      "source_raw": "Salt and pepper, to taste",
+      "item": "Salt and Pepper (to taste)",
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "to taste",
+      "optional": true,
+      "decision": "optional-pantry",
+      "notes": "Unmeasured to-taste line, optional per the source. Zero grams booked; salt and black-pepper are both 7 of 7 on the board if the writer wants a cost line. NOT enqueued (never enqueue an optional line)."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 528, "protein_g": 41, "carbs_g": 5, "fat_g": 37 },
+    "computed_per_serving": { "calories": 546.2, "protein_g": 42.2, "carbs_g": 5.4, "fat_g": 40.1 },
+    "protein_gap_pct": 2.9,
+    "calorie_gap_pct": 3.4,
+    "verdict": "PASS - protein +2.9%, calories +3.4%, carbs +8%, fat +8.4%: all four track the source's own label closely. The main protein is anchored by an explicit source weight (1 lb flank), and the two big cheese lines are explicit weights too, so no each-weight assumption exists anywhere in this recipe (the florentine failure mode cannot occur). Nothing to re-examine.",
+    "band_check": "computed 546.2 cal in [400, 650] PASS (104 cal of ceiling headroom, 146 above the floor); carbs 5.4 g <= 35 PASS. Optional lines: none with grams."
+  },
+  "loud_flags": [
+    "Stamp-time hazard inherited from creamy-tuscan-chicken-skillet: ingredient-map's legacy 'Spinach' -> frozen-chopped-spinach entry will override this file's fresh 'spinach' bid when update-recipes-db.ps1 stamps item_id (map wins over scaler bid). Macros are unaffected (fresh and frozen rows are per-gram identical); the price class is. Needs the map correction already flagged by the sibling before this recipe's stamp pass."
+  ],
+  "board_defects_observed": [
+    "Term 'flank steak' still claimed by no commodity while the item's board id (sirloin-steak) prices 7 of 7 - the term-resolution gap flank-steak-parmesan-green-beans recorded persists on today's board.",
+    "provolone-cheese (recipe board): Walmart, Baker's and Family Fare cells still carry a price with an EMPTY item name (re-observed 2026-08-16, first logged by philly-cheesesteak-stuffed-peppers)."
+  ],
+  "densities_followups": [
+    "Spinach (fresh): still no densities row (third recipe in this run to need one); USDA raw cup = 30 g used, sibling's proposed explicit fresh row stands."
+  ]
+}

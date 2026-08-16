@@ -1,0 +1,17 @@
+{
+  "slug": "thai-red-curry-ground-turkey-cauliflower-zucchini-skillet",
+  "name": "One-Pan Thai Red Curry Ground Turkey with Cauliflower and Zucchini",
+  "protein": "turkey",
+  "cuisine": "thai",
+  "verdict": "DUPE",
+  "dupe_of": "oneskillet-ground-turkey-thai-curry-with-rice",
+  "against": "catalog",
+  "fit": "in-band",
+  "fit_note": "407 cal / 13g carbs / 32g protein per serving clears the 400-650 cal and <=35g carb band; no seafood; one-pan skillet scales cleanly to 14. Passes conditions but loses on dedup.",
+  "evidence": "Structurally identical dinner to the live catalog recipe 'oneskillet-ground-turkey-thai-curry-with-rice': same protein (ground turkey), same Thai coconut-curry sauce family, same one-skillet method, shared coconut-milk + chicken-broth + zucchini; only the starch differs (cauliflower rice vs rice), which is the low-carb stand-in for the same role, not a new dish. Names near-mirror each other ('One-Pan Thai Red Curry Ground Turkey' vs 'One-Skillet Ground Turkey Thai Curry').",
+  "other_catalog_near_matches": [
+    "thai-coconut-curry-turkey-meatballs (same flavor family but meatball format w/ breadcrumbs+egg - NOT the same dish)",
+    "curry-ground-turkey-bowls (coconut-milk curry turkey but tomato+peas+rice, Indian-leaning - weaker match)"
+  ],
+  "cross_protein_collision_note": "Catalog already carries 'thai-red-curry-chicken-rice-bowls' (chicken take on the same red-curry sauce). If another selector's pool holds a chicken or beef 'thai red curry cauliflower/zucchini skillet', it is the same dish in a different protein - flag for the cross-protein merge pass."
+}

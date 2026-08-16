@@ -1,0 +1,26 @@
+{
+  "slug": "chicken-piccata-skillet",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "ingredient-coverage",
+      "severity": "note",
+      "detail": "Olive Oil (94 g / 7 tbsp) appears in the spec but not in the source ingredient list. It is a documented ruled addition (writer_notes): the source's fry step lists no fat and its 1 tbsp butter is consumed by the sauce; the extractor's own concerns flagged the missing fry fat. Deliberate, documented, not silent - travels as a note.",
+      "owner": "mapper"
+    },
+    {
+      "check": "ingredient-coverage",
+      "severity": "note",
+      "detail": "Source step 10 stirs in parsley but parsley appears in no source ingredient line; spec omits it entirely (no buy, no step). Documented in writer_notes as a deliberate omission of an unbought zero-macro garnish. Consistent both directions as shipped.",
+      "owner": "writer"
+    },
+    {
+      "check": "prose-numbers",
+      "severity": "note",
+      "detail": "All prose cost literals match the spec's own machine fields: $26.05/$1.86 = cost_batch/cost_per_serving, $30.98/$2.21 = cost_batch_true/cost_per_serving_true, $15.03/$46.01 = cost_pantry_add/cost_first_run. However stat.cost_ps (3.29, echoed in head.costPerServing) equals neither cost_per_serving (1.86) nor cost_per_serving_true (2.21). No prose literal contradicts the stat (closing/upsell use the {{cost_ps}} token), so this is not a transcription defect, but the stat-vs-cost-field relationship should be confirmed by the batch auditor, which owns cost consistency.",
+      "owner": "mapper"
+    }
+  ],
+  "notes": "Both anchors reached: extraction JSON and live page at cookedbyjulie.com agree exactly (2 servings, 10 ingredient lines, same method). Scaling is one consistent 7x ratio (2 -> 14 servings) on every line: chicken 2->14 breasts (2800 g at house 200 g each), paprika 0.5->3.5 tsp, oregano 1->7 tsp, parmesan 0.5->3.5 cups (392 g), garlic 2->14 cloves, stock 1->7 cups (1680 g), butter 1->7 tbsp (98 g), capers 1->7 tbsp (56 g), lemon 0.5->3.5 (164 g juice). Method survives intact: season, parmesan coat, fry, same-pan garlic-butter/stock/lemon sauce, capers, return chicken. Title names the same dish (chicken piccata). Credit points at the exact source URL."
+}

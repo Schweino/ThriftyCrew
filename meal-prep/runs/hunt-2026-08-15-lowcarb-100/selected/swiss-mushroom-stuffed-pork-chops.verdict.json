@@ -1,0 +1,21 @@
+{
+  "slug": "swiss-mushroom-stuffed-pork-chops",
+  "name": "Swiss and Mushroom Stuffed Pork Chops",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "status": "FIT",
+    "src_cal": 593,
+    "src_carbs": 3,
+    "evidence": "593 cal sits inside the 400-650 band; 3g carbs well under the 35g ceiling; pork whole-muscle bake, no seafood, weigh-and-divide scales cleanly to 14 servings."
+  },
+  "dedupe": {
+    "vs_catalog": "KEEP - no stuffed pork chop exists in the 544-recipe catalog. Nearest pork-chop neighbor creamy-mushroom-pork-chops-over-mashed-potatoes shares only mushroom+pork (1 of 4): it is a cream-gravy skillet served over mashed potatoes, whereas this is a cheese-stuffed pocket bake with no starch base and no cream sauce - sauce family, starch, and method all differ. cheesy-pork-chop-and-hash-brown-casserole and farmhouse-pork-chop-stuffing-casserole are hash-brown/bread casseroles, not a stuffed chop.",
+    "vs_accepted_run": "KEEP - accepted-slugs carries creamy-garlic-herb-wine-pork-chops (a creamy wine skillet chop) which is a different dish; no stuffed or Swiss-mushroom pork chop accepted this run."
+  },
+  "cross_protein_collision_watch": "Filling is mushroom + Swiss + parsley stuffed into whole-muscle meat and baked. Decider should watch other selectors' pools for a structurally identical stuffed-cutlet twin in chicken or turkey (e.g. a 'mushroom-Swiss stuffed chicken breast' or 'stuffed turkey cutlet'). Not the same dish as the catalog's cordon-bleu casseroles (chicken-cordon-bleu-casserole, turkey-cordon-bleu-casserole) which also use swiss-cheese but are ham+rice casseroles, not a cheese-stuffed whole-muscle bake.",
+  "notes": {
+    "cuisine": "American - does not widen the American-skewed catalog on cuisine, but adds a stuffed-chop batch format the catalog lacks.",
+    "unmapped": "swiss-cheese is not on the board (catalog tracks cheddar/mozzarella/parmesan/cream-cheese/gruyere). Left as-is per v2.1 5.1 - absent-ingredient pick exercises the pricer lane, not a penalty."
+  }
+}

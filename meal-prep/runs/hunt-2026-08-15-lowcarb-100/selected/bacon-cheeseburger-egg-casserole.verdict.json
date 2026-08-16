@@ -1,0 +1,18 @@
+{
+  "slug": "bacon-cheeseburger-egg-casserole",
+  "name": "Bacon Cheeseburger Egg-Bound Casserole",
+  "protein": "beef",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "borderline": true,
+  "fit_check": "536 cal (within 400-650), 2g carbs (<=35g), budget ground-beef/bacon/cheddar/egg bake, scales linearly to 14 servings, no seafood - clears all conditions.",
+  "dupe_of": null,
+  "evidence": "No catalog egg-custard cheeseburger bake exists: cheeseburger-pasta (penne+marinara) and cheeseburger-rice-bowls (rice+ketchup) share the flavor but use grain starches, not a crustless egg set; the two egg-bound beef bakes in-catalog carry different flavor families (south-african-bobotie-beef-bake is curried/sweet Cape Malay, chile-relleno-casserole-ground-beef is poblano+rice), so none is the same dinner.",
+  "borderline_reason": "Nearest neighbor is ACCEPTED keto-cheeseburger-skillet (same protein + cheeseburger flavor + low-carb = 3/4 attributes); distinguished only by method - a sliceable egg-custard-set baked casserole vs a loose stovetop skillet. I rule this a genuine format distinction (crustless-quiche-style set vs skillet scramble portions/reheats differently) so it clears dedup, but flag it because it adds a SECOND American low-carb cheeseburger beef dish to a catalog already skewed American/Tex-Mex - the decider should weigh whether the catalog wants both.",
+  "cross_protein_collisions": [
+    "A turkey version (ground-turkey cheeseburger egg casserole / any ground-turkey crustless egg-bound bake) would be structurally the SAME dish minus the beef swap - the decider should check the turkey pool for a twin I cannot see.",
+    "Any pork breakfast-sausage egg casserole shares the crustless egg-custard-set casserole FORMAT (different flavor family) - not a dupe of this, but watch that the egg-cheese lane doesn't ship several near-identical egg-bound bakes.",
+    "Already-accepted crustless-bacon-gruyere-quiche (egg-cheese lane) is the same egg-custard crustless-bake CATEGORY but has no ground beef and a bacon-gruyere (not cheeseburger) flavor - distinct dish, noted only so the decider limits how many crustless egg bakes land in one run."
+  ]
+}

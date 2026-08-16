@@ -152,7 +152,7 @@
   {
       "batch":  "hunt-2026-08-15-lowcarb-100-w1",
       "opened":  "2026-08-16T06:07:43",
-      "last_activity":  "2026-08-16T13:52:08",
+      "last_activity":  "2026-08-16T15:52:34",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -192,6 +192,21 @@
                          "stage":  "reconcile",
                          "at":  "2026-08-16T13:52:08",
                          "detail":  "dropped 1: slow-cooker-boneless-beef-short-ribs - retired on Brad ruling: honest $6.71/serving"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-08-16T15:52:07",
+                         "detail":  "9/9 GO (wave-1.audit.md 14:55:56, scoped re-audit round 7: stale-cert + hatch carb copy blockers closed)"
+                     },
+                     {
+                         "stage":  "cost-basis",
+                         "at":  "2026-08-16T15:52:34",
+                         "detail":  "compute-v2-perserving + reanchor on 9 slug(s)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-08-16T15:52:34",
+                         "detail":  "9 row(s) via hunt-2026-08-15-lowcarb-100-w1"
                      }
                  ]
   },
@@ -240,7 +255,7 @@
   {
       "batch":  "hunt-2026-08-15-lowcarb-100-w3",
       "opened":  "2026-08-16T12:35:08",
-      "last_activity":  "2026-08-16T13:52:08",
+      "last_activity":  "2026-08-16T14:06:02",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -280,6 +295,60 @@
                          "stage":  "reconcile",
                          "at":  "2026-08-16T13:52:08",
                          "detail":  "dropped 1: sheet-pan-smoked-sausage-broccoli-cheddar - held: no fresh-broccoli board price at the time"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-08-16T14:05:17",
+                         "detail":  "9/9 GO (scope: stamp-withholding-fix)"
+                     },
+                     {
+                         "stage":  "cost-basis",
+                         "at":  "2026-08-16T14:06:01",
+                         "detail":  "compute-v2-perserving + reanchor on 9 slug(s)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-08-16T14:06:02",
+                         "detail":  "9 row(s) via hunt-2026-08-15-lowcarb-100-w3"
+                     }
+                 ]
+  },
+  {
+      "batch":  "hunt-2026-08-15-lowcarb-100-w4",
+      "opened":  "2026-08-16T14:20:09",
+      "last_activity":  "2026-08-16T16:03:23",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "sheet-pan-smoked-sausage-broccoli-cheddar",
+                    "spinach-provolone-stuffed-flank-steak-rolls"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-08-16T16:02:46",
+                         "detail":  "2/2 GO (wave-4.audit.md 16:02:13; batch-id + store-integrity + writer-note blockers closed, description trim verified)"
+                     },
+                     {
+                         "stage":  "cost-basis",
+                         "at":  "2026-08-16T16:03:07",
+                         "detail":  "compute-v2-perserving + reanchor on 2 slug(s)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-08-16T16:03:07",
+                         "detail":  "2 row(s) via hunt-2026-08-15-lowcarb-100-w4"
+                     },
+                     {
+                         "stage":  "build-cards",
+                         "at":  "2026-08-16T16:03:23",
+                         "detail":  "2 card(s) rebuilt via propagate"
+                     },
+                     {
+                         "stage":  "publish",
+                         "at":  "2026-08-16T16:03:23",
+                         "detail":  "2/2 wave slug(s) published through engine\\publish (visibility preserved) + 20 collateral spec(s) carried by propagate (total dirty 22)"
                      }
                  ]
   }

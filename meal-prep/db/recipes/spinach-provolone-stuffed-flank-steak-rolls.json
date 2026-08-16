@@ -13,24 +13,24 @@
                ],
     "writer_notes":  [
                          "SOURCE YIELD 4 (2 pinwheel rolls per serving from a 1 lb flank), rebuilt to 14 at the mapper\u0027s 3.5x scale, which is 28 rolls and about 113 g of raw flank per serving. Every gram and buy string transcribed from mapped\\spinach-provolone-stuffed-flank-steak-rolls.json; no number computed in prose.",
-                         "MACROS transcribed from the mapper\u0027s food-DB recompute (546.2 cal, 42.2 g protein, 5.4 g carbs, 40.1 g fat per serving), reported as stat 546 / 42 / 5 / 40 and re-verified by build-v2-spec\u0027s food-macros-db recompute at 14 servings. In band for this run (400 to 650 cal, 35 g carb or less): 546 cal sits inside the window with about 104 cal of ceiling headroom, and carbs at 5.4 g are nowhere near the 35 g limit.",
+                         "MACROS transcribed from the mapper\u0027s food-DB recompute (546.2 cal, 42.2 g protein, 5.4 g carbs, 40.1 g fat per serving), reported as stat 546 / 42 / 5 / 40 and re-verified by build-v2-spec\u0027s food-macros-db recompute at 14 servings. In band for this run (400 to 650 cal, 35 g carb or less): 546 cal sits inside the window with about 104 cal of ceiling headroom, and carbs at 5.4 g are nowhere near the 35 g limit. RESOLVED 2026-08-16 (Brad ruling): this recipe is now built on the 1/3 Fat Cream Cheese (Great Value Neufchatel) food-DB row, not the full-fat USDA row. Brad ruled the recipes should USE the lower-calorie product, which made the PRICE correct all along (the bid was already 1-3-fat-cream-cheese) and the macros and copy the wrong fields. Any calorie, fat or basis figure stated above predates that rebase - read the spec stat block, not this note.",
                          "VEGETABLE OIL is the source\u0027s bare \u0027oil\u0027 line, booked to the house vegetable-oil generic per the mapper\u0027s ruled_substitutions (the recipe names no oil type). It fries the onion and garlic base that goes into the filling, so it is counted in full and named in the filling step.",
                          "PROVOLONE is the primary of the source\u0027s own \u0027or mozzarella or your favorite melting cheese\u0027 line, so booking provolone matches the source\u0027s published nutrition basis. The buy string names it as sliced to match the sliced-provolone commodity the engine buys; no slice-weight assumption exists because the source states a weight (8 oz scaled to 28 oz).",
-                         "CREAM CHEESE is full-fat, matching the mapper\u0027s deliberate choice (the 1/3-fat map entry would deflate calories). Booked at 14 oz / 397 g and named in the filling step.",
-                         "SPINACH is FRESH baby spinach, matching the source and the buy string. The mapper flagged a stamp-time hazard: the ingredient map routes the item name \u0027Spinach\u0027 to frozen-chopped-spinach, so pricing and item_id resolve to the frozen commodity even though the dish is fresh. Macros are unaffected (fresh and frozen rows are per-gram identical); the price class is wrong. Left as the mapper mapped it and flagged in the report, not fixed here.",
+                         "CREAM CHEESE is full-fat, matching the mapper\u0027s deliberate choice (the 1/3-fat map entry would deflate calories). Booked at 14 oz / 397 g and named in the filling step. RESOLVED 2026-08-16 (Brad ruling): this recipe is now built on the 1/3 Fat Cream Cheese (Great Value Neufchatel) food-DB row, not the full-fat USDA row. Brad ruled the recipes should USE the lower-calorie product, which made the PRICE correct all along (the bid was already 1-3-fat-cream-cheese) and the macros and copy the wrong fields. Any calorie, fat or basis figure stated above predates that rebase - read the spec stat block, not this note.",
+                         "SPINACH is FRESH baby spinach, matching the source and the buy string. The mapper flagged a stamp-time hazard: the ingredient map routes the item name \u0027Spinach\u0027 to frozen-chopped-spinach, so pricing and item_id resolve to the frozen commodity even though the dish is fresh. Macros are unaffected (fresh and frozen rows are per-gram identical); the price class is wrong. Left as the mapper mapped it and flagged in the report, not fixed here. RESOLVED 2026-08-16: the bid was corrected. Item Spinach now bids the fresh weekly commodity spinach (priced 7/7 stores, cheapest Walmart $0.20/oz, a 10 oz bag of fresh leaf); the frozen recipes keep the separate Frozen Chopped Spinach row. Cost block re-rendered off the fresh basis.",
                          "SALT AND PEPPER is the source\u0027s unmeasured to-taste line (source states NO quantity); booked here at a smallest-defensible to-taste minimum (Salt 2 tsp, Black Pepper 1 tsp per 14-serving batch, both zero/near-zero macro) so the \u0027season with salt and pepper\u0027 steps (make_it 2, 3, 4) are cook-as-shopped and clear the PHANTOM buy-coverage gate (2026-08-16 repair). Grams are macro-immaterial.",
                          "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked the costed list against the steps both directions: flank steak (make_it 2, 4, 5, 6), vegetable oil (3), onion (3), garlic (3), cream cheese (3, 4), provolone (4), spinach (4).",
                          "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it. Every statement is grounded in the recipe\u0027s own buy amount, with package sizes referenced generically and never with a per-line cost. Provolone is named as sliced to match the commodity the engine buys, so there is no block-beats-tub trap. Re-walk the bullets against cost_lines once costed before publish.",
                          "PORTION METHOD: the rolls are one component, so weigh the full baking dish of cooked pinwheels, subtract the empty weight noted in Step 1, and divide by 14. Two rolls per serving is the source\u0027s own portion; the scale weight is the honest tie-breaker when rolls vary in size.",
-                         "COST NOTE for the repair pass: db\\ingredients.json has no \u0027Cream Cheese\u0027 row (only \u00271/3 Fat Cream Cheese\u0027), so the item may resolve with no bid and cost as zero even though the cream-cheese commodity is on the feed. Flagged in the report; a real bought ingredient must not cost nothing."
+                         "COST NOTE for the repair pass: db\\ingredients.json has no \u0027Cream Cheese\u0027 row (only \u00271/3 Fat Cream Cheese\u0027), so the item may resolve with no bid and cost as zero even though the cream-cheese commodity is on the feed. Flagged in the report; a real bought ingredient must not cost nothing. RESOLVED 2026-08-16: no longer true. Cream Cheese resolves through the adjudicated alias on the 1/3 Fat Cream Cheese row and is priced - this batch books ~$3.22 used / $3.68 bought. It does NOT cost zero. Separately flagged to Brad: that alias points a full-fat card at the 1/3-fat commodity, and the full-fat cream-cheese id is both live and CHEAPER (7/7, $0.1381/oz vs $0.1862/oz), so ruling 0c #1 rests on a premise that measures the wrong way round."
                      ],
     "cal_floor":  null,
     "stat":  {
-                 "cal":  546,
+                 "cal":  518,
                  "protein":  42,
-                 "carbs":  5,
-                 "fat":  40,
-                 "cost_ps":  "3.01"
+                 "carbs":  6,
+                 "fat":  36,
+                 "cost_ps":  "4.00"
              },
     "intro_html":  "Flank steak is the cut that rewards a little knife work. Butterfly it open, spread it with a warm cream cheese and garlic filling, lay down fresh spinach and slices of provolone, then roll it up and slice it into pinwheels. What comes out of the oven looks like something off a steakhouse menu, and it costs a fraction of one. The filling does the heavy lifting here, turning a lean cut into something rich without a pile of added carbs, which is why this plate lands around \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving with under 10 grams of carbs. Sear the rolls to build a crust, finish them in the oven, and you have two weeks of dinners that eat like a splurge.",
     "ingredients_display":  [
@@ -38,7 +38,7 @@
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 7 tbsp vegetable oil (98 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 3/4 cups chopped onion (about 2 medium) (201 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 12 cloves garlic, minced (about 1 head) (36 g)",
-                                "\u003cstrong\u003eCream Cheese (generic (USDA)):\u003c/strong\u003e 14 oz cream cheese (one and three-quarter 8 oz bricks) (397 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 14 oz cream cheese (one and three-quarter 8 oz bricks) (397 g)",
                                 "\u003cstrong\u003eProvolone Cheese (generic):\u003c/strong\u003e 28 oz sliced provolone (1 3/4 lb) (794 g)",
                                 "\u003cstrong\u003eSpinach:\u003c/strong\u003e 7 cups baby spinach (about 7 oz) (210 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (12 g)",
@@ -50,13 +50,13 @@
                        "Vegetable Oil, 7 tbsp vegetable oil: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Yellow Onion, 1 3/4 cups chopped onion (about 2 medium): ~$0.51. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 12 cloves garlic, minced (about 1 head): ~$0.49. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Cream Cheese, 14 oz cream cheese (one and three-quarter 8 oz bricks): ~$3.22. \u003cstrong\u003eBuy 2 8oz bricks: $3.68.\u003c/strong\u003e",
+                       "1/3 Fat Cream Cheese, 14 oz cream cheese (one and three-quarter 8 oz bricks): ~$3.22. \u003cstrong\u003eBuy 2 8oz bricks: $3.68.\u003c/strong\u003e",
                        "Provolone Cheese, 28 oz sliced provolone (1 3/4 lb): ~$5.85. \u003cstrong\u003eBuy 4 8oz packs: $6.69.\u003c/strong\u003e",
-                       "Spinach, 7 cups baby spinach (about 7 oz): ~$0.85. \u003cstrong\u003eBuy 1 10oz bag: $1.15.\u003c/strong\u003e",
+                       "Spinach, 7 cups baby spinach (about 7 oz): ~$1.48. \u003cstrong\u003eBuy 1 10oz bag: $2.00.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.08. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $42.11 across 14 servings, so roughly $3.01 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $48.83 across 14 servings, roughly $3.49 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.33 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.16. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $42.74 across 14 servings, so roughly $3.05 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.68 across 14 servings, roughly $3.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.33 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.01. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a stuffed flank steak dinner that looks like a restaurant plate. The steak carries the protein, the cream cheese and provolone carry the richness, and the whole thing stays under 10 grams of carbs a serving.",
     "shop_smart":  [
@@ -77,14 +77,14 @@
     "portion_html":  "Set the full baking dish on your scale and subtract the empty weight you noted in Step 1 to get the cooked total. Divide that number by 14 and give each container that exact weight, which works out to about two pinwheels apiece. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://gimmedelicious.com/spinach-cheese-stuffed-flank-steak-rolls/\" target=\"_blank\" rel=\"noopener\"\u003egimmedelicious.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  42.11,
-    "cost_batch_true":  48.83,
-    "cost_per_serving":  3.01,
-    "cost_per_serving_true":  3.49,
+    "cost_batch":  42.74,
+    "cost_batch_true":  49.68,
+    "cost_per_serving":  3.05,
+    "cost_per_serving_true":  3.55,
     "cost_pantry_add":  6.33,
-    "cost_first_run":  55.16,
+    "cost_first_run":  56.01,
     "scaler":  {
-                   "cost":  "48.83",
+                   "cost":  "49.68",
                    "ing":  [
                                {
                                    "item":  "Beef Flank/Sirloin Steak",
@@ -119,8 +119,8 @@
                                    "gpu":  "42.600"
                                },
                                {
-                                   "item":  "Cream Cheese",
-                                   "canon":  "Cream Cheese",
+                                   "item":  "1/3 Fat Cream Cheese",
+                                   "canon":  "1/3 Fat Cream Cheese",
                                    "grams":  397,
                                    "buy":  "14 oz cream cheese (one and three-quarter 8 oz bricks)",
                                    "bid":  "1-3-fat-cream-cheese",
@@ -139,7 +139,7 @@
                                    "canon":  "Spinach",
                                    "grams":  210,
                                    "buy":  "7 cups baby spinach (about 7 oz)",
-                                   "bid":  "frozen-chopped-spinach",
+                                   "bid":  "spinach",
                                    "gpu":  "28.350"
                                },
                                {
@@ -161,19 +161,19 @@
                            ]
                },
     "head":  {
-                 "description":  "Spinach and provolone stuffed flank steak rolls for meal prep: butterflied flank steak spread with a cream cheese and garlic filling, layered with fresh spinach and provolone, rolled and sliced into pinwheels, seared and baked, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 10 grams of carbs.",
+                 "description":  "Spinach and provolone stuffed flank steak rolls for meal prep: flank steak spread with a cream cheese filling, layered with fresh spinach and provolone, rolled into pinwheels and baked, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 10 grams of carbs.",
                  "keywords":  "stuffed flank steak, flank steak pinwheels, spinach provolone steak rolls, low carb steak dinner, high protein beef meal prep",
                  "image":  "",
                  "prepTime":  "PT10M",
                  "cookTime":  "PT20M",
                  "totalTime":  "PT30M",
-                 "costPerServing":  3.01,
+                 "costPerServing":  4.00,
                  "recipeIngredient":  [
                                           "Beef Flank/Sirloin Steak, 3 1/2 lb flank steak, butterflied (1588 g)",
                                           "Vegetable Oil, 7 tbsp vegetable oil (98 g)",
                                           "Yellow Onion, 1 3/4 cups chopped onion (about 2 medium) (201 g)",
                                           "Garlic, 12 cloves garlic, minced (about 1 head) (36 g)",
-                                          "Cream Cheese, 14 oz cream cheese (one and three-quarter 8 oz bricks) (397 g)",
+                                          "1/3 Fat Cream Cheese, 14 oz cream cheese (one and three-quarter 8 oz bricks) (397 g)",
                                           "Provolone Cheese, 28 oz sliced provolone (1 3/4 lb) (794 g)",
                                           "Spinach, 7 cups baby spinach (about 7 oz) (210 g)",
                                           "Salt, 2 tsp (12 g)",
@@ -207,7 +207,7 @@
                                   "grams":  36
                               },
                               {
-                                  "item":  "Cream Cheese",
+                                  "item":  "1/3 Fat Cream Cheese",
                                   "grams":  397
                               },
                               {

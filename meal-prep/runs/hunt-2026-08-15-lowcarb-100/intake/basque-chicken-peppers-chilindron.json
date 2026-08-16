@@ -1,0 +1,76 @@
+{
+  "name": "Basque Chicken and Peppers (Pollo al Chilindron)",
+  "slug": "basque-chicken-peppers-chilindron",
+  "protein": "chicken",
+  "cuisine": "Spanish",
+  "source_url": "https://www.themediterraneandish.com/basque-chicken-and-peppers-pollo-al-chilindron/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Chicken Thighs (bone-in, skin-on, raw)", "display_name": "Chicken Thighs (Bone-In, Skin-On)", "grams": 2117, "buy": "4 2/3 lb bone-in skin-on chicken thighs, drumsticks, or both" },
+    { "item": "Salt", "grams": 14, "buy": "to taste (about 2 1/4 tsp kosher)" },
+    { "item": "Black Pepper", "grams": 3, "buy": "to taste (about 1 tsp)" },
+    { "item": "Olive Oil", "grams": 94, "buy": "7 tbsp extra virgin" },
+    { "item": "Yellow Onion", "grams": 257, "buy": "2 1/3 medium, thinly sliced" },
+    { "item": "Red Bell Pepper", "grams": 560, "buy": "4 2/3 peppers, thinly sliced" },
+    { "item": "Hickory Smoked Bacon", "grams": 234, "buy": "8 1/4 oz diced bacon or pancetta" },
+    { "item": "Garlic", "grams": 27, "buy": "9 cloves, thinly sliced" },
+    { "item": "Smoked Paprika", "grams": 3, "buy": "1 1/4 tsp" },
+    { "item": "Diced Tomatoes", "grams": 959, "buy": "2 1/3 (14.5 oz) cans fire-roasted" },
+    { "item": "Dry White Wine", "grams": 275, "buy": "1 cup plus 2 3/4 tbsp" },
+    { "item": "Sugar", "grams": 10, "buy": "2 1/3 tsp" },
+    { "item": "Bay Leaves", "grams": 1, "buy": "2 leaves" },
+    { "item": "Fresh Thyme", "grams": 12, "buy": "10 to 12 sprigs" }
+  ],
+  "macros_per_serving": { "calories": 485, "protein_g": 27, "carbs_g": 9.5, "fat_g": 34.8 },
+  "writer_notes": [
+    "SOURCE YIELD 6, rebuilt to 14 at the mapper's 2.3333x scale. Every gram and buy string transcribed from mapped\\basque-chicken-peppers-chilindron.json; no number computed in prose.",
+    "MACROS are the writer's food-macros-db recompute at 14 servings using the same formula the build guard uses: 484.6 cal, 26.9 g protein, 9.5 g carbs, 34.8 g fat per serving (batch 6784 cal). In band for this run (400 to 650 cal, 35 g carb or less): 485 cal sits 85 above the 400 floor and 165 under the 650 ceiling; 9.5 g carbs is well under the 35 g ceiling; protein 27 g clears the 25 g house floor. These are COMPUTED, not read from a built spec, because the spec did NOT build (see BLOCKER note). The mapper's own compute matched (484.2 / 26.8 / 9.7 / 34.7). Source published 452.5 cal / 23.7 P / 6.6 C / 35.1 F at 6 servings; our calories run +7% and fat lands within 1% of the source label, which is the skin-sensitive number and validates the mapper's skin-on basis.",
+    "BLOCKER, recipe PARKED, spec NOT built and NOT advanced. build-v2-spec hard-fails at the UNKNOWN INGREDIENT NAME guard on TWO canon names the mapper minted that have no row in db\\ingredients.json: 'Chicken Thighs (bone-in, skin-on, raw)' (wants bid chicken-thighs) and 'Fresh Thyme' (wants bid fresh-thyme). Both bids ALREADY resolve on the live feed (chicken-thighs lb, fresh-thyme oz) and both item names ALREADY exist in food-macros-db, so the only gap is the db\\ingredients.json canonical-map rows that wire item name -> bid + gpu + unit. Adding those rows is the commodity-registrar's job, not the writer lane's (the run never edits commodity files and no stage mints a commodity id). The mapper flagged both as new DB rows (db_entries_added) and explicitly routed the chicken row to REGISTRAR/GATE REVIEW REQUESTED as a deliberate departure from the skin-removed chicken canon. This intake is complete and correct; once the registrar wires the two vocabulary rows the rebuild is a single build-v2-spec -InFile ... -RunCost with no edits here.",
+    "DO NOT flatten the chicken to the existing 'Boneless Skinless Chicken Thigh' row: the mapper argued at length that the skinless rebuild misstates fat ~2x and computes ~320 cal/serving, which is 20% below this run's 400 floor, for a braise that sears and cooks skin-on. Renaming to BSCT would change the numbers, which is not the writer's to do. Same reason the thyme is NOT flattened to 'Dried Thyme' (a form-flip that changes macros).",
+    "SALT flattened from the mapper's non-canonical 'Kosher Salt' (bid kosher-salt, which lives in NEITHER food-macros-db NOR db\\ingredients.json) to the batch-canonical 'Salt' (bid salt, brand Morton), buy string 'to taste (about 2 1/4 tsp kosher)'. Same repair the french-chicken-fricassee writer made this batch. Salt is zero-macro so no stat number moved; prose reads 'kosher salt', which the buy string keeps truthful.",
+    "JAMON SERRANO / PANCETTA -> HICKORY SMOKED BACON is a SOURCE-SANCTIONED substitution: the source ingredient line itself reads 'diced jamon Serrano, pancetta, or bacon'. Jamon has no board presence and pancetta is a single capture-only delicacy; bacon is the source's own third option and is carried 7 of 7 stores. Prose names bacon and mentions jamon only as the classic Spanish original. No step calls for jamon.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked both directions: chicken (steps 2,3,7,8), salt (2), black pepper (2), olive oil (3), onion (4), red bell pepper (4), bacon (4), garlic (4), smoked paprika (5), diced tomatoes (6), white wine (6), sugar (6), bay leaves (6,8), fresh thyme (6,8). Fourteen bought, fourteen used; the make_it and head.steps introduce nothing the shopper did not buy.",
+    "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount. Once this recipe is costed (after the registrar unblocks the build), re-walk the bullets against cost_lines before publish.",
+    "MONEY IN PROSE carries only the ${{cost_ps}} token and the site's $1-a-month line. No per-line costs anywhere. Calorie and carb bounds are written as true literals: 'under 500 calories' (485) and 'under 10 grams of carbs' (9.5).",
+    "DRIFT carried from the mapper, all macro-immaterial: smoked paprika 1 1/4 tsp (+7.1%, spice class), bay leaves 2 whole leaves (-14.3%, removed before serving), garlic 9 cloves (-3.6%). Salt, black pepper, and fresh thyme had no printed source quantity and were assumed by the mapper; all three are used in the braise so none is marked optional.",
+    "DATA SMELLS flagged for the repair pass, none fixed here: (1) Hickory Smoked Bacon DB row is a COOKED-slice basis (2 cooked slices = 15 g = 90 cal) applied to 234 g of raw-diced grams, the same raw-vs-cooked ambiguity the quiche and sausage-skillet batches flagged; spread is ~30 cal/serving and does not move the band. (2) The bare term 'fire-roasted diced tomatoes' resolves through the FRESH tomatoes commodity in the board resolver even though the mapping correctly bids the canned diced-tomatoes id; a canned-to-fresh resolver stretch worth the match-soundness gate's attention."
+  ],
+  "prose": {
+    "intro_html": "Chilindron is the Spanish name for what happens when red peppers, onions, tomato, and a little smoked paprika cook down around browned chicken until the whole pot tastes like far more than the sum of its parts. Bone-in, skin-on thighs and drumsticks earn their place here because the skin browns into flavor and the bones keep the meat from drying out over a slow simmer. A handful of diced bacon does the job Spanish cooks give to jamon, and a splash of dry white wine lifts every browned bit off the bottom of the pot. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 10 grams of carbs. That is a Sunday-in-Spain dinner on a Tuesday budget.",
+    "shop_smart": [
+      "<strong>Bone-in, skin-on chicken is the whole plate.</strong> You want about four and two-thirds pounds of thighs, drumsticks, or a mix of both. Buy it bone-in and skin-on on purpose, because the skin browns into flavor and the bones keep the meat juicy through the braise. The big family pack is the cheapest way to buy chicken.",
+      "<strong>Red peppers and onions build the base.</strong> Roughly four and a half red bell peppers and a couple of onions, all sliced thin. This is where chilindron gets its color and its sweetness, so this is not the place to cut corners.",
+      "<strong>A few ounces of bacon do the jamon's job.</strong> About eight ounces of diced bacon carries the smoky, salty backbone that Spanish cooks pull from jamon Serrano. Bacon is the recipe's own listed stand-in and it is on every shelf in town.",
+      "<strong>Canned fire-roasted tomatoes are the sauce.</strong> You need a little over two cans of fire-roasted diced tomatoes. The fire-roasting is worth reaching for because the char is already built in, but plain diced tomatoes will do if that is what is in the pantry.",
+      "<strong>Dry white wine and smoked paprika make it Spanish.</strong> Just about a cup of any dry white you would actually drink, plus smoked Spanish paprika, sometimes labeled pimenton. Skip the bottle marked cooking wine and reach for the real thing.",
+      "<strong>Garlic, bay, fresh thyme, a spoon of sugar, and olive oil round it out.</strong> These are pantry and produce backbone you most likely already have on hand, so they barely move the cart."
+    ],
+    "make_it": [
+      "Weigh your empty Dutch oven or deep skillet and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+      "Pat the chicken pieces dry with paper towels and season them all over with the kosher salt and black pepper.",
+      "Heat the olive oil in the pot over medium-high heat. Working in batches so the pot is not crowded, sear the chicken skin-side down until golden, about 3 to 4 minutes a side. It will not be cooked through yet. Move it to a plate.",
+      "Reduce the heat to medium. Add the sliced onion, red bell peppers, diced bacon, and garlic. Cook, stirring now and then, until the onion turns translucent, 8 to 10 minutes.",
+      "Stir in the smoked paprika and cook about 30 seconds, just until it smells toasty.",
+      "Add the fire-roasted tomatoes, white wine, sugar, bay leaves, and fresh thyme. Scrape the bottom of the pot to loosen every browned bit into the sauce.",
+      "Nestle the chicken back into the sauce along with any collected juices. Bring it to a boil, then drop the heat to low and hold a gentle simmer, uncovered, about 35 minutes, until the chicken is tender and reads 190 to 195 degrees F at the bone.",
+      "Fish out the bay leaves and thyme stems. Weigh the full pot and subtract the empty weight from Step 1 to get the cooked total. Divide by 14 and give each container an even share of chicken and pepper-tomato sauce, aiming for that weight."
+    ],
+    "portion_html": "Set the full pot on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Each container gets an even share of chicken and pepper-tomato sauce, landing near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a Spanish braise that tastes like it simmered all afternoon. The chicken and the peppers carry it; the bacon and the wine just make it taste expensive.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Basque chicken chilindron for meal prep: bone-in skin-on chicken braised with red peppers, onions, bacon, fire-roasted tomatoes, white wine, and smoked paprika, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 10 grams of carbs.",
+    "keywords": "basque chicken, pollo al chilindron, spanish chicken and peppers, low carb meal prep, high protein chicken dinner",
+    "prepTime": "PT10M",
+    "cookTime": "PT1H",
+    "totalTime": "PT1H10M",
+    "steps": [
+      "Pat the chicken dry and season it with the kosher salt and black pepper.",
+      "Sear the chicken skin-side down in olive oil until golden but not cooked through, then set it aside.",
+      "Cook the onion, red peppers, bacon, and garlic until the onion is translucent, then bloom the smoked paprika.",
+      "Add the fire-roasted tomatoes, white wine, sugar, bay, and thyme, nestle the chicken back in, and simmer to 190 degrees F.",
+      "Weigh the pot, subtract the empty weight, and divide across 14 containers."
+    ]
+  }
+}

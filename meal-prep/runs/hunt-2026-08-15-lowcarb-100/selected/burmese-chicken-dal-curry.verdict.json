@@ -1,0 +1,17 @@
+{
+  "slug": "burmese-chicken-dal-curry",
+  "name": "Burmese Chicken Dal Curry",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 529,
+    "carbs_g": 31,
+    "within_band": true,
+    "note": "529 cal is inside 400-650; 31g carbs clears the 35g ceiling with 4g margin on the source's published numbers; no seafood; one-pot braise scales cleanly to 14. FIT on published macros."
+  },
+  "dupe_evidence": "Not a duplicate. The catalog holds many chicken curries but every one is a rice-bowl-served, coconut- or tomato-based dish (chicken-madras-curry, slow-cooker-chicken-korma-rice-bowls, cape-malay-chicken-curry, trinidadian-curry-chicken-bowls, chicken-vindaloo); none is a Burmese split-pea (yellow dal) braise with no coconut/tomato and no rice in the dish. Shares the 'chicken curry' string with chicken-madras-curry (which also uses Madras powder) but the food differs on cuisine, body (split peas vs coconut/tomato), and starch - different dinner.",
+  "borderline_flag": "None. Distinct Burmese cuisine widens a catalog with no dal-based chicken braise.",
+  "cross_protein_collision": "Low collision risk - the yellow-split-pea dal body + Burmese spice profile is chicken-specific in this pool. A generic 'lentil/dal + turkey or beef curry' in another selector's pool would be a different legume/spice build, not a twin; no action expected at merge.",
+  "unmapped_note": "Deliberately carries yellow split peas, Madras curry powder, garam masala, bay leaves, and optional Thai chiles as unmapped - per v2.1 5.1 wanted for the pricer lane, not penalised.",
+  "already_accepted_note": "This slug already appears in accepted-slugs.json (decider has accepted it); this verdict is consistent - KEEP, no conflict."
+}

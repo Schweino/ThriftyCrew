@@ -1,0 +1,116 @@
+{
+  "slug": "low-carb-taco-cabbage-beef-skillet",
+  "title": "Low Carb Taco Cabbage Skillet",
+  "source_url": "https://www.heyketomama.com/low-carb-taco-cabbage-skillet/",
+  "source_servings": 3,
+  "target_servings": 14,
+  "scale_factor": 4.6667,
+  "protein": "beef",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters, drift from the exact 4.6667x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "Plain 'ground beef' is booked as 80/20 (ground-beef-8020, 7 of 7 stores, cheapest Sam's $4.77/lb, every cell a true 80/20 product) with the NEW USDA 80/20 DB row. This is the generic retail default AND the class the source's own numbers describe: their published fat (37 g) reproduces at 80/20 (ours 38.6) and would collapse to ~19 g at 93/7. Booking the house 93/7 row instead would deflate the dish to ~368 cal - under the 400 floor - misdescribing the recipe as published (Sour Cream full-fat precedent: deflation fails a floor gate as surely as inflation fails the ceiling). The source drains the browned fat; the raw-label basis therefore overstates fat somewhat, per house convention, noted not modeled."
+  ],
+  "registrar_rulings": [],
+  "ingredients": [
+    {
+      "source_raw": "1 pound of ground beef",
+      "item": "80/20 Ground Beef",
+      "bid": "ground-beef-8020",
+      "board": "weekly",
+      "grams": 2155,
+      "buy": "4 3/4 lb (80/20)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by explicit source WEIGHT (1 lb); exact 4.6667x = 4.667 lb quantized to 4 3/4 lb = 2155 g (+1.8%). See ruled_substitutions for the 80/20 class ruling. Board 7 of 7, cheapest Sam's $4.77/lb. NEW DB row 80/20 Ground Beef (USDA SR 23572, 254 cal / 17.2 P / 20 F per 100 g)."
+    },
+    {
+      "source_raw": "½ cup of salsa",
+      "item": "Salsa",
+      "bid": "salsa",
+      "board": "weekly",
+      "grams": 560,
+      "buy": "2 1/3 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 4.6667x = 2.333 cups x densities 240 g/cup (label-reconciled 2026-08-07) = 560 g; 2 1/3 cups printed as the cook measure (thirds are pourable; the nearest quarter would drift 7%). Board 7 of 7, cheapest Sam's $0.0984/oz. Pace label 10 cal/30 g."
+    },
+    {
+      "source_raw": "2 cups of cabbage, shredded",
+      "item": "Green Cabbage",
+      "bid": "cabbage",
+      "board": "weekly",
+      "grams": 653,
+      "buy": "9 1/3 cups shredded (about 3/4 head)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 4.6667x = 9.333 cups x densities 70 g/cup = 653 g (0.73 of a 900 g head). Board 6 of 7, cheapest Fareway $0.768/lb. USDA row 25 cal/100 g."
+    },
+    {
+      "source_raw": "2 Teaspoons of chili powder",
+      "item": "Chili Powder",
+      "bid": "chili-powder",
+      "board": "weekly",
+      "grams": 24.3,
+      "buy": "3 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 4.6667x = 9.33 tsp quantized to 3 tbsp = 9 tsp (-3.6%) x densities 2.7 g/tsp = 24.3 g. Board 7 of 7, cheapest Walmart $0.3462/oz."
+    },
+    {
+      "source_raw": "¾ cup of cheese, shredded",
+      "item": "Mexican Cheese Blend",
+      "bid": "shredded-cheese",
+      "board": "weekly",
+      "grams": 396,
+      "buy": "3 1/2 cups shredded",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Generic 'cheese, shredded' in a taco dish = the house Mexican blend (ingredient-map's own entry). exact 4.6667x = 3.5 cups x densities 113 g/cup = 395.5 -> 396 g. Board 7 of 7, cheapest Sam's $0.1521/oz. GV label 110 cal/28 g."
+    },
+    {
+      "source_raw": "Salt and pepper to taste",
+      "item": "Salt and Pepper (to taste)",
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "to taste",
+      "optional": true,
+      "decision": "optional-pantry",
+      "notes": "Unmeasured to-taste line, optional per the source; zero grams booked, NOT enqueued."
+    },
+    {
+      "source_raw": "Optional garnishes: sour cream and green onions",
+      "item": "Sour Cream and Green Onions (optional garnish)",
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "optional garnish: sour cream and sliced green onions, to taste",
+      "optional": true,
+      "decision": "optional-unquantified",
+      "notes": "Unquantified optional garnish; zero grams booked (stroganoff salt-and-pepper precedent), NOT enqueued. Both components ARE board-priced if the writer later quantifies them: sour-cream 7 of 7 ($0.1025/oz Walmart), green-onions 4 of 7 ($0.79/each Family Fare). The instructions' passing mention of avocado (extractor concern) is part of this same garnish suggestion; avocados is likewise a priced commodity."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "80/20 Ground Beef (USDA SR NDB 23572, per 100 g: 254 cal / 17.2 P / 0 C / 20 F; raw basis; shared with keto-cheeseburger-skillet)"
+  ],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 576, "protein_g": 50, "carbs_g": 11, "fat_g": 37 },
+    "recomputed_per_serving_from_food_db": { "calories": 525.3, "protein_g": 32.9, "carbs_g": 8.6, "fat_g": 38.6 },
+    "protein_gap_pct": -34.2,
+    "calorie_gap_pct": -8.8,
+    "verdict": "EXPLAINED, NOT A PORTION ERROR - the protein gap exceeds 15% so the main protein line was re-examined per rule 6. Our side is weight-anchored by the source itself (1 lb / 3 servings = 151.2 g raw beef per serving), so no each-weight assumption exists to correct. Their 50 g protein is physically impossible for the stated ingredients: 151.2 g of even the LEANEST retail beef (93/7) yields 32.1 g, plus 6.1 g from the cheese = 38.2 g absolute ceiling. Their macro set is internally consistent (4x50 + 9x37 + 4x11 = 577 = their 576), which means their calculator booked a beef entry near 29 P per 100 g RAW-weight - that is cooked-beef protein density applied to a raw portion, a raw/cooked double-count on their side. Removing the phantom ~17 g protein (~68 cal) reconciles their 576 to our 525 within 1%. Fat corroborates the 80/20 ruling: theirs 37 vs ours 38.6 (+4%); at 93/7 fat would read ~19 (-49%), so their own label rules OUT lean beef.",
+    "band_check": "computed 525.3 cal in [400, 650] PASS; carbs 8.6 g <= 35 PASS. With the house 93/7 row instead the dish computes 368 cal and FAILS the floor - the 80/20 ruling is load-bearing, see ruled_substitutions."
+  },
+  "loud_flags": [
+    "Source's published protein (50 g) is arithmetically impossible for its own ingredient list (ceiling 38.2 g); documented in the cross-check as a source-side raw/cooked double-count. Our 32.9 g is the defensible figure.",
+    "The 80/20-vs-93/7 choice decides the calorie floor for this recipe (525 PASS vs 368 FAIL). Ruled per the evidence in ruled_substitutions; if the house later prefers lean here, the recipe cannot pass the band as a 3-serving-per-pound dish."
+  ],
+  "board_defects_observed": [
+    "Bare term 'ground beef' resolves to NO commodity (CAPTURE, 25 candidates across 2 stores) even though ground-beef-8020 and ground-beef-93-7 both exist with full cells; a generic include for the unqualified term would spare every future mapper this detour - flagged for the match-soundness gate."
+  ]
+}

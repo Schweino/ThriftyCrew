@@ -1,0 +1,242 @@
+{
+  "slug": "turkey-meatballs-cream-sauce-skillet",
+  "title": "Turkey Meatballs in Easy Cream Sauce",
+  "source_url": "https://www.smalltownwoman.com/turkey-meatballs-in-easy-cream-sauce/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "turkey",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters ('plus a pinch' for the recurring 7/8 tsp points, jalapeno-popper precedent), drift from the exact 3.5x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "Generic '1 1/4 lbs ground turkey' is booked as the house 93/7 item (93-7-ground-turkey, recipe board) following the THREE in-run precedents that ruled the identical generic phrase (keto-turkey-broccoli-cheddar-casserole, turkey-zucchini-noodle-casserole, southwest-ground-turkey-cauliflower-rice-skillet): the only bid-wired ground-turkey DB rows are the Jennie-O labels, and 93/7 is the standing generic booking. NOT NEUTRAL for the cross-check - the source's own published macros reconstruct on a 99/1 lean basis (see macro_cross_check); the 99/1 vocab row exists but carries NO BID, so booking it would hold the recipe. Band passes on the 93/7 build.",
+    "'low sodium chicken broth' -> Chicken Broth row (regular, Swanson label): sodium is not a tracked macro field, the calorie line is identical (10 cal/cup), and the product concept and price class are the same broth shelf; the printed 'low sodium' is preserved in the buy string. No prior ruling existed; recorded to ingredient-resolutions.",
+    "'salt and pepper to taste' is an unquantified optional seasoning line: booked as one optional zero-macro note line with no grams (both salt and black-pepper commodities price 7 of 7 if the cook reaches for them)."
+  ],
+  "registrar_rulings": [],
+  "ingredients": [
+    {
+      "source_raw": "1 1/4 lbs ground turkey",
+      "item": "93/7 Ground Turkey",
+      "bid": "93-7-ground-turkey",
+      "board": "recipe",
+      "grams": 2041,
+      "buy": "4 1/2 lb ground turkey (93/7)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by explicit source WEIGHT (1.25 lb). Exact 3.5x = 4.375 lb, quantized 4 1/2 lb = 2041 g (+2.9%). Jennie-O 93/7 label row (170 cal / 21 P / 8 F per 112 g raw). Board (recipe) 6 of 7, cheapest Aldi $3.9083/lb; the bare term 'ground turkey' also answers 7 of 7 via the generic ground-turkey commodity ($2.6633/lb, an 85/15 product class) - the standing fat-class split, see ruled_substitutions and loud_flags. 146 g raw turkey per serving, in family with the catalog's protein portions."
+    },
+    {
+      "source_raw": "2/3 cup panko bread crumbs",
+      "item": "Panko Breadcrumbs",
+      "bid": "bread-crumbs",
+      "board": "recipe",
+      "grams": 140,
+      "buy": "2 1/3 cups panko bread crumbs",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 2 1/3 cups, zero drift, x Kikkoman label 1/2 cup = 30 g (cup = 60 g; the densities Bread Crumbs cup = 108 g is the DENSER plain-crumb product - panko row basis governs, FLAGGED for a panko densities row) -> 140 g. Kikkoman panko label row (110 cal / 30 g), deliberately not the USDA plain Bread Crumbs row. Recipe-board bread-crumbs id answers; the bare term 'panko bread crumbs' falsely resolves to the BREAD commodity - see board_defects_observed."
+    },
+    {
+      "source_raw": "1 teaspoons dried oregano",
+      "item": "Dried Oregano",
+      "bid": "dried-oregano",
+      "board": "weekly",
+      "grams": 3.5,
+      "buy": "3 1/2 tsp dried oregano (meatballs)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 3.5 tsp x densities tsp = 1 g -> 3.5 g. Source's '1 teaspoons' singular/plural typo transcribed as printed (extractor concern), quantity read as 1. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/4 teaspoon garlic powder",
+      "item": "Garlic Powder",
+      "bid": "garlic-powder",
+      "board": "weekly",
+      "grams": 2.7,
+      "buy": "3/4 tsp plus a pinch garlic powder (meatballs)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 0.875 tsp ('plus a pinch' eighth, jalapeno-popper salt precedent, zero drift) x densities tsp = 3.1 g -> 2.7 g. Board 7 of 7, cheapest Walmart $0.216/oz."
+    },
+    {
+      "source_raw": "1/4 cup minced onion",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 101,
+      "buy": "3/4 cup plus 2 tbsp minced yellow onion (about 1 small onion)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 0.875 cup (zero drift) x densities cup = 115 g -> 100.6 -> 101 g. Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "1 egg",
+      "item": "Eggs",
+      "bid": "eggs",
+      "board": "weekly",
+      "grams": 200,
+      "buy": "4 large eggs",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 3.5 eggs, quantized 4 whole (+14.3% DRIFT NOTED - half an egg is not a cook measure; binder line, +2.5 cal/serving) x densities each = 50 g -> 200 g. Board 7 of 7, cheapest Aldi $1.46/dozen."
+    },
+    {
+      "source_raw": "2 tablespoons Worcestershire sauce",
+      "item": "Worcestershire Sauce",
+      "bid": "worcestershire",
+      "board": "weekly",
+      "grams": 119,
+      "buy": "7 tbsp Worcestershire sauce (meatballs)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 7 tbsp (zero drift) x densities tbsp = 17 g -> 119 g. Lea & Perrins label row (5 cal/tsp). Board 6 of 7, cheapest Walmart $0.10/floz. Large for a meatball mix but that is what the page prints (3 1/2 tbsp total per 4 source servings across both sections); transcribed and scaled as printed."
+    },
+    {
+      "source_raw": "1 tablespoon olive oil",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 47,
+      "buy": "3 1/2 tbsp olive oil, for browning",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 3.5 tbsp x densities tbsp = 13.5 g -> 47.3 -> 47 g. Board 7 of 7, cheapest Sam's Club $0.1879/floz."
+    },
+    {
+      "source_raw": "2 tablespoons butter",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "recipe",
+      "grams": 98,
+      "buy": "7 tbsp butter",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 7 tbsp x densities tbsp = 14 g -> 98 g. USDA butter row (717 cal/100 g). Board (recipe) 7 of 7, cheapest Sam's Club $2.555/lb."
+    },
+    {
+      "source_raw": "2 tablespoons all-purpose flour",
+      "item": "All-Purpose Flour",
+      "bid": "flour",
+      "board": "recipe",
+      "grams": 56,
+      "buy": "7 tbsp all-purpose flour",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 7 tbsp x densities tbsp = 8 g -> 56 g. GV label row (110 cal / 30 g). Board (recipe) 7 of 7, cheapest Sam's Club $0.3392/lb."
+    },
+    {
+      "source_raw": "1 cup low sodium chicken broth",
+      "item": "Chicken Broth",
+      "bid": "chicken-broth",
+      "board": "weekly",
+      "grams": 840,
+      "buy": "3 1/2 cups low sodium chicken broth",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 3.5 cups x densities cup = 240 g -> 840 g. Regular-broth row per ruled_substitutions (sodium untracked, 10 cal/cup either way); printed 'low sodium' preserved in the buy string. Board 7 of 7, cheapest Aldi $0.0373/floz."
+    },
+    {
+      "source_raw": "1/4 teaspoon garlic powder",
+      "item": "Garlic Powder",
+      "bid": "garlic-powder",
+      "board": "weekly",
+      "grams": 2.7,
+      "buy": "3/4 tsp plus a pinch garlic powder (sauce)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Second garlic-powder line kept separate per source sections (Cream Sauce). Exact 0.875 tsp = 2.7 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/4 teaspoon onion powder",
+      "item": "Onion Powder",
+      "bid": "onion-powder",
+      "board": "weekly",
+      "grams": 2.1,
+      "buy": "3/4 tsp plus a pinch onion powder (sauce)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 0.875 tsp x densities tsp = 2.4 g -> 2.1 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 1/2 tablespoons Worcestershire sauce",
+      "item": "Worcestershire Sauce",
+      "bid": "worcestershire",
+      "board": "weekly",
+      "grams": 89,
+      "buy": "5 1/4 tbsp Worcestershire sauce (sauce)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 5.25 tbsp (zero drift) x densities tbsp = 17 g -> 89.3 -> 89 g. Board 6 of 7."
+    },
+    {
+      "source_raw": "1/2 cup heavy cream",
+      "item": "Heavy Cream",
+      "bid": "heavy-cream",
+      "board": "weekly",
+      "grams": 417,
+      "buy": "1 3/4 cups heavy cream",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 1.75 cups (zero drift) x densities cup = 238 g -> 416.5 -> 417 g. GV label row (50 cal/tbsp). Board 7 of 7, cheapest Sam's Club $0.1162/floz."
+    },
+    {
+      "source_raw": "1/2 teaspoon dried oregano",
+      "item": "Dried Oregano",
+      "bid": "dried-oregano",
+      "board": "weekly",
+      "grams": 1.8,
+      "buy": "1 3/4 tsp dried oregano (sauce)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5x = 1.75 tsp x densities tsp = 1 g -> 1.75 -> 1.8 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "salt and pepper to taste",
+      "item": "Salt and Black Pepper (to taste)",
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "salt and black pepper, to taste",
+      "optional": true,
+      "decision": "optional-note",
+      "notes": "Unquantified to-taste line, zero-macro either way; excluded from band macros with no gram basis invented. Both commodities board-priced 7 of 7 (salt cheapest Aldi $0.0304/oz, black pepper cheapest Hy-Vee $0.4167/oz); nothing to enqueue."
+    },
+    {
+      "source_raw": "1 tablespoon chopped fresh parsley",
+      "item": "Fresh Parsley",
+      "bid": "fresh-parsley",
+      "board": "weekly",
+      "grams": 13,
+      "buy": "3 1/2 tbsp chopped fresh parsley (optional garnish)",
+      "optional": true,
+      "decision": "mapped-optional",
+      "notes": "OPTIONAL garnish (extractor marked it on the sprinkle-at-the-end basis), excluded from band macros (~0.3 cal/serving if counted). Exact 3.5x = 3.5 tbsp x USDA tbsp chopped = 3.8 g (NO densities row - FLAGGED, re-flag of the stroganoff addition note) -> 13.3 -> 13 g. Board 3 of 7, cheapest Hy-Vee $0.99/each."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 433, "protein_g": 38, "carbs_g": 16, "fat_g": 24 },
+    "recomputed_per_serving_from_food_db": { "calories": 492.5, "protein_g": 31.2, "carbs_g": 17.2, "fat_g": 30.8 },
+    "protein_gap_pct": -17.9,
+    "calorie_gap_pct": 13.7,
+    "verdict": "PROTEIN GAP EXCEEDS THE 15% INSTRUMENT AND IS EXPLAINED, NOT A PORTION ERROR. The main protein is weight-anchored (1.25 lb printed; our only drift is +2.9% quantization, which pushes our protein UP, the wrong direction to create this gap). Rebuilding OUR EXACT line set with the 99/1 Ground Turkey label row (120 cal / 26 P / 1.5 F per 112 g) in place of 93/7 reproduces the source's published figures almost exactly: 427.4 cal (-1.3%), 37.7 P (-0.7%), 22.3 F (-7%), 17.2 C. Their calculator used an extra-lean 99/1-class turkey for the generic phrase 'ground turkey'. The in-run precedent (three recipes, identical phrase) books 93/7, the house label row with a wired bid; 99/1 resolves in the vocab but has NO BID, so booking it would hold the recipe for wiring it has never had. The 93/7 build is internally consistent and is what the card will publish.",
+    "band_check": "computed 492.5 cal in [400, 650] PASS with 92 cal above the floor and 158 below the ceiling; carbs 17.2 g <= 35 PASS. The only >5% drift on a macro-bearing line is the 3.5 -> 4 egg quantization (+2.5 cal/serving)."
+  },
+  "loud_flags": [
+    "Protein cross-check gap -17.9% is OUTSIDE the 15% instrument; kept because the identical-basis 99/1 reconstruction pins the entire gap on the source's lean-class assumption (all four macros reconcile within 7% on their basis). The published card will state ~31 g protein where the source page says 38; that is the honest 93/7 figure, but QA should accept the divergence knowingly. If the gate owner prefers the source-matching lean build, the path is wiring a bid for the existing 99/1 Ground Turkey row, not remapping here.",
+    "Worcestershire totals 12 1/4 tbsp scaled across the two sections - faithful to the printed 3.5 tbsp per 4 servings, just visually large at 14 servings; flagged for the writer as a cook-note candidate, not changed."
+  ],
+  "board_defects_observed": [
+    "Term 'panko bread crumbs' resolves to the BREAD commodity (include /\\bbread\\b/, cheapest cell a white sandwich loaf) - a false product-concept match; the bread-crumbs recipe-board id is the real answer. Same include-greed family as the flour claim on 'almond flour' (creamy-garlic-herb precedent). Flagged for the match-soundness gate.",
+    "Standing ground-turkey fat-class split re-observed: bare term answers via the generic 85/15 commodity (7 of 7, $2.6633/lb) while the bid-wired label row is 93/7 (recipe board, 6 of 7, $3.9083/lb); the cheaper generic commodity still has no matching label row in the food DB."
+  ],
+  "densities_followups": [
+    "Panko Breadcrumbs: propose cup = 60 g (Kikkoman label 1/2 cup = 30 g); the existing Bread Crumbs cup = 108 g is the plain-crumb product and overweighs panko lines by 80%.",
+    "Fresh Parsley: still no densities row (tbsp chopped = 3.8 g, cup = 60 g, USDA) - re-flag."
+  ]
+}

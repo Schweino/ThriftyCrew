@@ -1,0 +1,21 @@
+{
+  "slug": "bbq-ranch-ground-turkey-veggie-skillet",
+  "name": "BBQ Ranch Ground Turkey Veggie Skillet",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "pass": true,
+    "src_cal": 415,
+    "src_carbs": 31,
+    "band": "400-650 cal / <=35g carb",
+    "note": "Published card 415 cal / 31g carb clears both edges; no seafood; one-skillet stovetop, weigh-and-divide scalable to 14; budget meal-prep dinner. Sourcer's LOW-MODERATE confidence is about a possible label recompute tipping carbs>35 or cal<400, but the PUBLISHED numbers clear the gate, so it is not NOT-FIT."
+  },
+  "dupe": {
+    "is_dupe": false,
+    "evidence": "No BBQ-ranch turkey skillet in the 544-recipe digest or the 42 accepted slugs. Closest turkey neighbors differ on sauce/flavor family: ground-turkey-sweet-potato-bowl (turkey+sweet potato but salsa/cheese Tex-Mex bowl, not BBQ-ranch skillet), ground-turkey-calabacitas-skillet (turkey+zucchini skillet but Mexican calabacitas, not BBQ-ranch), and sheet-pan-bbq-turkey-meatballs-over-rice (BBQ+turkey but meatballs over rice, no ranch, no veggie skillet). Sauce profile (BBQ+ranch), starch (sweet potato), and mixed roasted-veg skillet format together make it a distinct dinner."
+  },
+  "cross_protein_collision_note": "The BBQ-ranch + sweet potato + mixed-veg skillet template travels across proteins: watch another selector's pool for a BBQ-ranch chicken skillet/bowl or BBQ-ranch ground-beef skillet, which would be structurally the same dinner with the protein swapped. The catalog already has several BBQ-CHICKEN and BBQ-pork dishes (bbq-chicken-rice-bowls, slow-cooker-bbq-pulled-chicken-bowls, bbq-pulled-pork-stuffed-sweet-potatoes) but none combine BBQ+ranch, so a BBQ-ranch chicken candidate is the most likely twin to flag.",
+  "borderline_flag": "Sits near both band edges (cal near 400 floor, carbs near 35 ceiling) with carbs from a starchy base (sweet potato + optional golden raisins + BBQ-sauce sugar). If selected, dropping the optional 1/4 cup golden raisins protects the carb gate on a label-accurate recompute.",
+  "cuisine": "American",
+  "unmapped": []
+}

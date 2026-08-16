@@ -1,0 +1,14 @@
+{
+  "slug": "jalapeno-popper-chicken-cauliflower-bake",
+  "name": "Jalapeno Popper Chicken and Cauliflower Bake",
+  "protein": "chicken",
+  "verdict": "DUPE",
+  "fit": "PASS",
+  "fit_note": "588 cal (400-650 ok), 10g carbs (<=35 ok), no seafood, budget cheesy chicken bake, weigh-and-divide scalable to 14 - clears all conditions.",
+  "dupe_of": "chicken-bacon-ranch-cauliflower-bake",
+  "dupe_scope": "pool (already in accepted-slugs.json this run)",
+  "evidence": "Structurally the same plate as the just-accepted chicken-bacon-ranch-cauliflower-bake: same protein (chicken), same cauliflower base, same oven-bake method, same bacon + cheddar + cream-cheese binding; only the seasoning accent differs (jalapeno-popper vs ranch). Three of four axes identical with near-total ingredient overlap = near-duplicate loaded cheesy chicken-bacon cauliflower casserole, not a distinct dinner. Catalog itself has no jalapeno-popper or cauliflower bake, so it is the pool twin, not the catalog, that kills this.",
+  "cross_protein_flags": [
+    "A turkey jalapeno-popper cauliflower/cheese bake or a turkey bacon-ranch cauliflower bake in the turkey selector's pool would be the same dish one protein over - catalog already carries several turkey cheesy-vegetable casseroles (Turkey Divan Broccoli Rice Bake, Cheesy Turkey Sausage and Vegetable Rice Casserole); decider should watch for a turkey twin."
+  ]
+}

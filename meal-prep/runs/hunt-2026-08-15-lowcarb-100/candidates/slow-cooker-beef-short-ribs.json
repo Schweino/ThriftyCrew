@@ -1,0 +1,32 @@
+{
+  "name": "Slow Cooker Braised Beef Short Ribs",
+  "slug": "slow-cooker-beef-short-ribs",
+  "protein": "beef",
+  "method": "slow cooker",
+  "cuisine": "American",
+  "source_url": "https://theforkedspoon.com/slow-cooker-beef-short-ribs/",
+  "source_servings": 4,
+  "src_cal": 533,
+  "src_carbs": 9,
+  "src_protein": 50,
+  "src_fat": 29,
+  "ingredients_verbatim": [
+    "3-4 pounds beef short ribs, about 8 short ribs, boneless or bone-in",
+    "Salt and pepper, to season",
+    "1-2 tablespoon olive oil",
+    "1 onion, sliced",
+    "4 cloves garlic, peeled and left whole",
+    "2 tablespoon tomato paste",
+    "2 1/2 cups beef broth",
+    "1/2 cup red wine (Cabernet Sauvignon or Pinot Noir), optional but highly recommended! Sub with additional beef broth.",
+    "1/4 cup Worcestershire sauce",
+    "1 teaspoon dried thyme",
+    "1 teaspoon dried rosemary",
+    "2 bay leaves",
+    "Chopped fresh parsley and thyme sprigs, optional garnish"
+  ],
+  "main_ingredients": ["beef short ribs", "onions", "garlic", "tomato-paste", "beef-broth", "worcestershire", "olive-oil"],
+  "unmapped": ["beef short ribs (board has chuck-roast/ribeye/sirloin only, no short rib home)", "red wine (optional, sub beef broth)", "dried thyme", "dried rosemary", "bay leaves"],
+  "why": "Slow-cooker beef braise dead-center in band: published 533 cal / 9g carb / 50g protein per serving. Structurally low-carb (meat + aromatics + broth, no starch base) and high-protein. Fills an open lane (no short-rib braise in the 544-recipe catalog) and intentionally carries the unmapped short-rib + wine/herb flags that prove the pricer lane. Batch-scales cleanly to 14 servings by weight; sub extra beef broth for the wine to keep it commodity-friendly.",
+  "confidence": "high - nutrition and full ingredient list read directly from source page"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "cheesy-cauliflower-mac-smoked-sausage-bake",
+  "name": "Cheesy Cauliflower Mac and Cheese with Smoked Sausage",
+  "protein": "pork",
+  "verdict": "DUPE",
+  "fit": "PASS",
+  "fit_evidence": "Published 588 cal / 10g carbs / 26g protein per serving clears 400-650 cal and <=35g carb on its own numbers (588 sits near the ceiling - recompute could drift over 650). Qualifies on the gate; rejected on duplication, not fitness.",
+  "dupe_of": "pork-sausage-cauliflower-cheese-bake",
+  "dupe_scope": "pool",
+  "reason": "Same dinner as pool-mate pork-sausage-cauliflower-cheese-bake on all four identity axes - main protein (pork sausage), flavor family (cheese sauce), base (cauliflower cut/floret in place of starch), method (oven bake). The differences (cheddar/monterey-jack + Cajun + smoked-sausage links vs Gruyere/cream-cheese + fresh British sausage) are seasoning/cheese swaps, not a different plate. Kept the British version for cuisine spread and lower carbs; this American mac-style take is the pool-dupe loser.",
+  "catalog_evidence": "No exact catalog duplicate in the pork digest either; cheesy-smoked-sausage-rice-skillet is a rice skillet, different base. This is a within-batch (pool) dupe, not a catalog dupe.",
+  "borderline_note": "Borderline: British cauliflower-cheese vs American cauliflower-mac-and-cheese could be argued a distinct comfort-food take. If the decider wants the American-skew comfort version over the British one, this is the candidate to swap in - but the catalog should not ship BOTH.",
+  "cross_protein_collisions": [
+    "Belongs to the same sausage-and-cauliflower-cheese-bake cluster flagged on the KEEP verdict; any smoked-turkey-sausage cauliflower-mac in another pool would also be this dish."
+  ]
+}

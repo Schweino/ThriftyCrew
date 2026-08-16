@@ -1,0 +1,18 @@
+{
+  "slug": "mississippi-pot-roast",
+  "name": "Mississippi Pot Roast",
+  "protein": "beef",
+  "lane": "beef-slow",
+  "verdict": "DUPE",
+  "dupe_of": "mississippi-pot-roast-bowls",
+  "reason": "Direct duplicate of catalog recipe 'Mississippi Pot Roast Bowls' (slug mississippi-pot-roast-bowls, items beef-chuck-roast/butter/pepperoncini/rice): identical dish - same protein (beef chuck), same slow-cooker method, same ranch + au-jus + pepperoncini braise flavor family; the catalog version simply plates it over rice as bowls but it is the same dinner (name-same, dish-same).",
+  "fit": {
+    "in_band": true,
+    "note": "Published 481 cal / 4 g carbs per serving clears the 400-650 cal and <=35 g carb band; no seafood; slow-cooker shred scales to 14 - fit is fine, but it loses on duplication, not on conditions."
+  },
+  "cross_protein_collision": "Catalog also carries slow-cooker-mississippi-pork-bowls (pork) and slow-cooker-ranch-pork-potato-bowls - the Mississippi/ranch-braise template already spans beef and pork, so the decider should watch for any Mississippi/ranch chicken or turkey twin in other selectors' pools.",
+  "adjudicated_against": {
+    "catalog_digest_recipe_count": 544,
+    "accepted_slugs_checked": true
+  }
+}

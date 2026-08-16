@@ -1,0 +1,27 @@
+{
+  "slug": "korean-bossam-pork-lettuce-wraps",
+  "name": "Momofuku Bossam (Korean Slow-Roasted Pork Lettuce Wraps)",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "conditions_check": {
+    "calories": 626,
+    "cal_in_band": true,
+    "carbs": 18,
+    "carbs_in_band": true,
+    "seafood": "optional raw-oyster garnish only; core dish seafood-free and oysters dropped in rebuild per standing rule",
+    "scalable_14": true,
+    "budget": true,
+    "fit": "FIT"
+  },
+  "dupe_check": {
+    "is_dupe": false,
+    "evidence": "Nearest catalog dishes are slow-cooker-korean-shredded-pork-bowls, slow-cooker-korean-gochujang-pork-bowls, and korean-gochujang-ground-pork-rice-bowls -- all gochujang/soy-braised pork over RICE via slow-cooker; bossam differs on starch (low-carb lettuce wrap, not rice), method (oven dry salt-sugar cure then roast, not braise), and sauce delivery (pork is plain salt-cured; gochujang only in an optional side dip), so it is a distinct plate, not a near-duplicate.",
+    "checked_accepted_slugs": true,
+    "accepted_slugs_conflict": "none (no Korean pork or lettuce-wrap dish in accepted-slugs)"
+  },
+  "cross_protein_collision_flags": [
+    "The 'Korean lettuce wrap with ssam/gochujang sauce' format could recur in another protein pool as a beef ssam / Korean bulgogi lettuce wrap or a Korean ground-turkey lettuce wrap -- decider should check beef and turkey pools for a same-format lettuce-wrap twin.",
+    "Distinct from catalog's Korean bulgogi beef (korean-bulgogi-beef-burrito) and korean-ground-turkey-bowls only if those stay in rice/burrito format; a lettuce-wrap version of either would be the real collision to watch."
+  ],
+  "notes": "Sourcer's ceiling-proximity caveat is real: 626 vs 650 ceiling. Rebuild dropping optional oysters + trimming rice garnish/sauce oil should pull computed cal toward mid-band, but decider should treat the recomputed number as the gate. Carries intentional unmapped ingredients (ssamjang, kimchi, sherry-vinegar) for the pricer lane -- not penalized per v2.1 5.1. Widens catalog cuisine spread (Korean, low-carb wrap format)."
+}

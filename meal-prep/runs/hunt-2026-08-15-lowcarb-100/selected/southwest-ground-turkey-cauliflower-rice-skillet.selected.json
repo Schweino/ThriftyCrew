@@ -1,0 +1,11 @@
+{
+  "slug": "southwest-ground-turkey-cauliflower-rice-skillet",
+  "name": "Southwest Ground Turkey and Cauliflower Rice Skillet",
+  "protein": "turkey",
+  "cuisine": "Tex-Mex / Southwest",
+  "source_url": "https://upnorthnosh.com/low-carb-ground-turkey-skillet-with-cauliflower-rice/",
+  "decision": "ACCEPT",
+  "decided_by": "decider",
+  "cross_lane_dupe_check": "No collision with accepted-slugs.json (read fresh). No southwest/taco cauliflower-rice skillet accepted in any protein; accepted turkey slugs (zucchini-noodle casserole, keto broccoli-cheddar casserole, meatballs-cream-sauce skillet, italian white-bean skillet) are all distinct dishes. Adjudicator flagged a likely same-dish twin (southwest ground BEEF or ground-chicken cauliflower-rice skillet) in another pool - noted for orchestrator cross-protein merge; none in accepted state.",
+  "note": "Tex-Mex is the catalog's saturated cuisine, so this does not widen spread - accepted on balance because turkey is underrepresented, it is a clean distinct low-carb cauliflower-rice plate (no rice/beans/corn/wet sauce), and it passes fit cleanly (476 cal / 15g carb). Weakest of this batch on cuisine value; if the beef/chicken southwest-cauliflower twin surfaces, the orchestrator merge should keep only one."
+}

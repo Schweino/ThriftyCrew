@@ -1,0 +1,25 @@
+{
+  "slug": "chicken-pesto-cauliflower-bake",
+  "name": "Chicken Pesto Cauliflower Casserole",
+  "protein": "chicken",
+  "cuisine": "Italian",
+  "verdict": "DUPE",
+  "fit": {
+    "calories": 563,
+    "carbs_g": 11.8,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "seafood": false,
+    "scalable_to_14": true,
+    "result": "FIT"
+  },
+  "dupe_of": "pesto-chicken-cauliflower-bake",
+  "dupe_scope": "pool",
+  "evidence": "Pool duplicate of already-ruled sibling pesto-chicken-cauliflower-bake (ruled KEEP): identical dish (pesto-mozzarella cream over roasted cauliflower with shredded chicken), identical protein/sauce-family/base/method 4-of-4, and identical published macros (563 cal / 11.8g carbs) - the two names ('Chicken Pesto Cauliflower Casserole' vs 'Pesto Chicken and Cauliflower Bake') are the same dinner reordered, so only one may ship.",
+  "catalog_dupe": null,
+  "catalog_evidence": "No catalog duplicate exists: 'cauliflower' appears zero times in the 544-recipe digest and the only two pesto dishes (turkey-pesto-pasta-kale, turkey-sausage-and-peppers-rice-skillet) are pasta/rice, not a chicken cauliflower bake. It is NOT a duplicate of the accepted chicken-bacon-ranch-cauliflower-bake (bacon-ranch cheddar vs pesto-mozzarella cream). The dupe is purely against the pool sibling, not the live catalog.",
+  "borderline_note": "If the decider prefers this slug over the sibling as the surviving copy, it is a clean KEEP/FIT on its own merits (Italian, widens catalog cuisine spread, all ingredients board-mapped, mid-band macros); only ONE of the two identical bakes should survive.",
+  "cross_protein_collision_watch": "Sauce-bound, starch-free cauliflower-and-shredded-protein bake; a pesto turkey or pesto pork/ground-turkey cauliflower bake in another selector's pool would be a same-dish-different-protein twin. Decider should check turkey/pork pools for a pesto cauliflower bake (same watch already logged on the sibling verdict).",
+  "ruled_by": "adjudicator",
+  "ruled_at": "2026-08-16"
+}

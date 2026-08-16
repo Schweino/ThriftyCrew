@@ -1,0 +1,59 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Slow Cooker Galbi Jjim (Korean Short Ribs)",
+  "source_url": "https://butfirstwebrunch.com/slow-cooker-galbi-jjim-korean-short-ribs/",
+  "servings": 6,
+  "time_total": "7 hours 45 minutes",
+  "time_active": "45 minutes",
+  "nutrition_per_serving": {
+    "calories": "481kcal",
+    "carbohydrates": "22g",
+    "protein": "44g",
+    "fat": "24g",
+    "saturated_fat": "10g",
+    "polyunsaturated_fat": "2g",
+    "monounsaturated_fat": "10g",
+    "cholesterol": "130mg",
+    "sodium": "618mg",
+    "potassium": "1107mg",
+    "fiber": "4g",
+    "sugar": "13g",
+    "vitamin_a": "4314IU",
+    "vitamin_c": "13mg",
+    "calcium": "57mg",
+    "iron": "6mg"
+  },
+  "ingredients": [
+    { "raw": "1 cup soy sauce", "item": "soy sauce", "qty": "1", "unit": "cup", "prep": null, "optional": false, "section": "Sauce Ingredients" },
+    { "raw": "4 tablespoon gochujang (Korean chili paste)", "item": "gochujang", "qty": "4", "unit": "tablespoon", "prep": null, "optional": false, "section": "Sauce Ingredients" },
+    { "raw": "2 tablespoon gochugaru (Korean chili powder)", "item": "gochugaru", "qty": "2", "unit": "tablespoon", "prep": null, "optional": false, "section": "Sauce Ingredients" },
+    { "raw": "2 teaspoon sesame oil", "item": "sesame oil", "qty": "2", "unit": "teaspoon", "prep": null, "optional": false, "section": "Sauce Ingredients" },
+    { "raw": "1 tablespoon honey", "item": "honey", "qty": "1", "unit": "tablespoon", "prep": null, "optional": false, "section": "Sauce Ingredients" },
+    { "raw": "1/4 cup Mirin (rice wine)", "item": "mirin", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": "Sauce Ingredients" },
+    { "raw": "1/4 cup rice wine vinegar", "item": "rice wine vinegar", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": "Sauce Ingredients" },
+    { "raw": "1 teaspoon salt", "item": "salt", "qty": "1", "unit": "teaspoon", "prep": null, "optional": false, "section": "Sauce Ingredients" },
+    { "raw": "1/2 teaspoon black pepper", "item": "black pepper", "qty": "1/2", "unit": "teaspoon", "prep": null, "optional": false, "section": "Sauce Ingredients" },
+    { "raw": "1 pear, peeled and chopped", "item": "pear", "qty": "1", "unit": "each", "prep": "peeled and chopped", "optional": false, "section": "Sauce Ingredients" },
+    { "raw": "1 apple, peeled and chopped", "item": "apple", "qty": "1", "unit": "each", "prep": "peeled and chopped", "optional": false, "section": "Sauce Ingredients" },
+    { "raw": "4 green onions, chopped", "item": "green onions", "qty": "4", "unit": "each", "prep": "chopped", "optional": false, "section": "Sauce Ingredients" },
+    { "raw": "2 large carrots, chopped in 2 inch pieces", "item": "carrots", "qty": "2", "unit": "each", "prep": "chopped in 2 inch pieces", "optional": false, "section": "Everything Else" },
+    { "raw": "1 large onion, cut in quarters", "item": "onion", "qty": "1", "unit": "each", "prep": "cut in quarters", "optional": false, "section": "Everything Else" },
+    { "raw": "1/2 cup sliced shiitake mushrooms", "item": "shiitake mushrooms", "qty": "1/2", "unit": "cup", "prep": "sliced", "optional": false, "section": "Everything Else" },
+    { "raw": "1 medium turnip, cut in one inch pieces", "item": "turnip", "qty": "1", "unit": "each", "prep": "cut in one inch pieces", "optional": false, "section": "Everything Else" },
+    { "raw": "1 cup rice cakes", "item": "rice cakes", "qty": "1", "unit": "cup", "prep": null, "optional": false, "section": "Everything Else" },
+    { "raw": "1 cup beef broth", "item": "beef broth", "qty": "1", "unit": "cup", "prep": null, "optional": false, "section": "Everything Else" },
+    { "raw": "4 lb beef short ribs", "item": "beef short ribs", "qty": "4", "unit": "lb", "prep": null, "optional": false, "section": "Everything Else" }
+  ],
+  "instructions": [
+    "Place all the sauce ingredients in your food processor or blender and pulse until smooth.",
+    "Rub all the short rib pieces with olive oil, salt, and pepper.",
+    "Sear all sides in pan over high heat. Don't be tempted to turn them too quickly! Let a good crust form on each side! There's flavor in the brown! Place them at the bottom of your slow cooker.",
+    "Cover the meat with rice cakes and then vegetables. Pour sauce over the top, then pour in beef broth. Cook on low heat for 6-7 hours (stirring once, halfway through) or until the meat is tender and vegetables are cooked.",
+    "Serve over rice or on its own. Spoon sauce over the top and maybe a sprinkle of chopped green onion and sesame seeds."
+  ],
+  "concerns": [
+    "Instructions call for olive oil (rub), salt and pepper for the sear, and sesame seeds/green onion for serving; olive oil and sesame seeds do not appear in the ingredient list.",
+    "Page prints fraction quantities with unicode glyphs (1/4, 1/2); transcribed as ASCII fractions."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Creamy Parmesan Pork Chops Skillet",
+  "slug": "creamy-parmesan-pork-chops-skillet",
+  "protein": "pork",
+  "cuisine": "American",
+  "method": "skillet",
+  "source_url": "https://momfoodie.com/keto-pork-chops-parmesan-cream-sauce/",
+  "source_servings": 4,
+  "src_cal": 571,
+  "src_carbs": 7,
+  "src_protein": 38,
+  "src_fat": 42,
+  "ingredients_verbatim": [
+    "4 boneless pork chops (thick cut)",
+    "1 tbsp. butter (unsalted)",
+    "1 tbsp. olive oil",
+    "1 cup onion (chopped)",
+    "3 cloves garlic (minced)",
+    "1/2 cup bone broth",
+    "1 cup heavy whipping cream",
+    "1 teaspoon basil",
+    "1/2 teaspoon garlic powder",
+    "3/4 cup Parmesan cheese",
+    "2 tablespoons parsley (chopped)",
+    "Salt and pepper to taste"
+  ],
+  "unmapped": ["basil (dried basil has no board id; minor spice), bone-broth maps to chicken-broth on board"],
+  "why": "Whole-muscle boneless pork chops, pan-seared then finished in a parmesan-cream pan sauce - no rice/pasta/potato base, so structurally low-carb. Published nutrition 571 cal / 7g carbs / 38g protein per serving sits dead center of the 400-650 cal, <=35g carb band with strong protein. Skillet dish, weigh-and-divide-friendly, scales cleanly to 14. Distinct from existing creamy-mushroom-pork-chops-over-mashed-potatoes (that one is mushroom gravy over mashed potatoes; this is an onion-parmesan cream sauce, no starch base). Board covers pork-chops, butter, olive-oil, onions, garlic, chicken-broth, heavy-cream, parmesan, garlic-powder, dried-parsley.",
+  "confidence": "high - read nutrition and full ingredient list directly from source page"
+}

@@ -1,0 +1,30 @@
+{
+  "name": "One-Skillet Pesto Mozzarella Chicken",
+  "slug": "pesto-mozzarella-chicken-skillet",
+  "protein": "chicken",
+  "method": "skillet",
+  "cuisine": "Italian",
+  "source_url": "https://www.foodiecrush.com/pesto-chicken/",
+  "source_servings": 4,
+  "src_cal": 417,
+  "src_carbs": 5,
+  "src_protein": 44,
+  "ingredients_verbatim": [
+    "1 1/2 pounds boneless skinless chicken breasts (or 4 chicken cutlets)",
+    "1 1/2 teaspoons kosher salt, divided",
+    "1 teaspoon freshly ground black pepper, divided",
+    "2 cups cherry or grape tomatoes",
+    "1 small zucchini, sliced into coins",
+    "3 tablespoons Delallo Private Reserve Extra Virgin Olive Oil, divided",
+    "1 tablespoon butter",
+    "1 6 ounce jar Delallo Simply Pesto Traditional Basil",
+    "4 slices fresh mozzarella",
+    "fresh basil leaves"
+  ],
+  "unmapped": [
+    "basil pesto (6 oz jar) - signature ingredient, likely no board home; flagged for pricer lane",
+    "fresh mozzarella (sliced) - board may only carry shredded mozzarella"
+  ],
+  "why": "Genuine one-pan stovetop chicken saute (chicken seared, tomatoes/zucchini sauteed, pesto stirred in, mozzarella melted on top in the skillet) - squarely in the chicken-skillet lane and distinct from the run's creamy-garlic/tuscan/marsala/greek chicken skillets. Published 417 cal / 44 g protein / 5 g carbs per serving clears the 400-650 cal and <=35 g carb band with huge carb headroom (meat + olive oil + pesto + cheese + non-starchy veg, zero starch base). High protein relative to calories. Batch-scalable to 14 (weigh-and-divide skillet). Carries an intentional unmapped signature ingredient (jarred basil pesto) to exercise the pricer lane.",
+  "confidence": "high - read published nutrition and full ingredient list directly from source page; only minor risk our label-DB compute of a 6 oz pesto jar + 3 tbsp oil pushes calories above 417, but still well inside the band"
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Spinach Artichoke Chicken Bake",
+  "slug": "spinach-artichoke-chicken-bake",
+  "protein": "chicken",
+  "method": "oven bake",
+  "cuisine": "American",
+  "source_url": "https://www.wholesomelicious.com/spinach-artichoke-chicken-casserole/",
+  "source_servings": 6,
+  "src_cal": 480,
+  "src_carbs": 4,
+  "src_protein": 40,
+  "ingredients": [
+    "2 lbs chicken breast (boneless and skinless)",
+    "4 oz cream cheese (slightly warmed)",
+    "1/2 cup mayonnaise",
+    "1 tbsp dijon mustard",
+    "2 cloves garlic (minced)",
+    "1/2 cup freshly grated parmesan cheese",
+    "2/3 cup mozzarella cheese",
+    "1/2 tsp kosher salt",
+    "1/2 tsp black pepper",
+    "8 oz marinated artichokes (drained)",
+    "3 cups fresh spinach (or 4 oz fresh spinach)"
+  ],
+  "unmapped": [],
+  "why": "Verified from source page: 480 cal, 40g protein, 4g carbs per serving - dead center of the 400-650/<=35g band with an outstanding protein-to-calorie ratio. Structurally low-carb: chicken breast bound with cream cheese, mozzarella and parmesan (no pasta/rice/potato), spinach and artichoke hearts as the vegetables. Oven bake at 375F, weigh-and-divide friendly and trivially scalable to 14 servings. All main ingredients (chicken breast, cream cheese, mayonnaise, dijon, parmesan, mozzarella, artichoke hearts, spinach) map to existing Omaha board commodities - no unmapped flags.",
+  "confidence": "high - nutrition read directly from source page"
+}

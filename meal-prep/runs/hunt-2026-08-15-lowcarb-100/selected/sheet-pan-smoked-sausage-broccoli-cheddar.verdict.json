@@ -1,0 +1,26 @@
+{
+  "slug": "sheet-pan-smoked-sausage-broccoli-cheddar",
+  "name": "Sheet-Pan Smoked Sausage, Broccoli and Cheddar",
+  "protein": "pork",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "conditions_check": {
+    "calories": 472,
+    "carbs_g": 10.6,
+    "in_calorie_band_400_650": true,
+    "under_carb_ceiling_35": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "budget_meal_prep": true,
+    "fit": "FIT"
+  },
+  "dupe_of": null,
+  "evidence": "No catalog duplicate: this is a DRY roasted sheet pan of smoked sausage + broccoli + cheddar with zero starch and no sauce (main protein smoked-sausage, no sauce family, no starch, sheet-pan method). The nearest catalog dishes differ on 2+ of those axes - chicken-divan-broccoli-bake and keto-turkey-broccoli-cheddar-casserole (accepted) are CREAMY casseroles, ground-turkey-broccoli-cheddar-rice-skillet and cheesy-turkey-sausage-vegetable-rice-casserole are RICE-based skillets/bakes, and pork orecchiette-italian-sausage-broccoli is a pasta dish. None share 3 of 4 (protein/sauce/starch/method).",
+  "cross_protein_collision_flags": [
+    "Structural twin risk in TURKEY: andouille rebuilds cleanly on smoked-turkey-sausage, so a 'sheet-pan smoked-turkey-sausage + broccoli + cheddar' in another selector's turkey pool would be the SAME dish (same veg, same cheese, same dry sheet-pan method) - decider should merge if such a turkey candidate exists.",
+    "Weaker collision with any BEEF/chicken dry sheet-pan meat+broccoli+cheddar bake - structurally the same plate if protein swapped; none seen in catalog but flag for cross-pool merge."
+  ],
+  "pool_note": "Candidate's own 'why' flags creamy broccoli-smoked-sausage cream-cheese casseroles elsewhere in the pork-sausage pool (thatlowcarblife, captured x3). Those are creamy bakes; this is a dry roast - different method/dish, but decider should keep only one broccoli+smoked-sausage entry if the creamy ones also advance.",
+  "unmapped_ok": ["andouille-sausage"],
+  "confidence": "high on numbers and fit; medium on novelty - broccoli+sausage combo is represented as creamy bakes, but method/dish is distinct"
+}

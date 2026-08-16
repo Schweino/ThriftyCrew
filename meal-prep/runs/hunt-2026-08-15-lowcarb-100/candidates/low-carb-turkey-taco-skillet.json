@@ -1,0 +1,29 @@
+{
+  "name": "Low Carb Turkey Taco Skillet",
+  "slug": "low-carb-turkey-taco-skillet",
+  "protein": "turkey",
+  "cuisine": "Tex-Mex",
+  "method": "skillet",
+  "source_url": "https://stepawayfromthecarbs.com/low-carb-turkey-taco-skillet/",
+  "source_servings": 2,
+  "src_cal": 446,
+  "src_carbs": 6,
+  "ingredients_verbatim": [
+    "1 tbs olive oil",
+    "1 teaspoon onion powder",
+    "1 lb ground turkey",
+    "1 red bell pepper, deseeded and diced",
+    "1 teaspoon dried oregano",
+    "1 teaspoon paprika",
+    "1 teaspoon ground cumin",
+    "1/2 cup shredded Mexican blend cheese",
+    "Fresh cilantro, chopped",
+    "Sour cream, shredded lettuce and/or low carb wraps for serving"
+  ],
+  "src_protein": 61,
+  "src_fat": 20,
+  "src_fiber": 2,
+  "unmapped": ["shredded Mexican blend cheese (board tracks cheddar-cheese-shredded; blend may need mapping)"],
+  "why": "Ground turkey + bell pepper + cheese, no rice/pasta/bean base - structurally low-carb. Published 446 cal / 6g carbs clears the 400-650 / <=35 band on the source's own numbers with 61g protein (well over the 25g identity bar). Stovetop skillet, brown-and-simmer, scales cleanly to 14 servings (7x). Not a duplicate: catalog turkey tacos are all rice/casserole/soup based; no low-carb turkey taco skillet exists. Note: 446 sits near the calorie floor, so our label-DB recompute could dip under 400 - the cheese and 20g fat give some cushion but flag as moderate confidence on the floor.",
+  "confidence": "verified nutrition read from page; moderate confidence it stays above 400 floor after our recompute"
+}

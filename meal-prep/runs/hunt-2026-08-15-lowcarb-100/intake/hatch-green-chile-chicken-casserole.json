@@ -1,0 +1,76 @@
+{
+  "name": "Hatch Green Chile Chicken Casserole",
+  "slug": "hatch-green-chile-chicken-casserole",
+  "protein": "chicken",
+  "cuisine": "Southwestern",
+  "source_url": "https://www.ruled.me/hatch-chile-casserole/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Rotisserie Chicken", "grams": 1439, "buy": "50 3/4 oz shredded rotisserie chicken meat (about 3.2 lb, roughly 2 birds)" },
+    { "item": "Diced Green Chiles", "grams": 1340, "buy": "47 1/4 oz canned whole hatch green chiles" },
+    { "item": "Zucchini", "grams": 1029, "buy": "5 1/4 medium zucchini, spiralized or cut into thin strips" },
+    { "item": "Pepper Jack Cheese", "grams": 452, "buy": "4 cups shredded pepper jack (about 1 lb), divided" },
+    { "item": "Heavy Cream", "grams": 417, "buy": "1 3/4 cups heavy whipping cream" },
+    { "item": "Yellow Bell Pepper", "grams": 210, "buy": "1 3/4 medium yellow bell peppers, diced" },
+    { "item": "Red Bell Pepper", "grams": 210, "buy": "1 3/4 medium red bell peppers, diced" },
+    { "item": "Cream Cheese", "grams": 198, "buy": "7 oz cream cheese, softened" },
+    { "item": "Yellow Onion", "grams": 55, "buy": "1/2 medium onion" },
+    { "item": "Cheddar Cheese, Shredded", "grams": 49, "buy": "7 tbsp shredded sharp cheddar" },
+    { "item": "Olive Oil", "grams": 16, "buy": "3 1/2 tsp olive oil, divided" },
+    { "item": "Garlic Powder", "grams": 5, "buy": "1 3/4 tsp garlic powder" },
+    { "item": "Salt", "grams": 12, "buy": "2 tsp" },
+    { "item": "Black Pepper", "grams": 2, "buy": "1 tsp" }
+  ],
+  "macros_per_serving": { "calories": 544, "protein_g": 41, "carbs_g": 14, "fat_g": 35 },
+  "writer_notes": [
+    "SOURCE YIELD 8, rebuilt to 14 at the mapper's 1.75x scale. Every gram and buy string transcribed from mapped\\hatch-green-chile-chicken-casserole.json; no number computed in prose.",
+    "MACROS transcribed from the mapper's food-DB recompute at 14 servings (macro_cross_check.computed_per_serving): 543.8 cal, 40.6 g protein, 14.3 g carbs, 34.8 g fat, reported here as 544 / 41 / 14 / 35. In band for this run (400 to 650 cal, 35 g carb or less): 144 cal above the floor, 106 below the ceiling, carbs less than half the carb gate. Under-15-grams-of-carbs is the literal bound used in prose (built carbs = 14).",
+    "SOURCE MACRO NOTE (flag, not fixed): ruled.me prints 543 cal / 40.6 P / 10.4 gross carbs / 37.2 fat per serving. Our recompute lands 543.8 cal / 40.6 P / 14.3 C / 34.8 F. Protein is near-exact (-0.1%), calories near-exact (+0.1%). The carb gap (14.3 vs 10.4) is the source card printing total carbs equal to net carbs (extractor flagged it), so its 10.4 is likely net; our 14.3 is the conservative total-carb figure and still clears the 35 g gate with 20 g to spare. Fat -6.5%. Band holds under either reading.",
+    "GRAMS rounded to int for the intake (build stores grams as int): 1339.5->1340 chiles, 1438.8->1439 chicken, 416.5->417 cream, 198.4->198 cream cheese, 15.75->16 oil, 5.4->5 garlic powder. Each shift is sub-gram-per-serving and macro-immaterial; buy strings are the mapper's exact printed measures so the display amounts are unchanged.",
+    "BID-MAP BLOCKER for the repair pass (three lines, mapper-stage/map-owner domain, NOT edited here): db\\ingredients.json has NO item row for 'Pepper Jack Cheese' (mapper bid shredded-cheese), 'Yellow Bell Pepper' (mapper bid bell-peppers), or full-fat 'Cream Cheese' (mapper bid cream-cheese). All three HAVE food-macros-db rows (macro check passes) but no bid map row, so in this build they emit no bid and price pantry-static. cost_ps is therefore a FLOOR understated by roughly a pound of shredded pepper jack, a 7 oz cream-cheese brick, and ~1.75 yellow bells until the map rows are wired. I did NOT swap Cream Cheese to the existing '1/3 Fat Cream Cheese' row: the mapper explicitly warned that deflates a keto card's calorie floor, and it would change macros. bell-peppers bid also has no item row at all in ingredients.json (only 'Green Bell Peppers' and 'Red Bell Pepper' exist); shredded-cheese resolves only from 'Mexican Cheese Blend'. Re-cost after the three map rows land.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked both directions: olive oil (make_it 3 and 4, divided), zucchini (3), yellow onion (2, blended), green chiles (2 blended + 4 into sauce + 7 reserved garnish), yellow bell + red bell (4 into pan + 7 reserved garnish), garlic powder (4), heavy cream (5), pepper jack (6 into sauce + 7 on top, divided), cream cheese (6), rotisserie chicken (7), sharp cheddar (7 on top). The 'water or chile liquid' line is the mapper's mapped-free zero-cost item (chile-can liquid or tap water), NOT a booked ingredient, so it is excluded from the ingredient list and step 2 references the chile-can liquid; no orphan either direction. Salt and pepper are the source's to-taste line (source states NO quantity); booked here at a smallest-defensible to-taste minimum (Salt 2 tsp, Black Pepper 1 tsp per 14-serving batch, both zero/near-zero macro) so make_it 6's 'season with salt and pepper to taste' is cook-as-shopped and clears the PHANTOM buy-coverage gate (2026-08-16 repair). Grams are macro-immaterial.",
+    "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet needs a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount (matching the keto-turkey card's approach and steering clear of the 2026-08-15 audit failures). No per-line dollar figures; only ${{cost_ps}} and the $1/month membership line carry money.",
+    "PORTION METHOD: weigh the empty dish first, then weigh full and subtract, divide by 14. Standard house method.",
+    "DATA SMELLS (flag, not fixed): (1) mapper CLASS CAVEAT - the bell-peppers commodity's cheapest cell is a GREEN bell at $0.77, so a yellow-only line prices low; red-bell-pepper's own class ($0.83-2.50 each) brackets a true yellow cost. (2) shredded-cheese commodity cell hijacks re-observed 2026-08-16 (Walmart 'Kraft Deluxe Mac and Cheese 14 oz' cheapest cell; Sam's 'Member's Mark Part-Skim Mozzarella 5 lb' for a jack query) - wrong-flavor/boxed-dinner matches on the class pepper jack would book to once wired. (3) canned-green-chilies board class is built on 4 oz cans; a 27 oz can typically prices BETTER per oz, so that line's estimate is conservative. All three are pricing-quality flags for the match-soundness gate, not build errors.",
+    "PHANTOM REPAIR 2026-08-16: (1) make_it 7 read 'pour the green chile sauce over the top'. That sauce is MADE in steps 4 to 6 from the blended green chiles, heavy cream, pepper jack and cream cheese (source ruled.me calls it 'green chile cream sauce'), but the bare phrase collided with the bottled-condiment vocab name Green Chile Sauce (bid salsa-verde) and hard-failed audit PHANTOM. Reworded to 'green chile cream sauce', matching the source; no bottled sauce added. (2) make_it 6 seasons with salt and pepper that were not on the shopping list; added Salt and Black Pepper lines per above. NOTE: this intake cannot rebuild into db\\recipes yet because Pepper Jack Cheese (bid pepper-jack-cheese) and Yellow Bell Pepper (bid yellow-bell-pepper) are not on the live feed (known CHEAPEST-FALLBACK blocker); the db\\recipes spec still carries both phantoms until those bids land and this is rebuilt."
+  ],
+  "prose": {
+    "intro_html": "Green chile casserole in most kitchens means a can of cream-of-something soup, a bag of tortilla chips, and a prayer. This one earns its name instead. Roasted hatch green chiles get blended into a real cream sauce built from heavy cream, pepper jack, and a brick of cream cheese, then folded over pulled rotisserie chicken and a bed of spiralized zucchini that does the job the tortillas or the rice used to do. No soup can, no chips, no flour. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 15 grams of carbs. That is Southwestern comfort food that works for your body and your wallet at the same time.",
+    "shop_smart": [
+      "<strong>Rotisserie chicken is the anchor, about 3.2 pounds of pulled meat.</strong> That is roughly two birds off the hot counter, already roasted and ready to shred, which buys you back the hour you would have spent cooking chicken from raw. This is where most of the protein and most of the money live, so pull the meat off the bones and skip the skin.",
+    "<strong>The hatch green chiles are the whole point, about 47 ounces of them.</strong> You blend most of the can right into the sauce, so whole or already diced both work fine since they end up pureed either way. Hold back a little to scatter on top for color. This is the flavor the soup can was always faking.",
+      "<strong>Five or so medium zucchini do the work the tortillas used to.</strong> Spiralize them or cut them into thin strips and give them a quick saute so they hold their bite through the bake. They carry the bulk and the volume without carrying the carbs that chips or rice would drag in.",
+      "<strong>Three cheeses build the sauce and the top, so buy all three.</strong> About a pound of shredded pepper jack goes in divided, most melted into the sauce and a handful saved for the top, plus a 7 ounce brick of cream cheese to thicken it and a few tablespoons of sharp cheddar to finish. This is the richness that makes it eat like a casserole and not a salad.",
+      "<strong>Heavy cream, peppers, and pantry staples round it out.</strong> About one and three quarter cups of heavy cream turns the chiles and cheese into a sauce that actually coats everything, and a yellow and a red bell pepper, half an onion, garlic powder, and a little olive oil are the backbone under it. Most of that is staples you buy once and cook with all week."
+    ],
+    "make_it": [
+      "Weigh your empty baking dish and write the number down. You will need it at the end to split this into 14 even servings by weight, which is the only honest way to portion one big bake.",
+      "Heat the oven to 350 degrees F. Blend the onion with a splash of the liquid from the chile can, or a little water, and most of the green chiles until it is a rough puree. Hold back a small handful of the chiles to scatter on top later.",
+      "Heat half of the olive oil in your largest skillet over medium heat. Add the spiralized zucchini and saute just until it begins to soften, then spread it evenly across the bottom of the baking dish.",
+      "Wipe the skillet clean, return it to the heat, and add the rest of the olive oil. Cook most of the diced yellow and red bell pepper until it begins to soften, holding back a little for the top, then stir in the garlic powder and pour in the blended green chiles.",
+      "Once the chile mixture starts to bubble, stir in the heavy cream. The sauce will thin out and lighten in color as it comes together.",
+      "Stir most of the shredded pepper jack into the sauce until it melts, holding back a handful for the top. Cube the softened cream cheese and whisk it in until the sauce is smooth, then season with salt and pepper to taste.",
+      "Layer the shredded chicken over the zucchini, pour the green chile cream sauce over the top, and gently prod everything so the sauce works its way through. Scatter the reserved peppers and chiles over the top, then finish with the sharp cheddar and the pepper jack you held back.",
+      "Bake at 350 degrees F for about 30 minutes, until the cheese is melted and the casserole is bubbling. Let it rest 10 minutes so it firms up, then weigh the dish, subtract the empty weight from Step 1, and divide across 14 containers."
+    ],
+    "portion_html": "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a bubbling green chile casserole that eats like the soup-can version and skips the chips, the rice, and the flour. The chicken and the cheese carry it; the zucchini does the job the tortillas used to, for a lot less.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Hatch green chile chicken casserole for meal prep: pulled rotisserie chicken and spiralized zucchini baked in a real roasted-chile cream sauce with pepper jack and cream cheese, no soup can and no flour, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
+    "keywords": "hatch green chile casserole, green chile chicken casserole, keto casserole, low carb casserole, high protein meal prep",
+    "prepTime": "PT20M",
+    "cookTime": "PT40M",
+    "totalTime": "PT1H",
+    "steps": [
+      "Weigh the empty baking dish and note the number for portioning later.",
+      "Heat the oven to 350 degrees F and blend the onion, a splash of chile liquid, and most of the green chiles into a rough puree, reserving a little for the top.",
+      "Saute the spiralized zucchini in half the olive oil until it softens, then spread it across the baking dish.",
+      "Cook most of the diced yellow and red bell pepper in the rest of the oil, stir in the garlic powder, and add the blended green chiles.",
+      "Stir in the heavy cream once the chiles bubble, then melt in most of the pepper jack and whisk in the cubed cream cheese; season to taste.",
+      "Layer the chicken over the zucchini, pour the sauce over, and top with the reserved peppers and chiles, the cheddar, and the remaining pepper jack.",
+      "Bake at 350 degrees F for about 30 minutes until bubbling, rest 10 minutes, then weigh the dish and divide across 14 containers."
+    ]
+  }
+}

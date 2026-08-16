@@ -1,0 +1,58 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Chimichurri Sheet Pan Dinner",
+  "source_url": "https://fedandfit.com/chimichurri-beef-sheet-pan-dinner/",
+  "servings": 6,
+  "time_total": "1 hour 25 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    { "raw": "1/4 cup olive oil", "item": "olive oil", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": "For the Chimichurri" },
+    { "raw": "2 1/2 tablespoons red wine vinegar", "item": "red wine vinegar", "qty": "2 1/2", "unit": "tablespoon", "prep": null, "optional": false, "section": "For the Chimichurri" },
+    { "raw": "1/4 cup fresh cilantro stems and leaves", "item": "fresh cilantro stems and leaves", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": "For the Chimichurri" },
+    { "raw": "1/4 cup fresh flat-leaf parsley stems and leaves", "item": "fresh flat-leaf parsley stems and leaves", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": "For the Chimichurri" },
+    { "raw": "2 garlic cloves minced", "item": "garlic", "qty": "2", "unit": "clove", "prep": "minced", "optional": false, "section": "For the Chimichurri" },
+    { "raw": "1/2 tablespoon fresh oregano", "item": "fresh oregano", "qty": "1/2", "unit": "tablespoon", "prep": null, "optional": false, "section": "For the Chimichurri" },
+    { "raw": "1/4 teaspoon red pepper flakes", "item": "red pepper flakes", "qty": "1/4", "unit": "teaspoon", "prep": null, "optional": false, "section": "For the Chimichurri" },
+    { "raw": "1/4 teaspoon fine sea salt", "item": "fine sea salt", "qty": "1/4", "unit": "teaspoon", "prep": null, "optional": false, "section": "For the Chimichurri" },
+    { "raw": "4 small sweet potatoes", "item": "sweet potatoes", "qty": "4", "unit": "each", "prep": null, "optional": false, "section": "For the Sheet Pan Dinner" },
+    { "raw": "2 tablespoons extra virgin olive oil divided", "item": "extra virgin olive oil", "qty": "2", "unit": "tablespoon", "prep": "divided", "optional": false, "section": "For the Sheet Pan Dinner" },
+    { "raw": "3/4 teaspoon sea salt divided", "item": "sea salt", "qty": "3/4", "unit": "teaspoon", "prep": "divided", "optional": false, "section": "For the Sheet Pan Dinner" },
+    { "raw": "1 head broccolini", "item": "broccolini", "qty": "1", "unit": "head", "prep": null, "optional": false, "section": "For the Sheet Pan Dinner" },
+    { "raw": "1.5 to 2 pounds steak \u2013 sirloin or flank steak recommended", "item": "steak (sirloin or flank)", "qty": "1.5 to 2", "unit": "pound", "prep": null, "optional": false, "section": "For the Sheet Pan Dinner" },
+    { "raw": "1/2 cup chimichurri divided", "item": "chimichurri", "qty": "1/2", "unit": "cup", "prep": "divided", "optional": false, "section": "For the Sheet Pan Dinner" }
+  ],
+  "instructions": [
+    "Preheat the oven to 350 F.",
+    "Rub the sweet potatoes with olive oil and 1/4 teaspoon sea salt, and place on sheet pan. Bake for 45 minutes.",
+    "While sweet potatoes are baking, place all of the chimichurri ingredients in a blender and blend until smooth.",
+    "Slice the beef into 1/2 inch strips, then place in a large bowl and mix with 1/4 cup chimichurri to marinate.",
+    "Once timer goes off, remove the sweet potatoes from the oven. Cut the sweet potatoes in half and spread out on the pan, then toss the broccolini with the remaining tablespoon of olive oil. Lay the broccoli on the sheet pan and sprinkle broccolini and sweet potatoes with remaining sea salt.",
+    "Remove steak from the chimichurri marinade and lay on the pan. Bake for 30 minutes.",
+    "Drizzle the remaining chimichurri over the steak and vegetables and serve!"
+  ],
+  "nutrition": {
+    "per_serving": {
+      "calories": "491",
+      "carbohydrates": "31g",
+      "protein": "25g",
+      "fat": "30g",
+      "saturated_fat": "9g",
+      "polyunsaturated_fat": "2g",
+      "monounsaturated_fat": "18g",
+      "cholesterol": "69mg",
+      "sodium": "534mg",
+      "potassium": "843mg",
+      "fiber": "5g",
+      "sugar": "6g",
+      "vitamin_a": "21683IU",
+      "vitamin_c": "8mg",
+      "calcium": "67mg",
+      "iron": "3mg"
+    }
+  },
+  "concerns": [
+    "The '1/2 cup chimichurri divided' line refers to the sub-recipe made from the 'For the Chimichurri' section, not an additional purchased ingredient.",
+    "Steak quantity is a range as printed: '1.5 to 2 pounds'."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Slow Cooker Corned Beef and Cabbage",
+  "slug": "slow-cooker-corned-beef-and-cabbage",
+  "protein": "beef",
+  "method": "slow cooker",
+  "cuisine": "Irish",
+  "source_url": "https://thecozycook.com/corned-beef-and-cabbage/",
+  "source_servings": 8,
+  "src_cal": 551,
+  "src_carbs": 34,
+  "src_protein": 34,
+  "ingredients_verbatim": [
+    "2 cups chicken broth",
+    "1 cup beer",
+    "1 tablespoon Dijon mustard",
+    "3 1/2-4 lb corned beef (plus seasoning packet)",
+    "4 cloves garlic, peeled and sliced",
+    "2 bay leaves",
+    "1 yellow onion, sliced",
+    "1 lb carrots, cut into halves or thirds",
+    "2 lbs baby Yukon gold potatoes, washed and dried",
+    "1 small head green cabbage, cut into 1 1/2-inch wedges",
+    "Freshly chopped parsley, butter, salt, and pepper for serving"
+  ],
+  "unmapped": ["beer (no board id)"],
+  "why": "Whole-muscle beef slow-cooker braise, corned-beef-brisket is on the board and cabbage/carrots/onions/potatoes/garlic/chicken-broth/bay-leaves all map. Published 551 cal / 34g protein / 34g carbs technically clears the band. Not in catalog.",
+  "confidence": "LOW - src_carbs 34g sits right at the 35g ceiling and the 2 lb potato load means our label-accurate DB may push computed carbs over the gate. Selector should weigh dropping/reducing the potato at rewrite. Included because verified in the same pass; the short-ribs candidate is the confident pick."
+}

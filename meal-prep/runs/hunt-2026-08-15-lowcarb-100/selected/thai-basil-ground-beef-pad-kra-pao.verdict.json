@@ -1,0 +1,17 @@
+{
+  "slug": "thai-basil-ground-beef-pad-kra-pao",
+  "name": "Thai Basil Ground Beef Skillet (Pad Kra Pao)",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "fit_evidence": "Published 632 cal (within 400-650, near ceiling) and 15g carbs (<=35); rice/egg are excluded side items so the dish itself is low-carb; ground-beef stir-fry scales to 14. Fish sauce / oyster sauce are trace umami condiments, not a seafood main - catalog's own live pad-kra-pao recipes use them, so 'no seafood' is not tripped.",
+  "dupe_evidence": "Only beef Thai-basil catalog recipe is thai-basil-beef-bowls-with-coconut-rice, which is a COCONUT-MILK + lime + carrot bowl over coconut rice (sweet coconut-basil sauce build, starch=rice); this candidate is savory pad kra pao (fish/oyster/dark soy/chili/holy basil, NO coconut, NO rice) - different sauce profile and starch, a distinct dinner. Not a dupe against beef catalog.",
+  "cross_protein_collisions": [
+    "STRONG: catalog thai-basil-pork-pad-kra-pao-bowls (fish sauce/oyster/soy/sugar/basil/rice) is the SAME dish (pad kra pao) as this, differing only by protein (pork vs ground beef) and by rice vs low-carb - this is a same-dish-different-protein twin for the cross-protein merge pass to resolve.",
+    "MODERATE: catalog thai-basil-chicken-pad-krapow is the chicken version of the same pad-krapow dish.",
+    "Watch other-protein pools for any pork/chicken/turkey pad-kra-pao low-carb skillet."
+  ],
+  "borderline": true,
+  "borderline_reason": "Near-ceiling calories (632 vs 650) - published clears the gate so ruled FIT, but a label-accurate recompute could push over; and it is a strong same-dish twin of the catalog pork/chicken pad-kra-pao by protein only. Flagged for decider/audit.",
+  "notes": "Unmapped Thai bird's-eye chilis and Thai/holy basil are genuine board gaps - wanted pricer-lane exercise."
+}

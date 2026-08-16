@@ -1,0 +1,45 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Jalapeno Popper Chicken Casserole",
+  "source_url": "https://joyfilledeats.com/jalapeno-popper-chicken-casserole/",
+  "servings": 8,
+  "time_total": "45 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    { "raw": "2 lb chicken breasts cooked and chopped", "item": "chicken breasts", "qty": "2", "unit": "lb", "prep": "cooked and chopped", "optional": false, "section": "Casserole Ingredients" },
+    { "raw": "8 oz cream cheese", "item": "cream cheese", "qty": "8", "unit": "oz", "prep": null, "optional": false, "section": "Casserole Ingredients" },
+    { "raw": "1/2 cup mayo", "item": "mayo", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": "Casserole Ingredients" },
+    { "raw": "1/2 cup sour cream", "item": "sour cream", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": "Casserole Ingredients" },
+    { "raw": "1/2 cup shredded cheddar", "item": "shredded cheddar", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": "Casserole Ingredients" },
+    { "raw": "1/2 cup bacon crumbles", "item": "bacon crumbles", "qty": "1/2", "unit": "cup", "prep": null, "optional": false, "section": "Casserole Ingredients" },
+    { "raw": "1/2 cup jalapeno or poblano pepper seeded and diced", "item": "jalapeno or poblano pepper", "qty": "1/2", "unit": "cup", "prep": "seeded and diced", "optional": false, "section": "Casserole Ingredients" },
+    { "raw": "1 tsp garlic powder", "item": "garlic powder", "qty": "1", "unit": "tsp", "prep": null, "optional": false, "section": "Casserole Ingredients" },
+    { "raw": "1/2 tsp salt", "item": "salt", "qty": "1/2", "unit": "tsp", "prep": null, "optional": false, "section": "Casserole Ingredients" },
+    { "raw": "1/4 tsp black pepper", "item": "black pepper", "qty": "1/4", "unit": "tsp", "prep": null, "optional": false, "section": "Casserole Ingredients" },
+    { "raw": "1/4 cup shredded cheddar", "item": "shredded cheddar", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": "Topping Ingredients" },
+    { "raw": "1/4 cup crumbled bacon", "item": "crumbled bacon", "qty": "1/4", "unit": "cup", "prep": null, "optional": false, "section": "Topping Ingredients" },
+    { "raw": "1 thinly sliced and seeded jalapeno optional", "item": "jalapeno", "qty": "1", "unit": "each", "prep": "thinly sliced and seeded", "optional": true, "section": "Topping Ingredients" }
+  ],
+  "instructions": [
+    "Combine the casserole ingredients (except the chicken) in a large bowl. Mix until smooth.",
+    "Fold in the cooked chicken.",
+    "Put into a greased casserole dish. Top with the reserved cheddar, bacon, and sliced jalapenos (if using).",
+    "Bake at 350 for 35 minutes or until bubbly and hot."
+  ],
+  "nutrition": {
+    "per_serving": {
+      "calories": "418",
+      "carbohydrates": "2g",
+      "protein": "30g",
+      "fat": "31g",
+      "saturated_fat": "12g",
+      "cholesterol": "132mg",
+      "sodium": "606mg",
+      "potassium": "522mg",
+      "fiber": "0g",
+      "sugar": "1g"
+    }
+  },
+  "concerns": []
+}

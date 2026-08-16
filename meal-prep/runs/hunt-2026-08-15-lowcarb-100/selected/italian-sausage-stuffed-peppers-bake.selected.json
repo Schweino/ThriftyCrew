@@ -1,0 +1,11 @@
+{
+  "slug": "italian-sausage-stuffed-peppers-bake",
+  "name": "Italian Sausage Stuffed Peppers with Marinara and Mozzarella",
+  "protein": "pork-sausage",
+  "cuisine": "Italian-American",
+  "source_url": "https://remakemyplate.com/lazy-keto-italian-stuffed-sausage-peppers/",
+  "decision": "ACCEPT",
+  "decided_by": "decider",
+  "cross_lane_dupe_check": "No collision with accepted-slugs.json (read fresh). Accepted stuffed peppers are philly-cheesesteak-stuffed-peppers (beef, cheesesteak flavor) and pulled-pork-stuffed-peppers (pork, BBQ) - neither shares the marinara+mozzarella Italian filling. No marinara/mozzarella baked stuffed pepper in the accepted list, so the adjudicator's same-dish-different-protein risk (a beef/turkey Italian stuffed pepper) has no realized twin yet; noted for orchestrator cross-protein merge.",
+  "note": "Accept: uses the under-represented pork-sausage protein and adds an Italian-American stuffed-and-baked entree distinct in form from the accepted italian-sausage-peppers-onions skillet. Clean fit: 561 cal / 8g carb, whole-pepper bake scales to 14, zero unmapped."
+}

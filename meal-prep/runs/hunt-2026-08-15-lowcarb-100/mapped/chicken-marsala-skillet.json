@@ -1,0 +1,156 @@
+{
+  "slug": "chicken-marsala-skillet",
+  "title": "Easy Chicken Marsala",
+  "source_url": "https://www.saltandlavender.com/chicken-in-a-mushroom-and-marsala-sauce/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters, drift noted per line where it exceeds 5%.",
+  "ruled_substitutions": [],
+  "ingredients": [
+    {
+      "source_raw": "2 large chicken breasts",
+      "item": "Boneless Skinless Chicken Breast",
+      "bid": "chicken-breast",
+      "board": "weekly",
+      "grams": 1575,
+      "buy": "3 1/2 lb boneless skinless (7 large breasts, halved lengthwise into 14 cutlets)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "MAIN-PROTEIN EACH-WEIGHT, WORKED NOT ASSUMED (florentine rule): '2 large breasts' carries no printed weight, so the weight is derived from the source's own 26 g protein/serving - chicken must supply ~24.4 g/serving, giving ~437 g total, i.e. 2 breasts of ~220 g; booked at 225 g/large (house each=200 medium), 450 g source total, recomputing to +6.2% protein vs source. That is 112.5 g/serving, BELOW the catalog's 167 g/serving chicken-breast average - but this is the sauce-heavy direction the florentine lesson allows when the source's own protein demands it (inflating to catalog average would publish 34 g protein against the source's printed 26 and push calories up 90/serving). Board 6 of 7, cheapest Baker's $1.99/lb."
+    },
+    {
+      "source_raw": "Salt & pepper to taste",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 6,
+      "buy": "salt and pepper, to taste (about 1 tsp salt)",
+      "optional": true,
+      "decision": "mapped-optional",
+      "notes": "To-taste seasoning, optional per source line. Zero-macro nominal. Board 7 of 7. NOT enqueued."
+    },
+    {
+      "source_raw": "1/4 teaspoon garlic powder",
+      "item": "Garlic Powder",
+      "bid": "garlic-powder",
+      "board": "weekly",
+      "grams": 2.7,
+      "buy": "7/8 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 3.1 g/tsp. Exact 0.875 tsp. Board 7 of 7."
+    },
+    {
+      "source_raw": "Flour for dredging",
+      "item": "All-Purpose Flour",
+      "bid": "flour",
+      "board": "weekly",
+      "grams": 105,
+      "buy": "3/4 cup plus 2 tbsp, for dredging",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "UNQUANTIFIED SOURCE LINE, ALLOWANCE BOOKED AND CALLED OUT: 'flour for dredging' prints no amount; booked at the standard 1/4 cup (30 g) per 4 cutlets dredge allowance, scaled 3.5x to 105 g. This is the one line in the recipe where a quantity had to be assigned rather than read; the source's own published carbs (11 g/serving) back-solve to ~4-6 g flour carbs/serving, consistent with the allowance (5.75 g). Sensitivity: halving the allowance moves the recipe -14 cal/serving, still mid-band. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 tablespoon olive oil",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 47.25,
+      "buy": "3 1/2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 13.5 g/tbsp, exact 3.5x. Board 7 of 7."
+    },
+    {
+      "source_raw": "3 tablespoons butter divided",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "weekly",
+      "grams": 147,
+      "buy": "10 1/2 tbsp, divided",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 14 g/tbsp, exact 3.5x. Board 7 of 7."
+    },
+    {
+      "source_raw": "8 ounces cremini mushrooms sliced fairly thin",
+      "item": "Baby Bella (Crimini) Mushrooms",
+      "bid": "mushrooms",
+      "board": "weekly",
+      "grams": 793.8,
+      "buy": "28 oz, sliced fairly thin (three and a half 8-oz tubs)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "EXACT keto-crustless-pizza-casserole precedent: mushrooms commodity include /mushrooms?/ claims the term (board-sanctioned class), 7 of 7 stores, cheapest Sam's $0.1654/oz. CLASS CAVEAT re-flagged: visible cheapest cells are white-mushroom products. Macros on the Baby Bella (Crimini) DB row, NOT White Mushrooms (variety split). Exact 28.0 oz."
+    },
+    {
+      "source_raw": "1 large clove garlic minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 15,
+      "buy": "5 cloves, minced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 3.5 LARGE cloves booked as 5 house cloves (3 g basis; a large clove runs ~4-5 g, so 3.5 large ~ 15 g agrees with 5 x 3 g by weight - the count moved, the grams did not). Board 5 of 7."
+    },
+    {
+      "source_raw": "3/4 cup marsala wine see note",
+      "item": "Marsala Wine",
+      "bid": null,
+      "board": null,
+      "grams": 617,
+      "buy": "2 1/2 cups plus 2 tbsp",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "item_id NULL with reason: no commodity claims marsala; today's single capture is Holland House Marsala Cooking Wine (Walmart, 13 fl oz $3.48) - evidence, not a price. Term ENQUEUED blocking (shared with chicken-chasseur); new-commodity proposal recorded there and referenced here. NEW DB row Marsala Wine (USDA dessert-wine-dry class, 152 cal/100 g, carb field flagged needs_verify - at this recipe's 44 g/serving the flag is worth 1.5 g carbs/serving either way, ceiling-safe at the booked higher figure). Exact 2.625 cups = 42 tbsp at the Red Wine 235 g/cup basis, zero drift. NOTE: an earlier lane attached this slug to the queue's 'brandy' entry (the source note names brandy as a marsala fallback); marsala itself is what the recipe prints, so marsala is what this map books and enqueues.",
+      "grams_basis": "235 g/cup fortified-wine (Red Wine density basis)"
+    },
+    {
+      "source_raw": "1/2 cup heavy/whipping cream",
+      "item": "Heavy Cream",
+      "bid": "heavy-cream",
+      "board": "weekly",
+      "grams": 420,
+      "buy": "1 3/4 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities tbsp=15 g (28 tbsp), exact 3.5x. Board 7 of 7, cheapest Sam's $0.1162/floz."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Marsala Wine (shared addition with chicken-chasseur, recorded in that file's db_entries_added; USDA dessert-wine-dry class, per 100 g: 152 cal / 0.2 P / 11.7 C / 0 F, carb field flagged needs_verify)"
+  ],
+  "pricing_terms_needed": [
+    { "term": "marsala wine", "blocking": true, "why": "2 1/2 cups plus 2 tbsp IS the sauce of a chicken marsala - the recipe cannot price without it; no commodity claims the term, single Walmart capture (Holland House $3.48/13 floz) is evidence not a price" }
+  ],
+  "new_commodity_proposals": [
+    {
+      "proposed_id": "marsala-wine",
+      "for_item": "Marsala Wine",
+      "status": "flagged-for-registrar",
+      "registrar_ruling": "NOT YET OBTAINED - shared proposal, full evidence recorded in chicken-chasseur.json new_commodity_proposals; item maps null meanwhile (pantry-static, safe)."
+    }
+  ],
+  "registrar_rulings": "PENDING for marsala-wine (shared with chicken-chasseur); ingredient maps item_id: null (pantry-static) until the registrar rules.",
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 428, "protein_g": 26, "carbs_g": 11, "fat_g": 26 },
+    "computed_per_serving": { "calories": 444.6, "protein_g": 27.6, "carbs_g": 15.9, "fat_g": 25.0 },
+    "protein_gap_pct": 6.2,
+    "calorie_gap_pct": 3.9,
+    "verdict": "PASS - protein +6.2%, calories +3.9%, fat -3.8%: the tightest cross-check in the batch, and it validates the DERIVED 225 g/breast (see the chicken line - the source printed no weight, so its own protein figure sized the bird). Carbs +4.9 g comes from the flagged marsala carb basis (booked high) plus the dredge allowance; both conservative-high, both called out on their lines.",
+    "band_check": "computed 444.6 cal in [400, 650] PASS - NOTE THE MARGIN, 44.6 cal above the FLOOR; this is the batch's floor-side recipe. The two conservative-high bookings (marsala carbs, full dredge allowance) both push UP, so the floor margin is if anything understated. Carbs 15.9 g <= 35 PASS."
+  },
+  "board_defects_observed": [
+    "mushrooms commodity class caveat re-flagged (see chicken-chasseur)."
+  ],
+  "densities_followups": [
+    "Marsala Wine: no densities row - propose cup=235, floz=29.4 mirroring Red Wine (also flagged in chicken-chasseur)"
+  ]
+}

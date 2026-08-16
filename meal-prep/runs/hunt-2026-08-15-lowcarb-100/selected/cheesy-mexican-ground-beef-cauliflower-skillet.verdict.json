@@ -1,0 +1,18 @@
+{
+  "slug": "cheesy-mexican-ground-beef-cauliflower-skillet",
+  "name": "Cheesy Mexican Ground Beef & Cauliflower Rice Skillet",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "status": "FIT",
+    "src_cal": 414,
+    "src_carbs": 11.2,
+    "evidence": "414 cal is inside the 400-650 band and 11.2 g carb is well under the 35 g ceiling; ground-beef budget skillet, no seafood, 2 lb feeds 9 so scales cleanly to 14."
+  },
+  "dupe_check": {
+    "catalog": "Not a duplicate; nearest catalog neighbor is arroz-con-carne-molida (Mexican Beef and Rice Skillet) which shares ground beef + tomatoes-green-chilies + skillet, but differs on the two axes that define this plate: a cauliflower-rice low-carb base vs white rice + corn, and a taco-seasoning/sour-cream/cheese-melt Tex-Mex build vs a tomato-corn rice skillet.",
+    "other_beef_considered": "Distinct from cheesy-zucchini-beef-rice-skillet (non-Mexican, rice+zucchini), beef-enchilada-skillet-bowls (enchilada sauce, tortillas+beans), frito-pie-walking-taco-casserole (Frito pie w/ kidney beans+corn chips), chile-relleno-casserole-ground-beef (egg-custard poblano bake), and accepted keto-cheeseburger-skillet (American cheeseburger flavor) / low-carb-steak-fajita-skillet (steak strips, no cauliflower/cheese base).",
+    "borderline": false
+  },
+  "cross_protein_collision": "Structurally a taco-seasoned cheesy skillet on a cauliflower-rice base with a cheese-melt finish; would collide with a ground-TURKEY version (a 'Cheesy Mexican Ground Turkey & Cauliflower Rice Skillet' is an extremely common variant) or a ground-chicken version. Decider should check the turkey pool for that same-dish-different-protein twin before accepting both."
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Cantonese Beef in Black Bean Sauce",
+  "slug": "cantonese-beef-black-bean-sauce-skillet",
+  "protein": "beef",
+  "method": "skillet",
+  "cuisine": "Chinese (Cantonese)",
+  "source_url": "https://www.recipetineats.com/beef-in-black-bean-sauce/",
+  "source_servings": 5,
+  "src_cal": 421,
+  "src_carbs": 16,
+  "src_protein": 24,
+  "ingredients_verbatim": [
+    "1/2 cup (75g) preserved black beans",
+    "400g/14oz beef rump steak, thinly sliced 3mm",
+    "1 medium brown onion, cut into 2.5cm squares",
+    "1 medium green capsicum, cut into 2.5cm squares",
+    "1 tbsp garlic, finely minced (~4 cloves)",
+    "1/2 cup peanut oil",
+    "1 tbsp Chinese cooking wine (Shaoxing wine)",
+    "1 tbsp light soy sauce",
+    "1 tsp dark soy sauce",
+    "1 tbsp oyster sauce",
+    "2 tsp cornflour/cornstarch",
+    "1/4 tsp baking soda",
+    "1 tbsp sesame oil",
+    "2 tsp white sugar",
+    "2 tbsp cornflour/cornstarch",
+    "1 cup water"
+  ],
+  "main_ingredients": ["sirloin-steak", "green-bell-pepper", "onions", "garlic", "peanut-oil", "oyster-sauce", "soy-sauce"],
+  "unmapped": ["fermented-black-beans", "shaoxing-wine"],
+  "why": "Verified in-band from the source page: 421 cal, 24g protein, 16g carbs per serving over 5, nutrition excludes rice. Structurally low-carb Cantonese stir-fry (sliced beef + capsicum + onion in a savory sauce, no rice/pasta/potato/bean base). Stir-fry style beef fits the beef-skillet lane and scales to 14 by weigh-and-divide in a wok/large skillet. Genuine cuisine gap: the catalog's Chinese beef entries are honey-black-pepper, mushroom stir-fry, chow mein and bulgogi - none is black-bean-sauce beef, and it is not in the current candidate pool. Two signature ingredients have NO board home - Chinese preserved/fermented black beans (douchi, distinct from canned-black-beans) and Shaoxing cooking wine - flagged as a deliberate pricer-lane test, not filtered out. Beef rump maps to sirloin-steak. Confidence high on the numbers (read from the recipe card); the one caveat is cal 421 sits near the 400 floor, so label-DB macros could drift slightly under - the fatty stir-fry oil makes a real sub-400 drop unlikely."
+}

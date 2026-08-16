@@ -1,0 +1,20 @@
+{
+  "slug": "slow-cooker-shredded-beef-chili",
+  "name": "Slow Cooker Shredded Beef Chili",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "in_band": true,
+    "src_cal": 401,
+    "src_carbs": 16,
+    "no_seafood": true,
+    "scalable_14": true,
+    "note": "401 cal clears the 400 floor (thin, +1) and 16g carbs clears the 35g cap; slow-cooker chuck scales cleanly from source 13 servings to 14; budget chuck-roast meal-prep dinner."
+  },
+  "dedup": {
+    "catalog": "NOT a dupe. Closest catalog beef dishes are ground-beef 'Beef Chili Mac' (chili + macaroni pasta) and 'Beef Chili Rice Bowls' (ground chili over rice) - both share only the chili-con-carne flavor family; this candidate differs on protein cut (whole-muscle chuck, shredded, not ground), starch (plain batch chili, no pasta/rice), and method (slow-cooker braise vs skillet). Only 1 of 4 axes matches, so it is a distinct dinner. Shredded-beef entries in catalog (Barbacoa, Machaca, Ropa Vieja, BBQ Shredded, Chile Colorado) are all different sauce/flavor families - none is a tomato-and-kidney-bean chili con carne.",
+    "pool_and_accepted": "No chili con carne present in accepted-slugs.json (read fresh; 28 slugs, none a chili). slow-cooker-beef-barbacoa exists in another adjudicator's verdicts but barbacoa (chile-adobo shredded beef, no beans/tomato-chili) is a different dish."
+  },
+  "cross_protein_watch": "Structurally this is a bean-tomato chili con carne differentiated only by protein/cut. The decider should watch for same-dish twins in other pools: a turkey chili, a ground-beef chili, or a pork/three-bean chili would collide on flavor family + format (batch chili) - keep at most one chili con carne per format unless cut/cuisine genuinely distinguishes them.",
+  "confidence": "medium-high - clearly in-band and a genuinely distinct shredded-chuck chili vs the catalog's ground-beef chilis; only caution is the calorie floor sitting at 401 and the general chili-format crowding across proteins."
+}

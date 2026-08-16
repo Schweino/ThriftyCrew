@@ -1,0 +1,19 @@
+{
+  "slug": "crustless-ham-gruyere-quiche",
+  "name": "Crustless Ham and Gruyere Quiche",
+  "protein": "pork",
+  "verdict": "DUPE",
+  "dupe_of": "crustless-bacon-gruyere-quiche",
+  "fit": {
+    "in_band": true,
+    "src_cal": 444,
+    "src_carbs": 3,
+    "no_seafood": true,
+    "scalable_14": true,
+    "note": "Clears every condition (400-650 cal, <=35g carb); the ruling is a duplicate, not a fitness fail."
+  },
+  "evidence": "Structurally identical to the already-accepted crustless-bacon-gruyere-quiche: both are a crustless gruyere quiche in an egg/heavy-cream/milk custard, oven-baked, no starch, with green onion aromatics; only the cured-pork cut differs (ham vs bacon), so 3 of 4 identity axes (cheese/flavor family, starch=none, method=oven bake) match and shipping both would be two near-identical gruyere quiches.",
+  "borderline": true,
+  "borderline_reason": "Ham vs bacon is a real menu distinction and a defender could call this a distinct regional take; flagged so the decider can override if it wants both cured-pork variants. Also note a third crustless quiche (sausage-spinach-crustless-quiche) was seen adjudicated in this same pool - the crustless-quiche slice is crowded, reinforcing the dupe call.",
+  "cross_protein_collision": "Not applicable in the KEEP sense since ruled DUPE, but for the decider's merge: the crustless-gruyere-egg-custard bake is protein-agnostic - any turkey-ham, turkey-sausage, or chicken crustless gruyere quiche in another selector's pool is the same dish and should collapse to one survivor."
+}

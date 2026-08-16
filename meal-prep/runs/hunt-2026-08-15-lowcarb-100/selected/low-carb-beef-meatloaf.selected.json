@@ -1,0 +1,13 @@
+{
+  "slug": "low-carb-beef-meatloaf",
+  "name": "Low-Carb Beef Meatloaf",
+  "protein": "beef",
+  "cuisine": "American (comfort)",
+  "decision": "ACCEPT",
+  "source_url": "https://www.freshfitkitchen.com/the-best-easy-low-carb-meatloaf-recipe-with-beef/",
+  "fit": { "calories": 585, "carbs_g": 19, "in_band": true },
+  "cross_lane_dupe_check": "Checked against accepted-slugs.json fresh - no meatloaf of any protein accepted yet. Catalog has only turkey-meatloaf-with-mashed-potatoes (turkey + high-carb mash), a different protein and different plate. Pool meatloaf cluster (keto-turkey-meatloaf, bacon-cheeseburger-meatloaf, italian-mozzarella-stuffed-turkey-meatloaf) - none accepted, so no cross-lane collision.",
+  "note": "Accepted as borderline. Distinct dish - the catalog carries no low-carb beef meatloaf. Flagged: this is a protein-swappable ketchup/tomato-glazed baked-meatloaf frame, so the cross-protein merge should keep only ONE low-carb meatloaf across the beef/turkey cluster; recommend this beef entry as that one. Beef-weighting note: this is the 2nd beef accept in this batch (with chimichurri); beef now leads the run's mix - future batches should favor turkey/pork/chicken over beef to keep balance. unmapped: coconut-sugar.",
+  "decided_by": "selector",
+  "decided_at": "2026-08-16"
+}

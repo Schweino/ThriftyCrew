@@ -1,0 +1,23 @@
+{
+  "slug": "crispy-pork-carnitas-low-carb",
+  "name": "Crispy Pork Carnitas (Low-Carb, No Rice)",
+  "protein": "pork",
+  "verdict": "DUPE",
+  "dupe_of": "slow-cooker-pork-carnitas-bowl",
+  "dupe_scope": "catalog",
+  "fit": {
+    "cal": 578,
+    "carbs_g": 1.7,
+    "in_cal_band": true,
+    "in_carb_limit": true,
+    "seafood": false,
+    "fit_verdict": "PASS"
+  },
+  "evidence": "Same dish as catalog Pork Carnitas Burrito Bowl (slow-cooker-pork-carnitas-bowl): pork shoulder + carnitas citrus/cumin/oregano seasoning + slow-cooker-shredded method all match (3 of 4); only the starch differs (candidate crisps and drops the rice), which is a plating change, not a distinct dinner. Meets all run conditions on its own but loses to the existing carnitas.",
+  "pool_collisions": [
+    "crispy-pork-carnitas (pool twin, same core carnitas prep, adjudicated separately)",
+    "crispy-slow-cooker-pork-carnitas (pool twin, same core carnitas prep, adjudicated separately)"
+  ],
+  "cross_protein_collision_note": "Structurally a shredded-citrus-braise; a beef barbacoa or chicken tinga low-carb plate would be a different flavor family, not a twin. No cross-protein twin suspected.",
+  "confidence": "high"
+}

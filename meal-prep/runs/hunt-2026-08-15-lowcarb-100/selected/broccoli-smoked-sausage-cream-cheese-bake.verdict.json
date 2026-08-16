@@ -1,0 +1,20 @@
+{
+  "slug": "broccoli-smoked-sausage-cream-cheese-bake",
+  "name": "Broccoli and Smoked Sausage Cream Cheese Bake",
+  "protein": "pork",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "borderline": true,
+  "fit": {
+    "pass": true,
+    "cal": 533,
+    "carbs": 8,
+    "evidence": "533 cal within 400-650 band; 8 g carbs under 35 g cap; no seafood; starch-free creamy oven casserole, budget meal-prep, weigh-and-divide scales 8->14. Clears the band. Caveat: protein only 20g/serving with fat 46g - under the catalog's 25g identity target though it clears the run's stated band."
+  },
+  "dupe_of": null,
+  "dupe_evidence": "NOT a live-catalog duplicate within my pork scope. Catalog smoked-sausage bakes all carry a starch (cauliflower-mac, pasta, rice) or are soups/skillets; none is a rice-free cream-cheese-bound broccoli-cheddar sausage casserole. Flagged BORDERLINE on a cross-protein twin (below), not a same-protein catalog dupe.",
+  "pool_collision": "SAME-PROTEIN (pork) pool twin: sheet-pan-smoked-sausage-broccoli-cheddar (ruled together this batch). Same protein + lead veg + cheese; differ on method/sauce (creamy bound CASSEROLE here vs dry ROAST there) = 2-of-4. Decider should likely ship only ONE smoked-sausage-broccoli-cheddar dinner bake - THIS is the creamy/higher-cal/lower-protein option, the sheet-pan is the leaner roast.",
+  "cross_protein_collision": "STRONG same-dish-different-protein twin the decider must weigh: accepted keto-turkey-broccoli-cheddar-casserole is the SAME plate - a rice-free creamy broccoli + cheddar oven bake - with turkey + heavy-cream where this uses smoked sausage + cream-cheese/mayo. Protein + binder differ but the dish (creamy low-carb broccoli-cheddar bake) is the same; per cross-protein rules I flag rather than kill. If the catalog wants only one creamy broccoli-cheddar bake across proteins, this competes directly with that accepted turkey casserole. Also adjacent: the pork broccoli-cheddar-sausage EGG bakes (egg-custard-bound, different structure).",
+  "notes": "unmapped=[]; all 7 mains board-map. Weakest of this batch's two sausage bakes on protein density (20g). Decider: reconcile against the sheet-pan pool twin AND the accepted turkey creamy broccoli-cheddar casserole before shipping.",
+  "checked_against": {"accepted_slugs_read_fresh": true, "catalog_digest_544": true}
+}

@@ -1,0 +1,20 @@
+{
+  "slug": "low-carb-unstuffed-cabbage-beef-skillet",
+  "name": "Low-Carb Unstuffed Cabbage Beef Skillet",
+  "protein": "beef",
+  "verdict": "DUPE",
+  "dupe_of": "unstuffed-cabbage-roll-bowls",
+  "fit_check": {
+    "calories": 474,
+    "carbs_g": 11,
+    "conditions_pass": true,
+    "note": "474 cal / 11g carb clears the 400-650 cal, <=35g carb, no-seafood, scalable band; rejected as a duplicate, NOT on fit."
+  },
+  "reason": "Same dish as catalog unstuffed-cabbage-roll-bowls: deconstructed cabbage rolls of ground beef + green cabbage + tomato + onion/pepper in one skillet. Identical cabbage-roll identity, same protein, same tomato flavor family; the only differences are dropping the rice for low-carb and adding cheddar-jack - formulation tweaks, not a different dinner.",
+  "pool_dupe": "Also a pool near-duplicate of sibling candidate beef-unstuffed-cabbage-skillet (already ruled DUPE of the same catalog recipe) - essentially the same low-carb ground-beef + cabbage + tomato + cheddar-jack skillet from a different source. Keep at most one; both should fall to the catalog dupe. NOT a dupe of the pool's mediterranean-beef-cabbage-skillet (that one is a no-tomato, no-cheese Middle Eastern baharat/cumin skillet - only 2-of-4 overlap).",
+  "cross_protein_collision": "Unstuffed cabbage roll is protein-swappable and already clusters across proteins (catalog turkey-cabbage-roll-soup). Any turkey or pork unstuffed-cabbage / cabbage-roll skillet in another pool is the structurally same dinner - flag for the cross-protein merge.",
+  "unmapped_ingredients": [],
+  "source_url": "https://wonkywonderful.com/low-carb-unstuffed-cabbage-casserole-recipe/",
+  "ruled_by": "adjudicate-3",
+  "ruled_at": "2026-08-15"
+}

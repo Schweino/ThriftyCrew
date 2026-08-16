@@ -1,0 +1,21 @@
+{
+  "slug": "creamy-mushroom-chicken-skillet",
+  "name": "Chicken Breast in Creamy Mushroom Sauce",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "ok": true,
+    "src_cal": 571,
+    "src_carbs": 12,
+    "reason": "571 cal (within 400-650), 12g carbs (<=35), chicken/no seafood, skillet weigh-and-divide scales to 14. Clears the band."
+  },
+  "dupe_check": {
+    "catalog": "Nearest catalog entry is slow-cooker-creamy-chicken-mushroom-bowls (cream-cheese/greek-yogurt chicken+mushroom over rice) - shares only protein + creamy-mushroom flavor (2 of 4 axes); differs on method (skillet sear vs slow-cooker) and starch/format (saucy cutlet, no starch vs a rice bowl). Not a catalog duplicate.",
+    "accepted_slugs": "Nearest accepted is creamy-tuscan-chicken-skillet: same chassis on all four axes (chicken breast + parmesan-cream + skillet + no starch); the ONLY distinguisher is the signature vegetable/flavor - mushroom-parmesan here vs sun-dried-tomato/spinach-parmesan there. By the paprikash-vs-goulash test these read as different dinners, so not a hard dupe, but it is close."
+  },
+  "borderline": true,
+  "borderline_reason": "This run has a dense creamy chicken-BREAST skillet cluster. A near-identical pool sibling, creamy-garlic-parmesan-mushroom-chicken-skillet, was already ruled DUPE (of creamy-garlic-parmesan-chicken-skillet). This candidate is the same chicken+mushroom+parmesan-cream chassis and survives only because its nearest ACCEPTED neighbor (creamy-tuscan) uses a different vegetable. If creamy-garlic-parmesan-chicken-skillet or the parmesan-mushroom sibling lands in accepted-slugs, this becomes a straight dupe. Recommend the decider keep AT MOST ONE of {creamy-tuscan (accepted), creamy-garlic-parmesan-chicken-skillet, creamy-garlic-parmesan-mushroom-chicken-skillet (DUPE'd), this}; this one's edge is source quality (RecipeTinEats) and standout 42g protein.",
+  "cross_protein_watch": "'Seared protein + mushroom-parmesan cream pan sauce' is one of the most-cloned templates. HIGH twin risk: catalog creamy-mushroom-pork-chops (pork), salisbury/cube steak in mushroom gravy (beef), and a turkey cutlet mushroom skillet are the same dinner protein-swapped. Decider should sweep pork/beef/turkey pools before accepting additional mushroom-cream skillets.",
+  "unmapped_note": "dry white wine (unmapped) + optional chives - expected/wanted for the pricer lane per v2.1 5.1, not penalized.",
+  "by": "adjudicator (orchestrator dispatch: adjudicate 2)"
+}

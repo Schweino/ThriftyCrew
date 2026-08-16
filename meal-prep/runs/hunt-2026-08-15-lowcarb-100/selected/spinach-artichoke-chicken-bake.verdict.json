@@ -1,0 +1,25 @@
+{
+  "slug": "spinach-artichoke-chicken-bake",
+  "name": "Spinach Artichoke Chicken Bake",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 480,
+    "carbs": 4,
+    "in_band": true,
+    "seafood": false,
+    "scalable_14": true,
+    "batch_format": "weigh-and-divide oven bake, trivially scalable",
+    "note": "480 cal within 400-650; 4g carbs well under 35g; no seafood; budget chicken-breast bake."
+  },
+  "catalog_dupe": null,
+  "evidence": "No catalog duplicate. Nearest catalog dishes are chicken-florentine (spinach+cream+parmesan skillet, NO artichoke and no dip-style cream cheese/mayo/mozzarella binding - a Florentine cream sauce, different dinner) and chicken-divan-broccoli-bake (broccoli + cream-of-mushroom + rice, different vegetable and carries rice). This candidate is a distinct spinach-artichoke-dip-bound chicken breast bake with no starch.",
+  "pool_dupe": null,
+  "cross_protein_flags": [
+    "SAME FLAVOR FAMILY as catalog recipe turkey-spinach-artichoke-rice-casserole (Turkey Spinach Artichoke Wild Rice Casserole) - but that is ground turkey + wild rice (a starch-carrying casserole), so NOT a duplicate of this low-carb chicken-breast no-starch bake. Distinct on protein AND starch.",
+    "DECIDER WATCH: this is structurally 'creamy spinach-artichoke dip binding a lean protein, baked, no starch'. If another selector's pool contains a spinach-artichoke turkey/beef/pork bake that is ALSO low-carb (no rice), those would be same-dish-different-protein twins to reconcile in the cross-protein merge pass."
+  ],
+  "cuisine": "American",
+  "unmapped": [],
+  "confidence": "high - nutrition read directly from source page"
+}

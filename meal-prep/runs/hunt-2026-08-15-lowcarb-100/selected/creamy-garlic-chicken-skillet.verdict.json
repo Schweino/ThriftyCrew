@@ -1,0 +1,30 @@
+{
+  "slug": "creamy-garlic-chicken-skillet",
+  "name": "Creamy Garlic Chicken Skillet",
+  "protein": "chicken",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "fit": {
+    "cal": 435,
+    "carbs": 3,
+    "in_cal_band": true,
+    "in_carb_band": true,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "435 cal within 400-650; 3g carbs far under 35g; no seafood; sear-then-sauce skillet + weigh-and-divide scales cleanly to 14. Xanthan-gum thickener is unmapped but not penalized (pricer-lane exercise per v2.1 5.1)."
+  },
+  "dupe_check": {
+    "catalog_nearest": ["creamy-chicken-and-gnocchi-skillet", "slow-cooker-creamy-chicken-mushroom-bowls", "slow-cooker-tuscan-chicken-pasta"],
+    "accepted_nearest": ["creamy-tuscan-chicken-skillet"],
+    "reason": "Not a catalog dupe: creamy-chicken-and-gnocchi-skillet carries a gnocchi starch base, the creamy-chicken-mushroom entry is a slow-cooker starch bowl, and tuscan-chicken-pasta is a pasta dish. Against the freshly-accepted creamy-tuscan-chicken-skillet it matches 3-4 axes (chicken breast / cream sauce / skillet / no-starch) but the Tuscan plate is distinguished by its sun-dried-tomato + spinach signature vs. this plain garlic-parmesan white sauce - judged a genuinely different dinner, so KEEP not DUPE, but flagged borderline for the audit."
+  },
+  "borderline": "Close to accepted creamy-tuscan-chicken-skillet on structure; separated only by Tuscan's sun-dried-tomato/spinach. If the catalog wants only one creamy-cream-sauce chicken skillet, these two compete.",
+  "pool_collisions": [
+    "STRONG same-dish twin in the candidate pool: creamy-garlic-parmesan-chicken-skillet (Salt & Lavender, chicken breast + garlic + parmesan + heavy cream + broth skillet, 457 cal/5g) is the identical dinner - same protein, garlic-parmesan cream sauce, skillet, no starch. Decider must keep only ONE of {creamy-garlic-chicken-skillet, creamy-garlic-parmesan-chicken-skillet}; the twin has fuller ingredient mapping (no unmapped item) while this one carries xanthan gum.",
+    "Also adjacent: creamy-garlic-parmesan-mushroom-chicken-skillet in the pool is a mushroom variant of the same base sauce."
+  ],
+  "cross_protein_collisions": [
+    "A creamy garlic-parmesan PORK-CHOP skillet (e.g. creamy-garlic-herb pork chops in the pork pool) is the same white-cream-sauce dish with the protein swapped - decider should check the pork lane for a creamy-garlic/parmesan cream-sauce chop.",
+    "A turkey cutlet or turkey-tenderloin creamy garlic cream skillet would also be structurally identical."
+  ]
+}

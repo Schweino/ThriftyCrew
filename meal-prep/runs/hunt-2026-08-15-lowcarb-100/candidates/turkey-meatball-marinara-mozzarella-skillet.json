@@ -1,0 +1,33 @@
+{
+  "name": "Turkey Meatball Marinara Mozzarella Skillet",
+  "slug": "turkey-meatball-marinara-mozzarella-skillet",
+  "protein": "turkey",
+  "method": "skillet (stovetop; meatballs pan-fried in batches, then simmered in marinara and topped with mozzarella in the same pan)",
+  "cuisine": "Italian",
+  "source_url": "https://www.ketofocus.com/recipes/keto-skillet-meatballs/",
+  "source_servings": 8,
+  "src_cal": 533,
+  "src_carbs": 5.2,
+  "src_protein": 34.8,
+  "src_nutrition_note": "Published per-serving nutrition (533 cal / 34.8g protein / 5.2g total carbs / 4.3g net / 41.2g fat) is for the source's default 2 lb ground beef+sausage. Ground turkey is explicitly named as an option in the source FAQ ('runs leaner, mix with Italian sausage or add an extra egg yolk'). Rebuilt on 93/7 ground turkey the calories drop but the parmesan/mozzarella/oil keep it fat-dense, landing squarely mid-band; total carbs are unaffected and remain ~5g. Clears the 400-650 cal / <=35g carb band on the source's own numbers.",
+  "ingredients_verbatim": [
+    "2 pounds ground beef, ground sausage or ground elk",
+    "2 eggs",
+    "1 cup grated parmesan cheese",
+    "2/3 cup pork panko",
+    "2-3 tablespoons minced garlic",
+    "1 teaspoon salt",
+    "1 teaspoon seasoning salt",
+    "1 teaspoon pepper",
+    "1 teaspoon oregano",
+    "1/2 cup chopped fresh parsley",
+    "3 tablespoons avocado oil or olive oil",
+    "25 oz low-carb marinara",
+    "1 1/2 cups shredded mozzarella cheese"
+  ],
+  "main_ingredients": ["ground-turkey", "eggs", "parmesan", "pasta-sauce", "shredded-cheese", "avocado-oil"],
+  "unmapped": ["pork panko (no board home; low-carb breadcrumb substitute - flag for pricer lane; seasoned breadcrumbs also have no board id)"],
+  "rebuild_note": "Lane is ground turkey: source defaults to ground beef/sausage but names turkey as an option. Rebuild the 2 lb meat as 93/7 ground turkey (optionally +1 egg yolk for bind per source). All other ingredients unchanged.",
+  "why": "A genuinely stovetop, one-skillet turkey meatball dinner (no bake, no pasta, no rice) that clears the low-carb band on published numbers: 533 cal / 5.2g carbs at 8 servings, mid-band and comfortably under the 35g carb ceiling. Tomato-marinara + mozzarella profile is distinct from the run's already-accepted CREAM-sauce turkey meatball skillet and from the catalog's pasta-based turkey-meatball-marinara-pasta. Batch-scales cleanly to 14 (bulk meatballs, simmer, divide). Signature swap ingredient pork panko is deliberately left flagged for the pricer lane rather than dropped.",
+  "confidence": "high on band/skillet/verification (nutrition read from page, entirely stovetop); medium on protein-purity (source is beef-default with turkey as a stated option, so turkey rebuild is required)."
+}

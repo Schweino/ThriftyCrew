@@ -1,0 +1,22 @@
+{
+  "slug": "sausage-egg-cheddar-crustless-bake",
+  "name": "Sausage, Broccoli and Cheddar Crustless Egg Bake",
+  "protein": "pork",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "fit": {
+    "cal": 463,
+    "carbs": 4.2,
+    "in_band": true,
+    "reason": "463 cal (400-650) and 4.2g carbs (<=35) both clear; crustless no-starch bake, no seafood, 9x13 casserole scales to 14 by weigh-and-divide; budget meal-prep fit."
+  },
+  "dupe_check": {
+    "catalog": "NOT A DUPE. Nearest catalog neighbors are hash-brown/potato breakfast casseroles: sausage-hash-brown-egg-casserole (eggs+ground-pork+cheddar+HASH-BROWNS+milk) and baked-sausage-egg-breakfast-hash (eggs+ground-pork+RUSSET-POTATOES). Both are starch-forward higher-carb breakfast bakes; this candidate is crustless, no starch, cream-custard, broccoli-forward and low-carb (4.2g) - a different plate.",
+    "accepted_slugs": "NOT A DUPE but STRUCTURALLY ADJACENT to freshly-accepted crustless-bacon-gruyere-quiche (also a crustless egg+cream custard bake). Protein (breakfast sausage vs bacon), cheese (cheddar vs gruyere), and vegetable (broccoli vs none) all differ, so a different dinner - but decider should confirm the catalog wants two crustless egg-custard bakes."
+  },
+  "cross_protein_collisions": [
+    "Same-dish-different-protein twin risk: a crustless broccoli-cheddar egg bake made with TURKEY sausage or CHICKEN sausage would be the identical plate (sausage is a swappable component here, identity is the custard casserole). Catalog already has turkey-sausage-hash-brown-breakfast-bake (turkey lane) but that is hash-brown based, not this. Decider should watch turkey/chicken lanes for a crustless broccoli-cheddar egg bake."
+  ],
+  "borderline": true,
+  "borderline_reason": "Keep is confident on catalog vs hash-brown casseroles; the one call to double-check is co-existing with crustless-bacon-gruyere-quiche in the crustless-egg-custard family."
+}

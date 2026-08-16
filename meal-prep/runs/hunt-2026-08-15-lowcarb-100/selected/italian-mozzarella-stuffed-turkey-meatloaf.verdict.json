@@ -1,0 +1,24 @@
+{
+  "slug": "italian-mozzarella-stuffed-turkey-meatloaf",
+  "name": "Italian Mozzarella-Stuffed Turkey Meatloaf",
+  "protein": "turkey",
+  "cuisine": "Italian",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 400,
+    "carbs_g": 4,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "note": "400 cal sits at the band floor (inclusive) and candidate's own recompute lands ~435; 4g carbs clears the 35g ceiling easily; meatloaf pan scales cleanly to 14."
+  },
+  "dedup": {
+    "catalog": "Not a dupe. Only turkey meatloaf in the digest is turkey-meatloaf-with-mashed-potatoes (American loaf, ketchup/gravy profile, plated on a mashed-potato starch); this candidate shares only protein+loaf-format (2 of 4), differing in flavor family (Italian marinara/pesto/mozzarella-stuffed) and starch (none, low-carb) — a distinct dinner. Italian turkey entries turkey-meatball-marinara-pasta and turkey-meatball-sub-bake are meatballs-with-pasta/bread, a different format.",
+    "accepted_slugs": "No turkey meatloaf present in accepted-slugs.json (22 slugs, read fresh)."
+  },
+  "cross_protein_collision_flags": [
+    "Structurally an Italian mozzarella-stuffed meatloaf; would near-duplicate any beef or pork 'Italian stuffed meatloaf' / 'mozzarella-stuffed meatloaf' in another selector's pool — the only real distinguisher there would be the protein. Decider should watch beef/pork pools for a stuffed-Italian-meatloaf twin.",
+    "Sourcer flagged a pool overlap with keto-turkey-meatloaf.json (plain American keto loaf, ketodietyum, 489/6.4) — same protein+format but American plain vs Italian mozzarella-stuffed; if that candidate is also being ruled, keep only one turkey meatloaf and prefer the wider-cuisine Italian take."
+  ]
+}

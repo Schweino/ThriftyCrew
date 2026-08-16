@@ -1,0 +1,18 @@
+{
+  "slug": "chicken-marsala-skillet",
+  "name": "Chicken Marsala Skillet",
+  "protein": "chicken",
+  "cuisine": "Italian-American",
+  "verdict": "KEEP",
+  "fit": {
+    "in_band": true,
+    "src_cal": 428,
+    "src_carbs": 11,
+    "notes": "428 cal is between the 400-650 floor/ceiling (near the low end but clears); 11g carbs well under 35g; no seafood; weigh-and-divide skillet scales cleanly to 14 servings; budget meal-prep dinner."
+  },
+  "dupe_evidence": "No chicken marsala, piccata, or fricassee-by-name in the catalog, and no marsala wine anywhere in it; the marsala-wine reduction over seared cutlets with no starch base is a distinct named Italian-American dish, not a duplicate of any live recipe.",
+  "borderline": true,
+  "borderline_reason": "Nearest live neighbor is french-chicken-fricassee (already in accepted-slugs) - both are creamy-mushroom chicken-in-wine-sauce dishes with no starch base, sharing 3 of 4 axes (protein, no-starch, creamy-mushroom sauce family). Distinguished by wine (sweet fortified marsala vs dry white velouté), method (quick sear-and-reduce skillet vs braise), and cuisine (Italian-American vs French). I judge them different dinners, but flag the proximity so the decider can confirm the catalog wants both. Also near creamy-tuscan-chicken-skillet (accepted), but that is a sun-dried-tomato/spinach cream, a clearly different flavor family.",
+  "cross_protein_collision": "Structurally identical to a pork-marsala or turkey-marsala (seared cutlets in marsala-mushroom cream) if another selector's pool holds one - decider should watch for same-dish-different-protein twins. Also adjacent to the pork creamy-mushroom family already live (creamy-mushroom-pork-chops-over-mashed-potatoes, pork-tenderloin-stroganoff), though those carry a starch base and stroganoff/sour-cream profile.",
+  "unmapped_note": "marsala wine has no board home (board carries white-wine and red-wine, not marsala) - a deliberate pricer-lane flag per v2.1 5.1, not a penalty."
+}

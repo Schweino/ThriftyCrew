@@ -1,0 +1,75 @@
+{
+  "name": "Creamy Garlic Herb Wine Pork Chops",
+  "slug": "creamy-garlic-herb-wine-pork-chops",
+  "protein": "pork",
+  "cuisine": "American",
+  "source_url": "https://whatsinthepan.com/pork-chops-garlic-herb-wine-sauce/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Pork Chops", "grams": 1680, "buy": "14 thin-cut boneless pork chops (about 4 1/4 oz / 120 g each, roughly 3 3/4 lb)" },
+    { "item": "Butter", "grams": 196, "buy": "14 tbsp (7 for searing, 7 for the sauce)" },
+    { "item": "Blanched Almond Flour", "grams": 131, "buy": "1 cup plus 2 3/4 tbsp, for dredging" },
+    { "item": "Garlic Powder", "grams": 5, "buy": "1 3/4 tsp" },
+    { "item": "Onion Powder", "grams": 4, "buy": "1 3/4 tsp" },
+    { "item": "Italian Seasoning", "grams": 7, "buy": "7 tsp (3 1/2 for the dredge, 3 1/2 for the sauce)" },
+    { "item": "Salt", "grams": 6, "buy": "salt and freshly ground pepper, to taste (about 1 tsp salt)" },
+    { "item": "Garlic", "grams": 21, "buy": "7 cloves, minced" },
+    { "item": "Parmesan Cheese", "grams": 196, "buy": "1 3/4 cups grated (about 7 oz)" },
+    { "item": "Dry White Wine", "grams": 411, "buy": "1 3/4 cups" },
+    { "item": "Lemon Juice", "grams": 41, "buy": "juice of 1 small lemon (about 2 3/4 tbsp)" },
+    { "item": "Chicken Broth", "grams": 420, "buy": "1 3/4 cups" },
+    { "item": "Heavy Cream", "grams": 420, "buy": "1 3/4 cups" },
+    { "item": "Fresh Thyme", "grams": 14, "buy": "14 sprigs, leaves only" }
+  ],
+  "macros_per_serving": { "calories": 524, "protein_g": 32.2, "carbs_g": 7.7, "fat_g": 38.1 },
+  "writer_notes": [
+    "SOURCE YIELD 4, rebuilt to 14 at the mapper's 3.5x scale. Every gram and buy string transcribed from mapped\\creamy-garlic-herb-wine-pork-chops.json; no number computed in prose.",
+    "MACROS transcribed from the mapper's food-macros-db recompute at 14 servings and independently re-verified by the writer with the same formula the build guard uses: 524 cal, 32.2 g protein, 7.7 g carbs, 38.1 g fat per serving (rounds to 524 / 32 / 8 / 38). In band for this run: 524 cal inside [400, 650] with room on both sides, and about 8 g carbs well under the 35 g gate. The source's own published 497 cal / 32 g protein / 7 g carbs / 35 g fat tracks protein within 0.6 percent and calories within 5.4 percent, every instrument inside the noise band.",
+    "DERIVED THIN-CUT CHOP, carried from the mapper (florentine rule): '4 boneless pork chops' prints no weight, and the house densities default of 170 g/chop recomputes to 42 g protein/serving against the source's printed 32 g (+31 percent). The mapper back-solved the source's protein to about 120 g/chop (a thin 4-oz chop, consistent with the source's 3 to 4 minute per side sear), which recomputes protein to +0.6 percent. Booked 1680 g at 14 chops. Deviation from the densities default is deliberate and documented, not silent.",
+    "COMBINED DUPLICATE COMMODITY LINES so the shopping list reads clean: the source lists butter twice (2 tbsp to sear, 2 tbsp for the sauce) and Italian seasoning twice (1 tsp in the dredge, 1 tsp in the sauce). Presented as one Butter line (14 tbsp, split 7 and 7 in the buy string and in the steps) and one Italian Seasoning line (7 tsp, split 3 1/2 and 3 1/2). Grams are the summed totals the mapper booked (98+98 and 3.5+3.5).",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought: pork chops (steps 2,3,7), butter (3,4), almond flour (2), garlic powder (2), onion powder (2), Italian seasoning (2 dredge and 6 sauce), salt and pepper (2,6), garlic (4), dry white wine (5), lemon juice (5), chicken broth (5), heavy cream (5), parmesan (6), fresh thyme (6). Walked the costed list against the steps both directions.",
+    "PEPPER folded into the Salt line as the mapper structured it: the source reads 'Salt and freshly ground pepper to taste' with no separate pepper quantity, so pepper is named inside the Salt line's buy string ('salt and freshly ground pepper, to taste'). Steps that say salt and pepper are covered by that bought line; pepper is a zero-stakes to-taste seasoning, not an orphan.",
+    "THICKENER PARENTHETICAL kept out of prose: the source's Parmesan line prints '(or 1/4 cup almond flour, or 1/4 tsp Xanthan Gum)' as thickener fallbacks. Primary parmesan is booked; the alternates are not additional ingredients and nobody buys xanthan gum, so no step and no shop_smart bullet names them.",
+    "SHOP_SMART makes NO leftover, per-ounce, or lasts-several-batches claim, so no bullet requires a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount and package form. Re-walk the bullets against cost_lines once the recipe actually costs.",
+    "BUILD BLOCKED at intake, NOT a writer-lane fix (see the run report): two ingredients have no row in db\\ingredients.json, so build-v2-spec hard-fails UNKNOWN INGREDIENT NAME before any spec is written. Blanched Almond Flour has a food-macros-db row and a filed commodity-registrar proposal (almond-flour, PENDING) but no vocabulary row and no feed commodity (the feed carries flour, almonds, almond-milk, none of which is almond flour, and the mapper rejected the wheat-flour hijack as a 15x price-class error). Fresh Thyme has a food-macros-db row and a live feed bid (fresh-thyme) but still no db\\ingredients.json row wiring the two together. Both need the mapper or registrar to wire vocabulary rows; the writer lane does not mint them. Wine is NO LONGER a blocker: Dry White Wine now resolves to bid white-wine and white-wine is on the live feed."
+  ],
+  "prose": {
+    "intro_html": "Pork chops get a bad name because most people cook them to the texture of a hockey puck. This is the fix. You dredge the chops in seasoned almond flour, sear them fast so they stay tender, then build a creamy garlic, herb, and white wine pan sauce right in the same skillet and let the two finish together. No breadcrumbs, no flour, no gluten anywhere in it. Built at 14 servings it runs about <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 10 grams of carbs. That is a restaurant-style creamy pork chop that still lands inside a low-carb week.",
+    "shop_smart": [
+      "<strong>Fourteen thin-cut boneless pork chops are the backbone.</strong> That is roughly three and three-quarter pounds, one chop per serving, and it is where most of the money and all of the protein live. Reach for the big family pack of boneless chops instead of the small trays so you are paying for pork, not packaging. Thin-cut is the move here, because a thin chop sears in three or four minutes a side and stays tender instead of drying out.",
+      "<strong>Almond flour is the dredge, and it is what keeps this gluten free.</strong> You need about a cup and change of blanched almond flour to coat all fourteen chops. This is not a spot for regular all-purpose flour, because the whole point of this dish is a low-carb, gluten-free crust. Blanched almond flour lives on the baking aisle near the other specialty flours.",
+      "<strong>Heavy cream and a splash of dry white wine make the sauce.</strong> You need about a cup and three-quarters of cream and the same of wine. Any dry white you would actually drink works here, so skip the bottle labeled cooking wine. The cream is what carries the sauce, so buy the real heavy cream and not a light version.",
+      "<strong>Parmesan thickens the sauce and seasons it at the same time.</strong> Grate in about one and three-quarter cups, which is roughly seven ounces. It melts into the cream and wine and pulls the whole thing together, no cornstarch or roux needed.",
+      "<strong>Garlic, a lemon, and fresh thyme are the flavor.</strong> A head of garlic for the seven cloves, one small lemon for the juice, and a little bundle of fresh thyme. Fresh thyme is worth hunting for here since it is the herb the sauce is built around, but if your store only carries the packaged herbs, grab the smallest one.",
+      "<strong>Butter and three pantry seasonings round it out.</strong> Butter to sear in and to start the sauce, plus garlic powder, onion powder, and Italian seasoning for the dredge and the sauce. These are backbone staples you most likely already have, so they barely move the cart."
+    ],
+    "make_it": [
+      "Weigh your empty skillet and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+      "In a large bowl, whisk together the almond flour, garlic powder, onion powder, and 3 1/2 teaspoons of the Italian seasoning. Season the pork chops all over with salt and pepper, then dredge each one thoroughly in the almond flour mixture.",
+      "Heat 7 tablespoons of the butter in a large skillet over medium-high heat. Working in batches so the pan is not crowded, add the chops and sear about 3 to 4 minutes a side, six to eight minutes total. Cook the first side on medium-high, then drop the heat to medium for the second side. Move the chops to a plate and cover to keep warm.",
+      "Return the skillet to the heat and add the remaining 7 tablespoons of butter and the minced garlic. Cook about 1 to 2 minutes over medium heat until the garlic is fragrant.",
+      "Pour in the white wine and squeeze in the lemon juice, then add the chicken broth and the heavy cream. Bring the sauce up to a boil, then lower the heat.",
+      "Stir in the fresh thyme leaves and the remaining 3 1/2 teaspoons of Italian seasoning, then season with salt and pepper. Add the grated parmesan and simmer 2 to 3 minutes until the sauce thickens. Taste and adjust the seasoning.",
+      "Reduce the heat to low and return the chops and any collected juices to the pan. Spoon the sauce over them and reheat on low 2 to 3 minutes until the chops are cooked through.",
+      "Weigh the full pan and subtract the empty weight from Step 1 to get the cooked total. Divide by 14 and give each container one chop and an even share of the creamy herb sauce, aiming for that weight."
+    ],
+    "portion_html": "Set the full pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Each container gets one pork chop and an even spoonful of the creamy garlic herb sauce, landing near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a creamy pork chop that tastes like it came off a restaurant menu. The pork and the cream carry it; the wine, the parmesan, and the fresh thyme just make it taste expensive.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Creamy garlic herb wine pork chops for meal prep: almond-flour-dredged pork chops seared and finished in a creamy white wine and parmesan pan sauce, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 10 grams of carbs.",
+    "keywords": "creamy pork chops, low carb pork chops, gluten free pork chops, garlic herb wine sauce, low carb meal prep, high protein pork dinner",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "totalTime": "PT30M",
+    "steps": [
+      "Whisk the almond flour with the garlic powder, onion powder, and half the Italian seasoning, then season and dredge the pork chops.",
+      "Sear the chops in butter about 3 to 4 minutes a side, then set them aside.",
+      "Cook the garlic in more butter, then add the wine, lemon juice, chicken broth, and heavy cream and bring to a boil.",
+      "Stir in the thyme, the rest of the Italian seasoning, and the parmesan and simmer until the sauce thickens.",
+      "Return the chops to the sauce and reheat on low until cooked through.",
+      "Weigh the pan, subtract the empty weight, and divide across 14 containers."
+    ]
+  }
+}

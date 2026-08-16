@@ -1,0 +1,39 @@
+{
+  "slug": "low-carb-taco-cabbage-beef-skillet",
+  "name": "Low Carb Taco Cabbage Beef Skillet",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 576,
+    "carbs_g": 11,
+    "in_band": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "note": "576 cal sits mid-band (400-650) and 11g carb clears the 35g ceiling with deep margin; ground beef seared with shredded cabbage as the vegetable base, no rice/pasta/potato; single skillet weigh-and-divide to 14. FIT on published source macros."
+  },
+  "catalog_dupe": null,
+  "dupe_evidence": "No catalog match. Catalog taco/tex-mex beef skillets are all rice-based (loaded-beef-taco-skillet-bowls, tex-mex-beef-rice-skillet-bowls, arroz-con-carne-molida) - loaded-beef-taco-skillet-bowls shares protein+taco flavor+skillet but is a loaded RICE bowl with beans/corn/zucchini, a genuinely different plate from this simple beef+cabbage+cheese cabbage skillet. unstuffed-cabbage-roll-bowls pairs beef+cabbage but is cabbage-roll tomato flavor over rice, not taco and not low-carb.",
+  "pool_collisions": [
+    {
+      "slug": "beef-cauliflower-taco-skillet",
+      "relation": "STRONG pool near-dupe (same protein)",
+      "note": "Both are a low-carb beef taco skillet differing only in the low-carb vegetable base (cabbage here vs cauliflower there); same protein + taco flavor + skillet method. Decider should keep ONE. This cabbage version has a far deeper carb margin (11g vs beef-cauliflower-taco-skillet's 34g, which sits only 1g under the ceiling) and cabbage is the cheaper board item."
+    },
+    {
+      "slug": "mediterranean-beef-cabbage-skillet",
+      "relation": "not a dupe",
+      "note": "Shares beef+cabbage+skillet but Mediterranean flavor family, not taco - different dinner."
+    }
+  ],
+  "cross_protein_twins": [
+    {
+      "slug": "low-carb-turkey-taco-skillet",
+      "note": "Structurally the same dish in ground turkey (taco-seasoned turkey skillet) - decider verify against turkey pool."
+    },
+    {
+      "slug": "low-carb-turkey-cabbage-skillet",
+      "note": "Turkey + cabbage skillet; if that one is taco-flavored it is a cross-protein twin of this dish."
+    }
+  ],
+  "borderline": false
+}

@@ -1,0 +1,23 @@
+{
+  "slug": "keto-salisbury-steak-mushroom-gravy-skillet",
+  "name": "Keto Salisbury Steak with Mushroom Gravy Skillet",
+  "protein": "beef",
+  "verdict": "DUPE",
+  "dupe_of": "salisbury-steak-potato-bowls",
+  "dupe_scope": "catalog",
+  "evidence": "Live catalog recipe salisbury-steak-potato-bowls (Salisbury Steak and Potato Bowls) is the same dinner - 93/7 ground-beef Salisbury steak patties simmered in a mushroom-onion gravy (its board: 93-7-ground-beef, beef-broth, bread-crumbs, mushrooms, onions, tomato-paste). The candidate matches on protein (ground beef), dish identity (literally 'Salisbury Steak'), and sauce family (mushroom gravy); the keto/skillet framing only drops the potato side and swaps the breadcrumb binder for almond flour, which is not a distinct plate.",
+  "fit_check": {
+    "calories": 463,
+    "carbs_g": 7.75,
+    "within_400_650_cal": true,
+    "carbs_under_35": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "note": "Meets all run conditions, but rejected as a catalog duplicate, not on fit."
+  },
+  "cross_protein_collisions": [
+    "A turkey Salisbury steak / turkey patties in mushroom gravy would be structurally the same dish - flag any such candidate in the turkey pool.",
+    "A pork or 'meatball in mushroom gravy' skillet in another protein pool could also collide on the mushroom-gravy-over-seared-patties structure."
+  ],
+  "borderline": false
+}

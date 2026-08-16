@@ -1,0 +1,50 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Low Carb Ground Turkey Skillet with Cauliflower Rice",
+  "source_url": "https://upnorthnosh.com/low-carb-ground-turkey-skillet-with-cauliflower-rice/",
+  "servings": 3,
+  "time_total": "25 minutes",
+  "time_active": "5 minutes prep, 20 minutes cook",
+  "ingredients": [
+    { "raw": "1 lb ground turkey", "item": "ground turkey", "qty": "1", "unit": "lb", "prep": null, "optional": false, "section": null },
+    { "raw": "2 T olive oil", "item": "olive oil", "qty": "2", "unit": "T", "prep": null, "optional": false, "section": null },
+    { "raw": "1 cup frozen spinach", "item": "frozen spinach", "qty": "1", "unit": "cup", "prep": null, "optional": false, "section": null },
+    { "raw": ".5 t cumin", "item": "cumin", "qty": ".5", "unit": "t", "prep": null, "optional": false, "section": null },
+    { "raw": ".5 t paprika", "item": "paprika", "qty": ".5", "unit": "t", "prep": null, "optional": false, "section": null },
+    { "raw": ".5 t coriander", "item": "coriander", "qty": ".5", "unit": "t", "prep": null, "optional": false, "section": null },
+    { "raw": ".5 t onion powder", "item": "onion powder", "qty": ".5", "unit": "t", "prep": null, "optional": false, "section": null },
+    { "raw": ".5 t garlic powder", "item": "garlic powder", "qty": ".5", "unit": "t", "prep": null, "optional": false, "section": null },
+    { "raw": "1/4 t cayenne", "item": "cayenne", "qty": "1/4", "unit": "t", "prep": null, "optional": false, "section": null },
+    { "raw": "1 T dried parsley", "item": "dried parsley", "qty": "1", "unit": "T", "prep": null, "optional": false, "section": null },
+    { "raw": "1 t salt", "item": "salt", "qty": "1", "unit": "t", "prep": null, "optional": false, "section": null },
+    { "raw": "1/4 t black pepper", "item": "black pepper", "qty": "1/4", "unit": "t", "prep": null, "optional": false, "section": null },
+    { "raw": "1 red bell pepper", "item": "red bell pepper", "qty": "1", "unit": "each", "prep": null, "optional": false, "section": null },
+    { "raw": "1 small shallot", "item": "shallot", "qty": "1", "unit": "each", "prep": null, "optional": false, "section": null },
+    { "raw": "1.5 cups cauliflower rice", "item": "cauliflower rice", "qty": "1.5", "unit": "cups", "prep": null, "optional": false, "section": null },
+    { "raw": "3 T siracha mayo (optional)", "item": "siracha mayo", "qty": "3", "unit": "T", "prep": null, "optional": true, "section": null },
+    { "raw": "3/4 cup shredded lettuce (optional)", "item": "shredded lettuce", "qty": "3/4", "unit": "cup", "prep": null, "optional": true, "section": null },
+    { "raw": "6 T pico de gallo (optional)", "item": "pico de gallo", "qty": "6", "unit": "T", "prep": null, "optional": true, "section": null }
+  ],
+  "instructions": [
+    "Over medium-high heat, coat the bottom of your skillet with olive oil (approx 2T) and add 1lb of ground turkey. Break the turkey up using the back of a wooden spoon or a meat masher tool.",
+    "While the meat is browning, combine all spices in a small cup.",
+    "Pour the seasoning mixture over the ground turkey and cook until no longer pink, while stirring occasionally.",
+    "Finely dice 1 red bell pepper and 1 shallot. Add diced vegetables to the skillet and stir to combine.",
+    "Add in 1 cup of frozen spinach. Spinach will thaw the rest of the way in the hot skillet.",
+    "Continue cooking over medium heat for another 2-3 minutes, stirring frequently until everything is well combined and warmed through.",
+    "Cook your cauliflower rice per the package instructions.",
+    "Scoop 1 cup of rice into bowls and top with a heaping cup of the ground turkey mixture. Add shredded lettuce, pico de gallo, and siracha mayo."
+  ],
+  "nutrition_per_serving": {
+    "calories": "476 kcal",
+    "carbohydrates": "15g",
+    "protein": "33g",
+    "fat": "33g"
+  },
+  "concerns": [
+    "Page uses shorthand units 'T' (tablespoon) and 't' (teaspoon); transcribed as printed.",
+    "Page title is 'Low Carb Ground Turkey Skillet with Cauliflower Rice'; candidate slug says 'southwest', which does not appear in the page title.",
+    "1.5 cups cauliflower rice for 3 servings, but step 8 says to scoop 1 cup of rice per bowl; quantities may not reconcile as printed."
+  ]
+}

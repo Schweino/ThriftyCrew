@@ -1,0 +1,16 @@
+{
+  "slug": "jalapeno-popper-chicken-casserole",
+  "name": "Jalapeno Popper Chicken Casserole",
+  "protein": "chicken",
+  "cuisine": "tex-mex",
+  "method": "oven bake",
+  "source_url": "https://joyfilledeats.com/jalapeno-popper-chicken-casserole/",
+  "source_servings": 8,
+  "src_cal": 418,
+  "src_carbs": 2,
+  "src_protein": 30,
+  "unmapped": ["shredded cheddar cheese (map-lane id verify)"],
+  "decision": "ACCEPT",
+  "note": "In-band (418 cal / 2g carbs), cream-cheese/sour-cream/cheddar-bound crustless chicken bake, jalapeno-forward, no starch. Distinct from accepted chicken-bacon-ranch-cauliflower-bake (ranch + cauliflower, different flavor family) - jalapeno popper is a distinct Tex-Mex flavor. Cross-lane merge resolved: the pending pool candidate jalapeno-popper-chicken-cauliflower-bake is the SAME dish (jalapeno popper chicken bake, cream cheese + bacon + cheddar + jalapeno) with only a cauliflower add; this no-starch casserole is the cleaner low-carb keep, so that variant will be rejected as a pool-dupe when it reaches me. Cross-protein jalapeno-popper turkey/beef bakes would be the same dish in another protein - none accepted, none pending seen; future-lane watch.",
+  "cross_lane_checked": true
+}

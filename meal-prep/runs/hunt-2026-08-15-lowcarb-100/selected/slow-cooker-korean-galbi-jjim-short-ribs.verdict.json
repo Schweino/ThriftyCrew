@@ -1,0 +1,15 @@
+{
+  "slug": "slow-cooker-korean-galbi-jjim-short-ribs",
+  "name": "Slow Cooker Korean Galbi Jjim (Braised Short Ribs)",
+  "protein": "beef",
+  "cuisine": "Korean",
+  "verdict": "KEEP",
+  "dupe_of": null,
+  "fit": "PASS",
+  "fit_evidence": "481 cal / 22g carb per serving clears the 400-650 cal band and the 35g carb ceiling; slow-cooker dump-and-go dinner, scales to 14 by multiplying short ribs and sauce, no seafood.",
+  "evidence": "No catalog or accepted-slugs duplicate. The catalog's Korean beef dishes are all ground-beef or thin-sliced bowls (korean-beef-bibimbap-bowls, korean-ground-beef-rice-bowls, korean-bulgogi-beef-burrito, korean-beef-japchae-noodle-bowls); none is a braised bone-in short-rib dish. dak-galbi in the catalog is chicken. This is a distinct galbi jjim braise the catalog lacks.",
+  "cross_protein_collision_notes": [
+    "Pool has a CLUSTER of short-rib braises in other beef verdicts (slow-cooker-beef-short-ribs, slow-cooker-boneless-beef-short-ribs, red-wine-braised-beef-short-ribs, braised-beef-short-ribs-red-wine) - all American/red-wine Western braises. Same protein + slow-braise method; the distinguishing axis is the Korean gochujang/soy/pear flavor family and Korean cuisine (which widens the American-heavy catalog). Decider should confirm it wants BOTH a Western short-rib braise and this Korean one; keep only if cuisine spread justifies a second short-rib slot.",
+    "Structurally a gochujang/soy braise - could collide with a pork galbi-jjim or Korean braised-pork equivalent in the pork selector's pool (catalog already has slow-cooker-korean-gochujang-pork-bowls and slow-cooker-korean-shredded-pork-bowls, but those are shredded/ground bowls, a different format)."
+  ]
+}

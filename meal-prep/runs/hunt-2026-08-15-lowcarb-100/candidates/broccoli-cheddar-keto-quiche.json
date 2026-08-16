@@ -1,0 +1,27 @@
+{
+  "name": "Broccoli Cheddar Keto Quiche",
+  "slug": "broccoli-cheddar-keto-quiche",
+  "protein": "vegetarian",
+  "cuisine": "American",
+  "method": "oven bake",
+  "source_url": "https://www.wholesomeyum.com/keto-quiche/",
+  "source_servings": 6,
+  "src_cal": 573,
+  "src_carbs": 13.3,
+  "src_protein": 23.2,
+  "src_fat": 51.5,
+  "ingredients": [
+    "1 recipe Almond flour pie crust (omit sweetener, use extra salt)",
+    "1 tbsp Olive oil",
+    "2 cloves Garlic, minced",
+    "2 cups Broccoli, cut into small florets",
+    "1/4 cup Water",
+    "5 large Eggs",
+    "1/3 cup Heavy cream",
+    "1/2 tsp Sea salt",
+    "1/4 tsp Black pepper",
+    "1 cup Cheddar cheese, shredded"
+  ],
+  "unmapped": ["almond flour pie crust (almond flour has no board home)"],
+  "why": "Egg/cheese quiche, vegetarian. Published 573 cal / 23.2g protein / 13.3g total carbs (6.5 net) is in-band though upper-half on calories. Low-carb by structure. Carries an almond-flour crust so not strictly crustless; almond flour is a genuinely absent board ingredient - flagged for the pricer lane as intended. Scales to 14. Lower confidence than the crustless sausage bake because 573 cal leaves little headroom under the 650 ceiling once our own DB recomputes."
+}

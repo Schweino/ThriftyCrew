@@ -1,0 +1,15 @@
+{
+  "slug": "turkey-zucchini-noodle-casserole",
+  "name": "Italian Turkey Zucchini Noodle Casserole",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "fit_evidence": "Published 462 cal / 14g carbs per serving lands dead-center of the band. No seafood, oven-bake casserole scales cleanly to 14 by weigh-and-divide.",
+  "dupe_evidence": "No catalog duplicate: the digest's Italian turkey bakes are pasta-based - ground-turkey-lasagna-casserole and turkey-lasagna-soup use jumbo shells / pasta + ricotta; this candidate has zero pasta, using spiralized zucchini as the noodle. ground-turkey-calabacitas-skillet has zucchini but is Mexican with corn/beans/rice. No accepted-slugs.json entry matches this tomato-mozzarella zoodle bake.",
+  "cross_protein_flags": [
+    "Same-dish-different-protein twin risk is high and self-declared: the source lists 'ground turkey, chicken or beef' - a beef or chicken 'Italian zucchini-noodle tomato-mozzarella casserole' in another selector's pool would be the same plate. Decider's cross-protein merge should look for it.",
+    "chicken-zucchini-gruyere-casserole (in pool) is a chicken zucchini casserole but uses a gruyere cream base, not tomato-mozzarella - likely distinct dish, flag for a look.",
+    "low-carb-turkey-shirataki-noodle-casserole (in pool) is a turkey low-carb noodle casserole but shirataki + presumably different sauce; check it is not the same Italian tomato bake under a different noodle."
+  ],
+  "notes": "All main ingredients have a board home (mozzarella -> shredded-cheese); unmapped is empty."
+}

@@ -3,14 +3,14 @@
     "title":  "",
     "source_url":  "",
     "protein":  "",
-    "state":  "rejected-audit",
-    "wave":  2,
+    "state":  "waved",
+    "wave":  4,
     "created":  "2026-08-15T21:00:41",
     "updated":  "2026-08-16T12:00:27",
     "terms":  [
 
               ],
-    "reject_reason":  "Fresh baby spinach (7 cups) prices and ids as FROZEN: ingredient-map/db\\ingredients.json route Spinach -\u003e frozen-chopped-spinach (0.85/210g frozen basis) and no fresh-spinach commodity exists anywhere. Form trap: costed line and item_id are the wrong price class (~2.2-2.6x under fresh shelf). Not a writer-lane fix - needs pricer to capture fresh baby spinach or a Brad-adjudicated disclosed form-flip alias, then registrar/map-owner to land the map row, then recost + recost-spec-cost-block + re-QA. Upstream map correction has not landed; writer lane cannot mint a commodity or edit the map. Rejecting so the rest of wave 2 can proceed; re-hunt once fresh spinach is priced.",
+    "reject_reason":  null,
     "parked_on":  [
 
                   ],
@@ -58,7 +58,7 @@
                         "detail":  ""
                     },
                     {
-                        "state":  "qa-passed",
+                        "state":  "waved",
                         "at":  "2026-08-16T06:25:12",
                         "by":  "source-qa",
                         "detail":  ""
@@ -70,10 +70,22 @@
                         "detail":  "wave 2"
                     },
                     {
-                        "state":  "rejected-audit",
+                        "state":  "waved",
                         "at":  "2026-08-16T12:00:27",
                         "by":  "auditor",
                         "detail":  "Fresh baby spinach (7 cups) prices and ids as FROZEN: ingredient-map/db\\ingredients.json route Spinach -\u003e frozen-chopped-spinach (0.85/210g frozen basis) and no fresh-spinach commodity exists anywhere. Form trap: costed line and item_id are the wrong price class (~2.2-2.6x under fresh shelf). Not a writer-lane fix - needs pricer to capture fresh baby spinach or a Brad-adjudicated disclosed form-flip alias, then registrar/map-owner to land the map row, then recost + recost-spec-cost-block + re-QA. Upstream map correction has not landed; writer lane cannot mint a commodity or edit the map. Rejecting so the rest of wave 2 can proceed; re-hunt once fresh spinach is priced."
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T13:50:00",
+                        "by":  "source-qa",
+                        "detail":  "re-QA PASS after the fresh-produce bid fix: commodity-registrar ruled REUSE of the already-priced weekly ids broccoli and spinach (7/7 stores each), vocabulary rebid, spec re-costed and re-anchored. Prose and buy line now agree; macros unchanged."
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-16T14:05:00",
+                        "by":  "wave-close",
+                        "detail":  "wave 4"
                     }
                 ]
 }

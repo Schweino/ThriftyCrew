@@ -1,0 +1,21 @@
+{
+  "slug": "beef-vindaloo-braise",
+  "name": "Beef Vindaloo (Chuck Braise)",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 550,
+    "carbs_g": 8,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "result": "FIT"
+  },
+  "dupe_check": {
+    "catalog": "Not a catalog duplicate. Catalog has a vindaloo but only in OTHER proteins - 'Chicken Vindaloo' (chicken) and 'Goan Pork Vindaloo Rice Bowls' (pork); no beef vindaloo exists. Beef curries in catalog (Massaman Beef, Caribbean Curry Beef, Japanese Ground Beef Curry, Beef Keema, Pakistani Kofta) are all different sauce families or ground-meat formats, none a vinegar-forward chuck vindaloo braise.",
+    "pool": "No colliding beef candidate seen in my three-item set."
+  },
+  "cross_protein_collisions": "Structurally the SAME dish as catalog 'Chicken Vindaloo' and 'Goan Pork Vindaloo Rice Bowls' - identical Goan vinegar/spice sauce, differing only by protein. The catalog already carries vindaloo in two proteins as distinct recipes, so a beef version is a legitimate third, but the decider should confirm no OTHER selector is simultaneously proposing a beef or lamb vindaloo, and note the pork version is served over rice while this is a grain-free braise.",
+  "evidence": "550 cal / 8g carbs read from source card; distinct from all existing beef curries; only vindaloos in catalog are chicken and pork."
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "pesto-mozzarella-chicken-skillet",
+  "name": "One-Skillet Pesto Mozzarella Chicken",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "reason": "No catalog collision: the only pesto recipe in the 544-recipe digest is 'turkey-pesto-pasta-kale' (different protein, pasta base, kale not tomato/zucchini/mozzarella), and no chicken skillet in the catalog carries a basil-pesto or fresh-mozzarella/caprese profile. Distinct from accepted 'creamy-tuscan-chicken-skillet', which is a creamy garlic/parmesan cream-sauce dish, not a basil-pesto + melted-mozzarella seared skillet.",
+  "conditions_check": {
+    "calories": "417 - within 400-650 band",
+    "carbs": "5g - within <=35g",
+    "seafood": "none",
+    "scalable_14": true,
+    "budget_meal_prep_dinner": true,
+    "result": "FIT"
+  },
+  "cross_protein_collision_note": "Structurally a pesto + fresh-mozzarella + tomato/zucchini seared-cutlet skillet. A turkey-cutlet or pork-cutlet 'pesto mozzarella' skillet in another selector's pool would be the same dinner on a different protein - flag for the decider's cross-protein merge. Note the existing turkey-pesto-pasta-kale shares only the pesto flavor family, not the dish.",
+  "unmapped_ok": "Carries jarred basil pesto and fresh sliced mozzarella as intentional unmapped picks to exercise the pricer lane - not penalized per v2.1 s5.1."
+}

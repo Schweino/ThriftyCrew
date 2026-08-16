@@ -1,0 +1,20 @@
+{
+  "slug": "turkey-meatballs-cream-sauce-skillet",
+  "name": "Turkey Meatballs in Cream Sauce Skillet",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "in_band": true,
+    "src_cal": 433,
+    "src_carbs": 16,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "433 cal in [400,650], 16 g carbs <= 35, no starch base, scales by weigh-and-divide; cal sits near the 400 floor so label-DB recompute has limited downside headroom but clears as published."
+  },
+  "dupe_evidence": "No turkey duplicate: the 11 catalog turkey-meatball entries are all distinct flavor families (Greek lemon-orzo, youvarlakia, Indian kofta curry, Izmir potato bake, BBQ-over-rice, Thai coconut curry, Italian wedding soup, marinara pasta, sub bake, Japanese tsukune, Vietnamese xiu mai) - none is a creamy roux/broth-and-cream gravy skillet, so this occupies an open slot.",
+  "cross_protein_collisions": [
+    "beef swedish-meatball-potato-bowls (Swedish Meatball and Potato Bowls) - structurally the SAME dish family: meatballs in a creamy Worcestershire cream gravy; differs by protein (beef vs turkey) and by carrying a potato base this bare skillet lacks. Decider should confirm this reads as a distinct turkey take, not a re-skin.",
+    "pork country-pork-meatballs-onion-gravy (Country Pork Meatballs with Onion Gravy over Mashed Potatoes) - also meatballs in a creamy gravy; differs by protein and mashed-potato base."
+  ],
+  "borderline": false
+}

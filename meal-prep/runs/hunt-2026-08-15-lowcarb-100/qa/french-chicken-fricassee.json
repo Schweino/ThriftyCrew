@@ -1,0 +1,16 @@
+﻿{
+  "slug": "french-chicken-fricassee",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    { "check": "scaling",
+      "severity": "note",
+      "detail": "Egg yolk: source 1 yolk x3.5 = 3.5, spec buys 4 large yolks (68 g), +14.3% on the line. Deliberate round-up to a cook measure, documented in writer_notes; every other line sits on the 3.5x ratio exactly.",
+      "owner": "mapper" },
+    { "check": "prose-numbers",
+      "severity": "note",
+      "detail": "stat.cost_ps \"5.81\" (and head.costPerServing 5.81) differs from cost_per_serving 3.72 / cost_per_serving_true 4.53. All prose LITERALS (52.09, 3.72, 63.48, 4.53, 17.85, 81.33) match their cost_* fields exactly, and {{cost_ps}} tokens are correct by construction, but the rendered token ($5.81) will sit next to the literal $3.72-per-bowl line. Cost reconciliation is the batch auditor's lane; flagged so it travels.",
+      "owner": "mapper" }
+  ],
+  "notes": "Both anchors reached; live page agrees with the extraction (4 servings, same ingredients, same method). Verified both dispatch changes: Dry White Wine cost line now present (~$1.08, Buy 1 750ml bottle $3.90) and parsley line reads Buy 1 bunch. Tarragon->parsley is the source's own stated substitute. Prior hot-sauce phantom is resolved: steps read hot pan sauce. No built body.html exists yet; judged spec only."
+}

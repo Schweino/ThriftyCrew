@@ -1,0 +1,17 @@
+{
+  "slug": "filipino-pork-adobo-sa-gata",
+  "name": "Filipino Pork Adobo sa Gata (Pork Adobo in Coconut Milk)",
+  "protein": "pork",
+  "lane": "pork-shoulder",
+  "verdict": "KEEP",
+  "condition_fit": "FIT",
+  "condition_evidence": "510 cal / 11g carbs / 35g protein per serving - inside 400-650 cal and well under the 35g carb ceiling; no seafood; one-pot braised pork shoulder that scales to 14 by weigh-and-divide; budget meal-prep dinner.",
+  "dupe_of": null,
+  "dupe_evidence": "Not ruled a duplicate. Nearest catalog dish is 'slow-cooker-filipino-pork-adobo-bowls' (Slow Cooker Filipino Pork Adobo Bowls): it matches on protein (pork), cuisine (Filipino) and method (braise) - 3 of 4 axes - but the sauce family genuinely diverges. The catalog dish is a plain soy-vinegar-garlic-peppercorn adobo served as rice bowls; this candidate is adobo SA GATA - the coconut milk (gata) + Thai chili turns the thin tangy-salty braise into a rich creamy Bicol/Southern-style sauce, a recognized distinct regional dish and a starch-free plate rather than a rice bowl. The other catalog adobos are chicken (slow-cooker-chicken-adobo-rice-bowls, filipino-adobo-chicken-burrito), different protein. This is the coconut-adobo variant the catalog would want, so it survives - but it is genuinely borderline against the existing pork adobo, flagged for the decider rather than silently kept.",
+  "cross_protein_collision_watch": "MEDIUM-HIGH: adobo sa gata is a technique that ports across proteins. A chicken adobo sa gata (coconut-milk adobo) in another selector's pool would be structurally the same dish as this on sauce + method, differing only by protein - and the catalog already carries a plain chicken adobo (slow-cooker-chicken-adobo-rice-bowls). Decider should check the chicken pool for a coconut/gata adobo twin and keep only one across proteins if the sauce profiles collide. Also note the KEPT 'thai-coconut-curry-pork-shoulder' is another coconut-milk pork-shoulder braise - distinct flavor family (Thai curry vs Filipino soy-vinegar-coconut adobo) but decider should confirm two coconut-milk pork-shoulder braises are both wanted.",
+  "pool_collision_watch": "No adobo/gata collision among pork verdicts written so far; distinct from the KEPT Thai coconut curry pork by flavor family (adobo soy-vinegar base vs Thai curry aromatics).",
+  "unmapped_note": "Carries unmapped bay-leaves and thai-chili-peppers; per v2.1 5.1 these are wanted pricer-lane signals, not penalties. pork-shoulder / garlic / onions / white-vinegar / soy-sauce / coconut-milk-canned / black-pepper / vegetable-oil are board-resident.",
+  "borderline": true,
+  "ruled_by": "adjudicator",
+  "run": "hunt-2026-08-15-lowcarb-100"
+}

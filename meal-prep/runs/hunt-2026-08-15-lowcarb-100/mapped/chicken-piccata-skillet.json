@@ -1,0 +1,170 @@
+{
+  "slug": "chicken-piccata-skillet",
+  "title": "Low Carb Chicken Piccata",
+  "source_url": "https://www.cookedbyjulie.com/low-carb-chicken-piccata/",
+  "source_servings": 2,
+  "target_servings": 14,
+  "scale_factor": 7,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters, drift over 5% noted per line.",
+  "ruled_substitutions": [
+    {
+      "from": "(no fat listed for the fry step)",
+      "to": "Olive Oil, 7 tbsp scaled (1 tbsp per source batch), ADDED",
+      "basis": "Source step 4 says 'Fry the chicken breasts' but the printed list carries no frying fat (the 1 tbsp butter is consumed later by the sauce, step 6-7; the extractor flagged the same). The card is not executable without it, and the source's own published calories arbitrate the amount: our no-oil recompute is 408 cal/serving vs the published 465, and adding 1 tbsp oil per 2-serving source batch lands at 467.5 (+0.5% vs published) - the source's calculator almost certainly counted this oil. 1 tbsp per two cutlets is also the physical minimum for a shallow fry. Documented as an addition, not silently blended."
+    }
+  ],
+  "registrar_rulings": [],
+  "ingredients": [
+    {
+      "source_raw": "2 boneless chicken breast",
+      "item": "Boneless Skinless Chicken Breast",
+      "bid": "chicken-breast",
+      "board": "weekly",
+      "grams": 2800,
+      "buy": "14 boneless chicken breasts (about 6.2 lb)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein on a COUNT, so the each-weight is the danger line (florentine failure mode) - checked against the source's own label. House each = 200 g -> 2800 g = 200 g raw per serving. Published 60 g protein/serving implies ~215 g chicken/serving after crediting the parmesan (~10 g) and broth (~0.5 g); our 200 g booking computes 55.6 g (-7.3%), inside the 15% instrument, while a small 113 g cutlet would compute 36 g (-40%, BREAK) and is refuted. Catalog average is 167 g/serving; 200 g sits high but is what the published label supports. Board 6 of 7, cheapest Baker's $1.99/lb."
+    },
+    {
+      "source_raw": "1/2 tsp paprika",
+      "item": "Paprika",
+      "bid": "paprika",
+      "board": "recipe",
+      "grams": 8,
+      "buy": "3 1/2 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities tsp = 2.3 g (8.05 booked as 8). Board 7 of 7, cheapest Walmart $0.432/oz."
+    },
+    {
+      "source_raw": "1 tsp oregano",
+      "item": "Dried Oregano",
+      "bid": "dried-oregano",
+      "board": "weekly",
+      "grams": 7,
+      "buy": "2 tbsp plus 1 tsp dried oregano",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 7 tsp, quarter-clean as 2 tbsp + 1 tsp. densities tsp = 1 g. Board 7 of 7, cheapest Hy-Vee $0.9307/oz."
+    },
+    {
+      "source_raw": "1/2 cup parmesan cheese",
+      "item": "Parmesan Cheese",
+      "bid": "parmesan",
+      "board": "weekly",
+      "grams": 392,
+      "buy": "3 1/2 cups grated parmesan (for coating)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities cup = 112 g (label 1/4 cup = 28 g). Board 7 of 7, cheapest Sam's Club $0.3092/oz."
+    },
+    {
+      "source_raw": "2 garlic cloves",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 42,
+      "buy": "14 cloves garlic",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities clove = 3 g. Board 5 of 7, cheapest Baker's $0.498/each."
+    },
+    {
+      "source_raw": "1 cup chicken stock",
+      "item": "Chicken Broth",
+      "bid": "chicken-broth",
+      "board": "weekly",
+      "grams": 1680,
+      "buy": "7 cups chicken stock",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Board commodity is labeled 'Chicken Broth / Stock' - one price class covers both, no stretch. densities cup = 240 g. Board 7 of 7, cheapest Aldi $0.0373/floz."
+    },
+    {
+      "source_raw": "1 tbsp butter",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "recipe",
+      "grams": 98,
+      "buy": "7 tbsp butter",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities tbsp = 14 g. Board 7 of 7, cheapest Sam's Club $2.555/lb. board 'recipe' per the membership rule (id present in recipe-commodities.json); earlier files vary, see board_defects_observed."
+    },
+    {
+      "source_raw": "1 tbsp capers",
+      "item": "Capers",
+      "bid": "capers",
+      "board": "recipe",
+      "grams": 56,
+      "buy": "7 tbsp capers, drained",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities cup = 128 -> tbsp 8 g. Board 1 of 7 (Family Fare $1.0257/floz) - CARRIED under Rule B; partial coverage is an answer, not a gate. Near-zero macros (13 cal across the batch)."
+    },
+    {
+      "source_raw": "1/2 lemon",
+      "item": "Lemon Juice",
+      "bid": "lemon-juice",
+      "board": "weekly",
+      "grams": 164.5,
+      "buy": "juice of 3 1/2 lemons (about 2/3 cup)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "The pot receives the juice (step 8 'add the chicken stock and lemon juice'), so the line books as juice: densities Lemon Juice each = 47 g -> 3.5 lemons = 164.5 g. Board 7 of 7, cheapest Sam's Club $0.0675/floz."
+    },
+    {
+      "source_raw": "(unlisted, required by step 4) oil for frying",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 94.5,
+      "buy": "7 tbsp olive oil, for frying",
+      "optional": false,
+      "decision": "mapped-ruled-addition",
+      "notes": "RULED ADDITION, see ruled_substitutions: the fry step has no listed fat; 1 tbsp per source batch reconciles our recompute to the source's published calories within 0.5%. densities tbsp = 13.5 g. Board 7 of 7, cheapest Sam's Club $0.1879/floz."
+    },
+    {
+      "source_raw": "Salt and pepper to taste",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 6,
+      "buy": "salt, to taste (about 1 tsp)",
+      "optional": true,
+      "decision": "mapped",
+      "notes": "To-taste line split into its two pantry items; nominal 1 tsp booked, zero-macro. Board 7 of 7."
+    },
+    {
+      "source_raw": "Salt and pepper to taste (pepper half)",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 2.3,
+      "buy": "black pepper, to taste (about 1 tsp)",
+      "optional": true,
+      "decision": "mapped",
+      "notes": "Nominal 1 tsp = 2.3 g, 6 cal batch. Board 7 of 7."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 465, "protein_g": 60, "carbs_g": 9, "fat_g": 19 },
+    "computed_per_serving": { "calories": 467.5, "protein_g": 55.6, "carbs_g": 5.4, "fat_g": 24.9 },
+    "protein_gap_pct": -7.3,
+    "calorie_gap_pct": 0.5,
+    "verdict": "PASS: protein -7.3% (inside the 15% instrument) and calories +0.5% once the ruled frying-oil addition is included; without it the recompute is 408 cal (-12.3%), which is the fingerprint of the missing oil, not of a wrong portion. Fat runs +31% high and carbs -40% low against the published label, but the published label is internally loose (its own macros sum to ~447 cal against its printed 465) and protein is the instrument; the 200 g each-weight on the main protein is affirmatively supported by the published 60 g protein figure. Also note step 10 mentions parsley that is in no ingredient list; left out as garnish-only, zero stakes.",
+    "band_check": "computed 467.5 cal in [400, 650] PASS (67 above the floor, 182 below the ceiling); carbs 5.4 g <= 35 PASS. Caveat: WITHOUT the ruled oil the recipe sits at 408.0 cal, only 8 above the floor - if spec/QA strips the ruled addition, the floor margin nearly vanishes."
+  },
+  "board_defects_observed": [
+    "butter and paprika exist on BOTH boards' rule sets; this file books board='recipe' per the stated membership rule (id present in recipe-commodities.json), but creamy-tuscan-chicken-skillet booked both as 'weekly'. One convention should win at the gate; flagged, not silently harmonized."
+  ],
+  "densities_followups": []
+}

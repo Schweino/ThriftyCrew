@@ -1,0 +1,27 @@
+{
+  "slug": "low-carb-turkey-green-bean-casserole",
+  "name": "Low-Carb Turkey and Green Bean Cheddar Casserole",
+  "protein": "turkey",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "fit": {
+    "status": "FIT",
+    "cal": 416,
+    "carbs": 12.5,
+    "evidence": "416 cal sits inside the 400-650 band (near the floor; the excluded optional walnuts push it toward ~470), 12.5g carbs clears the <=35g cap, no seafood, budget meal-prep casserole that scales to 14 by weigh-and-divide."
+  },
+  "dupe_check": {
+    "catalog_dupe": null,
+    "evidence": "No live-catalog dupe: the only two green-bean turkey dishes in the 544-recipe digest (middle-eastern-turkey-green-bean-stew, persian-turkey-loobia-polo) are both rice-based stews/pilafs, a different dish from a rice-free baked cheddar casserole; turkey-divan-broccoli-rice-bake shares cheddar+mayo+bake but is broccoli and rice-based.",
+    "nearest_accepted": "keto-turkey-broccoli-cheddar-casserole (accepted this run)",
+    "nearest_analysis": "4-axis: protein turkey=turkey (MATCH, but ground vs leftover whole-muscle), method oven-bake=oven-bake (MATCH), starch none/none (N/A), sauce/flavor family DIFFERS clearly - the accepted one is a savory heavy-cream+cheddar comfort bake, this candidate is a mayo-bound Thanksgiving-leftover casserole with sugar-free cranberry sauce + goat cheese + walnuts (sweet-tangy-nutty axis) on green beans not broccoli. Only 2 of 4 axes match and both the vegetable and the entire flavor family genuinely distinguish the plate, so it clears the 3-of-4 dupe bar."
+  },
+  "borderline": {
+    "flag": true,
+    "note": "Two turkey oven-baked cheddar casseroles landing in the same run (this + accepted keto-turkey-broccoli-cheddar-casserole) is structurally adjacent even though the plates differ. Flagging so the decider can confirm the catalog wants both; my read is KEEP because the cranberry/goat-cheese/walnut leftover-Thanksgiving profile + green beans is a distinct dinner, not a broccoli-cheddar variant."
+  },
+  "cross_protein_collisions": [
+    "The 'protein + green vegetable + cheddar, mix-and-bake casserole' template would be the same dish in another protein - a chicken green-bean or broccoli cheddar casserole in the chicken selector's pool would be a same-dish-different-protein twin (accepted chicken-bacon-ranch-cauliflower-bake is a cousin but distinct via ranch/bacon/cauliflower). Decider should run the cross-protein merge against any chicken/beef cheddar-veg bake.",
+    "The cranberry + goat cheese + walnut 'Thanksgiving leftovers' signature is fairly unique and less likely to collide across proteins."
+  ]
+}

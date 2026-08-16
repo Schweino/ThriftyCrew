@@ -1,0 +1,25 @@
+{
+  "slug": "apple-cider-baked-chicken-cabbage",
+  "name": "Apple Cider Baked Chicken and Cabbage",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 418,
+    "carbs": 20,
+    "within_400_650_cal": true,
+    "within_35g_carb": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "note": "Published 418 cal / 20g carb clears both bands; ruling on published numbers, source-flagged low-cal-floor drift risk is not disqualifying."
+  },
+  "dupe_check": {
+    "catalog": "No catalog dupe. Closest is 'Chicken Normandy (Apple Cider Braised Chicken)' (chicken-normandy-apple-cider) which shares chicken+apple-cider but is a creamy French braise (cream/mushroom, no cabbage) versus this rustic Dijon oven bake with red cabbage and apple wedges - different dinner (method braise-vs-bake, sauce creamy-vs-Dijon-cider-vinegar, cabbage present only here). 'Dak Galbi' shares chicken+cabbage but is a Korean gochujang skillet - unrelated flavor family.",
+    "accepted_slugs": "No collision with this run's accepted bakes (chicken-bacon-ranch-cauliflower-bake, jalapeno-popper-chicken-casserole are cheese/cauliflower bakes, not cider/cabbage)."
+  },
+  "cross_protein_collision_notes": [
+    "Catalog 'Sausage, Cabbage and Apple Skillet' (sausage-cabbage-apple-skillet) is the same cabbage+apple flavor combo in a different protein/method - decider should confirm no pool candidate re-runs that combo as sausage/pork.",
+    "Braised-or-baked meat + cabbage + apple is a Central/European rustic template; a pork, sausage, or turkey 'cabbage and apple' candidate in another selector's pool would be structurally the same plate - flag for cross-protein merge."
+  ],
+  "borderline": false,
+  "evidence_one_line": "KEEP - no catalog dupe; nearest is Chicken Normandy (creamy cider braise, no cabbage) which is a distinct dinner from this Dijon apple-cider oven bake of chicken with red cabbage and apple."
+}

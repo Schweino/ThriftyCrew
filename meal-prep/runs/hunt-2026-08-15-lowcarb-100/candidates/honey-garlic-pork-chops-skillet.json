@@ -1,0 +1,27 @@
+{
+  "name": "Honey Garlic Pork Chops Skillet",
+  "slug": "honey-garlic-pork-chops-skillet",
+  "protein": "pork",
+  "cuisine": "American",
+  "method": "skillet",
+  "source_url": "https://www.wholesomeyum.com/keto-pork-chops/",
+  "source_servings": 4,
+  "src_cal": 483,
+  "src_carbs": 7,
+  "src_protein": 49,
+  "src_fat": null,
+  "ingredients_verbatim": [
+    "4 8-oz boneless pork chops (1 inch thick)",
+    "1 tsp sea salt",
+    "1/2 tsp black pepper",
+    "2 tbsp olive oil",
+    "2 tbsp unsalted butter",
+    "3 cloves garlic, minced",
+    "1/4 cup Wholesome Yum Zero Sugar Honey",
+    "3 tbsp reduced sodium chicken broth",
+    "1 tbsp apple cider vinegar"
+  ],
+  "unmapped": ["Wholesome Yum Zero Sugar Honey (branded keto sweetener - rebuild on real honey; honey itself may have no board id, flag for pricer lane)"],
+  "why": "Whole-muscle boneless pork chops pan-seared and finished in a honey-garlic-butter pan glaze - no starch base, structurally low-carb. Published nutrition 483 cal / 7.1g total carbs / 49g protein per serving sits mid-band (400-650 cal, <=35g carb). CAVEAT: the source hits 7g carbs by using a branded zero-sugar honey; rebuilt on real honey the glaze adds roughly 12g carbs/serving (~19g total) and ~60 cal (~543 cal) - both still comfortably inside the band. Skillet dish, scales to 14, weigh-and-divide-friendly. Distinct concept (sweet-savory glaze) from all taken creamy/gravy pork chops. Board covers pork-chops, olive-oil, butter, garlic, chicken-broth, apple-cider-vinegar; honey/keto-sweetener flagged.",
+  "confidence": "medium-high - published nutrition read directly (483 cal, 7.1g carb, 49g protein), but those numbers rely on a zero-sugar honey substitute; real-honey rebuild shifts macros upward (est ~543 cal / ~19g carb), still in band"
+}

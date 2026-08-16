@@ -1,0 +1,15 @@
+{
+  "slug": "slow-cooker-beef-short-ribs",
+  "name": "Slow Cooker Braised Beef Short Ribs",
+  "protein": "beef",
+  "lane": "beef-slow",
+  "verdict": "KEEP",
+  "condition_fit": "FIT",
+  "condition_evidence": "533 cal / 9g carb / 50g protein per serving - inside 400-650 cal and well under the 35g carb ceiling; no seafood; slow-cooker braise, no starch base, scales to 14 by weigh-and-divide.",
+  "dupe_of": null,
+  "dupe_evidence": "Not a catalog duplicate. No short-rib braise exists in the 544-recipe catalog; nearest neighbors share at most 2 of 4 - classic-beef-stew and slow-cooker-pot-roast are chunk/chuck braises bodied with potato+carrot (starch and cut differ), french-onion-pot-roast is a wine-free beef-stock onion braise, balsamic-beef-pot-roast uses balsamic on chuck. This is a broth+worcestershire+tomato-paste American braise on short ribs, a distinct cut and sauce base.",
+  "cross_protein_collision_watch": "Low - short ribs are a beef-specific cut; no clean same-dish twin in another protein.",
+  "pool_collision_watch": "BORDERLINE POOL COLLISION with slow-cooker-red-wine-beef-cheeks (already KEEP in this selected dir). Both are slow-cooker braised beef in a dark savory sauce with no starch base, matching on protein + method + starch (3 of 4). That adjudicator's own verdict explicitly predicted 'a short-rib or beef-bourguignon red-wine braise in another selector's beef pool would be near-duplicate' - i.e. THIS candidate. Distinguishers: cut (short rib vs beef cheek) and sauce base (broth/worcestershire/tomato-paste American braise with wine optional-and-substitutable, vs a French red-wine reduction bourguignon). I am NOT resolving this - flagging for the decider's cross-item merge. If only one braised-beef-in-brown-sauce plate survives, beef-cheeks fills the scarcer French cuisine while short-ribs is American (a cuisine the catalog already over-indexes), so beef-cheeks is the likely stronger keep; this short-rib candidate is the more probable cut if the decider drops one.",
+  "unmapped_note": "Carries unmapped beef-short-ribs (board has chuck/ribeye/sirloin, no short-rib home), red-wine, dried-thyme/rosemary, bay-leaves; per v2.1 5.1 wanted pricer-lane signals, not penalties.",
+  "borderline": true
+}

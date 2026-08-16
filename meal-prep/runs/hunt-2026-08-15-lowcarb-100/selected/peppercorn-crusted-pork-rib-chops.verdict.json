@@ -1,0 +1,22 @@
+{
+  "slug": "peppercorn-crusted-pork-rib-chops",
+  "name": "Peppercorn-Crusted Pork Rib Chops",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "src_cal": 469,
+    "src_carbs": 2,
+    "band_ok": true,
+    "carb_ok": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "note": "469 cal is inside 400-650; 2g carbs is well under 35g; no seafood; sear chops in batches and weigh-divide to 14 servings."
+  },
+  "dupe_of": null,
+  "evidence": "Not a duplicate: every pork-chop dish in the 118-recipe pork catalog is sauced, smothered, creamy, cheesed, casseroled, or served over rice/pasta/potatoes (creamy-garlic-herb-wine-pork-chops [accepted this run], creamy-mushroom-pork-chops-over-mashed-potatoes, southern-smothered-pork-chops-and-rice, marry-me-pork-chops-over-pasta, panseared-pork-chops-with-cajun-dirty-rice, hong-kongstyle-baked-pork-chop-rice, etc.); this is a bare dry peppercorn-crusted (au-poivre-style) pan sear with no sauce and no starch base, sharing only protein+pan-sear method (1-2 of 4 identity axes) with the closest catalog chop, so it is a genuinely distinct plate and no peppercorn/au-poivre pork exists in the catalog.",
+  "cross_protein_watch": "Structurally identical to a dry peppercorn-crusted / au-poivre pan-seared protein in any other lane. The decider should specifically check the BEEF lane for a steak au poivre / peppercorn-crusted steak, and secondarily any peppercorn-crusted chicken or turkey cutlet, since those would be the same dish with the protein swapped.",
+  "selection_flags": {
+    "thinness": "Bare seared protein with no vegetable or sauce component; band-fit and dedup are solid but the selector may judge it thin for a composed meal-prep dinner. Flagging, not resolving.",
+    "unmapped": "green and pink peppercorns intentionally unmapped (no peppercorn/whole-pepper id on the board) - a deliberate pricer-lane test item per v2.1 5.1, not a penalty."
+  }
+}

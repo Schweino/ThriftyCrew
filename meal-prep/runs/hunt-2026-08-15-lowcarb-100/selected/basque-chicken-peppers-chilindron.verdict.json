@@ -1,0 +1,19 @@
+{
+  "slug": "basque-chicken-peppers-chilindron",
+  "name": "Basque Chicken and Peppers (Pollo al Chilindron)",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 452.5,
+    "carbs": 6.6,
+    "in_band": true,
+    "note": "452.5 cal within 400-650; 6.6g carb well under 35g ceiling; no seafood; bone-in-thigh braise scales to 14 by weigh-and-divide from the pot."
+  },
+  "dupe_check": {
+    "catalog": "Not a duplicate. Closest catalog chicken dishes are Slow Cooker Chicken Cacciatore Pasta (Italian herb-tomato braise over penne with mushrooms - starch base + different flavor family), Hungarian Chicken Paprikash (creamy sour-cream paprika over egg noodles - no peppers, no tomato-pepper base), and Puerto Rican Pollo Guisado (Caribbean sofrito/sazon stew with potatoes and olives). Shares only chicken+tomato+peppers with cacciatore (2 of 4); sauce family (Spanish smoked-paprika + jamon + white wine) and no-starch plate make it a distinct dinner.",
+    "accepted_slugs": "No collision - accepted chicken slugs are tuscan skillet, bacon-ranch cauliflower bake, french fricassee, burmese dal curry, jalapeno-popper casserole, chicken marsala; none is a Spanish/Basque tomato-pepper braise."
+  },
+  "cuisine_value": "Fills a Basque/Spanish gap the catalog lacks (catalog skews American/Tex-Mex); widens spread.",
+  "cross_protein_collisions": "Structurally a paprika-tomato-pepper braise. Watch for same-dish-different-protein twins in other selectors' pools: a pork/sausage 'peppers and onions' paprika braise (catalog already has Polish Leczo kielbasa-and-peppers and Szegedin pork goulash - different proteins, not this recipe's dupe but same skeleton), or a turkey 'sausage and peppers' braise. If another selector KEEPs a chicken tomato-pepper braise (cacciatore-style, chilindron-style) the decider should compare directly.",
+  "borderline": false
+}

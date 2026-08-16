@@ -1,0 +1,21 @@
+{
+  "slug": "creamy-garlic-herb-wine-pork-chops",
+  "name": "Creamy Garlic Herb Wine Pork Chops",
+  "protein": "pork-chop",
+  "verdict": "KEEP",
+  "fit": {
+    "in_band": true,
+    "cal": 497,
+    "carbs": 7,
+    "note": "497 cal within 400-650; 7g carbs well under 35g ceiling; no seafood; one-skillet weigh-and-divide scales to 14; budget meal-prep dinner. FIT."
+  },
+  "catalog_dupe_check": "Not a catalog duplicate. Closest catalog pork-chop is 'creamy-mushroom-pork-chops-over-mashed-potatoes' - same protein but different sauce family (mushroom cream vs garlic/herb white-wine cream) and different plate (served over mashed potato starch vs low-carb skillet, no starch); only protein+method match, so a distinct dinner. Other catalog chops (marry-me-pork-chops-over-pasta, southern-smothered, no-peek-rice, hong-kong, vietnamese-lemongrass) all carry a starch base and different sauce.",
+  "accepted_slugs_dupe_check": "Not a duplicate of anything in accepted-slugs.json; this slug IS itself accepted (line 14).",
+  "pool_collision_flags": [
+    "STRONG same-protein pool collision the decider must resolve: a sibling verdict 'creamy-garlic-herb-pork-chops' exists in the pool - same dish minus the wine (creamy garlic-herb pan sauce on pork chops). Three of four axes (protein+sauce family+method) match; wine is the only differentiator. Likely near-duplicate - flagging for the decider's merge, not resolving.",
+    "Softer collisions in pool: creamy-parmesan-garlic-pork-chops-skillet, creamy-parmesan-pork-chops-skillet, creamy-tuscan-pork-chops, cheese-smothered-pork-chops - all creamy-sauce pork-chop skillets; decider should confirm the run is not shipping a cluster of creamy-pork-chop near-twins."
+  ],
+  "cross_protein_collision_flags": [
+    "Structurally a creamy garlic-herb white-wine cream skillet; could collide with a chicken or turkey version of the same sauce (e.g. creamy-garlic-chicken-skillet / creamy-garlic-parmesan-chicken-skillet already in pool differ by sauce detail but share the creamy-garlic-skillet frame). Decider should check for a same-sauce chicken/turkey twin."
+  ]
+}

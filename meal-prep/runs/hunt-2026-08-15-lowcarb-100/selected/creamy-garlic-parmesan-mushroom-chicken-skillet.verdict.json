@@ -1,0 +1,16 @@
+{
+  "slug": "creamy-garlic-parmesan-mushroom-chicken-skillet",
+  "name": "Creamy Garlic Parmesan Mushroom Chicken Skillet",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "ok": true,
+    "cal": 569,
+    "carbs": 7,
+    "notes": "569 cal in 400-650 band; 7g carb well under 35g; no seafood; chicken breast in a pan sauce scales to 14 by weigh-and-divide."
+  },
+  "dupe_evidence": "Not a duplicate. Closest catalog dish is slow-cooker-creamy-chicken-mushroom-bowls, but that is a slow-cooker rice bowl built on a cream-cheese/greek-yogurt/broth sauce (starch base, high-carb format), whereas this is a low-carb stovetop skillet on a heavy-cream + parmesan + garlic sauce with no starch - sauce family, method, and starch all differ (only protein+mushroom overlap). Distinct from accepted chicken-marsala-skillet (marsala wine), creamy-tuscan-chicken-skillet (spinach/sun-dried tomato), and french-chicken-fricassee (white-wine cream braise) - this is a wine-free parmesan-forward mushroom cream.",
+  "cross_protein_collision": "Structurally a generic creamy garlic-parmesan mushroom cream skillet; the same plate could appear under pork (note catalog already has creamy-mushroom-pork-chops-over-mashed-potatoes, but that carries a mashed-potato starch base) or turkey/pork-chop candidates in other selectors' pools. Decider should check for a same-sauce, no-starch pork-chop or turkey-cutlet twin.",
+  "cuisine": "American",
+  "unmapped_count": 0
+}

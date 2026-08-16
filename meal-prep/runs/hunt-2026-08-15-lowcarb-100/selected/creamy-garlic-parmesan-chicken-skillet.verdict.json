@@ -1,0 +1,12 @@
+{
+  "slug": "creamy-garlic-parmesan-chicken-skillet",
+  "name": "Creamy Garlic Parmesan Chicken Skillet",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "fit_evidence": "457 cal (within 400-650) and 5 g carbs (<=35) per serving, no seafood, single-skillet sear-then-sauce scales cleanly to 14 by weigh-and-divide, budget meal-prep dinner.",
+  "dupe_evidence": "No catalog duplicate: closest chicken recipes are 'Parmesan Garlic Sheet-Pan Chicken Thighs and Potatoes' (sheet-pan thighs + potatoes + mayo, not a cream-sauce skillet) and 'Creamy Chicken and Gnocchi Skillet' (gnocchi starch + spinach); neither is a starch-free garlic-parmesan cream pan-seared chicken breast.",
+  "pool_note": "Distinct from the one accepted pool slug creamy-tuscan-chicken-skillet: same creamy chicken-breast skillet chassis but different flavor family (garlic-parmesan cream vs Tuscan sun-dried-tomato + spinach). Borderline-adjacent on the cream-base axis; flagging so the decider confirms the two creamy-chicken skillets are wanted as distinct plates rather than near-dupes.",
+  "cross_protein_note": "The garlic-parmesan cream pan sauce is a protein-agnostic chassis; a 'creamy garlic parmesan pork chops' or turkey/steak-bites version could plausibly sit in another selector's pool as the structurally identical dish minus the protein. Decider should check pork/turkey pools for a garlic-parmesan cream skillet twin.",
+  "borderline": true
+}

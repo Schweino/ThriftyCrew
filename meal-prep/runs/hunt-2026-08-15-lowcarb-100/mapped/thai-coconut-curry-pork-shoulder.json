@@ -1,0 +1,360 @@
+{
+  "slug": "thai-coconut-curry-pork-shoulder",
+  "title": "Instant Pot Thai Pork Coconut Curry (Low Carb, Paleo, Whole30)",
+  "source_url": "https://yummyforadam.ca/instant-pot-thai-pork-coconut-curry/",
+  "source_servings": 8,
+  "target_servings": 14,
+  "scale_factor": 1.75,
+  "protein": "pork",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or flagged USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift over 5% noted per line.",
+  "ruled_substitutions": [
+    {
+      "from": "1 tablespoon turmeric root, optional (paste)",
+      "to": "Ground Turmeric, 1 3/4 tsp scaled",
+      "basis": "Fresh turmeric root is carried by no board commodity and no Omaha capture; ground turmeric is the house pantry equivalent at the standard 1 tbsp fresh = 1 tsp dried conversion. OPTIONAL line, macro stakes ~16 cal across the whole 14-serving batch, so the fresh-vs-dried per-gram difference is immaterial. The fresh-is-not-dried standing rejection is about pricing a fresh line through a dried commodity; here the ingredient itself is substituted and the printed line says so."
+    }
+  ],
+  "registrar_rulings": [
+    {
+      "proposed_id": "thai-chiles",
+      "for_item": "Thai Chiles",
+      "status": "PENDING - proposal drafted, registrar not yet consulted (mapper lane cannot invoke the registrar agent; orchestrator must route it). Same proposal context as burmese-chicken-dal-curry, where the term was optional; here it is BLOCKING."
+    },
+    {
+      "proposed_id": "cardamom-pods",
+      "for_item": "Cardamom Pods",
+      "status": "PENDING - proposal drafted, registrar not yet consulted; item maps null meanwhile (pantry-static, safe)."
+    },
+    {
+      "proposed_id": "creamed-coconut",
+      "for_item": "Creamed Coconut",
+      "status": "PENDING - proposal drafted, registrar not yet consulted; item maps null meanwhile. NOTE for pricer/registrar: the source's own notes sanction fallbacks if not carried ('you can use coconut cream, more full fat coconut milk'), so a not-carried verdict here should trigger a substitution decision, not an automatic recipe rejection."
+    }
+  ],
+  "ingredients": [
+    {
+      "source_raw": "1 large onion roughly chopped (paste)",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 262.5,
+      "buy": "1 3/4 large onions, roughly chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities large = 150 g. Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "1 large bell pepper red or green (paste)",
+      "item": "Green Bell Peppers",
+      "bid": "bell-peppers",
+      "board": "weekly",
+      "grams": 210,
+      "buy": "1 3/4 large green bell peppers",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Source allows red OR green; green chosen (cheaper class, and the bell-peppers commodity's cheapest cells are all green bell peppers - Fareway $0.77/each, 6 of 7 stores - so the price class matches the pick). The ingredient-map's legacy board_id green-bell-pepper no longer exists on the board (flagged below); the live id is bell-peppers. densities Green Bell Peppers has each = 120 but NO large weight (FLAGGED); booked at each = 120, which understates a true large (~150 g) - macro stakes ~7 cal/serving batch-wide, conservative direction for the ceiling."
+    },
+    {
+      "source_raw": "5-6 whole Thai chili peppers red or green (paste)",
+      "item": "Thai Chiles",
+      "bid": null,
+      "board": null,
+      "grams": 50,
+      "buy": "10 whole thai chiles",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "BLOCKING heat line (transcribed optional:false; the paste is the dish). bid null: price-ingredient ABSENT, no commodity claims the term; serrano is not thai (variety precedent). Term 'thai chiles' enqueued BLOCKING; the queue already carries it as optional from burmese-chicken-dal-curry and dedupes by term. Source range 5-6 booked at midpoint 5.5 x 1.75 = 9.6 quantized to 10 (+4%); per-chile 5 g flagged (no thai-specific USDA portion; 20 cal across the batch). Existing food-DB row (USDA generic hot red chili, disclosed)."
+    },
+    {
+      "source_raw": "5 cloves garlic (paste)",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 27,
+      "buy": "9 cloves garlic",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities clove = 3 g; exact 8.75 quantized to 9 (+2.9%). Board 5 of 7, cheapest Baker's $0.498/each."
+    },
+    {
+      "source_raw": "1 cup cilantro roughly chopped (paste)",
+      "item": "Fresh Cilantro",
+      "bid": "cilantro",
+      "board": "weekly",
+      "grams": 28,
+      "buy": "1 3/4 cups cilantro, roughly chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities cup = 16 g. Board 5 of 7, cheapest Aldi $0.89/each."
+    },
+    {
+      "source_raw": "2 large lemongrass stalks finely chopped (paste)",
+      "item": "Lemongrass Paste",
+      "bid": "lemongrass-paste",
+      "board": "weekly",
+      "grams": 42,
+      "buy": "3 1/2 large lemongrass stalks, finely chopped (or 3 1/2 tbsp lemongrass paste)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Estate books lemongrass stalks against the Lemongrass Paste item (densities carries stalk = 12 under it); no 'large' stalk weight (FLAGGED, booked at stalk = 12). Board 2 of 7, cheapest Baker's $1.2475/oz. Macro caveat: the DB row is the Gourmet Garden paste label (3 cal/g); fresh stalk is ~1 cal/g, so the 54 g of lemongrass across both sections overstates by roughly 100 cal per batch (~7 cal/serving), conservative toward the ceiling."
+    },
+    {
+      "source_raw": "2 tablespoons fresh ginger peeled and chopped (paste)",
+      "item": "Ginger",
+      "bid": "fresh-ginger",
+      "board": "weekly",
+      "grams": 21,
+      "buy": "3 1/2 tbsp fresh ginger, peeled and chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities tbsp = 6 g. Board 6 of 7, cheapest Walmart $3.6255/lb."
+    },
+    {
+      "source_raw": "1 tablespoon turmeric root optional (paste)",
+      "item": "Ground Turmeric",
+      "bid": "ground-turmeric",
+      "board": "weekly",
+      "grams": 5.25,
+      "buy": "1 3/4 tsp ground turmeric (substituted for 1 3/4 tbsp fresh turmeric root, optional)",
+      "optional": true,
+      "decision": "mapped",
+      "notes": "Ruled substitution (see ruled_substitutions): fresh turmeric root carried nowhere on the board or in captures; optional line, ~16 cal per batch. densities tsp = 3 g. Board 7 of 7, cheapest Sam's Club $0.399/oz."
+    },
+    {
+      "source_raw": "3 Tablespoons coconut oil",
+      "item": "Coconut Oil",
+      "bid": "coconut-oil",
+      "board": "weekly",
+      "grams": 71.4,
+      "buy": "5 1/4 tbsp coconut oil",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "NEW food-DB row (USDA Oil, coconut, mirror-verified; fat-only 892 cal/100 g). densities has NO coconut-oil row (FLAGGED); oil-class tbsp = 13.6 g used. Board 7 of 7, cheapest Sam's Club $0.1952/oz."
+    },
+    {
+      "source_raw": "1/2 cup aromatic curry paste recipe below",
+      "item": null,
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "1/2 cup aromatic curry paste (from the paste section above; the section yields extra - see notes)",
+      "optional": false,
+      "decision": "sub-recipe-reference",
+      "notes": "Not a purchasable line; the Aromatic Curry Paste section ingredients above ARE this line. FULL paste booked for cost and macros: the section's printed quantities blend to roughly 1.5 cups and the pot takes 1/2 cup, so booked macros overstate the pot by ~370 cal per scaled batch (~26 cal/serving); pot-true per-serving is ~406 cal vs the booked 432, BOTH inside the run's [400, 650] band. Source notes confirm the paste 'makes more than you need' and keeps for other uses; the cook still buys and makes all of it, so cost must cover the full section."
+    },
+    {
+      "source_raw": "1/2 tsp salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 6,
+      "buy": "1 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 0.875 tsp printed as 1 tsp (+14%, zero-macro, noted). densities tsp = 6 g. Board 7 of 7, cheapest Aldi $0.0304/oz."
+    },
+    {
+      "source_raw": "2 pounds pork shoulder cubed",
+      "item": "Pork Shoulder",
+      "bid": "pork-shoulder",
+      "board": "weekly",
+      "grams": 1587.6,
+      "buy": "3 1/2 lb pork shoulder, cubed",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein on an ABSOLUTE weight (no each-weight assumption available to get wrong - the florentine failure mode does not apply). 2 lb x 1.75 = 3.5 lb = 1587.6 g raw; DB row is USDA raw Boston butt (186 cal / 17.4 P per 100 g). See macro_cross_check: the source's published 29.9 g protein/serving is IMPOSSIBLE from 907 g raw pork (max ~21.6 g/serving) and back-computes exactly to a cooked-basis entry of the same 2 lb; our raw booking is the physically correct one. Board 7 of 7, cheapest Sam's Club $1.94/lb."
+    },
+    {
+      "source_raw": "1/2 teaspoon cayenne optional",
+      "item": "Cayenne Pepper",
+      "bid": "cayenne-pepper",
+      "board": "weekly",
+      "grams": 1.35,
+      "buy": "3/4 tsp cayenne (optional)",
+      "optional": true,
+      "decision": "mapped",
+      "notes": "Exact 0.875 tsp quantized to 3/4 tsp (-14%, spice-immaterial). densities tsp = 1.8 g. Board 6 of 7, cheapest Hy-Vee $0.4167/oz."
+    },
+    {
+      "source_raw": "1 tablespoon paprika",
+      "item": "Paprika",
+      "bid": "paprika",
+      "board": "recipe",
+      "grams": 12.1,
+      "buy": "1 3/4 tbsp paprika",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities tbsp = 6.9 g. Board 7 of 7, cheapest Walmart $0.432/oz. board 'recipe' per the membership rule (id present in recipe-commodities.json); earlier mapped files vary on this id, see board_defects_observed."
+    },
+    {
+      "source_raw": "2-3 whole Thai chillies red or green",
+      "item": "Thai Chiles",
+      "bid": null,
+      "board": null,
+      "grams": 22.5,
+      "buy": "4 or 5 whole thai chiles",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "Second thai-chile line (main pot). Midpoint 2.5 x 1.75 = 4.375 booked as 4.5 chiles = 22.5 g at the flagged 5 g each. Same enqueued blocking term as the paste line; one term covers both."
+    },
+    {
+      "source_raw": "4 whole cardamom pods green or black",
+      "item": "Cardamom Pods",
+      "bid": null,
+      "board": null,
+      "grams": 3.5,
+      "buy": "7 whole cardamom pods",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "bid null: price-ingredient ABSENT on board and captures. Term 'cardamom pods' enqueued BLOCKING. NEW food-DB row (USDA Spices, cardamom, mirror-verified; spice-exempt class). Pod ~ 0.5 g (FLAGGED, no densities row); 11 cal across the batch."
+    },
+    {
+      "source_raw": "1 teaspoon coriander heaping",
+      "item": "Ground Coriander",
+      "bid": "ground-coriander",
+      "board": "weekly",
+      "grams": 3.15,
+      "buy": "1 3/4 tsp ground coriander, heaping",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities tsp = 1.8 g; 'heaping' left as printed, spice-immaterial. Board 4 of 7, cheapest Walmart $0.7331/oz."
+    },
+    {
+      "source_raw": "1 tablespoon black pepper",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 12.1,
+      "buy": "1 3/4 tbsp black pepper",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Reads high but transcribed as printed (extractor concern noted the same). densities tbsp = 6.9 g. Board 7 of 7, cheapest Hy-Vee $0.4167/oz."
+    },
+    {
+      "source_raw": "1 tablespoon ginger julienned",
+      "item": "Ginger",
+      "bid": "fresh-ginger",
+      "board": "weekly",
+      "grams": 10.5,
+      "buy": "1 3/4 tbsp fresh ginger, julienned",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities tbsp = 6 g. Same commodity as the paste ginger line."
+    },
+    {
+      "source_raw": "1 stalk lemon grass finely chopped",
+      "item": "Lemongrass Paste",
+      "bid": "lemongrass-paste",
+      "board": "weekly",
+      "grams": 21,
+      "buy": "1 3/4 stalks lemongrass, finely chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 1.75 stalks x densities stalk 12 g = 21 g, agreeing with the printed measure by construction. Same commodity as the paste-section lemongrass line."
+    },
+    {
+      "source_raw": "1 can full fat coconut milk",
+      "item": "Coconut Milk",
+      "bid": "coconut-milk-canned",
+      "board": "weekly",
+      "grams": 700,
+      "buy": "1 3/4 cans (24 1/2 floz) full-fat coconut milk",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities can = 400 g. DB row is the Thai Kitchen FULL-FAT label. Board 5 of 7, cheapest Walmart $0.1358/floz."
+    },
+    {
+      "source_raw": "water (a cup or two, to almost cover)",
+      "item": null,
+      "bid": null,
+      "board": null,
+      "grams": 591,
+      "buy": "2 1/2 cups water, or enough to almost cover the pork",
+      "optional": false,
+      "decision": "mapped-free",
+      "notes": "Zero-cost, zero-macro. Source states no quantity ('a cup or two'); midpoint 1.5 cups x 1.75 = 2.625 quantized to 2.5 cups."
+    },
+    {
+      "source_raw": "4 tablespoons creamed coconut see notes",
+      "item": "Creamed Coconut",
+      "bid": null,
+      "board": null,
+      "grams": 105,
+      "buy": "7 tbsp creamed coconut, chopped",
+      "optional": false,
+      "decision": "mapped-null",
+      "notes": "bid null: price-ingredient ABSENT on board and captures. Term 'creamed coconut' enqueued BLOCKING. NEW food-DB row (USDA desiccated unsweetened coconut, the same 100%-coconut food milled to a block; mirror-verified 659 cal/100 g). tbsp = 15 g chopped block MED conf (FLAGGED, no densities row); at 105 g this line is 692 cal of the batch (~49 cal/serving), the single largest macro uncertainty in the recipe. Source note sanctions coconut cream or more full-fat coconut milk if not carried - recorded for the pricer in registrar_rulings."
+    },
+    {
+      "source_raw": "1/4 cup lime/lemon juice",
+      "item": "Lime Juice",
+      "bid": "limes",
+      "board": "weekly",
+      "grams": 105,
+      "buy": "7 tbsp lime juice (about 3 1/2 limes)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Lime chosen of the lime/lemon pair (thai profile; both carried). densities tbsp = 15 g. Board 4 of 7, cheapest Baker's $0.69/each."
+    },
+    {
+      "source_raw": "1/4 cup cilantro to garnish",
+      "item": "Fresh Cilantro",
+      "bid": "cilantro",
+      "board": "weekly",
+      "grams": 8,
+      "buy": "1/2 cup cilantro, to garnish",
+      "optional": true,
+      "decision": "mapped",
+      "notes": "OPTIONAL garnish. Exact 0.4375 cup quantized to 1/2 cup (+14%, herb-immaterial). densities cup = 16 g."
+    },
+    {
+      "source_raw": "toasted coconut optional topping",
+      "item": null,
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "toasted coconut, optional topping, to taste",
+      "optional": true,
+      "decision": "omitted-serving-suggestion",
+      "notes": "No quantity printed anywhere in the source; unquantifiable serving suggestion booked at 0 g, not enqueued (a garnish with no amount cannot be priced or counted honestly). Not a blocking term."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Coconut Oil (USDA Oil, coconut, per 100 g: 892 cal / 0 P / 0 C / 99.1 F; mirror-verified 2026-08-16)",
+    "Creamed Coconut (USDA desiccated unsweetened coconut meat, per 100 g: 659 cal / 6.9 P / 23.6 C / 64.5 F; shared record disclosed; mirror-verified 2026-08-16)",
+    "Cardamom Pods (USDA Spices, cardamom, per 100 g: 310 cal / 10.8 P / 68.5 C / 6.7 F; spice-exempt; mirror-verified 2026-08-16)"
+  ],
+  "pricing_terms_needed": [
+    { "term": "thai chiles", "blocking": true, "why": "paste + pot heat, 72.5 g scaled across two lines; ABSENT on board and captures; already queued optional by burmese-chicken-dal-curry, this recipe attaches as blocking" },
+    { "term": "cardamom pods", "blocking": true, "why": "7 whole pods; ABSENT on board and captures" },
+    { "term": "creamed coconut", "blocking": true, "why": "finishing coconut block, 105 g scaled; ABSENT on board and captures; source sanctions coconut cream / full-fat coconut milk fallback if not carried" }
+  ],
+  "new_commodity_proposals": [
+    { "proposed_id": "thai-chiles", "for_item": "Thai Chiles", "status": "flagged-for-registrar" },
+    { "proposed_id": "cardamom-pods", "for_item": "Cardamom Pods", "status": "flagged-for-registrar" },
+    { "proposed_id": "creamed-coconut", "for_item": "Creamed Coconut", "status": "flagged-for-registrar" }
+  ],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 548, "protein_g": 29.9, "carbs_g": 6.1, "fat_g": 44.1 },
+    "computed_per_serving": { "calories": 433.8, "protein_g": 21.7, "carbs_g": 10.9, "fat_g": 33.4 },
+    "protein_gap_pct": -27.4,
+    "calorie_gap_pct": -20.8,
+    "verdict": "BREAK EXPLAINED, CALLED OUT LOUDLY: protein -27.4% is outside the 15% instrument, so the main-protein line was re-examined as the rule demands. The pork line is an ABSOLUTE printed weight (2 lb cubed raw), so no each-weight assumption exists to correct. The source's 29.9 g/serving x 8 = 239 g protein is IMPOSSIBLE from 907 g raw pork shoulder (USDA raw max ~158 g, plus ~15 g from everything else = ~173 g total); 239 g back-computes almost exactly to the same 907 g entered as COOKED pork shoulder (USDA cooked ~25.7 P/100 g -> 233 g), a raw/cooked basis flip in the source's own calculator. Cubing happens raw, our raw booking is the physical recipe, and the source label is the number that is wrong. Calories (-21%) and fat (-24%) shift the same direction for the same reason. Carbs run higher than published because the full paste section and the creamed-coconut USDA basis are booked; both are disclosed per-line.",
+    "band_check": "computed 433.8 cal in [400, 650] PASS but with only 34 cal of floor margin - and the pot-true figure (paste overstatement removed, ~406 cal) passes by just 6 cal. If the pricer forces the creamed-coconut fallback to coconut milk, this recipe DROPS BELOW THE FLOOR (~385 cal). Spec lane must re-run the band after the creamed-coconut verdict lands. Carbs 10.6 g <= 35 PASS."
+  },
+  "board_defects_observed": [
+    "ingredient-map.json entries 'Green Bell Peppers' -> green-bell-pepper and 'Red Bell Pepper' (recipe board) reference a green-bell-pepper id that NO LONGER EXISTS in grocery\\commodities.json; the live weekly id is bell-peppers (its cells are green bells at 5 stores plus one yellow). Map needs repointing through the match-soundness gate; this file bids bell-peppers directly.",
+    "bell-peppers commodity mixes color classes in one bucket (green cells plus a Family Fare yellow at ~2x the green price); fine for green lines, unsound for premium colors - see the hatch casserole file for the yellow-line handling."
+  ],
+  "densities_followups": [
+    "Coconut Oil: no row; propose tbsp 13.6 / tsp 4.5 (oil class)",
+    "Creamed Coconut: no row; propose tbsp 15 (chopped block, MED conf)",
+    "Thai Chiles: no row; propose each 5 (also flagged by burmese-chicken-dal-curry)",
+    "Cardamom Pods: no row; propose each 0.5",
+    "Green Bell Peppers: no 'large' weight (each 120 only); propose large 150 to match the onion convention",
+    "Lemongrass Paste: no 'large stalk' weight (stalk 12); propose large 15"
+  ]
+}

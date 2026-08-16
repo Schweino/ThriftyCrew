@@ -1,0 +1,19 @@
+{
+  "slug": "braised-chicken-cacciatore",
+  "name": "Braised Chicken Cacciatore (Low-Carb Italian Chicken Stew)",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "cal": 495,
+    "carbs": 15,
+    "within_band": true,
+    "no_seafood": "flagged",
+    "note": "495 cal is inside 400-650; 15g carb clears the 35g cap; batch-scales cleanly in a pot to 14. SEAFOOD FLAG: recipe uses 3 anchovy fillets dissolved as an umami base (Italian-braise/Caesar convention), NOT as a seafood main; I read the 'no seafood' condition as excluding seafood DINNERS, so this passes as a chicken braise, but the decider should confirm it wants trace anchovy in a low-carb run."
+  },
+  "dupe_check": {
+    "vs_catalog": "NOT a duplicate of 'slow-cooker-chicken-cacciatore-pasta' (the only cacciatore in the 544-recipe digest): shares the cacciatore NAME and tomato-Italian sauce FAMILY, but only 2 of 4 axes match. Starch differs (this is a no-starch low-carb braise vs a penne-pasta dish), method differs (stovetop brown-then-simmer braise vs slow cooker), and the cut differs (bone-in thighs+drumsticks vs chicken breast). A pasta casserole and a low-carb braised stew are different dinners. No other tomato/red-wine braise in the accepted chicken set (fricassee=cream, marsala=marsala+mushroom no-tomato, tuscan=cream) collides.",
+    "vs_accepted_slugs": "read fresh; no cacciatore or tomato-braise present."
+  },
+  "cross_protein_collision_flag": "Cacciatore-style braise (protein browned then simmered in tomato/red-wine/kalamata-olive/mushroom/capsicum sauce) is a portable 'hunter's stew' pattern. Watch for a same-structure twin in another protein's pool - a pork cacciatore, turkey cacciatore, or a rabbit/chicken-thigh 'hunter's braise' would be structurally the same dinner. Decider should run the cross-protein merge against any tomato-red-wine-olive braise.",
+  "evidence": "Only cacciatore in catalog is the pasta-based slow-cooker version; this candidate is a distinct low-carb no-pasta stovetop braise, so it is a legitimate variation, not a near-duplicate."
+}

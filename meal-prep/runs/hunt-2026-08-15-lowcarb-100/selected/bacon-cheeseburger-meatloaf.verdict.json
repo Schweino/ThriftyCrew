@@ -1,0 +1,22 @@
+{
+  "slug": "bacon-cheeseburger-meatloaf",
+  "name": "Bacon Cheeseburger Meatloaf",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "conditions_check": {
+    "calories": 405,
+    "carbs_g": 2,
+    "in_calorie_band_400_650": true,
+    "carbs_le_35": true,
+    "scalable_to_14": true,
+    "no_seafood": true,
+    "fit": "PASS"
+  },
+  "dedupe_evidence": "Not a catalog dup: the nearest catalog meatloaf is turkey-meatloaf-with-mashed-potatoes (different protein + mashed-potato starch, no cheeseburger flavor), and the catalog cheeseburger dishes are cheeseburger-pasta and cheeseburger-rice-bowls (pasta/rice-bowl format, not a baked loaf); the oven-baked beef meatloaf + bacon/cheddar/sugar-free-BBQ cheeseburger flavor combination has no match in the digest or accepted-slugs.",
+  "flavor_family_neighbors_noted": "keto-cheeseburger-skillet (accepted) shares the cheeseburger flavor family but is a skillet, not a baked loaf with bacon + sugar-free BBQ glaze - distinct dish, flagged for decider awareness only.",
+  "cross_protein_collision_watch": "Could collide with a turkey version of the same dish - a 'turkey bacon cheeseburger meatloaf' would be structurally identical (loaf method + bacon/cheddar/BBQ cheeseburger flavor, protein swapped). Decider should check the turkey pool. Catalog already has turkey-meatloaf-with-mashed-potatoes but that is a different (plain, mashed-potato) turkey loaf.",
+  "pool_collision_watch": "Candidate's own note flags low-carb-beef-meatloaf.json in the pool (classic oat-bound ketchup-glaze loaf, 585 cal / 19g carb). Same protein + baked-loaf method (2 of 4), but different flavor family (cheeseburger/bacon/cheddar/sugar-free-BBQ vs plain ketchup glaze) and carb class (2g vs 19g, no oat binder). I judge them different dinners and KEEP this one; both are another adjudicator's / the decider's cross-check, flagged not resolved.",
+  "unmapped_ingredients": ["mustard-powder"],
+  "unmapped_note": "mustard-powder unmapped - not penalized per v2.1 section 5.1 (pricer-lane probe wanted).",
+  "confidence": "high on nutrition and catalog dedupe; pool collision with low-carb-beef-meatloaf flagged for decider."
+}

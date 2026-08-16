@@ -1,0 +1,26 @@
+{
+  "slug": "turkey-parmesan-meatball-bake",
+  "name": "Turkey Parmesan Meatball Bake",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": "FIT",
+  "conditions_check": {
+    "calories_per_serving": 466,
+    "carbs_per_serving": 9,
+    "net_carbs_per_serving": 7,
+    "cal_in_band_400_650": true,
+    "carbs_at_or_under_35": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "budget_meal_prep_dinner": true
+  },
+  "dupe_of": null,
+  "evidence": "No catalog meatball-parmesan bake exists; the nearest turkey neighbor 'turkey-meatball-marinara-pasta' shares protein + marinara but is a pasta dinner (different starch + method), and 'turkey-meatball-sub-bake' is a bread/sub format, so this cheese-blanketed no-pasta oven bake is a distinct low-carb plate.",
+  "borderline": false,
+  "cross_protein_collision_watch": [
+    "STRONG: the source recipe is literally a keto CHICKEN parmesan meatball recipe (sugarfreemom.com), rebuilt to turkey per the no-ground-chicken rule - a chicken 'parmesan meatball bake' or 'chicken parm meatball' candidate in the chicken pool is the SAME DISH with a different protein and should not co-ship with this.",
+    "MODERATE: any beef or pork 'meatball parmesan / marinara-and-mozzarella meatball bake' (no-pasta, cheese-blanketed) in another selector's pool is structurally this same plate.",
+    "NOTE: a classic breaded 'chicken parmesan' cutlet is NOT this dish (different form) - only the meatball-parmesan-bake variants collide."
+  ],
+  "notes": "Ground-chicken -> ground-turkey rebuild; optional almond-flour + frying oil dropped for the oven-bake path. Carries unmapped ingredients (marinara/board-home, fresh parsley, Italian seasoning, basil) - not penalized per v2.1 5.1 (pricer-lane exercise). Cuisine: Italian, widens catalog low-carb Italian beyond skillet/soup formats."
+}

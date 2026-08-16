@@ -1,0 +1,173 @@
+{
+  "slug": "keto-cheeseburger-skillet",
+  "title": "Keto Cheeseburger Casserole Skillet",
+  "source_url": "https://thebestketorecipes.com/one-pan-keto-bacon-cheeseburger-skillet/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "beef",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "'1 pound ground beef or ground turkey' is booked as BEEF (the cheeseburger title protein), 80/20 class (ground-beef-8020, 7 of 7 stores, cheapest Sam's $4.77/lb) with the NEW USDA 80/20 DB row - the same generic-term ruling as low-carb-taco-cabbage-beef-skillet in this batch, and again load-bearing for the floor: the house 93/7 row computes this dish to 394.6 cal, 5 cal UNDER the 400 floor. The source's own internally inconsistent label most closely matches 90/10 beef, a class no board commodity carries; 80/20 is the nearest carried class in the direction that keeps the dish honest about what the buy string tells the reader to buy. The turkey alternative is recorded, unpriced.",
+    "'1/2 cup chicken or beef broth' is booked as CHICKEN broth (listed first by the source; chicken-broth 7 of 7, cheapest Aldi $0.0373/floz). Beef-broth alternative recorded, unpriced; macro difference is under 2 cal per serving."
+  ],
+  "registrar_rulings": [],
+  "ingredients": [
+    {
+      "source_raw": "4 slices of bacon chopped into small pieces",
+      "item": "Hickory Smoked Bacon",
+      "bid": "bacon",
+      "board": "weekly",
+      "grams": 168,
+      "buy": "14 slices, chopped into small pieces",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 14 slices x densities 12 g/slice raw = 168 g (the estate's bacon slice basis, quiche-validated). Macros on the GV cooked-slice label (2 slices = 15 g = 90 cal) -> 45 cal/slice. Standing canon folds the retained tablespoon of bacon grease into this line - not a separate ingredient. Board 7 of 7, cheapest Sam's $3.784/lb."
+    },
+    {
+      "source_raw": "1 pound ground beef or ground turkey",
+      "item": "80/20 Ground Beef",
+      "bid": "ground-beef-8020",
+      "board": "weekly",
+      "grams": 1588,
+      "buy": "3 1/2 lb (80/20)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by explicit source WEIGHT (1 lb); exact 3.5x = 3.5 lb = 1588 g, zero drift. See ruled_substitutions for the beef + 80/20 class ruling. Board 7 of 7, cheapest Sam's $4.77/lb. DB row 80/20 Ground Beef (USDA SR 23572), added this batch."
+    },
+    {
+      "source_raw": "1/2 cup chopped onion about half of one small onion",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 201,
+      "buy": "1 3/4 cups chopped (about 2 medium)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 1.75 cups x densities 115 g/cup = 201 g. The source's own parenthetical ('half of one small onion' for 1/2 cup) is looser than the cup measure; the CUP governs (rule 0). Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "2 tablespoons tomato paste",
+      "item": "Tomato Paste",
+      "bid": "tomato-paste",
+      "board": "recipe",
+      "grams": 112,
+      "buy": "7 tbsp (a bit under 1/2 cup)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 7 tbsp x densities 16 g/tbsp = 112 g. Board 7 of 7, cheapest Walmart $0.1017/oz. GV label 30 cal / 2 tbsp."
+    },
+    {
+      "source_raw": "1 teaspoon mustard",
+      "item": "Yellow Mustard",
+      "bid": "mustard",
+      "board": "weekly",
+      "grams": 18,
+      "buy": "3 1/2 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Plain 'mustard' in a cheeseburger sauce = prepared yellow mustard, the mustard commodity's own product class (7 of 7, cheapest Aldi $0.0495/oz). exact 3.5x = 3.5 tsp x 5 g/tsp = 17.5 -> 18 g. NEW DB row Yellow Mustard (USDA prepared yellow, 60 cal/100 g; under 1 cal/serving here)."
+    },
+    {
+      "source_raw": "2 ounces cream cheese",
+      "item": "Cream Cheese",
+      "bid": "cream-cheese",
+      "board": "weekly",
+      "grams": 198,
+      "buy": "7 oz, softened",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "SUPERSEDED 2026-08-16 by Brad's ruling: this recipe is now built on the 1/3 Fat Cream Cheese (Great Value Neufchatel, 70 cal/28 g) row, NOT the full-fat USDA row this record originally chose. The recipe lands at 524 cal/serving, comfortably inside the 400-650 band, so the floor concern recorded below did not materialise. The original reasoning is kept for provenance: FULL-FAT brick cream cheese (this run's USDA row, 350 cal/100 g) - NOT the 1/3 Fat item, which would deflate a floor-marginal recipe further. exact 3.5x = 7 oz = 198 g; printed weight and grams agree. Board 7 of 7, cheapest Sam's $0.1381/oz."
+    },
+    {
+      "source_raw": "1/2 cup chicken or beef broth",
+      "item": "Chicken Broth",
+      "bid": "chicken-broth",
+      "board": "weekly",
+      "grams": 420,
+      "buy": "1 3/4 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 1.75 cups x densities 240 g/cup = 420 g. See ruled_substitutions for the chicken-first ruling. Board 7 of 7, cheapest Aldi $0.0373/floz. Swanson label 10 cal/cup."
+    },
+    {
+      "source_raw": "1/2 teaspoon onion powder",
+      "item": "Onion Powder",
+      "bid": "onion-powder",
+      "board": "weekly",
+      "grams": 4.2,
+      "buy": "1 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 1.75 tsp x densities 2.4 g/tsp = 4.2 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "1/2 teaspoon garlic powder",
+      "item": "Garlic Powder",
+      "bid": "garlic-powder",
+      "board": "weekly",
+      "grams": 5.4,
+      "buy": "1 3/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 1.75 tsp x densities 3.1 g/tsp = 5.4 g. Board 7 of 7, cheapest Walmart $0.216/oz."
+    },
+    {
+      "source_raw": "1/4 teaspoon salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 6,
+      "buy": "1 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 0.875 tsp quantized to 1 tsp (+14.3% drift, noted; zero-macro so harmless) = 6 g at densities 6 g/tsp. Board 7 of 7. (Philly precedent, identical numbers.)"
+    },
+    {
+      "source_raw": "1/4 teaspoon pepper",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 2,
+      "buy": "1 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact scale 0.875 tsp quantized to 1 tsp (+14.3% drift, noted; 6 cal/tsp, immaterial) = 2.3 -> 2 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 cup shredded cheddar cheese",
+      "item": "Cheddar Cheese, Shredded",
+      "bid": "cheddar-cheese-shredded",
+      "board": "recipe",
+      "grams": 396,
+      "buy": "3 1/2 cups shredded",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 3.5 cups x densities 113 g/cup = 395.5 -> 396 g. Full-fat GV label row (110 cal/28 g). Board via ingredient-map (cheddar-cheese-shredded, recipe)."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Yellow Mustard (USDA SR prepared yellow, per 100 g: 60 cal / 3.7 P / 5.8 C / 3.3 F; macro-immaterial at usage, row added for label-accuracy rather than borrowing the Dijon record)",
+    "80/20 Ground Beef (shared with low-carb-taco-cabbage-beef-skillet, listed there)"
+  ],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 423, "protein_g": 25, "carbs_g": 5.3, "fat_g": 27 },
+    "recomputed_per_serving_from_food_db": { "calories": 511.5, "protein_g": 29.5, "carbs_g": 5.4, "fat_g": 40.2 },
+    "protein_gap_pct": 17.9,
+    "calorie_gap_pct": 20.9,
+    "verdict": "EXPLAINED - the protein gap crosses 15% so the main protein line was re-examined per rule 6, and the portion survives: it is weight-anchored by the source (1 lb / 4 servings = 113.4 g raw), no each-weight assumption exists. The source's label is internally INCONSISTENT (4x25 + 9x27 + 4x5.3 = 364 cal against their stated 423, a 59 cal hole), so exact agreement is unavailable by construction. Their figures reproduce almost perfectly with 90/10 beef (recomputed 423.7 cal on our own rows) - a class no board commodity carries; our disclosed 80/20 ruling adds ~88 cal and ~11 g fat over that 90/10 basis, which is the entire calorie gap. Against a corrected 90/10-basis source protein (32.7 g), our 29.5 g reads -9.8%, inside tolerance. Carbs agree at 5.4 vs 5.3.",
+    "band_check": "computed 511.5 cal in [400, 650] PASS; carbs 5.4 g <= 35 PASS. With the 93/7 row instead the dish computes 394.6 cal and FAILS the floor by 5 cal - the 80/20 ruling is load-bearing, see ruled_substitutions. No optional lines."
+  },
+  "loud_flags": [
+    "The beef fat class decides this recipe's floor: 80/20 -> 511.5 PASS, 93/7 -> 394.6 FAIL (by 5 cal). Source's own (inconsistent) label sits between at ~90/10, a class the board does not carry. The 80/20 ruling is disclosed in ruled_substitutions; if the house prefers lean beef here, this recipe is a marginal floor-fail and should be re-based or dropped, not fudged.",
+    "Source macro set is internally inconsistent by 59 cal (documented in the cross-check); treat their published card as approximate."
+  ],
+  "board_defects_observed": [
+    "Same generic-term hole as the taco skillet: bare 'ground beef' resolves to no commodity despite two fully priced ground-beef ids on the board."
+  ]
+}

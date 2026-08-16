@@ -1,0 +1,21 @@
+{
+  "slug": "ground-turkey-taco-stuffed-peppers",
+  "name": "Ground Turkey Taco Stuffed Peppers",
+  "protein": "turkey",
+  "verdict": "KEEP",
+  "fit": {
+    "cal_per_serving": 438,
+    "carbs_per_serving": 13.7,
+    "cal_ok": true,
+    "carbs_ok": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "note": "438 cal is within 400-650; 13.7g carbs is well under 35g; scales by pepper count with weigh-and-divide filling."
+  },
+  "dupe_check": {
+    "catalog": "Not a duplicate. Closest is turkey-taco-casserole (same protein + taco flavor family) but that is a layered casserole built on tortillas + seasoned black beans + salsa + sour cream (a carb base), whereas this is a low-carb individual stuffed-pepper entree with no starch base - different format and starch, genuinely different plate. turkey-stuffed-pepper-soup is a rice soup with classic (worcestershire/parmesan) seasoning, not taco. turkey-taco-rice-skillet and turkey-taco-soup both carry rice and are skillet/soup formats. philly-cheesesteak-stuffed-peppers (accepted) shares only the stuffed-pepper vessel but is beef + cheesesteak flavor.",
+    "duplicate_of": null
+  },
+  "cross_protein_flag": "Structurally a taco-seasoned ground-meat-baked-in-bell-peppers dish. Decider should watch for a same-dish-different-protein twin in the BEEF pool (a 'ground beef taco stuffed peppers') or a chicken taco stuffed pepper - those would collide on flavor + vessel + method with only the protein differing.",
+  "borderline": false
+}

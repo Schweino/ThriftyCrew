@@ -1,0 +1,23 @@
+{
+  "slug": "chicken-zucchini-gruyere-casserole",
+  "name": "Chicken and Zucchini Gruyere Casserole",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "dupe_of": null,
+  "evidence": "No chicken zucchini cheese bake in catalog; nearest chicken neighbors chicken-divan-broccoli-bake (broccoli + divan cream, different veg/flavor) and slow-cooker-creamy-chicken-mushroom-bowls (served-over bowl, no zucchini/gruyere gratin) are distinct dishes, and accepted-slugs chicken-bacon-ranch-cauliflower-bake (cauliflower + ranch/bacon) differs in veg and flavor family.",
+  "fit": {
+    "cal": 451,
+    "carbs_g": 9,
+    "in_cal_band": true,
+    "in_carb_band": true,
+    "seafood": false,
+    "scalable_14": true,
+    "result": "FIT"
+  },
+  "cross_protein_collisions": [
+    "Structurally a creamy cheese-bound low-carb protein+non-starchy-veg bake (Gruyere/mushroom/zucchini). A turkey version (turkey breast or ground turkey zucchini gruyere bake) would be the SAME dish - decider should check other-protein pools for a turkey/pork zucchini-cheese bake twin.",
+    "Adjacent but distinct: chicken-bacon-ranch-cauliflower-bake (already accepted) shares the low-carb creamy chicken-veg-bake format but differs in vegetable (cauliflower vs zucchini) and flavor (ranch/bacon vs gruyere/mushroom)."
+  ],
+  "unmapped_ok": ["Swiss Gruyere shredded cheese blend"],
+  "notes": "Cuisine American - does not widen the catalog's American skew, but clears all run conditions and is a genuine low-carb dish not present in catalog or accepted list."
+}

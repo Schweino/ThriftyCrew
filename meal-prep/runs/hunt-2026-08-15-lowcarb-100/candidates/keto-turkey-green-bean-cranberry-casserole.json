@@ -1,0 +1,28 @@
+{
+  "name": "Keto Turkey and Green Bean Casserole",
+  "slug": "keto-turkey-green-bean-cranberry-casserole",
+  "protein": "turkey",
+  "method": "oven bake",
+  "cuisine": "American",
+  "source_url": "https://www.wholesomeyum.com/recipes/easy-leftover-turkey-casserole-recipe/",
+  "source_servings": 8,
+  "src_cal": 416,
+  "src_carbs": 12.5,
+  "src_protein": 23.6,
+  "src_net_carbs": 9,
+  "ingredients_verbatim": [
+    "3 cups leftover turkey (cubed or shredded)",
+    "4 cups cooked green beans",
+    "1 cup shredded cheddar cheese",
+    "2 cloves minced garlic",
+    "1/2 cup mayonnaise (or Greek yogurt)",
+    "1 1/2 cups cranberry sauce",
+    "1/2 cup crumbled goat cheese",
+    "1/2 cup chopped walnuts (optional)"
+  ],
+  "unmapped": ["cranberry-sauce", "goat-cheese"],
+  "mapped_note": "turkey->turkey-breast, cooked green beans->fresh-green-beans/canned-green-beans, shredded cheddar->cheddar-cheese-shredded, mayonnaise->mayonnaise, garlic->garlic, walnuts->walnuts",
+  "why": "Baked keto turkey + green-bean casserole; published 416 cal / 12.5g total carb (9g net) / 23.6g protein per serving at 8 servings clears the 400-650 cal and <=35g carb band on the source's own numbers. Cheese/mayo-bound, no rice/pasta/potato/bread base, so structurally low-carb. Fills a real gap: no turkey green-bean bake exists in the 544-recipe catalog (closest is broccoli/zucchini turkey bakes, all distinct). Deliberately carries TWO genuinely board-absent ingredients (cranberry sauce, goat cheese) which is a FEATURE for the pricer-lane proving run.",
+  "confidence": "medium",
+  "confidence_notes": "Verified: read the page's own nutrition. Two caveats for the selector: (1) sits near the 400 floor and protein 23.6g is just under the catalog's 25g ideal, so it has little headroom on a low-side recompute; (2) the low published carb depends on a SUGAR-FREE cranberry sauce (WholesomeYum is a keto site) - if the board maps cranberry sauce to a full-sugar row, our computed carbs could rise materially. Turkey mapped to turkey-breast (cooked/leftover); a diced-chicken-style whole-muscle turkey, not ground."
+}

@@ -1,0 +1,203 @@
+{
+  "slug": "basque-chicken-peppers-chilindron",
+  "title": "Basque Chicken and Peppers (Pollo al Chilindron)",
+  "source_url": "https://www.themediterraneandish.com/basque-chicken-and-peppers-pollo-al-chilindron/",
+  "source_servings": 6,
+  "target_servings": 14,
+  "scale_factor": 2.3333,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 2.3333x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [
+    "Jamon Serrano / pancetta -> Hickory Smoked Bacon, SOURCE-SANCTIONED: the ingredient line itself reads 'diced jamon Serrano, pancetta, or bacon'. Jamon has no board presence at all; pancetta is CAPTURE-only (1 product, 1 store, $9.99/3.5 oz - a delicacy price class). Bacon is the source's own third option, board 7 of 7, and the house Hickory Smoked Bacon row books it."
+  ],
+  "ingredients": [
+    {
+      "source_raw": "2 pounds bone-in skin-on chicken thighs, drumsticks, or both",
+      "item": "Chicken Thighs (bone-in, skin-on, raw)",
+      "bid": "chicken-thighs",
+      "board": "weekly",
+      "grams": 2117,
+      "buy": "4 2/3 lb bone-in skin-on chicken thighs, drumsticks, or both",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein anchored by explicit source WEIGHT (2 lb), exact 2.3333x = 4.667 lb = 2117 g bone-in, zero drift. DELIBERATE DEPARTURE from the skin-removed canon (skin-on chicken -> BSCT, burmese/provencal rulings): this braise sears SKIN-ON and the skin cooks into the dish, so the skinless rebuild would misstate fat ~2x AND compute the recipe to ~320 cal/serving - 20% below this run's 400 floor - for a dish whose true skin-on basis computes to ~484. NEW DB row 'Chicken Thighs (bone-in, skin-on, raw)' books per 100 g AS-PURCHASED (USDA 05091 meat+skin x 0.80 disclosed yield) so the one grams number is honest for both cost and macros. The source's own published macros arbitrate: our 484 cal / 26.8 P / 34.7 F vs their 452.5 / 23.7 / 35.1 - calories +7%, fat -1%, protein +13% (inside the 15% instrument); the skinless-canon alternative computes 320 cal / -29% - refuted by the source's own label. Board chicken-thighs is EXACTLY this product concept (label 'Chicken Thighs / Drumsticks'; Baker's cell is literally 'Bone In Skin On Chicken Thighs'), 7 of 7 stores, cheapest Sam's Club $1.28/lb. Departure flagged for registrar/match-soundness review in new_commodity_proposals."
+    },
+    {
+      "source_raw": "Kosher salt",
+      "item": "Kosher Salt",
+      "bid": "kosher-salt",
+      "board": "weekly",
+      "grams": 14,
+      "buy": "to taste (about 2 1/4 tsp)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "No quantity printed (extractor concern); used in the instructions, so not optional. Booked at an ASSUMED 1 tsp per source batch -> 2.33 tsp scaled, quantized 2 1/4 tsp = 14 g on the table-salt 6 g/tsp basis - zero-macro, so the assumption is macro- and cost-irrelevant (fricassee kosher-salt precedent). kosher-salt commodity 3 of 7 stores, cheapest Walmart $0.0629/oz. No Kosher Salt DB row exists (fricassee precedent flagged the same); zero-macro."
+    },
+    {
+      "source_raw": "Freshly ground black pepper",
+      "item": "Black Pepper",
+      "bid": "black-pepper",
+      "board": "weekly",
+      "grams": 2.7,
+      "buy": "to taste (about 1 tsp)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "No quantity printed; assumed 1/2 tsp per source batch -> 1.17 tsp scaled, quantized 1 tsp+ = 2.7 g at densities 2.3 g/tsp. ~0.5 cal/serving. Board 7 of 7."
+    },
+    {
+      "source_raw": "3 tablespoons extra virgin olive oil",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 94.5,
+      "buy": "7 tbsp extra virgin",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 2.3333x = 7 tbsp x densities 13.5 g = 94.5 g, zero drift. Board 7 of 7, cheapest Sam's Club $0.1879/floz."
+    },
+    {
+      "source_raw": "1 onion, thinly sliced",
+      "item": "Yellow Onion",
+      "bid": "onions",
+      "board": "weekly",
+      "grams": 257,
+      "buy": "2 1/3 medium onions, thinly sliced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 2.3333 each x densities 110 g = 256.7 -> 257 g. Board 7 of 7, cheapest Aldi $0.7967/lb."
+    },
+    {
+      "source_raw": "2 red bell peppers, thinly sliced",
+      "item": "Red Bell Pepper",
+      "bid": "red-bell-pepper",
+      "board": "recipe",
+      "grams": 560,
+      "buy": "4 2/3 red bell peppers, thinly sliced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 2.3333x = 4.667 each x densities 120 g = 560 g. RED bell pepper to the red-bell-pepper id per the standing green-is-not-red variety rejection; ingredient-map entry (recipe board), 6 of 7 stores, cheapest Sam's Club $0.83/each. DB row USDA red bell 31 cal/100 g."
+    },
+    {
+      "source_raw": "3 1/2 ounces diced jamon Serrano, pancetta, or bacon (100g)",
+      "item": "Hickory Smoked Bacon",
+      "bid": "bacon",
+      "board": "weekly",
+      "grams": 234,
+      "buy": "8 1/4 oz diced bacon or pancetta",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "SOURCE-SANCTIONED bacon option, see ruled_substitutions. Source anchors GRAMS explicitly (100 g) -> exact 2.3333x = 233.3 g, quantized 8 1/4 oz = 233.9 -> 234 g (+0.2%). Booked on the house Hickory Smoked Bacon row (GV label, 2 cooked slices = 15 g = 90 cal); NOTE the row is a COOKED-slice basis applied to raw-diced grams - the same raw-vs-cooked row ambiguity the quiche and sausage-skillet batches flagged. On this line the spread is ~70-100 cal/serving contribution; both readings keep the recipe mid-band and the source cross-check passes either way (fat computes -1% vs their label on this basis). Board 7 of 7, cheapest Sam's Club $3.784/lb."
+    },
+    {
+      "source_raw": "4 garlic cloves thinly sliced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 27,
+      "buy": "9 cloves, thinly sliced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 2.3333x = 9.33 cloves, quantized 9 cloves x densities 3 g = 27 g (-3.6%). Board 5 of 7, cheapest Baker's $0.498/each."
+    },
+    {
+      "source_raw": "1/2 teaspoon smoked Spanish paprika",
+      "item": "Smoked Paprika",
+      "bid": "smoked-paprika",
+      "board": "recipe",
+      "grams": 2.9,
+      "buy": "1 1/4 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 2.3333x = 1.167 tsp, quantized 1 1/4 tsp = 2.9 g (+7.1% DRIFT NOTED - spice-class, macro-irrelevant). ingredient-map entry smoked-paprika (recipe board); board 5 of 7, cheapest Walmart $0.631/oz."
+    },
+    {
+      "source_raw": "1 (14.5-ounce) can fire-roasted crushed or diced tomatoes",
+      "item": "Diced Tomatoes",
+      "bid": "diced-tomatoes",
+      "board": "weekly",
+      "grams": 959,
+      "buy": "2 1/3 (14.5 oz) cans fire-roasted diced tomatoes",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Fire-roasted books to the diced-tomatoes commodity per the existing DB row's own note ('fire-roasted equivalent; high conf') - italian-ground-turkey precedent, same product concept and price class. densities can = 411 g x 2.3333 = 959 g. Whole-can measure is honest here: the source line IS a whole can. Board 7 of 7, cheapest Walmart $0.0529/oz. NOTE the bare TERM 'fire-roasted diced tomatoes' resolves via the FRESH 'tomatoes' commodity include /\\btomato(?:es)?\\b/ - a canned-to-fresh resolver stretch logged in board_defects_observed; the mapping uses the correct canned id."
+    },
+    {
+      "source_raw": "1/2 cup dry white wine",
+      "item": "Dry White Wine",
+      "bid": "white-wine",
+      "board": "weekly",
+      "grams": 275,
+      "buy": "1 cup plus 2 3/4 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 2.3333x = 1.167 cups = 18.67 tbsp, quantized 18.75 tbsp (+0.4%) = 1.172 cups x 235 g/cup (Red Wine densities basis, fricassee precedent) = 275 g. The white-wine commodity now EXISTS on the weekly board (created after fricassee's mapped-null) and covers the concept, but has NO priced cell and no capture today (price-ingredient: ABSENT) - term 'dry white wine' ENQUEUED (queue already holds a resolved CARRIED verdict from fricassee/pork-chops; this slug attached). DB row Dry White Wine (USDA white table wine, 82 cal/100 g, added by fricassee). 16 cal/serving."
+    },
+    {
+      "source_raw": "1 teaspoon sugar",
+      "item": "Sugar",
+      "bid": "sugar",
+      "board": "weekly",
+      "grams": 9.8,
+      "buy": "2 1/3 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 2.3333x = 2.33 tsp x 4.2 g = 9.8 g. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 bay leaf",
+      "item": "Bay Leaves",
+      "bid": "bay-leaves",
+      "board": "weekly",
+      "grams": 1.2,
+      "buy": "2 bay leaves",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Exact 2.3333x = 2.33 leaves, quantized 2 whole leaves (-14.3% DRIFT NOTED - a third of a bay leaf is not a cook measure; 2 cal total, removed before serving). Board 6 of 7."
+    },
+    {
+      "source_raw": "Fresh thyme",
+      "item": "Fresh Thyme",
+      "bid": "fresh-thyme",
+      "board": "weekly",
+      "grams": 12,
+      "buy": "10-12 sprigs",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "No quantity printed (extractor concern); used in the braise, so not optional. ASSUMED ~5 sprigs per source batch -> ~12 sprigs scaled = 12 g at USDA ~1 g/sprig; ~0.9 cal/serving, macro-irrelevant. NEW DB row Fresh Thyme (USDA SR raw, 100 cal/100 g, tsp = 0.8 g, verified 2026-08-16) - NOT the Dried Thyme row (form-flip). fresh-thyme commodity 3 of 7 stores, cheapest Aldi $3.18/oz (partial coverage is an answer)."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Chicken Thighs (bone-in, skin-on, raw) (USDA 05091 meat+skin x 0.80 disclosed bone-in yield, per 100 g as-purchased: 177 cal / 13.2 P / 0.2 C / 13.3 F)",
+    "Fresh Thyme (USDA SR raw, per 100 g: 100 cal / 5 P / 25 C / 1.6 F; tsp = 0.8 g, sprig ~ 1 g)"
+  ],
+  "pricing_terms_needed": [
+    { "term": "dry white wine", "blocking": true, "why": "braise deglaze, 1 cup plus 2 3/4 tbsp at 14 servings; board answer is ABSENT (white-wine commodity exists but no cell, no capture) - queue already holds a resolved CARRIED verdict, slug attached for the derive" }
+  ],
+  "new_commodity_proposals": [
+    {
+      "for_item": "Chicken Thighs (bone-in, skin-on, raw)",
+      "proposal": "REGISTRAR/GATE REVIEW REQUESTED, not a new commodity: this mapping books bone-in purchase grams against a NEW bone-in-basis DB row (USDA 05091 x 0.80 disclosed yield), departing from the skin-REMOVED canon ruling ('the estate's answer is the substitution, not a bone-in DB row' - burmese-chicken-dal-curry). That ruling's own rationale (bone-in grams corrupt MEAT-basis macros) does not bite here because the row is bone-in-basis by construction, and the skinless rebuild it prescribes would drop this in-band skin-on braise ~130 cal/serving below the run's 400 floor while misstating fat ~2x. Asking for the ruling to be scoped to skin-removed sources; if the registrar rules the other way, this recipe re-books to BSCT and retires at the band gate honestly."
+    }
+  ],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 452.5, "protein_g": 23.7, "carbs_g": 6.6, "fat_g": 35.1 },
+    "computed_per_serving": { "calories": 484.2, "protein_g": 26.8, "carbs_g": 9.7, "fat_g": 34.7 },
+    "protein_gap_pct": 13.1,
+    "calorie_gap_pct": 7.0,
+    "verdict": "PASS: protein +13.1% (inside the 15% instrument), calories +7.0%, fat -1.1% (near-exact - and fat is the skin-sensitive number, validating the skin-on basis). The rejected alternative (skinless BSCT rebuild per canon) computes ~320 cal / 20.8 P - calories -29% vs the source's own label and below the run floor - so the source label refutes the skinless reading, not ours. Carbs +47% relative but +3.1 g absolute (9.7 vs 6.6), driven by onion/tomato rounding; irrelevant against the 35 g ceiling.",
+    "band_check": "computed 484.2 cal in [400, 650] PASS (84 above the floor, 166 of ceiling headroom); carbs 9.7 g <= 35 PASS. Bacon-row raw-vs-cooked ambiguity (see line note) spreads the estimate ~454-484; both ends in band."
+  },
+  "board_defects_observed": [
+    "Term resolver stretch: 'fire-roasted diced tomatoes' resolves MAPPED to the FRESH 'tomatoes' commodity (include /\\btomato(?:es)?\\b/) and would price canned tomatoes as fresh Romas ($0.95/lb class vs $0.0529/oz canned class). The mapping bids the correct diced-tomatoes id; resolver flagged for the match-soundness gate.",
+    "Hickory Smoked Bacon DB row cooked-basis-vs-raw-grams ambiguity re-observed (first flagged by crustless-bacon-gruyere-quiche and italian-sausage-peppers-onions-skillet batches); on this recipe the spread is ~30 cal/serving and not band-deciding.",
+    "white-wine commodity exists with zero priced cells and zero captures - the queue's store-probe evidence (CARRIED) is the only pricing anywhere; a board cell would end the repeated ABSENT answers."
+  ],
+  "densities_followups": [
+    "Chicken Thighs (bone-in, skin-on): no densities row; propose lb-only entry plus a note pinning the 0.80 bone-in edible yield once the registrar rules (each ~ 240 g retail bone-in thigh if a count basis is ever needed).",
+    "Fresh Thyme: no densities row; USDA tsp = 0.8 g, sprig ~ 1 g - propose explicit row.",
+    "Kosher Salt: still no densities row (re-flag of fricassee); booked at table-salt 6 g/tsp, zero-macro."
+  ]
+}

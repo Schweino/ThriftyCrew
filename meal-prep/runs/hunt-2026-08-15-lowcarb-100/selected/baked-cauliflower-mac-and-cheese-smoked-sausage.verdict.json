@@ -1,0 +1,14 @@
+{
+  "slug": "baked-cauliflower-mac-and-cheese-smoked-sausage",
+  "name": "Baked Cauliflower Mac and Cheese with Smoked Sausage",
+  "protein": "pork-sausage",
+  "verdict": "KEEP",
+  "fit": "PASS",
+  "fit_evidence": "588 cal (within 400-650) and 10 g carbs (well within <=35 g), no seafood, cheese-bound cauliflower casserole scales to 14 servings by weigh-and-divide.",
+  "dupe_of": null,
+  "borderline": true,
+  "dupe_evidence": "Closest live-catalog match is the turkey recipe kielbasa-mac-and-cheese-bake (smoked-turkey-sausage + cheddar + cream, oven bake) - same sauce family and method, but that dish uses real pasta while this uses cauliflower, and the meat is pork smoked sausage vs turkey. On the 4-axis test protein (pork vs turkey sausage) and starch (cauliflower vs pasta) both differ, so it clears as a distinct low-carb plate; the pork pulled-pork-baked-mac-and-cheese is a different protein cut with pasta. Not in the fresh accepted-slugs list; chicken-bacon-ranch-cauliflower-bake (accepted) is a ranch/bacon chicken bake, unrelated.",
+  "cross_protein_collisions": "STRUCTURAL TWIN in turkey lane: kielbasa-mac-and-cheese-bake (already live) is the pasta version of this same smoked-sausage-mac-and-cheese-bake concept; a low-carb cauliflower kielbasa mac in a turkey/sausage selector's pool would be a true same-dish twin. Flagged for the cross-protein merge pass - the distinguisher here is cauliflower-for-pasta, so if another selector holds a cauliflower smoked-sausage cheese bake, only one should survive.",
+  "cuisine": "American",
+  "notes": "Rescued as KEEP over DUPE because the existing catalog mac-and-cheese bakes are all pasta-based (high-carb, unfit for this <=35 g run), so this fills the low-carb sausage-cheese-bake slot the catalog lacks. Decider should make the final cross-protein call. Monterey jack (1/3 cup) is the only unmapped ingredient - not penalized per v2.1 5.1."
+}

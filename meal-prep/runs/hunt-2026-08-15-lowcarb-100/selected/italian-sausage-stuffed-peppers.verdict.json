@@ -1,0 +1,21 @@
+{
+  "slug": "italian-sausage-stuffed-peppers",
+  "name": "Italian Sausage Stuffed Peppers",
+  "protein": "pork-sausage",
+  "verdict": "KEEP",
+  "fit": {
+    "pass": true,
+    "cal": 536,
+    "carbs": 22,
+    "evidence": "536 cal/serving is inside 400-650; 22g carbs clears the <=35 ceiling; scalable to 14 (brown-and-stuff, weigh-divide filling); no seafood."
+  },
+  "dedup": {
+    "catalog_dupe": null,
+    "evidence": "No Italian-sausage stuffed pepper in the 544-recipe digest. Closest catalog matches are distinct dishes: unstuffed-pepper-skillet-bowls (ground BEEF, deconstructed skillet, no stuffing) and turkey-stuffed-pepper-soup (TURKEY, soup format) - both differ in protein AND format. Same-lane accepted italian-sausage-peppers-onions-skillet shares protein+Italian flavor but is a sliced sausage-and-peppers saute with no stuffing/rice/cheese - a different dinner (2 of 4: protein match, cuisine match; method and construction differ)."
+  },
+  "cross_protein_collisions": [
+    "STUFFED-PEPPER STRUCTURE: same-dish-different-protein twins are likely in other selectors' pools. A beef or turkey 'stuffed peppers' candidate would be structurally this exact dish (pepper shell + ground/loose protein + rice + tomato + cheese, baked). Catalog already carries the beef skillet (unstuffed-pepper-skillet-bowls) and turkey soup (turkey-stuffed-pepper-soup) versions of this flavor. Decider should merge against any ground-beef/ground-turkey stuffed-peppers candidate.",
+    "THEME CROWDING: this run has already accepted two stuffed-pepper recipes - pulled-pork-stuffed-peppers and philly-cheesesteak-stuffed-peppers. Keeping this makes three stuffed-pepper plates in one run. Each is a distinct protein+flavor (pulled pork / beef+cheese / Italian pork sausage), so not dupes, but the decider may want to cap the stuffed-pepper theme."
+  ],
+  "notes": "Rice is a minor binder (~1/6 cup per serving) so carbs stay low. src_protein 23g is a touch under the 25g catalog ideal but clears the run's explicit cal/carb gate. Confidence HIGH on nutrition (published, read on page)."
+}

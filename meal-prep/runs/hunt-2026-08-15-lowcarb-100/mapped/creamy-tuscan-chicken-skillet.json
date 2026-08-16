@@ -1,0 +1,135 @@
+{
+  "slug": "creamy-tuscan-chicken-skillet",
+  "title": "Creamy Tuscan Chicken",
+  "source_url": "https://thatlowcarblife.com/creamy-tuscan-chicken/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "chicken",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-16",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%.",
+  "ruled_substitutions": [],
+  "ingredients": [
+    {
+      "source_raw": "4 thin sliced chicken breasts",
+      "item": "Boneless Skinless Chicken Breast",
+      "bid": "chicken-breast",
+      "board": "weekly",
+      "grams": 2800,
+      "buy": "14 thin sliced chicken breasts (about 6.2 lb)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Main protein on a COUNT, so the each-weight is the danger line (florentine failure mode). Booked at the house densities each = 200 g -> 800 g source batch = 200 g raw per serving. The source's own published protein arbitrates: 42 g/serving implies ~173 g chicken/serving (non-chicken lines supply ~3.3 g), and our 200 g recompute lands at 45.9 g protein, +9.3% vs published - inside the 15% instrument. A retail 'thin sliced' cutlet at ~113 g each would give 26.7 g (-36%, BREAK), so the small-cutlet reading is refuted by the source's own label. Catalog average is 167 g/serving; 200 g sits high but within the band the published macros support. Board 6 of 7, cheapest Baker's $1.99/lb."
+    },
+    {
+      "source_raw": "1 teaspoon paprika",
+      "item": "Paprika",
+      "bid": "paprika",
+      "board": "weekly",
+      "grams": 8,
+      "buy": "3 1/2 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 2.3 g/tsp (8.05 booked as 8). Board 7 of 7, cheapest Walmart $0.432/oz."
+    },
+    {
+      "source_raw": "1 teaspoon garlic powder",
+      "item": "Garlic Powder",
+      "bid": "garlic-powder",
+      "board": "weekly",
+      "grams": 10.9,
+      "buy": "3 1/2 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 3.1 g/tsp. Board 7 of 7, cheapest Walmart $0.216/oz."
+    },
+    {
+      "source_raw": "1 teaspoon salt",
+      "item": "Salt",
+      "bid": "salt",
+      "board": "weekly",
+      "grams": 21,
+      "buy": "3 1/2 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 6 g/tsp. Zero-macro. Board 7 of 7, cheapest Aldi $0.0304/oz."
+    },
+    {
+      "source_raw": "2 tablespoons butter",
+      "item": "Butter",
+      "bid": "butter",
+      "board": "weekly",
+      "grams": 98,
+      "buy": "7 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 14 g/tbsp. Board 7 of 7, cheapest Sam's Club $2.555/lb."
+    },
+    {
+      "source_raw": "1 cup heavy cream",
+      "item": "Heavy Cream",
+      "bid": "heavy-cream",
+      "board": "weekly",
+      "grams": 833,
+      "buy": "3 1/2 cups",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities cup = 238 g. DB row is the GV heavy whipping cream label (1 tbsp 15 g = 50 cal / 5 F / 1 C). Board 7 of 7, cheapest Sam's Club $0.1162/floz."
+    },
+    {
+      "source_raw": "1/2 cup sun-dried tomatoes oil-packed, but drain the oil",
+      "item": "Sun-Dried Tomatoes (Oil-Packed)",
+      "bid": "sun-dried-tomatoes",
+      "board": "weekly",
+      "grams": 193,
+      "buy": "1 3/4 cups oil-packed, drained",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Source says OIL-PACKED, DRAINED, so the line books to the NEW oil-packed DB row (USDA 11955 drained, 213 cal/100 g, cup = 110 g), NOT the existing DRY row (cup = 54 g, ~55 C/100 g) - the dry basis would halve the grams and nearly double the carbs per gram, and this run has a 35 g carb gate. Same one board commodity covers both forms (no form-flip in the PRICE class: the cheapest cell today is itself an in-oil jar, Terra Verde 24 oz Sam's Club $0.4158/oz). 1.75 cups x 110 = 192.5 booked as 193. Board 7 of 7."
+    },
+    {
+      "source_raw": "2 cloves garlic minced",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 21,
+      "buy": "7 cloves, minced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities clove = 3 g. Board 5 of 7, cheapest Baker's $0.498/each."
+    },
+    {
+      "source_raw": "1 cup chopped spinach",
+      "item": "Spinach",
+      "bid": "spinach",
+      "board": "weekly",
+      "grams": 105,
+      "buy": "3 1/2 cups chopped",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "FRESH spinach mapped to the board's FRESH commodity id 'spinach' (label 'Spinach (fresh)', 7 of 7 stores, cheapest Walmart $0.20/oz) - NOT frozen-chopped-spinach, per the fresh-is-not-frozen standing rejection. The legacy ingredient-map.json entry 'Spinach' -> frozen-chopped-spinach predates the fresh commodity and is flagged below, not followed. Macros book to the existing raw Spinach DB row (USDA, 23 cal/100 g; identical per-gram to the frozen row, so the macro side is form-independent either way). densities has NO fresh-spinach row (FLAGGED); USDA raw cup = 30 g -> 3.5 cups = 105 g. Macro stakes are trivial (2 cal/serving) even if chopped packs denser."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [
+    "Sun-Dried Tomatoes (Oil-Packed) (USDA 11955 packed in oil drained, per 100 g: 213 cal / 5.1 P / 23.3 C / 14.1 F; cup = 110 g)"
+  ],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 485, "protein_g": 42, "carbs_g": 8, "fat_g": 32 },
+    "computed_per_serving": { "calories": 517.8, "protein_g": 45.9, "carbs_g": 8.8, "fat_g": 32.9 },
+    "protein_gap_pct": 9.3,
+    "calorie_gap_pct": 6.8,
+    "verdict": "PASS: protein +9.3% (inside the 15% instrument), calories +6.8%, fat +2.9%, carbs +10% - all four track the source. The gap direction is consistent with our 200 g/breast house each-weight vs the source's implied ~173 g/serving; both readings sit inside tolerance, and the alternative 113 g retail thin-cutlet reading is refuted outright (protein would compute -36% low). Nothing to re-examine.",
+    "band_check": "computed 517.8 cal in [400, 650] PASS (132 cal of ceiling headroom, 118 above the floor); carbs 8.8 g <= 35 PASS (net-carb margin is not needed - total carbs already clear the gate)"
+  },
+  "board_defects_observed": [
+    "ingredient-map.json legacy entry 'Spinach' -> frozen-chopped-spinach is a FRESH->FROZEN form-flip that predates the board's fresh 'spinach' commodity (now live, 7 of 7 stores). This run's mapped file bids 'spinach' (fresh); but update-recipes-db.ps1 stamps item_id from ingredient-map.json FIRST, so at spec/stamp time the item name 'Spinach' would be overridden back to frozen-chopped-spinach. Needs a map correction through the match-soundness gate BEFORE this recipe's stamp pass; the macro side is unaffected (fresh and frozen rows are per-gram identical), only the price class is. Not edited by this run - flagged for the registrar/gate."
+  ],
+  "densities_followups": [
+    "Spinach (fresh): no densities row (only Frozen Chopped Spinach cup 85); USDA raw cup = 30 g used here. NOTE the published slow-cooker-tuscan-chicken-pasta booked fresh chopped spinach at ~67 g/cup (200 g / 3 cups) - two live bases in the catalog; propose an explicit fresh row (cup 30 whole/loose, chopped-packed higher) to end the ambiguity. Macro stakes here: ~2 cal/serving.",
+    "Sun-Dried Tomatoes (Oil-Packed): no densities row; the existing Sun-Dried Tomatoes cup 54 / tbsp 3.5 is the DRY basis. USDA oil-packed drained cup = 110 g - propose a separate row (cup 110, tbsp 7) keyed to the new DB item."
+  ]
+}

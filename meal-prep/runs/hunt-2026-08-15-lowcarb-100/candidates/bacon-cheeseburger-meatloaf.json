@@ -1,0 +1,29 @@
+{
+  "name": "Bacon Cheeseburger Meatloaf",
+  "slug": "bacon-cheeseburger-meatloaf",
+  "protein": "beef",
+  "method": "oven bake",
+  "cuisine": "American",
+  "source_url": "https://jenniferbanz.com/bacon-cheeseburger-meatloaf",
+  "source_servings": 6,
+  "src_cal": 405,
+  "src_carbs": 2,
+  "src_protein": 35,
+  "src_fat": 28,
+  "ingredients_verbatim": [
+    "1 pound ground beef",
+    "1/2 pound bacon cooked and crumbled",
+    "1 cup shredded cheddar cheese",
+    "1 large egg",
+    "1 teaspoon onion powder",
+    "1 teaspoon garlic powder",
+    "1 teaspoon mustard powder",
+    "1 teaspoon kosher salt",
+    "1/2 cup sugar free BBQ sauce"
+  ],
+  "main_ingredients": ["ground-beef-8020", "bacon", "cheddar-cheese-shredded", "eggs", "sugar-free-bbq-sauce"],
+  "unmapped": ["mustard-powder"],
+  "why": "Meatloaf-style oven bake (explicitly in-lane) built on ground beef + bacon + cheddar, bound with egg, glazed with sugar-free BBQ. Published nutrition read straight off the source page: 405 cal / 35g protein / 2g total carb / 28g fat per serving - protein-dense, genuinely keto-low-carb (no oats/breadcrumb/glaze sugar), and inside the 400-650 / <=35g band. It reads as a NEAR-FLOOR calorie (405) but is a calorie-dense build (half a pound of bacon + a cup of cheddar over 6 servings), so our label-accurate macros should drift UP past 405, not below 400. Every signature ingredient maps to the Omaha board (ground-beef-8020, bacon, cheddar-cheese-shredded, eggs, sugar-free-bbq-sauce); mustard-powder flagged as a possible missing board home (a minor spice, intentional pricer-lane probe). Scales cleanly to 14 as multiple loaves + weigh-and-divide.",
+  "dedupe_note": "Possible near-dup of existing candidate low-carb-beef-meatloaf.json - but that one is a classic oat-bound loaf with carrot and a coconut-sugar ketchup glaze (585 cal / 19g carb); THIS is a distinct keto cheeseburger-flavor loaf (bacon + cheddar + sugar-free BBQ, 2g carb, no binder starch). Different flavor family and carb class. Adjudicator's call per the run's 'let the selector decide' directive.",
+  "confidence": "high on nutrition - calories/protein/carbs/full ingredient list read directly from the source page. Moderate on dedupe - shares the meatloaf format with an existing candidate, flagged above."
+}

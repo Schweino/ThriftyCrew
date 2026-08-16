@@ -1,0 +1,22 @@
+{
+  "slug": "momofuku-bossam-korean-pork",
+  "name": "Momofuku Bossam (Korean Slow-Cooked Pork)",
+  "protein": "pork",
+  "cuisine": "Korean",
+  "verdict": "KEEP",
+  "dupe_of": null,
+  "fit": {
+    "src_cal": 626,
+    "src_carbs": 18,
+    "band_400_650": true,
+    "carbs_le_35": true,
+    "no_seafood": true,
+    "scalable_14": true,
+    "fit_ruling": "FIT - 626 cal is inside 400-650 (near the ceiling), 18g carbs well under 35g"
+  },
+  "evidence": "No catalog duplicate: the nearest Korean-pork rows are slow-cooker-korean-shredded-pork-bowls, slow-cooker-korean-gochujang-pork-bowls and korean-gochujang-ground-pork-rice-bowls, all gochujang-glazed shredded pork over rice; Bossam is a distinct dish - salt-and-sugar dry-cured pork butt oven-roasted with a brown-sugar crust and served with ginger-scallion sauce + ssamjang (lettuce-wrap style, no rice base), differing on sauce/flavor family, starch, and method (only protein matches), so it is a different dinner that widens the Korean spread.",
+  "cross_protein_note": "Structurally a salt-cured, slow-roasted shredded protein finished with Korean ginger-scallion + ssamjang sauces; decider should watch other pools for a Korean bossam/ssam-style or 'Korean slow-roasted' beef, chicken or turkey twin using the same cure+sauce format.",
+  "pricer_lane_note": "Carries board-absent ingredients ssamjang and sherry-vinegar (flagged unmapped) - wanted for the pricer lane, not penalized.",
+  "caveat": "626 cal sits near the 650 ceiling; a label-accurate pork-shoulder recompute could push computed calories over gate - medium confidence it survives the run's own cal recompute.",
+  "confidence": "high on published nutrition fit; distinctness high; medium on surviving computed-cal gate at 626"
+}

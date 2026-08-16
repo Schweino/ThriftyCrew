@@ -1,0 +1,9 @@
+﻿{
+  "slug": "balsamic-sirloin-steak-sheet-pan",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    { "check": "prose-numbers", "severity": "note", "detail": "cost_lines parsley line reads 'Buy 1 1 bunch' (doubled quantity token); cosmetic typo in cost prose, not a fidelity defect. Values themselves are consistent.", "owner": "writer" }
+  ],
+  "notes": "Live page fetched successfully and matches the extraction verbatim (title, 4 servings, all 16 ingredient lines, all 9 steps, nutrition 412 cal). Spec is one consistent 3.5x scale (4 -> 14) on every line, verified per-ingredient; olive oil is the source's two lines (3+2 tbsp) combined to 17.5 tbsp/236 g and re-divided 10.5/7 in the steps, matching the source's split. Garlic 10.5 -> 11 cloves is ordinary rounding. Method preserved: marinade, half over steak, veg roast 12-15 min at 425F, steak added center 8-10 min to 145F, 5 min rest, parsley garnish; only additions are the house weigh-pan portioning steps. Title same dish, credit points at source URL, prose uses tokens plus literals that match the spec's own numbers."
+}

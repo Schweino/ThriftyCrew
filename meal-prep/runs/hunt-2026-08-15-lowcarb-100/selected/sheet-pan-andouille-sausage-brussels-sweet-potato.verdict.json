@@ -1,0 +1,25 @@
+{
+  "slug": "sheet-pan-andouille-sausage-brussels-sweet-potato",
+  "name": "Sheet-Pan Andouille Sausage with Brussels Sprouts and Sweet Potato",
+  "protein": "pork",
+  "verdict": "KEEP",
+  "fit": {
+    "src_cal": 494,
+    "src_carbs": 25,
+    "cal_ok": true,
+    "carbs_ok": true,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "494 cal in-band (400-650), 25 g carbs <=35, no seafood, weigh-and-divide sheet-pan roast scalable across pans to 14."
+  },
+  "dupe_of": null,
+  "evidence": "No catalog pork/sausage sheet-pan roast matches: existing sausage sheet-pans are bratwurst+peppers+potatoes (sheet-pan-bratwurst-peppers-potatoes) and Italian-sausage-meatballs+kale+potatoes (sheet-pan-sausage-meatballs-kale-potatoes) - different protein flavor (bratwurst/Italian vs Cajun andouille) and different veg/starch; catalog Cajun/andouille dishes (cajun-chicken-and-sausage-jambalaya, chicken-sausage-gumbo, one-pot-creamy-cajun-sausage-pasta) are rice/pasta stews, not a roasted-vegetable sheet pan.",
+  "cross_protein_flags": [
+    "STRUCTURAL TWIN in chicken: sheet-pan-chicken-sweet-potato-brussels (Harvest Sheet-Pan Chicken with Sweet Potatoes and Brussels Sprouts) shares the exact starch+veg (sweet potato + Brussels sprouts) and method (sheet-pan roast) - only protein and flavor family (Cajun andouille vs harvest chicken) differ. Decider should confirm the catalog wants both a chicken and a pork-sausage take on the same roasted plate.",
+    "Plausible turkey-sausage version: same dish could be sourced with smoked-turkey-sausage as the protein - watch for a selected-turkey twin."
+  ],
+  "board": {
+    "unmapped": ["andouille-sausage"],
+    "note": "Andouille has no board home (nearest smoked-turkey-sausage/kielbasa); intentionally kept per v2.1 5.1 to exercise the pricer lane, not penalized."
+  }
+}

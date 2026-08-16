@@ -1,0 +1,32 @@
+{
+  "slug": "broccoli-smoked-sausage-cheddar-bake",
+  "name": "Broccoli & Smoked Sausage Cheddar Bake",
+  "protein": "pork-sausage",
+  "verdict": "DUPE",
+  "fit": {
+    "cal": 533,
+    "carbs": 8,
+    "in_band": true,
+    "note": "Clears the gate on numbers (400-650 cal, <=35g carbs, scalable to 14 by weigh-and-divide, no seafood) - rejected purely as a duplicate, not for fit."
+  },
+  "dupe_of": "baked-cauliflower-mac-smoked-sausage",
+  "dupe_scope": "accepted-slugs (accepted this run)",
+  "reason": "Same dinner on all four identity axes as the already-accepted baked-cauliflower-mac-smoked-sausage: main protein (smoked sausage), sauce/flavor family (cheddar + cream-cheese sauce), base (a low-carb cruciferous floret standing in for the starch), and method (oven bake). The only differences are the specific floret (cauliflower->broccoli) and minor seasoning/binder (cajun+heavy cream vs garlic+mayo) - a floret swap inside an identical cheesy smoked-sausage bake, not a distinct plate.",
+  "cross_protein_twins": [
+    "keto-turkey-broccoli-cheddar-casserole (accepted, turkey) - structurally the same broccoli+cheddar low-carb casserole in turkey; my candidate is the pork-sausage restatement of it",
+    "cheesy-smoked-sausage-rice-skillet (catalog, turkey) - same smoked-sausage+broccoli+cheddar flavor but rice-based skillet, so a different dinner, not a dupe"
+  ],
+  "pool_collision_flags": [
+    "broccoli-smoked-sausage-cream-cheese-bake",
+    "broccoli-smoked-sausage-cream-cheese-casserole",
+    "sheet-pan-smoked-sausage-broccoli-cheddar",
+    "sausage-broccoli-cheddar-egg-bake",
+    "broccoli-cheddar-sausage-egg-bake",
+    "keto-sausage-broccoli-egg-casserole",
+    "cheesy-cauliflower-mac-smoked-sausage-bake",
+    "baked-cauliflower-mac-and-cheese-smoked-sausage",
+    "pork-sausage-cauliflower-cheese-bake"
+  ],
+  "pool_note": "The pork-sausage lane is carrying a large near-identical cluster of smoked-sausage + cruciferous-floret + cheddar low-carb bakes (both broccoli and cauliflower variants, some egg-enriched). Other adjudicators are ruling these; decider should collapse the whole cluster to a single survivor - baked-cauliflower-mac-smoked-sausage already holds that slot.",
+  "adjudicated_against": ["catalog-digest.json (544 recipes)", "accepted-slugs.json (23 slugs, read fresh)"]
+}

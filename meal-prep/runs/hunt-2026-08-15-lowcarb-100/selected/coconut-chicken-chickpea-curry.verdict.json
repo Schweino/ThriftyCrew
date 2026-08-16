@@ -1,0 +1,30 @@
+{
+  "slug": "coconut-chicken-chickpea-curry",
+  "name": "Coconut Chicken and Chickpea Curry",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "borderline": true,
+  "fit": {
+    "ok": true,
+    "cal": 479,
+    "carbs": 21,
+    "seafood": false,
+    "scalable_14": true,
+    "note": "479 cal (400-650 band OK), 21g carbs (<=35 OK), no seafood, one-pot simmer scales cleanly to 14."
+  },
+  "catalog_dupe_check": "Not a catalog duplicate: closest live recipe is kuku-paka-swahili-coconut-chicken-curry (chicken thigh + coconut milk + tomato), but that is a Swahili rice-served curry with no legume, whereas this is an Indian coconut-cream chicken+chickpea curry - the chickpeas make it a distinct legume-forward plate; other catalog chicken curries (cape-malay, madras, slow-cooker) share none of the coconut+chickpea combination.",
+  "pool_collisions": [
+    {
+      "slug": "golden-coconut-chicken-curry",
+      "severity": "high - likely pool-dupe",
+      "evidence": "Same dish structure: chicken-thigh + coconut-cream + curry-spice stovetop braise (3 of 4 factors match; differs only in chickpeas vs broccoli). golden is the STRONGER twin (16g carbs vs 21g, distinct Malaysian aromatics - star anise/cinnamon/garam masala/fennel - widen cuisine spread more than this generic Indian curry-powder profile; same recipetineats source). Recommend decider keep only ONE coconut chicken curry and likely prefer golden-coconut-chicken-curry; this candidate is the weaker of the pair."
+    },
+    {
+      "slug": "burmese-chicken-dal-curry",
+      "severity": "low - distinct plate, same niche",
+      "evidence": "Already accepted this run; also a chicken-thigh + legume (yellow split peas/dal) curry braise. NOT a duplicate - burmese is coconut-free, paprika/turmeric water-based, whole different sauce family. Flagged only because both occupy the 'chicken + legume curry' niche and the catalog should not over-index it."
+    }
+  ],
+  "cross_protein_watch": "Structurally a coconut-cream + curry-spice + chickpea braise where the protein is swappable; watch for a turkey or pork coconut-chickpea/coconut-legume curry twin in other selectors' pools (catalog already has thai-coconut-curry-turkey-meatballs and curry-ground-turkey-bowls in the coconut-curry space).",
+  "recommendation": "KEEP as borderline. Fits all conditions and adds an Indian coconut-chickpea curry the catalog lacks, but it directly overlaps golden-coconut-chicken-curry in-pool - decider should not ship both coconut chicken curries; if forced to one, golden is the better pick."
+}

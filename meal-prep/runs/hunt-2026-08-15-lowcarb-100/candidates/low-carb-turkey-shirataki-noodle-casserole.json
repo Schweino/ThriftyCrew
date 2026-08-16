@@ -1,0 +1,27 @@
+{
+  "name": "Low-Carb Turkey Noodle Casserole",
+  "slug": "low-carb-turkey-shirataki-noodle-casserole",
+  "protein": "turkey",
+  "method": "oven bake",
+  "cuisine": "American",
+  "source_url": "https://mylifecookbook.com/easy-low-carb-turkey-noodle-casserole-with-leftover-turkey/",
+  "source_servings": 4,
+  "src_cal": 462,
+  "src_carbs": 5.5,
+  "src_protein": 40.1,
+  "src_net_carbs": 1.9,
+  "ingredients_verbatim": [
+    "14 oz Wonder Noodles",
+    "1 lb cooked turkey breast, chopped",
+    "2 oz cream cheese",
+    "1/2 cup heavy cream, separated",
+    "1/2 teaspoon garlic powder",
+    "1/2 teaspoon onion powder",
+    "1/2 cup gruyere cheese",
+    "1 3/4 oz pork rinds, crushed and ground",
+    "1/4 cup parmesan cheese"
+  ],
+  "unmapped": ["wonder-noodles-shirataki", "gruyere-cheese", "pork-rinds"],
+  "why": "Well-centered in the band on the source's own printed numbers: 462 cal / 5.5 g total carbs (1.9 g net) / 40.1 g protein per serving - middle of the 400-650 window, far under the 35 g carb ceiling, and outstanding protein density (40 g). Oven-baked at 350F, a true creamy weigh-and-divide casserole that scales cleanly to 14. No seafood. Structurally low-carb (turkey breast + cheeses + cream over shirataki/yam-fiber noodles, no rice/pasta/potato/bread base). Distinct from the catalog: turkey-noodle-casserole uses real egg noodles (high carb) and the accepted turkey-zucchini-noodle-casserole uses zucchini - this uses shirataki 'Wonder Noodles', a different dish. Good pricer-lane specimen: cooked turkey breast maps to turkey-breast and cream-cheese/heavy-cream/parmesan/garlic-powder/onion-powder all sit on the Omaha board, but three signature items have NO board home - the shirataki/yam-fiber Wonder Noodles, gruyere, and pork rinds - deliberately left flagged to exercise the queue.",
+  "confidence": "high on macros - read directly from the recipe card nutrition block (cal, protein, total and net carbs all printed). Note the noodles/pork-rind/gruyere costs will need new-commodity workflow; cream cheese here is full-fat vs the board's 1-3-fat-cream-cheese row."
+}

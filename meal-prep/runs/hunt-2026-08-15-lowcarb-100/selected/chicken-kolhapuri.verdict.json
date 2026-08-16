@@ -1,0 +1,24 @@
+{
+  "slug": "chicken-kolhapuri",
+  "name": "Chicken Kolhapuri",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "fit": {
+    "calories": 604,
+    "carbs_g": 19,
+    "within_calorie_band": true,
+    "within_carb_ceiling": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "meal_prep_dinner": true,
+    "note": "604 cal sits at the top edge of the 400-650 band and 19g carbs is safely mid-band; published numbers clear all conditions. Candidate's own caveat is that a label-accurate recompute (3 tbsp oil over 3 servings) could brush the 650 ceiling, but the published figure is FIT."
+  },
+  "dupe_of": null,
+  "evidence": "Not a duplicate: the nearest catalog chicken curries are structurally different dinners. kadai-chicken-karahi (bell pepper + tomato + cream, no coconut/poppy/sesame) and chicken-jalfrezi (bell-pepper stir-fry) lack the signature roasted Kolhapuri masala; chicken-madras-curry is coconut-milk based and south-indian-chettinad-pepper-chicken-bowls is a Tamil pepper-forward prep. Kolhapuri's defining roasted dry-coconut/white-poppy/sesame/whole-spice masala and fiery Maharashtrian profile make it a distinct regional dish, and no Kolhapuri/Maharashtrian entry exists in the catalog digest (544 recipes) or accepted-slugs.",
+  "cuisine": "Indian (Maharashtrian)",
+  "cuisine_spread_value": "high - adds a Maharashtrian entry the catalog lacks; the Indian-chicken-curry cluster is already dense (madras, jalfrezi, rogan-josh, vindaloo, kadai/karahi, chettinad, tikka-masala variants, trinidadian) so this widens region within an existing cuisine rather than a new cuisine.",
+  "unmapped_ingredients_positive": ["white poppy seeds", "dried/desiccated coconut", "mace", "nutmeg", "black cardamom", "white sesame seeds", "dried red chilies"],
+  "cross_protein_collision_watch": "Kolhapuri masala is applied to mutton/lamb as often as chicken in Maharashtrian cooking - a lamb/mutton 'Kolhapuri' or 'Maharashtrian [protein] curry' in the beef/lamb pool would be the same dish under a different protein. Decider should also watch for a goat/mutton kadai or generic 'spicy Indian [protein] curry' twin.",
+  "borderline": false,
+  "borderline_note": "Adjacent-but-distinct to kadai-chicken-karahi and chettinad within a dense Indian-curry cluster; flagged for decider visibility, not a dupe."
+}

@@ -1,0 +1,20 @@
+{
+  "slug": "chicken-cacciatore-braise",
+  "name": "Chicken Cacciatore (Italian Chicken Stew)",
+  "protein": "chicken",
+  "verdict": "KEEP",
+  "dupe_of": null,
+  "evidence": "The only cacciatore in the catalog is slow-cooker-chicken-cacciatore-pasta, which is a different dinner: chicken-breast + penne-pasta + jarred traditional-pasta-sauce, slow-cooker method, starch-integral and high-carb; this candidate is a bone-in-thigh stovetop braise in red wine + crushed tomato + mushroom + red pepper + kalamata olives, no pasta, 15g carbs. Same name and tomato family, but different starch/format/method, so not a duplicate. No other Italian chicken tomato braise in the catalog (nearest neighbors are chicken-normandy-apple-cider and fesenjan/mafe stews, unrelated flavor families).",
+  "conditions_check": {
+    "calories_per_serving": 495,
+    "in_cal_band_400_650": true,
+    "carbs_per_serving": 15,
+    "carbs_at_or_below_35": true,
+    "no_seafood": "PASS with caveat - dish protein is chicken; recipe lists 3 anchovy fillets as an explicitly OPTIONAL umami seasoning (or omit / anchovy paste). Not a seafood dish; anchovy is droppable at spec time. Flagging for decider awareness, not ruling NOT-FIT.",
+    "meal_prep_dinner": true,
+    "scalable_to_14": true,
+    "fit": "PASS"
+  },
+  "cross_protein_collision_notes": "Structurally the classic tomato braise (browned protein simmered in red-wine + crushed tomato + mushroom + bell pepper). Watch for a same-dish twin in other proteins' pools: a turkey cacciatore / turkey tomato-mushroom-pepper braise, or a pork/sausage cacciatore, would be the same dinner with the protein swapped - decider should cross-check turkey and pork lanes.",
+  "borderline": false
+}

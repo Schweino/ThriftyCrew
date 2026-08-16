@@ -1,0 +1,19 @@
+{
+  "slug": "kuku-paka-african-coconut-chicken-curry",
+  "name": "Kuku Paka (East African Coconut Chicken Curry)",
+  "protein": "chicken",
+  "verdict": "DUPE",
+  "dupe_of": "kuku-paka-swahili-coconut-chicken-curry",
+  "reason": "Exact same dish already live in catalog: 'Kuku Paka (Swahili Coconut Chicken Curry)' — same signature name (Kuku Paka), same protein (chicken), same sauce family (coconut-milk + tomato curry), same East African/Swahili cuisine. Four-of-four match (protein, sauce, method, cuisine); this is a straight catalog duplicate, not a distinct regional variant.",
+  "fit": {
+    "calories": 631,
+    "carbs": 12,
+    "within_conditions": true,
+    "note": "Numbers clear the 400-650 cal / <=35g carb window and no seafood, but fit is moot — killed as a catalog duplicate."
+  },
+  "cross_protein_collision": null,
+  "adjudicated_against": {
+    "catalog_digest": "544 recipes / 147 chicken",
+    "accepted_slugs_checked": true
+  }
+}

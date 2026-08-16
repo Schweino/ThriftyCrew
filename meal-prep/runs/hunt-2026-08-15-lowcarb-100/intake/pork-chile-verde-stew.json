@@ -1,0 +1,75 @@
+{
+  "name": "Pork Chile Verde Stew",
+  "slug": "pork-chile-verde-stew",
+  "protein": "pork",
+  "cuisine": "Mexican",
+  "source_url": "https://farmtojar.com/pork-chile-verde/",
+  "visibility": "paid",
+  "ingredients": [
+    { "item": "Pork Shoulder", "grams": 3175.1, "buy": "7 lb pork shoulder, cut into 1 1/2 inch cubes" },
+    { "item": "Tomatillos", "grams": 1587.6, "buy": "3 1/2 lb tomatillos, husked, rinsed and coarsely chopped" },
+    { "item": "Poblano Peppers", "grams": 595, "buy": "7 poblano peppers" },
+    { "item": "Yellow Onion", "grams": 375, "buy": "2 1/2 large yellow onions, coarsely chopped" },
+    { "item": "Green Onions", "grams": 180, "buy": "2 bunches green onions" },
+    { "item": "Fresh Cilantro", "grams": 114, "buy": "2 bunches fresh cilantro (reserve some for garnish)" },
+    { "item": "Garlic", "grams": 39, "buy": "13 cloves garlic, peeled" },
+    { "item": "Chicken Broth", "grams": 1080, "buy": "4 1/2 cups chicken broth" },
+    { "item": "Olive Oil", "grams": 64.1, "buy": "4 3/4 tbsp olive oil" },
+    { "item": "Ground Cumin", "grams": 4.7, "buy": "2 1/4 tsp ground cumin" },
+    { "item": "Chipotle Powder", "grams": 4.5, "buy": "2 1/4 tsp chipotle powder" },
+    { "item": "Ground Cinnamon", "grams": 5.85, "buy": "2 1/4 tsp ground cinnamon" },
+    { "item": "Dried Oregano", "grams": 2.25, "buy": "2 1/4 tsp dried oregano" },
+    { "item": "Salt", "grams": 21, "buy": "3 1/2 tsp salt" }
+  ],
+  "macros_per_serving": { "calories": 533.7, "protein_g": 41.8, "carbs_g": 13.7, "fat_g": 34.0 },
+  "writer_notes": [
+    "SOURCE YIELD 6, rebuilt to 14 at the mapper's 2.3333x scale. Every gram and buy string transcribed from mapped\\pork-chile-verde-stew.json; no number computed in prose. Where the mapper quantized to house quarters the drift is carried as mapped (cilantro and green onions -14.3% because whole bunches are indivisible and near-zero macro; yellow onion +7.1%; the broth and spice lines -3.6% quarter-teaspoon rounding).",
+    "MACROS transcribed from the mapper's food-macros-db recompute at 14 servings: 533.7 cal / 41.8 g protein / 13.7 g carbs / 34.0 g fat per serving. Build rounds to 534 / 42 / 14 / 34. In band for this run (400 to 650 cal PASS at 534, with 134 above the floor and 116 of ceiling headroom; 35 g carb or less PASS at 14). No number adjusted toward the target.",
+    "MACRO GAP the mapper flagged and I carried, not fixed: source page prints 471 cal / 47 P per serving vs our recompute 533.7 / 41.8. Mapper verdict is the familiar raw-basis-vs-lean-record split. Identical 227 g raw pork per serving on both sides; the source calculator booked a leaner pork record (47 P from 227 g raw is 20.7 P/100 g vs USDA Boston butt lean-and-fat 17.4), which also accounts for our higher fat and calories. The braise keeps the pork's rendered fat in the pot, so lean-and-fat is the honest basis. Protein gap -11.1% is inside tolerance and the pork is weight-anchored by the source (3 lb stated), so no portion re-examination is triggered.",
+    "BLOCKER, NOT A WRITER-LANE FIX. Chipotle Powder (2 1/4 tsp, 4.5 g) is a printed non-optional spice with NO row in db\\ingredients.json (vocab genuine gap) and NO row in food-macros-db.json (no label captured). The mapper booked it bid-null pending the commodity-registrar and booked its macros ZERO (ceiling ~1.5 cal/serving, immaterial to the band). build-v2-spec.ps1 therefore HARD-FAILS on it twice over: UNKNOWN INGREDIENT NAME (not in the vocabulary, not in not-price-tracked-ok.json) and then the macro recompute (item not in food-macros-db). The rails forbid every escape here: I may not mint a canon name, invent a macro label, add it to not-price-tracked-ok.json (its own doc bars parking an unwired bid there), weaken the guard, or quietly drop a printed non-optional ingredient. So the spec CANNOT be assembled at the writer lane today. This intake is written complete so the build is a single command once the registrar mints the chipotle-powder commodity + vocab row AND a chipotle powder label is captured into food-macros-db. Same shape as braised-pork-shoulder-fennel-tomato, which is also holding pre-spec on a vocab+DB gap.",
+    "NOTE on the run state: hunt-run -Derive moved this slug to 'priced' because the pricer scored the TERM 'chipotle powder' CARRIED (a store stocks it). CARRIED is a carriage verdict, not a vocabulary or macro row. The commodity id, the ingredients.json vocab row, and the food-macros-db label are three separate artifacts owned by the registrar and the label-capture stage, and none of them exist yet. Carriage does not unblock the build.",
+    "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked both directions: pork shoulder (steps 4, 6), tomatillos (2, 3), poblano peppers (2, 3), garlic (2, 3), cilantro (3, and the reserved garnish in 8), green onions (3), chicken broth (3 sauce + 6 stew, the full 4 1/2 cups), olive oil (4), salt (4), yellow onion (5), ground cumin (6), chipotle powder (6), ground cinnamon (6), dried oregano (6). All 14 lines used. The only thing a step calls for that is not on the buy list is a splash of water to loosen the stew in step 7, which is house-allowed.",
+    "STRUCTURE ADAPTATIONS from the source, none of which add or drop a bought ingredient: (a) the two source broth lines (1 cup for the sauce, 1 cup for the stew, each 2.33 cups scaled) are consolidated into ONE Chicken Broth line of 4 1/2 cups / 1080 g; both uses are kept and split explicitly across steps 3 and 6. (b) The source blends only 'half the roasted tomatillos' with the other half's fate left ambiguous on the page; at meal-prep scale I blend ALL the roasted tomatillos into the sauce so every bought tomatillo is used, which is standard for chile verde. (c) The mapper booked the garlic peeled (the ingredient line reads 'peeled', though the instruction step says '6 unpeeled'); peeled cloves are roasted tucked among the tomatillos. (d) The source's 'thin with more broth if needed' is cook's discretion the mapper did not book, so step 7 loosens with water rather than broth nobody bought.",
+    "SHOP_SMART makes NO leftover, per-ounce, or lasts-several-batches claim, so no bullet needs a cost_lines entry to prove it; every statement is grounded in the recipe's own buy amount. Re-walk the bullets against cost_lines once the recipe is finally costed, before publish.",
+    "DROPPED serve-with lines per standing canon (instruction-only, never in the ingredient list): sour cream, avocados, and limes. Cilantro garnish is kept because cilantro is a bought line."
+  ],
+  "prose": {
+    "intro_html": "Chile verde is what happens when a cheap, tough cut of pork meets a pot of roasted tomatillos and green chiles and nobody is in a hurry. You char the tomatillos and poblanos under the broiler, blend them into a bright green sauce, brown the pork, and let the whole thing simmer low for a couple of hours until the meat gives up and falls apart. The tomatillos do most of the seasoning work, so you are not paying for much beyond the pork and a bag of green vegetables. Built at 14 servings it comes in around <strong>{{cal}} calories</strong> and <strong>{{protein}} grams of protein</strong> a serving, with under 15 grams of carbs. That is a Sunday pot of stew that feeds you all week.",
+    "shop_smart": [
+      "<strong>Seven pounds of pork shoulder is the whole recipe.</strong> This is where the money and nearly all of the protein live, and it is still one of the cheapest cuts in the case because it needs time instead of a fancy grade. Reach for a big boneless shoulder, sometimes labeled Boston butt, and cut it into large cubes yourself so you are paying for pork and not for someone else doing the trimming.",
+      "<strong>Three and a half pounds of tomatillos and seven poblano peppers are the green in chile verde.</strong> The tomatillos are the tart backbone and the poblanos are the mild green chile behind it, and together they do most of the seasoning. Buy firm tomatillos with tight, dry husks and poblanos that feel heavy and glossy, and skip the jarred salsa verde because you are building your own here.",
+      "<strong>Two bunches of cilantro, two bunches of green onions, and a head of garlic go into the blender sauce.</strong> These are what turn roasted vegetables into something that actually tastes like chile verde. The cilantro and green onions go in fresh, and you set a little cilantro aside to scatter over the top when you serve it.",
+      "<strong>Four and a half cups of chicken broth carries the braise.</strong> Half of it goes into the blender to loosen the green sauce and half thins the stew as the pork cooks down. Any plain chicken broth does the job here, so skip the bone broth and buy the everyday carton.",
+      "<strong>Cumin, chipotle powder, cinnamon, oregano, and salt are the spice shelf.</strong> A little smoked chipotle and a pinch of cinnamon are what set this version apart from a plain green stew. These are small spoonfuls from jars you likely already keep on the shelf."
+    ],
+    "make_it": [
+      "Weigh your empty Dutch oven or the biggest heavy pot you own and write the number down. You will use it at the end to split this into 14 even servings by weight instead of guessing.",
+      "Heat the broiler. Halve the tomatillos and lay them cut side up on a sheet pan with the poblano peppers and the peeled garlic cloves tucked in among them. Broil for 5 to 6 minutes, until the tomatillos slump and the poblano skins blister and char.",
+      "Scrape everything on the pan, juices and all, into a blender. Add the cilantro, the green onions, and 2 1/4 cups of the chicken broth. Blend to a green sauce, as chunky or smooth as you like it, and set it aside.",
+      "Cut the pork shoulder into 1 1/2 inch cubes if it did not come that way, and sprinkle it all over with the salt. Heat the olive oil in the pot over high heat and brown the pork in batches, giving each batch room so it sears instead of steams. Move the browned pork to a plate.",
+      "Lower the heat to medium. Coarsely chop the yellow onions, add them to the pot, and cook about 5 minutes until they soften and turn translucent, scraping up the browned bits from the bottom as they go.",
+      "Stir in the ground cumin, chipotle powder, cinnamon, and oregano and cook one minute, until they smell toasty. Return the pork and any juices on the plate, pour in the green sauce and the remaining 2 1/4 cups broth, and bring it up to a gentle boil.",
+      "Cover the pot, drop the heat to low, and simmer 2 to 2 1/2 hours, stirring now and then, until the pork is fork-tender and the sauce has cooked down and deepened. If it ever looks too thick, loosen it with a splash of water.",
+      "Weigh the full pot and subtract the empty weight from Step 1 to get the cooked total. Divide by 14 and spoon that exact weight into each container. Scatter the reserved cilantro over the top when you serve."
+    ],
+    "portion_html": "Set the full pot on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container so every one gets the same share of pork and green sauce. Each serving lands near <strong>{{cal}} calories with {{protein}} grams of protein</strong>.",
+    "cost_closing_html": "About <strong>${{cost_ps}} a serving</strong> (at everyday cost) for a pot of pork chile verde that tastes like it simmered all day, because it did. The pork shoulder carries the cost and the protein, and the tomatillos and chiles do the rest for pocket change.",
+    "upsell_html": "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month."
+  },
+  "head": {
+    "description": "Pork chile verde stew for meal prep: pork shoulder browned and slow-simmered in a roasted tomatillo and poblano green sauce, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 15 grams of carbs.",
+    "keywords": "pork chile verde, chile verde stew, tomatillo pork stew, low carb pork dinner, high protein meal prep",
+    "prepTime": "PT45M",
+    "cookTime": "PT2H30M",
+    "totalTime": "PT3H15M",
+    "steps": [
+      "Weigh the empty pot and write the number down.",
+      "Broil the halved tomatillos, poblanos, and peeled garlic until charred and soft.",
+      "Blend the roasted vegetables with cilantro, green onions, and half the broth into a green sauce.",
+      "Salt and brown the cubed pork in olive oil, then set it aside.",
+      "Soften the onion, toast the spices, return the pork, and add the sauce and remaining broth.",
+      "Cover and simmer low until the pork is fork-tender.",
+      "Weigh the pot, subtract the empty weight, and divide across 14 containers."
+    ]
+  }
+}

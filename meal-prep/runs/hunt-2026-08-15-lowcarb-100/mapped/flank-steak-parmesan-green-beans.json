@@ -1,0 +1,165 @@
+{
+  "slug": "flank-steak-parmesan-green-beans",
+  "title": "Flank Steak & Green Beans",
+  "source_url": "https://www.momsintofitness.com/recipes/flank-steak-green-beans/",
+  "source_servings": 4,
+  "target_servings": 14,
+  "scale_factor": 3.5,
+  "protein": "beef",
+  "mapped_by": "recipe-ingredient-mapper",
+  "mapped_at": "2026-08-15",
+  "conventions": "buy strings are cook measures (what goes in the pot), grams derived FROM the printed measure via db\\densities.json (or the flagged label/USDA unit weights where densities has no row) so the two agree by construction; quantities quantized to house quarters, drift from the exact 3.5x scale noted per line where it exceeds 5%. Marinade is counted in full, matching the source's own published nutrition (their 15 g sugars/serving is the whole honey).",
+  "ruled_substitutions": [
+    "Coconut aminos -> soy sauce, SOURCE-SANCTIONED: the line itself prints '1/4 CUP COCONUT AMINOS (OR SOY SAUCE)'. Coconut aminos has no board commodity; soy-sauce is 7 of 7. Macro delta is small and in the honest direction (soy is slightly higher protein, near-equal carbs vs aminos' sugars)."
+  ],
+  "ingredients": [
+    {
+      "source_raw": "1 LB. FLANK STEAK",
+      "item": "Beef Flank/Sirloin Steak",
+      "bid": "sirloin-steak",
+      "board": "weekly",
+      "grams": 1588,
+      "buy": "3 1/2 lb flank steak",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "Existing ingredient-map authority: item 'Beef Flank/Sirloin Steak' -> sirloin-steak (weekly), i.e. the house has already ruled flank and sirloin one price class ($5.49-10.99/lb board range brackets real flank pricing) - this mapping follows that entry rather than minting anything. The bare TERM 'flank steak' is unclaimed by any commodity (CAPTURE tier: one Walmart fajita-seasoned tray) - term gap noted below. sirloin-steak 7 of 7 stores, cheapest Family Fare $5.49/lb. Main protein anchored by source WEIGHT, exact 3.5x. DB row Beef Flank/Sirloin Steak (USDA lean raw, 155 cal/100 g)."
+    },
+    {
+      "source_raw": "1/4 CUP OLIVE OIL (marinade)",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 189,
+      "buy": "3/4 cup plus 2 tbsp (marinade)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities cup=216 g; 0.875 cup = 189 g, exact 3.5x. Counted in full per the source's own nutrition basis; real absorbed fraction is lower, but discounting it would be a guess. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 CLOVE GARLIC, MINCED",
+      "item": "Garlic",
+      "bid": "garlic",
+      "board": "weekly",
+      "grams": 11,
+      "buy": "3 1/2 cloves, minced",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities clove=3 g; 3.5 cloves = 10.5 g rounded 11. Board 5 of 7."
+    },
+    {
+      "source_raw": "3 TBSP HONEY",
+      "item": "Honey",
+      "bid": "honey",
+      "board": "weekly",
+      "grams": 221,
+      "buy": "10 1/2 tbsp (about 2/3 cup)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "label 21 g/tbsp; 10.5 tbsp = 220.5 g rounded 221, exact 3.5x. This one line is 12.8 g of the 22.6 g carbs/serving - it is the marinade sugar the source itself publishes. Board 7 of 7."
+    },
+    {
+      "source_raw": "2 TBSP RED WINE VINEGAR (marinade)",
+      "item": "Red Wine Vinegar",
+      "bid": "red-wine-vinegar",
+      "board": "weekly",
+      "grams": 105,
+      "buy": "7 tbsp (marinade)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 15 g/tbsp. Board 5 of 7, cheapest Walmart $0.1192/floz."
+    },
+    {
+      "source_raw": "1/4 CUP COCONUT AMINOS (OR SOY SAUCE)",
+      "item": "Soy Sauce",
+      "bid": "soy-sauce",
+      "board": "weekly",
+      "grams": 223,
+      "buy": "3/4 cup plus 2 tbsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "SOURCE-SANCTIONED substitution, see ruled_substitutions. densities cup=255 g; 0.875 cup = 223 g. Board 7 of 7, cheapest Aldi $0.11/floz."
+    },
+    {
+      "source_raw": "SALT AND PEPPER",
+      "item": "Salt and Pepper (to taste)",
+      "bid": null,
+      "board": null,
+      "grams": 0,
+      "buy": "to taste",
+      "optional": true,
+      "decision": "optional-pantry",
+      "notes": "No quantity on the page (extractor concern); optional to-taste line, zero grams booked, NOT enqueued."
+    },
+    {
+      "source_raw": "16 OUNCES FRESH OR FROZEN GREEN BEANS",
+      "item": "Green Beans",
+      "bid": "frozen-green-beans",
+      "board": "recipe",
+      "grams": 1588,
+      "buy": "3 1/2 lb, fresh or frozen",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "NOT a form-flip: the source line itself sanctions frozen ('FRESH OR FROZEN'), and the ingredient-map authority routes Green Beans to frozen-green-beans (recipe board, 5 of 7, cheapest Walmart $0.061/oz). The fresh-green-beans commodity is also carried (6 of 7) if the writer prefers the fresh read; either satisfies the source. Exact 3.5x = 56 oz."
+    },
+    {
+      "source_raw": "1/4 CUP OLIVE OIL (dressing)",
+      "item": "Olive Oil",
+      "bid": "olive-oil",
+      "board": "weekly",
+      "grams": 189,
+      "buy": "3/4 cup plus 2 tbsp (dressing)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "second listed oil line (Green Beans section), kept separate to trace to the extraction. Board 7 of 7."
+    },
+    {
+      "source_raw": "1 TBSP RED WINE VINEGAR (dressing)",
+      "item": "Red Wine Vinegar",
+      "bid": "red-wine-vinegar",
+      "board": "weekly",
+      "grams": 53,
+      "buy": "3 1/2 tbsp (dressing)",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 15 g/tbsp; 3.5 tbsp = 52.5 g rounded 53."
+    },
+    {
+      "source_raw": "1 TSP DIJON MUSTARD",
+      "item": "Dijon Mustard",
+      "bid": "dijon-mustard",
+      "board": "weekly",
+      "grams": 18,
+      "buy": "3 1/2 tsp",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "densities 5 g/tsp; 17.5 g rounded 18. Board 6 of 7."
+    },
+    {
+      "source_raw": "1/3 CUP GRATED PARMESAN",
+      "item": "Parmesan Cheese",
+      "bid": "parmesan",
+      "board": "weekly",
+      "grams": 131,
+      "buy": "1 cup plus 2 3/4 tbsp, grated",
+      "optional": false,
+      "decision": "mapped",
+      "notes": "exact 3.5x = 1.167 cups = 18.67 tbsp, quantized 18.75 tbsp (+0.4%) at the label 7 g/tbsp = 131 g. Board 7 of 7."
+    }
+  ],
+  "rejected": [],
+  "db_entries_added": [],
+  "pricing_terms_needed": [],
+  "new_commodity_proposals": [],
+  "macro_cross_check": {
+    "source_published_per_serving": { "calories": 516, "protein_g": 28, "carbs_g": 18, "fat_g": 38 },
+    "computed_per_serving": { "calories": 543.3, "protein_g": 31.7, "carbs_g": 22.6, "fat_g": 37.6 },
+    "protein_gap_pct": 13.3,
+    "calorie_gap_pct": 5.3,
+    "verdict": "PASS - protein gap +13.3% is inside the 15% tolerance but worth its sentence: the source served '4 ounces of steak' from a 1 lb raw flank (cooking loss), while our raw-basis label row books the full raw pound; that direction and size of gap is exactly what a raw-vs-cooked serving basis produces and does not indicate a wrong portion. Fat matches to within 1% (37.6 vs 38), which pins the big oil lines as correctly counted-in-full, same as their calculator.",
+    "band_check": "computed 543.3 cal in [400, 650] PASS; carbs 22.6 g <= 35 PASS"
+  },
+  "board_defects_observed": [
+    "Term 'flank steak' is claimed by no commodity (CAPTURE tier) even though the ingredient-map's own 'Beef Flank/Sirloin Steak' item routes to sirloin-steak - a term-resolution gap: any future recipe writing the bare term will look unpriced while the item is priced 7 of 7. A flank include-pattern on sirloin-steak would close it, but that is a commodities.json matching change and goes through the match-soundness gate, not this run."
+  ],
+  "densities_followups": []
+}

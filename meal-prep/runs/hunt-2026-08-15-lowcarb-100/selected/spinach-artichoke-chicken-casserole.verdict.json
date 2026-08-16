@@ -1,0 +1,26 @@
+{
+  "slug": "spinach-artichoke-chicken-casserole",
+  "name": "4-Cheese Spinach Artichoke Chicken Casserole",
+  "protein": "chicken",
+  "cuisine": "American",
+  "verdict": "KEEP",
+  "conditions_check": {
+    "calories": 451,
+    "carbs": 6,
+    "in_cal_band_400_650": true,
+    "carbs_le_35": true,
+    "no_seafood": true,
+    "scalable_to_14": true,
+    "meal_prep_dinner": true,
+    "fit": true
+  },
+  "dedup": {
+    "catalog_dupe": false,
+    "evidence": "Nearest catalog dish is 'turkey-spinach-artichoke-rice-casserole' (Turkey Spinach Artichoke Wild Rice Casserole) — same spinach-artichoke creamy-cheese flavor family but different protein (turkey vs chicken) AND different starch base (wild rice vs keto/no-starch, cheese-and-cream bound), so 2 of 4 identity axes differ: a genuinely different plate, not a near-duplicate. No chicken spinach-artichoke dish exists in the catalog or in accepted-slugs.json (checked fresh: jalapeno-popper-chicken-casserole and chicken-bacon-ranch-cauliflower-bake are distinct flavor families; chicken-florentine is a spinach cream skillet with no artichoke)."
+  },
+  "cross_protein_collision_flags": [
+    "STRUCTURAL TWIN of catalog's turkey-spinach-artichoke-rice-casserole minus the rice — a decider watching for a keto/no-rice TURKEY spinach-artichoke casserole in the turkey selector's pool should treat that as the same dish as this and keep only one.",
+    "Any pool spinach-artichoke creamy-cheese casserole on a different protein (turkey/pork) with no starch is the same dinner as this; flagging for the cross-protein merge pass."
+  ],
+  "notes": "Unmapped: dairy mozzarella (board carries only daiya-mozzarella-style-shreds). Per v2.1 5.1 the unmapped pick is wanted, not penalised."
+}

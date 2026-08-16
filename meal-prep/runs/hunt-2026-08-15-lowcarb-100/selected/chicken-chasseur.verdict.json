@@ -1,0 +1,20 @@
+{
+  "slug": "chicken-chasseur",
+  "name": "Chicken Chasseur (French Hunter's Chicken)",
+  "protein": "chicken",
+  "cuisine": "French",
+  "verdict": "KEEP",
+  "borderline": true,
+  "fit": {
+    "pass": true,
+    "cal": 459,
+    "carbs": 13,
+    "evidence": "459 cal within 400-650 band; 13 g carbs under 35 g cap; 36 g protein; no seafood; starch-free Dutch-oven braise, budget meal-prep, weigh-and-divide scales 6->14. Clears the band strongly (high protein, low carb)."
+  },
+  "dupe_of": null,
+  "dupe_evidence": "NOT ruled a hard catalog dupe, but flagged BORDERLINE against catalog coq-au-vin: both are French chicken-THIGH braises with BACON + MUSHROOMS + tomato-paste = 3-of-4 shared axes (protein, method, bacon-mushroom-tomato profile). Distinguished by wine/sauce character: coq au vin is a RED-wine braise; chasseur is a WHITE-wine + fresh crushed-tomato + tarragon 'hunter's' sauce. Recognizably different classic dishes, but adjacent enough that a strict decider running the French-braise slot should confirm it does not double up on coq au vin. NOT a dupe of accepted chicken-marsala-skillet (marsala reduction, no tomato/bacon/white-wine) nor catalog slow-cooker-chicken-cacciatore-pasta (Italian, pasta base, peppers, no bacon/tarragon).",
+  "pool_collision": "The 'braised chicken thighs + mushrooms + wine' space is CROWDED with pool candidates the decider must reconcile (verdict files already present in select dir): coq-au-vin-braised-chicken, braised-chicken-thighs-mushrooms-leeks, chicken-cacciatore / chicken-cacciatore-braise / braised-chicken-cacciatore, chicken-marsala. Chasseur overlaps most with a pool coq-au-vin candidate (same red/white distinction as the catalog note) - decider should ensure the French braised-thigh niche is not oversubscribed.",
+  "cross_protein_collision": "Low cross-protein risk - chasseur is chicken-identity-bound. A turkey-thigh hunter's braise would be the nearest swap; no strong twin expected in beef/pork lanes.",
+  "notes": "unmapped white-wine, marsala-wine, fresh-tarragon are intentional pricer-lane exercises (not penalized per v2.1 s5.1); tarragon has a dried-thyme fallback on-board. Widens French coverage only marginally since coq-au-vin already holds a French chicken braise - that overlap is the borderline.",
+  "checked_against": {"accepted_slugs_read_fresh": true, "catalog_digest_544": true}
+}

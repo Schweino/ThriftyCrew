@@ -1,0 +1,18 @@
+{
+  "slug": "flank-steak-parmesan-green-beans",
+  "name": "Flank Steak with Parmesan Green Beans",
+  "protein": "beef",
+  "verdict": "KEEP",
+  "fit": {
+    "ok": true,
+    "cal": 516,
+    "carbs": 18,
+    "notes": "516 cal is inside 400-650; 18g carbs clears the <=35g cap; no seafood; steak + dressed green beans scales cleanly to 14 servings as a budget meal-prep dinner."
+  },
+  "dupe_check": {
+    "catalog": "No duplicate - every catalog steak dish pairs whole-muscle steak with a starch (chipotle-steak-burrito, honey-garlic-steak-bites-potatoes, pepper-steak-with-rice, slow-cooker-steak-and-onions-rice, steak-fajita-rice-bowls all rice/potato-based); loobia-polo-persian-beef-green-bean-rice has green beans but is ground beef over rice, a different dinner.",
+    "accepted_slugs": "No duplicate - spinach-provolone-stuffed-flank-steak-rolls is a stuffed rolled roast, garlic-butter-steak-bites-zucchini is butter steak bites with zucchini, low-carb-steak-fajita-skillet is fajitas; none share the honey/coconut-aminos marinade + parmesan-dijon green-bean plate structure."
+  },
+  "cross_protein_collision_watch": "Structurally a seared-protein + parmesan-dijon-dressed-green-beans plate with a honey/soy marinade; the decider should watch for a chicken or pork twin (e.g. 'chicken with parmesan green beans' or a pork-chop + green-beans plate) in another selector's pool, since swapping the protein would produce the same dinner.",
+  "unmapped_note": "flank-steak is unmapped on the Omaha board (board carries sirloin-steak and ribeye-steak, not flank) - a wanted absent-ingredient pick for the pricer lane per v2.1 section 5.1, not a penalty."
+}
