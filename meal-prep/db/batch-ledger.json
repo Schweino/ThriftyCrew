@@ -152,7 +152,7 @@
   {
       "batch":  "hunt-2026-08-15-lowcarb-100-w1",
       "opened":  "2026-08-16T06:07:43",
-      "last_activity":  "2026-08-16T06:07:44",
+      "last_activity":  "2026-08-16T13:52:08",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -162,7 +162,6 @@
                     "turkey-zucchini-noodle-casserole",
                     "keto-turkey-broccoli-cheddar-casserole",
                     "baked-cauliflower-mac-smoked-sausage",
-                    "slow-cooker-boneless-beef-short-ribs",
                     "chimichurri-steak-sheet-pan",
                     "french-chicken-fricassee",
                     "chicken-piccata-skillet",
@@ -188,6 +187,99 @@
                          "stage":  "build-specs",
                          "at":  "2026-08-16T06:07:44",
                          "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "reconcile",
+                         "at":  "2026-08-16T13:52:08",
+                         "detail":  "dropped 1: slow-cooker-boneless-beef-short-ribs - retired on Brad ruling: honest $6.71/serving"
+                     }
+                 ]
+  },
+  {
+      "batch":  "hunt-2026-08-15-lowcarb-100-w2",
+      "opened":  "2026-08-16T11:40:51",
+      "last_activity":  "2026-08-16T11:40:52",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "flank-steak-parmesan-green-beans",
+                    "philly-cheesesteak-stuffed-peppers",
+                    "keto-cheeseburger-skillet",
+                    "low-carb-steak-fajita-skillet",
+                    "low-carb-taco-cabbage-beef-skillet",
+                    "sheet-pan-smoked-sausage-broccoli-cheddar",
+                    "spinach-provolone-stuffed-flank-steak-rolls",
+                    "low-carb-turkey-cauliflower-mushroom-casserole",
+                    "sheet-pan-tandoori-chicken-cauliflower",
+                    "balsamic-sirloin-steak-sheet-pan"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-16T11:40:51",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-16T11:40:51",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-16T11:40:52",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-16T11:40:52",
+                         "detail":  "streamed per-recipe before wave close"
+                     }
+                 ]
+  },
+  {
+      "batch":  "hunt-2026-08-15-lowcarb-100-w3",
+      "opened":  "2026-08-16T12:35:08",
+      "last_activity":  "2026-08-16T13:52:08",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "garlic-butter-steak-bites-zucchini",
+                    "turkey-meatballs-cream-sauce-skillet",
+                    "mexican-chorizo-egg-casserole",
+                    "spinach-artichoke-chicken-casserole",
+                    "pulled-pork-stuffed-peppers",
+                    "flank-steak-parmesan-green-beans",
+                    "keto-cheeseburger-skillet",
+                    "low-carb-taco-cabbage-beef-skillet",
+                    "sheet-pan-tandoori-chicken-cauliflower"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-16T12:35:09",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-16T12:35:09",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-16T12:35:09",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-16T12:35:09",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "reconcile",
+                         "at":  "2026-08-16T13:52:08",
+                         "detail":  "dropped 1: sheet-pan-smoked-sausage-broccoli-cheddar - held: no fresh-broccoli board price at the time"
                      }
                  ]
   }

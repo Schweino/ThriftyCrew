@@ -16,10 +16,11 @@
 #   .\batch-ledger.ps1 -Start -Batch burrito-2026-08-07 -Slugs a,b,c
 #   .\batch-ledger.ps1 -Stamp -Batch burrito-2026-08-07 -Stage publish -Detail '29/29 verified'
 #   .\batch-ledger.ps1 -Close -Batch burrito-2026-08-07 -Detail 'stage 8 GO'
+#   .\batch-ledger.ps1 -Reconcile -Batch <b> -Slugs a,b -Detail 'why' (OPEN rows only; records the removals)
 #   .\batch-ledger.ps1 -Verify                 (exit 1 if any open batch is stale or missing a stage)
 #   .\batch-ledger.ps1 -SelfTest
 param(
-  [switch]$Start,[switch]$Stamp,[switch]$Close,[switch]$Verify,[switch]$SelfTest,
+  [switch]$Start,[switch]$Stamp,[switch]$Close,[switch]$Verify,[switch]$SelfTest,[switch]$Reconcile,
   [string]$Batch,[string[]]$Slugs,[string]$Stage,[string]$Detail,
   [int]$MaxAgeHours = 24,
   [string]$LedgerPath
@@ -37,6 +38,15 @@ $script:REQUIRED = @('select','map','write','build-specs','audit','recipes-db','
 function Test-BatchComplete { param($Batch)
   $have = @($Batch.stages | ForEach-Object { [string]$_.stage })
   return @($script:REQUIRED | Where-Object { $have -notcontains $_ })
+}
+# The reconcile decision, as a function so the fixtures can drive it without a ledger file. Returns
+# @{ dropped; added; noop } - the caller turns `added` into a refusal and `dropped` into the audit trail.
+function Get-ReconcilePlan { param([string[]]$Was,[string[]]$Want)
+  $wasL  = @(@($Was)  | ForEach-Object { [string]$_ } | Where-Object { $_ })
+  $wantL = @(@($Want) | ForEach-Object { [string]$_ } | Where-Object { $_ })
+  $dropped = @($wasL  | Where-Object { $wantL -notcontains $_ })
+  $added   = @($wantL | Where-Object { $wasL  -notcontains $_ })
+  return [pscustomobject]@{ dropped=$dropped; added=$added; noop=($dropped.Count -eq 0 -and $added.Count -eq 0) }
 }
 function Test-BatchStale { param($Batch,[datetime]$Now,[int]$MaxAgeHours)
   if($Batch.closed){ return $false }
@@ -79,6 +89,32 @@ if($SelfTest){
   T 'CLEAN TWIN an open batch still inside the window is not yet a finding'       (-not (Test-BatchStale $fresh $now 24)) 'spurious finding'
   T 'MUST FIRE  that same young batch is still INCOMPLETE'                        ((Test-BatchComplete $fresh).Count -gt 0) 'not reported'
 
+  # ---- RECONCILE. FROZEN FIXTURE: wave 1 of hunt-2026-08-15-lowcarb-100 on 2026-08-16. The row opened
+  # with 10 slugs; an audit retired slow-cooker-boneless-beef-short-ribs at its honest $6.71 a serving and
+  # the manifest was cut to 9, but nothing could tell the ledger. A closed batch is the permanent record of
+  # what shipped, so it must not carry a recipe that did not.
+  $w1was = @('low-carb-ground-beef-stroganoff-skillet','creamy-tuscan-chicken-skillet','turkey-zucchini-noodle-casserole',
+             'keto-turkey-broccoli-cheddar-casserole','baked-cauliflower-mac-smoked-sausage','slow-cooker-boneless-beef-short-ribs',
+             'chimichurri-steak-sheet-pan','french-chicken-fricassee','chicken-piccata-skillet','hatch-green-chile-chicken-casserole')
+  $w1want = @($w1was | Where-Object { $_ -ne 'slow-cooker-boneless-beef-short-ribs' })
+  $p1 = Get-ReconcilePlan $w1was $w1want
+  T 'MUST FIRE  reconcile drops exactly the retired slug'      ($p1.dropped.Count -eq 1 -and $p1.dropped[0] -eq 'slow-cooker-boneless-beef-short-ribs') ($p1.dropped -join ',')
+  T 'MUST FIRE  and adds nothing while doing it'               ($p1.added.Count -eq 0) ($p1.added -join ',')
+
+  # ADDING is the refusal case: a slug the row never carried means the wave GREW after opening, which is a
+  # new batch, not a correction. Silently accepting it would let a batch rewrite its own history.
+  $p2 = Get-ReconcilePlan @('a','b') @('a','b','c')
+  T 'MUST FIRE  a slug never in the batch is surfaced as an ADD, so the caller can refuse it' ($p2.added -contains 'c') ($p2.added -join ',')
+
+  # CLEAN TWIN: an already-correct row is a no-op, not a spurious stage entry. A reconcile that stamps
+  # every time it runs would bury the real removals in noise.
+  $p3 = Get-ReconcilePlan @('a','b') @('a','b')
+  T 'CLEAN TWIN a row that already matches reconciles to a no-op' ($p3.noop) ("dropped=" + ($p3.dropped -join ',') + " added=" + ($p3.added -join ','))
+
+  # CLEAN TWIN: order is not a difference. The manifest and the ledger can list the same slugs in any order.
+  $p4 = Get-ReconcilePlan @('a','b','c') @('c','a','b')
+  T 'CLEAN TWIN reordering the same slugs is not a change' ($p4.noop) ("dropped=" + ($p4.dropped -join ',') + " added=" + ($p4.added -join ','))
+
   # FROZEN FIXTURE: the founding bug AFTER someone closes it. -Verify used to `continue` on every closed row,
   # so closing an unfinished batch made it permanently invisible - the one action most likely to happen when
   # a session ends and somebody tidies up.
@@ -117,6 +153,42 @@ if($Start){
                                 closed_at=$null; close_detail=$null; slugs=@($Slugs); stages=@() }
   Save-Ledger $ledger
   Write-Output ("ledger opened: {0} ({1} slug(s))" -f $Batch, @($Slugs).Count); Write-GuardComplete -Name 'batch-ledger'; exit 0
+}
+# RECONCILE. A wave's manifest can lose slugs after the ledger row is opened - an audit NO-GO trims a
+# recipe back for repair, or Brad retires one outright - and until today nothing could tell the ledger.
+# On 2026-08-16 the w1 row still listed a retired $6.71/serving recipe and w3 still listed a held one.
+# Two auditors independently ruled that this does not block PUBLISH (wave-publish reads the manifest for
+# slugs and the ledger only for the audit stamp) but must not survive to -Close, because a closed batch is
+# the permanent record of what shipped and it would name recipes that did not.
+#
+# It is its own verb, deliberately. Overloading -Stamp would let a routine stamp silently rewrite the slug
+# list, and a hand edit leaves no trace of what was removed. This refuses a CLOSED row, refuses to invent
+# slugs the row never had, and appends a `reconcile` stage entry naming every removal - so the batch still
+# records that those recipes were once in it and why they left.
+if($Reconcile){
+  if(-not $Batch){ throw '-Batch required' }
+  $row = $ledger | Where-Object { $_.batch -eq $Batch } | Select-Object -First 1
+  if(-not $row){ throw "no ledger row for '$Batch'" }
+  if($row.closed){ throw "batch '$Batch' is CLOSED - its slug list is the record of what shipped and is not rewritten" }
+  $was = @($row.slugs | ForEach-Object { [string]$_ })
+  $want = @($Slugs | ForEach-Object { [string]$_ } | Where-Object { $_ })
+  if(-not $want.Count){ throw '-Slugs required: reconciling a batch to zero slugs is a close or a mistake, not a reconcile' }
+  $plan = Get-ReconcilePlan $was $want
+  # ADDING is refused. This verb exists to drop what a trim removed; a slug the row never carried would
+  # mean the wave grew after opening, which is a new batch, not a correction to this one.
+  if($plan.added.Count){ throw ("refusing to ADD slug(s) never in this batch: " + ($plan.added -join ', ') + ". Reconcile drops, it does not grow a batch.") }
+  $dropped = @($plan.dropped)
+  if(-not $dropped.Count){
+    Write-Output ("{0}: already matches - nothing dropped" -f $Batch)
+    Write-GuardComplete -Name 'batch-ledger'; exit 0
+  }
+  $row.slugs = @($want)
+  $row.stages = @($row.stages) + @([pscustomobject]@{ stage='reconcile'; at=$now
+      detail=("dropped " + $dropped.Count + ": " + ($dropped -join ', ') + $(if($Detail){" - $Detail"}else{''})) })
+  $row.last_activity = $now
+  Save-Ledger $ledger
+  Write-Output ("{0}: reconciled to {1} slug(s); dropped {2}: {3}" -f $Batch, $want.Count, $dropped.Count, ($dropped -join ', '))
+  Write-GuardComplete -Name 'batch-ledger'; exit 0
 }
 if($Stamp -or $Close){
   if(-not $Batch){ throw '-Batch required' }
