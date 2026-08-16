@@ -27,24 +27,6 @@
                      },
                      {
                          "run":  "live",
-                         "slug":  "french-chicken-fricassee",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027hot sauce\u0027 but Hot Sauce is in no ingredient line - it cannot be made as shopped"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "hatch-green-chile-chicken-casserole",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027green chile sauce\u0027 but Green Chile Sauce is in no ingredient line - it cannot be made as shopped"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "hatch-green-chile-chicken-casserole",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027salt\u0027 but Salt is in no ingredient line - it cannot be made as shopped"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "morisqueta-pork-rice-and-beans",
                          "cls":  "UNMEASURABLE-QTY",
                          "why":  "a line asks for \u00270.12 cups\u0027, which no kitchen measure shows: Dried Arbol Chiles (generic (USDA)): 0.12 cups (3 g)"
@@ -84,12 +66,6 @@
                          "slug":  "pozole-rojo-pork-hominy-bowls",
                          "cls":  "UNMEASURABLE-QTY",
                          "why":  "a line asks for \u00270.08 cups\u0027, which no kitchen measure shows: Dried Arbol Chiles (generic (USDA)): 0.08 cups (2 g)"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-boneless-beef-short-ribs",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027salt\u0027 but Salt is in no ingredient line - it cannot be made as shopped"
                      },
                      {
                          "run":  "live",
@@ -154,7 +130,6 @@
                  ],
     "generated":  "see git",
     "by_class":  {
-                     "UNMEASURABLE-QTY":  21,
-                     "PHANTOM":  4
+                     "UNMEASURABLE-QTY":  21
                  }
 }

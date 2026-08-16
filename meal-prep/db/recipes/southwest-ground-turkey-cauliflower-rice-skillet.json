@@ -33,7 +33,7 @@
                  "protein":  32,
                  "carbs":  9,
                  "fat":  20,
-                 "cost_ps":  "2.17"
+                 "cost_ps":  "2.35"
              },
     "intro_html":  "Ground turkey has a reputation as the protein you put up with on a diet, not the one you look forward to. Season it like the Southwest and it stops apologizing. You brown lean turkey with a full spice cup of cumin, coriander, paprika and cayenne, fold in sweet red bell pepper, shallot and spinach, then stir riced cauliflower right into the pan where the rice bowl used to be. One skillet, about twenty-five minutes, and it portions clean into containers. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 10 grams of carbs. The original finishes each bowl with shredded lettuce, pico de gallo and a swipe of sriracha mayo. Those are yours to add at the table if you want them; the build here is just the seasoned skillet, so the macros on the label are the macros in your container.",
     "ingredients_display":  [
@@ -56,14 +56,15 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 4 3/4 lb lean (93/7) ground turkey: ~$21.62. \u003cstrong\u003eBuy 5 lbs: $22.75.\u003c/strong\u003e",
+                       "Cauliflower, 7 cups riced (from about 1 1/2 medium heads): ~$2.52. \u003cstrong\u003eBuy 2 1 heads: $3.96.\u003c/strong\u003e",
                        "Red Bell Pepper, 4 1/2 red bell peppers, finely diced: ~$4.41. \u003cstrong\u003eBuy 5 each: $4.90.\u003c/strong\u003e",
                        "Shallots, 5 small shallots, finely diced: ~$0.38. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Frozen Chopped Spinach, 4 3/4 cups frozen chopped spinach: ~$1.64. \u003cstrong\u003eBuy 2 10oz boxes: $2.30.\u003c/strong\u003e",
                        "Olive Oil, 9 1/4 tbsp (a bit over 1/2 cup): ~$1.36. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (dried parsley, garlic powder, onion powder, paprika, ground cumin, ground coriander, salt, black pepper, cayenne pepper): ~$0.93. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $30.34 across 14 servings, so roughly $2.17 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $33.38 across 14 servings, roughly $2.38 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.24 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.62. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $32.86 across 14 servings, so roughly $2.35 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $37.34 across 14 servings, roughly $2.67 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.24 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.58. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a Southwest turkey skillet that eats like a rice bowl without the rice. The turkey carries the protein; the riced cauliflower, peppers and spice rack turn it into a full container for almost nothing.",
     "shop_smart":  [
@@ -87,14 +88,14 @@
     "portion_html":  "Set the full pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container. Give each one an even share of the turkey, pepper, spinach and cauliflower, and every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://upnorthnosh.com/low-carb-ground-turkey-skillet-with-cauliflower-rice/\" target=\"_blank\" rel=\"noopener\"\u003eupnorthnosh.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  30.34,
-    "cost_batch_true":  33.38,
-    "cost_per_serving":  2.17,
-    "cost_per_serving_true":  2.38,
+    "cost_batch":  32.86,
+    "cost_batch_true":  37.34,
+    "cost_per_serving":  2.35,
+    "cost_per_serving_true":  2.67,
     "cost_pantry_add":  16.24,
-    "cost_first_run":  49.62,
+    "cost_first_run":  53.58,
     "scaler":  {
-                   "cost":  "33.38",
+                   "cost":  "37.34",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -225,7 +226,7 @@
                  "prepTime":  "PT10M",
                  "cookTime":  "PT20M",
                  "totalTime":  "PT30M",
-                 "costPerServing":  2.17,
+                 "costPerServing":  2.35,
                  "recipeIngredient":  [
                                           "93/7 Ground Turkey, 4 3/4 lb lean (93/7) ground turkey (2155 g)",
                                           "Cauliflower, 7 cups riced (from about 1 1/2 medium heads) (749 g)",

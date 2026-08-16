@@ -9216,6 +9216,40 @@
                                "size":  "0.5 oz"
                            }
                        ]
+        },
+        {
+            "id":  "white-wine",
+            "commodity":  "Dry White Wine",
+            "category":  "Snacks \u0026 Drinks",
+            "unit":  "floz",
+            "cheapest_store":  "Aldi",
+            "stores":  [
+                           {
+                               "store":  "Aldi",
+                               "per_unit":  0.1555,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Winking Owl Sauvignon Blanc, 750ml",
+                               "size":  "25.4 floz"
+                           }
+                       ]
+        },
+        {
+            "id":  "brandy",
+            "commodity":  "Brandy",
+            "category":  "Snacks \u0026 Drinks",
+            "unit":  "floz",
+            "cheapest_store":  "Walmart",
+            "stores":  [
+                           {
+                               "store":  "Walmart",
+                               "per_unit":  0.4539,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Christian Brothers VS Grape Brandy, 750ml",
+                               "size":  "25.4 floz"
+                           }
+                       ]
         }
     ],
     "built_at": "2026-08-02T08:27:09",

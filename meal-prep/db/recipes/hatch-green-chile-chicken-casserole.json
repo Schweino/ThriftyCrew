@@ -17,10 +17,11 @@
                          "SOURCE MACRO NOTE (flag, not fixed): ruled.me prints 543 cal / 40.6 P / 10.4 gross carbs / 37.2 fat per serving. Our recompute lands 543.8 cal / 40.6 P / 14.3 C / 34.8 F. Protein is near-exact (-0.1%), calories near-exact (+0.1%). The carb gap (14.3 vs 10.4) is the source card printing total carbs equal to net carbs (extractor flagged it), so its 10.4 is likely net; our 14.3 is the conservative total-carb figure and still clears the 35 g gate with 20 g to spare. Fat -6.5%. Band holds under either reading.",
                          "GRAMS rounded to int for the intake (build stores grams as int): 1339.5-\u003e1340 chiles, 1438.8-\u003e1439 chicken, 416.5-\u003e417 cream, 198.4-\u003e198 cream cheese, 15.75-\u003e16 oil, 5.4-\u003e5 garlic powder. Each shift is sub-gram-per-serving and macro-immaterial; buy strings are the mapper\u0027s exact printed measures so the display amounts are unchanged.",
                          "BID-MAP BLOCKER for the repair pass (three lines, mapper-stage/map-owner domain, NOT edited here): db\\ingredients.json has NO item row for \u0027Pepper Jack Cheese\u0027 (mapper bid shredded-cheese), \u0027Yellow Bell Pepper\u0027 (mapper bid bell-peppers), or full-fat \u0027Cream Cheese\u0027 (mapper bid cream-cheese). All three HAVE food-macros-db rows (macro check passes) but no bid map row, so in this build they emit no bid and price pantry-static. cost_ps is therefore a FLOOR understated by roughly a pound of shredded pepper jack, a 7 oz cream-cheese brick, and ~1.75 yellow bells until the map rows are wired. I did NOT swap Cream Cheese to the existing \u00271/3 Fat Cream Cheese\u0027 row: the mapper explicitly warned that deflates a keto card\u0027s calorie floor, and it would change macros. bell-peppers bid also has no item row at all in ingredients.json (only \u0027Green Bell Peppers\u0027 and \u0027Red Bell Pepper\u0027 exist); shredded-cheese resolves only from \u0027Mexican Cheese Blend\u0027. Re-cost after the three map rows land.",
-                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked both directions: olive oil (make_it 3 and 4, divided), zucchini (3), yellow onion (2, blended), green chiles (2 blended + 4 into sauce + 7 reserved garnish), yellow bell + red bell (4 into pan + 7 reserved garnish), garlic powder (4), heavy cream (5), pepper jack (6 into sauce + 7 on top, divided), cream cheese (6), rotisserie chicken (7), sharp cheddar (7 on top). The \u0027water or chile liquid\u0027 line is the mapper\u0027s mapped-free zero-cost item (chile-can liquid or tap water), NOT a booked ingredient, so it is excluded from the ingredient list and step 2 references the chile-can liquid; no orphan either direction. Salt and pepper are the source\u0027s to-taste line, mapped optional-pantry at zero booked cost (keto precedent), so step 6 says \u0027season to taste\u0027 only and they are not booked ingredient lines.",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked both directions: olive oil (make_it 3 and 4, divided), zucchini (3), yellow onion (2, blended), green chiles (2 blended + 4 into sauce + 7 reserved garnish), yellow bell + red bell (4 into pan + 7 reserved garnish), garlic powder (4), heavy cream (5), pepper jack (6 into sauce + 7 on top, divided), cream cheese (6), rotisserie chicken (7), sharp cheddar (7 on top). The \u0027water or chile liquid\u0027 line is the mapper\u0027s mapped-free zero-cost item (chile-can liquid or tap water), NOT a booked ingredient, so it is excluded from the ingredient list and step 2 references the chile-can liquid; no orphan either direction. Salt and pepper are the source\u0027s to-taste line (source states NO quantity); booked here at a smallest-defensible to-taste minimum (Salt 2 tsp, Black Pepper 1 tsp per 14-serving batch, both zero/near-zero macro) so make_it 6\u0027s \u0027season with salt and pepper to taste\u0027 is cook-as-shopped and clears the PHANTOM buy-coverage gate (2026-08-16 repair). Grams are macro-immaterial.",
                          "SHOP_SMART makes NO per-ounce, leftover, or lasts-several-batches claim, so no bullet needs a cost_lines entry to prove it; every statement is grounded in the recipe\u0027s own buy amount (matching the keto-turkey card\u0027s approach and steering clear of the 2026-08-15 audit failures). No per-line dollar figures; only ${{cost_ps}} and the $1/month membership line carry money.",
                          "PORTION METHOD: weigh the empty dish first, then weigh full and subtract, divide by 14. Standard house method.",
-                         "DATA SMELLS (flag, not fixed): (1) mapper CLASS CAVEAT - the bell-peppers commodity\u0027s cheapest cell is a GREEN bell at $0.77, so a yellow-only line prices low; red-bell-pepper\u0027s own class ($0.83-2.50 each) brackets a true yellow cost. (2) shredded-cheese commodity cell hijacks re-observed 2026-08-16 (Walmart \u0027Kraft Deluxe Mac and Cheese 14 oz\u0027 cheapest cell; Sam\u0027s \u0027Member\u0027s Mark Part-Skim Mozzarella 5 lb\u0027 for a jack query) - wrong-flavor/boxed-dinner matches on the class pepper jack would book to once wired. (3) canned-green-chilies board class is built on 4 oz cans; a 27 oz can typically prices BETTER per oz, so that line\u0027s estimate is conservative. All three are pricing-quality flags for the match-soundness gate, not build errors."
+                         "DATA SMELLS (flag, not fixed): (1) mapper CLASS CAVEAT - the bell-peppers commodity\u0027s cheapest cell is a GREEN bell at $0.77, so a yellow-only line prices low; red-bell-pepper\u0027s own class ($0.83-2.50 each) brackets a true yellow cost. (2) shredded-cheese commodity cell hijacks re-observed 2026-08-16 (Walmart \u0027Kraft Deluxe Mac and Cheese 14 oz\u0027 cheapest cell; Sam\u0027s \u0027Member\u0027s Mark Part-Skim Mozzarella 5 lb\u0027 for a jack query) - wrong-flavor/boxed-dinner matches on the class pepper jack would book to once wired. (3) canned-green-chilies board class is built on 4 oz cans; a 27 oz can typically prices BETTER per oz, so that line\u0027s estimate is conservative. All three are pricing-quality flags for the match-soundness gate, not build errors.",
+                         "PHANTOM REPAIR 2026-08-16: (1) make_it 7 read \u0027pour the green chile sauce over the top\u0027. That sauce is MADE in steps 4 to 6 from the blended green chiles, heavy cream, pepper jack and cream cheese (source ruled.me calls it \u0027green chile cream sauce\u0027), but the bare phrase collided with the bottled-condiment vocab name Green Chile Sauce (bid salsa-verde) and hard-failed audit PHANTOM. Reworded to \u0027green chile cream sauce\u0027, matching the source; no bottled sauce added. (2) make_it 6 seasons with salt and pepper that were not on the shopping list; added Salt and Black Pepper lines per above. NOTE: this intake cannot rebuild into db\\recipes yet because Pepper Jack Cheese (bid pepper-jack-cheese) and Yellow Bell Pepper (bid yellow-bell-pepper) are not on the live feed (known CHEAPEST-FALLBACK blocker); the db\\recipes spec still carries both phantoms until those bids land and this is rebuilt."
                      ],
     "cal_floor":  null,
     "stat":  {
@@ -28,7 +29,7 @@
                  "protein":  41,
                  "carbs":  14,
                  "fat":  35,
-                 "cost_ps":  "2.08"
+                 "cost_ps":  "2.20"
              },
     "intro_html":  "Green chile casserole in most kitchens means a can of cream-of-something soup, a bag of tortilla chips, and a prayer. This one earns its name instead. Roasted hatch green chiles get blended into a real cream sauce built from heavy cream, pepper jack, and a brick of cream cheese, then folded over pulled rotisserie chicken and a bed of spiralized zucchini that does the job the tortillas or the rice used to do. No soup can, no chips, no flour. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 15 grams of carbs. That is Southwestern comfort food that works for your body and your wallet at the same time.",
     "ingredients_display":  [
@@ -43,7 +44,9 @@
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1/2 medium onion (55 g)",
                                 "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 7 tbsp shredded sharp cheddar (49 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 1/2 tsp olive oil, divided (16 g)",
-                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 3/4 tsp garlic powder (5 g)"
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 3/4 tsp garlic powder (5 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -52,13 +55,14 @@
                        "Zucchini, 5 1/4 medium zucchini, spiralized or cut into thin strips: ~$3.45. \u003cstrong\u003eBuy 3 lbs: $4.56.\u003c/strong\u003e",
                        "Heavy Cream, 1 3/4 cups heavy whipping cream: ~$2.06. \u003cstrong\u003eBuy 1 pint: $2.34.\u003c/strong\u003e",
                        "Red Bell Pepper, 1 3/4 medium red bell peppers, diced: ~$1.72. \u003cstrong\u003eBuy 2 each: $1.96.\u003c/strong\u003e",
+                       "Cream Cheese, 7 oz cream cheese, softened: ~$1.61. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
                        "Yellow Onion, 1/2 medium onion: ~$0.14. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 7 tbsp shredded sharp cheddar: ~$0.26. \u003cstrong\u003eBuy 1 8oz bag: $1.22.\u003c/strong\u003e",
                        "Olive Oil, 3 1/2 tsp olive oil, divided: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (yellow bell pepper, garlic powder): ~$0.04. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.18 across 14 servings, so roughly $2.08 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $38.43 across 14 servings, roughly $2.74 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.11 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.54. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (yellow bell pepper, garlic powder, salt, black pepper): ~$0.04. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $30.79 across 14 servings, so roughly $2.20 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.27 across 14 servings, roughly $2.88 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.11 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.38. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a bubbling green chile casserole that eats like the soup-can version and skips the chips, the rice, and the flour. The chicken and the cheese carry it; the zucchini does the job the tortillas used to, for a lot less.",
     "shop_smart":  [
@@ -75,20 +79,20 @@
                     "Wipe the skillet clean, return it to the heat, and add the rest of the olive oil. Cook most of the diced yellow and red bell pepper until it begins to soften, holding back a little for the top, then stir in the garlic powder and pour in the blended green chiles.",
                     "Once the chile mixture starts to bubble, stir in the heavy cream. The sauce will thin out and lighten in color as it comes together.",
                     "Stir most of the shredded pepper jack into the sauce until it melts, holding back a handful for the top. Cube the softened cream cheese and whisk it in until the sauce is smooth, then season with salt and pepper to taste.",
-                    "Layer the shredded chicken over the zucchini, pour the green chile sauce over the top, and gently prod everything so the sauce works its way through. Scatter the reserved peppers and chiles over the top, then finish with the sharp cheddar and the pepper jack you held back.",
+                    "Layer the shredded chicken over the zucchini, pour the green chile cream sauce over the top, and gently prod everything so the sauce works its way through. Scatter the reserved peppers and chiles over the top, then finish with the sharp cheddar and the pepper jack you held back.",
                     "Bake at 350 degrees F for about 30 minutes, until the cheese is melted and the casserole is bubbling. Let it rest 10 minutes so it firms up, then weigh the dish, subtract the empty weight from Step 1, and divide across 14 containers."
                 ],
     "portion_html":  "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.ruled.me/hatch-chile-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eruled.me\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  29.18,
-    "cost_batch_true":  38.43,
-    "cost_per_serving":  2.08,
-    "cost_per_serving_true":  2.74,
+    "cost_batch":  30.79,
+    "cost_batch_true":  40.27,
+    "cost_per_serving":  2.2,
+    "cost_per_serving_true":  2.88,
     "cost_pantry_add":  8.11,
-    "cost_first_run":  46.54,
+    "cost_first_run":  48.38,
     "scaler":  {
-                   "cost":  "38.43",
+                   "cost":  "40.27",
                    "ing":  [
                                {
                                    "item":  "Rotisserie Chicken",
@@ -118,7 +122,9 @@
                                    "item":  "Pepper Jack Cheese",
                                    "canon":  "Pepper Jack Cheese",
                                    "grams":  452,
-                                   "buy":  "4 cups shredded pepper jack (about 1 lb), divided"
+                                   "buy":  "4 cups shredded pepper jack (about 1 lb), divided",
+                                   "bid":  "pepper-jack-cheese",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Heavy Cream",
@@ -132,7 +138,9 @@
                                    "item":  "Yellow Bell Pepper",
                                    "canon":  "Yellow Bell Pepper",
                                    "grams":  210,
-                                   "buy":  "1 3/4 medium yellow bell peppers, diced"
+                                   "buy":  "1 3/4 medium yellow bell peppers, diced",
+                                   "bid":  "yellow-bell-pepper",
+                                   "gpu":  "186.000"
                                },
                                {
                                    "item":  "Red Bell Pepper",
@@ -146,7 +154,9 @@
                                    "item":  "Cream Cheese",
                                    "canon":  "Cream Cheese",
                                    "grams":  198,
-                                   "buy":  "7 oz cream cheese, softened"
+                                   "buy":  "7 oz cream cheese, softened",
+                                   "bid":  "1-3-fat-cream-cheese",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -179,6 +189,22 @@
                                    "buy":  "1 3/4 tsp garlic powder",
                                    "bid":  "garlic-powder",
                                    "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "2 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
                                }
                            ]
                },
@@ -189,7 +215,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT1H",
-                 "costPerServing":  2.08,
+                 "costPerServing":  2.2,
                  "recipeIngredient":  [
                                           "Rotisserie Chicken, 50 3/4 oz shredded rotisserie chicken meat (about 3.2 lb, roughly 2 birds) (1439 g)",
                                           "Diced Green Chiles, 47 1/4 oz canned whole hatch green chiles (1340 g)",
@@ -202,7 +228,9 @@
                                           "Yellow Onion, 1/2 medium onion (55 g)",
                                           "Cheddar Cheese, Shredded, 7 tbsp shredded sharp cheddar (49 g)",
                                           "Olive Oil, 3 1/2 tsp olive oil, divided (16 g)",
-                                          "Garlic Powder, 1 3/4 tsp garlic powder (5 g)"
+                                          "Garlic Powder, 1 3/4 tsp garlic powder (5 g)",
+                                          "Salt, 2 tsp (12 g)",
+                                          "Black Pepper, 1 tsp (2 g)"
                                       ],
                  "steps":  [
                                "Weigh the empty baking dish and note the number for portioning later.",
@@ -262,6 +290,14 @@
                               {
                                   "item":  "Garlic Powder",
                                   "grams":  5
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
                               }
                           ]
 }

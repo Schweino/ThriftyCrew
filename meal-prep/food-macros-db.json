@@ -1,4 +1,4 @@
-{
+﻿{
     "readme":  "Food macro database for Thrifty Crew meal prep. Each item\u0027s calories/protein_g/carbs_g/fat_g are PER SERVING. serving_grams = grams in one serving (used to scale by weight, e.g. pounds). For count or volume items (eggs, tbsp), serving_qty + serving_unit describe the serving. Conversions: 1 lb = 453.592 g, 1 oz = 28.3495 g. Note raw vs cooked for meats. brand empty string = not specified yet. null macro = pending label.",
     "items":  [
                   {
@@ -146,7 +146,7 @@
                       "carbs_g":  18,
                       "fat_g":  2,
                       "fiber_g":  2,
-                      "notes":  "Great Value Small Fajita Flour Tortillas, 26 oz / 20 ct - the product the tortillas board cell actually prices ($0.106 each, Walmart, 2026-08-06). Label serving 1 tortilla (36 g); package basis is 737 g / 20 = 36.85 g, which is what densities.json and the map gpu carry. Was La Banderita Carb Counter 65 g / 90 cal until 2026-08-06 - a specific high-fiber product on the shared GENERIC row, which priced and counted macros for a tortilla the board has never priced. That product now lives on its own 'High Fiber Tortilla' row (burrito format), so this row is free to describe an ordinary flour tortilla."
+                      "notes":  "Great Value Small Fajita Flour Tortillas, 26 oz / 20 ct - the product the tortillas board cell actually prices ($0.106 each, Walmart, 2026-08-06). Label serving 1 tortilla (36 g); package basis is 737 g / 20 = 36.85 g, which is what densities.json and the map gpu carry. Was La Banderita Carb Counter 65 g / 90 cal until 2026-08-06 - a specific high-fiber product on the shared GENERIC row, which priced and counted macros for a tortilla the board has never priced. That product now lives on its own \u0027High Fiber Tortilla\u0027 row (burrito format), so this row is free to describe an ordinary flour tortilla."
                   },
                   {
                       "item":  "High Fiber Tortilla",
@@ -159,7 +159,7 @@
                       "carbs_g":  23,
                       "fat_g":  2,
                       "fiber_g":  18,
-                      "notes":  "La Banderita Carb Counter Large (13.7oz/6ct); 1 tortilla (65g) per serving; same verified label as the 'Tortilla' row above (2026-08-06 burrito repoint) - values identical BY DESIGN so repointing moves no recipe macros"
+                      "notes":  "La Banderita Carb Counter Large (13.7oz/6ct); 1 tortilla (65g) per serving; same verified label as the \u0027Tortilla\u0027 row above (2026-08-06 burrito repoint) - values identical BY DESIGN so repointing moves no recipe macros"
                   },
                   {
                       "item":  "Greek Yogurt",
@@ -316,7 +316,7 @@
                       "protein_g":  3,
                       "carbs_g":  36,
                       "fat_g":  0,
-                      "notes":  "Long Grain White Rice; 1/4 cup (45g) dry per serving; from label. RE-POINTED 2026-08-07: this row was a Member\u0027s Mark THAI JASMINE label (1/4 cup = 50 g, 180 cal), which put it at 200 g per cup while db\\densities.json said 185 and the board priced long grain. The board\u0027s White Rice commodity is long grain at all seven stores, so the cost math was already long-grain and this row was the odd one out. Mahatma Extra Long Grain states the same 45 g / 160 cal serving, so the figure is not one bag\u0027s quirk. Per gram this moved calories 3.60 -> 3.56 and protein 0.080 -> 0.067: at most 5.3 cal and 1.6 g protein per serving across the 305 recipes that use rice."
+                      "notes":  "Long Grain White Rice; 1/4 cup (45g) dry per serving; from label. RE-POINTED 2026-08-07: this row was a Member\u0027s Mark THAI JASMINE label (1/4 cup = 50 g, 180 cal), which put it at 200 g per cup while db\\densities.json said 185 and the board priced long grain. The board\u0027s White Rice commodity is long grain at all seven stores, so the cost math was already long-grain and this row was the odd one out. Mahatma Extra Long Grain states the same 45 g / 160 cal serving, so the figure is not one bag\u0027s quirk. Per gram this moved calories 3.60 -\u003e 3.56 and protein 0.080 -\u003e 0.067: at most 5.3 cal and 1.6 g protein per serving across the 305 recipes that use rice."
                   },
                   {
                       "item":  "Fat Free Mozzarella",
@@ -3367,7 +3367,7 @@
                       "protein_g":  2,
                       "carbs_g":  21,
                       "fat_g":  1,
-                      "notes":  "White corn tortillas; label 2 tortillas (50 g) = 100 cal. This is the product the corn-tortillas board cell prices (Baker's Guerrero White Corn Tortillas 80 ct $4.49); Walmart lists the identical 80 ct at 66.333 oz = 1880 g, i.e. 23.5 g per tortilla, which db ingredients gpu now carries. Label 25 g vs pack 23.5 g is label rounding.",
+                      "notes":  "White corn tortillas; label 2 tortillas (50 g) = 100 cal. This is the product the corn-tortillas board cell prices (Baker\u0027s Guerrero White Corn Tortillas 80 ct $4.49); Walmart lists the identical 80 ct at 66.333 oz = 1880 g, i.e. 23.5 g per tortilla, which db ingredients gpu now carries. Label 25 g vs pack 23.5 g is label rounding.",
                       "source":  "Guerrero White Corn Tortillas label (guerrerotortillas.com calories; fatsecret panel concurs)"
                   },
                   {
@@ -3380,12 +3380,12 @@
                       "protein_g":  4,
                       "carbs_g":  24,
                       "fat_g":  0,
-                      "notes":  "Japanese-style panko, 8 oz box (matches the priced 8oz-box package row). Deliberately separate from the USDA 'Bread Crumbs' row (380 cal/100g plain crumbs); panko is a distinct product at 367 cal/100g.",
+                      "notes":  "Japanese-style panko, 8 oz box (matches the priced 8oz-box package row). Deliberately separate from the USDA \u0027Bread Crumbs\u0027 row (380 cal/100g plain crumbs); panko is a distinct product at 367 cal/100g.",
                       "source":  "Kikkoman Panko Bread Crumbs 8 oz label (Hannaford/myfooddiary listings concur)"
                   },
                   {
                       "item":  "Sweet Chili Sauce",
-                      "brand":  "Frank's RedHot",
+                      "brand":  "Frank\u0027s RedHot",
                       "serving_grams":  38,
                       "serving_qty":  2,
                       "serving_unit":  "tbsp",
@@ -3394,7 +3394,7 @@
                       "carbs_g":  17,
                       "fat_g":  0,
                       "notes":  "Thai-style sweet chili; retail 12 floz bottle matches the pantry package row. Spec sheet states the serving in grams (38 g), which most retail mirrors print as 2 tbsp / 30 mL.",
-                      "source":  "McCormick For Chefs Frank's RedHot Sweet Chili Sauce nutrition spec sheet (webstaurantstore PDF): 38 g serving, 70 cal, 0F/17C(14 sugars)/0P"
+                      "source":  "McCormick For Chefs Frank\u0027s RedHot Sweet Chili Sauce nutrition spec sheet (webstaurantstore PDF): 38 g serving, 70 cal, 0F/17C(14 sugars)/0P"
                   },
                   {
                       "item":  "Dried Rosemary",
@@ -3432,7 +3432,7 @@
                       "protein_g":  1.5,
                       "carbs_g":  25,
                       "fat_g":  0.2,
-                      "notes":  "orange peel, raw, per 100g; recipes use single-digit grams so the per-serving impact is trace but honest. Atwater 108 vs 97 is the peel's fiber.",
+                      "notes":  "orange peel, raw, per 100g; recipes use single-digit grams so the per-serving impact is trace but honest. Atwater 108 vs 97 is the peel\u0027s fiber.",
                       "source":  "USDA FDC 169103 (SR Legacy) Orange peel, raw; fetched from FDC API 2026-08-07"
                   },
                   {
@@ -3446,7 +3446,7 @@
                       "carbs_g":  1,
                       "fat_g":  3.5,
                       "notes":  "2 tbsp (30 mL) per serving; NOT the Heavy Cream row (50 cal/tbsp, different product). Atwater exact (39.5 vs 40).",
-                      "source":  "Great Value Half & Half label (myfooddata FDC branded 2380490 / fatsecret concur)"
+                      "source":  "Great Value Half \u0026 Half label (myfooddata FDC branded 2380490 / fatsecret concur)"
                   },
                   {
                       "item":  "Shallots",
@@ -3497,7 +3497,7 @@
                       "protein_g":  0,
                       "carbs_g":  3,
                       "fat_g":  0,
-                      "notes":  "Hatch Valley green chile sauce, 16 oz jar class (spec prints '16oz can'; the map prices this item through the salsa-verde board cell). Medium variant lists 10 cal per 2 tbsp - same class, kept the label-transcribed 15.",
+                      "notes":  "Hatch Valley green chile sauce, 16 oz jar class (spec prints \u002716oz can\u0027; the map prices this item through the salsa-verde board cell). Medium variant lists 10 cal per 2 tbsp - same class, kept the label-transcribed 15.",
                       "source":  "505 Southwestern Green Chile Sauce label transcription (nutritionvalue.org 556671): 2 tbsp (30 g), 15 cal, 0F/3C/0P"
                   },
                   {
@@ -3523,12 +3523,12 @@
                       "protein_g":  23.6,
                       "carbs_g":  8.06,
                       "fat_g":  19.7,
-                      "notes":  "low-moisture part-skim SHREDDED, per 100g - the form the priced '8oz bag' package row describes. Deliberately NOT the Reduced Fat Mozzarella row (70 cal/28g, a specific GV reduced-fat product) and not Fat Free; split per the shared-item-carrying-a-brand rule.",
+                      "notes":  "low-moisture part-skim SHREDDED, per 100g - the form the priced \u00278oz bag\u0027 package row describes. Deliberately NOT the Reduced Fat Mozzarella row (70 cal/28g, a specific GV reduced-fat product) and not Fat Free; split per the shared-item-carrying-a-brand rule.",
                       "source":  "USDA FDC 170900 (SR Legacy) Cheese, mozzarella, low moisture, part-skim, shredded; fetched from FDC API 2026-08-07"
                   },
                   {
                       "item":  "Condensed French Onion Soup",
-                      "brand":  "Campbell's",
+                      "brand":  "Campbell\u0027s",
                       "serving_grams":  119,
                       "serving_qty":  0.5,
                       "serving_unit":  "cup condensed",
@@ -3554,7 +3554,7 @@
                   },
                   {
                       "item":  "Liquid Smoke",
-                      "brand":  "Wright's",
+                      "brand":  "Wright\u0027s",
                       "serving_grams":  5,
                       "serving_qty":  1,
                       "serving_unit":  "tsp",
@@ -3563,7 +3563,7 @@
                       "carbs_g":  0,
                       "fat_g":  0,
                       "notes":  "water + condensed hickory smoke, 3.5 floz bottle (matches the pantry package row). Label prints 0 cal at 1 tsp; a couple of listings show a 2-cal trace. Honest zeros, not invented-for-convenience: the label itself is zero.",
-                      "source":  "Wright's Hickory Liquid Smoke label (bgfoods.com / myfooddiary listings concur)"
+                      "source":  "Wright\u0027s Hickory Liquid Smoke label (bgfoods.com / myfooddiary listings concur)"
                   },
                   {
                       "item":  "Cauliflower",
@@ -3677,7 +3677,7 @@
                       "carbs_g":  3.9,
                       "fat_g":  0.4,
                       "needs_verify":  false,
-                      "notes":  "RAW portabella/portobello, per 100 g; USDA 1 cup diced = 86 g, 1 whole cap ~ 84 g. Distinct from the White Mushrooms row (variety split mirrors the board's separate portobello-mushrooms commodity - red-onion-is-not-onions precedent). Added 2026-08-15 (lowcarb-100 run, french-chicken-fricassee).",
+                      "notes":  "RAW portabella/portobello, per 100 g; USDA 1 cup diced = 86 g, 1 whole cap ~ 84 g. Distinct from the White Mushrooms row (variety split mirrors the board\u0027s separate portobello-mushrooms commodity - red-onion-is-not-onions precedent). Added 2026-08-15 (lowcarb-100 run, french-chicken-fricassee).",
                       "source":  "USDA FDC/SR 11265 Mushrooms, portabella, raw"
                   },
                   {
@@ -3691,7 +3691,7 @@
                       "carbs_g":  23.3,
                       "fat_g":  14.1,
                       "needs_verify":  false,
-                      "notes":  "Sun-dried tomatoes packed in oil, DRAINED, per 100 g; USDA 1 cup = 110 g, 1/2 cup = 55 g. Distinct from the existing Sun-Dried Tomatoes row, which is the DRY bagged form (72 cal per 28 g oz, ~55 C/100 g, cup = 54 g) - booking an oil-packed line on the dry row flips the carb/fat shape and halves the cup weight. Both forms live under the one sun-dried-tomatoes board commodity, whose cheapest cell today is itself an in-oil jar (Terra Verde 24 oz, Sam's Club), so the price class matches. Added 2026-08-16 (lowcarb-100 run, creamy-tuscan-chicken-skillet).",
+                      "notes":  "Sun-dried tomatoes packed in oil, DRAINED, per 100 g; USDA 1 cup = 110 g, 1/2 cup = 55 g. Distinct from the existing Sun-Dried Tomatoes row, which is the DRY bagged form (72 cal per 28 g oz, ~55 C/100 g, cup = 54 g) - booking an oil-packed line on the dry row flips the carb/fat shape and halves the cup weight. Both forms live under the one sun-dried-tomatoes board commodity, whose cheapest cell today is itself an in-oil jar (Terra Verde 24 oz, Sam\u0027s Club), so the price class matches. Added 2026-08-16 (lowcarb-100 run, creamy-tuscan-chicken-skillet).",
                       "source":  "USDA FDC/SR 11955 Tomatoes, sun-dried, packed in oil, drained"
                   },
                   {
@@ -3721,7 +3721,7 @@
                       "needs_verify":  true,
                       "verify_source":  "NOT independently verified against a fetched panel - values are the widely printed Better Than Bouillon Roasted Beef Base serving (1 tsp / 6 g: 15 cal, 1 P, 1 C, 0.5 F, ~680 mg sodium) recorded from memory of the jar label. VERIFY against the jar or a label mirror before any recipe where this line is macro-material.",
                       "needs_verify_note":  "Macro-immaterial at current usage: 1 tsp across 4 servings is under 4 cal/serving (Berbere spice-exempt precedent), which is why the row ships flagged instead of blocking the recipe.",
-                      "notes":  "Concentrated paste beef base (Better Than Bouillon class). NOT beef broth (the Beef Broth row is the diluted product - form-flip) and NOT a dry cube. Board term 'beef base' resolves to the bouillon commodity whose include pattern explicitly claims 'beef base'. Added 2026-08-15 (lowcarb-100 run, low-carb-ground-beef-stroganoff-skillet).",
+                      "notes":  "Concentrated paste beef base (Better Than Bouillon class). NOT beef broth (the Beef Broth row is the diluted product - form-flip) and NOT a dry cube. Board term \u0027beef base\u0027 resolves to the bouillon commodity whose include pattern explicitly claims \u0027beef base\u0027. Added 2026-08-15 (lowcarb-100 run, low-carb-ground-beef-stroganoff-skillet).",
                       "source":  "Better Than Bouillon Roasted Beef Base jar label (from memory - see needs_verify)"
                   },
                   {
@@ -3736,7 +3736,7 @@
                       "fat_g":  3.89,
                       "needs_verify":  false,
                       "verify_source":  "fetched from FDC portal API 2026-08-15; Atwater 374 vs 364 ok (fiber 22.2 g/100 g explains the gap); 1 cup dry = 196 g per the same record",
-                      "notes":  "DRY split peas, per 100 g raw. USDA record is 'Peas, green, split, mature seeds, raw' (no yellow-specific SR record exists); yellow split peas share the record class - disclosed, not averaged (Dried Guajillo precedent). NOT the Frozen Green Peas, Pigeon Peas or Chickpeas rows. Added 2026-08-15 (lowcarb-100 run, burmese-chicken-dal-curry).",
+                      "notes":  "DRY split peas, per 100 g raw. USDA record is \u0027Peas, green, split, mature seeds, raw\u0027 (no yellow-specific SR record exists); yellow split peas share the record class - disclosed, not averaged (Dried Guajillo precedent). NOT the Frozen Green Peas, Pigeon Peas or Chickpeas rows. Added 2026-08-15 (lowcarb-100 run, burmese-chicken-dal-curry).",
                       "source":  "USDA FDC 172428 (SR Legacy 16085) Peas, green, split, mature seeds, raw"
                   },
                   {
@@ -3765,9 +3765,9 @@
                       "carbs_g":  8.81,
                       "fat_g":  0.44,
                       "needs_verify":  false,
-                      "needs_verify_note":  "Per-100g macros are USDA-verified; the per-CHILE weight (~5 g for a thai/bird's-eye) has no USDA portion row and is flagged in the mapped file. Macro-immaterial: the only current use is an OPTIONAL 35 g batch line = 14 cal across 14 servings (Berbere spice-exempt precedent).",
+                      "needs_verify_note":  "Per-100g macros are USDA-verified; the per-CHILE weight (~5 g for a thai/bird\u0027s-eye) has no USDA portion row and is flagged in the mapped file. Macro-immaterial: the only current use is an OPTIONAL 35 g batch line = 14 cal across 14 servings (Berbere spice-exempt precedent).",
                       "verify_source":  "fetched from FDC portal API 2026-08-15 (FDC 170106)",
-                      "notes":  "FRESH hot red chiles, per 100 g raw. USDA record is generic 'Peppers, hot chili, red, raw'; thai/bird's-eye shares the record class - disclosed, not averaged. NOT the dried-chile rows (form-flip) and NOT serrano (variety). Added 2026-08-15 (lowcarb-100 run, burmese-chicken-dal-curry optional heat).",
+                      "notes":  "FRESH hot red chiles, per 100 g raw. USDA record is generic \u0027Peppers, hot chili, red, raw\u0027; thai/bird\u0027s-eye shares the record class - disclosed, not averaged. NOT the dried-chile rows (form-flip) and NOT serrano (variety). Added 2026-08-15 (lowcarb-100 run, burmese-chicken-dal-curry optional heat).",
                       "source":  "USDA FDC 170106 (SR Legacy) Peppers, hot chili, red, raw"
                   },
                   {
@@ -3781,9 +3781,9 @@
                       "carbs_g":  0,
                       "fat_g":  7,
                       "needs_verify":  false,
-                      "verify_source":  "shares the USDA lean raw beef record the estate already carries as 'Beef Flank/Sirloin Steak' (added wave90); cross-checked against the source page's published macros in the mapped file: recomputed protein lands +9.6% of the source's 28 g/serving, inside tolerance",
-                      "notes":  "Retail shaved/thin-sliced beef steak (tray product, sirloin/round class, raw). Shares the USDA record used by the Beef Flank/Sirloin Steak row - disclosed, not averaged (Dried Guajillo precedent); no USDA record exists for 'shaved steak' as such and retail tray labels vary by cut. NOT ground beef and NOT deli roast beef (cooked - form-flip). Added 2026-08-15 (lowcarb-100 run, philly-cheesesteak-stuffed-peppers).",
-                      "source":  "USDA FDC beef top sirloin/flank, separable lean, raw (via the estate's Beef Flank/Sirloin Steak row)"
+                      "verify_source":  "shares the USDA lean raw beef record the estate already carries as \u0027Beef Flank/Sirloin Steak\u0027 (added wave90); cross-checked against the source page\u0027s published macros in the mapped file: recomputed protein lands +9.6% of the source\u0027s 28 g/serving, inside tolerance",
+                      "notes":  "Retail shaved/thin-sliced beef steak (tray product, sirloin/round class, raw). Shares the USDA record used by the Beef Flank/Sirloin Steak row - disclosed, not averaged (Dried Guajillo precedent); no USDA record exists for \u0027shaved steak\u0027 as such and retail tray labels vary by cut. NOT ground beef and NOT deli roast beef (cooked - form-flip). Added 2026-08-15 (lowcarb-100 run, philly-cheesesteak-stuffed-peppers).",
+                      "source":  "USDA FDC beef top sirloin/flank, separable lean, raw (via the estate\u0027s Beef Flank/Sirloin Steak row)"
                   },
                   {
                       "item":  "Boneless Beef Short Ribs",
@@ -3796,7 +3796,7 @@
                       "carbs_g":  0,
                       "fat_g":  19,
                       "needs_verify":  false,
-                      "verify_source":  "fetched from FDC portal API 2026-08-16 (FDC 170827); cross-checked against the source page's published macros in the mapped file: recomputed calories land -0.5% and protein +3.3% of the source's 581 cal / 39 g per serving, which confirms both the cut and the raw lean-and-fat basis",
+                      "verify_source":  "fetched from FDC portal API 2026-08-16 (FDC 170827); cross-checked against the source page\u0027s published macros in the mapped file: recomputed calories land -0.5% and protein +3.3% of the source\u0027s 581 cal / 39 g per serving, which confirms both the cut and the raw lean-and-fat basis",
                       "notes":  "Retail boneless beef short ribs are the CHUCK cut, lean and fat, raw - the whole piece goes in the slow cooker and the rendered fat stays in the braise, so the lean-and-fat record is the honest basis (no drained-chuck discount taken; distinct from the Beef Chuck Roast row, which books a drained shredded basis). NOT bone-in rib-section short ribs (USDA 388 cal/100 g class) and NOT chuck roast (different cut and price class). Added 2026-08-16 (lowcarb-100 run, slow-cooker-boneless-beef-short-ribs).",
                       "source":  "USDA FDC 170827 (SR Legacy) Beef, chuck, short ribs, boneless, separable lean and fat, trimmed to 0 in fat, choice, raw"
                   },
@@ -3811,8 +3811,8 @@
                       "carbs_g":  6.6,
                       "fat_g":  0.4,
                       "needs_verify":  false,
-                      "verify_source":  "USDA SR Legacy 11090 (broccoli, raw): 34 cal / 2.82 P / 6.64 C / 0.37 F per 100 g; the estate's existing Broccoli Florets row (GV frozen bag, 30 cal per 85 g cup = 35.3 cal/100 g) independently lands within 4% of the same figures",
-                      "notes":  "FRESH raw broccoli, per 100 g; USDA generic (produce has no label, same basis as the Yellow Onion and Garlic rows). Distinct from the Broccoli Florets row, which is the Great Value FROZEN bag label mapped to the frozen commodity - fresh is not frozen (form-flip), so fresh recipe lines book this row against the fresh 'broccoli' board commodity. densities.json carries head=300 and cup=85 under 'Broccoli Florets'; a 'Broccoli' alias row is proposed in the mapped file. Added 2026-08-16 (lowcarb-100 run, keto-turkey-broccoli-cheddar-casserole).",
+                      "verify_source":  "USDA SR Legacy 11090 (broccoli, raw): 34 cal / 2.82 P / 6.64 C / 0.37 F per 100 g; the estate\u0027s existing Broccoli Florets row (GV frozen bag, 30 cal per 85 g cup = 35.3 cal/100 g) independently lands within 4% of the same figures",
+                      "notes":  "FRESH raw broccoli, per 100 g; USDA generic (produce has no label, same basis as the Yellow Onion and Garlic rows). Distinct from the Broccoli Florets row, which is the Great Value FROZEN bag label mapped to the frozen commodity - fresh is not frozen (form-flip), so fresh recipe lines book this row against the fresh \u0027broccoli\u0027 board commodity. densities.json carries head=300 and cup=85 under \u0027Broccoli Florets\u0027; a \u0027Broccoli\u0027 alias row is proposed in the mapped file. Added 2026-08-16 (lowcarb-100 run, keto-turkey-broccoli-cheddar-casserole).",
                       "source":  "USDA FDC 11090 (SR Legacy) Broccoli, raw"
                   },
                   {
@@ -3827,7 +3827,7 @@
                       "fat_g":  15,
                       "needs_verify":  false,
                       "verify_source":  "nutritionvalue.org USDA branded mirror (Skinless smoked sausage by Armour-Eckrich Meats LLC) checked 2026-08-16: 2 oz (56 g) = 180 cal / 6 P / 4 C / 15 F (6 sat), 490 mg sodium; ingredients open with pork, beef, mechanically separated turkey",
-                      "notes":  "PORK/BEEF skinless smoked sausage rope (Eckrich class; the kielbasa board commodity's cells are this product at 5 of 7 stores). Distinct from the Smoked Turkey Sausage row (that label is 70-90 cal/2 oz; mapping generic smoked sausage to it would understate calories by half). Sold as 14 oz ropes. Added 2026-08-16 (lowcarb-100 run, baked-cauliflower-mac-smoked-sausage).",
+                      "notes":  "PORK/BEEF skinless smoked sausage rope (Eckrich class; the kielbasa board commodity\u0027s cells are this product at 5 of 7 stores). Distinct from the Smoked Turkey Sausage row (that label is 70-90 cal/2 oz; mapping generic smoked sausage to it would understate calories by half). Sold as 14 oz ropes. Added 2026-08-16 (lowcarb-100 run, baked-cauliflower-mac-smoked-sausage).",
                       "source":  "USDA branded food: Skinless smoked sausage, Armour-Eckrich Meats LLC (nutritionvalue.org mirror)"
                   },
                   {
@@ -3847,7 +3847,7 @@
                   },
                   {
                       "item":  "Broccolini",
-                      "brand":  "Mann's",
+                      "brand":  "Mann\u0027s",
                       "serving_grams":  85,
                       "serving_qty":  3,
                       "serving_unit":  "oz",
@@ -3856,9 +3856,9 @@
                       "carbs_g":  5.9,
                       "fat_g":  0,
                       "needs_verify":  false,
-                      "verify_source":  "USDA FDC search API checked 2026-08-16: Branded FDC 2424770 'Steakhouse Style Broccolini Baby Broccoli', Mann's, per 85 g serving = 35 cal / 3.53 P / 5.88 C / 0.0 F (manufacturer label submission); corroborated by Branded FDC 2655063 (Texas Harvest broccolini + rainbow carrots, 85 g = 35 cal / 2.35 P / 7.06 C / 0 F) sitting in the same 35 cal per 85 g class",
-                      "notes":  "FRESH raw broccolini (baby broccoli, a broccoli x gai lan hybrid) - broccolini has NO USDA generic/SR record, so the branded produce label is the label-accurate basis. The 0 g fat on the label confirms the record is the plain bunch, not a seasoned kit, despite the 'Steakhouse Style' line name. NOT broccoli raab/rapini (bitter mustard-family green, FNDDS 22 cal/100 g) and NOT the fresh Broccoli or frozen Broccoli Florets rows (different vegetable and different price class - broccolini sells per bunch at roughly 4x broccoli). Sold as ~8 oz (227 g) bunches; densities.json has no row (followup flagged in the mapped file). Added 2026-08-16 (lowcarb-100 run, chimichurri-steak-sheet-pan).",
-                      "source":  "USDA FDC Branded 2424770, Mann's Broccolini Baby Broccoli (manufacturer label submission via FDC)"
+                      "verify_source":  "USDA FDC search API checked 2026-08-16: Branded FDC 2424770 \u0027Steakhouse Style Broccolini Baby Broccoli\u0027, Mann\u0027s, per 85 g serving = 35 cal / 3.53 P / 5.88 C / 0.0 F (manufacturer label submission); corroborated by Branded FDC 2655063 (Texas Harvest broccolini + rainbow carrots, 85 g = 35 cal / 2.35 P / 7.06 C / 0 F) sitting in the same 35 cal per 85 g class",
+                      "notes":  "FRESH raw broccolini (baby broccoli, a broccoli x gai lan hybrid) - broccolini has NO USDA generic/SR record, so the branded produce label is the label-accurate basis. The 0 g fat on the label confirms the record is the plain bunch, not a seasoned kit, despite the \u0027Steakhouse Style\u0027 line name. NOT broccoli raab/rapini (bitter mustard-family green, FNDDS 22 cal/100 g) and NOT the fresh Broccoli or frozen Broccoli Florets rows (different vegetable and different price class - broccolini sells per bunch at roughly 4x broccoli). Sold as ~8 oz (227 g) bunches; densities.json has no row (followup flagged in the mapped file). Added 2026-08-16 (lowcarb-100 run, chimichurri-steak-sheet-pan).",
+                      "source":  "USDA FDC Branded 2424770, Mann\u0027s Broccolini Baby Broccoli (manufacturer label submission via FDC)"
                   },
                   {
                       "item":  "Coconut Oil",
@@ -3887,7 +3887,7 @@
                       "fat_g":  64.5,
                       "needs_verify":  false,
                       "verify_source":  "nutritionvalue.org USDA mirror (Nuts, coconut meat, dried (desiccated), not sweetened) checked 2026-08-16: 187 cal / 2 P / 6.7 C / 18 F per 28.35 g oz = 659 cal / 6.9 P / 23.6 C / 64.5 F per 100 g",
-                      "notes":  "Creamed coconut block (hard dried block of 100% coconut, ground; single-ingredient product - Grace / Let's Do Organic class). USDA desiccated unsweetened coconut meat is the same food milled to a block; shared record disclosed, not averaged (guajillo precedent). NOT canned coconut cream (wet emulsion, ~330 cal/100 g) and NOT sweetened cream of coconut (cocktail syrup). tbsp ~ 15 g chopped block, MED conf (densities row proposed). Added 2026-08-16 (lowcarb-100 run, thai-coconut-curry-pork-shoulder).",
+                      "notes":  "Creamed coconut block (hard dried block of 100% coconut, ground; single-ingredient product - Grace / Let\u0027s Do Organic class). USDA desiccated unsweetened coconut meat is the same food milled to a block; shared record disclosed, not averaged (guajillo precedent). NOT canned coconut cream (wet emulsion, ~330 cal/100 g) and NOT sweetened cream of coconut (cocktail syrup). tbsp ~ 15 g chopped block, MED conf (densities row proposed). Added 2026-08-16 (lowcarb-100 run, thai-coconut-curry-pork-shoulder).",
                       "source":  "USDA Nuts, coconut meat, dried (desiccated), not sweetened (nutritionvalue.org mirror)"
                   },
                   {
@@ -3917,7 +3917,7 @@
                       "fat_g":  30.3,
                       "needs_verify":  false,
                       "verify_source":  "same USDA SR record class as the Monterey Jack Cheese row (Cheese, monterey; nutritionvalue.org mirror checked 2026-08-16 for that row: 373 cal / 24.5 P / 0.7 C / 30.3 F per 100 g); retail pepper jack shred labels print 110 cal per 28 g (= 388/100 g), within 4%",
-                      "notes":  "Monterey Jack with jalapeno/chile flecks; shares the USDA Cheese, monterey record class - the pepper flecks are macro-immaterial (shared record disclosed, not averaged; guajillo precedent). Kept as a SEPARATE row from Monterey Jack Cheese per that row's explicit NOT-pepper-jack warning (item identity split; do not merge). 1 cup shredded = 113 g (densities row proposed). Added 2026-08-16 (lowcarb-100 run, hatch-green-chile-chicken-casserole).",
+                      "notes":  "Monterey Jack with jalapeno/chile flecks; shares the USDA Cheese, monterey record class - the pepper flecks are macro-immaterial (shared record disclosed, not averaged; guajillo precedent). Kept as a SEPARATE row from Monterey Jack Cheese per that row\u0027s explicit NOT-pepper-jack warning (item identity split; do not merge). 1 cup shredded = 113 g (densities row proposed). Added 2026-08-16 (lowcarb-100 run, hatch-green-chile-chicken-casserole).",
                       "source":  "USDA SR Legacy Cheese, monterey (nutritionvalue.org mirror), pepper jack variant disclosed"
                   },
                   {
@@ -3962,7 +3962,7 @@
                       "fat_g":  14,
                       "needs_verify":  false,
                       "verify_source":  "Hormel Original Pepperoni label via fatsecret/mynetdiary and Hormel smart-label mirrors checked 2026-08-16: 15 slices (30 g) = 150 cal / 5 P / 0 C / 14 F (6 sat, 520 mg Na); USDA FDC branded record agrees",
-                      "notes":  "PORK/BEEF pepperoni (pizza-topping slices), the product the board's pepperoni commodity prices. Deliberately DISTINCT from the Turkey Pepperoni row (70 cal/28 g - half the calories; mapping pork pepperoni lines to it would deflate a calorie-floor card). ~5 cal/g. Added 2026-08-16 (lowcarb-100 run, keto-crustless-pizza-casserole).",
+                      "notes":  "PORK/BEEF pepperoni (pizza-topping slices), the product the board\u0027s pepperoni commodity prices. Deliberately DISTINCT from the Turkey Pepperoni row (70 cal/28 g - half the calories; mapping pork pepperoni lines to it would deflate a calorie-floor card). ~5 cal/g. Added 2026-08-16 (lowcarb-100 run, keto-crustless-pizza-casserole).",
                       "source":  "Hormel Original Pepperoni label (fatsecret / Hormel smart label mirrors)"
                   },
                   {
@@ -3976,7 +3976,7 @@
                       "carbs_g":  1,
                       "fat_g":  14,
                       "needs_verify":  false,
-                      "verify_source":  "johnsonville.com Andouille Smoked Rope Sausage nutrition panel checked 2026-08-16: 2 oz (56 g) = 160 cal / 7 P / 1 C / 14 F (4.5 sat, 500 mg Na), 7 servings per 14 oz container; third-party mirrors print 160-170 (older panels) - the manufacturer's current panel is the basis",
+                      "verify_source":  "johnsonville.com Andouille Smoked Rope Sausage nutrition panel checked 2026-08-16: 2 oz (56 g) = 160 cal / 7 P / 1 C / 14 F (4.5 sat, 500 mg Na), 7 servings per 14 oz container; third-party mirrors print 160-170 (older panels) - the manufacturer\u0027s current panel is the basis",
                       "notes":  "The 14 oz andouille rope named by sheet-pan recipes (Johnsonville New Orleans style). Kept SEPARATE from the Eckrich Smoked Sausage row (180 cal/2 oz) - different brand and label; do not merge or average. Kielbasa board commodity covers the price class via its smoked-sausage include. Added 2026-08-16 (lowcarb-100 run, sheet-pan-smoked-sausage-broccoli-cheddar).",
                       "source":  "Johnsonville Andouille Smoked Rope Sausage panel (johnsonville.com)"
                   },
@@ -3992,12 +3992,12 @@
                       "fat_g":  0,
                       "needs_verify":  false,
                       "verify_source":  "Primal Kitchen Organic Unsweetened Ketchup label via fatsecret/myfooddiary/nutritionvalue USDA-branded mirrors checked 2026-08-16: 1 tbsp = 10 cal / 0 P / 2 C (1 sugar, no added) / 0 F, 105 mg Na",
-                      "notes":  "No-sugar-added ketchup (Primal Kitchen / Heinz No Sugar Added class). Deliberately DISTINCT from the regular Ketchup row (101 cal/100 g, 27 C) - sugar-content flip changes both macros and price class, mirroring the BBQ Sauce (Sugar Free) item split. 1 tbsp = 17 g -> cup ~ 272 g. Added 2026-08-16 (lowcarb-100 run, low-carb-beef-meatloaf).",
+                      "notes":  "No-sugar-added ketchup (Primal Kitchen / Heinz No Sugar Added class). Deliberately DISTINCT from the regular Ketchup row (101 cal/100 g, 27 C) - sugar-content flip changes both macros and price class, mirroring the BBQ Sauce (Sugar Free) item split. 1 tbsp = 17 g -\u003e cup ~ 272 g. Added 2026-08-16 (lowcarb-100 run, low-carb-beef-meatloaf).",
                       "source":  "Primal Kitchen Organic Unsweetened Ketchup label (fatsecret/nutritionvalue mirrors)"
                   },
                   {
                       "item":  "90/10 Ground Beef",
-                      "brand":  "Member's Mark class",
+                      "brand":  "Member\u0027s Mark class",
                       "serving_grams":  113,
                       "serving_qty":  4,
                       "serving_unit":  "oz",
@@ -4006,9 +4006,9 @@
                       "carbs_g":  0,
                       "fat_g":  11,
                       "needs_verify":  false,
-                      "verify_source":  "Member's Mark 90% Lean / 10% Fat Ground Beef label via eatthismuch checked 2026-08-16: 4 oz raw = 200 cal / 23 P / 0 C / 11 F; USDA generic (Beef, ground, 90% lean / 10% fat, raw) prints 199 cal / 22.7 P / 11.3 F per 4 oz - within rounding",
+                      "verify_source":  "Member\u0027s Mark 90% Lean / 10% Fat Ground Beef label via eatthismuch checked 2026-08-16: 4 oz raw = 200 cal / 23 P / 0 C / 11 F; USDA generic (Beef, ground, 90% lean / 10% fat, raw) prints 199 cal / 22.7 P / 11.3 F per 4 oz - within rounding",
                       "notes":  "RAW 90% lean ground beef. Deliberately DISTINCT from the 93/7 Ground Beef row (170 cal/4 oz) - a lean-point flip moves calories 15% on the main protein line and the two sell as separate price classes (board has ground-beef-8020 and ground-beef-93-7 but no 90/10 id; registrar proposal pending). Added 2026-08-16 (lowcarb-100 run, low-carb-beef-meatloaf).",
-                      "source":  "Member's Mark 90/10 label (eatthismuch mirror); USDA generic agrees"
+                      "source":  "Member\u0027s Mark 90/10 label (eatthismuch mirror); USDA generic agrees"
                   },
                   {
                       "item":  "Tandoori Masala",
@@ -4021,8 +4021,8 @@
                       "carbs_g":  2,
                       "fat_g":  1,
                       "needs_verify":  false,
-                      "verify_source":  "USDA branded record FDC 2666734 (Shan Tandoori Masala Seasoning Mix) via myfooddata/search mirrors checked 2026-08-16: 1 tbsp (8 g) = 25 cal, energy split ~19% P / 38% C / 43% F -> 1 P / 2 C / 1 F per tbsp",
-                      "notes":  "Tandoori spice blend (paprika, chili, ginger, cumin, etc). Shan's blend contains salt; recipes calling for a no-salt-added mix differ only in sodium, which this DB does not track - macro fields carry. ~3.1 cal/g, spice-class stakes. Other branded records spread 10-20 cal/tsp on inconsistent tsp weights; the USDA branded record is the anchor. Added 2026-08-16 (lowcarb-100 run, sheet-pan-tandoori-chicken-cauliflower).",
+                      "verify_source":  "USDA branded record FDC 2666734 (Shan Tandoori Masala Seasoning Mix) via myfooddata/search mirrors checked 2026-08-16: 1 tbsp (8 g) = 25 cal, energy split ~19% P / 38% C / 43% F -\u003e 1 P / 2 C / 1 F per tbsp",
+                      "notes":  "Tandoori spice blend (paprika, chili, ginger, cumin, etc). Shan\u0027s blend contains salt; recipes calling for a no-salt-added mix differ only in sodium, which this DB does not track - macro fields carry. ~3.1 cal/g, spice-class stakes. Other branded records spread 10-20 cal/tsp on inconsistent tsp weights; the USDA branded record is the anchor. Added 2026-08-16 (lowcarb-100 run, sheet-pan-tandoori-chicken-cauliflower).",
                       "source":  "USDA branded FDC 2666734, Shan Tandoori Masala"
                   },
                   {
@@ -4052,7 +4052,7 @@
                       "fat_g":  20,
                       "needs_verify":  false,
                       "verify_source":  "USDA SR Beef, ground, 80% lean meat / 20% fat, raw (NDB 23572): 254 cal / 17.17 P / 0 C / 20 F per 100 g; 4 oz (113 g) = 287 cal - matches the ubiquitous 290-cal retail 80/20 label class",
-                      "notes":  "RAW, per 100 g. Distinct row from 93/7 Ground Beef (Member's Mark label, 170 cal/113 g) - fat-class split, do not merge; booking a plain 'ground beef' recipe line to the 93/7 row deflates calories ~37%, which fails a calorie-floor gate as surely as inflation fails the ceiling (Sour Cream full-fat precedent). Board commodity ground-beef-8020 carries true 80/20 cells at all 7 stores, so price class matches. House convention books raw label basis; recipes that brown-and-drain shed some of this fat (noted per recipe, not modeled). Added 2026-08-16 (lowcarb-100 run, low-carb-taco-cabbage-beef-skillet + keto-cheeseburger-skillet).",
+                      "notes":  "RAW, per 100 g. Distinct row from 93/7 Ground Beef (Member\u0027s Mark label, 170 cal/113 g) - fat-class split, do not merge; booking a plain \u0027ground beef\u0027 recipe line to the 93/7 row deflates calories ~37%, which fails a calorie-floor gate as surely as inflation fails the ceiling (Sour Cream full-fat precedent). Board commodity ground-beef-8020 carries true 80/20 cells at all 7 stores, so price class matches. House convention books raw label basis; recipes that brown-and-drain shed some of this fat (noted per recipe, not modeled). Added 2026-08-16 (lowcarb-100 run, low-carb-taco-cabbage-beef-skillet + keto-cheeseburger-skillet).",
                       "source":  "USDA SR NDB 23572, ground beef 80/20 raw"
                   },
                   {
@@ -4066,7 +4066,7 @@
                       "carbs_g":  5.8,
                       "fat_g":  3.3,
                       "needs_verify":  false,
-                      "verify_source":  "USDA SR Mustard, prepared, yellow: 60 cal / 3.7 P / 5.8 C / 3.3 F per 100 g; 1 tsp = 5 g = 3 cal (retail labels e.g. French's Classic print 0 cal per 5 g serving because 3 rounds down)",
+                      "verify_source":  "USDA SR Mustard, prepared, yellow: 60 cal / 3.7 P / 5.8 C / 3.3 F per 100 g; 1 tsp = 5 g = 3 cal (retail labels e.g. French\u0027s Classic print 0 cal per 5 g serving because 3 rounds down)",
                       "notes":  "Prepared yellow mustard, per 100 g. Distinct from Dijon Mustard (66 cal/100 g USDA row) and Honey Dijon. Macro-immaterial at typical usage (under 1 cal per serving in the recipe that added it) but the row keeps the ledger label-accurate instead of borrowing the Dijon row. Added 2026-08-16 (lowcarb-100 run, keto-cheeseburger-skillet).",
                       "source":  "USDA SR mustard, prepared, yellow"
                   },
@@ -4082,7 +4082,7 @@
                       "fat_g":  0.2,
                       "needs_verify":  false,
                       "verify_source":  "USDA SR Fennel, bulb, raw (NDB 11957): 31 cal / 1.24 P / 7.3 C / 0.2 F per 100 g; 1 cup sliced = 87 g, 1 medium bulb = 234 g",
-                      "notes":  "RAW fresh fennel bulb, per 100 g. Distinct from Ground Fennel (seed spice, 345 cal/100 g) - form-flip, do not merge; the board's fennel commodity is unit 'each' = the fresh bulb and the queue's CARRIED ruling (Baker's Fresh Fennel $3.99) is for the bulb, not the seed jars. Fresh produce has no package label; USDA is the label-equivalent authority (Cauliflower precedent). Added 2026-08-16 (lowcarb-100 run, braised-pork-shoulder-fennel-tomato).",
+                      "notes":  "RAW fresh fennel bulb, per 100 g. Distinct from Ground Fennel (seed spice, 345 cal/100 g) - form-flip, do not merge; the board\u0027s fennel commodity is unit \u0027each\u0027 = the fresh bulb and the queue\u0027s CARRIED ruling (Baker\u0027s Fresh Fennel $3.99) is for the bulb, not the seed jars. Fresh produce has no package label; USDA is the label-equivalent authority (Cauliflower precedent). Added 2026-08-16 (lowcarb-100 run, braised-pork-shoulder-fennel-tomato).",
                       "source":  "USDA SR NDB 11957, fennel bulb raw"
                   },
                   {
@@ -4097,7 +4097,7 @@
                       "fat_g":  16.6,
                       "needs_verify":  false,
                       "verify_source":  "USDA SR Chicken, broilers or fryers, thigh, meat and skin, raw (NDB 05091): 221 cal / 16.52 P / 0 C / 16.61 F per 100 g",
-                      "notes":  "RAW thigh MEAT AND SKIN, per 100 g - grams booked on this row are EDIBLE meat+skin with the bone excluded (bone is refuse, not food); the purchase is still bone-in by the pound. Distinct from Boneless Skinless Chicken Thigh (140 cal/112 g label row) - the skin fat nearly doubles calories per gram, so borrowing the boneless row deflates a skin-on braise below the calorie floor. House each-weight: 185 g meat+skin from a ~230 g (8 oz) family-pack bone-in thigh; validated against the adding recipe's own published protein (chicken-chasseur, computed -3.1% vs source). Added 2026-08-16 (lowcarb-100 run, chicken-chasseur).",
+                      "notes":  "RAW thigh MEAT AND SKIN, per 100 g - grams booked on this row are EDIBLE meat+skin with the bone excluded (bone is refuse, not food); the purchase is still bone-in by the pound. Distinct from Boneless Skinless Chicken Thigh (140 cal/112 g label row) - the skin fat nearly doubles calories per gram, so borrowing the boneless row deflates a skin-on braise below the calorie floor. House each-weight: 185 g meat+skin from a ~230 g (8 oz) family-pack bone-in thigh; validated against the adding recipe\u0027s own published protein (chicken-chasseur, computed -3.1% vs source). Added 2026-08-16 (lowcarb-100 run, chicken-chasseur).",
                       "source":  "USDA SR NDB 05091, chicken thigh meat and skin raw"
                   },
                   {
@@ -4112,7 +4112,7 @@
                       "fat_g":  1.7,
                       "needs_verify":  false,
                       "verify_source":  "USDA SR Thyme, fresh (NDB 02049): 101 cal / 5.56 P / 24.45 C / 1.68 F per 100 g; 1 tsp leaves = 0.8 g",
-                      "notes":  "FRESH thyme sprigs/leaves, per 100 g. Distinct from Dried Thyme (form-flip; the Dried Thyme densities row's sprig=1 g remains the sprig-weight basis). Macro-immaterial at sprig usage (~1 cal per sprig) but the row keeps fresh-thyme lines off the dried row. Added 2026-08-16 (lowcarb-100 run, chicken-chasseur + creamy-garlic-herb-wine-pork-chops).",
+                      "notes":  "FRESH thyme sprigs/leaves, per 100 g. Distinct from Dried Thyme (form-flip; the Dried Thyme densities row\u0027s sprig=1 g remains the sprig-weight basis). Macro-immaterial at sprig usage (~1 cal per sprig) but the row keeps fresh-thyme lines off the dried row. Added 2026-08-16 (lowcarb-100 run, chicken-chasseur + creamy-garlic-herb-wine-pork-chops).",
                       "source":  "USDA SR NDB 02049, thyme fresh"
                   },
                   {
@@ -4126,8 +4126,8 @@
                       "carbs_g":  6,
                       "fat_g":  14,
                       "needs_verify":  false,
-                      "verify_source":  "Blue Diamond Almond Flour label (identical on Great Value / Member's Mark almond flour): 1/4 cup (28 g) = 160 cal / 6 P / 6 C (3 fiber) / 14 F - the label class is uniform because the sole ingredient is blanched almonds",
-                      "notes":  "Blanched finely-sifted almond flour, 1/4 cup = 28 g label basis (cup = 112 g). NOT the All-Purpose Flour row (110 cal/30 g, 23 C) and NOT the wheat-flour board commodity - different food and ~15x the price class; the flour commodity's include /\\bflour\\b/ wrongly claims the term (flagged, term enqueued instead). Added 2026-08-16 (lowcarb-100 run, creamy-garlic-herb-wine-pork-chops).",
+                      "verify_source":  "Blue Diamond Almond Flour label (identical on Great Value / Member\u0027s Mark almond flour): 1/4 cup (28 g) = 160 cal / 6 P / 6 C (3 fiber) / 14 F - the label class is uniform because the sole ingredient is blanched almonds",
+                      "notes":  "Blanched finely-sifted almond flour, 1/4 cup = 28 g label basis (cup = 112 g). NOT the All-Purpose Flour row (110 cal/30 g, 23 C) and NOT the wheat-flour board commodity - different food and ~15x the price class; the flour commodity\u0027s include /\\bflour\\b/ wrongly claims the term (flagged, term enqueued instead). Added 2026-08-16 (lowcarb-100 run, creamy-garlic-herb-wine-pork-chops).",
                       "source":  "Blue Diamond Almond Flour package label"
                   },
                   {
@@ -4141,7 +4141,7 @@
                       "carbs_g":  11.7,
                       "fat_g":  0,
                       "needs_verify":  true,
-                      "verify_source":  "USDA SR Alcoholic beverage, wine, dessert, dry (NDB 14536 class): 152 cal / 0.2 P / ~11.7 C / 0 F per 100 g. Marsala is a fortified (dessert-class) wine; wine is exempt from nutrition labeling so USDA is the only label-equivalent authority (Dry White Wine / Red Wine row precedent). CARB FIGURE FLAGGED: the USDA dry-dessert carb value is a class average; a dry Marsala's residual sugar can run lower (~4 g/100 g). Booked at the HIGHER figure so the carb gate is tested against the conservative case.",
+                      "verify_source":  "USDA SR Alcoholic beverage, wine, dessert, dry (NDB 14536 class): 152 cal / 0.2 P / ~11.7 C / 0 F per 100 g. Marsala is a fortified (dessert-class) wine; wine is exempt from nutrition labeling so USDA is the only label-equivalent authority (Dry White Wine / Red Wine row precedent). CARB FIGURE FLAGGED: the USDA dry-dessert carb value is a class average; a dry Marsala\u0027s residual sugar can run lower (~4 g/100 g). Booked at the HIGHER figure so the carb gate is tested against the conservative case.",
                       "notes":  "Fortified dessert-class wine, per 100 g; ~29.4 g per fl oz, ~235 g per cup (Red Wine density basis). Alcohol calories are real calories; no cook-off discount is taken. The only Omaha capture today is Holland House Marsala COOKING wine (Walmart, 13 fl oz $3.48, salted) - same macro class within a few cal. needs_verify=true on the carb field only; calories are solid either way. Added 2026-08-16 (lowcarb-100 run, chicken-chasseur + chicken-marsala-skillet).",
                       "source":  "USDA SR wine, dessert, dry"
                   },
@@ -4155,7 +4155,7 @@
                       "protein_g":  13.2,
                       "carbs_g":  0.2,
                       "fat_g":  13.3,
-                      "notes":  "PER 100 g AS-PURCHASED BONE-IN weight, so one grams number can drive cost (bone-in lb price class, board chicken-thighs) AND macros without corrupting either. Basis: USDA SR 05091 thigh meat and skin raw (221 cal / 16.5 P / 0.25 C / 16.6 F per 100 g edible, verified 2026-08-16 via nutritionvalue USDA mirror) x 0.80 edible meat+skin yield per bone-in gram. YIELD IS A DISCLOSED ESTIMATE: estate-standing 70% meat-only yield after bone AND skin (burmese-chicken-dal-curry ruling, USDA-cited) plus ~10% skin fraction = ~80% meat+skin; +/-3% yield moves ~10 cal per 150 g serving. DELIBERATE DEPARTURE from the skin-REMOVED canon (skin-on chicken -> BSCT): for skin-ON braises the skinless rebuild misstates fat ~2x and drops in-band sources below the 400 floor; the skin cooks into the dish (Boneless Beef Short Ribs lean-and-fat precedent). Flagged for registrar/match-soundness review. Added 2026-08-16 (lowcarb-100 run, basque-chicken-peppers-chilindron; source's own published macros validate this basis to +0.3% calories).",
+                      "notes":  "PER 100 g AS-PURCHASED BONE-IN weight, so one grams number can drive cost (bone-in lb price class, board chicken-thighs) AND macros without corrupting either. Basis: USDA SR 05091 thigh meat and skin raw (221 cal / 16.5 P / 0.25 C / 16.6 F per 100 g edible, verified 2026-08-16 via nutritionvalue USDA mirror) x 0.80 edible meat+skin yield per bone-in gram. YIELD IS A DISCLOSED ESTIMATE: estate-standing 70% meat-only yield after bone AND skin (burmese-chicken-dal-curry ruling, USDA-cited) plus ~10% skin fraction = ~80% meat+skin; +/-3% yield moves ~10 cal per 150 g serving. DELIBERATE DEPARTURE from the skin-REMOVED canon (skin-on chicken -\u003e BSCT): for skin-ON braises the skinless rebuild misstates fat ~2x and drops in-band sources below the 400 floor; the skin cooks into the dish (Boneless Beef Short Ribs lean-and-fat precedent). Flagged for registrar/match-soundness review. Added 2026-08-16 (lowcarb-100 run, basque-chicken-peppers-chilindron; source\u0027s own published macros validate this basis to +0.3% calories).",
                       "source":  "USDA SR 05091 chicken thigh meat and skin raw, x0.80 bone-in yield (disclosed estimate)"
                   },
                   {
@@ -4181,7 +4181,7 @@
                       "protein_g":  6,
                       "carbs_g":  1,
                       "fat_g":  6,
-                      "notes":  "Low-moisture part-skim mozzarella string cheese, 1 stick = 28 g (1 oz). Frigo Cheese Heads Original label: 80 cal / 6 P / <=1 C / 6 F per stick (verified 2026-08-16, fatsecret/carbmanager label mirrors; carbs booked at 1 g, the ceiling-conservative reading of a <1 g label). Frigo is the board's cheapest string-cheese cell today (Sam's Club 48 ct). Same food family as the Mozzarella Cheese row (304 cal/100 g shredded) but a DIFFERENT retail form and price class (individually wrapped sticks, string-cheese commodity, not shredded-cheese) - kept as its own row per the shared-item-carrying-a-brand rule. Added 2026-08-16 (lowcarb-100 run, italian-sausage-stuffed-peppers-bake).",
+                      "notes":  "Low-moisture part-skim mozzarella string cheese, 1 stick = 28 g (1 oz). Frigo Cheese Heads Original label: 80 cal / 6 P / \u003c=1 C / 6 F per stick (verified 2026-08-16, fatsecret/carbmanager label mirrors; carbs booked at 1 g, the ceiling-conservative reading of a \u003c1 g label). Frigo is the board\u0027s cheapest string-cheese cell today (Sam\u0027s Club 48 ct). Same food family as the Mozzarella Cheese row (304 cal/100 g shredded) but a DIFFERENT retail form and price class (individually wrapped sticks, string-cheese commodity, not shredded-cheese) - kept as its own row per the shared-item-carrying-a-brand rule. Added 2026-08-16 (lowcarb-100 run, italian-sausage-stuffed-peppers-bake).",
                       "source":  "Frigo Cheese Heads Original String Cheese package label"
                   },
                   {
@@ -4196,6 +4196,18 @@
                       "fat_g":  1.6,
                       "notes":  "RAW fresh thyme, per 100 g; USDA SR: 1 tsp leaves = 0.8 g, 1 sprig ~ 1 g (verified 2026-08-16 via nutritionvalue USDA mirror). Fresh produce has no package label; USDA is the label-equivalent authority (Fresh Parsley row precedent). NOT the Dried Thyme row (form-flip). Spice-class stakes: a whole-recipe 12 g is ~12 cal. Added 2026-08-16 (lowcarb-100 run, basque-chicken-peppers-chilindron).",
                       "source":  "USDA SR thyme, fresh"
+                  },
+                  {
+                      "item":  "Fresh Oregano",
+                      "brand":  "fresh (USDA)",
+                      "serving_grams":  100,
+                      "serving_qty":  100,
+                      "serving_unit":  "g",
+                      "calories":  265,
+                      "protein_g":  9,
+                      "carbs_g":  68.9,
+                      "fat_g":  4.3,
+                      "note":  "USDA SR \"Oregano, fresh\" per 100 g. Same basis as the Fresh Parsley row added the same day, so the two herbs stand on one footing. DISTINCT from Dried Oregano, which is a Great Value label per tsp."
                   }
               ]
 }

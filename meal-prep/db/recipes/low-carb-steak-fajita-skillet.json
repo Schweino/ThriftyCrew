@@ -27,7 +27,7 @@
                  "protein":  56,
                  "carbs":  7,
                  "fat":  30,
-                 "cost_ps":  "4.92"
+                 "cost_ps":  "4.96"
              },
     "intro_html":  "Fajitas are one of those dinners that already eat low carb if you just walk past the tortillas, and once you do that the plate gets a whole lot leaner without giving up a single thing you actually came for. This is skirt or flank steak sliced thin, seasoned hard, and seared fast, then folded back together with peppers and red onion cooked just to the point of tender. A blanket of melted cheese goes over the top and that is the meal. No wrap, no filler, just steak and vegetables doing the work. Built at 14 servings it lands around \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 10 grams of carbs. That is a Tex-Mex dinner that loves your macros back.",
     "ingredients_display":  [
@@ -49,10 +49,10 @@
                        "Green Bell Peppers, 1 3/4 cups sliced into strips (about 1 1/2 peppers): ~$1.03. \u003cstrong\u003eBuy 2 each: $1.54.\u003c/strong\u003e",
                        "Red Onion, 1 3/4 cups sliced into strips (about 1 large): ~$0.59. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
                        "Garlic, 3 1/2 tsp minced (about 3 cloves): ~$0.14. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Mexican Cheese Blend, 3 1/2 cups shredded: ~$2.47. \u003cstrong\u003eBuy 2 8oz bags: $2.84.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 3 1/2 cups shredded: ~$3.02. \u003cstrong\u003eBuy 2 8oz bags: $3.46.\u003c/strong\u003e",
                        "Pantry seasonings (fajita seasoning, yellow bell pepper): ~$1.01. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $68.91 across 14 servings, so roughly $4.92 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $73.98 across 14 servings, roughly $5.28 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses."
+                       "\u003cstrong\u003eBatch total: about $69.46 across 14 servings, so roughly $4.96 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $74.60 across 14 servings, roughly $5.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e at everyday prices for a steak fajita dinner you can eat all week, cheese and all. The steak carries the plate and the peppers stretch it, and nobody misses the tortilla.",
     "shop_smart":  [
@@ -74,14 +74,14 @@
     "portion_html":  "The honest way to make fourteen even servings is by weight. Weigh the loaded skillet before the cheese goes on, subtract the empty weight you noted in Step 1, and that is your cooked total. Divide it by 14 and give each container that exact amount, then split the cheese evenly over the tops. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://domesticallycreative.com/low-carb-steak-fajita-skillet/\" target=\"_blank\" rel=\"noopener\"\u003edomesticallycreative.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low carb, high protein dinner for about ${{cost_ps}} a serving at everyday prices. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  68.91,
-    "cost_batch_true":  73.98,
-    "cost_per_serving":  4.92,
-    "cost_per_serving_true":  5.28,
+    "cost_batch":  69.46,
+    "cost_batch_true":  74.6,
+    "cost_per_serving":  4.96,
+    "cost_per_serving_true":  5.33,
     "cost_pantry_add":  0,
-    "cost_first_run":  73.98,
+    "cost_first_run":  74.6,
     "scaler":  {
-                   "cost":  "73.98",
+                   "cost":  "74.60",
                    "ing":  [
                                {
                                    "item":  "Beef Flank/Sirloin Steak",
@@ -127,7 +127,9 @@
                                    "item":  "Yellow Bell Pepper",
                                    "canon":  "Yellow Bell Pepper",
                                    "grams":  161,
-                                   "buy":  "1 3/4 cups sliced into strips (about 1 1/2 peppers)"
+                                   "buy":  "1 3/4 cups sliced into strips (about 1 1/2 peppers)",
+                                   "bid":  "yellow-bell-pepper",
+                                   "gpu":  "186.000"
                                },
                                {
                                    "item":  "Red Onion",
@@ -162,7 +164,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT25M",
                  "totalTime":  "PT45M",
-                 "costPerServing":  4.92,
+                 "costPerServing":  4.96,
                  "recipeIngredient":  [
                                           "Beef Flank/Sirloin Steak, 7 lb, sliced into thin strips (3175 g)",
                                           "Fajita Seasoning, 7 tbsp (about 1 1/2 packets) (56 g)",

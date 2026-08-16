@@ -26,7 +26,7 @@
                  "protein":  37,
                  "carbs":  11,
                  "fat":  22,
-                 "cost_ps":  "1.60"
+                 "cost_ps":  "2.19"
              },
     "intro_html":  "Tandoori chicken is one of those dinners that tastes like somebody fussed over it, and it never did. The spice blend does all the work. You whisk it into coconut milk with a little salt and lemon, coat the chicken and a pile of cauliflower, and let one hot oven turn it into dinner. No frying, no babysitting, just a sheet pan and a timer. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 15 grams of carbs. That is a warm, spiced, weeknight-easy dinner that portions straight into your containers for the week.",
     "ingredients_display":  [
@@ -43,15 +43,16 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Thigh, 5 1/4 lb boneless skinless chicken thighs: ~$16.90. \u003cstrong\u003eBuy 6 lbs: $19.32.\u003c/strong\u003e",
+                       "Cauliflower, 3 1/2 small heads (2 lb or less each), cut into florets: ~$6.36. \u003cstrong\u003eBuy 4 1 heads: $7.92.\u003c/strong\u003e",
                        "Coconut Milk, 3 1/2 cups full-fat coconut milk (about two 13.5 oz cans plus a third): ~$3.86. \u003cstrong\u003eBuy 3 13.5oz cans: $5.51.\u003c/strong\u003e",
                        "Red Onion, 3 1/2 small red onions, cut into thin wedges: ~$0.72. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
                        "Lemon Juice, 3 1/2 tbsp lemon juice: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Olive Oil, 3 1/2 tbsp olive oil, for the pans: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fresh Cilantro, 3/4 cup plus 2 tbsp minced fresh cilantro: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
-                       "Pantry seasonings (tandoori masala, salt): ~$0.04. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $22.38 across 14 servings, so roughly $1.60 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $27.74 across 14 servings, roughly $1.98 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.01 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.75. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (tandoori masala, salt): ~$2.00. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $30.70 across 14 servings, so roughly $2.19 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $37.62 across 14 servings, roughly $2.69 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.05 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.67. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a spiced, roasted sheet pan dinner that eats like takeout and preps in one pass. The chicken does the heavy lifting; the cauliflower and one jar of spice stretch it into 14 real dinners.",
     "shop_smart":  [
@@ -74,14 +75,14 @@
     "portion_html":  "Set your container on the scale and subtract the empty weight you wrote down in Step 1 to get the cooked total across all the pans. Divide that number by 14 and pack that exact weight into each container, giving each one some chicken and some cauliflower. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://nomnompaleo.com/sheet-pan-tandoori-chicken\" target=\"_blank\" rel=\"noopener\"\u003enomnompaleo.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  22.38,
-    "cost_batch_true":  27.74,
-    "cost_per_serving":  1.6,
-    "cost_per_serving_true":  1.98,
-    "cost_pantry_add":  10.01,
-    "cost_first_run":  37.75,
+    "cost_batch":  30.7,
+    "cost_batch_true":  37.62,
+    "cost_per_serving":  2.19,
+    "cost_per_serving_true":  2.69,
+    "cost_pantry_add":  10.05,
+    "cost_first_run":  47.67,
     "scaler":  {
-                   "cost":  "27.74",
+                   "cost":  "37.62",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Thigh",
@@ -95,7 +96,9 @@
                                    "item":  "Cauliflower",
                                    "canon":  "Cauliflower",
                                    "grams":  1890,
-                                   "buy":  "3 1/2 small heads (2 lb or less each), cut into florets"
+                                   "buy":  "3 1/2 small heads (2 lb or less each), cut into florets",
+                                   "bid":  "cauliflower",
+                                   "gpu":  "588.000"
                                },
                                {
                                    "item":  "Coconut Milk",
@@ -117,7 +120,9 @@
                                    "item":  "Tandoori Masala",
                                    "canon":  "Tandoori Masala",
                                    "grams":  56,
-                                   "buy":  "7 tbsp tandoori spice mix (no salt added)"
+                                   "buy":  "7 tbsp tandoori spice mix (no salt added)",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Lemon Juice",
@@ -160,7 +165,7 @@
                  "prepTime":  "PT15M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT50M",
-                 "costPerServing":  1.6,
+                 "costPerServing":  2.19,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Thigh, 5 1/4 lb boneless skinless chicken thighs (2381 g)",
                                           "Cauliflower, 3 1/2 small heads (2 lb or less each), cut into florets (1890 g)",

@@ -30,7 +30,7 @@
                  "protein":  29,
                  "carbs":  31,
                  "fat":  21,
-                 "cost_ps":  "2.89"
+                 "cost_ps":  "3.70"
              },
     "intro_html":  "Chimichurri is what happens when a steak decides to dress up. It is nothing fancier than fresh herbs, garlic, red wine vinegar, and good olive oil buzzed into a bright green sauce, and it pulls a double shift here. Half of it marinates the steak before it hits the pan, and the other half gets spooned over the top at the end. Everything roasts on one sheet pan next to sweet potatoes and broccolini, so there is one pan to wash and nothing to stand over. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 35 grams of carbs. That is a steakhouse plate that fits inside a meal-prep container.",
     "ingredients_display":  [
@@ -42,7 +42,7 @@
                                 "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1/2 cup plus 1 1/2 tbsp, stems and leaves (10 g)",
                                 "\u003cstrong\u003eFresh Parsley (fresh (USDA)):\u003c/strong\u003e 1/2 cup plus 1 1/2 tbsp, stems and leaves (36 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 3/4 cloves, minced (14 g)",
-                                "\u003cstrong\u003eFresh Oregano:\u003c/strong\u003e 1 1/4 tbsp, leaves stripped (1 g)",
+                                "\u003cstrong\u003eFresh Oregano (fresh (USDA)):\u003c/strong\u003e 1 1/4 tbsp, leaves stripped (1 g)",
                                 "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/2 tsp (1 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 1/4 tsp fine sea salt, divided (14 g)"
                             ],
@@ -50,14 +50,16 @@
     "cost_lines":  [
                        "Beef Flank/Sirloin Steak, 3 1/2 lb sirloin or flank steak: ~$30.87. \u003cstrong\u003eBuy 4 lbs: $35.27.\u003c/strong\u003e",
                        "Sweet Potatoes, 9 1/4 sweet potatoes, about 1/2 lb each: ~$6.79. \u003cstrong\u003eBuy 5 lbs: $7.40.\u003c/strong\u003e",
+                       "Broccolini, 2 1/4 bunches (about 18 oz): ~$10.19. \u003cstrong\u003eBuy 3 1 bunches: $11.97.\u003c/strong\u003e",
                        "Olive Oil, 7/8 cup extra virgin, divided: ~$2.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Red Wine Vinegar, 5 3/4 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fresh Cilantro, 1/2 cup plus 1 1/2 tbsp, stems and leaves: ~$0.16. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Fresh Parsley, 1/2 cup plus 1 1/2 tbsp, stems and leaves: ~$1.16. \u003cstrong\u003eBuy 1 1 bunch: $1.93.\u003c/strong\u003e",
                        "Garlic, 4 3/4 cloves, minced: ~$0.19. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Pantry seasonings (fresh parsley, fresh oregano, red pepper flakes, salt): ~$0.04. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $40.46 across 14 servings, so roughly $2.89 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $46.59 across 14 servings, roughly $3.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.91. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (fresh oregano, red pepper flakes, salt): ~$0.04. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $51.81 across 14 servings, so roughly $3.70 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $60.49 across 14 servings, roughly $4.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $68.81. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a chimichurri steak dinner that most people only order out. The steak and the sweet potatoes carry the plate, and the green sauce is what makes it taste like more than the sum of its parts.",
     "shop_smart":  [
@@ -80,14 +82,14 @@
     "portion_html":  "Set the loaded sheet pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total, steak and vegetables and sauce together. Divide that number by 14 and give each container that exact weight, aiming for an even share of steak, sweet potato, and broccolini. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://fedandfit.com/chimichurri-beef-sheet-pan-dinner/\" target=\"_blank\" rel=\"noopener\"\u003efedandfit.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  40.46,
-    "cost_batch_true":  46.59,
-    "cost_per_serving":  2.89,
-    "cost_per_serving_true":  3.33,
+    "cost_batch":  51.81,
+    "cost_batch_true":  60.49,
+    "cost_per_serving":  3.7,
+    "cost_per_serving_true":  4.32,
     "cost_pantry_add":  8.32,
-    "cost_first_run":  54.91,
+    "cost_first_run":  68.81,
     "scaler":  {
-                   "cost":  "46.59",
+                   "cost":  "60.49",
                    "ing":  [
                                {
                                    "item":  "Beef Flank/Sirloin Steak",
@@ -109,7 +111,9 @@
                                    "item":  "Broccolini",
                                    "canon":  "Broccolini",
                                    "grams":  511,
-                                   "buy":  "2 1/4 bunches (about 18 oz)"
+                                   "buy":  "2 1/4 bunches (about 18 oz)",
+                                   "bid":  "broccolini",
+                                   "gpu":  "200.000"
                                },
                                {
                                    "item":  "Olive Oil",
@@ -139,7 +143,9 @@
                                    "item":  "Fresh Parsley",
                                    "canon":  "Fresh Parsley",
                                    "grams":  36,
-                                   "buy":  "1/2 cup plus 1 1/2 tbsp, stems and leaves"
+                                   "buy":  "1/2 cup plus 1 1/2 tbsp, stems and leaves",
+                                   "bid":  "fresh-parsley",
+                                   "gpu":  "60.000"
                                },
                                {
                                    "item":  "Garlic",
@@ -153,7 +159,9 @@
                                    "item":  "Fresh Oregano",
                                    "canon":  "Fresh Oregano",
                                    "grams":  1,
-                                   "buy":  "1 1/4 tbsp, leaves stripped"
+                                   "buy":  "1 1/4 tbsp, leaves stripped",
+                                   "bid":  "fresh-oregano",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Red Pepper Flakes",
@@ -180,7 +188,7 @@
                  "prepTime":  "PT10M",
                  "cookTime":  "PT1H15M",
                  "totalTime":  "PT1H25M",
-                 "costPerServing":  2.89,
+                 "costPerServing":  3.7,
                  "recipeIngredient":  [
                                           "Beef Flank/Sirloin Steak, 3 1/2 lb sirloin or flank steak (1588 g)",
                                           "Sweet Potatoes, 9 1/4 sweet potatoes, about 1/2 lb each (2081 g)",

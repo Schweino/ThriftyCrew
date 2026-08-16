@@ -30,7 +30,7 @@
                  "protein":  23,
                  "carbs":  9,
                  "fat":  29,
-                 "cost_ps":  "0.77"
+                 "cost_ps":  "1.01"
              },
     "intro_html":  "Pizza night is usually the crust doing the damage. Take the crust away and what is left is the part you actually came for: browned Italian sausage, crisped pepperoni, a layer of tomato basil sauce, and melted cheese, all baked together until the top browns and bubbles. No dough, no cardboard-and-cheese delivery box, no carb hangover an hour later. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 10 grams of carbs. That is Friday-night flavor on a Tuesday-night budget.",
     "ingredients_display":  [
@@ -47,15 +47,16 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Hot Italian Sausage, 2 1/4 lb Italian sausage (hot or mild), casings removed: ~$5.63. \u003cstrong\u003eBuy 3 lbs: $7.50.\u003c/strong\u003e",
+                       "Pepperoni, 5 3/4 oz sliced pepperoni: ~$3.36. \u003cstrong\u003eBuy 2 5oz packs: $5.85.\u003c/strong\u003e",
                        "Pizza Blend Cheese, 3 1/2 cups, shredded: ~$2.12. \u003cstrong\u003eBuy 2 8oz bags: $2.44.\u003c/strong\u003e",
                        "Marinara Sauce, 2 1/4 cups tomato basil pasta sauce: ~$1.15. \u003cstrong\u003eBuy 1 24oz jar: $1.42.\u003c/strong\u003e",
                        "Red Bell Pepper, 1 1/4 large bell peppers (red and/or green), sliced: ~$1.22. \u003cstrong\u003eBuy 2 each: $1.96.\u003c/strong\u003e",
                        "Yellow Onion, 1 1/4 medium, sliced thin: ~$0.35. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Olive Oil, 2 1/4 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.03. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $10.83 across 14 servings, so roughly $0.77 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $14.82 across 14 servings, roughly $1.06 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $25.43. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $14.19 across 14 servings, so roughly $1.01 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $20.67 across 14 servings, roughly $1.48 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $31.28. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a baked pizza casserole that eats like the real thing and skips the crust entirely. The sausage, pepperoni, and cheese carry it; the crust never did anything for you but run up the carbs.",
     "shop_smart":  [
@@ -75,14 +76,14 @@
     "portion_html":  "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://drdavinahseats.com/low-carb-keto-crustless-pizza-casserole-recipe\" target=\"_blank\" rel=\"noopener\"\u003edrdavinahseats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  10.83,
-    "cost_batch_true":  14.82,
-    "cost_per_serving":  0.77,
-    "cost_per_serving_true":  1.06,
+    "cost_batch":  14.19,
+    "cost_batch_true":  20.67,
+    "cost_per_serving":  1.01,
+    "cost_per_serving_true":  1.48,
     "cost_pantry_add":  10.61,
-    "cost_first_run":  25.43,
+    "cost_first_run":  31.28,
     "scaler":  {
-                   "cost":  "14.82",
+                   "cost":  "20.67",
                    "ing":  [
                                {
                                    "item":  "Hot Italian Sausage",
@@ -96,7 +97,9 @@
                                    "item":  "Pepperoni",
                                    "canon":  "Pepperoni",
                                    "grams":  163,
-                                   "buy":  "5 3/4 oz sliced pepperoni"
+                                   "buy":  "5 3/4 oz sliced pepperoni",
+                                   "bid":  "turkey-pepperoni",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Pizza Blend Cheese",
@@ -163,7 +166,7 @@
                  "prepTime":  "PT10M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT45M",
-                 "costPerServing":  0.77,
+                 "costPerServing":  1.01,
                  "recipeIngredient":  [
                                           "Hot Italian Sausage, 2 1/4 lb Italian sausage (hot or mild), casings removed (1021 g)",
                                           "Pepperoni, 5 3/4 oz sliced pepperoni (163 g)",

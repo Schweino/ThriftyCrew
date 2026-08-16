@@ -25,7 +25,7 @@
                  "protein":  31,
                  "carbs":  5,
                  "fat":  42,
-                 "cost_ps":  "0.38"
+                 "cost_ps":  "1.73"
              },
     "intro_html":  "A bacon cheeseburger is one of the best things you can eat and one of the worst things you can build a budget around, so this takes the whole flavor and throws out the bun and the drive-through. You crisp the bacon, brown the beef with onion, and melt a quick sauce of cream cheese, broth, tomato paste, and mustard right in the pan, then blanket the whole thing with cheddar. It eats like a cheeseburger you can portion into containers. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 6 grams of carbs. That is a burger night that does not fight your macros or your wallet.",
     "ingredients_display":  [
@@ -45,14 +45,17 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Hickory Smoked Bacon, 14 slices, chopped into small pieces: ~$1.47. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
+                       "80/20 Ground Beef, 3 1/2 lb (80/20): ~$17.31. \u003cstrong\u003eBuy 4 lbs: $19.77.\u003c/strong\u003e",
                        "Yellow Onion, 1 3/4 cups chopped (about 2 medium): ~$0.51. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Tomato Paste, 7 tbsp (a bit under 1/2 cup): ~$0.40. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
+                       "Yellow Mustard, 3 1/2 tsp: ~$0.03. \u003cstrong\u003eBuy 1 20oz bottle: $1.00.\u003c/strong\u003e",
+                       "Cream Cheese, 7 oz, softened: ~$1.61. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
                        "Chicken Broth, 1 3/4 cups: ~$0.64. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 3 1/2 cups shredded: ~$2.12. \u003cstrong\u003eBuy 2 8oz bags: $2.44.\u003c/strong\u003e",
                        "Pantry seasonings (onion powder, garlic powder, salt, black pepper): ~$0.16. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $5.30 across 14 servings, so roughly $0.38 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $8.95 across 14 servings, roughly $0.64 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.67 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $14.62. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $24.25 across 14 servings, so roughly $1.73 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.56 across 14 servings, roughly $2.25 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.67 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.23. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a bacon cheeseburger you eat with a fork. The beef, bacon, and cheddar carry it; the cream cheese and broth just turn it into a sauce that coats every bite.",
     "shop_smart":  [
@@ -73,14 +76,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thebestketorecipes.com/one-pan-keto-bacon-cheeseburger-skillet/\" target=\"_blank\" rel=\"noopener\"\u003ethebestketorecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein cheeseburger dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  5.3,
-    "cost_batch_true":  8.95,
-    "cost_per_serving":  0.38,
-    "cost_per_serving_true":  0.64,
+    "cost_batch":  24.25,
+    "cost_batch_true":  31.56,
+    "cost_per_serving":  1.73,
+    "cost_per_serving_true":  2.25,
     "cost_pantry_add":  5.67,
-    "cost_first_run":  14.62,
+    "cost_first_run":  37.23,
     "scaler":  {
-                   "cost":  "8.95",
+                   "cost":  "31.56",
                    "ing":  [
                                {
                                    "item":  "Hickory Smoked Bacon",
@@ -94,7 +97,9 @@
                                    "item":  "80/20 Ground Beef",
                                    "canon":  "80/20 Ground Beef",
                                    "grams":  1588,
-                                   "buy":  "3 1/2 lb (80/20)"
+                                   "buy":  "3 1/2 lb (80/20)",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -116,13 +121,17 @@
                                    "item":  "Yellow Mustard",
                                    "canon":  "Yellow Mustard",
                                    "grams":  18,
-                                   "buy":  "3 1/2 tsp"
+                                   "buy":  "3 1/2 tsp",
+                                   "bid":  "mustard",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Cream Cheese",
                                    "canon":  "Cream Cheese",
                                    "grams":  198,
-                                   "buy":  "7 oz, softened"
+                                   "buy":  "7 oz, softened",
+                                   "bid":  "1-3-fat-cream-cheese",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -181,7 +190,7 @@
                  "prepTime":  "PT5M",
                  "cookTime":  "PT15M",
                  "totalTime":  "PT20M",
-                 "costPerServing":  0.38,
+                 "costPerServing":  1.73,
                  "recipeIngredient":  [
                                           "Hickory Smoked Bacon, 14 slices, chopped into small pieces (168 g)",
                                           "80/20 Ground Beef, 3 1/2 lb (80/20) (1588 g)",

@@ -25,7 +25,7 @@
                  "protein":  29,
                  "carbs":  11,
                  "fat":  33,
-                 "cost_ps":  "2.02"
+                 "cost_ps":  "2.37"
              },
     "intro_html":  "Stroganoff has a reputation as fussy Sunday food, but the ground beef version is a Tuesday and always was. You brown the beef, build a quick pan sauce out of mushrooms, a little brandy, and sour cream, and you are done in about half an hour. The only trick for keeping it low carb is what goes underneath. Instead of egg noodles, this one rides on cabbage cut into thin strips and fried soft in the pan, so it eats like noodles without the carbs. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 15 grams of carbs. That is comfort food that does not fight your macros or your wallet.",
     "ingredients_display":  [
@@ -49,11 +49,14 @@
                        "Yellow Onion, 3/4 cup plus 2 tbsp, chopped: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Butter, 10 1/2 tbsp, divided: ~$0.96. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "Worcestershire Sauce, 3 1/2 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cream Cheese, 7 oz (about 3/4 cup plus 2 tbsp), softened: ~$1.61. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
+                       "Sour Cream, 3 1/2 cups full-fat: ~$2.91. \u003cstrong\u003eBuy 2 16oz tubs: $3.28.\u003c/strong\u003e",
+                       "Fresh Parsley, 3 1/2 tbsp, chopped: ~$0.42. \u003cstrong\u003eBuy 1 1 bunch: $1.93.\u003c/strong\u003e",
                        "Green Cabbage, 2 5/8 lb, cut into thin strips (about 1 1/3 heads): ~$2.23. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
-                       "Pantry seasonings (ground nutmeg, fresh parsley): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $28.29 across 14 servings, so roughly $2.02 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $35.84 across 14 servings, roughly $2.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.31 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.15. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (ground nutmeg): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.23 across 14 servings, so roughly $2.37 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.89 across 14 servings, roughly $3.06 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.31 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.20. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a creamy beef stroganoff that most people think of as restaurant food. The beef and the cabbage carry it; the sour cream and the brandy just make it taste like more.",
     "shop_smart":  [
@@ -75,14 +78,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.lowcarbmaven.com/low-carb-beef-stroganoff-ground-beef-stroganoff/\" target=\"_blank\" rel=\"noopener\"\u003elowcarbmaven.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  28.29,
-    "cost_batch_true":  35.84,
-    "cost_per_serving":  2.02,
-    "cost_per_serving_true":  2.56,
+    "cost_batch":  33.23,
+    "cost_batch_true":  42.89,
+    "cost_per_serving":  2.37,
+    "cost_per_serving_true":  3.06,
     "cost_pantry_add":  3.31,
-    "cost_first_run":  39.15,
+    "cost_first_run":  46.2,
     "scaler":  {
-                   "cost":  "35.84",
+                   "cost":  "42.89",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -120,7 +123,9 @@
                                    "item":  "Brandy",
                                    "canon":  "Brandy",
                                    "grams":  97,
-                                   "buy":  "7 tbsp (a bit under 1/2 cup)"
+                                   "buy":  "7 tbsp (a bit under 1/2 cup)",
+                                   "bid":  "brandy",
+                                   "gpu":  "29.570"
                                },
                                {
                                    "item":  "Worcestershire Sauce",
@@ -134,19 +139,25 @@
                                    "item":  "Beef Base",
                                    "canon":  "Beef Base",
                                    "grams":  21,
-                                   "buy":  "3 1/2 tsp"
+                                   "buy":  "3 1/2 tsp",
+                                   "bid":  "beef-base",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Cream Cheese",
                                    "canon":  "Cream Cheese",
                                    "grams":  198,
-                                   "buy":  "7 oz (about 3/4 cup plus 2 tbsp), softened"
+                                   "buy":  "7 oz (about 3/4 cup plus 2 tbsp), softened",
+                                   "bid":  "1-3-fat-cream-cheese",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Sour Cream",
                                    "canon":  "Sour Cream",
                                    "grams":  805,
-                                   "buy":  "3 1/2 cups full-fat"
+                                   "buy":  "3 1/2 cups full-fat",
+                                   "bid":  "sour-cream",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Ground Nutmeg",
@@ -160,7 +171,9 @@
                                    "item":  "Fresh Parsley",
                                    "canon":  "Fresh Parsley",
                                    "grams":  13,
-                                   "buy":  "3 1/2 tbsp, chopped"
+                                   "buy":  "3 1/2 tbsp, chopped",
+                                   "bid":  "fresh-parsley",
+                                   "gpu":  "60.000"
                                },
                                {
                                    "item":  "Green Cabbage",
@@ -179,7 +192,7 @@
                  "prepTime":  "PT10M",
                  "cookTime":  "PT20M",
                  "totalTime":  "PT30M",
-                 "costPerServing":  2.02,
+                 "costPerServing":  2.37,
                  "recipeIngredient":  [
                                           "93/7 Ground Beef, 3 1/2 lb lean (93/7) (1588 g)",
                                           "White Mushrooms, 14 oz, sliced (about 5 2/3 cups) (397 g)",

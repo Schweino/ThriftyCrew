@@ -25,7 +25,7 @@
                  "protein":  33,
                  "carbs":  8,
                  "fat":  39,
-                 "cost_ps":  "0.46"
+                 "cost_ps":  "2.17"
              },
     "intro_html":  "Taco night is one of the cheapest ways to feed a crowd, right up until the shells, the tortillas, and the seasoning packets pile the carbs and the cost back on. This one keeps the taco and throws out the wrapper. You brown the beef, stir in salsa and chili powder for the whole taco flavor with no packet, then wilt shredded cabbage down in the pan where the shells used to be and melt cheese over the top. It eats like a taco bowl you can portion into containers. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 10 grams of carbs. Top your bowl with whatever you like when you eat it; the build is just the skillet. That is taco night that does not fight your macros or your wallet.",
     "ingredients_display":  [
@@ -37,13 +37,14 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
+                       "80/20 Ground Beef, 4 3/4 lb (80/20): ~$23.48. \u003cstrong\u003eBuy 5 lbs: $24.71.\u003c/strong\u003e",
                        "Salsa, 2 1/3 cups: ~$2.43. \u003cstrong\u003eBuy 2 16oz jars: $3.94.\u003c/strong\u003e",
                        "Green Cabbage, 9 1/3 cups shredded (about 3/4 head): ~$1.22. \u003cstrong\u003eBuy 1 head: $1.69.\u003c/strong\u003e",
-                       "Mexican Cheese Blend, 3 1/2 cups shredded: ~$2.47. \u003cstrong\u003eBuy 2 8oz bags: $2.84.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 3 1/2 cups shredded: ~$3.02. \u003cstrong\u003eBuy 2 8oz bags: $3.46.\u003c/strong\u003e",
                        "Pantry seasonings (chili powder): ~$0.29. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $6.41 across 14 servings, so roughly $0.46 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $8.76 across 14 servings, roughly $0.63 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $0.58 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $9.34. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $30.44 across 14 servings, so roughly $2.17 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.09 across 14 servings, roughly $2.44 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $0.58 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $34.67. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a taco bowl you eat with a fork. The beef carries it and the cheese finishes it; the salsa, chili powder, and cabbage turn a pound of ground beef into a full skillet for almost nothing.",
     "shop_smart":  [
@@ -64,20 +65,22 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.heyketomama.com/low-carb-taco-cabbage-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eheyketomama.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein taco dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  6.41,
-    "cost_batch_true":  8.76,
-    "cost_per_serving":  0.46,
-    "cost_per_serving_true":  0.63,
+    "cost_batch":  30.44,
+    "cost_batch_true":  34.09,
+    "cost_per_serving":  2.17,
+    "cost_per_serving_true":  2.44,
     "cost_pantry_add":  0.58,
-    "cost_first_run":  9.34,
+    "cost_first_run":  34.67,
     "scaler":  {
-                   "cost":  "8.76",
+                   "cost":  "34.09",
                    "ing":  [
                                {
                                    "item":  "80/20 Ground Beef",
                                    "canon":  "80/20 Ground Beef",
                                    "grams":  2155,
-                                   "buy":  "4 3/4 lb (80/20)"
+                                   "buy":  "4 3/4 lb (80/20)",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
                                },
                                {
                                    "item":  "Salsa",
@@ -120,7 +123,7 @@
                  "prepTime":  "PT15M",
                  "cookTime":  "PT20M",
                  "totalTime":  "PT35M",
-                 "costPerServing":  0.46,
+                 "costPerServing":  2.17,
                  "recipeIngredient":  [
                                           "80/20 Ground Beef, 4 3/4 lb (80/20) (2155 g)",
                                           "Salsa, 2 1/3 cups (560 g)",

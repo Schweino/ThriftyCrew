@@ -26,7 +26,7 @@
                  "protein":  46,
                  "carbs":  9,
                  "fat":  33,
-                 "cost_ps":  "1.39"
+                 "cost_ps":  "1.69"
              },
     "intro_html":  "Tuscan chicken sounds like a restaurant order, but it is really just seared chicken finished in a cream sauce with sun-dried tomatoes and spinach. No long braise, no special cut, no equipment you do not already own. You season the cutlets, brown them in butter, then build the sauce right in the same pan and let the two finish together. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 10 grams of carbs. That is a creamy, rich-tasting dinner that still lands inside a low-carb week.",
     "ingredients_display":  [
@@ -45,12 +45,13 @@
                        "Boneless Skinless Chicken Breast, 14 thin sliced chicken breasts (about 6.2 lb): ~$13.77. \u003cstrong\u003eBuy 7 lbs: $15.61.\u003c/strong\u003e",
                        "Butter, 7 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "Heavy Cream, 3 1/2 cups: ~$4.12. \u003cstrong\u003eBuy 2 pints: $4.68.\u003c/strong\u003e",
+                       "Sun-Dried Tomatoes (Oil-Packed), 1 3/4 cups oil-packed, drained: ~$4.15. \u003cstrong\u003eBuy 1 24oz jar: $14.62.\u003c/strong\u003e",
                        "Garlic, 7 cloves, minced: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Spinach, 3 1/2 cups chopped: ~$0.43. \u003cstrong\u003eBuy 1 10oz bag: $1.15.\u003c/strong\u003e",
                        "Pantry seasonings (paprika, garlic powder, salt): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $19.48 across 14 servings, so roughly $1.39 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $25.23 across 14 servings, roughly $1.80 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.49 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $27.72. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $23.63 across 14 servings, so roughly $1.69 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.85 across 14 servings, roughly $2.85 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.49 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.34. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a creamy Tuscan chicken dinner that tastes like it came off a restaurant menu. The chicken and the cream carry it; the sun-dried tomatoes and spinach just make it look and taste expensive.",
     "shop_smart":  [
@@ -72,14 +73,14 @@
     "portion_html":  "Set the full pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Each container gets one chicken cutlet and an even spoonful of the creamy tomato and spinach sauce, landing near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thatlowcarblife.com/creamy-tuscan-chicken/\" target=\"_blank\" rel=\"noopener\"\u003ethatlowcarblife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  19.48,
-    "cost_batch_true":  25.23,
-    "cost_per_serving":  1.39,
-    "cost_per_serving_true":  1.8,
+    "cost_batch":  23.63,
+    "cost_batch_true":  39.85,
+    "cost_per_serving":  1.69,
+    "cost_per_serving_true":  2.85,
     "cost_pantry_add":  2.49,
-    "cost_first_run":  27.72,
+    "cost_first_run":  42.34,
     "scaler":  {
-                   "cost":  "25.23",
+                   "cost":  "39.85",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -133,7 +134,9 @@
                                    "item":  "Sun-Dried Tomatoes (Oil-Packed)",
                                    "canon":  "Sun-Dried Tomatoes (Oil-Packed)",
                                    "grams":  193,
-                                   "buy":  "1 3/4 cups oil-packed, drained"
+                                   "buy":  "1 3/4 cups oil-packed, drained",
+                                   "bid":  "sun-dried-tomatoes",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Garlic",
@@ -160,7 +163,7 @@
                  "prepTime":  "PT10M",
                  "cookTime":  "PT20M",
                  "totalTime":  "PT30M",
-                 "costPerServing":  1.39,
+                 "costPerServing":  1.69,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Breast, 14 thin sliced chicken breasts (about 6.2 lb) (2800 g)",
                                           "Paprika, 3 1/2 tsp (8 g)",
