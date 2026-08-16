@@ -2047,6 +2047,96 @@
                         "ruled_on":  "2026-08-16",
                         "ruled_by":  "triage-developer 2026-08-16 (plan-2026-08-16, queue 2026-08-07-058ac6)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "sea-salt|Aldi|simply-nature-organic-sea-salt-pop-corn-6-oz",
+                        "commodity":  "sea-salt",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Simply Nature Organic Sea Salt Pop Corn 6 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Sea-salt-flavored POPCORN (Simply Nature Organic Sea Salt Pop Corn 6 OZ) holding the sea salt cell at 0.5483/oz. Blind check found the only true sea salt SKU at OLA 48 is Stonemill Sea Salt Grinder 3.53 oz .59 = 0.4504/oz.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-16",
+                        "ruled_by":  "weekly accuracy sample 2026-08-15",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "grape-juice|Walmart|great-value-zero-sugar-cranberry-grape-juice-64",
+                        "commodity":  "grape-juice",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Zero Sugar Cranberry Grape Juice, 64 fl oz"
+                                  ],
+                        "product_id":  "9314957272",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Zero-sugar CRANBERRY-grape juice blend holding the grape juice cell at 0.0397/floz. Not grape juice: different fruit blend and artificially sweetened. Blind check found cheapest real grape juice is Welch\u0027s 100% Concord 96 fl oz .97 = 0.0726/floz.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-16",
+                        "ruled_by":  "weekly accuracy sample 2026-08-15",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "frozen-meatballs|Walmart|banquet-mega-bowls-dynamite-penne-with-meatballs",
+                        "commodity":  "frozen-meatballs",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Banquet MEGA Bowls Dynamite Penne with Meatballs, 24g Protein, Frozen Meal, 14 oz."
+                                  ],
+                        "product_id":  "607781149",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Banquet MEGA Bowls Dynamite Penne with Meatballs is a complete frozen PASTA MEAL, not frozen meatballs, holding the cell at 0.2129/oz. Blind check found Great Value Italian Style Meatballs 80 oz .72 = 0.234/oz.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-16",
+                        "ruled_by":  "weekly accuracy sample 2026-08-15",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "frozen-vegetables|Aldi|happy-harvest-mixed-vegetables-15-oz",
+                        "commodity":  "frozen-vegetables",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Happy Harvest Mixed Vegetables 15 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "CANNED product in a FROZEN cell. Happy Harvest is Aldi\u0027s canned vegetable brand; the PDP carries the aisle label \u0027Canned Vegetable\u0027 and 15 oz is a can size. Held the frozen cell at 0.0640/oz. Correct frozen row is Season\u0027s Choice Steamable Frozen Mixed Vegetable 12 oz .98 = 0.0817/oz, tagged \u0027Freezer Doors\u0027 on the same search page.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-16",
+                        "ruled_by":  "weekly accuracy sample 2026-08-15",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "five-spice-powder|Walmart|spice-supreme-oriental-five-spices-3-5-oz-plasti",
+                        "commodity":  "five-spice-powder",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Spice Supreme oriental five spices, 3.5-oz. plastic shaker"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Third-party MARKETPLACE listing, not a Walmart shelf item. walmart.com item 385394335 __NEXT_DATA__ reads sellerName CREYES GLOBAL LLC, sellerType EXTERNAL, availabilityStatus OUT_OF_STOCK, offerType ONLINE_ONLY. Held the cell at 0.279/oz, 17x under the cheapest first-party option (McCormick Gourmet 1.75 oz = 4.79/oz). The board\u0027s product NAME is also the Amazon title verbatim, not Walmart\u0027s.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-16",
+                        "ruled_by":  "weekly accuracy sample 2026-08-15",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "broccoli|HyVee|hy-vee-chopped-broccoli",
+                        "commodity":  "broccoli",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Hy Vee Chopped Broccoli"
+                                  ],
+                        "product_id":  "2997765",
+                        "verdict":  "wrong-product",
+                        "evidence":  "FROZEN 12 oz bag in a FRESH produce cell. Hy-Vee PDP breadcrumb reads Frozen / Frozen Fruits and Vegetables / Frozen Vegetables / Frozen Broccoli; 12 oz at 1.39 = 1.8533/lb, matching the board exactly. Cheapest FRESH is Broccoli Florettes 2.69/lb, so the frozen row undercut every real fresh option.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-16",
+                        "ruled_by":  "weekly accuracy sample 2026-08-15",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
