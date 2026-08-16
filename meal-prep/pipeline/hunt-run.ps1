@@ -38,6 +38,7 @@ param(
   [switch]$Init, [switch]$Advance, [switch]$Derive, [switch]$WaveClose, [switch]$Status, [switch]$SelfTest,
   [switch]$Lane, [switch]$LaneSummary,
   [int]$InputTokens = -1, [int]$OutputTokens = -1,   # -1 = not reported (older lines, or a lane that cannot see usage)
+  [ValidateSet('', 'start', 'end')][string]$Event = '',   # pair start/end on the same lane+label to get duration
   [string]$RunDir = '', [string]$Slug = '', [string]$To = '', [string]$By = '', [string]$Detail = '',
   [string]$Title = '', [string]$SourceUrl = '', [string]$Protein = '',
   [string[]]$Terms = @(), [string[]]$OptionalTerms = @(),
@@ -222,14 +223,17 @@ function Split-LaneItems {
 
 function New-LaneLine {
   param([string]$LaneName, [string]$Label, $ItemList, [string]$By, [string]$Detail, [string]$At,
-        [int]$In = -1, [int]$Out = -1)
+        [int]$In = -1, [int]$Out = -1, [string]$Event = '')
   $rows = @(Split-LaneItems $ItemList)
   # in/out are the agent's reported token usage for THIS invocation. -1 means "not reported" and is
   # kept distinct from 0: a stage that genuinely returned nothing is not the same as a stage whose
   # usage the orchestrator could not see, and a summary that averages them together lies about both.
+  # `event` pairs a start line with an end line on the same lane+label, which is the only way this
+  # estate can measure DURATION: the orchestrator runs in a sandbox where Date.now() throws, so it
+  # cannot time its own agent calls. The agent stamps both ends itself instead.
   return [pscustomobject]@{
     at = $At; lane = $LaneName; label = $Label; count = $rows.Count; items = @($rows)
-    by = $By; detail = $Detail; in = $In; out = $Out
+    by = $By; detail = $Detail; in = $In; out = $Out; event = $Event
   }
 }
 
@@ -470,9 +474,32 @@ if ($runLaneSummary) {
   }
   if (-not $rows.Count) { Write-Output 'hunt-run lane summary: lane log is empty'; exit 0 }
 
+  # DURATION comes from pairing start/end lines on the same lane+label. The orchestrator cannot time
+  # its own calls (Date.now() throws in that sandbox), so each agent stamps both ends itself. A stage
+  # with no end line is either still running or died - counted as unfinished, never as instant.
+  $starts = @{}
+  $durations = @{}
+  foreach ($r in ($rows | Sort-Object at)) {
+    $ev = if ($r.PSObject.Properties.Name -contains 'event') { [string]$r.event } else { '' }
+    if (-not $ev) { continue }
+    $key = ([string]$r.lane) + '|' + ([string]$r.label)
+    if ($ev -eq 'start') { $starts[$key] = [datetime]$r.at; continue }
+    if ($ev -eq 'end' -and $starts.ContainsKey($key)) {
+      $sec = ([datetime]$r.at - $starts[$key]).TotalSeconds
+      if ($sec -ge 0) {
+        if (-not $durations.ContainsKey([string]$r.lane)) { $durations[[string]$r.lane] = @() }
+        $durations[[string]$r.lane] += $sec
+      }
+      $starts.Remove($key)
+    }
+  }
+
   $agg = @{}
   foreach ($r in $rows) {
     $ln = [string]$r.lane
+    # only count a call ONCE - an end line is the same invocation as its start, not a second one
+    $ev = if ($r.PSObject.Properties.Name -contains 'event') { [string]$r.event } else { '' }
+    if ($ev -eq 'end') { continue }
     if (-not $agg.ContainsKey($ln)) { $agg[$ln] = [pscustomobject]@{ lane=$ln; calls=0; items=0; in=0; out=0; measured=0 } }
     $a = $agg[$ln]; $a.calls++; $a.items += [int]$r.count
     $ri = if ($r.PSObject.Properties.Name -contains 'in') { [int]$r.in } else { -1 }
@@ -485,12 +512,19 @@ if ($runLaneSummary) {
     exit 0
   }
   Write-Output ("hunt-run lane summary: {0}" -f (Split-Path $RunDir -Leaf))
-  Write-Output ("  {0,-9} {1,6} {2,7} {3,12} {4,12} {5,12} {6,7}" -f 'lane','calls','items','input','output','total','share')
+  Write-Output ("  {0,-9} {1,6} {2,7} {3,12} {4,12} {5,12} {6,7} {7,9} {8,9}" -f 'lane','calls','items','input','output','total','share','mean_sec','total_min')
   foreach ($a in ($agg.Values | Sort-Object { -($_.in + $_.out) })) {
     $lt = $a.in + $a.out
     $share = if ($tot -gt 0) { '{0:N1}%' -f (100.0 * $lt / $tot) } else { '-' }
-    $note = if ($a.measured -lt $a.calls) { (' [{0}/{1} measured]' -f $a.measured, $a.calls) } else { '' }
-    Write-Output ("  {0,-9} {1,6} {2,7} {3,12:N0} {4,12:N0} {5,12:N0} {6,7}{7}" -f $a.lane,$a.calls,$a.items,$a.in,$a.out,$lt,$share,$note)
+    $note = if ($a.measured -lt $a.calls) { (' [{0}/{1} tok]' -f $a.measured, $a.calls) } else { '' }
+    $d = @($durations[$a.lane])
+    $mean = if ($d.Count) { '{0:N0}' -f (($d | Measure-Object -Average).Average) } else { '-' }
+    $tmin = if ($d.Count) { '{0:N1}' -f ((($d | Measure-Object -Sum).Sum) / 60.0) } else { '-' }
+    Write-Output ("  {0,-9} {1,6} {2,7} {3,12:N0} {4,12:N0} {5,12:N0} {6,7} {7,9} {8,9}{9}" -f $a.lane,$a.calls,$a.items,$a.in,$a.out,$lt,$share,$mean,$tmin,$note)
+  }
+  $unfinished = @($starts.Keys)
+  if ($unfinished.Count -gt 0) {
+    Write-Output ("  {0} invocation(s) logged a start with no end - still running, or died: {1}" -f $unfinished.Count, (($unfinished | Select-Object -First 4) -join ', '))
   }
   Write-Output ("  {0,-9} {1,6} {2,7} {3,12} {4,12} {5,12:N0}" -f 'TOTAL',($rows.Count),(($agg.Values|Measure-Object -Property items -Sum).Sum),'','',$tot)
   $unmeasured = @($rows | Where-Object { -not ($_.PSObject.Properties.Name -contains 'in') -or [int]$_.in -lt 0 }).Count
@@ -511,7 +545,7 @@ if ($runLane) {
     Write-Output ("hunt-run: '{0}' is not a lane. One of: {1}" -f $LaneName, (@($script:LANES) -join ', ')); exit 1
   }
   if (-not (Test-Path $RunDir)) { Write-Output ("hunt-run: no such run dir '{0}'" -f $RunDir); exit 1 }
-  $line = New-LaneLine -LaneName $ln -Label $Label -ItemList $Items -By $By -Detail $Detail -At (Get-Stamp) -In $InputTokens -Out $OutputTokens
+  $line = New-LaneLine -LaneName $ln -Label $Label -ItemList $Items -By $By -Detail $Detail -At (Get-Stamp) -In $InputTokens -Out $OutputTokens -Event $Event
   Add-LaneLine -Path (Join-Path $RunDir 'lane-log.jsonl') -Line $line
   Write-Output ("hunt-run lane: {0}  {1} item(s){2}" -f $ln, $line.count, $(if ($Label) { "   ($Label)" } else { '' }))
   if ($line.count -eq 0) {

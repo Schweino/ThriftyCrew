@@ -66,38 +66,35 @@ const DRAIN_ONLY = true
 // extracted -> map, priced -> write, written -> qa, qa-passed -> straight into a wave.
 // Re-read from state\*.json on 2026-08-16 after the partial drain, so this reflects where every recipe
 // ACTUALLY stopped - not where the first seed put it.
+// Re-read from state\*.json 2026-08-16 AFTER the vocabulary work, the board commodities reaching the
+// feed, and the phantom repairs. All 24 in-flight intakes now build; every cost gate is green.
 const SEED = {
   extracted: [
-    'balsamic-sirloin-steak-sheet-pan', 'basque-chicken-peppers-chilindron',
-    'braised-pork-shoulder-fennel-tomato', 'chicken-chasseur', 'chicken-marsala-skillet',
-    'creamy-garlic-herb-wine-pork-chops', 'garlic-butter-steak-bites-zucchini',
-    'italian-sausage-stuffed-peppers-bake', 'jalapeno-popper-chicken-casserole',
     'methi-malai-murgh-creamy-fenugreek-chicken', 'mexican-chorizo-egg-casserole',
     'pork-chile-verde-stew', 'pulled-pork-stuffed-peppers',
     'slow-cooker-korean-galbi-jjim-short-ribs', 'spinach-artichoke-chicken-casserole',
     'turkey-meatballs-cream-sauce-skillet', 'turkey-parmesan-meatball-bake',
   ],
   priced: [
-    'keto-cheeseburger-skillet', 'keto-crustless-pizza-casserole', 'low-carb-steak-fajita-skillet',
-    'low-carb-taco-cabbage-beef-skillet', 'low-carb-turkey-cauliflower-mushroom-casserole',
-    'sheet-pan-smoked-sausage-broccoli-cheddar', 'southwest-ground-turkey-cauliflower-rice-skillet',
-    'spinach-provolone-stuffed-flank-steak-rolls',
+    'balsamic-sirloin-steak-sheet-pan', 'basque-chicken-peppers-chilindron',
+    'braised-pork-shoulder-fennel-tomato', 'chicken-bacon-ranch-cauliflower-bake',
+    'chicken-marsala-skillet', 'creamy-garlic-herb-wine-pork-chops',
+    'garlic-butter-steak-bites-zucchini', 'italian-sausage-stuffed-peppers-bake',
+    'jalapeno-popper-chicken-casserole',
   ],
   written: [],
-  // 12 already through QA - a full wave of 10 closes the moment the run starts.
+  // 9 through QA. NOT seeded with the 10 sitting in `waved` - those belong to wave 1 and the trim
+  // returns the audit-clean ones to this pool itself. Seeding them here as well would double-count
+  // them and close a wave over recipes another wave already owns.
   qaPassed: [
-    'baked-cauliflower-mac-smoked-sausage', 'chicken-piccata-skillet', 'chimichurri-steak-sheet-pan',
-    'creamy-tuscan-chicken-skillet', 'flank-steak-parmesan-green-beans', 'french-chicken-fricassee',
-    'hatch-green-chile-chicken-casserole', 'keto-turkey-broccoli-cheddar-casserole',
-    'low-carb-ground-beef-stroganoff-skillet', 'philly-cheesesteak-stuffed-peppers',
-    'slow-cooker-boneless-beef-short-ribs', 'turkey-zucchini-noodle-casserole',
+    'flank-steak-parmesan-green-beans', 'keto-cheeseburger-skillet', 'low-carb-steak-fajita-skillet',
+    'low-carb-taco-cabbage-beef-skillet', 'low-carb-turkey-cauliflower-mushroom-casserole',
+    'philly-cheesesteak-stuffed-peppers', 'sheet-pan-smoked-sausage-broccoli-cheddar',
+    'sheet-pan-tandoori-chicken-cauliflower', 'spinach-provolone-stuffed-flank-steak-rolls',
   ],
-  // Parked on genuinely unpriced terms. The price lane retries them; unchecked is never not-carried,
-  // so they either rejoin the chain or stay parked as the resume worklist.
+  // One genuinely parked recipe. The price lane retries it; unchecked is never not-carried.
   parked: [
-    { slug: 'chicken-bacon-ranch-cauliflower-bake', terms: ['bacon bits'] },
     { slug: 'low-carb-beef-meatloaf', terms: ['90/10 ground beef', 'unsweetened ketchup'] },
-    { slug: 'sheet-pan-tandoori-chicken-cauliflower', terms: ['tandoori spice mix'] },
   ],
 }
 
@@ -282,10 +279,25 @@ const qaCh = chan()
 // Every lane invocation is recorded as it is dispatched, so audit-lane-shape.ps1 can judge the SHAPE of
 // the work afterwards. The state files and the queue record only the RESULT: a run that priced 9 terms in
 // 8 sessions and one that priced them in a single batch leave byte-identical evidence without this log.
+// EVERY dispatch is logged at BOTH ends. The start line says what was asked for; the end line is what
+// makes duration measurable at all, because this sandbox forbids Date.now() so the orchestrator cannot
+// time its own calls - the agent stamps both ends itself.
+//
+// The wave lane (audit, publish, review, trim, repair) carried NO logging until 2026-08-16, which is
+// why 37 agents and 24M tokens landed under `unknown` in the first real cost measurement - and the
+// audit is the single most expensive stage in the flow, measured at 31% of tokens in v2.1. The most
+// expensive thing we had was the thing we could not see.
 function laneLog(laneName, label, items) {
   const list = (items || []).filter(Boolean).join(',').replace(/'/g, "''")
-  return `FIRST, record this invocation before doing any work:
-  powershell -NoProfile -File ${HR} -Lane -RunDir ${RUN} -LaneName ${laneName} -Label '${String(label).replace(/'/g, "''")}' -Items '${list}' -By orchestrator
+  const lbl = String(label).replace(/'/g, "''")
+  return `FIRST, before doing any work, record that this invocation started:
+  powershell -NoProfile -File ${HR} -Lane -RunDir ${RUN} -LaneName ${laneName} -Label '${lbl}' -Items '${list}' -By orchestrator -Event start
+
+LAST, once your work is done and just before you return, record that it finished:
+  powershell -NoProfile -File ${HR} -Lane -RunDir ${RUN} -LaneName ${laneName} -Label '${lbl}' -Items '${list}' -By orchestrator -Event end
+
+Both lines matter. The pair is the only measurement of how long this stage takes, and a stage nobody
+can measure is a stage nobody can make faster.
 `
 }
 
@@ -416,6 +428,7 @@ async function trimWave(wk, slugs, audit, batch, repairSpent) {
   log(`WAVE ${wk}: trimming - ${blocked.length} blocked, ${clean.length} clean${allBlocked ? ' (auditor named no slugs, so the whole wave is blocked)' : ''}`)
 
   await agent(`${SHELL}
+${laneLog("audit", `wave-${wk}:trim`, slugs)}
 Wave ${wk} of run ${RUNID} could not publish. Trim it per plan section S8 so nothing strands in \`waved\`.
 
 BLOCKED (${blocked.length}): ${blocked.join(', ') || '(none)'}
@@ -444,6 +457,7 @@ async function runWave(k, drain) {
   // the run dir for the next resume, which is exactly what they are designed to do.
   if (halted()) { log(`WAVE ${k}: not starting - run halted; qa-passed recipes wait for the next resume`); return }
   const close = await agent(`${SHELL}
+${laneLog("audit", `wave-${k}:close`, ["wave-close"])}
 Close the next hunt wave.
   powershell -NoProfile -File ${HR} -WaveClose -RunDir ${RUN}${drain ? ' -Drain' : ''}
 It writes waves\\wave-<k>.json and opens batch-ledger batch ${RUNID}-w<k>, stamping select, map, write and
@@ -457,7 +471,8 @@ and the batch id. If it closed empty or refused, report wave 0 with an empty slu
   const batch = close.batch || `${RUNID}-w${wk}`
   log(`WAVE ${wk}: ${slugs.length} recipes - ${slugs.join(', ')}`)
 
-  let audit = await agent(`Audit wave ${wk} of run ${RUNID} before it publishes.
+  let audit = await agent(`${laneLog("audit", `wave-${wk}:audit`, slugs)}
+Audit wave ${wk} of run ${RUNID} before it publishes.
 Run dir: ${RUN}. Wave file: ${RUN}\\waves\\wave-${wk}.json. Slugs: ${slugs.join(', ')}.
 scope: whole-wave  (first audit of this wave)
 
@@ -477,6 +492,7 @@ Report the verdict, blocking slugs, whether each blocker is recipe-local or shar
       : audit.owner === 'mapper' ? 'recipe-ingredient-mapper' : 'recipe-writer'
     await agent(`${SHELL}
 ${RULES}
+${laneLog("audit", `wave-${wk}:repair`, blockers)}
 The batch auditor returned NO-GO on wave ${wk} of run ${RUNID}.
 Read ${RUN}\\waves\\wave-${wk}.audit.md and repair EXACTLY what it blocks on.
 Blocking slugs: ${blockers.join(', ') || '(whole wave)'}
@@ -499,6 +515,7 @@ List the files you changed, one per line, under a final line reading "CHANGED FI
     // "I changed X" with X untouched is not, and must not buy a re-audit.
     // ---------------------------------------------------------------------------------------------
     const post = await agent(`${SHELL}
+${laneLog("audit", `wave-${wk}:verify-repair`, slugs)}
 Verify what the repair actually changed for wave ${wk}, before we pay for a re-audit.
 
 For each wave slug, report the LastWriteTime of C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\<slug>.json
@@ -529,7 +546,8 @@ check is what exposed a false repair claim on 2026-08-16.`,
       throw new Error(`scope gate: a shared-data blocker may not re-audit narrowly (got '${scope}')`)
     }
     log(`WAVE ${wk}: re-audit scope: ${scope} (${audit.blocker_kind})`)
-    audit = await agent(`Re-audit wave ${wk} of run ${RUNID} AFTER the repair.
+    audit = await agent(`${laneLog("audit", `wave-${wk}:reaudit`, slugs)}
+Re-audit wave ${wk} of run ${RUNID} AFTER the repair.
 Run dir: ${RUN}. Wave file: ${RUN}\\waves\\wave-${wk}.json.
 scope: ${scope}
 Reason: ${why}.
@@ -549,6 +567,7 @@ certifies (wave-publish P1b refuses a stale GO). On GO run:
   }
 
   const pub = await agent(`${SHELL}
+${laneLog("publish", `wave-${wk}:publish`, slugs)}
 Publish wave ${wk} of run ${RUNID}. The audit reads GO and is stamped on batch ${batch}.
   powershell -NoProfile -File C:\\Codex\\ThriftyCrew\\meal-prep\\pipeline\\wave-publish.ps1 -RunDir ${RUN} -Wave ${wk}
 
@@ -574,7 +593,8 @@ propagate"), and any slug the E6/E7 serveability arm drafted and moved to held.`
   const held = pub.held || []
   log(`WAVE ${wk}: published ${published.length}, held ${held.length}, collateral ${pub.collateral || 0}`)
 
-  const review = await agent(`Post-publish review of run ${RUNID} wave ${wk}, which just shipped.
+  const review = await agent(`${laneLog("review", `wave-${wk}:review`, published)}
+Post-publish review of run ${RUNID} wave ${wk}, which just shipped.
 WAVE SLUGS (${published.length}): ${published.join(', ')}
 COLLATERAL carried by propagate: ${pub.collateral || 0} additional recipes republished in the same push.
 Review BOTH numbers (plan section 4): propagate carries every dirty spec by design, so a review scoped to
@@ -828,6 +848,7 @@ which stores are still unchecked and why.`,
 
       // section 2.2: derived counts are the ONLY thing that moves a recipe out of pricing/parked
       const d = await agent(`${SHELL}
+${laneLog("price", `derive-after-batch-${n}`, terms)}
 Recompute derived pricing state from ground truth and report what moved.
   powershell -NoProfile -File ${HR} -Derive -RunDir ${RUN}
 Then for each of these recipes read ${RUN}\\state\\<slug>.json and report its CURRENT state:
@@ -900,6 +921,7 @@ Then: ${HR} -Advance -RunDir ${RUN} -Slug ${c.slug} -To spec-built -By writer
           && (cal < CAL_MIN || cal > CAL_MAX || carb > CARB_MAX)) {
         log(`macro gate: ${c.slug} built at ${cal} cal / ${carb}g carbs - outside ${CAL_MIN}-${CAL_MAX} cal / <=${CARB_MAX}g, retiring`)
         await agent(`${SHELL}
+${laneLog("write", `macro-reject:${c.slug}`, [c.slug])}
 Recipe ${c.slug} built at ${cal} cal and ${carb} g carbs per serving, missing this run's conditions
 (${COND}). Retire it - do not adjust the recipe to make the numbers fit:
   ${HR} -Advance -RunDir ${RUN} -Slug ${c.slug} -To rejected-qa -By macro-gate -Detail 'macro gate: ${cal} cal / ${carb}g carbs per serving'`,
@@ -951,6 +973,7 @@ Report PASS or FAIL, and on FAIL the owner (writer for prose/card, extractor for
         log(`QA FAIL ${c.slug} -> one repair cycle by ${owner}`)
         await agent(`${SHELL}
 ${RULES}
+${laneLog("qa", `repair:${c.slug}`, [c.slug])}
 Source-QA failed recipe ${c.slug} and routed the repair to you. This is the ONE repair cycle it gets; a
 second failure is terminal, so fix the actual finding rather than papering over it.
 Findings: ${(q.findings || '').slice(0, 2000)}
@@ -964,6 +987,7 @@ Never hand-edit a spec. Report what you changed.`,
 
         if (!isPass(q.verdict)) {
           await agent(`${SHELL}
+${laneLog("qa", `qa-reject:${c.slug}`, [c.slug])}
 Recipe ${c.slug} failed source-QA twice - terminal per plan section S7:
   ${HR} -Advance -RunDir ${RUN} -Slug ${c.slug} -To rejected-qa -By source-qa -Detail 'failed QA twice: ${((q.findings || 'see qa file')).slice(0, 150)}'`,
             { label: `qa-reject:${c.slug}`, phase: 'QA' })
@@ -1366,6 +1390,7 @@ phase('Instrument')
 // and their output would describe a truncated run as if it were a finished one. Skip them and say so.
 const [usage, proof] = circuitOpen ? ['(skipped - run halted early)', '(skipped - run halted early)'] : await parallel([
   () => agent(`${SHELL}
+${laneLog("review", "instrument:usage", ["usage"])}
 Compile per-stage token usage for run ${RUNID} into ${RUN}\\usage.jsonl (v2.1 plan section 5.2).
 The workflow's subagent transcripts are JSONL under:
   C:\\Users\\Owner\\.claude\\projects\\C--Codex-ThriftyCrew\\b1e6837d-41aa-4ba9-bd67-4132dfde30e4\\subagents\\workflows\\
@@ -1380,6 +1405,7 @@ rather than estimating - a fabricated number here defeats the whole point of ins
     { label: 'instrument:usage', phase: 'Instrument' }),
 
   () => agent(`${SHELL}
+${laneLog("review", "instrument:proving-checks", ["proving"])}
 Verify the three things v2.1 plan section 5.3 says this proving run must establish. Report evidence, and
 report FAILURE plainly if the evidence is not there - this is the run that is supposed to catch these.
 
@@ -1404,6 +1430,7 @@ Write your findings to ${RUN}\\proving-run-verification.md.`,
 ])
 
 const status = circuitOpen ? '(skipped - run halted early; hunt-run.ps1 -Status is the record)' : await agent(`${SHELL}
+${laneLog("review", "final-report", ["report"])}
 Write the final run report for ${RUNID} to ${RUN}\\report.md and report it back.
   powershell -NoProfile -File ${HR} -Status -RunDir ${RUN}
 
