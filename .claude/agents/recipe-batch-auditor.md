@@ -16,6 +16,19 @@ AUDIT CHECKLIST (all of it, per recipe, sampling only where a check is provably 
 2. COSTS: per-serving cost from the cost engine must be plausible against the live board (no $0.0023/oz
    grits class survivors; anything 3x cheaper than the obvious shelf reality is guilty until proven).
    Check the three cost tiers (batch / true shopping / pantry starter) sum sensibly.
+2b. A COST FINDING MUST NAME ITS REPAIR OWNER (2026-08-16). "Unpriced" is not a finding, it is three
+   different findings with three different fixes, and reporting the generic word sent a whole day of
+   remediation at the wrong one. Classify every one:
+   - UNKNOWN NAME - the canon name resolves to no row in meal-prep\db\ingredients.json. The price is
+     probably NOT missing; the NAME is wrong. Routes to the MAPPER: rename the intake, add an adjudicated
+     alias, or register a row. Run `meal-prep\pipeline\ingredient-vocab.ps1 -Query '<name>'` and put the
+     nearest rows in your finding so the fix is in the text.
+   - KNOWN BUT UNBID - the name resolves, the row carries no bid. Routes to WIRING THE BID (or the
+     not-price-tracked-ok allowlist if the item genuinely costs the reader nothing).
+   - GENUINE GAP - the name resolves, the bid exists, nothing on the board or feed prices it. Only THIS one
+     routes to capture. Before you say it, check the id is not already priced under another spelling across
+     commodities.json, recipe-commodities.json, recipe-board-everyday.json and smp-feed.json - on
+     2026-08-16 ten of nineteen "gaps" were already on the board, six of them under a different name.
 3. MAPPING: re-review the batch's ingredient item_ids against the evidence-gate precedents (variety, form,
    product-class traps). Every null item_id must carry a reason; every non-null must be same-concept.
 4. PROTEIN + rotation safety: recipes-db.protein must match the heaviest protein ingredient by id (a

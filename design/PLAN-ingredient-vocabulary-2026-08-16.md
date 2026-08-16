@@ -330,6 +330,23 @@ resolved names, so the writer cannot inherit an invented one. The registrar's re
 to cover vocabulary rows: minting a name and minting an id are the same act of extending a controlled
 namespace, and they get the same gate.
 
+**AMENDED 2026-08-16, after this paragraph was tested in anger and proved insufficient.** As written above,
+V4 checks NAMES against the vocabulary. That is necessary and not sufficient: six proposed ids resolved
+perfectly well as names and were still duplicates as IDS, because `80-20-ground-beef` and
+`ground-beef-8020` are two strings for one commodity. A name-resolution contract alone would have passed
+every one of them. So the contract carries **two** obligations, and the second is the expensive one:
+
+1. **Resolve the NAME** against `db\ingredients.json` (item or adjudicated alias), via `ingredient-vocab.ps1`.
+2. **Prove the ID is not already priced under another spelling**, across all four of `commodities.json`,
+   `recipe-commodities.json`, `out\recipe-board-everyday.json` and the live `out\smp-feed.json` - searching
+   by FOOD and reading the LABELS of near rows, not by slug. `mustard`'s label is literally "Yellow
+   Mustard"; `kielbasa` shares zero tokens with "pork smoked sausage"; a word-order flip defeats every
+   normalization audit-commodity-dupes runs. No mechanical sweep reaches these, which is precisely why the
+   obligation sits on the mapper and the registrar rather than on a script.
+
+Both obligations are now written into `.claude\agents\recipe-ingredient-mapper.md` (rule 1b) and
+`.claude\agents\commodity-registrar.md` (the fourth-namespace section). See 0d for the measurement.
+
 ### V5. Estate-wide reconciliation - the remediation, shaped as an adjudication worklist  (fixes the damage)
 
 One sweep over: the 23 unbid specs, the 30 seeded resolution rows, and every in-flight intake. For

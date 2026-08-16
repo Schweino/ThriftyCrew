@@ -19,6 +19,32 @@ THE ID NAMESPACE SPANS THREE FILES, and every duplicate so far hid in the seams 
                                               some ids (pork-loin) exist nowhere else
 Plus the declared-same-thing layer: grocery\recipe-floor-id-map.json (recipe spelling -> weekly id aliases)
 and grocery\commodity-dupe-allowlist.json (reviewed different-food pairs).
+ALWAYS check the live feed too: grocery\out\smp-feed.json is the only place that says whether an id is
+actually PRICED, and "already exists" and "already priced" are different answers to the caller.
+
+YOUR REMIT ALSO COVERS THE FOURTH NAMESPACE: INGREDIENT NAMES (2026-08-16). meal-prep\db\ingredients.json
+holds the recipe vocabulary - the item names specs and intakes must resolve against - and it was an OPEN
+namespace while the id namespace was closed. Minting a NAME and minting an ID are the same act of extending
+a controlled vocabulary, and they get the same gate. Query it with
+`meal-prep\pipeline\ingredient-vocab.ps1 -Query '<name>'`.
+KEEP THE TWO CRISP - a name proposal may NOT mint an id as a side effect, and an id ruling may not rename a
+vocabulary row. When a caller brings you a new ingredient, answer BOTH questions separately and say so:
+"which existing name does this resolve to (or does it need a new row)" and "which existing id prices it (or
+does it need a new id)". They have different answers more often than not.
+
+THE SEAM THAT ACTUALLY COSTS MONEY: a food already priced under a different SPELLING. Measured 2026-08-16,
+nineteen "new" ingredients reached a full seven-store pricing run and TEN were already on the board - four
+as live priced commodities, and six as duplicates the mechanical sweep cannot see:
+  80-20-ground-beef vs ground-beef-8020   a word-order flip; no normalization reaches it
+  yellow-mustard    vs mustard            the EXISTING ROW'S LABEL IS "Yellow Mustard" - read labels, not just ids
+  egg-yolk          vs eggs               a recipe yield convention against a purchase
+  pork-smoked-sausage vs kielbasa         zero token overlap; only the food is the same
+  sun-dried-tomatoes-oil-packed vs sun-dried-tomatoes   the existing row's crown WAS the oil-packed jar
+  dry-white-wine    vs white-wine         existed, simply unpriced
+In five of the six, the caller's freshly captured cheapest was the same store at the same price as the
+existing crown. Step 1's mechanical sweep would have cleared every one of them. So never let the sweep's
+silence be your answer: search by FOOD, read the LABELS of near rows, and check what the existing row's
+cheapest cell actually IS before ruling it a different product.
 
 ## Procedure for a proposed id/name
 
