@@ -52,8 +52,20 @@ function Test-CostLineCoverage {
   if ($gap -lt $MinLine) { return $null }
   # A line named differently in prose ("Beef Flank/Sirloin Steak" reads as "flank steak") is NOT this bug.
   # It is only this bug if the money is missing from the total too.
+  #
+  # THE TEST IS ONE-SIDED, and the first cut got that wrong. It required the gap to MATCH the named-missing
+  # sum within tolerance, which silently excused the compound case: hatch-green-chile-chicken-casserole
+  # was missing Pepper Jack ($3.73) by name AND had Yellow Bell Pepper ($1.65) present but booked as a
+  # $0.04 pantry seasoning, so the gap was $5.46 against $3.73 of named-missing money. |5.46 - 3.73| =
+  # $1.73, over tolerance, and the guard returned clean on a spec that would have published $2.20 a
+  # serving instead of $2.59. A wave auditor caught it by commit archaeology after my guard said clean.
+  #
+  # So: the gap must be AT LEAST the money that is missing by name (less tolerance), with no upper bound.
+  # A gap larger than the named-missing sum means MORE is wrong, not less. The lower bound is what keeps
+  # naming variants out - if prose merely calls a line something else, the money is still in the total and
+  # the gap stays near zero, well under the sum.
   $sum = ($missing | Measure-Object -Property util_cost -Sum).Sum
-  if ([math]::Abs($gap - $sum) -gt $Tolerance) { return $null }
+  if ($gap -lt ($sum - $Tolerance)) { return $null }
   return [pscustomobject]@{
     gap = [math]::Round($gap, 2); omitted = @($missing)
     detail = (@($missing | ForEach-Object { "{0} `${1}" -f $_.item, $_.util_cost }) -join '; ')
@@ -105,6 +117,27 @@ if ($SelfTest) {
       [pscustomobject]@{ item = 'Chicken'; util_cost = 19.60 }) }
   $r6 = Test-CostLineCoverage $pickle 'Chicken: ~$19.60. Pickle spears: ~$0.37.' 19.97 0.20 0.75
   ok ($null -eq $r6) 'CLEAN TWIN a near-zero gap means the money is present, whatever the prose calls it' "$r6"
+
+  # MUST FIRE, THE COMPOUND CASE. hatch-green-chile-chicken-casserole, 2026-08-16: Pepper Jack ($3.73)
+  # absent from the block by name, AND Yellow Bell Pepper ($1.65) present in the prose but booked as a
+  # $0.04 pantry seasoning. Gap $5.46 against $3.73 of named-missing money. The first cut of this guard
+  # required those to MATCH within tolerance, so it returned clean and a wave auditor had to find it by
+  # commit archaeology. A gap LARGER than the named-missing sum means more is wrong, not less.
+  $hatch = [pscustomobject]@{ cost_batch = 36.25; lines = @(
+      [pscustomobject]@{ item = 'Pepper Jack Cheese'; util_cost = 3.73 }
+      [pscustomobject]@{ item = 'Yellow Bell Pepper'; util_cost = 1.65 }
+      [pscustomobject]@{ item = 'Chicken'; util_cost = 30.87 }) }
+  $r7 = Test-CostLineCoverage $hatch 'Chicken: ~$30.87. Pantry seasonings (yellow bell pepper): ~$0.04.' 30.79 0.20 0.75
+  ok ($null -ne $r7) 'MUST FIRE  a compound gap - one line missing, one misbooked - is caught' "$r7"
+
+  # CLEAN TWIN for the loosened side: a big gap from board drift plus a naming variant must STAY quiet.
+  # Here every line is in the prose except the differently-named steak, and the gap is board movement.
+  # gap (10) is far below the named-missing sum (30.87), so the lower bound holds it back.
+  $drift = [pscustomobject]@{ cost_batch = 43.0; lines = @(
+      [pscustomobject]@{ item = 'Beef Flank/Sirloin Steak'; util_cost = 30.87 }
+      [pscustomobject]@{ item = 'Garlic'; util_cost = 2.13 }) }
+  $r8 = Test-CostLineCoverage $drift 'Flank steak, 4 lb: ~$25.00. Garlic: ~$2.13.' 33.0 0.20 0.75
+  ok ($null -eq $r8) 'CLEAN TWIN board drift plus a naming variant is still not an omission' "$r8"
 
   if ($fails) { Write-Host "SELFTEST: $fails FAILED"; exit 1 }
   Write-Host 'audit-cost-line-coverage SELF-TEST PASS'
