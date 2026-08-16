@@ -27,6 +27,10 @@ const RUN = 'C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-10
 const HR = 'C:\\Codex\\ThriftyCrew\\meal-prep\\pipeline\\hunt-run.ps1'
 const IQ = 'C:\\Codex\\ThriftyCrew\\grocery\\ingredient-queue.ps1'
 const DIGEST = 'C:\\Codex\\ThriftyCrew\\meal-prep\\pipeline\\catalog-digest.json'
+// The pipeline dir, so prompts can name the query tools instead of the files they wrap. Every one of
+// these exists to make an agent ASK a question rather than LOAD a corpus - measured 2026-08-16, the
+// hunt and select lanes were 75.5% of a 751M-token run, most of it repeated context.
+const PIPE = 'C:\\Codex\\ThriftyCrew\\meal-prep\\pipeline'
 const RUNID = 'hunt-2026-08-15-lowcarb-100'
 const TARGET = 100
 const WAVE_SIZE = 10          // plan default; 100 recipes = 10 waves = 10 audits, not 20
@@ -600,6 +604,17 @@ async function extractLane() {
       const r = await withRetry(() => agent(`${SHELL}
 ${laneLog('extract', c.slug, [c.slug])}
 Transcribe ONE sourced recipe. Slug: ${c.slug}. Source: ${c.source_url}
+
+FETCH FROM CACHE - the sourcer already fetched this page:
+  powershell -NoProfile -File ${PIPE}\\fetch-recipe.ps1 -Url '${c.source_url || '<source_url from the candidate file>'}'
+It serves the cached body (no network, no second fetch of a page we already paid for) and returns the
+page's own schema.org JSON-LD Recipe block when present. Two recipes died on 404s in the 2026-08-16 run
+AFTER a sourcer had already read them successfully; the cache is why that cannot happen again.
+
+TRANSCRIBING FROM JSON-LD IS STILL TRANSCRIBING THE PAGE - it is the page's own machine-readable
+statement of its recipe, and it is more reliable than prose-reading a rendered blog. What remains
+forbidden is transcribing from the SOURCER'S DESCRIPTION of a page. If the JSON-LD and the visible page
+disagree, that is a finding to report, not a preference to exercise.
 Write ${RUN}\\extracted\\${c.slug}.json: ingredients exactly as the page states them (measurement, unit and
 name verbatim), stated servings, stated nutrition if any, and the cooking steps. Mark garnish/optional
 lines optional - an optional line never blocks and never rejects a recipe.
@@ -646,6 +661,29 @@ Slugs: ${slugs.join(', ')}
 Transcriptions: ${RUN}\\extracted\\<slug>.json      Write: ${RUN}\\mapped\\<slug>.json
 
 For EACH recipe:
+0. RESOLVE EVERY INGREDIENT NAME AGAINST THE VOCABULARY FIRST. This is the single most expensive
+   mistake this pipeline has made. db\\ingredients.json is a CLOSED vocabulary of ~301 canon names.
+   build-v2-spec matches them EXACTLY, so an invented name silently costs $0.00 and the recipe ships a
+   price that excludes it. On 2026-08-16 recipes wrote "Cream Cheese", "Sour Cream", "Broccoli" and
+   "Portobello Mushrooms" while the vocabulary stocked "1/3 Fat Cream Cheese", "Light Sour Cream",
+   "Broccoli Florets" and "White Mushrooms" - four live pages went out understating cost and a whole
+   run's worth of recipes was blocked chasing prices that were never missing.
+
+   For EVERY ingredient:
+     powershell -NoProfile -File ${PIPE}\\ingredient-vocab.ps1 -Query '<ingredient name>'
+   Exit 0 = it resolves; use that EXACT canon name in the intake. Exit 3 = it does not, and the nearest
+   rows are printed with a DIFFERENT-FORM flag where the near name is a different food.
+
+   NEVER invent a canon name and NEVER pick a near match yourself. If nothing resolves, report it as a
+   vocabulary proposal - rename, alias, or new row - and hold the recipe rather than guessing. "Dry
+   White Wine" is not "White Wine Vinegar"; "Fresh Parsley" is not "Dried Parsley"; "Broccoli Florets"
+   is frozen, which its name hides and only its bid reveals. A plausible wrong match is worse than a
+   visible miss, because nothing downstream ever fires again.
+
+   ${PIPE}\\ingredient-resolutions.ps1 -Query -Term '<t>' carries prior rulings, including whether a bid
+   is wired. A recipe whose ingredient resolves but has NO bid must HOLD at mapped - do not let it reach
+   the writer, because the spec build will refuse and the writing will have been paid for already.
+
 1. Map every ingredient to a canonical board commodity id, or reject it with evidence. Add label-accurate
    food-DB entries for anything new. This run's recipes must land between ${CAL_MIN} and ${CAL_MAX} cal
    and at or under ${CARB_MAX} g carbs per serving, so a guessed macro here becomes a false claim on a
@@ -1037,6 +1075,14 @@ sitting at 645 cal will fail our own gate as easily as one at 655. A candidate w
 is acceptable ONLY if the dish is structurally low-carb and moderate-calorie (meat + fat + non-starchy
 vegetables, no rice/pasta/potato/bread/bean base) - say so explicitly in "why".
 
+KNOW WHICH LANES ARE ALREADY FULL before you hunt:
+  powershell -NoProfile -File ${PIPE}\\make-saturation.ps1 -Brief
+It lists the (protein x sauce-family) regions the catalog has already filled. You MAY bring a dish from
+a saturated region - but you must name the axis that makes it distinct, in "why". This is guidance to
+argue with, not a filter. It exists because the 2026-08-15 run found, fetched and adjudicated FIVE
+creamy pork-chop skillets and FOUR creamy chicken skillets before rejecting them all as duplicates -
+48% of that run's recipes died as dupes, after being paid for.
+
 PRICER-LANE EXERCISE (design\\PLAN-recipe-hunter-v2.1-2026-08-15.md section 5.1): this is the proving run for
 the pricer lane, and the shakedown's bias was to AVOID candidates with unmapped ingredients. Invert that. Do
 NOT filter out a good recipe because a signature ingredient may be absent from the board - flag it in
@@ -1045,9 +1091,32 @@ are what proves the queue and the pricer lane work in anger.
 
 Still required: scalable to 14 servings, no seafood.
 
-DEDUPE against BOTH the catalog digest ${DIGEST} (544 live recipes) AND
-${RUN}\\accepted-slugs.json - READ IT NOW, it is being appended to continuously by the decider while you
-hunt, so it is the freshest record of what this run has already taken.
+DEDUPE BY QUERYING, NOT BY LOADING. Do NOT read catalog-digest.json - it is 111,942 bytes and the hunt
+and select lanes together burned 75.5% of the last run's tokens largely on repeated context. Instead:
+
+  powershell -NoProfile -File ${PIPE}\\find-similar.ps1 -Name '<dish name>' -Protein ${L.key.split('-')[0]}
+      -> the ~5 nearest catalog recipes, about 1KB, with the words they share
+
+  powershell -NoProfile -File ${PIPE}\\considered-dishes.ps1 -Query -Name '<dish>' -Protein <p> -Method <m>
+      -> has this estate ALREADY ruled on this dish? Exit 3 means yes, with the reason. ADVISORY: you may
+         still bring it, but say in "why" what makes it distinct from the prior ruling.
+
+  ${RUN}\\accepted-slugs.json - still read this; the decider appends to it continuously.
+
+CHECK THE PUBLISHER BEFORE YOU FETCH:
+  powershell -NoProfile -File ${PIPE}\\source-domains.ps1 -Brief
+      -> BLOCKED domains (do not fetch, do not retry), UNRELIABLE ones to avoid, and which publishers
+         carry JSON-LD. On 2026-08-16 a sourcer fetched thespruceeats - blocked in its own prompt - and
+         the recipe 404'd after paying for the search AND the fetch.
+
+FETCH CHEAPLY. Use the helper rather than pulling a whole page into context:
+  powershell -NoProfile -File ${PIPE}\\fetch-recipe.ps1 -Url '<url>'
+      -> caches the page (so the extractor never re-fetches it) and returns the page's own schema.org
+         JSON-LD Recipe block when present: ingredients, instructions AND nutrition. Measured on a real
+         budgetbytes page, the rendered HTML is 591,477 bytes and the JSON-LD block is about 4K - a 97%
+         cut. It also records the fetch outcome against the domain ledger automatically.
+      Reject on the SEARCH SNIPPET where you can - identity is visible in a snippet, nutrition is not,
+      so a snippet may rule out a duplicate but may never establish the band.
 
 RETURN THE MOMENT YOU HAVE ONE VERIFIED CANDIDATE. Do not keep searching to fill a quota - a candidate
 you are holding is a candidate the rest of the pipeline cannot start on. The dedup adjudicators are idle
@@ -1104,7 +1173,14 @@ Other adjudicators are ruling other candidates right now, the decider is consumi
 land, and the sourcers are still hunting. Rule what is in front of you and return - do not wait for more.
 
 Rule EACH candidate KEEP or DUPE against:
-  - the live catalog digest ${DIGEST} (544 recipes)
+  - the catalog, QUERIED not loaded. Do NOT read catalog-digest.json (111,942 bytes, and this lane plus
+    hunt were 75.5% of the last run's tokens). Per candidate:
+        powershell -NoProfile -File ${PIPE}\\find-similar.ps1 -Name '<dish>' -Protein <p>
+    It returns the ~5 nearest catalog recipes with the words they share - about 1KB.
+  - prior rulings, so this estate never re-adjudicates a dish it has already judged:
+        powershell -NoProfile -File ${PIPE}\\considered-dishes.ps1 -Query -Name '<dish>' -Protein <p> -Method <m>
+    Exit 3 means there IS a prior ruling; the reason is printed. Treat it as strong prior art, not as a
+    verdict - the decider still rules.
   - ${RUN}\\accepted-slugs.json - READ IT FRESH each time, the decider appends to it continuously
 "Beef chili" and "beef chili mac" are different dishes; "chicken tikka masala" twice is not. Give each
 ruling one sentence of evidence naming the catalog recipe it duplicates, if any.
@@ -1183,7 +1259,14 @@ Your job is the part that could NOT be sharded:
 2. ACCEPT or REJECT each one, keeping the run's protein mix balanced rather than letting one lane run away
    with it. Rejecting is correct when a candidate is weak or collides - more are coming continuously and
    you never need to fill the target from what is in front of you. Do not pad.
-3. THE SINGLE WRITE. Append every accepted slug to ${RUN}\\accepted-slugs.json (create it as a JSON array
+3. RECORD EVERY RULING IN THE ESTATE'S MEMORY. You are the only writer of it. For EACH candidate you
+   rule on - accepted or rejected:
+     powershell -NoProfile -File ${PIPE}\\considered-dishes.ps1 -Record -Slug <s> -Name '<name>' -Protein <p> -Method <m> -Verdict <accepted|rejected-dupe|...> -Reason '<one sentence>' -DupeOf '<slug>','<slug>' -Run ${RUNID} -By decider
+   This is what stops the next run re-sourcing, re-adjudicating and re-deciding the same dishes: 44 of
+   91 recipes died as duplicates on 2026-08-16 and left no trace outside the run dir, so every future
+   run would have paid for them again. Record rejections especially - they are the ones that repeat.
+
+4. THE SINGLE WRITE. Append every accepted slug to ${RUN}\\accepted-slugs.json (create it as a JSON array
    if absent) and write ${RUN}\\selected\\<slug>.selected.json per acceptance. Nothing else writes those.
 
 You may overrule the adjudicator, but not silently - say why in the selection note.
