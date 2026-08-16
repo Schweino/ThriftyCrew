@@ -170,6 +170,16 @@ foreach ($s in $targets) {
   if ($r) { $hits += [pscustomobject]@{ slug = $s; gap = $r.gap; detail = $r.detail } }
 }
 
+# A GUARD THAT SWEEPS NOTHING MUST NOT REPORT CLEAN. Passing -Slugs 'a,b' as one comma-joined string (the
+# convention some sibling guards accept) matched no spec file, so this printed "clean n=0" and exited 0 -
+# a green light over an empty check. Found 2026-08-16 by a wave auditor. Refusing is the only safe answer:
+# the caller asked for specific slugs and got none of them.
+if($targets.Count -and $checked -eq 0){
+  Write-Host ("audit-cost-line-coverage: REFUSING - {0} slug(s) named but NONE matched a spec in db\recipes." -f $targets.Count)
+  Write-Host  '  If you passed -Slugs as one comma-joined string, pass an array instead: -Slugs a,b or -Slugs $list.'
+  Write-Host  '  A sweep of zero specs is not a clean sweep.'
+  exit 1
+}
 Write-Host "audit-cost-line-coverage: swept $checked spec(s)"
 if ($hits.Count) {
   foreach ($h in ($hits | Sort-Object -Property gap -Descending)) {

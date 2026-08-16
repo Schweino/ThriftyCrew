@@ -84,10 +84,47 @@ foreach($sf in (Get-ChildItem (Join-Path $mp 'db\recipes\*.json'))){
   $specs[$sf.BaseName]=$sf.FullName
 }
 foreach($s in $idxBySlug.Keys){ if(-not $specSlugs.ContainsKey($s)){ $issues.Add("INDEX-ONLY: $s (recipes-db row has no db\recipes spec)") } }
-foreach($s in $specSlugs.Keys){ if(-not $idxBySlug.ContainsKey($s)){ $issues.Add("SPEC-ONLY: $s (db\recipes spec has no recipes-db row)") } }
+# SPEC-ONLY AND INDEX-ONLY ARE NOT THE SAME DEFECT, and treating them alike blocked every wave publish.
+#
+# INDEX-ONLY is always wrong: the site carries a row for a recipe whose spec is gone, so nothing can
+# rebuild or re-cost it.
+#
+# SPEC-ONLY has two meanings and only one of them is a defect. A spec that WAS published and has since
+# lost its row is serious - the live page is orphaned from its index. A spec that has NEVER published is
+# ordinary work in flight: the Recipe Hunter builds specs in db\recipes and publishes them a wave at a
+# time, so between the build and the wave there is always a spec with no row. On 2026-08-16 there were 21
+# of them - nine awaiting their wave and twelve rejected or never audited - and this gate failed the whole
+# publish over them, which meant no wave could ever ship while any other work was in flight.
+#
+# db\published-hashes.json is the record of what has actually published: engine\publish.ps1 writes a slug's
+# content hash there only AFTER a successful live verify. So it answers the question exactly. A slug in it
+# with no index row is a real orphan and still fails. A slug absent from it has never been live, and is
+# reported as in-flight rather than as drift.
+$publishedEver = @{}
+$phPath = Join-Path $mp 'db\published-hashes.json'
+if(Test-Path $phPath){
+  try { $ph = (Get-Content $phPath -Raw | ConvertFrom-Json); foreach($p in $ph.PSObject.Properties){ $publishedEver[$p.Name]=$true } } catch {}
+}
+$inFlight = @()
+foreach($s in $specSlugs.Keys){
+  if($idxBySlug.ContainsKey($s)){ continue }
+  if($publishedEver.ContainsKey($s)){ $issues.Add("SPEC-ONLY (ORPHANED): $s was published but its recipes-db row is gone") }
+  else { $inFlight += $s }
+}
 
 $items=@{}
-foreach($row in (Get-Content (Join-Path $mp 'db\ingredients.json') -Raw | ConvertFrom-Json)){ $items[[string]$row.item]=$row }
+# ALIASES COUNT. db\ingredients.json is a closed vocabulary in which one purchasable row may answer to
+# several adjudicated names - "Tandoori Masala" resolves to the Garam Masala row, "Cream Cheese" to
+# "1/3 Fat Cream Cheese" - each recorded with an alias_ruling and documented in
+# design\PLAN-ingredient-vocabulary-2026-08-16.md section 0c. build-v2-spec.ps1 resolves them (its
+# Resolve-ItemRow) and so does ingredient-vocab.ps1, but this gate only ever looked at `item`, so it
+# reported NO-DB-ITEM for a name the rest of the estate resolves fine and hard-failed a publish over it
+# on 2026-08-16. A gate that disagrees with the builder about what the vocabulary contains is not a
+# stricter gate, it is a different vocabulary.
+foreach($row in (Get-Content (Join-Path $mp 'db\ingredients.json') -Raw | ConvertFrom-Json)){
+  $items[[string]$row.item]=$row
+  foreach($a in @($row.aliases)){ if($a){ $items[[string]$a]=$row } }
+}
 
 # BID single-source (2026-07-27, overhaul-2): db\ingredients.json holds the canonical bid per item, and a
 # spec's scaler bid is a DERIVED copy of it (build-v2-spec). If they diverge, everyday cost (db bid) and the
@@ -251,6 +288,11 @@ if($fallback.Count){
 }
 
 if($issues.Count -eq 0){
+  # Reported, never silent. An in-flight spec is expected, but a growing pile of them is how twelve
+  # never-audited specs sat unnoticed until a publish tried to create them as live posts.
+  if($inFlight.Count){
+    Write-Output ("db-agreement: {0} spec(s) built but never published - in flight, not drift: {1}" -f $inFlight.Count, (($inFlight | Sort-Object) -join ', '))
+  }
   Write-Output ("db-agreement: CLEAN ({0} recipes, index==specs)" -f $specSlugs.Count)
   Write-GuardComplete -Name 'db-agreement' -Summary ("recipes={0} issues=0" -f $specSlugs.Count)
   exit 0
