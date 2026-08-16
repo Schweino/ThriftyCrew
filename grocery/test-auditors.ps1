@@ -1,4 +1,4 @@
-﻿<#
+<#
   test-auditors.ps1 - proves the WATCHERS still work. Complements test-guards.ps1, which breaks a live
   invariant and asserts guards.ps1 exits 2; this one tests the auditors and alert plumbing that guards.ps1
   does not own, using FROZEN FIXTURES instead of mutating live data.
@@ -3433,7 +3433,7 @@ else {
   $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $fcp -SelfTest 2>&1 | Out-String
   # The count is pinned for the reason every count here is pinned: a case that silently stops running never
   # errors, so the tally is the only thing that notices it went missing.
-  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 14/14 pass') {
+  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 16/16 pass') {
     Ok 'feed-covers-published -SelfTest passes with its founding-bug fixtures armed (a published slug the feed does not carry, a bid in ingredients but not pricing_inputs, a present-but-zero-priced entry, and the allowlist pardoning only its own bid)'
   } else { Bad ('feed-covers-published -SelfTest failed or lost its founding-bug fixtures: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 

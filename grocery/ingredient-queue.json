@@ -1615,13 +1615,62 @@
                       "why":  "tier1 MIS-MAPPED: price-ingredient maps to commodity \u0027rice\u0027 via /\\brice\\b/ at \\.4396/lb long-grain white rice; commodity \u0027rice-cakes\u0027 is the puffed Quaker snack. Neither is tteok. Needs a live per-store carriage check for plain ~600g tteok.",
                       "status":  "pending",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "walmart.com in Chrome, store verified \"Omaha L St Supercenter\", 12812 S 38TH St. Parsed \u003cscript id=\"__NEXT_DATA__\"\u003e -\u003e props.pageProps.initialData.searchResult.itemStacks[].items, capturing priceInfo.priceDetails.priceLines[0], sellerName and fulfillmentType. Four rungs: \u0027rice cakes korean\u0027=64 records, \u0027tteokbokki\u0027=64, \u0027garaetteok\u0027=16, \u0027rice cake sticks\u0027=50. Plain tteok IS listed on walmart.com - Apexy Korean Tteokbokki Rice Cake Slice 21.16oz $9.99, UNHA\u0027S Garaetteok Rice Cake Sticks 21.16oz $10.00, Fusion Select Korean Rice Cakes 600g $11.99, Wang Rice Cake Stick 21.16oz 12pk, Sekero Rice Sticks 24oz. BUT EVERY ONE OF THEM IS THIRD-PARTY: sellerName Apexy Store / Unha\u0027s Asian Snack Box / Ace Solutions Holding Inc / Atmada Nutrition / GeticMax / Numidian Trading Company, fulfillmentType FC or MARKETPLACE, i.e. shipped from a third-party warehouse, never stocked at the Omaha club. The project\u0027s own gate agrees: import-walmart-batch.ps1 line 101-102 admits a row only when sellerName is empty or matches ^walmart(\\.com)?$ and drops MARKETPLACE outright. Filtering the \u0027garaetteok\u0027 pool to first-party gives ZERO tteok rows. Every first-party Walmart.com tteok item is a sauce-included kit: Samyang Buldak Original Spicy Chicken Tteokbokki 6.52oz cup (ft=STORE), Samyang Buldak Carbonara 6.31oz cup (STORE), Dongwon Cheese Topokki Cup 4.23oz (STORE), Dongwon Spicy and Sweet Topokki Cup 4.23oz (STORE), O\u0027Food Original Tteokbokki Gochujang 9.1oz $7.98 (FC), O\u0027Food Sweet Chili 10.2oz $7.98 (FC), O\u0027Food Tteokbokki BBQ 9.1oz (FC). The only tteok physically on an Omaha Walmart shelf (ft=STORE) is a 4-6oz sauced instant cup. Ruled not-carried for PLAIN tteok; a reviewer who decides ship-to-home marketplace counts as Omaha carriage can overturn this on the named listings above.",
+                                                     "checked":  "2026-08-16T07:56:44"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "shop.fareway.com, identity verified by ADDRESS not shopId: window.__APOLLO_CLIENT__.cache.extract() -\u003e GetRetailerLocationAddress id 531573, lineOneString \"17070 Audrey Street\", lineTwoString \"Omaha, NE 68136\" - the correct Omaha store, not Des Moines 513473. Three rungs, all EMPTY by explicit banner: \u0027tteok\u0027 rendered [No results for \"tteok\" - Browse related items or try another search] with 9 suggestion tiles (Nongshim, Bibigo japchae, China Bowl rice sticks, Ka-Me bean threads); \u0027topokki\u0027 same no-results banner, 9 suggestion tiles (Bibigo dumplings, Snapdragon pho); \u0027korean rice cake\u0027 same no-results banner, 9 suggestion tiles (Bibigo fried rice, Drizzilicious bites). R1 applied throughout - the tiles are suggestions, the result count is 0. Rung \u0027rice cakes\u0027 DID return a genuine grid (no banner), 9 tiles, every one the puffed snack cake: quaker-rice-cakes-lightly-salted-4-47-oz, quaker-rice-cakes-caramel-corn-6-56-oz, quaker-rice-cakes-chocolate-crunch-7-23-oz, quaker-rice-cakes-apple-cinnamon, quaker-rice-cakes-white-cheddar, quaker-rice-cakes-salt-free, quaker-rice-cakes-buttered-popcorn, plus two Drizzilicious. No tteok of any kind, sauced or plain.",
+                                                     "checked":  "2026-08-16T07:56:30"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "blocked",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "UNCHECKED - both surfaces failed, this is a throttle not an absence. (1) probe-ingredient.ps1 Freshop (app_key family_fare, store_id 6401) returned HTTP 400 Bad Request on every one of 4 separate invocations spread over ~20 min: \u0027tteok\u0027, \u0027rice cakes\u0027, \u0027garaetteok\u0027, \u0027rice cake sticks\u0027. (2) CONTROL PROBE: \u0027banana\u0027 also returned 400 from the same lane, which proves the endpoint is refusing all callers rather than reporting zero tteok. (3) Second surface tried: an in-page fetch of api.freshop.ncrcloud.com/1/products?app_key=family_fare\u0026store_id=6401\u0026q=tteok from a live shopfamilyfare.com tab also returned 400. (4) Third attempt: navigated shopfamilyfare.com/shop/search?q=tteok in Chrome; the store chrome rendered (Family Fare - 50Th \u0026 Grover St, 5019 Grover St, Omaha NE 68106) but the results grid never rendered - 459 chars of body text, 0 product links. No search ever executed. BLOCKED, not not-carried.",
+                                                         "checked":  "2026-08-16T07:55:53"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "not-carried",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "Rendered aisles-online page in Chrome, store selector verified reading \u0027Shopping Omaha #1, NE\u0027. Rung 1 \u0027tteok\u0027: explicit \u00271 - 1 of 1 Results for tteok\u0027 = O\u0027Food Original Tteokbokki 9.1 oz \\.99, filtered as brand O\u0027Food / category Ramen \u0026 Noodle Bowls - a sauce-included kit, not plain tteok. Rung 2 \u0027rice cake\u0027: \u00271 - 41 of 41 Results\u0027, facet counts Rice Cakes \u0026 Crisps (36) / Mochi (3) / Cereal (1) / Ramen \u0026 Noodle Bowls (1); read all 41 names - Quaker and Hy-Vee puffed rice cakes and crisps, Drizzilicious bites, Lundberg mini cakes, Like Air, My/Mochi ice cream, and the same single O\u0027Food Tteokbokki. Hy-Vee search is substring-based (it matched \u0027tteok\u0027 inside \u0027Tteokbokki\u0027), so the 41-result sweep is the widest honest pool. No plain refrigerated/frozen/shelf-stable bag of garae-tteok. No no-results banner on either rung, so both are genuine result grids.",
+                                                    "checked":  "2026-08-16T07:56:07"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "samsclub.com, club verified \"Omaha Sam\u0027s Club\", 15429 Blackwell Dr, Omaha. In-page fetch(\u0027/search?q=...\u0027) parsing \u003cscript id=\"__NEXT_DATA__\"\u003e -\u003e props.pageProps.initialData.searchResult.itemStacks[].items. Rung \u0027tteokbokki\u0027: 12 records, no no-results flag, and NOT ONE is a rice cake - the pool is Kinder\u0027s Korean BBQ Seasoning 9oz, Member\u0027s Mark FujiSan Korean BBQ Chicken Spring Roll, Golden Island Korean Barbecue Pork Jerky, Member\u0027s Mark Chicken Pot Pie, Tikka Masala, Teriyaki Chicken Bowl - the engine widened to the word \"Korean\" and returned dishes, exactly the near-miss trap. Rung \u0027rice cake\u0027: 27 records, all puffed snack (Lundberg Organic Lightly Salted Rice Cakes 7.1oz 3pk, Drizzilicious Mini Rice Cakes 32pk, Quaker Rice Crisps Variety 36pk, Quaker Caramel Rice Crisps 18oz, Quaker Rice Cakes Variety 4pk, Like Air Drizzled Rice Cakes) plus unrelated bulk grocery. A warehouse club carrying a 21oz specialty Korean bag would be out of character and nothing in either pool is tteok. No plain garae-tteok.",
+                                                             "checked":  "2026-08-16T07:56:30"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "aldi.us first-party, header verified \"In-Store - open 9am - 8pm / ALDI - OLA 48 - Omaha\" before and after searching (In-Store mode held, not Delivery). Rung 1 \u0027tteok\u0027: page renders the literal no-results phrase [No results for \"tteok\" - Browse related items or try another search] and then 9 SUGGESTION tiles (Nongshim Shin Ramyun, Samyang hot chicken ramen, Aldi Kimchi Fried Rice \u0026 Sauce, Fusia beef mandu, Simply Nature seaweed) - R1 applied, tile count is not a result count, this is EMPTY. Rung \u0027korean rice cake\u0027: same explicit [No results for \"korean rice cake\" - Browse related items], 91 suggestion tiles (Fit \u0026 Active puffed rice cakes, Bibigo/Nongshim, Millville crispy rice treats). Rung \u0027rice cakes\u0027: 115 tiles with NO no-results banner, i.e. a genuine grid - all of it Aldi private-label puffed snack cake (fit-active-lightly-salted-rice-cakes-4-9-oz, fit-active-caramel-corn-rice-cakes-6-56-oz, fit-active-cheddar-cheese-flavored-rice-snacks-6-oz) plus chips/pretzels. No tteok in any form, sauced or plain.",
+                                                  "checked":  "2026-08-16T07:56:14"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "kroger-public-api locationId 61500319 (Omaha), shelf price. Full ladder: \u0027tteok\u0027=4 hits, \u0027rice cakes\u0027=25, \u0027garaetteok\u0027=0 across 4 spacing rungs (garaetteok/gara etteok/garae tteok/garaet teok), \u0027rice cake sticks\u0027=0 across 2 rungs. The four \u0027tteok\u0027 hits are ALL sauce-included kits, verified name by name: Daesang O\u0027Food Tteokbokki BBQ 9.1oz \\.49, O\u0027Food Tteokbokki Sweet Chili 10.2oz \\.49, Samyang Buldak Original Spicy Chicken Flavored Tteokbokki 6.53oz \\.99, Bibigo Frozen Tteokbokki Rice Cakes with Sweet \u0026 Spicy Sauce 16.8oz \\.99. The 25 \u0027rice cakes\u0027 hits are the puffed Quaker/Kroger snack cake (Kroger Caramel Rice Cakes 6.56oz \\.99 etc), a different food. No plain ~600g bag of garae-tteok/tteokbokki-tteok at any rung.",
+                                                          "checked":  "2026-08-16T07:55:53"
+                                                      }
                                  },
                       "verdict":  "PENDING",
                       "notes":  null

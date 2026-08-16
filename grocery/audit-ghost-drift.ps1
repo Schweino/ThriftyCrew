@@ -231,7 +231,9 @@ if (Test-Path $allowPath) { try { $allow = @((Get-Content $allowPath -Raw | Conv
 
 $clean = @(); $drift = @(); $blind = @()
 foreach ($t in $manifest) {
-  $lf = Join-Path $repo $t.file
+  # site\tools is where discovery (above) reads the tool htmls from; joining the manifest's BARE filename to
+  # the repo ROOT went blind on all 16 pages when the 2026-08-15 restructure moved them. ONE derivation.
+  $lf = Join-Path $repo (Join-Path 'site\tools' $t.file)
   if (-not (Test-Path $lf)) { $blind += ("{0}: local source {1} is gone" -f $t.slug, $t.file); continue }
   $local = [IO.File]::ReadAllText($lf)
   $live = $null

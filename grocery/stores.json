@@ -286,6 +286,12 @@
       "file": "probe-ingredient.ps1",
       "contains": "The five walled stores",
       "reason": "operator note naming the 5 stores the probe cannot reach, so NO-CANDIDATES is never read as not-carried"
+    },
+    {
+      "file": "measure-cheapest-selection.ps1",
+      "contains": "$butterJson",
+      "reason": "frozen must-fire fixture for the cheapest-to-BUY defect (bangers-and-mash butter, measured 2026-08-15): Sam's Club wins per-unit on a 4 lb box while Aldi's 1 lb box is cheaper to actually buy. The 4 stores are the fixture's own frozen shape, not a live store list. SELF-REFERENTIAL like $asrFive and $cgQuiet above - a must-fire fixture for a code-scanning guard gets flagged by that guard unless it is registered here.",
+      "reviewed": "2026-08-16"
     }
   ],
   "pull_profile_readme": "Per-store pull mechanics, read by that store's agent module so pacing is versioned data instead of a number retyped into a console snippet. RULES: (1) every value is MEASURED or marked proposed/unmeasured - never guess a safe rate, an unpaced Sams sweep walled at 207 of 595 terms on 2026-08-15; (2) this block records HOW to pull, never WHAT a store carries. Do not add learned empty/absent terms here. A term recorded as empty during a wall would silently stop being checked forever, which is the contested-flag-baselined-away class: unchecked is never not-carried."
