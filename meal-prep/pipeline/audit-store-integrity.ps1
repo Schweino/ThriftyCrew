@@ -40,6 +40,27 @@ function Test-BaseDrift { param([double]$DensityGrams,[double]$FoodDbGrams,[doub
   if($FoodDbGrams -le 0 -or $DensityGrams -le 0){ return $false }
   return ([Math]::Abs($DensityGrams-$FoodDbGrams)/$FoodDbGrams -gt $Tol) }
 
+# AN ALIAS IS A PRICE ROW (2026-08-16). This guard indexed db\ingredients.json by `item` alone, so every
+# canon name that reaches its row through an adjudicated ALIAS read as "no ingredients.json row (its cost
+# line is silently dropped)" - a sentence that is false twice over: the row is there, and the line is
+# priced. V2 of the vocabulary plan made aliases first-class on 2026-08-16 and the cost engine learned them
+# (f60ede7f); this reader did not, so it reported 8 hard findings for 7 Brad-adjudicated aliases (Cream
+# Cheese, Sour Cream, Smoked Sausage, Andouille Smoked Sausage, Baby Bella (Crimini) Mushrooms, Tandoori
+# Masala, Pepperoni). wave-publish P5 hard-fails on any non-zero exit, so a guard crying wolf about a
+# mechanism the estate deliberately adopted was blocking every wave in the run from publishing at all.
+# A false HARD is worse than no guard: it trains the operator to reach for -Skip on the one gate that must
+# never be skipped. Build the price-side index over item names AND their aliases, exactly as resolution
+# actually works.
+function Add-PriceNames { param($Rows,[hashtable]$Map)
+  foreach($r in $Rows){
+    $n=[string]$r.item
+    if(-not $n){ continue }
+    if(-not $Map.ContainsKey($n)){ $Map[$n]=$r }
+    if($r.PSObject.Properties.Name -notcontains 'aliases'){ continue }
+    foreach($a in @($r.aliases)){ $an=[string]$a; if($an -and -not $Map.ContainsKey($an)){ $Map[$an]=$r } }
+  }
+  return $Map }
+
 if($SelfTest){
   $f=0
   function T($m,$c,$g){ if($c){ Write-Output ("ok    "+$m) } else { Write-Output ("FAIL  "+$m+"   got: "+$g); $script:f++ } }
@@ -64,6 +85,20 @@ if($SelfTest){
   T 'MUST FIRE  Ricotta at 246 g/cup against 62 (a 1/4-cup serving labelled a cup)'    (Test-BaseDrift 246 62) 'no finding'
   T 'CLEAN TWIN a base inside rounding (203 vs 200)'                                   (-not (Test-BaseDrift 203 200)) 'spurious finding'
   T 'CLEAN TWIN a missing base is not drift'                                           (-not (Test-BaseDrift 0 200)) 'spurious finding'
+  # ALIAS INDEXING - the 2026-08-16 false-HARD class that blocked three waves. Fixture mirrors the real rows.
+  $aliasRows = @(
+    [pscustomobject]@{ item='1/3 Fat Cream Cheese'; bid='1-3-fat-cream-cheese'; aliases=@('Cream Cheese') },
+    [pscustomobject]@{ item='Pork Smoked Sausage';  bid='kielbasa'; aliases=@('Smoked Sausage','Andouille Smoked Sausage') },
+    [pscustomobject]@{ item='Salt';                 bid='salt' }
+  )
+  $am = Add-PriceNames $aliasRows @{}
+  T 'MUST FIRE  an adjudicated alias resolves as a price row'        ($am.ContainsKey('Cream Cheese'))              'alias still reads as MISSING-SIDE'
+  T 'MUST FIRE  a second alias on one row resolves too'              ($am.ContainsKey('Andouille Smoked Sausage'))  'only the first alias indexed'
+  T 'an alias points at its OWN row, not a copy'                     ([string]$am['Cream Cheese'].bid -eq '1-3-fat-cream-cheese') ([string]$am['Cream Cheese'].bid)
+  T 'the row name itself still resolves'                             ($am.ContainsKey('Pork Smoked Sausage'))       'item name lost'
+  T 'a row with no aliases array is handled'                         ($am.ContainsKey('Salt'))                      'threw or skipped'
+  # CLEAN TWIN: widening the index must not make an unknown name resolve - that would hide real dropped lines.
+  T 'CLEAN TWIN an unmapped name still does NOT resolve'             (-not $am.ContainsKey('Panko Breadcrumbs'))    'alias widening swallowed a real MISSING-SIDE'
   if($f -eq 0){ Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
@@ -71,7 +106,8 @@ $hard = New-Object System.Collections.Generic.List[string]
 $warn = New-Object System.Collections.Generic.List[string]
 
 $ing = Get-Content (Join-Path $mp 'db\ingredients.json') -Raw -Encoding UTF8 | ConvertFrom-Json
-$ingm=@{}; foreach($r in $ing){ $ingm[[string]$r.item]=$r }
+$ingm=@{}; $ingm = Add-PriceNames $ing $ingm   # item names AND adjudicated aliases - see Add-PriceNames
+if($ingm.Count -lt 200){ Write-Output ("audit-store-integrity: indexed only $($ingm.Count) price names - implausible; parse error, not data."); exit 1 }
 $fdb = Get-Content (Join-Path $mp 'food-macros-db.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 $fdbm=@{}; foreach($g in $fdb.PSObject.Properties){ if($g.Value -is [array]){ foreach($x in $g.Value){ if($x.item -and -not $fdbm.ContainsKey($x.item)){ $fdbm[$x.item]=$x } } } }
 $dens = (Get-Content (Join-Path $mp 'db\densities.json') -Raw -Encoding UTF8 | ConvertFrom-Json).items

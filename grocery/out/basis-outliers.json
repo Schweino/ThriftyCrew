@@ -109,7 +109,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-16T10:17:09",
+    "generated":  "2026-08-17T06:27:44",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -216,18 +216,6 @@
                               "per_unit":  21.3929,
                               "size":  "200 ml",
                               "item":  "Litehouse Herb, Freeze  Dried Basil 0.28 Oz",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "bbq-sauce",
-                              "commodity":  "BBQ Sauce",
-                              "unit":  "oz",
-                              "store":  "Baker\u0027s",
-                              "per_unit":  0.1106,
-                              "size":  "18 fl oz",
-                              "item":  "Kraft Sweet Honey Slow-Simmered BBQ Sauce",
                               "kind":  "volume",
                               "row_kind":  "weight",
                               "holds_crown":  false
@@ -821,18 +809,6 @@
                               "holds_crown":  false
                           },
                           {
-                              "id":  "orange-juice",
-                              "commodity":  "Orange Juice",
-                              "unit":  "floz",
-                              "store":  "Fareway",
-                              "per_unit":  0.0765,
-                              "size":  "52 oz",
-                              "item":  "Fareway 100% Orange Juice",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
                               "id":  "oven-cleaner",
                               "commodity":  "Oven Cleaner",
                               "unit":  "oz",
@@ -947,7 +923,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0993,
                               "size":  "15 oz",
-                              "item":  "Alberto Vo5 Extra Body With Collagen Volumizing Shampoo For Body \u0026 Bounce Bonus Size 15 Fl Oz",
+                              "item":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1157,5 +1133,5 @@
                               "holds_crown":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-08-15.json"
+    "compare_file":  "comparison-2026-08-16.json"
 }

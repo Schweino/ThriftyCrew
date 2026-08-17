@@ -18,7 +18,7 @@
                  "protein":  53,
                  "carbs":  66,
                  "fat":  12,
-                 "cost_ps":  "2.29"
+                 "cost_ps":  "2.34"
              },
     "intro_html":  "Sweet, garlicky, and dead simple, this one tastes like takeout for a fraction of the cost. Lean pork loin slow cooks in a honey soy sauce until it falls apart, then goes over rice with broccoli. It runs about ${{cost_ps}} a serving (at everyday cost) and gives you {{protein}} grams of protein across 14 bowls.",
     "ingredients_display":  [
@@ -157,7 +157,7 @@
     "head":  {
                  "description":  "A high-protein Asian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker honey garlic pork bowls, budget dinner",
-                 "costPerServing":  2.29,
+                 "costPerServing":  2.34,
                  "recipeIngredient":  [
                                           "Pork Loin, 7 lb (3050 g)",
                                           "Rice, 1 lb (820 g)",

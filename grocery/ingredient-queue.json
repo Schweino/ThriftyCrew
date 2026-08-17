@@ -778,32 +778,68 @@
                                       "creamy-garlic-herb-wine-pork-chops",
                                       "hunt-2026-08-15-lowcarb-100",
                                       "chicken-chasseur",
-                                      "basque-chicken-peppers-chilindron"
+                                      "basque-chicken-peppers-chilindron",
+                                      "vocab-gap-2026-08-16"
                                   ],
                       "added":  "2026-08-15T20:57:25",
                       "why":  "fricassee needs it for the deglaze/sauce base (3/4 cup plus 2 tbsp at 14 servings); board and captures carry no white-wine cell but several Omaha stores stock wine",
                       "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  3.96,
+                                                     "size":  "750 ml",
+                                                     "item":  "Oak Leaf Vineyards Pinot Grigio/Colombard White Wine",
+                                                     "evidence":  "Walmart Omaha store confirmed in page header. In-page fetch /search parsed from __NEXT_DATA__. NOTE ON PRICE PATH: at this search endpoint the live shape is the FLAT priceInfo.linePrice + priceInfo.unitPrice, not priceInfo.priceDetails.priceLines - reading the priceDetails path returned null for every row and looked exactly like no price. Searched \u0027pinot grigio white wine\u0027: Oak Leaf Vineyards Pinot Grigio/Colombard 750 ml linePrice $3.96, unitPrice 15.6 c/fl oz - cheapest dry white bottle. Liberty Creek Pinot Grigio 1.5 L $7.57 is cheapest per volume at 14.9 c/fl oz. Barefoot Pinot Grigio 750 ml $7.42.",
+                                                     "checked":  "2026-08-16T08:41:23"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  7.99,
+                                                     "size":  "750 ml",
+                                                     "item":  "Barefoot Pinot Grigio White Wine",
+                                                     "evidence":  "Identity verified by ADDRESS not shopId: Apollo cache GetRetailerLocationAddress reads lineOne 17070 Audrey Street, lineTwo Omaha NE 68136. Header In-Store. Searched \u0027white wine\u0027, no no-results banner, genuine Aisle 17 grid. Cheapest dry white Barefoot Pinot Grigio 750 ml $7.99; Barefoot Sauvignon Blanc and Barefoot Chardonnay also $7.99. Dearer: Josh Cellars Sauvignon Blanc $12.99, Matua NZ Sauvignon Blanc $13.99. Sutter Home Sauvignon Blanc $6.99 is 4 x 187 ml minis (748 ml total) not a bottle.",
+                                                     "checked":  "2026-08-16T08:35:48"
+                                                 },
                                      "Family Fare":  {
-                                                         "state":  "carried",
-                                                         "price":  5.69,
-                                                         "size":  "500 ml",
-                                                         "item":  "Vendange Pinot Grigio White Wine 500 Ml",
-                                                         "evidence":  "probe-ingredient rung 1 \u0027dry white wine\u0027 on Freshop store_id 6401 Omaha (pickup = shelf price, not Instacart): 25 hits, no no-results banner. Vendange Pinot Grigio 500ml \\.69 sits in catalog path beer_wine_spirits/wines_champagnes/pinot_grigio_bone_dry - a still bone-dry white wine, exactly the cooking ingredient. Corroborated by Vendange Sauvignon Blanc 1.5L \\.99 in sauvignon_blanc_dry and Carlo Rossi Chablis 4L \\.99.",
-                                                         "checked":  "2026-08-16T06:36:12"
+                                                         "state":  "blocked",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog search returned HTTP 400 Bad Request on EVERY attempt across THREE separate runs spaced over the session (11 terms at first pass, 1 term after a 45s cooldown, 5 terms on a third pass) - probe-ingredient classifies this as UNUSABLE and notes it is search-budget bound throttling, not absence. No result grid was ever rendered, so no term could be searched and no adjudication was possible. Family Fare is the Freshop platform and is server-only (not an Instacart storefront), so there is no browser surface to fall back to for it. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-16T08:45:26"
                                                      },
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  6.99,
+                                                    "size":  "750 ml",
+                                                    "item":  "Sutter Home Pinot Grigio White Wine",
+                                                    "evidence":  "Omaha #1, NE, rendered page. Searched \u0027pinot grigio\u0027, no no-results banner. Sutter Home Pinot Grigio White Wine 750 ml $6.99 - cheapest dry white bottle here. Others: Barefoot Cellars Pinot Grigio 750 ml $7.98, Menage a Trois Light Pinot Grigio $10.99, Bota Box Pinot Grigio 3 L $15.98 (equals 4 bottles, cheapest per volume). Sutter Home 4-pack of 187 ml minis $5.98 is not a bottle. Apothic White is a sweeter blend, excluded.",
+                                                    "checked":  "2026-08-16T08:45:25"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  10.34,
+                                                             "size":  "750 ml",
+                                                             "item":  "Kim Crawford Sauvignon Blanc Wine",
+                                                             "evidence":  "Club identity: Omaha Sams Club, member session signed in as Brad. In-page fetch /search parsed from __NEXT_DATA__, capturing BOTH linePrice and unitPrice. Searched \u0027sauvignon blanc\u0027: Kim Crawford Sauvignon Blanc 750 ml linePrice $10.34, unitPrice $0.41/foz - cheapest dry white at this club. Dearer: Oyster Bay NZ Sauvignon Blanc $13.18, Decoy $15.12, La Crema $15.98, Whitehaven $17.48. All genuinely dry varietals.",
+                                                             "checked":  "2026-08-16T08:38:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  3.95,
+                                                  "size":  "750 ml",
+                                                  "item":  "Winking Owl Sauvignon Blanc",
+                                                  "evidence":  "In-Store mode, ALDI - OLA 48 - Omaha. Searched \u0027white wine\u0027, no no-results banner, real Wine-aisle grid. Cheapest dry whites both $3.95/750 ml: Winking Owl Sauvignon Blanc and Winking Owl Pinot Grigio (Winking Owl Chardonnay also $3.95). Dearer dry whites: Bear Bros. Sauvignon Blanc $7.55, Sunshine Bay Sauvignon Blanc $7.69. Sweet wines (Winking Owl Sweet Red, Pacific Fruit blueberry/pineapple) excluded as not dry.",
+                                                  "checked":  "2026-08-16T08:32:01"
+                                              },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
-                                                          "price":  10.99,
-                                                          "size":  "750 ml",
-                                                          "item":  "Chateau Ste. Michelle Dry Riesling Washington White Wine",
-                                                          "evidence":  "probe-ingredient rung 1 \u0027dry white wine\u0027 on kroger-public-api locationId 61500319 (Omaha Baker\u0027s): 4 hits, no no-results banner. Ruled out the two Cook\u0027s Extra Dry sparkling/champagne rows (sparkling, not a still cooking wine). Ruled in Chateau Ste. Michelle Dry Riesling 750ml \\.99 - a still, explicitly dry white wine a cook would buy; Drylands Sauvignon Blanc 750ml \\.99 is a second genuine hit.",
-                                                          "checked":  "2026-08-16T06:36:11"
+                                                          "price":  3.99,
+                                                          "size":  "500 ml",
+                                                          "item":  "Vendange Pinot Grigio White Wine",
+                                                          "evidence":  "Searched \u0027white wine\u0027, 25 hits, all actual wine bottles. Adjudicated for DRY: Pinot Grigio / Sauvignon Blanc / Chardonnay qualify, Moscato (Seven Daughters \\.99) excluded as sweet. Cheapest dry white = Vendange Pinot Grigio 500 ml \\.99. Others: Yellow Tail Pinot Grigio 750 ml \\.99, Parkers Estate Chardonnay 750 ml \\.99, Bogle Chardonnay 750 ml \\.99, Matua Sauvignon Blanc 750 ml \\.99. This is wine, not the White Wine VINEGAR row the vocabulary already had.",
+                                                          "checked":  "2026-08-16T08:26:55"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -814,32 +850,68 @@
                       "recipes":  [
                                       "low-carb-ground-beef-stroganoff-skillet",
                                       "chicken-marsala-skillet",
-                                      "hunt-2026-08-15-lowcarb-100"
+                                      "hunt-2026-08-15-lowcarb-100",
+                                      "vocab-gap-2026-08-16"
                                   ],
                       "added":  "2026-08-15T20:57:25",
                       "why":  "stroganoff needs it for the deglaze (7 tbsp at 14 servings, listed non-optional by the source); no board cell or capture but Omaha grocers such as Hy-Vee sell spirits",
                       "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  11.53,
+                                                     "size":  "750 ml",
+                                                     "item":  "Christian Brothers VS Grape Brandy",
+                                                     "evidence":  "Walmart Omaha, __NEXT_DATA__, flat priceInfo shape. Searched \u0027brandy\u0027. Christian Brothers VS Grape Brandy 750 ml 40% ABV linePrice $11.53, unitPrice 45.5 c/fl oz - cheapest true 750 ml brandy of any store checked. Excluded the two NON-ALCOHOLIC brandy alternatives that topped the grid (ESCAPE WISE Eau de Vie NonAlc $33.99, BEST REGARDS Brandy Alternative NonAlcoholic $33.99) - a de-alcoholised substitute is not brandy - and Grand Marnier orange brandy LIQUEUR $23.48 as flavoured.",
+                                                     "checked":  "2026-08-16T08:41:23"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  11.99,
+                                                     "size":  "750 ml",
+                                                     "item":  "Christian Brothers VS Brandy",
+                                                     "evidence":  "17070 Audrey Street Omaha NE 68136, In-Store. Searched \u0027brandy\u0027, no no-results banner, 3 genuine Aisle 17 tiles. Cheapest unflavoured brandy Christian Brothers VS Brandy 750 ml $11.99; E\u0026J VS Brandy 750 ml $12.99. Phillips BLACKBERRY Brandy $13.99 excluded as a flavoured liqueur rather than plain brandy.",
+                                                     "checked":  "2026-08-16T08:35:48"
+                                                 },
                                      "Family Fare":  {
-                                                         "state":  "error",
+                                                         "state":  "blocked",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "probe-ingredient server lane: Freshop returned HTTP 400 Bad Request on the single query for \u0027brandy\u0027; search-budget throttling, no result grid ever rendered. UNUSABLE, not absence.",
-                                                         "checked":  "2026-08-15T20:59:34"
+                                                         "evidence":  "Freshop catalog search returned HTTP 400 Bad Request on EVERY attempt across THREE separate runs spaced over the session (11 terms at first pass, 1 term after a 45s cooldown, 5 terms on a third pass) - probe-ingredient classifies this as UNUSABLE and notes it is search-budget bound throttling, not absence. No result grid was ever rendered, so no term could be searched and no adjudication was possible. Family Fare is the Freshop platform and is server-only (not an Instacart storefront), so there is no browser surface to fall back to for it. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-16T08:45:26"
                                                      },
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  13.99,
+                                                    "size":  "750 ml",
+                                                    "item":  "Christian Brothers Brandy",
+                                                    "evidence":  "Omaha #1, NE, rendered page. Searched \u0027brandy\u0027, no no-results banner. Christian Brothers Brandy 750 ml $13.99 - plain unflavoured brandy. E \u0026 J VS Brandy 375 ml $8.99 is the half bottle. Excluded flavoured brandies (Phillips Blackberry $13.99, Leroux Jezynowka Blackberry $12.99), Tuaca (a vanilla-citrus brandy liqueur, $25.98) and Hennessy VS Cognac 375 ml $24.99 as a far dearer style.",
+                                                    "checked":  "2026-08-16T08:45:25"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  19.28,
+                                                             "size":  "1.75 L",
+                                                             "item":  "Christian Brothers VS Grape Brandy",
+                                                             "evidence":  "Omaha Sams Club, member session. Searched \u0027brandy\u0027 via __NEXT_DATA__. Christian Brothers VS Grape Brandy 1.75 L linePrice $19.28, unitPrice $0.33/foz - genuine brandy and the cheapest per volume of any store checked. E\u0026J VS Brandy 1.75 L $20.97 ($0.35/foz). Cognacs (Hennessy VS $32.47, DUSSE $40.67, Members Mark XO $44.94) are brandy but a far dearer style; the plain VS grape brandy is the cooking choice.",
+                                                             "checked":  "2026-08-16T08:38:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "In-Store mode, OLA 48 Omaha. Searched \u0027brandy\u0027: literal no-results banner for brandy. Every tile rendered is a SUGGESTION from the Wine aisle (Specially Selected Rioja Reserva, Winking Owl Sweet Red, Winking Owl Merlot, Pacific Fruit Vineyards blueberry and pineapple wines, California Heritage Sweet Red) - not one is a brandy or any distilled spirit. Single-word term so there is no qualifier to strip and no ladder rung beyond rung 1. This Aldi sells wine but no spirits.",
+                                                  "checked":  "2026-08-16T08:32:01"
+                                              },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  12.49,
                                                           "size":  "750 ml",
                                                           "item":  "E\u0026J VS Brandy",
-                                                          "evidence":  "kroger-public-api locationId 61500319, searched \u0027brandy\u0027, 25 hits, top 8 all genuine brandy bottles (E\u0026J VS / VSOP / XO) at relevance 134-137, no brand-name-collision rows. Ruled IN E\u0026J VS Brandy 750ml at 12.49 as the base standard-size bottle a cook would buy; 50ml/200ml/375ml minis and the 1.75L handle are the same product at other sizes, XO/VSOP are premium tiers.",
-                                                          "checked":  "2026-08-15T20:59:34"
+                                                          "evidence":  "Searched \u0027brandy\u0027, 25 hits, all actual brandy bottles. Standard recipe bottle E\u0026J VS Brandy 750 ml \\.49. Size ladder at same store: 50 ml \\.99, 200 ml \\.00, 375 ml \\.59, 1.75 L \\.49 (cheapest per ml at \\.01514). E\u0026J XO 750 ml \\.99.",
+                                                          "checked":  "2026-08-16T08:26:56"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -994,7 +1066,8 @@
                                       "hunt-2026-08-15-lowcarb-100",
                                       "batch3",
                                       "low-carb-steak-fajita-skillet",
-                                      "italian-sausage-stuffed-peppers-bake"
+                                      "italian-sausage-stuffed-peppers-bake",
+                                      "pulled-pork-stuffed-peppers"
                                   ],
                       "added":  "2026-08-15T20:58:49",
                       "why":  "the vessel of the dish, 7 peppers; commodity id exists but no priced board cell (CAPTURE) - 8 capture candidates across 6 stores need the pricer rule",
@@ -1058,32 +1131,68 @@
                       "recipes":  [
                                       "philly-cheesesteak-stuffed-peppers",
                                       "hunt-2026-08-15-lowcarb-100",
-                                      "batch3"
+                                      "batch3",
+                                      "vocab-gap-2026-08-16"
                                   ],
                       "added":  "2026-08-15T20:58:50",
                       "why":  "the title protein, 1361 g; ABSENT - no commodity claims the term; registrar proposal shaved-beef-steak pending",
                       "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
+                                     "Walmart":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Walmart Omaha, __NEXT_DATA__, flat priceInfo shape. Searched \u0027shaved beef steak\u0027 and \u0027philly shaved steak\u0027. No plain whole-muscle shaved steak. Near misses, all disqualified and named so you can overrule me: Great Value SEASONED Sirloin Beef Philly Steak 14 oz $7.94 (seasoned, not plain); Steak-umm Sliced Steaks 27 oz $10.86 at $6.43/lb (chopped-and-formed frozen beef, not whole-muscle shaved); Beef Choice Angus THIN SLICED Sirloin Tip $8.82/lb, Bottom Round $10.34/lb, Eye of Round $11.24/lb (thin-sliced whole steaks, a different cut and thickness from shaved); Philly Sensations 40-pack raw steaks $145.32 (marketplace bulk); Guy Fieri cheesesteak tots bowl (a dish).",
+                                                     "checked":  "2026-08-16T08:41:24"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  8.49,
+                                                     "size":  "10.8 oz",
+                                                     "item":  "Gary\u0027s Quick Steak Thinly Sliced Sirloin Beef",
+                                                     "evidence":  "17070 Audrey Street Omaha NE 68136, In-Store. Rung 1 \u0027shaved beef steak\u0027 and rung 2 \u0027shaved steak\u0027 BOTH rendered a literal no-results banner, so neither could be concluded from its tiles. But the same product surfaced in both suggestion blocks, so I confirmed it against a genuine grid: searching \u0027quick steak\u0027 returns NO banner and a real result set led by Gary\u0027s Quick Steak Thinly Sliced Sirloin Beef 10.8 oz $8.49, filed under the Beef category. That is the pre-sliced shaved steak product ($0.786/oz). Excluded Gary\u0027s QuickSteak Chicken Breast and Gary\u0027s Quick Steak Corned Beef.",
+                                                     "checked":  "2026-08-16T08:35:48"
+                                                 },
                                      "Family Fare":  {
-                                                         "state":  "not-carried",
+                                                         "state":  "blocked",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "Freshop store_id 6401 Omaha. rung 1 \u0027shaved beef steak\u0027: 0 hits; rung \u0027shavedbeefsteak\u0027: 0 hits; rung \u0027shaved steak\u0027: 0 then 0 then a widened 25-hit pool that was shaved deli TURKEY, Hawaiian shaved ice and eight shaving creams - zero beef. No shaved/sandwich-steak beef SKU in the Omaha catalog.",
-                                                         "checked":  "2026-08-15T21:01:58"
+                                                         "evidence":  "Freshop catalog search returned HTTP 400 Bad Request on EVERY attempt across THREE separate runs spaced over the session (11 terms at first pass, 1 term after a 45s cooldown, 5 terms on a third pass) - probe-ingredient classifies this as UNUSABLE and notes it is search-budget bound throttling, not absence. No result grid was ever rendered, so no term could be searched and no adjudication was possible. Family Fare is the Freshop platform and is server-only (not an Instacart storefront), so there is no browser surface to fall back to for it. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-16T08:45:26"
                                                      },
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  10.99,
+                                                    "size":  "12 oz",
+                                                    "item":  "Heritage Shaved Ribeye",
+                                                    "evidence":  "Omaha #1, NE, rendered page. Searched \u0027shaved beef steak\u0027, no no-results banner. Heritage SHAVED Ribeye 12 oz $10.99 ($0.9158/oz) is the genuine pre-shaved beef product, dearest of the carrying stores. Steak-Umm Sliced Angus Beef Sandwiches 10 ct 15 oz $9.99 is chopped-and-formed rather than whole-muscle. The remaining hits are other cuts (Beef Fajita Mix $11.99/lb, stew meat, stir fry beef).",
+                                                    "checked":  "2026-08-16T08:45:25"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  17.47,
+                                                             "size":  "16 oz x 2 pk (32 oz)",
+                                                             "item":  "Demakes Bros. Choice Beef Shaved Steak",
+                                                             "evidence":  "Omaha Sams Club, member session. Searched \u0027shaved beef steak\u0027 via __NEXT_DATA__. Demakes Bros. Choice Beef Shaved Steak 16 oz 2 pk linePrice $17.47, unitPrice $0.62/oz - fresh, exactly the pre-sliced product, club multipack. Also genuine but FROZEN: Garys Sirloin Beef Thinly Sliced QuickSteak 9 ct $16.97 at $7.54/lb ($0.471/oz). Gortons fish sticks and Real Good chicken chunks in the grid are noise.",
+                                                             "checked":  "2026-08-16T08:38:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  6.45,
+                                                  "size":  "14 oz",
+                                                  "item":  "Old Neighborhood USDA Beef Shaved Steak",
+                                                  "evidence":  "In-Store mode, OLA 48 Omaha. Searched \u0027shaved beef steak\u0027, no no-results banner, exactly 1 tile: Old Neighborhood USDA Beef Shaved Steak 14 oz $6.45, Fresh Meat aisle. Single hit weighed rather than assumed - the name is an exact match for the pre-sliced product and the aisle is fresh meat, so it qualifies. $0.4607/oz, cheaper than Bakers $7.99/14 oz.",
+                                                  "checked":  "2026-08-16T08:32:01"
+                                              },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  7.99,
                                                           "size":  "14 oz",
                                                           "item":  "Kroger Beef Shaved Steak",
-                                                          "evidence":  "kroger-public-api locationId 61500319. rung 1 \u0027shaved beef steak\u0027: 5 hits, no no-results banner. Kroger Beef Shaved Steak 14 oz 7.99 is exactly the cheesesteak cut, plain/unseasoned base label. Also 1.5 lb 11.99 and Wagyu 9.99/10 oz; the salt-pepper-garlic seasoned version and the Land O\u0027Frost shaved TURKEY ruled out.",
-                                                          "checked":  "2026-08-15T21:01:57"
+                                                          "evidence":  "Searched \u0027shaved beef steak\u0027, 5 hits. Kroger Beef Shaved Steak 14 oz \\.99 is exactly the pre-sliced product. Also Kroger Beef Shaved Steak BIG DEAL 1.5 lb \\.99 (\\.99/lb), Demakes Wagyu Beef Shaved Steak 10 oz \\.99, Kroger Salt Pepper \u0026 Garlic Beef Shaved Steak 14 oz \\.49 (seasoned, excluded). Land O\u0027Frost shaved TURKEY excluded.",
+                                                          "checked":  "2026-08-16T08:26:56"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -1093,32 +1202,68 @@
                       "term":  "boneless beef short ribs",
                       "recipes":  [
                                       "slow-cooker-boneless-beef-short-ribs",
-                                      "batch-4"
+                                      "batch-4",
+                                      "vocab-gap-2026-08-16"
                                   ],
                       "added":  "2026-08-16T01:03:52",
                       "why":  "main protein, 7 lb at 14 servings; no commodity claims the term and no capture matches",
                       "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
+                                     "Walmart":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Walmart Omaha, __NEXT_DATA__, flat priceInfo shape. Searched \u0027boneless beef short ribs\u0027 and \u0027boneless short ribs beef\u0027. The only actual short rib is Chuck Short Ribs, Choice Angus Beef, BONE-IN, 3-4 per Tray at $8.84/lb. The closest boneless beef rib cut is Chuck Country Style Beef Ribs, BONELESS, 6 per Tray at $11.47/lb - a boneless chuck rib strip, but not labelled or trimmed as short ribs, so I am not counting it as the product; naming it here in case you want to alias it deliberately. Remaining hits were Chuck Roast $7.97/lb and Grumpy Butcher marketplace steak boxes at $164.",
+                                                     "checked":  "2026-08-16T08:41:24"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "17070 Audrey Street Omaha NE 68136, In-Store. Searched the head phrase \u0027short ribs\u0027: no no-results banner, a genuine and complete grid of 4 tiles. The only beef short rib is USDA Choice Whole BONE-IN Beef Short Ribs at $9.99/lb; the other three are pork (Hand-Cut Extra Meaty Baby Back Pork Ribs $4.99/lb, Pork Boneless Country Style Ribs $3.99/lb, Baby Back Pork Ribs $4.99/lb). Bone-in is not the boneless cut - the edible yield per pound differs materially - so I will not substitute it.",
+                                                     "checked":  "2026-08-16T08:35:49"
+                                                 },
                                      "Family Fare":  {
                                                          "state":  "blocked",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "Freshop server lane returned HTTP 400 Bad Request on all three rungs (\u0027boneless beef short ribs\u0027, \u0027beef short ribs\u0027, \u0027short ribs\u0027) - search-budget throttling, not absence. No result grid ever rendered, so UNUSABLE, recorded blocked not not-carried.",
-                                                         "checked":  "2026-08-16T01:13:04"
+                                                         "evidence":  "Freshop catalog search returned HTTP 400 Bad Request on EVERY attempt across THREE separate runs spaced over the session (11 terms at first pass, 1 term after a 45s cooldown, 5 terms on a third pass) - probe-ingredient classifies this as UNUSABLE and notes it is search-budget bound throttling, not absence. No result grid was ever rendered, so no term could be searched and no adjudication was possible. Family Fare is the Freshop platform and is server-only (not an Instacart storefront), so there is no browser surface to fall back to for it. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-16T08:45:26"
                                                      },
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
+                                     "Hy-Vee":  {
+                                                    "state":  "not-carried",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "Omaha #1, NE, rendered page. Searched \u0027boneless beef short ribs\u0027, no no-results banner, full grid returned. The only beef short rib is Hy-Vee Choice Reserve Beef Short Ribs, 1.55 lbs $15.48 ($9.99/lb) - and the listing does NOT state bone-in or boneless, so I cannot confirm it is the boneless cut. Every other hit is pork (Fresh Pork Riblets $3.49/lb, Pork Loin Back Ribs $4.88/lb and $4.69/lb, St. Louis Style Spare Ribs $2.99/lb, LLOYDS Baby Back Pork Ribs in BBQ sauce, Pork Loin Ribs Half Rack). Recording not-carried for the BONELESS product specifically rather than stretching an unlabelled tray into it - the ambiguous $9.99/lb tray is named here so you can overrule me if you know the cut.",
+                                                    "checked":  "2026-08-16T08:45:26"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Omaha Sams Club, member session. Searched both \u0027boneless beef short ribs\u0027 and the head phrase \u0027short ribs\u0027 via __NEXT_DATA__. The only short rib in the club is Members Mark USDA Choice Angus Beef BONE-IN Short Ribs at unitPrice $10.97/lb. Everything else returned is a different cut (Sadlers Mesquite Beef Brisket, John Soules Angus Beef Fajitas, Members Mark Whole Beef Tenderloin, Boneless Whole Brisket). Bone-in is not the boneless cut and I will not substitute it.",
+                                                             "checked":  "2026-08-16T08:38:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "In-Store mode, OLA 48 Omaha. Searched the broader head phrase \u0027short ribs\u0027 which subsumes the boneless-beef qualifiers: literal no-results banner. Suggestion tiles are all other cuts - Pork Bnls Country Style Ribs $3.89/lb, Baby Back PORK Ribs $3.29/lb, Smithfield Pork Spareribs $1.99/lb, Thin-Sliced Beef Ribeye $10.99/lb, Black Angus Stew Meat $7.69/lb, plus a beef broth. No beef short rib, bone-in or boneless.",
+                                                  "checked":  "2026-08-16T08:32:01"
+                                              },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  11.99,
                                                           "size":  "1 lb",
                                                           "item":  "Boneless Short Beef Ribs (About 4 per Pack)",
-                                                          "evidence":  "kroger-public-api locationId 61500319. Rung 1 \u0027boneless beef short ribs\u0027 returned 1 hit (below threshold); rung \u0027beef short ribs\u0027 and rung \u0027short ribs\u0027 each returned 4 hits, no no-results banner. Hits: Beef Bone In Flanken Style Short Ribs 9.99/lb (bone-in, wrong cut), Beef Choice Bone-In Short Ribs 10.99/lb (bone-in), Boneless Short Beef Ribs About 4 per Pack 11.99/lb (EXACT match, boneless beef short ribs, raw meat counter cut), Giovanni Rana Beef Short Rib Ravioli 6.79 (prepared pasta, rejected). Ruled carried on the boneless raw cut at 11.99 per lb.",
-                                                          "checked":  "2026-08-16T01:13:00"
+                                                          "evidence":  "Rung 1 \u0027boneless beef short ribs\u0027 returned 1 hit and the scripted ladder then collapsed spacing to \u0027bonelessbeefshortribs\u0027 (0 hits) and reported EMPTY. Manually re-searched the head phrase \u0027short ribs\u0027: 4 hits, including Boneless Short Beef Ribs (About 4 per Pack) \\.99/lb - exactly the boneless cut. Also Beef Bone In Flanken Style Short Ribs \\.99/lb and Beef Choice Bone-In Short Ribs \\.99/lb (bone-in, excluded); Giovanni Rana Beef Short Rib Ravioli excluded as a dish.",
+                                                          "checked":  "2026-08-16T08:26:56"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -1128,32 +1273,68 @@
                       "term":  "fresh oregano",
                       "recipes":  [
                                       "chimichurri-steak-sheet-pan",
-                                      "hunt-2026-08-15-lowcarb-100"
+                                      "hunt-2026-08-15-lowcarb-100",
+                                      "vocab-gap-2026-08-16"
                                   ],
                       "added":  "2026-08-16T01:24:44",
                       "why":  "required chimichurri component (1 1/4 tbsp at 14 servings); board only answers via dried-oregano include pattern which is a form-flip - needs a real fresh-herb carriage/price verdict",
                       "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
+                                     "Walmart":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Walmart Omaha, __NEXT_DATA__, flat priceInfo shape. Walked three phrasings - \u0027fresh oregano\u0027, \u0027fresh herbs produce oregano\u0027, \u0027Marketside fresh oregano herb\u0027. Every store-stocked oregano is DRIED: Great Value Oregano Leaves 0.87 oz $1.08, Great Value Organic Oregano Leaves 0.5 oz $4.36, McCormick Kosher Oregano Leaves 0.75 oz $2.48, McCormick Gourmet Organic 0.5 oz $4.68, Lawrys Casero Whole Oregano 0.75 oz $2.97, Litehouse FREEZE DRIED Oregano 0.28 oz $4.97. The single fresh-sounding row, Organic Oregano Bunches (on stem) $16.99, is a third-party MARKETPLACE listing with no unit price and no Omaha store stock - Walmart search mixes marketplace items into store results, and a shipped marketplace bunch at $16.99 is not this store carrying fresh oregano.",
+                                                     "checked":  "2026-08-16T08:41:24"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "17070 Audrey Street Omaha NE 68136, In-Store. Rung 1 \u0027fresh oregano\u0027 rendered the literal no-results banner followed by suggestion tiles - banner read before counting. Rung 2 \u0027oregano\u0027 with the qualifier stripped: no banner, genuine grid of 4, and every one is a DRIED jar in Aisle 6 (Badia Spices Oregano 0.5 oz $1.68, Tones Oregano Leaf 0.56 oz $2.99, McCormick Ground Oregano 0.75 oz $2.99, McCormick Oregano Leaves 0.75 oz $3.99). Meaningful absence not a catalog gap: Fareway stocks a fresh cut-herb line in Produce (Crazy Fresh Organic Basil 0.75 oz $2.99, Truefood Basil 1 each $5.99, Cilantro 1 each $1.49) with no oregano in it.",
+                                                     "checked":  "2026-08-16T08:35:49"
+                                                 },
                                      "Family Fare":  {
-                                                         "state":  "error",
+                                                         "state":  "blocked",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "probe-ingredient.ps1 Freshop catalog (store_id 6401 Omaha) returned HTTP 400 Bad Request on both attempts (\u0027fresh oregano\u0027 and \u0027oregano herb\u0027), consistent with Freshop search-budget throttling. Verdict UNUSABLE - no grid was ever rendered, so this is BLOCKED, not absence.",
-                                                         "checked":  "2026-08-16T01:27:09"
+                                                         "evidence":  "Freshop catalog search returned HTTP 400 Bad Request on EVERY attempt across THREE separate runs spaced over the session (11 terms at first pass, 1 term after a 45s cooldown, 5 terms on a third pass) - probe-ingredient classifies this as UNUSABLE and notes it is search-budget bound throttling, not absence. No result grid was ever rendered, so no term could be searched and no adjudication was possible. Family Fare is the Freshop platform and is server-only (not an Instacart storefront), so there is no browser surface to fall back to for it. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-16T08:45:26"
                                                      },
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  2.99,
+                                                    "size":  "0.75 oz",
+                                                    "item":  "Johnson Family Farm Fresh Oregano",
+                                                    "evidence":  "Store selector reads Omaha #1, NE. Read off the RENDERED aisles-online page (an in-page fetch returns a client-rendered shell with zero product hrefs). Searched \u0027fresh oregano\u0027, no no-results banner. Johnson Family Farm FRESH Oregano 0.75 oz $2.99 - a fresh cut-herb clamshell, named Fresh on its face, and the genuine article. The dried jars in the same grid are clearly separate SKUs: McCormick Oregano Leaves 0.75 oz $4.99, McCormick Ground Oregano 0.75 oz $4.99, Hy-Vee Mexican Oregano Leaves 0.85 oz 3/$5.00, Morton \u0026 Bassett Oregano 0.6 oz $8.99. $3.987/oz, cheaper per ounce than Bakers fresh pack.",
+                                                    "checked":  "2026-08-16T08:45:25"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Omaha Sams Club, member session. Searched \u0027fresh oregano\u0027 via __NEXT_DATA__. The only oregano product is Members Mark Oregano 5.5 oz $5.98, unitPrice $1.09/oz - a 5.5 oz warehouse shaker of DRIED oregano, not a fresh bunch. Everything else returned is dry seasoning (McCormick Montreal Steak Seasoning, Hidden Valley Ranch mix, Adolphs Tenderizer, Lawrys Garlic Salt with Parsley). A warehouse club does not stock fresh cut culinary herbs in bunch form.",
+                                                             "checked":  "2026-08-16T08:38:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "In-Store mode, ALDI - OLA 48 - Omaha. Rung 1 \u0027fresh oregano\u0027 rendered the literal banner (No results for fresh oregano / Browse related items) followed by 7 SUGGESTION tiles (Stonemill Oregano, Parsley, Thyme, Cilantro, Garlic, Rosemary, Green Onions) - banner read before counting tiles. Rung 2 \u0027oregano\u0027 with the qualifier stripped: no banner, but every relevant tile is DRIED - Stonemill Oregano $0.99 filed under Processed Foods/Spice, plus Stonemill Italian Seasoning and Stonemill Garlic Powder. Meaningful absence rather than a catalog gap: Aldi demonstrably stocks a fresh cut-herb line in Produce Mdu at 0.5 oz (Thyme 0.5 oz $1.59, Rosemary 0.5 oz $1.59) plus fresh Parsley and Cilantro bunches - there is simply no oregano in it.",
+                                                  "checked":  "2026-08-16T08:32:01"
+                                              },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  2.49,
                                                           "size":  "0.5 oz",
                                                           "item":  "Simple Truth Organic Oregano",
-                                                          "evidence":  "Kroger public API locationId 61500319 (Bakers Omaha). Rung 1 \u0027fresh oregano\u0027 returned exactly 1 hit: Simple Truth Organic Oregano 0.5 oz $2.49, productId 0001111001859. Rung 2 \u0027oregano\u0027 returned 19 hits; product categories disambiguate them - every other oregano SKU is categorized Baking Goods or International (Kroger/Smart Way/Private Selection/Spice Islands/McCormick \u0027Oregano Leaves\u0027 and \u0027Oregano Leaves Shaker\u0027, Tampico Whole/Ground/Cut) i.e. the dried spice aisle, plus 6 false positives that merely contain the word (diced tomatoes with basil garlic and oregano, Kroger Basil and Oregano grated parmesan, Sargento oregano crackers). 0001111001859 is the ONLY oregano item with categories \u0027Natural \u0026 Organic,Produce\u0027. A control query \u0027fresh herbs\u0027 returns it inside the fresh-clamshell cluster alongside Simple Truth Organic Thyme/Rosemary/Sage/Mint/Tarragon/Chives/Baby Dill, all 0.5 oz at $2.49, which is the store\u0027s fresh cut-herb clamshell line. Note it is the organic label only because that is the only fresh cut-herb line Bakers stocks, not a preference upgrade over a base private label.",
-                                                          "checked":  "2026-08-16T01:27:04"
+                                                          "evidence":  "Kroger API locationId 61500319. filter.term \u0027fresh oregano\u0027 returns exactly 1 hit: Simple Truth Organic Oregano 0.5 oz \\.49. Adjudicated FRESH not dried: term \u0027fresh herb\u0027 returns the whole uniform 0.5 oz/\\.49 Simple Truth Organic clamshell line (Thyme, Rosemary, Baby Dill, Chives, Sage, Tarragon, Mint, Italian Parsley, Cilantro, Oregano) alongside Parsley 1 ct and Fresh Fennel 1 ct - dried herbs are not sold as 0.5 oz dill/chive/tarragon packs at one flat price. The DRIED Baker\u0027s line is separately named \u0027Oregano Leaves\u0027 (Kroger Oregano Leaves Shaker 0.5 oz \\.99, Smart Way 0.63 oz \\.25, Simple Truth Organic Oregano Leaves 0.55 oz \\.99) and is a different SKU set.",
+                                                          "checked":  "2026-08-16T08:26:55"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -1305,7 +1486,8 @@
                       "term":  "90/10 ground beef",
                       "recipes":  [
                                       "low-carb-beef-meatloaf",
-                                      "hunt-2026-08-15-lowcarb-100"
+                                      "hunt-2026-08-15-lowcarb-100",
+                                      "lowcarb-batch-1"
                                   ],
                       "added":  "2026-08-16T06:02:09",
                       "why":  "main protein, 3 1/2 lb; author pins the 85-90 lean point and board has only 80/20 and 93/7 ids; registrar proposal ground-beef-90-10 pending",
@@ -1343,17 +1525,31 @@
                                   ],
                       "added":  "2026-08-16T06:02:09",
                       "why":  "topping, 1 1/4 cups; no-sugar-added ketchup is a separate product and price class from regular ketchup (sugar-free-bbq split precedent); registrar proposal unsweetened-ketchup pending",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
                                      "Walmart":  null,
                                      "Fareway":  null,
-                                     "Family Fare":  null,
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog store_id 6401 Omaha, pickup = store shelf price. Two rungs walked. Rung \u0027no sugar added ketchup\u0027 = EMPTY. Rung \u0027ketchup\u0027 (head noun) = MATCHES, 8 genuine tiles, no no-results banner: Our Family 38oz \\.59 / 64oz \\.99, Heinz 14/20/32/38 oz \\.29-\\.89, Hunt\u0027s 20oz \\.49 / 32oz \\.19. Every one is a standard sugar- or HFCS-sweetened ketchup; no no-sugar-added or unsweetened variant on the shelf. Ruled out rather than stretched.",
+                                                         "checked":  "2026-08-16T11:36:44"
+                                                     },
                                      "Hy-Vee":  null,
                                      "Sam\u0027s Club":  null,
                                      "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.79,
+                                                          "size":  "18.5 oz",
+                                                          "item":  "Kroger No Sugar Added Tomato Ketchup",
+                                                          "evidence":  "kroger-public-api locationId 61500319. Rung 1 \u0027unsweetened ketchup\u0027 0 hits; the probe ladder then widened to the ADJECTIVE \u0027unsweetened\u0027 and returned 25 almond/oat milks, which I rejected as pool-widening. Correct rung for this two-word term is the head noun plus qualifier: \u0027no sugar added ketchup\u0027 returned Kroger No Sugar Added Tomato Ketchup 18.5 oz \\.79 and Heinz No Sugar Added Tomato Ketchup 13 oz \\.99 / 29.5 oz \\.99. These are jarred no-added-sugar tomato ketchup, the exact ingredient a cook buys for a low-carb recipe.",
+                                                          "checked":  "2026-08-16T11:36:38"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -1449,7 +1645,8 @@
                   {
                       "term":  "pico de gallo",
                       "recipes":  [
-                                      "southwest-ground-turkey-cauliflower-rice-skillet"
+                                      "southwest-ground-turkey-cauliflower-rice-skillet",
+                                      "mexican-chorizo-egg-casserole"
                                   ],
                       "added":  "2026-08-16T06:02:41",
                       "why":  "OPTIONAL garnish only, 28 tbsp; no commodity claims the term (2 capture candidates); never blocking",
@@ -1673,6 +1870,727 @@
                                                       }
                                  },
                       "verdict":  "PENDING",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Cauliflower",
+                      "recipes":  [
+                                      "vocab-gap-2026-08-16"
+                                  ],
+                      "added":  "2026-08-16T08:23:29",
+                      "why":  "tier1 MAPPED commodity cauliflower, verifying/pricing for ingredients.json row",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  1.98,
+                                                     "size":  "each (1 head)",
+                                                     "item":  "Fareway Cauliflower",
+                                                     "evidence":  "Answered at tier 1 from the priced board, comparison-2026-08-15.json (week of 2026-08-15). Resolves by board id/label to commodity \u0027cauliflower\u0027 - a genuine own-commodity match, not a substring trap. Unit is \u0027each\u0027 = the WHOLE head. Cheapest of 4 covered stores at $1.98 each; Aldi Cauliflower Each $2.99, Family Fare Cauliflower Small 1 ct $3.79, Sams Club Cauliflower each $3.82. No live lookup needed - this was already priced on disk.",
+                                                     "checked":  "2026-08-16T08:46:03"
+                                                 },
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Fresh Parsley",
+                      "recipes":  [
+                                      "vocab-gap-2026-08-16"
+                                  ],
+                      "added":  "2026-08-16T08:23:29",
+                      "why":  "tier1 MAPPED commodity fresh-parsley",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  0.99,
+                                                    "size":  "1 ct (bunch)",
+                                                    "item":  "Fresh Curly Parsley",
+                                                    "evidence":  "Answered at tier 1 from comparison-2026-08-15.json. Resolves by board id/label to its OWN commodity \u0027fresh-parsley\u0027 (not to a dried-herb commodity), unit \u0027each\u0027 = the bunch, so the fresh-vs-dried distinction this term was raised for is already respected by the board. Cheapest of 3 covered stores: Hy-Vee Fresh Curly Parsley 1 ct $0.99; Fareway Curly Parsley 1 ct $1.49; Walmart Fresh Green Italian Parsley Herb 1 Bunch Bag $1.93. Corroborated live at Bakers, which lists Parsley 1 ct $1.29 and Parsley - Italian 1 ct $1.29.",
+                                                    "checked":  "2026-08-16T08:46:03"
+                                                },
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Monterey Jack Cheese",
+                      "recipes":  [
+                                      "vocab-gap-2026-08-16"
+                                  ],
+                      "added":  "2026-08-16T08:23:29",
+                      "why":  "tier1 MIS-MAPPED to shredded-cheese, cheapest row is MOZZARELLA",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  3.58,
+                                                     "size":  "16 oz",
+                                                     "item":  "Great Value Monterey Jack Block Cheese",
+                                                     "evidence":  "Walmart Omaha, __NEXT_DATA__, flat priceInfo shape. Searched \u0027monterey jack cheese block\u0027. Great Value Monterey Jack Block Cheese 16 oz Chunk linePrice $3.58, unitPrice 22.4 c/oz - pure Monterey Jack block, base private label. Excluded the marbled blends that outranked it: Tillamook Colby Jack Block 16 oz $6.97, Crystal Farms Marble Jack Block 16 oz $5.24 and 8 oz $2.78, plus Laughing Cow spreadable wedges.",
+                                                     "checked":  "2026-08-16T08:41:23"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.48,
+                                                     "size":  "8 oz",
+                                                     "item":  "Fareway Monterey Jack Cheese",
+                                                     "evidence":  "17070 Audrey Street Omaha NE 68136, In-Store. Searched \u0027monterey jack cheese\u0027, no no-results banner, Aisle 18 grid. Fareway Monterey Jack Cheese 8 oz $2.48 block ($0.31/oz), store brand. Excluded the blends that dominate the grid: Fareway Colby \u0026 Monterey Jack Cheese CUBES, Kraft Colby \u0026 Monterey Jack Shredded, Crystal Farms Marble Jack. Fareway Monterey Jack SHREDDED 8 oz is the same $2.48 if shredded is preferred.",
+                                                     "checked":  "2026-08-16T08:35:48"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "blocked",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog search returned HTTP 400 Bad Request on EVERY attempt across THREE separate runs spaced over the session (11 terms at first pass, 1 term after a 45s cooldown, 5 terms on a third pass) - probe-ingredient classifies this as UNUSABLE and notes it is search-budget bound throttling, not absence. No result grid was ever rendered, so no term could be searched and no adjudication was possible. Family Fare is the Freshop platform and is server-only (not an Instacart storefront), so there is no browser surface to fall back to for it. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-16T08:45:26"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  3.18,
+                                                    "size":  "8 oz",
+                                                    "item":  "Kraft Monterey Jack Cheese",
+                                                    "evidence":  "Omaha #1, NE, rendered page. Searched \u0027monterey jack cheese\u0027, no no-results banner. Kraft Monterey Jack Cheese 8 oz $3.18 block ($0.3975/oz) is the only pure Monterey Jack; Kraft Monterey Jack Shredded 8 oz is also $3.18. Everything else in the grid is a colby-jack or Mexican BLEND (Hy-Vee Finely Shredded Mexican 3/$5.00, Hy-Vee Sliced Colby Jack 8 oz $2.97, Hy-Vee Quality Sliced Colby Jack $7.98/lb, Hy-Vee Finely Shredded Colby Jack 3/$5.00), plus Red Baron frozen pizzas as noise.",
+                                                    "checked":  "2026-08-16T08:45:25"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Omaha Sams Club, member session. Searched \u0027monterey jack cheese\u0027 via __NEXT_DATA__. Every monterey-jack tile is a COLBY AND Monterey Jack BLEND, not pure Monterey Jack: Members Mark Colby and Monterey Jack Cheese Chunk 2 lbs $5.42 ($2.71/lb), Members Mark Colby and Monterey Jack Shredded 16 oz 2 pk $5.97, Members Mark Colby and Monterey Jack Cheese Sticks 36 ct $7.87, Tillamook Colby Jack 2.5 lbs $10.14. Colby-jack is a marbled two-cheese blend and a distinct product from Monterey Jack, which is the whole reason this term was ruled its own row. No pure Monterey Jack block in the club.",
+                                                             "checked":  "2026-08-16T08:38:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  1.75,
+                                                  "size":  "8 oz",
+                                                  "item":  "Happy Farms Monterey Jack Cheese Block",
+                                                  "evidence":  "In-Store mode, OLA 48 Omaha. Searched \u0027monterey jack cheese\u0027, no no-results banner. Happy Farms Monterey Jack Cheese BLOCK 8 oz $1.75 ($0.21875/oz) is the base private label and the genuine article. Excluded Simply Nature Organic shredded Mexican blend $2.79/6 oz and Happy Farms Deli Sliced COLBY Jack $1.49/7.5 oz (colby blend, not pure monterey jack).",
+                                                  "checked":  "2026-08-16T08:32:01"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.69,
+                                                          "size":  "16 oz",
+                                                          "item":  "Kroger Monterey Jack Block Cheese",
+                                                          "evidence":  "Searched \u0027monterey jack cheese\u0027, 22 hits. Rejected the high-relevance decoys: Colby \u0026 Monterey Jack cheese STICKS, Sargento Mighty Bites turkey snack kit, El Monterey frozen quesadillas (brand name, not the cheese), Jimmy Dean breakfast bowl, Simple Truth protein snack bars. The genuine article is Kroger Monterey Jack BLOCK Cheese: 16 oz \\.69 (\\.2306/oz) and 8 oz \\.00 (\\.25/oz). Not mozzarella - the board\u0027s shredded-cheese commodity mis-maps this term.",
+                                                          "checked":  "2026-08-16T08:26:55"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Pepper Jack Cheese",
+                      "recipes":  [
+                                      "vocab-gap-2026-08-16"
+                                  ],
+                      "added":  "2026-08-16T08:23:29",
+                      "why":  "tier1 MIS-MAPPED to shredded-cheese, cheapest row is MOZZARELLA",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  1.87,
+                                                     "size":  "8 oz",
+                                                     "item":  "Great Value Pepper Jack Block Cheese",
+                                                     "evidence":  "Walmart Omaha, __NEXT_DATA__, flat priceInfo shape. Searched \u0027pepper jack cheese block\u0027. Great Value Pepper Jack Block Cheese 8 oz Chunk linePrice $1.87, unitPrice 23.4 c/oz - pure pepper jack block. Excluded Sargento Colby-PEPPER Jack sliced (a blend), Sargento Pepper Jack Sticks 12 ct $4.94 (snack sticks) and Tillamook Colby Jack Block.",
+                                                     "checked":  "2026-08-16T08:41:23"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  3.98,
+                                                     "size":  "16 oz",
+                                                     "item":  "Fareway Pepper Jack Cheese",
+                                                     "evidence":  "17070 Audrey Street Omaha NE 68136, In-Store. Searched \u0027pepper jack cheese\u0027, no no-results banner, Aisle 18 grid. Fareway Pepper Jack Cheese 16 oz $3.98 ($0.24875/oz) is the best per-oz block; the 8 oz is $2.48. Excluded slices (Fareway Cheese Slices Pepper Jack, Sargento, Tillamook Farmstyle) and the deli-counter Shullsburg Creamery Pepper Jack at $7.99/lb.",
+                                                     "checked":  "2026-08-16T08:35:48"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "blocked",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog search returned HTTP 400 Bad Request on EVERY attempt across THREE separate runs spaced over the session (11 terms at first pass, 1 term after a 45s cooldown, 5 terms on a third pass) - probe-ingredient classifies this as UNUSABLE and notes it is search-budget bound throttling, not absence. No result grid was ever rendered, so no term could be searched and no adjudication was possible. Family Fare is the Freshop platform and is server-only (not an Instacart storefront), so there is no browser surface to fall back to for it. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-16T08:45:26"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  1.97,
+                                                    "size":  "8 oz",
+                                                    "item":  "Hy-Vee Pepper Jack Cheese",
+                                                    "evidence":  "Omaha #1, NE, rendered page. Searched \u0027pepper jack cheese\u0027, no no-results banner. Hy-Vee Pepper Jack Cheese 8 oz $1.97, regular price $2.98 - store brand block, $0.24625/oz on promo. Excluded slices and blends: Hy-Vee Sliced Pepper Jack 10 ct $2.97, Kraft Big Slice 2/$6.00, Kraft Singles Pepper Jack 16 ct $4.69, Di Lusso deli sliced $9.99/lb, and Hy-Vee Pepper Jack Monterey Jack SHREDDED with jalapeno 3/$5.00.",
+                                                    "checked":  "2026-08-16T08:45:25"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  10.14,
+                                                             "size":  "2.5 lbs",
+                                                             "item":  "Tillamook Pepper Jack Cheese",
+                                                             "evidence":  "Omaha Sams Club, member session. Searched \u0027pepper jack cheese\u0027 via __NEXT_DATA__. Tillamook Pepper Jack Cheese 2.5 lbs linePrice $10.14 ($0.2535/oz) is a genuine pepper jack block. Cheaper per oz but sliced rather than block: Members Mark Pepper Jack Cheese Slices 2 lbs $6.42, unitPrice $3.21/lb ($0.2006/oz). Excluded Hatch Chile \u0026 Pepper Jack Cheese CHICKEN BURGER - a prepared dish flavoured with the cheese, not the cheese.",
+                                                             "checked":  "2026-08-16T08:38:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  1.75,
+                                                  "size":  "8 oz",
+                                                  "item":  "Happy Farms Pepper Jack Cheese Block",
+                                                  "evidence":  "In-Store mode, OLA 48 Omaha. Searched \u0027pepper jack cheese\u0027, no no-results banner, 4 tiles. Happy Farms Pepper Jack Cheese BLOCK 8 oz $1.75 ($0.21875/oz), base private label. Also real: Happy Farms Pepper Jack Shredded 12 oz $2.79, Happy Farms Deli Sliced Pepper Jack 7.5 oz $1.49. Emporium Selection Habanero Jack excluded as a different pepper.",
+                                                  "checked":  "2026-08-16T08:32:01"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.69,
+                                                          "size":  "16 oz",
+                                                          "item":  "Kroger Pepper Jack Block Cheese",
+                                                          "evidence":  "Rung 1 \u0027pepper jack cheese\u0027 returned mostly non-cheese (Cheez-It crackers, Nut-Thins, Balanced Breaks snack kits) so re-searched \u0027pepper jack\u0027, 25 hits. Genuine block cheese found: Kroger Pepper Jack Block Cheese 16 oz \\.69 (\\.2306/oz) and 8 oz \\.00. Also real but dearer: Tillamook Pepper Jack Block 8 oz, Boar\u0027s Head Jalapeno Pepper Jack 8 oz \\.49. Crackers and snack kits excluded.",
+                                                          "checked":  "2026-08-16T08:26:55"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Gruyere Cheese",
+                      "recipes":  [
+                                      "vocab-gap-2026-08-16"
+                                  ],
+                      "added":  "2026-08-16T08:23:29",
+                      "why":  "tier1 ABSENT - no commodity claims it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  2.97,
+                                                     "size":  "8 oz",
+                                                     "item":  "bettergoods Gruyere Cheese Block",
+                                                     "evidence":  "Walmart Omaha, __NEXT_DATA__, flat priceInfo shape. Searched \u0027gruyere cheese\u0027. bettergoods Gruyere Cheese 8 oz BLOCK linePrice $2.97, unitPrice 37.1 c/oz - a genuine single-variety gruyere block and by a wide margin the CHEAPEST gruyere of all seven stores. Also genuine: Emmi Le Gruyere AOP 6 oz $7.97, Red Apple Natural Gruyere Wisconsin 7 oz $4.87. Excluded Red Apple SMOKED Gruyere (flavoured) and the two bettergoods Farmhouse SHREDDED multi-cheese blends that merely contain gruyere.",
+                                                     "checked":  "2026-08-16T08:41:23"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  13.99,
+                                                     "size":  "8 oz",
+                                                     "item":  "Grand Suisse Le Gruyere Cheese",
+                                                     "evidence":  "17070 Audrey Street Omaha NE 68136, In-Store. Searched \u0027gruyere\u0027, no no-results banner, exactly 1 tile: Grand Suisse Le Gruyere Cheese 8 oz $13.99, Cheese aisle. Single hit weighed rather than assumed - Le Gruyere is the genuine AOP article, not a blend. $1.74875/oz, the dearest gruyere of the stores checked.",
+                                                     "checked":  "2026-08-16T08:35:48"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "blocked",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog search returned HTTP 400 Bad Request on EVERY attempt across THREE separate runs spaced over the session (11 terms at first pass, 1 term after a 45s cooldown, 5 terms on a third pass) - probe-ingredient classifies this as UNUSABLE and notes it is search-budget bound throttling, not absence. No result grid was ever rendered, so no term could be searched and no adjudication was possible. Family Fare is the Freshop platform and is server-only (not an Instacart storefront), so there is no browser surface to fall back to for it. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-16T08:45:26"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  4.99,
+                                                    "size":  "7 oz",
+                                                    "item":  "Red Apple Cheese Gruyere Cheese",
+                                                    "evidence":  "Omaha #1, NE, rendered page. Searched \u0027gruyere\u0027, no no-results banner. Red Apple Cheese Gruyere Cheese 7 oz $4.99 ($0.7129/oz) is genuine unflavoured gruyere and cheapest here. Also genuine: Finlandia Gruyere 7 oz $7.99, Emmi Le Gruyere AOP 6 oz $12.99. Excluded Red Apple APPLE SMOKED Gruyere 8 oz $4.99 (flavoured), Black Creek Cheddar with Gruyere NOTES 7 oz $7.99 (cheddar, not gruyere - a near-miss the name invites), and Aidells chicken sausage with gruyere (a dish).",
+                                                    "checked":  "2026-08-16T08:45:25"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  11.87,
+                                                             "size":  "1 lb",
+                                                             "item":  "Alpenhaus French Gruyere Semi-Hard Cheese Wedge",
+                                                             "evidence":  "Omaha Sams Club, member session. Searched \u0027gruyere cheese\u0027 via __NEXT_DATA__. Alpenhaus French Gruyere Semi-Hard Cheese Wedge 1 lb linePrice $11.87, unitPrice $0.74/oz - genuine single-variety gruyere wedge and the CHEAPEST gruyere per ounce of all seven stores. Rejected the rest of the grid as unrelated cheeses that merely ranked (La Chona Chihuahua, Kerrygold Dubliner, Tillamook Cheddar, Amish Blue Crumbles, Romano wheel, Members Mark Sharp Cheddar).",
+                                                             "checked":  "2026-08-16T08:38:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  5.69,
+                                                  "size":  "6 oz",
+                                                  "item":  "Specially Selected Le Gruyere Cheese",
+                                                  "evidence":  "In-Store mode, OLA 48 Omaha. Searched \u0027gruyere\u0027, no no-results banner, 3 gruyere tiles. Specially Selected LE GRUYERE Cheese 6 oz $5.69 ($0.9483/oz) is genuine gruyere and the cheapest per oz of any store checked. Excluded Emporium Selection Specialty Shredded Swiss AND Gruyere 8 oz $2.69 (a blend) and Emporium Selection Applewood SMOKED Gruyere 8 oz $3.99 (flavoured variant).",
+                                                  "checked":  "2026-08-16T08:32:01"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  8.49,
+                                                          "size":  "8 oz",
+                                                          "item":  "Boar\u0027s Head Blanc Grue Gruyere Cheese",
+                                                          "evidence":  "Searched \u0027gruyere\u0027, 9 hits. Excluded BLENDS and dishes: Private Selection Cheddar-Gruyere block/slices, Private Selection Alpine Blend Swiss \u0026 Gruyere shredded \\.49 (a blend, not gruyere), Gruyere-and-Bacon mac and cheese, sweet onion salad kit, ham \u0026 gruyere egg bites. Pure gruyere: Boar\u0027s Head Blanc Grue Gruyere 8 oz \\.49 (\\.061/oz, cheapest), Murray\u0027s Gruyere Shredded 8 oz \\.99, Murray\u0027s Cave Aged Gruyere Wedge 1 lb \\.99.",
+                                                          "checked":  "2026-08-16T08:26:55"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "80/20 Ground Beef",
+                      "recipes":  [
+                                      "vocab-gap-2026-08-16"
+                                  ],
+                      "added":  "2026-08-16T08:23:29",
+                      "why":  "tier1 MAPPED commodity ground-beef-8020",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  4.77,
+                                                             "size":  "per lb (chub, case)",
+                                                             "item":  "80%/20% Ground Chuck Chub, Case, priced per pound",
+                                                             "evidence":  "Answered at tier 1 from comparison-2026-08-15.json. Resolves by board id/label to its OWN commodity \u0027ground-beef-8020\u0027 - the 80/20 vs 93/7 distinction is already a separate board row, so no aliasing risk. Full 7 of 7 store coverage. Cheapest Sams Club $4.77/lb; Walmart 80% Lean/20% Fat Ground Beef Chuck 10 lb Roll $4.943/lb; Bakers Kroger 80/20 Ground Beef Roll 3 LB $4.99/lb; Hy-Vee Ground Beef Roll 80/20 $4.99/lb; Fareway bulk $5.99/lb; Family Fare Value Pack $5.99/lb; Aldi $6.19/lb.",
+                                                             "checked":  "2026-08-16T08:46:03"
+                                                         },
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Pork Smoked Sausage",
+                      "recipes":  [
+                                      "vocab-gap-2026-08-16"
+                                  ],
+                      "added":  "2026-08-16T08:23:29",
+                      "why":  "tier1 MAPPED to kielbasa but cheapest row is Bar-S chicken-blend; need explicit PORK",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  5.48,
+                                                     "size":  "13.5 oz",
+                                                     "item":  "Johnsonville Polish Kielbasa Smoked Rope Pork Sausage",
+                                                     "evidence":  "Walmart Omaha, __NEXT_DATA__, flat priceInfo shape. Searched \u0027polska kielbasa pork\u0027. Johnsonville Polish Kielbasa Smoked Rope PORK Sausage 13.5 oz linePrice $5.48, unitPrice $6.52/lb - the product name states PORK on its face, kielbasa-style rope, no turkey. Cheaper kielbasa ropes exist but do not name pork: Eckrich Skinless Polska Kielbasa 14 oz $3.46, Hillshire Farm Polska Kielbasa 14 oz $3.97. Bar-S Polish Smoked Sausage 2.5 lb $5.84 is the mechanically-separated-chicken blend the board currently picks as cheapest kielbasa and is rejected here.",
+                                                     "checked":  "2026-08-16T08:41:24"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  4.49,
+                                                     "size":  "14 oz",
+                                                     "item":  "Johnsonville Polish Kielbasa Smoked Sausage",
+                                                     "evidence":  "17070 Audrey Street Omaha NE 68136, In-Store. Searched \u0027kielbasa\u0027, no no-results banner, 5 genuine tiles. Johnsonville Polish Kielbasa Smoked Sausage 14 oz $4.49 - Johnsonville kielbasa is a pork-based rope, kielbasa-style, no turkey. Johnsonville BEEF Polish Kielbasa 12 oz $4.49 is a separate beef product and Hillshire Farm Polska Kielbasa 14 oz $5.49 is the dearer alternative.",
+                                                     "checked":  "2026-08-16T08:35:48"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "blocked",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog search returned HTTP 400 Bad Request on EVERY attempt across THREE separate runs spaced over the session (11 terms at first pass, 1 term after a 45s cooldown, 5 terms on a third pass) - probe-ingredient classifies this as UNUSABLE and notes it is search-budget bound throttling, not absence. No result grid was ever rendered, so no term could be searched and no adjudication was possible. Family Fare is the Freshop platform and is server-only (not an Instacart storefront), so there is no browser surface to fall back to for it. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-16T08:45:26"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  3.99,
+                                                    "size":  "13.5 oz",
+                                                    "item":  "Johnsonville Polish Kielbasa Smoked Rope Pork Sausage",
+                                                    "evidence":  "Omaha #1, NE, rendered page. Searched \u0027polska kielbasa\u0027, no no-results banner. Johnsonville Polish Kielbasa Smoked Rope PORK Sausage 13.5 oz $3.99, regular $4.46 - the product name states PORK explicitly, kielbasa-style rope, no turkey. This is the CHEAPEST explicitly-pork kielbasa of all seven stores at $4.73/lb. Johnsonville Smoked Polish BEEF Rope 12 oz $3.99 and Hillshire Farm BEEF Polska Kielbasa 12 oz $4.48 are the beef variants; Hillshire Farm Polska Kielbasa 14 oz $4.48 does not name its meat.",
+                                                    "checked":  "2026-08-16T08:45:25"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Omaha Sams Club, member session. Searched \u0027kielbasa\u0027 AND \u0027smoked sausage\u0027 via __NEXT_DATA__. The ONLY polska kielbasa in the club is Hillshire Farm TURKEY Polska Kielbasa Smoked Sausage 14 oz 3 pk $9.57 - precisely the turkey substitution this term exists to avoid. The other smoked sausages are beef (Hillshire Farm Beef Smoked Sausage 48 oz $11.28, Kiolbassa Beef Hickory 12 ct $19.87), flavoured (Members Mark Jalapeno Cheddar 12 ct $12.94), or breakfast rolls/links (Jimmy Dean Premium Pork Sausage Roll 2 lbs $7.34, Jimmy Dean Fully Cooked Links) which are not kielbasa-style ropes. Eckrich Hardwood Smoked Sausage Family Pack 42 oz $6.98 is a pork/chicken/beef/turkey blend rather than a pork sausage. No clean pork kielbasa here.",
+                                                             "checked":  "2026-08-16T08:38:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  2.89,
+                                                  "size":  "14 oz",
+                                                  "item":  "Parkview Polska Kielbasa",
+                                                  "evidence":  "In-Store mode, OLA 48 Omaha. Searched \u0027kielbasa\u0027, no no-results banner, 4 tiles. Parkview Polska Kielbasa 14 oz $2.89 is the base non-turkey kielbasa - Aldi lists the turkey version as a SEPARATE product, Parkview TURKEY Polska Kielbasa 13 oz $2.89, so the plain rope is the non-turkey line. CAVEAT: the tile prints no ingredient panel, so pork is inferred from the product line rather than read off the label; Bakers Kroger row is explicitly \u0027Pork and Beef\u0027 if an explicit pork label is required. Parkview USDA BEEF Smoked Sausage 12 oz $2.89 is a separate beef-only product.",
+                                                  "checked":  "2026-08-16T08:32:01"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.29,
+                                                          "size":  "14 oz",
+                                                          "item":  "Kroger Hardwood Smoked Polska Kielbasa Sausage Pork and Beef Rope",
+                                                          "evidence":  "Searched \u0027pork smoked sausage\u0027, 9 hits. Chose the kielbasa-style PORK rope: Kroger Hardwood Smoked Polska Kielbasa Sausage Pork and Beef Rope 14 oz \\.29 (\\.76/lb). Explicitly pork-and-beef, no turkey. Rejected the board\u0027s cheapest kielbasa row (Walmart Bar-S Polish Smoked Sausage) as a mechanically-separated-chicken blend, and rejected Kroger Franks in a Blanket \\.99 (a dish), Johnsonville Jalapeno Cheddar links and Aidells Andouille (flavoured variants). Sibling non-kielbasa option: Kroger Hardwood Smoked Sausage Pork and Beef Rope 14 oz \\.00.",
+                                                          "checked":  "2026-08-16T08:26:56"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Portobello Mushrooms",
+                      "recipes":  [
+                                      "vocab-gap-2026-08-16"
+                                  ],
+                      "added":  "2026-08-16T08:23:29",
+                      "why":  "tier1 MAPPED commodity portobello-mushrooms, 2 of 7",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  2.49,
+                                                  "size":  "6 oz package",
+                                                  "item":  "Portabello Mushroom Package 6 OZ",
+                                                  "evidence":  "Answered at tier 1 from comparison-2026-08-15.json. Resolves by board id/label to its OWN commodity \u0027portobello-mushrooms\u0027, distinct from button/crimini, which is exactly the distinction this term needed. Board unit basis is per lb: Aldi $6.64/lb on a 6 oz package = $2.49 per package; Walmart Fresh Whole Portabella Mushroom Caps 6 oz $8.32/lb = $3.12 per package. Only 2 of 7 stores carry it, but Rule B needs one.",
+                                                  "checked":  "2026-08-16T08:46:03"
+                                              },
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Broccolini",
+                      "recipes":  [
+                                      "vocab-gap-2026-08-16"
+                                  ],
+                      "added":  "2026-08-16T08:23:29",
+                      "why":  "tier1 MAPPED commodity broccolini, 1 of 7",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.99,
+                                                          "size":  "1 ct (bunch)",
+                                                          "item":  "Broccolini",
+                                                          "evidence":  "Answered at tier 1 from comparison-2026-08-15.json. Resolves by board id/label to its OWN commodity \u0027broccolini\u0027. Carried at exactly 1 of 7 stores - Bakers, $3.99 per bunch, unit \u0027each\u0027. This is the achiote-paste shape: single-store carriage is still CARRIED under Rule B and the recipe proceeds.",
+                                                          "checked":  "2026-08-16T08:46:03"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Beef Base",
+                      "recipes":  [
+                                      "vocab-gap-2026-08-16"
+                                  ],
+                      "added":  "2026-08-16T08:23:30",
+                      "why":  "tier1 MAPPED to bouillon but cheapest row is Knorr TOMATO-with-CHICKEN",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  2.77,
+                                                     "size":  "7.9 oz",
+                                                     "item":  "Knorr Shelf Stable Paste Beef Bouillon",
+                                                     "evidence":  "Walmart Omaha, __NEXT_DATA__, flat priceInfo shape. Searched \u0027beef base\u0027. Knorr Shelf Stable PASTE Beef Bouillon 7.9 oz Jar linePrice $2.77, unitPrice 35.1 c/oz - a concentrated paste, the same product class as Better Than Bouillon, and the cheapest per ounce here. Explicitly named alternative: Knorr Bouillon Premium Roasted Beef Flavor BASE 11 oz $5.88 (53.5 c/oz). Excluded Knorr Granulated Beef Bouillon 2 lb $5.38 (dry granules) and Zoup Beef Bone Broth 32 oz $5.98 (ready-to-use liquid).",
+                                                     "checked":  "2026-08-16T08:41:24"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  5.99,
+                                                     "size":  "8 oz",
+                                                     "item":  "Better Than Bouillon Roasted Beef Base",
+                                                     "evidence":  "17070 Audrey Street Omaha NE 68136, In-Store. Searched \u0027beef base\u0027, no no-results banner, Aisle 2 grid. Better Than Bouillon Roasted Beef Base Premium 8 oz $5.99 is exactly the concentrated paste base (reduced-sodium version also $5.99). Distinguished from the bouillon powders and liquid stocks in the same grid (Wylers Beef Instant Bouillon Powder 3.75 oz $3.98, HERB-OX Beef Bouillon Granules 4 oz $3.29, Kitchen Basics Beef Stock 32 oz $3.49) which are different products.",
+                                                     "checked":  "2026-08-16T08:35:48"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "blocked",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog search returned HTTP 400 Bad Request on EVERY attempt across THREE separate runs spaced over the session (11 terms at first pass, 1 term after a 45s cooldown, 5 terms on a third pass) - probe-ingredient classifies this as UNUSABLE and notes it is search-budget bound throttling, not absence. No result grid was ever rendered, so no term could be searched and no adjudication was possible. Family Fare is the Freshop platform and is server-only (not an Instacart storefront), so there is no browser surface to fall back to for it. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-16T08:45:26"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  6.49,
+                                                    "size":  "8 oz",
+                                                    "item":  "Better Than Bouillon Beef Base",
+                                                    "evidence":  "Omaha #1, NE, rendered page. Rung 1 \u0027beef base\u0027 returned NO no-results banner but no actual base - only liquid stock and broth (Hy-Vee Beef Cooking Stock 32 oz $2.28, Hy-Vee Beef Broth 32 oz $1.99, Swanson Beef Broth $2.52), Hy-Vee Beef Bouillon Cubes 3.4 oz $3.19 and Beefy Onion Soup Mix. Rather than conclude absence from a weak in-store search engine I queried the brand: \u0027better than bouillon\u0027 returns a clean grid and Better Than Bouillon Beef Base 8 oz $6.49 IS stocked (alongside Reduced Sodium Beef Base $6.49, Chicken, Vegetable, Turkey and No Chicken bases). The store carries it; its own search simply does not match the phrase.",
+                                                    "checked":  "2026-08-16T08:45:25"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  5.98,
+                                                             "size":  "16 oz",
+                                                             "item":  "Member\u0027s Mark Beef Base",
+                                                             "evidence":  "Omaha Sams Club, member session. Searched \u0027beef base\u0027 via __NEXT_DATA__. Members Mark Beef Base 16 oz linePrice $5.98, unitPrice $0.37/oz - exactly the concentrated beef base and the CHEAPEST beef base per ounce of all seven stores (half the per-oz cost of Better Than Bouillon 8 oz $5.99 = $0.749/oz). Distinguished from the bouillon products in the same grid (Knorr Granulated Beef Bouillon 40.5 oz $6.28, Members Mark Beef Bouillon 32 oz $8.96) and from the Nongshim beef-flavour ramen that merely ranked.",
+                                                             "checked":  "2026-08-16T08:38:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "In-Store mode, OLA 48 Omaha. Searched \u0027beef base\u0027: literal no-results banner. Suggestion tiles are all liquid stock/broth or dry gravy mix - Chefs Cupboard Fat Free Beef Cooking Stock 32 oz $1.69, Chefs Cupboard Fat Free Beef Broth 32 oz $1.25, Simply Nature Organic Beef Broth 32 oz $1.95, Simply Nature Organic Beef Bone Broth 32 oz $3.39, Stonemill Brown Gravy Mix 0.87 oz $0.48. A 32 oz ready-to-use broth is not a concentrated beef BASE/paste (Better Than Bouillon style) and I will not stretch it into one.",
+                                                  "checked":  "2026-08-16T08:32:01"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  5.99,
+                                                          "size":  "8 oz",
+                                                          "item":  "Better Than Bouillon Roasted Beef Base",
+                                                          "evidence":  "Searched \u0027beef base\u0027, 16 hits. Better Than Bouillon Roasted Beef Base 8 oz \\.99 is exactly the paste-style beef base (organic version 8 oz \\.49). Rejected the top-relevance decoy Kroger Canned CORNED BEEF 12 oz \\.79 - that is tinned meat, not a base. Also rejected Impossible plant-based beef and Better Than Bouillon Roasted GARLIC base. Note the board\u0027s bouillon commodity mis-maps this term to Knorr TOMATO bouillon with CHICKEN flavor.",
+                                                          "checked":  "2026-08-16T08:26:56"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Egg Yolk",
+                      "recipes":  [
+                                      "vocab-gap-2026-08-16"
+                                  ],
+                      "added":  "2026-08-16T08:23:30",
+                      "why":  "tier1 MAPPED to eggs - cook buys whole eggs",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  1.46,
+                                                  "size":  "12 ct (dozen)",
+                                                  "item":  "Goldhen Grade A Large Eggs 12 CT",
+                                                  "evidence":  "Answered at tier 1 from comparison-2026-08-15.json. Maps to commodity \u0027eggs\u0027 via /\beggs?\b/ and I am accepting that mapping deliberately: a cook buys whole eggs and separates them, so whole eggs ARE the purchasable form of an egg yolk. This is not the korean-rice-cakes trap, where the matched commodity is a different food at a different price - it is the same food. 7 of 7 coverage; cheapest Aldi Goldhen Grade A Large Eggs 12 ct $1.46/dozen (base private label). For the row you will want a per-yolk basis: a large egg yolk is about 17 g, so a dozen yields roughly 204 g of yolk.",
+                                                  "checked":  "2026-08-16T08:46:03"
+                                              },
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Sun-Dried Tomatoes (Oil-Packed)",
+                      "recipes":  [
+                                      "vocab-gap-2026-08-16"
+                                  ],
+                      "added":  "2026-08-16T08:23:30",
+                      "why":  "tier1 MAPPED sun-dried-tomatoes but cheapest rows are dry-pack; need OIL-PACKED",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  9.98,
+                                                             "size":  "24 oz jar",
+                                                             "item":  "Terra Verde Italian Sundried Tomatoes in Oil",
+                                                             "evidence":  "Answered at tier 1 from comparison-2026-08-15.json, commodity \u0027sun-dried-tomatoes\u0027 by board id/label, 7 of 7 coverage - but adjudicated specifically for OIL-PACKED, which the board does not distinguish. Sams Club Terra Verde Italian Sundried Tomatoes IN OIL 24 oz at $0.4158/oz = $9.98 per jar is both the cheapest per ounce AND explicitly oil-packed. Note the next two cheapest board rows are DRY-packed and do not qualify: Aldi Tuscan Garden Sundried Tomatoes 8 oz $0.4988/oz and Hy-Vee Valued Naturals Sun Dried Tomatoes $0.4988/oz. Walmart Bella Sun Luci Sun Dried Tomatoes in Olive Oil with Italian Herbs 8.5 oz $0.6094/oz is oil-packed but herbed.",
+                                                             "checked":  "2026-08-16T08:46:03"
+                                                         },
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Yellow Bell Pepper",
+                      "recipes":  [
+                                      "vocab-gap-2026-08-16"
+                                  ],
+                      "added":  "2026-08-16T08:23:30",
+                      "why":  "tier1 MAPPED to bell-peppers, cheapest row is GREEN",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  1.46,
+                                                     "size":  "1 each",
+                                                     "item":  "Fresh Yellow Bell Pepper, Each",
+                                                     "evidence":  "Walmart Omaha, __NEXT_DATA__, flat priceInfo shape. Searched \u0027yellow bell pepper\u0027. Fresh Yellow Bell Pepper, Each linePrice $1.46 - an explicitly yellow, single, whole pepper sold each, and the CHEAPEST yellow bell pepper of all seven stores. The grid also cleanly separates the colours, which confirms the row is genuinely yellow: Fresh Green Bell Pepper each $0.86, Fresh Red Bell Pepper each $1.52, Organic Yellow Bell Pepper each $3.46 (organic, excluded), Fresh Bell Peppers 3 Count $2.97.",
+                                                     "checked":  "2026-08-16T08:41:24"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  1.5,
+                                                     "size":  "1 each",
+                                                     "item":  "Yellow Bell Pepper",
+                                                     "evidence":  "17070 Audrey Street Omaha NE 68136, In-Store. Searched \u0027yellow bell pepper\u0027, no no-results banner, 2 tiles both genuinely yellow. Yellow Bell Pepper 1 each $1.50 on promotion, regular price $1.99 (25% off) - use $1.99 for a stable row if the promo matters. Produce department, unit is each = the whole pepper. Also Green/Red/Yellow Peppers mixed pack $4.99.",
+                                                     "checked":  "2026-08-16T08:35:48"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "blocked",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop catalog search returned HTTP 400 Bad Request on EVERY attempt across THREE separate runs spaced over the session (11 terms at first pass, 1 term after a 45s cooldown, 5 terms on a third pass) - probe-ingredient classifies this as UNUSABLE and notes it is search-budget bound throttling, not absence. No result grid was ever rendered, so no term could be searched and no adjudication was possible. Family Fare is the Freshop platform and is server-only (not an Instacart storefront), so there is no browser surface to fall back to for it. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-16T08:45:26"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  1.99,
+                                                    "size":  "1 ct",
+                                                    "item":  "Yellow Bell Pepper",
+                                                    "evidence":  "Omaha #1, NE, rendered page. Searched \u0027yellow bell pepper\u0027, no no-results banner. Yellow Bell Pepper 1 ct $1.99 - explicitly yellow, sold each, SNAP/WIC eligible produce. Also Yellow Pepper 2/$4.00 priced per 1 lb. The rest of the grid is frozen pepper blends (Birds Eye Pepper Stir Fry, Hy-Vee Pepper \u0026 Onion Blend, Birds Eye Fajita Veggies) and an Oscar Mayer cracked-black-pepper turkey that matched only on the word pepper.",
+                                                    "checked":  "2026-08-16T08:45:25"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Omaha Sams Club, member session. Searched \u0027yellow bell peppers\u0027 via __NEXT_DATA__. No yellow-only bell pepper pack. The bell peppers stocked are Green Bell Peppers 6 ct $4.97 ($0.83/ea) and Multi Bell Sweet Peppers 6 ct $5.97 ($0.99/ea), a mixed red/yellow/orange assortment. A mixed pack is not a yellow bell pepper row - you cannot buy yellow alone here. Sweet Mini Peppers 1.5 lbs $5.15 are a different vegetable.",
+                                                             "checked":  "2026-08-16T08:38:04"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "not-carried",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "In-Store mode, OLA 48 Omaha. Rung 1 \u0027yellow bell pepper\u0027: literal no-results banner; suggestions were green peppers, red onions, mushrooms, jalapenos, avocado, jarred roasted red pepper strips. Widened to \u0027bell peppers\u0027: no banner, but the only bell-pepper tiles are Freshire Farms GREEN Peppers 3 ct $2.69 and a Multi-Colored Peppers 3 ct tile explicitly marked OUT OF STOCK. No yellow bell pepper available; widening the pool must not widen the ruling, so green stock does not make yellow carried.",
+                                                  "checked":  "2026-08-16T08:32:01"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.67,
+                                                          "size":  "1 ct",
+                                                          "item":  "Fresh Yellow Bell Pepper",
+                                                          "evidence":  "Searched \u0027yellow bell pepper\u0027, 1 genuine hit surviving the full ladder: Fresh Yellow Bell Pepper \\.67 each. Weighed rather than assumed - the name is an exact match for the commodity and the unit is \u0027each\u0027 (the whole pepper). Distinct from the green bell pepper the board\u0027s bell-peppers commodity returns as cheapest.",
+                                                          "checked":  "2026-08-16T08:26:56"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Yellow Mustard",
+                      "recipes":  [
+                                      "vocab-gap-2026-08-16"
+                                  ],
+                      "added":  "2026-08-16T08:23:30",
+                      "why":  "tier1 MAPPED commodity mustard",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  0.99,
+                                                  "size":  "20 oz squeeze bottle",
+                                                  "item":  "Burman\u0027s Traditional Yellow Mustard",
+                                                  "evidence":  "Answered at tier 1 from comparison-2026-08-15.json. Resolves by board id/label to commodity \u0027mustard\u0027, and the matched product is literally yellow mustard rather than the Dijon it was ruled distinct from - so the mapping is sound. 7 of 7 coverage. Cheapest Aldi Burmans Traditional Yellow Mustard 20 OZ at $0.0495/oz = $0.99 per bottle; Walmart Great Value Yellow Mustard 20 oz $0.05/oz = $1.00; Sams Club Frenchs Classic Yellow 105 oz $0.0512/oz. Every one of the seven cheapest rows is an explicitly YELLOW mustard.",
+                                                  "checked":  "2026-08-16T08:46:03"
+                                              },
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "chipotle powder",
+                      "recipes":  [
+                                      "pork-chile-verde-stew",
+                                      "hunt-2026-08-15-lowcarb-100"
+                                  ],
+                      "added":  "2026-08-16T11:52:19",
+                      "why":  "printed non-optional spice (2 1/4 tsp scaled); vocab genuine gap + board ABSENT; registrar proposal chipotle-powder pending; standard spice-aisle item so carriage is plausible",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  11.99,
+                                                         "size":  "2 oz",
+                                                         "item":  "Mc Cormick Gourmet Chipotle Chile Pepper 2 Oz",
+                                                         "evidence":  "Freshop store_id 6401 Omaha. Rung 1 \u0027chipotle powder\u0027 0 hits; rung 2 \u0027chipotle\u0027 25 hits and rung \u0027chipotle pepper\u0027 25 hits, both MATCHES with no no-results banner. Among them McCormick Gourmet Chipotle Chile Pepper 2 oz $11.99 in pantry/mixes_spices_seasoning/spices - a ground chipotle chile spice jar, i.e. the ingredient. Ruled out La Preferida Chipotle Seasoning (blended seasoning), Sns Ancho Chipotle Rub (rub), and all Cholula/Somos/Subway sauces and the Fresh \u0026 Finest chicken bowl.",
+                                                         "checked":  "2026-08-16T11:56:55"
+                                                     },
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "In-app pane, identity verified: header read \u0027In-Store - open 9am - 8pm - ALDI - OLA 42 - Omaha\u0027. SPA push to /aldi/s?k=chipotle+powder rendered site chrome and footer only - zero a[href*=/products/] tiles and NO no-results banner. R3 flat 7s retry: same. Hard navigate to /store/aldi/s?k=chipotle changed the title to \u0027ALDI Chipotle Delivery or Pickup Near Me\u0027 but the results grid still never entered the DOM. Results region never rendered = UNUSABLE, not EMPTY.",
+                                                  "checked":  "2026-08-16T11:58:26"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "Kroger public API locationId 61500319. Rung 1 \u0027chipotle powder\u0027 0 hits; rung 2 \u0027chipotle\u0027 25 hits; also \u0027chipotle pepper\u0027 25 hits. All MATCHES, no no-results banner. Top relevance rows are Kraft Chipotle Aioli, La Costena/Cholula/Pace sauces, Embasa \u0026 Goya \u0026 San Marcos chipotles in adobo (canned whole peppers, not ground), Private Selection chipotle hummus, Simple Truth chipotle-flavored almonds. No ground/powdered chipotle chile spice jar in either ladder rung.",
+                                                          "checked":  "2026-08-16T11:56:59"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "ground chicken",
+                      "recipes":  [
+                                      "turkey-parmesan-meatball-bake",
+                                      "batch-2"
+                                  ],
+                      "added":  "2026-08-16T11:52:44",
+                      "why":  "BLOCKING main protein, 3 1/2 lb at 14 servings; no commodity claims the term (CAPTURE, 6 candidate products across 4 stores incl Aldi Perdue 92/8 $3.39/lb); registrar proposal for a ground-chicken commodity filed in the mapped file; recipe parks on this term",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  3.72,
+                                                     "size":  "1 lb",
+                                                     "item":  "All Natural Fresh Ground Chicken, 1 lb Tray",
+                                                     "evidence":  "price-ingredient CAPTURE tier: two Walmart capture rows as_of 2026-08-11 - All Natural Fresh Ground Chicken 1 lb Tray at 3.72 and Perdue Harvestland Fresh Ground Chicken 92/8 1 lb Tray at 3.92. Both are raw ground chicken trays, not a dish or dog food. Already on disk - no browser needed.",
+                                                     "checked":  "2026-08-16T11:55:07"
+                                                 },
+                                     "Fareway":  null,
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "probe-ingredient Freshop catalog store_id 6401 Omaha, rung 1 \u0027ground chicken\u0027 4 hits, rung 2 \u0027chicken ground fresh\u0027 4 hits - identical set, all canned dog food (Pedigree Classic Ground Chicken 13.2/22 oz, Purina One Ground Chicken and Brown Rice 6 ea, Iams Classic Ground). No no-results banner, MATCHES verdict, but zero rows are raw ground chicken meat for a cook.",
+                                                         "checked":  "2026-08-16T11:54:51"
+                                                     },
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  3.39,
+                                                  "size":  "1 lb",
+                                                  "item":  "Perdue Fresh 92% Lean 8% Fat Ground Chicken",
+                                                  "evidence":  "price-ingredient CAPTURE tier off comparison-2026-08-15.json: Aldi capture row as_of 2026-08-15 (this week), Perdue Fresh 92/8 Ground Chicken 1 lb at 3.39; a second Aldi row Perdue Fresh Ground Chicken 1 LB as_of 2026-08-05 also at 3.39, corroborating. Raw 1 lb tray, the form a cook buys. Already on disk - no browser needed.",
+                                                  "checked":  "2026-08-16T11:55:06"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  4.99,
+                                                          "size":  "1 lb",
+                                                          "item":  "Perdue NAE Tray Pack Ground Chicken",
+                                                          "evidence":  "probe-ingredient kroger-public-api locationId 61500319, rung 1 \u0027ground chicken\u0027, 21 hits, MATCHES. Top hit is the raw 1 lb tray of ground chicken at 4.99; also Perdue NAE 3 lb at 10.00 and ground chicken breast 1 lb at 5.49. Ruled out the Purina/Pet Pride/Pedigree wet dog food rows lower in the list.",
+                                                          "checked":  "2026-08-16T11:54:51"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
                       "notes":  null
                   }
               ]

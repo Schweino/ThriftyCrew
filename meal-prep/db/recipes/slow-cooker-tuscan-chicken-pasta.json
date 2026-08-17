@@ -18,7 +18,7 @@
                  "protein":  68,
                  "carbs":  52,
                  "fat":  14,
-                 "cost_ps":  "3.29"
+                 "cost_ps":  "3.37"
              },
     "intro_html":  "Creamy Tuscan chicken with sun-dried tomatoes tastes like a restaurant special, but the slow cooker makes it a weeknight regular. This bowl brings {{protein}} grams of protein for about ${{cost_ps}} a serving (at everyday cost), tossed with penne in a rich, tangy sauce. Fourteen servings from one pot turns a fancy-feeling dinner into an affordable weekly habit.",
     "ingredients_display":  [
@@ -40,19 +40,20 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 8 lb: ~$16.22. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
-                       "Penne Pasta, 8 1/3 cups: ~$1.80. \u003cstrong\u003eBuy 2 16oz boxes: $1.94.\u003c/strong\u003e",
-                       "Sun-Dried Tomatoes, 2 2/3 cups: ~$2.60. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Penne Pasta, 8 1/3 cups: ~$1.69. \u003cstrong\u003eBuy 2 16oz boxes: $1.83.\u003c/strong\u003e",
+                       "Sun-Dried Tomatoes, 2 2/3 cups: ~$3.01. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Coconut Milk, 1 can: ~$1.47. \u003cstrong\u003eBuy 1 13.5oz can: $1.84.\u003c/strong\u003e",
                        "Chicken Broth, 2 cups: ~$0.73. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
                        "Parmesan Cheese, 1 cup: ~$1.01. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
+                       "Olive Oil, 1 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Shallots, 1/2 cup chopped: ~$0.45. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Garlic, 2 cloves: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Garlic, 2 cloves: ~$0.34. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Cornstarch, 2.25 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Spinach, 3 cups fresh, chopped: ~$0.81. \u003cstrong\u003eBuy 1 10oz bag: $1.15.\u003c/strong\u003e",
-                       "Pantry seasonings (olive oil, italian seasoning, salt, black pepper): ~$0.43. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $25.89 across 14 servings, so roughly $1.85 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $30.95 across 14 servings, roughly $2.21 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.11 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.06. Those containers then feed this batch and many more after it."
+                       "Spinach, 3 cups fresh, chopped: ~$1.41. \u003cstrong\u003eBuy 1 10oz bag: $2.00.\u003c/strong\u003e",
+                       "Pantry seasonings (italian seasoning, salt, black pepper): ~$0.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.83 across 14 servings, so roughly $1.92 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.21 across 14 servings, roughly $2.30 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.00 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.21. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -71,14 +72,14 @@
     "portion_html":  "You get {{protein}} grams of protein and {{cal}} calories per serving, restaurant flavor at a home-cook price.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://kristineskitchenblog.com/tuscan-slow-cooker-chicken-thighs/\" target=\"_blank\" rel=\"noopener\"\u003eKristine\u0027s Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Tastes like a splurge, costs like a staple. That\u0027s the sweet spot we\u0027re always chasing. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  25.89,
-    "cost_batch_true":  30.95,
-    "cost_per_serving":  1.85,
-    "cost_per_serving_true":  2.21,
-    "cost_pantry_add":  14.11,
-    "cost_first_run":  45.06,
+    "cost_batch":  26.83,
+    "cost_batch_true":  32.21,
+    "cost_per_serving":  1.92,
+    "cost_per_serving_true":  2.3,
+    "cost_pantry_add":  15,
+    "cost_first_run":  47.21,
     "scaler":  {
-                   "cost":  "30.95",
+                   "cost":  "32.21",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -175,7 +176,7 @@
                                    "item":  "Spinach",
                                    "grams":  200,
                                    "buy":  "3 cups fresh, chopped",
-                                   "bid":  "frozen-chopped-spinach",
+                                   "bid":  "spinach",
                                    "gpu":  "28.350"
                                }
                            ]
@@ -183,7 +184,7 @@
     "head":  {
                  "description":  "A high-protein Italian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker tuscan chicken pasta, budget dinner",
-                 "costPerServing":  3.29,
+                 "costPerServing":  3.37,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Breast, 8 lb (3300 g)",
                                           "Penne Pasta, 8 1/3 cups (840 g)",

@@ -1,4 +1,4 @@
-﻿{
+{
     "readme":  "Food macro database for Thrifty Crew meal prep. Each item\u0027s calories/protein_g/carbs_g/fat_g are PER SERVING. serving_grams = grams in one serving (used to scale by weight, e.g. pounds). For count or volume items (eggs, tbsp), serving_qty + serving_unit describe the serving. Conversions: 1 lb = 453.592 g, 1 oz = 28.3495 g. Note raw vs cooked for meats. brand empty string = not specified yet. null macro = pending label.",
     "items":  [
                   {
@@ -3320,7 +3320,7 @@
                       "item":  "Spinach",
                       "needs_verify":  false,
                       "verify_source":  "USDA standard record; identical to the existing Frozen Chopped Spinach row, so specs computed on either agree",
-                      "notes":  "raw; USDA FDC raw spinach per 100g. NOTE: the price row for item Spinach bids frozen-chopped-spinach (pre-existing shared mapping, also used by slow-cooker-tuscan-chicken-pasta); fresh and frozen carry the same macros here so the stat is form-independent",
+                      "notes":  "raw; USDA FDC raw spinach per 100g. NOTE (corrected 2026-08-16): the price row for item Spinach now bids the FRESH weekly commodity spinach; the old frozen-chopped-spinach bid was retired when the registrar ruled REUSE of the already-priced fresh id. Recipes wanting frozen use the separate Frozen Chopped Spinach row. Fresh and frozen carry the same macros here, so the stat was never form-dependent - only the price was",
                       "source":  "USDA FDC raw spinach",
                       "brand":  "fresh",
                       "fat_g":  0.4,

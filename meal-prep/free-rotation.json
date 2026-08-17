@@ -1,14 +1,14 @@
 ﻿{
     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
-    "week_of":  "2026-08-15",
-    "rotated_at":  "2026-08-15T16:25:10",
+    "week_of":  "2026-08-16",
+    "rotated_at":  "2026-08-17T06:24:41",
     "free":  [
                  {
                      "slug":  "chicken-fried-rice-skillet",
                      "protein":  "chicken",
                      "rank":  1,
                      "name":  "Chicken Fried Rice",
-                     "per_serving":  1.95
+                     "per_serving":  1.96
                  },
                  {
                      "slug":  "buffalo-chicken-pasta-bake",
@@ -64,7 +64,7 @@
                      "protein":  "turkey",
                      "rank":  4,
                      "name":  "Scalloped Potato Turkey Casserole",
-                     "per_serving":  1.99
+                     "per_serving":  2.05
                  },
                  {
                      "slug":  "turkey-maqluba-upside-down-rice-bake",
@@ -78,35 +78,35 @@
                      "protein":  "beef",
                      "rank":  1,
                      "name":  "Slow Cooker Beef and Potato Au Gratin Casserole",
-                     "per_serving":  2.06
+                     "per_serving":  2.17
+                 },
+                 {
+                     "slug":  "low-carb-taco-cabbage-beef-skillet",
+                     "protein":  "beef",
+                     "rank":  2,
+                     "name":  "Low Carb Taco Cabbage Beef Skillet",
+                     "per_serving":  2.24
+                 },
+                 {
+                     "slug":  "keto-cheeseburger-skillet",
+                     "protein":  "beef",
+                     "rank":  3,
+                     "name":  "Keto Cheeseburger Casserole Skillet",
+                     "per_serving":  2.34
                  },
                  {
                      "slug":  "million-dollar-baked-spaghetti",
                      "protein":  "beef",
-                     "rank":  2,
+                     "rank":  4,
                      "name":  "Million Dollar Baked Spaghetti",
                      "per_serving":  2.36
                  },
                  {
-                     "slug":  "john-wayne-casserole",
-                     "protein":  "beef",
-                     "rank":  3,
-                     "name":  "John Wayne Casserole",
-                     "per_serving":  2.39
-                 },
-                 {
                      "slug":  "lebanese-hashweh",
                      "protein":  "beef",
-                     "rank":  4,
+                     "rank":  5,
                      "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
                      "per_serving":  2.4
-                 },
-                 {
-                     "slug":  "cheesy-beef-and-shells-casserole",
-                     "protein":  "beef",
-                     "rank":  5,
-                     "name":  "Cheesy Beef and Shells Casserole",
-                     "per_serving":  2.42
                  },
                  {
                      "slug":  "bratwurst-sauerkraut-potatoes-bake",
@@ -130,18 +130,18 @@
                      "per_serving":  1.72
                  },
                  {
-                     "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
+                     "slug":  "baked-cauliflower-mac-smoked-sausage",
                      "protein":  "pork",
                      "rank":  4,
-                     "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
-                     "per_serving":  1.86
+                     "name":  "Baked Cauliflower Mac and Cheese with Smoked Sausage",
+                     "per_serving":  1.77
                  },
                  {
-                     "slug":  "no-peek-pork-chop-rice-casserole",
+                     "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
                      "protein":  "pork",
                      "rank":  5,
-                     "name":  "No-Peek Pork Chop and Rice Casserole",
-                     "per_serving":  1.92
+                     "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
+                     "per_serving":  1.86
                  }
              ]
 }

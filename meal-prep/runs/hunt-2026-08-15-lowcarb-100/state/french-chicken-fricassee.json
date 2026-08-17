@@ -3,10 +3,10 @@
     "title":  "",
     "source_url":  "",
     "protein":  "",
-    "state":  "waved",
+    "state":  "published",
     "wave":  1,
     "created":  "2026-08-15T20:32:42",
-    "updated":  "2026-08-16T06:07:43",
+    "updated":  "2026-08-16T16:07:01",
     "terms":  [
                   {
                       "term":  "dry white wine",
@@ -76,6 +76,12 @@
                         "state":  "waved",
                         "at":  "2026-08-16T06:07:43",
                         "by":  "wave-close",
+                        "detail":  "wave 1"
+                    },
+                    {
+                        "state":  "published",
+                        "at":  "2026-08-16T16:07:01",
+                        "by":  "wave-publish",
                         "detail":  "wave 1"
                     }
                 ]

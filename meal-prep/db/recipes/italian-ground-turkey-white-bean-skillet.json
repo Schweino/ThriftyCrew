@@ -15,7 +15,7 @@
                          "SOURCE YIELD 4, rebuilt to 14 at the mapper\u0027s 3.5x scale. Every gram and buy string transcribed from mapped\\italian-ground-turkey-white-bean-skillet.json; no number computed in prose.",
                          "MACROS transcribed from the mapper\u0027s food-macros-db recompute at 14 servings and re-verified by the writer against the build guard\u0027s own formula: batch 5268 cal / 465.5 P / 334.7 C / 216.5 F, per serving 376.3 cal / 33.3 P / 23.9 C / 15.5 F, which rounds to 376 / 33 / 24 / 15. The intake grams are integer-rounded (892, 1438, 47, 7, 16, 4) from the mapper\u0027s fractional grams; the macro recompute lands identically to the sub-gram figures (build guard passes at 376 cal / 33 P).",
                          "BAND FLAG, LOUD, CARRIED FROM THE MAPPER: 376 cal per serving is BELOW this run\u0027s 400 cal floor by 24 cal. Carbs 24 g are comfortably under the 35 g gate (PASS). This is the honest label-accurate number and it is NOT adjustable: every quantity is an absolute printed amount (1 lb turkey, one 14.5 oz can of each, 1/2 cup parmesan), so there is no each-weight assumption to correct upward. The source\u0027s own auto-calculated 422 cal / 41 g protein is inflated (protein -18.9% vs our recompute, outside the 15% instrument) and is not reproducible from the printed quantities: turkey 297.9 g + parmesan 70 g + cannellini 69.6 g + the rest sums to 465.5 g protein batch = 33.3/serving, versus the source\u0027s implied 164 g. Numbers here are transcribed, not tuned. Do not retire on this number without a product call on the band; see report.",
-                         "SPINACH is FRESH per the source and the mapper (macro row \u0027Spinach\u0027 is the fresh USDA row, 23 cal/100 g, brand \u0027fresh\u0027). Prose names fresh spinach, the recipe of record. The legacy db\\ingredients.json bid for item \u0027Spinach\u0027 still points at frozen-chopped-spinach, a fresh-to-frozen price-class defect the mapper re-flagged (same defect logged by creamy-tuscan-chicken-skillet); the bid needs correcting to the live fresh \u0027spinach\u0027 commodity through the match-soundness gate before this recipe stamps. Macro side is unaffected (fresh and frozen rows are per-gram identical).",
+                         "SPINACH is FRESH per the source and the mapper (macro row \u0027Spinach\u0027 is the fresh USDA row, 23 cal/100 g, brand \u0027fresh\u0027). Prose names fresh spinach, the recipe of record. The legacy db\\ingredients.json bid for item \u0027Spinach\u0027 still points at frozen-chopped-spinach, a fresh-to-frozen price-class defect the mapper re-flagged (same defect logged by creamy-tuscan-chicken-skillet); the bid needs correcting to the live fresh \u0027spinach\u0027 commodity through the match-soundness gate before this recipe stamps. Macro side is unaffected (fresh and frozen rows are per-gram identical). RESOLVED 2026-08-16: the bid was corrected. Item Spinach now bids the fresh weekly commodity spinach (priced 7/7 stores, cheapest Walmart $0.20/oz, a 10 oz bag of fresh leaf); the frozen recipes keep the separate Frozen Chopped Spinach row. Cost block re-rendered off the fresh basis.",
                          "GREEN BELL PEPPERS: the mapper repoints the stale ingredient-map id green-bell-pepper (no longer in commodities.json) to the live bell-peppers commodity, whose cheapest cells are green bells (6 of 7 stores). Class-sound for a green line. Flagged for the map repoint through the gate.",
                          "CANNELLINI: the weekly resolver claims \u0027cannellini\u0027 for the canned-white-beans commodity (white kidney bean class, 6 of 7 stores) while the ingredient-map carries a cannellini-beans id; same product concept, one id should own it at the gate. Flagged.",
                          "FIRE-ROASTED tomatoes book to the diced-tomatoes commodity per the DB row\u0027s own note (fire-roasted equivalent, high conf) - an estate precedent, same price class, not a variety stretch.",
@@ -33,7 +33,7 @@
                  "protein":  33,
                  "carbs":  24,
                  "fat":  15,
-                 "cost_ps":  "3.21"
+                 "cost_ps":  "3.27"
              },
     "intro_html":  "Ground turkey has a reputation for being the protein you tolerate on a diet rather than the one you look forward to. This skillet quietly fixes that. You brown lean turkey with onion, green pepper and garlic, then fold in white beans, fire-roasted tomatoes and a couple of big handfuls of spinach, and finish the whole thing with parmesan. One pan, about twenty-five minutes, and it eats like it asked more of you than it did. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 25 grams of carbs. That is a filling, low-carb dinner that leans on the cheapest honest protein at the meat case.",
     "ingredients_display":  [
@@ -57,14 +57,14 @@
                        "Diced Tomatoes, 3 1/2 (14.5 oz) cans fire-roasted diced tomatoes: ~$2.68. \u003cstrong\u003eBuy 4 cans: $3.07.\u003c/strong\u003e",
                        "Green Bell Peppers, 3 1/2 green bell peppers, chopped: ~$2.70. \u003cstrong\u003eBuy 4 each: $3.08.\u003c/strong\u003e",
                        "Yellow Onion, 3 1/2 medium onions, chopped: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Spinach, 7 cups fresh baby spinach (about 7 oz): ~$0.85. \u003cstrong\u003eBuy 1 10oz bag: $1.15.\u003c/strong\u003e",
+                       "Spinach, 7 cups fresh baby spinach (about 7 oz): ~$1.48. \u003cstrong\u003eBuy 1 10oz bag: $2.00.\u003c/strong\u003e",
                        "Parmesan Cheese, 1 3/4 cups grated Parmesan: ~$2.37. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
                        "Olive Oil, 3 1/2 tbsp extra-virgin olive oil: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 7 cloves garlic, minced: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Pantry seasonings (italian seasoning, salt, black pepper): ~$0.38. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.56 across 14 servings, so roughly $2.11 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $34.14 across 14 servings, roughly $2.44 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.79 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.93. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $30.19 across 14 servings, so roughly $2.16 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.99 across 14 servings, roughly $2.50 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.79 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.78. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a hearty Italian skillet that tastes like it took all afternoon. The turkey and the beans carry the plate; the tomatoes, spinach and parmesan just make it taste like more than it cost.",
     "shop_smart":  [
@@ -87,14 +87,14 @@
     "portion_html":  "Set the full pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Give each container an even share of the turkey, beans, tomatoes and spinach, aiming for that weight, and it lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.familyfoodonthetable.com/italian-ground-turkey-skillet/\" target=\"_blank\" rel=\"noopener\"\u003efamilyfoodonthetable.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  29.56,
-    "cost_batch_true":  34.14,
-    "cost_per_serving":  2.11,
-    "cost_per_serving_true":  2.44,
+    "cost_batch":  30.19,
+    "cost_batch_true":  34.99,
+    "cost_per_serving":  2.16,
+    "cost_per_serving_true":  2.5,
     "cost_pantry_add":  10.79,
-    "cost_first_run":  44.93,
+    "cost_first_run":  45.78,
     "scaler":  {
-                   "cost":  "34.14",
+                   "cost":  "34.99",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -141,7 +141,7 @@
                                    "canon":  "Spinach",
                                    "grams":  210,
                                    "buy":  "7 cups fresh baby spinach (about 7 oz)",
-                                   "bid":  "frozen-chopped-spinach",
+                                   "bid":  "spinach",
                                    "gpu":  "28.350"
                                },
                                {
@@ -201,7 +201,7 @@
                  "prepTime":  "PT5M",
                  "cookTime":  "PT20M",
                  "totalTime":  "PT25M",
-                 "costPerServing":  3.21,
+                 "costPerServing":  3.27,
                  "recipeIngredient":  [
                                           "93/7 Ground Turkey, 3 1/2 lb lean (93/7) ground turkey (1589 g)",
                                           "Cannellini Beans, 3 1/2 (14.5 oz) cans cannellini beans, rinsed and drained (about 5 1/4 cups drained) (892 g)",

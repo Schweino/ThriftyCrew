@@ -152,7 +152,7 @@
   {
       "batch":  "hunt-2026-08-15-lowcarb-100-w1",
       "opened":  "2026-08-16T06:07:43",
-      "last_activity":  "2026-08-16T16:06:57",
+      "last_activity":  "2026-08-16T16:07:04",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -227,6 +227,11 @@
                          "stage":  "publish",
                          "at":  "2026-08-16T16:06:57",
                          "detail":  "9/9 wave slug(s) published through engine\\publish (visibility preserved) + 2 collateral spec(s) carried by propagate (total dirty 11)"
+                     },
+                     {
+                         "stage":  "serveability",
+                         "at":  "2026-08-16T16:07:04",
+                         "detail":  "9/9 wave slug(s) verified against the rebuilt feed"
                      }
                  ]
   },

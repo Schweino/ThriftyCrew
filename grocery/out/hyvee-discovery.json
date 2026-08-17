@@ -1,5 +1,31 @@
 ﻿[
     {
+        "id":  "pomegranates",
+        "store":  "Hy-Vee",
+        "product":  "Pomegranates",
+        "size":  "1 ct",
+        "price":  3.99,
+        "per_unit":  3.99,
+        "unit":  "each",
+        "held_per_unit":  0,
+        "beats_by_pct":  null,
+        "product_id":  "8783",
+        "why":  "we hold nothing here"
+    },
+    {
+        "id":  "mini-sweet-peppers",
+        "store":  "Hy-Vee",
+        "product":  "Sunset Sweet Mini Peppers",
+        "size":  "16 oz",
+        "price":  3.99,
+        "per_unit":  0.2494,
+        "unit":  "oz",
+        "held_per_unit":  0.3119,
+        "beats_by_pct":  20,
+        "product_id":  "4263917",
+        "why":  "beats the held price"
+    },
+    {
         "id":  "pickled-jalapenos",
         "store":  "Hy-Vee",
         "product":  "La Costena Green Pickled Sliced Jalapeno Peppers",
@@ -9136,19 +9162,6 @@
         "held_per_unit":  13.32,
         "beats_by_pct":  62.5,
         "product_id":  "8679",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "mini-sweet-peppers",
-        "store":  "Hy-Vee",
-        "product":  "Sunset Sweet Mini Peppers",
-        "size":  "16 oz",
-        "price":  3.99,
-        "per_unit":  0.2494,
-        "unit":  "oz",
-        "held_per_unit":  0.3119,
-        "beats_by_pct":  20,
-        "product_id":  "4263917",
         "why":  "beats the held price"
     },
     {

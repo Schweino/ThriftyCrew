@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Ingredient string -\u003e commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.",
     "_rule":  "Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.",
-    "updated":  "2026-08-16T08:21:02",
-    "count":  10,
+    "updated":  "2026-08-16T13:45:42",
+    "count":  23,
     "resolutions":  [
                         {
                             "key":  "pepperoni",
@@ -50,15 +50,6 @@
                             "at":  "2026-08-16T08:21:02"
                         },
                         {
-                            "key":  "broccoli",
-                            "term":  "Broccoli",
-                            "item_id":  "frozen-broccoli-florets",
-                            "bid_exists":  true,
-                            "evidence":  "adjudicated alias, Brad 2026-08-16 (PLAN-ingredient-vocabulary section 0c)",
-                            "by":  "adjudication",
-                            "at":  "2026-08-16T08:21:02"
-                        },
-                        {
                             "key":  "sumac",
                             "term":  "Sumac",
                             "item_id":  "sumac",
@@ -93,6 +84,132 @@
                             "evidence":  "already in the vocabulary with a bid; the live spec simply predates the row - rebuild only",
                             "by":  "adjudication",
                             "at":  "2026-08-16T08:21:02"
+                        },
+                        {
+                            "key":  "chorizo sausage",
+                            "term":  "chorizo sausage",
+                            "item_id":  "ground-pork",
+                            "bid_exists":  true,
+                            "evidence":  "Vocab row Pork Chorizo (bid ground-pork, 6 of 7); Cacique 190cal/70g raw label row in food DB; dedicated mexican-chorizo-fresh commodity ALSO claims the term (2 of 7, Walmart $2.6786/lb Cacique) - bid-repoint flagged to registrar/match-soundness",
+                            "by":  "mapper",
+                            "at":  "2026-08-16T11:53:02"
+                        },
+                        {
+                            "key":  "ground turkey",
+                            "term":  "ground turkey",
+                            "item_id":  "93-7-ground-turkey",
+                            "bid_exists":  true,
+                            "evidence":  "In-run precedent x3 for the identical generic phrase (keto-turkey-broccoli, turkey-zucchini, southwest); Jennie-O 93/7 label row; generic 85/15 ground-turkey commodity 7 of 7 has no label row - standing fat-class split",
+                            "by":  "mapper",
+                            "at":  "2026-08-16T11:53:02"
+                        },
+                        {
+                            "key":  "low sodium chicken broth",
+                            "term":  "low sodium chicken broth",
+                            "item_id":  "chicken-broth",
+                            "bid_exists":  true,
+                            "evidence":  "Ruled turkey-meatballs-cream-sauce-skillet 2026-08-16: regular Chicken Broth row/commodity; sodium untracked, 10 cal/cup either way, same shelf and price class; printed low sodium kept in buy string",
+                            "by":  "mapper",
+                            "at":  "2026-08-16T11:53:02"
+                        },
+                        {
+                            "key":  "panko bread crumbs",
+                            "term":  "panko bread crumbs",
+                            "item_id":  "bread-crumbs",
+                            "bid_exists":  true,
+                            "evidence":  "Vocab row Panko Breadcrumbs (bid bread-crumbs, recipe board); Kikkoman 110cal/30g label row distinct from USDA plain Bread Crumbs; NB term resolver falsely matches the bread commodity - defect flagged",
+                            "by":  "mapper",
+                            "at":  "2026-08-16T11:53:03"
+                        },
+                        {
+                            "key":  "kosher salt",
+                            "term":  "kosher salt",
+                            "item_id":  "salt",
+                            "bid_exists":  true,
+                            "evidence":  "Burmese-chicken-dal-curry precedent: no Kosher Salt vocab row today; zero-macro, table-salt 6g/tsp gram basis, printed measure preserved; kosher-salt commodity exists 3 of 7 for whenever the row is re-added",
+                            "by":  "mapper",
+                            "at":  "2026-08-16T11:53:03"
+                        },
+                        {
+                            "key":  "half and half",
+                            "term":  "half-and-half",
+                            "item_id":  "half-and-half",
+                            "bid_exists":  true,
+                            "evidence":  "Vocab row Half and Half; GV label 40cal/2tbsp(30g) DB row; 7 of 7",
+                            "by":  "mapper",
+                            "at":  "2026-08-16T11:53:03"
+                        },
+                        {
+                            "key":  "jalapeno peppers",
+                            "term":  "jalapeno peppers",
+                            "item_id":  "jalapenos",
+                            "bid_exists":  true,
+                            "evidence":  "Vocab row Jalapeno; USDA 14g each row; 6 of 7 (Walmart escabeche cell defect standing)",
+                            "by":  "mapper",
+                            "at":  "2026-08-16T11:53:03"
+                        },
+                        {
+                            "key":  "ground black pepper",
+                            "term":  "ground black pepper",
+                            "item_id":  "black-pepper",
+                            "bid_exists":  true,
+                            "evidence":  "Black Pepper row IS the ground spice (row note + jalapeno-popper precedent); form flag spurious",
+                            "by":  "mapper",
+                            "at":  "2026-08-16T11:53:04"
+                        },
+                        {
+                            "key":  "dried italian seasoning",
+                            "term":  "dried italian seasoning",
+                            "item_id":  "italian-seasoning",
+                            "bid_exists":  true,
+                            "evidence":  "Italian Seasoning row IS the dried blend (creamy-garlic-herb precedent); 7 of 7",
+                            "by":  "mapper",
+                            "at":  "2026-08-16T11:53:04"
+                        },
+                        {
+                            "key":  "low carb marinara sauce",
+                            "term":  "low carb marinara sauce",
+                            "item_id":  "marinara-sauce",
+                            "bid_exists":  true,
+                            "evidence":  "Ruled turkey-parmesan-meatball-bake 2026-08-16: house GV jarred Marinara Sauce row, substitution disclosed (+~2g carbs/serving vs no-sugar marinara), recipe-board id",
+                            "by":  "mapper",
+                            "at":  "2026-08-16T11:53:04"
+                        },
+                        {
+                            "key":  "fresh garlic",
+                            "term":  "fresh garlic",
+                            "item_id":  "garlic",
+                            "bid_exists":  true,
+                            "evidence":  "Garlic row IS fresh whole bulbs; form flag spurious",
+                            "by":  "mapper",
+                            "at":  "2026-08-16T11:53:04"
+                        },
+                        {
+                            "key":  "ground chicken",
+                            "term":  "ground chicken",
+                            "item_id":  "",
+                            "bid_exists":  false,
+                            "evidence":  "GENUINE GAP: no vocab row, no commodity (CAPTURE, 6 products across 4 stores), no DB label; registrar proposal filed by turkey-parmesan-meatball-bake 2026-08-16; recipes hold/park until minted",
+                            "by":  "mapper",
+                            "at":  "2026-08-16T11:53:10"
+                        },
+                        {
+                            "key":  "broccoli",
+                            "term":  "Broccoli",
+                            "item_id":  "broccoli",
+                            "bid_exists":  true,
+                            "evidence":  "CORRECTS the 2026-08-16 08:21 entry, which cached Broccoli -\u003e frozen-broccoli-florets. Brad ruling 0c #4 was superseded the same day: the fresh weekly commodity broccoli was already priced 7/7 (cheapest Hy-Vee $1.8533/lb) and commodity-registrar ruled REUSE. Bare \"Broccoli\" now means FRESH; recipes that want frozen must write \"Broccoli Florets\".",
+                            "by":  "adjudication",
+                            "at":  "2026-08-16T13:45:42"
+                        },
+                        {
+                            "key":  "spinach",
+                            "term":  "Spinach",
+                            "item_id":  "spinach",
+                            "bid_exists":  true,
+                            "evidence":  "Fresh baby spinach. Row \"Spinach\" was rebid off frozen-chopped-spinach 2026-08-16; the fresh weekly commodity spinach was already priced 7/7 (cheapest Walmart $0.20/oz, Marketside Fresh Spinach 10 oz bag) and commodity-registrar ruled REUSE. Recipes that want frozen must write \"Frozen Chopped Spinach\".",
+                            "by":  "adjudication",
+                            "at":  "2026-08-16T13:45:42"
                         }
                     ]
 }

@@ -37,12 +37,29 @@ $mp = Split-Path -Parent $here
 
 # The whole check, over shapes rather than files, so the fixtures can drive it without a repo on disk.
 function Test-CostLineCoverage {
-  param($EngineRow, [string]$ProseText, [double]$SpecBatch, [double]$MinLine, [double]$Tolerance)
+  param($EngineRow, [string]$ProseText, [double]$SpecBatch, [double]$MinLine, [double]$Tolerance, [hashtable]$DisplayNames)
   $gap = [double]$EngineRow.cost_batch - $SpecBatch
   $missing = @()
   foreach ($l in @($EngineRow.lines)) {
     if ([double]$l.util_cost -lt $MinLine) { continue }
-    if ($ProseText -notmatch [regex]::Escape([string]$l.item)) { $missing += $l }
+    # THE BLOCK NEVER PRINTS THE CANON NAME when the spec carries a display override - cost-render-lib
+    # renders scaler.ing[].item, and the engine keys its line on scaler.ing[].canon. So for the three
+    # dangmyeon specs the block truthfully said "Korean glass noodles (dangmyeon), 14 oz dry: ~$4.76"
+    # against an engine line named "Rice Noodles", and a name-only search called that money missing.
+    #
+    # andong-jjimdak-braised-chicken, 2026-08-16: its block summed to its own cost_batch EXACTLY, noodles
+    # included, yet this guard reported it short $7.43 - because $9.70 of unrelated chicken-thigh drift
+    # cleared the $4.76 lower bound. That is the r8 CLEAN TWIN inverted: the bound only holds a naming
+    # variant back while the drift stays SMALLER than the variant's line. Drift has no such ceiling.
+    #
+    # So resolve canon -> the reader-facing name the block actually prints, and accept either. This is a
+    # NAME resolution, not a loosening: MinLine and the one-sided lower bound are untouched, and a line
+    # that appears under NEITHER name is still the omission the guard was built to catch.
+    $names = @([string]$l.item)
+    if ($DisplayNames -and $DisplayNames.ContainsKey([string]$l.item)) { $names += [string]$DisplayNames[[string]$l.item] }
+    $seen = $false
+    foreach ($n in $names) { if ($n -and $ProseText -match [regex]::Escape($n)) { $seen = $true; break } }
+    if (-not $seen) { $missing += $l }
   }
   if (-not $missing.Count) { return $null }
   # THE MONEY MUST ACTUALLY BE GONE. A near-zero gap means the total already includes the line and the
@@ -139,6 +156,29 @@ if ($SelfTest) {
   $r8 = Test-CostLineCoverage $drift 'Flank steak, 4 lb: ~$25.00. Garlic: ~$2.13.' 33.0 0.20 0.75
   ok ($null -eq $r8) 'CLEAN TWIN board drift plus a naming variant is still not an omission' "$r8"
 
+  # CLEAN TWIN, THE DISPLAY OVERRIDE. andong-jjimdak-braised-chicken, 2026-08-16. The engine keys the line
+  # "Rice Noodles" (from scaler.canon); the block prints "Korean glass noodles (dangmyeon)" (from
+  # scaler.item), which is the whole point of the override - the canonical name is a pricing basis and must
+  # never reach a cook. The $4.76 IS in the block and the block sums to its own cost_batch exactly. The gap
+  # is $7.43 of chicken-thigh drift, which cleared the $4.76 lower bound and made this report an omission.
+  $jjim = [pscustomobject]@{ cost_batch = 34.16; lines = @(
+      [pscustomobject]@{ item = 'Rice Noodles'; util_cost = 4.76 }
+      [pscustomobject]@{ item = 'Boneless Skinless Chicken Thigh'; util_cost = 21.53 }) }
+  $jprose = 'Korean glass noodles (dangmyeon), 14 oz dry: ~$4.76. Boneless Skinless Chicken Thigh, 6.75 lb: ~$11.83.'
+  $jdisp  = @{ 'Rice Noodles' = 'Korean glass noodles (dangmyeon)' }
+  $r9 = Test-CostLineCoverage $jjim $jprose 26.73 0.20 0.75 $jdisp
+  ok ($null -eq $r9) 'CLEAN TWIN a display-override line the block DOES print is not missing, however far the board drifted' "$r9"
+
+  # MUST FIRE: the same override, but the line really is gone - neither the canon nor the reader-facing
+  # name appears. Resolving the display name must not become a blanket excuse for the class.
+  $r10 = Test-CostLineCoverage $jjim 'Boneless Skinless Chicken Thigh, 6.75 lb: ~$11.83.' 11.83 0.20 0.75 $jdisp
+  ok ($null -ne $r10 -and $r10.omitted.Count -eq 1) 'MUST FIRE  an override line absent under BOTH names is still an omission' $(if ($r10) { $r10.omitted.Count } else { '<null>' })
+
+  # MUST FIRE: with no map supplied the guard behaves exactly as before - the parameter is optional and
+  # its absence must not silently soften anything.
+  $r11 = Test-CostLineCoverage $jjim $jprose 26.73 0.20 0.75 $null
+  ok ($null -ne $r11) 'MUST FIRE  with no display map the old name-only behaviour is unchanged' "$r11"
+
   if ($fails) { Write-Host "SELFTEST: $fails FAILED"; exit 1 }
   Write-Host 'audit-cost-line-coverage SELF-TEST PASS'
   exit 0
@@ -166,7 +206,14 @@ foreach ($s in $targets) {
   $specRaw = Get-Content $f -Raw
   $spec = ConvertFrom-Json $specRaw
   $checked++
-  $r = Test-CostLineCoverage $e ((@($spec.cost_lines) -join ' ')) ([double]$spec.cost_batch) $MinLine $Tolerance
+  # canon -> the reader-facing name the cost block prints for it. Built from the spec's OWN scaler, so a
+  # display override is recognised without any per-recipe list to keep in sync.
+  $disp = @{}
+  foreach ($se in @($spec.scaler.ing)) {
+    $c = if (($se.PSObject.Properties.Name -contains 'canon') -and $se.canon) { [string]$se.canon } else { [string]$se.item }
+    if ($c -and [string]$se.item -and $c -ne [string]$se.item -and -not $disp.ContainsKey($c)) { $disp[$c] = [string]$se.item }
+  }
+  $r = Test-CostLineCoverage $e ((@($spec.cost_lines) -join ' ')) ([double]$spec.cost_batch) $MinLine $Tolerance $disp
   if ($r) { $hits += [pscustomobject]@{ slug = $s; gap = $r.gap; detail = $r.detail } }
 }
 

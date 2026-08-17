@@ -252,3 +252,12 @@
 [2026-08-15T09:20:44] EDGE STALE: The edge is serving a feed generated 2026-08-15T06:20:32 but the repo pushed 2026-08-15T09:10:16. The push succeeded, so this is a Cloudflare deploy that has not landed. Live recipe prices are stale until it does. Check the CF dashboard build log for the smp-feed worker.
 [2026-08-15T09:20:45] feed fresh: week 2026-08-15, 542 recipes, 605 ingredients (inputs verified same-day)
 [2026-08-15T09:20:45] done
+[2026-08-16T08:30:02] cloud-runs: check-cloud-runs: daily.yml query failed (The remote server returned an error: (404) Not Found.) - skipping (fails open)
+[2026-08-16T08:30:03] cloud-runs: check-cloud-runs: heartbeat.yml query failed (The remote server returned an error: (404) Not Found.) - skipping (fails open)
+[2026-08-16T08:30:03] weekly-lock: weekly-run lock: STALE - C:\Codex\ThriftyCrew\grocery\out\weekly-run.lock was written by pid 2356 (phase publish), last refreshed 2026-08-15T12:49:39, and EXPIRED 940 min ago. It is being IGNORED: a stale lock must never disable the daily job. Look for a weekly run that died in out\logs\weekly-post-capture-*.log.
+[2026-08-16T08:30:03] weekly-lock: weekly-run lock RELEASED.
+[2026-08-16T08:30:03] start: syncing repo
+[2026-08-16T08:30:04] pull: From https://github.com/Schweino/ThriftyCrew
+[2026-08-16T08:30:04] pull:  * branch              main       -> FETCH_HEAD
+[2026-08-16T08:30:04] pull: Already up to date.
+[2026-08-16T08:30:04] running check-ad-cycles

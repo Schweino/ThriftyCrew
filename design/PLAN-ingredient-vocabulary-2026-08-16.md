@@ -118,6 +118,40 @@ honest across every alias below. My initial framing of the cream-cheese ruling o
 | 13 | Yellow Bell Pepper | **NEW ROW + capture** | Missed in the first questioning round and caught when the rebuild sweep surfaced it. Ruled its own row rather than aliasing to Red Bell Pepper. |
 | 14 | Yellow Mustard | **NEW ROW + capture** | Plain yellow is markedly cheaper than Dijon and is a distinct staple; aliasing would overstate cost and change the dish's character. |
 | 15 | Dry White Wine | **NEW ROW + capture** (registrar NOT consulted) | Brad ruled directly: treat the 4056603f "Red Wine" deletion as unrelated cleanup. **Recorded explicitly because it overrides this plan's own recommendation to ask the registrar first** - if wine later proves deliberately out of scope, this is the decision to revisit, and the reason it was made without that check. |
+| 16 | Broccoli (fresh) | **SUPERSEDES #4: NEW ROW, alias retired** | Ruling #4 aliased "Broccoli" to the frozen Broccoli Florets row on the stated premise that the board carried no fresh broccoli. **That premise was false.** Weekly commodity `broccoli` ("Broccoli (fresh)", lb) was live and priced at 7/7 stores, cheapest Hy-Vee $1.8533/lb, the whole time. commodity-registrar ruled REUSE - no id minted - and verified the fresh/frozen firewall holds both ways (`broccoli` excludes `\bfrozen\b`/`steam`/`cuts`; `frozen-broccoli`'s includes are all frozen-qualified). Vocabulary gained a fresh `Broccoli` row (bid `broccoli`, lb, gpu 453.592); the alias came off Broccoli Florets, which keeps serving the 37 recipes that spec frozen and argue for it in prose. |
+| 17 | Spinach (fresh) | **REBID, no new row** | Row "Spinach" bid `frozen-chopped-spinach` - the same bid as the separate, correctly-named "Frozen Chopped Spinach" row. All 5 recipes writing canon `Spinach` say "fresh baby spinach" in prose; all 22 writing `Frozen Chopped Spinach` say "thaw and squeeze it dry". Weekly commodity `spinach` ("Spinach (fresh)", oz) was live at 7/7 stores, cheapest Walmart $0.20/oz (Marketside Fresh Spinach, 10 oz bag). Registrar ruled REUSE. Row rebid to `spinach`; fresh and frozen now have exactly one row each and no shared bid. |
+
+| 18 | Cream Cheese | **SUPERSEDES #1's premise: recipes USE the 1/3-fat product** | Ruling #1 accepted the alias because "light cream cheese is cheaper" and cost would be "understated modestly". The feed says the opposite: `cream-cheese` (full-fat) is **$0.1381/oz at 7/7 stores** against `1-3-fat-cream-cheese` at **$0.1862/oz, 6/7** - the alias is 35% MORE per ounce, not less. Brad ruled 2026-08-16 that the recipes should USE the lower-calorie product regardless of cost. That makes the PRICE the correct field and the MACROS and COPY the wrong ones: five specs carried the USDA full-fat macro row while priced off the 1/3-fat commodity, and two told the reader in so many words to buy the full-fat brick. All five were rebased onto the "1/3 Fat Cream Cheese" (Great Value Neufchatel) food-DB row (-14 to -28 cal/serving, all still inside the 400-650 band), display and cost labels now name that product, and the two contradicting shop_smart bullets were rewritten. Cost did not move - the bid was already right. |
+
+### The alias/macro split - a structural trap this ruling exposed
+
+**Price resolves through aliases; macros do not.** `build-v2-spec` looks up price by ingredient ROW (following
+aliases) and macros by the spec's CANON NAME against `food-macros-db` (no alias resolution). So a spec can name
+one product, carry a second product's macros, and be priced off a third, with every guard green. Swept over the
+live vocabulary, **seven aliases name a food-DB row distinct from the row they resolve to**:
+
+| alias | resolves to row | macro gap |
+|---|---|---|
+| Cream Cheese | 1/3 Fat Cream Cheese | 350 cal/100 g vs 250 - **the one that bit us** |
+| Pepperoni | Turkey Pepperoni | 150 cal/30 g vs 70/28 - cost-side only, ruled knowingly at #12 |
+| Sour Cream | Light Sour Cream | 198 vs 140 cal/100 g - honest today: bid is the GENERIC `sour-cream`, macros full-fat, card says full-fat |
+| Baby Bella (Crimini) Mushrooms | White Mushrooms | 22 vs 21.4 cal/100 g - immaterial |
+| Tandoori Masala | Garam Masala | garnish-scale grams |
+| Smoked Sausage / Andouille Smoked Sausage | Pork Smoked Sausage | row name has NO food-DB row; specs write the alias, which does |
+
+Only cream cheese had macros contradicting its own card, and no affected recipe is published. **The open risk is
+future recurrence:** the `Cream Cheese` alias survives, so a new spec writing bare "Cream Cheese" would again get
+full-fat macros on a 1/3-fat price. Two candidate remedies, neither taken - Brad's call: retire the alias so the
+bare name refuses and the mapper must choose, or give full-fat its own row (`cream-cheese` is live and priced
+7/7, so it would be a REUSE, not a mint - the same shape as ruling #16). A build-time guard that refuses when a
+canon name's price row and macro row disagree would close the class rather than the instance.
+
+**The lesson #16 and #17 repeat, for the third time in one day.** Section 0d found ten of nineteen "new"
+ids already existed. This is eleven and twelve. In both cases a ruling was made, and a recipe was held for
+a day, on "the board does not carry this" - asserted by a sweep that only ever read `ingredients.json`.
+Nobody checked `commodities.json` or the feed. **The standing correction: before any ruling that turns on
+whether the estate prices a food, query the FEED, not the ingredient map.** A missing ingredient row and an
+unpriced food look identical from the vocabulary side and are opposite problems with opposite remedies.
 
 ### The resulting capture list - ONE pricer pass, ~17 terms
 

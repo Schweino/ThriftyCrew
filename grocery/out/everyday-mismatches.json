@@ -741,19 +741,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "tartar-sauce",
-        "store":  "Walmart",
-        "unit":  "floz",
-        "board":  0.1267,
-        "link":  0.1367,
-        "ratio":  1.08,
-        "price":  1.64,
-        "size":  "12 fl oz",
-        "boardItem":  "Great Value Tartar Sauce, 12 fl oz",
-        "linkItem":  "Great Value Tartar Sauce, 12 fl oz",
-        "board_src":  "main"
-    },
-    {
         "id":  "teriyaki-sauce",
         "store":  "Sam\u0027s Club",
         "unit":  "floz",
@@ -1063,6 +1050,19 @@
         "size":  "32 oz",
         "boardItem":  "Simple Truth Organic Plain Nonfat Greek Yogurt Tub",
         "linkItem":  "Kroger Plain Nonfat Greek Yogurt Tub",
+        "board_src":  "recipe"
+    },
+    {
+        "id":  "greek-yogurt",
+        "store":  "Family Fare",
+        "unit":  "oz",
+        "board":  0.2817,
+        "link":  0.3566,
+        "ratio":  1.27,
+        "price":  1.89,
+        "size":  "5.3 oz",
+        "boardItem":  "Chobani Strawberry Banana On The Bottom Reduced Fat Greek Yogurt 5.3 Oz",
+        "linkItem":  "Chobani Plain Nonfat Greek Yogurt 5.3 Oz",
         "board_src":  "recipe"
     },
     {

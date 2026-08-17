@@ -1,0 +1,12 @@
+{
+    "run":  "hunt-2026-08-15-lowcarb",
+    "created":  "2026-08-15T19:00:51",
+    "conditions":  "Dinner recipes: over 475 calories per serving AND under 35g net-listed carbs per serving. Budget meal-prep, 14-serving scalable, no seafood, board-priceable ingredients.",
+    "stop":  "10 recipes carried to a terminal state (published, parked, or rejected), targeting 10 PUBLISHED.",
+    "wave_size":  5,
+    "auto_publish":  true,
+    "catalog_digest":  "C:\\Codex\\ThriftyCrew\\meal-prep\\pipeline\\catalog-digest.json",
+    "catalog_digest_written":  "2026-08-15T11:38:04",
+    "board_file":  "comparison-2026-08-15.json",
+    "board_written":  "2026-08-15T18:13:34"
+}

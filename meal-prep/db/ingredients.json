@@ -318,10 +318,8 @@
         "board":  "recipe",
         "buy_pkg_g":  340,
         "buy_pkg_label":  "12oz bag",
-        "aliases":  [
-                        "Broccoli"
-                    ],
-        "alias_ruling":  "Brad, 2026-08-16; see design\\PLAN-ingredient-vocabulary-2026-08-16.md section 0c"
+        "aliases":  [],
+        "alias_ruling":  "Brad, 2026-08-16 (superseded same day): ruling 0c #4 aliased \"Broccoli\" here on the premise that no fresh broccoli row existed. It did - weekly commodity broccoli, 7/7 stores. The alias moved to its own fresh row; this row serves recipes that spec FROZEN florets and argue for them."
     },
     {
         "item":  "Brown Gravy Mix",
@@ -2239,10 +2237,10 @@
     },
     {
         "item":  "Spinach",
-        "bid":  "frozen-chopped-spinach",
+        "bid":  "spinach",
         "gpu":  28.3495,
         "unit":  "oz",
-        "board":  "recipe",
+        "board":  "weekly",
         "buy_pkg_g":  283,
         "buy_pkg_label":  "10oz bag"
     },
@@ -2585,7 +2583,10 @@
         "bid":  "rice-noodles",
         "gpu":  28.3495,
         "unit":  "oz",
-        "board":  "recipe"
+        "board":  "recipe",
+        "buy_pkg_g":  397,
+        "buy_pkg_label":  "14oz box",
+        "note":  "Priced off bid rice-noodles - same box, same shelf, same gpu - but a DISTINCT food from Rice Noodles for macros: sweet potato starch is ~0.2 g protein/100 g against 7.1 g. The package fields are copied from the Rice Noodles row so this name costs identically; before 2026-08-16 they were missing, so the three dangmyeon specs had to carry canon 'Rice Noodles' to get a buy line, which split the cost key from the macro key and made cost-render-lib drop the noodles."
     },
     {
         "item":  "Cauliflower",
@@ -2780,5 +2781,15 @@
         "buy_pkg_g":  567,
         "buy_pkg_label":  "20oz bottle",
         "note":  "Markedly cheaper than Dijon; ruled its own row."
+    },
+    {
+        "item":  "Broccoli",
+        "bid":  "broccoli",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb",
+        "note":  "FRESH broccoli, sold by the pound. Supersedes the 0c #4 alias to Broccoli Florets (frozen); commodity-registrar ruled REUSE of the existing priced weekly id broccoli, 2026-08-16. Fresh and frozen exclude each other in commodities.json, so neither can crown the other."
     }
 ]

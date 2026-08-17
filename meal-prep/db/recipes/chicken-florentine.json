@@ -16,7 +16,7 @@
                          "The vinegar goes in with the broth, before the cream, so it cooks into the sauce.",
                          "SOURCE YIELD: 4 servings, rebuilt to 14. Source cutlets respec\u0027d to 14 pieces of about 6 oz cut from whole breasts (5.25 lb), per the mapper\u0027s macro-reconstructed cutlet weight.",
                          "Reader-facing wine win (skip a whole bottle for one pour) placed in shop_smart and echoed in the cost closing, mirroring senfbraten-german-mustard-pork-roast.",
-                         "MAPPING FLAGS forwarded to repair (see report): Shallots bid is decision-needed (evidence bid \u0027shallots\u0027 vs canonical row pointing at \u0027onions\u0027); Spinach priced on a frozen-chopped basis for a fresh baby-spinach recipe; board hijacks noted on parmesan (Aldi Kirkwood Parmesan Chicken Tenders), butter (Fareway spread, Family Fare butter lettuce), and heavy cream (Aldi dairy-free at a suspect 169 floz size)."
+                         "MAPPING FLAGS forwarded to repair (see report): Shallots bid is decision-needed (evidence bid \u0027shallots\u0027 vs canonical row pointing at \u0027onions\u0027); Spinach priced on a frozen-chopped basis for a fresh baby-spinach recipe; board hijacks noted on parmesan (Aldi Kirkwood Parmesan Chicken Tenders), butter (Fareway spread, Family Fare butter lettuce), and heavy cream (Aldi dairy-free at a suspect 169 floz size). RESOLVED 2026-08-16: the bid was corrected. Item Spinach now bids the fresh weekly commodity spinach (priced 7/7 stores, cheapest Walmart $0.20/oz, a 10 oz bag of fresh leaf); the frozen recipes keep the separate Frozen Chopped Spinach row. Cost block re-rendered off the fresh basis."
                      ],
     "forbidden_prose_terms":  [
 
@@ -26,7 +26,7 @@
                  "protein":  45,
                  "carbs":  14,
                  "fat":  37,
-                 "cost_ps":  "3.29"
+                 "cost_ps":  "3.41"
              },
     "intro_html":  "Chicken Florentine is the restaurant plate you think you cannot make at home for cheap: golden chicken cutlets under a cream sauce loaded with spinach and parmesan. Florentine just means there is spinach in it, and the spinach is not a garnish, it is half the reason the sauce tastes like more than cream. We build it at 14 servings and it still lands at about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e with \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a plate, staying under 600 calories while eating like it has no business being that lean.",
     "ingredients_display":  [
@@ -56,12 +56,12 @@
                        "Chicken Broth, 3.5 cups: ~$1.28. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
                        "White Wine Vinegar, 3 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 16.9floz bottle: $3.01.\u003c/strong\u003e",
                        "Heavy Cream, 3.5 cups: ~$4.12. \u003cstrong\u003eBuy 2 pints: $4.68.\u003c/strong\u003e",
-                       "Baby Spinach, 14 cups fresh baby spinach (about 14 oz): ~$1.61. \u003cstrong\u003eBuy 2 10oz bags: $2.30.\u003c/strong\u003e",
+                       "Baby Spinach, 14 cups fresh baby spinach (about 14 oz): ~$2.80. \u003cstrong\u003eBuy 2 10oz bags: $3.99.\u003c/strong\u003e",
                        "Parmesan Cheese, 1.75 cups grated: ~$2.37. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, italian seasoning): ~$0.19. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $23.45 across 14 servings, so roughly $1.68 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.88 across 14 servings, roughly $2.35 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.14 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.02. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $24.64 across 14 servings, so roughly $1.76 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.57 across 14 servings, roughly $2.47 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.14 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.71. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a plate\u003c/strong\u003e (at everyday cost) for chicken in a cream and parmesan sauce that tastes like a night out. Skipping the wine keeps a whole bottle out of your cart and does not cost the dish a thing.",
     "shop_smart":  [
@@ -82,14 +82,14 @@
     "portion_html":  "Set the full pan on your scale and subtract the empty weight from Step 1 to get your total. Give each of your 14 containers one cutlet so the protein lands even, then divide the sauce and spinach by 14 and spoon that much over each piece. Every plate comes in around \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.smalltownwoman.com/chicken-florentine/\" target=\"_blank\" rel=\"noopener\"\u003esmalltownwoman.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Restaurant plates on a weeknight budget, about ${{cost_ps}} a plate (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  23.45,
-    "cost_batch_true":  32.88,
-    "cost_per_serving":  1.68,
-    "cost_per_serving_true":  2.35,
+    "cost_batch":  24.64,
+    "cost_batch_true":  34.57,
+    "cost_per_serving":  1.76,
+    "cost_per_serving_true":  2.47,
     "cost_pantry_add":  13.14,
-    "cost_first_run":  46.02,
+    "cost_first_run":  47.71,
     "scaler":  {
-                   "cost":  "32.88",
+                   "cost":  "34.57",
                    "ing":  [
                                {
                                    "item":  "Chicken Breast (cutlets)",
@@ -192,7 +192,7 @@
                                    "canon":  "Spinach",
                                    "grams":  397,
                                    "buy":  "14 cups fresh baby spinach (about 14 oz)",
-                                   "bid":  "frozen-chopped-spinach",
+                                   "bid":  "spinach",
                                    "gpu":  "28.350"
                                },
                                {
@@ -212,7 +212,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT1H",
-                 "costPerServing":  3.29,
+                 "costPerServing":  3.41,
                  "recipeIngredient":  [
                                           "Chicken Breast (cutlets), 5.25 lb (14 cutlets, about 6 oz each) (2381 g)",
                                           "All-Purpose Flour, 0.75 cups (for dredging) (94 g)",
