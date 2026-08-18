@@ -109,7 +109,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-18T06:24:17",
+    "generated":  "2026-08-18T09:14:07",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -923,7 +923,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0993,
                               "size":  "15 oz",
-                              "item":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
+                              "item":  "Alberto Vo5 Extra Body With Collagen Volumizing Shampoo For Body \u0026 Bounce Bonus Size 15 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1049,6 +1049,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "teriyaki-sauce",
+                              "commodity":  "Teriyaki Sauce / Marinade",
+                              "unit":  "floz",
+                              "store":  "Hy-Vee",
+                              "per_unit":  0.2376,
+                              "size":  "21 oz",
+                              "item":  "Soy Vay Marinade \u0026 Sauce, Less Sodium, Veri Veri Teriyaki",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "vanilla-extract",
                               "commodity":  "Vanilla Extract",
                               "unit":  "floz",
@@ -1121,5 +1133,5 @@
                               "holds_crown":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-08-17.json"
+    "compare_file":  "comparison-2026-08-18.json"
 }

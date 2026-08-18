@@ -1,70 +1,83 @@
 ﻿{
     "resolved":  [
-
+                     {
+                         "id":  "anaheim-peppers",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Anaheim Peppers (Green And Red)",
+                         "board_pu":  4.99,
+                         "name":  "Anaheim Peppers (Green And Red)",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/anaheim_peppers_green_and_red/p/12543",
+                         "price":  "$4.99",
+                         "size":  "lb",
+                         "score":  1
+                     },
+                     {
+                         "id":  "eggs",
+                         "fault":  "NO-LINK",
+                         "board":  "Large Grade A Eggs Our Family (30 Ct)",
+                         "board_pu":  2.356,
+                         "name":  "Large Eggs, Grade A Our Family",
+                         "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
+                         "price":  "$2.39",
+                         "size":  "12 ct",
+                         "score":  1
+                     }
                  ],
     "refused":  [
                     {
-                        "id":  "anaheim-peppers",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
                         "id":  "dried-basil",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"200 ml\" gives no per-unit in oz"
                     },
                     {
                         "id":  "caesar-salad-kit",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"1 bag\" gives no per-unit in oz"
                     },
                     {
                         "id":  "canned-pasta",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but per-unit disagrees: board $0.0993 vs link $0.106 (6.3%)"
                     },
                     {
                         "id":  "cherry-tomatoes",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"1 pt\" gives no per-unit in oz"
                     },
                     {
                         "id":  "clementines",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $1.995 vs link $2.895 (31.1%)"
                     },
                     {
                         "id":  "croissants",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "dinner-rolls",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"15 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "donuts",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "hamburger-buns",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "eggs",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"16 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "orange-juice",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"0.5 gll\" gives no per-unit in floz"
                     },
                     {
                         "id":  "queso",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"23\" gives no per-unit in oz"
                     },
                     {
                         "id":  "strawberries",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $0.3119 vs link $0.4369 (28.6%)"
                     },
                     {
                         "id":  "tomatoes",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $1.69 vs link $1.99 (15.1%)"
                     }
                 ],
     "worked":  15,
-    "generated":  "2026-08-18 06:23",
-    "board":  "comparison-2026-08-17.json"
+    "generated":  "2026-08-18 09:12",
+    "board":  "comparison-2026-08-18.json"
 }

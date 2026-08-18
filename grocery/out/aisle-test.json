@@ -182,7 +182,7 @@
     {
         "id":  "baby-food",
         "store":  "Family Fare",
-        "product":  "Gerber Prune Apple, Sitter 2nd Foods, 2 Packs 2 Ea",
+        "product":  "Gerber Sitter 2nd Foods Nourishing Blends Sweet Potato Turkey With Oats 2 Ea",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/baby_child",
         "verdict":  "ALLOW",
@@ -218,7 +218,7 @@
     {
         "id":  "bagels",
         "store":  "Family Fare",
-        "product":  "Lender\u0027s Pre Sliced Cinnamon Raisin Swirl Bagels 6 Ea",
+        "product":  "Lender\u0027s Pre Sliced Plain Bagels 6 Ea",
         "dept":  "dairy",
         "aisle":  "dairy/breads_rolls_bagels",
         "verdict":  "ALLOW",
@@ -668,7 +668,7 @@
     {
         "id":  "canned-green-beans",
         "store":  "Family Fare",
-        "product":  "Our Family No Salt Added Cut Green Beans 14.5 Oz",
+        "product":  "Our Family Cut Green Beans 14.5 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -1460,7 +1460,7 @@
     {
         "id":  "english-muffins",
         "store":  "Family Fare",
-        "product":  "Country Hearth English Muffins, Light, Valu Pack 12 Ea",
+        "product":  "Country Hearth Sourdough English Muffins",
         "dept":  "bakery",
         "aisle":  "bakery/english_muffins_biscuits_croissants",
         "verdict":  "ALLOW",
@@ -1586,7 +1586,7 @@
     {
         "id":  "frosting",
         "store":  "Family Fare",
-        "product":  "Pillsbury Frosting, Cream Cheese 16 Oz",
+        "product":  "Pillsbury Frosting, Vanilla, Creamy Supreme 16 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/baking",
         "verdict":  "ALLOW",
@@ -1643,6 +1643,15 @@
         "product":  "Our Family Cherry Berry Blend, Fresh Frozen 16 Oz",
         "dept":  "freezer",
         "aisle":  "freezer/frozen_fruit",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
+    },
+    {
+        "id":  "hash-browns",
+        "store":  "Family Fare",
+        "product":  "Ore Ida Crispy Hash Brown Patties Shredded Frozen Potatoes, 1 Bag, For Easy Breakfast Sides, Gluten Free, 3 Lb",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_potatoes",
         "verdict":  "ALLOW",
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
@@ -2099,7 +2108,7 @@
     {
         "id":  "italian-dressing",
         "store":  "Family Fare",
-        "product":  "Our Family House Italian Dressing 16 Fl Oz",
+        "product":  "Our Family Zesty Italian Dressing 16 Fl Oz",
         "dept":  "pantry",
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "ALLOW",
@@ -2675,7 +2684,7 @@
     {
         "id":  "pickles",
         "store":  "Family Fare",
-        "product":  "Our Family Spears Kosher Dill Pickles 24 Fl Oz",
+        "product":  "Our Family Spears Polish Dill Pickles 24 Fl Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -2810,7 +2819,7 @@
     {
         "id":  "pretzels",
         "store":  "Family Fare",
-        "product":  "Our Family Pretzels, Classic, Mini Twists 16 Oz",
+        "product":  "Our Family Pretzels, Classic, Thin Twists 16 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",
@@ -3152,7 +3161,7 @@
     {
         "id":  "shampoo",
         "store":  "Family Fare",
-        "product":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
+        "product":  "Alberto Vo5 Extra Body With Collagen Volumizing Shampoo For Body \u0026 Bounce Bonus Size 15 Fl Oz",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/grooming_hygiene",
         "verdict":  "ALLOW",
@@ -3467,7 +3476,7 @@
     {
         "id":  "toaster-pastries",
         "store":  "Family Fare",
-        "product":  "Our Family Toaster Pastries, Brown Sugar Cinnamon, Frosted 12 Ea",
+        "product":  "Our Family Toaster Pastries, Strawberry, Frosted 12 Ea",
         "dept":  "pantry",
         "aisle":  "pantry/breakfast",
         "verdict":  "ALLOW",

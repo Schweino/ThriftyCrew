@@ -403,7 +403,7 @@ script-census FAIL: 1 finding(s). Wire it in, move it to archive\one-off\, or re
   PASS  compare-deals and audit-capture-eviction still state the SAME coverage-depth eligibility rule
   PASS  compare-deals still emits src_date into candidates (the field the per-store ranking turns on)
   PASS  audit-capture-eviction is ROSTERED in check-ad-cycles - the eviction check runs on every board generation, not only when a human remembers it
-  PASS  capture-eviction roster is ARMED: capture-evictions.json (2026-08-18T06:25:34) post-dates the newest board comparison-2026-08-17.json (built_at 2026-08-18T06:11:49)
+  PASS  capture-eviction roster is ARMED: capture-evictions.json (2026-08-18T09:15:30) post-dates the newest board comparison-2026-08-18.json (built_at 2026-08-18T09:00:51)
   FAIL  prompt-backup drift (rc=2) - run ops\audit-prompt-backup.ps1 -Sync and commit: prompt-backup: checked 23 live prompt(s) against ops\prompt-backup   3 issue(s):     SCOPE DRIFT  recipe-batch-auditor.md - the user-scope copy differs from the project-scope copy, so which prompt runs depends on the session's working directory     SCOPE DRIFT  recipe-ingredient-mapper.md - the user-scope copy differs from the project-scope copy, so which prompt runs depends on the session's working directory     STALE BACKUP  skills\recipe-hunter\SKILL.md - repo copy differs from the live skill   Fix: run this with -Sync (live -> repo, and project scope -> user scope), then commit ops\prompt-backup. PROMPT-BACKUP-COMPLETE
   PASS  fmt-lib: per-unit display still rolls over at a dollar and still shows a real sub-cent price
   PASS  basis-outlier: still catches a pack price on a single-unit size, and still stays silent on an ordinary premium spread

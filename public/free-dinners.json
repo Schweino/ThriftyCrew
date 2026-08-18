@@ -1,6 +1,6 @@
 {
-    "week_of":  "2026-08-17",
-    "updated":  "2026-08-18T06:20:57",
+    "week_of":  "2026-08-18",
+    "updated":  "2026-08-18T09:10:57",
     "note":  "This week free because they are the cheapest dinners per protein on the live Omaha board. They revert to members-only when prices re-rank.",
     "free":  [
                  {
@@ -39,18 +39,18 @@
                      "per_serving":  2.03
                  },
                  {
-                     "slug":  "turkey-huevos-rancheros-rice-bowls",
-                     "protein":  "turkey",
-                     "rank":  1,
-                     "name":  "Turkey Huevos Rancheros Rice Bowls",
-                     "per_serving":  1.79
-                 },
-                 {
                      "slug":  "turkey-biscuit-pot-pie-casserole",
                      "protein":  "turkey",
-                     "rank":  2,
+                     "rank":  1,
                      "name":  "Turkey Biscuit Pot Pie Casserole",
                      "per_serving":  1.89
+                 },
+                 {
+                     "slug":  "turkey-huevos-rancheros-rice-bowls",
+                     "protein":  "turkey",
+                     "rank":  2,
+                     "name":  "Turkey Huevos Rancheros Rice Bowls",
+                     "per_serving":  1.91
                  },
                  {
                      "slug":  "turkey-alfredo-rotini-bake",

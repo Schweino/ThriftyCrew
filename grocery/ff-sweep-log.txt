@@ -3113,3 +3113,26 @@
 [2026-08-18T05:55:31]   Family Fare: catalog healthy - 5141 items, 27 expired, 3853 re-verified in 48h (no alert)
 [2026-08-18T05:55:57] multipack-repair: repair-multipack-sizes: 146 file(s), 0 guard-5 reject(s) examined, 0 repairable, 0 REFUSED (need a human) - APPLIED
 [2026-08-18T05:55:57] sweep done rc=0 - cursor #122 -> #205
+[2026-08-18T07:00:01] sweep start (cursor before = #205, MaxMinutes=9)
+[2026-08-18T07:06:05]   Family Fare: 596 search term(s) across 595 commodit(y/ies) - 1 are ADDITIONAL terms on multi-term commodities and each one spends a budget slot every rotation
+[2026-08-18T07:06:05]   Family Fare: term cursor at #205 of 596 - this run's budget starts there and wraps
+[2026-08-18T07:06:05]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-18T07:06:05]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-18T07:06:05]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-18T07:06:05]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-18T07:06:05]   Family Fare: ABORTING - 60 consecutive empty terms after 776 rows. API said: HTTP 400 x178. Continuing would burn time for nothing and push the limit out further. Carrying forward and writing what we have.
+[2026-08-18T07:06:05]   WARNING: Family Fare: 536 term(s) STILL empty after recovery (not carried, or persistent throttle): cream of mushroom
+[2026-08-18T07:06:05]   soup, cream of chicken soup, instant mashed potatoes, stuffing mix, brown rice, egg noodles, lasagna noodles, alfredo
+[2026-08-18T07:06:05]   sauce, pizza sauce, salsa con queso, hummus, marshmallows, graham crackers, canned sliced peaches, canned pineapple
+[2026-08-18T07:06:05]   chunks, gelatin cups, apple juice, grape juice, cranberry juice, lemonade, fruit punch, gatorade, energy drink,
+[2026-08-18T07:06:05]   sparkling water, iced tea gallon, black tea bags, hot cocoa mix, coffee k cups, instant coffee, dish sponges, paper
+[2026-08-18T07:06:05]   plates, paper napkins, sandwich bags, plastic wrap, parchment paper, toilet bowl cleaner, glass cleaner, disinfecting
+[2026-08-18T07:06:05]   wipes, disinfectant spray, air freshener spray
+[2026-08-18T07:06:05]   WARNING: Family Fare: throttled - got only 776 items vs 5167 in the last good file. Diagnostic copy:
+[2026-08-18T07:06:05]   C:\Codex\ThriftyCrew\grocery\out\throttled\family-fare-2026-08-18.throttled.json. These rows are REAL and are being
+[2026-08-18T07:06:05]   MERGED (today's prices win, everything else carries forward).
+[2026-08-18T07:06:05]   Family Fare everyday prices: 5143 catalog items (772 fresh, 4371 carried forward, 0 expired past 14 d [0 starved, 0 churn, 0 unknown]; 536 terms still empty) -> C:\Codex\ThriftyCrew\grocery\out\regular\family-fare-regular-2026-08-18.json
+[2026-08-18T07:06:05]   Family Fare: term cursor advanced to #294 (this run bought terms #205..#293, merged catalog landed)
+[2026-08-18T07:06:05]   Family Fare: catalog healthy - 5143 items, 0 expired, 4175 re-verified in 48h (no alert)
+[2026-08-18T07:06:29] multipack-repair: repair-multipack-sizes: 147 file(s), 0 guard-5 reject(s) examined, 0 repairable, 0 REFUSED (need a human) - APPLIED
+[2026-08-18T07:06:29] sweep done rc=0 - cursor #205 -> #294
