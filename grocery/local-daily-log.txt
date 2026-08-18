@@ -261,3 +261,12 @@
 [2026-08-16T08:30:04] pull:  * branch              main       -> FETCH_HEAD
 [2026-08-16T08:30:04] pull: Already up to date.
 [2026-08-16T08:30:04] running check-ad-cycles
+[2026-08-17T08:30:02] cloud-runs: check-cloud-runs: daily.yml query failed (The remote server returned an error: (404) Not Found.) - skipping (fails open)
+[2026-08-17T08:30:02] cloud-runs: check-cloud-runs: heartbeat.yml query failed (The remote server returned an error: (404) Not Found.) - skipping (fails open)
+[2026-08-17T08:30:02] stale lock (24h) - taking over
+[2026-08-17T08:30:03] weekly-lock: weekly-run lock: none - no weekly refresh is holding the tree.
+[2026-08-17T08:30:03] start: syncing repo
+[2026-08-17T08:30:04] pull: From https://github.com/Schweino/ThriftyCrew
+[2026-08-17T08:30:04] pull:  * branch              main       -> FETCH_HEAD
+[2026-08-17T08:30:04] pull: Already up to date.
+[2026-08-17T08:30:04] running check-ad-cycles

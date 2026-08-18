@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-17 06:17",
-    "board":  "comparison-2026-08-16.json",
-    "sidecar_generated":  "2026-08-17 06:17:26",
+    "generated":  "2026-08-18 06:15",
+    "board":  "comparison-2026-08-17.json",
+    "sidecar_generated":  "2026-08-18 06:15:47",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2972,
-                     "corpus":  36653,
-                     "rule_invisible":  6665
+                     "board_pairs":  2969,
+                     "corpus":  36738,
+                     "rule_invisible":  6683
                  },
     "identity_count":  0,
-    "coverage_count":  68,
+    "coverage_count":  65,
     "identity":  [
 
                  ],
@@ -95,8 +95,8 @@
                          "commodity":  "Baby Back Ribs",
                          "store":  "Walmart",
                          "product":  "Prairie Fresh Natural Fresh Pork Spareribs, Bone-in, 4.0-5.5 lb, 19g Protein per 4oz Serving",
-                         "cos":  0.7243,
-                         "score":  0.976323,
+                         "cos":  0.7249,
+                         "score":  0.976005,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -195,8 +195,18 @@
                          "commodity":  "Baby Back Ribs",
                          "store":  "Walmart",
                          "product":  "Prairie Fresh Natural Fresh Pork St. Louis Style Spareribs, Bone-in, 3.0- 4.4 lb, 19g of protein per 4oz serving",
-                         "cos":  0.7126,
-                         "score":  0.955245,
+                         "cos":  0.7119,
+                         "score":  0.956812,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "bar-soap",
+                         "commodity":  "Bar Soap",
+                         "store":  "Baker\u0027s",
+                         "product":  "Caress Daily Silk Cleansing Bar, White Peach \u0026 Orange Blossom Moisturizing Body Soap",
+                         "cos":  0.6953,
+                         "score":  0.955202,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -207,16 +217,6 @@
                          "product":  "Ziploc Brand Food Storage Bags, School Supplies, with Grip \u0027n Seal Technology, Zipper, Quart, 50 Count",
                          "cos":  0.7096,
                          "score":  0.954744,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "bar-soap",
-                         "commodity":  "Bar Soap",
-                         "store":  "Baker\u0027s",
-                         "product":  "Caress Daily Silk Cleansing Bar, White Peach \u0026 Orange Blossom Moisturizing Body Soap",
-                         "cos":  0.7026,
-                         "score":  0.948031,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -291,16 +291,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "iced-tea",
-                         "commodity":  "Iced Tea (bottled/gallon)",
-                         "store":  "Walmart",
-                         "product":  "Red Diamond Unsweetened Tea, Gallon, 128 Fl Oz",
-                         "cos":  0.619,
-                         "score":  0.935898,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "aluminum-foil",
                          "commodity":  "Aluminum Foil",
                          "store":  "Walmart",
@@ -351,16 +341,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
-                         "store":  "Baker\u0027s",
-                         "product":  "Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts",
-                         "cos":  0.7372,
-                         "score":  0.931673,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "quart-storage-bags",
                          "commodity":  "Food Storage Bags (quart)",
                          "store":  "Family Fare",
@@ -371,12 +351,22 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "white-wine",
-                         "commodity":  "White Wine",
-                         "store":  "Family Fare",
-                         "product":  "Vendange Chardonnay White Wine 1.5 L",
-                         "cos":  0.5711,
-                         "score":  0.927613,
+                         "id":  "chicken-breast",
+                         "commodity":  "Boneless Skinless Chicken Breast",
+                         "store":  "Baker\u0027s",
+                         "product":  "Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts",
+                         "cos":  0.7373,
+                         "score":  0.930574,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "chicken-breast",
+                         "commodity":  "Boneless Skinless Chicken Breast",
+                         "store":  "Walmart",
+                         "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
+                         "cos":  0.7637,
+                         "score":  0.927831,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -387,16 +377,6 @@
                          "product":  "Great Value Slider Zipper Storage Bags, Quart, 50 Count",
                          "cos":  0.7026,
                          "score":  0.927091,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
-                         "store":  "Walmart",
-                         "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
-                         "cos":  0.762,
-                         "score":  0.927064,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -491,16 +471,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "deli-ham",
-                         "commodity":  "Ham (deli / sliced)",
-                         "store":  "Walmart",
-                         "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
-                         "cos":  0.6916,
-                         "score":  0.922606,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "cranberry-juice",
                          "commodity":  "Cranberry Juice",
                          "store":  "Family Fare",
@@ -511,22 +481,22 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "garden-salad",
-                         "commodity":  "Garden Salad Blend (bagged)",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Iceberg Shredded Lettuce Bagged Salad BIG DEAL!",
-                         "cos":  0.6779,
-                         "score":  0.922294,
+                         "id":  "white-wine",
+                         "commodity":  "White Wine",
+                         "store":  "Family Fare",
+                         "product":  "Vendange Chardonnay White Wine 1.5 L",
+                         "cos":  0.5602,
+                         "score":  0.921828,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "tilapia",
-                         "commodity":  "Tilapia Fillets",
+                         "id":  "deli-ham",
+                         "commodity":  "Ham (deli / sliced)",
                          "store":  "Walmart",
-                         "product":  "Great Value Frozen Skinless \u0026 Boneless Swai Fish Fillets Value Bag, 4 lb",
-                         "cos":  0.6396,
-                         "score":  0.92059,
+                         "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
+                         "cos":  0.691,
+                         "score":  0.920936,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -561,12 +531,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "shredded-cheese",
-                         "commodity":  "Shredded / Block Cheese",
-                         "store":  "Aldi",
-                         "product":  "Happy Farms Shredded Mild Cheddar",
-                         "cos":  0.6817,
-                         "score":  0.912878,
+                         "id":  "almond-milk",
+                         "commodity":  "Almond Milk",
+                         "store":  "Walmart",
+                         "product":  "bettergoods Plant-Based Chocolate Almond Milk, Half Gallon",
+                         "cos":  0.7163,
+                         "score":  0.912804,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -591,6 +561,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "graham-crackers",
+                         "commodity":  "Graham Crackers",
+                         "store":  "Family Fare",
+                         "product":  "Honey Maid Cinnamon Grahams 14.4 Oz",
+                         "cos":  0.6053,
+                         "score":  0.911812,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "coconut-oil",
                          "commodity":  "Coconut Oil",
                          "store":  "Walmart",
@@ -611,22 +591,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "breakfast-sandwiches",
-                         "commodity":  "Frozen Breakfast Sandwiches",
-                         "store":  "Family Fare",
-                         "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
-                         "cos":  0.7076,
-                         "score":  0.909076,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "chicken-breast",
                          "commodity":  "Boneless Skinless Chicken Breast",
                          "store":  "Walmart",
                          "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.85 - 3.5 lb Tray",
-                         "cos":  0.7628,
-                         "score":  0.907789,
+                         "cos":  0.7643,
+                         "score":  0.908628,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -691,12 +661,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "feminine-pads",
-                         "commodity":  "Feminine Pads",
-                         "store":  "Walmart",
-                         "product":  "Stayfree Classic Pads Super Long without Wings, Unscented, 22 Ct",
-                         "cos":  0.574,
-                         "score":  0.900192,
+                         "id":  "sparkling-water",
+                         "commodity":  "Sparkling Water",
+                         "store":  "Aldi",
+                         "product":  "Puraqua Flavored Water Bottles, 24 Pack",
+                         "cos":  0.6169,
+                         "score":  0.900009,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

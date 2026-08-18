@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-08-17T06:12:16",
+    "generated":  "2026-08-18T06:11:59",
     "note":  "winning history cells at a verdict-rejected (commodity,store) whose product could not be identified from any surviving board; neither purged nor cleared",
     "cells":  [
                   {
@@ -14,7 +14,7 @@
                       "store":  "Aldi",
                       "week":  "2026-07-12",
                       "price":  0.1375,
-                      "is_record_low":  true
+                      "is_record_low":  false
                   },
                   {
                       "id":  "spinach",

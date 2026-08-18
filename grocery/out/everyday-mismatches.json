@@ -13,6 +13,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "ground-beef-8020",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  6.49,
+        "link":  4.99,
+        "ratio":  0.77,
+        "price":  4.99,
+        "size":  "lb",
+        "boardItem":  "Ground Beef Roll 80 Lean 20 Fat",
+        "linkItem":  "Ground Beef Roll 80 Lean 20 Fat",
+        "board_src":  "main"
+    },
+    {
+        "id":  "almond-milk",
+        "store":  "Hy-Vee",
+        "unit":  "floz",
+        "board":  0.0467,
+        "link":  0.0389,
+        "ratio":  0.83,
+        "price":  2.49,
+        "size":  "64 oz",
+        "boardItem":  "Hy Vee Almondmilk Original Unsweetened",
+        "linkItem":  "Hy Vee Almondmilk Original Unsweetened",
+        "board_src":  "main"
+    },
+    {
         "id":  "almonds",
         "store":  "Aldi",
         "unit":  "oz",
@@ -23,6 +49,19 @@
         "size":  "14 oz",
         "boardItem":  "Southern Grove Oil Roasted And Salted Almonds",
         "linkItem":  "Southern Grove Oil Roasted Salted Almonds 14 OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "anaheim-peppers",
+        "store":  "Family Fare",
+        "unit":  "lb",
+        "board":  4.99,
+        "link":  4.49,
+        "ratio":  0.9,
+        "price":  4.49,
+        "size":  "lb",
+        "boardItem":  "Anaheim Peppers (Green And Red)",
+        "linkItem":  "Anaheim Peppers (Green And Red)",
         "board_src":  "main"
     },
     {
@@ -65,6 +104,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "baby-back-ribs",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  3.99,
+        "link":  4.88,
+        "ratio":  1.22,
+        "price":  4.88,
+        "size":  "lb",
+        "boardItem":  "Pork Loin Back Ribs Previously Frozen",
+        "linkItem":  "Pork Loin Back Ribs Previously Frozen",
+        "board_src":  "main"
+    },
+    {
+        "id":  "baby-food",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.435,
+        "link":  0.5114,
+        "ratio":  1.18,
+        "price":  1.79,
+        "size":  "3.5 oz",
+        "boardItem":  "Happy Tot Stage 4 Organic Pears, Raspberries, Carrots \u0026 Butternut Squash Pouch, 4 oz.",
+        "linkItem":  "Gerber Stage 4 Toddler Food, Cherry Banana Vanilla Puree Pouch",
+        "board_src":  "main"
+    },
+    {
         "id":  "beef-jerky",
         "store":  "Sam\u0027s Club",
         "unit":  "oz",
@@ -104,6 +169,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "chicken-breast",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  3.99,
+        "link":  2.99,
+        "ratio":  0.75,
+        "price":  2.99,
+        "size":  "lb",
+        "boardItem":  "Boneless Skinless Chicken Breast",
+        "linkItem":  "Boneless Skinless Chicken Breast",
+        "board_src":  "main"
+    },
+    {
         "id":  "broccoli",
         "store":  "Aldi",
         "unit":  "lb",
@@ -114,6 +192,19 @@
         "size":  "lb",
         "boardItem":  "Broccoli Crowns, Per LB",
         "linkItem":  "Broccoli Crowns",
+        "board_src":  "main"
+    },
+    {
+        "id":  "brown-sugar",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  0.985,
+        "link":  0.94,
+        "ratio":  0.95,
+        "price":  1.88,
+        "size":  "32 oz",
+        "boardItem":  "That\u0027s Smart! Light Brown Sugar",
+        "linkItem":  "That\u0027s Smart! Light Brown Sugar",
         "board_src":  "main"
     },
     {
@@ -156,6 +247,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "chicken-wings",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  4.99,
+        "link":  3.99,
+        "ratio":  0.8,
+        "price":  3.99,
+        "size":  "lb",
+        "boardItem":  "Hy-Vee Chicken Wings Family Pack",
+        "linkItem":  "Hy-Vee Chicken Wings Family Pack",
+        "board_src":  "main"
+    },
+    {
+        "id":  "clementines",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  1.6267,
+        "link":  1.6633,
+        "ratio":  1.02,
+        "price":  4.99,
+        "size":  "3 lb",
+        "boardItem":  "Kings River Poppies Mandarins",
+        "linkItem":  "Kings River Poppies Mandarins",
+        "board_src":  "main"
+    },
+    {
         "id":  "cod",
         "store":  "Aldi",
         "unit":  "lb",
@@ -192,6 +309,19 @@
         "size":  "32 fl oz",
         "boardItem":  "Friendly Farms Half \u0026 Half Creamer",
         "linkItem":  "Barissimo Coconut Creme Coffee Creamer 32 FL OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "coffee-creamer",
+        "store":  "Hy-Vee",
+        "unit":  "floz",
+        "board":  0.1041,
+        "link":  0.1244,
+        "ratio":  1.19,
+        "price":  3.98,
+        "size":  "32 oz",
+        "boardItem":  "Coffee Mate French Vanilla Flavored Coffee Creamer",
+        "linkItem":  "Coffee Mate French Vanilla Flavored Coffee Creamer",
         "board_src":  "main"
     },
     {
@@ -351,6 +481,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "sugar",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  0.745,
+        "link":  0.78,
+        "ratio":  1.05,
+        "price":  3.12,
+        "size":  "4 lb",
+        "boardItem":  "That\u0027s Smart! Granulated Sugar",
+        "linkItem":  "That\u0027s Smart! Granulated Sugar",
+        "board_src":  "main"
+    },
+    {
         "id":  "ground-cinnamon",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -377,6 +520,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "deli-ham",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.3119,
+        "link":  0.2494,
+        "ratio":  0.8,
+        "price":  3.99,
+        "size":  "lb",
+        "boardItem":  "Smithfield Sliced Deli Ham",
+        "linkItem":  "Smithfield Sliced Deli Ham",
+        "board_src":  "main"
+    },
+    {
+        "id":  "italian-dressing",
+        "store":  "Hy-Vee",
+        "unit":  "floz",
+        "board":  0.1431,
+        "link":  0.1612,
+        "ratio":  1.13,
+        "price":  2.58,
+        "size":  "16 fl oz",
+        "boardItem":  "Hy-Vee Zesty Italian Dressing",
+        "linkItem":  "Hy-Vee Zesty Italian Dressing",
+        "board_src":  "main"
+    },
+    {
         "id":  "jalapenos",
         "store":  "Aldi",
         "unit":  "lb",
@@ -387,6 +556,19 @@
         "size":  "8 oz",
         "boardItem":  "Jalapeno Pepper Package 8 OZ",
         "linkItem":  "Jalapeno Peppers, Package",
+        "board_src":  "main"
+    },
+    {
+        "id":  "kielbasa",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  5.0971,
+        "link":  4.56,
+        "ratio":  0.89,
+        "price":  3.99,
+        "size":  "14 oz",
+        "boardItem":  "Johnsonville Polish Kielbasa Smoked Sausage, 6 Count, 14 oz",
+        "linkItem":  "Johnsonville Polish Kielbasa Smoked Sausage, 6 Count, 14 oz",
         "board_src":  "main"
     },
     {
@@ -416,6 +598,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "oatmeal",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.095,
+        "link":  0.1188,
+        "ratio":  1.25,
+        "price":  4.99,
+        "size":  "42 oz",
+        "boardItem":  "Hy-Vee Oatmeal Old Fashioned Oats",
+        "linkItem":  "Hy-Vee Oatmeal Old Fashioned Oats",
+        "board_src":  "main"
+    },
+    {
         "id":  "olive-oil",
         "store":  "Aldi",
         "unit":  "floz",
@@ -426,6 +621,19 @@
         "size":  "33.8 oz",
         "boardItem":  "Carlini Pure Olive Oil",
         "linkItem":  "Carlini Pure Olive Oil 33.8 FL OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "olive-oil",
+        "store":  "Hy-Vee",
+        "unit":  "floz",
+        "board":  0.4112,
+        "link":  0.47,
+        "ratio":  1.14,
+        "price":  7.99,
+        "size":  "17 oz",
+        "boardItem":  "Hy Vee Extra Virgin Olive Oil",
+        "linkItem":  "Hy Vee Extra Virgin Olive Oil",
         "board_src":  "main"
     },
     {
@@ -452,6 +660,19 @@
         "size":  "40 oz",
         "boardItem":  "Peanut Delight Creamy Peanut Butter 40oz",
         "linkItem":  "Peanut Delight Creamy Peanut Butter 40 oz",
+        "board_src":  "main"
+    },
+    {
+        "id":  "pickles",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.1079,
+        "link":  0.1238,
+        "ratio":  1.15,
+        "price":  2.97,
+        "size":  "24 fl oz",
+        "boardItem":  "Hy-Vee Kosher Dill Pickle Spears",
+        "linkItem":  "Hy-Vee Kosher Dill Pickle Spears",
         "board_src":  "main"
     },
     {
@@ -517,6 +738,19 @@
         "size":  "8 oz",
         "boardItem":  "Fareway Wavy Potato Chips",
         "linkItem":  "Lay\u0027s Potato Chips, Classic",
+        "board_src":  "main"
+    },
+    {
+        "id":  "powdered-sugar",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  0.99,
+        "link":  0.94,
+        "ratio":  0.95,
+        "price":  1.88,
+        "size":  "2 lb",
+        "boardItem":  "That\u0027s Smart! Powdered Sugar",
+        "linkItem":  "That\u0027s Smart! Powdered Sugar",
         "board_src":  "main"
     },
     {
@@ -715,6 +949,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "strawberries",
+        "store":  "Family Fare",
+        "unit":  "oz",
+        "board":  0.3119,
+        "link":  0.2806,
+        "ratio":  0.9,
+        "price":  4.49,
+        "size":  "16 oz",
+        "boardItem":  "Fresh Strawberries",
+        "linkItem":  "Fresh Strawberries",
+        "board_src":  "main"
+    },
+    {
         "id":  "sweet-corn",
         "store":  "Walmart",
         "unit":  "each",
@@ -780,6 +1027,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "toilet-paper",
+        "store":  "Hy-Vee",
+        "unit":  "each",
+        "board":  0.5825,
+        "link":  0.7492,
+        "ratio":  1.29,
+        "price":  8.99,
+        "size":  "12 ct",
+        "boardItem":  "Hy-Vee Soft and Strong Bath Tissue",
+        "linkItem":  "Hy-Vee Soft and Strong Bath Tissue",
+        "board_src":  "main"
+    },
+    {
         "id":  "tortillas",
         "store":  "Aldi",
         "unit":  "each",
@@ -816,6 +1076,19 @@
         "size":  "8 fl oz",
         "boardItem":  "Rising Star Baking Supply Pure Vanilla Extract, 8 fl. oz.",
         "linkItem":  "McCormick Pure Vanilla Extract, 8 fl. oz.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "whole-chicken",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  1.88,
+        "link":  2.19,
+        "ratio":  1.16,
+        "price":  2.19,
+        "size":  "lb",
+        "boardItem":  "Hy-Vee Fresh Young Whole Chicken",
+        "linkItem":  "Hy-Vee Fresh Young Whole Chicken",
         "board_src":  "main"
     },
     {
