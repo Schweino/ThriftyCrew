@@ -280,3 +280,14 @@
 [2026-08-18T08:30:04] pull: Already up to date.
 [2026-08-18T08:30:04] running check-ad-cycles
 [2026-08-18T09:22:42] check-ad-cycles exit 0
+[2026-08-18T09:22:44] rebase[1]: Created autostash: 3563b3cc
+[2026-08-18T09:22:44] rebase[1]: Current branch main is up to date.
+[2026-08-18T09:22:45] rebase[1]: Applying autostash resulted in conflicts.
+[2026-08-18T09:22:45] rebase[1]: Your changes are safe in the stash.
+[2026-08-18T09:22:45] rebase[1]: You can run "git stash pop" or "git stash drop" at any time.
+[2026-08-18T09:22:49] push[1]: To https://github.com/Schweino/ThriftyCrew.git
+[2026-08-18T09:22:49] push[1]:    284cf2d8..873d6d78  HEAD -> main
+[2026-08-18T09:22:49] pushed on attempt 1
+[2026-08-18T09:23:21] EDGE STALE: The edge is serving a feed generated 2026-08-18T06:21:11 but the repo pushed 2026-08-18T09:11:11. The push succeeded, so this is a Cloudflare deploy that has not landed. Live recipe prices are stale until it does. Check the CF dashboard build log for the smp-feed worker.
+[2026-08-18T09:23:21] FEED ASSERT FAILED: feed carries 564 recipes but 574 specs exist
+[2026-08-18T09:23:22] done

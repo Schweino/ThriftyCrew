@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-18 09:05",
+    "generated":  "2026-08-19 06:19",
     "board":  "comparison-2026-08-18.json",
-    "sidecar_generated":  "2026-08-18 09:05:00",
+    "sidecar_generated":  "2026-08-19 06:19:29",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2970,
-                     "corpus":  36740,
-                     "rule_invisible":  6683
+                     "board_pairs":  2969,
+                     "corpus":  36858,
+                     "rule_invisible":  6709
                  },
     "identity_count":  0,
-    "coverage_count":  65,
+    "coverage_count":  66,
     "identity":  [
 
                  ],
@@ -111,6 +111,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "furniture-polish",
+                         "commodity":  "Furniture Polish / Dusting Spray",
+                         "store":  "Walmart",
+                         "product":  "Old English Wood Furniture Oil Protecting Polish, Lemon, 16oz",
+                         "cos":  0.7112,
+                         "score":  0.970657,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "chili-garlic-sauce",
                          "commodity":  "Chili Garlic Sauce",
                          "store":  "Baker\u0027s",
@@ -171,16 +181,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "vegetable-soup",
-                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
-                         "store":  "Walmart",
-                         "product":  "Progresso Minestrone Soup, Vegetable Classics Canned Soup, 19 oz",
-                         "cos":  0.7472,
-                         "score":  0.957623,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "coconut-aminos",
                          "commodity":  "Coconut Aminos",
                          "store":  "Baker\u0027s",
@@ -201,22 +201,32 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "bar-soap",
-                         "commodity":  "Bar Soap",
-                         "store":  "Baker\u0027s",
-                         "product":  "Caress Daily Silk Cleansing Bar, White Peach \u0026 Orange Blossom Moisturizing Body Soap",
-                         "cos":  0.6953,
-                         "score":  0.955202,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "quart-storage-bags",
                          "commodity":  "Food Storage Bags (quart)",
                          "store":  "Walmart",
                          "product":  "Ziploc Brand Food Storage Bags, School Supplies, with Grip \u0027n Seal Technology, Zipper, Quart, 50 Count",
                          "cos":  0.7096,
                          "score":  0.954744,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "bar-soap",
+                         "commodity":  "Bar Soap",
+                         "store":  "Baker\u0027s",
+                         "product":  "Caress Daily Silk Cleansing Bar, White Peach \u0026 Orange Blossom Moisturizing Body Soap",
+                         "cos":  0.7026,
+                         "score":  0.948031,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "vegetable-soup",
+                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "store":  "Walmart",
+                         "product":  "Progresso Minestrone Soup, Vegetable Classics Canned Soup, 19 oz",
+                         "cos":  0.7219,
+                         "score":  0.947862,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -281,6 +291,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "sandwich-bags",
+                         "commodity":  "Sandwich Bags",
+                         "store":  "Walmart",
+                         "product":  "Ziploc® Brand Snack Bags with EasyGuide™ Texture, Grip \u0027n Seal Technology™, Food Storage, Zipper, 100 Count",
+                         "cos":  0.6569,
+                         "score":  0.937218,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "chili-garlic-sauce",
                          "commodity":  "Chili Garlic Sauce",
                          "store":  "Baker\u0027s",
@@ -297,16 +317,6 @@
                          "product":  "Mainstays 2 lb. Aluminum Foil Loaf Pans, 3 Count, Disposable, Easy Cleaning",
                          "cos":  0.6014,
                          "score":  0.935655,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "sandwich-bags",
-                         "commodity":  "Sandwich Bags",
-                         "store":  "Walmart",
-                         "product":  "Ziploc® Brand Snack Bags with EasyGuide™ Texture, Grip \u0027n Seal Technology™, Food Storage, Zipper, 100 Count",
-                         "cos":  0.6491,
-                         "score":  0.934927,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -331,6 +341,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "chicken-breast",
+                         "commodity":  "Boneless Skinless Chicken Breast",
+                         "store":  "Walmart",
+                         "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
+                         "cos":  0.7786,
+                         "score":  0.933402,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "canned-chicken",
                          "commodity":  "Canned Chicken Breast",
                          "store":  "Walmart",
@@ -347,26 +367,6 @@
                          "product":  "Our Family Freezer Bags, Resealable, Quart Size, Mega Pack 80 Ea",
                          "cos":  0.6597,
                          "score":  0.93061,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
-                         "store":  "Baker\u0027s",
-                         "product":  "Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts",
-                         "cos":  0.7373,
-                         "score":  0.930574,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
-                         "store":  "Walmart",
-                         "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
-                         "cos":  0.7637,
-                         "score":  0.927831,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -501,16 +501,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "tea-bags",
-                         "commodity":  "Tea Bags",
-                         "store":  "Walmart",
-                         "product":  "Taylors of Harrogate Assam, Black Tea, Individually Wrapped Bags, 20 Count (Pack of 1), Full-bodied, Satisfying \u0026 Malty, Caffeinated, Enjoy Hot or Iced, 20 Teabags",
-                         "cos":  0.6963,
-                         "score":  0.91974,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "ground-beef-93-7",
                          "commodity":  "93/7 Lean Ground Beef",
                          "store":  "Aldi",
@@ -527,16 +517,6 @@
                          "product":  "FoodSaver Quart Vacuum Seal Bags, 19 Count Pre-Cut BPA-Free Freezer Bags, Align to Seal \u0026 Tear to Open for Food Storage, Sous Vide, and Meal Prep",
                          "cos":  0.6617,
                          "score":  0.915625,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "almond-milk",
-                         "commodity":  "Almond Milk",
-                         "store":  "Walmart",
-                         "product":  "bettergoods Plant-Based Chocolate Almond Milk, Half Gallon",
-                         "cos":  0.7163,
-                         "score":  0.912804,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -595,8 +575,48 @@
                          "commodity":  "Boneless Skinless Chicken Breast",
                          "store":  "Walmart",
                          "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.85 - 3.5 lb Tray",
-                         "cos":  0.7643,
-                         "score":  0.908628,
+                         "cos":  0.7795,
+                         "score":  0.909728,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "breakfast-sandwiches",
+                         "commodity":  "Frozen Breakfast Sandwiches",
+                         "store":  "Family Fare",
+                         "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
+                         "cos":  0.7064,
+                         "score":  0.908548,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "vegetable-soup",
+                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "store":  "Baker\u0027s",
+                         "product":  "Campbell\u0027s Chunky Beef Soup with Country Vegetables 18.8 Oz Can",
+                         "cos":  0.7279,
+                         "score":  0.908327,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-beef-8020",
+                         "commodity":  "80/20 Ground Beef",
+                         "store":  "Aldi",
+                         "product":  "USDA 80% Lean 20% Fat Ground Beef Patties - 4 Count",
+                         "cos":  0.715,
+                         "score":  0.907272,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-beef-8020",
+                         "commodity":  "80/20 Ground Beef",
+                         "store":  "Aldi",
+                         "product":  "USDA 80% Lean 20% Fat Ground Beef Patties - 10 Count",
+                         "cos":  0.715,
+                         "score":  0.907272,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -607,6 +627,16 @@
                          "product":  "Pride of India Ground Cumin Seed, 8 oz Dual Sifter Bottle",
                          "cos":  0.6362,
                          "score":  0.906948,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "shredded-cheese",
+                         "commodity":  "Shredded / Block Cheese",
+                         "store":  "Aldi",
+                         "product":  "Happy Farms Shredded Mild Cheddar",
+                         "cos":  0.6825,
+                         "score":  0.905249,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -647,26 +677,6 @@
                          "product":  "Great Value Frozen Cauliflower, 12 oz Bag, No Added Preservatives",
                          "cos":  0.7151,
                          "score":  0.901266,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "turkey-lunchmeat",
-                         "commodity":  "Turkey (deli / sliced)",
-                         "store":  "Aldi",
-                         "product":  "Deli Sliced Honey Turkey 8 OZ",
-                         "cos":  0.666,
-                         "score":  0.900468,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "sparkling-water",
-                         "commodity":  "Sparkling Water",
-                         "store":  "Aldi",
-                         "product":  "Puraqua Flavored Water Bottles, 24 Pack",
-                         "cos":  0.6169,
-                         "score":  0.900009,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

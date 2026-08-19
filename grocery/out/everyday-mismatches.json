@@ -1248,19 +1248,6 @@
         "board_src":  "recipe"
     },
     {
-        "id":  "sugar-free-bbq-sauce",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.2,
-        "link":  0.1886,
-        "ratio":  0.94,
-        "price":  3.49,
-        "size":  "18.5 oz",
-        "boardItem":  "Ray\u0027s No Sugar Added Original BBQ Sauce",
-        "linkItem":  "Ray\u0027s No Sugar Added Original BBQ Sauce",
-        "board_src":  "recipe"
-    },
-    {
         "id":  "frozen-broccoli-florets",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -1310,6 +1297,19 @@
         "size":  "16 oz",
         "boardItem":  "KrogerÂ® Hot Italian Sausage",
         "linkItem":  "Johnsonville Hot Italian Ground Sausage",
+        "board_src":  "recipe"
+    },
+    {
+        "id":  "reduced-fat-mozzarella",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  0.23,
+        "link":  0.2188,
+        "ratio":  0.95,
+        "price":  3.5,
+        "size":  "16 oz",
+        "boardItem":  "KrogerÂ® Low-Moisture Part Skim Mozzarella Shredded Cheese",
+        "linkItem":  "Kroger Low-Moisture Part Skim Mozzarella Shredded Cheese",
         "board_src":  "recipe"
     },
     {

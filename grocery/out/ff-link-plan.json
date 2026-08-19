@@ -1,13 +1,13 @@
 ﻿{
     "resolved":  [
                      {
-                         "id":  "anaheim-peppers",
+                         "id":  "butternut-squash",
                          "fault":  "PRICE-DRIFT",
-                         "board":  "Anaheim Peppers (Green And Red)",
-                         "board_pu":  4.99,
-                         "name":  "Anaheim Peppers (Green And Red)",
-                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/anaheim_peppers_green_and_red/p/12543",
-                         "price":  "$4.99",
+                         "board":  "Butternut Squash",
+                         "board_pu":  1.99,
+                         "name":  "Butternut Squash",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/squashes/butternut_squash/p/12561",
+                         "price":  "$1.99",
                          "size":  "lb",
                          "score":  1
                      },
@@ -78,6 +78,6 @@
                     }
                 ],
     "worked":  15,
-    "generated":  "2026-08-18 09:12",
+    "generated":  "2026-08-19 06:27",
     "board":  "comparison-2026-08-18.json"
 }

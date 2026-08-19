@@ -1,6 +1,17 @@
 ﻿{
     "kind_mismatch_crown":  [
-
+                                {
+                                    "id":  "blueberries",
+                                    "commodity":  "Blueberries",
+                                    "unit":  "oz",
+                                    "store":  "Aldi",
+                                    "per_unit":  0.2312,
+                                    "size":  "1 pt",
+                                    "item":  "Blueberries Package 1 PT",
+                                    "kind":  "volume",
+                                    "row_kind":  "weight",
+                                    "holds_crown":  true
+                                }
                             ],
     "findings":  [
                      {
@@ -109,7 +120,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-18T09:14:07",
+    "generated":  "2026-08-19T06:29:07",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -272,36 +283,36 @@
                               "id":  "blueberries",
                               "commodity":  "Blueberries",
                               "unit":  "oz",
-                              "store":  "Walmart",
-                              "per_unit":  0.3178,
-                              "size":  "18 oz",
-                              "item":  "Fresh Blueberries, 18 oz. Container",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
+                              "store":  "Aldi",
+                              "per_unit":  0.2312,
+                              "size":  "1 pt",
+                              "item":  "Blueberries Package 1 PT",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  true
+                          },
+                          {
+                              "id":  "blueberries",
+                              "commodity":  "Blueberries",
+                              "unit":  "oz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.3563,
+                              "size":  "1 pt",
+                              "item":  "Fresh Blueberries",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
                               "holds_crown":  false
                           },
                           {
                               "id":  "blueberries",
                               "commodity":  "Blueberries",
                               "unit":  "oz",
-                              "store":  "Sam\u0027s Club",
-                              "per_unit":  0.3469,
-                              "size":  "16 oz",
-                              "item":  "Jumbo Blueberries, 16 oz.",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "blueberries",
-                              "commodity":  "Blueberries",
-                              "unit":  "oz",
-                              "store":  "Fareway",
-                              "per_unit":  0.6,
-                              "size":  "9.8 oz",
-                              "item":  "Jumbo Blueberries",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
+                              "store":  "Hy-Vee",
+                              "per_unit":  0.4455,
+                              "size":  "1 pt",
+                              "item":  "Fresh Blueberries, 1 Pint",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
                               "holds_crown":  false
                           },
                           {
@@ -725,18 +736,6 @@
                               "holds_crown":  false
                           },
                           {
-                              "id":  "lemonade",
-                              "commodity":  "Lemonade",
-                              "unit":  "floz",
-                              "store":  "Family Fare",
-                              "per_unit":  0.0422,
-                              "size":  "59 oz",
-                              "item":  "Minute Maid Lemonade 59 Oz",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
                               "id":  "egg-whites",
                               "commodity":  "Liquid Egg Whites",
                               "unit":  "floz",
@@ -746,18 +745,6 @@
                               "item":  "Hy-Vee 100% Egg Whites",
                               "kind":  "volume",
                               "row_kind":  "weight",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "bottled-marinade",
-                              "commodity":  "Meat Marinade (bottled)",
-                              "unit":  "floz",
-                              "store":  "Baker\u0027s",
-                              "per_unit":  0.2574,
-                              "size":  "15.5 oz",
-                              "item":  "Kinder\u0027s All Purpose Marinade 15.5 oz",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
                               "holds_crown":  false
                           },
                           {
@@ -923,7 +910,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0993,
                               "size":  "15 oz",
-                              "item":  "Alberto Vo5 Extra Body With Collagen Volumizing Shampoo For Body \u0026 Bounce Bonus Size 15 Fl Oz",
+                              "item":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -960,6 +947,18 @@
                               "per_unit":  0.199,
                               "size":  "10 oz",
                               "item":  "Fareway Soy Sauce",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "sparkling-water",
+                              "commodity":  "Sparkling Water",
+                              "unit":  "floz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0818,
+                              "size":  "17 oz",
+                              "item":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
