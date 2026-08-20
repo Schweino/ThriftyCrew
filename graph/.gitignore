@@ -1,0 +1,14 @@
+# The SQLite index is DERIVED and rebuildable from the tracked JSON + provenance.
+# Keeping it out of git preserves the "git is the bus" model and the single-writer rule.
+# Rebuild with:  python graph/lib/rebuild.py
+sqlite/graph.db
+sqlite/graph.db-wal
+sqlite/graph.db-shm
+
+# Per-run scratch: immutable plans, executor state, shadow-eval working dirs.
+# The durable record of a run lives in graph/provenance/*.jsonl (tracked).
+runs/
+
+# Python noise
+__pycache__/
+*.pyc

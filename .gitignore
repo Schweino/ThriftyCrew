@@ -46,6 +46,17 @@
 !/.github/
 !/public/
 !/worker/
+# The knowledge graph (graph-native redesign, Phase 0-6). Same split as sidecar\
+# above: SOURCE and DURABLE STATE are tracked, the derived index and the model
+# environment are not. graph\sqlite\graph.db is an INDEX, rebuildable in seconds
+# from the tracked nodes/edges/aliases/provenance JSON, and graph\.gitignore
+# excludes it plus the per-run scratch under graph\runs\. The gold set and the
+# provenance JSONL ARE tracked: they are the evaluation record and the audit
+# trail, and a gold set that does not outlive the machine that produced it is
+# not a gold set. Model weights (~13 GB) live OUTSIDE the repo at C:\Codex\llm
+# and are refetched by tools\local-llm\fetch-model.ps1.
+!/graph/
+!/tools/
 !/wrangler.jsonc
 !/platform/
 # THE 52-WEEK CURRICULUM AND ITS SUPPORTING DOCS (2026-08-08). lessons\ holds the local ORIGINAL of 55
