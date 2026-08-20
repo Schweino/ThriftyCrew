@@ -340,3 +340,57 @@ def build_resolve_prompt(cc: CompiledCommodity, product_name: str) -> tuple[str,
         "Is this listing that commodity?"
     )
     return system, user
+
+
+def main() -> int:
+    """CLI: adjudicate every unadjudicated observation.
+
+        python graph/pipeline/resolve.py              # deterministic layers only
+        python graph/pipeline/resolve.py --llm        # + LLM on the contested set
+        python graph/pipeline/resolve.py --llm --limit 500
+    """
+    import argparse
+    import json as _json
+    from graphdb import open_db
+
+    ap = argparse.ArgumentParser(description="Resolve candidate rows to commodities")
+    ap.add_argument("--llm", action="store_true",
+                    help="consult the local model on rows the deterministic layers cannot settle")
+    ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--reset", action="store_true",
+                    help="re-adjudicate everything (clears prior verdicts first)")
+    args = ap.parse_args()
+
+    llm = None
+    if args.llm:
+        llm = LocalLLM()
+        if not llm.health():
+            print("local endpoint down — start it: pwsh tools/local-llm/serve.ps1",
+                  file=sys.stderr)
+            return 2
+
+    run = f"run:resolve:{time.strftime('%Y%m%dT%H%M%S')}"
+    with open_db() as db:
+        if args.reset:
+            db.conn.execute("UPDATE price_observations SET match_status='unadjudicated', "
+                            "match_reason=NULL")
+            db.conn.commit()
+        r = Resolver(db, llm=llm, use_llm=bool(llm))
+        t0 = time.time()
+        out = r.resolve_pending(limit=args.limit, run=run, allow_llm=bool(llm),
+                                progress=print)
+        print(f"\nresolved {out['resolved']} rows in {time.time()-t0:.1f}s")
+        for k, v in sorted(out["by_status"].items(), key=lambda x: -x[1]):
+            print(f"   {k:<20} {v}")
+        if out["escalations"]:
+            print(f"\n   {len(out['escalations'])} rows escalated for Claude review")
+            qp = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                              "..", "..", "grocery", "escalation-queue.json")
+            with open(os.path.abspath(qp), "w", encoding="utf-8") as fh:
+                _json.dump(out["escalations"], fh, indent=2, ensure_ascii=False)
+            print(f"   wrote {os.path.abspath(qp)}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

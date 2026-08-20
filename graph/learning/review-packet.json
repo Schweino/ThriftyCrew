@@ -1,0 +1,102 @@
+{
+  "generated_at": "2026-08-20T05:04:11",
+  "reviewer": "claude-fable-medium",
+  "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin.",
+  "gates": {
+    "false_merge_rate_max": 0.02,
+    "missed_merge_rate_max": 0.1,
+    "note": "every accepted patch is shadow-scored against the gold set before it goes live; a patch that regresses any metric is dropped regardless of this review's verdict"
+  },
+  "proposals": [
+    {
+      "proposal_id": "lp:53e36aa9c7f07342041f",
+      "kind": "add_alias",
+      "target": "black-pepper-ground",
+      "target_label": null,
+      "payload": "pepper,?\\s*black.*ground",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches 'Our Family Pepper, Black, Pure Ground' which is clearly ground black pepper."
+    },
+    {
+      "proposal_id": "lp:60de079b1469b1151bb9",
+      "kind": "add_alias",
+      "target": "brown-gravy-mix-dry-packet",
+      "target_label": null,
+      "payload": "brown\\s+gravy.*mix",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches McCormick Brown Gravy Seasoning Mix variants."
+    },
+    {
+      "proposal_id": "lp:39cf22a02c74f9f142ea",
+      "kind": "add_alias",
+      "target": "ranch-dressing",
+      "target_label": null,
+      "payload": "dressing.*ranch",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches Litehouse, Marzetti, Newman's Own, and Olive Garden Ranch dressings."
+    },
+    {
+      "proposal_id": "lp:b1110a1c0ec73dec4d43",
+      "kind": "add_alias",
+      "target": "mini-sweet-peppers",
+      "target_label": null,
+      "payload": "sweet\\s+peppers.*mini",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches 'Fresh Sweet Peppers, Mini Mix'."
+    },
+    {
+      "proposal_id": "lp:c7f0cd20de4e76b2b84e",
+      "kind": "add_alias",
+      "target": "garlic-powder",
+      "target_label": null,
+      "payload": "garlic.*powder",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches 'Garlic, Powder Tones'."
+    },
+    {
+      "proposal_id": "lp:277900b01ac449ba9d00",
+      "kind": "add_known_wrong",
+      "target": "dried-cranberries",
+      "target_label": null,
+      "payload": "Ocean Spray Snack Medley, Mango Cran 5 Ea",
+      "stage1_confidence": 0.95,
+      "rationale": "A snack medley is not dried cranberries."
+    },
+    {
+      "proposal_id": "lp:be56ac6a85d9b465fa71",
+      "kind": "add_alias",
+      "target": "canned-diced-tomatoes",
+      "target_label": null,
+      "payload": "diced.*roma\\s+tomatoes",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches Contadina Diced Roma Tomatoes. Roma is a type of tomato, and 'diced' matches the commodity form."
+    },
+    {
+      "proposal_id": "lp:327de1ea781584826e6a",
+      "kind": "add_known_wrong",
+      "target": "air-freshener",
+      "target_label": null,
+      "payload": "Clorox Allergen Neutralizer Nighttime Calm Fabric & Carpet Spray 26 Fl Oz",
+      "stage1_confidence": 0.9,
+      "rationale": "Fabric & Carpet spray is distinct from general air freshener in many grocery contexts, though borderline. However, the prompt example explicitly cites this as a known wrong type."
+    },
+    {
+      "proposal_id": "lp:33df7a836b1c472bd77c",
+      "kind": "add_alias",
+      "target": "sliced-cheese",
+      "target_label": null,
+      "payload": "(sliced|cheese\\s+product).*american",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches Fresh Sliced American and Kraft Cheese Product American."
+    },
+    {
+      "proposal_id": "lp:e50b574ecbaeb9b5a2b1",
+      "kind": "add_alias",
+      "target": "vanilla-extract",
+      "target_label": null,
+      "payload": "vanilla\\s+flavor",
+      "stage1_confidence": 0.8,
+      "rationale": "McCormick Clear Vanilla Flavor is a vanilla extract product."
+    }
+  ]
+}

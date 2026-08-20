@@ -71,6 +71,45 @@ Files written by one runtime and read by another **through the committed repo**.
 - **UNTRACKED 2026-07-27 (provably safe):** `meal-prep/db/built/**` (1026 cards). Only build-cards (writes) + publish (reads) touch them, always paired and on-demand; no runtime reads them cross-run. Rebuildable from spec+costed. Repo 4692 -> 3668 files.
 - **DEFER to a watched cloud-run session:** the `grocery/out/**` derived OUTPUTS (`comparison-*`, `candidates-*`, `flagged-*`, `audit/**`, `board.json`, `trend/**`). Each run makes and reads its own newest, so they *look* untrackable, but the last-good-board fallback and staleness logic touch prior outputs; verify against one live daily cycle before untracking. Store captures, public/, caches, and logs above stay tracked permanently.
 
+## The knowledge graph (graph-native redesign, added 2026-08-20)
+
+**There is still no fifth runtime.** `graph/` is a SHADOW estate that reads the
+legacy estate and writes only itself. Nothing in any serving path reads it, the
+Worker does not touch it, and the four runtimes above are unchanged. It stays
+that way until its numeric exit gates pass — the V3/V4 platform is the reason
+those gates are numbers.
+
+- **What it is.** A file+SQLite knowledge graph over the same facts the board
+  already knows: 7 stores, 633 commodities across the staple and recipe
+  namespaces, 3.3k product SKUs, the adjudicated known-wrong rulings, the
+  category-exclude guardrails, and ~119k price observations backfilled from the
+  tracked captures. Built by `graph/import/import_all.py` in about six seconds.
+- **Where truth lives.** In the tracked JSON under `graph/nodes|edges|aliases|
+  provenance` plus the gold set. `graph/sqlite/graph.db` is a rebuildable INDEX
+  and is gitignored — it never crosses the git-bus, so this adds nothing to the
+  OVERHAUL-4 problem.
+- **A fifth local model, not a fifth runtime.** `tools/local-llm/serve.ps1`
+  starts a llama.cpp OpenAI-compatible endpoint on 127.0.0.1:8080 (Qwen3.8-27B,
+  13.1 GB, weights OUTSIDE the repo at `C:\Codex\llm`). Nothing schedules it and
+  nothing requires it: every caller checks `Test-LocalLLM` and falls back to the
+  deterministic path, because the board must publish with the endpoint down.
+- **New local-only queue.** `grocery/learning-queue.json`, gitignored for exactly
+  the reason `triage-queue.json` is (`.gitignore:153`): producer and consumer are
+  the same PC, so it never crosses the git-bus, and its bodies carry store text.
+- **Where it already earns its keep.** `graph/agentic/verifier.py` answers the
+  existing hard gates as graph queries. On its first run it flagged that
+  **Fareway's weekly ad window expired 2026-08-15 with `next_pull` 2026-08-16 —
+  four days overdue on the browser lane** — while correctly classifying Aldi as
+  merely due-today rather than overdue.
+- **Status and what remains.** `python graph/eval/status.py` is the single
+  answer. Phase 0 passed all four acceptance bars; the gold set (547 cases) shows
+  precision 1.000 / recall 0.981 / false-merge 0.0000 / missed-merge 0.0188.
+  Board parity is NOT met (0.758 agreement over 0.31 coverage): only the
+  `regular` and `throttled` lanes carry a parseable `deals` array, so Baker's,
+  Sam's, Fareway and the Hy-Vee/Aldi ad pulls are not yet imported, and only
+  Walmart rows carry the engine's verified unit price. The 14-day and
+  4-Wednesday gates stand at 0.
+
 ## OVERHAUL-5 consolidation opportunities
 
 - Local (8:30am) and cloud (daily.yml) run the identical pipeline; cloud is a stand-down backup. The **non-browser** daily portion (server ad pulls -> compare -> publish) is fully headless and could become cloud-PRIMARY, demoting the PC to the weekly browser captures only. Hard blocker: the Wed walled-store captures need a real logged-in Chrome (no headless path; CAPTCHA walls).

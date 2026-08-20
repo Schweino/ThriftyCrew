@@ -24,6 +24,7 @@ from graphdb import GraphDB, read_json, REPO_ROOT
 from ids import (adcycle_id, category_id, catexclude_id, commodity_id,
                  known_wrong_id, mapping_id, norm_store, observation_id,
                  override_id, sku_id, store_id, store_label, hash_obj, slug)
+from units import parse_engine_unit_price
 
 GROCERY = os.path.join(REPO_ROOT, "grocery")
 MEALPREP = os.path.join(REPO_ROOT, "meal-prep")
@@ -490,14 +491,20 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
                 price = _money(d.get("current_price") or d.get("ad_price"))
                 as_of = d.get("as_of") or observed
                 oid = observation_id(cid, dstore, as_of, rel(fp), name)
+
+                # Prefer the LEGACY ENGINE's own verified unit price over
+                # re-deriving one here. See parse_engine_unit_price for why.
+                upx, unit = parse_engine_unit_price(
+                    d.get("engine_check") or d.get("wm_unit_price"))
+
                 db.add_observation({
                     "id": oid,
                     "commodity_id": cid,
                     "store_id": store_id(dstore),
                     "product_name": name,
                     "price": price,
-                    "unit_price": None,
-                    "unit": None,
+                    "unit_price": upx,
+                    "unit": unit,
                     "size_text": d.get("size"),
                     "is_sale": 1 if (d.get("price_type") or "").lower() == "sale" else 0,
                     "price_type": d.get("price_type"),

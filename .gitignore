@@ -135,6 +135,13 @@
 # local ops-alert triage queue + its drain state: machine-local by design (the cloud runner's copy would be
 # ephemeral anyway, and tracking it would rebase-conflict every day). Cloud failures reach Brad via /ops-alert.
 /grocery/triage-queue.json
+# the graph's learning + escalation queues: same class as triage-queue.json above. Producer (the daily
+# pipeline / resolver) and consumer (the learning loop, the Claude review agent) are on the SAME PC, so
+# these never cross the git-bus, and their bodies carry raw store product text. Durable learning records
+# live in the graph (learning_proposals / approved_patches) and in graph\provenance\, both of which ARE
+# tracked - so nothing auditable is lost by ignoring the queues themselves.
+/grocery/learning-queue.json
+/grocery/escalation-queue.json
 # Kroger-API evaluation captures: raw pulls kept for analysis, deliberately NOT board inputs (the
 # "N ct / M oz" size ambiguity underprices some cells; see pull-regular-bakers-api.ps1 header)
 /grocery/out/kroger-api-eval/
