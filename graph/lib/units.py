@@ -130,6 +130,18 @@ def parse_size(text: str | None) -> Size | None:
                 qty *= 12
             return Size(qty, "ct", "count", mult)
 
+    # A BARE unit word with no number means a quantity of one, and the sticker is
+    # already the unit price. product-urls stores per-pound meat as
+    # {"price": 2.19, "size": "lb"} — refusing that as unparseable threw away the
+    # single largest source of board cells (86% of live cells have such an entry).
+    bare = t.strip().strip(".").strip("/")
+    if bare in WEIGHT_TO_OZ:
+        return Size(WEIGHT_TO_OZ[bare], "oz", "weight", mult)
+    if bare in VOLUME_TO_FLOZ:
+        return Size(VOLUME_TO_FLOZ[bare], "floz", "volume", mult)
+    if bare in COUNT_WORDS:
+        return Size(12.0 if bare in ("dozen", "doz") else 1.0, "ct", "count", mult)
+
     return None
 
 
@@ -194,6 +206,9 @@ _CONVERT: dict[tuple[str, str], float] = {
     ("floz", "l"): 33.814, ("floz", "liter"): 33.814,
     ("ml", "l"): 1000.0,
     ("g", "kg"): 1000.0,
+    # eggs are declared per dozen on the board but parse as a count
+    ("ct", "dozen"): 12.0, ("ct", "doz"): 12.0,
+    ("ct", "each"): 1.0, ("each", "ct"): 1.0,
 }
 
 
@@ -231,7 +246,24 @@ def reconcile_unit(value: float | None, from_unit: str | None,
     return round(value * factor, 4), t
 
 
-def per_unit(price: float | None, size_text: str | None,
+def coerce_price(v) -> float | None:
+    """Accept the several ways a price is written across this estate.
+
+    Captures store floats, product-urls stores "$10.35", some lanes store "1.49"
+    as a bare string, and Sam's reject rows store "" for missing. Coercing here
+    rather than at each call site means a caller cannot forget and crash on a
+    string, which is exactly what happened the first time product-urls prices
+    were fed to per_unit().
+    """
+    if v is None:
+        return None
+    if isinstance(v, (int, float)):
+        return float(v)
+    m = re.search(r"-?\d+(?:\.\d+)?", str(v).replace(",", ""))
+    return float(m.group()) if m else None
+
+
+def per_unit(price, size_text: str | None,
              commodity_unit: str | None = None) -> tuple[float | None, str | None]:
     """Price per canonical unit.
 
@@ -240,6 +272,7 @@ def per_unit(price: float | None, size_text: str | None,
     commodity ('lb', 'oz', 'ct', 'each'); when it is 'lb' the weight answer is
     converted from per-ounce to per-pound so it matches the legacy board.
     """
+    price = coerce_price(price)
     if price is None:
         return None, None
     s = parse_size(size_text)

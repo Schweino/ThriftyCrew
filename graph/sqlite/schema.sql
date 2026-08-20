@@ -114,7 +114,16 @@ CREATE TABLE IF NOT EXISTS price_observations (
     match_status  TEXT NOT NULL DEFAULT 'unadjudicated',
         -- unadjudicated | include_hit | no_include_hit | excluded
         -- | category_excluded | known_wrong | llm_confirmed | llm_rejected | escalated
-    match_reason  TEXT
+    match_reason  TEXT,
+    -- Basis plausibility, orthogonal to match_status. A row can be a CORRECT
+    -- match and still carry an unusable per-unit price, because the source size
+    -- was wrong ("221 fl oz" for a hand-soap pump) or because a loose include
+    -- pattern let a different product in ("Cinnamon Swirl Crumb Cake" under
+    -- ground-cinnamon). Either way the row computes an impossibly low per-unit
+    -- price and would steal the cheapest crown. Flagged rows stay as EVIDENCE
+    -- but are barred from pricing a cell.
+    basis_flag    TEXT,      -- NULL = plausible | 'low_outlier' | 'no_basis'
+    basis_detail  TEXT
 );
 CREATE INDEX IF NOT EXISTS ix_po_commodity ON price_observations(commodity_id, observed_at DESC);
 CREATE INDEX IF NOT EXISTS ix_po_store     ON price_observations(store_id, observed_at DESC);
@@ -210,11 +219,13 @@ JOIN (
     SELECT commodity_id, store_id, MAX(observed_at) AS mx
     FROM price_observations
     WHERE match_status IN ('include_hit', 'llm_confirmed')
+      AND basis_flag IS NULL
     GROUP BY commodity_id, store_id
 ) t ON t.commodity_id = p.commodity_id
    AND t.store_id     = p.store_id
    AND t.mx           = p.observed_at
-WHERE p.match_status IN ('include_hit', 'llm_confirmed');
+WHERE p.match_status IN ('include_hit', 'llm_confirmed')
+  AND p.basis_flag IS NULL;
 
 -- Cheapest surviving per-unit candidate per cell — the "crown" the board renders.
 CREATE VIEW IF NOT EXISTS v_cell_crown AS

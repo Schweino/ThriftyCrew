@@ -230,18 +230,25 @@ class GraphDB:
             """INSERT INTO price_observations
                  (id, commodity_id, store_id, product_name, price, unit_price, unit,
                   size_text, is_sale, price_type, ad_cycle_id, provenance_id,
-                  confidence, observed_at, source_file)
+                  confidence, observed_at, source_file, match_status, match_reason)
                VALUES (:id,:commodity_id,:store_id,:product_name,:price,:unit_price,:unit,
                        :size_text,:is_sale,:price_type,:ad_cycle_id,:provenance_id,
-                       :confidence,:observed_at,:source_file)
+                       :confidence,:observed_at,:source_file,:match_status,:match_reason)
                ON CONFLICT(id) DO UPDATE SET
                  price      = excluded.price,
                  unit_price = excluded.unit_price,
-                 confidence = excluded.confidence""",
+                 confidence = excluded.confidence,
+                 match_status = excluded.match_status,
+                 match_reason = excluded.match_reason""",
             {
                 "product_name": None, "price": None, "unit_price": None, "unit": None,
                 "size_text": None, "is_sale": 0, "price_type": None, "ad_cycle_id": None,
-                "confidence": 1.0, "source_file": None, **obs,
+                "confidence": 1.0, "source_file": None,
+                # Default is 'unadjudicated' so a lane that does NOT already know the
+                # commodity cannot skip the resolver by omission. Only importers whose
+                # source asserts the commodity id may pass 'include_hit' explicitly.
+                "match_status": "unadjudicated", "match_reason": None,
+                **obs,
             },
         )
         return obs["id"]

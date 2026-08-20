@@ -80,14 +80,37 @@ def graph_board(db) -> dict[str, dict[str, float]]:
     that), and only rows whose size parsed can be normalised — an unparsed size
     contributes nothing rather than a guess.
     """
+    # basis_flag IS NULL is not optional here: a row with an implausible per-unit
+    # price is barred from crowning (see graph/pipeline/flag_outliers.py). Without
+    # it, a "221 fl oz" hand-soap pump prices the cell at $0.009.
     rows = db.conn.execute(
         """SELECT p.commodity_id, p.store_id, p.price, p.size_text,
-                  p.unit_price, p.unit, n.properties_json
+                  p.unit_price, p.unit, p.source_file, n.properties_json
            FROM price_observations p
            LEFT JOIN nodes n ON n.id = p.commodity_id
            WHERE p.match_status IN ('include_hit','llm_confirmed')
+             AND p.basis_flag IS NULL
              AND p.price IS NOT NULL""").fetchall()
 
+    # Overrides: the board pins certain cells to a corrected per-unit and those
+    # win over anything the sweep saw. Modelling the board without them
+    # guarantees a disagreement on every pinned cell.
+    overrides: dict[tuple[str, str], float] = {}
+    for r in db.conn.execute(
+            """SELECT canonical_name, properties_json FROM nodes WHERE type='Override'"""):
+        p = json.loads(r["properties_json"] or "{}")
+        if p.get("commodity") and p.get("store") and p.get("per_unit") is not None:
+            overrides[(p["commodity"], norm_store(p["store"]))] = float(p["per_unit"])
+
+    # PRECEDENCE, mirroring what the live board actually renders:
+    #   1. a pinned override for the cell
+    #   2. the CURATED product-urls row (the See-item link the board shows) --
+    #      this is the answer a human verified against the shelf
+    #   3. otherwise the cheapest surviving row the capture sweep found
+    # Taking a flat minimum across all three was the modelling error: the sweep
+    # is a DISCOVERY lane and routinely sees a cheaper near-match that the board
+    # deliberately did not pick.
+    curated: dict[str, dict[str, float]] = {}
     best: dict[str, dict[str, float]] = {}
     unparsed = 0
     for r in rows:
@@ -115,9 +138,23 @@ def graph_board(db) -> dict[str, dict[str, float]]:
             unparsed += 1
             continue
         store = r["store_id"].replace("store:", "")
-        cell = best.setdefault(legacy, {})
-        if store not in cell or pu < cell[store]:
-            cell[store] = pu
+        if "product-urls" in (r["source_file"] or ""):
+            c = curated.setdefault(legacy, {})
+            if store not in c or pu < c[store]:
+                c[store] = pu
+        else:
+            cell = best.setdefault(legacy, {})
+            if store not in cell or pu < cell[store]:
+                cell[store] = pu
+
+    # apply the precedence
+    for legacy, stores in curated.items():
+        for store, pu in stores.items():
+            best.setdefault(legacy, {})[store] = pu
+    for (legacy, store), pu in overrides.items():
+        if legacy in best and store in best[legacy]:
+            best[legacy][store] = pu
+
     graph_board.unparsed = unparsed          # type: ignore[attr-defined]
     return best
 

@@ -420,6 +420,191 @@ def import_ingredient_map(db: GraphDB, ts: str, run: str) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Fareway shop lane — already keyed by commodity id (Block 1.2)
+# ---------------------------------------------------------------------------
+
+def _is_capture(rows: list) -> bool:
+    """Distinguish a capture from a WORKLIST by shape, never by filename.
+
+    grocery/out/fareway/ holds both. reprice-chips.json and recapture-terms.json
+    are worklists — rows of {id, q[, t]} naming what still needs pricing — and
+    importing them as observations would invent prices that were never observed.
+    A capture row carries a price field; a worklist row does not.
+    """
+    if not isinstance(rows, list) or not rows:
+        return False
+    sample = [r for r in rows[:50] if isinstance(r, dict)]
+    if not sample:
+        return False
+    keys = {k for r in sample for k in r}
+    return bool(keys & {"price", "ad_price", "lp"})
+
+
+def import_fareway_shop(db: GraphDB, ts: str, run: str, *,
+                        limit_files: int | None = None) -> dict:
+    """grocery/out/fareway/fareway-shop-*.json -> PriceObservation rows.
+
+    The cheapest lane in the estate to import: every row is ALREADY keyed by
+    commodity id, so no resolution is needed and no model is consulted. Rows land
+    pre-adjudicated as 'include_hit' because the capture itself asserted the
+    commodity — the id came from the store-side pull, not from a guess here.
+
+    Two field subtleties, both load-bearing:
+      * `unit` carries an engine-computed unit price ("$1.99/lb"). Prefer it, per
+        the same rule that makes Walmart's wm_unit_price authoritative.
+      * `per: "package (estimated)"` marks a variable-weight item where `price`
+        is an ESTIMATE for a whole package (e.g. $59.90 for "about 10 lb" of
+        ground beef). The sticker is not comparable; the unit price is.
+    """
+    files = sorted(glob.glob(os.path.join(GROCERY, "out", "fareway", "fareway-shop-*.json")))
+    if limit_files:
+        files = files[-limit_files:]
+
+    n_obs = n_files = n_skipped = n_worklist = 0
+    for fp in files:
+        try:
+            rows = read_json(fp)
+        except Exception:
+            continue
+        if not _is_capture(rows):
+            n_worklist += 1
+            continue
+
+        observed = os.path.basename(fp).replace("fareway-shop-", "").replace(".json", "")
+        prov = db.record_provenance(rel(fp), "import:fareway-shop", ts,
+                                    raw_output_hash=hash_obj(len(rows)), run=run)
+        n_files += 1
+
+        for r in rows:
+            legacy = r.get("id")
+            name = r.get("name")
+            if not (legacy and name):
+                n_skipped += 1
+                continue
+            cid = None
+            for ns in ("staple", "recipe"):
+                cand = commodity_id(legacy, ns)
+                if db.get_node(cand):
+                    cid = cand
+                    break
+            if not cid:
+                n_skipped += 1
+                continue
+
+            price = _money(r.get("price"))
+            orig = _money(r.get("orig"))
+            upx, unit = parse_engine_unit_price(r.get("unit"))
+            estimated = "estimat" in str(r.get("per", "")).lower()
+
+            oid = observation_id(cid, "Fareway", observed, rel(fp), name)
+            db.add_observation({
+                "id": oid,
+                "commodity_id": cid,
+                "store_id": store_id("Fareway"),
+                "product_name": name,
+                # A variable-weight sticker is not a comparable price; keep it for
+                # evidence but never let it stand in as one.
+                "price": None if (estimated and upx is not None) else price,
+                "unit_price": upx,
+                "unit": unit,
+                "size_text": r.get("size"),
+                "is_sale": 1 if (orig and price and orig > price) else 0,
+                "price_type": "sale" if (orig and price and orig > price) else "everyday",
+                "ad_cycle_id": None,
+                "provenance_id": prov,
+                "confidence": 1.0,
+                "observed_at": observed,
+                "source_file": rel(fp),
+                # the capture asserted the commodity id; nothing to adjudicate
+                "match_status": "include_hit",
+                "match_reason": "fareway shop capture is keyed by commodity id",
+            })
+            n_obs += 1
+
+    return {"fareway_observations": n_obs, "fareway_files": n_files,
+            "fareway_worklists_skipped": n_worklist, "fareway_rows_skipped": n_skipped}
+
+
+def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
+                              limit_files: int | None = None) -> dict:
+    """product-urls.json -> PriceObservation rows (Block 1, largest parity lever).
+
+    WHY THIS IS THE BIGGEST LEVER, measured rather than assumed: 86.2% of the
+    live board's 3,213 cells have a product-urls entry for that exact
+    (commodity, store), and 71.5% of those reproduce the board's rendered
+    data-pu within 2%. The capture sweep is a DISCOVERY lane; this file is the
+    curated, shelf-verified answer the board actually renders, complete with the
+    See-item link. Importing only the sweep and not this was why the graph could
+    speak to barely a third of the board.
+
+    Rows land pre-adjudicated as include_hit: the file is keyed by commodity id
+    and each entry was curated for that commodity, so there is nothing for the
+    resolver to decide. `verified` dates are carried onto the observation so
+    freshness stays auditable.
+    """
+    path = os.path.join(GROCERY, "product-urls.json")
+    if not os.path.exists(path):
+        return {"product_url_observations": 0}
+    data = read_json(path)
+    prov = db.record_provenance(rel(path), "import:product-urls-prices", ts, run=run)
+
+    n_obs = n_skip = 0
+    for cid_raw, entry in (data.get("items") or {}).items():
+        cid = None
+        for ns in ("staple", "recipe"):
+            cand = commodity_id(cid_raw, ns)
+            if db.get_node(cand):
+                cid = cand
+                break
+        if not cid:
+            n_skip += 1
+            continue
+
+        for store, v in entry.items():
+            if store == "commodity" or not isinstance(v, dict):
+                continue
+            price = _money(v.get("price"))
+            if price is None:
+                n_skip += 1
+                continue
+            name = v.get("name") or cid_raw
+            # `verified` is the day the shelf was actually checked; fall back to
+            # the file's own updated stamp so an observation always has a date.
+            observed = v.get("verified") or data.get("updated") or ts[:10]
+
+            oid = observation_id(cid, store, observed, rel(path), name)
+            db.add_observation({
+                "id": oid,
+                "commodity_id": cid,
+                "store_id": store_id(store),
+                "product_name": name,
+                "price": price,
+                # recipe_pu is NOT imported as unit_price: it is the RECIPE
+                # board's basis, which for some commodities differs from the
+                # staple board's declared unit. Carrying it across without its
+                # basis is precisely the mismatch reconcile_unit exists to stop
+                # (the milk fl-oz/gallon class of error). Let price+size derive,
+                # where the basis is unambiguous.
+                "unit_price": None,
+                "unit": None,
+                "size_text": v.get("size"),
+                "is_sale": 0,
+                "price_type": "everyday",
+                "ad_cycle_id": None,
+                "provenance_id": prov,
+                "confidence": 1.0,
+                "observed_at": observed,
+                "source_file": rel(path),
+                "match_status": "include_hit",
+                "match_reason": "curated product-urls entry, keyed by commodity id"
+                                + (f"; shelf-verified {v['verified']}" if v.get("verified") else ""),
+            })
+            n_obs += 1
+
+    return {"product_url_observations": n_obs, "product_url_skipped": n_skip}
+
+
+# ---------------------------------------------------------------------------
 # Price observations — the high-volume backfill
 # ---------------------------------------------------------------------------
 
@@ -520,6 +705,12 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
 
 
 # ---------------------------------------------------------------------------
+
+# Lane importers run AFTER the generic capture backfill and take limit_files.
+LANE_IMPORTERS: list[tuple[str, Callable]] = [
+    ("fareway_shop", import_fareway_shop),
+    ("product_url_prices", import_product_url_prices),
+]
 
 ALL_IMPORTERS: list[tuple[str, Callable]] = [
     ("stores", import_stores),

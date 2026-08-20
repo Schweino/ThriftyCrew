@@ -70,6 +70,19 @@ def main() -> int:
             db.conn.commit()
             say(f"  {'observations':<20} {res}   ({time.time()-t0:.1f}s)")
 
+            for name, fn in importers.LANE_IMPORTERS:
+                t0 = time.time()
+                try:
+                    res = fn(db, ts, run, limit_files=args.limit_files)
+                except Exception as e:                  # noqa: BLE001
+                    say(f"  {name:<20} FAILED: {e}")
+                    db.log_event(run=run, timestamp=ts, etype="escalate", step_id=name,
+                                 decision="lane_importer_failed", detail={"error": str(e)})
+                    continue
+                totals.update(res)
+                db.conn.commit()
+                say(f"  {name:<20} {res}   ({time.time()-t0:.1f}s)")
+
         stats = db.stats()
         db.log_event(run=run, timestamp=ts, etype="state_transition",
                      decision="import_complete", detail={"totals": totals, "stats": stats})
