@@ -152,10 +152,10 @@
   {
       "batch":  "hunt-2026-08-15-lowcarb-100-w1",
       "opened":  "2026-08-16T06:07:43",
-      "last_activity":  "2026-08-20T04:17:10",
-      "closed":  false,
-      "closed_at":  null,
-      "close_detail":  null,
+      "last_activity":  "2026-08-20T04:20:08",
+      "closed":  true,
+      "closed_at":  "2026-08-20T04:20:08",
+      "close_detail":  "post-publish review CLEAN (independent, via Ghost admin API): fresh spinach/broccoli bids confirmed live, 5 excerpt trims match their JSON-LD exactly, cream-cheese rebase live with the sour-cream and cheddar exceptions intact, must-not-be-live slugs genuinely 404, no orphan slugs",
       "slugs":  [
                     "low-carb-ground-beef-stroganoff-skillet",
                     "creamy-tuscan-chicken-skillet",
@@ -285,10 +285,10 @@
   {
       "batch":  "hunt-2026-08-15-lowcarb-100-w3",
       "opened":  "2026-08-16T12:35:08",
-      "last_activity":  "2026-08-20T04:17:17",
-      "closed":  false,
-      "closed_at":  null,
-      "close_detail":  null,
+      "last_activity":  "2026-08-20T04:20:08",
+      "closed":  true,
+      "closed_at":  "2026-08-20T04:20:08",
+      "close_detail":  "post-publish review CLEAN (independent, via Ghost admin API): fresh spinach/broccoli bids confirmed live, 5 excerpt trims match their JSON-LD exactly, cream-cheese rebase live with the sour-cream and cheddar exceptions intact, must-not-be-live slugs genuinely 404, no orphan slugs",
       "slugs":  [
                     "garlic-butter-steak-bites-zucchini",
                     "turkey-meatballs-cream-sauce-skillet",
@@ -376,10 +376,10 @@
   {
       "batch":  "hunt-2026-08-15-lowcarb-100-w4",
       "opened":  "2026-08-16T14:20:09",
-      "last_activity":  "2026-08-20T04:17:25",
-      "closed":  false,
-      "closed_at":  null,
-      "close_detail":  null,
+      "last_activity":  "2026-08-20T04:20:36",
+      "closed":  true,
+      "closed_at":  "2026-08-20T04:20:08",
+      "close_detail":  "post-publish review CLEAN (independent, via Ghost admin API): fresh spinach/broccoli bids confirmed live, 5 excerpt trims match their JSON-LD exactly, cream-cheese rebase live with the sour-cream and cheddar exceptions intact, must-not-be-live slugs genuinely 404, no orphan slugs",
       "slugs":  [
                     "sheet-pan-smoked-sausage-broccoli-cheddar",
                     "spinach-provolone-stuffed-flank-steak-rolls"
@@ -419,6 +419,26 @@
                          "stage":  "post-publish-review",
                          "at":  "2026-08-20T04:17:25",
                          "detail":  "CLEAN - w4\u0027s 2 slugs (sheet-pan-smoked-sausage-broccoli-cheddar, spinach-provolone-stuffed-flank-steak-rolls) verified: bid:broccoli (fresh) and bid:spinach (fresh) confirmed live, spinach-provolone\u0027s 1-3-fat-cream-cheese rebase confirmed, custom_excerpt/JSON-LD match on spinach-provolone (one of the 5 description trims). Also spot-checked collateral republish (andong-jjimdak-braised-chicken uses corrected bid:boneless-skinless-chicken-thigh not bone-in chicken-thighs; korean-beef-japchae-noodle-bowls and korean-turkey-japchae use \u0027Korean glass noodles (dangmyeon)\u0027 with zero leftover \u0027Rice Noodle\u0027 text). Confirmed low-carb-turkey-cauliflower-mushroom-casserole and southwest-ground-turkey-cauliflower-rice-skillet never went live (404 via admin API). Pre-existing, batch-unrelated: grocery guards.ps1 currently rc=2 (board staleness + blueberries unit-basis, already tracked as open triage 2026-08-19-566f97, no commodity from this batch involved)."
+                     },
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-20T04:20:36",
+                         "detail":  "completed 2026-08-16 in the original run, before this ledger row existed: both slugs were sourced, selected, mapped, written and spec-built, then held at rejected-audit on the fresh-produce pricing gap. Row w4 was opened 2026-08-16 when they were revived, so these stages predate it. See state history in runs\\hunt-2026-08-15-lowcarb-100\\state\\."
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-20T04:20:36",
+                         "detail":  "completed 2026-08-16 in the original run, before this ledger row existed: both slugs were sourced, selected, mapped, written and spec-built, then held at rejected-audit on the fresh-produce pricing gap. Row w4 was opened 2026-08-16 when they were revived, so these stages predate it. See state history in runs\\hunt-2026-08-15-lowcarb-100\\state\\."
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-20T04:20:36",
+                         "detail":  "completed 2026-08-16 in the original run, before this ledger row existed: both slugs were sourced, selected, mapped, written and spec-built, then held at rejected-audit on the fresh-produce pricing gap. Row w4 was opened 2026-08-16 when they were revived, so these stages predate it. See state history in runs\\hunt-2026-08-15-lowcarb-100\\state\\."
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-20T04:20:36",
+                         "detail":  "completed 2026-08-16 in the original run, before this ledger row existed: both slugs were sourced, selected, mapped, written and spec-built, then held at rejected-audit on the fresh-produce pricing gap. Row w4 was opened 2026-08-16 when they were revived, so these stages predate it. See state history in runs\\hunt-2026-08-15-lowcarb-100\\state\\."
                      }
                  ]
   }
