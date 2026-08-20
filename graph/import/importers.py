@@ -644,13 +644,18 @@ def _build_term_index(db: GraphDB) -> dict:
 
 
 def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | None = None,
-                        dirs: tuple[str, ...] = ("regular", "throttled"),
+                        dirs: tuple[str, ...] = ("regular", "throttled", "sams"),
                         progress: Callable[[str], None] | None = None) -> dict:
     """grocery/out/<lane>/*.json -> PriceObservation rows.
 
     Observations are the one structure NOT exported to tracked JSON (they are
     reconstructable from these very captures, which are themselves tracked). Their
     provenance rows ARE exported, so the audit trail survives a rebuild.
+
+    The sams lane rides this importer because its rows carry `found_by_term`
+    exactly like regular/throttled; its `price_type` lives at FILE level
+    ("everyday" for the club-price sweeps), and its sams-rejects-*.json
+    siblings are bare lists, which the isinstance(dict) guard already skips.
     """
     term_index = _build_term_index(db)
     n_obs = n_files = n_unresolved = 0
@@ -697,6 +702,9 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
                 upx, unit = parse_engine_unit_price(
                     d.get("engine_check") or d.get("wm_unit_price"))
 
+                # Row-level price_type wins; the sams sweep declares it once
+                # at file level instead.
+                ptype = d.get("price_type") or data.get("price_type")
                 db.add_observation({
                     "id": oid,
                     "commodity_id": cid,
@@ -706,8 +714,8 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
                     "unit_price": upx,
                     "unit": unit,
                     "size_text": d.get("size"),
-                    "is_sale": 1 if (d.get("price_type") or "").lower() == "sale" else 0,
-                    "price_type": d.get("price_type"),
+                    "is_sale": 1 if (ptype or "").lower() == "sale" else 0,
+                    "price_type": ptype,
                     "ad_cycle_id": None,
                     "provenance_id": prov,
                     # No confidence: this lane imports raw candidates as
@@ -721,11 +729,106 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
             "unresolved_rows": n_unresolved}
 
 
+def import_ad_deals(db: GraphDB, ts: str, run: str, *, limit_files: int | None = None,
+                    dirs: tuple[str, ...] = ("bakers", "fareway"),
+                    progress: Callable[[str], None] | None = None) -> dict:
+    """grocery/out/{bakers,fareway}/*-deals-*.json -> candidate PriceObservations.
+
+    These are WEEKLY-AD extractions, and unlike the search-term lanes their rows
+    carry no commodity key and no `found_by_term` — an ad page just says
+    "Pork Shoulder Bone-In $1.99/lb". The commodity has to be DISCOVERED, which
+    is exactly what the legacy compare-deals does by running every commodity's
+    include patterns over the ad text. This importer mirrors that: a row becomes
+    a candidate observation for every commodity whose include regex matches its
+    item text, stored as 'unadjudicated' so the resolver adjudicates it under
+    the full layer stack (known-wrong and category guards CAN still kill a
+    candidate the include regex liked — that is the point of importing
+    candidates rather than asserting matches).
+
+    A row matching no commodity at all is counted and skipped, exactly as the
+    live board skips ad rows it cannot place. Fareway's *shop* captures are a
+    different lane (import_fareway_shop, keyed by commodity); this one is only
+    the ad book.
+    """
+    # Compile every commodity's include patterns once. ~633 commodities over a
+    # few hundred ad rows is trivial; per-row compilation would not be.
+    matchers: list[tuple[str, list[re.Pattern]]] = []
+    for row in db.conn.execute(
+            """SELECT node_id, GROUP_CONCAT(alias, char(10)) AS pats
+               FROM aliases WHERE kind='include' GROUP BY node_id""").fetchall():
+        pats = []
+        for p in (row["pats"] or "").split("\n"):
+            if not p:
+                continue
+            try:
+                pats.append(re.compile(p, re.IGNORECASE))
+            except re.error:
+                continue                      # malformed stored regex: audit's job
+        if pats:
+            matchers.append((row["node_id"], pats))
+
+    n_obs = n_files = n_unplaced = 0
+    for lane in dirs:
+        files = sorted(glob.glob(os.path.join(GROCERY, "out", lane, "*-deals-*.json")))
+        if limit_files:
+            files = files[-limit_files:]
+        for fp in files:
+            try:
+                data = read_json(fp)
+            except Exception:
+                continue
+            if not isinstance(data, dict) or not data.get("deals"):
+                continue
+            store = data.get("store")
+            observed = data.get("captured") or data.get("ad_from") or ts[:10]
+            frm, to = data.get("ad_from"), data.get("ad_to")
+            cycle = adcycle_id(store, frm, to) if (store and frm and to) else None
+            prov = db.record_provenance(rel(fp), f"import:ad-deals:{lane}", ts,
+                                        raw_output_hash=hash_obj(data.get("source", "")),
+                                        run=run)
+            n_files += 1
+            if progress:
+                progress(f"  {rel(fp)}  ({len(data['deals'])} ad rows)")
+
+            for d in data["deals"]:
+                dstore = d.get("store") or store
+                name = d.get("item")
+                if not (dstore and name):
+                    continue
+                price = _money(d.get("ad_price") or d.get("current_price"))
+                hits = [cid for cid, pats in matchers
+                        if any(p.search(name) for p in pats)]
+                if not hits:
+                    n_unplaced += 1
+                    continue
+                for cid in hits:
+                    db.add_observation({
+                        "id": observation_id(cid, dstore, observed, rel(fp), name),
+                        "commodity_id": cid,
+                        "store_id": store_id(dstore),
+                        "product_name": name,
+                        "price": price,
+                        "unit_price": None,
+                        "unit": None,
+                        "size_text": d.get("size"),
+                        "is_sale": 1,
+                        "price_type": "ad",
+                        "ad_cycle_id": cycle,
+                        "provenance_id": prov,
+                        "observed_at": observed,
+                        "source_file": rel(fp),
+                    })
+                    n_obs += 1
+    return {"ad_deal_observations": n_obs, "ad_deal_files": n_files,
+            "ad_rows_unplaced": n_unplaced}
+
+
 # ---------------------------------------------------------------------------
 
 # Lane importers run AFTER the generic capture backfill and take limit_files.
 LANE_IMPORTERS: list[tuple[str, Callable]] = [
     ("fareway_shop", import_fareway_shop),
+    ("ad_deals", import_ad_deals),
     ("product_url_prices", import_product_url_prices),
 ]
 

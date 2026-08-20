@@ -244,9 +244,23 @@ class GraphDB:
                ON CONFLICT(id) DO UPDATE SET
                  price      = excluded.price,
                  unit_price = excluded.unit_price,
-                 confidence = excluded.confidence,
-                 match_status = excluded.match_status,
-                 match_reason = excluded.match_reason""",
+                 -- Re-import must never clobber an adjudication. The importer
+                 -- speaks with authority only when its SOURCE asserts the
+                 -- commodity (it then sends a non-'unadjudicated' status);
+                 -- a raw candidate arriving as 'unadjudicated' says nothing,
+                 -- and overwriting an llm_/escalated/include_hit verdict with
+                 -- it silently destroyed the entire adjudication history on
+                 -- every routine re-import (caught 2026-08-20: a midday
+                 -- import erased that morning's 25 model verdicts).
+                 confidence = CASE WHEN excluded.match_status != 'unadjudicated'
+                                   THEN excluded.confidence
+                                   ELSE price_observations.confidence END,
+                 match_status = CASE WHEN excluded.match_status != 'unadjudicated'
+                                     THEN excluded.match_status
+                                     ELSE price_observations.match_status END,
+                 match_reason = CASE WHEN excluded.match_status != 'unadjudicated'
+                                     THEN excluded.match_reason
+                                     ELSE price_observations.match_reason END""",
             {
                 "product_name": None, "price": None, "unit_price": None, "unit": None,
                 "size_text": None, "is_sale": 0, "price_type": None, "ad_cycle_id": None,
