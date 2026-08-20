@@ -216,7 +216,10 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Run graph gate checks")
     ap.add_argument("--check", action="append", help="run only this check (repeatable)")
     ap.add_argument("--today", default=None)
-    ap.add_argument("--max-age-days", type=int, default=21)
+    # Default None = read MaxCarryDays from capture-policy.ps1. A literal here
+    # would be a THIRD private copy of the everyday-price window — the CLI
+    # shipped with 21 and silently overrode the policy-reading check.
+    ap.add_argument("--max-age-days", type=int, default=None)
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
