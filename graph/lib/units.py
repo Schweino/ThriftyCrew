@@ -242,10 +242,24 @@ def reconcile_unit(value: float | None, from_unit: str | None,
     f = str(from_unit).strip().lower()
     t = str(to_unit or "").strip().lower()
 
-    # normalise a few spellings
-    alias = {"fl oz": "floz", "fluid ounce": "floz", "ounce": "oz", "ounces": "oz",
+    # Normalise spellings BEFORE comparing. This map is the one place a surface
+    # form is canonicalised — the same rule ids.STORE_CANON follows for store
+    # names: add the form here, never "fix" it at a call site.
+    #
+    # fl_oz is not hypothetical: commodities.json declares BOTH 'floz' (74
+    # commodities) and 'fl_oz' (5). Without the underscore forms below,
+    # reconcile_unit could not convert fl_oz even TO ITSELF, so those five
+    # commodities silently refused every derived price they were ever offered.
+    # The graph adapts to the legacy catalog's surface forms; it does not write
+    # back to commodities.json to tidy them (dual-write only).
+    alias = {"fl oz": "floz", "fl_oz": "floz", "fl. oz": "floz", "fl-oz": "floz",
+             "fluid ounce": "floz", "fluid ounces": "floz", "fluid_ounce": "floz",
+             "ounce": "oz", "ounces": "oz",
              "pounds": "lb", "lbs": "lb", "pound": "lb", "each": "each", "ea": "each",
-             "count": "ct", "gallon": "gal"}
+             "count": "ct", "counts": "ct", "gallon": "gal", "gallons": "gal",
+             "grams": "gram", "g": "gram",
+             "sqft": "sq_ft", "sq ft": "sq_ft", "square foot": "sq_ft",
+             "square feet": "sq_ft", "dozens": "dozen"}
     f = alias.get(f, f)
     t = alias.get(t, t)
 
