@@ -2019,7 +2019,9 @@
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
-                        "\\bfruit\\s+blend\\b"
+                        "\\bfruit\\s+blend\\b",
+                        "\\bjams?\\b",
+                        "\\bconserve\\b"
                     ]
     },
     {
@@ -2204,7 +2206,9 @@
                         "\\bpops\\b",
                         "\\bfruit\\s+blend\\b",
                         "\\biqf\\b",
-                        "\\bunsweetened\\b"
+                        "\\bunsweetened\\b",
+                        "\\bjams?\\b",
+                        "\\bconserve\\b"
                     ]
     },
     {
@@ -3102,7 +3106,9 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bconserve\\b"
                     ]
     },
     {
@@ -13320,7 +13326,9 @@
                         "marinade",
                         "\\bdressing\\b",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bconserve\\b"
                     ]
     },
     {
@@ -13495,7 +13503,9 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bconserve\\b"
                     ]
     },
     {
@@ -45803,7 +45813,9 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bconserve\\b"
                     ]
     },
     {
@@ -46924,7 +46936,9 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bconserve\\b"
                     ]
     },
     {
@@ -49421,7 +49435,9 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bconserve\\b"
                     ]
     },
     {
@@ -54413,7 +54429,9 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bconserve\\b"
                     ]
     },
     {
