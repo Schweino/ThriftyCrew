@@ -1,0 +1,43 @@
+{
+  "note": "THE placeholder-name LIBRARY - single source of truth for product names that are TEST/PLACEHOLDER DATA rather than a real shelf item. Unlike category-excludes.json (which asks 'is this the wrong FOOD for this commodity?'), this asks 'is this a real listing at all?' - so it is wrong for EVERY commodity at EVERY store, and it is applied at CAPTURE TIME, before a row can ever become a pricing candidate. Born from po:247cb099bb67b4b193c95440, 'Test Id 1 Homekist Fudge Grahams' (Walmart item 105676485): a genuine Walmart catalog listing, correctly priced at $2.26, that passed the marketplace-seller filter AND the engine unit-price check AND landed on commodity:staple:graham-crackers with confidence 1.0. Nothing about the PRICE was wrong, so no price guard could see it; only the NAME gave it away, and only a human in the confirm-match review caught it. RULE FOR ADDING PATTERNS: a pattern belongs here ONLY if a name matching it cannot be a real grocery item under ANY reading. Loose tokens do not qualify - a bare word-boundary 'test' would eat America's Test Kitchen, and 'xxx' would eat vitaminwater XXX and Melinda's XXXX Reserve habanero, both of which are real, priceable products already in our captures. Every pattern must be structural (test plus a data-ish noun, or test plus a sequence number), never a bare word. must_not_match is the regression set: real product names, taken from live captures, that these patterns are forbidden to reject.",
+  "consumers": [
+    "graph/lib/placeholder_names.py - is_placeholder_name(); every observation-creating importer in graph/import/importers.py drops matching rows before add_observation",
+    "grocery/capture-lib.ps1 - Test-PlaceholderProductName; Import-CaptureCsv drops matching rows as the capture is read, so every builder that uses the shared reader inherits it",
+    "grocery/import-walmart-batch.ps1 - applied in its own line parser, which reads the reducer output directly rather than through Import-CaptureCsv"
+  ],
+  "patterns": [
+    "\\btest\\s*id\\b",
+    "\\btest\\s*(item|product|sku|listing|entry|record|data)\\b",
+    "\\b(sample|demo|dummy|placeholder)\\s*(item|product|sku|listing|entry|record)\\b",
+    "\\bplaceholder\\b",
+    "\\bdummy\\b",
+    "\\bdo\\s*not\\s*(use|order|buy|ship|sell|purchase)\\b",
+    "\\bfor\\s+testing\\b",
+    "\\btest\\s+only\\b",
+    "\\bdelete\\s*me\\b",
+    "^\\s*test\\s*[-_#:]?\\s*\\d"
+  ],
+  "must_match": [
+    "Test Id 1 Homekist Fudge Grahams",
+    "TESTID 4 Great Value Sugar",
+    "Test Product - do not order",
+    "test sku 00912",
+    "Placeholder Item 7",
+    "DUMMY - Kroger Whole Milk",
+    "Vendor listing DO NOT USE",
+    "Test 3 Ground Beef",
+    "delete me test entry"
+  ],
+  "must_not_match": [
+    "vitaminwater Zero Sugar XXX Acai-Blueberry-Pomegranate Flavored Water Beverage Bottle",
+    "Melinda's Pepper Sauce, Original Habanero, Xxx Xtra Reserve, Xxx Xtra Hot 5 Oz",
+    "Melindas XXXX Reserve Original Habanero Pepper Sauce",
+    "America's Test Kitchen Complete Cookbook",
+    "Duncan Hines Test Kitchen Brownie Mix",
+    "Contest Winner Chili Seasoning",
+    "Latest Harvest Honeycrisp Apples",
+    "Homekist Fudge Covered Graham Crackers, 13 oz",
+    "Great Value Protest-Free Sparkling Water",
+    "Testa Rossa Espresso Beans 12 oz"
+  ]
+}

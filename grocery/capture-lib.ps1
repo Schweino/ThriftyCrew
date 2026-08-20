@@ -26,6 +26,7 @@
   Usage:  . (Join-Path $PSScriptRoot 'capture-lib.ps1')
           $rows = Import-CaptureCsv -Path <capture.csv> -Delimiter '|'      # UTF-8 + names repaired
           $name = Repair-Mojibake $rawName
+          if (Test-PlaceholderProductName $name) { continue }             # vendor TEST listing, not a product
           .\capture-lib.ps1 -CaptureLibSelfTest
 
   NOTE the switch is NOT called -SelfTest. Dot-sourcing runs a script's param() block in the CALLER's scope,
@@ -70,6 +71,41 @@ function Repair-Mojibake([string]$s) {
   return $cur
 }
 
+# --- PLACEHOLDER / TEST NAMES -------------------------------------------------------------------------
+# A store's own catalog sometimes carries a VENDOR TEST LISTING as a real, purchasable, correctly priced row.
+# 2026-08-20: "Test Id 1 Homekist Fudge Grahams" (Walmart item 105676485, $2.26, real product page, real CDN
+# image) came off a live Omaha "graham crackers" search on 2026-08-11 sitting at result 26, one row below the
+# genuine "Homekist Fudge Covered Graham Crackers, 13 oz" at the same price. It passed the marketplace-seller
+# quarantine and the engine's unit-price reproduction check, because NOTHING ABOUT THE PRICE WAS WRONG. It
+# reached the graph's confirm-match review as a live candidate against graham-crackers at confidence 1.0, and
+# was stopped only by a human reading the name. That is not a control; it is luck. This is the control.
+#
+# The patterns are NOT defined here. They live in placeholder-name-patterns.json so this lane and the graph
+# lane (graph/lib/placeholder_names.py) reject exactly the same names, and so the regression set of REAL
+# product names they must never reject travels with them. Read that file before adding a pattern.
+$script:PLACEHOLDER_PATTERNS = $null
+function Get-PlaceholderPatterns {
+  if ($null -eq $script:PLACEHOLDER_PATTERNS) {
+    $libPath = Join-Path $PSScriptRoot 'placeholder-name-patterns.json'
+    # Hard failure, not a silent empty list. A guard that quietly stops guarding is worse than no guard: the
+    # rows it should have dropped go straight back to being someone's job to notice in review.
+    if (-not (Test-Path $libPath)) { throw "capture-lib: placeholder-name library missing: $libPath" }
+    $script:PLACEHOLDER_PATTERNS = @((Get-Content $libPath -Raw -Encoding UTF8 | ConvertFrom-Json).patterns)
+  }
+  return $script:PLACEHOLDER_PATTERNS
+}
+
+function Test-PlaceholderProductName([string]$name) {
+  <#
+    $true if the name reads as vendor test/placeholder data rather than a product. An EMPTY name is $false:
+    callers have their own handling for nameless rows and must keep it, rather than have those quietly
+    recounted as placeholders and disappear into this counter.
+  #>
+  if ([string]::IsNullOrWhiteSpace($name)) { return $false }
+  foreach ($p in (Get-PlaceholderPatterns)) { if ($name -match $p) { return $true } }
+  return $false
+}
+
 function Import-CaptureCsv {
   <#
     Read a browser-capture CSV the way it was actually written (UTF-8) and repair any text that was already
@@ -92,11 +128,24 @@ function Import-CaptureCsv {
       }
     }
   }
+  # Drop vendor TEST listings at the moment the capture is read, so no builder downstream can turn one into a
+  # priced row. This runs AFTER the mojibake repair on purpose: a name has to be readable before it can be
+  # judged. Every builder that reads captures through this function inherits the guard for free.
+  $kept = New-Object System.Collections.ArrayList
+  $placeholders = 0
+  foreach ($r in $rows) {
+    $nm = ''
+    foreach ($c in $RepairColumns) { if ($r.PSObject.Properties[$c] -and -not $nm) { $nm = [string]$r.$c } }
+    if (Test-PlaceholderProductName $nm) { $placeholders++; continue }
+    [void]$kept.Add($r)
+  }
+
   # NEVER Write-Output here. A function that returns data must emit NOTHING else: the progress line landed in
   # the returned array as an extra "row" and the very next pipeline died on
   # `Select-Object -ExpandProperty q`. The count goes in a script-scope variable for the caller to report.
   $script:CaptureRepairCount = $repaired
-  return $rows
+  $script:CapturePlaceholderCount = $placeholders
+  return @($kept.ToArray())
 }
 
 if ($CaptureLibSelfTest) {
@@ -136,6 +185,22 @@ if ($CaptureLibSelfTest) {
     if ($got -eq $u) { Write-Output ('ok    left alone: ' + $u) } else { Write-Output ('FAIL  damaged clean text [' + $u + '] -> [' + $got + ']'); $fail++ }
   }
   if ([string]::IsNullOrEmpty((Repair-Mojibake ''))) { Write-Output 'ok    empty input is safe' } else { Write-Output 'FAIL  empty'; $fail++ }
+
+  # PLACEHOLDER GUARD - driven by the SAME must_match / must_not_match sets the Python lane asserts against, so
+  # the two lanes cannot silently drift apart. must_not_match is the part that matters: it is real product
+  # names lifted from live captures (vitaminwater XXX, Melinda's XXXX Reserve habanero, America's Test Kitchen)
+  # that a lazier pattern would have thrown away.
+  $plib = Get-Content (Join-Path $PSScriptRoot 'placeholder-name-patterns.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+  foreach ($n in @($plib.must_match)) {
+    if (Test-PlaceholderProductName $n) { Write-Output ('ok    rejected test row: ' + $n) }
+    else { Write-Output ('FAIL  test row NOT rejected: ' + $n); $fail++ }
+  }
+  foreach ($n in @($plib.must_not_match)) {
+    if (Test-PlaceholderProductName $n) { Write-Output ('FAIL  REAL product rejected: ' + $n); $fail++ }
+    else { Write-Output ('ok    real product kept: ' + $n) }
+  }
+  if (Test-PlaceholderProductName '') { Write-Output 'FAIL  empty name treated as placeholder'; $fail++ }
+  else { Write-Output 'ok    empty name is not a placeholder' }
 
   # DOUBLE mangling: a name that went through the bad read twice needs two decodes. This is not theoretical -
   # 8 of 29 link names survived the first pass and only cleared on a second run.

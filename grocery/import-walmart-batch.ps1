@@ -369,6 +369,7 @@ $lines = @(Get-Content (Join-Path $root $Raw) -Encoding UTF8) | ForEach-Object {
 $rows = New-Object System.Collections.ArrayList
 $ids = @{}
 $dropped3P = New-Object System.Collections.ArrayList
+$droppedTest = New-Object System.Collections.ArrayList
 $quarantined = New-Object System.Collections.ArrayList
 $rejects = New-Object System.Collections.ArrayList
 $overrides = New-Object System.Collections.ArrayList
@@ -380,6 +381,13 @@ foreach ($ln in $lines) {
     if ($f.Count -lt 3) { continue }
     $nm = ($f[0]).Trim()
     if (-not $nm) { continue }
+    # VENDOR TEST LISTING. This parser reads the reducer output directly rather than through
+    # Import-CaptureCsv, so it does not inherit that reader's guard and needs its own. It is checked here,
+    # ahead of the seller and unit-price checks, because a test row can pass BOTH: "Test Id 1 Homekist Fudge
+    # Grahams" (item 105676485) was first-party, correctly priced at $2.26, and reproduced its own unit price
+    # exactly. It reached the graph's confirm-match review as a live graham-crackers candidate on 2026-08-20
+    # and was caught by a human reading the name. See placeholder-name-patterns.json.
+    if (Test-PlaceholderProductName $nm) { [void]$droppedTest.Add(("{0}  [id={1}, {2}]" -f $nm, $(if ($f.Count -ge 4) { ($f[3]).Trim() } else { '' }), [string]$f[1])); continue }
     $itemId = ''; if ($f.Count -ge 4) { $itemId = ($f[3]).Trim() }
     $sv = Test-IwbSeller $f $TrustNoSeller.IsPresent
     if ($sv.drop3p) { [void]$dropped3P.Add(("{0}  [seller={1}, fulfill={2}]" -f $nm, $sv.seller, $sv.fulfill)); continue }
@@ -394,6 +402,7 @@ foreach ($ln in $lines) {
   }
 }
 if ($dropped3P.Count -gt 0) { Write-Output ("Walmart: DROPPED {0} third-party/marketplace row(s) (in-store rule):" -f $dropped3P.Count); $dropped3P | ForEach-Object { Write-Output ('  - ' + $_) } }
+if ($droppedTest.Count -gt 0) { Write-Output ("Walmart: DROPPED {0} vendor TEST listing(s) (placeholder-name-patterns.json):" -f $droppedTest.Count); $droppedTest | ForEach-Object { Write-Output ('  - ' + $_) } }
 if ($overrides.Count -gt 0) { Write-Output ("Walmart: {0} row(s) where the name size beat Walmart's own unit price:" -f $overrides.Count); $overrides | ForEach-Object { Write-Output ('  - ' + $_) } }
 
 # REPLACE-by-identity merge into today's walmart-regular. ADD-only (item|size key) kept BOTH a corrected row

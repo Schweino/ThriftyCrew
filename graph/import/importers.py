@@ -24,6 +24,7 @@ from graphdb import GraphDB, read_json, REPO_ROOT
 from ids import (adcycle_id, category_id, catexclude_id, commodity_id,
                  known_wrong_id, mapping_id, norm_store, observation_id,
                  override_id, sku_id, store_id, store_label, hash_obj, slug)
+from placeholder_names import is_placeholder_name
 from units import parse_engine_unit_price
 
 GROCERY = os.path.join(REPO_ROOT, "grocery")
@@ -376,7 +377,7 @@ def import_product_urls(db: GraphDB, ts: str, run: str) -> dict:
         return {"skus": 0}
     data = read_json(path)
     prov = db.record_provenance(rel(path), "import:product-urls", ts, run=run)
-    n = 0
+    n = n_placeholder = 0
     for cid_raw, entry in (data.get("items") or {}).items():
         target = None
         for ns in ("staple", "recipe"):
@@ -387,6 +388,11 @@ def import_product_urls(db: GraphDB, ts: str, run: str) -> dict:
             if store == "commodity" or not isinstance(v, dict):
                 continue
             name = v.get("name") or cid_raw
+            # A vendor test listing must not become the commodity's SKU either:
+            # this is the node that carries the See-item link the board renders.
+            if is_placeholder_name(name):
+                n_placeholder += 1
+                continue
             skid = sku_id(store, name, v.get("size"))
             db.upsert_node(skid, "ProductSKU", name, ts,
                            properties={"url": v.get("url"), "price": v.get("price"),
@@ -401,7 +407,7 @@ def import_product_urls(db: GraphDB, ts: str, run: str) -> dict:
                 db.upsert_edge(skid, "instance_of", target, ts, provenance=prov,
                                properties={"source": "product-urls"})
             n += 1
-    return {"skus": n}
+    return {"skus": n, "sku_placeholder_rows_dropped": n_placeholder}
 
 
 def import_ingredient_map(db: GraphDB, ts: str, run: str) -> dict:
@@ -471,7 +477,7 @@ def import_fareway_shop(db: GraphDB, ts: str, run: str, *,
     if limit_files:
         files = files[-limit_files:]
 
-    n_obs = n_files = n_skipped = n_worklist = 0
+    n_obs = n_files = n_skipped = n_worklist = n_placeholder = 0
     for fp in files:
         try:
             rows = read_json(fp)
@@ -491,6 +497,9 @@ def import_fareway_shop(db: GraphDB, ts: str, run: str, *,
             name = r.get("name")
             if not (legacy and name):
                 n_skipped += 1
+                continue
+            if is_placeholder_name(name):
+                n_placeholder += 1
                 continue
             cid = None
             for ns in ("staple", "recipe"):
@@ -533,7 +542,8 @@ def import_fareway_shop(db: GraphDB, ts: str, run: str, *,
             n_obs += 1
 
     return {"fareway_observations": n_obs, "fareway_files": n_files,
-            "fareway_worklists_skipped": n_worklist, "fareway_rows_skipped": n_skipped}
+            "fareway_worklists_skipped": n_worklist, "fareway_rows_skipped": n_skipped,
+            "fareway_placeholder_rows_dropped": n_placeholder}
 
 
 def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
@@ -559,7 +569,7 @@ def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
     data = read_json(path)
     prov = db.record_provenance(rel(path), "import:product-urls-prices", ts, run=run)
 
-    n_obs = n_skip = 0
+    n_obs = n_skip = n_placeholder = 0
     for cid_raw, entry in (data.get("items") or {}).items():
         cid = None
         for ns in ("staple", "recipe"):
@@ -579,6 +589,12 @@ def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
                 n_skip += 1
                 continue
             name = v.get("name") or cid_raw
+            # Curated file, but curated FROM captures - a test listing picked up
+            # as a commodity's product URL would be priced with confidence 1.0
+            # and match_status include_hit, i.e. adjudicated by nobody at all.
+            if is_placeholder_name(name):
+                n_placeholder += 1
+                continue
             # `verified` is the day the shelf was checked, but the field is FREE
             # TEXT that often carries prose after the date:
             #   "2026-08-12 DERIVED from the price row (same record the board priced)"
@@ -616,7 +632,8 @@ def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
             })
             n_obs += 1
 
-    return {"product_url_observations": n_obs, "product_url_skipped": n_skip}
+    return {"product_url_observations": n_obs, "product_url_skipped": n_skip,
+            "product_url_placeholder_rows_dropped": n_placeholder}
 
 
 # ---------------------------------------------------------------------------
@@ -658,7 +675,7 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
     siblings are bare lists, which the isinstance(dict) guard already skips.
     """
     term_index = _build_term_index(db)
-    n_obs = n_files = n_unresolved = 0
+    n_obs = n_files = n_unresolved = n_placeholder = 0
 
     for lane in dirs:
         files = sorted(glob.glob(os.path.join(GROCERY, "out", lane, "*.json")))
@@ -688,11 +705,19 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
                 dstore = d.get("store") or store
                 if not dstore:
                     continue
+                name = d.get("item")
+                # A store's own catalog can carry a vendor TEST listing as a
+                # real, correctly-priced row (see placeholder_names). Drop it
+                # BEFORE resolution: a test row that reaches the resolver is a
+                # pricing candidate, and the only thing then standing between it
+                # and a crowned cell is a human noticing the name in review.
+                if is_placeholder_name(name):
+                    n_placeholder += 1
+                    continue
                 cid = _resolve_by_term(db, d.get("found_by_term"), term_index)
                 if not cid:
                     n_unresolved += 1
                     continue
-                name = d.get("item")
                 price = _money(d.get("current_price") or d.get("ad_price"))
                 as_of = d.get("as_of") or observed
                 oid = observation_id(cid, dstore, as_of, rel(fp), name)
@@ -726,7 +751,8 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
                 })
                 n_obs += 1
     return {"observations": n_obs, "capture_files": n_files,
-            "unresolved_rows": n_unresolved}
+            "unresolved_rows": n_unresolved,
+            "placeholder_rows_dropped": n_placeholder}
 
 
 def import_ad_deals(db: GraphDB, ts: str, run: str, *, limit_files: int | None = None,
@@ -767,7 +793,7 @@ def import_ad_deals(db: GraphDB, ts: str, run: str, *, limit_files: int | None =
         if pats:
             matchers.append((row["node_id"], pats))
 
-    n_obs = n_files = n_unplaced = 0
+    n_obs = n_files = n_unplaced = n_placeholder = 0
     for lane in dirs:
         files = sorted(glob.glob(os.path.join(GROCERY, "out", lane, "*-deals-*.json")))
         if limit_files:
@@ -795,6 +821,9 @@ def import_ad_deals(db: GraphDB, ts: str, run: str, *, limit_files: int | None =
                 name = d.get("item")
                 if not (dstore and name):
                     continue
+                if is_placeholder_name(name):
+                    n_placeholder += 1
+                    continue
                 price = _money(d.get("ad_price") or d.get("current_price"))
                 hits = [cid for cid, pats in matchers
                         if any(p.search(name) for p in pats)]
@@ -820,7 +849,8 @@ def import_ad_deals(db: GraphDB, ts: str, run: str, *, limit_files: int | None =
                     })
                     n_obs += 1
     return {"ad_deal_observations": n_obs, "ad_deal_files": n_files,
-            "ad_rows_unplaced": n_unplaced}
+            "ad_rows_unplaced": n_unplaced,
+            "ad_placeholder_rows_dropped": n_placeholder}
 
 
 # ---------------------------------------------------------------------------
