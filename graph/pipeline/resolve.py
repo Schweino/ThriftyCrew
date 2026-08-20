@@ -62,6 +62,10 @@ PROMPTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "prompt
 # exact prompt and policy that produced it. Bump on ANY change to either.
 PROMPT_VERSION = "resolve-v3-reject-only"
 
+# Verdicts are banked to SQLite every this many questions during the LLM pass,
+# so a long run is interruptible and resumable rather than all-or-nothing.
+CHECKPOINT_EVERY = 200
+
 # Grammar schema for the adjudication call — guarantees parseable output.
 RESOLVE_SCHEMA = {
     "type": "object",
@@ -312,6 +316,58 @@ class Resolver:
         self.stats[v.status] = self.stats.get(v.status, 0) + 1
         return v
 
+    def _commit_verdicts(self, verdicts: dict, groups: dict, run: str, ts: str,
+                         escalations: list) -> int:
+        """Write a batch of question-verdicts out to every row that asked that
+        question, and commit. MAIN THREAD ONLY — the worker pool does HTTP and
+        nothing else, so the estate's single-writer rule is untouched.
+
+        Returns the number of observation ROWS written (not questions)."""
+        n = 0
+        for key, v in verdicts.items():
+            ids = groups[key]
+            cid, name = key
+            self.db.conn.executemany(
+                "UPDATE price_observations SET match_status=?, match_reason=?, "
+                "confidence=? WHERE id=?",
+                [(v.status, v.reason, v.confidence, i) for i in ids])
+            self.stats[v.status] = self.stats.get(v.status, 0) + len(ids)
+            # Every MODEL judgment gets its own decision-log row. The aggregate
+            # event says what a run did; only per-judgment rows with the model
+            # id and prompt version let a bad verdict be attributed to the exact
+            # model + prompt that produced it months later. One row per
+            # QUESTION, carrying how many observations it settled.
+            if run and v.meta:
+                self.db.log_event(
+                    run=run, timestamp=ts, etype="resolve",
+                    model=v.meta["model"],
+                    input_hash=v.meta["input_hash"],
+                    output_hash=v.meta["output_hash"],
+                    confidence=v.confidence,
+                    decision=v.status,
+                    detail={"observation": ids[0], "rows_settled": len(ids),
+                            "commodity": cid, "product": name,
+                            "llm_verdict": v.meta["llm_verdict"],
+                            "prompt_version": v.meta["prompt_version"],
+                            "reason": v.reason[:200]})
+            if v.escalate:
+                escalations.append({
+                    "observation": ids[0], "commodity": cid,
+                    "product": name, "reason": v.reason,
+                    # One packet per QUESTION, not per row: the reviewer answers
+                    # it once and the verdict applies to every row that shares it.
+                    "rows_settled": len(ids),
+                    # confirm_match: local model is confident this IS the
+                    # commodity and asks the reviewer to upgrade the row.
+                    # contested: nobody knows; adjudicate from scratch.
+                    "kind": ("confirm_match" if v.status == "llm_match_unverified"
+                             else "contested"),
+                    "confidence": v.confidence,
+                })
+            n += len(ids)
+        self.db.conn.commit()
+        return n
+
     # -- bulk application --------------------------------------------------
     def resolve_pending(self, limit: int | None = None, run: str = "",
                         ts: str | None = None, allow_llm: bool = True,
@@ -384,13 +440,24 @@ class Resolver:
         # rebuild the tally at write time below.
         self.stats = {}
 
+        n = 0
+        escalations: list[dict] = []
+        # The deterministic verdicts are already known; bank them before any
+        # model call, so an interrupted LLM pass never loses them.
+        n += self._commit_verdicts(verdicts, groups, run, ts, escalations)
+
         # -- pass 2: the model, on the contested questions only -------------
+        # Verdicts are CHECKPOINTED as they arrive, not held to the end. A run
+        # over the full contested set takes ~48 minutes; banking nothing until
+        # it finishes would mean a stop at minute 40 — a thermal abort, a
+        # power cut, Ctrl-C — threw away 40 minutes of GPU time. Because
+        # resolve_pending selects rows still in 'no_include_hit', a checkpointed
+        # run is also RESUMABLE: re-running simply continues where it stopped.
         if contested:
             if progress:
                 progress(f"    {len(contested)} contested questions "
                          f"({sum(len(groups[k]) for k in contested)} rows), "
-                         f"{jobs} concurrent")
-            done = [0]
+                         f"{jobs} concurrent, checkpointing every {CHECKPOINT_EVERY}")
 
             def adjudicate(key):
                 cid, name = key
@@ -399,73 +466,37 @@ class Resolver:
                 except Exception as e:                       # noqa: BLE001
                     return key, Verdict("escalated", f"llm error: {e}", 0.0, escalate=True)
 
+            # commodity() caches per node id and reads the DB on a miss; warm
+            # every entry on THIS thread so workers only ever read the dict.
+            for cid, _ in contested:
+                try:
+                    self.commodity(cid)
+                except KeyError:
+                    pass
+
+            batch: dict = {}
+            done = 0
+
+            def absorb(key, v):
+                nonlocal batch, done, n
+                batch[key] = v
+                done += 1
+                if len(batch) >= CHECKPOINT_EVERY:
+                    n += self._commit_verdicts(batch, groups, run, ts, escalations)
+                    batch = {}
+                    if progress:
+                        progress(f"    adjudicated {done}/{len(contested)} "
+                                 f"(checkpointed)")
+
             if jobs > 1:
-                # commodity() caches per node id; warm every entry on THIS
-                # thread so the workers only ever read the dict.
-                for cid, _ in contested:
-                    try:
-                        self.commodity(cid)
-                    except KeyError:
-                        pass
                 with ThreadPoolExecutor(max_workers=jobs) as pool:
                     for key, v in pool.map(adjudicate, contested):
-                        verdicts[key] = v
-                        done[0] += 1
-                        if progress and done[0] % 200 == 0:
-                            progress(f"    adjudicated {done[0]}/{len(contested)}")
+                        absorb(key, v)
             else:
                 for key in contested:
-                    k, v = adjudicate(key)
-                    verdicts[k] = v
-                    done[0] += 1
-                    if progress and done[0] % 200 == 0:
-                        progress(f"    adjudicated {done[0]}/{len(contested)}")
-
-        # -- pass 3: write back, expanding each verdict to its rows ---------
-        n = 0
-        escalations = []
-        for key, v in verdicts.items():
-            ids = groups[key]
-            cid, name = key
-            self.db.conn.executemany(
-                "UPDATE price_observations SET match_status=?, match_reason=?, "
-                "confidence=? WHERE id=?",
-                [(v.status, v.reason, v.confidence, i) for i in ids])
-            self.stats[v.status] = self.stats.get(v.status, 0) + len(ids)
-            # Every MODEL judgment gets its own decision-log row. The aggregate
-            # event below says what a run did; only per-judgment rows with the
-            # model id and prompt version let a bad verdict be attributed to the
-            # exact model + prompt that produced it months later. One row per
-            # QUESTION, carrying how many observations it settled.
-            if run and v.meta:
-                self.db.log_event(
-                    run=run, timestamp=ts, etype="resolve",
-                    model=v.meta["model"],
-                    input_hash=v.meta["input_hash"],
-                    output_hash=v.meta["output_hash"],
-                    confidence=v.confidence,
-                    decision=v.status,
-                    detail={"observation": ids[0], "rows_settled": len(ids),
-                            "commodity": cid, "product": name,
-                            "llm_verdict": v.meta["llm_verdict"],
-                            "prompt_version": v.meta["prompt_version"],
-                            "reason": v.reason[:200]})
-            if v.escalate:
-                escalations.append({
-                    "observation": ids[0], "commodity": cid,
-                    "product": name, "reason": v.reason,
-                    # One packet per QUESTION, not per row: the reviewer answers
-                    # it once and the verdict applies to every row that shares it.
-                    "rows_settled": len(ids),
-                    # confirm_match: local model is confident this IS the
-                    # commodity and asks the reviewer to upgrade the row.
-                    # contested: nobody knows; adjudicate from scratch.
-                    "kind": ("confirm_match" if v.status == "llm_match_unverified"
-                             else "contested"),
-                    "confidence": v.confidence,
-                })
-            n += len(ids)
-        self.db.conn.commit()
+                    absorb(*adjudicate(key))
+            if batch:
+                n += self._commit_verdicts(batch, groups, run, ts, escalations)
 
         if run:
             self.db.log_event(run=run, timestamp=ts, etype="resolve",
