@@ -9,9 +9,13 @@ read by the grocery-alert-triage agent as well as by a human, which is why every
 gate reports its NUMBER next to its TARGET rather than a bare pass/fail — a gate
 that fails by 0.001 and one that fails by 0.4 need different responses.
 
-Gates that require elapsed calendar time (14 consecutive daily cycles, 4
-consecutive Wednesday browser cycles) are counted from the decision log, not
-asserted. There is no way to shortcut them and no reason to pretend otherwise.
+Time-based gates (decision 2026-08-20, Brad): AD TIMING and the 90-DAY TIMER,
+nothing else. The consecutive-clean-days counters (14 daily cycles, 4 Wednesday
+browser cycles) that the first build carried over from the V4 postmortem were
+removed on the owner's call — readiness is judged by the numeric gates plus the
+two windows the capture policy actually defines: every weekly-ad store inside
+its current window (check_ad_window) and no everyday row older than the 90-day
+quarter (check_row_age, read from grocery/capture-policy.ps1 MaxCarryDays).
 """
 
 from __future__ import annotations
@@ -36,8 +40,6 @@ PHASE_GATES = {
     "false_merge_rate": ("gold-set false-merge rate", 0.02, "max"),
     "missed_merge_rate": ("gold-set missed-merge rate", 0.10, "max"),
     "board_agreement": ("Phase 2 board parity agreement", 0.99, "min"),
-    "shadow_days": ("Phase 2/3 consecutive clean daily cycles", 14, "min"),
-    "chrome_cycles": ("Phase 4 consecutive Wednesday browser cycles", 4, "min"),
 }
 
 
@@ -45,27 +47,6 @@ def latest_eval(db) -> dict | None:
     r = db.conn.execute(
         """SELECT * FROM eval_runs ORDER BY run_at DESC LIMIT 1""").fetchone()
     return dict(r) if r else None
-
-
-def count_clean_daily_runs(db) -> int:
-    """Consecutive daily runs that completed without halting, most recent first.
-
-    Counted from the decision log rather than tracked in a counter, so it cannot
-    drift from what actually happened.
-    """
-    rows = db.conn.execute(
-        """SELECT run_id, decision, timestamp FROM decision_log
-           WHERE type='state_transition'
-             AND decision IN ('run_complete','run_halted')
-             AND run_id LIKE 'run:daily:%'
-           ORDER BY timestamp DESC""").fetchall()
-    streak = 0
-    for r in rows:
-        if r["decision"] == "run_complete":
-            streak += 1
-        else:
-            break
-    return streak
 
 
 def learning_summary(db) -> dict:
@@ -112,7 +93,6 @@ def build(db) -> dict:
         "gate_checks": {k: v["ok"] for k, v in checks["checks"].items()},
         "gate_check_detail": {k: v["detail"] for k, v in checks["checks"].items()
                               if not v["ok"]},
-        "consecutive_clean_daily_runs": count_clean_daily_runs(db),
         "learning": learning_summary(db),
     }
 
@@ -155,13 +135,12 @@ def main() -> int:
     for name, detail in rep["gate_check_detail"].items():
         print(f"           {json.dumps(detail, default=str)[:200]}")
 
-    print(f"\n  consecutive clean daily runs: {rep['consecutive_clean_daily_runs']} / 14")
     if rep["learning"]:
-        print(f"  learning: {rep['learning']}")
+        print(f"\n  learning: {rep['learning']}")
 
     print("\n  NOTE: the graph is non-authoritative. The legacy pipeline runs the")
-    print("        live board. Time-based gates (14 daily cycles, 4 Wednesdays)")
-    print("        cannot be shortened by code.")
+    print("        live board. The only time-based gates are ad timing and the")
+    print("        90-day quarter (capture-policy.ps1 MaxCarryDays).")
     return 0
 
 

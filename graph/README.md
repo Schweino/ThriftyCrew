@@ -121,13 +121,20 @@ observation ever lacks one. "Why does this price appear?" is answerable from
 | gold-set false-merge rate | ≤0.02 | **0.0000** | PASS |
 | gold-set missed-merge rate | ≤0.10 | **0.0188** | PASS |
 | Phase 2 board parity | ≥0.99 agreement | 0.917 @ 0.838 coverage (2026-08-20) | **NOT MET** |
-| Phase 2 shadow days | 14 consecutive | 0 | **NOT MET** |
-| Phase 3 state-graph days | 14 consecutive | 0 | **NOT MET** |
-| Phase 4 Chrome cycles | 4 consecutive | 0 | **NOT MET** |
+| ad timing | every weekly-ad store inside its current window | Fareway 4d overdue | **NOT MET** |
+| 90-day timer | no everyday row older than `MaxCarryDays` | reads `capture-policy.ps1` | PASS |
 
 Phase 0 and the Phase 1 evaluation discipline are complete. Phases 2-6 are built
-and runnable but **have not earned their gates**, which require elapsed calendar
-time (14 daily cycles, 4 Wednesdays) that no amount of coding shortens.
+and runnable; the parity gate has not been earned yet.
+
+**Time-based gates are AD TIMING and the 90-DAY TIMER, nothing else** (decision
+2026-08-20, Brad). The first build carried the V4 postmortem's
+consecutive-clean-days counters (14 shadow days, 14 state-graph days, 4
+Wednesday Chrome cycles) into this estate; they were removed on the owner's
+call. The 90-day window is read from `grocery/capture-policy.ps1` `MaxCarryDays`
+— the one canonical definition — never copied, which is also how this estate's
+own `row_age` check was caught asserting a private 21-day window while the
+engine ran the 90-day quarter.
 
 ### What Phase 2 still needs
 

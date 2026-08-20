@@ -16,8 +16,8 @@ The Executor's contract, and the reason each clause exists:
 
 SHADOW MODE is the default and does not execute tool steps — it walks the plan,
 runs the graph-side verify/model steps, and records what it WOULD have run. That
-is what lets Phase 3 accumulate its 14 parity days without touching the live
-daily chain.
+is what lets the graph prove itself against the parity and window gates without
+touching the live daily chain.
 """
 
 from __future__ import annotations

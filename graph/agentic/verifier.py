@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 from datetime import date as _date, datetime, timedelta
 
@@ -124,8 +125,35 @@ def check_no_unresolved_pricing(db, **_) -> tuple[bool, dict]:
     return (n == 0), {"leaked_rows": n}
 
 
-def check_row_age(db, max_age_days: int = 21, today: str | None = None, **_) -> tuple[bool, dict]:
-    """No cell may be priced by an observation older than max_age_days."""
+def _policy_max_carry_days() -> int:
+    """The everyday-price window, read from the ONE canonical definition.
+
+    grocery/capture-policy.ps1 says of MaxCarryDays: "Change it HERE and
+    nowhere else." A hardcoded copy here is exactly the private-window defect
+    the estate spent three commits closing (audit-coverage-gaps said 14 while
+    the engine moved to the 90-day quarter, and manufactured a false alarm) —
+    and this check itself shipped with 21 while the policy said 90. A gate
+    that cannot read its own window must fail loudly, never guess.
+    """
+    policy = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                          "..", "..", "grocery", "capture-policy.ps1")
+    with open(policy, encoding="utf-8-sig") as fh:
+        for line in fh:
+            m = re.match(r"\s*\$script:MaxCarryDays\s*=\s*(\d+)\s*$", line)
+            if m:
+                return int(m.group(1))
+    raise RuntimeError(f"cannot find $script:MaxCarryDays in {policy}; "
+                       "row_age has no window to enforce")
+
+
+def check_row_age(db, max_age_days: int | None = None, today: str | None = None,
+                  **_) -> tuple[bool, dict]:
+    """No cell may be priced by an observation older than the capture policy's
+    everyday-price window (MaxCarryDays, the 90-day quarter). Ad freshness is
+    check_ad_window's job; this one is about everyday rows outliving the
+    rotation that would have re-verified them."""
+    if max_age_days is None:
+        max_age_days = _policy_max_carry_days()
     today_d = _parse(today) or _date.today()
     cutoff = today_d - timedelta(days=max_age_days)
     rows = db.conn.execute(
