@@ -82,7 +82,31 @@ async function farewayProbe(term) {
     seen.add(key);
     rows.push({ n: m[1].replace(/[|\r\n]+/g, ' ').trim(), lp: parseFloat(m[2]), up: null, id: '' });
   }
-  // A page we genuinely read that lists nothing really is EMPTY. We only reach here past the wall checks.
+  // BLINDNESS IS NOT EMPTINESS (2026-08-20). EMPTY is a claim about the STORE - "we looked, it carries
+  // nothing" - and downstream treats it exactly that way: a NOT-CARRIED ruling, a dropped cell, a term
+  // retired. Reaching that conclusion because WE cannot see is the confident-ok-over-an-empty-examination
+  // shape this estate keeps paying for.
+  //
+  // What happened: shop.fareway.com became fully client-rendered. This response is now a 584KB shell with
+  // ZERO product JSON in it - measured the same day, `"priceString"` appears 0 times, `__NEXT_DATA__` 0
+  // times, the search term itself twice (title and meta). The regex above therefore matched nothing on
+  // EVERY term, and a sweep of the whole worklist would have completed, exited 0, reported no wall, and
+  // recorded that Fareway carries none of the ~700 things it sells.
+  //
+  // So: if the response carries no product markup AT ALL, this parser did not read the page - it failed to.
+  // That is UNUSABLE, which halts the sweep loudly, rather than EMPTY, which poisons the catalog quietly.
+  // The working path is driver-side: navigate per term, scroll to the bottom TWICE (results lazy-load nine
+  // at a time; a repeated exact 9 is the tell), then read the rendered tiles - which cannot run from inside
+  // this page, because navigating unloads the script doing the sweeping. Do not "fix" this by widening the
+  // regex; there is nothing in the response to widen onto.
+  if (!rows.length && !/"priceString"|"viewSection"/.test(html)) {
+    return {
+      state: 'UNUSABLE', rows: [],
+      why: 'no product JSON in the response - the storefront is client-rendered and this fetch-and-regex probe cannot see it. Use the driver-side DOM sweep (navigate, scroll twice, extract), not this probe.'
+    };
+  }
+  // A page we genuinely read that lists nothing really is EMPTY. We only reach here past the wall checks
+  // AND past the blindness check above, so this is now a statement we can actually stand behind.
   return rows.length ? { state: 'MATCHES', rows } : { state: 'EMPTY', rows: [], why: 'store returned no products' };
 }
 

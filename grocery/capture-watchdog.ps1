@@ -47,6 +47,8 @@ foreach ($name in $TASKS) {
   # for the daily one; for the ad job we report its last result instead.
   $isDaily = $name -like '*Daily Capture*'
   $ranToday = $last -and ($last.ToString('yyyy-MM-dd') -eq $todayS)
+  # Check 7 below may only indict a headless lane on a day the daily capture actually ran.
+  if ($isDaily) { $dailyRanToday = [bool]$ranToday }
 
   # Windows sentinels, which are NOT failures and must not be reported as such:
   #   267011 SCHED_S_TASK_HAS_NOT_RUN  - registered but its trigger has not come round yet
@@ -115,6 +117,68 @@ foreach ($f in $flags) {
   }
 }
 
+
+# ---- 7. did each STORE actually contribute a fresh row, or just the pipeline? -------------------------
+# THE HOLE THIS CLOSES. Checks 1-6 are all pipeline-level: the tasks fired, a board exists, it published.
+# Every one of them passes while an individual store captures NOTHING, because carry-forward keeps that
+# store's row count up and the board builds and ships regardless. Measured 2026-08-20: Fareway's sanctioned
+# agent had gone structurally blind (the storefront went client-rendered, so its fetch-and-regex probe
+# matched zero products and returned EMPTY for every term). A full sweep would have exited 0, raised no
+# wall, and recorded that Fareway carries none of the ~700 things it sells - and this watchdog would have
+# reported healthy, because a board WAS built and it WAS published.
+#
+# So this asks the one question the others do not: whose prices are actually NEW today?
+#
+# TWO POPULATIONS, TWO BARS, because one bar would be either noise or nothing:
+#   HEADLESS lanes (Hy-Vee, Baker's, Family Fare) pull themselves. On a day the 08:00 job ran, a lane that
+#     contributed zero fresh rows is broken - that is the Fareway shape, and it is a finding.
+#   BROWSER lanes (Walmart, Sam's Club, Fareway, Aldi) are bot-walled and need a human in Chrome, so zero
+#     rows on any given day is normal and flagging it daily would train the reader to ignore this email.
+#     They are judged on AGE instead: under a 90-day rotation a store must keep contributing SOMETHING or
+#     it can never finish a quarter. Seven days without a single fresh row means its rotation has stalled.
+#     On the day this shipped that was true of Sam's Club (19d) and Walmart (9d) - both real, both already
+#     carrying rescue worklists. It is not a quiet start; it is an accurate one.
+$HEADLESS_LANES = @('Hy-Vee', "Baker's", 'Family Fare')
+$BROWSER_STALE_DAYS = 7
+$freshByStore = @{}; $newestByStore = @{}
+foreach ($rf in (Get-ChildItem (Join-Path $OutDir 'regular\*-regular-*.json') -ErrorAction SilentlyContinue)) {
+  try { $doc = Get-Content $rf.FullName -Raw -Encoding UTF8 | ConvertFrom-Json } catch { continue }
+  $st = [string]$doc.store
+  if (-not $st) { continue }
+  if (-not $freshByStore.ContainsKey($st)) { $freshByStore[$st] = 0 }
+  foreach ($row in @($doc.deals)) {
+    $a = [string]$row.as_of
+    if ($a.Length -lt 10) { continue }
+    $a = $a.Substring(0, 10)
+    if ($a -eq $todayS) { $freshByStore[$st] = $freshByStore[$st] + 1 }
+    if (-not $newestByStore.ContainsKey($st) -or $a -gt $newestByStore[$st]) { $newestByStore[$st] = $a }
+  }
+}
+if (-not $newestByStore.Count) {
+  # No dated rows anywhere is not "every store is fine" - it is this check failing to look.
+  [void]$findings.Add('STORE FRESHNESS BLIND: no out\regular file carried a single dated row, so this check examined nothing. That is not a pass.')
+} else {
+  foreach ($st in ($newestByStore.Keys | Sort-Object)) {
+    $fresh = [int]$freshByStore[$st]
+    $newest = [string]$newestByStore[$st]
+    $age = [int]((Get-Date $todayS) - (Get-Date $newest)).TotalDays
+    if ($HEADLESS_LANES -contains $st) {
+      # Only a day the daily job actually ran can indict a headless lane; otherwise nobody asked it for
+      # anything and zero is the correct answer.
+      if ($dailyRanToday -and $fresh -eq 0) {
+        [void]$findings.Add(("NO FRESH ROWS: {0} has a headless lane and the 08:00 capture ran, but it contributed ZERO rows dated {1} (newest {2}, {3}d old). Its puller ran and saw nothing - check that lane before trusting its cells." -f $st, $todayS, $newest, $age))
+      } else {
+        [void]$ok.Add(("{0}: {1} fresh row(s) today (newest {2})" -f $st, $fresh, $newest))
+      }
+    } else {
+      if ($age -gt $BROWSER_STALE_DAYS) {
+        [void]$findings.Add(("ROTATION STALLED: {0} has contributed no fresh row for {1} day(s) (newest {2}). It is bot-walled, so this needs a Chrome pass - out\rescue-terms-*.txt names the cells that leave the board if it keeps slipping." -f $st, $age, $newest))
+      } else {
+        [void]$ok.Add(("{0}: {1} fresh row(s) today, newest {2} ({3}d)" -f $st, $fresh, $newest, $age))
+      }
+    }
+  }
+}
 # ---- report ------------------------------------------------------------------
 Write-Output "CAPTURE WATCHDOG - $todayS"
 foreach ($o in $ok) { Write-Output "  ok    $o" }
