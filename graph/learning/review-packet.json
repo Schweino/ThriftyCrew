@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T05:04:11",
+  "generated_at": "2026-08-20T06:58:24",
   "reviewer": "claude-fable-medium",
   "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin.",
   "gates": {
@@ -8,6 +8,15 @@
     "note": "every accepted patch is shadow-scored against the gold set before it goes live; a patch that regresses any metric is dropped regardless of this review's verdict"
   },
   "proposals": [
+    {
+      "proposal_id": "lp:39cf22a02c74f9f142ea",
+      "kind": "add_alias",
+      "target": "ranch-dressing",
+      "target_label": null,
+      "payload": "dressing.*ranch",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches Litehouse, Marzetti, Newman's Own, and Olive Garden Ranch dressings."
+    },
     {
       "proposal_id": "lp:53e36aa9c7f07342041f",
       "kind": "add_alias",
@@ -25,15 +34,6 @@
       "payload": "brown\\s+gravy.*mix",
       "stage1_confidence": 0.95,
       "rationale": "Matches McCormick Brown Gravy Seasoning Mix variants."
-    },
-    {
-      "proposal_id": "lp:39cf22a02c74f9f142ea",
-      "kind": "add_alias",
-      "target": "ranch-dressing",
-      "target_label": null,
-      "payload": "dressing.*ranch",
-      "stage1_confidence": 0.95,
-      "rationale": "Matches Litehouse, Marzetti, Newman's Own, and Olive Garden Ranch dressings."
     },
     {
       "proposal_id": "lp:b1110a1c0ec73dec4d43",
@@ -59,8 +59,8 @@
       "target": "dried-cranberries",
       "target_label": null,
       "payload": "Ocean Spray Snack Medley, Mango Cran 5 Ea",
-      "stage1_confidence": 0.95,
-      "rationale": "A snack medley is not dried cranberries."
+      "stage1_confidence": 0.9,
+      "rationale": "A snack medley is a mixed product, not pure dried cranberries."
     },
     {
       "proposal_id": "lp:be56ac6a85d9b465fa71",
@@ -72,31 +72,13 @@
       "rationale": "Matches Contadina Diced Roma Tomatoes. Roma is a type of tomato, and 'diced' matches the commodity form."
     },
     {
-      "proposal_id": "lp:327de1ea781584826e6a",
+      "proposal_id": "lp:5847c91b404d83979442",
       "kind": "add_known_wrong",
-      "target": "air-freshener",
+      "target": "dish-soap-liquid",
       "target_label": null,
-      "payload": "Clorox Allergen Neutralizer Nighttime Calm Fabric & Carpet Spray 26 Fl Oz",
-      "stage1_confidence": 0.9,
-      "rationale": "Fabric & Carpet spray is distinct from general air freshener in many grocery contexts, though borderline. However, the prompt example explicitly cites this as a known wrong type."
-    },
-    {
-      "proposal_id": "lp:33df7a836b1c472bd77c",
-      "kind": "add_alias",
-      "target": "sliced-cheese",
-      "target_label": null,
-      "payload": "(sliced|cheese\\s+product).*american",
+      "payload": "Dawn Heavy Duty Dish Spray 16 Fl Oz",
       "stage1_confidence": 0.85,
-      "rationale": "Matches Fresh Sliced American and Kraft Cheese Product American."
-    },
-    {
-      "proposal_id": "lp:e50b574ecbaeb9b5a2b1",
-      "kind": "add_alias",
-      "target": "vanilla-extract",
-      "target_label": null,
-      "payload": "vanilla\\s+flavor",
-      "stage1_confidence": 0.8,
-      "rationale": "McCormick Clear Vanilla Flavor is a vanilla extract product."
+      "rationale": "A dish spray is a different form factor than liquid dish soap."
     }
   ]
 }

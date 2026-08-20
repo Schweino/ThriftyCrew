@@ -129,6 +129,7 @@ def ingest(db, path: str) -> dict:
         db.conn.execute("UPDATE learning_proposals SET status=? WHERE id=?", (status, pid))
         n += 1
     db.conn.commit()
+    db.export_learning()      # write through: a verdict exists nowhere else
     db.log_event(run=f"run:learning2:{time.strftime('%Y%m%dT%H%M%S')}", timestamp=ts,
                  etype="learning_approval", decision="stage2_ingest",
                  detail={"verdicts": n, "source": os.path.basename(path)})
@@ -228,10 +229,18 @@ def shadow_and_apply(db, dry_run: bool = False) -> dict:
         kind = r["kind"]
         target = resolve_target(db, r["target_id"])
         if not (payload and target):
+            # NOT a regression, and recording it as one was a real bug: a patch
+            # whose target cannot be resolved has told us nothing about the gold
+            # set. Worse, 'regression' is terminal -- these rows are filtered out
+            # of future runs -- so a transient condition became permanent. The
+            # index is DERIVED and can legitimately be empty (immediately after a
+            # rebuild drill, before import_all has run), and every patch would be
+            # written off forever for a reason that fixes itself.
+            # Left as 'not_run' so it is retried once the index is populated.
             rejected.append({"patch": r["id"], "target": r["target_id"],
-                             "why": "target did not resolve to a commodity node"})
-            db.conn.execute("UPDATE approved_patches SET shadow_verdict='regression' "
-                            "WHERE id=?", (r["id"],))
+                             "why": "target did not resolve to a commodity node "
+                                    "(is the index populated? run import_all) - "
+                                    "left retryable"})
             continue
         if kind in ("add_gold", "tighten_prompt"):
             held.append({"patch": r["id"], "why": f"{kind} changes the definition of "
@@ -298,6 +307,10 @@ def shadow_and_apply(db, dry_run: bool = False) -> dict:
             (json.dumps(base), json.dumps({k: after[k] for k in base}), verdict, r["id"]))
 
     db.conn.commit()
+    # Write through: the shadow before/after metrics are the EVIDENCE that a
+    # patch was safe to apply. Losing them leaves applied changes with no record
+    # of why they were allowed.
+    db.export_learning()
     db.log_event(run=run, timestamp=ts, etype="learning_approval",
                  decision="shadow_and_apply",
                  detail={"applied": len(applied), "rejected": len(rejected),
@@ -338,7 +351,8 @@ def main() -> int:
             print(f"  applied  {len(res['applied'])}")
             for a in res["applied"][:10]:
                 print(f"     {a['target']}  <- {str(a['payload'])[:44]}   delta={a['delta']}")
-            print(f"  rejected {len(res['rejected'])}  (regressed the gold set)")
+            print(f"  rejected {len(res['rejected'])}  (gold-set regression, or an "
+                  f"unresolvable target)")
             for x in res["rejected"][:10]:
                 print(f"     {x.get('target')}  {x['why']}")
             print(f"  held     {len(res['held'])}  (human review)")

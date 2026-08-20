@@ -219,6 +219,10 @@ def main() -> int:
                  float(s.get("confidence", 0) or 0), s.get("rationale")))
             kept += 1
         db.conn.commit()
+        # Write through to tracked JSON immediately. Proposals exist nowhere
+        # else, so the window between writing them and exporting them is a
+        # window in which a crash destroys them.
+        db.export_learning()
 
         db.log_event(run=run, timestamp=ts, etype="learning_proposal",
                      model=res.model, output_hash=res.output_hash,

@@ -60,7 +60,8 @@ def write_json(path: str, obj: Any) -> None:
 class GraphDB:
     """Thin, explicit wrapper over SQLite. No ORM, no magic."""
 
-    def __init__(self, path: str = DB_PATH, create: bool = True):
+    def __init__(self, path: str = DB_PATH, create: bool = True,
+                 restore_learning: bool = True):
         self.path = path
         os.makedirs(os.path.dirname(path), exist_ok=True)
         fresh = not os.path.exists(path)
@@ -69,6 +70,12 @@ class GraphDB:
         self.conn.execute("PRAGMA foreign_keys = ON")
         if fresh or create:
             self.init_schema()
+        # A fresh database restores its learning records automatically. Making
+        # this depend on someone remembering a flag is how the records were lost
+        # in the first place -- durability that has to be opted into is not
+        # durability. Cheap: it is a no-op once the tables are populated.
+        if restore_learning and not any(self.learning_counts().values()):
+            self.import_learning()
 
     def init_schema(self) -> None:
         with io.open(SCHEMA_PATH, encoding="utf-8") as fh:
@@ -338,7 +345,65 @@ class GraphDB:
                 f"SELECT * FROM {table} ORDER BY 1").fetchall()]
             write_json(os.path.join(out_dir, fname), rows)
             written[table] = len(rows)
+        written.update(self.export_learning(out_dir))
         return written
+
+    # -- learning durability ----------------------------------------------
+    # These two are the ONLY structures in the graph that cannot be
+    # reconstructed from anything else. Nodes, edges, aliases and observations
+    # all rebuild from the legacy estate and the tracked captures; a learning
+    # proposal and its shadow-scored verdict exist nowhere but here. Leaving
+    # them in a gitignored, rebuildable database meant a routine
+    # delete-and-rebuild silently destroyed the safety record of what the loop
+    # proposed, what was approved, and what the gold set said before and after.
+    # That is exactly the "a memory the pipeline cannot read is not a memory"
+    # failure the estate already learned once with prose audit findings.
+
+    LEARNING_TABLES = (
+        ("learning_proposals", "learning/proposals.json"),
+        ("approved_patches", "learning/approved-patches.json"),
+    )
+
+    def export_learning(self, out_dir: str | None = None) -> dict[str, int]:
+        """Write learning records to tracked JSON. Called after every write."""
+        out_dir = out_dir or GRAPH_DIR
+        written = {}
+        for table, fname in self.LEARNING_TABLES:
+            rows = [dict(r) for r in self.conn.execute(
+                f"SELECT * FROM {table} ORDER BY 1").fetchall()]
+            write_json(os.path.join(out_dir, fname), rows)
+            written[table] = len(rows)
+        return written
+
+    def import_learning(self, out_dir: str | None = None) -> dict[str, int]:
+        """Restore learning records from tracked JSON into a fresh database."""
+        out_dir = out_dir or GRAPH_DIR
+        restored = {}
+        for table, fname in self.LEARNING_TABLES:
+            path = os.path.join(out_dir, fname)
+            if not os.path.exists(path):
+                restored[table] = 0
+                continue
+            try:
+                rows = read_json(path)
+            except (json.JSONDecodeError, OSError):
+                restored[table] = 0
+                continue
+            n = 0
+            for row in rows or []:
+                cols = ", ".join(row.keys())
+                marks = ", ".join(f":{k}" for k in row)
+                self.conn.execute(
+                    f"INSERT INTO {table} ({cols}) VALUES ({marks}) "
+                    f"ON CONFLICT(id) DO NOTHING", row)
+                n += 1
+            restored[table] = n
+        self.conn.commit()
+        return restored
+
+    def learning_counts(self) -> dict[str, int]:
+        return {t: self.conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
+                for t, _ in self.LEARNING_TABLES}
 
 
 def open_db(create: bool = True) -> GraphDB:

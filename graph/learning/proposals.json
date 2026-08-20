@@ -1,0 +1,98 @@
+[
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T06:57:51",
+    "id": "lp:277900b01ac449ba9d00",
+    "kind": "add_known_wrong",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"Ocean Spray Snack Medley, Mango Cran 5 Ea\"}",
+    "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
+    "rationale": "A snack medley is a mixed product, not pure dried cranberries.",
+    "status": "applied",
+    "target_id": "dried-cranberries"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-08-20T06:57:51",
+    "id": "lp:39cf22a02c74f9f142ea",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"dressing.*ranch\"}",
+    "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
+    "rationale": "Matches Litehouse, Marzetti, Newman's Own, and Olive Garden Ranch dressings.",
+    "status": "applied",
+    "target_id": "ranch-dressing"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-08-20T06:57:51",
+    "id": "lp:53e36aa9c7f07342041f",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"pepper,?\\\\s*black.*ground\"}",
+    "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
+    "rationale": "Matches 'Our Family Pepper, Black, Pure Ground' which is clearly ground black pepper.",
+    "status": "accepted",
+    "target_id": "black-pepper-ground"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-08-20T06:57:51",
+    "id": "lp:5847c91b404d83979442",
+    "kind": "add_known_wrong",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"Dawn Heavy Duty Dish Spray 16 Fl Oz\"}",
+    "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
+    "rationale": "A dish spray is a different form factor than liquid dish soap.",
+    "status": "accepted",
+    "target_id": "dish-soap-liquid"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-08-20T06:57:51",
+    "id": "lp:60de079b1469b1151bb9",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"brown\\\\s+gravy.*mix\"}",
+    "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
+    "rationale": "Matches McCormick Brown Gravy Seasoning Mix variants.",
+    "status": "accepted",
+    "target_id": "brown-gravy-mix-dry-packet"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-08-20T06:57:51",
+    "id": "lp:b1110a1c0ec73dec4d43",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"sweet\\\\s+peppers.*mini\"}",
+    "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
+    "rationale": "Matches 'Fresh Sweet Peppers, Mini Mix'.",
+    "status": "applied",
+    "target_id": "mini-sweet-peppers"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T06:57:51",
+    "id": "lp:be56ac6a85d9b465fa71",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"diced.*roma\\\\s+tomatoes\"}",
+    "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
+    "rationale": "Matches Contadina Diced Roma Tomatoes. Roma is a type of tomato, and 'diced' matches the commodity form.",
+    "status": "accepted",
+    "target_id": "canned-diced-tomatoes"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-08-20T06:57:51",
+    "id": "lp:c7f0cd20de4e76b2b84e",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"garlic.*powder\"}",
+    "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
+    "rationale": "Matches 'Garlic, Powder Tones'.",
+    "status": "applied",
+    "target_id": "garlic-powder"
+  }
+]
