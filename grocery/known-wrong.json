@@ -2182,6 +2182,36 @@
                         "ruled_on":  "2026-08-20",
                         "ruled_by":  "graph smoke test (Claude Opus 5)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "apricots|Walmart|smuckers-natural-apricot-fruit-spread-17-25-oz-j",
+                        "commodity":  "apricots",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Smuckers Natural Apricot Fruit Spread, 17.25 oz Jar"
+                                  ],
+                        "product_id":  "688276833",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A fruit spread, not fresh apricots. Held the apricots Walmart cell on the LIVE board at 3.9606/lb. Found 2026-08-20 by the crown plausibility checker; the per-commodity exclude list had jam and preserve but not spread, which is why it slipped.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph plausibility checker (Claude Opus 5)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "blackberries|Walmart|smuckers-natural-blackberry-fruit-spread-17-25-o",
+                        "commodity":  "blackberries",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Smucker\u0027s Natural Blackberry Fruit Spread, 17.25 oz"
+                                  ],
+                        "product_id":  "38498821",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A fruit spread, not fresh blackberries. Held the blackberries Walmart cell on the LIVE board at 0.2475/oz against a real 0.52/oz for Fresh Blackberries 12 oz - i.e. it UNDERSTATED blackberries by half and made Walmart look cheapest. Nobody had found this one; it surfaced only when the preserve_carrier class was applied to all produce on 2026-08-20.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph preserve_carrier rollout (Claude Opus 5)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

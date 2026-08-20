@@ -1449,7 +1449,7 @@
                         "cheese[^,]*(cheddar|mozzarella|colby)"
                     ],
         "exclude":  [
-                        "\\bmac\\s*(?:&|and|n)?\\s*cheese\\b",
+                        "\\bmac\\s*(?:\u0026|and|n)?\\s*cheese\\b",
                         "\\bcheese\\s+curds?\\b",
                         "\\b(?:burritos?|feta)\\b",
                         "cottage",
@@ -1822,7 +1822,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -2021,7 +2033,18 @@
                         "\\bpops\\b",
                         "\\bfruit\\s+blend\\b",
                         "\\bjams?\\b",
-                        "\\bconserve\\b"
+                        "\\bconserve\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -2208,7 +2231,18 @@
                         "\\biqf\\b",
                         "\\bunsweetened\\b",
                         "\\bjams?\\b",
-                        "\\bconserve\\b"
+                        "\\bconserve\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -2388,7 +2422,19 @@
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
-                        "\\bdressing\\b"
+                        "\\bdressing\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -2562,7 +2608,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -2745,7 +2803,19 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "\\bbuns?\\b",
-                        "\\bwith\\s+onions?\\b"
+                        "\\bwith\\s+onions?\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -2922,7 +2992,19 @@
                         "marshmallows?",
                         "lean\\s*cuisine",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -3108,7 +3190,18 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "\\bjams?\\b",
-                        "\\bconserve\\b"
+                        "\\bconserve\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -3304,7 +3397,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -3493,7 +3598,19 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "\\bgarden\\s+seeds?\\b",
-                        "\\bhalf\\b"
+                        "\\bhalf\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -3685,7 +3802,19 @@
                         "sliced\\s+peaches",
                         "peach\\s+slices",
                         "peaches\\s+in\\s+(?:heavy\\s+|light\\s+)?syrup",
-                        "peach\\s+halves"
+                        "peach\\s+halves",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -5476,7 +5605,19 @@
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
-                        "\\bgarden\\s+seeds?\\b"
+                        "\\bgarden\\s+seeds?\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -5669,7 +5810,19 @@
                         "marinade",
                         "\\bdressing\\b",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -5865,7 +6018,19 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "\\bdressing\\b",
-                        "\\bmarinade\\b"
+                        "\\bmarinade\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -6054,7 +6219,19 @@
                         "rice\\s+cakes?",
                         "\\bcherubs?\\b",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -6231,7 +6408,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ],
         "relax_global":  [
                              "wrapped"
@@ -6412,7 +6601,19 @@
                         "\\bpops\\b",
                         "\\bbroccoli\\b",
                         "\\bcauliflower\\b",
-                        "\\bblend\\b"
+                        "\\bblend\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -6598,7 +6799,19 @@
                         "broccoli\\s+florets\\b.{0,25}(?:frozen|steam)",
                         "steamable\\s+broccoli",
                         "broccoli\\s+cuts",
-                        "cut\\s+broccoli"
+                        "cut\\s+broccoli",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -6773,7 +6986,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -6946,7 +7171,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -7124,7 +7361,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -7319,7 +7568,19 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "\\bbaguette\\b",
-                        "\\bgreen\\s+beans\\b"
+                        "\\bgreen\\s+beans\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -7501,7 +7762,19 @@
                         "\\bpops\\b",
                         "\\bcans?\\b",
                         "\\bpopeye\\b",
-                        "\\bdel\\s*monte\\b"
+                        "\\bdel\\s*monte\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -7692,7 +7965,19 @@
                         "mushroom\\s+pieces",
                         "\\bPortobello\\s+Mushrooms\\b",
                         "\\bportobello\\s+mushrooms\\b",
-                        "\\bportabella\\s+mushrooms\\b"
+                        "\\bportabella\\s+mushrooms\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -7868,7 +8153,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -12231,7 +12528,19 @@
                         "pears?\\s+in\\s+(?:light\\s+|heavy\\s+|100%\\s+)?(?:juice|syrup)",
                         "pear\\s+slices?",
                         "\\bsyrup\\b",
-                        "(?i)^(?!.*\\bfresh\\b).*\\bsliced\\b.*\\bpears?\\b"
+                        "(?i)^(?!.*\\bfresh\\b).*\\bsliced\\b.*\\bpears?\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -12438,7 +12747,19 @@
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
-                        "\\bfruit\\s+blend\\b"
+                        "\\bfruit\\s+blend\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -12611,7 +12932,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -12783,7 +13116,19 @@
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
-                        "\\bgarden\\s+seeds?\\b"
+                        "\\bgarden\\s+seeds?\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -13144,7 +13489,19 @@
                         "\\bpops\\b",
                         "pineapple\\s+(?:chunks|slices|tidbits|crushed|rings)",
                         "crushed\\s+pineapple",
-                        "canned\\s+pineapple"
+                        "canned\\s+pineapple",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -13329,7 +13686,18 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "\\bjams?\\b",
-                        "\\bconserve\\b"
+                        "\\bconserve\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -13506,7 +13874,18 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "\\bjams?\\b",
-                        "\\bconserve\\b"
+                        "\\bconserve\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -13719,7 +14098,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -13891,7 +14282,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -14065,7 +14468,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -14248,7 +14663,19 @@
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
-                        "(?i)^(?!.*(?:\\bfresh\\b|\\bhalos?\\b|\\bcuties\\b|\\bclementines?\\b|\\bsweet\\s+scarletts?\\b)).*\\bmandarin\\s+oranges?\\b"
+                        "(?i)^(?!.*(?:\\bfresh\\b|\\bhalos?\\b|\\bcuties\\b|\\bclementines?\\b|\\bsweet\\s+scarletts?\\b)).*\\bmandarin\\s+oranges?\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -14420,7 +14847,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -14597,7 +15036,19 @@
                         "\\bbroccoli\\b",
                         "\\bmedley\\b",
                         "\\bblend\\b",
-                        "\\bcarrots?\\b"
+                        "\\bcarrots?\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -14774,7 +15225,19 @@
                         "asparagus\\s+cut\\s+spears",
                         "extra\\s+long\\s+asparagus\\s+spears",
                         "canned\\s+asparagus",
-                        "(?i)^(?!.*\\bfresh\\b).*asparagus\\s+spears"
+                        "(?i)^(?!.*\\bfresh\\b).*asparagus\\s+spears",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -14945,7 +15408,19 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "birds\\s*eye",
-                        "green\\s+giant\\s+season"
+                        "green\\s+giant\\s+season",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -15118,7 +15593,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -15289,7 +15776,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -15459,7 +15958,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -15644,7 +16155,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -15820,7 +16343,19 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "\\bdressing\\b",
-                        "\\bmarinade\\b"
+                        "\\bmarinade\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -16004,7 +16539,19 @@
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
-                        "\\bmarinade\\b"
+                        "\\bmarinade\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -16172,7 +16719,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -16345,7 +16904,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -16525,7 +17096,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -36016,7 +36599,7 @@
                         "\\bgravy\\b"
                     ],
         "exclude":  [
-                        "\\b(?:and|&|n)\\s+gravy\\b",
+                        "\\b(?:and|\u0026|n)\\s+gravy\\b",
                         "\\bbowl\\b",
                         "breakfast",
                         "jimmy\\s+dean",
@@ -37953,8 +38536,10 @@
                         "pickled\\s+jalape[n\\u00f1]os?",
                         "jalape[n\\u00f1]o\\s+(?:slices|rings|nacho)",
                         "(?:nacho|tamed|sliced|diced)\\s+(?:hot\\s+)?jalape[n\\u00f1]os?",
-                        "jalape[nÃ±]o\\s+peppers,?\\s+pickled",
-                        "jalape[nÃ±ÃƒÂ±]{1,2}o\\s+peppers,?\\s+pickled"
+                        "jalape[nÃƒÂ±]o\\s+peppers,?\\s+pickled",
+                        "jalape[nÃƒÂ±ÃƒÆ’Ã‚Â±]{1,2}o\\s+peppers,?\\s+pickled",
+                        "jalape[nñ]o\\s+peppers,?\\s+pickled",
+                        "jalape[nñÃ±]{1,2}o\\s+peppers,?\\s+pickled"
                     ],
         "exclude":  [
                         "green\\s+chil",
@@ -39735,7 +40320,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -42545,7 +43142,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -42714,7 +43323,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -42890,7 +43511,19 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "stir[\\s-]*in",
-                        "\\bpaste\\b"
+                        "\\bpaste\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -43065,7 +43698,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -43969,7 +44614,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -44994,7 +45651,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -45816,7 +46485,18 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "\\bjams?\\b",
-                        "\\bconserve\\b"
+                        "\\bconserve\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -45994,7 +46674,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ],
         "pint_oz":  10
     },
@@ -46756,7 +47448,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -46939,7 +47643,18 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "\\bjams?\\b",
-                        "\\bconserve\\b"
+                        "\\bconserve\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -47126,7 +47841,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -47306,7 +48033,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -47496,7 +48235,19 @@
                         "rice\\s+cakes?",
                         "reduced\\s+sugar",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -47670,7 +48421,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -47869,7 +48632,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -48043,7 +48818,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -48218,7 +49005,19 @@
                         "rice\\s+cakes?",
                         "balanced\\s*breaks",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -48386,7 +49185,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -48555,7 +49366,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -48733,7 +49556,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -48903,7 +49738,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -49073,7 +49920,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -49243,7 +50102,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -49438,7 +50309,18 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "\\bjams?\\b",
-                        "\\bconserve\\b"
+                        "\\bconserve\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -49621,7 +50503,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -49791,7 +50685,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -49959,7 +50865,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -50127,7 +51045,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -50295,7 +51225,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -50470,7 +51412,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -50640,7 +51594,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -50810,7 +51776,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -50977,7 +51955,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -51148,7 +52138,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -51321,7 +52323,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -51489,7 +52503,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -51658,7 +52684,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -51834,7 +52872,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -52004,7 +53054,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -52179,7 +53241,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -52356,7 +53430,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -52528,7 +53614,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ],
         "relax_global":  [
                              "\\bkit\\b"
@@ -52706,7 +53804,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -52886,7 +53996,19 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "sun[\\s-]?bird",
-                        "\\bseasoning\\b"
+                        "\\bseasoning\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -53059,7 +54181,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -53228,7 +54362,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -53401,7 +54547,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -53567,7 +54725,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -53742,7 +54912,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -53910,7 +55092,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -54082,7 +55276,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -54258,7 +55464,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -54432,7 +55650,18 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "\\bjams?\\b",
-                        "\\bconserve\\b"
+                        "\\bconserve\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -54588,7 +55817,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -54763,7 +56004,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -54938,7 +56191,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -55114,7 +56379,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -55284,7 +56561,19 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -55719,7 +57008,7 @@
         "exclude":  [
                         "\\b(canned|can|dry|dried|dehydrated|soup|chili|baked|refried)\\b",
                         "\\b(edamame|fava|green beans?|black-?eyed peas?|mixed vegetables?)\\b",
-                        "\\b(meal|entree|entrÃ©e|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b",
+                        "\\b(meal|entree|entrÃƒÂ©e|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -55797,7 +57086,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\b(meal|entree|entrée|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b"
                     ],
         "band_min":  0.04,
         "band_max":  0.41
@@ -56221,7 +57511,19 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ],
         "band_min":  1.39,
         "band_max":  14.95
@@ -56799,14 +58101,15 @@
     },
     {
         "id":  "creme-fraiche",
-        "label":  "CrÃ¨me fraÃ®che",
+        "label":  "CrÃƒÂ¨me fraÃƒÂ®che",
         "unit":  "oz",
         "include":  [
-                        "\\bcr[eÃ¨]me\\s+fra[iÃ®]che\\b"
+                        "\\bcr[eÃƒÂ¨]me\\s+fra[iÃƒÂ®]che\\b",
+                        "\\bcr[eè]me\\s+fra[iî]che\\b"
                     ],
         "exclude":  [
                         "\\bsour\\s+cream\\b",
-                        "\\bcrema\\s+(?:mexicana|salvadore[nÃ±]a|agria)\\b",
+                        "\\bcrema\\s+(?:mexicana|salvadore[nÃƒÂ±]a|agria)\\b",
                         "\\btable\\s+cream\\b",
                         "\\bcream\\s+cheese\\b",
                         "\\bmascarpone\\b",
@@ -56893,7 +58196,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bcrema\\s+(?:mexicana|salvadore[nñ]a|agria)\\b"
                     ],
         "band_min":  0.3,
         "band_max":  2.63
@@ -56909,9 +58213,9 @@
         "exclude":  [
                         "\\b(vinegar|cooking\\s+wine|wine\\s+sauce|marinade|broth|stock|seasoning|extract)\\b",
                         "\\b(non[- ]?alcoholic|alcohol[- ]?removed|zero[- ]?proof|0%\\s*abv)\\b",
-                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃ©]|pink|white\\s+zinfandel)\\b",
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃƒÂ©]|pink|white\\s+zinfandel)\\b",
                         "\\b(cocktail|mimosa|sangria|hard\\s+seltzer|beer|cider|margarita|ready[- ]to[- ]drink|rtd)\\b",
-                        "\\b(frozen|entr[eÃ©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(frozen|entr[eÃƒÂ©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -57001,7 +58305,9 @@
                         "carlo\\s+rossi",
                         "\\bbag\\s*in\\s*box\\b",
                         "vinaigrette",
-                        "\\bdressing\\b"
+                        "\\bdressing\\b",
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eé]|pink|white\\s+zinfandel)\\b",
+                        "\\b(frozen|entr[eé]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
                     ],
         "band_min":  0.08,
         "band_max":  1.0,
@@ -57036,9 +58342,9 @@
                         "eau\\s+de\\s+vie",
                         "\\b(vinegar|cooking\\s+wine|wine\\s+sauce|marinade|broth|stock|seasoning|extract)\\b",
                         "\\b(non[- ]?alcoholic|alcohol[- ]?removed|zero[- ]?proof|0%\\s*abv)\\b",
-                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃ©]|pink|white\\s+zinfandel)\\b",
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃƒÂ©]|pink|white\\s+zinfandel)\\b",
                         "\\b(cocktail|mimosa|sangria|hard\\s+seltzer|beer|cider|margarita|ready[- ]to[- ]drink|rtd)\\b",
-                        "\\b(frozen|entr[eÃ©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(frozen|entr[eÃƒÂ©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -57116,7 +58422,9 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eé]|pink|white\\s+zinfandel)\\b",
+                        "\\b(frozen|entr[eé]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
                     ]
     },
     {
@@ -57505,7 +58813,7 @@
                         "\\bsofrito\\b"
                     ],
         "exclude":  [
-                        "\\b(saz[oÃ³]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b",
+                        "\\b(saz[oÃƒÂ³]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b",
                         "\\b(beverage|drink|juice|cocktail|supplement|capsule|tablet|powder)\\b",
                         "\\b(prepared meal|meal kit|ready-to-eat|restaurant)\\b",
                         "beech\\s*nut",
@@ -57585,7 +58893,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\b(saz[oó]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b"
                     ],
         "band_min":  0.08,
         "band_max":  0.75
@@ -57884,8 +59193,8 @@
                     ],
         "exclude":  [
                         "\\b(sauce|sauced|seasoning|spice|powder|flakes?|pickled|canned|jarred|dried|dehydrated)\\b",
-                        "\\b(stuffed|pizza|meal|entrÃ©e|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
-                        "\\b(roasted red pepper|green chiles?|jalape[nÃ±]os?|banana peppers?|poblanos?|serranos?)\\b",
+                        "\\b(stuffed|pizza|meal|entrÃƒÂ©e|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
+                        "\\b(roasted red pepper|green chiles?|jalape[nÃƒÂ±]os?|banana peppers?|poblanos?|serranos?)\\b",
                         "\\b(broccoli|cauliflower|carrots?|corn|peas?|potatoes?|mushrooms?|celery)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
@@ -57964,7 +59273,9 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\b(stuffed|pizza|meal|entrée|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
+                        "\\b(roasted red pepper|green chiles?|jalape[nñ]os?|banana peppers?|poblanos?|serranos?)\\b"
                     ],
         "band_min":  0.04,
         "band_max":  0.4
@@ -58067,7 +59378,8 @@
         "label":  "Veggie Sausages",
         "unit":  "oz",
         "include":  [
-                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027â€™]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027â€™]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b"
+                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027Ã¢â‚¬â„¢]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027Ã¢â‚¬â„¢]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b",
+                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027’]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027’]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b"
                     ],
         "exclude":  [
                         "\\b(?:hot dog|veggie dog|smart dog|ground|crumble|meatball|burger|bacon|nugget|wing|pizza|burrito|bowl|sandwich|pasta sauce|supplement|protein powder|shake|beverage|drink)\\b",
@@ -59110,7 +60422,19 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ],
         "band_min":  0.42,
         "band_max":  5.97
@@ -59315,9 +60639,9 @@
         "exclude":  [
                         "\\b(?:vinegar|cooking\\s+wine|wine\\s+sauce|marinade|broth|stock|seasoning|extract)\\b",
                         "\\b(?:non[- ]?alcoholic|alcohol[- ]?removed|zero[- ]?proof|0%\\s*abv)\\b",
-                        "\\b(?:sparkling|champagne|prosecco|brut|ros[eÃ©]|pink|white\\s+zinfandel|white\\s+wine)\\b",
+                        "\\b(?:sparkling|champagne|prosecco|brut|ros[eÃƒÂ©]|pink|white\\s+zinfandel|white\\s+wine)\\b",
                         "\\b(?:sangria|sweet\\s+red|dessert\\s+wine|port|sherry|marsala|cocktail|margarita|ready[- ]to[- ]drink|rtd)\\b",
-                        "\\b(?:frozen|entr[eÃ©]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(?:frozen|entr[eÃƒÂ©]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -59405,7 +60729,9 @@
                         "\\bbag\\s*in\\s*box\\b",
                         "\\bmustard\\b",
                         "vinaigrette",
-                        "\\bdressing\\b"
+                        "\\bdressing\\b",
+                        "\\b(?:sparkling|champagne|prosecco|brut|ros[eé]|pink|white\\s+zinfandel|white\\s+wine)\\b",
+                        "\\b(?:frozen|entr[eé]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
                     ],
         "band_min":  0.08,
         "band_max":  1.0,
@@ -60915,7 +62241,19 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
@@ -61609,7 +62947,7 @@
                     ],
         "exclude":  [
                         "\\b(?:sauce|marinade|dip|salsa|seasoning)\\b",
-                        "\\b(?:vinaigrette|avocado|jalape[nÃ±]o|ranch)\\b",
+                        "\\b(?:vinaigrette|avocado|jalape[nÃƒÂ±]o|ranch)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -61687,7 +63025,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\b(?:vinaigrette|avocado|jalape[nñ]o|ranch)\\b"
                     ]
     },
     {
@@ -62049,7 +63388,19 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "chunky\\s+style"
+                        "chunky\\s+style",
+                        "\\bjams?\\b",
+                        "\\bjell(y|ies)\\b",
+                        "\\bpreserves?\\b",
+                        "\\bconserves?\\b",
+                        "\\bmarmalades?\\b",
+                        "\\bfruit\\s+spreads?\\b",
+                        "\\bfruit\\s+butters?\\b",
+                        "\\bcompotes?\\b",
+                        "\\bchutneys?\\b",
+                        "\\bfruit\\s+filling\\b",
+                        "\\bpie\\s+filling\\b",
+                        "\\btoppings?\\b"
                     ]
     },
     {
