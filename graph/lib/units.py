@@ -312,6 +312,66 @@ def count_from_name(name: str | None) -> int | None:
     return v if 1 < v <= 144 else None
 
 
+# A measure sitting next to a CONTAINER noun in a product name is the size of
+# ONE item ("12 Fl Oz Cans", "1.65 oz bars"), so a pack of N holds N times it.
+_CONTAINER = (r"(?:cans?|bottles?|cups?|pouch(?:es)?|bars?|sticks?|packets?|"
+              r"boxes|bags?|jars?|tubs?|rolls?|sleeves?|tubes?)")
+_MEASURE = (r"(fl\.?\s*oz|fluid\s+ounces?|oz|ounces?|ml|milliliters?|"
+            r"l|liters?|litres?|g|grams?|kg|lbs?|pounds?|sq\.?\s*ft|square\s+feet)")
+
+_NAME_PER_ITEM = re.compile(rf"{_NUM}\s*-?\s*{_MEASURE}\.?\s*-?\s*{_CONTAINER}\b", re.IGNORECASE)
+_NAME_MEASURE = re.compile(rf"{_NUM}\s*-?\s*{_MEASURE}\b", re.IGNORECASE)
+
+
+def _measure_to_size(qty: float, raw_unit: str) -> "Size | None":
+    """Turn a (number, unit-word) pair into a canonical Size."""
+    u = re.sub(r"[.\s]+", " ", raw_unit.strip().lower()).strip()
+    u = {"fl oz": "fl oz", "fluid ounce": "fl oz", "fluid ounces": "fl oz"}.get(u, u)
+    if u in VOLUME_TO_FLOZ:
+        return Size(qty * VOLUME_TO_FLOZ[u], "floz", "volume")
+    if u in ("sq ft", "sqft", "square feet", "square foot"):
+        return Size(qty, "sq_ft", "area")
+    if u in WEIGHT_TO_OZ:
+        return Size(qty * WEIGHT_TO_OZ[u], "oz", "weight")
+    return None
+
+
+def size_from_name(product_name: str | None, count: float) -> "Size | None":
+    """Recover a pack's true measure from its NAME when the size field gave only
+    a count: "Rc Cola Soda, 12 Fl Oz Cans" at 24 ea is 288 fl oz, not 24 of
+    nothing. Roughly 4,670 rows carry their real size only in the name.
+
+    Deliberately as conservative as count_from_name, and for the same reason —
+    a bare number in a product name is very often a flavour, a percentage or a
+    brand ("2% Milk", "100 Calorie", "7UP"), and inventing a size publishes a
+    wrong per-unit price. Two rules keep it honest:
+
+      * The number must be immediately followed by a UNIT word. A naked number
+        is never used.
+      * With a count above 1 the measure must also sit against a CONTAINER noun
+        ("12 fl oz cans"), which is what marks it as the size of one item. Left
+        unqualified it could equally be the pack TOTAL, and multiplying a total
+        by the count inflates the size — and so understates the per-unit price,
+        which is the direction that steals a cheapest-crown.
+
+    A count of exactly 1 needs no such proof: one item's size IS the total, so
+    any explicit measure in the name can be taken at face value.
+    """
+    if not product_name or count <= 0:
+        return None
+    m = _NAME_PER_ITEM.search(str(product_name))
+    if m:
+        q = _num(m.group(1))
+        s = _measure_to_size(q, m.group(2)) if q is not None else None
+        return Size(s.qty * count, s.unit, s.basis) if s else None
+    if count == 1:
+        m = _NAME_MEASURE.search(str(product_name))
+        if m:
+            q = _num(m.group(1))
+            return _measure_to_size(q, m.group(2)) if q is not None else None
+    return None
+
+
 def per_unit(price, size_text: str | None,
              commodity_unit: str | None = None,
              product_name: str | None = None) -> tuple[float | None, str | None]:
@@ -340,6 +400,15 @@ def per_unit(price, size_text: str | None,
         if (commodity_unit or "").lower() in ("each", "ea", "ct"):
             return float(price), "each"
         return None, None
+
+    # A COUNT cannot answer a weight/volume/area basis on its own ("24 ea" says
+    # nothing about fluid ounces). Before giving up, look for the pack's real
+    # measure in the product name — see size_from_name for why that is safe.
+    if s.basis == "count" and (commodity_unit or "").lower() not in (
+            "", "ct", "count", "each", "ea", "pk", "pack", "dozen"):
+        named = size_from_name(product_name, s.total)
+        if named and named.total > 0:
+            s = named
 
     pu = float(price) / s.total
     unit = s.unit
