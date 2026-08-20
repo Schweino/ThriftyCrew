@@ -1,269 +1,270 @@
-﻿{
-    "updated":  "2026-08-20",
-    "note":  "Per-store weekly-ad cycle tracker. \u0027current\u0027 = the live ad window; \u0027next_pull\u0027 = day AFTER it expires (when the new ad is live), so the automation pulls each store the day its new ad drops. Dates are read from each store\u0027s own feed when available and otherwise advanced only after a successful store-scoped capture. VERIFIED cadences (all weekly / 7-day): Hy-Vee = Mon-Sun (new ad Monday); Aldi = Wed-Tue (new ad Wednesday); Baker\u0027s = Wed-Tue (new ad Wednesday); Family Fare = Sun-Sat (new ad Sunday). Hy-Vee, Aldi, and Family Fare ad calendars are detected headlessly; Baker\u0027s calendar advances only after its successful store-scoped API capture. Price capture lanes remain platform-owned. Sam\u0027s and Walmart have no weekly ad cycle.",
-    "stores":  [
-                   {
-                       "store":  "Hy-Vee",
-                       "method":  "server",
-                       "cadence_days":  7,
-                       "current":  {
-                                       "from":  "2026-08-17",
-                                       "to":  "2026-08-23"
-                                   },
-                       "next_pull":  "2026-08-24",
-                       "history":  [
-                                       {
-                                           "from":  "2026-06-29",
-                                           "to":  "2026-07-05",
-                                           "detected":  "2026-07-05"
-                                       },
-                                       {
-                                           "from":  "2026-07-06",
-                                           "to":  "2026-07-12",
-                                           "detected":  "2026-07-06"
-                                       },
-                                       {
-                                           "from":  "2026-07-13",
-                                           "to":  "2026-07-19",
-                                           "detected":  "2026-07-13"
-                                       },
-                                       {
-                                           "from":  "2026-07-20",
-                                           "to":  "2026-07-20",
-                                           "detected":  "2026-07-20"
-                                       },
-                                       {
-                                           "from":  "2026-07-20",
-                                           "to":  "2026-07-26",
-                                           "detected":  "2026-07-21"
-                                       },
-                                       {
-                                           "from":  "2026-07-27",
-                                           "to":  "2026-08-02",
-                                           "detected":  "2026-07-27"
-                                       },
-                                       {
-                                           "from":  "2026-08-03",
-                                           "to":  "2026-08-09",
-                                           "detected":  "2026-08-03"
-                                       },
-                                       {
-                                           "from":  "2026-08-10",
-                                           "to":  "2026-08-10",
-                                           "detected":  "2026-08-10"
-                                       },
-                                       {
-                                           "from":  "2026-08-10",
-                                           "to":  "2026-08-16",
-                                           "detected":  "2026-08-11"
-                                       },
-                                       {
-                                           "from":  "2026-08-17",
-                                           "to":  "2026-08-17",
-                                           "detected":  "2026-08-18"
-                                       },
-                                       {
-                                           "from":  "2026-08-17",
-                                           "to":  "2026-08-23",
-                                           "detected":  "2026-08-18"
-                                       }
-                                   ]
-                   },
-                   {
-                       "store":  "Aldi",
-                       "method":  "server",
-                       "cadence_days":  7,
-                       "current":  {
-                                       "from":  "2026-08-19",
-                                       "to":  "2026-08-25"
-                                   },
-                       "next_pull":  "2026-08-26",
-                       "history":  [
-                                       {
-                                           "from":  "2026-07-01",
-                                           "to":  "2026-07-07",
-                                           "detected":  "2026-07-05"
-                                       },
-                                       {
-                                           "from":  "2026-07-08",
-                                           "to":  "2026-07-14",
-                                           "detected":  "2026-07-08"
-                                       },
-                                       {
-                                           "from":  "2026-07-15",
-                                           "to":  "2026-07-21",
-                                           "detected":  "2026-07-15"
-                                       },
-                                       {
-                                           "from":  "2026-07-22",
-                                           "to":  "2026-07-28",
-                                           "detected":  "2026-07-22"
-                                       },
-                                       {
-                                           "from":  "2026-07-29",
-                                           "to":  "2026-08-04",
-                                           "detected":  "2026-07-29"
-                                       },
-                                       {
-                                           "from":  "2026-08-12",
-                                           "to":  "2026-08-18",
-                                           "detected":  "2026-08-12"
-                                       },
-                                       {
-                                           "from":  "2026-08-19",
-                                           "to":  "2026-08-25",
-                                           "detected":  "2026-08-20"
-                                       }
-                                   ]
-                   },
-                   {
-                       "store":  "Family Fare",
-                       "method":  "server",
-                       "cadence_days":  7,
-                       "current":  {
-                                       "from":  "2026-08-16",
-                                       "to":  "2026-08-22"
-                                   },
-                       "next_pull":  "2026-08-23",
-                       "history":  [
-                                       {
-                                           "from":  "2026-07-05",
-                                           "to":  "2026-07-11",
-                                           "detected":  "2026-07-05"
-                                       },
-                                       {
-                                           "from":  "2026-07-12",
-                                           "to":  "2026-07-18",
-                                           "detected":  "2026-07-12"
-                                       },
-                                       {
-                                           "from":  "2026-07-19",
-                                           "to":  "2026-07-25",
-                                           "detected":  "2026-07-19"
-                                       },
-                                       {
-                                           "from":  "2026-07-26",
-                                           "to":  "2026-08-01",
-                                           "detected":  "2026-07-26"
-                                       },
-                                       {
-                                           "from":  "2026-08-02",
-                                           "to":  "2026-08-08",
-                                           "detected":  "2026-08-02"
-                                       },
-                                       {
-                                           "from":  "2026-08-09",
-                                           "to":  "2026-08-15",
-                                           "detected":  "2026-08-09"
-                                       },
-                                       {
-                                           "from":  "2026-08-16",
-                                           "to":  "2026-08-22",
-                                           "detected":  "2026-08-17"
-                                       }
-                                   ]
-                   },
-                   {
-                       "store":  "Baker\u0027s",
-                       "method":  "server",
-                       "cadence_days":  7,
-                       "current":  {
-                                       "from":  "2026-08-19",
-                                       "to":  "2026-08-25"
-                                   },
-                       "next_pull":  "2026-08-26",
-                       "history":  [
-                                       {
-                                           "from":  "2026-07-01",
-                                           "to":  "2026-07-07",
-                                           "detected":  "2026-07-05"
-                                       },
-                                       {
-                                           "from":  "2026-07-08",
-                                           "to":  "2026-07-14",
-                                           "detected":  "2026-07-08"
-                                       },
-                                       {
-                                           "from":  "2026-07-15",
-                                           "to":  "2026-07-21",
-                                           "detected":  "2026-07-15"
-                                       },
-                                       {
-                                           "from":  "2026-07-22",
-                                           "to":  "2026-07-28",
-                                           "detected":  "2026-07-23"
-                                       },
-                                       {
-                                           "from":  "2026-07-29",
-                                           "to":  "2026-08-04",
-                                           "detected":  "2026-07-29"
-                                       },
-                                       {
-                                           "from":  "2026-08-12",
-                                           "to":  "2026-08-18",
-                                           "detected":  "2026-08-12"
-                                       },
-                                       {
-                                           "from":  "2026-08-19",
-                                           "to":  "2026-08-25",
-                                           "detected":  "2026-08-19"
-                                       }
-                                   ]
-                   },
-                   {
-                       "store":  "Sam\u0027s Club",
-                       "method":  "browser",
-                       "cadence_days":  null,
-                       "current":  null,
-                       "next_pull":  null,
-                       "history":  [
-
-                                   ],
-                       "note":  "National warehouse pricing, no weekly ad cycle. Refresh weekly with the browser pull."
-                   },
-                   {
-                       "store":  "Walmart",
-                       "method":  "browser",
-                       "cadence_days":  null,
-                       "current":  null,
-                       "next_pull":  null,
-                       "history":  [
-
-                                   ],
-                       "note":  "Store/location-specific everyday grocery pricing (Omaha L St Supercenter 68137), no weekly-ad cycle. Refresh weekly with the browser in-page __NEXT_DATA__ fetch."
-                   },
-                   {
-                       "store":  "Fareway",
-                       "method":  "browser",
-                       "cadence_days":  7,
-                       "current":  {
-                                       "from":  "2026-08-09",
-                                       "to":  "2026-08-15"
-                                   },
-                       "next_pull":  "2026-08-16",
-                       "history":  [
-                                       {
-                                           "from":  "2026-07-12",
-                                           "to":  "2026-07-18",
-                                           "detected":  "2026-07-12"
-                                       },
-                                       {
-                                           "from":  "2026-07-19",
-                                           "to":  "2026-07-25",
-                                           "detected":  "2026-07-23"
-                                       },
-                                       {
-                                           "from":  "2026-07-26",
-                                           "to":  "2026-08-01",
-                                           "detected":  "2026-07-27"
-                                       },
-                                       {
-                                           "from":  "2026-08-02",
-                                           "to":  "2026-08-08",
-                                           "detected":  "2026-08-09"
-                                       }
-                                   ],
-                       "note":  "Fareway Omaha (store 043). Board data = shop.fareway.com storefront (Instacart Storefront platform but NO markup - in-store prices, Omaha; browser-only) pulled by the Wednesday agent -\u003e build-fareway-regular.ps1 -\u003e out/regular/fareway-regular-*.json. Weekly ad = Sun-Sat image flyer (server-downloadable via pull-fareway-ads.ps1) + a monthly ad; ad SALE supplement -\u003e out/fareway/fareway-deals-*.json via -FarewayFile."
-                   }
-               ]
+{
+    "updated": "2026-08-20",
+    "note": "Per-store weekly-ad cycle tracker. 'current' = the live ad window; 'next_pull' = day AFTER it expires (when the new ad is live), so the automation pulls each store the day its new ad drops. Dates are read from each store's own feed when available and otherwise advanced only after a successful store-scoped capture. VERIFIED cadences (all weekly / 7-day): Hy-Vee = Mon-Sun (new ad Monday); Aldi = Wed-Tue (new ad Wednesday); Baker's = Wed-Tue (new ad Wednesday); Family Fare = Sun-Sat (new ad Sunday). Hy-Vee, Aldi, and Family Fare ad calendars are detected headlessly; Baker's calendar advances only after its successful store-scoped API capture. Price capture lanes remain platform-owned. Sam's and Walmart have no weekly ad cycle.",
+    "stores": [
+        {
+            "store": "Hy-Vee",
+            "method": "server",
+            "cadence_days": 7,
+            "current": {
+                "from": "2026-08-17",
+                "to": "2026-08-23"
+            },
+            "next_pull": "2026-08-24",
+            "history": [
+                {
+                    "from": "2026-06-29",
+                    "to": "2026-07-05",
+                    "detected": "2026-07-05"
+                },
+                {
+                    "from": "2026-07-06",
+                    "to": "2026-07-12",
+                    "detected": "2026-07-06"
+                },
+                {
+                    "from": "2026-07-13",
+                    "to": "2026-07-19",
+                    "detected": "2026-07-13"
+                },
+                {
+                    "from": "2026-07-20",
+                    "to": "2026-07-20",
+                    "detected": "2026-07-20"
+                },
+                {
+                    "from": "2026-07-20",
+                    "to": "2026-07-26",
+                    "detected": "2026-07-21"
+                },
+                {
+                    "from": "2026-07-27",
+                    "to": "2026-08-02",
+                    "detected": "2026-07-27"
+                },
+                {
+                    "from": "2026-08-03",
+                    "to": "2026-08-09",
+                    "detected": "2026-08-03"
+                },
+                {
+                    "from": "2026-08-10",
+                    "to": "2026-08-10",
+                    "detected": "2026-08-10"
+                },
+                {
+                    "from": "2026-08-10",
+                    "to": "2026-08-16",
+                    "detected": "2026-08-11"
+                },
+                {
+                    "from": "2026-08-17",
+                    "to": "2026-08-17",
+                    "detected": "2026-08-18"
+                },
+                {
+                    "from": "2026-08-17",
+                    "to": "2026-08-23",
+                    "detected": "2026-08-18"
+                }
+            ]
+        },
+        {
+            "store": "Aldi",
+            "method": "server",
+            "cadence_days": 7,
+            "current": {
+                "from": "2026-08-19",
+                "to": "2026-08-25"
+            },
+            "next_pull": "2026-08-26",
+            "history": [
+                {
+                    "from": "2026-07-01",
+                    "to": "2026-07-07",
+                    "detected": "2026-07-05"
+                },
+                {
+                    "from": "2026-07-08",
+                    "to": "2026-07-14",
+                    "detected": "2026-07-08"
+                },
+                {
+                    "from": "2026-07-15",
+                    "to": "2026-07-21",
+                    "detected": "2026-07-15"
+                },
+                {
+                    "from": "2026-07-22",
+                    "to": "2026-07-28",
+                    "detected": "2026-07-22"
+                },
+                {
+                    "from": "2026-07-29",
+                    "to": "2026-08-04",
+                    "detected": "2026-07-29"
+                },
+                {
+                    "from": "2026-08-12",
+                    "to": "2026-08-18",
+                    "detected": "2026-08-12"
+                },
+                {
+                    "from": "2026-08-19",
+                    "to": "2026-08-25",
+                    "detected": "2026-08-20"
+                }
+            ]
+        },
+        {
+            "store": "Family Fare",
+            "method": "server",
+            "cadence_days": 7,
+            "current": {
+                "from": "2026-08-16",
+                "to": "2026-08-22"
+            },
+            "next_pull": "2026-08-23",
+            "history": [
+                {
+                    "from": "2026-07-05",
+                    "to": "2026-07-11",
+                    "detected": "2026-07-05"
+                },
+                {
+                    "from": "2026-07-12",
+                    "to": "2026-07-18",
+                    "detected": "2026-07-12"
+                },
+                {
+                    "from": "2026-07-19",
+                    "to": "2026-07-25",
+                    "detected": "2026-07-19"
+                },
+                {
+                    "from": "2026-07-26",
+                    "to": "2026-08-01",
+                    "detected": "2026-07-26"
+                },
+                {
+                    "from": "2026-08-02",
+                    "to": "2026-08-08",
+                    "detected": "2026-08-02"
+                },
+                {
+                    "from": "2026-08-09",
+                    "to": "2026-08-15",
+                    "detected": "2026-08-09"
+                },
+                {
+                    "from": "2026-08-16",
+                    "to": "2026-08-22",
+                    "detected": "2026-08-17"
+                }
+            ]
+        },
+        {
+            "store": "Baker's",
+            "method": "server",
+            "cadence_days": 7,
+            "current": {
+                "from": "2026-08-19",
+                "to": "2026-08-25"
+            },
+            "next_pull": "2026-08-26",
+            "history": [
+                {
+                    "from": "2026-07-01",
+                    "to": "2026-07-07",
+                    "detected": "2026-07-05"
+                },
+                {
+                    "from": "2026-07-08",
+                    "to": "2026-07-14",
+                    "detected": "2026-07-08"
+                },
+                {
+                    "from": "2026-07-15",
+                    "to": "2026-07-21",
+                    "detected": "2026-07-15"
+                },
+                {
+                    "from": "2026-07-22",
+                    "to": "2026-07-28",
+                    "detected": "2026-07-23"
+                },
+                {
+                    "from": "2026-07-29",
+                    "to": "2026-08-04",
+                    "detected": "2026-07-29"
+                },
+                {
+                    "from": "2026-08-12",
+                    "to": "2026-08-18",
+                    "detected": "2026-08-12"
+                },
+                {
+                    "from": "2026-08-19",
+                    "to": "2026-08-25",
+                    "detected": "2026-08-19"
+                }
+            ]
+        },
+        {
+            "store": "Sam's Club",
+            "method": "browser",
+            "cadence_days": null,
+            "current": null,
+            "next_pull": null,
+            "history": [],
+            "note": "National warehouse pricing, no weekly ad cycle. Refresh weekly with the browser pull."
+        },
+        {
+            "store": "Walmart",
+            "method": "browser",
+            "cadence_days": null,
+            "current": null,
+            "next_pull": null,
+            "history": [],
+            "note": "Store/location-specific everyday grocery pricing (Omaha L St Supercenter 68137), no weekly-ad cycle. Refresh weekly with the browser in-page __NEXT_DATA__ fetch."
+        },
+        {
+            "store": "Fareway",
+            "method": "browser",
+            "cadence_days": 7,
+            "current": {
+                "from": "2026-08-17",
+                "to": "2026-08-22"
+            },
+            "next_pull": "2026-08-23",
+            "history": [
+                {
+                    "from": "2026-07-12",
+                    "to": "2026-07-18",
+                    "detected": "2026-07-12"
+                },
+                {
+                    "from": "2026-07-19",
+                    "to": "2026-07-25",
+                    "detected": "2026-07-23"
+                },
+                {
+                    "from": "2026-07-26",
+                    "to": "2026-08-01",
+                    "detected": "2026-07-27"
+                },
+                {
+                    "from": "2026-08-02",
+                    "to": "2026-08-08",
+                    "detected": "2026-08-09"
+                },
+                {
+                    "from": "2026-08-09",
+                    "to": "2026-08-15",
+                    "detected": "2026-08-09"
+                }
+            ],
+            "note": "Fareway Omaha (store 043). Board data = shop.fareway.com storefront (Instacart Storefront platform but NO markup - in-store prices, Omaha; browser-only) pulled by the Wednesday agent -> build-fareway-regular.ps1 -> out/regular/fareway-regular-*.json. Weekly ad = Sun-Sat image flyer (server-downloadable via pull-fareway-ads.ps1) + a monthly ad; ad SALE supplement -> out/fareway/fareway-deals-*.json via -FarewayFile."
+        }
+    ]
 }

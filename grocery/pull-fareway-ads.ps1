@@ -132,7 +132,41 @@ function Get-AdPages([string]$kind) {
   $matches = [regex]::Matches($html, $rx)
   if ($matches.Count -eq 0) { $res.reason = 'no OmahaGroup ad images found (wrong city or ad markup changed)'; Set-OnDisk $res; return $res }
   $fromRaw = $matches[0].Groups[1].Value; $toRaw = $matches[0].Groups[2].Value
-  $from = [datetime]::ParseExact($fromRaw,'MMddyyyy',$null); $to = [datetime]::ParseExact($toRaw,'MMddyyyy',$null)
+
+  # THE STORE TYPOS ITS OWN FILENAMES, AND THAT USED TO CRASH THE PULL.
+  # Observed live 2026-08-20: OmahaGroup_weekly_08162026_80222026-N.jpg. The end
+  # date reads "80222026" - month EIGHTY - because 0822 was transposed to 8022.
+  # ParseExact threw, $ErrorActionPreference='Stop' took the whole run down, and
+  # the operator saw a raw FormatException rather than "Fareway's ad is unreadable".
+  # An upstream typo must never be an unhandled exception here.
+  #
+  # THE REPAIR IS NARROW AND ON THE RECORD. Only a transposed leading pair is
+  # undone (8022 -> 0822), and only when the result is a date that is AFTER the
+  # ad's own valid start and no more than 31 days later. That is evidence, not a
+  # guess: the start date parsed cleanly, the previous ad ended the day before it,
+  # and the store's cadence puts the end exactly where the repair lands. Anything
+  # that fails those checks stays BLOCKED - a wrong window would publish sale
+  # prices outside their validity, which is the failure the CURRENT gate exists
+  # to prevent. The manifest records to_raw and to_repaired so the repair is
+  # auditable and this never becomes an invisible fixup.
+  function Parse-AdDate([string]$raw) {
+    $d = [datetime]::MinValue
+    if ([datetime]::TryParseExact($raw,'MMddyyyy',$null,[Globalization.DateTimeStyles]::None,[ref]$d)) { return $d }
+    return $null
+  }
+  $from = Parse-AdDate $fromRaw
+  $to   = Parse-AdDate $toRaw
+  $res.to_raw = $toRaw; $res.to_repaired = $false
+  if (-not $from) { $res.reason = "unreadable ad START date in filename ('$fromRaw')"; Set-OnDisk $res; return $res }
+  if (-not $to -and $toRaw.Length -eq 8) {
+    $swap = $toRaw.Substring(1,1) + $toRaw.Substring(0,1) + $toRaw.Substring(2)
+    $cand = Parse-AdDate $swap
+    if ($cand -and $cand -gt $from -and ($cand - $from).Days -le 31) {
+      $to = $cand; $res.to_repaired = $true
+      Write-Warning ("Fareway ${kind}: the store's filename carries an impossible end date '$toRaw'; read as '$swap' (" + $to.ToString('yyyy-MM-dd') + ") - a transposed leading pair, consistent with the ad start " + $from.ToString('yyyy-MM-dd') + ". Recorded as repaired in the manifest.")
+    }
+  }
+  if (-not $to) { $res.reason = "unreadable ad END date in filename ('$toRaw')"; Set-OnDisk $res; return $res }
   $res.from = $from.ToString('yyyy-MM-dd'); $res.to = $to.ToString('yyyy-MM-dd')
   # CURRENT gate: today within [from, to]
   if ($asof -lt $from -or $asof -gt $to) { $res.reason = "not current (ad $($res.from)..$($res.to), today $asofS)"; Set-OnDisk $res; return $res }
