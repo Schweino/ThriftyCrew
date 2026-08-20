@@ -395,9 +395,28 @@ def per_unit(price, size_text: str | None,
         if n:
             s = Size(float(n), "ct", "count", 1)
 
+    # An 'each'-basis commodity is priced per ITEM, and that is true whether or
+    # not a size parsed. Bread declares 'each' and its listings carry "20 oz";
+    # deriving $/oz there and then asking reconcile_unit for oz -> each refuses
+    # forever, which is how ~6,097 rows across 75 commodities went unpriceable
+    # while the live board happily showed "$1.69 each" for the same listing.
+    # The board's rule, read off comparison-*.json: price divided by the pack
+    # COUNT (bar soap $0.4988/bar, buns $0.1658/bun), or the sticker price when
+    # there is no count. Mirror it exactly — a weight on the label never turns
+    # an each-priced commodity into a per-ounce one.
+    if (commodity_unit or "").lower() in ("each", "ea"):
+        n = 1.0
+        if s and s.basis == "count" and s.total > 0:
+            n = float(s.total)
+        else:
+            c = count_from_name(product_name)
+            if c:
+                n = float(c)
+        return round(float(price) / n, 4), "each"
+
     if not s or s.total <= 0:
-        # 'each'-based commodities have no size to parse; the sticker IS the unit price.
-        if (commodity_unit or "").lower() in ("each", "ea", "ct"):
+        # No size to divide by; for a count basis the sticker IS the unit price.
+        if (commodity_unit or "").lower() in ("ct", "count"):
             return float(price), "each"
         return None, None
 
