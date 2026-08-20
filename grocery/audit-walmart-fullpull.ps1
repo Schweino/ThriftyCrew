@@ -27,9 +27,18 @@
   exist precisely so that cannot happen. Duplicated tracing is an accepted drift risk here; a broken
   freshness watcher is not.
 #>
-param([int]$WindowDays = 14, [int]$WarnAgeDays = 10, [string]$GroceryRoot = "", [int]$CellWarnDays = 5, [int]$CellWarnPct = 5)
+param([int]$WindowDays = 0, [int]$WarnAgeDays = 10, [string]$GroceryRoot = "", [int]$CellWarnDays = 5, [int]$CellWarnPct = 5)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+# THE UNION WINDOW IS NOT THIS FILE'S TO CHOOSE. This watch counts down to the day a capture leaves the
+# window the ENGINE prices from, so a private copy of that number makes it count down to the wrong day.
+# It held a private 14 until 2026-08-20, when the everyday-price window moved to the capture policy's
+# 90-day quarter: this watch went on warning that 468 of 468 Walmart cells (100%) were about to expire,
+# for cells with 80-odd days left. A false alarm at that volume is worse than no alarm - it is how a
+# reader learns to scroll past a red line. 0 means 'ask regular-fileset-lib'; an explicit -WindowDays
+# still overrides, which is what the frozen fixtures use.
+. (Join-Path $PSScriptRoot 'regular-fileset-lib.ps1')
+if ($WindowDays -le 0) { $WindowDays = Get-RegularUnionDays }
 $root = if ($GroceryRoot) { $GroceryRoot } elseif ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $today = [datetime]::Today
 
