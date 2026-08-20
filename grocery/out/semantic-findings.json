@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-19 06:19",
-    "board":  "comparison-2026-08-18.json",
-    "sidecar_generated":  "2026-08-19 06:19:29",
+    "generated":  "2026-08-20 06:16",
+    "board":  "comparison-2026-08-19.json",
+    "sidecar_generated":  "2026-08-20 06:16:46",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -10,11 +10,11 @@
                    },
     "examined":  {
                      "board_pairs":  2969,
-                     "corpus":  36858,
-                     "rule_invisible":  6709
+                     "corpus":  36978,
+                     "rule_invisible":  6732
                  },
     "identity_count":  0,
-    "coverage_count":  66,
+    "coverage_count":  67,
     "identity":  [
 
                  ],
@@ -211,6 +211,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "pork-tenderloin",
+                         "commodity":  "Pork Tenderloin",
+                         "store":  "Walmart",
+                         "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.51.9 lb, 20 Grams of Protein per 4 oz Serving",
+                         "cos":  0.7368,
+                         "score":  0.949435,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "bar-soap",
                          "commodity":  "Bar Soap",
                          "store":  "Baker\u0027s",
@@ -257,16 +267,6 @@
                          "product":  "USDA 73% Lean 27% Fat Ground Beef, Per LB",
                          "cos":  0.7542,
                          "score":  0.94223,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "pork-tenderloin",
-                         "commodity":  "Pork Tenderloin",
-                         "store":  "Walmart",
-                         "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.51.9 lb, 20 Grams of Protein per 4 oz Serving",
-                         "cos":  0.7452,
-                         "score":  0.941752,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -431,6 +431,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "queso",
+                         "commodity":  "Queso / Cheese Dip",
+                         "store":  "Baker\u0027s",
+                         "product":  "Ricos Products Co. Gourmet Nacho Cheddar Cheese Sauce",
+                         "cos":  0.755,
+                         "score":  0.924664,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "string-cheese",
                          "commodity":  "String Cheese",
                          "store":  "Walmart",
@@ -481,16 +491,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "white-wine",
-                         "commodity":  "White Wine",
-                         "store":  "Family Fare",
-                         "product":  "Vendange Chardonnay White Wine 1.5 L",
-                         "cos":  0.5602,
-                         "score":  0.921828,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "deli-ham",
                          "commodity":  "Ham (deli / sliced)",
                          "store":  "Walmart",
@@ -507,6 +507,16 @@
                          "product":  "Simply Nature Organic Grass Fed 93/07 Ground Beef",
                          "cos":  0.6609,
                          "score":  0.919662,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "white-wine",
+                         "commodity":  "White Wine",
+                         "store":  "Family Fare",
+                         "product":  "Vendange Chardonnay White Wine 1.5 L",
+                         "cos":  0.5999,
+                         "score":  0.918364,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -581,12 +591,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "breakfast-sandwiches",
-                         "commodity":  "Frozen Breakfast Sandwiches",
-                         "store":  "Family Fare",
-                         "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
-                         "cos":  0.7064,
-                         "score":  0.908548,
+                         "id":  "iced-tea",
+                         "commodity":  "Iced Tea (bottled/gallon)",
+                         "store":  "Walmart",
+                         "product":  "Red Diamond Unsweetened Tea, Gallon, 128 Fl Oz",
+                         "cos":  0.5964,
+                         "score":  0.908486,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

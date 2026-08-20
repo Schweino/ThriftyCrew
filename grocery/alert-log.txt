@@ -946,3 +946,39 @@
 [2026-08-19T06:29:28] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: Walmart full capture aging - 2026-08-19' [type: grocery walmart full capture aging]
 [2026-08-19T06:37:31] QUEUE ABSORBED into open item 2026-08-17-2e12d3 (day 2 of this condition, count now 4) - no new id minted
 [2026-08-19T06:37:31] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: a GUARD has gone blind (test-auditors failed)' [type: grocery a guard has gone blind test auditors failed]
+[2026-08-19T06:45:05] QUEUE ABSORBED into open item 2026-08-15-9ee54e (day 4 of this condition, count now 3) - no new id minted
+[2026-08-19T06:45:05] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Automation silent-death: 1 issue(s)' [type: automation silent death issue s]
+[2026-08-20T06:09:54] QUEUE ABSORBED into open item 2026-08-17-db55dc (day 3 of this condition, count now 5) - no new id minted
+[2026-08-20T06:09:54] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Baker's ad window advanced with no capture behind it' [type: baker s ad window advanced with no capture behind it]
+[2026-08-20T06:09:55] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: Wednesday browser refresh MISSED - week of 2026-08-19' [type: grocery wednesday browser refresh missed week of]
+[2026-08-20T06:14:02] QUEUE ABSORBED into open item 2026-08-17-847da1 (day 3 of this condition, count now 3) - no new id minted
+[2026-08-20T06:14:02] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 27 store(s) dropped from a commodity they carry - 2026-08-20' [type: grocery store s dropped from a commodity they carry]
+[2026-08-20T06:16:48] QUEUE ABSORBED into open item 2026-08-07-cac5f3 (day 13 of this condition, count now 18) - no new id minted
+[2026-08-20T06:16:48] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: semantic sweep found 67 product(s) no rule can see - 2026-08-20' [type: grocery semantic sweep found product s no rule can see]
+[2026-08-20T06:16:49] QUEUE ABSORBED into open item 2026-08-17-8642d7 (day 3 of this condition, count now 3) - no new id minted
+[2026-08-20T06:16:49] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 11 board cell(s) sit in the wrong store department - 2026-08-20' [type: grocery board cell s sit in the wrong store department]
+[2026-08-20T06:18:49] QUEUE ABSORBED into open item 2026-08-17-83c542 (day 3 of this condition, count now 4) - no new id minted
+[2026-08-20T06:18:49] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery matching soundness - review needed' [type: grocery matching soundness review needed]
+[2026-08-20T06:20:53] QUEUE ABSORBED into open item 2026-08-17-abd166 (day 3 of this condition, count now 2) - no new id minted
+[2026-08-20T06:20:53] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 1 on-sale item(s) have no everyday fallback - 2026-08-20' [type: grocery on sale item s have no everyday fallback]
+[2026-08-20T06:21:15] QUEUE ABSORBED into open item 2026-08-18-64f28f (day 2 of this condition, count now 4) - no new id minted
+[2026-08-20T06:21:15] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe db drift (index vs specs)' [type: recipe db drift index vs specs]
+[2026-08-20T06:21:46] QUEUE ABSORBED into open item 2026-08-12-2f6bba (day 8 of this condition, count now 13) - no new id minted
+[2026-08-20T06:21:46] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Database constraint refused a write' [type: database constraint refused a write]
+[2026-08-20T06:21:47] QUEUE ABSORBED into open item 2026-08-12-fb9d1d (day 8 of this condition, count now 13) - no new id minted
+[2026-08-20T06:21:47] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'A write broke cross-store integrity' [type: a write broke cross store integrity]
+[2026-08-20T06:21:48] QUEUE ABSORBED into open item 2026-08-18-6cc68e (day 2 of this condition, count now 4) - no new id minted
+[2026-08-20T06:21:48] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe batch stalled with stages unfinished' [type: recipe batch stalled with stages unfinished]
+[2026-08-20T06:21:51] QUEUE BODY UPGRADED on 2026-08-09-817ca5 (957 -> 1574 chars) - a later occurrence carried fuller evidence
+[2026-08-20T06:21:51] QUEUE ABSORBED into open item 2026-08-09-817ca5 (day 11 of this condition, count now 20) - no new id minted
+[2026-08-20T06:21:51] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Board prices aging inside a fresh file' [type: board prices aging inside a fresh file]
+[2026-08-20T06:24:56] QUEUE ABSORBED into open item 2026-08-17-356aea (day 3 of this condition, count now 3) - no new id minted
+[2026-08-20T06:24:56] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 2 NEW price flag(s) - 2026-08-20' [type: grocery new price flag s]
+[2026-08-20T06:25:40] QUEUE ABSORBED into open item 2026-08-19-566f97 (day 1 of this condition, count now 2) - no new id minted
+[2026-08-20T06:25:40] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: GUARDS FAILED - board not published - 2026-08-20' [type: grocery guards failed board not published]
+[2026-08-20T06:25:43] QUEUE ABSORBED into open item 2026-08-07-fb1fee (day 13 of this condition, count now 20) - no new id minted
+[2026-08-20T06:25:43] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: Walmart full capture aging - 2026-08-20' [type: grocery walmart full capture aging]
+[2026-08-20T06:33:41] QUEUE ABSORBED into open item 2026-08-17-2e12d3 (day 3 of this condition, count now 5) - no new id minted
+[2026-08-20T06:33:41] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: a GUARD has gone blind (test-auditors failed)' [type: grocery a guard has gone blind test auditors failed]
+[2026-08-20T06:45:05] QUEUE ABSORBED into open item 2026-08-15-9ee54e (day 5 of this condition, count now 4) - no new id minted
+[2026-08-20T06:45:05] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Automation silent-death: 2 issue(s)' [type: automation silent death issue s]

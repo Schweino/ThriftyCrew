@@ -1,17 +1,6 @@
 ﻿{
     "resolved":  [
                      {
-                         "id":  "butternut-squash",
-                         "fault":  "PRICE-DRIFT",
-                         "board":  "Butternut Squash",
-                         "board_pu":  1.99,
-                         "name":  "Butternut Squash",
-                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/squashes/butternut_squash/p/12561",
-                         "price":  "$1.99",
-                         "size":  "lb",
-                         "score":  1
-                     },
-                     {
                          "id":  "eggs",
                          "fault":  "NO-LINK",
                          "board":  "Large Grade A Eggs Our Family (30 Ct)",
@@ -30,7 +19,7 @@
                     },
                     {
                         "id":  "caesar-salad-kit",
-                        "why":  "match found but its size \"1 bag\" gives no per-unit in oz"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "canned-pasta",
@@ -77,7 +66,7 @@
                         "why":  "match found but per-unit disagrees: board $1.69 vs link $1.99 (15.1%)"
                     }
                 ],
-    "worked":  15,
-    "generated":  "2026-08-19 06:27",
-    "board":  "comparison-2026-08-18.json"
+    "worked":  14,
+    "generated":  "2026-08-20 06:24",
+    "board":  "comparison-2026-08-19.json"
 }

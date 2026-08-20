@@ -1,6 +1,6 @@
 ﻿{
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
-    "updated":  "2026-08-19",
+    "updated":  "2026-08-20",
     "tol":  0.3,
     "count":  7,
     "cells":  [
@@ -11,7 +11,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  7.19,
                       "link_name":  "Chicken Thighs, Boneless Gold N Plump",
-                      "set":  "2026-08-19"
+                      "set":  "2026-08-20"
                   },
                   {
                       "id":  "1-3-fat-cream-cheese",
@@ -20,7 +20,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.2075,
                       "link_name":  "Hy-Vee 1/3 Less Fat than Cream Cheese (Neufchatel Cheese)",
-                      "set":  "2026-08-19"
+                      "set":  "2026-08-20"
                   },
                   {
                       "id":  "golden-raisins",
@@ -29,7 +29,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.4142,
                       "link_name":  "Great Value Seedless Golden Raisins, 15 oz",
-                      "set":  "2026-08-19"
+                      "set":  "2026-08-20"
                   },
                   {
                       "id":  "light-sour-cream",
@@ -38,7 +38,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.18,
                       "link_name":  "Daisy Sour Cream, 48 oz",
-                      "set":  "2026-08-19"
+                      "set":  "2026-08-20"
                   },
                   {
                       "id":  "red-bell-pepper",
@@ -47,7 +47,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.83,
                       "link_name":  "Multi Bell Sweet Peppers",
-                      "set":  "2026-08-19"
+                      "set":  "2026-08-20"
                   },
                   {
                       "id":  "red-bell-pepper",
@@ -56,7 +56,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  2.5,
                       "link_name":  "Fresh Sweet Bell Pepper, Red Organic",
-                      "set":  "2026-08-19"
+                      "set":  "2026-08-20"
                   },
                   {
                       "id":  "zero-sugar-soda-2l",
@@ -65,7 +65,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.01,
                       "link_name":  "Diet Big K Cola No Calorie Soda Bottle",
-                      "set":  "2026-08-19"
+                      "set":  "2026-08-20"
                   }
               ]
 }

@@ -90,6 +90,15 @@
         "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
     },
     {
+        "id":  "almonds",
+        "store":  "Family Fare",
+        "product":  "Our Family Almonds, Roasted \u0026 Lightly Salted, Whole 12 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
+    },
+    {
         "id":  "anaheim-peppers",
         "store":  "Family Fare",
         "product":  "Anaheim Peppers (Green And Red)",
@@ -124,6 +133,15 @@
         "aisle":  "fresh_fruits_vegetables/apples",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
+    },
+    {
+        "id":  "applesauce",
+        "store":  "Family Fare",
+        "product":  "Our Family Applesauce, Unsweetened 48 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
         "id":  "artichoke-hearts",
@@ -443,7 +461,7 @@
     {
         "id":  "bratwurst",
         "store":  "Family Fare",
-        "product":  "Bratwurst, Original Our Family",
+        "product":  "Bratwurst, Cheddar Our Family",
         "dept":  "meat",
         "aisle":  "meat/sausage",
         "verdict":  "ALLOW",
@@ -457,6 +475,15 @@
         "aisle":  "pantry/baking",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
+        "id":  "cereal",
+        "store":  "Family Fare",
+        "product":  "Our Family Cereal, Raisin Bran, Crunchy 18.2 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/breakfast",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
     },
     {
         "id":  "breakfast-sausage",
@@ -866,7 +893,7 @@
     {
         "id":  "chicken-noodle-soup",
         "store":  "Family Fare",
-        "product":  "Chicken Noodle Soup Our Family Chunky",
+        "product":  "Campbell\u0027s® Chicken Noodle Soup 10.750 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/broth_soups_stews_chili",
         "verdict":  "ALLOW",
@@ -1028,7 +1055,7 @@
     {
         "id":  "coffee-creamer",
         "store":  "Family Fare",
-        "product":  "International Delight French Vanilla Liquid Coffee Creamer 64 Fl Oz",
+        "product":  "International Delight Caramel Macchiato Liquid Coffee Creamer 64 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/coffee",
         "verdict":  "ALLOW",
@@ -1051,6 +1078,15 @@
         "aisle":  "meat/chicken",
         "verdict":  "ALLOW",
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
+        "id":  "cookies",
+        "store":  "Family Fare",
+        "product":  "Crav\u0027n Flavor Cookies, Chocolate Chip, Candy Gems 12.4 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/cookies",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "cooking-spray",
@@ -1118,7 +1154,7 @@
     {
         "id":  "cottage-cheese",
         "store":  "Family Fare",
-        "product":  "Our Family Cottage Cheese, Large Curd, 4% Milkfat Minimum 24 Oz",
+        "product":  "Our Family Cottage Cheese, Small Curd, 4% Milkfat Minimum 24 Oz",
         "dept":  "dairy",
         "aisle":  "dairy/cheese",
         "verdict":  "ALLOW",
@@ -1132,6 +1168,15 @@
         "aisle":  "health_beauty/grooming_hygiene",
         "verdict":  "ALLOW",
         "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027personal\u0027"
+    },
+    {
+        "id":  "crackers",
+        "store":  "Family Fare",
+        "product":  "Our Family Saltine Original Crackers 16 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/crackers",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "cranberry-juice",
@@ -1307,7 +1352,7 @@
     {
         "id":  "disinfecting-wipes",
         "store":  "Family Fare",
-        "product":  "Clorox 3 In 1 Crisp Lemon Disinfecting Wipes 75 Ea",
+        "product":  "Clorox Grapefruit \u0026 Orange Blossom Disinfecting Wipes 75 Ea",
         "dept":  "household",
         "aisle":  "household/cleaners_air_fresheners",
         "verdict":  "ALLOW",
@@ -1559,7 +1604,7 @@
     {
         "id":  "breakfast-sandwiches",
         "store":  "Family Fare",
-        "product":  "Jimmy Dean Biscuit Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen, 8 Ct",
+        "product":  "Jimmy Dean Croissant Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen 8 Ct",
         "dept":  "freezer",
         "aisle":  "freezer/frozen_meals_more",
         "verdict":  "ALLOW",
@@ -1764,6 +1809,15 @@
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
+        "id":  "graham-crackers",
+        "store":  "Family Fare",
+        "product":  "Crav\u0027n Flavor Graham Crackers, Chocolate, 3 Inner Packs 14.4 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/crackers",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
+    },
+    {
         "id":  "granola",
         "store":  "Family Fare",
         "product":  "Our Family Granola, Vanilla Almond 12 Oz",
@@ -1793,7 +1847,7 @@
     {
         "id":  "grape-juice",
         "store":  "Family Fare",
-        "product":  "Our Family White Grape Juice 64 Fl Oz",
+        "product":  "Our Family Grape Juice 64 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/fruit_vegetable_beverages",
         "verdict":  "ALLOW",
@@ -2025,6 +2079,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
+        "id":  "hummus",
+        "store":  "Family Fare",
+        "product":  "Fresh \u0026 Finest By Our Family Roasted Red Pepper Hummus 10 Oz",
+        "dept":  "deli",
+        "aisle":  "deli/party_trays_dips",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027deli\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
         "id":  "ice-cream",
         "store":  "Family Fare",
         "product":  "Vanilla Ice Cream Our Family",
@@ -2216,7 +2279,7 @@
     {
         "id":  "lemonade",
         "store":  "Family Fare",
-        "product":  "Minute Maid Strawberry Lemonade Carton 59 Fl Oz",
+        "product":  "Minute Maid Lemonade 59 Oz",
         "dept":  "beverages",
         "aisle":  "beverages/fruit_vegetable_beverages",
         "verdict":  "ALLOW",
@@ -2266,6 +2329,15 @@
         "aisle":  "fresh_fruits_vegetables/tropical_fruits",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
+    },
+    {
+        "id":  "marshmallows",
+        "store":  "Family Fare",
+        "product":  "Our Family Marshmallows, Mini 16 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "mayonnaise",
@@ -2338,6 +2410,15 @@
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
+        "id":  "mixed-nuts",
+        "store":  "Family Fare",
+        "product":  "Our Family Mixed Nuts 10.3 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
         "id":  "mouthwash",
@@ -2441,11 +2522,11 @@
     {
         "id":  "oranges",
         "store":  "Family Fare",
-        "product":  "Our Family Orange Navel California",
-        "dept":  "fresh_fruits_vegetables",
-        "aisle":  "fresh_fruits_vegetables/citrus_fruits",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
+        "product":  "Simply Orange Oj Medium Pulp",
+        "dept":  "beverages",
+        "aisle":  "beverages/fruit_vegetable_beverages",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027beverages\u0027; category \u0027fruit\u0027 allows only: fresh_fruits_vegetables"
     },
     {
         "id":  "dried-oregano",
@@ -2574,6 +2655,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
+        "id":  "peanuts",
+        "store":  "Family Fare",
+        "product":  "Our Family Peanuts, Unsalted, Dry Roasted 16 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
+    },
+    {
         "id":  "pepperoni",
         "store":  "Family Fare",
         "product":  "Armour Family Pack Pepperoni Slices 12 Oz",
@@ -2603,7 +2693,7 @@
     {
         "id":  "pickles",
         "store":  "Family Fare",
-        "product":  "Our Family Spears Kosher Dill Pickles 24 Fl Oz",
+        "product":  "Our Family Spears Polish Dill Pickles 24 Fl Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -2765,7 +2855,7 @@
     {
         "id":  "pudding-cups",
         "store":  "Family Fare",
-        "product":  "Our Family Pudding Cups, Chocolate 4 Ea",
+        "product":  "Our Family Pudding Cups, Tapioca 4 Ea",
         "dept":  "pantry",
         "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",
@@ -2788,6 +2878,15 @@
         "aisle":  "fresh_fruits_vegetables/fresh_prepared_fruits_vegetables",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "raisins",
+        "store":  "Family Fare",
+        "product":  "Our Family Seedless Raisins 20 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
         "id":  "ramen",
@@ -3071,7 +3170,7 @@
     {
         "id":  "shampoo",
         "store":  "Family Fare",
-        "product":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
+        "product":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/grooming_hygiene",
         "verdict":  "ALLOW",
@@ -3098,7 +3197,7 @@
     {
         "id":  "shredded-cheese",
         "store":  "Family Fare",
-        "product":  "Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz",
+        "product":  "Our Family Natural Finely Cut Mexican Shredded Cheese 32 Oz",
         "dept":  "deli",
         "aisle":  "deli/cheese",
         "verdict":  "ALLOW",
@@ -3188,7 +3287,7 @@
     {
         "id":  "sparkling-water",
         "store":  "Family Fare",
-        "product":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
+        "product":  "Sparkling Ice Zero Sugar Fruit Punch Sparkling Water 17 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/soda_other_carbonated_beverages",
         "verdict":  "ALLOW",
@@ -3206,7 +3305,7 @@
     {
         "id":  "sports-drinks",
         "store":  "Family Fare",
-        "product":  "Gatorade Thirst Quencher, Zero Sugar, Orange 28 Fl Oz",
+        "product":  "Gatorade Lemon Lime Thirst Quencher 28 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/sport_energy",
         "verdict":  "ALLOW",
@@ -3386,7 +3485,7 @@
     {
         "id":  "toaster-pastries",
         "store":  "Family Fare",
-        "product":  "Our Family Toaster Pastries, Strawberry, Frosted 12 Ea",
+        "product":  "Our Family Toaster Pastries, Brown Sugar Cinnamon, Frosted 12 Ea",
         "dept":  "pantry",
         "aisle":  "pantry/breakfast",
         "verdict":  "ALLOW",
@@ -3566,16 +3665,16 @@
     {
         "id":  "whipped-cream",
         "store":  "Family Fare",
-        "product":  "Our Family Original Whipped Topping 8 Oz",
-        "dept":  "freezer",
-        "aisle":  "freezer/sweet_stuff",
+        "product":  "Our Family Reduced Fat Whipped Topping 8 Oz",
+        "dept":  "dairy",
+        "aisle":  "dairy/whipped_toppings_whipping_creams",
         "verdict":  "ALLOW",
-        "reason":  "\u0027freezer\u0027 is a reviewed exception department for \u0027whipped-cream\u0027"
+        "reason":  "\u0027dairy\u0027 is a reviewed exception department for \u0027whipped-cream\u0027"
     },
     {
         "id":  "white-onion",
         "store":  "Family Fare",
-        "product":  "White Onions",
+        "product":  "Fresh White Onions",
         "dept":  "fresh_fruits_vegetables",
         "aisle":  "fresh_fruits_vegetables/onions",
         "verdict":  "ALLOW",
@@ -3674,7 +3773,7 @@
     {
         "id":  "yogurt",
         "store":  "Family Fare",
-        "product":  "Yoplait Low Fat Strawberry Yogurt 6 Oz",
+        "product":  "Yoplait Low Fat Harvest Peach Yogurt 6 Oz",
         "dept":  "dairy",
         "aisle":  "dairy/yogurt",
         "verdict":  "ALLOW",
