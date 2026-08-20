@@ -1,0 +1,100 @@
+{
+  "_comment": [
+    "DECLARED STATE of the Cloudflare estate. Written 2026-08-20 after an R2 lifecycle",
+    "misconfiguration billed $9.00/month for four days before anyone looked.",
+    "",
+    "This file is the answer to 'what is supposed to be deployed'. ops\\audit-cloudflare-estate.ps1",
+    "reads it and compares against live. Nothing else in this repo referenced these buckets, this",
+    "database, or these workers at all before today - they were created 2026-08-09/10 by the deleted",
+    "V3 platform estate and have been changing costs silently ever since.",
+    "",
+    "READ docs\\RUNTIME-MAP.md BEFORE DELETING ANYTHING HERE. It says the tc-grocery-v3 worker is",
+    "'no longer in any serving path'. That is WRONG and measured wrong on 2026-08-20: tc-grocery-v3",
+    "took 480 requests in five days, more than smp-feed, and all 542 live recipe cards hydrate their",
+    "prices from a route it serves. The V3 code was deleted from the repo; the V3 runtime was not."
+  ],
+  "accountId": "bdf84c0d4146b198e8a14a59d08701ed",
+  "policy": {
+    "infrequentAccess": "FORBIDDEN",
+    "infrequentAccessWhy": [
+      "R2 operations are billed per WHOLE MILLION and are not prorated, and the Infrequent Access",
+      "class has no free tier. One single lifecycle transition anywhere in the account therefore buys",
+      "a full $9.00 Class A block. On 2026-08-19, 499 transitions cost $9.00 - a rate of $0.018 per",
+      "operation against a $0.000009 list rate.",
+      "",
+      "The saving it buys is $0.005/GB-month. At the estate's ~42GB that is about $0.06 a month, and",
+      "moving out of Standard also forfeits the 10GB Standard free tier. Break-even is roughly 1.8 TB.",
+      "",
+      "Do not add a storageClassTransition to any bucket below unless IA holds more than 1.8 TB.",
+      "Partial cleanup is worthless: it is one $9.00 block per cycle regardless of volume, so leaving",
+      "even ONE IA transition anywhere in the account costs the full $9.00."
+    ]
+  },
+  "buckets": {
+    "tc-grocery-v3-evidence": {
+      "boundTo": ["tc-grocery-v3:EVIDENCE"],
+      "rules": [
+        { "id": "Archive batch evidence then expire", "enabled": true, "prefix": "batches/", "deleteAfterDays": 400 },
+        { "id": "Archive release payloads then expire", "enabled": true, "prefix": "releases/", "deleteAfterDays": 400 },
+        { "id": "Bound encrypted capture journal recovery points", "enabled": true, "prefix": "capture-journals/", "deleteAfterDays": 45 },
+        { "id": "Default Multipart Abort Rule", "enabled": true, "prefix": null, "abortMultipartAfterDays": 7 }
+      ]
+    },
+    "tc-grocery-v3-archive": {
+      "boundTo": ["tc-grocery-v3:ARCHIVE"],
+      "retentionGap": [
+        "release-nodes/schema=1/, observations/schema=1/ and release-manifests/schema=1/ have NO expiry",
+        "and grow forever. 60,034 objects / 4.2GB on 2026-08-20, currently creeping ~5 objects/day.",
+        "Three rules that used to cover these prefixes did nothing but move them to Infrequent Access -",
+        "no delete transition at all - so they were removed outright on 2026-08-20 rather than stripped",
+        "(the API rejects a rule with no transition left). Removing them changed no data and no retention,",
+        "because they never deleted anything. Deciding an actual TTL here is still an open question."
+      ],
+      "rules": [
+        { "id": "Default Multipart Abort Rule", "enabled": true, "prefix": null, "abortMultipartAfterDays": 7 }
+      ]
+    },
+    "tc-grocery-v3-backups": {
+      "boundTo": ["tc-grocery-v3:BACKUPS"],
+      "rules": [
+        { "id": "Archive weekly D1 exports then expire", "enabled": true, "prefix": "d1/", "deleteAfterDays": 90 },
+        { "id": "Default Multipart Abort Rule", "enabled": true, "prefix": null, "abortMultipartAfterDays": 7 },
+        { "id": "Expire hot recovery checkpoints", "enabled": true, "prefix": "d1-checkpoints/", "deleteAfterDays": 90 },
+        { "id": "Expire restore staging fallback", "enabled": true, "prefix": "restore-", "deleteAfterDays": 7 },
+        { "id": "Retain recovery manifests", "enabled": true, "prefix": "lake-manifests/", "deleteAfterDays": 365 }
+      ]
+    },
+    "tc-grocery-v3-backups-secondary": {
+      "boundTo": ["tc-grocery-v3:BACKUPS_SECONDARY"],
+      "rules": [
+        { "id": "Archive independent backup replica then expire", "enabled": true, "prefix": null, "deleteAfterDays": 400 },
+        { "id": "Default Multipart Abort Rule", "enabled": true, "prefix": null, "abortMultipartAfterDays": 7 }
+      ]
+    }
+  },
+  "d1": {
+    "tc-grocery-v3": {
+      "databaseId": "a567ae53-a582-498f-b4c2-2d8843096b75",
+      "boundTo": ["tc-grocery-v3:DB"],
+      "includedStorageGB": 5,
+      "warnAtGB": 4.5,
+      "observed": [
+        "4.03GB on 2026-08-20 and FALLING ~0.075GB/day since the 2026-08-15 peak of 4.38GB.",
+        "Storage is the binding D1 constraint, not rows: 81% of the 5GB included, overage $0.75/GB-month.",
+        "The 2026-08-12..14 backfill took it 0.88GB -> 4.36GB in two days. A second backfill of that size",
+        "would cross 5GB. Rows written run ~257k/day steady (~8M/month of 50M included) but that same",
+        "backfill wrote 14M rows in ONE day, so four such days would also cross the row allowance",
+        "at $1.00/million. Rows read (~8.5M/day of 25B) are not a constraint and never have been."
+      ]
+    }
+  },
+  "workers": {
+    "tc-grocery-v3": {
+      "status": "LIVE - busiest worker on the account despite RUNTIME-MAP.md calling it dead",
+      "requestsAug16to20": 480,
+      "bindings": ["r2:EVIDENCE", "r2:ARCHIVE", "r2:BACKUPS", "r2:BACKUPS_SECONDARY", "d1:DB"]
+    },
+    "smp-feed": { "status": "LIVE - the repo's own worker (wrangler.jsonc)", "requestsAug16to20": 383 },
+    "tc-grocery-public": { "status": "near-idle", "requestsAug16to20": 10 }
+  }
+}

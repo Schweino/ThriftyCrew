@@ -10,8 +10,21 @@ untracking work runs against.
 `ThriftyCrew V3 *` scheduled tasks. It never became authoritative — the PowerShell estate below ran the live
 site the entire time — and its own exit gates stood at 1/14 parity days and 0/4 Chrome cycles when V4 was
 started on top of it. If you find a reference to it, that reference is stale. The code is recoverable with
-`git checkout pre-platform-removal -- platform/`; the Cloudflare workers `tc-grocery-v3` and
-`tc-grocery-public` may still be deployed but are no longer in any serving path.
+`git checkout pre-platform-removal -- platform/`.
+
+**Its RUNTIME was not deleted, and the sentence that used to sit here — that the Cloudflare workers
+`tc-grocery-v3` and `tc-grocery-public` "are no longer in any serving path" — was wrong.** Measured
+2026-08-20: `tc-grocery-v3` took **480 requests in five days, more than `smp-feed`**, making it the
+busiest worker on the account, and all 542 live recipe cards hydrate their prices from a route it
+serves (see the open `/api/v2/recipe-feed/` item in `grocery\triage-queue.json`). It is bound to a
+4GB D1 database and all four `tc-grocery-v3-*` R2 buckets. **Do not delete any of it as dead V3
+debris.** Deleting the code from this repo did not delete the estate; it only made it invisible.
+
+That invisibility had a price. Nine R2 lifecycle rules nobody could see moved objects into
+Infrequent Access, which bills per whole million operations with no free tier — 499 transitions on
+2026-08-19 bought a full $9.00 block, about 95% of the Cloudflare bill, to save roughly six cents of
+storage. The rules were removed 2026-08-20. The estate is now declared in `ops\cloudflare-estate.json`
+and checked on every push by `ops\audit-cloudflare-estate.ps1`.
 
 ## The four runtimes
 
