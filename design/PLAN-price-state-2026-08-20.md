@@ -1,6 +1,6 @@
 # PLAN — Price state: the graph stops hoarding events and starts keeping answers
 
-**Status: PROPOSED 2026-08-20. Brad's design, amended in two places (§3), awaiting his ratification of the amendments before implementation.**
+**Status: RATIFIED 2026-08-20 (Brad) — both §3 amendments accepted. Implementation begins at Phase A once the 2026-08-20 contested adjudication run completes and its verdicts are banked.**
 
 ---
 
