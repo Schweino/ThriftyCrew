@@ -1,4 +1,4 @@
-[
+﻿[
     {
         "id":  "chicken-breast",
         "label":  "Boneless Skinless Chicken Breast",
@@ -144,7 +144,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -274,7 +279,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -414,7 +424,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ],
         "relax_global":  [
                              "\\bmeal\\b"
@@ -542,7 +557,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -680,7 +700,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -808,7 +833,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -1835,7 +1865,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -2046,7 +2082,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -2245,7 +2287,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -2438,7 +2486,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -2625,7 +2679,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -2821,7 +2881,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -3011,7 +3077,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -3209,7 +3281,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -3418,7 +3496,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -3620,7 +3704,8 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -3825,7 +3910,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -4402,7 +4493,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -4540,7 +4636,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -4662,7 +4763,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -4797,7 +4903,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -4940,7 +5051,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -5077,7 +5193,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -5220,7 +5341,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -5630,7 +5756,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -5836,7 +5968,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -6045,7 +6183,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -6247,7 +6391,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -6437,7 +6587,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ],
         "relax_global":  [
                              "wrapped"
@@ -6631,7 +6787,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -6830,7 +6992,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -7018,7 +7186,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -7204,7 +7378,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -7395,7 +7575,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -7603,7 +7789,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -7798,7 +7990,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -8002,7 +8200,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -8191,7 +8395,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -12568,7 +12778,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -12789,7 +13005,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -12975,7 +13197,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -13160,7 +13388,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -13333,7 +13567,12 @@
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
                         "\\bgarden\\s+seeds?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -13535,7 +13774,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -13732,7 +13977,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -13921,7 +14172,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -14147,7 +14404,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -14332,7 +14595,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -14519,7 +14788,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -14715,7 +14990,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -14900,7 +15181,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -15090,7 +15377,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -15280,7 +15573,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -15464,7 +15763,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -15650,7 +15955,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -15834,7 +16145,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -16017,7 +16334,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -16215,7 +16538,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -16404,7 +16733,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -16601,7 +16936,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -16782,7 +17123,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -16968,7 +17315,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -17161,7 +17514,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -17393,7 +17752,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -17521,7 +17885,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -17652,7 +18021,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -17774,7 +18148,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -17904,7 +18283,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -18036,7 +18420,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -18164,7 +18553,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ],
         "relax_global":  [
                              "\\bbeer\\b"
@@ -18298,7 +18692,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -18429,7 +18828,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -18565,7 +18969,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ],
         "relax_global":  [
                              "seasoned"
@@ -18698,7 +19107,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -18831,7 +19245,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -18967,7 +19386,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -19103,7 +19527,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -19232,7 +19661,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -19365,7 +19799,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -19490,7 +19929,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -38592,10 +39036,10 @@
                         "pickled\\s+jalape[n\\u00f1]os?",
                         "jalape[n\\u00f1]o\\s+(?:slices|rings|nacho)",
                         "(?:nacho|tamed|sliced|diced)\\s+(?:hot\\s+)?jalape[n\\u00f1]os?",
-                        "jalape[nÃƒÆ’Ã‚Â±]o\\s+peppers,?\\s+pickled",
-                        "jalape[nÃƒÆ’Ã‚Â±ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±]{1,2}o\\s+peppers,?\\s+pickled",
-                        "jalape[nÃ±]o\\s+peppers,?\\s+pickled",
-                        "jalape[nÃ±ÃƒÂ±]{1,2}o\\s+peppers,?\\s+pickled"
+                        "jalape[nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±]o\\s+peppers,?\\s+pickled",
+                        "jalape[nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±]{1,2}o\\s+peppers,?\\s+pickled",
+                        "jalape[nÃƒÂ±]o\\s+peppers,?\\s+pickled",
+                        "jalape[nÃƒÂ±ÃƒÆ’Ã‚Â±]{1,2}o\\s+peppers,?\\s+pickled"
                     ],
         "exclude":  [
                         "green\\s+chil",
@@ -40390,7 +40834,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -43215,7 +43665,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -43397,7 +43853,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -43586,7 +44048,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -43774,7 +44242,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -43943,7 +44417,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -44399,7 +44878,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ],
         "relax_global":  [
                              "\\bwater\\b"
@@ -44691,7 +45175,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -44932,7 +45422,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -45729,7 +46224,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -45967,7 +46468,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -46563,7 +47069,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -46754,7 +47266,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ],
         "pint_oz":  10
     },
@@ -47100,7 +47618,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -47244,7 +47767,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -47529,7 +48057,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -47724,7 +48258,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -47924,7 +48464,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -48117,7 +48663,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -48320,7 +48872,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -48507,7 +49065,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -48719,7 +49283,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -48906,7 +49476,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -49094,7 +49670,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -49275,7 +49857,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -49457,7 +50045,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -49648,7 +50242,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -49831,7 +50431,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -50014,7 +50620,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -50197,7 +50809,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -50404,7 +51022,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -50600,7 +51224,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -50783,7 +51413,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -50964,7 +51600,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -51145,7 +51787,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -51326,7 +51974,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -51514,7 +52168,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -51697,7 +52357,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -51880,7 +52546,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -52060,7 +52732,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -52244,7 +52922,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -52429,7 +53113,13 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -52610,7 +53300,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -52792,7 +53488,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -52981,7 +53683,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -53164,7 +53872,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -53352,7 +54066,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -53542,7 +54262,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -53727,7 +54453,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ],
         "relax_global":  [
                              "\\bkit\\b"
@@ -53918,7 +54650,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -54111,7 +54849,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -54297,7 +55041,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -54479,7 +55229,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -54665,7 +55421,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -54844,7 +55606,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -55032,7 +55800,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -55213,7 +55987,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -55398,7 +56178,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -55587,7 +56373,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -55773,7 +56565,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -55942,7 +56740,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -56130,7 +56934,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -56318,7 +57128,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -56507,7 +57323,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -56690,7 +57512,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -56920,7 +57748,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ],
         "band_min":  0.04,
         "band_max":  0.65
@@ -57125,7 +57958,7 @@
         "exclude":  [
                         "\\b(canned|can|dry|dried|dehydrated|soup|chili|baked|refried)\\b",
                         "\\b(edamame|fava|green beans?|black-?eyed peas?|mixed vegetables?)\\b",
-                        "\\b(meal|entree|entrÃƒÆ’Ã‚Â©e|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b",
+                        "\\b(meal|entree|entrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©e|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -57204,7 +58037,7 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(meal|entree|entrÃ©e|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b"
+                        "\\b(meal|entree|entrÃƒÂ©e|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b"
                     ],
         "band_min":  0.04,
         "band_max":  0.41
@@ -57333,7 +58166,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ],
         "band_min":  0.14,
         "band_max":  22.44
@@ -57458,7 +58296,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ],
         "band_min":  0.05,
         "band_max":  14.97
@@ -57641,7 +58484,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ],
         "band_min":  1.39,
         "band_max":  14.95
@@ -58219,15 +59068,15 @@
     },
     {
         "id":  "creme-fraiche",
-        "label":  "CrÃƒÆ’Ã‚Â¨me fraÃƒÆ’Ã‚Â®che",
+        "label":  "CrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¨me fraÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â®che",
         "unit":  "oz",
         "include":  [
-                        "\\bcr[eÃƒÆ’Ã‚Â¨]me\\s+fra[iÃƒÆ’Ã‚Â®]che\\b",
-                        "\\bcr[eÃ¨]me\\s+fra[iÃ®]che\\b"
+                        "\\bcr[eÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¨]me\\s+fra[iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â®]che\\b",
+                        "\\bcr[eÃƒÂ¨]me\\s+fra[iÃƒÂ®]che\\b"
                     ],
         "exclude":  [
                         "\\bsour\\s+cream\\b",
-                        "\\bcrema\\s+(?:mexicana|salvadore[nÃƒÆ’Ã‚Â±]a|agria)\\b",
+                        "\\bcrema\\s+(?:mexicana|salvadore[nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±]a|agria)\\b",
                         "\\btable\\s+cream\\b",
                         "\\bcream\\s+cheese\\b",
                         "\\bmascarpone\\b",
@@ -58315,7 +59164,7 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\bcrema\\s+(?:mexicana|salvadore[nÃ±]a|agria)\\b"
+                        "\\bcrema\\s+(?:mexicana|salvadore[nÃƒÂ±]a|agria)\\b"
                     ],
         "band_min":  0.3,
         "band_max":  2.63
@@ -58331,9 +59180,9 @@
         "exclude":  [
                         "\\b(vinegar|cooking\\s+wine|wine\\s+sauce|marinade|broth|stock|seasoning|extract)\\b",
                         "\\b(non[- ]?alcoholic|alcohol[- ]?removed|zero[- ]?proof|0%\\s*abv)\\b",
-                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃƒÆ’Ã‚Â©]|pink|white\\s+zinfandel)\\b",
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©]|pink|white\\s+zinfandel)\\b",
                         "\\b(cocktail|mimosa|sangria|hard\\s+seltzer|beer|cider|margarita|ready[- ]to[- ]drink|rtd)\\b",
-                        "\\b(frozen|entr[eÃƒÆ’Ã‚Â©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(frozen|entr[eÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -58424,8 +59273,8 @@
                         "\\bbag\\s*in\\s*box\\b",
                         "vinaigrette",
                         "\\bdressing\\b",
-                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃ©]|pink|white\\s+zinfandel)\\b",
-                        "\\b(frozen|entr[eÃ©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃƒÂ©]|pink|white\\s+zinfandel)\\b",
+                        "\\b(frozen|entr[eÃƒÂ©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
                     ],
         "band_min":  0.08,
         "band_max":  1.0,
@@ -58460,9 +59309,9 @@
                         "eau\\s+de\\s+vie",
                         "\\b(vinegar|cooking\\s+wine|wine\\s+sauce|marinade|broth|stock|seasoning|extract)\\b",
                         "\\b(non[- ]?alcoholic|alcohol[- ]?removed|zero[- ]?proof|0%\\s*abv)\\b",
-                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃƒÆ’Ã‚Â©]|pink|white\\s+zinfandel)\\b",
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©]|pink|white\\s+zinfandel)\\b",
                         "\\b(cocktail|mimosa|sangria|hard\\s+seltzer|beer|cider|margarita|ready[- ]to[- ]drink|rtd)\\b",
-                        "\\b(frozen|entr[eÃƒÆ’Ã‚Â©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(frozen|entr[eÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -58541,8 +59390,8 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃ©]|pink|white\\s+zinfandel)\\b",
-                        "\\b(frozen|entr[eÃ©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃƒÂ©]|pink|white\\s+zinfandel)\\b",
+                        "\\b(frozen|entr[eÃƒÂ©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
                     ]
     },
     {
@@ -58931,7 +59780,7 @@
                         "\\bsofrito\\b"
                     ],
         "exclude":  [
-                        "\\b(saz[oÃƒÆ’Ã‚Â³]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b",
+                        "\\b(saz[oÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b",
                         "\\b(beverage|drink|juice|cocktail|supplement|capsule|tablet|powder)\\b",
                         "\\b(prepared meal|meal kit|ready-to-eat|restaurant)\\b",
                         "beech\\s*nut",
@@ -59012,7 +59861,7 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(saz[oÃ³]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b"
+                        "\\b(saz[oÃƒÂ³]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b"
                     ],
         "band_min":  0.08,
         "band_max":  0.75
@@ -59311,8 +60160,8 @@
                     ],
         "exclude":  [
                         "\\b(sauce|sauced|seasoning|spice|powder|flakes?|pickled|canned|jarred|dried|dehydrated)\\b",
-                        "\\b(stuffed|pizza|meal|entrÃƒÆ’Ã‚Â©e|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
-                        "\\b(roasted red pepper|green chiles?|jalape[nÃƒÆ’Ã‚Â±]os?|banana peppers?|poblanos?|serranos?)\\b",
+                        "\\b(stuffed|pizza|meal|entrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©e|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
+                        "\\b(roasted red pepper|green chiles?|jalape[nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±]os?|banana peppers?|poblanos?|serranos?)\\b",
                         "\\b(broccoli|cauliflower|carrots?|corn|peas?|potatoes?|mushrooms?|celery)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
@@ -59392,8 +60241,8 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(stuffed|pizza|meal|entrÃ©e|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
-                        "\\b(roasted red pepper|green chiles?|jalape[nÃ±]os?|banana peppers?|poblanos?|serranos?)\\b"
+                        "\\b(stuffed|pizza|meal|entrÃƒÂ©e|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
+                        "\\b(roasted red pepper|green chiles?|jalape[nÃƒÂ±]os?|banana peppers?|poblanos?|serranos?)\\b"
                     ],
         "band_min":  0.04,
         "band_max":  0.4
@@ -59496,8 +60345,8 @@
         "label":  "Veggie Sausages",
         "unit":  "oz",
         "include":  [
-                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b",
-                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027â€™]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027â€™]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b"
+                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b",
+                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027Ã¢â‚¬â„¢]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027Ã¢â‚¬â„¢]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b"
                     ],
         "exclude":  [
                         "\\b(?:hot dog|veggie dog|smart dog|ground|crumble|meatball|burger|bacon|nugget|wing|pizza|burrito|bowl|sandwich|pasta sauce|supplement|protein powder|shake|beverage|drink)\\b",
@@ -60276,7 +61125,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ],
         "band_min":  0.15,
         "band_max":  1.32
@@ -60553,7 +61407,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ],
         "band_min":  0.42,
         "band_max":  5.97
@@ -60758,9 +61618,9 @@
         "exclude":  [
                         "\\b(?:vinegar|cooking\\s+wine|wine\\s+sauce|marinade|broth|stock|seasoning|extract)\\b",
                         "\\b(?:non[- ]?alcoholic|alcohol[- ]?removed|zero[- ]?proof|0%\\s*abv)\\b",
-                        "\\b(?:sparkling|champagne|prosecco|brut|ros[eÃƒÆ’Ã‚Â©]|pink|white\\s+zinfandel|white\\s+wine)\\b",
+                        "\\b(?:sparkling|champagne|prosecco|brut|ros[eÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©]|pink|white\\s+zinfandel|white\\s+wine)\\b",
                         "\\b(?:sangria|sweet\\s+red|dessert\\s+wine|port|sherry|marsala|cocktail|margarita|ready[- ]to[- ]drink|rtd)\\b",
-                        "\\b(?:frozen|entr[eÃƒÆ’Ã‚Â©]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(?:frozen|entr[eÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -60849,8 +61709,8 @@
                         "\\bmustard\\b",
                         "vinaigrette",
                         "\\bdressing\\b",
-                        "\\b(?:sparkling|champagne|prosecco|brut|ros[eÃ©]|pink|white\\s+zinfandel|white\\s+wine)\\b",
-                        "\\b(?:frozen|entr[eÃ©]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
+                        "\\b(?:sparkling|champagne|prosecco|brut|ros[eÃƒÂ©]|pink|white\\s+zinfandel|white\\s+wine)\\b",
+                        "\\b(?:frozen|entr[eÃƒÂ©]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
                     ],
         "band_min":  0.08,
         "band_max":  1.0,
@@ -62185,7 +63045,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -62373,7 +63238,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {
@@ -62684,7 +63555,12 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail"
                     ]
     },
     {
@@ -63067,7 +63943,7 @@
                     ],
         "exclude":  [
                         "\\b(?:sauce|marinade|dip|salsa|seasoning)\\b",
-                        "\\b(?:vinaigrette|avocado|jalape[nÃƒÆ’Ã‚Â±]o|ranch)\\b",
+                        "\\b(?:vinaigrette|avocado|jalape[nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±]o|ranch)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -63146,7 +64022,7 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(?:vinaigrette|avocado|jalape[nÃ±]o|ranch)\\b"
+                        "\\b(?:vinaigrette|avocado|jalape[nÃƒÂ±]o|ranch)\\b"
                     ]
     },
     {
@@ -63521,7 +64397,13 @@
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
                         "\\btoppings?\\b",
-                        "\\bsiggi\u0027?s?\\b"
+                        "\\bsiggi\u0027?s?\\b",
+                        "\\blemonade\\b",
+                        "\\bmargaritas?\\b",
+                        "\\bdaiquiris?\\b",
+                        "\\bmixers?\\b",
+                        "juice\\s+cocktail",
+                        "\\bsyrups?\\b"
                     ]
     },
     {

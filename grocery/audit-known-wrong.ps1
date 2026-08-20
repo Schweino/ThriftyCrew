@@ -376,6 +376,57 @@ if ($blocked.Count -gt 0) {
   Say ("KNOWN-WRONG AUDIT FAILED: " + $blocked.Count + " adjudicated-wrong product(s) are priced on the board. Board NOT safe to publish. Each one was already ruled wrong with evidence in known-wrong.json - fix the commodity rule (or reverse the ruling with add-known-wrong.ps1 -Reverse and say why).")
   exit 2
 }
+
+# ---------------------------------------------------------------------------
+# The SECOND place a product identity lives: product-urls.json.
+#
+# A ruling used to be enforced against priced board cells only, so a product
+# adjudicated wrong could still be the curated "See item" link the page shows.
+# On 2026-08-20 TEN of them were: strawberries linked to Great Value Strawberry
+# SYRUP, pineapple to Pineapple Teriyaki BRATS, lime-juice to a MAYONNAISE,
+# sea-salt to POPCORN. The board price was right and the link sent the shopper
+# to a different product entirely - a defect the board-cell check cannot see,
+# because the curated file is a private second copy of the same identity.
+# Same lesson as the everyday-price window: one ruling, every copy.
+# ---------------------------------------------------------------------------
+$purlPath = Join-Path $root 'product-urls.json'
+if (Test-Path $purlPath) {
+  $badLinks = New-Object System.Collections.Generic.List[object]
+  try {
+    $purlDoc = Get-Content $purlPath -Raw | ConvertFrom-Json
+    $purlItems = if ($purlDoc.PSObject.Properties.Name -contains 'items') { $purlDoc.items } else { $purlDoc }
+    foreach ($cProp in $purlItems.PSObject.Properties) {
+      $cid = $cProp.Name
+      if ($cProp.Value -isnot [psobject]) { continue }
+      foreach ($sProp in $cProp.Value.PSObject.Properties) {
+        $entryVal = $sProp.Value
+        if ($entryVal -isnot [psobject] -or -not $entryVal.PSObject.Properties.Name.Contains('name')) { continue }
+        $nk = KwNorm ([string]$entryVal.name)
+        if (-not $nk) { continue }
+        foreach ($e in $entries) {
+          if ((KwNorm ([string]$e.commodity)) -ne (KwNorm $cid)) { continue }
+          $eNames = @($e.names); if (-not $eNames -or $eNames.Count -eq 0) { continue }
+          foreach ($en in $eNames) {
+            if ((KwNorm ([string]$en)) -eq $nk) {
+              $badLinks.Add([pscustomobject]@{ commodity = $cid; store = $sProp.Name; name = [string]$entryVal.name })
+              break
+            }
+          }
+        }
+      }
+    }
+  } catch {
+    Say ("KNOWN-WRONG AUDIT FAILED: product-urls.json will not parse (" + $_.Exception.Message + "); the curated-link half of this gate cannot be trusted.")
+    exit 2
+  }
+  if ($badLinks.Count -gt 0) {
+    foreach ($b in $badLinks) {
+      Say ("  BLOCKED-LINK  [" + $b.store + "] " + $b.commodity + " curated link points at '" + $b.name + "', which is adjudicated wrong")
+    }
+    Say ("KNOWN-WRONG AUDIT FAILED: " + $badLinks.Count + " curated product-urls.json link(s) point at an adjudicated-wrong product. The price may be right while the 'See item' link sends the shopper to a different product. Remove the entry (or reverse the ruling and say why).")
+    exit 2
+  }
+}
 Say ("KNOWN-WRONG AUDIT OK: 0 of " + $entries.Count + " adjudicated-wrong products are priced on the board (" + $evaluable + " entries evaluable against " + $cellsNamed + " named priced cells; " + $review.Count + " near-match(es) for review).")
 exit 0
 

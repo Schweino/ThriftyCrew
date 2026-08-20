@@ -2242,6 +2242,51 @@
                         "ruled_on":  "2026-08-20",
                         "ruled_by":  "escalation-review 2026-08-20",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|Walmart|great-value-strawberry-syrup-22-oz",
+                        "commodity":  "strawberries",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Strawberry Syrup, 22 oz"
+                                  ],
+                        "product_id":  "10315246",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Strawberry SYRUP, not fresh strawberries. Held the strawberries CHEAPEST crown on the live board at $0.1259/oz on 2026-08-20, beating the real cheapest (Aldi Strawberries Package 1 lb, $0.1431/oz) and telling shoppers the cheapest strawberries in Omaha are a bottle of syrup. Matched on the loose include pattern \"strawberr\"; the commodity carries ~180 exclude patterns but none for syrup.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-produce-audit-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|Fareway|master-of-mixes-handcrafted-daiquiri-margarita-m",
+                        "commodity":  "strawberries",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Master of Mixes Handcrafted Daiquiri Margarita Mixer Strawberry, 33.8 fl oz"
+                                  ],
+                        "product_id":  "97404",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A cocktail mixer, not fresh strawberries. Priced the Fareway strawberries cell at $0.1417/oz on 2026-08-20, above the real cheapest but still occupying a store column that should show actual strawberries. Same root cause as the Walmart syrup: include pattern \"strawberr\" with no beverage/syrup exclusions.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-produce-audit-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "rhubarb|Walmart|oregon-fruit-rhubarb-slices-in-extra-light-syrup",
+                        "commodity":  "rhubarb",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Oregon Fruit Rhubarb Slices in Extra Light Syrup"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "CANNED rhubarb packed in syrup, priced against the FRESH Rhubarb commodity at $5.4466/unit on 2026-08-20. A canned fruit in syrup is a different purchase from fresh produce and normalises on a different basis.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-produce-audit-2026-08-20",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

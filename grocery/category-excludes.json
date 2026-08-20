@@ -4,6 +4,11 @@
     "beverage": [
       "beverage",
       "\\bdrink\\b",
+      "\\blemonade\\b",
+      "\\bmargaritas?\\b",
+      "\\bdaiquiris?\\b",
+      "\\bmixers?\\b",
+      "juice\\s+cocktail",
       "electrolyte",
       "electrolit",
       "\\bsoda\\b",
@@ -176,6 +181,7 @@
     ],
     "preserve_carrier": [
       "\\bjams?\\b",
+      "\\bsyrups?\\b",
       "\\bjell(y|ies)\\b",
       "\\bpreserves?\\b",
       "\\bconserves?\\b",
