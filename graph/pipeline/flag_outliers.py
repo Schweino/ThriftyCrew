@@ -64,7 +64,7 @@ def row_unit_price(row, basis: str | None) -> float | None:
     and both reconciled to the commodity's declared basis or refused."""
     pu, unit = reconcile_unit(row["unit_price"], row["unit"], basis)
     if pu is None:
-        d, du = per_unit(row["price"], row["size_text"], basis)
+        d, du = per_unit(row["price"], row["size_text"], basis, row["product_name"])
         pu, unit = reconcile_unit(d, du, basis)
     return pu
 

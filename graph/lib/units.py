@@ -86,14 +86,25 @@ def parse_size(text: str | None) -> Size | None:
     if not t:
         return None
 
-    # multipack: "12 x 8 oz" / "3 ct., 29 oz."
+    # Multipacks. Two spellings, and missing the second one was a large,
+    # systematic parity defect: "72 pk 0.67 oz" was read as 0.67 oz, so a
+    # 72-count cheese pack priced at exactly 72x the true per-ounce rate. The
+    # give-away was that the graph/board ratio equalled the pack count on every
+    # such row (72.01, 47.99, 24.00, 11.99).
+    #
+    # Only treat "N pk/ct" as a MULTIPLIER when another quantity follows it. A
+    # bare "6 ct" is a count basis in its own right, not a multiplier, and
+    # conflating them would break every count-priced commodity.
     mult = 1
-    mx = re.search(rf"{_NUM}\s*(?:x|×)\s*(?={_NUM})", t)
-    if mx:
-        v = _num(mx.group(1))
-        if v and v >= 1:
-            mult = int(v)
-            t = t[mx.end():]
+    for pat in (rf"{_NUM}\s*(?:x|×)\s*(?={_NUM})",
+                rf"{_NUM}\s*(?:pk|pack|ct|count)\.?,?\s+(?={_NUM})"):
+        mx = re.search(pat, t)
+        if mx:
+            v = _num(mx.group(1))
+            if v and v >= 1:
+                mult = int(v)
+                t = t[mx.end():]
+            break
 
     # a range ("4.7-6.1 lb") -> take the midpoint, which is what a shopper pays on average
     rng = re.search(rf"{_NUM}\s*[-–]\s*{_NUM}\s*([a-z.\s]+)", t)
@@ -263,8 +274,33 @@ def coerce_price(v) -> float | None:
     return float(m.group()) if m else None
 
 
+_NAME_COUNT = re.compile(r"\((\d+)\s*(?:ct|count|pk|pack)\.?\)", re.IGNORECASE)
+
+
+def count_from_name(name: str | None) -> int | None:
+    """Pull a pack count out of a PRODUCT NAME, e.g. 'Fresh Sweet Corn (4 Ct)'.
+
+    Some lanes put the count in the name and leave the size field as a bare
+    "1 pk", which reads as a single unit and prices a 4-ear corn pack at 4x the
+    true per-ear rate. Only a parenthesised count is accepted: a bare number in
+    a name is far too often a flavour, a percentage, or a size already counted
+    ("2% Milk", "100 Calorie"), and guessing there would invent prices.
+    """
+    if not name:
+        return None
+    m = _NAME_COUNT.search(str(name))
+    if not m:
+        return None
+    try:
+        v = int(m.group(1))
+    except ValueError:
+        return None
+    return v if 1 < v <= 144 else None
+
+
 def per_unit(price, size_text: str | None,
-             commodity_unit: str | None = None) -> tuple[float | None, str | None]:
+             commodity_unit: str | None = None,
+             product_name: str | None = None) -> tuple[float | None, str | None]:
     """Price per canonical unit.
 
     Returns (value, unit) or (None, None) when the size cannot be parsed
@@ -276,6 +312,15 @@ def per_unit(price, size_text: str | None,
     if price is None:
         return None, None
     s = parse_size(size_text)
+
+    # A size of "1 pk"/"1 ct" carries no information; if the NAME states the
+    # count, use it. Applied only when the parsed size is a single unit, so a
+    # real size is never overridden by a number scraped out of a name.
+    if s is not None and s.basis == "count" and s.total <= 1:
+        n = count_from_name(product_name)
+        if n:
+            s = Size(float(n), "ct", "count", 1)
+
     if not s or s.total <= 0:
         # 'each'-based commodities have no size to parse; the sticker IS the unit price.
         if (commodity_unit or "").lower() in ("each", "ea", "ct"):
@@ -287,4 +332,11 @@ def per_unit(price, size_text: str | None,
     if s.basis == "weight" and (commodity_unit or "").lower() in ("lb", "lbs", "pound"):
         pu *= 16.0
         unit = "lb"
+    elif s.unit == "oz" and (commodity_unit or "").lower() in ("floz", "fl oz"):
+        # Stores routinely write a bare "oz" for a liquid ("Sparkling Ice ...
+        # 17 oz"). When the COMMODITY's declared basis is fluid ounces, a bare
+        # ounce reading is that store's shorthand for fl oz, not a weight. This
+        # is scoped to that case only -- weight and volume ounces are otherwise
+        # never interchangeable, which is why reconcile_unit refuses the pair.
+        unit = "floz"
     return round(pu, 4), unit

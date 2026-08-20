@@ -85,7 +85,7 @@ def graph_board(db) -> dict[str, dict[str, float]]:
     # it, a "221 fl oz" hand-soap pump prices the cell at $0.009.
     rows = db.conn.execute(
         """SELECT p.commodity_id, p.store_id, p.price, p.size_text,
-                  p.unit_price, p.unit, p.source_file, n.properties_json
+                  p.unit_price, p.unit, p.source_file, p.product_name, n.properties_json
            FROM price_observations p
            LEFT JOIN nodes n ON n.id = p.commodity_id
            WHERE p.match_status IN ('include_hit','llm_confirmed')
@@ -132,7 +132,8 @@ def graph_board(db) -> dict[str, dict[str, float]]:
             # is not necessarily the basis the board compares on. Using it
             # unreconciled is what made milk look like $0.027 against a $3.49
             # board cell. Refuse rather than guess.
-            derived, derived_unit = per_unit(r["price"], r["size_text"], basis)
+            derived, derived_unit = per_unit(r["price"], r["size_text"], basis,
+                                            r["product_name"])
             pu, unit = reconcile_unit(derived, derived_unit, basis)
         if pu is None:
             unparsed += 1
