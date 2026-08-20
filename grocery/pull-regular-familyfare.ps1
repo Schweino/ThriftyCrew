@@ -537,6 +537,10 @@ try {
   . (Join-Path $root 'capture-policy.ps1')
   $plan = Get-CapturePlan -Store 'Family Fare' -Today $todayS
   $script:TermBudget = [int]$plan.TermBudget
+  # Emit the worklist too, so this store's slice is recorded the same way the walled
+  # stores' is. One shape for all seven means an audit can ask "what was this store
+  # asked for on that day?" and get an answer regardless of how it was fetched.
+  try { $null = Write-CaptureWorklist -Store 'Family Fare' -Today $todayS -OutDir $OutDir } catch { }
   Write-Output ("Family Fare: capture-policy budget = " + $script:TermBudget + " term(s) today (" + $plan.RotationTerms + " rotation + " + $plan.SaleExpiries.Count + " sale expiry; quarter " + $plan.QuarterDays + "d)")
 } catch {
   # A policy that cannot load must NOT silently become "unlimited" - that is the state

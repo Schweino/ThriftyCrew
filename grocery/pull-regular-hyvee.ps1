@@ -232,6 +232,37 @@ if ($addWork -gt 0 -or $addDup -gt 0) {
 }
 if ($Quick) { $work = @($work | Where-Object { $_.pid -gt 0 } | Select-Object -First 10) }
 
+# CAPTURE POLICY BUDGET (2026-08-20). Hy-Vee re-verified 1010 products a run at
+# baseline and the coverage ledger has it REGRESSED to 356 - a lane pulling as hard
+# as it can until something upstream pushes back. Family Fare showed what that
+# eventually costs: Freshop now answers its search with HTTP 400 / error_code 429.
+# The budget is total terms / 90 days, decided in capture-policy.ps1 for all seven
+# stores so no lane can quietly set its own.
+# Products, not terms, is the right unit HERE - this lane re-verifies by product id
+# rather than by search term, so the per-request cost is per product.
+if (-not $Quick) {
+  try {
+    . (Join-Path $root 'capture-policy.ps1')
+    $hvPlan = Get-CapturePlan -Store 'Hy-Vee'
+    $hvBudget = [int]$hvPlan.TermBudget
+    if ($hvBudget -gt 0 -and @($work).Count -gt $hvBudget) {
+      # Rotate rather than always taking the head of the list, or the tail is never
+      # re-verified and ages out silently - the exact shape of the Sam's 19-day file.
+      $hvCur = 0
+      $hvCurFile = Join-Path $OutDir 'hyvee-rotation-cursor.json'
+      if (Test-Path $hvCurFile) { try { $hvCur = [int](ConvertFrom-Json ([IO.File]::ReadAllText($hvCurFile))).next_index } catch { } }
+      $hvAll = @($work); $hvN = $hvAll.Count
+      $hvPick = New-Object System.Collections.Generic.List[object]
+      for ($z = 0; $z -lt $hvBudget; $z++) { [void]$hvPick.Add($hvAll[(($hvCur + $z) % $hvN)]) }
+      $work = $hvPick.ToArray()
+      Set-Content -Path $hvCurFile -Encoding UTF8 -Value (@{ next_index = (($hvCur + $hvBudget) % $hvN); updated = (Get-Date).ToString('s'); note = 'capture-policy rotation cursor for the Hy-Vee product re-verify lane' } | ConvertTo-Json)
+      Write-Output ("Hy-Vee: capture-policy budget = $hvBudget product(s) today (rotation $hvCur/$hvN; quarter $($hvPlan.QuarterDays)d)")
+    }
+  } catch {
+    Write-Warning ("Hy-Vee: capture-policy did not load (" + $_.Exception.Message + ") - running unbudgeted this pass")
+  }
+}
+
 $refreshable = @($work | Where-Object { $_.pid -gt 0 }).Count
 Write-Output ("Hy-Vee: " + @($work).Count + " products (" + $refreshable + " refreshable via GraphQL; " + (@($work).Count - $refreshable) + " have no link so their price cannot be re-verified)")
 
