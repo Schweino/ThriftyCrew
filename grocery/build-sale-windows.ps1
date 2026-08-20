@@ -111,8 +111,34 @@ foreach ($c in $board.comparison) {
     $win = $adWin[$store]
     if (-not $win) { continue }                               # a sale with no known store window (EDLP store) - skip
     $wf = $win.from; $wt = $win.to
-    $flash = ParseFlashWindow ((([string]$s.ad) + ' ' + ([string]$s.note))) $wf $wt
+
+    # A MONTHLY-AD PRICE DOES NOT EXPIRE ON THE WEEKLY BOUNDARY.
+    # ad-schedule.json only knows each store's WEEKLY cycle, so every sale used to
+    # inherit it. Fareway also runs a MONTHLY ad, and its rows carry
+    # source_ad = "monthly ad p4 ..." - those prices run the whole month. Stamping
+    # the weekly window on them declared three live Fareway sales expired on
+    # 2026-08-15 when the monthly ad ran to 08-29 (found 2026-08-20:
+    # alfredo-sauce, fruit-cups, fruit-snacks). The board was right; this file was
+    # wrong, and capture-policy then queued six re-prices that were not needed -
+    # spending the very request budget the policy exists to protect.
+    # The monthly window comes from the store's own ad manifest.
     $note = ''
+    if ([string]$s.source_ad -match '(?i)monthly') {
+      $mw = $null
+      $mf = Get-ChildItem (Join-Path $OutDir ((($store -replace "[^A-Za-z]", '').ToLower()) + '\*-ad-manifest-*.json')) -ErrorAction SilentlyContinue |
+            Sort-Object Name -Descending | Select-Object -First 1
+      if ($mf) {
+        try {
+          $mdoc = Get-Content $mf.FullName -Raw | ConvertFrom-Json
+          if ($mdoc.monthly -and $mdoc.monthly.from -and $mdoc.monthly.to) {
+            $mw = @{ from = [datetime]$mdoc.monthly.from; to = [datetime]$mdoc.monthly.to }
+          }
+        } catch { }
+      }
+      if ($mw) { $wf = $mw.from; $wt = $mw.to }
+      else { $note = 'monthly-ad price but no monthly window found; weekly window used (expiry may be early)' }
+    }
+    $flash = ParseFlashWindow ((([string]$s.ad) + ' ' + ([string]$s.note))) $wf $wt
     if ($flash -and $flash.suppress) { $note = 'undated short sale (window unknown, using weekly)'; $flash = $null }
     $sFrom = if ($flash) { $flash.from } else { $wf }
     $sTo   = if ($flash) { $flash.to }   else { $wt }
