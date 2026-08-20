@@ -4,6 +4,18 @@
   yet" on the board (the 2026-07-13 ground-pork bug). coverage-gaps CANNOT see this - it only scans the raw pull,
   and a dropped item was never pulled.
 
+  THE RATE LIMIT HAS A SECOND SHAPE, found 2026-08-20. Freshop also refuses a search with HTTP 400 whose BODY
+  is {"error_code":429} - a 429 wearing a 400. Nothing that switches on the HTTP status can see it, and an
+  empty `catch {}` cannot tell it from a malformed request, so this guard now reads the body and counts those
+  probes separately. It does not change the verdict (a throttled probe still proved nothing and the run is
+  still BLIND) - it changes the REPORT, from "Freshop answered none of them" to "Freshop rate-limited N of
+  them", which is the difference between chasing a dead integration and cutting the request budget.
+
+  DO NOT "fix" this by renaming the q= parameter. search=, query=, keyword=, term=, text= and name= all return
+  HTTP 200 - and all return the store's default product list regardless of what you asked for ("Yellow Bananas"
+  for q=eggs). Swapping the parameter would turn a guard that is honestly blind into one that confidently
+  confirms matches that do not exist, which is strictly worse.
+
   How: read the latest family-fare-regular file's `empty_terms` (terms that returned nothing even after the pull's
   recovery passes), and re-probe each ONE more time against the Freshop API (token-less). If the API returns a real
   matching, priced product, FF genuinely carries it and the pull dropped it -> a confirmed victim. Small, targeted
@@ -13,7 +25,7 @@
   passes are the primary defense). -Alert emails once per NEW victim-set.
 #>
 param([switch]$Alert, [switch]$SelfTest, [string]$OutDir = "")
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
@@ -42,6 +54,7 @@ function Emit-Coverage([int]$elig, [int]$exam, [string]$why) {
   } catch { }
 }
 $probed = 0
+$throttled = 0
 $ff = $null; $doc = $null; $emptyTerms = @()
 # THE SELF-TEST MUST NOT DEPEND ON PULL STATE. Both early exits below sit ABOVE the fixture block, so a
 # -SelfTest run on any day with no FF file - or with no empty terms, which is the HEALTHY state - printed
@@ -161,7 +174,26 @@ foreach ($term in $emptyTerms) {
   # Freshop refuses every call would otherwise record 464 examined and look identical to a healthy run,
   # when in truth it examined nothing and proved nothing. Counted this way it records 0 of 464, which the
   # ledger reports as BLIND.
-  try { $r = Invoke-RestMethod -Uri ("$b/products?app_key=$ak&store_id=$sid&q=" + [uri]::EscapeDataString([string]$term) + "&limit=15&fields=name,price,base_price") -Headers $UA -TimeoutSec 25; $items = @($r.items); $probed++ } catch {}
+  # WHY THE CATCH READS THE BODY. Freshop signals a rate limit as HTTP 400 with
+  # {"error_code":429} in the BODY - not as a 429 status. Verified 2026-08-20
+  # against the live API from the site's own origin. So a bare `catch {}` cannot
+  # tell "we were throttled" from "the request was malformed", and the BLIND line
+  # this guard prints says only that nothing was probed, never WHY. Counting the
+  # throttle separately is what turns "Freshop answered none of them" into an
+  # actionable "Freshop rate-limited N of them". It does NOT change any verdict:
+  # $probed still only counts real responses, so a throttled run is still BLIND.
+  try {
+    $r = Invoke-RestMethod -Uri ("$b/products?app_key=$ak&store_id=$sid&q=" + [uri]::EscapeDataString([string]$term) + "&limit=15&fields=name,price,base_price") -Headers $UA -TimeoutSec 25
+    $items = @($r.items); $probed++
+  } catch {
+    # $_.ErrorDetails.Message, NOT the response stream. Windows PowerShell 5.1
+    # has already consumed the error body by the time the catch runs, so
+    # GetResponseStream() reads EMPTY - measured here, and it silently produced
+    # a throttle count of 0 on a run where every single probe was rate-limited.
+    # 5.1 puts the body in ErrorDetails.Message instead.
+    $body = [string]$_.ErrorDetails.Message
+    if ($body -match '"error_code"\s*:\s*429' -or $_.Exception.Response.StatusCode.value__ -eq 429) { $throttled++ }
+  }
   Start-Sleep -Milliseconds 400
   $good = @($items | Where-Object { $_.name -and (Match-Local $c ([string]$_.name)) -and ($_.base_price -or $_.price) })
   if ($good.Count) { $victims.Add([pscustomobject]@{ term = [string]$term; commodity = $termToId[[string]$term]; product = [string]$good[0].name }) }
@@ -189,7 +221,14 @@ Set-Content (Join-Path $OutDir 'ff-carry-report.json') -Value ($report | Convert
 # SAY WHAT WAS SUPPRESSED. A filter that removes 15 of 24 findings and reports only the survivors is one
 # bad predicate away from reporting nothing at all, and 'OK, 0 victims' reads identically whether the pull
 # is healthy or the filter has eaten every real case. The counts make that distinguishable from the log.
-$probeStat = ' (' + $probed + ' of ' + $emptyTerms.Count + ' empty term(s) re-probed; ' + $suppressed + ' skipped because this pull already prices that commodity)'
+$probeStat = ' (' + $probed + ' of ' + $emptyTerms.Count + ' empty term(s) re-probed; ' + $suppressed + ' skipped because this pull already prices that commodity'
+# NAME THE THROTTLE. "Freshop answered none of them" is true but not actionable - it reads like the API is
+# broken. Freshop signals a rate limit as HTTP 400 with {"error_code":429} in the BODY (verified against the
+# live API 2026-08-20), so saying HOW MANY probes were rate-limited is the difference between "investigate a
+# dead integration" and "we are asking for more than our budget allows". It changes no verdict: a throttled
+# run still probed nothing and is still BLIND.
+if ($throttled -gt 0) { $probeStat += '; ' + $throttled + ' RATE-LIMITED by Freshop (HTTP 400 carrying error_code 429)' }
+$probeStat += ')'
 # ZERO PROBES IS NOT A CLEAN BILL OF HEALTH. Every Freshop call is wrapped in an empty catch, so a throttled
 # window returns 0 items for all of them, $victims stays empty, and this used to print the same confident
 # "OK no term is missing" as a run that actually checked 123 terms. Observed live 2026-07-31 (throttled by

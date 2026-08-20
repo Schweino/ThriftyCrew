@@ -363,7 +363,21 @@ function Get-FreshopItems($term) {
       # difference between diagnosing this in one run and guessing at it for a fortnight.
       $sc = 0
       try { if ($_.Exception.Response) { $sc = [int]$_.Exception.Response.StatusCode } } catch {}
-      $key = if ($sc) { "HTTP $sc" } else { 'no response/timeout' }
+      # READ THE BODY, NOT JUST THE STATUS - this is the missing half of the note above.
+      # That note concluded "HTTP 400, not 429" and therefore "not ip-blocked", because it
+      # only ever saw the status line. Measured 2026-08-20: the 400's BODY is
+      # {"error_code":429}. It IS a rate limit; Freshop just dresses it as a 400, which is
+      # precisely why three weeks of looking at status codes pointed away from the answer.
+      # Windows PowerShell 5.1 has already consumed the error stream by the time this catch
+      # runs, so GetResponseStream() reads empty - the body is in ErrorDetails.Message.
+      $ec = ''
+      try {
+        $eb = [string]$_.ErrorDetails.Message
+        if ($eb -match '"error_code"\s*:\s*(\d+)') { $ec = $Matches[1] }
+      } catch {}
+      $key = if ($sc -and $ec) { "HTTP $sc (error_code $ec" + $(if ($ec -eq '429') { ' = RATE LIMITED)' } else { ')' }) }
+             elseif ($sc) { "HTTP $sc" }
+             else { 'no response/timeout' }
       if (-not $script:apiStatus) { $script:apiStatus = @{} }
       $script:apiStatus[$key] = 1 + [int]$script:apiStatus[$key]
       Start-Sleep -Milliseconds 400
