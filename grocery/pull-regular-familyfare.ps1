@@ -527,7 +527,30 @@ $empty = New-Object System.Collections.Generic.List[string]
 $ABORT_EMPTY_RUN = 60      # sustained refusal after we had been getting data
 $ABORT_COLD_START = 30     # refused from the very first term - nothing has EVER come back this run
 $streak = 0; $emptyRun = 0; $aborted = $false; $lastSuccessRot = -1
+# TERM BUDGET (capture policy, 2026-08-20). The wall-clock cap alone let one run buy
+# 60-90 terms and the estate ran TWO passes a day, which is what put us over Freshop's
+# window and got the search endpoint answering 400/error_code 429. The budget is now
+# derived, not guessed: total terms / 90 days, plus one extra for each sale reverting
+# today. See capture-policy.ps1 - the single place that decides this for every store.
+$script:TermBudget = [int]::MaxValue
+try {
+  . (Join-Path $root 'capture-policy.ps1')
+  $plan = Get-CapturePlan -Store 'Family Fare' -Today $todayS
+  $script:TermBudget = [int]$plan.TermBudget
+  Write-Output ("Family Fare: capture-policy budget = " + $script:TermBudget + " term(s) today (" + $plan.RotationTerms + " rotation + " + $plan.SaleExpiries.Count + " sale expiry; quarter " + $plan.QuarterDays + "d)")
+} catch {
+  # A policy that cannot load must NOT silently become "unlimited" - that is the state
+  # we are fixing. Fall back to the quarter rate rather than the old free-for-all.
+  $script:TermBudget = 7
+  Write-Warning ("Family Fare: capture-policy.ps1 did not load (" + $_.Exception.Message + ") - falling back to a conservative 7-term budget")
+}
+$bought = 0
 for ($i = 0; $i -lt $termList.Count; $i++) {
+  if ($bought -ge $script:TermBudget) {
+    for ($j = $i; $j -lt $termList.Count; $j++) { $empty.Add($termList[$j]); $termDeferred[$termList[$j]] = 'term budget reached before request' }
+    Write-Output ("Family Fare: term budget reached (" + $bought + " bought) - stopping the main pass. This is the policy working, not a failure.")
+    break
+  }
   if (Over-Cap) { for ($j = $i; $j -lt $termList.Count; $j++) { $empty.Add($termList[$j]); $termDeferred[$termList[$j]] = 'wall-clock cap before request' }; Write-Output 'Family Fare: wall-clock cap hit in main pass; remaining terms deferred to recovery'; break }
   $term = $termList[$i]
   $termAttempted[$term] = $true
@@ -545,7 +568,7 @@ for ($i = 0; $i -lt $termList.Count; $i++) {
       break
     }
     if ($streak -ge 15) { Write-Output ("Family Fare: throttle streak ($streak empties) - cooling down 45s..."); Start-Sleep -Seconds 45; $streak = 0 }
-  } else { $streak = 0; $emptyRun = 0; $lastSuccessRot = $i; $termSuccess[$term] = $todayS; Ingest-Items $items $term }
+  } else { $streak = 0; $emptyRun = 0; $lastSuccessRot = $i; $termSuccess[$term] = $todayS; $bought++; Ingest-Items $items $term }
 }
 # Advance the cursor past the contiguous stretch the budget actually bought. Only main-pass successes move it:
 # recovery-pass hits are re-tries of earlier empties and would drag the cursor backwards. No successes at all
@@ -648,7 +671,12 @@ if ($prevMax -gt 100 -and @($deals).Count -lt ($prevMax * 0.5)) {
 # So: today's price ALWAYS wins for a product this run returned; a product it did NOT return is carried
 # forward at its last verified price, stamped with the date that price was captured, and dropped once that
 # capture goes stale. Absence from one throttled response is not evidence of absence from the store.
-$MaxCarryDays = 14
+# MUST track capture-policy's quarter. At a 90-day rotation a term is only revisited
+# every ~85 days, so a 14-day carry would expire ~85% of the catalog before its turn
+# came round again - the rotation and the expiry are two halves of one decision and
+# cannot be set independently. Read from the policy so they can never drift apart.
+$MaxCarryDays = 90
+try { . (Join-Path $root 'capture-policy.ps1'); $MaxCarryDays = Get-PolicyMaxCarryDays } catch { }
 $carried = 0; $expired = 0
 # EXPIRY CLASSIFICATION (2026-08-02). Counted here, not inferred later. See Get-FfExpiryClass for what the
 # three classes mean and why only one of them is allowed to page. The ledger has already been merged with
