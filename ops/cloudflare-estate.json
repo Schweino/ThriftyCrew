@@ -33,6 +33,18 @@
   "buckets": {
     "tc-grocery-v3-evidence": {
       "boundTo": ["tc-grocery-v3:EVIDENCE"],
+      "residualInfrequentAccess": [
+        "2026-08-20: 830 objects / 14.6GB are ALREADY in Infrequent Access under capture-journals/,",
+        "left behind by the transitions that fired 08-19 and 08-20 before the rules were removed.",
+        "Removing a lifecycle rule does not move them back, and moving them back would itself buy",
+        "another $9.00 Class A block, so they are being left to expire. The capture-journals/ 45-day",
+        "delete clears them ~2026-09-26, past the 30-day IA minimum storage duration, so there is no",
+        "early-deletion penalty. Cost until then is ~$0.15/month of IA storage.",
+        "",
+        "NOTE ON MEASURING THIS: r2StorageAdaptiveGroups must be queried WITH the storageClass",
+        "dimension. Without it the datetime-granularity rollup reports Standard only (36.2GB) and",
+        "hides the IA half entirely - which is how the 14.6GB was first mistaken for a rounding error."
+      ],
       "rules": [
         { "id": "Archive batch evidence then expire", "enabled": true, "prefix": "batches/", "deleteAfterDays": 400 },
         { "id": "Archive release payloads then expire", "enabled": true, "prefix": "releases/", "deleteAfterDays": 400 },
@@ -79,7 +91,7 @@
       "includedStorageGB": 5,
       "warnAtGB": 4.5,
       "observed": [
-        "4.03GB on 2026-08-20 and FALLING ~0.075GB/day since the 2026-08-15 peak of 4.38GB.",
+        "3.94GB on 2026-08-20 and FALLING since the 2026-08-15 peak of 4.38GB (4.17 -> 4.03 -> 3.94).",
         "Storage is the binding D1 constraint, not rows: 81% of the 5GB included, overage $0.75/GB-month.",
         "The 2026-08-12..14 backfill took it 0.88GB -> 4.36GB in two days. A second backfill of that size",
         "would cross 5GB. Rows written run ~257k/day steady (~8M/month of 50M included) but that same",
