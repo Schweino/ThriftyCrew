@@ -232,7 +232,9 @@ if ($SelfTest) {
                                 "\u003cstrong\u003eFat Free Cheddar (Kraft):\u003c/strong\u003e 1 bag (200 g)",
                                 "\u003cstrong\u003eMystery Powder:\u003c/strong\u003e 1 jar (50 g)",
                                 "\u003cstrong\u003eKidney Beans:\u003c/strong\u003e 2 cans, drained (510 g)",
-                                "\u003cstrong\u003eCheddar Cheese, Shredded (Sam\u0027s Choice):\u003c/strong\u003e 1 bag, Brad\u0027s mac \u0026 cheese blend (226 g)"
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Sam\u0027s Choice):\u003c/strong\u003e 1 bag, Brad\u0027s mac \u0026 cheese blend (226 g)",
+                                "\u003cstrong\u003eFixture Greens:\u003c/strong\u003e 2 1/4 bunches (about 18 oz) (511 g)",
+                                "\u003cstrong\u003eFixture Roast:\u003c/strong\u003e 1 bag (567 g)"
                             ],
     "scaler":  {
                    "ing":  [
@@ -244,7 +246,9 @@ if ($SelfTest) {
                                { "item": "Fat Free Cheddar",         "grams": 200, "buy": "1 bag" },
                                { "item": "Mystery Powder",           "grams": 50,  "buy": "1 jar" },
                                { "item": "Kidney Beans",             "grams": 510, "buy": "2 cans, drained" },
-                               { "item": "Cheddar Cheese, Shredded", "grams": 226, "buy": "1 bag, Brad\u0027s mac \u0026 cheese blend" }
+                               { "item": "Cheddar Cheese, Shredded", "grams": 226, "buy": "1 bag, Brad\u0027s mac \u0026 cheese blend" },
+                               { "item": "Fixture Greens",           "grams": 511, "buy": "2 1/4 bunches (about 18 oz)" },
+                               { "item": "Fixture Roast",            "grams": 567, "buy": "1 bag" }
                            ]
                }
 }
@@ -281,6 +285,14 @@ if ($SelfTest) {
     Chk 'MUST FIRE  an unweighable JAR still is not a cooking measure -> a weight' ($by['Mystery Powder'] -match '^\d.*\s(oz|g|lb)$') ($by['Mystery Powder'])
     Chk 'the ALIAS carries a sibling density (fat free cheddar -> cheddar)' ($by['Fat Free Cheddar'] -match 'cups?$') ($by['Fat Free Cheddar'])
     Chk 'a cooking qualifier survives the rewrite (", drained")' ($by['Kidney Beans'] -match 'drained') ($by['Kidney Beans'])
+    # THE BROCCOLINI FOUNDING CASE (2026-08-20), both defects in one string. 511 g labelled
+    # "2 1/4 bunches (about 18 oz)" used to repair to "1 1/4 lb (about 18 oz)": the hard >=340 g
+    # threshold picked lb, the kitchen-fraction snap made that 567 g (11% over the grams the macros
+    # and cost were computed from), and the quantity-restating parenthetical rode along as a "tail" -
+    # so the shipped line stated three amounts and two were wrong. The repair must state ONE amount,
+    # in the unit that survives friendly formatting, and drop a tail that restates the quantity.
+    Chk 'MUST FIRE  511 g labelled in bunches repairs to the ACCURATE unit, restating tail dropped' ($by['Fixture Greens'] -eq '18 oz') ($by['Fixture Greens'])
+    Chk 'CLEAN TWIN the friendly fraction survives when it IS accurate (567 g -> 1 1/4 lb)' ($by['Fixture Roast'] -eq '1 1/4 lb') ($by['Fixture Roast'])
     Chk 'the display line keeps its item, brand and gram count' (($dl[0] -eq '<strong>Soy Sauce (generic):</strong> 1/2 cup (120 g)')) ($dl[0])
     Chk 'display and buy always agree' ((@($s.scaler.ing) | Where-Object { $dl -join '|' -notmatch [regex]::Escape([string]$_.buy) }).Count -eq 0) 'a display line disagrees with its buy'
     $r2 = Invoke-CookMeasureRepair (Join-Path $T 'recipes') (Join-Path $T 'densities.json') $true
@@ -301,7 +313,7 @@ if ($SelfTest) {
     # What the splice WRITES has to be escaped the way the rest of the file is, or a label repair also
     # swaps every escape on that line for a raw character and the diff stops being about the label.
     Chk 'a rewritten label re-escapes what it writes in the same style as the rest of the file' (($by['Cheddar Cheese, Shredded'] -eq "2 cups, Brad's mac & cheese blend") -and ($rawAfter -match '2 cups, Brad\\u0027s mac \\u0026 cheese blend') -and ($rawAfter -notmatch "Brad's mac & cheese")) ($by['Cheddar Cheese, Shredded'])
-    Chk 'every file still parses and every spec still has all 9 / 1 / 1 ingredients' ((@($s.scaler.ing).Count -eq 9) -and (@($dl).Count -eq 9) -and (@($one.scaler.ing).Count -eq 1)) 'an array changed length'
+    Chk 'every file still parses and every spec still has all 11 / 1 / 1 ingredients' ((@($s.scaler.ing).Count -eq 11) -and (@($dl).Count -eq 11) -and (@($one.scaler.ing).Count -eq 1)) 'an array changed length'
 
     # ---- the SERVING SCALER must survive the labels this repair writes ----
     # Frozen cases for the scaleBuy rewrite. The old JS multiplied every number in the string, so a reader

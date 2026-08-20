@@ -169,6 +169,14 @@ function Get-CookMeasure($densItems, [string]$item, [double]$grams, [string]$old
   <# The replacement label. Returns $null when nothing honest can be produced. #>
   if ($grams -le 0) { return $null }
   $tail = Get-CmTail $oldBuy
+  # A TAIL THAT RESTATES A QUANTITY IS NOT A COOKING INSTRUCTION (2026-08-20). Get-CmTail exists to carry
+  # ", drained" and ", finely chopped" through a rewrite. "(about 18 oz)" is a second statement of the
+  # AMOUNT, and the moment the leading measure is rewritten it goes stale - agreeing by luck or
+  # contradicting outright. The founding case shipped "1 1/4 lb (about 18 oz)" for 511 g: 567 g stated in
+  # front, 510 g in the parentheses, and the display layer appended the true "(511 g)" after both - three
+  # quantities on one line, two of them wrong. Only a PURE parenthetical amount is dropped (a number and a
+  # measuring unit, nothing else), so "(from 2 lemons)" and every comma tail survive untouched.
+  if ($tail -match '(?i)^\(\s*(?:about|approx\.?|~|roughly)?\s*[\d\s/.]+\s*(?:lbs?|oz|g|kg|ml|l|cups?|tbsp|tsp|fl\s*oz)\.?\s*\)$') { $tail = '' }
   $dm = Get-CmDensity $densItems $item
   if ($dm) {
     foreach ($p in $script:CM_PREF) {
@@ -195,13 +203,25 @@ function Get-CookMeasure($densItems, [string]$item, [double]$grams, [string]$old
       return $out.Trim()
     }
   }
-  # weight fallback - always a true statement about the grams
-  $q = $null; $unit = $null
-  if ($grams -ge 340) { $q = $grams / 453.592; $unit = 'lb' }
-  elseif ($grams -ge 28) { $q = $grams / 28.3495; $unit = 'oz' }
-  else { $q = $grams; $unit = 'g' }
-  $out = ((Format-CmQty $q) + ' ' + $unit)
-  if ($tail) { $out = "$out $tail" }
+  # weight fallback - always a true statement about the grams. TRUE INCLUDES THE ROUNDING (2026-08-20):
+  # Format-CmQty snaps to friendly kitchen fractions, and a snap that is harmless at 1/4 cup can be an 11%
+  # error at 1/4 lb. The founding case: 511 g picked lb on the old hard >=340 threshold, snapped
+  # 1.127 -> "1 1/4 lb" (567 g), and told the cook to use 11% more broccolini than the macros and cost
+  # were computed from - while "18 oz" (510 g, 0.2% off) sat one unit down the ladder. So the unit is now
+  # chosen by what SURVIVES friendly formatting: largest unit first, accepted only when the formatted
+  # label round-trips within 5% of the grams (the same tolerance the macros gate holds recipes to), else
+  # the next unit down. Grams are the floor and are stated exactly, so the ladder always lands somewhere
+  # honest. The friendly fraction is kept whenever it is accurate: 567 g still reads "1 1/4 lb".
+  $out = $null
+  foreach ($cand in @(@(453.592, 'lb', 340), @(28.3495, 'oz', 28), @(1, 'g', 0))) {
+    if ($grams -lt [double]$cand[2]) { continue }
+    $q = Format-CmQty ($grams / [double]$cand[0])
+    $back = (Get-CmQty $q) * [double]$cand[0]
+    if (([math]::Abs($back - $grams) / [math]::Max(1, $grams)) -le 0.05) { $out = "$q $($cand[1])"; break }
+  }
+  if (-not $out) { $out = ('{0:0.##} g' -f $grams) }   # unreachable in practice; never return nothing
+  # Join-CmTail, same as the density path: a comma tail joins tight ("18 oz, drained", never "18 oz , drained").
+  if ($tail) { $out = Join-CmTail $out $tail }
   return $out.Trim()
 }
 
