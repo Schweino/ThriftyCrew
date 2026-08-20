@@ -103,7 +103,11 @@ CREATE TABLE IF NOT EXISTS price_observations (
     price_type    TEXT,                    -- 'everyday' | 'sale' | 'ad'
     ad_cycle_id   TEXT,
     provenance_id TEXT NOT NULL REFERENCES provenance(id),
-    confidence    REAL NOT NULL DEFAULT 1.0,
+    -- NULL = no adjudicator has asserted a confidence. A deterministic layer
+    -- that MATCHED something writes 1.0; "no pattern matched" is an absence of
+    -- knowledge and must stay NULL — attaching certainty to "don't know" is how
+    -- a downstream reader comes to trust a row nobody ever vouched for.
+    confidence    REAL,
     observed_at   TEXT NOT NULL,
     source_file   TEXT,
     -- Adjudication. A capture file holds every candidate row a search term
@@ -113,7 +117,15 @@ CREATE TABLE IF NOT EXISTS price_observations (
     -- resolution, and why. Only 'include_hit' rows may price a board cell.
     match_status  TEXT NOT NULL DEFAULT 'unadjudicated',
         -- unadjudicated | include_hit | no_include_hit | excluded
-        -- | category_excluded | known_wrong | llm_confirmed | llm_rejected | escalated
+        -- | category_excluded | known_wrong | llm_confirmed | llm_rejected
+        -- | llm_match_unverified | escalated
+        --
+        -- llm_match_unverified: the LOCAL model said MATCH with confidence, but
+        -- the local model may not mint a price (Phase 0 bench decomposition:
+        -- 3 of its 8 gold NO_MATCH cases came back as MATCH at conf 0.95-0.98,
+        -- so confidence does not discriminate its false matches). The row waits
+        -- in the escalation queue; only the Claude reviewer may upgrade it to
+        -- llm_confirmed. 'llm_confirmed' therefore means REVIEWER-confirmed.
     match_reason  TEXT,
     -- Basis plausibility, orthogonal to match_status. A row can be a CORRECT
     -- match and still carry an unusable per-unit price, because the source size
@@ -208,34 +220,68 @@ CREATE INDEX IF NOT EXISTS ix_eval_at ON eval_runs(run_at DESC);
 -- ---------------------------------------------------------------------------
 -- Convenience views
 -- ---------------------------------------------------------------------------
+-- Views are DROPped before CREATE so that editing this file actually changes an
+-- existing database on its next open. CREATE VIEW IF NOT EXISTS silently keeps
+-- the old definition forever, which is how a view bug outlives its fix.
+
 -- Newest SURVIVING observation per (commodity, store) — the graph's answer to
 -- "the board". Restricted to rows that passed resolution: a candidate row that
 -- failed its include regex, hit an exclude, or matched a known-wrong ruling must
 -- never be able to price a cell. That restriction is the whole point.
-CREATE VIEW IF NOT EXISTS v_current_cell AS
-SELECT p.*
-FROM price_observations p
-JOIN (
-    SELECT commodity_id, store_id, MAX(observed_at) AS mx
-    FROM price_observations
-    WHERE match_status IN ('include_hit', 'llm_confirmed')
-      AND basis_flag IS NULL
-    GROUP BY commodity_id, store_id
-) t ON t.commodity_id = p.commodity_id
-   AND t.store_id     = p.store_id
-   AND t.mx           = p.observed_at
-WHERE p.match_status IN ('include_hit', 'llm_confirmed')
-  AND p.basis_flag IS NULL;
+--
+-- Exactly ONE row per cell, by construction. observed_at is a DATE, so every
+-- candidate a sweep captured the same day ties on "newest" — a plain
+-- MAX(observed_at) join returned 3.9 rows per cell (207 for deodorant at
+-- family-fare) and left the reader to collapse them arbitrarily. Ties are
+-- broken deterministically: cheapest per-unit first (board semantics), rows
+-- with no unit price last, then price, then id so replays are stable.
+DROP VIEW IF EXISTS v_current_cell;
+CREATE VIEW v_current_cell AS
+SELECT * FROM (
+    SELECT p.*,
+           ROW_NUMBER() OVER (
+               PARTITION BY p.commodity_id, p.store_id
+               ORDER BY p.observed_at DESC,
+                        (p.unit_price IS NULL) ASC,
+                        p.unit_price ASC,
+                        p.price ASC,
+                        p.id ASC
+           ) AS rn
+    FROM price_observations p
+    WHERE p.match_status IN ('include_hit', 'llm_confirmed')
+      AND p.basis_flag IS NULL
+)
+WHERE rn = 1;
 
--- Cheapest surviving per-unit candidate per cell — the "crown" the board renders.
-CREATE VIEW IF NOT EXISTS v_cell_crown AS
-SELECT commodity_id, store_id, MIN(price) AS best_price, COUNT(*) AS n_candidates
-FROM price_observations
-WHERE match_status IN ('include_hit', 'llm_confirmed') AND price IS NOT NULL
-GROUP BY commodity_id, store_id;
+-- Cheapest surviving PER-UNIT candidate per cell — the "crown" the board
+-- renders. MIN(price) was the modelling error this view is named to prevent:
+-- a small dear package beats a large cheap one on shelf price while being the
+-- worse buy (sampled: 114 of 200 multi-candidate cells crowned the wrong row).
+-- basis_flag IS NULL is mandatory — an implausible per-unit row is barred from
+-- crowning exactly as it is barred from v_current_cell.
+DROP VIEW IF EXISTS v_cell_crown;
+CREATE VIEW v_cell_crown AS
+SELECT * FROM (
+    SELECT p.commodity_id, p.store_id, p.id AS observation_id, p.product_name,
+           p.price, p.unit_price, p.unit, p.observed_at,
+           COUNT(*) OVER (PARTITION BY p.commodity_id, p.store_id) AS n_candidates,
+           ROW_NUMBER() OVER (
+               PARTITION BY p.commodity_id, p.store_id
+               ORDER BY (p.unit_price IS NULL) ASC,
+                        p.unit_price ASC,
+                        p.price ASC,
+                        p.id ASC
+           ) AS rn
+    FROM price_observations p
+    WHERE p.match_status IN ('include_hit', 'llm_confirmed')
+      AND p.basis_flag IS NULL
+      AND p.price IS NOT NULL
+)
+WHERE rn = 1;
 
 -- Full provenance join for the "why does this price appear?" question.
-CREATE VIEW IF NOT EXISTS v_price_why AS
+DROP VIEW IF EXISTS v_price_why;
+CREATE VIEW v_price_why AS
 SELECT p.id, p.commodity_id, p.store_id, p.product_name, p.price, p.unit_price,
        p.unit, p.is_sale, p.observed_at,
        v.source_document, v.extraction_method, v.model, v.timestamp AS extracted_at

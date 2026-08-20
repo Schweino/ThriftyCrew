@@ -113,6 +113,9 @@ def check_no_unresolved_pricing(db, **_) -> tuple[bool, dict]:
     """Only adjudicated rows may price a cell.
 
     Guards against a regression where 'unadjudicated' leaks into the board view.
+    The whitelist is include_hit + llm_confirmed ONLY, and llm_confirmed means
+    REVIEWER-confirmed: 'llm_match_unverified' (a confident local-model MATCH)
+    is deliberately outside it — the local model may never mint a price.
     """
     n = db.conn.execute(
         """SELECT COUNT(*) FROM price_observations

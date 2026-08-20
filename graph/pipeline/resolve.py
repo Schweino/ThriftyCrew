@@ -16,6 +16,23 @@ Layers 1-4 are the "blocking" the plan mandates before expensive LLM resolution.
 On real data they settle the overwhelming majority of rows, which is what keeps
 Claude/local volume low and the false-merge rate down.
 
+THE LOCAL MODEL MAY ONLY REJECT, NEVER MINT A PRICE (decision 2026-08-20).
+Layer 5's authority is asymmetric by design:
+
+    NO_MATCH, confident  -> llm_rejected          (prunes the candidate)
+    MATCH,    confident  -> llm_match_unverified  (CANNOT price; queued for the
+                                                   Claude reviewer to confirm)
+    UNSURE / low conf    -> escalated
+
+Why: decomposing the Phase 0 bench (seed 20260820) showed the headline 0.900
+agreement was 22/22 on gold MATCH cases but only 5/8 on gold NO_MATCH — and all
+three errors were FALSE MATCHES at confidence 0.95-0.98, far above any sane
+escalation threshold. Confidence does not discriminate this model's false
+matches, so no threshold makes a local MATCH safe to publish. A confident local
+MATCH is still valuable: it feeds the escalation queue (Claude confirms cheaply)
+and the learning loop (a confirmed match becomes an include-alias proposal, and
+the deterministic layers take over from there).
+
 BIAS: prefer a MISSED merge over a FALSE merge. A missed merge costs one empty
 board cell; a false merge publishes a wrong price, which is the failure mode this
 whole estate is built to prevent (see the 2026-07-14 blueberries incident and the
@@ -33,10 +50,15 @@ from dataclasses import dataclass
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "lib"))
 
 from graphdb import GraphDB                        # noqa: E402
-from ids import norm_text                          # noqa: E402
+from ids import hash_obj, norm_text                # noqa: E402
 from llm import LocalLLM, should_escalate          # noqa: E402
 
 PROMPTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "prompts")
+
+# Version of build_resolve_prompt + the layer-5 authority policy. Recorded on
+# every per-judgment decision-log row so a verdict can be attributed to the
+# exact prompt and policy that produced it. Bump on ANY change to either.
+PROMPT_VERSION = "resolve-v3-reject-only"
 
 # Grammar schema for the adjudication call — guarantees parseable output.
 RESOLVE_SCHEMA = {
@@ -56,11 +78,18 @@ RESOLVE_SCHEMA = {
 class Verdict:
     status: str          # matches price_observations.match_status
     reason: str
-    confidence: float = 1.0
+    # None = nobody asserted a confidence. Deterministic layers that MATCHED
+    # assert 1.0; "no pattern matched" is an absence of knowledge, not certainty.
+    confidence: float | None = None
     escalate: bool = False
+    # Set only by the LLM layer: everything the decision log needs to attribute
+    # this judgment to a model + prompt version (model, hashes, verdict, tokens).
+    meta: dict | None = None
 
     @property
     def is_match(self) -> bool:
+        # llm_match_unverified is deliberately NOT here: a local-model MATCH is
+        # a lead for the reviewer, not a match the board may act on.
         return self.status in ("include_hit", "llm_confirmed")
 
 
@@ -234,10 +263,14 @@ class Resolver:
 
         # 5. genuinely contested: no positive hit, but nothing rules it out.
         if not (allow_llm and self.use_llm and self.llm):
-            return self._tally(Verdict("no_include_hit", "no include pattern matched", 1.0))
+            # No confidence asserted: "no pattern matched" is not knowledge.
+            return self._tally(Verdict("no_include_hit", "no include pattern matched"))
         return self._tally(self._llm_adjudicate(cc, name))
 
     def _llm_adjudicate(self, cc: CompiledCommodity, name: str) -> Verdict:
+        """Layer 5. The local model may REJECT a candidate or flag a probable
+        match for review; it may never mint a price. See the module docstring
+        for the bench decomposition that forced this asymmetry."""
         system, user = build_resolve_prompt(cc, name)
         try:
             parsed, res = self.llm.json_call(system, user, schema=RESOLVE_SCHEMA, max_tokens=400)
@@ -247,15 +280,31 @@ class Resolver:
         verdict = str(parsed.get("verdict", "UNSURE")).upper()
         conf = float(parsed.get("confidence", 0.0) or 0.0)
         why = str(parsed.get("evidence", ""))[:400]
+        meta = {
+            "model": res.model,
+            "prompt_version": PROMPT_VERSION,
+            "input_hash": hash_obj([system, user]),
+            "output_hash": res.output_hash,
+            "llm_verdict": verdict,
+            "completion_tokens": res.completion_tokens,
+        }
 
-        if verdict == "MATCH" and not should_escalate(conf, self.escalate_below):
-            return Verdict("llm_confirmed", f"llm: {why}", conf)
         if verdict == "NO_MATCH" and not should_escalate(conf, self.escalate_below):
-            return Verdict("llm_rejected", f"llm: {why}", conf)
-        # UNSURE, or a confident-sounding answer below threshold -> escalate.
-        # Preferring a missed merge over a false one, an escalation does NOT
-        # price a cell while it waits for Claude.
-        return Verdict("escalated", f"llm {verdict} conf={conf:.2f}: {why}", conf, escalate=True)
+            # Rejection is the one power the local model holds outright: a wrong
+            # rejection costs one empty cell, never a wrong published price.
+            return Verdict("llm_rejected", f"llm: {why}", conf, meta=meta)
+        if verdict == "MATCH" and not should_escalate(conf, self.escalate_below):
+            # A confident MATCH is a LEAD, not a verdict. The bench's three
+            # false matches carried conf 0.95-0.98, so no threshold cleanses a
+            # local MATCH; only the Claude reviewer may upgrade this row to
+            # llm_confirmed. Meanwhile it cannot price a cell.
+            return Verdict("llm_match_unverified", f"llm MATCH (unverified): {why}",
+                           conf, escalate=True, meta=meta)
+        # UNSURE, or any answer below threshold -> escalate. Preferring a missed
+        # merge over a false one, an escalation does NOT price a cell while it
+        # waits for Claude.
+        return Verdict("escalated", f"llm {verdict} conf={conf:.2f}: {why}", conf,
+                       escalate=True, meta=meta)
 
     def _tally(self, v: Verdict) -> Verdict:
         self.stats[v.status] = self.stats.get(v.status, 0) + 1
@@ -265,18 +314,33 @@ class Resolver:
     def resolve_pending(self, limit: int | None = None, run: str = "",
                         ts: str | None = None, allow_llm: bool = True,
                         progress=None) -> dict:
-        """Adjudicate every unadjudicated observation, writing status back.
+        """Adjudicate pending observations, writing status back.
 
-        Deterministic layers run for ALL rows. The LLM layer is applied only to
-        the contested remainder, and only when allow_llm is set — which is how a
-        Phase 2 shadow run can score the deterministic layer in isolation.
+        Deterministic layers run for ALL selected rows. What counts as
+        "pending" depends on the mode:
+
+        * deterministic-only: 'unadjudicated' rows. A row the layers already
+          classified stays put — re-running is a no-op by design.
+        * with the LLM: 'unadjudicated' PLUS 'no_include_hit'. no_include_hit
+          IS the contested set — "no layer settled this" — and before this
+          selection included it, the documented `resolve.py --llm` invocation
+          selected zero rows on a fully-imported graph and the LLM layer was
+          unreachable except through --reset.
+
+        Rows already at llm_* / escalated are never re-selected: those verdicts
+        are waiting on (or produced by) the reviewer and re-rolling the model
+        over them would rewrite adjudication history.
         """
         ts = ts or time.strftime("%Y-%m-%dT%H:%M:%S")
-        q = """SELECT id, commodity_id, product_name FROM price_observations
-               WHERE match_status='unadjudicated'"""
+        self.stats = {}          # per-call, not per-Resolver: two runs on one
+                                 # instance must not double-count in the log
+        use_llm = allow_llm and self.use_llm and self.llm is not None
+        pending = ("unadjudicated", "no_include_hit") if use_llm else ("unadjudicated",)
+        q = ("SELECT id, commodity_id, product_name FROM price_observations "
+             f"WHERE match_status IN ({','.join('?' * len(pending))})")
         if limit:
             q += f" LIMIT {int(limit)}"
-        rows = self.db.conn.execute(q).fetchall()
+        rows = self.db.conn.execute(q, pending).fetchall()
 
         n = 0
         escalations = []
@@ -288,9 +352,34 @@ class Resolver:
             self.db.conn.execute(
                 "UPDATE price_observations SET match_status=?, match_reason=?, confidence=? WHERE id=?",
                 (v.status, v.reason, v.confidence, r["id"]))
+            # Every MODEL judgment gets its own decision-log row. The aggregate
+            # event below says what a run did; only per-judgment rows with the
+            # model id and prompt version let a bad verdict be attributed to the
+            # exact model + prompt that produced it months later.
+            if run and v.meta:
+                self.db.log_event(
+                    run=run, timestamp=ts, etype="resolve",
+                    model=v.meta["model"],
+                    input_hash=v.meta["input_hash"],
+                    output_hash=v.meta["output_hash"],
+                    confidence=v.confidence,
+                    decision=v.status,
+                    detail={"observation": r["id"], "commodity": r["commodity_id"],
+                            "product": r["product_name"],
+                            "llm_verdict": v.meta["llm_verdict"],
+                            "prompt_version": v.meta["prompt_version"],
+                            "reason": v.reason[:200]})
             if v.escalate:
-                escalations.append({"observation": r["id"], "commodity": r["commodity_id"],
-                                    "product": r["product_name"], "reason": v.reason})
+                escalations.append({
+                    "observation": r["id"], "commodity": r["commodity_id"],
+                    "product": r["product_name"], "reason": v.reason,
+                    # confirm_match: local model is confident this IS the
+                    # commodity and asks the reviewer to upgrade the row.
+                    # contested: nobody knows; adjudicate from scratch.
+                    "kind": ("confirm_match" if v.status == "llm_match_unverified"
+                             else "contested"),
+                    "confidence": v.confidence,
+                })
             n += 1
             if progress and n % 2000 == 0:
                 progress(f"    resolved {n}/{len(rows)}")
@@ -300,6 +389,8 @@ class Resolver:
             self.db.log_event(run=run, timestamp=ts, etype="resolve",
                               decision="resolve_pending",
                               detail={"n": n, "by_status": self.stats,
+                                      "llm_enabled": bool(use_llm),
+                                      "prompt_version": PROMPT_VERSION if use_llm else None,
                                       "escalations": len(escalations)})
         return {"resolved": n, "by_status": dict(self.stats), "escalations": escalations}
 
@@ -343,10 +434,11 @@ def build_resolve_prompt(cc: CompiledCommodity, product_name: str) -> tuple[str,
 
 
 def main() -> int:
-    """CLI: adjudicate every unadjudicated observation.
+    """CLI: adjudicate pending observations.
 
-        python graph/pipeline/resolve.py              # deterministic layers only
-        python graph/pipeline/resolve.py --llm        # + LLM on the contested set
+        python graph/pipeline/resolve.py              # deterministic layers, unadjudicated rows
+        python graph/pipeline/resolve.py --llm        # + LLM over the contested set
+                                                      #   (unadjudicated + no_include_hit)
         python graph/pipeline/resolve.py --llm --limit 500
     """
     import argparse
@@ -372,8 +464,10 @@ def main() -> int:
     run = f"run:resolve:{time.strftime('%Y%m%dT%H%M%S')}"
     with open_db() as db:
         if args.reset:
+            # confidence must go too: a stale confidence on an 'unadjudicated'
+            # row is an assertion nobody is currently making.
             db.conn.execute("UPDATE price_observations SET match_status='unadjudicated', "
-                            "match_reason=NULL")
+                            "match_reason=NULL, confidence=NULL")
             db.conn.commit()
         r = Resolver(db, llm=llm, use_llm=bool(llm))
         t0 = time.time()
@@ -383,12 +477,25 @@ def main() -> int:
         for k, v in sorted(out["by_status"].items(), key=lambda x: -x[1]):
             print(f"   {k:<20} {v}")
         if out["escalations"]:
-            print(f"\n   {len(out['escalations'])} rows escalated for Claude review")
-            qp = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                              "..", "..", "grocery", "escalation-queue.json")
-            with open(os.path.abspath(qp), "w", encoding="utf-8") as fh:
-                _json.dump(out["escalations"], fh, indent=2, ensure_ascii=False)
-            print(f"   wrote {os.path.abspath(qp)}")
+            confirm = sum(1 for e in out["escalations"] if e.get("kind") == "confirm_match")
+            print(f"\n   {len(out['escalations'])} rows escalated for Claude review "
+                  f"({confirm} confirm-match, {len(out['escalations']) - confirm} contested)")
+            qp = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                              "..", "..", "grocery", "escalation-queue.json"))
+            # Append and dedupe by observation id — overwriting would silently
+            # drop escalations a previous run queued and nobody has reviewed yet.
+            prior = []
+            if os.path.exists(qp):
+                try:
+                    with open(qp, encoding="utf-8-sig") as fh:
+                        prior = _json.load(fh)
+                except (_json.JSONDecodeError, OSError):
+                    prior = []
+            seen = {e.get("observation") for e in prior}
+            merged = prior + [e for e in out["escalations"] if e["observation"] not in seen]
+            with open(qp, "w", encoding="utf-8", newline="\n") as fh:
+                _json.dump(merged, fh, indent=2, ensure_ascii=False)
+            print(f"   queue now {len(merged)} rows at {qp}")
     return 0
 
 

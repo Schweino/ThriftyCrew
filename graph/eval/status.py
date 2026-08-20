@@ -87,7 +87,12 @@ def build(db) -> dict:
     resolved = {r["match_status"]: r["n"] for r in db.conn.execute(
         "SELECT match_status, COUNT(*) n FROM price_observations GROUP BY 1")}
     total = sum(resolved.values()) or 1
-    settled = total - resolved.get("unadjudicated", 0) - resolved.get("no_include_hit", 0)
+    # Unsettled = nobody has reached a final ruling: never adjudicated, no layer
+    # matched, waiting on the reviewer, or a local-model MATCH the reviewer has
+    # not confirmed. 'escalated' used to be counted as settled — it is the
+    # definition of not settled.
+    pending = ("unadjudicated", "no_include_hit", "escalated", "llm_match_unverified")
+    settled = total - sum(resolved.get(s, 0) for s in pending)
 
     return {
         "graph": stats,

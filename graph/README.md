@@ -81,7 +81,16 @@ re-running step 1 is always safe.
 2. **category-exclude** — wrong-CLASS guardrails, *scoped by category*.
 3. **exclude regex** — the commodity's own negatives. Absolute.
 4. **include regex** — the commodity's own positives. A hit is a match.
-5. **LLM** — only for rows with no include hit and no exclusion.
+5. **LLM** — only for rows with no include hit and no exclusion — and it may
+   **only reject, never mint a price**. A confident local NO_MATCH prunes the
+   candidate (`llm_rejected`); a confident local MATCH becomes
+   `llm_match_unverified`, which cannot price a cell and queues for the Claude
+   reviewer to confirm. Decomposing the Phase 0 bench showed why: 22/22 on gold
+   MATCH cases but 5/8 on gold NO_MATCH, all three misses being false MATCHes
+   at confidence 0.95–0.98 — no escalation threshold catches those. With the
+   LLM enabled, `resolve.py --llm` targets the contested set
+   (`unadjudicated` + `no_include_hit`), so the layer is reachable without
+   `--reset`.
 
 On 119,029 real capture rows the deterministic layers settle **~89%** in ~9
 seconds, so a model is only ever asked about the genuinely contested remainder.
@@ -111,7 +120,7 @@ observation ever lacks one. "Why does this price appear?" is answerable from
 | Phase 0 decode | ≥15 tok/s | **46.1 tok/s** | PASS |
 | gold-set false-merge rate | ≤0.02 | **0.0000** | PASS |
 | gold-set missed-merge rate | ≤0.10 | **0.0188** | PASS |
-| Phase 2 board parity | ≥0.99 agreement | 0.758 @ 0.31 coverage | **NOT MET** |
+| Phase 2 board parity | ≥0.99 agreement | 0.917 @ 0.838 coverage (2026-08-20) | **NOT MET** |
 | Phase 2 shadow days | 14 consecutive | 0 | **NOT MET** |
 | Phase 3 state-graph days | 14 consecutive | 0 | **NOT MET** |
 | Phase 4 Chrome cycles | 4 consecutive | 0 | **NOT MET** |
@@ -122,7 +131,12 @@ time (14 daily cycles, 4 Wednesdays) that no amount of coding shortens.
 
 ### What Phase 2 still needs
 
-Board parity is at 0.758 agreement over 0.31 coverage. Two concrete gaps:
+Board parity is at 0.917 agreement over 0.838 coverage (2026-08-20). Three
+concrete gaps — the third is the contested set itself: 12,808 `no_include_hit`
+rows cannot price a cell until the reviewer confirms them (the local model may
+only reject; see the resolution section above). Working the escalation queue and
+letting the learning loop convert confirmed matches into include aliases is how
+that coverage returns. The other two:
 
 1. **Lane coverage.** Only the `regular` and `throttled` capture lanes carry a
    parseable `deals` array. Baker's (`out/bakers/`, page-structured), Sam's and
@@ -160,6 +174,17 @@ This is why `add_gold` proposals are never auto-applied: they change what
 "correct" means, and a model may not edit the thing it is graded against.
 
 ---
+
+## Known limitation of layer-1 known-wrong matching
+
+A KnownWrong ruling matches by exact normalised product NAME (one node per
+surface form in the ruling's `names` list — the importer covers all of them).
+If a store restyles a name, layer 1 misses that restyled row; layers 2-4, the
+reject-only LLM layer, and the legacy `audit-known-wrong.ps1` gate (which also
+checks `product_id`) all still stand behind it. This is deliberate: loosening an
+ABSOLUTE layer to fuzzy matching trades a bounded miss for unbounded false
+rejections. `price_observations` carries no store product id today; if one is
+ever added, extend layer 1 to match on it before touching name semantics.
 
 ## Rules for changing anything here
 

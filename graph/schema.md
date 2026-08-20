@@ -84,10 +84,25 @@ the evidence; `match_status` records whether it survived resolution:
 
 `unadjudicated` · `include_hit` · `no_include_hit` · `excluded` ·
 `category_excluded` · `known_wrong` · `llm_confirmed` · `llm_rejected` ·
-`escalated`
+`llm_match_unverified` · `escalated`
 
 **Only `include_hit` and `llm_confirmed` may price a cell** — enforced in
 `v_current_cell`, and re-checked by `verifier.check_no_unresolved_pricing`.
+
+**The local model may only reject, never mint a price** (decision 2026-08-20).
+A confident local NO_MATCH becomes `llm_rejected`; a confident local MATCH
+becomes `llm_match_unverified`, which cannot price and waits in the escalation
+queue (`kind: confirm_match`) for the Claude reviewer. `llm_confirmed` therefore
+means *reviewer-confirmed* — the reviewer is the only writer of that status.
+Why: the Phase 0 bench decomposed by label shows the local model at 22/22 on
+gold MATCH but 5/8 on gold NO_MATCH, with all three errors being false MATCHes
+at confidence 0.95–0.98 — above any usable escalation threshold. Confidence
+does not discriminate this model's false matches, so no threshold makes a local
+MATCH safe to publish.
+
+`confidence` is nullable: NULL means no adjudicator asserted anything (raw
+capture, `no_include_hit`, post-`--reset`). Deterministic layers that matched
+assert 1.0; the LLM layer asserts the model's own number.
 
 ### Unit basis is not optional
 
@@ -114,7 +129,17 @@ modified/deferred/held_for_human → applied/reverted) and `approved_patches`
 
 ## Views
 
-- `v_current_cell` — newest **surviving** observation per (commodity, store).
-- `v_cell_crown` — cheapest surviving candidate per cell.
+Views are `DROP`ped and recreated by `schema.sql` on every open, so an edited
+view definition actually reaches existing databases (`CREATE VIEW IF NOT
+EXISTS` kept old definitions alive forever, which is how the same-day-tie bug
+below survived its own fix).
+
+- `v_current_cell` — newest **surviving** observation per (commodity, store),
+  **exactly one row per cell**. `observed_at` is a date, so same-day candidates
+  tie on "newest"; ties break deterministically (cheapest per-unit, no-unit-
+  price rows last, then price, then id).
+- `v_cell_crown` — cheapest surviving **per-unit** candidate per cell (never
+  `MIN(price)`: a small dear package beats a large cheap one on shelf price
+  while being the worse buy), `basis_flag IS NULL` enforced.
 - `v_price_why` — observation joined to its provenance; answers "why does this
   price appear?" on its own.

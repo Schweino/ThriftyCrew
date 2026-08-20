@@ -710,7 +710,9 @@ def import_observations(db: GraphDB, ts: str, run: str, *, limit_files: int | No
                     "price_type": d.get("price_type"),
                     "ad_cycle_id": None,
                     "provenance_id": prov,
-                    "confidence": 1.0,
+                    # No confidence: this lane imports raw candidates as
+                    # 'unadjudicated'. Confidence belongs to whichever layer
+                    # eventually adjudicates the row, not to the act of capture.
                     "observed_at": as_of,
                     "source_file": rel(fp),
                 })

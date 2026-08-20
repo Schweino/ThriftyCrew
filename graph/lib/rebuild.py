@@ -17,9 +17,11 @@ WHAT REBUILDS AND WHAT DOES NOT, and why the distinction matters:
 
   learning_proposals          exist NOWHERE ELSE. A proposal the local model
   approved_patches            made, the verdict a reviewer gave it, and the
-      before/after gold-set metrics that justified applying it cannot be
-      regenerated from any other file. They are the only irreplaceable rows in
-      the database, and they were the ones sitting in a gitignored file.
+  eval_runs                   before/after gold-set metrics that justified
+      applying it — plus every scored evaluation run with its model and prompt
+      version — cannot be regenerated from any other file. They are the only
+      irreplaceable rows in the database, and they were the ones sitting in a
+      gitignored file.
 
 So the drill below is not ceremony. It is the only way to know that a routine
 `rm graph.db` -- which the README actively encourages -- does not quietly delete

@@ -250,7 +250,11 @@ class GraphDB:
             {
                 "product_name": None, "price": None, "unit_price": None, "unit": None,
                 "size_text": None, "is_sale": 0, "price_type": None, "ad_cycle_id": None,
-                "confidence": 1.0, "source_file": None,
+                # confidence defaults to NULL ("nobody asserted anything"), for
+                # the same reason match_status defaults to 'unadjudicated': an
+                # importer that KNOWS must say so explicitly, and an importer
+                # that doesn't must not look like it did.
+                "confidence": None, "source_file": None,
                 # Default is 'unadjudicated' so a lane that does NOT already know the
                 # commodity cannot skip the resolver by omission. Only importers whose
                 # source asserts the commodity id may pass 'include_hit' explicitly.
@@ -269,7 +273,11 @@ class GraphDB:
         return dict(r) if r else None
 
     def board_matrix(self) -> dict[tuple[str, str], dict]:
-        """The graph's answer to 'the board': newest observation per cell."""
+        """The graph's answer to 'the board': one surviving observation per
+        cell. v_current_cell guarantees exactly one row per (commodity, store)
+        — this dict comprehension must never again paper over duplicates by
+        last-write-wins key collision, which it silently did for 9,138 rows
+        while the view returned same-day ties."""
         rows = self.conn.execute("SELECT * FROM v_current_cell").fetchall()
         return {(r["commodity_id"], r["store_id"]): dict(r) for r in rows}
 
@@ -348,20 +356,27 @@ class GraphDB:
         written.update(self.export_learning(out_dir))
         return written
 
-    # -- learning durability ----------------------------------------------
-    # These two are the ONLY structures in the graph that cannot be
-    # reconstructed from anything else. Nodes, edges, aliases and observations
-    # all rebuild from the legacy estate and the tracked captures; a learning
-    # proposal and its shadow-scored verdict exist nowhere but here. Leaving
-    # them in a gitignored, rebuildable database meant a routine
+    # -- durability of irreplaceable tables --------------------------------
+    # These are the structures in the graph that cannot be reconstructed from
+    # anything else. Nodes, edges, aliases and observations all rebuild from
+    # the legacy estate and the tracked captures; a learning proposal, the
+    # verdict a reviewer gave it, and a scored evaluation run exist nowhere but
+    # here. Leaving them in a gitignored, rebuildable database meant a routine
     # delete-and-rebuild silently destroyed the safety record of what the loop
     # proposed, what was approved, and what the gold set said before and after.
     # That is exactly the "a memory the pipeline cannot read is not a memory"
     # failure the estate already learned once with prose audit findings.
+    #
+    # eval_runs is here for the same reason (added 2026-08-20): the README's
+    # own rule is "re-score after any prompt/model/resolver change and record
+    # the run — eval_runs keeps model + prompt version so a regression can be
+    # attributed", and stage1_analyze reads the latest run's errors. A history
+    # that the sanctioned `rm graph.db` deletes is not a history.
 
     LEARNING_TABLES = (
         ("learning_proposals", "learning/proposals.json"),
         ("approved_patches", "learning/approved-patches.json"),
+        ("eval_runs", "eval/eval-runs.json"),
     )
 
     def export_learning(self, out_dir: str | None = None) -> dict[str, int]:

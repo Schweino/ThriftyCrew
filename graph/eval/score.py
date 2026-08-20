@@ -142,6 +142,9 @@ def record(db, metrics: dict, model: str | None, prompt_version: str,
          context, json.dumps({k: v for k, v in metrics.items() if k != "errors"},
                              default=str)))
     db.conn.commit()
+    # Mirror to tracked JSON immediately — eval history is irreplaceable and the
+    # database is a deletable index (see graphdb.LEARNING_TABLES).
+    db.export_learning()
     return eid
 
 

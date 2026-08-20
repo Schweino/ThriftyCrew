@@ -123,7 +123,7 @@ def gather_contested(db, limit: int) -> list[dict]:
                   MAX(n2.canonical_name) AS commodity_label
            FROM price_observations p
            LEFT JOIN nodes n2 ON n2.id = p.commodity_id
-           WHERE p.match_status IN ('no_include_hit','escalated')
+           WHERE p.match_status IN ('no_include_hit','escalated','llm_match_unverified')
              AND p.product_name IS NOT NULL
            GROUP BY p.commodity_id, p.product_name
            ORDER BY n DESC
