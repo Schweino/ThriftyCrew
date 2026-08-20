@@ -35,6 +35,17 @@ def rel(path: str) -> str:
     return os.path.relpath(path, REPO_ROOT).replace("\\", "/")
 
 
+_DATE_RE = re.compile(r"(\d{4}-\d{2}-\d{2})")
+
+
+def _leading_date(v) -> str | None:
+    """Pull the ISO date out of a field that may carry prose after it."""
+    if not v:
+        return None
+    m = _DATE_RE.search(str(v))
+    return m.group(1) if m else None
+
+
 def _money(v) -> float | None:
     """Parse '$4.88' / '4.88' / 4.88 -> 4.88. Returns None on anything else."""
     if v is None:
@@ -568,9 +579,13 @@ def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
                 n_skip += 1
                 continue
             name = v.get("name") or cid_raw
-            # `verified` is the day the shelf was actually checked; fall back to
-            # the file's own updated stamp so an observation always has a date.
-            observed = v.get("verified") or data.get("updated") or ts[:10]
+            # `verified` is the day the shelf was checked, but the field is FREE
+            # TEXT that often carries prose after the date:
+            #   "2026-08-12 DERIVED from the price row (same record the board priced)"
+            # Storing that raw put prose into observed_at, which made the row_age
+            # gate compare a sentence against a date and report every such row as
+            # 37 days stale. Take the leading ISO date and nothing else.
+            observed = _leading_date(v.get("verified")) or data.get("updated") or ts[:10]
 
             oid = observation_id(cid, store, observed, rel(path), name)
             db.add_observation({

@@ -2152,6 +2152,36 @@
                         "ruled_on":  "2026-08-20",
                         "ruled_by":  "graph-native parity work (Claude Opus 5)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "oatmeal|Walmart|wild-oats-marketplace-organic-dark-red-kidney-be",
+                        "commodity":  "oatmeal",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Wild Oats Marketplace Organic Dark Red Kidney Beans, 15 oz"
+                                  ],
+                        "product_id":  "35510573",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Kidney beans, not oats. \u0027Wild Oats Marketplace\u0027 is a Walmart house BRAND; the commodity include pattern \\boats\\b matched the brand name. Held the oatmeal Walmart cell on the LIVE board at 0.0613/oz - the second-cheapest oatmeal in Omaha - with the See-item link pointing at Wild-Oats-Marketplace-Organic-Dark-Red-Kidney-Beans-15-oz. Found 2026-08-20 by the graph end-to-end smoke test.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph smoke test (Claude Opus 5)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "grapefruit|Fareway|lemon",
+                        "commodity":  "grapefruit",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Lemon"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A lemon, not a grapefruit. The product-urls entry for grapefruit/Fareway points at shop.fareway.com/.../3259496-lemon-each. Not currently rendering a board cell, so this is a latent defect rather than a live one, but the curated entry is wrong and would price the cell the moment Fareway\u0027s row appeared.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph smoke test (Claude Opus 5)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
