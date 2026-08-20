@@ -8,8 +8,20 @@
     "payload_json": "{\"payload\": \"chili,?\\\\s*w/\\\\s*beans?\"}",
     "queue_hash": null,
     "rationale": "the 'W/Beans' abbreviation used in Our Family feed titles",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:canned-chili"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:03be667ed8cea9fcdddd",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"chunk\\\\s+(?:white\\\\s+)?(?:breast\\\\s+of\\\\s+)?chicken\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: 'Chunk Breast Of Chicken' / 'Chunk White Chicken'",
+    "status": "applied",
+    "target_id": "commodity:staple:canned-chicken"
   },
   {
     "confidence": 0.9,
@@ -20,7 +32,7 @@
     "payload_json": "{\"payload\": \"\\\\bfruit\\\\s+spread\\\\b\"}",
     "queue_hash": null,
     "rationale": "'fruit spread' is the third retail name for jelly/jam alongside the existing jelly/jam/preserves patterns",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:jelly"
   },
   {
@@ -32,8 +44,44 @@
     "payload_json": "{\"payload\": \"salmon,\\\\s*(?:\\\\w+\\\\s+)?pink\"}",
     "queue_hash": null,
     "rationale": "allows an origin word between 'Salmon,' and 'Pink'; fresh/fillet/smoked/pouch excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:canned-salmon"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:06f6f01143eccaa50a3b",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"\\\\btreats?\\\\s+for\\\\s+(?:all\\\\s+|any\\\\s+size\\\\s+)?dogs?\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: 'Treats for Dogs' is the universal suffix",
+    "status": "applied",
+    "target_id": "commodity:staple:dog-treats"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:0969b931beabdea0c0bf",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"\\\\btea\\\\b.{0,24}\\\\bgallon\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: gallon jugs of ready-to-drink tea",
+    "status": "applied",
+    "target_id": "commodity:staple:iced-tea"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:0a6b77797ecb2689d6e0",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"milk\\\\s+drink,\\\\s*chocolate\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: 'Milk Drink, Chocolate' shelf-stable cartons",
+    "status": "applied",
+    "target_id": "commodity:staple:chocolate-milk"
   },
   {
     "confidence": 0.9,
@@ -44,7 +92,7 @@
     "payload_json": "{\"payload\": \"dish\\\\s*washing\\\\s+liquid\"}",
     "queue_hash": null,
     "rationale": "tolerates the space in 'Dish Washing Liquid'",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:dish-soap"
   },
   {
@@ -56,7 +104,7 @@
     "payload_json": "{\"payload\": \"hot\\\\s*dog\\\\s+rolls?\"}",
     "queue_hash": null,
     "rationale": "'rolls' is the second retail word for hot dog buns",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:hot-dog-buns"
   },
   {
@@ -68,7 +116,7 @@
     "payload_json": "{\"payload\": \"\\\\bfridge\\\\s+pack\\\\b.{0,15}cans\"}",
     "queue_hash": null,
     "rationale": "'Fridge Pack Cans' is Coca-Cola's name for the 12-pack this cell prices",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:soda"
   },
   {
@@ -80,8 +128,32 @@
     "payload_json": "{\"payload\": \"bar\\\\s*'*\\\\s*b\\\\s*'*\\\\s*'*\\\\s*q\\\\s*'*\\\\s*sauce\"}",
     "queue_hash": null,
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:bbq-sauce"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:0e290dd43d483e6e5684",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"rawhide\\\\s+chews?\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: rawhide chews are the chew-treat class",
+    "status": "applied",
+    "target_id": "commodity:staple:dog-treats"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:146ad8271ca09a7bef1d",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"finely\\\\s+shredded\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: 'Finely Shredded' blends",
+    "status": "applied",
+    "target_id": "commodity:staple:shredded-cheese"
   },
   {
     "confidence": 0.9,
@@ -92,7 +164,7 @@
     "payload_json": "{\"payload\": \"oil\\\\s+spray\\\\b\"}",
     "queue_hash": null,
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:cooking-spray"
   },
   {
@@ -104,8 +176,32 @@
     "payload_json": "{\"payload\": \"macaroni\\\\s+dinner\"}",
     "queue_hash": null,
     "rationale": "the 'Macaroni Dinner' box wording used by store brands",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:mac-and-cheese"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:1b6b86ac2d9313406147",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"\\\\bkraft\\\\b.{0,12}singles\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: Kraft Singles titles that never say 'cheese'",
+    "status": "applied",
+    "target_id": "commodity:staple:sliced-cheese"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:1c67ca858057b40e2ba0",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"\\\\bsingles\\\\b.{0,40}cheese\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: widen: brand+attribute words sit between 'Singles' and 'Cheese'",
+    "status": "applied",
+    "target_id": "commodity:staple:sliced-cheese"
   },
   {
     "confidence": 0.9,
@@ -116,8 +212,20 @@
     "payload_json": "{\"payload\": \"beans,\\\\s*refried\"}",
     "queue_hash": null,
     "rationale": "the '<type> Beans, Refried' comma order, generalising the existing black-bean branch",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:refried-beans"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:217cc76f15327806d224",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"\\\\btea\\\\b.{0,20}128\\\\s*fl\\\\s*oz\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: the 128 fl oz gallon by volume",
+    "status": "applied",
+    "target_id": "commodity:staple:iced-tea"
   },
   {
     "confidence": 0.9,
@@ -128,7 +236,7 @@
     "payload_json": "{\"payload\": \"buns?,\\\\s*(?:enriched,\\\\s*)?(?:white\\\\s+)?hot\\\\s*dog\"}",
     "queue_hash": null,
     "rationale": "the 'Buns, [Enriched,] [White] Hot Dog' comma order used by several bakery feeds",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:hot-dog-buns"
   },
   {
@@ -140,8 +248,20 @@
     "payload_json": "{\"payload\": \"100%\\\\s*juice[^,]*,\\\\s*(?:just\\\\s+)?cranberry\\\\b(?!\\\\s+\\\\w*\\\\s*(?:pomegranate|apple|grape|berry))\"}",
     "queue_hash": null,
     "rationale": "catches the 'X 100% Juice, Cranberry' word order while refusing named-blend suffixes",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:cranberry-juice"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:2483ad8b20ce01a25236",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"velveeta\\\\s+slices\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: Velveeta's sliced pack",
+    "status": "applied",
+    "target_id": "commodity:staple:sliced-cheese"
   },
   {
     "confidence": 0.9,
@@ -152,7 +272,7 @@
     "payload_json": "{\"payload\": \"\\\\bflings\\\\b\"}",
     "queue_hash": null,
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:laundry-pods"
   },
   {
@@ -169,6 +289,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:27e4db9e60dc19d3543b",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"breakfast\\\\s+country\\\\s+sausage\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: 'Breakfast Country Sausage' patties",
+    "status": "applied",
+    "target_id": "commodity:staple:breakfast-sausage"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:2a2e6bfbda0a16642353",
     "kind": "add_alias",
@@ -176,7 +308,7 @@
     "payload_json": "{\"payload\": \"sweet\\\\s+peppers?,\\\\s*mini\"}",
     "queue_hash": null,
     "rationale": "the 'Sweet Peppers, Mini' comma order; bell/pickled/jar/stuffed excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:mini-sweet-peppers"
   },
   {
@@ -188,7 +320,7 @@
     "payload_json": "{\"payload\": \"\\\\bonions?\\\\s+red\\\\b\"}",
     "queue_hash": null,
     "rationale": "the inverted 'Onion Red' order; the prepared-form excludes already guard the cell",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:red-onion"
   },
   {
@@ -200,7 +332,7 @@
     "payload_json": "{\"payload\": \"cleaner\\\\b.{0,10}multi[\\\\s-]*(?:surface|purpose)\"}",
     "queue_hash": null,
     "rationale": "the reversed 'Cleaner Multi Surface' order",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:all-purpose-cleaner"
   },
   {
@@ -212,7 +344,7 @@
     "payload_json": "{\"payload\": \"\\\\bpeas\\\\s+sweet\\\\b\"}",
     "queue_hash": null,
     "rationale": "the inverted 'Peas Sweet' feed order",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:canned-peas"
   },
   {
@@ -224,7 +356,7 @@
     "payload_json": "{\"payload\": \"soup,\\\\s*tomato\\\\b\"}",
     "queue_hash": null,
     "rationale": "the 'Condensed Soup, Tomato' comma order; dry/mix excludes guard the packets",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:tomato-soup"
   },
   {
@@ -236,7 +368,7 @@
     "payload_json": "{\"payload\": \"(?:local\\\\s+roots|crazy\\\\s+fresh|gotham\\\\s+greens)\\\\s+(?:organic\\\\s+)?dill\\\\b\"}",
     "queue_hash": null,
     "rationale": "names the fresh-herb clamshell brands specifically, so dried and pickled dill cannot match",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:fresh-dill"
   },
   {
@@ -248,8 +380,20 @@
     "payload_json": "{\"payload\": \"beans?,\\\\s*(?:[^,]*,\\\\s*)?pinto\"}",
     "queue_hash": null,
     "rationale": "the 'Beans, [attribute,] Pinto' comma order; dry/dried/refried excludes guard the dry aisle",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:canned-pinto-beans"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:32c649d159089f4e361a",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"potato\\\\s+kettle\\\\s+chips?\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: kettle-cooked potato chips",
+    "status": "applied",
+    "target_id": "commodity:staple:potato-chips"
   },
   {
     "confidence": 0.9,
@@ -260,7 +404,7 @@
     "payload_json": "{\"payload\": \"frozen\\\\s+fruit\\\\s+bars?\"}",
     "queue_hash": null,
     "rationale": "fruit bars are the retail name for fruit ice pops; 'dairy' does not appear in fruit-bar titles",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:popsicles"
   },
   {
@@ -272,7 +416,7 @@
     "payload_json": "{\"payload\": \"dressing\\\\s*&\\\\s*dip,\\\\s*(?:\\\\w+\\\\s+)?bl(?:ue|eu)\\\\s+cheese\"}",
     "queue_hash": null,
     "rationale": "the Litehouse 'Dressing & Dip, <variety> Blue Cheese' comma order",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:blue-cheese-dressing"
   },
   {
@@ -284,7 +428,7 @@
     "payload_json": "{\"payload\": \"seasoning\\\\s+mix,\\\\s*(?:original,?\\\\s*)?taco\"}",
     "queue_hash": null,
     "rationale": "the 'Seasoning Mix, Taco' / 'Seasoning Mix, Original, Taco' comma orders",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:taco-seasoning"
   },
   {
@@ -308,7 +452,7 @@
     "payload_json": "{\"payload\": \"peppercorns?,\\\\s*black\"}",
     "queue_hash": null,
     "rationale": "the 'Peppercorn, Black' comma order; ground/cracked/grinder excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:black-peppercorns"
   },
   {
@@ -320,7 +464,7 @@
     "payload_json": "{\"payload\": \"puck\\\\s+of\\\\s+soap\"}",
     "queue_hash": null,
     "rationale": "Duke Cannon's bar-form naming",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:bar-soap"
   },
   {
@@ -332,7 +476,7 @@
     "payload_json": "{\"payload\": \"a\\\\s+taste\\\\s+of\\\\s+thai\\\\b.{0,20}vermicelli\"}",
     "queue_hash": null,
     "rationale": "brand-anchored so wheat vermicelli cannot match",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:rice-noodles"
   },
   {
@@ -344,7 +488,7 @@
     "payload_json": "{\"payload\": \"moisturizer,\\\\s*(?:[^,]*,\\\\s*)?(?:ultra\\\\s+)?healing\"}",
     "queue_hash": null,
     "rationale": "the 'Moisturizer, <skin type>, Ultra Healing' comma order; SPF/tanning excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:lotion"
   },
   {
@@ -356,7 +500,7 @@
     "payload_json": "{\"payload\": \"beef\\\\s+cooking\\\\s+stock\"}",
     "queue_hash": null,
     "rationale": "the 'Beef Cooking Stock' wording; bouillon/base/cube excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:beef-broth"
   },
   {
@@ -368,7 +512,7 @@
     "payload_json": "{\"payload\": \"caesar\\\\b.{0,20}kit\\\\b\"}",
     "queue_hash": null,
     "rationale": "widens the existing 'caesar ... salad kit' pattern to kits that omit the word 'salad'",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:caesar-salad-kit"
   },
   {
@@ -380,7 +524,7 @@
     "payload_json": "{\"payload\": \"\\\\bbeef\\\\s+(?:\\\\w+\\\\s+)?dogs\\\\b\"}",
     "queue_hash": null,
     "rationale": "the truncated '<brand> Beef <line> Dogs' titles; buns/chili/sauce excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:hot-dogs"
   },
   {
@@ -392,7 +536,7 @@
     "payload_json": "{\"payload\": \"kidney\\\\s+(?:dark|light)\\\\s+red\"}",
     "queue_hash": null,
     "rationale": "the truncated 'Kidney Dark/Light Red' order in Bush's feed titles; dried/dry/bag excludes guard the dry aisle",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:kidney-beans"
   },
   {
@@ -404,8 +548,20 @@
     "payload_json": "{\"payload\": \"dinner\\\\s+yeast\\\\s+rolls?\"}",
     "queue_hash": null,
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:dinner-rolls"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:495a7933179e04c261db",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"\\\\bbug\\\\s+stop\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: Spectracide's Bug Stop line",
+    "status": "applied",
+    "target_id": "commodity:staple:insect-spray"
   },
   {
     "confidence": 0.9,
@@ -416,7 +572,7 @@
     "payload_json": "{\"payload\": \"beans?,\\\\s*kidney\"}",
     "queue_hash": null,
     "rationale": "the 'Beans, Kidney, <color>' comma order; dried/dry/bag excludes stop the dry-bag aisle",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:kidney-beans"
   },
   {
@@ -428,7 +584,7 @@
     "payload_json": "{\"payload\": \"corn\\\\s+bread\\\\s+(?:baking\\\\s+)?mix\"}",
     "queue_hash": null,
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:corn-muffin-mix"
   },
   {
@@ -440,7 +596,7 @@
     "payload_json": "{\"payload\": \"\\\\bbags?\\\\b.{0,40}\\\\bquart\\\\b\"}",
     "queue_hash": null,
     "rationale": "mirrors the existing pattern for titles that name the bag before the size; gallon/pint/sandwich/snack excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:quart-storage-bags"
   },
   {
@@ -452,7 +608,7 @@
     "payload_json": "{\"payload\": \"pepper,?\\\\s*black.*ground\"}",
     "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
     "rationale": "Matches 'Our Family Pepper, Black, Pure Ground' which is clearly ground black pepper.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "black-pepper-ground"
   },
   {
@@ -464,8 +620,32 @@
     "payload_json": "{\"payload\": \"southern\\\\s+homestyle.{0,30}biscuits?\"}",
     "queue_hash": null,
     "rationale": "Southern Homestyle line with any flavor word between line name and 'Biscuits'",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:refrigerated-biscuits"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:5410b9891a7d842bccca",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"\\\\branch\\\\b.{0,45}dressing\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: widen: line names sit between 'Ranch' and 'Dressing'",
+    "status": "applied",
+    "target_id": "commodity:staple:ranch-dressing"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:547b9028f898c5a9ae8e",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"shredded\\\\s+\\\\d+%\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: 'Shredded 2% Milk ...' reduced-fat shreds",
+    "status": "applied",
+    "target_id": "commodity:staple:shredded-cheese"
   },
   {
     "confidence": 0.9,
@@ -476,7 +656,7 @@
     "payload_json": "{\"payload\": \"cherry\\\\b.{0,15}tomatoes?\"}",
     "queue_hash": null,
     "rationale": "allows 'on the vine' between 'Cherry' and 'Tomatoes'; sun-dried/dried/paste/salsa excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:cherry-tomatoes"
   },
   {
@@ -488,7 +668,7 @@
     "payload_json": "{\"payload\": \"diced\\\\s+roma\\\\s+tomatoes\"}",
     "queue_hash": null,
     "rationale": "the 'Diced Roma Tomatoes' order that the existing 'diced\\s+tomato' pattern misses",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:diced-tomatoes"
   },
   {
@@ -500,7 +680,7 @@
     "payload_json": "{\"payload\": \"Dawn Heavy Duty Dish Spray 16 Fl Oz\"}",
     "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
     "rationale": "A dish spray is a different form factor than liquid dish soap.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "dish-soap-liquid"
   },
   {
@@ -512,7 +692,7 @@
     "payload_json": "{\"payload\": \"vegetable\\\\s+blend,\\\\s*[^,]*,\\\\s*fresh\\\\s+frozen\"}",
     "queue_hash": null,
     "rationale": "the 'Vegetable Blend, <style>, Fresh Frozen' comma order; every canned exclude stays in force",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:frozen-vegetables"
   },
   {
@@ -524,8 +704,44 @@
     "payload_json": "{\"payload\": \"soup,\\\\s*chicken\\\\s+noodle\"}",
     "queue_hash": null,
     "rationale": "the 'Condensed/Traditional Soup, Chicken Noodle' comma order; ramen/dry excludes guard the rest",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:chicken-noodle-soup"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:5bd443ef49d54c64fd59",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"tomato\\\\b.{0,20}basil\\\\b.{0,12}(?:soup|bisque)\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: tomato-basil soup and bisque",
+    "status": "applied",
+    "target_id": "commodity:staple:tomato-soup"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:5d3a076cc0fc24edcae8",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"\\\\b(?:table|sugar\\\\s+free|maple\\\\s+flavor)\\\\s+syrup\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: table, sugar-free and maple-flavour table syrups",
+    "status": "applied",
+    "target_id": "commodity:staple:maple-syrup"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:5eae2e0c50b285b9ef5d",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"\\\\bsausage\\\\s+roll\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: the pork breakfast sausage chub",
+    "status": "applied",
+    "target_id": "commodity:staple:breakfast-sausage"
   },
   {
     "confidence": 0.9,
@@ -536,7 +752,7 @@
     "payload_json": "{\"payload\": \"microwave\\\\b.{0,30}popping\\\\s+corn\"}",
     "queue_hash": null,
     "rationale": "the 'Microwave ... Popping Corn' wording; the kernels-jar and tin excludes keep loose kernels out",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:microwave-popcorn"
   },
   {
@@ -548,7 +764,7 @@
     "payload_json": "{\"payload\": \"ready\\\\s+rice\\\\b.{0,20}long\\\\s+grain\\\\s*(?:&|and)\\\\s*wild\"}",
     "queue_hash": null,
     "rationale": "the 'Ready Rice Rice, Long Grain & Wild' word order; jasmine/basmati/plain excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:ready-to-serve-long-grain-wild-rice-pouch"
   },
   {
@@ -560,7 +776,7 @@
     "payload_json": "{\"payload\": \"brown\\\\s+gravy.*mix\"}",
     "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
     "rationale": "Matches McCormick Brown Gravy Seasoning Mix variants.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "brown-gravy-mix-dry-packet"
   },
   {
@@ -572,7 +788,7 @@
     "payload_json": "{\"payload\": \"mighty\\\\s+pacs?\"}",
     "queue_hash": null,
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:laundry-pods"
   },
   {
@@ -584,7 +800,7 @@
     "payload_json": "{\"payload\": \"butter(?:\\\\s+rich|\\\\s+flavor)?\\\\s+syrup\"}",
     "queue_hash": null,
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:maple-syrup"
   },
   {
@@ -596,8 +812,20 @@
     "payload_json": "{\"payload\": \"beans?,\\\\s*(?:[^,]*,\\\\s*)?black\\\\b\"}",
     "queue_hash": null,
     "rationale": "the 'Beans, [attribute,] Black' comma order; dry/dried/soup/refried excludes guard the rest",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:canned-black-beans"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:66acaf6f0a3fac86b596",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"lactose\\\\s+free\\\\s+chocolate\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: Hiland's title drops the word milk entirely",
+    "status": "applied",
+    "target_id": "commodity:staple:chocolate-milk"
   },
   {
     "confidence": 0.9,
@@ -608,7 +836,7 @@
     "payload_json": "{\"payload\": \"paper\\\\s*tow(?:el|l)?s?\\\\b\"}",
     "queue_hash": null,
     "rationale": "covers the truncated 'Paper Tow' and misspelled 'Paper Towls' feed titles; holder/dispenser excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:paper-towels"
   },
   {
@@ -620,8 +848,20 @@
     "payload_json": "{\"payload\": \"shells\\\\s*(?:&|and)\\\\s*cheese\"}",
     "queue_hash": null,
     "rationale": "shells are the second boxed mac-and-cheese pasta shape",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:mac-and-cheese"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:69f88637e286534326cc",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"\\\\bqueen\\\\s+olives\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: Queen is a green-olive grade",
+    "status": "applied",
+    "target_id": "commodity:staple:green-olives"
   },
   {
     "confidence": 0.9,
@@ -632,7 +872,7 @@
     "payload_json": "{\"payload\": \"shredded\\\\s+chees\\\\b\"}",
     "queue_hash": null,
     "rationale": "the truncated 'Shredded Chees' feed title",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:shredded-cheese"
   },
   {
@@ -644,7 +884,7 @@
     "payload_json": "{\"payload\": \"\\\\bnut\\\\s+mix\\\\b\"}",
     "queue_hash": null,
     "rationale": "'Nut Mix' is the retail synonym for mixed nuts; the trail and chocolate excludes keep fruit-bearing mixes out",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:mixed-nuts"
   },
   {
@@ -656,8 +896,32 @@
     "payload_json": "{\"payload\": \"pillsbury\\\\b[^,]{0,30}\\\\bbiscuits?\\\\b\"}",
     "queue_hash": null,
     "rationale": "every Pillsbury product containing 'Biscuits' is refrigerated dough; cookie/frozen/mix excludes guard the edge cases",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:refrigerated-biscuits"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:72b31d551c938cc95040",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"\\\\b(?:home|insect)\\\\s+barrier\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: 'Home Barrier' / 'Insect Barrier' is the indoor-spray product name",
+    "status": "applied",
+    "target_id": "commodity:staple:insect-spray"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:7579bb0677b31d585839",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"lunch\\\\s+meat,\\\\s*[^,]*turkey\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: 'Deli Lunch Meat, <flavour> Turkey Breast'",
+    "status": "applied",
+    "target_id": "commodity:staple:turkey-lunchmeat"
   },
   {
     "confidence": 0.9,
@@ -668,7 +932,7 @@
     "payload_json": "{\"payload\": \"cornbread\\\\s+(?:and\\\\s+|&\\\\s+)?muffin\\\\s+mix\"}",
     "queue_hash": null,
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:corn-muffin-mix"
   },
   {
@@ -680,7 +944,7 @@
     "payload_json": "{\"payload\": \"\\\\balani\\\\s*nu\\\\b\"}",
     "queue_hash": null,
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:energy-drinks"
   },
   {
@@ -692,7 +956,7 @@
     "payload_json": "{\"payload\": \"bathroom\\\\b.{0,30}cleaner\"}",
     "queue_hash": null,
     "rationale": "allows a form/scent phrase between 'Bathroom' and 'Cleaner'",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:shower-cleaner"
   },
   {
@@ -704,8 +968,20 @@
     "payload_json": "{\"payload\": \"pads,\\\\s*maxi\"}",
     "queue_hash": null,
     "rationale": "the 'Pads, Maxi' comma order; liners/incontinence excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:feminine-pads"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:7e880f21f79fb0089449",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"flea\\\\s*(?:&|and)\\\\s*tick\\\\s+home\\\\s+spray\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: home flea/tick spray for carpet and furniture",
+    "status": "applied",
+    "target_id": "commodity:staple:insect-spray"
   },
   {
     "confidence": 0.9,
@@ -716,8 +992,32 @@
     "payload_json": "{\"payload\": \"seasoning,\\\\s*italian\"}",
     "queue_hash": null,
     "rationale": "the 'Seasoning, Italian [Herb]' comma order; dressing/sausage/breadcrumb excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:italian-seasoning"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:8068edab5361c7ed79db",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"pancake\\\\s*(?:&|and)\\\\s*waffle\\\\s+syrup\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: 'Pancake & Waffle Syrup'",
+    "status": "applied",
+    "target_id": "commodity:staple:maple-syrup"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:806f40a116a7feef3dd3",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"freezer\\\\s+quart\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: 'Freezer Quart Mega'",
+    "status": "applied",
+    "target_id": "commodity:staple:quart-storage-bags"
   },
   {
     "confidence": 0.9,
@@ -728,7 +1028,7 @@
     "payload_json": "{\"payload\": \"cranberries,\\\\s*reduced\\\\s+sugar\"}",
     "queue_hash": null,
     "rationale": "the reduced-sugar dried-cranberry title that omits the word 'dried'",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:dried-cranberries"
   },
   {
@@ -740,7 +1040,7 @@
     "payload_json": "{\"payload\": \"deli\\\\s+sliced\\\\b.{0,20}turkey\"}",
     "queue_hash": null,
     "rationale": "allows a flavor word between 'Deli Sliced' and 'Turkey'; ham/ground/bacon excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:turkey-lunchmeat"
   },
   {
@@ -752,7 +1052,7 @@
     "payload_json": "{\"payload\": \"flaky\\\\s+layer(?:s|ed)?.{0,25}biscuits?\"}",
     "queue_hash": null,
     "rationale": "Flaky Layers/Layered with a flavor word before 'Biscuits'",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:refrigerated-biscuits"
   },
   {
@@ -764,7 +1064,7 @@
     "payload_json": "{\"payload\": \"seasoning\\\\s+blend,\\\\s*(?:[^,]*,\\\\s*)?garlic\\\\s*(?:&|and)\\\\s*herbs?\"}",
     "queue_hash": null,
     "rationale": "the 'Seasoning Blend, [attribute,] Garlic & Herb' comma order; salt/marinade/sauce excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:garlic-herb-seasoning"
   },
   {
@@ -776,7 +1076,7 @@
     "payload_json": "{\"payload\": \"corn,\\\\s*(?:[^,]*,\\\\s*)?whole\\\\s+kernel\"}",
     "queue_hash": null,
     "rationale": "allows a variety phrase between 'Corn,' and 'Whole Kernel'; cob/fresh/frozen/cream excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:canned-corn"
   },
   {
@@ -788,7 +1088,7 @@
     "payload_json": "{\"payload\": \"sauce,\\\\s*oyster\"}",
     "queue_hash": null,
     "rationale": "the 'Sauce, Oyster [Flavored]' comma order",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:oyster-sauce"
   },
   {
@@ -800,7 +1100,7 @@
     "payload_json": "{\"payload\": \"cut\\\\s+italian\\\\s+beans?\"}",
     "queue_hash": null,
     "rationale": "the Italian (flat) cut of canned green beans; fresh/frozen excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:canned-green-beans"
   },
   {
@@ -812,7 +1112,7 @@
     "payload_json": "{\"payload\": \"dressing,\\\\s*(?:\\\\w+\\\\s+)?italian\"}",
     "queue_hash": null,
     "rationale": "the 'Dressing, [Traditional] Italian' comma order; mix/seasoning excludes guard the dry packets",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:italian-dressing"
   },
   {
@@ -824,7 +1124,7 @@
     "payload_json": "{\"payload\": \"taco\\\\s+\\\\w+\\\\s+seasoning\"}",
     "queue_hash": null,
     "rationale": "'Taco <variety> Seasoning' order (Mild/Original/etc); the sauce/kit/dinner excludes guard the rest",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:taco-seasoning"
   },
   {
@@ -836,7 +1136,7 @@
     "payload_json": "{\"payload\": \"cloves?,\\\\s*whole\"}",
     "queue_hash": null,
     "rationale": "the 'Cloves, Whole' comma order; ground/powder/garlic/clove-oil excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:whole-cloves"
   },
   {
@@ -848,7 +1148,7 @@
     "payload_json": "{\"payload\": \"pepper,?\\\\s*black\"}",
     "queue_hash": null,
     "rationale": "the 'Pepper, Black' / 'Pepper Black' inverted order; the blend/salt/garlic/peppercorn excludes already guard the neighbours",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:black-pepper"
   },
   {
@@ -860,7 +1160,7 @@
     "payload_json": "{\"payload\": \"\\\\bcooki\\\\b\"}",
     "queue_hash": null,
     "rationale": "the truncated 'Cooki' feed title; every existing cookie exclude still applies",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:cookies"
   },
   {
@@ -872,7 +1172,7 @@
     "payload_json": "{\"payload\": \"shredded\\\\s+\\\\w+(?:\\\\s+\\\\w+)?\\\\s+cheese\"}",
     "queue_hash": null,
     "rationale": "allows the blend name between 'Shredded' and 'Cheese'; curds/cream/string/slice excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:shredded-cheese"
   },
   {
@@ -884,7 +1184,7 @@
     "payload_json": "{\"payload\": \"frozen\\\\s+mixed\\\\s+vegetables?\"}",
     "queue_hash": null,
     "rationale": "tolerates the singular 'Vegetable'; the canned excludes remain the guard",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:frozen-vegetables"
   },
   {
@@ -896,8 +1196,20 @@
     "payload_json": "{\"payload\": \"\\\\bair\\\\s+spray\\\\b\"}",
     "queue_hash": null,
     "rationale": "'Air Spray' is the second retail name for a room air freshener",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:air-freshener"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:9dab1ab956725027cbbc",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"\\\\bsalad\\\\s+olives\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: sliced pimiento salad olives",
+    "status": "applied",
+    "target_id": "commodity:staple:green-olives"
   },
   {
     "confidence": 0.9,
@@ -908,7 +1220,7 @@
     "payload_json": "{\"payload\": \"paper\\\\s+(?:luncheon|dinner|dessert)\\\\s+plates?\"}",
     "queue_hash": null,
     "rationale": "allows the plate-size word between 'Paper' and 'Plates'",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:paper-plates"
   },
   {
@@ -920,7 +1232,7 @@
     "payload_json": "{\"payload\": \"morsels,\\\\s*(?:semi\\\\s*-?\\\\s*sweet\\\\s+)?chocolate\"}",
     "queue_hash": null,
     "rationale": "the 'Morsels, Semi Sweet Chocolate' comma order; cookie/bar/mix excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:chocolate-chips"
   },
   {
@@ -932,7 +1244,7 @@
     "payload_json": "{\"payload\": \"paper\\\\s*towels?\"}",
     "queue_hash": null,
     "rationale": "makes the existing pattern tolerate the missing space in 'PaperTowel'",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:paper-towels"
   },
   {
@@ -944,7 +1256,7 @@
     "payload_json": "{\"payload\": \"\\\\bdawn\\\\b.{0,25}\\\\b(?:original|blue|ultra|platinum)\\\\b\"}",
     "queue_hash": null,
     "rationale": "Dawn's dish liquid under titles that omit 'dish soap'; the pac/pod/tab excludes keep dishwasher products out",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:dish-soap"
   },
   {
@@ -956,7 +1268,7 @@
     "payload_json": "{\"payload\": \"cleaner,\\\\s*bathroom\"}",
     "queue_hash": null,
     "rationale": "the 'Cleaner, Bathroom' comma order; toilet/wand/brush excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:shower-cleaner"
   },
   {
@@ -968,7 +1280,7 @@
     "payload_json": "{\"payload\": \"ultra\\\\s+pacs?\"}",
     "queue_hash": null,
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:laundry-pods"
   },
   {
@@ -980,7 +1292,7 @@
     "payload_json": "{\"payload\": \"tomatoes?,\\\\s*(?:[^,]*,\\\\s*)?crushed\"}",
     "queue_hash": null,
     "rationale": "the 'Tomatoes, [style,] Crushed' comma order; paste/sauce/juice/soup excludes guard the rest",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:crushed-tomatoes"
   },
   {
@@ -992,7 +1304,7 @@
     "payload_json": "{\"payload\": \"\\\\bcocoa\\\\s+mix\\\\b\"}",
     "queue_hash": null,
     "rationale": "cocoa mix without the word 'hot'; the k-cup exclude remains",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:hot-cocoa"
   },
   {
@@ -1004,7 +1316,7 @@
     "payload_json": "{\"payload\": \"balsamic\\\\b.{0,20}vinegar\"}",
     "queue_hash": null,
     "rationale": "allows an acidity or grade phrase between 'Balsamic' and 'Vinegar'",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:balsamic-vinegar"
   },
   {
@@ -1016,8 +1328,20 @@
     "payload_json": "{\"payload\": \"wine,\\\\s*red\\\\b\"}",
     "queue_hash": null,
     "rationale": "the 'Wine, Red' comma order; the non-alcoholic, sparkling, rose and box-wine excludes all remain in force",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:red-wine"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:af271fbe188aab45c305",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"welch'?s\\\\s+fusions\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: Welch's Fusions gummy line",
+    "status": "applied",
+    "target_id": "commodity:staple:fruit-snacks"
   },
   {
     "confidence": 0.9,
@@ -1028,7 +1352,7 @@
     "payload_json": "{\"payload\": \"pampers\\\\b.{0,45}wipes?\"}",
     "queue_hash": null,
     "rationale": "mirrors the existing huggies pattern so a scent/line name may sit between brand and 'Wipes'",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:baby-wipes"
   },
   {
@@ -1045,6 +1369,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:b3c07b9c72eea80c861f",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"zipper,\\\\s*quart\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: '... Zipper, Quart, 50 Count'",
+    "status": "applied",
+    "target_id": "commodity:staple:quart-storage-bags"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:b6627ab10d4df0d36f9b",
     "kind": "add_alias",
@@ -1052,7 +1388,7 @@
     "payload_json": "{\"payload\": \"dressing,\\\\s*(?:[^,]*\\\\s+)?caesar\"}",
     "queue_hash": null,
     "rationale": "the 'Dressing, <variety> Caesar' comma order; crouton/kit/mix excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:caesar-dressing"
   },
   {
@@ -1064,7 +1400,7 @@
     "payload_json": "{\"payload\": \"potatoes?\\\\s+(?:\\\\w+\\\\s+){0,2}red\\\\b(?!\\\\s*(?:skin\\\\s+)?(?:mashed|salad))\"}",
     "queue_hash": null,
     "rationale": "the 'Potatoes <region> Red' order; sweet/frozen/canned/salad excludes already guard the neighbours",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:red-potatoes"
   },
   {
@@ -1076,7 +1412,7 @@
     "payload_json": "{\"payload\": \"macaroni\\\\s*(?:&|and)\\\\s*(?:\\\\w+\\\\s+)?cheddar\"}",
     "queue_hash": null,
     "rationale": "Annie's names the cheese variety instead of the word 'cheese'; frozen/bites excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:mac-and-cheese"
   },
   {
@@ -1088,7 +1424,7 @@
     "payload_json": "{\"payload\": \"milk,\\\\s*(?:[^,]*,\\\\s*)*chocolate\"}",
     "queue_hash": null,
     "rationale": "the 'Milk, Lowfat, [milkfat,] Chocolate' comma order; almond/oat/soy/powder/mix/protein excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:chocolate-milk"
   },
   {
@@ -1100,7 +1436,7 @@
     "payload_json": "{\"payload\": \"recipe\\\\s+soup\\\\s*&\\\\s*dip\\\\s+mix,\\\\s*(?:\\\\w+\\\\s+)?onion\"}",
     "queue_hash": null,
     "rationale": "the Lipton 'Recipe Soup & Dip Mix, [variety] Onion' comma order",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:onion-soup-mix"
   },
   {
@@ -1112,7 +1448,7 @@
     "payload_json": "{\"payload\": \"buns?,\\\\s*(?:enriched,\\\\s*)?(?:white\\\\s+)?hamburger\"}",
     "queue_hash": null,
     "rationale": "the 'Buns, [Enriched,] [White] Hamburger' comma order used by bakery feeds",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:hamburger-buns"
   },
   {
@@ -1124,8 +1460,20 @@
     "payload_json": "{\"payload\": \"seasoning,\\\\s*(?:[^,]*\\\\s+)?ranch\"}",
     "queue_hash": null,
     "rationale": "the 'Seasoning, <variety> Ranch' comma order; snack/wing/veggie excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:ranch-seasoning-mix"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:bbabf3956902aae562ec",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"\\\\b(?:fruit\\\\s+salad|tropical\\\\s+fruit|mixed\\\\s+fruit)\\\\s+blend\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: frozen fruit blends",
+    "status": "applied",
+    "target_id": "commodity:staple:frozen-fruit"
   },
   {
     "confidence": 0.9,
@@ -1136,8 +1484,20 @@
     "payload_json": "{\"payload\": \"tomatoes,\\\\s*sun\\\\s*-?\\\\s*dried\"}",
     "queue_hash": null,
     "rationale": "the 'Tomatoes, Sun Dried' comma order; the pesto/dressing/hummus/sausage excludes guard prepared foods",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:sun-dried-tomatoes"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:be3df064ecf91417e233",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"tomatoes,\\\\s*okra\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: tomatoes-okra-corn canned mix",
+    "status": "applied",
+    "target_id": "commodity:staple:canned-mixed-vegetables"
   },
   {
     "confidence": 0.9,
@@ -1148,7 +1508,7 @@
     "payload_json": "{\"payload\": \"diced.*roma\\\\s+tomatoes\"}",
     "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
     "rationale": "Matches Contadina Diced Roma Tomatoes. Roma is a type of tomato, and 'diced' matches the commodity form.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "canned-diced-tomatoes"
   },
   {
@@ -1160,7 +1520,7 @@
     "payload_json": "{\"payload\": \"jalape[n\\\\u00f1]o\\\\s+peppers,\\\\s*[^,]*pickled\"}",
     "queue_hash": null,
     "rationale": "the 'Jalapeno Peppers, Sliced Green Pickled' order; green-chile/banana-pepper excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:pickled-jalapenos"
   },
   {
@@ -1172,8 +1532,20 @@
     "payload_json": "{\"payload\": \"sweet\\\\s+yellow\\\\s+corn\"}",
     "queue_hash": null,
     "rationale": "the 'Sweet Yellow Corn' adjective order",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:sweet-corn"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:c6586cd69c1a526158e6",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"fruit\\\\s+smiles\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: Great Value's gummy fruit-snack line",
+    "status": "applied",
+    "target_id": "commodity:staple:fruit-snacks"
   },
   {
     "confidence": 0.95,
@@ -1196,7 +1568,7 @@
     "payload_json": "{\"payload\": \"mac\\\\s+n'?\\\\s+cheese\"}",
     "queue_hash": null,
     "rationale": "the 'Mac N Cheese' spelling the existing pattern's optional-ampersand branch misses",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:mac-and-cheese"
   },
   {
@@ -1208,7 +1580,7 @@
     "payload_json": "{\"payload\": \"stems\\\\s*(?:&|and)\\\\s*pieces\"}",
     "queue_hash": null,
     "rationale": "the reversed 'Stems & Pieces' order alongside the existing 'pieces & stems' pattern",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:canned-mushrooms"
   },
   {
@@ -1220,7 +1592,7 @@
     "payload_json": "{\"payload\": \"\\\\bangel\\\\s+hair\\\\b|\\\\blinguine\\\\b\"}",
     "queue_hash": null,
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:pasta"
   },
   {
@@ -1232,8 +1604,32 @@
     "payload_json": "{\"payload\": \"water,\\\\s*sparkling\"}",
     "queue_hash": null,
     "rationale": "the 'Spring/Mineral Water, Sparkling' comma order; tonic/hard/juice excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:sparkling-water"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:cca996c511034269c847",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"fresh\\\\s+sliced,\\\\s*american\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: deli-counter 'Fresh Sliced, American'",
+    "status": "applied",
+    "target_id": "commodity:staple:sliced-cheese"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:ccd94ebd6670d3ddfba8",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"deli\\\\s+fresh\\\\b.{0,35}turkey\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: Oscar Mayer's Deli Fresh line with a flavour word between",
+    "status": "applied",
+    "target_id": "commodity:staple:turkey-lunchmeat"
   },
   {
     "confidence": 0.9,
@@ -1244,7 +1640,7 @@
     "payload_json": "{\"payload\": \"juice\\\\s+cocktail,\\\\s*(?:original\\\\s+)?cranberry\\\\b(?!\\\\s+\\\\w*\\\\s*(?:pomegranate|apple|grape|berry))\"}",
     "queue_hash": null,
     "rationale": "the 'Juice Cocktail, Cranberry' word order, blocking named-blend suffixes like 'Cranberry Mixed Berry'",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:cranberry-juice"
   },
   {
@@ -1256,7 +1652,7 @@
     "payload_json": "{\"payload\": \"(?:local\\\\s+roots|crazy\\\\s+fresh|gotham\\\\s+greens)\\\\s+(?:organic\\\\s+)?thyme\\\\b\"}",
     "queue_hash": null,
     "rationale": "names the fresh-herb brands specifically so dried/ground thyme cannot match",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:fresh-thyme"
   },
   {
@@ -1268,8 +1664,20 @@
     "payload_json": "{\"payload\": \"salt,\\\\s*(?:[^,]*,\\\\s*)?kosher\"}",
     "queue_hash": null,
     "rationale": "the '<Sea> Salt, Coarse, Kosher' comma order; the fine/pink/himalayan/iodized excludes remain the guard",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:kosher-salt"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:d5f1116494b0673bb6c5",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"cheese\\\\s+product\\\\b.{0,40}slices?\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: 'Cheese Product ... 16 Slices' (the FDA term for processed slices)",
+    "status": "applied",
+    "target_id": "commodity:staple:sliced-cheese"
   },
   {
     "confidence": 0.9,
@@ -1280,8 +1688,20 @@
     "payload_json": "{\"payload\": \"vinegar,\\\\s*(?:[^,]*,\\\\s*)?apple\\\\s+cider\"}",
     "queue_hash": null,
     "rationale": "the 'Vinegar, [style,] Apple Cider' comma order; capsule/pill excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:apple-cider-vinegar"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:d837cb721a2f6505df1a",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"\\\\bstuffed\\\\b.{0,20}olives\\\\b\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: stuffed green olives, whatever the stuffing",
+    "status": "applied",
+    "target_id": "commodity:staple:green-olives"
   },
   {
     "confidence": 0.9,
@@ -1292,7 +1712,7 @@
     "payload_json": "{\"payload\": \"brown\\\\s+gravy\\\\s+seasoning\\\\s+mix\"}",
     "queue_hash": null,
     "rationale": "McCormick's 'Brown Gravy Seasoning Mix' wording; jar/ready-to-serve/chicken/turkey excludes guard the rest",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:brown-gravy-mix"
   },
   {
@@ -1304,7 +1724,7 @@
     "payload_json": "{\"payload\": \"baking\\\\s+potato(?:es)?\"}",
     "queue_hash": null,
     "rationale": "the '-ing' form of the existing 'baker potato' pattern; the sweet-potato exclude remains",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:russet-potatoes"
   },
   {
@@ -1316,7 +1736,7 @@
     "payload_json": "{\"payload\": \"(?<!liquid )castile\\\\s+soap\"}",
     "queue_hash": null,
     "rationale": "castile bar soap, refusing the 'Liquid Castile Soap' form",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:bar-soap"
   },
   {
@@ -1328,7 +1748,7 @@
     "payload_json": "{\"payload\": \"dressing,\\\\s*(?:\\\\w+\\\\s+)?bl(?:ue|eu)\\\\s+cheese\"}",
     "queue_hash": null,
     "rationale": "the 'Dressing, [Chunky] Blue Cheese' comma order; crumble/wedge/chunk-cheese excludes guard the cheese aisle",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:blue-cheese-dressing"
   },
   {
@@ -1340,8 +1760,20 @@
     "payload_json": "{\"payload\": \"(?:bbq|barbe?c?que|barbecue)\\\\s+sauce\"}",
     "queue_hash": null,
     "rationale": "adds the 'Barbeque' spelling; wing sauce/rub/cocktail excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:bbq-sauce"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:e1a7e8d0c2fe0a530b14",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"simply\\\\s+dressed\\\\b.{0,20}ranch\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: Marzetti's Simply Dressed line",
+    "status": "applied",
+    "target_id": "commodity:staple:ranch-dressing"
   },
   {
     "confidence": 0.9,
@@ -1352,7 +1784,7 @@
     "payload_json": "{\"payload\": \"pancake\\\\s*(?:&|and)\\\\s*baking\\\\s+mix\"}",
     "queue_hash": null,
     "rationale": "the 'Pancake & Baking Mix' phrasing alongside the existing 'pancake & waffle mix' pattern",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:pancake-mix"
   },
   {
@@ -1364,7 +1796,7 @@
     "payload_json": "{\"payload\": \"vinegar,\\\\s*(?:[^,]*,\\\\s*)?balsamic\"}",
     "queue_hash": null,
     "rationale": "the 'Vinegar, [attribute,] Balsamic' comma order; glaze/dressing/vinaigrette excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:balsamic-vinegar"
   },
   {
@@ -1376,7 +1808,7 @@
     "payload_json": "{\"payload\": \"mustard,\\\\s*honey\\\\b\"}",
     "queue_hash": null,
     "rationale": "the 'Mustard, Honey' comma order; pretzel/cracker/snack excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:honey-mustard"
   },
   {
@@ -1388,7 +1820,7 @@
     "payload_json": "{\"payload\": \"(?:head\\\\s*&\\\\s*shoulders|pantene)\\\\b.{0,25}2\\\\s*in\\\\s*1\"}",
     "queue_hash": null,
     "rationale": "brand-anchored 2-in-1 shampoo bottles whose titles omit the word 'shampoo'",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:shampoo"
   },
   {
@@ -1400,8 +1832,20 @@
     "payload_json": "{\"payload\": \"\\\\bbrat\\\\b(?!\\\\s*(?:patties|patty|burgers?))\"}",
     "queue_hash": null,
     "rationale": "the singular 'Brat' the '\\bbrats\\b' pattern misses, while refusing the patty form",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:bratwurst"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T18:29:19",
+    "id": "lp:f716aeb9e28892d33c5c",
+    "kind": "add_alias",
+    "model": "claude-fable-5",
+    "payload_json": "{\"payload\": \"queso\\\\s+quesadilla\"}",
+    "queue_hash": null,
+    "rationale": "escalation-review round 2: Chihuahua-style melting cheese",
+    "status": "applied",
+    "target_id": "commodity:staple:shredded-cheese"
   },
   {
     "confidence": 0.9,
@@ -1412,7 +1856,7 @@
     "payload_json": "{\"payload\": \"biscuits?,\\\\s*butter\"}",
     "queue_hash": null,
     "rationale": "the 'Biscuits, Butter[milk]' comma order used by Our Family dough cans; cookie/frozen excludes already guard the commodity",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:refrigerated-biscuits"
   },
   {
@@ -1424,7 +1868,7 @@
     "payload_json": "{\"payload\": \"lasagne\\\\s+pasta|wavy\\\\s+lasagne\"}",
     "queue_hash": null,
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:lasagna-noodles"
   },
   {
@@ -1436,7 +1880,7 @@
     "payload_json": "{\"payload\": \"dressing,\\\\s*(?:[^,]*,\\\\s*)?ranch\"}",
     "queue_hash": null,
     "rationale": "the 'Dressing, [attribute,] Ranch' comma order; seasoning/mix/dip/chips excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:ranch-dressing"
   },
   {
@@ -1448,7 +1892,7 @@
     "payload_json": "{\"payload\": \"\\\\borange\\\\s+oj\\\\b|\\\\boj\\\\b\\\\s+(?:no|low|medium|high|some|lots)\\\\s+pulp\"}",
     "queue_hash": null,
     "rationale": "the truncated 'Simply Orange Oj <pulp>' feed titles; anchored so bare 'OJ' cannot match alone",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:orange-juice"
   },
   {
@@ -1460,7 +1904,7 @@
     "payload_json": "{\"payload\": \"seasoning,\\\\s*(?:[^,]*\\\\s+)?(?:cajun|creole)\\\\b\"}",
     "queue_hash": null,
     "rationale": "the 'Seasoning, <style> Cajun' comma order; fries/snack/batter/boil excludes remain",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:cajun-seasoning"
   },
   {
@@ -1472,7 +1916,7 @@
     "payload_json": "{\"payload\": \"organic\\\\s.{0,40}frozen\\\\s+pops\"}",
     "queue_hash": null,
     "rationale": "the JonnyPops organic fruit-pop line ('Organic <flavor> Frozen Pops'); dairy-dessert pops do not carry 'organic' in these feeds",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:popsicles"
   },
   {
@@ -1484,7 +1928,7 @@
     "payload_json": "{\"payload\": \"no\\\\s+beans?\\\\s+chili|chili\\\\s+without\\\\s+beans?\"}",
     "queue_hash": null,
     "rationale": "the 'No Beans Chili' and 'Chili Without Beans' orders the existing pattern misses",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "commodity:staple:canned-chili"
   }
 ]

@@ -191,6 +191,12 @@ def main() -> int:
           f"gate <= {GATE_MISSED_MERGE}   {'PASS' if m['gates']['missed_merge_ok'] else 'FAIL'}")
     print(f"  tp={c['tp']} fp={c['fp']} tn={c['tn']} fn={c['fn']} "
           f"escalated={c['escalated']} missing_node={c['missing_node']}")
+    if c["missing_node"]:
+        # Loud, because a skipped case is a case that silently shrinks the set:
+        # every metric above is computed over a DENOMINATOR THAT EXCLUDES THESE.
+        print(f"\n  *** {c['missing_node']} GOLD CASE(S) SKIPPED: no commodity node ***")
+        print("  They are counted in neither rate. Run graph/gold/seed_gold.py to see")
+        print("  which commodities, and why each one is a real catalog question.")
 
     if args.show_errors and m["errors"]:
         print(f"\n  --- first {args.show_errors} errors ---")

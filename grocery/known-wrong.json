@@ -2287,6 +2287,201 @@
                         "ruled_on":  "2026-08-20",
                         "ruled_by":  "graph-produce-audit-2026-08-20",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "five-spice-powder|Walmart|simply-asia-five-spice-citrus-stir-fry-sauce-4-2",
+                        "commodity":  "five-spice-powder",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Simply Asia Five Spice Citrus Stir-Fry Sauce, 4.22 oz Pouch"
+                                  ],
+                        "product_id":  "5992198039",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A stir-fry SAUCE, not five-spice powder. Priced the graph walmart cell at $0.6256/oz vs the real $4.75/oz spice - an 87% understatement that would steal the crown.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-lower-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|Fareway|master-of-mixes-mixer-strawberry-daiquiri-margar",
+                        "commodity":  "strawberries",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Master of Mixes Mixer, Strawberry Daiquiri/Margarita"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Same cocktail mixer already ruled wrong 2026-08-20 under its long surface form; this is the SHORT form the curated product-urls entry uses, which let it survive the purge - the exact-name matching limitation caught live.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-lower-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "grapefruit|Fareway|lime",
+                        "commodity":  "grapefruit",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Lime"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A LIME priced the grapefruit cell at $0.99 vs the real $1.69 grapefruit. Different fruit outright.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-lower-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pistachios|FamilyFare|pillsbury-whipped-pistachio-frosting-12-oz",
+                        "commodity":  "pistachios",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Pillsbury Whipped Pistachio Frosting 12 Oz"
+                                  ],
+                        "product_id":  "1764405684715656476",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Cake FROSTING, not pistachio nuts. Priced the family-fare pistachios cell at $0.1908/oz vs the real $0.4698/oz Planters. Include matched on the word pistachio alone.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-lower-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "italian-sausage|FamilyFare|prego-italian-sausage-garlic-meat-sauce-23-5-oz",
+                        "commodity":  "italian-sausage",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Prego Italian Sausage \u0026 Garlic Meat Sauce 23.5 Oz"
+                                  ],
+                        "product_id":  "33949",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A jarred pasta SAUCE containing sausage, not italian sausage the meat. Crowned at $1.96/lb vs the real $4.49/lb ground sausage.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-lower-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "peaches|FamilyFare|sparkling-ice-sparkling-water-zero-sugar-peach-n",
+                        "commodity":  "peaches",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz"
+                                  ],
+                        "product_id":  "2421",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Peach-FLAVORED sparkling water, not peaches. Beverage-on-fruit, the blueberries-as-Bai class exactly; crowned at $1.31/lb vs real $2.99/lb fruit.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-lower-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "asparagus|FamilyFare|birds-eye-gold-white-corn-carrots-asparagus-10-8",
+                        "commodity":  "asparagus",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Birds Eye Gold \u0026 White Corn, Carrots \u0026 Asparagus 10.8 Oz"
+                                  ],
+                        "product_id":  "3158366",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A frozen corn/carrot/asparagus MIX, not asparagus. Crowned at $3.84/lb vs the real $6.99/lb fresh.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-lower-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "celery|Bakers|kroger-frozen-mirepoix-style-blend-onions-carrot",
+                        "commodity":  "celery",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Kroger Frozen Mirepoix Style Blend Onions, Carrots \u0026 Celery"
+                                  ],
+                        "product_id":  "0001111089788",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A frozen mirepoix BLEND of three vegetables, not celery. Crowned the bakers celery cell at $1.59 vs the real $2.59 fresh celery.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-lower-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "celery|FamilyFare|vegetable-stew-mix-potatoes-carrots-onions-celer",
+                        "commodity":  "celery",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Vegetable Stew Mix Potatoes, Carrots, Onions \u0026 Celery"
+                                  ],
+                        "product_id":  "1564405684703628304",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A stew vegetable MIX where celery is one of four ingredients, not celery. Crowned at $1.99 vs the real $2.79.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-lower-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "sun-dried-tomatoes|FamilyFare|fresh-finest-by-our-family-sun-dried-tomato-feta",
+                        "commodity":  "sun-dried-tomatoes",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Fresh \u0026 Finest By Our Family Sun Dried Tomato Feta Dip 10 Oz"
+                                  ],
+                        "product_id":  "1564405684716878403",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A feta DIP flavored with sun-dried tomato, not sun-dried tomatoes. Crowned at $0.499/oz vs the real $0.7488/oz julienne tomatoes.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-lower-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "sea-salt|FamilyFare|green-giant-seasoned-with-sea-salt-sliced-beets",
+                        "commodity":  "sea-salt",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Green Giant Seasoned With Sea Salt Sliced Beets 15 Oz"
+                                  ],
+                        "product_id":  "1564405684716204597",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Canned BEETS seasoned with sea salt, not sea salt. Second sea-salt carrier ruling of 2026-08-20; the popcorn was the first. Crowned at $0.1327/oz vs real $0.1681/oz salt.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-lower-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "gochujang|Bakers|devour-big-bowl-spicy-gochujang-pork-mac-cheese",
+                        "commodity":  "gochujang",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Devour Big Bowl Spicy Gochujang Pork Mac \u0026 Cheese Frozen Bowl"
+                                  ],
+                        "product_id":  "0002515500083",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A frozen mac-and-cheese MEAL flavored with gochujang, not gochujang chili paste. Crowned at $0.3564/oz vs the real $0.4248/oz Sempio paste.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-lower-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "egg-noodles|FamilyFare|campbells-chicken-noodle-soup-dry-egg-noodle-rec",
+                        "commodity":  "egg-noodles",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Campbell\u0027s Chicken Noodle Soup Dry Egg Noodle Recipe 22.400 Oz"
+                                  ],
+                        "product_id":  "595935",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Chicken noodle SOUP, not egg noodles the pasta. Crowned at $0.1558/oz vs the real $0.1825/oz Our Family noodles.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "graph-lower-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

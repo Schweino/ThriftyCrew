@@ -51,7 +51,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "lib"))
 sys.path.insert(0, os.path.join(HERE, "..", "gold"))
 
-from graphdb import open_db, GRAPH_DIR, REPO_ROOT       # noqa: E402
+from graphdb import open_db, GRAPH_DIR, REPO_ROOT, read_json   # noqa: E402
 from ids import hash_obj, store_label                   # noqa: E402
 from seed_gold import case as gold_case, GOLD_PATH      # noqa: E402
 from flag_outliers import flag as flag_basis            # noqa: E402
@@ -128,27 +128,75 @@ def _commodity_context(db, cid: str) -> dict:
     }
 
 
-def _question_rows(db, cid: str, product: str) -> list[dict]:
-    """Every live row still asking this question."""
+# The row status each queue kind is waiting on. A verdict may only move rows
+# that are still in its kind's source status — that is what makes
+# refuse-don't-clobber meaningful across both lanes.
+KIND_STATUS = {
+    "confirm_match": "llm_match_unverified",   # model said MATCH; confirm the lead
+    "contested": "escalated",                  # model could not say; rule from scratch
+}
+
+
+def _question_rows(db, cid: str, product: str,
+                   status: str = "llm_match_unverified") -> list[dict]:
+    """Every live row still asking this question, in the status it is waiting in."""
     return [dict(r) for r in db.conn.execute(
         """SELECT id, store_id, observed_at FROM price_observations
-           WHERE commodity_id=? AND product_name=?
-             AND match_status='llm_match_unverified'""",
-        (cid, product)).fetchall()]
+           WHERE commodity_id=? AND product_name=? AND match_status=?""",
+        (cid, product, status)).fetchall()]
 
 
-def emit_packet(db) -> str:
+def _store_page_hint(cid: str, rows: list[dict]) -> dict:
+    """Where a later session should go looking for the evidence a title lacks.
+
+    product-urls.json already holds curated per-(commodity, store) product links.
+    When one exists for a store this question actually appears in, hand it over
+    rather than making the evidence pass re-derive it."""
+    hint: dict = {"stores": sorted({r["store_id"].replace("store:", "") for r in rows})}
+    path = os.path.join(REPO_ROOT, "grocery", "product-urls.json")
+    if not os.path.exists(path):
+        return hint
+    try:
+        items = (read_json(path).get("items") or {})
+    except (ValueError, OSError):
+        return hint
+    entry = items.get(cid.rpartition(":")[2]) or {}
+    urls = {}
+    for store, v in entry.items():
+        if store == "commodity" or not isinstance(v, dict):
+            continue
+        if v.get("url"):
+            urls[store] = v["url"]
+    if urls:
+        hint["known_product_urls"] = urls
+    return hint
+
+
+def emit_packet(db, kind: str = "confirm_match", deferred_only: bool = False) -> str:
+    """Build a review packet for one KIND of queued question.
+
+    confirm_match — the local model said MATCH with confidence; the reviewer is
+                    confirming or overturning a LEAD.
+    contested     — the model said UNSURE or scored below threshold; there is no
+                    lead, and the reviewer adjudicates FROM SCRATCH. Expect a
+                    higher DEFER rate here; that is the rubric working, not
+                    failure.
+
+    The two kinds share every piece of machinery except which rows they are
+    waiting on (KIND_STATUS). Splitting them into separate modules would have
+    duplicated the ingest invariants — refuse-don't-clobber, gold write-through,
+    provenance, queue bookkeeping — and those are exactly the things that must
+    not drift between two copies.
+    """
+    if kind not in KIND_STATUS:
+        raise ValueError(f"unknown kind {kind!r}; expected one of {sorted(KIND_STATUS)}")
+    status = KIND_STATUS[kind]
+
     queue = _load_queue()
-    # This lane rules CONFIRM_MATCH questions only. A 'contested' entry is a row
-    # nobody could settle (status 'escalated'), which needs adjudication from
-    # scratch rather than confirmation of a lead — and --ingest deliberately
-    # touches only 'llm_match_unverified' rows, so a verdict here could not move
-    # it anyway. They are COUNTED and reported rather than silently dropped, so
-    # a queue quietly filling with contested work is visible.
-    entries = [e for e in queue if e.get("kind") == "confirm_match"]
-    contested = sum(1 for e in queue if e.get("kind") != "confirm_match")
+    entries = [e for e in queue if e.get("kind") == kind]
+    other = sum(1 for e in queue if e.get("kind") != kind)
 
-    # Orphan sweep: questions whose rows are llm_match_unverified but which the
+    # Orphan sweep: questions whose rows sit in this kind's status but which the
     # queue never recorded (a killed resolve run banks rows at checkpoints yet
     # writes its queue only at exit). Without this, those rows would wait forever.
     queued_keys = {(e.get("commodity"), e.get("product")) for e in entries}
@@ -156,8 +204,8 @@ def emit_packet(db) -> str:
         """SELECT commodity_id, product_name, MIN(id) AS obs, COUNT(*) AS n,
                   MAX(match_reason) AS reason, MAX(confidence) AS confidence
            FROM price_observations
-           WHERE match_status='llm_match_unverified' AND product_name IS NOT NULL
-           GROUP BY commodity_id, product_name""").fetchall()
+           WHERE match_status=? AND product_name IS NOT NULL
+           GROUP BY commodity_id, product_name""", (status,)).fetchall()
     swept = 0
     for r in orphans:
         key = (r["commodity_id"], r["product_name"])
@@ -166,10 +214,15 @@ def emit_packet(db) -> str:
         entries.append({
             "observation": r["obs"], "commodity": r["commodity_id"],
             "product": r["product_name"], "reason": r["reason"],
-            "rows_settled": r["n"], "kind": "confirm_match",
+            "rows_settled": r["n"], "kind": kind,
             "confidence": r["confidence"], "swept_from_db": True,
         })
         swept += 1
+
+    if deferred_only:
+        # The evidence pass: only questions a previous review could not settle
+        # from the title alone, each carrying what it is waiting on.
+        entries = [e for e in entries if e.get("deferred_reason")]
 
     # Group by commodity; biggest coverage return first.
     by_commodity: dict[str, list[dict]] = {}
@@ -181,7 +234,7 @@ def emit_packet(db) -> str:
         ctx = _commodity_context(db, cid)
         questions = []
         for e in group:
-            rows = _question_rows(db, cid, e["product"])
+            rows = _question_rows(db, cid, e["product"], status)
             q = {
                 "observation": e["observation"],
                 "product": e["product"],
@@ -189,9 +242,15 @@ def emit_packet(db) -> str:
                 "model_confidence": e.get("confidence"),
                 "rows_live": len(rows),
                 "stores": sorted({r["store_id"] for r in rows}),
+                # Echoed onto every verdict at ingest so the UPDATE can scope
+                # itself to the status this question is actually waiting in.
+                "from_status": status,
             }
+            if kind == "contested":
+                q["adjudicate_from_scratch"] = True
             if e.get("deferred_reason"):
                 q["deferred_reason"] = e["deferred_reason"]
+                q["store_page_hint"] = _store_page_hint(cid, rows)
             questions.append(q)
         questions.sort(key=lambda q: -q["rows_live"])
         ctx["rows_total"] = sum(q["rows_live"] for q in questions)
@@ -199,26 +258,49 @@ def emit_packet(db) -> str:
         commodities.append(ctx)
     commodities.sort(key=lambda c: -c["rows_total"])
 
+    instructions = (
+        "For each question return one verdict object: {observation, "
+        "commodity, product, verdict: CONFIRM|REJECT|DEFER, evidence}. "
+        "evidence must name the DECIDING WORDS — same standard as "
+        "known-wrong.json and the gold set. A DEFER carries "
+        "deferred_reason instead (what store-page evidence would settle "
+        "it). A REJECT seen on/near the live board carries board_grade: "
+        "true so the ruling also enters known-wrong. A CONFIRM may carry "
+        "alias_proposal (an include regex anchored on words naming the "
+        "FOOD) + alias_rationale, filed through the normal shadow gate. "
+        "Echo each question's from_status onto its verdict. "
+        "Ingest with: python graph/pipeline/review_escalations.py "
+        f"--ingest verdicts.json"
+    )
+    if kind == "contested":
+        instructions += (
+            "\n\nTHIS IS THE CONTESTED LANE. The local model could NOT lean "
+            "either way on these — there is no lead to confirm, so adjudicate "
+            "each from scratch against the rubric and the commodity's own "
+            "evidence. A HIGHER DEFER RATE IS CORRECT HERE: if the title cannot "
+            "settle it, DEFER with what would. Never confirm to clear the queue."
+        )
+    if deferred_only:
+        instructions += (
+            "\n\nDEFERRED-EVIDENCE PASS. Every question here was already "
+            "deferred once, so the title alone is known to be insufficient — "
+            "read the store page. Family Fare and Aldi product pages are "
+            "client-rendered: use the browser, not a plain fetch. Put what the "
+            "PAGE showed (aisle, unit, ingredient panel) into evidence. You may "
+            "re-defer only with a NEW reason naming what the page failed to show."
+        )
+
     packet = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
+        "kind": kind,
+        "from_status": status,
+        "deferred_only": deferred_only,
         "prompt_version": PROMPT_VERSION,
         "rubric": RUBRIC,
-        "instructions": (
-            "For each question return one verdict object: {observation, "
-            "commodity, product, verdict: CONFIRM|REJECT|DEFER, evidence}. "
-            "evidence must name the DECIDING WORDS — same standard as "
-            "known-wrong.json and the gold set. A DEFER carries "
-            "deferred_reason instead (what store-page evidence would settle "
-            "it). A REJECT seen on/near the live board carries board_grade: "
-            "true so the ruling also enters known-wrong. A CONFIRM may carry "
-            "alias_proposal (an include regex anchored on words naming the "
-            "FOOD) + alias_rationale, filed through the normal shadow gate. "
-            "Ingest with: python graph/pipeline/review_escalations.py "
-            "--ingest verdicts.json"
-        ),
+        "instructions": instructions,
         "questions_total": sum(len(c["questions"]) for c in commodities),
         "swept_from_db": swept,
-        "contested_not_in_this_lane": contested,
+        "other_kinds_not_in_this_packet": other,
         "commodities": commodities,
     }
     with open(PACKET, "w", encoding="utf-8", newline="\n") as fh:
@@ -292,10 +374,21 @@ def ingest(db, path: str) -> dict:
     kw_commands: list[str] = []
     proposals: list[str] = []
 
+    # A packet-level from_status applies to every verdict in the file; a verdict
+    # may override it. Default keeps every pre-contested-lane verdict file valid.
+    file_status = data.get("from_status", "llm_match_unverified") \
+        if isinstance(data, dict) else "llm_match_unverified"
+
     for v in verdicts:
         verdict = (v.get("verdict") or "").upper()
         obs, cid, product = v.get("observation"), v.get("commodity"), v.get("product")
         evidence = (v.get("evidence") or v.get("deferred_reason") or "").strip()
+        from_status = v.get("from_status", file_status)
+        if from_status not in KIND_STATUS.values():
+            refused.append({"observation": obs,
+                            "why": f"from_status {from_status!r} is not a status this "
+                                   f"lane may move rows out of"})
+            continue
         if verdict not in ("CONFIRM", "REJECT", "DEFER") or not (cid and product):
             refused.append({"verdict": v, "why": "malformed: needs verdict/commodity/product"})
             continue
@@ -310,9 +403,11 @@ def ingest(db, path: str) -> dict:
             if entry is None:
                 # A swept orphan has no queue entry yet; give it one so the
                 # deferral is durable and the next --emit-packet shows it.
+                kind_of = next((k for k, s in KIND_STATUS.items() if s == from_status),
+                               "confirm_match")
                 entry = {"observation": obs, "commodity": cid, "product": product,
                          "reason": v.get("model_reason"), "rows_settled": 0,
-                         "kind": "confirm_match", "confidence": None}
+                         "kind": kind_of, "confidence": None}
                 queue.append(entry)
                 by_q[(cid, product)] = entry
             entry["deferred_reason"] = evidence
@@ -324,18 +419,23 @@ def ingest(db, path: str) -> dict:
                                  "prompt_version": PROMPT_VERSION})
             continue
 
+        # llm_confirmed means REVIEWER-confirmed regardless of how the question
+        # arrived here (schema.md defines it that way), so a contested CONFIRM
+        # lands in the same status as a confirm_match CONFIRM. What differs is
+        # only the status the rows are moved OUT of — scoped so a verdict written
+        # against one lane can never silently move the other lane's rows.
         status = "llm_confirmed" if verdict == "CONFIRM" else "llm_rejected"
         reason = f"reviewer {verdict}: {evidence}"[:400]
         cur = db.conn.execute(
             """UPDATE price_observations SET match_status=?, match_reason=?, confidence=?
-               WHERE commodity_id=? AND product_name=?
-                 AND match_status='llm_match_unverified'""",
-            (status, reason, float(v.get("confidence", 1.0) or 1.0), cid, product))
+               WHERE commodity_id=? AND product_name=? AND match_status=?""",
+            (status, reason, float(v.get("confidence", 1.0) or 1.0), cid, product,
+             from_status))
         if cur.rowcount == 0:
             # Someone else already ruled this question. Report, don't clobber —
             # and leave the queue entry for a human to reconcile.
             refused.append({"observation": obs, "commodity": cid, "product": product,
-                            "why": "no rows still llm_match_unverified"})
+                            "why": f"no rows still {from_status}"})
             continue
 
         db.log_event(run=run, timestamp=ts, etype="escalate", model=reviewer,
@@ -344,6 +444,7 @@ def ingest(db, path: str) -> dict:
                      provenance_ids=[prov],
                      detail={"observation": obs, "commodity": cid, "product": product,
                              "rows_updated": cur.rowcount, "evidence": evidence,
+                             "from_status": from_status,
                              "prompt_version": PROMPT_VERSION})
 
         # Gold case: every ruled question is a labelled, evidenced judgement.
@@ -445,8 +546,13 @@ def status(db) -> None:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Confirm-match review lane")
+    ap = argparse.ArgumentParser(description="Escalation review lanes "
+                                             "(confirm-match and contested)")
     ap.add_argument("--emit-packet", action="store_true")
+    ap.add_argument("--kind", choices=sorted(KIND_STATUS), default="confirm_match",
+                    help="which queued question kind to emit (default confirm_match)")
+    ap.add_argument("--deferred-only", action="store_true",
+                    help="emit only previously-deferred questions, with store-page hints")
     ap.add_argument("--ingest", metavar="VERDICTS_JSON")
     ap.add_argument("--status", action="store_true")
     args = ap.parse_args()
@@ -457,16 +563,18 @@ def main() -> int:
 
     with open_db() as db:
         if args.emit_packet:
-            p = emit_packet(db)
+            p = emit_packet(db, kind=args.kind, deferred_only=args.deferred_only)
             packet = json.load(open(p, encoding="utf-8"))
-            print(f"review packet: {p}")
+            print(f"review packet [{packet['kind']}"
+                  f"{', deferred-only' if packet['deferred_only'] else ''}]: {p}")
             print(f"  {packet['questions_total']} question(s) across "
                   f"{len(packet['commodities'])} commodities "
                   f"({packet['swept_from_db']} swept from DB, not the queue)")
-            if packet["contested_not_in_this_lane"]:
-                print(f"  {packet['contested_not_in_this_lane']} 'contested' "
-                      f"queue entries are NOT in this packet — they need "
-                      f"adjudication from scratch, not confirmation")
+            print(f"  verdicts must move rows out of: {packet['from_status']}")
+            if packet["other_kinds_not_in_this_packet"]:
+                print(f"  {packet['other_kinds_not_in_this_packet']} queue entr(ies) "
+                      f"of another kind are NOT in this packet — emit them with "
+                      f"--kind")
             print("Review in batches of ~50, biggest rows_live first; "
                   "ingest each batch with --ingest.")
         if args.ingest:

@@ -76,12 +76,25 @@ from collections import defaultdict
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "lib"))
 sys.path.insert(0, os.path.join(HERE, "..", "gold"))
+sys.path.insert(0, os.path.join(HERE, "..", "pipeline"))
 
 from graphdb import open_db, GRAPH_DIR, read_json, REPO_ROOT   # noqa: E402
 from ids import norm_text                                      # noqa: E402
 from seed_gold import load_gold                                # noqa: E402
 
 REPORT = os.path.join(GRAPH_DIR, "learning", "alias-blast-radius.json")
+
+_RESOLVER = None
+
+
+def _resolver(db):
+    """One Resolver for the whole run — it caches compiled commodity rules, and
+    recompiling per candidate name was measurably the slow path in resolve.py."""
+    global _RESOLVER
+    if _RESOLVER is None or _RESOLVER.db is not db:
+        from resolve import Resolver                       # noqa: E402
+        _RESOLVER = Resolver(db, llm=None, use_llm=False)
+    return _RESOLVER
 
 # Statuses that mean "this row is pricing, or could price, a cell for its
 # commodity" — the ones a cross-commodity collision actually matters for.
@@ -186,17 +199,40 @@ def analyse(db, target: str, pattern: str, corpus=None, negatives=None) -> dict:
     buckets: dict[str, list[dict]] = defaultdict(list)
     counts: dict[str, int] = defaultdict(int)
 
+    # The resolver itself, so this asks what the LAYERS would really do rather
+    # than re-implementing them. Layers 1-3 (known-wrong, category-exclude,
+    # exclude) run BEFORE include, so a name they already block is a name this
+    # alias can never fire on — counting it as a collision is a false alarm.
+    # Measured 2026-08-20: 6 of 9 cross-commodity warnings were exactly this
+    # (shower-cleaner excludes 'toilet', shredded-cheese excludes 'parmesan' and
+    # 'burritos', sweet-corn excludes 'cornbread'), and acting on them would have
+    # narrowed three correct patterns for no reason.
+    resolver = _resolver(db)
+    try:
+        resolver.commodity(target)
+    except KeyError:
+        return {"target": target, "pattern": pattern, "kill": True,
+                "kill_reasons": [f"target {target!r} is not a commodity node"]}
+
     for name, info in corpus:
         if not rx.search(name):
             continue
         n = norm_text(name)
         priced_by, rejected_by = info["priced_by"], info["rejected_by"]
 
+        prior = resolver.resolve(target, name, allow_llm=False)
+        if prior.status in ("known_wrong", "category_excluded", "excluded"):
+            counts["blocked_by_rules"] += 1
+            if len(buckets["blocked_by_rules"]) < EXAMPLES:
+                buckets["blocked_by_rules"].append(
+                    {"product": name[:90], "blocked_by": prior.reason[:80]})
+            continue
+
         if n in own_negatives:
             bucket = "known_wrong_hit"
         elif target in rejected_by:
             bucket = "rejected_hit"
-        elif target in info["rule_matched_by"]:
+        elif prior.status == "include_hit":
             bucket = "already_matched"          # an include pattern already hits it
         elif target in priced_by:
             bucket = "absorbs_review"           # priced only by a reviewer CONFIRM
@@ -241,7 +277,8 @@ def analyse(db, target: str, pattern: str, corpus=None, negatives=None) -> dict:
         "pattern": pattern,
         "counts": {k: counts[k] for k in
                    ("intended_capture", "absorbs_review", "already_matched",
-                    "cross_commodity", "known_wrong_hit", "rejected_hit")},
+                    "cross_commodity", "known_wrong_hit", "rejected_hit",
+                    "blocked_by_rules")},
         "total_hits": sum(counts.values()),
         "kill": bool(kill_reasons),
         "kill_reasons": kill_reasons,

@@ -1,4 +1,4 @@
-﻿{
+{
  "readme": "Durable per-store direct product URLs + verified price for the Omaha grocery prices page. Keyed by commodity id -> store -> {url,price,size,name}. Survives weekly regeneration; build-deals-page.ps1 renders a 'See item' link per chip.",
  "updated": "2026-08-20",
  "items": {
@@ -22290,13 +22290,6 @@
     "size": "2 lb",
     "name": "Strawberries, 2 lbs.",
     "board_pu": 0.1225
-   },
-   "Fareway": {
-    "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/97404-master-of-mixes-handcrafted-daiquiri-margarita-mixer-strawberry-33-8-fl-oz",
-    "name": "Master of Mixes Mixer, Strawberry Daiquiri/Margarita",
-    "price": "$4.79",
-    "size": "33.8 oz",
-    "verified": "2026-08-12 DERIVED from the price row (same record the board priced)"
    }
   },
   "string-cheese": {

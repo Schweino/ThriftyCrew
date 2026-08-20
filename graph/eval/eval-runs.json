@@ -17,6 +17,23 @@
     "run_at": "2026-08-20T18:18:15"
   },
   {
+    "context": "post-plan-items-2026-08-20",
+    "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.6891133557800224, \"relation_precision\": 1.0, \"relation_recall\": 0.6891133557800224, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.3108866442199775, \"counts\": {\"tp\": 614, \"fp\": 0, \"tn\": 381, \"fn\": 277, \"gold_match\": 891, \"gold_no_match\": 381, \"escalated\": 0, \"missing_node\": 26}, \"by_status\": {\"known_wrong\": 155, \"include_hit\": 614, \"no_include_hit\": 501, \"excluded\": 2}, \"f1\": 0.8159468438538205, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}}",
+    "entity_precision": 1.0,
+    "entity_recall": 0.6891133557800224,
+    "false_merge_rate": 0.0,
+    "gold_version": "022e1076942fe08b",
+    "id": "eval:565a6350f3135e1f6711",
+    "missed_merge_rate": 0.3108866442199775,
+    "model": "deterministic-only",
+    "n_gold": 1301,
+    "n_pred": 614,
+    "prompt_version": "resolve.v1",
+    "relation_precision": 1.0,
+    "relation_recall": 0.6891133557800224,
+    "run_at": "2026-08-20T18:27:15"
+  },
+  {
     "context": "phase2",
     "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.41685393258426967, \"relation_precision\": 1.0, \"relation_recall\": 0.41685393258426967, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.5831460674157304, \"counts\": {\"tp\": 371, \"fp\": 0, \"tn\": 378, \"fn\": 519, \"gold_match\": 890, \"gold_no_match\": 378, \"escalated\": 0, \"missing_node\": 27}, \"by_status\": {\"known_wrong\": 150, \"no_include_hit\": 746, \"include_hit\": 371, \"excluded\": 1}, \"f1\": 0.5884218873909596, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}}",
     "entity_precision": 1.0,
@@ -49,6 +66,23 @@
     "relation_precision": 1.0,
     "relation_recall": 0.9812332439678284,
     "run_at": "2026-08-20T15:14:24"
+  },
+  {
+    "context": "final-2026-08-20",
+    "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.7789001122334456, \"relation_precision\": 1.0, \"relation_recall\": 0.7789001122334456, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.22109988776655443, \"counts\": {\"tp\": 694, \"fp\": 0, \"tn\": 381, \"fn\": 197, \"gold_match\": 891, \"gold_no_match\": 381, \"escalated\": 0, \"missing_node\": 26}, \"by_status\": {\"known_wrong\": 155, \"include_hit\": 694, \"no_include_hit\": 421, \"excluded\": 2}, \"f1\": 0.8757097791798107, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}}",
+    "entity_precision": 1.0,
+    "entity_recall": 0.7789001122334456,
+    "false_merge_rate": 0.0,
+    "gold_version": "022e1076942fe08b",
+    "id": "eval:8f321299482e58ff18c8",
+    "missed_merge_rate": 0.22109988776655443,
+    "model": "deterministic-only",
+    "n_gold": 1301,
+    "n_pred": 694,
+    "prompt_version": "resolve.v1",
+    "relation_precision": 1.0,
+    "relation_recall": 0.7789001122334456,
+    "run_at": "2026-08-20T18:33:04"
   },
   {
     "context": "phase2",
@@ -85,6 +119,23 @@
     "run_at": "2026-08-20T15:14:28"
   },
   {
+    "context": "post-alias-absorption-2026-08-20",
+    "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.6910112359550562, \"relation_precision\": 1.0, \"relation_recall\": 0.6910112359550562, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.3089887640449438, \"counts\": {\"tp\": 615, \"fp\": 0, \"tn\": 378, \"fn\": 275, \"gold_match\": 890, \"gold_no_match\": 378, \"escalated\": 0, \"missing_node\": 27}, \"by_status\": {\"known_wrong\": 152, \"include_hit\": 615, \"no_include_hit\": 500, \"excluded\": 1}, \"f1\": 0.8172757475083057, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}}",
+    "entity_precision": 1.0,
+    "entity_recall": 0.6910112359550562,
+    "false_merge_rate": 0.0,
+    "gold_version": "79113b6a92acb41e",
+    "id": "eval:98e69d4f4aa6aaacf9b3",
+    "missed_merge_rate": 0.3089887640449438,
+    "model": "deterministic-only",
+    "n_gold": 1298,
+    "n_pred": 615,
+    "prompt_version": "resolve.v1",
+    "relation_precision": 1.0,
+    "relation_recall": 0.6910112359550562,
+    "run_at": "2026-08-20T18:23:31"
+  },
+  {
     "context": "phase2",
     "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.41685393258426967, \"relation_precision\": 1.0, \"relation_recall\": 0.41685393258426967, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.5831460674157304, \"counts\": {\"tp\": 371, \"fp\": 0, \"tn\": 378, \"fn\": 519, \"gold_match\": 890, \"gold_no_match\": 378, \"escalated\": 0, \"missing_node\": 27}, \"by_status\": {\"known_wrong\": 152, \"no_include_hit\": 744, \"include_hit\": 371, \"excluded\": 1}, \"f1\": 0.5884218873909596, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}}",
     "entity_precision": 1.0,
@@ -100,6 +151,40 @@
     "relation_precision": 1.0,
     "relation_recall": 0.41685393258426967,
     "run_at": "2026-08-20T17:31:43"
+  },
+  {
+    "context": "post-round2-aliases-2026-08-20",
+    "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.7789001122334456, \"relation_precision\": 1.0, \"relation_recall\": 0.7789001122334456, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.22109988776655443, \"counts\": {\"tp\": 694, \"fp\": 0, \"tn\": 381, \"fn\": 197, \"gold_match\": 891, \"gold_no_match\": 381, \"escalated\": 0, \"missing_node\": 26}, \"by_status\": {\"known_wrong\": 155, \"include_hit\": 694, \"no_include_hit\": 421, \"excluded\": 2}, \"f1\": 0.8757097791798107, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}}",
+    "entity_precision": 1.0,
+    "entity_recall": 0.7789001122334456,
+    "false_merge_rate": 0.0,
+    "gold_version": "022e1076942fe08b",
+    "id": "eval:af02bbc10153205ea4c8",
+    "missed_merge_rate": 0.22109988776655443,
+    "model": "deterministic-only",
+    "n_gold": 1301,
+    "n_pred": 694,
+    "prompt_version": "resolve.v1",
+    "relation_precision": 1.0,
+    "relation_recall": 0.7789001122334456,
+    "run_at": "2026-08-20T18:29:40"
+  },
+  {
+    "context": "post-plan-items-2026-08-20",
+    "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.6891133557800224, \"relation_precision\": 1.0, \"relation_recall\": 0.6891133557800224, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.3108866442199775, \"counts\": {\"tp\": 614, \"fp\": 0, \"tn\": 381, \"fn\": 277, \"gold_match\": 891, \"gold_no_match\": 381, \"escalated\": 0, \"missing_node\": 26}, \"by_status\": {\"known_wrong\": 155, \"include_hit\": 614, \"no_include_hit\": 501, \"excluded\": 2}, \"f1\": 0.8159468438538205, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}}",
+    "entity_precision": 1.0,
+    "entity_recall": 0.6891133557800224,
+    "false_merge_rate": 0.0,
+    "gold_version": "022e1076942fe08b",
+    "id": "eval:be49c4221b9d480c52a1",
+    "missed_merge_rate": 0.3108866442199775,
+    "model": "deterministic-only",
+    "n_gold": 1301,
+    "n_pred": 614,
+    "prompt_version": "resolve.v1",
+    "relation_precision": 1.0,
+    "relation_recall": 0.6891133557800224,
+    "run_at": "2026-08-20T18:27:12"
   },
   {
     "context": "phase2",
