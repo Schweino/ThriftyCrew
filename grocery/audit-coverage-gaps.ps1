@@ -27,6 +27,7 @@
 param([string]$OutDir = "", [string]$CompareFile = "", [string]$CandidatesFile = "", [string]$ReportDir = "",
       [string]$CommoditiesFile = "", [string]$AllowFile = "", [int]$MatchTimeoutMs = 250, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'regular-fileset-lib.ps1')
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 
 # ---- BOUNDED-TIME MATCHING (2026-08-14) ----------------------------------------------------------
@@ -146,7 +147,10 @@ foreach ($rf in (Get-ChildItem (Join-Path $OutDir 'regular\*.json') -ErrorAction
     $regNewest[$pfx] = [pscustomobject]@{ stamp = $stamp; file = $rf }
   }
 }
-$freshFloor = (Get-Date).AddDays(-14).ToString('yyyy-MM-dd')
+# The floor is ASKED FOR, not restated. The comment above says 'the same window the engine itself
+# honours' - it said 14 while the engine moved to the 90-day quarter, so this manufactured exactly
+# the false gaps it was written to prevent.
+$freshFloor = (Get-Date).AddDays(-(Get-RegularUnionDays)).ToString('yyyy-MM-dd')
 foreach ($k in $regNewest.Keys) {
   $entry = $regNewest[$k]
   if ($entry.stamp -lt $freshFloor) { continue }        # past the cliff: the engine would not price it either

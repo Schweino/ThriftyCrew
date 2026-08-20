@@ -27,12 +27,16 @@
 #>
 param(
   [ValidateSet('fareway','aldi')][string]$Store,
-  [int]$MaxAgeDays = 14,
+  [int]$MaxAgeDays = 0,
   [string]$RegularDir = "",
   [string]$Root = "",
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'regular-fileset-lib.ps1')
+# 0 = ask. Only build-fareway-regular passes -MaxAgeDays today, so this default was reachable
+# by any future caller and would have quietly re-dated rows against a window nothing else uses.
+if ($MaxAgeDays -le 0) { $MaxAgeDays = Get-RegularUnionDays }
 # -Store is REQUIRED for a real run but must NOT be declared Mandatory (2026-08-08). PowerShell prompts for a
 # missing mandatory parameter, so `-SelfTest` alone could never be invoked: it died with
 # MissingMandatoryParameter on any non-interactive runner. This file's self-test therefore existed and had

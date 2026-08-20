@@ -40,6 +40,8 @@
 # store's links should move: a link layer this wide should never be rewritten wholesale to fix one store.
 param([switch]$Apply, [string]$OutDir = "", [string]$Store = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'regular-fileset-lib.ps1')
+$UNION_DAYS = Get-RegularUnionDays
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path $root 'pu-lib.ps1')   # store what you audit: every entry re-prices through the same lib prune uses
@@ -76,7 +78,9 @@ function Get-StoreFiles([string]$store) {
     "Sam's Club" {
       foreach ($f in (Get-ChildItem (Join-Path $OutDir 'sams\sams-deals-*.json') -EA SilentlyContinue | Sort-Object Name -Descending)) {
         if ($f.BaseName -notmatch '(\d{4}-\d{2}-\d{2})$') { continue }
-        if ([math]::Abs(([datetime]$Matches[1] - (Get-Date)).TotalDays) -gt 14) { continue }
+        # $UNION_DAYS, not 14: the engine unions Sam's captures over the SAME window, so a private copy
+        # here silently refuses to derive links for cells the board is actively pricing.
+        if ([math]::Abs(([datetime]$Matches[1] - (Get-Date)).TotalDays) -gt $UNION_DAYS) { continue }
         $files += $f.FullName
       }
       if ($reg) { $files += $reg.FullName }

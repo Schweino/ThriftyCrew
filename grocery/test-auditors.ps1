@@ -691,7 +691,12 @@ $fxCell = NewFxDir 'wfp-cellexpiry'
 New-Item -ItemType Directory -Force (Join-Path $fxCell 'out\regular') | Out-Null
 New-Item -ItemType Directory -Force (Join-Path $fxCell 'out\sams') | Out-Null
 _WfpSeed $fxCell '{"item":"Fresh Row","ad_price":"$9.99"}' '{"item":"Old Row","ad_price":"$1.00"}' ($fxFresh + ',' + $fxOld + ',' + $fxSams)
-$r = RunPS 'audit-walmart-fullpull.ps1' @('-GroceryRoot', $fxCell)
+# -WindowDays IS PINNED: these two fixtures are frozen around an 11-day-old capture that sits 2 days
+# from a 14-day cliff. On 2026-08-20 the window became the capture policy's 90-day quarter and an
+# 11-day-old capture stopped being anywhere near expiry, so both cases went quiet while the arithmetic
+# they test was perfectly correct. The window the watch USES in production is asserted separately, in
+# the window-consumer sweep below; what these two test is the countdown, so they pin it.
+$r = RunPS 'audit-walmart-fullpull.ps1' @('-GroceryRoot', $fxCell, '-WindowDays', '14')
 if ($r.rc -eq 1 -and $r.text -match '\[Walmart\] cells: WARNING - 1 of 2' -and $r.text -match 'CROWNS' -and $r.text -match 'ok - newest comprehensive capture walmart') { Ok 'walmart-fullpull FIRES on a board cell whose only source is about to leave the union window, while watch 1 still reads ok' }
 else { Bad ('walmart-fullpull cell-expiry watch MISSED its founding bug (rc=' + $r.rc + '): ' + $r.text) }
 Remove-Item $fxCell -Recurse -Force -ErrorAction SilentlyContinue
@@ -705,7 +710,12 @@ New-Item -ItemType Directory -Force (Join-Path $fxPct 'out\sams') | Out-Null
 $pFresh = @(); $pCmp = @()
 foreach ($i in 1..39) { $pFresh += ('{"item":"Row ' + $i + '","ad_price":"$' + $i + '.00"}'); $pCmp += ('{"id":"c' + $i + '","cheapest_store":"Walmart","stores":[{"store":"Walmart","item":"Row ' + $i + '","ad":"$' + $i + '.00"}]}') }
 _WfpSeed $fxPct ($pFresh -join ',') '{"item":"Old Row","ad_price":"$1.00"}' (($pCmp -join ',') + ',' + $fxOld + ',' + $fxSams)
-$r = RunPS 'audit-walmart-fullpull.ps1' @('-GroceryRoot', $fxPct)
+# -WindowDays IS PINNED: these two fixtures are frozen around an 11-day-old capture that sits 2 days
+# from a 14-day cliff. On 2026-08-20 the window became the capture policy's 90-day quarter and an
+# 11-day-old capture stopped being anywhere near expiry, so both cases went quiet while the arithmetic
+# they test was perfectly correct. The window the watch USES in production is asserted separately, in
+# the window-consumer sweep below; what these two test is the countdown, so they pin it.
+$r = RunPS 'audit-walmart-fullpull.ps1' @('-GroceryRoot', $fxPct, '-WindowDays', '14')
 if ($r.rc -eq 0 -and $r.text -match '\[Walmart\] cells: ok - 1 of 40') { Ok 'walmart-fullpull cell watch stays SILENT at 1 aging cell in 40 (2.5%, under the 5% floor) - the trailing-cell noise floor' }
 else { Bad ('walmart-fullpull cell watch cried wolf on the 2.5% noise floor (rc=' + $r.rc + '): ' + $r.text) }
 Remove-Item $fxPct -Recurse -Force -ErrorAction SilentlyContinue
@@ -2432,6 +2442,55 @@ $rwDefault = ([regex]::Match($rwSrc, '\[int\]\$WindowDays\s*=\s*(\d+)')).Groups[
 . (Join-Path $root 'regular-fileset-lib.ps1')
 if ($rwDefault -and [int]$rwDefault -eq (Get-RegularUnionDays)) { Ok "build-rescue-worklist's window default still equals the engine's union window ($rwDefault d)" }
 else { Bad "build-rescue-worklist -WindowDays default is '$rwDefault' but the engine unions over $(Get-RegularUnionDays) - the rescue list would count down to the wrong day" }
+
+# ---- EVERY CONSUMER OF THE EVERYDAY-PRICE WINDOW AGREES WITH THE POLICY -------------------------------
+# 2026-08-20: capture-policy.ps1 moved everyday prices to a 90-day quarter, and SEVEN files still held a
+# private 14. They did not fail loudly - they failed plausibly. audit-walmart-fullpull warned that 468 of
+# 468 Walmart cells (100%) were about to expire, for cells with eighty days left; audit-coverage-gaps
+# manufactured exactly the false gaps its own comment says it exists to prevent; derive-links-from-prices
+# quietly stopped deriving links for Sam's cells the board was actively pricing.
+#
+# A comment saying "MUST match compare-deals' union window" is not a test. This is the test. It asserts
+# each consumer either ASKS (Get-RegularUnionDays / 0 = ask) or states the same number the policy does, so
+# the next person to move the quarter cannot leave a consumer behind - and a NEW consumer that hardcodes a
+# window will not be covered here, which is why the -ListOnly sweep below names what it checked.
+. (Join-Path $root 'regular-fileset-lib.ps1')
+$winPolicy = Get-PolicyCarryDaysFromText
+$winUnion  = Get-RegularUnionDays
+if ($null -ne $winPolicy -and $winUnion -eq $winPolicy) { Ok "the union window equals capture-policy MaxCarryDays ($winUnion d)" }
+else { Bad "union window is $winUnion but capture-policy says $winPolicy - everyday rows expire before the rotation re-captures them" }
+
+# name -> the regex that must find EITHER a shared-source call OR the policy number
+$WIN_CONSUMERS = @(
+  @{ f = 'compare-deals.ps1';           pat = '\[int\]\$SamsMaxAgeDays\s*=\s*(\d+)';     what = "Sam's union window" },
+  @{ f = 'compare-deals.ps1';           pat = '\[int\]\$WalmartMaxAgeDays\s*=\s*(\d+)';  what = 'Walmart union window' },
+  @{ f = 'carry-forward-regular.ps1';   pat = '\[int\]\$MaxCarryDays\s*=\s*(\d+)';       what = 'the carry cap every out\regular store inherits' },
+  @{ f = 'build-fareway-regular.ps1';   pat = '\[int\]\$MaxExtractDays\s*=\s*(\d+)';     what = "Fareway's extract merge window" },
+  @{ f = 'build-rescue-worklist.ps1';   pat = '\[int\]\$WindowDays\s*=\s*(\d+)';         what = 'the rescue countdown window' },
+  @{ f = 'audit-walmart-fullpull.ps1';  pat = '\[int\]\$WindowDays\s*=\s*(\d+)';         what = 'the fullpull expiry watch' },
+  @{ f = 'repair-asof-evidence.ps1';    pat = '\[int\]\$MaxAgeDays\s*=\s*(\d+)';         what = 'the as_of repair window' }
+)
+foreach ($c in $WIN_CONSUMERS) {
+  $src = [IO.File]::ReadAllText((Join-Path $root $c.f))
+  $m = [regex]::Match($src, $c.pat)
+  if (-not $m.Success) { Bad ("window consumer " + $c.f + " no longer declares " + $c.what + " - this check went blind on it, which is not the same as it being correct"); continue }
+  $v = [int]$m.Groups[1].Value
+  # 0 is the ASK sentinel: the file resolves the window from regular-fileset-lib at run time.
+  if ($v -eq 0) {
+    if ($src -match 'Get-RegularUnionDays') { Ok ($c.f + ' asks regular-fileset-lib for ' + $c.what) }
+    else { Bad ($c.f + ' defaults ' + $c.what + ' to 0 but never calls Get-RegularUnionDays - it will run on a zero-day window') }
+  }
+  elseif ($v -eq $winUnion) { Ok ($c.f + ' states ' + $c.what + " as $v d, matching the policy") }
+  else { Bad ($c.f + ' holds a PRIVATE window of ' + $v + ' d for ' + $c.what + " - the engine prices over $winUnion d, so this one counts down to the wrong day") }
+}
+# The two that must not restate the number at all - they compute a floor/filter inline.
+foreach ($c in @(
+  @{ f = 'audit-coverage-gaps.ps1';        what = 'its fresh-file floor' },
+  @{ f = 'derive-links-from-prices.ps1';   what = "Sam's link-source window" })) {
+  $src = [IO.File]::ReadAllText((Join-Path $root $c.f))
+  if ($src -match 'Get-RegularUnionDays') { Ok ($c.f + ' derives ' + $c.what + ' from the shared union window') }
+  else { Bad ($c.f + ' no longer asks Get-RegularUnionDays for ' + $c.what + ' - it is back to a private copy of the window') }
+}
 # CLEAN TWIN: same store, capture one day old and carrying both rows, older board identical. Every section
 # empty, exit 0, and the file still written so a stale list can never be mistaken for today's.
 $rwB = RwFixture 'rescue-clean'
