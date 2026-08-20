@@ -17,10 +17,16 @@
                        is 2048 tokens each rather than 8x16384. Measured on
                        this box, a resolve prompt is 312 tokens and generation
                        is capped at 400, so 2048/slot is ~2.5x the requirement.
-                       Decode is memory-BANDWIDTH bound (12.2 GiB of weights
-                       read per step), so batching amortises one weight read
-                       across eight sequences and multiplies throughput; a
-                       single stream leaves most of the 896 GB/s idle.
+                       Decode is memory-BANDWIDTH bound at batch 1 (12.2 GiB of
+                       weights read per step), and batching amortises that read
+                       across eight sequences. MEASURED on this box, not
+                       predicted: 36.6 -> 80.4 tok/s aggregate, i.e. 2.2x, and
+                       it is flat past ~8 slots. It does NOT scale linearly --
+                       once the weight reads are amortised, Q3_K dequantisation
+                       compute becomes the ceiling. Verified not to be the JSON
+                       grammar: dropping the schema entirely only moves it to
+                       2.36x, which is why the schema stays (a 13% cost for a
+                       structural valid-JSON guarantee is a good trade).
                        NOTE: the CLIENT must issue concurrent requests to use
                        these slots — see resolve.py --jobs. A sequential client
                        against eight slots is exactly as fast as one slot.
