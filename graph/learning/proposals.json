@@ -452,7 +452,7 @@
     "payload_json": "{\"payload\": \"pepper,?\\\\s*black.*ground\"}",
     "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
     "rationale": "Matches 'Our Family Pepper, Black, Pure Ground' which is clearly ground black pepper.",
-    "status": "accepted",
+    "status": "proposed",
     "target_id": "black-pepper-ground"
   },
   {
@@ -500,7 +500,7 @@
     "payload_json": "{\"payload\": \"Dawn Heavy Duty Dish Spray 16 Fl Oz\"}",
     "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
     "rationale": "A dish spray is a different form factor than liquid dish soap.",
-    "status": "accepted",
+    "status": "proposed",
     "target_id": "dish-soap-liquid"
   },
   {
@@ -560,7 +560,7 @@
     "payload_json": "{\"payload\": \"brown\\\\s+gravy.*mix\"}",
     "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
     "rationale": "Matches McCormick Brown Gravy Seasoning Mix variants.",
-    "status": "accepted",
+    "status": "proposed",
     "target_id": "brown-gravy-mix-dry-packet"
   },
   {
@@ -1148,7 +1148,7 @@
     "payload_json": "{\"payload\": \"diced.*roma\\\\s+tomatoes\"}",
     "queue_hash": "e1f34838e5d240fe87f8d6cc4d42aa4718ac766f92098f0478a891045e01b19b",
     "rationale": "Matches Contadina Diced Roma Tomatoes. Roma is a type of tomato, and 'diced' matches the commodity form.",
-    "status": "accepted",
+    "status": "proposed",
     "target_id": "canned-diced-tomatoes"
   },
   {

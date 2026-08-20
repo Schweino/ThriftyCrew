@@ -266,7 +266,41 @@ def import_known_wrong(db: GraphDB, ts: str, run: str) -> dict:
                                                "verdict": e.get("verdict")})
                     break
             n += 1
-    return {"known_wrong": n}
+
+    # RETRO-APPLY. A ruling used to bind only rows adjudicated AFTER it existed:
+    # layer 1 consults known-wrong during resolution, and an already-include_hit
+    # row is never re-litigated. So the 2026-08-20 strawberry-syrup ruling
+    # demoted nothing — the syrup kept crowning the graph's walmart cell with a
+    # ruling against it sitting right there in the file. A ruling that cannot
+    # reach rows judged before it existed is half a ruling. Matching is
+    # commodity-wide by normalised name, exactly the scope layer 1 enforces.
+    from ids import norm_text                          # noqa: PLC0415
+    demoted = 0
+    kw_rows = db.conn.execute(
+        """SELECT n.canonical_name AS nm, e.target_id AS cid
+           FROM nodes n JOIN edges e ON e.source_id = n.id
+           WHERE n.type='KnownWrong' AND e.predicate='known_wrong_for'""").fetchall()
+    by_commodity: dict[str, set[str]] = {}
+    for r in kw_rows:
+        by_commodity.setdefault(r["cid"], set()).add(norm_text(r["nm"]))
+    for cid, names in by_commodity.items():
+        rows = db.conn.execute(
+            """SELECT id, product_name, match_status FROM price_observations
+               WHERE commodity_id=? AND match_status IN
+                 ('include_hit','llm_confirmed','llm_match_unverified','no_include_hit')""",
+            (cid,)).fetchall()
+        hits = [r["id"] for r in rows if norm_text(r["product_name"]) in names]
+        if hits:
+            db.conn.executemany(
+                "UPDATE price_observations SET match_status='known_wrong', "
+                "match_reason='retro-applied known-wrong ruling (import sweep)', "
+                "confidence=1.0 WHERE id=?", [(i,) for i in hits])
+            demoted += len(hits)
+    if demoted:
+        db.log_event(run=run, timestamp=ts, etype="resolve",
+                     decision="known_wrong_retro_sweep",
+                     detail={"rows_demoted": demoted})
+    return {"known_wrong": n, "known_wrong_retro_demoted": demoted}
 
 
 def import_dupe_allowlist(db: GraphDB, ts: str, run: str) -> dict:
@@ -570,6 +604,7 @@ def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
     prov = db.record_provenance(rel(path), "import:product-urls-prices", ts, run=run)
 
     n_obs = n_skip = n_placeholder = 0
+    written: set[str] = set()          # every observation id this run asserts
     for cid_raw, entry in (data.get("items") or {}).items():
         cid = None
         for ns in ("staple", "recipe"):
@@ -630,9 +665,28 @@ def import_product_url_prices(db: GraphDB, ts: str, run: str, *,
                 "match_reason": "curated product-urls entry, keyed by commodity id"
                                 + (f"; shelf-verified {v['verified']}" if v.get("verified") else ""),
             })
+            written.add(oid)
             n_obs += 1
 
+    # SUPERSEDE. This importer mirrors ONE file; an observation sourced from it
+    # that this run did not re-assert corresponds to an entry that was edited or
+    # deleted. Before this, removed entries were immortal: the daiquiri-mixer
+    # link stripped from product-urls.json on 2026-08-20 kept pricing the
+    # graph's fareway strawberries cell from its orphaned observation. Curated
+    # rows are the one lane where deletion upstream must mean deletion here —
+    # the file IS the curation.
+    stale = [r["id"] for r in db.conn.execute(
+        "SELECT id FROM price_observations WHERE source_file=?", (rel(path),))
+        if r["id"] not in written]
+    if stale:
+        db.conn.executemany("DELETE FROM price_observations WHERE id=?",
+                            [(i,) for i in stale])
+        db.log_event(run=run, timestamp=ts, etype="resolve",
+                     decision="curated_supersede",
+                     detail={"stale_curated_rows_deleted": len(stale)})
+
     return {"product_url_observations": n_obs, "product_url_skipped": n_skip,
+            "product_url_superseded": len(stale),
             "product_url_placeholder_rows_dropped": n_placeholder}
 
 

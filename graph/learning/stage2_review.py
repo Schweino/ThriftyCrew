@@ -20,6 +20,23 @@ against the gold set; if precision, recall, false-merge rate or missed-merge rat
 gets worse, the patch is REJECTED no matter who approved it. A review is a human
 (or model) judgement; the gold set is evidence, and evidence wins. High-impact
 changes additionally stay held for human confirmation during early phases.
+
+AN APPROVAL IS SCOPED TO THE RESOLUTION REGIME THAT GRANTED IT.
+`resolve_target` decides which commodity a patch touches. A patch whose target
+does not resolve is left retryable rather than failed (the index can legitimately
+be empty mid-rebuild) — but that leaves pre-approved patches parked indefinitely,
+and the moment anyone WIDENS the resolution ladder they all apply at once, with
+no fresh eyes. Four were found parked on 2026-08-20, all approved months earlier
+against LEGACY-style target ids the graph never adopted (`black-pepper-ground`,
+`dish-soap-liquid`) rather than namespaced node ids. Their payloads are not
+obviously wrong — that is the point. Nobody re-read them, and a one-line change
+to the ladder would have applied all four unreviewed.
+
+    python graph/learning/stage2_review.py --requeue-stuck
+
+demotes exactly that state back to `proposed` so it re-enters review. RUN IT
+BEFORE ANY CHANGE TO `resolve_target`. The invariant it protects: an approval
+granted under one target-resolution regime never applies under a different one.
 """
 
 from __future__ import annotations
@@ -49,16 +66,31 @@ PACKET = os.path.join(GRAPH_DIR, "learning", "review-packet.json")
 HIGH_IMPACT_CELLS = 25
 
 
+def _blast_radius_index() -> dict:
+    """The alias blast-radius report, if one has been generated. Keyed by
+    proposal id. Absent file is not an error — the report is derived evidence,
+    not a dependency."""
+    path = os.path.join(GRAPH_DIR, "learning", "alias-blast-radius.json")
+    if not os.path.exists(path):
+        return {}
+    try:
+        with open(path, encoding="utf-8-sig") as fh:
+            return json.load(fh).get("proposals", {})
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
 def emit_packet(db) -> str:
     rows = db.conn.execute(
         """SELECT id, kind, target_id, payload_json, confidence, rationale, created_at
            FROM learning_proposals WHERE status='proposed' ORDER BY confidence DESC"""
     ).fetchall()
+    blast = _blast_radius_index()
     proposals = []
     for r in rows:
         payload = json.loads(r["payload_json"] or "{}")
         node = db.get_node(r["target_id"]) if r["target_id"] else None
-        proposals.append({
+        entry = {
             "proposal_id": r["id"],
             "kind": r["kind"],
             "target": r["target_id"],
@@ -66,7 +98,24 @@ def emit_packet(db) -> str:
             "payload": payload.get("payload"),
             "stage1_confidence": r["confidence"],
             "rationale": r["rationale"],
-        })
+        }
+        # An add_alias verdict made without the blast radius is made on the gold
+        # set alone — and for review-derived aliases the gold set is circular
+        # evidence (see alias_blast_radius.py). Attach what the corpus says.
+        b = blast.get(r["id"])
+        if b:
+            entry["blast_radius"] = {
+                "counts": b.get("counts"),
+                "kill": b.get("kill", False),
+                "kill_reasons": b.get("kill_reasons", []),
+                "warn_reasons": b.get("warn_reasons", []),
+                "examples": b.get("examples", {}),
+            }
+        elif r["kind"] == "add_alias":
+            entry["blast_radius"] = {
+                "missing": "no blast-radius report for this proposal — run "
+                           "graph/learning/alias_blast_radius.py before ruling on it"}
+        proposals.append(entry)
 
     packet = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -79,7 +128,14 @@ def emit_packet(db) -> str:
             "over-broad alias lets a wrong product take a price, which is the "
             "failure this board exists to prevent. Prefer reject over accept "
             "when uncertain; a missed alias costs one empty cell. Mark "
-            "hold_for_human when the change is broad or the evidence is thin."
+            "hold_for_human when the change is broad or the evidence is thin. "
+            "For add_alias, READ blast_radius first: kill=true is an automatic "
+            "reject (the pattern re-litigates an adjudicated ruling or "
+            "resurrects a rejection, and include runs before the model). Any "
+            "cross_commodity hit needs a written reason why the collision is "
+            "benign, or a `modify` payload that tightens the pattern. "
+            "absorbs_review + intended_capture are what the alias BUYS; a "
+            "proposal with none of either is noise."
         ),
         "gates": {
             "false_merge_rate_max": GATE_FALSE_MERGE,
@@ -184,6 +240,54 @@ def _apply_to_graph(db, kind: str, target: str, payload: str, ts: str,
     # never auto-applied — they change what "correct" MEANS, so a model may not
     # edit them unreviewed.
     return 0
+
+
+def requeue_stuck(db) -> dict:
+    """Demote approved-but-unappliable patches back to proposals.
+
+    Selects the exact parked state — approved (accept|modify), never applied,
+    shadow never run — and keeps only those whose target STILL does not resolve.
+    A patch whose target resolves today is not stuck; it is simply waiting for
+    the next --apply, and demoting it would throw away a valid review.
+
+    This is deliberately a DEMOTION and never a promotion: it can only move work
+    back toward review, so running it when in doubt is always safe.
+    """
+    ts = time.strftime("%Y-%m-%dT%H:%M:%S")
+    run = f"run:learning-requeue:{time.strftime('%Y%m%dT%H%M%S')}"
+    rows = db.conn.execute(
+        """SELECT a.id, a.proposal_id, a.verdict, p.kind, p.target_id
+           FROM approved_patches a
+           JOIN learning_proposals p ON p.id = a.proposal_id
+           WHERE a.verdict IN ('accept','modify')
+             AND a.applied_at IS NULL
+             AND a.shadow_verdict = 'not_run'""").fetchall()
+
+    requeued = []
+    for r in rows:
+        if resolve_target(db, r["target_id"]):
+            continue                      # resolves now — not stuck, leave it
+        db.conn.execute(
+            "UPDATE approved_patches SET shadow_verdict='requeued' WHERE id=?",
+            (r["id"],))
+        db.conn.execute(
+            "UPDATE learning_proposals SET status='proposed' WHERE id=?",
+            (r["proposal_id"],))
+        db.log_event(run=run, timestamp=ts, etype="learning_approval",
+                     decision="requeued_stuck",
+                     detail={"patch": r["id"], "proposal": r["proposal_id"],
+                             "prior_verdict": r["verdict"], "kind": r["kind"],
+                             "target_id": r["target_id"],
+                             "why": "approved patch whose target does not resolve; "
+                                    "demoted so a widened resolution ladder cannot "
+                                    "apply it without re-review"})
+        requeued.append({"patch": r["id"], "proposal": r["proposal_id"],
+                         "target": r["target_id"], "kind": r["kind"]})
+
+    db.conn.commit()
+    if requeued:
+        db.export_learning()
+    return {"candidates": len(rows), "requeued": requeued}
 
 
 def shadow_and_apply(db, dry_run: bool = False) -> dict:
@@ -326,13 +430,26 @@ def main() -> int:
     ap.add_argument("--ingest", metavar="VERDICTS_JSON")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--requeue-stuck", action="store_true",
+                    help="demote approved-but-unresolvable patches back to "
+                         "'proposed'; run BEFORE widening resolve_target")
     args = ap.parse_args()
 
-    if not (args.emit_packet or args.ingest or args.apply):
+    if not (args.emit_packet or args.ingest or args.apply or args.requeue_stuck):
         ap.print_help()
         return 1
 
     with open_db() as db:
+        if args.requeue_stuck:
+            res = requeue_stuck(db)
+            print(f"parked patches examined: {res['candidates']}   "
+                  f"requeued: {len(res['requeued'])}")
+            for r in res["requeued"]:
+                print(f"   {r['kind']:<16} target={r['target']}  ({r['patch']})")
+            if res["requeued"]:
+                print("These are back at status='proposed' and will appear in the "
+                      "next --emit-packet.")
+
         if args.emit_packet:
             p = emit_packet(db)
             n = len(json.load(open(p, encoding="utf-8"))["proposals"])

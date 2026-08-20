@@ -100,13 +100,35 @@ def check_known_wrong_not_priced(db, **_) -> tuple[bool, dict]:
 
     The graph mirror of audit-known-wrong.ps1, which exits 2 for exactly this.
     A ruling that can come back silently is not a ruling.
+
+    TWO halves, and the second exists because the first was blind to it:
+    a row already demoted to match_status='known_wrong' cannot price by
+    construction — but a row adjudicated include_hit BEFORE the ruling existed
+    kept its status and kept pricing (the 2026-08-20 strawberry-syrup ruling
+    demoted nothing already in the graph). The import sweep retro-applies
+    rulings; this check proves, by NAME, that nothing slipped either path.
     """
+    from ids import norm_text                          # noqa: PLC0415
     rows = db.conn.execute(
         """SELECT commodity_id, store_id, product_name
            FROM price_observations
            WHERE match_status='known_wrong'
              AND id IN (SELECT id FROM v_current_cell)""").fetchall()
     viol = [dict(r) for r in rows]
+
+    kw = db.conn.execute(
+        """SELECT n.canonical_name AS nm, e.target_id AS cid
+           FROM nodes n JOIN edges e ON e.source_id = n.id
+           WHERE n.type='KnownWrong' AND e.predicate='known_wrong_for'""").fetchall()
+    by_commodity: dict[str, set[str]] = {}
+    for r in kw:
+        by_commodity.setdefault(r["cid"], set()).add(norm_text(r["nm"]))
+    priced = db.conn.execute(
+        "SELECT commodity_id, store_id, product_name FROM v_current_cell").fetchall()
+    for r in priced:
+        names = by_commodity.get(r["commodity_id"])
+        if names and norm_text(r["product_name"]) in names:
+            viol.append({**dict(r), "via": "name-match: ruling never retro-applied"})
     return (not viol), {"violations": viol, "n": len(viol)}
 
 

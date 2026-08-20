@@ -140,7 +140,7 @@ observation ever lacks one. "Why does this price appear?" is answerable from
 | Phase 0 decode | ≥15 tok/s | **46.1 tok/s** | PASS |
 | gold-set false-merge rate | ≤0.02 | **0.0000** | PASS |
 | gold-set missed-merge rate | ≤0.10 | 0.5831 (see below) | **NOT MET** |
-| Phase 2 board parity | ≥0.99 agreement | 0.927 @ 0.838 coverage (2026-08-20, post-review) | **NOT MET** |
+| Phase 2 board parity (staple scope) | ≥0.99 agreement | 0.887 @ 0.946 coverage (2026-08-20, honest-currency crowns) | **NOT MET** |
 | ad timing | every weekly-ad store inside its current window | all 5 in-window | PASS |
 | 90-day timer | no everyday row older than `MaxCarryDays` | reads `capture-policy.ps1` | PASS |
 

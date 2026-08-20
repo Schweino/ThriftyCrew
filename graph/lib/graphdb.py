@@ -252,13 +252,28 @@ class GraphDB:
                  -- it silently destroyed the entire adjudication history on
                  -- every routine re-import (caught 2026-08-20: a midday
                  -- import erased that morning's 25 model verdicts).
-                 confidence = CASE WHEN excluded.match_status != 'unadjudicated'
+                 --
+                 -- And a KNOWN_WRONG ruling outranks even an asserting source.
+                 -- The retro sweep runs with the seed importers; lane importers
+                 -- that assert include_hit run after it, and 'the capture is
+                 -- keyed by commodity id' is a claim about the PRICE belonging
+                 -- to the product, not the product belonging to the commodity
+                 -- (the coconut-oil incident's exact lesson). Caught same day:
+                 -- FOCO Coconut Juice was demoted by the sweep, then re-blessed
+                 -- include_hit by the fareway lane minutes later.
+                 confidence = CASE WHEN price_observations.match_status = 'known_wrong'
+                                   THEN price_observations.confidence
+                                   WHEN excluded.match_status != 'unadjudicated'
                                    THEN excluded.confidence
                                    ELSE price_observations.confidence END,
-                 match_status = CASE WHEN excluded.match_status != 'unadjudicated'
+                 match_status = CASE WHEN price_observations.match_status = 'known_wrong'
+                                     THEN price_observations.match_status
+                                     WHEN excluded.match_status != 'unadjudicated'
                                      THEN excluded.match_status
                                      ELSE price_observations.match_status END,
-                 match_reason = CASE WHEN excluded.match_status != 'unadjudicated'
+                 match_reason = CASE WHEN price_observations.match_status = 'known_wrong'
+                                     THEN price_observations.match_reason
+                                     WHEN excluded.match_status != 'unadjudicated'
                                      THEN excluded.match_reason
                                      ELSE price_observations.match_reason END""",
             {

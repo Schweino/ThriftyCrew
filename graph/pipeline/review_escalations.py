@@ -54,6 +54,7 @@ sys.path.insert(0, os.path.join(HERE, "..", "gold"))
 from graphdb import open_db, GRAPH_DIR, REPO_ROOT       # noqa: E402
 from ids import hash_obj, store_label                   # noqa: E402
 from seed_gold import case as gold_case, GOLD_PATH      # noqa: E402
+from flag_outliers import flag as flag_basis            # noqa: E402
 
 QUEUE = os.path.join(REPO_ROOT, "grocery", "escalation-queue.json")
 PACKET = os.path.join(REPO_ROOT, "grocery", "escalation-review-packet.json")
@@ -393,18 +394,31 @@ def ingest(db, path: str) -> dict:
     if proposals:
         db.export_learning()
 
+    # A CONFIRM is the moment a row first becomes able to CROWN a cell, so it is
+    # also the first moment its per-unit basis matters. A correct match can still
+    # carry a nonsense basis: "Boulder Everyday PaperTowel" ($5.39, size '660 ct')
+    # is genuinely paper towels, but 660 is a SHEET count divided as though it
+    # were rolls -> $0.0082 each, 345x under the median, instantly the cheapest
+    # cell. On 2026-08-20 that was caught only because someone re-ran the guard by
+    # hand. Printed advice is not a control, so the sweep runs HERE, in-process,
+    # on the same connection and after the verdicts are committed.
+    basis = {"flagged": 0, "checked_rows": 0}
+    if confirmed:
+        basis = flag_basis(db, run=run, ts=ts)
+
     db.log_event(run=run, timestamp=ts, etype="escalate", model=reviewer,
                  decision="ingest_complete", provenance_ids=[prov],
                  detail={"confirmed": len(confirmed), "rejected": len(rejected),
                          "deferred": len(deferred), "refused": len(refused),
                          "gold_added": gold_added,
                          "alias_proposals": len(proposals),
+                         "basis_flagged": basis["flagged"],
                          "source": os.path.basename(path)})
     db.conn.commit()
     return {"confirmed": confirmed, "rejected": rejected, "deferred": deferred,
             "refused": refused, "gold_added": gold_added,
             "alias_proposals": proposals, "known_wrong_commands": kw_commands,
-            "queue_remaining": len(queue)}
+            "queue_remaining": len(queue), "basis": basis}
 
 
 def status(db) -> None:
@@ -471,16 +485,10 @@ def main() -> int:
                 for c in res["known_wrong_commands"]:
                     print(f"  {c}")
             if res["confirmed"]:
-                # A CONFIRM is the moment a row becomes able to crown a cell, so
-                # it is also the moment its per-unit price starts mattering. A
-                # correct match can still carry a nonsense basis: "Boulder
-                # Everyday PaperTowel" ($5.39, size '660 ct') divided a SHEET
-                # count as rolls, giving $0.0082 each — 345x under the median and
-                # instantly the cheapest cell. flag_outliers caught it, but only
-                # because someone re-ran it (2026-08-20).
-                print("\nNEXT (not optional): python graph/pipeline/flag_outliers.py")
-                print("  Confirmed rows can now crown a cell, so their per-unit "
-                      "basis must be re-checked before any parity read.")
+                b = res["basis"]
+                print(f"basis guard ran automatically: {b['checked_rows']} priceable "
+                      f"rows checked, {b['flagged']} barred from crowning")
+                print("Parity is now safe to re-read: python graph/eval/board_parity.py")
         if args.status:
             status(db)
     return 0

@@ -193,7 +193,13 @@ CREATE TABLE IF NOT EXISTS approved_patches (
     -- shadow evaluation, recorded BEFORE anything goes live
     shadow_before_json TEXT,
     shadow_after_json  TEXT,
-    shadow_verdict     TEXT,              -- no_regression | regression | not_run
+    -- no_regression | regression | not_run | requeued
+    --   requeued: the patch was approved, never applied, and its target could
+    --   not be resolved at the time. It has been DEMOTED back to a proposal so
+    --   it is re-reviewed. See stage2_review.py --requeue-stuck: an approval
+    --   granted under one target-resolution regime must never silently apply
+    --   under a different one.
+    shadow_verdict     TEXT,
     applied_at    TEXT,
     applied_by    TEXT
 );
@@ -224,7 +230,37 @@ CREATE INDEX IF NOT EXISTS ix_eval_at ON eval_runs(run_at DESC);
 -- existing database on its next open. CREATE VIEW IF NOT EXISTS silently keeps
 -- the old definition forever, which is how a view bug outlives its fix.
 
--- Newest SURVIVING observation per (commodity, store) — the graph's answer to
+-- The CURRENT surviving rows: for each (commodity, store, product), only that
+-- product's NEWEST sighting — an older sighting is superseded by its latest one
+-- (the price-state supersede rule, applied at read time until Phase C lands it
+-- at import). Ad/sale rows are current only while their ad window CONTAINS
+-- today; an ad row with no resolvable window is never current (an expired
+-- 07-23 blueberries sale was crowning its cell a month later). Everyday AGE is
+-- deliberately NOT gated here: the 90-day window lives in capture-policy.ps1
+-- and a literal here would be another private copy — check_row_age reads the
+-- canonical value at run time instead. The ad window has no such problem: the
+-- window data lives in this database, on the AdCycle node.
+DROP VIEW IF EXISTS v_current_rows;
+CREATE VIEW v_current_rows AS
+SELECT * FROM (
+    SELECT p.*,
+           ROW_NUMBER() OVER (
+               PARTITION BY p.commodity_id, p.store_id, lower(trim(COALESCE(p.product_name,'')))
+               ORDER BY p.observed_at DESC, p.price ASC, p.id ASC
+           ) AS prn
+    FROM price_observations p
+    WHERE p.match_status IN ('include_hit', 'llm_confirmed')
+      AND p.basis_flag IS NULL
+      AND (COALESCE(p.price_type,'') NOT IN ('ad','sale')
+           OR EXISTS (SELECT 1 FROM nodes ac
+                      WHERE ac.id = p.ad_cycle_id
+                        AND date('now','localtime')
+                            BETWEEN json_extract(ac.properties_json,'$.from')
+                                AND json_extract(ac.properties_json,'$.to')))
+)
+WHERE prn = 1;
+
+-- Newest CURRENT observation per (commodity, store) — the graph's answer to
 -- "the board". Restricted to rows that passed resolution: a candidate row that
 -- failed its include regex, hit an exclude, or matched a known-wrong ruling must
 -- never be able to price a cell. That restriction is the whole point.
@@ -247,18 +283,17 @@ SELECT * FROM (
                         p.price ASC,
                         p.id ASC
            ) AS rn
-    FROM price_observations p
-    WHERE p.match_status IN ('include_hit', 'llm_confirmed')
-      AND p.basis_flag IS NULL
+    FROM v_current_rows p
 )
 WHERE rn = 1;
 
--- Cheapest surviving PER-UNIT candidate per cell — the "crown" the board
+-- Cheapest CURRENT per-unit candidate per cell — the "crown" the board
 -- renders. MIN(price) was the modelling error this view is named to prevent:
 -- a small dear package beats a large cheap one on shelf price while being the
 -- worse buy (sampled: 114 of 200 multi-candidate cells crowned the wrong row).
--- basis_flag IS NULL is mandatory — an implausible per-unit row is barred from
--- crowning exactly as it is barred from v_current_cell.
+-- Selecting over v_current_rows (not raw observations) is equally load-bearing:
+-- a flat minimum over history crowns the cheapest price EVER SEEN, not the
+-- current one, and old low prices win forever.
 DROP VIEW IF EXISTS v_cell_crown;
 CREATE VIEW v_cell_crown AS
 SELECT * FROM (
@@ -272,10 +307,8 @@ SELECT * FROM (
                         p.price ASC,
                         p.id ASC
            ) AS rn
-    FROM price_observations p
-    WHERE p.match_status IN ('include_hit', 'llm_confirmed')
-      AND p.basis_flag IS NULL
-      AND p.price IS NOT NULL
+    FROM v_current_rows p
+    WHERE p.price IS NOT NULL
 )
 WHERE rn = 1;
 

@@ -44,6 +44,16 @@ from units import per_unit, reconcile_unit             # noqa: E402
 
 BOARD_PATH = os.path.join(REPO_ROOT, "public", "board.json")
 
+
+def _days_between(older: str, newer: str) -> int | None:
+    """newer minus older, in days; None when either is not an ISO date."""
+    try:
+        from datetime import date
+        o, n = date.fromisoformat(older[:10]), date.fromisoformat(newer[:10])
+        return (n - o).days
+    except (ValueError, TypeError):
+        return None
+
 CHIP_RE = re.compile(
     r"data-store=[\"']([^\"']+)[\"'][^>]*data-pu='([\d.]+)'", re.IGNORECASE)
 
@@ -85,7 +95,8 @@ def graph_board(db) -> dict[str, dict[str, float]]:
     # it, a "221 fl oz" hand-soap pump prices the cell at $0.009.
     rows = db.conn.execute(
         """SELECT p.commodity_id, p.store_id, p.price, p.size_text,
-                  p.unit_price, p.unit, p.source_file, p.product_name, n.properties_json
+                  p.unit_price, p.unit, p.source_file, p.product_name,
+                  p.price_type, p.ad_cycle_id, p.observed_at, n.properties_json
            FROM price_observations p
            LEFT JOIN nodes n ON n.id = p.commodity_id
            WHERE p.match_status IN ('include_hit','llm_confirmed')
@@ -102,22 +113,43 @@ def graph_board(db) -> dict[str, dict[str, float]]:
         if p.get("commodity") and p.get("store") and p.get("per_unit") is not None:
             overrides[(p["commodity"], norm_store(p["store"]))] = float(p["per_unit"])
 
-    # PRECEDENCE, mirroring what the live board actually renders:
-    #   1. a pinned override for the cell
-    #   2. the CURATED product-urls row (the See-item link the board shows) --
-    #      this is the answer a human verified against the shelf
-    #   3. otherwise the cheapest surviving row the capture sweep found
-    # Taking a flat minimum across all three was the modelling error: the sweep
-    # is a DISCOVERY lane and routinely sees a cheaper near-match that the board
-    # deliberately did not pick.
-    curated: dict[str, dict[str, float]] = {}
-    best: dict[str, dict[str, float]] = {}
+    # CURRENCY FIRST, then precedence. The board renders the CURRENT price; a
+    # flat minimum over all history modelled "cheapest EVER observed", so any
+    # old low price won forever — Aldi cucumbers crowned at the 08-09 $0.65
+    # against the board's current 08-15 $0.75 with both files imported, and an
+    # expired 07-23 blueberries sale still held its cell. Selection is now:
+    #
+    #   1. newest observation per (cell, product) — a product's older sightings
+    #      are superseded by its latest one, exactly the price-state design's
+    #      supersede rule, applied at read time until Phase C lands it at import
+    #   2. ad/sale rows count only while their ad window CONTAINS today; an
+    #      ad row with no resolvable window never crowns (missed-over-false)
+    #   3. precedence: pinned override > curated product-urls row > cheapest
+    #      surviving sweep row. Curated wins ONLY while reasonably current —
+    #      a curated row more than 14 days older than the cell's newest sweep
+    #      sighting has been overtaken by events (the July $1.89 strawberries
+    #      entry was outranking August shelf data) and falls back to the sweep.
+    today = time.strftime("%Y-%m-%d")
+    cycles: dict[str, tuple[str, str]] = {}
+    for c in db.conn.execute(
+            "SELECT id, properties_json FROM nodes WHERE type='AdCycle'"):
+        p = json.loads(c["properties_json"] or "{}")
+        if p.get("from") and p.get("to"):
+            cycles[c["id"]] = (p["from"], p["to"])
+
+    # (legacy, store, norm product) -> (observed_at, pu, is_curated)
+    newest: dict[tuple[str, str, str], tuple[str, float, bool]] = {}
     unparsed = 0
     for r in rows:
         props = json.loads(r["properties_json"] or "{}")
         legacy = props.get("legacy_id")
         if not legacy:
             continue
+        # Ad/sale currency gate, before any price work.
+        if (r["price_type"] or "").lower() in ("ad", "sale"):
+            win = cycles.get(r["ad_cycle_id"] or "")
+            if not win or not (win[0] <= today <= win[1]):
+                continue
 
         # Prefer the legacy engine's own verified unit price, but ONLY after
         # reconciling its basis with the board's declared basis for this
@@ -139,25 +171,42 @@ def graph_board(db) -> dict[str, dict[str, float]]:
             unparsed += 1
             continue
         store = r["store_id"].replace("store:", "")
-        if "product-urls" in (r["source_file"] or ""):
-            c = curated.setdefault(legacy, {})
-            if store not in c or pu < c[store]:
-                c[store] = pu
-        else:
-            cell = best.setdefault(legacy, {})
-            if store not in cell or pu < cell[store]:
-                cell[store] = pu
+        pkey = re.sub(r"\s+", " ", (r["product_name"] or "").lower()).strip()
+        key = (legacy, store, pkey)
+        cur = newest.get(key)
+        obs = r["observed_at"] or ""
+        is_cur = "product-urls" in (r["source_file"] or "")
+        # newer sighting supersedes; same-day ties keep the cheaper reading
+        if cur is None or obs > cur[0] or (obs == cur[0] and pu < cur[1]):
+            newest[key] = (obs, pu, is_cur)
 
-    # apply the precedence
+    curated: dict[str, dict[str, tuple[float, str]]] = {}
+    best: dict[str, dict[str, tuple[float, str]]] = {}
+    for (legacy, store, _pkey), (obs, pu, is_cur) in newest.items():
+        tgt = curated if is_cur else best
+        cell = tgt.setdefault(legacy, {})
+        if store not in cell or pu < cell[store][0]:
+            cell[store] = (pu, obs)
+
+    out: dict[str, dict[str, float]] = {}
+    for legacy, stores in best.items():
+        for store, (pu, _obs) in stores.items():
+            out.setdefault(legacy, {})[store] = pu
     for legacy, stores in curated.items():
-        for store, pu in stores.items():
-            best.setdefault(legacy, {})[store] = pu
+        for store, (pu, obs) in stores.items():
+            sweep = best.get(legacy, {}).get(store)
+            if sweep is not None:
+                sweep_obs = sweep[1]
+                stale = (_days_between(obs, sweep_obs) or 0) > 14
+                if stale:
+                    continue                     # overtaken curated row: sweep stands
+            out.setdefault(legacy, {})[store] = pu
     for (legacy, store), pu in overrides.items():
-        if legacy in best and store in best[legacy]:
-            best[legacy][store] = pu
+        if legacy in out and store in out[legacy]:
+            out[legacy][store] = pu
 
     graph_board.unparsed = unparsed          # type: ignore[attr-defined]
-    return best
+    return out
 
 
 def compare(live: dict, graph: dict, tol: float = 0.02) -> dict:
@@ -215,11 +264,20 @@ def main() -> int:
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
-    live = parse_live_board()
+    live_all = parse_live_board()
+    # SCOPE: this gate measures the STAPLE pricing mechanism. '::r' rows are
+    # recipe-board cells the live board prices via recipe->ingredient mapping —
+    # a different mechanism this comparison does not model, so scoring them
+    # here counted 248 permanently-unreachable cells against coverage (0.876
+    # blended vs 0.948 in scope). They are reported, not blended, and deserve
+    # their own mapping-based parity gate.
+    live = {c: v for c, v in live_all.items() if not c.endswith("::r")}
+    recipe_cells = sum(len(v) for c, v in live_all.items() if c.endswith("::r"))
     with open_db() as db:
         graph = graph_board(db)
         res = compare(live, graph, args.tolerance)
         res["unparsed_sizes"] = getattr(graph_board, "unparsed", 0)
+        res["recipe_cells_out_of_scope"] = recipe_cells
         db.log_event(run="run:parity:" + time.strftime("%Y%m%dT%H%M%S"),
                      timestamp=time.strftime("%Y-%m-%dT%H:%M:%S"),
                      etype="verify", decision="board_parity",
@@ -229,7 +287,9 @@ def main() -> int:
         print(json.dumps(res, indent=2))
         return 0
 
-    print("\n=== board parity (graph vs public/board.json) ===")
+    print("\n=== board parity (graph vs public/board.json, STAPLE scope) ===")
+    print(f"  recipe cells        {res['recipe_cells_out_of_scope']}   "
+          f"(::r rows; priced via ingredient mapping — separate gate, not blended)")
     print(f"  live board cells    {res['live_cells']}")
     print(f"  graph cells         {res['graph_cells']}   "
           f"(sizes unparsed, skipped: {res['unparsed_sizes']})")
