@@ -3,6 +3,14 @@
   "schema": 1,
   "allow": [
     {
+      "id": "blueberries",
+      "store": "Aldi",
+      "size": "1 pt",
+      "reviewed": "2026-08-20",
+      "reviewed_by": "claude (graph-native parity work)",
+      "reason": "The size string names a VOLUME (1 pt) on a weight-priced row, but the number behind it is already a weight: the cell's own basis reads 'size 11.2 oz', and 11.2 oz is the standard net weight of a retail pint clamshell of blueberries. $2.59 / 11.2 oz = 0.2313, which is the published 0.2312, so compare-deals did the conversion correctly and only the LABEL is volume-shaped. Cross-checked against the identical 1 pt -> 11.2 oz conversion on the same board at Family Fare ($3.99 = 0.3563) and Hy-Vee ($4.99 = 0.4455), neither of which holds the crown; Aldi being cheapest is consistent with its position across the rest of the board. Allowlisted because the NUMBER is right, not because the flag was inconvenient - had the pint been divided by 16 fl oz instead of 11.2 oz the cell would have understated blueberries by about 30% and this would have been a commodity exclude, not an entry here."
+    },
+    {
       "id": "clam-chowder",
       "store": "Aldi",
       "size": "18.8 fl oz",
