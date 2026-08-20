@@ -142,6 +142,7 @@
 # tracked - so nothing auditable is lost by ignoring the queues themselves.
 /grocery/learning-queue.json
 /grocery/escalation-queue.json
+/grocery/escalation-review-packet.json
 # Kroger-API evaluation captures: raw pulls kept for analysis, deliberately NOT board inputs (the
 # "N ct / M oz" size ambiguity underprices some cells; see pull-regular-bakers-api.ps1 header)
 /grocery/out/kroger-api-eval/

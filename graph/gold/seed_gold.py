@@ -95,6 +95,17 @@ def from_product_urls(verified_only: bool = False) -> list[dict]:
     return out
 
 
+def from_escalation_review() -> list[dict]:
+    """Cases the confirm-match review lane ruled (review_escalations.py). They
+    are stored pre-built in the seeder's own format; without this merge, every
+    rebuild would silently erase the reviewer's labelled judgements."""
+    path = os.path.join(GOLD_DIR, "escalation-review.jsonl")
+    if not os.path.exists(path):
+        return []
+    with io.open(path, encoding="utf-8") as fh:
+        return [json.loads(l) for l in fh if l.strip()]
+
+
 def from_dupe_allowlist() -> list[dict]:
     path = os.path.join(GROCERY, "commodity-dupe-allowlist.json")
     if not os.path.exists(path):
@@ -120,6 +131,7 @@ def main() -> int:
     neg = from_known_wrong()
     pos = from_product_urls(args.verified_only)
     dnm = from_dupe_allowlist()
+    rev = from_escalation_review()
 
     # Balance: an evaluation dominated by easy positives hides false merges, which
     # are the error type this system most needs to see.
@@ -128,7 +140,7 @@ def main() -> int:
         pos = [pos[int(i * step)] for i in range(args.max_positives)]
 
     cases, seen = [], set()
-    for c in neg + pos + dnm:
+    for c in neg + rev + pos + dnm:
         if c["id"] in seen:
             continue
         seen.add(c["id"])

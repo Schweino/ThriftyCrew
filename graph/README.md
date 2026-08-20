@@ -43,6 +43,13 @@ python graph/learning/stage1_analyze.py         # local -> Learning Proposals
 python graph/learning/stage2_review.py --emit-packet
 python graph/learning/stage2_review.py --ingest verdicts.json
 python graph/learning/stage2_review.py --apply  # shadow-eval, then apply
+
+# 7. the confirm-match review lane — the ONLY writer of llm_confirmed
+python graph/pipeline/review_escalations.py --emit-packet
+python graph/pipeline/review_escalations.py --ingest verdicts.json
+python graph/pipeline/flag_outliers.py       # MANDATORY after an ingest: newly
+                                             # confirmed rows can now crown a cell
+python graph/pipeline/review_escalations.py --status
 ```
 
 The SQLite file is a rebuildable INDEX. Deleting `graph/sqlite/graph.db` and
@@ -61,6 +68,7 @@ re-running step 1 is always safe.
 | `lib/units.py` | size parsing, per-unit normalisation, basis reconciliation |
 | `import/` | the 10 seed importers (legacy JSON -> graph) |
 | `pipeline/resolve.py` | the layered resolver — the highest-risk component |
+| `pipeline/review_escalations.py` | the confirm-match review lane; the only writer of `llm_confirmed` |
 | `gold/` | the evaluation gold set and its seeder |
 | `eval/score.py` | entity/relation P/R, false-merge, missed-merge |
 | `eval/board_parity.py` | Phase 2 exit gate: graph vs `public/board.json` |
@@ -92,6 +100,18 @@ re-running step 1 is always safe.
    (`unadjudicated` + `no_include_hit`), so the layer is reachable without
    `--reset`.
 
+`llm_match_unverified` leaves that state in exactly one way:
+`pipeline/review_escalations.py`, the confirm-match review lane. It emits an
+enriched packet per commodity (include/exclude patterns, sibling `include_hit`
+names, known-wrong names, the model's own reason), a Claude reviewer rules
+CONFIRM / REJECT / DEFER with written evidence naming the deciding words, and
+`--ingest` writes the verdict to every row that asked the question, with
+provenance and one `decision_log` row each. It refuses to overwrite a question
+someone else already ruled, files an include-alias learning proposal for each
+confirmed pattern (through the normal Stage-2 shadow gate, never around it), and
+turns every ruling into a gold case in `gold/escalation-review.jsonl`, which
+`seed_gold.py` merges so a rebuild cannot erase the reviewer's judgements.
+
 On 119,029 real capture rows the deterministic layers settle **~89%** in ~9
 seconds, so a model is only ever asked about the genuinely contested remainder.
 That is the "blocking before expensive resolution" the plan requires, and it is
@@ -119,13 +139,42 @@ observation ever lacks one. "Why does this price appear?" is answerable from
 | Phase 0 resolution agreement | ≥0.90 | **0.900** (n=30) | PASS |
 | Phase 0 decode | ≥15 tok/s | **46.1 tok/s** | PASS |
 | gold-set false-merge rate | ≤0.02 | **0.0000** | PASS |
-| gold-set missed-merge rate | ≤0.10 | **0.0188** | PASS |
-| Phase 2 board parity | ≥0.99 agreement | 0.917 @ 0.838 coverage (2026-08-20) | **NOT MET** |
+| gold-set missed-merge rate | ≤0.10 | 0.5831 (see below) | **NOT MET** |
+| Phase 2 board parity | ≥0.99 agreement | 0.927 @ 0.838 coverage (2026-08-20, post-review) | **NOT MET** |
 | ad timing | every weekly-ad store inside its current window | Fareway 4d overdue | **NOT MET** |
 | 90-day timer | no everyday row older than `MaxCarryDays` | reads `capture-policy.ps1` | PASS |
 
 Phase 0 and the Phase 1 evaluation discipline are complete. Phases 2-6 are built
 and runnable; the parity gate has not been earned yet.
+
+### Why missed-merge went 0.0188 -> 0.5831 on 2026-08-20
+
+It is not a resolver regression. The confirm-match review added **745 gold cases**
+(gold went 547 -> 1298, commodities covered 379 -> 472), and 517 of them are
+reviewer-CONFIRMED matches. Every one of those is by construction a listing that
+**no include pattern matches** — that is precisely why the model was consulted and
+the reviewer asked. `score.py` scores the deterministic layers only, so each one
+reads as a missed merge. Measured per source:
+
+| gold source | gold MATCH cases | missed by the rules | rate |
+|---|---|---|---|
+| `product-urls.json` (pre-existing) | 373 | 2 | 0.0054 |
+| `escalation-review` (new) | 517 | 517 | 1.0000 |
+
+So the old 0.0188 was flattering: the gold set was seeded largely from curated
+per-commodity product links the patterns already matched. The set is now honest
+about what the rules alone can do, and the honest answer is that they miss the
+whole contested set. **False-merge — the dangerous direction — is still 0.0000.**
+
+The legitimate way to close this is the 116 include-alias proposals the review
+filed (`learning_proposals`, status `proposed`): once the deterministic layers
+absorb those patterns, the rate falls on merit. They are deliberately NOT
+auto-applied here. The shadow gate can only catch a regression the gold set can
+SEE, and each of these aliases was derived from the very case it would be scored
+against — so it would pass circularly. Several also need a human eye first:
+`\bangel\s+hair\b` for pasta would also match "Angel Hair Coleslaw", and
+`\bfridge\s+pack\b.{0,15}cans` for soda would match a beer fridge pack. They go
+through Stage 2 like any other proposal.
 
 **Time-based gates are AD TIMING and the 90-DAY TIMER, nothing else** (decision
 2026-08-20, Brad). The first build carried the V4 postmortem's
@@ -138,12 +187,26 @@ engine ran the 90-day quarter.
 
 ### What Phase 2 still needs
 
-Board parity is at 0.917 agreement over 0.838 coverage (2026-08-20). Three
-concrete gaps — the third is the contested set itself: 12,808 `no_include_hit`
-rows cannot price a cell until the reviewer confirms them (the local model may
-only reject; see the resolution section above). Working the escalation queue and
-letting the learning loop convert confirmed matches into include aliases is how
-that coverage returns. The other two:
+Board parity is at 0.927 agreement over 0.838 coverage (2026-08-20, measured
+after the confirm-match review). The third gap — the contested set — has now been
+WORKED: `no_include_hit` is 0, every `confirm_match` question has a verdict, and
+3,658 rows reached `llm_confirmed` and became priceable. That returned less
+parity than expected, and the reason is worth recording: only **31 cells** ended
+up actually held by a reviewer-confirmed row, because most confirmed rows sit in
+cells an `include_hit` row already covers with a newer or cheaper candidate. The
+contested set was a real coverage gap but a thin one at the cell level; the two
+gaps below are the larger ones.
+
+One defect the review surfaced: a correctly-matched row can still carry a
+nonsense per-unit price, and upgrading rows to priceable is what exposes it.
+"Boulder Everyday PaperTowel" ($5.39, size `660 ct`) divided a SHEET count as
+though it were rolls and produced $0.0082 each — 345x below the commodity median
+— instantly the cheapest paper-towels cell. `pipeline/flag_outliers.py` caught and
+barred it, but only because it was re-run afterwards. **Run the basis guard after
+any review ingest**, not just after an import: the review is the step that makes
+new rows able to crown.
+
+The other two gaps: 
 
 1. **Lane coverage.** Only the `regular` and `throttled` capture lanes carry a
    parseable `deals` array. Baker's (`out/bakers/`, page-structured), Sam's and

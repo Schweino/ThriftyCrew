@@ -2212,6 +2212,36 @@
                         "ruled_on":  "2026-08-20",
                         "ruled_by":  "graph preserve_carrier rollout (Claude Opus 5)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "red-potatoes|FamilyFare|organic-yams-red-small",
+                        "commodity":  "red-potatoes",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Organic Yams, Red, Small"
+                                  ],
+                        "product_id":  "2313272",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Yams - a different food entirely (sweet potato/yam, not a red potato). The commodity\u0027s own \u0027sweet\u0027 exclude marks this boundary; the word Red here describes yam skin. Ruled by the confirm-match review lane 2026-08-20.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "escalation-review 2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "instant-coffee|FamilyFare|green-mountain-coffee-roasters-coffee-original-b",
+                        "commodity":  "instant-coffee",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Green Mountain Coffee Roasters Coffee, Original Black, Instant, Cold Brew, Iced 10 Ea"
+                                  ],
+                        "product_id":  "1564405684715427323",
+                        "verdict":  "wrong-product",
+                        "evidence":  "K-CUP PODS, not instant coffee. The word Instant is a title artifact: the same UPC 00611247398272 is listed by Kroger, Walmart and ShopRite as \u0027Original Black Iced Cold Brew Medium Roast K-Cup Coffee Pods, 10 ct, 2.1 oz\u0027, and the sibling SKU on the same shelf-set spells out K-Cup Pods in an otherwise identical title. 2.1 oz across 10 units is ~6 g each, which is K-Cup ground weight, not soluble-powder sachet weight. Verified against retailer listings 2026-08-20.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "escalation-review 2026-08-20",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
