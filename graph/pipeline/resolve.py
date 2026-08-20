@@ -43,8 +43,10 @@ from __future__ import annotations
 
 import os
 import re
+import sqlite3
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "lib"))
@@ -313,7 +315,7 @@ class Resolver:
     # -- bulk application --------------------------------------------------
     def resolve_pending(self, limit: int | None = None, run: str = "",
                         ts: str | None = None, allow_llm: bool = True,
-                        progress=None) -> dict:
+                        progress=None, jobs: int = 1) -> dict:
         """Adjudicate pending observations, writing status back.
 
         Deterministic layers run for ALL selected rows. What counts as
@@ -330,6 +332,19 @@ class Resolver:
         Rows already at llm_* / escalated are never re-selected: those verdicts
         are waiting on (or produced by) the reviewer and re-rolling the model
         over them would rewrite adjudication history.
+
+        DEDUPLICATION. `resolve()` is a pure function of
+        (commodity_id, product_name) — nothing else about a row reaches it — so
+        the SAME question is asked once and its verdict applied to every row
+        that shares it. The contested set is 4.08x redundant (12,806 rows,
+        3,139 distinct questions), because every capture of the same store
+        listing re-poses the identical question. This is not only ~4x less
+        work: it makes an identical question impossible to answer two different
+        ways in one run, which sampling temperature alone could otherwise do.
+
+        `jobs` > 1 issues the model calls concurrently against llama.cpp's
+        parallel slots. Only the HTTP calls are threaded — every database write
+        happens on this thread — so the single-writer rule is unchanged.
         """
         ts = ts or time.strftime("%Y-%m-%dT%H:%M:%S")
         self.stats = {}          # per-call, not per-Resolver: two runs on one
@@ -342,20 +357,86 @@ class Resolver:
             q += f" LIMIT {int(limit)}"
         rows = self.db.conn.execute(q, pending).fetchall()
 
-        n = 0
-        escalations = []
+        # -- group identical questions ------------------------------------
+        groups: dict[tuple[str, str], list[str]] = {}
+        meta_of: dict[tuple[str, str], sqlite3.Row] = {}
         for r in rows:
+            key = (r["commodity_id"], r["product_name"] or "")
+            groups.setdefault(key, []).append(r["id"])
+            meta_of.setdefault(key, r)
+
+        # -- pass 1: deterministic layers, in-process ----------------------
+        verdicts: dict[tuple[str, str], Verdict] = {}
+        contested: list[tuple[str, str]] = []
+        for key in groups:
+            cid, name = key
             try:
-                v = self.resolve(r["commodity_id"], r["product_name"] or "", allow_llm=allow_llm)
+                # allow_llm=False here even in LLM mode: this pass settles what
+                # the cheap layers can settle and isolates the contested set.
+                v = self.resolve(cid, name, allow_llm=False)
             except KeyError:
                 v = Verdict("escalated", "commodity node missing", 0.0, escalate=True)
-            self.db.conn.execute(
-                "UPDATE price_observations SET match_status=?, match_reason=?, confidence=? WHERE id=?",
-                (v.status, v.reason, v.confidence, r["id"]))
+            if use_llm and v.status == "no_include_hit":
+                contested.append(key)
+            else:
+                verdicts[key] = v
+        # The deterministic pass tallied by QUESTION; stats must count ROWS, so
+        # rebuild the tally at write time below.
+        self.stats = {}
+
+        # -- pass 2: the model, on the contested questions only -------------
+        if contested:
+            if progress:
+                progress(f"    {len(contested)} contested questions "
+                         f"({sum(len(groups[k]) for k in contested)} rows), "
+                         f"{jobs} concurrent")
+            done = [0]
+
+            def adjudicate(key):
+                cid, name = key
+                try:
+                    return key, self._llm_adjudicate(self.commodity(cid), name)
+                except Exception as e:                       # noqa: BLE001
+                    return key, Verdict("escalated", f"llm error: {e}", 0.0, escalate=True)
+
+            if jobs > 1:
+                # commodity() caches per node id; warm every entry on THIS
+                # thread so the workers only ever read the dict.
+                for cid, _ in contested:
+                    try:
+                        self.commodity(cid)
+                    except KeyError:
+                        pass
+                with ThreadPoolExecutor(max_workers=jobs) as pool:
+                    for key, v in pool.map(adjudicate, contested):
+                        verdicts[key] = v
+                        done[0] += 1
+                        if progress and done[0] % 200 == 0:
+                            progress(f"    adjudicated {done[0]}/{len(contested)}")
+            else:
+                for key in contested:
+                    k, v = adjudicate(key)
+                    verdicts[k] = v
+                    done[0] += 1
+                    if progress and done[0] % 200 == 0:
+                        progress(f"    adjudicated {done[0]}/{len(contested)}")
+
+        # -- pass 3: write back, expanding each verdict to its rows ---------
+        n = 0
+        escalations = []
+        for key, v in verdicts.items():
+            ids = groups[key]
+            cid, name = key
+            self.db.conn.executemany(
+                "UPDATE price_observations SET match_status=?, match_reason=?, "
+                "confidence=? WHERE id=?",
+                [(v.status, v.reason, v.confidence, i) for i in ids])
+            self.stats[v.status] = self.stats.get(v.status, 0) + len(ids)
             # Every MODEL judgment gets its own decision-log row. The aggregate
             # event below says what a run did; only per-judgment rows with the
             # model id and prompt version let a bad verdict be attributed to the
-            # exact model + prompt that produced it months later.
+            # exact model + prompt that produced it months later. One row per
+            # QUESTION, carrying how many observations it settled.
             if run and v.meta:
                 self.db.log_event(
                     run=run, timestamp=ts, etype="resolve",
@@ -364,15 +445,18 @@ class Resolver:
                     output_hash=v.meta["output_hash"],
                     confidence=v.confidence,
                     decision=v.status,
-                    detail={"observation": r["id"], "commodity": r["commodity_id"],
-                            "product": r["product_name"],
+                    detail={"observation": ids[0], "rows_settled": len(ids),
+                            "commodity": cid, "product": name,
                             "llm_verdict": v.meta["llm_verdict"],
                             "prompt_version": v.meta["prompt_version"],
                             "reason": v.reason[:200]})
             if v.escalate:
                 escalations.append({
-                    "observation": r["id"], "commodity": r["commodity_id"],
-                    "product": r["product_name"], "reason": v.reason,
+                    "observation": ids[0], "commodity": cid,
+                    "product": name, "reason": v.reason,
+                    # One packet per QUESTION, not per row: the reviewer answers
+                    # it once and the verdict applies to every row that shares it.
+                    "rows_settled": len(ids),
                     # confirm_match: local model is confident this IS the
                     # commodity and asks the reviewer to upgrade the row.
                     # contested: nobody knows; adjudicate from scratch.
@@ -380,19 +464,22 @@ class Resolver:
                              else "contested"),
                     "confidence": v.confidence,
                 })
-            n += 1
-            if progress and n % 2000 == 0:
-                progress(f"    resolved {n}/{len(rows)}")
+            n += len(ids)
         self.db.conn.commit()
 
         if run:
             self.db.log_event(run=run, timestamp=ts, etype="resolve",
                               decision="resolve_pending",
                               detail={"n": n, "by_status": self.stats,
+                                      "questions": len(groups),
+                                      "model_calls": len(contested) if use_llm else 0,
+                                      "jobs": jobs,
                                       "llm_enabled": bool(use_llm),
                                       "prompt_version": PROMPT_VERSION if use_llm else None,
                                       "escalations": len(escalations)})
-        return {"resolved": n, "by_status": dict(self.stats), "escalations": escalations}
+        return {"resolved": n, "by_status": dict(self.stats), "escalations": escalations,
+                "questions": len(groups),
+                "model_calls": len(contested) if use_llm else 0}
 
 
 def build_resolve_prompt(cc: CompiledCommodity, product_name: str) -> tuple[str, str]:
@@ -449,6 +536,9 @@ def main() -> int:
     ap.add_argument("--llm", action="store_true",
                     help="consult the local model on rows the deterministic layers cannot settle")
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--jobs", type=int, default=8,
+                    help="concurrent model calls; must be <= llama-server --parallel "
+                         "slots (tools/local-llm/serve.ps1 -Slots), else requests queue")
     ap.add_argument("--reset", action="store_true",
                     help="re-adjudicate everything (clears prior verdicts first)")
     args = ap.parse_args()
@@ -472,8 +562,11 @@ def main() -> int:
         r = Resolver(db, llm=llm, use_llm=bool(llm))
         t0 = time.time()
         out = r.resolve_pending(limit=args.limit, run=run, allow_llm=bool(llm),
-                                progress=print)
-        print(f"\nresolved {out['resolved']} rows in {time.time()-t0:.1f}s")
+                                progress=print, jobs=max(1, args.jobs))
+        dt = time.time() - t0
+        print(f"\nresolved {out['resolved']} rows in {dt:.1f}s "
+              f"({out['questions']} distinct questions, "
+              f"{out['model_calls']} model calls)")
         for k, v in sorted(out["by_status"].items(), key=lambda x: -x[1]):
             print(f"   {k:<20} {v}")
         if out["escalations"]:

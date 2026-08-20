@@ -11,8 +11,19 @@
     --cache-type-k/v   q8_0 KV cache. A 27B dense model at 16k context would
                        otherwise spend several GiB on the KV cache and tip the
                        card into offload, which collapses decode speed.
-    -c 16384           satisfies the plan's ">=8k context headroom" acceptance bar
-                       with room for the Resolve prompts' candidate blocks.
+    -c 16384           TOTAL context, divided among the slots below.
+    --parallel 8       eight concurrent slots. This costs NO extra VRAM: -c is
+                       the total KV budget and llama.cpp splits it, so 8 slots
+                       is 2048 tokens each rather than 8x16384. Measured on
+                       this box, a resolve prompt is 312 tokens and generation
+                       is capped at 400, so 2048/slot is ~2.5x the requirement.
+                       Decode is memory-BANDWIDTH bound (12.2 GiB of weights
+                       read per step), so batching amortises one weight read
+                       across eight sequences and multiplies throughput; a
+                       single stream leaves most of the 896 GB/s idle.
+                       NOTE: the CLIENT must issue concurrent requests to use
+                       these slots — see resolve.py --jobs. A sequential client
+                       against eight slots is exactly as fast as one slot.
     --jinja            uses the model's own chat template. Qwen3.x REQUIRES this
                        for correct role handling and for reasoning-block parsing.
     --temp 0.1 etc.    low-variance settings: this endpoint's job is structured
@@ -35,6 +46,7 @@ param(
     [int]$Context    = 16384,
     [int]$GpuLayers  = 99,
     [string]$CacheType = "q8_0",
+    [int]$Slots      = 8,
     [switch]$Foreground
 )
 
@@ -64,9 +76,17 @@ $serverArgs = @(
     '--temp', '0.1',
     '--top-p', '0.9',
     '--repeat-penalty', '1.05',
-    '--parallel', '1',
+    '--parallel', $Slots,
     '--alias', 'local-primary'
 )
+
+# A slot too small to hold prompt + generation makes llama.cpp truncate or
+# refuse mid-run, which would look like a model failure rather than a config
+# one. 312-token prompt + 400 generated + margin; fail here instead.
+$perSlot = [math]::Floor($Context / $Slots)
+if ($perSlot -lt 1024) {
+    throw "Context $Context split across $Slots slots is $perSlot tokens/slot; a resolve call needs ~840. Raise -Context or lower -Slots."
+}
 
 Write-Host "Starting llama-server:" -ForegroundColor Cyan
 Write-Host "  model   : $(Split-Path $Model -Leaf)"
@@ -80,29 +100,53 @@ if ($Foreground) {
 
 $logDir = Join-Path $PSScriptRoot 'logs'
 New-Item -ItemType Directory -Force -Path $logDir | Out-Null
-$stdout = Join-Path $logDir 'llama-server.out.log'
-$stderr = Join-Path $logDir 'llama-server.err.log'
+$logFile = Join-Path $logDir 'llama-server.log'
+$serverArgs += @('--log-file', $logFile)
 
-$proc = Start-Process -FilePath $server -ArgumentList $serverArgs -PassThru `
-                      -RedirectStandardOutput $stdout -RedirectStandardError $stderr `
-                      -WindowStyle Hidden
-Write-Host "  pid     : $($proc.Id)  (logs: $logDir)"
+# WHY Win32_Process.Create AND NOT Start-Process.
+#
+# Start-Process with -RedirectStandardOutput/-RedirectStandardError calls
+# CreateProcess with bInheritHandles=TRUE. That makes the child inherit EVERY
+# inheritable handle this PowerShell holds -- including the stdout PIPE its own
+# caller handed it -- regardless of where the child's own stdout was pointed.
+# llama-server then holds the write end of that pipe forever, so any caller
+# reading our output (`serve.ps1 | tail`, `$(serve.ps1)`, a CI step, an agent
+# harness) blocks waiting for an EOF that cannot arrive until the SERVER dies.
+# Measured 2026-08-20: the script completed and the server came up healthy,
+# and the invoking shell still hung until it was killed by hand -- the worst
+# shape of failure, because everything "worked".
+#
+# Win32_Process.Create creates the process with bInheritHandles=FALSE: no
+# handle of ours crosses into the daemon. llama.cpp's own --log-file replaces
+# the shell redirection we lose, which is better anyway (one ordered log
+# instead of a split stdout/stderr pair).
+$argLine = ($serverArgs | ForEach-Object {
+    $a = [string]$_
+    if ($a -match '\s') { '"' + $a + '"' } else { $a }
+}) -join ' '
+$create = Invoke-CimMethod -ClassName Win32_Process -MethodName Create `
+                           -Arguments @{ CommandLine = ('"{0}" {1}' -f $server, $argLine) }
+if ($create.ReturnValue -ne 0) {
+    throw "Win32_Process.Create failed with code $($create.ReturnValue) (see Win32_Process docs)"
+}
+$serverPid = [int]$create.ProcessId
+Write-Host "  pid     : $serverPid  (log: $logFile)"
 
 # Wait for readiness. A 27B load off NVMe into VRAM takes a while on a cold cache.
 $deadline = (Get-Date).AddSeconds(300)
 while ((Get-Date) -lt $deadline) {
     Start-Sleep -Seconds 3
-    if ($proc.HasExited) {
-        Write-Host "llama-server exited early (code $($proc.ExitCode)). Tail of stderr:" -ForegroundColor Red
-        if (Test-Path $stderr) { Get-Content $stderr -Tail 25 }
+    if (-not (Get-Process -Id $serverPid -ErrorAction SilentlyContinue)) {
+        Write-Host "llama-server exited early. Tail of its log:" -ForegroundColor Red
+        if (Test-Path $logFile) { Get-Content $logFile -Tail 25 }
         throw "llama-server failed to start"
     }
     try {
         $h = Invoke-RestMethod -Uri "http://${ListenHost}:$Port/health" -TimeoutSec 3 -ErrorAction Stop
         if ($h.status -eq 'ok') {
-            Write-Host "READY  http://${ListenHost}:$Port/v1" -ForegroundColor Green
+            Write-Host "READY  http://${ListenHost}:$Port/v1  ($Slots slots)" -ForegroundColor Green
             return
         }
     } catch { }
 }
-throw "llama-server did not become healthy within 300s; see $stderr"
+throw "llama-server did not become healthy within 300s; see $logFile"
