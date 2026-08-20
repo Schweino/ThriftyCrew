@@ -8,7 +8,9 @@
 # and the repair-stops-at-source-of-truth class, twice. The publish step's content-hash gate already proved
 # the cure at the last hop; this applies it to the whole chain.
 #
-# HOW IT DECIDES WHAT IS DIRTY. A SHA1 of each spec's bytes, compared to pipeline\propagate-stamps.json.
+# HOW IT DECIDES WHAT IS DIRTY. A SHA1 of each spec with its two DAILY-REANCHORED machine fields masked
+# (see Get-SpecHash - stat.cost_ps / head.costPerServing move every day and are propagated by the
+# reanchor loop, not by this runner), compared to pipeline\propagate-stamps.json.
 # The stamp for a slug is rewritten ONLY after every stage has succeeded for it - a failing run leaves the
 # slug dirty, so the next run retries it (the checkpoint-before-durable lesson: a watermark committed
 # before the work it certifies turns a failure into silently skipped work).
@@ -46,9 +48,36 @@ $stampPath = Join-Path $here 'propagate-stamps.json'
 # param block in the CALLER's scope); its own self-test pins that.
 . (Join-Path (Split-Path $mp -Parent) 'lib\guard-contract.ps1')
 
+# ---- MACHINE FIELDS ARE NOT DIRT (2026-08-20) -------------------------------------------------------
+# stat.cost_ps and head.costPerServing are re-anchored by the DAILY chain (reanchor-all, Brad-approved
+# unattended 2026-08-07), and the token architecture means no derived copy bakes them: {{cost_ps}}
+# renders as a live-price placeholder, recipes-db does not carry the two fields at all, and the reanchor
+# loop republishes any card whose bytes actually move. So a daily re-cost is fully propagated by a
+# DIFFERENT, older mechanism - and hashing raw spec bytes made this stamp file count it as dirt anyway.
+# Measured 2026-08-20: 465 of 574 specs "dirty", of which 458 differed ONLY in these two fields. A gate
+# reading 465 when 7 need work is a gate someone learns to scroll past - the Walmart fullpull watch
+# failed exactly that way the same morning.
+#
+# So the stamp hashes the spec with the two machine fields MASKED, using the SAME two patterns
+# reanchor-machine-fields.ps1 re-anchors with (the -SelfTest pins them against that file's source, so
+# the two cannot drift apart silently). Everything else - prose, ingredients, canon names, the deeper
+# cost_batch/cost_first_run family that only moves on a real re-cost - still dirties the stamp, because
+# nothing else re-publishes those.
+#
+# A BOM flip still dirties: the hash covers a has-BOM marker plus the masked text, because BOM churn is
+# real content this estate has shipped bugs over, and masking must never widen beyond the two fields.
+$script:MACHINE_FIELD_PATTERNS = @(
+  @('("cost_ps":\s*")[^"]*(")',                 '${1}MASKED${2}'),
+  @('("costPerServing":\s*)[0-9]+(?:\.[0-9]+)?', '${1}0')
+)
 function Get-SpecHash([string]$Path) {
+  $bytes = [IO.File]::ReadAllBytes($Path)
+  $hasBom = ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF)
+  $text = [Text.Encoding]::UTF8.GetString($(if ($hasBom) { $bytes[3..($bytes.Length-1)] } else { $bytes }))
+  foreach ($p in $script:MACHINE_FIELD_PATTERNS) { $text = [regex]::Replace($text, $p[0], $p[1]) }
+  $payload = [Text.Encoding]::UTF8.GetBytes($(if ($hasBom) { 'BOM:' + $text } else { $text }))
   $sha = [System.Security.Cryptography.SHA1]::Create()
-  return ([BitConverter]::ToString($sha.ComputeHash([IO.File]::ReadAllBytes($Path))) -replace '-', '')
+  return ([BitConverter]::ToString($sha.ComputeHash($payload)) -replace '-', '')
 }
 function Get-DirtySlugs { param([hashtable]$Stamps, $Files)
   $d = New-Object System.Collections.Generic.List[string]
@@ -72,6 +101,29 @@ if ($SelfTest) {
     T 'MUST FIRE  with no stamps, every spec is dirty' ((Get-DirtySlugs $stamps $files).Count -eq 2) 'missed'
     foreach ($x in $files) { $stamps[$x.BaseName] = Get-SpecHash $x.FullName }
     T 'CLEAN TWIN stamped specs are clean' ((Get-DirtySlugs $stamps $files).Count -eq 0) 'spurious dirt'
+    # ---- MACHINE-FIELD MASKING (the 465-dirty founding case, 2026-08-20) ----
+    Set-Content (Join-Path $tmp 'm.json') '{"stat":{"cost_ps":"3.99"},"head":{"costPerServing":3.99},"prose":"hello"}' -Encoding UTF8
+    $h1 = Get-SpecHash (Join-Path $tmp 'm.json')
+    Set-Content (Join-Path $tmp 'm.json') '{"stat":{"cost_ps":"4.12"},"head":{"costPerServing":4.12},"prose":"hello"}' -Encoding UTF8
+    T 'MUST FIRE  a daily re-cost of the two machine fields does NOT dirty the stamp' ($h1 -eq (Get-SpecHash (Join-Path $tmp 'm.json'))) 'hash moved'
+    Set-Content (Join-Path $tmp 'm.json') '{"stat":{"cost_ps":"4.12"},"head":{"costPerServing":4.12},"prose":"edited"}' -Encoding UTF8
+    T 'CLEAN TWIN a prose edit still dirties it' ($h1 -ne (Get-SpecHash (Join-Path $tmp 'm.json'))) 'prose edit invisible'
+    Set-Content (Join-Path $tmp 'm2.json') '{"cost_batch":34.06,"x":1}' -Encoding UTF8
+    $h2 = Get-SpecHash (Join-Path $tmp 'm2.json')
+    Set-Content (Join-Path $tmp 'm2.json') '{"cost_batch":41.20,"x":1}' -Encoding UTF8
+    T 'CLEAN TWIN the deeper cost_batch family is NOT masked - a real re-cost still dirties' ($h2 -ne (Get-SpecHash (Join-Path $tmp 'm2.json'))) 'cost_batch masked too'
+    # A BOM flip is content. Write the same bytes with and without one.
+    [IO.File]::WriteAllBytes((Join-Path $tmp 'b.json2'), [Text.Encoding]::UTF8.GetBytes('{"x":1}'))
+    [IO.File]::WriteAllBytes((Join-Path $tmp 'b2.json2'), (@(0xEF,0xBB,0xBF) + [Text.Encoding]::UTF8.GetBytes('{"x":1}')))
+    T 'CLEAN TWIN a BOM flip still dirties (masking never widens beyond the two fields)' ((Get-SpecHash (Join-Path $tmp 'b.json2')) -ne (Get-SpecHash (Join-Path $tmp 'b2.json2'))) 'BOM invisible'
+    # SOURCE PIN: the mask must be the SAME two patterns reanchor-machine-fields re-anchors with. If that
+    # file's patterns change, this fails until the mask follows - the drift can never be silent.
+    $raSrc = [IO.File]::ReadAllText((Join-Path $here 'reanchor-machine-fields.ps1'))
+    $pinOk = $true
+    foreach ($p in $script:MACHINE_FIELD_PATTERNS) { if (-not $raSrc.Contains($p[0])) { $pinOk = $false } }
+    T 'SOURCE PIN the masked patterns are reanchor-machine-fields'' own two, verbatim' $pinOk 'patterns drifted from reanchor-machine-fields.ps1'
+    # the mask fixtures must not leak into the later whole-directory dirty tests
+    Remove-Item (Join-Path $tmp 'm.json'), (Join-Path $tmp 'm2.json') -Force
 
     # ---- CREATE AUTHORITY. `dirty` is the wrong authority for CREATING a live post: propagate carries
     # every dirty spec by design, and on 2026-08-16 that set was 49, of which 21 had never been published
