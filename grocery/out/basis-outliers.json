@@ -4,16 +4,16 @@
                             ],
     "findings":  [
                      {
-                         "id":  "soda",
-                         "commodity":  "Soda (12-pack)",
-                         "unit":  "floz",
-                         "store":  "Fareway",
-                         "per_unit":  0.1395,
-                         "median":  0.0312,
-                         "mult":  4.47,
-                         "size":  "20 fl oz",
-                         "item":  "Coca-Cola Soda Bottle",
-                         "peers_packed":  "3 of 6",
+                         "id":  "protein-bars",
+                         "commodity":  "Protein Bars",
+                         "unit":  "each",
+                         "store":  "Family Fare",
+                         "per_unit":  2.165,
+                         "median":  0.528,
+                         "mult":  4.1,
+                         "size":  "6 ea",
+                         "item":  "Builders Chocolatey Mint Protein Bars 6 Ea",
+                         "peers_packed":  "4 of 6",
                          "size_shape_mismatch":  true
                      },
                      {
@@ -82,19 +82,6 @@
                          "size_shape_mismatch":  false
                      },
                      {
-                         "id":  "hand-soap",
-                         "commodity":  "Hand Soap (liquid)",
-                         "unit":  "floz",
-                         "store":  "Fareway",
-                         "per_unit":  0.4653,
-                         "median":  0.0998,
-                         "mult":  4.66,
-                         "size":  "7.5 fl oz",
-                         "item":  "Dial Antibacterial Defense Power Berries Scent Foaming Hand Soap, 7.5 fl oz",
-                         "peers_packed":  "0 of 6",
-                         "size_shape_mismatch":  false
-                     },
-                     {
                          "id":  "shampoo",
                          "commodity":  "Shampoo",
                          "unit":  "floz",
@@ -109,7 +96,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-20T06:31:47",
+    "generated":  "2026-08-20T13:08:48",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -209,6 +196,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "banana-peppers",
+                              "commodity":  "Banana Peppers / Pepperoncini",
+                              "unit":  "oz",
+                              "store":  "Fareway",
+                              "per_unit":  0.165,
+                              "size":  "12 oz",
+                              "item":  "Vlasic Mild Banana Pepper Rings, Keto Friendly",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "dried-basil",
                               "commodity":  "Basil (dried)",
                               "unit":  "oz",
@@ -296,6 +295,18 @@
                               "id":  "cherry-tomatoes",
                               "commodity":  "Cherry / Grape Tomatoes",
                               "unit":  "oz",
+                              "store":  "Fareway",
+                              "per_unit":  0.248,
+                              "size":  "pint",
+                              "item":  "Grape Tomatoes",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "cherry-tomatoes",
+                              "commodity":  "Cherry / Grape Tomatoes",
+                              "unit":  "oz",
                               "store":  "Family Fare",
                               "per_unit":  0.399,
                               "size":  "1 pt",
@@ -350,6 +361,18 @@
                               "item":  "Kemps Reduced Fat Chocolate Milk",
                               "kind":  "weight",
                               "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "clam-chowder",
+                              "commodity":  "Clam Chowder (canned)",
+                              "unit":  "oz",
+                              "store":  "Fareway",
+                              "per_unit":  0.1319,
+                              "size":  "18.8 fl oz",
+                              "item":  "Campbell\u0027s New England Clam Chowder18.8 fl oz",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
                               "holds_crown":  false
                           },
                           {
@@ -521,18 +544,6 @@
                               "holds_crown":  false
                           },
                           {
-                              "id":  "glass-cleaner",
-                              "commodity":  "Glass Cleaner",
-                              "unit":  "floz",
-                              "store":  "Sam\u0027s Club",
-                              "per_unit":  0.1445,
-                              "size":  "4 ct 19 oz",
-                              "item":  "Windex Fast Shine Foam Glass Cleaner, No-Drip Aerosol Cleaning Spray, 19 oz., 4 pk.",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
                               "id":  "gochujang",
                               "commodity":  "Gochujang (Korean Chili Paste)",
                               "unit":  "oz",
@@ -605,13 +616,13 @@
                               "holds_crown":  false
                           },
                           {
-                              "id":  "heavy-cream",
-                              "commodity":  "Heavy Whipping Cream",
-                              "unit":  "floz",
-                              "store":  "Fareway",
-                              "per_unit":  0.2494,
-                              "size":  "32 oz",
-                              "item":  "Kemps Heavy Whipping Cream",
+                              "id":  "honey-mustard",
+                              "commodity":  "Honey Mustard",
+                              "unit":  "oz",
+                              "store":  "Walmart",
+                              "per_unit":  0.1433,
+                              "size":  "12 oz",
+                              "item":  "Great Value Honey Mustard, 12 oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -620,10 +631,10 @@
                               "id":  "honey-mustard",
                               "commodity":  "Honey Mustard",
                               "unit":  "oz",
-                              "store":  "Walmart",
-                              "per_unit":  0.1433,
+                              "store":  "Fareway",
+                              "per_unit":  0.1567,
                               "size":  "12 oz",
-                              "item":  "Great Value Honey Mustard, 12 oz",
+                              "item":  "Fareway Honey Mustard",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -707,7 +718,7 @@
                               "store":  "Fareway",
                               "per_unit":  0.155,
                               "size":  "16 oz",
-                              "item":  "Fareway Italian Dressing",
+                              "item":  "Fareway Zesty Italian Dressing",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -746,6 +757,18 @@
                               "item":  "Hy-Vee 100% Egg Whites",
                               "kind":  "volume",
                               "row_kind":  "weight",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "mayonnaise",
+                              "commodity":  "Mayonnaise",
+                              "unit":  "oz",
+                              "store":  "Fareway",
+                              "per_unit":  0.1263,
+                              "size":  "30 oz",
+                              "item":  "Fareway Mayonnaise Homestyle",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
                               "holds_crown":  false
                           },
                           {
@@ -797,6 +820,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "orange-juice",
+                              "commodity":  "Orange Juice",
+                              "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.0623,
+                              "size":  "128 oz",
+                              "item":  "Fareway Orange Juice, from Concentrate",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "oven-cleaner",
                               "commodity":  "Oven Cleaner",
                               "unit":  "oz",
@@ -828,18 +863,6 @@
                               "per_unit":  0.1556,
                               "size":  "16 fl oz",
                               "item":  "Tuscan Garden Hot Jalapeno Slices 16 FL OZ",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "pickled-jalapenos",
-                              "commodity":  "Pickled Jalapenos (sliced)",
-                              "unit":  "oz",
-                              "store":  "Fareway",
-                              "per_unit":  0.2492,
-                              "size":  "12 fl oz",
-                              "item":  "Mt. Olive Jalapeno Slices",
                               "kind":  "volume",
                               "row_kind":  "weight",
                               "holds_crown":  false
@@ -896,18 +919,6 @@
                               "id":  "shampoo",
                               "commodity":  "Shampoo",
                               "unit":  "floz",
-                              "store":  "Fareway",
-                              "per_unit":  0.0876,
-                              "size":  "22.5 oz",
-                              "item":  "Suave Ocean Breeze Refreshing Shampoo with Sea Algae Extract \u0026 Vitamin E, Cleanses, Softens \u0026 Shines For All Hair Types, 22.5 FL OZ",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "shampoo",
-                              "commodity":  "Shampoo",
-                              "unit":  "floz",
                               "store":  "Family Fare",
                               "per_unit":  0.0993,
                               "size":  "15 oz",
@@ -949,6 +960,18 @@
                               "size":  "10 oz",
                               "item":  "Fareway Soy Sauce",
                               "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "sports-drinks",
+                              "commodity":  "Sports Drinks",
+                              "unit":  "floz",
+                              "store":  "Baker\u0027s",
+                              "per_unit":  0.0374,
+                              "size":  "8 pack",
+                              "item":  "Gatorade 8-Pack 20 fl oz or Pringles Multipack 12 ct",
+                              "kind":  "count",
                               "row_kind":  "volume",
                               "holds_crown":  false
                           },
@@ -1079,7 +1102,7 @@
                               "store":  "Fareway",
                               "per_unit":  0.0741,
                               "size":  "128 oz",
-                              "item":  "Fareway Vegetable Oil",
+                              "item":  "Fareway Canola Oil",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false

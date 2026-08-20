@@ -68,6 +68,8 @@ param(
   [int]$ResultsPerTerm = 25,   # 15 missed real staples behind promo churn (vegetable oil, fresh cauliflower)
   [string]$LocationId = '61500319',   # Baker's - Saddlecreek, 888 S Saddle Creek Rd, Omaha 68106
   [int]$PaceMs = 180,
+  # Pull ONLY these commodity ids (targeted re-price). Empty = the full term list.
+  [string[]]$Commodities = @(),
   [string]$OutDir = ''
 )
 $ErrorActionPreference = 'Stop'
@@ -446,6 +448,17 @@ if ($SelfTest) {
 # ---------------------------------------------------------------- pull
 $terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
 $termList = @($terms.PSObject.Properties)
+# TARGETED RE-PRICE. -Commodities takes specific commodity ids and pulls ONLY those.
+# The capture policy produces exactly this kind of list - the items whose sale ended
+# today, and the ones that lost their cell when an ad closed - and re-pulling all
+# 596 terms to refresh two of them is what put Family Fare over its request budget.
+# Filtering here means a targeted re-price costs two requests, not six hundred.
+if ($Commodities -and $Commodities.Count) {
+  $want = @{}; foreach ($c in $Commodities) { $want[[string]$c] = $true }
+  $termList = @($termList | Where-Object { $want.ContainsKey([string]$_.Name) })
+  Write-Output ("bakers-api: TARGETED re-price of {0} commodity(ies): {1}" -f $termList.Count, ($Commodities -join ', '))
+  if ($termList.Count -eq 0) { Write-Warning 'none of the requested commodity ids exist in commodity-search.json'; exit 1 }
+}
 if ($Limit -gt 0) { $termList = $termList | Select-Object -First $Limit }
 Write-Output ("bakers-api: {0} term(s), store {1}, {2} results/term" -f $termList.Count, $LocationId, $ResultsPerTerm)
 
@@ -616,6 +629,48 @@ if ($Verify) {
 }
 
 # ---------------------------------------------------------------- write
+# A TARGETED RE-PRICE MERGES; IT DOES NOT OVERWRITE.
+# The thin-pull guard below is exactly right for a full run - 38 rows replacing a
+# 10,000-row capture is a catastrophe wearing the costume of a successful pull.
+# But a -Commodities run is DELIBERATELY thin: it re-prices the handful of items
+# whose sale ended or whose ad closed. So here it merges its rows into the newest
+# existing capture, replacing only the commodities it actually pulled and leaving
+# every other row untouched. Without this, a targeted re-price can only ever be
+# refused, which is what happened the first time it was tried.
+if ($Commodities -and $Commodities.Count) {
+  $regDir = Join-Path $out 'regular'   # $out is the RESOLVED dir (line ~79); $OutDir may be ''
+  $prev = Get-ChildItem (Join-Path $regDir 'bakers-regular-*.json') -EA SilentlyContinue |
+          Sort-Object Name -Descending | Select-Object -First 1
+  if (-not $prev) {
+    Write-Warning 'bakers-api: targeted re-price needs an existing capture to merge into; none found. Nothing written.'
+    exit 1
+  }
+  $base = Get-Content $prev.FullName -Raw | ConvertFrom-Json
+  $keep = @($base.deals | Where-Object { -not ($Commodities -contains [string]$_.found_by_term_id) -and
+                                          -not ($Commodities -contains [string]$_.commodity_id) })
+  # Older captures may not carry an id on the row; fall back to the search term.
+  if (@($keep).Count -eq @($base.deals).Count) {
+    $wantTerms = @{}
+    foreach ($c in $Commodities) { if ($terms.PSObject.Properties.Name -contains $c) { $wantTerms[[string]$terms.$c] = $true } }
+    $keep = @($base.deals | Where-Object { -not $wantTerms.ContainsKey([string]$_.found_by_term) })
+  }
+  # .ToArray(), NOT @($deals). $deals is a System.Collections.Generic.List[object],
+  # and in Windows PowerShell 5.1 the array-subexpression @( ) around one throws
+  # "ArgumentException: Argument types do not match". audit-ff-carry.ps1 carries a
+  # long note about this exact trap - it silently broke that script on every run
+  # for 17 days. Same list type, same mistake, caught here by hitting it.
+  $fresh = $deals.ToArray()
+  $before = @($base.deals).Count
+  $base.deals = @($keep) + $fresh
+  $base | Add-Member -NotePropertyName last_targeted_reprice -NotePropertyValue @{
+    at = (Get-Date).ToString('s'); commodities = $Commodities; rows_pulled = @($fresh).Count
+    replaced = ($before - @($keep).Count)
+  } -Force
+  $outFile = Join-Path $regDir ("bakers-regular-" + (Get-Date).ToString('yyyy-MM-dd') + ".json")
+  Set-Content -Path $outFile -Value ($base | ConvertTo-Json -Depth 8) -Encoding UTF8
+  Write-Output ("bakers-api: TARGETED MERGE - kept {0} row(s), replaced with {1} freshly pulled, wrote {2}" -f @($keep).Count, @($fresh).Count, (Split-Path $outFile -Leaf))
+  exit 0
+}
 if ($stats.products -lt 100) {
   Write-Warning ("bakers-api: only $($stats.products) products - refusing to overwrite the capture with a thin pull (a partial pull is an overwrite). Nothing written.")
   exit 1

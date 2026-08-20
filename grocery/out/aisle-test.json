@@ -641,7 +641,7 @@
     {
         "id":  "canned-corn",
         "store":  "Family Fare",
-        "product":  "Our Family Super Sweet Whole Kernel Corn 15.25 Oz",
+        "product":  "Our Family No Salt Added Super Sweet Whole Kernel Corn 15.25 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -1307,9 +1307,9 @@
     {
         "id":  "dried-dill",
         "store":  "Family Fare",
-        "product":  "Our Family Dill Weed 0.56 Oz",
+        "product":  "Sugar \u0027N Spice Dill Weed Pp",
         "dept":  "pantry",
-        "aisle":  "pantry/mixes_spices_seasoning",
+        "aisle":  "pantry/condiments_dressing",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
@@ -2828,7 +2828,7 @@
     {
         "id":  "pretzels",
         "store":  "Family Fare",
-        "product":  "Our Family Pretzels, Classic, Thin Twists 16 Oz",
+        "product":  "Our Family Pretzels, Classic, Mini Twists 16 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",

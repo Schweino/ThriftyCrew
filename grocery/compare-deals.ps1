@@ -18,11 +18,11 @@ param(
 # Sam's captures are partial (see the loader below): every capture inside this window is loaded, and the
 # freshest one that covers a given commodity wins it. Warehouse "everyday" prices are stable enough for this;
 # tighten it if Sam's starts moving prices weekly.
-[int]$SamsMaxAgeDays = 14,
+[int]$SamsMaxAgeDays = 90,   # = capture policy MaxCarryDays; see regular-fileset-lib.ps1
   # Walmart's out\regular captures are unioned the same way (see the everyday-price loader): a partial daily
   # refresh must not shrink the board, so every Walmart capture inside this window is loaded and the freshest
   # one covering each commodity wins. Walmart is everyday-priced, so an older capture is only ever a gap-filler.
-  [int]$WalmartMaxAgeDays = 14,
+  [int]$WalmartMaxAgeDays = 90,   # = capture policy MaxCarryDays; see regular-fileset-lib.ps1
   [string]$FarewayFile = "",
   # DEFAULT 1, matching the daily pipeline (check-ad-cycles passes -MinStores 1 explicitly). It was 2 until
   # 2026-07-23, when a MANUAL rerun during the Fareway incident silently dropped every single-store tail
@@ -712,21 +712,30 @@ if ($SelfTest) {
   # path stops using it. Synthetic and frozen - never regenerated from the live board.
   $sd = Join-Path $env:TEMP ('regfileset-selftest-' + [guid]::NewGuid())
   New-Item -ItemType Directory (Join-Path $sd 'regular') -Force | Out-Null
-  foreach ($n in @('walmart-regular-2026-07-15','walmart-regular-2026-07-29','hyvee-regular-2026-07-15','hyvee-regular-2026-07-29')) {
+  # THE EDGE CAPTURE. Cases 16/17/19 all turn on a Walmart capture that is exactly ONE WINDOW old
+  # relative to the 07-29 board: in reach for that board, out of reach for 07-30's. That date was
+  # frozen at 2026-07-15 because the window was then 14 days. When the capture policy moved the
+  # window to the 90-day quarter (2026-08-20), the literal quietly became a 15-day-old file sitting
+  # INSIDE a 90-day window, and cases 17 and 19 inverted - the fixture stopped testing the boundary
+  # and started asserting the opposite of it. Deriving the date from the window keeps the boundary
+  # under test at whatever the window becomes next. Still synthetic and still never regenerated
+  # from the live board - that freeze is about not reading the answer off the thing under test.
+  $edgeW = 'walmart-regular-' + ([datetime]'2026-07-29').AddDays(-(Get-RegularUnionDays)).ToString('yyyy-MM-dd')
+  foreach ($n in @($edgeW,'walmart-regular-2026-07-29','hyvee-regular-2026-07-15','hyvee-regular-2026-07-29')) {
     '{}' | Set-Content (Join-Path $sd ('regular\' + $n + '.json')) -Encoding UTF8
   }
   try {
     # 16. MUST FIRE: board dated 07-29, clock 07-30 -> the capture the board WAS priced from stays in reach.
     '{}' | Set-Content (Join-Path $sd 'comparison-2026-07-29.json') -Encoding UTF8
     $g1 = @(Select-EngineRegularFiles $sd ([datetime]'2026-07-30') | ForEach-Object { $_.BaseName })
-    if ($g1 -contains 'walmart-regular-2026-07-15') { Write-Output 'ok    guards as-of follows the BOARD, not the wall clock' }
+    if ($g1 -contains $edgeW) { Write-Output 'ok    guards as-of follows the BOARD, not the wall clock' }
     else { Write-Output 'FAIL  guards as-of re-derived from the clock - a file the board WAS priced from is out of guard 5/10 reach again'; $script:fail++ }
-    # 17. CLEAN TWIN: board dated 07-30 -> that same capture really is 15 days old and must stay OUT. Proves
-    #     the fix follows the board's own date rather than widening the window unconditionally.
+    # 17. CLEAN TWIN: board dated 07-30 -> that same capture is now one day PAST the window and must stay
+    #     OUT. Proves the fix follows the board's own date rather than widening the window unconditionally.
     '{}' | Set-Content (Join-Path $sd 'comparison-2026-07-30.json') -Encoding UTF8
     $g2 = @(Select-EngineRegularFiles $sd ([datetime]'2026-07-30') | ForEach-Object { $_.BaseName })
-    if ($g2 -notcontains 'walmart-regular-2026-07-15') { Write-Output 'ok    a capture outside the BOARD''s own window stays excluded' }
-    else { Write-Output 'FAIL  the guards file set widened unconditionally - a 15-day-old capture is being guarded as live'; $script:fail++ }
+    if ($g2 -notcontains $edgeW) { Write-Output 'ok    a capture outside the BOARD''s own window stays excluded' }
+    else { Write-Output ('FAIL  the guards file set widened unconditionally - ' + $edgeW + ' is one day past the window and is being guarded as live'); $script:fail++ }
     # 18. an ad-cycling store is still newest-only whatever the as-of (unioning one would guard expired sales)
     if ($g1 -notcontains 'hyvee-regular-2026-07-15') { Write-Output 'ok    ad-cycling store stays newest-only under the board as-of' }
     else { Write-Output 'FAIL  a non-everyday store started unioning - expired sale prices would be guarded as live'; $script:fail++ }
@@ -746,7 +755,7 @@ if ($SelfTest) {
     # 19. no board on disk -> the wall clock (guard 12 hard-fails that state on its own)
     Remove-Item (Join-Path $sd 'comparison-*.json') -Force
     $g3 = @(Select-EngineRegularFiles $sd ([datetime]'2026-07-30') | ForEach-Object { $_.BaseName })
-    if ($g3 -notcontains 'walmart-regular-2026-07-15') { Write-Output 'ok    no board on disk falls back to the wall clock' }
+    if ($g3 -notcontains $edgeW) { Write-Output 'ok    no board on disk falls back to the wall clock' }
     else { Write-Output 'FAIL  the no-board fallback did not use the wall clock'; $script:fail++ }
   } finally { Remove-Item $sd -Recurse -Force -ErrorAction SilentlyContinue }
 
@@ -756,6 +765,20 @@ if ($SelfTest) {
     if ($WalmartMaxAgeDays -eq (Get-RegularUnionDays)) { Write-Output 'ok    union window single-sourced (compare-deals default == regular-fileset-lib)' }
     else { Write-Output ('FAIL  union window drift: -WalmartMaxAgeDays default is ' + $WalmartMaxAgeDays + ' but regular-fileset-lib says ' + (Get-RegularUnionDays) + ' - guards would iterate a different window than the engine'); $script:fail++ }
   }
+  # Sam's unions on the same window and had no such check, so its default could drift alone.
+  if (-not $PSBoundParameters.ContainsKey('SamsMaxAgeDays')) {
+    if ($SamsMaxAgeDays -eq (Get-RegularUnionDays)) { Write-Output 'ok    union window single-sourced (-SamsMaxAgeDays default == regular-fileset-lib)' }
+    else { Write-Output ('FAIL  union window drift: -SamsMaxAgeDays default is ' + $SamsMaxAgeDays + ' but regular-fileset-lib says ' + (Get-RegularUnionDays)); $script:fail++ }
+  }
+  # --- 20b: and the window must still equal the CAPTURE POLICY that justifies it ---------------------------
+  # The window is only safe because the rotation promises to re-capture every term within it. If someone
+  # shortens the quarter (or lengthens the window) without moving the other, rows again expire before their
+  # turn comes round - the 2026-08-20 failure, where a 14-day window under a 90-day rotation had already
+  # queued 100% of Walmart's cells for deletion. $null = policy unreadable, which is reported, not passed.
+  $polDays = Get-PolicyCarryDaysFromText
+  if ($null -eq $polDays) { Write-Output 'FAIL  capture-policy.ps1 MaxCarryDays could not be read - the union window has nothing to agree WITH'; $script:fail++ }
+  elseif ($polDays -eq (Get-RegularUnionDays)) { Write-Output "ok    union window equals the capture policy ($polDays d rotation carry)" }
+  else { Write-Output ('FAIL  policy drift: capture-policy.ps1 MaxCarryDays=' + $polDays + ' but the union window is ' + (Get-RegularUnionDays) + ' - everyday rows will expire before the rotation re-captures them'); $script:fail++ }
 
   # --- 21-24: a stale out\regular capture must not out-rank the store's own live feed ---------------------
   # FROZEN FOUNDING BUG (2026-07-30). out\regular\sams-regular-2026-07-14.json is a 60-row hand-promotion

@@ -39,8 +39,14 @@ if (-not $Root)     { $Root     = if ($PSScriptRoot) { $PSScriptRoot } else { Sp
 $Root = $Root.TrimEnd('\')
 if (-not $ScanRoot) { $ScanRoot = Split-Path -Parent $Root }
 $ScanRoot = $ScanRoot.TrimEnd('\')
-# FROZEN 2026-07-30: measured count of .ps1 under grocery\out\. May only go DOWN (archive them).
-if ($OutBaseline -lt 0) { $OutBaseline = 37 }
+# FROZEN 2026-07-30 at 37: measured count of .ps1 under grocery\out\. May only go DOWN (archive them).
+# RAISED to 38 on 2026-08-20, once - and the reason matters, because raising a ratchet to make it green is
+# normally the wrong move. out\vsample-2026-08-15\merge-findings.ps1 landed with commit 65149ad9 (the weekly
+# accuracy sample) and cannot be archived: it resolves its own directory from $MyInvocation and merges the
+# per-store CSVs sitting BESIDE it, writing to the parent. Moving it to archive\one-off\ would break it,
+# so the choice was a permanently-red gate or an honest ceiling. If a 39th appears, that one is new debris -
+# archive it rather than raising this again.
+if ($OutBaseline -lt 0) { $OutBaseline = 38 }
 
 # FROZEN 2026-07-30, appended to since - the scripts nothing in the repo calls, each with the reason it
 # stays. An entry that stops being uncalled (wired in, or archived) prints a note telling you to delete the
@@ -54,10 +60,16 @@ $KNOWN = [ordered]@{
   'fareway-daily-due.ps1'            = 'SKILL grocery-fareway-daily-check - due gate'
   'select-fareway-shop.ps1'          = 'SKILL grocery-fareway-daily-check - Omaha store picker'
   'pull-fareway-ads.ps1'             = 'SKILL grocery-fareway-daily-check + browser-stores-refresh; stamped into ad-schedule.json'
+  # -- launched by Windows Task Scheduler DIRECTLY (the task's action names the .ps1, so nothing in the
+  #    repo does). Verified 2026-08-20 against Get-ScheduledTask; if a task is ever deleted, delete its
+  #    line here too, or this table starts excusing a script that genuinely nothing runs.
+  'capture-run.ps1'                  = 'scheduled tasks "TC Grocery Ad Pulls 0700" (-Kind ad) and "TC Grocery Daily Capture 0800" (-Kind daily) - the concurrent seven-store capture runner'
+  'capture-watchdog.ps1'             = 'scheduled task "TC Grocery Capture Watchdog 0930" (-Alert) - checks the 0700/0800 jobs actually captured AND published, rather than merely exiting 0'
   # -- launched by Windows Task Scheduler through the GENERIC run-hidden.vbs, so no file names it
   'familyfare-sweep.ps1'             = 'scheduled task "SMP Family Fare Term Sweep", every 3h via run-hidden.vbs'
   'send-friday-email.ps1'            = 'scheduled task "SMP Friday Email (draft)", weekly via run-hidden.vbs; drafts unless -Send, and a week_of stamp stops a double-mail'
   # -- human entry points, run when a specific failure or a specific job shows up
+  'local-llm-lib.ps1'                = 'PowerShell client for the local inference endpoint. Uncalled ON PURPOSE for now: the graph pipeline reaches the same server through graph\lib\llm.py, and this is the PS-side client for when a .ps1 needs it. Nothing dot-sources it yet - delete this line and the file if that never happens.'
   'ingredient-queue.ps1'             = 'Recipe Hunter Rule B queue (an ingredient is CARRIED once ANY of the 7 stores has it; NOT-CARRIED only when all 7 were CHECKED and none do). Built 2026-08-15; stays uncalled until the Recipe Hunter runner is code rather than SKILL instructions. Delete this line the moment that runner lands.'
   'promote-verdicts.ps1'             = 'weekly by hand after audit-match-soundness; writes exclude-provenance.json'
   'adjudicate-blind-findings.ps1'    = 'weekly by hand inside the accuracy sample - opens the sealed key AFTER the blind findings are frozen, which is the whole point (a caller could run it early)'

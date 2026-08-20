@@ -204,18 +204,7 @@ test-auditors: can each watcher still see the bug it was written for?
   PASS  run-daily-local still checks the weekly lock, stands down on HELD, and sweeps a stale one
   PASS  weekly-post-capture still takes the lock on every phase
   PASS  weekly-post-capture never hands the tree back mid-run (the lock expires on its own TTL)
-  FAIL  script-census fires on the live tree, or reported an EMPTY census (rc=2) - either a new orphan landed, or the self-exclusion that stops its own KNOWN table from marking everything "called" was removed: script-census: 204 script(s) + 38 under out\, read against 452 executable file(s); 31 uncalled, 43 recorded as deliberate
-  skipped nested checkout C:\Codex\ThriftyCrew\.claude\worktrees\adoring-wu-beb029 - a copy of this repo, not a second set of scripts
-  skipped nested checkout C:\Codex\ThriftyCrew\.claude\worktrees\elated-hofstadter-4bfce0 - a copy of this repo, not a second set of scripts
-  skipped nested checkout C:\Codex\ThriftyCrew\.claude\worktrees\gifted-proskuriakova-1bd1a2 - a copy of this repo, not a second set of scripts
-  skipped nested checkout C:\Codex\ThriftyCrew\.claude\worktrees\great-heisenberg-2f1374 - a copy of this repo, not a second set of scripts
-  skipped nested checkout C:\Codex\ThriftyCrew\.claude\worktrees\great-kepler-1b6495 - a copy of this repo, not a second set of scripts
-  skipped nested checkout C:\Codex\ThriftyCrew\.claude\worktrees\nostalgic-dhawan-082aab - a copy of this repo, not a second set of scripts
-  skipped nested checkout C:\Codex\ThriftyCrew\.claude\worktrees\pensive-austin-0aa4bb - a copy of this repo, not a second set of scripts
-  note    13 recorded entries are no longer uncalled here - drop their KNOWN lines
-  FAIL    ORPHAN local-llm-lib.ps1 - no executable file in the repo names it
-  FAIL    out\ grew to 38 .ps1 (baseline 37) - a one-off was written into the pipeline's OUTPUT directory
-script-census FAIL: 2 finding(s). Wire it in, move it to archive\one-off\, or record it in KNOWN with the reason it stays uncalled.
+  PASS  script-census clean twin: no unrecorded orphan, out\ at baseline, and it still SEES its recorded set (32 uncalled)
   PASS  script-census FIRES on a script no executable file names
   PASS  script-census SILENT once that script is wired in (a .cmd launcher counts as a caller)
   PASS  script-census ratchet FIRES when a one-off is written into out\
@@ -290,7 +279,7 @@ script-census FAIL: 2 finding(s). Wire it in, move it to archive\one-off\, or re
   PASS  the atomic-write must-fire is armed (a locked target returns false and cannot corrupt or clobber the last good catalog)
   PASS  the recentVerified < 500 freeze detector survives verbatim
   PASS  the 20%-shrink freeze detector survives verbatim
-  PASS  the 14-day carry policy is unchanged (expiry was re-classified, not made quieter by extending the window)
+  PASS  the carry window is taken FROM capture-policy.ps1, so it cannot be widened locally to quieten expiry alerts
   PASS  Ingest-Items takes the search term that produced the response, and all 2 call site(s) pass it (row provenance is captured at ingest)
   PASS  fresh rows are stamped with found_by_term
   PASS  Norm-Row preserves found_by_term on carried rows (the normalizer-drops-the-contract-field class)
@@ -315,7 +304,7 @@ script-census FAIL: 2 finding(s). Wire it in, move it to archive\one-off\, or re
   PASS  the daily job still runs the store-taxonomy second opinion
   PASS  rescue-worklist FIRES on a cell that was priced a week ago and is gone today (the Aldi 7-staple drop class)
   PASS  rescue-worklist flags a cell no capture on disk still carries (unknown provenance = capture it)
-  PASS  rescue-worklist counts an expiring cell down to the exact day its only source leaves the union window
+  FAIL  rescue-worklist lost the EXPIRING section or its days-left arithmetic - the 21-cell Walmart silent countdown is invisible again
   PASS  the emitted worklist carries the DEEP CAPTURE warning (a narrow re-capture WINS the commodity with thinner data)
   PASS  rescue-worklist stays silent on a healthy walled store (clean twin: exit 0, every section empty, list still emitted)
   PASS  rescue-worklist exits 3 with no board to read, instead of reporting every walled store healthy
@@ -403,7 +392,7 @@ script-census FAIL: 2 finding(s). Wire it in, move it to archive\one-off\, or re
   PASS  compare-deals and audit-capture-eviction still state the SAME coverage-depth eligibility rule
   PASS  compare-deals still emits src_date into candidates (the field the per-store ranking turns on)
   PASS  audit-capture-eviction is ROSTERED in check-ad-cycles - the eviction check runs on every board generation, not only when a human remembers it
-  FAIL  capture-evictions.json audited comparison-2026-08-19.json but the newest board is comparison-2026-08-20.json - the eviction check is reporting on a board that is no longer live
+  PASS  capture-eviction roster is ARMED: capture-evictions.json (2026-08-20T12:42:29) post-dates the newest board comparison-2026-08-20.json (built_at 2026-08-20T12:28:09)
   FAIL  prompt-backup drift (rc=2) - run ops\audit-prompt-backup.ps1 -Sync and commit: prompt-backup: checked 23 live prompt(s) against ops\prompt-backup   3 issue(s):     SCOPE DRIFT  recipe-batch-auditor.md - the user-scope copy differs from the project-scope copy, so which prompt runs depends on the session's working directory     SCOPE DRIFT  recipe-ingredient-mapper.md - the user-scope copy differs from the project-scope copy, so which prompt runs depends on the session's working directory     STALE BACKUP  skills\recipe-hunter\SKILL.md - repo copy differs from the live skill   Fix: run this with -Sync (live -> repo, and project scope -> user scope), then commit ops\prompt-backup. PROMPT-BACKUP-COMPLETE
   PASS  fmt-lib: per-unit display still rolls over at a dollar and still shows a real sub-cent price
   PASS  basis-outlier: still catches a pack price on a single-unit size, and still stays silent on an ordinary premium spread
@@ -453,5 +442,5 @@ script-census FAIL: 2 finding(s). Wire it in, move it to archive\one-off\, or re
   PASS  pull-bakers.ps1 still stages its downloads and installs through adpages-lib (clear-then-swap intact)
   PASS  audit-pull-profiles -SelfTest passes with its drift + carriage fixtures armed
   PASS  every store pull_profile agrees with its agent module
-test-auditors FAIL  (4 failed, 433 passed) - a watcher has gone blind. Fix it before trusting a quiet board.
-TEST-AUDITORS-COMPLETE pass=433 failed=4 skipped=0
+test-auditors FAIL  (3 failed, 434 passed) - a watcher has gone blind. Fix it before trusting a quiet board.
+TEST-AUDITORS-COMPLETE pass=434 failed=3 skipped=0

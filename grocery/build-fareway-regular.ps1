@@ -16,10 +16,12 @@
   Last writer wins per id (pass core first, then the rest). Skips NOT FOUND / empty-price rows.
 #>
 param([string[]]$In = @(), [string]$OutDir = "", [string]$Today = "", [string]$ModeVerified = "", [switch]$Force,
-  # See the EXTRACT DATING block below. 14 days is not a new policy number - it is the same cap
-  # carry-forward-regular.ps1 already applies to every row it copies, applied here to the extracts this
-  # script merges, because merging an old extract and carrying an old row are the same act.
-  [int]$MaxExtractDays = 14,
+  # See the EXTRACT DATING block below. 90 days is not a number invented here - it is the capture
+  # policy's quarter (capture-policy.ps1 MaxCarryDays), which is also the cap carry-forward-regular.ps1
+  # applies to every row it copies, applied here to the extracts this script merges, because merging an
+  # old extract and carrying an old row are the same act. It was 14 until 2026-08-20, which under a
+  # 90-day rotation expired extracts long before the rotation returned to their terms.
+  [int]$MaxExtractDays = 90,
   # -SelfTest runs the frozen fixtures below by RE-INVOKING this very script over a fixture capture, so the
   # assertions exercise the real emit path end to end instead of a copy of it (the 2026-07-29 lesson: two
   # same-day fixes regressed because their self-test could not reach the new code).
@@ -251,12 +253,17 @@ if ($SelfTest) {
     # flattened into one element), which has cost this estate two same-day regressions.
     $mDir = Join-Path $T 'multi\fareway'
     New-Item -ItemType Directory -Path $mDir -Force | Out-Null
+    # BEYOND THE CAP, derived from the cap. This extract was frozen at 2026-07-15 - 17 days before the
+    # 08-01 board, hence "beyond" only while the cap was 14 days. When the capture policy moved the cap to
+    # the 90-day quarter (2026-08-20) a 17-day-old extract became a PERFECTLY LIVE one, and this pair
+    # stopped testing the aged-out path entirely. Derived from $MaxExtractDays it stays beyond whatever
+    # the cap becomes; the child re-invocation below passes no -MaxExtractDays, so it uses that same default.
+    $agedDate = ([datetime]'2026-08-01').AddDays(-($MaxExtractDays + 3)).ToString('yyyy-MM-dd')
     (@(
-      # 17 days old -> beyond the 14-day cap: the whole extract must be skipped and NAMED
       @{ id = 'bottled-water'; name = 'Fareway Purified Drinking Water'; price = '1.11'; per = ''; orig = ''; unit = ''; size = '24 ct'; url = '' }
-    ) | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $mDir 'fareway-shop-2026-07-15.json') -Encoding UTF8
+    ) | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $mDir "fareway-shop-$agedDate.json") -Encoding UTF8
     (@(
-      # 9 days old -> inside the cap, so it still prices the board, but it must SAY 2026-07-23
+      # 9 days old -> comfortably inside the cap, so it still prices the board, but it must SAY 2026-07-23
       @{ id = 'ranch-dressing'; name = 'Fareway Ranch Dressing'; price = '0.99'; per = ''; orig = ''; unit = ''; size = '16 fl oz'; url = '' },
       @{ id = 'tomatoes'; name = 'NatureSweet Cherubs Tomatoes'; price = '9.99'; per = ''; orig = ''; unit = ''; size = '10 oz'; url = '' }
     ) | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $mDir 'fareway-shop-2026-07-23.json') -Encoding UTF8
@@ -268,9 +275,9 @@ if ($SelfTest) {
     $b3 = @{}; foreach ($d in @($doc3.deals)) { $b3[[string]$d.item] = $d }
     $q1 = $b3['Fareway Ranch Dressing']
     Chk '(q) row from a 07-23 extract keeps as_of 2026-07-23, NOT the build date' ($q1 -and $q1.as_of -eq '2026-07-23') ("as_of=$($q1.as_of)")
-    Chk '(r) extract 17 days old is skipped whole - its row never publishes' (-not $b3.ContainsKey('Fareway Purified Drinking Water')) 'row present'
+    Chk "(r) extract older than the $MaxExtractDays-day cap is skipped whole - its row never publishes" (-not $b3.ContainsKey('Fareway Purified Drinking Water')) 'row present'
     $agedLine = (($out3 -split "`r?`n") | Where-Object { $_ -match 'AGED OUT' }) -join ' '
-    Chk '(r) the skipped extract is NAMED, not quietly dropped' ($agedLine -match '2026-07-15') "agedLine=[$agedLine]"
+    Chk '(r) the skipped extract is NAMED, not quietly dropped' ($agedLine -match $agedDate) "agedLine=[$agedLine]"
     $s1 = $b3['NatureSweet Cherubs Tomatoes']
     Chk '(s) CLEAN TWIN today''s extract still dates as today  2026-08-01' ($s1 -and $s1.as_of -eq '2026-08-01') ("as_of=$($s1.as_of)")
     Chk '(t) CLEAN TWIN last-writer-wins survives  $3.99 beats the older $9.99' ($s1 -and $s1.ad_price -eq '$3.99') ("$($s1.ad_price)")

@@ -1,11 +1,11 @@
 ﻿{
     "no_taxonomy_rows":  0,
-    "judged":  4528,
+    "judged":  4530,
     "unknown_departments":  [
 
                             ],
     "sources":  [
-                    "Family Fare: canonical_url from 24 file(s) within 30d -\u003e 5377 product(s) with a department (newest family-fare-regular-2026-08-20.json)",
+                    "Family Fare: canonical_url from 24 file(s) within 30d -\u003e 5379 product(s) with a department (newest family-fare-regular-2026-08-20.json)",
                     "Hy-Vee: row field store_department in hyvee-regular-2026-08-18.json -\u003e 356 product(s) with a department",
                     "Baker\u0027s: row field store_category in bakers-regular-2026-08-20.json -\u003e 6713 product(s) with a department"
                 ],
@@ -86,26 +86,6 @@
                                         "taxonomy_src":  "family-fare-regular-2026-08-20.json"
                                     },
                                     {
-                                        "subcategory":  "dog",
-                                        "item":  "Blue Buffalo Natural Puppy Chicken And Brown Rice Recipe Food For Puppies 5 Lb",
-                                        "id":  "brown-rice",
-                                        "unit_price":  null,
-                                        "rankable":  false,
-                                        "store":  "Family Fare",
-                                        "department":  "pets_wildlife",
-                                        "taxonomy_src":  "family-fare-regular-2026-08-20.json"
-                                    },
-                                    {
-                                        "subcategory":  "facial_tissue",
-                                        "item":  "Kleenex 3 In 1 3 Ply Coconut Oil + Aloe Tissues 4 Ea",
-                                        "id":  "coconut-oil",
-                                        "unit_price":  null,
-                                        "rankable":  false,
-                                        "store":  "Family Fare",
-                                        "department":  "household",
-                                        "taxonomy_src":  "family-fare-regular-2026-08-20.json"
-                                    },
-                                    {
                                         "subcategory":  "pharmacy",
                                         "item":  "Top Care Fiber Powder, Sugar Free, Orange Flavor 23.3 Oz",
                                         "id":  "oranges",
@@ -163,6 +143,26 @@
                                         "rankable":  false,
                                         "store":  "Family Fare",
                                         "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-20.json"
+                                    },
+                                    {
+                                        "subcategory":  "dog",
+                                        "item":  "Blue Buffalo Natural Puppy Chicken And Brown Rice Recipe Food For Puppies 5 Lb",
+                                        "id":  "brown-rice",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "pets_wildlife",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-20.json"
+                                    },
+                                    {
+                                        "subcategory":  "facial_tissue",
+                                        "item":  "Kleenex 3 In 1 3 Ply Coconut Oil + Aloe Tissues 4 Ea",
+                                        "id":  "coconut-oil",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "household",
                                         "taxonomy_src":  "family-fare-regular-2026-08-20.json"
                                     },
                                     {

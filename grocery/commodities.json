@@ -1834,7 +1834,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -2044,7 +2045,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -2242,7 +2244,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -2434,7 +2437,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -2620,7 +2624,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -2815,7 +2820,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -3004,7 +3010,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -3201,7 +3208,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -3409,7 +3417,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -3610,7 +3619,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -3814,7 +3824,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -5082,6 +5093,7 @@
                         "shrimp"
                     ],
         "exclude":  [
+                        "\\bbutterfly\\b",
                         "breaded",
                         "popcorn",
                         "cocktail\\s+sauce",
@@ -5617,7 +5629,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -5822,7 +5835,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -6030,7 +6044,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -6231,7 +6246,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -6420,7 +6436,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ],
         "relax_global":  [
                              "wrapped"
@@ -6613,7 +6630,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -6811,7 +6829,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -6998,7 +7017,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -7183,7 +7203,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -7373,7 +7394,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -7580,7 +7602,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -7774,7 +7797,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -7977,7 +8001,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -8165,7 +8190,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -8181,6 +8207,7 @@
                         "tortillas?"
                     ],
         "exclude":  [
+                        "\\d+\\s*ct\\.?\\s+or\\s+.{0,40}?\\d+\\s*ct",
                         "carb\\s+(balance|counter|advantage)\\b.*\\b(burrito|large|xl|grande)\\b.*\\btortillas?\\b",
                         "carb\\s+(balance|counter|advantage)\\b.*\\btortillas?\\b.*\\bburrito\\b",
                         "carb\\s+(balance|counter|advantage)\\s+10\\b.*\\btortillas?\\b",
@@ -12540,7 +12567,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -12553,6 +12581,7 @@
                         "mango(?:es|s)?\\b"
                     ],
         "exclude":  [
+                        "\\bfruit\\s+rolls?\\b",
                         "salsa",
                         "\\bsauces?\\b",
                         "\\bpouches?\\b",
@@ -12759,7 +12788,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -12944,7 +12974,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -13128,7 +13159,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -13300,7 +13332,8 @@
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
                         "\\bpops\\b",
-                        "\\bgarden\\s+seeds?\\b"
+                        "\\bgarden\\s+seeds?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -13501,7 +13534,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -13697,7 +13731,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -13885,7 +13920,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -14110,7 +14146,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -14294,7 +14331,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -14480,7 +14518,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -14675,7 +14714,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -14859,7 +14899,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -15048,7 +15089,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -15237,7 +15279,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -15420,7 +15463,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -15605,7 +15649,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -15788,7 +15833,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -15970,7 +16016,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -16167,7 +16214,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -16355,7 +16403,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -16551,7 +16600,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -16731,7 +16781,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -16916,7 +16967,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -17108,7 +17160,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -17122,6 +17175,7 @@
                         "ribeye"
                     ],
         "exclude":  [
+                        "\\bsteak\\s+burgers?\\b",
                         "\\bpork\\b",
                         "sandwich",
                         "\\bjerky\\b",
@@ -26980,7 +27034,8 @@
         "include":  [
                         "microwave\\s+popcorn",
                         "popcorn\\b.{0,20}\\bbags?\\b",
-                        "microwave\\b.{0,30}popcorn"
+                        "microwave\\b.{0,30}popcorn",
+                        "popcorn\\b.{0,30}\\bmicrowave\\b"
                     ],
         "exclude":  [
                         "chicken",
@@ -36702,6 +36757,7 @@
                         "spicy\\s+brown\\s+mustard"
                     ],
         "exclude":  [
+                        "\\bspicy\\s+brown\\s+mustard\\b",
                         "honey",
                         "\\bvinaigrette\\b",
                         "\\bdressing\\b",
@@ -38536,10 +38592,10 @@
                         "pickled\\s+jalape[n\\u00f1]os?",
                         "jalape[n\\u00f1]o\\s+(?:slices|rings|nacho)",
                         "(?:nacho|tamed|sliced|diced)\\s+(?:hot\\s+)?jalape[n\\u00f1]os?",
-                        "jalape[nÃƒÂ±]o\\s+peppers,?\\s+pickled",
-                        "jalape[nÃƒÂ±ÃƒÆ’Ã‚Â±]{1,2}o\\s+peppers,?\\s+pickled",
-                        "jalape[nñ]o\\s+peppers,?\\s+pickled",
-                        "jalape[nñÃ±]{1,2}o\\s+peppers,?\\s+pickled"
+                        "jalape[nÃƒÆ’Ã‚Â±]o\\s+peppers,?\\s+pickled",
+                        "jalape[nÃƒÆ’Ã‚Â±ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±]{1,2}o\\s+peppers,?\\s+pickled",
+                        "jalape[nÃ±]o\\s+peppers,?\\s+pickled",
+                        "jalape[nÃ±ÃƒÂ±]{1,2}o\\s+peppers,?\\s+pickled"
                     ],
         "exclude":  [
                         "green\\s+chil",
@@ -38640,6 +38696,7 @@
                         "pimi?ento[\\s-]?stuffed"
                     ],
         "exclude":  [
+                        "tuscan\\s+garden\\s+manzanilla",
                         "black\\s+olives",
                         "ripe\\s+olives",
                         "kalamata",
@@ -40332,7 +40389,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -40528,6 +40586,7 @@
                         "tony\\s+chachere"
                     ],
         "exclude":  [
+                        "chophouse\\s+cajun",
                         "\\bfries\\b",
                         "chips",
                         "\\bsnack\\b",
@@ -41181,6 +41240,7 @@
                         "\\bthyme\\b"
                     ],
         "exclude":  [
+                        "(?:little\\s+potato\\s+company|\\bpotatoes\\s+with\\b)",
                         "\\bfresh\\b",
                         "\\bplant\\b",
                         "living",
@@ -43154,7 +43214,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -43335,7 +43396,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -43523,7 +43585,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -43710,7 +43773,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -44626,7 +44690,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -45663,7 +45728,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -46496,7 +46562,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -46686,7 +46753,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ],
         "pint_oz":  10
     },
@@ -47460,7 +47528,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -47654,7 +47723,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -47853,7 +47923,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -48045,7 +48116,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -48247,7 +48319,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -48433,7 +48506,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -48644,7 +48718,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -48830,7 +48905,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -49017,7 +49093,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -49197,7 +49274,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -49378,7 +49456,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -49568,7 +49647,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -49750,7 +49830,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -49932,7 +50013,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -50114,7 +50196,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -50320,7 +50403,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -50515,7 +50599,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -50697,7 +50782,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -50877,7 +50963,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -51057,7 +51144,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -51237,7 +51325,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -51424,7 +51513,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -51606,7 +51696,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -51788,7 +51879,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -51967,7 +52059,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -52150,7 +52243,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -52515,7 +52609,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -52696,7 +52791,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -52884,7 +52980,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -53066,7 +53163,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -53253,7 +53351,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -53442,7 +53541,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -53626,7 +53726,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ],
         "relax_global":  [
                              "\\bkit\\b"
@@ -53816,7 +53917,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -54008,7 +54110,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -54193,7 +54296,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -54374,7 +54478,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -54559,7 +54664,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -54737,7 +54843,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -54924,7 +55031,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -55104,7 +55212,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -55288,7 +55397,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -55476,7 +55586,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -55661,7 +55772,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -55829,7 +55941,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -56016,7 +56129,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -56203,7 +56317,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -56391,7 +56506,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -56573,7 +56689,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -57008,7 +57125,7 @@
         "exclude":  [
                         "\\b(canned|can|dry|dried|dehydrated|soup|chili|baked|refried)\\b",
                         "\\b(edamame|fava|green beans?|black-?eyed peas?|mixed vegetables?)\\b",
-                        "\\b(meal|entree|entrÃƒÂ©e|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b",
+                        "\\b(meal|entree|entrÃƒÆ’Ã‚Â©e|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -57087,7 +57204,7 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(meal|entree|entrée|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b"
+                        "\\b(meal|entree|entrÃ©e|prepared|seasoned|sauce|supplement|powder|juice|drink|beverage)\\b"
                     ],
         "band_min":  0.04,
         "band_max":  0.41
@@ -57523,7 +57640,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ],
         "band_min":  1.39,
         "band_max":  14.95
@@ -58101,15 +58219,15 @@
     },
     {
         "id":  "creme-fraiche",
-        "label":  "CrÃƒÂ¨me fraÃƒÂ®che",
+        "label":  "CrÃƒÆ’Ã‚Â¨me fraÃƒÆ’Ã‚Â®che",
         "unit":  "oz",
         "include":  [
-                        "\\bcr[eÃƒÂ¨]me\\s+fra[iÃƒÂ®]che\\b",
-                        "\\bcr[eè]me\\s+fra[iî]che\\b"
+                        "\\bcr[eÃƒÆ’Ã‚Â¨]me\\s+fra[iÃƒÆ’Ã‚Â®]che\\b",
+                        "\\bcr[eÃ¨]me\\s+fra[iÃ®]che\\b"
                     ],
         "exclude":  [
                         "\\bsour\\s+cream\\b",
-                        "\\bcrema\\s+(?:mexicana|salvadore[nÃƒÂ±]a|agria)\\b",
+                        "\\bcrema\\s+(?:mexicana|salvadore[nÃƒÆ’Ã‚Â±]a|agria)\\b",
                         "\\btable\\s+cream\\b",
                         "\\bcream\\s+cheese\\b",
                         "\\bmascarpone\\b",
@@ -58197,7 +58315,7 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\bcrema\\s+(?:mexicana|salvadore[nñ]a|agria)\\b"
+                        "\\bcrema\\s+(?:mexicana|salvadore[nÃ±]a|agria)\\b"
                     ],
         "band_min":  0.3,
         "band_max":  2.63
@@ -58213,9 +58331,9 @@
         "exclude":  [
                         "\\b(vinegar|cooking\\s+wine|wine\\s+sauce|marinade|broth|stock|seasoning|extract)\\b",
                         "\\b(non[- ]?alcoholic|alcohol[- ]?removed|zero[- ]?proof|0%\\s*abv)\\b",
-                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃƒÂ©]|pink|white\\s+zinfandel)\\b",
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃƒÆ’Ã‚Â©]|pink|white\\s+zinfandel)\\b",
                         "\\b(cocktail|mimosa|sangria|hard\\s+seltzer|beer|cider|margarita|ready[- ]to[- ]drink|rtd)\\b",
-                        "\\b(frozen|entr[eÃƒÂ©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(frozen|entr[eÃƒÆ’Ã‚Â©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -58306,8 +58424,8 @@
                         "\\bbag\\s*in\\s*box\\b",
                         "vinaigrette",
                         "\\bdressing\\b",
-                        "\\b(sparkling|champagne|prosecco|brut|ros[eé]|pink|white\\s+zinfandel)\\b",
-                        "\\b(frozen|entr[eé]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃ©]|pink|white\\s+zinfandel)\\b",
+                        "\\b(frozen|entr[eÃ©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
                     ],
         "band_min":  0.08,
         "band_max":  1.0,
@@ -58342,9 +58460,9 @@
                         "eau\\s+de\\s+vie",
                         "\\b(vinegar|cooking\\s+wine|wine\\s+sauce|marinade|broth|stock|seasoning|extract)\\b",
                         "\\b(non[- ]?alcoholic|alcohol[- ]?removed|zero[- ]?proof|0%\\s*abv)\\b",
-                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃƒÂ©]|pink|white\\s+zinfandel)\\b",
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃƒÆ’Ã‚Â©]|pink|white\\s+zinfandel)\\b",
                         "\\b(cocktail|mimosa|sangria|hard\\s+seltzer|beer|cider|margarita|ready[- ]to[- ]drink|rtd)\\b",
-                        "\\b(frozen|entr[eÃƒÂ©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(frozen|entr[eÃƒÆ’Ã‚Â©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -58423,8 +58541,8 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(sparkling|champagne|prosecco|brut|ros[eé]|pink|white\\s+zinfandel)\\b",
-                        "\\b(frozen|entr[eé]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
+                        "\\b(sparkling|champagne|prosecco|brut|ros[eÃ©]|pink|white\\s+zinfandel)\\b",
+                        "\\b(frozen|entr[eÃ©]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
                     ]
     },
     {
@@ -58813,7 +58931,7 @@
                         "\\bsofrito\\b"
                     ],
         "exclude":  [
-                        "\\b(saz[oÃƒÂ³]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b",
+                        "\\b(saz[oÃƒÆ’Ã‚Â³]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b",
                         "\\b(beverage|drink|juice|cocktail|supplement|capsule|tablet|powder)\\b",
                         "\\b(prepared meal|meal kit|ready-to-eat|restaurant)\\b",
                         "beech\\s*nut",
@@ -58894,7 +59012,7 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(saz[oó]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b"
+                        "\\b(saz[oÃ³]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b"
                     ],
         "band_min":  0.08,
         "band_max":  0.75
@@ -59193,8 +59311,8 @@
                     ],
         "exclude":  [
                         "\\b(sauce|sauced|seasoning|spice|powder|flakes?|pickled|canned|jarred|dried|dehydrated)\\b",
-                        "\\b(stuffed|pizza|meal|entrÃƒÂ©e|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
-                        "\\b(roasted red pepper|green chiles?|jalape[nÃƒÂ±]os?|banana peppers?|poblanos?|serranos?)\\b",
+                        "\\b(stuffed|pizza|meal|entrÃƒÆ’Ã‚Â©e|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
+                        "\\b(roasted red pepper|green chiles?|jalape[nÃƒÆ’Ã‚Â±]os?|banana peppers?|poblanos?|serranos?)\\b",
                         "\\b(broccoli|cauliflower|carrots?|corn|peas?|potatoes?|mushrooms?|celery)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
@@ -59274,8 +59392,8 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(stuffed|pizza|meal|entrée|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
-                        "\\b(roasted red pepper|green chiles?|jalape[nñ]os?|banana peppers?|poblanos?|serranos?)\\b"
+                        "\\b(stuffed|pizza|meal|entrÃ©e|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
+                        "\\b(roasted red pepper|green chiles?|jalape[nÃ±]os?|banana peppers?|poblanos?|serranos?)\\b"
                     ],
         "band_min":  0.04,
         "band_max":  0.4
@@ -59378,8 +59496,8 @@
         "label":  "Veggie Sausages",
         "unit":  "oz",
         "include":  [
-                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027Ã¢â‚¬â„¢]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027Ã¢â‚¬â„¢]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b",
-                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027’]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027’]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b"
+                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b",
+                        "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus[\u0027â€™]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus[\u0027â€™]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b"
                     ],
         "exclude":  [
                         "\\b(?:hot dog|veggie dog|smart dog|ground|crumble|meatball|burger|bacon|nugget|wing|pizza|burrito|bowl|sandwich|pasta sauce|supplement|protein powder|shake|beverage|drink)\\b",
@@ -60434,7 +60552,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ],
         "band_min":  0.42,
         "band_max":  5.97
@@ -60639,9 +60758,9 @@
         "exclude":  [
                         "\\b(?:vinegar|cooking\\s+wine|wine\\s+sauce|marinade|broth|stock|seasoning|extract)\\b",
                         "\\b(?:non[- ]?alcoholic|alcohol[- ]?removed|zero[- ]?proof|0%\\s*abv)\\b",
-                        "\\b(?:sparkling|champagne|prosecco|brut|ros[eÃƒÂ©]|pink|white\\s+zinfandel|white\\s+wine)\\b",
+                        "\\b(?:sparkling|champagne|prosecco|brut|ros[eÃƒÆ’Ã‚Â©]|pink|white\\s+zinfandel|white\\s+wine)\\b",
                         "\\b(?:sangria|sweet\\s+red|dessert\\s+wine|port|sherry|marsala|cocktail|margarita|ready[- ]to[- ]drink|rtd)\\b",
-                        "\\b(?:frozen|entr[eÃƒÂ©]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
+                        "\\b(?:frozen|entr[eÃƒÆ’Ã‚Â©]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -60730,8 +60849,8 @@
                         "\\bmustard\\b",
                         "vinaigrette",
                         "\\bdressing\\b",
-                        "\\b(?:sparkling|champagne|prosecco|brut|ros[eé]|pink|white\\s+zinfandel|white\\s+wine)\\b",
-                        "\\b(?:frozen|entr[eé]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
+                        "\\b(?:sparkling|champagne|prosecco|brut|ros[eÃ©]|pink|white\\s+zinfandel|white\\s+wine)\\b",
+                        "\\b(?:frozen|entr[eÃ©]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
                     ],
         "band_min":  0.08,
         "band_max":  1.0,
@@ -62253,7 +62372,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {
@@ -62947,7 +63067,7 @@
                     ],
         "exclude":  [
                         "\\b(?:sauce|marinade|dip|salsa|seasoning)\\b",
-                        "\\b(?:vinaigrette|avocado|jalape[nÃƒÂ±]o|ranch)\\b",
+                        "\\b(?:vinaigrette|avocado|jalape[nÃƒÆ’Ã‚Â±]o|ranch)\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -63026,7 +63146,7 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\b(?:vinaigrette|avocado|jalape[nñ]o|ranch)\\b"
+                        "\\b(?:vinaigrette|avocado|jalape[nÃ±]o|ranch)\\b"
                     ]
     },
     {
@@ -63400,7 +63520,8 @@
                         "\\bchutneys?\\b",
                         "\\bfruit\\s+filling\\b",
                         "\\bpie\\s+filling\\b",
-                        "\\btoppings?\\b"
+                        "\\btoppings?\\b",
+                        "\\bsiggi\u0027?s?\\b"
                     ]
     },
     {

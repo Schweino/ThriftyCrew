@@ -143,6 +143,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "cake-mix",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  1.29,
+        "link":  1.49,
+        "ratio":  1.16,
+        "price":  1.49,
+        "size":  "each",
+        "boardItem":  "Jiffy Golden Yellow Cake Mix",
+        "linkItem":  "Pillsbury Moist Supreme Yellow Cake Mix, 15.25 oz Box",
+        "board_src":  "main"
+    },
+    {
         "id":  "canned-chicken",
         "store":  "Aldi",
         "unit":  "oz",
@@ -156,6 +169,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "canned-pumpkin",
+        "store":  "Walmart",
+        "unit":  "oz",
+        "board":  0.12,
+        "link":  0.1307,
+        "ratio":  1.09,
+        "price":  1.96,
+        "size":  "15 oz",
+        "boardItem":  "Libby\u0027s 100% Pure Pumpkin Puree, All Natural Gluten Free Can",
+        "linkItem":  "Great Value 100% Pure Pumpkin, 15 oz",
+        "board_src":  "main"
+    },
+    {
+        "id":  "carrots",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  1.245,
+        "link":  1.385,
+        "ratio":  1.11,
+        "price":  2.77,
+        "size":  "32 oz",
+        "boardItem":  "Carrot",
+        "linkItem":  "Dole Carrots, Mini Cut",
+        "board_src":  "main"
+    },
+    {
         "id":  "celery",
         "store":  "Aldi",
         "unit":  "each",
@@ -166,6 +205,45 @@
         "size":  "each",
         "boardItem":  "Celery, Each",
         "linkItem":  "Organic Celery Hearts Each",
+        "board_src":  "main"
+    },
+    {
+        "id":  "cherries",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  2.94,
+        "link":  3.74,
+        "ratio":  1.27,
+        "price":  11.22,
+        "size":  "3 lb",
+        "boardItem":  "Sweet Red Cherries, 3 lbs.",
+        "linkItem":  "Sweet Red Cherries, 3 lbs.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "cherries",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  4.99,
+        "link":  5.9867,
+        "ratio":  1.2,
+        "price":  4.49,
+        "size":  "12 oz",
+        "boardItem":  "Red Cherries",
+        "linkItem":  "Fareway Unsweetened \u0026 Pitted Dark Sweet Cherries",
+        "board_src":  "main"
+    },
+    {
+        "id":  "clam-chowder",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.1319,
+        "link":  0.1,
+        "ratio":  0.76,
+        "price":  1.88,
+        "size":  "18.8 oz",
+        "boardItem":  "Campbell\u0027s New England Clam Chowder18.8 fl oz",
+        "linkItem":  "Fareway New England Style Chunky-Style Clam Chowder Soup",
         "board_src":  "main"
     },
     {
@@ -295,7 +373,20 @@
         "price":  12.86,
         "size":  "3.805 lb",
         "boardItem":  "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
-        "linkItem":  "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
+        "linkItem":  "GortonÃ¢â‚¬â„¢s Super Crunchy Fish Sticks, Frozen, 64 ct.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "french-bread",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  1.99,
+        "link":  2.49,
+        "ratio":  1.25,
+        "price":  2.49,
+        "size":  "each",
+        "boardItem":  "Bakery Fresh French Baguette",
+        "linkItem":  "Bakery Fresh French Bread",
         "board_src":  "main"
     },
     {
@@ -313,6 +404,19 @@
     },
     {
         "id":  "chicken-nuggets",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.2178,
+        "link":  0.241,
+        "ratio":  1.11,
+        "price":  6.99,
+        "size":  "29 oz",
+        "boardItem":  "Tyson Frozen Chicken Nuggets Family Pack, 4-Pound",
+        "linkItem":  "Perdue Panko Chicken Nuggets",
+        "board_src":  "main"
+    },
+    {
+        "id":  "chicken-nuggets",
         "store":  "Hy-Vee",
         "unit":  "oz",
         "board":  0.2584,
@@ -322,32 +426,6 @@
         "size":  "29 oz",
         "boardItem":  "Hy Vee Chicken Nuggets",
         "linkItem":  "Hy-Vee Chicken Nuggets",
-        "board_src":  "main"
-    },
-    {
-        "id":  "frozen-vegetables",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  0.0919,
-        "link":  0.0808,
-        "ratio":  0.88,
-        "price":  0.97,
-        "size":  "12 oz",
-        "boardItem":  "Fareway Mixed Vegetables",
-        "linkItem":  "Fareway Mixed Vegetables, Steamables",
-        "board_src":  "main"
-    },
-    {
-        "id":  "frozen-peas",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  0.0919,
-        "link":  0.0808,
-        "ratio":  0.88,
-        "price":  0.97,
-        "size":  "12 oz",
-        "boardItem":  "Fareway Green Peas",
-        "linkItem":  "Fareway Steamables Green Peas",
         "board_src":  "main"
     },
     {
@@ -429,6 +507,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "milk",
+        "store":  "Fareway",
+        "unit":  "gallon",
+        "board":  4.99,
+        "link":  5.98,
+        "ratio":  1.2,
+        "price":  2.99,
+        "size":  "0.5 gal",
+        "boardItem":  "Fareway Skim Milk",
+        "linkItem":  "Fareway 2% Reduced Fat Milk",
+        "board_src":  "main"
+    },
+    {
         "id":  "olive-oil",
         "store":  "Aldi",
         "unit":  "floz",
@@ -465,6 +556,19 @@
         "size":  "40 oz",
         "boardItem":  "Peanut Delight Creamy Peanut Butter 40oz",
         "linkItem":  "Peanut Delight Creamy Peanut Butter 40 oz",
+        "board_src":  "main"
+    },
+    {
+        "id":  "pears",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  1.77,
+        "link":  1.99,
+        "ratio":  1.12,
+        "price":  1.99,
+        "size":  "lb",
+        "boardItem":  "Bartlett Pear",
+        "linkItem":  "D\u0027anjou Pears",
         "board_src":  "main"
     },
     {
@@ -517,19 +621,6 @@
         "size":  "10 oz",
         "boardItem":  "Clancy\u0027s Spicy Dill Pickle Flavored Wavy Potato Chips",
         "linkItem":  "Clancy\u0027s Original Potato Chips",
-        "board_src":  "main"
-    },
-    {
-        "id":  "potato-chips",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  0.2488,
-        "link":  0.235,
-        "ratio":  0.94,
-        "price":  1.88,
-        "size":  "8 oz",
-        "boardItem":  "Fareway Wavy Potato Chips",
-        "linkItem":  "Lay\u0027s Potato Chips, Classic",
         "board_src":  "main"
     },
     {
@@ -611,6 +702,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "ribeye-steak",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  24.99,
+        "link":  29.98,
+        "ratio":  1.2,
+        "price":  14.99,
+        "size":  "8 oz",
+        "boardItem":  "USDA Choice Thick Cut Ribeye Steak",
+        "linkItem":  "USDA Choice Boneless Ribeye Steak",
+        "board_src":  "main"
+    },
+    {
         "id":  "ricotta",
         "store":  "Aldi",
         "unit":  "oz",
@@ -663,6 +767,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "salmon",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  7.495,
+        "link":  7.992,
+        "ratio":  1.07,
+        "price":  9.99,
+        "size":  "20 oz",
+        "boardItem":  "Northern Fisheries Salmon Portions",
+        "linkItem":  "Trident Seafoods Fillet, Alaska Salmon",
+        "board_src":  "main"
+    },
+    {
+        "id":  "sandwich-cookies",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.1112,
+        "link":  0.1192,
+        "ratio":  1.07,
+        "price":  2.98,
+        "size":  "25 oz",
+        "boardItem":  "Fareway Vanilla Cremes Sandwich Cookies",
+        "linkItem":  "Fareway Lemon Cremes Sandwich Cookies",
+        "board_src":  "main"
+    },
+    {
         "id":  "toasted-sesame-seeds",
         "store":  "Sam\u0027s Club",
         "unit":  "oz",
@@ -698,7 +828,20 @@
         "price":  6.97,
         "size":  "lb",
         "boardItem":  "Sirloin Tip, Case  priced per pound",
-        "linkItem":  "Member’s Mark USDA Choice Angus Beef Boneless Sirloin Tip Roast, priced per pound",
+        "linkItem":  "MemberÃ¢â‚¬â„¢s Mark USDA Choice Angus Beef Boneless Sirloin Tip Roast, priced per pound",
+        "board_src":  "main"
+    },
+    {
+        "id":  "sirloin-steak",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  7.99,
+        "link":  5.99,
+        "ratio":  0.75,
+        "price":  5.99,
+        "size":  "lb",
+        "boardItem":  "USDA Choice Sirloin Tip Steak",
+        "linkItem":  "USDA Choice Sirloin Tip Steak",
         "board_src":  "main"
     },
     {
@@ -741,6 +884,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "stuffing-mix",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.365,
+        "link":  0.4158,
+        "ratio":  1.14,
+        "price":  4.99,
+        "size":  "12 oz",
+        "boardItem":  "Fareway Cornbread Stuffing Mix",
+        "linkItem":  "Kraft Stove Top Everyday Stuffing Mix for Chicken",
+        "board_src":  "main"
+    },
+    {
         "id":  "sweet-corn",
         "store":  "Walmart",
         "unit":  "each",
@@ -764,6 +920,19 @@
         "size":  "6.25 oz",
         "boardItem":  "Fareway Taco Seasoning Mix",
         "linkItem":  "Old El Paso Taco Seasoning, Original, Large Size",
+        "board_src":  "main"
+    },
+    {
+        "id":  "tartar-sauce",
+        "store":  "Walmart",
+        "unit":  "floz",
+        "board":  0.1267,
+        "link":  0.1367,
+        "ratio":  1.08,
+        "price":  1.64,
+        "size":  "12 fl oz",
+        "boardItem":  "Great Value Tartar Sauce, 12 fl oz",
+        "linkItem":  "Great Value Tartar Sauce, 12 fl oz",
         "board_src":  "main"
     },
     {
@@ -816,6 +985,19 @@
         "size":  "12 ct",
         "boardItem":  "Great Value Frosted Chocolate Fudge Toasted Pastries, 20.3 oz, 12 Count",
         "linkItem":  "Great Value Frosted Cherry Toaster Pastries",
+        "board_src":  "main"
+    },
+    {
+        "id":  "tortillas",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  0.1658,
+        "link":  0.199,
+        "ratio":  1.2,
+        "price":  1.99,
+        "size":  "each",
+        "boardItem":  "Frescados Flour Taco Style Tortillas",
+        "linkItem":  "Mission Super Soft Flour Tortillas, Fajita Size, 10 Count",
         "board_src":  "main"
     },
     {

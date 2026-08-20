@@ -1,14 +1,14 @@
 ﻿{
     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
-    "week_of":  "2026-08-19",
-    "rotated_at":  "2026-08-20T06:22:15",
+    "week_of":  "2026-08-20",
+    "rotated_at":  "2026-08-20T12:38:36",
     "free":  [
                  {
                      "slug":  "chicken-fried-rice-skillet",
                      "protein":  "chicken",
                      "rank":  1,
                      "name":  "Chicken Fried Rice",
-                     "per_serving":  1.96
+                     "per_serving":  1.97
                  },
                  {
                      "slug":  "buffalo-chicken-pasta-bake",
@@ -130,18 +130,18 @@
                      "per_serving":  1.67
                  },
                  {
-                     "slug":  "baked-cauliflower-mac-smoked-sausage",
-                     "protein":  "pork",
-                     "rank":  4,
-                     "name":  "Baked Cauliflower Mac and Cheese with Smoked Sausage",
-                     "per_serving":  1.77
-                 },
-                 {
                      "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
                      "protein":  "pork",
-                     "rank":  5,
+                     "rank":  4,
                      "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
                      "per_serving":  1.86
+                 },
+                 {
+                     "slug":  "no-peek-pork-chop-rice-casserole",
+                     "protein":  "pork",
+                     "rank":  5,
+                     "name":  "No-Peek Pork Chop and Rice Casserole",
+                     "per_serving":  1.92
                  }
              ]
 }

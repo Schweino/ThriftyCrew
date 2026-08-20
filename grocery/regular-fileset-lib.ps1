@@ -39,7 +39,27 @@ function Get-EverydayOnlyStores { return @($script:REGFILESET_EVERYDAY_ONLY) }
 # written to kill, one size smaller: nothing on either side notices when one of them moves. compare-deals'
 # -SelfTest asserts its own param default still equals this, and guards.ps1 runs that self-test as a BLOCKING
 # invariant (guard 0b), so the drift cannot reach a publish.
-$script:REGFILESET_UNION_DAYS = 14
+# 2026-08-20: 14 -> 90, to match the capture policy. Under the quarterly rotation a term's
+# next scheduled capture is ~90 days out, so a 14-day window expires nearly every row BEFORE
+# the rotation can come back to it - capture-policy.ps1 puts that at ~85% of the catalog, and
+# it was already live: the Walmart fullpull watch had 471 of 471 attributed cells (100%) due
+# to leave this window on 2026-08-21. The number is the CAPTURE POLICY's MaxCarryDays and may
+# not be edited here alone; capture-policy.ps1 owns it and compare-deals' -SelfTest asserts
+# the two still agree (Test-PolicyWindowAgreement below).
+$script:REGFILESET_UNION_DAYS = 90
+
+# Read the policy's own number out of capture-policy.ps1 AS TEXT. It cannot be dot-sourced:
+# it declares a param() block, and this file is dot-sourced into every caller, so its params
+# would land in the caller's scope - the exact capture-lib.ps1 bug of 2026-07-29 that the
+# header above forbids. Returns $null if the policy file cannot be read, so a missing file
+# reports "unknown" rather than silently asserting agreement.
+function Get-PolicyCarryDaysFromText {
+  $p = Join-Path $PSScriptRoot 'capture-policy.ps1'
+  if (-not (Test-Path $p)) { return $null }
+  $m = [regex]::Match([IO.File]::ReadAllText($p), '(?m)^\s*\$script:MaxCarryDays\s*=\s*(\d+)')
+  if (-not $m.Success) { return $null }
+  return [int]$m.Groups[1].Value
+}
 function Get-RegularUnionDays { return $script:REGFILESET_UNION_DAYS }
 
 function Resolve-BoardAsOf($boardFileObjs, [datetime]$wallClock) {

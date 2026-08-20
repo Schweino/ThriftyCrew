@@ -44,7 +44,7 @@ param(
   [string]$StoresFile = "",        # default <OutDir>\stores.json if present, else <root>\stores.json
   [string]$TermsFile = "",         # default <OutDir>\commodity-search.json if present, else <root>\...
   [string]$PullOrderDir = "",      # default $OutDir; holds pull-order-<slug>.txt
-  [int]$WindowDays = 14,           # MUST match compare-deals' union window ($WalmartMaxAgeDays/$SamsMaxAgeDays)
+  [int]$WindowDays = 90,           # MUST match compare-deals' union window ($WalmartMaxAgeDays/$SamsMaxAgeDays)
   [int]$ExpireWithinDays = 5,      # matches audit-walmart-fullpull's cell-expiry warn horizon
   [int]$DropLookbackDays = 7,      # comparison-diff span for the DROPPED section
   [string]$AsOf = ""               # 'yyyy-MM-dd'; default today. REQUIRED for frozen fixtures - Get-Date

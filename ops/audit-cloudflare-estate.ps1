@@ -34,6 +34,11 @@
 param([switch]$SelfTest, [switch]$Quiet, [string]$CompareFile)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
+# A detector that runs in the chain must be able to PROVE it ran to the end, or a crash halfway reads as a
+# pass. Same helper, same contract as opsudit-prompt-backup.ps1. Deliberately NOT emitted on the BLIND
+# path: exit 3 means it evaluated nothing, and a completion marker there would vouch for an examination
+# that never happened.
+. (Join-Path (Split-Path $here -Parent) 'lib\guard-contract.ps1')
 $declaredPath = Join-Path $here 'cloudflare-estate.json'
 
 # ---------------------------------------------------------------------------------------------------
@@ -203,9 +208,10 @@ if ($CompareFile) {
     Write-Output ("  buckets checked : {0}" -f $live.Keys.Count)
     if ($null -ne $snapD1) { Write-Output ("  D1 size         : {0}GB" -f $snapD1) }
   }
-  if ($findings.Count -eq 0) { Write-Output 'CLEAN: snapshot matches ops\cloudflare-estate.json'; exit 0 }
+  if ($findings.Count -eq 0) { Write-Output 'CLEAN: snapshot matches ops\cloudflare-estate.json'; Write-GuardComplete -Name 'cloudflare-estate' -Summary 'snapshot findings=0'; exit 0 }
   foreach ($f in $findings) { Write-Output "  DRIFT  $f" }
   Write-Output "DRIFT: $($findings.Count) finding(s)"
+Write-GuardComplete -Name 'cloudflare-estate' -Summary "findings=$($findings.Count)"
   exit 2
 }
 
@@ -245,7 +251,8 @@ if (-not $Quiet) {
   Write-Output ("  buckets checked : {0}" -f $live.Keys.Count)
   if ($null -ne $d1GB) { Write-Output ("  D1 size         : {0}GB" -f $d1GB) } else { Write-Output '  D1 size         : unread' }
 }
-if ($findings.Count -eq 0) { Write-Output 'CLEAN: live matches ops\cloudflare-estate.json'; exit 0 }
+if ($findings.Count -eq 0) { Write-Output 'CLEAN: live matches ops\cloudflare-estate.json'; Write-GuardComplete -Name 'cloudflare-estate' -Summary 'live findings=0'; exit 0 }
 foreach ($f in $findings) { Write-Output "  DRIFT  $f" }
 Write-Output "DRIFT: $($findings.Count) finding(s)"
+Write-GuardComplete -Name 'cloudflare-estate' -Summary "findings=$($findings.Count)"
 exit 2

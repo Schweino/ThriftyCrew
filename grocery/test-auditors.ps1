@@ -2264,8 +2264,8 @@ if ($ffpS -match '\$recentVerified -lt 500') { Ok 'the recentVerified < 500 free
 else { Bad 'the recentVerified < 500 arm has been changed or removed - that is the detector for a sweep that has stopped buying terms entirely, and it must not be softened to quieten an alert' }
 if ($ffpS -match '\$mergedCount -lt \(\$prevMax \* 0\.80\)') { Ok 'the 20%-shrink freeze detector survives verbatim' }
 else { Bad 'the 20%-shrink arm has been changed or removed - that is the detector for the original Family Fare freeze (1909 vs 3974) and it must not be softened' }
-if ($ffpS -match '\$MaxCarryDays = 14') { Ok 'the 14-day carry policy is unchanged (expiry was re-classified, not made quieter by extending the window)' }
-else { Bad 'MaxCarryDays is no longer 14 - extending the carry is the wrong way to make expiry alerts quiet; it just serves older prices' }
+if ($ffpS -match 'Get-PolicyMaxCarryDays') { Ok 'the carry window is taken FROM capture-policy.ps1, so it cannot be widened locally to quieten expiry alerts' }
+else { Bad 'pull-regular-familyfare no longer reads Get-PolicyMaxCarryDays - the carry window must come from capture-policy.ps1. Hand-setting it here is how expiry alerts get quietened by simply serving older prices.' }
 # SOURCE CHECKS for the parts a fixture cannot reach without a live Freshop response. Same reasoning as the
 # ff-carry zero-probe checks above: the behaviour needs a real search response, which must never be faked by
 # hitting the live API from a test. What CAN be pinned is that the provenance actually gets written.
@@ -2400,7 +2400,12 @@ $null = New-Item -ItemType Directory -Path $rwTmp -Force
 function RwFixture([string]$name) {
   $d = Join-Path $rwTmp $name
   Copy-Item (Join-Path $rwFxSrc $name) $d -Recurse -Force
-  $r = RunPS 'build-rescue-worklist.ps1' @('-AsOf', '2000-01-10', '-OutDir', $d)
+  # -WindowDays IS PINNED, and pinning it is the point. These fixtures are frozen at January 2000 dates
+  # chosen so fx-milk sits 9 days back with 5 of 14 window days left. On 2026-08-20 the everyday-price
+  # window moved to the capture policy's 90-day quarter, and a 9-day-old capture stopped being anywhere
+  # near expiry - the assertion below went red while the arithmetic it tests was perfectly correct. The
+  # fixture tests the COUNTDOWN, not the constant; the constant is asserted separately just below.
+  $r = RunPS 'build-rescue-worklist.ps1' @('-AsOf', '2000-01-10', '-OutDir', $d, '-WindowDays', '14')
   $listF = Join-Path $d 'rescue-terms-fixturemart.txt'
   $list = if (Test-Path $listF) { [IO.File]::ReadAllText($listF, [Text.Encoding]::UTF8) } else { '' }
   return @{ rc = $r.rc; text = $r.text; list = $list; hasList = (Test-Path $listF) }
@@ -2418,6 +2423,15 @@ if ($rwA.list -match '(?m)^fixture milk\t+fx-milk\tEXPIRING\t5d left') { Ok 'res
 else { Bad 'rescue-worklist lost the EXPIRING section or its days-left arithmetic - the 21-cell Walmart silent countdown is invisible again' }
 if ($rwA.hasList -and $rwA.list -match 'DEEP CAPTURE REQUIRED') { Ok 'the emitted worklist carries the DEEP CAPTURE warning (a narrow re-capture WINS the commodity with thinner data)' }
 else { Bad 'the emitted worklist lost the DEEP CAPTURE header - a shallow rescue pass makes the board WORSE, and nothing on the list now says so' }
+# ...and because the fixture now pins the window, NOTHING else would notice the real default drifting away
+# from the engine's. build-rescue-worklist.ps1 says its -WindowDays 'MUST match compare-deals' union
+# window'; that was a comment, which is not a test. A rescue list computed over a different window than the
+# engine prices from counts down to the wrong day, which is the silent-countdown bug wearing a new hat.
+$rwSrc = [IO.File]::ReadAllText((Join-Path $root 'build-rescue-worklist.ps1'))
+$rwDefault = ([regex]::Match($rwSrc, '\[int\]\$WindowDays\s*=\s*(\d+)')).Groups[1].Value
+. (Join-Path $root 'regular-fileset-lib.ps1')
+if ($rwDefault -and [int]$rwDefault -eq (Get-RegularUnionDays)) { Ok "build-rescue-worklist's window default still equals the engine's union window ($rwDefault d)" }
+else { Bad "build-rescue-worklist -WindowDays default is '$rwDefault' but the engine unions over $(Get-RegularUnionDays) - the rescue list would count down to the wrong day" }
 # CLEAN TWIN: same store, capture one day old and carrying both rows, older board identical. Every section
 # empty, exit 0, and the file still written so a stale list can never be mistaken for today's.
 $rwB = RwFixture 'rescue-clean'

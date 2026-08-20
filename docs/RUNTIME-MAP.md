@@ -31,10 +31,16 @@ and checked on every push by `ops\audit-cloudflare-estate.ps1`.
 ### 1. Local PC (Windows Task Scheduler) — PRIMARY
 | Task | When | Does |
 |---|---|---|
-| SMP Bakers Daily Scan | 6:00am | `wscript run-hidden.vbs bakers-daily-scan.ps1` (Kroger API pull for Baker's) |
-| SMP Grocery Daily Pipeline (local) | 8:30am | `check-ad-cycles.ps1` — the whole daily: ad pulls -> compare-deals -> guards -> publish deals page -> cost-recipes -> compute-v2 -> top5-weekly -> rotate-free-dinners. Commits + pushes. |
-| SMP Grocery Failure Watchdog | periodic | `local-watchdog.ps1` + `health-heartbeat.ps1` (silent-death detection) |
-| SMP Wake For Grocery Agents | early am | wakes the machine so the Claude agents can run |
+| TC Grocery Ad Pulls 0700 | 7:00am | `capture-run.ps1 -Kind ad` — pulls the weekly ad for every store whose ad rolled over TODAY (capture-policy decides; a store not due is skipped, not pulled "just in case"). All stores run CONCURRENTLY, then the downstream chain: compare-deals -> guards -> publish -> recipes -> commit. |
+| TC Grocery Daily Capture 0800 | 8:00am | `capture-run.ps1 -Kind daily` — the quarterly rotation slice (total terms / 90 days, per store) plus any sale reverting today, then the same downstream chain. Ads land on different days per store, but everyday prices move daily, so this publishes too. |
+| TC Grocery Capture Watchdog 0930 | 9:30am | `capture-watchdog.ps1 -Alert` — asks whether the 07:00/08:00 jobs actually CAPTURED and PUBLISHED, not merely exited 0. One email, never six. |
+
+**The four `SMP *` tasks that used to sit here are gone** (deleted 2026-08-20, not renamed): `SMP Bakers
+Daily Scan`, `SMP Grocery Daily Pipeline (local)` (the 8:30am run), `SMP Grocery Failure Watchdog`,
+`SMP Wake For Grocery Agents`, plus `SMP Daily Facebook Reel` and `SMP Friday Email`. The three tasks
+above replace them. The browser-walled stores (Walmart, Sam's Club, Fareway, Aldi) have no headless
+lane: `capture-run.ps1` writes them a worklist and raises a flag file, and a human-driven Chrome works
+it — the watchdog is what notices when nobody does.
 
 ### 2. GitHub Actions (cloud) — MANUAL FALLBACK ONLY (not a running backup)
 Both are `on: { workflow_dispatch: {} }` — **no cron, they never fire on their own.** GitHub-hosted
@@ -117,13 +123,15 @@ those gates are numbers.
 - **Status and what remains.** `python graph/eval/status.py` is the single
   answer. Phase 0 passed all four acceptance bars; the gold set (547 cases) shows
   precision 1.000 / recall 0.981 / false-merge 0.0000 / missed-merge 0.0188.
-  Board parity is NOT met (0.758 agreement over 0.31 coverage): only the
-  `regular` and `throttled` lanes carry a parseable `deals` array, so Baker's,
-  Sam's, Fareway and the Hy-Vee/Aldi ad pulls are not yet imported, and only
-  Walmart rows carry the engine's verified unit price. The 14-day and
-  4-Wednesday gates stand at 0.
+  Board parity is NOT met, but the gap is now small: **0.916 agreement over 0.838
+  coverage** (measured 2026-08-20, 2691 shared cells of 3213 live; the bar is 0.99).
+  The old figures here (0.758 over 0.31) came from a run where only the `regular` and
+  `throttled` lanes had a parseable `deals` array. All seven stores are imported now -
+  Aldi, Baker's, Family Fare, Fareway, Hy-Vee, Sam's Club and Walmart all appear in the
+  parity run - so do not read that sentence as a live description of the importers.
+  The 14-day and 4-Wednesday gates stand at 0.
 
 ## OVERHAUL-5 consolidation opportunities
 
-- Local (8:30am) and cloud (daily.yml) run the identical pipeline; cloud is a stand-down backup. The **non-browser** daily portion (server ad pulls -> compare -> publish) is fully headless and could become cloud-PRIMARY, demoting the PC to the weekly browser captures only. Hard blocker: the Wed walled-store captures need a real logged-in Chrome (no headless path; CAPTCHA walls).
+- Local (07:00 ad pulls + 08:00 daily capture, was a single 8:30am run) and cloud (daily.yml) run the identical pipeline; cloud is a stand-down backup. The **non-browser** daily portion (server ad pulls -> compare -> publish) is fully headless and could become cloud-PRIMARY, demoting the PC to the weekly browser captures only. Hard blocker: the Wed walled-store captures need a real logged-in Chrome (no headless path; CAPTCHA walls).
 - Consolidation target: shrink the PC's role to (a) the weekly browser capture and (b) a watchdog, moving the daily headless pipeline to the cloud. That also shrinks the git-bus, which in turn unblocks more of OVERHAUL-4.

@@ -1726,6 +1726,42 @@ try {
   }
 } catch { Log ('prompt-backup weekly threw: ' + $_.Exception.Message) }
 
+# ---- WEEKLY: does the live Cloudflare estate still match what this repo declares? ----
+# ops\audit-cloudflare-estate.ps1 landed 2026-08-20 and NOTHING in production called it - the same shape
+# audit-prompt-backup.ps1 sat in above, and the same shape that let nine unseen R2 lifecycle rules bill
+# ~$9/mo for months. ops\run-gates.ps1 DISCOVERS it, but only ever runs its -SelfTest: that proves the
+# comparison logic works and checks nothing live. Weekly, because lifecycle rules change when a human
+# changes them, not on a schedule.
+#
+# THIS NEVER BLOCKS THE PUBLISH. It is Cloudflare ops, not a board invariant - a drifted lifecycle rule is
+# expensive, not wrong, and holding the board hostage to it would be the wrong trade.
+try {
+  $cfStampF = Join-Path $root 'cloudflare-estate-weekly-stamp.txt'
+  $cfLast = [datetime]'2000-01-01'
+  if (Test-Path $cfStampF) { try { $cfLast = [datetime](Get-Content $cfStampF -TotalCount 1) } catch {} }
+  if (((Get-Date) - $cfLast).TotalDays -ge 7) {
+    $cf = (& powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'ops\audit-cloudflare-estate.ps1') | ForEach-Object { [string]$_ }) -join "`n"
+    $cfRc = $LASTEXITCODE
+    (Get-Date -Format 'yyyy-MM-dd') | Set-Content $cfStampF -Encoding ascii
+    if ($cfRc -eq 3) {
+      # BLIND IS NOT A PASS, and as of 2026-08-20 it is the EXPECTED state: no CLOUDFLARE_API_TOKEN exists
+      # on this machine, so the drift this gate was written to catch is currently invisible. Saying so every
+      # week is the point - a gate that cannot see must never read as a gate that saw nothing wrong.
+      Log 'cloudflare-estate weekly: BLIND - no CLOUDFLARE_API_TOKEN, so R2 lifecycle drift would not be seen'
+      $summary += 'REVIEW    cloudflare estate check is BLIND (no CLOUDFLARE_API_TOKEN) - lifecycle drift unwatched'
+    } elseif ($cf -notmatch '(?m)^CLOUDFLARE-ESTATE-COMPLETE') {
+      Log ('cloudflare-estate weekly DID NOT RUN TO THE END (rc=' + $cfRc + ') - no completion marker')
+      $summary += 'REVIEW    cloudflare estate check did not finish - the estate went unverified'
+    } elseif ($cfRc -eq 0) {
+      Log 'cloudflare-estate weekly: live Cloudflare estate matches ops\cloudflare-estate.json'
+    } else {
+      Log ('cloudflare-estate weekly rc=' + $cfRc)
+      $summary += 'REVIEW    the live Cloudflare estate drifted from ops\cloudflare-estate.json'
+      if (-not $NoAlert) { Send-Alert -Subject 'Ops: the Cloudflare estate drifted from its declaration' -Body ("ops\audit-cloudflare-estate.ps1 compares the live R2 buckets, their lifecycle rules and the D1 size against ops\cloudflare-estate.json. Exit " + $cfRc + ": 2 = drift, 3 = BLIND (no token, which proves nothing).`n`nIA transitions are the expensive class: R2 bills operations per whole million with no proration and no IA free tier, which is how 499 transitions bought a full 9.00 dollar block on 2026-08-19.`n`n" + $cf) | Out-Null }
+    }
+  }
+} catch { Log ('cloudflare-estate weekly threw: ' + $_.Exception.Message) }
+
 # ---- WEEKLY: do the store SEARCH templates still resolve? ----
 # The all-3 rule guarantees every priced chip carries a link; nothing guaranteed the link WORKED. Family
 # Fare's search template 404'd on 20 live chips in public/board.json (2026-08-02) and no guard could see it,

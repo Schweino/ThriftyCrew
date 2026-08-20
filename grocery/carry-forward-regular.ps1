@@ -22,7 +22,7 @@
 #>
 param(
   [ValidateSet('bakers','aldi','fareway')][string]$Store,
-  [int]$MaxCarryDays = 14,
+  [int]$MaxCarryDays = 90,   # = capture policy MaxCarryDays (quarterly rotation); -SelfTest passes its own
   [string]$RegularDir = "",
   [switch]$SelfTest
 )

@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-20 06:16",
-    "board":  "comparison-2026-08-19.json",
-    "sidecar_generated":  "2026-08-20 06:16:46",
+    "generated":  "2026-08-20 12:32",
+    "board":  "comparison-2026-08-20.json",
+    "sidecar_generated":  "2026-08-20 12:32:11",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,36 +9,16 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2969,
-                     "corpus":  36978,
-                     "rule_invisible":  6732
+                     "board_pairs":  3017,
+                     "corpus":  36998,
+                     "rule_invisible":  6745
                  },
     "identity_count":  0,
-    "coverage_count":  67,
+    "coverage_count":  63,
     "identity":  [
 
                  ],
     "coverage":  [
-                     {
-                         "kind":  "coverage",
-                         "id":  "wild-rice-blend",
-                         "commodity":  "Wild Rice Blend",
-                         "store":  "Walmart",
-                         "product":  "Lundberg Sustainable Wild Blend Rice - Gluten Free, Vegan, 1lb Resealable Bag",
-                         "cos":  0.6484,
-                         "score":  0.994209,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "wild-rice-blend",
-                         "commodity":  "Wild Rice Blend",
-                         "store":  "Baker\u0027s",
-                         "product":  "Lundberg Family Farms Sustainable Wild Blend Rice",
-                         "cos":  0.6926,
-                         "score":  0.993964,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
                      {
                          "kind":  "coverage",
                          "id":  "chili-beans",
@@ -95,8 +75,8 @@
                          "commodity":  "Baby Back Ribs",
                          "store":  "Walmart",
                          "product":  "Prairie Fresh Natural Fresh Pork Spareribs, Bone-in, 4.0-5.5 lb, 19g Protein per 4oz Serving",
-                         "cos":  0.7249,
-                         "score":  0.976005,
+                         "cos":  0.7434,
+                         "score":  0.978809,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -161,12 +141,22 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "baby-back-ribs",
+                         "commodity":  "Baby Back Ribs",
+                         "store":  "Walmart",
+                         "product":  "Prairie Fresh Natural Fresh Pork St. Louis Style Spareribs, Bone-in, 3.0- 4.4 lb, 19g of protein per 4oz serving",
+                         "cos":  0.7269,
+                         "score":  0.964471,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "ground-beef-93-7",
                          "commodity":  "93/7 Lean Ground Beef",
                          "store":  "Walmart",
                          "product":  "93% Lean / 7% Fat Lean Ground Beef Patties, 4 Count, 1 lb Tray, Fresh, All Natural*",
-                         "cos":  0.7654,
-                         "score":  0.961294,
+                         "cos":  0.7691,
+                         "score":  0.961829,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -187,16 +177,6 @@
                          "product":  "Bragg Organic Coconut Liquid Aminos Soy-Free Seasoning",
                          "cos":  0.5762,
                          "score":  0.957425,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "baby-back-ribs",
-                         "commodity":  "Baby Back Ribs",
-                         "store":  "Walmart",
-                         "product":  "Prairie Fresh Natural Fresh Pork St. Louis Style Spareribs, Bone-in, 3.0- 4.4 lb, 19g of protein per 4oz serving",
-                         "cos":  0.7119,
-                         "score":  0.956812,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -265,8 +245,8 @@
                          "commodity":  "93/7 Lean Ground Beef",
                          "store":  "Aldi",
                          "product":  "USDA 73% Lean 27% Fat Ground Beef, Per LB",
-                         "cos":  0.7542,
-                         "score":  0.94223,
+                         "cos":  0.7619,
+                         "score":  0.941561,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -321,26 +301,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "frozen-vegetables",
-                         "commodity":  "Frozen Mixed Vegetables",
-                         "store":  "Aldi",
-                         "product":  "Season\u0027s Choice Steamable Frozen Mixed Vegetable",
-                         "cos":  0.7277,
-                         "score":  0.934147,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-pork",
-                         "commodity":  "Ground Pork",
-                         "store":  "Baker\u0027s",
-                         "product":  "Ground Beef And Pork Blend Patties 80% Lean 20% Fat",
-                         "cos":  0.7078,
-                         "score":  0.933604,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "chicken-breast",
                          "commodity":  "Boneless Skinless Chicken Breast",
                          "store":  "Walmart",
@@ -371,22 +331,22 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "cat-litter",
+                         "commodity":  "Cat Litter",
+                         "store":  "Baker\u0027s",
+                         "product":  "Tidy Cats LightWeight 24/7 Performance Odor control, Multi-Cat, Clumping",
+                         "cos":  0.6925,
+                         "score":  0.929441,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "quart-storage-bags",
                          "commodity":  "Food Storage Bags (quart)",
                          "store":  "Walmart",
                          "product":  "Great Value Slider Zipper Storage Bags, Quart, 50 Count",
                          "cos":  0.7026,
                          "score":  0.927091,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "frozen-fruit",
-                         "commodity":  "Frozen Fruit / Berries",
-                         "store":  "Walmart",
-                         "product":  "Great Value Blueberries, 48 oz (Frozen)",
-                         "cos":  0.6838,
-                         "score":  0.926411,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -461,22 +421,22 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "frozen-vegetables",
+                         "commodity":  "Frozen Mixed Vegetables",
+                         "store":  "Aldi",
+                         "product":  "Season\u0027s Choice Steamable Frozen Mixed Vegetable",
+                         "cos":  0.7391,
+                         "score":  0.923255,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "hulled-pumpkin-seeds",
                          "commodity":  "Hulled Pumpkin Seeds",
                          "store":  "Aldi",
                          "product":  "Southern Grove Pumpkin Seeds 6 OZ",
                          "cos":  0.6622,
                          "score":  0.923174,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "73% Lean 27% Fat Ground Beef, 3 LB",
-                         "cos":  0.7349,
-                         "score":  0.923124,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -491,22 +451,22 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "frozen-fruit",
+                         "commodity":  "Frozen Fruit / Berries",
+                         "store":  "Walmart",
+                         "product":  "Great Value Blueberries, 48 oz (Frozen)",
+                         "cos":  0.6795,
+                         "score":  0.922386,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "deli-ham",
                          "commodity":  "Ham (deli / sliced)",
                          "store":  "Walmart",
                          "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
                          "cos":  0.691,
                          "score":  0.920936,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "Simply Nature Organic Grass Fed 93/07 Ground Beef",
-                         "cos":  0.6609,
-                         "score":  0.919662,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -527,6 +487,16 @@
                          "product":  "FoodSaver Quart Vacuum Seal Bags, 19 Count Pre-Cut BPA-Free Freezer Bags, Align to Seal \u0026 Tear to Open for Food Storage, Sous Vide, and Meal Prep",
                          "cos":  0.6617,
                          "score":  0.915625,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-beef-93-7",
+                         "commodity":  "93/7 Lean Ground Beef",
+                         "store":  "Aldi",
+                         "product":  "73% Lean 27% Fat Ground Beef, 3 LB",
+                         "cos":  0.7414,
+                         "score":  0.914338,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -591,16 +561,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "iced-tea",
-                         "commodity":  "Iced Tea (bottled/gallon)",
-                         "store":  "Walmart",
-                         "product":  "Red Diamond Unsweetened Tea, Gallon, 128 Fl Oz",
-                         "cos":  0.5964,
-                         "score":  0.908486,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "vegetable-soup",
                          "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
                          "store":  "Baker\u0027s",
@@ -651,12 +611,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ground-pork",
-                         "commodity":  "Ground Pork",
-                         "store":  "Walmart",
-                         "product":  "Ground Beef and Pork Blend Hamburger Patties, 80% Lean 20% Fat, 4 Count, 1.33 lb Tray",
-                         "cos":  0.6989,
-                         "score":  0.904857,
+                         "id":  "ground-beef-93-7",
+                         "commodity":  "93/7 Lean Ground Beef",
+                         "store":  "Aldi",
+                         "product":  "Simply Nature Organic Grass Fed 93/07 Ground Beef",
+                         "cos":  0.6677,
+                         "score":  0.904109,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
