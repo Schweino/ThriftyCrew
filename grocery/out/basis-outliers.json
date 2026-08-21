@@ -76,8 +76,8 @@
                          "per_unit":  0.4775,
                          "median":  0.0993,
                          "mult":  4.81,
-                         "size":  "12 fl oz",
-                         "item":  "Pantene Classic Clean 2 N 1 IN Shampoo Conditioner 12 FL OZ",
+                         "size":  "12 oz",
+                         "item":  "Pantene Pro V Daily Moisture Renewal Shampoo 12 OZ",
                          "peers_packed":  "0 of 6",
                          "size_shape_mismatch":  false
                      },
@@ -96,7 +96,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-21T01:36:36",
+    "generated":  "2026-08-21T02:33:38",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -155,6 +155,18 @@
                               "per_unit":  0.131,
                               "size":  "48 oz",
                               "item":  "Unsweetened Almond Milk",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "apple-cider-vinegar",
+                              "commodity":  "Apple Cider Vinegar",
+                              "unit":  "floz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0889,
+                              "size":  "64 oz",
+                              "item":  "Heinz Vinegar, Flavored Distilled, Apple Cider 64 Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -928,6 +940,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "shampoo",
+                              "commodity":  "Shampoo",
+                              "unit":  "floz",
+                              "store":  "Aldi",
+                              "per_unit":  0.4775,
+                              "size":  "12 oz",
+                              "item":  "Pantene Pro V Daily Moisture Renewal Shampoo 12 OZ",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "shower-cleaner",
                               "commodity":  "Shower / Bathroom Cleaner",
                               "unit":  "floz",
@@ -1069,6 +1093,18 @@
                               "item":  "Soy Vay Marinade \u0026 Sauce, Less Sodium, Veri Veri Teriyaki",
                               "kind":  "weight",
                               "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "tomato-soup",
+                              "commodity":  "Tomato Soup (canned)",
+                              "unit":  "oz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0842,
+                              "size":  "26 fl oz",
+                              "item":  "Our Family Condensed Soup, Tomato, Classic 26 Fl Oz",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
                               "holds_crown":  false
                           },
                           {

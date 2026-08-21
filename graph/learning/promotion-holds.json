@@ -1,0 +1,95 @@
+{
+  "note": "Learned aliases that PASSED the shadow gate but FAILED the live guard suite on promotion. promote_aliases.py must refuse these. Clearing an entry means re-running the full guard suite.",
+  "holds": [
+    {
+      "commodity": "balsamic-vinegar",
+      "pattern": "balsamic\\b.{0,20}vinegar",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: 1.59x unit-basis outlier vs its own link (Alessi 12.75 Oz)"
+    },
+    {
+      "commodity": "balsamic-vinegar",
+      "pattern": "vinegar,\\s*(?:[^,]*,\\s*)?balsamic",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: 1.59x unit-basis outlier vs its own link (Alessi 12.75 Oz)"
+    },
+    {
+      "commodity": "chicken-noodle-soup",
+      "pattern": "soup,\\s*chicken\\s+noodle",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: 1.76x unit-basis outlier vs its own link (Campbell 10.75 Oz)"
+    },
+    {
+      "commodity": "crushed-tomatoes",
+      "pattern": "tomatoes?,\\s*(?:[^,]*,\\s*)?crushed",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: 1.62x unit-basis outlier vs its own link (Contadina 28 Oz)"
+    },
+    {
+      "commodity": "green-olives",
+      "pattern": "\\bqueen\\s+olives\\b",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: 0.54x unit-basis outlier vs its own link (Tuscan Garden Manzanilla)"
+    },
+    {
+      "commodity": "green-olives",
+      "pattern": "\\bsalad\\s+olives\\b",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: 0.54x unit-basis outlier vs its own link (Tuscan Garden Manzanilla)"
+    },
+    {
+      "commodity": "green-olives",
+      "pattern": "\\bstuffed\\b.{0,20}olives\\b",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: 0.54x unit-basis outlier vs its own link (Tuscan Garden Manzanilla)"
+    },
+    {
+      "commodity": "hot-dog-buns",
+      "pattern": "buns?,\\s*(?:enriched,\\s*)?(?:white\\s+)?hot\\s*dog",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: 2.16x unit-basis outlier vs its own link (Pepperidge Farm 14 Oz)"
+    },
+    {
+      "commodity": "hot-dog-buns",
+      "pattern": "hot\\s*dog\\s+rolls?",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: 2.16x unit-basis outlier vs its own link (Pepperidge Farm 14 Oz)"
+    },
+    {
+      "commodity": "insect-spray",
+      "pattern": "\\b(?:home|insect)\\s+barrier\\b",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: 2.33x unit-basis outlier vs its own link (Eliminator 17.5 Oz)"
+    },
+    {
+      "commodity": "insect-spray",
+      "pattern": "\\bbug\\s+stop\\b",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: 2.33x unit-basis outlier vs its own link (Eliminator 17.5 Oz)"
+    },
+    {
+      "commodity": "insect-spray",
+      "pattern": "flea\\s*(?:&|and)\\s*tick\\s+home\\s+spray",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: 2.33x unit-basis outlier vs its own link (Eliminator 17.5 Oz)"
+    },
+    {
+      "commodity": "sweet-corn",
+      "pattern": "sweet\\s+yellow\\s+corn",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: 2.17x outlier - \"Fresh Sweet Corn (4 Ct)\" priced per ear vs per pack"
+    },
+    {
+      "commodity": "kosher-salt",
+      "pattern": "salt,\\s*(?:[^,]*,\\s*)?kosher",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: cross-claims the sea-salt cell (\"Sea Salt, Coarse, Kosher\")"
+    },
+    {
+      "commodity": "honey-mustard",
+      "pattern": "mustard,\\s*honey\\b",
+      "held": "2026-08-21",
+      "reason": "guards 2026-08-21: crowned a 128 fl oz cell on a weight-priced row (measure-kind mismatch)"
+    }
+  ]
+}

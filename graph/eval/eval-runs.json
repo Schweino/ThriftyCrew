@@ -239,6 +239,23 @@
   },
   {
     "context": "phase2",
+    "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.6409550045913682, \"relation_precision\": 1.0, \"relation_recall\": 0.6409550045913682, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.3590449954086318, \"counts\": {\"tp\": 698, \"fp\": 0, \"tn\": 564, \"fn\": 391, \"gold_match\": 1089, \"gold_no_match\": 564, \"escalated\": 0, \"missing_node\": 12}, \"by_status\": {\"known_wrong\": 186, \"include_hit\": 698, \"no_include_hit\": 764, \"category_excluded\": 3, \"excluded\": 2}, \"f1\": 0.7811975377728037, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": true}, \"deterministic\": {\"missed_merge_rate\": 0.3590449954086318, \"false_merge_rate\": 0.0, \"entity_recall\": 0.6409550045913682}, \"system\": {\"missed_merge_rate\": 0.015610651974288337, \"false_merge_rate\": 0.0, \"entity_recall\": 0.9843893480257117}}",
+    "entity_precision": 1.0,
+    "entity_recall": 0.6409550045913682,
+    "false_merge_rate": 0.0,
+    "gold_version": "be1bba064f66220c",
+    "id": "eval:63dc3144f83c6aa00c17",
+    "missed_merge_rate": 0.3590449954086318,
+    "model": "deterministic-only",
+    "n_gold": 1668,
+    "n_pred": 698,
+    "prompt_version": "resolve.v1",
+    "relation_precision": 1.0,
+    "relation_recall": 0.6409550045913682,
+    "run_at": "2026-08-21T01:46:32"
+  },
+  {
+    "context": "phase2",
     "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.6480965645311049, \"relation_precision\": 1.0, \"relation_recall\": 0.6480965645311049, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.3519034354688951, \"counts\": {\"tp\": 698, \"fp\": 0, \"tn\": 564, \"fn\": 379, \"gold_match\": 1077, \"gold_no_match\": 564, \"escalated\": 0, \"missing_node\": 24}, \"by_status\": {\"known_wrong\": 186, \"include_hit\": 698, \"no_include_hit\": 755, \"excluded\": 2}, \"f1\": 0.7864788732394367, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": true}, \"deterministic\": {\"missed_merge_rate\": 0.3519034354688951, \"false_merge_rate\": 0.0, \"entity_recall\": 0.6480965645311049}, \"system\": {\"missed_merge_rate\": 0.003714020427112349, \"false_merge_rate\": 0.0, \"entity_recall\": 0.9962859795728877}}",
     "entity_precision": 1.0,
     "entity_recall": 0.6480965645311049,
