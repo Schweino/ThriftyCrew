@@ -168,7 +168,8 @@
       "\\boutshine\\b",
       "marshmallows?",
       "\\bbomb\\s*pops?\\b",
-      "\\bpops\\b"
+      "\\bpops\\b",
+      "\\bgum\\s?balls?\\b"
     ],
     "supplement": [
       "\\bsupplements?\\b",
@@ -177,7 +178,10 @@
       "superbeets",
       "\\bsoftgels?\\b",
       "heart\\s+chews?",
-      "\\bheart\\s+health\\b"
+      "\\bheart\\s+health\\b",
+      "\\bcough\\b",
+      "\\bthroat\\s+(?:drops?|relief|lozenges?)\\b",
+      "\\blozenges?\\b"
     ],
     "preserve_carrier": [
       "\\bjams?\\b",
