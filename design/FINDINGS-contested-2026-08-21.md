@@ -184,3 +184,62 @@ predictable from the diff. Anything that changes which PRODUCT a cell holds
 should offer to re-derive that store's links, or at minimum name the exact
 command with the store already filled in. Right now every fixer has to know to
 do it, and the failure only appears one guard run later.
+
+## 10. Blast radius measured on the wrong corpus — DONE
+
+Every blast-radius check I ran on 2026-08-21 globbed `out\regular\*.json` only.
+That is **36,487** names. The real corpus, once `out\sams`, `out\bakers`,
+`out\fareway`, `out\extra` and `ads-*.json` are included, is **44,125** — the
+partial view was missing 17% of the products the engine actually prices, and
+Sam's Club almost entirely, because Sam's ships a `sams-deals-*.json` as well as
+a regular file.
+
+Caught by accident: a new pattern was measured as catching 3 products, but the
+Sam's row it was written for was not among them. It was not in the corpus.
+
+The shipped `pet` class change was re-verified against the full 44,125 — still
+0 human-food false positives — so nothing bad went out. But the check that
+proved it was weaker than it looked, which is the part worth fixing. Any
+blast-radius measurement should read the same file set the engine reads, not a
+convenient subset of it. Cached to `%TEMP%\corpus-names.json` for this session;
+it belongs in a shared helper.
+
+## 11. Excluding a product does not delete it — it re-homes it — DONE
+
+Ruling 3 (serranos are not mild green chiles) was applied as an exclude on
+`canned-green-chilies`. That freed the La Costena can, which promptly landed in
+`serrano-peppers` — a FRESH, per-pound produce row — at $3.06/lb, and
+tile-integrity caught it at 2.09x within one guard run.
+
+An exclude is not a delete. First-match-wins means the product falls to the next
+commodity whose patterns accept it, and that commodity may be a worse home than
+the one it left. Every exclude needs the second question asked: not just "should
+this row lose it" but "who gets it next".
+
+Fixing that surfaced a pre-existing defect in the same row: `serrano-peppers`
+was claiming **seven hot sauces and taco sauces**. Fresh-produce rows now
+exclude sauce and fire-roasted forms.
+
+And removing the serrano can from `canned-green-chilies` promoted the next
+cheapest, which was **"Stokes Green Chile Stew with Pork and Potatoes"** — a
+stew, crowned as the cheapest canned diced green chile. Behind it sat burritos,
+refried beans, queso and an aioli: eleven products where "green chile" is a
+FLAVOUR, not the contents. That row now excludes the carrier forms and reads
+$0.2125/oz for Benita Chopped Green Chiles, which is what it always claimed to be.
+
+Three defects, all revealed by one exclude. The exclusion was correct; what it
+displaced was not.
+
+## 12. A canned commodity priced by fresh fruit — OPEN
+
+`mandarin-oranges` is labelled "Canned Mandarin Oranges" and its cheapest cell
+is Aldi's **"Mandarin Oranges" 3 lb at $0.0706/oz** — a bag of fresh
+clementines, roughly half the price per ounce of any real can on the row.
+
+Not fixable by name pattern: the name is exactly "Mandarin Oranges" with no
+form word to key on. The only tell is the size — a 3 lb sack is not a can. The
+board already carries a size field and `audit-unit-basis-outlier` already
+reasons about pack shape, so the machinery exists; the rule does not.
+
+Left open deliberately. It needs a form-vs-size rule, not another regex, and
+inventing one mid-session is how the last four patterns got written.

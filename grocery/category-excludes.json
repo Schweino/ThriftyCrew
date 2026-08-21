@@ -207,7 +207,8 @@
     "prepared_meal_carrier": [
       "\\bbowl\\b",
       "frozen\\s+meal",
-      "meal\\s+kit"
+      "meal\\s+kit",
+      "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w"
     ],
     "alcohol": [
       "\\bliqueurs?\\b",
