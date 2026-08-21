@@ -152,7 +152,22 @@ Every producer adds, never renames:
 
 `ad_price` and `current_price` **stay exactly as they are** during transition: `current_price` is what the store charges today and guard 10 keeps asserting `ad_price == current_price`. Under the new fields the same invariant reads `current_price == (sale_price ?? everyday_price)`, which is guard 10 restated, not weakened.
 
-Per store, what each source can honestly fill (read from each producer today; the last column is what must be verified before the producer is changed):
+**READ THE ROW HEADINGS AS SOURCES, NOT STORES (corrected 2026-08-21 after Brad: "hyvee fareway and aldi do have end dates on their ads. im not sure why you are saying no? are you actually looking at the ads themselves?").**
+
+He was right and I was not. Phase 0's browser pass probed each store's **storefront/product API** - the shelf surface - and I then wrote the conclusion as though it described the store. It does not. Every store has **two** discount surfaces and they answer this question differently:
+
+| surface | carries an end date? | what we store today |
+|---|---|---|
+| Hy-Vee Flipp flyers - **three concurrent**: Weekly 08-17..08-23 (444 deals), monthly 08-03..08-30 (216), 3 Day Sale 08-21..08-23 (26) | **YES, per flyer** | **nothing** - `ads-*.json` stores `item, source_ad, store` only |
+| Aldi Flipp flyerkit - 108 items, each carrying `valid_from`/`valid_to` (+ `original_price`) | **YES, per item** | **nothing** - `pull-grocery-ads` reads `$prods[0].valid_from` to test currency, then drops it building the deal rows |
+| Family Fare Freshop `/circulars` 08-16..08-22 and `/offers` per offer | **YES** | **nothing** - neither endpoint is read |
+| Baker's Kroger API `expirationDate` | **YES, per item** | **nothing** - dropped by the puller |
+| Baker's / Fareway flyer FILES (`*-deals-*.json`) | **YES, document-level** | **yes** - `Test-AdWindowClosed` already enforces it |
+| shelf markdowns: Hy-Vee `onSale`, Fareway/Aldi `fullPriceString`, Walmart rollback, Sam's `wasPrice` | **NO** (measured, see below) | n/a |
+
+**So the TTL question only ever applied to the last row.** Ad prices are dated at every one of the five ad-carrying stores; we simply throw the dates away. And because we do, `build-sale-windows` stamps one store-level window on everything, which retires **216 Hy-Vee monthly-ad deals seven days early** - the same monthly-vs-weekly bug it already had to special-case for Fareway, unhandled at Hy-Vee.
+
+Per source, what each can honestly fill (read from each producer today; the last column is what was verified):
 
 | store | everyday_price from | sale_price from | sale_from/to from | must verify |
 |---|---|---|---|---|

@@ -1,0 +1,52 @@
+{
+    "generated":  "2026-08-21",
+    "correction":  "Phase 0 browser pass probed STOREFRONT surfaces only. The AD feeds carry end dates and were never opened. Brad caught this.",
+    "ad_windows_the_feeds_gave_us":  [
+                                         {
+                                             "from":  "2026-08-17",
+                                             "flyer":  "Weekly Ad",
+                                             "to":  "2026-08-23",
+                                             "deals":  444,
+                                             "store":  "Hy-Vee"
+                                         },
+                                         {
+                                             "from":  "2026-08-03",
+                                             "flyer":  "(unnamed / monthly)",
+                                             "to":  "2026-08-30",
+                                             "deals":  216,
+                                             "store":  "Hy-Vee"
+                                         },
+                                         {
+                                             "from":  "2026-08-21",
+                                             "flyer":  "3 Day Sale",
+                                             "to":  "2026-08-23",
+                                             "deals":  26,
+                                             "store":  "Hy-Vee"
+                                         },
+                                         {
+                                             "per_item":  true,
+                                             "store":  "Aldi",
+                                             "to":  "2026-08-25",
+                                             "from":  "2026-08-19",
+                                             "flyer":  "flyerkit publication 8080907",
+                                             "deals":  108
+                                         },
+                                         {
+                                             "from":  "2026-08-16",
+                                             "flyer":  "Freshop circular",
+                                             "to":  "2026-08-22",
+                                             "deals":  1000,
+                                             "store":  "Family Fare"
+                                         }
+                                     ],
+    "aldi_item_fields":  "id, name, sale_story, sku, description, valid_from_timestamp, valid_to_timestamp, valid_from, valid_to, price_text, pre_price_text, post_price_text, original_price, brand, item_categories, ...",
+    "aldi_per_item_windows":  "all 108 items carry valid_from 2026-08-19 / valid_to 2026-08-25",
+    "aldi_next_publication":  "8077356 valid 2026-08-26..2026-09-01 (already visible before it opens)",
+    "what_we_store_per_deal":  [
+                                   "item",
+                                   "source_ad",
+                                   "store"
+                               ],
+    "consequence":  "build-sale-windows stamps the single store-level ad window on every sale cell, so the 216 Hy-Vee monthly-ad deals are retired 2026-08-23 instead of 2026-08-30 - seven days early. Same class as the Fareway monthly-ad case already special-cased there, unhandled at Hy-Vee.",
+    "ttl_scope":  "A TTL was only ever needed for SHELF MARKDOWNS (Hy-Vee onSale, Fareway/Aldi fullPriceString, Walmart rollback, Sams wasPrice). Ad prices are dated at all five ad-carrying stores."
+}
