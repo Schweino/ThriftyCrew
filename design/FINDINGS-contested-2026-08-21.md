@@ -454,3 +454,48 @@ measures ROW age. Different clocks, both valid. Worth writing down because the
 two numbers sitting 76 days apart invite exactly the wrong conclusion.
 
 The baseline entry now carries this history so the next person does not re-chase it.
+
+## 19. The canned/fresh mix-up is a SINGLETON, not a class — DONE
+
+Finding #12 said `mandarin-oranges` is labelled "Canned Mandarin Oranges" and
+was priced by Aldi's fresh 3 lb bag, and that it needed a form-vs-size rule
+rather than a regex. I went looking for the class before writing the rule. There
+is no class.
+
+**Attempt 1 - size outliers.** Cells whose size is >=3x the peer median AND whose
+per-unit is <=0.6x the peer median: 60 hits, and almost all are **Sam's Club
+buying bigger**. 50 lb rice, 48 oz almonds, 160 oz oats, 15 lb dog biscuits.
+Buying bigger IS cheaper per unit - that is the board working, not failing. Size
+outlier is not a defect signal.
+
+**Attempt 2 - canned rows priced from a pound.** 17 hits, and 15 are a parsing
+artefact: Sam's multipacks read "12 ct 15 oz", so the first unit matched is `ct`.
+Of the two real ones, `canned-chicken` at Walmart is a genuine 12.5 oz can whose
+size was normalised to 0.779 lb. That leaves exactly one.
+
+So no rule. One adjudicated ruling, in the mechanism built for exactly this -
+`known-wrong.json`, one row per (commodity, store, product) a reasoner has ruled
+wrong, scoped so it cannot delete a right answer elsewhere.
+
+The evidence that made it rulable rather than guessable: **Aldi already prices
+"Mandarins Bag 3 LB" at $1.33/lb in the `clementines` row, and 0.0706/oz x 16 =
+$1.13/lb.** Same bag, two capture spellings, two commodities. And `clementines`
+cannot simply take it - that commodity deliberately excludes a bare "mandarin
+oranges" unless the name also says fresh/halos/cuties, because on a shelf that
+phrase normally IS the can. A good rule with one exception, and no name pattern
+can separate them: the name is exactly "Mandarin Oranges" and the only tell is a
+size field the include/exclude layer cannot see.
+
+Better outcome than expected. Aldi did not lose its cell - it fell through to
+**"Sweet Harvest Mandarin Oranges in Light Syrup, 15 oz" at $0.0993/oz**, a real
+can, and still the cheapest on the row. The fresh bag had been masking a
+legitimately cheaper can the whole time.
+
+guards hard=0 warn=16, known-wrong 0 of 186, soundness 0 moved 0 dropped,
+published.
+
+**The general lesson, which cost two measurement passes to learn:** before
+writing a rule, check whether the class exists. Both plausible signals here
+described normal, correct behaviour far more often than defects, and a rule
+built on either would have fired constantly on Sam's Club doing exactly what a
+warehouse club does.
