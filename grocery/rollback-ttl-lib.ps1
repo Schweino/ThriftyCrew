@@ -1,0 +1,146 @@
+<#
+  rollback-ttl-lib.ps1 - the durable "when did we FIRST see this rollback?" ledger.
+
+  BRAD'S RULE (2026-08-21): "for walmart and sams, a rollback price we just stick with a 30 day TTL
+  from when we first detect".
+
+  THE WHOLE DIFFICULTY IS IN THE WORD *FIRST*. Walmart and Sam's publish no end date for a rollback -
+  measured 2026-08-21: Walmart's ROLLBACK badge carries __typename/key/text/type/id/styleId and
+  nothing temporal, promoData is Affirm financing only, promoDiscount is null; Sam's payload contains
+  zero date-shaped values at all. So the window has to come from us, and the only honest anchor is the
+  first day we observed it.
+
+  IF THE ANCHOR MOVES, THE TTL IS INFINITE. A rollback is re-observed on every capture that covers its
+  term. Stamping "today + 30" each time an observation lands would push the expiry forward forever and
+  the price would never revert - a 30-day rule that silently means "never", which is strictly worse
+  than no rule because it reads as governed. So first_seen is written ONCE per (store, item) and is
+  NEVER advanced; only last_seen moves. That is the same discipline as `dates written, not measured`
+  and as the FF cursor-commit rule: the durable fact is recorded when it happens and is not re-derived
+  from the clock afterwards.
+
+  KEYED BY THE STORE'S OWN ITEM ID, not the product name. A name changes when the merchant re-lists or
+  re-titles an item and a name-keyed ledger would silently mint a new first_seen and restart the
+  clock - the re-listing escape that `a ruling a store can escape by re-listing is not a ruling`
+  describes. Walmart gives usItemId, Sam's gives productId; both are already captured.
+
+  THE PRICE IS PART OF THE IDENTITY OF A ROLLBACK. If the rolled-back price CHANGES, that is a new
+  rollback, not a continuation of the old one, and it earns a fresh 30 days. A store that cuts $5.96
+  to $4.87 and later to $3.99 has run two promotions; carrying the first anchor forward would expire
+  the second one early. Recorded as price_changed in the ledger so the reason is visible.
+
+  Usage:
+      . rollback-ttl-lib.ps1
+      $w = Get-RollbackWindow -Store 'Walmart' -ItemId '10450114' -Price 4.87 -Today '2026-08-21'
+      # -> @{ ad_from = '2026-08-21'; ad_to = '2026-09-20'; first_seen = '2026-08-21'; is_new = $true }
+      Save-RollbackLedger        # once, after a build, to persist what the run observed
+#>
+
+# The TTL itself. Brad's number, and it is a POLICY value rather than a measurement: neither store
+# publishes a window, so this is the length we are choosing to stand behind, not one they gave us.
+# Kept here beside the ledger it governs so the two can never disagree.
+$script:RollbackTtlDays = 30
+
+# Which stores this applies to. A store that PUBLISHES a window must never be given a TTL instead -
+# Baker's states expirationDate per item and Family Fare states finish_date per offer, and inventing
+# a 30-day guess over either would be replacing a fact with a worse one.
+$script:RollbackTtlStores = @('Walmart', "Sam's Club")
+
+$script:RbLedger = $null
+$script:RbLedgerPath = $null
+$script:RbDirty = $false
+
+function Get-RollbackLedgerPath([string]$Root) {
+  if (-not $Root) { $Root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' } }
+  return (Join-Path $Root 'rollback-first-seen.json')
+}
+
+function Import-RollbackLedger([string]$Root = '') {
+  if ($null -ne $script:RbLedger) { return }
+  $script:RbLedgerPath = Get-RollbackLedgerPath $Root
+  $script:RbLedger = @{}
+  if (Test-Path $script:RbLedgerPath) {
+    try {
+      $doc = ConvertFrom-Json ([IO.File]::ReadAllText($script:RbLedgerPath))
+      foreach ($e in @($doc.entries)) {
+        $script:RbLedger[[string]$e.key] = [ordered]@{
+          store = [string]$e.store; item_id = [string]$e.item_id
+          price = [double]$e.price; first_seen = [string]$e.first_seen
+          last_seen = [string]$e.last_seen; price_changed = [int]$e.price_changed
+        }
+      }
+    } catch { }
+  }
+}
+
+function Test-RollbackTtlStore([string]$Store) { return ($script:RollbackTtlStores -contains $Store) }
+function Get-RollbackTtlDays { return $script:RollbackTtlDays }
+
+function Get-RollbackWindow {
+  <#
+    .SYNOPSIS The window for one observed rollback, anchored to the day we FIRST saw it.
+    .DESCRIPTION Returns $null for a store that publishes its own dates - the caller must use those.
+                 Pure apart from the in-memory ledger; call Save-RollbackLedger to persist.
+  #>
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory)][string]$Store,
+    # NOT Mandatory, deliberately. A row with no item id must come back as $null - "we cannot anchor
+    # this honestly" - not as a parameter-binding crash. Mandatory rejects '' at the binder, before
+    # the guard below can give that answer, which turns a legitimate no-op into a failed build.
+    [string]$ItemId = '',
+    [Parameter(Mandatory)][double]$Price,
+    [string]$Today = '',
+    [string]$Root = ''
+  )
+  if (-not (Test-RollbackTtlStore $Store)) { return $null }
+  if (-not $ItemId) { return $null }        # no stable key -> no honest anchor -> no window
+  Import-RollbackLedger $Root
+  $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
+  $key = "$Store|$ItemId"
+
+  $e = $script:RbLedger[$key]
+  $isNew = $false
+  if (-not $e) {
+    $e = [ordered]@{ store = $Store; item_id = $ItemId; price = $Price; first_seen = $todayS; last_seen = $todayS; price_changed = 0 }
+    $script:RbLedger[$key] = $e; $script:RbDirty = $true; $isNew = $true
+  }
+  elseif ([math]::Abs([double]$e.price - $Price) -gt 0.005) {
+    # A DIFFERENT ROLLED-BACK PRICE IS A DIFFERENT PROMOTION. Re-anchor and say so.
+    $e.price = $Price; $e.first_seen = $todayS; $e.price_changed = [int]$e.price_changed + 1
+    $e.last_seen = $todayS; $script:RbDirty = $true; $isNew = $true
+  }
+  else {
+    # SAME ROLLBACK, SEEN AGAIN. last_seen moves; first_seen MUST NOT - that is the whole rule.
+    if ([string]$e.last_seen -ne $todayS) { $e.last_seen = $todayS; $script:RbDirty = $true }
+  }
+
+  $from = [string]$e.first_seen
+  $to = ''
+  try { $to = ([datetime]::ParseExact($from, 'yyyy-MM-dd', $null)).AddDays($script:RollbackTtlDays).ToString('yyyy-MM-dd') } catch { }
+  return [ordered]@{
+    ad_from = $from; ad_to = $to; first_seen = $from; last_seen = [string]$e.last_seen
+    is_new = $isNew; ttl_days = $script:RollbackTtlDays
+    basis = "TTL - neither store publishes a rollback end date; anchored to first detection"
+  }
+}
+
+function Save-RollbackLedger([string]$Root = '') {
+  if ($null -eq $script:RbLedger) { return $false }
+  if (-not $script:RbDirty) { return $true }
+  if (-not $script:RbLedgerPath) { $script:RbLedgerPath = Get-RollbackLedgerPath $Root }
+  $doc = [ordered]@{
+    updated = (Get-Date).ToString('s')
+    ttl_days = $script:RollbackTtlDays
+    note = 'When each Walmart / Sam''s rollback was FIRST observed. first_seen is written once per (store,item_id) and NEVER advanced - re-observing a rollback moves last_seen only, because an anchor that moves makes a 30-day TTL infinite. A CHANGED rolled-back price is a new promotion and re-anchors, counted in price_changed. Keyed by the store''s own item id, never the name, so a re-listing cannot restart the clock.'
+    entries = @($script:RbLedger.Keys | Sort-Object | ForEach-Object {
+      $v = $script:RbLedger[$_]
+      [ordered]@{ key = $_; store = $v.store; item_id = $v.item_id; price = $v.price
+                  first_seen = $v.first_seen; last_seen = $v.last_seen; price_changed = $v.price_changed }
+    })
+  }
+  $tmp = "$($script:RbLedgerPath).tmp"
+  [IO.File]::WriteAllText($tmp, ($doc | ConvertTo-Json -Depth 5), (New-Object System.Text.UTF8Encoding($false)))
+  Move-Item -LiteralPath $tmp -Destination $script:RbLedgerPath -Force
+  $script:RbDirty = $false
+  return $true
+}

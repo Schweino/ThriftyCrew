@@ -52,6 +52,8 @@ if ($OutBaseline -lt 0) { $OutBaseline = 38 }
 # stays. An entry that stops being uncalled (wired in, or archived) prints a note telling you to delete the
 # line; it never fails. No count is written here: it drifted from 25 to 39 before anyone noticed.
 $KNOWN = [ordered]@{
+  # -- manual investigation tools, run by a human when a question needs answering
+  'probe-price-fields.ps1'           = 'PHASE 0 of PLAN-live-price-state: asks each of the 9 price sources whether it states that a discount is live and when it ENDS, and writes the raw payloads to out\audit\price-fields\ as evidence. Answered its question on 2026-08-21 (Baker''s and Family Fare publish windows; five stores do not). Re-run by hand when a store changes its API - it makes assertions about the world, not about our data, so a scheduled run would just re-download the same answer daily.'
   # -- launched by hand from a scheduled-agent SKILL under ~\.claude\scheduled-tasks\ (not in this repo)
   'build-aldi-regular.ps1'           = 'SKILL grocery-browser-stores-refresh step F2 - weekly Aldi capture builder'
   'build-pull-order.ps1'             = 'SKILL grocery-browser-stores-refresh - priority term order for the walled stores'

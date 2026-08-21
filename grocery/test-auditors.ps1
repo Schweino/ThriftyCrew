@@ -3881,6 +3881,14 @@ $r = RunPS 'audit-pull-profiles.ps1' @()
 if ($r.rc -eq 0) { Ok 'every store pull_profile agrees with its agent module' }
 else { Bad ('pull_profile drift or a profile encoding carriage: ' + ((($r.text -split "`n") | Select-Object -First 6) -join ' | ')) }
 
+# ---------------------------------------------------------------- rollback TTL ledger (2026-08-21)
+# Brad: "for walmart and sams, a rollback price we just stick with a 30 day TTL from when we first
+# detect". The whole difficulty is in FIRST. A rollback is re-observed on every capture covering its
+# term, so an anchor that re-stamps on each sighting makes the TTL infinite while reading as governed.
+# test-rollback-ttl.ps1 carries the must-fire fixture for exactly that.
+$r = RunPS 'test-rollback-ttl.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'ROLLBACK-TTL PASSED') { Ok 'rollback TTL: first_seen anchors once and never re-anchors on re-sighting' }
+else { Bad ('rollback TTL fixtures FAILED (rc=' + $r.rc + ') - a 30-day window that re-anchors never expires') }
 # ---------------------------------------------------------------- matcher parity (wired 2026-08-21)
 # WHICH COMMODITY OWNS A PRODUCT NAME is decided by Match-Category in compare-deals, and re-implemented in
 # at least three auditors - one of them, audit-household-in-food, a HARD guard. test-matcher-parity.ps1 was

@@ -1,4 +1,4 @@
-<#
+﻿<#
   pull-grocery-ads.ps1 - Pulls CURRENT weekly-ad data for the 3 server-side Omaha stores:
     Hy-Vee (Flipp SFML), Aldi (Flipp flyerkit JSON), Family Fare (Freshop circular API).
   Baker's is browser-assisted - see pull-bakers.ps1.
@@ -82,7 +82,14 @@ function Pull-HyVee {
             if ($sz) { $safe = $sz.Replace('$','$$'); $l = $l -replace ',\s*,', (', ' + $safe + ', ') }
           }
           $l = ($l -replace ',\s*,', ',' -replace '\s+', ' ').Trim()
-          if ($l.Length -gt 5 -and -not $seen.ContainsKey($l)) { $seen[$l]=$true; $deals += [ordered]@{ item=$l; source_ad=[string]$f.external_display_name } }
+          # STAMP THE FLYER'S OWN WINDOW ON EVERY DEAL (2026-08-21, Brad: "We MUST log ad dates and
+          # pricing. non negotioble."). Hy-Vee runs SEVERAL FLYERS AT ONCE and they do not share a
+          # window - measured today: 'Weekly Ad' 08-17..08-23 (444 deals), monthly 08-03..08-30 (216),
+          # '3 Day Sale' 08-21..08-23 (26). This loop is already PER FLYER so $f carries the right
+          # dates for the rows it emits; they were simply discarded. Without them every consumer falls
+          # back to the ONE store-level window in ad-schedule.json, which retires the 216 monthly deals
+          # on 08-23 instead of 08-30 - seven days early, while the ad is still running.
+          if ($l.Length -gt 5 -and -not $seen.ContainsKey($l)) { $seen[$l]=$true; $deals += [ordered]@{ item=$l; source_ad=[string]$f.external_display_name; ad_from=($f.valid_from -replace 'T.*',''); ad_to=($f.valid_to -replace 'T.*','') } }
         }
       }
       Add-Result 'Hy-Vee' ("ad='"+$f.external_display_name+"'") $zip ($f.valid_from -replace 'T.*','') ($f.valid_to -replace 'T.*','') $okOmaha $okCurrent $deals
@@ -106,7 +113,11 @@ function Pull-Aldi {
       if (-not $prods -or $prods.Count -eq 0) { continue }
       if (Test-Current $prods[0].valid_from $prods[0].valid_to) {
         $okCurrent=$true; $curFrom=$prods[0].valid_from; $curTo=$prods[0].valid_to
-        foreach ($it in $prods) { $price = ((""+$it.pre_price_text+' $'+$it.price_text+' '+$it.post_price_text) -replace '\s+',' ').Trim(); $deals += [ordered]@{ item=$it.name; size=$it.description; ad_price=$price; source_ad='Weekly Ad' } }
+        # PER-ITEM WINDOWS, NOT THE PUBLICATION'S (2026-08-21). flyerkit returns valid_from/valid_to on
+        # EVERY product - all 108 carried 2026-08-19..2026-08-25 today - and this loop read
+        # $prods[0].valid_from purely to test the ad was current, then built the rows without it.
+        # original_price is on the item too, so an ad row can now state what it was cut FROM.
+        foreach ($it in $prods) { $price = ((""+$it.pre_price_text+' $'+$it.price_text+' '+$it.post_price_text) -replace '\s+',' ').Trim(); $deals += [ordered]@{ item=$it.name; size=$it.description; ad_price=$price; source_ad='Weekly Ad'; ad_from=([string]$it.valid_from -replace 'T.*',''); ad_to=([string]$it.valid_to -replace 'T.*',''); regular=$it.original_price } }
         break
       }
     }
@@ -135,7 +146,11 @@ function Pull-FamilyFare {
         $r = Invoke-RestMethod -Uri "$b/products?app_key=$ak&store_id=$sid$tq&circular_id=$($cur.id)&limit=200&page=$page&fields=name,size,base_price,sale_price" -Headers $UA -TimeoutSec 30
         if ($r.total) { $total = [int]$r.total }
         $its = $r.items
-        foreach ($it in $its) { $deals += [ordered]@{ item=$it.name; size=$it.size; regular=$it.base_price; ad_price=$it.sale_price; source_ad='Weekly Ad' } }
+          # THE CIRCULAR'S WINDOW, ON EVERY ROW IT PRODUCED (2026-08-21). $cur is the circular these
+          # products were fetched FOR (circular_id=$($cur.id)), and it carries start_date/finish_date -
+          # 2026-08-16..2026-08-22 today. Emitting rows without it forces every consumer back to the
+          # store-level ad window, which is the defect that retires Hy-Vee's monthly deals a week early.
+          foreach ($it in $its) { $deals += [ordered]@{ item=$it.name; size=$it.size; regular=$it.base_price; ad_price=$it.sale_price; source_ad='Weekly Ad'; ad_from=([string]$cur.start_date -replace 'T.*',''); ad_to=([string]$cur.finish_date -replace 'T.*','') } }
         $collected += @($its).Count; $page++
       } while (@($its).Count -gt 0 -and $collected -lt $total -and $page -le 25)
     }
