@@ -304,3 +304,7 @@ meal-prep/db/*.db-journal
 
 # fetch-recipe.ps1 page cache - regenerable, and one page is ~0.5 MB
 meal-prep/db/page-cache/
+
+# Derived triage ranking (local_triage.py --triage-queue). Regenerated on
+# demand from the queue; carries raw store text like its inputs.
+/grocery/escalation-triage.json
