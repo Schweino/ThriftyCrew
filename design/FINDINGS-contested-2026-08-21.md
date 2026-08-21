@@ -283,3 +283,53 @@ noise after `\bd\s+batteries\b` near-missed every AA pack in the corpus.
 
 Worth running after any catalog edit. Not a guard - it produces questions, and a
 gate that fails on a question trains people to ignore it.
+
+## 14. relink-drifted-cells: the forgotten step, automated — DONE (partially effective)
+
+Four times in one day a match fix moved a price and orphaned its link, caught by
+tile-integrity one guard run later, fixed by the identical command. That is a
+mechanical consequence of the diff and should not depend on the fixer knowing.
+
+`grocery/relink-drifted-cells.ps1` needs no before/after snapshot - a drifted
+cell is self-evident: the board says the cell holds product X, product-urls.json
+says its link opens Y. It groups those by store, re-derives ONLY those stores
+(per store, never globally - derive-links-from-prices carries a scar about that),
+and refreshes the name-drift flags afterwards, since tile-integrity reads them.
+
+Honest result: **193 drifted tiles found, 7 repairable.** The other 186 are not
+a bug in this tool - `derive-links-from-prices` can only write a link when the
+capture row carries a product identity, and for Aldi and Fareway it usually does
+not. Those links were resolved by SEARCH, not derived, which is exactly the
+two-pipelines-for-one-fact problem `derive-links-from-prices.ps1` was written to
+end. Ending it for the remaining stores means capture-side work, not link-side.
+
+So the tool closes the loop for derived stores and reports honestly on the rest.
+That is worth having, and worth not overselling.
+
+## 15. The tolerated middle: 188 tiles whose link names a different variant — OPEN
+
+`audit-name-drift` flags a link only when its name shares **zero** distinctive
+tokens with the board's product name. Its own output says so: "some are just
+brand differences". That conservatism is deliberate and load-bearing -
+`generate-board-overrides` refuses to pin any cell name-drift flags, so a false
+flag silently blocks a good pin.
+
+The consequence is a gap between "shares no tokens" (flagged) and "identical"
+(fine), and **188 priced tiles currently sit in it**:
+
+    alfredo-sauce   Fareway   board Classico          link Ragu
+    bbq-sauce       Fareway   board Original          link Honey
+    bottled-water   Fareway   board Purified          link Natural Spring
+    almond-milk     Aldi      board Vanilla           link Vanilla UNSWEETENED
+    body-wash       Fareway   board Cocoa Butter+Shea link Ocean Breeze
+
+Each shares enough words to pass, and each opens a different product than the
+price describes. Against Brad's invariant - "the price and item name need to
+match the link 100%" - these are violations that the guard reports as ACCURACY OK.
+
+NOT unilaterally fixed. Tightening the threshold would flag the cosmetic cases
+too ("Bananas" vs "Bananas Per LB", "Gala Apples" vs "Gala Apples, Bag") and
+every false flag blocks a pin. The right fix is a similarity measure that
+separates packaging noise from variant identity, and choosing that threshold is
+a decision with a measurable board cost - it deserves its own pass, not a guess
+at the end of one.

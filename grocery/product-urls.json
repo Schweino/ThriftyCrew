@@ -3937,11 +3937,11 @@
                                                                "name":  "Chi-Chi\u0027s Diced Green Chiles"
                                                            },
                                                "Walmart":  {
-                                                               "url":  "https://www.walmart.com/ip/La-Coste-a-Toreados-Whole-Peppers-7-76-oz/671467318",
-                                                               "name":  "La CosteÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±a Fire Roasted Green Chile Serrano Peppers, 12 oz",
-                                                               "price":  "$1.48",
-                                                               "size":  "7.749 oz",
-                                                               "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
+                                                               "url":  "https://www.walmart.com/ip/505-Southwestern-Hatch-Valley-Flame-Roasted-Green-Chiles-16-oz/13424843",
+                                                               "name":  "505 Southwestern Flame Roasted Hatch Valley Green Chile Peppers, Medium, 16 oz Jar – Hatch Green Chiles for Cooking",
+                                                               "price":  "$4.00",
+                                                               "size":  "16 oz",
+                                                               "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                                            }
                                            },
                   "canned-mixed-vegetables":  {
@@ -7070,11 +7070,11 @@
                                                         "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                     },
                                         "Baker\u0027s":  {
-                                                             "url":  "https://www.bakersplus.com/p/kroger-nonstick-vegetable-oil-cooking-spray-twin-pack/0001111014544",
-                                                             "name":  "Kroger Nonstick Vegetable Oil Cooking Spray Twin Pack",
-                                                             "price":  4.49,
+                                                             "url":  "https://www.bakersplus.com/p/kroger-canola-oil-nonstick-cooking-spray-twin-pack/0001111014542",
+                                                             "name":  "Kroger Canola Oil Nonstick Cooking Spray Twin Pack",
+                                                             "price":  "$4.49",
                                                              "size":  "2 pk 6 oz",
-                                                             "verified":  "2026-08-20"
+                                                             "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                                          }
                                     },
                   "corn-chips":  {
@@ -8331,14 +8331,6 @@
                                      },
                   "dijon-mustard":  {
                                         "commodity":  "Dijon Mustard",
-                                        "Aldi":  {
-                                                     "url":  "https://www.aldi.us/store/aldi/products/18649413-burman-s-spicy-brown-mustard-12-oz",
-                                                     "name":  "Burman S Spicy Brown Mustard 12 OZ",
-                                                     "price":  "$1.49",
-                                                     "size":  "12 oz",
-                                                     "verified":  "2026-08-05 DERIVED from the price row (same record the board priced)",
-                                                     "board_pu":  0.1242
-                                                 },
                                         "Baker\u0027s":  {
                                                              "url":  "https://www.bakersplus.com/p/kroger-dijon-mustard/0001111081088",
                                                              "price":  1.89,
@@ -8371,7 +8363,14 @@
                                                         "price":  "$1.72",
                                                         "size":  "12 oz",
                                                         "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                    },
+                                        "Aldi":  {
+                                                     "url":  "https://www.aldi.us/store/aldi/products/18648757-burman-s-all-natural-dijon-mustard-12-oz",
+                                                     "name":  "Burman S All Natural Dijon Mustard 12 OZ",
+                                                     "price":  "$1.49",
+                                                     "size":  "12 oz",
+                                                     "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                 }
                                     },
                   "dinner-rolls":  {
                                        "commodity":  "dinner-rolls",
@@ -21230,14 +21229,6 @@
                                },
                   "shampoo":  {
                                   "commodity":  "shampoo",
-                                  "Aldi":  {
-                                               "url":  "https://www.aldi.us/store/aldi/products/25324336-pantene-classic-clean-2-n-1-in-shampoo-conditioner-12-fl-oz",
-                                               "name":  "Pantene Classic Clean 2 N 1 IN Shampoo Conditioner 12 FL OZ",
-                                               "price":  "$5.73",
-                                               "size":  "12 fl oz",
-                                               "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
-                                               "board_pu":  0.4775
-                                           },
                                   "Fareway":  {
                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/82401404-ocean-breeze-shampoo",
                                                   "price":  1.97,
@@ -21278,7 +21269,14 @@
                                                       "price":  "$1.49",
                                                       "size":  "15 oz",
                                                       "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                  "Aldi":  {
+                                               "url":  "https://www.aldi.us/store/aldi/products/25324234-pantene-pro-v-daily-moisture-renewal-shampoo-12-oz",
+                                               "name":  "Pantene Pro V Daily Moisture Renewal Shampoo 12 OZ",
+                                               "price":  "$5.73",
+                                               "size":  "12 oz",
+                                               "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                           }
                               },
                   "shaving-cream":  {
                                         "commodity":  "shaving-cream",
@@ -21465,14 +21463,6 @@
                                       },
                   "shrimp":  {
                                  "commodity":  "shrimp",
-                                 "Aldi":  {
-                                              "url":  "https://www.aldi.us/store/aldi/products/21344727-fremont-fish-market-jumbo-butterfly-shrimp-9-oz",
-                                              "name":  "Fremont Fish Market Jumbo Butterfly Shrimp 9 OZ",
-                                              "price":  "$3.69",
-                                              "size":  "9 oz",
-                                              "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
-                                              "board_pu":  6.56
-                                          },
                                  "Family Fare":  {
                                                      "url":  "https://www.shopfamilyfare.com/shop/meat/seafood_fish/frozen_seafood/our_family_shrimp_raw_small/p/1564405684714906255",
                                                      "name":  "Our Family Shrimp Raw Small",
@@ -21509,7 +21499,14 @@
                                                          "price":  "$5.82",
                                                          "size":  "lb",
                                                          "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                 "Aldi":  {
+                                              "url":  "https://www.aldi.us/store/aldi/products/41417737-fremont-fish-market-value-pack-large-raw-peeled-shrimp-32-oz",
+                                              "name":  "Fremont Fish Market Value Pack Large Raw Peeled Shrimp 32 OZ",
+                                              "price":  "$16.49",
+                                              "size":  "32 oz",
+                                              "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                          }
                              },
                   "sirloin-steak":  {
                                         "commodity":  "sirloin-steak",
@@ -25928,6 +25925,22 @@
                                                           "size":  "25.4 fl oz",
                                                           "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
                                                       }
-                                 }
+                                 },
+                  "green-chilli":  {
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/111934073-burman-s-green-chili-squeeze-aioli-10-oz",
+                                                    "name":  "Burman S Green Chili Squeeze Aioli 10 OZ",
+                                                    "price":  "$2.45",
+                                                    "size":  "10 oz",
+                                                    "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/Stokes-Green-Chile-Stew-with-Pork-and-Potatoes-Medium-15-oz-Can/35230539",
+                                                       "name":  "Stokes Green Chile Stew with Pork and Potatoes, Medium, 15 oz Can",
+                                                       "price":  "$2.88",
+                                                       "size":  "15 oz",
+                                                       "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                   }
+                                   }
               }
 }
