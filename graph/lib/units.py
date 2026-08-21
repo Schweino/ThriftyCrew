@@ -51,10 +51,14 @@ class Size:
     unit: str            # canonical: 'oz' (weight) | 'floz' | 'ct'
     basis: str           # 'weight' | 'volume' | 'count'
     multiplier: int = 1  # e.g. "12 x 8 oz" -> multiplier 12
+    # True when `qty` ALREADY covers the whole pack, so the multiplier counts
+    # pieces but must not scale the measure. "72 ct 3 lb" is 3 pounds of cheese
+    # cut into 72 slices, not 72 three-pound slices. See parse_size.
+    qty_is_total: bool = False
 
     @property
     def total(self) -> float:
-        return self.qty * self.multiplier
+        return self.qty if self.qty_is_total else self.qty * self.multiplier
 
 
 def _num(text: str) -> float | None:
@@ -96,6 +100,7 @@ def parse_size(text: str | None) -> Size | None:
     # bare "6 ct" is a count basis in its own right, not a multiplier, and
     # conflating them would break every count-priced commodity.
     mult = 1
+    qty_is_total = False
     for pat in (rf"{_NUM}\s*(?:x|×)\s*(?={_NUM})",
                 rf"{_NUM}\s*(?:pk|pack|ct|count)\.?,?\s+(?={_NUM})"):
         mx = re.search(pat, t)
@@ -106,6 +111,31 @@ def parse_size(text: str | None) -> Size | None:
                 t = t[mx.end():]
             break
 
+    # Two readings of "N <unit-ish> M <unit>" have to be told apart, and the
+    # size string alone cannot always do it, so only the cases that are provable
+    # are corrected. Both corrections shrink the parsed size, which OVERSTATES
+    # the per-unit price — the harmless direction. Inflating a size understates
+    # the price and steals a cheapest-crown, which is the failure to avoid.
+    #
+    # 1. "12 x 12 each" (Fareway hamburger buns, $1.99) is a CASE of 12 packs of
+    #    12 buns. The shopper buys one pack, so 144 is not the size of anything
+    #    on the shelf: it priced buns at $0.0138 each against a $0.63 median,
+    #    46x low. Whenever the trailing quantity is itself a COUNT the leading
+    #    number is a case pack and must be dropped, not multiplied.
+    if mult > 1 and re.match(rf"\s*{_NUM}\s*(?:ct|count|ea|each|pk|pack)\b", t):
+        mult = 1
+    # 2. "72 ct 3 lb" (Kraft Singles, 3 lbs. / 72 ct.) is 3 POUNDS of cheese cut
+    #    into 72 slices — Sam's writes the pack total in pounds and the piece
+    #    count separately. Multiplying gave 3,456 oz and $0.0027/oz against a
+    #    $0.266 median, 98x low; "80 ct 8 lb" franks and "65 ct 3.45 lb"
+    #    Dentastix failed the same way. A pack of ten or more pieces whose
+    #    PIECES each weighed a pound or more would be a 10+ lb case, not a
+    #    retail unit, so at that count a pound-scale measure is the pack total.
+    #    Below ten the per-item reading is real and is left alone ("2 pk 20 lb"
+    #    charcoal is genuinely two twenty-pound bags).
+    elif mult >= 10 and re.match(rf"\s*{_NUM}\s*(?:lbs?|pounds?|kgs?|kilograms?)\b", t):
+        qty_is_total = True
+
     # a range ("4.7-6.1 lb") -> take the midpoint, which is what a shopper pays on average
     rng = re.search(rf"{_NUM}\s*[-–]\s*{_NUM}\s*([a-z.\s]+)", t)
     if rng:
@@ -115,6 +145,7 @@ def parse_size(text: str | None) -> Size | None:
             s = _classify((lo + hi) / 2.0, unit_txt)
             if s:
                 s.multiplier = mult
+                s.qty_is_total = qty_is_total
                 return s
 
     # volume first: "fl oz" must beat the bare "oz" weight rule
@@ -130,7 +161,7 @@ def parse_size(text: str | None) -> Size | None:
             qty, unit_txt = _num(m.group(1)), m.group(2).strip().replace(".", "")
             factor = table.get(unit_txt) or table.get(unit_txt.rstrip("s"))
             if qty and factor:
-                return Size(qty * factor, canon, basis, mult)
+                return Size(qty * factor, canon, basis, mult, qty_is_total)
 
     # count last — the weakest signal
     mc = re.search(rf"{_NUM}\s*(ct|count|pk|pack|ea|each|dozen|doz|rolls?)\b", t)
@@ -407,6 +438,61 @@ def names_multiple_products(product_name: str | None) -> bool:
     return bool(_CHOICE_AD.search(str(product_name)))
 
 
+# Nouns that name ONE indivisible retail item. Singular only, and never right
+# after a number: "2 Heads", "12 Loaves", "6 Bunches" all describe a pack and are
+# left to the ordinary count rules.
+#
+# "head" is NOT in the general list: it is a unit only for the few vegetables
+# sold that way, and everywhere else in this catalog it is a part of an
+# appliance. Admitting a bare "head" mispriced three real rows on the first
+# pass — "Gillette Sensor2 ... Pivoting Head Disposable Razors, 52 ct" jumped
+# from $0.54 to $27.98 a razor, and a Colgate "Full Head Value Pack, 4 ct" and
+# a "Pivoting Head 10 Ea" razor did the same. So it is spelled out per vegetable.
+_WHOLE_ITEM = re.compile(
+    r"(?<!\d\s)\b(?:loaf|bunch|stalk|melon"
+    r"|(?:lettuce|cabbage|cauliflower|romaine|iceberg)\s+head"
+    r"|head\s+of\s+(?:lettuce|cabbage|cauliflower|romaine))"
+    r"\b(?!\s*(?:s|es|ves)\b)",
+    re.IGNORECASE)
+
+# What may follow the whole-item noun: nothing, or pure size/count metadata.
+# The noun has to be the LAST thing the name says about WHAT the item is. That
+# anchor is what keeps "... Pivoting Head Disposable Razors" out while letting
+# "... White Bread Loaf, 24 oz, 20 Count" in.
+_ONLY_MEASURES = re.compile(
+    r"^[\s,.\-]*(?:\d[\d.,/]*\s*"
+    r"(?:oz|ounces?|lbs?|pounds?|g|grams?|kg|ml|l|liters?|fl\.?\s*oz|"
+    r"ct|count|pk|pack|ea|each)\.?[\s,.\-]*)*$",
+    re.IGNORECASE)
+
+
+def names_single_whole_item(product_name: str | None) -> bool:
+    """True when the product NAME says the listing is one whole item.
+
+    Two separate defects, both measured 2026-08-20, come from counting something
+    other than packages when the name has already said the package is one:
+
+      case pack   family-fare lists "Fresh Iceberg Lettuce Head" with size
+                  "24 ct" — the store's wholesale case quantity, not anything a
+                  shopper can buy. A lettuce HEAD is one item, so $2.49 is the
+                  each-price; dividing by 24 published $0.1038 against a $2.88
+                  median, 28x low and an instant false crown.
+
+      pieces      "Village Hearth Cottage White Bread LOAF, 24 oz, 20 Count"
+                  counts SLICES inside the one loaf, and count_from_name read
+                  them as twenty loaves: $0.182 each against a $3.69 median.
+
+    In both, the singular whole-item noun is the trustworthy signal and the count
+    is not. Capping the divisor at one can only overstate a per-unit price, which
+    never wins a crown; the reading it replaces understated it by 20-28x.
+    """
+    if not product_name:
+        return False
+    name = str(product_name)
+    return any(_ONLY_MEASURES.match(name[m.end():])
+               for m in _WHOLE_ITEM.finditer(name))
+
+
 def per_unit(price, size_text: str | None,
              commodity_unit: str | None = None,
              product_name: str | None = None) -> tuple[float | None, str | None]:
@@ -441,6 +527,10 @@ def per_unit(price, size_text: str | None,
     # an each-priced commodity into a per-ounce one.
     if (commodity_unit or "").lower() in ("each", "ea"):
         n = 1.0
+        if names_single_whole_item(product_name):
+            # The name already declared the package to be one item; any count
+            # in the size field or the name is a case pack or a piece count.
+            return round(float(price), 4), "each"
         if s and s.basis == "count" and s.total > 0:
             n = float(s.total)
         elif s and s.multiplier and s.multiplier > 1:

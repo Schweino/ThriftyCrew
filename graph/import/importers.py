@@ -177,6 +177,54 @@ def import_commodities(db: GraphDB, ts: str, run: str) -> dict:
     return out
 
 
+def import_recipe_board_rows(db: GraphDB, ts: str, run: str) -> dict:
+    """out/recipe-board.json -> the recipe commodities the BOARD actually renders.
+
+    The live board draws 53 recipe-ingredient rows (the `<id>::r` chip keys) and
+    only 13 of them come from recipe-commodities.json; the other 40 are
+    ingredients the meal-prep side priced — hot-italian-sausage, turkey-pepperoni,
+    pork-loin, hot-honey — with no commodity node in this graph at all. They were
+    therefore invisible to every gate, and the parity harness excluded them as
+    "out of scope" when the truth was simply that the catalog had never been
+    imported.
+
+    NOT a traversal problem, which is what this was first mistaken for. A `::r`
+    row is a commodity priced in the recipe board's own unit; `maps_to` edges
+    connect IngredientMapping to Commodity for meal-prep COSTING and have nothing
+    to do with these rows. Verified before writing this: of the 13 already
+    present, 13 agree with the graph's unit basis and 0 conflict.
+
+    The unit comes from the row itself rather than being assumed, because the
+    recipe board legitimately prices some commodities in a different basis than
+    the weekly staple board does (butter per oz here, per lb there).
+    """
+    path = os.path.join(GROCERY, "out", "recipe-board.json")
+    if not os.path.exists(path):
+        return {"recipe_board_rows": 0}
+    data = read_json(path)
+    rows = data.get("comparison") or []
+    if not rows:
+        return {"recipe_board_rows": 0}
+    prov = db.record_provenance(rel(path), "import:recipe-board", ts, run=run)
+    n_new = n_seen = 0
+    for r in rows:
+        rid = r.get("id")
+        if not rid:
+            continue
+        nid = commodity_id(rid, "recipe")
+        if db.get_node(nid):
+            n_seen += 1
+            continue
+        db.upsert_node(nid, "Commodity", r.get("commodity") or rid, ts,
+                       properties={"legacy_id": rid, "namespace": "recipe",
+                                   "unit_basis": r.get("unit"),
+                                   "source": "recipe-board"},
+                       provenance=prov)
+        n_new += 1
+    return {"recipe_board_rows": len(rows), "recipe_nodes_created": n_new,
+            "recipe_nodes_existing": n_seen}
+
+
 def import_categories(db: GraphDB, ts: str, run: str) -> dict:
     path = os.path.join(GROCERY, "categories.json")
     if not os.path.exists(path):
@@ -933,6 +981,7 @@ LANE_IMPORTERS: list[tuple[str, Callable]] = [
 ALL_IMPORTERS: list[tuple[str, Callable]] = [
     ("stores", import_stores),
     ("commodities", import_commodities),
+    ("recipe_board_rows", import_recipe_board_rows),
     ("categories", import_categories),
     ("search_terms", import_search_terms),
     ("known_wrong", import_known_wrong),
