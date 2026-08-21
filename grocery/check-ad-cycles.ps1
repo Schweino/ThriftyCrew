@@ -550,6 +550,19 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    commodity matching changed vs baseline (a product MOVED/DROPPED) - see out\audit\soundness-report.json; publish will HOLD until reviewed + audit-match-soundness.ps1 -Accept' }
         elseif ($LASTEXITCODE -eq 3) { Log 'match-soundness BLIND: ingested ZERO products - no store feed reached this audit, so its silence is not a clean board'; $summary += 'REVIEW    audit-match-soundness ingested ZERO products - commodity matching is UNGUARDED this run (check out\regular\ and out\ads-*.json)' }
       } catch { Log ('match-soundness guard threw: ' + $_.Exception.Message) }
+      # ---- MATCHER PARITY (wired 2026-08-21): the auditors' COPIES of Match-Category must still assign
+      # product names exactly as the engine does. audit-household-in-food is a HARD gate built on one of
+      # those copies, so a divergence means a hard guard is judging cells under the wrong commodity while
+      # reporting clean. test-matcher-parity.ps1 was written on 2026-08-21 and shipped with no caller at
+      # all; wiring it into test-auditors alone would NOT have fixed that, because test-auditors is a
+      # TESTER_FILE and the chain does not run it - naming a guard in a test proves it is tested, not that
+      # it runs, which is the audit-unit-basis-outlier lesson this contract exists to enforce. So it runs
+      # HERE, against live product names. Sampled (the full sweep is ~28.5k names); a copy that drifts does
+      # so for a whole rule, not one unlucky name. Advisory: it reports, the board still ships.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-matcher-parity.ps1') -Sample 400 | ForEach-Object { Log ('matcher-parity: ' + $_) }
+        if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    an auditor copy of Match-Category no longer agrees with the engine - audit-household-in-food is a HARD gate built on one of those copies, so it may be judging cells under the wrong commodity' }
+      } catch { Log ('matcher-parity threw: ' + $_.Exception.Message) }
       # ---- CATEGORY-COVERAGE GUARD: a commodity filed into NO category renders in no department/filter (invisible).
       # HARD publish gate + daily alert so adding a new item can never silently skip a filter.
       try {
@@ -1044,6 +1057,15 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $pr = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-out.ps1') -Apply
         foreach ($l in (@($pr) | Select-Object -Last 1)) { Log ('prune-out: ' + $l) }
       } catch { Log ('prune-out threw: ' + $_.Exception.Message) }
+      # THE OTHER HALF OF RETENTION (wired 2026-08-21). prune-out caps the dated FAMILIES in out\;
+      # prune-intermediates caps the gitignored per-run scratch (candidates-<date>.json and siblings),
+      # which no reader ever opens except the newest. It was written on 2026-08-21 against 408 MB growing
+      # ~19 MB/day and shipped with NO production caller, so the growth it was written to stop carried
+      # right on - the script census caught it as an orphan. Keep 3, matching its own default. Non-fatal.
+      try {
+        $pi = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-intermediates.ps1') -Keep 3
+        foreach ($l in (@($pi) | Select-Object -Last 1)) { Log ('prune-intermediates: ' + $l) }
+      } catch { Log ('prune-intermediates threw: ' + $_.Exception.Message) }
       # re-cost the recipes from today's board + refresh the hub's Top 5 (only publishes on change). Non-fatal.
       # Brad's final call 2026-07-25: the ORIGINAL SMP-TOP5 hub section stays (he preferred it over the
       # green free-week grid, which was removed same day). The free ROTATION still runs below - it just
@@ -1487,6 +1509,23 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
               # construction. Net: a browser link pruned for drift is healed in the SAME pass and never stays a
               # gap. Heal-only (never overwrites a healthy link, so guard 4 keeps checking those independently).
               & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sync-browser-links.ps1') | Out-Null
+              # A MATCH FIX THAT MOVED A PRICE ORPHANED THAT CELL'S LINK (wired 2026-08-21).
+              # sync-browser-links heals a link that is MISSING; it does not notice one that is merely
+              # pointing at last week's winner. When a rule change moves which product holds a cell, the
+              # pin in product-urls.json still opens the old one, and nothing finds out until tile-integrity
+              # fails on the next pass. relink-drifted-cells.ps1 was written for exactly that on 2026-08-21,
+              # after the same manual remedy was applied four times in one day (cloves $11.92 -> $2.99 with
+              # the link still opening the McCormick jar, and three siblings). It shipped with NO production
+              # caller, so the step it was built to stop forgetting was still being forgotten - the census
+              # caught it as an orphan. It belongs HERE: after the links are healed, before name-drift forms
+              # the identity verdict that guards and the pins both read. Non-fatal by design.
+              # -Apply IS LOAD-BEARING. Without it the script is READ-ONLY and exits 1 having repaired
+              # nothing - so a caller that omits it reports drift daily and fixes it never, which is a
+              # wired-but-inert guard and no better than the orphan it replaced. It re-derives per STORE,
+              # only the stores that actually drifted (a global -Apply once re-pointed ~40 Fareway links
+              # onto pack prices while fixing Sam's - that scar is why the script groups by store).
+              try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'relink-drifted-cells.ps1') -Apply | ForEach-Object { Log ('relink: ' + $_) } }
+              catch { Log ('relink-drifted-cells threw: ' + $_.Exception.Message) }
               # REFRESH THE IDENTITY INPUT BEFORE ANYTHING READS IT. name-drift.json is the product-identity
               # verdict that BOTH generate-board-overrides (it refuses to pin a flagged cell) and guards'
               # tile-integrity WRONG-PRODUCT gate consume - and the prune+sync above just rewrote the links it

@@ -101,7 +101,16 @@ foreach ($w in $totalN.Keys) { if ($totalN[$w] -ge 6 -and ($leadN[$w] / $totalN[
 # label word removes that whole class - and costs nothing real, since no manufacturer is named after
 # the single word for the thing it sells.
 $foodWords = New-Object System.Collections.Generic.HashSet[string]
-foreach ($cm in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) {
+# NAME THE DEPENDENCY WHEN IT IS ABSENT. A bare Get-Content throw here reads as a PowerShell stack trace
+# rather than "this audit needs a file", and that is exactly how five red test cases spent a morning
+# looking like a name-drift regression when they were fixtures that had never been given this file.
+$cmFile = Join-Path $root 'commodities.json'
+if (-not (Test-Path $cmFile)) {
+  throw ("audit-name-drift needs commodities.json in $root - it subtracts every commodity id/label word " +
+         'from the learned brand lexicon so a food word ("Carrot", "Paprika") is never mistaken for a ' +
+         'manufacturer. A fixture that copies this script must copy a commodities.json beside it.')
+}
+foreach ($cm in (Get-Content $cmFile -Raw | ConvertFrom-Json)) {
   foreach ($src in @([string]$cm.id, [string]$cm.label)) {
     foreach ($w in (Sig-Tokens ($src -replace '-', ' '))) { [void]$foodWords.Add($w) }
   }

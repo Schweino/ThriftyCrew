@@ -836,6 +836,12 @@ Remove-Item $fxCd -Recurse -Force -ErrorAction SilentlyContinue
 $fxNd = NewFxDir 'nd-blind'
 Copy-Item (Join-Path $root 'audit-name-drift.ps1') (Join-Path $fxNd 'audit-name-drift.ps1')
 New-Item -ItemType Directory -Force (Join-Path $fxNd 'out') | Out-Null
+# FROZEN commodities.json for the fixture. audit-name-drift subtracts every commodity id/label word from
+# its learned brand lexicon (so "Carrot" is never treated as a manufacturer), which makes this file a REAL
+# dependency of the script, not scenery. It was added to audit-name-drift on 2026-08-21 and the fixtures
+# were not grown with it, so every name-drift case died on a raw Get-Content throw before reaching a
+# verdict - five red tests that looked like a name-drift regression and were fixture rot.
+Set-Content (Join-Path $fxNd 'commodities.json') '[{"id":"eggs","label":"Eggs"}]' -Encoding UTF8
 Set-Content (Join-Path $fxNd 'product-urls.json') '{"items":{}}' -Encoding UTF8
 Set-Content (Join-Path $fxNd 'out\comparison-2026-01-01.json') '{"comparison":[{"id":"eggs","stores":[{"store":"Hy-Vee","item":"Grade A Eggs 12 ct"}]}]}' -Encoding UTF8
 $r = RunPSAt $fxNd 'audit-name-drift.ps1' @()
@@ -860,6 +866,11 @@ Remove-Item $fxNd -Recurse -Force -ErrorAction SilentlyContinue
 $fxNdU = NewFxDir 'nd-union'
 Copy-Item (Join-Path $root 'audit-name-drift.ps1') (Join-Path $fxNdU 'audit-name-drift.ps1')
 New-Item -ItemType Directory -Force (Join-Path $fxNdU 'out') | Out-Null
+# Same frozen dependency as the nd-blind fixture above. The three ids here are the ones this fixture's
+# boards actually use, so the food-word subtraction is genuinely exercised rather than merely satisfied:
+# without "paprika" among the food words, a one-product lexicon could learn it as a brand and the CLEAN
+# TWIN below would flag a link that matches byte-for-byte.
+Set-Content (Join-Path $fxNdU 'commodities.json') '[{"id":"eggs","label":"Eggs"},{"id":"shared-oats","label":"Oats"},{"id":"pinned-paprika","label":"Paprika"}]' -Encoding UTF8
 Set-Content (Join-Path $fxNdU 'out\comparison-2026-01-01.json') '{"comparison":[{"id":"eggs","unit":"dozen","stores":[{"store":"Hy-Vee","per_unit":2.50,"type":"everyday","item":"Grade A Eggs 12 ct"}]},{"id":"shared-oats","unit":"oz","stores":[{"store":"Hy-Vee","per_unit":0.10,"type":"everyday","item":"Quaker Oats 42 oz"}]}]}' -Encoding UTF8
 Set-Content (Join-Path $fxNdU 'out\recipe-board.json') '{"comparison":[{"id":"pinned-paprika","unit":"oz","stores":[{"store":"Hy-Vee","per_unit":0.99,"type":"everyday","item":"Simply Organic Smoked Paprika 2.72 oz"}]},{"id":"shared-oats","unit":"oz","stores":[{"store":"Hy-Vee","per_unit":0.10,"type":"everyday","item":"Bobs Redmill Steelcut Groats 24 oz"}]}]}' -Encoding UTF8
 $ndUPu = '{"items":{"eggs":{"Hy-Vee":{"url":"https://example.test/eggs","price":"$2.50","size":"12 ct","name":"Grade A Eggs 12 ct"}},"shared-oats":{"Hy-Vee":{"url":"https://example.test/oats","price":"$4.20","size":"42 oz","name":"Quaker Oats 42 oz"}},"pinned-paprika":{"Hy-Vee":{"url":"https://example.test/p","price":"$2.69","size":"2.72 oz","name":"{LINK}"}}}}'
@@ -3869,6 +3880,20 @@ if ($r.rc -eq 0 -and $r.text -match 'MUST-FIRE' -and $r.text -match 'all self-te
 $r = RunPS 'audit-pull-profiles.ps1' @()
 if ($r.rc -eq 0) { Ok 'every store pull_profile agrees with its agent module' }
 else { Bad ('pull_profile drift or a profile encoding carriage: ' + ((($r.text -split "`n") | Select-Object -First 6) -join ' | ')) }
+
+# ---------------------------------------------------------------- matcher parity (wired 2026-08-21)
+# WHICH COMMODITY OWNS A PRODUCT NAME is decided by Match-Category in compare-deals, and re-implemented in
+# at least three auditors - one of them, audit-household-in-food, a HARD guard. test-matcher-parity.ps1 was
+# written on 2026-08-21 to prove those copies still agree with the engine, and it shipped with NO caller:
+# the script census listed it as an orphan and guard-contract as DEAD. A parity test nothing runs proves
+# nothing, which is precisely the class this whole harness exists to catch, so it is called from here.
+# SAMPLED, not exhaustive: the estate holds ~28.5k product names and the full sweep is minutes. 400 is
+# enough to catch a systematic divergence (the failure mode is a copy drifting for a WHOLE rule, not for
+# one unlucky name) while keeping this suite quick enough that people keep running it.
+$r = RunPS 'test-matcher-parity.ps1' @('-Sample','400')
+if ($r.rc -eq 0 -and $r.text -match 'MATCHER-PARITY OK') { Ok 'matcher parity: every auditor copy of Match-Category still assigns names exactly as the engine does' }
+elseif ($r.rc -eq 3 -or $r.text -match 'FATAL') { Bad ('matcher parity could not evaluate (rc=' + $r.rc + ') - it proved nothing, which is not the same as agreement') }
+else { Bad ('matcher parity FAILED (rc=' + $r.rc + ') - an auditor no longer describes the engine that builds the board; audit-household-in-food is a HARD guard, so it may be judging cells under the wrong commodity') }
 
 # COMPLETION MARKER (2026-08-08). This file is the founding case for the whole contract: on 2026-08-08 it
 # threw 242 checks before this point, printed 176 lines of PASS, and exited 1 - indistinguishable from an

@@ -1,4 +1,4 @@
-<#
+﻿<#
   test-matcher-parity.ps1 - the four copies of Match-Category must agree with the engine's.
 
   WHICH COMMODITY OWNS A PRODUCT NAME is decided by Match-Category in compare-deals.ps1. That function is
@@ -34,6 +34,10 @@
 #>
 param([int]$Sample = 0)
 $ErrorActionPreference = 'Stop'
+# COMPLETION MARKER CONTRACT (2026-08-21). This joined the daily chain in check-ad-cycles, and every
+# detector there must say it REACHED THE END - an exit code alone cannot tell a clean run from a crash
+# three checks in. audit-guard-contract flagged this the moment it was wired, which is the contract working.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
 function Extract([string]$file, [string]$pattern, [string]$what) {
@@ -42,6 +46,7 @@ function Extract([string]$file, [string]$pattern, [string]$what) {
   if (-not $m.Success) {
     Write-Output ("FATAL: could not extract $what from $file - this test cannot prove anything, so it fails rather than passing quietly.")
     Write-Output "       (the function was renamed or reshaped; update the pattern, do not delete the test)"
+    Write-GuardComplete -Name 'matcher-parity' -Summary 'BLIND: zero names loaded'
     exit 2
   }
   return $m.Value
@@ -64,7 +69,11 @@ $auditSrc = $auditSrc -replace 'function Match-Category', 'function Auditor-Matc
 # Both need the same inputs the real scripts give them.
 $cdSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
 $gm = [regex]::Match($cdSrc, '\$GLOBAL_EXCLUDE\s*=\s*@\((?<body>[\s\S]*?)\r?\n\)')
-if (-not $gm.Success) { Write-Output 'FATAL: cannot parse $GLOBAL_EXCLUDE from compare-deals.ps1'; exit 2 }
+if (-not $gm.Success) {
+  Write-Output 'FATAL: cannot parse $GLOBAL_EXCLUDE from compare-deals.ps1'
+  Write-GuardComplete -Name 'matcher-parity' -Summary 'BLIND: could not parse GLOBAL_EXCLUDE from the engine'
+  exit 2
+}
 $GLOBAL_EXCLUDE = Invoke-Expression ('@(' + $gm.Groups['body'].Value + ')')
 $commodities = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
 
@@ -88,6 +97,7 @@ $all = @($names)
 if ($Sample -gt 0 -and $all.Count -gt $Sample) { $all = $all[0..($Sample-1)] }
 if ($all.Count -eq 0) {
   Write-Output 'FATAL: zero product names loaded - a parity test over nothing would report agreement it never checked.'
+  Write-GuardComplete -Name 'matcher-parity' -Summary ("compared=" + $all.Count + " disagreements=" + $n)
   exit 2
 }
 
@@ -111,6 +121,9 @@ if ($diff.Count) {
   Write-Output ''
   Write-Output 'Fix by making the copies match the engine - or, better, extract match-lib.ps1 the way'
   Write-Output 'pu-lib.ps1 and known-wrong-lib.ps1 already are, so the question cannot be asked again.'
+  Write-GuardComplete -Name 'matcher-parity' -Summary ("compared=" + $all.Count + " disagreements=" + $n)
   exit 2
 }
 Write-Output 'MATCHER-PARITY OK - every copy assigns every product name exactly as the engine does.'
+Write-GuardComplete -Name 'matcher-parity' -Summary ("compared=" + $all.Count + " disagreements=0")
+
