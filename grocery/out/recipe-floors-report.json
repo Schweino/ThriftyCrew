@@ -1,7 +1,7 @@
 ﻿{
-    "derived_from":  "candidates-2026-08-01.json",
-    "updated_cells":  4,
-    "unchanged_cells":  644,
+    "derived_from":  "candidates-2026-08-20.json",
+    "updated_cells":  154,
+    "unchanged_cells":  491,
     "ids_with_no_board_match":  [
                                     "93-7-ground-turkey [priced from the recipe pool instead]",
                                     "boneless-skinless-chicken-thigh [priced from the recipe pool instead]",
@@ -16,7 +16,6 @@
                                     "red-bell-pepper [priced from the recipe pool instead]",
                                     "roasted-red-peppers [priced from the recipe pool instead]",
                                     "sugar-free-maple-syrup [priced from the recipe pool instead]",
-                                    "zero-sugar-soda [priced from the recipe pool instead]",
                                     "sugar-free-bbq-sauce",
                                     "frozen-broccoli-florets",
                                     "buffalo-wing-sauce",
@@ -48,8 +47,15 @@
                                     "white-wine-vinegar",
                                     "pineapple-juice",
                                     "sriracha",
-                                    "breadcrumbs",
-                                    "capers"
+                                    "capers",
+                                    "monterey-jack-cheese",
+                                    "pepper-jack-cheese",
+                                    "gruyere-cheese",
+                                    "shaved-beef-steak",
+                                    "boneless-beef-short-ribs",
+                                    "yellow-bell-pepper",
+                                    "beef-base",
+                                    "fresh-oregano"
                                 ],
     "ids_with_unit_mismatch":  [
                                    "apple (row \u0027each\u0027 vs board \u0027lb\u0027) [priced from the recipe pool instead]",
@@ -65,6 +71,7 @@
                                              "1-3-fat-cream-cheese/Family Fare",
                                              "apple/Sam\u0027s Club",
                                              "apple/Hy-Vee",
+                                             "apple/Aldi",
                                              "apple/Family Fare",
                                              "brown-sugar/Family Fare",
                                              "cashews/Family Fare",
@@ -79,22 +86,17 @@
                                              "golden-raisins/Hy-Vee",
                                              "golden-raisins/Baker\u0027s",
                                              "golden-raisins/Family Fare",
-                                             "green-beans/Family Fare",
                                              "hominy/Family Fare",
                                              "honey-dijon-mustard/Aldi",
                                              "light-sour-cream/Hy-Vee",
                                              "light-sour-cream/Sam\u0027s Club",
-                                             "light-sour-cream/Family Fare",
-                                             "milk/Walmart",
                                              "milk/Baker\u0027s",
                                              "milk/Aldi",
-                                             "milk/Family Fare",
                                              "milk/Hy-Vee",
                                              "olives/Family Fare",
                                              "pineapple-chunks/Family Fare",
-                                             "pineapple-chunks/Sam\u0027s Club",
                                              "poblano-peppers/Family Fare",
-                                             "provolone-cheese/Walmart",
+                                             "provolone-cheese/Aldi",
                                              "provolone-cheese/Baker\u0027s",
                                              "provolone-cheese/Family Fare",
                                              "red-bell-pepper/Sam\u0027s Club",
@@ -103,41 +105,340 @@
                                              "red-bell-pepper/Baker\u0027s",
                                              "red-bell-pepper/Hy-Vee",
                                              "red-bell-pepper/Family Fare",
-                                             "roasted-red-peppers/Walmart",
+                                             "red-wine-vinegar/Aldi",
                                              "roasted-red-peppers/Baker\u0027s",
                                              "roasted-red-peppers/Hy-Vee",
                                              "sugar-free-maple-syrup/Family Fare",
-                                             "zero-sugar-soda/Walmart",
-                                             "zero-sugar-soda/Baker\u0027s",
-                                             "zero-sugar-soda/Aldi",
-                                             "zero-sugar-soda/Hy-Vee",
                                              "93-7-ground-beef/Baker\u0027s",
                                              "coconut-milk/Family Fare",
                                              "green-bell-pepper/Hy-Vee",
                                              "green-bell-pepper/Family Fare",
                                              "pork-tenderloin/Baker\u0027s",
-                                             "sun-dried-tomatoes/Family Fare",
                                              "rice-vinegar/Aldi",
-                                             "feta-cheese/Family Fare",
-                                             "dried-basil/Family Fare",
                                              "green-onions/Aldi",
                                              "ground-coriander/Family Fare",
                                              "apple-cider-vinegar/Hy-Vee",
                                              "dried-thyme/Family Fare",
-                                             "five-spice-powder/Baker\u0027s"
+                                             "five-spice-powder/Baker\u0027s",
+                                             "white-wine/Aldi",
+                                             "brandy/Walmart"
                                          ],
     "deltas_over_25pct":  [
                               {
-                                  "id":  "tomatillos",
+                                  "id":  "1-3-fat-cream-cheese",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.2075,
+                                  "new":  0.3113,
+                                  "item":  "Hy-Vee 1/3 Less Fat than Cream Cheese (Neufchatel Cheese)",
+                                  "source":  "recipe-pool"
+                              },
+                              {
+                                  "id":  "bread-crumbs",
+                                  "store":  "Aldi",
+                                  "old":  0.2312,
+                                  "new":  0.1233,
+                                  "item":  "Chef S Cupboard Italian Bread Crumbs 15 OZ",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "carrots",
+                                  "store":  "Sam\u0027s Club",
+                                  "old":  0.904,
+                                  "new":  0.628,
+                                  "item":  "Whole Carrots, 5 lbs.",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "cashews",
+                                  "store":  "Aldi",
+                                  "old":  0.3497,
+                                  "new":  0.5362,
+                                  "item":  "Simply Nature Raw Cashews Walnuts Macadamia Nuts 8 OZ",
+                                  "source":  "recipe-pool"
+                              },
+                              {
+                                  "id":  "cashews",
+                                  "store":  "Walmart",
+                                  "old":  0.687,
+                                  "new":  0.3593,
+                                  "item":  "Planters Salted Mixed Nuts, Peanuts, Cashews, Almonds, Brazil Nuts, Pecans. 6g Protein (7% DV) per serving, Plant Based Protein Snacks. 56 oz Can",
+                                  "source":  "recipe-pool"
+                              },
+                              {
+                                  "id":  "dijon-mustard",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.1658,
+                                  "new":  0.2075,
+                                  "item":  "Hy-Vee Stone Ground Dijon Mustard",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "ginger",
+                                  "store":  "Walmart",
+                                  "old":  3.6255,
+                                  "new":  1.392,
+                                  "item":  "VAHDAM, Premium Himalayan Pink Salt Rock Salt with Ginger \u0026 Cayenne - Coarse Salt for Grinder Refill, Pink Himalayan Sea Salt Seasoning",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "golden-raisins",
+                                  "store":  "Walmart",
+                                  "old":  0.4142,
+                                  "new":  0.2653,
+                                  "item":  "Great Value Seedless Golden Raisins Carton, 15 oz (425g)",
+                                  "source":  "recipe-pool"
+                              },
+                              {
+                                  "id":  "greek-yogurt",
+                                  "store":  "Baker\u0027s",
+                                  "old":  0.1466,
+                                  "new":  0.1887,
+                                  "item":  "Chobani Low-Fat Greek Yogurt Mango On The Bottom 2% Milk Fat",
+                                  "source":  "recipe-pool"
+                              },
+                              {
+                                  "id":  "green-beans",
                                   "store":  "Family Fare",
-                                  "old":  1.99,
-                                  "new":  2.49,
-                                  "item":  "Tomatillos",
+                                  "old":  0.2492,
+                                  "new":  0.0683,
+                                  "item":  "Our Family Cut Green Beans 14.5 Oz",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "green-cabbage",
+                                  "store":  "Aldi",
+                                  "old":  0.79,
+                                  "new":  2.37,
+                                  "item":  "Cabbage, Per LB",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "hominy",
+                                  "store":  "Walmart",
+                                  "old":  0.0402,
+                                  "new":  0.0248,
+                                  "item":  "(2 pack) Teasdale Quality Foods Teasdale Hominy, 108 oz",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "kidney-beans",
+                                  "store":  "Family Fare",
+                                  "old":  0.0927,
+                                  "new":  0.0639,
+                                  "item":  "Our Family Beans, Kidney, No Salt Added, Dark Red 15.5 Oz",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "milk",
+                                  "store":  "Walmart",
+                                  "old":  3,
+                                  "new":  1.21,
+                                  "item":  "Great Value Instant Nonfat Dry Milk, 3.2 oz Pouches (3 Count), Makes 3 Quarts",
+                                  "source":  "recipe-pool"
+                              },
+                              {
+                                  "id":  "paprika",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.625,
+                                  "new":  0.4545,
+                                  "item":  "That\u0027s Smart Paprika",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "red-wine-vinegar",
+                                  "store":  "Walmart",
+                                  "old":  0.1702,
+                                  "new":  0.1143,
+                                  "item":  "(2 pack) Star Italian Kitchen Red Wine Vinegar 25 fl oz, Bottle",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "white-mushrooms",
+                                  "store":  "Family Fare",
+                                  "old":  0.3325,
+                                  "new":  0.2492,
+                                  "item":  "Our Family Mushrooms, White 12 Oz",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "white-vinegar",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.0262,
+                                  "new":  0.0374,
+                                  "item":  "Hy Vee White Distilled Vinegar",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "white-vinegar",
+                                  "store":  "Aldi",
+                                  "old":  0.0476,
+                                  "new":  0.0119,
+                                  "item":  "Woeber S White Vinegar Distilled 5 Acidity 1 GL",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "diced-green-chiles",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.3557,
+                                  "new":  0.2557,
+                                  "item":  "Hy-Vee Mild Green Chiles Diced",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "diced-green-chiles",
+                                  "store":  "Walmart",
+                                  "old":  0.3671,
+                                  "new":  0.25,
+                                  "item":  "505 Southwestern Flame Roasted Hatch Valley Green Chile Peppers, Medium, 16 oz Jar – Hatch Green Chiles for Cooking",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "garlic-powder",
+                                  "store":  "Walmart",
+                                  "old":  0.3176,
+                                  "new":  0.216,
+                                  "item":  "5th Season Garlic Powder, 5 oz",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "ground-cumin",
+                                  "store":  "Family Fare",
+                                  "old":  1.745,
+                                  "new":  1.145,
+                                  "item":  "Sugar \u0027N Spice Cumin Ground Pp",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "italian-seasoning",
+                                  "store":  "Hy-Vee",
+                                  "old":  1.09,
+                                  "new":  0.698,
+                                  "item":  "Hy-Vee Italian Seasoning",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "salsa",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.1244,
+                                  "new":  0.1681,
+                                  "item":  "Hy-Vee Mild Thick \u0026 Chunky Salsa",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "bay-leaves",
+                                  "store":  "Walmart",
+                                  "old":  3.36,
+                                  "new":  1.4369,
+                                  "item":  "Soeos Bay Leaves 16 oz (454g), Bay Leaves Bulk, Bay Leaves Dry, Bay Leaf, Laurel Leaves, Natural Laurel Leaf, Natural Dried Bay Leaf, Dried Bay Leaves, Whole Bay Leaves",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "bay-leaves",
+                                  "store":  "Family Fare",
+                                  "old":  15.3,
+                                  "new":  31.9333,
+                                  "item":  "Full Circle Market Bay Leaves, Organic",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "garam-masala",
+                                  "store":  "Walmart",
+                                  "old":  1.64,
+                                  "new":  0.9943,
+                                  "item":  "27 Peaks Gourmet No Artificial Flavors Garam Masala, 12.3 oz Bottle",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "rice-vinegar",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.2492,
+                                  "new":  0.3908,
+                                  "item":  "Marukan Genuine Brewed Rice Vinegar",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "feta-cheese",
+                                  "store":  "Family Fare",
+                                  "old":  0.8113,
+                                  "new":  1.2475,
+                                  "item":  "Athenos Feta Traditional Cheese Crumbles 4 Oz",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "dried-dill",
+                                  "store":  "Baker\u0027s",
+                                  "old":  8.194,
+                                  "new":  5.9189,
+                                  "item":  "Tampico Dill Weed",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "dried-basil",
+                                  "store":  "Walmart",
+                                  "old":  0.978,
+                                  "new":  0.7312,
+                                  "item":  "Frontier Co-op Certified Organic Basil Leaf, 16 oz. Bag",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "dried-basil",
+                                  "store":  "Family Fare",
+                                  "old":  4.8226,
+                                  "new":  21.3929,
+                                  "item":  "Litehouse Herb, Freeze  Dried Basil 0.28 Oz",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "ground-ginger",
+                                  "store":  "Walmart",
+                                  "old":  1.6867,
+                                  "new":  0.8088,
+                                  "item":  "27 Peaks Gourmet All Natural Ground Ginger Powder, 16 oz Bottle",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "ground-coriander",
+                                  "store":  "Walmart",
+                                  "old":  0.9964,
+                                  "new":  0.7331,
+                                  "item":  "27 Peaks Gourmet All Natural Coriander Powder, 16 oz Bottle",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "dried-thyme",
+                                  "store":  "Walmart",
+                                  "old":  1.9857,
+                                  "new":  1.165,
+                                  "item":  "BADIA Thyme, Leaves, 8.0 OZ",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "ground-cinnamon",
+                                  "store":  "Aldi",
+                                  "old":  0.4177,
+                                  "new":  0.1497,
+                                  "item":  "Millville Cinnamon Crunch Squares",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "ground-cinnamon",
+                                  "store":  "Family Fare",
+                                  "old":  0.4576,
+                                  "new":  0.676,
+                                  "item":  "That\u0027s Smart! Ground Cinnamon",
+                                  "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "ground-cinnamon",
+                                  "store":  "Walmart",
+                                  "old":  0.508,
+                                  "new":  0.3629,
+                                  "item":  "5th Season Ground Cinnamon, 3.5 oz",
                                   "source":  "staples-board"
                               }
                           ],
-    "cells_given_product_name":  582,
-    "cells_given_size":  581,
+    "cells_given_product_name":  588,
+    "cells_given_size":  587,
     "cells_whose_candidate_has_no_name":  [
 
                                           ],
@@ -159,16 +460,15 @@
                             "provolone-cheese",
                             "red-bell-pepper",
                             "roasted-red-peppers",
-                            "sugar-free-maple-syrup",
-                            "zero-sugar-soda"
+                            "sugar-free-maple-syrup"
                         ],
     "recipe_pool_cells":  [
                               {
                                   "id":  "93-7-ground-turkey",
                                   "store":  "Aldi",
                                   "old":  3.9083,
-                                  "new":  3.9083,
-                                  "item":  "Kirkwood Fresh 93% Lean Ground Turkey",
+                                  "new":  4.075,
+                                  "item":  "Fit Active 93 Lean Fresh Ground Turkey 19.2 OZ",
                                   "size":  "19.2 oz"
                               },
                               {
@@ -231,17 +531,17 @@
                                   "id":  "boneless-skinless-chicken-thigh",
                                   "store":  "Walmart",
                                   "old":  3.2199,
-                                  "new":  3.2199,
-                                  "item":  "Freshness Guaranteed Boneless Skinless Chicken Thighs Family Pack, 2.75 - 5.7 lb Tray",
-                                  "size":  "4.32 lb"
+                                  "new":  3.2196,
+                                  "item":  "Freshness Guaranteed Boneless Skinless Chicken Thighs Family Pack, 2.6 - 6.9 lb Tray",
+                                  "size":  "4.339 lb"
                               },
                               {
                                   "id":  "boneless-skinless-chicken-thigh",
                                   "store":  "Baker\u0027s",
                                   "old":  3.6633,
-                                  "new":  3.6633,
-                                  "item":  "Kroger Frozen Raw Boneless Skinless Chicken Thighs",
-                                  "size":  "3 lb"
+                                  "new":  2.99,
+                                  "item":  "Tyson All Natural Fresh Boneless Skinless Chicken Thighs",
+                                  "size":  "lb"
                               },
                               {
                                   "id":  "boneless-skinless-chicken-thigh",
@@ -256,14 +556,14 @@
                                   "store":  "Aldi",
                                   "old":  0.1862,
                                   "new":  0.1862,
-                                  "item":  "Happy Farms Neufchatel Cheese",
+                                  "item":  "Happy Farms Neufchatel Cheese 8 OZ",
                                   "size":  "8 oz"
                               },
                               {
                                   "id":  "1-3-fat-cream-cheese",
                                   "store":  "Hy-Vee",
                                   "old":  0.2075,
-                                  "new":  0.2075,
+                                  "new":  0.3113,
                                   "item":  "Hy-Vee 1/3 Less Fat than Cream Cheese (Neufchatel Cheese)",
                                   "size":  "8 oz"
                               },
@@ -279,40 +579,32 @@
                                   "id":  "apple",
                                   "store":  "Walmart",
                                   "old":  0.75,
-                                  "new":  0.75,
-                                  "item":  "Fresh Red Delicious Apple, Each",
-                                  "size":  "0.487 lb"
-                              },
-                              {
-                                  "id":  "apple",
-                                  "store":  "Aldi",
-                                  "old":  1.27,
-                                  "new":  1.27,
-                                  "item":  "Envy Apple, Each",
-                                  "size":  "each"
+                                  "new":  0.64,
+                                  "item":  "Fresh Gala Apple, Each",
+                                  "size":  "0.432 lb"
                               },
                               {
                                   "id":  "apple",
                                   "store":  "Baker\u0027s",
                                   "old":  1.79,
                                   "new":  1.79,
-                                  "item":  "Large Gala Apple - Each",
+                                  "item":  "Large Fuji Apple Each",
                                   "size":  "lb"
                               },
                               {
                                   "id":  "cashews",
                                   "store":  "Aldi",
                                   "old":  0.3497,
-                                  "new":  0.3497,
-                                  "item":  "Southern Grove Deluxe Whole Cashews",
-                                  "size":  "30 oz"
+                                  "new":  0.5362,
+                                  "item":  "Simply Nature Raw Cashews Walnuts Macadamia Nuts 8 OZ",
+                                  "size":  "8 oz"
                               },
                               {
                                   "id":  "cashews",
                                   "store":  "Sam\u0027s Club",
                                   "old":  0.4236,
                                   "new":  0.4236,
-                                  "item":  "Member\u0027s Mark Lightly Salted Whole Cashews, 33 oz.",
+                                  "item":  "Member\u0027s Mark Unsalted Whole Cashews, 33 oz.",
                                   "size":  "33 oz"
                               },
                               {
@@ -327,15 +619,15 @@
                                   "id":  "cashews",
                                   "store":  "Walmart",
                                   "old":  0.687,
-                                  "new":  0.687,
-                                  "item":  "Emerald® Nuts Avocado Oil Roasted Hot Honey Cashews, 120-Calorie packs, 10ct",
-                                  "size":  "7.802 oz"
+                                  "new":  0.3593,
+                                  "item":  "Planters Salted Mixed Nuts, Peanuts, Cashews, Almonds, Brazil Nuts, Pecans. 6g Protein (7% DV) per serving, Plant Based Protein Snacks. 56 oz Can",
+                                  "size":  "56 oz"
                               },
                               {
                                   "id":  "cashews",
                                   "store":  "Baker\u0027s",
                                   "old":  0.898,
-                                  "new":  0.898,
+                                  "new":  0.998,
                                   "item":  "PLANTERS Garlic Chili Crisp cashews 5oz",
                                   "size":  "5 oz"
                               },
@@ -343,9 +635,9 @@
                                   "id":  "frozen-chopped-spinach",
                                   "store":  "Walmart",
                                   "old":  0.115,
-                                  "new":  0.115,
-                                  "item":  "Pictsweet Family Size Chopped Spinach",
-                                  "size":  "32 oz"
+                                  "new":  0.105,
+                                  "item":  "Great Value Chopped Spinach, 12 oz (Frozen)",
+                                  "size":  "12 oz"
                               },
                               {
                                   "id":  "frozen-chopped-spinach",
@@ -359,23 +651,23 @@
                                   "id":  "golden-raisins",
                                   "store":  "Walmart",
                                   "old":  0.4142,
-                                  "new":  0.4142,
-                                  "item":  "Sun-Maid® California Golden Raisins, 12 oz Bag in a Box",
-                                  "size":  "12 oz"
+                                  "new":  0.2653,
+                                  "item":  "Great Value Seedless Golden Raisins Carton, 15 oz (425g)",
+                                  "size":  "15 oz"
                               },
                               {
                                   "id":  "greek-yogurt",
                                   "store":  "Aldi",
                                   "old":  0.0872,
                                   "new":  0.0872,
-                                  "item":  "Friendly Farms Vanilla Nonfat Greek Yogurt",
+                                  "item":  "Friendly Farms Nonfat Strawberry Greek Yogurt 32 OZ",
                                   "size":  "32 oz"
                               },
                               {
                                   "id":  "greek-yogurt",
                                   "store":  "Walmart",
                                   "old":  0.1025,
-                                  "new":  0.1025,
+                                  "new":  0.0928,
                                   "item":  "Great Value Vanilla Nonfat Greek Yogurt, 32 oz Tub",
                                   "size":  "32 oz"
                               },
@@ -399,9 +691,9 @@
                                   "id":  "greek-yogurt",
                                   "store":  "Baker\u0027s",
                                   "old":  0.1466,
-                                  "new":  0.1466,
-                                  "item":  "Simple Truth Organic Plain Nonfat Greek Yogurt Tub",
-                                  "size":  "32 oz"
+                                  "new":  0.1887,
+                                  "item":  "Chobani Low-Fat Greek Yogurt Mango On The Bottom 2% Milk Fat",
+                                  "size":  "5.3 oz"
                               },
                               {
                                   "id":  "greek-yogurt",
@@ -432,7 +724,7 @@
                                   "store":  "Hy-Vee",
                                   "old":  0.1658,
                                   "new":  0.1658,
-                                  "item":  "Hy-Vee Honey Mustard",
+                                  "item":  "Hy-Vee Stone Ground Honey Dijon Mustard",
                                   "size":  "12 oz"
                               },
                               {
@@ -448,7 +740,7 @@
                                   "store":  "Aldi",
                                   "old":  0.1094,
                                   "new":  0.1094,
-                                  "item":  "Friendly Farms Light Sour Cream 16 OZ",
+                                  "item":  "Friendly Farms Light Sour Cream",
                                   "size":  "16 oz"
                               },
                               {
@@ -468,12 +760,36 @@
                                   "size":  "16 oz"
                               },
                               {
+                                  "id":  "light-sour-cream",
+                                  "store":  "Family Fare",
+                                  "old":  0.2494,
+                                  "new":  0.2369,
+                                  "item":  "Daisy Daisy® Light Sour Cream 16 Oz. Tub",
+                                  "size":  "16 oz"
+                              },
+                              {
+                                  "id":  "milk",
+                                  "store":  "Walmart",
+                                  "old":  3,
+                                  "new":  1.21,
+                                  "item":  "Great Value Instant Nonfat Dry Milk, 3.2 oz Pouches (3 Count), Makes 3 Quarts",
+                                  "size":  "9.6 oz"
+                              },
+                              {
+                                  "id":  "milk",
+                                  "store":  "Family Fare",
+                                  "old":  3.69,
+                                  "new":  3.665,
+                                  "item":  "Abbott Infant Formula, Ready To Feed, Milk Based, Sensitive 6 Ea",
+                                  "size":  "6 ea"
+                              },
+                              {
                                   "id":  "provolone-cheese",
-                                  "store":  "Aldi",
-                                  "old":  0.1862,
-                                  "new":  0.1862,
-                                  "item":  "Happy Farms Provolone Deli Sliced Cheese",
-                                  "size":  "8 oz"
+                                  "store":  "Walmart",
+                                  "old":  0.209,
+                                  "new":  0.2175,
+                                  "item":  "Great Value Low-Moisture Part-Skim Mozzarella \u0026 Provolone Finely Shredded Cheese, 16 oz Bag",
+                                  "size":  "16 oz"
                               },
                               {
                                   "id":  "provolone-cheese",
@@ -487,9 +803,17 @@
                                   "id":  "provolone-cheese",
                                   "store":  "Hy-Vee",
                                   "old":  0.4112,
-                                  "new":  0.4112,
+                                  "new":  0.3713,
                                   "item":  "Hy-Vee Sliced Provolone Cheese 10Ct",
                                   "size":  "8 oz"
+                              },
+                              {
+                                  "id":  "roasted-red-peppers",
+                                  "store":  "Walmart",
+                                  "old":  0.178,
+                                  "new":  0.1775,
+                                  "item":  "Great Value Roasted Red Bell Pepper Slices, 12 oz",
+                                  "size":  "12 oz"
                               },
                               {
                                   "id":  "roasted-red-peppers",
@@ -511,17 +835,9 @@
                                   "id":  "sugar-free-maple-syrup",
                                   "store":  "Hy-Vee",
                                   "old":  0.1367,
-                                  "new":  0.1367,
+                                  "new":  0.12,
                                   "item":  "Hy-Vee Sugar Free Pancake \u0026 Waffle Syrup",
                                   "size":  "24 fl oz"
-                              },
-                              {
-                                  "id":  "zero-sugar-soda",
-                                  "store":  "Family Fare",
-                                  "old":  0.8817,
-                                  "new":  0.8817,
-                                  "item":  "Welch\u0027s Zero Sugar Concord Grape Drink 6 Ea",
-                                  "size":  "6 ea"
                               }
                           ]
 }

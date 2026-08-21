@@ -499,3 +499,86 @@ writing a rule, check whether the class exists. Both plausible signals here
 described normal, correct behaviour far more often than defects, and a rule
 built on either would have fired constantly on Sam's Club doing exactly what a
 warehouse club does.
+
+## 20. Great Value was invisible to the brand rule — DONE
+
+The brand-mismatch clause shipped in #17 could not see Walmart's house brand.
+`great` and `value` were both sitting in the tokeniser's noise list, so **2,071
+Great Value products** - the most common brand at the biggest store - registered
+no brand at all and could never disagree with anything.
+
+Restored and measured: lead-ratio `great` 0.97, `value` 0.92, comfortably
+brand-shaped. Three more genuine mismatches surfaced immediately:
+
+    canned-pumpkin   Walmart   board Libby's              link Great Value
+    golden-raisins   Walmart   board Sun-Maid             link Great Value
+    chicken-thighs   Walmart   board Freshness Guaranteed link Great Value
+
+A rival brand whose name also contains "value" shares the token and therefore
+does NOT flag - the safe direction to be wrong in.
+
+One of those had been PINNED: `generate-board-overrides` had pinned
+golden-raisins/Walmart to the Great Value link, and guard 3 correctly hard-failed
+the moment name-drift flagged it. Regenerating the overrides refused 11
+drift-flagged cells and left 6 clean pins.
+
+## 21. 3-pin-identity is missing DATA, not a loose threshold — DIAGNOSED, not fixed
+
+Guard 3's WRONG-PRODUCT clause covers 2 of 6 pins. I assumed this was #15's
+tolerance question again. It is not.
+
+**All 6 pins are recipe-board cells, and 4 of them record no `item` at all** -
+so `audit-name-drift` has no product name to compare and skips them. Nothing to
+do with tolerance.
+
+`derive-recipe-floors.ps1` already stamps identity, and its own comments name
+this exact consequence ("guard 3 cannot product-identity-check a pinned link
+whose board cell has no product name"). It stamps only where a current everyday
+candidate exists - deliberately, because attaching a name from a DIFFERENT
+observation would be the wrong-basis class in a new costume. Those 4 cells had
+no candidate at their last refresh.
+
+Running it read-only: it would stamp **588 cells** and close the gap outright.
+It would ALSO re-price 154 cells with **39 deltas over 25%**, and pull in 47
+"second-class" recipe-pool cells its own output says must be read - and a spot
+check found `93-7-ground-turkey` at Family Fare sitting on *Jennie-O 99%/1%
+Ground Turkey Breast*, which is not 93/7 anything.
+
+So: not applied. This is a reviewed recipe-board repricing, not a guard-gap
+patch, and doing it as a side effect of closing a warning is how a wrong price
+gets in. The diagnosis is now exact, which is what the next session needs.
+
+## 22. The two things that had no way to fail — DONE
+
+**`test-matcher-parity.ps1`** (#6). Four re-implementations of `Match-Category`
+against the engine's - and my earlier claim that `audit-match-contested` was
+"correct by construction" was wrong: it scrapes only `$GLOBAL_EXCLUDE` and
+re-implements the loop, so it is a fourth copy, not an exception.
+
+The test extracts the REAL function bodies out of the REAL files and runs both
+over every distinct product name. 44,324 compared, 0 disagreements - still
+latent, still not a live defect. Proved able to fail: injecting one divergence
+into the auditor copy produced 2,268 disagreements and exit 2; restoring it
+returned 0 and exit 0.
+
+Anchoring the extraction is load-bearing. An unanchored `function
+Get-MatchTexts...` also matches compare-deals' own `-SelfTest`, which carries
+that pattern as a string literal - the first run extracted the regex instead of
+the function. Extracting code by pattern needs a pattern that cannot match a
+description of itself.
+
+The proper fix is still extraction into a shared `match-lib.ps1`, the way
+`pu-lib.ps1` and `known-wrong-lib.ps1` already are. Not done here because
+compare-deals' `-SelfTest` reads its matcher from its own source, so moving the
+function breaks the harness that proves it works. Worth doing deliberately.
+
+**`graph/learning/test_gates.py`** (#5). `test-guards.ps1` proves every
+PowerShell guard can fail; nothing did that for the Python gates. 12 assertions,
+each paired with a clean twin: reopening milk's chocolate hole must be detected
+and the shipped catalogue must stay quiet; `blame()` must accuse on a real HARD
+FAIL line and stay silent on a warning; `promote_into` must refuse a held
+pattern, a withheld commodity, a non-compiling pattern, and a control character.
+
+`lint_adjacency` gained `--catalog` purely so the fixture can exist. That is the
+point of the whole exercise - the first must-fire fixture written today found
+two bugs in `--gated`'s failure paths that no passing run could have shown.

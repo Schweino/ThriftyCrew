@@ -159,12 +159,15 @@ def main() -> int:
     ap.add_argument("--class-risk", action="store_true",
                     help="only near-misses where the product names a DIFFERENT class - pet, household, alcohol, supplement. The dog-treat-as-beef-jerky shape.")
     ap.add_argument("--gap", type=int, default=30, help="chars allowed between words")
+    ap.add_argument("--catalog", default="",
+                    help="read a different commodities.json; test_gates.py points this at a fixture with a known hole in it to prove the lint FIRES")
     args = ap.parse_args()
 
     names = corpus()
     low = [(n, n.lower()) for n in names]
     live = live_cells()
-    with open(CATALOG, encoding="utf-8-sig") as fh:
+    catalog_path = args.catalog or CATALOG
+    with open(catalog_path, encoding="utf-8-sig") as fh:
         catalog = [r for r in json.load(fh) if r.get("id")]
     print(f"corpus {len(names)} distinct product names | {len(catalog)} commodities\n")
 

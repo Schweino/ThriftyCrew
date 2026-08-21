@@ -66,7 +66,13 @@ foreach ($lf in $lexFiles) {
   foreach ($r in $rows) { $n = if ($r.item) { [string]$r.item } elseif ($r.name) { [string]$r.name } else { '' }; if ($n) { [void]$lexNames.Add($n) } }
 }
 $SIZERE = '\b\d+(?:\.\d+)?\s*(?:fl\s*oz|oz|lb|lbs|ct|ea|pk|pack|count|g|kg|ml|l|qt|gal)s?\b'
-$LEXNOISE = 'fresh|organic|natural|premium|value|size|large|small|bulk|each|approx|bag|bagged|package|packaged|pack|box|boxed|jar|jarred|can|canned|bottle|bottled|tub|carton|container|pouch|per|with|and|the|of|in|on|for|new|great|quality|select|brand|family'
+# 'great' and 'value' are NOT noise, however generic they read. Walmart's house brand is Great
+# Value and it leads 2,071 product names in this corpus - with both words filtered out, the single
+# most common brand at the biggest store could never register a brand at all, so a board row naming
+# Libby's behind a Great Value link went unflagged. Measured lead ratio with them restored:
+# great 0.97, value 0.92 - comfortably brand-shaped. A rival brand whose name also contains 'value'
+# SHARES the token and therefore does not flag, which is the safe direction to be wrong in.
+$LEXNOISE = 'fresh|organic|natural|premium|size|large|small|bulk|each|approx|bag|bagged|package|packaged|pack|box|boxed|jar|jarred|can|canned|bottle|bottled|tub|carton|container|pouch|per|with|and|the|of|in|on|for|new|quality|select|brand|family'
 function Sig-Tokens([string]$s) {
   $t = ($s.ToLower() -replace $SIZERE, ' ') -replace '[^a-z0-9 ]', ' '
   $out = New-Object System.Collections.Generic.List[string]
