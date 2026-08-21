@@ -333,3 +333,43 @@ every false flag blocks a pin. The right fix is a similarity measure that
 separates packaging noise from variant identity, and choosing that threshold is
 a decision with a measurable board cost - it deserves its own pass, not a guess
 at the end of one.
+
+## 16. Two of the four "blind guard" warnings were the WATCHER, not the guard — DONE
+
+The guard suite carried four coverage complaints for days. Two were false, and
+both false in a way that trains people to stop reading the warning.
+
+**audit-ff-carry "examined 0 of 536" — the LEDGER was stale, not the guard.**
+Running it directly: 40 empty Family Fare terms actually re-probed, 87
+rate-limited (Freshop's HTTP 400 carrying `error_code: 429`), 469 skipped
+because this pull already prices that commodity. Not blind at all. The row in
+`coverage-ledger.json` came from an earlier run where Freshop throttled every
+probe, and `audit-ff-carry` runs in `check-ad-cycles`, not in `guards.ps1` - so
+the guard suite kept re-reading a verdict nobody was refreshing. Cleared by
+running the audit. The stale-input shape from finding #1, again, in a second
+place.
+
+**guards/3-pin-derivable "examined 7, baseline 19" — 7 of 7 is 100%.**
+The ratchet compares examined against BASELINE examined and never reads
+`eligible`. Override pins fell from 19 to 7; the check read every single one of
+them. It was reported as "PARTLY blind - the rows it stopped looking at are
+unguarded", and there were no such rows. Its own baseline `why` already
+anticipates the collapse ("pins collapsed 19 -> 1"), which is why its tolerance
+is 0.5 - the tolerance was treating the symptom.
+
+Now: at `examined >= eligible` the verdict becomes POPULATION SHRANK, a note
+rather than a finding, because nothing is unguarded and the REGRESSED text would
+be false. A shrinking population is still worth seeing - pins vanish when links
+are lost - so it is not silenced.
+
+Findings 4 -> 2, and the ratchet still fires on both checks that genuinely
+stopped reading rows:
+
+  guards/3-pin-identity  3 of 7 pins have their link examined by name-drift.
+                         4 are unguarded. REAL - and it is finding #15 wearing a
+                         different hat: name-drift's zero-shared-token rule.
+  pull-regular-hyvee     356 of 539, row as_of 2026-08-18 against a max age of
+                         3 days. REAL - needs a Hy-Vee pull, capture-side work.
+
+The pattern worth carrying: a coverage ratchet on an absolute count silently
+assumes a fixed population. When the denominator can move, ratchet the ratio.

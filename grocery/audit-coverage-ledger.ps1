@@ -61,7 +61,7 @@ param(
   [switch]$Gate,
   [switch]$Quiet
 )
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -195,7 +195,24 @@ foreach ($bp in ($blRows | Sort-Object Name)) {
   # REGRESSED - the ratchet.
   if ($bExam -gt 0) {
     $floor = [math]::Floor($bExam * (1.0 - $bTol))
-    if ($exam -lt $floor) {
+    # FULL COVERAGE IS NOT A REGRESSION (2026-08-21). The ratchet compares examined against the
+    # BASELINE examined and never looks at how many rows exist to examine. When the eligible
+    # population legitimately shrinks, a check that reads every single row it has is reported as
+    # "PARTLY blind - the rows it stopped looking at are unguarded", and there are no such rows.
+    #
+    # Measured: guards/3-pin-derivable recorded eligible 7, examined 7 - 100% - against a baseline
+    # of 19, and was reported REGRESSED for weeks. Override pins had simply gone from 19 to 7. Its
+    # own baseline `why` already anticipates this ("pins collapsed 19 -> 1"), which is why its
+    # tolerance is 0.5; the tolerance was treating the symptom.
+    #
+    # The distinction that matters is whether anything is UNGUARDED. At exam >= elig nothing is, so
+    # the REGRESSED text would be false. But a shrinking population is still worth seeing - pins can
+    # vanish because links were lost - so it becomes a note rather than silence. The baseline stores
+    # only `examined`, so the note reports what it can prove: full coverage of a smaller set.
+    if ($exam -lt $floor -and $elig -gt 0 -and $exam -ge $elig) {
+      $notes.Add(("POPULATION SHRANK: {0} - examined {1} of {2} eligible ({3}%), against a baseline of {4}. Nothing is unguarded - this check read every row it has - so this is NOT a coverage regression. What fell is the POPULATION. Worth knowing WHY it shrank, and -Accept once you do. {5}" -f $name, $exam, $elig, [math]::Round(100.0 * $exam / $elig), $bExam, $detail))
+    }
+    elseif ($exam -lt $floor) {
       $pct = [math]::Round(100.0 * ($bExam - $exam) / $bExam, 1)
       $findings.Add(("REGRESSED       {0} - examined {1}, baseline {2} ({3}% fewer, tolerance {4}%). Not blind, PARTLY blind: the rows it stopped looking at are unguarded and nothing else in this tree can tell. Re-run it, or accept the new floor with audit-coverage-ledger.ps1 -Accept once you know WHY it shrank. {5}" -f $name, $exam, $bExam, $pct, [math]::Round($bTol * 100), $detail))
       continue
