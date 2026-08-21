@@ -50,7 +50,40 @@ $cmp = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison
 $pu = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
 $drift = @{}
 $ndF = Join-Path $OutDir 'name-drift.json'
-if (Test-Path $ndF) { foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $drift[([string]$d.id + '|' + [string]$d.store)] = [string]$d.reason } }
+# STALENESS ASSERTION (2026-08-21). The WRONG-PRODUCT half of this audit is not computed here - it is READ
+# from out\name-drift.json, which audit-name-drift.ps1 writes. That makes this a cached input, and a cached
+# input can report the past.
+#
+# Measured the day this was added: 52 links were re-derived after a batch of commodity fixes moved prices.
+# This audit then failed 7 tiles whose board row and link were, by then, character-for-character identical -
+# it was judging them against flags written 20 minutes earlier. Annoying, but that is the SAFE direction.
+#
+# The unsafe direction is the same bug with the sign flipped: rewrite a link to the WRONG product while this
+# file is stale, and the lookup finds no flag, so the tile passes. A false green on the one gate that enforces
+# "the price and item name need to match the link 100%". Nothing else would catch it - guard 3 reads the same
+# stale file, and its existing zero-examined warning does not fire when the file is merely OLD.
+#
+# So: the flags must be no older than the things they describe. Anything else is HELD, not warned - a guard
+# that cannot see the current links has no opinion to offer, and saying so is the whole point.
+$puF = Join-Path $root 'product-urls.json'
+if (Test-Path $ndF) {
+  $ndAge = (Get-Item $ndF).LastWriteTimeUtc
+  $stale = @()
+  foreach ($dep in @($puF, $cmpF.FullName)) {
+    if ((Test-Path $dep) -and ((Get-Item $dep).LastWriteTimeUtc -gt $ndAge)) {
+      $stale += ('{0} ({1:yyyy-MM-dd HH:mm:ss}Z)' -f (Split-Path $dep -Leaf), (Get-Item $dep).LastWriteTimeUtc)
+    }
+  }
+  if ($stale.Count) {
+    Write-Output ("HELD: out\name-drift.json is {0:yyyy-MM-dd HH:mm:ss}Z, OLDER than {1}." -f $ndAge, ($stale -join ' and '))
+    Write-Output "  Its WRONG-PRODUCT flags describe links that have since changed, so this audit would grade"
+    Write-Output "  today's links against yesterday's verdicts - passing a wrong link that carries no stale flag."
+    Write-Output "  Fix: run audit-name-drift.ps1, then re-run this. Do not -Force past it; a green from a stale"
+    Write-Output "  flags file is exactly the false green this assertion exists to prevent."
+    exit 2
+  }
+  foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $drift[([string]$d.id + '|' + [string]$d.store)] = [string]$d.reason }
+}
 
 $rows = New-Object System.Collections.Generic.List[object]
 $graded = 0   # everyday linked tiles whose link price was actually compared to the board
