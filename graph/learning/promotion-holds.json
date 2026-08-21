@@ -90,6 +90,12 @@
       "pattern": "mustard,\\s*honey\\b",
       "held": "2026-08-21",
       "reason": "guards 2026-08-21: crowned a 128 fl oz cell on a weight-priced row (measure-kind mismatch)"
+    },
+    {
+      "commodity": "shredded-cheese",
+      "pattern": "queso\\s+quesadilla",
+      "held": "2026-08-21",
+      "reason": "match-soundness 2026-08-21: pulled La Morenita Queso Quesadilla (a MELTING cheese, name never says shredded) into the shredded row - wrong FORM, same class as the packet-means-packet ruling"
     }
   ]
 }

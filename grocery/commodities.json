@@ -1642,7 +1642,6 @@
       "cheese[^,]*(cheddar|mozzarella|colby)",
       "shredded\\s+\\w+(?:\\s+\\w+)?\\s+cheese",
       "shredded\\s+chees\\b",
-      "queso\\s+quesadilla",
       "shredded\\s+\\d+%",
       "finely\\s+shredded\\b"
     ],
@@ -9586,6 +9585,8 @@
       "\\bangel\\s+hair\\b|\\blinguine\\b"
     ],
     "exclude": [
+      "\\bcabbage\\b",
+      "\\bcoleslaw\\b",
       "\\bsauce\\b",
       "cheese",
       "\\bcanned\\b",
