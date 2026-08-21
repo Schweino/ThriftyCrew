@@ -52,15 +52,22 @@ param(
     [int]$Context    = 16384,
     [int]$GpuLayers  = 99,
     [string]$CacheType = "q8_0",
-    # 4, not 8. -c is the TOTAL KV budget and llama.cpp splits it, so 8 slots
-    # meant 2048 tokens EACH — ample for a resolve call (312-token prompt, ~70
-    # out) and far too small for Learning Stage 1, whose prompt alone is ~1,000
-    # tokens. Stage 1 died on 2026-08-20 with finish_reason=length at 882
-    # completion tokens while max_tokens said 4000: the slot ceiling, not the
-    # request, was the limit, and it looked like malformed JSON rather than
-    # truncation. 4 slots gives 4096 each and costs almost nothing — measured
-    # the same day, 4 jobs ran 0.99 q/s against 8 jobs at 1.08, an 8% give-back
-    # for a context that fits every caller instead of only the smallest one.
+    # 4, and STAYING 4 — this was re-examined on 2026-08-21 and the answer held.
+    #
+    # -c is the TOTAL KV budget and llama.cpp splits it, so 8 slots meant 2048
+    # tokens EACH: ample for a resolve call (312-token prompt, ~70 out) and far
+    # too small for Learning Stage 1, whose prompt alone is ~1,000. Stage 1 died
+    # with finish_reason=length at 882 completion tokens while max_tokens said
+    # 4000 — the slot ceiling, not the request, was the limit, and it surfaced
+    # as malformed JSON rather than as a config error. That is the shape of bug
+    # worth paying to avoid.
+    #
+    # Going back to 8 slots WITHOUT re-breaking Stage 1 would need -c 26400+,
+    # which means roughly doubling the KV cache. Measured free VRAM at 4 slots:
+    # 1,092 MiB, against the ~1.5-2 GB that doubling needs on a 27B at q8_0. It
+    # does not fit, and it is not worth wanting: the measured cost of 4 vs 8 is
+    # 0.99 q/s against 1.08, an 8% give-back on occasional bulk runs, to buy a
+    # context that fits every caller instead of only the smallest one.
     [int]$Slots      = 4,
     [switch]$Foreground
 )
@@ -98,9 +105,14 @@ $serverArgs = @(
 # A slot too small to hold prompt + generation makes llama.cpp truncate or
 # refuse mid-run, which would look like a model failure rather than a config
 # one. 312-token prompt + 400 generated + margin; fail here instead.
+# The floor is set by the LARGEST caller, not the smallest. resolve needs ~840
+# tokens; Learning Stage 1 sends a ~1,000-token prompt and asks for up to 2,200
+# back, so anything under ~3,300 per slot silently truncates IT while resolve
+# looks fine — which is exactly how 8 slots at 2,048 broke Stage 1 on
+# 2026-08-20 and presented as malformed JSON rather than as a config error.
 $perSlot = [math]::Floor($Context / $Slots)
-if ($perSlot -lt 1024) {
-    throw "Context $Context split across $Slots slots is $perSlot tokens/slot; a resolve call needs ~840. Raise -Context or lower -Slots."
+if ($perSlot -lt 3300) {
+    throw "Context $Context split across $Slots slots is $perSlot tokens/slot. Learning Stage 1 needs ~3,300 (1,000-token prompt + 2,200 requested). Raise -Context or lower -Slots. resolve alone would fit in 1,024, which is the trap: it fits and Stage 1 does not."
 }
 
 Write-Host "Starting llama-server:" -ForegroundColor Cyan
