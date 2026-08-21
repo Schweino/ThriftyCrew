@@ -149,7 +149,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -284,7 +287,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -429,7 +435,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ],
         "relax_global":  [
                              "\\bmeal\\b"
@@ -562,7 +571,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -705,7 +717,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -838,7 +853,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -4498,7 +4516,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -4641,7 +4662,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -4768,7 +4792,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -4908,7 +4935,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -5056,7 +5086,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -5198,7 +5231,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -5346,7 +5382,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -5449,7 +5488,10 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -17623,7 +17665,10 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -17757,7 +17802,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -17890,7 +17938,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -18026,7 +18077,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -18153,7 +18207,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -18288,7 +18345,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -18425,7 +18485,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -18558,7 +18621,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ],
         "relax_global":  [
                              "\\bbeer\\b"
@@ -18697,7 +18763,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -18833,7 +18902,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -18974,7 +19046,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ],
         "relax_global":  [
                              "seasoned"
@@ -19112,7 +19187,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -19250,7 +19328,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -19391,7 +19472,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -19532,7 +19616,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -19666,7 +19753,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -19804,7 +19894,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -19934,7 +20027,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -44422,7 +44518,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -44883,7 +44982,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ],
         "relax_global":  [
                              "\\bwater\\b"
@@ -45427,7 +45529,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -46473,7 +46578,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -47623,7 +47731,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -47772,7 +47883,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -57753,7 +57867,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ],
         "band_min":  0.04,
         "band_max":  0.65
@@ -58171,7 +58288,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ],
         "band_min":  0.14,
         "band_max":  22.44
@@ -58301,7 +58421,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ],
         "band_min":  0.05,
         "band_max":  14.97
@@ -61130,7 +61253,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ],
         "band_min":  0.15,
         "band_max":  1.32
@@ -63050,7 +63176,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {
@@ -63560,7 +63689,10 @@
                         "\\bmargaritas?\\b",
                         "\\bdaiquiris?\\b",
                         "\\bmixers?\\b",
-                        "juice\\s+cocktail"
+                        "juice\\s+cocktail",
+                        "\\bbowl\\b",
+                        "frozen\\s+meal",
+                        "meal\\s+kit"
                     ]
     },
     {

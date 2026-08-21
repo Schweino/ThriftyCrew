@@ -193,6 +193,16 @@
       "\\bfruit\\s+filling\\b",
       "\\bpie\\s+filling\\b",
       "\\btoppings?\\b"
+    ],
+    "dried_carrier": [
+      "\\bdried\\b",
+      "\\bflakes?\\b",
+      "\\bdill\\s+weed\\b"
+    ],
+    "prepared_meal_carrier": [
+      "\\bbowl\\b",
+      "frozen\\s+meal",
+      "meal\\s+kit"
     ]
   },
   "apply": [
@@ -219,7 +229,8 @@
         "pet",
         "household",
         "supplement",
-        "snack_carrier"
+        "snack_carrier",
+        "prepared_meal_carrier"
       ]
     },
     {
@@ -230,6 +241,13 @@
         "household",
         "supplement"
       ]
+    },
+    {
+      "categories": "^(Vegetables)$",
+      "classes": [
+        "dried_carrier"
+      ],
+      "note": "dried/flake spice-jar forms are wrong for every FRESH-produce commodity, but Fruit is excluded from scope on purpose: dried-cranberries and raisins are Fruit rows whose own products carry the word dried. Born from the 2026-08-20 contested review: Dan's Pantry Rosemary, Gourmet Garden basil paste, freeze-dried red onion and McCormick celery flakes were all pricing fresh rows."
     }
   ],
   "exempt": {
@@ -242,7 +260,9 @@
     "candy": "",
     "snack_carrier": "^apples$",
     "supplement": "",
-    "preserve_carrier": "peanut\\s+butter|almond\\s+butter|apple\\s+butter|honey|maple\\s+syrup|cranberry\\s+sauce|\\bjam\\b\\s*$|jelly\\s+beans"
+    "preserve_carrier": "peanut\\s+butter|almond\\s+butter|apple\\s+butter|honey|maple\\s+syrup|cranberry\\s+sauce|\\bjam\\b\\s*$|jelly\\s+beans",
+    "dried_carrier": "sun[\\s-]?dried",
+    "prepared_meal_carrier": ""
   },
   "universal_for_unknown": [
     "babyfood",

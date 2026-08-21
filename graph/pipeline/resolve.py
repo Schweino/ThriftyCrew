@@ -413,20 +413,17 @@ class Resolver:
                         progress=None, jobs: int = 1) -> dict:
         """Adjudicate pending observations, writing status back.
 
-        Deterministic layers run for ALL selected rows. What counts as
-        "pending" depends on the mode:
+        Every DETERMINISTIC verdict (include_hit / excluded / category_excluded
+        / no_include_hit, plus anything unadjudicated) is recomputed from the
+        current rule set on every pass — see the comment at the selection below
+        for the 2026-08-20 incident that made freezing them untenable. With the
+        LLM enabled, the contested remainder (fresh verdict no_include_hit, no
+        banked answer) goes to the model.
 
-        * deterministic-only: 'unadjudicated' rows. A row the layers already
-          classified stays put — re-running is a no-op by design.
-        * with the LLM: 'unadjudicated' PLUS 'no_include_hit'. no_include_hit
-          IS the contested set — "no layer settled this" — and before this
-          selection included it, the documented `resolve.py --llm` invocation
-          selected zero rows on a fully-imported graph and the LLM layer was
-          unreachable except through --reset.
-
-        Rows already at llm_* / escalated are never re-selected: those verdicts
-        are waiting on (or produced by) the reviewer and re-rolling the model
-        over them would rewrite adjudication history.
+        Rows at llm_* / escalated / known_wrong are never re-selected: those
+        verdicts are paid for (model time, reviewer time, or an adjudicated
+        ruling) and re-rolling them would rewrite adjudication history. Their
+        durability lives in question_verdicts and known-wrong.json, not here.
 
         DEDUPLICATION. `resolve()` is a pure function of
         (commodity_id, product_name) — nothing else about a row reaches it — so
@@ -445,7 +442,18 @@ class Resolver:
         self.stats = {}          # per-call, not per-Resolver: two runs on one
                                  # instance must not double-count in the log
         use_llm = allow_llm and self.use_llm and self.llm is not None
-        pending = ("unadjudicated", "no_include_hit") if use_llm else ("unadjudicated",)
+        # DETERMINISTIC verdicts are recomputed EVERY pass, never trusted from a
+        # previous run. They cost ~2s for 120k rows, and freezing them meant a
+        # new rule could not reach a row adjudicated before the rule existed:
+        # the dried_carrier class guard landed on 2026-08-20 and freeze-dried
+        # red onion, celery flakes and dried brussels-sprout crisps all kept
+        # their old include_hit and kept pricing fresh-produce cells. The same
+        # disease known-wrong rulings had, and the same cure — a rule change
+        # binds everything, not just the future. What is NEVER re-rolled here:
+        # llm_* and escalated (paid verdicts, banked in question_verdicts) and
+        # known_wrong (absolute).
+        pending = ("unadjudicated", "include_hit", "excluded",
+                   "category_excluded", "no_include_hit")
         q = ("SELECT id, commodity_id, product_name FROM price_observations "
              f"WHERE match_status IN ({','.join('?' * len(pending))})")
         if limit:

@@ -120,6 +120,23 @@
   },
   {
     "context": "phase2",
+    "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.7116564417177914, \"relation_precision\": 1.0, \"relation_recall\": 0.7116564417177914, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.2883435582822086, \"counts\": {\"tp\": 696, \"fp\": 0, \"tn\": 492, \"fn\": 282, \"gold_match\": 978, \"gold_no_match\": 492, \"escalated\": 0, \"missing_node\": 26}, \"by_status\": {\"known_wrong\": 172, \"include_hit\": 696, \"no_include_hit\": 600, \"excluded\": 2}, \"f1\": 0.8315412186379929, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}}",
+    "entity_precision": 1.0,
+    "entity_recall": 0.7116564417177914,
+    "false_merge_rate": 0.0,
+    "gold_version": "9dc75c577c289fbc",
+    "id": "eval:5d7932e7200b09efb3c6",
+    "missed_merge_rate": 0.2883435582822086,
+    "model": "deterministic-only",
+    "n_gold": 1499,
+    "n_pred": 696,
+    "prompt_version": "resolve.v1",
+    "relation_precision": 1.0,
+    "relation_recall": 0.7116564417177914,
+    "run_at": "2026-08-20T19:37:07"
+  },
+  {
+    "context": "phase2",
     "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.41685393258426967, \"relation_precision\": 1.0, \"relation_recall\": 0.41685393258426967, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.5831460674157304, \"counts\": {\"tp\": 371, \"fp\": 0, \"tn\": 378, \"fn\": 519, \"gold_match\": 890, \"gold_no_match\": 378, \"escalated\": 0, \"missing_node\": 27}, \"by_status\": {\"known_wrong\": 150, \"no_include_hit\": 746, \"include_hit\": 371, \"excluded\": 1}, \"f1\": 0.5884218873909596, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}}",
     "entity_precision": 1.0,
     "entity_recall": 0.41685393258426967,
@@ -389,6 +406,23 @@
     "relation_precision": 1.0,
     "relation_recall": 0.7811447811447811,
     "run_at": "2026-08-20T19:02:39"
+  },
+  {
+    "context": "phase2",
+    "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.7116564417177914, \"relation_precision\": 1.0, \"relation_recall\": 0.7116564417177914, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.2883435582822086, \"counts\": {\"tp\": 696, \"fp\": 0, \"tn\": 492, \"fn\": 282, \"gold_match\": 978, \"gold_no_match\": 492, \"escalated\": 0, \"missing_node\": 26}, \"by_status\": {\"known_wrong\": 172, \"include_hit\": 696, \"no_include_hit\": 600, \"excluded\": 2}, \"f1\": 0.8315412186379929, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}}",
+    "entity_precision": 1.0,
+    "entity_recall": 0.7116564417177914,
+    "false_merge_rate": 0.0,
+    "gold_version": "9dc75c577c289fbc",
+    "id": "eval:ecce32caaae8a7062e23",
+    "missed_merge_rate": 0.2883435582822086,
+    "model": "deterministic-only",
+    "n_gold": 1499,
+    "n_pred": 696,
+    "prompt_version": "resolve.v1",
+    "relation_precision": 1.0,
+    "relation_recall": 0.7116564417177914,
+    "run_at": "2026-08-20T19:35:44"
   },
   {
     "context": "phase2",
