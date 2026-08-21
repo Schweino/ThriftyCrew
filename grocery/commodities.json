@@ -1061,6 +1061,7 @@
       "gallon\\s+milk"
     ],
     "exclude": [
+      "\\bchocolate\\b",
       "almond",
       "\\boat\\b",
       "\\bsoy\\b",
@@ -6079,6 +6080,7 @@
       "\\boranges?\\b"
     ],
     "exclude": [
+      "\\boj\\b",
       "\\bhabanero\\b",
       "\\bcarrots?\\b",
       "\\bpolish\\b",
