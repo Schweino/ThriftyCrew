@@ -61,6 +61,7 @@
       "dog\\s+(food|treats?|snacks?|chews?)",
       "cat\\s+(food|treats?|litter)",
       "food\\s+for\\s+(dogs?|cats?|pets?)",
+      "\\bfor\\s+(?:\\w+\\s+){0,3}(?<!hot\\s)(?<!corn\\s)(?<!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
       "\\bfor\\s+dogs?\\b",
       "\\bfor\\s+cats?\\b",
       "\\bnutrish\\b",

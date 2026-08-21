@@ -87,3 +87,100 @@ silently discarded verdicts it had just spent two guard cycles earning.
 
 `test-guards.ps1` / `run-test-guards-weekly.ps1` already apply this idea to
 `guards.ps1`. Nothing applies it to the newer Python gates.
+
+## 6. Three copies of the matcher, no measurable divergence — WATCH, not urgent
+
+`Match-Category` — the function deciding which commodity owns a product name —
+is defined three times: `compare-deals.ps1:1326` (the engine),
+`audit-household-in-food.ps1:26`, and `validate-fills.ps1:33`. The two auditors
+are byte-identical to each other and different from the engine.
+
+The difference is real. The engine runs `Get-MatchTexts`, testing includes
+against TWO strings — the raw lowercased name and a variant with Sam's
+", priced per pound" suffix stripped and "and" collapsed to a space. The
+auditors test the raw name only. So in principle the engine can match a product
+the auditors think matches nothing, and `audit-household-in-food` is guard 2 in
+`guards.ps1:249` — a cleaning product landing in an edible commodity would go
+unreported.
+
+I expected this to be a live false-negative. It is not. Measured across all
+**36,661 distinct product names** in `out\regular`: **0 disagreements**. Every
+product the engine assigns, the auditors assign identically. The variant text
+never changes an outcome on the current corpus.
+
+So this is latent, not active, and I am not going to dress it up as more. What
+makes it worth an entry is that nothing tests it: change `Get-MatchTexts` and
+the auditors silently start describing a different engine, with no failing test
+anywhere. The check that proved it benign took about 90 seconds to run and is
+mechanical — engine matcher vs auditor matcher over every distinct name, assert
+zero disagreements. As a weekly assertion it converts a silent future break into
+a caught one.
+
+`audit-match-contested` and `audit-match-soundness` do NOT have this problem:
+they regex-scrape the engine's own source (`compare-deals.ps1:895`) rather than
+keeping a copy. Ugly, but correct by construction, and the estate already knows
+it — that scrape is guarded.
+
+## 7. The 663-row contested backlog is really a 22-row backlog — DONE (method)
+
+The number that makes this work look unaffordable is the wrong number.
+`audit-match-contested` reports **663 contested rows**. Joining those against the
+live board — keeping only rows where the WINNING commodity actually publishes
+that product in a priced cell — leaves **22**. Everything else is a product that
+never wins a cell anywhere, so its ownership is theoretical.
+
+Written to `out\contested-live.json`. That join is the missing prioritisation
+step: it turns "663 latent ambiguities" into a list a person can read in ten
+minutes, ranked by whether a shopper can actually see the consequence.
+
+Of the 22, nineteen resolve correctly on inspection (fresh green beans beating
+canned, tahini beating sesame seeds, tuna-in-vegetable-oil beating vegetable
+oil). One was a live wrong price. See #8.
+
+## 8. A dog treat was the CHEAPEST beef jerky on the board — DONE
+
+`beef-jerky` published **"Golden Rewards Chicken Flavor Premium Dry Jerky Treats
+for All Dogs, 16 oz"** at $0.6231/oz as its crown — the cheapest beef jerky in
+Omaha, and the number a shopper would act on, was dog food.
+
+beef-jerky carries **ten** pet-exclusion patterns. Not one fired:
+
+  `\bdog\b`                              name says "Dogs"  — plural
+  `\bfor\s+dogs?\b`                      name says "for All Dogs" — a word between
+  `\bfor\s+(?:dogs?|cats?|pets?)\b`      same
+  `dog\s+(food|treats?|snacks?|chews?)`  name is "Jerky Treats for All Dogs"
+
+This is the SAME defect as the cloves, the milk and the oranges: patterns that
+assume adjacency and exact number. Fourth instance in two days. It is the
+dominant bug class in this catalog and it is not a coincidence — the patterns
+read like English, and English puts words between other words.
+
+Fixed centrally in the `pet` class of `category-excludes.json` rather than on
+beef-jerky, so every guarded commodity benefits:
+
+    \bfor\s+(?:\w+\s+){0,3}(?<!hot\s)(?<!corn\s)(?<!chili\s)(?:dogs?|cats?|puppies|kittens)\b
+
+The lookbehinds are not decoration. The first draft, without them, was measured
+against all 36,487 distinct product names and caught one human food:
+*"Castleberry's Hot Dog Chili Sauce ... Topping for Hot Dogs and Coney-Style
+Franks"*. A bare `\bdogs?\b` token would additionally have destroyed hot-dogs
+and corn-dogs outright. Measured final: +33 pet products caught, 0 human-food
+false positives, 0 regressions.
+
+Board effect: 2 cells, 1 crown. beef-jerky $0.6231 @ Walmart -> $0.998 @ Aldi.
+The crown got MORE expensive, which is the point — a false bargain was removed.
+Soundness also dropped **"Blue Buffalo Natural Puppy ... Food For Puppies"** out
+of `brown-rice`, a second latent wrong price nobody had reported.
+
+## 9. Every price move orphans its link, every time — PROPOSED
+
+Four times in two days now: fix a match, the price moves, and `tile-integrity`
+immediately hard-fails because `product-urls.json` still pins the old product.
+Cloves, chocolate milk, the 7-tile batch, beef-jerky. The remedy is always
+identical — `derive-links-from-prices -Store <the one that moved> -Apply`.
+
+The guard is doing its job; the workflow just has a manual step that is 100%
+predictable from the diff. Anything that changes which PRODUCT a cell holds
+should offer to re-derive that store's links, or at minimum name the exact
+command with the store already filled in. Right now every fixer has to know to
+do it, and the failure only appears one guard run later.

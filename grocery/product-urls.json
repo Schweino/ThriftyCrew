@@ -218,13 +218,6 @@
                                                         "size":  "7.3 oz",
                                                         "verified":  "2026-08-09 DERIVED from the price row (same record the board priced)"
                                                     },
-                                        "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/Glade-Aero-Sea-Mist-Cypress-7-3oz-6-US/18154113929",
-                                                        "name":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener, Sea Mist \u0026 Cypress, 7.3oz, 1 Count",
-                                                        "price":  "$1.48",
-                                                        "size":  "7.3 oz",
-                                                        "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                    },
                                         "Aldi":  {
                                                      "url":  "https://www.aldi.us/store/aldi/products/90266230-febreze-air-linen-and-sky",
                                                      "name":  "Febreze Air Linen And Sky",
@@ -238,7 +231,14 @@
                                                              "price":  "$1.49",
                                                              "size":  "7.3 oz",
                                                              "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
-                                                         }
+                                                         },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/Glade-Aero-Clean-Linen-7-3oz-6-US/18155070209",
+                                                        "name":  "Glade® Soft Mist Odor Fighting Aerosol Air Freshener, Clean Linen®, 7.3oz, 1 Count",
+                                                        "price":  "$1.48",
+                                                        "size":  "7.3 oz",
+                                                        "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                    }
                                     },
                   "alfredo-sauce":  {
                                         "commodity":  "alfredo-sauce",
@@ -2031,13 +2031,6 @@
                                                     "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)",
                                                     "board_pu":  2.3825
                                                 },
-                                     "Walmart":  {
-                                                     "url":  "https://www.walmart.com/ip/GR-16OZ-CHICKEN-JERKY/855704356",
-                                                     "name":  "Golden Rewards Chicken Flavor Premium Dry Jerky Treats for All Dogs, 16 oz",
-                                                     "price":  "$9.97",
-                                                     "size":  "16 oz",
-                                                     "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                 },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/1708287774",
                                                              "name":  "Jack Link\u0027s Teriyaki Beef Jerky, 16 oz.",
@@ -2051,7 +2044,14 @@
                                                           "price":  "$10.49",
                                                           "size":  "8 oz",
                                                           "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                      },
+                                     "Walmart":  {
+                                                     "url":  "https://www.walmart.com/ip/Great-Value-Teriyaki-Beef-Jerky-Value-Pack-10-oz/761023933",
+                                                     "name":  "Great Value Teriyaki Beef Jerky Value Pack, 10 oz",
+                                                     "price":  "$11.52",
+                                                     "size":  "0.63 lb",
+                                                     "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                 }
                                  },
                   "beef-stew":  {
                                     "commodity":  "Canned Beef Stew",
@@ -3015,11 +3015,11 @@
                                                          "board_pu":  0.7236
                                                      },
                                           "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/Great-Value-Reduced-Sodium-Brown-Gravy-Mix-0-87-oz/802388318",
-                                                          "name":  "Great Value Reduced Sodium Brown Gravy Mix, 0.87 oz Packet",
-                                                          "price":  "$0.52",
-                                                          "size":  "0.87 oz",
-                                                          "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
+                                                          "url":  "https://www.walmart.com/ip/McCormick-No-Artificial-Flavors-Brown-Gravy-Seasoning-Mix-Bottle-21-oz-Bottle/28273204",
+                                                          "name":  "McCormick Brown Gravy Seasoning Mix Bottle, 21.0 oz Bottle",
+                                                          "price":  "$9.62",
+                                                          "size":  "21 oz",
+                                                          "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                                       }
                                       },
                   "brownie-mix":  {
@@ -8649,13 +8649,6 @@
                                                     "size":  "5.6 oz",
                                                     "verified":  "2026-08-09 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                 },
-                                     "Walmart":  {
-                                                     "url":  "https://www.walmart.com/ip/Milk-Bone-Original-Dog-Biscuits-Medium-Crunchy-Dog-Treats-24-oz/22211012",
-                                                     "name":  "Milk Bone Crunchy Medium Dog Treats, 24 oz Box, Original Beef Flavor",
-                                                     "price":  "$2.98",
-                                                     "size":  "24 oz",
-                                                     "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                 },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/19348961936",
                                                              "name":  "Milk-Bone Original Dog Biscuits, Medium Crunchy Dog Treats, 15 lbs.",
@@ -8676,7 +8669,14 @@
                                                           "price":  "$4.39",
                                                           "size":  "24 oz",
                                                           "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                      },
+                                     "Walmart":  {
+                                                     "url":  "https://www.walmart.com/ip/Milk-Bone-Original-Dog-Biscuits-Small-Crunchy-Dog-Treats-24-Ounces/10293676",
+                                                     "name":  "Milk Bone Original Small Dog Biscuits, Original Beef Flavor Dog Treats for Small Dogs, 24 oz Box",
+                                                     "price":  "$2.98",
+                                                     "size":  "24 oz",
+                                                     "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                 }
                                  },
                   "donuts":  {
                                  "commodity":  "donuts",
@@ -14214,13 +14214,6 @@
                                                   "size":  "59 fl oz",
                                                   "verified":  "2026-08-13 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                               },
-                                   "Walmart":  {
-                                                   "url":  "https://www.walmart.com/ip/Red-Diamond-Sweet-Tea-1-gal/10321291",
-                                                   "name":  "Red Diamond Sweet Tea, Gallon, 128 Fl Oz",
-                                                   "price":  "$3.24",
-                                                   "size":  "128 fl oz",
-                                                   "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                               },
                                    "Baker\u0027s":  {
                                                         "url":  "https://www.bakersplus.com/p/kroger-decaffeinated-unsweetened-iced-tea/0001111013437",
                                                         "name":  "Kroger Decaffeinated Unsweetened Iced Tea",
@@ -14234,7 +14227,14 @@
                                                            "price":  "$3.67",
                                                            "size":  "128 fl oz",
                                                            "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                       }
+                                                       },
+                                   "Walmart":  {
+                                                   "url":  "https://www.walmart.com/ip/Red-Diamond-Fresh-Brewed-Sugar-Free-Iced-Tea-Sweetened-with-Splenda-1-Gallon/10321290",
+                                                   "name":  "Red Diamond Fresh Brewed Sugar Free Iced Tea, Sweetened with Splenda, 1 Gallon",
+                                                   "price":  "$3.24",
+                                                   "size":  "128 fl oz",
+                                                   "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                               }
                                },
                   "insect-spray":  {
                                        "commodity":  "Insect / Bug Spray (home)",
@@ -17573,13 +17573,6 @@
                                                         "name":  "Member\u0027s Mark Spaghetti Pasta Pantry Pack, 1 lb., 6 pk.",
                                                         "board_pu":  0.0571
                                                     },
-                                "Walmart":  {
-                                                "url":  "https://www.walmart.com/ip/Great-Value-Spaghetti-32-oz/10534105",
-                                                "name":  "Great Value Spaghetti, 32 oz",
-                                                "price":  "$1.94",
-                                                "size":  "32 oz",
-                                                "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                            },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/55914/hy-vee-rotini-pasta",
                                                "name":  "Hy-Vee Rotini Pasta",
@@ -17607,6 +17600,13 @@
                                                 "price":  "$0.99",
                                                 "size":  "16 oz",
                                                 "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
+                                            },
+                                "Walmart":  {
+                                                "url":  "https://www.walmart.com/ip/Great-Value-Penne-32-oz/5144705712",
+                                                "name":  "Great Value Penne, 32 oz (Shelf Stable)",
+                                                "price":  "$1.94",
+                                                "size":  "32 oz",
+                                                "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                             }
                             },
                   "pasta-sauce":  {
@@ -21434,13 +21434,6 @@
                                                                   "size":  "5 lb",
                                                                   "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
                                                               },
-                                          "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/Great-Value-Finely-Shredded-Mild-Cheddar-Cheese-32-oz-Bag-Plastic-Packaging/10452439",
-                                                          "name":  "Great Value Mild Cheddar Finely Shredded Cheese, 32 oz Bag",
-                                                          "price":  "$6.92",
-                                                          "size":  "32 oz",
-                                                          "verified":  "2026-08-17 DERIVED from the price row (same record the board priced)"
-                                                      },
                                           "Baker\u0027s":  {
                                                                "url":  "https://www.bakersplus.com/p/kroger-sharp-cheddar-shredded-cheese/0001111015132",
                                                                "name":  "Kroger Sharp Cheddar Shredded Cheese",
@@ -21461,7 +21454,14 @@
                                                          "price":  "$1.97",
                                                          "size":  "8 oz",
                                                          "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                          "Walmart":  {
+                                                          "url":  "https://www.walmart.com/ip/Great-Value-Finely-Shredded-Sharp-Cheddar-Cheese-32-oz/42004037",
+                                                          "name":  "Great Value Sharp Cheddar Finely Shredded Cheese, 32 oz Bag",
+                                                          "price":  "$6.92",
+                                                          "size":  "32 oz",
+                                                          "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                      }
                                       },
                   "shrimp":  {
                                  "commodity":  "shrimp",
@@ -21604,20 +21604,20 @@
                                                                 "name":  "Member\u0027s Mark American Cheese 5 lbs., 160 slices",
                                                                 "board_pu":  0.1521
                                                             },
-                                        "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/Great-Value-Singles-American-Pasteurized-Prepared-Cheese-Product-24-oz-Bag-32-Count/42004056",
-                                                        "name":  "Great Value Individually Plastic Wrapped Singles American Cheese Product, 24 oz, 32 Slices",
-                                                        "price":  "$3.68",
-                                                        "size":  "24 oz",
-                                                        "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                    },
                                         "Family Fare":  {
                                                             "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/packaged_sliced/kraft_american_cheese_slices_24_ea/p/17691",
                                                             "name":  "Kraft American Cheese Slices 24 Ea",
                                                             "price":  "$5.99",
                                                             "size":  "16 oz",
                                                             "verified":  "2026-08-19 DERIVED from the price row (same record the board priced)"
-                                                        }
+                                                        },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/Great-Value-Singles-American-Pasteurized-Prepared-Cheese-Product-48-oz-72-Count/10452377",
+                                                        "name":  "Great Value Singles, American Pasteurized Prepared Cheese Product, 48 oz, 72 Count",
+                                                        "price":  "$6.96",
+                                                        "size":  "48 oz",
+                                                        "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                    }
                                     },
                   "sloppy-joe-sauce":  {
                                            "commodity":  "Sloppy Joe Sauce (Manwich style)",
@@ -22438,7 +22438,14 @@
                                                                "size":  "2 lb",
                                                                "name":  "Strawberries, 2 lbs.",
                                                                "board_pu":  0.1225
-                                                           }
+                                                           },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/Sunrise-Growers-New-West-Whole-Strawberry/156682663",
+                                                       "name":  "Sunrise Growers New West Whole Strawberry",
+                                                       "price":  "$9.42",
+                                                       "size":  "64.082 oz",
+                                                       "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "string-cheese":  {
                                         "commodity":  "string-cheese",
@@ -24398,7 +24405,14 @@
                                                                   "price":  "$8.98",
                                                                   "size":  "8 fl oz",
                                                                   "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                              }
+                                                              },
+                                          "Walmart":  {
+                                                          "url":  "https://www.walmart.com/ip/Great-Value-Pure-Vanilla-Extract-4-fl-oz-Liquid-Ambient-Plastic-Container/585133649",
+                                                          "name":  "Great Value Pure Vanilla Extract, 4 fl oz (Liquid, Ambient, Plastic Container)",
+                                                          "price":  "$9.76",
+                                                          "size":  "4 fl oz",
+                                                          "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                      }
                                       },
                   "vegetable-broth":  {
                                           "commodity":  "Vegetable Broth / Stock",

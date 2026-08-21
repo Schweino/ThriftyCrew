@@ -38,7 +38,10 @@ param(
   # frozen or it is not hermetic: it froze the data, then read the LIVE rule + band files, so every ordinary
   # rule edit tripped it and it sat red for weeks until nobody read it. See regression-test.ps1.
   [string]$BandsFile = "",
-  [switch]$SelfTest
+  [switch]$SelfTest,
+  # -Explain <commodity-id>: read-only ownership dump for ONE cell, then exit. See the block near
+  # Match-Category. Writes no board, so it is safe to run against a live tree mid-pipeline.
+  [string]$Explain = ""
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -1347,6 +1350,66 @@ function Match-Category($name) {
     return $c
   }
   return $null
+}
+
+# ---------------------------------------------------------------- -Explain: why does this cell say that?
+# READ-ONLY. Prints the ownership decision for one commodity and exits WITHOUT writing a board.
+#
+# Added 2026-08-21 after working out by hand why Family Fare's whole-cloves cell published $11.92/oz when a
+# $2.99 jar sat in the same capture. That took about ten passes of throwaway script re-deriving what this
+# engine already knows. The answer, once found, was one line long: ground-cloves' include list contained
+# 'whole\s+cloves?', so it claimed the cheap jars first and whole-cloves never saw them.
+#
+# That is the CONTESTED failure - two commodities match one product and the winner is whichever sits earlier
+# in commodities.json. audit-match-contested finds them in bulk; this answers the opposite question, the one
+# actually asked when a single cell looks wrong: which rows could this commodity have had, and who took them.
+#
+# It lives HERE, inside the engine, on purpose. Match-Category is already copied into two auditors (see
+# design\FINDINGS-contested-2026-08-21.md #6); a diagnostic that re-implemented the matcher would be the
+# fourth copy and the first one anyone actually trusts, which is how a debugging tool starts lying.
+if ($Explain) {
+  $target = @($commodities | Where-Object { [string]$_.id -eq $Explain })
+  if (-not $target.Count) { Write-Output ("-Explain: no commodity with id '" + $Explain + "'"); exit 1 }
+  $tc = $target[0]
+  $pos = [array]::IndexOf(@($commodities | ForEach-Object { [string]$_.id }), [string]$tc.id)
+  Write-Output ("EXPLAIN  " + $tc.id + "  (" + $tc.label + ")   unit=" + $tc.unit + "   position " + $pos + " of " + @($commodities).Count + " in commodities.json")
+  Write-Output ("  include: " + (@($tc.include) -join '  |  '))
+  Write-Output ""
+  $mine = 0; $lost = 0
+  foreach ($d in $deals) {
+    $nm = [string]$d.name
+    if (-not $nm) { continue }
+    $texts = Get-MatchTexts $nm
+    $hit = $false
+    foreach ($inc in $tc.include) { foreach ($t in $texts) { if ($t -match $inc) { $hit = $true; break } }; if ($hit) { break } }
+    if (-not $hit) { continue }                       # this commodity's patterns never wanted it
+    $winner = Match-Category $nm
+    $wid = if ($winner) { [string]$winner.id } else { '<unmatched>' }
+    if ($wid -eq [string]$tc.id) {
+      $mine++
+      Write-Output ("  OURS      {0,-12} {1,-9} {2,-10} {3}" -f $d.store, $d.price_text, $d.size_text, $nm)
+    } else {
+      $lost++
+      # WHY it went elsewhere: our own exclude threw it out, or another commodity simply got there first.
+      $n0 = $texts[0]; $selfExc = @()
+      foreach ($exc in $tc.exclude) { if ($n0 -match $exc) { $selfExc += $exc } }
+      $why = if ($selfExc.Count) { "our exclude " + $selfExc[0] }
+             elseif ($wid -eq '<unmatched>') { "global exclude / no commodity" }
+             else {
+               $wpos = [array]::IndexOf(@($commodities | ForEach-Object { [string]$_.id }), $wid)
+               if ($wpos -ge 0 -and $wpos -lt $pos) { "CONTESTED - '" + $wid + "' sits earlier (position " + $wpos + ")" }
+               else { "claimed by '" + $wid + "'" }
+             }
+      Write-Output ("  LOST ->   {0,-12} {1,-9} {2,-10} {3}" -f $d.store, $d.price_text, $d.size_text, $nm)
+      Write-Output ("            {0}" -f $why)
+    }
+  }
+  Write-Output ""
+  Write-Output ("  {0} row(s) this commodity keeps, {1} its patterns matched but lost." -f $mine, $lost)
+  Write-Output "  A LOST row reading CONTESTED is decided by array order, not by a rule. Fix it with an"
+  Write-Output "  explicit exclude on the commodity that should not have it - never by reordering the file."
+  Write-Output "  (read-only: no board was written)"
+  exit 0
 }
 
 # dedup identical rows (Family Fare's circular API repeats items across pages)
