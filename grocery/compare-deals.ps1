@@ -45,6 +45,8 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+# The one place that decides what is EVERYDAY and what is a SALE on a captured row. See its header.
+. (Join-Path $root 'price-split-lib.ps1')
 if (-not $OutDir)  { $OutDir  = Join-Path $root 'out' }
 if (-not $AdsFile) { $AdsFile = (Get-ChildItem (Join-Path $OutDir 'ads-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName }
 if (-not $CommoditiesFile) { $CommoditiesFile = Join-Path $root 'commodities.json' }
@@ -1100,10 +1102,28 @@ function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate
   # monthly-ad deals seven days early while the ad was still running.
   # BLANK STAYS BLANK: a row whose source states no window must not inherit a neighbour's. That is the
   # borrowed-window bug guard 8 exists for, and it is why this is carried rather than defaulted.
+  # AN EXPIRED SALE DOES NOT PRICE THE BOARD, PER ROW (2026-08-21).
+  # Test-AdWindowClosed already refuses a whole flyer FILE outside its window, which was the only
+  # granularity available while the engine had no per-row dates. It is not enough now: Hy-Vee runs
+  # three flyers at once inside ONE ads file, and Baker's per-item promos in one capture legitimately
+  # end 7, 14, 28 and 32 days apart. Without this check the dates would be decorative - captured,
+  # carried, displayed, and never acted on - which is the shape this whole session keeps finding.
+  # Judged against the BOARD's date ($today from the ads file), never the wall clock, so a pinned
+  # regression run stays reproducible - the same rule Test-AdWindowClosed follows.
+  # A row with no ad_to is NOT expired: absent evidence is not evidence, and an undated markdown is
+  # handled by its own TTL rather than by being silently dropped here.
+  if ($ptype -eq 'sale' -and $adTo -match '^\d{4}-\d{2}-\d{2}$' -and $script:BoardToday) {
+    if ([string]$adTo -lt [string]$script:BoardToday) { $script:ExpiredSaleRows++; return }
+  }
   $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo })
 }
 $ads = Get-Content $AdsFile -Raw | ConvertFrom-Json
 $today = $ads.today
+# The board's own date, visible to Add-Norm so it can refuse an expired sale row. Script-scoped
+# because Add-Norm is a function and cannot see this scope otherwise; set from the ads file rather
+# than the clock so a pinned regression run stays reproducible.
+$script:BoardToday = [string]$today
+$script:ExpiredSaleRows = 0
 foreach ($d in $ads.deals) {                                                                # weekly ads = 'sale'
   switch ($d.store) {
     # pull-grocery-ads stamps ad_from/ad_to on EVERY deal now - per FLYER for Hy-Vee (it runs three at
@@ -1293,7 +1313,33 @@ if (Test-Path $regDir) {
     # $sd is the FILE's date. Get-RowSrcDate lets a row carrying an OLDER as_of keep it, so a file that holds
     # rows of mixed age (refresh-sams-verified re-prices some rows and carries the rest) cannot hand the
     # carried ones the refreshed file's freshness. Backward only - see that function.
-    foreach ($d in $ex.deals) { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt (Get-RowSrcDate ([string]$ex.store) $d $sd) }
+    # THE EVERYDAY/SALE SPLIT (2026-08-21, Brad: "Ad pricing must never enter the every day pricing
+    # value"). An out\regular file is nominally the store's EVERYDAY channel, but the row it carries is
+    # simply "what you pay today" - which for 357 board cells was really a markdown, typed everyday,
+    # 27 of them holding the Cheapest crown and none of them expiring under the 90-day carry.
+    # price-split-lib reads each store's own discount signal (see its header for what each one is) and
+    # returns the two halves. Applied HERE rather than in seven producers so it covers the rows already
+    # on disk - the board is mostly carried-forward rows, which a producer-side fix could not reach for
+    # a quarter - and so the capture files stay the honest record of what the store showed us.
+    foreach ($d in $ex.deals) {
+      $rsd = Get-RowSrcDate ([string]$ex.store) $d $sd
+      $spl = Get-PriceSplit $d ([string]$ex.store)
+      if ($spl.sale_price) {
+        # A CUT PRICE IS A SALE, AND IT CARRIES ITS OWN WINDOW. Typed 'sale' so build-sale-windows
+        # dates it, the page badges it, and it can expire. Its everyday half is emitted separately
+        # below so the cell the shopper reverts to is never lost.
+        Add-Norm $d.store $d.item ('$' + $spl.sale_price) $d.size $d.regular $d.source_ad 'sale' $rsd $spl.sale_from $spl.sale_to
+        # AND THE PRICE IT REVERTS TO. Without this row the everyday value disappears the moment a
+        # store discounts an item, which is the other half of Brad's rule - everyday must not be
+        # replaced by the ad. Only emitted when the store told us what it was cut FROM; a flagged row
+        # with no was-price would otherwise publish the sale price twice under two labels.
+        if ($spl.everyday_price -and $spl.everyday_price -gt $spl.sale_price) {
+          Add-Norm $d.store $d.item ('$' + $spl.everyday_price) $d.size $null $d.source_ad 'everyday' $rsd '' ''
+        }
+      } else {
+        Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $rsd
+      }
+    }
   }
 }
 
@@ -1609,7 +1655,7 @@ $report = @($report | Sort-Object commodity)
 $flagPfx = if ($OutName -eq 'comparison') { 'flagged' } else { "$OutName-flagged" }
 (@{ week_of=$today; flagged_count=$flagged.Count; flagged=$flagged.ToArray(); multibuy_unpriced=$mbUnpriced.ToArray() } | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $OutDir ("$flagPfx-"+$today+".json")) -Encoding UTF8
 $storesWithData = @($matched | Where-Object { $_.unit_price -ne $null } | ForEach-Object { $_.store } | Select-Object -Unique | Sort-Object)
-$health = [ordered]@{ stores_with_data=$storesWithData; store_count=$storesWithData.Count; commodities_compared=$report.Count; flagged_out_of_band=$flagged.Count; multibuy_unpriced=$mbUnpriced.Count }
+$health = [ordered]@{ stores_with_data=$storesWithData; store_count=$storesWithData.Count; commodities_compared=$report.Count; flagged_out_of_band=$flagged.Count; multibuy_unpriced=$mbUnpriced.Count; expired_sale_rows_dropped=$script:ExpiredSaleRows }
 
 # ---------------------------------------------------------------- output
 $out = [ordered]@{ built_at=(Get-Date).ToString('s'); week_of=$today; source=$AdsFile; commodities_compared=$report.Count; health=$health; comparison=$report }
