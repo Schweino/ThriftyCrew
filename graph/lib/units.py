@@ -288,7 +288,17 @@ def coerce_price(v) -> float | None:
     return float(m.group()) if m else None
 
 
-_NAME_COUNT = re.compile(r"\((\d+)\s*(?:ct|count|pk|pack)\.?\)", re.IGNORECASE)
+# A count WORD is required, but the parentheses are not. The original pattern
+# demanded "(8 ct)" and so missed every "Brioche Buns, 6 Count", "Tortillas, 8
+# Count" and "Ice Pops, 18 Ct" in the corpus — 745 of 3,783 each-basis rows,
+# each priced as a SINGLE item and therefore overstated by its own pack count
+# (the 18-count popsicles read $5.99 each instead of $0.33).
+#
+# The conservatism that mattered is kept: a BARE number is still never used,
+# because in a product name it is far more often a flavour, a percentage or a
+# size ("2% Milk", "100 Calorie"). What is accepted is a number immediately
+# followed by an explicit count word, which is not something a flavour looks like.
+_NAME_COUNT = re.compile(r"\b(\d+)\s*(?:ct|count|pk|pack)s?\.?\b", re.IGNORECASE)
 
 
 def count_from_name(name: str | None) -> int | None:
@@ -433,6 +443,12 @@ def per_unit(price, size_text: str | None,
         n = 1.0
         if s and s.basis == "count" and s.total > 0:
             n = float(s.total)
+        elif s and s.multiplier and s.multiplier > 1:
+            # "18 pk 1.65 fl oz" parses as VOLUME with multiplier 18 — and for
+            # an each-basis commodity that multiplier IS the pack count. Without
+            # this the size parsed perfectly and was then ignored, pricing an
+            # 18-count box of ice pops at the full $5.99 per pop.
+            n = float(s.multiplier)
         else:
             c = count_from_name(product_name)
             if c:
