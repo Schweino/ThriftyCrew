@@ -570,6 +570,16 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-hyvee-store-blend.ps1') | ForEach-Object { Log ('hyvee-store-blend: ' + $_) }
       } catch { Log ('hyvee-store-blend threw: ' + $_.Exception.Message) }
+      # ---- PRICE CAPTURE REACH (wired 2026-08-21, Brad: "make sure that when we pull pricing, from
+      # ANY part of our codebase, its populating the table correctly"). Every OTHER guard here starts
+      # from the board and asks whether what is on it is right. This asks the opposite: is anything we
+      # already know MISSING from it? A price that never arrives cannot be wrong, cannot be stale and
+      # cannot fail parity - it is invisible to a system that only audits its own output. The Recipe
+      # Hunter's pricing agent had 99 captured store prices sitting in ingredient-queue.json, 97 of
+      # which had reached nothing at all since 2026-08-16.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-price-capture-reach.ps1') | ForEach-Object { Log ('price-capture-reach: ' + $_) }
+      } catch { Log ('price-capture-reach threw: ' + $_.Exception.Message) }
       # ---- MATCHER PARITY (wired 2026-08-21): the auditors' COPIES of Match-Category must still assign
       # product names exactly as the engine does. audit-household-in-food is a HARD gate built on one of
       # those copies, so a divergence means a hard guard is judging cells under the wrong commodity while

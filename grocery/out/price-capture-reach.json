@@ -1,0 +1,2403 @@
+{
+    "updated":  "2026-08-21T15:26:26",
+    "price_table":  "price-table-2026-08-21.json",
+    "note":  "Prices captured somewhere in the codebase that do not appear in the price table. compare-deals reads six input classes and the table is derived from the same rows the ranker uses, so a capture path either writes into one of those six or its prices do not exist. Advisory: \"captured, adjudicated, waiting on a commodity id\" is a legitimate state; \"captured and forgotten because nothing counts it\" is not.",
+    "stores":  [
+                   {
+                       "file":  "ingredient-queue.json",
+                       "what":  "Recipe Hunter pricing agent (ingredient-queue.ps1 -Record -Price)",
+                       "expected":  "reach",
+                       "captured":  99,
+                       "reached":  2,
+                       "missing":  97,
+                       "missing_rows":  [
+                                            {
+                                                "key":  "cumin-seeds",
+                                                "store":  "Family Fare",
+                                                "price":  2.29,
+                                                "size":  "2 oz",
+                                                "item":  "Sugar \u0027N Spice Cumin Whole",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "cumin-seeds",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.69,
+                                                "size":  "1 oz",
+                                                "item":  "Tampico Cumin Whole",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "chili-garlic-sauce",
+                                                "store":  "Family Fare",
+                                                "price":  5.99,
+                                                "size":  "8 oz",
+                                                "item":  "Lee Kum Kee Chili Garlic Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "chili-garlic-sauce",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.49,
+                                                "size":  "8 oz",
+                                                "item":  "Huy Fong Chili Garlic Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "chipotle-powder",
+                                                "store":  "Baker\u0027s",
+                                                "price":  14.49,
+                                                "size":  "2.3 oz",
+                                                "item":  "Spice Islands Ground Chipotle Chile",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "fennel",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.99,
+                                                "size":  "1 ct",
+                                                "item":  "Fresh Fennel",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "brown-lentils",
+                                                "store":  "Family Fare",
+                                                "price":  2.69,
+                                                "size":  "1 lb",
+                                                "item":  "Our Family Lentils",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "brown-lentils",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.99,
+                                                "size":  "16 oz",
+                                                "item":  "Goya Lentils",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "bean-sprouts",
+                                                "store":  "Family Fare",
+                                                "price":  2.79,
+                                                "size":  "14.5 oz",
+                                                "item":  "Geisha Bean Sprouts, In Water",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "bean-sprouts",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.19,
+                                                "size":  "14 oz",
+                                                "item":  "La Choy Bean Sprouts",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "coconut",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.49,
+                                                "size":  "1 ct",
+                                                "item":  "Fresh Brown Coconuts",
+                                                "commodity_known":  true
+                                            },
+                                            {
+                                                "key":  "dried-guajillo-chiles",
+                                                "store":  "Family Fare",
+                                                "price":  2.49,
+                                                "size":  "3 oz",
+                                                "item":  "Guajillo Chili",
+                                                "commodity_known":  true
+                                            },
+                                            {
+                                                "key":  "avocado-oil",
+                                                "store":  "Family Fare",
+                                                "price":  13.99,
+                                                "size":  "20.96 fl oz",
+                                                "item":  "Our Family 100% Pure Avocado Oil 20.96 Fl Oz",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "avocado-oil",
+                                                "store":  "Baker\u0027s",
+                                                "price":  9.99,
+                                                "size":  "17 fl oz",
+                                                "item":  "Private Selection Avocado Oil",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "cornmeal",
+                                                "store":  "Family Fare",
+                                                "price":  2.29,
+                                                "size":  "32 oz",
+                                                "item":  "Our Family Yellow Enriched Pre Sifted Corn Meal",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "cornmeal",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.29,
+                                                "size":  "24 oz",
+                                                "item":  "Kroger Yellow Corn Meal",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "bacon bits",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  3.784,
+                                                "size":  "per lb (10 lb pack)",
+                                                "item":  "Member\u0027s Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "bacon bits",
+                                                "store":  "Aldi",
+                                                "price":  3.95,
+                                                "size":  "per lb",
+                                                "item":  "Appleton Farms Lower Sodium Bacon",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "bacon bits",
+                                                "store":  "Baker\u0027s",
+                                                "price":  4.4444,
+                                                "size":  "per lb",
+                                                "item":  "Kroger Naturally Hardwood Smoked Thick Cut Bacon",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "gruyere",
+                                                "store":  "Baker\u0027s",
+                                                "price":  8.49,
+                                                "size":  "8 oz",
+                                                "item":  "Boar\u0027s Head Blanc Grue Gruyere Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "dry white wine",
+                                                "store":  "Walmart",
+                                                "price":  3.96,
+                                                "size":  "750 ml",
+                                                "item":  "Oak Leaf Vineyards Pinot Grigio/Colombard White Wine",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "dry white wine",
+                                                "store":  "Fareway",
+                                                "price":  7.99,
+                                                "size":  "750 ml",
+                                                "item":  "Barefoot Pinot Grigio White Wine",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "dry white wine",
+                                                "store":  "Hy-Vee",
+                                                "price":  6.99,
+                                                "size":  "750 ml",
+                                                "item":  "Sutter Home Pinot Grigio White Wine",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "dry white wine",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  10.34,
+                                                "size":  "750 ml",
+                                                "item":  "Kim Crawford Sauvignon Blanc Wine",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "dry white wine",
+                                                "store":  "Aldi",
+                                                "price":  3.95,
+                                                "size":  "750 ml",
+                                                "item":  "Winking Owl Sauvignon Blanc",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "dry white wine",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.99,
+                                                "size":  "500 ml",
+                                                "item":  "Vendange Pinot Grigio White Wine",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "brandy",
+                                                "store":  "Walmart",
+                                                "price":  11.53,
+                                                "size":  "750 ml",
+                                                "item":  "Christian Brothers VS Grape Brandy",
+                                                "commodity_known":  true
+                                            },
+                                            {
+                                                "key":  "brandy",
+                                                "store":  "Fareway",
+                                                "price":  11.99,
+                                                "size":  "750 ml",
+                                                "item":  "Christian Brothers VS Brandy",
+                                                "commodity_known":  true
+                                            },
+                                            {
+                                                "key":  "brandy",
+                                                "store":  "Hy-Vee",
+                                                "price":  13.99,
+                                                "size":  "750 ml",
+                                                "item":  "Christian Brothers Brandy",
+                                                "commodity_known":  true
+                                            },
+                                            {
+                                                "key":  "brandy",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  19.28,
+                                                "size":  "1.75 L",
+                                                "item":  "Christian Brothers VS Grape Brandy",
+                                                "commodity_known":  true
+                                            },
+                                            {
+                                                "key":  "thai chiles",
+                                                "store":  "Walmart",
+                                                "price":  3.38,
+                                                "size":  "1.37 oz",
+                                                "item":  "McCormick Crushed Thai Style Chili Pepper, 1.37 oz Bottle",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "thai chiles",
+                                                "store":  "Hy-Vee",
+                                                "price":  5.99,
+                                                "size":  "1.37 oz",
+                                                "item":  "McCormick Crushed Thai Style Chili Pepper",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "green bell pepper",
+                                                "store":  "Walmart",
+                                                "price":  2.96,
+                                                "size":  "8 oz / 2 ct",
+                                                "item":  "Marketside Organic Green Bell Pepper, 8 oz, 2 Count",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "green bell pepper",
+                                                "store":  "Fareway",
+                                                "price":  0.77,
+                                                "size":  "each",
+                                                "item":  "Green Bell Pepper",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "green bell pepper",
+                                                "store":  "Family Fare",
+                                                "price":  1.29,
+                                                "size":  "1 ct",
+                                                "item":  "Fresh Green Peppers",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "green bell pepper",
+                                                "store":  "Hy-Vee",
+                                                "price":  0.79,
+                                                "size":  "lb",
+                                                "item":  "Green Bell Pepper",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "green bell pepper",
+                                                "store":  "Aldi",
+                                                "price":  2.69,
+                                                "size":  "3 ct",
+                                                "item":  "Green Bell Pepper 3 CT",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "green bell pepper",
+                                                "store":  "Baker\u0027s",
+                                                "price":  0.99,
+                                                "size":  "1 ct",
+                                                "item":  "Fresh Large Green Bell Pepper",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "shaved beef steak",
+                                                "store":  "Fareway",
+                                                "price":  8.49,
+                                                "size":  "10.8 oz",
+                                                "item":  "Gary\u0027s Quick Steak Thinly Sliced Sirloin Beef",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "shaved beef steak",
+                                                "store":  "Hy-Vee",
+                                                "price":  10.99,
+                                                "size":  "12 oz",
+                                                "item":  "Heritage Shaved Ribeye",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "shaved beef steak",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  17.47,
+                                                "size":  "16 oz x 2 pk (32 oz)",
+                                                "item":  "Demakes Bros. Choice Beef Shaved Steak",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "shaved beef steak",
+                                                "store":  "Aldi",
+                                                "price":  6.45,
+                                                "size":  "14 oz",
+                                                "item":  "Old Neighborhood USDA Beef Shaved Steak",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "shaved beef steak",
+                                                "store":  "Baker\u0027s",
+                                                "price":  7.99,
+                                                "size":  "14 oz",
+                                                "item":  "Kroger Beef Shaved Steak",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "boneless beef short ribs",
+                                                "store":  "Baker\u0027s",
+                                                "price":  11.99,
+                                                "size":  "1 lb",
+                                                "item":  "Boneless Short Beef Ribs (About 4 per Pack)",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "fresh oregano",
+                                                "store":  "Hy-Vee",
+                                                "price":  2.99,
+                                                "size":  "0.75 oz",
+                                                "item":  "Johnson Family Farm Fresh Oregano",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "fresh oregano",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.49,
+                                                "size":  "0.5 oz",
+                                                "item":  "Simple Truth Organic Oregano",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "cardamom pods",
+                                                "store":  "Hy-Vee",
+                                                "price":  13.99,
+                                                "size":  "0.9 oz",
+                                                "item":  "Morton \u0026 Bassett Cardamom",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "90/10 ground beef",
+                                                "store":  "Baker\u0027s",
+                                                "price":  8.99,
+                                                "size":  "1 lb",
+                                                "item":  "Simple Truth Organic 90/10 Grass Fed Ground Beef Pack 1 LB",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "unsweetened ketchup",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.79,
+                                                "size":  "18.5 oz",
+                                                "item":  "Kroger No Sugar Added Tomato Ketchup",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "tandoori spice mix",
+                                                "store":  "Hy-Vee",
+                                                "price":  2.49,
+                                                "size":  "0.88 oz",
+                                                "item":  "Patak\u0027s BBQ Tandoori Chicken Seasoning Rub 0.88 oz",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "marsala wine",
+                                                "store":  "Family Fare",
+                                                "price":  5.49,
+                                                "size":  "16 fl oz",
+                                                "item":  "Holland House Marsala Cooking Wine 16 Fl Oz",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "marsala wine",
+                                                "store":  "Baker\u0027s",
+                                                "price":  4.99,
+                                                "size":  "16 fl oz",
+                                                "item":  "Holland House Marsala Cooking Wine",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "almond flour",
+                                                "store":  "Family Fare",
+                                                "price":  9.99,
+                                                "size":  "16 oz",
+                                                "item":  "Blue Diamond Finely Sifted Almond Flour 16 Oz",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "almond flour",
+                                                "store":  "Baker\u0027s",
+                                                "price":  7.49,
+                                                "size":  "16 oz",
+                                                "item":  "Simple Truth Gluten Free Superfine Almond Flour",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Cauliflower",
+                                                "store":  "Fareway",
+                                                "price":  1.98,
+                                                "size":  "each (1 head)",
+                                                "item":  "Fareway Cauliflower",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Fresh Parsley",
+                                                "store":  "Hy-Vee",
+                                                "price":  0.99,
+                                                "size":  "1 ct (bunch)",
+                                                "item":  "Fresh Curly Parsley",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Monterey Jack Cheese",
+                                                "store":  "Walmart",
+                                                "price":  3.58,
+                                                "size":  "16 oz",
+                                                "item":  "Great Value Monterey Jack Block Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Monterey Jack Cheese",
+                                                "store":  "Fareway",
+                                                "price":  2.48,
+                                                "size":  "8 oz",
+                                                "item":  "Fareway Monterey Jack Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Monterey Jack Cheese",
+                                                "store":  "Hy-Vee",
+                                                "price":  3.18,
+                                                "size":  "8 oz",
+                                                "item":  "Kraft Monterey Jack Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Monterey Jack Cheese",
+                                                "store":  "Aldi",
+                                                "price":  1.75,
+                                                "size":  "8 oz",
+                                                "item":  "Happy Farms Monterey Jack Cheese Block",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Monterey Jack Cheese",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.69,
+                                                "size":  "16 oz",
+                                                "item":  "Kroger Monterey Jack Block Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pepper Jack Cheese",
+                                                "store":  "Walmart",
+                                                "price":  1.87,
+                                                "size":  "8 oz",
+                                                "item":  "Great Value Pepper Jack Block Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pepper Jack Cheese",
+                                                "store":  "Fareway",
+                                                "price":  3.98,
+                                                "size":  "16 oz",
+                                                "item":  "Fareway Pepper Jack Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pepper Jack Cheese",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.97,
+                                                "size":  "8 oz",
+                                                "item":  "Hy-Vee Pepper Jack Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pepper Jack Cheese",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  10.14,
+                                                "size":  "2.5 lbs",
+                                                "item":  "Tillamook Pepper Jack Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pepper Jack Cheese",
+                                                "store":  "Aldi",
+                                                "price":  1.75,
+                                                "size":  "8 oz",
+                                                "item":  "Happy Farms Pepper Jack Cheese Block",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pepper Jack Cheese",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.69,
+                                                "size":  "16 oz",
+                                                "item":  "Kroger Pepper Jack Block Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Gruyere Cheese",
+                                                "store":  "Walmart",
+                                                "price":  2.97,
+                                                "size":  "8 oz",
+                                                "item":  "bettergoods Gruyere Cheese Block",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Gruyere Cheese",
+                                                "store":  "Fareway",
+                                                "price":  13.99,
+                                                "size":  "8 oz",
+                                                "item":  "Grand Suisse Le Gruyere Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Gruyere Cheese",
+                                                "store":  "Hy-Vee",
+                                                "price":  4.99,
+                                                "size":  "7 oz",
+                                                "item":  "Red Apple Cheese Gruyere Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Gruyere Cheese",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  11.87,
+                                                "size":  "1 lb",
+                                                "item":  "Alpenhaus French Gruyere Semi-Hard Cheese Wedge",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Gruyere Cheese",
+                                                "store":  "Aldi",
+                                                "price":  5.69,
+                                                "size":  "6 oz",
+                                                "item":  "Specially Selected Le Gruyere Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Gruyere Cheese",
+                                                "store":  "Baker\u0027s",
+                                                "price":  8.49,
+                                                "size":  "8 oz",
+                                                "item":  "Boar\u0027s Head Blanc Grue Gruyere Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "80/20 Ground Beef",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  4.77,
+                                                "size":  "per lb (chub, case)",
+                                                "item":  "80%/20% Ground Chuck Chub, Case, priced per pound",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Smoked Sausage",
+                                                "store":  "Walmart",
+                                                "price":  5.48,
+                                                "size":  "13.5 oz",
+                                                "item":  "Johnsonville Polish Kielbasa Smoked Rope Pork Sausage",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Smoked Sausage",
+                                                "store":  "Fareway",
+                                                "price":  4.49,
+                                                "size":  "14 oz",
+                                                "item":  "Johnsonville Polish Kielbasa Smoked Sausage",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Smoked Sausage",
+                                                "store":  "Hy-Vee",
+                                                "price":  3.99,
+                                                "size":  "13.5 oz",
+                                                "item":  "Johnsonville Polish Kielbasa Smoked Rope Pork Sausage",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Smoked Sausage",
+                                                "store":  "Aldi",
+                                                "price":  2.89,
+                                                "size":  "14 oz",
+                                                "item":  "Parkview Polska Kielbasa",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Smoked Sausage",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.29,
+                                                "size":  "14 oz",
+                                                "item":  "Kroger Hardwood Smoked Polska Kielbasa Sausage Pork and Beef Rope",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Portobello Mushrooms",
+                                                "store":  "Aldi",
+                                                "price":  2.49,
+                                                "size":  "6 oz package",
+                                                "item":  "Portabello Mushroom Package 6 OZ",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Broccolini",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.99,
+                                                "size":  "1 ct (bunch)",
+                                                "item":  "Broccolini",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Base",
+                                                "store":  "Walmart",
+                                                "price":  2.77,
+                                                "size":  "7.9 oz",
+                                                "item":  "Knorr Shelf Stable Paste Beef Bouillon",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Base",
+                                                "store":  "Fareway",
+                                                "price":  5.99,
+                                                "size":  "8 oz",
+                                                "item":  "Better Than Bouillon Roasted Beef Base",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Base",
+                                                "store":  "Hy-Vee",
+                                                "price":  6.49,
+                                                "size":  "8 oz",
+                                                "item":  "Better Than Bouillon Beef Base",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Base",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  5.98,
+                                                "size":  "16 oz",
+                                                "item":  "Member\u0027s Mark Beef Base",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Base",
+                                                "store":  "Baker\u0027s",
+                                                "price":  5.99,
+                                                "size":  "8 oz",
+                                                "item":  "Better Than Bouillon Roasted Beef Base",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Egg Yolk",
+                                                "store":  "Aldi",
+                                                "price":  1.46,
+                                                "size":  "12 ct (dozen)",
+                                                "item":  "Goldhen Grade A Large Eggs 12 CT",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Sun-Dried Tomatoes (Oil-Packed)",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  9.98,
+                                                "size":  "24 oz jar",
+                                                "item":  "Terra Verde Italian Sundried Tomatoes in Oil",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Yellow Bell Pepper",
+                                                "store":  "Walmart",
+                                                "price":  1.46,
+                                                "size":  "1 each",
+                                                "item":  "Fresh Yellow Bell Pepper, Each",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Yellow Bell Pepper",
+                                                "store":  "Fareway",
+                                                "price":  1.5,
+                                                "size":  "1 each",
+                                                "item":  "Yellow Bell Pepper",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Yellow Bell Pepper",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.99,
+                                                "size":  "1 ct",
+                                                "item":  "Yellow Bell Pepper",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Yellow Bell Pepper",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.67,
+                                                "size":  "1 ct",
+                                                "item":  "Fresh Yellow Bell Pepper",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Yellow Mustard",
+                                                "store":  "Aldi",
+                                                "price":  0.99,
+                                                "size":  "20 oz squeeze bottle",
+                                                "item":  "Burman\u0027s Traditional Yellow Mustard",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "chipotle powder",
+                                                "store":  "Family Fare",
+                                                "price":  11.99,
+                                                "size":  "2 oz",
+                                                "item":  "Mc Cormick Gourmet Chipotle Chile Pepper 2 Oz",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "ground chicken",
+                                                "store":  "Walmart",
+                                                "price":  3.72,
+                                                "size":  "1 lb",
+                                                "item":  "All Natural Fresh Ground Chicken, 1 lb Tray",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "ground chicken",
+                                                "store":  "Aldi",
+                                                "price":  3.39,
+                                                "size":  "1 lb",
+                                                "item":  "Perdue Fresh 92% Lean 8% Fat Ground Chicken",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "ground chicken",
+                                                "store":  "Baker\u0027s",
+                                                "price":  4.99,
+                                                "size":  "1 lb",
+                                                "item":  "Perdue NAE Tray Pack Ground Chicken",
+                                                "commodity_known":  false
+                                            }
+                                        ]
+                   },
+                   {
+                       "file":  "ingredient-prices.json",
+                       "what":  "SMP pilot hand-priced ingredient table, updated 2026-07-06",
+                       "expected":  "legacy",
+                       "captured":  537,
+                       "reached":  0,
+                       "missing":  537,
+                       "missing_rows":  [
+                                            {
+                                                "key":  "Boneless Skinless Chicken Breast",
+                                                "store":  "Walmart",
+                                                "price":  2.67,
+                                                "size":  "",
+                                                "item":  "Boneless Skinless Chicken Breast",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Boneless Skinless Chicken Breast",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  2.88,
+                                                "size":  "",
+                                                "item":  "Boneless Skinless Chicken Breast",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Boneless Skinless Chicken Breast",
+                                                "store":  "Hy-Vee",
+                                                "price":  2.98,
+                                                "size":  "",
+                                                "item":  "Boneless Skinless Chicken Breast",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Boneless Skinless Chicken Breast",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.89,
+                                                "size":  "",
+                                                "item":  "Boneless Skinless Chicken Breast",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Boneless Skinless Chicken Breast",
+                                                "store":  "Family Fare",
+                                                "price":  2.99,
+                                                "size":  "",
+                                                "item":  "Boneless Skinless Chicken Breast",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Boneless Skinless Chicken Breast",
+                                                "store":  "Aldi",
+                                                "price":  2.19,
+                                                "size":  "",
+                                                "item":  "Boneless Skinless Chicken Breast",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Tenderloin",
+                                                "store":  "Walmart",
+                                                "price":  4.94,
+                                                "size":  "",
+                                                "item":  "Pork Tenderloin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Tenderloin",
+                                                "store":  "Hy-Vee",
+                                                "price":  5.49,
+                                                "size":  "",
+                                                "item":  "Pork Tenderloin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Tenderloin",
+                                                "store":  "Baker\u0027s",
+                                                "price":  4.99,
+                                                "size":  "",
+                                                "item":  "Pork Tenderloin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Tenderloin",
+                                                "store":  "Family Fare",
+                                                "price":  5.49,
+                                                "size":  "",
+                                                "item":  "Pork Tenderloin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Tenderloin",
+                                                "store":  "Aldi",
+                                                "price":  3.59,
+                                                "size":  "",
+                                                "item":  "Pork Tenderloin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Loin",
+                                                "store":  "Walmart",
+                                                "price":  3.63,
+                                                "size":  "",
+                                                "item":  "Pork Loin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Loin",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  1.98,
+                                                "size":  "",
+                                                "item":  "Pork Loin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Loin",
+                                                "store":  "Hy-Vee",
+                                                "price":  3.99,
+                                                "size":  "",
+                                                "item":  "Pork Loin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Loin",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.49,
+                                                "size":  "",
+                                                "item":  "Pork Loin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pork Loin",
+                                                "store":  "Aldi",
+                                                "price":  2.09,
+                                                "size":  "",
+                                                "item":  "Pork Loin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Chuck Roast",
+                                                "store":  "Walmart",
+                                                "price":  9.47,
+                                                "size":  "",
+                                                "item":  "Beef Chuck Roast",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Chuck Roast",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  7.47,
+                                                "size":  "",
+                                                "item":  "Beef Chuck Roast",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Chuck Roast",
+                                                "store":  "Hy-Vee",
+                                                "price":  8.99,
+                                                "size":  "",
+                                                "item":  "Beef Chuck Roast",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Chuck Roast",
+                                                "store":  "Baker\u0027s",
+                                                "price":  9.99,
+                                                "size":  "",
+                                                "item":  "Beef Chuck Roast",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Chuck Roast",
+                                                "store":  "Family Fare",
+                                                "price":  10.99,
+                                                "size":  "",
+                                                "item":  "Beef Chuck Roast",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Chuck Roast",
+                                                "store":  "Aldi",
+                                                "price":  7.99,
+                                                "size":  "",
+                                                "item":  "Beef Chuck Roast",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "93/7 Ground Beef",
+                                                "store":  "Walmart",
+                                                "price":  7.06,
+                                                "size":  "",
+                                                "item":  "93/7 Ground Beef",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "93/7 Ground Beef",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  6.17,
+                                                "size":  "",
+                                                "item":  "93/7 Ground Beef",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "93/7 Ground Beef",
+                                                "store":  "Hy-Vee",
+                                                "price":  8.99,
+                                                "size":  "",
+                                                "item":  "93/7 Ground Beef",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "93/7 Ground Beef",
+                                                "store":  "Baker\u0027s",
+                                                "price":  9.49,
+                                                "size":  "",
+                                                "item":  "93/7 Ground Beef",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "93/7 Ground Beef",
+                                                "store":  "Family Fare",
+                                                "price":  9.29,
+                                                "size":  "",
+                                                "item":  "93/7 Ground Beef",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "93/7 Ground Beef",
+                                                "store":  "Aldi",
+                                                "price":  7.49,
+                                                "size":  "",
+                                                "item":  "93/7 Ground Beef",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Fat Free Cheddar",
+                                                "store":  "Walmart",
+                                                "price":  1.97,
+                                                "size":  "",
+                                                "item":  "Fat Free Cheddar",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Fat Free Cheddar",
+                                                "store":  "Hy-Vee",
+                                                "price":  3.18,
+                                                "size":  "",
+                                                "item":  "Fat Free Cheddar",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Fat Free Cheddar",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.79,
+                                                "size":  "",
+                                                "item":  "Fat Free Cheddar",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Fat Free Cheddar",
+                                                "store":  "Aldi",
+                                                "price":  3.09,
+                                                "size":  "",
+                                                "item":  "Fat Free Cheddar",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Reduced Fat Mozzarella",
+                                                "store":  "Walmart",
+                                                "price":  3.48,
+                                                "size":  "",
+                                                "item":  "Reduced Fat Mozzarella",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Reduced Fat Mozzarella",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  1.22,
+                                                "size":  "",
+                                                "item":  "Reduced Fat Mozzarella",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Reduced Fat Mozzarella",
+                                                "store":  "Hy-Vee",
+                                                "price":  2.48,
+                                                "size":  "",
+                                                "item":  "Reduced Fat Mozzarella",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Reduced Fat Mozzarella",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.69,
+                                                "size":  "",
+                                                "item":  "Reduced Fat Mozzarella",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Reduced Fat Mozzarella",
+                                                "store":  "Family Fare",
+                                                "price":  2.59,
+                                                "size":  "",
+                                                "item":  "Reduced Fat Mozzarella",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Reduced Fat Mozzarella",
+                                                "store":  "Aldi",
+                                                "price":  3.65,
+                                                "size":  "",
+                                                "item":  "Reduced Fat Mozzarella",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Parmesan Cheese",
+                                                "store":  "Walmart",
+                                                "price":  3.48,
+                                                "size":  "",
+                                                "item":  "Parmesan Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Parmesan Cheese",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  2.48,
+                                                "size":  "",
+                                                "item":  "Parmesan Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Parmesan Cheese",
+                                                "store":  "Hy-Vee",
+                                                "price":  4.99,
+                                                "size":  "",
+                                                "item":  "Parmesan Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Parmesan Cheese",
+                                                "store":  "Baker\u0027s",
+                                                "price":  5.99,
+                                                "size":  "",
+                                                "item":  "Parmesan Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Parmesan Cheese",
+                                                "store":  "Family Fare",
+                                                "price":  3.69,
+                                                "size":  "",
+                                                "item":  "Parmesan Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Parmesan Cheese",
+                                                "store":  "Aldi",
+                                                "price":  3.09,
+                                                "size":  "",
+                                                "item":  "Parmesan Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Rice",
+                                                "store":  "Walmart",
+                                                "price":  1.45,
+                                                "size":  "",
+                                                "item":  "Rice",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Rice",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  0.48,
+                                                "size":  "",
+                                                "item":  "Rice",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Rice",
+                                                "store":  "Hy-Vee",
+                                                "price":  0.94,
+                                                "size":  "",
+                                                "item":  "Rice",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Rice",
+                                                "store":  "Baker\u0027s",
+                                                "price":  0.76,
+                                                "size":  "",
+                                                "item":  "Rice",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Rice",
+                                                "store":  "Family Fare",
+                                                "price":  0.94,
+                                                "size":  "",
+                                                "item":  "Rice",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Rice",
+                                                "store":  "Aldi",
+                                                "price":  0.98,
+                                                "size":  "",
+                                                "item":  "Rice",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Penne Pasta",
+                                                "store":  "Walmart",
+                                                "price":  2.27,
+                                                "size":  "",
+                                                "item":  "Penne Pasta",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Penne Pasta",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  1.42,
+                                                "size":  "",
+                                                "item":  "Penne Pasta",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Penne Pasta",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.44,
+                                                "size":  "",
+                                                "item":  "Penne Pasta",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Penne Pasta",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.25,
+                                                "size":  "",
+                                                "item":  "Penne Pasta",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Penne Pasta",
+                                                "store":  "Family Fare",
+                                                "price":  1.89,
+                                                "size":  "",
+                                                "item":  "Penne Pasta",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Penne Pasta",
+                                                "store":  "Aldi",
+                                                "price":  1.25,
+                                                "size":  "",
+                                                "item":  "Penne Pasta",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Seasoned Black Beans",
+                                                "store":  "Walmart",
+                                                "price":  1.28,
+                                                "size":  "",
+                                                "item":  "Seasoned Black Beans",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Seasoned Black Beans",
+                                                "store":  "Hy-Vee",
+                                                "price":  0.99,
+                                                "size":  "",
+                                                "item":  "Seasoned Black Beans",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Seasoned Black Beans",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1,
+                                                "size":  "",
+                                                "item":  "Seasoned Black Beans",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Seasoned Black Beans",
+                                                "store":  "Family Fare",
+                                                "price":  1.79,
+                                                "size":  "",
+                                                "item":  "Seasoned Black Beans",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Seasoned Black Beans",
+                                                "store":  "Aldi",
+                                                "price":  0.95,
+                                                "size":  "",
+                                                "item":  "Seasoned Black Beans",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Sweet Whole Kernel Corn",
+                                                "store":  "Walmart",
+                                                "price":  0.64,
+                                                "size":  "",
+                                                "item":  "Sweet Whole Kernel Corn",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Sweet Whole Kernel Corn",
+                                                "store":  "Hy-Vee",
+                                                "price":  0.88,
+                                                "size":  "",
+                                                "item":  "Sweet Whole Kernel Corn",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Sweet Whole Kernel Corn",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1,
+                                                "size":  "",
+                                                "item":  "Sweet Whole Kernel Corn",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Sweet Whole Kernel Corn",
+                                                "store":  "Family Fare",
+                                                "price":  0.99,
+                                                "size":  "",
+                                                "item":  "Sweet Whole Kernel Corn",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Sweet Whole Kernel Corn",
+                                                "store":  "Aldi",
+                                                "price":  0.89,
+                                                "size":  "",
+                                                "item":  "Sweet Whole Kernel Corn",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Diced Tomatoes",
+                                                "store":  "Walmart",
+                                                "price":  0.96,
+                                                "size":  "",
+                                                "item":  "Diced Tomatoes",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Diced Tomatoes",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.19,
+                                                "size":  "",
+                                                "item":  "Diced Tomatoes",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Diced Tomatoes",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1,
+                                                "size":  "",
+                                                "item":  "Diced Tomatoes",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Diced Tomatoes",
+                                                "store":  "Family Fare",
+                                                "price":  0.99,
+                                                "size":  "",
+                                                "item":  "Diced Tomatoes",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Diced Tomatoes",
+                                                "store":  "Aldi",
+                                                "price":  0.99,
+                                                "size":  "",
+                                                "item":  "Diced Tomatoes",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Diced Green Chiles",
+                                                "store":  "Walmart",
+                                                "price":  0.88,
+                                                "size":  "",
+                                                "item":  "Diced Green Chiles",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Diced Green Chiles",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.79,
+                                                "size":  "",
+                                                "item":  "Diced Green Chiles",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Diced Green Chiles",
+                                                "store":  "Baker\u0027s",
+                                                "price":  0.99,
+                                                "size":  "",
+                                                "item":  "Diced Green Chiles",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Diced Green Chiles",
+                                                "store":  "Family Fare",
+                                                "price":  2.29,
+                                                "size":  "",
+                                                "item":  "Diced Green Chiles",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Diced Green Chiles",
+                                                "store":  "Aldi",
+                                                "price":  0.95,
+                                                "size":  "",
+                                                "item":  "Diced Green Chiles",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Sun-Dried Tomatoes",
+                                                "store":  "Walmart",
+                                                "price":  3.98,
+                                                "size":  "",
+                                                "item":  "Sun-Dried Tomatoes",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Sun-Dried Tomatoes",
+                                                "store":  "Hy-Vee",
+                                                "price":  3.99,
+                                                "size":  "",
+                                                "item":  "Sun-Dried Tomatoes",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Sun-Dried Tomatoes",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.99,
+                                                "size":  "",
+                                                "item":  "Sun-Dried Tomatoes",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Sun-Dried Tomatoes",
+                                                "store":  "Family Fare",
+                                                "price":  5.99,
+                                                "size":  "",
+                                                "item":  "Sun-Dried Tomatoes",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Sun-Dried Tomatoes",
+                                                "store":  "Aldi",
+                                                "price":  4.39,
+                                                "size":  "",
+                                                "item":  "Sun-Dried Tomatoes",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pepperoncini",
+                                                "store":  "Walmart",
+                                                "price":  4.18,
+                                                "size":  "",
+                                                "item":  "Pepperoncini",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pepperoncini",
+                                                "store":  "Hy-Vee",
+                                                "price":  4.99,
+                                                "size":  "",
+                                                "item":  "Pepperoncini",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pepperoncini",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.99,
+                                                "size":  "",
+                                                "item":  "Pepperoncini",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Pepperoncini",
+                                                "store":  "Family Fare",
+                                                "price":  3.29,
+                                                "size":  "",
+                                                "item":  "Pepperoncini",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Chipotle in Adobo",
+                                                "store":  "Walmart",
+                                                "price":  1.63,
+                                                "size":  "",
+                                                "item":  "Chipotle in Adobo",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Chipotle in Adobo",
+                                                "store":  "Hy-Vee",
+                                                "price":  3.29,
+                                                "size":  "",
+                                                "item":  "Chipotle in Adobo",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Chipotle in Adobo",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.89,
+                                                "size":  "",
+                                                "item":  "Chipotle in Adobo",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Chipotle in Adobo",
+                                                "store":  "Family Fare",
+                                                "price":  1.99,
+                                                "size":  "",
+                                                "item":  "Chipotle in Adobo",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Coconut Milk",
+                                                "store":  "Walmart",
+                                                "price":  2.12,
+                                                "size":  "",
+                                                "item":  "Coconut Milk",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Coconut Milk",
+                                                "store":  "Hy-Vee",
+                                                "price":  3.39,
+                                                "size":  "",
+                                                "item":  "Coconut Milk",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Coconut Milk",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.99,
+                                                "size":  "",
+                                                "item":  "Coconut Milk",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Buffalo Wing Sauce",
+                                                "store":  "Walmart",
+                                                "price":  3.48,
+                                                "size":  "",
+                                                "item":  "Buffalo Wing Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Buffalo Wing Sauce",
+                                                "store":  "Hy-Vee",
+                                                "price":  4.99,
+                                                "size":  "",
+                                                "item":  "Buffalo Wing Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Buffalo Wing Sauce",
+                                                "store":  "Baker\u0027s",
+                                                "price":  4.99,
+                                                "size":  "",
+                                                "item":  "Buffalo Wing Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Buffalo Wing Sauce",
+                                                "store":  "Family Fare",
+                                                "price":  4.99,
+                                                "size":  "",
+                                                "item":  "Buffalo Wing Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Buffalo Wing Sauce",
+                                                "store":  "Aldi",
+                                                "price":  2.35,
+                                                "size":  "",
+                                                "item":  "Buffalo Wing Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Hot Sauce",
+                                                "store":  "Walmart",
+                                                "price":  3.26,
+                                                "size":  "",
+                                                "item":  "Hot Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Hot Sauce",
+                                                "store":  "Hy-Vee",
+                                                "price":  4.99,
+                                                "size":  "",
+                                                "item":  "Hot Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Hot Sauce",
+                                                "store":  "Baker\u0027s",
+                                                "price":  4.59,
+                                                "size":  "",
+                                                "item":  "Hot Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Hot Sauce",
+                                                "store":  "Family Fare",
+                                                "price":  3.49,
+                                                "size":  "",
+                                                "item":  "Hot Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Hot Sauce",
+                                                "store":  "Aldi",
+                                                "price":  2.09,
+                                                "size":  "",
+                                                "item":  "Hot Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Salsa Verde",
+                                                "store":  "Walmart",
+                                                "price":  2.54,
+                                                "size":  "",
+                                                "item":  "Salsa Verde",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Salsa Verde",
+                                                "store":  "Hy-Vee",
+                                                "price":  3.79,
+                                                "size":  "",
+                                                "item":  "Salsa Verde",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Salsa Verde",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.5,
+                                                "size":  "",
+                                                "item":  "Salsa Verde",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Salsa Verde",
+                                                "store":  "Family Fare",
+                                                "price":  3.59,
+                                                "size":  "",
+                                                "item":  "Salsa Verde",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Salsa Verde",
+                                                "store":  "Aldi",
+                                                "price":  4.19,
+                                                "size":  "",
+                                                "item":  "Salsa Verde",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Salsa",
+                                                "store":  "Walmart",
+                                                "price":  1.98,
+                                                "size":  "",
+                                                "item":  "Salsa",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Salsa",
+                                                "store":  "Hy-Vee",
+                                                "price":  3.49,
+                                                "size":  "",
+                                                "item":  "Salsa",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Salsa",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.89,
+                                                "size":  "",
+                                                "item":  "Salsa",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Salsa",
+                                                "store":  "Family Fare",
+                                                "price":  3.79,
+                                                "size":  "",
+                                                "item":  "Salsa",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Salsa",
+                                                "store":  "Aldi",
+                                                "price":  2.85,
+                                                "size":  "",
+                                                "item":  "Salsa",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Teriyaki Sauce",
+                                                "store":  "Walmart",
+                                                "price":  4.52,
+                                                "size":  "",
+                                                "item":  "Teriyaki Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Teriyaki Sauce",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.99,
+                                                "size":  "",
+                                                "item":  "Teriyaki Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Teriyaki Sauce",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.99,
+                                                "size":  "",
+                                                "item":  "Teriyaki Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Teriyaki Sauce",
+                                                "store":  "Family Fare",
+                                                "price":  2.29,
+                                                "size":  "",
+                                                "item":  "Teriyaki Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Teriyaki Sauce",
+                                                "store":  "Aldi",
+                                                "price":  2.45,
+                                                "size":  "",
+                                                "item":  "Teriyaki Sauce",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "BBQ Sauce (Sugar Free)",
+                                                "store":  "Walmart",
+                                                "price":  3.98,
+                                                "size":  "",
+                                                "item":  "BBQ Sauce (Sugar Free)",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "BBQ Sauce (Sugar Free)",
+                                                "store":  "Hy-Vee",
+                                                "price":  3.48,
+                                                "size":  "",
+                                                "item":  "BBQ Sauce (Sugar Free)",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "BBQ Sauce (Sugar Free)",
+                                                "store":  "Baker\u0027s",
+                                                "price":  5.99,
+                                                "size":  "",
+                                                "item":  "BBQ Sauce (Sugar Free)",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "BBQ Sauce (Sugar Free)",
+                                                "store":  "Family Fare",
+                                                "price":  6.99,
+                                                "size":  "",
+                                                "item":  "BBQ Sauce (Sugar Free)",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Chicken Broth",
+                                                "store":  "Walmart",
+                                                "price":  1,
+                                                "size":  "",
+                                                "item":  "Chicken Broth",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Chicken Broth",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.99,
+                                                "size":  "",
+                                                "item":  "Chicken Broth",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Chicken Broth",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.59,
+                                                "size":  "",
+                                                "item":  "Chicken Broth",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Chicken Broth",
+                                                "store":  "Family Fare",
+                                                "price":  1.69,
+                                                "size":  "",
+                                                "item":  "Chicken Broth",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Chicken Broth",
+                                                "store":  "Aldi",
+                                                "price":  1.39,
+                                                "size":  "",
+                                                "item":  "Chicken Broth",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Broth",
+                                                "store":  "Walmart",
+                                                "price":  1,
+                                                "size":  "",
+                                                "item":  "Beef Broth",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Broth",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.99,
+                                                "size":  "",
+                                                "item":  "Beef Broth",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Broth",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.59,
+                                                "size":  "",
+                                                "item":  "Beef Broth",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Broth",
+                                                "store":  "Family Fare",
+                                                "price":  1.69,
+                                                "size":  "",
+                                                "item":  "Beef Broth",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Beef Broth",
+                                                "store":  "Aldi",
+                                                "price":  1.39,
+                                                "size":  "",
+                                                "item":  "Beef Broth",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Olive Oil",
+                                                "store":  "Walmart",
+                                                "price":  6.12,
+                                                "size":  "",
+                                                "item":  "Olive Oil",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Olive Oil",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  5.1,
+                                                "size":  "",
+                                                "item":  "Olive Oil",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Olive Oil",
+                                                "store":  "Hy-Vee",
+                                                "price":  7.99,
+                                                "size":  "",
+                                                "item":  "Olive Oil",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Olive Oil",
+                                                "store":  "Baker\u0027s",
+                                                "price":  6.49,
+                                                "size":  "",
+                                                "item":  "Olive Oil",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Olive Oil",
+                                                "store":  "Family Fare",
+                                                "price":  7.99,
+                                                "size":  "",
+                                                "item":  "Olive Oil",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Olive Oil",
+                                                "store":  "Aldi",
+                                                "price":  6.39,
+                                                "size":  "",
+                                                "item":  "Olive Oil",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Ranch Seasoning Mix",
+                                                "store":  "Walmart",
+                                                "price":  1.08,
+                                                "size":  "",
+                                                "item":  "Ranch Seasoning Mix",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Ranch Seasoning Mix",
+                                                "store":  "Hy-Vee",
+                                                "price":  2.18,
+                                                "size":  "",
+                                                "item":  "Ranch Seasoning Mix",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Ranch Seasoning Mix",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.29,
+                                                "size":  "",
+                                                "item":  "Ranch Seasoning Mix",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Ranch Seasoning Mix",
+                                                "store":  "Family Fare",
+                                                "price":  2.59,
+                                                "size":  "",
+                                                "item":  "Ranch Seasoning Mix",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Ranch Seasoning Mix",
+                                                "store":  "Aldi",
+                                                "price":  0.65,
+                                                "size":  "",
+                                                "item":  "Ranch Seasoning Mix",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Taco Seasoning",
+                                                "store":  "Walmart",
+                                                "price":  0.47,
+                                                "size":  "",
+                                                "item":  "Taco Seasoning",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Taco Seasoning",
+                                                "store":  "Hy-Vee",
+                                                "price":  0.99,
+                                                "size":  "",
+                                                "item":  "Taco Seasoning",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Taco Seasoning",
+                                                "store":  "Baker\u0027s",
+                                                "price":  0.5,
+                                                "size":  "",
+                                                "item":  "Taco Seasoning",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Taco Seasoning",
+                                                "store":  "Family Fare",
+                                                "price":  1.29,
+                                                "size":  "",
+                                                "item":  "Taco Seasoning",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Taco Seasoning",
+                                                "store":  "Aldi",
+                                                "price":  0.55,
+                                                "size":  "",
+                                                "item":  "Taco Seasoning",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Ground Cumin",
+                                                "store":  "Walmart",
+                                                "price":  2.44,
+                                                "size":  "",
+                                                "item":  "Ground Cumin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Ground Cumin",
+                                                "store":  "Hy-Vee",
+                                                "price":  2.49,
+                                                "size":  "",
+                                                "item":  "Ground Cumin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Ground Cumin",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.99,
+                                                "size":  "",
+                                                "item":  "Ground Cumin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Ground Cumin",
+                                                "store":  "Family Fare",
+                                                "price":  4.29,
+                                                "size":  "",
+                                                "item":  "Ground Cumin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Ground Cumin",
+                                                "store":  "Aldi",
+                                                "price":  1.09,
+                                                "size":  "",
+                                                "item":  "Ground Cumin",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Chili Powder",
+                                                "store":  "Walmart",
+                                                "price":  1.08,
+                                                "size":  "",
+                                                "item":  "Chili Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Chili Powder",
+                                                "store":  "Hy-Vee",
+                                                "price":  2.49,
+                                                "size":  "",
+                                                "item":  "Chili Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Chili Powder",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.25,
+                                                "size":  "",
+                                                "item":  "Chili Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Chili Powder",
+                                                "store":  "Family Fare",
+                                                "price":  1.69,
+                                                "size":  "",
+                                                "item":  "Chili Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Chili Powder",
+                                                "store":  "Aldi",
+                                                "price":  1.09,
+                                                "size":  "",
+                                                "item":  "Chili Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Garlic Powder",
+                                                "store":  "Walmart",
+                                                "price":  1.13,
+                                                "size":  "",
+                                                "item":  "Garlic Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Garlic Powder",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.25,
+                                                "size":  "",
+                                                "item":  "Garlic Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Garlic Powder",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.25,
+                                                "size":  "",
+                                                "item":  "Garlic Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Garlic Powder",
+                                                "store":  "Family Fare",
+                                                "price":  1.39,
+                                                "size":  "",
+                                                "item":  "Garlic Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Garlic Powder",
+                                                "store":  "Aldi",
+                                                "price":  1.09,
+                                                "size":  "",
+                                                "item":  "Garlic Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Onion Powder",
+                                                "store":  "Walmart",
+                                                "price":  1.08,
+                                                "size":  "",
+                                                "item":  "Onion Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Onion Powder",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.99,
+                                                "size":  "",
+                                                "item":  "Onion Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Onion Powder",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.25,
+                                                "size":  "",
+                                                "item":  "Onion Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Onion Powder",
+                                                "store":  "Family Fare",
+                                                "price":  1.69,
+                                                "size":  "",
+                                                "item":  "Onion Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Onion Powder",
+                                                "store":  "Aldi",
+                                                "price":  1.09,
+                                                "size":  "",
+                                                "item":  "Onion Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Italian Seasoning",
+                                                "store":  "Walmart",
+                                                "price":  1.08,
+                                                "size":  "",
+                                                "item":  "Italian Seasoning",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Italian Seasoning",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.25,
+                                                "size":  "",
+                                                "item":  "Italian Seasoning",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Italian Seasoning",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.25,
+                                                "size":  "",
+                                                "item":  "Italian Seasoning",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Italian Seasoning",
+                                                "store":  "Family Fare",
+                                                "price":  1.69,
+                                                "size":  "",
+                                                "item":  "Italian Seasoning",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Italian Seasoning",
+                                                "store":  "Aldi",
+                                                "price":  1.09,
+                                                "size":  "",
+                                                "item":  "Italian Seasoning",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Broccoli Florets",
+                                                "store":  "Walmart",
+                                                "price":  1.16,
+                                                "size":  "",
+                                                "item":  "Broccoli Florets",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Broccoli Florets",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  1.19,
+                                                "size":  "",
+                                                "item":  "Broccoli Florets",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Broccoli Florets",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.99,
+                                                "size":  "",
+                                                "item":  "Broccoli Florets",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Broccoli Florets",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.49,
+                                                "size":  "",
+                                                "item":  "Broccoli Florets",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Broccoli Florets",
+                                                "store":  "Family Fare",
+                                                "price":  1.79,
+                                                "size":  "",
+                                                "item":  "Broccoli Florets",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Broccoli Florets",
+                                                "store":  "Aldi",
+                                                "price":  1.29,
+                                                "size":  "",
+                                                "item":  "Broccoli Florets",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Zucchini",
+                                                "store":  "Walmart",
+                                                "price":  1.42,
+                                                "size":  "",
+                                                "item":  "Zucchini",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Zucchini",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.99,
+                                                "size":  "",
+                                                "item":  "Zucchini",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Zucchini",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.49,
+                                                "size":  "",
+                                                "item":  "Zucchini",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Zucchini",
+                                                "store":  "Family Fare",
+                                                "price":  2.29,
+                                                "size":  "",
+                                                "item":  "Zucchini",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Zucchini",
+                                                "store":  "Aldi",
+                                                "price":  1.39,
+                                                "size":  "",
+                                                "item":  "Zucchini",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Yellow Onion",
+                                                "store":  "Walmart",
+                                                "price":  0.85,
+                                                "size":  "",
+                                                "item":  "Yellow Onion",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Yellow Onion",
+                                                "store":  "Hy-Vee",
+                                                "price":  0.83,
+                                                "size":  "",
+                                                "item":  "Yellow Onion",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Yellow Onion",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.16,
+                                                "size":  "",
+                                                "item":  "Yellow Onion",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Yellow Onion",
+                                                "store":  "Family Fare",
+                                                "price":  1,
+                                                "size":  "",
+                                                "item":  "Yellow Onion",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Yellow Onion",
+                                                "store":  "Aldi",
+                                                "price":  0.88,
+                                                "size":  "",
+                                                "item":  "Yellow Onion",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Green Bell Peppers",
+                                                "store":  "Walmart",
+                                                "price":  1.07,
+                                                "size":  "",
+                                                "item":  "Green Bell Peppers",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Green Bell Peppers",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.5,
+                                                "size":  "",
+                                                "item":  "Green Bell Peppers",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Green Bell Peppers",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.19,
+                                                "size":  "",
+                                                "item":  "Green Bell Peppers",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Green Bell Peppers",
+                                                "store":  "Family Fare",
+                                                "price":  1.69,
+                                                "size":  "",
+                                                "item":  "Green Bell Peppers",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Green Bell Peppers",
+                                                "store":  "Aldi",
+                                                "price":  0.92,
+                                                "size":  "",
+                                                "item":  "Green Bell Peppers",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Shredded Carrots",
+                                                "store":  "Walmart",
+                                                "price":  1.13,
+                                                "size":  "",
+                                                "item":  "Shredded Carrots",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Shredded Carrots",
+                                                "store":  "Hy-Vee",
+                                                "price":  1.5,
+                                                "size":  "",
+                                                "item":  "Shredded Carrots",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Shredded Carrots",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.66,
+                                                "size":  "",
+                                                "item":  "Shredded Carrots",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Shredded Carrots",
+                                                "store":  "Aldi",
+                                                "price":  1.1,
+                                                "size":  "",
+                                                "item":  "Shredded Carrots",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Garlic",
+                                                "store":  "Walmart",
+                                                "price":  0.72,
+                                                "size":  "",
+                                                "item":  "Garlic",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Garlic",
+                                                "store":  "Hy-Vee",
+                                                "price":  0.79,
+                                                "size":  "",
+                                                "item":  "Garlic",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "Garlic",
+                                                "store":  "Baker\u0027s",
+                                                "price":  0.89,
+                                                "size":  "",
+                                                "item":  "Garlic",
+                                                "commodity_known":  false
+                                            }
+                                        ]
+                   }
+               ]
+}

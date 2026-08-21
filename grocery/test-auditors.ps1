@@ -3918,6 +3918,16 @@ else { Bad ('rollback TTL fixtures FAILED (rc=' + $r.rc + ') - a 30-day window t
 # separate fixtures - ad must never become everyday, everyday must never become an ad, and an ad must
 # be null when there is no ad. The file also proves the parity check can FAIL, because a parity check
 # that cannot fail makes "derived from the same rows" read as "verified".
+# ---------------------------------------------------------------- captured-but-unpublished (2026-08-21)
+# Brad: "we need to make sure that when we pull pricing, from ANY part of our codebase, its populating
+# the table correctly." It was not. The Recipe Hunter's pricing agent records real adjudicated prices
+# into ingredient-queue.json and NOTHING promotes them - 97 of 99 had reached nothing since 2026-08-16.
+# No existing guard could see it: every other one starts from the board and asks whether what is on it
+# is right, so a price that never arrives is invisible by construction.
+$r = RunPS 'audit-price-capture-reach.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'price-capture-reach: a captured price that reaches nothing is still reported, and reach is measured per CELL not per commodity' }
+else { Bad ('audit-price-capture-reach -SelfTest failed (rc=' + $r.rc + ') - captured prices can go missing without anything counting them: ' + ($r.text -replace "`n", ' ')) }
+
 $r = RunPS 'test-price-table.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'PRICE-TABLE PASSED') { Ok 'price table: the everyday/ad split holds in both directions, a closed ad nulls out, and parity can still see a disagreement' }
 else { Bad ('price-table fixtures FAILED (rc=' + $r.rc + ') - the everyday/ad separation Brad called non-negotiable is not holding: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
