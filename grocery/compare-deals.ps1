@@ -1728,3 +1728,64 @@ if ($mbUnpriced.Count -gt 0) {
 }
 Write-Output ""
 Write-Output ("Saved: " + $file)
+
+# ---------------------------------------------------------------- THE WIDE PRICE TABLE (2026-08-21)
+# Brad's model: one row per ITEM, carrying every store's everyday price, ad price and ad window as
+# columns, and pages show the cheaper of the two. When the ad's window closes the ad column nulls out
+# and the everyday price returns BY ARITHMETIC - no re-capture needed. Under the 90-day carry that is
+# the difference between a finished sale falling off by itself and one publishing for a quarter.
+#
+# BUILT HERE, NOT IN A SEPARATE PASS, and that is the load-bearing decision. Every price in the table
+# is chosen from the SAME $priced rows by the SAME Select-FreshestCaptureRows the ranking above used.
+# A standalone builder reading comparison-*.json could only ever see the ONE winning row per store,
+# so it could not know the everyday price behind a sale cell - and a builder re-reading the candidate
+# pool would be a second implementation of "which row wins", which is precisely how a table and the
+# board it describes drift while both look correct.
+# The parity check below then proves, per cell, that they still agree.
+. (Join-Path $PSScriptRoot 'price-table-lib.ps1')
+$ptRows = New-Object System.Collections.Generic.List[object]
+foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Object id)) {
+  $f0 = $g.Group[0]
+  [void]$ptRows.Add((Build-PriceTableRow -Id $g.Name -Commodity ([string]$f0.label) -Unit ([string]$f0.unit) -Rows $g.Group -Today $today))
+}
+$ptTable = @($ptRows | Sort-Object id)
+$ptStoreOrder = @('Hy-Vee', 'Aldi', 'Family Fare', 'Fareway', "Baker's", "Sam's Club", 'Walmart')
+$ptDoc = [ordered]@{
+  week_of = $today
+  built_at = (Get-Date).ToString('s')
+  note = 'WIDE price table, one row per item. Per store: everyday price, ad price, and the ad window. ad is NULL when the item is not on ad - Brad''s founding rule - and an ad whose ad_to has passed is nulled at build time rather than cleaned up later. `shown` is the cheaper of the two, which is what a page must display. Derived from the same candidate rows and the same eligibility rule the board ranks with; price-table-parity proves they agree per cell.'
+  stores = $ptStoreOrder
+  rows = $ptTable.Count
+  items = $ptTable
+}
+$ptFile = Join-Path $OutDir (($(if ($OutName -eq 'comparison') { 'price-table' } else { "$OutName-price-table" })) + '-' + $today + '.json')
+[IO.File]::WriteAllText($ptFile, ($ptDoc | ConvertTo-Json -Depth 8), (New-Object System.Text.UTF8Encoding($false)))
+# The CSV is a RENDERING of the JSON, regenerated every build, never authored - so the two cannot
+# disagree about a price the way two hand-maintained files would.
+$ptCsv = ConvertTo-PriceTableCsv -Table $ptTable -StoreOrder $ptStoreOrder
+$ptCsvFile = [IO.Path]::ChangeExtension($ptFile, 'csv')
+[IO.File]::WriteAllText($ptCsvFile, $ptCsv, (New-Object System.Text.UTF8Encoding($false)))
+
+$ptCells = 0; $ptWithAd = 0; $ptWithEv = 0; $ptBoth = 0
+foreach ($r in $ptTable) {
+  foreach ($k in $r.stores.Keys) {
+    $ptCells++
+    $c = $r.stores[$k]
+    if ($null -ne $c.ad) { $ptWithAd++ }
+    if ($null -ne $c.everyday) { $ptWithEv++ }
+    if ($null -ne $c.ad -and $null -ne $c.everyday) { $ptBoth++ }
+  }
+}
+Write-Output ("price-table: {0} item(s), {1} store cell(s) - {2} carry an everyday price, {3} carry a LIVE ad, {4} carry both" -f $ptTable.Count, $ptCells, $ptWithEv, $ptWithAd, $ptBoth)
+# PARITY, EVERY BUILD, NOT ON A SCHEDULE. A table that disagrees with the board it describes is worse
+# than no table, because it will be believed. This is cheap and it is the only thing standing between
+# "derived from the same rows" and "actually still the same answer".
+$ptBad = @(Test-PriceTableParity -Table $ptTable -Comparison ([pscustomobject]@{ comparison = $report }))
+if ($ptBad.Count) {
+  Write-Output ("!! PRICE-TABLE PARITY: {0} cell(s) disagree with the published board - the table and the ranker have drifted:" -f $ptBad.Count)
+  foreach ($b in ($ptBad | Select-Object -First 12)) { Write-Output ("   [{0}] {1}: {2}" -f $b.id, $b.store, $b.why) }
+} else {
+  Write-Output ("price-table: parity OK - every one of the {0} cell(s) matches the price the board published" -f $ptCells)
+}
+Write-Output ("Saved: " + $ptFile)
+Write-Output ("Saved: " + $ptCsvFile)

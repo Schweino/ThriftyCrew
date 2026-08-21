@@ -3911,6 +3911,17 @@ else { Bad ('rollback TTL fixtures FAILED (rc=' + $r.rc + ') - a 30-day window t
 # It also sweeps every production script for the RETIRED Omaha #01 identity: that identity lived in six
 # files while stores.json carried none of it, so switching stores meant editing six and hoping. The sweep
 # caught four files missed on its first run, which is why it is a fixture and not a comment.
+# ---------------------------------------------------------------- the wide price table (2026-08-21)
+# Brad's model: one row per item, every store's everyday price and ad price as columns, page shows the
+# cheaper, and the ad column NULLS OUT when its window closes so a finished sale expires by arithmetic
+# instead of waiting for the 90-day rotation to come back round. His three non-negotiables are three
+# separate fixtures - ad must never become everyday, everyday must never become an ad, and an ad must
+# be null when there is no ad. The file also proves the parity check can FAIL, because a parity check
+# that cannot fail makes "derived from the same rows" read as "verified".
+$r = RunPS 'test-price-table.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'PRICE-TABLE PASSED') { Ok 'price table: the everyday/ad split holds in both directions, a closed ad nulls out, and parity can still see a disagreement' }
+else { Bad ('price-table fixtures FAILED (rc=' + $r.rc + ') - the everyday/ad separation Brad called non-negotiable is not holding: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
+
 $r = RunPS 'test-hyvee-tag-check.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'HYVEE-TAG-CHECK PASSED') { Ok 'Hy-Vee: a price below the store shelf tag is still refused, a real promotion still is not, and no script is pinned to the retired store' }
 else { Bad ('Hy-Vee tag/identity fixtures FAILED (rc=' + $r.rc + ') - either a price the till will not honour can publish again, or a caller is still pulling the retired Omaha #01: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
