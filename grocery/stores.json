@@ -23,6 +23,19 @@
         "evidence": "sanctioned/server feed - not rate-limited by a bot wall",
         "identity_assert": null,
         "wall_signals": []
+      },
+      "store_identity": {
+        "store_id": 1466,
+        "location_id": "09e8f4f0-e614-4b86-9285-c9c3dbff0d85",
+        "label": "Omaha #02",
+        "note": "storeId selects storeProducts (price/basePrice/onSale); location_id selects retailItems (tagPrice). They are independent request variables and a mismatched pair grades one store against another store shelf tag - it manufactured 11 false disagreements on 2026-08-21. Move both or neither. See hyvee-store-lib.ps1.",
+        "ruled": "2026-08-21 Brad: switch to Omaha 2, less variables, more straightforward regular vs ads",
+        "previous": {
+          "store_id": 1465,
+          "location_id": "adcb2ae1-f440-4512-bfe8-9624832c72a9",
+          "label": "Omaha #01",
+          "retired": "2026-08-21"
+        }
       }
     },
     {

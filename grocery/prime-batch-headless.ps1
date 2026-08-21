@@ -136,7 +136,8 @@ if ($Store -eq 'ff' -or $Store -eq 'both') {
 if ($Store -eq 'hyvee' -or $Store -eq 'both') {
   $EP = 'https://www.hy-vee.com/aisles-online/api/search/products'
   $HUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148 Safari/537.36'
-  $HStore = 1465
+  . (Join-Path $PSScriptRoot 'hyvee-store-lib.ps1')  # one home for the store identity; see that file
+  $HStore = [int](Get-HyVeeStore).store_id
   function HV-Search($term) {
     $h = @{ 'content-type' = 'application/json'; 'User-Agent' = $HUA; 'x-hy-vee-correlation-id' = [guid]::NewGuid().ToString() }
     # pageSize 90, was 40 (F1(c), 2026-08-01). Cheap - one request either way - but MEASURED to be a small
@@ -164,7 +165,7 @@ if ($Store -eq 'hyvee' -or $Store -eq 'both') {
       $slug = (((([string]$desc).ToLower()) -replace '[^a-z0-9 ]', ' ') -replace '\s+', ' ').Trim() -replace ' ', '-'
       if ($slug.Length -gt 80) { $slug = $slug.Substring(0, 80).TrimEnd('-') }
       $url = 'https://www.hy-vee.com/aisles-online/p/' + [string]$x.id + '/' + $slug
-      $row = [ordered]@{ store = 'Hy-Vee'; item = $desc; ad_price = ('$' + $price); size = $size; regular = $price; current_price = $price; source_ad = 'Aisles Online search current price (batch primer, storeId 1465, Omaha #01)'; as_of = $todayS; product_id = [int]$x.id; link_url = $url }
+      $row = [ordered]@{ store = 'Hy-Vee'; item = $desc; ad_price = ('$' + $price); size = $size; regular = $price; current_price = $price; source_ad = (Get-HyVeeSourceLabel -Kind 'search current price (batch primer)'); as_of = $todayS; product_id = [int]$x.id; link_url = $url }
       if ($base -gt 0) { $row['base_price'] = $base; if ($price -lt ($base - 0.005)) { $row['marked_down'] = $true } }
       [void]$hvRows.Add($row); $n++
     }

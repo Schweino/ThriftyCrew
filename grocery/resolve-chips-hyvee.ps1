@@ -11,9 +11,13 @@
   by more than the one tolerance (0.32, half-cent floor) are refused here, not deleted tomorrow.
   A chip we cannot match is SKIPPED and named - never guessed.
 #>
-param([switch]$Apply, [int]$StoreId = 1465)
+param([switch]$Apply, [int]$StoreId = 0)   # 0 = ask hyvee-store-lib; see that file
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
+# 0 means 'take the store the board speaks for'. One home for the identity - see hyvee-store-lib.ps1.
+. (Join-Path $root 'hyvee-store-lib.ps1')
+if ($StoreId -le 0) { $StoreId = [int](Get-HyVeeStore -Root $root).store_id }
+
 . (Join-Path $root 'pu-lib.ps1')
 
 $EP = 'https://www.hy-vee.com/aisles-online/api/search/products'

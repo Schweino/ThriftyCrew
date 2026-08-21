@@ -1,5 +1,20 @@
 ﻿<#
-  pull-regular-hyvee.ps1 - refresh Hy-Vee to the CURRENT Omaha #01 shelf price. Headless; no browser needed.
+  pull-regular-hyvee.ps1 - refresh Hy-Vee to the CURRENT shelf price at the store the board speaks for.
+  Headless; no browser needed. WHICH store that is lives in hyvee-store-lib.ps1, never in this file:
+  it was Omaha #01 until 2026-08-21 and is Omaha #02 now, on Brad's ruling, and it was hard-coded here
+  plus in five other callers, so "switching stores" meant editing six files and hoping.
+
+  A FOURTH PRICE, FOUND 2026-08-21, AND IT IS THE ONE THAT MATTERS NOW:
+
+      retailItems.tagPrice / ecommerceTagPrice   the SHELF TAG at the pickup location
+
+  storeProducts.price can disagree with it. Measured at Omaha #01 with the store and location correctly
+  matched: 2 of 22 sampled products, both Morton & Bassett spices, published at $5.31 and $5.81 against a
+  $9.99 tag - and Brad's own Omaha #01 product page showed $9.99. So the board was publishing a number no
+  shopper could pay, on a row that looked perfect from the inside (real product, real store, onSale true,
+  a plausible was-price). Test-HyVeeTagAgreement below is the cross-check that catches it, and it is only
+  meaningful because the tag comes from a DIFFERENT part of the response than the price - the same reason
+  guard 10 keeps ad_price and current_price as separate assignments.
 
   WHY THIS EXISTS. Hy-Vee was the only priced store with no automated pull. Its everyday file was refreshed by
   hand through a browser, went stale between runs, and - worse - whatever captured it read the WRONG NUMBER.
@@ -7,7 +22,7 @@
 
       basePrice             13.99   the REGULAR price
       ssrPricing.price      12.99   *** a DIFFERENT STORE (storeId 1759), not Omaha at all ***
-      storeProducts.price   11.99   what Omaha #01 actually charges today   <-- the only correct one
+      storeProducts.price   11.99   what the store charges today   <-- what we publish, cross-checked below
 
   The board was publishing 13.99. Brad found it through sirloin steak: we showed $6.99/lb (a stale markdown),
   the store charged $11.99/lb, and our "fresh" everyday file said $13.99/lb. Three numbers, none of them right.
@@ -34,7 +49,12 @@
   the exact document lives base64'd in hyvee\query-b64.txt. storeId is a request VARIABLE, not a cookie, which
   is why this runs with no session and can sit in the daily cloud pipeline like Family Fare's.
 #>
-param([string]$OutDir = "", [int]$StoreId = 1465, [switch]$Quick)
+# $StoreId defaults to 0 = "ask hyvee-store-lib", so the store identity has exactly ONE home. Passing an
+# explicit -StoreId still works for probing another store, but it then ALSO needs -LocationId: the two
+# select different halves of the response and a mismatched pair grades one store's price against another
+# store's shelf tag. That mismatch reported 11 of 21 Omaha #02 rows as wrong on 2026-08-21 when the real
+# number was zero, so the two are deliberately awkward to move apart.
+param([string]$OutDir = "", [int]$StoreId = 0, [string]$LocationId = "", [switch]$Quick)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'omaha-time.ps1')
@@ -49,7 +69,23 @@ if (-not (Test-Path $qFile)) { throw "missing $qFile (the persisted GraphQL docu
 $QUERY = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(((Get-Content $qFile -Raw) -replace '\s','')))
 
 $EP  = 'https://www.hy-vee.com/aisles-online/api/graphql/two-legged/getProductDetailsWithPrice'
-$LOC = 'adcb2ae1-f440-4512-bfe8-9624832c72a9'   # Omaha #01 pickup location
+# THE STORE, FROM THE ONE PLACE THAT KNOWS IT. Both identifiers move together or neither does.
+. (Join-Path $root 'hyvee-store-lib.ps1')
+$drift = Test-HyVeeStoreDrift -Root $root
+if ($drift) { throw $drift }
+$HVSTORE = Get-HyVeeStore -Root $root
+if ($StoreId -le 0) { $StoreId = [int]$HVSTORE.store_id }
+elseif (-not $LocationId) {
+  throw ("-StoreId $StoreId was passed without -LocationId. storeId selects the PRICE and locationId " +
+         "selects the SHELF TAG; querying one store's price against another store's tag manufactures " +
+         "false disagreements (11 of 21 on 2026-08-21). Pass both, or pass neither and take the registry's.")
+}
+$LOC = if ($LocationId) { $LocationId } else { [string]$HVSTORE.location_id }
+$STORE_LABEL = [string]$HVSTORE.label
+# DERIVED, NEVER TYPED. Every row records which store it came from, and that label used to be a string
+# literal sitting next to the request rather than built from it - so a store switch could move the query
+# while the rows kept claiming the old store, and nothing downstream could tell.
+$SRC_LABEL = Get-HyVeeSourceLabel -Root $root
 $HDR = @{
   'content-type'              = 'application/json'
   'x-operation-name'          = 'getProductDetailsWithPrice'
@@ -73,16 +109,61 @@ function Get-HyVeeStoreProduct([int]$productId) {
       $sp = @($r.data.storeProducts.storeProducts) | Where-Object { [int]$_.storeId -eq $StoreId } | Select-Object -First 1
       if ($sp) {
         $ri = @($r.data.product.item.retailItems) | Select-Object -First 1
+        # THE SHELF TAG, CARRIED OUT ALONGSIDE THE PRICE (2026-08-21). It comes from retailItems, which
+        # locationIds selects, while the price comes from storeProducts, which storeId selects. Two
+        # independent halves of one response is exactly what makes the cross-check below worth anything:
+        # a puller bug that reached for the wrong price field cannot also move the tag.
         return [pscustomobject]@{
           sp = $sp
           soldBy = if ($ri) { [string]$ri.soldByUnitOfMeasure.code } else { '' }
           rawSize = ([string]$r.data.product.size).Trim()
+          tagPrice = if ($ri -and $null -ne $ri.tagPrice) { [double]$ri.tagPrice } else { $null }
+          ecomTagPrice = if ($ri -and $null -ne $ri.ecommerceTagPrice) { [double]$ri.ecommerceTagPrice } else { $null }
+          tagQty = if ($ri -and $null -ne $ri.tagPriceQuantity) { [double]$ri.tagPriceQuantity } else { $null }
         }
       }
       return $null
     } catch { Start-Sleep -Milliseconds 500 }
   }
   return $null
+}
+
+function Test-HyVeeTagAgreement {
+  <#
+    .SYNOPSIS Does the price we are about to publish match the store's own shelf tag?
+    .DESCRIPTION Returns '' when they agree or when there is nothing to compare, else a description of
+                 the disagreement. Pure, so the frozen fixtures reach the real decision.
+
+    THE FOUNDING BUG (2026-08-21). Brad checked Morton & Bassett Black Sesame Seed on his own Omaha #01
+    page and saw $9.99. The board published $5.31 as a 47% markdown off $9.99. Everything about that row
+    looked right from the inside: real productId 40112, real store, onSale true, basePrice 9.99, the
+    arithmetic reproduces, every existing guard green. The store's retail record said:
+        tagPrice 9.99   ecommerceTagPrice 9.99   basePrice 9.99   memberTagPrice null
+    while storeProducts.price said 5.31. Two of 22 sampled products were like this. There is no guard
+    anywhere in this estate that could see it, because every guard reads the same storeProducts.price.
+
+    WHY IT ONLY REFUSES WHEN THE PRICE IS *LOWER* THAN THE TAG. A published price ABOVE the tag makes us
+    look expensive and costs a reader nothing they can be surprised by; a published price BELOW the tag is
+    a promise the till will break. The asymmetry is deliberate and it also keeps this from firing on the
+    legitimate case it would otherwise destroy - a genuine promotion IS a price below the regular price,
+    but it is not below the TAG, because the tag is what the shelf says today including the promotion.
+    Confirmed across the sample: all 20 clean rows had promotional prices and every one matched its tag.
+
+    MULTIBUY IS NOT A DISAGREEMENT. tagPriceQuantity states how many the tag price covers, exactly as
+    priceMultiple does for the price. Comparing a 3-for total against a single-unit tag is the
+    two-different-bases mistake guard 10 already exists for, so a row whose quantities do not match is
+    left alone rather than judged on a comparison that does not mean anything.
+  #>
+  param([double]$Price, [double]$Mult, $TagPrice, $EcomTagPrice, $TagQty)
+  $tag = if ($null -ne $EcomTagPrice) { [double]$EcomTagPrice } elseif ($null -ne $TagPrice) { [double]$TagPrice } else { $null }
+  if ($null -eq $tag -or $tag -le 0) { return '' }              # nothing to compare against, not a pass
+  $tq = if ($null -ne $TagQty -and [double]$TagQty -gt 0) { [double]$TagQty } else { 1.0 }
+  $pm = if ($Mult -gt 0) { [double]$Mult } else { 1.0 }
+  if ([math]::Abs($tq - $pm) -gt 0.0001) { return '' }          # different bases; see the note above
+  $perUnitTag = $tag / $tq
+  $perUnitPrice = $Price / $pm
+  if ($perUnitPrice -ge ($perUnitTag - 0.005)) { return '' }    # at or above the tag: allowed, see above
+  return ("storeProducts.price {0} is BELOW this store's own shelf tag {1} - the till will not honour it" -f $perUnitPrice, $perUnitTag)
 }
 
 # Fallback size normaliser - used ONLY for a product we have never priced before, where we have no verified
@@ -280,6 +361,10 @@ $startT = Get-Date
 $MAXMIN = 14
 $deals = New-Object System.Collections.ArrayList
 $fresh = 0; $fail = 0; $markdown = 0; $stale = 0; $newProd = 0; $mismatch = 0
+# Rows refused because the price sat below the store's own shelf tag. Counted and LISTED, never just
+# counted: the two rows this caught on its first run were a 47% and a 42% phantom markdown on the same
+# brand, which is a pattern worth seeing rather than a number worth logging.
+$tagRefused = 0; $tagRefusedRows = New-Object System.Collections.ArrayList
 # rows whose priceMultiple did not reconcile against basePrice - refused, never published (see the divisor
 # note at the price calculation below). Counted separately from $fail so a rise in it is visible as its own
 # signal rather than blending into ordinary lookup failures.
@@ -400,6 +485,18 @@ foreach ($w in $work) {
       if ($got) {
         if (-not $size) { $size = 'each' }
 
+        # THE SHELF-TAG CROSS-CHECK. A price BELOW the store's own tag is refused outright rather than
+        # published and flagged: this is the one failure mode where the row looks perfect from every
+        # angle we already measure, so a warning nobody reads would be the same as shipping it. The
+        # commodity falls through to another store, which is what a shopper should have been seeing.
+        $tagWhy = Test-HyVeeTagAgreement -Price $price -Mult $mult -TagPrice $got.tagPrice -EcomTagPrice $got.ecomTagPrice -TagQty $got.tagQty
+        if ($tagWhy) {
+          $tagRefused++
+          [void]$tagRefusedRows.Add([ordered]@{ item = [string]$w.name; product_id = [int]$w.pid; price = $price; tag = $(if ($null -ne $res.ecomTagPrice) { $res.ecomTagPrice } else { $res.tagPrice }); why = $tagWhy })
+          [void]$captureTerms.Add([ordered]@{ term = $workKey; ordinal = $workOrdinal; outcome = 'refused-below-shelf-tag'; row_count = 0 })
+          $workOrdinal++
+          continue
+        }
         $isDown = ([bool]$sp.onSale) -and ($null -ne $base) -and ($price -lt $base)
         if ($isDown) { $markdown++ }
 
@@ -410,7 +507,7 @@ foreach ($w in $work) {
           # current_price stop agreeing and the guard catches it from the outside. Drop this field and the
           # guard goes blind - which is exactly the state Baker's, Fareway, Sam's and Walmart are still in.
           current_price=[double]$sp.price
-          source_ad='Aisles Online current shelf price (storeId 1465, Omaha #01)'
+          source_ad=$SRC_LABEL
                     as_of=$todayS; product_id=[int]$w.pid
         }
         # THE STORE'S OWN SHELF, RECORDED AT LAST. The persisted GraphQL document in hyvee\query-b64.txt has
@@ -478,6 +575,12 @@ Write-Output ("Hy-Vee: " + $fresh + " refreshed today (" + $markdown + " marked 
 # looked; a silent counter would recreate exactly that.
 if ($multDescriptive -gt 0 -or $multRefused -gt 0) {
   Write-Output ("Hy-Vee: priceMultiple reconciliation - " + $multDescriptive + " row(s) treated the multiple as DESCRIPTIVE (price already per-item, price == basePrice), " + $multRefused + " row(s) REFUSED (divided price landed under 40% of the regular price, so the divisor is more likely wrong than the promo is deep)")
+# THE SHELF-TAG REFUSALS, NAMED. A count alone would have hidden what made this worth building: the two
+# rows it caught first were the same brand, both phantom markdowns of 40%+ off a tag that had not moved.
+Write-Output ("Hy-Vee: shelf-tag cross-check - " + $tagRefused + " row(s) REFUSED for pricing BELOW the store's own tagPrice (a price the till will not honour)")
+foreach ($x in $tagRefusedRows) {
+  Write-Output ("  below-tag: [{0}] '{1}' price {2} vs shelf tag {3}" -f $x.product_id, $x.item, $x.price, $x.tag)
+}
 }
 
 # COVERAGE, SO THE EXISTING RATCHET CATCHES TRUNCATION - no new threshold invented here. $refreshable is
@@ -527,7 +630,7 @@ $file = if ($Quick) { Join-Path $OutDir 'hyvee-quick-test.json' } else { Join-Pa
 $out = [ordered]@{
   store='Hy-Vee'; week_of=$todayS; price_type='everyday'; price_mode='in-store'; mode_verified=$todayS
   coverage_mode='partial'
-  source='Hy-Vee Aisles Online GraphQL storeProducts.price - the CURRENT shelf price at storeId 1465 (Omaha #01). NOT basePrice (the regular price) and NOT ssrPricing (a different store).'
+  source=("Hy-Vee Aisles Online GraphQL storeProducts.price - the CURRENT shelf price at storeId $StoreId ($STORE_LABEL), cross-checked against retailItems.ecommerceTagPrice at the matching pickup location. NOT basePrice (the regular price) and NOT ssrPricing (a different store).")
   size_policy='sizes are OUR verified ones, not Hy-Vee''s - their size field mixes totals, single units of a multipack, and mislabelled units'
   # cap_skipped is ADDITIVE and sits beside the counts that were already here. Every consumer of this file
   # reads .deals or a named top-level field (guards 9/10, generate-board-overrides, refresh-hyvee-links,

@@ -159,7 +159,10 @@ if ($Ids.Count) {
 
 $EP = 'https://www.hy-vee.com/aisles-online/api/search/products'
 $HUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148 Safari/537.36'
-$HStore = 1465
+# THE STORE IDENTITY HAS ONE HOME (2026-08-21). It was hard-coded in six files, so switching stores
+# meant editing six and hoping. See hyvee-store-lib.ps1 for why storeId and locationId must move together.
+. (Join-Path $PSScriptRoot 'hyvee-store-lib.ps1')
+$HStore = [int](Get-HyVeeStore).store_id
 function HV-Search([string]$term, [int]$size) {
   $h = @{ 'content-type' = 'application/json'; 'User-Agent' = $HUA; 'x-hy-vee-correlation-id' = [guid]::NewGuid().ToString() }
   $body = @{ pageNumber = 1; pageSize = $size; searchFilters = @(); searchTerm = $term; sortDirection = 'RELEVANCE'; storeId = $HStore; pageViewId = [guid]::NewGuid().ToString() } | ConvertTo-Json -Compress
