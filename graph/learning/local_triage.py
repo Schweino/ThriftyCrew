@@ -96,6 +96,10 @@ KNOWN_FAMILIES = [
     "flavoring-for-the-food",
 ]
 
+# Batch size. 18 rejections per call measured 4.5s/call at --jobs 4 and left the
+# prompt around 900 tokens — the whole 3,755-row corpus labelled in 209 calls and
+# 949s of otherwise-idle GPU, with zero parse failures and zero dropped lines.
+#
 # BOUND EVERY ARRAY AND EVERY STRING. llama.cpp's grammar guarantees "legal so
 # far", not "complete": stage1_analyze died on 2026-08-20 with a document that
 # was a valid PREFIX because generation hit max_tokens mid-object. maxItems here
