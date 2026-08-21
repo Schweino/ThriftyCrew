@@ -559,6 +559,17 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-sale-without-ad.ps1') -Quiet | ForEach-Object { Log ('sale-without-ad: ' + $_) }
       } catch { Log ('sale-without-ad threw: ' + $_.Exception.Message) }
+      # ---- HY-VEE STORE BLEND (wired 2026-08-21). Brad moved the board from Omaha #01 to Omaha #02.
+      # The code switched in one commit; the DATA cannot, because capture policy refreshes 7 Hy-Vee
+      # products a day against 1554 rows. So the everyday file is a two-store mixture for up to a full
+      # quarter, and a mixture is invisible to every other guard - each row is real and each price
+      # reproduces against the store that supplied it. The two stores disagree on roughly a third of
+      # everyday rows and most sale rows, so this prints how far through the switch we actually are
+      # instead of leaving it as a thing nobody is tracking. Advisory: the blend is a known, accepted
+      # migration state; what must not happen is it becoming an unknown one.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-hyvee-store-blend.ps1') | ForEach-Object { Log ('hyvee-store-blend: ' + $_) }
+      } catch { Log ('hyvee-store-blend threw: ' + $_.Exception.Message) }
       # ---- MATCHER PARITY (wired 2026-08-21): the auditors' COPIES of Match-Category must still assign
       # product names exactly as the engine does. audit-household-in-food is a HARD gate built on one of
       # those copies, so a divergence means a hard guard is judging cells under the wrong commodity while

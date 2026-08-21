@@ -3902,6 +3902,18 @@ else { Bad ('pull_profile drift or a profile encoding carriage: ' + ((($r.text -
 $r = RunPS 'test-rollback-ttl.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'ROLLBACK-TTL PASSED') { Ok 'rollback TTL: first_seen anchors once and never re-anchors on re-sighting' }
 else { Bad ('rollback TTL fixtures FAILED (rc=' + $r.rc + ') - a 30-day window that re-anchors never expires') }
+
+# ---------------------------------------------------------------- Hy-Vee shelf tag + store identity (2026-08-21)
+# Brad checked four Hy-Vee cells against his own screen and all four disagreed. Two causes, and the
+# second one no guard here could see: storeProducts.price - the field every guard in this estate reads -
+# can sit BELOW retailItems.ecommerceTagPrice, the shelf tag. Morton & Bassett sesame seed published at
+# $5.31 against a $9.99 tag, as a 47% markdown, with every check green. The fixture freezes that row.
+# It also sweeps every production script for the RETIRED Omaha #01 identity: that identity lived in six
+# files while stores.json carried none of it, so switching stores meant editing six and hoping. The sweep
+# caught four files missed on its first run, which is why it is a fixture and not a comment.
+$r = RunPS 'test-hyvee-tag-check.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'HYVEE-TAG-CHECK PASSED') { Ok 'Hy-Vee: a price below the store shelf tag is still refused, a real promotion still is not, and no script is pinned to the retired store' }
+else { Bad ('Hy-Vee tag/identity fixtures FAILED (rc=' + $r.rc + ') - either a price the till will not honour can publish again, or a caller is still pulling the retired Omaha #01: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
 # ---------------------------------------------------------------- matcher parity (wired 2026-08-21)
 # WHICH COMMODITY OWNS A PRODUCT NAME is decided by Match-Category in compare-deals, and re-implemented in
 # at least three auditors - one of them, audit-household-in-food, a HARD guard. test-matcher-parity.ps1 was
