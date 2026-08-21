@@ -155,8 +155,11 @@ observation ever lacks one. "Why does this price appear?" is answerable from
 | Phase 0 resolution agreement | ≥0.90 | **0.900** (n=30) | PASS |
 | Phase 0 decode | ≥15 tok/s | **46.1 tok/s** | PASS |
 | gold-set false-merge rate | ≤0.02 | **0.0000** | PASS |
-| gold-set missed-merge rate | ≤0.10 | 0.2211 (see below) | **NOT MET** |
-| Phase 2 board parity (staple scope) | ≥0.99 agreement | 0.897 @ 0.953 coverage (2026-08-20, read from `cell_state`) | **NOT MET** |
+| gold-set missed-merge (SYSTEM, gated) | ≤0.10 | **0.0156** | PASS |
+| gold-set missed-merge (deterministic, work indicator) | — | 0.3590 | not gated |
+| Phase 2 board parity — UNVERIFIED graph-LOWER | ≤0.01 | **0.0021** (6 of 2,884 shared cells) | PASS |
+| Phase 2 board parity — coverage | ≥0.90 | **0.949** | PASS |
+| blended agreement | — | 0.914 | reported, not gated |
 | ad timing | every weekly-ad store inside its current window | all 5 in-window | PASS |
 | 90-day timer | no everyday row older than `MaxCarryDays` | reads `capture-policy.ps1` | PASS |
 | ad reversion owed | every closed ad window re-checked | 0 owed | PASS |
@@ -221,6 +224,33 @@ known-wrong for DRIED thyme and correct for fresh), and a reviewer-confirmed row
 must be counted as something an alias ABSORBS, not as redundancy (collapsing
 those two made 85 of 119 aliases read as "captures nothing new" when absorbing
 them was the entire point).
+
+### Why graph-LOWER is split (decision 2026-08-21)
+
+Brad's question ended the argument: *"if the item is right, and it's in the
+right commodity, and it fetched the correct price, why is it a defect to begin
+with?"* It is not. The live board is the INCUMBENT, not ground truth — it held
+the strawberry-syrup crown, it overpriced 745 multipacks by 6-18x, it linked ten
+See-item tiles to the wrong products, and this estate fixed all of that in a
+single day. So a cell where the graph is cheaper says nothing about who is
+wrong until the graph's claim is adjudicated.
+
+`adjudicate_lower` splits them. A cell is VERIFIED only when the crowning row's
+identity survived adjudication (reviewer-confirmed, or a deterministic hit on a
+commodity the gold set actually covers), its price is inside the capture
+window, every guard had its chance to demote it, and the discount is within
+reach of the rest of the market for that commodity.
+
+That last clause was added after the first version passed a lie: brandy at
+Baker's read $6.99 for 59.2 fl oz — a 1.75 L bottle — and cleared identity,
+freshness and every guard, because each of those asks whether the PRODUCT is
+right and none of them asks whether the PRICE is possible. It now fails at 4.3x
+under the market median, alongside a garlic-bread cell at 8.9x.
+
+VERIFIED cells are not defects and are not gated. They are written to
+`grocery/out/board-gap-worklist.json` — 79 cells and a $45.94 per-unit gap
+today — because they are the board being dearer than the shelf. The UNVERIFIED
+residue is what gates, at 0.0021 of shared cells.
 
 **Time-based gates are AD TIMING and the 90-DAY TIMER, nothing else** (decision
 2026-08-20, Brad). The first build carried the V4 postmortem's

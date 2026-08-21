@@ -305,9 +305,132 @@ def compare(live: dict, graph: dict, tol: float = 0.02) -> dict:
         # price. Blending them punished the graph for being honest about what it
         # could not yet see, and made the target recede as coverage grew.
         "graph_lower_rate": len(lower) / len(shared) if shared else 0.0,
-        "graph_lower_cases": lower[:20],
+        # ALL of them, not a sample: adjudicate_lower must see every case or
+        # the gate would be computed over a truncated denominator.
+        "graph_lower_cases": lower,
         "graph_only": len(graph_cells - live_cells),
     }
+
+
+def adjudicate_lower(db, lower_cases: list[dict], today: str | None = None,
+                     live_by_commodity: dict | None = None,
+                     max_discount: float = 3.0) -> dict:
+    """Split graph-LOWER cells into VERIFIED findings and UNVERIFIED residue.
+
+    Decision 2026-08-21 (Brad): "if the item is right, in the right commodity,
+    and it fetched the correct price, why is it a defect to begin with?" It is
+    not. The live board is the INCUMBENT, not ground truth — it held the
+    strawberry-syrup crown and the 6-18x multipack overprices this estate spent
+    the day removing — so a cell where the graph is cheaper carries no
+    information about WHO is wrong until the graph's claim is adjudicated.
+
+    A LOWER cell is VERIFIED when every check this estate owns has passed:
+
+      identity  the crowning row is reviewer-confirmed (llm_confirmed), or it
+                is a deterministic include_hit on a commodity the gold set
+                actually covers — an untested pattern regime is exactly where
+                the syrup class of defect lives, so no gold means no credit.
+      price     the observation is inside the capture policy's window (row_age
+                enforces this globally; re-checked here per cell), and an ad
+                price only counts inside its ad window (cell_state enforces).
+      guards    known-wrong, class guards and the plausibility flag all had
+                their chance to demote the row and did not.
+
+    Verified cells are NOT defects. They are the graph finding value the board
+    missed, they flow to the board-gap worklist, and they stop counting against
+    the gate. The UNVERIFIED residue is where the next wrong price hides, and
+    that is what gates at ~0.
+    """
+    import time as _t
+    live_by_commodity = live_by_commodity or {}
+    today = today or _t.strftime("%Y-%m-%d")
+    max_age = None
+    try:
+        sys.path.insert(0, os.path.join(HERE, "..", "agentic"))
+        from verifier import _policy_max_carry_days           # noqa: PLC0415
+        max_age = _policy_max_carry_days()
+    except Exception:                                          # noqa: BLE001
+        max_age = 90
+    # commodities the gold set can actually see
+    gold_cov = set()
+    gold_path = os.path.join(HERE, "..", "gold", "gold.jsonl")
+    if os.path.exists(gold_path):
+        with open(gold_path, encoding="utf-8") as fh:
+            for line in fh:
+                try:
+                    gold_cov.add(json.loads(line).get("commodity"))
+                except json.JSONDecodeError:
+                    continue
+    legacy_to_node = {}
+    for r in db.conn.execute("SELECT id, properties_json FROM nodes WHERE type='Commodity'"):
+        lid = (json.loads(r["properties_json"] or "{}")).get("legacy_id")
+        if lid:
+            legacy_to_node.setdefault(lid, []).append(r["id"])
+
+    verified, unverified = [], []
+    for c in lower_cases:
+        cell = None
+        for nid in legacy_to_node.get(c["commodity"], []):
+            cell = db.conn.execute(
+                "SELECT * FROM cell_state WHERE commodity_id=? AND store_id=?",
+                (nid, f"store:{c['store']}")).fetchone()
+            if cell:
+                break
+        why = None
+        if cell is None:
+            why = "no cell_state row resolvable"
+        else:
+            # whichever side (everyday/ad) produced the cheaper number is the claim
+            use_ad = (cell["ad_unit_price"] is not None and
+                      (cell["everyday_unit_price"] is None or
+                       cell["ad_unit_price"] <= cell["everyday_unit_price"]))
+            ev_id = cell["ad_evidence"] if use_ad else cell["everyday_evidence"]
+            asof = (cell["ad_from"] if use_ad else cell["everyday_asof"]) or ""
+            row = db.conn.execute("SELECT * FROM price_observations WHERE id=?",
+                                  (ev_id,)).fetchone() if ev_id else None
+            if row is None:
+                why = "evidence row pruned or missing"
+            elif row["match_status"] == "llm_confirmed":
+                pass                                          # reviewer-verified
+            elif row["match_status"] == "include_hit":
+                if c["commodity"] not in gold_cov:
+                    why = "include_hit on a commodity with NO gold coverage"
+            else:
+                why = f"crowning row status {row['match_status']!r}"
+            if why is None and not use_ad:
+                d = _days_between(asof[:10], today)
+                if d is None or d > max_age:
+                    why = f"everyday price {d if d is not None else '?'}d old (window {max_age}d)"
+        # PRICE PLAUSIBILITY, and this clause exists because the first version
+        # of this bar did not have it and passed a lie. Brandy at Baker's read
+        # $6.99 for 59.2 fl oz — a 1.75 L bottle — and cleared identity,
+        # freshness and every guard, because each of those asks whether the
+        # PRODUCT is right and none of them asks whether the PRICE is possible.
+        # flag_outliers bars rows 5x below the commodity median; this one sat at
+        # roughly 3x and sailed through.
+        #
+        # A cell may only be credited as a board-gap finding if its discount is
+        # within reach of the rest of the market for that commodity. Beyond that
+        # the cheaper number is far more likely to be a bad capture than a real
+        # bargain, and crediting it would let a data defect masquerade as
+        # savings — the exact inversion this split was built to prevent.
+        if why is None and c.get("live"):
+            others = [v for v in (live_by_commodity.get(c["commodity"]) or {}).values()
+                      if v is not None]
+            if len(others) >= 2:
+                med = sorted(others)[len(others) // 2]
+                if med and c["graph"] < med / max_discount:
+                    why = (f"price implausible: {c['graph']:.4f} is "
+                           f"{med / c['graph']:.1f}x under the {med:.4f} market median")
+        entry = dict(c)
+        if why is None and row is not None:
+            entry["product"] = row["product_name"]
+            entry["observed_at"] = row["observed_at"]
+            verified.append(entry)
+        else:
+            entry["unverified_because"] = why
+            unverified.append(entry)
+    return {"verified": verified, "unverified": unverified}
 
 
 def main() -> int:
@@ -320,6 +443,10 @@ def main() -> int:
                     help="max share of shared cells where the graph is CHEAPER "
                          "than the board - the false-merge direction")
     ap.add_argument("--min-coverage", type=float, default=0.90)
+    ap.add_argument("--max-discount", type=float, default=3.0,
+                    help="a verified board-gap finding may not be more than this "
+                         "many times under the commodity market median; beyond it "
+                         "a bad capture is likelier than a real bargain")
     ap.add_argument("--show", type=int, default=8)
     ap.add_argument("--from-observations", action="store_true",
                     help="bypass cell_state and re-derive from observations "
@@ -393,18 +520,52 @@ def main() -> int:
         print("  cannot see the products that won many live crowns. Widening the backfill is")
         print("  Phase 2's remaining work; until then treat AGREEMENT as indicative, not passing.")
 
-    # Gate on the DANGEROUS direction plus a coverage floor, not on blended
-    # agreement. graph-LOWER cells are the only ones that can publish a wrong
-    # price; graph-HIGHER means the graph has not imported a cheaper row yet,
-    # which costs an empty cell and nothing else.
-    lower_ok = res["graph_lower_rate"] <= args.max_lower
+    # Gate on the UNVERIFIED residue, not on every cell where the graph is
+    # cheaper. Being cheaper is only dangerous when the PRODUCT IS WRONG; a
+    # cheaper cell whose identity and price both survived adjudication is the
+    # graph finding value the board missed, which is the entire point of it.
+    with open_db() as db2:
+        adj = adjudicate_lower(db2, res.get("graph_lower_cases") or [],
+                               live_by_commodity=live, max_discount=args.max_discount)
+    n_ver, n_unver = len(adj["verified"]), len(adj["unverified"])
+    shared = res["shared_cells"] or 1
+    unver_rate = n_unver / shared
+    res["lower_verified"], res["lower_unverified"] = n_ver, n_unver
+    res["lower_unverified_rate"] = unver_rate
+
+    lower_ok = unver_rate <= args.max_lower
     cov_ok = res["coverage"] >= args.min_coverage
-    print(f"\n  GATED: graph-LOWER rate {res['graph_lower_rate']:.4f} "
-          f"(<= {args.max_lower}) {'PASS' if lower_ok else 'FAIL'}   |   "
-          f"coverage {res['coverage']:.3f} (>= {args.min_coverage}) "
-          f"{'PASS' if cov_ok else 'FAIL'}")
-    print(f"  blended agreement {res['agreement']:.3f} is REPORTED, not gated - "
-          f"it mixes a benign coverage gap with the dangerous direction.")
+    print(f"\n  graph-LOWER {res['graph_lower']} splits into:")
+    print(f"     {n_ver:>4} VERIFIED   - identity adjudicated, price in window, guards passed.")
+    print(f"            NOT defects: these are cells where the board is dearer than")
+    print(f"            the shelf. Worklist written for the board to adopt.")
+    print(f"     {n_unver:>4} UNVERIFIED - cheaper, and the claim did NOT clear the bar.")
+    print(f"            This is where the next wrong price hides.")
+    print(f"\n  GATED: unverified-LOWER rate {unver_rate:.4f} (<= {args.max_lower}) "
+          f"{'PASS' if lower_ok else 'FAIL'}   |   coverage {res['coverage']:.3f} "
+          f"(>= {args.min_coverage}) {'PASS' if cov_ok else 'FAIL'}")
+    print(f"  blended agreement {res['agreement']:.3f} is REPORTED, not gated.")
+
+    if adj["verified"]:
+        out = os.path.join(REPO_ROOT, "grocery", "out", "board-gap-worklist.json")
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        total = sum(max(0.0, c["live"] - c["graph"]) for c in adj["verified"])
+        with open(out, "w", encoding="utf-8", newline="\n") as fh:
+            json.dump({"generated": time.strftime("%Y-%m-%dT%H:%M:%S"),
+                       "note": ("Cells where the graph has an ADJUDICATED cheaper answer "
+                                "than the live board. Not defects - the board is dearer "
+                                "than the shelf here. Each entry names the product to check."),
+                       "cells": len(adj["verified"]),
+                       "per_unit_gap_total": round(total, 4),
+                       "findings": sorted(adj["verified"], key=lambda c: c["pct_diff"])},
+                      fh, indent=2, ensure_ascii=False)
+        print(f"\n  board-gap worklist: {len(adj['verified'])} cells, "
+              f"{total:.2f} total per-unit gap -> {os.path.relpath(out, REPO_ROOT)}")
+    if adj["unverified"]:
+        print(f"\n  --- unverified residue (the gated set) ---")
+        for c in sorted(adj["unverified"], key=lambda x: x["pct_diff"])[:8]:
+            print(f"    {c['commodity'][:22]:<24}@{c['store']:<12}{c['pct_diff']:>7}%  "
+                  f"{c['unverified_because']}")
     return 0 if (lower_ok and cov_ok) else 1
 
 

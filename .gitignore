@@ -308,3 +308,7 @@ meal-prep/db/page-cache/
 # Derived triage ranking (local_triage.py --triage-queue). Regenerated on
 # demand from the queue; carries raw store text like its inputs.
 /grocery/escalation-triage.json
+
+# The board-gap worklist is DERIVED: board_parity.py regenerates it every run
+# from cell_state and the live board. Its findings are actionable, not records.
+/grocery/out/board-gap-worklist.json
