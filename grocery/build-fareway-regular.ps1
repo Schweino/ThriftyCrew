@@ -501,6 +501,12 @@ foreach ($f in $In) {
     $curNum = 0.0
     [void][double]::TryParse(($adp -replace '[^0-9.]',''), [ref]$curNum)
     $row = [ordered]@{ store='Fareway'; item=$name; ad_price=$adp; size=$sz; regular=$reg; source_ad='shop.fareway.com'; as_of=$srcAsOf; found_by_term=[string]$r.term }
+    # THE PRODUCT URL, ON THE ROW (2026-08-21). It was already read for the slug basis override and
+    # the See-item link, then dropped before the row was written - so downstream had the price and no
+    # stable identity for it. That identity is what lets a Fareway markdown be given a TTL anchored to
+    # a product id rather than to its NAME: a name-keyed anchor restarts its own clock the moment the
+    # merchant re-titles the item, which is the re-listing escape a ruling must not have.
+    if ($r.url) { $row['link_url'] = [string]$r.url }
     # identity rule: the link belongs ON the price row (derive-links reads link_url verbatim), not only in
     # the url-inputs side file - two homes for one fact is how they drift.
     if ($r.url -and "$($r.url)" -ne '') { $row['link_url'] = [string]$r.url }

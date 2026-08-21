@@ -36,12 +36,22 @@ $c = Get-RollbackWindow -Store 'Walmart' -ItemId '10450114' -Price 3.99 -Today '
 if ($c.ad_from -eq '2026-09-05' -and $c.ad_to -eq '2026-10-05' -and $c.is_new) { Ok 'a new rolled-back price re-anchors and earns a fresh 30 days' }
 else { Bad "price change did not re-anchor ($($c.ad_from)..$($c.ad_to))" }
 
-# 4. a store that PUBLISHES its own window must never be handed a TTL
-foreach ($s in @("Baker's", 'Family Fare', 'Hy-Vee', 'Fareway', 'Aldi')) {
-  $r = Get-RollbackWindow -Store $s -ItemId 'x1' -Price 1.00 -Today '2026-08-21' -Root $tmp
-  if ($null -ne $r) { Bad "$s was given a rollback TTL - it must use its own published dates"; break }
-}
-if ($fail -eq 0 -or $true) { if (-not (@("Baker's",'Family Fare','Hy-Vee','Fareway','Aldi') | Where-Object { $null -ne (Get-RollbackWindow -Store $_ -ItemId 'x1' -Price 1.0 -Today '2026-08-21' -Root $tmp) })) { Ok 'only Walmart and Sam''s get a TTL; every dated store is refused one' } }
+# 4. WHICH STORES MAY BE GIVEN A TTL AT ALL.
+# Updated 2026-08-21 after Brad's ruling: "if product page shows a sale price, but it doesn't match a
+# weekly or monthly ad, give it a 30 day TTL" - for FAREWAY. It had been excluded here on the earlier
+# understanding that it published its own dates; the browser probe proved it does not for most items
+# (itemPromotions empty, promotionGroupId null, on_sale_ind.retailer false).
+# The refusals that remain are the ones that matter: a store which DOES publish a window must never
+# be handed a guess instead. Baker's states expirationDate per item and Family Fare finish_date per
+# offer, and replacing either with 30 days would swap a fact for something worse.
+# Hy-Vee and Aldi are refused for a different reason - no ruling has been made for them yet, and a
+# TTL nobody chose is not a default, it is an invention.
+$allowed = @('Walmart', "Sam's Club", 'Fareway')
+$refused = @("Baker's", 'Family Fare', 'Hy-Vee', 'Aldi')
+$bad = @()
+foreach ($s in $allowed) { if ($null -eq (Get-RollbackWindow -Store $s -ItemId "ok-$s" -Price 1.00 -Today '2026-08-21' -Root $tmp)) { $bad += "$s was REFUSED a TTL but should get one" } }
+foreach ($s in $refused) { if ($null -ne (Get-RollbackWindow -Store $s -ItemId "no-$s" -Price 1.00 -Today '2026-08-21' -Root $tmp)) { $bad += "$s was GIVEN a TTL - it publishes its own dates, or none has been ruled for it" } }
+if ($bad.Count) { foreach ($m in $bad) { Bad $m } } else { Ok 'Walmart, Sam''s and Fareway get a TTL; every store that publishes its own dates is refused one' }
 
 # 5. no item id means no honest anchor, so no window
 $n = Get-RollbackWindow -Store 'Walmart' -ItemId '' -Price 4.87 -Today '2026-08-21' -Root $tmp

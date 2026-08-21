@@ -1089,7 +1089,7 @@ if ($SelfTest) {
 
 # ---------------------------------------------------------------- load + normalize all sources
 $deals = New-Object System.Collections.Generic.List[object]
-function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='') {
+function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='',$adBasis='') {
   if (-not $name) { return }
   # src_date = the date of the CAPTURE FILE this row came from (not the ad cycle). Only rows loaded from dated
   # per-store capture files carry it; it is how the ranking step below can prefer the freshest capture that
@@ -1115,7 +1115,7 @@ function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate
   if ($ptype -eq 'sale' -and $adTo -match '^\d{4}-\d{2}-\d{2}$' -and $script:BoardToday) {
     if ([string]$adTo -lt [string]$script:BoardToday) { $script:ExpiredSaleRows++; return }
   }
-  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo })
+  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo; ad_basis=[string]$adBasis })
 }
 $ads = Get-Content $AdsFile -Raw | ConvertFrom-Json
 $today = $ads.today
@@ -1279,6 +1279,23 @@ if ($extraF) {
 # everyday/regular shelf-price files (out\regular\<store>-regular-<date>.json), newest per store; price_type=everyday.
 # -RegularDir lets the regression harness pin the everyday-price channel to a FROZEN copy - the default
 # newest-per-store auto-load is exactly the unpinned input that made the "frozen" regression drift.
+# ---- the ad rows a storefront markdown can INHERIT its window from --------------------------------
+# Brad, 2026-08-21: "if an item has a sale price, it MUST of been on some ad previously." Largely
+# true, and where it is true the store has ALREADY told us when the sale ends - so the honest move is
+# to go and get that date rather than invent a TTL. Measured on this board: 176 of 377 undated sale
+# cells match a real ad row (Hy-Vee 60 of 82). Hy-Vee's butter is the case that proved it - published
+# as an undated sale at $2.48 while sitting in the 3 Day Sale flyer as "Hy-Vee butter, 16 oz., $2.48"
+# valid 08-21..08-23.
+# LIVE ADS ONLY here, deliberately: an expired flyer's dates would retire the cell the moment they
+# were applied, and a flyer that has not opened would keep it alive past its real end. The
+# sale-without-ad ledger asks the other question ("was it EVER advertised") and passes -IncludeExpired.
+. (Join-Path $root 'ad-match-lib.ps1')
+. (Join-Path $root 'rollback-ttl-lib.ps1')   # the LAST-RESORT window: see the TTL block in the split below
+$script:AdIndex = $null
+try { $script:AdIndex = Import-AdRows -OutDir $OutDir -BoardDate ([string]$today) } catch { Write-Warning ("ad-match index unavailable (" + $_.Exception.Message + ") - undated sales stay undated") }
+$script:AdInherited = 0
+$script:TtlDated = 0
+
 $regDir = if ($RegularDir) { $RegularDir } else { Join-Path $OutDir 'regular' }
 if (Test-Path $regDir) {
   # ONLY canonically-named files are data: "<store>-regular-<yyyy-MM-dd>.json", nothing else. This glob used
@@ -1324,11 +1341,37 @@ if (Test-Path $regDir) {
     foreach ($d in $ex.deals) {
       $rsd = Get-RowSrcDate ([string]$ex.store) $d $sd
       $spl = Get-PriceSplit $d ([string]$ex.store)
+      $script:LastBasis = if ($spl.sale_from) { 'store' } else { '' }
       if ($spl.sale_price) {
+        # INHERIT THE AD'S WINDOW when the store's own row carried none. This is what turns "a sale
+        # we cannot date" into "a sale that ends on the day the flyer says", and it is the difference
+        # between a TTL guess and the store's own answer.
+        if (-not $spl.sale_from -and $script:AdIndex) {
+          $adHit = Find-AdForCell -Index $script:AdIndex -Store ([string]$ex.store) -Item ([string]$d.item) -PriceText ('$' + $spl.sale_price)
+          if ($adHit -and $adHit.from -match '^\d{4}-\d{2}-\d{2}$' -and $adHit.to -match '^\d{4}-\d{2}-\d{2}$') {
+            $spl.sale_from = $adHit.from; $spl.sale_to = $adHit.to; $script:AdInherited++; $script:LastBasis = 'ad'
+          }
+        }
+        # LAST RESORT: a TTL, anchored to the first day we saw this exact cut price (Brad's rule for
+        # Fareway, Walmart and Sam's - the three stores that publish no end date). Deliberately AFTER
+        # the ad lookup: a real window from the store's own flyer always beats a number we chose.
+        # Keyed on the store's product id, never the name, so a re-listing cannot restart the clock;
+        # a row with no identity gets no window rather than a name-keyed guess.
+        if (-not $spl.sale_from -and (Test-RollbackTtlStore ([string]$ex.store))) {
+          $ttlKey = ''
+          if ($d.item_id)   { $ttlKey = [string]$d.item_id }
+          elseif ($d.sams_item_id) { $ttlKey = [string]$d.sams_item_id }
+          elseif ($d.product_id)   { $ttlKey = [string]$d.product_id }
+          elseif ($d.link_url -match '/products/(\d+)') { $ttlKey = $Matches[1] }
+          if ($ttlKey) {
+            $rw = Get-RollbackWindow -Store ([string]$ex.store) -ItemId $ttlKey -Price ([double]$spl.sale_price) -Today ([string]$today) -Root $root
+            if ($rw) { $spl.sale_from = $rw.ad_from; $spl.sale_to = $rw.ad_to; $script:TtlDated++; $script:LastBasis = 'ttl' }
+          }
+        }
         # A CUT PRICE IS A SALE, AND IT CARRIES ITS OWN WINDOW. Typed 'sale' so build-sale-windows
         # dates it, the page badges it, and it can expire. Its everyday half is emitted separately
         # below so the cell the shopper reverts to is never lost.
-        Add-Norm $d.store $d.item ('$' + $spl.sale_price) $d.size $d.regular $d.source_ad 'sale' $rsd $spl.sale_from $spl.sale_to
+        Add-Norm $d.store $d.item ('$' + $spl.sale_price) $d.size $d.regular $d.source_ad 'sale' $rsd $spl.sale_from $spl.sale_to $script:LastBasis
         # AND THE PRICE IT REVERTS TO. Without this row the everyday value disappears the moment a
         # store discounts an item, which is the other half of Brad's rule - everyday must not be
         # replaced by the ad. Only emitted when the store told us what it was cut FROM; a flagged row
@@ -1570,7 +1613,7 @@ foreach ($d in $deals) {
     # Carry the SOURCE through to the page. Without it build-deals-page cannot tell an ad-backed sale from a
     # one-off price snapshot, so it stamped every sale chip with the store's ad-cycle end date - dressing an
     # undated Aisles Online markdown up as "Sale thru Jul 19". A date we invented is worse than no date.
-    source_ad=$d.source_ad; src_date=$d.src_date; ad_from=$d.ad_from; ad_to=$d.ad_to;
+    source_ad=$d.source_ad; src_date=$d.src_date; ad_from=$d.ad_from; ad_to=$d.ad_to; ad_basis=$d.ad_basis;
     unit_price=$uprice; basis=$basis; note=$note })
 }
 
@@ -1646,7 +1689,7 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
     # date a sale from the deal that actually won the cell instead of from the store's one ad cycle.
     # Emitted for every cell; empty on an everyday cell, which is correct - an everyday price has no
     # window and must never be given one.
-    stores = @($ranked | ForEach-Object { [pscustomobject]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; member_label=$_.member_label; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note; source_ad=$_.source_ad; ad_from=$_.ad_from; ad_to=$_.ad_to } })
+    stores = @($ranked | ForEach-Object { [pscustomobject]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; member_label=$_.member_label; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note; source_ad=$_.source_ad; ad_from=$_.ad_from; ad_to=$_.ad_to; ad_basis=$_.ad_basis } })
   })
 }
 $report = @($report | Sort-Object commodity)
@@ -1655,12 +1698,20 @@ $report = @($report | Sort-Object commodity)
 $flagPfx = if ($OutName -eq 'comparison') { 'flagged' } else { "$OutName-flagged" }
 (@{ week_of=$today; flagged_count=$flagged.Count; flagged=$flagged.ToArray(); multibuy_unpriced=$mbUnpriced.ToArray() } | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $OutDir ("$flagPfx-"+$today+".json")) -Encoding UTF8
 $storesWithData = @($matched | Where-Object { $_.unit_price -ne $null } | ForEach-Object { $_.store } | Select-Object -Unique | Sort-Object)
-$health = [ordered]@{ stores_with_data=$storesWithData; store_count=$storesWithData.Count; commodities_compared=$report.Count; flagged_out_of_band=$flagged.Count; multibuy_unpriced=$mbUnpriced.Count; expired_sale_rows_dropped=$script:ExpiredSaleRows }
+$health = [ordered]@{ stores_with_data=$storesWithData; store_count=$storesWithData.Count; commodities_compared=$report.Count; flagged_out_of_band=$flagged.Count; multibuy_unpriced=$mbUnpriced.Count; expired_sale_rows_dropped=$script:ExpiredSaleRows; sale_windows_inherited_from_ads=$script:AdInherited; sale_windows_from_ttl=$script:TtlDated }
 
 # ---------------------------------------------------------------- output
 $out = [ordered]@{ built_at=(Get-Date).ToString('s'); week_of=$today; source=$AdsFile; commodities_compared=$report.Count; health=$health; comparison=$report }
 $file = Join-Path $OutDir ($OutName + "-" + $today + ".json")
 ($out | ConvertTo-Json -Depth 8) | Set-Content $file -Encoding UTF8
+
+# PERSIST THE TTL ANCHORS, or the whole mechanism is a no-op that looks like it works.
+# Get-RollbackWindow records first_seen in memory; without this write it is discarded at process
+# exit, every build re-anchors every markdown to ITS OWN run date, and a 30-day TTL silently becomes
+# a rolling 30-days-from-now that never expires. That is precisely the failure rollback-ttl-lib's
+# must-fire fixture exists to catch, reintroduced one layer up by simply not saving.
+# Caught because the ledger file was absent after a build that dated 372 cells from it.
+try { [void](Save-RollbackLedger $root) } catch { Write-Warning ('rollback ledger not saved (' + $_.Exception.Message + ') - TTL anchors will re-date on the next build') }
 
 Write-Output ("CHEAPEST IN OMAHA  -  week of " + $today + "   (commodities with >= $MinStores stores: " + $report.Count + ")")
 Write-Output ("=" * 78)

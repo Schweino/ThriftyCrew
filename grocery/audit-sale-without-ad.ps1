@@ -1,4 +1,4 @@
-<#
+﻿<#
   audit-sale-without-ad.ps1 - every cell we publish as a SALE that we cannot trace to an ad.
 
   BRAD'S RULE (2026-08-21): "if an item has a sale price, it MUST of been on some ad previously...
@@ -42,42 +42,20 @@ if (-not $cmpFile) { Write-Output 'sale-without-ad: no comparison board found'; 
 $cmp = Get-Content $cmpFile.FullName -Raw | ConvertFrom-Json
 $today = [string]$cmp.week_of
 
-# ---- every ad row we hold, from every source ------------------------------------------------
-$adRows = New-Object System.Collections.Generic.List[object]
-$adsFile = Get-ChildItem (Join-Path $OutDir 'ads-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-if ($adsFile) { foreach ($d in (Get-Content $adsFile.FullName -Raw | ConvertFrom-Json).deals) { [void]$adRows.Add([pscustomobject]@{ store=[string]$d.store; item=[string]$d.item }) } }
-foreach ($lane in @('fareway','bakers')) {
-  $dir = Join-Path $OutDir $lane
-  if (-not (Test-Path $dir)) { continue }
-  foreach ($f in (Get-ChildItem (Join-Path $dir '*-deals-*.json') -EA SilentlyContinue)) {
-    try { $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }
-    foreach ($d in @($doc.deals)) { [void]$adRows.Add([pscustomobject]@{ store=([string]$d.store); item=[string]$d.item }) }
-  }
-}
-$adByStore = @{}
-foreach ($a in $adRows) { if (-not $a.store) { continue }; if (-not $adByStore.ContainsKey($a.store)) { $adByStore[$a.store] = New-Object System.Collections.Generic.List[object] }; [void]$adByStore[$a.store].Add($a.item) }
-
-$STOP = @('fresh','hyvee','fareway','with','from','each','pack','size','count','select','varieties','assorted','your','choice','when','more','less','spend','save','kroger','simply','great','value')
-function Get-Toks([string]$s) {
-  $t = ($s -replace '[^A-Za-z0-9 ]',' ').ToLower() -split '\s+'
-  return @($t | Where-Object { $_.Length -gt 3 -and $STOP -notcontains $_ })
-}
-$adTok = @{}
-foreach ($k in $adByStore.Keys) {
-  # -ArgumentList (,$arr) IS LOAD-BEARING in PS 5.1: New-Object UNROLLS an array argument into
-  # separate constructor parameters, so a 3-token name looks for a HashSet ctor taking 3 args and
-  # throws. The unary comma wraps it back into a single argument. Same family as the @() traps this
-  # estate keeps hitting.
-  # HashSet<string> has several one-argument constructors (IEnumerable<string>, IEqualityComparer,
-  # int capacity) and PS 5.1 cannot pick between them from a [string[]], so New-Object reports
-  # "multiple ambiguous overloads". Construct it empty and fill it - unambiguous, and the intent is
-  # clearer than a cast that happens to bind.
-  $adTok[$k] = @($adByStore[$k] | ForEach-Object {
-    $set = New-Object 'System.Collections.Generic.HashSet[string]'
-    foreach ($w in (Get-Toks $_)) { [void]$set.Add($w) }
-    ,$set
-  })
-}
+# ---- every ad row we hold, from every source, via the SHARED matcher -------------------------
+# THE MATCH RULE LIVES IN ad-match-lib.ps1, not here. compare-deals needs the identical decision in
+# order to INHERIT an ad's window onto an undated sale cell, and two copies of "did this cell come
+# from that ad row?" would drift the way every duplicated rule in this estate has.
+# The first version of this audit carried its own copy and got it wrong in a way that mattered: it
+# demanded two shared distinctive words, which a terse ad line can never satisfy - "Hy-Vee butter,
+# 16 oz., $2.48" reduces to the single token `butter` once the store name, the digits and the unit
+# are stripped. Hy-Vee's butter therefore read as untraceable while sitting in the 3 Day Sale flyer
+# at exactly the price the board was publishing. Brad found it by looking at the ad.
+. (Join-Path $root 'ad-match-lib.ps1')
+# -IncludeExpired: this audit asks "was it EVER advertised", which is Brad's "must of been on some
+# ad PREVIOUSLY". A sale that began in last week's flyer and is still running is traceable, not
+# unexplained. The engine's inheritance uses the live-only pool - see ad-match-lib's header.
+$adIndex = Import-AdRows -OutDir $OutDir -BoardDate $today -IncludeExpired
 
 # ---- product links, so a finding is reviewable ------------------------------------------------
 $purl = @{}
@@ -105,19 +83,20 @@ foreach ($c in $cmp.comparison) {
     if ([string]$s.type -ne 'sale') { continue }
     $saleCells++
     # A cell the STORE dated is not untraceable - we know when it ends, which is the whole point.
-    if ([string]$s.ad_from -match '^\d{4}-\d{2}-\d{2}$' -and [string]$s.ad_to -match '^\d{4}-\d{2}-\d{2}$') { $datedAlready++; continue }
+    # BUT A TTL-DATED CELL IS NOT STORE-DATED. Once the engine began stamping a 30-day TTL onto
+    # undated Fareway/Walmart/Sam's markdowns, those cells started carrying ad_from/ad_to too - and a
+    # date test alone would have quietly reclassified all 372 of them as "dated by the store" and
+    # dropped them off this list. That would have deleted the review list at the exact moment it
+    # became most useful: a TTL is our guess, and a guess is precisely what wants reviewing.
+    # ad_basis says which: 'store' (its own feed), 'ad' (traced to a flyer), 'ttl' (ours).
+    $basis = [string]$s.ad_basis
+    $hasWindow = ([string]$s.ad_from -match '^\d{4}-\d{2}-\d{2}$' -and [string]$s.ad_to -match '^\d{4}-\d{2}-\d{2}$')
+    if ($hasWindow -and $basis -ne 'ttl') { $datedAlready++; continue }
     $store = [string]$s.store
-    $ut = Get-Toks ([string]$s.item)
-    if (-not $ut.Count) { continue }
-    $need = if ($ut.Count -ge 3) { 2 } else { 1 }
-    $hit = $false
-    if ($adTok.ContainsKey($store)) {
-      foreach ($set in $adTok[$store]) {
-        $n = 0; foreach ($w in $ut) { if ($set.Contains($w)) { $n++; if ($n -ge $need) { break } } }
-        if ($n -ge $need) { $hit = $true; break }
-      }
-    }
-    if ($hit) { $traced++; continue }
+    # Price + one shared distinctive word, OR two shared words. See ad-match-lib's header for why
+    # the second rule alone can never match a terse ad line.
+    $hitRow = Find-AdForCell -Index $adIndex -Store $store -Item ([string]$s.item) -PriceText ([string]$s.ad)
+    if ($hitRow) { $traced++; continue }
     $key = "$store|$($c.id)"
     $fseen = if ($prior.ContainsKey($key) -and $prior[$key].first_seen) { [string]$prior[$key].first_seen } else { $today }
     $days = 0
@@ -138,7 +117,7 @@ $doc = [ordered]@{
   updated = (Get-Date).ToString('s'); board = $cmpFile.Name; week_of = $today
   note = 'Cells published as a SALE that match no row in any ad we hold. Not automatically wrong - a store may cut a shelf price without advertising it (Fareway''s own product page reports on_sale:true with retailer:false and no promotionGroupId) - but this is the class we cannot DATE, so it is the class that cannot expire on its own. first_seen is written once and never re-stamped; days_unexplained is only meaningful because of that.'
   sale_cells = $saleCells; dated_by_the_store = $datedAlready; traced_to_an_ad = $traced; untraceable = $found.Count
-  ad_rows_available = (@($adByStore.Keys | ForEach-Object { "$_=$($adByStore[$_].Count)" }) -join ' ')
+  ad_rows_available = (@($adIndex.Keys | Sort-Object | ForEach-Object { "$_=$($adIndex[$_].Count)" }) -join ' ')
   items = @($found | Sort-Object -Property @{e={$_.days_unexplained}; Descending=$true}, @{e={$_.store}}, @{e={$_.id}})
 }
 $tmp = "$ledgerFile.tmp"
@@ -162,3 +141,4 @@ if (-not $Quiet) {
 }
 Write-GuardComplete -Name 'sale-without-ad' -Summary "sale=$saleCells traced=$traced untraceable=$($found.Count)"
 exit 0
+

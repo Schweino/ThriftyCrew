@@ -43,7 +43,16 @@ $script:RollbackTtlDays = 30
 # Which stores this applies to. A store that PUBLISHES a window must never be given a TTL instead -
 # Baker's states expirationDate per item and Family Fare states finish_date per offer, and inventing
 # a 30-day guess over either would be replacing a fact with a worse one.
-$script:RollbackTtlStores = @('Walmart', "Sam's Club")
+# FAREWAY JOINED THIS LIST 2026-08-21, on Brad's rule: "if product page shows a sale price, but it
+# doesn't match a weekly or monthly ad, give it a 30 day TTL." It is the store with by far the most
+# undated sales - 178 cells after ad-matching had already dated everything it could - and its own
+# storefront publishes no end date for them (itemPromotions empty, secondaryPromotion null,
+# promotionGroupId null, and on_sale_ind reports retailer:false, i.e. not a retailer promotion).
+# ORDER MATTERS AND IS ENFORCED BY THE CALLER: a TTL is the LAST resort. A cell is dated by the
+# store's own feed if it can be, then by the ad it was traced to, and only then by this. Fareway also
+# states "Sale ends in N days" in saleDisclaimerString on SOME items; where that is captured it is a
+# real date and must beat this guess.
+$script:RollbackTtlStores = @('Walmart', "Sam's Club", 'Fareway')
 
 $script:RbLedger = $null
 $script:RbLedgerPath = $null
