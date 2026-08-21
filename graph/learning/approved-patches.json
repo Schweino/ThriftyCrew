@@ -28,6 +28,34 @@
     "verdict": "accept"
   },
   {
+    "applied_at": "2026-08-21T01:01:56",
+    "applied_by": "learning-loop",
+    "id": "ap:06b60551a78c5ea5fd1a",
+    "payload_json": "{\"payload\": \"93%?/7%?\\\\s+ground\\\\s+turkey\"}",
+    "proposal_id": "lp:a04c4cccdbc518e5b2b8",
+    "rationale": "Names the RATIO, which is what distinguishes this commodity from generic ground turkey. Radius clean: 1 intended capture, 0 cross-commodity.",
+    "reviewed_at": "2026-08-21T01:01:56",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.6480965645311049, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.3519034354688951}",
+    "shadow_before_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.6480965645311049, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.3519034354688951}",
+    "shadow_verdict": "no_regression",
+    "verdict": "accept"
+  },
+  {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:0772a3f21791f2b9a760",
+    "payload_json": "{\"payload\": \"sour\\\\s+cream\"}",
+    "proposal_id": "lp:333512c7a51cbdbd8e90",
+    "rationale": "VARIETY COLLAPSE, worst of the batch: bare 'sour cream' against a commodity that names LIGHT, pulling 45 rows with 13 cross-commodity collisions. Light and regular are different products.",
+    "reviewed_at": "2026-08-21T01:01:56",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "reject"
+  },
+  {
     "applied_at": "2026-08-20T18:29:29",
     "applied_by": "learning-loop",
     "id": "ap:08ac10f666c768343c72",
@@ -68,6 +96,20 @@
     "shadow_before_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.6235955056179775, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.37640449438202245}",
     "shadow_verdict": "no_regression",
     "verdict": "accept"
+  },
+  {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:0ad1924b1bb075b73a01",
+    "payload_json": "{\"payload\": \"(dijon|honey)\\\\s+mustard\"}",
+    "proposal_id": "lp:9108479cf35cc685ca81",
+    "rationale": "The alternation makes 'dijon' sufficient on its own, so plain Dijon matches - and Stage 1's own rationale admits it captures \"Burman's Dijon Mustard\". Dijon is not honey dijon. The NARROWER version accepted earlier today, which requires the word honey in every branch, already covers the real cases.",
+    "reviewed_at": "2026-08-21T01:01:56",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "reject"
   },
   {
     "applied_at": "2026-08-20T18:22:55",
@@ -406,6 +448,20 @@
     "verdict": "accept"
   },
   {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:301dcd28d8d8178c7571",
+    "payload_json": "{\"payload\": \"(california|seedless)\\\\s+raisins\"}",
+    "proposal_id": "lp:6c04fc395a7dd2e607e1",
+    "rationale": "VARIETY COLLAPSE again. 'california|seedless raisins' are ordinary raisins; the commodity names GOLDEN, which is a different grape treatment at a different price. 13 'intended' captures is the whole raisin shelf.",
+    "reviewed_at": "2026-08-21T01:01:56",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "reject"
+  },
+  {
     "applied_at": "2026-08-20T18:22:55",
     "applied_by": "learning-loop",
     "id": "ap:32441b0d212b10dc0db9",
@@ -445,6 +501,20 @@
     "shadow_after_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.42247191011235957, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.5775280898876405}",
     "shadow_before_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.42247191011235957, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.5775280898876405}",
     "shadow_verdict": "no_regression",
+    "verdict": "accept"
+  },
+  {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:3d234387b8e4511d4b3c",
+    "payload_json": "{\"payload\": \"Our Family Great Northern Beans 15.5 Oz\"}",
+    "proposal_id": "lp:5391cad5f9c88306761a",
+    "rationale": "An add_known_wrong, not an alias: Great Northern beans are a different white bean from cannellini and the commodity names the variety. Correct negative to bank.",
+    "reviewed_at": "2026-08-21T01:01:56",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
     "verdict": "accept"
   },
   {
@@ -1050,6 +1120,20 @@
     "verdict": "accept"
   },
   {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:6c1a874425e85c29caa0",
+    "payload_json": "{\"payload\": \"pineapple\\\\s+tidbits\"}",
+    "proposal_id": "lp:75996eaba7c051dee1a3",
+    "rationale": "Third time proposed, third rejection: 4 cross-commodity collisions, all Dole Pineapple Tidbits ALREADY priced under canned-pineapple. Two commodities claiming one product is a false merge by construction.",
+    "reviewed_at": "2026-08-21T01:01:56",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "reject"
+  },
+  {
     "applied_at": "2026-08-20T18:29:29",
     "applied_by": "learning-loop",
     "id": "ap:6c4395752838b339f91b",
@@ -1398,6 +1482,20 @@
     "shadow_before_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.6924803591470258, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.3075196408529742}",
     "shadow_verdict": "no_regression",
     "verdict": "accept"
+  },
+  {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:9133176d7969bc6275d0",
+    "payload_json": "{\"payload\": \"cream\\\\s+cheese\"}",
+    "proposal_id": "lp:072a85e8924c34eea8b7",
+    "rationale": "VARIETY COLLAPSE. The commodity is 1/3-FAT cream cheese; the pattern is bare 'cream cheese' and would swallow all 52 full-fat rows. Reduced-fat and full-fat price differently and are different purchases.",
+    "reviewed_at": "2026-08-21T01:01:56",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "reject"
   },
   {
     "applied_at": "2026-08-20T18:22:55",
@@ -1859,6 +1957,20 @@
     "shadow_after_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.6033707865168539, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.39662921348314606}",
     "shadow_before_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.6033707865168539, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.39662921348314606}",
     "shadow_verdict": "no_regression",
+    "verdict": "accept"
+  },
+  {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:bb3024638fbc733904e8",
+    "payload_json": "{\"payload\": \"(shredded|finely\\\\s+shredded)\\\\s+(mild|sharp|triple)?\\\\s*cheddar\"}",
+    "proposal_id": "lp:1a9e67427329bba72c16",
+    "rationale": "Requires BOTH 'shredded' and 'cheddar', so it cannot reach block cheddar or a shredded blend. 5 intended captures, zero collisions.",
+    "reviewed_at": "2026-08-21T01:01:56",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
     "verdict": "accept"
   },
   {
@@ -2448,6 +2560,20 @@
     "shadow_before_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.6, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.4}",
     "shadow_verdict": "no_regression",
     "verdict": "accept"
+  },
+  {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:fa16449094237c9eaa62",
+    "payload_json": "{\"payload\": \"organic\\\\s+spinach\"}",
+    "proposal_id": "lp:f4815b86b55fade1a748",
+    "rationale": "'organic spinach' does not require FROZEN, and the commodity names the form. Fresh organic spinach would match and price a frozen row.",
+    "reviewed_at": "2026-08-21T01:01:56",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "reject"
   },
   {
     "applied_at": "2026-08-20T18:22:55",

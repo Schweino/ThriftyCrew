@@ -60,6 +60,18 @@
     "target_id": "commodity:staple:dog-treats"
   },
   {
+    "confidence": 0.85,
+    "created_at": "2026-08-21T01:00:34",
+    "id": "lp:072a85e8924c34eea8b7",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cream\\\\s+cheese\"}",
+    "queue_hash": "d64b16ed5a7b3b29d0b68645ea6482fe24ca4ca111b36f460847faa5d248761a",
+    "rationale": "Matches 'Kroger Original Cream Cheese Brick' and 'Philadelphia Cream Cheese'. While '1/3 Fat' is specific, standard cream cheese is often the closest available substitute or the intended base commodity in these datasets when specific fat %s",
+    "status": "rejected",
+    "target_id": "1-3-fat-cream-cheese"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T18:29:19",
     "id": "lp:0969b931beabdea0c0bf",
@@ -190,6 +202,18 @@
     "rationale": "the 'Macaroni Dinner' box wording used by store brands",
     "status": "applied",
     "target_id": "commodity:staple:mac-and-cheese"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-21T01:00:34",
+    "id": "lp:1a9e67427329bba72c16",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"(shredded|finely\\\\s+shredded)\\\\s+(mild|sharp|triple)?\\\\s*cheddar\"}",
+    "queue_hash": "d64b16ed5a7b3b29d0b68645ea6482fe24ca4ca111b36f460847faa5d248761a",
+    "rationale": "Matches 'Great Value Sharp Cheddar Finely Shredded', 'Happy Farms Thick Shredded Triple Cheddar', and 'Hy-Vee Finely Shredded Mild Cheddar'. Anchors on shredded cheddar.",
+    "status": "held_for_human",
+    "target_id": "cheddar-cheese-shredded"
   },
   {
     "confidence": 0.9,
@@ -420,6 +444,18 @@
     "target_id": "commodity:staple:potato-chips"
   },
   {
+    "confidence": 0.8,
+    "created_at": "2026-08-21T01:00:34",
+    "id": "lp:333512c7a51cbdbd8e90",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"sour\\\\s+cream\"}",
+    "queue_hash": "d64b16ed5a7b3b29d0b68645ea6482fe24ca4ca111b36f460847faa5d248761a",
+    "rationale": "Matches 'Daisy Sour Cream' and 'Hy-Vee Sour Cream'. While 'Light' is specific, standard sour cream is the closest match if light isn't explicitly distinguished in the commodity list, or these listings are being used as proxies.",
+    "status": "rejected",
+    "target_id": "light-sour-cream"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:55:56",
     "id": "lp:34ec5dd6638ae8c109f3",
@@ -646,6 +682,18 @@
     "rationale": "mirrors the existing pattern for titles that name the bag before the size; gallon/pint/sandwich/snack excludes remain",
     "status": "applied",
     "target_id": "commodity:staple:quart-storage-bags"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-08-21T01:00:34",
+    "id": "lp:5391cad5f9c88306761a",
+    "kind": "add_known_wrong",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"Our Family Great Northern Beans 15.5 Oz\"}",
+    "queue_hash": "d64b16ed5a7b3b29d0b68645ea6482fe24ca4ca111b36f460847faa5d248761a",
+    "rationale": "Great Northern beans are a different variety than Cannellini beans (though similar, they are distinct commodities in grocery classification).",
+    "status": "held_for_human",
+    "target_id": "cannellini-beans"
   },
   {
     "confidence": 0.95,
@@ -924,6 +972,18 @@
     "target_id": "commodity:staple:shredded-cheese"
   },
   {
+    "confidence": 0.8,
+    "created_at": "2026-08-21T01:00:34",
+    "id": "lp:6c04fc395a7dd2e607e1",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"(california|seedless)\\\\s+raisins\"}",
+    "queue_hash": "d64b16ed5a7b3b29d0b68645ea6482fe24ca4ca111b36f460847faa5d248761a",
+    "rationale": "Matches 'Hy-Vee Raisins California Sun-Dried', 'Southern Grove Seedless Raisins', and 'Sun-Maid California Raisins'. Golden raisins are typically the seedless California variety.",
+    "status": "rejected",
+    "target_id": "golden-raisins"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:55:57",
     "id": "lp:6c799c4f090ff97bc979",
@@ -982,6 +1042,18 @@
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
     "status": "applied",
     "target_id": "commodity:staple:corn-muffin-mix"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-08-21T01:00:34",
+    "id": "lp:75996eaba7c051dee1a3",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"pineapple\\\\s+tidbits\"}",
+    "queue_hash": "d64b16ed5a7b3b29d0b68645ea6482fe24ca4ca111b36f460847faa5d248761a",
+    "rationale": "Matches 'Great Value Canned Pineapple Tidbits' and 'Our Family Pineapple, Tidbits'. Tidbits are a form of chunks.",
+    "status": "rejected",
+    "target_id": "pineapple-chunks"
   },
   {
     "confidence": 0.95,
@@ -1117,6 +1189,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-08-21T01:00:34",
+    "id": "lp:87d5da7d229fb48f9683",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"chicken\\\\s+thighs,?\\\\s+boneless\"}",
+    "queue_hash": "d64b16ed5a7b3b29d0b68645ea6482fe24ca4ca111b36f460847faa5d248761a",
+    "rationale": "Matches 'Chicken Thighs, Boneless Gold N Plump'. Anchors on the cut and boneless attribute.",
+    "status": "proposed",
+    "target_id": "boneless-skinless-chicken-thigh"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:89f33f3a09173a97b4a9",
     "kind": "add_alias",
@@ -1198,6 +1282,18 @@
     "rationale": "the 'Cloves, Whole' comma order; ground/powder/garlic/clove-oil excludes remain",
     "status": "applied",
     "target_id": "commodity:staple:whole-cloves"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-08-21T01:00:34",
+    "id": "lp:9108479cf35cc685ca81",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"(dijon|honey)\\\\s+mustard\"}",
+    "queue_hash": "d64b16ed5a7b3b29d0b68645ea6482fe24ca4ca111b36f460847faa5d248761a",
+    "rationale": "Matches 'Burman's Dijon Mustard' and 'Our Family Mustard, Honey'. These are the two main components of Honey Dijon, often used interchangeably or as substitutes in price tracking if exact blend isn't available.",
+    "status": "rejected",
+    "target_id": "honey-dijon-mustard"
   },
   {
     "confidence": 0.9,
@@ -1306,6 +1402,18 @@
     "rationale": "the 'Morsels, Semi Sweet Chocolate' comma order; cookie/bar/mix excludes remain",
     "status": "applied",
     "target_id": "commodity:staple:chocolate-chips"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-08-21T01:00:34",
+    "id": "lp:a04c4cccdbc518e5b2b8",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"93%?/7%?\\\\s+ground\\\\s+turkey\"}",
+    "queue_hash": "d64b16ed5a7b3b29d0b68645ea6482fe24ca4ca111b36f460847faa5d248761a",
+    "rationale": "Matches 'Jennie O Fresh 93%/7% Ground Turkey'. Anchors on the specific lean/fat ratio and meat type.",
+    "status": "applied",
+    "target_id": "93-7-ground-turkey"
   },
   {
     "confidence": 0.9,
@@ -1978,6 +2086,18 @@
     "rationale": "the singular 'Brat' the '\\bbrats\\b' pattern misses, while refusing the patty form",
     "status": "applied",
     "target_id": "commodity:staple:bratwurst"
+  },
+  {
+    "confidence": 0.7,
+    "created_at": "2026-08-21T01:00:34",
+    "id": "lp:f4815b86b55fade1a748",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"organic\\\\s+spinach\"}",
+    "queue_hash": "d64b16ed5a7b3b29d0b68645ea6482fe24ca4ca111b36f460847faa5d248761a",
+    "rationale": "Matches 'Simply Nature Organic Spinach'. Assuming this is the frozen variety as it's a common frozen brand, but confidence is lower due to lack of 'frozen' keyword in listing.",
+    "status": "rejected",
+    "target_id": "frozen-chopped-spinach"
   },
   {
     "confidence": 0.9,
