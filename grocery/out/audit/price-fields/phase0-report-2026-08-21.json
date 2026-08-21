@@ -1,0 +1,75 @@
+{
+    "generated":  "2026-08-21T08:59:50",
+    "term":  "butter",
+    "question":  "Per source: does it say a discount is LIVE, does it say when it ENDS, and if not is the end date reachable from another first-party surface? A source that can date its own discount needs no TTL.",
+    "probed":  [
+
+               ],
+    "not_probed":  [
+                       "Baker\u0027s (Kroger /v1/products)",
+                       "Hy-Vee (persisted GraphQL)",
+                       "Family Fare (Freshop)",
+                       "Walmart",
+                       "Sam\u0027s Club",
+                       "Aldi",
+                       "Fareway"
+                   ],
+    "findings":  [
+                     {
+                         "source":  "Baker\u0027s (Kroger /v1/products)",
+                         "says_discount_is_live":  "unknown",
+                         "says_when_it_ends":  "unknown",
+                         "end_date_reachable_elsewhere":  "unknown",
+                         "evidence":  "",
+                         "note":  "probe failed: Cannot find an overload for \"Add\" and the argument count: \"2\"."
+                     },
+                     {
+                         "source":  "Hy-Vee (persisted GraphQL)",
+                         "says_discount_is_live":  "unknown",
+                         "says_when_it_ends":  "unknown",
+                         "end_date_reachable_elsewhere":  "unknown",
+                         "evidence":  "",
+                         "note":  "probe failed: Cannot find an overload for \"Add\" and the argument count: \"2\"."
+                     },
+                     {
+                         "source":  "Family Fare (Freshop)",
+                         "says_discount_is_live":  "unknown",
+                         "says_when_it_ends":  "unknown",
+                         "end_date_reachable_elsewhere":  "unknown",
+                         "evidence":  "",
+                         "note":  "probe failed: The remote server returned an error: (400) Bad Request."
+                     },
+                     {
+                         "source":  "Walmart",
+                         "says_discount_is_live":  "unknown",
+                         "says_when_it_ends":  "unknown",
+                         "end_date_reachable_elsewhere":  "unknown",
+                         "evidence":  "",
+                         "note":  "NOT PROBED - needs a logged-in Chrome; expression emitted in the probe plan"
+                     },
+                     {
+                         "source":  "Sam\u0027s Club",
+                         "says_discount_is_live":  "unknown",
+                         "says_when_it_ends":  "unknown",
+                         "end_date_reachable_elsewhere":  "unknown",
+                         "evidence":  "",
+                         "note":  "NOT PROBED - needs a logged-in Chrome; expression emitted in the probe plan"
+                     },
+                     {
+                         "source":  "Aldi",
+                         "says_discount_is_live":  "unknown",
+                         "says_when_it_ends":  "unknown",
+                         "end_date_reachable_elsewhere":  "unknown",
+                         "evidence":  "",
+                         "note":  "NOT PROBED - needs a logged-in Chrome; expression emitted in the probe plan"
+                     },
+                     {
+                         "source":  "Fareway",
+                         "says_discount_is_live":  "unknown",
+                         "says_when_it_ends":  "unknown",
+                         "end_date_reachable_elsewhere":  "unknown",
+                         "evidence":  "",
+                         "note":  "NOT PROBED - needs a logged-in Chrome; expression emitted in the probe plan"
+                     }
+                 ]
+}
