@@ -482,6 +482,7 @@ def triage_queue(top: int | None, out_path: str) -> dict:
             "confidence": e.get("confidence"),
             "observation": e.get("observation"),
             "previously_deferred": bool(e.get("deferred_reason")),
+            "stale": False,
         })
 
     scored.sort(key=lambda x: (-x["unlock_score"], x["commodity"]))
@@ -490,7 +491,8 @@ def triage_queue(top: int | None, out_path: str) -> dict:
         "source_queue": QUEUE,
         "entries": len(scored),
         "unpriced_commodities": sum(1 for s in scored if s["commodity_priced_stores"] == 0),
-        "rows_settled_total": sum(s["rows_settled"] for s in scored),
+        "stale_entries": sum(1 for s in scored if s["stale"]),
+        "live_rows_total": sum(s["rows_settled"] for s in scored),
         "ordered": scored[:top] if top else scored,
     }
     with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
@@ -540,7 +542,8 @@ def main() -> int:
         rep = triage_queue(args.top, out)
         print(f"{rep['entries']} queued questions, "
               f"{rep['unpriced_commodities']} on commodities with NO priced cell, "
-              f"{rep['rows_settled_total']} rows at stake -> {out}\n")
+              f"{rep['stale_entries']} already settled (stale), "
+              f"{rep['live_rows_total']} live rows at stake -> {out}\n")
         for s in rep["ordered"]:
             print(f"  {s['unlock_score']:>4}  {s['kind']:<13} {s['commodity']}")
             print(f"        {s['product'][:70]!r}")
