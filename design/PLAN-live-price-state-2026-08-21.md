@@ -244,8 +244,17 @@ Verification: a byte-level diff of every served artifact built from the same inp
 
 Each phase ends green and pushed, or it does not end. The tree must be clean before each A/B (standing rule: a fix measured over a polluted tree re-measures the pollution).
 
-**Phase 0 - answer the open questions (no code in the pipeline).**
-Capture one raw response per source and record what it exposes: Kroger promo dates, Hy-Vee promotion fields, Freshop sale dates, Walmart/Sam's `wasPrice`, Aldi/Fareway strike-through text. Output: section 3.2's "must verify" column filled in with evidence files under `grocery/out/audit/price-fields/`. **Gate: every row of that table cites a file.** This phase exists because the plan would otherwise be guessing which store can date its sales.
+**Phase 0 - WHY IS THERE NO END DATE? (no code in the pipeline).** Brad's ruling promoted this from a checklist item to the phase's whole purpose.
+For each of the nine sources, capture one raw response and answer three questions from the bytes, not from belief:
+  1. Does this source state that a discount is live at all (`onSale`, `marked_down`, a strike-through, a promo block)?
+  2. Does it state when that discount **ends** - or a duration, or a promotion id we can resolve to one?
+  3. If not, is the end date obtainable from a second first-party surface (the store's flyer feed, a promotions endpoint, the product page as opposed to the search tile)?
+
+Named targets: Kroger `price.promo` + any promotion object; Hy-Vee's persisted GraphQL document (`hyvee/query-b64.txt`) for promotion fields it could select but does not; Freshop `sale_start_date`/`sale_finish_date`; **Walmart `priceInfo` rollback end**; **Sam's Instant Savings end**; Fareway and Aldi storefront card markup.
+
+Output: section 3.2's "must verify" column filled in, every row citing an evidence file under `grocery/out/audit/price-fields/`. Then, and only then, a TTL recommendation per store - **for the sources that provably cannot date their own discounts, and no others.**
+
+**Gate: every row of that table cites a file, and the TTL proposal names which sources still need one and why.** This phase exists because the plan would otherwise be guessing which store can date its sales, and a TTL invented for a store that publishes a real end date is a worse answer than no TTL at all.
 
 **Phase 1 - engine emits the cell, reads nothing new.**
 `compare-deals.ps1` computes everyday and ad answers from the EXISTING labels (`price_type`), emits the additive cell fields and `cell-state-<date>.json`. Nothing else changes.
@@ -272,12 +281,28 @@ Graph importers read the new row fields and the server-ad file. **Gate:** `board
 
 ---
 
-## 6. Open questions for Brad (decisions, not research)
+## 6. Decisions - RULED by Brad 2026-08-21
 
-1. **`MarkdownTtlDays`.** How long may an undated storefront markdown (Fareway's 622, Hy-Vee's 119) be shown as an ad price before it must be re-verified or dropped? Proposed 7 days. The alternative is 0 (never show an undated discount), which is option A from this morning and loses real savings.
-2. **Show the everyday price behind a sale on the grocery page?** The data will be there. The template change is small; it is a design call. Recipe cards already have the two-tab shape.
-3. **Walmart rollbacks and Sam's Instant Savings**, if Phase 0 finds them exposed: treat as `markdown` under the TTL, or as `everyday` because those stores have no ad cycle in `ad-schedule.json`? Proposed: `markdown`, because a rollback ends.
-4. **Record lows from sales.** Should a sale week be eligible to set `record_low` (drives the buy/wait badge)? Today it does, unlabelled. Proposed: yes, but labelled `kind: ad`, so "cheapest since" can say it was a sale.
+1. **`MarkdownTtlDays` - DEFERRED, and the deferral is a correction to this plan.**
+   > "Can we triage why theres no end date? We should figure that out first before making a decision."
+
+   Correct, and the plan asked the question the wrong way round. Section 3.2 marks "does this store expose a sale end date?" as *must verify* for six of the nine sources, yet the TTL question was put as though the absence were established. **No TTL number is chosen until Phase 0 reports.** If a store turns out to publish an end date, it needs no TTL at all - it gets a real `ad_to` and expires by arithmetic like a flyer. A TTL is the fallback for a source that genuinely cannot date its own discount, and how many of those exist is a measurement nobody has taken.
+
+2. **Show the everyday price behind a sale: NO.** The grocery page shows only the price you pay. The everyday value is still stored, still never overwritten, and still what the page reverts to when the ad expires - it is simply not rendered alongside. Recipe cards keep their existing two-tab shape, which is a different surface with a different job.
+
+3. **Walmart / Sam's rollbacks: their own ad price, on a 30-day TTL** - subject to the same Phase 0 triage as item 1.
+   > "I believe generally, Walmart and Sams are 30 days on roll backs. So could we consider them something like sams_ad_price and walmart_ad_price with a 30 day TTL?"
+
+   Two readings recorded so they can be corrected rather than assumed:
+   - **`sams_ad_price` / `walmart_ad_price` are read as the WIDE PROJECTION'S column names, not a return to per-store columns in storage.** Store-long/render-wide was settled in section 0; the stored field stays `ad_price` on the `(commodity, store)` row and renders as `sams_ad_price` in any flat view. If the intent was per-store storage columns, that reverses amendment 3a and needs saying.
+   - **The TTL becomes per-store, not one global constant.** `MarkdownTtlDays` becomes a per-store policy value in `capture-policy`, defaulting to whatever item 1 settles on, with Walmart and Sam's at 30.
+   - **30 days is a belief, not a measurement** ("I believe generally"), which puts it in exactly the class item 1 just deferred. Phase 0 therefore also asks whether Walmart's `priceInfo` and Sam's Instant Savings carry a rollback end date or duration. If they do, 30 is replaced by the store's own number and no TTL is needed.
+
+4. **Record lows from sales: YES, labelled as a sale.** `update-history` banks `published_unit_price` and records `published_kind`, so "cheapest since" can say the low was an ad price rather than a shelf price.
+
+5. **Scope: run through Phase 3** - with one hard stop. Phase 3 applies the markdown TTL, which item 1 defers to Phase 0. So the sequence is Phase 0 -> report the end-date findings and settle the TTL(s) -> Phases 1, 2, 3. Phase 3 does not begin on a guessed TTL.
+
+6. **Pre-existing test failures: fixed first, separate commit.** Done 2026-08-21 in `f79c756e`: test-auditors 437/11 -> 449/0. Guard-contract still reports 4 HALF-COVERED and 3 DEAD, all pre-existing and untouched; the meal-prep `Bulgur Wheat` / `Keto Bun` constraint still fails the daily chain. Named here so Phase 1's gate is read against a known baseline rather than a clean one.
 
 ---
 
