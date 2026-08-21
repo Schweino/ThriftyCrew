@@ -46,6 +46,19 @@ mistake as calling an unreached store "not carried".
    spec, and every spec ingredient must trace back to an extracted line. An ingredient that appears in the
    spec but not in the source is invented; one in the source but not the spec is dropped. Both change the
    dish, and both are shipped silently today unless you catch them.
+
+   **RUN THE CODE FIRST - do not count this by hand.** This check is set arithmetic, and code does it
+   exactly while a model can miscount a fourteen-item list:
+
+       python meal-prep/pipeline/coverage_check.py --spec <built.json> --source <transcription.json> --json
+
+   It returns `invented` and `dropped` by name, pairing on the HEAD NOUN so a cut or form substitution
+   cannot slip through as a match (chicken thighs vs breast, broth vs stock, heavy vs sour cream all
+   separate; "extra virgin olive oil" and "olive oil" still pair). Take its lists as given and spend your
+   judgement on what it explicitly does NOT decide, listed in its `not_checked` field: whether a
+   substitution it found was deliberate and defensible, whether the METHOD still cooks the source's dish,
+   and whether scaling, title, credit and prose numbers drifted. A `pass` from the tool is not a pass from
+   you - it means the counting is done, not that the recipe is faithful.
 2. **Scaling is one consistent ratio.** The catalog is built at 14 servings from a source that stated its
    own. Check that the grams-per-ingredient reflect ONE ratio (source servings -> 14), not a per-line
    guess. A single ingredient scaled on a different ratio is the signature of a hand-adjusted line, and it
