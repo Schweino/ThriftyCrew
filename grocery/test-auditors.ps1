@@ -3211,15 +3211,28 @@ if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'audit-capture-evicti
 else { Bad ('audit-capture-eviction -SelfTest failed (rc=' + $r.rc + ') - the capture-eviction class is unguarded: ' + ($r.text -replace "`n", ' ')) }
 $aceSrc = Get-Content (Join-Path $root 'audit-capture-eviction.ps1') -Raw
 $cdSrc2 = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
-# LOCKSTEP: the audit restates Select-FreshestCaptureRows' eligibility rule so it can ask whether the BOARD
-# agrees with it. If the engine's rule changes and the audit's copy does not, the audit silently starts
-# measuring a rule nothing runs - which is the whole class of bug this file exists to catch. Both must carry
-# the depth comparison verbatim.
-$cdRule = ($cdSrc2 -match '\$g\.Count -gt \$newestCount')
-$aceRule = ($aceSrc -match '\$g\.Count -gt \$newestCount')
-if ($cdRule -and $aceRule) { Ok 'compare-deals and audit-capture-eviction still state the SAME coverage-depth eligibility rule' }
-elseif (-not $cdRule) { Bad 'compare-deals lost the coverage-depth rule in Select-FreshestCaptureRows - a 1-row capture can again evict a 20-row one, which is how Sams baby-formula shipped at +87% and how six wrong products reached the board' }
-else { Bad 'audit-capture-eviction no longer mirrors the engine eligibility rule - it is now auditing a rule the engine does not run' }
+# LOCKSTEP, NOW BY SHARED CODE RATHER THAN BY MATCHING TEXT (2026-08-21).
+# The audit asks whether the BOARD agrees with the engine's eligibility rule, so it has to know that rule.
+# It used to carry a hand-restated copy, and this check kept the two honest by grepping both files for the
+# same literal. That worked until the rule's MEANING changed instead of its text: the everyday/sale split
+# made one captured product emit two candidate rows, so "count the rows" stopped meaning "how much does
+# this capture know about this commodity" while both copies still read `$g.Count -gt $newestCount` and this
+# check still passed. A grep sees a literal; it cannot see a definition moving underneath one.
+# Both sides now dot-source capture-depth-lib, so the drift is no longer expressible and what is asserted
+# here is that neither has quietly re-grown a private copy.
+$cdLib  = ($cdSrc2 -match "capture-depth-lib\.ps1")
+$aceLib = ($aceSrc -match "capture-depth-lib\.ps1")
+$cdOwnCopy  = ($cdSrc2 -match 'function\s+Select-FreshestCaptureRows')
+$aceOwnCopy = ($aceSrc -match 'function\s+Select-FreshestCaptureRows')
+if ($cdLib -and $aceLib -and -not $cdOwnCopy -and -not $aceOwnCopy) { Ok 'compare-deals and audit-capture-eviction share ONE coverage-depth rule (capture-depth-lib), neither holds a private copy' }
+elseif (-not $cdLib) { Bad 'compare-deals no longer dot-sources capture-depth-lib - the engine and the audit that checks it can now disagree silently, which is how Sams baby-formula shipped at +87% and how Walmart cherries published a 38-day-dead $2.50 against a live $6.97' }
+elseif (-not $aceLib) { Bad 'audit-capture-eviction no longer dot-sources capture-depth-lib - it is at risk of auditing a rule the engine does not run' }
+else { Bad 'a private copy of Select-FreshestCaptureRows has re-appeared beside the shared lib - two copies of this rule have drifted before and the failure is silent in both directions' }
+# The lib must still COUNT DISTINCT PRODUCTS. This is the one property that cannot be inferred from "both
+# dot-source the lib", and reverting it re-opens the cherries cell.
+$cdlSrc = Get-Content (Join-Path $root 'capture-depth-lib.ps1') -Raw
+if ($cdlSrc -match 'Select-Object -Unique' -and $cdlSrc -match 'function\s+Get-CaptureDepth') { Ok 'capture-depth-lib still measures depth in DISTINCT products, so a split one-product capture cannot out-rank a live one' }
+else { Bad 'capture-depth-lib no longer counts distinct products - the everyday/sale split makes one product emit two rows, so a 1-product capture presents as depth 2 and a stale-low price can evict today''s' }
 # The candidates artifact must keep carrying src_date, or this guard is permanently BLIND. It shipped
 # without that field for months, which is exactly why the eviction class went unseen.
 if ($cdSrc2 -match 'price_type,src_date\)') { Ok 'compare-deals still emits src_date into candidates (the field the per-store ranking turns on)' }

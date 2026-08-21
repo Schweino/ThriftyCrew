@@ -519,42 +519,15 @@ function Get-RowSrcDate([string]$store, $row, [string]$fileDate) {
   return $fileDate
 }
 
-function Select-FreshestCaptureRows($rows) {
-  # THE FRESHEST CAPTURE THAT COVERS A COMMODITY WINS IT - UNLESS IT KNOWS LESS THAN THE ONE IT DISPLACES.
-  # Rows with NO src_date are a store's only source and are never filtered. Extracted verbatim from the
-  # ranker so the self-test runs the REAL decision instead of a transcribed copy of it.
-  #
-  # ORIGINAL RULE (2026-07-30): newest capture wins outright. It was written for a real bug - a 16-day-old
-  # 60-row hand-promotion was pricing Sam's onions at a stale-LOW $0.737/lb against a live $0.8267 - and
-  # that case is still frozen in cases 21-24 below.
-  #
-  # WHAT IT MISSED (2026-08-06): "covers the commodity" meant ONE MATCHING ROW. Sam's and Walmart captures
-  # are partial term-based pulls, so a capture that swept one premium product wins the commodity from a
-  # capture that swept twenty, and the surviving cell is real, correctly priced and much dearer. Measured
-  # across the live board: 58 cells, worst 18.17x (Walmart tea-bags showed a $0.3961/each specialty matcha
-  # from a 1-row capture while a 58-row capture five days older held Great Value black tea at $0.0218). It
-  # is also how a wrong product reaches the board: a bad rule is harmless while it is outranked, and becomes
-  # the cell the moment it is ALONE in its capture. Six live wrong products got there exactly that way.
-  #
-  # THE FIX IS NOT "PREFER THE CHEAPEST", which would bring the onions bug straight back. A capture only
-  # survives if it knows AT LEAST AS MUCH about this commodity as the newest one does. So:
-  #   onions  - newer capture holds MORE onion rows than the file it displaces -> displaces it. Unchanged.
-  #   formula - newer capture holds FEWER -> the richer, older capture's rows stay eligible beside it.
-  # Ties go to the newer capture. Staleness is already bounded by -SamsMaxAgeDays / -WalmartMaxAgeDays; this
-  # function is a second filter on top of that window, and it has no business discarding better information.
-  # Spot-checked before shipping: of 11 evicted Walmart rows re-read live, 9 were unchanged after five days
-  # and the 2 that moved were still 2.08x closer to the truth than the cell that had displaced them.
-  $dated = @($rows | Where-Object { $_.src_date })
-  if (-not $dated.Count) { return @($rows) }
-  $newest = @($dated | ForEach-Object { [string]$_.src_date } | Sort-Object -Descending)[0]
-  $newestCount = @($dated | Where-Object { [string]$_.src_date -eq $newest }).Count
-  $keepDates = @($newest)
-  foreach ($g in ($dated | Group-Object src_date)) {
-    if ([string]$g.Name -eq $newest) { continue }
-    if ($g.Count -gt $newestCount) { $keepDates += [string]$g.Name }
-  }
-  return @($rows | Where-Object { -not $_.src_date -or $keepDates -contains [string]$_.src_date })
-}
+# SELECT-FRESHESTCAPTUREROWS NOW LIVES IN capture-depth-lib.ps1 (2026-08-21), because this engine is not
+# its only reader: audit-capture-eviction checks the published board against the same rule and used to do
+# it from a hand-restated copy, kept honest by a test-auditors grep for a shared literal. A grep can see a
+# literal change and cannot see a change in MEANING - and the meaning did change the day the everyday/sale
+# split made one product emit two rows. The lib's header carries the full history: the onions bug the
+# freshness rule exists for, the baby-formula bug the depth exception exists for, and the cherries cell
+# that made depth count distinct products instead of rows.
+. (Join-Path $PSScriptRoot 'capture-depth-lib.ps1')
+
 
 # IS THIS AD FILE LIVE ON THE BOARD'S OWN DATE? Pure, so the self-test below can reach the real code instead
 # of a copy of it - the inline version of this check had no test at all, and an inline copy is how a guard
@@ -908,6 +881,27 @@ if ($SelfTest) {
     (_Row 'Kerrygold Butter, 1 lb.'       6.20 '2026-07-29')
   ) | Sort-Object unit_price | Select-Object -First 1)
   _Eq 'a thin but genuinely cheaper capture still wins' $cheapThin.name "Member's Mark Butter, 4 lb."
+  # 28b. MUST FIRE - THE FROZEN CHERRIES CASE (2026-08-21). One product, split into its everyday half and
+  #      its sale half, must not present as a two-product capture. This is the real data: Walmart item id
+  #      46491694 in the 2026-07-14 capture, against the single row the 2026-08-11 capture holds.
+  #      Under row-counting the July capture scored 2 against August's 1, survived, and its $2.50/lb sale
+  #      won the cell while Walmart was charging $6.97/lb - a price 38 days dead, one cent off the crown.
+  $splitInflated = @(Select-FreshestCaptureRows @(
+    (_Row 'Fresh Red Cherries'               2.5000 '2026-07-14'),   # the SAME product, sale half
+    (_Row 'Fresh Red Cherries'               4.9600 '2026-07-14'),   # ...and everyday half
+    (_Row 'Fresh Red Cherries, 2.25 lb Bag'  6.9689 '2026-08-11')
+  ) | Sort-Object unit_price | Select-Object -First 1)
+  _Eq 'a split one-product capture does not out-depth a live one' $splitInflated.name 'Fresh Red Cherries, 2.25 lb Bag'
+  # 28c. CLEAN TWIN for 28b, and it is the guard against over-correcting into "distinct is per capture-wide
+  #      name". TWO GENUINELY DIFFERENT products in the older capture still out-depth the newer single row -
+  #      the baby-formula fix must survive the cherries fix. Same prices as 28b so the only variable is
+  #      whether the older capture's two rows name one product or two.
+  $twoRealProducts = @(Select-FreshestCaptureRows @(
+    (_Row 'Fresh Red Cherries'               2.5000 '2026-07-14'),
+    (_Row 'Rainier Cherries, 2 lb Bag'       4.9600 '2026-07-14'),
+    (_Row 'Fresh Red Cherries, 2.25 lb Bag'  6.9689 '2026-08-11')
+  ) | Sort-Object unit_price | Select-Object -First 1)
+  _Eq 'two REAL products still out-depth a newer single row' $twoRealProducts.name 'Fresh Red Cherries'
   # CLEAN TWIN: the direction that must NOT work. A row claiming to be FRESHER than the file it lives in is
   # the as_of laundering fixed in the Fareway builder the same day; taking its word would let a stale price
   # out-rank a live one, which is the exact failure this whole family of fixes exists to prevent.

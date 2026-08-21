@@ -41,6 +41,8 @@ $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # ONE implementation of the ruling matcher, two callers (compare-deals enforces it, this audits against it).
 . (Join-Path $root 'known-wrong-lib.ps1')
+# ONE implementation of the ELIGIBILITY rule, same two callers, same reason. See capture-depth-lib's header.
+. (Join-Path $root 'capture-depth-lib.ps1')
 
 # THE DETECTOR, pure so the fixture reaches the REAL code path with no data files on disk
 # (fix-needs-reachable-selftest: two same-day fixes regressed in this estate because their self-test could
@@ -70,18 +72,17 @@ function Find-CaptureEvictions {
       $boardPu = [double]$cell.per_unit
       if ($boardPu -le 0) { continue }
 
-      # ELIGIBILITY, restated from Select-FreshestCaptureRows. Keep this in lockstep with the engine; a
-      # test-auditors check asserts both still name the same rule.
+      # ELIGIBILITY - THE ENGINE'S OWN FUNCTION, not a restatement of it (2026-08-21).
+      # This used to be a hand-copied transcription with a comment asking the next editor to keep both in
+      # lockstep, backed by a test-auditors grep for a shared literal. The copies drifted the first time
+      # the rule's MEANING changed rather than its text: when the everyday/sale split made one captured
+      # product emit two candidate rows, "count the rows" quietly stopped meaning "how much does this
+      # capture know". A grep cannot see that. Both sides now call capture-depth-lib, so an audit that
+      # measures a rule the engine does not run is no longer expressible.
       $dated = @($rows | Where-Object { $_.src_date })
       if ($dated.Count) {
         $newest = @($dated | ForEach-Object { [string]$_.src_date } | Sort-Object -Descending)[0]
-        $newestCount = @($dated | Where-Object { [string]$_.src_date -eq $newest }).Count
-        $keepDates = @($newest)
-        foreach ($g in ($dated | Group-Object src_date)) {
-          if ([string]$g.Name -eq $newest) { continue }
-          if ($g.Count -gt $newestCount) { $keepDates += [string]$g.Name }
-        }
-        $eligible = @($rows | Where-Object { -not $_.src_date -or $keepDates -contains [string]$_.src_date })
+        $eligible = @(Select-FreshestCaptureRows $rows)
       } else {
         $eligible = $rows
         $newest = ''
