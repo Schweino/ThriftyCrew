@@ -49,6 +49,29 @@ def latest_eval(db) -> dict | None:
     return dict(r) if r else None
 
 
+def state_summary(db) -> dict:
+    """The price-state tables: the answer, and how fresh it is."""
+    try:
+        cells = db.conn.execute("SELECT COUNT(*) FROM cell_state").fetchone()[0]
+    except Exception:                                        # noqa: BLE001
+        return {}
+    if not cells:
+        return {}
+    row = db.conn.execute(
+        """SELECT COUNT(*) n,
+                  SUM(everyday_price IS NOT NULL) everyday,
+                  SUM(ad_price IS NOT NULL) on_ad,
+                  SUM(ad_to IS NOT NULL AND ad_to < date('now','localtime')
+                      AND reverted_checked_at IS NULL) reversions_owed
+           FROM cell_state""").fetchone()
+    q = db.conn.execute("SELECT COUNT(*) FROM question_verdicts").fetchone()[0]
+    obs = db.conn.execute("SELECT COUNT(*) FROM price_observations").fetchone()[0]
+    return {"cells": row["n"], "with_everyday": row["everyday"],
+            "on_ad_now": row["on_ad"], "ad_reversions_owed": row["reversions_owed"],
+            "banked_questions": q, "evidence_rows": obs,
+            "rows_per_answer": round(obs / row["n"], 1) if row["n"] else None}
+
+
 def learning_summary(db) -> dict:
     out = defaultdict(int)
     for r in db.conn.execute(
@@ -90,6 +113,7 @@ def build(db) -> dict:
             "false_merge_rate": ev["false_merge_rate"],
             "missed_merge_rate": ev["missed_merge_rate"],
         } if ev else None,
+        "state": state_summary(db),
         "gate_checks": {k: v["ok"] for k, v in checks["checks"].items()},
         "gate_check_detail": {k: v["detail"] for k, v in checks["checks"].items()
                               if not v["ok"]},
@@ -128,6 +152,15 @@ def main() -> int:
         print(f"     precision {ev['entity_precision']:.3f}   recall {ev['entity_recall']:.3f}")
         print(f"     false-merge {ev['false_merge_rate']:.4f} (gate <=0.02)   "
               f"missed-merge {ev['missed_merge_rate']:.4f} (gate <=0.10)")
+
+    if rep.get("state"):
+        s = rep["state"]
+        print(f"\n  price state: {s['cells']} cells "
+              f"({s['with_everyday']} everyday, {s['on_ad_now']} on ad now), "
+              f"{s['banked_questions']} banked questions")
+        print(f"     evidence rows {s['evidence_rows']}  "
+              f"({s['rows_per_answer']} per answer)   "
+              f"ad reversions owed: {s['ad_reversions_owed']}")
 
     print("\n  gate checks:")
     for name, ok in rep["gate_checks"].items():

@@ -267,6 +267,19 @@ def import_known_wrong(db: GraphDB, ts: str, run: str) -> dict:
                     break
             n += 1
 
+    return {"known_wrong": n,
+            "known_wrong_retro_demoted": retro_apply_known_wrong(db, ts, run)}
+
+
+def retro_apply_known_wrong(db: GraphDB, ts: str, run: str) -> int:
+    """Demote every existing row that a ruling covers, by normalised name.
+
+    MUST run AFTER the observation and lane importers, not only alongside the
+    seed import. On a fresh rebuild the seed pass has no observations to sweep,
+    and the fareway/product-urls lanes then insert rows pre-marked include_hit —
+    so a ruling could never reach them and FOCO Coconut Juice came back priced
+    on a clean build. import_all calls this again once every lane has landed.
+    """
     # RETRO-APPLY. A ruling used to bind only rows adjudicated AFTER it existed:
     # layer 1 consults known-wrong during resolution, and an already-include_hit
     # row is never re-litigated. So the 2026-08-20 strawberry-syrup ruling
@@ -297,10 +310,11 @@ def import_known_wrong(db: GraphDB, ts: str, run: str) -> dict:
                 "confidence=1.0 WHERE id=?", [(i,) for i in hits])
             demoted += len(hits)
     if demoted:
+        db.conn.commit()
         db.log_event(run=run, timestamp=ts, etype="resolve",
                      decision="known_wrong_retro_sweep",
                      detail={"rows_demoted": demoted})
-    return {"known_wrong": n, "known_wrong_retro_demoted": demoted}
+    return demoted
 
 
 def import_dupe_allowlist(db: GraphDB, ts: str, run: str) -> dict:

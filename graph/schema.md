@@ -143,3 +143,46 @@ below survived its own fix).
   while being the worse buy), `basis_flag IS NULL` enforced.
 - `v_price_why` — observation joined to its provenance; answers "why does this
   price appear?" on its own.
+
+## Price state (2026-08-20) — the answer, not the log
+
+`cell_state` and `question_verdicts` implement
+`design/PLAN-price-state-2026-08-20.md`. The estate stored a grocery board as an
+event stream — 128,162 observations over 37 days, ~40 rows per cell of which one
+was the answer, growing ~6,500/day with no retention. A board is a **state
+machine**, and these two tables say so.
+
+| table | one row per | grows with |
+|---|---|---|
+| `cell_state` | (commodity, store) | the CATALOG |
+| `question_verdicts` | (commodity, product) | new PRODUCTS |
+| `price_observations` | surviving evidence | store ASSORTMENT |
+
+None of them grows with time. Measured: 130,240 observations → 27,116 after the
+supersede-prune, 3,149 cells, 8.6 evidence rows per answer.
+
+**`cell_state` is tracked JSON, and that is the price historian.** Every change
+is a commit diff, so history is dated, auditable, stored as deltas, and costs
+nothing daily. There is no history table and no rollup because there does not
+need to be one.
+
+**Evidence ids are pointers, never foreign keys.** `cell_state` is durable;
+`price_observations` is derived and prunable, and a durable table cannot hold a
+foreign key into one it outlives — the destructive rebuild drill proved it by
+failing on exactly that constraint. A dangling evidence id means the receipt was
+pruned, which is legal; the price and its as-of date stand alone.
+
+**Only EXPENSIVE verdicts are banked.** Deterministic ones re-derive in ~1.5s for
+100k rows and would freeze the very rules the next `commodities.json` edit is
+meant to change; banking them also made the tracked export 11.5 MB of daily churn
+for answers nobody reads. What is banked: model calls (55 GPU-minutes to
+reproduce), reviewer rulings, known-wrong. The resolver consults them at **layer
+4.5** — after the deterministic layers so a new rule still wins, before the model
+so a question is never paid for twice.
+
+**Freshness is data.** `everyday_asof` + `MaxCarryDays` (read from
+`grocery/capture-policy.ps1`, never copied) decides staleness; `ad_from`/`ad_to`
+bound an ad price to its window; `reverted_checked_at` NULL after a window closes
+means the post-ad verification pull is still OWED, and
+`verifier.check_ad_reversion_owed` turns that into a red gate rather than a
+silent assumption.

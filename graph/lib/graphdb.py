@@ -402,10 +402,20 @@ class GraphDB:
     # attributed", and stage1_analyze reads the latest run's errors. A history
     # that the sanctioned `rm graph.db` deletes is not a history.
 
+    # cell_state and question_verdicts are DERIVED (pipeline/state.py rebuilds
+    # both from observations), but they are tracked anyway and for a different
+    # reason than the rest: cell_state's git history IS the price history. Every
+    # commit diff is a dated record of what changed, which is what let the
+    # estate stop paying 6,500 observation rows a day to store a past nothing
+    # queried. Losing the file would not lose today's answer — it would lose
+    # every yesterday. question_verdicts rides along because it is the memory
+    # that makes the supersede-prune safe to run at all.
     LEARNING_TABLES = (
         ("learning_proposals", "learning/proposals.json"),
         ("approved_patches", "learning/approved-patches.json"),
         ("eval_runs", "eval/eval-runs.json"),
+        ("cell_state", "state/cell-state.json"),
+        ("question_verdicts", "state/question-verdicts.json"),
     )
 
     def export_learning(self, out_dir: str | None = None) -> dict[str, int]:
@@ -437,9 +447,13 @@ class GraphDB:
             for row in rows or []:
                 cols = ", ".join(row.keys())
                 marks = ", ".join(f":{k}" for k in row)
+                # OR IGNORE, not ON CONFLICT(id): these tables no longer share a
+                # single-column 'id' key — cell_state is keyed (commodity_id,
+                # store_id) and question_verdicts (commodity_id, product_key), so
+                # naming a conflict column would raise on restore, which is the
+                # one moment this code exists for.
                 self.conn.execute(
-                    f"INSERT INTO {table} ({cols}) VALUES ({marks}) "
-                    f"ON CONFLICT(id) DO NOTHING", row)
+                    f"INSERT OR IGNORE INTO {table} ({cols}) VALUES ({marks})", row)
                 n += 1
             restored[table] = n
         self.conn.commit()

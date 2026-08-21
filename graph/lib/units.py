@@ -372,6 +372,31 @@ def size_from_name(product_name: str | None, count: float) -> "Size | None":
     return None
 
 
+# An ad line that offers a CHOICE — "Jack Link's Beef Jerky or Pepperidge Farm
+# Goldfish, $5.99" — names two products and one price, and nothing says which
+# size the price is per. Weekly ads are full of them.
+_CHOICE_AD = re.compile(
+    r"\b(?:or)\b(?=[^,]*\b(?:oz|ct|lb|pk|pack|fl|count|each|ea)\b)"   # "A or B 12 oz"
+    r"|\b\d+(?:\.\d+)?\s*(?:oz|ct|lb|fl\.?\s*oz)\b[^,]*\bor\b",       # "30 oz or ..."
+    re.IGNORECASE)
+
+
+def names_multiple_products(product_name: str | None) -> bool:
+    """True when a listing offers a CHOICE of products under one price.
+
+    Such a row is a correct MATCH (the commodity really is on offer) but cannot
+    yield a per-unit price: the price attaches to whichever item the shopper
+    picks, and the two rarely share a size. Measured 2026-08-20: "Duke's
+    Mayonnaise 30 oz or Heinz Ketchup 32 oz" priced the bakers mayonnaise cell
+    11% under the board, and "Jack Link's Beef Jerky or Pepperidge Farm ..."
+    did the same to beef-jerky. Refusing costs one empty ad price; guessing
+    publishes a number no shelf will honour.
+    """
+    if not product_name:
+        return False
+    return bool(_CHOICE_AD.search(str(product_name)))
+
+
 def per_unit(price, size_text: str | None,
              commodity_unit: str | None = None,
              product_name: str | None = None) -> tuple[float | None, str | None]:

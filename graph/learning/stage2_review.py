@@ -242,6 +242,42 @@ def _apply_to_graph(db, kind: str, target: str, payload: str, ts: str,
     return 0
 
 
+def reapply_applied_patches(db, ts: str, run: str = "") -> dict:
+    """Re-materialise every patch already marked applied. Idempotent.
+
+    The learning loop's RECORD is durable (learning_proposals and
+    approved_patches are tracked JSON), but its EFFECT lived only in the
+    rebuildable index: `learned` aliases are written into the graph, never back
+    into commodities.json, because nothing here writes to the legacy estate.
+    So a routine `rm graph.db` + re-import silently un-applied every patch the
+    loop had ever landed — 157 of them on 2026-08-20 — while the proposals went
+    on reporting status='applied'. The README's promise that deleting the index
+    is always safe was false for exactly this table.
+
+    Called from import_all after the lanes land, so the graph a rebuild produces
+    is the graph that was there before it.
+    """
+    rows = db.conn.execute(
+        """SELECT p.id, p.kind, p.target_id, a.payload_json
+           FROM learning_proposals p JOIN approved_patches a ON a.proposal_id = p.id
+           WHERE p.status='applied' AND a.verdict IN ('accept','modify')""").fetchall()
+    if not rows:
+        return {"reapplied": 0}
+    prov = db.record_provenance("graph/learning/approved-patches.json",
+                                "learning:reapply", ts, run=run)
+    n = 0
+    for r in rows:
+        payload = (json.loads(r["payload_json"] or "{}") or {}).get("payload")
+        if not payload:
+            continue
+        target = resolve_target(db, r["target_id"])
+        if not target:
+            continue
+        n += _apply_to_graph(db, r["kind"], target, payload, ts, prov)
+    db.conn.commit()
+    return {"reapplied": n}
+
+
 def requeue_stuck(db) -> dict:
     """Demote approved-but-unappliable patches back to proposals.
 

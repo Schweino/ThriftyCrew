@@ -135,7 +135,8 @@ def _compile_all(patterns: list[str]) -> list[re.Pattern]:
 
 class Resolver:
     def __init__(self, db: GraphDB, llm: LocalLLM | None = None,
-                 use_llm: bool = True, escalate_below: float = 0.75):
+                 use_llm: bool = True, escalate_below: float = 0.75,
+                 use_bank: bool = True):
         self.db = db
         self.llm = llm
         self.use_llm = use_llm
@@ -146,6 +147,23 @@ class Resolver:
         self._universal_classes: set[str] = set()
         self._load_category_excludes()
         self.stats: dict[str, int] = {}
+        # Verdicts banked by question_verdicts. Only MODEL/REVIEWER answers are
+        # reused (see layer 4.5) — the expensive ones. Absent table (a fresh
+        # index mid-migration) simply means no bank, never an error.
+        self.bank: dict[tuple[str, str], dict] = {}
+        if use_bank:
+            try:
+                self.bank = {
+                    (r["commodity_id"], r["product_key"]):
+                        {"status": r["status"], "reason": r["reason"],
+                         "confidence": r["confidence"]}
+                    for r in self.db.conn.execute(
+                        """SELECT commodity_id, product_key, status, reason, confidence
+                           FROM question_verdicts
+                           WHERE status IN ('llm_rejected','llm_confirmed',
+                                            'llm_match_unverified','escalated')""")}
+            except Exception:                                # noqa: BLE001
+                self.bank = {}
 
     # -- setup -------------------------------------------------------------
     def _load_category_excludes(self) -> None:
@@ -266,6 +284,27 @@ class Resolver:
             if pat.search(name):
                 return self._tally(Verdict("include_hit",
                                            f"matched include pattern '{pat.pattern}'", 1.0))
+
+        # 4.5 BANKED VERDICT — a question this estate has already answered with
+        # a model call or a human review. Checked here, and the placement is
+        # deliberate.
+        #
+        # PLAN-price-state calls this "layer 0", meaning it should come before
+        # everything. Implemented literally that would freeze the deterministic
+        # rules: a newly added exclude pattern, category guard or known-wrong
+        # ruling could never reach a question already banked, and this estate
+        # ships those patterns constantly (13 rulings on 2026-08-20 alone).
+        # The plan's stated GOAL is "the model is never asked a question twice
+        # across runs" — which this position achieves exactly, while leaving
+        # layers 1-4 free to overrule a banked verdict whenever the rules move.
+        # Deterministic verdicts are never banked-and-reused: they are ~9s for
+        # 120k rows, so recomputing them costs nothing and keeps them current.
+        if self.bank:
+            banked = self.bank.get((cc.node_id, norm))
+            if banked:
+                return self._tally(Verdict(banked["status"],
+                                           f"banked: {banked['reason']}",
+                                           banked["confidence"]))
 
         # 5. genuinely contested: no positive hit, but nothing rules it out.
         if not (allow_llm and self.use_llm and self.llm):

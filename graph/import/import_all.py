@@ -83,6 +83,78 @@ def main() -> int:
                 db.conn.commit()
                 say(f"  {name:<20} {res}   ({time.time()-t0:.1f}s)")
 
+        # PHASE C: the answer is rebuilt and the evidence bounded as part of the
+        # import, not as a chore someone remembers. The ORDER is load-bearing,
+        # and getting it wrong is silent rather than loud:
+        #
+        #   1. resolve (deterministic)  — freshly imported rows arrive
+        #      'unadjudicated', and the prune refuses to delete an open question.
+        #      Building state before this produced a prune that removed 2,400
+        #      rows instead of 103,000 and looked like it had worked.
+        #   2. rebuild cell_state       — the current answer per cell
+        #   3. bank question_verdicts   — so pruning destroys no adjudication
+        #   4. supersede-prune          — drop rows a newer sighting replaced
+        #   5. export                   — cell_state's git diff IS the price history
+        #
+        # The resolver consults the banked verdicts (layer 4.5), so questions a
+        # model already answered in an earlier run cost nothing to re-settle.
+        if args.observations:
+            pipeline_dir = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), "..", "pipeline")
+            sys.path.insert(0, pipeline_dir)
+            from resolve import Resolver                                  # noqa: PLC0415
+            from state import (build_cell_state, build_question_verdicts,  # noqa: PLC0415
+                               supersede_prune, export_state)
+            say("\n  adjudicate + price state ...")
+            # Rulings first, and again here rather than only in the seed pass:
+            # the lanes above insert rows pre-marked include_hit, so a ruling
+            # that swept before they landed never touched them.
+            # The learning loop's applied patches live only in this index, so a
+            # rebuild must re-materialise them or it silently un-applies work
+            # the proposals still report as applied.
+            sys.path.insert(0, os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), "..", "learning"))
+            from stage2_review import reapply_applied_patches      # noqa: PLC0415
+            t0 = time.time()
+            res = reapply_applied_patches(db, ts, run)
+            totals.update(res)
+            say(f"  {'reapply patches':<20} {res}   ({time.time()-t0:.1f}s)")
+
+            t0 = time.time()
+            n_demoted = importers.retro_apply_known_wrong(db, ts, run)
+            totals["known_wrong_retro_demoted"] = n_demoted
+            say(f"  {'known-wrong sweep':<20} {n_demoted} rows demoted   "
+                f"({time.time()-t0:.1f}s)")
+            t0 = time.time()
+            res = Resolver(db, use_llm=False).resolve_pending(run=run, ts=ts,
+                                                              allow_llm=False)
+            totals["resolved_rows"] = res["resolved"]
+            say(f"  {'resolve':<20} {res['resolved']} rows, "
+                f"{res['questions']} questions   ({time.time()-t0:.1f}s)")
+            for label, fn in (("cell_state", build_cell_state),
+                              ("verdicts", build_question_verdicts)):
+                t0 = time.time()
+                out = fn(db, ts)
+                totals.update(out)
+                say(f"  {label:<20} {out}   ({time.time()-t0:.1f}s)")
+
+            # The migration gate, measured while both derivations still see the
+            # same evidence — the prune below removes rows the observations path
+            # would need to answer with, so this is the only honest moment for it.
+            from state import verify_against_matrix            # noqa: PLC0415
+            gate = verify_against_matrix(db)
+            totals["state_gate_ok"] = gate["ok"]
+            say(f"  {'state gate':<20} {'PASS' if gate['ok'] else 'FAIL'}  "
+                f"cells {gate['state_cells']}, live-board agreement "
+                f"{gate['agreement_from_state']} vs {gate['agreement_from_observations']} "
+                f"from observations")
+
+            t0 = time.time()
+            out = supersede_prune(db, ts)
+            totals.update(out)
+            say(f"  {'prune':<20} {out}   ({time.time()-t0:.1f}s)")
+            say(f"  {'state export':<20} {export_state(db)}")
+
         stats = db.stats()
         db.log_event(run=run, timestamp=ts, etype="state_transition",
                      decision="import_complete", detail={"totals": totals, "stats": stats})

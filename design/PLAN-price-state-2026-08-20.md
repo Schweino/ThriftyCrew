@@ -1,6 +1,6 @@
 # PLAN — Price state: the graph stops hoarding events and starts keeping answers
 
-**Status: RATIFIED 2026-08-20 (Brad) — both §3 amendments accepted. Implementation begins at Phase A once the 2026-08-20 contested adjudication run completes and its verdicts are banked.**
+**Status: IMPLEMENTED 2026-08-20. All four phases (A-D) built, gated and pushed. See §7 for what each phase landed and graph/schema.md for the living definition.**
 
 ---
 

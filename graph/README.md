@@ -20,8 +20,16 @@ Gates are numbers here, not opinions.
 # 0. bring the local model up (once per boot; ~40s to load 13 GB into VRAM)
 pwsh tools/local-llm/serve.ps1
 
-# 1. build the graph from the legacy estate (structure ~1s, +observations ~6s)
+# 1. build the graph from the legacy estate. With --observations this is the
+#    whole refresh: import -> re-apply learning patches -> retro-apply
+#    known-wrong rulings -> resolve -> rebuild cell_state + question_verdicts
+#    -> state gate -> supersede-prune -> export tracked state. ~25s.
 python graph/import/import_all.py --observations
+
+# 1b. price state on its own (rebuild, gate, prune, ad-reversion worklist)
+python graph/pipeline/state.py                  # rebuild + gate + export
+python graph/pipeline/state.py --verify         # migration gate only
+python graph/pipeline/state.py --ad-reversions  # cells owing a post-ad check
 
 # 2. adjudicate candidate rows (deterministic layers only, ~9s for 119k rows)
 python graph/pipeline/resolve.py
@@ -148,9 +156,11 @@ observation ever lacks one. "Why does this price appear?" is answerable from
 | Phase 0 decode | ≥15 tok/s | **46.1 tok/s** | PASS |
 | gold-set false-merge rate | ≤0.02 | **0.0000** | PASS |
 | gold-set missed-merge rate | ≤0.10 | 0.2211 (see below) | **NOT MET** |
-| Phase 2 board parity (staple scope) | ≥0.99 agreement | 0.884 @ 0.938 coverage (2026-08-20, after alias absorption) | **NOT MET** |
+| Phase 2 board parity (staple scope) | ≥0.99 agreement | 0.897 @ 0.953 coverage (2026-08-20, read from `cell_state`) | **NOT MET** |
 | ad timing | every weekly-ad store inside its current window | all 5 in-window | PASS |
 | 90-day timer | no everyday row older than `MaxCarryDays` | reads `capture-policy.ps1` | PASS |
+| ad reversion owed | every closed ad window re-checked | 0 owed | PASS |
+| price-state migration gate | state ≥ observations vs live board | 0.8968 vs 0.8964 | PASS |
 
 Phase 0 and the Phase 1 evaluation discipline are complete. Phases 2-6 are built
 and runnable; the parity gate has not been earned yet.

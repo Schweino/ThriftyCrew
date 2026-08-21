@@ -226,6 +226,88 @@ CREATE INDEX IF NOT EXISTS ix_eval_at ON eval_runs(run_at DESC);
 -- ---------------------------------------------------------------------------
 -- Convenience views
 -- ---------------------------------------------------------------------------
+-- cell_state — THE ANSWER. One row per (commodity, store), never per capture.
+--
+-- A grocery board is a state machine, not an event stream: every cell has a
+-- current everyday price, sometimes a current ad price, and freshness rules for
+-- each. price_observations held 40 rows per cell of which 1 was the answer, and
+-- grew ~6,500 rows/day forever. This table is bounded by the CATALOG (633
+-- commodities x 7 stores), never by elapsed time.
+--
+-- It is exported to tracked JSON, which is what makes price history free: every
+-- price change is a diff in a commit, so `git log -p graph/state/cell-state.json`
+-- IS the history — dated, auditable, stored as deltas, and costing nothing daily.
+--
+-- The wide per-store file Brad specified still exists as the RENDERED artifact
+-- (public/board.json); this is the one place it is computed from.
+-- See design/PLAN-price-state-2026-08-20.md.
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS cell_state (
+    commodity_id        TEXT NOT NULL,
+    store_id            TEXT NOT NULL,
+    -- everyday: the shelf price, refreshed on the capture policy's quarter.
+    -- STALENESS IS NOT STORED. everyday_asof + MaxCarryDays is computed at read
+    -- time against grocery/capture-policy.ps1, because a window baked in here
+    -- would be the fourth private copy of it this estate has had to close.
+    everyday_price      REAL,
+    everyday_unit_price REAL,
+    everyday_unit       TEXT,
+    everyday_size       TEXT,
+    everyday_product    TEXT,
+    everyday_asof       TEXT,
+    -- Evidence ids are POINTERS, deliberately not foreign keys. cell_state is
+    -- tracked and durable; price_observations is derived, prunable and
+    -- rebuildable — a durable table cannot hold a foreign key into a table that
+    -- it outlives. The destructive rebuild drill proved it: restoring
+    -- cell-state.json into a fresh index failed on FOREIGN KEY constraint
+    -- because the evidence rows had not been re-imported yet. A dangling
+    -- evidence id means "the receipt was pruned", which is legal; the price and
+    -- its as-of date stand on their own.
+    everyday_evidence   TEXT,
+    -- ad: present only while the store's cycle window contains today.
+    ad_price            REAL,
+    ad_unit_price       REAL,
+    ad_product          TEXT,
+    ad_from             TEXT,
+    ad_to               TEXT,
+    ad_evidence         TEXT,
+    -- NULL after an ad window closes = the post-ad verification pull is still
+    -- OWED. This is the whole point of tracking ad windows as data: when an ad
+    -- ends, somebody must confirm the shelf went back up. Until this is stamped,
+    -- verifier.check_ad_reversion_owed reports the cell.
+    reverted_checked_at TEXT,
+    updated_at          TEXT NOT NULL,
+    PRIMARY KEY (commodity_id, store_id)
+);
+CREATE INDEX IF NOT EXISTS ix_cell_store  ON cell_state(store_id);
+CREATE INDEX IF NOT EXISTS ix_cell_asof   ON cell_state(everyday_asof);
+CREATE INDEX IF NOT EXISTS ix_cell_adto   ON cell_state(ad_to);
+
+-- ---------------------------------------------------------------------------
+-- question_verdicts — adjudication memory, one row per QUESTION.
+--
+-- resolve() is a pure function of (commodity_id, product_name), so the same
+-- question was being answered up to 40 times and stored on 40 rows. Banking it
+-- once here means (a) deleting a superseded observation destroys no
+-- adjudication work, which is what makes the supersede rule safe, and (b) the
+-- resolver can consult it as LAYER 0 — a question answered in a previous run is
+-- never asked again, not merely never asked twice within one run.
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS question_verdicts (
+    commodity_id   TEXT NOT NULL,
+    product_key    TEXT NOT NULL,      -- norm_text(product_name)
+    product_name   TEXT NOT NULL,      -- a representative raw surface form
+    status         TEXT NOT NULL,      -- the match_status this question earns
+    reason         TEXT,
+    confidence     REAL,
+    decided_by     TEXT,               -- 'deterministic' | model id | reviewer
+    prompt_version TEXT,
+    decided_at     TEXT NOT NULL,
+    PRIMARY KEY (commodity_id, product_key)
+);
+CREATE INDEX IF NOT EXISTS ix_qv_status ON question_verdicts(status);
+
+-- ---------------------------------------------------------------------------
 -- Views are DROPped before CREATE so that editing this file actually changes an
 -- existing database on its next open. CREATE VIEW IF NOT EXISTS silently keeps
 -- the old definition forever, which is how a view bug outlives its fix.

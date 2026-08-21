@@ -40,7 +40,7 @@ sys.path.insert(0, os.path.join(HERE, "..", "lib"))
 
 from graphdb import open_db, read_json, REPO_ROOT      # noqa: E402
 from ids import norm_store, store_id                   # noqa: E402
-from units import per_unit, reconcile_unit             # noqa: E402
+from units import per_unit, reconcile_unit, names_multiple_products  # noqa: E402
 
 BOARD_PATH = os.path.join(REPO_ROOT, "public", "board.json")
 
@@ -80,6 +80,51 @@ def parse_live_board(path: str = BOARD_PATH) -> dict[str, dict[str, float]]:
                 continue
         if cells:
             out[cid] = cells
+    return out
+
+
+def graph_board_from_state(db) -> dict[str, dict[str, float]] | None:
+    """PHASE B: the graph's matrix, read straight off cell_state.
+
+    cell_state already holds the one current answer per cell, derived once by
+    pipeline/state.py with the same unit reconciliation this file used to redo
+    itself. Reading it means parity and the state table cannot drift apart —
+    they were two implementations of "what does the graph think this cell costs",
+    and two implementations of one answer is how the estate got a curated file
+    that disagreed with its own board.
+
+    Returns None when the table is absent or empty, so the pre-state derivation
+    below still runs on a fresh index mid-migration.
+    """
+    try:
+        rows = db.conn.execute("""
+            SELECT c.commodity_id, c.store_id, c.everyday_unit_price, c.ad_unit_price,
+                   n.properties_json
+            FROM cell_state c LEFT JOIN nodes n ON n.id = c.commodity_id""").fetchall()
+    except Exception:                                        # noqa: BLE001
+        return None
+    if not rows:
+        return None
+    out: dict[str, dict[str, float]] = {}
+    for r in rows:
+        legacy = (json.loads(r["properties_json"] or "{}")).get("legacy_id")
+        if not legacy:
+            continue
+        vals = [v for v in (r["everyday_unit_price"], r["ad_unit_price"]) if v is not None]
+        if not vals:
+            continue
+        out.setdefault(legacy, {})[r["store_id"].replace("store:", "")] = min(vals)
+
+    # Overrides are a BOARD-level correction pinned by a human; they outrank
+    # anything derived, exactly as before.
+    for r in db.conn.execute(
+            "SELECT properties_json FROM nodes WHERE type='Override'"):
+        p = json.loads(r["properties_json"] or "{}")
+        if p.get("commodity") and p.get("store") and p.get("per_unit") is not None:
+            legacy, store = p["commodity"], norm_store(p["store"])
+            if legacy in out and store in out[legacy]:
+                out[legacy][store] = float(p["per_unit"])
+    graph_board.unparsed = 0                 # type: ignore[attr-defined]
     return out
 
 
@@ -144,6 +189,9 @@ def graph_board(db) -> dict[str, dict[str, float]]:
         props = json.loads(r["properties_json"] or "{}")
         legacy = props.get("legacy_id")
         if not legacy:
+            continue
+        # A choice-of-products ad line prices neither of them.
+        if names_multiple_products(r["product_name"]):
             continue
         # Ad/sale currency gate, before any price work.
         if (r["price_type"] or "").lower() in ("ad", "sale"):
@@ -261,6 +309,9 @@ def main() -> int:
                     help="relative per-unit tolerance for 'agrees' (default 2%%)")
     ap.add_argument("--min-agreement", type=float, default=0.99)
     ap.add_argument("--show", type=int, default=8)
+    ap.add_argument("--from-observations", action="store_true",
+                    help="bypass cell_state and re-derive from observations "
+                         "(the Phase B identity check)")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
@@ -274,10 +325,14 @@ def main() -> int:
     live = {c: v for c, v in live_all.items() if not c.endswith("::r")}
     recipe_cells = sum(len(v) for c, v in live_all.items() if c.endswith("::r"))
     with open_db() as db:
-        graph = graph_board(db)
+        graph = None if args.from_observations else graph_board_from_state(db)
+        source = "cell_state"
+        if graph is None:
+            graph, source = graph_board(db), "observations"
         res = compare(live, graph, args.tolerance)
         res["unparsed_sizes"] = getattr(graph_board, "unparsed", 0)
         res["recipe_cells_out_of_scope"] = recipe_cells
+        res["graph_source"] = source
         db.log_event(run="run:parity:" + time.strftime("%Y%m%dT%H%M%S"),
                      timestamp=time.strftime("%Y-%m-%dT%H:%M:%S"),
                      etype="verify", decision="board_parity",
@@ -288,6 +343,7 @@ def main() -> int:
         return 0
 
     print("\n=== board parity (graph vs public/board.json, STAPLE scope) ===")
+    print(f"  graph source        {res['graph_source']}")
     print(f"  recipe cells        {res['recipe_cells_out_of_scope']}   "
           f"(::r rows; priced via ingredient mapping — separate gate, not blended)")
     print(f"  live board cells    {res['live_cells']}")

@@ -173,13 +173,25 @@ def check_row_age(db, max_age_days: int | None = None, today: str | None = None,
     """No cell may be priced by an observation older than the capture policy's
     everyday-price window (MaxCarryDays, the 90-day quarter). Ad freshness is
     check_ad_window's job; this one is about everyday rows outliving the
-    rotation that would have re-verified them."""
+    rotation that would have re-verified them.
+
+    PHASE B: reads cell_state.everyday_asof — the freshness stamp on the ANSWER —
+    instead of scanning every surviving observation. Same question, one row per
+    cell instead of forty, and it is the field the capture worklist will key off.
+    """
     if max_age_days is None:
         max_age_days = _policy_max_carry_days()
     today_d = _parse(today) or _date.today()
     cutoff = today_d - timedelta(days=max_age_days)
-    rows = db.conn.execute(
-        "SELECT commodity_id, store_id, observed_at FROM v_current_cell").fetchall()
+    try:
+        rows = db.conn.execute(
+            """SELECT commodity_id, store_id, everyday_asof AS observed_at
+               FROM cell_state WHERE everyday_asof IS NOT NULL""").fetchall()
+        if not rows:
+            raise ValueError("empty cell_state")
+    except Exception:                                        # noqa: BLE001
+        rows = db.conn.execute(
+            "SELECT commodity_id, store_id, observed_at FROM v_current_cell").fetchall()
     old = []
     for r in rows:
         d = _parse(r["observed_at"])
@@ -205,12 +217,44 @@ def check_provenance_complete(db, **_) -> tuple[bool, dict]:
     return (orphan == 0), {"orphan_observations": orphan}
 
 
+def check_ad_reversion_owed(db, max_days_owed: int = 3, today: str | None = None,
+                            **_) -> tuple[bool, dict]:
+    """PHASE D: every closed ad window owes a price check, and this counts them.
+
+    Brad's rule, made a gate: when an ad stops, somebody must confirm the shelf
+    went back to the everyday price. Until `reverted_checked_at` is stamped the
+    cell is carrying an ASSUMPTION about what a shopper pays — and this estate's
+    incident list is a list of assumptions that turned out to be stale prices
+    (the V4 blueberries served wrong for two days at HTTP 200).
+
+    Grace of a few days is deliberate: the capture lanes are paced per store by
+    capture-policy, so a cell whose ad ended yesterday has not had its turn yet.
+    Past the grace the run goes red, and pipeline/state.py --ad-reversions emits
+    the worklist that clears it.
+    """
+    today_d = _parse(today) or _date.today()
+    cutoff = (today_d - timedelta(days=max_days_owed)).isoformat()
+    try:
+        rows = db.conn.execute(
+            """SELECT commodity_id, store_id, ad_to, ad_product
+               FROM cell_state
+               WHERE ad_to IS NOT NULL AND ad_to < ?
+                 AND reverted_checked_at IS NULL
+               ORDER BY ad_to""", (cutoff,)).fetchall()
+    except Exception:                                        # noqa: BLE001
+        return True, {"skipped": "cell_state not built yet"}
+    owed = [dict(r) for r in rows]
+    return (not owed), {"owed": len(owed), "grace_days": max_days_owed,
+                        "worst": owed[:10]}
+
+
 CHECKS = {
     "omaha_identity": check_omaha_identity,
     "ad_window": check_ad_window,
     "known_wrong_not_priced": check_known_wrong_not_priced,
     "no_unresolved_pricing": check_no_unresolved_pricing,
     "row_age": check_row_age,
+    "ad_reversion_owed": check_ad_reversion_owed,
     "provenance_complete": check_provenance_complete,
 }
 

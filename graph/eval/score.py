@@ -51,8 +51,15 @@ def _safe_div(a: float, b: float) -> float:
 
 def score(db, gold: list[dict], use_llm: bool = False,
           llm: LocalLLM | None = None, progress=None) -> dict:
-    """Run every gold case through the resolver and score the verdicts."""
-    r = Resolver(db, llm=llm, use_llm=use_llm)
+    """Run every gold case through the resolver and score the verdicts.
+
+    use_bank=False is not optional. The gold set exists to measure whether the
+    RULES decide correctly; a resolver consulting question_verdicts would answer
+    gold cases from a bank those very cases populated, and the score would
+    measure the estate's memory of its own homework. Every gold case must be
+    re-derived from the layers each run.
+    """
+    r = Resolver(db, llm=llm, use_llm=use_llm, use_bank=False)
 
     tp = fp = tn = fn = 0          # w.r.t. the MATCH class
     unsure = missing = 0
