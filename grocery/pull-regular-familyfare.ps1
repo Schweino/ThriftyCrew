@@ -290,6 +290,66 @@ function Get-FreshToken {
 }
 $tok = Get-FreshToken
 
+# ---------------------------------------------------------------- OFFERS: where Family Fare's sales actually live
+# THE PRODUCT RECORD CANNOT TELL YOU A FAMILY FARE ITEM IS ON SALE (measured 2026-08-21). Its 74 fields
+# hold no date but `last_updated_at`, and base_price equals price on essentially every row - the live
+# catalogue had 5,222 rows, 280 carrying a base_price and **zero** marked_down. So the usual
+# "price < base_price" test is structurally blind here and always will be.
+#
+# The sale lives in a separate record. Each product carries offer_ids / circular_ids /
+# has_featured_offer, and /1/offers returns, per offer:
+#     start_date, finish_date, display_start_date, display_finish_date, sale_price, base_price, product_ids
+# which is precisely the window Brad asked us to log ("we MUST log ad dates and pricing"), on the one
+# store whose product feed looked like it could not supply it. "This store cannot date a sale" and "we
+# were reading the wrong endpoint" are different answers and only one of them licenses a TTL.
+#
+# Fetched ONCE per run (a few hundred offers), never per term - the point of the capture budget is to
+# spend fewer requests, not more. A failure here is non-fatal: rows simply ship undated, exactly as
+# they did before, rather than the whole everyday pull dying over an enrichment.
+$script:FfOffers = @{}
+# The promo-length bound, read from the capture policy rather than written here.
+$script:FfOfferMaxDays = 90
+try { . (Join-Path $root 'capture-policy-lib.ps1'); $script:FfOfferMaxDays = [int](Get-PolicyQuarterDays) } catch { }
+try {
+  $tqO = if ($tok) { "&token=$tok" } else { "" }
+  $offPage = 1; $offTotal = 0
+  do {
+    $ro = Invoke-RestMethod -Uri "$b/offers?app_key=$ak&store_id=$sid$tqO&limit=200&page=$offPage" -Headers $UA -TimeoutSec 25
+    $oits = if ($ro.items) { @($ro.items) } else { @() }
+    if ($ro.total) { $offTotal = [int]$ro.total }
+    foreach ($o in $oits) {
+      $of = ([string]$o.start_date  -replace 'T.*','')
+      $ot = ([string]$o.finish_date -replace 'T.*','')
+      if (-not ($of -match '^\d{4}-\d{2}-\d{2}$') -or -not ($ot -match '^\d{4}-\d{2}-\d{2}$')) { continue }
+      # AN OFFER THAT IS NOT RUNNING TODAY IS NOT A SALE TODAY. Freshop returns future and finished
+      # offers in the same list; stamping one of those onto a row would publish a window the shopper
+      # cannot use - the same "expired ads do not price the board" rule compare-deals already enforces.
+      if ($ot -lt $todayS -or $of -gt $todayS) { continue }
+      # A WINDOW LONGER THAN THE QUARTER IS NOT A SALE, IT IS THE PRICE. Same rule and same reason as
+      # the Kroger promo bound in pull-regular-bakers-api: Brad's own definition of everyday is "a
+      # price people can buy at any time", and every live Family Fare offer measured on 2026-08-21 ran
+      # 2026-06-29..2026-10-04 - 97 days. Publishing that as a dated sale would claim a discount that
+      # outlives the rotation meant to re-check it. Bounded by capture-policy's OWN quarter, never a
+      # fresh literal here, so the two numbers cannot drift apart.
+      try {
+        $ofd = [datetime]::ParseExact($of,'yyyy-MM-dd',$null); $otd = [datetime]::ParseExact($ot,'yyyy-MM-dd',$null)
+        if (($otd - $ofd).TotalDays -gt $script:FfOfferMaxDays) { continue }
+      } catch { continue }
+      foreach ($pidv in @($o.product_ids)) {
+        $k = [string]$pidv
+        if (-not $k) { continue }
+        if (-not $script:FfOffers.ContainsKey($k)) {
+          $script:FfOffers[$k] = [ordered]@{ ad_from=$of; ad_to=$ot; sale_price=$o.sale_price; base_price=$o.base_price }
+        }
+      }
+    }
+    $offPage++
+  } while (($offPage - 1) * 200 -lt $offTotal -and $offPage -le 10)
+  Write-Output ("Family Fare: " + $script:FfOffers.Count + " product(s) covered by an offer running today (from " + $offTotal + " offer record(s))")
+} catch {
+  Write-Warning ("Family Fare: /offers lookup failed (" + $_.Exception.Message + ") - rows will ship without a sale window, as before")
+}
+
 # OMAHA GUARD (Brad's rule: every store source must be a verified Omaha location). Store 6401 is
 # "Family Fare - 50th & Grover St, 5019 Grover St, Omaha NE 68106" (verified 2026-07-12). Assert it on
 # every run: if Freshop ever remaps the id to a different city, FAIL LOUD rather than pull wrong prices.
@@ -450,6 +510,19 @@ function Ingest-Items($items, $term) {
     if ($it.id) { $row['product_id'] = [string]$it.id }
     if ($base -gt 0) { $row['base_price'] = $base }
     if ($base -gt 0 -and $val -lt ($base - 0.005)) { $row['marked_down'] = $true }
+    # THE OFFER THAT MAKES THIS A SALE, AND THE WINDOW IT RUNS IN (2026-08-21). See the /offers block
+    # above for why the product record alone cannot answer this. Only a LIVE offer reaches here, so a
+    # row that gets these dates really is on sale today.
+    $offKey = [string]$it.id
+    if ($offKey -and $script:FfOffers.ContainsKey($offKey)) {
+      $ofr = $script:FfOffers[$offKey]
+      $row['ad_from'] = [string]$ofr.ad_from
+      $row['ad_to']   = [string]$ofr.ad_to
+      $row['marked_down'] = $true
+      # Record the offer's own regular price when the product record never carried one - that is the
+      # number a shopper is being saved from, and without it the saving cannot be stated honestly.
+      if (-not $row.Contains('base_price') -and $ofr.base_price) { $row['base_price'] = [double]$ofr.base_price }
+    }
     $script:deals += ,$row
   }
 }

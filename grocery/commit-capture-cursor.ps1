@@ -1,4 +1,4 @@
-﻿<#
+<#
   commit-capture-cursor.ps1 - advance ONE store's quarterly rotation cursor, after its
   capture has actually landed.
 
@@ -56,15 +56,15 @@ if ($SelfTest) {
   $fail = 0
 
   # MUST-FIRE fixture: no capture landed -> the cursor must NOT move.
-  $r1 = Step-CaptureCursor -Store 'Walmart' -Today '2026-08-21' -OutDir $tmp
+  $r1 = Step-CaptureCursor -Store 'Walmart' -Today (Get-Date).ToString('yyyy-MM-dd') -OutDir $tmp
   if ($r1.Advanced) { Write-Output 'FAIL  a store with no landed capture advanced its cursor - that is the skip-the-slice bug'; $fail++ }
   else { Write-Output 'ok    no landed capture -> cursor held' }
 
   # CLEAN TWIN: a real capture landed -> the cursor must move by the rotation size.
   $prefix = 'walmart'
   @(@{ item = 'x'; ad_price = '$1.00' }) | ConvertTo-Json |
-    Set-Content (Join-Path $tmp ("regular\{0}-regular-2026-08-21.json" -f $prefix)) -Encoding UTF8
-  $r2 = Step-CaptureCursor -Store 'Walmart' -Today '2026-08-21' -OutDir $tmp
+    Set-Content (Join-Path $tmp ("regular\{0}-regular-{1}.json" -f $prefix, (Get-Date).ToString('yyyy-MM-dd'))) -Encoding UTF8
+  $r2 = Step-CaptureCursor -Store 'Walmart' -Today (Get-Date).ToString('yyyy-MM-dd') -OutDir $tmp
   if (-not $r2.Advanced) { Write-Output "FAIL  a landed capture did NOT advance the cursor ($($r2.Reason))"; $fail++ }
   elseif ($r2.To -le $r2.From) { Write-Output "FAIL  cursor went backwards or nowhere: $($r2.From) -> $($r2.To)"; $fail++ }
   else { Write-Output "ok    landed capture -> cursor $($r2.From) -> $($r2.To)" }
@@ -74,21 +74,42 @@ if ($SelfTest) {
   # several times a day, and each run advanced another 7 terms. Fareway reached #63, nine
   # slices ahead, on a day it had landed one capture. Over-advancing skips terms for a whole
   # quarter; repeating one merely costs a few requests.
-  $r3 = Step-CaptureCursor -Store 'Walmart' -Today '2026-08-21' -OutDir $tmp
+  $r3 = Step-CaptureCursor -Store 'Walmart' -Today (Get-Date).ToString('yyyy-MM-dd') -OutDir $tmp
   if ($r3.Advanced) { Write-Output "FAIL  a second build the same day rotated AGAIN ($($r2.To) -> $($r3.To)) - the rotation sprints past uncaptured terms"; $fail++ }
   else { Write-Output 'ok    second build the same day held the cursor' }
 
-  # ...but the NEXT day it must move again, or the guard has frozen the rotation instead of
+  # ...but on a NEW day it must move again, or the guard has frozen the rotation instead of
   # rate-limiting it.
+  # SIMULATED BY AGEING THE LEDGER, NOT BY FAKING THE DATE. The first version of this case passed
+  # -Today 2026-08-22 to mean "tomorrow", which the replay guard now correctly refuses - a future or
+  # past date is exactly what a self-test or a rebuild looks like, and that is the thing that moved
+  # Fareway seven slices. What the day-guard actually keys on is <store>_last, so rolling that back a
+  # day is what "a new day" genuinely means to it, and the run still carries today's real date.
+  $realToday = (Get-Date).ToString('yyyy-MM-dd')
   @(@{ item = 'x'; ad_price = '$1.00' }) | ConvertTo-Json |
-    Set-Content (Join-Path $tmp "regular\walmart-regular-2026-08-22.json") -Encoding UTF8
-  $r4 = Step-CaptureCursor -Store 'Walmart' -Today '2026-08-22' -OutDir $tmp
-  if (-not $r4.Advanced) { Write-Output "FAIL  the next day did NOT advance ($($r4.Reason)) - the day-guard froze the rotation"; $fail++ }
-  else { Write-Output "ok    next day advanced $($r4.From) -> $($r4.To)" }
+    Set-Content (Join-Path $tmp ("regular\walmart-regular-$realToday.json")) -Encoding UTF8
+  $cf = Join-Path $tmp 'capture-cursor.json'
+  $cj = ConvertFrom-Json ([IO.File]::ReadAllText($cf))
+  $cj.Walmart_last = (Get-Date).AddDays(-1).ToString('yyyy-MM-dd')
+  [IO.File]::WriteAllText($cf, ($cj | ConvertTo-Json -Depth 4), (New-Object System.Text.UTF8Encoding($false)))
+  $r4 = Step-CaptureCursor -Store 'Walmart' -Today $realToday -OutDir $tmp
+  if (-not $r4.Advanced) { Write-Output "FAIL  a new day did NOT advance ($($r4.Reason)) - the day-guard froze the rotation instead of rate-limiting it"; $fail++ }
+  else { Write-Output "ok    a new day advanced $($r4.From) -> $($r4.To)" }
+
+  # MUST-FIRE fixture #3: a REPLAY must not advance the live rotation. This is the bug the advance log
+  # caught on the day the day-guard shipped: build-fareway-regular's SELF-TEST builds with frozen
+  # fixture dates (2026-07-31, 2026-08-01), and the day-guard compares against the date it was PASSED,
+  # so a fixture date never matched <store>_last and every self-test run advanced the production
+  # cursor. Fareway went #7 -> #63 in two hours that way. A test must not move live state.
+  @(@{ item = 'x'; ad_price = '$1.00' }) | ConvertTo-Json |
+    Set-Content (Join-Path $tmp "regular\walmart-regular-2026-07-31.json") -Encoding UTF8
+  $r5 = Step-CaptureCursor -Store 'Walmart' -Today '2026-07-31' -OutDir $tmp
+  if ($r5.Advanced) { Write-Output "FAIL  a replay dated 2026-07-31 advanced the live cursor - a self-test can move production"; $fail++ }
+  else { Write-Output 'ok    a replay/self-test date is refused, however landed its capture looks' }
 
   # The two rotations that are NOT term rotations must refuse, not silently no-op.
   foreach ($s in @('Hy-Vee', "Baker's")) {
-    $r = Step-CaptureCursor -Store $s -Today '2026-08-21' -OutDir $tmp
+    $r = Step-CaptureCursor -Store $s -Today (Get-Date).ToString('yyyy-MM-dd') -OutDir $tmp
     if ($r.Advanced) { Write-Output "FAIL  $s got a TERM cursor - its rotation is a different namespace"; $fail++ }
     else { Write-Output "ok    $s correctly excluded from the term cursor" }
   }

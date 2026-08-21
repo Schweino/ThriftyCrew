@@ -421,6 +421,24 @@ function Step-CaptureCursor {
   # Fareway went to #63, nine slices ahead, on a day it had landed ONE capture. Over-advancing
   # is the dangerous direction - a skipped term is not captured for another quarter, whereas a
   # repeated one merely costs a few requests - so the guard errs toward repeating.
+  # A REPLAY IS NOT NEW WORK (2026-08-21). The cursor may only be advanced by a run whose date IS
+  # today's real date. Found by the advance log this guard shipped with, which recorded:
+  #     {"from":14,"to":21,"day":"2026-07-31","caller":"build-fareway-regular.ps1"}
+  #     {"from":21,"to":28,"day":"2026-08-01","caller":"build-fareway-regular.ps1"}
+  # Those are the BUILDER'S SELF-TEST fixture dates. The self-tests were advancing the PRODUCTION
+  # cursor, and the one-slice-per-day guard below could not see it: it compares <store>_last against
+  # the date it was PASSED, and a frozen fixture date never equals today, so every self-test run
+  # sailed through. That is what moved Fareway #7 -> #63 in two hours, and it is a test mutating live
+  # state - the worst kind of coupling, because the more you verify the further the damage goes.
+  # Checked against the WALL CLOCK on purpose. Everything else in this estate is judged against the
+  # board's own date so that a pinned regression run stays reproducible; this is the one decision that
+  # must not be, because "is this a replay?" is exactly the question a pinned date cannot answer.
+  $realToday = (Get-Date).ToString('yyyy-MM-dd')
+  if ($todayS -ne $realToday) {
+    return [pscustomobject]@{ Store = $Store; Advanced = $false; From = (Get-CaptureCursor -Store $Store -OutDir $OutDir); To = (Get-CaptureCursor -Store $Store -OutDir $OutDir)
+      Reason = "refusing to advance on a REPLAY: this run's date is $todayS but today is $realToday - a rebuild of an older capture, or a self-test, must never move the live rotation" }
+  }
+
   $lastKey = (Get-CursorKey $Store) + '_last'
   $cursors = Get-CaptureCursors $OutDir
   if ($cursors.PSObject.Properties.Name -contains $lastKey -and [string]$cursors.$lastKey -eq $todayS -and -not $Force) {

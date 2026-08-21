@@ -138,6 +138,21 @@ foreach ($c in $board.comparison) {
       if ($mw) { $wf = $mw.from; $wt = $mw.to }
       else { $note = 'monthly-ad price but no monthly window found; weekly window used (expiry may be early)' }
     }
+    # THE CELL'S OWN WINDOW BEATS THE STORE'S (2026-08-21). Until today the only window available was
+    # ad-schedule.json's per-STORE ad cycle, so every sale cell inherited it. That is wrong wherever a
+    # store runs more than one ad at a time, which is most of them:
+    #   Hy-Vee  'Weekly Ad' 08-17..08-23  |  monthly 08-03..08-30  |  '3 Day Sale' 08-21..08-23
+    #   Fareway  weekly Sun-Sat           |  monthly ~4 weeks   (already special-cased below)
+    # Measured before the fix: all 28 Hy-Vee sale cells carried 08-17..08-23, so its 216 monthly-ad
+    # deals were retired on 08-23 instead of 08-30 - seven days early, while the ad was still running,
+    # reverting those cells to everyday and re-queueing them for a capture they did not need.
+    # compare-deals now carries ad_from/ad_to from the deal that actually WON the cell, so prefer it.
+    # The monthly-ad manifest lookup below stays as the fallback for rows that still arrive undated.
+    $cellFrom = $null; $cellTo = $null
+    if ($s.PSObject.Properties['ad_from'] -and [string]$s.ad_from -match '^\d{4}-\d{2}-\d{2}$') { try { $cellFrom = [datetime]$s.ad_from } catch {} }
+    if ($s.PSObject.Properties['ad_to']   -and [string]$s.ad_to   -match '^\d{4}-\d{2}-\d{2}$') { try { $cellTo   = [datetime]$s.ad_to } catch {} }
+    if ($cellFrom -and $cellTo) { $wf = $cellFrom; $wt = $cellTo; $note = 'window from the deal itself' }
+
     $flash = ParseFlashWindow ((([string]$s.ad) + ' ' + ([string]$s.note))) $wf $wt
     if ($flash -and $flash.suppress) { $note = 'undated short sale (window unknown, using weekly)'; $flash = $null }
     $sFrom = if ($flash) { $flash.from } else { $wf }

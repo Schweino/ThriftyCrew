@@ -602,10 +602,37 @@ $raw = Import-CaptureCsv -Path $In -Delimiter '|'   # UTF-8 + repairs names mang
 if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled product name(s) on ingest (UTF-8 read as ANSI upstream)") }
 $rows = New-Object System.Collections.Generic.List[object]
 $rejects = New-Object System.Collections.Generic.List[object]
+# THE ROLLBACK WINDOW (2026-08-21). Brad: a rollback gets "a 30 day TTL from when we first detect".
+# Walmart publishes no end date for one - measured on a live search, the ROLLBACK badge carries six keys
+# and not one is temporal, promoData is Affirm financing, promoDiscount null - so the window is ours to
+# anchor, and the anchor MUST be the first sighting. A rollback is re-observed on every capture covering
+# its term, so re-stamping today+30 each time would push the expiry forward forever: a 30-day rule that
+# silently means never. rollback-ttl-lib owns that rule and refuses to re-anchor one it has seen before.
+# Inert until the capture actually carries a was-price, so an older CSV is unaffected.
+. (Join-Path $root 'rollback-ttl-lib.ps1')
+$rollbacks = 0
 foreach ($r in $raw) {
   $b = Build-Row $r
-  if ($b.row) { $rows.Add($b.row) } else { $rejects.Add([pscustomobject]@{ name=$r.n; lp=$r.lp; up=$r.up; reason=$b.err }) }
+  if ($b.row) {
+    $wasV = 0.0; $curV = 0.0
+    [void][double]::TryParse((([string]$r.was) -replace '[^0-9.]',''), [ref]$wasV)
+    [void][double]::TryParse((([string]$b.row.ad_price) -replace '[^0-9.]',''), [ref]$curV)
+    if ($wasV -gt 0 -and $curV -gt 0 -and $wasV -gt $curV) {
+      $rw = Get-RollbackWindow -Store 'Walmart' -ItemId ([string]$r.id) -Price $curV -Today $script:CaptureDate -Root $root
+      if ($rw) {
+        Add-Member -InputObject $b.row -NotePropertyName 'base_price'  -NotePropertyValue $wasV     -Force
+        Add-Member -InputObject $b.row -NotePropertyName 'marked_down' -NotePropertyValue $true     -Force
+        Add-Member -InputObject $b.row -NotePropertyName 'ad_from'     -NotePropertyValue $rw.ad_from -Force
+        Add-Member -InputObject $b.row -NotePropertyName 'ad_to'       -NotePropertyValue $rw.ad_to   -Force
+        Add-Member -InputObject $b.row -NotePropertyName 'ad_basis'    -NotePropertyValue $rw.basis   -Force
+        $rollbacks++
+      }
+    }
+    $rows.Add($b.row)
+  } else { $rejects.Add([pscustomobject]@{ name=$r.n; lp=$r.lp; up=$r.up; reason=$b.err }) }
 }
+[void](Save-RollbackLedger $root)
+if ($rollbacks -gt 0) { Write-Output ("${Me}: $rollbacks rollback(s) dated from first detection (" + (Get-RollbackTtlDays) + "-day TTL; Walmart publishes no end date)") }
 # de-dupe identical products (the same SKU is returned by several search terms)
 $seen = @{}; $ded = New-Object System.Collections.Generic.List[object]
 foreach ($r in $rows) { $k = $r.item + '|' + $r.ad_price + '|' + $r.size; if (-not $seen.ContainsKey($k)) { $seen[$k]=$true; $ded.Add($r) } }

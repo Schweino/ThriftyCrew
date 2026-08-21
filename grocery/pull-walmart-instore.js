@@ -77,6 +77,26 @@ async function walmartProbe(term) {
     const lines = node.priceInfo?.priceDetails?.priceLines || node.priceInfo?.currentPrice;
     const lp = node.priceInfo?.currentPrice?.price ?? (Array.isArray(lines) ? lines[0]?.price : undefined);
     const up = node.priceInfo?.unitPrice?.price ?? node.priceInfo?.unitPriceDisplayCondition;
+    /*
+      THE ROLLBACK, CAPTURED (2026-08-21). Brad: "for walmart and sams, a rollback price we just stick
+      with a 30 day TTL from when we first detect". Nothing could anchor that TTL because this capture
+      recorded only the current price - a rollback and an ordinary everyday price arrived identical, so
+      a cut price entered the board as EVERYDAY and never expired.
+
+      Walmart publishes no end date for one. Measured on a live butter search: the ROLLBACK badge
+      carries __typename/key/text/type/id/styleId and nothing temporal, promoData holds only an AFFIRM
+      financing entry, promoDiscount is null, eventAttributes is {priceFlip:false, specialBuy:false}.
+      What it DOES publish is priceInfo.wasPrice ($5.96 against a $4.87 line price) plus a ROLLBACK
+      badge flag, and those two together are enough to say "this is a discount" honestly.
+
+      So capture the was-price and the badge; rollback-ttl-lib anchors the window to the first day we
+      saw it and refuses to re-anchor on re-sighting, which is what stops a 30-day TTL becoming
+      infinite. Emitted as extra CSV columns - build-walmart-deals reads q|n|lp|up|id positionally, so
+      appending is safe and an older builder simply ignores them.
+    */
+    const wasRaw = node.priceInfo?.wasPrice?.price ?? node.priceInfo?.wasPrice;
+    const was = typeof wasRaw === 'object' ? (wasRaw?.amount ?? null) : (wasRaw ?? null);
+    const rb = !!(node.badges?.flags || []).find(f => f && f.key === 'ROLLBACK');
     if (name && id && lp != null && !seen.has(String(id))) {
       seen.add(String(id));
       rows.push({
@@ -84,6 +104,8 @@ async function walmartProbe(term) {
         lp: typeof lp === 'object' ? (lp.amount ?? null) : lp,
         up: typeof up === 'object' ? (up.amount ?? null) : (up ?? null),
         id: String(id),
+        was: was,
+        rb: rb ? 1 : 0,
       });
     }
     for (const k of Object.keys(node)) walk(node[k], depth + 1);
@@ -101,6 +123,8 @@ const walmartAgent = {
 };
 
 const pullWalmartInStore    = (worklist, opts) => runPacedSweep(walmartAgent, worklist, opts);
-const walmartSweepToCsv     = () => sweepToCsv(WALMART_STORAGE_KEY, p => [p.n, p.lp ?? '', p.up ?? '', p.id ?? '']);
+// q|n|lp|up|id|was|rb - the first five are the contract build-walmart-deals has always read
+// positionally; was/rb are appended so an older builder ignores them rather than mis-parsing.
+const walmartSweepToCsv     = () => sweepToCsv(WALMART_STORAGE_KEY, p => [p.n, p.lp ?? '', p.up ?? '', p.id ?? '', p.was ?? '', p.rb ?? 0]);
 const walmartSweepVerdicts  = () => sweepVerdicts(WALMART_STORAGE_KEY);
 const walmartSweepRemaining = wl => sweepRemaining(WALMART_STORAGE_KEY, wl);

@@ -109,11 +109,25 @@ async function samsProbe(term) {
       const id   = node.productId || node.itemNumber || node.id;
       if (name && id && !seen.has(String(id))) {
         seen.add(String(id));
+        /*
+          THE ROLLBACK / INSTANT-SAVINGS PRICE (2026-08-21). Same reason as Walmart: Brad's 30-day TTL
+          runs "from when we first detect", and nothing could detect one because this capture recorded
+          only what you pay today. A cut price and an everyday price arrived identical, so a discount
+          entered the board as EVERYDAY and never expired.
+          Sam's publishes no end date either - measured on a live butter search, the payload contains
+          ZERO date-shaped values and every key matching /Expir/ is session, cache or consent related.
+          It does expose a strikethrough / was-price, which is enough to say "this is a discount"
+          honestly and hand rollback-ttl-lib something to anchor.
+          Recorded honestly: "Instant Savings" did not appear for that term, so that specific mechanism
+          is UNTESTED rather than absent; whatever field carries it will surface here as a was-price.
+        */
+        const wasRaw = pi.wasPrice ?? pi.strikethroughPrice ?? pi.listPrice ?? null;
         rows.push({
           n:  String(name).replace(/[|\r\n]+/g, ' ').trim(),
           lp: pi.linePrice,          // "$14.98" - keep the string, the builder parses it
           up: pi.unitPrice ?? null,  // "$0.09/ea" - unit of measure must survive
           id: String(id),
+          was: (typeof wasRaw === 'object' && wasRaw) ? (wasRaw.amount ?? null) : wasRaw,
         });
       }
       return;                        // do not descend into a priced item and re-match its children
@@ -168,6 +182,7 @@ const samsAgent = {
 };
 
 const pullSamsInStore    = (worklist, opts) => runPacedSweep(samsAgent, worklist, opts);
-const samsSweepToCsv     = () => sweepToCsv(SAMS_STORAGE_KEY, p => [p.n, p.lp ?? '', p.up ?? '', p.id ?? '']);
+// q|n|lp|up|id|was - the first five are build-sams-deals' long-standing positional contract.
+const samsSweepToCsv     = () => sweepToCsv(SAMS_STORAGE_KEY, p => [p.n, p.lp ?? '', p.up ?? '', p.id ?? '', p.was ?? '']);
 const samsSweepVerdicts  = () => sweepVerdicts(SAMS_STORAGE_KEY);
 const samsSweepRemaining = wl => sweepRemaining(SAMS_STORAGE_KEY, wl);

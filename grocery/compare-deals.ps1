@@ -1087,21 +1087,33 @@ if ($SelfTest) {
 
 # ---------------------------------------------------------------- load + normalize all sources
 $deals = New-Object System.Collections.Generic.List[object]
-function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='') {
+function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='') {
   if (-not $name) { return }
   # src_date = the date of the CAPTURE FILE this row came from (not the ad cycle). Only rows loaded from dated
   # per-store capture files carry it; it is how the ranking step below can prefer the freshest capture that
   # covers a commodity instead of letting an older capture's price compete with it.
-  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate })
+  # ad_from / ad_to = THE WINDOW THIS PARTICULAR DEAL RUNS IN, carried from the feed that supplied it.
+  # Added 2026-08-21 (Brad: "we MUST log ad dates and pricing"). Before this the engine had no per-deal
+  # window at all, so build-sale-windows fell back to the ONE store-level window in ad-schedule.json -
+  # and Hy-Vee runs THREE flyers at once (Weekly 08-17..08-23, monthly 08-03..08-30, 3 Day Sale
+  # 08-21..08-23). All 28 of its sale cells collapsed onto the weekly window, retiring the 216
+  # monthly-ad deals seven days early while the ad was still running.
+  # BLANK STAYS BLANK: a row whose source states no window must not inherit a neighbour's. That is the
+  # borrowed-window bug guard 8 exists for, and it is why this is carried rather than defaulted.
+  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo })
 }
 $ads = Get-Content $AdsFile -Raw | ConvertFrom-Json
 $today = $ads.today
 foreach ($d in $ads.deals) {                                                                # weekly ads = 'sale'
   switch ($d.store) {
-    'Hy-Vee'      { Add-Norm $d.store $d.item $d.item $null $null $d.source_ad 'sale' }      # price+size embedded in item text
-    'Aldi'        { Add-Norm $d.store $d.item $d.ad_price $d.size $null $d.source_ad 'sale' }
-    'Family Fare' { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad 'sale' }
-    default       { Add-Norm $d.store $d.item ($d.ad_price + ' ' + $d.item) $d.size $d.regular $d.source_ad 'sale' }
+    # pull-grocery-ads stamps ad_from/ad_to on EVERY deal now - per FLYER for Hy-Vee (it runs three at
+    # once), per ITEM for Aldi (flyerkit gives each product its own), per CIRCULAR for Family Fare.
+    # Passing them through is the entire point of having captured them.
+    # Aldi also now carries original_price as `regular`, so an Aldi ad row can state what it was cut from.
+    'Hy-Vee'      { Add-Norm $d.store $d.item $d.item $null $null $d.source_ad 'sale' '' $d.ad_from $d.ad_to }      # price+size embedded in item text
+    'Aldi'        { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad 'sale' '' $d.ad_from $d.ad_to }
+    'Family Fare' { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad 'sale' '' $d.ad_from $d.ad_to }
+    default       { Add-Norm $d.store $d.item ($d.ad_price + ' ' + $d.item) $d.size $d.regular $d.source_ad 'sale' '' $d.ad_from $d.ad_to }
   }
 }
 # ad-based extra files (Baker's ad, Sam's, Fareway weekly-ad sales). Each file may declare price_type (Sam's
@@ -1189,7 +1201,15 @@ foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
     $pt = if ($ex.price_type) { [string]$ex.price_type } else { 'sale' }
     $sd = ''
     if ([IO.Path]::GetFileNameWithoutExtension($extra) -match '(\d{4}-\d{2}-\d{2})$') { $sd = $Matches[1] }
-    foreach ($d in $ex.deals) { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $sd }
+    # A FLYER FILE DECLARES ITS WINDOW AT THE DOCUMENT LEVEL, and Test-AdWindowClosed above has already
+    # refused the whole file if today falls outside it. Carry that window down onto each row so a cell
+    # can be dated individually - and let a row that states its OWN window win, because Fareway runs a
+    # weekly and a monthly ad concurrently whose rows legitimately expire on different days.
+    foreach ($d in $ex.deals) {
+      $rFrom = if ($d.ad_from) { [string]$d.ad_from } else { [string]$ex.ad_from }
+      $rTo   = if ($d.ad_to)   { [string]$d.ad_to }   else { [string]$ex.ad_to }
+      Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $sd $rFrom $rTo
+    }
   }
 }
 # supplemental agent-authored deals: out\extra-deals-<date>.json (newest). This is how a Hy-Vee/Aldi BOGO gets
@@ -1504,7 +1524,7 @@ foreach ($d in $deals) {
     # Carry the SOURCE through to the page. Without it build-deals-page cannot tell an ad-backed sale from a
     # one-off price snapshot, so it stamped every sale chip with the store's ad-cycle end date - dressing an
     # undated Aisles Online markdown up as "Sale thru Jul 19". A date we invented is worse than no date.
-    source_ad=$d.source_ad; src_date=$d.src_date;
+    source_ad=$d.source_ad; src_date=$d.src_date; ad_from=$d.ad_from; ad_to=$d.ad_to;
     unit_price=$uprice; basis=$basis; note=$note })
 }
 
@@ -1576,7 +1596,11 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
     nomem_store = $(if($nm.Count){$nm[0].store}else{$null})
     nomem_price = $(if($nm.Count){$nm[0].unit_price}else{$null})
     nomem_type  = $(if($nm.Count){$nm[0].price_type}else{$null})
-    stores = @($ranked | ForEach-Object { [pscustomobject]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; member_label=$_.member_label; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note; source_ad=$_.source_ad } })
+    # ad_from / ad_to ON THE CELL (2026-08-21). This is the field build-sale-windows needs in order to
+    # date a sale from the deal that actually won the cell instead of from the store's one ad cycle.
+    # Emitted for every cell; empty on an everyday cell, which is correct - an everyday price has no
+    # window and must never be given one.
+    stores = @($ranked | ForEach-Object { [pscustomobject]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; member_label=$_.member_label; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note; source_ad=$_.source_ad; ad_from=$_.ad_from; ad_to=$_.ad_to } })
   })
 }
 $report = @($report | Sort-Object commodity)

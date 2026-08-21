@@ -1,4 +1,4 @@
-<#
+﻿<#
   pull-regular-bakers-api.ps1 - Baker's everyday/current shelf prices from KROGER'S OWN PUBLIC API
   (developer.kroger.com), Omaha Saddlecreek store. Built 2026-07-24.
 
@@ -464,7 +464,11 @@ Write-Output ("bakers-api: {0} term(s), store {1}, {2} results/term" -f $termLis
 
 $deals = New-Object System.Collections.Generic.List[object]
 $seen = @{}          # keyed by productId: a product legitimately answers several terms
-$stats = [ordered]@{ terms=0; fail=0; products=0; promo=0; nopriced=0; refused=0 }
+# THE PROMO-LENGTH BOUND, read from the capture policy rather than written here. A "sale" longer than
+# the rotation quarter is the price you can buy at any time, which is the definition of everyday.
+$script:PromoMaxDays = 90
+try { . (Join-Path $root 'capture-policy-lib.ps1'); $script:PromoMaxDays = [int](Get-PolicyQuarterDays) } catch { }
+$stats = [ordered]@{ terms=0; fail=0; products=0; promo=0; dated=0; longpromo=0; nopriced=0; refused=0 }
 $refusals = New-Object System.Collections.Generic.List[object]
 $termReceipts = @{}
 $termOrdinals = @{}
@@ -556,7 +560,49 @@ foreach ($tp in $pending) {
     if ($ktx.category) { $row['store_category'] = $ktx.category }
     if ($ktx.aisle)    { $row['store_aisle']    = $ktx.aisle }
     if ($link) { $row['link_url'] = $link }
-    if ($promo -gt 0 -and $reg -gt $promo) { $row['base_price'] = $reg; $row['marked_down'] = $true; $stats.promo++ }
+    if ($promo -gt 0 -and $reg -gt $promo) {
+      $row['base_price'] = $reg; $row['marked_down'] = $true; $stats.promo++
+      # KROGER TELLS US WHEN THE PROMO ENDS, AND WE WERE THROWING IT AWAY (2026-08-21).
+      # price carries effectiveDate and expirationDate. Measured on one live search:
+      #   Tyson All Natural Boneless Skinless   reg 4.99   promo 2.99    08-19..08-26    7d  <- the flyer deal
+      #   Perdue Harvestland                    reg 12     promo 11      08-19..09-02   14d
+      #   Tyson Thin Sliced                     reg 12.49  promo 10      08-19..09-16   28d
+      #   Simple Truth Organic                  reg 15.99  promo 14.99   08-08..09-09   32d
+      # ONE field carries the right window for BOTH kinds - short for a flyer deal, long for a running
+      # promo - so Baker's needs neither a TTL nor a second ad slot. Without these dates
+      # build-sale-windows stamped the store's 7-day ad cycle on all of them, retiring the 14/28/32-day
+      # promos up to three weeks early while the store was still charging them.
+      # THE 9999 SENTINEL IS "NEVER EXPIRES", NOT A DATE. Every non-promo item in that same response
+      # carried expirationDate 9999-12-31, which makes it the clean live-promo test - and publishing it
+      # as a window would claim the sale runs for eight thousand years.
+      # A WINDOW LONGER THAN THE QUARTER IS NOT A SALE, IT IS THE PRICE.
+      # Measured on the first full pull carrying these dates: 1,402 promos, of which 124 run longer
+      # than 90 days, 39 longer than 180, and one - an American Greetings card - to 2099-12-12, a
+      # 26,822-day "sale". 9999-12-31 is not the only sentinel Kroger uses, so filtering that literal
+      # alone lets the next one through; the honest test is the LENGTH, not the spelling.
+      # Brad's own definition settles what to do with them: everyday is "a price people can buy at any
+      # time". A 364-day promo IS that. So a window longer than capture-policy's quarter is treated as
+      # NO sale at all - the row keeps its price as everyday and gets no ad window - rather than
+      # publishing a discount that never expires, which is exactly the failure the whole ad/everyday
+      # split exists to end. Bounded by the POLICY's own number, never a fresh literal, so the two
+      # cannot drift: at a 90-day rotation we would re-capture such a row before it ended anyway.
+      $eff = [string]$it.price.effectiveDate.value
+      $exp = [string]$it.price.expirationDate.value
+      if ($eff -match '^(\d{4}-\d{2}-\d{2})' -and $exp -match '^(\d{4}-\d{2}-\d{2})') {
+        $efd = $null; $exd = $null
+        try { $efd = [datetime]::ParseExact(([regex]::Match($eff,'^\d{4}-\d{2}-\d{2}').Value),'yyyy-MM-dd',$null) } catch {}
+        try { $exd = [datetime]::ParseExact(([regex]::Match($exp,'^\d{4}-\d{2}-\d{2}').Value),'yyyy-MM-dd',$null) } catch {}
+        if ($efd -and $exd -and $exd -gt $efd -and (($exd - $efd).TotalDays -le $script:PromoMaxDays)) {
+          $row['ad_from'] = $efd.ToString('yyyy-MM-dd')
+          $row['ad_to']   = $exd.ToString('yyyy-MM-dd')
+          $stats.dated++
+        } else {
+          # Not a sale by our definition: undo the markdown flags so nothing downstream treats this
+          # long-running promotional price as a temporary one.
+          $row.Remove('base_price'); $row.Remove('marked_down'); $stats.promo--; $stats.longpromo++
+        }
+      }
+    }
     $deals.Add([pscustomobject]$row)
     $stats.products++
   }
