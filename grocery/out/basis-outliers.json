@@ -96,7 +96,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-21T06:28:01",
+    "generated":  "2026-08-21T16:13:54",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -769,18 +769,6 @@
                               "item":  "Hy-Vee 100% Egg Whites",
                               "kind":  "volume",
                               "row_kind":  "weight",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "mayonnaise",
-                              "commodity":  "Mayonnaise",
-                              "unit":  "oz",
-                              "store":  "Fareway",
-                              "per_unit":  0.1263,
-                              "size":  "30 oz",
-                              "item":  "Fareway Mayonnaise Homestyle",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
                               "holds_crown":  false
                           },
                           {

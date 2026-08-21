@@ -1012,3 +1012,17 @@
 [2026-08-20T12:37:39] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe db drift (index vs specs)' [type: recipe db drift index vs specs]
 [2026-08-20T12:42:27] QUEUE ABSORBED into open item 2026-08-07-fb1fee (day 13 of this condition, count now 22) - no new id minted
 [2026-08-20T12:42:27] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: Walmart full capture aging - 2026-08-20' [type: grocery walmart full capture aging]
+[2026-08-21T07:05:14] QUEUE ABSORBED into open item 2026-08-17-847da1 (day 4 of this condition, count now 5) - no new id minted
+[2026-08-21T07:05:14] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 17 store(s) dropped from a commodity they carry - 2026-08-21' [type: grocery store s dropped from a commodity they carry]
+[2026-08-21T07:08:10] QUEUE ABSORBED into open item 2026-08-07-cac5f3 (day 14 of this condition, count now 19) - no new id minted
+[2026-08-21T07:08:10] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: semantic sweep found 52 product(s) no rule can see - 2026-08-21' [type: grocery semantic sweep found product s no rule can see]
+[2026-08-21T07:08:11] QUEUE ABSORBED into open item 2026-08-17-8642d7 (day 4 of this condition, count now 4) - no new id minted
+[2026-08-21T07:08:11] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 11 board cell(s) sit in the wrong store department - 2026-08-21' [type: grocery board cell s sit in the wrong store department]
+[2026-08-21T07:10:42] QUEUE ABSORBED into open item 2026-08-17-83c542 (day 4 of this condition, count now 6) - no new id minted
+[2026-08-21T07:10:42] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery matching soundness - review needed' [type: grocery matching soundness review needed]
+[2026-08-21T07:10:44] QUEUE BODY UPGRADED on 2026-08-20-358a26 (287 -> 666 chars) - a later occurrence carried fuller evidence
+[2026-08-21T07:10:44] QUEUE ABSORBED into open item 2026-08-20-358a26 (day 1 of this condition, count now 2) - no new id minted
+[2026-08-21T07:10:44] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: store-registry drift - 5 issue(s)' [type: grocery store registry drift issue s]
+[2026-08-21T07:13:47] QUEUE ABSORBED into open item 2026-08-17-989ad7 (day 4 of this condition, count now 3) - no new id minted
+[2026-08-21T07:13:47] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe pricing: 4 unpriced ingredient line(s)' [type: recipe pricing unpriced ingredient line s]
+[2026-08-21T09:30:24] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery capture watchdog: 5 issue(s) 2026-08-21' [type: grocery capture watchdog issue s]

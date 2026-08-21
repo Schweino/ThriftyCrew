@@ -1374,8 +1374,16 @@
                            "commodity":  "Green Cabbage",
                            "category":  "Vegetables",
                            "unit":  "lb",
-                           "cheapest_store":  "Walmart",
+                           "cheapest_store":  "Aldi",
                            "stores":  [
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.79,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Cabbage, Per LB",
+                                              "size":  "3.0 lb"
+                                          },
                                           {
                                               "store":  "Walmart",
                                               "per_unit":  0.85,
@@ -1393,14 +1401,6 @@
                                               "size":  "lb"
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.99,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Green Cabbage",
-                                              "size":  "lb"
-                                          },
-                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.99,
                                               "type":  "everyday",
@@ -1409,12 +1409,12 @@
                                               "size":  "lb"
                                           },
                                           {
-                                              "store":  "Aldi",
-                                              "per_unit":  2.37,
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.99,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "item":  "Cabbage, Per LB",
-                                              "size":  "3.0 lb"
+                                              "item":  "Green Cabbage",
+                                              "size":  "lb"
                                           }
                                       ]
                        },
@@ -9262,6 +9262,6 @@
                                       ]
                        }
                    ],
-    "built_at":  "2026-08-21T05:56:03",
+    "built_at":  "2026-08-21T06:29:41",
     "reverified":  "2026-07-07 (monthly floor re-verify: Sam\u0027s+Walmart full re-pull; Aldi/Hy-Vee/Baker\u0027s spot-confirmed)"
 }

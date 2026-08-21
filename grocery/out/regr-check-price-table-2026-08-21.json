@@ -1,6 +1,6 @@
 {
     "week_of":  "2026-08-21",
-    "built_at":  "2026-08-21T16:05:47",
+    "built_at":  "2026-08-21T16:08:33",
     "note":  "WIDE price table, one row per item. Per store: everyday price, ad price, and the ad window. ad is NULL when the item is not on ad - Brad\u0027s founding rule - and an ad whose ad_to has passed is nulled at build time rather than cleaned up later. `shown` is the cheaper of the two, which is what a page must display. Derived from the same candidate rows and the same eligibility rule the board ranks with; price-table-parity proves they agree per cell.",
     "stores":  [
                    "Hy-Vee",

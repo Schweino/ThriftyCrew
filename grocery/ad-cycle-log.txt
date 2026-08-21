@@ -19570,3 +19570,674 @@
 [2026-08-20T12:50:05] coverage-cycle: coverage-ledger: 4 coverage finding(s) across 13 rostered check(s); 13 row(s) evaluated.
 [2026-08-20T12:50:05] coverage-cycle: COVERAGE-LEDGER-COMPLETE
 [2026-08-20T12:50:05] run complete; flips=0; pull=(no pull - -NoPull; latest ads file reused)
+[2026-08-21T07:00:30] multipack-repair: repair-multipack-sizes: 155 file(s), 0 guard-5 reject(s) examined, 0 repairable, 0 REFUSED (need a human) - APPLIED
+[2026-08-21T07:02:56] history banked from the raw board (no verdict file for this week - nothing judged, so raw == verified)
+[2026-08-21T07:05:14] coverage-gaps: 61 gap(s), 17 actionable - mandarin-oranges @ Sam's Club; teriyaki-sauce @ Aldi; nectarines @ Fareway; pomegranates @ Walmart; papaya @ Walmart; prunes @ Sam's Club; beets @ Family Fare; coleslaw-mix @ Walmart; pie-pumpkins @ Aldi; quinoa-uncooked @ Walmart; cornmeal @ Baker's; daiya-mozzarella-style-shreds @ Baker's; canned-butter-beans @ Hy-Vee; pistachios @ Aldi; avocado-oil @ Baker's; cooked-jasmine-rice @ Walmart; sea-salt @ Aldi
+[2026-08-21T07:05:14] coverage-gap alert sent
+[2026-08-21T07:08:10] semantic sweep: 52 product(s) invisible to the rules across 35 commodit(y/ies) - aluminum-foil, baby-back-ribs, bar-soap, cat-litter, chicken-breast, chili-beans, chili-garlic-sauce, coconut-aminos, coconut-oil, cranberry-juice, creamy-cilantro-lime-dressing, cumin-seeds, deli-ham, enchilada-sauce, frozen-cauliflower-florets, frozen-fruit, furniture-polish, graham-crackers, ground-beef-8020, ground-beef-93-7, hulled-pumpkin-seeds, laundry-detergent, pie-pumpkins, pork-tenderloin, quart-storage-bags, queso, ranch-seasoning-mix, ready-to-serve-long-grain-wild-rice-pouch, ribeye-steak, sandwich-bags, storage-bags, string-cheese, taco-sauce, vegetable-soup, white-wine
+[2026-08-21T07:08:10] semantic sweep alert sent
+[2026-08-21T07:08:11] aisle test: 11 live cell(s) sit in a department their commodity does not occupy - black-peppercorns, brandy, cinnamon-stick, dried-ancho-chiles, dried-basil, parmesan, pistachios, red-wine, vienna-sausage, white-wine, whole-cloves
+[2026-08-21T07:08:11] aisle-test alert sent
+[2026-08-21T07:10:42] match-soundness: match-soundness: MOVED=0  DROPPED=0  new-contested=4  drift-vs-engine=0
+[2026-08-21T07:10:42] match-soundness:   new-contested (order-dependence to review): GoGo squeeZ FruitZ & VeggieZ No Sugar Added Dino Pear Peach Carrot Applesauce Variety Pouches | Party Size Frito-Lay snacks, salsa or queso, 8.25 to 24 oz., $3.99 ea. with purchase of 2 | Pure Organic Strawberry Banana 6.2oz | Stubb's Citrus & Onion Chicken Marinade
+[2026-08-21T07:10:42] match-soundness: MATCH-SOUNDNESS-COMPLETE
+[2026-08-21T07:10:42] category-coverage: category-coverage: OK  all 574 commodities are in exactly one of 16 categories
+[2026-08-21T07:10:42] category-coverage: CATEGORY-COVERAGE-COMPLETE
+[2026-08-21T07:10:44] store-registry: store-registry: 5 drift issue(s):
+[2026-08-21T07:10:44] store-registry:   code: audit-ad-status.ps1:87 names 3 store(s) but is missing Fareway, Baker's, Sam's Club, Walmart
+[2026-08-21T07:10:44] store-registry:   code: capture-policy-lib.ps1:269 names 5 store(s) but is missing Hy-Vee, Baker's
+[2026-08-21T07:10:44] store-registry:   code: capture-watchdog.ps1:200 names 3 store(s) but is missing Aldi, Fareway, Sam's Club, Walmart
+[2026-08-21T07:10:44] store-registry:   code: derive-not-carried.ps1:46 names 3 store(s) but is missing Hy-Vee, Fareway, Sam's Club, Walmart
+[2026-08-21T07:10:44] store-registry:   code: derive-not-carried.ps1:47 names 4 store(s) but is missing Aldi, Family Fare, Baker's
+[2026-08-21T07:10:44] store-registry: STORE-REGISTRY-COMPLETE
+[2026-08-21T07:11:15] commodity-dupes: commodity-dupes: OK - 799 ids across 3 namespaces, no unreviewed near-duplicates, every recipe-board category inside the canonical 16-label set, no near-duplicate labels in the registry itself
+[2026-08-21T07:11:15] commodity-dupes: COMMODITY-DUPES-COMPLETE
+[2026-08-21T07:13:08] discover-hyvee: DOCKET: 1113 open candidate(s) that beat what we hold -> C:\Codex\ThriftyCrew\grocery\out\hyvee-discovery.json
+[2026-08-21T07:13:08] discover-hyvee:   (35 found by this slice, 1078 carried forward from earlier runs, 0 removed because they are now ruled)
+[2026-08-21T07:13:08] discover-hyvee:   (2 further candidate(s) suppressed during the search - already ruled)
+[2026-08-21T07:13:14] arrivals:   cells today 3020 | baseline union 4096 | ARRIVALS 11 (crown 1) | scored 11 | blind 0
+[2026-08-21T07:13:14] arrivals:   FLAGGED at div >= 0.75: 4  (this is a REVIEW QUEUE - measured precision is low; nothing here blocks a publish)
+[2026-08-21T07:13:14] arrivals: CROWN ARRIVALS (1) - a wrong product is 4x more likely to hold a crown
+[2026-08-21T07:13:14] arrivals:   FLAG#1  div=0.75  CROWN  canned-tuna @ Hy-Vee   $0.1540/oz
+[2026-08-21T07:13:14] arrivals: OTHER ARRIVALS (10)
+[2026-08-21T07:13:14] arrivals:   FLAG#2  div=1.00         pasta @ Hy-Vee   $0.0619/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#3  div=1.00         salsa @ Hy-Vee   $0.1662/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#4  div=0.75         peanuts @ Hy-Vee   $0.1206/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#1  div= n/a  TAKES CROWN  artichokes @ Hy-Vee   $2.9900/each
+[2026-08-21T07:13:14] arrivals:   FLAG#2  div= n/a  TAKES CROWN  artichokes @ Hy-Vee   $2.9900/each
+[2026-08-21T07:13:14] arrivals:   FLAG#3  div= n/a  TAKES CROWN  habanero-peppers @ Hy-Vee   $9.9900/lb
+[2026-08-21T07:13:14] arrivals:   FLAG#4  div= n/a  TAKES CROWN  pecorino-romano @ Hy-Vee   $1.4271/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#5  div=1.00  TAKES CROWN  cooked-shredded-chicken @ Hy-Vee   $0.3495/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#6  div=1.00  TAKES CROWN  strawberries @ Hy-Vee   $0.0767/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#7  div=0.83  TAKES CROWN  pistachios @ Hy-Vee   $0.2995/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#8  div=0.80  TAKES CROWN  fresh-sage @ Hy-Vee   $3.9867/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#9  div=0.80  TAKES CROWN  portobello-mushrooms @ Hy-Vee   $3.1936/lb
+[2026-08-21T07:13:14] arrivals:   FLAG#10  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.5600/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#11  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.5588/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#12  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.3694/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#13  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.3588/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#14  div=0.00  TAKES CROWN  strawberries @ Hy-Vee   $0.0735/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#29  div= n/a  no crown  apricots @ Hy-Vee   $4.9900/lb
+[2026-08-21T07:13:14] arrivals:   FLAG#30  div= n/a  crown UNKNOWN (unit/row mismatch)  buckwheat-soba-noodles @ Hy-Vee   $0.6238/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#31  div= n/a  no crown  chicken-wings @ Hy-Vee   $2.7960/lb
+[2026-08-21T07:13:14] arrivals:   FLAG#32  div= n/a  crown UNKNOWN (unit/row mismatch)  chili-garlic-sauce @ Hy-Vee   $0.6238/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#33  div= n/a  crown UNKNOWN (unit/row mismatch)  cornmeal @ Hy-Vee   $0.1954/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#34  div= n/a  crown UNKNOWN (unit/row mismatch)  cornmeal @ Hy-Vee   $0.1454/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#35  div= n/a  no crown  creme-fraiche @ Hy-Vee   $1.1414/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#36  div= n/a  crown UNKNOWN (unit/row mismatch)  cumin-seeds @ Hy-Vee   $3.3167/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#37  div= n/a  crown UNKNOWN (unit/row mismatch)  cumin-seeds @ Hy-Vee   $4.7263/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#38  div= n/a  crown UNKNOWN (unit/row mismatch)  cumin-seeds @ Hy-Vee   $4.9950/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#39  div= n/a  crown UNKNOWN (unit/row mismatch)  cumin-seeds @ Hy-Vee   $5.8321/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#40  div= n/a  crown UNKNOWN (unit/row mismatch)  daiya-cheddar-style-shreds @ Hy-Vee   $0.8437/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#41  div= n/a  no crown  firm-tofu @ Hy-Vee   $0.3325/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#42  div= n/a  crown UNKNOWN (unit/row mismatch)  fresh-whole-nutmeg @ Hy-Vee   $6.8368/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#43  div= n/a  crown UNKNOWN (unit/row mismatch)  fresh-whole-nutmeg @ Hy-Vee   $7.9933/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#44  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-cauliflower-florets @ Hy-Vee   $0.2306/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#45  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-lima-beans @ Hy-Vee   $0.2790/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#46  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-mixed-peppers @ Hy-Vee   $0.1729/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#47  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-mixed-peppers @ Hy-Vee   $0.1993/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#48  div= n/a  no crown  habanero-peppers @ Hy-Vee   $12.7787/lb
+[2026-08-21T07:13:14] arrivals:   FLAG#49  div= n/a  crown UNKNOWN (unit/row mismatch)  lamb-shoulder @ Hy-Vee   $14.9900/lb
+[2026-08-21T07:13:14] arrivals:   FLAG#50  div= n/a  crown UNKNOWN (unit/row mismatch)  mace-spice @ Hy-Vee   $5.5444/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#51  div= n/a  no crown  parsnips @ Hy-Vee   $2.9900/lb
+[2026-08-21T07:13:14] arrivals:   FLAG#52  div= n/a  crown UNKNOWN (unit/row mismatch)  phyllo-dough @ Hy-Vee   $0.4806/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#53  div= n/a  no crown  pomegranates @ Hy-Vee   $3.9900/each
+[2026-08-21T07:13:14] arrivals:   FLAG#54  div= n/a  no crown  raspberries @ Hy-Vee   $0.4167/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#55  div= n/a  no crown  red-lentils @ Hy-Vee   $0.3118/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#56  div= n/a  no crown  rhubarb @ Hy-Vee   $3.9900/lb
+[2026-08-21T07:13:14] arrivals:   FLAG#57  div=1.00  no crown  almonds @ Hy-Vee   $0.2908/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#58  div=1.00  no crown  almonds @ Hy-Vee   $0.4933/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#59  div=1.00  no crown  apple-cider-vinegar @ Hy-Vee   $0.5576/floz
+[2026-08-21T07:13:14] arrivals:   FLAG#60  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#61  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#62  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#63  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#64  div=1.00  no crown  blueberries @ Hy-Vee   $0.4350/oz
+[2026-08-21T07:13:14] arrivals:   FLAG#65  div=1.00  no crown  canned-chili @ Hy-Vee   $0.1437/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#66  div=1.00  no crown  cat-food @ Hy-Vee   $0.9981/lb
+[2026-08-21T07:13:15] arrivals:   FLAG#67  div=1.00  no crown  cat-food @ Hy-Vee   $1.8762/lb
+[2026-08-21T07:13:15] arrivals:   FLAG#68  div=1.00  no crown  cat-food @ Hy-Vee   $0.9981/lb
+[2026-08-21T07:13:15] arrivals:   FLAG#69  div=1.00  no crown  cherries @ Hy-Vee   $2.5960/lb
+[2026-08-21T07:13:15] arrivals:   FLAG#70  div=1.00  no crown  cream-cheese @ Hy-Vee   $0.2850/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#71  div=1.00  no crown  cream-cheese @ Hy-Vee   $0.2653/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#72  div=1.00  no crown  deodorant @ Hy-Vee   $1.3317/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#73  div=1.00  no crown  dog-treats @ Hy-Vee   $0.6633/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#74  div=1.00  no crown  dog-treats @ Hy-Vee   $0.4608/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#75  div=1.00  no crown  dog-treats @ Hy-Vee   $0.5253/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#76  div=1.00  no crown  dog-treats @ Hy-Vee   $0.4592/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#77  div=1.00  no crown  feminine-pads @ Hy-Vee   $0.3323/each
+[2026-08-21T07:13:15] arrivals:   FLAG#78  div=1.00  no crown  feminine-pads @ Hy-Vee   $0.2489/each
+[2026-08-21T07:13:15] arrivals:   FLAG#79  div=1.00  no crown  frozen-fruit @ Hy-Vee   $0.4161/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#80  div=1.00  no crown  frozen-fruit @ Hy-Vee   $0.2706/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#81  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2950/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#82  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2496/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#83  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2632/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#84  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2989/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#85  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2486/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#86  div=1.00  no crown  honey @ Hy-Vee   $0.2496/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#87  div=1.00  no crown  honey @ Hy-Vee   $0.2028/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#88  div=1.00  no crown  italian-sausage @ Hy-Vee   $4.4444/lb
+[2026-08-21T07:13:15] arrivals:   FLAG#89  div=1.00  no crown  lettuce @ Hy-Vee   $3.9900/each
+[2026-08-21T07:13:15] arrivals:   FLAG#90  div=1.00  no crown  mangoes @ Hy-Vee   $1.9900/each
+[2026-08-21T07:13:15] arrivals:   FLAG#91  div=1.00  no crown  olive-oil @ Hy-Vee   $0.2941/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#92  div=1.00  no crown  pasta-sauce @ Hy-Vee   $0.0741/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#93  div=1.00  no crown  pistachios @ Hy-Vee   $1.9975/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#94  div=1.00  no crown  sandwich-cookies @ Hy-Vee   $0.3229/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#95  div=1.00  no crown  sea-salt @ Hy-Vee   $0.3495/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#96  div=1.00  no crown  sea-salt @ Hy-Vee   $1.1400/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#97  div=1.00  no crown  sea-salt @ Hy-Vee   $0.3495/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#98  div=1.00  no crown  sea-salt @ Hy-Vee   $0.8317/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#99  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#100  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#101  div=1.00  no crown  sea-salt @ Hy-Vee   $1.1400/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#102  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#103  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#104  div=1.00  no crown  sea-salt @ Hy-Vee   $1.1400/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#105  div=1.00  no crown  tampons @ Hy-Vee   $0.2629/each
+[2026-08-21T07:13:15] arrivals:   FLAG#106  div=1.00  no crown  white-wine @ Hy-Vee   $0.5911/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#107  div=1.00  no crown  white-wine @ Hy-Vee   $0.4728/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#108  div=1.00  no crown  white-wine @ Hy-Vee   $0.3151/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#109  div=1.00  no crown  white-wine @ Hy-Vee   $0.5568/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#110  div=1.00  no crown  white-wine @ Hy-Vee   $0.3545/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#111  div=0.86  no crown  quinoa-uncooked @ Hy-Vee   $0.4369/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#112  div=0.86  no crown  quinoa-uncooked @ Hy-Vee   $0.3434/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#113  div=0.86  no crown  quinoa-uncooked @ Hy-Vee   $0.4995/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#114  div=0.83  no crown  pistachios @ Hy-Vee   $1.1100/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#115  div=0.83  no crown  pistachios @ Hy-Vee   $1.6225/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#116  div=0.83  no crown  veggie-sausages @ Hy-Vee   $0.9425/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#117  div=0.80  no crown  cat-food @ Hy-Vee   $1.4807/lb
+[2026-08-21T07:13:15] arrivals:   FLAG#118  div=0.80  no crown  cat-food @ Hy-Vee   $1.9138/lb
+[2026-08-21T07:13:15] arrivals:   FLAG#119  div=0.80  no crown  cat-food @ Hy-Vee   $1.4077/lb
+[2026-08-21T07:13:15] arrivals:   FLAG#120  div=0.80  no crown  raisins @ Hy-Vee   $0.2494/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#121  div=0.80  no crown  raisins @ Hy-Vee   $0.2497/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#122  div=0.80  no crown  tater-tots @ Hy-Vee   $0.2496/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#123  div=0.78  no crown  shelled-edamame @ Hy-Vee   $0.2990/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#124  div=0.75  no crown  brandy @ Hy-Vee   $0.9065/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#125  div=0.75  no crown  brandy @ Hy-Vee   $0.5513/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#126  div=0.75  no crown  brandy @ Hy-Vee   $0.5516/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#127  div=0.75  no crown  brandy @ Hy-Vee   $1.0244/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#128  div=0.75  no crown  couscous @ Hy-Vee   $0.4279/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#129  div=0.75  no crown  facial-tissues @ Hy-Vee   $0.0109/each
+[2026-08-21T07:13:15] arrivals:   FLAG#130  div=0.75  no crown  gochujang @ Hy-Vee   $0.3403/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#131  div=0.75  no crown  lemon-pepper-seasoning @ Hy-Vee   $2.9900/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#132  div=0.75  no crown  red-wine @ Hy-Vee   $0.3939/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#133  div=0.75  no crown  red-wine @ Hy-Vee   $0.9065/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#134  div=0.75  no crown  sponges @ Hy-Vee   $0.7975/each
+[2026-08-21T07:13:15] arrivals:   FLAG#135  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#136  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#137  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#138  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#139  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#140  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#141  div=0.67  no crown  drain-cleaner @ Hy-Vee   $0.1249/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#142  div=0.50  no crown  coconut-oil @ Hy-Vee   $0.2997/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#143  div=0.50  no crown  dog-treats @ Hy-Vee   $0.4608/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#144  div=0.50  no crown  furniture-polish @ Hy-Vee   $0.6064/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#145  div=0.50  no crown  olive-oil @ Hy-Vee   $0.3584/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#146  div=0.50  no crown  olive-oil @ Hy-Vee   $0.2941/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#147  div=0.50  no crown  olive-oil @ Hy-Vee   $0.4333/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#148  div=0.50  no crown  olive-oil @ Hy-Vee   $0.2941/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#149  div=0.50  no crown  olive-oil @ Hy-Vee   $0.3584/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#150  div=0.33  no crown  egg-whites @ Hy-Vee   $0.2184/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#151  div=0.33  no crown  sea-salt @ Hy-Vee   $0.1248/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#152  div=0.33  no crown  sea-salt @ Hy-Vee   $0.6123/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#153  div=0.33  no crown  sea-salt @ Hy-Vee   $1.8543/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#154  div=0.25  no crown  coconut-oil @ Hy-Vee   $0.3330/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#155  div=0.00  no crown  beef-broth @ Hy-Vee   $0.0469/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#156  div=0.00  no crown  chicken-broth @ Hy-Vee   $0.0469/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#157  div=0.00  no crown  chicken-broth @ Hy-Vee   $0.0600/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#158  div=0.00  no crown  coconut-oil @ Hy-Vee   $0.3331/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#159  div=0.00  no crown  coconut-oil @ Hy-Vee   $0.4993/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#160  div=0.00  no crown  disinfectant-spray @ Hy-Vee   $0.1730/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#161  div=0.00  no crown  evaporated-milk @ Hy-Vee   $0.1483/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#162  div=0.00  no crown  furniture-polish @ Hy-Vee   $0.2952/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#163  div=0.00  no crown  lemonade @ Hy-Vee   $0.0467/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#164  div=0.00  no crown  lemonade @ Hy-Vee   $0.0467/floz
+[2026-08-21T07:13:15] arrivals:   FLAG#165  div=0.00  no crown  mayonnaise @ Hy-Vee   $0.0990/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#166  div=0.00  no crown  pickles @ Hy-Vee   $0.1100/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#167  div=0.00  no crown  relish @ Hy-Vee   $0.1056/oz
+[2026-08-21T07:13:15] arrivals:   FLAG#168  div=0.00  no crown  relish @ Hy-Vee   $0.1856/oz
+[2026-08-21T07:13:23] taxonomy: taxonomy source: Family Fare: canonical_url from 24 file(s) within 30d -> 5379 product(s) with a department (newest family-fare-regular-2026-08-20.json)
+[2026-08-21T07:13:23] taxonomy: taxonomy source: Hy-Vee: row field store_department in hyvee-regular-2026-08-21.json -> 487 product(s) with a department
+[2026-08-21T07:13:23] taxonomy: taxonomy source: Baker's: row field store_category in bakers-regular-2026-08-21.json -> 6710 product(s) with a department
+[2026-08-21T07:13:23] taxonomy: taxonomy: judged 4669 row(s) across board cells + candidates; 0 LIVE CELL disagreement(s), 15 candidate disagreement(s)
+[2026-08-21T07:13:23] taxonomy: taxonomy: 6292 row(s) from Baker's carried a department but that store has no entry in taxonomy-map.json - NOT judged
+[2026-08-21T07:13:23] taxonomy: taxonomy: 828 row(s) from Hy-Vee carried a department but that store has no entry in taxonomy-map.json - NOT judged
+[2026-08-21T07:13:23] taxonomy:   candidate  apples @ Family Fare -> health_beauty/baby_child  Pumpkin Tree Fruit & Vegetable Puree, Apple, Sweet Potato & Corn, Organic 4.4 Oz
+[2026-08-21T07:13:23] taxonomy:   candidate  coconut-oil @ Family Fare -> household/facial_tissue  Kleenex 3 In 1 3 Ply Coconut Oil + Aloe Tissues 4 Ea
+[2026-08-21T07:13:23] taxonomy:   candidate  grapefruit @ Family Fare -> health_beauty/skin_care  Top Care Foaming Pink Grapefruit Acne Scrub 4.2 Fl Oz
+[2026-08-21T07:13:23] taxonomy:   candidate  ice-cream @ Family Fare -> health_beauty/adult_nutrition  Optimum Nutrition Vanilla Ice Cream 100% Whey Protein 24.05 Oz
+[2026-08-21T07:13:23] taxonomy:   candidate  milk @ Family Fare -> health_beauty/pharmacy  Phillips' Phillips' Genuine Sugar Free Fresh Mint Milk Of Magnesia 12 Fl Oz
+[2026-08-21T07:13:23] taxonomy:   candidate  milk @ Family Fare -> health_beauty/pharmacy  Top Care Milk Of Magnesia, Fresh Mint Flavor 12 Fl Oz
+[2026-08-21T07:13:23] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Metamucil Metamucil Psyllium Fiber Powder, Sugar Free, Orange, Glp 1 Friendly Fiber>, 72 Tsp 15 Oz
+[2026-08-21T07:13:23] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/grooming_hygiene  Nair Shower Cream Moroccan Argan Oil & Orange Blossom Hair Remover 12 Oz
+[2026-08-21T07:13:23] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Metamucil 4 In 1 Psyllium Fiber Powder, Sugar Free, Orange, 114 Tsp 23.3 Oz
+[2026-08-21T07:13:23] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Top Care Fiber Powder, Sugar Free, 4 In 1, Orange Flavor 36.8 Oz
+[2026-08-21T07:13:23] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Top Care Fiber Powder, Sugar Free, Orange Flavor 23.3 Oz
+[2026-08-21T07:13:23] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Metamucil Metamucil Psyllium Fiber Powder, Sugar Free, Orange, Glp 1 Friendly Fiber>, 114 Tsp 23.3 Oz
+[2026-08-21T07:13:23] taxonomy:   candidate  whole-chicken @ Family Fare [RANKABLE] -> pets_wildlife/dog  Iams Puppy<1 Healthy Puppy Chicken & Whole Grain Recipe Puppy Food 5 Lb
+[2026-08-21T07:13:23] taxonomy:   candidate  whole-chicken @ Family Fare [RANKABLE] -> pets_wildlife/dog  Iams Puppy <1 Healthy Puppy Chicken & Whole Grain Recipe Puppy Food 5 Lb
+[2026-08-21T07:13:23] taxonomy:   candidate  yogurt @ Family Fare -> health_beauty/baby_child  Tippy Toes Yogurt Bites, Banana 1 Oz
+[2026-08-21T07:13:23] taxonomy: taxonomy: report -> C:\Codex\ThriftyCrew\grocery\out\taxonomy-disagreements-2026-08-21.json
+[2026-08-21T07:13:23] taxonomy: STORE-TAXONOMY-COMPLETE
+[2026-08-21T07:13:28] sale-fallback: 2 on-sale cell(s) with no everyday fallback - miracle-whip @ Baker's; pizza-sauce @ Aldi
+[2026-08-21T07:13:28] sale-fallback gaps unchanged - not re-alerting
+[2026-08-21T07:13:28] sale-windows refreshed
+[2026-08-21T07:13:44] recipe-overlay applied
+[2026-08-21T07:13:47] engine cost-recipes refreshed db\costed
+[2026-08-21T07:13:47] cost-flags: 4 unpriced recipe line(s) - a recipe is priced too cheap; see db\cost-flags.txt
+[2026-08-21T07:13:50] golden-test: clean
+[2026-08-21T07:13:52] scaler-pricing: clean
+[2026-08-21T07:13:55] db-agreement guard: clean
+[2026-08-21T07:14:07] spec-contradiction guard: no class worse than baseline
+[2026-08-21T07:14:13] v2 per-serving manifest recomputed
+[2026-08-21T07:14:14] ingredient-map regenerated (derived from specs + feed)
+[2026-08-21T07:14:16] store-integrity: no hard findings (12 warn)
+[2026-08-21T07:14:28] guard-contract:   ! HALF-COVERED: audit-commodity-dupes.ps1 has the marker but leaves by 2 unmarked verdict exit(s) at line(s) 219, 235 |   ! HALF-COVERED: audit-coverage-ledger.ps1 has the marker but leaves by 1 unmarked verdict exit(s) at line(s) 319 |   ! HALF-COVERED: audit-store-integrity.ps1 has the marker but leaves by 1 unmarked verdict exit(s) at line(s) 110 |   ! HALF-COVERED: audit-tile-integrity.ps1 has the marker but leaves by 1 unmarked verdict exit(s) at line(s) 83 |   ! DEAD: verify-debt.ps1 is a detector that NOTHING in production calls - only its own tests, or nothing at all |   ! DEAD: verify-savings.ps1 is a detector that NOTHING in production calls - only its own tests, or nothing at all |   ! DEAD: test-matcher-parity.ps1 is a detector that NOTHING in production calls - only its own tests, or nothing at all |   ! DEAD: audit-cost-line-coverage.ps1 is a detector that NOTHING in production calls - only its own tests, or nothing at all
+[2026-08-21T07:27:05] multipack-repair: repair-multipack-sizes: 156 file(s), 0 guard-5 reject(s) examined, 0 repairable, 0 REFUSED (need a human) - APPLIED
+[2026-08-21T07:29:02] history banked from the raw board (no verdict file for this week - nothing judged, so raw == verified)
+[2026-08-21T07:30:43] coverage-gaps: 61 gap(s), 17 actionable - mandarin-oranges @ Sam's Club; teriyaki-sauce @ Aldi; nectarines @ Fareway; pomegranates @ Walmart; papaya @ Walmart; prunes @ Sam's Club; beets @ Family Fare; coleslaw-mix @ Walmart; pie-pumpkins @ Aldi; quinoa-uncooked @ Walmart; cornmeal @ Baker's; daiya-mozzarella-style-shreds @ Baker's; canned-butter-beans @ Hy-Vee; pistachios @ Aldi; avocado-oil @ Baker's; cooked-jasmine-rice @ Walmart; sea-salt @ Aldi
+[2026-08-21T07:30:43] coverage-gaps unchanged since last alert - not re-alerting
+[2026-08-21T07:32:57] semantic sweep: 52 product(s) invisible to the rules across 35 commodit(y/ies) - aluminum-foil, baby-back-ribs, bar-soap, cat-litter, chicken-breast, chili-beans, chili-garlic-sauce, coconut-aminos, coconut-oil, cranberry-juice, creamy-cilantro-lime-dressing, cumin-seeds, deli-ham, enchilada-sauce, frozen-cauliflower-florets, frozen-fruit, furniture-polish, graham-crackers, ground-beef-8020, ground-beef-93-7, hulled-pumpkin-seeds, laundry-detergent, pie-pumpkins, pork-tenderloin, quart-storage-bags, queso, ranch-seasoning-mix, ready-to-serve-long-grain-wild-rice-pouch, ribeye-steak, sandwich-bags, storage-bags, string-cheese, taco-sauce, vegetable-soup, white-wine
+[2026-08-21T07:32:57] semantic findings unchanged since last alert - not re-alerting
+[2026-08-21T07:32:58] aisle test: 11 live cell(s) sit in a department their commodity does not occupy - black-peppercorns, brandy, cinnamon-stick, dried-ancho-chiles, dried-basil, parmesan, pistachios, red-wine, vienna-sausage, white-wine, whole-cloves
+[2026-08-21T07:32:58] aisle-test block-set unchanged since last alert - not re-alerting
+[2026-08-21T07:35:12] match-soundness: match-soundness: MOVED=0  DROPPED=0  new-contested=4  drift-vs-engine=0
+[2026-08-21T07:35:12] match-soundness:   new-contested (order-dependence to review): GoGo squeeZ FruitZ & VeggieZ No Sugar Added Dino Pear Peach Carrot Applesauce Variety Pouches | Party Size Frito-Lay snacks, salsa or queso, 8.25 to 24 oz., $3.99 ea. with purchase of 2 | Pure Organic Strawberry Banana 6.2oz | Stubb's Citrus & Onion Chicken Marinade
+[2026-08-21T07:35:12] match-soundness: MATCH-SOUNDNESS-COMPLETE
+[2026-08-21T07:35:12] category-coverage: category-coverage: OK  all 574 commodities are in exactly one of 16 categories
+[2026-08-21T07:35:12] category-coverage: CATEGORY-COVERAGE-COMPLETE
+[2026-08-21T07:35:14] store-registry: store-registry: 5 drift issue(s):
+[2026-08-21T07:35:14] store-registry:   code: audit-ad-status.ps1:87 names 3 store(s) but is missing Fareway, Baker's, Sam's Club, Walmart
+[2026-08-21T07:35:14] store-registry:   code: capture-policy-lib.ps1:269 names 5 store(s) but is missing Hy-Vee, Baker's
+[2026-08-21T07:35:14] store-registry:   code: capture-watchdog.ps1:200 names 3 store(s) but is missing Aldi, Fareway, Sam's Club, Walmart
+[2026-08-21T07:35:14] store-registry:   code: derive-not-carried.ps1:46 names 3 store(s) but is missing Hy-Vee, Fareway, Sam's Club, Walmart
+[2026-08-21T07:35:14] store-registry:   code: derive-not-carried.ps1:47 names 4 store(s) but is missing Aldi, Family Fare, Baker's
+[2026-08-21T07:35:14] store-registry: STORE-REGISTRY-COMPLETE
+[2026-08-21T07:35:43] commodity-dupes: commodity-dupes: OK - 799 ids across 3 namespaces, no unreviewed near-duplicates, every recipe-board category inside the canonical 16-label set, no near-duplicate labels in the registry itself
+[2026-08-21T07:35:43] commodity-dupes: COMMODITY-DUPES-COMPLETE
+[2026-08-21T07:37:33] discover-hyvee: DOCKET: 1114 open candidate(s) that beat what we hold -> C:\Codex\ThriftyCrew\grocery\out\hyvee-discovery.json
+[2026-08-21T07:37:33] discover-hyvee:   (49 found by this slice, 1065 carried forward from earlier runs, 0 removed because they are now ruled)
+[2026-08-21T07:37:39] arrivals:   cells today 3020 | baseline union 4096 | ARRIVALS 11 (crown 1) | scored 11 | blind 0
+[2026-08-21T07:37:39] arrivals:   FLAGGED at div >= 0.75: 4  (this is a REVIEW QUEUE - measured precision is low; nothing here blocks a publish)
+[2026-08-21T07:37:39] arrivals: CROWN ARRIVALS (1) - a wrong product is 4x more likely to hold a crown
+[2026-08-21T07:37:39] arrivals:   FLAG#1  div=0.75  CROWN  canned-tuna @ Hy-Vee   $0.1540/oz
+[2026-08-21T07:37:39] arrivals: OTHER ARRIVALS (10)
+[2026-08-21T07:37:39] arrivals:   FLAG#2  div=1.00         pasta @ Hy-Vee   $0.0619/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#3  div=1.00         salsa @ Hy-Vee   $0.1662/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#4  div=0.75         peanuts @ Hy-Vee   $0.1206/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#1  div= n/a  TAKES CROWN  artichokes @ Hy-Vee   $2.9900/each
+[2026-08-21T07:37:39] arrivals:   FLAG#2  div= n/a  TAKES CROWN  artichokes @ Hy-Vee   $2.9900/each
+[2026-08-21T07:37:39] arrivals:   FLAG#3  div= n/a  TAKES CROWN  habanero-peppers @ Hy-Vee   $9.9900/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#4  div= n/a  TAKES CROWN  pecorino-romano @ Hy-Vee   $1.4271/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#5  div=1.00  TAKES CROWN  cooked-shredded-chicken @ Hy-Vee   $0.3495/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#6  div=1.00  TAKES CROWN  strawberries @ Hy-Vee   $0.0767/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#7  div=0.83  TAKES CROWN  pistachios @ Hy-Vee   $0.2995/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#8  div=0.80  TAKES CROWN  fresh-sage @ Hy-Vee   $3.9867/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#9  div=0.80  TAKES CROWN  portobello-mushrooms @ Hy-Vee   $3.1936/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#10  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.5600/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#11  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.3588/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#12  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.5588/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#13  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.3694/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#14  div=0.00  TAKES CROWN  strawberries @ Hy-Vee   $0.0735/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#29  div= n/a  no crown  apricots @ Hy-Vee   $4.9900/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#30  div= n/a  crown UNKNOWN (unit/row mismatch)  buckwheat-soba-noodles @ Hy-Vee   $0.6238/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#31  div= n/a  no crown  chicken-wings @ Hy-Vee   $2.7960/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#32  div= n/a  crown UNKNOWN (unit/row mismatch)  chili-garlic-sauce @ Hy-Vee   $0.6238/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#33  div= n/a  crown UNKNOWN (unit/row mismatch)  cornmeal @ Hy-Vee   $0.1954/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#34  div= n/a  crown UNKNOWN (unit/row mismatch)  cornmeal @ Hy-Vee   $0.1454/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#35  div= n/a  no crown  creme-fraiche @ Hy-Vee   $1.1414/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#36  div= n/a  crown UNKNOWN (unit/row mismatch)  cumin-seeds @ Hy-Vee   $4.9950/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#37  div= n/a  crown UNKNOWN (unit/row mismatch)  cumin-seeds @ Hy-Vee   $4.7263/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#38  div= n/a  crown UNKNOWN (unit/row mismatch)  cumin-seeds @ Hy-Vee   $3.3167/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#39  div= n/a  crown UNKNOWN (unit/row mismatch)  cumin-seeds @ Hy-Vee   $5.8321/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#40  div= n/a  crown UNKNOWN (unit/row mismatch)  daiya-cheddar-style-shreds @ Hy-Vee   $0.8437/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#41  div= n/a  no crown  firm-tofu @ Hy-Vee   $0.3325/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#42  div= n/a  crown UNKNOWN (unit/row mismatch)  fresh-whole-nutmeg @ Hy-Vee   $6.8368/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#43  div= n/a  crown UNKNOWN (unit/row mismatch)  fresh-whole-nutmeg @ Hy-Vee   $7.9933/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#44  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-cauliflower-florets @ Hy-Vee   $0.2306/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#45  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-lima-beans @ Hy-Vee   $0.2790/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#46  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-mixed-peppers @ Hy-Vee   $0.1729/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#47  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-mixed-peppers @ Hy-Vee   $0.1993/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#48  div= n/a  no crown  habanero-peppers @ Hy-Vee   $12.7787/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#49  div= n/a  crown UNKNOWN (unit/row mismatch)  lamb-shoulder @ Hy-Vee   $14.9900/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#50  div= n/a  crown UNKNOWN (unit/row mismatch)  mace-spice @ Hy-Vee   $5.5444/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#51  div= n/a  no crown  parsnips @ Hy-Vee   $2.9900/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#52  div= n/a  crown UNKNOWN (unit/row mismatch)  phyllo-dough @ Hy-Vee   $0.4806/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#53  div= n/a  no crown  pomegranates @ Hy-Vee   $3.9900/each
+[2026-08-21T07:37:39] arrivals:   FLAG#54  div= n/a  no crown  raspberries @ Hy-Vee   $0.4167/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#55  div= n/a  no crown  red-lentils @ Hy-Vee   $0.3118/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#56  div= n/a  no crown  rhubarb @ Hy-Vee   $3.9900/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#57  div=1.00  no crown  almonds @ Hy-Vee   $0.4933/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#58  div=1.00  no crown  almonds @ Hy-Vee   $0.2908/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#59  div=1.00  no crown  apple-cider-vinegar @ Hy-Vee   $0.5576/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#60  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#61  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#62  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#63  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#64  div=1.00  no crown  blueberries @ Hy-Vee   $0.4350/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#65  div=1.00  no crown  canned-chili @ Hy-Vee   $0.1437/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#66  div=1.00  no crown  cat-food @ Hy-Vee   $1.8762/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#67  div=1.00  no crown  cat-food @ Hy-Vee   $0.9981/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#68  div=1.00  no crown  cat-food @ Hy-Vee   $0.9981/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#69  div=1.00  no crown  cherries @ Hy-Vee   $2.5960/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#70  div=1.00  no crown  cream-cheese @ Hy-Vee   $0.2653/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#71  div=1.00  no crown  cream-cheese @ Hy-Vee   $0.2850/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#72  div=1.00  no crown  deodorant @ Hy-Vee   $1.3317/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#73  div=1.00  no crown  dog-treats @ Hy-Vee   $0.5253/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#74  div=1.00  no crown  dog-treats @ Hy-Vee   $0.4608/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#75  div=1.00  no crown  dog-treats @ Hy-Vee   $0.4592/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#76  div=1.00  no crown  dog-treats @ Hy-Vee   $0.6633/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#77  div=1.00  no crown  feminine-pads @ Hy-Vee   $0.2489/each
+[2026-08-21T07:37:39] arrivals:   FLAG#78  div=1.00  no crown  feminine-pads @ Hy-Vee   $0.3323/each
+[2026-08-21T07:37:39] arrivals:   FLAG#79  div=1.00  no crown  frozen-fruit @ Hy-Vee   $0.4161/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#80  div=1.00  no crown  frozen-fruit @ Hy-Vee   $0.2706/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#81  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2632/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#82  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2950/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#83  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2989/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#84  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2496/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#85  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2486/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#86  div=1.00  no crown  honey @ Hy-Vee   $0.2496/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#87  div=1.00  no crown  honey @ Hy-Vee   $0.2028/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#88  div=1.00  no crown  italian-sausage @ Hy-Vee   $4.4444/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#89  div=1.00  no crown  lettuce @ Hy-Vee   $3.9900/each
+[2026-08-21T07:37:39] arrivals:   FLAG#90  div=1.00  no crown  mangoes @ Hy-Vee   $1.9900/each
+[2026-08-21T07:37:39] arrivals:   FLAG#91  div=1.00  no crown  olive-oil @ Hy-Vee   $0.2941/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#92  div=1.00  no crown  pasta-sauce @ Hy-Vee   $0.0741/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#93  div=1.00  no crown  pistachios @ Hy-Vee   $1.9975/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#94  div=1.00  no crown  sandwich-cookies @ Hy-Vee   $0.3229/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#95  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#96  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#97  div=1.00  no crown  sea-salt @ Hy-Vee   $1.1400/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#98  div=1.00  no crown  sea-salt @ Hy-Vee   $0.8317/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#99  div=1.00  no crown  sea-salt @ Hy-Vee   $0.3495/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#100  div=1.00  no crown  sea-salt @ Hy-Vee   $0.3495/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#101  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#102  div=1.00  no crown  sea-salt @ Hy-Vee   $1.1400/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#103  div=1.00  no crown  sea-salt @ Hy-Vee   $1.1400/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#104  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#105  div=1.00  no crown  tampons @ Hy-Vee   $0.2629/each
+[2026-08-21T07:37:39] arrivals:   FLAG#106  div=1.00  no crown  white-wine @ Hy-Vee   $0.3545/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#107  div=1.00  no crown  white-wine @ Hy-Vee   $0.4728/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#108  div=1.00  no crown  white-wine @ Hy-Vee   $0.5568/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#109  div=1.00  no crown  white-wine @ Hy-Vee   $0.5911/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#110  div=1.00  no crown  white-wine @ Hy-Vee   $0.3151/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#111  div=0.86  no crown  quinoa-uncooked @ Hy-Vee   $0.4369/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#112  div=0.86  no crown  quinoa-uncooked @ Hy-Vee   $0.4995/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#113  div=0.86  no crown  quinoa-uncooked @ Hy-Vee   $0.3434/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#114  div=0.83  no crown  pistachios @ Hy-Vee   $1.6225/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#115  div=0.83  no crown  pistachios @ Hy-Vee   $1.1100/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#116  div=0.83  no crown  veggie-sausages @ Hy-Vee   $0.9425/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#117  div=0.80  no crown  cat-food @ Hy-Vee   $1.9138/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#118  div=0.80  no crown  cat-food @ Hy-Vee   $1.4077/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#119  div=0.80  no crown  cat-food @ Hy-Vee   $1.4807/lb
+[2026-08-21T07:37:39] arrivals:   FLAG#120  div=0.80  no crown  raisins @ Hy-Vee   $0.2494/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#121  div=0.80  no crown  raisins @ Hy-Vee   $0.2497/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#122  div=0.80  no crown  tater-tots @ Hy-Vee   $0.2496/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#123  div=0.78  no crown  shelled-edamame @ Hy-Vee   $0.2990/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#124  div=0.75  no crown  brandy @ Hy-Vee   $0.9065/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#125  div=0.75  no crown  brandy @ Hy-Vee   $1.0244/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#126  div=0.75  no crown  brandy @ Hy-Vee   $0.5513/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#127  div=0.75  no crown  brandy @ Hy-Vee   $0.5516/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#128  div=0.75  no crown  couscous @ Hy-Vee   $0.4279/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#129  div=0.75  no crown  facial-tissues @ Hy-Vee   $0.0109/each
+[2026-08-21T07:37:39] arrivals:   FLAG#130  div=0.75  no crown  gochujang @ Hy-Vee   $0.3403/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#131  div=0.75  no crown  lemon-pepper-seasoning @ Hy-Vee   $2.9900/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#132  div=0.75  no crown  red-wine @ Hy-Vee   $0.9065/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#133  div=0.75  no crown  red-wine @ Hy-Vee   $0.3939/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#134  div=0.75  no crown  sponges @ Hy-Vee   $0.7975/each
+[2026-08-21T07:37:39] arrivals:   FLAG#135  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#136  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#137  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#138  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#139  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#140  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#141  div=0.67  no crown  drain-cleaner @ Hy-Vee   $0.1249/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#142  div=0.50  no crown  coconut-oil @ Hy-Vee   $0.2997/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#143  div=0.50  no crown  dog-treats @ Hy-Vee   $0.4608/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#144  div=0.50  no crown  furniture-polish @ Hy-Vee   $0.6064/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#145  div=0.50  no crown  olive-oil @ Hy-Vee   $0.3584/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#146  div=0.50  no crown  olive-oil @ Hy-Vee   $0.2941/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#147  div=0.50  no crown  olive-oil @ Hy-Vee   $0.3584/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#148  div=0.50  no crown  olive-oil @ Hy-Vee   $0.4333/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#149  div=0.50  no crown  olive-oil @ Hy-Vee   $0.2941/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#150  div=0.33  no crown  egg-whites @ Hy-Vee   $0.2184/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#151  div=0.33  no crown  sea-salt @ Hy-Vee   $1.8543/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#152  div=0.33  no crown  sea-salt @ Hy-Vee   $0.1248/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#153  div=0.33  no crown  sea-salt @ Hy-Vee   $0.6123/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#154  div=0.25  no crown  coconut-oil @ Hy-Vee   $0.3330/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#155  div=0.00  no crown  beef-broth @ Hy-Vee   $0.0469/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#156  div=0.00  no crown  chicken-broth @ Hy-Vee   $0.0469/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#157  div=0.00  no crown  chicken-broth @ Hy-Vee   $0.0600/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#158  div=0.00  no crown  coconut-oil @ Hy-Vee   $0.3331/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#159  div=0.00  no crown  coconut-oil @ Hy-Vee   $0.4993/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#160  div=0.00  no crown  disinfectant-spray @ Hy-Vee   $0.1730/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#161  div=0.00  no crown  evaporated-milk @ Hy-Vee   $0.1483/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#162  div=0.00  no crown  furniture-polish @ Hy-Vee   $0.2952/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#163  div=0.00  no crown  lemonade @ Hy-Vee   $0.0467/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#164  div=0.00  no crown  lemonade @ Hy-Vee   $0.0467/floz
+[2026-08-21T07:37:39] arrivals:   FLAG#165  div=0.00  no crown  mayonnaise @ Hy-Vee   $0.0990/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#166  div=0.00  no crown  pickles @ Hy-Vee   $0.1100/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#167  div=0.00  no crown  relish @ Hy-Vee   $0.1056/oz
+[2026-08-21T07:37:39] arrivals:   FLAG#168  div=0.00  no crown  relish @ Hy-Vee   $0.1856/oz
+[2026-08-21T07:37:47] taxonomy: taxonomy source: Family Fare: canonical_url from 25 file(s) within 30d -> 5379 product(s) with a department (newest family-fare-regular-2026-08-21.json)
+[2026-08-21T07:37:47] taxonomy: taxonomy source: Hy-Vee: row field store_department in hyvee-regular-2026-08-21.json -> 487 product(s) with a department
+[2026-08-21T07:37:47] taxonomy: taxonomy source: Baker's: row field store_category in bakers-regular-2026-08-21.json -> 6710 product(s) with a department
+[2026-08-21T07:37:47] taxonomy: taxonomy: judged 4669 row(s) across board cells + candidates; 0 LIVE CELL disagreement(s), 15 candidate disagreement(s)
+[2026-08-21T07:37:47] taxonomy: taxonomy: 6292 row(s) from Baker's carried a department but that store has no entry in taxonomy-map.json - NOT judged
+[2026-08-21T07:37:47] taxonomy: taxonomy: 828 row(s) from Hy-Vee carried a department but that store has no entry in taxonomy-map.json - NOT judged
+[2026-08-21T07:37:47] taxonomy:   candidate  apples @ Family Fare -> health_beauty/baby_child  Pumpkin Tree Fruit & Vegetable Puree, Apple, Sweet Potato & Corn, Organic 4.4 Oz
+[2026-08-21T07:37:47] taxonomy:   candidate  coconut-oil @ Family Fare -> household/facial_tissue  Kleenex 3 In 1 3 Ply Coconut Oil + Aloe Tissues 4 Ea
+[2026-08-21T07:37:47] taxonomy:   candidate  grapefruit @ Family Fare -> health_beauty/skin_care  Top Care Foaming Pink Grapefruit Acne Scrub 4.2 Fl Oz
+[2026-08-21T07:37:47] taxonomy:   candidate  ice-cream @ Family Fare -> health_beauty/adult_nutrition  Optimum Nutrition Vanilla Ice Cream 100% Whey Protein 24.05 Oz
+[2026-08-21T07:37:47] taxonomy:   candidate  milk @ Family Fare -> health_beauty/pharmacy  Phillips' Phillips' Genuine Sugar Free Fresh Mint Milk Of Magnesia 12 Fl Oz
+[2026-08-21T07:37:47] taxonomy:   candidate  milk @ Family Fare -> health_beauty/pharmacy  Top Care Milk Of Magnesia, Fresh Mint Flavor 12 Fl Oz
+[2026-08-21T07:37:47] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Metamucil Metamucil Psyllium Fiber Powder, Sugar Free, Orange, Glp 1 Friendly Fiber>, 72 Tsp 15 Oz
+[2026-08-21T07:37:47] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/grooming_hygiene  Nair Shower Cream Moroccan Argan Oil & Orange Blossom Hair Remover 12 Oz
+[2026-08-21T07:37:47] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Metamucil 4 In 1 Psyllium Fiber Powder, Sugar Free, Orange, 114 Tsp 23.3 Oz
+[2026-08-21T07:37:47] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Top Care Fiber Powder, Sugar Free, 4 In 1, Orange Flavor 36.8 Oz
+[2026-08-21T07:37:47] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Top Care Fiber Powder, Sugar Free, Orange Flavor 23.3 Oz
+[2026-08-21T07:37:47] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Metamucil Metamucil Psyllium Fiber Powder, Sugar Free, Orange, Glp 1 Friendly Fiber>, 114 Tsp 23.3 Oz
+[2026-08-21T07:37:47] taxonomy:   candidate  whole-chicken @ Family Fare [RANKABLE] -> pets_wildlife/dog  Iams Puppy<1 Healthy Puppy Chicken & Whole Grain Recipe Puppy Food 5 Lb
+[2026-08-21T07:37:47] taxonomy:   candidate  whole-chicken @ Family Fare [RANKABLE] -> pets_wildlife/dog  Iams Puppy <1 Healthy Puppy Chicken & Whole Grain Recipe Puppy Food 5 Lb
+[2026-08-21T07:37:47] taxonomy:   candidate  yogurt @ Family Fare -> health_beauty/baby_child  Tippy Toes Yogurt Bites, Banana 1 Oz
+[2026-08-21T07:37:47] taxonomy: taxonomy: report -> C:\Codex\ThriftyCrew\grocery\out\taxonomy-disagreements-2026-08-21.json
+[2026-08-21T07:37:47] taxonomy: STORE-TAXONOMY-COMPLETE
+[2026-08-21T07:37:51] sale-fallback: 2 on-sale cell(s) with no everyday fallback - miracle-whip @ Baker's; pizza-sauce @ Aldi
+[2026-08-21T07:37:51] sale-fallback gaps unchanged - not re-alerting
+[2026-08-21T07:37:51] sale-windows refreshed
+[2026-08-21T07:38:05] recipe-overlay applied
+[2026-08-21T07:38:07] engine cost-recipes refreshed db\costed
+[2026-08-21T07:38:07] cost-flags: 4 unpriced recipe line(s) - a recipe is priced too cheap; see db\cost-flags.txt
+[2026-08-21T07:38:10] golden-test: clean
+[2026-08-21T07:38:12] scaler-pricing: clean
+[2026-08-21T07:38:15] db-agreement guard: clean
+[2026-08-21T07:38:26] spec-contradiction guard: no class worse than baseline
+[2026-08-21T07:38:31] v2 per-serving manifest recomputed
+[2026-08-21T07:38:32] ingredient-map regenerated (derived from specs + feed)
+[2026-08-21T07:38:34] store-integrity: no hard findings (12 warn)
+[2026-08-21T07:38:45] guard-contract:   ! HALF-COVERED: audit-commodity-dupes.ps1 has the marker but leaves by 2 unmarked verdict exit(s) at line(s) 219, 235 |   ! HALF-COVERED: audit-coverage-ledger.ps1 has the marker but leaves by 1 unmarked verdict exit(s) at line(s) 319 |   ! HALF-COVERED: audit-store-integrity.ps1 has the marker but leaves by 1 unmarked verdict exit(s) at line(s) 110 |   ! HALF-COVERED: audit-tile-integrity.ps1 has the marker but leaves by 1 unmarked verdict exit(s) at line(s) 83 |   ! DEAD: verify-debt.ps1 is a detector that NOTHING in production calls - only its own tests, or nothing at all |   ! DEAD: verify-savings.ps1 is a detector that NOTHING in production calls - only its own tests, or nothing at all |   ! DEAD: test-matcher-parity.ps1 is a detector that NOTHING in production calls - only its own tests, or nothing at all |   ! DEAD: audit-cost-line-coverage.ps1 is a detector that NOTHING in production calls - only its own tests, or nothing at all
+[2026-08-21T08:11:45] multipack-repair: repair-multipack-sizes: 156 file(s), 0 guard-5 reject(s) examined, 0 repairable, 0 REFUSED (need a human) - APPLIED
+[2026-08-21T08:14:29] history banked from the raw board (no verdict file for this week - nothing judged, so raw == verified)
+[2026-08-21T08:17:00] coverage-gaps: 61 gap(s), 17 actionable - mandarin-oranges @ Sam's Club; teriyaki-sauce @ Aldi; nectarines @ Fareway; pomegranates @ Walmart; papaya @ Walmart; prunes @ Sam's Club; beets @ Family Fare; coleslaw-mix @ Walmart; pie-pumpkins @ Aldi; quinoa-uncooked @ Walmart; cornmeal @ Baker's; daiya-mozzarella-style-shreds @ Baker's; canned-butter-beans @ Hy-Vee; pistachios @ Aldi; avocado-oil @ Baker's; cooked-jasmine-rice @ Walmart; sea-salt @ Aldi
+[2026-08-21T08:17:00] coverage-gaps unchanged since last alert - not re-alerting
+[2026-08-21T08:20:19] semantic sweep: 52 product(s) invisible to the rules across 35 commodit(y/ies) - aluminum-foil, baby-back-ribs, bar-soap, cat-litter, chicken-breast, chili-beans, chili-garlic-sauce, coconut-aminos, coconut-oil, cranberry-juice, creamy-cilantro-lime-dressing, cumin-seeds, deli-ham, enchilada-sauce, frozen-cauliflower-florets, frozen-fruit, furniture-polish, graham-crackers, ground-beef-8020, ground-beef-93-7, hulled-pumpkin-seeds, laundry-detergent, pie-pumpkins, pork-tenderloin, quart-storage-bags, queso, ranch-seasoning-mix, ready-to-serve-long-grain-wild-rice-pouch, ribeye-steak, sandwich-bags, storage-bags, string-cheese, taco-sauce, vegetable-soup, white-wine
+[2026-08-21T08:20:19] semantic findings unchanged since last alert - not re-alerting
+[2026-08-21T08:20:20] aisle test: 11 live cell(s) sit in a department their commodity does not occupy - black-peppercorns, brandy, cinnamon-stick, dried-ancho-chiles, dried-basil, parmesan, pistachios, red-wine, vienna-sausage, white-wine, whole-cloves
+[2026-08-21T08:20:20] aisle-test block-set unchanged since last alert - not re-alerting
+[2026-08-21T08:23:02] match-soundness: match-soundness: MOVED=0  DROPPED=0  new-contested=4  drift-vs-engine=0
+[2026-08-21T08:23:02] match-soundness:   new-contested (order-dependence to review): GoGo squeeZ FruitZ & VeggieZ No Sugar Added Dino Pear Peach Carrot Applesauce Variety Pouches | Party Size Frito-Lay snacks, salsa or queso, 8.25 to 24 oz., $3.99 ea. with purchase of 2 | Pure Organic Strawberry Banana 6.2oz | Stubb's Citrus & Onion Chicken Marinade
+[2026-08-21T08:23:02] match-soundness: MATCH-SOUNDNESS-COMPLETE
+[2026-08-21T08:23:02] category-coverage: category-coverage: OK  all 574 commodities are in exactly one of 16 categories
+[2026-08-21T08:23:02] category-coverage: CATEGORY-COVERAGE-COMPLETE
+[2026-08-21T08:23:04] store-registry: store-registry: 5 drift issue(s):
+[2026-08-21T08:23:04] store-registry:   code: audit-ad-status.ps1:87 names 3 store(s) but is missing Fareway, Baker's, Sam's Club, Walmart
+[2026-08-21T08:23:04] store-registry:   code: capture-policy-lib.ps1:269 names 5 store(s) but is missing Hy-Vee, Baker's
+[2026-08-21T08:23:04] store-registry:   code: capture-watchdog.ps1:200 names 3 store(s) but is missing Aldi, Fareway, Sam's Club, Walmart
+[2026-08-21T08:23:04] store-registry:   code: derive-not-carried.ps1:46 names 3 store(s) but is missing Hy-Vee, Fareway, Sam's Club, Walmart
+[2026-08-21T08:23:04] store-registry:   code: derive-not-carried.ps1:47 names 4 store(s) but is missing Aldi, Family Fare, Baker's
+[2026-08-21T08:23:04] store-registry: STORE-REGISTRY-COMPLETE
+[2026-08-21T08:23:34] commodity-dupes: commodity-dupes: OK - 799 ids across 3 namespaces, no unreviewed near-duplicates, every recipe-board category inside the canonical 16-label set, no near-duplicate labels in the registry itself
+[2026-08-21T08:23:34] commodity-dupes: COMMODITY-DUPES-COMPLETE
+[2026-08-21T08:26:10] discover-hyvee: DOCKET: 1121 open candidate(s) that beat what we hold -> C:\Codex\ThriftyCrew\grocery\out\hyvee-discovery.json
+[2026-08-21T08:26:10] discover-hyvee:   (81 found by this slice, 1040 carried forward from earlier runs, 0 removed because they are now ruled)
+[2026-08-21T08:26:16] arrivals:   cells today 3020 | baseline union 4096 | ARRIVALS 11 (crown 1) | scored 11 | blind 0
+[2026-08-21T08:26:16] arrivals:   FLAGGED at div >= 0.75: 4  (this is a REVIEW QUEUE - measured precision is low; nothing here blocks a publish)
+[2026-08-21T08:26:16] arrivals: CROWN ARRIVALS (1) - a wrong product is 4x more likely to hold a crown
+[2026-08-21T08:26:16] arrivals:   FLAG#1  div=0.75  CROWN  canned-tuna @ Hy-Vee   $0.1540/oz
+[2026-08-21T08:26:16] arrivals: OTHER ARRIVALS (10)
+[2026-08-21T08:26:16] arrivals:   FLAG#2  div=1.00         pasta @ Hy-Vee   $0.0619/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#3  div=1.00         salsa @ Hy-Vee   $0.1662/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#4  div=0.75         peanuts @ Hy-Vee   $0.1206/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#1  div= n/a  TAKES CROWN  artichokes @ Hy-Vee   $2.9900/each
+[2026-08-21T08:26:16] arrivals:   FLAG#2  div= n/a  TAKES CROWN  artichokes @ Hy-Vee   $2.9900/each
+[2026-08-21T08:26:16] arrivals:   FLAG#3  div= n/a  TAKES CROWN  habanero-peppers @ Hy-Vee   $9.9900/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#4  div= n/a  TAKES CROWN  pecorino-romano @ Hy-Vee   $1.4271/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#5  div=1.00  TAKES CROWN  cooked-shredded-chicken @ Hy-Vee   $0.3495/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#6  div=1.00  TAKES CROWN  strawberries @ Hy-Vee   $0.0767/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#7  div=0.83  TAKES CROWN  pistachios @ Hy-Vee   $0.2995/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#8  div=0.80  TAKES CROWN  fresh-sage @ Hy-Vee   $3.9867/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#9  div=0.80  TAKES CROWN  portobello-mushrooms @ Hy-Vee   $3.1936/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#10  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.5588/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#11  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.3588/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#12  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.5600/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#13  div=0.00  TAKES CROWN  baby-formula @ Hy-Vee   $0.3694/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#14  div=0.00  TAKES CROWN  strawberries @ Hy-Vee   $0.0735/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#29  div= n/a  no crown  apricots @ Hy-Vee   $4.9900/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#30  div= n/a  crown UNKNOWN (unit/row mismatch)  buckwheat-soba-noodles @ Hy-Vee   $0.6238/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#31  div= n/a  no crown  chicken-wings @ Hy-Vee   $2.7960/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#32  div= n/a  crown UNKNOWN (unit/row mismatch)  chili-garlic-sauce @ Hy-Vee   $0.6238/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#33  div= n/a  crown UNKNOWN (unit/row mismatch)  cornmeal @ Hy-Vee   $0.1454/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#34  div= n/a  crown UNKNOWN (unit/row mismatch)  cornmeal @ Hy-Vee   $0.1954/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#35  div= n/a  no crown  creme-fraiche @ Hy-Vee   $1.1414/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#36  div= n/a  crown UNKNOWN (unit/row mismatch)  cumin-seeds @ Hy-Vee   $4.9950/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#37  div= n/a  crown UNKNOWN (unit/row mismatch)  cumin-seeds @ Hy-Vee   $4.7263/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#38  div= n/a  crown UNKNOWN (unit/row mismatch)  cumin-seeds @ Hy-Vee   $5.8321/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#39  div= n/a  crown UNKNOWN (unit/row mismatch)  cumin-seeds @ Hy-Vee   $3.3167/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#40  div= n/a  crown UNKNOWN (unit/row mismatch)  daiya-cheddar-style-shreds @ Hy-Vee   $0.8437/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#41  div= n/a  no crown  firm-tofu @ Hy-Vee   $0.3325/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#42  div= n/a  crown UNKNOWN (unit/row mismatch)  fresh-whole-nutmeg @ Hy-Vee   $7.9933/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#43  div= n/a  crown UNKNOWN (unit/row mismatch)  fresh-whole-nutmeg @ Hy-Vee   $6.8368/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#44  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-cauliflower-florets @ Hy-Vee   $0.2306/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#45  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-lima-beans @ Hy-Vee   $0.2790/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#46  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-mixed-peppers @ Hy-Vee   $0.1993/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#47  div= n/a  crown UNKNOWN (unit/row mismatch)  frozen-mixed-peppers @ Hy-Vee   $0.1729/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#48  div= n/a  no crown  habanero-peppers @ Hy-Vee   $12.7787/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#49  div= n/a  crown UNKNOWN (unit/row mismatch)  lamb-shoulder @ Hy-Vee   $14.9900/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#50  div= n/a  crown UNKNOWN (unit/row mismatch)  mace-spice @ Hy-Vee   $5.5444/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#51  div= n/a  no crown  parsnips @ Hy-Vee   $2.9900/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#52  div= n/a  crown UNKNOWN (unit/row mismatch)  phyllo-dough @ Hy-Vee   $0.4806/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#53  div= n/a  no crown  pomegranates @ Hy-Vee   $3.9900/each
+[2026-08-21T08:26:16] arrivals:   FLAG#54  div= n/a  no crown  raspberries @ Hy-Vee   $0.4167/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#55  div= n/a  no crown  red-lentils @ Hy-Vee   $0.3118/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#56  div= n/a  no crown  rhubarb @ Hy-Vee   $3.9900/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#57  div=1.00  no crown  almonds @ Hy-Vee   $0.4933/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#58  div=1.00  no crown  almonds @ Hy-Vee   $0.2908/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#59  div=1.00  no crown  apple-cider-vinegar @ Hy-Vee   $0.5576/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#60  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#61  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#62  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#63  div=1.00  no crown  baby-food @ Hy-Vee   $0.4123/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#64  div=1.00  no crown  blueberries @ Hy-Vee   $0.4350/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#65  div=1.00  no crown  canned-chili @ Hy-Vee   $0.1437/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#66  div=1.00  no crown  cat-food @ Hy-Vee   $0.9981/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#67  div=1.00  no crown  cat-food @ Hy-Vee   $1.8762/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#68  div=1.00  no crown  cat-food @ Hy-Vee   $0.9981/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#69  div=1.00  no crown  cherries @ Hy-Vee   $2.5960/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#70  div=1.00  no crown  cream-cheese @ Hy-Vee   $0.2653/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#71  div=1.00  no crown  cream-cheese @ Hy-Vee   $0.2850/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#72  div=1.00  no crown  deodorant @ Hy-Vee   $1.3317/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#73  div=1.00  no crown  dog-treats @ Hy-Vee   $0.4608/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#74  div=1.00  no crown  dog-treats @ Hy-Vee   $0.6633/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#75  div=1.00  no crown  dog-treats @ Hy-Vee   $0.5253/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#76  div=1.00  no crown  dog-treats @ Hy-Vee   $0.4592/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#77  div=1.00  no crown  feminine-pads @ Hy-Vee   $0.3323/each
+[2026-08-21T08:26:16] arrivals:   FLAG#78  div=1.00  no crown  feminine-pads @ Hy-Vee   $0.2489/each
+[2026-08-21T08:26:16] arrivals:   FLAG#79  div=1.00  no crown  frozen-fruit @ Hy-Vee   $0.2706/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#80  div=1.00  no crown  frozen-fruit @ Hy-Vee   $0.4161/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#81  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2496/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#82  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2950/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#83  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2486/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#84  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2989/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#85  div=1.00  no crown  frozen-meatballs @ Hy-Vee   $0.2632/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#86  div=1.00  no crown  honey @ Hy-Vee   $0.2496/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#87  div=1.00  no crown  honey @ Hy-Vee   $0.2028/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#88  div=1.00  no crown  italian-sausage @ Hy-Vee   $4.4444/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#89  div=1.00  no crown  lettuce @ Hy-Vee   $3.9900/each
+[2026-08-21T08:26:16] arrivals:   FLAG#90  div=1.00  no crown  mangoes @ Hy-Vee   $1.9900/each
+[2026-08-21T08:26:16] arrivals:   FLAG#91  div=1.00  no crown  olive-oil @ Hy-Vee   $0.2941/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#92  div=1.00  no crown  pasta-sauce @ Hy-Vee   $0.0741/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#93  div=1.00  no crown  pistachios @ Hy-Vee   $1.9975/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#94  div=1.00  no crown  raisins @ Hy-Vee   $0.2071/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#95  div=1.00  no crown  sandwich-cookies @ Hy-Vee   $0.2635/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#96  div=1.00  no crown  sea-salt @ Hy-Vee   $1.1400/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#97  div=1.00  no crown  sea-salt @ Hy-Vee   $0.8317/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#98  div=1.00  no crown  sea-salt @ Hy-Vee   $1.1400/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#99  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#100  div=1.00  no crown  sea-salt @ Hy-Vee   $0.3495/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#101  div=1.00  no crown  sea-salt @ Hy-Vee   $0.3495/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#102  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#103  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#104  div=1.00  no crown  sea-salt @ Hy-Vee   $1.1400/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#105  div=1.00  no crown  sea-salt @ Hy-Vee   $0.1544/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#106  div=1.00  no crown  tampons @ Hy-Vee   $0.2629/each
+[2026-08-21T08:26:16] arrivals:   FLAG#107  div=1.00  no crown  white-wine @ Hy-Vee   $0.3151/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#108  div=1.00  no crown  white-wine @ Hy-Vee   $0.4728/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#109  div=1.00  no crown  white-wine @ Hy-Vee   $0.5911/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#110  div=1.00  no crown  white-wine @ Hy-Vee   $0.5568/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#111  div=1.00  no crown  white-wine @ Hy-Vee   $0.3545/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#112  div=0.86  no crown  quinoa-uncooked @ Hy-Vee   $0.3434/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#113  div=0.86  no crown  quinoa-uncooked @ Hy-Vee   $0.4369/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#114  div=0.86  no crown  quinoa-uncooked @ Hy-Vee   $0.4995/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#115  div=0.83  no crown  pistachios @ Hy-Vee   $1.1100/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#116  div=0.83  no crown  pistachios @ Hy-Vee   $1.6225/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#117  div=0.83  no crown  veggie-sausages @ Hy-Vee   $0.9425/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#118  div=0.80  no crown  cat-food @ Hy-Vee   $1.4807/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#119  div=0.80  no crown  cat-food @ Hy-Vee   $1.9138/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#120  div=0.80  no crown  cat-food @ Hy-Vee   $1.4077/lb
+[2026-08-21T08:26:16] arrivals:   FLAG#121  div=0.80  no crown  raisins @ Hy-Vee   $0.2497/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#122  div=0.80  no crown  raisins @ Hy-Vee   $0.2494/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#123  div=0.80  no crown  tater-tots @ Hy-Vee   $0.2496/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#124  div=0.78  no crown  shelled-edamame @ Hy-Vee   $0.2990/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#125  div=0.75  no crown  brandy @ Hy-Vee   $0.5513/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#126  div=0.75  no crown  brandy @ Hy-Vee   $0.9065/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#127  div=0.75  no crown  brandy @ Hy-Vee   $1.0244/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#128  div=0.75  no crown  brandy @ Hy-Vee   $0.5516/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#129  div=0.75  no crown  couscous @ Hy-Vee   $0.4279/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#130  div=0.75  no crown  facial-tissues @ Hy-Vee   $0.0109/each
+[2026-08-21T08:26:16] arrivals:   FLAG#131  div=0.75  no crown  gochujang @ Hy-Vee   $0.3403/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#132  div=0.75  no crown  lemon-pepper-seasoning @ Hy-Vee   $2.9900/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#133  div=0.75  no crown  red-wine @ Hy-Vee   $0.3939/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#134  div=0.75  no crown  red-wine @ Hy-Vee   $0.9065/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#135  div=0.75  no crown  sponges @ Hy-Vee   $0.7975/each
+[2026-08-21T08:26:16] arrivals:   FLAG#136  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#137  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#138  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#139  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#140  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#141  div=0.75  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#142  div=0.67  no crown  drain-cleaner @ Hy-Vee   $0.1249/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#143  div=0.50  no crown  coconut-oil @ Hy-Vee   $0.2997/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#144  div=0.50  no crown  dog-treats @ Hy-Vee   $0.4608/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#145  div=0.50  no crown  furniture-polish @ Hy-Vee   $0.6064/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#146  div=0.50  no crown  olive-oil @ Hy-Vee   $0.2941/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#147  div=0.50  no crown  olive-oil @ Hy-Vee   $0.2941/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#148  div=0.50  no crown  olive-oil @ Hy-Vee   $0.4333/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#149  div=0.50  no crown  olive-oil @ Hy-Vee   $0.3584/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#150  div=0.50  no crown  olive-oil @ Hy-Vee   $0.3584/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#151  div=0.33  no crown  egg-whites @ Hy-Vee   $0.2184/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#152  div=0.33  no crown  sea-salt @ Hy-Vee   $0.6123/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#153  div=0.33  no crown  sea-salt @ Hy-Vee   $0.1248/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#154  div=0.33  no crown  sea-salt @ Hy-Vee   $1.8543/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#155  div=0.25  no crown  coconut-oil @ Hy-Vee   $0.3330/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#156  div=0.00  no crown  beef-broth @ Hy-Vee   $0.0469/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#157  div=0.00  no crown  chicken-broth @ Hy-Vee   $0.0469/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#158  div=0.00  no crown  chicken-broth @ Hy-Vee   $0.0600/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#159  div=0.00  no crown  coconut-oil @ Hy-Vee   $0.3331/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#160  div=0.00  no crown  coconut-oil @ Hy-Vee   $0.4993/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#161  div=0.00  no crown  disinfectant-spray @ Hy-Vee   $0.1730/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#162  div=0.00  no crown  evaporated-milk @ Hy-Vee   $0.1483/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#163  div=0.00  no crown  furniture-polish @ Hy-Vee   $0.2952/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#164  div=0.00  no crown  lemonade @ Hy-Vee   $0.0467/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#165  div=0.00  no crown  lemonade @ Hy-Vee   $0.0467/floz
+[2026-08-21T08:26:16] arrivals:   FLAG#166  div=0.00  no crown  mayonnaise @ Hy-Vee   $0.0990/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#167  div=0.00  no crown  pickles @ Hy-Vee   $0.1100/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#168  div=0.00  no crown  relish @ Hy-Vee   $0.1056/oz
+[2026-08-21T08:26:16] arrivals:   FLAG#169  div=0.00  no crown  relish @ Hy-Vee   $0.1856/oz
+[2026-08-21T08:26:24] taxonomy: taxonomy source: Family Fare: canonical_url from 25 file(s) within 30d -> 5379 product(s) with a department (newest family-fare-regular-2026-08-21.json)
+[2026-08-21T08:26:24] taxonomy: taxonomy source: Hy-Vee: row field store_department in hyvee-regular-2026-08-21.json -> 487 product(s) with a department
+[2026-08-21T08:26:24] taxonomy: taxonomy source: Baker's: row field store_category in bakers-regular-2026-08-21.json -> 6710 product(s) with a department
+[2026-08-21T08:26:24] taxonomy: taxonomy: judged 4669 row(s) across board cells + candidates; 0 LIVE CELL disagreement(s), 15 candidate disagreement(s)
+[2026-08-21T08:26:24] taxonomy: taxonomy: 6292 row(s) from Baker's carried a department but that store has no entry in taxonomy-map.json - NOT judged
+[2026-08-21T08:26:24] taxonomy: taxonomy: 828 row(s) from Hy-Vee carried a department but that store has no entry in taxonomy-map.json - NOT judged
+[2026-08-21T08:26:24] taxonomy:   candidate  apples @ Family Fare -> health_beauty/baby_child  Pumpkin Tree Fruit & Vegetable Puree, Apple, Sweet Potato & Corn, Organic 4.4 Oz
+[2026-08-21T08:26:24] taxonomy:   candidate  coconut-oil @ Family Fare -> household/facial_tissue  Kleenex 3 In 1 3 Ply Coconut Oil + Aloe Tissues 4 Ea
+[2026-08-21T08:26:24] taxonomy:   candidate  grapefruit @ Family Fare -> health_beauty/skin_care  Top Care Foaming Pink Grapefruit Acne Scrub 4.2 Fl Oz
+[2026-08-21T08:26:24] taxonomy:   candidate  ice-cream @ Family Fare -> health_beauty/adult_nutrition  Optimum Nutrition Vanilla Ice Cream 100% Whey Protein 24.05 Oz
+[2026-08-21T08:26:24] taxonomy:   candidate  milk @ Family Fare -> health_beauty/pharmacy  Phillips' Phillips' Genuine Sugar Free Fresh Mint Milk Of Magnesia 12 Fl Oz
+[2026-08-21T08:26:24] taxonomy:   candidate  milk @ Family Fare -> health_beauty/pharmacy  Top Care Milk Of Magnesia, Fresh Mint Flavor 12 Fl Oz
+[2026-08-21T08:26:24] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Metamucil Metamucil Psyllium Fiber Powder, Sugar Free, Orange, Glp 1 Friendly Fiber>, 72 Tsp 15 Oz
+[2026-08-21T08:26:24] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/grooming_hygiene  Nair Shower Cream Moroccan Argan Oil & Orange Blossom Hair Remover 12 Oz
+[2026-08-21T08:26:24] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Metamucil 4 In 1 Psyllium Fiber Powder, Sugar Free, Orange, 114 Tsp 23.3 Oz
+[2026-08-21T08:26:24] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Top Care Fiber Powder, Sugar Free, 4 In 1, Orange Flavor 36.8 Oz
+[2026-08-21T08:26:24] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Top Care Fiber Powder, Sugar Free, Orange Flavor 23.3 Oz
+[2026-08-21T08:26:24] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Metamucil Metamucil Psyllium Fiber Powder, Sugar Free, Orange, Glp 1 Friendly Fiber>, 114 Tsp 23.3 Oz
+[2026-08-21T08:26:24] taxonomy:   candidate  whole-chicken @ Family Fare [RANKABLE] -> pets_wildlife/dog  Iams Puppy<1 Healthy Puppy Chicken & Whole Grain Recipe Puppy Food 5 Lb
+[2026-08-21T08:26:24] taxonomy:   candidate  whole-chicken @ Family Fare [RANKABLE] -> pets_wildlife/dog  Iams Puppy <1 Healthy Puppy Chicken & Whole Grain Recipe Puppy Food 5 Lb
+[2026-08-21T08:26:24] taxonomy:   candidate  yogurt @ Family Fare -> health_beauty/baby_child  Tippy Toes Yogurt Bites, Banana 1 Oz
+[2026-08-21T08:26:24] taxonomy: taxonomy: report -> C:\Codex\ThriftyCrew\grocery\out\taxonomy-disagreements-2026-08-21.json
+[2026-08-21T08:26:24] taxonomy: STORE-TAXONOMY-COMPLETE
+[2026-08-21T08:26:29] sale-fallback: 2 on-sale cell(s) with no everyday fallback - miracle-whip @ Baker's; pizza-sauce @ Aldi
+[2026-08-21T08:26:29] sale-fallback gaps unchanged - not re-alerting
+[2026-08-21T08:26:29] sale-windows refreshed
+[2026-08-21T08:26:43] recipe-overlay applied
+[2026-08-21T08:26:45] engine cost-recipes refreshed db\costed
+[2026-08-21T08:26:45] cost-flags: 4 unpriced recipe line(s) - a recipe is priced too cheap; see db\cost-flags.txt
+[2026-08-21T08:26:49] golden-test: clean
+[2026-08-21T08:26:50] scaler-pricing: clean
+[2026-08-21T08:26:53] db-agreement guard: clean
+[2026-08-21T08:27:04] spec-contradiction guard: no class worse than baseline
+[2026-08-21T08:27:10] v2 per-serving manifest recomputed
+[2026-08-21T08:27:11] ingredient-map regenerated (derived from specs + feed)
+[2026-08-21T08:27:13] store-integrity: no hard findings (12 warn)
+[2026-08-21T08:27:24] guard-contract:   ! HALF-COVERED: audit-commodity-dupes.ps1 has the marker but leaves by 2 unmarked verdict exit(s) at line(s) 219, 235 |   ! HALF-COVERED: audit-coverage-ledger.ps1 has the marker but leaves by 1 unmarked verdict exit(s) at line(s) 319 |   ! HALF-COVERED: audit-store-integrity.ps1 has the marker but leaves by 1 unmarked verdict exit(s) at line(s) 110 |   ! HALF-COVERED: audit-tile-integrity.ps1 has the marker but leaves by 1 unmarked verdict exit(s) at line(s) 83 |   ! DEAD: verify-debt.ps1 is a detector that NOTHING in production calls - only its own tests, or nothing at all |   ! DEAD: verify-savings.ps1 is a detector that NOTHING in production calls - only its own tests, or nothing at all |   ! DEAD: audit-cost-line-coverage.ps1 is a detector that NOTHING in production calls - only its own tests, or nothing at all

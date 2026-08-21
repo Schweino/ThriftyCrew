@@ -49,6 +49,16 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 . (Join-Path $root 'price-split-lib.ps1')
 if (-not $OutDir)  { $OutDir  = Join-Path $root 'out' }
 if (-not $AdsFile) { $AdsFile = (Get-ChildItem (Join-Path $OutDir 'ads-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName }
+# WHICH FILES THIS BUILD ACTUALLY OPENS (2026-08-21). grocery\out holds 870 tracked files, and the ones
+# the engine still NEEDS are named exactly like the ones it has finished with - a dated capture looks
+# identical to a disposable output. The board reads a UNION of dated captures (up to 14 days for
+# Walmart, up to the 90-day quarter elsewhere) because the rotation only re-prices ~7 items per store
+# per day, so a three-week-old file can be the only place a store's price for a commodity exists.
+# Deleting by date bins prices the board is ranking on, and it does not error - it just publishes a
+# different store as cheapest. The engine always knew which files it opened; it never wrote it down.
+. (Join-Path $PSScriptRoot 'input-usage-lib.ps1')
+$inputUsage = New-InputUsageTracker
+Add-InputUsed -Tracker $inputUsage -Path $AdsFile -Role 'ads'
 if (-not $CommoditiesFile) { $CommoditiesFile = Join-Path $root 'commodities.json' }
 $cdoc = Get-Content $CommoditiesFile -Raw | ConvertFrom-Json
 # a rule FILE may be a bare array (staples) or a wrapper { global_exclude:[...], commodities:[...] } (recipe
@@ -1174,6 +1184,8 @@ if ($FarewayFile -and (Test-Path $FarewayFile)) {
 # the rows from the freshest capture that actually covers it. A blind union would be worse than the bug it fixes:
 # "cheapest per store" would let a stale-low price from an old capture beat today's real one.
 # An explicit -SamsFile still wins (the regression harness pins one file).
+Add-InputUsed -Tracker $inputUsage -Path $BakersFile -Role 'bakers-ad'
+Add-InputUsed -Tracker $inputUsage -Path $FarewayFile -Role 'fareway-ad'
 $samsFiles = @()
 if ($SamsFile) { $samsFiles = @($SamsFile) }
 else {
@@ -1185,6 +1197,9 @@ else {
   }
   if ($samsFiles.Count) { Write-Warning ("compare-deals: -SamsFile not passed; auto-using " + $samsFiles.Count + " Sam's capture(s): " + (($samsFiles | ForEach-Object { Split-Path $_ -Leaf }) -join ', ')) }
 }
+# Sam's is the clearest case for the ledger: it unions up to 11 captures at once, so "which of these is
+# still doing work" is not answerable by eye at all.
+foreach ($sfu in $samsFiles) { Add-InputUsed -Tracker $inputUsage -Path $sfu -Role 'sams-deals' }
 # EXPIRED ADS DO NOT PRICE THE BOARD (2026-08-07, Brad's call). A weekly-ad supplement declares its own
 # window in ad_from/ad_to, and these rows OVERRIDE the everyday storefront price whenever they are cheaper.
 # Nothing retired them when the window closed, so a missed ad pull left a dead sale winning cells forever.
@@ -1306,6 +1321,9 @@ if (Test-Path $regDir) {
   # multi-capture pattern Sam's already uses. Every OTHER store here can run weekly sales, so unioning old files
   # would resurrect expired prices; they stay newest-only.
   $regFiles = Select-RegularFileSet (Get-ChildItem (Join-Path $regDir '*-regular-*.json') -ErrorAction SilentlyContinue) ([datetime]$today) $WalmartMaxAgeDays
+  # Recorded on the SELECTED set, not on everything in the directory. Which captures the union actually
+  # ADMITTED is the whole question a cleanup has to answer; what is merely present on disk is not.
+  foreach ($rfu in $regFiles) { Add-InputUsed -Tracker $inputUsage -Path $rfu.FullName -Role 'everyday' }
   foreach ($rf in $regFiles) {
     $ex = Get-Content $rf.FullName -Raw | ConvertFrom-Json
     # PRICE-MODE GATE (2026-07-15): Aldi/Fareway are Instacart storefronts whose DELIVERY catalog is marked up
@@ -1789,3 +1807,16 @@ if ($ptBad.Count) {
 }
 Write-Output ("Saved: " + $ptFile)
 Write-Output ("Saved: " + $ptCsvFile)
+
+# ---------------------------------------------------------------- THE INPUT LEDGER (2026-08-21)
+# -IsLiveBuild only when this run built the PUBLISHED board. A regression or fixture run reads a PINNED
+# set of inputs, and stamping those would mark files the live board has not touched in weeks as alive -
+# worse than no record, because it reads as evidence. $OutName is the honest test: every pinned harness
+# passes its own name so its artifacts do not collide with the real ones.
+$liveBuild = ($OutName -eq 'comparison') -and (-not $RegularDir) -and (-not $ExtraDir)
+$iuCount = Save-InputUsage -Tracker $inputUsage -OutDir $OutDir -Today $today -IsLiveBuild:$liveBuild
+if ($iuCount -ge 0) {
+  Write-Output ("input-usage: recorded {0} file(s) this build -> {1}" -f $iuCount, (Join-Path $OutDir 'input-usage.json'))
+} else {
+  Write-Output "input-usage: NOT recorded (this is a pinned/regression run, not the live board)"
+}

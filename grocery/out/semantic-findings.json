@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-20 12:32",
-    "board":  "comparison-2026-08-20.json",
-    "sidecar_generated":  "2026-08-20 12:32:11",
+    "generated":  "2026-08-21 08:20",
+    "board":  "comparison-2026-08-21.json",
+    "sidecar_generated":  "2026-08-21 08:20:16",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3017,
-                     "corpus":  36998,
-                     "rule_invisible":  6745
+                     "board_pairs":  3020,
+                     "corpus":  37083,
+                     "rule_invisible":  6468
                  },
     "identity_count":  0,
-    "coverage_count":  63,
+    "coverage_count":  52,
     "identity":  [
 
                  ],
@@ -111,16 +111,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "quart-storage-bags",
-                         "commodity":  "Food Storage Bags (quart)",
-                         "store":  "Walmart",
-                         "product":  "Ziploc Brand Freezer Food Storage Bags, School Supplies, with Grip \u0027n Seal Technology, Zipper, Quart, 50 Count",
-                         "cos":  0.7244,
-                         "score":  0.969368,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "cumin-seeds",
                          "commodity":  "Cumin seeds",
                          "store":  "Walmart",
@@ -181,12 +171,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "quart-storage-bags",
-                         "commodity":  "Food Storage Bags (quart)",
+                         "id":  "ribeye-steak",
+                         "commodity":  "Ribeye Steak",
                          "store":  "Walmart",
-                         "product":  "Ziploc Brand Food Storage Bags, School Supplies, with Grip \u0027n Seal Technology, Zipper, Quart, 50 Count",
-                         "cos":  0.7096,
-                         "score":  0.954744,
+                         "product":  "Beef Choice Angus Cubed Steak, Tray, Family Pack, Fresh, 0.9 - 1.5 lb",
+                         "cos":  0.6585,
+                         "score":  0.955702,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -201,22 +191,22 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "ground-beef-8020",
+                         "commodity":  "80/20 Ground Beef",
+                         "store":  "Aldi",
+                         "product":  "80 Lean Ground Beef Patties Per LB",
+                         "cos":  0.669,
+                         "score":  0.948182,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "bar-soap",
                          "commodity":  "Bar Soap",
                          "store":  "Baker\u0027s",
                          "product":  "Caress Daily Silk Cleansing Bar, White Peach \u0026 Orange Blossom Moisturizing Body Soap",
                          "cos":  0.7026,
                          "score":  0.948031,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "vegetable-soup",
-                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
-                         "store":  "Walmart",
-                         "product":  "Progresso Minestrone Soup, Vegetable Classics Canned Soup, 19 oz",
-                         "cos":  0.7219,
-                         "score":  0.947862,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -261,16 +251,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "brown-gravy-mix",
-                         "commodity":  "Brown Gravy Mix (dry packet)",
-                         "store":  "Walmart",
-                         "product":  "McCormick 30% Less Sodium Brown Gravy Seasoning Mix, 0.87 oz Packet",
-                         "cos":  0.7001,
-                         "score":  0.93915,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "sandwich-bags",
                          "commodity":  "Sandwich Bags",
                          "store":  "Walmart",
@@ -301,32 +281,22 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "vegetable-soup",
+                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "store":  "Walmart",
+                         "product":  "Progresso Minestrone Soup, Vegetable Classics Canned Soup, 19 oz",
+                         "cos":  0.698,
+                         "score":  0.933822,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "chicken-breast",
                          "commodity":  "Boneless Skinless Chicken Breast",
                          "store":  "Walmart",
                          "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
                          "cos":  0.7786,
                          "score":  0.933402,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "canned-chicken",
-                         "commodity":  "Canned Chicken Breast",
-                         "store":  "Walmart",
-                         "product":  "Great Value Chunk Breast Of Chicken 10oz",
-                         "cos":  0.6503,
-                         "score":  0.93256,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "quart-storage-bags",
-                         "commodity":  "Food Storage Bags (quart)",
-                         "store":  "Family Fare",
-                         "product":  "Our Family Freezer Bags, Resealable, Quart Size, Mega Pack 80 Ea",
-                         "cos":  0.6597,
-                         "score":  0.93061,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -341,42 +311,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "quart-storage-bags",
-                         "commodity":  "Food Storage Bags (quart)",
-                         "store":  "Walmart",
-                         "product":  "Great Value Slider Zipper Storage Bags, Quart, 50 Count",
-                         "cos":  0.7026,
-                         "score":  0.927091,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "creamy-cilantro-lime-dressing",
                          "commodity":  "Creamy Cilantro Lime Dressing",
                          "store":  "Family Fare",
                          "product":  "Taylor Farms Southwest Chopped Kit With Creamy Cilantro Dressing 12.6 Oz",
                          "cos":  0.6873,
                          "score":  0.925325,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "quart-storage-bags",
-                         "commodity":  "Food Storage Bags (quart)",
-                         "store":  "Walmart",
-                         "product":  "Great Value Slider Zipper Freezer Bags, Quart, 50 Count",
-                         "cos":  0.6908,
-                         "score":  0.925081,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ready-to-serve-long-grain-wild-rice-pouch",
-                         "commodity":  "Ready-to-Serve Long Grain \u0026 Wild Rice Pouch",
-                         "store":  "Walmart",
-                         "product":  "Great Value Ready-to-Heat 90-Second Long Grain White Rice Pouch, 8.8 oz",
-                         "cos":  0.7627,
-                         "score":  0.924826,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -411,26 +351,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "quart-storage-bags",
-                         "commodity":  "Food Storage Bags (quart)",
-                         "store":  "Walmart",
-                         "product":  "Great Value Freezer Guard Slider Zipper Bags, Quart Freezer, 75 Count",
-                         "cos":  0.7151,
-                         "score":  0.92436,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "frozen-vegetables",
-                         "commodity":  "Frozen Mixed Vegetables",
-                         "store":  "Aldi",
-                         "product":  "Season\u0027s Choice Steamable Frozen Mixed Vegetable",
-                         "cos":  0.7391,
-                         "score":  0.923255,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "hulled-pumpkin-seeds",
                          "commodity":  "Hulled Pumpkin Seeds",
                          "store":  "Aldi",
@@ -461,22 +381,22 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "white-wine",
+                         "commodity":  "White Wine",
+                         "store":  "Family Fare",
+                         "product":  "Vendange Chardonnay White Wine 1.5 L",
+                         "cos":  0.5602,
+                         "score":  0.921828,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "deli-ham",
                          "commodity":  "Ham (deli / sliced)",
                          "store":  "Walmart",
                          "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
                          "cos":  0.691,
                          "score":  0.920936,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "white-wine",
-                         "commodity":  "White Wine",
-                         "store":  "Family Fare",
-                         "product":  "Vendange Chardonnay White Wine 1.5 L",
-                         "cos":  0.5999,
-                         "score":  0.918364,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -501,12 +421,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "kidney-beans",
-                         "commodity":  "Kidney Beans (canned)",
-                         "store":  "Family Fare",
-                         "product":  "Our Family Beans, Kidney, No Salt Added, Dark Red 15.5 Oz",
-                         "cos":  0.6383,
-                         "score":  0.912691,
+                         "id":  "ready-to-serve-long-grain-wild-rice-pouch",
+                         "commodity":  "Ready-to-Serve Long Grain \u0026 Wild Rice Pouch",
+                         "store":  "Walmart",
+                         "product":  "Great Value Ready-to-Heat 90-Second Long Grain White Rice Pouch, 8.8 oz",
+                         "cos":  0.7571,
+                         "score":  0.912324,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -561,32 +481,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "vegetable-soup",
-                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
-                         "store":  "Baker\u0027s",
-                         "product":  "Campbell\u0027s Chunky Beef Soup with Country Vegetables 18.8 Oz Can",
-                         "cos":  0.7279,
-                         "score":  0.908327,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "USDA 80% Lean 20% Fat Ground Beef Patties - 4 Count",
-                         "cos":  0.715,
-                         "score":  0.907272,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "USDA 80% Lean 20% Fat Ground Beef Patties - 10 Count",
-                         "cos":  0.715,
-                         "score":  0.907272,
+                         "id":  "taco-sauce",
+                         "commodity":  "Taco Sauce",
+                         "store":  "Walmart",
+                         "product":  "Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 8 oz",
+                         "cos":  0.6937,
+                         "score":  0.908269,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -601,12 +501,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "shredded-cheese",
-                         "commodity":  "Shredded / Block Cheese",
-                         "store":  "Aldi",
-                         "product":  "Happy Farms Shredded Mild Cheddar",
-                         "cos":  0.6825,
-                         "score":  0.905249,
+                         "id":  "vegetable-soup",
+                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "store":  "Baker\u0027s",
+                         "product":  "Campbell\u0027s Chunky Beef Soup with Country Vegetables 18.8 Oz Can",
+                         "cos":  0.7303,
+                         "score":  0.904312,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -627,16 +527,6 @@
                          "product":  "Las Palmas Medium Red Chile Sauce, 28 oz",
                          "cos":  0.6431,
                          "score":  0.903476,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "green-olives",
-                         "commodity":  "Green Olives (stuffed)",
-                         "store":  "Walmart",
-                         "product":  "Great Value Stuffed Queen Olives with Minced Pimento, 10 oz",
-                         "cos":  0.6861,
-                         "score":  0.901376,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

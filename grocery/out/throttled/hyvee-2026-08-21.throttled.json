@@ -1,0 +1,79 @@
+﻿{
+    "store":  "Hy-Vee",
+    "week_of":  "2026-08-21",
+    "price_type":  "everyday",
+    "throttled":  true,
+    "deal_count":  7,
+    "deals":  [
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hy Vee Grade A Large Eggs",
+                      "ad_price":  "$1.59",
+                      "size":  "dozen",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-15",
+                      "not_reverified":  true
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hy Vee Grade A Large Eggs 18 Count",
+                      "ad_price":  "$2.38",
+                      "size":  "18 ct",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-15",
+                      "not_reverified":  true
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hy Vee Grade A Jumbo Eggs",
+                      "ad_price":  "$1.99",
+                      "size":  "dozen jumbo",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-15",
+                      "not_reverified":  true
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hy Vee Vitamin D Milk",
+                      "ad_price":  "$4.99",
+                      "size":  "gallon",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-15",
+                      "not_reverified":  true
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hy Vee 2 Reduced Fat Milk",
+                      "ad_price":  "$4.99",
+                      "size":  "gallon",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-15",
+                      "not_reverified":  true
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Thats Smart 2 Reduced Fat Milk",
+                      "ad_price":  "$3.06",
+                      "size":  "gallon",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-15",
+                      "not_reverified":  true
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hy Vee Sweet Cream Salted Butter Quarters",
+                      "ad_price":  "$3.99",
+                      "size":  "1 lb",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-15",
+                      "not_reverified":  true
+                  }
+              ]
+}
