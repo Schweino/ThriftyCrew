@@ -366,7 +366,42 @@ function Get-UnitPrice($deal, $cat) {
     $wp = [regex]::Match((("" + $deal.price_text)), '(?i)(?:per\s+(\d+(?:\.\d+)?)\s*-?\s*lb|(\d+(?:\.\d+)?)\s*-?\s*lb\.?\s*(?:pkg|package|bag))')
     if ($wp.Success) { $wn = if ($wp.Groups[1].Success) { [double]$wp.Groups[1].Value } else { [double]$wp.Groups[2].Value }; if ($wn -gt 1) { return @{ unit_price=($pr.per_item/$wn); basis="per-$wn-lb pkg"; note=$pr.note } } }
   }
-  if ($unit -eq 'lb' -and $pr.kind.perlb)     { return @{ unit_price=$pr.per_item; basis='per-lb marker'; note=$pr.note } }
+  # A PER-LB MARKER FOUND ONLY IN THE NAME LOSES TO AN EXPLICIT MULTI-POUND SIZE (2026-08-21).
+  # Get-ItemPrice searches priceText + nameText together, so a product NAMED "Cabbage, Per LB" sets the
+  # marker even when its price is a package total. Aldi published cabbage at $2.37/lb - 3x every other
+  # store - because of exactly that, while Fareway (1.92 / 2.5 lb) and Walmart (2.59 / 3.047 lb) divided
+  # their sizes and landed at $0.77 and $0.85. Aldi's own earlier capture proves the intended number:
+  # 2026-08-05 read "Cabbage Per LB" $0.79 size "lb"; 2026-08-15 read the same cabbage as $2.37 with size
+  # "3.0 lb" - a 3 lb head and its total. 2.37 / 3.0 = 0.79, the store's own price.
+  #
+  # It sat at 2.7x of the row median, under audit-unit-basis-outlier's 4x bar, so nothing flagged it.
+  #
+  # THE TWO CASES THIS MUST NOT BREAK, both already paid for in comments above:
+  #   * a real per-lb PRICE ("$1.68 lb.") - so the marker is re-tested against the price text ALONE, and
+  #     when the price itself carries it, the price still wins.
+  #   * Hy-Vee's random-weight rate-in-the-size ("2.85 lbs ($8.99/lb)"), where the price IS the per-pound
+  #     rate and dividing published corned beef 65% under shelf - so a size stating a $/lb rate is left
+  #     to the clause below that was written for it.
+  # What remains is the narrow case: the name says per-lb, the price does not, and the size states a
+  # package of more than one pound. There the size is the only party describing what was actually bought.
+  if ($unit -eq 'lb' -and $pr.kind.perlb) {
+    $szlb  = [regex]::Match(("" + $deal.size_text), '(?i)^\s*(\d+(?:\.\d+)?)\s*-?\s*lbs?\b')
+    $rate  = (("" + $deal.size_text) -match '(?i)\$\s*\d+(?:\.\d+)?\s*/\s*lb')
+    $inPrc = ((ConvertTo-DigitNumerals ("" + $deal.price_text)) -match '(?i)(per\s*lb|/\s*lb|\blb\.?\b|a\s*pound|per\s*pound)')
+    # AND NOT Sam's "priced per pound" SUFFIX. That phrase is Sam's own label for a random-weight item
+    # whose listed price really IS the per-pound rate - the engine strips it in Get-MatchTexts for exactly
+    # that reason. build-walmart-deals.ps1 extracts this pricing code (its line 24) and asks it what the
+    # engine would do, then chooses which SHAPE to emit; its self-test case 4 exists because the package
+    # shape used to publish a $10.35 tray at $10.35/lb. Letting this clause price the package shape
+    # correctly flips that decision and fails a test that encodes a real, paid-for lesson. Aldi's
+    # "Cabbage, Per LB" carries no such suffix, so the narrow fix stays narrow.
+    $samsSuffix = (("" + $deal.name) -match '(?i),?\s*priced\s+per\s+\w+')
+    if ($szlb.Success -and ([double]$szlb.Groups[1].Value -gt 1) -and (-not $rate) -and (-not $inPrc) -and (-not $samsSuffix)) {
+      $szn = [double]$szlb.Groups[1].Value
+      return @{ unit_price=($pr.per_item/$szn); basis="size $szn lb (per-lb marker was in the NAME only)"; note=$pr.note }
+    }
+    return @{ unit_price=$pr.per_item; basis='per-lb marker'; note=$pr.note }
+  }
   if ($unit -eq 'each' -and $pr.kind.pereach) { return @{ unit_price=$pr.per_item; basis='per-each marker'; note=$pr.note } }
   # PER-LB RATE PRINTED IN THE SIZE, NOT THE PRICE. Hy-Vee's random-weight items carry the rate in the size
   # text ("2.85 lbs ($8.99/lb)") while the captured price is that same per-pound rate - the perlb marker above
