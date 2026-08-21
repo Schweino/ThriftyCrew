@@ -120,7 +120,7 @@ class CompiledCommodity:
     """A commodity's resolution rules, compiled once and reused across thousands
     of candidate rows. Compiling per-row was measurably the slow path."""
 
-    __slots__ = ("node_id", "label", "unit", "include", "exclude", "known_wrong",
+    __slots__ = ("node_id", "label", "unit", "include", "exclude", "known_wrong", "known_wrong_cores",
                  "raw_include", "category", "active_classes")
 
     def __init__(self, node_id: str, label: str, unit: str | None,
@@ -133,9 +133,38 @@ class CompiledCommodity:
         self.include = _compile_all(include)
         self.exclude = _compile_all(exclude)
         self.known_wrong = known_wrong
+        # Same rulings, packaging noise stripped - see _kw_core.
+        self.known_wrong_cores = {c for c in (_kw_core(k) for k in known_wrong) if c}
         self.category = category
         # Which wrong-class guardrails are in force for THIS commodity's category.
         self.active_classes = active_classes
+
+
+# Noise a store adds around a product name without changing the product: a
+# leading multipack prefix, a trailing size/count, and packaging words.
+_KW_PREFIX = re.compile(r"^\s*\(?\s*\d+\s*(?:pack|pk|ct|count|x)\s*\)?\s*", re.I)
+_KW_TRAIL = re.compile(
+    r"[\s,\-]*\b\d+(?:\.\d+)?\s*"
+    r"(?:oz|ounces?|fl\.?\s*oz|lb|lbs|pounds?|g|kg|ml|l|ct|count|pk|pack|ea|each)\b"
+    r"[\s.\-]*$", re.I)
+
+
+def _kw_core(norm_name: str) -> str:
+    """The identity of a listing with packaging noise stripped.
+
+    Deliberately conservative: it removes only a LEADING pack prefix and a
+    TRAILING size, both of which a store adds to the same product. It does not
+    touch interior words, so 'Diet Coke' can never collapse into 'Coke'.
+    Returns '' when stripping leaves too little to be an identity, so a ruling
+    can never widen into a near-empty token that matches everything.
+    """
+    s = _KW_PREFIX.sub("", norm_name or "")
+    prev = None
+    while prev != s:                     # a name can carry both "12 oz" and "4 ct"
+        prev = s
+        s = _KW_TRAIL.sub("", s)
+    s = s.strip()
+    return s if len(s) >= 8 and len(s.split()) >= 2 else ""
 
 
 def _compile_all(patterns: list[str]) -> list[re.Pattern]:
@@ -305,9 +334,24 @@ class Resolver:
         norm = norm_text(name)
 
         # 1. known-wrong: an adjudicated negative. Absolute, never re-litigated.
+        #
+        # Matched on the ruling's CORE, not on an exact string. Stores re-list
+        # the same product with a pack prefix or a trailing size, and an
+        # exact-name ruling misses every variant: the Master of Mixes daiquiri
+        # mixer was ruled wrong under its long form in the morning and was back
+        # pricing strawberries under its short form by the afternoon, and
+        # 'Simply Asia Five Spice Stir-Fry Sauce' returned as '(4 pack) Simply
+        # Asia Five Spice Stir-Fry Sauce'. A ruling that a store can escape by
+        # re-listing is not a ruling.
         if norm in cc.known_wrong:
             return self._tally(Verdict("known_wrong",
                                        "adjudicated known-wrong for this commodity", 1.0))
+        core = _kw_core(norm)
+        if core and core in cc.known_wrong_cores:
+            return self._tally(Verdict(
+                "known_wrong",
+                "adjudicated known-wrong for this commodity (matched on ruling core; "
+                "the listing differs only by pack prefix or trailing size)", 1.0))
 
         # 2. wrong-class guardrails — ONLY the classes in force for this
         #    commodity's category (see _load_category_excludes).
