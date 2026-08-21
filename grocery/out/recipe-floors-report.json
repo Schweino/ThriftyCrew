@@ -1,7 +1,7 @@
 ﻿{
     "derived_from":  "candidates-2026-08-20.json",
-    "updated_cells":  154,
-    "unchanged_cells":  491,
+    "updated_cells":  150,
+    "unchanged_cells":  495,
     "ids_with_no_board_match":  [
                                     "93-7-ground-turkey [priced from the recipe pool instead]",
                                     "boneless-skinless-chicken-thigh [priced from the recipe pool instead]",
@@ -65,6 +65,7 @@
                                    "fresh-mint (row \u0027each\u0027 vs board \u0027oz\u0027)"
                                ],
     "cells_with_no_everyday_candidate":  [
+                                             "93-7-ground-turkey/Family Fare",
                                              "boneless-skinless-chicken-thigh/Family Fare",
                                              "1-3-fat-cream-cheese/Sam\u0027s Club",
                                              "1-3-fat-cream-cheese/Baker\u0027s",
@@ -74,6 +75,7 @@
                                              "apple/Aldi",
                                              "apple/Family Fare",
                                              "brown-sugar/Family Fare",
+                                             "cashews/Aldi",
                                              "cashews/Family Fare",
                                              "fries/Family Fare",
                                              "frozen-chopped-spinach/Baker\u0027s",
@@ -86,12 +88,15 @@
                                              "golden-raisins/Hy-Vee",
                                              "golden-raisins/Baker\u0027s",
                                              "golden-raisins/Family Fare",
+                                             "greek-yogurt/Family Fare",
                                              "hominy/Family Fare",
                                              "honey-dijon-mustard/Aldi",
                                              "light-sour-cream/Hy-Vee",
                                              "light-sour-cream/Sam\u0027s Club",
+                                             "milk/Walmart",
                                              "milk/Baker\u0027s",
                                              "milk/Aldi",
+                                             "milk/Family Fare",
                                              "milk/Hy-Vee",
                                              "olives/Family Fare",
                                              "pineapple-chunks/Family Fare",
@@ -149,35 +154,11 @@
                                   "source":  "staples-board"
                               },
                               {
-                                  "id":  "cashews",
-                                  "store":  "Aldi",
-                                  "old":  0.3497,
-                                  "new":  0.5362,
-                                  "item":  "Simply Nature Raw Cashews Walnuts Macadamia Nuts 8 OZ",
-                                  "source":  "recipe-pool"
-                              },
-                              {
-                                  "id":  "cashews",
-                                  "store":  "Walmart",
-                                  "old":  0.687,
-                                  "new":  0.3593,
-                                  "item":  "Planters Salted Mixed Nuts, Peanuts, Cashews, Almonds, Brazil Nuts, Pecans. 6g Protein (7% DV) per serving, Plant Based Protein Snacks. 56 oz Can",
-                                  "source":  "recipe-pool"
-                              },
-                              {
                                   "id":  "dijon-mustard",
                                   "store":  "Hy-Vee",
                                   "old":  0.1658,
                                   "new":  0.2075,
                                   "item":  "Hy-Vee Stone Ground Dijon Mustard",
-                                  "source":  "staples-board"
-                              },
-                              {
-                                  "id":  "ginger",
-                                  "store":  "Walmart",
-                                  "old":  3.6255,
-                                  "new":  1.392,
-                                  "item":  "VAHDAM, Premium Himalayan Pink Salt Rock Salt with Ginger \u0026 Cayenne - Coarse Salt for Grinder Refill, Pink Himalayan Sea Salt Seasoning",
                                   "source":  "staples-board"
                               },
                               {
@@ -192,8 +173,8 @@
                                   "id":  "greek-yogurt",
                                   "store":  "Baker\u0027s",
                                   "old":  0.1466,
-                                  "new":  0.1887,
-                                  "item":  "Chobani Low-Fat Greek Yogurt Mango On The Bottom 2% Milk Fat",
+                                  "new":  0.2028,
+                                  "item":  "Fage Total Plain Whole Milk Greek Yogurt Tub",
                                   "source":  "recipe-pool"
                               },
                               {
@@ -229,20 +210,20 @@
                                   "source":  "staples-board"
                               },
                               {
-                                  "id":  "milk",
-                                  "store":  "Walmart",
-                                  "old":  3,
-                                  "new":  1.21,
-                                  "item":  "Great Value Instant Nonfat Dry Milk, 3.2 oz Pouches (3 Count), Makes 3 Quarts",
-                                  "source":  "recipe-pool"
-                              },
-                              {
                                   "id":  "paprika",
                                   "store":  "Hy-Vee",
                                   "old":  0.625,
                                   "new":  0.4545,
                                   "item":  "That\u0027s Smart Paprika",
                                   "source":  "staples-board"
+                              },
+                              {
+                                  "id":  "provolone-cheese",
+                                  "store":  "Walmart",
+                                  "old":  0.209,
+                                  "new":  0.405,
+                                  "item":  "Sargento® Provolone with  Smoke Flavor Sliced Cheese, 12 slices",
+                                  "source":  "recipe-pool"
                               },
                               {
                                   "id":  "red-wine-vinegar",
@@ -414,14 +395,6 @@
                               },
                               {
                                   "id":  "ground-cinnamon",
-                                  "store":  "Aldi",
-                                  "old":  0.4177,
-                                  "new":  0.1497,
-                                  "item":  "Millville Cinnamon Crunch Squares",
-                                  "source":  "staples-board"
-                              },
-                              {
-                                  "id":  "ground-cinnamon",
                                   "store":  "Family Fare",
                                   "old":  0.4576,
                                   "new":  0.676,
@@ -437,8 +410,8 @@
                                   "source":  "staples-board"
                               }
                           ],
-    "cells_given_product_name":  588,
-    "cells_given_size":  587,
+    "cells_given_product_name":  583,
+    "cells_given_size":  582,
     "cells_whose_candidate_has_no_name":  [
 
                                           ],
@@ -502,14 +475,6 @@
                                   "new":  6.49,
                                   "item":  "JENNIE-O Ground Turkey 93/7 Chub",
                                   "size":  "1 lb"
-                              },
-                              {
-                                  "id":  "93-7-ground-turkey",
-                                  "store":  "Family Fare",
-                                  "old":  7.99,
-                                  "new":  7.99,
-                                  "item":  "Jennie O 99%/1% Fresh Ground Turkey Breast 16 Oz",
-                                  "size":  "16 oz"
                               },
                               {
                                   "id":  "boneless-skinless-chicken-thigh",
@@ -593,14 +558,6 @@
                               },
                               {
                                   "id":  "cashews",
-                                  "store":  "Aldi",
-                                  "old":  0.3497,
-                                  "new":  0.5362,
-                                  "item":  "Simply Nature Raw Cashews Walnuts Macadamia Nuts 8 OZ",
-                                  "size":  "8 oz"
-                              },
-                              {
-                                  "id":  "cashews",
                                   "store":  "Sam\u0027s Club",
                                   "old":  0.4236,
                                   "new":  0.4236,
@@ -619,9 +576,9 @@
                                   "id":  "cashews",
                                   "store":  "Walmart",
                                   "old":  0.687,
-                                  "new":  0.3593,
-                                  "item":  "Planters Salted Mixed Nuts, Peanuts, Cashews, Almonds, Brazil Nuts, Pecans. 6g Protein (7% DV) per serving, Plant Based Protein Snacks. 56 oz Can",
-                                  "size":  "56 oz"
+                                  "new":  0.5479,
+                                  "item":  "Great Value Honey Roasted Cashews, 8.25 oz",
+                                  "size":  "8.25 oz"
                               },
                               {
                                   "id":  "cashews",
@@ -660,23 +617,23 @@
                                   "store":  "Aldi",
                                   "old":  0.0872,
                                   "new":  0.0872,
-                                  "item":  "Friendly Farms Nonfat Strawberry Greek Yogurt 32 OZ",
+                                  "item":  "Friendly Farms Nonfat Plain Greek Yogurt 32 OZ",
                                   "size":  "32 oz"
                               },
                               {
                                   "id":  "greek-yogurt",
                                   "store":  "Walmart",
                                   "old":  0.1025,
-                                  "new":  0.0928,
-                                  "item":  "Great Value Vanilla Nonfat Greek Yogurt, 32 oz Tub",
+                                  "new":  0.115,
+                                  "item":  "bettergoods Plain Whole Milk Greek Yogurt, 32 oz Tub",
                                   "size":  "32 oz"
                               },
                               {
                                   "id":  "greek-yogurt",
                                   "store":  "Sam\u0027s Club",
                                   "old":  0.1217,
-                                  "new":  0.1217,
-                                  "item":  "Member\u0027s Mark Honey Vanilla Whole Milk Greek Yogurt, 48 oz.",
+                                  "new":  0.1223,
+                                  "item":  "Member\u0027s Mark Nonfat Plain Greek Yogurt, 48 oz.",
                                   "size":  "48 oz"
                               },
                               {
@@ -691,17 +648,9 @@
                                   "id":  "greek-yogurt",
                                   "store":  "Baker\u0027s",
                                   "old":  0.1466,
-                                  "new":  0.1887,
-                                  "item":  "Chobani Low-Fat Greek Yogurt Mango On The Bottom 2% Milk Fat",
-                                  "size":  "5.3 oz"
-                              },
-                              {
-                                  "id":  "greek-yogurt",
-                                  "store":  "Family Fare",
-                                  "old":  0.2817,
-                                  "new":  0.2817,
-                                  "item":  "Chobani Strawberry Banana On The Bottom Reduced Fat Greek Yogurt 5.3 Oz",
-                                  "size":  "6 oz"
+                                  "new":  0.2028,
+                                  "item":  "Fage Total Plain Whole Milk Greek Yogurt Tub",
+                                  "size":  "32 oz"
                               },
                               {
                                   "id":  "honey-dijon-mustard",
@@ -768,28 +717,12 @@
                                   "size":  "16 oz"
                               },
                               {
-                                  "id":  "milk",
-                                  "store":  "Walmart",
-                                  "old":  3,
-                                  "new":  1.21,
-                                  "item":  "Great Value Instant Nonfat Dry Milk, 3.2 oz Pouches (3 Count), Makes 3 Quarts",
-                                  "size":  "9.6 oz"
-                              },
-                              {
-                                  "id":  "milk",
-                                  "store":  "Family Fare",
-                                  "old":  3.69,
-                                  "new":  3.665,
-                                  "item":  "Abbott Infant Formula, Ready To Feed, Milk Based, Sensitive 6 Ea",
-                                  "size":  "6 ea"
-                              },
-                              {
                                   "id":  "provolone-cheese",
                                   "store":  "Walmart",
                                   "old":  0.209,
-                                  "new":  0.2175,
-                                  "item":  "Great Value Low-Moisture Part-Skim Mozzarella \u0026 Provolone Finely Shredded Cheese, 16 oz Bag",
-                                  "size":  "16 oz"
+                                  "new":  0.405,
+                                  "item":  "Sargento® Provolone with  Smoke Flavor Sliced Cheese, 12 slices",
+                                  "size":  "8 oz"
                               },
                               {
                                   "id":  "provolone-cheese",

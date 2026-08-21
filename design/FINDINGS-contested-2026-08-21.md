@@ -582,3 +582,90 @@ pattern, a withheld commodity, a non-compiling pattern, and a control character.
 `lint_adjacency` gained `--catalog` purely so the fixture can exist. That is the
 point of the whole exercise - the first must-fire fixture written today found
 two bugs in `--gated`'s failure paths that no passing run could have shown.
+
+## 23. The recipe rule set never got the class guards — PARTLY FIXED
+
+The recipe board is user-facing (`build-deals-page` reads `recipe-board.json`)
+and it is priced by a DIFFERENT rule set - `recipe-commodities.json` - which
+carries a **median of 8 excludes per row against the staples set's 98**.
+
+The reason is structural, not neglect: `apply-category-excludes.ps1` maps
+commodity -> category via `categories.json`, and **14 of the 15 ids actually
+priced from the recipe pool have no category at all**. The class library
+(pet, household, candy, alcohol, imitation, prepared-meal...) cannot reach them.
+
+What that produced, all live in the proposed refresh:
+
+    milk               Family Fare   Abbott INFANT FORMULA, Ready To Feed
+    milk               Walmart       Great Value Instant Nonfat DRY Milk
+    93-7-ground-turkey Family Fare   Jennie-O 99%/1% Ground Turkey BREAST
+    cashews            Aldi          Simply Nature Raw Cashews WALNUTS MACADAMIA
+    cashews            Walmart       Planters Salted MIXED NUTS
+    provolone-cheese   Walmart       Great Value MOZZARELLA & Provolone blend
+    greek-yogurt       5 of 6 stores flavoured (strawberry, mango, honey vanilla)
+
+Fixed by hand, per id, each measured against the full corpus first. `milk` was
+given the staples definition outright rather than patched - one commodity, one
+definition. `greek-yogurt` now requires PLAIN: every store carries it and the
+premium is trivial (Aldi identical, Sam's +$0.0006), and a recipe calling for
+greek yogurt does not mean strawberry.
+
+After: all 42 recipe-pool cells hold a genuine product for their commodity.
+
+NOT fixed: the structural gap. Closing it means assigning categories to 29
+recipe ids so the class library can reach them, and a wrong category applies the
+wrong guards - that is a registration decision, not a cleanup.
+
+## 24. Chasing the recipe board found TWO live staples defects — DONE
+
+Both were on the main published board, neither was reported by any guard.
+
+**`ground-cinnamon` was crowned by a breakfast cereal.** Aldi's cell held
+"Millville Cinnamon Crunch Squares" at $0.1497/oz and it was the CHEAPEST ground
+cinnamon in Omaha. The include was a bare `\bcinnamon\b`, which also claimed
+Oreos, Eggo waffles, rice cakes, Pop-Tarts and an Air Wick diffuser.
+
+My first fix was too aggressive AND committed the exact bug I have been fixing
+all day: tightening the include to `ground\s+cinnamon` dropped **"Ground Saigon
+Cinnamon"**, because the words are not adjacent. `audit-match-soundness` caught
+it. The shipped rule uses the bounded-gap form
+`ground\s+(?:\w+\s+){0,2}cinnamon` plus carrier excludes, and now claims 73
+products with all seven store cells holding real spice.
+
+**`fresh-ginger` and `cayenne-pepper` both claimed the same pink salt.**
+"VAHDAM Premium Himalayan Pink Salt Rock Salt with Ginger & Cayenne" matched
+every spice named in it. It was not winning on the staples board, but the recipe
+deriver picks the cheapest CANDIDATE without the board's filters, so it won
+there - proposing ginger at $1.392 and cayenne at $0.087 (a 9.6x drop). Both
+rules now exclude rock salt.
+
+That last one is worth stating on its own: **`derive-recipe-floors` picks from
+the candidates file, which contains rows the board itself does not publish.**
+Whatever filters a bad candidate out of the staples board does not run for the
+recipe board.
+
+## 25. Aldi cabbage is published at 3x the real price — DIAGNOSED, not fixed
+
+The live board shows `cabbage` at Aldi for **$2.37/lb** against $0.69-$0.99 at
+every other store. It sits under `audit-unit-basis-outlier`'s 4x threshold
+(2.7x of median) so nothing flags it.
+
+Aldi's own two captures settle what it should be:
+
+    2026-08-05   "Cabbage Per LB"    $0.79   size "lb"       -> $0.79/lb
+    2026-08-15   "Cabbage, Per LB"   $2.37   size "3.0 lb"   -> published $2.37/lb
+
+The August 15 row is the same cabbage with the capture stating a 3 lb head and
+its total price. $2.37 / 3.0 lb = $0.79/lb - the store's own earlier number.
+The engine is treating the price as already per-pound because the NAME says
+"Per LB", and ignoring the explicit size beside it.
+
+`pu-lib.ps1`'s own Qty() handles "3.0 lb" correctly, so the board is not taking
+that path for this row. Not fixed here: per-unit math in the core engine is not
+something to change in the tail of a long session, and this needs its own pass
+with its own must-fire fixture.
+
+CONSEQUENCE FOR THE RECIPE BOARD: `derive-recipe-floors` was NOT applied. Its
+proposal would carry this $2.37 onto the recipe board too (green-cabbage 0.79 ->
+2.37). The recipe rule fixes above are shipped; the floor refresh waits for the
+cabbage basis fix.
