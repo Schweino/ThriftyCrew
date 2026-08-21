@@ -2752,6 +2752,51 @@
                         "ruled_on":  "2026-08-20",
                         "ruled_by":  "contested-review-2026-08-20",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "five-spice-powder|Walmart|bettergoods-seasoning-mix-for-five-spice-lettuce",
+                        "commodity":  "five-spice-powder",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "bettergoods Seasoning Mix for Five Spice Lettuce Wraps, 1 oz"
+                                  ],
+                        "product_id":  "19660756347",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A seasoning mix FOR A DISH (five-spice lettuce wraps), not five-spice powder the spice. Priced the walmart cell at $1.43/oz against the real $4.75/oz, 70% under. Same class as the Simply Asia stir-fry sauce already ruled wrong for this commodity.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-21",
+                        "ruled_by":  "lower-cell-review-2026-08-21",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pistachios|FamilyFare|4-ct-pistachio-muffins",
+                        "commodity":  "pistachios",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "4 Ct Pistachio Muffins"
+                                  ],
+                        "product_id":  "1564405684713023252",
+                        "verdict":  "wrong-product",
+                        "evidence":  "MUFFINS flavoured with pistachio, not pistachio nuts. A bakery item cannot price the nut row; 20% under the real Planters price.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-21",
+                        "ruled_by":  "lower-cell-review-2026-08-21",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "toasted-sesame-seeds|SamsClub|members-mark-black-sesame-seed-22-oz",
+                        "commodity":  "toasted-sesame-seeds",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Member\u0027s Mark Black Sesame Seed, 22 oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "BLACK sesame seed, raw, in a 22 oz bulk jar. The commodity names TOASTED sesame seeds; black and toasted are different products with different uses and prices.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-21",
+                        "ruled_by":  "lower-cell-review-2026-08-21",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
