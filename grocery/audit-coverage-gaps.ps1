@@ -169,6 +169,38 @@ foreach ($glob in @('bakers\bakers-deals-*.json','sams\sams-deals-*.json','farew
 $allow = @{}
 $allowF = if ($AllowFile) { $AllowFile } else { Join-Path $root 'coverage-gap-allowlist.json' }
 if (Test-Path $allowF) { try { foreach ($a in (Get-Content $allowF -Raw | ConvertFrom-Json).allow) { $allow[([string]$a.commodity + '|' + [string]$a.store)] = $true } } catch {} }
+# NOT-CARRIED: the OTHER reason a cell is legitimately missing. The allowlist above says "the store sells
+# it and we cannot price it like-for-like"; not-carried.json says "the store does not sell it", derived
+# from the store's own capture evidence (see derive-not-carried.ps1). Both explain a gap; conflating them
+# would let a measurement failure hide inside a fact about a shelf, so they stay in separate files.
+#
+# EXPIRY IS ENFORCED HERE, not in the file. An entry older than recheck_days stops explaining anything and
+# the gap goes back to being reported - because a store that BEGINS stocking an item is exactly the event
+# this audit exists to notice, and a permanent marker would bury it. Silence must be re-earned each quarter.
+$ncStale = 0; $ncFresh = 0; $ncDeclaredStale = 0
+$ncF = Join-Path $root 'not-carried.json'
+if (Test-Path $ncF) {
+  try {
+    $ncDoc = Get-Content $ncF -Raw | ConvertFrom-Json
+    $ncDays = if ($ncDoc.PSObject.Properties.Name -contains 'recheck_days') { [int]$ncDoc.recheck_days } else { 90 }
+    $now = Get-Date
+    foreach ($e in @(@($ncDoc.entries) | Where-Object { $_ })) {
+      $age = $null
+      try { $age = ($now - [datetime][string]$e.checked).TotalDays } catch { }
+      if ($null -ne $age -and $age -le $ncDays) {
+        $allow[([string]$e.commodity + '|' + [string]$e.store)] = $true
+        $ncFresh++
+      } else {
+        $ncStale++
+        if ([string]$e.basis -ne 'derived') { $ncDeclaredStale++ }
+      }
+    }
+  } catch { }
+}
+if ($ncFresh -or $ncStale) {
+  Write-Output ("not-carried: {0} entr(y/ies) explain a gap; {1} EXPIRED past {2} days and are being reported again{3}" -f `
+    $ncFresh, $ncStale, $ncDays, $(if ($ncDeclaredStale) { " ($ncDeclaredStale of them hand-declared, so nothing will re-observe them - recheck or drop them)" } else { '' }))
+}
 
 # ---- which stores are already on the board per commodity ----
 if (-not $CompareFile) { $CompareFile = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName }

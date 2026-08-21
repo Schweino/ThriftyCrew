@@ -1,50 +1,274 @@
 ﻿{
-    "readme":  "Commodity x store cells confirmed (by manual verification) that the store genuinely does not carry a comparable product. build-deals-page.ps1 renders these as a \u0027Does not carry\u0027 cell with a \u0027See it? Let us know!\u0027 link to /suggest-an-item/. Keyed list of {id, store}.",
-    "cells":  [
-                  {
-                      "id":  "frozen-green-peas",
-                      "store":  "Sam\u0027s Club",
-                      "note":  "Sam\u0027s stocks frozen broccoli/corn/green beans/mixes but no plain frozen peas (checked 2026-07-12)"
-                  },
-                  {
-                      "id":  "laundry-detergent",
-                      "store":  "Sam\u0027s Club",
-                      "note":  "No A\u0026H laundry detergent at the Omaha club - only Gain/Tide/Persil/Era/Member\u0027s Mark; A\u0026H hits are baking soda only (checked 2026-07-12)"
-                  },
-                  {
-                      "id":  "laundry-detergent",
-                      "store":  "Aldi",
-                      "note":  "Aldi catalog: No results for arm hammer detergent - Tandil private label + Tide/Gain only (checked 2026-07-12)"
-                  },
-                  {
-                      "id":  "whole-chicken",
-                      "store":  "Sam\u0027s Club",
-                      "note":  "Sam\u0027s: only organic + hot rotisserie, no plain fresh whole chicken (agent-verified 2026-07-12)"
-                  },
-                  {
-                      "id":  "broccoli",
-                      "store":  "Sam\u0027s Club",
-                      "note":  "Sam\u0027s: organic/steamable only, no plain fresh broccoli (2026-07-12)"
-                  },
-                  {
-                      "id":  "celery",
-                      "store":  "Sam\u0027s Club",
-                      "note":  "Sam\u0027s: organic sticks only (2026-07-12)"
-                  },
-                  {
-                      "id":  "spinach",
-                      "store":  "Sam\u0027s Club",
-                      "note":  "Sam\u0027s: organic only (2026-07-12)"
-                  },
-                  {
-                      "id":  "frozen-vegetables",
-                      "store":  "Sam\u0027s Club",
-                      "note":  "Sam\u0027s: no plain frozen mixed-vegetable product (2026-07-12)"
-                  },
-                  {
-                      "id":  "bleach",
-                      "store":  "Sam\u0027s Club",
-                      "note":  "Sam\u0027s: no plain liquid bleach in search results (2026-07-12)"
-                  }
-              ]
+    "readme":  "DOES THIS STORE STOCK THIS ITEM AT ALL? One row per (commodity, store) where the answer is no. This is NOT coverage-gap-allowlist.json, which records the opposite case - the store DOES carry it but it cannot be priced like-for-like (unit mismatch, no count in the capture, wrong-product collision). Keeping them apart matters: an unpriceable item is a measurement problem we own, a not-carried item is a fact about the store, and merging them would let the first hide inside the second.",
+    "why_this_exists":  "Measured 2026-08-21: the board holds 3,020 of a possible 3,766 store cells (80.2%). Of the 746 missing, 108 were allowlisted as unpriceable and 638 had no explanation at all - so nobody could tell an item Aldi has never stocked from an item that silently vanished from a store that sells it. audit-coverage-gaps exists precisely to catch the second, and 638 unexplained rows is where that signal goes to die.",
+    "basis_field":  "EVERY entry states how it is known, and the two are never allowed to look alike. \u0027derived\u0027 means the store\u0027s own capture recorded the search and what came back - the machine observed it. \u0027declared\u0027 means a human asserted it. A declared entry is worth having and is not worth trusting as far as an observation; the audit reports the split so the ratio is always visible.",
+    "expiry":  "Entries EXPIRE. A store not stocking an item today says nothing about next quarter, and a permanent marker would hide the exact event the gap detector was built to catch - a store beginning, or ceasing, to sell something. recheck_days follows capture-policy.ps1\u0027s QuarterDays (90), the same clock the rotation already runs on. Past that an entry is UNVERIFIED, not false: it stops explaining the gap and starts asking to be re-observed.",
+    "how_to_grow_the_derived_share":  "Today only Baker\u0027s records per-term capture outcomes keyed by commodity id, so only Baker\u0027s rows can be derived. Family Fare records terms but under the budget rotation almost every outcome is not_attempted; Hy-Vee records product ids rather than commodity terms; Aldi, Walmart, Sam\u0027s Club and Fareway record nothing at all. The unlock is capture-side, not list-side: have each puller write {term_key, outcome, row_count} the way bakers-regular already does, and this file maintains itself for every store instead of accumulating hand-written assertions.",
+    "recheck_days":  90,
+    "entries":  [
+                    {
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u002793 lean ground beef\u0027: the store returned 2 row(s) and none matched this commodity",
+                        "outcome":  "success",
+                        "row_count":  2,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "achiote-paste",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027achiote paste\u0027: the store\u0027s own search returned no rows at all. A poor search term looks identical from here - overturn this entry rather than the term if the store does stock it",
+                        "outcome":  "empty",
+                        "row_count":  0,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "berbere-seasoning",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027berbere seasoning\u0027: the store\u0027s own search returned no rows at all. A poor search term looks identical from here - overturn this entry rather than the term if the store does stock it",
+                        "outcome":  "empty",
+                        "row_count":  0,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "caraway-seeds",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027caraway seed\u0027: the store\u0027s own search returned no rows at all. A poor search term looks identical from here - overturn this entry rather than the term if the store does stock it",
+                        "outcome":  "empty",
+                        "row_count":  0,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "five-spice-powder",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027five spice powder\u0027: the store\u0027s own search returned no rows at all. A poor search term looks identical from here - overturn this entry rather than the term if the store does stock it",
+                        "outcome":  "empty",
+                        "row_count":  0,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "cooked-jasmine-rice",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027cooked jasmine rice\u0027: the store\u0027s own search returned no rows at all. A poor search term looks identical from here - overturn this entry rather than the term if the store does stock it",
+                        "outcome":  "empty",
+                        "row_count":  0,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "dried-ancho-chiles",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027ancho chiles\u0027: the store returned 1 row(s) and none matched this commodity",
+                        "outcome":  "success",
+                        "row_count":  1,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "dried-arbol-chiles",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027chile de arbol\u0027: the store\u0027s own search returned no rows at all. A poor search term looks identical from here - overturn this entry rather than the term if the store does stock it",
+                        "outcome":  "empty",
+                        "row_count":  0,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "fresh-parsley",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027fresh parsley bunch\u0027: the store\u0027s own search returned no rows at all. A poor search term looks identical from here - overturn this entry rather than the term if the store does stock it",
+                        "outcome":  "empty",
+                        "row_count":  0,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "fresh-rosemary",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027fresh rosemary\u0027: the store returned 2 row(s) and none matched this commodity",
+                        "outcome":  "success",
+                        "row_count":  2,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "fresh-sweet-italian-turkey-sausage",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027sweet Italian turkey sausage\u0027: the store\u0027s own search returned no rows at all. A poor search term looks identical from here - overturn this entry rather than the term if the store does stock it",
+                        "outcome":  "empty",
+                        "row_count":  0,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "fresh-thyme",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027fresh thyme\u0027: the store returned 4 row(s) and none matched this commodity",
+                        "outcome":  "success",
+                        "row_count":  4,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "gelatin",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027gelatin cups\u0027: the store returned 25 row(s) and none matched this commodity",
+                        "outcome":  "success",
+                        "row_count":  25,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "green-chilli",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027fresh green chilli\u0027: the store\u0027s own search returned no rows at all. A poor search term looks identical from here - overturn this entry rather than the term if the store does stock it",
+                        "outcome":  "empty",
+                        "row_count":  0,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "harissa-paste",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027harissa\u0027: the store\u0027s own search returned no rows at all. A poor search term looks identical from here - overturn this entry rather than the term if the store does stock it",
+                        "outcome":  "empty",
+                        "row_count":  0,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "jicama",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027jicama\u0027: the store returned 25 row(s) and none matched this commodity",
+                        "outcome":  "success",
+                        "row_count":  25,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "lasagna-noodles",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027lasagna noodles\u0027: the store returned 3 row(s) and none matched this commodity",
+                        "outcome":  "success",
+                        "row_count":  3,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "onion-soup-mix",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027onion soup mix\u0027: the store returned 6 row(s) and none matched this commodity",
+                        "outcome":  "success",
+                        "row_count":  6,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "pesto",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027basil pesto\u0027: the store returned 10 row(s) and none matched this commodity",
+                        "outcome":  "success",
+                        "row_count":  10,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "pomegranate-molasses",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027pomegranate molasses\u0027: the store\u0027s own search returned no rows at all. A poor search term looks identical from here - overturn this entry rather than the term if the store does stock it",
+                        "outcome":  "empty",
+                        "row_count":  0,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027pork tenderloin whole boneless\u0027: the store\u0027s own search returned no rows at all. A poor search term looks identical from here - overturn this entry rather than the term if the store does stock it",
+                        "outcome":  "empty",
+                        "row_count":  0,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "portobello-mushrooms",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027portobello mushrooms\u0027: the store returned 2 row(s) and none matched this commodity",
+                        "outcome":  "success",
+                        "row_count":  2,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "snow-peas",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027snow peas\u0027: the store returned 4 row(s) and none matched this commodity",
+                        "outcome":  "success",
+                        "row_count":  4,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    },
+                    {
+                        "commodity":  "wild-rice",
+                        "store":  "Baker\u0027s",
+                        "basis":  "derived",
+                        "verdict":  "not-carried",
+                        "evidence":  "searched \u0027wild rice\u0027: the store returned 16 row(s) and none matched this commodity",
+                        "outcome":  "success",
+                        "row_count":  16,
+                        "source":  "bakers-regular-2026-08-21.json",
+                        "checked":  "2026-08-21"
+                    }
+                ]
 }
