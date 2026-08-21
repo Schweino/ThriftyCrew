@@ -2482,6 +2482,36 @@
                         "ruled_on":  "2026-08-20",
                         "ruled_by":  "graph-lower-review-2026-08-20",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "fresh-basil|FamilyFare|sugar-n-spice-whole-basil",
+                        "commodity":  "fresh-basil",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Sugar \u0027N Spice Whole Basil"
+                                  ],
+                        "product_id":  "5920129",
+                        "verdict":  "wrong-product",
+                        "evidence":  "DRIED basil in a spice jar, not the fresh herb. Sugar \u0027N Spice is a dried-spice line - its other listings in this corpus are Bay Leaves, Whole Cloves, Fennel Seed, Black Peppercorns, Cumin Ground and Garlic Powder. The commodity is Basil (FRESH), category Vegetables, whose siblings are Gotham Greens and Local Roots living-herb clamshells. Dried costs a fraction per oz of fresh, so this understates the cell; 20 live rows.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "escalation-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "fresh-dill|FamilyFare|dans-dill-weed",
+                        "commodity":  "fresh-dill",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Dan\u0027s Dill Weed"
+                                  ],
+                        "product_id":  "5782328",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Dill weed is the dried-spice form; this is a spice-aisle jar, not the fresh herb the commodity names (siblings: Local Roots Organic Dill, Fresh Dill 0.5 oz Clamshell). Same defect class as the Sugar N Spice dried basil ruled in this batch.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "escalation-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
