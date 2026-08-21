@@ -418,3 +418,39 @@ the estate's own stated exchange rate, "a wrong link is strictly worse than no
 link". Those tiles now show a price with no link, which is honest.
 
 guards hard=0 warn=16, published.
+
+## 18. I was wrong about Hy-Vee: nothing needs pulling — CORRECTED
+
+I reported `pull-regular-hyvee` at "356 of 539, three days past its max age -
+needs a Hy-Vee pull". Brad asked whether that was accurate given the new age
+rules. It was not, on both counts.
+
+**The row is not stale, it is obsolete.** It was written 2026-08-18. The Hy-Vee
+capture budget landed 2026-08-20. It describes a regime that no longer exists.
+
+**The metric no longer measures what its name says.** `capture-policy.ps1` gives
+Hy-Vee a budget of **7 products per run**, rotated by a cursor so the tail is not
+starved, against a 90-day quarter. `$refreshable` is computed AFTER that trim
+(`pull-regular-hyvee.ps1:266`), so eligible and examined both collapse to the
+daily slice by design. Ratcheting that against a 1,010 baseline taken when the
+lane swept everything daily guarantees a permanent false alarm.
+
+**The rotation is healthy, which is the question that actually matters.**
+Measured on the newest Hy-Vee capture: oldest row **38 days**, median 11, newest
+3, and **zero rows past 60 days** against a 90-day carry. Nothing is aging out.
+
+Two things fall out of this:
+
+The ratchet fix from #16 already handles the new shape. A future run recording
+7 of 7 is FULL coverage of that day's work, so it reports POPULATION SHRANK
+rather than REGRESSED. That was written for the pin guards and turns out to be
+the same defect class - which is the point: **ratchet against the policy, not
+against a high-water mark taken under a different regime.**
+
+And guard 9's 14-day rule is NOT in conflict with `MaxCarryDays = 90`, though it
+looks like it. Guard 9 measures FILE age - "did the puller stop running" - and a
+daily partial rewrites the file whether it refreshed 7 rows or 700. MaxCarryDays
+measures ROW age. Different clocks, both valid. Worth writing down because the
+two numbers sitting 76 days apart invite exactly the wrong conclusion.
+
+The baseline entry now carries this history so the next person does not re-chase it.
