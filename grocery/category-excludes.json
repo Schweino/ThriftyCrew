@@ -207,6 +207,20 @@
       "\\bbowl\\b",
       "frozen\\s+meal",
       "meal\\s+kit"
+    ],
+    "alcohol": [
+      "\\bliqueurs?\\b",
+      "\\bliquor\\b",
+      "\\bvodka\\b",
+      "\\bwhiskey\\b",
+      "\\bbourbon\\b",
+      "\\btequila\\b",
+      "\\bschnapps\\b",
+      "\\brum\\b"
+    ],
+    "imitation_carrier": [
+      "\\bimitation\\b",
+      "\\bartificially\\s+flavou?red\\b"
     ]
   },
   "apply": [
@@ -222,7 +236,8 @@
         "candy",
         "snack_carrier",
         "supplement",
-        "preserve_carrier"
+        "preserve_carrier",
+        "alcohol"
       ]
     },
     {
@@ -234,7 +249,8 @@
         "household",
         "supplement",
         "snack_carrier",
-        "prepared_meal_carrier"
+        "prepared_meal_carrier",
+        "alcohol"
       ]
     },
     {
@@ -243,7 +259,9 @@
         "babyfood",
         "pet",
         "household",
-        "supplement"
+        "supplement",
+        "alcohol",
+        "imitation_carrier"
       ]
     },
     {
@@ -266,7 +284,9 @@
     "supplement": "",
     "preserve_carrier": "peanut\\s+butter|almond\\s+butter|apple\\s+butter|honey|maple\\s+syrup|cranberry\\s+sauce|\\bjam\\b\\s*$|jelly\\s+beans",
     "dried_carrier": "sun[\\s-]?dried",
-    "prepared_meal_carrier": ""
+    "prepared_meal_carrier": "",
+    "alcohol": "wine|beer|brandy|liquor|liqueur|cooking\\s+wine|mirin|vodka|whiskey|rum",
+    "imitation_carrier": ""
   },
   "universal_for_unknown": [
     "babyfood",
