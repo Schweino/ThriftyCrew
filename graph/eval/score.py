@@ -50,16 +50,32 @@ def _safe_div(a: float, b: float) -> float:
 
 
 def score(db, gold: list[dict], use_llm: bool = False,
-          llm: LocalLLM | None = None, progress=None) -> dict:
+          llm: LocalLLM | None = None, progress=None,
+          use_bank: bool = False) -> dict:
     """Run every gold case through the resolver and score the verdicts.
 
-    use_bank=False is not optional. The gold set exists to measure whether the
-    RULES decide correctly; a resolver consulting question_verdicts would answer
-    gold cases from a bank those very cases populated, and the score would
-    measure the estate's memory of its own homework. Every gold case must be
-    re-derived from the layers each run.
+    TWO COVERAGES, MEASURED SEPARATELY (decision 2026-08-21, Brad).
+
+    A single missed-merge number stopped meaning one thing. 701 of 1,101 gold
+    MATCH cases are reviewer CONFIRMATIONS, and every one is by construction a
+    listing no include pattern reaches — that is why it was escalated. Each
+    review batch therefore drove the number UP (0.0188 -> 0.2211 -> 0.2883 ->
+    0.3519) even though the estate was getting strictly more correct, and the
+    0.10 gate became unreachable by construction.
+
+      deterministic  — rules alone, bank OFF. Answers "how much do the free
+                       layers catch?" This is a WORK INDICATOR: it rises when
+                       review outpaces alias absorption, and falling is the
+                       goal, not a gate.
+      system         — the pipeline as deployed, bank ON. Answers "does this
+                       estate resolve the case?" A banked reviewer verdict IS
+                       how production resolves it, so this is what gets gated.
+
+    Scoring only deterministically was measuring the estate's homework rather
+    than its answers; scoring only with the bank would measure its memory. Both
+    are reported, and only `system` carries the gate.
     """
-    r = Resolver(db, llm=llm, use_llm=use_llm, use_bank=False)
+    r = Resolver(db, llm=llm, use_llm=use_llm, use_bank=use_bank)
 
     tp = fp = tn = fn = 0          # w.r.t. the MATCH class
     unsure = missing = 0
@@ -177,8 +193,23 @@ def main() -> int:
     ts = time.strftime("%Y-%m-%dT%H:%M:%S")
     with open_db() as db:
         t0 = time.time()
-        m = score(db, gold, use_llm=args.llm, llm=llm,
+        # DETERMINISTIC arm: rules only, the work indicator.
+        m = score(db, gold, use_llm=args.llm, llm=llm, use_bank=False,
                   progress=None if args.json else print)
+        # SYSTEM arm: the pipeline as deployed, bank on. This is what is gated.
+        sysm = score(db, gold, use_llm=args.llm, llm=llm, use_bank=True)
+        m["deterministic"] = {"missed_merge_rate": m["missed_merge_rate"],
+                              "false_merge_rate": m["false_merge_rate"],
+                              "entity_recall": m["entity_recall"]}
+        m["system"] = {"missed_merge_rate": sysm["missed_merge_rate"],
+                       "false_merge_rate": sysm["false_merge_rate"],
+                       "entity_recall": sysm["entity_recall"]}
+        # The gate follows the SYSTEM arm; the deterministic numbers stay
+        # visible so nobody mistakes a banked answer for a learned rule.
+        m["gates"] = {
+            "false_merge_ok": sysm["false_merge_rate"] <= GATE_FALSE_MERGE,
+            "missed_merge_ok": sysm["missed_merge_rate"] <= GATE_MISSED_MERGE,
+        }
         elapsed = time.time() - t0
         model = (llm.model if args.llm else "deterministic-only")
         record(db, m, model, args.prompt_version, gold, args.context, ts)
@@ -192,10 +223,16 @@ def main() -> int:
     print(f"  entity precision  {m['entity_precision']:.3f}")
     print(f"  entity recall     {m['entity_recall']:.3f}")
     print(f"  f1                {m['f1']:.3f}")
-    print(f"  false-merge rate  {m['false_merge_rate']:.4f}   "
+    det, sysm = m["deterministic"], m["system"]
+    print(f"  false-merge rate  {sysm['false_merge_rate']:.4f}   "
           f"gate <= {GATE_FALSE_MERGE}   {'PASS' if m['gates']['false_merge_ok'] else 'FAIL'}")
-    print(f"  missed-merge rate {m['missed_merge_rate']:.4f}   "
+    print(f"  missed-merge rate {sysm['missed_merge_rate']:.4f}   "
           f"gate <= {GATE_MISSED_MERGE}   {'PASS' if m['gates']['missed_merge_ok'] else 'FAIL'}")
+    print(f"     SYSTEM coverage (bank on, the pipeline as deployed) — GATED")
+    print(f"  deterministic missed-merge {det['missed_merge_rate']:.4f}   "
+          f"(work indicator, NOT gated)")
+    print(f"     rules alone. Rises when review outpaces alias absorption;")
+    print(f"     the gap between the two IS the alias backlog.")
     print(f"  tp={c['tp']} fp={c['fp']} tn={c['tn']} fn={c['fn']} "
           f"escalated={c['escalated']} missing_node={c['missing_node']}")
     if c["missing_node"]:

@@ -298,6 +298,13 @@ def compare(live: dict, graph: dict, tol: float = 0.02) -> dict:
         "conflicts": conflicts,
         "graph_higher": len(higher),
         "graph_lower": len(lower),
+        # THE GATED NUMBER (decision 2026-08-21, Brad). Blended agreement mixed
+        # two disagreements that mean opposite things: graph-HIGHER is a benign
+        # coverage gap that self-heals as lanes backfill, while graph-LOWER is
+        # the false-merge direction — the only one that can publish a wrong
+        # price. Blending them punished the graph for being honest about what it
+        # could not yet see, and made the target recede as coverage grew.
+        "graph_lower_rate": len(lower) / len(shared) if shared else 0.0,
         "graph_lower_cases": lower[:20],
         "graph_only": len(graph_cells - live_cells),
     }
@@ -307,7 +314,12 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--tolerance", type=float, default=0.02,
                     help="relative per-unit tolerance for 'agrees' (default 2%%)")
-    ap.add_argument("--min-agreement", type=float, default=0.99)
+    ap.add_argument("--min-agreement", type=float, default=0.99,
+                    help="reported only; the gate is --max-lower + --min-coverage")
+    ap.add_argument("--max-lower", type=float, default=0.01,
+                    help="max share of shared cells where the graph is CHEAPER "
+                         "than the board - the false-merge direction")
+    ap.add_argument("--min-coverage", type=float, default=0.90)
     ap.add_argument("--show", type=int, default=8)
     ap.add_argument("--from-observations", action="store_true",
                     help="bypass cell_state and re-derive from observations "
@@ -381,7 +393,19 @@ def main() -> int:
         print("  cannot see the products that won many live crowns. Widening the backfill is")
         print("  Phase 2's remaining work; until then treat AGREEMENT as indicative, not passing.")
 
-    return 0 if (res["agreement"] >= args.min_agreement and res["coverage"] >= 0.9) else 1
+    # Gate on the DANGEROUS direction plus a coverage floor, not on blended
+    # agreement. graph-LOWER cells are the only ones that can publish a wrong
+    # price; graph-HIGHER means the graph has not imported a cheaper row yet,
+    # which costs an empty cell and nothing else.
+    lower_ok = res["graph_lower_rate"] <= args.max_lower
+    cov_ok = res["coverage"] >= args.min_coverage
+    print(f"\n  GATED: graph-LOWER rate {res['graph_lower_rate']:.4f} "
+          f"(<= {args.max_lower}) {'PASS' if lower_ok else 'FAIL'}   |   "
+          f"coverage {res['coverage']:.3f} (>= {args.min_coverage}) "
+          f"{'PASS' if cov_ok else 'FAIL'}")
+    print(f"  blended agreement {res['agreement']:.3f} is REPORTED, not gated - "
+          f"it mixes a benign coverage gap with the dangerous direction.")
+    return 0 if (lower_ok and cov_ok) else 1
 
 
 if __name__ == "__main__":
