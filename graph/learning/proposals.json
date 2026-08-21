@@ -164,7 +164,7 @@
     "payload_json": "{\"payload\": \"(california|sun-dried|seedless)?\\\\s*raisins\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Matches 'California Sun-Dried', 'Seedless', and 'California' raisins. These are commonly sold as golden or standard raisins. Anchors on 'raisins'.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "golden-raisins"
   },
   {
@@ -224,7 +224,7 @@
     "payload_json": "{\"payload\": \"(frozen\\\\s+)?(chopped\\\\s+)?spinach\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Matches 'Simply Nature Organic Spinach'. While 'chopped' is not explicit in the listing, frozen spinach is typically chopped. The pattern is broad enough to catch standard frozen spinach but anchored on 'spinach'.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "frozen-chopped-spinach"
   },
   {
@@ -464,7 +464,7 @@
     "payload_json": "{\"payload\": \"chicken\\\\s+thighs?,?\\\\s+boneless\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Matches 'Chicken Thighs, Boneless'. Anchors on 'chicken thighs' and 'boneless' to ensure it's the correct cut and preparation.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "boneless-skinless-chicken-thigh"
   },
   {
@@ -536,7 +536,7 @@
     "payload_json": "{\"payload\": \"pineapple,?\\\\s+tidbits\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Matches 'Pineapple Tidbits'. Tidbits are a form of chunks/pieces. Anchors on 'pineapple' and 'tidbits'.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "pineapple-chunks"
   },
   {
@@ -992,7 +992,7 @@
     "payload_json": "{\"payload\": \"bacon,?\\\\s+hickory\\\\s+smoked\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Matches 'Bacon, Hickory Smoked'. Anchors on 'bacon' and 'hickory smoked'.",
-    "status": "proposed",
+    "status": "applied",
     "target_id": "hickory-smoked-bacon"
   },
   {
@@ -1244,7 +1244,7 @@
     "payload_json": "{\"payload\": \"greek\\\\s+(plain|nonfat)?\\\\s*yogurt\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Matches 'Greek Plain Nonfat Yogurt'. Anchors on 'greek' and 'yogurt'.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "greek-yogurt"
   },
   {
@@ -1316,7 +1316,7 @@
     "payload_json": "{\"payload\": \"red\\\\s+(bell\\\\s+)?peppers?\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Matches 'Red Pepper'. Anchors on 'red' and 'pepper'.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "red-bell-pepper"
   },
   {
@@ -1328,7 +1328,7 @@
     "payload_json": "{\"payload\": \"93%?/7%?\\\\s+ground\\\\s+turkey\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Matches the specific lean/fat ratio and product type. Anchors on 'ground turkey' to avoid matching other meats.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "ground-turkey-93-7"
   },
   {
@@ -1484,7 +1484,7 @@
     "payload_json": "{\"payload\": \"sour\\\\s+cream,?\\\\s+light\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Matches 'Sour Cream, Light'. Anchors on 'sour cream' and 'light'.",
-    "status": "proposed",
+    "status": "held_for_human",
     "target_id": "light-sour-cream"
   },
   {
@@ -1604,7 +1604,7 @@
     "payload_json": "{\"payload\": \"chick\\\\s+caesar\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Tay Farm Chick Caesar is a specific brand of Caesar salad kit. The pattern anchors on the product name 'Chick Caesar' which is distinct enough to avoid matching generic chicken or other salads.",
-    "status": "proposed",
+    "status": "rejected",
     "target_id": "caesar-salad-kit"
   },
   {
@@ -1760,7 +1760,7 @@
     "payload_json": "{\"payload\": \"(honey\\\\s+dijon|dijon\\\\s+honey|mustard,?\\\\s+honey)\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Matches 'Mustard, Honey'. Note: 'Burman's Dijon Mustard' is likely a different product (plain Dijon), so this alias targets the honey variant specifically.",
-    "status": "proposed",
+    "status": "held_for_human",
     "target_id": "honey-dijon-mustard"
   },
   {
@@ -1892,7 +1892,7 @@
     "payload_json": "{\"payload\": \"(shredded|finely\\\\s+shredded)\\\\s+(sharp|mild|triple)?\\\\s*cheddar\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Matches various shredded cheddar cheeses (Sharp, Mild, Triple). Anchors on 'shredded' and 'cheddar' to exclude block cheese or other types.",
-    "status": "proposed",
+    "status": "held_for_human",
     "target_id": "cheddar-cheese-shredded"
   },
   {

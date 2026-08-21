@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T18:29:20",
+  "generated_at": "2026-08-20T23:46:28",
   "reviewer": "claude-fable-medium",
   "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin. For add_alias, READ blast_radius first: kill=true is an automatic reject (the pattern re-litigates an adjudicated ruling or resurrects a rejection, and include runs before the model). Any cross_commodity hit needs a written reason why the collision is benign, or a `modify` payload that tightens the pattern. absorbs_review + intended_capture are what the alias BUYS; a proposal with none of either is noise.",
   "gates": {
@@ -9,367 +9,17 @@
   },
   "proposals": [
     {
-      "proposal_id": "lp:1c67ca858057b40e2ba0",
+      "proposal_id": "lp:be2ae1f5a35e3b51475d",
       "kind": "add_alias",
-      "target": "commodity:staple:sliced-cheese",
-      "target_label": "Sliced Cheese",
-      "payload": "\\bsingles\\b.{0,40}cheese",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: widen: brand+attribute words sit between 'Singles' and 'Cheese'",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 3,
-          "already_matched": 11,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "already_matched": [
-            {
-              "product": "Great Value Individually Plastic Wrapped Singles American Cheese Product, 12 oz, 16 Slices",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Individually Plastic Wrapped Singles American Cheese Product, 16 oz, 24 Slices",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Individually Plastic Wrapped Singles American Cheese Product, 24 oz, 32 Slices",
-              "rows": 2
-            },
-            {
-              "product": "Great Value Individually Plastic Wrapped Singles White American Cheese Product, 12 oz, 16 ",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Individually Plastic Wrapped Singles White American Cheese Product, 16 oz, 24 ",
-              "rows": 1
-            },
-            {
-              "product": "Hy-Vee Singles American Cheese 24Ct",
-              "rows": 1
-            },
-            {
-              "product": "Kraft Singles 2% Pasteurized Prepared Cheese Product American Slices, 22 Count Pack",
-              "rows": 1
-            },
-            {
-              "product": "Kraft Singles American Cheese Slices 3 lbs., 72 ct.",
-              "rows": 1
-            },
-            {
-              "product": "Kroger Singles American Sliced Cheese BIG DEAL!",
-              "rows": 1
-            },
-            {
-              "product": "Our Family Singles American Cheese Slices 16 Ea",
-              "rows": 22
-            },
-            {
-              "product": "Our Family Singles American Cheese Slices 24 Ea",
-              "rows": 22
-            }
-          ],
-          "absorbs_review": [
-            {
-              "product": "Great Value Individually Plastic Wrapped Singles Reduced Fat American Cheese Product, 16 o",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Singles American Pasteurized Process Cheese Product, Fat-Free, 16 count, 12 oz",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Singles, American Pasteurized Prepared Cheese Product, 48 oz, 72 Count",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:1b6b86ac2d9313406147",
-      "kind": "add_alias",
-      "target": "commodity:staple:sliced-cheese",
-      "target_label": "Sliced Cheese",
-      "payload": "\\bkraft\\b.{0,12}singles\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: Kraft Singles titles that never say 'cheese'",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 1,
-          "already_matched": 8,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Kraft 2% Singles, 16 Oz., 24 Count",
-              "rows": 1
-            }
-          ],
-          "already_matched": [
-            {
-              "product": "Kraft Singles 2% Pasteurized Prepared Cheese Product American Slices, 22 Count Pack",
-              "rows": 1
-            },
-            {
-              "product": "Kraft Singles American Cheese Slices 3 lbs., 72 ct.",
-              "rows": 1
-            },
-            {
-              "product": "Kraft Singles American Slices Twin Pack, 32 Count Pack",
-              "rows": 1
-            },
-            {
-              "product": "Kraft Singles American Slices, 16 Count Pack",
-              "rows": 1
-            },
-            {
-              "product": "Kraft Singles American Slices, 24 Count Pack",
-              "rows": 1
-            },
-            {
-              "product": "Kraft Singles American Slices, 72 Count Box",
-              "rows": 1
-            },
-            {
-              "product": "Kraft Singles White American Slices, 16 Count Pack",
-              "rows": 1
-            },
-            {
-              "product": "Kraft Singles White American Slices, 24 Count Pack",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:d5f1116494b0673bb6c5",
-      "kind": "add_alias",
-      "target": "commodity:staple:sliced-cheese",
-      "target_label": "Sliced Cheese",
-      "payload": "cheese\\s+product\\b.{0,40}slices?\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: 'Cheese Product ... 16 Slices' (the FDA term for processed slices)",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 3,
-          "already_matched": 6,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Crystal Farms Individually Plastic Wrapped American Cheese Product, 12 oz., 16 Slices, Ref",
-              "rows": 1
-            },
-            {
-              "product": "Crystal Farms Swiss Style Cheese Product, 16 Slices, Refrigerated, Individually Wrapped",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Individually Plastic Wrapped Singles Reduced Fat American Cheese Product, 16 o",
-              "rows": 1
-            }
-          ],
-          "already_matched": [
-            {
-              "product": "Great Value Individually Plastic Wrapped Singles American Cheese Product, 12 oz, 16 Slices",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Individually Plastic Wrapped Singles American Cheese Product, 16 oz, 24 Slices",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Individually Plastic Wrapped Singles American Cheese Product, 24 oz, 32 Slices",
-              "rows": 2
-            },
-            {
-              "product": "Great Value Individually Plastic Wrapped Singles White American Cheese Product, 12 oz, 16 ",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Individually Plastic Wrapped Singles White American Cheese Product, 16 oz, 24 ",
-              "rows": 1
-            },
-            {
-              "product": "Kraft Singles 2% Pasteurized Prepared Cheese Product American Slices, 22 Count Pack",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:2483ad8b20ce01a25236",
-      "kind": "add_alias",
-      "target": "commodity:staple:sliced-cheese",
-      "target_label": "Sliced Cheese",
-      "payload": "velveeta\\s+slices",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: Velveeta's sliced pack",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 1,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Velveeta Slices Original Cheese, 16 Count Pack",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:cca996c511034269c847",
-      "kind": "add_alias",
-      "target": "commodity:staple:sliced-cheese",
-      "target_label": "Sliced Cheese",
-      "payload": "fresh\\s+sliced,\\s*american",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: deli-counter 'Fresh Sliced, American'",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 1,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Fresh Sliced, American White Kretschmar",
-              "rows": 22
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:06f6f01143eccaa50a3b",
-      "kind": "add_alias",
-      "target": "commodity:staple:dog-treats",
-      "target_label": "Dog Treats",
-      "payload": "\\btreats?\\s+for\\s+(?:all\\s+|any\\s+size\\s+)?dogs?\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: 'Treats for Dogs' is the universal suffix",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 5,
-          "absorbs_review": 6,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "intended_capture": [
-            {
-              "product": "Bil-Jac Little Jacs Chicken Liver Flavor Soft Treats for Dogs, 12 oz",
-              "rows": 1
-            },
-            {
-              "product": "Member's Mark Dental Chew Treats for Dogs, 30 ct.",
-              "rows": 1
-            },
-            {
-              "product": "Pedigree Treats For Dogs, Original With Real Chicken, Triple Action, Large (40+ Lb) 26.6 O",
-              "rows": 20
-            },
-            {
-              "product": "Pedigree Triple Action Daily Oral Care Original Chicken Flavor Treats For Dogs 32 Ea",
-              "rows": 2
-            },
-            {
-              "product": "Stewart 3 in 1 Multi Flavor Fun Pack Beef Liver, Chicken Liver & Chicken Breast Freeze Dri",
-              "rows": 1
-            }
-          ],
-          "absorbs_review": [
-            {
-              "product": "Golden Rewards Chicken Flavor Premium Dry Jerky Treats for All Dogs, 16 oz",
-              "rows": 2
-            },
-            {
-              "product": "Golden Rewards Chicken, Duck and Beef Premium Variety Dry Jerky Treats for Dogs, 12 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Golden Rewards Duck Jerky Premium Treats for Dogs, 16 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Golden Rewards Sweet Potato Wrapped with Duck Premium Treats for Dogs, 16 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Ol' Roy Chicken Stick, 0.63 oz, Dry Training Treats for Any Size Dogs, 1 Count",
-              "rows": 1
-            },
-            {
-              "product": "Purina Beneful Baked Delights Snackers with Peanut Butter Flavor Soft Baked Treats for Dog",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:0e290dd43d483e6e5684",
-      "kind": "add_alias",
-      "target": "commodity:staple:dog-treats",
-      "target_label": "Dog Treats",
-      "payload": "rawhide\\s+chews?\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: rawhide chews are the chew-treat class",
+      "target": "caesar-salad-kit",
+      "target_label": null,
+      "payload": "chick\\s+caesar",
+      "stage1_confidence": 0.95,
+      "rationale": "Tay Farm Chick Caesar is a specific brand of Caesar salad kit. The pattern anchors on the product name 'Chick Caesar' which is distinct enough to avoid matching generic chicken or other salads.",
       "blast_radius": {
         "counts": {
           "intended_capture": 1,
-          "absorbs_review": 2,
+          "absorbs_review": 0,
           "already_matched": 0,
           "cross_commodity": 0,
           "known_wrong_hit": 0,
@@ -382,112 +32,25 @@
         "examples": {
           "intended_capture": [
             {
-              "product": "Canine Chews Chicken-Wrapped Rawhide Chews for Dogs, 125 ct.",
-              "rows": 1
-            }
-          ],
-          "absorbs_review": [
-            {
-              "product": "Good 'n' Fun Triple Flavor Kabobs, Rawhide Chews for All Dogs, 12 oz",
-              "rows": 1
-            },
-            {
-              "product": "Good 'n' Fun Triple Flavor Kabobs, Rawhide Chews for All Dogs, 4 oz",
-              "rows": 1
+              "product": "Tay Farm Chick Caesar",
+              "rows": 20
             }
           ]
         }
       }
     },
     {
-      "proposal_id": "lp:ccd94ebd6670d3ddfba8",
+      "proposal_id": "lp:783f69d950c6e2a1d34f",
       "kind": "add_alias",
-      "target": "commodity:staple:turkey-lunchmeat",
-      "target_label": "Turkey (deli / sliced)",
-      "payload": "deli\\s+fresh\\b.{0,35}turkey",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: Oscar Mayer's Deli Fresh line with a flavour word between",
+      "target": "hickory-smoked-bacon",
+      "target_label": null,
+      "payload": "bacon,?\\s+hickory\\s+smoked",
+      "stage1_confidence": 0.95,
+      "rationale": "Matches 'Bacon, Hickory Smoked'. Anchors on 'bacon' and 'hickory smoked'.",
       "blast_radius": {
         "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 6,
-          "already_matched": 6,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Oscar Mayer Deli Fresh Cracked Black Pepper Turkey Breast, 16 oz Family Pack",
-              "rows": 1
-            },
-            {
-              "product": "Oscar Mayer Deli Fresh Honey Smoked Turkey Breast, 16 oz Family Pack",
-              "rows": 1
-            },
-            {
-              "product": "Oscar Mayer Deli Fresh Honey Smoked Turkey Breast, 9 oz Pack",
-              "rows": 1
-            },
-            {
-              "product": "Oscar Mayer Deli Fresh Mesquite Smoked Turkey Breast, 16 oz Family Pack",
-              "rows": 1
-            },
-            {
-              "product": "Oscar Mayer Deli Fresh Mesquite Smoked Turkey Breast, 8 oz Pack",
-              "rows": 1
-            },
-            {
-              "product": "Oscar Mayer Deli Fresh Smoked Turkey Breast, 9 oz Pack",
-              "rows": 1
-            }
-          ],
-          "already_matched": [
-            {
-              "product": "Oscar Mayer Deli Fresh Honey Smoked Turkey Breast Sliced Sandwich Lunch Meat",
-              "rows": 2
-            },
-            {
-              "product": "Oscar Mayer Deli Fresh Oven Roasted Turkey Breast",
-              "rows": 3
-            },
-            {
-              "product": "Oscar Mayer Deli Fresh Oven Roasted Turkey Breast Sliced Sandwich Lunch Meat Family Size",
-              "rows": 2
-            },
-            {
-              "product": "Oscar Mayer Deli Fresh Oven Roasted Turkey Breast, 16 oz Family Pack",
-              "rows": 1
-            },
-            {
-              "product": "Oscar Mayer Deli Fresh Oven Roasted Turkey Breast, 22 oz Mega Pack",
-              "rows": 1
-            },
-            {
-              "product": "Oscar Mayer Deli Fresh Oven Roasted Turkey Breast, 9 oz Pack",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:7579bb0677b31d585839",
-      "kind": "add_alias",
-      "target": "commodity:staple:turkey-lunchmeat",
-      "target_label": "Turkey (deli / sliced)",
-      "payload": "lunch\\s+meat,\\s*[^,]*turkey",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: 'Deli Lunch Meat, <flavour> Turkey Breast'",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 2,
+          "intended_capture": 2,
+          "absorbs_review": 0,
           "already_matched": 1,
           "cross_commodity": 0,
           "known_wrong_hit": 0,
@@ -498,37 +61,294 @@
         "kill_reasons": [],
         "warn_reasons": [],
         "examples": {
+          "intended_capture": [
+            {
+              "product": "Farmland Bacon, Hickory Smoked, Classic Cut 12 Oz",
+              "rows": 2
+            },
+            {
+              "product": "Member's Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.",
+              "rows": 2
+            }
+          ],
           "already_matched": [
             {
-              "product": "Land O' Frost Premium Meat, Sandwich Sliced Fresh Deli Lunch Meat, Oven Roasted Turkey Bre",
+              "product": "Jimmy Dean Premium Bacon Hickory Smoked",
+              "rows": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "proposal_id": "lp:a19c389976ff3b7ff74b",
+      "kind": "add_alias",
+      "target": "ground-turkey-93-7",
+      "target_label": null,
+      "payload": "93%?/7%?\\s+ground\\s+turkey",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches the specific lean/fat ratio and product type. Anchors on 'ground turkey' to avoid matching other meats.",
+      "blast_radius": {
+        "counts": null,
+        "kill": true,
+        "kill_reasons": [
+          "target 'ground-turkey-93-7' is not a commodity node"
+        ],
+        "warn_reasons": [],
+        "examples": {}
+      }
+    },
+    {
+      "proposal_id": "lp:38c8b7f3c781a77355af",
+      "kind": "add_alias",
+      "target": "boneless-skinless-chicken-thigh",
+      "target_label": null,
+      "payload": "chicken\\s+thighs?,?\\s+boneless",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Chicken Thighs, Boneless'. Anchors on 'chicken thighs' and 'boneless' to ensure it's the correct cut and preparation.",
+      "blast_radius": {
+        "counts": {
+          "intended_capture": 0,
+          "absorbs_review": 0,
+          "already_matched": 0,
+          "cross_commodity": 1,
+          "known_wrong_hit": 0,
+          "rejected_hit": 0,
+          "blocked_by_rules": 0
+        },
+        "kill": false,
+        "kill_reasons": [],
+        "warn_reasons": [
+          "matches 1 name(s) already priced under a different commodity — confirm the collision is benign before accepting",
+          "captures nothing new — it settles no unmatched row and absorbs no reviewer confirmation, so it is noise"
+        ],
+        "examples": {
+          "cross_commodity": [
+            {
+              "product": "Chicken Thighs, Boneless Gold N Plump",
+              "rows": 2,
+              "priced_by": [
+                "commodity:staple:chicken-thighs"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "proposal_id": "lp:df3435bdaf93c672deb8",
+      "kind": "add_alias",
+      "target": "cheddar-cheese-shredded",
+      "target_label": null,
+      "payload": "(shredded|finely\\s+shredded)\\s+(sharp|mild|triple)?\\s*cheddar",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches various shredded cheddar cheeses (Sharp, Mild, Triple). Anchors on 'shredded' and 'cheddar' to exclude block cheese or other types.",
+      "blast_radius": {
+        "counts": {
+          "intended_capture": 5,
+          "absorbs_review": 0,
+          "already_matched": 0,
+          "cross_commodity": 0,
+          "known_wrong_hit": 0,
+          "rejected_hit": 0,
+          "blocked_by_rules": 0
+        },
+        "kill": false,
+        "kill_reasons": [],
+        "warn_reasons": [],
+        "examples": {
+          "intended_capture": [
+            {
+              "product": "Happy Farms Shredded Mild Cheddar Cheese",
+              "rows": 1
+            },
+            {
+              "product": "Happy Farms Shredded Sharp Cheddar Cheese",
+              "rows": 1
+            },
+            {
+              "product": "Happy Farms Thick Shredded Triple Cheddar",
+              "rows": 1
+            },
+            {
+              "product": "Hy-Vee Finely Shredded Mild Cheddar Natural Cheese",
+              "rows": 1
+            },
+            {
+              "product": "Tillamook Farmstyle Shredded Triple Cheddar Cheese, 8 oz",
+              "rows": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "proposal_id": "lp:95a2cd3c08798d9f9961",
+      "kind": "add_alias",
+      "target": "greek-yogurt",
+      "target_label": null,
+      "payload": "greek\\s+(plain|nonfat)?\\s*yogurt",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Greek Plain Nonfat Yogurt'. Anchors on 'greek' and 'yogurt'.",
+      "blast_radius": {
+        "counts": {
+          "intended_capture": 0,
+          "absorbs_review": 0,
+          "already_matched": 55,
+          "cross_commodity": 0,
+          "known_wrong_hit": 0,
+          "rejected_hit": 0,
+          "blocked_by_rules": 11
+        },
+        "kill": false,
+        "kill_reasons": [],
+        "warn_reasons": [
+          "captures nothing new — it settles no unmatched row and absorbs no reviewer confirmation, so it is noise"
+        ],
+        "examples": {
+          "already_matched": [
+            {
+              "product": "Chobani 20G Protein Low Fat Greek Yogurt Cups Variety Pack, 6.7 oz., 16 ct.",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Blended Key Lime Low Fat Greek Yogurt 5.3 Oz",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Blueberry On The Bottom Nonfat Greek Yogurt 5.3 Oz",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Flip Low-Fat Greek Yogurt Almond Coco Loco 4.5 oz Cup",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Flip Low-Fat Greek Yogurt Cookies and Cream 4.5 oz Cup",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Flip Low-Fat Greek Yogurt Key Lime Crumble 4.5 oz Cup",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Flip Low-Fat Greek Yogurt Strawberry Cheesecake 4.5 oz Cup",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Flip Low-Fat Greek Yogurt Variety Pack, 4.5 oz., 16 ct.",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Flip Low-Fat Greek Yogurt, Peanut Butter Cup 4.5 oz",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Flip Low-Fat Greek Yogurt, S'more S'mores 4.5 oz",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Flip Low-Fat Greek Yogurt, Salted Caramel Crunch 4.5 oz",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Greek Yogurt",
+              "rows": 4
+            },
+            {
+              "product": "Chobani Low-Fat Greek Yogurt Mango On The Bottom 2% Milk Fat",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Low-Fat Strawberry Banana on the Bottom Greek Yogurt 5.3oz 4ct",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Low-Fat Vanilla Greek Yogurt Mixed Berry On The Bottom, Hero Batch 5.3oz 4PK",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Mango On The Bottom Reduced Fat Greek Yogurt 5.3 Oz",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Non-Fat Greek Yogurt Plain 32 oz Tub",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Non-Fat Peach on the Bottom Greek Yogurt 5.3oz 4ct",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Non-Fat Plain Greek Yogurt 5.3oz",
+              "rows": 1
+            },
+            {
+              "product": "Chobani Nonfat Greek Yogurt Fruit On The Bottom Variety Pack, 5.3 oz., 16 ct.",
               "rows": 1
             }
           ],
-          "absorbs_review": [
+          "blocked_by_rules": [
             {
-              "product": "Land O'Frost Premium Sandwich Sliced Deli Lunch Meat, Hickory Smoked Turkey Breast, 14 oz ",
-              "rows": 1
+              "product": "Chobani 20G Protein Lowfat Greek Yogurt Drink, Variety Pack, 10 fl. oz.,  12 ct.",
+              "blocked_by": "matched exclude pattern '\\bdrink'"
             },
             {
-              "product": "Land O'Frost Premium Sandwich Sliced Deli Lunch Meat, Honey Smoked Turkey Breast, 14 oz Re",
-              "rows": 1
+              "product": "Chobani Flip Low-Fat Greek Yogurt Chocolate Covered Strawberry 4.5 oz Cup",
+              "blocked_by": "matched exclude pattern 'covered'"
+            },
+            {
+              "product": "Chobani Greek Yogurt Drink",
+              "blocked_by": "matched exclude pattern '\\bdrink'"
+            },
+            {
+              "product": "Chobani Lowfat* Greek Yogurt Drink Strawberry Banana 7 fl oz 4PK",
+              "blocked_by": "matched exclude pattern '\\bdrink'"
+            },
+            {
+              "product": "Chobani Zero Added Sugar Greek Yogurt Mango Protein Drink 14 Fl Oz",
+              "blocked_by": "matched exclude pattern '\\bdrink'"
+            },
+            {
+              "product": "Chobani Zero Added Sugar Greek Yogurt Vanilla Ice Cream Protein Drink 14 Fl Oz",
+              "blocked_by": "matched exclude pattern '\\bdrink'"
+            },
+            {
+              "product": "Clio Greek Yogurt Bar, Strawberry & Vanilla, 12 pk.",
+              "blocked_by": "matched exclude pattern '\\bbar\\b'"
+            },
+            {
+              "product": "Light + Fit REMIX Strawberry Cheesecake Nonfat Greek Yogurt with Graham Cookies, Caramel P",
+              "blocked_by": "matched exclude pattern '\\bmix\\b(?!\\s*(?:&|and)\\s*match)'"
+            },
+            {
+              "product": "Ocean Spray Greek Yogurt Covered Craisins, Greek Yogurt Covered Dried Cranberries, Dried F",
+              "blocked_by": "matched exclude pattern 'covered'"
+            },
+            {
+              "product": "Oikos Oikos Triple Zero Lemon Tart Blended Greek Yogurt",
+              "blocked_by": "matched exclude pattern '\\btart\\b'"
+            },
+            {
+              "product": "Yasso Chocolate Chip Cookie Dough Frozen Greek Yogurt 14 Fl Oz",
+              "blocked_by": "matched exclude pattern 'frozen'"
             }
           ]
         }
       }
     },
     {
-      "proposal_id": "lp:c6586cd69c1a526158e6",
+      "proposal_id": "lp:b64671ccf11a8abe7808",
       "kind": "add_alias",
-      "target": "commodity:staple:fruit-snacks",
-      "target_label": "Fruit Snacks",
-      "payload": "fruit\\s+smiles\\b",
+      "target": "light-sour-cream",
+      "target_label": null,
+      "payload": "sour\\s+cream,?\\s+light",
       "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: Great Value's gummy fruit-snack line",
+      "rationale": "Matches 'Sour Cream, Light'. Anchors on 'sour cream' and 'light'.",
       "blast_radius": {
         "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 6,
+          "intended_capture": 3,
+          "absorbs_review": 0,
           "already_matched": 0,
           "cross_commodity": 0,
           "known_wrong_hit": 0,
@@ -539,29 +359,17 @@
         "kill_reasons": [],
         "warn_reasons": [],
         "examples": {
-          "absorbs_review": [
+          "intended_capture": [
             {
-              "product": "Great Value Fruit Smiles Snack, Original Flavor, 10 Count",
+              "product": "Daisy Sour Cream, Light 14 Oz",
               "rows": 1
             },
             {
-              "product": "Great Value Fruit Smiles Snacks, Original Flavor, 22 Count",
-              "rows": 1
+              "product": "Daisy Sour Cream, Light 16 Oz",
+              "rows": 2
             },
             {
-              "product": "Great Value Fruit Smiles Snacks, Original Flavor, 40 Count",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Fruit Smiles Snacks, Tangy Flavor, 10 Count",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Fruit Smiles Snacks, Tangy Flavor, 22 Count",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Fruit Smiles Snacks, Tangy Flavor, 40 Count",
+              "product": "Daisy Sour Cream, Light 8 Oz",
               "rows": 1
             }
           ]
@@ -569,274 +377,72 @@
       }
     },
     {
-      "proposal_id": "lp:af271fbe188aab45c305",
+      "proposal_id": "lp:426c1e531704c71b1fce",
       "kind": "add_alias",
-      "target": "commodity:staple:fruit-snacks",
-      "target_label": "Fruit Snacks",
-      "payload": "welch'?s\\s+fusions\\b",
+      "target": "pineapple-chunks",
+      "target_label": null,
+      "payload": "pineapple,?\\s+tidbits",
       "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: Welch's Fusions gummy line",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 1,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Welch's Fusions, Original Fruits, Soft Kids Snacks, 0.8 oz, 20 Count",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:72b31d551c938cc95040",
-      "kind": "add_alias",
-      "target": "commodity:staple:insect-spray",
-      "target_label": "Insect / Bug Spray (home)",
-      "payload": "\\b(?:home|insect)\\s+barrier\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: 'Home Barrier' / 'Insect Barrier' is the indoor-spray product name",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 4,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Ortho Home Defense Max Indoor Insect Barrier with Extended Reach Comfort Wand, 1 gal.",
-              "rows": 1
-            },
-            {
-              "product": "Spectracide Bug Stop Home Barrier with AccuShot Sprayer, 1.33 Gal.",
-              "rows": 1
-            },
-            {
-              "product": "Spectracide Bug Stop Home Barrier, Ready-To-Use Indoor Plus Outdoor Insect Control, 32 Oz.",
-              "rows": 1
-            },
-            {
-              "product": "Spectracide Bug Stop Home Barrier, Ready-to-Use Indoor Plus Outdoor Insect Control, 1 Gal.",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:495a7933179e04c261db",
-      "kind": "add_alias",
-      "target": "commodity:staple:insect-spray",
-      "target_label": "Insect / Bug Spray (home)",
-      "payload": "\\bbug\\s+stop\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: Spectracide's Bug Stop line",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 3,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Spectracide Bug Stop Home Barrier with AccuShot Sprayer, 1.33 Gal.",
-              "rows": 1
-            },
-            {
-              "product": "Spectracide Bug Stop Home Barrier, Ready-To-Use Indoor Plus Outdoor Insect Control, 32 Oz.",
-              "rows": 1
-            },
-            {
-              "product": "Spectracide Bug Stop Home Barrier, Ready-to-Use Indoor Plus Outdoor Insect Control, 1 Gal.",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:7e880f21f79fb0089449",
-      "kind": "add_alias",
-      "target": "commodity:staple:insect-spray",
-      "target_label": "Insect / Bug Spray (home)",
-      "payload": "flea\\s*(?:&|and)\\s*tick\\s+home\\s+spray",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: home flea/tick spray for carpet and furniture",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 1,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "ADAMS Flea & Tick Home Spray for Indoor Treatment, Kills Bed Bugs, Fleas, & Ticks, For Car",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:d837cb721a2f6505df1a",
-      "kind": "add_alias",
-      "target": "commodity:staple:green-olives",
-      "target_label": "Green Olives (stuffed)",
-      "payload": "\\bstuffed\\b.{0,20}olives\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: stuffed green olives, whatever the stuffing",
+      "rationale": "Matches 'Pineapple Tidbits'. Tidbits are a form of chunks/pieces. Anchors on 'pineapple' and 'tidbits'.",
       "blast_radius": {
         "counts": {
           "intended_capture": 2,
-          "absorbs_review": 3,
-          "already_matched": 21,
-          "cross_commodity": 0,
+          "absorbs_review": 0,
+          "already_matched": 0,
+          "cross_commodity": 4,
           "known_wrong_hit": 0,
           "rejected_hit": 0,
-          "blocked_by_rules": 0
+          "blocked_by_rules": 1
         },
         "kill": false,
         "kill_reasons": [],
-        "warn_reasons": [],
+        "warn_reasons": [
+          "matches 4 name(s) already priced under a different commodity — confirm the collision is benign before accepting"
+        ],
         "examples": {
-          "already_matched": [
+          "cross_commodity": [
             {
-              "product": "Early California Manzanilla Pimiento Stuffed Olives, 10 oz",
-              "rows": 1
+              "product": "(4 pack) Dole Fruit Bowls Pineapple Tidbits in 100% Fruit Juice, 4 oz Cups (4 Pack)",
+              "rows": 1,
+              "priced_by": [
+                "commodity:staple:canned-pineapple"
+              ]
             },
             {
-              "product": "Early California Pimiento Stuffed Manzanilla Green Olives",
-              "rows": 1
+              "product": "Dole Fruit Bowls Pineapple Tidbits in 100% Fruit Juice, 4 oz Cups (4 Pack)",
+              "rows": 1,
+              "priced_by": [
+                "commodity:staple:canned-pineapple"
+              ]
             },
             {
-              "product": "Early California Pimiento Stuffed Manzanilla Olives 21 oz. Jar. Major Allergens Not Contai",
-              "rows": 1
+              "product": "Dole Pineapple Tidbits in 100% Fruit Juice, 20 oz Can",
+              "rows": 1,
+              "priced_by": [
+                "commodity:staple:canned-pineapple"
+              ]
             },
             {
-              "product": "Early California Pimiento Stuffed Manzanilla Olives, 10 oz. Jar. Allergens Not Contained.",
-              "rows": 1
-            },
-            {
-              "product": "Early California Pimiento Stuffed Manzanilla Olives, 5.75 oz Jar. Major Allergens Not Cont",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Garlic Stuffed Green Olives, 9.5 oz",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Gv Pimento Stuffed Queen Olives 8.5oz",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Stuffed Blue Cheese Green Olives, 7 oz Jar",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Stuffed Feta Cheese Green Olives, 7 oz Jar",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Stuffed Garlic Green Olives, 7 oz Jar",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Stuffed Jalapeno Green Olives, 7 oz Jar",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Stuffed Manzanilla Olives with Minced Pimento, 10 oz",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Stuffed Manzanilla Olives with Minced Pimento, 21 oz",
-              "rows": 2
-            },
-            {
-              "product": "Great Value Stuffed Manzanilla Olives with Minced Pimento, 7 oz",
-              "rows": 1
-            },
-            {
-              "product": "Kroger Stuffed Manzanilla Olives with Pimiento",
-              "rows": 1
-            },
-            {
-              "product": "Lindsay Pimiento Stuffed Manzanilla Olives, 21 oz",
-              "rows": 1
-            },
-            {
-              "product": "Lindsay Spanish Pimiento Stuffed Manzanilla Olives 5.75 oz",
-              "rows": 1
-            },
-            {
-              "product": "Mario Pimiento Stuffed Manzanilla Spanish Olives, 21 oz",
-              "rows": 1
-            },
-            {
-              "product": "Member's Mark Pimento Stuffed Manzanilla Olives, 2 pk.",
-              "rows": 2
-            },
-            {
-              "product": "Pimiento Stuffed Spanish Manzanilla Olives",
-              "rows": 1
+              "product": "Great Value Pineapple Tidbits, 4 oz, 4 Count",
+              "rows": 1,
+              "priced_by": [
+                "commodity:staple:canned-pineapple"
+              ]
             }
           ],
-          "absorbs_review": [
+          "blocked_by_rules": [
             {
-              "product": "Great Value Stuffed Queen Olives with Minced Pimento, 10 oz",
-              "rows": 1
-            },
-            {
-              "product": "Mezzetta Garlic Stuffed Olives, 10 oz Dr. Wt. Jar",
-              "rows": 1
-            },
-            {
-              "product": "Mezzetta Jalapeno Stuffed Olives, 10.0 OZ",
-              "rows": 1
+              "product": "Dole Fruit Bowls No Sugar Added Pineapple Tidbits in Water, 4 oz Cups (4 Pack)",
+              "blocked_by": "matched exclude pattern '\\bwater\\b'"
             }
           ],
           "intended_capture": [
             {
-              "product": "Member's Mark Jalapeno and Garlic Stuffed Olives, 20.5 oz.",
-              "rows": 1
+              "product": "Great Value Canned Pineapple Tidbits, 20 oz",
+              "rows": 2
             },
             {
-              "product": "bettergoods Lemon Peel and Orange Peel Stuffed Olives, 7 oz Jar",
+              "product": "Our Family Pineapple, Tidbits 20 Oz",
               "rows": 1
             }
           ]
@@ -844,1294 +450,712 @@
       }
     },
     {
-      "proposal_id": "lp:69f88637e286534326cc",
+      "proposal_id": "lp:a0bd8576d9221f5ed6c9",
       "kind": "add_alias",
-      "target": "commodity:staple:green-olives",
-      "target_label": "Green Olives (stuffed)",
-      "payload": "\\bqueen\\s+olives\\b",
+      "target": "red-bell-pepper",
+      "target_label": null,
+      "payload": "red\\s+(bell\\s+)?peppers?",
       "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: Queen is a green-olive grade",
+      "rationale": "Matches 'Red Pepper'. Anchors on 'red' and 'pepper'.",
       "blast_radius": {
         "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 2,
+          "intended_capture": 5,
+          "absorbs_review": 0,
+          "already_matched": 2,
+          "cross_commodity": 3,
+          "known_wrong_hit": 0,
+          "rejected_hit": 0,
+          "blocked_by_rules": 50
+        },
+        "kill": false,
+        "kill_reasons": [],
+        "warn_reasons": [
+          "matches 3 name(s) already priced under a different commodity — confirm the collision is benign before accepting"
+        ],
+        "examples": {
+          "blocked_by_rules": [
+            {
+              "product": "(2 pack) Mezzetta Roasted Red Bell Pepper Strips, 16 fl oz Jar",
+              "blocked_by": "matched exclude pattern 'roasted'"
+            },
+            {
+              "product": "Badia Spices Crushed Red Pepper",
+              "blocked_by": "matched exclude pattern 'crushed'"
+            },
+            {
+              "product": "COLUMBUS Charcuterie Snack Tray with Uncured Pepperoni, Mozzarella Cheese, and Rosemary Cr",
+              "blocked_by": "matched exclude pattern '\\bsnack\\b'"
+            },
+            {
+              "product": "Cedar's Organic Roasted Red Pepper Hummus",
+              "blocked_by": "matched exclude pattern 'roasted'"
+            },
+            {
+              "product": "Classico Roasted Red Pepper Alfredo Pasta Sauce, 15 oz Jar",
+              "blocked_by": "matched exclude pattern 'roasted'"
+            },
+            {
+              "product": "Fresh & Finest By Our Family Roasted Red Pepper Hummus 10 Oz",
+              "blocked_by": "matched exclude pattern 'roasted'"
+            },
+            {
+              "product": "Fresh Cravings Roasted Red Pepper Hummus Dip, 17 oz. Plastic Tub, Gluten-Free, 2 Tbsp (32g",
+              "blocked_by": "matched exclude pattern 'roasted'"
+            },
+            {
+              "product": "Fresh Cravings Roasted Red Pepper Hummus, 10 oz Tub, Gluten-Free, Vegan, Contains: Sesame",
+              "blocked_by": "matched exclude pattern 'roasted'"
+            },
+            {
+              "product": "Full Circle Market Crushed Red Pepper 1.2 Oz",
+              "blocked_by": "matched exclude pattern 'crushed'"
+            },
+            {
+              "product": "Great Value Crushed Red Pepper, 1.75 oz",
+              "blocked_by": "matched exclude pattern 'crushed'"
+            },
+            {
+              "product": "Great Value Crushed Red Pepper, 12 oz",
+              "blocked_by": "matched exclude pattern 'crushed'"
+            },
+            {
+              "product": "Great Value Ground Cayenne Red Pepper, 5.2 oz",
+              "blocked_by": "matched exclude pattern 'ground'"
+            },
+            {
+              "product": "Great Value Roasted Red Bell Pepper Slices, 12 oz",
+              "blocked_by": "matched exclude pattern 'roasted'"
+            },
+            {
+              "product": "Great Value Seasoning Blend with Onions, Celery, Red Peppers, Green Peppers and Parsley Fl",
+              "blocked_by": "matched exclude pattern 'flake'"
+            },
+            {
+              "product": "Greenfield Natural* Meat Co. Smoked Uncured Pepperoni Protein Snack Kit, Sliced, Tray",
+              "blocked_by": "matched exclude pattern '\\bkit\\b'"
+            },
+            {
+              "product": "Hy-Vee Roasted Red Pepper Hummus",
+              "blocked_by": "matched exclude pattern 'roasted'"
+            },
+            {
+              "product": "Kroger Spicy Red Pepper Pizza Sauce",
+              "blocked_by": "matched exclude pattern '\\bsauce\\b'"
+            },
+            {
+              "product": "Marketside Gluten-Free Roasted Red Pepper Hummus 10 oz, Ready to Eat, Resealable Cup, 2 Tb",
+              "blocked_by": "matched exclude pattern 'roasted'"
+            },
+            {
+              "product": "Marketside Organic Roasted Red Pepper Hummus, 10 oz",
+              "blocked_by": "matched exclude pattern 'roasted'"
+            },
+            {
+              "product": "Mc Cormick Crushed Red Pepper 1.5 Oz",
+              "blocked_by": "matched exclude pattern 'crushed'"
+            }
+          ],
+          "intended_capture": [
+            {
+              "product": "Del Monte Green Beans, French Style, With Onion, Red Pepper & Garlic 14.5 Oz",
+              "rows": 2
+            },
+            {
+              "product": "Multi-Colored Peppers, Package",
+              "rows": 1
+            },
+            {
+              "product": "Nancy's Chicago Style Thin Crust Italian Sausage & Uncured Pepperoni Pizza 19.31 Oz",
+              "rows": 1
+            },
+            {
+              "product": "Red Pepper",
+              "rows": 1
+            },
+            {
+              "product": "Samyang MEP Ramen Bowl, Red Pepper and Chicken & Cilantro, 6 pk.",
+              "rows": 1
+            }
+          ],
+          "cross_commodity": [
+            {
+              "product": "Del Monte Whole Kernel Southwest Style Corn With Poblano & Red Peppers 15.25 Oz",
+              "rows": 3,
+              "priced_by": [
+                "commodity:staple:canned-corn",
+                "commodity:staple:poblano-peppers"
+              ]
+            },
+            {
+              "product": "Del Monte Whole Kernel Southwest Style Corn with Poblano & Red Peppers",
+              "rows": 1,
+              "priced_by": [
+                "commodity:staple:poblano-peppers"
+              ]
+            },
+            {
+              "product": "Marketside Sliced Uncured Pepperoni, 8 oz",
+              "rows": 1,
+              "priced_by": [
+                "commodity:staple:pepperoni"
+              ]
+            }
+          ],
+          "already_matched": [
+            {
+              "product": "Fresh Red Bell Pepper",
+              "rows": 1
+            },
+            {
+              "product": "Fresh Red Bell Pepper, Each",
+              "rows": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "proposal_id": "lp:1472666fa5eecdfe1357",
+      "kind": "add_alias",
+      "target": "golden-raisins",
+      "target_label": null,
+      "payload": "(california|sun-dried|seedless)?\\s*raisins",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'California Sun-Dried', 'Seedless', and 'California' raisins. These are commonly sold as golden or standard raisins. Anchors on 'raisins'.",
+      "blast_radius": {
+        "counts": {
+          "intended_capture": 37,
+          "absorbs_review": 0,
+          "already_matched": 3,
+          "cross_commodity": 3,
+          "known_wrong_hit": 0,
+          "rejected_hit": 0,
+          "blocked_by_rules": 27
+        },
+        "kill": false,
+        "kill_reasons": [],
+        "warn_reasons": [
+          "matches 3 name(s) already priced under a different commodity — confirm the collision is benign before accepting"
+        ],
+        "examples": {
+          "blocked_by_rules": [
+            {
+              "product": "Bimbo Cinnamon Rolls, With Raisins 12.88 Oz",
+              "blocked_by": "matched exclude pattern 'cinnamon'"
+            },
+            {
+              "product": "Bimbo Pound Cake With Raisins 9.88 Oz",
+              "blocked_by": "matched exclude pattern '\\bcake\\b'"
+            },
+            {
+              "product": "Great Value Chocolate Flavored Cocoa Yogurt Raisins, 1 oz, 6 Count",
+              "blocked_by": "matched exclude pattern 'chocolate'"
+            },
+            {
+              "product": "Great Value Milk Chocolate Covered Raisins, 8oz Pouch",
+              "blocked_by": "matched exclude pattern 'chocolate'"
+            },
+            {
+              "product": "Great Value Vanilla Yogurt Covered Raisins,1 oz, 6 Count",
+              "blocked_by": "matched exclude pattern 'yog(?:h)?urt'"
+            },
+            {
+              "product": "Kroger Milk Chocolate Coated Raisins",
+              "blocked_by": "matched exclude pattern 'chocolate'"
+            },
+            {
+              "product": "Kroger Yogurt Flavored Coated Raisins",
+              "blocked_by": "matched exclude pattern 'yog(?:h)?urt'"
+            },
+            {
+              "product": "Mariani Dried Fruit, Vanilla Yogurt Covered Raisins, 7 oz Bag",
+              "blocked_by": "matched exclude pattern 'yog(?:h)?urt'"
+            },
+            {
+              "product": "Mariani Vanilla Yogurt Covered Raisins",
+              "blocked_by": "matched exclude pattern 'yog(?:h)?urt'"
+            },
+            {
+              "product": "Member's Mark Milk Chocolate Raisins, 54 oz.",
+              "blocked_by": "matched exclude pattern 'chocolate'"
+            },
+            {
+              "product": "Ocean Spray Greek Yogurt Covered Craisins, Greek Yogurt Covered Dried Cranberries, Dried F",
+              "blocked_by": "matched exclude pattern 'yog(?:h)?urt'"
+            },
+            {
+              "product": "Ocean Spray Sour Watermelon Flavored Craisins Dried Cranberries, 6oz",
+              "blocked_by": "matched exclude pattern 'flavored'"
+            },
+            {
+              "product": "Our Family Peg Chocolate Raisins",
+              "blocked_by": "matched exclude pattern 'chocolate'"
+            },
+            {
+              "product": "Quaker Simply Granola Breakfast Cereal, Oats Honey Raisins & Almonds, 24.1 oz Box",
+              "blocked_by": "matched exclude pattern 'cereal'"
+            },
+            {
+              "product": "Raisinets Milk Chocolate Covered Raisins Gluten-free California Movie Theater Candy Box",
+              "blocked_by": "matched exclude pattern 'chocolate'"
+            },
+            {
+              "product": "Raisinets Milk Chocolate Covered Raisins, Gluten-free California Chocolate Raisins, Reseal",
+              "blocked_by": "matched exclude pattern 'chocolate'"
+            },
+            {
+              "product": "Raisinets Milk Chocolate Covered Raisins, Gluten-free California Movie Theater Candy Box, ",
+              "blocked_by": "matched exclude pattern 'chocolate'"
+            },
+            {
+              "product": "Raisins, Dates & Walnuts Instant Oatmeal",
+              "blocked_by": "matched exclude pattern 'oatmeal'"
+            },
+            {
+              "product": "Simple Truth Yogurt Covered Raisins",
+              "blocked_by": "matched exclude pattern 'yog(?:h)?urt'"
+            },
+            {
+              "product": "Sun Maid Blueberry & Vanilla Yogurt Covered Raisins 6 Ea",
+              "blocked_by": "matched exclude pattern 'yog(?:h)?urt'"
+            }
+          ],
+          "intended_capture": [
+            {
+              "product": "GV 8/20oz Berries & G.Raisins, Prop 65",
+              "rows": 1
+            },
+            {
+              "product": "Great Value All-Natural California Raisins, 24 oz",
+              "rows": 1
+            },
+            {
+              "product": "Great Value Raisins 12oz",
+              "rows": 1
+            },
+            {
+              "product": "Great Value Sour Raisins Multi-Pack, 20 Count",
+              "rows": 1
+            },
+            {
+              "product": "Great Value Sun-Dried Raisins 6 Pack, 6 - 1 oz (28g) Cartons",
+              "rows": 1
+            },
+            {
+              "product": "Great Value Sun-Dried Raisins Canister, 20 oz (1lb 4oz) 567g",
+              "rows": 1
+            },
+            {
+              "product": "Great Value Sun-Dried Raisins Carton, 12 oz (340g)",
+              "rows": 1
+            },
+            {
+              "product": "Hy-Vee Raisins California Sun-Dried",
+              "rows": 2
+            },
+            {
+              "product": "Kroger 100% Fruit Seedless Raisins",
+              "rows": 1
+            },
+            {
+              "product": "Kroger Seedless Raisins",
+              "rows": 1
+            },
+            {
+              "product": "Ocean Spray Cherry Craisins",
+              "rows": 1
+            },
+            {
+              "product": "Ocean Spray Craisins 50% Less Sugar Dried Cranberries - Dried Fruit",
+              "rows": 1
+            },
+            {
+              "product": "Ocean Spray Craisins Original Dried Cranberries - Dried Fruit",
+              "rows": 1
+            },
+            {
+              "product": "Ocean Spray Original Craisins",
+              "rows": 1
+            },
+            {
+              "product": "Ocean Spray® Craisins® Original Dried Cranberries, Dried Fruit, 12 oz Pouch",
+              "rows": 1
+            },
+            {
+              "product": "Ocean Spray® Craisins® Original Dried Cranberries, Dried Fruit, 24 oz Pouch",
+              "rows": 1
+            },
+            {
+              "product": "Ocean Spray® Craisins®, 50% Less Sugar Dried Cranberries, Dried Fruit, 20 oz Pouch",
+              "rows": 1
+            },
+            {
+              "product": "Our Family Seedless Raisins 20 Oz",
+              "rows": 2
+            },
+            {
+              "product": "Our Family Seedless Raisins 6 Ea",
+              "rows": 1
+            },
+            {
+              "product": "Quaker Simply Granola Honey Raisins and Almonds Granola",
+              "rows": 1
+            }
+          ],
+          "already_matched": [
+            {
+              "product": "Great Value Seedless Golden Raisins Carton, 15 oz (425g)",
+              "rows": 1
+            },
+            {
+              "product": "Great Value Seedless Golden Raisins, 15 oz",
+              "rows": 1
+            },
+            {
+              "product": "Sun Maid California Golden Raisins 12 Oz",
+              "rows": 1
+            }
+          ],
+          "cross_commodity": [
+            {
+              "product": "Ocean Spray Craisins, Original Dried Cranberries, 48 oz.",
+              "rows": 2,
+              "priced_by": [
+                "commodity:staple:dried-cranberries"
+              ]
+            },
+            {
+              "product": "Ocean Spray® Craisins®, 50% Less Sugar Dried Cranberries, Dried Fruit, 43 oz.",
+              "rows": 1,
+              "priced_by": [
+                "commodity:staple:dried-cranberries"
+              ]
+            },
+            {
+              "product": "Ocean SprayÃƒâ€šÃ‚Â® CraisinsÃƒâ€šÃ‚Â® Original Dried Cranberries, Dried Fruit",
+              "rows": 1,
+              "priced_by": [
+                "commodity:staple:dried-cranberries"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "proposal_id": "lp:cce60d6f6ece8f8183e4",
+      "kind": "add_alias",
+      "target": "honey-dijon-mustard",
+      "target_label": null,
+      "payload": "(honey\\s+dijon|dijon\\s+honey|mustard,?\\s+honey)",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Mustard, Honey'. Note: 'Burman's Dijon Mustard' is likely a different product (plain Dijon), so this alias targets the honey variant specifically.",
+      "blast_radius": {
+        "counts": {
+          "intended_capture": 1,
+          "absorbs_review": 0,
           "already_matched": 2,
           "cross_commodity": 0,
           "known_wrong_hit": 0,
           "rejected_hit": 0,
-          "blocked_by_rules": 0
+          "blocked_by_rules": 3
         },
         "kill": false,
         "kill_reasons": [],
         "warn_reasons": [],
         "examples": {
-          "already_matched": [
+          "blocked_by_rules": [
             {
-              "product": "Great Value Gv Pimento Stuffed Queen Olives 8.5oz",
-              "rows": 1
+              "product": "G Hughes Zero Sugar Honey Dijon Dressing, 12 Fl oz",
+              "blocked_by": "matched exclude pattern 'dressing'"
             },
             {
-              "product": "Mezzetta Super Colossal Spanish Queen Olives Pimiento Stuffed, 10 oz Dr. Wt. Jar",
-              "rows": 1
+              "product": "Skinnygirl, Fat-Free, Sugar-Free Honey Dijon Salad Dressing, 8 fl oz",
+              "blocked_by": "matched exclude pattern 'dressing'"
+            },
+            {
+              "product": "WF Honey Dijon Dressing, 12 oz, Fres/ Delicious Salad Topping, Sugar Free 0g Net Carbs,  G",
+              "blocked_by": "matched exclude pattern 'dressing'"
             }
           ],
-          "absorbs_review": [
+          "already_matched": [
             {
-              "product": "Great Value Stuffed Pimento Jumbo Queen Olives, 7 oz Jar",
-              "rows": 1
+              "product": "Great Value Honey Dijon Mustard, 12 oz",
+              "rows": 2
             },
             {
-              "product": "Great Value Stuffed Queen Olives with Minced Pimento, 10 oz",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:9dab1ab956725027cbbc",
-      "kind": "add_alias",
-      "target": "commodity:staple:green-olives",
-      "target_label": "Green Olives (stuffed)",
-      "payload": "\\bsalad\\s+olives\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: sliced pimiento salad olives",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 1,
-          "absorbs_review": 1,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Great Value Sliced Salad Olives with Minced Pimento, 10 oz",
+              "product": "Hy-Vee Stone Ground Honey Dijon Mustard",
               "rows": 1
             }
           ],
           "intended_capture": [
             {
-              "product": "Our Family Sliced Salad Olives With Minced Pimiento 5.75 Oz",
-              "rows": 1
+              "product": "Our Family Mustard, Honey 12 Oz",
+              "rows": 3
             }
           ]
         }
       }
     },
     {
-      "proposal_id": "lp:5eae2e0c50b285b9ef5d",
+      "proposal_id": "lp:1e5c958d277551d218ba",
       "kind": "add_alias",
-      "target": "commodity:staple:breakfast-sausage",
-      "target_label": "Breakfast Sausage (pork)",
-      "payload": "\\bsausage\\s+roll\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: the pork breakfast sausage chub",
+      "target": "frozen-chopped-spinach",
+      "target_label": null,
+      "payload": "(frozen\\s+)?(chopped\\s+)?spinach",
+      "stage1_confidence": 0.8,
+      "rationale": "Matches 'Simply Nature Organic Spinach'. While 'chopped' is not explicit in the listing, frozen spinach is typically chopped. The pattern is broad enough to catch standard frozen spinach but anchored on 'spinach'.",
       "blast_radius": {
         "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 5,
+          "intended_capture": 12,
+          "absorbs_review": 0,
           "already_matched": 11,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 1
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "already_matched": [
-            {
-              "product": "Appleton Farms Premium Pork Sausage Roll",
-              "rows": 1
-            },
-            {
-              "product": "Farmland Original Pork Breakfast Sausage Roll, 16 oz",
-              "rows": 2
-            },
-            {
-              "product": "Farmland Original Pork Sausage Roll, 32 oz",
-              "rows": 1
-            },
-            {
-              "product": "Jimmy Dean Premium Maple Pork Sausage Roll, 16 oz",
-              "rows": 1
-            },
-            {
-              "product": "Jimmy Dean Premium Pork Hot Breakfast Sausage Roll 16 Oz",
-              "rows": 21
-            },
-            {
-              "product": "Jimmy Dean Premium Pork Regular Breakfast Sausage Roll 16 Oz",
-              "rows": 21
-            },
-            {
-              "product": "Jimmy Dean Premium Pork Sage Breakfast Sausage Roll 16 Oz",
-              "rows": 21
-            },
-            {
-              "product": "Jimmy Dean Premium Pork Sausage Roll, 2 lbs.",
-              "rows": 1
-            },
-            {
-              "product": "Jimmy Dean® Hot Pork Regular Breakfast Sausage Roll, 32 oz",
-              "rows": 1
-            },
-            {
-              "product": "Jimmy DeanÃƒâ€šÃ‚Â® Hot Pork Regular Breakfast Sausage Roll, 32 oz",
-              "rows": 1
-            },
-            {
-              "product": "Kroger Hot Pork Sausage Roll",
-              "rows": 1
-            }
-          ],
-          "absorbs_review": [
-            {
-              "product": "Great Value Original Premium Sausage Roll, 16 oz, Plastic Wrapped (Refrigerated)",
-              "rows": 1
-            },
-            {
-              "product": "Jimmy Dean Fresh Premium Pork Regular Sausage Roll, 16 oz, 9g protein per serving (Refrige",
-              "rows": 1
-            },
-            {
-              "product": "Jimmy Dean Premium Pork Country Mild Sausage Roll, 16 oz",
-              "rows": 1
-            },
-            {
-              "product": "Jimmy Dean Premium Pork Hot Sausage Roll, 16 oz",
-              "rows": 1
-            },
-            {
-              "product": "Jimmy Dean Premium Pork Regular Sausage Roll, 32 oz",
-              "rows": 1
-            }
-          ],
-          "blocked_by_rules": [
-            {
-              "product": "Jimmy Dean Italian Pork Sausage Roll, 16 oz",
-              "blocked_by": "matched exclude pattern 'italian'"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:27e4db9e60dc19d3543b",
-      "kind": "add_alias",
-      "target": "commodity:staple:breakfast-sausage",
-      "target_label": "Breakfast Sausage (pork)",
-      "payload": "breakfast\\s+country\\s+sausage",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: 'Breakfast Country Sausage' patties",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 1,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Purnell's \"Old Folks\" Medium Patties Breakfast Country Sausage, 38 Ounce",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:5bd443ef49d54c64fd59",
-      "kind": "add_alias",
-      "target": "commodity:staple:tomato-soup",
-      "target_label": "Tomato Soup (canned)",
-      "payload": "tomato\\b.{0,20}basil\\b.{0,12}(?:soup|bisque)",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: tomato-basil soup and bisque",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 3,
-          "absorbs_review": 5,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Campbell's Slow Kettle Style Tomato & Sweet Basil Bisque, 15.5 oz Microwavable Bowl",
-              "rows": 1
-            },
-            {
-              "product": "Progresso Reduced Sodium Creamy Tomato With Basil Soup 19 Oz",
-              "rows": 21
-            },
-            {
-              "product": "Progresso Reduced Sodium, Creamy Tomato with Basil Soup, Gluten Free, 19 oz",
-              "rows": 1
-            },
-            {
-              "product": "Progresso Tomato Basil Soup 19 Oz",
-              "rows": 21
-            },
-            {
-              "product": "Progresso Tomato Basil Soup, Vegetable Classics Canned Soup, Gluten Free, 19 oz",
-              "rows": 1
-            }
-          ],
-          "intended_capture": [
-            {
-              "product": "Campbell's® Tomato Basil Soup 16.300 Oz",
-              "rows": 21
-            },
-            {
-              "product": "Member's Mark Tomato Basil Soup 32 oz. tubs, 2 pk.",
-              "rows": 1
-            },
-            {
-              "product": "Proper Good Tomato Basil Soup, Ready in 90 Seconds, Shelf Stable Meal, 12 oz",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:146ad8271ca09a7bef1d",
-      "kind": "add_alias",
-      "target": "commodity:staple:shredded-cheese",
-      "target_label": "Shredded / Block Cheese",
-      "payload": "finely\\s+shredded\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: 'Finely Shredded' blends",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 1,
-          "absorbs_review": 2,
-          "already_matched": 26,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 2
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "already_matched": [
-            {
-              "product": "Great Value Colby Jack Finely Shredded Cheese, 16 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Colby Jack Finely Shredded Cheese, 8 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Fiesta Blend Finely Shredded Cheese, 16 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Fiesta Blend Finely Shredded Cheese, 8 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Italian Style Finely Shredded Cheese, 16 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Italian Style Finely Shredded Cheese, 8 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Low-Moisture Part-Skim Mozzarella Finely Shredded Cheese, 16 oz",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Low-Moisture Part-Skim Mozzarella Finely Shredded Cheese, 8 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Mild Cheddar Finely Shredded Cheese, 16 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Mild Cheddar Finely Shredded Cheese, 32 oz Bag",
-              "rows": 2
-            },
-            {
-              "product": "Great Value Mild Cheddar Finely Shredded Cheese, 8 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Sharp Cheddar Finely Shredded Cheese, 16 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Sharp Cheddar Finely Shredded Cheese, 32 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Sharp Cheddar Finely Shredded Cheese, 8 oz",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Sharp Cheddar Finely Shredded Cheese, 8 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Taco Blend Finely Shredded Cheese, 8 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Triple Cheddar Finely Shredded Cheese, 8 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Kraft Natural Colby Jack Finely Shredded Cheese, 16 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Kraft Natural Colby Jack Finely Shredded Cheese, 8 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Kraft Natural Italian Five Cheese Blend Finely Shredded Cheese, 8 oz Bag",
-              "rows": 1
-            }
-          ],
-          "absorbs_review": [
-            {
-              "product": "Great Value Fiesta Cheese Finely Shredded Blend, 32 oz Bag",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Finely Shredded Reduced Fat Fiesta Cheese Blend, 7 oz",
-              "rows": 1
-            }
-          ],
-          "blocked_by_rules": [
-            {
-              "product": "Great Value Parmesan Finely Shredded Cheese, 6 oz Bag",
-              "blocked_by": "matched exclude pattern 'parmesan'"
-            },
-            {
-              "product": "Kraft Natural Parmesan Finely Shredded Cheese, 6 oz Bag",
-              "blocked_by": "matched exclude pattern 'parmesan'"
-            }
-          ],
-          "intended_capture": [
-            {
-              "product": "Hy-Vee Finely Shredded Mild Cheddar Natural Cheese",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:547b9028f898c5a9ae8e",
-      "kind": "add_alias",
-      "target": "commodity:staple:shredded-cheese",
-      "target_label": "Shredded / Block Cheese",
-      "payload": "shredded\\s+\\d+%",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: 'Shredded 2% Milk ...' reduced-fat shreds",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 1,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Happy Farms Shredded 2% Milk Mexican Style Cheese",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:f716aeb9e28892d33c5c",
-      "kind": "add_alias",
-      "target": "commodity:staple:shredded-cheese",
-      "target_label": "Shredded / Block Cheese",
-      "payload": "queso\\s+quesadilla",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: Chihuahua-style melting cheese",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 2,
-          "already_matched": 1,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "already_matched": [
-            {
-              "product": "Great Value Queso Quesadilla Shredded Cheese, 16 oz Bag",
-              "rows": 1
-            }
-          ],
-          "absorbs_review": [
-            {
-              "product": "La Morenita Queso Quesadilla, Chihuahua-Style Melting Cheese, 16 oz, Resealable Plastic Ba",
-              "rows": 1
-            },
-            {
-              "product": "La Morenita Queso Quesadilla, Chihuahua-Style Melting Cheese, 32 oz, Resealable Plastic Ba",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:5d3a076cc0fc24edcae8",
-      "kind": "add_alias",
-      "target": "commodity:staple:maple-syrup",
-      "target_label": "Syrup (pancake / maple)",
-      "payload": "\\b(?:table|sugar\\s+free|maple\\s+flavor)\\s+syrup\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: table, sugar-free and maple-flavour table syrups",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 1,
-          "absorbs_review": 4,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Great Value Reduced Calorie Sugar Free Syrup, 24 fl oz",
-              "rows": 1
-            },
-            {
-              "product": "Log Cabin All Natural Table Syrup, 22 FL OZ",
-              "rows": 1
-            },
-            {
-              "product": "Log Cabin Sugar Free Syrup, 24 FL oz",
-              "rows": 1
-            },
-            {
-              "product": "Maple Grove Farms Sugar Free Maple Flavor Syrup, Low Calorie Syrup, Gluten-Free, 24 fl oz ",
-              "rows": 1
-            }
-          ],
-          "intended_capture": [
-            {
-              "product": "Maple Grove Farms Sugar Free Low Calorie Original Maple Flavor Syrup 24 Fl Oz",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:8068edab5361c7ed79db",
-      "kind": "add_alias",
-      "target": "commodity:staple:maple-syrup",
-      "target_label": "Syrup (pancake / maple)",
-      "payload": "pancake\\s*(?:&|and)\\s*waffle\\s+syrup",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: 'Pancake & Waffle Syrup'",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 1,
-          "absorbs_review": 1,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "intended_capture": [
-            {
-              "product": "Hy-Vee Sugar Free Pancake & Waffle Syrup",
-              "rows": 1
-            }
-          ],
-          "absorbs_review": [
-            {
-              "product": "Pearl Milling Company Lite Original Pancake & Waffle Syrup, 24 fl oz Bottle, Easy-Pour Dis",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:03be667ed8cea9fcdddd",
-      "kind": "add_alias",
-      "target": "commodity:staple:canned-chicken",
-      "target_label": "Canned Chicken Breast",
-      "payload": "chunk\\s+(?:white\\s+)?(?:breast\\s+of\\s+)?chicken",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: 'Chunk Breast Of Chicken' / 'Chunk White Chicken'",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 1,
-          "absorbs_review": 2,
-          "already_matched": 11,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "already_matched": [
-            {
-              "product": "(8 pack) Great Value Chunk Chicken Breast with Rib Meat in Water, 12.5 oz Cans, 4 Pack",
-              "rows": 1
-            },
-            {
-              "product": "Brookdale Chunk Chicken Breast",
-              "rows": 1
-            },
-            {
-              "product": "Fareway Premium Chunk Chicken Breast in Water",
-              "rows": 7
-            },
-            {
-              "product": "Great Value Chunk Chicken Breast with Rib Meat in Water, 12.5 oz Can",
-              "rows": 2
-            },
-            {
-              "product": "Great Value Chunk Chicken Breast with Rib Meat in Water, 5 oz Can",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Less Sodium Chunk Chicken Breast with Rib Meat in Water, 12.5 oz Can",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Premium Chunk Chicken Breast with Rib Meat in Water, 12.5 oz Can",
-              "rows": 1
-            },
-            {
-              "product": "Member's Mark Premium Chunk Chicken Breast, 12.5 oz., 6 ct.",
-              "rows": 2
-            },
-            {
-              "product": "Swanson Premium Chunk Chicken Breast with Rib Meat, 12.5 oz. (Pack of 2)",
-              "rows": 1
-            },
-            {
-              "product": "Swanson Premium Chunk Chicken Breast with Rib Meat, 4.5 oz. (Pack of 4)",
-              "rows": 1
-            },
-            {
-              "product": "Tyson White Premium Chunk Chicken Breast, 12.5 oz Can",
-              "rows": 1
-            }
-          ],
-          "absorbs_review": [
-            {
-              "product": "Great Value Chunk Breast Of Chicken 10oz",
-              "rows": 1
-            },
-            {
-              "product": "Tyson Premium Chunk White Chicken, in Water, 5 oz Can",
-              "rows": 1
-            }
-          ],
-          "intended_capture": [
-            {
-              "product": "Swanson Chunk White Chicken Breast",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:0a6b77797ecb2689d6e0",
-      "kind": "add_alias",
-      "target": "commodity:staple:chocolate-milk",
-      "target_label": "Chocolate Milk",
-      "payload": "milk\\s+drink,\\s*chocolate",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: 'Milk Drink, Chocolate' shelf-stable cartons",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 1,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "LALA Low Fat Shelf-Stable Milk Drink, Chocolate, 8.25 oz Carton Container (6 Ct)",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:66acaf6f0a3fac86b596",
-      "kind": "add_alias",
-      "target": "commodity:staple:chocolate-milk",
-      "target_label": "Chocolate Milk",
-      "payload": "lactose\\s+free\\s+chocolate\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: Hiland's title drops the word milk entirely",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 1,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 1
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Hiland Lactose Free Chocolate, 0.5 gal",
-              "rows": 1
-            }
-          ],
-          "blocked_by_rules": [
-            {
-              "product": "Silk Protein Dairy Free, Lactose Free Chocolate Complete Plant Protein Milk, Plant Based M",
-              "blocked_by": "matched exclude pattern 'protein'"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:be3df064ecf91417e233",
-      "kind": "add_alias",
-      "target": "commodity:staple:canned-mixed-vegetables",
-      "target_label": "Canned Mixed Vegetables",
-      "payload": "tomatoes,\\s*okra",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: tomatoes-okra-corn canned mix",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 1,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Margaret Holmes Canned Tomatoes, Okra and Corn, 14.5 oz",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:0969b931beabdea0c0bf",
-      "kind": "add_alias",
-      "target": "commodity:staple:iced-tea",
-      "target_label": "Iced Tea (bottled/gallon)",
-      "payload": "\\btea\\b.{0,24}\\bgallon\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: gallon jugs of ready-to-drink tea",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 3,
-          "already_matched": 6,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 5
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "AriZona Diet Blueberry Green Tea - 128 fl oz Gallon",
-              "rows": 1
-            },
-            {
-              "product": "AriZona Raspberry Tea - 128 fl oz Gallon",
-              "rows": 1
-            },
-            {
-              "product": "Red Diamond Unsweetened Tea, Gallon, 128 Fl Oz",
-              "rows": 1
-            }
-          ],
-          "already_matched": [
-            {
-              "product": "AriZona Iced Tea with Lemon Flavor, Caffeinated Black Tea Variety, 128 fl oz Gallon",
-              "rows": 1
-            },
-            {
-              "product": "Milo's Extra Sweet Tea, Refrigerated Iced Tea, 128 fl oz Gallon, 100% Natural, No Preserva",
-              "rows": 1
-            },
-            {
-              "product": "Milo's Famous Sweet Tea, Refrigerated Iced Tea, 128 fl oz Gallon, 100% Natural, No Preserv",
-              "rows": 1
-            },
-            {
-              "product": "Milo's Zero Sugar Sweet Tea, Refrigerated Iced Tea, 128 fl oz Gallon, No Preservatives, Br",
-              "rows": 1
-            },
-            {
-              "product": "Red Diamond Extra Sweet Tea, Gallon, 128 Fl Oz",
-              "rows": 1
-            },
-            {
-              "product": "Red Diamond Sweet Tea, Gallon, 128 Fl Oz",
-              "rows": 2
-            }
-          ],
-          "blocked_by_rules": [
-            {
-              "product": "Great Value, Iced Black Tea Gallon Sized, Tea Bags, 24 Ct",
-              "blocked_by": "matched exclude pattern '\\bbags?\\b'"
-            },
-            {
-              "product": "Lipton Iced Black Tea, Gallon Size Tea Bags, 24 Count",
-              "blocked_by": "matched exclude pattern '\\bbags?\\b'"
-            },
-            {
-              "product": "Lipton Iced Southern Sweet Black Tea Bags, Gallon Size, 22 Count",
-              "blocked_by": "matched exclude pattern '\\bbags?\\b'"
-            },
-            {
-              "product": "Lipton Iced Tea, Gallon Size Tea Bags, 48 ct.",
-              "blocked_by": "matched exclude pattern '\\bbags?\\b'"
-            },
-            {
-              "product": "Luzianne Iced Tea Gallon Size Tea Bags, 48 ct.",
-              "blocked_by": "matched exclude pattern '\\bbags?\\b'"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:217cc76f15327806d224",
-      "kind": "add_alias",
-      "target": "commodity:staple:iced-tea",
-      "target_label": "Iced Tea (bottled/gallon)",
-      "payload": "\\btea\\b.{0,20}128\\s*fl\\s*oz",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: the 128 fl oz gallon by volume",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 4,
-          "already_matched": 11,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "AriZona Diet Blueberry Green Tea - 128 fl oz Gallon",
-              "rows": 1
-            },
-            {
-              "product": "AriZona Diet Green Tea with Ginseng - 128 fl oz Gallon",
-              "rows": 1
-            },
-            {
-              "product": "AriZona Raspberry Tea - 128 fl oz Gallon",
-              "rows": 1
-            },
-            {
-              "product": "Red Diamond Unsweetened Tea, Gallon, 128 Fl Oz",
-              "rows": 1
-            }
-          ],
-          "already_matched": [
-            {
-              "product": "AriZona Iced Tea with Lemon Flavor, Caffeinated Black Tea Variety, 128 fl oz Gallon",
-              "rows": 1
-            },
-            {
-              "product": "AriZona Sweet Tea Southern Style - 128 fl oz Gallon",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Diet Sugar-Free Sweet Brewed Iced Tea, 128 fl oz",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Sweet Brewed Iced Tea, 128 fl oz",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Unsweet Brewed Iced Tea, 128 fl oz Bottle",
-              "rows": 1
-            },
-            {
-              "product": "Milo's Extra Sweet Tea, Refrigerated Iced Tea, 128 fl oz Gallon, 100% Natural, No Preserva",
-              "rows": 1
-            },
-            {
-              "product": "Milo's Famous Sweet Tea, Refrigerated Iced Tea, 128 fl oz Gallon, 100% Natural, No Preserv",
-              "rows": 1
-            },
-            {
-              "product": "Milo's Sweet Tea and Lemonade, Refrigerated Half Iced Tea and Half Lemonade, 128 fl oz Gal",
-              "rows": 1
-            },
-            {
-              "product": "Milo's Zero Sugar Sweet Tea, Refrigerated Iced Tea, 128 fl oz Gallon, No Preservatives, Br",
-              "rows": 1
-            },
-            {
-              "product": "Red Diamond Extra Sweet Tea, Gallon, 128 Fl Oz",
-              "rows": 1
-            },
-            {
-              "product": "Red Diamond Sweet Tea, Gallon, 128 Fl Oz",
-              "rows": 2
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:bbabf3956902aae562ec",
-      "kind": "add_alias",
-      "target": "commodity:staple:frozen-fruit",
-      "target_label": "Frozen Fruit / Berries",
-      "payload": "\\b(?:fruit\\s+salad|tropical\\s+fruit|mixed\\s+fruit)\\s+blend\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: frozen fruit blends",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 2,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Great Value Fruit Salad Blend, 48 oz (Frozen)",
-              "rows": 1
-            },
-            {
-              "product": "Great Value Tropical Fruit Blend, 48 oz (Frozen)",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:b3c07b9c72eea80c861f",
-      "kind": "add_alias",
-      "target": "commodity:staple:quart-storage-bags",
-      "target_label": "Food Storage Bags (quart)",
-      "payload": "zipper,\\s*quart\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: '... Zipper, Quart, 50 Count'",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 3,
-          "already_matched": 1,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "(4 pack) Ziploc Brand Food Storage Bags, School Supplies, with Grip 'n Seal Technology, Zi",
-              "rows": 1
-            },
-            {
-              "product": "Ziploc Brand Food Storage Bags, School Supplies, with Grip 'n Seal Technology, Zipper, Qua",
-              "rows": 1
-            },
-            {
-              "product": "Ziploc Brand Freezer Food Storage Bags, School Supplies, with Grip 'n Seal Technology, Zip",
-              "rows": 1
-            }
-          ],
-          "already_matched": [
-            {
-              "product": "Bright Essentials Freezer Bags, Double Zipper, Quart Size",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:806f40a116a7feef3dd3",
-      "kind": "add_alias",
-      "target": "commodity:staple:quart-storage-bags",
-      "target_label": "Food Storage Bags (quart)",
-      "payload": "freezer\\s+quart\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: 'Freezer Quart Mega'",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 1,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
-            {
-              "product": "Ziploc Suso Freezer Quart Mega",
-              "rows": 16
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:5410b9891a7d842bccca",
-      "kind": "add_alias",
-      "target": "commodity:staple:ranch-dressing",
-      "target_label": "Ranch Dressing",
-      "payload": "\\branch\\b.{0,45}dressing",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: widen: line names sit between 'Ranch' and 'Dressing'",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 1,
-          "already_matched": 59,
-          "cross_commodity": 0,
+          "cross_commodity": 8,
           "known_wrong_hit": 0,
           "rejected_hit": 0,
           "blocked_by_rules": 34
         },
         "kill": false,
         "kill_reasons": [],
-        "warn_reasons": [],
+        "warn_reasons": [
+          "matches 8 name(s) already priced under a different commodity — confirm the collision is benign before accepting"
+        ],
         "examples": {
-          "blocked_by_rules": [
-            {
-              "product": "(2 Pack) Hidden Valley Original Ranch Seasoning & Salad Dressing Mix, 1 oz Packet",
-              "blocked_by": "matched exclude pattern 'seasoning'"
-            },
-            {
-              "product": "(4 Pack) Hidden Valley Original Ranch Seasoning & Salad Dressing Mix, 1 oz Packet",
-              "blocked_by": "matched exclude pattern 'seasoning'"
-            },
-            {
-              "product": "Chosen Foods Classic Ranch Dressing & Dip 8 Fl Oz",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Great Value Buttermilk Ranch Dressing & Dip, 16 oz",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Great Value Chipotle Ranch Dressing & Dip, 16 fl oz",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Great Value Classic Ranch Dressing & Dip, 36 fl oz",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Great Value Classic Ranch Dressing & Dip, 8 oz",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Great Value Classic Ranch Salad Dressing & Dip, 16 fl oz",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Great Value Classic Ranch Salad Dressing & Recipe Mix, 1 oz",
-              "blocked_by": "matched exclude pattern '\\bmix\\b'"
-            },
-            {
-              "product": "Great Value Classic Ranch Salad Dressing & Recipe Mix, 1 oz Packets, 4 Count",
-              "blocked_by": "matched exclude pattern '\\bmix\\b'"
-            },
-            {
-              "product": "Great Value Classic Ranch Salad Dressing & Recipe Mix, 8 oz Canister",
-              "blocked_by": "matched exclude pattern '\\bmix\\b'"
-            },
-            {
-              "product": "Great Value Light Ranch Dressing & Dip, 16 fl oz",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Hidden Valley Bacon Ranch Dip Sauce Condiment & Dressing, 16 fl oz Squeeze Bottle",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Hidden Valley Blue Cheese Ranch Dip Sauce Condiment & Dressing, 20 fl oz Squeeze Bottle",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Hidden Valley Buffalo Ranch Dip Sauce Condiment & Dressing, 20 fl oz Squeeze Bottle",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Hidden Valley Creamy Jalapeno Ranch Dressing, Made With Real Jalapeno Peppers, Use For Ran",
-              "blocked_by": "matched exclude pattern '\\bdip\\b'"
-            },
-            {
-              "product": "Hidden Valley Creamy Jalapeno Ranch Seasoning Dressing & Recipe Mix, 1 oz Packet",
-              "blocked_by": "matched exclude pattern 'seasoning'"
-            },
-            {
-              "product": "Hidden Valley Original Ranch Salad Dressing and Seasoning Mix, 16 oz.",
-              "blocked_by": "matched exclude pattern 'seasoning'"
-            },
-            {
-              "product": "Hidden Valley Original Ranch Seasoning & Salad Dressing Mix, 1 oz Packet",
-              "blocked_by": "matched exclude pattern 'seasoning'"
-            },
-            {
-              "product": "Hidden Valley Original Ranch Seasoning Dressing & Dip Mix, 8 oz",
-              "blocked_by": "matched exclude pattern 'seasoning'"
-            }
-          ],
           "already_matched": [
             {
-              "product": "(6 pack) Kraft Classic Ranch Dressing, 16 fl oz Bottle",
+              "product": "Allens Popeye Spinach, Chopped, 13.5 Oz",
               "rows": 1
             },
             {
-              "product": "Bolthouse Farms Dressing, Classic Ranch Yogurt Dressing, 12 fl. oz.",
+              "product": "Birds Eye Chopped Spinach",
               "rows": 1
             },
             {
-              "product": "Chick-Fil-A Garden Herb Ranch Refrigerated Salad Dressing, 12 Fluid oz Bottle, Fresh",
+              "product": "Del Monte Chopped Spinach",
               "rows": 1
             },
             {
-              "product": "Fareway Ranch Dressing",
-              "rows": 12
-            },
-            {
-              "product": "G Hughes Zero Sugar Ranch Dressing 12 Fl Oz",
-              "rows": 21
-            },
-            {
-              "product": "G Hughes Zero Sugar Ranch Dressing, 12 fl oz.",
+              "product": "Frozen Spinach, Chopped Our Family",
               "rows": 1
             },
             {
-              "product": "Great Value Buttermilk Ranch Dressing, 36 fl oz",
+              "product": "Great Value Chopped Spinach, 10 oz (Frozen)",
+              "rows": 1
+            },
+            {
+              "product": "Great Value Chopped Spinach, 12 oz (Frozen)",
+              "rows": 1
+            },
+            {
+              "product": "Great Value Chopped Spinach, 16 oz (Frozen)",
+              "rows": 1
+            },
+            {
+              "product": "Great Value Organic Chopped Spinach, 10 oz (Frozen)",
+              "rows": 1
+            },
+            {
+              "product": "Kroger Frozen Spinach Chopped",
+              "rows": 1
+            },
+            {
+              "product": "Pictsweet Family Size Chopped Spinach",
+              "rows": 1
+            },
+            {
+              "product": "Pictsweet Farms Frozen Chopped Spinach, Simple Harvest, 24 oz",
+              "rows": 1
+            }
+          ],
+          "blocked_by_rules": [
+            {
+              "product": "Barilla Classic Non-GMO, Filled Cheese and Spinach Tortellini Pasta, 12 oz",
+              "blocked_by": "matched exclude pattern 'filled'"
+            },
+            {
+              "product": "Beech-Nut Turkey Stage 2 Baby Food, Turkey Butternut Squash Corn & Spinach, Puree Meat Bab",
+              "blocked_by": "matched exclude pattern 'baby'"
+            },
+            {
+              "product": "Beech-Nut Veggies Stage 2 Baby Food, Zucchini Spinach & Banana, 3.5 oz Pouch",
+              "blocked_by": "matched exclude pattern 'baby'"
+            },
+            {
+              "product": "Del Monte Fresh Cut Leaf Spinach, 13.5 oz Can, Canned Vegetables",
+              "blocked_by": "matched exclude pattern '\\bfresh\\b'"
+            },
+            {
+              "product": "Dole Organic Baby Spinach Clamshell 5 oz",
+              "blocked_by": "matched exclude pattern 'baby'"
+            },
+            {
+              "product": "Dole Salad Baby Spinach",
+              "blocked_by": "matched exclude pattern 'salad'"
+            },
+            {
+              "product": "Earthbound Farm Organic Baby Spinach 5 Oz",
+              "blocked_by": "matched exclude pattern 'baby'"
+            },
+            {
+              "product": "Fancy Feast Purina Fancy Feast Medleys White Meat Chicken Primavera With Tomatoes, Carrots",
+              "blocked_by": "matched wrong-class token '\\bpurina\\b' (pet)"
+            },
+            {
+              "product": "Fresh & Finest By Our Family Spinach Dip 10 Oz",
+              "blocked_by": "matched exclude pattern '\\bfresh\\b'"
+            },
+            {
+              "product": "Fresh Express Baby Spinach 5 Oz",
+              "blocked_by": "matched exclude pattern '\\bfresh\\b'"
+            },
+            {
+              "product": "Fresh Express Salad, Baby Spinach 10 Oz",
+              "blocked_by": "matched exclude pattern 'salad'"
+            },
+            {
+              "product": "Gerber 2nd Foods, Organic Apple Zucchini Spinach Strawberry, 3.5 oz Pouch",
+              "blocked_by": "matched wrong-class token '\\bgerber\\b' (babyfood)"
+            },
+            {
+              "product": "Giovanni Rana Ravioli Spinach Ricotta Premium Filled Pasta Bag (Family Size, 18oz), Refrig",
+              "blocked_by": "matched exclude pattern 'filled'"
+            },
+            {
+              "product": "Kroger Tender Baby Spinach Bag Salad",
+              "blocked_by": "matched exclude pattern 'salad'"
+            },
+            {
+              "product": "Little Salad Bar Spinach",
+              "blocked_by": "matched exclude pattern 'salad'"
+            },
+            {
+              "product": "Marketside Fresh Baby Spinach, 11 oz",
+              "blocked_by": "matched exclude pattern '\\bfresh\\b'"
+            },
+            {
+              "product": "Marketside Fresh Baby Spinach, 6 oz Bag (Fresh)",
+              "blocked_by": "matched exclude pattern '\\bfresh\\b'"
+            },
+            {
+              "product": "Marketside Fresh Spinach and Spring Mix, 11 oz",
+              "blocked_by": "matched exclude pattern '\\bfresh\\b'"
+            },
+            {
+              "product": "Marketside Fresh Spinach, 10 oz Bag (Fresh)",
+              "blocked_by": "matched exclude pattern '\\bfresh\\b'"
+            },
+            {
+              "product": "Marketside Organic Baby Spinach Salad, 5 oz Clam Shell (Fresh)",
+              "blocked_by": "matched exclude pattern 'salad'"
+            }
+          ],
+          "intended_capture": [
+            {
+              "product": "Beneful Complete Adult Salmon, Green Beans & Spinach Dog Food 9.5 Oz",
               "rows": 2
             },
             {
-              "product": "Hidden Valley Buttermilk Ranch Condiment & Dressing 24 Fl Oz",
-              "rows": 18
+              "product": "Beneful Freshly Prepared Meals Roasted Chicken Recipe With Brown Rice Carrots & Spinach Do",
+              "rows": 2
             },
             {
-              "product": "Hidden Valley Buttermilk Ranch Salad Dressing & Condiment, 16 fl oz Squeeze Bottle",
+              "product": "Dole Spinach",
+              "rows": 3
+            },
+            {
+              "product": "Fancy Feast Purina Fancy Feast Cat Food Medleys Shredded Tuna Fare Wet Cat Food Recipe Wit",
               "rows": 1
             },
             {
-              "product": "Hidden Valley Cilantro Lime Ranch Condiment & Dressing 16 Fl Oz",
-              "rows": 19
-            },
-            {
-              "product": "Hidden Valley Light Ranch Dressing & Condiment, 24 fl oz Squeeze Bottle",
+              "product": "Fancy Feast Purina Fancy Feast Wet Cat Food Medleys Shredded White Meat Chicken Fare With ",
               "rows": 1
             },
             {
-              "product": "Hidden Valley Light Ranch Dressing, 40 oz., 2 pk.",
+              "product": "Great Value Canned Leaf Spinach, 13.5 oz Can",
               "rows": 1
             },
             {
-              "product": "Hidden Valley Original Ranch Condiment and Dressing, America 250 Limited Edition Easy Sque",
+              "product": "Lean Cuisine Signature Ricotta Cheese & Spinach Ravioli In A Tomato Garlic Sauce 8 Oz",
               "rows": 1
             },
             {
-              "product": "Hidden Valley Original Ranch Condiment and Dressing, America 250 Limited Edition Easy Sque",
+              "product": "Member's Mark Fire Roasted Red Bell Pepper, Spinach, and Cheese Trio Egg White Bites, 5 pk",
               "rows": 1
             },
             {
-              "product": "Hidden Valley Original Ranch Dressing, 40 oz., 2 pk.",
+              "product": "Member's Mark Spinach and Ricotta Ravioli 19 oz., 2 pk.",
               "rows": 1
             },
             {
-              "product": "Hidden Valley Original Ranch Salad Dressing & Condiment, 20 fl oz Squeeze Bottle",
+              "product": "Mission Wraps Garden Spinach, 6 Count",
               "rows": 1
             },
             {
-              "product": "Hidden Valley Original Ranch Salad Dressing & Condiment, 36 fl oz Bottle",
+              "product": "Popeye Leaf Spinach, 13.5 oz., Can",
               "rows": 1
             },
             {
-              "product": "Hidden Valley Original Ranch Salad Dressing & Condiment, 8 fl oz Bottle",
-              "rows": 1
-            },
-            {
-              "product": "Hidden Valley Southwest Chipotle Ranch Salad Dressing & Condiment, 16 fl oz Squeeze Bottle",
-              "rows": 1
-            },
-            {
-              "product": "Hy-Vee Ranch Dressing",
+              "product": "Simply Nature Organic Spinach",
               "rows": 1
             }
           ],
-          "absorbs_review": [
+          "cross_commodity": [
             {
-              "product": "Hidden Valley Ranch Dairy Free Plant Powered Salad Dressing & Condiment, 12 fl oz Bottle",
-              "rows": 1
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:e1a7e8d0c2fe0a530b14",
-      "kind": "add_alias",
-      "target": "commodity:staple:ranch-dressing",
-      "target_label": "Ranch Dressing",
-      "payload": "simply\\s+dressed\\b.{0,20}ranch",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: Marzetti's Simply Dressed line",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 1,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
+              "product": "Cerebelly 6+ Months Organic Spinach Apple Sweet Potato Puree 4 Oz",
+              "rows": 1,
+              "priced_by": [
+                "commodity:staple:sweet-potatoes"
+              ]
+            },
             {
-              "product": "Marzetti Simply Dressed Homestyle Ranch",
-              "rows": 22
-            }
-          ]
-        }
-      }
-    },
-    {
-      "proposal_id": "lp:32c649d159089f4e361a",
-      "kind": "add_alias",
-      "target": "commodity:staple:potato-chips",
-      "target_label": "Potato Chips",
-      "payload": "potato\\s+kettle\\s+chips?\\b",
-      "stage1_confidence": 0.9,
-      "rationale": "escalation-review round 2: kettle-cooked potato chips",
-      "blast_radius": {
-        "counts": {
-          "intended_capture": 0,
-          "absorbs_review": 1,
-          "already_matched": 0,
-          "cross_commodity": 0,
-          "known_wrong_hit": 0,
-          "rejected_hit": 0,
-          "blocked_by_rules": 0
-        },
-        "kill": false,
-        "kill_reasons": [],
-        "warn_reasons": [],
-        "examples": {
-          "absorbs_review": [
+              "product": "Dole Greener Selection, Classic Romaine, or Spinach",
+              "rows": 2,
+              "priced_by": [
+                "commodity:staple:lettuce",
+                "commodity:staple:spinach"
+              ]
+            },
             {
-              "product": "Jackson’s Classic Potato Kettle Chips with Sea Salt, Avocado Oil, Free of Top 9 Allergens,",
-              "rows": 1
+              "product": "Happy Tot Organics Super Bellies Stage 4 Bananas Spinach & Blueberries Organic Toddler Foo",
+              "rows": 1,
+              "priced_by": [
+                "commodity:staple:blueberries"
+              ]
+            },
+            {
+              "product": "Happy Tot Stage 4 Organic Pears Blueberries & Spinach Pouch",
+              "rows": 1,
+              "priced_by": [
+                "commodity:staple:blueberries"
+              ]
+            },
+            {
+              "product": "Jimmy Dean Delights Egg’wich Breakfast Sandwiches With Bacon, Spinach, Caramelized Onions,",
+              "rows": 2,
+              "priced_by": [
+                "commodity:staple:breakfast-sandwiches"
+              ]
+            },
+            {
+              "product": "Marketside Spinach and Ricotta Tortellini, No Artificial Ingredients, 18 oz Tray",
+              "rows": 1,
+              "priced_by": [
+                "commodity:staple:cheese-tortellini"
+              ]
+            },
+            {
+              "product": "Once Upon A Farm No Added Sugar Apple, Sweet Potato & Spinach Toddler Tractor Wheels 5 Ea",
+              "rows": 1,
+              "priced_by": [
+                "commodity:staple:sweet-potatoes"
+              ]
+            },
+            {
+              "product": "bettergoods Ricotta and Spinach Gnocchi, 16 oz (Frozen)",
+              "rows": 1,
+              "priced_by": [
+                "commodity:staple:potato-gnocchi"
+              ]
             }
           ]
         }

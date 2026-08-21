@@ -392,6 +392,20 @@
     "verdict": "accept"
   },
   {
+    "applied_at": "2026-08-20T23:47:26",
+    "applied_by": "learning-loop",
+    "id": "ap:2efff20fde8af120e4c1",
+    "payload_json": "{\"payload\": \"bacon,?\\\\s+hickory\\\\s+smoked\"}",
+    "proposal_id": "lp:783f69d950c6e2a1d34f",
+    "rationale": "Canonical word-order alias: 'Bacon, Hickory Smoked' is the same food the commodity names, written comma-first. Radius is clean - 2 intended captures, 0 cross-commodity, 0 known-wrong.",
+    "reviewed_at": "2026-08-20T23:47:26",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.7116564417177914, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.2883435582822086}",
+    "shadow_before_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.7116564417177914, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.2883435582822086}",
+    "shadow_verdict": "no_regression",
+    "verdict": "accept"
+  },
+  {
     "applied_at": "2026-08-20T18:22:55",
     "applied_by": "learning-loop",
     "id": "ap:32441b0d212b10dc0db9",
@@ -1078,6 +1092,20 @@
     "verdict": "accept"
   },
   {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:72431eaf2c4908451e66",
+    "payload_json": "{\"payload\": \"sour\\\\s+cream,?\\\\s+light\"}",
+    "proposal_id": "lp:b64671ccf11a8abe7808",
+    "rationale": "'Sour Cream, Light' is the comma-first form of the commodity's own name and the pattern requires BOTH words. 3 intended captures, zero collisions.",
+    "reviewed_at": "2026-08-20T23:47:26",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "accept"
+  },
+  {
     "applied_at": "2026-08-20T18:22:55",
     "applied_by": "learning-loop",
     "id": "ap:7405a6e4f080ee951b24",
@@ -1272,6 +1300,20 @@
     "shadow_before_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.6112359550561798, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.3887640449438202}",
     "shadow_verdict": "no_regression",
     "verdict": "accept"
+  },
+  {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:88976d39a785f50e2d1a",
+    "payload_json": "{\"payload\": \"chick\\\\s+caesar\"}",
+    "proposal_id": "lp:be2ae1f5a35e3b51475d",
+    "rationale": "This is the question I DEFERRED in the contested review hours ago: 'Tay Farm Chick Caesar' is truncated and Taylor Farms sells both a chicken Caesar SALAD BOWL (a meal) and Caesar chopped KITS. Filing an alias would settle by fiat exactly what I refused to guess at. It needs the store page, not a rule.",
+    "reviewed_at": "2026-08-20T23:47:26",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "reject"
   },
   {
     "applied_at": "2026-08-20T18:22:55",
@@ -1582,6 +1624,20 @@
     "verdict": "accept"
   },
   {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:a6c5a8d58f65e62f7552",
+    "payload_json": "{\"payload\": \"(shredded|finely\\\\s+shredded)\\\\s+(sharp|mild|triple)?\\\\s*cheddar\"}",
+    "proposal_id": "lp:df3435bdaf93c672deb8",
+    "rationale": "Anchors on 'shredded' AND 'cheddar' together, so it cannot reach block cheddar or a shredded blend. 5 intended captures, zero collisions.",
+    "reviewed_at": "2026-08-20T23:47:26",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "accept"
+  },
+  {
     "applied_at": "2026-08-20T18:22:55",
     "applied_by": "learning-loop",
     "id": "ap:a90c4d91e4340b9abc6b",
@@ -1652,6 +1708,20 @@
     "verdict": "accept"
   },
   {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:ac9e7ce28965a7ff7241",
+    "payload_json": "{\"payload\": \"red\\\\s+(bell\\\\s+)?peppers?\"}",
+    "proposal_id": "lp:a0bd8576d9221f5ed6c9",
+    "rationale": "Over-broad in the exact way the rubric names. 'peppers?' is unanchored, so it reaches inside 'Pepperoni', and the optional 'bell' lets bare 'red pepper' match - which is red pepper FLAKES and red CHILI pepper as much as bell. Radius confirms it: 3 cross-commodity hits including canned corn with poblano and red peppers.",
+    "reviewed_at": "2026-08-20T23:47:26",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "reject"
+  },
+  {
     "applied_at": "2026-08-20T18:22:55",
     "applied_by": "learning-loop",
     "id": "ap:ad349047bfada7ddb274",
@@ -1678,6 +1748,20 @@
     "shadow_before_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.5067415730337078, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.49325842696629213}",
     "shadow_verdict": "no_regression",
     "verdict": "accept"
+  },
+  {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:ade67e121e4bf705ad13",
+    "payload_json": "{\"payload\": \"chicken\\\\s+thighs?,?\\\\s+boneless\"}",
+    "proposal_id": "lp:38c8b7f3c781a77355af",
+    "rationale": "intended_capture = 0. It settles no unmatched row and absorbs no reviewer confirmation, so it buys nothing - and it still carries a cross-commodity collision. Pure downside.",
+    "reviewed_at": "2026-08-20T23:47:26",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "reject"
   },
   {
     "applied_at": "2026-08-20T18:22:55",
@@ -1778,6 +1862,34 @@
     "verdict": "accept"
   },
   {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:bbcb2b3837ac8c2cfcb4",
+    "payload_json": "{\"payload\": \"(frozen\\\\s+)?(chopped\\\\s+)?spinach\"}",
+    "proposal_id": "lp:1e5c958d277551d218ba",
+    "rationale": "Both qualifiers optional, so it reduces to bare 'spinach' and reaches fresh spinach, spinach dip and creamed spinach alike. 8 cross-commodity collisions. The commodity names the FORM; the pattern ignores it.",
+    "reviewed_at": "2026-08-20T23:47:26",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "reject"
+  },
+  {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:be32a46b1c9e09809c96",
+    "payload_json": "{\"payload\": \"(honey\\\\s+dijon|dijon\\\\s+honey|mustard,?\\\\s+honey)\"}",
+    "proposal_id": "lp:cce60d6f6ece8f8183e4",
+    "rationale": "Every branch requires the word honey, so plain Dijon cannot match - the risk Stage 1 flagged itself. Small capture (1) but zero collisions and zero known-wrong hits.",
+    "reviewed_at": "2026-08-20T23:47:26",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "accept"
+  },
+  {
     "applied_at": "2026-08-20T18:29:29",
     "applied_by": "learning-loop",
     "id": "ap:be7f003cda732dd55d07",
@@ -1804,6 +1916,20 @@
     "shadow_before_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.5449438202247191, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.4550561797752809}",
     "shadow_verdict": "no_regression",
     "verdict": "accept"
+  },
+  {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:c3f85d66deb6b10afb0c",
+    "payload_json": "{\"payload\": \"93%?/7%?\\\\s+ground\\\\s+turkey\"}",
+    "proposal_id": "lp:a19c389976ff3b7ff74b",
+    "rationale": "Blast radius KILL: target 'ground-turkey-93-7' is not a commodity node. An approval against a target the graph never adopted is the parked-patch trap this file's own docstring documents.",
+    "reviewed_at": "2026-08-20T23:47:26",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "reject"
   },
   {
     "applied_at": "2026-08-20T18:22:55",
@@ -1930,6 +2056,20 @@
     "shadow_before_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.6685393258426966, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.33146067415730335}",
     "shadow_verdict": "no_regression",
     "verdict": "modify"
+  },
+  {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:d63489a52d0f16fef2b5",
+    "payload_json": "{\"payload\": \"greek\\\\s+(plain|nonfat)?\\\\s*yogurt\"}",
+    "proposal_id": "lp:95a2cd3c08798d9f9961",
+    "rationale": "intended_capture = 0 against 55 rows the existing rules already match. Noise: it re-states a rule the catalog has and adds a second surface for the same job.",
+    "reviewed_at": "2026-08-20T23:47:26",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "reject"
   },
   {
     "applied_at": "2026-08-20T07:00:07",
@@ -2100,6 +2240,20 @@
     "verdict": "accept"
   },
   {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:eddd4fb2775b32bc1edd",
+    "payload_json": "{\"payload\": \"(california|sun-dried|seedless)?\\\\s*raisins\"}",
+    "proposal_id": "lp:1472666fa5eecdfe1357",
+    "rationale": "Every prefix is optional, so the pattern is effectively bare 'raisins' - and the commodity names the VARIETY, golden. It would collapse ordinary California raisins into the golden row, which price differently. 37 'intended' captures is the tell: that is the whole raisin shelf, not this commodity.",
+    "reviewed_at": "2026-08-20T23:47:26",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "reject"
+  },
+  {
     "applied_at": "2026-08-20T18:29:29",
     "applied_by": "learning-loop",
     "id": "ap:ee984a897b14dfdf3b1d",
@@ -2168,6 +2322,20 @@
     "shadow_before_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.5797752808988764, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.4202247191011236}",
     "shadow_verdict": "no_regression",
     "verdict": "accept"
+  },
+  {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:f0c2da64320955dea5d1",
+    "payload_json": "{\"payload\": \"pineapple,?\\\\s+tidbits\"}",
+    "proposal_id": "lp:426c1e531704c71b1fce",
+    "rationale": "4 cross-commodity collisions, all Dole Pineapple Tidbits ALREADY priced under canned-pineapple. Two commodities claiming one product is a false merge by construction, and tidbits are a distinct cut from chunks - the variety rule cuts against this.",
+    "reviewed_at": "2026-08-20T23:47:26",
+    "reviewer": "claude-opus-5",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "reject"
   },
   {
     "applied_at": "2026-08-20T18:22:55",
