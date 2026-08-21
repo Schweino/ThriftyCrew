@@ -1,4 +1,4 @@
-<#
+﻿<#
   pull-regular-familyfare.ps1 - Pulls Family Fare EVERYDAY (non-ad) shelf prices for the tracked
   commodities, straight from Family Fare's OWN Freshop catalog (base_price). NOT Instacart.
   Output: out\regular\family-fare-regular-<date>.json  (price_type = "everyday"), which compare-deals
@@ -481,15 +481,36 @@ if ($extraTerms -gt 0) {
 # scheduled more than once a day (each extra run advances the cursor another budget's worth - that cadence is
 # a scheduling decision, not a code one). Absent terms stay covered by carry-forward exactly as before.
 # The cursor file failing to parse starts the run at 0 - fail toward the old behaviour, never toward skipping.
-$cursorFile = Join-Path $OutDir 'ff-term-cursor.json'
+# SINGLE-SOURCED 2026-08-21. This index used to live in its own ff-term-cursor.json,
+# which was a second copy of a number capture-policy.ps1 already keeps: both are "an
+# index into the commodity-search term order", so the pair could disagree, and they did
+# - capture-cursor.json read 0 while this file read 466, and the worklist written to
+# out\worklists\capture-familyfare-*.json therefore recorded a slice this lane never
+# fetched. Anyone auditing "what was Family Fare asked for that day?" got the wrong
+# answer. The shared cursor is now the only copy; the legacy file is read ONCE to carry
+# its position over and then left alone as a record.
 $startIdx = 0
-if (Test-Path $cursorFile) {
-  try {
-    $cj = Get-Content $cursorFile -Raw | ConvertFrom-Json
-    $ci = [int]$cj.next_index
-    if ($ci -ge 0 -and $ci -lt $termList.Count) { $startIdx = $ci }
-  } catch {}
+try {
+  . (Join-Path $root 'capture-policy-lib.ps1')
+  $startIdx = [int](Get-CaptureCursor -Store 'Family Fare' -OutDir $OutDir)
+} catch {
+  Write-Warning ('Family Fare: shared capture cursor unreadable (' + $_.Exception.Message + ') - starting at 0')
 }
+# One-time carry-over from the retired private file, so the migration does not re-buy
+# the 466 terms this lane has already worked through.
+if ($startIdx -le 0) {
+  $legacy = Join-Path $OutDir 'ff-term-cursor.json'
+  if (Test-Path $legacy) {
+    try {
+      $li = [int](ConvertFrom-Json ([IO.File]::ReadAllText($legacy))).next_index
+      if ($li -gt 0 -and $li -lt $termList.Count) {
+        $startIdx = $li
+        Write-Output ("Family Fare: carried the retired ff-term-cursor.json position #$li into the shared cursor")
+      }
+    } catch {}
+  }
+}
+if ($startIdx -lt 0 -or $startIdx -ge $termList.Count) { $startIdx = 0 }
 if ($startIdx -gt 0) {
   $termList = @($termList[$startIdx..($termList.Count-1)]) + @($termList[0..($startIdx-1)])
   Write-Output ("Family Fare: term cursor at #$startIdx of $($termList.Count) - this run's budget starts there and wraps")
@@ -534,7 +555,7 @@ $streak = 0; $emptyRun = 0; $aborted = $false; $lastSuccessRot = -1
 # today. See capture-policy.ps1 - the single place that decides this for every store.
 $script:TermBudget = [int]::MaxValue
 try {
-  . (Join-Path $root 'capture-policy.ps1')
+  . (Join-Path $root 'capture-policy-lib.ps1')
   $plan = Get-CapturePlan -Store 'Family Fare' -Today $todayS
   $script:TermBudget = [int]$plan.TermBudget
   # Emit the worklist too, so this store's slice is recorded the same way the walled
@@ -680,7 +701,7 @@ if ($prevMax -gt 100 -and @($deals).Count -lt ($prevMax * 0.5)) {
 # came round again - the rotation and the expiry are two halves of one decision and
 # cannot be set independently. Read from the policy so they can never drift apart.
 $MaxCarryDays = 90
-try { . (Join-Path $root 'capture-policy.ps1'); $MaxCarryDays = Get-PolicyMaxCarryDays } catch { }
+try { . (Join-Path $root 'capture-policy-lib.ps1'); $MaxCarryDays = Get-PolicyMaxCarryDays } catch { }
 $carried = 0; $expired = 0
 # EXPIRY CLASSIFICATION (2026-08-02). Counted here, not inferred later. See Get-FfExpiryClass for what the
 # three classes mean and why only one of them is allowed to page. The ledger has already been merged with
@@ -778,9 +799,18 @@ if (-not $mergedOk) {
 }
 $commitIdx = Get-FfCursorCommit $nextIdx $mergedOk
 if ($null -ne $commitIdx) {
-  if (Write-FfJsonAtomic $cursorFile (([ordered]@{ next_index = $commitIdx; updated = (Get-Date).ToString('s'); note = 'index into the commodity-search term order where the NEXT Family Fare run starts; only written after the merged catalog has landed - see the cursor-commit comment in pull-regular-familyfare.ps1' } | ConvertTo-Json))) {
+  # Writes to the SHARED cursor (capture-cursor.json) via capture-policy's Save-CaptureCursor,
+  # which is atomic for the same reason Write-FfJsonAtomic is: the 2026-08-20 incident where a
+  # torn cursor write skipped ~104 terms whose rows had already been discarded. This lane keeps
+  # owning WHEN to commit - Get-FfCursorCommit's cold-shutout rule is Family Fare's own hard-won
+  # knowledge - and hands off only WHERE the number is stored.
+  try {
+    . (Join-Path $root 'capture-policy-lib.ps1')
+    Save-CaptureCursor -Store 'Family Fare' -Next $commitIdx -OutDir $OutDir
     Write-Output ("Family Fare: term cursor advanced to #$commitIdx (this run bought terms #$startIdx..#$(($startIdx + $lastSuccessRot) % $termList.Count), merged catalog landed)")
-  } else { Write-Warning ('Family Fare: merged catalog landed but the term cursor could not be written (next run restarts at #' + $startIdx + ' and re-buys this slice - no rows are lost).') }
+  } catch {
+    Write-Warning ('Family Fare: merged catalog landed but the shared term cursor could not be written (' + $_.Exception.Message + ') - next run restarts at #' + $startIdx + ' and re-buys this slice; no rows are lost.')
+  }
 }
 # The ledger is a full rewrite of a merged map, so a failed write costs the run's new dates and nothing else:
 # every term simply keeps its last honestly-earned date and re-earns today's on the next window.
@@ -839,3 +869,4 @@ try {
     Write-Output ("Family Fare: catalog healthy - " + @($deals).Count + " items, $expired expired, $recentVerified re-verified in 48h (no alert)")
   }
 } catch { Write-Warning ('family-fare catalog-degradation check failed: ' + $_.Exception.Message) }
+

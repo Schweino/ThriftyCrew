@@ -43,6 +43,12 @@ function Get-BrowserFeedDates {
   <#
     Returns an ordered map of feed label -> newest capture date (or $null if the feed has no dated file at all).
     ADD A BROWSER STORE HERE AND BOTH the pre-run gate AND the missed-refresh alert pick it up.
+
+    NOTE (2026-08-21): this map is the FRESHNESS REPORT and still lists Baker's and Hy-Vee's everyday feeds,
+    because "how old is this feed" is worth answering for every store. It is NOT the list of stores that need a
+    Chrome tab - both of those moved to sanctioned headless APIs (Kroger for Baker's, persisted GraphQL for
+    Hy-Vee) and no longer cost any browser time at all. Use Get-BrowserCaptureStores for that question; reading
+    this map as "the browser worklist" is what would send an agent to re-scrape two stores that pull themselves.
   #>
   param([Parameter(Mandatory = $true)][string]$OutDir)
   return [ordered]@{
@@ -53,5 +59,22 @@ function Get-BrowserFeedDates {
     "Walmart everyday" = (Get-NewestCaptureDate (Join-Path $OutDir 'regular\walmart-regular-*.json'))
     "Aldi everyday"    = (Get-NewestCaptureDate (Join-Path $OutDir 'regular\aldi-regular-*.json'))
     "Fareway everyday" = (Get-NewestCaptureDate (Join-Path $OutDir 'regular\fareway-regular-*.json'))
+  }
+}
+
+function Get-BrowserCaptureStores {
+  <#
+    The stores whose EVERYDAY rotation genuinely cannot run without a logged-in Chrome, as
+    stores.json records them (walled = true), paired with the everyday file each one lands.
+    These four are what a browser session actually owes work to.
+
+    Baker's ad remains a vision read and is handled by the ad lane, not the rotation.
+  #>
+  param([Parameter(Mandatory = $true)][string]$OutDir)
+  return [ordered]@{
+    'Walmart'    = (Join-Path $OutDir 'regular\walmart-regular-*.json')
+    "Sam's Club" = (Join-Path $OutDir 'regular\sams-regular-*.json')
+    'Aldi'       = (Join-Path $OutDir 'regular\aldi-regular-*.json')
+    'Fareway'    = (Join-Path $OutDir 'regular\fareway-regular-*.json')
   }
 }

@@ -588,3 +588,17 @@ if (-not $NoCarry) {
 & powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'repair-asof-evidence.ps1') -Store fareway -MaxAgeDays $MaxExtractDays | Write-Output
 }
 
+
+# ---------------------------------------------------------------------------
+# ADVANCE THE QUARTERLY ROTATION CURSOR (2026-08-21).
+# The capture only counts once it has become a priced file, so the commit belongs
+# here rather than in the browser agent that fetched it - the same placement rule
+# the placeholder-name guard follows. Step-CaptureCursor re-checks that the file
+# really landed and holds rows, so this cannot advance on an empty build.
+# Never fatal: a cursor that fails to move costs one repeated slice tomorrow,
+# while a builder that dies after writing its rows costs the rows.
+if (-not $SelfTest) {
+  try {
+  & (Join-Path $PSScriptRoot 'commit-capture-cursor.ps1') -Store 'Fareway' -Date $Today | Write-Output
+  } catch { Write-Warning ("cursor commit skipped: " + $_.Exception.Message) }
+}

@@ -48,17 +48,32 @@ function Get-EverydayOnlyStores { return @($script:REGFILESET_EVERYDAY_ONLY) }
 # the two still agree (Test-PolicyWindowAgreement below).
 $script:REGFILESET_UNION_DAYS = 90
 
-# Read the policy's own number out of capture-policy.ps1 AS TEXT. It cannot be dot-sourced:
-# it declares a param() block, and this file is dot-sourced into every caller, so its params
-# would land in the caller's scope - the exact capture-lib.ps1 bug of 2026-07-29 that the
-# header above forbids. Returns $null if the policy file cannot be read, so a missing file
-# reports "unknown" rather than silently asserting agreement.
+# Read the policy's own number. This used to scrape capture-policy.ps1 AS TEXT, because that
+# file declared a param() block and could not be dot-sourced from here without its parameters
+# landing in every caller's scope - the capture-lib.ps1 bug of 2026-07-29 that the header above
+# forbids. On 2026-08-21 the policy was split: the constants and functions moved to the
+# paramless capture-policy-lib.ps1, so the reason for the scrape is gone and the scrape itself
+# is now the fragile part. It reads the file it is POINTED at, and a constant that moves house
+# turns the guard silently blind - which is exactly what happened the moment the split landed:
+# this returned $null and the drift check reported "capture-policy says <nothing>".
+#
+# So: ask the library, and keep a text fallback ONLY for the case where the library is missing
+# entirely. Returns $null when the number genuinely cannot be established, so an unknown reports
+# as unknown rather than silently asserting agreement.
 function Get-PolicyCarryDaysFromText {
-  $p = Join-Path $PSScriptRoot 'capture-policy.ps1'
-  if (-not (Test-Path $p)) { return $null }
-  $m = [regex]::Match([IO.File]::ReadAllText($p), '(?m)^\s*\$script:MaxCarryDays\s*=\s*(\d+)')
-  if (-not $m.Success) { return $null }
-  return [int]$m.Groups[1].Value
+  $lib = Join-Path $PSScriptRoot 'capture-policy-lib.ps1'
+  if (Test-Path $lib) {
+    try {
+      if (-not (Get-Command Get-PolicyMaxCarryDays -ErrorAction SilentlyContinue)) { . $lib }
+      $v = Get-PolicyMaxCarryDays
+      if ($v) { return [int]$v }
+    } catch { }
+    # The library exists but would not answer: fall back to reading its text, still pointed at
+    # the file that actually holds the constant today.
+    $m = [regex]::Match([IO.File]::ReadAllText($lib), '(?m)^\s*\$script:MaxCarryDays\s*=\s*(\d+)')
+    if ($m.Success) { return [int]$m.Groups[1].Value }
+  }
+  return $null
 }
 function Get-RegularUnionDays { return $script:REGFILESET_UNION_DAYS }
 

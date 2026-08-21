@@ -1,4 +1,4 @@
-<#
+﻿<#
   capture-watchdog.ps1 - did today's capture actually happen, and did it publish?
 
   WHY THIS EXISTS. The old SMP Grocery Failure Watchdog watched the old jobs; those
@@ -20,12 +20,58 @@
 
   Anything that fails is ONE email, not six. Exit 0 = healthy, 1 = findings.
 #>
-param([switch]$Alert, [string]$OutDir = '', [string]$Today = '')
+param([switch]$Alert, [string]$OutDir = '', [string]$Today = '', [switch]$SelfTest)
 
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
+
+# How long a registered-but-never-fired task is still innocently "waiting for its trigger".
+# One full daily cycle plus a margin: a task registered AFTER today's slot (exactly how the
+# 07:00 and 08:00 capture tasks were created on 2026-08-20, at 08:24) legitimately cannot run
+# until tomorrow, and calling that broken on day one would train the reader to ignore this
+# watchdog before it had ever reported anything real.
+$script:NeverRanGraceHours = 30
+
+function Test-NeverRanTooLong {
+  <#
+    .SYNOPSIS Has a task that has NEVER fired been waiting long enough to call it broken?
+    .DESCRIPTION Pure, so the -SelfTest fixture below can drive it without a real Task
+                 Scheduler. Returns $false when the start boundary is unknown: an unreadable
+                 trigger is not evidence of a fault, and inventing one would be worse than
+                 the silence this replaces.
+  #>
+  param([datetime]$TriggerStart, [datetime]$Now, [int]$GraceHours = 0)
+  if ($GraceHours -le 0) { $GraceHours = $script:NeverRanGraceHours }
+  if (-not $TriggerStart -or $TriggerStart.Year -lt 2000) { return $false }
+  return ((($Now - $TriggerStart).TotalHours) -gt $GraceHours)
+}
+
+if ($SelfTest) {
+  # Frozen fixtures: the founding bug (a task that never runs, reported green forever) and
+  # its clean twin (a task legitimately still waiting for its first slot).
+  $fail = 0
+  $now = [datetime]'2026-08-21 06:47'
+
+  # MUST FIRE: registered four days ago, still never run.
+  if (-not (Test-NeverRanTooLong -TriggerStart ([datetime]'2026-08-17 07:00') -Now $now)) {
+    Write-Output 'FAIL  a task registered 4 days ago that never fired read as ok - the gate cannot arm'; $fail++
+  } else { Write-Output 'ok    4-day-old never-run task is a finding' }
+
+  # CLEAN TWIN: registered yesterday after its own slot; its first real chance is today.
+  if (Test-NeverRanTooLong -TriggerStart ([datetime]'2026-08-20 07:00') -Now $now) {
+    Write-Output 'FAIL  a task still inside its first cycle was called broken - day-one false alarm'; $fail++
+  } else { Write-Output 'ok    task still inside its first cycle stays ok' }
+
+  # An unreadable trigger must not manufacture a finding.
+  if (Test-NeverRanTooLong -TriggerStart ([datetime]'1999-11-30') -Now $now) {
+    Write-Output 'FAIL  an unknown trigger start produced a finding out of nothing'; $fail++
+  } else { Write-Output 'ok    unknown trigger start -> no invented finding' }
+
+  Write-Output ("SELFTEST " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
+  exit $(if ($fail) { 1 } else { 0 })
+}
 . (Join-Path $root 'alert-lib.ps1')
 
 $TASKS = @('TC Grocery Ad Pulls 0700', 'TC Grocery Daily Capture 0800')
@@ -60,7 +106,20 @@ foreach ($name in $TASKS) {
 
   if ($neverRan) {
     $next = if ($i.NextRunTime) { $i.NextRunTime.ToString('yyyy-MM-dd HH:mm') } else { 'unscheduled' }
-    [void]$ok.Add("$name has not run yet (registered; next $next)")
+    # "Not yet" is only innocent while it is still EARLY. A task registered days ago that has
+    # still never fired is not waiting for its trigger, it is broken - a bad principal, a
+    # condition that never holds, a StartBoundary in the past. Left as a permanent `ok` this
+    # is a gate that can never arm: the one state it exists to catch would read green forever.
+    # The grace is one full cycle plus a margin, so a task created after today's slot (which is
+    # exactly how these two were registered on 2026-08-20) still gets its first real chance.
+    $start = $null
+    try { if ($t.Triggers[0].StartBoundary) { $start = [datetime]$t.Triggers[0].StartBoundary } } catch { }
+    if (Test-NeverRanTooLong -TriggerStart $start -Now (Get-Date)) {
+      $days = [int]((Get-Date) - $start).TotalDays
+      [void]$findings.Add("NEVER RAN: '$name' was registered $days day(s) ago (trigger $($start.ToString('yyyy-MM-dd HH:mm'))) and has still never fired. Next says $next. A trigger that has never produced a run is not waiting, it is misconfigured.")
+    } else {
+      [void]$ok.Add("$name has not run yet (registered; next $next)")
+    }
   } elseif ($rc -eq 267009) {
     [void]$ok.Add("$name is running now")
   } elseif ($isDaily -and -not $ranToday) {
@@ -193,3 +252,4 @@ if ($findings.Count -and $Alert) {
 
 Write-Output ("CAPTURE-WATCHDOG-COMPLETE findings={0}" -f $findings.Count)
 if ($findings.Count) { exit 1 } else { exit 0 }
+

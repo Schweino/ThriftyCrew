@@ -1,4 +1,4 @@
-<#
+﻿<#
   pull-regular-hyvee.ps1 - refresh Hy-Vee to the CURRENT Omaha #01 shelf price. Headless; no browser needed.
 
   WHY THIS EXISTS. Hy-Vee was the only priced store with no automated pull. Its everyday file was refreshed by
@@ -242,7 +242,7 @@ if ($Quick) { $work = @($work | Where-Object { $_.pid -gt 0 } | Select-Object -F
 # rather than by search term, so the per-request cost is per product.
 if (-not $Quick) {
   try {
-    . (Join-Path $root 'capture-policy.ps1')
+    . (Join-Path $root 'capture-policy-lib.ps1')
     $hvPlan = Get-CapturePlan -Store 'Hy-Vee'
     $hvBudget = [int]$hvPlan.TermBudget
     if ($hvBudget -gt 0 -and @($work).Count -gt $hvBudget) {
@@ -255,7 +255,17 @@ if (-not $Quick) {
       $hvPick = New-Object System.Collections.Generic.List[object]
       for ($z = 0; $z -lt $hvBudget; $z++) { [void]$hvPick.Add($hvAll[(($hvCur + $z) % $hvN)]) }
       $work = $hvPick.ToArray()
-      Set-Content -Path $hvCurFile -Encoding UTF8 -Value (@{ next_index = (($hvCur + $hvBudget) % $hvN); updated = (Get-Date).ToString('s'); note = 'capture-policy rotation cursor for the Hy-Vee product re-verify lane' } | ConvertTo-Json)
+      # COMMIT AFTER THE CAPTURE LANDS, NOT HERE (2026-08-21). This used to write the
+      # cursor at slice time, so a run that then failed - a throttle, a torn write, an
+      # exception anywhere in the next 250 lines - moved the rotation past products it
+      # never re-verified, and they waited a full quarter for another chance. That is
+      # exactly the failure pull-regular-familyfare documented on 2026-08-20, where a
+      # cursor advanced ahead of a write that then threw and 686 rows were discarded
+      # while their terms were skipped. Only the INTENT is computed here; the write
+      # happens beside the output file at the end of the run.
+      $script:HvCursorNext = (($hvCur + $hvBudget) % $hvN)
+      $script:HvCursorFile = $hvCurFile
+      $script:HvCursorFrom = $hvCur
       Write-Output ("Hy-Vee: capture-policy budget = $hvBudget product(s) today (rotation $hvCur/$hvN; quarter $($hvPlan.QuarterDays)d)")
     }
   } catch {
@@ -531,3 +541,25 @@ $out = [ordered]@{
 }
 ($out | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8
 Write-Output ("Hy-Vee everyday prices -> " + $file)
+
+# THE ROTATION COMMIT. Deliberately the last thing the run does, and only once the
+# everyday file above is on disk: the cursor is a promise that those products were
+# actually re-verified, so it must never be written by a run that did not finish.
+# Hy-Vee keeps its own cursor file rather than joining capture-cursor.json because it
+# rotates by PRODUCT ID while that one indexes commodity-search TERMS - the same
+# integer would otherwise mean two different things depending on who read it.
+if ($null -ne $script:HvCursorNext -and (Test-Path $file)) {
+  try {
+    $tmp = "$($script:HvCursorFile).tmp"
+    Set-Content -Path $tmp -Encoding UTF8 -Value (@{
+      next_index = $script:HvCursorNext
+      updated    = (Get-Date).ToString('s')
+      note       = 'PRODUCT-index rotation cursor for the Hy-Vee re-verify lane (NOT the commodity-search term cursor in capture-cursor.json). Written only after the everyday file landed.'
+    } | ConvertTo-Json)
+    Move-Item -LiteralPath $tmp -Destination $script:HvCursorFile -Force
+    Write-Output ("Hy-Vee: rotation cursor advanced #$($script:HvCursorFrom) -> #$($script:HvCursorNext) (capture landed)")
+  } catch {
+    Write-Warning ("Hy-Vee: everyday file landed but the rotation cursor could not be written (" + $_.Exception.Message + ") - the next run re-verifies this same slice; nothing is lost.")
+  }
+}
+

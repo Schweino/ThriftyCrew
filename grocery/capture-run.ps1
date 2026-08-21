@@ -1,4 +1,4 @@
-<#
+﻿<#
   capture-run.ps1 - run the capture policy across ALL SEVEN STORES CONCURRENTLY.
 
   TWO KINDS, on two schedules:
@@ -40,7 +40,7 @@ $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
-. (Join-Path $root 'capture-policy.ps1')
+. (Join-Path $root 'capture-policy-lib.ps1')
 
 # store -> how its EVERYDAY rotation is captured. $null = browser handoff.
 $DAILY_LANE = @{
@@ -194,3 +194,4 @@ if (-not $NoDownstream) {
 
 Write-Output 'CAPTURE-RUN-COMPLETE'
 if ($failed.Count) { exit 1 } else { exit 0 }
+

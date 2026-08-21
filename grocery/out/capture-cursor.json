@@ -1,4 +1,7 @@
-{
-  "updated": "2026-08-20T08:25:00",
-  "note": "reset after a dry-run rotation simulation; real lanes advance this only after their capture lands"
+﻿{
+    "updated":  "2026-08-21T07:09:38",
+    "Fareway":  7,
+    "note":  "index into the commodity-search term order where each TERM-ROTATION store starts next. Advanced only after that store\u0027s capture landed. Hy-Vee (product ids) and Baker\u0027s (comprehensive) are deliberately absent.",
+    "FamilyFare":  466,
+    "Fareway_last":  "2026-08-21"
 }
