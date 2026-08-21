@@ -550,6 +550,15 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    commodity matching changed vs baseline (a product MOVED/DROPPED) - see out\audit\soundness-report.json; publish will HOLD until reviewed + audit-match-soundness.ps1 -Accept' }
         elseif ($LASTEXITCODE -eq 3) { Log 'match-soundness BLIND: ingested ZERO products - no store feed reached this audit, so its silence is not a clean board'; $summary += 'REVIEW    audit-match-soundness ingested ZERO products - commodity matching is UNGUARDED this run (check out\regular\ and out\ads-*.json)' }
       } catch { Log ('match-soundness guard threw: ' + $_.Exception.Message) }
+      # ---- SALE WITHOUT AN AD (wired 2026-08-21, Brad: "Items that we show on 'sale' but no
+      # matching 'ad' keep note of"). Every cell published as a sale that matches no row in any ad we
+      # hold. Not automatically wrong - a store can cut a shelf price without advertising it - but it
+      # is the one class we cannot DATE, so it is the class that cannot expire by itself. The ledger
+      # keeps first_seen so "unexplained for three weeks" becomes visible; a count alone would not.
+      # Advisory: it reports a question, not a defect, so the board still ships.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-sale-without-ad.ps1') -Quiet | ForEach-Object { Log ('sale-without-ad: ' + $_) }
+      } catch { Log ('sale-without-ad threw: ' + $_.Exception.Message) }
       # ---- MATCHER PARITY (wired 2026-08-21): the auditors' COPIES of Match-Category must still assign
       # product names exactly as the engine does. audit-household-in-food is a HARD gate built on one of
       # those copies, so a divergence means a hard guard is judging cells under the wrong commodity while
