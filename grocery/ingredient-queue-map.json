@@ -96,6 +96,61 @@
       "id": "chipotle-powder",
       "basis": "slugified",
       "why": "resolved to an existing catalog commodity by slugified"
+    },
+    "almond flour": {
+      "id": "almond-flour",
+      "basis": "ruled by Brad 2026-08-21",
+      "why": "Brad 2026-08-21: new id. Verified unclaimed - flour excludes almond, so no collision."
+    },
+    "thai chiles": {
+      "id": "crushed-thai-chili",
+      "basis": "ruled by Brad 2026-08-21",
+      "why": "Brad 2026-08-21: new id, dried. Both captures are McCormick Crushed Thai Style Chili Pepper, a spice jar, not fresh chiles."
+    },
+    "cardamom pods": {
+      "id": "cardamom",
+      "basis": "ruled by Brad 2026-08-21",
+      "why": "Brad 2026-08-21: new id. One store (Hy-Vee) but a real staple spice."
+    },
+    "90/10 ground beef": {
+      "id": "ground-beef-9010",
+      "basis": "ruled by Brad 2026-08-21",
+      "why": "Brad 2026-08-21: new id for 90/10 only - organic or not does not matter for the id. Placed after ground-beef-93-7 so it cannot steal from 80/20 or 93/7."
+    },
+    "boneless beef short ribs": {
+      "id": "beef-short-ribs",
+      "basis": "ruled by Brad 2026-08-21",
+      "why": "Brad 2026-08-21: keep it, filed with the meats. Verified unclaimed."
+    },
+    "tandoori spice mix": {
+      "id": "tandoori-seasoning",
+      "basis": "ruled by Brad 2026-08-21",
+      "why": "Brad asked whether any store sells it: Hy-Vee does, $2.49/0.88oz Patak BBQ Tandoori Chicken Seasoning, and it is a real seasoning. 6 of 7 stores do not carry it."
+    },
+    "Gruyere Cheese": {
+      "id": "gruyere",
+      "basis": "ruled by Brad 2026-08-21",
+      "why": "Brad 2026-08-21: one new id for gruyere. Placed at index 12, ahead of apples (21), which also stops Red Apple Cheese Gruyere Cheese from matching apples."
+    },
+    "gruyere": {
+      "id": "gruyere",
+      "basis": "ruled by Brad 2026-08-21",
+      "why": "same id as Gruyere Cheese - queued twice, identical Boar's Head price."
+    },
+    "fresh oregano": {
+      "id": "fresh-oregano",
+      "basis": "ruled by Brad 2026-08-21",
+      "why": "Brad 2026-08-21: new id, re-verify the Bakers row. dried-oregano already excludes \bfresh\b so there is no collision; the Bakers row (Simple Truth Organic Oregano) matches dried-oregano and is NOT fresh - it is excluded here by the dried/ground extra-excludes."
+    },
+    "Yellow Bell Pepper": {
+      "id": "yellow-bell-pepper",
+      "basis": "ruled by Brad 2026-08-21",
+      "why": "Brad 2026-08-21: new id. Required an exclude on bell-peppers first - its bells+peppers? include matched Yellow Bell Pepper and would have kept winning it (first-match-wins)."
+    },
+    "green bell pepper": {
+      "id": "bell-peppers",
+      "basis": "ruled by Brad 2026-08-21",
+      "why": "Brad 2026-08-21: no new id - fold into bell-peppers and take the cheapest per lb. This also resolves the tile-integrity failure, because the cheapest per-lb row IS the $0.79 Green Bell Pepper the stored link points at."
     }
   },
   "banned": {
@@ -105,23 +160,12 @@
   },
   "pending_new_id": {
     "bacon bits": "a shelf-stable topping, not bacon - different aisle, different basis, and reusing bacon would corrupt a live cell",
-    "gruyere": "duplicate of \"Gruyere Cheese\" - one id, not two",
-    "thai chiles": "the catalog names chiles individually (dried-arbol-chiles, dried-guajillo-chiles, dried-ancho-chiles); thai is a fourth",
     "shaved beef steak": "a specific cut/prep; the catalog names cuts individually (sirloin-steak, ribeye-steak)",
-    "boneless beef short ribs": "a specific cut; baby-back-ribs is pork and is the only ribs id",
-    "fresh oregano": "the catalog carries dried-oregano explicitly, so fresh vs dried IS a boundary here (and the per-oz prices are nothing alike)",
-    "cardamom pods": "no candidate in the catalog - the only \"pods\" matches are coffee-pods and laundry-pods, which are false friends",
-    "90/10 ground beef": "the catalog splits ground beef by lean ratio (ground-beef-8020, ground-beef-93-7), so 90/10 is a third id, not a rename of either",
     "unsweetened ketchup": "a premium variant; folding it into ketchup would make the ketchup cell look dearer than the ketchup people buy",
-    "tandoori spice mix": "no spice-blend id covers it; the \"mix\" matches are all baking mixes",
-    "almond flour": "flour is wheat flour; almond flour is a different food at several times the price",
     "Monterey Jack Cheese": "the catalog has NO block/specialty cheese ids at all (only cottage, cream, shredded, sliced, string) - this is a genuine gap, not a rename",
     "Pepper Jack Cheese": "same gap as Monterey Jack",
-    "Gruyere Cheese": "same gap; note this and the lowercase \"gruyere\" entry are the SAME food queued twice and must resolve to ONE id",
     "Pork Smoked Sausage": "the catalog names sausages individually (italian-sausage, breakfast-sausage, smoked-turkey-sausage); pork smoked is a fourth",
     "Beef Base": "beef-broth exists but a base is a concentrate paste, not a liquid - different unit basis entirely",
-    "Egg Yolk": "not sold as a separate retail item; the captured price is almost certainly for whole eggs, so mapping it to eggs would publish a wrong basis. Needs a human ruling on whether it is a commodity at all.",
-    "green bell pepper": "REVERTED 2026-08-21 by audit-tile-integrity. Ruled a reuse of bell-peppers on the reasoning that the catalog does not split bell peppers by colour - which is true of the CATALOG and false of the PRICE. Promoting Yellow Bell Pepper at $1.99 created a Hy-Vee cell whose stored link is a Green Bell Pepper at $0.79, a 0.4x disagreement, and the guard hard-failed the publish. Colour is a price boundary here even though it is not an id boundary, so these need their own ids or none.",
-    "Yellow Bell Pepper": "REVERTED 2026-08-21 by audit-tile-integrity. Ruled a reuse of bell-peppers on the reasoning that the catalog does not split bell peppers by colour - which is true of the CATALOG and false of the PRICE. Promoting Yellow Bell Pepper at $1.99 created a Hy-Vee cell whose stored link is a Green Bell Pepper at $0.79, a 0.4x disagreement, and the guard hard-failed the publish. Colour is a price boundary here even though it is not an id boundary, so these need their own ids or none."
+    "Egg Yolk": "not sold as a separate retail item; the captured price is almost certainly for whole eggs, so mapping it to eggs would publish a wrong basis. Needs a human ruling on whether it is a commodity at all."
   }
 }

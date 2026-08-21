@@ -4,7 +4,7 @@
     "price_mode":  "in-store",
     "mode_verified":  "2026-08-16",
     "source":  "promote-ingredient-queue.ps1 from ingredient-queue.json - prices an agent captured per store and adjudicated per product",
-    "generated":  "2026-08-21T17:13:12",
+    "generated":  "2026-08-21T18:17:24",
     "note":  "Prices from the Recipe Hunter pricing agent, promoted into the engine because compare-deals reads out\\regular and does not read the queue. Commodity ids come from ingredient-queue-map.json, which is a RULING - nothing here was slugified or inferred.",
     "deals":  [
                   {
@@ -139,6 +139,19 @@
                   },
                   {
                       "store":  "Baker\u0027s",
+                      "item":  "Boar\u0027s Head Blanc Grue Gruyere Cheese",
+                      "ad_price":  "$8.49",
+                      "size":  "8 oz",
+                      "regular":  "$8.49",
+                      "current_price":  8.49,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "gruyere",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "gruyere"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
                       "item":  "E\u0026J VS Brandy",
                       "ad_price":  "$12.49",
                       "size":  "750 ml",
@@ -152,6 +165,84 @@
                   },
                   {
                       "store":  "Baker\u0027s",
+                      "item":  "Fresh Large Green Bell Pepper",
+                      "ad_price":  "$0.99",
+                      "size":  "1 ct",
+                      "regular":  "$0.99",
+                      "current_price":  0.99,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "green bell pepper",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "bell-peppers"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Boneless Short Beef Ribs (About 4 per Pack)",
+                      "ad_price":  "$11.99",
+                      "size":  "1 lb",
+                      "regular":  "$11.99",
+                      "current_price":  11.99,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "boneless beef short ribs",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "beef-short-ribs"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Simple Truth Organic Oregano",
+                      "ad_price":  "$2.49",
+                      "size":  "0.5 oz",
+                      "regular":  "$2.49",
+                      "current_price":  2.49,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "fresh oregano",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "fresh-oregano"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Simple Truth Organic 90/10 Grass Fed Ground Beef Pack 1 LB",
+                      "ad_price":  "$8.99",
+                      "size":  "1 lb",
+                      "regular":  "$8.99",
+                      "current_price":  8.99,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "90/10 ground beef",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "ground-beef-9010"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Simple Truth Gluten Free Superfine Almond Flour",
+                      "ad_price":  "$7.49",
+                      "size":  "16 oz",
+                      "regular":  "$7.49",
+                      "current_price":  7.49,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "almond flour",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "almond-flour"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Boar\u0027s Head Blanc Grue Gruyere Cheese",
+                      "ad_price":  "$8.49",
+                      "size":  "8 oz",
+                      "regular":  "$8.49",
+                      "current_price":  8.49,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Gruyere Cheese",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "gruyere"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
                       "item":  "Broccolini",
                       "ad_price":  "$3.99",
                       "size":  "1 ct (bunch)",
@@ -162,6 +253,19 @@
                       "found_by_term":  "Broccolini",
                       "price_type":  "everyday",
                       "hunter_commodity":  "broccolini"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Fresh Yellow Bell Pepper",
+                      "ad_price":  "$1.67",
+                      "size":  "1 ct",
+                      "regular":  "$1.67",
+                      "current_price":  1.67,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Yellow Bell Pepper",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "yellow-bell-pepper"
                   }
               ]
 }

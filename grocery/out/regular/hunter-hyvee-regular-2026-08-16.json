@@ -4,7 +4,7 @@
     "price_mode":  "in-store",
     "mode_verified":  "2026-08-16",
     "source":  "promote-ingredient-queue.ps1 from ingredient-queue.json - prices an agent captured per store and adjudicated per product",
-    "generated":  "2026-08-21T17:13:12",
+    "generated":  "2026-08-21T18:17:24",
     "note":  "Prices from the Recipe Hunter pricing agent, promoted into the engine because compare-deals reads out\\regular and does not read the queue. Commodity ids come from ingredient-queue-map.json, which is a RULING - nothing here was slugified or inferred.",
     "deals":  [
                   {
@@ -22,6 +22,71 @@
                   },
                   {
                       "store":  "Hy-Vee",
+                      "item":  "McCormick Crushed Thai Style Chili Pepper",
+                      "ad_price":  "$5.99",
+                      "size":  "1.37 oz",
+                      "regular":  "$5.99",
+                      "current_price":  5.99,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "thai chiles",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "crushed-thai-chili"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Green Bell Pepper",
+                      "ad_price":  "$0.79",
+                      "size":  "lb",
+                      "regular":  "$0.79",
+                      "current_price":  0.79,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "green bell pepper",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "bell-peppers"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Johnson Family Farm Fresh Oregano",
+                      "ad_price":  "$2.99",
+                      "size":  "0.75 oz",
+                      "regular":  "$2.99",
+                      "current_price":  2.99,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "fresh oregano",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "fresh-oregano"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Morton \u0026 Bassett Cardamom",
+                      "ad_price":  "$13.99",
+                      "size":  "0.9 oz",
+                      "regular":  "$13.99",
+                      "current_price":  13.99,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "cardamom pods",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "cardamom"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Patak\u0027s BBQ Tandoori Chicken Seasoning Rub 0.88 oz",
+                      "ad_price":  "$2.49",
+                      "size":  "0.88 oz",
+                      "regular":  "$2.49",
+                      "current_price":  2.49,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "tandoori spice mix",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "tandoori-seasoning"
+                  },
+                  {
+                      "store":  "Hy-Vee",
                       "item":  "Fresh Curly Parsley",
                       "ad_price":  "$0.99",
                       "size":  "1 ct (bunch)",
@@ -32,6 +97,32 @@
                       "found_by_term":  "Fresh Parsley",
                       "price_type":  "everyday",
                       "hunter_commodity":  "fresh-parsley"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Red Apple Cheese Gruyere Cheese",
+                      "ad_price":  "$4.99",
+                      "size":  "7 oz",
+                      "regular":  "$4.99",
+                      "current_price":  4.99,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Gruyere Cheese",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "gruyere"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Yellow Bell Pepper",
+                      "ad_price":  "$1.99",
+                      "size":  "1 ct",
+                      "regular":  "$1.99",
+                      "current_price":  1.99,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Yellow Bell Pepper",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "yellow-bell-pepper"
                   }
               ]
 }

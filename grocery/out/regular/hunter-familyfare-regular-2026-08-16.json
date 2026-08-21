@@ -4,7 +4,7 @@
     "price_mode":  "in-store",
     "mode_verified":  "2026-08-16",
     "source":  "promote-ingredient-queue.ps1 from ingredient-queue.json - prices an agent captured per store and adjudicated per product",
-    "generated":  "2026-08-21T17:13:12",
+    "generated":  "2026-08-21T18:17:24",
     "note":  "Prices from the Recipe Hunter pricing agent, promoted into the engine because compare-deals reads out\\regular and does not read the queue. Commodity ids come from ingredient-queue-map.json, which is a RULING - nothing here was slugified or inferred.",
     "deals":  [
                   {
@@ -97,6 +97,32 @@
                       "found_by_term":  "cornmeal",
                       "price_type":  "everyday",
                       "hunter_commodity":  "cornmeal"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh Green Peppers",
+                      "ad_price":  "$1.29",
+                      "size":  "1 ct",
+                      "regular":  "$1.29",
+                      "current_price":  1.29,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "green bell pepper",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "bell-peppers"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Blue Diamond Finely Sifted Almond Flour 16 Oz",
+                      "ad_price":  "$9.99",
+                      "size":  "16 oz",
+                      "regular":  "$9.99",
+                      "current_price":  9.99,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "almond flour",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "almond-flour"
                   },
                   {
                       "store":  "Family Fare",
