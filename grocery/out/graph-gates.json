@@ -1,0 +1,44 @@
+{
+    "updated":  "2026-08-21T16:32:39",
+    "python":  "C:\\Codex\\Python312\\python.exe",
+    "mode":  "ADVISORY - graph checks the finished board and can never change a price or stop a publish. Promotion to blocking is per-gate, after a clean record of real days, and is Brad\u0027s call.",
+    "gates_total":  7,
+    "gates_failing":  0,
+    "gates":  [
+                  {
+                      "gate":  "omaha_identity",
+                      "verdict":  "PASS",
+                      "detail":  ""
+                  },
+                  {
+                      "gate":  "ad_window",
+                      "verdict":  "PASS",
+                      "detail":  ""
+                  },
+                  {
+                      "gate":  "known_wrong_not_priced",
+                      "verdict":  "PASS",
+                      "detail":  ""
+                  },
+                  {
+                      "gate":  "no_unresolved_pricing",
+                      "verdict":  "PASS",
+                      "detail":  ""
+                  },
+                  {
+                      "gate":  "row_age",
+                      "verdict":  "PASS",
+                      "detail":  ""
+                  },
+                  {
+                      "gate":  "ad_reversion_owed",
+                      "verdict":  "PASS",
+                      "detail":  ""
+                  },
+                  {
+                      "gate":  "provenance_complete",
+                      "verdict":  "PASS",
+                      "detail":  ""
+                  }
+              ]
+}

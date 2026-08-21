@@ -580,6 +580,19 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-price-capture-reach.ps1') | ForEach-Object { Log ('price-capture-reach: ' + $_) }
       } catch { Log ('price-capture-reach threw: ' + $_.Exception.Message) }
+      # ---- GRAPH GATES (graduated 2026-08-21 on Brad's call: "Im confident to graduate this system
+      # and well work out the kinks as it's live"). graph\ stops being a bystander and starts CHECKING
+      # the finished board - it cannot invent a cell, move a crown or change a number, so the worst it
+      # can do is complain. It has earned this once already: on its first run it flagged that Fareway's
+      # weekly ad window had expired 2026-08-15 while next_pull said 2026-08-16.
+      # ADVISORY, and the reason is concrete rather than cautious: graph reads some of its rules out of
+      # THIS estate's source text, and the capture-policy split earlier the same day turned its row_age
+      # gate red. It refused to guess, which is right, but it means a reasonable refactor here can turn
+      # it red there. While that is true it must not be able to stop a publish. Promotion to blocking
+      # is per-gate, after a clean record of real days, and it is Brad's call.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-graph-gates.ps1') | ForEach-Object { Log ('graph-gates: ' + $_) }
+      } catch { Log ('graph-gates threw: ' + $_.Exception.Message) }
       # ---- MATCHER PARITY (wired 2026-08-21): the auditors' COPIES of Match-Category must still assign
       # product names exactly as the engine does. audit-household-in-food is a HARD gate built on one of
       # those copies, so a divergence means a hard guard is judging cells under the wrong commodity while

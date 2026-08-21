@@ -3924,6 +3924,16 @@ else { Bad ('rollback TTL fixtures FAILED (rc=' + $r.rc + ') - a 30-day window t
 # into ingredient-queue.json and NOTHING promotes them - 97 of 99 had reached nothing since 2026-08-16.
 # No existing guard could see it: every other one starts from the board and asks whether what is on it
 # is right, so a price that never arrives is invisible by construction.
+# ---------------------------------------------------------------- graph gates (graduated 2026-08-21)
+# graph\ now CHECKS the live board. The fixture's must-fire is a parser one, and it is the right thing
+# to freeze: if the parser silently drops a FAIL line, this whole check reports clean forever - the
+# worst possible failure mode for a guard, and invisible from the outside. Its clean twins keep the
+# block from over-reading (a later report section must not be mistaken for a gate) and keep an
+# unrecognised verdict from being read as a pass, because unknown is not a pass.
+$r = RunPS 'audit-graph-gates.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'graph-gates: a failing gate survives parsing, a later section is not read as a gate, and an unknown verdict is not a pass' }
+else { Bad ('audit-graph-gates -SelfTest failed (rc=' + $r.rc + ') - graph could report every board clean regardless of what its gates said: ' + ($r.text -replace "`n", ' ')) }
+
 $r = RunPS 'audit-price-capture-reach.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'price-capture-reach: a captured price that reaches nothing is still reported, and reach is measured per CELL not per commodity' }
 else { Bad ('audit-price-capture-reach -SelfTest failed (rc=' + $r.rc + ') - captured prices can go missing without anything counting them: ' + ($r.text -replace "`n", ' ')) }
