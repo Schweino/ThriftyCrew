@@ -243,3 +243,43 @@ reasons about pack shape, so the machinery exists; the rule does not.
 
 Left open deliberately. It needs a form-vs-size rule, not another regex, and
 inventing one mid-session is how the last four patterns got written.
+
+## 13. The adjacency class is now CLEAN on the live board — DONE
+
+`graph/learning/lint_adjacency.py` sweeps every exclude pattern in the catalog
+for the defect that shipped four wrong prices: a pattern written as adjacent
+words, defeated by a name that separates or pluralises them. It checks against
+the full 44,125-name corpus and reports only near-misses on products the
+commodity ACTUALLY CLAIMS - an exclude missing something its commodity never
+wanted is not a defect.
+
+Result after the four fixes:
+
+  704 near-misses total
+   19 on a product the board publishes  -> all 19 read, ALL CORRECT BEHAVIOUR
+   17 flagged as class-risk (pet / household / alcohol / supplement)
+    0 of those on a live cell
+
+The 19 live ones are things like `chili\s+beans` not firing on "Chili with
+Beans" (which IS canned chili), `ground\s+mustard` not firing on "Stone Ground
+Dijon" (which IS dijon), `corn\s+chips?` not firing on "Corn Tortilla Chips"
+(which ARE tortilla chips). The pattern is supposed to miss those.
+
+So: no remaining live instances of this class in the machine-checkable shape.
+That is a result, not a null. It is also exactly the claim that needs a
+must-fire test before anyone believes it, so:
+
+  fixture   remove milk's \bchocolate\b exclude (the 2026-08-21 fix)
+  ->        30 near-misses on milk, including "LALA Chocolate 1% Milk",
+            "Nesquik Chocolate Low-fat Milk", "Horizon Organic Chocolate
+            Low-Fat Milk" - the exact products that caused the original bug
+  restore   0 near-misses. Clean twin.
+
+Two limits, stated rather than hidden. It only reads patterns made of plain
+words - anything with alternation or a character class is skipped rather than
+guessed at, so `\bfor\s+(?:dogs?|cats?|pets?)\b` (one of the ten that failed on
+the dog treat) is invisible to it. And single-letter literals are dropped as
+noise after `\bd\s+batteries\b` near-missed every AA pack in the corpus.
+
+Worth running after any catalog edit. Not a guard - it produces questions, and a
+gate that fails on a question trains people to ignore it.
