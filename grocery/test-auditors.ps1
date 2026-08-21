@@ -3930,6 +3930,17 @@ else { Bad ('rollback TTL fixtures FAILED (rc=' + $r.rc + ') - a 30-day window t
 # worst possible failure mode for a guard, and invisible from the outside. Its clean twins keep the
 # block from over-reading (a later report section must not be mistaken for a gate) and keep an
 # unrecognised verdict from being read as a pass, because unknown is not a pass.
+# ---------------------------------------------------------------- the everyday/sale split (wired 2026-08-21)
+# price-split-lib has carried a full self-test since it was written, and NOTHING CALLED IT - the
+# fixtures for the rule Brad called non-negotiable had never been executed by this suite, on the
+# function whose first live outing re-typed 357 board cells and moved 27 Cheapest crowns.
+# It now also covers Fareway's stated countdown ("Sale ends in N days"), whose must-not-drift case is
+# the important one: the window is anchored to the CAPTURE date, so the same row read a week later
+# still ends on the same day. Anchored on today instead, a sale would never end.
+$r = RunPS 'test-price-split.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'PRICE-SPLIT PASSED') { Ok 'price split: ad never becomes everyday, everyday never becomes an ad, and a stated countdown does not drift with the clock' }
+else { Bad ('price-split fixtures FAILED (rc=' + $r.rc + ') - the everyday/ad separation or the stated sale window is wrong: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
+
 $r = RunPS 'audit-graph-gates.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'graph-gates: a failing gate survives parsing, a later section is not read as a gate, and an unknown verdict is not a pass' }
 else { Bad ('audit-graph-gates -SelfTest failed (rc=' + $r.rc + ') - graph could report every board clean regardless of what its gates said: ' + ($r.text -replace "`n", ' ')) }

@@ -512,6 +512,32 @@ foreach ($f in $In) {
     if ($r.url -and "$($r.url)" -ne '') { $row['link_url'] = [string]$r.url }
     if ($r.taxonomy_path) { $row['taxonomy_path'] = [string]$r.taxonomy_path }
     if ($curNum -gt 0) { $row['current_price'] = $curNum }
+    # THE STORE'S OWN COUNTDOWN (2026-08-21). Brad pointed at a Fareway product page reading
+    # "Sale ends in 1 day" and asked why we were guessing a 30-day TTL for it. We were guessing
+    # because nothing captured the field: saleDisclaimerString lives ONLY in the page's Apollo
+    # cache and is never painted into the DOM, so no tile scraper could ever have seen it
+    # (measured on the pork-ribs results page: document.body.innerText contains "Sale ends" -> NO,
+    # the cache -> YES). pull-fareway-shop.js reads the cache and emits the integer.
+    #
+    # THE INTEGER IS STORED, NEVER A DATE COMPUTED HERE. "Sale ends in 1 day" means one day from
+    # the day it was CAPTURED, and it means something different tomorrow. A Fareway row can be
+    # carried forward for weeks under the 90-day quarter, so a date baked in at build time would
+    # quietly age into a lie while looking precise. The engine derives ad_to from this integer and
+    # the row's own as_of - `dates written, not measured`, which surfaces as a wrong PRICE.
+    #
+    # NOT EVERY MARKDOWN HAS ONE, and the count is expected to be low: on that same page 47 items
+    # carried a was-price and only 6 carried an end date, all six MEAT. This dates Fareway's weekly
+    # meat ad and leaves packaged markdowns on the TTL. A small number here is not a broken sweep.
+    if ($null -ne $r.sale_ends_days -and "$($r.sale_ends_days)" -ne '') {
+      $sedN = -1
+      if ([int]::TryParse([string]$r.sale_ends_days, [ref]$sedN) -and $sedN -ge 0 -and $sedN -le 60) {
+        $row['sale_ends_days'] = $sedN
+      }
+    }
+    # Kept verbatim even when it parsed to nothing, so a disclaimer shape we do not handle yet
+    # ("Add 2 to qualify for deal" is the one already seen) stays visible in the capture instead
+    # of being silently dropped. It dates nothing on its own.
+    if ($r.sale_note -and "$($r.sale_note)" -ne '') { $row['sale_note'] = [string]$r.sale_note }
 
     # base_price (the was-price) ONLY when it is in the same basis as what we publish. For a weighted good we
     # publish a per-POUND price while `orig` is the PACK's was-price - recording that as base_price would be

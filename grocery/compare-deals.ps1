@@ -1304,6 +1304,10 @@ $script:AdIndex = $null
 try { $script:AdIndex = Import-AdRows -OutDir $OutDir -BoardDate ([string]$today) } catch { Write-Warning ("ad-match index unavailable (" + $_.Exception.Message + ") - undated sales stay undated") }
 $script:AdInherited = 0
 $script:TtlDated = 0
+# Sales dated by the STORE's own stated countdown (Fareway saleDisclaimerString). Counted separately
+# from ad-inherited and TTL windows so the three sources stay distinguishable in the health block -
+# a real date from the store and a 30-day guess must never read as the same fact.
+$script:StoreCountdown = 0
 
 $regDir = if ($RegularDir) { $RegularDir } else { Join-Path $OutDir 'regular' }
 if (Test-Path $regDir) {
@@ -1355,6 +1359,30 @@ if (Test-Path $regDir) {
       $spl = Get-PriceSplit $d ([string]$ex.store)
       $script:LastBasis = if ($spl.sale_from) { 'store' } else { '' }
       if ($spl.sale_price) {
+        # THE STORE STATED A COUNTDOWN. Highest precedence after its own explicit dates, because it
+        # IS the store's own answer - Fareway's saleDisclaimerString, "Sale ends in N days", captured
+        # from the storefront's Apollo cache. Brad found this by opening a product page and asking why
+        # a row with a visible end date was being given a 30-day guess.
+        #
+        # DERIVED FROM THE ROW'S OWN as_of, NEVER FROM TODAY. The countdown is relative to the day it
+        # was captured: "ends in 1 day" seen on 08-21 means 08-22, and still means 08-22 when the row
+        # is read on 08-25. Reading it against today would push the expiry forward every single build
+        # and produce a sale that never ends - the same infinite-TTL shape the rollback anchor exists
+        # to prevent, arriving through a different door.
+        # Verified against an independent source before shipping: the ribs read "Sale ends in 1 day"
+        # on 2026-08-21 -> 2026-08-22, and fareway-deals-2026-08-20.json independently states the
+        # weekly ad runs 2026-08-17 to 2026-08-22.
+        # The derivation lives in price-split-lib beside the split it belongs to, so the frozen
+        # fixtures exercise the REAL decision rather than a transcription of it.
+        # ANCHORED ON THE ROW'S as_of, not $rsd's file date and not today - see that function's header.
+        if (-not $spl.sale_from -and $null -ne $d.sale_ends_days) {
+          $anchorDate = if ([string]$d.as_of -match '^\d{4}-\d{2}-\d{2}$') { [string]$d.as_of } else { $rsd }
+          $sw = Get-StatedSaleWindow $d.sale_ends_days $anchorDate
+          if ($sw) {
+            $spl.sale_from = $sw.from; $spl.sale_to = $sw.to
+            $script:StoreCountdown++; $script:LastBasis = 'store'
+          }
+        }
         # INHERIT THE AD'S WINDOW when the store's own row carried none. This is what turns "a sale
         # we cannot date" into "a sale that ends on the day the flyer says", and it is the difference
         # between a TTL guess and the store's own answer.
@@ -1710,7 +1738,7 @@ $report = @($report | Sort-Object commodity)
 $flagPfx = if ($OutName -eq 'comparison') { 'flagged' } else { "$OutName-flagged" }
 (@{ week_of=$today; flagged_count=$flagged.Count; flagged=$flagged.ToArray(); multibuy_unpriced=$mbUnpriced.ToArray() } | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $OutDir ("$flagPfx-"+$today+".json")) -Encoding UTF8
 $storesWithData = @($matched | Where-Object { $_.unit_price -ne $null } | ForEach-Object { $_.store } | Select-Object -Unique | Sort-Object)
-$health = [ordered]@{ stores_with_data=$storesWithData; store_count=$storesWithData.Count; commodities_compared=$report.Count; flagged_out_of_band=$flagged.Count; multibuy_unpriced=$mbUnpriced.Count; expired_sale_rows_dropped=$script:ExpiredSaleRows; sale_windows_inherited_from_ads=$script:AdInherited; sale_windows_from_ttl=$script:TtlDated }
+$health = [ordered]@{ stores_with_data=$storesWithData; store_count=$storesWithData.Count; commodities_compared=$report.Count; flagged_out_of_band=$flagged.Count; multibuy_unpriced=$mbUnpriced.Count; expired_sale_rows_dropped=$script:ExpiredSaleRows; sale_windows_inherited_from_ads=$script:AdInherited; sale_windows_from_ttl=$script:TtlDated; sale_windows_from_store_countdown=$script:StoreCountdown }
 
 # ---------------------------------------------------------------- output
 $out = [ordered]@{ built_at=(Get-Date).ToString('s'); week_of=$today; source=$AdsFile; commodities_compared=$report.Count; health=$health; comparison=$report }

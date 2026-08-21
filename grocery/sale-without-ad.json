@@ -1,12 +1,12 @@
 {
-    "updated":  "2026-08-21T14:02:54",
+    "updated":  "2026-08-21T16:55:16",
     "board":  "comparison-2026-08-21.json",
     "week_of":  "2026-08-21",
     "note":  "Cells published as a SALE that match no row in any ad we hold. Not automatically wrong - a store may cut a shelf price without advertising it (Fareway\u0027s own product page reports on_sale:true with retailer:false and no promotionGroupId) - but this is the class we cannot DATE, so it is the class that cannot expire on its own. first_seen is written once and never re-stamped; days_unexplained is only meaningful because of that.",
-    "sale_cells":  502,
+    "sale_cells":  500,
     "dated_by_the_store":  232,
-    "traced_to_an_ad":  70,
-    "untraceable":  200,
+    "traced_to_an_ad":  69,
+    "untraceable":  199,
     "ad_rows_available":  "Aldi=108 Baker\u0027s=292 Family Fare=1000 Fareway=267 Hy-Vee=686",
     "items":  [
                   {
@@ -57,19 +57,6 @@
                       "per_unit":  0.0507,
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/55441263-fareway-apple-cider-vinegar-128-fl-oz",
-                      "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-08-21",
-                      "days_unexplained":  0
-                  },
-                  {
-                      "key":  "Fareway|baby-back-ribs",
-                      "id":  "baby-back-ribs",
-                      "store":  "Fareway",
-                      "item":  "Hand-Cut Extra Meaty Baby Back Pork Ribs",
-                      "price":  "$3.99",
-                      "per_unit":  3.99,
-                      "unit":  "lb",
-                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387836-hand-cut-extra-meaty-baby-back-pork-ribs-1-each",
                       "first_seen":  "2026-08-21",
                       "last_seen":  "2026-08-21",
                       "days_unexplained":  0
