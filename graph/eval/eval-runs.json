@@ -52,6 +52,23 @@
   },
   {
     "context": "phase2",
+    "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.7116564417177914, \"relation_precision\": 1.0, \"relation_recall\": 0.7116564417177914, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.2883435582822086, \"counts\": {\"tp\": 696, \"fp\": 0, \"tn\": 492, \"fn\": 282, \"gold_match\": 978, \"gold_no_match\": 492, \"escalated\": 0, \"missing_node\": 26}, \"by_status\": {\"known_wrong\": 172, \"include_hit\": 696, \"no_include_hit\": 600, \"excluded\": 2}, \"f1\": 0.8315412186379929, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}}",
+    "entity_precision": 1.0,
+    "entity_recall": 0.7116564417177914,
+    "false_merge_rate": 0.0,
+    "gold_version": "9dc75c577c289fbc",
+    "id": "eval:3db4ca5aefece9c23185",
+    "missed_merge_rate": 0.2883435582822086,
+    "model": "deterministic-only",
+    "n_gold": 1499,
+    "n_pred": 696,
+    "prompt_version": "resolve.v1",
+    "relation_precision": 1.0,
+    "relation_recall": 0.7116564417177914,
+    "run_at": "2026-08-20T19:26:59"
+  },
+  {
+    "context": "phase2",
     "detail_json": "{\"entity_precision\": 1.0, \"entity_recall\": 0.7811447811447811, \"relation_precision\": 1.0, \"relation_recall\": 0.7811447811447811, \"false_merge_rate\": 0.0, \"missed_merge_rate\": 0.21885521885521886, \"counts\": {\"tp\": 696, \"fp\": 0, \"tn\": 381, \"fn\": 195, \"gold_match\": 891, \"gold_no_match\": 381, \"escalated\": 0, \"missing_node\": 26}, \"by_status\": {\"known_wrong\": 155, \"include_hit\": 696, \"no_include_hit\": 419, \"excluded\": 2}, \"f1\": 0.8771266540642723, \"gates\": {\"false_merge_ok\": true, \"missed_merge_ok\": false}}",
     "entity_precision": 1.0,
     "entity_recall": 0.7811447811447811,

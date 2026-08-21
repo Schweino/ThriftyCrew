@@ -2512,6 +2512,246 @@
                         "ruled_on":  "2026-08-20",
                         "ruled_by":  "escalation-review-2026-08-20",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "conditioner|FamilyFare|not-your-mothers-10-in-1-hair-perfector-6-fl-oz",
+                        "commodity":  "conditioner",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Not Your Mother\u0027s 10 In 1 Hair Perfector 6 Fl Oz"
+                                  ],
+                        "product_id":  "1564405684704809491",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u002710 In 1 Hair Perfector\u0027 - a leave-in styling treatment, not rinse-out hair conditioner; different product class sold as a treatment.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "conditioner|FamilyFare|hair-biology-full-and-vibrant-thickening-treatme",
+                        "commodity":  "conditioner",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Hair Biology Full And Vibrant Thickening Treatment For Fine, Thin, Flat Hair 6.4 Fl Oz 6.4 Fl Oz"
+                                  ],
+                        "product_id":  "1564405684707011558",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Thickening Treatment\u0027 - the listing\u0027s own word is Treatment; a scalp/thickening treatment is not conditioner.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "plums|Bakers|fresh-mottled-plumcot",
+                        "commodity":  "plums",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Fresh Mottled Plumcot"
+                                  ],
+                        "product_id":  "0000000003278",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Plumcot\u0027 - a plum-apricot HYBRID, a different fruit from the plum the commodity names.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "plums|Bakers|fresh-green-plumcot",
+                        "commodity":  "plums",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Fresh Green Plumcot"
+                                  ],
+                        "product_id":  "0000000003610",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Green Plumcot\u0027 - plum-apricot hybrid, not a plum.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "plums|Bakers|fresh-black-plumcot",
+                        "commodity":  "plums",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Fresh Black Plumcot"
+                                  ],
+                        "product_id":  "0000000003611",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Black Plumcot\u0027 - plum-apricot hybrid, not a plum.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "hot-dog-buns|FamilyFare|fresh-finest-6-ct-brat-buns",
+                        "commodity":  "hot-dog-buns",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Fresh \u0026 Finest 6 Ct Brat Buns"
+                                  ],
+                        "product_id":  "1564405684713023155",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Brat Buns\u0027 - a larger, denser bakery SKU sold specifically for bratwurst; the commodity names hot dog buns.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "hot-dog-buns|FamilyFare|buns-brat-rotellas-italian-bakery",
+                        "commodity":  "hot-dog-buns",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Buns, Brat Rotella\u0027s Italian Bakery"
+                                  ],
+                        "product_id":  "1564405684690001371",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Buns, Brat\u0027 - Rotella\u0027s brat buns; same distinct SKU class as above.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "breakfast-sausage|FamilyFare|jimmy-dean-breakfast-bowl-sausage-frozen-bowl-7",
+                        "commodity":  "breakfast-sausage",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Jimmy Dean Breakfast Bowl, Sausage, Frozen, Bowl 7 Oz"
+                                  ],
+                        "product_id":  "2407173",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Breakfast BOWL ... Frozen\u0027 - a prepared frozen meal with sides, not breakfast sausage the meat.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "popsicles|FamilyFare|fat-boy-smores-ice-cream-sandwich-pops-4-ea",
+                        "commodity":  "popsicles",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Fat Boy S\u0027mores Ice Cream Sandwich Pops 4 Ea"
+                                  ],
+                        "product_id":  "1764405684715732366",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027S\u0027mores ICE CREAM Sandwich Pops\u0027 - a dairy ice-cream novelty, not a popsicle/ice pop.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "fresh-rosemary|FamilyFare|dans-pantry-rosemary",
+                        "commodity":  "fresh-rosemary",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Dan\u0027s Pantry Rosemary"
+                                  ],
+                        "product_id":  "5782401",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Dan\u0027s PANTRY Rosemary\u0027 - the Pantry line is dried spice jars (Dan\u0027s Dill Weed was ruled the same today); the commodity is the FRESH herb whose siblings are clamshells.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "beef-broth|FamilyFare|campbells-beef-consomme-10-500-oz",
+                        "commodity":  "beef-broth",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Campbell\u0027sÂ® Beef Consomme 10.500 Oz"
+                                  ],
+                        "product_id":  "33850",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Beef Consomme\u0027 - condensed clarified consomme must be diluted; per-floz against ready-to-serve broth understates and the product class differs.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "chili-beans|FamilyFare|chili-w-beans-our-family",
+                        "commodity":  "chili-beans",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Chili, W/Beans Our Family"
+                                  ],
+                        "product_id":  "6787029",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Chili, W/Beans\u0027 - prepared canned CHILI with beans, which is the canned-chili commodity, not chili beans in sauce.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "sesame-oil|FamilyFare|dynasty-sesame-seed-oil-5-oz",
+                        "commodity":  "sesame-oil",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Dynasty Sesame Seed Oil 5 Oz"
+                                  ],
+                        "product_id":  "13107",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Dynasty Sesame Seed Oil\u0027 - Dynasty\u0027s is a pressed sesame oil sold as all-purpose, and the commodity names TOASTED sesame oil specifically; the label does not say toasted.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "fresh-basil|FamilyFare|gourmet-garden-herb-blend-basil",
+                        "commodity":  "fresh-basil",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Gourmet Garden Herb Blend, Basil"
+                                  ],
+                        "product_id":  "2367001",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Herb BLEND, Basil\u0027 - Gourmet Garden stir-in PASTE blend (basil plus oil and preservatives), not the fresh herb.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "doubanjiang|FamilyFare|our-family-chili-beans-in-mild-chili-sauce-15-5",
+                        "commodity":  "doubanjiang",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Our Family Chili Beans, In Mild Chili Sauce 15.5 Oz"
+                                  ],
+                        "product_id":  "6786953",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Our Family Chili Beans, In Mild Chili Sauce\u0027 - American canned chili beans, nothing to do with doubanjiang, the Chinese fermented broad-bean chili paste.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "fruit-snacks|FamilyFare|del-monte-fruit-cup-snacks-mandarin-oranges-in-1",
+                        "commodity":  "fruit-snacks",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Del Monte Fruit Cup Snacks Mandarin Oranges In 100% Juice Family Pack 12 Ea"
+                                  ],
+                        "product_id":  "565645",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Fruit Cup Snacks Mandarin Oranges In 100% Juice\u0027 - canned fruit cups; the fruit-snacks commodity\u0027s siblings are Welch\u0027s/Betty Crocker gummy pouches. Different food entirely.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-20",
+                        "ruled_by":  "contested-review-2026-08-20",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
