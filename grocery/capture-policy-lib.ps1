@@ -318,6 +318,40 @@ function Save-CaptureCursor {
   Move-Item -LiteralPath $tmp -Destination $p -Force
 }
 
+function Write-CursorLog {
+  <#
+    .SYNOPSIS Append one line per cursor advance: who moved it, from where, to where, and when.
+    .DESCRIPTION
+      WHY THIS EXISTS (2026-08-21). Fareway's cursor moved from #7 to #63 - eight slices - inside a
+      two-hour window on the day the one-slice-per-day guard shipped, and afterwards NOTHING on disk
+      could say which process did it. The cursor file records only the latest value, so a run that
+      moves it eight times and a run that moves it once look identical afterwards. The guard tests
+      green when driven directly, so the honest position is "there is a path I have not reproduced",
+      and the fix for that is evidence, not another guess.
+
+      One JSONL line per advance, carrying the CALLER (the top-level script that invoked this) and
+      the process id, so the next occurrence names itself instead of having to be re-derived. Never
+      fatal: a cursor that moves but cannot be logged is still a moved cursor, and losing the write
+      must not lose the capture.
+  #>
+  [CmdletBinding()]
+  param([Parameter(Mandatory)][string]$Store, [int]$From, [int]$To, [string]$Today, [string]$OutDir = '')
+  try {
+    if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
+    # The outermost script in the call stack is the thing that actually caused this.
+    $caller = ''
+    try {
+      $stack = @(Get-PSCallStack | Where-Object { $_.ScriptName } | Select-Object -ExpandProperty ScriptName)
+      if ($stack.Count) { $caller = (Split-Path $stack[-1] -Leaf) }
+    } catch { }
+    $line = [ordered]@{
+      at = (Get-Date).ToString('s'); store = $Store; from = $From; to = $To
+      day = $Today; caller = $caller; pid = $PID
+    } | ConvertTo-Json -Compress
+    Add-Content -LiteralPath (Join-Path $OutDir 'capture-cursor-log.jsonl') -Value $line -Encoding UTF8
+  } catch { }
+}
+
 function Test-CaptureLanded {
   <#
     .SYNOPSIS Did this store actually contribute fresh everyday rows for $Today?
@@ -406,6 +440,7 @@ function Step-CaptureCursor {
   }
   $to = (($from + $plan.RotationTerms) % $all.Count)
   Save-CaptureCursor -Store $Store -Next $to -OutDir $OutDir -AdvancedOn $todayS
+  Write-CursorLog -Store $Store -From $from -To $to -Today $todayS -OutDir $OutDir
   return [pscustomobject]@{ Store = $Store; Advanced = $true; From = $from; To = $to
     Reason = "advanced $($plan.RotationTerms) term(s) after a landed capture" }
 }

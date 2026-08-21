@@ -1,0 +1,64 @@
+{
+  "generated": "2026-08-21",
+  "method": "read live in the owner's Chrome, one tab per store, identity asserted before reading anything",
+  "question": "Does this source say a discount is LIVE, and does it say when it ENDS?",
+  "results": [
+    {
+      "store": "Fareway",
+      "identity_asserted": "retailerLocation 531573, zoneId 917, postalCode 68136, 'Audrey' present, 'Des Moines' absent; header reads In-Store",
+      "discount_is_detectable": true,
+      "how": "Apollo item carries priceString $5.99 alongside fullPriceString $7.99, plus badge.badgeVariant='sale' and badge.offerLabelString='25% off'",
+      "end_date": false,
+      "proof_of_absence": [
+        "itemPromotions is an empty array",
+        "secondaryPromotion is null",
+        "badge carries 19 keys and not one is date/expiry/valid related",
+        "no key on the discounted item matches /date|expir|end|valid|until|thru|remain|time/",
+        "the entire Apollo cache holds two date-shaped values (2026-08-21, 2026-08-11), neither a promo window",
+        "page body contains no ends/thru/through/valid/expires/until/limited-time wording"
+      ],
+      "card_text_sample": "Current price: $5.99 | $599 | Original Price: $7.99 | 25% off | Truly Yours Premium Alfredo Pasta Sauce | 18 oz | Aisle 6",
+      "note": "the glued '$599' beside the correct $5.99 is the known extractor defect; the authoritative 'Current price:' line is what must be parsed"
+    },
+    {
+      "store": "Aldi",
+      "identity_asserted": "header reads In-Store; store label 'ALDI - OLA 48 - Omaha'",
+      "discount_is_detectable": true,
+      "how": "same Instacart storefront platform as Fareway: fullPriceString / Original Price / strikethrough / itemPromotions all present in the Apollo cache",
+      "end_date": false,
+      "proof_of_absence": [
+        "zero keys matching /EndDate|Expir|ValidUntil/ anywhere in the Apollo cache",
+        "only date-shaped values are 2026-08-21 and 2026-08-05, neither a promo window"
+      ],
+      "card_text_sample": "Current price: $1.85 | $185 | Millville Fruit Rounds | 12.2 oz | Many in stock | Cereal",
+      "note": "OLA 48, not the OLA 42 in older notes - the store id changed 2026-08-15 and the memory records it"
+    },
+    {
+      "store": "Walmart",
+      "identity_asserted": "walmart.com, no bot interstitial, 60 items returned",
+      "discount_is_detectable": true,
+      "how": "priceInfo.wasPrice ($5.96 against a $4.87 line price), savings 'SAVE $1.09', savingsAmt 1.09, and a ROLLBACK badge flag",
+      "end_date": false,
+      "proof_of_absence": [
+        "the ROLLBACK badge carries exactly __typename, key, text, type, id, styleId - nothing temporal",
+        "promoData holds only an AFFIRM financing entry; promoDiscount is null",
+        "annualEvent false, earlyAccessEvent false, eventAttributes {priceFlip:false, specialBuy:false}",
+        "the only date-ish item keys are streetDate / releaseDate / deliveryDate, none of which describe a price"
+      ],
+      "sample": "Tillamook Extra Creamy Salted Butter Sticks 4ct 16oz: $4.87, was $5.96",
+      "note": "a rollback is therefore a REAL discount with no published window - the 30-day figure would be a TTL, not a date the store gave us"
+    },
+    {
+      "store": "Sam's Club",
+      "identity_asserted": "page reads 'Omaha Sam's Club'; no bot interstitial",
+      "discount_is_detectable": true,
+      "how": "strikethrough and wasPrice both present in __NEXT_DATA__",
+      "end_date": false,
+      "proof_of_absence": [
+        "zero date-shaped values in the entire payload",
+        "every key matching /Expir/ is session, cache or consent related (tempoCacheExpirationInSeconds, payAtStoreExpiryHours, uxconPartialConsentedExpiry, ...) - none is a price window"
+      ],
+      "note": "'Instant Savings' did not appear for this term; absence of the phrase here is not proof it never carries a window, and is recorded as untested rather than negative"
+    }
+  ]
+}
