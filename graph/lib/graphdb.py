@@ -19,6 +19,7 @@ from __future__ import annotations
 import io
 import json
 import os
+import re
 import sqlite3
 from contextlib import contextmanager
 from typing import Any, Iterable, Sequence
@@ -342,8 +343,44 @@ class GraphDB:
 
     @staticmethod
     def _append_jsonl(run: str, record: dict) -> None:
-        safe = run.replace(":", "_")
-        path = os.path.join(GRAPH_DIR, "provenance", f"{safe}.jsonl")
+        """Mirror one decision to the durable, git-tracked JSONL trail.
+
+        SHARDED BY DAY, NOT BY RUN (changed 2026-08-21). It used to write
+        provenance/{run_id}.jsonl - one FILE per run - which produced 162 tracked
+        files on 2026-08-20 alone and 38 more by mid-morning on the 21st. 140 of
+        those 201 files held a SINGLE LINE. Every runtime here commits and pushes,
+        RUNTIME-MAP.md calls the git bus delicate, and OVERHAUL-4 exists to shrink
+        it; ~200 new tracked files a day from a system nothing serves yet would
+        have added roughly 5,000 a month.
+
+        NOTHING IS LOST, and that is why this is the right fix rather than
+        gitignoring the trail. graph/.gitignore states outright that "the durable
+        record of a run lives in graph/provenance/*.jsonl (tracked)" - so ignoring
+        it would delete the audit trail the design depends on, which is the
+        `shrinking output leaves orphans` mistake. Every record already carries its
+        own run_id and timestamp, so the FILENAME was pure redundancy: grouping by
+        run is recoverable from the content with a grep, and grouping by day is
+        what anyone actually reads.
+
+        The day comes from the RECORD's own timestamp, never the wall clock. A
+        replayed or backfilled event belongs in the day it happened, not the day it
+        was written - the same `dates written, not measured` rule the price estate
+        follows, where laundering a date surfaces later as a wrong fact.
+        """
+        day = ""
+        ts = str(record.get("timestamp") or "")
+        if len(ts) >= 10 and ts[4] == "-" and ts[7] == "-":
+            day = ts[:10]
+        if not day:
+            # Fall back to the timestamp embedded in the run id ("run:kind:20260820T181640").
+            m = re.search(r"(\d{4})(\d{2})(\d{2})T\d{6}", run or "")
+            if m:
+                day = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
+        if not day:
+            # UNDATED, not "today". Silently filing an undated record under the
+            # current date is exactly the laundering the docstring warns about.
+            day = "undated"
+        path = os.path.join(GRAPH_DIR, "provenance", f"{day}.jsonl")
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with io.open(path, "a", encoding="utf-8", newline="\n") as fh:
             fh.write(json.dumps(record, ensure_ascii=False, sort_keys=True, default=str) + "\n")

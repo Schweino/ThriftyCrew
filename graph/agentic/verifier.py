@@ -156,16 +156,41 @@ def _policy_max_carry_days() -> int:
     the engine moved to the 90-day quarter, and manufactured a false alarm) —
     and this check itself shipped with 21 while the policy said 90. A gate
     that cannot read its own window must fail loudly, never guess.
+
+    BROKEN AND FIXED 2026-08-21. capture-policy.ps1 was split that morning:
+    its param() block was clobbering caller variables through dot-sourcing, so
+    the paramless half moved to capture-policy-lib.ps1 and MaxCarryDays went
+    with it. This gate went red the same day with "cannot find
+    $script:MaxCarryDays" — correctly, because it refuses to guess, but the
+    cause was a refactor in the OTHER estate.
+
+    That is the real lesson and it is why both files are searched now: this
+    reads a rule out of another estate's SOURCE TEXT, so it is coupled to that
+    file's layout, not just to its value. Nothing in the PowerShell tree can
+    know this reader exists, so a perfectly reasonable refactor there breaks a
+    gate here and only this gate's own loudness reveals it. Searching the
+    candidates in order keeps the coupling honest without letting it guess.
     """
-    policy = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                          "..", "..", "grocery", "capture-policy.ps1")
-    with open(policy, encoding="utf-8-sig") as fh:
-        for line in fh:
-            m = re.match(r"\s*\$script:MaxCarryDays\s*=\s*(\d+)\s*$", line)
-            if m:
-                return int(m.group(1))
-    raise RuntimeError(f"cannot find $script:MaxCarryDays in {policy}; "
-                       "row_age has no window to enforce")
+    here = os.path.dirname(os.path.abspath(__file__))
+    # Order matters: the lib is where the definition lives now; the original is
+    # kept as a fallback so a revert of that split does not break this again.
+    candidates = [
+        os.path.join(here, "..", "..", "grocery", "capture-policy-lib.ps1"),
+        os.path.join(here, "..", "..", "grocery", "capture-policy.ps1"),
+    ]
+    looked = []
+    for policy in candidates:
+        looked.append(policy)
+        if not os.path.exists(policy):
+            continue
+        with open(policy, encoding="utf-8-sig") as fh:
+            for line in fh:
+                m = re.match(r"\s*\$script:MaxCarryDays\s*=\s*(\d+)\s*$", line)
+                if m:
+                    return int(m.group(1))
+    raise RuntimeError("cannot find $script:MaxCarryDays in any of "
+                       + ", ".join(looked)
+                       + "; row_age has no window to enforce")
 
 
 def check_row_age(db, max_age_days: int | None = None, today: str | None = None,
