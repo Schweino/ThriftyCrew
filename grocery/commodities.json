@@ -46677,11 +46677,10 @@
     "unit": "oz",
     "include": [
       "ground\\s+cloves?",
-      "whole\\s+cloves?",
-      "cloves?,?\\s+ground",
-      "cloves?,?\\s+whole"
+      "cloves?,?\\s+ground"
     ],
     "exclude": [
+      "\\bwhole\\b",
       "garlic",
       "beech\\s*nut",
       "\\bgerber\\b",
