@@ -29,6 +29,89 @@ if (Test-Path $rbF) {
 $purls = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
 # commodity + generic words that appear in both names, so are NOT distinctive of the specific product
 $stop = 'boneless|skinless|chicken|breast|breasts|thigh|thighs|drumstick|drumsticks|ground|beef|turkey|pork|bacon|fresh|frozen|large|whole|family|pack|natural|all|lean|value|brand|each|lb|lbs|oz|count|ct|bag|tray|organic|cage|free|grade|sweet|original|classic|the|and|with|for|from|our|certified|the|of|per|shredded|cheese|milk|eggs|butter|sour|cream|juice|orange|apple|apples|banana|bananas|potato|potatoes|russet|onion|onions|bread|coffee|sugar|brown|tomato|tomatoes|sauce|paste|beans|kidney|garbanzo|cannellini|olives|pineapple|chunks|strawberries|blueberries|grapes|avocado|avocados|watermelon|corn|cabbage|carrots|ginger|honey|mustard|dijon|vinegar|balsamic|white|red|wine|soy|hoisin|sesame|oil|tahini|paprika|curry|powder|cornstarch|starch|rotini|pasta|marinara|spinach|peas|green|hominy|tomatillos|cashews|peanut|maple|syrup|yogurt|greek|cottage|provolone|cheddar|colby|jack|mozzarella|fries|crumbs|loin|chop|chops|thick|cut|roll|spread|soft|low|fat|pint|package|bowl'
+# ---------------------------------------------------------------- BRAND LEXICON (2026-08-21)
+# THE TOLERATED MIDDLE. The token test below flags a link only when it shares NO distinctive word
+# with the board item, and this script's own output says so ("some are just brand differences").
+# That conservatism is load-bearing - generate-board-overrides refuses to pin any cell flagged here,
+# so a false flag silently blocks a good pin - but it leaves a gap, and 188 priced tiles were sitting
+# in it: Fareway pricing Classico alfredo behind a Ragu link, Hy-Vee pricing its own fudge cookies
+# behind CHIPS AHOY, Aldi pricing Friendly Farms half-and-half behind a Barissimo coconut creamer.
+# Each shares enough words to pass. Each opens a different manufacturer's product than the price
+# describes, which is the invariant this whole audit exists for.
+#
+# What separates those from noise is BRAND, not word overlap. "Traditional Yellow Mustard" against
+# "Yellow Mustard" is one product written two ways; "Classico" against "Ragu" is not. So the question
+# is which tokens name a manufacturer - and that is answerable from the corpus rather than guessed:
+# a brand almost always LEADS a product name, a descriptor floats anywhere in it. Measured over
+# 33,628 names: kroger 0.98 lead, ragu 1.00, classico 0.96, libby 1.00, tyson 1.00 - against
+# vanilla 0.15, honey 0.20, original 0.27, light 0.25. The gap is not marginal.
+#
+# Built inline every run from the newest capture per store, NOT cached. A cached input is how
+# tile-integrity spent this morning grading today's links against yesterday's verdicts; a lexicon
+# file would be the same mistake with a slower fuse.
+$leadN = @{}; $totalN = @{}
+$lexNames = New-Object System.Collections.Generic.HashSet[string]
+$lexFiles = New-Object System.Collections.Generic.List[string]
+foreach ($grp in @('out\regular\*-regular-*.json','out\sams\sams-deals-*.json','out\bakers\bakers-deals-*.json','out\fareway\fareway-deals-*.json')) {
+  $byPrefix = @{}
+  foreach ($f in (Get-ChildItem (Join-Path $root $grp) -ErrorAction SilentlyContinue)) {
+    $p = ($f.BaseName -replace '-[^-]+$','')          # strip the trailing date -> one bucket per store feed
+    if (-not $byPrefix.ContainsKey($p) -or $f.Name -gt $byPrefix[$p].Name) { $byPrefix[$p] = $f }
+  }
+  foreach ($f in $byPrefix.Values) { $lexFiles.Add($f.FullName) }
+}
+foreach ($lf in $lexFiles) {
+  try { $d = Get-Content $lf -Raw | ConvertFrom-Json } catch { continue }
+  $rows = if ($d -is [array]) { $d } elseif ($d.PSObject.Properties['deals']) { $d.deals } elseif ($d.PSObject.Properties['products']) { $d.products } else { @() }
+  foreach ($r in $rows) { $n = if ($r.item) { [string]$r.item } elseif ($r.name) { [string]$r.name } else { '' }; if ($n) { [void]$lexNames.Add($n) } }
+}
+$SIZERE = '\b\d+(?:\.\d+)?\s*(?:fl\s*oz|oz|lb|lbs|ct|ea|pk|pack|count|g|kg|ml|l|qt|gal)s?\b'
+$LEXNOISE = 'fresh|organic|natural|premium|value|size|large|small|bulk|each|approx|bag|bagged|package|packaged|pack|box|boxed|jar|jarred|can|canned|bottle|bottled|tub|carton|container|pouch|per|with|and|the|of|in|on|for|new|great|quality|select|brand|family'
+function Sig-Tokens([string]$s) {
+  $t = ($s.ToLower() -replace $SIZERE, ' ') -replace '[^a-z0-9 ]', ' '
+  $out = New-Object System.Collections.Generic.List[string]
+  foreach ($w in ($t -split '\s+')) {
+    if (-not $w -or $w -match '^\d+$' -or $w -match ('^(' + $LEXNOISE + ')$')) { continue }
+    if ($w.Length -gt 3 -and $w.EndsWith('s') -and -not $w.EndsWith('ss')) { $w = $w.Substring(0, $w.Length - 1) }
+    $out.Add($w)
+  }
+  return $out
+}
+foreach ($n in $lexNames) {
+  $t = @(Sig-Tokens $n)   # @() IS LOAD-BEARING - see Brands-Of
+  for ($i = 0; $i -lt $t.Count; $i++) {
+    $w = $t[$i]
+    if (-not $totalN.ContainsKey($w)) { $totalN[$w] = 0; $leadN[$w] = 0 }
+    $totalN[$w]++
+    if ($i -lt 2) { $leadN[$w]++ }
+  }
+}
+$BRAND = New-Object System.Collections.Generic.HashSet[string]
+foreach ($w in $totalN.Keys) { if ($totalN[$w] -ge 6 -and ($leadN[$w] / $totalN[$w]) -ge 0.80) { [void]$BRAND.Add($w) } }
+# A WORD THAT NAMES A COMMODITY IS NOT A BRAND, however reliably it leads. Produce breaks the
+# lead-position heuristic outright: "Carrot", "Blueberries", "Plum Bag" begin with the food itself, so
+# `carrot` scored like a manufacturer and Fareway's "Carrot" was flagged against a "Dole Carrots, Mini
+# Cut" link for disagreeing about a brand the board never named. Subtracting every commodity id and
+# label word removes that whole class - and costs nothing real, since no manufacturer is named after
+# the single word for the thing it sells.
+$foodWords = New-Object System.Collections.Generic.HashSet[string]
+foreach ($cm in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) {
+  foreach ($src in @([string]$cm.id, [string]$cm.label)) {
+    foreach ($w in (Sig-Tokens ($src -replace '-', ' '))) { [void]$foodWords.Add($w) }
+  }
+}
+foreach ($w in @($foodWords)) { [void]$BRAND.Remove($w) }
+function Brands-Of([string]$s) {
+  # @() IS LOAD-BEARING. A one-token name ("Carrot") comes back from Sig-Tokens as a bare STRING,
+  # not a list, and $t[0] then indexes the STRING - yielding the character "c". That is how Fareway
+  # carrots was flagged brand-mismatch against a Dole link: the board named no brand, PowerShell
+  # invented one letter long, and "c" happened to be in the lexicon (which the same bug had put there).
+  $t = @(Sig-Tokens $s); $b = New-Object System.Collections.Generic.HashSet[string]
+  for ($i = 0; $i -lt [math]::Min(3, $t.Count); $i++) { if ($BRAND.Contains($t[$i])) { [void]$b.Add($t[$i]) } }
+  return $b
+}
+$brandActive = ($BRAND.Count -ge 100)   # too few names to have learned anything -> the clause has NO opinion, and says so
+
 $flags = @(); $examined = 0; $exByStore = @{}; $exCells = New-Object System.Collections.Generic.List[string]
 foreach ($it in $c) {
   $id = [string]$it.id
@@ -73,8 +156,29 @@ foreach ($it in $c) {
     $hit = $false; foreach ($t in $btoks) { if ($lname -match [regex]::Escape($t)) { $hit = $true; break } }
     # no distinctive tokens = the token test has NO opinion; it must not read as "clean" (that was the bug above)
     if ($btoks.Count -eq 0) { $hit = $true }
-    if ((-not $hit) -or $formFlip -or $countMismatch) {
-      $reason = if ($formFlip) { 'form-flip' } elseif ($countMismatch) { 'count-mismatch' } else { 'name-drift' }
+    # BRAND MISMATCH: both names state a manufacturer and they are different manufacturers. Independent
+    # of the token test for the same reason form-flip is - "Classico Pasta Sauce or Alfredo" and "Ragu
+    # Classic Alfredo Sauce" share alfredo, sauce and classic/classico, so the token test is satisfied
+    # by words that say nothing about who made it.
+    #
+    # Fires ONLY when both sides name a brand. Silence when either side names none is deliberate: a
+    # board item reading just "Blueberries" cannot disagree about a brand it never stated, and guessing
+    # there would flag the generic names this audit was specifically fixed to stop skipping.
+    #
+    # The prefix clause is not cosmetic. Aldi's board item arrives as "Nescaf" where the link says
+    # "Nescafe Clasico" - the same brand with an accented character eaten in transit. Without it, that
+    # was the single false positive in the 22 this rule found.
+    $brandMismatch = $false
+    if ($brandActive) {
+      $bb = Brands-Of $item; $bl = Brands-Of ([string]$lnk.name)
+      if ($bb.Count -gt 0 -and $bl.Count -gt 0) {
+        $shared = $false
+        foreach ($x in $bb) { foreach ($y in $bl) { if ($x -eq $y -or $x.StartsWith($y) -or $y.StartsWith($x)) { $shared = $true; break } }; if ($shared) { break } }
+        $brandMismatch = -not $shared
+      }
+    }
+    if ((-not $hit) -or $formFlip -or $countMismatch -or $brandMismatch) {
+      $reason = if ($formFlip) { 'form-flip' } elseif ($countMismatch) { 'count-mismatch' } elseif ($brandMismatch) { 'brand-mismatch' } else { 'name-drift' }
       $flags += [pscustomobject]@{ id=$id; store=$store; reason=$reason; board_item=$item; link_name=[string]$lnk.name; link_price=$lnk.price }
     }
   }

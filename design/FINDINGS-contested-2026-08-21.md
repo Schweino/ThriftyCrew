@@ -373,3 +373,48 @@ stopped reading rows:
 
 The pattern worth carrying: a coverage ratchet on an absolute count silently
 assumes a fixed population. When the denominator can move, ratchet the ratio.
+
+## 17. The tolerated middle, closed: brand disagreement is now a flag — DONE
+
+Finding #15 said 188 priced tiles sat between "shares no words" (flagged) and
+"identical" (fine), and that closing the gap needed a measure separating
+packaging noise from product identity. It does, and the measure is BRAND.
+
+"Traditional Yellow Mustard" against "Yellow Mustard" is one product written
+twice. "Classico" against "Ragu" is not. So the question is which tokens name a
+manufacturer, and that is answerable from the corpus instead of guessed: **a
+brand almost always LEADS a product name; a descriptor floats anywhere in it.**
+Measured over 33,628 names, lead-position ratio:
+
+    kroger 0.98   ragu 1.00   classico 0.96   libby 1.00   tyson 1.00
+    vanilla 0.15  honey 0.20  original 0.27   light 0.25   traditional 0.38
+
+Not a marginal gap. `audit-name-drift` now builds that lexicon inline every run
+from the newest capture per store - 20 files, 8 seconds, NOT cached, because a
+cached input is how tile-integrity spent this morning grading today's links
+against yesterday's verdicts.
+
+Two corrections were needed before it was honest:
+
+**A word that names a commodity is not a brand.** Produce breaks the heuristic -
+"Carrot", "Blueberries", "Plum Bag" begin with the food itself. Every commodity
+id and label word is subtracted from the lexicon.
+
+**A one-token name is a STRING, not a list.** `Sig-Tokens "Carrot"` returns a
+single value, PowerShell unrolls it, and `$t[0]` then indexes the *string* and
+yields the character `c`. Fareway's "Carrot" was flagged for disagreeing about a
+brand the board never named - and `c` was in the lexicon because the same bug
+had put it there while building it. `@()` at both call sites. This is the
+classic PS unrolling trap and it corrupted a lexicon and a comparison at once.
+
+Result: 27 brand-mismatch flags, all genuine on review - Fareway pricing
+Classico alfredo behind a Ragu link, Hy-Vee pricing its own fudge cookies behind
+CHIPS AHOY, Aldi pricing Friendly Farms half-and-half behind a Barissimo coconut
+creamer, Sam's pricing Member's Mark greek yogurt behind Chobani.
+
+`prune-bad-links` already drops any drift-flagged cell, so the remedy needed no
+new code: **21 links removed of 2,777** - under 1% of link coverage - bought with
+the estate's own stated exchange rate, "a wrong link is strictly worse than no
+link". Those tiles now show a price with no link, which is honest.
+
+guards hard=0 warn=16, published.
