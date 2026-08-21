@@ -37,6 +37,23 @@ BIAS: prefer a MISSED merge over a FALSE merge. A missed merge costs one empty
 board cell; a false merge publishes a wrong price, which is the failure mode this
 whole estate is built to prevent (see the 2026-07-14 blueberries incident and the
 2026-07-28 coconut-oil/Epsom-salt crown in known-wrong.json).
+
+THE MODEL IS SHOWN THIS BOARD'S OWN PRIOR RULINGS (prompt v4, 2026-08-20).
+Until v4 it judged blind — include patterns and nothing else — while the human
+review packet for the SAME question carried the excludes, the confirmed
+siblings and the known-wrong list. 2,551 adjudicated rejections sat unused.
+Retrieving the handful most similar to the listing under judgement, measured
+leave-one-out on 60 gold cases whose commodities carry history:
+
+    false MATCH   14/26 (54%)  ->  7-8/26 (29%)
+    correct       38           ->  48-49
+    escalated      7           ->  3
+    false reject   1/34        ->  1/34  (unchanged)
+
+Roughly half the dangerous error and half the human review, for no new missed
+merges, using labels the estate had already paid for. Leave-one-out matters:
+many gold cases ARE banked rejections, so a case must never appear among its
+own examples or the number measures memory instead of learning.
 """
 
 from __future__ import annotations
@@ -60,7 +77,7 @@ PROMPTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "prompt
 # Version of build_resolve_prompt + the layer-5 authority policy. Recorded on
 # every per-judgment decision-log row so a verdict can be attributed to the
 # exact prompt and policy that produced it. Bump on ANY change to either.
-PROMPT_VERSION = "resolve-v3-reject-only"
+PROMPT_VERSION = "resolve-v4-reject-only-with-priors"
 
 # Verdicts are banked to SQLite every this many questions during the LLM pass,
 # so a long run is interruptible and resumable rather than all-or-nothing.
@@ -164,6 +181,34 @@ class Resolver:
                                             'llm_match_unverified','escalated')""")}
             except Exception:                                # noqa: BLE001
                 self.bank = {}
+
+        # Prior-ruling index for few-shot retrieval: commodity -> [(name, words,
+        # kind)]. Built once; the model is otherwise asked to judge blind while
+        # the human review packet for the same question gets all of this.
+        # known_wrong rows come from the ABSOLUTE rulings, llm_rejected from the
+        # model's own past work, llm_confirmed/include_hit from what belongs.
+        self._verdict_index: dict[str, list[tuple[str, set[str], str]]] = {}
+        if use_bank:
+            try:
+                rows = self.db.conn.execute(
+                    """SELECT commodity_id, product_name, status
+                       FROM question_verdicts
+                       WHERE status IN ('llm_rejected','known_wrong','llm_confirmed')
+                       UNION ALL
+                       SELECT n.id, k.canonical_name, 'known_wrong'
+                       FROM nodes k JOIN edges e ON e.source_id=k.id
+                            AND e.predicate='known_wrong_for'
+                       JOIN nodes n ON n.id=e.target_id
+                       WHERE k.type='KnownWrong'""").fetchall()
+                for r in rows:
+                    nm = r[1]
+                    if not nm:
+                        continue
+                    kind = "confirm" if r[2] == "llm_confirmed" else "reject"
+                    self._verdict_index.setdefault(r[0], []).append(
+                        (nm, set(re.findall(r"[a-z]{3,}", nm.lower())), kind))
+            except Exception:                                # noqa: BLE001
+                self._verdict_index = {}
 
     # -- setup -------------------------------------------------------------
     def _load_category_excludes(self) -> None:
@@ -312,11 +357,37 @@ class Resolver:
             return self._tally(Verdict("no_include_hit", "no include pattern matched"))
         return self._tally(self._llm_adjudicate(cc, name))
 
+    def _prior_rulings(self, cc: CompiledCommodity, name: str,
+                       n_rej: int = 6, n_conf: int = 3) -> dict:
+        """The most RELEVANT prior rulings for this commodity, as few-shot.
+
+        Ranked by word overlap with the listing under judgement, because a
+        rejection only teaches when it resembles the question: powdered-sugar
+        carries 43 of them, and dumping all 43 would bury the one that matters
+        and blow the prompt budget. Ties break toward the shorter name, which
+        is usually the more general ruling.
+        """
+        if not self._verdict_index:
+            return {}
+        pool = self._verdict_index.get(cc.node_id)
+        if not pool:
+            return {}
+        want = set(re.findall(r"[a-z]{3,}", (name or "").lower()))
+
+        def rank(item):
+            words = item[1]
+            overlap = len(want & words) / max(len(want | words), 1)
+            return (-overlap, len(item[0]))
+
+        rej = sorted((p for p in pool if p[2] == "reject"), key=rank)[:n_rej]
+        conf = sorted((p for p in pool if p[2] == "confirm"), key=rank)[:n_conf]
+        return {"rejected": [r[0] for r in rej], "confirmed": [c[0] for c in conf]}
+
     def _llm_adjudicate(self, cc: CompiledCommodity, name: str) -> Verdict:
         """Layer 5. The local model may REJECT a candidate or flag a probable
         match for review; it may never mint a price. See the module docstring
         for the bench decomposition that forced this asymmetry."""
-        system, user = build_resolve_prompt(cc, name)
+        system, user = build_resolve_prompt(cc, name, self._prior_rulings(cc, name))
         try:
             parsed, res = self.llm.json_call(system, user, schema=RESOLVE_SCHEMA, max_tokens=400)
         except Exception as e:                                  # noqa: BLE001
@@ -560,7 +631,8 @@ class Resolver:
                 "model_calls": len(contested) if use_llm else 0}
 
 
-def build_resolve_prompt(cc: CompiledCommodity, product_name: str) -> tuple[str, str]:
+def build_resolve_prompt(cc: CompiledCommodity, product_name: str,
+                         examples: dict | None = None) -> tuple[str, str]:
     """Build the adjudication prompt.
 
     The system prompt carries this catalog's SEMANTICS, not just generic
@@ -588,14 +660,36 @@ def build_resolve_prompt(cc: CompiledCommodity, product_name: str) -> tuple[str,
         "Cite the specific words that decide it. Output JSON only."
     )
     inc = cc.raw_include[:8]
-    user = (
-        f"COMMODITY: {cc.label}\n"
-        f"sold by: {cc.unit or 'unspecified'}\n"
-        f"known surface patterns: {inc}\n\n"
-        f"STORE PRODUCT LISTING: {product_name!r}\n\n"
-        "Is this listing that commodity?"
-    )
-    return system, user
+    parts = [f"COMMODITY: {cc.label}",
+             f"sold by: {cc.unit or 'unspecified'}",
+             f"known surface patterns: {inc}"]
+
+    # PRIOR RULINGS — this estate's own labelled history for THIS commodity.
+    #
+    # Until 2026-08-20 the model judged blind: it got the include patterns and
+    # nothing else, while the human review packet for the same question carried
+    # the excludes, the confirmed siblings and the known-wrong list. We were
+    # teaching the reviewer and starving the model, with 2,551 adjudicated
+    # rejections sitting unused (43 of them on powdered-sugar alone).
+    #
+    # These are not hints, they are decisions this board already made, and the
+    # model's measured weakness is exactly the one they address: it asserts
+    # MATCH on adjacent products at 0.95+ confidence. Showing it the adjacent
+    # products that were already ruled out is the cheapest correction available,
+    # and it costs no training run - the labels exist.
+    if examples:
+        rejected = examples.get("rejected") or []
+        confirmed = examples.get("confirmed") or []
+        if rejected:
+            parts.append("\nALREADY RULED **NOT** THIS COMMODITY (do not repeat "
+                         "these mistakes):")
+            parts += [f"  - {r!r}" for r in rejected]
+        if confirmed:
+            parts.append("\nALREADY RULED **YES**, this is what belonging looks like:")
+            parts += [f"  - {c!r}" for c in confirmed]
+    parts.append(f"\nSTORE PRODUCT LISTING: {product_name!r}\n")
+    parts.append("Is this listing that commodity?")
+    return system, "\n".join(parts)
 
 
 def main() -> int:

@@ -91,3 +91,39 @@ serves.
 from pricing). `llm_confirmed` is written only by the reviewer. See
 `pipeline/resolve.py` and `schema.md`; prompt/policy version
 `resolve-v3-reject-only`.
+
+## Prompt v4 — showing the model this board's prior rulings (2026-08-20)
+
+The resolve prompt shipped v1-v3 giving the model the commodity label, its unit
+basis and up to eight include patterns. Nothing else. The human review packet
+for the *same question* carried the exclude patterns, the confirmed siblings and
+the known-wrong list — so the estate was teaching its reviewer and starving its
+model, with 2,551 adjudicated rejections banked and unread (43 of them on
+powdered-sugar alone).
+
+v4 retrieves the prior rulings most similar to the listing under judgement —
+up to 6 rejections and 3 confirmations, ranked by word overlap, because a
+rejection only teaches when it resembles the question and dumping all 43 would
+bury the useful one.
+
+**Measured, leave-one-out, on 60 gold cases whose commodities carry history.**
+Leave-one-out is not optional: many gold cases ARE banked rejections, and a case
+appearing among its own examples measures memorisation rather than learning.
+
+| | blind (v3) | with priors (v4) |
+|---|---|---|
+| FALSE MATCH (the dangerous error) | 14/26 = 54% | **7-8/26 = 29%** |
+| correct | 38 | **48-49** |
+| escalated to a human | 7 | **3** |
+| false reject (missed merge) | 1/34 | 1/34 unchanged |
+
+Two independent runs agreed. Roughly half the dangerous error and half the
+review load, with no new missed merges, from labels already paid for.
+
+**This does NOT re-open the reject-only decision.** A 29% false-match rate is
+still far too high to let a local MATCH price a cell; the gain is that fewer
+bogus leads reach the confirm-match queue and more candidates are correctly
+pruned. The asymmetry stands on the same evidence it always did.
+
+Cost: the prompt grows by roughly 100-150 tokens. Prefill measured 0.26s of a
+2.74s call at v3, so the added latency is small against the accuracy bought.
