@@ -43,6 +43,16 @@ from llm import LocalLLM                                # noqa: E402
 
 QUEUE = os.path.join(REPO_ROOT, "grocery", "learning-queue.json")
 
+# A grammar constrains SHAPE, not LENGTH. On 2026-08-20 this call died with
+# "Expecting value: line 37" — the schema had kept every token legal right up to
+# the moment generation hit max_tokens and stopped mid-object, producing a valid
+# PREFIX of an invalid document. The guarantee llama.cpp's grammar buys is
+# "syntactically legal so far", which is not the same as "complete".
+#
+# The structural fix is to bound the output so it cannot outrun the budget:
+# maxItems caps how many suggestions can be emitted and maxLength stops one
+# verbose rationale eating the whole allowance. Raising max_tokens alone would
+# only move the cliff.
 PROPOSAL_SCHEMA = {
     "type": "object",
     "additionalProperties": False,
@@ -50,6 +60,7 @@ PROPOSAL_SCHEMA = {
     "properties": {
         "suggestions": {
             "type": "array",
+            "maxItems": 12,
             "items": {
                 "type": "object",
                 "additionalProperties": False,
@@ -63,7 +74,7 @@ PROPOSAL_SCHEMA = {
                     "payload": {"type": "string",
                                 "description": "the exact pattern / product name / case"},
                     "confidence": {"type": "number", "minimum": 0, "maximum": 1},
-                    "rationale": {"type": "string"},
+                    "rationale": {"type": "string", "maxLength": 240},
                 },
             },
         },
@@ -168,7 +179,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--max-items", type=int, default=40)
     ap.add_argument("--dry-run", action="store_true", help="print the prompt, call nothing")
-    ap.add_argument("--max-tokens", type=int, default=2500)
+    ap.add_argument("--max-tokens", type=int, default=2200)
     args = ap.parse_args()
 
     ts = time.strftime("%Y-%m-%dT%H:%M:%S")

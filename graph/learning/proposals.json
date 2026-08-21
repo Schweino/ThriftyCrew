@@ -156,6 +156,18 @@
     "target_id": "commodity:staple:shredded-cheese"
   },
   {
+    "confidence": 0.85,
+    "created_at": "2026-08-20T23:45:32",
+    "id": "lp:1472666fa5eecdfe1357",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"(california|sun-dried|seedless)?\\\\s*raisins\"}",
+    "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
+    "rationale": "Matches 'California Sun-Dried', 'Seedless', and 'California' raisins. These are commonly sold as golden or standard raisins. Anchors on 'raisins'.",
+    "status": "proposed",
+    "target_id": "golden-raisins"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T17:00:43",
     "id": "lp:156b5749a04d41867991",
@@ -202,6 +214,18 @@
     "rationale": "escalation-review round 2: widen: brand+attribute words sit between 'Singles' and 'Cheese'",
     "status": "applied",
     "target_id": "commodity:staple:sliced-cheese"
+  },
+  {
+    "confidence": 0.8,
+    "created_at": "2026-08-20T23:45:32",
+    "id": "lp:1e5c958d277551d218ba",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"(frozen\\\\s+)?(chopped\\\\s+)?spinach\"}",
+    "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
+    "rationale": "Matches 'Simply Nature Organic Spinach'. While 'chopped' is not explicit in the listing, frozen spinach is typically chopped. The pattern is broad enough to catch standard frozen spinach but anchored on 'spinach'.",
+    "status": "proposed",
+    "target_id": "frozen-chopped-spinach"
   },
   {
     "confidence": 0.9,
@@ -432,6 +456,18 @@
     "target_id": "commodity:staple:taco-seasoning"
   },
   {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T23:45:32",
+    "id": "lp:38c8b7f3c781a77355af",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"chicken\\\\s+thighs?,?\\\\s+boneless\"}",
+    "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
+    "rationale": "Matches 'Chicken Thighs, Boneless'. Anchors on 'chicken thighs' and 'boneless' to ensure it's the correct cut and preparation.",
+    "status": "proposed",
+    "target_id": "boneless-skinless-chicken-thigh"
+  },
+  {
     "confidence": 0.95,
     "created_at": "2026-08-20T06:57:51",
     "id": "lp:39cf22a02c74f9f142ea",
@@ -490,6 +526,18 @@
     "rationale": "the 'Moisturizer, <skin type>, Ultra Healing' comma order; SPF/tanning excludes remain",
     "status": "applied",
     "target_id": "commodity:staple:lotion"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T23:45:32",
+    "id": "lp:426c1e531704c71b1fce",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"pineapple,?\\\\s+tidbits\"}",
+    "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
+    "rationale": "Matches 'Pineapple Tidbits'. Tidbits are a form of chunks/pieces. Anchors on 'pineapple' and 'tidbits'.",
+    "status": "proposed",
+    "target_id": "pineapple-chunks"
   },
   {
     "confidence": 0.9,
@@ -936,6 +984,18 @@
     "target_id": "commodity:staple:corn-muffin-mix"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-08-20T23:45:32",
+    "id": "lp:783f69d950c6e2a1d34f",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"bacon,?\\\\s+hickory\\\\s+smoked\"}",
+    "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
+    "rationale": "Matches 'Bacon, Hickory Smoked'. Anchors on 'bacon' and 'hickory smoked'.",
+    "status": "proposed",
+    "target_id": "hickory-smoked-bacon"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T17:10:08",
     "id": "lp:7856aad6b714d842aaad",
@@ -1177,6 +1237,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-08-20T23:45:32",
+    "id": "lp:95a2cd3c08798d9f9961",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"greek\\\\s+(plain|nonfat)?\\\\s*yogurt\"}",
+    "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
+    "rationale": "Matches 'Greek Plain Nonfat Yogurt'. Anchors on 'greek' and 'yogurt'.",
+    "status": "proposed",
+    "target_id": "greek-yogurt"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:9690d1341791fed303ef",
     "kind": "add_alias",
@@ -1234,6 +1306,30 @@
     "rationale": "the 'Morsels, Semi Sweet Chocolate' comma order; cookie/bar/mix excludes remain",
     "status": "applied",
     "target_id": "commodity:staple:chocolate-chips"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T23:45:32",
+    "id": "lp:a0bd8576d9221f5ed6c9",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"red\\\\s+(bell\\\\s+)?peppers?\"}",
+    "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
+    "rationale": "Matches 'Red Pepper'. Anchors on 'red' and 'pepper'.",
+    "status": "proposed",
+    "target_id": "red-bell-pepper"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T23:45:32",
+    "id": "lp:a19c389976ff3b7ff74b",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"93%?/7%?\\\\s+ground\\\\s+turkey\"}",
+    "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
+    "rationale": "Matches the specific lean/fat ratio and product type. Anchors on 'ground turkey' to avoid matching other meats.",
+    "status": "proposed",
+    "target_id": "ground-turkey-93-7"
   },
   {
     "confidence": 0.9,
@@ -1381,6 +1477,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-08-20T23:45:32",
+    "id": "lp:b64671ccf11a8abe7808",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"sour\\\\s+cream,?\\\\s+light\"}",
+    "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
+    "rationale": "Matches 'Sour Cream, Light'. Anchors on 'sour cream' and 'light'.",
+    "status": "proposed",
+    "target_id": "light-sour-cream"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:b6627ab10d4df0d36f9b",
     "kind": "add_alias",
@@ -1486,6 +1594,18 @@
     "rationale": "the 'Tomatoes, Sun Dried' comma order; the pesto/dressing/hummus/sausage excludes guard prepared foods",
     "status": "applied",
     "target_id": "commodity:staple:sun-dried-tomatoes"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-08-20T23:45:32",
+    "id": "lp:be2ae1f5a35e3b51475d",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"chick\\\\s+caesar\"}",
+    "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
+    "rationale": "Tay Farm Chick Caesar is a specific brand of Caesar salad kit. The pattern anchors on the product name 'Chick Caesar' which is distinct enough to avoid matching generic chicken or other salads.",
+    "status": "proposed",
+    "target_id": "caesar-salad-kit"
   },
   {
     "confidence": 0.9,
@@ -1632,6 +1752,18 @@
     "target_id": "commodity:staple:turkey-lunchmeat"
   },
   {
+    "confidence": 0.85,
+    "created_at": "2026-08-20T23:45:32",
+    "id": "lp:cce60d6f6ece8f8183e4",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"(honey\\\\s+dijon|dijon\\\\s+honey|mustard,?\\\\s+honey)\"}",
+    "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
+    "rationale": "Matches 'Mustard, Honey'. Note: 'Burman's Dijon Mustard' is likely a different product (plain Dijon), so this alias targets the honey variant specifically.",
+    "status": "proposed",
+    "target_id": "honey-dijon-mustard"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:55:56",
     "id": "lp:d11dcd3cbf423e74cb3a",
@@ -1750,6 +1882,18 @@
     "rationale": "the 'Dressing, [Chunky] Blue Cheese' comma order; crumble/wedge/chunk-cheese excludes guard the cheese aisle",
     "status": "applied",
     "target_id": "commodity:staple:blue-cheese-dressing"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-20T23:45:32",
+    "id": "lp:df3435bdaf93c672deb8",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"(shredded|finely\\\\s+shredded)\\\\s+(sharp|mild|triple)?\\\\s*cheddar\"}",
+    "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
+    "rationale": "Matches various shredded cheddar cheeses (Sharp, Mild, Triple). Anchors on 'shredded' and 'cheddar' to exclude block cheese or other types.",
+    "status": "proposed",
+    "target_id": "cheddar-cheese-shredded"
   },
   {
     "confidence": 0.9,

@@ -44,6 +44,7 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import re
 import os
 import sys
 import time
@@ -220,9 +221,42 @@ def resolve_target(db, target: str | None) -> str | None:
     return row["id"] if row else None
 
 
+def payload_is_sane(kind: str, payload: str) -> tuple[bool, str]:
+    """Reject a payload that would silently become a different rule than it reads.
+
+    Two failure modes, both from carrying regexes through JSON:
+
+    * A CONTROL CHARACTER means an escape was eaten. "\\b" is a LEGAL JSON escape
+      for backspace, so a word-boundary pattern the model meant as \\\\b parses
+      cleanly into a literal backspace and installs a rule that can never match
+      anything. json.loads succeeds, the shadow gate sees no regression because
+      the pattern is inert, and a dead rule enters the catalog looking healthy.
+    * A pattern that will not COMPILE is caught here rather than swallowed by
+      _compile_all(), which skips bad regexes silently by design so one broken
+      stored pattern cannot take down a pipeline run.
+    """
+    if kind not in ("add_alias",):
+        return True, ""
+    if not payload:
+        return False, "empty payload"
+    bad = [c for c in payload if ord(c) < 32]
+    if bad:
+        return False, (f"contains control character {bad[0]!r} — an escape was "
+                       f"eaten in transit (\\b is legal JSON for backspace); "
+                       f"the rule would be inert")
+    try:
+        re.compile(payload, re.IGNORECASE)
+    except re.error as e:
+        return False, f"does not compile as a regex: {e}"
+    return True, ""
+
+
 def _apply_to_graph(db, kind: str, target: str, payload: str, ts: str,
                     prov: str) -> int:
     """Effect one patch on the graph. Returns rows touched."""
+    ok, why = payload_is_sane(kind, payload)
+    if not ok:
+        raise ValueError(f"refusing to apply {kind} {payload!r}: {why}")
     if kind == "add_alias":
         db.add_alias(target, payload, "learning-patch", ts, kind="include",
                      is_regex=True, confidence=0.9, provenance=prov)

@@ -22,6 +22,7 @@ validation on this box (RTX 5070 Ti, sm_120):
 from __future__ import annotations
 
 import json
+import re
 import os
 import time
 import urllib.error
@@ -71,7 +72,32 @@ class LLMResult:
         if not text:
             raise LLMError("model returned empty content "
                            "(reasoning budget exhausted? pass think=False)")
-        return json.loads(text)
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError:
+            # REGEX PAYLOADS BREAK JSON. The learning loop asks the model for
+            # include patterns like \s+ and \d, and a lone backslash is not a
+            # legal JSON escape — so a perfectly good proposal arrives as an
+            # unparseable document and the whole batch dies (measured
+            # 2026-08-20 on stage1_analyze). llama.cpp's grammar does not save
+            # us here: it constrains the SHAPE of the string, not whether its
+            # escapes are legal.
+            #
+            # Repair only what actually failed to parse, and only the invalid
+            # escapes: a backslash NOT followed by one of the eight legal JSON
+            # escape characters is doubled. A document that parses is never
+            # touched.
+            # Scan backslash+char PAIRS left to right, never re-examining a
+            # consumed character. A naive lookahead is wrong and was measured
+            # wrong here: on the already-correct "\\s" it skips the first
+            # backslash (followed by a backslash, a legal escape) and then
+            # doubles the SECOND one, producing "\\\s" — turning a valid
+            # document into a broken one.
+            def _fix(m):
+                nxt = m.group(1)
+                return m.group(0) if nxt in '"\\/bfnrtu' else '\\\\' + nxt
+            repaired = re.sub(r"\\(.)", _fix, text, flags=re.S)
+            return json.loads(repaired)
 
 
 class LocalLLM:

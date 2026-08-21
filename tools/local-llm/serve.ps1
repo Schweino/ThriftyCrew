@@ -52,7 +52,16 @@ param(
     [int]$Context    = 16384,
     [int]$GpuLayers  = 99,
     [string]$CacheType = "q8_0",
-    [int]$Slots      = 8,
+    # 4, not 8. -c is the TOTAL KV budget and llama.cpp splits it, so 8 slots
+    # meant 2048 tokens EACH — ample for a resolve call (312-token prompt, ~70
+    # out) and far too small for Learning Stage 1, whose prompt alone is ~1,000
+    # tokens. Stage 1 died on 2026-08-20 with finish_reason=length at 882
+    # completion tokens while max_tokens said 4000: the slot ceiling, not the
+    # request, was the limit, and it looked like malformed JSON rather than
+    # truncation. 4 slots gives 4096 each and costs almost nothing — measured
+    # the same day, 4 jobs ran 0.99 q/s against 8 jobs at 1.08, an 8% give-back
+    # for a context that fits every caller instead of only the smallest one.
+    [int]$Slots      = 4,
     [switch]$Foreground
 )
 
