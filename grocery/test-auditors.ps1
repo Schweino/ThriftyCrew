@@ -3945,6 +3945,17 @@ $r = RunPS 'audit-graph-gates.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'graph-gates: a failing gate survives parsing, a later section is not read as a gate, and an unknown verdict is not a pass' }
 else { Bad ('audit-graph-gates -SelfTest failed (rc=' + $r.rc + ') - graph could report every board clean regardless of what its gates said: ' + ($r.text -replace "`n", ' ')) }
 
+# ---------------------------------------------------------------- promoting queued prices (2026-08-21)
+# The Recipe Hunter's agent had 99 adjudicated store prices in ingredient-queue.json reaching nothing.
+# promote-ingredient-queue moves them into out\regular, which IS an engine input. Its -Apply stays a
+# manual step (the commodity mapping is a human ruling), but its fixtures run here, and the must-fire is
+# the one that matters: an UNRULED term must be skipped, never slugified into an id. "gruyere"
+# slugifies to a perfectly plausible commodity id, which is exactly why inferring would be dangerous -
+# a careless id splits a commodity already priced under another name.
+$r = RunPS 'promote-ingredient-queue.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'promote-queue: only RULED terms promote; an unruled term is skipped rather than guessed, and a price with no size is refused' }
+else { Bad ('promote-ingredient-queue -SelfTest failed (rc=' + $r.rc + ') - queued prices could enter the board under a guessed commodity id: ' + ($r.text -replace "`n", ' ')) }
+
 $r = RunPS 'audit-price-capture-reach.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'price-capture-reach: a captured price that reaches nothing is still reported, and reach is measured per CELL not per commodity' }
 else { Bad ('audit-price-capture-reach -SelfTest failed (rc=' + $r.rc + ') - captured prices can go missing without anything counting them: ' + ($r.text -replace "`n", ' ')) }

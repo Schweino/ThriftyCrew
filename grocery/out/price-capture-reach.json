@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-08-21T15:26:26",
+    "updated":  "2026-08-21T17:16:21",
     "price_table":  "price-table-2026-08-21.json",
     "note":  "Prices captured somewhere in the codebase that do not appear in the price table. compare-deals reads six input classes and the table is derived from the same rows the ranker uses, so a capture path either writes into one of those six or its prices do not exist. Advisory: \"captured, adjudicated, waiting on a commodity id\" is a legitimate state; \"captured and forgotten because nothing counts it\" is not.",
     "stores":  [
@@ -8,8 +8,8 @@
                        "what":  "Recipe Hunter pricing agent (ingredient-queue.ps1 -Record -Price)",
                        "expected":  "reach",
                        "captured":  99,
-                       "reached":  2,
-                       "missing":  97,
+                       "reached":  8,
+                       "missing":  91,
                        "missing_rows":  [
                                             {
                                                 "key":  "cumin-seeds",
@@ -44,22 +44,6 @@
                                                 "commodity_known":  false
                                             },
                                             {
-                                                "key":  "chipotle-powder",
-                                                "store":  "Baker\u0027s",
-                                                "price":  14.49,
-                                                "size":  "2.3 oz",
-                                                "item":  "Spice Islands Ground Chipotle Chile",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "fennel",
-                                                "store":  "Baker\u0027s",
-                                                "price":  3.99,
-                                                "size":  "1 ct",
-                                                "item":  "Fresh Fennel",
-                                                "commodity_known":  false
-                                            },
-                                            {
                                                 "key":  "brown-lentils",
                                                 "store":  "Family Fare",
                                                 "price":  2.69,
@@ -90,22 +74,6 @@
                                                 "size":  "14 oz",
                                                 "item":  "La Choy Bean Sprouts",
                                                 "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "coconut",
-                                                "store":  "Baker\u0027s",
-                                                "price":  3.49,
-                                                "size":  "1 ct",
-                                                "item":  "Fresh Brown Coconuts",
-                                                "commodity_known":  true
-                                            },
-                                            {
-                                                "key":  "dried-guajillo-chiles",
-                                                "store":  "Family Fare",
-                                                "price":  2.49,
-                                                "size":  "3 oz",
-                                                "item":  "Guajillo Chili",
-                                                "commodity_known":  true
                                             },
                                             {
                                                 "key":  "avocado-oil",
@@ -225,22 +193,6 @@
                                                 "price":  11.53,
                                                 "size":  "750 ml",
                                                 "item":  "Christian Brothers VS Grape Brandy",
-                                                "commodity_known":  true
-                                            },
-                                            {
-                                                "key":  "brandy",
-                                                "store":  "Fareway",
-                                                "price":  11.99,
-                                                "size":  "750 ml",
-                                                "item":  "Christian Brothers VS Brandy",
-                                                "commodity_known":  true
-                                            },
-                                            {
-                                                "key":  "brandy",
-                                                "store":  "Hy-Vee",
-                                                "price":  13.99,
-                                                "size":  "750 ml",
-                                                "item":  "Christian Brothers Brandy",
                                                 "commodity_known":  true
                                             },
                                             {

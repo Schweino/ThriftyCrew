@@ -1,0 +1,127 @@
+{
+  "readme": "Adjudicated mapping from Recipe Hunter ingredient-queue terms to canonical commodity ids. THIS FILE IS THE RULING, not a hint: promote-ingredient-queue.ps1 reads only what is written here and skips anything absent. A fuzzy matcher deciding commodity identity at runtime is exactly the uncontrolled id assignment the estate guards against - a careless id splits a commodity already priced under another name.",
+  "ruled_on": "2026-08-21",
+  "map": {
+    "cumin-seeds": {
+      "id": "cumin-seeds",
+      "basis": "exact id",
+      "why": "resolved to an existing catalog commodity by exact id"
+    },
+    "chili-garlic-sauce": {
+      "id": "chili-garlic-sauce",
+      "basis": "exact id",
+      "why": "resolved to an existing catalog commodity by exact id"
+    },
+    "chipotle-powder": {
+      "id": "chipotle-powder",
+      "basis": "exact id",
+      "why": "resolved to an existing catalog commodity by exact id"
+    },
+    "fennel": {
+      "id": "fennel",
+      "basis": "exact id",
+      "why": "resolved to an existing catalog commodity by exact id"
+    },
+    "brown-lentils": {
+      "id": "brown-lentils",
+      "basis": "exact id",
+      "why": "resolved to an existing catalog commodity by exact id"
+    },
+    "bean-sprouts": {
+      "id": "bean-sprouts",
+      "basis": "exact id",
+      "why": "resolved to an existing catalog commodity by exact id"
+    },
+    "coconut": {
+      "id": "coconut",
+      "basis": "exact id",
+      "why": "resolved to an existing catalog commodity by exact id"
+    },
+    "dried-guajillo-chiles": {
+      "id": "dried-guajillo-chiles",
+      "basis": "exact id",
+      "why": "resolved to an existing catalog commodity by exact id"
+    },
+    "avocado-oil": {
+      "id": "avocado-oil",
+      "basis": "exact id",
+      "why": "resolved to an existing catalog commodity by exact id"
+    },
+    "cornmeal": {
+      "id": "cornmeal",
+      "basis": "exact id",
+      "why": "resolved to an existing catalog commodity by exact id"
+    },
+    "brandy": {
+      "id": "brandy",
+      "basis": "exact id",
+      "why": "resolved to an existing catalog commodity by exact id"
+    },
+    "Cauliflower": {
+      "id": "cauliflower",
+      "basis": "slugified",
+      "why": "resolved to an existing catalog commodity by slugified"
+    },
+    "Fresh Parsley": {
+      "id": "fresh-parsley",
+      "basis": "slugified",
+      "why": "resolved to an existing catalog commodity by slugified"
+    },
+    "80/20 Ground Beef": {
+      "id": "ground-beef-8020",
+      "basis": "label",
+      "why": "resolved to an existing catalog commodity by label"
+    },
+    "Portobello Mushrooms": {
+      "id": "portobello-mushrooms",
+      "basis": "slugified",
+      "why": "resolved to an existing catalog commodity by slugified"
+    },
+    "Broccolini": {
+      "id": "broccolini",
+      "basis": "slugified",
+      "why": "resolved to an existing catalog commodity by slugified"
+    },
+    "Sun-Dried Tomatoes (Oil-Packed)": {
+      "id": "sun-dried-tomatoes",
+      "basis": "manual",
+      "why": "Oil-packed is a PACK variant of the same food; sun-dried-tomatoes already exists and the catalog does not split by packing medium."
+    },
+    "Yellow Mustard": {
+      "id": "mustard",
+      "basis": "label",
+      "why": "resolved to an existing catalog commodity by label"
+    },
+    "chipotle powder": {
+      "id": "chipotle-powder",
+      "basis": "slugified",
+      "why": "resolved to an existing catalog commodity by slugified"
+    }
+  },
+  "banned": {
+    "dry white wine": "no wine in the catalog (canon layer; respec to broth)",
+    "marsala wine": "no wine in the catalog (canon layer; respec to broth)",
+    "ground chicken": "ground chicken is banned by the sourcer PROTEIN CLASS gate"
+  },
+  "pending_new_id": {
+    "bacon bits": "a shelf-stable topping, not bacon - different aisle, different basis, and reusing bacon would corrupt a live cell",
+    "gruyere": "duplicate of \"Gruyere Cheese\" - one id, not two",
+    "thai chiles": "the catalog names chiles individually (dried-arbol-chiles, dried-guajillo-chiles, dried-ancho-chiles); thai is a fourth",
+    "shaved beef steak": "a specific cut/prep; the catalog names cuts individually (sirloin-steak, ribeye-steak)",
+    "boneless beef short ribs": "a specific cut; baby-back-ribs is pork and is the only ribs id",
+    "fresh oregano": "the catalog carries dried-oregano explicitly, so fresh vs dried IS a boundary here (and the per-oz prices are nothing alike)",
+    "cardamom pods": "no candidate in the catalog - the only \"pods\" matches are coffee-pods and laundry-pods, which are false friends",
+    "90/10 ground beef": "the catalog splits ground beef by lean ratio (ground-beef-8020, ground-beef-93-7), so 90/10 is a third id, not a rename of either",
+    "unsweetened ketchup": "a premium variant; folding it into ketchup would make the ketchup cell look dearer than the ketchup people buy",
+    "tandoori spice mix": "no spice-blend id covers it; the \"mix\" matches are all baking mixes",
+    "almond flour": "flour is wheat flour; almond flour is a different food at several times the price",
+    "Monterey Jack Cheese": "the catalog has NO block/specialty cheese ids at all (only cottage, cream, shredded, sliced, string) - this is a genuine gap, not a rename",
+    "Pepper Jack Cheese": "same gap as Monterey Jack",
+    "Gruyere Cheese": "same gap; note this and the lowercase \"gruyere\" entry are the SAME food queued twice and must resolve to ONE id",
+    "Pork Smoked Sausage": "the catalog names sausages individually (italian-sausage, breakfast-sausage, smoked-turkey-sausage); pork smoked is a fourth",
+    "Beef Base": "beef-broth exists but a base is a concentrate paste, not a liquid - different unit basis entirely",
+    "Egg Yolk": "not sold as a separate retail item; the captured price is almost certainly for whole eggs, so mapping it to eggs would publish a wrong basis. Needs a human ruling on whether it is a commodity at all.",
+    "green bell pepper": "REVERTED 2026-08-21 by audit-tile-integrity. Ruled a reuse of bell-peppers on the reasoning that the catalog does not split bell peppers by colour - which is true of the CATALOG and false of the PRICE. Promoting Yellow Bell Pepper at $1.99 created a Hy-Vee cell whose stored link is a Green Bell Pepper at $0.79, a 0.4x disagreement, and the guard hard-failed the publish. Colour is a price boundary here even though it is not an id boundary, so these need their own ids or none.",
+    "Yellow Bell Pepper": "REVERTED 2026-08-21 by audit-tile-integrity. Ruled a reuse of bell-peppers on the reasoning that the catalog does not split bell peppers by colour - which is true of the CATALOG and false of the PRICE. Promoting Yellow Bell Pepper at $1.99 created a Hy-Vee cell whose stored link is a Green Bell Pepper at $0.79, a 0.4x disagreement, and the guard hard-failed the publish. Colour is a price boundary here even though it is not an id boundary, so these need their own ids or none."
+  }
+}

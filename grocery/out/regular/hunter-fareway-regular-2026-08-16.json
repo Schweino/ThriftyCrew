@@ -1,0 +1,37 @@
+{
+    "store":  "Fareway",
+    "price_type":  "everyday",
+    "price_mode":  "in-store",
+    "mode_verified":  "2026-08-16",
+    "source":  "promote-ingredient-queue.ps1 from ingredient-queue.json - prices an agent captured per store and adjudicated per product",
+    "generated":  "2026-08-21T17:13:12",
+    "note":  "Prices from the Recipe Hunter pricing agent, promoted into the engine because compare-deals reads out\\regular and does not read the queue. Commodity ids come from ingredient-queue-map.json, which is a RULING - nothing here was slugified or inferred.",
+    "deals":  [
+                  {
+                      "store":  "Fareway",
+                      "item":  "Christian Brothers VS Brandy",
+                      "ad_price":  "$11.99",
+                      "size":  "750 ml",
+                      "regular":  "$11.99",
+                      "current_price":  11.99,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "brandy",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "brandy"
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Fareway Cauliflower",
+                      "ad_price":  "$1.98",
+                      "size":  "each (1 head)",
+                      "regular":  "$1.98",
+                      "current_price":  1.98,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Cauliflower",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "cauliflower"
+                  }
+              ]
+}

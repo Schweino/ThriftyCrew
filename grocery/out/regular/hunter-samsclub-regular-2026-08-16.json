@@ -1,0 +1,50 @@
+{
+    "store":  "Sam\u0027s Club",
+    "price_type":  "everyday",
+    "price_mode":  "in-store",
+    "mode_verified":  "2026-08-16",
+    "source":  "promote-ingredient-queue.ps1 from ingredient-queue.json - prices an agent captured per store and adjudicated per product",
+    "generated":  "2026-08-21T17:13:12",
+    "note":  "Prices from the Recipe Hunter pricing agent, promoted into the engine because compare-deals reads out\\regular and does not read the queue. Commodity ids come from ingredient-queue-map.json, which is a RULING - nothing here was slugified or inferred.",
+    "deals":  [
+                  {
+                      "store":  "Sam\u0027s Club",
+                      "item":  "Christian Brothers VS Grape Brandy",
+                      "ad_price":  "$19.28",
+                      "size":  "1.75 L",
+                      "regular":  "$19.28",
+                      "current_price":  19.28,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "brandy",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "brandy"
+                  },
+                  {
+                      "store":  "Sam\u0027s Club",
+                      "item":  "80%/20% Ground Chuck Chub, Case, priced per pound",
+                      "ad_price":  "$4.77",
+                      "size":  "per lb (chub, case)",
+                      "regular":  "$4.77",
+                      "current_price":  4.77,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "80/20 Ground Beef",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "ground-beef-8020"
+                  },
+                  {
+                      "store":  "Sam\u0027s Club",
+                      "item":  "Terra Verde Italian Sundried Tomatoes in Oil",
+                      "ad_price":  "$9.98",
+                      "size":  "24 oz jar",
+                      "regular":  "$9.98",
+                      "current_price":  9.98,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Sun-Dried Tomatoes (Oil-Packed)",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "sun-dried-tomatoes"
+                  }
+              ]
+}

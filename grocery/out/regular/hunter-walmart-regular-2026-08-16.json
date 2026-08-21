@@ -1,0 +1,24 @@
+{
+    "store":  "Walmart",
+    "price_type":  "everyday",
+    "price_mode":  "in-store",
+    "mode_verified":  "2026-08-16",
+    "source":  "promote-ingredient-queue.ps1 from ingredient-queue.json - prices an agent captured per store and adjudicated per product",
+    "generated":  "2026-08-21T17:13:12",
+    "note":  "Prices from the Recipe Hunter pricing agent, promoted into the engine because compare-deals reads out\\regular and does not read the queue. Commodity ids come from ingredient-queue-map.json, which is a RULING - nothing here was slugified or inferred.",
+    "deals":  [
+                  {
+                      "store":  "Walmart",
+                      "item":  "Christian Brothers VS Grape Brandy",
+                      "ad_price":  "$11.53",
+                      "size":  "750 ml",
+                      "regular":  "$11.53",
+                      "current_price":  11.53,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "brandy",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "brandy"
+                  }
+              ]
+}
