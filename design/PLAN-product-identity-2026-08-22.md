@@ -48,7 +48,7 @@ These are the estate's load-bearing rules. A step that violates one is wrong eve
 | decision | ruling |
 |---|---|
 | Where the identity table lives | **graph's SQLite** as the index; tracked JSON as truth (per invariant 6) |
-| What a product IS (the key) | **(store, product_id)**, with normalised name as the fallback key for rows without an id |
+| What a product IS (the key) | **(store, product_id)**, with normalised name as the fallback key for rows without an id — **plus the rule namespace** (`staple` / `recipe`), see §10.1; Brad's ruling was about product identity, the namespace axis is a schema fact |
 | Scope of this build | **All five steps** (§4) |
 | Sidecar/ML verdicts once in the table | **Advisory only; a human confirms.** Scores rank the escalation queue; nothing moves a crown without a human ruling or an existing adjudicated verdict |
 
@@ -67,7 +67,8 @@ Also standing: the 90-day quarterly capture policy is the only carry window (no 
                                                            ▼
    rulings: known-wrong, verdict-suppressions,      ┌─────────────────────┐
    discovery-verdicts, graph question_verdicts ───► │ PRODUCT IDENTITY    │ ◄── sidecar scores (advisory)
-   (one precedence order)                           │ (store, product_id) │
+   (one precedence order)                           │ (store, product_id, │
+                                                    │  namespace)         │
                                                     │ → commodity,        │
                                                     │   how, confidence,  │
                                                     │   rules_hash, dates │
@@ -80,7 +81,7 @@ Also standing: the 90-day quarterly capture policy is the only carry window (no 
                            household, aisle…)   cell                only)                rules_hash)
 ```
 
-Daily work is proportional to **new (store, product_id) pairs**, not to the catalog. Everything else is a lookup.
+Daily work is proportional to **new (store, product_id, namespace) rows**, not to the catalog. Everything else is a lookup.
 
 ---
 
@@ -94,7 +95,7 @@ Each step ships alone, is reversible, and ends with a clean green `check-ad-cycl
 
 - **Truth file:** `graph/identity/<store>.jsonl` — tracked, append-only assertions, **one per (store, product_id, namespace)**. Fields: `store`, `product_id` (or `name_key` when no id — see §5.1), `key_kind`, `name`, `name_key` (the normalised name the rules actually saw), `namespace` (`staple` | `recipe` — see §10.1), `commodity` (namespaced id as graph uses: `commodity:staple:<id>`, or null = "no commodity under these rules"), `how` = `rule`, `include_hit` (the exact pattern text that fired), `excludes_tested` (count), `candidates` (every other commodity in this namespace whose include hit AND whose excludes all missed — this is what `match-soundness` calls "contested"), `rules_hash`, `first_seen`, `provenance_id`. **No `last_seen` in the truth file** — it would turn append-only into rewrite-daily; last-seen is derived from captures in the index.
 - **Index:** `graph/import/import_all.py` gains an importer that upserts these into `graph.db` as `ProductSKU` nodes + `instance_of` edges (3,443 / 3,412 exist today from `product-urls.json`; this supersedes and widens that source). Deterministic ids per `graph/lib/ids.py`.
-- **`rules_hash`** = SHA-256 over the byte content of `commodities.json`, `recipe-commodities.json`, `category-excludes.json`, and `match-lib.ps1`'s `$GLOBAL_EXCLUDE` source. Same hash → assignment is reusable. Different hash → full rematch (see step 1c).
+- **`rules_hash`** = SHA-256 over the byte content of `commodities.json`, `recipe-commodities.json`, `category-excludes.json`, and `match-lib.ps1`'s `$GLOBAL_EXCLUDE` source. Same hash → assignment is reusable. Different hash → full rematch (see §5.3 and §10.12).
 - **Incremental:** on a run whose `rules_hash` matches the table's, only names not present in the table are matched. Measured churn makes this tens of names/day.
 - **Parity gate (HARD, in `guards.ps1`):** for every board cell in today's comparison, the product's `instance_of` in the table must equal the commodity `compare-deals` priced it under. Zero disagreements or the publish holds. This replaces `audit-match-soundness`'s self-check with something that cannot drift, because there is no second implementation.
 - **Provenance line:** `build-deals-page.ps1` renders, per cell, `matched by <include_hit>; <n> excludes tested` (hidden until a row opens, like the chips). Today "why is this the crown?" has no answer anywhere.
@@ -103,7 +104,7 @@ Each step ships alone, is reversible, and ends with a clean green `check-ad-cycl
 
 ### Step 2 — One verdict store with one precedence order
 
-**What.** Four files today hold adjudicated negatives/positives, and four scripts re-implement "is this product banned here?": `grocery/known-wrong.json`, `grocery/verdict-suppressions.json`, `grocery/discovery-verdicts.json`, and graph's `question_verdicts` (4,141 rows, the LLM-rejected / human-confirmed set). Fold them into the identity table as rulings with `how ∈ {human, llm_rejected, cross_encoder, rule}` and an explicit precedence:
+**What.** Four files today hold adjudicated negatives/positives, and four scripts re-implement "is this product banned here?": `grocery/known-wrong.json`, `grocery/verdict-suppressions.json`, `grocery/discovery-verdicts.json`, and graph's `question_verdicts` (4,141 rows, the LLM-rejected / human-confirmed set). Fold them into the identity table as rulings with `how ∈ {human, llm_rejected, rule}` (the cross-encoder is a SCORE column, never a `how` — §5.2) and an explicit precedence:
 
 `human ruling > adjudicated verdict (known-wrong / suppression) > rule proposal > sidecar score (advisory, never decides)`.
 
@@ -119,7 +120,7 @@ Each step ships alone, is reversible, and ends with a clean green `check-ad-cycl
 
 Order (cost first): `audit-match-soundness` (111 s → a diff of two rules_hash snapshots: MOVED/DROPPED/contested fall out of a join); `audit-semantic-identity` corpus prep (~90 s → a read); `audit-household-in-food` (HARD gate — becomes a query over `commodity` × product class; migrate with a must-fire fixture proving it still exits 2 on the founding Lysol/mango case); `audit-coverage-gaps`; `aisle-test`; `discover-hyvee`; `audit-sale-fallback`; `build-deals-page`; then the long tail (`apply-coverage-batch`, `triage-coverage-gaps`, `explain-coverage-gap`, `validate-fills`, `notify-item-added`, `resolve-*`, `diag-ff`, `export-identity-eval`, `promote-verdicts`, `audit-match-contested`, `audit-ff-carry`).
 
-- Delete the five `Invoke-Expression`-over-scraped-source sites (`audit-household-in-food.ps1`, `audit-match-contested.ps1`, `audit-match-soundness.ps1`, `validate-fills.ps1`, and the one in `check-ad-cycles.ps1`). Also the same class in `build-walmart-deals.ps1:83-88`, `build-sams-deals.ps1:56-61`, `import-walmart-batch.ps1:40-54`, `import-instacart-batch.ps1:64-69`, which lift `Get-UnitPrice`/`Get-PackCount`/`Convert-ToUnit` out of `compare-deals.ps1` by regex — extract those into `pricing-lib.ps1` and dot-source it (coordinate: the browser-lane session owns the Walmart/Sam's builders; land `pricing-lib.ps1` first, let them adopt it).
+- Delete the five `Invoke-Expression`-over-scraped-source sites (`audit-household-in-food.ps1`, `audit-match-contested.ps1`, `audit-match-soundness.ps1`, `validate-fills.ps1`, and any in `check-ad-cycles.ps1` — verify by grep; the census listed it, it may be a comment). Also the same class in `build-walmart-deals.ps1:83-88`, `build-sams-deals.ps1:56-61`, `import-walmart-batch.ps1:40-54`, `import-instacart-batch.ps1:64-69`, which lift `Get-UnitPrice`/`Get-PackCount`/`Convert-ToUnit` out of `compare-deals.ps1` by regex — extract those into `pricing-lib.ps1` and dot-source it (coordinate: the browser-lane session owns the Walmart/Sam's builders; land `pricing-lib.ps1` first, let them adopt it).
 - `audit-guard-contract.ps1` must still see every detector called (its DEAD/HALF-COVERED checks). A migrated audit keeps its completion marker.
 - The coverage ratchet (`audit-coverage-ledger.ps1`) reads receipts each check writes; a migrated check keeps writing its receipt with `examined`/`eligible` counts, or the ratchet reports it BLIND.
 
@@ -260,3 +261,30 @@ The machine-wide mutex (`Global\tc-capture-run`), the run record (`out/logs/capt
 
 ### 10.11 The twenty copies are not all the same copy
 Some "copies" are *loosened* matchers on purpose — `audit-coverage-gaps` scans with a deliberately broader include to find products the strict rules miss. That is a different question ("what *could* match?"), not a drifted copy of "what *does* match?". Classify each of the twenty before migrating: faithful replicas become table reads; deliberate variants keep their own logic but take the table as their "current assignment" input instead of recomputing it.
+
+### 10.12 "Append-only" and "full rematch on rule change" contradict each other — resolved
+Step 1 called the truth file append-only AND said a `rules_hash` change triggers a full rematch. On 2026-08-21 alone there were ~40 rule-touching commits; 40 rematches × ~40k rows appended = 1.6 million lines in a day. **The truth file holds ONE current row per key and is rewritten whole, atomically, when anything changes.** History is git: the file is tracked, so every assignment change is a commit diff, and the "previous state" for a rule-change diff (§5.3) is `git show HEAD:graph/identity/<store>.jsonl`. On a quiet day the rewrite produces identical bytes and nothing is committed. Rulings (step 2) are the append-only part — they are rare, human, and belong in their own file per §10.13. Keep rows sorted by key so diffs are minimal.
+
+### 10.13 Rulings do not share the product key — there is a join problem
+`known-wrong.json` rows are (commodity, store, product_id); `verdict-suppressions.json` keys on product NAME + commodity; `discovery-verdicts.json` are Hy-Vee prospects that may have **no capture row at all**; graph's `question_verdicts` key on the resolver's own (commodity, product) ids. Step 2 needs an explicit normalisation that maps each source's key to `(store, product_id | name_key, namespace)`, and **must report every ruling it could not join** rather than dropping it — a silently lost known-wrong is a wrong product back on the board. Rulings live in `graph/identity/rulings.jsonl` (append-only, with `ruled_by`/`ruled_on`/`evidence`/`source_file`) and are joined at read time; they are not folded into the derived rows.
+
+### 10.14 Ad rows have no product_id and churn weekly — the parity gate must expect that
+Flyer deals ("Hy-Vee butter, 16 oz., $2.48") come from `out\ads-*.json`, go through the same matcher, and win cells. They carry no store product id, so they are name-keyed, and their names change every ad cycle. They are a legitimate, expected source of daily new rows and must be in the table, or the parity gate fails on every ad cell. Do not mistake their weekly churn for instability.
+
+### 10.15 Check which stores' capture rows actually carry a product id TODAY
+§5.1 lists where ids *exist at the source*. Whether the row written to `out\regular\*.json` carries the field is a separate question, and the Walmart/Sam's/Fareway/Aldi builders belong to the other session (§5.5). Step 1 must enumerate, per store, the id field present in current capture rows; where absent, use the name key and file a one-line request to the browser-lane session to persist the id. Do not edit their builders.
+
+### 10.16 `product-classes.json` is part of the rules — put it in `rules_hash`
+Step 4 adds a file that changes assignments. If it is not hashed, a class edit would leave stale derived rows in place with a matching hash. `rules_hash` inputs after step 4: post-bake `commodities.json`, `recipe-commodities.json`, `category-excludes.json`, `product-classes.json`, and the `$GLOBAL_EXCLUDE` source.
+
+### 10.17 The parity gate ships ADVISORY and is promoted by Brad, not by the builder
+The estate's own rule (`audit-graph-gates.ps1` header): "Promotion to blocking is a per-gate decision, after a clean run of real days, and it is Brad's." The new gate runs as WARN with a full disagreement list for at least three real mornings; Brad promotes it to HARD. This also gives a rollback: a flag on `compare-deals` (`-NoIdentity`) disables emission, and a flag on `guards` disables the gate, so step 1 can be reverted without a code revert.
+
+### 10.18 Stages with side effects must never be skipped by a fingerprint
+Step 5's runner skips a stage whose inputs are unchanged. That is correct for pure audits and wrong for anything whose "input" is the world or whose effect is the point: the pulls (network), `publish-deals-page` (Ghost; it already self-gates on `BoardSignature`), `send-price-alerts` and `notify-item-added` (email + state advance — must not double-fire either), `export-feed`, the commit/push stage. Each stage declares `skippable: true|false`; default **false**. Only audits that write nothing but their own report opt in. Also: fingerprinting `out\regular` (385 MB) by content every run is itself a cost — use size+mtime first and hash only on change.
+
+### 10.19 The provenance line must not inflate `public\board.json`
+It is a 2.5 MB served asset cached per-colo for 30 minutes. "matched by `<pattern text>`" on ~3,000 cells is hundreds of KB of regex text shipped to every reader. Render a short token (pattern index id) and keep the text in the tracked identity file; expand on demand.
+
+### 10.20 The table covers the two RULE namespaces only
+The registrar speaks of three id namespaces (staple, recipe, feed ingredient ids). Feed ids have no matching rules — they are costed by bid through `meal-prep`, not matched — so they are not rows in this table. Saying so stops a builder from inventing a third namespace.
