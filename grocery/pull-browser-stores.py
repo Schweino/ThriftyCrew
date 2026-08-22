@@ -113,6 +113,21 @@ STORES = {
         # the wall gets deeper. Enforced below rather than written down as guidance, because a flag
         # that is only documented is a flag someone passes anyway.
         "never_headless": True,
+        # PAUSED 2026-08-22 - AND NOT BECAUSE OF A WALL.
+        # With the browsing-mode launch the hard wall is gone (unusable went to 0 on the first clean
+        # run). What replaced it is worse to diagnose and worse to keep probing: Walmart serves this
+        # automated browser pages that CONTAIN items but carry no prices. Measured the same minute,
+        # same machine, same cookies:
+        #     Brad's own Chrome   /search?q=milk -> 119 item nodes, prices present, parser keeps 59
+        #     the driver's Chrome /search?q=...  -> 83-111 item nodes, no extractable price, keeps 0
+        # So it is a SOFT block on the automation channel, not the profile, the fingerprint or the
+        # IP - all of which were measured identical. Left paused rather than retried daily because
+        # every attempt spends request budget on a store that cannot currently return a price, and
+        # raises the score against an account that still works fine for Brad by hand.
+        # To retry: delete this flag and run ONE capture. If item nodes appear with real prices, it
+        # is fixed. Do not iterate against the live store - use Brad's Chrome as the control, which
+        # is what finally separated the two faults here.
+        "paused": "serves the automated browser price-less payloads (soft block); works in Brad's own Chrome",
         # Walmart is the one store with nothing to assert: prices are already the local store's and
         # there is no store toggle in the payload, so walmartIdentity() only proves we are on
         # walmart.com and not already walled. Seeding is therefore about the SESSION (a warm,
@@ -518,6 +533,12 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
         headless = False
     prof = profile_dir(store_key)
     seeded_marker = os.path.join(prof, ".tc-seeded")
+
+    # A PAUSED STORE IS SKIPPED, NOT ATTEMPTED. Reported as outstanding so it stays visible on the
+    # browser flag and in the watchdog, but never probed - a store that cannot currently return a
+    # price should not spend request budget every morning proving it again.
+    if not seed and cfg.get("paused"):
+        return True, f"skipped: PAUSED - {cfg['paused']}"
 
     if not seed and not os.path.exists(seeded_marker):
         return False, (f"NEEDS SEEDING: no seeded Chrome profile for {name}. Run "
