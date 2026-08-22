@@ -1,6 +1,6 @@
 ---
 name: grocery-accuracy-sample
-description: Weekly (Sunday 8am) out-of-band accuracy measurement: draw a blind n=100 sample of published board cells, verify ALL of them against the stores' own sites via a per-store agent fan-out, record the verdicts and report the Wilson interval. The only statement about the board that the board did not write about itself.
+description: DISABLED 2026-08-22 by Brad: the three TC Windows tasks are the ONLY routines that should fire. NOTE this was the only out-of-band accuracy measurement of the board (blind n=100 weekly sample, Wilson interval) - nothing else measures accuracy independently. Run it on demand, or fold it into a Windows task if the measurement is wanted back on a clock. Prompt kept for reference.
 ---
 
 You are running the weekly out-of-band accuracy measurement for the Thrifty Crew grocery board.

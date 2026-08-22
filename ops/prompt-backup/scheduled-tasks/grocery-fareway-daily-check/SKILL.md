@@ -1,6 +1,6 @@
 ---
 name: grocery-fareway-daily-check
-description: Daily Fareway storefront check (in-store price mode, Omaha): window-aware guard, re-pull + re-compare + republish only when prices moved. Cron fires 6:30am daily except Wednesday (the weekly agent covers Wed). Builder carry-forwards items a partial pull misses.
+description: DISABLED 2026-08-22 by Brad: the three TC Windows tasks are the ONLY routines that should fire. Fareway's rotation slice is now covered by the quarterly capture policy via capture-run.ps1; this separate 6:30am agent double-pulled the same store and raced the 0800 task in the same working tree. Prompt kept for reference.
 ---
 
 Daily Fareway price check for the Thrifty Crew Omaha grocery board (www.thriftycrew.com/omaha-grocery-prices). Fareway is a BROWSER store (shop.fareway.com storefront, Instacart platform - no headless API) with a weekly ad (Sun-Sat) + a monthly ad. When its ad drops off, the new pricing can only be fetched with a browser; the headless daily job can't see it, and the weekly Wednesday agent alone would leave a Fareway sale that ends mid-week (e.g. the Sunday weekly-ad flip) stale until Wednesday. This tiny agent re-fetches Fareway same-day on the days its prices are scheduled to move. All scripts + data live in C:\Codex\ThriftyCrew\grocery\ .

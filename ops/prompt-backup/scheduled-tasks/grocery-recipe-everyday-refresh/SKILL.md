@@ -1,6 +1,6 @@
 ---
 name: grocery-recipe-everyday-refresh
-description: "Monthly (1st, 8am): refresh the recipe EVERYDAY floor prices by DERIVING them from the board's own weekly pull data (derive-recipe-floors.ps1); hand-verify only the flagged residue. Rewritten 2026-07-23 - the old 158-item x 6-store hand-browse is obsolete."
+description: DISABLED 2026-08-22 by Brad: the three TC Windows tasks are the ONLY routines that should fire. Monthly recipe EVERYDAY floor refresh (derive-recipe-floors.ps1) now runs on demand. Prompt kept for reference.
 ---
 
 Monthly refresh of the recipe-ingredient EVERYDAY (non-sale) floor prices behind the Thrifty Crew grocery board's recipe rows (www.thriftycrew.com/omaha-grocery-prices). All scripts + data in C:\Codex\ThriftyCrew\grocery\ .

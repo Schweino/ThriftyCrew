@@ -1,6 +1,6 @@
 ---
 name: grocery-browser-stores-refresh
-description: DAILY browser capture pass for the four walled Omaha stores (Walmart, Sam's, Aldi, Fareway): each works its own small quarterly-rotation worklist (~7 terms from out\worklists\), plus the Baker's ad vision-read on rollover, then compare/verify/publish. 6:15am daily. STEP 0 (browser-refresh-due) reports rotation debt and expiry pressure and stops instantly when nothing is owed.
+description: DISABLED 2026-08-22 by Brad: the three TC Windows tasks (Ad Pulls 0700, Daily Capture 0800, Capture Watchdog 0930) are the ONLY routines that should fire. Browser-walled store captures (Walmart/Sam's/Aldi/Fareway) now happen on demand, not on a schedule. capture-run.ps1 still writes out\browser-capture-due-<date>.flag when browser work is outstanding; that flag is the handoff to a manual run. Prompt kept for reference.
 ---
 
 DAILY browser capture pass for the BROWSER-walled Omaha grocery stores, ending by REBUILDING + REPUBLISHING the live page: (A) Baker's weekly AD *on rollover only*, (B) Sam's Club, (E) Walmart, (F2) ALDI, (F3) FAREWAY, then (F) compare, (H) semantic verify, (I) sanity gate, and (J) PUBLISH. Steps (C) Baker's everyday and (D) Hy-Vee everyday are HEADLESS and cost no browser time. All scripts + data live in C:\Codex\ThriftyCrew\grocery\ .
