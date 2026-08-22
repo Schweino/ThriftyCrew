@@ -41,7 +41,23 @@ param(
   [switch]$SelfTest,
   # -Explain <commodity-id>: read-only ownership dump for ONE cell, then exit. See the block near
   # Match-Category. Writes no board, so it is safe to run against a live tree mid-pipeline.
-  [string]$Explain = ""
+  [string]$Explain = "",
+  # ---- THE PRODUCT IDENTITY TABLE (2026-08-22, PLAN-product-identity step 1) --------------------
+  # -IdentityNamespace <staple|recipe>: emit graph\identity\<ns>\<store>.jsonl for this run - one row
+  # per (store, product key) recording which commodity owns the product, which include pattern fired,
+  # how many excludes were tested, and which other commodities also wanted it.
+  #
+  # OPT-IN, NOT DEFAULT-ON, and that is section 10.9 rather than caution: compare-deals is ALSO run
+  # ad hoc - -Explain, -SelfTest, and apply-coverage-batch.ps1, which edits commodities.json and
+  # re-runs the engine three or four times per attempt to see what a rule edit moved. Those runs
+  # carry a DIFFERENT rules hash, so a default-on emitter would rewrite the whole table with trial
+  # rules and hand the next reader a table that never described a published board. The chain names
+  # the namespace explicitly (check-ad-cycles -> staple, recipe-overlay -> recipe); nothing else emits.
+  #
+  # -NoIdentity is the kill switch section 10.17 asks for: the gate ships ADVISORY and is promoted by
+  # Brad, and until then step 1 must be revertible without a code revert. It wins over the namespace.
+  [string]$IdentityNamespace = "",
+  [switch]$NoIdentity
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -1155,7 +1171,32 @@ if ($SelfTest) {
 
 # ---------------------------------------------------------------- load + normalize all sources
 $deals = New-Object System.Collections.Generic.List[object]
-function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='',$adBasis='') {
+function Get-RowProductId($row) {
+  <#
+    THE STORE'S OWN ID FOR THIS LISTING, when the capture row carries one. Enumerated on the live
+    captures 2026-08-22 (PLAN section 10.15 asks for exactly this census, because "the source has an id"
+    and "our row records it" are different questions):
+        Baker's      product_id   7,289 rows      Hy-Vee       product_id   1,554 rows
+        Family Fare  product_id   5,224 rows      Walmart      item_id        136 rows
+        Aldi, Fareway, Sam's Club, hunter-*       NO id field on the row -> name-keyed
+    Aldi and Fareway rows do carry link_url, which is a stabler key than a name; adopting it is a
+    deliberate change to those lanes' contract (they belong to the browser-lane session, section 5.5),
+    so it is NOT taken here. Ad rows have no store id by nature and are name-keyed on purpose
+    (section 10.14).
+    Returns '' rather than $null so the caller never has to test for both.
+  #>
+  # DIRECT property access, not PSObject.Properties.Name -contains. This is called once per capture row
+  # - about 40,000 times per build - and materialising the property-name collection for each row cost a
+  # measured ~10s of the ship path. A missing property on a PSCustomObject reads as $null, which is
+  # exactly the answer wanted, so the membership test bought nothing.
+  if ($null -eq $row) { return '' }
+  $v = ('' + $row.product_id).Trim()
+  if ($v) { return $v }
+  $v = ('' + $row.item_id).Trim()
+  if ($v) { return $v }
+  return ''
+}
+function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='',$adFrom='',$adTo='',$adBasis='',$prodId='') {
   if (-not $name) { return }
   # src_date = the date of the CAPTURE FILE this row came from (not the ad cycle). Only rows loaded from dated
   # per-store capture files carry it; it is how the ranking step below can prefer the freshest capture that
@@ -1181,7 +1222,7 @@ function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate
   if ($ptype -eq 'sale' -and $adTo -match '^\d{4}-\d{2}-\d{2}$' -and $script:BoardToday) {
     if ([string]$adTo -lt [string]$script:BoardToday) { $script:ExpiredSaleRows++; return }
   }
-  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo; ad_basis=[string]$adBasis })
+  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate; ad_from=[string]$adFrom; ad_to=[string]$adTo; ad_basis=[string]$adBasis; product_id=[string]$prodId })
 }
 $ads = Get-Content $AdsFile -Raw | ConvertFrom-Json
 $today = $ads.today
@@ -1299,7 +1340,7 @@ foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
     foreach ($d in $ex.deals) {
       $rFrom = if ($d.ad_from) { [string]$d.ad_from } else { [string]$ex.ad_from }
       $rTo   = if ($d.ad_to)   { [string]$d.ad_to }   else { [string]$ex.ad_to }
-      Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $sd $rFrom $rTo
+      Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $sd $rFrom $rTo '' (Get-RowProductId $d)
     }
   }
 }
@@ -1341,7 +1382,7 @@ if ($extraF) {
     $claimsDiscount = ($ap -gt 0 -and $rg -gt 0 -and $ap -lt $rg)
     $dated = [bool]$d.sale_end
     if ($claimsDiscount -and (-not $dated) -and ($exDate -ne $todayReal)) { $staleDiscount++; continue }
-    Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt
+    Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt '' '' '' '' (Get-RowProductId $d)
   }
   if ($staleDiscount -gt 0) {
     Write-Warning ("extra-deals: skipped $staleDiscount undated discount row(s) from $exDate (captured before today, no end date - cannot be shown as a live sale). The board falls back to each store's everyday shelf price, which IS verified against its product link.")
@@ -1478,16 +1519,16 @@ if (Test-Path $regDir) {
         # A CUT PRICE IS A SALE, AND IT CARRIES ITS OWN WINDOW. Typed 'sale' so build-sale-windows
         # dates it, the page badges it, and it can expire. Its everyday half is emitted separately
         # below so the cell the shopper reverts to is never lost.
-        Add-Norm $d.store $d.item ('$' + $spl.sale_price) $d.size $d.regular $d.source_ad 'sale' $rsd $spl.sale_from $spl.sale_to $script:LastBasis
+        Add-Norm $d.store $d.item ('$' + $spl.sale_price) $d.size $d.regular $d.source_ad 'sale' $rsd $spl.sale_from $spl.sale_to $script:LastBasis (Get-RowProductId $d)
         # AND THE PRICE IT REVERTS TO. Without this row the everyday value disappears the moment a
         # store discounts an item, which is the other half of Brad's rule - everyday must not be
         # replaced by the ad. Only emitted when the store told us what it was cut FROM; a flagged row
         # with no was-price would otherwise publish the sale price twice under two labels.
         if ($spl.everyday_price -and $spl.everyday_price -gt $spl.sale_price) {
-          Add-Norm $d.store $d.item ('$' + $spl.everyday_price) $d.size $null $d.source_ad 'everyday' $rsd '' ''
+          Add-Norm $d.store $d.item ('$' + $spl.everyday_price) $d.size $null $d.source_ad 'everyday' $rsd '' '' '' (Get-RowProductId $d)
         }
       } else {
-        Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $rsd
+        Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $rsd '' '' '' (Get-RowProductId $d)
       }
     }
   }
@@ -1683,8 +1724,15 @@ $mbUnpriced = New-Object System.Collections.Generic.List[object]   # Buy-N-Get-K
 # product owns a cell exist at all.
 . (Join-Path $PSScriptRoot 'match-lib.ps1')
 $fastMatcher = New-CommodityMatcher -Commodities $commodities -GlobalExclude $GLOBAL_EXCLUDE
+# THE IDENTITY TABLE COLLECTS EVERY ROW, INCLUDING THE UNMATCHED ONES. "No commodity owns this product
+# under today's rules" is an answer, and it is the answer audit-coverage-gaps spends 100 seconds a day
+# recomputing. Collected as references to rows already in memory, so this costs nothing here; the actual
+# detail scan happens once per distinct name after the board is written (see the emission block).
+$IDENT_ON = ($IdentityNamespace -ne '') -and (-not $NoIdentity)
+$identityRows = $(if ($IDENT_ON) { New-Object System.Collections.Generic.List[object] } else { $null })
 foreach ($d in $deals) {
   $c = Resolve-Commodity -Matcher $fastMatcher -Name $d.name
+  if ($IDENT_ON) { [void]$identityRows.Add($d) }
   if (-not $c) { continue }
   $up = Get-UnitPrice $d $c
   $uprice = $null; $basis = 'UNPRICED'; $note = ''
@@ -1913,6 +1961,158 @@ if ($ptBad.Count) {
 }
 Write-Output ("Saved: " + $ptFile)
 Write-Output ("Saved: " + $ptCsvFile)
+
+# ---------------------------------------------------------------- THE PRODUCT IDENTITY TABLE (2026-08-22)
+# PLAN-product-identity step 1. The engine has always known which commodity owns which product; it has
+# never written it down. Twenty other scripts therefore carry their own copy of the decision - two of them
+# HARD gates - and the daily chain recomputes a stable answer about twenty times. This block emits the
+# answer as a first-class, git-tracked artifact so everything downstream can be a lookup.
+#
+# IT RUNS AFTER THE BOARD IS WRITTEN, ON PURPOSE. The board is the product; the table describes it. A
+# crash in here must never cost today's prices, so it is wrapped and reported rather than thrown - and the
+# failure is not silent, because a table left at yesterday's rules_hash is exactly what the parity gate in
+# guards.ps1 reports (section 10.7: an absent or stale row is BLIND, never a pass).
+if ($IDENT_ON) {
+  try {
+    if (@('staple', 'recipe') -notcontains $IdentityNamespace) {
+      throw ("-IdentityNamespace must be 'staple' or 'recipe' (got '" + $IdentityNamespace + "'). Section 10.20: feed ingredient ids are costed by bid through meal-prep, not matched, so there is no third namespace to invent.")
+    }
+    . (Join-Path $PSScriptRoot 'identity-lib.ps1')
+    $idSw = [Diagnostics.Stopwatch]::StartNew()
+    $rulesHash = Get-IdentityRulesHash -GroceryRoot $root
+
+    # ---- pass 1: which product ids are AMBIGUOUS today -------------------------------------------
+    # A store id is supposed to name one product, but a capture union can carry the same id under two
+    # different normalised names (an ad title and a catalog title, a renamed listing carried forward).
+    # Keying those on the id would make the row's meaning depend on iteration order, and the parity gate
+    # joins a board cell by NAME - so an id whose names disagree is demoted to name keys for this run and
+    # counted. Measured, not assumed: the count is printed and lands in the manifest.
+    # Get-MatchTexts is memoised across BOTH passes: the same normalisation would otherwise run twice
+    # for every one of ~40,000 rows, which measured ~2.5s of pure repetition on a warm run.
+    $nameKeyCache = @{}
+    $idNames = @{}
+    foreach ($d in $identityRows) {
+      $sid = [string]$d.product_id
+      if (-not $sid) { continue }
+      $nm0 = [string]$d.name
+      if (-not $nameKeyCache.ContainsKey($nm0)) { $nameKeyCache[$nm0] = (Get-MatchTexts $nm0)[1] }
+      $nk = $nameKeyCache[$nm0]
+      $k = ([string]$d.store + '|' + $sid)
+      if (-not $idNames.ContainsKey($k)) { $idNames[$k] = @{} }
+      $idNames[$k][$nk] = $true
+    }
+    $ambiguous = @{}
+    foreach ($k in $idNames.Keys) { if ($idNames[$k].Count -gt 1) { $ambiguous[$k] = $true } }
+
+    # ---- pass 2: one current row per (store, key) -------------------------------------------------
+    # Previous tables are read per store and consulted for REUSE. A stored row is still today's answer
+    # only when BOTH the rules hash matches AND the stored name_key equals the name the rules would see
+    # now (section 10.3): a Kroger product_id is stable across a size or label variant, and the rules
+    # match the NAME, so a hash check alone would keep an assignment made for a different product.
+    # Sub-timings are printed, not inferred. This block sits on the ship path, and "the identity table
+    # cost N seconds" is useless for deciding what to fix; read/match/write separately is not.
+    $tRead = [double]0; $tMatch = [double]0
+    $detailCache = @{}
+    $prevByStore = @{}
+    $rowsByStore = @{}
+    $seenByStore = @{}
+    $reusedByStore = @{}
+    $reused = 0; $rematched = 0; $contested = 0
+    foreach ($d in $identityRows) {
+      $store = [string]$d.store
+      if (-not $prevByStore.ContainsKey($store)) {
+        $swR = [Diagnostics.Stopwatch]::StartNew()
+        $prevByStore[$store] = Read-IdentityTable -GroceryRoot $root -Namespace $IdentityNamespace -Store $store
+        $tRead += $swR.Elapsed.TotalSeconds
+        $rowsByStore[$store] = New-Object System.Collections.Generic.List[object]
+        $seenByStore[$store] = @{}
+      }
+      $name = [string]$d.name
+      if (-not $nameKeyCache.ContainsKey($name)) { $nameKeyCache[$name] = (Get-MatchTexts $name)[1] }
+      $nameKey = $nameKeyCache[$name]
+      $sid = [string]$d.product_id
+      if ($sid -and $ambiguous.ContainsKey($store + '|' + $sid)) { $sid = '' }
+      $kk = Get-IdentityKey -ProductId $sid -NameKey $nameKey
+      if ($seenByStore[$store].ContainsKey($kk.key)) { continue }   # first row wins; the key is the row
+      $seenByStore[$store][$kk.key] = $true
+
+      $prev = $prevByStore[$store][$kk.key]
+      $firstSeen = $(if ($prev -and $prev.first_seen) { [string]$prev.first_seen } else { [string]$today })
+      if ($prev -and [string]$prev.rules_hash -eq $rulesHash -and [string]$prev.name_key -eq $nameKey) {
+        # REUSE. This is what makes daily work proportional to NEW products rather than to the catalog.
+        $reused++
+        $reusedByStore[$store] = [int]$reusedByStore[$store] + 1
+        [void]$rowsByStore[$store].Add($prev)
+        if (@($prev.candidates).Count) { $contested++ }
+        continue
+      }
+      $rematched++
+      if (-not $detailCache.ContainsKey($name)) {
+        $swM = [Diagnostics.Stopwatch]::StartNew()
+        $detailCache[$name] = Resolve-CommodityDetail -Matcher $fastMatcher -Name $name
+        $tMatch += $swM.Elapsed.TotalSeconds
+      }
+      $det = $detailCache[$name]
+      $cid = $(if ($det.commodity) { 'commodity:' + $IdentityNamespace + ':' + [string]$det.commodity.id } else { $null })
+      if (@($det.candidates).Count) { $contested++ }
+      [void]$rowsByStore[$store].Add([pscustomobject]@{
+        store = $store
+        key = $kk.key
+        key_kind = $kk.key_kind
+        name = $name
+        name_key = $nameKey
+        size = [string]$d.size_text
+        namespace = $IdentityNamespace
+        commodity = $cid            # $null = no commodity owns this product under these rules
+        how = 'rule'
+        include_hit = [string]$det.include_hit
+        include_hit_ix = [int]$det.include_hit_ix
+        excludes_tested = [int]$det.excludes_tested
+        candidates = @($det.candidates)
+        rules_hash = $rulesHash
+        first_seen = $firstSeen
+      })
+    }
+
+    # ---- write, atomically, and only where the bytes moved ---------------------------------------
+    $storeSummary = New-Object System.Collections.Generic.List[object]
+    $changedFiles = 0
+    $swW = [Diagnostics.Stopwatch]::StartNew()
+    foreach ($store in ($rowsByStore.Keys | Sort-Object)) {
+      $n = $rowsByStore[$store].Count
+      # PROVABLY UNCHANGED, so do not re-serialise 35,000 rows to find that out. Every row of this store
+      # came back from the previous table AND the row count is the same, so the key SET is the same, the
+      # sort is the same, and each row serialises to the bytes it was read from (the round-trip is what
+      # the "0 changed" run already demonstrates). A REMOVED product changes the count, so a shrinking
+      # table still goes through the full write. This is what keeps a quiet morning near zero cost.
+      if ($n -gt 0 -and [int]$reusedByStore[$store] -eq $n -and $prevByStore[$store].Count -eq $n) {
+        $storeSummary.Add([pscustomobject]@{ store = $store; rows = $n; changed = $false })
+        continue
+      }
+      $res = Save-IdentityTable -GroceryRoot $root -Namespace $IdentityNamespace -Store $store -Rows $rowsByStore[$store]
+      if ($res.changed) { $changedFiles++ }
+      $storeSummary.Add([pscustomobject]@{ store = $store; rows = $res.rows; changed = $res.changed })
+    }
+    $null = Save-IdentityManifest -GroceryRoot $root -Namespace $IdentityNamespace -RulesHash $rulesHash `
+      -BoardDate ([string]$today) -Stores $storeSummary -Reused $reused -Matched $rematched `
+      -Contested $contested -IdCollisions $ambiguous.Count
+    $tWrite = $swW.Elapsed.TotalSeconds
+    $idSw.Stop()
+    $idRowTotal = 0
+    foreach ($s in $storeSummary) { $idRowTotal += [int]$s.rows }
+    Write-Output ("identity[{0}]: {1} row(s) across {2} store file(s) ({3} changed) - {4} reused at rules_hash {5}, {6} re-matched, {7} contested, {8} ambiguous product id(s) demoted to name keys" -f `
+      $IdentityNamespace, $idRowTotal, $storeSummary.Count, $changedFiles, $reused, $rulesHash.Substring(0, 12), $rematched, $contested, $ambiguous.Count)
+    Write-Output ("identity[{0}]: {1:N1}s total - read {2:N1}s, match {3:N1}s, write {4:N1}s" -f $IdentityNamespace, $idSw.Elapsed.TotalSeconds, $tRead, $tMatch, $tWrite)
+  } catch {
+    # LOUD, NOT FATAL. The board is already written and correct; what is now wrong is the table, and the
+    # honest consequence is that it stays at its previous rules_hash - which is precisely the state the
+    # parity gate reports as BLIND rather than as agreement.
+    # WITH THE LINE NUMBER. A bare .Message on a PowerShell runtime error is frequently unlocatable
+    # ("Argument types do not match", "Value cannot be null") and this block is 100 lines long.
+    Write-Output ("!! identity[" + $IdentityNamespace + "]: the identity table was NOT updated this run - " + $_.Exception.Message + " (compare-deals.ps1 line " + $_.InvocationInfo.ScriptLineNumber + ")")
+    Write-Output ("   The board is unaffected. guards' parity gate will report this as stale/BLIND until the table is rebuilt.")
+  }
+}
 
 # ---------------------------------------------------------------- THE INPUT LEDGER (2026-08-21)
 # -IsLiveBuild only when this run built the PUBLISHED board. A regression or fixture run reads a PINNED

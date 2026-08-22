@@ -16,6 +16,7 @@ false merge, and those two are genuinely different purchases.
 from __future__ import annotations
 
 import glob
+import json
 import os
 import re
 from typing import Callable
@@ -978,6 +979,157 @@ LANE_IMPORTERS: list[tuple[str, Callable]] = [
     ("product_url_prices", import_product_url_prices),
 ]
 
+# ---------------------------------------------------------------------------
+# The product identity table
+# ---------------------------------------------------------------------------
+
+IDENTITY = os.path.join(REPO_ROOT, "graph", "identity")
+
+# The two RULE namespaces, and only those. PLAN-product-identity section 10.20:
+# feed ingredient ids are costed by bid through meal-prep, not matched, so there
+# is no third namespace to invent here.
+IDENTITY_NAMESPACES = ("staple", "recipe")
+
+
+def _read_jsonl(path: str) -> list[dict]:
+    """Rows of a .jsonl file. A line that will not parse is a hard error.
+
+    Skipping it would silently narrow the index while every count still looked
+    plausible - the failure mode this estate calls "partly blind".
+    """
+    rows = []
+    with open(path, "r", encoding="utf-8") as fh:
+        for n, line in enumerate(fh, 1):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                rows.append(json.loads(line))
+            except json.JSONDecodeError as e:
+                raise ValueError(f"{rel(path)} line {n} is not JSON: {e}") from e
+    return rows
+
+
+def import_identity(db: GraphDB, ts: str, run: str) -> dict:
+    """graph/identity/<ns>/<store>.jsonl -> ProductSKU nodes + instance_of edges.
+
+    WHAT THIS IS. `compare-deals.ps1 -IdentityNamespace <ns>` writes one current
+    row per (store, product key) recording which commodity owns the product under
+    a named `rules_hash`, which include pattern fired, how many excludes were
+    tested, and which other commodities also wanted it. Those files are the TRUTH
+    (schema commitment 3: this DB is a rebuildable index; nothing may exist only
+    here). This is the index side of that sentence.
+
+    IT SUPERSEDES AND WIDENS import_product_urls. That one builds ProductSKUs from
+    product-urls.json - roughly 3,400 hand-verified links, one per (commodity,
+    store) cell. The identity table holds every product the engine SAW, about
+    39,000 per namespace, and its assignment is the engine's own answer rather
+    than a by-product of link curation. Both land on the same node whenever name
+    and size agree (sku_id), so this widens the graph rather than forking it, and
+    the edge's `source` property says which importer asserted it.
+
+    PROVENANCE. record_provenance() is the only minting path (commitment 1) and it
+    is Python, so the PowerShell emitter mints nothing: it writes a _manifest.json
+    naming the run, and one provenance id is minted here per namespace.
+    """
+    if not os.path.isdir(IDENTITY):
+        return {"identity_skus": 0, "identity_namespaces": 0}
+
+    n_sku = n_edge = n_ns = n_unmatched = n_missing_commodity = 0
+    for ns in IDENTITY_NAMESPACES:
+        nsdir = os.path.join(IDENTITY, ns)
+        if not os.path.isdir(nsdir):
+            continue
+        n_ns += 1
+        ns_rows = 0
+        prov = db.record_provenance(rel(nsdir), f"import:identity:{ns}", ts, run=run)
+
+        for fname in sorted(os.listdir(nsdir)):
+            if not fname.endswith(".jsonl"):
+                continue
+            for row in _read_jsonl(os.path.join(nsdir, fname)):
+                store = row.get("store") or ""
+                name = row.get("name") or ""
+                if not (store and name):
+                    continue
+                ns_rows += 1
+                skid = sku_id(store, name, row.get("size"))
+                db.upsert_node(
+                    skid, "ProductSKU", name, ts,
+                    properties={
+                        "store": store,
+                        "size": row.get("size"),
+                        # the store's own id when it has one, else the normalised
+                        # name; key_kind says which, so a reader never has to
+                        # guess how stable this row is across a rename
+                        "product_key": row.get("key"),
+                        "key_kind": row.get("key_kind"),
+                        "name_key": row.get("name_key"),
+                        # NO namespace or rules_hash ON THE NODE. sku_id is
+                        # (store, name, size), which is namespace-independent, so
+                        # the staple and recipe passes upsert the SAME node - and
+                        # a per-namespace property here would simply record
+                        # whichever pass ran last while looking like a fact. Both
+                        # live on the instance_of EDGE, where there is genuinely
+                        # one per namespace.
+                        "first_seen": row.get("first_seen"),
+                    },
+                    provenance=prov)
+                n_sku += 1
+
+                sid = store_id(store)
+                if db.get_node(sid):
+                    db.upsert_edge(skid, "sold_at", sid, ts, provenance=prov)
+
+                cid = row.get("commodity")
+                if not cid:
+                    # "No commodity owns this product under these rules" is an
+                    # ANSWER, not a gap - it is the answer audit-coverage-gaps
+                    # spends a hundred seconds a day recomputing. The node exists
+                    # so that question can be a query; it has no instance_of edge.
+                    n_unmatched += 1
+                    continue
+                if not db.get_node(cid):
+                    # Counted and reported, never created here: minting a
+                    # commodity node from a SKU row would let a typo in the rules
+                    # become a graph node that later looks like evidence.
+                    n_missing_commodity += 1
+                    continue
+                db.upsert_edge(
+                    skid, "instance_of", cid, ts, provenance=prov,
+                    properties={
+                        "source": "identity-table",
+                        "how": row.get("how"),
+                        "include_hit": row.get("include_hit"),
+                        "excludes_tested": row.get("excludes_tested"),
+                        # every other commodity whose include also fired and whose
+                        # excludes all missed: the contested set, decided today by
+                        # array order alone
+                        "candidates": row.get("candidates") or [],
+                        "rules_hash": row.get("rules_hash"),
+                    })
+                n_edge += 1
+
+        # The manifest's own count against what was actually read. A mismatch
+        # means a file was written or truncated between the emitter and this
+        # import, and the index would be a partial view calling itself complete.
+        manifest_path = os.path.join(nsdir, "_manifest.json")
+        if os.path.exists(manifest_path):
+            claimed = int((read_json(manifest_path) or {}).get("rows_total") or 0)
+            if claimed and claimed != ns_rows:
+                raise ValueError(
+                    f"identity[{ns}]: _manifest.json claims {claimed} rows, "
+                    f"{ns_rows} were read from the .jsonl files")
+
+    return {
+        "identity_skus": n_sku,
+        "identity_instance_of": n_edge,
+        "identity_namespaces": n_ns,
+        "identity_unmatched_products": n_unmatched,
+        "identity_missing_commodity_node": n_missing_commodity,
+    }
+
+
 ALL_IMPORTERS: list[tuple[str, Callable]] = [
     ("stores", import_stores),
     ("commodities", import_commodities),
@@ -990,4 +1142,9 @@ ALL_IMPORTERS: list[tuple[str, Callable]] = [
     ("category_excludes", import_category_excludes),
     ("product_urls", import_product_urls),
     ("ingredient_map", import_ingredient_map),
+    # LAST, deliberately. It attaches instance_of edges to commodity nodes that
+    # import_commodities creates, and get_node is what decides whether an edge is
+    # written at all - so running it earlier would report every commodity as a
+    # missing node and quietly index 39,000 SKUs with no assignment.
+    ("identity", import_identity),
 ]

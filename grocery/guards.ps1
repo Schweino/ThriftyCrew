@@ -32,7 +32,10 @@
 
   Exit codes: 0 = safe to publish. 2 = HARD FAIL. (Advisory-only findings still exit 0.)
 #>
-param([switch]$Quiet)
+# -NoIdentityGate: switch off the board-vs-identity parity check (guard 13). It ships ADVISORY and is
+# promoted to blocking by Brad, not by the builder (PLAN section 10.17); this flag plus dropping
+# -IdentityNamespace from check-ad-cycles is what makes step 1 revertible without a code revert.
+param([switch]$Quiet, [switch]$NoIdentityGate)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')   # Write-GuardComplete: proves this run reached the end
 $root = $PSScriptRoot
@@ -512,6 +515,102 @@ foreach ($g in @(
 $cmpF = Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1
 $cmp  = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json
 $pu   = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+
+# ---------------------------------------------------------------- 13: BOARD vs PRODUCT IDENTITY TABLE
+<#
+  THE PARITY GATE (2026-08-22, PLAN-product-identity step 1).
+
+  Every cell on the board was priced under some commodity. compare-deals now WRITES that assignment down,
+  per (store, product key, namespace), in graph\identity\. This checks the two agree.
+
+  WHY IT IS DIFFERENT FROM audit-match-soundness. That audit re-implements the matcher and compares its own
+  answer to the board's - so when it agrees, what it has proven is that two copies of a rule still agree,
+  and when it disagrees you cannot tell which copy is wrong. This compares the board against the SAME
+  engine's own recorded output. There is no second implementation to drift.
+
+  IT SHIPS ADVISORY (section 10.17). The estate's own rule, from audit-graph-gates.ps1's header, is that
+  "promotion to blocking is a per-gate decision, after a clean run of real days, and it is Brad's". So this
+  runs as WARN with the full disagreement list. -NoIdentityGate turns it off entirely, which - together
+  with dropping -IdentityNamespace from check-ad-cycles - is what makes step 1 revertible without a code
+  revert.
+
+  BLIND IS NOT A PASS, AND ABSENT IS NOT AGREEMENT (section 10.7). Three distinct outcomes:
+    * no table at all, or none of it at the current rules_hash -> the table is not populated for these
+      rules; say so as BLIND. That is what makes the very first morning possible.
+    * table present, cell has no row -> a real disagreement, counted and named.
+    * table present, cell's row names another commodity -> a real disagreement, counted and named.
+  Only rows at the CURRENT rules_hash are compared; a row under an older hash is stale by definition, not
+  a disagreement, and Read-IdentityIndexByName leaves it out and counts it separately.
+#>
+$script:idCoverage = @()
+if ($NoIdentityGate) {
+  # Named, not silent. A gate that is switched off must say so, or its absence reads as a clean run.
+  [void]$warn.Add('board-vs-identity is DISABLED for this run (-NoIdentityGate). No board cell was checked against the product identity table.')
+}
+elseif (-not $NoIdentityGate) {
+ try {
+  . (Join-Path $root 'identity-lib.ps1')
+  . (Join-Path $root 'match-lib.ps1')   # Get-MatchTexts only; nothing here builds a matcher, so no Add-Type
+  $idHash = Get-IdentityRulesHash -GroceryRoot $root
+  # BOTH namespaces, each against its OWN board (section 10.1). The recipe board only exists on days
+  # recipe-overlay produced one; a namespace with no board today is reported, never silently skipped.
+  $idBoards = @(
+    [pscustomobject]@{ ns = 'staple'; file = $cmpF; doc = $cmp }
+  )
+  $recF = Get-ChildItem (Join-Path $root 'out\recipe-sales-*.json') -ErrorAction SilentlyContinue |
+            Where-Object { $_.BaseName -match '^recipe-sales-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1
+  if ($recF -and $recF.BaseName -match '(\d{4}-\d{2}-\d{2})$' -and $Matches[1] -eq [string]$cmp.week_of) {
+    $idBoards += [pscustomobject]@{ ns = 'recipe'; file = $recF; doc = (Get-Content $recF.FullName -Raw | ConvertFrom-Json) }
+  }
+  foreach ($b in $idBoards) {
+    $ix = Read-IdentityIndexByName -GroceryRoot $root -Namespace $b.ns -RulesHash $idHash
+    if ($null -eq $ix -or $ix.rows.Count -eq 0) {
+      [void]$warn.Add(("board-vs-identity [{0}]: BLIND - no identity rows at the current rules_hash {1}. Either the table has never been written for these rules, or the rules changed and compare-deals has not re-emitted. Nothing was compared, so nothing is proven; this is not agreement." -f $b.ns, $idHash.Substring(0, 12)))
+      continue
+    }
+    $seen = 0; $bad = New-Object System.Collections.ArrayList; $missing = 0
+    foreach ($row in @($b.doc.comparison)) {
+      $want = 'commodity:' + $b.ns + ':' + [string]$row.id
+      foreach ($s in @($row.stores)) {
+        $item = [string]$s.item
+        if (-not $item) { continue }
+        $seen++
+        $k = ([string]$s.store + '|' + (Get-MatchTexts $item)[1])
+        $r = $ix.rows[$k]
+        if ($null -eq $r) {
+          $missing++
+          if ($bad.Count -lt 200) { [void]$bad.Add(("[{0}] {1} '{2}' - priced as {3}, but the identity table has NO row for it" -f $b.ns, $s.store, $item, [string]$row.id)) }
+          continue
+        }
+        if ([string]$r.commodity -ne $want) {
+          if ($bad.Count -lt 200) { [void]$bad.Add(("[{0}] {1} '{2}' - board priced it as {3}, the table says {4}" -f $b.ns, $s.store, $item, [string]$row.id, $(if ($r.commodity) { [string]$r.commodity } else { '<no commodity>' }))) }
+        }
+      }
+    }
+    $disagree = $bad.Count
+    if ($seen -eq 0) {
+      [void]$warn.Add(("board-vs-identity [{0}]: BLIND - the board carried zero cells with a product name, so no cell could be joined to the table" -f $b.ns))
+    } elseif ($disagree -eq 0) {
+      Say ("  ok    board-vs-identity [{0}]: all {1} cell(s) match the engine's own recorded assignment (rules_hash {2}, {3} stale row(s) ignored)" -f $b.ns, $seen, $idHash.Substring(0, 12), $ix.stale)
+    } else {
+      # ADVISORY UNTIL BRAD PROMOTES IT. The list is deliberately complete-ish (capped at 200) rather than
+      # a count: a gate whose output is a number cannot be acted on the morning it first fires.
+      [void]$warn.Add(("board-vs-identity [{0}]: {1} of {2} board cell(s) DISAGREE with the identity table ({3} of them have no row at all). ADVISORY for now - promote to a hard fail once it has run clean on real mornings." -f $b.ns, $disagree, $seen, $missing))
+      foreach ($d in ($bad | Select-Object -First 25)) { [void]$warn.Add('    ' + $d) }
+      if ($disagree -gt 25) { [void]$warn.Add(("    ... and {0} more" -f ($disagree - 25))) }
+    }
+    # The RECEIPT is written down at the coverage block near the end of this file, not here:
+    # coverage-lib.ps1 is not dot-sourced until then, so calling Write-CoverageRecord at this point would
+    # be swallowed by its own try/catch and the ratchet would report this check BLIND forever - which is
+    # exactly the class audit-coverage-ledger exists to catch, reintroduced by the check that reports it.
+    $script:idCoverage += @([pscustomobject]@{ ns = $b.ns; seen = $seen; missing = $missing; disagree = $disagree })
+  }
+ } catch {
+  # A gate that ERRORED proves nothing, and this one is new. Say so rather than letting its silence read
+  # as a pass - the same contract every delegated audit here follows.
+  [void]$warn.Add('board-vs-identity could NOT be evaluated (it proved nothing this run): ' + $_.Exception.Message)
+ }
+}
 
 # ---------------------------------------------------------------- 3: a pin must be DERIVABLE from its own link
 # REWRITTEN 2026-07-16. The old invariant was "a pin must not disagree with the engine (>2%)", which was wrong
@@ -1281,6 +1380,13 @@ try {
       -Detail 'stores that completed a freshness note. Guard 10 names guard 9 as the ONLY staleness watch on Bakers, Fareway, Sams and Walmart.'
     Write-CoverageRecord -Check 'guards/10-store-charges' -OutDir $covOut -Eligible $checked -Examined $checked `
       -Detail ('rows verified against the store''s own current_price; stores recording no current_price at all: ' + (@($noContract.Keys | Sort-Object) -join ', '))
+    # guard 13's receipt, recorded HERE because coverage-lib is only dot-sourced at this point. Zero
+    # examined means the table was absent or entirely stale, which is the BLIND state the gate warns
+    # about - and the ratchet must be able to see that, not just the gate's own text.
+    foreach ($ic in @($script:idCoverage)) {
+      Write-CoverageRecord -Check ('guards/13-board-vs-identity-' + $ic.ns) -OutDir $covOut -Eligible $ic.seen -Examined ($ic.seen - $ic.missing) -Skipped $ic.missing `
+        -Detail ('board cells joined to the product identity table by (store, name_key) at the current rules_hash; ' + $ic.disagree + ' disagreement(s). ADVISORY until promoted.')
+    }
     Write-CoverageRecord -Check 'guards/11-bakers-provenance' -OutDir $covOut -Eligible $bkN -Examined $bkN `
       -Detail 'Bakers rows whose price provenance was checked (the founding bug of the ledger: ok over 0 of 6,960 rows for five days)'
   }

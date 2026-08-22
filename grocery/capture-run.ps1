@@ -489,7 +489,14 @@ else {
 $inputPaths = @('grocery/out',
                 'grocery/ad-cycle-log.txt', 'grocery/alert-log.txt', 'grocery/ff-sweep-log.txt',
                 'grocery/ad-schedule.json', 'grocery/price-history.json', 'grocery/product-urls.json',
-                'grocery/sale-windows.json', 'grocery/rollback-first-seen.json')
+                'grocery/sale-windows.json', 'grocery/rollback-first-seen.json',
+                # THE PRODUCT IDENTITY TABLE. It is regenerated every morning, so if it is not staged here
+                # it never leaves this PC - which is exactly the last-mile failure found on 2026-08-22
+                # (public\board.json rebuilt daily, last bot commit four days old). It also has to be
+                # tracked for the table to exist in the cloud at all: daily.yml clones clean and rebuilds
+                # graph.db from tracked JSON, so an untracked table means an empty index there.
+                # On a quiet day the emitter writes identical bytes and this stages nothing.
+                'graph/identity')
 $servedPaths = @('public',
                  'meal-prep/db/costed.json', 'meal-prep/db/cost-flags.txt',
                  'meal-prep/pipeline/v2-perserving.json', 'meal-prep/pipeline/v2-perserving.prev.json',
