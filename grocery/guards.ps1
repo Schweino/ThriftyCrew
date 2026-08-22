@@ -811,10 +811,45 @@ foreach ($p in $prefixes.Keys) {
   foreach ($old in ($files | Select-Object -Skip 1 -First 4)) {
     try { $c = @((Get-Content $old.FullName -Raw | ConvertFrom-Json).deals).Count; if ($c -gt $best) { $best = $c } } catch {}
   }
+
+  # A UNION STORE'S NEWEST FILE IS *SUPPOSED* TO BE SMALL (2026-08-22).
+  # This test asks "is the newest file much thinner than recent ones", which is exactly right for a
+  # CARRY-FORWARD store, where that file IS the store's whole board. It is exactly WRONG for an
+  # everyday-only store: Walmart's rows are UNIONED across the policy window by the engine
+  # (regular-fileset-lib.ps1 owns that list), so a partial daily capture is the designed behaviour,
+  # not a throttled one.
+  # Before the quarterly rotation this never showed, because Walmart captures were full ~500-term
+  # sweeps of ~11,000 rows. Under 7 terms a day a capture is ~136 rows, so from 2026-08-22 this
+  # guard would have hard-failed the publish EVERY DAY on correct data - and a guard that cries wolf
+  # daily gets worked around, which costs more than the class it was watching.
+  # Measured that day: newest file 136 rows, union across the window 16,564 distinct items.
+  #
+  # So judge a union store BY ITS UNION, and keep a real invariant rather than skipping it: the union
+  # must be at least as rich as the best single capture in it. That still catches the collapse this
+  # guard exists for (a pruned out\regular, every file aged out, a directory that emptied), while
+  # letting the intended small daily slice through.
+  $isUnion = ((Get-EverydayOnlyStores) -contains $p)
+  if ($isUnion) {
+    $unionItems = New-Object 'System.Collections.Generic.HashSet[string]'
+    foreach ($uf in $files) {
+      try {
+        foreach ($r in @((Get-Content $uf.FullName -Raw | ConvertFrom-Json).deals)) {
+          $nm = [string]$r.item
+          if ($nm) { [void]$unionItems.Add($nm.ToLowerInvariant()) }
+        }
+      } catch {}
+    }
+    $curr = $unionItems.Count
+  }
+
   $g6Checked++
   if ((Get-CollapseVerdict $files.Count $curr $best) -eq 'collapsed') {
     $thin++
-    [void]$fail.Add(("HARD FAIL: store data collapsed  [{0}] newest file '{1}' has {2} rows vs {3} recently - a throttled/partial pull must not become the source of truth" -f $p, $newest.Name, $curr, $best))
+    if ($isUnion) {
+      [void]$fail.Add(("HARD FAIL: store data collapsed  [{0}] the UNION across its window holds {1} distinct item(s) vs {2} in a single recent capture - an everyday-only store is priced from the union, so a union thinner than one of its own files means captures have been lost, not merely throttled" -f $p, $curr, $best))
+    } else {
+      [void]$fail.Add(("HARD FAIL: store data collapsed  [{0}] newest file '{1}' has {2} rows vs {3} recently - a throttled/partial pull must not become the source of truth" -f $p, $newest.Name, $curr, $best))
+    }
   }
 }
 if ($thin -eq 0) {

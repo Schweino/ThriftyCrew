@@ -414,6 +414,28 @@ if ($res.rejects.Count) {
 # really landed and holds rows, so this cannot advance on an empty build.
 # Never fatal: a cursor that fails to move costs one repeated slice tomorrow,
 # while a builder that dies after writing its rows costs the rows.
+# ---------------------------------------------------------------------------
+# CARRY FORWARD, HERE, NOT IN A RUNBOOK (2026-08-22).
+# Aldi is a CARRY-FORWARD store: unlike Walmart it has no union across recent captures, so whatever
+# this file holds IS the store's everyday board. Under the 90-day quarterly rotation a day's capture
+# is ~7 terms, so writing it unmerged collapses Aldi from ~2,200 rows to ~300 and guard 6 hard-fails
+# the publish - correctly, because a partial pull must not become the source of truth.
+#
+# This was documented as a MANUAL step in the weekly runbook ("AFTER writing, run
+# carry-forward-regular.ps1 -Store aldi"), and on 2026-08-22 it was missed and blocked the board.
+# Baker's and Hy-Vee hit the same class the same morning. A step that must happen after every build
+# belongs IN the build - a runbook line is a step that will eventually be skipped, and the failure
+# only shows up two scripts later as a guard nobody expected to fire.
+# Fareway's builder has called it from its own tail since 2026-07-23 for exactly this reason.
+#
+# Never fatal: a carry-forward that fails leaves a thin file that guard 6 will catch loudly, whereas
+# a builder that dies after writing its rows loses the capture itself.
+if (-not $SelfTest) {
+  try {
+    & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'carry-forward-regular.ps1') -Store aldi | Write-Output
+  } catch { Write-Warning ("carry-forward skipped: " + $_.Exception.Message) }
+}
+
 if (-not $SelfTest) {
   try {
   & (Join-Path $PSScriptRoot 'commit-capture-cursor.ps1') -Store 'Aldi' -Date $Date | Write-Output
