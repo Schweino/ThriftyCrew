@@ -89,20 +89,26 @@ try {
 # the reason every caller goes through it even when today's body looks short, in alert-lib.ps1.
 . (Join-Path $root 'alert-lib.ps1')
 
-# ---- SIDE-BY-SIDE ADVISORY AUDITS WITH A HARD STOP (2026-08-22) ---------------------------------------
-# The stage profile over 08-12..08-21 put five advisory audits at ~2 min EACH, run one after another, in a
-# chain whose real work (compare + guards + publish) is ~2.5 min: semantic sweep 138 s, match-soundness
-# 111 s, coverage-gaps 111 s, discover-hyvee 103 s, basis-reconcile 40 s. None of them can block a publish,
-# none reads another's output, and each is its own `powershell -File` process that parses the same ~40 MB
-# of JSON from scratch - so there is nothing to wait FOR except the CPU, and this box has 32 of them.
-# They are launched together the moment the board is final and collected at the exact spot each used to
-# run, so every downstream reader (aisle-test, the arrivals desk, guards) still sees finished outputs.
-# THE TIMEOUT IS THE OTHER HALF. Every child here was synchronous and unbounded: on 2026-08-14
+# ---- BOUNDED CHILDREN, RUN ONE AT A TIME (2026-08-22) --------------------------------------------------
+# THE PARALLEL EXPERIMENT IS REVERTED, ON THE MEASUREMENT. Earlier today four advisory audits (coverage-gaps,
+# semantic, match-soundness, discover-hyvee) were launched side by side on the reasoning that none blocks a
+# publish, none reads another's output, and this box has 32 threads. Measured end to end it was WORSE, not
+# better: serial 30.9 min vs parallel 41.7 min. Under concurrency match-soundness went 111 s -> 904 s,
+# graph-gates 22 s -> killed at its 600 s budget, db-build 2 s -> killed at 300 s, while the CPU sat at 14%.
+# They do not contend on the CPU; they contend on I/O, each re-parsing the same ~40 MB of JSON from disk.
+# So: plain serial invocation, at the exact spot each audit's result is read.
+# WHAT ACTUALLY BOUGHT THE TIME is the ship/inspect split further down - the board now publishes before any
+# of these runs at all, so their cost no longer sits between a price and a shopper.
+# THE TIMEOUT STAYS, and it is the half that earned its keep (it caught three real hangs). Every child here
+# used to be synchronous and unbounded: on 2026-08-14
 # audit-coverage-gaps sat in a ReDoS for 11 hours and the board never published; the two Python steps
 # (the GPU sweep, graph gates) could hang a CUDA init or a SQLite lock forever and "BLIND never blocks"
 # covers only a non-zero EXIT, not a process that never exits. A job that outruns its budget is stopped,
-# logged by name with its budget, and reported as rc 124 so its caller takes the same BLIND/advisory path
-# it already has for a failure. The chain keeps moving; the board still ships.
+# logged by name with its budget, and reported as the estate rc 3 (could-not-evaluate) so its caller takes
+# the same BLIND/advisory path it already has for a failure. The chain keeps moving; the board still ships.
+# Start-AuditJob / Receive-AuditJob are NOT called directly any more - Invoke-Bounded is the only entry
+# point, and it starts and collects in one breath. They stay split because that is what makes the budget
+# enforceable: you cannot kill a child you never named.
 $script:AuditJobs = @{}
 function Start-AuditJob([string]$Name, [string[]]$Arguments) {
   # $Arguments is the full powershell argument list (e.g. -ExecutionPolicy, Bypass, -File, <path>, ...)
@@ -162,7 +168,7 @@ function Receive-AuditJob([string]$Name, [int]$TimeoutSec = 900) {
   $rc = if ($r -and $null -ne $r.ExitCode) { [int]$r.ExitCode } else { 3 }
   $out = if ($r) { @($r.Output) } else { @() }
   if (-not $r) { $out += @('the audit job produced no result object - BLIND') + @(($e.Job.ChildJobs[0].Error | ForEach-Object { [string]$_ })) }
-  Log ("{0}: {1} s side-by-side (rc={2})" -f $Name, $elapsed, $rc)
+  Log ("{0}: {1} s (rc={2})" -f $Name, $elapsed, $rc)
   return [pscustomobject]@{ ExitCode = $rc; Output = $out; TimedOut = $false; Elapsed = $elapsed }
 }
 function Invoke-Bounded([string]$Name, [string[]]$Arguments, [int]$TimeoutSec = 600) {
@@ -200,6 +206,13 @@ $sched  = Get-Content $ScheduleFile -Raw | ConvertFrom-Json
 $stores = @($sched.stores)
 $summary = @()
 $flips = @()
+# SHIP-PATH CLOCK (2026-08-22). The point of the ship/inspect split is that the board reaches shoppers fast;
+# a claim like that has to be measurable from the log alone, on any day, without a stopwatch. Started here
+# - before the pulls, which ARE ship work - and read once at the ship/inspect boundary.
+$script:ShipStart = Get-Date
+# Set true at the boundary. Retention (prune-out / prune-intermediates) moved OUT of the downstream block so
+# it can run after the last reader of the newest comparison-*; this flag keeps its old condition exactly.
+$script:DownstreamRan = $false
 
 # ---- pull server ads EVERY day (not just on the weekly ad-flip day) so pricing always reflects today's
 #      ad dates: a flash/weekend sale that ended, or any mid-cycle correction, is caught the next morning.
@@ -499,25 +512,424 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # whose product a verdict had already rejected, 10-12 of them CROWNING their commodity. Sweep it back out.
       # Evidence-driven and idempotent, so a day that banked nothing rejected changes nothing and costs ~3s.
       & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'purge-verdict-lows.ps1') -Apply | Out-Null
-      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sanity-check.ps1') | Out-Null   # exit 1 = flags (expected), not a crash -> guards-<week>.json
-      # the board is final from here: start the four heavy advisory audits together (collected below, in place)
-      Start-AuditJob 'coverage-gaps' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-coverage-gaps.ps1'))
-      Start-AuditJob 'semantic' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-semantic-identity.ps1'))
-      $msArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-match-soundness.ps1'),'-OutDir',$OutDir)
-      if (-not $NoAlert) { $msArgs += '-Alert' }
-      Start-AuditJob 'match-soundness' $msArgs
-      Start-AuditJob 'discover-hyvee' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'discover-hyvee.ps1'),'-Slice','40')
+      # Refresh the per-item sale-window log (sale price + start/end dates from the fresh board) so the daily
+      # Baker's guard fires only when a sale actually reverts/starts, not blindly. Headless-safe, non-fatal.
+      # RECORD TODAY'S LANDED RE-PRICES FIRST (2026-08-22). build-sale-windows prunes a window
+      # only once refresh_on is past AND repriced_for matches it - so this reconcile is what
+      # lets the ledger drain. It must run BEFORE the build: after it, a re-price that landed
+      # looks unprocessed and is asked for again tomorrow (wasteful, safe). It writes only for
+      # stores whose everyday file actually landed today, so a blind day retires nothing. The
+      # lanes that know their own outcome (Family Fare, Hy-Vee, the four walled builders via
+      # commit-capture-cursor) have already written theirs; this catches the rest.
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'capture-policy.ps1') -Reconcile | Out-Null; Log 'sale-expiry re-prices reconciled' } catch { Log ('capture-policy -Reconcile threw: ' + $_.Exception.Message) }
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-sale-windows.ps1') | Out-Null; Log 'sale-windows refreshed' } catch { Log ('build-sale-windows threw: ' + $_.Exception.Message) }
+      # Re-apply the weekly semantic verdicts (wrong-product drops / de-crowns) to TODAY's fresh board so
+      # build/publish's verified-<week> board reflects both the fresh prices AND the wrong-product removals.
+      # Deterministic PS (no LLM); only runs when this week's verdicts exist. Non-fatal.
+      $cmpNow = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
+      if ($cmpNow) { try { $wkNow = (Get-Content $cmpNow.FullName -Raw | ConvertFrom-Json).week_of; if (Test-Path (Join-Path $OutDir ("verify-verdicts-" + $wkNow + ".json"))) { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'verify-apply.ps1') | Out-Null; Log 'verify-apply re-applied verdicts to fresh board' } } catch { Log ('verify-apply threw: ' + $_.Exception.Message) } }
+      # overlay this week's ad-sales onto the everyday recipe-ingredient board (catches recipe items on sale;
+      # reverts automatically when a sale ends). MUST run BEFORE resolve-worklist so the link worklist reflects
+      # TODAY's recipe board, not yesterday's. Non-fatal - only runs once the recipe rule-set exists.
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'recipe-overlay.ps1') | Out-Null; Log 'recipe-overlay applied' } catch { Log ('recipe-overlay threw: ' + $_.Exception.Message) }
+      # UNIFIED ENGINE (2026-07-26 consolidation): re-cost the whole catalog from today's boards into
+      # db\costed.json, then recompute the v2 per-serving manifest (everyday + cheapest whole-package)
+      # that top5-weekly reads. MUST run before top5-weekly or per_serving falls back to the legacy
+      # basis. Feed path = the local smp-feed, which is now exported immediately below rather than 270
+      # lines later - the one-day lag this comment used to describe was the bug fixed on 2026-08-22.
+      # Non-fatal.
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\cost-recipes.ps1') | Out-Null; Log 'engine cost-recipes refreshed db\costed' } catch { Log ('engine cost-recipes threw: ' + $_.Exception.Message) }
+      # EXPORT THE FEED BEFORE ANYTHING RESOLVES IT (2026-08-22). compute-v2-perserving.ps1 is invoked with
+      # -FeedPath out\smp-feed.json and export-feed.ps1 is what WRITES that file - and until today it wrote
+      # it ~270 lines LATER in this same run. So compute-v2 resolved YESTERDAY's feed every single day and
+      # its freshness rule refused the manifest: the 2026-08-22 08:12 run logged
+      # "compute-v2 REFUSED to recompute the manifest - stale price feed: ... freshness: STALE_VS_CLOCK".
+      # export-feed reads the comparison, the recipe board, sale-windows, product-urls and recipe-costs -
+      # all final by this point - and reads NOTHING compute-v2 writes, so there is no cycle to create.
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'export-feed.ps1') | Out-Null; Log 'smp-feed exported' } catch { Log ('export-feed threw: ' + $_.Exception.Message) }
+      # compute-v2 now SKIPS bad recipes and exits 1 with the list (was: throw -> whole manifest stale,
+      # and a child exit-1 does NOT raise in this parent, so the old code logged success falsely). Check
+      # the exit code explicitly and alert on any skipped recipe.
+      # $cv2Ok is captured HERE, at the call site, and nowhere else. It used to be re-read 60 lines below as a
+      # bare $LASTEXITCODE, by which point three more `& powershell` children had overwritten it - so the
+      # close-the-loop gate was testing batch-ledger's exit code and calling it compute-v2's. It failed both
+      # ways: a partial manifest (rc 1) sailed through whenever batch-ledger was clean, and a stalled batch
+      # (rc 1) skipped the loop while logging "compute-v2 did not succeed". Start it FALSE so a throw before
+      # the assignment leaves the gate shut; the old `-or $null -eq $cv2` arm did the exact opposite and let
+      # a compute-v2 that died at launch pass as success.
+      $cv2Ok = $false
+      try {
+        $cv2   = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\compute-v2-perserving.ps1') -FeedPath (Join-Path $OutDir 'smp-feed.json')
+        $cv2Rc = $LASTEXITCODE
+        $cv2Ok = ($cv2Rc -eq 0)
+        # rc 2 is the 2026-08-15 staleness refusal, NOT a bad-recipe skip. It has to read as itself: the
+        # manifest was deliberately NOT rewritten (so the surfaces keep their previous numbers instead of
+        # gaining wrong ones), and the fix is upstream in the feed, not in any recipe's cost data. Reporting
+        # it as "skipped recipe(s) with bad cost data" would send triage looking at specs for a problem that
+        # is not there. compute-v2 alerts on its own for this case, so no second email from here.
+        if ($cv2Rc -eq 2) {
+          $cv2Why = (($cv2 | Where-Object { $_ -match 'REFUSING|freshness:' }) -join ' ')
+          Log ('compute-v2 REFUSED to recompute the manifest - stale price feed: ' + $cv2Why)
+          $summary += 'REVIEW    v2 per-serving manifest was NOT recomputed - the price feed it resolved is stale (surfaces keep their previous numbers; fix the feed, not the recipes)'
+        }
+        elseif ($cv2Rc -ne 0) {
+          $cv2Bad = @($cv2 | Where-Object { $_ -match '^\s+\S' -or $_ -match 'SKIPPED' })
+          Log ('compute-v2 SKIPPED recipe(s) with bad cost data: ' + (($cv2Bad | Select-Object -First 6) -join ' | '))
+          $summary += 'REVIEW    v2 per-serving manifest skipped recipe(s) with bad cost data - top5/rotation may be stale for them (see compute-v2 output)'
+          if (-not $NoAlert) { try { Send-Alert -Subject "Recipe per-serving manifest: skipped recipe(s)" -Body ("compute-v2-perserving.ps1 could not compute per-serving cost for some recipes and skipped them (the rest still updated). Their top5/rotation/site numbers are stale until fixed. Detail: " + (($cv2Bad | Select-Object -First 15) -join ' | ')) | Out-Null } catch {} }
+        } else { Log 'v2 per-serving manifest recomputed' }
+      } catch { Log ('compute-v2-perserving threw: ' + $_.Exception.Message) }
+      # DERIVED ingredient-map refresh (2026-07-26): regenerate meal-prep\ingredient-map.json from the spec
+      # scaler payloads + live feed (it was a hand-authored file frozen since 07-07, missing 58 items). Runs
+      # BEFORE top5 (which reads it for sale badges); dinner/protein tool builders read it on their own runs.
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\regenerate-ingredient-map.ps1') | Out-Null; Log 'ingredient-map regenerated (derived from specs + feed)' } catch { Log ('regenerate-ingredient-map threw: ' + $_.Exception.Message) }
+      # ---- CLOSE THE LOOP: re-anchor the specs and republish the cards the board just moved ------------
+      # THE GAP THIS FILLS (2026-08-07, Brad approved unattended republish). This chain recomputed prices
+      # every day and never propagated them: reanchor + build-cards + publish were manual, so every baked
+      # number on 542 live pages drifted by exactly the daily board move. Measured before this landed: 471
+      # cards showed a per-serving cost their own spec no longer held, 452 of them TOO HIGH by up to $1.26
+      # on a site whose whole promise is cheap. That was the steady-state error of the design, not a bug.
+      #
+      # Guards on it:
+      #  * SKIPPED ENTIRELY if compute-v2 failed - re-anchoring to a partial manifest would stamp bad numbers.
+      #  * reanchor-all runs BOTH halves (machine fields + prose). Running machine-fields alone leaves every
+      #    touched spec quoting two different prices; that happened twice by hand on 2026-08-07.
+      #  * A SANITY CAP: normal daily drift is a handful to a few dozen slugs. A number far above that means
+      #    something systemic moved (a gpu, a shared row, a DB rename) and a human should look before 500
+      #    live pages are rewritten unattended. Over the cap we alert and skip rather than publish.
+      #  * -Slugs is passed IN-PROCESS. engine\README.md: `powershell -File` marshals an array as one
+      #    command-line string, so a 300-slug run binds as one slug and reports a cheerful "built 1/1".
+      #  * The publish only runs if reanchor-all printed its REANCHOR-COMPLETE marker. Its exit code cannot
+      #    carry that: under EAP=Stop a throw exits 1, the same code it uses for "some specs still disagree".
+      #    Without the marker a crash between the two halves would have republished cards from half-anchored
+      #    specs - and reanchor-all now empties its slug list before starting, so a crash publishes nothing.
+      if ($cv2Ok) {
+        try {
+          $mp = Split-Path $root -Parent
+          $raOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $mp 'meal-prep\pipeline\reanchor-all.ps1')
+          foreach ($l in @($raOut)) { Log ('reanchor: ' + $l) }
+          $raDone = @($raOut | Where-Object { $_ -match 'REANCHOR-COMPLETE' }).Count -gt 0
+          $staleList = Join-Path $mp 'meal-prep\pipeline\reanchor-stale-cards.txt'
+          $stale = @()
+          if ($raDone -and (Test-Path $staleList)) { $stale = @(Get-Content $staleList | Where-Object { $_.Trim() -ne '' }) }
+          $CAP = 150
+          if (-not $raDone) {
+            Log 'loop NOT closed: reanchor-all did not finish (no completion marker) - specs may be half-anchored, nothing republished'
+            $summary += 'REVIEW    reanchor-all did not complete - the specs may be half re-anchored (quoting two prices) and no cards were republished'
+            if (-not $NoAlert) { try { Send-Alert -Subject "Re-anchor did not complete - cards not republished" -Body ("reanchor-all.ps1 exited without its REANCHOR-COMPLETE marker, which means it died part-way through. Machine fields may be stamped while the prose still quotes the old price. Nothing was rebuilt or published. Run meal-prep\pipeline\reanchor-all.ps1 by hand and read the output.`n`nLast lines:`n" + ((@($raOut) | Select-Object -Last 10) -join "`n")) | Out-Null } catch {} }
+          }
+          elseif ($stale.Count -eq 0) { Log 'loop closed: no card cost moved today' }
+          elseif ($stale.Count -gt $CAP) {
+            Log ("loop NOT closed: $($stale.Count) cards moved, over the $CAP sanity cap - not republishing unattended")
+            $summary += "REVIEW    $($stale.Count) recipe cards moved cost today (cap $CAP). Something systemic changed; review then run build-cards + publish for meal-prep\pipeline\reanchor-stale-cards.txt"
+            if (-not $NoAlert) { try { Send-Alert -Subject "Recipe cards: $($stale.Count) moved, over the daily cap" -Body ("The daily chain re-anchored the specs but did NOT republish, because $($stale.Count) cards changed cost and the sanity cap is $CAP. A number this large usually means a shared row, a gpu, or a DB rename moved rather than ordinary price drift. Slug list: meal-prep\pipeline\reanchor-stale-cards.txt") | Out-Null } catch {} }
+          } else {
+            # A FAILED PUBLISH MUST SURVIVE THE RUN. Staleness is measured spec-vs-BUILT-card, and build-cards
+            # runs first - so the moment the cards are rebuilt the spec and the card agree and tomorrow reports
+            # a clean loop, while the LIVE page keeps the old number forever. The failure erases its own
+            # evidence. Slugs therefore go into a pending file BEFORE the publish and are only cleared once it
+            # actually succeeds, so a bad night retries on the next run instead of going quiet.
+            $pendPath = Join-Path $mp 'meal-prep\pipeline\republish-pending.txt'
+            if (Test-Path $pendPath) { $stale = @(@($stale) + @(Get-Content $pendPath | Where-Object { $_.Trim() -ne '' }) | Select-Object -Unique) }
+            $stale | Out-File $pendPath -Encoding utf8
+            $pubOk = $false
+            try {
+              Push-Location (Join-Path $mp 'meal-prep')
+              try {
+                & '.\engine\build-cards.ps1' -Slugs $stale | Select-Object -Last 1 | ForEach-Object { Log ('build-cards: ' + $_) }
+                $bcRc = $LASTEXITCODE
+                $pubOut = & '.\engine\publish.ps1' -Slugs $stale
+                $pubRc  = $LASTEXITCODE
+                foreach ($l in (@($pubOut) | Select-Object -Last 1)) { Log ('publish: ' + $l) }
+                $pubOk = ($bcRc -eq 0 -and $pubRc -eq 0 -and @($pubOut).Count -gt 0)
+                if (-not $pubOk) { Log ("publish did NOT succeed: build-cards rc=$bcRc, publish rc=$pubRc, " + @($pubOut).Count + ' output line(s)') }
+              } finally { Pop-Location }   # without this a throw leaks CWD to meal-prep for the rest of the run
+            } catch { Log ('build/publish threw: ' + $_.Exception.Message) }
+            if ($pubOk) {
+              Remove-Item $pendPath -ErrorAction SilentlyContinue
+              Log ("loop closed: $($stale.Count) card(s) re-anchored and republished")
+            } else {
+              Log ("loop NOT closed: $($stale.Count) card(s) rebuilt but the publish failed - slugs held in republish-pending.txt for the next run")
+              $summary += "REVIEW    $($stale.Count) recipe card(s) were rebuilt but did NOT publish - the live pages still show the old cost (meal-prep\pipeline\republish-pending.txt)"
+              if (-not $NoAlert) { try { Send-Alert -Subject "Recipe cards rebuilt but publish failed" -Body ("The daily loop re-anchored $($stale.Count) card(s) and rebuilt them, but the publish step failed. The LIVE pages still show the old per-serving cost. Because staleness is measured spec-vs-built-card, this would otherwise read as clean from tomorrow on - the slugs are held in meal-prep\pipeline\republish-pending.txt and retried on the next run.") | Out-Null } catch {} }
+            }
+          }
+        } catch { Log ('close-the-loop threw: ' + $_.Exception.Message) }
+      } else { Log 'loop NOT closed: compute-v2 did not succeed, so the manifest is not trustworthy to re-anchor from' }
+      # ---- CLOSE FAMILY FARE'S NO-LINK GAP, A LITTLE EVERY DAY. -------------------------------------------
+      # resolve-worklist above only DETECTS; it has never added a link. The note further up claiming "the API
+      # stores already self-heal in the daily job" was half true: refresh-hyvee-links re-points Hy-Vee's price
+      # SNAPSHOTS, but nothing here ever filled a MISSING link. That is why 58 priced Family Fare tiles were
+      # published with no "See item" link at all.
+      # Family Fare is the one store resolvable without a browser (Freshop REST). Its documented budget is
+      # ~40 calls before it 400s everything, so this takes 30/day and no more - the backlog grinds down over a
+      # few days and then stays at zero as new items appear. Two steps because the resolver splits plan from
+      # apply: the plan does the searching, -Apply writes it with zero network calls.
+      # Safety: it links ONLY when the found product's name matches the board's own item AND its per-unit
+      # equals the board's. Anything less confident is refused and left exactly as it was, because a link that
+      # disagrees with the price does not fix the tile - it just moves the lie somewhere a shopper will find it.
+      # Non-fatal, and guards still gate the publish.
+      # ---- DERIVE LINKS FROM THE PRICE ROWS, BEFORE ANY SEARCH. -------------------------------------------
+      # A price was fetched FROM a product; that product's id/URL is on the row. Deriving the link from the same
+      # record the board priced makes price and link ONE fact that cannot drift. Searching the store to re-find
+      # the product is a SECOND pipeline for the same fact, and every wrong link we have ever shipped came from
+      # the two disagreeing ("Hy Vee Almondmilk" priced, "Blue Diamond Almond Breeze" linked).
+      # This runs FIRST so the searchers only ever work on what identity could not cover.
+      try {
+        $dlOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'derive-links-from-prices.ps1') -Apply
+        Log ('derive-links-from-prices: ' + ((@($dlOut) | Where-Object { $_ -match 'APPLIED' })[-1]))
+      } catch { Log ('derive-links-from-prices threw: ' + $_.Exception.Message) }
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-tile-integrity.ps1') -Quiet | Out-Null
+        if ($LASTEXITCODE -eq 3) { Log 'tile-integrity BLIND (zero links graded) - the link layer is empty/unreadable; fix-links-ff is about to run against nothing' }
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'fix-links-ff.ps1') -Fresh -MaxCalls 30 | Out-Null
+        $ffOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'fix-links-ff.ps1') -Apply
+        Log ('family-fare link fill: ' + (@($ffOut | Where-Object { $_ -match 'APPLIED' })[-1]))
+      } catch { Log ('fix-links-ff threw: ' + $_.Exception.Message) }
+      # ---- NEVER SHIP A LINK WE CANNOT PROVE. --------------------------------------------------------------
+      # Brad's bar is 100% ACCURATE, and accuracy and coverage are different promises. A tile with a price and
+      # no link is incomplete; a tile whose link opens a DIFFERENT product is a lie - the shopper clicks, sees
+      # $4.99 where we said $2.98, and concludes the board inflates its deals. Prices move daily, links go
+      # stale, and merge-product-urls can resurrect old ones, so this has to run EVERY day, not once.
+      # It removes any link that is not positively verified against the board (wrong product, wrong price,
+      # unverifiable per-unit, or no price to check). The tile falls back to a price with no link, which is
+      # honest. name-drift must run FIRST - it is the product-identity check the pruner reads.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null
+        if ($LASTEXITCODE -eq 3) { Log 'name-drift BLIND: examined ZERO cells - its count=0 output is not clean; prune-bad-links and the builder link suppression are running with no product-identity input'; $summary += 'REVIEW    audit-name-drift examined ZERO cells (product-urls/board mismatch) - wrong-product links are unguarded this run' }
+        # -Tol 0.32, SAME as the repair path below and as guard 4's factor rule (>=1.5x / <=0.67x). I first
+        # wired this with the default 2%, which deletes a RIGHT-product link the moment the store nudges its
+        # price - eroding coverage a little every day to enforce a threshold the accuracy gate itself does not
+        # use. One tolerance, everywhere: a link is removed for being a different PRODUCT (any drift counts as
+        # a factor error), never for its snapshot being a few cents old.
+        $pbOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-bad-links.ps1') -Tol 0.32
+        Log ('prune-bad-links: ' + ((@($pbOut) | Where-Object { $_ -match 'DROPPED' }) -join ' | '))
+      } catch { Log ('prune-bad-links threw: ' + $_.Exception.Message) }
+      $sigAfter = BoardSignature
+      $sigFile  = Join-Path $OutDir 'published-board.sig'
+      $prevPub  = if (Test-Path $sigFile) { ((Get-Content $sigFile -Raw) + '').Trim() } else { '' }
+      # republish when the price/type/ad-window signature moved OR a new ad window flipped (belt-and-suspenders)
+      $boardChanged = ($sigAfter -ne $sigBefore) -or ($sigAfter -ne $prevPub) -or (@($flips).Count -gt 0)
+      if (@($flips).Count -gt 0) { Log ("downstream refreshed after flips: " + ($flips -join ',')) }
+      # AUTO-PUBLISH only when the board changed. publish-deals-page.ps1 self-gates on coverage, rebuilds
+      # (recomputing the sale-window badges), and republishes preserving visibility.
+      # ---- HARD INVARIANT GATE ------------------------------------------------------------------
+      # guards.ps1 blocks the publish if any invariant that is ALWAYS a bug is violated: a mode-sensitive
+      # store off the in-store catalogue, a cleaning product priced as food, an override pin that beats the
+      # engine, a board cell that differs from its own linked product by a FACTOR (the 2x/3x/12x/24x
+      # quantity bugs - ordinary price drift is ignored), or a multipack priced as a single unit.
+      # These are exactly the classes that shipped wrong prices on 2026-07-14 while every existing gate
+      # stayed green, so a failure here must stop the board going live, not just log.
+
+      # Pins are minted HERE, before guards, so every number the build can apply passes the gate first.
+      # (Until 2026-07-23 publish-deals-page regenerated them post-gate; a carried-row day minted 37
+      # wrong-basis pins the guards never saw. Publish now only APPLIES the pins file.)
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'generate-board-overrides.ps1') | ForEach-Object { Log ('pins: ' + $_) } } catch { Log ('WARN generate-board-overrides threw: ' + $_.Exception.Message) }
+      $guardsRc = 0
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') | ForEach-Object { Log ('guards: ' + $_) }
+        $guardsRc = $LASTEXITCODE
+      } catch { $guardsRc = 2; Log ('guards threw: ' + $_.Exception.Message) }
+      $guardsBlocked = ($guardsRc -ne 0)
+      # ---- THE VERDICT AS A VALUE, NOT A SIDE EFFECT (2026-08-22) --------------------------------------
+      # Guards holding the Ghost publish is only half a gate: export-feed has ALREADY written
+      # public\smp-feed.json by this point (it runs in the recipe lane above), and capture-run's publish
+      # stage commits public\** to git, which is what Cloudflare deploys. So a board this gate rejected
+      # could still reach every recipe card on the site while the board POST correctly stayed at last-good.
+      # This file cannot answer that with an exit code - bakers-daily-scan and daily.yml both read its rc
+      # and would change meaning - so it states the verdict where the publisher can read it.
+      try {
+        ([ordered]@{
+          date = $asofS; written = (Get-Date).ToString('s'); guards_rc = $guardsRc
+          guards_blocked = [bool]$guardsBlocked
+          note = 'Written by check-ad-cycles after guards. capture-run reads guards_blocked before it stages public\** or meal-prep\** - a board the gate rejected must never reach the edge.'
+        } | ConvertTo-Json -Depth 4) | Set-Content -Path (Join-Path $OutDir 'chain-verdict.json') -Encoding UTF8
+      } catch { Log ('chain-verdict write threw: ' + $_.Exception.Message) }
+      if ($guardsBlocked) {
+        # Do NOT reuse $boardChanged here: that would log "no price change today", which is a lie -
+        # the board DID change, we refused to ship it. A misleading log is how an outage goes unnoticed.
+        Log 'GUARDS FAILED - board NOT republished (left at last good state)'
+        $summary += 'BLOCKED   guards failed a hard invariant - live page left at last good, NOT updated'
+        if (-not $NoAlert) {
+          try { Send-Alert -Subject "Grocery: GUARDS FAILED - board not published - $asofS" -Body "guards.ps1 found a hard invariant violation on $asofS (wrong-mode store, cleaner priced as food, a pin overriding the engine, a cell off its linked product by a FACTOR, or a multipack priced as one unit). The live page was left at its last good state. See grocery/ad-cycle-log.txt." | Out-Null } catch {}
+        }
+      }
+
+      # weekly shareable drops graphic (also the board post's og:image). Refresh BEFORE publish so the
+      # og:image step sees today's png. Non-fatal: a share graphic must never block prices.
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-share-image.ps1') | ForEach-Object { Log ('share: ' + $_) } } catch { Log ('share-image threw: ' + $_.Exception.Message) }
+
+      if ($guardsBlocked) {
+        # already logged + alerted above; fall through without publishing
+      } elseif (-not $boardChanged) {
+        Log 'no price change today - board already current, nothing republished'
+        $summary += 'CURRENT   no price change today - live page already current'
+      } elseif (-not $NoPublish) {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1') | Out-Null
+        $pubrc = $LASTEXITCODE
+        if ($pubrc -eq 0)     { Set-Content -Path $sigFile -Value $sigAfter -Encoding ASCII; Log ('AUTO-PUBLISH: live page updated (price change' + $(if (@($flips).Count -gt 0) { '/new ad' } else { ' mid-cycle' }) + ')'); $summary += 'PUBLISHED live page updated (price change detected)' }
+        elseif ($pubrc -eq 2) {
+          Log 'AUTO-PUBLISH HELD: coverage gate failed - live page NOT updated'
+          $summary += 'HELD      coverage gate failed - live page NOT updated (a store pull is thin/missing)'
+          if (-not $NoAlert) { try { Send-Alert -Subject "Grocery page HELD (coverage) - $asofS" -Body "A refreshed board failed the coverage gate on $asofS (a store's pull produced too few commodities), so the live page was NOT updated - nothing bad was published. Check the store pulls." | Out-Null } catch { Log ('held-alert threw: ' + $_.Exception.Message) } }
+        }
+        else { Log "AUTO-PUBLISH ERROR (rc=$pubrc) - Ghost upsert or build failed; live page NOT updated"; $summary += 'ERROR     auto-publish failed (page NOT updated) - see ad-cycle-log.txt'; if (-not $NoAlert) { try { Send-Alert -Subject "Grocery publish FAILED (rc=$pubrc) - $asofS" -Body "publish-deals-page.ps1 returned $pubrc on $asofS (Ghost upsert or page build failed). The live page was NOT updated with today's price change. Check ad-cycle-log.txt." | Out-Null } catch {} } }
+      }
+
+      # ---- CONSISTENCY GUARD: enforce "the price shown == the product the 'See item' link opens", every day.
+      # audit-board-consistency.ps1 returns 2 when too many chips fall back to a name (a link was suppressed
+      # because its price no longer matches - divergence or a stale board price). On breach we AUTO-REPAIR the
+      # Family Fare links (re-point each to the exact product the board priced, at today's price - the API path
+      # that can run headless in the cloud), re-merge, republish, and re-audit. A breach that survives repair =
+      # a browser-store shelf price drifted from the board (needs a re-pull); we alert Brad ONCE per distinct
+      # drift set (signature de-dup, so a stable backlog never spams) even under -NoAlert.
+      if (-not $NoPublish) {
+        try {
+          & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-board-consistency.ps1') | Out-Null
+          if ($LASTEXITCODE -eq 2) {
+            Log 'consistency BREACH - auto-repairing Family Fare + Hy-Vee links + republishing'
+            try {
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-ff-boardmatch.ps1') | Out-Null
+              # Hy-Vee no-link + wrong-size chips self-heal the SAME way, headless via Hy-Vee's search API.
+              # Added 2026-07-14: this repair ran Family Fare ONLY, so Hy-Vee no-link gaps never closed on their
+              # own and the board sat at 25 linkless Hy-Vee chips. resolve-hyvee-links board-matches by
+              # size+brand+price and writes product-urls.json directly, so it runs BEFORE the merge; the
+              # prune-bad-links + guards gate below still catch anything it produces that drifts by a factor.
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-hyvee-links.ps1') | Out-Null
+              # CAUTION: merge-product-urls re-merges EVERY store-*-urls.json still sitting in
+              # out\url-inputs\, so a stale resolver file left behind can RESURRECT an old link and
+              # overwrite a good one (it silently corrupted ~226 links on 2026-07-14). Old resolver
+              # outputs therefore live in out\url-inputs-archive\, NOT out\url-inputs\.
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'merge-product-urls.ps1')     | Out-Null
+              # Prune at a FACTOR tolerance, NOT the strict 2%. Rationale:
+              #   - strict 2% would delete a perfectly good link the moment a store nudged its price
+              #     (the board refreshes daily; the link's price snapshot does not), eroding coverage;
+              #   - but a link left off by a FACTOR (a wrong SKU / a pack counted as one unit) would
+              #     trip guards.ps1 below and BLOCK the board every single day.
+              # 0.32 drops everything guards would hard-fail on (ratio >=1.5x or <=0.67x) and nothing
+              # else, so the repair is self-healing and the gate can never deadlock the daily publish.
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-bad-links.ps1') -Tol 0.32 | Out-Null
+              # THE PERMANENT FIX for browser-store link regression: prune just dropped any link that drifted by
+              # a factor (a wrong SKU/size), which would leave a no-link gap. sync-browser-links immediately
+              # re-creates any browser link that is now missing but whose row still carries the product identity
+              # (item_id for Walmart/Sam's, a captured URL for Baker's), board-ANCHORED so it matches by
+              # construction. Net: a browser link pruned for drift is healed in the SAME pass and never stays a
+              # gap. Heal-only (never overwrites a healthy link, so guard 4 keeps checking those independently).
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sync-browser-links.ps1') | Out-Null
+              # A MATCH FIX THAT MOVED A PRICE ORPHANED THAT CELL'S LINK (wired 2026-08-21).
+              # sync-browser-links heals a link that is MISSING; it does not notice one that is merely
+              # pointing at last week's winner. When a rule change moves which product holds a cell, the
+              # pin in product-urls.json still opens the old one, and nothing finds out until tile-integrity
+              # fails on the next pass. relink-drifted-cells.ps1 was written for exactly that on 2026-08-21,
+              # after the same manual remedy was applied four times in one day (cloves $11.92 -> $2.99 with
+              # the link still opening the McCormick jar, and three siblings). It shipped with NO production
+              # caller, so the step it was built to stop forgetting was still being forgotten - the census
+              # caught it as an orphan. It belongs HERE: after the links are healed, before name-drift forms
+              # the identity verdict that guards and the pins both read. Non-fatal by design.
+              # -Apply IS LOAD-BEARING. Without it the script is READ-ONLY and exits 1 having repaired
+              # nothing - so a caller that omits it reports drift daily and fixes it never, which is a
+              # wired-but-inert guard and no better than the orphan it replaced. It re-derives per STORE,
+              # only the stores that actually drifted (a global -Apply once re-pointed ~40 Fareway links
+              # onto pack prices while fixing Sam's - that scar is why the script groups by store).
+              try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'relink-drifted-cells.ps1') -Apply | ForEach-Object { Log ('relink: ' + $_) } }
+              catch { Log ('relink-drifted-cells threw: ' + $_.Exception.Message) }
+              # REFRESH THE IDENTITY INPUT BEFORE ANYTHING READS IT. name-drift.json is the product-identity
+              # verdict that BOTH generate-board-overrides (it refuses to pin a flagged cell) and guards'
+              # tile-integrity WRONG-PRODUCT gate consume - and the prune+sync above just rewrote the links it
+              # describes. Left stale, every link the heal just CORRECTED still reads as wrong: measured
+              # 2026-07-30, five Walmart cells (balsamic-vinegar, hominy, diapers, oat-milk, tampons) whose
+              # healed link matched the board byte-for-byte kept failing the hard gate until name-drift was
+              # re-run, and it cleared to ACCURACY 0 the moment it was. A heal that fixes links must not leave
+              # the gate holding yesterday's opinion of them. -Phase links in weekly-post-capture.ps1 has
+              # always done this; this path is the one that was missing it.
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null
+              if ($LASTEXITCODE -eq 3) { Log 'name-drift BLIND after link repair - guards will grade WRONG-PRODUCT with no identity input' }
+              # This repair path used to publish DIRECTLY, which would have bypassed the invariant gate.
+              # Links just changed, so pins derived from them must be re-minted BEFORE guards re-check
+              # (same publish-never-mints rule as the main gate above).
+              try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'generate-board-overrides.ps1') | Out-Null } catch {}
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') -Quiet | Out-Null
+              if ($LASTEXITCODE -eq 0) {
+                & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')   | Out-Null
+              } else {
+                Log 'GUARDS FAILED after consistency auto-repair - NOT republished (left at last good)'
+                $summary += 'BLOCKED   guards failed after consistency auto-repair - live page left at last good'
+              }
+            } catch { Log ('consistency auto-repair threw: ' + $_.Exception.Message) }
+            & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-board-consistency.ps1') | Out-Null
+            if ($LASTEXITCODE -eq 2) {
+              $cr = try { Get-Content (Join-Path $OutDir 'consistency-report.json') -Raw | ConvertFrom-Json } catch { $null }
+              $nl = if ($cr) { [string]$cr.no_link_count } else { '?' }
+              # signature covers BOTH failure kinds: price-drift mismatches AND no-link chips (a pure no-link
+              # breach used to hash to '' and could never de-dup properly)
+              $driftSig = if ($cr) { (@(@($cr.mismatch) + @($cr.no_link) | Where-Object { $_ } | ForEach-Object { $_.id + '|' + $_.store } | Sort-Object -Unique) -join ';') } else { '' }
+              $csigF = Join-Path $OutDir 'consistency-alert.sig'
+              $prevSig = if (Test-Path $csigF) { ((Get-Content $csigF -Raw) + '').Trim() } else { '' }
+              Log ("consistency STILL breached after repair - no-link=$nl (browser-store price drift, needs re-pull)")
+              $summary += "REVIEW    board-link drift: $nl chips show a name not a link - see consistency-report.json"
+              if ($driftSig -ne $prevSig -and (-not $NoAlert)) {
+                try { Send-Alert -Subject "Grocery: board-link price drift ($nl chips) - $asofS" -Body "$nl priced chips fall back to a product name (no 'See item' link) after auto-repair on $asofS, because a store's shelf price drifted from the board. NO misleading link is shown. Re-pull the flagged store(s). Details: grocery/out/consistency-report.json." | Out-Null
+                      if ($LASTEXITCODE -eq 0) { Set-Content -Path $csigF -Value $driftSig -Encoding UTF8; Log 'consistency drift alert sent' } } catch { Log ('consistency alert threw: ' + $_.Exception.Message) }
+              } else { Log 'consistency drift unchanged since last alert - not re-alerting' }
+            } else { Log 'consistency repaired - all shown links match their price'; if (Test-Path (Join-Path $OutDir 'consistency-alert.sig')) { Remove-Item (Join-Path $OutDir 'consistency-alert.sig') -ErrorAction SilentlyContinue } }
+          } elseif ($LASTEXITCODE -eq 3) {
+            # exit 3 = could-not-evaluate (P6). Before 2026-07-30 this branch did not exist, so a consistency
+            # run that examined ZERO chips - feed missing, or the pg-chip markup drifted - fell into the else
+            # below and was logged as "consistency OK": the guard's blindest state wearing its healthiest label.
+            Log 'consistency BLIND - the auditor examined 0 priced chips; "no-link=0" today means nothing (see chips_examined in out\consistency-report.json)'
+            $summary += 'REVIEW    board-consistency examined 0 chips - the price/link check is not running; check public\board.json and the pg-chip markup in build-deals-page.ps1'
+          } else { Log 'consistency OK - every shown link matches its price' }
+        } catch { Log ('consistency guard threw: ' + $_.Exception.Message) }
+      }
+
+      # ================================================================================================
+      # SHIP / INSPECT BOUNDARY (2026-08-22). Everything ABOVE this line is the SHIP path: the work that
+      # decides what the live board, the public feed and the recipe cards say, ending at the publish and
+      # its consistency auto-repair. Everything BELOW is INSPECT: advisory auditing that reports, alerts
+      # and queues, and CANNOT change what has already shipped.
+      # Why the split exists: measured on 2026-08-22 the whole chain ran 31-42 minutes, of which the
+      # product path was ~6-7. Under Task Scheduler's 2h ceiling - and under any late throw - the day's
+      # prices were held hostage by auditing that could never block a publish anyway. Ship first, inspect
+      # after: a crash below this line now costs a report, not a board.
+      # KEEP THE ORDER ABOVE. It is a dependency chain, not a preference: export-feed BEFORE compute-v2
+      # (it writes the feed compute-v2 resolves), and audit-name-drift BEFORE guards - guard 3's
+      # WRONG-PRODUCT hard fail reads out\name-drift.json and generate-board-overrides refuses pins from
+      # links it flags, so moving name-drift below makes that gate structurally unfirable.
+      # ================================================================================================
+      $script:DownstreamRan = $true
+      $shipSecs = [int]((Get-Date) - $script:ShipStart).TotalSeconds
+      Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + [math]::Round($shipSecs/60.0,1) + ' min): the board, the feed and the cards are published. INSPECT (advisory audits) starts now and cannot change what shipped. ----')
+      $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + [math]::Round($shipSecs/60.0,1) + ' min) - the board published before any advisory audit ran')
+
+      # ---------------------------------------------------------------------------------------------
+      # INSPECT PATH - ADVISORY ONLY. Nothing below may hold, change or unpublish today's board. Several
+      # of these stages take minutes each and used to run BEFORE the publish, which is exactly what made
+      # a killed or late-throwing chain cost the day's prices.
+      # ---------------------------------------------------------------------------------------------
+      # THESE TWO PUBLISH SITE CONTENT, so they lead the inspect path rather than trailing it: everything
+      # they read (the v2 manifest, the ingredient map) is a SHIP output that is already final, and if this
+      # phase is ever cut short they should be the first thing that got done, not the last thing that did not.
+      # re-cost the recipes from today's board + refresh the hub's Top 5 (only publishes on change). Non-fatal.
+      # Brad's final call 2026-07-25: the ORIGINAL SMP-TOP5 hub section stays (he preferred it over the
+      # green free-week grid, which was removed same day). The free ROTATION still runs below - it just
+      # renders nothing on the hub; the Top 5 section is the display.
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') | Out-Null; Log 'top5-weekly refreshed' } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) }
+      # Free-dinner rotation (Brad, 2026-07-25): top 5 cheapest dinners per protein go FREE for the board
+      # week; they revert to members-only when the week re-ranks them. Runs daily right after re-costing but
+      # no-ops until the board week (or the set) changes, so flips happen on the ad flip. Non-fatal.
+      try { (Invoke-Bounded 'free-rotation' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\rotate-free-dinners.ps1')) 900).Output | ForEach-Object { Log ('free-rotation: ' + $_) } } catch { Log ('rotate-free-dinners threw: ' + $_.Exception.Message) }
+
       # NOTE: the coverage-REGRESSION check (a store quietly shrinking between boards) is NOT run here. It is a
       # hard invariant, so it lives in guards.ps1 where a failure actually stops the publish. Setting $hardFail
-      # at this point would not: the publish below gates on $guardsBlocked, and $hardFail was already read at the
-      # top of this block - so it would log "publish HELD" while the board shipped anyway.
+      # at this point would not: the publish (now ABOVE, on the ship path) gates on $guardsBlocked, and $hardFail
+      # was already read at the top of this block - so it would log "publish HELD" while the board shipped anyway.
       # ---- COVERAGE GAP GUARD: a store SILENTLY dropped from a commodity it actually carries (a too-strict
       # include regex not matching that store's real product name - the Hy-Vee "Pork Loin TOP Loin Chops" bug).
       # audit-coverage-gaps.ps1 scans each missing store's raw pull for a loosened-include match; a hit = fix the
       # commodity's include (or allowlist it). Alert Brad ONCE per distinct gap-set (signature de-dup) so it is
       # never silent but never spams. Advisory (we still publish the current board).
       try {
-        $cgRc = (Receive-AuditJob 'coverage-gaps' 900).ExitCode
+        $cgRc = (Invoke-Bounded 'coverage-gaps' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-coverage-gaps.ps1')) 900).ExitCode
         if ($cgRc -eq 3) {
           # BLIND: the file on disk is a PREVIOUS day's. Reading it here would dedupe today against
           # yesterday's gap set and report "unchanged" about a scan that never happened.
@@ -577,7 +989,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # publish, and findings never change a price, a crown, a rule or a link on their own. Signature de-dup so
       # a standing backlog is reported ONCE and only genuinely NEW findings speak up again.
       try {
-        $semRc = (Receive-AuditJob 'semantic' 900).ExitCode
+        $semRc = (Invoke-Bounded 'semantic' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-semantic-identity.ps1')) 900).ExitCode
         if ($semRc -eq 3) {
           Log 'semantic sweep BLIND (no sidecar/GPU available) - the board still ships; no coverage opinion today'
           $summary += 'REVIEW    semantic sweep could not run (BLIND) - no semantic coverage check on this board'
@@ -640,7 +1052,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # guard catches theft-IN. audit-match-soundness -Alert self-dedups and emails on a NEW issue-set; a
       # MOVED/DROPPED also makes it exit 2 so the publish gate holds. Advisory here (the daily board still ships).
       try {
-        $msJ = Receive-AuditJob 'match-soundness' 900
+        $msArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-match-soundness.ps1'),'-OutDir',$OutDir)
+        if (-not $NoAlert) { $msArgs += '-Alert' }
+        $msJ = Invoke-Bounded 'match-soundness' $msArgs 900
         $msJ.Output | ForEach-Object { Log ('match-soundness: ' + $_) }
         if ($msJ.ExitCode -eq 2) { $summary += 'REVIEW    commodity matching changed vs baseline (a product MOVED/DROPPED) - see out\audit\soundness-report.json; publish will HOLD until reviewed + audit-match-soundness.ps1 -Accept' }
         elseif ($msJ.ExitCode -eq 3) { $summary += 'REVIEW    audit-match-soundness could not evaluate - commodity matching is UNGUARDED this run'; Log 'match-soundness BLIND: ingested ZERO products - no store feed reached this audit, so its silence is not a clean board'; $summary += 'REVIEW    audit-match-soundness ingested ZERO products - commodity matching is UNGUARDED this run (check out\regular\ and out\ads-*.json)' }
@@ -754,7 +1168,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # docket this writes. Reversed, the desk would always show yesterday's findings.
       # Non-fatal and advisory - it can never touch a board.
       try {
-        $dhJ = Receive-AuditJob 'discover-hyvee' 900
+        $dhJ = Invoke-Bounded 'discover-hyvee' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'discover-hyvee.ps1'),'-Slice','40') 900
         if ($dhJ.ExitCode -eq 3) { Log 'discover-hyvee BLIND (killed at its budget or the job broke) - no NEW Hy-Vee products were looked for today' }
         $dhOut = @($dhJ.Output)
         @($dhOut | Where-Object { $_ -match '^DOCKET:|^  \(|SEARCH FAILED|^BLIND' }) | ForEach-Object { Log ('discover-hyvee: ' + $_) }
@@ -844,35 +1258,12 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           } else { Log 'sale-fallback gaps unchanged - not re-alerting' }
         } else { if (Test-Path (Join-Path $OutDir 'sale-fallback-alert.sig')) { Remove-Item (Join-Path $OutDir 'sale-fallback-alert.sig') -ErrorAction SilentlyContinue } }
       } catch { Log ('sale-fallback guard threw: ' + $_.Exception.Message) }
-      # Refresh the per-item sale-window log (sale price + start/end dates from the fresh board) so the daily
-      # Baker's guard fires only when a sale actually reverts/starts, not blindly. Headless-safe, non-fatal.
-      # RECORD TODAY'S LANDED RE-PRICES FIRST (2026-08-22). build-sale-windows prunes a window
-      # only once refresh_on is past AND repriced_for matches it - so this reconcile is what
-      # lets the ledger drain. It must run BEFORE the build: after it, a re-price that landed
-      # looks unprocessed and is asked for again tomorrow (wasteful, safe). It writes only for
-      # stores whose everyday file actually landed today, so a blind day retires nothing. The
-      # lanes that know their own outcome (Family Fare, Hy-Vee, the four walled builders via
-      # commit-capture-cursor) have already written theirs; this catches the rest.
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'capture-policy.ps1') -Reconcile | Out-Null; Log 'sale-expiry re-prices reconciled' } catch { Log ('capture-policy -Reconcile threw: ' + $_.Exception.Message) }
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-sale-windows.ps1') | Out-Null; Log 'sale-windows refreshed' } catch { Log ('build-sale-windows threw: ' + $_.Exception.Message) }
       # Keep the product-URL worklist current: after prices move, flag any "See item" link whose board price
       # changed (stale) or whose linked product no longer matches (mismatch), so the weekly browser agent
       # re-resolves it. Headless-safe (detection only); the actual re-resolution needs Chrome. Non-fatal.
-      # Re-apply the weekly semantic verdicts (wrong-product drops / de-crowns) to TODAY's fresh board so
-      # build/publish's verified-<week> board reflects both the fresh prices AND the wrong-product removals.
-      # Deterministic PS (no LLM); only runs when this week's verdicts exist. Non-fatal.
-      $cmpNow = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-      if ($cmpNow) { try { $wkNow = (Get-Content $cmpNow.FullName -Raw | ConvertFrom-Json).week_of; if (Test-Path (Join-Path $OutDir ("verify-verdicts-" + $wkNow + ".json"))) { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'verify-apply.ps1') | Out-Null; Log 'verify-apply re-applied verdicts to fresh board' } } catch { Log ('verify-apply threw: ' + $_.Exception.Message) } }
-      # overlay this week's ad-sales onto the everyday recipe-ingredient board (catches recipe items on sale;
-      # reverts automatically when a sale ends). MUST run BEFORE resolve-worklist so the link worklist reflects
-      # TODAY's recipe board, not yesterday's. Non-fatal - only runs once the recipe rule-set exists.
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'recipe-overlay.ps1') | Out-Null; Log 'recipe-overlay applied' } catch { Log ('recipe-overlay threw: ' + $_.Exception.Message) }
-      # UNIFIED ENGINE (2026-07-26 consolidation): re-cost the whole catalog from today's boards into
-      # db\costed.json, then recompute the v2 per-serving manifest (everyday + cheapest whole-package)
-      # that top5-weekly reads. MUST run before top5-weekly or per_serving falls back to the legacy
-      # basis. Feed path = the local smp-feed (regenerated later in this same sequence; one-day lag on
-      # feed-only movements, same as the retired per-run flow). Non-fatal.
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\cost-recipes.ps1') | Out-Null; Log 'engine cost-recipes refreshed db\costed' } catch { Log ('engine cost-recipes threw: ' + $_.Exception.Message) }
+      # ORDER: it reads research-worklist.json, which audit-sale-fallback directly above writes, and it must
+      # see TODAY's recipe board - recipe-overlay is on the ship path, so it is already applied by here.
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-worklist.ps1') | Out-Null } catch { Log ('resolve-worklist threw: ' + $_.Exception.Message) }
       # COST-FLAG ALERT (2026-07-26 scale hardening): an unpriced ingredient line silently makes a recipe
       # look CHEAPER (the line is dropped from the batch cost). cost-recipes records these to db\cost-flags.txt
       # but nothing read it. Alert on a NEW flag-set (signature de-dup so a persistent flag does not spam).
@@ -949,42 +1340,6 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           try { Send-Alert -Subject "Recipe spec contradictions got worse" -Body ("meal-prep\pipeline\audit-spec-contradictions.ps1 found MORE of a contradiction class than the recorded baseline. One of the two disagreeing statements is on a live card. Full list in meal-prep\out\spec-contradictions.json. " + $scWorse) | Out-Null } catch {}
         } else { Log 'spec-contradiction guard: no class worse than baseline' }
       } catch { Log ('spec-contradiction guard threw: ' + $_.Exception.Message) }
-      # compute-v2 now SKIPS bad recipes and exits 1 with the list (was: throw -> whole manifest stale,
-      # and a child exit-1 does NOT raise in this parent, so the old code logged success falsely). Check
-      # the exit code explicitly and alert on any skipped recipe.
-      # $cv2Ok is captured HERE, at the call site, and nowhere else. It used to be re-read 60 lines below as a
-      # bare $LASTEXITCODE, by which point three more `& powershell` children had overwritten it - so the
-      # close-the-loop gate was testing batch-ledger's exit code and calling it compute-v2's. It failed both
-      # ways: a partial manifest (rc 1) sailed through whenever batch-ledger was clean, and a stalled batch
-      # (rc 1) skipped the loop while logging "compute-v2 did not succeed". Start it FALSE so a throw before
-      # the assignment leaves the gate shut; the old `-or $null -eq $cv2` arm did the exact opposite and let
-      # a compute-v2 that died at launch pass as success.
-      $cv2Ok = $false
-      try {
-        $cv2   = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\compute-v2-perserving.ps1') -FeedPath (Join-Path $OutDir 'smp-feed.json')
-        $cv2Rc = $LASTEXITCODE
-        $cv2Ok = ($cv2Rc -eq 0)
-        # rc 2 is the 2026-08-15 staleness refusal, NOT a bad-recipe skip. It has to read as itself: the
-        # manifest was deliberately NOT rewritten (so the surfaces keep their previous numbers instead of
-        # gaining wrong ones), and the fix is upstream in the feed, not in any recipe's cost data. Reporting
-        # it as "skipped recipe(s) with bad cost data" would send triage looking at specs for a problem that
-        # is not there. compute-v2 alerts on its own for this case, so no second email from here.
-        if ($cv2Rc -eq 2) {
-          $cv2Why = (($cv2 | Where-Object { $_ -match 'REFUSING|freshness:' }) -join ' ')
-          Log ('compute-v2 REFUSED to recompute the manifest - stale price feed: ' + $cv2Why)
-          $summary += 'REVIEW    v2 per-serving manifest was NOT recomputed - the price feed it resolved is stale (surfaces keep their previous numbers; fix the feed, not the recipes)'
-        }
-        elseif ($cv2Rc -ne 0) {
-          $cv2Bad = @($cv2 | Where-Object { $_ -match '^\s+\S' -or $_ -match 'SKIPPED' })
-          Log ('compute-v2 SKIPPED recipe(s) with bad cost data: ' + (($cv2Bad | Select-Object -First 6) -join ' | '))
-          $summary += 'REVIEW    v2 per-serving manifest skipped recipe(s) with bad cost data - top5/rotation may be stale for them (see compute-v2 output)'
-          if (-not $NoAlert) { try { Send-Alert -Subject "Recipe per-serving manifest: skipped recipe(s)" -Body ("compute-v2-perserving.ps1 could not compute per-serving cost for some recipes and skipped them (the rest still updated). Their top5/rotation/site numbers are stale until fixed. Detail: " + (($cv2Bad | Select-Object -First 15) -join ' | ')) | Out-Null } catch {} }
-        } else { Log 'v2 per-serving manifest recomputed' }
-      } catch { Log ('compute-v2-perserving threw: ' + $_.Exception.Message) }
-      # DERIVED ingredient-map refresh (2026-07-26): regenerate meal-prep\ingredient-map.json from the spec
-      # scaler payloads + live feed (it was a hand-authored file frozen since 07-07, missing 58 items). Runs
-      # BEFORE top5 (which reads it for sale badges); dinner/protein tool builders read it on their own runs.
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\regenerate-ingredient-map.ps1') | Out-Null; Log 'ingredient-map regenerated (derived from specs + feed)' } catch { Log ('regenerate-ingredient-map threw: ' + $_.Exception.Message) }
       # ---- CROSS-STORE INTEGRITY (2026-08-07) ------------------------------------------------------------
       # audit-db-agreement owns the two RECIPE masters. This owns the INGREDIENT stores, which nothing
       # compared until now: every defect in the 29-burrito batch was a seam, not a value. 6 items had macros
@@ -1131,162 +1486,16 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if (-not $NoAlert) { try { Send-Alert -Subject "Board prices aging inside a fresh file" -Body ("audit-row-age.ps1 found rows aging past the window, or a store that stopped stamping as_of. The FILE dates look fine either way, which is why guard 9 stays quiet. These prices are what 542 live recipe pages quote.`n`n" + ($raBad -join "`n")) | Out-Null } catch {} }
         } else { Log ('row-age: no findings (' + (@($ra | Where-Object { $_ -match 'rows' }).Count) + ' store(s) profiled)') }
       } catch { Log ('audit-row-age threw: ' + $_.Exception.Message) }
-      # ---- CLOSE THE LOOP: re-anchor the specs and republish the cards the board just moved ------------
-      # THE GAP THIS FILLS (2026-08-07, Brad approved unattended republish). This chain recomputed prices
-      # every day and never propagated them: reanchor + build-cards + publish were manual, so every baked
-      # number on 542 live pages drifted by exactly the daily board move. Measured before this landed: 471
-      # cards showed a per-serving cost their own spec no longer held, 452 of them TOO HIGH by up to $1.26
-      # on a site whose whole promise is cheap. That was the steady-state error of the design, not a bug.
-      #
-      # Guards on it:
-      #  * SKIPPED ENTIRELY if compute-v2 failed - re-anchoring to a partial manifest would stamp bad numbers.
-      #  * reanchor-all runs BOTH halves (machine fields + prose). Running machine-fields alone leaves every
-      #    touched spec quoting two different prices; that happened twice by hand on 2026-08-07.
-      #  * A SANITY CAP: normal daily drift is a handful to a few dozen slugs. A number far above that means
-      #    something systemic moved (a gpu, a shared row, a DB rename) and a human should look before 500
-      #    live pages are rewritten unattended. Over the cap we alert and skip rather than publish.
-      #  * -Slugs is passed IN-PROCESS. engine\README.md: `powershell -File` marshals an array as one
-      #    command-line string, so a 300-slug run binds as one slug and reports a cheerful "built 1/1".
-      #  * The publish only runs if reanchor-all printed its REANCHOR-COMPLETE marker. Its exit code cannot
-      #    carry that: under EAP=Stop a throw exits 1, the same code it uses for "some specs still disagree".
-      #    Without the marker a crash between the two halves would have republished cards from half-anchored
-      #    specs - and reanchor-all now empties its slug list before starting, so a crash publishes nothing.
-      if ($cv2Ok) {
-        try {
-          $mp = Split-Path $root -Parent
-          $raOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $mp 'meal-prep\pipeline\reanchor-all.ps1')
-          foreach ($l in @($raOut)) { Log ('reanchor: ' + $l) }
-          $raDone = @($raOut | Where-Object { $_ -match 'REANCHOR-COMPLETE' }).Count -gt 0
-          $staleList = Join-Path $mp 'meal-prep\pipeline\reanchor-stale-cards.txt'
-          $stale = @()
-          if ($raDone -and (Test-Path $staleList)) { $stale = @(Get-Content $staleList | Where-Object { $_.Trim() -ne '' }) }
-          $CAP = 150
-          if (-not $raDone) {
-            Log 'loop NOT closed: reanchor-all did not finish (no completion marker) - specs may be half-anchored, nothing republished'
-            $summary += 'REVIEW    reanchor-all did not complete - the specs may be half re-anchored (quoting two prices) and no cards were republished'
-            if (-not $NoAlert) { try { Send-Alert -Subject "Re-anchor did not complete - cards not republished" -Body ("reanchor-all.ps1 exited without its REANCHOR-COMPLETE marker, which means it died part-way through. Machine fields may be stamped while the prose still quotes the old price. Nothing was rebuilt or published. Run meal-prep\pipeline\reanchor-all.ps1 by hand and read the output.`n`nLast lines:`n" + ((@($raOut) | Select-Object -Last 10) -join "`n")) | Out-Null } catch {} }
-          }
-          elseif ($stale.Count -eq 0) { Log 'loop closed: no card cost moved today' }
-          elseif ($stale.Count -gt $CAP) {
-            Log ("loop NOT closed: $($stale.Count) cards moved, over the $CAP sanity cap - not republishing unattended")
-            $summary += "REVIEW    $($stale.Count) recipe cards moved cost today (cap $CAP). Something systemic changed; review then run build-cards + publish for meal-prep\pipeline\reanchor-stale-cards.txt"
-            if (-not $NoAlert) { try { Send-Alert -Subject "Recipe cards: $($stale.Count) moved, over the daily cap" -Body ("The daily chain re-anchored the specs but did NOT republish, because $($stale.Count) cards changed cost and the sanity cap is $CAP. A number this large usually means a shared row, a gpu, or a DB rename moved rather than ordinary price drift. Slug list: meal-prep\pipeline\reanchor-stale-cards.txt") | Out-Null } catch {} }
-          } else {
-            # A FAILED PUBLISH MUST SURVIVE THE RUN. Staleness is measured spec-vs-BUILT-card, and build-cards
-            # runs first - so the moment the cards are rebuilt the spec and the card agree and tomorrow reports
-            # a clean loop, while the LIVE page keeps the old number forever. The failure erases its own
-            # evidence. Slugs therefore go into a pending file BEFORE the publish and are only cleared once it
-            # actually succeeds, so a bad night retries on the next run instead of going quiet.
-            $pendPath = Join-Path $mp 'meal-prep\pipeline\republish-pending.txt'
-            if (Test-Path $pendPath) { $stale = @(@($stale) + @(Get-Content $pendPath | Where-Object { $_.Trim() -ne '' }) | Select-Object -Unique) }
-            $stale | Out-File $pendPath -Encoding utf8
-            $pubOk = $false
-            try {
-              Push-Location (Join-Path $mp 'meal-prep')
-              try {
-                & '.\engine\build-cards.ps1' -Slugs $stale | Select-Object -Last 1 | ForEach-Object { Log ('build-cards: ' + $_) }
-                $bcRc = $LASTEXITCODE
-                $pubOut = & '.\engine\publish.ps1' -Slugs $stale
-                $pubRc  = $LASTEXITCODE
-                foreach ($l in (@($pubOut) | Select-Object -Last 1)) { Log ('publish: ' + $l) }
-                $pubOk = ($bcRc -eq 0 -and $pubRc -eq 0 -and @($pubOut).Count -gt 0)
-                if (-not $pubOk) { Log ("publish did NOT succeed: build-cards rc=$bcRc, publish rc=$pubRc, " + @($pubOut).Count + ' output line(s)') }
-              } finally { Pop-Location }   # without this a throw leaks CWD to meal-prep for the rest of the run
-            } catch { Log ('build/publish threw: ' + $_.Exception.Message) }
-            if ($pubOk) {
-              Remove-Item $pendPath -ErrorAction SilentlyContinue
-              Log ("loop closed: $($stale.Count) card(s) re-anchored and republished")
-            } else {
-              Log ("loop NOT closed: $($stale.Count) card(s) rebuilt but the publish failed - slugs held in republish-pending.txt for the next run")
-              $summary += "REVIEW    $($stale.Count) recipe card(s) were rebuilt but did NOT publish - the live pages still show the old cost (meal-prep\pipeline\republish-pending.txt)"
-              if (-not $NoAlert) { try { Send-Alert -Subject "Recipe cards rebuilt but publish failed" -Body ("The daily loop re-anchored $($stale.Count) card(s) and rebuilt them, but the publish step failed. The LIVE pages still show the old per-serving cost. Because staleness is measured spec-vs-built-card, this would otherwise read as clean from tomorrow on - the slugs are held in meal-prep\pipeline\republish-pending.txt and retried on the next run.") | Out-Null } catch {} }
-            }
-          }
-        } catch { Log ('close-the-loop threw: ' + $_.Exception.Message) }
-      } else { Log 'loop NOT closed: compute-v2 did not succeed, so the manifest is not trustworthy to re-anchor from' }
-      # ---- RETENTION (2026-08-08): cap out\'s dated-family growth. Conservative per-family windows set past
-      # the deepest historical reader (see prune-out.ps1's header); evidence dirs are never listed. Non-fatal.
-      try {
-        $pr = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-out.ps1') -Apply
-        foreach ($l in (@($pr) | Select-Object -Last 1)) { Log ('prune-out: ' + $l) }
-      } catch { Log ('prune-out threw: ' + $_.Exception.Message) }
-      # THE OTHER HALF OF RETENTION (wired 2026-08-21). prune-out caps the dated FAMILIES in out\;
-      # prune-intermediates caps the gitignored per-run scratch (candidates-<date>.json and siblings),
-      # which no reader ever opens except the newest. It was written on 2026-08-21 against 408 MB growing
-      # ~19 MB/day and shipped with NO production caller, so the growth it was written to stop carried
-      # right on - the script census caught it as an orphan. Keep 3, matching its own default. Non-fatal.
-      try {
-        $pi = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-intermediates.ps1') -Keep 3
-        foreach ($l in (@($pi) | Select-Object -Last 1)) { Log ('prune-intermediates: ' + $l) }
-      } catch { Log ('prune-intermediates threw: ' + $_.Exception.Message) }
-      # re-cost the recipes from today's board + refresh the hub's Top 5 (only publishes on change). Non-fatal.
-      # Brad's final call 2026-07-25: the ORIGINAL SMP-TOP5 hub section stays (he preferred it over the
-      # green free-week grid, which was removed same day). The free ROTATION still runs below - it just
-      # renders nothing on the hub; the Top 5 section is the display.
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') | Out-Null; Log 'top5-weekly refreshed' } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) }
-      # Free-dinner rotation (Brad, 2026-07-25): top 5 cheapest dinners per protein go FREE for the board
-      # week; they revert to members-only when the week re-ranks them. Runs daily right after re-costing but
-      # no-ops until the board week (or the set) changes, so flips happen on the ad flip. Non-fatal.
-      try { (Invoke-Bounded 'free-rotation' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\rotate-free-dinners.ps1')) 900).Output | ForEach-Object { Log ('free-rotation: ' + $_) } } catch { Log ('rotate-free-dinners threw: ' + $_.Exception.Message) }
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'export-feed.ps1') | Out-Null; Log 'smp-feed exported' } catch { Log ('export-feed threw: ' + $_.Exception.Message) }
       # price alerts: email label:alert-<id> subscribers when an item hits a tracked low (self-gates via alert-state.json)
       try { $paOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-price-alerts.ps1'); Log ('price-alerts: ' + (@($paOut)[-1])) } catch { Log ('send-price-alerts threw: ' + $_.Exception.Message) }
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-worklist.ps1') | Out-Null } catch { Log ('resolve-worklist threw: ' + $_.Exception.Message) }
-      # ---- CLOSE FAMILY FARE'S NO-LINK GAP, A LITTLE EVERY DAY. -------------------------------------------
-      # resolve-worklist above only DETECTS; it has never added a link. The note further up claiming "the API
-      # stores already self-heal in the daily job" was half true: refresh-hyvee-links re-points Hy-Vee's price
-      # SNAPSHOTS, but nothing here ever filled a MISSING link. That is why 58 priced Family Fare tiles were
-      # published with no "See item" link at all.
-      # Family Fare is the one store resolvable without a browser (Freshop REST). Its documented budget is
-      # ~40 calls before it 400s everything, so this takes 30/day and no more - the backlog grinds down over a
-      # few days and then stays at zero as new items appear. Two steps because the resolver splits plan from
-      # apply: the plan does the searching, -Apply writes it with zero network calls.
-      # Safety: it links ONLY when the found product's name matches the board's own item AND its per-unit
-      # equals the board's. Anything less confident is refused and left exactly as it was, because a link that
-      # disagrees with the price does not fix the tile - it just moves the lie somewhere a shopper will find it.
-      # Non-fatal, and guards still gate the publish.
-      # ---- DERIVE LINKS FROM THE PRICE ROWS, BEFORE ANY SEARCH. -------------------------------------------
-      # A price was fetched FROM a product; that product's id/URL is on the row. Deriving the link from the same
-      # record the board priced makes price and link ONE fact that cannot drift. Searching the store to re-find
-      # the product is a SECOND pipeline for the same fact, and every wrong link we have ever shipped came from
-      # the two disagreeing ("Hy Vee Almondmilk" priced, "Blue Diamond Almond Breeze" linked).
-      # This runs FIRST so the searchers only ever work on what identity could not cover.
-      try {
-        $dlOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'derive-links-from-prices.ps1') -Apply
-        Log ('derive-links-from-prices: ' + ((@($dlOut) | Where-Object { $_ -match 'APPLIED' })[-1]))
-      } catch { Log ('derive-links-from-prices threw: ' + $_.Exception.Message) }
-      try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-tile-integrity.ps1') -Quiet | Out-Null
-        if ($LASTEXITCODE -eq 3) { Log 'tile-integrity BLIND (zero links graded) - the link layer is empty/unreadable; fix-links-ff is about to run against nothing' }
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'fix-links-ff.ps1') -Fresh -MaxCalls 30 | Out-Null
-        $ffOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'fix-links-ff.ps1') -Apply
-        Log ('family-fare link fill: ' + (@($ffOut | Where-Object { $_ -match 'APPLIED' })[-1]))
-      } catch { Log ('fix-links-ff threw: ' + $_.Exception.Message) }
-      # ---- NEVER SHIP A LINK WE CANNOT PROVE. --------------------------------------------------------------
-      # Brad's bar is 100% ACCURATE, and accuracy and coverage are different promises. A tile with a price and
-      # no link is incomplete; a tile whose link opens a DIFFERENT product is a lie - the shopper clicks, sees
-      # $4.99 where we said $2.98, and concludes the board inflates its deals. Prices move daily, links go
-      # stale, and merge-product-urls can resurrect old ones, so this has to run EVERY day, not once.
-      # It removes any link that is not positively verified against the board (wrong product, wrong price,
-      # unverifiable per-unit, or no price to check). The tile falls back to a price with no link, which is
-      # honest. name-drift must run FIRST - it is the product-identity check the pruner reads.
-      try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null
-        if ($LASTEXITCODE -eq 3) { Log 'name-drift BLIND: examined ZERO cells - its count=0 output is not clean; prune-bad-links and the builder link suppression are running with no product-identity input'; $summary += 'REVIEW    audit-name-drift examined ZERO cells (product-urls/board mismatch) - wrong-product links are unguarded this run' }
-        # -Tol 0.32, SAME as the repair path below and as guard 4's factor rule (>=1.5x / <=0.67x). I first
-        # wired this with the default 2%, which deletes a RIGHT-product link the moment the store nudges its
-        # price - eroding coverage a little every day to enforce a threshold the accuracy gate itself does not
-        # use. One tolerance, everywhere: a link is removed for being a different PRODUCT (any drift counts as
-        # a factor error), never for its snapshot being a few cents old.
-        $pbOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-bad-links.ps1') -Tol 0.32
-        Log ('prune-bad-links: ' + ((@($pbOut) | Where-Object { $_ -match 'DROPPED' }) -join ' | '))
-      } catch { Log ('prune-bad-links threw: ' + $_.Exception.Message) }
-      $sigAfter = BoardSignature
-      $sigFile  = Join-Path $OutDir 'published-board.sig'
-      $prevPub  = if (Test-Path $sigFile) { ((Get-Content $sigFile -Raw) + '').Trim() } else { '' }
-      # republish when the price/type/ad-window signature moved OR a new ad window flipped (belt-and-suspenders)
-      $boardChanged = ($sigAfter -ne $sigBefore) -or ($sigAfter -ne $prevPub) -or (@($flips).Count -gt 0)
-      if (@($flips).Count -gt 0) { Log ("downstream refreshed after flips: " + ($flips -join ',')) }
+
+      # ---- THE REVIEW-FLAG UNIT: sanity-check -> basis-reconcile -> pack-basis -> the alert block. ----
+      # These move together and in this order. sanity-check writes out\guards-<week>.json and the two basis
+      # audits write their own reports; the block below is the SINGLE consumer of all three ($flagParts /
+      # $flagKeys and the alerted-flags.json write). Split them and the alert block reads a PREVIOUS day's
+      # flags and stamps them as today's. All of it is advisory - none of it has ever gated a publish -
+      # so the whole unit sits after the board has shipped.
+      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sanity-check.ps1') | Out-Null   # exit 1 = flags (expected), not a crash -> guards-<week>.json
 
       # ---- REVIEW FLAGS: a likely-wrong in-band price (sanity outlier / WoW) or an unpriced tracked BOGO is
       #      advisory (we still publish so the board stays current) but must NOT be silent. Alert Brad ONCE per
@@ -1490,15 +1699,6 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       $fsigFile = Join-Path $OutDir 'alerted-flags.sig'
       if (Test-Path $fsigFile) { Remove-Item $fsigFile -ErrorAction SilentlyContinue }
 
-      # AUTO-PUBLISH only when the board changed. publish-deals-page.ps1 self-gates on coverage, rebuilds
-      # (recomputing the sale-window badges), and republishes preserving visibility.
-      # ---- HARD INVARIANT GATE ------------------------------------------------------------------
-      # guards.ps1 blocks the publish if any invariant that is ALWAYS a bug is violated: a mode-sensitive
-      # store off the in-store catalogue, a cleaning product priced as food, an override pin that beats the
-      # engine, a board cell that differs from its own linked product by a FACTOR (the 2x/3x/12x/24x
-      # quantity bugs - ordinary price drift is ignored), or a multipack priced as a single unit.
-      # These are exactly the classes that shipped wrong prices on 2026-07-14 while every existing gate
-      # stayed green, so a failure here must stop the board going live, not just log.
       # WARN-ONLY: are the weekly-ad landing pages (the flyer-only pills' link targets, ad-urls.json) still
       # alive? Never blocks - a store site outage must not stop OUR publish - but a dead ad link is the same
       # lie class as a dead product link, so it gets said out loud the day it breaks. Baker's is skipped
@@ -1514,61 +1714,6 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           } catch { Log ('WARN ad-url ' + $p.Name + ' unreachable (' + $_.Exception.Message + ') - the flyer-only pill links there: ' + $p.Value) }
         }
       } catch { Log ('WARN ad-url check skipped: ' + $_.Exception.Message) }
-
-      # Pins are minted HERE, before guards, so every number the build can apply passes the gate first.
-      # (Until 2026-07-23 publish-deals-page regenerated them post-gate; a carried-row day minted 37
-      # wrong-basis pins the guards never saw. Publish now only APPLIES the pins file.)
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'generate-board-overrides.ps1') | ForEach-Object { Log ('pins: ' + $_) } } catch { Log ('WARN generate-board-overrides threw: ' + $_.Exception.Message) }
-      $guardsRc = 0
-      try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') | ForEach-Object { Log ('guards: ' + $_) }
-        $guardsRc = $LASTEXITCODE
-      } catch { $guardsRc = 2; Log ('guards threw: ' + $_.Exception.Message) }
-      $guardsBlocked = ($guardsRc -ne 0)
-      # ---- THE VERDICT AS A VALUE, NOT A SIDE EFFECT (2026-08-22) --------------------------------------
-      # Guards holding the Ghost publish is only half a gate: export-feed has ALREADY written
-      # public\smp-feed.json by this point (it runs in the recipe lane above), and capture-run's publish
-      # stage commits public\** to git, which is what Cloudflare deploys. So a board this gate rejected
-      # could still reach every recipe card on the site while the board POST correctly stayed at last-good.
-      # This file cannot answer that with an exit code - bakers-daily-scan and daily.yml both read its rc
-      # and would change meaning - so it states the verdict where the publisher can read it.
-      try {
-        ([ordered]@{
-          date = $asofS; written = (Get-Date).ToString('s'); guards_rc = $guardsRc
-          guards_blocked = [bool]$guardsBlocked
-          note = 'Written by check-ad-cycles after guards. capture-run reads guards_blocked before it stages public\** or meal-prep\** - a board the gate rejected must never reach the edge.'
-        } | ConvertTo-Json -Depth 4) | Set-Content -Path (Join-Path $OutDir 'chain-verdict.json') -Encoding UTF8
-      } catch { Log ('chain-verdict write threw: ' + $_.Exception.Message) }
-      if ($guardsBlocked) {
-        # Do NOT reuse $boardChanged here: that would log "no price change today", which is a lie -
-        # the board DID change, we refused to ship it. A misleading log is how an outage goes unnoticed.
-        Log 'GUARDS FAILED - board NOT republished (left at last good state)'
-        $summary += 'BLOCKED   guards failed a hard invariant - live page left at last good, NOT updated'
-        if (-not $NoAlert) {
-          try { Send-Alert -Subject "Grocery: GUARDS FAILED - board not published - $asofS" -Body "guards.ps1 found a hard invariant violation on $asofS (wrong-mode store, cleaner priced as food, a pin overriding the engine, a cell off its linked product by a FACTOR, or a multipack priced as one unit). The live page was left at its last good state. See grocery/ad-cycle-log.txt." | Out-Null } catch {}
-        }
-      }
-
-      # weekly shareable drops graphic (also the board post's og:image). Refresh BEFORE publish so the
-      # og:image step sees today's png. Non-fatal: a share graphic must never block prices.
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-share-image.ps1') | ForEach-Object { Log ('share: ' + $_) } } catch { Log ('share-image threw: ' + $_.Exception.Message) }
-
-      if ($guardsBlocked) {
-        # already logged + alerted above; fall through without publishing
-      } elseif (-not $boardChanged) {
-        Log 'no price change today - board already current, nothing republished'
-        $summary += 'CURRENT   no price change today - live page already current'
-      } elseif (-not $NoPublish) {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1') | Out-Null
-        $pubrc = $LASTEXITCODE
-        if ($pubrc -eq 0)     { Set-Content -Path $sigFile -Value $sigAfter -Encoding ASCII; Log ('AUTO-PUBLISH: live page updated (price change' + $(if (@($flips).Count -gt 0) { '/new ad' } else { ' mid-cycle' }) + ')'); $summary += 'PUBLISHED live page updated (price change detected)' }
-        elseif ($pubrc -eq 2) {
-          Log 'AUTO-PUBLISH HELD: coverage gate failed - live page NOT updated'
-          $summary += 'HELD      coverage gate failed - live page NOT updated (a store pull is thin/missing)'
-          if (-not $NoAlert) { try { Send-Alert -Subject "Grocery page HELD (coverage) - $asofS" -Body "A refreshed board failed the coverage gate on $asofS (a store's pull produced too few commodities), so the live page was NOT updated - nothing bad was published. Check the store pulls." | Out-Null } catch { Log ('held-alert threw: ' + $_.Exception.Message) } }
-        }
-        else { Log "AUTO-PUBLISH ERROR (rc=$pubrc) - Ghost upsert or build failed; live page NOT updated"; $summary += 'ERROR     auto-publish failed (page NOT updated) - see ad-cycle-log.txt'; if (-not $NoAlert) { try { Send-Alert -Subject "Grocery publish FAILED (rc=$pubrc) - $asofS" -Body "publish-deals-page.ps1 returned $pubrc on $asofS (Ghost upsert or page build failed). The live page was NOT updated with today's price change. Check ad-cycle-log.txt." | Out-Null } catch {} } }
-      }
 
       # ---- Walmart full-capture aging watch (2026-07-23 incident follow-up). The union in compare-deals
       # absorbs partial Walmart pulls only while a COMPREHENSIVE capture sits in its 14-day window. Daily
@@ -1636,112 +1781,6 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-friday-digest.ps1') | ForEach-Object { Log ('digest: ' + $_) } } catch { Log ('digest threw: ' + $_.Exception.Message) }
       }
 
-      # ---- CONSISTENCY GUARD: enforce "the price shown == the product the 'See item' link opens", every day.
-      # audit-board-consistency.ps1 returns 2 when too many chips fall back to a name (a link was suppressed
-      # because its price no longer matches - divergence or a stale board price). On breach we AUTO-REPAIR the
-      # Family Fare links (re-point each to the exact product the board priced, at today's price - the API path
-      # that can run headless in the cloud), re-merge, republish, and re-audit. A breach that survives repair =
-      # a browser-store shelf price drifted from the board (needs a re-pull); we alert Brad ONCE per distinct
-      # drift set (signature de-dup, so a stable backlog never spams) even under -NoAlert.
-      if (-not $NoPublish) {
-        try {
-          & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-board-consistency.ps1') | Out-Null
-          if ($LASTEXITCODE -eq 2) {
-            Log 'consistency BREACH - auto-repairing Family Fare + Hy-Vee links + republishing'
-            try {
-              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-ff-boardmatch.ps1') | Out-Null
-              # Hy-Vee no-link + wrong-size chips self-heal the SAME way, headless via Hy-Vee's search API.
-              # Added 2026-07-14: this repair ran Family Fare ONLY, so Hy-Vee no-link gaps never closed on their
-              # own and the board sat at 25 linkless Hy-Vee chips. resolve-hyvee-links board-matches by
-              # size+brand+price and writes product-urls.json directly, so it runs BEFORE the merge; the
-              # prune-bad-links + guards gate below still catch anything it produces that drifts by a factor.
-              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-hyvee-links.ps1') | Out-Null
-              # CAUTION: merge-product-urls re-merges EVERY store-*-urls.json still sitting in
-              # out\url-inputs\, so a stale resolver file left behind can RESURRECT an old link and
-              # overwrite a good one (it silently corrupted ~226 links on 2026-07-14). Old resolver
-              # outputs therefore live in out\url-inputs-archive\, NOT out\url-inputs\.
-              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'merge-product-urls.ps1')     | Out-Null
-              # Prune at a FACTOR tolerance, NOT the strict 2%. Rationale:
-              #   - strict 2% would delete a perfectly good link the moment a store nudged its price
-              #     (the board refreshes daily; the link's price snapshot does not), eroding coverage;
-              #   - but a link left off by a FACTOR (a wrong SKU / a pack counted as one unit) would
-              #     trip guards.ps1 below and BLOCK the board every single day.
-              # 0.32 drops everything guards would hard-fail on (ratio >=1.5x or <=0.67x) and nothing
-              # else, so the repair is self-healing and the gate can never deadlock the daily publish.
-              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-bad-links.ps1') -Tol 0.32 | Out-Null
-              # THE PERMANENT FIX for browser-store link regression: prune just dropped any link that drifted by
-              # a factor (a wrong SKU/size), which would leave a no-link gap. sync-browser-links immediately
-              # re-creates any browser link that is now missing but whose row still carries the product identity
-              # (item_id for Walmart/Sam's, a captured URL for Baker's), board-ANCHORED so it matches by
-              # construction. Net: a browser link pruned for drift is healed in the SAME pass and never stays a
-              # gap. Heal-only (never overwrites a healthy link, so guard 4 keeps checking those independently).
-              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sync-browser-links.ps1') | Out-Null
-              # A MATCH FIX THAT MOVED A PRICE ORPHANED THAT CELL'S LINK (wired 2026-08-21).
-              # sync-browser-links heals a link that is MISSING; it does not notice one that is merely
-              # pointing at last week's winner. When a rule change moves which product holds a cell, the
-              # pin in product-urls.json still opens the old one, and nothing finds out until tile-integrity
-              # fails on the next pass. relink-drifted-cells.ps1 was written for exactly that on 2026-08-21,
-              # after the same manual remedy was applied four times in one day (cloves $11.92 -> $2.99 with
-              # the link still opening the McCormick jar, and three siblings). It shipped with NO production
-              # caller, so the step it was built to stop forgetting was still being forgotten - the census
-              # caught it as an orphan. It belongs HERE: after the links are healed, before name-drift forms
-              # the identity verdict that guards and the pins both read. Non-fatal by design.
-              # -Apply IS LOAD-BEARING. Without it the script is READ-ONLY and exits 1 having repaired
-              # nothing - so a caller that omits it reports drift daily and fixes it never, which is a
-              # wired-but-inert guard and no better than the orphan it replaced. It re-derives per STORE,
-              # only the stores that actually drifted (a global -Apply once re-pointed ~40 Fareway links
-              # onto pack prices while fixing Sam's - that scar is why the script groups by store).
-              try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'relink-drifted-cells.ps1') -Apply | ForEach-Object { Log ('relink: ' + $_) } }
-              catch { Log ('relink-drifted-cells threw: ' + $_.Exception.Message) }
-              # REFRESH THE IDENTITY INPUT BEFORE ANYTHING READS IT. name-drift.json is the product-identity
-              # verdict that BOTH generate-board-overrides (it refuses to pin a flagged cell) and guards'
-              # tile-integrity WRONG-PRODUCT gate consume - and the prune+sync above just rewrote the links it
-              # describes. Left stale, every link the heal just CORRECTED still reads as wrong: measured
-              # 2026-07-30, five Walmart cells (balsamic-vinegar, hominy, diapers, oat-milk, tampons) whose
-              # healed link matched the board byte-for-byte kept failing the hard gate until name-drift was
-              # re-run, and it cleared to ACCURACY 0 the moment it was. A heal that fixes links must not leave
-              # the gate holding yesterday's opinion of them. -Phase links in weekly-post-capture.ps1 has
-              # always done this; this path is the one that was missing it.
-              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null
-              if ($LASTEXITCODE -eq 3) { Log 'name-drift BLIND after link repair - guards will grade WRONG-PRODUCT with no identity input' }
-              # This repair path used to publish DIRECTLY, which would have bypassed the invariant gate.
-              # Links just changed, so pins derived from them must be re-minted BEFORE guards re-check
-              # (same publish-never-mints rule as the main gate above).
-              try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'generate-board-overrides.ps1') | Out-Null } catch {}
-              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') -Quiet | Out-Null
-              if ($LASTEXITCODE -eq 0) {
-                & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')   | Out-Null
-              } else {
-                Log 'GUARDS FAILED after consistency auto-repair - NOT republished (left at last good)'
-                $summary += 'BLOCKED   guards failed after consistency auto-repair - live page left at last good'
-              }
-            } catch { Log ('consistency auto-repair threw: ' + $_.Exception.Message) }
-            & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-board-consistency.ps1') | Out-Null
-            if ($LASTEXITCODE -eq 2) {
-              $cr = try { Get-Content (Join-Path $OutDir 'consistency-report.json') -Raw | ConvertFrom-Json } catch { $null }
-              $nl = if ($cr) { [string]$cr.no_link_count } else { '?' }
-              # signature covers BOTH failure kinds: price-drift mismatches AND no-link chips (a pure no-link
-              # breach used to hash to '' and could never de-dup properly)
-              $driftSig = if ($cr) { (@(@($cr.mismatch) + @($cr.no_link) | Where-Object { $_ } | ForEach-Object { $_.id + '|' + $_.store } | Sort-Object -Unique) -join ';') } else { '' }
-              $csigF = Join-Path $OutDir 'consistency-alert.sig'
-              $prevSig = if (Test-Path $csigF) { ((Get-Content $csigF -Raw) + '').Trim() } else { '' }
-              Log ("consistency STILL breached after repair - no-link=$nl (browser-store price drift, needs re-pull)")
-              $summary += "REVIEW    board-link drift: $nl chips show a name not a link - see consistency-report.json"
-              if ($driftSig -ne $prevSig -and (-not $NoAlert)) {
-                try { Send-Alert -Subject "Grocery: board-link price drift ($nl chips) - $asofS" -Body "$nl priced chips fall back to a product name (no 'See item' link) after auto-repair on $asofS, because a store's shelf price drifted from the board. NO misleading link is shown. Re-pull the flagged store(s). Details: grocery/out/consistency-report.json." | Out-Null
-                      if ($LASTEXITCODE -eq 0) { Set-Content -Path $csigF -Value $driftSig -Encoding UTF8; Log 'consistency drift alert sent' } } catch { Log ('consistency alert threw: ' + $_.Exception.Message) }
-              } else { Log 'consistency drift unchanged since last alert - not re-alerting' }
-            } else { Log 'consistency repaired - all shown links match their price'; if (Test-Path (Join-Path $OutDir 'consistency-alert.sig')) { Remove-Item (Join-Path $OutDir 'consistency-alert.sig') -ErrorAction SilentlyContinue } }
-          } elseif ($LASTEXITCODE -eq 3) {
-            # exit 3 = could-not-evaluate (P6). Before 2026-07-30 this branch did not exist, so a consistency
-            # run that examined ZERO chips - feed missing, or the pg-chip markup drifted - fell into the else
-            # below and was logged as "consistency OK": the guard's blindest state wearing its healthiest label.
-            Log 'consistency BLIND - the auditor examined 0 priced chips; "no-link=0" today means nothing (see chips_examined in out\consistency-report.json)'
-            $summary += 'REVIEW    board-consistency examined 0 chips - the price/link check is not running; check public\board.json and the pg-chip markup in build-deals-page.ps1'
-          } else { Log 'consistency OK - every shown link matches its price' }
-        } catch { Log ('consistency guard threw: ' + $_.Exception.Message) }
-      }
-
       # ---- ALL-STORES-SHOWN MONITOR: re-assert on the freshly BUILT board that every staple commodity shows a
       # tile for all 7 stores (a price, or a "Doesn't carry / No price yet - See it? Let us know!" card). This is
       # the blueberries drop-off invariant. build-deals-page renders it by construction + publish HARD-GATES on
@@ -1781,6 +1820,143 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
 } elseif ($hardFail -and (-not $NoDownstream)) {
   Log 'HARD FAILURE - skipped re-compare/publish; board left at last good (alert already sent)'
   $summary += 'HELD      server pull hard-failed - board left at last good, not republished'
+}
+
+# ---- THE BOARD vs ITS OWN LINKS (everyday cells only) ----
+# WAS AN ORPHAN. audit-everyday-mismatch.ps1 is the only check that asks "does the number we published agree
+# with the product page we linked to?", it works, and until now NOTHING invoked it - not guards.ps1, not this
+# file. It could find real defects every day and no one would ever read them. (Found 5 on 2026-07-31.)
+# STRICTLY ADVISORY, and that is measured, not assumed: on a 43-finding day only 3 were wrong NUMBERS, and in
+# the other 40 the BOARD was right and the LINK was stale. Gating a publish on this would hold correct boards
+# hostage to stale links. Exit 1 means "found disagreements", not "failed"; only exit 3 (could-not-evaluate)
+# and an unexpected code are worth a REVIEW line of their own.
+# Placed here, at the end of the cycle: it reads the newest comparison-*.json and product-urls.json, so it
+# must run after compare-deals AND after the link repairs above, and before the coverage ratchet below so its
+# row is on the ledger when the ratchet reads it. No 2>&1 (EAP=Stop turns a child's stderr into a throw).
+try {
+  $emPath = Join-Path $root 'audit-everyday-mismatch.ps1'
+  if (Test-Path $emPath) {
+    $emOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $emPath -OutDir $OutDir
+    $emRc  = $LASTEXITCODE
+    foreach ($l in @($emOut)) { Log ('everyday-mismatch: ' + $l) }
+    if ($emRc -eq 1) {
+      # [regex]::Match, NOT -match + $Matches. $Matches is GLOBAL in PowerShell, so reading it downstream of a
+      # -match inside a pipeline both depends on and clobbers state this file uses elsewhere - a trap this
+      # repo has already been bitten by. A local Match object carries its own groups and touches nothing.
+      $emM = [regex]::Match((@($emOut) -join "`n"), 'EVERYDAY MISMATCHES[^:]*:\s*(\d+)')
+      $emN = if ($emM.Success) { $emM.Groups[1].Value } else { 'some' }
+      $summary += ('REVIEW    everyday-mismatch: ' + $emN + ' board cell(s) disagree with their own linked product - usually a stale LINK, not a wrong price; see out\everyday-mismatches.json')
+    }
+    elseif ($emRc -eq 3) {
+      $summary += 'REVIEW    everyday-mismatch could not evaluate - the board/link agreement check proved nothing this cycle'
+    }
+    elseif ($emRc -ne 0) {
+      Log ("everyday-mismatch: DID NOT RUN - exit $emRc with " + @($emOut).Count + ' output line(s)')
+      $summary += 'REVIEW    everyday-mismatch did not complete - board/link agreement went unchecked this cycle'
+    }
+  }
+} catch { Log ('everyday-mismatch threw: ' + $_.Exception.Message) }
+
+# ---- THE SAME COMMODITY MUST NOT BE PUBLISHED ON BOTH BOARDS ----
+# recipe-overlay (line ~699) drops any recipe row whose commodity also lives on the weekly board, and since
+# 2026-08-08 it resolves the two id spellings through recipe-floor-id-map.json. This is the independent
+# second opinion on that, and it exists because the de-dup was silently half-blind for 9 days: it compared
+# raw ids, the namespaces spell 33 shared commodities differently, and the site served two prices for the
+# same product (beef chuck roast at Family Fare, $8.49 against $10.99). Re-deriving the collision set from
+# the data every run means the next mapping added without teaching the de-dup about it fires HERE instead
+# of reaching a shopper.
+# ADVISORY IN THE CHAIN, on purpose and against my instinct. The condition is a genuine correctness defect
+# and the script exits 2 for it, but this gate is one day old and runs inside the unattended 6:30am job; a
+# brand-new check that can halt that run is the failure this estate has already had once. It reports loudly
+# now, and can be promoted to a hold once it has a clean history behind it.
+# Placed after everyday-mismatch so the comparison is final, and before the coverage ratchet so its row is
+# on the ledger when the ratchet reads it. No 2>&1 (EAP=Stop turns a child's first stderr line into a throw).
+try {
+  $brPath = Join-Path $root 'audit-board-reconciliation.ps1'
+  if (Test-Path $brPath) {
+    $brOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $brPath -OutDir $OutDir
+    $brRc  = $LASTEXITCODE
+    foreach ($l in @($brOut)) { Log ('board-reconciliation: ' + $l) }
+    if ($brRc -eq 2) {
+      # [regex]::Match, NOT -match + $Matches: $Matches is GLOBAL and this file reads it elsewhere.
+      $brM = [regex]::Match((@($brOut) -join "`n"), 'PUBLISHED ON BOTH BOARDS:\s*(\d+)')
+      $brN = if ($brM.Success) { $brM.Groups[1].Value } else { 'some' }
+      $summary += ('REVIEW    board-reconciliation: ' + $brN + ' commodity(ies) are published on BOTH boards - the site is showing two prices for the same product; see out\board-reconciliation.json')
+    }
+    elseif ($brRc -eq 1) {
+      $summary += 'REVIEW    board-reconciliation: the boards are de-duplicated but a price or basis contradiction remains; see out\board-reconciliation.json'
+    }
+    elseif ($brRc -eq 3) {
+      $summary += 'REVIEW    board-reconciliation could not evaluate - nothing proved this cycle about the same fact being published twice'
+    }
+    elseif ($brRc -ne 0) {
+      Log ("board-reconciliation: DID NOT RUN - exit $brRc with " + @($brOut).Count + ' output line(s)')
+      $summary += 'REVIEW    board-reconciliation did not complete - duplicate-commodity publishing went unchecked this cycle'
+    }
+  }
+} catch { Log ('board-reconciliation threw: ' + $_.Exception.Message) }
+
+# ---- RESCUE WORKLIST FOR THE WALLED STORES (Walmart, Sam's, Aldi, Fareway) ----
+# The four walled stores are captured by hand through a browser, and compare-deals hands each commodity to
+# the FRESHEST capture in a 14-day window OUTRIGHT. Two things fall out of that and nothing used to turn
+# either into a to-do list: cells silently counting down to the day their only source leaves the window
+# (21 Walmart produce cells on 2026-07-31, all of them renamed products newer captures missed by name),
+# and a re-capture that is BIGGER overall but narrower on some terms (Aldi's 1,664-row 07-29 pass still
+# cost 7 staple cells). audit-walmart-fullpull COUNTS the first; audit-cell-drops reports the second AFTER
+# the loss. This turns both, plus the already-past-the-window pocket at Sam's, into per-store search lists.
+# ADVISORY AND NOTHING ELSE: exit 1 means "capture work exists", never "hold the board". The output is a
+# to-do list for the next browser session.
+# Placed after the everyday-mismatch block so the comparison is final, and before the coverage ratchet so
+# this tool's coverage row is on the ledger when the ratchet reads it. No 2>&1 / 2>$null on the child (under
+# EAP=Stop a native child's first stderr line becomes a terminating throw), capture then read $LASTEXITCODE.
+try {
+  $rwPath = Join-Path $root 'build-rescue-worklist.ps1'
+  if (Test-Path $rwPath) {
+    $rwOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $rwPath -OutDir $OutDir
+    $rwRc  = $LASTEXITCODE
+    foreach ($l in @($rwOut)) { Log ('rescue-worklist: ' + $l) }
+    if ($rwRc -eq 1) {
+      # [regex]::Match, NOT -match + $Matches: $Matches is GLOBAL and this file reads it elsewhere.
+      $rwWork = 0
+      foreach ($rwM in [regex]::Matches((@($rwOut) -join "`n"), 'DROPPED (\d+)\s+UNTRACEABLE (\d+)\s+EXPIRING (\d+)\s+STALE (\d+)')) {
+        for ($rwG = 1; $rwG -le 4; $rwG++) { $rwWork += [int]$rwM.Groups[$rwG].Value }
+      }
+      $rwN = if ($rwWork -gt 0) { [string]$rwWork } else { 'some' }
+      $summary += ('REVIEW    rescue-worklist: capture work exists for the walled stores (' + $rwN + ' cell(s)) - see out\rescue-terms-*.txt (DROPPED/EXPIRING cells will leave the board if not captured)')
+    }
+    elseif ($rwRc -eq 3) {
+      $summary += 'REVIEW    rescue-worklist could not evaluate - the walled-store freshness check proved nothing this cycle, so no browser worklist can be trusted'
+    }
+    elseif ($rwRc -ne 0) {
+      Log ("rescue-worklist: DID NOT RUN - exit $rwRc with " + @($rwOut).Count + ' output line(s)')
+      $summary += 'REVIEW    rescue-worklist did not complete - walled-store capture priorities went uncomputed this cycle'
+    }
+  }
+} catch { Log ('rescue-worklist threw: ' + $_.Exception.Message) }
+
+# ---- RETENTION, AFTER EVERY READER OF "THE NEWEST comparison-*" HAS RUN ----------------------------
+# Moved here 2026-08-22 with the ship/inspect split. prune-out and prune-intermediates DELETE dated files;
+# arrivals-docket, capture-eviction, board-reconciliation and everyday-mismatch each resolve "the newest
+# comparison-*" (and their own dated inputs), so retention now runs after all four - and still BEFORE
+# test-auditors, because a deletion that blinds a watcher has to say so the same day it happened.
+# Gated on $script:DownstreamRan so the condition is unchanged from when it lived inside the downstream
+# block: it prunes only on a day the downstream actually ran, never after a hard-failed pull.
+if ($script:DownstreamRan) {
+  # ---- RETENTION (2026-08-08): cap out\'s dated-family growth. Conservative per-family windows set past
+  # the deepest historical reader (see prune-out.ps1's header); evidence dirs are never listed. Non-fatal.
+  try {
+    $pr = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-out.ps1') -Apply
+    foreach ($l in (@($pr) | Select-Object -Last 1)) { Log ('prune-out: ' + $l) }
+  } catch { Log ('prune-out threw: ' + $_.Exception.Message) }
+  # THE OTHER HALF OF RETENTION (wired 2026-08-21). prune-out caps the dated FAMILIES in out\;
+  # prune-intermediates caps the gitignored per-run scratch (candidates-<date>.json and siblings),
+  # which no reader ever opens except the newest. It was written on 2026-08-21 against 408 MB growing
+  # ~19 MB/day and shipped with NO production caller, so the growth it was written to stop carried
+  # right on - the script census caught it as an orphan. Keep 3, matching its own default. Non-fatal.
+  try {
+    $pi = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-intermediates.ps1') -Keep 3
+    foreach ($l in (@($pi) | Select-Object -Last 1)) { Log ('prune-intermediates: ' + $l) }
+  } catch { Log ('prune-intermediates threw: ' + $_.Exception.Message) }
 }
 
 # ---- WATCH THE WATCHERS - ALWAYS, outside the downstream branch (hoisted 2026-07-28) ----
@@ -1999,117 +2175,6 @@ try {
   }
 } catch { Log ('search-links weekly threw: ' + $_.Exception.Message) }
 
-# ---- THE BOARD vs ITS OWN LINKS (everyday cells only) ----
-# WAS AN ORPHAN. audit-everyday-mismatch.ps1 is the only check that asks "does the number we published agree
-# with the product page we linked to?", it works, and until now NOTHING invoked it - not guards.ps1, not this
-# file. It could find real defects every day and no one would ever read them. (Found 5 on 2026-07-31.)
-# STRICTLY ADVISORY, and that is measured, not assumed: on a 43-finding day only 3 were wrong NUMBERS, and in
-# the other 40 the BOARD was right and the LINK was stale. Gating a publish on this would hold correct boards
-# hostage to stale links. Exit 1 means "found disagreements", not "failed"; only exit 3 (could-not-evaluate)
-# and an unexpected code are worth a REVIEW line of their own.
-# Placed here, at the end of the cycle: it reads the newest comparison-*.json and product-urls.json, so it
-# must run after compare-deals AND after the link repairs above, and before the coverage ratchet below so its
-# row is on the ledger when the ratchet reads it. No 2>&1 (EAP=Stop turns a child's stderr into a throw).
-try {
-  $emPath = Join-Path $root 'audit-everyday-mismatch.ps1'
-  if (Test-Path $emPath) {
-    $emOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $emPath -OutDir $OutDir
-    $emRc  = $LASTEXITCODE
-    foreach ($l in @($emOut)) { Log ('everyday-mismatch: ' + $l) }
-    if ($emRc -eq 1) {
-      # [regex]::Match, NOT -match + $Matches. $Matches is GLOBAL in PowerShell, so reading it downstream of a
-      # -match inside a pipeline both depends on and clobbers state this file uses elsewhere - a trap this
-      # repo has already been bitten by. A local Match object carries its own groups and touches nothing.
-      $emM = [regex]::Match((@($emOut) -join "`n"), 'EVERYDAY MISMATCHES[^:]*:\s*(\d+)')
-      $emN = if ($emM.Success) { $emM.Groups[1].Value } else { 'some' }
-      $summary += ('REVIEW    everyday-mismatch: ' + $emN + ' board cell(s) disagree with their own linked product - usually a stale LINK, not a wrong price; see out\everyday-mismatches.json')
-    }
-    elseif ($emRc -eq 3) {
-      $summary += 'REVIEW    everyday-mismatch could not evaluate - the board/link agreement check proved nothing this cycle'
-    }
-    elseif ($emRc -ne 0) {
-      Log ("everyday-mismatch: DID NOT RUN - exit $emRc with " + @($emOut).Count + ' output line(s)')
-      $summary += 'REVIEW    everyday-mismatch did not complete - board/link agreement went unchecked this cycle'
-    }
-  }
-} catch { Log ('everyday-mismatch threw: ' + $_.Exception.Message) }
-
-# ---- THE SAME COMMODITY MUST NOT BE PUBLISHED ON BOTH BOARDS ----
-# recipe-overlay (line ~699) drops any recipe row whose commodity also lives on the weekly board, and since
-# 2026-08-08 it resolves the two id spellings through recipe-floor-id-map.json. This is the independent
-# second opinion on that, and it exists because the de-dup was silently half-blind for 9 days: it compared
-# raw ids, the namespaces spell 33 shared commodities differently, and the site served two prices for the
-# same product (beef chuck roast at Family Fare, $8.49 against $10.99). Re-deriving the collision set from
-# the data every run means the next mapping added without teaching the de-dup about it fires HERE instead
-# of reaching a shopper.
-# ADVISORY IN THE CHAIN, on purpose and against my instinct. The condition is a genuine correctness defect
-# and the script exits 2 for it, but this gate is one day old and runs inside the unattended 6:30am job; a
-# brand-new check that can halt that run is the failure this estate has already had once. It reports loudly
-# now, and can be promoted to a hold once it has a clean history behind it.
-# Placed after everyday-mismatch so the comparison is final, and before the coverage ratchet so its row is
-# on the ledger when the ratchet reads it. No 2>&1 (EAP=Stop turns a child's first stderr line into a throw).
-try {
-  $brPath = Join-Path $root 'audit-board-reconciliation.ps1'
-  if (Test-Path $brPath) {
-    $brOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $brPath -OutDir $OutDir
-    $brRc  = $LASTEXITCODE
-    foreach ($l in @($brOut)) { Log ('board-reconciliation: ' + $l) }
-    if ($brRc -eq 2) {
-      # [regex]::Match, NOT -match + $Matches: $Matches is GLOBAL and this file reads it elsewhere.
-      $brM = [regex]::Match((@($brOut) -join "`n"), 'PUBLISHED ON BOTH BOARDS:\s*(\d+)')
-      $brN = if ($brM.Success) { $brM.Groups[1].Value } else { 'some' }
-      $summary += ('REVIEW    board-reconciliation: ' + $brN + ' commodity(ies) are published on BOTH boards - the site is showing two prices for the same product; see out\board-reconciliation.json')
-    }
-    elseif ($brRc -eq 1) {
-      $summary += 'REVIEW    board-reconciliation: the boards are de-duplicated but a price or basis contradiction remains; see out\board-reconciliation.json'
-    }
-    elseif ($brRc -eq 3) {
-      $summary += 'REVIEW    board-reconciliation could not evaluate - nothing proved this cycle about the same fact being published twice'
-    }
-    elseif ($brRc -ne 0) {
-      Log ("board-reconciliation: DID NOT RUN - exit $brRc with " + @($brOut).Count + ' output line(s)')
-      $summary += 'REVIEW    board-reconciliation did not complete - duplicate-commodity publishing went unchecked this cycle'
-    }
-  }
-} catch { Log ('board-reconciliation threw: ' + $_.Exception.Message) }
-
-# ---- RESCUE WORKLIST FOR THE WALLED STORES (Walmart, Sam's, Aldi, Fareway) ----
-# The four walled stores are captured by hand through a browser, and compare-deals hands each commodity to
-# the FRESHEST capture in a 14-day window OUTRIGHT. Two things fall out of that and nothing used to turn
-# either into a to-do list: cells silently counting down to the day their only source leaves the window
-# (21 Walmart produce cells on 2026-07-31, all of them renamed products newer captures missed by name),
-# and a re-capture that is BIGGER overall but narrower on some terms (Aldi's 1,664-row 07-29 pass still
-# cost 7 staple cells). audit-walmart-fullpull COUNTS the first; audit-cell-drops reports the second AFTER
-# the loss. This turns both, plus the already-past-the-window pocket at Sam's, into per-store search lists.
-# ADVISORY AND NOTHING ELSE: exit 1 means "capture work exists", never "hold the board". The output is a
-# to-do list for the next browser session.
-# Placed after the everyday-mismatch block so the comparison is final, and before the coverage ratchet so
-# this tool's coverage row is on the ledger when the ratchet reads it. No 2>&1 / 2>$null on the child (under
-# EAP=Stop a native child's first stderr line becomes a terminating throw), capture then read $LASTEXITCODE.
-try {
-  $rwPath = Join-Path $root 'build-rescue-worklist.ps1'
-  if (Test-Path $rwPath) {
-    $rwOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $rwPath -OutDir $OutDir
-    $rwRc  = $LASTEXITCODE
-    foreach ($l in @($rwOut)) { Log ('rescue-worklist: ' + $l) }
-    if ($rwRc -eq 1) {
-      # [regex]::Match, NOT -match + $Matches: $Matches is GLOBAL and this file reads it elsewhere.
-      $rwWork = 0
-      foreach ($rwM in [regex]::Matches((@($rwOut) -join "`n"), 'DROPPED (\d+)\s+UNTRACEABLE (\d+)\s+EXPIRING (\d+)\s+STALE (\d+)')) {
-        for ($rwG = 1; $rwG -le 4; $rwG++) { $rwWork += [int]$rwM.Groups[$rwG].Value }
-      }
-      $rwN = if ($rwWork -gt 0) { [string]$rwWork } else { 'some' }
-      $summary += ('REVIEW    rescue-worklist: capture work exists for the walled stores (' + $rwN + ' cell(s)) - see out\rescue-terms-*.txt (DROPPED/EXPIRING cells will leave the board if not captured)')
-    }
-    elseif ($rwRc -eq 3) {
-      $summary += 'REVIEW    rescue-worklist could not evaluate - the walled-store freshness check proved nothing this cycle, so no browser worklist can be trusted'
-    }
-    elseif ($rwRc -ne 0) {
-      Log ("rescue-worklist: DID NOT RUN - exit $rwRc with " + @($rwOut).Count + ' output line(s)')
-      $summary += 'REVIEW    rescue-worklist did not complete - walled-store capture priorities went uncomputed this cycle'
-    }
-  }
-} catch { Log ('rescue-worklist threw: ' + $_.Exception.Message) }
 
 # ---- COVERAGE RATCHET FOR THE CYCLE PHASE ----
 # THE HOOK THAT WAS NEVER BUILT. coverage-baseline.json's own audit-ff-carry entry has carried the note
@@ -2150,5 +2215,10 @@ Write-Output ("Ad-cycle check  -  " + $asofS + $pullNote)
 Write-Output ('-'*74)
 foreach ($line in $summary) { Write-Output $line }
 if (@($flips).Count -gt 0) { Write-Output ""; Write-Output ("Flipped this run: " + ($flips -join ', ') + "  -> comparison + price history refreshed") }
-Log ("run complete; flips=" + (@($flips).Count) + "; pull=" + $pullNote.Trim())
+# TOTAL vs SHIP, both on one line, so the split's value is readable from the log alone on any day - no
+# stopwatch, no cross-referencing two timestamps. shipSecs is 0 on a run that never reached the boundary
+# (hard-failed pull, -NoDownstream), and saying "ship not reached" is the honest wording for that.
+$totalSecs = [int]((Get-Date) - $script:ShipStart).TotalSeconds
+$shipNote = if ($script:DownstreamRan) { "ship=" + $shipSecs + "s" } else { "ship=not reached" }
+Log ("run complete; flips=" + (@($flips).Count) + "; pull=" + $pullNote.Trim() + "; " + $shipNote + "; total=" + $totalSecs + "s")
 
