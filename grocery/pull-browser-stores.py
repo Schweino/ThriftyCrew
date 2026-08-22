@@ -37,18 +37,30 @@ FIVE THINGS THAT ARE DELIBERATE
      out\worklists\capture-<store>-<date>.json and sweeps exactly that. Being deep within those
      terms is the rule; being broad across the catalogue is what trips a wall.
 
-DO NOT PROBE A WALLED STORE BY HAND (learned the expensive way, 2026-08-22)
-  While bringing this up I ran ad-hoc single-term probes against Walmart from a fresh profile, over
-  and over, to work out WHY it was failing. Each one bypassed pull-agent-lib's pacing, its retry
-  backoff and its wallLimit - the entire apparatus that exists to stop exactly that. Walmart went
-  from "walls a cold profile" to walled hard, and PerimeterX scores the IP as well as the profile, so
-  the damage is not confined to this throwaway profile. Brad's verdict: "you broke walmart with your
-  testing."
-  The rule that follows: diagnose a walled store ONCE, then stop and think. If a store answers
-  UNUSABLE/bot-wall, that IS the diagnosis - repeating the request cannot turn it into a different
-  answer, it can only raise the score against us. Anything more than one probe must go through
-  runPacedSweep, which paces, backs off and hands off to a human. A store you have to wait a week to
-  re-approach costs far more than the minutes the fast probe saved.
+NEVER HEADLESS - IT ADVERTISES ITSELF IN THE USER-AGENT (measured 2026-08-22)
+  Every store here is marked never_headless, and this is the measurement behind it. On about:blank,
+  with no site involved:
+      headless : navigator.userAgent = "... HeadlessChrome/151.0.0.0 ..."   <- says it outright
+      headed   : navigator.userAgent = "... Chrome/151.0.0.0 ..."           <- indistinguishable
+  navigator.webdriver is false either way, plugins/languages/window.chrome all look normal. The UA is
+  the tell, and it needs no cleverness to read.
+
+  I WAS THE PROBLEM, AND I MISDIAGNOSED IT TWICE. Bringing this up I ran repeated ad-hoc probes at
+  Walmart from a fresh HEADLESS profile, bypassing pull-agent-lib's pacing, backoff and wallLimit -
+  the whole apparatus built to prevent that. Walmart walled hard. Sam's Club, measured OPEN at 08:15
+  (22 rows, no login), was walled by 09:25. I concluded the IP was burned and both stores had to be
+  left for days.
+  That was wrong. Brad opened Sam's in his own Chrome and it was fine: "the way you are doing this is
+  causing a problem." The reputation damage was never IP-wide - it was earned by a browser wearing a
+  HeadlessChrome user-agent, hammering with no pacing, from a profile with no history.
+
+  THE RULES THAT FOLLOW, in order of how much they cost to learn:
+   1. Never headless against these stores. Enforced per store, not documented.
+   2. One probe. A bot-wall verdict IS the diagnosis; repeating cannot change the answer, only the
+      score. Anything beyond one goes through runPacedSweep, which paces and hands off to a human.
+   3. When something fails, suspect YOUR OWN SETUP before concluding the world has changed. A
+      conclusion as expensive as "the IP is burned, wait days" needs a control - Brad's working tab
+      was the control I never thought to ask for, and it took ten seconds.
 
 EXIT CODES  0 = every requested store captured. 1 = at least one store failed or was walled.
             2 = nothing could run (no Chrome, no worklists).
@@ -86,8 +98,14 @@ STORES = {
         "to_csv": "walmartSweepToCsv",
         "verdicts": "walmartSweepVerdicts",
         "storage_key": "TC_WALMART_SWEEP",
+        "identity": "walmartIdentity()",
+        # The header the PowerShell builder parses with. sweepToCsv emits DATA ONLY - Import-Csv
+        # needs a header line or the first product row is eaten as one. Must match
+        # walmartSweepToCsv's cell order exactly: [term, n, lp, up, id, was, rb].
+        "csv_header": "q|n|lp|up|id|was|rb",
         "capture": os.path.join("out", "captures", "walmart-capture-{date}.csv"),
-        # BRAD'S RULE, 2026-08-22: "walmart can never be headless."
+        # BRAD'S RULE, 2026-08-22: "walmart can never be headless." (Now true of every store here -
+        # see NEVER_HEADLESS_REASON below; kept on Walmart explicitly because he named it.)
         # Measured the same day on a fresh profile: walmartProbe('milk') returned
         # {"state":"UNUSABLE","why":"bot-wall"} and the page title was literally "Robot or human?".
         # PerimeterX flags this store hardest, and a headless run cannot be rescued - there is no
@@ -110,7 +128,13 @@ STORES = {
         "to_csv": "samsSweepToCsv",
         "verdicts": "samsSweepVerdicts",
         "storage_key": "TC_SAMS_SWEEP",
+        "identity": "samsIdentity()",
+        # samsSweepToCsv emits [term, n, lp, up, id, was] - six columns. The captures before
+        # 2026-08-21 had five (no `was`); `was` arrived with the rollback-TTL work. A stale
+        # five-name header over six-column data does not error, it SHIFTS every field one place.
+        "csv_header": "q|n|lp|up|id|was",
         "capture": os.path.join("out", "captures", "sams-capture-{date}.csv"),
+        "never_headless": True,
         # 15429 Blackwell Dr, NOT the 13130 L St in the older runbooks. The live session moved on
         # 2026-08-15 and several docs still name L St. Seeding the wrong Omaha club would not be
         # caught by samsIdentity() - it matches the word "Omaha", not a specific club - and Sam's
@@ -132,11 +156,15 @@ STORES = {
         "agent": "pull-fareway-instore.js",
         "extra_agent": "pull-fareway-shop.js",
         "lane": "navigate",                  # NOT the paced same-origin fetch sweep
+        # Asserts BOTH retailerLocation == 531573 (Omaha) AND mode == In-Store, from the Apollo
+        # cache. This is what licenses capture-run to pass -ModeVerified downstream.
+        "identity": "farewayIdentity()",
         "extract": "farewayShopExtract",
         "search_url": "https://shop.fareway.com/store/fareway-meat-grocery/s?k={term}",
         # Mirrors stores.json -> Fareway -> pull_profile. audit-pull-profiles.ps1 fails if they disagree.
         "delay_ms": 900, "jitter_ms": 600, "retries": 3,
         "capture": os.path.join("out", "fareway", "fareway-shop-{date}.jsonl"),
+        "never_headless": True,
         "seed_hint": "set the store to Omaha 17070 Audrey Street (68136) and confirm the header "
                      "reads In-Store.",
     },
@@ -266,6 +294,32 @@ def release_profile(prof):
     except Exception as e:
         print(f"  ! could not check for stale Chrome on the profile: {e}")
         return 0
+
+
+def wait_for_identity(browser, call, timeout_s=45):
+    """Poll the store's OWN assertIdentity until it passes. Returns (ok, last_verdict).
+
+    THE BUG THIS FIXES (2026-08-22). Seeding polls for up to 15 minutes, so it happily waits for the
+    club name to render. The sweep asserted identity ONCE, immediately after injection - and
+    samsIdentity() reads the club out of document.body.innerText, which on a client-rendered header
+    is simply not there yet a few seconds after navigation. Same profile, same club, same page:
+    seeding said OK and the capture said "could not read an Omaha club from the page".
+
+    This waits for the PAGE, it does not weaken the CHECK. The assertion is unchanged and still has
+    to pass on its own terms; the only thing added is patience. Weakening it instead - accepting a
+    blank header as "probably still Omaha" - is how a capture ends up pricing another market's shelf,
+    which is the one failure mode this whole driver exists to prevent.
+    """
+    deadline = time.time() + timeout_s
+    last = ""
+    while time.time() < deadline:
+        last = browser.js(
+            "(function(){ try { %s; return 'OK'; } "
+            "catch(e){ return 'REFUSED: ' + String((e&&e.message)||e).slice(0,200); } })()" % call)
+        if last == "OK":
+            return True, last
+        time.sleep(2)
+    return False, last
 
 
 def ensure_agent(browser, agent_src, probe_fn):
@@ -583,15 +637,17 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
         if not browser.js(f"typeof {probe_fn} === 'function'"):
             return False, f"agent did not load: {probe_fn} is not defined after injecting {cfg['agent']}"
 
+        # IDENTITY BEFORE EITHER LANE, AND WAIT FOR IT.
+        # The navigate lane never enters runPacedSweep, so its identity check has to be made here.
+        # The PACED lane does call assertIdentity() itself - but it calls it once, the instant the
+        # sweep starts, which is too early on a client-rendered header (see wait_for_identity).
+        # Proving it here first means the sweep's own assertion is a formality that cannot fail for
+        # a timing reason, while still failing for a real one.
+        ok, verdict = wait_for_identity(browser, _identity_call(cfg))
+        if not ok:
+            return False, f"identity check failed - {verdict}"
+
         if navigate_lane:
-            # IDENTITY FIRST, EXPLICITLY. The paced sweep calls assertIdentity() itself inside
-            # runPacedSweep; this lane never enters that function, so the one check that proves we
-            # are not quietly pricing Des Moines has to be made here. Without it a store that
-            # drifted would produce a full, plausible, completely wrong capture.
-            v = browser.js("(function(){ try { farewayIdentity(); return 'OK'; } "
-                           "catch(e){ return 'REFUSED: ' + String((e&&e.message)||e).slice(0,200); } })()")
-            if v != "OK":
-                return False, f"identity check failed - {v}"
             out_path = os.path.join(ROOT, cfg["capture"].format(date=date_s))
             return run_navigate_lane(browser, cfg, pairs, out_path, agent_src)
 
@@ -653,7 +709,24 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
         body = browser.js(f"{cfg['to_csv']}()") or ""
         if not body.strip():
             return False, "sweep produced no rows - capture NOT written (an empty file would read as a real, empty store)"
+
+        # HEADER, AND PROVE IT FITS. sweepToCsv emits data rows only; Import-Csv needs a header or it
+        # eats the first product as one. Worse than missing is WRONG: Sam's captures carried five
+        # columns until `was` was added for the rollback TTL on 2026-08-21, and a five-name header
+        # over six-column data does not error - it shifts every field one place, so a product id
+        # lands in the price column and the row still looks like a row.
+        header = cfg.get("csv_header")
+        if not header:
+            return False, f"no csv_header declared for {name} - refusing to write an unparseable capture"
+        cols = len(header.split("|"))
+        first = body.strip().split("\n")[0]
+        got = len(first.split("|"))
+        if got != cols:
+            return False, (f"capture shape drift: {cfg['to_csv']}() emits {got} columns but the declared "
+                           f"header '{header}' names {cols}. Refusing to write - a mismatched header "
+                           f"silently shifts every field rather than failing.")
         with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(header + "\n")
             fh.write(body if body.endswith("\n") else body + "\n")
 
         summary = json.loads(summary_raw) if summary_raw else {}
@@ -758,12 +831,32 @@ def self_test(headless=False):
 
 
 def _identity_call(cfg):
-    """The agent's identity function, named per store (they are not uniform, deliberately)."""
-    return {
-        "walmart": "walmartIdentity()",
-        "samsclub": "samsIdentity()",
-        "fareway": "farewayIdentity()",
-    }.get(cfg["agent"].split("-")[1], "null")
+    """The agent's identity function. Declared per store in STORES - never derived, never defaulted.
+
+    THE BUG THIS REPLACES (2026-08-22) IS THE WORST KIND THIS DRIVER CAN HAVE.
+    This used to look the name up by slicing the AGENT FILENAME - cfg["agent"].split("-")[1] - and
+    fall back to the string "null" when that missed. For Walmart and Fareway the slice happened to
+    match the STORES key. For Sam's Club it did not: "pull-sams-instore.js" yields "sams" while the
+    key is "samsclub". So the lookup missed, the call became the literal `null`, and:
+
+        (function(){ try { null; return 'OK'; } catch(e){ ... } })()   ->   'OK', always.
+
+    Sam's identity was therefore never checked AT ALL. Worse, seeding reported "profile seeded
+    (store proved by the agent's own identity check)" on the strength of it - a marker written
+    against a check that could not fail, on the one store where the club genuinely is ambiguous and
+    prices differ per club. A guard whose miss path is a no-op does not fail loudly, it PASSES
+    quietly, and everything downstream inherits that false confidence
+    ([[fallback-tests-absence-not-function]]).
+
+    So: the name is declared alongside the store it belongs to, and an unknown store RAISES. A driver
+    that cannot name the check it is about to run must refuse to run it, not substitute a pass.
+    """
+    fn = cfg.get("identity")
+    if not fn:
+        raise RuntimeError(
+            f"no identity function declared for {cfg.get('name', '?')} - refusing to proceed. "
+            "An unverified store is exactly what this driver exists to prevent.")
+    return fn
 
 
 def main():

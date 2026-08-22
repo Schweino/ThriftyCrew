@@ -739,19 +739,46 @@ function Test-CaptureLanded {
   # regular_prefix is stores.json's own name for the store's everyday file, so the
   # mapping is not duplicated here.
   $prefix = $null
+  $dealsGlob = $null
   try {
     $sj = Get-PolicyJson 'stores.json'
-    foreach ($s in $sj.stores) { if ([string]$s.name -eq $Store) { $prefix = [string]$s.regular_prefix; break } }
+    foreach ($s in $sj.stores) {
+      if ([string]$s.name -eq $Store) { $prefix = [string]$s.regular_prefix; $dealsGlob = [string]$s.deals_glob; break }
+    }
   } catch { }
-  if (-not $prefix) { return $false }
+  if (-not $prefix -and -not $dealsGlob) { return $false }
 
-  $f = Join-Path $OutDir ("regular\{0}-regular-{1}.json" -f $prefix, $todayS)
-  if (-not (Test-Path $f)) { return $false }
-  try {
-    $doc = ConvertFrom-Json ([IO.File]::ReadAllText($f))
-    $rows = if ($doc.deals) { @($doc.deals) } else { @($doc) }
-    return (@($rows).Count -gt 0)
-  } catch { return $false }
+  function Test-RowsDated([string]$Path) {
+    if (-not (Test-Path $Path)) { return $false }
+    try {
+      $doc = ConvertFrom-Json ([IO.File]::ReadAllText($Path))
+      $rows = if ($doc.deals) { @($doc.deals) } else { @($doc) }
+      return (@($rows).Count -gt 0)
+    } catch { return $false }
+  }
+
+  if ($prefix) {
+    $f = Join-Path $OutDir ("regular\{0}-regular-{1}.json" -f $prefix, $todayS)
+    if (Test-RowsDated $f) { return $true }
+  }
+
+  # NOT EVERY STORE HAS AN out\regular FILE, AND SAM'S NEVER HAS (fixed 2026-08-22).
+  # This asked only about regular\<prefix>-regular-<date>.json. Sam's Club does not produce one -
+  # build-sams-deals writes out\sams\sams-deals-<date>.json, which is the contract compare-deals
+  # reads it through (-SamsFile). So the answer for Sam's was ALWAYS $false, which meant its
+  # rotation cursor could never advance: a landed capture of 100 priced rows still reported
+  # "no fresh rows landed - the slice is re-attempted tomorrow", forever, on slice #0.
+  # A gate that can never arm ([[gates-that-can-never-arm]]) - and a silent one, because
+  # "re-attempt tomorrow" is the SAFE-sounding branch, so it reads as caution rather than a defect.
+  # stores.json already declares deals_glob for exactly these stores; consult it rather than
+  # inventing a second mapping here.
+  if ($dealsGlob) {
+    $rel = ($dealsGlob -replace '^out[\\/]', '') -replace '/', '\'
+    # The glob names the SHAPE; only today's file counts, so the date is substituted in.
+    $dated = $rel -replace '\*', $todayS
+    if (Test-RowsDated (Join-Path $OutDir $dated)) { return $true }
+  }
+  return $false
 }
 
 function Step-CaptureCursor {
