@@ -2823,6 +2823,18 @@ else { Bad 'audit-food-category lost its eligible counter - its ok line can shri
 $covSrcC = Get-Content (Join-Path $root 'audit-ff-carry.ps1') -Raw
 if ($covSrcC -match 'Emit-Coverage \$emptyTerms\.Count \$probed') { Ok 'audit-ff-carry records its probe count BEFORE the report line that threw for 17 days' }
 else { Bad 'audit-ff-carry no longer records coverage before its report line - a repeat of the 17-day silent death leaves no trace again' }
+# THE BUDGETED LANE'S DENOMINATOR (2026-08-22). pull-regular-hyvee asks about ~18 products a day, so
+# eligible = every product holding an id read as a ~98% collapse EVERY morning - a permanent finding nobody
+# can act on. Its denominator is now the slice the run was ALLOWED to ask about, and examined is what the
+# store ANSWERED (a refused answer was still examined). Reverting either silently restores the daily cry-wolf.
+$covSrcH = Get-Content (Join-Path $root 'pull-regular-hyvee.ps1') -Raw
+if ($covSrcH -match 'Write-CoverageRecord -Check ''pull-regular-hyvee'' -OutDir \$OutDir -Eligible \$askableToday -Examined \$covExamined') {
+  Ok 'pull-regular-hyvee records coverage against TODAY''S SLICE (askable today / answered), not the whole catalogue'
+} else {
+  Bad 'pull-regular-hyvee no longer records eligible=$askableToday examined=$covExamined - a budgeted lane measured against the whole catalogue reports a ~98% collapse every day, and a permanent finding trains people to ignore the ledger'
+}
+if ($covSrcH -match '\$covExamined = \[int\]\$pass\.Answered') { Ok 'pull-regular-hyvee counts an ANSWERED product as examined, so a refused answer is not miscounted as blindness' }
+else { Bad 'pull-regular-hyvee stopped taking its examined count from $pass.Answered - if it went back to $fresh, a day of size/shelf-tag refusals reads as a coverage collapse' }
 
 $fxCov = NewFxDir 'cov-ledger'
 New-Item -ItemType Directory -Force (Join-Path $fxCov 'out') | Out-Null
@@ -2846,9 +2858,10 @@ function CovLedger([hashtable]$rows) {
  "guards/11-bakers-provenance":{"examined":6960,"tolerance":0.25,"max_age_days":2,"phase":"publish"},
  "guards/3-pin-identity":{"examined":16,"tolerance":0.5,"max_age_days":2,"phase":"publish"},
  "guards/4-factor":{"examined":2435,"tolerance":0.1,"max_age_days":2,"phase":"publish"},
+ "pull-regular-hyvee":{"examined":3,"tolerance":1.0,"min_ratio":0.9,"max_age_days":3,"phase":"cycle","why":"BUDGETED LANE - the absolute ratchet is off and min_ratio replaces it. It asks about a rotating slice of ~18 products a day (0-18 of them linkable, median 3), so a fixed baseline count reported a 98% collapse every morning. Judged on the fraction of TODAY'S eligible slice it examined."},
  "audit-ff-carry":{"examined":464,"tolerance":1.0,"max_age_days":3,"phase":"cycle","why":"RATCHET DELIBERATELY OFF - inverse denominator. It counts EMPTY FF search terms re-probed, so it FALLS when the pull improves; a ratchet would fire at whoever fixed the thing it watches. The clean twin below pins exactly that. Recorded here because DEAD-RATCHET now separates a declared exemption from an accidental one, and an undeclared 1.0 is an accident."}}}
 '@), $covEnc)
-$covHealthy = @{ 'guards/11-bakers-provenance' = @(6960, 6936); 'guards/3-pin-identity' = @(19, 9); 'guards/4-factor' = @(2435, 2435); 'audit-ff-carry' = @(464, 464) }
+$covHealthy = @{ 'guards/11-bakers-provenance' = @(6960, 6936); 'guards/3-pin-identity' = @(19, 9); 'guards/4-factor' = @(2435, 2435); 'audit-ff-carry' = @(464, 464); 'pull-regular-hyvee' = @(3, 3) }
 
 # MUST FIRE 1 - the guard-11 founding bug: an ok over 0 of 6,960 rows.
 $h = $covHealthy.Clone(); $h['guards/11-bakers-provenance'] = @(6960, 0); CovLedger $h
@@ -2923,6 +2936,62 @@ $h = $covHealthy.Clone(); $h['audit-ff-carry'] = @(12, 12); CovLedger $h
 $r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
 if ($r.rc -eq 0) { Ok 'coverage-ledger does NOT punish ff-carry for having fewer empty terms to re-probe' }
 else { Bad ('coverage-ledger fired when the FF pull IMPROVED (rc=' + $r.rc + ') - the tolerance-1.0 exemption was lost') }
+# ---- THE BUDGETED LANE (min_ratio), 2026-08-22 ------------------------------------------------------
+# CLEAN TWIN 5 - THE ONE THIS RAIL EXISTS FOR. pull-regular-hyvee asks about a rotating slice of ~18
+# products a day; on a median day only 3 of them carry a link. Full coverage of that slice is a HEALTHY
+# day and must be silent. Against the old fixed baseline (1,010, measured when the lane re-verified
+# everything daily) the identical run was REGRESSED every single morning - a permanent finding nobody
+# could act on, which is the surest way to teach people to ignore the whole ledger.
+$h = $covHealthy.Clone(); $h['pull-regular-hyvee'] = @(2, 2); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 0) { Ok 'coverage-ledger is SILENT on a budgeted lane that fully covered its (small) daily slice' }
+else { Bad ('a budgeted lane at 100% of today''s slice was reported as a finding (rc=' + $r.rc + '): ' + $r.text + ' - this is the every-morning cry-wolf the ratio rail replaced') }
+# MUST FIRE 8 - the throttle, which is the whole reason this puller is on the ledger. Allowed to ask about
+# 18, answered for 4: the wall clock bit, or GraphQL stopped answering. A fixed floor cannot see this at all
+# (4 clears any floor a 0-18 population could carry); the ratio sees it immediately.
+$h = $covHealthy.Clone(); $h['pull-regular-hyvee'] = @(18, 4); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 1 -and $r.text -match 'SHORTFALL' -and $r.text -match 'pull-regular-hyvee') { Ok 'coverage-ledger FIRES when a budgeted lane examines 4 of the 18 rows it was allowed to examine' }
+else { Bad ('a budgeted lane got answers for 4 of 18 and nothing said so (rc=' + $r.rc + '): ' + $r.text) }
+# CLEAN TWIN 7 - SMALL-N: one unanswered product on a 3-product slice is 33%, and firing on it would put
+# this rail back in cry-wolf territory about one morning in seventeen (measured no-offer rate ~2% of asked
+# products). A dead product id is not a throttle. It is a NOTE, so a slow bleed is still visible.
+$h = $covHealthy.Clone(); $h['pull-regular-hyvee'] = @(3, 2); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 0 -and $r.text -match 'SMALL SLICE') { Ok 'one unanswered product on a tiny slice is a note, not a SHORTFALL (a percentage is the wrong instrument at n=3)' }
+else { Bad ('a single dead product id turned the ledger red on a 3-product slice (rc=' + $r.rc + '): ' + $r.text) }
+# ...but TWO of three missing is a third of the day's work and must still be reported.
+$h = $covHealthy.Clone(); $h['pull-regular-hyvee'] = @(3, 1); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 1 -and $r.text -match 'SHORTFALL') { Ok 'the one-row grace is exactly one row - 1 of 3 is still a SHORTFALL' }
+else { Bad ('the small-n grace swallowed a 2-of-3 loss (rc=' + $r.rc + ') - it must not become a blanket exemption') }
+# MUST FIRE 9 - and reverting the denominator to the whole catalogue does not go QUIET, it goes SHORTFALL:
+# 18 answered of 535 linked products is 3%, which is what the old wiring recorded every day.
+$h = $covHealthy.Clone(); $h['pull-regular-hyvee'] = @(535, 18); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 1 -and $r.text -match 'SHORTFALL') { Ok 'coverage-ledger still fires if the whole-catalogue denominator comes back (18 of 535 is not a day''s work)' }
+else { Bad ('the pre-2026-08-22 denominator passed silently (rc=' + $r.rc + ') - the ratio rail must not become a way to hide a real collapse') }
+# MUST FIRE 10 - asked and got nothing back. BLIND is untouched by the ratio rail and is the verdict that
+# matters most for a budgeted lane: a dead endpoint looks exactly like a quiet day if nobody checks.
+$h = $covHealthy.Clone(); $h['pull-regular-hyvee'] = @(5, 0); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 1 -and $r.text -match 'BLIND' -and $r.text -match 'pull-regular-hyvee') { Ok 'coverage-ledger still calls a budgeted lane that asked and got NOTHING back BLIND' }
+else { Bad ('a budgeted lane answered for 0 of 5 and was not called blind (rc=' + $r.rc + '): ' + $r.text) }
+# MUST FIRE 11 - a slice holding no linkable product at all. Measured: 6% of 18-wide windows in the live
+# rotation (5 of 87 simulated days). Eligible 0 is TRUE - the lane verified no price that day - and INERT
+# is the verdict, deliberately: it is the no-discovery-path problem (1,064 of 1,554 rows carry no link) in
+# the only form anyone can act on. Do not silence it by zero-filling the denominator.
+$h = $covHealthy.Clone(); $h['pull-regular-hyvee'] = @(0, 0); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 1 -and $r.text -match 'INERT' -and $r.text -match 'pull-regular-hyvee') { Ok 'a day whose slice held no linkable product is INERT, not a silent pass' }
+else { Bad ('a lane that examined nothing at all reported clean (rc=' + $r.rc + '): ' + $r.text) }
+# CLEAN TWIN 6 - a tolerance of 1.0 on a ratio-judged row is NOT a dead ratchet: min_ratio is its ratchet
+# and it fires (MUST FIRE 8 above). Reporting it would be the cry-wolf DEAD-RATCHET was written to prevent.
+$h = $covHealthy.Clone(); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 0 -and $r.text -notmatch 'DEAD-RATCHET') { Ok 'a ratio-judged row is not reported as a dead ratchet (min_ratio IS its ratchet)' }
+else { Bad ('a row judged by min_ratio was flagged DEAD-RATCHET (rc=' + $r.rc + '): ' + $r.text) }
+
 # CLEAN TWIN 4 - brand-new instrumentation must never turn the board red on the day it lands.
 $h = $covHealthy.Clone(); $h['audit-something-new'] = @(5, 5); CovLedger $h
 $r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
@@ -2933,6 +3002,20 @@ $h = $covHealthy.Clone(); $h['guards/4-factor'] = @(2435, 2435, ((Get-Date).AddD
 $r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
 if ($r.rc -eq 1 -and $r.text -match 'STALE') { Ok 'coverage-ledger FIRES on a check that stopped recording 9 days ago' }
 else { Bad ('coverage-ledger accepted a 9-day-old coverage row as current (rc=' + $r.rc + ')') }
+
+# -Accept AND THE RATIO ROW, LAST because -Accept rewrites the fixture baseline. A budgeted lane's absolute
+# count must NOT ratchet: a dense day (18 of 18 linkable) would pin a floor that a median day (3) can never
+# clear, re-arming the every-morning finding the ratio rail replaced. min_ratio must survive the round trip
+# too, or the first -Accept quietly demotes the row back to the fixed floor.
+$h = $covHealthy.Clone(); $h['pull-regular-hyvee'] = @(18, 18); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all', '-Accept')
+$covAfter = $null
+try { $covAfter = ((Get-Content (Join-Path $fxCov 'coverage-baseline.json') -Raw) + '').Trim() | ConvertFrom-Json } catch { }
+if ($covAfter -and [int]$covAfter.checks.'pull-regular-hyvee'.examined -eq 3 -and ([double]$covAfter.checks.'pull-regular-hyvee'.min_ratio -eq 0.9) -and $r.text -match 'PINNED') {
+  Ok '-Accept keeps a budgeted lane pinned (examined 3, min_ratio 0.9) instead of ratcheting it to a dense day'
+} else {
+  Bad ('-Accept re-armed the fixed floor on a ratio-judged row - the median day can never clear it and the daily cry-wolf is back: ' + $r.text)
+}
 
 # THE EMITTER ITSELF must still round-trip, or every row above is fiction. Runs the REAL coverage-lib.ps1.
 $covEmitOk = $false

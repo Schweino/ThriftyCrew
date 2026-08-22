@@ -215,6 +215,26 @@ function Get-HyVeeProductBudget {
   return $b
 }
 
+function Get-HyVeeAskableCount {
+  <#
+    .SYNOPSIS How many products may this run ASK Hy-Vee about today, and hold a productId to ask with?
+    .DESCRIPTION
+      THE COVERAGE DENOMINATOR FOR A BUDGETED LANE. It is a function rather than the inline loop it
+      replaces because the console line and the coverage ledger must read the SAME number: the day those
+      two disagree, the ledger is describing a run that did not happen.
+      $AskIndex $null means unbudgeted - every product holding an id is askable, which is the pre-budget
+      denominator unchanged.
+  #>
+  param($Work, $AskIndex = $null)
+  $n = 0; $i = -1
+  foreach ($w in $Work) {
+    $i++
+    if (($null -ne $AskIndex) -and (-not $AskIndex.ContainsKey($i))) { continue }
+    if ([int]$w.pid -gt 0) { $n++ }
+  }
+  return $n
+}
+
 function Test-HyVeeWipeout([int]$RowCount, [int]$PrevMax) {
   <#
     The THROTTLE-WIPEOUT rule as ONE expression, so the run and the fixtures read the same text and the
@@ -636,6 +656,31 @@ if ($SelfTest) {
   _T 'unbudgeted (no capture policy loaded): every product is asked about and every product is written' (
       (@($passU.Deals).Count -eq $POP) -and ($passU.Fresh -eq $POP) -and ($passU.BudgetSkipped -eq 0))
 
+  # --- (e) THE COVERAGE DENOMINATOR: today's slice, not the whole catalogue -------------------------
+  # The ledger row this lane writes used to be eligible=every product holding an id / examined=refreshed
+  # today. Under a budget that reads as a ~98% collapse EVERY DAY - a permanent finding nobody can act on.
+  # These pin the pair that replaced it. See the coverage block near the end of this file.
+  _T '(e) a healthy budgeted day is FULL coverage of its slice: eligible 3, answered 3 - not 3 of 240' (
+      ((Get-HyVeeAskableCount -Work $fixWork -AskIndex $askA) -eq $fixBudget) -and ($passA.Answered -eq $fixBudget))
+  # The live shape is mixed: 490 of the 1,554 rows in the 2026-08-21 file carry a product id, and they
+  # CLUSTER, so what a slice can ask about is not its size.
+  $mixWork = New-Object System.Collections.ArrayList
+  for ($i = 0; $i -lt 20; $i++) {
+    $mpid = 0; if ($i % 4 -eq 0) { $mpid = 500 + $i }
+    [void]$mixWork.Add([pscustomobject]@{ name = ("Mixed $i"); size = ''; prow = $null; pid = $mpid; cid = ("mix-$i") })
+  }
+  _T '(e) unbudgeted, the denominator is every product holding an id (the pre-budget number, unchanged)' (
+      (Get-HyVeeAskableCount -Work $mixWork -AskIndex $null) -eq 5)
+  $mixAsk = @{}; foreach ($i in @(0, 1, 2, 3)) { $mixAsk[$i] = $true }
+  _T "(e) budgeted, it is what TODAY'S SLICE may ask about - 1 of the 4 selected, NOT 5 of 20" (
+      (Get-HyVeeAskableCount -Work $mixWork -AskIndex $mixAsk) -eq 1)
+  $mixNone = @{}; foreach ($i in @(1, 2, 3)) { $mixNone[$i] = $true }
+  # ~6% of 18-wide windows in the live rotation hold no linkable product at all. Eligible 0 is the truth on
+  # that day - the lane verified no price - and the ledger calls it INERT, which is a finding worth having:
+  # it is the no-discovery-path problem (1,064 of 1,554 rows carry no link) in its actionable form.
+  _T '(e) a slice holding no linkable product is ZERO eligible, not a 98% collapse' (
+      (Get-HyVeeAskableCount -Work $mixWork -AskIndex $mixNone) -eq 0)
+
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
@@ -909,11 +954,7 @@ if (-not $Quick) {
 }
 
 $refreshable = @($work | Where-Object { $_.pid -gt 0 }).Count
-$askableToday = $refreshable
-if ($null -ne $askIndex) {
-  $askableToday = 0
-  for ($i = 0; $i -lt @($work).Count; $i++) { if ($askIndex.ContainsKey($i) -and [int]$work[$i].pid -gt 0) { $askableToday++ } }
-}
+$askableToday = Get-HyVeeAskableCount -Work $work -AskIndex $askIndex
 Write-Output ("Hy-Vee: " + @($work).Count + " products (" + $refreshable + " refreshable via GraphQL; " + (@($work).Count - $refreshable) + " have no link so their price cannot be re-verified; " + $askableToday + " will be asked about today)")
 
 # THE PASS ITSELF LIVES IN Invoke-HyVeeWorkPass, ABOVE -SelfTest. It was inline here until 2026-08-22,
@@ -972,24 +1013,52 @@ foreach ($x in $tagRefusedRows) {
 }
 }
 
-# COVERAGE, SO THE EXISTING RATCHET CATCHES TRUNCATION - no new threshold invented here. $refreshable is
-# every product we hold a productId for, $fresh is how many of them Hy-Vee actually answered for. If the cap
-# starts biting, or the GraphQL endpoint starts refusing, examined falls against the baseline and
-# audit-coverage-ledger reports it. Measured across the retained history for the baseline entry: refreshed
-# sits at 1,006-1,065 since 2026-07-19, worst day-over-day drop -8.1% (07-24), so a 0.15 band gives zero
-# findings on real history. Wrapped in its own try/catch inside coverage-lib, which is function-scoped, so a
-# missing or broken ledger can never take the price pull down with it.
+# COVERAGE. THE DENOMINATOR CHANGED ON 2026-08-22 AND THE NUMBERS BELOW ARE NOT COMPARABLE TO THE OLD ONES.
+#
+# It used to be Eligible = every product we hold a productId for (~535) and Examined = $fresh, the products
+# refreshed today. That was the right pair while this lane re-verified EVERYTHING it could, every day, and
+# it measured 1,006-1,065 for a month. The capture-policy budget made it a lie: the lane now deliberately
+# asks about ceil(1554/90) = 18 products a day (see Get-HyVeeProductBudget), of which only those holding a
+# link can be asked at all - median 3, measured over a full 90-day rotation of the 2026-08-21 file. Against
+# a 1,010 baseline that is a ~98% collapse EVERY MORNING: a permanent finding nobody can act on, which is
+# the ledger's own founding failure - a confident answer about nothing - pointing the other way. A watcher
+# that cries every day is a watcher that gets ignored, and then it is watching nothing.
+#
+# THE HONEST DENOMINATOR FOR A BUDGETED LANE IS TODAY'S SLICE:
+#     Eligible = the products this run was ALLOWED to ask about today and holds an id to ask with
+#     Examined = the ones Aisles Online actually came back with a usable offer for
+# so a healthy budgeted day records 3 of 3, not 3 of 535. The two numbers separate only when something
+# stopped us ASKING (the wall-clock cap) or stopped the store ANSWERING (GraphQL refusing), which is
+# precisely the truncation the ledger was put on this puller to catch. Because the slice legitimately
+# swings 0-18 from one day to the next, that separation is watched as a RATIO - min_ratio in
+# coverage-baseline.json - and not as an absolute count: no fixed floor can tell a throttled day from an
+# ordinary one in that range, and a fixed floor is exactly what produced the permanent finding above.
+#
+# EXAMINED IS Answered, NOT Fresh. A row whose answer was REFUSED - a size that disagrees with ours, a
+# price below the store's own shelf tag - WAS examined; we looked at it and rejected what we saw. Counting
+# a refusal as an unexamined row would report a coverage collapse on a day the accuracy checks did their job.
+#
+# Wrapped in its own try/catch inside coverage-lib, which is function-scoped, so a missing or broken ledger
+# can never take the price pull down with it.
 # -Quick MUST NOT RECORD. It caps the work list at 10 products and writes to hyvee-quick-test.json instead of
-# the real capture, but the coverage ledger is a single shared file: a -Quick run would stamp examined=10
-# against a baseline of ~1,010 and the ratchet would report a 99% collapse on a deliberate smoke test.
+# the real capture, but the coverage ledger is a single shared file: a -Quick run would stamp a smoke test's
+# numbers over the real lane's row.
 try {
   $covLib = Join-Path $root 'coverage-lib.ps1'
   if ((-not $Quick) -and (Test-Path $covLib)) {
     . $covLib
-    if ($fresh -le 0 -and $refreshable -gt 0) {
-      Write-CoverageRecord -Check 'pull-regular-hyvee' -OutDir $OutDir -Eligible $refreshable -Examined $fresh -Detail 'Hy-Vee products re-verified against Aisles Online GraphQL' -Blind
+    $covExamined = [int]$pass.Answered
+    # The detail line carries the whole account, because a finding is only actionable if it says which of
+    # the three ways to examine nothing actually happened: no slice, no asking, or no answer.
+    $covDetail = ("Hy-Vee products in TODAY'S capture-policy slice that Aisles Online answered for: budget " +
+      $hvBudget + ", asked " + $pass.Attempted + ", answered " + $covExamined + ", " + $capSkipped +
+      " never asked (wall-clock cap), " + $budgetSkipped + " outside today's slice and carried forward. " +
+      $refreshable + " of " + @($work).Count + " products hold an id at all - that whole-catalogue number is " +
+      "NOT the denominator any more; see coverage-baseline.json for why.")
+    if ($covExamined -le 0 -and $askableToday -gt 0) {
+      Write-CoverageRecord -Check 'pull-regular-hyvee' -OutDir $OutDir -Eligible $askableToday -Examined $covExamined -Detail $covDetail -Blind
     } else {
-      Write-CoverageRecord -Check 'pull-regular-hyvee' -OutDir $OutDir -Eligible $refreshable -Examined $fresh -Detail 'Hy-Vee products re-verified against Aisles Online GraphQL'
+      Write-CoverageRecord -Check 'pull-regular-hyvee' -OutDir $OutDir -Eligible $askableToday -Examined $covExamined -Detail $covDetail
     }
   }
 } catch { }
