@@ -402,36 +402,10 @@ foreach ($rec in $newStores) {
 # ---- persist schedule ----
 ([ordered]@{ updated=$asofS; note=$sched.note; stores=$newStores } | ConvertTo-Json -Depth 8) | Set-Content $ScheduleFile -Encoding UTF8
 
-# ---- browser-refresh watchdog: only the weekly Wednesday Chrome agent can pull the browser stores.
-#      If it did not run, its data goes stale and NOTHING headless can refresh it. Alert Brad ONCE/week. ----
-if (-not $NoAlert) {
-  $dow = [int]$asof.DayOfWeek                  # Sun=0 .. Wed=3 .. Sat=6
-  $daysSinceWed = (($dow - 3) + 7) % 7         # 0 if today is Wednesday
-  if ($daysSinceWed -ge 1) {                   # Thursday or later -> the Wednesday agent should have run this week
-    $lastWed = $asof.AddDays(-$daysSinceWed).Date
-    $marker  = Join-Path $OutDir ('browser-stale-' + $lastWed.ToString('yyyy-MM-dd') + '.flag')
-    if (-not (Test-Path $marker)) {
-      # THE FEED LIST LIVES IN ONE PLACE: browser-refresh-due.ps1. This used to carry its own copy of the same
-      # six globs and the same mtime comparison, and the two drifted exactly as that class always does - neither
-      # listed FAREWAY, so when its weekly sweep was skipped on 2026-07-29 the pre-run gate said FRESH and this
-      # alert could not name the store either. Sourcing the definition means a store added to the gate is
-      # automatically watched by the alert. (Same fix shape as the pu-lib "1/2 gal" divergence.)
-      . (Join-Path $root 'browser-feeds-lib.ps1')
-      $feeds = Get-BrowserFeedDates -OutDir $OutDir
-      $stale = @()
-      foreach ($k in $feeds.Keys) { $m = $feeds[$k]; if (($null -eq $m) -or ($m.Date -lt $lastWed)) { $tag = if ($m) { ' (' + $m.ToString('MM-dd') + ')' } else { ' (missing)' }; $stale += ($k + $tag) } }
-      if ($stale.Count -gt 0) {
-        $bd = "The weekly Wednesday grocery browser refresh did not run for the week of " + $lastWed.ToString('yyyy-MM-dd') + ". Stale/missing browser feeds: " + ($stale -join ', ') + ". The live page is holding last week's prices for those stores. Open the Claude app and run the grocery-browser-stores-refresh agent. While in the warm store tabs, ALSO close any browser-store no-link gaps: run build-chips-from-tileintegrity.ps1 for the chip list (reads out\tile-integrity.json, all stores), then paste hyvee/browser-link-resolve.js and BLR.run('<store>', chips) per store (board-match, skips sponsored/wrong-size), save to out\url-inputs\store-<store>-urls.json, and merge -> stamp -> prune-bad-links -Tol 0.32 -> guards -> publish -> archive the url-inputs file. Family Fare's MISSING links now self-heal in the daily job (fix-links-ff, 30 Freshop calls/day) and Hy-Vee's link PRICES self-heal (refresh-hyvee-links) - but nothing headless can ADD a Hy-Vee/Aldi/Baker's/Walmart/Sam's link, so those no-link chips need this browser pass. Check out\tile-integrity.json for the current per-store count. IMPORTANT: the Walmart capture must run the FULL commodity worklist (every commodity-search.json term (count the file, 526 as of 2026-07-29)) - a core-staples subset is absorbed by the union but leaves the comprehensive-capture clock running (audit-walmart-fullpull warns from day 10 of 14)."
-        Send-Alert -Subject ("Grocery: Wednesday browser refresh MISSED - week of " + $lastWed.ToString('yyyy-MM-dd')) -Body $bd | Out-Null
-        # only burn the once-per-week de-dupe marker if the email actually SENT (send-alert exits 1 on
-        # failure) - otherwise a transient mail error silently ate the whole week's stale warning.
-        if ($LASTEXITCODE -eq 0) { New-Item -ItemType File -Path $marker -Force | Out-Null; Log ("browser-stale alert sent: " + ($stale -join ', ')) } else { Log 'browser-stale alert FAILED to send (will retry next run)' }
-        $summary += ("ALERT     Wednesday browser refresh missed - stale: " + ($stale -join ', '))
-      }
-    }
-  }
-}
-
+# ---- (retired 2026-08-22) the Wednesday browser-refresh watchdog. It paged when the weekly Chrome agent
+#      missed its week; that agent is disabled (Brad: the three TC tasks are the only routines) and the
+#      walled stores are captured on demand from out\browser-capture-due-<date>.flag, which
+#      capture-watchdog watches. A weekly clock nobody is on would have alerted every Thursday forever. ----
 # ---- refresh downstream if a server store flipped ----
 # Re-compare DAILY (server ads were just re-pulled) so the board reflects today's ad dates, then re-publish
 # ONLY when a price actually changed (new ad, flash sale ended, or a mid-cycle correction) - detected by the
