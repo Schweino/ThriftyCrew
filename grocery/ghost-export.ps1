@@ -1,4 +1,4 @@
-<#
+﻿<#
   ghost-export.ps1 - monthly off-Ghost backup of ALL site content (2026-07-23, improvement item 13).
 
   Everything price-related is rebuildable from this repo, but hand-authored Ghost content (the 52
@@ -7,7 +7,7 @@
   via the Admin API into site-backups\ghost-export-<yyyy-MM>.json, which the local daily wrapper commits
   monthly. Read-only: this script never writes to Ghost.
 
-  Run standalone anytime, or let run-daily-local.ps1 call it on the 1st of the month.
+  Run standalone anytime, or let capture-run.ps1 -Kind daily call it on the 1st of the month (it was run-daily-local.ps1's job until 2026-08-22).
 #>
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'

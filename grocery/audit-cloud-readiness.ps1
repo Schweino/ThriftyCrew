@@ -1,4 +1,4 @@
-<#
+﻿<#
   audit-cloud-readiness.ps1 - can the daily chain actually run on a runner that has no key files?
 
   WHY THIS EXISTS (2026-08-08). The cloud backup (.github\workflows\daily.yml) has NEVER completed a full
@@ -61,7 +61,7 @@ if ($SelfTest) {
 }
 
 # ---- who does the daily chain actually invoke? -----------------------------------------------------------
-$chain = @((Join-Path $root 'check-ad-cycles.ps1'), (Join-Path $root 'run-daily-local.ps1'))
+$chain = @((Join-Path $root 'check-ad-cycles.ps1'), (Join-Path $root 'capture-run.ps1'))   # run-daily-local.ps1 retired 2026-08-22
 $chainText = ''
 foreach ($c in $chain) { if (Test-Path $c) { $chainText += [IO.File]::ReadAllText($c) } }
 

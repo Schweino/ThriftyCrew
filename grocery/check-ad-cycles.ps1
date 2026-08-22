@@ -61,15 +61,22 @@ function Log([string]$m) {
   try { Add-Content -Path $script:LogSidecar -Value $line -ErrorAction Stop } catch { try { Write-Host ('[log locked, not written] ' + $line) } catch {} }
 }
 # SIDECAR RECOVERY: fold any PRIOR day's LOCKED-* sidecar into the primary log, in order, and remove it.
-# Today's is left alone (a concurrent run may still be appending). Non-fatal.
+# Today's is left alone (a concurrent run may still be appending). If the primary is still locked nothing
+# is deleted - the sidecar simply waits for a run that can write. Non-fatal.
+# >>> SIDECAR-RECOVERY (self-test extracts between these sentinels; see test-log-sidecar-recovery.ps1)
 try {
+  $todayStamp = (Get-Date -Format 'yyyy-MM-dd')
   foreach ($sc in @(Get-ChildItem (($LogFile -replace '\.txt$', '') + '.LOCKED-*.txt') -ErrorAction SilentlyContinue | Sort-Object Name)) {
-    if ($sc.BaseName -notmatch 'LOCKED-(\d{4}-\d{2}-\d{2})$' -or $Matches[1] -ge (Get-Date -Format 'yyyy-MM-dd')) { continue }
-    $body = @(Get-Content $sc.FullName -ErrorAction SilentlyContinue)
-    $mark = "[" + (Get-Date).ToString('s') + "] --- recovered from " + $sc.Name + " (" + $body.Count + " lines): the primary log was held by another process during that run; folded back here in order ---"
-    try { Add-Content -Path $LogFile -Value (@($mark) + $body) -ErrorAction Stop; Remove-Item $sc.FullName -Force -ErrorAction SilentlyContinue } catch { }
+    if ($sc.BaseName -notmatch 'LOCKED-(\d{4}-\d{2}-\d{2})$' -or $Matches[1] -ge $todayStamp) { continue }
+    $scBody = @(Get-Content $sc.FullName -ErrorAction SilentlyContinue)
+    if ($scBody.Count -eq 0) { Remove-Item $sc.FullName -Force -ErrorAction SilentlyContinue; continue }
+    $scMark = "[" + (Get-Date).ToString('s') + "] --- recovered from " + $sc.Name + " (" + $scBody.Count + " lines): the primary log was held by another process during that run, so its trail went to the lock sidecar. Folded back here in order; the sidecar is removed. ---"
+    $scOk = $false
+    for ($i = 0; $i -lt 5; $i++) { try { Add-Content -Path $LogFile -Value (@($scMark) + $scBody) -ErrorAction Stop; $scOk = $true; break } catch { Start-Sleep -Milliseconds 120 } }
+    if ($scOk) { Remove-Item $sc.FullName -Force -ErrorAction SilentlyContinue }
   }
 } catch { }
+# <<< SIDECAR-RECOVERY
 
 # ---- SEND AN ALERT WITHOUT LOSING IT (2026-08-06) -------------------------------------------------------
 # Send-Alert is the only way this file may page anybody. Every alert below used to be

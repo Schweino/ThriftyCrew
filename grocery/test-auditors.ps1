@@ -1,4 +1,4 @@
-<#
+﻿<#
   test-auditors.ps1 - proves the WATCHERS still work. Complements test-guards.ps1, which breaks a live
   invariant and asserts guards.ps1 exits 2; this one tests the auditors and alert plumbing that guards.ps1
   does not own, using FROZEN FIXTURES instead of mutating live data.
@@ -1764,9 +1764,7 @@ else { Bad 'weekly lock: -Release left the file behind - a swept stale lock woul
 Remove-Item $fxWl -Recurse -Force -ErrorAction SilentlyContinue
 # and BOTH callers must still be wired to it - a lock nobody takes and nobody checks is a no-op that
 # passes every behavioural test above (source asserts: house precedent for caller plumbing).
-$rdlLk = Get-Content (Join-Path $root 'run-daily-local.ps1') -Raw
-if ($rdlLk -match 'weekly-run-lock\.ps1' -and $rdlLk -match '\$wlRc -eq 2' -and $rdlLk -match 'STAND DOWN: the weekly browser refresh' -and $rdlLk -match "weekly-run-lock\.ps1'\) -Release") { Ok 'run-daily-local still checks the weekly lock, stands down on HELD, and sweeps a stale one' }
-else { Bad 'run-daily-local no longer stands down for the weekly run - the 46-minute collision of 2026-07-29 is back' }
+# (run-daily-local.ps1's stand-down assert retired with that runner on 2026-08-22; capture-run has no weekly to stand down for - the weekly browser agent is disabled)
 if ($wpcLk -match "weekly-run-lock\.ps1'\) @\('-Acquire'") { Ok 'weekly-post-capture still takes the lock on every phase' }
 else { Bad 'weekly-post-capture stopped taking the weekly lock - the daily has nothing to stand down for' }
 if ($wpcLk -match "weekly-run-lock\.ps1'\) @\('-Release'") { Bad 'weekly-post-capture releases the lock mid-run again - on 2026-07-29 a links phase finished at 08:01:34 and the next phase was 08:46:24, so releasing hands grocery\out back 28 min before the 08:30 daily fires. The lock expires on its own TTL; nothing in the weekly may hand it back.' }

@@ -1,4 +1,4 @@
-<#
+﻿<#
   health-heartbeat.ps1 - SILENT-DEATH detector for the estate's automations + critical outputs.
 
   The existing safety net catches LOUD failures: a GitHub Actions run that errors emails Brad, and
@@ -99,7 +99,7 @@ foreach ($t in @($cfg.windows_tasks)) {
 # what the JSON already lists. That is exactly how "SMP Daily Facebook Reel", "SMP Family Fare Term Sweep" and
 # "SMP Friday Email (draft)" ran unwatched until they were found by hand. This catches the NEXT one.
 $known = @(@($cfg.windows_tasks) | ForEach-Object { [string]$_.name })
-foreach ($wt in @(Get-ScheduledTask -TaskName 'SMP *' -ErrorAction SilentlyContinue)) {
+foreach ($wt in @(@(Get-ScheduledTask -TaskName 'SMP *' -ErrorAction SilentlyContinue) + @(Get-ScheduledTask -TaskName 'TC *' -ErrorAction SilentlyContinue))) {
   if ($known -notcontains [string]$wt.TaskName) {
     $issues.Add(("TASK UNWATCHED: '{0}' is registered in Windows Task Scheduler but missing from expected-automations.json - nothing checks whether it still runs. Add it to windows_tasks." -f $wt.TaskName))
   }
