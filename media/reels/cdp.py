@@ -159,7 +159,20 @@ class Chrome:
             pass
         try:
             if self.proc:
-                self.proc.terminate()
+                # KILL THE TREE, NOT THE PARENT (2026-08-22). Chrome forks a crashpad handler, a GPU
+                # process and a renderer per tab, and terminate() reaps only the launcher - the
+                # children keep the profile directory locked and stay resident. Measured after a
+                # handful of driver self-tests: 13 orphaned chrome.exe processes still running.
+                # For the reel that is untidy; for the grocery driver, which launches Chrome three
+                # times every morning, it is an unbounded daily leak.
+                # taskkill /T walks the child tree; /F because a headless Chrome mid-teardown does
+                # not always answer a polite request. Falls back to terminate() off-Windows.
+                if os.name == "nt":
+                    subprocess.run(["taskkill", "/PID", str(self.proc.pid), "/T", "/F"],
+                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                                   timeout=20)
+                else:
+                    self.proc.terminate()
                 self.proc.wait(timeout=10)
         except Exception:
             pass
