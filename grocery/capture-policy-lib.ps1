@@ -539,6 +539,115 @@ function Step-CaptureCursor {
     Reason = "advanced $($plan.RotationTerms) term(s) after a landed capture" }
 }
 
+function Test-HyVeeCursorAdvance {
+  <#
+    .SYNOPSIS Has today's Hy-Vee run earned the right to move the PRODUCT rotation on?
+    .DESCRIPTION
+      THE RULE, AND WHY IT IS NOT "advance after the file landed" (2026-08-22). Every other cursor in
+      this estate advances only once the capture has LANDED - see Step-CaptureCursor - because a run that
+      bought nothing must re-attempt its slice rather than skip it. The Hy-Vee product lane found the
+      other edge of that rule the hard way. Its commit sat after the everyday file was written, the
+      capture-policy budget collapsed the file to 7 rows, the THROTTLE-WIPEOUT guard quarantined it and
+      exited 2 - so the cursor was never written AT ALL. Every subsequent run re-read cursor 0, took the
+      same 7 products, and those 7 carry no product link, so the lane reported "0 refreshed, 7 not
+      re-verified" every day while Hy-Vee's prices sat frozen. Not a slow day: a DEADLOCK, and the thing
+      that made it one is that a refused write also refused the rotation.
+
+      So this lane advances on what the run ASKED, not on what it managed to write:
+
+        answered > 0                        ADVANCE. The store answered; those products had their turn,
+                                            whether or not the file was allowed to land afterwards.
+        attempted > 0, answered = 0         HOLD. Every request failed - a dead or throttled endpoint,
+                                            not a day's work. Burning the slice here is exactly the
+                                            Family Fare failure of 2026-08-20 (a cursor that ran ahead
+                                            of a capture that never happened).
+        attempted = 0, slice all unaskable  ADVANCE. Nothing in the slice carries a product id, so there
+                                            was nothing to ask and there never will be; re-asking
+                                            nothing tomorrow is the deadlock above, verbatim.
+        attempted = 0, slice was askable    HOLD. We had things to ask and did not ask them (the
+                                            wall-clock cap, an early exit). Those products are owed.
+
+      Pure: the fixtures state the four cases directly.
+  #>
+  [CmdletBinding()]
+  param([int]$Attempted = 0, [int]$Answered = 0, [int]$SliceSize = 0, [int]$SliceUnaskable = 0)
+  if ($Answered -gt 0) {
+    return [pscustomobject]@{ Advance = $true; Reason = "the store answered for $Answered of the $Attempted product(s) asked" }
+  }
+  if ($Attempted -gt 0) {
+    return [pscustomobject]@{ Advance = $false
+      Reason = "$Attempted request(s) issued and NOT ONE was answered - a dead or throttled endpoint, not a day's work; this slice is re-attempted tomorrow" }
+  }
+  if ($SliceSize -gt 0 -and $SliceUnaskable -ge $SliceSize) {
+    return [pscustomobject]@{ Advance = $true
+      Reason = "none of the $SliceSize product(s) in today's slice carries a retailer product id - there was nothing to ask, and re-asking nothing tomorrow is a deadlock, not patience" }
+  }
+  return [pscustomobject]@{ Advance = $false
+    Reason = 'no request was issued and the slice was askable (wall-clock cap, or an early exit) - those products are owed their turn' }
+}
+
+function Step-HyVeeProductCursor {
+  <#
+    .SYNOPSIS Advance the Hy-Vee PRODUCT rotation cursor, under the same guards as the term cursor.
+    .DESCRIPTION
+      A SEPARATE FILE, DELIBERATELY. Hy-Vee indexes 1,554 PRODUCT IDS while capture-cursor.json indexes
+      commodity-search TERMS; folding them together would make the same integer mean two different things
+      (see TermRotationStores above), which is why Save-CaptureCursor REFUSES to write a term cursor for
+      this store. But the guards are the same guards, and they live here rather than inside the puller so
+      the two cursors cannot drift into two slightly different sets of rules:
+
+        REPLAYS DO NOT COUNT      a run whose date is not the wall-clock date - a rebuild of an older
+                                  capture, or a self-test on a frozen fixture date - must never move the
+                                  live rotation. That is what took Fareway from #7 to #63 in two hours.
+        ONE SLICE PER DAY         however many times the builder runs. Over-advancing is the dangerous
+                                  direction: a skipped product waits a quarter, a repeated one costs one
+                                  request.
+        ONLY IF THE RUN ASKED     Test-HyVeeCursorAdvance above; the whole judgement is in that function.
+        ATOMIC                    temp-then-move, because a torn cursor silently loses a quarter of
+                                  coverage and reads as a valid file afterwards.
+  #>
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory)][int]$Next,
+    [int]$From = 0,
+    [int]$Attempted = 0, [int]$Answered = 0, [int]$SliceSize = 0, [int]$SliceUnaskable = 0,
+    [string]$Today = '', [string]$OutDir = '', [switch]$Force
+  )
+  if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
+  $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
+  $p = Join-Path $OutDir 'hyvee-rotation-cursor.json'
+
+  $realToday = (Get-Date).ToString('yyyy-MM-dd')
+  if ($todayS -ne $realToday -and -not $Force) {
+    return [pscustomobject]@{ Advanced = $false; From = $From; To = $From
+      Reason = "refusing to advance on a REPLAY: this run's date is $todayS but today is $realToday" }
+  }
+
+  $doc = $null
+  if (Test-Path $p) { try { $doc = ConvertFrom-Json ([IO.File]::ReadAllText($p)) } catch { $doc = $null } }
+  if ($doc -and ([string]$doc.last_advanced) -eq $todayS -and -not $Force) {
+    return [pscustomobject]@{ Advanced = $false; From = $From; To = $From
+      Reason = "already advanced for $todayS - one product slice per day, no matter how many times the puller runs" }
+  }
+
+  $d = Test-HyVeeCursorAdvance -Attempted $Attempted -Answered $Answered -SliceSize $SliceSize -SliceUnaskable $SliceUnaskable
+  if (-not $d.Advance -and -not $Force) {
+    return [pscustomobject]@{ Advanced = $false; From = $From; To = $From; Reason = $d.Reason }
+  }
+
+  $tmp = "$p.tmp"
+  Set-Content -Path $tmp -Encoding UTF8 -Value (([ordered]@{
+    next_index    = $Next
+    from_index    = $From
+    last_advanced = $todayS
+    updated       = (Get-Date).ToString('s')
+    note          = 'PRODUCT-index rotation cursor for the Hy-Vee re-verify lane (NOT the commodity-search term cursor in capture-cursor.json). Advanced when the run ASKED the store, even if the write was later refused - a refused write must not also refuse the rotation, or the same slice is re-asked forever.'
+  }) | ConvertTo-Json)
+  Move-Item -LiteralPath $tmp -Destination $p -Force
+  Write-CursorLog -Store 'Hy-Vee (products)' -From $From -To $Next -Today $todayS -OutDir $OutDir
+  return [pscustomobject]@{ Advanced = $true; From = $From; To = $Next; Reason = $d.Reason }
+}
+
 function Write-CaptureWorklist {
   <#
     .SYNOPSIS Emit today's worklist file for a store (what the browser agent reads).
