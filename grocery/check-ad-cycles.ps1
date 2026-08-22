@@ -705,6 +705,27 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $pbOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-bad-links.ps1') -Tol 0.32
         Log ('prune-bad-links: ' + ((@($pbOut) | Where-Object { $_ -match 'DROPPED' }) -join ' | '))
       } catch { Log ('prune-bad-links threw: ' + $_.Exception.Message) }
+      # ---- RE-DERIVE THE DRIFT VERDICTS OVER THE PRUNED LINK SET (2026-08-22) -------------------------
+      # THIS IS A REAL CYCLE, AND IT BLOCKED THE BOARD THREE TIMES TODAY. prune-bad-links READS
+      # out
+ame-drift.json (it is how it knows which links are the wrong PRODUCT) and then WRITES
+      # product-urls.json - which makes name-drift.json older than the links it describes. audit-tile-
+      # integrity refuses to grade in that state, on purpose and correctly: "a green from a stale flags
+      # file is exactly the false green this assertion exists to prevent". So on every day the pruner
+      # actually drops a link, guards hard-failed and NOTHING PUBLISHED - measured 2026-08-22, three runs,
+      # name-drift.json 2 seconds older than product-urls.json. On quiet days the pruner writes nothing,
+      # the timestamps hold, and the gate passes - which is why this looked intermittent rather than
+      # structural. The chain's own auto-repair loop already resolves the cycle exactly this way (it
+      # re-runs name-drift after its prune); the ship path simply never did.
+      # Conditional on the file actually moving, so a quiet day does not pay for a second pass.
+      try {
+        $ndF = Join-Path $OutDir 'name-drift.json'
+        $puF = Join-Path $root 'product-urls.json'
+        if ((Test-Path $ndF) -and (Test-Path $puF) -and ((Get-Item $puF).LastWriteTimeUtc -gt (Get-Item $ndF).LastWriteTimeUtc)) {
+          & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null
+          Log 'name-drift re-derived over the pruned link set (the pruner rewrote product-urls, which stales the drift table tile-integrity grades against)'
+        }
+      } catch { Log ('name-drift re-derive threw: ' + $_.Exception.Message) }
       $sigAfter = BoardSignature
       $sigFile  = Join-Path $OutDir 'published-board.sig'
       $prevPub  = if (Test-Path $sigFile) { ((Get-Content $sigFile -Raw) + '').Trim() } else { '' }
