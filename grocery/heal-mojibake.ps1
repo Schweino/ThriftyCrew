@@ -1,9 +1,9 @@
-<#
+﻿<#
   heal-mojibake.ps1 - one-time backfill: repair product names that were corrupted BEFORE the ingest fix.
 
   Every builder now reads its capture as UTF-8 and repairs on ingest (see capture-lib.ps1), so new pulls are
   clean. But the corruption was baked into the BYTES of files already on disk, and compare-deals unions each
-  store's captures across a 14-day window - so older files keep feeding mangled names onto the board until
+  store's captures across the capture policy's carry window - so older files keep feeding mangled names onto the board until
   they age out. This repairs them in place instead of waiting two weeks.
 
   It is safe to re-run: Repair-Mojibake only touches strings carrying a mojibake signature that round-trip to

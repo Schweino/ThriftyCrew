@@ -1,4 +1,4 @@
-<#
+﻿<#
   audit-asof-evidence.ps1 - "no published price may claim a date newer than the capture it came from."
 
   WHY THIS EXISTS (2026-08-02, found by the C3 out-of-band sample).
@@ -15,7 +15,7 @@
       The laundering fed it a fabricated 78% against a true 6%. A staleness detector reading a number the
       builder wrote to be true is not a detector.
     - carry-forward-regular.ps1 expires a carried row from its ORIGINAL as_of. A laundered date resets that
-      clock on every build, so the 14-day cap can never expire the row it was written to expire.
+      clock on every build, so the carry cap can never expire the row it was written to expire.
     - generate-board-overrides.ps1 accepts a feed row as corroboration only inside a 2-day as_of window.
     - sync-browser-links.ps1 only touches rows priced TODAY.
   Each of those is correct code reading a fabricated input, which is why the shopper-visible symptom was a

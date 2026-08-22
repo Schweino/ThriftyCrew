@@ -4,7 +4,7 @@
 
   *** WHY THIS EXISTS (measured 2026-07-31, not assumed) ***
   The four walled stores (Walmart, Sam's Club, Aldi, Fareway) are captured by hand through a browser and
-  priced through compare-deals' 14-day union: every capture inside the window is unioned and the FRESHEST
+  priced through compare-deals' union window (the capture policy's carry, 90d): every capture inside the window is unioned and the FRESHEST
   file carrying a commodity wins it OUTRIGHT. Two failure classes fall straight out of that design:
 
     1. THE SILENT COUNTDOWN. 21 of 436 Walmart cells traced to walmart-regular-2026-07-18.json, which left

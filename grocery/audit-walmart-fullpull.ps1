@@ -1,8 +1,8 @@
-<#
+﻿<#
   audit-walmart-fullpull.ps1 - early warning for the partial-pull aging class, BEFORE it becomes a
   coverage hold. Covers BOTH union-based stores since 2026-07-23: Walmart AND Sam's Club.
 
-  Both stores' board coverage rests on compare-deals UNIONING their recent captures inside a 14-day
+  Both stores' board coverage rests on compare-deals UNIONING their recent captures inside the capture policy's carry window (90d since 2026-08-20; 14 before that) - a
   window. A throttled/sliced day produces a partial capture; the union absorbs it by backfilling from
   older captures. But daily/weekly partials keep every OTHER freshness signal green (guard 9 watches
   file AGE, the Wednesday watchdog watches mtimes) while the last COMPREHENSIVE capture silently ages
@@ -28,7 +28,8 @@
   freshness watcher is not.
 #>
 param([int]$WindowDays = 0, [int]$WarnAgeDays = 10, [string]$GroceryRoot = "", [int]$CellWarnDays = 5, [int]$CellWarnPct = 5)
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
+
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 # THE UNION WINDOW IS NOT THIS FILE'S TO CHOOSE. This watch counts down to the day a capture leaves the
 # window the ENGINE prices from, so a private copy of that number makes it count down to the wrong day.

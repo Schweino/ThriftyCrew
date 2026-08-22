@@ -698,8 +698,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       } catch { Log ('prune-bad-links threw: ' + $_.Exception.Message) }
       # ---- RE-DERIVE THE DRIFT VERDICTS OVER THE PRUNED LINK SET (2026-08-22) -------------------------
       # THIS IS A REAL CYCLE, AND IT BLOCKED THE BOARD THREE TIMES TODAY. prune-bad-links READS
-      # out
-ame-drift.json (it is how it knows which links are the wrong PRODUCT) and then WRITES
+      # out\name-drift.json (it is how it knows which links are the wrong PRODUCT) and then WRITES
       # product-urls.json - which makes name-drift.json older than the links it describes. audit-tile-
       # integrity refuses to grade in that state, on purpose and correctly: "a green from a stale flags
       # file is exactly the false green this assertion exists to prevent". So on every day the pruner
@@ -1870,7 +1869,18 @@ ame-drift.json (it is how it knows which links are the wrong PRODUCT) and then W
         if ($niSent -gt 0) { $summary += ("NOTIFIED  $niSent item-request follower(s) emailed - their suggested item is now on the board") }
       } catch { Log ('notify-item-added threw: ' + $_.Exception.Message) }
     }
-  } catch { Log ("downstream FAILED: " + $_.Exception.Message) }
+  } catch {
+    # AN ERROR WITH NO LOCATION IS A DAY OF GUESSING (2026-08-22). This caught
+    # "Cannot process argument transformation on parameter 'test'" - a message that names neither the
+    # stage nor the line - and reproducing it meant running every stage in the window by hand. The whole
+    # downstream block is one try, so anything thrown outside a stage's own catch lands here with no
+    # context at all. Log where it came from.
+    Log ("downstream FAILED: " + $_.Exception.Message)
+    try {
+      Log ("downstream FAILED at: " + [string]$_.InvocationInfo.PositionMessage.Trim().Replace("`r`n", ' | ').Replace("`n", ' | '))
+      Log ("downstream FAILED stack: " + ([string]$_.ScriptStackTrace).Replace("`r`n", ' | ').Replace("`n", ' | '))
+    } catch { }
+  }
 } elseif ($hardFail -and (-not $NoDownstream)) {
   Log 'HARD FAILURE - skipped re-compare/publish; board left at last good (alert already sent)'
   $summary += 'HELD      server pull hard-failed - board left at last good, not republished'

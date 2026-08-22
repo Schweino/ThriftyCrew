@@ -1,4 +1,4 @@
-<#
+﻿<#
   familyfare-sweep.ps1 - one EXTRA Family Fare term-budget sweep, outside the 8:30 daily pipeline.
 
   WHY THIS EXISTS (2026-07-30). Freshop's limit is a per-window REQUEST COUNT (~60-70 search terms), not a
@@ -11,7 +11,7 @@
 
   So the cadence is the fix, and cadence is a scheduling decision (the pull script's own comment says exactly
   that). This wrapper is what the "SMP Family Fare Term Sweep" task runs every 3 hours; with the daily pipeline
-  that is ~9 budgets a day, so the catalogue turns over roughly daily and no row has to ride the 14-day carry
+  that is ~9 budgets a day, so the catalogue turns over roughly daily and no row has to ride the full carry
   to the edge.
 
   It ONLY pulls. It does not rebuild or publish the board - the daily pipeline owns that, and a sweep that

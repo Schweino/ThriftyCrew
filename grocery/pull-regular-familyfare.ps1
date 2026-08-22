@@ -139,7 +139,7 @@ function Get-FfExpiryClass([string]$foundByTerm, [string]$lastSuccess, [string]$
 function Test-FfCatalogDegraded([int]$mergedCount, [int]$prevMax, [int]$starvedExpired, [int]$churnExpired, [int]$recentVerified) {
   $reasons = @()
   $totalExpired = $starvedExpired + $churnExpired
-  if ($starvedExpired -gt 0) { $reasons += ("$starvedExpired row(s) aged out past the 14-day carry on a STARVED search term - that term has not returned a single product inside the carry window, so the sweep genuinely cannot replace those products") }
+  if ($starvedExpired -gt 0) { $reasons += ("$starvedExpired row(s) aged out past the capture-policy carry on a STARVED search term - that term has not returned a single product inside the carry window, so the sweep genuinely cannot replace those products") }
   if ($mergedCount -gt 0 -and $totalExpired -gt ($mergedCount * 0.02)) { $reasons += ("$totalExpired row(s) aged out in ONE run against a $mergedCount-item catalog - that is a mass loss (over 2%) whatever class the rows are") }
   if ($recentVerified -lt 500) { $reasons += ("only $recentVerified row(s) re-verified against the store in the last 48h - the sweep is not buying terms") }
   if ($prevMax -gt 100 -and $mergedCount -lt ($prevMax * 0.80)) { $reasons += ("merged catalog is $mergedCount items against a best-of-recent $prevMax - it shrank by more than 20%") }

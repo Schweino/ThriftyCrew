@@ -7,7 +7,7 @@
   without tripping anything. This audit diffs the newest board against a ~5-7 day old one at CELL level
   (commodity x store) and reports every EVERYDAY cell that vanished. Ended SALES are excluded (rolling
   off the ad cycle is correct; the sale-fallback machinery owns those) and Sam's Club is excluded (its
-  slices age out by the 14-day policy on purpose; the fullpull watch owns that). What remains should be
+  slices age out by the capture policy on purpose; the fullpull watch owns that). What remains should be
   ZERO now that carry-forward walks the whole window - so anything listed is a real, new leak.
   ADVISORY (exit 1, never 2; exit 3 = BLIND, examined nothing): the board holding a true price matters more than perfect coverage.
 #>
