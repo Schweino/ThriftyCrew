@@ -392,22 +392,46 @@ if ($blocked.Count -gt 0) {
 $purlPath = Join-Path $root 'product-urls.json'
 if (Test-Path $purlPath) {
   $badLinks = New-Object System.Collections.Generic.List[object]
+  # INDEXED, NOT RE-NORMALISED PER COMPARISON (2026-08-22 - performance, not behaviour).
+  # This loop used to call KwNorm on EVERY blocklist entry's commodity and EVERY one of its names once per
+  # curated link: ~3.5k links x ~100 entries x their names, each a chain of six regex replaces. Measured on
+  # the live tree it was 14 of audit-known-wrong's 15.7 seconds, and audit-known-wrong was on its own 37% of
+  # the whole publish gate.
+  # KwNorm is a PURE function of its argument, so normalising each entry ONCE up front computes the same
+  # strings the inner loop computed over and over. The index below is deliberately a LIST OF ENTRIES per
+  # normalised commodity, NOT one merged name set: the original adds a finding PER MATCHING ENTRY (the
+  # `break` exits the NAMES loop, not the entries loop), so two entries that share a normalised commodity
+  # and both name the same link produced TWO findings. A merged set would silently report one. Entry order
+  # is preserved for the same reason - the report is ordered, and an order change is a diff nobody asked for.
+  $kwByCid = @{}
+  foreach ($e in $entries) {
+    # NOTE: an entry whose commodity normalises to '' is indexed under '' rather than dropped - the original
+    # compared KwNorm(commodity) to KwNorm(cid) with no empty-string special case, so a degenerate id on both
+    # sides matched. Keeping it means this index is equivalent on the edge cases too, not just the real ones.
+    $ck = KwNorm ([string]$e.commodity)
+    $eNames = @($e.names); if (-not $eNames -or $eNames.Count -eq 0) { continue }
+    $nn = New-Object System.Collections.Generic.List[string]
+    foreach ($en in $eNames) { [void]$nn.Add((KwNorm ([string]$en))) }
+    if (-not $kwByCid.ContainsKey($ck)) { $kwByCid[$ck] = New-Object System.Collections.Generic.List[object] }
+    [void]$kwByCid[$ck].Add([pscustomobject]@{ nnames = $nn })
+  }
   try {
     $purlDoc = Get-Content $purlPath -Raw | ConvertFrom-Json
     $purlItems = if ($purlDoc.PSObject.Properties.Name -contains 'items') { $purlDoc.items } else { $purlDoc }
     foreach ($cProp in $purlItems.PSObject.Properties) {
       $cid = $cProp.Name
       if ($cProp.Value -isnot [psobject]) { continue }
+      $cidNorm = KwNorm $cid
+      if (-not $kwByCid.ContainsKey($cidNorm)) { continue }
+      $cidEntries = $kwByCid[$cidNorm]
       foreach ($sProp in $cProp.Value.PSObject.Properties) {
         $entryVal = $sProp.Value
         if ($entryVal -isnot [psobject] -or -not $entryVal.PSObject.Properties.Name.Contains('name')) { continue }
         $nk = KwNorm ([string]$entryVal.name)
         if (-not $nk) { continue }
-        foreach ($e in $entries) {
-          if ((KwNorm ([string]$e.commodity)) -ne (KwNorm $cid)) { continue }
-          $eNames = @($e.names); if (-not $eNames -or $eNames.Count -eq 0) { continue }
-          foreach ($en in $eNames) {
-            if ((KwNorm ([string]$en)) -eq $nk) {
+        foreach ($e in $cidEntries) {
+          foreach ($en in $e.nnames) {
+            if ($en -eq $nk) {
               $badLinks.Add([pscustomobject]@{ commodity = $cid; store = $sProp.Name; name = [string]$entryVal.name })
               break
             }
