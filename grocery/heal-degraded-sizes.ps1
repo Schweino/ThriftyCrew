@@ -1,4 +1,4 @@
-<#
+﻿<#
   heal-degraded-sizes.ps1 - restore pack counts a shallow capture dropped (2026-07-23).
 
   The bug class: the browser agent's storefront pull can return an item WITHOUT its pack size
@@ -20,11 +20,20 @@
 #>
 param(
   [ValidateSet('bakers','aldi','fareway')][string]$Store,
-  [int]$MaxDays = 14,
+  # 0 = read the capture policy's carry (90). It was a hardcoded 14 until 2026-08-22, which under the
+  # quarterly rotation left degraded sizes on every row 15-90 days old unhealed - and those rows are on
+  # the board, priced, for the rest of their carry. The self-test passes its own number.
+  [int]$MaxDays = 0,
   [string]$RegularDir = "",
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+if (-not $MaxDays -and -not $SelfTest) {
+  . (Join-Path $PSScriptRoot 'capture-policy-lib.ps1')
+  $MaxDays = [int](Get-PolicyMaxCarryDays)
+  if (-not $MaxDays) { throw 'heal-degraded-sizes: the capture-policy carry window could not be read' }
+}
+if (-not $MaxDays) { $MaxDays = 14 }   # -SelfTest runs hermetically with its own fixtures
 # -Store is REQUIRED for a real run but must NOT be declared Mandatory (2026-08-08). PowerShell prompts for a
 # missing mandatory parameter, so `-SelfTest` alone could never be invoked: it died with
 # MissingMandatoryParameter on any non-interactive runner. This file's self-test therefore existed and had

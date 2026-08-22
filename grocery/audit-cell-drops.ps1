@@ -1,4 +1,4 @@
-<#
+﻿<#
   audit-cell-drops.ps1 - "we had this price and quietly lost it" per-CELL detector (2026-07-23, built the
   day Brad caught Fareway's boneless chicken breast missing by eye).
 
@@ -37,7 +37,12 @@ foreach ($r in $old) {
     # different question - "what should the next browser session search?" - and by that measure the shopper
     # lost the price either way and a capture is what fixes it. Two questions, two answers, one comment in
     # each file so neither reads as a bug in the other.
-    if ($st -eq "Sam's Club") { continue }              # 14-day slice policy; fullpull watch owns it
+    # SAM'S IS SKIPPED BECAUSE ITS CAPTURES ARE SLICES, not because of any particular window. The comment
+    # here said "14-day slice policy" until 2026-08-22; the carry is 90 days now, so a genuine Sam's drop
+    # would have gone unreported for 76 days longer than the note implied. The reason still holds - a
+    # partial club capture legitimately omits categories, and audit-walmart-fullpull owns that clock - but
+    # the reason is the SLICE, and it must not be re-derived from a stale number.
+    if ($st -eq "Sam's Club") { continue }
     if ([string]$s.type -eq 'sale') { continue }        # ended sales roll off correctly
     $cells++
     $now = $nmap[[string]$r.id]

@@ -1468,7 +1468,7 @@
     {
         "item":  "Keto Bun",
         "bid":  null,
-        "note":  "UNPRICED 2026-08-22 (commodity-registrar): 'keto bun' is a brand-defined class, not a store search term. Needs Brad's product-class ruling - any low-carb hamburger bun (-> mint low-carb-hamburger-buns, allowlisted vs hamburger-buns) or a specific brand/sub roll. bid stays null until then so db-build can rebuild.",
+        "note":  "UNPRICED 2026-08-22, AND THIS IS NOT THE SETTLED END STATE. db/not-price-tracked-ok.json's _rule forbids parking an unwired bid: an entry there claims the item costs the reader NOTHING, and a bun is not that. bid=null unblocks db-build (the daily FK gate) but build-v2-spec.ps1 REFUSES an unbid ingredient and audit-vocab-integrity exits 1, so this recipe cannot be re-spec'd or ride a wave until the bid exists - and it is already LIVE. The end state is a real commodity id plus either a board price or a documented register-estimate label in labels-r300.json. Blocked on Brad's product-class ruling: 'keto bun' is a brand-defined class, not a store search term. Needs Brad's product-class ruling - any low-carb hamburger bun (-> mint low-carb-hamburger-buns, allowlisted vs hamburger-buns) or a specific brand/sub roll. bid stays null until then so db-build can rebuild.",
         "gpu":  50,
         "unit":  "each",
         "board":  "recipe",
@@ -1487,7 +1487,7 @@
     {
         "item":  "Korean Rice Cakes",
         "bid":  null,
-        "note":  "NOT-CARRIED 2026-08-22 (commodity-registrar + the 7-store sweep in grocery/ingredient-queue.json): no first-party Omaha store stocks plain garae-tteok (Walmart marketplace-only, Hy-Vee/Baker's sauced kits only, Aldi/Sam's puffed snack only; Family Fare blocked - recheck). rice-cakes is the Quaker snack and rice is long-grain rice: neither is this food. Do not fake an Asian-market price into the board.",
+        "note":  "NOT-CARRIED 2026-08-22, AND NOT THE SETTLED END STATE - same rule tension as Keto Bun above: bid=null unblocks the daily db-build but build-v2-spec and audit-vocab-integrity refuse an unbid ingredient, and this recipe is already LIVE. End state per the registrar: mint 'tteok' (NOT 'korean-rice-cakes', whose suffix collides with the rice-cakes snack id) and give it a documented register-estimate label, since no Omaha store can fill a board cell for it. Evidence (commodity-registrar + the 7-store sweep in grocery/ingredient-queue.json): no first-party Omaha store stocks plain garae-tteok (Walmart marketplace-only, Hy-Vee/Baker's sauced kits only, Aldi/Sam's puffed snack only; Family Fare blocked - recheck). rice-cakes is the Quaker snack and rice is long-grain rice: neither is this food. Do not fake an Asian-market price into the board.",
         "gpu":  28.3495,
         "unit":  "oz",
         "board":  "recipe",
