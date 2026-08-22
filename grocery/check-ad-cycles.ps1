@@ -825,6 +825,14 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       } catch { Log ('sale-fallback guard threw: ' + $_.Exception.Message) }
       # Refresh the per-item sale-window log (sale price + start/end dates from the fresh board) so the daily
       # Baker's guard fires only when a sale actually reverts/starts, not blindly. Headless-safe, non-fatal.
+      # RECORD TODAY'S LANDED RE-PRICES FIRST (2026-08-22). build-sale-windows prunes a window
+      # only once refresh_on is past AND repriced_for matches it - so this reconcile is what
+      # lets the ledger drain. It must run BEFORE the build: after it, a re-price that landed
+      # looks unprocessed and is asked for again tomorrow (wasteful, safe). It writes only for
+      # stores whose everyday file actually landed today, so a blind day retires nothing. The
+      # lanes that know their own outcome (Family Fare, Hy-Vee, the four walled builders via
+      # commit-capture-cursor) have already written theirs; this catches the rest.
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'capture-policy.ps1') -Reconcile | Out-Null; Log 'sale-expiry re-prices reconciled' } catch { Log ('capture-policy -Reconcile threw: ' + $_.Exception.Message) }
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-sale-windows.ps1') | Out-Null; Log 'sale-windows refreshed' } catch { Log ('build-sale-windows threw: ' + $_.Exception.Message) }
       # Keep the product-URL worklist current: after prices move, flag any "See item" link whose board price
       # changed (stale) or whose linked product no longer matches (mismatch), so the weekly browser agent

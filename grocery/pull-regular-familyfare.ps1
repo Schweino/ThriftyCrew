@@ -685,11 +685,23 @@ try {
     $ffPrepended = [int]$sl.Prepended
     # The policy budgets one slot per expiring COMMODITY; a multi-term commodity needs one per TERM, and
     # the rotation must not pay for the difference or its slice silently shrinks on expiry days.
+    # ...BUT NEVER PAST THE WALL (2026-08-22). This top-up used to be unbounded, and with 19 FF
+    # windows reverting on 2026-08-23 (and 130 across the estate) a multi-term commodity could
+    # push the budget straight through Freshop's ~40-call window - the throttle this whole
+    # policy exists to avoid. The plan's own CallCap is the ceiling; anything the cap defers is
+    # still OWED in sale-windows.json and leads tomorrow's slice, oldest first.
     $extraTerms = $ffPrepended - @($plan.SaleExpiries).Count
     if ($extraTerms -gt 0 -and $script:TermBudget -lt [int]::MaxValue) { $script:TermBudget += $extraTerms }
+    if ($plan.CallCap -gt 0 -and $script:TermBudget -gt [int]$plan.CallCap) {
+      Write-Output ("Family Fare: budget clamped from " + $script:TermBudget + " to the store call cap " + $plan.CallCap + " (" + $plan.CallCapBasis + ") - multi-term expiries do not get to breach the Freshop window")
+      $script:TermBudget = [int]$plan.CallCap
+    }
     Write-Output ("Family Fare: " + $sl.Prepended + " term(s) for " + @($plan.SaleExpiries).Count + " expiring sale(s) moved to the FRONT of today's slice: " + (($termList | Select-Object -First $sl.Prepended) -join ', '))
   }
-  Write-Output ("Family Fare: capture-policy budget = " + $script:TermBudget + " term(s) today (" + $plan.RotationTerms + " rotation + " + $plan.SaleExpiries.Count + " sale expiry; quarter " + $plan.QuarterDays + "d)")
+  Write-Output ("Family Fare: capture-policy budget = " + $script:TermBudget + " term(s) today (" + $plan.RotationTerms + " rotation + " + @($plan.SaleExpiries).Count + " sale expiry, cap " + $plan.CallCap + "; quarter " + $plan.QuarterDays + "d)")
+  if ([int]$plan.ExpiryDeferred -gt 0) {
+    Write-Output ("Family Fare: " + $plan.ExpiryDeferred + " further expiry(ies) OWED and deferred by the cap (oldest owed since " + $plan.ExpiryOldest + ") - they are NOT dropped; sale-windows.json keeps them until a landed run records them.")
+  }
 } catch {
   # A policy that cannot load must NOT silently become "unlimited" - that is the state
   # we are fixing. Fall back to the quarter rate rather than the old free-for-all.
@@ -924,6 +936,20 @@ if ($null -ne $commitIdx) {
   } catch {
     Write-Warning ('Family Fare: merged catalog landed but the shared term cursor could not be written (' + $_.Exception.Message + ') - next run restarts at #' + $startIdx + ' and re-buys this slice; no rows are lost.')
   }
+}
+# THE EXPIRY LEDGER IS PART OF THE SAME COMMIT (2026-08-22). The expiry slice is now CAPPED at
+# the Freshop wall (40 calls/window, measured) and build-sale-windows no longer prunes a window
+# by date - it prunes only what was recorded as done. So this write is what lets the ledger
+# drain; without it every expiry is re-queued forever. Gated on $mergedOk exactly like the
+# cursor above: a run whose rows did not land must repeat its expiries, not retire them. Only
+# the ids this run was actually ASKED for are marked - Set-SaleExpiryProcessed reads the same
+# capped plan the slice was built from.
+if ($mergedOk) {
+  try {
+    . (Join-Path $root 'capture-policy-lib.ps1')
+    $mk = Set-SaleExpiryProcessed -Store 'Family Fare' -Today $todayS -OutDir $OutDir -Landed $true
+    if ($mk.Marked -gt 0) { Write-Output ("Family Fare: recorded " + $mk.Marked + " sale re-price(s) in sale-windows.json") }
+  } catch { Write-Warning ('Family Fare: sale-expiry ledger not updated (' + $_.Exception.Message + ') - those re-prices stay owed and lead tomorrow''s slice') }
 }
 # The ledger is a full rewrite of a merged map, so a failed write costs the run's new dates and nothing else:
 # every term simply keeps its last honestly-earned date and re-earns today's on the next window.

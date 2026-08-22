@@ -749,3 +749,17 @@ if ($null -ne $script:HvCursorNext -and (Test-Path $file)) {
   }
 }
 
+# THE EXPIRY LEDGER MOVES WITH THE CURSOR (2026-08-22). Hy-Vee's slice of expiring sales is
+# now CAPPED (104 of its windows revert on 2026-08-24 against a 120-product cap), and
+# build-sale-windows now keeps an unprocessed window instead of pruning it by date - so
+# something has to say which ones were actually done, or the whole backlog is re-queued
+# forever. Written only when the everyday file landed, for the same reason the cursor is:
+# a run that fetched nothing must repeat its slice, not retire it.
+if (Test-Path $file) {
+  try {
+    . (Join-Path $root 'capture-policy-lib.ps1')
+    $mk = Set-SaleExpiryProcessed -Store 'Hy-Vee' -Today $todayS -OutDir $OutDir -Landed $true
+    if ($mk.Marked -gt 0) { Write-Output ("Hy-Vee: recorded " + $mk.Marked + " sale re-price(s) in sale-windows.json") }
+  } catch { Write-Warning ("Hy-Vee: sale-expiry ledger not updated (" + $_.Exception.Message + ") - those re-prices stay owed and lead tomorrow's slice") }
+}
+
