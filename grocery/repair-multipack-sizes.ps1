@@ -66,8 +66,34 @@ if ($SelfTest) {
 }
 
 if (-not (Test-Path $RegularDir)) { Write-Output ('repair-multipack-sizes: BLIND - no regular dir at ' + $RegularDir); exit 3 }
-$files = @(Get-ChildItem (Join-Path $RegularDir '*-regular-*.json') -ErrorAction SilentlyContinue | Sort-Object Name)
-if ($files.Count -eq 0) { Write-Output ('repair-multipack-sizes: BLIND - no *-regular-*.json in ' + $RegularDir); exit 3 }
+$allFiles = @(Get-ChildItem (Join-Path $RegularDir '*-regular-*.json') -ErrorAction SilentlyContinue | Sort-Object Name)
+if ($allFiles.Count -eq 0) { Write-Output ('repair-multipack-sizes: BLIND - no *-regular-*.json in ' + $RegularDir); exit 3 }
+
+# ---- REPAIR WHAT THE BOARD CAN ACTUALLY READ (2026-08-22) ---------------------------------------------
+# This walked EVERY *-regular-*.json in the folder - 170 files, 385 MB - on every run, and today's answer
+# was "0 repairable, 0 REFUSED" after 38-58 s on the SHIP path, i.e. time spent before the day's prices go
+# live. The engine only ever prices from Select-RegularFileSet (the union window, currently 30 of those
+# 170 files); a pack size in a file outside that window cannot reach the board, so repairing it changes
+# nothing a reader will ever see.
+# NOTHING IS LEFT UNREPAIRED BY THIS. Files only age OUT of the union, never into it: a capture is written
+# fresh, enters the window immediately, and is walked by every run until it expires. So each file is still
+# repaired on every day it can influence a price.
+# ONE SOURCE FOR THE WINDOW, deliberately - the same function compare-deals and guards use. A private copy
+# here is exactly how this file could start repairing a different set than the board prices from, which is
+# the drift class the union self-test in compare-deals exists to catch.
+$files = $allFiles
+try {
+  . (Join-Path $Root 'regular-fileset-lib.ps1')
+  $asOfMp = (Get-Date).Date
+  $sel = @(Select-RegularFileSet $allFiles $asOfMp (Get-RegularUnionDays))
+  if ($sel.Count -gt 0) { $files = @($sel | Sort-Object Name) }
+  else { Write-Output '  note: the engine file set came back EMPTY - repairing every capture instead, because a repair that examines nothing is worse than a slow one' }
+} catch {
+  # Fail OPEN to the old behaviour: a repair that silently examined a SMALLER set than it reported would
+  # be the confident-ok-over-an-empty-examination shape this estate keeps rediscovering.
+  Write-Output ('  note: could not resolve the engine file set (' + $_.Exception.Message + ') - repairing every capture')
+}
+Write-Output ('repair-multipack-sizes: examining ' + $files.Count + ' of ' + $allFiles.Count + ' capture file(s) - the ones inside the engine union window')
 
 $allow = Get-MpAllowKeys $Root
 $repaired = 0; $refused = 0; $examined = 0
