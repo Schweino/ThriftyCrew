@@ -116,6 +116,17 @@ function Get-CapturePlan {
   # sale-windows.json already computes refresh_on = sale_end + 1, described in its own
   # note as "the day the price reverts, when a re-price is due". It was being written
   # daily and read by nothing; this is what consumes it.
+  #
+  # THE COUPLING THAT BOUNDS THIS LIST (documented 2026-08-22). build-sale-windows.ps1
+  # keeps an entry only while refresh_on >= today ("Prune only once refresh_on is in the
+  # past") and prunes it the day AFTER refresh_on. So an id appears here on exactly ONE
+  # day - refresh_on itself, the day after the window ends - and is gone the next. That
+  # is what keeps SaleExpiries from growing without bound, and it is also why a lane that
+  # skips its expiry slice on that day never gets a second chance from this list: the
+  # re-price is owed on the day the sale drops off, not "sometime after". Brad's rule:
+  # "reprice whenever an ad price / sale price / rollback price / instant-savings price
+  # drops off." The two halves - the builder's prune and this consumer's >= test - must
+  # stay aligned; widen one without the other and expiries are either missed or repeated.
   $expiries = New-Object System.Collections.Generic.List[string]
   $sw = Get-PolicyJson 'sale-windows.json'
   if ($sw -and $sw.windows) {
@@ -220,10 +231,12 @@ function Get-CaptureWorklist {
 
   # Sales reverting today are EXTRA, not part of the rotation slice: the whole point
   # is that the shelf price changed back and the board is still showing the sale.
+  # EVERY term of the expiring commodity, not its first (2026-08-22). commodity-search.json allows an
+  # array of terms precisely because 210 of 429 commodities are only reachable through a second term;
+  # re-pricing the expiring item through its first term alone could miss the very product on sale.
   $sale = New-Object System.Collections.Generic.List[object]
   foreach ($id in $plan.SaleExpiries) {
-    $hit = $all | Where-Object { $_.id -eq $id } | Select-Object -First 1
-    if ($hit) { [void]$sale.Add($hit) }
+    foreach ($hit in @($all | Where-Object { $_.id -eq $id })) { [void]$sale.Add($hit) }
   }
 
   return [pscustomobject]@{
@@ -244,6 +257,69 @@ function Get-CaptureWorklist {
                       Group-Object -Property term | ForEach-Object { $_.Group[0] })
     QuarterDays   = $plan.QuarterDays
     MaxCarryDays  = $plan.MaxCarryDays
+  }
+}
+
+function Select-ExpiryFirstSlice {
+  <#
+    .SYNOPSIS Today's work slice with the expiring sales IN it, not merely budgeted for.
+    .DESCRIPTION
+      THE DEFECT (2026-08-22). Get-CapturePlan returned SaleExpiries and a TermBudget of
+      rotation + expiries, and both headless lanes (Family Fare, Hy-Vee) read the BUDGET
+      and ignored the LIST: they took a bigger slice of the rotation and never put the
+      expiring items into it. The extra budget re-verified whatever happened to sit at
+      the cursor, while the item whose sale had just ended - the one the extra slot was
+      FOR - waited its turn in the quarter. Brad's rule: "reprice whenever an ad price /
+      sale price / rollback price / instant-savings price drops off."
+
+      So: the expiring items come FIRST, then the rotation fills from the cursor until
+      the budget is spent. Pure - no disk, no cursor writes - so a fixture can prove an
+      expiring commodity's term is in the slice.
+
+    .PARAMETER Items     the lane's full worklist in rotation order (terms, or products)
+    .PARAMETER Expiring  keys of the items whose sale ended (commodity ids, or terms)
+    .PARAMETER KeyOf     scriptblock: item -> the key(s) it answers to (string or string[])
+    .PARAMETER Budget    total items to take today; <= 0 means unbudgeted (all, expiries first)
+    .PARAMETER CursorStart  where the rotation starts in Items
+    .OUTPUTS  @{ Items; Prepended; FromRotation; CursorNext }
+  #>
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory)][AllowEmptyCollection()]$Items,
+    [AllowEmptyCollection()][string[]]$Expiring = @(),
+    [Parameter(Mandatory)][scriptblock]$KeyOf,
+    [int]$Budget = 0,
+    [int]$CursorStart = 0
+  )
+  $all = @($Items); $n = $all.Count
+  $exp = @{}; foreach ($k in @($Expiring)) { if ($k) { $exp[[string]$k] = $true } }
+  $taken = New-Object System.Collections.Generic.List[object]
+  $seen = New-Object 'System.Collections.Generic.HashSet[int]'
+  $prepended = 0
+  if ($exp.Count -gt 0) {
+    for ($i = 0; $i -lt $n; $i++) {
+      $keys = @(& $KeyOf $all[$i])
+      $hit = $false
+      foreach ($k in $keys) { if ($k -and $exp.ContainsKey([string]$k)) { $hit = $true; break } }
+      if ($hit) { [void]$taken.Add($all[$i]); [void]$seen.Add($i); $prepended++ }
+    }
+  }
+  $walked = 0
+  if ($n -gt 0) {
+    $start = (($CursorStart % $n) + $n) % $n
+    while ($walked -lt $n) {
+      if ($Budget -gt 0 -and $taken.Count -ge $Budget) { break }
+      $idx = ($start + $walked) % $n
+      $walked++
+      if ($seen.Contains($idx)) { continue }
+      [void]$taken.Add($all[$idx]); [void]$seen.Add($idx)
+    }
+  }
+  return [pscustomobject]@{
+    Items        = $taken.ToArray()
+    Prepended    = $prepended
+    FromRotation = ($taken.Count - $prepended)
+    CursorNext   = if ($n -gt 0) { (($CursorStart + $walked) % $n) } else { 0 }
   }
 }
 

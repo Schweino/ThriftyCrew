@@ -662,6 +662,7 @@ $streak = 0; $emptyRun = 0; $aborted = $false; $lastSuccessRot = -1
 # derived, not guessed: total terms / 90 days, plus one extra for each sale reverting
 # today. See capture-policy.ps1 - the single place that decides this for every store.
 $script:TermBudget = [int]::MaxValue
+$ffPrepended = 0
 try {
   . (Join-Path $root 'capture-policy-lib.ps1')
   $plan = Get-CapturePlan -Store 'Family Fare' -Today $todayS
@@ -670,6 +671,24 @@ try {
   # stores' is. One shape for all seven means an audit can ask "what was this store
   # asked for on that day?" and get an answer regardless of how it was fetched.
   try { $null = Write-CaptureWorklist -Store 'Family Fare' -Today $todayS -OutDir $OutDir } catch { }
+  # THE EXPIRING SALES GO TO THE FRONT OF THE LIST (2026-08-22). The budget above already counted one
+  # slot per expiry, but nothing put the expiring commodity's TERMS into the slice - the extra slot was
+  # spent on whatever sat at the cursor while the item whose sale just ended waited its quarter. Brad's
+  # rule: "reprice whenever an ad price / sale price / rollback price / instant-savings price drops off."
+  # Select-ExpiryFirstSlice is pure and fixtured in test-capture-policy.ps1; unbudgeted here (the budget
+  # counter in the buy loop still applies) so it simply reorders: every term of every expiring commodity
+  # first, then the rotation exactly as the cursor left it.
+  if (@($plan.SaleExpiries).Count -gt 0) {
+    $byTerm = @{}; foreach ($tp in $termPairs) { if (-not $byTerm.ContainsKey($tp.term)) { $byTerm[$tp.term] = @() }; $byTerm[$tp.term] += [string]$tp.id }
+    $sl = Select-ExpiryFirstSlice -Items $termList -Expiring @($plan.SaleExpiries) -KeyOf { param($t) $byTerm[$t] } -Budget 0 -CursorStart 0
+    $termList = @($sl.Items)
+    $ffPrepended = [int]$sl.Prepended
+    # The policy budgets one slot per expiring COMMODITY; a multi-term commodity needs one per TERM, and
+    # the rotation must not pay for the difference or its slice silently shrinks on expiry days.
+    $extraTerms = $ffPrepended - @($plan.SaleExpiries).Count
+    if ($extraTerms -gt 0 -and $script:TermBudget -lt [int]::MaxValue) { $script:TermBudget += $extraTerms }
+    Write-Output ("Family Fare: " + $sl.Prepended + " term(s) for " + @($plan.SaleExpiries).Count + " expiring sale(s) moved to the FRONT of today's slice: " + (($termList | Select-Object -First $sl.Prepended) -join ', '))
+  }
   Write-Output ("Family Fare: capture-policy budget = " + $script:TermBudget + " term(s) today (" + $plan.RotationTerms + " rotation + " + $plan.SaleExpiries.Count + " sale expiry; quarter " + $plan.QuarterDays + "d)")
 } catch {
   # A policy that cannot load must NOT silently become "unlimited" - that is the state
@@ -717,7 +736,11 @@ for ($i = 0; $i -lt $termList.Count; $i++) {
 # purchases in memory and nothing on disk. The cursor had certified a window that produced nothing.
 # The arithmetic stays exactly where it was and stays pure; only the COMMIT moves, down past the merged write,
 # behind Get-FfCursorCommit. Compute here, commit there.
-$nextIdx = Get-FfNextCursor $startIdx $lastSuccessRot $termList.Count
+# THE EXPIRY TERMS AT THE FRONT ARE NOT ROTATION POSITIONS (2026-08-22). Select-ExpiryFirstSlice moved
+# $ffPrepended terms ahead of the cursor's slice, so the rotated index of the last success overstates how
+# far the rotation itself got by exactly that many. Subtract them; a run whose only successes were the
+# expiry terms leaves the cursor alone, which is right - no rotation term was re-verified.
+$nextIdx = Get-FfNextCursor $startIdx ($lastSuccessRot - $ffPrepended) $termList.Count
 # RECOVERY PASSES: empties are rate-limit victims; wait out the throttle and retry ONCE each, up to 2 passes,
 # still under the wall-clock cap. Single query per term (no inner backoff) so a hard throttle can't blow up.
 # If the main pass ABORTED on a shutout, skip recovery entirely. Recovery exists to re-ask terms that were

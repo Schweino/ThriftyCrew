@@ -387,7 +387,7 @@ if ($Quick) { $work = @($work | Where-Object { $_.pid -gt 0 } | Select-Object -F
 if (-not $Quick) {
   try {
     . (Join-Path $root 'capture-policy-lib.ps1')
-    $hvPlan = Get-CapturePlan -Store 'Hy-Vee'
+    $hvPlan = Get-CapturePlan -Store 'Hy-Vee' -Today $todayS
     $hvBudget = [int]$hvPlan.TermBudget
     if ($hvBudget -gt 0 -and @($work).Count -gt $hvBudget) {
       # Rotate rather than always taking the head of the list, or the tail is never
@@ -396,9 +396,28 @@ if (-not $Quick) {
       $hvCurFile = Join-Path $OutDir 'hyvee-rotation-cursor.json'
       if (Test-Path $hvCurFile) { try { $hvCur = [int](ConvertFrom-Json ([IO.File]::ReadAllText($hvCurFile))).next_index } catch { } }
       $hvAll = @($work); $hvN = $hvAll.Count
-      $hvPick = New-Object System.Collections.Generic.List[object]
-      for ($z = 0; $z -lt $hvBudget; $z++) { [void]$hvPick.Add($hvAll[(($hvCur + $z) % $hvN)]) }
-      $work = $hvPick.ToArray()
+      # THE EXPIRING SALES GO FIRST (2026-08-22). The budget above counted one slot per sale reverting
+      # today, but the slot was spent on whatever sat at the cursor; the product whose sale just ended
+      # waited its quarter. A product answers to its commodity id (from product-urls) - and, for a row
+      # with no stored link, to the commodity whose product-urls name matches its name. Brad's rule:
+      # "reprice whenever an ad price / sale price / rollback price / instant-savings price drops off."
+      $hvExpNames = @{}
+      foreach ($xid in @($hvPlan.SaleExpiries)) {
+        $xe = $pd.$xid.'Hy-Vee'
+        if ($xe -and $xe.name) { $hvExpNames[([string]$xe.name).ToLower().Trim()] = [string]$xid }
+      }
+      $hvSlice = Select-ExpiryFirstSlice -Items $hvAll -Expiring @($hvPlan.SaleExpiries) -Budget $hvBudget -CursorStart $hvCur -KeyOf {
+        param($w)
+        $ks = @()
+        if ($w.cid) { $ks += [string]$w.cid }
+        $nk = ([string]$w.name).ToLower().Trim()
+        if ($hvExpNames.ContainsKey($nk)) { $ks += $hvExpNames[$nk] }
+        return $ks
+      }
+      $work = @($hvSlice.Items)
+      if ($hvSlice.Prepended -gt 0) {
+        Write-Output ("Hy-Vee: " + $hvSlice.Prepended + " product(s) for " + @($hvPlan.SaleExpiries).Count + " expiring sale(s) placed at the FRONT of today's slice: " + ((@($work | Select-Object -First $hvSlice.Prepended) | ForEach-Object { $_.name }) -join '; '))
+      }
       # COMMIT AFTER THE CAPTURE LANDS, NOT HERE (2026-08-21). This used to write the
       # cursor at slice time, so a run that then failed - a throttle, a torn write, an
       # exception anywhere in the next 250 lines - moved the rotation past products it
@@ -407,7 +426,9 @@ if (-not $Quick) {
       # cursor advanced ahead of a write that then threw and 686 rows were discarded
       # while their terms were skipped. Only the INTENT is computed here; the write
       # happens beside the output file at the end of the run.
-      $script:HvCursorNext = (($hvCur + $hvBudget) % $hvN)
+      # Advance by the rotation positions actually walked, not the whole budget: the expiry
+      # products at the front were not rotation positions (Select-ExpiryFirstSlice reports it).
+      $script:HvCursorNext = [int]$hvSlice.CursorNext
       $script:HvCursorFile = $hvCurFile
       $script:HvCursorFrom = $hvCur
       Write-Output ("Hy-Vee: capture-policy budget = $hvBudget product(s) today (rotation $hvCur/$hvN; quarter $($hvPlan.QuarterDays)d)")
