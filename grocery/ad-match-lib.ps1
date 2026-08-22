@@ -126,28 +126,57 @@ function Import-AdRows {
 function Find-AdForCell {
   <#
     .SYNOPSIS The live ad row this sale cell came from, or $null.
-    .DESCRIPTION Price + one shared word, OR two shared words. See the header for why the second
-                 rule alone can never match a terse ad line.
+    .DESCRIPTION Price + shared words, OR two shared words - scored, best candidate wins. See the
+                 header for why a two-word rule alone can never match a terse ad line.
+
+    *** FIRST-MATCH-WINS WAS A BUG (2026-08-22) ***
+    The loop used to RETURN the first ad row sharing one distinctive word and the cell's dollar
+    figure. Ad flyers are full of same-price lines - a $1.99 page has cottage cheese, shredded
+    cheese, yogurt and sour cream on it - so "Hy-Vee Shredded Cheddar Cheese 8 oz $1.99" took the
+    window of whichever $1.99 cheese line came FIRST in the file, cottage cheese included, and the
+    cell inherited another product's sale dates. Now every price-matching candidate is scored by
+    token overlap (shared count, then Jaccard as the tie-break, brand and size words included) and
+    the BEST one is taken.
+
+    THE BAR RISES WITH THE EVIDENCE AVAILABLE. A cell with >= 3 distinctive tokens must share >= 2
+    with the ad line - but only as many as the ad line HAS. The founding butter case is a 5-token
+    cell against a 1-token ad ("Hy-Vee butter, 16 oz., $2.48" reduces to {butter}); demanding two
+    shared words there is the impossible rule the header describes, so the requirement is
+    min(2, ad-line tokens). Cottage cheese ({cottage, cheese}) has two tokens and shares one with
+    the cheddar cell, so it fails the bar; the terse butter line has one and shares it, so it passes.
   #>
   [CmdletBinding()]
   param([Parameter(Mandatory)]$Index, [Parameter(Mandatory)][string]$Store,
         [string]$Item = '', [string]$PriceText = '')
 
   if (-not $Index.ContainsKey($Store)) { return $null }
-  $ut = Get-AmTokens $Item
+  $ut = @(Get-AmTokens $Item | Select-Object -Unique)
   if (-not $ut.Count) { return $null }
-  $need = if ($ut.Count -ge 3) { 2 } else { 1 }
   $cp = @(Get-AmPrices $PriceText)
   $cell = if ($cp.Count) { [double]$cp[0] } else { $null }
 
+  $best = $null; $bestPrice = $false; $bestOverlap = 0; $bestJac = 0.0
   foreach ($a in $Index[$Store]) {
     $overlap = 0
     foreach ($w in $ut) { if ($a.tokens.Contains($w)) { $overlap++ } }
     if ($overlap -lt 1) { continue }
-    if ($null -ne $cell) {
-      foreach ($p in $a.prices) { if ([math]::Abs($p - $cell) -lt 0.005) { return $a } }
-    }
-    if ($overlap -ge $need) { return $a }
+    $union = $ut.Count + $a.tokens.Count - $overlap
+    $jac = if ($union -gt 0) { $overlap / [double]$union } else { 0.0 }
+    $priceHit = $false
+    if ($null -ne $cell) { foreach ($p in $a.prices) { if ([math]::Abs($p - $cell) -lt 0.005) { $priceHit = $true; break } } }
+    if ($priceHit) {
+      $need = if ($ut.Count -ge 3) { [math]::Min(2, $a.tokens.Count) } else { 1 }
+      if ($overlap -lt $need) { continue }
+    } elseif ($overlap -lt 2) { continue }           # the old two-word rule, kept, for rows with no price match
+    # RANK: a price match beats any number of shared words (see the header); then more shared
+    # words; then the tighter set (Jaccard), so a terse exact line beats a long line that merely
+    # happens to contain the same words.
+    $better = $false
+    if ($null -eq $best) { $better = $true }
+    elseif ($priceHit -ne $bestPrice) { $better = $priceHit }
+    elseif ($overlap -ne $bestOverlap) { $better = ($overlap -gt $bestOverlap) }
+    elseif ($jac -gt $bestJac + 1e-9) { $better = $true }
+    if ($better) { $best = $a; $bestPrice = $priceHit; $bestOverlap = $overlap; $bestJac = $jac }
   }
-  return $null
+  return $best
 }
