@@ -161,6 +161,10 @@ if (Test-Path $statusF) {
       if ([string]$r.stage -eq 'complete') {
         if ([int]$r.exit_code -ne 0) { [void]$findings.Add("RUN RECORD: capture-run [$kind] completed with exit $($r.exit_code) - see $($r.log)") }
         else { [void]$ok.Add("capture-run [$kind] completed rc=0 at $($r.updated)") }
+      } elseif (@('started','capturing','downstream','publishing') -notcontains [string]$r.stage) {
+        # An UNRECOGNISED stage is not a healthy one. 'whatif' used to land here and read as ok simply
+        # because it was under the age bar - the failure mode this whole check exists to end.
+        [void]$findings.Add("RUN RECORD: capture-run [$kind] left stage '$($r.stage)', which is not a stage a real run passes through. Its record cannot be trusted to say whether today's prices were built.")
       } elseif ($ageMin -gt 90) {
         [void]$findings.Add("RUN RECORD: capture-run [$kind] has sat in stage '$($r.stage)' for $ageMin min (pid $($r.pid)) - it never reached 'complete'. Log: $($r.log)")
       } else { [void]$ok.Add("capture-run [$kind] in stage '$($r.stage)' ($ageMin min)") }

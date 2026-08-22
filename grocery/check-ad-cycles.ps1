@@ -143,17 +143,25 @@ function Receive-AuditJob([string]$Name, [int]$TimeoutSec = 900) {
     Stop-Job $e.Job -ErrorAction SilentlyContinue; Remove-Job $e.Job -Force -ErrorAction SilentlyContinue
     Remove-Item $e.PidFile -Force -ErrorAction SilentlyContinue
     $script:AuditJobs.Remove($Name)
-    Log ("TIMED OUT: $Name exceeded its $TimeoutSec s budget and was stopped - treated as could-not-evaluate (rc 124); the board still ships")
-    return [pscustomobject]@{ ExitCode = 124; Output = @("$Name TIMED OUT after $TimeoutSec s"); TimedOut = $true; Elapsed = $elapsed }
+    # RETURN THE ESTATE'S OWN COULD-NOT-EVALUATE CODE (2026-08-22). The first version returned 124 and the
+    # commit claimed callers would "take the same BLIND path they already have for a failure". They do not:
+    # every collector tests for 3 (or for a specific failure code) and 124 fell through the ELSE - so a
+    # killed coverage-gaps re-read YESTERDAY's json and deduped against it as today's, a killed semantic
+    # sweep logged "no invisible products found" and cleared its alert signature, and a killed db-build,
+    # the foreign-key gate, logged clean. A timeout must mean what it is: nothing was proven. The distinct
+    # fact that we KILLED it rather than the script exiting 3 lives in TimedOut and in this log line.
+    Log ("TIMED OUT: $Name exceeded its $TimeoutSec s budget and was stopped - reported as BLIND (could-not-evaluate); the board still ships")
+    return [pscustomobject]@{ ExitCode = 3; Output = @("$Name TIMED OUT after $TimeoutSec s - BLIND, nothing proven"); TimedOut = $true; Elapsed = $elapsed }
   }
   $r = Receive-Job $e.Job -ErrorAction SilentlyContinue
   Remove-Job $e.Job -Force -ErrorAction SilentlyContinue
   Remove-Item $e.PidFile -Force -ErrorAction SilentlyContinue
   $script:AuditJobs.Remove($Name)
-  # no exit code = the job itself broke before the child reported: that is a failure (125), never a clean 0
-  $rc = if ($r -and $null -ne $r.ExitCode) { [int]$r.ExitCode } else { 125 }
+  # no exit code = the job itself broke before the child ever reported. That is not a clean 0 and it is not
+  # a verdict either: it is BLIND, for the same reason as the timeout above.
+  $rc = if ($r -and $null -ne $r.ExitCode) { [int]$r.ExitCode } else { 3 }
   $out = if ($r) { @($r.Output) } else { @() }
-  if ($rc -eq 125) { $out += @(($e.Job.ChildJobs[0].Error | ForEach-Object { [string]$_ })) }
+  if (-not $r) { $out += @('the audit job produced no result object - BLIND') + @(($e.Job.ChildJobs[0].Error | ForEach-Object { [string]$_ })) }
   Log ("{0}: {1} s side-by-side (rc={2})" -f $Name, $elapsed, $rc)
   return [pscustomobject]@{ ExitCode = $rc; Output = $out; TimedOut = $false; Elapsed = $elapsed }
 }
@@ -509,7 +517,14 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # commodity's include (or allowlist it). Alert Brad ONCE per distinct gap-set (signature de-dup) so it is
       # never silent but never spams. Advisory (we still publish the current board).
       try {
-        $null = Receive-AuditJob 'coverage-gaps' 900
+        $cgRc = (Receive-AuditJob 'coverage-gaps' 900).ExitCode
+        if ($cgRc -eq 3) {
+          # BLIND: the file on disk is a PREVIOUS day's. Reading it here would dedupe today against
+          # yesterday's gap set and report "unchanged" about a scan that never happened.
+          Log 'coverage-gaps BLIND (killed at its budget or the job broke) - no gap opinion on this board'
+          $summary += 'REVIEW    audit-coverage-gaps could not evaluate - the store-dropped-a-commodity check did not run this cycle'
+          throw 'CG-BLIND'
+        }
         $cg = try { Get-Content (Join-Path $OutDir 'coverage-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
         # ---- ALERT ON THE ACTIONABLE SUBSET ONLY (2026-08-06, triage plan-2026-08-06 item 2026-08-03-f4fb91).
         # The audit already separates a gap it can act on (CLAIMED-BY / RULE-INVISIBLE / PRICED) from one the
@@ -548,7 +563,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           Log ("coverage-gaps BLIND for: " + $ns + " - zero raw products parsed; those stores were never checked")
           $summary += "REVIEW    coverage-gaps scanned 0 products for $ns - the 'no gaps' result does not cover those stores"
         } else { if (Test-Path (Join-Path $OutDir 'coverage-gap-alert.sig')) { Remove-Item (Join-Path $OutDir 'coverage-gap-alert.sig') -ErrorAction SilentlyContinue } }
-      } catch { Log ('coverage-gap guard threw: ' + $_.Exception.Message) }
+      } catch {
+        # CG-BLIND is this block's own deliberate exit (the audit could not evaluate); it has already
+        # logged and summarised, so do not re-report it as a crash - that would read like a code fault.
+        if ($_.Exception.Message -ne 'CG-BLIND') { Log ('coverage-gap guard threw: ' + $_.Exception.Message) }
+      }
       # ---- SEMANTIC SWEEP (added 2026-08-01): the coverage guard above is REGEX reasoning about regex - it can
       # only find a store that a LOOSENED version of the same include would have matched. It cannot see a product
       # whose name shares no vocabulary with the rule at all, which is how a $45 spice jar won ground-cloves
@@ -624,7 +643,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $msJ = Receive-AuditJob 'match-soundness' 900
         $msJ.Output | ForEach-Object { Log ('match-soundness: ' + $_) }
         if ($msJ.ExitCode -eq 2) { $summary += 'REVIEW    commodity matching changed vs baseline (a product MOVED/DROPPED) - see out\audit\soundness-report.json; publish will HOLD until reviewed + audit-match-soundness.ps1 -Accept' }
-        elseif ($msJ.ExitCode -eq 3) { Log 'match-soundness BLIND: ingested ZERO products - no store feed reached this audit, so its silence is not a clean board'; $summary += 'REVIEW    audit-match-soundness ingested ZERO products - commodity matching is UNGUARDED this run (check out\regular\ and out\ads-*.json)' }
+        elseif ($msJ.ExitCode -eq 3) { $summary += 'REVIEW    audit-match-soundness could not evaluate - commodity matching is UNGUARDED this run'; Log 'match-soundness BLIND: ingested ZERO products - no store feed reached this audit, so its silence is not a clean board'; $summary += 'REVIEW    audit-match-soundness ingested ZERO products - commodity matching is UNGUARDED this run (check out\regular\ and out\ads-*.json)' }
       } catch { Log ('match-soundness guard threw: ' + $_.Exception.Message) }
       # ---- SALE WITHOUT AN AD (wired 2026-08-21, Brad: "Items that we show on 'sale' but no
       # matching 'ad' keep note of"). Every cell published as a sale that matches no row in any ad we
@@ -735,7 +754,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # docket this writes. Reversed, the desk would always show yesterday's findings.
       # Non-fatal and advisory - it can never touch a board.
       try {
-        $dhOut = @((Receive-AuditJob 'discover-hyvee' 900).Output)
+        $dhJ = Receive-AuditJob 'discover-hyvee' 900
+        if ($dhJ.ExitCode -eq 3) { Log 'discover-hyvee BLIND (killed at its budget or the job broke) - no NEW Hy-Vee products were looked for today' }
+        $dhOut = @($dhJ.Output)
         @($dhOut | Where-Object { $_ -match '^DOCKET:|^  \(|SEARCH FAILED|^BLIND' }) | ForEach-Object { Log ('discover-hyvee: ' + $_) }
       } catch { Log ('discover-hyvee threw: ' + $_.Exception.Message); $summary += 'REVIEW    discover-hyvee threw - no NEW Hy-Vee products were looked for today (the refresh-only puller cannot find any on its own)' }
 

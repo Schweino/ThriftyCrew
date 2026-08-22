@@ -952,6 +952,42 @@ else { Bad 'guards.ps1 lost an advisory-wrapper exit-3 branch or the missing-all
 # (k) the direct callers keep their blind branches (source asserts - house precedent for caller plumbing;
 # the behavioral exit-3s are covered by the producer fixtures above).
 $cacSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+
+# ---- THE LAST MILE: what the pipeline computes must reach a reader, and only if it passed ------------
+# Two founding bugs, both 2026-08-22, both invisible to every other check in this file.
+# (1) The 2026-08-20 cutover to the TC tasks left the commit+push behind in run-daily-local.ps1. The
+#     chain rebuilt public\board.json every morning and nothing shipped it: last pipeline commit was
+#     08-18 while every guard read green, because "published" was measured between two LOCAL files.
+# (2) The publish stage that fixed (1) staged public\** unconditionally - so a board guards had BLOCKED
+#     still shipped its feed to the edge, and the 07:00 ad run, which builds nothing, pushed whatever a
+#     session had left mid-edit in meal-prep\.
+# These are source asserts because the plumbing is the bug: the behaviour only appears on a real run,
+# and by then it is a live wrong price. Same precedent as the guard-caller asserts above.
+$crSrc = Get-Content (Join-Path $root 'capture-run.ps1') -Raw
+if ($crSrc -match 'smp-pipeline-bot' -and $crSrc -match 'push origin HEAD:main') {
+  Ok 'capture-run still commits and pushes the pipeline output (the last mile exists)'
+} else { Bad 'capture-run LOST its commit/push - the chain would compute prices that never reach a reader, exactly as 2026-08-18..22' }
+if ($crSrc -match '\$servedPaths' -and $crSrc -match '\$inputPaths') {
+  Ok 'capture-run separates INPUT paths from SERVED paths'
+} else { Bad 'capture-run no longer separates served from input paths - a blocked board or a capture-only run can ship public\** again' }
+if ($crSrc -match '\$shipServed\s*=\s*\$runDownstream\s+-and\s+\$verdictSeen\s+-and\s+\(-not\s+\$guardsBlocked\)') {
+  Ok 'served files ship ONLY when the chain ran AND guards passed (verdict read, never inferred)'
+} else { Bad 'the served-path gate changed shape - public\** may ship without a passing guard verdict' }
+if ($crSrc -notmatch "git -C \$repo add -A -- '?public") {
+  Ok 'capture-run never stages public\ unconditionally'
+} else { Bad 'capture-run stages public\ unconditionally again' }
+if ($crSrc -match "New-Object System\.Threading\.Mutex\(\`$false, 'Global\\tc-capture-run'\)") {
+  Ok 'capture-run holds a machine-wide lock (overlapping scheduled + manual runs cannot share a git index)'
+} else { Bad 'capture-run LOST its mutex - two runs can rebase the same tree at once' }
+# the verdict must be WRITTEN by the chain, or the reader above silently degrades to "no verdict, no ship"
+if ($cacSrc -match 'chain-verdict\.json' -and $cacSrc -match 'guards_blocked') {
+  Ok 'check-ad-cycles states its guard verdict as a value (out\chain-verdict.json)'
+} else { Bad 'check-ad-cycles no longer writes chain-verdict.json - capture-run cannot tell a blocked board from a clean one' }
+# and the watchdog must ask the question that speaks for the READER, not for the pipeline
+$cwSrc = Get-Content (Join-Path $root 'capture-watchdog.ps1') -Raw
+if ($cwSrc -match 'NEVER REACHED MAIN' -and $cwSrc -match "log --author='smp-pipeline-bot'") {
+  Ok 'capture-watchdog asks git whether the pipeline output actually reached main'
+} else { Bad 'capture-watchdog lost the reached-main check - the four-day silent staleness of 2026-08-18..22 becomes invisible again' }
 if ($cacSrc -match 'walmart-fullpull BLIND' -and $cacSrc -match 'name-drift BLIND' -and $cacSrc -match 'coverage-gaps BLIND for' -and $cacSrc -match 'tile-integrity BLIND' -and $cacSrc -match 'match-soundness BLIND') { Ok 'check-ad-cycles keeps all five audit blind branches' }
 else { Bad 'check-ad-cycles lost an audit blind branch - a blind audit logs as routine again' }
 if ($cacSrc -match 'Not an early warning') { Ok 'check-ad-cycles blind email does not reuse the nothing-is-broken-yet body' }

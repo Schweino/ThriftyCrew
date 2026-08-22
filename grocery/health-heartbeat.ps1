@@ -81,6 +81,14 @@ foreach ($t in @($cfg.windows_tasks)) {
   # This fires whenever the heartbeat's check races the watched task's own run (both scheduled 06:45).
   if ([string]$task.State -eq 'Running' -or $res -eq $TASK_RUNNING) { $okLines.Add(("{0,-38} currently running (OK)" -f $name)) }
   elseif ($ageH -gt [double]$t.max_age_hours) { $issues.Add(("TASK STALE: '{0}' last ran {1}h ago (> {2}h) - did its trigger stop? {3}" -f $name, $ageH, $t.max_age_hours, $t.why)) }
+  elseif ($res -ne 0 -and $t.allow_nonzero_exit) {
+    # SOME TASKS REPORT FINDINGS THROUGH THEIR EXIT CODE (2026-08-22). capture-watchdog exits 1 whenever it
+    # has findings - that is it working, not dying - and it is also the script that runs THIS heartbeat, so
+    # without this branch the heartbeat pages about the watchdog every single day the watchdog does its job,
+    # permanently, from its first real finding. A task flagged here is still watched for STALE and for
+    # NEVER RAN above; only the exit code stops being read as death.
+    $okLines.Add(("{0,-38} result {1} (nonzero BY DESIGN - it reports findings that way)" -f $name, $res))
+  }
   elseif ($res -ne 0) {
     # A nonzero exit is only a SILENT DEATH if the work also failed to land. When the registry names a
     # 'proves' output and that output is fresh AND was written by this run, the task's job got done (a

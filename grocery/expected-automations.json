@@ -4,9 +4,9 @@
         {
             "name": "TC Grocery Ad Pulls 0700",
             "max_age_hours": 30,
-            "why": "07:00 weekly-ad pull for every store whose ad rolled over (capture-run -Kind ad; captures only, no chain)",
+            "why": "07:00 weekly-ad pull for every store whose ad rolled over (capture-run -Kind ad; captures only, no chain). proves = the ads file itself: a run-log exists the moment the process starts, so proving with it downgraded a killed run (0xC000013A) to 'work landed'.",
             "allow_pending": true,
-            "proves": "grocery/out/logs/capture-run-ad-*.log"
+            "proves": "grocery/out/ads-*.json"
         },
         {
             "name": "TC Grocery Daily Capture 0800",
@@ -17,7 +17,8 @@
         {
             "name": "TC Grocery Capture Watchdog 0930",
             "max_age_hours": 30,
-            "why": "09:30 outcome check of the two tasks above (schedule, run record, board, publish, ads, browser flags) + this heartbeat"
+            "why": "09:30 outcome check of the two tasks above (schedule, run record, board, publish, ads, browser flags) + this heartbeat. EXITS 1 BY DESIGN whenever it has findings, and it is the script that RUNS health-heartbeat - without this flag the heartbeat pages about the watchdog every day the watchdog does its job (self-referential, permanent from its first real finding).",
+            "allow_nonzero_exit": true
         }
     ],
     "startup_entries": [],
