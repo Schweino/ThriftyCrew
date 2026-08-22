@@ -752,7 +752,16 @@ function Test-CaptureLanded {
     if (-not (Test-Path $Path)) { return $false }
     try {
       $doc = ConvertFrom-Json ([IO.File]::ReadAllText($Path))
-      $rows = if ($doc.deals) { @($doc.deals) } else { @($doc) }
+      # AN EMPTY deals ARRAY IS FALSY, AND THAT INVERTED THIS TEST (fixed 2026-08-22).
+      # `if ($doc.deals)` is FALSE for an empty array in PS 5.1, so a file that legitimately
+      # contained `"deals": []` fell through to the `@($doc)` branch, which wraps the whole document
+      # object and counts 1 - reporting LANDED for a capture that priced nothing.
+      # Measured: build-walmart-deals wrote 333 raw -> 0 priced, and the cursor still advanced
+      # #0 -> #7, skipping that slice for a full quarter. The function's own docstring says the
+      # opposite ("a run that fetched nothing must re-attempt the same slice tomorrow, never skip
+      # it"), so this was a silent inversion of the stated rule, in the safe-sounding direction.
+      # Ask whether the PROPERTY EXISTS, then count it - never lean on array truthiness.
+      $rows = if ($doc.PSObject.Properties['deals']) { @($doc.deals) } else { @($doc) }
       return (@($rows).Count -gt 0)
     } catch { return $false }
   }

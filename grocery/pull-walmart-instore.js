@@ -96,11 +96,25 @@ async function walmartProbe(term) {
       const m2 = String(v).match(/([\d,]+\.?\d*)/);
       return m2 ? parseFloat(m2[1].replace(/,/g, '')) : undefined;
     };
+    /*
+      lp MUST REACH THE CSV AS A "$x.xx" STRING, NOT A NUMBER.
+      build-walmart-deals' Build-Row parses it with [regex]::Match($raw.lp, '\$\s*([\d,]+...)') and
+      rejects anything without the dollar sign. A first version of this fix ran every candidate
+      through money() and emitted bare floats: the capture looked perfect (333 rows, 7/7 MATCHES)
+      and the builder rejected all 333 with "no linePrice". The price was right and the SHAPE was
+      wrong, which is the harder failure to see because nothing in the capture looks broken.
+      So: keep the display string when the payload gives one, and only synthesise "$n" from a
+      numeric shape. money() stays, but as the VALIDATOR - it decides whether we have a price at
+      all, while the string is what travels.
+    */
     const lines = node.priceInfo?.priceDetails?.priceLines || node.priceInfo?.currentPrice;
-    const lp = money(node.priceInfo?.currentPrice?.price)
-      ?? (Array.isArray(lines) ? money(lines[0]?.price) : undefined)
-      ?? money(node.priceInfo?.linePrice)
-      ?? money(node.priceInfo?.linePriceDisplay);
+    const lpRaw = node.priceInfo?.currentPrice?.price
+      ?? (Array.isArray(lines) ? lines[0]?.price : undefined)
+      ?? node.priceInfo?.linePrice
+      ?? node.priceInfo?.linePriceDisplay;
+    const lpNum = money(lpRaw);
+    const lp = lpNum == null ? undefined
+      : (typeof lpRaw === 'string' && lpRaw.includes('$') ? lpRaw.trim() : '$' + lpNum.toFixed(2));
     // unitPrice is a DISPLAY STRING in the flat shape ("2.7 c/fl oz"). Kept verbatim rather than
     // parsed to a number: the basis ("/fl oz") is half the fact, and a bare 2.7 beside a $/lb rival
     // is the unit-mismatch error this estate has already paid for at three stores.

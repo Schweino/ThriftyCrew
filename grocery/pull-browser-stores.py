@@ -127,7 +127,16 @@ STORES = {
         # To retry: delete this flag and run ONE capture. If item nodes appear with real prices, it
         # is fixed. Do not iterate against the live store - use Brad's Chrome as the control, which
         # is what finally separated the two faults here.
-        "paused": "serves the automated browser price-less payloads (soft block); works in Brad's own Chrome",
+        # NOT DRIVABLE HERE - CAPTURED THROUGH BRAD'S OWN CHROME INSTEAD (Brad, 2026-08-22:
+        # "Im okay with you using MY chrome to do the search like you do with Aldi. For walmart that
+        # is."). This driver stays out of Walmart's way entirely rather than probing it daily.
+        # Proven the same day through the claude-in-chrome extension: the same paced sweep, the same
+        # fixed parser, 7/7 terms MATCHES, 333 rows, zero walls -> 136 priced commodities. So the
+        # store is fine and the AGENT is fine; what Walmart declines is this automated browser.
+        # That makes Walmart an ATTENDED lane: it needs a session with the extension, so the 08:00
+        # job cannot do it and correctly reports it as outstanding on the browser flag.
+        "paused": "captured through Brad's own Chrome (attended, like Aldi) - this driver's browser "
+                  "gets price-less payloads, his does not",
         # Walmart is the one store with nothing to assert: prices are already the local store's and
         # there is no store toggle in the payload, so walmartIdentity() only proves we are on
         # walmart.com and not already walled. Seeding is therefore about the SESSION (a warm,
