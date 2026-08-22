@@ -54,9 +54,13 @@ foreach ($r in $old) {
 if ($cells -eq 0) { Write-Output ("cell-drops: BLIND - compared ZERO everyday cells against " + $oldF.BaseName + " (that board parsed to no comparison rows, or stores[].store/.type renamed); 'no cell lost' would be an empty claim"); exit 3 }
 if ($drops.Count -eq 0) { Write-Output ("cell-drops: ok - no everyday cell lost vs " + $oldF.BaseName + " (" + $cells + " cells compared)"); exit 0 }
 # Wording fixed 2026-07-28. It used to assert "carry-forward should have prevented it", which sent every
-# reader hunting for a carry-forward bug in Baker's and Walmart - stores that run COMPREHENSIVE pulls and
-# deliberately have no carry-forward at all. For those the usual cause is a search term that failed during
+# reader hunting for a carry-forward bug in Baker's and Walmart - stores that ran COMPREHENSIVE pulls and
+# deliberately had no carry-forward at all. For those the usual cause is a search term that failed during
 # the capture, so every product reachable only through it is simply absent from that day's file.
-Write-Output ("cell-drops: WARNING - {0} everyday cell(s) priced on {1} are missing from today's board. Baker's/Walmart run comprehensive pulls with NO carry-forward by design, so a dead search term is an instant hole - check that store's pull for failed terms first; for the browser stores check as_of expiry + carry-forward:" -f $drops.Count, $oldF.BaseName)
+# BAKER'S IS NO LONGER ONE OF THEM (2026-08-22, Brad's rotation ruling). Its lane now asks about ~7 of 598
+# terms a day and carries the rest forward on product_id, and a term that FAILS is struck from the asked
+# set so its rows carry too - so a dead search term is not an instant hole there any more. Pointing a
+# reader at "check that store's pull for failed terms" would now be pointing them at the wrong thing.
+Write-Output ("cell-drops: WARNING - {0} everyday cell(s) priced on {1} are missing from today's board. Walmart runs a comprehensive pull with NO carry-forward by design, so for that store a dead search term is an instant hole - check its pull for failed terms first. Baker's now rotates WITH carry-forward (2026-08-22), so a drop there means a row aged past the 90-day carry, or a term it DID re-read stopped returning that product; check carry_expired and capture_terms in its everyday file. For the browser stores check as_of expiry + carry-forward:" -f $drops.Count, $oldF.BaseName)
 $drops | ForEach-Object { Write-Output ("  " + $_.id + " @ " + $_.store + " (was $" + $_.was + ")") }
 exit 1

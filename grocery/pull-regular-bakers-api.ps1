@@ -55,15 +55,62 @@
        A refused row is a gap the coverage machinery can see; a guessed row is a lie nothing can.
   Links come from productPageURI (the store's own /p/<slug>/<upc>), never guessed from productId.
 
+  *** IT ROTATES NOW - IT USED TO PULL THE WHOLE CATALOGUE EVERY DAY (2026-08-22). ***
+  BRAD'S RULING: "Bakers should be following the SAME logic as literally everyone else when it comes to ad
+  rotation and 'everyday' pricing. IDK why its pulling the entire thing but it needs to stop."
+
+  capture-policy-lib.ps1 decides what each of the seven stores is asked for daily - ad rollover, sale expiry,
+  and a 90-day quarterly rotation (total terms / 90 = 7 a day). Every store honoured it except this lane,
+  which took no slice at all and walked all 598 terms at 180ms pacing every morning: ~5 minutes of the daily
+  run, the single largest remaining cost in the pipeline, to re-read prices that had not moved.
+
+  THE BUDGET LIMITS WHAT WE ASK, NOT WHAT WE WRITE. That sentence is the whole design, and it is written here
+  because the Hy-Vee lane learned it the expensive way six hours before this change (commit b649fdcc): a
+  budget was added there by REPLACING the work list with the slice, so the output file contained 7 rows
+  instead of 1,554, the THROTTLE-WIPEOUT guard correctly quarantined it, the script exited before the cursor
+  commit, and the same 7 products were re-taken every day while Hy-Vee's prices sat frozen. So here:
+
+    - the slice is a set of TERMS WE ASK ABOUT today (rotation from the shared cursor, expiring sales first);
+    - every OTHER term's rows are carried forward from the previous capture, at their last known price, with
+      their own as_of and not_reverified=true - present in the file, never passed off as fresh;
+    - the file therefore still carries its full ~7,275 rows on every run.
+
+  WHY CARRY-FORWARD IS SAFE HERE WHEN THE OLD COMMENT SAID IT WAS NOT. The tail of this file used to refuse
+  carry-forward, and it was RIGHT about the thing it named: carry-forward-regular.ps1 keys on the ITEM NAME
+  and walks every prior file in the window, including the browser-era Baker's captures whose names carry the
+  size ("... Chicken Wings (2.5 lb)" @ $3.20/lb) where the API's do not ("... Chicken Wings" @ $8.99/"2.5 lb").
+  Two different names for one product means both rows survive and the stale per-lb copy can win the
+  cheapest-per-store slot. That objection is satisfied rather than overruled:
+    - the carry keys on Kroger's OWN product_id, not on the name, so one product can never become two;
+    - it reads ONE file - the previous capture of THIS lane - not every file in the window. Every row in it
+      carries product_id and source_ad='kroger-api' (7,287/7,287 on 2026-08-22), so no browser-era row can
+      enter through this door;
+    - a term we DID ask about today has its previous rows discarded outright: the fresh response for that
+      term is the catalogue for that term. Without that rule the file would only ever grow.
+
   USAGE
     -Verify           compare against the current board and WRITE NOTHING (review before trusting)
-    -Limit N          only the first N terms (smoke test)
+    -Full             ask about EVERY term (the old behaviour). See below for how often that is needed.
+    -Limit N          only the first N terms of whatever list is in play (smoke test)
     -ResultsPerTerm N how many products per search (default 15)
+    -Commodities ids  targeted re-price of specific commodity ids, merged into the newest capture
+
+  HOW OFTEN A FULL PULL IS STILL NEEDED. The rotation covers 598 terms at ceil(598/90) = 7 a day, so a
+  complete sweep takes ceil(598/7) = 86 days against capture-policy's 90-day MaxCarryDays - a 4-day margin.
+  That margin is the whole answer: if this lane runs every day, no row ever ages out and no full pull is
+  required. Every day the daily run does NOT happen spends one of those four days. So: run -Full once a
+  quarter as a matter of course, and run it after any stretch where the daily lane missed more than four
+  days in a 90-day window (out\capture-cursor-log.jsonl records every advance, so the gaps are countable).
+  A row whose as_of is past MaxCarryDays is DROPPED by the carry rather than published stale, so the cost of
+  skipping the full pull is coverage, never a wrong price.
   Credentials: grocery\.krogerkey (gitignored) or $env:KROGER_CLIENT_ID / $env:KROGER_CLIENT_SECRET in CI.
 #>
 param(
   [switch]$Verify,
   [switch]$SelfTest,
+  # Ask about EVERY term instead of today's rotation slice. The pre-2026-08-22 behaviour, kept because a
+  # comprehensive refresh is still wanted occasionally - see the header for how often.
+  [switch]$Full,
   [int]$Limit = 0,
   [int]$ResultsPerTerm = 25,   # 15 missed real staples behind promo churn (vegetable oil, fresh cauliflower)
   [string]$LocationId = '61500319',   # Baker's - Saddlecreek, 888 S Saddle Creek Rd, Omaha 68106
@@ -344,6 +391,144 @@ function Get-KrogerTaxonomy($p) {
   return @{ category = (($cats.ToArray()) -join ' > '); aisle = $aisle }
 }
 
+# ============================================================================================
+# THE ROTATION HALF. Everything below is PURE - no network, no disk, no credentials - and it all
+# lives ABOVE the -SelfTest block on purpose. -SelfTest exits before the term list and the first
+# request, so a function defined further down cannot be reached by a fixture at all. That is not a
+# style preference: the Hy-Vee budget bug of 2026-08-22 lived in code no self-test could execute,
+# and it collapsed that file to 7 rows for two days.
+# ============================================================================================
+
+# EVERY PRICE FIELD THIS FILE'S ROWS CARRY, enumerated from the live capture
+# (out\regular\bakers-regular-2026-08-22.json, 7,287 rows) rather than from memory:
+#   on every row     store item ad_price size regular source_ad as_of current_price product_id
+#                    size_raw size_basis stock_level found_by_term net_weight sold_by
+#   on most rows     store_category (7,287) link_url (7,287) store_aisle (7,129)
+#   on promo rows    base_price marked_down ad_from ad_to (1,306)
+# The carry copies the row WHOLE - every property it has, known or not - rather than naming a key
+# list that a later field addition would silently fall out of. Hy-Vee's carry names its keys and
+# had to be fixed on 2026-08-22 when base_price/marked_down were dropped from carried markdowns and
+# price-split typed them EVERYDAY at the sale price. Copying everything cannot have that bug.
+function Get-BakersCarryRow($prow, [string]$today) {
+  <#
+    .SYNOPSIS One row of the previous capture, carried at its last known price and SAID SO.
+    .DESCRIPTION
+      A carried row must never be laundered into looking freshly verified. So as_of keeps the date the
+      store actually told us this price - it is NOT restamped to today - and not_reverified=true rides
+      on the row, exactly as the Hy-Vee lane does it. guard 9 counts those flags and prints them.
+
+      AND BRAD'S RULING ON AN ENDED SALE (2026-08-22, already ratified for Hy-Vee): when a sale's dates
+      end, the sale price drops away and the everyday price is what remains. Baker's is the ONE lane that
+      knows those dates - 1,306 of 7,287 rows carry ad_from/ad_to straight from Kroger's own
+      price.expirationDate - so a carried promo row whose window has passed reverts to base_price as an
+      everyday row. Without this, the rotation would publish an expired 7-day flyer price for up to 86
+      days, which is precisely the failure the ad/everyday split exists to end.
+  #>
+  $row = [ordered]@{}
+  foreach ($p in $prow.PSObject.Properties) { $row[$p.Name] = $p.Value }
+  if (-not $row.Contains('as_of')) { $row['as_of'] = '' }
+  $row['not_reverified'] = $true
+  $to = [string]$prow.ad_to
+  $base = $null
+  if ($null -ne $prow.base_price) { try { $base = [double]$prow.base_price } catch { $base = $null } }
+  if ($to -match '^\d{4}-\d{2}-\d{2}$' -and $today -match '^\d{4}-\d{2}-\d{2}$' -and $to -lt $today -and $null -ne $base -and $base -gt 0) {
+    # current_price follows ad_price so guard 10's contract (what we publish == what the store charges)
+    # still holds on the reverted row; sale_expired_on keeps the reason visible rather than making the
+    # reversion look like a silent re-price.
+    $row['ad_price'] = ('$' + $base.ToString('0.00'))
+    $row['current_price'] = $base
+    foreach ($k in @('base_price', 'marked_down', 'ad_from', 'ad_to')) { if ($row.Contains($k)) { $row.Remove($k) } }
+    $row['sale_expired_on'] = $to
+  }
+  return $row
+}
+
+function Test-BakersWipeout([int]$RowCount, [int]$PrevMax) {
+  <#
+    THE THROTTLE-WIPEOUT RULE, as one expression the run and the fixtures both read - the same shape
+    Test-HyVeeWipeout uses, and for the same reason: a guard written twice can be weakened in one place.
+    A file under half the recent high-water mark is quarantined, never written over good data.
+    It is NOT the thing to relax when a budgeted run looks thin. The fix for that is to stop handing this
+    guard a collapsed file, which is what the carry below exists to do.
+  #>
+  return ($PrevMax -gt 100 -and $RowCount -lt ($PrevMax * 0.5))
+}
+
+function Invoke-BakersCarryMerge {
+  <#
+    .SYNOPSIS Today's fresh rows plus every row we did not ask about, and nothing else.
+    .DESCRIPTION
+      THE THREE RULES, stated once here so the fixtures test this exact text:
+
+        1. A FRESH ROW ALWAYS WINS, keyed on Kroger's product_id. A product can legitimately answer
+           several search terms, so the same product may sit under term B in yesterday's file and come
+           back under term A today; keying on the id (never the name) means that is one row, not two.
+        2. A TERM WE ASKED ABOUT TODAY IS RE-STATED, NOT ADDED TO. Its previous rows are discarded:
+           today's response IS the catalogue for that term. Without this rule a delisted product would
+           be carried forever and the file could only grow.
+        3. EVERY OTHER TERM'S ROWS ARE CARRIED, at their last known price, marked not_reverified -
+           unless their as_of is already past MaxCarryDays, in which case they are DROPPED and counted.
+           capture-policy-lib is explicit that rows carried longer than that expire, and dropping one is
+           a coverage gap the ledger can see; publishing it is a stale price nothing reports.
+
+      A term that FAILED both request passes is deliberately NOT in AskedTerms, so its rows carry. That
+      retires the 2026-07-28 defect this file documents at length - "because this is a comprehensive pull
+      that deliberately skips carry-forward, a skipped term is an INSTANT HOLE in the board" (8 dead terms
+      silently dropped cucumbers, spinach, yeast and canned mixed vegetables). A hole is now a carry.
+
+    .PARAMETER Fresh       today's rows, in pull order (ordered hashtables or objects)
+    .PARAMETER PrevDeals   the previous capture's deals
+    .PARAMETER AskedTerms  hashtable of commodity id -> $true for the terms this run actually re-read
+    .PARAMETER Today       yyyy-MM-dd
+    .PARAMETER MaxCarryDays  rows whose as_of is older than this are dropped (0 = never expire)
+    .OUTPUTS @{ Rows; Carried; Expired; Restated; Superseded }
+  #>
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory)][AllowEmptyCollection()]$Fresh,
+    [AllowEmptyCollection()]$PrevDeals = @(),
+    [hashtable]$AskedTerms = @{},
+    [Parameter(Mandatory)][string]$Today,
+    [int]$MaxCarryDays = 0
+  )
+  $rows = New-Object System.Collections.Generic.List[object]
+  $freshIds = @{}
+  foreach ($r in @($Fresh)) {
+    [void]$rows.Add($r)
+    # Read through IDictionary when it IS one: in PS 5.1 `$psCustomObject['key']` and
+    # `$orderedHashtable.key` are not interchangeable, and a silent $null here would make every
+    # fresh row look id-less and let the carry duplicate all of them.
+    # NOT $pid - that is a read-only automatic variable (the process id) and assigning to it throws
+    # "Cannot overwrite variable PID" from inside the function, killing the whole run.
+    $rid = if ($r -is [System.Collections.IDictionary]) { [string]$r['product_id'] } else { [string]$r.product_id }
+    if ($rid) { $freshIds[$rid] = $true }
+  }
+  $carried = 0; $expired = 0; $restated = 0; $superseded = 0
+  $todayD = $null
+  if ($MaxCarryDays -gt 0) { try { $todayD = [datetime]::ParseExact($Today, 'yyyy-MM-dd', $null) } catch { $todayD = $null } }
+  foreach ($d in @($PrevDeals)) {
+    $rid = [string]$d.product_id
+    if ($rid -and $freshIds.ContainsKey($rid)) { $superseded++; continue }        # rule 1
+    if ($AskedTerms.ContainsKey([string]$d.found_by_term)) { $restated++; continue } # rule 2
+    if ($null -ne $todayD) {                                                       # rule 3
+      $ao = [string]$d.as_of
+      if ($ao -match '^\d{4}-\d{2}-\d{2}$') {
+        $aoD = $null
+        try { $aoD = [datetime]::ParseExact($ao, 'yyyy-MM-dd', $null) } catch { $aoD = $null }
+        if ($aoD -and (($todayD - $aoD).TotalDays -gt $MaxCarryDays)) { $expired++; continue }
+      }
+    }
+    [void]$rows.Add([pscustomobject](Get-BakersCarryRow $d $Today))
+    $carried++
+  }
+  # .ToArray(), NOT the List itself. In Windows PowerShell 5.1 `@( )` around a
+  # System.Collections.Generic.List[object] throws "ArgumentException: Argument types do not match", and
+  # every caller here wraps the result in @( ). audit-ff-carry.ps1 carries a long note about this exact
+  # trap - it silently broke that script on every run for 17 days.
+  return [pscustomobject]@{ Rows = $rows.ToArray(); Carried = $carried; Expired = $expired
+                            Restated = $restated; Superseded = $superseded }
+}
+
 # ---------------------------------------------------------------- self-test (no credentials, no network)
 # Fixtures are REAL rows read off the Saddlecreek store on 2026-07-24 - every case is a known answer, and
 # several are the exact products that produced the 4x Kerrygold underprice this resolver exists to prevent.
@@ -442,38 +627,271 @@ if ($SelfTest) {
   T 'taxonomy REFUSES non-string elements'  (Get-KrogerTaxonomy (New-Object psobject -Property @{ categories = @((New-Object psobject -Property @{ id = 7 })) })).category ''
   T 'taxonomy REFUSES a blank aisle'        (Get-KrogerTaxonomy (New-Object psobject -Property @{ aisleLocations = @((New-Object psobject -Property @{ description = '   ' })) })).aisle ''
 
+  # ==================================================================================================
+  # THE ROTATION (2026-08-22). Baker's used to ask for all 598 terms every day; Brad's ruling ended it.
+  # Every case below is about ONE sentence, the one the Hy-Vee lane had to learn twice:
+  # A BUDGET LIMITS WHAT WE ASK, NEVER WHAT WE WRITE.
+  # These FAIL on the code that shipped before this change - there was no slice, no carry and no cursor,
+  # so a rotation-sized run produced a rotation-sized FILE.
+  # Synthetic 240-term population, frozen rows, no network, no live policy files, no writes outside TEMP.
+  # ==================================================================================================
+  . (Join-Path $root 'capture-policy-lib.ps1')
+  function B([string]$label, [bool]$cond) { if ($cond) { Write-Output ("ok    " + $label) } else { Write-Output ("FAIL  " + $label); $script:fail++ } }
+
+  $NT_TERMS = 240
+  $bkPrev = New-Object System.Collections.Generic.List[object]
+  $bkTerms = New-Object System.Collections.Generic.List[object]
+  for ($i = 0; $i -lt $NT_TERMS; $i++) {
+    $cid = ('fix-{0:d3}' -f $i)
+    [void]$bkTerms.Add([pscustomobject]@{ id = $cid; term = ('term ' + $cid) })
+    # two products per term, one of them a live promo carrying Kroger's own window
+    [void]$bkPrev.Add([pscustomobject][ordered]@{
+      store="Baker's"; item=("Fixture Product $i A"); ad_price='$2.50'; size='16 oz'; regular=$null
+      source_ad='kroger-api'; as_of='2026-08-21'; current_price=2.5; product_id=("P$i-A")
+      size_raw='16 oz'; size_basis='label'; stock_level='HIGH'; found_by_term=$cid
+      net_weight='1.0 [lb_av]'; sold_by='UNIT'; store_category='Grocery'; store_aisle='GROCERY'
+      link_url='https://www.bakersplus.com/p/x/1' })
+    [void]$bkPrev.Add([pscustomobject][ordered]@{
+      store="Baker's"; item=("Fixture Product $i B"); ad_price='$3.99'; size='12 oz'; regular=$null
+      source_ad='kroger-api'; as_of='2026-08-21'; current_price=3.99; product_id=("P$i-B")
+      size_raw='12 oz'; size_basis='label'; stock_level='HIGH'; found_by_term=$cid
+      net_weight='0.75 [lb_av]'; sold_by='UNIT'; store_category='Grocery'; store_aisle='GROCERY'
+      link_url='https://www.bakersplus.com/p/x/2'
+      base_price=5.49; marked_down=$true; ad_from='2026-08-19'; ad_to='2026-08-26' })
+  }
+  $POP = $bkPrev.Count            # 480 rows
+  # the rotation budget for this population, from the policy's own quarter: ceil(240/90) = 3 terms a day
+  $bkBudget = [int][math]::Ceiling($NT_TERMS / [double](Get-PolicyQuarterDays))
+  B "the daily slice is ceil($NT_TERMS terms / $(Get-PolicyQuarterDays)d) = $bkBudget term(s), not the whole list" ($bkBudget -eq 3)
+
+  # --- (a) a rotation-sized slice still writes a row for EVERY product the previous file had ---------
+  $sliceA = Select-ExpiryFirstSlice -Items $bkTerms.ToArray() -Expiring @() -Budget $bkBudget -CursorStart 0 -KeyOf { param($t) @([string]$t.id) }
+  $askA = @{}; foreach ($t in @($sliceA.Items)) { $askA[[string]$t.id] = $true }
+  # the store answers: one fresh row per asked term (the second product of that term is gone today -
+  # a re-read term is RESTATED, so that row must not survive)
+  $freshA = New-Object System.Collections.Generic.List[object]
+  foreach ($t in @($sliceA.Items)) {
+    $n = [int](([string]$t.id) -replace '\D','')
+    [void]$freshA.Add([pscustomobject][ordered]@{
+      store="Baker's"; item=("Fixture Product $n A"); ad_price='$2.29'; size='16 oz'; regular=$null
+      source_ad='kroger-api'; as_of='2026-08-22'; current_price=2.29; product_id=("P$n-A")
+      size_raw='16 oz'; size_basis='label'; stock_level='HIGH'; found_by_term=([string]$t.id)
+      net_weight='1.0 [lb_av]'; sold_by='UNIT' })
+  }
+  $mA = Invoke-BakersCarryMerge -Fresh $freshA.ToArray() -PrevDeals $bkPrev.ToArray() -AskedTerms $askA -Today '2026-08-22' -MaxCarryDays 90
+  $rowsA = @($mA.Rows)
+  $termsOut = @{}; foreach ($r in $rowsA) { $termsOut[[string]$r.found_by_term] = $true }
+  B "MUST-FIRE (a): a $bkBudget-term slice against $NT_TERMS terms still writes a row for EVERY commodity (got $($termsOut.Count))" ($termsOut.Count -eq $NT_TERMS)
+  # $POP rows in, $bkBudget of them re-read and re-stated at a new price, $bkBudget of them genuinely
+  # delisted from their term's response: $POP - $bkBudget rows out. The pre-change code wrote $bkBudget.
+  B "(a) and every product outside the re-read terms is still in the file ($($rowsA.Count) rows of $POP; $($mA.Superseded) re-priced, $($mA.Restated) delisted by a re-read term)" (
+      ($rowsA.Count -eq ($POP - $bkBudget)) -and ($mA.Superseded -eq $bkBudget) -and ($mA.Restated -eq $bkBudget))
+  B "(a) the budget limited ASKING only: $($freshA.Count) fresh + $($mA.Carried) carried = $($rowsA.Count)" (
+      ($freshA.Count -eq $bkBudget) -and ($mA.Carried -eq ($POP - (2 * $bkBudget))) -and ($rowsA.Count -eq ($freshA.Count + $mA.Carried)))
+  $frA = @($rowsA | Where-Object { [string]$_.product_id -eq 'P0-A' })[0]
+  B '(a) an asked row is genuinely fresh: as_of today, the price the store just gave, no not_reverified flag' (
+      ($null -ne $frA) -and ([string]$frA.as_of -eq '2026-08-22') -and ([string]$frA.ad_price -eq '$2.29') -and ($null -eq $frA.not_reverified))
+  B '(a) a re-read term is RESTATED, not added to: the product its response no longer carries is gone' (
+      @($rowsA | Where-Object { [string]$_.product_id -eq 'P0-B' }).Count -eq 0)
+
+  # --- (b) carried rows keep their price fields and are NOT marked re-verified today -----------------
+  $carA = @($rowsA | Where-Object { [string]$_.product_id -eq 'P100-B' })[0]
+  # -and short-circuits on purpose: on the pre-change code the row is not in the file at all and this
+  # must report FAIL, not throw an exception that swallows every case after it.
+  B '(b) MUST-FIRE: a carried promo row keeps ad_price / current_price / base_price / marked_down / ad_from / ad_to / size / product_id / link_url / source_ad' (
+      ($null -ne $carA) -and ([string]$carA.ad_price -eq '$3.99') -and ($carA.current_price -eq 3.99) -and
+      ($carA.base_price -eq 5.49) -and ([bool]$carA.marked_down) -and ([string]$carA.ad_to -eq '2026-08-26') -and
+      ([string]$carA.size -eq '12 oz') -and ([string]$carA.size_basis -eq 'label') -and
+      ([string]$carA.link_url -ne '') -and ([string]$carA.store_category -eq 'Grocery'))
+  B "(b) provenance survives the carry - guards.ps1 asserts every Baker's row carries source_ad='kroger-api'" (
+      @($rowsA | Where-Object { [string]$_.source_ad -ne 'kroger-api' }).Count -eq 0)
+  B '(b) a carried row is NOT laundered into looking fresh: as_of stays 2026-08-21 and not_reverified is set' (
+      ($null -ne $carA) -and ([string]$carA.as_of -eq '2026-08-21') -and ([bool]$carA.not_reverified))
+  B '(b) NO carried row claims to have been verified today' (
+      @($rowsA | Where-Object { $_.not_reverified -and ([string]$_.as_of -eq '2026-08-22') }).Count -eq 0)
+  # Brad's ruling, already ratified for Hy-Vee: when the sale's dates end the everyday price is what remains.
+  $mExp = Invoke-BakersCarryMerge -Fresh @() -PrevDeals @($bkPrev[1]) -AskedTerms @{} -Today '2026-08-27' -MaxCarryDays 90
+  $expRow = @($mExp.Rows)[0]
+  B '(b) a carried promo whose window has PASSED reverts to everyday at base_price, sale fields dropped, reason recorded' (
+      ([string]$expRow.ad_price -eq '$5.49') -and ($expRow.current_price -eq 5.49) -and
+      ($null -eq $expRow.marked_down) -and ($null -eq $expRow.ad_to) -and ([string]$expRow.sale_expired_on -eq '2026-08-26'))
+  $mOpen = Invoke-BakersCarryMerge -Fresh @() -PrevDeals @($bkPrev[1]) -AskedTerms @{} -Today '2026-08-23' -MaxCarryDays 90
+  B '(b) CLEAN TWIN: the same window still open stays the sale at $3.99 with its was-price intact' (
+      ([string]@($mOpen.Rows)[0].ad_price -eq '$3.99') -and (@($mOpen.Rows)[0].base_price -eq 5.49))
+  $mAged = Invoke-BakersCarryMerge -Fresh @() -PrevDeals @($bkPrev[0]) -AskedTerms @{} -Today '2026-12-01' -MaxCarryDays 90
+  B '(b) a row past MaxCarryDays is DROPPED and counted, never published stale' (
+      (@($mAged.Rows).Count -eq 0) -and ($mAged.Expired -eq 1))
+
+  # --- (c) the THROTTLE-WIPEOUT guard does not trip on a budgeted run --------------------------------
+  B "(c) MUST-FIRE: the guard does NOT trip on a budgeted run ($($rowsA.Count) rows vs a $POP high-water mark)" (
+      -not (Test-BakersWipeout -RowCount $rowsA.Count -PrevMax $POP))
+  B '(c) MUST-FIRE: the OLD shape - writing only what was asked - DOES trip it, which is what quarantined Hy-Vee for two days' (
+      Test-BakersWipeout -RowCount $bkBudget -PrevMax $POP)
+  B '(c) the guard itself is untouched: a genuinely collapsed run is still refused' (
+      (Test-BakersWipeout -RowCount 100 -PrevMax 480) -and (-not (Test-BakersWipeout -RowCount 241 -PrevMax 480)))
+
+  # --- (d) consecutive runs ask for DIFFERENT terms (the cursor advances) ----------------------------
+  $sliceB = Select-ExpiryFirstSlice -Items $bkTerms.ToArray() -Expiring @() -Budget $bkBudget -CursorStart ([int]$sliceA.CursorNext) -KeyOf { param($t) @([string]$t.id) }
+  $askB = @{}; foreach ($t in @($sliceB.Items)) { $askB[[string]$t.id] = $true }
+  B "(d) MUST-FIRE: tomorrow's slice is DISJOINT from today's (cursor 0 -> $($sliceA.CursorNext) -> $($sliceB.CursorNext))" (
+      ([int]$sliceA.CursorNext -eq $bkBudget) -and (@($askA.Keys | Where-Object { $askB.ContainsKey([string]$_) }).Count -eq 0))
+  $freshB = New-Object System.Collections.Generic.List[object]
+  foreach ($t in @($sliceB.Items)) {
+    $n = [int](([string]$t.id) -replace '\D','')
+    foreach ($sfx in @('A', 'B')) {
+      [void]$freshB.Add([pscustomobject][ordered]@{
+        store="Baker's"; item=("Fixture Product $n $sfx"); ad_price='$2.79'; size='16 oz'; regular=$null
+        source_ad='kroger-api'; as_of='2026-08-23'; current_price=2.79; product_id=("P$n-$sfx")
+        size_raw='16 oz'; size_basis='label'; stock_level='HIGH'; found_by_term=([string]$t.id)
+        net_weight='1.0 [lb_av]'; sold_by='UNIT' })
+    }
+  }
+  $mB = Invoke-BakersCarryMerge -Fresh $freshB.ToArray() -PrevDeals $rowsA -AskedTerms $askB -Today '2026-08-23' -MaxCarryDays 90
+  B "(d) and the second run also writes every remaining product, not just its own slice ($(@($mB.Rows).Count) rows)" (
+      @($mB.Rows).Count -eq $rowsA.Count)
+  B "(d) yesterday's fresh row is now a CARRIED row - still in the file, still at its own as_of, flagged" (
+      ([string]@($mB.Rows | Where-Object { [string]$_.product_id -eq 'P0-A' })[0].as_of -eq '2026-08-22') -and
+      ([bool]@($mB.Rows | Where-Object { [string]$_.product_id -eq 'P0-A' })[0].not_reverified))
+  # an expiring sale is re-priced FIRST, ahead of whatever sits at the cursor
+  $sliceX = Select-ExpiryFirstSlice -Items $bkTerms.ToArray() -Expiring @('fix-200') -Budget $bkBudget -CursorStart 0 -KeyOf { param($t) @([string]$t.id) }
+  B "(d) an expiring sale leads the slice instead of waiting its quarter (Brad: reprice when a sale price drops off)" (
+      ([string]@($sliceX.Items)[0].id -eq 'fix-200') -and (@($sliceX.Items).Count -eq $bkBudget))
+
+  # --- (d)/(e) the cursor FILE: one advance a day, never on a replay, never on a run that got nothing -
+  $bkTmp = Join-Path ([IO.Path]::GetTempPath()) ('bkcur-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $bkTmp -Force | Out-Null
+  try {
+    $realToday = (Get-Date).ToString('yyyy-MM-dd')
+    $cFile = Join-Path $bkTmp 'capture-cursor.json'
+    # (e) THE CASE THAT MATTERS MOST. The file is written with all its carried rows even when every
+    # request failed, so Test-CaptureLanded would say LANDED - which is why the lane passes -Landed
+    # itself. A run that asked and was answered by nobody must NOT burn its slice.
+    $e1 = Step-CaptureCursor -Store "Baker's" -Today $realToday -OutDir $bkTmp -Landed $false
+    B '(e) MUST-FIRE: a run that fetched NOTHING does not advance the cursor, and writes no cursor file' (
+        (-not $e1.Advanced) -and (-not (Test-Path $cFile)) -and ($e1.Reason -match 'no fresh rows landed'))
+    $d1 = Step-CaptureCursor -Store "Baker's" -Today $realToday -OutDir $bkTmp -Landed $true
+    $onDisk = -1
+    if (Test-Path $cFile) { $onDisk = [int](ConvertFrom-Json ([IO.File]::ReadAllText($cFile))).Bakers }
+    B "(d) MUST-FIRE: Baker's now HAS a term cursor - it advances by the rotation and lands on disk (#$onDisk)" (
+        ($d1.Advanced) -and ($onDisk -eq [int]$d1.To) -and ($onDisk -gt 0))
+    $d2 = Step-CaptureCursor -Store "Baker's" -Today $realToday -OutDir $bkTmp -Landed $true
+    B '(d) a second run the same day does not rotate again (one slice per day, however often the lane runs)' (
+        (-not $d2.Advanced) -and ([int](ConvertFrom-Json ([IO.File]::ReadAllText($cFile))).Bakers -eq $onDisk))
+    $d3 = Step-CaptureCursor -Store "Baker's" -Today '2026-01-01' -OutDir $bkTmp -Landed $true
+    B '(d) a REPLAY (or a self-test on a frozen date) never moves the live rotation' (
+        (-not $d3.Advanced) -and ([int](ConvertFrom-Json ([IO.File]::ReadAllText($cFile))).Bakers -eq $onDisk))
+  } finally { Remove-Item -LiteralPath $bkTmp -Recurse -Force -ErrorAction SilentlyContinue }
+
+  # --- the comprehensive pull is unchanged: every term asked, nothing carried -----------------------
+  $askFull = @{}; foreach ($t in $bkTerms) { $askFull[[string]$t.id] = $true }
+  $mFull = Invoke-BakersCarryMerge -Fresh $bkPrev.ToArray() -PrevDeals $bkPrev.ToArray() -AskedTerms $askFull -Today '2026-08-22' -MaxCarryDays 90
+  B '-Full (every term asked): the catalogue is restated wholesale and NOTHING is carried' (
+      (@($mFull.Rows).Count -eq $POP) -and ($mFull.Carried -eq 0))
+
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output ("SELF-TEST FAIL: " + $fail + " case(s)"); exit 1 }
 }
 
 # ---------------------------------------------------------------- pull
 $terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
-$termList = @($terms.PSObject.Properties)
+# THE POLICY IS LOADED FIRST, NOT LAST. It answers three separate questions below - the promo-length
+# bound, today's slice, and the carry window - so it has to be in scope before any of them.
+$script:PolicyOk = $false
+$script:PromoMaxDays = 90
+$script:CarryDays = 90
+try {
+  . (Join-Path $root 'capture-policy-lib.ps1')
+  $script:PromoMaxDays = [int](Get-PolicyQuarterDays)
+  $script:CarryDays = [int](Get-PolicyMaxCarryDays)
+  $script:PolicyOk = $true
+} catch { Write-Warning ("bakers-api: capture-policy did not load (" + $_.Exception.Message + ") - falling back to a COMPREHENSIVE pull this pass") }
+
+# THE TERM LIST COMES FROM Get-AllTerms, NOT FROM THE RAW PROPERTY BAG (2026-08-22).
+# The cursor indexes Get-AllTerms' order - sorted by commodity id, one entry PER TERM - so slicing any
+# other list would make the cursor's integer mean something different here than it does for the other
+# five term-rotation stores. It also fixes a quiet pre-existing defect: commodity-search.json lets a
+# commodity carry an ARRAY of terms (popsicles does), and `[string]$property.Value` on an array joins
+# them into one nonsense query string. Get-AllTerms flattens them properly - 598 terms, not 597.
+$allTerms = if ($script:PolicyOk) { @(Get-AllTerms) } else {
+  @($terms.PSObject.Properties | ForEach-Object {
+      $n = $_.Name
+      foreach ($v in @($_.Value)) { [pscustomobject]@{ id = $n; term = [string]$v } }
+    } | Sort-Object id)
+}
+$termList = @($allTerms)
+$fetchList = @($allTerms)     # what we actually ASK about today
+$askedTerms = @{}             # commodity id -> $true, for the carry
+$rotationMode = 'full'
+$bkPlan = $null
+$script:BkCursorFrom = $null
+$script:BkCursorNext = $null
+
 # TARGETED RE-PRICE. -Commodities takes specific commodity ids and pulls ONLY those.
 # The capture policy produces exactly this kind of list - the items whose sale ended
 # today, and the ones that lost their cell when an ad closed - and re-pulling all
-# 596 terms to refresh two of them is what put Family Fare over its request budget.
+# 598 terms to refresh two of them is what put Family Fare over its request budget.
 # Filtering here means a targeted re-price costs two requests, not six hundred.
 if ($Commodities -and $Commodities.Count) {
   $want = @{}; foreach ($c in $Commodities) { $want[[string]$c] = $true }
-  $termList = @($termList | Where-Object { $want.ContainsKey([string]$_.Name) })
-  Write-Output ("bakers-api: TARGETED re-price of {0} commodity(ies): {1}" -f $termList.Count, ($Commodities -join ', '))
-  if ($termList.Count -eq 0) { Write-Warning 'none of the requested commodity ids exist in commodity-search.json'; exit 1 }
+  $fetchList = @($allTerms | Where-Object { $want.ContainsKey([string]$_.id) })
+  $rotationMode = 'targeted'
+  Write-Output ("bakers-api: TARGETED re-price of {0} term(s) for: {1}" -f $fetchList.Count, ($Commodities -join ', '))
+  if ($fetchList.Count -eq 0) { Write-Warning 'none of the requested commodity ids exist in commodity-search.json'; exit 1 }
 }
-if ($Limit -gt 0) { $termList = $termList | Select-Object -First $Limit }
-Write-Output ("bakers-api: {0} term(s), store {1}, {2} results/term" -f $termList.Count, $LocationId, $ResultsPerTerm)
+# ---------------------------------------------------------------- today's slice
+# BRAD'S RULING, APPLIED: the same ad-rotation + everyday logic as literally everyone else.
+# Get-CapturePlan gives the daily drip (598/90 = 7 terms) plus today's capped slice of sales whose
+# window ended, all bounded by this store's own call cap ($StoreCallCap, 250 for Baker's).
+# Select-ExpiryFirstSlice puts the expiring commodities at the FRONT and fills the rest from the
+# shared rotation cursor, exactly as the Family Fare and Hy-Vee lanes do.
+elseif (-not $Full -and $script:PolicyOk) {
+  try {
+    $bkPlan = Get-CapturePlan -Store "Baker's" -Today $today
+    $bkCur = Get-CaptureCursor -Store "Baker's" -OutDir $out
+    $bkSlice = Select-ExpiryFirstSlice -Items $allTerms -Expiring @($bkPlan.SaleExpiries) `
+                 -Budget ([int]$bkPlan.TermBudget) -CursorStart $bkCur -KeyOf { param($t) @([string]$t.id) }
+    $sliceTerms = @($bkSlice.Items)
+    # ALL OF A COMMODITY'S TERMS OR NONE OF THEM. popsicles carries two search terms, and the rotation
+    # walk is positional, so a slice boundary can fall between them. The carry discards a term's old
+    # rows when that term was re-read, so half-asking a commodity would drop the rows its OTHER term
+    # found. One extra request is a much cheaper answer than a hole.
+    $sliceIds = @{}; foreach ($t in $sliceTerms) { $sliceIds[[string]$t.id] = $true }
+    $sliceTerms = @($allTerms | Where-Object { $sliceIds.ContainsKey([string]$_.id) })
+    $fetchList = $sliceTerms
+    $rotationMode = 'rotation'
+    $script:BkCursorFrom = [int]$bkCur
+    $script:BkCursorNext = [int]$bkSlice.CursorNext
+    Write-Output ("bakers-api: capture-policy slice = {0} term(s) to ASK about today (rotation {1}/{2}, {3}/day; {4} expiring sale term(s) at the front; quarter {5}d; cap {6}) - every other term's rows are CARRIED, not dropped" -f `
+      $fetchList.Count, $bkCur, $allTerms.Count, $bkPlan.RotationTerms, $bkSlice.Prepended, $bkPlan.QuarterDays, $bkPlan.CallCap)
+    if ($bkSlice.Prepended -gt 0) {
+      Write-Output ("bakers-api: expiring sale(s) re-priced FIRST: " + ((@($bkSlice.Items | Select-Object -First $bkSlice.Prepended) | ForEach-Object { $_.id }) -join ', '))
+    }
+    if ($bkPlan.ExpiryDeferred -gt 0) {
+      Write-Output ("bakers-api: {0} expiry(ies) did not fit today's cap - they stay OWED in sale-windows.json and lead tomorrow's slice (oldest {1})" -f $bkPlan.ExpiryDeferred, $bkPlan.ExpiryOldest)
+    }
+  } catch {
+    Write-Warning ("bakers-api: could not compute today's slice (" + $_.Exception.Message + ") - COMPREHENSIVE pull this pass")
+    $fetchList = @($allTerms); $rotationMode = 'full'
+  }
+}
+elseif ($Full) { Write-Output 'bakers-api: -Full - asking about EVERY term (the comprehensive refresh; see the header for how often this is needed)' }
+
+if ($Limit -gt 0) { $fetchList = @($fetchList | Select-Object -First $Limit) }
+foreach ($t in $fetchList) { $askedTerms[[string]$t.id] = $true }
+Write-Output ("bakers-api: {0} of {1} term(s) [{2}], store {3}, {4} results/term" -f $fetchList.Count, $termList.Count, $rotationMode, $LocationId, $ResultsPerTerm)
 
 $deals = New-Object System.Collections.Generic.List[object]
 $seen = @{}          # keyed by productId: a product legitimately answers several terms
-# THE PROMO-LENGTH BOUND, read from the capture policy rather than written here. A "sale" longer than
-# the rotation quarter is the price you can buy at any time, which is the definition of everyday.
-$script:PromoMaxDays = 90
-try { . (Join-Path $root 'capture-policy-lib.ps1'); $script:PromoMaxDays = [int](Get-PolicyQuarterDays) } catch { }
 $stats = [ordered]@{ terms=0; fail=0; products=0; promo=0; dated=0; longpromo=0; nopriced=0; refused=0 }
 $refusals = New-Object System.Collections.Generic.List[object]
 $termReceipts = @{}
 $termOrdinals = @{}
+# Keyed on id|term, not on id alone: a commodity may carry SEVERAL search terms (popsicles does), and
+# keying on the id would let one of its terms overwrite the other's receipt. The ordinal is the term's
+# position in the same list the rotation cursor indexes, so a receipt states exactly where in the
+# quarter this term sat.
+function Get-TermKey($tp) { return ([string]$tp.id + '|' + [string]$tp.term) }
 for ($termOrdinal = 0; $termOrdinal -lt $termList.Count; $termOrdinal++) {
-  $termOrdinals[[string]$termList[$termOrdinal].Name] = $termOrdinal
+  $termOrdinals[(Get-TermKey $termList[$termOrdinal])] = $termOrdinal
 }
 
 # RETRY FAILED TERMS ONCE (2026-07-28). A term was one HTTP call with no retry, and a failure just
@@ -483,7 +901,10 @@ for ($termOrdinal = 0; $termOrdinal -lt $termList.Count; $termOrdinal++) {
 # spinach, yeast and canned mixed vegetables from Baker's; a re-pull four hours later had all four back,
 # same store, same rules. It costs ~8 extra requests to stop that, and Baker's had been losing 1-6 cells a
 # day to it. The only pre-existing gate was `products < 100`, which 6,800 rows sail through.
-$pending = [object[]]@($termList)
+# 2026-08-22: a term that still fails both passes is no longer a hole either - it is REMOVED from
+# $askedTerms below, so its previous rows are carried forward instead of discarded. The retry stays: a
+# carried row is a price we could not check, and one extra request is a much better outcome than that.
+$pending = [object[]]@($fetchList)
 $pass = 0
 while ($pending.Count -gt 0 -and $pass -le 1) {
   if ($pass -eq 1) {
@@ -492,7 +913,7 @@ while ($pending.Count -gt 0 -and $pass -le 1) {
   }
   $failedThisPass = New-Object System.Collections.Generic.List[object]
 foreach ($tp in $pending) {
-  $id = $tp.Name; $term = [string]$tp.Value
+  $id = [string]$tp.id; $term = [string]$tp.term
   if (-not $term) { continue }
   $url = 'https://api.kroger.com/v1/products?filter.term={0}&filter.locationId={1}&filter.limit={2}' -f [uri]::EscapeDataString($term), $LocationId, $ResultsPerTerm
   try { $r = Get-KrogerJson $url } catch {
@@ -500,9 +921,10 @@ foreach ($tp in $pending) {
   }
   $stats.terms++
   $responseRows = @($r.data)
-  $termReceipts[$id] = [ordered]@{
+  $termReceipts[(Get-TermKey $tp)] = [ordered]@{
     term_key = $id
-    ordinal = [int]$termOrdinals[$id]
+    term = $term
+    ordinal = [int]$termOrdinals[(Get-TermKey $tp)]
     outcome = $(if ($responseRows.Count -gt 0) { 'success' } else { 'empty' })
     row_count = $responseRows.Count
   }
@@ -613,21 +1035,34 @@ foreach ($tp in $pending) {
 }
 # only terms that failed BOTH passes count as failures
 $stats.fail = $pending.Count
-if ($pending.Count -gt 0) { Write-Output ("bakers-api: {0} term(s) failed twice and are NOT in this capture: {1}" -f $pending.Count, (@($pending | ForEach-Object { $_.Value }) -join ', ')) }
+if ($pending.Count -gt 0) {
+  Write-Output ("bakers-api: {0} term(s) failed twice: {1}" -f $pending.Count, (@($pending | ForEach-Object { $_.term }) -join ', '))
+  # A FAILED TERM IS NOT AN ASKED TERM. This one line is what turns the 2026-07-28 "instant hole"
+  # into a carry: with the term out of $askedTerms, Invoke-BakersCarryMerge keeps its previous rows
+  # instead of restating the term from a response we never received.
+  foreach ($tp in $pending) { $askedTerms.Remove([string]$tp.id) }
+  Write-Output '           their previous rows are CARRIED forward, not dropped (this used to be a board hole)'
+}
 $captureTerms = New-Object System.Collections.Generic.List[object]
 foreach ($tp in $termList) {
-  $termId = [string]$tp.Name
-  if ($termReceipts.ContainsKey($termId)) { $captureTerms.Add([pscustomobject]$termReceipts[$termId]); continue }
+  $tk = Get-TermKey $tp
+  if ($termReceipts.ContainsKey($tk)) { $captureTerms.Add([pscustomobject]$termReceipts[$tk]); continue }
+  # NOT-ASKED AND BLOCKED ARE DIFFERENT THINGS, AND MUST NEVER SHARE A NUMBER. "not present" vs "not
+  # asked" being the same value is exactly what hid the Hy-Vee freeze for two days. A term outside
+  # today's slice says so, and says its rows were carried.
+  $asked = $askedTerms.ContainsKey([string]$tp.id) -or @($fetchList | Where-Object { (Get-TermKey $_) -eq $tk }).Count -gt 0
   $captureTerms.Add([pscustomobject][ordered]@{
-    term_key = $termId
-    ordinal = [int]$termOrdinals[$termId]
-    outcome = 'blocked'
+    term_key = [string]$tp.id
+    term = [string]$tp.term
+    ordinal = [int]$termOrdinals[$tk]
+    outcome = $(if ($asked) { 'blocked' } else { 'not_asked' })
     row_count = 0
-    reason = 'Kroger API request failed twice'
+    reason = $(if ($asked) { 'Kroger API request failed twice - previous rows carried forward' }
+               else { "outside today's capture-policy slice - previous rows carried at their last known price" })
   })
 }
 
-Write-Output ("bakers-api: terms ok={0} failed={1} | rows={2} (promo/sale={3}, unpriced={4}, size-REFUSED={5})" -f $stats.terms, $stats.fail, $stats.products, $stats.promo, $stats.nopriced, $stats.refused)
+Write-Output ("bakers-api: terms ok={0} failed={1} | fresh rows={2} (promo/sale={3}, unpriced={4}, size-REFUSED={5})" -f $stats.terms, $stats.fail, $stats.products, $stats.promo, $stats.nopriced, $stats.refused)
 if ($refusals.Count -gt 0) {
   $refDir = Join-Path $out 'kroger-api-eval'
   if (-not (Test-Path $refDir)) { New-Item -ItemType Directory -Path $refDir -Force | Out-Null }
@@ -717,42 +1152,152 @@ if ($Commodities -and $Commodities.Count) {
   Write-Output ("bakers-api: TARGETED MERGE - kept {0} row(s), replaced with {1} freshly pulled, wrote {2}" -f @($keep).Count, @($fresh).Count, (Split-Path $outFile -Leaf))
   exit 0
 }
-if ($stats.products -lt 100) {
-  Write-Warning ("bakers-api: only $($stats.products) products - refusing to overwrite the capture with a thin pull (a partial pull is an overwrite). Nothing written.")
+# ---------------------------------------------------------------- the rotation commit
+# BEFORE THE WRITE, NOT AFTER IT - and this is not a style choice. The Hy-Vee lane put its commit after
+# the write, the THROTTLE-WIPEOUT guard exited 2 twelve lines earlier, and the cursor was therefore NEVER
+# CREATED: every run re-took the same slice and that store's prices froze for two days with every
+# mechanism reporting success. A refused write must not also refuse the rotation.
+#
+# -Landed IS PASSED EXPLICITLY, and that is the one thing this lane must not leave to the default.
+# Step-CaptureCursor would otherwise call Test-CaptureLanded, which reads
+# out\regular\bakers-regular-<date>.json and counts rows - and that file now carries ~7,275 rows on EVERY
+# run because the un-asked terms are carried forward. It would answer LANDED even on a morning when every
+# single request failed, and the slice would burn. So the lane supplies the honest signal: did the store
+# actually ANSWER for at least one term we asked about? Same judgement Test-HyVeeCursorAdvance makes.
+# Replay refusal, one-slice-per-day and the atomic temp-then-move all still come from Step-CaptureCursor;
+# only the landing question is answered here, where it can be answered truthfully.
+if ($null -ne $script:BkCursorNext -and $script:PolicyOk) {
+  try {
+    $bkLanded = ($stats.terms -gt 0)
+    $cs = Step-CaptureCursor -Store "Baker's" -Today $today -OutDir $out -Landed $bkLanded
+    if ($cs.Advanced) { Write-Output ("bakers-api: rotation cursor advanced #{0} -> #{1} ({2})" -f $cs.From, $cs.To, $cs.Reason) }
+    else { Write-Warning ("bakers-api: rotation cursor HELD at #{0} - {1}" -f $script:BkCursorFrom, $cs.Reason) }
+  } catch {
+    Write-Warning ("bakers-api: the rotation cursor could not be written (" + $_.Exception.Message + ") - the next run re-asks this same slice; nothing is lost.")
+  }
+}
+
+# ---------------------------------------------------------------- carry forward, then write
+# THE BUDGET LIMITS WHAT WE ASK, NOT WHAT WE WRITE. The rules live in Invoke-BakersCarryMerge, above
+# -SelfTest, so the fixtures drive this exact text rather than a transcription of it.
+#
+# THE OLD COMMENT THAT STOOD HERE said carry-forward was "intentionally skipped" because this pull is
+# comprehensive and because carry-forward-regular.ps1 keys on the ITEM NAME - the API writes
+# "Kroger Raw Frozen Bone In Skin On Chicken Wings" $8.99 / "2.5 lb" where the browser era wrote
+# "Kroger ... Chicken Wings (2.5 lb)" $3.20 / "lb", so a name-keyed carry sees two items, keeps both, and
+# the stale per-lb copy can win the cheapest-per-store slot. Every word of that was true, and none of it
+# is true of THIS carry: it keys on Kroger's own product_id (one product can never become two), reads
+# ONLY the previous capture of this lane (every row of which carries source_ad='kroger-api'), and
+# discards a term's old rows outright whenever that term was re-read today. The reason was satisfied,
+# not overruled. See the file header.
+$regDir = Join-Path $out 'regular'
+$prevFile = Get-ChildItem (Join-Path $regDir 'bakers-regular-*.json') -EA SilentlyContinue |
+            Where-Object { $_.BaseName -match '^bakers-regular-\d{4}-\d{2}-\d{2}$' } |
+            Sort-Object Name -Descending | Select-Object -First 1
+$prevDeals = @()
+$prevName = ''
+if ($prevFile) {
+  try { $prevDeals = @((Get-Content $prevFile.FullName -Raw | ConvertFrom-Json).deals); $prevName = $prevFile.Name }
+  catch { Write-Warning ("bakers-api: the previous capture " + $prevFile.Name + " could not be read (" + $_.Exception.Message + ") - NOTHING can be carried this run"); $prevDeals = @() }
+}
+# A ROTATION RUN WITH NOTHING TO CARRY IS A COLD START, AND IT MUST SAY SO. Today's ~7 terms are not a
+# catalogue; without a previous capture this run can only write what it asked for, which is exactly the
+# collapsed file the wipeout guard below exists to refuse. It is left to that guard rather than refused
+# here, because on a genuine first-ever run (no Baker's file at all, prevMax 0) writing the slice IS the
+# right thing - it seeds the file that tomorrow carries from.
+if ($rotationMode -eq 'rotation' -and @($prevDeals).Count -eq 0) {
+  Write-Warning "bakers-api: no previous capture to carry from - this run can only write the terms it asked about. Run with -Full to seed a complete capture."
+}
+# A FULL PULL RESTATES EVERY TERM IT SUCCEEDED ON, so a clean -Full run carries nothing: $askedTerms holds
+# all 598 ids and rule 2 discards the previous file wholesale. The exception is the point - a term that
+# failed both passes was struck from $askedTerms above, so its rows are CARRIED instead of leaving the
+# board hole this file has documented since 2026-07-28. One code path for both modes, and the counters
+# printed below say which happened.
+$merge = Invoke-BakersCarryMerge -Fresh $deals.ToArray() -PrevDeals $prevDeals -AskedTerms $askedTerms `
+           -Today $today -MaxCarryDays $script:CarryDays
+$allRows = $merge.Rows
+Write-Output ("bakers-api: {0} fresh row(s) + {1} carried (not re-verified) = {2} row(s) | {3} superseded by a fresh row, {4} restated by a re-read term, {5} EXPIRED past the {6}-day carry" -f `
+  $deals.Count, $merge.Carried, $allRows.Count, $merge.Superseded, $merge.Restated, $merge.Expired, $script:CarryDays)
+if ($prevName) { Write-Output ("bakers-api: carried from " + $prevName) }
+
+# THE THIN-PULL REFUSAL, NOW MEASURED ON THE FILE WE ARE ABOUT TO WRITE. It used to read
+# `$stats.products -lt 100` - the count of FRESHLY PULLED rows - which is exactly the conflation that
+# quarantined Hy-Vee for two days: on a 7-term rotation day a perfect run legitimately pulls ~90 fresh
+# rows and writes 7,275. What must never collapse is the FILE, so that is what is measured. The fresh-row
+# floor is kept for a comprehensive pull, where it means what it always meant.
+if (($Full -or $rotationMode -eq 'full') -and $stats.products -lt 100) {
+  Write-Warning ("bakers-api: a COMPREHENSIVE pull returned only $($stats.products) products - refusing to overwrite the capture with a thin pull (a partial pull is an overwrite). Nothing written.")
   exit 1
 }
 # A ROW-COUNT GATE CANNOT SEE A TERM-SHAPED HOLE (2026-07-28). 8 dead terms out of 518 still yields ~6,800
 # rows, so the check above waves it through while four commodities silently leave the board. Gate on term
 # completeness too, AFTER the retry pass: if more than 2% of terms are still dead, this capture has holes
-# we cannot see the shape of, and yesterday's complete capture is the better thing to keep serving. Same
-# principle as the row gate - a partial pull is an overwrite - just measured on the axis that was blind.
-$termTotal = @($termList).Count
-if ($termTotal -gt 0 -and (($stats.fail / $termTotal) -gt 0.02)) {
+# we cannot see the shape of, and yesterday's complete capture is the better thing to keep serving.
+# ONLY ON A COMPREHENSIVE PULL, since 2026-08-22. On a 7-term rotation day ONE flaky term is 14% and this
+# would refuse the entire file - for a term whose rows are now carried forward intact. A gate that fires
+# on the healthy case is a gate people route around. A failed term in rotation mode is reported, carried,
+# and re-asked when the rotation comes back to it.
+$termTotal = @($fetchList).Count
+if (($Full -or $rotationMode -eq 'full') -and $termTotal -gt 0 -and (($stats.fail / $termTotal) -gt 0.02)) {
   Write-Warning ("bakers-api: {0} of {1} terms ({2:P1}) failed BOTH passes - refusing to overwrite the capture with a term-holed pull. The newest existing capture keeps serving. Nothing written." -f $stats.fail, $termTotal, ($stats.fail / $termTotal))
   exit 1
+}
+# THROTTLE-WIPEOUT GUARD: never let a broken run clobber good data. Its rule lives in Test-BakersWipeout,
+# above -SelfTest, so the run and the fixtures read the same text. This is the guard the carry above exists
+# to keep un-tripped: it is NOT the thing to relax when a budgeted run looks thin.
+$prevMax = 0
+foreach ($pf in (Get-ChildItem (Join-Path $regDir 'bakers-regular-*.json') -EA SilentlyContinue |
+    Where-Object { $_.BaseName -match '^bakers-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 4)) {
+  try { $c = @((Get-Content $pf.FullName -Raw | ConvertFrom-Json).deals).Count; if ($c -gt $prevMax) { $prevMax = $c } } catch {}
+}
+if (Test-BakersWipeout -RowCount $allRows.Count -PrevMax $prevMax) {
+  $qDir = Join-Path $out 'throttled'
+  if (-not (Test-Path $qDir)) { New-Item -ItemType Directory -Path $qDir -Force | Out-Null }
+  $pfile = Join-Path $qDir ("bakers-$today.throttled.json")   # NOT out\regular - see guards invariant 7
+  ([ordered]@{ store="Baker's"; week_of=$today; price_type='everyday'; throttled=$true; deal_count=$allRows.Count; deals=$allRows } | ConvertTo-Json -Depth 6) | Set-Content $pfile -Encoding UTF8
+  Write-Warning ("bakers-api: THROTTLE-WIPEOUT guard tripped - only " + $allRows.Count + " rows vs " + $prevMax + " last time. NOT overwriting.")
+  exit 2   # never a bare return: at script scope that reports SUCCESS to capture-run
 }
 $doc = [ordered]@{
   store = "Baker's"; week_of = $today; price_type = 'everyday'
   price_mode = 'in-store'; mode_verified = $today   # Kroger's API prices ARE the store's shelf prices (locationId-scoped, no delivery markup layer)
   source = 'kroger-public-api'; location_id = $LocationId; store_label = "Baker's - Saddlecreek, Omaha 68106"
-  coverage_mode = $(if ($stats.fail -eq 0) { 'full' } else { 'partial' })
-  pull_terms = $stats.terms; capture_terms = $captureTerms.ToArray(); deal_count = $deals.Count
-  deals = $deals.ToArray()
+  # PARTIAL IS THE HONEST WORD FOR A ROTATION DAY. 'full' now means only what it says: every term asked.
+  coverage_mode = $(if (($Full -or $rotationMode -eq 'full') -and $stats.fail -eq 0) { 'full' } else { 'partial' })
+  rotation_mode = $rotationMode
+  # "not asked" and "not present" must never be the same number again - that conflation is what froze the
+  # Hy-Vee file for two days. Recorded in the FILE, not just on the console.
+  terms_total = @($termList).Count; terms_asked = @($fetchList).Count
+  cursor_from = $script:BkCursorFrom; cursor_next = $script:BkCursorNext
+  fresh_rows = $deals.Count; carried_rows = $merge.Carried; not_reverified = $merge.Carried
+  carry_expired = $merge.Expired; carry_days = $script:CarryDays
+  carried_from = $prevName
+  pull_terms = $stats.terms; capture_terms = $captureTerms.ToArray(); deal_count = $allRows.Count
+  deals = $allRows
 }
 $file = Join-Path $out ('regular\bakers-regular-' + $today + '.json')
 ($doc | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8
-Write-Output ("bakers-api: wrote $($deals.Count) rows -> " + (Split-Path $file -Leaf))
+Write-Output ("bakers-api: wrote $($allRows.Count) rows ($($deals.Count) fresh) -> " + (Split-Path $file -Leaf))
 $bakersWindow = Update-BakersAdSchedule (Join-Path $root 'ad-schedule.json') $today
 Write-Output ("bakers-api: advanced ad schedule to {0}..{1}" -f $bakersWindow.from, $bakersWindow.to)
 
-# NO carry-forward here, deliberately. Those helpers exist for PARTIAL browser pulls of the same catalogue.
-# This pull is comprehensive (all 447 terms, ~4,800 products vs the browser pass's ~250), and the browser
-# captures use a DIFFERENT naming convention for the same product - the API says
-#   "Kroger Raw Frozen Bone In Skin On Chicken Wings" $8.99 / "2.5 lb"
-# where the browser wrote
-#   "Kroger Raw Frozen Bone In Skin On Chicken Wings (2.5 lb)" $3.20 / "lb"
-# Carry-forward keys on the name, sees two different items, and keeps BOTH - so a stale 07-18 per-lb row
-# competes with today's real price and can win the cheapest-per-store slot. That is the stale-low failure
-# the union rules were written to prevent. A comprehensive pull IS the catalogue; the coverage-regression
-# guard is what protects us if it ever comes back thin, and the thin-pull refusal above is the first line.
-Write-Output 'bakers-api: comprehensive pull - carry-forward/size-heal intentionally skipped (see comment).'
+# THE EXPIRY LEDGER MOVES WITH THE CAPTURE. build-sale-windows keeps an unprocessed window instead of
+# pruning it by date, so something has to say which expiries were actually re-priced or the backlog is
+# re-queued forever. Written only when the file landed, for the same reason the cursor is.
+if ((Test-Path $file) -and $script:PolicyOk -and $rotationMode -eq 'rotation') {
+  try {
+    $mk = Set-SaleExpiryProcessed -Store "Baker's" -Today $today -OutDir $out -Landed $true
+    if ($mk.Marked -gt 0) { Write-Output ("bakers-api: recorded " + $mk.Marked + " sale re-price(s) in sale-windows.json") }
+  } catch { Write-Warning ("bakers-api: sale-expiry ledger not updated (" + $_.Exception.Message + ") - those re-prices stay owed and lead tomorrow's slice") }
+}
+
+# SIZE-HEAL IS STILL SKIPPED, and now for a stronger reason than "the pull is comprehensive".
+# heal-degraded-sizes.ps1 repairs a row whose size came back '' or 'each' when an earlier capture had a
+# real count at the same price - the shallow-browser-capture class. This lane cannot produce that row:
+# Resolve-KrogerSize either proves a size from the label plus Kroger's netWeight or REFUSES the product
+# outright (it is counted into out\kroger-api-eval\refused-<date>.json and never written), so there is no
+# degraded size to heal. And the carry above copies the row WHOLE - the resolved `size`, `size_raw` and
+# `size_basis` travel with it - so a carried row cannot degrade either; it is the same string the resolver
+# proved on the day it was captured. Running the heal would only expose these rows to its name-keyed
+# matching for no possible gain.
+Write-Output 'bakers-api: size-heal intentionally skipped - the resolver refuses rather than degrades, and the carry preserves the proven size verbatim (see comment).'

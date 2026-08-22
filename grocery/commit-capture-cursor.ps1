@@ -107,12 +107,20 @@ if ($SelfTest) {
   if ($r5.Advanced) { Write-Output "FAIL  a replay dated 2026-07-31 advanced the live cursor - a self-test can move production"; $fail++ }
   else { Write-Output 'ok    a replay/self-test date is refused, however landed its capture looks' }
 
-  # The two rotations that are NOT term rotations must refuse, not silently no-op.
-  foreach ($s in @('Hy-Vee', "Baker's")) {
-    $r = Step-CaptureCursor -Store $s -Today (Get-Date).ToString('yyyy-MM-dd') -OutDir $tmp
-    if ($r.Advanced) { Write-Output "FAIL  $s got a TERM cursor - its rotation is a different namespace"; $fail++ }
-    else { Write-Output "ok    $s correctly excluded from the term cursor" }
-  }
+  # The ONE rotation that is not a term rotation must refuse, not silently no-op. Hy-Vee indexes 1,554
+  # PRODUCT IDS and keeps hyvee-rotation-cursor.json; the same integer must not mean two things.
+  $r = Step-CaptureCursor -Store 'Hy-Vee' -Today (Get-Date).ToString('yyyy-MM-dd') -OutDir $tmp
+  if ($r.Advanced -or $r.Reason -notmatch 'product id') { Write-Output "FAIL  Hy-Vee got a TERM cursor - its rotation is a different namespace"; $fail++ }
+  else { Write-Output 'ok    Hy-Vee correctly excluded from the term cursor (it rotates by product id)' }
+  # BAKER'S IS IN, AS OF 2026-08-22 (Brad: "Bakers should be following the SAME logic as literally
+  # everyone else"). It used to pull all 598 terms every day and was excluded here for that reason.
+  # It now rotates over the SAME term list as the other five, so it must be ACCEPTED - and this case
+  # fails on the code that shipped before that change, where it was refused as "comprehensive".
+  # -Landed is passed because Baker's own file always carries its full row count (the un-asked terms
+  # are carried forward), so Test-CaptureLanded cannot tell a good day from a dead endpoint there.
+  $rb = Step-CaptureCursor -Store "Baker's" -Today (Get-Date).ToString('yyyy-MM-dd') -OutDir $tmp -Landed $true
+  if ($rb.Advanced -and $rb.To -gt 0) { Write-Output ("ok    Baker's now takes a term cursor and advanced #" + $rb.From + ' -> #' + $rb.To) }
+  else { Write-Output ("FAIL  Baker's did not get its term cursor: " + $rb.Reason); $fail++ }
 
   Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
   Write-Output ("SELFTEST " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))
