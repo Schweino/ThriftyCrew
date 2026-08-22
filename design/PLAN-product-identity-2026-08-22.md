@@ -244,6 +244,16 @@ A Kroger/Hy-Vee `product_id` is stable across a size or label variant; the rules
 ### 10.5 Rulings are negatives; first-match-wins must be re-examined, not assumed
 `known_wrong_for` is "an adjudicated negative, absolute". When a known-wrong forbids the commodity the rule proposed, does the product today **fall through to the next matching commodity** or **drop**? Read `compare-deals.ps1`'s known-wrong handling and `known-wrong-lib.ps1` and preserve that exact behaviour in the precedence logic (step 2), with a fixture for each branch. Precedence is therefore two ladders — *forbid* (human forbid > known-wrong > suppression) and *assign* (human assign > rule) — not one.
 
+**RESOLVED 2026-08-22, measured on the real engine.** `grocery/test-precedence-ladders.ps1` is the answer, frozen as eight cases that run the real `compare-deals.ps1` over a purpose-built two-commodity corpus (both commodities' includes match the same product, so array order decides and a fall-through would be visible):
+
+- **The product DROPS.** The matcher returns exactly one commodity (first-match-wins); known-wrong is applied *afterwards*, in the "adjudicated-wrong cells" block, as a row-level removal from `$matched`. The second include-matching commodity does **not** inherit the row — the board loses the cell. The comment there ("the store falls through to its next-best row") means the store's *other products inside the same commodity*, not this product's next commodity.
+- A ruling is scoped to **(commodity, store)**: forbidding a commodity the rules never proposed is inert, and so is a ruling naming a different store.
+- Matching is on `KwNorm` **and** the unit-stripped `KwCore`, so re-listing at a new pack size does not escape a ruling. A `reversed_on`+`reversed_by` entry is history, not a gate.
+- The drop is **post-match and post-candidates**: `candidates-<date>.json` is written before it and still lists the forbidden row. Anything reading candidates as "what the board priced" is reading it wrong (relevant to the step-3 migrations).
+- Consequence for the table: a forbid never changes `commodity`; it removes **eligibility**. The derived row keeps the rule's proposal and carries the ruling alongside it.
+
+**The assign ladder does not exist yet.** `compare-deals.ps1` has exactly one assignment path — the rules (one `Resolve-Commodity` call site; the fixture asserts that count so a second one cannot appear unnoticed). `discovery-verdicts`' `accepted` adds a product to the Hy-Vee catalog pull and lets the ordinary rules match it; it assigns nothing. So step 2's *assign* ladder is **new capability, not a migration**, and it can move a cell the current engine could never have moved. It must therefore ship **empty by default**, or step 2's own acceptance test ("the board is byte-identical before/after") cannot pass.
+
 ### 10.6 `candidates` requires a small, parity-checked engine change
 The C# core stops at the first match (and its inverted-index prefilter skips entries that cannot match). Recording `candidates` means continuing past the first hit to evaluate every include-eligible entry's excludes. This is cheap in compiled code but it is an engine change: the first-match answer must remain identical (`test-match-lib`), and the prefilter's soundness (`RequiredLiteral`) must hold for the continued scan too.
 
