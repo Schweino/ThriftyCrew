@@ -1,4 +1,4 @@
-<#
+﻿<#
   update-history.ps1 - Maintains a persistent per-commodity CHEAPEST-PRICE HISTORY so we can later say
   "cheapest since <date>" / "lowest in N weeks" when a big sale lands.
 
@@ -153,7 +153,23 @@ $updated = $compacted
 
 # ---- persist ----
 $maxWeeks = 0; foreach ($u in $updated) { $hc = @($u.history).Count; if ($hc -gt $maxWeeks) { $maxWeeks = $hc } }
-([ordered]@{ updated=$week; weeks_on_record=$maxWeeks; commodities=$updated } | ConvertTo-Json -Depth 9) | Set-Content $HistoryFile -Encoding UTF8
+# WRITTEN ATOMICALLY, AND RE-PARSED BEFORE IT COUNTS (2026-08-22). This is the largest state file in the
+# estate (13+ MB) and it was written with a plain truncating Set-Content, twice per chain. The chain runs
+# under a 2-hour Task Scheduler limit; a kill inside this write leaves an EMPTY file, and the reader in
+# build-deals-page.ps1 turns '' into $null without throwing - so every record_low silently vanishes and
+# the buy/wait badge confidently tells a reader "cheapest ever" about a price it can no longer compare.
+# The temp+move+re-parse pattern is already in this folder (purge-verdict-lows.ps1); this uses it, and
+# refuses the swap if the rewritten file does not re-parse with the same commodity count.
+$histTmp = $HistoryFile + '.tmp'
+$histDoc = [ordered]@{ updated=$week; weeks_on_record=$maxWeeks; commodities=$updated }
+($histDoc | ConvertTo-Json -Depth 9) | Set-Content $histTmp -Encoding UTF8
+$histCheck = $null
+try { $histCheck = Get-Content $histTmp -Raw -Encoding UTF8 | ConvertFrom-Json } catch { }
+if (-not $histCheck -or @($histCheck.commodities.PSObject.Properties).Count -ne @($histDoc.commodities.PSObject.Properties).Count) {
+  Remove-Item $histTmp -Force -ErrorAction SilentlyContinue
+  throw 'update-history: the rewritten price-history.json did not re-parse with the same commodity count - REFUSING the swap; the previous file stands'
+}
+Move-Item $histTmp $HistoryFile -Force
 
 # ---- this week's highlight badges ----
 $notable = @($badges | Where-Object { $_.status -eq 'record_low' -or $_.status -eq 'ties_record' -or $_.status -eq 'low_since' } | Sort-Object @{E={$_.weeks_since};Descending=$true})
