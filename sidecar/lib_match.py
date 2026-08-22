@@ -86,15 +86,25 @@ def commodity_text(d: dict) -> str:
 
 @dataclass
 class Matcher:
-    embed_model: SentenceTransformer
+    embed_model: SentenceTransformer | None
     rerank_model: CrossEncoder | None
 
     @classmethod
     def load(cls, with_reranker: bool = True) -> "Matcher":
         em = SentenceTransformer(EMBED_MODEL, device=DEVICE)
         em.max_seq_length = 96  # product names are short; this is a large throughput win
-        rr = CrossEncoder(RERANK_MODEL, device=DEVICE, max_length=160) if with_reranker else None
+        rr = cls._reranker() if with_reranker else None
         return cls(em, rr)
+
+    @classmethod
+    def load_reranker_only(cls) -> "Matcher":
+        """The cross-encoder without the bi-encoder, for a caller (sweep.py's score cache) whose
+        embeddings are already on disk. Same pinned model and max_length as load()."""
+        return cls(None, cls._reranker())
+
+    @staticmethod
+    def _reranker() -> CrossEncoder:
+        return CrossEncoder(RERANK_MODEL, device=DEVICE, max_length=160)
 
     def embed(self, texts: Sequence[str], batch_size: int = 256) -> torch.Tensor:
         return self.embed_model.encode(
