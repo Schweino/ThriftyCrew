@@ -110,8 +110,18 @@ those gates are numbers.
 - **A fifth local model, not a fifth runtime.** `tools/local-llm/serve.ps1`
   starts a llama.cpp OpenAI-compatible endpoint on 127.0.0.1:8080 (Qwen3.8-27B,
   13.1 GB, weights OUTSIDE the repo at `C:\Codex\llm`). Nothing schedules it and
-  nothing requires it: every caller checks `Test-LocalLLM` and falls back to the
-  deterministic path, because the board must publish with the endpoint down.
+  nothing requires it: every caller checks `LocalLLM.health()` (`graph/lib/llm.py`)
+  and falls back to the deterministic path, because the board must publish with
+  the endpoint down. **ON-DEMAND ONLY, BY RULE (2026-08-22):** it cannot share
+  the 16 GB card with the semantic sidecar sweep, which needs ~3 GB and runs in
+  the 07:00 pipeline and 2-3x a day. Start llama-server by hand when a job needs
+  it and **stop it before 07:00**; `audit-semantic-identity.ps1` checks
+  `nvidia-smi` first and goes BLIND (exit 3, naming llama-server) instead of
+  launching a sweep that would OOM. Client bounds: `LocalLLM` times out at 120 s
+  per call (recipe extraction passes 600 explicitly for its 4096-token ask) and
+  `resolve.py --jobs` defaults to 4, coupled to `serve.ps1 -Slots 4`. The old
+  PowerShell client `grocery/local-llm-lib.ps1` was deleted the same day: it had
+  no callers and Python is the only client.
 - **New local-only queue.** `grocery/learning-queue.json`, gitignored for exactly
   the reason `triage-queue.json` is (`.gitignore:153`): producer and consumer are
   the same PC, so it never crosses the git-bus, and its bodies carry store text.

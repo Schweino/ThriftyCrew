@@ -752,9 +752,12 @@ def main() -> int:
     ap.add_argument("--llm", action="store_true",
                     help="consult the local model on rows the deterministic layers cannot settle")
     ap.add_argument("--limit", type=int, default=None)
-    ap.add_argument("--jobs", type=int, default=8,
+    # COUPLED to tools/local-llm/serve.ps1 -Slots (4 since 2026-08-21; default here 4 since
+    # 2026-08-22). More jobs than slots does not add throughput, it queues requests inside
+    # llama-server and every queued call burns its client timeout waiting. Change both or neither.
+    ap.add_argument("--jobs", type=int, default=4,
                     help="concurrent model calls; must be <= llama-server --parallel "
-                         "slots (tools/local-llm/serve.ps1 -Slots), else requests queue")
+                         "slots (tools/local-llm/serve.ps1 -Slots, currently 4), else requests queue")
     ap.add_argument("--reset", action="store_true",
                     help="re-adjudicate everything (clears prior verdicts first)")
     args = ap.parse_args()

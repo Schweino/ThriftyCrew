@@ -23,6 +23,11 @@ catalogue every night.
                    implementation, shared by everything below.
     sweep.py       The nightly GPU batch. Reads a corpus prepared by PowerShell, writes ranked
                    findings to out\semantic-findings.json. Scoring only.
+    score_cache.py The on-disk memo sweep.py scores through: bi-encoder vectors and cross-encoder
+                   pair scores keyed by (model id, exact text) in out\embed-cache\. Only text the
+                   run has never seen reaches the card, and a model is loaded only on a miss that
+                   needs it. Measured 2026-08-22: 46 s -> 4 s on an unchanged shelf, ~18 s with
+                   1,500 new names, findings byte-identical either way. SWEEP_CACHE=0 bypasses it.
     app.py         FastAPI service on 127.0.0.1:8077 for interactive/ad-hoc scoring.
     backtest.py    The acceptance gate. Scores the matcher against defects the estate already
                    shipped. See out\backtest-report.md.
@@ -40,6 +45,11 @@ because that matching must stay byte-identical to the pricing engine; Python nev
 CUDA wheels will not run on it.
 
 Model weights (~4.5 GB) download from HuggingFace on first use and are cached outside the repo.
+
+**The GPU is shared and the sweep needs ~3 GB of it.** The llama.cpp model (`tools\local-llm\serve.ps1`)
+is on-demand only and must be stopped before the 07:00 pipeline; `audit-semantic-identity.ps1` checks
+`nvidia-smi` before launching the sweep and goes BLIND (exit 3) rather than OOM if llama-server holds
+the card with under 3,500 MiB free.
 
 ## The rules that make it safe to run unattended
 

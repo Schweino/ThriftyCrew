@@ -6,6 +6,22 @@
   Launches llama.cpp's llama-server with the settings validated for THIS box:
   RTX 5070 Ti (Blackwell, sm_120, 16 GB) + Ryzen 9 9950X + 64 GB RAM.
 
+  ON-DEMAND ONLY. NEVER SCHEDULED. (Brad's ruling, 2026-08-22.)
+    This model takes ~13 GB of the 16 GB card and leaves ~1 GB free. The
+    semantic sidecar sweep (sidecar\sweep.py, run by
+    groceryudit-semantic-identity.ps1 in the 07:00 daily pipeline and 2-3x a
+    day) needs ~3 GB of VRAM for bge-m3 + the reranker. The two cannot share
+    the card: with this server up the sweep OOMs. So:
+      - start this by hand when a graph/learning/meal-prep job needs it;
+      - STOP IT BEFORE 07:00 (Stop-Process llama-server) and before any
+        manual run of the semantic audit;
+      - nothing in Task Scheduler or the pipeline may start it.
+    audit-semantic-identity.ps1 checks nvidia-smi first and goes BLIND
+    (exit 3, naming llama-server as the holder) rather than launching a sweep
+    that will OOM - but BLIND means the semantic guard did not run that day.
+    Ollama is a separate process and a separate decision; this rule is about
+    llama-server only.
+
   Why these flags:
     -ngl 99            all layers on GPU; the Q3_K_XL weights are 12.2 GiB and fit.
     --cache-type-k/v   q8_0 KV cache. A 27B dense model at 16k context would
@@ -28,8 +44,13 @@
                        2.36x, which is why the schema stays (a 13% cost for a
                        structural valid-JSON guarantee is a good trade).
                        NOTE: the CLIENT must issue concurrent requests to use
-                       these slots — see resolve.py --jobs. A sequential client
+                       these slots — see resolve.py --jobs, whose default is
+                       COUPLED to -Slots below (both 4; change both or
+                       neither - more jobs than slots just queues inside the
+                       server and burns client timeouts). A sequential client
                        against eight slots is exactly as fast as one slot.
+                       (The 8-slot figures above are the 2026-08 measurement;
+                       -Slots is 4 today, see the param note for why.)
     --jinja            uses the model's own chat template. Qwen3.x REQUIRES this
                        for correct role handling and for reasoning-block parsing.
     --temp 0.1 etc.    low-variance settings: this endpoint's job is structured

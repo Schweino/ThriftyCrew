@@ -28,11 +28,13 @@ import json, os, sys, time
 import torch
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lib_match import Matcher, clean_product, commodity_text, load_json, DEVICE
+from lib_match import Matcher, clean_product, commodity_text, load_json, DEVICE, EMBED_MODEL, RERANK_MODEL
+import score_cache
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "data")
 OUT = os.path.join(HERE, "out")
+CACHE = os.path.join(OUT, "embed-cache")
 os.makedirs(OUT, exist_ok=True)
 
 # Operating points from the Phase 1 backtest (backtest-report.md). IDENTITY_KEEP is the 100/2816
@@ -65,7 +67,19 @@ def main() -> None:
     corpus = load_json(os.path.join(DATA, "corpus-current.json"))
     log(f"device={DEVICE} commodities={len(defs)} board-pairs={len(pairs)} corpus={len(corpus)}")
 
-    m = Matcher.load(with_reranker=True)
+    # SCORE CACHE (2026-08-22). Both model answers are pure functions of (model id, exact text), so they
+    # are memoised on disk in out/embed-cache and only the texts this run has never seen reach the card.
+    # A model is loaded lazily, on the first miss that needs it: a run on an unchanged shelf loads
+    # neither and finishes in a few seconds instead of ~46 s, with a byte-identical findings file
+    # (modulo generated/elapsed). See score_cache.py. SWEEP_CACHE=0 forces a cold, uncached run.
+    if score_cache.enabled():
+        m = score_cache.CachedScorer(
+            CACHE, DEVICE,
+            embed_factory=lambda: Matcher.load(with_reranker=False),
+            rerank_factory=Matcher.load_reranker_only,
+            embed_model=EMBED_MODEL, rerank_model=RERANK_MODEL)
+    else:
+        m = Matcher.load(with_reranker=True)
     defs_by_id = {d["id"]: d for d in defs}
     cids = [d["id"] for d in defs]
     cidx = {c: i for i, c in enumerate(cids)}
@@ -165,6 +179,10 @@ def main() -> None:
         "identity": identity,
         "coverage": coverage,
     }
+    if isinstance(m, score_cache.CachedScorer):
+        m.save()
+        report["cache"] = m.stats()
+        log(f"cache: {report['cache']}")
     p = os.path.join(OUT, "semantic-findings.json")
     with open(p, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)

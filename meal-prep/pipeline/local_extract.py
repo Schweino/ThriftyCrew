@@ -145,7 +145,10 @@ def verify(result: dict, page_text: str) -> dict:
 
 def extract(page_text: str, url: str | None = None,
             llm: LocalLLM | None = None) -> dict:
-    llm = llm or LocalLLM()
+    # 600 s explicitly: this is the one caller that asks for 4096 tokens from a 24k-char page.
+    # LocalLLM's default dropped to 120 s on 2026-08-22 for every short structured call; a full
+    # recipe transcription can legitimately run several minutes, so it keeps the long bound here.
+    llm = llm or LocalLLM(timeout=600)
     # Long pages: keep the head, where recipe cards live, but generously.
     body = page_text if len(page_text) <= 24000 else page_text[:24000]
     user = (f"SOURCE URL: {url}\n\n" if url else "") + \
@@ -191,7 +194,7 @@ def main() -> int:
     else:
         ap.error("pass --url or --file")
 
-    llm = LocalLLM()
+    llm = LocalLLM(timeout=600)
     if not llm.health():
         print("local endpoint down — pwsh tools/local-llm/serve.ps1", file=sys.stderr)
         return 2
