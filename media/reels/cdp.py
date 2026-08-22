@@ -65,7 +65,7 @@ def free_port():
 
 class Chrome:
     def __init__(self, headless=True, width=375, height=812, dsf=3.0, verbose=False,
-                 profile_dir=None, mobile=True):
+                 profile_dir=None, mobile=True, browsing=False):
         """
         profile_dir  None (default) = a throwaway profile, deleted on close. This is right for the
                      reel and the demo, which drive our own public pages and want a clean browser
@@ -84,6 +84,9 @@ class Chrome:
         self.verbose = verbose
         self.profile_dir = profile_dir
         self.mobile = mobile
+        # browsing=True drops the screenshot-tuned rendering flags (see start()). Default False so
+        # the reel and demo keep the deterministic rendering they were built around.
+        self.browsing = browsing
         self._own_profile = profile_dir is None
         self._id = 0
         self.proc = None
@@ -109,15 +112,31 @@ class Chrome:
             f"--user-data-dir={self.profile}",
             "--no-first-run",
             "--no-default-browser-check",
-            "--disable-extensions",
-            "--disable-background-networking",
-            "--disable-features=Translate,MediaRouter",
-            "--hide-scrollbars",
-            "--force-color-profile=srgb",
-            "--font-render-hinting=none",
             f"--window-size={self.width},{self.height}",
-            "about:blank",
         ]
+        # THE RENDERING FLAGS ARE FOR SCREENSHOTS, NOT FOR BROWSING (split 2026-08-22).
+        # This flag set was written for the reel and the demo, which photograph our own pages: pin
+        # the colour profile, kill font hinting, hide scrollbars, strip extensions so nothing draws
+        # over the shot. Every one of those is either a fingerprint (a browser with zero extensions,
+        # scrollbar width 0, hinting off) or a behaviour change, and the grocery driver inherited
+        # them wholesale while trying to look like an ordinary shopper.
+        # browsing=True keeps only what is needed to DRIVE the browser and leaves the rest at
+        # Chrome's defaults, which is what a real profile looks like. Screenshot callers are
+        # unchanged - they still get the deterministic rendering they depend on.
+        if self.browsing:
+            # Chrome sets navigator.webdriver when it believes it is automated. It measured false
+            # here already, but this makes that explicit rather than incidental.
+            args.append("--disable-blink-features=AutomationControlled")
+        else:
+            args += [
+                "--disable-extensions",
+                "--disable-background-networking",
+                "--disable-features=Translate,MediaRouter",
+                "--hide-scrollbars",
+                "--force-color-profile=srgb",
+                "--font-render-hinting=none",
+            ]
+        args.append("about:blank")
         if self.headless:
             args.insert(1, "--headless=new")
             args.insert(2, "--disable-gpu")

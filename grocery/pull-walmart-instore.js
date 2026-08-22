@@ -74,9 +74,39 @@ async function walmartProbe(term) {
     if (Array.isArray(node)) { for (const v of node) walk(v, depth + 1); return; }
     const name = node.name || node.title;
     const id = node.usItemId || node.productId || node.id;
+    /*
+      TWO PRICE SHAPES, AND WE READ BOTH (2026-08-22).
+      This read only the OBJECT shape - priceInfo.currentPrice.price / priceDetails.priceLines[0].price.
+      Measured against a live /search?q=milk that returned 1.3 MB with 119 usItemId nodes and 69
+      priceInfo nodes, this extractor kept ZERO rows: the payload now carries
+
+          priceInfo = { linePrice: "$1.74", linePriceDisplay: "$1.74", unitPrice: "2.7 c/fl oz",
+                        wasPrice: "", savingsAmt: 0, ... }
+
+      - flat STRINGS, not nested objects with numeric .price. Neither old path exists on it, so every
+      term came back as a store that carries no milk.
+
+      Both shapes are kept because both have been real: this file's own header documents
+      priceDetails.priceLines as "Walmart's own structure", and it may well be what a different
+      response variant still returns. Reading both is cheap; guessing which era we are in is not.
+    */
+    const money = v => {
+      if (v == null || v === '') return undefined;
+      if (typeof v === 'number') return v;
+      const m2 = String(v).match(/([\d,]+\.?\d*)/);
+      return m2 ? parseFloat(m2[1].replace(/,/g, '')) : undefined;
+    };
     const lines = node.priceInfo?.priceDetails?.priceLines || node.priceInfo?.currentPrice;
-    const lp = node.priceInfo?.currentPrice?.price ?? (Array.isArray(lines) ? lines[0]?.price : undefined);
-    const up = node.priceInfo?.unitPrice?.price ?? node.priceInfo?.unitPriceDisplayCondition;
+    const lp = money(node.priceInfo?.currentPrice?.price)
+      ?? (Array.isArray(lines) ? money(lines[0]?.price) : undefined)
+      ?? money(node.priceInfo?.linePrice)
+      ?? money(node.priceInfo?.linePriceDisplay);
+    // unitPrice is a DISPLAY STRING in the flat shape ("2.7 c/fl oz"). Kept verbatim rather than
+    // parsed to a number: the basis ("/fl oz") is half the fact, and a bare 2.7 beside a $/lb rival
+    // is the unit-mismatch error this estate has already paid for at three stores.
+    const up = node.priceInfo?.unitPrice?.price
+      ?? (typeof node.priceInfo?.unitPrice === 'string' ? node.priceInfo.unitPrice : undefined)
+      ?? node.priceInfo?.unitPriceDisplayCondition;
     /*
       THE ROLLBACK, CAPTURED (2026-08-21). Brad: "for walmart and sams, a rollback price we just stick
       with a 30 day TTL from when we first detect". Nothing could anchor that TTL because this capture
@@ -111,7 +141,36 @@ async function walmartProbe(term) {
     for (const k of Object.keys(node)) walk(node[k], depth + 1);
   })(data, 0);
 
-  return rows.length ? { state: 'MATCHES', rows } : { state: 'EMPTY', rows: [], why: 'store returned no products' };
+  if (rows.length) return { state: 'MATCHES', rows };
+
+  /*
+    BLINDNESS IS NOT EMPTINESS (2026-08-22) - the same rule pull-fareway-instore.js learned the hard
+    way, arriving here for the same reason. EMPTY is a claim about the STORE: "we read the page and
+    it listed nothing", which downstream treats as a NOT-CARRIED ruling and will retire the cell.
+    We may only say that when we actually READ a product listing and it was bare.
+
+    The tell that we did not: the payload is full of products but none survived extraction. On
+    2026-08-22 a price-shape change did exactly this - 119 usItemId nodes, 69 priceInfo nodes, and
+    zero rows kept, reported as seven consecutive stores-carry-nothing. So count what we SAW: if the
+    page held item nodes and we still kept none, the parser is the thing that failed, not Walmart's
+    shelf, and UNUSABLE is the honest verdict - it halts loudly instead of poisoning the catalog.
+  */
+  let itemNodes = 0;
+  (function count(node, depth) {
+    if (!node || typeof node !== 'object' || depth > 12) return;
+    if (Array.isArray(node)) { for (const v of node) count(v, depth + 1); return; }
+    if (node.usItemId || node.priceInfo) itemNodes++;
+    for (const k of Object.keys(node)) count(node[k], depth + 1);
+  })(data, 0);
+
+  if (itemNodes > 0) {
+    return {
+      state: 'UNUSABLE', rows: [],
+      why: `parser kept 0 rows from a page holding ${itemNodes} item node(s) - the price shape moved, ` +
+           `this is our blindness and NOT evidence that Walmart carries nothing`,
+    };
+  }
+  return { state: 'EMPTY', rows: [], why: 'store returned no products' };
 }
 
 const walmartAgent = {

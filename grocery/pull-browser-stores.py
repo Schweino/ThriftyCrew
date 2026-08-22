@@ -550,7 +550,7 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
 
     release_profile(prof)
     browser = Chrome(headless=headless, width=1440, height=900, dsf=1.0,
-                     profile_dir=prof, mobile=False)
+                     profile_dir=prof, mobile=False, browsing=True)
     try:
         browser.start()
     except Exception as e:
@@ -801,7 +801,7 @@ def self_test(headless=False):
 
         # Throwaway profile ON PURPOSE: this must never inherit a seeded session, or the identity
         # check below would pass for the wrong reason and prove nothing.
-        b = Chrome(headless=headless, width=1440, height=900, dsf=1.0, mobile=False)
+        b = Chrome(headless=headless, width=1440, height=900, dsf=1.0, mobile=False, browsing=True)
         try:
             b.start()
             b.goto(cfg["origin"], wait_ms=4000)
