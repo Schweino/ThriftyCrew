@@ -3903,6 +3903,22 @@ $r = RunPS 'test-rollback-ttl.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'ROLLBACK-TTL PASSED') { Ok 'rollback TTL: first_seen anchors once and never re-anchors on re-sighting' }
 else { Bad ('rollback TTL fixtures FAILED (rc=' + $r.rc + ') - a 30-day window that re-anchors never expires') }
 
+# ---------------------------------------------------------------- the 2026-08-22 engine-review fixes
+# Each of these carries a MUST-FIRE that fails on the pre-fix code (verified against HEAD~ copies on the day
+# they shipped) and clean twins for what had to keep working. Wired here so a quiet suite proves they still run.
+$r = RunPS 'test-ad-match.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'AD-MATCH PASSED') { Ok 'ad-match: same-price candidates are scored, a cell cannot inherit another product''s window, the terse butter line still traces' }
+else { Bad ('test-ad-match FAILED (rc=' + $r.rc + ') - a sale cell can again take the window of whichever same-price ad line comes first: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
+$r = RunPS 'test-capture-policy.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'CAPTURE-POLICY PASSED') { Ok 'sale-expiry slice - an expiring sale''s terms/products are IN the headless lanes'' slice, not merely budgeted for' }
+else { Bad ('test-capture-policy FAILED (rc=' + $r.rc + ') - sale-expiry re-pricing no longer reaches the slice: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
+$r = RunPS 'test-pu-lib.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'PU-LIB PASSED') { Ok 'pu-lib: frozen per-unit values hold (fractions, x-packs, litre/ml/qt multipacks, pack count over per-each marker)' }
+else { Bad ('test-pu-lib FAILED (rc=' + $r.rc + ') - the shared per-unit math regressed against its frozen values: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
+$r = RunPS 'pull-regular-hyvee.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'pull-regular-hyvee -SelfTest: a carried markdown keeps its discount fields; an ended sale reverts to everyday at base_price' }
+else { Bad ('pull-regular-hyvee -SelfTest failed (rc=' + $r.rc + ') - the Hy-Vee carry can launder a markdown into an everyday price again: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
+
 # ---------------------------------------------------------------- Hy-Vee shelf tag + store identity (2026-08-21)
 # Brad checked four Hy-Vee cells against his own screen and all four disagreed. Two causes, and the
 # second one no guard here could see: storeProducts.price - the field every guard in this estate reads -
