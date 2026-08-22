@@ -84,7 +84,8 @@ if ($SelfTest) {
 # health-heartbeat.ps1 watches expected-automations.json for a task that quietly stopped being scheduled
 # or an output that quietly went stale. Its only runner was local-watchdog, retired with the old 8:30
 # pipeline, so for two days nothing ran it. It self-alerts and de-dupes; this just surfaces a line.
-try { & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'health-heartbeat.ps1') -Alert 2>&1 | ForEach-Object { Write-Output ('heartbeat: ' + $_) } } catch { Write-Output ('heartbeat threw: ' + $_.Exception.Message) }
+# No 2>&1 on the child (EAP=Stop turns its first stderr line into a terminating throw - test-native-stderr-eap.ps1).
+try { $hbOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'health-heartbeat.ps1') -Alert; @($hbOut) | ForEach-Object { Write-Output ('heartbeat: ' + $_) } } catch { Write-Output ('heartbeat threw: ' + $_.Exception.Message) }
 
 $TASKS = @('TC Grocery Ad Pulls 0700', 'TC Grocery Daily Capture 0800')
 $findings = New-Object System.Collections.Generic.List[string]
