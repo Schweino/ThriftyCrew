@@ -243,6 +243,58 @@ class Chrome:
             time.sleep(0.2)
         raise RuntimeError(f"timed out waiting for {label or expr}")
 
+    # ---------------------------------------------------------------- real input
+    # WHY THESE EXIST. element.click() from Runtime.evaluate is a SYNTHETIC event -
+    # isTrusted:false - and several storefront widgets ignore it outright. The Fareway store
+    # picker is one: a JS click on "Change store" returns cleanly and opens nothing, which is
+    # the worst kind of failure because the caller thinks it succeeded. Input.dispatch* goes in
+    # at the browser level, so the page cannot tell it from a person.
+
+    def box(self, selector, nth=0):
+        """Centre point of an element, in CSS px, or None. Scrolls it into view first."""
+        r = self.js("""(function(){
+            const els = document.querySelectorAll(%s);
+            const e = els[%d];
+            if (!e) return null;
+            e.scrollIntoView({block:'center', inline:'center'});
+            const b = e.getBoundingClientRect();
+            if (b.width === 0 && b.height === 0) return null;
+            return JSON.stringify({x: b.left + b.width/2, y: b.top + b.height/2});
+        })()""" % (json.dumps(selector), nth))
+        return json.loads(r) if r else None
+
+    def click_at(self, x, y, clicks=1):
+        for _ in range(clicks):
+            for ev in ("mousePressed", "mouseReleased"):
+                self.send("Input.dispatchMouseEvent", type=ev, x=x, y=y, button="left",
+                          clickCount=1, buttons=1 if ev == "mousePressed" else 0)
+            time.sleep(0.05)
+
+    def click(self, selector, nth=0):
+        """Real click on the first match. Returns False if the element is not there."""
+        b = self.box(selector, nth)
+        if not b:
+            return False
+        self.click_at(b["x"], b["y"])
+        return True
+
+    def type_text(self, text, per_char_ms=40):
+        """Type as a person does, so keypress handlers and autocompletes fire."""
+        for ch in text:
+            self.send("Input.dispatchKeyEvent", type="keyDown", text=ch)
+            self.send("Input.dispatchKeyEvent", type="keyUp", text=ch)
+            time.sleep(per_char_ms / 1000.0)
+
+    def key(self, name, code=None):
+        """A named key: Enter, ArrowDown, Tab, Escape."""
+        codes = {"Enter": 13, "ArrowDown": 40, "ArrowUp": 38, "Tab": 9, "Escape": 27}
+        vk = codes.get(name, 0)
+        args = {"windowsVirtualKeyCode": vk, "nativeVirtualKeyCode": vk, "key": name}
+        if name == "Enter":
+            args["text"] = "\r"
+        self.send("Input.dispatchKeyEvent", type="keyDown", **args)
+        self.send("Input.dispatchKeyEvent", type="keyUp", **args)
+
     def shot(self, path, clip=None, quality=None):
         """Viewport capture, or an arbitrary page rect given clip=(x, y, w, h) in CSS px.
 

@@ -37,6 +37,19 @@ FIVE THINGS THAT ARE DELIBERATE
      out\worklists\capture-<store>-<date>.json and sweeps exactly that. Being deep within those
      terms is the rule; being broad across the catalogue is what trips a wall.
 
+DO NOT PROBE A WALLED STORE BY HAND (learned the expensive way, 2026-08-22)
+  While bringing this up I ran ad-hoc single-term probes against Walmart from a fresh profile, over
+  and over, to work out WHY it was failing. Each one bypassed pull-agent-lib's pacing, its retry
+  backoff and its wallLimit - the entire apparatus that exists to stop exactly that. Walmart went
+  from "walls a cold profile" to walled hard, and PerimeterX scores the IP as well as the profile, so
+  the damage is not confined to this throwaway profile. Brad's verdict: "you broke walmart with your
+  testing."
+  The rule that follows: diagnose a walled store ONCE, then stop and think. If a store answers
+  UNUSABLE/bot-wall, that IS the diagnosis - repeating the request cannot turn it into a different
+  answer, it can only raise the score against us. Anything more than one probe must go through
+  runPacedSweep, which paces, backs off and hands off to a human. A store you have to wait a week to
+  re-approach costs far more than the minutes the fast probe saved.
+
 EXIT CODES  0 = every requested store captured. 1 = at least one store failed or was walled.
             2 = nothing could run (no Chrome, no worklists).
 """
@@ -72,6 +85,14 @@ STORES = {
         "verdicts": "walmartSweepVerdicts",
         "storage_key": "TC_WALMART_SWEEP",
         "capture": os.path.join("out", "captures", "walmart-capture-{date}.csv"),
+        # BRAD'S RULE, 2026-08-22: "walmart can never be headless."
+        # Measured the same day on a fresh profile: walmartProbe('milk') returned
+        # {"state":"UNUSABLE","why":"bot-wall"} and the page title was literally "Robot or human?".
+        # PerimeterX flags this store hardest, and a headless run cannot be rescued - there is no
+        # window for anyone to clear the challenge in, so the whole worklist records as UNUSABLE and
+        # the wall gets deeper. Enforced below rather than written down as guidance, because a flag
+        # that is only documented is a flag someone passes anyway.
+        "never_headless": True,
         # Walmart is the one store with nothing to assert: prices are already the local store's and
         # there is no store toggle in the payload, so walmartIdentity() only proves we are on
         # walmart.com and not already walled. Seeding is therefore about the SESSION (a warm,
@@ -257,6 +278,13 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
     """Capture one store. Returns (ok: bool, note: str)."""
     cfg = STORES[store_key]
     name = cfg["name"]
+
+    # A store marked never_headless is FORCED visible rather than refused: refusing would mean the
+    # 08:00 job silently skips it forever if anything ever passes --headless, which is the failure
+    # this flag exists to prevent. Say so in the output so the override is never invisible.
+    if cfg.get("never_headless") and headless:
+        print(f"  note: {name} cannot run headless (it walls instantly) - running visible instead.")
+        headless = False
     prof = profile_dir(store_key)
     seeded_marker = os.path.join(prof, ".tc-seeded")
 
