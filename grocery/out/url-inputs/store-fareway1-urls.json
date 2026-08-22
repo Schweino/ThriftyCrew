@@ -121,7 +121,7 @@
     {
         "id":  "avocados",
         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3251376-hass-avocado-each",
-        "price":  "1.50",
+        "price":  "0.99",
         "size":  "each",
         "name":  "Hass Avocado"
     },
@@ -869,10 +869,10 @@
     },
     {
         "id":  "baby-back-ribs",
-        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387478-baby-back-pork-ribs",
-        "price":  "4.99",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387836-hand-cut-extra-meaty-baby-back-pork-ribs-1-each",
+        "price":  "3.99",
         "size":  "lb",
-        "name":  "Baby Back Pork Ribs"
+        "name":  "Hand-Cut Extra Meaty Baby Back Pork Ribs"
     },
     {
         "id":  "ground-pork",
@@ -2003,24 +2003,24 @@
     },
     {
         "id":  "baby-wipes",
-        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18311864-huggies-simply-clean-unscented-baby-wipes-1-flip-top-pack-64-ea",
-        "price":  "2.29",
-        "size":  "64 ct",
-        "name":  "Huggies Simply Clean Unscented Baby Wipes"
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19747465-huggies-sensitive-baby-wipes-unscented-10-ea",
+        "price":  "18.98",
+        "size":  "560 ct",
+        "name":  "Huggies Natural Care Sensitive Unscented Baby Wipes"
     },
     {
         "id":  "baby-formula",
-        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/68773-similac-advance-infant-formula-with-iron-powder-canister-12-4-oz",
-        "price":  "21.99",
-        "size":  "12.4 oz",
-        "name":  "Similac Advance Infant Formula with Iron Powder Canister"
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/68781-similac-sensitive-infant-formula-with-iron-12-5-oz",
+        "price":  "23.99",
+        "size":  "12.5 oz",
+        "name":  "Similac Sensitive Infant Formula with Iron"
     },
     {
         "id":  "baby-food",
-        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/43571-plum-organics-pear-purple-carrot-blueberry-baby-food-4-oz",
-        "price":  "1.49",
-        "size":  "4 oz",
-        "name":  "Plum Organics Pear, Purple Carrot \u0026 Blueberry Baby Food"
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3318406-gerber-peaches-2nd-foods-4-oz",
+        "price":  "1.88",
+        "size":  "2 x 4 oz",
+        "name":  "Gerber Peaches 2nd Foods"
     },
     {
         "id":  "dog-food",
@@ -3218,5 +3218,12 @@
         "price":  "1.99",
         "size":  "each",
         "name":  "Eggplant"
+    },
+    {
+        "id":  "avocado-oil",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/52314647-chosen-foods-100-pure-avocado-oil-27-fl-oz",
+        "price":  "18.99",
+        "size":  "27 fl oz",
+        "name":  "Chosen Foods 100% Pure Avocado Oil, Squeeze Bottle"
     }
 ]

@@ -82,6 +82,19 @@
                          "size_shape_mismatch":  false
                      },
                      {
+                         "id":  "chocolate-milk",
+                         "commodity":  "Chocolate Milk",
+                         "unit":  "floz",
+                         "store":  "Sam\u0027s Club",
+                         "per_unit":  0.1388,
+                         "median":  0.0327,
+                         "mult":  4.24,
+                         "size":  "144 fl oz",
+                         "item":  "Horizon Organic Lowfat Chocolate Milk with DHA Omega-3, 8 fl. oz., 18 pk.",
+                         "peers_packed":  "0 of 6",
+                         "size_shape_mismatch":  false
+                     },
+                     {
                          "id":  "shampoo",
                          "commodity":  "Shampoo",
                          "unit":  "floz",
@@ -93,10 +106,23 @@
                          "item":  "Dove Nutritive Solutions Intensive Repair Shampoo",
                          "peers_packed":  "0 of 6",
                          "size_shape_mismatch":  false
+                     },
+                     {
+                         "id":  "pizza-sauce",
+                         "commodity":  "Pizza Sauce",
+                         "unit":  "oz",
+                         "store":  "Sam\u0027s Club",
+                         "per_unit":  0.3995,
+                         "median":  0.0993,
+                         "mult":  4.02,
+                         "size":  "37.5 oz",
+                         "item":  "Yo Mama\u0027s Foods Low-Carb Pizza Sauce 12.5 oz., 3 pk.",
+                         "peers_packed":  "0 of 6",
+                         "size_shape_mismatch":  false
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-22T06:19:58",
+    "generated":  "2026-08-22T10:42:11",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -685,18 +711,6 @@
                               "item":  "Kroger Horseradish Sauce",
                               "kind":  "volume",
                               "row_kind":  "weight",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "hot-sauce",
-                              "commodity":  "Hot Sauce",
-                              "unit":  "floz",
-                              "store":  "Baker\u0027s",
-                              "per_unit":  0.1085,
-                              "size":  "34 oz",
-                              "item":  "Valentina Mexican Hot Sauce",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
                               "holds_crown":  false
                           },
                           {

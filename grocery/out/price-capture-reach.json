@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-08-21T17:16:21",
+    "updated":  "2026-08-22T11:00:35",
     "price_table":  "price-table-2026-08-21.json",
     "note":  "Prices captured somewhere in the codebase that do not appear in the price table. compare-deals reads six input classes and the table is derived from the same rows the ranker uses, so a capture path either writes into one of those six or its prices do not exist. Advisory: \"captured, adjudicated, waiting on a commodity id\" is a legitimate state; \"captured and forgotten because nothing counts it\" is not.",
     "stores":  [
@@ -8,25 +8,9 @@
                        "what":  "Recipe Hunter pricing agent (ingredient-queue.ps1 -Record -Price)",
                        "expected":  "reach",
                        "captured":  99,
-                       "reached":  8,
-                       "missing":  91,
+                       "reached":  16,
+                       "missing":  83,
                        "missing_rows":  [
-                                            {
-                                                "key":  "cumin-seeds",
-                                                "store":  "Family Fare",
-                                                "price":  2.29,
-                                                "size":  "2 oz",
-                                                "item":  "Sugar \u0027N Spice Cumin Whole",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "cumin-seeds",
-                                                "store":  "Baker\u0027s",
-                                                "price":  1.69,
-                                                "size":  "1 oz",
-                                                "item":  "Tampico Cumin Whole",
-                                                "commodity_known":  false
-                                            },
                                             {
                                                 "key":  "chili-garlic-sauce",
                                                 "store":  "Family Fare",
@@ -44,36 +28,12 @@
                                                 "commodity_known":  false
                                             },
                                             {
-                                                "key":  "brown-lentils",
-                                                "store":  "Family Fare",
-                                                "price":  2.69,
-                                                "size":  "1 lb",
-                                                "item":  "Our Family Lentils",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "brown-lentils",
-                                                "store":  "Baker\u0027s",
-                                                "price":  1.99,
-                                                "size":  "16 oz",
-                                                "item":  "Goya Lentils",
-                                                "commodity_known":  false
-                                            },
-                                            {
                                                 "key":  "bean-sprouts",
                                                 "store":  "Family Fare",
                                                 "price":  2.79,
                                                 "size":  "14.5 oz",
                                                 "item":  "Geisha Bean Sprouts, In Water",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "bean-sprouts",
-                                                "store":  "Baker\u0027s",
-                                                "price":  2.19,
-                                                "size":  "14 oz",
-                                                "item":  "La Choy Bean Sprouts",
-                                                "commodity_known":  false
+                                                "commodity_known":  true
                                             },
                                             {
                                                 "key":  "avocado-oil",
@@ -132,14 +92,6 @@
                                                 "commodity_known":  false
                                             },
                                             {
-                                                "key":  "gruyere",
-                                                "store":  "Baker\u0027s",
-                                                "price":  8.49,
-                                                "size":  "8 oz",
-                                                "item":  "Boar\u0027s Head Blanc Grue Gruyere Cheese",
-                                                "commodity_known":  false
-                                            },
-                                            {
                                                 "key":  "dry white wine",
                                                 "store":  "Walmart",
                                                 "price":  3.96,
@@ -186,22 +138,6 @@
                                                 "size":  "500 ml",
                                                 "item":  "Vendange Pinot Grigio White Wine",
                                                 "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "brandy",
-                                                "store":  "Walmart",
-                                                "price":  11.53,
-                                                "size":  "750 ml",
-                                                "item":  "Christian Brothers VS Grape Brandy",
-                                                "commodity_known":  true
-                                            },
-                                            {
-                                                "key":  "brandy",
-                                                "store":  "Sam\u0027s Club",
-                                                "price":  19.28,
-                                                "size":  "1.75 L",
-                                                "item":  "Christian Brothers VS Grape Brandy",
-                                                "commodity_known":  true
                                             },
                                             {
                                                 "key":  "thai chiles",

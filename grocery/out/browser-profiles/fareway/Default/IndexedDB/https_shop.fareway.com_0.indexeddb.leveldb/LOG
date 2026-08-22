@@ -1,0 +1,14 @@
+2026/08/22-11:26:22.361 741c Reusing MANIFEST C:\Codex\ThriftyCrew\grocery\out\browser-profiles\fareway\Default\IndexedDB\https_shop.fareway.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/08/22-11:26:22.361 741c Recovering log #214
+2026/08/22-11:26:22.361 741c Reusing old log C:\Codex\ThriftyCrew\grocery\out\browser-profiles\fareway\Default\IndexedDB\https_shop.fareway.com_0.indexeddb.leveldb/000214.log 
+2026/08/22-11:26:22.362 741c Delete type=2 #212
+2026/08/22-11:26:22.365 1754 Level-0 table #219: started
+2026/08/22-11:26:22.367 1754 Level-0 table #219: 537 bytes OK
+2026/08/22-11:26:22.367 1754 Delete type=0 #214
+2026/08/22-11:26:22.368 741c Manual compaction at level-0 from '\x00J\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00K\x00\x00\x00' @ 0 : 0; will stop at '\x00J\x00\x00\x05' @ 1394 : 1
+2026/08/22-11:26:22.368 741c Compacting 1@0 + 1@1 files
+2026/08/22-11:26:22.369 741c Generated table #220@0: 79 keys, 2371 bytes
+2026/08/22-11:26:22.369 741c Compacted 1@0 + 1@1 files => 2371 bytes
+2026/08/22-11:26:22.369 741c compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/08/22-11:26:22.369 741c Delete type=2 #219
+2026/08/22-11:26:22.369 741c Manual compaction at level-0 from '\x00J\x00\x00\x05' @ 1394 : 1 .. '\x00K\x00\x00\x00' @ 0 : 0; will stop at (end)

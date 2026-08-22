@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-21 08:20",
+    "generated":  "2026-08-22 09:19",
     "board":  "comparison-2026-08-21.json",
-    "sidecar_generated":  "2026-08-21 08:20:16",
+    "sidecar_generated":  "2026-08-22 09:19:25",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,9 +9,9 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3020,
-                     "corpus":  37083,
-                     "rule_invisible":  6468
+                     "board_pairs":  3077,
+                     "corpus":  37205,
+                     "rule_invisible":  6465
                  },
     "identity_count":  0,
     "coverage_count":  52,
@@ -27,16 +27,6 @@
                          "product":  "(6 pack) Bush\u0027s Chili Magic Beans, Slow Simmered White Beans in Mild Chili Sauce, 15.5 oz Can",
                          "cos":  0.7062,
                          "score":  0.986156,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "cumin-seeds",
-                         "commodity":  "Cumin seeds",
-                         "store":  "Walmart",
-                         "product":  "Frontier Co-op Certified Organic Cumin Seed, Ground, 16 oz. Bag",
-                         "cos":  0.6967,
-                         "score":  0.984558,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -111,16 +101,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "cumin-seeds",
-                         "commodity":  "Cumin seeds",
-                         "store":  "Walmart",
-                         "product":  "Simply Organic Ground Cumin Seed, Shelf-Stable, 2.31 oz Bottle",
-                         "cos":  0.6799,
-                         "score":  0.966045,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "laundry-detergent",
                          "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
                          "store":  "Walmart",
@@ -151,12 +131,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "cumin-seeds",
-                         "commodity":  "Cumin seeds",
+                         "id":  "ribeye-steak",
+                         "commodity":  "Ribeye Steak",
                          "store":  "Walmart",
-                         "product":  "Spice Islands Ground Cumin Seed, Kosher, 1.9 oz",
-                         "cos":  0.6818,
-                         "score":  0.958278,
+                         "product":  "Beef Choice Angus Cubed Steak, Tray, Family Pack, Fresh, 0.9 - 1.5 lb",
+                         "cos":  0.6668,
+                         "score":  0.958685,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -171,12 +151,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ribeye-steak",
-                         "commodity":  "Ribeye Steak",
-                         "store":  "Walmart",
-                         "product":  "Beef Choice Angus Cubed Steak, Tray, Family Pack, Fresh, 0.9 - 1.5 lb",
-                         "cos":  0.6585,
-                         "score":  0.955702,
+                         "id":  "bar-soap",
+                         "commodity":  "Bar Soap",
+                         "store":  "Baker\u0027s",
+                         "product":  "Caress Daily Silk Cleansing Bar, White Peach \u0026 Orange Blossom Moisturizing Body Soap",
+                         "cos":  0.6953,
+                         "score":  0.955202,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -197,16 +177,6 @@
                          "product":  "80 Lean Ground Beef Patties Per LB",
                          "cos":  0.669,
                          "score":  0.948182,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "bar-soap",
-                         "commodity":  "Bar Soap",
-                         "store":  "Baker\u0027s",
-                         "product":  "Caress Daily Silk Cleansing Bar, White Peach \u0026 Orange Blossom Moisturizing Body Soap",
-                         "cos":  0.7026,
-                         "score":  0.948031,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -247,6 +217,16 @@
                          "product":  "Great Value Classic Ranch Salad Dressing \u0026 Dip, 16 fl oz",
                          "cos":  0.7126,
                          "score":  0.940791,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "almond-flour",
+                         "commodity":  "Almond Flour",
+                         "store":  "Walmart",
+                         "product":  "Nature’s Eats Ultimate Almond+ Flour Blend, Gluten-Free, 16 oz",
+                         "cos":  0.7636,
+                         "score":  0.940266,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -307,6 +287,16 @@
                          "product":  "Tidy Cats LightWeight 24/7 Performance Odor control, Multi-Cat, Clumping",
                          "cos":  0.6925,
                          "score":  0.929441,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "artichokes",
+                         "commodity":  "Artichokes (fresh, whole)",
+                         "store":  "Baker\u0027s",
+                         "product":  "ARTICHOKES QUARTERED TRAY PACK 6/14 OZ/CASE-KROGER (EACH)",
+                         "cos":  0.6993,
+                         "score":  0.928036,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -471,32 +461,22 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "shredded-cheese",
+                         "commodity":  "Shredded / Block Cheese",
+                         "store":  "Aldi",
+                         "product":  "Happy Farms Shredded Mild Cheddar",
+                         "cos":  0.676,
+                         "score":  0.910092,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "chicken-breast",
                          "commodity":  "Boneless Skinless Chicken Breast",
                          "store":  "Walmart",
                          "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.85 - 3.5 lb Tray",
                          "cos":  0.7795,
                          "score":  0.909728,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "taco-sauce",
-                         "commodity":  "Taco Sauce",
-                         "store":  "Walmart",
-                         "product":  "Ortega Original Thick and Smooth Medium Taco and Enchilada Chili Sauce, Kosher, 8 oz",
-                         "cos":  0.6937,
-                         "score":  0.908269,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "cumin-seeds",
-                         "commodity":  "Cumin seeds",
-                         "store":  "Walmart",
-                         "product":  "Pride of India Ground Cumin Seed, 8 oz Dual Sifter Bottle",
-                         "cos":  0.6362,
-                         "score":  0.906948,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -521,6 +501,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "breakfast-sandwiches",
+                         "commodity":  "Frozen Breakfast Sandwiches",
+                         "store":  "Family Fare",
+                         "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
+                         "cos":  0.7175,
+                         "score":  0.903522,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "enchilada-sauce",
                          "commodity":  "Enchilada Sauce",
                          "store":  "Walmart",
@@ -537,6 +527,16 @@
                          "product":  "Great Value Frozen Cauliflower, 12 oz Bag, No Added Preservatives",
                          "cos":  0.7151,
                          "score":  0.901266,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "sparkling-water",
+                         "commodity":  "Sparkling Water",
+                         "store":  "Aldi",
+                         "product":  "Puraqua Flavored Water Bottles, 24 Pack",
+                         "cos":  0.6169,
+                         "score":  0.900009,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]
