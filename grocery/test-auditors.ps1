@@ -962,6 +962,28 @@ else { Bad 'check-ad-cycles blind email body regressed - a blackout would email 
 # missed stamp re-opened the gate into a silent daily 658 MB crash loop (post-batch review 2026-07-30).
 if ($cacSrc -match "run-test-guards-weekly\.ps1'\)\s*2>&1") { Bad 'check-ad-cycles captures run-test-guards-weekly with 2>&1 under EAP=Stop again - a crashing suite throws past the stamp and alert into a silent daily retry loop' }
 else { Ok 'check-ad-cycles weekly test-guards capture leaves stderr unredirected (crash still reaches the alert path)' }
+# (k0) THE SAME RULE, AT THE SCHEDULED ENTRY POINTS (2026-08-22). The check above pins ONE call site.
+# The rule is general, and on 2026-08-22 it was being broken at two others that this file never looked at:
+# capture-run.ps1's downstream call and capture-watchdog.ps1's audit-ad-status call. Both are reached by the
+# TC Windows tasks, which as of that date are the ONLY routines that fire, so both failures surfaced purely
+# as an unexplained red task result. Classic one-copy-of-the-rule-per-caller drift: the lesson was written
+# down here, and the two newest callers never inherited it. test-native-stderr-eap.ps1 proves the shell
+# behaviour empirically (a must-fire founding case plus a clean twin) AND scans those entry points, so this
+# check is a real invocation rather than another hand-maintained regex.
+try {
+  $eapT = Join-Path $root 'test-native-stderr-eap.ps1'
+  if (Test-Path $eapT) {
+    $eapOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $eapT
+    $eapRc = $LASTEXITCODE
+    if ($eapRc -eq 0 -and (@($eapOut) -join "`n") -match 'NATIVE-STDERR-EAP-TEST-COMPLETE') {
+      Ok 'native-stderr/EAP fixture passes - scheduled entry points do not redirect a native child under EAP=Stop'
+    } else {
+      Bad ('native-stderr/EAP fixture FAILED (rc=' + $eapRc + '): ' + ((@($eapOut) | Where-Object { $_ -match 'FAIL' }) -join ' | '))
+    }
+  } else {
+    Bad 'test-native-stderr-eap.ps1 is MISSING - the 2026-08-22 exit-1 class has no fixture any more'
+  }
+} catch { Bad ('native-stderr/EAP fixture threw: ' + $_.Exception.Message) }
 # (k1e) THE DRIFT SCANNER COULD NOT READ THE LANGUAGE IT SCANS (2026-07-30). audit-store-registry hunts
 # hardcoded store lists in live .ps1 source. It recognised a store name written plainly, as &#39; and as
 # &rsquo; - but NOT as '', which is how an apostrophe is actually written inside a single-quoted PowerShell

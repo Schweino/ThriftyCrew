@@ -26,6 +26,12 @@ $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
+. (Join-Path $root 'run-log-lib.ps1')
+
+# Runs hidden from a scheduled task, so its findings only existed in an email.
+# The transcript keeps the evidence even when the alert de-dup suppresses the mail.
+# -SelfTest is excluded: it is a foreground developer action, not a scheduled run.
+$runLog = if ($SelfTest) { $null } else { Start-RunLog -Name 'capture-watchdog' -OutDir $OutDir -Today $todayS }
 
 # How long a registered-but-never-fired task is still innocently "waiting for its trigger".
 # One full daily cycle plus a margin: a task registered AFTER today's slot (exactly how the
@@ -158,22 +164,79 @@ if ((Test-Path $cmp) -and (Test-Path $pub)) {
 # ---- 5. ad health ------------------------------------------------------------
 $adsc = Join-Path $root 'audit-ad-status.ps1'
 if (Test-Path $adsc) {
-  $adOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $adsc -OutDir $OutDir -Today $todayS 2>&1
+  # NO 2>&1 (fixed 2026-08-22, same class as the capture-run downstream call).
+  # This script sets EAP=Stop, and in PS 5.1 redirecting a native child's stderr
+  # turns each line into a NativeCommandError that TERMINATES the caller. The day
+  # audit-ad-status.ps1 writes a single warning, this watchdog would die right here
+  # - silently skipping checks 6-8, which are the browser-flag and store-freshness
+  # checks. A watchdog that stops examining halfway and still exits through its own
+  # summary is worse than no watchdog: it reports on what it managed to reach.
+  # Latent when found (audit-ad-status is currently quiet); fixed while it is cheap.
+  $adOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $adsc -OutDir $OutDir -Today $todayS
   $adRc = $LASTEXITCODE
   $line = ($adOut | Where-Object { $_ -match 'stores needing a pull' } | Select-Object -First 1)
   if ($adRc -ne 0) { [void]$findings.Add("AD STALE: $line") } else { [void]$ok.Add(($line -replace '\s+', ' ').Trim()) }
 }
 
+# ---- 5b. rollback / instant-savings windows about to expire ------------------
+# THE OTHER HALF OF "STALE IS NOT A BAD THING". Everyday prices are allowed to be a quarter old;
+# a PROMO price is not. Walmart, Sam's Club and Fareway publish no end date for a rollback, so
+# rollback-ttl-lib anchors a 30-day window to first detection and the builders revert the price when
+# it lapses. That revert is invisible until it happens: a wave of cells quietly gets more expensive.
+# Reported as a COUNT with the nearest date, not per item - it is a heads-up, never a failure.
+try {
+  $rbLedger = Join-Path $root 'rollback-first-seen.json'
+  if (Test-Path $rbLedger) {
+    $rb = Get-Content $rbLedger -Raw -Encoding UTF8 | ConvertFrom-Json
+    $ttl = if ($rb.ttl_days) { [int]$rb.ttl_days } else { $ROLLBACK_TTL }
+    $expired = 0; $soon = 0; $nextDate = ''
+    foreach ($e in @($rb.entries)) {
+      $fs = [string]$e.first_seen
+      if ($fs.Length -lt 10) { continue }
+      try { $exp = ([datetime]::ParseExact($fs, 'yyyy-MM-dd', $null)).AddDays($ttl) } catch { continue }
+      $daysLeft = [int]($exp - (Get-Date $todayS)).TotalDays
+      if ($daysLeft -lt 0) { $expired++ }
+      elseif ($daysLeft -le 7) {
+        $soon++
+        if (-not $nextDate -or $exp.ToString('yyyy-MM-dd') -lt $nextDate) { $nextDate = $exp.ToString('yyyy-MM-dd') }
+      }
+    }
+    if ($expired -gt 0) {
+      # Past TTL means the builders should ALREADY have reverted these to the everyday price. A
+      # non-zero count that persists across days is the tell that a revert is not happening.
+      [void]$findings.Add(("ROLLBACK PAST TTL: {0} promo window(s) are past their {1}-day TTL. The builders should have reverted these to everyday pricing - if this count does not fall after the next capture, the revert is not running." -f $expired, $ttl))
+    }
+    if ($soon -gt 0) {
+      [void]$ok.Add(("rollback windows: {0} expire within 7 days (first {1}) - those cells revert to everyday pricing" -f $soon, $nextDate))
+    } elseif ($expired -eq 0) {
+      [void]$ok.Add(("rollback windows: none expired, none expiring within 7 days ({0}-day TTL)" -f $ttl))
+    }
+  }
+} catch { [void]$ok.Add('rollback window check skipped: ' + $_.Exception.Message) }
+
 # ---- 6. browser work left undone --------------------------------------------
 # The browser stores cannot be captured headlessly, so the runner leaves a flag.
 # A flag older than a day means nobody worked the list and those stores are
 # silently aging - which is exactly what happened to Fareway for five days.
-$flags = Get-ChildItem (Join-Path $OutDir 'browser-capture-due-*.flag') -EA SilentlyContinue
-foreach ($f in $flags) {
-  $age = ((Get-Date) - $f.LastWriteTime).TotalDays
-  if ($age -gt 1.5) {
-    [void]$findings.Add("BROWSER WORK STALE: $($f.Name) is $([int]$age) day(s) old - the walled stores have not been captured. Open a Chrome tab per store and work out\worklists\.")
-  }
+# ONE FINDING, NOT ONE PER DAY (2026-08-22). capture-run writes a NEW dated flag every
+# run and NOTHING ever deletes one, so this loop emitted a separate finding per unworked
+# day - an email that grows by a line a day and, within a fortnight, buries the finding
+# that actually matters (ROTATION STALLED, check 7) under a wall of near-identical lines.
+# This file's own header warns against exactly that: "flagging it daily would train the
+# reader to ignore this email." It became urgent on 2026-08-22, when the browser capture
+# routine was retired and the flags stopped being worked by anything at all.
+# Report the BACKLOG as one line - how many, and how old the oldest is - and prune the
+# ancient ones so out\ does not accumulate without bound. Pruning is capped well beyond
+# the point the message is made; it is housekeeping, not the signal.
+$flags = @(Get-ChildItem (Join-Path $OutDir 'browser-capture-due-*.flag') -EA SilentlyContinue)
+$staleFlags = @($flags | Where-Object { ((Get-Date) - $_.LastWriteTime).TotalDays -gt 1.5 })
+if ($staleFlags.Count) {
+  $oldest = ($staleFlags | Sort-Object LastWriteTime | Select-Object -First 1)
+  $oldestAge = [int]((Get-Date) - $oldest.LastWriteTime).TotalDays
+  [void]$findings.Add(("BROWSER WORK STALE: {0} unworked capture flag(s), oldest {1} at {2} day(s). The walled stores are not being captured by anything - open a Chrome tab per store and work out\worklists\." -f $staleFlags.Count, $oldest.Name, $oldestAge))
+}
+foreach ($f in ($flags | Where-Object { ((Get-Date) - $_.LastWriteTime).TotalDays -gt 45 })) {
+  try { Remove-Item $f.FullName -Force -ErrorAction SilentlyContinue } catch { }
 }
 
 
@@ -198,9 +261,50 @@ foreach ($f in $flags) {
 #     On the day this shipped that was true of Sam's Club (19d) and Walmart (9d) - both real, both already
 #     carrying rescue worklists. It is not a quiet start; it is an accurate one.
 $HEADLESS_LANES = @('Hy-Vee', "Baker's", 'Family Fare')
-$BROWSER_STALE_DAYS = 7
+
+# THE RULER WAS WRONG (Brad, 2026-08-22: "state is not a bad thing"). This check used a flat
+# $BROWSER_STALE_DAYS = 7 and called a store STALLED the moment it went a week without a fresh row.
+# That contradicts the policy the estate actually runs on, so it cried wolf on stores behaving exactly
+# as designed - and a daily false alarm is how a reader learns to skip this email, which then hides
+# the real one. The two governing numbers, read from the libraries that own them rather than
+# re-typed here (a copied constant is a constant that will disagree - [[two-copies-of-a-rule]]):
+#
+#   EVERYDAY prices  -> a 90-day quarter. Every store buys ~total_terms/90 terms per day and rows are
+#                       carried MaxCarryDays. An everyday price is SUPPOSED to be up to a quarter old;
+#                       it only becomes a problem at the carry cliff, when rows actually leave the board.
+#   ROLLBACK / INSTANT SAVINGS at Walmart and Sam's -> a 30-day TTL from FIRST detection, because
+#                       neither store publishes an end date (rollback-ttl-lib.ps1 owns that rule and
+#                       the builders already enforce it). This is the number that is genuinely tight.
+#
+# So the question is no longer "is this store older than a week" but "is anything about to leave the
+# board, or already past its promised window". Warn band before the cliff, not at it: a store that
+# only learns it is expiring on the day it expires cannot be rescued in time.
+. (Join-Path $root 'capture-policy-lib.ps1')
+. (Join-Path $root 'rollback-ttl-lib.ps1')
+$CARRY_DAYS = Get-PolicyMaxCarryDays          # 90 - rows older than this expire off the board
+$QUARTER_DAYS = Get-PolicyQuarterDays         # 90 - one full rotation of the catalogue
+$ROLLBACK_TTL = Get-RollbackTtlDays           # 30 - Walmart/Sam's promo window
+$CLIFF_WARN_DAYS = 14                         # notice before the carry cliff, not on it
+# A store that has landed nothing for a third of a quarter cannot finish the rotation on time. This
+# is DEBT, reported so it is visible, not an emergency - it is the number Brad reads to decide whether
+# to spend a browser session, and it must not be dressed up as a failure.
+$ROTATION_DEBT_DAYS = [int][math]::Round($QUARTER_DAYS / 3)
 $freshByStore = @{}; $newestByStore = @{}
-foreach ($rf in (Get-ChildItem (Join-Path $OutDir 'regular\*-regular-*.json') -ErrorAction SilentlyContinue)) {
+# A PROBE IS NOT A CAPTURE (2026-08-22). This glob used to swallow
+# out\regular\hunter-<store>-regular-<date>.json - files the Recipe Hunter's pricing
+# lane promotes via promote-ingredient-queue.ps1 so compare-deals can read them. They
+# are a handful of adjudicated ingredient prices, not a rotation slice, and on
+# 2026-08-22 all seven stores had one dated 2026-08-16. The effect: Walmart's real
+# newest capture was 2026-08-11 (11d, over the 7d line) and Sam's Club was 2026-08-01
+# (21d), yet BOTH read "ok ... 6d" here and this check stayed silent about two stores
+# whose rotation had genuinely stalled. Exactly the [[promoted-file-is-not-a-capture]]
+# shape: a thin dated file becomes the "newest capture" and alibis the stale ones.
+# That matters more now than when it shipped - as of 2026-08-22 the browser stores have
+# no scheduled capture at all, so this finding is the ONLY thing that reports them going
+# cold. Judge rotation freshness on rotation output only.
+$captureFiles = @(Get-ChildItem (Join-Path $OutDir 'regular\*-regular-*.json') -ErrorAction SilentlyContinue |
+                  Where-Object { $_.Name -notlike 'hunter-*' })
+foreach ($rf in $captureFiles) {
   try { $doc = Get-Content $rf.FullName -Raw -Encoding UTF8 | ConvertFrom-Json } catch { continue }
   $st = [string]$doc.store
   if (-not $st) { continue }
@@ -230,10 +334,16 @@ if (-not $newestByStore.Count) {
         [void]$ok.Add(("{0}: {1} fresh row(s) today (newest {2})" -f $st, $fresh, $newest))
       }
     } else {
-      if ($age -gt $BROWSER_STALE_DAYS) {
-        [void]$findings.Add(("ROTATION STALLED: {0} has contributed no fresh row for {1} day(s) (newest {2}). It is bot-walled, so this needs a Chrome pass - out\rescue-terms-*.txt names the cells that leave the board if it keeps slipping." -f $st, $age, $newest))
+      # BROWSER STORE. Judged against the real cadence (see the constants above), in three bands.
+      if ($age -gt $CARRY_DAYS) {
+        [void]$findings.Add(("CELLS EXPIRING NOW: {0}'s newest row is {1} day(s) old, past the {2}-day carry limit - its cells are leaving the board. This is the one that costs coverage; work out\rescue-terms-*.txt for this store first." -f $st, $age, $CARRY_DAYS))
+      } elseif ($age -gt ($CARRY_DAYS - $CLIFF_WARN_DAYS)) {
+        [void]$findings.Add(("APPROACHING CARRY CLIFF: {0}'s newest row is {1} day(s) old and rows expire at {2}. About {3} day(s) of notice before its cells start leaving the board." -f $st, $age, $CARRY_DAYS, ($CARRY_DAYS - $age)))
+      } elseif ($age -gt $ROTATION_DEBT_DAYS) {
+        # Deliberately NOT worded as a failure. Everyday prices are on a 90-day refresh by design.
+        [void]$ok.Add(("{0}: {1} fresh row(s) today, newest {2} ({3}d) - ROTATION DEBT: no capture for over {4}d, so this quarter will not complete on schedule. Not stale yet ({5}d carry); costs coverage only if it keeps slipping." -f $st, $fresh, $newest, $age, $ROTATION_DEBT_DAYS, $CARRY_DAYS))
       } else {
-        [void]$ok.Add(("{0}: {1} fresh row(s) today, newest {2} ({3}d)" -f $st, $fresh, $newest, $age))
+        [void]$ok.Add(("{0}: {1} fresh row(s) today, newest {2} ({3}d of {4}d carry)" -f $st, $fresh, $newest, $age, $CARRY_DAYS))
       }
     }
   }
@@ -251,5 +361,9 @@ if ($findings.Count -and $Alert) {
 }
 
 Write-Output ("CAPTURE-WATCHDOG-COMPLETE findings={0}" -f $findings.Count)
-if ($findings.Count) { exit 1 } else { exit 0 }
+# NOTE: rc=1 here means "the watchdog WORKED and found something", not "the
+# watchdog broke". Do not read a red result on this task as a crash - read the log.
+$rcFinal = if ($findings.Count) { 1 } else { 0 }
+Stop-RunLog -ExitCode $rcFinal -Path $runLog
+exit $rcFinal
 

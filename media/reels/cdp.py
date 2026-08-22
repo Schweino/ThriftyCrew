@@ -64,10 +64,27 @@ def free_port():
 
 
 class Chrome:
-    def __init__(self, headless=True, width=375, height=812, dsf=3.0, verbose=False):
+    def __init__(self, headless=True, width=375, height=812, dsf=3.0, verbose=False,
+                 profile_dir=None, mobile=True):
+        """
+        profile_dir  None (default) = a throwaway profile, deleted on close. This is right for the
+                     reel and the demo, which drive our own public pages and want a clean browser
+                     every time.
+                     A PATH = a PERSISTENT profile that is reused and NOT deleted. The grocery
+                     browser pull needs this: the walled stores identify the Omaha store/club from
+                     cookies, and a throwaway profile would silently capture some default store's
+                     prices - a wrong-store price is worse than no price at all.
+        mobile       False renders as a desktop browser. The stores serve a different (and for our
+                     purposes, richer) page to a desktop viewport, and the pull agents parse the
+                     desktop payload.
+        Both default to the previous behaviour, so the reel and demo callers are unchanged.
+        """
         self.headless = headless
         self.width, self.height, self.dsf = width, height, dsf
         self.verbose = verbose
+        self.profile_dir = profile_dir
+        self.mobile = mobile
+        self._own_profile = profile_dir is None
         self._id = 0
         self.proc = None
         self.ws = None
@@ -77,7 +94,11 @@ class Chrome:
 
     def start(self):
         port = free_port()
-        self.profile = tempfile.mkdtemp(prefix="tc-demo-chrome-")
+        if self.profile_dir:
+            os.makedirs(self.profile_dir, exist_ok=True)
+            self.profile = self.profile_dir
+        else:
+            self.profile = tempfile.mkdtemp(prefix="tc-demo-chrome-")
         args = [
             find_chrome(),
             f"--remote-debugging-port={port}",
@@ -123,7 +144,11 @@ class Chrome:
         self.send("Page.enable")
         self.send("Runtime.enable")
         self.send("Network.enable")
-        self.metrics(self.width, self.height, self.dsf)
+        # A desktop caller must NOT get a mobile emulation override: setDeviceMetricsOverride with
+        # mobile=True changes the UA-CH hints and the layout the site serves, and the grocery pull
+        # agents parse the desktop payload.
+        if self.mobile:
+            self.metrics(self.width, self.height, self.dsf)
         return self
 
     def close(self):
@@ -138,7 +163,9 @@ class Chrome:
                 self.proc.wait(timeout=10)
         except Exception:
             pass
-        if self.profile:
+        # Only remove a profile WE created. Deleting a persistent one would throw away the store
+        # cookies that make the next run land on the right Omaha store.
+        if self.profile and self._own_profile:
             shutil.rmtree(self.profile, ignore_errors=True)
 
     def __enter__(self):
