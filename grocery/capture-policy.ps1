@@ -19,13 +19,30 @@
   Usage:
       capture-policy.ps1 -Report            # human-readable, all seven stores
       capture-policy.ps1 -Emit              # write today's worklist for every store
+      capture-policy.ps1 -Reconcile         # record today's landed re-prices in sale-windows.json
       capture-policy.ps1 -Store 'Aldi'
+
+  -Reconcile MUST RUN BEFORE build-sale-windows.ps1 each day. build-sale-windows prunes a
+  window once refresh_on is past AND repriced_for matches it; -Reconcile is what writes
+  repriced_for, and only for stores whose capture actually landed. Run it after, and a
+  landed re-price looks unprocessed and is queued again tomorrow (wasteful but safe); skip
+  it entirely and the ledger simply keeps growing, which is also safe. The unsafe ordering
+  is the one that no longer exists: pruning by date, with nothing recording the work.
 #>
-param([switch]$Report, [switch]$Emit, [string]$Store = '', [string]$Today = '', [string]$OutDir = '')
+param([switch]$Report, [switch]$Emit, [switch]$Reconcile, [string]$Store = '', [string]$Today = '', [string]$OutDir = '')
 $ErrorActionPreference = 'Stop'
 $script:PolicyRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $script:PolicyRoot 'capture-policy-lib.ps1')
 $script:AllStores = @('Hy-Vee', 'Aldi', "Baker's", 'Family Fare', 'Fareway', 'Walmart', "Sam's Club")
+
+if ($Reconcile) {
+  $stores = if ($Store) { @($Store) } else { $script:AllStores }
+  foreach ($s in $stores) {
+    $r = Set-SaleExpiryProcessed -Store $s -Today $Today -OutDir $OutDir
+    Write-Output ("{0,-13} marked {1,3} re-price(s)  -  {2}" -f $s, $r.Marked, $r.Reason)
+  }
+  return
+}
 
 if ($Emit) {
   # Emit today's worklist for every store. The three walled stores (Walmart, Sam's,
@@ -45,10 +62,16 @@ if ($Report -or $Store) {
   Write-Output ''
   foreach ($s in $stores) {
     $p = Get-CapturePlan -Store $s -Today $Today
-    Write-Output ("{0,-13} rotation {1,3} term(s)/day  + {2,2} sale expiry  = budget {3,3}   ad: {4}" -f `
-        $p.Store, $p.RotationTerms, $p.SaleExpiries.Count, $p.TermBudget, $p.AdNote)
-    if ($p.SaleExpiries.Count) {
-      Write-Output ("               sales reverting today: " + (($p.SaleExpiries | Select-Object -First 8) -join ', '))
+    Write-Output ("{0,-13} rotation {1,3} term(s)/day  + {2,3} sale expiry  = budget {3,3} / cap {4,3} ({5})   ad: {6}" -f `
+        $p.Store, $p.RotationTerms, @($p.SaleExpiries).Count, $p.TermBudget, $p.CallCap, $p.CallCapBasis, $p.AdNote)
+    if (@($p.SaleExpiries).Count) {
+      Write-Output ("               re-pricing today (oldest owed first): " + ((@($p.SaleExpiries) | Select-Object -First 8) -join ', '))
+    }
+    if ([int]$p.ExpiryDeferred -gt 0) {
+      # Deferred is NOT dropped: build-sale-windows keeps an unprocessed window no matter how
+      # old it is, and these lead tomorrow's slice. Printed so a long backlog is visible.
+      Write-Output ("               {0} more expiry(ies) OWED and deferred by the cap (oldest owed since {1}); at {2}/day this store drains in ~{3} day(s)" -f `
+          $p.ExpiryDeferred, $p.ExpiryOldest, $p.ExpiryCap, [int][math]::Ceiling(@($p.ExpiryPending).Count / [double]$p.ExpiryCap))
     }
   }
 }

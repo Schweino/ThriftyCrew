@@ -176,23 +176,60 @@ foreach ($c in $board.comparison) {
       first_seen  = $fseen
       last_seen   = $today.ToString('yyyy-MM-dd')
       note        = $note
+      # THE PROCESSED SIGNAL (2026-08-22). repriced_for holds the refresh_on value a landed
+      # capture actually satisfied; capture-policy's Set-SaleExpiryProcessed is the only
+      # thing that writes it. Carried forward across the daily rebuild exactly like
+      # first_seen, or every rebuild would forget the work and re-queue it. It is
+      # deliberately compared against THIS entry's refresh_on, so when a sale renews with a
+      # later end date the entry becomes owed again rather than staying "done" forever.
+      repriced_on  = $(if ($prior.ContainsKey($key)) { [string]$prior[$key].repriced_on } else { '' })
+      repriced_for = $(if ($prior.ContainsKey($key)) { [string]$prior[$key].repriced_for } else { '' })
     }
   }
 }
 
 # carry forward a prior entry that has dropped OFF today's board but whose refresh_on hasn't passed yet:
 # we still need to know the sale is rolling off so the guard fires on that day (the item may already be gone
-# from the board the morning its price reverts). Prune only once refresh_on is in the past.
+# from the board the morning its price reverts).
+#
+# PRUNE BY WORK DONE, NOT BY DATE (2026-08-22). This used to keep an entry only while
+# refresh_on >= today, so an expiry lived for exactly one day and was then deleted whether or
+# not anybody re-priced it. That is safe only while every expiry is processed on its due day,
+# and it stopped being true the moment capture-policy started CAPPING the daily slice: 130
+# entries reverted on 2026-08-23 and Family Fare's Freshop wall is ~40 calls, so most of them
+# could not possibly be processed that morning. Deleting the rest would leave their SALE
+# prices publishing on the board until each item's next quarterly rotation slot - up to 90
+# days - with nothing on disk to say a re-price was ever owed. A throttle is visible; that is
+# not, which makes it the worse failure.
+#
+# So an entry survives while EITHER
+#   - its sale is still running / reverts today (refresh_on >= today), or
+#   - it is still OWED: refresh_on has passed and repriced_for does not match it.
+# capture-policy's Set-SaleExpiryProcessed writes repriced_for, and only after a landed
+# capture - so a run that fetched nothing prunes nothing. The two halves must move together;
+# see the coupling note beside SaleExpiries in capture-policy-lib.ps1.
+$owedCount = 0
 foreach ($k in $prior.Keys) {
   if ($active.ContainsKey($k)) { continue }
   $p = $prior[$k]
   $ro = $null; try { $ro = [datetime]$p.refresh_on } catch {}
-  if ($ro -ne $null -and $ro.Date -ge $today) {
-    $e = [ordered]@{}
-    foreach ($prop in $p.PSObject.Properties) { $e[$prop.Name] = $prop.Value }
-    $e['status'] = 'awaiting-rolloff'      # no longer on the live board, but its price is due to revert soon
-    $active[$k] = $e
+  if ($ro -eq $null) { continue }
+  $roS = $ro.ToString('yyyy-MM-dd')
+  $done = ((([string]$p.repriced_for) -ne '') -and (([string]$p.repriced_for) -eq $roS))
+  $due = ($ro.Date -ge $today)
+  if (-not $due -and $done) { continue }         # processed and past - this is the only prune
+  $e = [ordered]@{}
+  foreach ($prop in $p.PSObject.Properties) { $e[$prop.Name] = $prop.Value }
+  if (-not $e.Contains('repriced_on')) { $e['repriced_on'] = '' }
+  if (-not $e.Contains('repriced_for')) { $e['repriced_for'] = '' }
+  if ($due) {
+    $e['status'] = 'awaiting-rolloff'   # no longer on the live board, but its price is due to revert soon
+  } else {
+    # Past due and never processed - the board may still be publishing this sale price.
+    $e['status'] = 'reprice-owed'
+    $owedCount++
   }
+  $active[$k] = $e
 }
 
 $rows = @($active.Values | Sort-Object @{e={$_.store}}, @{e={$_.commodity}})
@@ -203,13 +240,14 @@ $out = [ordered]@{
   today        = $today.ToString('yyyy-MM-dd')
   source       = (Split-Path $ComparisonFile -Leaf)
   active_count = @($rows | Where-Object { $_.status -eq 'active' }).Count
-  note         = 'Per-item sale windows: sale_price + sale_start/sale_end from the ad; refresh_on = sale_end + 1 (the day the price reverts, when a re-price is due). Everyday/EDLP chips are not logged (no expiry). Derived daily from the newest comparison board; safe to delete (regenerates).'
+  owed_count   = @($rows | Where-Object { $_.status -eq 'reprice-owed' }).Count
+  note         = 'Per-item sale windows: sale_price + sale_start/sale_end from the ad; refresh_on = sale_end + 1 (the day the price reverts, when a re-price is due). Everyday/EDLP chips are not logged (no expiry). Derived daily from the newest comparison board; safe to delete (regenerates) EXCEPT for repriced_on/repriced_for, which record work that actually happened and cannot be rederived - an entry is pruned only once refresh_on is past AND repriced_for matches it, so a capped or throttled run leaves the re-price owed (status reprice-owed) instead of losing it.'
   windows      = $rows
 }
 ($out | ConvertTo-Json -Depth 6) | Set-Content $LogFile -Encoding UTF8
 
 # ---------------------------------------------------------------- report
-Write-Output ("SALE-WINDOW LOG  -  " + $today.ToString('yyyy-MM-dd') + "   (" + $out.active_count + " active sale(s), " + $rows.Count + " tracked)")
+Write-Output ("SALE-WINDOW LOG  -  " + $today.ToString('yyyy-MM-dd') + "   (" + $out.active_count + " active sale(s), " + $rows.Count + " tracked, " + $out.owed_count + " re-price OWED)")
 Write-Output ("=" * 82)
 foreach ($r in $rows) {
   $flag = if ($r.is_flash) { ' [flash]' } else { '' }

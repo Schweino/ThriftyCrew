@@ -108,6 +108,107 @@ try {
   # 10. THE COUPLING IS WRITTEN DOWN where the list is consumed (build-sale-windows prunes the day after refresh_on)
   $libText = Get-Content (Join-Path $root 'capture-policy-lib.ps1') -Raw
   if ($libText -match 'build-sale-windows\.ps1[\s\S]{0,400}refresh_on' ) { Ok 'capture-policy-lib documents the build-sale-windows prune that bounds SaleExpiries' } else { Bad 'the prune coupling is not documented beside its consumer' }
+
+  # =========================================================================
+  # THE 2026-08-23 DEFECT: AN EXPIRY BACKLOG THAT BREACHES ITS OWN BUDGET
+  #
+  # Select-ExpiryFirstSlice added EVERY expiring item in a first loop with no budget test -
+  # only the rotation loop afterwards checked $Budget - so the slice was (all expiries) +
+  # (rotation up to budget) and taken.Count could exceed the budget outright. On 2026-08-22
+  # the live sale-windows.json held 130 entries with refresh_on 2026-08-23 (Fareway 111,
+  # Family Fare 19) and 104 more on 08-24 (Hy-Vee). Family Fare's Freshop search answers
+  # HTTP 400 / {"error_code":429} past roughly 40 calls in a window, so that morning's run
+  # would have asked for ~19x its normal day and throttled the whole store.
+  #
+  # And the half that makes capping SAFE: build-sale-windows.ps1 used to prune a window the
+  # day after refresh_on, by date alone, so every expiry the cap deferred was deleted
+  # unprocessed and its SALE price kept publishing for up to a quarter. The prune is now
+  # driven by repriced_for, written only after a landed capture.
+  # =========================================================================
+
+  # 10. MUST-FIRE: 130 expiries, budget 7 -> the slice must be 7, not 130.
+  $many = @(); for ($i = 1; $i -le 130; $i++) { $many += [pscustomobject]@{ id = ('c{0:000}' -f $i); term = ('t{0:000}' -f $i) } }
+  $manyIds = @($many | ForEach-Object { $_.id })
+  $slBig = Select-ExpiryFirstSlice -Items $many -Expiring $manyIds -KeyOf { param($t) $t.id } -Budget 7 -CursorStart 0
+  if (@($slBig.Items).Count -eq 7) { Ok '130 expiries with a budget of 7 yield a 7-item slice (the cap applies to the expiries too)' }
+  else { Bad ("the expiry loop breached its own budget: " + @($slBig.Items).Count + " items for a budget of 7 - this is the 2026-08-23 throttle") }
+  if ([int]$slBig.ExpiryDropped -eq 123) { Ok '123 expiries are reported as deferred, not silently swallowed' } else { Bad ("ExpiryDropped = $($slBig.ExpiryDropped), expected 123") }
+
+  # 11. OLDEST OWED FIRST. The cap must take the longest-owed re-price, whatever its id sorts
+  #     like, or a backlog starves from the back for the rest of the quarter.
+  $swOld = @{ windows = @(
+      @{ store = 'Family Fare'; id = 'zzz-oldest'; sale_end = '2026-08-09'; refresh_on = '2026-08-10' },
+      @{ store = 'Family Fare'; id = 'aaa-middle'; sale_end = '2026-08-19'; refresh_on = '2026-08-20' },
+      @{ store = 'Family Fare'; id = 'mmm-newest'; sale_end = '2026-08-21'; refresh_on = '2026-08-22' }) }
+  [IO.File]::WriteAllText((Join-Path $tmp 'sale-windows.json'), ($swOld | ConvertTo-Json -Depth 4))
+  $capSave = $script:StoreCallCap['Family Fare']
+  $script:StoreCallCap['Family Fare'] = @{ cap = 2; basis = 'fixture'; unit = 'search terms' }  # rotation 1 + 1 expiry
+  $pOld = Get-CapturePlan -Store 'Family Fare' -Today '2026-08-22'
+  if (@($pOld.SaleExpiries).Count -eq 1 -and @($pOld.SaleExpiries)[0] -eq 'zzz-oldest') { Ok 'oldest-first: the one slot goes to the expiry owed since 2026-08-10, not to the alphabetical or newest one' }
+  else { Bad ("oldest-first broken: took [" + (@($pOld.SaleExpiries) -join ', ') + "]") }
+  if ($pOld.ExpiryDeferred -eq 2 -and $pOld.ExpiryOldest -eq '2026-08-10' -and @($pOld.ExpiryPending).Count -eq 3) { Ok "the 2 deferred expiries are still reported as OWED (backlog 3, oldest $($pOld.ExpiryOldest))" }
+  else { Bad "backlog not reported: deferred=$($pOld.ExpiryDeferred) oldest=$($pOld.ExpiryOldest) pending=$(@($pOld.ExpiryPending).Count)" }
+
+  # 12. THE WHOLE SLICE respects the cap: expiries first, rotation fills the rest, total = cap.
+  $script:StoreCallCap['Family Fare'] = @{ cap = 7; basis = 'fixture'; unit = 'search terms' }
+  [IO.File]::WriteAllText((Join-Path $tmp 'sale-windows.json'), (@{ windows = @($many | ForEach-Object { @{ store = 'Family Fare'; id = $_.id; sale_end = '2026-08-21'; refresh_on = '2026-08-22' } }) } | ConvertTo-Json -Depth 4))
+  $pCap = Get-CapturePlan -Store 'Family Fare' -Today '2026-08-22'
+  if ($pCap.TermBudget -eq 7 -and @($pCap.SaleExpiries).Count -eq 6 -and $pCap.RotationTerms -eq 1 -and $pCap.ExpiryDeferred -eq 124) {
+    Ok 'a 130-deep backlog against a cap of 7 plans 6 expiries + 1 rotation = 7 (the rotation drip is never fully starved)'
+  } else { Bad "capped plan wrong: budget=$($pCap.TermBudget) expiries=$(@($pCap.SaleExpiries).Count) rotation=$($pCap.RotationTerms) deferred=$($pCap.ExpiryDeferred)" }
+
+  # 13. A QUIET DAY IS UNCHANGED. Two expiries under a cap of 40 must still plan rotation + 2,
+  #     exactly the number the old uncapped formula produced.
+  $script:StoreCallCap['Family Fare'] = @{ cap = 40; basis = 'fixture'; unit = 'search terms' }
+  [IO.File]::WriteAllText((Join-Path $tmp 'sale-windows.json'), (@{ windows = @(
+      @{ store = 'Family Fare'; id = 'shredded-cheese'; sale_end = '2026-08-21'; refresh_on = '2026-08-22' },
+      @{ store = 'Family Fare'; id = 'butter';          sale_end = '2026-08-21'; refresh_on = '2026-08-22' }) } | ConvertTo-Json -Depth 4))
+  $pQuiet = Get-CapturePlan -Store 'Family Fare' -Today '2026-08-22'
+  if ($pQuiet.TermBudget -eq ($pQuiet.RotationTerms + 2) -and $pQuiet.ExpiryDeferred -eq 0 -and (@($pQuiet.SaleExpiries) -contains 'butter') -and (@($pQuiet.SaleExpiries) -contains 'shredded-cheese')) {
+    Ok "few expiries under the cap: behaviour unchanged (budget $($pQuiet.TermBudget) = rotation $($pQuiet.RotationTerms) + 2, nothing deferred)"
+  } else { Bad "quiet day changed: budget=$($pQuiet.TermBudget) rotation=$($pQuiet.RotationTerms) deferred=$($pQuiet.ExpiryDeferred) [$(@($pQuiet.SaleExpiries) -join ', ')]" }
+
+  # 14. A RUN THAT FETCHED NOTHING LOSES NOTHING. No everyday file on disk -> Test-CaptureLanded
+  #     is false -> nothing is marked processed -> the expiries are still owed tomorrow.
+  [IO.File]::WriteAllText((Join-Path $tmp 'stores.json'), (@{ stores = @(@{ name = 'Family Fare'; regular_prefix = 'family-fare' }) } | ConvertTo-Json -Depth 4))
+  $outT = Join-Path $tmp 'out'
+  $mkNone = Set-SaleExpiryProcessed -Store 'Family Fare' -Today '2026-08-22' -OutDir $outT -AllowReplay
+  if ($mkNone.Marked -eq 0) { Ok "a run with no landed rows marked nothing ($($mkNone.Reason))" } else { Bad "a blind run retired $($mkNone.Marked) re-price(s)" }
+  $pNext = Get-CapturePlan -Store 'Family Fare' -Today '2026-08-23'
+  if (@($pNext.SaleExpiries).Count -eq 2) { Ok 'both expiries are still owed the next day after a blind run' } else { Bad "expiries lost after a blind run: [$(@($pNext.SaleExpiries) -join ', ')]" }
+
+  # 15. A LANDED run records exactly what it was asked for, and only that.
+  New-Item -ItemType Directory -Path (Join-Path $outT 'regular') -Force | Out-Null
+  [IO.File]::WriteAllText((Join-Path $outT 'regular\family-fare-regular-2026-08-22.json'), (@{ deals = @(@{ item = 'x'; regular = 1.0 }) } | ConvertTo-Json -Depth 4))
+  $mkSome = Set-SaleExpiryProcessed -Store 'Family Fare' -Today '2026-08-22' -OutDir $outT -AllowReplay
+  if ($mkSome.Marked -eq 2) { Ok 'a landed run recorded both re-prices (repriced_for = the refresh_on it satisfied)' } else { Bad "landed run marked $($mkSome.Marked), expected 2 - $($mkSome.Reason)" }
+  $pAfter = Get-CapturePlan -Store 'Family Fare' -Today '2026-08-23'
+  if (@($pAfter.SaleExpiries).Count -eq 0) { Ok 'a recorded re-price is no longer owed' } else { Bad "recorded re-prices came back: [$(@($pAfter.SaleExpiries) -join ', ')]" }
+  $script:StoreCallCap['Family Fare'] = $capSave
+
+  # 16. THE PRUNE ITSELF. build-sale-windows must keep an UNPROCESSED expiry the day after its
+  #     refresh_on and drop only the processed one. This is the dangerous half: capping the
+  #     slice while the builder still pruned by date would have deleted 124 owed re-prices on
+  #     2026-08-24 and left their sale prices publishing until each item's next quarterly slot.
+  $bw = Join-Path $tmp 'bw'; New-Item -ItemType Directory -Path $bw -Force | Out-Null
+  [IO.File]::WriteAllText((Join-Path $bw 'sched.json'), (@{ stores = @(@{ store = 'Family Fare'; current = @{ from = '2026-08-17'; to = '2026-08-23' } }) } | ConvertTo-Json -Depth 4))
+  [IO.File]::WriteAllText((Join-Path $bw 'cmp.json'), (@{ comparison = @() } | ConvertTo-Json -Depth 4))
+  $swFile = Join-Path $bw 'sale-windows.json'
+  [IO.File]::WriteAllText($swFile, (@{ windows = @(
+      @{ id = 'owed-item'; commodity = 'Owed'; store = 'Family Fare'; refresh_on = '2026-08-23'; sale_start = '2026-08-17'; sale_end = '2026-08-22'; status = 'active'; repriced_on = ''; repriced_for = '' },
+      @{ id = 'done-item'; commodity = 'Done'; store = 'Family Fare'; refresh_on = '2026-08-23'; sale_start = '2026-08-17'; sale_end = '2026-08-22'; status = 'active'; repriced_on = '2026-08-23'; repriced_for = '2026-08-23' }) } | ConvertTo-Json -Depth 5))
+  & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'build-sale-windows.ps1') `
+      -AsOf '2026-08-24' -LogFile $swFile -ComparisonFile (Join-Path $bw 'cmp.json') `
+      -ScheduleFile (Join-Path $bw 'sched.json') -OutDir $bw | Out-Null
+  $after = ConvertFrom-Json ([IO.File]::ReadAllText($swFile))
+  $ids = @($after.windows | ForEach-Object { [string]$_.id })
+  if ($ids -contains 'owed-item') { Ok 'the day AFTER refresh_on, an unprocessed expiry survives the rebuild instead of being pruned by date' }
+  else { Bad 'THE DANGEROUS HALF: an unprocessed expiry was pruned the day after refresh_on - its sale price now publishes until the next quarterly rotation' }
+  if ($ids -notcontains 'done-item') { Ok 'a recorded re-price IS pruned once its refresh_on is past (the ledger still drains)' }
+  else { Bad 'a processed window was kept - the ledger would grow without bound' }
+  $owed = @($after.windows | Where-Object { [string]$_.id -eq 'owed-item' })
+  if (@($owed).Count -eq 1 -and [string]$owed[0].status -eq 'reprice-owed') { Ok "the surviving entry is labelled 'reprice-owed' so a stale sale price is visible, not silent" }
+  else { Bad ("survivor status = '" + (@($owed | ForEach-Object { $_.status }) -join ',') + "', expected reprice-owed") }
 } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 
 Write-Output ("CAPTURE-POLICY " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))

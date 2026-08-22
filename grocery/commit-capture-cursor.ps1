@@ -142,5 +142,20 @@ if ($res.Advanced) {
 } else {
   Write-Output ("cursor: {0} held at #{1} - {2}" -f $res.Store, $res.From, $res.Reason)
 }
+
+# THE EXPIRY LEDGER MOVES ON THE SAME EVIDENCE AS THE CURSOR (2026-08-22). This script is
+# already the one CLI every builder calls after its capture, and "did the data land?" is the
+# same question both writes depend on. Recording it here - rather than in each builder - is
+# the same reason this file exists at all: four inline copies of one rule is the duplicated-
+# rule trap. Unlike the cursor this is NOT term-rotation-only; every store owes re-prices.
+# Non-fatal: a re-price that happened but could not be recorded is simply asked for again.
+try {
+  $mk = Set-SaleExpiryProcessed -Store $Store -Today $todayS -OutDir $OutDir
+  if ($mk.Marked -gt 0) {
+    Write-Output ("expiry: {0} recorded {1} re-price(s) - they can now be pruned from sale-windows.json" -f $Store, $mk.Marked)
+  } else {
+    Write-Output ("expiry: {0} recorded none - {1}" -f $Store, $mk.Reason)
+  }
+} catch { Write-Warning ("expiry ledger not updated for $Store (" + $_.Exception.Message + ") - the re-price stays owed and leads tomorrow's slice") }
 exit 0
 

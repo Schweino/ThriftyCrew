@@ -68,6 +68,70 @@ $script:QuarterDays = 90
 # of the catalog would starve. The pulls read this so the two can never disagree.
 $script:MaxCarryDays = 90
 
+# ---------------------------------------------------------------------------
+# THE PER-STORE CALL CEILING (2026-08-22)
+#
+# WHY. Until today the daily slice was rotation + EVERY expiring sale, uncapped, and
+# Select-ExpiryFirstSlice added the expiries in a loop with no budget test at all - so the
+# returned slice could exceed its own budget outright. sale-windows.json on 2026-08-22 holds
+# 130 entries refreshing on 08-23 (Fareway 111, Family Fare 19) and 104 on 08-24 (Hy-Vee),
+# so tomorrow those lanes would have asked for ~19x and ~15x their normal day in ONE run.
+# Family Fare's Freshop search answers HTTP 400 carrying {"error_code":429} once we exceed
+# its window; a throttled run degrades that whole store, and on 2026-08-20 it cost five
+# blind days. A slice that cannot be fetched is not a bigger capture, it is a smaller one.
+#
+# WHERE THE NUMBERS COME FROM. One entry per store, each carrying its own basis, in the same
+# measured/proposed vocabulary stores.json already uses for pull_profile.confidence. This is
+# a CEILING ON REQUESTS PER RUN, in that lane's own request unit (search terms for the term-
+# rotation stores, product ids for Hy-Vee).
+#
+#   Family Fare 40  MEASURED. Freshop starts answering 400/error_code 429 at roughly 40
+#                   search calls in a window (2026-08-20 incident; FF fell to 15% same-day
+#                   rows from 64-77%). The only store whose refusal point has actually been
+#                   observed. Everything else below is bounded by an OBSERVED-CLEAN run, not
+#                   by an observed refusal, and is deliberately set well under it.
+#   Hy-Vee     120  PROPOSED. GraphQL, no wall ever observed; the lane re-verified 1010
+#                   products in a run at baseline with no refusal, so 120 is ~12% of a
+#                   known-clean run. Its unit is PRODUCTS (see PRODUCT ROTATION below).
+#   Baker's    250  PROPOSED. The Kroger API pull is comprehensive - 7,281 rows in one pass
+#                   on 2026-08-21 - so there is no per-item request to ration. The cap only
+#                   bounds a worklist so this store cannot be the one exception.
+#   Fareway     45  PROPOSED. Browser lane, 900ms pacing. A 144-term sweep completed clean on
+#                   2026-08-15 with zero empties, but 144 is a fifth of the list and no wall
+#                   has ever been measured; 45 is under a third of that known-clean sweep.
+#   Aldi        45  PROPOSED. Same 900ms browser pacing; stores.json records 403s "after a
+#                   few hundred rapid requests", so the same third-of-clean rule applies.
+#   Sam's Club  30  PROPOSED. 2600ms measured-clean pacing over 388 terms, but each term is a
+#                   slow storefront page - 30 keeps one Chrome session near the lane's own
+#                   14-minute wall-clock cap rather than near a rate limit.
+#   Walmart     25  PROPOSED. 3500ms pacing, and it is the ONLY store that has hit a hard
+#                   "Robot or human?" wall (2026-08-15) at a rate nobody recorded. The store
+#                   we know least about gets the smallest slice.
+#
+# RAISE A NUMBER ONLY WITH EVIDENCE, and move its basis to 'measured' in the same edit. An
+# unmeasured ceiling raised on a hunch is how the 2026-08-20 throttle happened.
+$script:StoreCallCap = @{
+  'Family Fare' = @{ cap = 40;  basis = 'measured'; unit = 'search terms' }
+  'Hy-Vee'      = @{ cap = 120; basis = 'proposed'; unit = 'product ids' }
+  "Baker's"     = @{ cap = 250; basis = 'proposed'; unit = 'search terms' }
+  'Fareway'     = @{ cap = 45;  basis = 'proposed'; unit = 'search terms' }
+  'Aldi'        = @{ cap = 45;  basis = 'proposed'; unit = 'search terms' }
+  "Sam's Club"  = @{ cap = 30;  basis = 'proposed'; unit = 'search terms' }
+  'Walmart'     = @{ cap = 25;  basis = 'proposed'; unit = 'search terms' }
+}
+# An unknown store gets the tightest cap in the table, never the loosest: a store nobody has
+# characterised is the one most likely to be walled by the request we have not thought about.
+$script:DefaultCallCap = 25
+
+function Get-StoreCallCap([string]$Store) {
+  if ($script:StoreCallCap.ContainsKey($Store)) { return [int]$script:StoreCallCap[$Store].cap }
+  return [int]$script:DefaultCallCap
+}
+function Get-StoreCallCapBasis([string]$Store) {
+  if ($script:StoreCallCap.ContainsKey($Store)) { return [string]$script:StoreCallCap[$Store].basis }
+  return 'default'
+}
+
 function Get-PolicyJson([string]$name) {
   $p = Join-Path $script:PolicyRoot $name
   if (-not (Test-Path $p)) { return $null }
@@ -117,49 +181,108 @@ function Get-CapturePlan {
   # note as "the day the price reverts, when a re-price is due". It was being written
   # daily and read by nothing; this is what consumes it.
   #
-  # THE COUPLING THAT BOUNDS THIS LIST (documented 2026-08-22). build-sale-windows.ps1
-  # keeps an entry only while refresh_on >= today ("Prune only once refresh_on is in the
-  # past") and prunes it the day AFTER refresh_on. So an id appears here on exactly ONE
-  # day - refresh_on itself, the day after the window ends - and is gone the next. That
-  # is what keeps SaleExpiries from growing without bound, and it is also why a lane that
-  # skips its expiry slice on that day never gets a second chance from this list: the
-  # re-price is owed on the day the sale drops off, not "sometime after". Brad's rule:
-  # "reprice whenever an ad price / sale price / rollback price / instant-savings price
-  # drops off." The two halves - the builder's prune and this consumer's >= test - must
-  # stay aligned; widen one without the other and expiries are either missed or repeated.
-  $expiries = New-Object System.Collections.Generic.List[string]
+  # THE COUPLING THAT BOUNDS THIS LIST - AND WHAT REPLACED IT (2026-08-22, second pass).
+  # build-sale-windows.ps1 USED to keep an entry only while refresh_on >= today and prune
+  # it the day AFTER refresh_on, so an id appeared here on exactly ONE day and was gone the
+  # next. That bounded the list, but it bounded it by the CALENDAR rather than by the work:
+  # an expiry a capped or throttled run did not actually process was dropped from the
+  # ledger and never re-priced, so its SALE price kept publishing on the board until that
+  # item's next quarterly rotation slot - up to 90 days away. Capping the slice without
+  # fixing that would have converted a throttle problem into silently stale prices, which
+  # is strictly worse. So the prune is now driven by an explicit PROCESSED SIGNAL:
+  #
+  #   repriced_for  = the refresh_on value a landed capture actually satisfied.
+  #   An entry is OWED while refresh_on <= today AND repriced_for <> refresh_on.
+  #   build-sale-windows.ps1 keeps an owed entry no matter how old it is; it prunes only
+  #   once refresh_on is past AND repriced_for matches it.
+  #   Set-SaleExpiryProcessed (below) writes that field, and only after a landed capture -
+  #   a run that fetched nothing marks nothing and therefore loses nothing.
+  #
+  # The two halves - the builder's prune and this consumer's test - must stay aligned;
+  # widen one without the other and expiries are either missed or repeated forever.
+  #
+  # OLDEST FIRST. Pending expiries are ordered by refresh_on ascending, then by id, so the
+  # cap below always takes the longest-owed work and nothing starves at the back of a
+  # backlog. The order is total and deterministic, so two runs on the same day pick the
+  # same slice - which is what lets Set-SaleExpiryProcessed mark exactly what was asked.
+  # Brad's rule: "reprice whenever an ad price / sale price / rollback price /
+  # instant-savings price drops off."
+  $pending = New-Object System.Collections.Generic.List[object]
+  $seenId = @{}
   $sw = Get-PolicyJson 'sale-windows.json'
   if ($sw -and $sw.windows) {
     foreach ($w in $sw.windows) {
       if ([string]$w.store -ne $Store) { continue }
       $ro = [string]$w.refresh_on
       if (-not $ro) { continue }
-      try {
-        $roD = [datetime]::ParseExact($ro, 'yyyy-MM-dd', $null)
-        if ($todayD -ge $roD) { [void]$expiries.Add([string]$w.id) }
-      } catch { }
+      $roD = $null
+      try { $roD = [datetime]::ParseExact($ro, 'yyyy-MM-dd', $null) } catch { continue }
+      if ($todayD -lt $roD) { continue }                       # sale still running
+      if ((Get-SaleWindowRepricedFor $w) -eq $ro) { continue }  # already processed for THIS window
+      $id = [string]$w.id
+      if (-not $id) { continue }
+      # One slot per commodity even when two of its items are on sale at the same store.
+      if ($seenId.ContainsKey($id)) {
+        if ([string]$seenId[$id].refresh_on -gt $ro) { $seenId[$id].refresh_on = $ro }
+        continue
+      }
+      $row = [pscustomobject]@{ id = $id; refresh_on = $ro }
+      $seenId[$id] = $row
+      [void]$pending.Add($row)
     }
   }
+  $ordered = @($pending | Sort-Object @{e = { [string]$_.refresh_on }}, @{e = { [string]$_.id }})
 
   # --- 3. quarterly rotation ------------------------------------------------
   $terms = Get-StoreTermCount $Store
   $rotation = [int][math]::Ceiling($terms / [double]$script:QuarterDays)
   if ($rotation -lt 1 -and $terms -gt 0) { $rotation = 1 }
 
+  # --- 4. the cap -----------------------------------------------------------
+  # Expiries come FIRST, but they may not eat the whole run: the rotation is reserved its
+  # daily drip, or a long backlog would stall the quarterly sweep for weeks and the rows
+  # it feeds would age past MaxCarryDays. So the expiry allowance is the store's call cap
+  # minus the rotation, and the two together are exactly the cap.
+  $callCap = Get-StoreCallCap $Store
+  $expiryCap = $callCap - $rotation
+  if ($expiryCap -lt 1) { $expiryCap = 1 }
+  $expiries = @($ordered | Select-Object -First $expiryCap | ForEach-Object { [string]$_.id })
+  $deferred = @($ordered).Count - @($expiries).Count
+  if ($deferred -lt 0) { $deferred = 0 }
+  $budget = $rotation + @($expiries).Count
+  if ($budget -gt $callCap) { $budget = $callCap }
+
   return [pscustomobject]@{
     Store         = $Store
     Today         = $todayS
     AdRollover    = $adRollover
     AdNote        = $adNote
-    SaleExpiries  = $expiries.ToArray()
+    # Today's slice of expiries: oldest-owed first, capped. NOT the whole backlog.
+    SaleExpiries  = $expiries
+    # Every expiry this store still owes, capped slice included. An audit reads this to
+    # see the backlog; a lane must never fetch it.
+    ExpiryPending = @($ordered | ForEach-Object { [string]$_.id })
+    ExpiryDeferred = $deferred
+    ExpiryCap     = $expiryCap
+    ExpiryOldest  = if (@($ordered).Count) { [string]@($ordered)[0].refresh_on } else { '' }
+    CallCap       = $callCap
+    CallCapBasis  = (Get-StoreCallCapBasis $Store)
     TermCount     = $terms
     RotationTerms = $rotation
     QuarterDays   = $script:QuarterDays
     MaxCarryDays  = $script:MaxCarryDays
-    # What the pull should actually ask for today: the daily drip plus any expiring
-    # sales. An ad rollover is a separate pull (the ad feed), not extra search terms.
-    TermBudget    = $rotation + $expiries.Count
+    # What the pull should actually ask for today: the daily drip plus today's capped
+    # slice of expiring sales, and never more than the store's call cap. An ad rollover
+    # is a separate pull (the ad feed), not extra search terms.
+    TermBudget    = $budget
   }
+}
+
+function Get-SaleWindowRepricedFor($w) {
+  <# The refresh_on value a landed capture already satisfied for this window, or ''. #>
+  if ($null -eq $w) { return '' }
+  try { if ($w.PSObject.Properties['repriced_for']) { return ([string]$w.repriced_for) } } catch { }
+  return ''
 }
 
 function Get-PolicyMaxCarryDays { return $script:MaxCarryDays }
@@ -249,6 +372,9 @@ function Get-CaptureWorklist {
     SaleTerms     = $sale.ToArray()
     AdRollover    = $plan.AdRollover
     AdNote        = $plan.AdNote
+    CallCap        = $plan.CallCap
+    ExpiryDeferred = $plan.ExpiryDeferred
+    ExpiryOldest   = $plan.ExpiryOldest
     # Dedupe on the TERM STRING. Select-Object -Unique on PSCustomObjects compares
     # their ToString(), which is identical for every one of them, so it silently
     # collapsed a 13-term worklist to a single entry - a store would then be told to
@@ -276,12 +402,29 @@ function Select-ExpiryFirstSlice {
       the budget is spent. Pure - no disk, no cursor writes - so a fixture can prove an
       expiring commodity's term is in the slice.
 
+      THE SECOND DEFECT, AND THE ORDERING RULE (2026-08-22, second pass). The expiry loop
+      had NO budget test - only the rotation loop afterwards checked $Budget - so the
+      returned slice was (ALL expiries) + (rotation up to budget) and taken.Count could
+      exceed the budget outright. With 130 sale windows reverting on 2026-08-23 that is a
+      ~19x day for Family Fare, straight into Freshop's 400/error_code 429. The loop now
+      walks $Expiring IN THE ORDER GIVEN and stops at the budget like everything else.
+
+      THE RULE, stated once so it can be tested (see test-capture-policy.ps1):
+        1. expiries before rotation;
+        2. expiries in the order $Expiring was given - Get-CapturePlan hands them over
+           oldest refresh_on first, so the longest-owed re-price is the one that survives
+           the cap and nothing starves at the back of a backlog;
+        3. the CAP APPLIES TO THE WHOLE SLICE, expiries included.
+      A multi-key item (a commodity with two search terms) keeps its terms adjacent
+      because the walk is per expiring key, not per position in Items.
+
     .PARAMETER Items     the lane's full worklist in rotation order (terms, or products)
-    .PARAMETER Expiring  keys of the items whose sale ended (commodity ids, or terms)
+    .PARAMETER Expiring  keys of the items whose sale ended (commodity ids, or terms),
+                         PRIORITY ORDER - first is taken first when the budget is short
     .PARAMETER KeyOf     scriptblock: item -> the key(s) it answers to (string or string[])
     .PARAMETER Budget    total items to take today; <= 0 means unbudgeted (all, expiries first)
     .PARAMETER CursorStart  where the rotation starts in Items
-    .OUTPUTS  @{ Items; Prepended; FromRotation; CursorNext }
+    .OUTPUTS  @{ Items; Prepended; FromRotation; CursorNext; ExpiryDropped }
   #>
   [CmdletBinding()]
   param(
@@ -292,16 +435,47 @@ function Select-ExpiryFirstSlice {
     [int]$CursorStart = 0
   )
   $all = @($Items); $n = $all.Count
-  $exp = @{}; foreach ($k in @($Expiring)) { if ($k) { $exp[[string]$k] = $true } }
   $taken = New-Object System.Collections.Generic.List[object]
   $seen = New-Object 'System.Collections.Generic.HashSet[int]'
   $prepended = 0
-  if ($exp.Count -gt 0) {
+  $expDropped = 0
+  $wanted = @(@($Expiring) | Where-Object { $_ })
+  if ($wanted.Count -gt 0 -and $n -gt 0) {
+    # key -> the positions in Items that answer to it, in Items order (so a commodity's
+    # two search terms stay adjacent and in their catalogue order).
+    $byKey = @{}
     for ($i = 0; $i -lt $n; $i++) {
-      $keys = @(& $KeyOf $all[$i])
-      $hit = $false
-      foreach ($k in $keys) { if ($k -and $exp.ContainsKey([string]$k)) { $hit = $true; break } }
-      if ($hit) { [void]$taken.Add($all[$i]); [void]$seen.Add($i); $prepended++ }
+      foreach ($k in @(& $KeyOf $all[$i])) {
+        if (-not $k) { continue }
+        $ks = [string]$k
+        if (-not $byKey.ContainsKey($ks)) { $byKey[$ks] = New-Object System.Collections.Generic.List[int] }
+        [void]$byKey[$ks].Add($i)
+      }
+    }
+    $full = $false
+    foreach ($k in $wanted) {
+      $ks = [string]$k
+      if (-not $byKey.ContainsKey($ks)) { continue }
+      foreach ($idx in $byKey[$ks]) {
+        if ($seen.Contains($idx)) { continue }
+        # THE CAP APPLIES TO THE EXPIRIES TOO. Everything past it is not lost - it stays
+        # OWED in sale-windows.json (repriced_for is only written for what actually landed)
+        # and comes back at the front of tomorrow's slice, oldest first.
+        if ($Budget -gt 0 -and $taken.Count -ge $Budget) { $full = $true; break }
+        [void]$taken.Add($all[$idx]); [void]$seen.Add($idx); $prepended++
+      }
+      if ($full) { $expDropped++ }
+    }
+    if ($full) {
+      # count the whole un-taken tail, not just the key we stopped on
+      $expDropped = 0
+      foreach ($k in $wanted) {
+        $ks = [string]$k
+        if (-not $byKey.ContainsKey($ks)) { continue }
+        $any = $false
+        foreach ($idx in $byKey[$ks]) { if ($seen.Contains($idx)) { $any = $true; break } }
+        if (-not $any) { $expDropped++ }
+      }
     }
   }
   $walked = 0
@@ -316,11 +490,130 @@ function Select-ExpiryFirstSlice {
     }
   }
   return [pscustomobject]@{
-    Items        = $taken.ToArray()
-    Prepended    = $prepended
-    FromRotation = ($taken.Count - $prepended)
-    CursorNext   = if ($n -gt 0) { (($CursorStart + $walked) % $n) } else { 0 }
+    Items         = $taken.ToArray()
+    Prepended     = $prepended
+    FromRotation  = ($taken.Count - $prepended)
+    ExpiryDropped = $expDropped
+    CursorNext    = if ($n -gt 0) { (($CursorStart + $walked) % $n) } else { 0 }
   }
+}
+
+function Get-SaleWindowsPath { return (Join-Path $script:PolicyRoot 'sale-windows.json') }
+
+function Set-SaleExpiryProcessed {
+  <#
+    .SYNOPSIS Record that a store's expiring sales were actually re-priced, so they can be pruned.
+    .DESCRIPTION
+      THE HALF THAT MAKES CAPPING SAFE (2026-08-22). build-sale-windows.ps1 used to prune an
+      entry the day after its refresh_on, by DATE alone. Cap the slice without changing that
+      and every expiry the cap deferred is deleted unprocessed - its sale price then keeps
+      publishing until the item's next quarterly slot, up to 90 days later. Silently stale
+      prices are worse than a throttle, because nothing reports them.
+
+      So the prune now needs a signal, and this is the only thing that writes it:
+          repriced_on  = the day a landed capture covered this window
+          repriced_for = the refresh_on value that capture satisfied
+      Both are written ONLY for ids this run actually asked for, and only when the store's
+      capture LANDED (Test-CaptureLanded - fresh rows on disk, not an exit code). A run that
+      fetched nothing marks nothing and therefore loses nothing; those ids are still owed
+      tomorrow, at the front of the slice.
+
+      ATTEMPTED-AND-LANDED, NOT PROVEN-REPRICED, and that is deliberate. Judging per item -
+      "did a fresh row for this exact commodity appear?" - would let one commodity the store
+      simply does not carry sit at the head of the oldest-first queue forever, blocking the
+      backlog behind it and re-spending its slot every single day. Marking what a landed run
+      was asked for keeps the queue draining. The cost is that a commodity the lane asked for
+      and failed to find is marked done; it is re-priced by the quarterly rotation instead,
+      which is exactly what happens to every non-sale item anyway.
+
+    .PARAMETER Ids  override the ids to mark. Default: exactly the capped slice
+                    Get-CapturePlan handed this store today.
+    .PARAMETER Landed  override the landing test (a lane that just wrote the file).
+    .OUTPUTS @{ Store; Today; Marked; Ids; Reason }
+  #>
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory)][string]$Store,
+    [string]$Today = '',
+    [string]$OutDir = '',
+    [AllowEmptyCollection()][string[]]$Ids = @(),
+    [nullable[bool]]$Landed = $null,
+    [switch]$AllowReplay
+  )
+  if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
+  $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
+  $res = [pscustomobject]@{ Store = $Store; Today = $todayS; Marked = 0; Ids = @(); Reason = '' }
+
+  # A REPLAY IS NOT NEW WORK, the same rule Step-CaptureCursor learned on 2026-08-21 when a
+  # builder's SELF-TEST fixture dates advanced the production cursor #7 -> #63 in two hours.
+  # This write is strictly more dangerous: marking a window processed is what ALLOWS the next
+  # build to delete it, so a self-test could retire a re-price that never happened. Judged
+  # against the WALL CLOCK on purpose - "is this a replay?" is the one question a pinned date
+  # cannot answer. -AllowReplay exists only for this file's own fixtures.
+  if (-not $AllowReplay) {
+    $realToday = (Get-Date).ToString('yyyy-MM-dd')
+    if ($todayS -ne $realToday) {
+      $res.Reason = "refusing to record re-prices on a REPLAY: this run's date is $todayS but today is $realToday"
+      return $res
+    }
+  }
+
+  $want = @(@($Ids) | Where-Object { $_ })
+  if ($want.Count -eq 0) {
+    try { $want = @((Get-CapturePlan -Store $Store -Today $todayS).SaleExpiries | Where-Object { $_ }) } catch { $want = @() }
+  }
+  if ($want.Count -eq 0) { $res.Reason = 'nothing was owed / asked for today'; return $res }
+
+  $did = if ($null -ne $Landed) { [bool]$Landed } else { Test-CaptureLanded -Store $Store -Today $todayS -OutDir $OutDir }
+  if (-not $did) {
+    $res.Reason = "no fresh rows landed for $todayS - $($want.Count) expiry(ies) stay OWED and lead tomorrow's slice"
+    return $res
+  }
+
+  $p = Get-SaleWindowsPath
+  if (-not (Test-Path $p)) { $res.Reason = 'no sale-windows.json'; return $res }
+  $doc = $null
+  try { $doc = ConvertFrom-Json ([IO.File]::ReadAllText($p)) } catch { $res.Reason = 'sale-windows.json unreadable'; return $res }
+  if (-not $doc -or -not $doc.windows) { $res.Reason = 'sale-windows.json has no windows'; return $res }
+
+  $todayD = [datetime]::ParseExact($todayS, 'yyyy-MM-dd', $null)
+  $set = @{}; foreach ($i in $want) { $set[[string]$i] = $true }
+  $marked = New-Object System.Collections.Generic.List[string]
+  $rows = New-Object System.Collections.Generic.List[object]
+  foreach ($w in @($doc.windows)) {
+    $e = [ordered]@{}
+    foreach ($pr in $w.PSObject.Properties) { $e[$pr.Name] = $pr.Value }
+    $ro = [string]$w.refresh_on
+    if ([string]$w.store -eq $Store -and $set.ContainsKey([string]$w.id) -and $ro) {
+      $roD = $null; try { $roD = [datetime]::ParseExact($ro, 'yyyy-MM-dd', $null) } catch { }
+      if ($roD -and $todayD -ge $roD -and (Get-SaleWindowRepricedFor $w) -ne $ro) {
+        $e['repriced_on'] = $todayS
+        $e['repriced_for'] = $ro
+        [void]$marked.Add([string]$w.id)
+      }
+    }
+    [void]$rows.Add([pscustomobject]$e)
+  }
+  if ($marked.Count -eq 0) { $res.Reason = 'already recorded'; return $res }
+
+  # Atomic, for the same reason the cursor is: a torn write here loses the record of work
+  # that was actually done, and the next build would prune it as unprocessed - or repeat it.
+  $out = [ordered]@{}
+  foreach ($pr in $doc.PSObject.Properties) { if ($pr.Name -ne 'windows') { $out[$pr.Name] = $pr.Value } }
+  # Through a VARIABLE, not inline. `$dict['k'] = @($listOfPSCustomObject)` throws
+  # "Argument types do not match" in Windows PowerShell 5.1 - the inline @() around a
+  # generic List of PSCustomObject picks the wrong indexer overload. Reproduced 2026-08-22.
+  $winArr = $rows.ToArray()
+  $out['windows'] = $winArr
+  $tmp = "$p.tmp"
+  Set-Content -Path $tmp -Value ($out | ConvertTo-Json -Depth 6) -Encoding UTF8
+  Move-Item -LiteralPath $tmp -Destination $p -Force
+
+  $markedIds = @($marked | Sort-Object -Unique)
+  $res.Marked = $marked.Count
+  $res.Ids = $markedIds
+  $res.Reason = "recorded $($marked.Count) re-price(s) after a landed capture"
+  return $res
 }
 
 # ---------------------------------------------------------------------------
@@ -673,7 +966,10 @@ function Write-CaptureWorklist {
     sale_terms     = @($wl.SaleTerms | ForEach-Object { $_.term })
     terms          = @($wl.Terms | ForEach-Object { $_.term })
     commodities    = @($wl.Terms | ForEach-Object { $_.id })
-    note           = 'Fetch ONLY these terms today. Advance the cursor with Save-CaptureCursor AFTER the capture lands - a run that fetched nothing must re-attempt this slice tomorrow, never skip it.'
+    call_cap       = $wl.CallCap
+    expiry_deferred = $wl.ExpiryDeferred
+    expiry_oldest_owed = $wl.ExpiryOldest
+    note           = 'Fetch ONLY these terms today - the list is already capped at this store''s call_cap so it cannot trip a rate limit. Advance the cursor with Save-CaptureCursor AFTER the capture lands - a run that fetched nothing must re-attempt this slice tomorrow, never skip it. expiry_deferred re-prices did NOT fit today; they are still recorded as owed in sale-windows.json and lead tomorrow''s slice, oldest first - do NOT fetch them here.'
   }
   Set-Content -Path $file -Value ($doc | ConvertTo-Json -Depth 5) -Encoding UTF8
   return $file
