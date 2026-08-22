@@ -54,6 +54,7 @@ if ($OutBaseline -lt 0) { $OutBaseline = 38 }
 $KNOWN = [ordered]@{
   # -- manual investigation tools, run by a human when a question needs answering
   'probe-price-fields.ps1'           = 'PHASE 0 of PLAN-live-price-state: asks each of the 9 price sources whether it states that a discount is live and when it ENDS, and writes the raw payloads to out\audit\price-fields\ as evidence. Answered its question on 2026-08-21 (Baker''s and Family Fare publish windows; five stores do not). Re-run by hand when a store changes its API - it makes assertions about the world, not about our data, so a scheduled run would just re-download the same answer daily.'
+  'reanchor-rollback-ledger.ps1'     = 'ONE-OFF MIGRATION, by hand (2026-08-22): moved rollback-first-seen.json first_seen anchors back to the capture as_of per Brad''s ruling that the 30-day TTL runs from DETECTION. Idempotent and -WhatIf-able; kept so the migration is reproducible and documented, never scheduled - Get-RollbackWindow -AsOf now does this on every build.'
   # -- launched by hand from a scheduled-agent SKILL under ~\.claude\scheduled-tasks\ (not in this repo)
   'build-aldi-regular.ps1'           = 'SKILL grocery-browser-stores-refresh step F2 - weekly Aldi capture builder'
   'build-pull-order.ps1'             = 'SKILL grocery-browser-stores-refresh - priority term order for the walled stores'
