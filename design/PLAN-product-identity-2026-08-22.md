@@ -92,7 +92,7 @@ Each step ships alone, is reversible, and ends with a clean green `check-ad-cycl
 
 **What.** `compare-deals.ps1` already computes every product's assignment via `match-lib`. Make it *emit* that as a first-class artifact.
 
-- **Truth file:** `graph/identity/<store>.jsonl` — tracked, append-only assertions, one per (store, product_id). Fields: `store`, `product_id` (or `name_key` when no id — see §5.1), `name`, `commodity` (namespaced id as graph uses: `commodity:staple:<id>`), `how` = `rule`, `include_hit` (the exact pattern text that fired), `excludes_tested` (count), `candidates` (other commodities whose include also hit — this is what `match-soundness` calls "contested"), `rules_hash`, `first_seen`, `last_seen`, `provenance_id`.
+- **Truth file:** `graph/identity/<store>.jsonl` — tracked, append-only assertions, **one per (store, product_id, namespace)**. Fields: `store`, `product_id` (or `name_key` when no id — see §5.1), `key_kind`, `name`, `name_key` (the normalised name the rules actually saw), `namespace` (`staple` | `recipe` — see §10.1), `commodity` (namespaced id as graph uses: `commodity:staple:<id>`, or null = "no commodity under these rules"), `how` = `rule`, `include_hit` (the exact pattern text that fired), `excludes_tested` (count), `candidates` (every other commodity in this namespace whose include hit AND whose excludes all missed — this is what `match-soundness` calls "contested"), `rules_hash`, `first_seen`, `provenance_id`. **No `last_seen` in the truth file** — it would turn append-only into rewrite-daily; last-seen is derived from captures in the index.
 - **Index:** `graph/import/import_all.py` gains an importer that upserts these into `graph.db` as `ProductSKU` nodes + `instance_of` edges (3,443 / 3,412 exist today from `product-urls.json`; this supersedes and widens that source). Deterministic ids per `graph/lib/ids.py`.
 - **`rules_hash`** = SHA-256 over the byte content of `commodities.json`, `recipe-commodities.json`, `category-excludes.json`, and `match-lib.ps1`'s `$GLOBAL_EXCLUDE` source. Same hash → assignment is reusable. Different hash → full rematch (see step 1c).
 - **Incremental:** on a run whose `rules_hash` matches the table's, only names not present in the table are matched. Measured churn makes this tens of names/day.
@@ -131,7 +131,7 @@ Order (cost first): `audit-match-soundness` (111 s → a diff of two rules_hash 
 
 - **Classes** live in `grocery/product-classes.json`: `{class: [patterns...]}` — built by de-duplicating the 65,742 excludes into their 2,290 distinct patterns and grouping the shared ones (`category-excludes.json` already names twelve such classes; reconcile, do not duplicate).
 - Each product gets its **class(es)** computed once (compiled code, same engine) and stored in the identity table.
-- Each commodity declares `accepts_classes` (default: `food` only) plus its genuinely commodity-specific excludes. The per-commodity exclude array shrinks from ~110 to the handful that are actually about that commodity.
+- Each commodity declares `accepts_classes` plus its genuinely commodity-specific excludes. **The default is NOT "food only"** — the board has a `household` category (`laundry-detergent`, `furniture-polish`, `all-purpose-cleaner` are live commodities) and `recipe-commodities.json` deliberately *relaxes* sauce/canned/frozen/juice via `relax_global`. The default `accepts_classes` is derived per commodity from `categories.json` plus a migration rule (§10.4), never assumed. The per-commodity exclude array shrinks from ~110 to the handful that are actually about that commodity.
 - `new-commodity.ps1` stops cloning: a new commodity is includes + class names. `add-commodity-rule.ps1` gains `-Class`.
 - **Semantics preserved exactly:** "product P is excluded from commodity C" ⇔ "P's class ∉ C.accepts_classes OR a C-specific exclude matches P". Prove by: identity table byte-identical before and after the migration, on the full corpus, under the old and new storage.
 
@@ -221,3 +221,42 @@ That session owns `pull-browser-stores.py`, `build-walmart-deals.ps1`, `build-sa
 | daily chain (after steps 1–5, excluding store API time) | ~14 min + captures | single-digit minutes + captures |
 
 Store API time (Freshop pacing, browser-driven stores) is not addressed here and is not reducible by this plan.
+
+---
+
+## 10. Pre-build review: gotchas found re-reading this plan (2026-08-22, same day)
+
+Each of these would have cost the builder a day or produced a wrong table. They are ordered by how badly they would have hurt.
+
+### 10.1 The table is per NAMESPACE, not per product — the first draft had this wrong
+`graph/schema.md` is explicit: the `staple` and `recipe` commodity namespaces are NOT merged, because staple `ground-turkey` and recipe `93-7-ground-turkey` are different purchases. `compare-deals` is run a second time with `-CommoditiesFile recipe-commodities.json` (by `recipe-overlay.ps1`), so **one SKU legitimately carries one assignment per namespace, and they differ**. The key is `(store, product_id, namespace)`; the parity gate compares each board against its own namespace; rule-change diffs are per namespace. A table keyed on product alone would have overwritten the staple answer with the recipe answer every run.
+
+### 10.2 The tracked truth file must be on the bot-commit path, or it never leaves this PC
+`capture-run.ps1`'s publish stage stages an explicit `$inputPaths` list (never `add -A`). `graph/identity/` must be added to that list in step 1, or the table is regenerated daily and never committed — which is exactly the last-mile failure found on 2026-08-22 (`public/board.json` rebuilt every morning, last bot commit four days old). The cloud backup (`daily.yml`, clean clone) rebuilds `graph.db` from tracked JSON, so this is also what makes the table exist there at all.
+
+### 10.3 Invalidate on NAME change, not only on rules change
+A Kroger/Hy-Vee `product_id` is stable across a size or label variant; the rules match the *name*. So a row is reusable only when BOTH `rules_hash` matches AND the stored `name_key` equals today's `Get-MatchTexts` normalised name. Otherwise re-match. (Guards already see this class: "REFUSED (productId is a different size than our row)".) Also: `name_key` must be computed AFTER `heal-mojibake` normalisation, or the same product appears twice.
+
+### 10.4 Product classes: a boilerplate pattern is deliberately ABSENT from some commodities
+`detergent` is in 530 of 588 exclude lists — it is missing from `laundry-detergent`; `\bcleaner\b` is missing from `all-purpose-cleaner`. A class may be attached to commodity C **only if every pattern of that class is present in C's current exclude list**; any class with a pattern C lacks stays expressed as C-specific excludes (or C declares the class with an explicit `except:` list — builder's choice, but it must be mechanical). The identity table byte-identical before/after is the proof, but the migration must be an algorithm, not a hand edit of 588 entries. Reconcile with `category-excludes.json`, which already names twelve classes and is *baked* into `commodities.json` by `apply-category-excludes.ps1` — the `rules_hash` must therefore be taken over the **post-bake** `commodities.json`, and the bake step must run before the hash is computed in the chain.
+
+### 10.5 Rulings are negatives; first-match-wins must be re-examined, not assumed
+`known_wrong_for` is "an adjudicated negative, absolute". When a known-wrong forbids the commodity the rule proposed, does the product today **fall through to the next matching commodity** or **drop**? Read `compare-deals.ps1`'s known-wrong handling and `known-wrong-lib.ps1` and preserve that exact behaviour in the precedence logic (step 2), with a fixture for each branch. Precedence is therefore two ladders — *forbid* (human forbid > known-wrong > suppression) and *assign* (human assign > rule) — not one.
+
+### 10.6 `candidates` requires a small, parity-checked engine change
+The C# core stops at the first match (and its inverted-index prefilter skips entries that cannot match). Recording `candidates` means continuing past the first hit to evaluate every include-eligible entry's excludes. This is cheap in compiled code but it is an engine change: the first-match answer must remain identical (`test-match-lib`), and the prefilter's soundness (`RequiredLiteral`) must hold for the continued scan too.
+
+### 10.7 The parity gate must fail closed on a MISSING row only once the table exists
+First run: the table is empty. An absent row is "table not populated" → BLIND (exit 3, publish proceeds), never a HARD FAIL — otherwise step 1 can never go live. After the first full population, absent = hard fail. Compare only rows at the **current** `rules_hash`; rows under an old hash are stale by definition, not disagreements.
+
+### 10.8 Keep Python off the SHIP path
+The importer into `graph.db` (`import_all.py`) runs in INSPECT (it already does, inside `audit-graph-gates`, ~1 s). `guards.ps1`'s parity gate reads the tracked JSONL directly in PowerShell — a keyed lookup over ~40k rows is sub-second with a hashtable. Do not put a Python call in front of publish.
+
+### 10.9 Write the table atomically, and only from the board-building invocation
+`compare-deals.ps1` is also run ad hoc (`-Explain <commodity>`, `-SelfTest`, by `apply-coverage-batch`). Only the chain's board-building run emits assertions; temp + move + re-parse before the swap (the pattern in `purge-verdict-lows.ps1` and `rollback-ttl-lib.ps1`), never a truncating write — the 13 MB `price-history.json` tear window of 08-22 is the precedent.
+
+### 10.10 Step 5 must keep what `capture-run.ps1` already guarantees
+The machine-wide mutex (`Global\tc-capture-run`), the run record (`out/logs/capture-run-status.json`), the SHIP/INSPECT boundary log line, the verdict file (`out/chain-verdict.json`) and the publish gate on it. The runner replaces the *ordering* of stages, not the run's contract with the watchdog.
+
+### 10.11 The twenty copies are not all the same copy
+Some "copies" are *loosened* matchers on purpose — `audit-coverage-gaps` scans with a deliberately broader include to find products the strict rules miss. That is a different question ("what *could* match?"), not a drifted copy of "what *does* match?". Classify each of the twenty before migrating: faithful replicas become table reads; deliberate variants keep their own logic but take the table as their "current assignment" input instead of recomputing it.
