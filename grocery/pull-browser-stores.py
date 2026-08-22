@@ -194,19 +194,34 @@ STORES = {
     },
 }
 
-# ALDI IS DELIBERATELY ABSENT, AND THIS IS NOT AN OVERSIGHT.
-# The other three agents share one contract: runPacedSweep over a list of SEARCH TERMS, which is
-# exactly what out\worklists\capture-<store>-<date>.json contains. pull-aldi-instore.js does not.
-# It walks PRODUCT SLUGS (`{i: id, s: slug}`) against ALDI_PRODUCT_BASE, because Aldi's storefront is
-# a slug lookup rather than a term sweep - so handing it the rotation worklist would fetch ~7 URLs
-# built from search phrases, 404 every one, and write a confident empty capture. An empty capture
-# from a store that sells the item is the single most expensive failure shape in this estate: it
-# reads as "Aldi does not carry this" and silently drops real cells.
-# To add Aldi properly, something must map its rotation terms to product slugs (product-urls.json
-# already holds resolved Aldi links and is the obvious source) and hand pullAldiInStore that list.
-# Until that exists, Aldi keeps the browser-handoff flag and is reported as outstanding.
-ALDI_NOTE = ("Aldi needs a terms->product-slug mapping before it can be driven: its agent walks "
-             "product slugs, not search terms. Left on the browser-handoff flag.")
+# ALDI IS CAPTURED THROUGH BRAD'S OWN CHROME, LIKE WALMART - AND I HAD THE REASON WRONG.
+# An earlier note here said Aldi could not be driven because pull-aldi-instore.js walks PRODUCT
+# SLUGS rather than search terms. True of that file, and beside the point: that agent is the
+# SECONDARY tool, a re-pricer for products whose slug we already know (product-urls.json has 410 of
+# 625). The PRIMARY Aldi lane has always been a SEARCH sweep - build-aldi-regular.ps1 reads
+# `id|term|name|prices|unit|size|href` and stamps found_by_term, which only a search can produce.
+# So the blocker was never the slug mapping. Proven 2026-08-22 through the claude-in-chrome
+# extension: 7 terms, 392 rows, 310 priced, mode verified In-Store at ALDI - OLA 48 - Omaha.
+#
+# THE METHOD, because it is not obvious and cost two false starts:
+#   * Client-side router, not navigation: window.__do_not_use_me_history.push('/aldi/s?k=<term>').
+#     The path is '/aldi/s' NOT '/store/aldi/s' - the router is already scoped under /store/, and
+#     doubling it produced /store/store/aldi/s, a page with no mode label at all. The In-Store
+#     assertion caught that and refused rather than capturing from a broken page.
+#   * SCROLL, or you get a tenth of the shelf. Results lazy-load: the first paint carries 8 tiles,
+#     and scrolling to the bottom until the count stops growing gave 21-90 per term. A sweep that
+#     stops at 8 is not a shallow sweep, it is a sweep that will miss the cheapest item.
+#   * NAME FROM THE SLUG, never the card text - the longest card line is often a descriptor
+#     ("Sold individually"). The slug cannot hold a decimal, so "15.5 oz" arrives as "15 5 oz";
+#     build-aldi-regular's Repair-SlugDecimals fixes it FROM THE SIZE COLUMN, so the size must be
+#     captured from the card rather than derived from the slug.
+#   * PRICE ONLY FROM "Current price: $X.XX". The card also carries a glued form ("$249" beside a
+#     $2.49 item) - the same 100x trap Fareway's extractor has.
+#
+# Not in STORES because this driver cannot run it: like Walmart, Aldi answers Brad's Chrome and not
+# an automated one, so it is an ATTENDED lane and the 08:00 job correctly reports it outstanding.
+ALDI_NOTE = ("Aldi is captured through Brad's own Chrome (attended, search sweep with lazy-load "
+             "scrolling) - see the note above for the method. Not drivable from here.")
 
 
 def today_str(override=""):
