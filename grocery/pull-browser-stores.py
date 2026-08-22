@@ -174,6 +174,27 @@ def js_file(name):
         return fh.read()
 
 
+def ensure_agent(browser, agent_src, probe_fn):
+    """Inject the agent only if this document does not already have it.
+
+    INJECTING TWICE IS A HARD ERROR, not a harmless repeat: pull-agent-lib.js declares `const sleep`
+    at top level, so a second evaluation in the same document throws
+    "Identifier 'sleep' has already been declared" and takes the whole run with it. That is easy to
+    trip, because the agent arrives by two routes - addScriptToEvaluateOnNewDocument (which fires on
+    every navigation) and an explicit evaluate for the page that is already open. Today the two are
+    kept apart by call ORDER, which is exactly the kind of invisible constraint that breaks when
+    someone reorders two lines. Asking the page whether it already has the agent removes the
+    ordering dependency altogether.
+    """
+    try:
+        if browser.js(f"typeof {probe_fn} === 'function'"):
+            return False
+    except Exception:
+        pass
+    browser.js(agent_src)
+    return True
+
+
 def storage_key_of(cfg):
     """Read the agent's localStorage key OUT OF THE AGENT, and prove it matches what we expect.
 
@@ -241,8 +262,18 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
             # means the marker is written because the page proved the Omaha store, not because a
             # human said so. Walmart is the exception it cannot cover (nothing to assert), so that
             # one gets a dwell instead - stated plainly rather than dressed up as verification.
-            browser.js(js_file("pull-agent-lib.js"))
-            browser.js(js_file(cfg["agent"]))
+            # INJECTED SCRIPTS DO NOT SURVIVE NAVIGATION, AND SEEDING IS ALL NAVIGATION.
+            # Picking a store reloads the page (Fareway and Sam's both do a full navigation), which
+            # wipes anything evaluated into the old document. A first version injected once before
+            # the loop, so from the operator's very first click every poll returned
+            # "REFUSED: farewayIdentity is not defined" and the profile could never be seeded - a
+            # bug that would have made this whole feature look broken on first use.
+            # addScriptToEvaluateOnNewDocument re-installs both files on EVERY document, so the
+            # identity check is available no matter how far the operator navigates. The explicit
+            # inject below covers the page that is already open.
+            agent_src = js_file("pull-agent-lib.js") + "\n;\n" + js_file(cfg["agent"])
+            browser.on_new_document(agent_src)
+            ensure_agent(browser, agent_src, call.split("(")[0])
             call = _identity_call(cfg)
             print(f"  SEEDING {name}. A Chrome window is open.")
             print(f"  Do this now: {cfg['seed_hint']}")
@@ -252,6 +283,15 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
             deadline = time.time() + 15 * 60
             last = ""
             while time.time() < deadline:
+                # Belt and braces: if a page somehow loaded without the on-new-document hook (a
+                # cross-origin sign-in redirect, say), put the agent back before judging. Judging a
+                # page that has no identity function would report "not defined" as if it were the
+                # store's answer.
+                try:
+                    if not browser.js(f"typeof {call.split('(')[0]} === 'function'"):
+                        ensure_agent(browser, agent_src, call.split("(")[0])
+                except Exception:
+                    pass
                 verdict = browser.js(
                     "(function(){ try { %s; return 'OK'; } "
                     "catch(e){ return 'REFUSED: ' + String((e&&e.message)||e).slice(0,160); } })()" % call
@@ -272,8 +312,12 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
         # Inject the shared library first, then the store agent. Both are plain scripts that define
         # globals; evaluating them in order is exactly the "paste lib, then paste agent" contract
         # their own headers describe.
-        browser.js(js_file("pull-agent-lib.js"))
-        browser.js(js_file(cfg["agent"]))
+        # Registered for every document as well as the current one. The sweep itself works by
+        # same-origin fetch and should not navigate, but a store that bounces us through an
+        # interstitial would otherwise land on a page with no agent on it.
+        agent_src = js_file("pull-agent-lib.js") + "\n;\n" + js_file(cfg["agent"])
+        browser.on_new_document(agent_src)
+        ensure_agent(browser, agent_src, cfg["sweep"])
 
         # THE AGENT MUST ACTUALLY BE THERE. If the injection silently failed, the sweep call below
         # would throw a ReferenceError that reads like a store problem rather than a load problem.
