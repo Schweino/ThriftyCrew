@@ -61,6 +61,11 @@ $runLog = Start-RunLog -Name ("capture-run-" + $Kind) -OutDir $OutDir -Today $to
 $script:RunStart = Get-Date
 $script:StatusFile = Join-Path (Join-Path $OutDir 'logs') 'capture-run-status.json'
 function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
+  # A REHEARSAL MUST NOT WRITE THE RECORD OF A REAL RUN (2026-08-22). Two -WhatIf runs at 08:27 and 08:43
+  # overwrote what the real 07:00 and 08:00 runs had written, and capture-watchdog then printed
+  # "ok  capture-run [ad] in stage 'whatif'" on a morning when BOTH tasks had failed (0xC000013A and 1).
+  # The check added to catch "reported rc=0 but never finished" reported ok on the worst day it has seen.
+  if ($WhatIf) { return }
   try {
     $doc = @{}
     if (Test-Path $script:StatusFile) { try { (Get-Content $script:StatusFile -Raw | ConvertFrom-Json).PSObject.Properties | ForEach-Object { $doc[$_.Name] = $_.Value } } catch { } }
@@ -191,7 +196,7 @@ foreach ($s in $browser) {
 }
 foreach ($s in $toRun.Keys) { Write-Output ("  run      {0,-13} {1}" -f $s, $toRun[$s]) }
 
-if ($WhatIf) { Write-Output "`nWhatIf: nothing launched."; Write-RunStatus 'whatif' 0; Release-RunMutex; Stop-RunLog -ExitCode 0 -Path $runLog; exit 0 }
+if ($WhatIf) { Write-Output "`nWhatIf: nothing launched."; Release-RunMutex; Stop-RunLog -ExitCode 0 -Path $runLog; exit 0 }
 Write-RunStatus 'capturing'
 
 # ---- launch every headless lane AT ONCE ------------------------------------
@@ -337,7 +342,30 @@ if ($browser.Count) {
           $b2Out = & powershell -NoProfile -ExecutionPolicy Bypass -File $b2 -Today $todayS -ModeVerified $todayS
           $b2Rc = $LASTEXITCODE
           foreach ($l in @($b2Out)) { Write-Output ("    " + $l) }
-          if ($b2Rc -ne 0) { Write-Warning ("{0}: {1} exited {2}" -f $s, $BROWSER_BUILDERS[$key].Then, $b2Rc); $failed += ("build2-" + $key) }
+          if ($b2Rc -ne 0) {
+            # A SECOND RUN IN ONE DAY IS NOT A FAILED RUN. build-fareway-regular REFUSES to overwrite
+            # today's file when a rebuild would shrink it - correct, because the file on disk has
+            # carry-forward applied (912 rows) while a rebuild from the shop capture alone starts at
+            # 461, and clobbering it would drop every carried row. But the refusal exits 1, so a
+            # re-run (a manual build earlier, or the 07:00 and 08:00 jobs overlapping) marked the
+            # whole store FAILED while today's prices were sitting on disk, correct and complete.
+            # So judge it on the evidence rather than the exit code: if today's file exists AND holds
+            # rows captured today, the store is fine and the guard did its job.
+            $fwOut = Join-Path $root ("out\regular\fareway-regular-$todayS.json")
+            $freshToday = 0
+            if (Test-Path $fwOut) {
+              try {
+                $fwDoc = Get-Content $fwOut -Raw -Encoding UTF8 | ConvertFrom-Json
+                $freshToday = @($fwDoc.deals | Where-Object { ([string]$_.as_of) -like "$todayS*" }).Count
+              } catch { }
+            }
+            if ($freshToday -gt 0) {
+              Write-Output ("  {0}: {1} declined to rebuild (exit {2}) but today's file already holds {3} row(s) captured today - not a failure." -f $s, $BROWSER_BUILDERS[$key].Then, $b2Rc, $freshToday)
+            } else {
+              Write-Warning ("{0}: {1} exited {2} and no rows dated {3} are on disk" -f $s, $BROWSER_BUILDERS[$key].Then, $b2Rc, $todayS)
+              $failed += ("build2-" + $key)
+            }
+          }
         }
       }
     }

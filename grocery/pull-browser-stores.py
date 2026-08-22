@@ -56,11 +56,13 @@ EXIT CODES  0 = every requested store captured. 1 = at least one store failed or
 import argparse
 import datetime
 import json
+import random
 import re
 import os
 import subprocess
 import sys
 import time
+from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(ROOT), "media", "reels"))
@@ -119,11 +121,22 @@ STORES = {
     "fareway": {
         "name": "Fareway",
         "origin": "https://shop.fareway.com/store/fareway-meat-grocery/",
+        # TWO FILES, AND THE SPLIT IS THE WHOLE POINT.
+        # pull-fareway-instore.js supplies farewayIdentity() - the only honest way to know which
+        # store we are on (it reads retailerLocation from the Apollo cache; the on-screen label lies,
+        # a fresh session reads plausibly while sitting on Des Moines). Its PROBE, though, is dead:
+        # shop.fareway.com went fully client-rendered, so fetch-and-regex sees a shell with zero
+        # product JSON. Its own header says so and says the fix is driver-side.
+        # pull-fareway-shop.js is that fix: navigate per term, then read window.__APOLLO_CLIENT__.
+        # It also recovers "Sale ends in N days", which is never painted into the DOM at all.
         "agent": "pull-fareway-instore.js",
-        "sweep": "pullFarewayInStore",
-        "to_csv": "farewaySweepToCsv",
-        "storage_key": "TC_FAREWAY_SWEEP",
-        "capture": os.path.join("out", "captures", "fareway-capture-{date}.csv"),
+        "extra_agent": "pull-fareway-shop.js",
+        "lane": "navigate",                  # NOT the paced same-origin fetch sweep
+        "extract": "farewayShopExtract",
+        "search_url": "https://shop.fareway.com/store/fareway-meat-grocery/s?k={term}",
+        # Mirrors stores.json -> Fareway -> pull_profile. audit-pull-profiles.ps1 fails if they disagree.
+        "delay_ms": 900, "jitter_ms": 600, "retries": 3,
+        "capture": os.path.join("out", "fareway", "fareway-shop-{date}.jsonl"),
         "seed_hint": "set the store to Omaha 17070 Audrey Street (68136) and confirm the header "
                      "reads In-Store.",
     },
@@ -169,6 +182,29 @@ def read_worklist(store_key, date_s):
     if not terms:
         return None, "worklist is empty - nothing owed today"
     return terms, None
+
+
+def read_worklist_pairs(store_key, date_s):
+    """(term, commodity_id) pairs. The navigate lane needs the COMMODITY id, not just the term.
+
+    The worklist carries `terms` and `commodities` as PARALLEL arrays, and select-fareway-shop.ps1
+    keys each JSONL line on the commodity id (it dedupes by it, last capture wins). Pairing by index
+    is what the file's own shape intends - but a length mismatch would silently shift every id by
+    one, filing pork prices under the previous commodity, so that is checked rather than assumed.
+    """
+    p = os.path.join(ROOT, "out", "worklists", f"capture-{store_key}-{date_s}.json")
+    if not os.path.exists(p):
+        return None, f"no worklist at {os.path.relpath(p, ROOT)}"
+    with open(p, "r", encoding="utf-8-sig") as fh:
+        doc = json.load(fh)
+    terms = [str(t) for t in (doc.get("terms") or [])]
+    cids = [str(c) for c in (doc.get("commodities") or [])]
+    if not terms:
+        return None, "worklist is empty - nothing owed today"
+    if len(cids) != len(terms):
+        return None, (f"worklist is malformed: {len(terms)} terms but {len(cids)} commodities. "
+                      "Pairing them by index would file every price under the wrong commodity.")
+    return list(zip(terms, cids)), None
 
 
 def notify_wall(store_name, detail, also_email=True):
@@ -253,6 +289,147 @@ def ensure_agent(browser, agent_src, probe_fn):
     return True
 
 
+MULTIPACK_RE = re.compile(r'^\s*(\d+)\s*x\s*([\d.]+)\s*([a-z ]+)$', re.I)
+SLUG_SIZE_RE = re.compile(r'-(\d+(?:-\d+)?)-(oz|fl-oz|lb|ct|count|each|g|ml|l)$')
+
+
+def corroborate_multipack_sizes(rows):
+    """Refuse to publish a multipack size the product's own URL does not corroborate.
+
+    THE ROW THAT FORCED THIS (2026-08-22, first run of this lane). Fareway's own pricingUnitString
+    said "6 x 288 oz" for Mott's applesauce at $3.48 - 1,728 oz, or 108 lb of applesauce for three
+    and a half dollars. The product slug says what it really is:
+        .../products/35024-mott-s-original-applesauce-4-oz
+    Six 4 oz cups. The bad size survived selection and WON the applesauce cell at $0.002/oz, which
+    is the estate's most familiar failure shape: a size error does not look wrong, IT LOOKS CHEAP,
+    and the smaller number wins a sort ([[cheapest-is-per-unit-not-per-purchase]]).
+
+    THE SLUG IS THE SECOND WITNESS, NOT THE NEW TRUTH. It is corrupt in its own way - it cannot hold
+    a decimal point, so "12 x 3.17 oz" appears as "317 oz", the same defect already known at Aldi.
+    So this does not "correct" one from the other; it only asks whether they AGREE, in the three
+    ways they legitimately can:
+        count x member == slug total      the slug states the pack total
+        slug == member x 100              the slug dropped the decimal
+        slug == member                    the slug states the per-member size
+    Anything else is a size no evidence supports, and the size is DROPPED rather than guessed.
+    A size-less row is unscorable, sorts last and cannot win a cell (select-fareway-shop:
+    "UNSCORABLE SORTS LAST, IT DOES NOT SORT AS ZERO"), so the row stays visible as a candidate
+    while losing the power to publish a false per-unit. Correcting it instead would mean choosing a
+    winner between two witnesses that are each wrong sometimes - see
+    [[label-scales-wrong-was-already-wrong]].
+
+    Measured on that first capture: 56 multipack sizes, 35 corroborated, 18 not comparable
+    (no slug size, or a different unit family), 3 dropped - both Mott's rows and one GoGo Squeez
+    where 12 x 3.2 = 38.4 but the slug says 32.
+    """
+    dropped = []
+    for c in rows:
+        sz = str(c.get("size") or "").strip()
+        m = MULTIPACK_RE.match(sz)
+        if not m:
+            continue
+        n, member, unit = int(m.group(1)), float(m.group(2)), m.group(3).strip().lower()
+        sm = SLUG_SIZE_RE.search(str(c.get("url") or ""))
+        if not sm:
+            continue                      # no second witness: leave it alone, do not invent doubt
+        slugv = float(sm.group(1).replace("-", "."))
+        slugu = sm.group(2).replace("-", " ")
+        if slugu.replace("fl ", "") != unit.replace("fl ", ""):
+            continue                      # different unit family - not comparable, not disagreeing
+        total = n * member
+        if (abs(total - slugv) <= max(0.02 * slugv, 0.05)
+                or abs(slugv - round(member * 100)) < 0.51
+                or abs(slugv - member) <= 0.01):
+            continue
+        c["size"] = ""
+        c["size_dropped"] = f"uncorroborated: '{sz}' implies {total:g} {unit} but the product URL says {slugv:g} {slugu}"
+        dropped.append((str(c.get("name", ""))[:45], sz, f"{slugv:g} {slugu}"))
+    return dropped
+
+
+def run_navigate_lane(browser, cfg, pairs, out_path, agent_src):
+    """Fareway's lane: navigate per term, then read the page's own Apollo cache.
+
+    WHY THIS IS NOT THE PACED-FETCH SWEEP. runPacedSweep works by same-origin fetch from inside the
+    page, which is perfect for Walmart and Sam's - their search response carries the product JSON.
+    Fareway's does not any more: the storefront is fully client-rendered, so the response is a shell
+    and fetch-and-regex reads zero products from a store that sells thousands. The only place the
+    data exists is the hydrated app's Apollo cache, and reaching it means NAVIGATING, which unloads
+    whatever script was doing the sweeping. That is precisely the work a driver can do and an
+    in-page agent cannot, and it is why pull-fareway-instore.js's header says to do it here.
+
+    BLINDNESS IS NOT EMPTINESS, ENFORCED. farewayShopExtract THROWS when the cache holds no priced
+    nodes rather than returning []. This keeps that distinction: a term whose extract never succeeds
+    is recorded as an error and reported, never written out as "Fareway carries none of these".
+    Writing a confident empty here would retire real cells - the most expensive failure this estate
+    has.
+    """
+    delay = cfg.get("delay_ms", 900) / 1000.0
+    jitter = cfg.get("jitter_ms", 600) / 1000.0
+    retries = cfg.get("retries", 3)
+    lines, errors = [], []
+
+    for i, (term, cid) in enumerate(pairs, 1):
+        url = cfg["search_url"].format(term=quote_plus(term))
+        rows, why = None, ""
+        for attempt in range(retries):
+            try:
+                browser.goto(url, wait_ms=3500)
+                ensure_agent(browser, agent_src, cfg["extract"])
+                # Results lazy-load, and the cache fills as they do. Give hydration a few chances
+                # before believing the page: an extract attempted too early throws for the same
+                # reason an empty store would, and the two must not be confused.
+                for _ in range(8):
+                    raw = browser.js(
+                        "(function(){ try { return JSON.stringify(%s(%s)); } "
+                        "catch(e){ return 'ERR:' + String((e&&e.message)||e); } })()"
+                        % (cfg["extract"], json.dumps(term)))
+                    if raw and not raw.startswith("ERR:"):
+                        rows = json.loads(raw)
+                        break
+                    why = (raw or "no response")[:160]
+                    browser.js("window.scrollTo(0, document.body.scrollHeight);")
+                    time.sleep(1.2)
+                if rows is not None:
+                    break
+            except Exception as e:
+                why = f"threw: {e}"
+            time.sleep(2 + attempt * 3)
+
+        if rows is None:
+            errors.append(f"{term}: {why}")
+            print(f"  [{i}/{len(pairs)}] {term!r}: COULD NOT READ - {why[:90]}")
+        else:
+            dropped = corroborate_multipack_sizes(rows)
+            lines.append({"id": cid, "term": term, "candidates": rows})
+            note = f"  [{i}/{len(pairs)}] {term!r}: {len(rows)} candidate(s) -> {cid}"
+            if dropped:
+                # Named, never a silent count: a dropped size is a cell that may now go unfilled,
+                # and the reader has to be able to see which product and why.
+                note += f"  [{len(dropped)} size(s) dropped as uncorroborated]"
+                for nm, sz, sl in dropped:
+                    note += f"\n        - {nm}: '{sz}' vs URL '{sl}'"
+            print(note)
+
+        time.sleep(delay + random.uniform(0, jitter))
+
+    if not lines:
+        return False, (f"every term failed to read ({len(errors)} of {len(pairs)}) - capture NOT "
+                       f"written. First: {errors[0] if errors else 'n/a'}")
+
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
+        for ln in lines:
+            fh.write(json.dumps(ln, ensure_ascii=False) + "\n")
+
+    note = f"wrote {os.path.relpath(out_path, ROOT)} ({len(lines)} of {len(pairs)} term(s))"
+    if errors:
+        # Reported, never silently dropped: a partial capture is fine, a partial capture nobody
+        # mentioned is how a term quietly stops being covered.
+        note += f"; {len(errors)} unreadable: " + "; ".join(e[:60] for e in errors[:3])
+    return True, note
+
+
 def storage_key_of(cfg):
     """Read the agent's localStorage key OUT OF THE AGENT, and prove it matches what we expect.
 
@@ -292,18 +469,26 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
         return False, (f"NEEDS SEEDING: no seeded Chrome profile for {name}. Run "
                        f"`pull-browser-stores.py --store {store_key} --seed` once, {cfg['seed_hint']}")
 
-    terms, why = (None, None) if seed else read_worklist(store_key, date_s)
+    navigate_lane = cfg.get("lane") == "navigate"
+    pairs = None
+    if seed:
+        terms, why = None, None
+    elif navigate_lane:
+        pairs, why = read_worklist_pairs(store_key, date_s)
+        terms = [t for t, _ in pairs] if pairs else None
+    else:
+        terms, why = read_worklist(store_key, date_s)
     if not seed and terms is None:
         return True, f"skipped: {why}"
 
     print(f"\n=== {name} ===")
     if not seed:
-        print(f"  worklist: {len(terms)} term(s)")
+        print(f"  worklist: {len(terms)} term(s)" + ("  [navigate lane]" if navigate_lane else ""))
 
     # Prove the agent/driver contract BEFORE launching a browser: a drift here is a code defect and
-    # should cost nothing to discover.
+    # should cost nothing to discover. The navigate lane has no localStorage sweep, so no key.
     skey = ""
-    if not seed:
+    if not seed and not navigate_lane:
         try:
             skey = storage_key_of(cfg)
         except Exception as e:
@@ -387,13 +572,28 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
         # same-origin fetch and should not navigate, but a store that bounces us through an
         # interstitial would otherwise land on a page with no agent on it.
         agent_src = js_file("pull-agent-lib.js") + "\n;\n" + js_file(cfg["agent"])
+        if cfg.get("extra_agent"):
+            agent_src += "\n;\n" + js_file(cfg["extra_agent"])
         browser.on_new_document(agent_src)
-        ensure_agent(browser, agent_src, cfg["sweep"])
+        probe_fn = cfg["extract"] if navigate_lane else cfg["sweep"]
+        ensure_agent(browser, agent_src, probe_fn)
 
-        # THE AGENT MUST ACTUALLY BE THERE. If the injection silently failed, the sweep call below
-        # would throw a ReferenceError that reads like a store problem rather than a load problem.
-        if not browser.js(f"typeof {cfg['sweep']} === 'function'"):
-            return False, f"agent did not load: {cfg['sweep']} is not defined after injecting {cfg['agent']}"
+        # THE AGENT MUST ACTUALLY BE THERE. If the injection silently failed, the call below would
+        # throw a ReferenceError that reads like a store problem rather than a load problem.
+        if not browser.js(f"typeof {probe_fn} === 'function'"):
+            return False, f"agent did not load: {probe_fn} is not defined after injecting {cfg['agent']}"
+
+        if navigate_lane:
+            # IDENTITY FIRST, EXPLICITLY. The paced sweep calls assertIdentity() itself inside
+            # runPacedSweep; this lane never enters that function, so the one check that proves we
+            # are not quietly pricing Des Moines has to be made here. Without it a store that
+            # drifted would produce a full, plausible, completely wrong capture.
+            v = browser.js("(function(){ try { farewayIdentity(); return 'OK'; } "
+                           "catch(e){ return 'REFUSED: ' + String((e&&e.message)||e).slice(0,200); } })()")
+            if v != "OK":
+                return False, f"identity check failed - {v}"
+            out_path = os.path.join(ROOT, cfg["capture"].format(date=date_s))
+            return run_navigate_lane(browser, cfg, pairs, out_path, agent_src)
 
         # Kick the sweep off WITHOUT awaiting it over the socket. awaitPromise would hold the
         # connection for the whole sweep, and a wall pause is unbounded - the driver has to stay

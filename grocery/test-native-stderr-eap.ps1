@@ -109,10 +109,21 @@ if (-not (Test-Path $drvPath)) {
 } else {
   $drv = Get-Content $drvPath -Raw
   $contractBad = @()
+  # TWO LANES, TWO CONTRACTS (updated 2026-08-22 when Fareway moved lanes - and this check FAILED on
+  # that change, which is the point of it).
+  #   paced   Walmart, Sam's Club: runPacedSweep over a term list, results in localStorage under a
+  #           storage key, exported by a *SweepToCsv function.
+  #   navigate Fareway: the storefront went client-rendered, so there is nothing for a same-origin
+  #           fetch to read. The driver navigates per term and calls farewayShopExtract, which reads
+  #           the Apollo cache. No sweep function, no storage key - asserting them here would be
+  #           asserting the dead contract. farewayIdentity still comes from the instore file and is
+  #           load-bearing: it proves BOTH the Omaha location and In-Store mode, which is what
+  #           licenses -ModeVerified downstream.
   foreach ($pair in @(
       @{ Agent = 'pull-walmart-instore.js'; Fns = @('pullWalmartInStore', 'walmartSweepToCsv'); Key = 'TC_WALMART_SWEEP' },
       @{ Agent = 'pull-sams-instore.js';    Fns = @('pullSamsInStore', 'samsSweepToCsv');       Key = 'TC_SAMS_SWEEP' },
-      @{ Agent = 'pull-fareway-instore.js'; Fns = @('pullFarewayInStore', 'farewaySweepToCsv'); Key = 'TC_FAREWAY_SWEEP' })) {
+      @{ Agent = 'pull-fareway-instore.js'; Fns = @('farewayIdentity');                         Key = '' },
+      @{ Agent = 'pull-fareway-shop.js';    Fns = @('farewayShopExtract');                      Key = '' })) {
     $ap = Join-Path $root $pair.Agent
     if (-not (Test-Path $ap)) { $contractBad += ($pair.Agent + ' is missing'); continue }
     $asrc = Get-Content $ap -Raw
@@ -120,8 +131,16 @@ if (-not (Test-Path $drvPath)) {
       if ($asrc -notmatch [regex]::Escape($fn)) { $contractBad += ("$($pair.Agent) no longer defines $fn") }
       if ($drv  -notmatch [regex]::Escape($fn)) { $contractBad += ("the driver no longer calls $fn") }
     }
-    if ($asrc -notmatch [regex]::Escape($pair.Key)) { $contractBad += ("$($pair.Agent) no longer uses $($pair.Key)") }
-    if ($drv  -notmatch [regex]::Escape($pair.Key)) { $contractBad += ("the driver no longer expects $($pair.Key)") }
+    if ($pair.Key) {
+      if ($asrc -notmatch [regex]::Escape($pair.Key)) { $contractBad += ("$($pair.Agent) no longer uses $($pair.Key)") }
+      if ($drv  -notmatch [regex]::Escape($pair.Key)) { $contractBad += ("the driver no longer expects $($pair.Key)") }
+    }
+  }
+  # Fareway's In-Store assertion is the whole basis for stamping -ModeVerified from a script. If it
+  # ever stops asserting the mode, that flag becomes a claim nobody checked.
+  $fwId = Get-Content (Join-Path $root 'pull-fareway-instore.js') -Raw -ErrorAction SilentlyContinue
+  if ($fwId -and $fwId -notmatch 'In-Store') {
+    $contractBad += 'farewayIdentity no longer asserts In-Store - capture-run stamps -ModeVerified on the strength of it'
   }
   if (-not $contractBad.Count) {
     Write-Output '  ok    browser-driver contract: every agent entry point and storage key the driver names still exists'
