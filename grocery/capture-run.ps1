@@ -46,6 +46,7 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 . (Join-Path $root 'capture-policy-lib.ps1')
 . (Join-Path $root 'run-log-lib.ps1')
+. (Join-Path $root 'alert-lib.ps1')   # Send-Alert: the ONLY way this file may page (32 KB command-line trap)
 
 # The scheduled task runs this hidden with no redirect, so without a transcript
 # the exit code is the ONLY thing that survives a run. Guarded: never fatal.
@@ -235,6 +236,18 @@ $BROWSER_DRIVER_KEYS = @{ 'Walmart' = 'walmart'; "Sam's Club" = 'samsclub'; 'Far
 $BROWSER_BUILDERS = @{
   'walmart'  = @{ Script = 'build-walmart-deals.ps1'; In = 'out\captures\walmart-capture-{0}.csv' }
   'samsclub' = @{ Script = 'build-sams-deals.ps1';    In = 'out\captures\sams-capture-{0}.csv' }
+  # FAREWAY IS A TWO-STAGE CHAIN, and it is wired up here as of 2026-08-22.
+  # It used to stop at the capture because -ModeVerified was understood to mean "a HUMAN confirmed
+  # the header said In-Store", and stamping that from a script would have been a claim nobody made.
+  # That reasoning is now obsolete: the driver refuses to capture Fareway at all unless
+  # farewayIdentity() passes, and that function asserts BOTH retailerLocation == 531573 (Omaha,
+  # 17070 Audrey Street) AND fulfillment mode == In-Store, read out of the Apollo cache rather than
+  # off the on-screen label - which is strictly stronger evidence than a person glancing at a header,
+  # since a fresh session reads plausibly while sitting on Des Moines. The flag is earned, not assumed.
+  # Leaving it unwired had a real cost: without -ModeVerified the builder stamps price_mode
+  # 'unverified' and compare-deals drops all ~433 Fareway cells, with only a Write-Warning to say so.
+  'fareway'  = @{ Script = 'select-fareway-shop.ps1'; In = 'out\fareway\fareway-shop-{0}.jsonl'
+                  Then = 'build-fareway-regular.ps1' }
 }
 $browserUndone = @()
 if ($browser.Count) {
@@ -279,18 +292,32 @@ if ($browser.Count) {
           continue
         }
         if (-not $BROWSER_BUILDERS.ContainsKey($key)) {
-          # Fareway's capture feeds select-fareway-shop -> build-fareway-regular, a two-stage path
-          # whose -ModeVerified flag means "a human confirmed the header said In-Store". Running it
-          # blind from here would stamp that claim without the confirmation, and without the flag
-          # compare-deals drops all 433 Fareway cells - so this stops at the capture, on purpose.
-          Write-Output ("  {0}: captured {1} - its builder chain is run separately (-ModeVerified needs a human's In-Store confirmation)" -f $s, $capRel)
+          Write-Output ("  {0}: captured {1} - no builder wired for this store yet" -f $s, $capRel)
           continue
         }
         $bScript = Join-Path $root $BROWSER_BUILDERS[$key].Script
-        $bOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $bScript -In $capRel -Date $todayS
+        # Fareway's selector takes -Today, the CSV builders take -Date. Passing the wrong one binds
+        # nothing and the script silently dates itself to the wall clock, which on a -Today replay
+        # would file a rebuild of an old capture under today.
+        $bOut = if ($key -eq 'fareway') {
+          & powershell -NoProfile -ExecutionPolicy Bypass -File $bScript -In $capRel -Today $todayS
+        } else {
+          & powershell -NoProfile -ExecutionPolicy Bypass -File $bScript -In $capRel -Date $todayS
+        }
         $bRc = $LASTEXITCODE
         foreach ($l in @($bOut)) { Write-Output ("    " + $l) }
         if ($bRc -ne 0) { Write-Warning ("{0}: builder exited {1}" -f $s, $bRc); $failed += ("build-" + $key) }
+
+        # SECOND STAGE, only if the first one worked. -ModeVerified is passed because the driver
+        # already proved In-Store (see the note on $BROWSER_BUILDERS); without it every Fareway cell
+        # is dropped by compare-deals.
+        if ($bRc -eq 0 -and $BROWSER_BUILDERS[$key].ContainsKey('Then')) {
+          $b2 = Join-Path $root $BROWSER_BUILDERS[$key].Then
+          $b2Out = & powershell -NoProfile -ExecutionPolicy Bypass -File $b2 -Today $todayS -ModeVerified $todayS
+          $b2Rc = $LASTEXITCODE
+          foreach ($l in @($b2Out)) { Write-Output ("    " + $l) }
+          if ($b2Rc -ne 0) { Write-Warning ("{0}: {1} exited {2}" -f $s, $BROWSER_BUILDERS[$key].Then, $b2Rc); $failed += ("build2-" + $key) }
+        }
       }
     }
   }
@@ -373,7 +400,122 @@ if ($runDownstream) {
   }
 }
 
+# ---- COMMIT + PUSH + PROVE THE EDGE TOOK IT (re-homed 2026-08-22) --------------------------------------
+# THE LAST MILE WAS SEVERED AND NOTHING NOTICED. Cloudflare serves public\** from the git repo, so a price
+# only reaches a reader once it is COMMITTED AND PUSHED. That step lived in run-daily-local.ps1, and the
+# 2026-08-20 cutover to the three TC tasks did not carry it over: the last smp-pipeline-bot commit was
+# 2026-08-18, while public\board.json and public\smp-feed.json were regenerated every morning and left
+# sitting in the working tree. For four days the live site served whatever a HUMAN commit had last swept
+# in (2026-08-21 12:38). The pipeline was healthy and the product was stale, which is the worst shape a
+# failure can take: every check green, every number right, nobody looking at them.
+#
+# *** STAGE PIPELINE-OWNED PATHS ONLY - NEVER git add -A. *** The cloud backup runs in a throwaway clone;
+# this shares Brad's REAL working tree, where interactive sessions and other agents are editing code at
+# the same time (today: pull-browser-stores.py and media\reels\cdp.py, mid-edit, in this very tree). A
+# blind add -A would sweep half-finished work into a bot commit and push it. The list below is the exact
+# set real bot commits have ever touched, plus rollback-first-seen.json (the TTL ledger added today).
+# Anything else the pipeline may someday write stays uncommitted here and is reported, never guessed at.
+# -NoDownstream is the TESTING flag (its own param comment says so). A test run must never commit or push
+# real data to main, so publishing is gated on it exactly as the chain is. -WhatIf already exited above.
+$today = $todayS
+$repo = Split-Path -Parent $root
+if ($NoDownstream) { Write-Output 'publish: SKIPPED (-NoDownstream is a testing flag - no commit, no push)' }
+else {
+$paths = @('grocery/out', 'public',
+           'grocery/ad-cycle-log.txt', 'grocery/alert-log.txt', 'grocery/ff-sweep-log.txt',
+           'grocery/ad-schedule.json', 'grocery/price-history.json', 'grocery/product-urls.json',
+           'grocery/sale-windows.json', 'grocery/rollback-first-seen.json',
+           'meal-prep/db/costed.json', 'meal-prep/db/cost-flags.txt',
+           'meal-prep/pipeline/v2-perserving.json', 'meal-prep/pipeline/v2-perserving.prev.json',
+           'meal-prep/pipeline/v2-inversions.json',
+           'meal-prep/free-rotation.json', 'meal-prep/ingredient-map.json',
+           'meal-prep/recipes-db.json') | Where-Object { Test-Path (Join-Path $repo $_) }
+Write-RunStatus 'publishing'
+$pushed = $false
+try {
+  # alert-sent-*.txt rotate (created+deleted daily) - stage the pattern only if any exist or were deleted
+  & git -C $repo add -A -- 'grocery/alert-sent-*.txt' 2>$null
+  & git -C $repo add -A -- $paths | ForEach-Object { Write-Output ("add: " + $_) }
+  & git -C $repo diff --cached --quiet
+  if ($LASTEXITCODE -eq 0) {
+    Write-Output 'commit: no pipeline changes to commit'
+    $pushed = $true      # nothing to ship is not a failed ship
+  } else {
+    $msg = "Daily pipeline: refresh prices + feed ($today) [$Kind]"
+    & git -C $repo -c user.name="smp-pipeline-bot" -c user.email="actions@users.noreply.github.com" commit -m $msg |
+      ForEach-Object { Write-Output ("commit: " + $_) }
+    # PUSH with the conflict-survival the cloud learned on 2026-07-16: -X theirs prefers the freshly
+    # regenerated derived files; abort on unresolvable so we NEVER strand a detached HEAD; autoStash
+    # carries any human WIP across the rebase untouched.
+    foreach ($attempt in 1..4) {
+      & git -C $repo fetch origin main 2>$null
+      & git -C $repo -c rebase.autoStash=true rebase -X theirs origin/main | ForEach-Object { Write-Output ("rebase[$attempt]: " + $_) }
+      if ($LASTEXITCODE -ne 0) {
+        Write-Output "rebase attempt $attempt conflicted; aborting (never detached)"
+        & git -C $repo rebase --abort 2>$null
+        Start-Sleep -Seconds 10; continue
+      }
+      & git -C $repo push origin HEAD:main | ForEach-Object { Write-Output ("push[$attempt]: " + $_) }
+      if ($LASTEXITCODE -eq 0) { $pushed = $true; Write-Output "pushed on attempt $attempt"; break }
+      Start-Sleep -Seconds 10
+    }
+    if (-not $pushed) {
+      Write-Output 'PUSH FAILED after 4 attempts - this run''s data is committed locally but NOT on main, so the live site still serves the previous board'
+      $failed += 'push'
+      try { Send-Alert -Subject "Grocery pipeline could not push - $today" -Body ("capture-run.ps1 [$Kind] committed today's refresh locally but could not push to main after 4 rebase attempts. Cloudflare deploys from the repo, so the live board and feed are STALE until this lands. Check for a rebase conflict in $repo (see grocery\out\logs\capture-run-$Kind-$today.log).") | Out-Null } catch {}
+    }
+  }
+} catch { Write-Output ("commit/push threw: " + $_.Exception.Message); $failed += 'push' }
+
+# ---- READ-AFTER-WRITE: prove the EDGE serves what we just pushed (was run-daily-local's check) ---------
+# A successful push is NOT a successful deploy: if the Cloudflare build fails afterwards the edge keeps
+# serving the OLD feed indefinitely and nothing in the estate notices. Cache-busted on purpose - the
+# response carries max-age=1800, and reading through the edge cache would only confirm the cache. Only
+# after a run that actually rebuilt the feed (the chain), and never fatal: this is a watcher, not a gate.
+if ($runDownstream -and $pushed) {
+  try {
+    $repoFeed = Get-Content (Join-Path $repo 'public\smp-feed.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    Start-Sleep -Seconds 30
+    $live = ((Invoke-WebRequest -Uri ("https://feed.thriftycrew.com/smp-feed.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45).Content | ConvertFrom-Json)
+    if ([string]$live.generated -ne [string]$repoFeed.generated) {
+      $m = "The edge is serving a feed generated $($live.generated) but the repo pushed $($repoFeed.generated). The push succeeded, so this is a Cloudflare deploy that has not landed. Live recipe prices are stale until it does. Check the CF dashboard build log."
+      Write-Output ("EDGE STALE: " + $m)
+      try { Send-Alert -Subject "smp-feed edge did not pick up today's push - $today" -Body $m | Out-Null } catch {}
+    } else { Write-Output ("edge verified: serving generated $($live.generated), $($live.recipe_count) recipes") }
+  } catch { Write-Output ("edge verify threw (not fatal): " + $_.Exception.Message) }
+}
+
+# ---- ASSERT THE FEED TRULY REFRESHED (was run-daily-local's assert) ------------------------------------
+# `generated` ALONE CANNOT DETECT THE FAILURE THIS EXISTS FOR: export-feed stamps that field itself, at the
+# moment it runs. Every recipe-lane stage upstream is non-fatal try/catch, so if one throws, export-feed
+# still runs happily over YESTERDAY's costed.json and stamps TODAY on the output - green assert, stale
+# prices, the dates-written-not-measured class. So check the INPUTS the feed's numbers derive from, and
+# the count. Only meaningful after the chain ran.
+if ($runDownstream) {
+  try {
+    $feed = Get-Content (Join-Path $repo 'public\smp-feed.json') -Raw | ConvertFrom-Json
+    $problems = New-Object System.Collections.Generic.List[string]
+    $gen = ([datetime]$feed.generated).ToString('yyyy-MM-dd')
+    if ($gen -ne $today) { [void]$problems.Add("smp-feed.generated is $gen, expected $today") }
+    foreach ($dep in @('meal-prep\db\costed.json', 'meal-prep\pipeline\v2-perserving.json')) {
+      $dp = Join-Path $repo $dep
+      if (-not (Test-Path $dp)) { [void]$problems.Add("$dep missing"); continue }
+      $mt = (Get-Item $dp).LastWriteTime.ToString('yyyy-MM-dd')
+      if ($mt -ne $today) { [void]$problems.Add("$dep last written $mt, not today - a recipe-lane stage threw and the feed re-exported stale numbers") }
+    }
+    $specCount = @(Get-ChildItem (Join-Path $repo 'meal-prep\db\recipes\*.json') -ErrorAction SilentlyContinue).Count
+    if ($specCount -gt 0 -and [int]$feed.recipe_count -ne $specCount) { [void]$problems.Add("feed carries $($feed.recipe_count) recipes but $specCount specs exist") }
+    if ($problems.Count) {
+      Write-Output ("FEED ASSERT FAILED: " + ($problems -join ' | '))
+      try { Send-Alert -Subject "Grocery pipeline: feed did not truly refresh - $today" -Body ("capture-run.ps1 finished but the feed is not trustworthy:`n`n" + ($problems -join "`n") + "`n`nNote ``generated`` alone is self-stamped by export-feed and cannot detect an upstream stage throwing. See grocery\ad-cycle-log.txt.") | Out-Null } catch {}
+    } else { Write-Output ("feed fresh: week $($feed.week_of), $($feed.recipe_count) recipes, $($feed.ingredient_count) ingredients (inputs verified same-day)") }
+  } catch { Write-Output ("feed assert threw: " + $_.Exception.Message) }
+}
+
+}   # end publish gate
+
 Write-Output 'CAPTURE-RUN-COMPLETE'
+
 if ($failed.Count) { Write-Output ("FAILED LANES: " + ($failed -join ', ')) }
 $rcFinal = if ($failed.Count) { 1 } else { 0 }
 Write-Output ("elapsed " + [int]((Get-Date) - $script:RunStart).TotalSeconds + " s")

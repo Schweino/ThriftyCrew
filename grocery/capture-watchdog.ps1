@@ -194,6 +194,32 @@ if ((Test-Path $cmp) -and (Test-Path $pub)) {
   }
 }
 
+# ---- 4b. DID IT REACH MAIN? (added 2026-08-22, after four days of the answer being "no") ------------
+# CHECK 4 ABOVE COMPARES TWO LOCAL FILES AND IS SATISFIED BY BOTH BEING FRESH ON DISK. That is not the
+# product. Cloudflare deploys public\** FROM THE GIT REPO, so a price reaches a reader only once it is
+# committed AND pushed. When the 2026-08-20 cutover moved the pipeline onto the three TC tasks it left
+# the commit+push step behind in run-daily-local.ps1: the board was rebuilt every morning, check 4 said
+# "current with the comparison" every morning, and the last smp-pipeline-bot commit was 2026-08-18. The
+# live site served four-day-old prices while every check in this file was green.
+# So ask the question the product cares about: is what the pipeline computed actually ON MAIN? Two
+# independent signals, because either alone can lie - a bot commit can exist without the served files in
+# it, and a clean tree can mean "nothing ran" as easily as "everything shipped".
+$repoRoot = Split-Path $root -Parent
+try {
+  $lastBot = (& git -C $repoRoot log --author='smp-pipeline-bot' -1 --format=%cd --date=format:'%Y-%m-%d' 2>$null | Select-Object -First 1)
+  $botAge = if ($lastBot) { [int]((Get-Date).Date - ([datetime]$lastBot)).TotalDays } else { 9999 }
+  # the served files, as git sees them: dirty = computed but never shipped
+  $dirty = @(& git -C $repoRoot status --porcelain -- 'public/board.json' 'public/smp-feed.json' 2>$null | Where-Object { $_ })
+  if ($botAge -gt 2) {
+    $seen = if ($lastBot) { "the last pipeline commit is $lastBot ($botAge days ago)" } else { 'there is NO pipeline commit in this history' }
+    [void]$findings.Add("NEVER REACHED MAIN: $seen. Cloudflare deploys public\** from the repo, so the live board and feed are stale by that much no matter how fresh the local files look. Check the publish stage at the end of capture-run.ps1 (commit -> push -> edge verify).")
+  } elseif ($dirty.Count) {
+    [void]$findings.Add("COMPUTED BUT NOT SHIPPED: " + ($dirty -join ', ') + " are modified in the working tree after today's run. The pipeline rebuilt them and the commit/push did not take them, so readers still get the previous board.")
+  } else {
+    [void]$ok.Add("reached main: last pipeline commit $lastBot, served files clean in git")
+  }
+} catch { [void]$findings.Add("could not ask git whether today's prices reached main ($($_.Exception.Message)) - the one check that speaks for the READER is unavailable") }
+
 # ---- 5. ad health ------------------------------------------------------------
 $adsc = Join-Path $root 'audit-ad-status.ps1'
 if (Test-Path $adsc) {
