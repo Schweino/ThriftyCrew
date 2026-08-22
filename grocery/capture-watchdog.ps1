@@ -137,6 +137,32 @@ foreach ($name in $TASKS) {
   }
 }
 
+# ---- 2b. the run's OWN record (2026-08-22) ---------------------------------------------------
+# capture-run.ps1 stamps out\logs\capture-run-status.json at start / capturing / downstream / complete
+# with its exit code. Task Scheduler only knows the process ended; this knows how far it got. A run
+# stuck in 'downstream' hours later, or one that never reached 'complete', is a finding even when the
+# task reports rc=0 - and it does not depend on ad-cycle-log.txt, which another process can hold mute.
+$statusF = Join-Path $OutDir 'logs\capture-run-status.json'
+if (Test-Path $statusF) {
+  try {
+    $st = Get-Content $statusF -Raw | ConvertFrom-Json
+    foreach ($kind in @('ad', 'daily')) {
+      $r = $st.$kind
+      if (-not $r) { continue }
+      if ([string]$r.date -ne $todayS) { if ($kind -eq 'daily') { [void]$findings.Add("RUN RECORD: the daily capture-run left no record for today (last $($r.date), stage $($r.stage)).") }; continue }
+      $ageMin = [int]((Get-Date) - [datetime]$r.updated).TotalMinutes
+      if ([string]$r.stage -eq 'complete') {
+        if ([int]$r.exit_code -ne 0) { [void]$findings.Add("RUN RECORD: capture-run [$kind] completed with exit $($r.exit_code) - see $($r.log)") }
+        else { [void]$ok.Add("capture-run [$kind] completed rc=0 at $($r.updated)") }
+      } elseif ($ageMin -gt 90) {
+        [void]$findings.Add("RUN RECORD: capture-run [$kind] has sat in stage '$($r.stage)' for $ageMin min (pid $($r.pid)) - it never reached 'complete'. Log: $($r.log)")
+      } else { [void]$ok.Add("capture-run [$kind] in stage '$($r.stage)' ($ageMin min)") }
+    }
+  } catch { [void]$findings.Add("RUN RECORD: $statusF is unreadable ($($_.Exception.Message))") }
+} else {
+  [void]$findings.Add("RUN RECORD: $statusF does not exist - capture-run has not written its own record; only Task Scheduler's word says it ran.")
+}
+
 # ---- 3. is there a board for today? -----------------------------------------
 $cmp = Join-Path $OutDir "comparison-$todayS.json"
 if (-not (Test-Path $cmp)) {

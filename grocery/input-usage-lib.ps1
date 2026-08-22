@@ -1,4 +1,4 @@
-<#
+﻿<#
   input-usage-lib.ps1 - WHICH FILES DID THE BOARD ACTUALLY OPEN?
 
   BRAD, 2026-08-21, on why grocery\out cannot simply be swept: he asked for the plain version, and it
@@ -6,7 +6,7 @@
   the engine STILL NEEDS have exactly the same kind of name as the ones it has finished with.
 
   Nothing on the outside distinguishes them. compare-deals reads a UNION of dated capture files - up to
-  14 days for Walmart, up to the 90-day quarter elsewhere - because the rotation only re-prices about 7
+  the 90-day capture-policy carry for every store (14 for Walmart until 2026-08-22) - because the rotation only re-prices about 7
   items per store per day. So a file three weeks old can be the only place a given store's price for a
   given commodity exists. Deleting by date bins prices today's board is ranking on, and it does not
   error: the board simply publishes a different store as cheapest and nobody finds out until somebody
@@ -115,7 +115,7 @@ function Save-InputUsage {
   $doc = [ordered]@{
     updated = (Get-Date).ToString('s')
     last_live_build = $Today
-    note = 'Which files the LIVE board actually opened, and when. The engine reads a UNION of dated captures (up to 14 days for Walmart, up to the 90-day quarter elsewhere) because the rotation only re-prices ~7 items per store per day, so a weeks-old file can be the only place a store''s price for a commodity exists - and a dated input is named exactly like a disposable output. last_used is what tells them apart. Recorded ONLY on live builds; a pinned regression run would stamp files the board has not touched. This is a ledger, not a delete list: judge last_used against the carry window before acting.'
+    note = 'Which files the LIVE board actually opened, and when. The engine reads a UNION of dated captures (up to the 90-day capture-policy carry for every store (14 for Walmart until 2026-08-22)) because the rotation only re-prices ~7 items per store per day, so a weeks-old file can be the only place a store''s price for a commodity exists - and a dated input is named exactly like a disposable output. last_used is what tells them apart. Recorded ONLY on live builds; a pinned regression run would stamp files the board has not touched. This is a ledger, not a delete list: judge last_used against the carry window before acting.'
     tracked_files = $files.Count
     files = $files
   }

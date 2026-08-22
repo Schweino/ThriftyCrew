@@ -1,4 +1,4 @@
-<#
+﻿<#
   test-guards.ps1 - negative tests. A guard that cannot fail is worthless, so break each invariant on
   purpose, assert guards.ps1 exits 2, then restore and assert it exits 0 again.
   Every mutation is made on a COPY-then-restore basis; nothing is left changed.
@@ -655,7 +655,8 @@ if ($g6Pick) {
 # synthetic prefix is canonical so guard 7 stays quiet, carries ONE row because guard 9's zero-rows warn
 # `continue`s past the age test on an empty deals array, and stamps price_mode so audit-price-mode does
 # not co-fire. Measured 2026-07-30 in a hermetic copy: exit 2, this text, nothing else.
-$g9Date = (Get-Date).AddDays(-20).ToString('yyyy-MM-dd')
+# 100 days: past the capture policy's 90-day carry (guard 9 reads that window; it was 14 until 2026-08-22)
+$g9Date = (Get-Date).AddDays(-100).ToString('yyyy-MM-dd')
 $g9F = Join-Path $root ('out\regular\zzstaleguard-regular-' + $g9Date + '.json')
 if (Test-Path $g9F) {
   Skip 'stale prices: the fixture path already exists on disk - refusing to overwrite it'
@@ -666,7 +667,7 @@ if (Test-Path $g9F) {
     price_mode = 'in-store'; mode_verified = $g9Date; deal_count = 1
     deals = @([pscustomobject]@{ store = 'ZZ Stale Guard Fixture'; item = 'Negative Test Filler 16 oz'; ad_price = '$1.00'; size = '16 oz'; regular = $null; source_ad = 'NEGATIVE TEST FIXTURE' })
   } | ConvertTo-Json -Depth 6) | Set-Content $g9F -Encoding UTF8
-  Check 'stale prices: a store whose newest capture is 20 days old' 2 'ZZ Stale Guard Fixture price data is 20 days old'
+  Check 'stale prices: a store whose newest capture is 100 days old (past the 90-day carry)' 2 'ZZ Stale Guard Fixture price data is 100 days old'
   Remove-Item $g9F -Force -ErrorAction SilentlyContinue
 }
 
