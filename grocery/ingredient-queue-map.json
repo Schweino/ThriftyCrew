@@ -151,6 +151,11 @@
       "id": "bell-peppers",
       "basis": "ruled by Brad 2026-08-21",
       "why": "Brad 2026-08-21: no new id - fold into bell-peppers and take the cheapest per lb. This also resolves the tile-integrity failure, because the cheapest per-lb row IS the $0.79 Green Bell Pepper the stored link points at."
+    },
+    "shaved beef steak": {
+      "id": "shaved-beef-steak",
+      "basis": "ruled by Brad 2026-08-21",
+      "why": "Brad: merge with meats - kept as its own id, filed in the meat category. 3 of the 5 captures were unclaimed; the other 2 (Gary's Quick Steak Thinly Sliced SIRLOIN, Heritage Shaved RIBEYE) name a specific cut and correctly stay on sirloin-steak / ribeye-steak, so this id excludes sirloin and ribeye rather than stealing them."
     }
   },
   "banned": {
@@ -159,8 +164,7 @@
     "ground chicken": "ground chicken is banned by the sourcer PROTEIN CLASS gate"
   },
   "pending_new_id": {
-    "bacon bits": "a shelf-stable topping, not bacon - different aisle, different basis, and reusing bacon would corrupt a live cell",
-    "shaved beef steak": "a specific cut/prep; the catalog names cuts individually (sirloin-steak, ribeye-steak)",
+    "bacon bits": "id bacon-bits CREATED per Brad 2026-08-21, but the term stays unmapped ON PURPOSE: all three captured rows are plain bacon by the pound (Member's Mark Restaurant Style, Appleton Farms, Kroger Thick Cut), not bacon bits. Promoting them would price the wrong food. Brad ruled re-capture; the id is ready and waiting for it.",
     "unsweetened ketchup": "a premium variant; folding it into ketchup would make the ketchup cell look dearer than the ketchup people buy",
     "Monterey Jack Cheese": "the catalog has NO block/specialty cheese ids at all (only cottage, cream, shredded, sliced, string) - this is a genuine gap, not a rename",
     "Pepper Jack Cheese": "same gap as Monterey Jack",

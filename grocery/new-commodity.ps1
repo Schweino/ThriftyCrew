@@ -95,6 +95,45 @@ for ($i = 0; $i -lt $aList.Count; $i++) {
 }
 if ($collateral.Count -gt 0) { Die ('COLLATERAL DAMAGE: ' + $collateral.Count + ' existing commodit(ies) changed (' + (($collateral | Select-Object -First 5) -join ', ') + '). Nothing written.') }
 
+# THE CARVE-OUT TRAP (added 2026-08-21, after it bit four of eleven new commodities in one sitting).
+# Cloning the parent's ~100 exclude patterns is what stops a new commodity arriving defenceless. But
+# when the new id is carved OUT of that parent, the inherited armour blocks the child - because the
+# parent's exclude exists precisely to keep this food away from it:
+#     almond-flour       inherited `almond`         from flour          (flour excludes almond)
+#     fresh-oregano      inherited `\bfresh\b`      from dried-oregano
+#     bacon-bits         inherited `bits`           from bacon
+#     yellow-bell-pepper inherited `yellow\s+bell`  from bell-peppers
+# Every one matched NOTHING and produced zero candidates, silently - the commodity existed, looked
+# healthy in the file, and could never win a cell. Nothing downstream can distinguish that from "no
+# store carries it", which is why it has to be caught here.
+#
+# The test is deliberately narrow: does an inherited exclude kill an include pattern's OWN literal?
+# It builds a sample from each include pattern by stripping the regex metacharacters, then asks
+# whether the entry would refuse its own name. It cannot catch every case - a pattern too exotic to
+# de-regex is skipped rather than guessed at - but it catches the shape that actually happens.
+$selfBlocked = New-Object System.Collections.ArrayList
+foreach ($inc in @($Include)) {
+  # Turn `almond\s+flour` into `almond flour`. If what is left still contains regex syntax, skip it.
+  $sample = $inc -replace '\\s\+', ' ' -replace '\\s\*', ' ' -replace '\\b', ''
+  if ($sample -match '[\\\[\]\(\)\|\?\*\+\{\}\^\$]') { continue }
+  foreach ($ex in @($obj['exclude'])) {
+    $hit = $false
+    try { $hit = [regex]::IsMatch($sample, $ex, 'IgnoreCase') } catch { $hit = $false }
+    if ($hit) {
+      [void]$selfBlocked.Add(("include '" + $inc + "' is killed by inherited exclude '" + $ex + "'"))
+      break
+    }
+  }
+}
+if ($selfBlocked.Count -gt 0) {
+  Die ("SELF-BLOCKED: this entry would match NOTHING, because an exclude inherited from " + $CloneExcludeFrom +
+       " cancels its own include. " + (($selfBlocked | Select-Object -First 3) -join '; ') +
+       ". That is the carve-out trap: the parent excludes this food precisely because it belongs here instead. " +
+       "Re-run with -ExtraExclude unchanged and then drop the offending pattern with " +
+       "add-commodity-rule.ps1 -Id " + $Id + " -RemoveExclude '<pattern>', or clone the excludes from a " +
+       "different sibling. Nothing written.")
+}
+
 Say ('new-commodity: ' + $Id + ' [' + $Unit + '] inserted at index ' + $newIdx + ', right after ' + $CloneExcludeFrom)
 Say ('    include: ' + (@($Include) -join ' | '))
 Say ('    exclude: ' + @($obj['exclude']).Count + ' patterns (' + $ExtraExclude.Count + ' new + ' + @($src.exclude).Count + ' inherited from ' + $CloneExcludeFrom + ')')
