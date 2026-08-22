@@ -174,6 +174,43 @@ def js_file(name):
         return fh.read()
 
 
+def release_profile(prof):
+    """Kill any Chrome still holding this persistent profile, before we try to launch on it.
+
+    THE TRAP (hit twice while building this, 2026-08-22): Chrome silently refuses to start a second
+    instance on a profile directory another process owns. It does not error - the process exits, the
+    debug port never opens, and the driver reports "Chrome never opened a debugging port", which
+    reads like a broken driver rather than a stale lock. cdp.py documents this trap and avoids it by
+    using a throwaway profile every time; a PERSISTENT profile cannot, so it has to clean up instead.
+    It bites in exactly the situation that matters: a seeding run that crashed, or a window someone
+    closed by hand, leaves the profile owned and EVERY later run fails until something kills it.
+    Nobody would guess that from the message.
+
+    Narrow on purpose - matched on this specific profile path, so it can never touch Brad's own
+    Chrome, which is the whole reason the driver keeps its own profiles in the first place.
+    """
+    if os.name != "nt":
+        return 0
+    try:
+        out = subprocess.run(
+            ["powershell", "-NoProfile", "-Command",
+             "Get-CimInstance Win32_Process -Filter \"Name='chrome.exe'\" | "
+             f"Where-Object {{ $_.CommandLine -like '*{prof}*' }} | "
+             "ForEach-Object { $_.ProcessId }"],
+            capture_output=True, text=True, timeout=30)
+        pids = [p.strip() for p in (out.stdout or "").splitlines() if p.strip().isdigit()]
+        for pid in pids:
+            subprocess.run(["taskkill", "/PID", pid, "/T", "/F"],
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=20)
+        if pids:
+            print(f"  cleared {len(pids)} stale Chrome process(es) still holding this profile")
+            time.sleep(2)
+        return len(pids)
+    except Exception as e:
+        print(f"  ! could not check for stale Chrome on the profile: {e}")
+        return 0
+
+
 def ensure_agent(browser, agent_src, probe_fn):
     """Inject the agent only if this document does not already have it.
 
@@ -244,12 +281,17 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
         except Exception as e:
             return False, str(e)
 
+    release_profile(prof)
     browser = Chrome(headless=headless, width=1440, height=900, dsf=1.0,
                      profile_dir=prof, mobile=False)
     try:
         browser.start()
     except Exception as e:
-        return False, f"could not start Chrome: {e}"
+        # Say what this almost always means, rather than leaving the raw CDP message to be
+        # interpreted. "Never opened a debugging port" reads as a broken driver; nine times out of
+        # ten it is a Chrome window still holding the profile.
+        return False, (f"could not start Chrome: {e}. If this persists, close any Chrome window "
+                       f"opened from {os.path.relpath(prof, ROOT)} and try again.")
 
     try:
         browser.goto(cfg["origin"], wait_ms=4000)
@@ -272,9 +314,10 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
             # identity check is available no matter how far the operator navigates. The explicit
             # inject below covers the page that is already open.
             agent_src = js_file("pull-agent-lib.js") + "\n;\n" + js_file(cfg["agent"])
-            browser.on_new_document(agent_src)
-            ensure_agent(browser, agent_src, call.split("(")[0])
             call = _identity_call(cfg)
+            identity_fn = call.split("(")[0]
+            browser.on_new_document(agent_src)
+            ensure_agent(browser, agent_src, identity_fn)
             print(f"  SEEDING {name}. A Chrome window is open.")
             print(f"  Do this now: {cfg['seed_hint']}")
             print("  This saves ITSELF as soon as the page proves the right store. Ctrl-C to abort.")
@@ -288,8 +331,8 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
                 # page that has no identity function would report "not defined" as if it were the
                 # store's answer.
                 try:
-                    if not browser.js(f"typeof {call.split('(')[0]} === 'function'"):
-                        ensure_agent(browser, agent_src, call.split("(")[0])
+                    if not browser.js(f"typeof {identity_fn} === 'function'"):
+                        ensure_agent(browser, agent_src, identity_fn)
                 except Exception:
                     pass
                 verdict = browser.js(

@@ -87,7 +87,7 @@ echo   Below you will see REFUSED lines every few seconds. That is
 echo   normal - it is telling you it does not see Omaha yet. When it
 echo   does, it saves and closes on its own.
 echo.
-"%PY%" "%DRIVER%" --store fareway --seed
+"%PY%" -u "%DRIVER%" --store fareway --seed
 goto done
 
 :walmart
@@ -104,7 +104,7 @@ echo.
 echo   This one saves after about 20 seconds either way - Walmart
 echo   gives us no way to prove which store we are on.
 echo.
-"%PY%" "%DRIVER%" --store walmart --seed
+"%PY%" -u "%DRIVER%" --store walmart --seed
 goto done
 
 :sams
@@ -122,7 +122,7 @@ echo   Sam's prices differ per club, and picking the wrong Omaha
 echo   club would look completely fine while quietly changing
 echo   every Sam's price on the board.
 echo.
-"%PY%" "%DRIVER%" --store samsclub --seed
+"%PY%" -u "%DRIVER%" --store samsclub --seed
 goto done
 
 :check
@@ -133,7 +133,7 @@ echo   -------------------------
 echo   Each store should say it WROTE a capture file.
 echo   If one says NEEDS SEEDING, run that store's option above.
 echo.
-"%PY%" "%DRIVER%"
+"%PY%" -u "%DRIVER%"
 goto done
 
 :done
