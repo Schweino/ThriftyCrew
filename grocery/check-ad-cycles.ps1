@@ -868,8 +868,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # no price board and so cannot age, and (b) the engine over frozen INPUTS, byte for byte. Running it
       # here is the point: the eleven-day gap happened because nothing ever invoked it. Non-fatal; alerts.
       try {
-        $gt = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\golden-test.ps1') 2>&1 | ForEach-Object { [string]$_ }
-        if ($LASTEXITCODE -ne 0) {
+        # through the bounded helper: stderr captured by file (no 2>&1 under EAP=Stop - see the rule at the
+        # test-guards call), and a budget so a hung test cannot hold the chain
+        $gtJ = Invoke-Bounded 'golden-test' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\engine\golden-test.ps1')) 600
+        $gt = $gtJ.Output
+        if ($gtJ.ExitCode -ne 0) {
           $gtFail = @($gt | Where-Object { $_ -match '^\s+(FAIL|C\d+)' })
           Log ('golden-test FAILED: ' + (($gtFail | Select-Object -First 3) -join ' | '))
           $summary += "REVIEW    golden-test: the cost engine's regression suite failed - run meal-prep\engine\golden-test.ps1"
@@ -884,8 +887,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # minimum-per-unit selection must still fail on the butter assertions. A guard that only ever passes
       # has not been shown to discriminate. Non-fatal; alerts.
       try {
-        $sp = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\run-scaler-pricing-test.ps1') -Quiet 2>&1 | ForEach-Object { [string]$_ }
-        if ($LASTEXITCODE -ne 0) {
+        $spJ = Invoke-Bounded 'scaler-pricing' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\run-scaler-pricing-test.ps1'),'-Quiet') 600
+        $sp = $spJ.Output
+        if ($spJ.ExitCode -ne 0) {
           Log ('scaler-pricing FAILED: ' + (($sp | Select-Object -First 3) -join ' | '))
           $summary += "REVIEW    scaler-pricing: the recipe cards' store-selection rule failed its fixture - run meal-prep\pipeline\run-scaler-pricing-test.ps1"
           try { Send-Alert -Subject "Recipe cards: pricing rule guard failed" -Body ("meal-prep\pipeline\run-scaler-pricing-test.ps1 failed. This guard pins the rule that each ingredient is priced at the store where the PACKAGE YOU HAVE TO BUY costs least, not the store with the lowest per-unit price - the defect that once billed `$10.22 for 20 cents of butter and `$40.00 for a 50 lb sack of rice. A POSITIVE-lane failure means tpl2-scaler-prefix.html no longer satisfies the fixture. A NEGATIVE-lane failure means the fixture has stopped reproducing the founding bug, so it is no longer testing anything. Lines: " + (($sp | Select-Object -First 15) -join ' | ')) | Out-Null } catch {}
@@ -907,8 +911,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # is PHANTOM - a step naming an ingredient the list never buys, which is how
       # slow-cooker-dr-pepper-pulled-pork-bowls shipped a Dr Pepper braise with no soda in the cost list.
       try {
-        $sc = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-spec-contradictions.ps1') -Quiet 2>&1
-        if ($LASTEXITCODE -ne 0) {
+        $scJ = Invoke-Bounded 'spec-contradictions' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-spec-contradictions.ps1'),'-Quiet') 600
+        $sc = $scJ.Output
+        if ($scJ.ExitCode -ne 0) {
           $scWorse = (($sc | Where-Object { $_ -match 'FAIL' }) -join ' ')
           Log ('spec-contradiction guard got WORSE: ' + $scWorse)
           $summary += 'REVIEW    a spec-contradiction class got worse than its baseline - see meal-prep\out\spec-contradictions.json'
@@ -1193,7 +1198,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # Free-dinner rotation (Brad, 2026-07-25): top 5 cheapest dinners per protein go FREE for the board
       # week; they revert to members-only when the week re-ranks them. Runs daily right after re-costing but
       # no-ops until the board week (or the set) changes, so flips happen on the ad flip. Non-fatal.
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\rotate-free-dinners.ps1') 2>&1 | ForEach-Object { Log ('free-rotation: ' + $_) } } catch { Log ('rotate-free-dinners threw: ' + $_.Exception.Message) }
+      try { (Invoke-Bounded 'free-rotation' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\rotate-free-dinners.ps1')) 900).Output | ForEach-Object { Log ('free-rotation: ' + $_) } } catch { Log ('rotate-free-dinners threw: ' + $_.Exception.Message) }
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'export-feed.ps1') | Out-Null; Log 'smp-feed exported' } catch { Log ('export-feed threw: ' + $_.Exception.Message) }
       # price alerts: email label:alert-<id> subscribers when an item hits a tracked low (self-gates via alert-state.json)
       try { $paOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-price-alerts.ps1'); Log ('price-alerts: ' + (@($paOut)[-1])) } catch { Log ('send-price-alerts threw: ' + $_.Exception.Message) }
@@ -1723,7 +1728,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # by the notify-known-ids.json state diff, so it is a no-op every day nothing new was added - and it runs
       # regardless of -NoAlert (these are requester-facing, not Brad-alerts). Never fatal to the pipeline.
       try {
-        $niOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'notify-item-added.ps1') 2>&1
+        $niOut = (Invoke-Bounded 'notify-item-added' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'notify-item-added.ps1')) 300).Output
         foreach ($ln in @($niOut)) { Log ("notify-item-added: " + $ln) }
         $niSent = @($niOut | Where-Object { "$_" -match '^NOTIFIED ' }).Count
         if ($niSent -gt 0) { $summary += ("NOTIFIED  $niSent item-request follower(s) emailed - their suggested item is now on the board") }
@@ -1748,8 +1753,9 @@ try {
   # ONE RUN, OUTPUT KEPT (2026-08-22). This used to run the suite once to get the exit code and then, on a
   # failure, run it AGAIN to get the text - and it failed on 10 of the previous 14 days, so the ~3-minute
   # suite cost ~7.5 minutes per chain, the single largest item in the stage profile. Capture once.
-  $ta = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-auditors.ps1') 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
-  if ($LASTEXITCODE -ne 0) {
+  $taJ = Invoke-Bounded 'test-auditors' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'test-auditors.ps1')) 1200
+  $ta = ($taJ.Output -join "`n")
+  if ($taJ.ExitCode -ne 0) {
     Log 'WATCHERS FAILED: test-auditors could not prove a guard still sees its own bug'
     $summary += 'WATCHERS  a guard can no longer see its own founding bug - see test-auditors output'
     # PERSIST THE WHOLE THING BEFORE ALERTING (2026-07-31). send-alert used to truncate its body, and on
