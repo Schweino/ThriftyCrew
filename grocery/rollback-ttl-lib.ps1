@@ -28,10 +28,15 @@
   to $4.87 and later to $3.99 has run two promotions; carrying the first anchor forward would expire
   the second one early. Recorded as price_changed in the ledger so the reason is visible.
 
+  DETECTION IS THE CAPTURE, NOT THE LEDGER (Brad, 2026-08-22). "30 days from when we first detect" means
+  the day the store's feed first SHOWED the cut price - the row's as_of - not the day this ledger first
+  processed the row. Pass -AsOf; the anchor is min(as_of, today). first_seen still never advances on a
+  re-observation; it may move EARLIER when a capture proves the price was already there.
+
   Usage:
       . rollback-ttl-lib.ps1
-      $w = Get-RollbackWindow -Store 'Walmart' -ItemId '10450114' -Price 4.87 -Today '2026-08-21'
-      # -> @{ ad_from = '2026-08-21'; ad_to = '2026-09-20'; first_seen = '2026-08-21'; is_new = $true }
+      $w = Get-RollbackWindow -Store 'Walmart' -ItemId '10450114' -Price 4.87 -Today '2026-08-21' -AsOf '2026-08-11'
+      # -> @{ ad_from = '2026-08-11'; ad_to = '2026-09-10'; first_seen = '2026-08-11'; is_new = $true }
       Save-RollbackLedger        # once, after a build, to persist what the run observed
 #>
 
@@ -99,28 +104,43 @@ function Get-RollbackWindow {
     [string]$ItemId = '',
     [Parameter(Mandatory)][double]$Price,
     [string]$Today = '',
-    [string]$Root = ''
+    [string]$Root = '',
+    # THE DAY THE CAPTURE SHOWED THIS PRICE (the row's as_of), which is NOT the day the ledger met it.
+    # BRAD'S RULING (2026-08-22): the TTL is 30 days FROM DETECTION, and detection is the capture that
+    # first showed the discounted price. The ledger was born on 2026-08-21 and stamped every one of its
+    # 368 entries with that day, while the rows it was reading carried as_of dates back to 2026-07-14 -
+    # a rollback captured five weeks earlier was handed a fresh 30 days on the day the bookkeeping
+    # started. Anchoring to min(as_of, today) makes the anchor a fact about the STORE, not about us.
+    [string]$AsOf = ''
   )
   if (-not (Test-RollbackTtlStore $Store)) { return $null }
   if (-not $ItemId) { return $null }        # no stable key -> no honest anchor -> no window
   Import-RollbackLedger $Root
   $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
+  # The honest anchor: the capture date when it is a real date and not in the future; otherwise today.
+  # A future as_of is a clock or file-naming fault, and must not start a window that has not opened.
+  $anchor = $todayS
+  if ($AsOf -match '^\d{4}-\d{2}-\d{2}$' -and $AsOf -lt $todayS) { $anchor = $AsOf }
   $key = "$Store|$ItemId"
 
   $e = $script:RbLedger[$key]
   $isNew = $false
   if (-not $e) {
-    $e = [ordered]@{ store = $Store; item_id = $ItemId; price = $Price; first_seen = $todayS; last_seen = $todayS; price_changed = 0 }
+    $e = [ordered]@{ store = $Store; item_id = $ItemId; price = $Price; first_seen = $anchor; last_seen = $todayS; price_changed = 0 }
     $script:RbLedger[$key] = $e; $script:RbDirty = $true; $isNew = $true
   }
   elseif ([math]::Abs([double]$e.price - $Price) -gt 0.005) {
     # A DIFFERENT ROLLED-BACK PRICE IS A DIFFERENT PROMOTION. Re-anchor and say so.
-    $e.price = $Price; $e.first_seen = $todayS; $e.price_changed = [int]$e.price_changed + 1
+    $e.price = $Price; $e.first_seen = $anchor; $e.price_changed = [int]$e.price_changed + 1
     $e.last_seen = $todayS; $script:RbDirty = $true; $isNew = $true
   }
   else {
-    # SAME ROLLBACK, SEEN AGAIN. last_seen moves; first_seen MUST NOT - that is the whole rule.
+    # SAME ROLLBACK, SEEN AGAIN. last_seen moves; first_seen MUST NOT ADVANCE - that is the whole rule.
     if ([string]$e.last_seen -ne $todayS) { $e.last_seen = $todayS; $script:RbDirty = $true }
+    # ...but it MAY move BACKWARD, to a capture that provably showed this price earlier than the ledger
+    # knew. Earlier is the safe direction: it can only shorten the window, never extend it, so the
+    # infinite-TTL failure this file exists to prevent cannot arrive through it.
+    if ($anchor -lt [string]$e.first_seen) { $e.first_seen = $anchor; $script:RbDirty = $true }
   }
 
   $from = [string]$e.first_seen
@@ -129,7 +149,7 @@ function Get-RollbackWindow {
   return [ordered]@{
     ad_from = $from; ad_to = $to; first_seen = $from; last_seen = [string]$e.last_seen
     is_new = $isNew; ttl_days = $script:RollbackTtlDays
-    basis = "TTL - neither store publishes a rollback end date; anchored to first detection"
+    basis = "TTL - neither store publishes a rollback end date; anchored to first detection (the capture's as_of)"
   }
 }
 
@@ -140,7 +160,7 @@ function Save-RollbackLedger([string]$Root = '') {
   $doc = [ordered]@{
     updated = (Get-Date).ToString('s')
     ttl_days = $script:RollbackTtlDays
-    note = 'When each Walmart / Sam''s rollback was FIRST observed. first_seen is written once per (store,item_id) and NEVER advanced - re-observing a rollback moves last_seen only, because an anchor that moves makes a 30-day TTL infinite. A CHANGED rolled-back price is a new promotion and re-anchors, counted in price_changed. Keyed by the store''s own item id, never the name, so a re-listing cannot restart the clock.'
+    note = 'When each Walmart / Sam''s / Fareway rollback was FIRST observed. first_seen is the as_of of the capture that first showed the cut price (detection = the capture, not the day this ledger met the row - Brad, 2026-08-22) and is NEVER advanced - re-observing a rollback moves last_seen only, because an anchor that moves makes a 30-day TTL infinite; it may move EARLIER when a capture proves the price was already there. A CHANGED rolled-back price is a new promotion and re-anchors, counted in price_changed. Keyed by the store''s own item id, never the name, so a re-listing cannot restart the clock.'
     entries = @($script:RbLedger.Keys | Sort-Object | ForEach-Object {
       $v = $script:RbLedger[$_]
       [ordered]@{ key = $_; store = $v.store; item_id = $v.item_id; price = $v.price

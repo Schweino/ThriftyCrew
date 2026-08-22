@@ -1429,7 +1429,12 @@ if (Test-Path $regDir) {
           elseif ($d.product_id)   { $ttlKey = [string]$d.product_id }
           elseif ($d.link_url -match '/products/(\d+)') { $ttlKey = $Matches[1] }
           if ($ttlKey) {
-            $rw = Get-RollbackWindow -Store ([string]$ex.store) -ItemId $ttlKey -Price ([double]$spl.sale_price) -Today ([string]$today) -Root $root
+            # -AsOf IS THE ROW'S OWN CAPTURE DATE. Brad's ruling (2026-08-22): the TTL runs from DETECTION,
+            # and detection is the capture that first showed the cut price, not the day this ledger met
+            # the row. Passing only -Today handed a five-week-old Fareway markdown a fresh 30 days on
+            # the day the ledger was created. Row as_of first, the file's date as the fallback.
+            $ttlAsOf = if ([string]$d.as_of -match '^\d{4}-\d{2}-\d{2}$') { [string]$d.as_of } else { [string]$rsd }
+            $rw = Get-RollbackWindow -Store ([string]$ex.store) -ItemId $ttlKey -Price ([double]$spl.sale_price) -Today ([string]$today) -AsOf $ttlAsOf -Root $root
             if ($rw) { $spl.sale_from = $rw.ad_from; $spl.sale_to = $rw.ad_to; $script:TtlDated++; $script:LastBasis = 'ttl' }
           }
         }

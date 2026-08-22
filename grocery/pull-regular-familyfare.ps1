@@ -146,6 +146,30 @@ function Test-FfCatalogDegraded([int]$mergedCount, [int]$prevMax, [int]$starvedE
   return @{ degraded = ($reasons.Count -gt 0); reasons = $reasons }
 }
 
+# One uniform row shape. Fresh rows are [ordered] hashtables; rows re-read from JSON are PSCustomObjects, and
+# mixing the two breaks both '.prop = x' assignment and Add-Member. Normalise every row through this.
+function Norm-Row($r, $asOf, $isCarried) {
+  $h = [ordered]@{ store='Family Fare'; item=[string]$r.item; ad_price=[string]$r.ad_price; size=[string]$r.size; regular=$r.regular; source_ad=[string]$r.source_ad; as_of=[string]$asOf }
+  # PRESERVE THE CONTRACT FIELDS. This normalizer rebuilds every row with a fixed key set, and it used to drop
+  # current_price / base_price / marked_down - so the contract the ingest step carefully wrote got stripped one
+  # line later, and guard 10 saw ZERO Family Fare rows to police. A normalizer that silently discards the field
+  # a guard depends on is how a store slips back out from under the guard without anyone noticing.
+  # canonical_url/product_id are contract fields too: they are the IDENTITY of the product this price came
+  # from, and the link is derived from them. Drop them here and the row keeps its price but forgets which
+  # product it priced - which is exactly how a tile ends up with a price and no link, or worse, a link found
+  # by a separate search that landed on a different product.
+  # found_by_term joined this list on 2026-08-02 for the same reason: a carried row that forgets which term
+  # found it can never have its expiry classified, and the classifier is the whole basis of the re-keyed alert.
+  # Dropping it here would silently return every carried row to the "unknown" class forever.
+  # ad_from / ad_to joined on 2026-08-22. The /offers block stamps the sale's own window on the row at
+  # ingest, and this list threw it away one line later - so the window never reached the file, the engine
+  # could not retire the sale on the day Freshop says it ends, and FF markdowns were dated by nothing.
+  # The same normalizer-strips-the-contract shape as the three fields above; same fix.
+  foreach ($k in @('current_price', 'base_price', 'marked_down', 'canonical_url', 'product_id', 'found_by_term', 'ad_from', 'ad_to')) { if ($null -ne $r.$k) { $h[$k] = $r.$k } }
+  if ($isCarried) { $h['carried_forward'] = $true }
+  return $h
+}
+
 if ($SelfTest) {
   # Reachable BY CONSTRUCTION: declared on param() (an undeclared [switch] silently lands in $args and the
   # script runs its normal live path looking like a passing self-test - the 2026-07-29 class, re-proven in
@@ -218,6 +242,17 @@ if ($SelfTest) {
   _T 'CLEAN-TWIN c4: a row with no found_by_term is UNKNOWN (never pages)' ((Get-FfExpiryClass '' '2026-08-01' '2026-08-02' 14) -eq 'unknown')
   _T 'CLEAN-TWIN c4: a term with no ledger entry is UNKNOWN, not starved (absence of a measurement is not a measurement)' ((Get-FfExpiryClass 'ground coriander' '' '2026-08-02' 14) -eq 'unknown')
   _T 'CLEAN-TWIN c4: exactly at the carry boundary (14 days) is still CHURN, not starved' ((Get-FfExpiryClass 'ground coriander' '2026-07-19' '2026-08-02' 14) -eq 'churn')
+
+  # ---- NORM-ROW PRESERVES THE OFFER WINDOW (2026-08-22). MUST-FIRE: a row the /offers block dated must still
+  # carry ad_from/ad_to after normalisation, fresh AND carried - before this the window never reached the file.
+  $offRow = [ordered]@{ store='Family Fare'; item='Our Family Shredded Cheddar'; ad_price='$1.99'; size='8 oz'; regular=1.99; current_price=1.99; source_ad='everyday shelf price'; as_of='2026-08-21'; product_id='4411'; base_price=2.99; marked_down=$true; ad_from='2026-08-20'; ad_to='2026-08-26' }
+  $nf = Norm-Row $offRow '2026-08-21' $false
+  _T 'MUST-FIRE: Norm-Row keeps ad_from/ad_to on a fresh offer row' (($nf.ad_from -eq '2026-08-20') -and ($nf.ad_to -eq '2026-08-26') -and ([bool]$nf.marked_down) -and ($nf.base_price -eq 2.99))
+  $nc = Norm-Row ([pscustomobject]$offRow) '2026-08-21' $true
+  _T 'MUST-FIRE: Norm-Row keeps ad_from/ad_to on a CARRIED offer row (JSON re-read shape)' (($nc.ad_from -eq '2026-08-20') -and ($nc.ad_to -eq '2026-08-26') -and ([bool]$nc.carried_forward))
+  # CLEAN TWIN: a row with no window gets none invented (blank stays blank - the borrowed-window guard)
+  $nn = Norm-Row ([ordered]@{ store='Family Fare'; item='Milk'; ad_price='$3.19'; size='gal'; regular=3.19; source_ad='x'; as_of='2026-08-21' }) '2026-08-21' $false
+  _T 'CLEAN-TWIN: an undated row is normalised without ad_from/ad_to' ((-not $nn.Contains('ad_from')) -and (-not $nn.Contains('ad_to')))
 
   # ---- CURSOR COMMIT. Frozen from the 2026-08-02T07:06:41 loss: 686 rows bought across terms #458..#34, the
   # cursor written to #35, the merged write then refused by a file lock. The cursor must NOT move on that.
@@ -786,25 +821,7 @@ $prevF = Get-ChildItem (Join-Path $regDir 'family-fare-regular-*.json') -EA Sile
   Where-Object { $_.BaseName -match '^family-fare-regular-\d{4}-\d{2}-\d{2}$' } |
   Sort-Object Name -Descending | Select-Object -First 1
 
-# One uniform row shape. Fresh rows are [ordered] hashtables; rows re-read from JSON are PSCustomObjects, and
-# mixing the two breaks both '.prop = x' assignment and Add-Member. Normalise every row through this.
-function Norm-Row($r, $asOf, $isCarried) {
-  $h = [ordered]@{ store='Family Fare'; item=[string]$r.item; ad_price=[string]$r.ad_price; size=[string]$r.size; regular=$r.regular; source_ad=[string]$r.source_ad; as_of=[string]$asOf }
-  # PRESERVE THE CONTRACT FIELDS. This normalizer rebuilds every row with a fixed key set, and it used to drop
-  # current_price / base_price / marked_down - so the contract the ingest step carefully wrote got stripped one
-  # line later, and guard 10 saw ZERO Family Fare rows to police. A normalizer that silently discards the field
-  # a guard depends on is how a store slips back out from under the guard without anyone noticing.
-  # canonical_url/product_id are contract fields too: they are the IDENTITY of the product this price came
-  # from, and the link is derived from them. Drop them here and the row keeps its price but forgets which
-  # product it priced - which is exactly how a tile ends up with a price and no link, or worse, a link found
-  # by a separate search that landed on a different product.
-  # found_by_term joined this list on 2026-08-02 for the same reason: a carried row that forgets which term
-  # found it can never have its expiry classified, and the classifier is the whole basis of the re-keyed alert.
-  # Dropping it here would silently return every carried row to the "unknown" class forever.
-  foreach ($k in @('current_price', 'base_price', 'marked_down', 'canonical_url', 'product_id', 'found_by_term')) { if ($null -ne $r.$k) { $h[$k] = $r.$k } }
-  if ($isCarried) { $h['carried_forward'] = $true }
-  return $h
-}
+# Norm-Row is declared with the other pure functions near the top of this file (so -SelfTest can reach it).
 
 $rows = New-Object System.Collections.ArrayList
 $have = @{}

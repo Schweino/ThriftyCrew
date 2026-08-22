@@ -54,7 +54,7 @@
 # select different halves of the response and a mismatched pair grades one store's price against another
 # store's shelf tag. That mismatch reported 11 of 21 Omaha #02 rows as wrong on 2026-08-21 when the real
 # number was zero, so the two are deliberately awkward to move apart.
-param([string]$OutDir = "", [int]$StoreId = 0, [string]$LocationId = "", [switch]$Quick)
+param([string]$OutDir = "", [int]$StoreId = 0, [string]$LocationId = "", [switch]$Quick, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'omaha-time.ps1')
@@ -63,6 +63,69 @@ $regDir = Join-Path $OutDir 'regular'
 if (-not (Test-Path $regDir)) { New-Item -ItemType Directory -Path $regDir -Force | Out-Null }
 $todayS = Get-OmahaDateKey
 . (Join-Path $root 'pu-lib.ps1')   # shared per-unit math - used to prove a productId really is our row's size
+
+# THE CARRY-FORWARD ROW, AS ONE PURE FUNCTION (2026-08-22). A product we could not re-verify keeps its last
+# known price - but the last known price has a SHAPE, not just a number. The old carry copied ad_price and
+# nothing else, so a markdown captured on Monday ($3.99, base_price 5.99, marked_down) was re-emitted on
+# Tuesday as a bare $3.99 row: no base_price, no marked_down, no product_id, no current_price. price-split-lib
+# then had no discount signal and typed it EVERYDAY at the sale price - the exact laundering Brad's rule
+# forbids ("ad pricing must never enter the every day pricing value"), and under the 90-day carry it held.
+# Measured on the two newest files: Wish Farms California Strawberries 16 oz, 08-18 marked_down $3.99
+# (base_price 5.99), 08-21 carried as a bare $3.99 row with no discount field at all.
+# BRAD'S RULING (2026-08-22): when a sale's date ends, the sale price drops away and the everyday (base)
+# price is what remains. So a carried row whose window has PASSED is emitted as everyday AT base_price;
+# one whose window is still open, or that carries no window at all (Hy-Vee markdowns are undated), keeps
+# every discount field so the split can type it as the markdown it is. The key list mirrors Family Fare's
+# Norm-Row so the two lanes preserve the same contract fields.
+$script:HvCarryKeys = @('current_price', 'base_price', 'marked_down', 'product_id', 'price_multiple',
+                        'ad_from', 'ad_to', 'store_department', 'store_department_group', 'store_category')
+function Get-HyVeeCarryRow($prow, [string]$name, [string]$asOf, [string]$today) {
+  $row = [ordered]@{
+    store='Hy-Vee'; item=$name; ad_price=[string]$prow.ad_price; size=[string]$prow.size; regular=$prow.regular
+    source_ad=[string]$prow.source_ad; as_of=$asOf; not_reverified=$true
+  }
+  foreach ($k in $script:HvCarryKeys) { if ($null -ne $prow.$k) { $row[$k] = $prow.$k } }
+  $to = [string]$prow.ad_to
+  $base = $null
+  if ($null -ne $prow.base_price) { try { $base = [double]$prow.base_price } catch { $base = $null } }
+  if ($to -match '^\d{4}-\d{2}-\d{2}$' -and $today -match '^\d{4}-\d{2}-\d{2}$' -and $to -lt $today -and $null -ne $base -and $base -gt 0) {
+    # THE SALE HAS ENDED. What remains is the everyday price the store told us it was cut FROM. The sale
+    # price, the flag and the window all go; current_price follows ad_price so guard 10's contract
+    # (ad_price == what the store charges) still holds on the reverted row. sale_expired_on keeps the
+    # reason visible on the row rather than making the reversion look like a silent re-price.
+    $row['ad_price'] = ('$' + $base); $row['regular'] = $base; $row['current_price'] = $base
+    foreach ($k in @('marked_down', 'ad_from', 'ad_to')) { if ($row.Contains($k)) { $row.Remove($k) } }
+    $row['sale_expired_on'] = $to
+  }
+  return $row
+}
+
+if ($SelfTest) {
+  # Pure, no network, no writes - placed above the store registry and every request so nothing can skip it.
+  . (Join-Path $root 'price-split-lib.ps1')
+  $fail = 0
+  function _T([string]$label, [bool]$cond) { if ($cond) { Write-Output "ok    $label" } else { Write-Output "FAIL  $label"; $script:fail++ } }
+  # MUST-FIRE: the founding row. An undated Hy-Vee markdown carried forward must still READ as a markdown.
+  $src = [pscustomobject]@{ item='Wish Farms California Strawberries'; ad_price='$3.99'; size='16 oz'; regular=3.99; current_price=3.99; source_ad='x'; as_of='2026-08-18'; product_id=12345; base_price=5.99; marked_down=$true; store_department='Produce' }
+  $c = Get-HyVeeCarryRow $src $src.item '2026-08-18' '2026-08-21'
+  _T 'carry keeps base_price / marked_down / product_id / current_price' (($c.base_price -eq 5.99) -and ([bool]$c.marked_down) -and ($c.product_id -eq 12345) -and ($c.current_price -eq 3.99))
+  $spl = Get-PriceSplit ([pscustomobject]$c) 'Hy-Vee'
+  _T 'price-split types the carried row as a MARKDOWN with everyday = base_price (5.99), not everyday at 3.99' (($spl.sale_price -eq 3.99) -and ($spl.everyday_price -eq 5.99) -and ($spl.sale_kind -eq 'markdown'))
+  # BRAD'S RULING: a carried row whose sale window has PASSED reverts to everyday at base_price.
+  $src2 = [pscustomobject]@{ item='Hy-Vee Butter'; ad_price='$2.48'; size='16 oz'; regular=2.48; current_price=2.48; source_ad='x'; as_of='2026-08-21'; product_id=777; base_price=4.19; marked_down=$true; ad_from='2026-08-21'; ad_to='2026-08-23' }
+  $e = Get-HyVeeCarryRow $src2 $src2.item '2026-08-21' '2026-08-24'
+  $spl2 = Get-PriceSplit ([pscustomobject]$e) 'Hy-Vee'
+  _T 'expired window -> everyday at base_price (4.19), sale fields dropped, reversion recorded' (($e.ad_price -eq '$4.19') -and ($null -eq $spl2.sale_price) -and ($spl2.everyday_price -eq 4.19) -and (-not $e.Contains('marked_down')) -and ($e.sale_expired_on -eq '2026-08-23'))
+  # CLEAN TWIN: the same window still open stays a dated sale at the cut price with its everyday half intact.
+  $o = Get-HyVeeCarryRow $src2 $src2.item '2026-08-21' '2026-08-22'
+  $spl3 = Get-PriceSplit ([pscustomobject]$o) 'Hy-Vee'
+  _T 'open window -> still the sale (2.48) with everyday 4.19 and the window carried' (($spl3.sale_price -eq 2.48) -and ($spl3.everyday_price -eq 4.19) -and ($o.ad_to -eq '2026-08-23'))
+  # a plain everyday row carries as a plain everyday row (no invented discount)
+  $src3 = [pscustomobject]@{ item='Hy-Vee Milk'; ad_price='$3.19'; size='gallon'; regular=3.19; current_price=3.19; source_ad='x'; as_of='2026-08-18'; product_id=5 }
+  $p = Get-HyVeeCarryRow $src3 $src3.item '2026-08-18' '2026-08-21'
+  _T 'an everyday row stays everyday (no discount invented)' (($null -eq (Get-PriceSplit ([pscustomobject]$p) 'Hy-Vee').sale_price) -and ([bool]$p.not_reverified))
+  if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
+}
 
 $qFile = Join-Path $root 'hyvee\query-b64.txt'
 if (-not (Test-Path $qFile)) { throw "missing $qFile (the persisted GraphQL document - it must be sent verbatim)" }
@@ -552,10 +615,9 @@ foreach ($w in $work) {
   # as today's number. A price we cannot check is not a price we get to call fresh.
   if ($w.prow) {
     $asOf = if ($w.prow.as_of) { [string]$w.prow.as_of } elseif ($prevF.BaseName -match '(\d{4}-\d{2}-\d{2})$') { $Matches[1] } else { $todayS }
-    $row = [ordered]@{
-      store='Hy-Vee'; item=$w.name; ad_price=[string]$w.prow.ad_price; size=[string]$w.prow.size; regular=$w.prow.regular
-      source_ad=[string]$w.prow.source_ad; as_of=$asOf; not_reverified=$true
-    }
+    # Through Get-HyVeeCarryRow, never an inline key list: see its header for the markdown that was being
+    # laundered into an everyday price here, and Brad's ruling on what an ended sale must revert to.
+    $row = Get-HyVeeCarryRow $w.prow $w.name $asOf $todayS
     [void]$deals.Add($row)
     $stale++
   } else { $fail++ }
