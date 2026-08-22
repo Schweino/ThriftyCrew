@@ -1,20 +1,28 @@
 <#
-  test-pu-lib.ps1 - differential test for pu-lib.ps1.
+  test-pu-lib.ps1 - frozen fixtures for pu-lib.ps1 (Get-LinkPerUnit), the ONE per-unit implementation.
 
-  The new shared Get-LinkPerUnit replaces BOTH the old LinkPU (which governs published prices) and the old
-  Qty (which governed the guards). Before it is wired in it must prove two things against every real cell:
+  WHAT THIS USED TO BE, AND WHY IT WAS PERMANENTLY RED (fixed 2026-08-22). This file was written as a
+  differential test: run the new shared Get-LinkPerUnit beside a verbatim copy of the OLD LinkPU over every
+  linked board cell and exit 1 on any disagreement - "pu-lib is NOT safe to wire in". That was the right
+  test on the day pu-lib was born. It became the wrong one the day pu-lib fixed a bug LinkPU had: from then
+  on every CORRECT answer ("1/2 gal" -> 0.078/fl oz, "12 x 12 fl oz" -> 0.0328) was reported as a
+  REGRESSION against the buggy baseline, the suite went red, and a red suite nobody can turn green is a
+  suite nobody reads. The baseline was the thing under test's own defects, frozen.
 
-    1. it NEVER disagrees with LinkPU where LinkPU produced an answer  -> no published price can change
-    2. it NEVER fails where LinkPU succeeded                           -> no loss of guard coverage
+  Now the baseline is a table of FROZEN EXPECTED VALUES, each one a real shape the board has priced and
+  each one independently derivable by hand. The test exits 0 while pu-lib agrees with them and 1 the day
+  it stops - which is what "fail if pu-lib regresses" has to mean. The live sweep at the bottom is kept as
+  INFORMATION (how many linked cells resolve today) and never fails the run: live data is not a fixture.
 
-  Anything it newly resolves is the blind spot being closed. Exit 1 on any regression.
+  Run: test-pu-lib.ps1        (exit 0 clean, 1 on any failure)
 #>
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')
 
-# --- explicit assertions: pin the tricky cases regardless of what live data happens to contain ---
+# --- frozen expected values. want=$null means "genuinely cannot be priced; must stay null, never zero" ---
 $cases = @(
+  # the founding shapes
   @{ size='6 pk 4 oz';     unit='oz';     price=2.50; name='';                  want=0.104167 }  # pack-first multipack
   @{ size='2 pk 48 fl oz'; unit='floz';   price=4.00; name='';                  want=0.041667 }  # fl oz multipack -> per fl oz
   @{ size='2 pk 1 gal';    unit='gallon'; price=6.00; name='';                  want=3.0      }  # gallon multipack
@@ -26,84 +34,59 @@ $cases = @(
   @{ size='lb';            unit='lb';     price=4.99; name='';                  want=4.99     }  # bare unit
   @{ size='$0.07/oz';      unit='oz';     price=5.00; name='';                  want=0.07     }  # explicit unit price
   @{ size='16 oz';         unit='each';   price=2.49; name='';                  want=$null    }  # genuine unit mismatch stays null
+  # THE TWO CORRECT ANSWERS THE OLD BASELINE CALLED REGRESSIONS (the reason this file was red for weeks):
+  @{ size='1/2 gal';       unit='floz';   price=4.99; name='';                  want=0.077969 }  # half-and-half/Baker's: 64 fl oz, NOT "2 gal"
+  @{ size='12 x 12 fl oz'; unit='floz';   price=4.72; name='';                  want=0.032778 }  # soda/Hy-Vee: 144 fl oz, NOT 12
+  @{ size='1/2 gal';       unit='gallon'; price=3.99; name='';                  want=7.98     }  # the same fraction on a gallon commodity
+  @{ size='6/4 oz';        unit='oz';     price=3.49; name='';                  want=0.145417 }  # count/size idiom: 6 cups of 4 oz = 24 oz
+  @{ size='2 ltr';         unit='floz';   price=1.99; name='';                  want=0.029426 }  # litre spelled 'ltr' (67.628 fl oz)
+  @{ size='12 pk 2 oz';    unit='dozen';  price=3.49; name='';                  want=3.49     }  # Kroger-API canonical egg shape: 12 items = 1 dozen
+  @{ size='18 ct';         unit='dozen';  price=4.50; name='';                  want=3.0      }  # 18 eggs = 1.5 dozen
+  # F(1) 2026-08-22: a per-each marker in the NAME must not stop the pack count from dividing (engine parity)
+  @{ size='each';          unit='each';   price=3.87; name='Bottled Water 24 Pack, $3.87 each'; want=0.16125 }
+  @{ size='24 ct';         unit='each';   price=3.87; name='Bottled Water, $3.87 each';         want=0.16125 }
+  @{ size='each';          unit='each';   price=3.87; name='Bottled Water, $3.87 each';         want=3.87    }  # no pack anywhere -> per-each
+  # F(2) 2026-08-22: litre / ml / quart multipacks multiply in BOTH orderings (engine parity)
+  @{ size='2 l 6 pk';      unit='floz';   price=6.00; name='';                  want=0.014787 }  # 12 l = 405.77 fl oz
+  @{ size='6 pk 2 l';      unit='floz';   price=6.00; name='';                  want=0.014787 }
+  @{ size='500 ml 24 pk';  unit='floz';   price=4.87; name='';                  want=0.012002 }  # 12,000 ml = 405.77 fl oz
+  @{ size='24 pk 500 ml';  unit='floz';   price=4.87; name='';                  want=0.012002 }
+  @{ size='1 qt 4 pk';     unit='floz';   price=8.00; name='';                  want=0.0625   }  # 128 fl oz
+  @{ size='4 pk 1 qt';     unit='floz';   price=8.00; name='';                  want=0.0625   }
+  @{ size='2 ltr 6 pk';    unit='floz';   price=6.00; name='';                  want=0.014787 }
 )
 $afail = 0
 foreach ($c in $cases) {
   $got = Get-LinkPerUnit -size $c.size -unit $c.unit -price $c.price -name $c.name
-  $ok = if ($null -eq $c.want) { $null -eq $got } else { ($null -ne $got) -and ([math]::Abs([double]$got - [double]$c.want) -lt 0.001) }
-  if (-not $ok) { $afail++; Write-Output ("ASSERT FAIL  size=`"$($c.size)`" unit=$($c.unit) price=$($c.price)  want=$($c.want)  got=$got") }
+  $ok = if ($null -eq $c.want) { $null -eq $got } else { ($null -ne $got) -and ([math]::Abs([double]$got - [double]$c.want) -lt 0.0005) }
+  if ($ok) { Write-Output ("ok    size=`"$($c.size)`" unit=$($c.unit) price=$($c.price)" + $(if ($c.name) { " name=`"$($c.name)`"" }) + "  -> $got") }
+  else { $afail++; Write-Output ("FAIL  size=`"$($c.size)`" unit=$($c.unit) price=$($c.price)" + $(if ($c.name) { " name=`"$($c.name)`"" }) + "  want=$($c.want)  got=$got") }
 }
-if ($afail) { Write-Output "$afail assertion(s) failed - pu-lib math is wrong."; exit 1 }
-Write-Output "explicit assertions: all $($cases.Count) passed"
 Write-Output ''
 
-# the OLD LinkPU, verbatim from audit-board-consistency.ps1 / build-deals-page.ps1
-function LinkPU([string]$size, [string]$unit, [double]$price, [string]$name = '') {
-  $s = ([string]$size).ToLower().Trim()
-  $up = [regex]::Match($s, '\$?\s*([0-9]+(?:\.[0-9]+)?)\s*/\s*(fl\s*oz|floz|oz|lb|ea|each|ct|count)')
-  if ($up.Success) { $v=[double]$up.Groups[1].Value; $un=($up.Groups[2].Value -replace '\s','') -replace 'fl',''; switch ($unit) { 'lb'{if($un -eq 'lb'){return $v}; if($un -eq 'oz'){return $v*16}} 'oz'{if($un -eq 'oz'){return $v}; if($un -eq 'lb'){return $v/16}} 'floz'{if($un -match 'oz'){return $v}; if($un -eq 'lb'){return $v/16}} 'each'{if($un -match '^(ea|each|ct|count)$'){return $v}; return $price} 'dozen'{if($un -match '^(ea|each|ct|count)$'){return $v*12}; return $price} } }
-  if ($price -le 0) { return $null }
-  $q = [regex]::Match($s, '([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|floz|oz|lbs?|ct|count|ea|pk|gal|dozen|doz)')
-  $n = if ($q.Success) { [double]$q.Groups[1].Value } else { $null }
-  $un = if ($q.Success) { ($q.Groups[2].Value -replace '\s','') -replace 'fl','' } else { '' }
-  if (-not $q.Success) { $bu=[regex]::Match($s,'\b(lbs?|gal|gallon|dozen|doz|each|ea)\b'); if ($bu.Success) { $n=1; $un=$bu.Groups[1].Value -replace '^gallon$','gal' -replace '^doz$','dozen' } }
-  $pk = [regex]::Match($s, '([0-9]+)\s*(pk|pack)\b'); if ($pk.Success -and $n -and ($un -match '^(oz|lbs?|gal)$')) { $n = $n * [double]$pk.Groups[1].Value }
-  if ($unit -eq 'each' -and $name -and (($null -eq $n) -or ($n -eq 1))) {
-    $pn = [regex]::Match(([string]$name).ToLower(), '([0-9]+)\s*(?:pk\b|pack\b|ct\b|count\b)')
-    if ($pn.Success) { $cnt = [double]$pn.Groups[1].Value; if ($cnt -gt 1) { return $price / $cnt } }
+# --- INFORMATION ONLY: how much of the live board's linked cells pu-lib can judge today. Never a failure:
+# live data changes daily and is not a fixture. A rising unresolved count is worth a look, not a red build.
+try {
+  $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1)
+  if ($cmpF) {
+    $all = @((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison)
+    $pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+    $res = 0; $unres = New-Object System.Collections.Generic.List[string]
+    foreach ($it in $all) {
+      $id = [string]$it.id; $unit = [string]$it.unit
+      foreach ($s in $it.stores) {
+        $e = $pd.$id.([string]$s.store); if (-not ($e -and $e.url)) { continue }
+        $sp = 0.0; [void][double]::TryParse((([string]$e.price) -replace '[^0-9.]', ''), [ref]$sp)
+        $n = Get-LinkPerUnit -size ([string]$e.size) -unit $unit -price $sp -name ([string]$e.name)
+        if ($null -ne $n) { $res++ } else { $unres.Add(('{0}/{1}  unit={2}  size="{3}"' -f $id, $s.store, $unit, [string]$e.size)) }
+      }
+    }
+    Write-Output ("live sweep ($($cmpF.Name)): $res linked cell(s) resolve, $($unres.Count) cannot be judged (informational)")
+    foreach ($x in ($unres | Select-Object -First 8)) { Write-Output ('   ' + $x) }
+    Write-Output ''
   }
-  switch ($unit) {
-    'lb'    { if ($un -match '^lbs?$' -and $n) { return $price/$n }; if ($un -eq 'oz' -and $n) { return $price/($n/16) }; return $null }
-    'oz'    { if ($un -eq 'oz' -and $n) { return $price/$n }; if ($un -match '^lbs?$' -and $n) { return $price/(16*$n) }; if ($un -eq 'gal' -and $n) { return $price/(128*$n) }; return $null }
-    'floz'  { if ($un -match 'oz' -and $n) { return $price/$n }; if ($un -eq 'gal' -and $n) { return $price/(128*$n) }; return $null }
-    'each'  { if ($un -match '^(ct|count|ea|pk)$' -and $n) { return $price/$n }; if ($un -match '^(dozen|doz)$') { return $price/12 }; if ($n -eq 1) { return $price }; return $null }
-    'dozen' { if ($un -match '^(dozen|doz)$') { return $price }; if ($un -match '^(ct|count|ea)$' -and $n) { return $price/($n/12) }; if ($n -eq 1) { return $price }; return $null }
-    'gallon'{ if ($un -eq 'gal' -and $n) { return $price/$n }; if ($n -eq 1) { return $price }; return $null }
-    default { return $null }
-  }
-  return $null
-}
+} catch { Write-Output ("live sweep skipped: " + $_.Exception.Message) }
 
-$cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
-$all = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)
-$riF = Join-Path $root 'out\recipe-board.json'
-if (Test-Path $riF) { $all += @((Get-Content $riF -Raw | ConvertFrom-Json).comparison) }
-$pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
-
-$same=0; $newOnly=0; $oldOnly=0; $differ=0
-$newList = New-Object System.Collections.Generic.List[string]
-$regress = New-Object System.Collections.Generic.List[string]
-foreach ($it in $all) {
-  $id=[string]$it.id; $unit=[string]$it.unit
-  foreach ($s in $it.stores) {
-    $st=[string]$s.store
-    $e = $pd.$id.$st; if (-not ($e -and $e.url)) { continue }
-    $sp=0.0; [void][double]::TryParse((([string]$e.price) -replace '[^0-9.]',''), [ref]$sp)
-    $o = LinkPU ([string]$e.size) $unit $sp ([string]$e.name)
-    $n = Get-LinkPerUnit -size ([string]$e.size) -unit $unit -price $sp -name ([string]$e.name)
-    if (($null -eq $o) -and ($null -eq $n)) { continue }
-    if (($null -eq $o) -and ($null -ne $n)) { $newOnly++; $newList.Add(('{0}/{1}  unit={2}  size="{3}"  -> {4}' -f $id,$st,$unit,([string]$e.size),[math]::Round($n,4))); continue }
-    if (($null -ne $o) -and ($null -eq $n)) { $oldOnly++; $regress.Add(('LOST  {0}/{1}  unit={2}  size="{3}"  old={4}' -f $id,$st,$unit,([string]$e.size),[math]::Round($o,4))); continue }
-    if ([math]::Abs([double]$o - [double]$n) -lt 0.0001) { $same++ }
-    else { $differ++; $regress.Add(('DIFF  {0}/{1}  unit={2}  size="{3}"  old={4}  new={5}' -f $id,$st,$unit,([string]$e.size),[math]::Round($o,4),[math]::Round($n,4))) }
-  }
-}
-Write-Output ("identical to the published math      : $same")
-Write-Output ("newly resolvable (blind spot closed) : $newOnly")
-Write-Output ("REGRESSION - old resolved, new cannot: $oldOnly")
-Write-Output ("REGRESSION - different value         : $differ")
-Write-Output ''
-if ($newList.Count) {
-  Write-Output 'sample of cells the guard could not previously judge:'
-  foreach ($x in ($newList | Select-Object -First 12)) { Write-Output ('   ' + $x) }
-  Write-Output ''
-}
-if ($regress.Count) {
-  Write-Output 'REGRESSIONS:'
-  foreach ($x in ($regress | Select-Object -First 25)) { Write-Output ('   ' + $x) }
-  Write-Output ''
-  Write-Output 'pu-lib is NOT safe to wire in.'
-  exit 1
-}
-Write-Output 'pu-lib matches the published math everywhere it applies, and resolves strictly more. Safe to wire in.'
+if ($afail) { Write-Output "PU-LIB FAILED ($afail) - pu-lib no longer agrees with its frozen expected values."; exit 1 }
+Write-Output "PU-LIB PASSED ($($cases.Count) frozen cases)"
 exit 0
