@@ -292,11 +292,16 @@ if ($browser.Count) {
       Write-Output ''
       Write-Output ("browser: driving " + ($drivable -join ', ') + " in Chrome")
       # No 2>&1 - same EAP=Stop rule as the downstream call below.
-      # TIMEOUT SIZED TO THE WORK, NOT TO THE WORST CASE. Under the quarterly policy a store gets
-      # ~7 terms, and the slowest pacing profile (Walmart, 3.5s +/- 2s, 3 retries) settles that in
-      # a couple of minutes. The driver's own default is 40 min, which across three stores would let
-      # one wedged store hold the 08:00 job for two hours and collide with the next day's run.
-      $bpOut = & $py $driver @storeArgs '--date' $todayS '--timeout-min' '10'
+      # TIMEOUT SIZED TO THE BIGGEST SLICE, NOT THE TYPICAL ONE (raised 10 -> 20, 2026-08-22).
+      # "~7 terms a day" is the QUARTERLY ROTATION only. Expiring sales ride on top of it, and
+      # capture-policy caps each store rather than trimming: a dry-run for 2026-08-23 showed Fareway
+      # at 45 terms - its whole ceiling - because 111 Fareway sale windows refresh that morning.
+      # Fareway's navigate lane spends ~8-12s per term (goto, hydrate, extract, pace), so 45 terms is
+      # 6-9 minutes and a 10-minute cap would have half-captured it. A half-capture is worse than a
+      # skip here: compare-deals hands a commodity to the FRESHEST capture outright, so a thin pass
+      # can move a cell onto a worse product.
+      # Still bounded well under the task's own 2h limit, so one wedged store cannot hold the morning.
+      $bpOut = & $py $driver @storeArgs '--date' $todayS '--timeout-min' '20'
       $bpRc = $LASTEXITCODE
       foreach ($l in @($bpOut)) { Write-Output ("  " + $l) }
       Write-Output ("browser driver rc=$bpRc")
