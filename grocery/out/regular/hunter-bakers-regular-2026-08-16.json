@@ -4,7 +4,7 @@
     "price_mode":  "in-store",
     "mode_verified":  "2026-08-16",
     "source":  "promote-ingredient-queue.ps1 from ingredient-queue.json - prices an agent captured per store and adjudicated per product",
-    "generated":  "2026-08-21T20:16:49",
+    "generated":  "2026-08-21T21:55:09",
     "note":  "Prices from the Recipe Hunter pricing agent, promoted into the engine because compare-deals reads out\\regular and does not read the queue. Commodity ids come from ingredient-queue-map.json, which is a RULING - nothing here was slugified or inferred.",
     "deals":  [
                   {
@@ -243,6 +243,32 @@
                   },
                   {
                       "store":  "Baker\u0027s",
+                      "item":  "Kroger Monterey Jack Block Cheese",
+                      "ad_price":  "$3.69",
+                      "size":  "16 oz",
+                      "regular":  "$3.69",
+                      "current_price":  3.69,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Monterey Jack Cheese",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "block-cheese"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Pepper Jack Block Cheese",
+                      "ad_price":  "$3.69",
+                      "size":  "16 oz",
+                      "regular":  "$3.69",
+                      "current_price":  3.69,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Pepper Jack Cheese",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "block-cheese"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
                       "item":  "Boar\u0027s Head Blanc Grue Gruyere Cheese",
                       "ad_price":  "$8.49",
                       "size":  "8 oz",
@@ -256,6 +282,19 @@
                   },
                   {
                       "store":  "Baker\u0027s",
+                      "item":  "Kroger Hardwood Smoked Polska Kielbasa Sausage Pork and Beef Rope",
+                      "ad_price":  "$3.29",
+                      "size":  "14 oz",
+                      "regular":  "$3.29",
+                      "current_price":  3.29,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Pork Smoked Sausage",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "kielbasa"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
                       "item":  "Broccolini",
                       "ad_price":  "$3.99",
                       "size":  "1 ct (bunch)",
@@ -266,6 +305,19 @@
                       "found_by_term":  "Broccolini",
                       "price_type":  "everyday",
                       "hunter_commodity":  "broccolini"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Better Than Bouillon Roasted Beef Base",
+                      "ad_price":  "$5.99",
+                      "size":  "8 oz",
+                      "regular":  "$5.99",
+                      "current_price":  5.99,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Beef Base",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "bouillon"
                   },
                   {
                       "store":  "Baker\u0027s",

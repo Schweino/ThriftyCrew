@@ -4,7 +4,7 @@
     "price_mode":  "in-store",
     "mode_verified":  "2026-08-16",
     "source":  "promote-ingredient-queue.ps1 from ingredient-queue.json - prices an agent captured per store and adjudicated per product",
-    "generated":  "2026-08-21T20:16:49",
+    "generated":  "2026-08-21T21:55:09",
     "note":  "Prices from the Recipe Hunter pricing agent, promoted into the engine because compare-deals reads out\\regular and does not read the queue. Commodity ids come from ingredient-queue-map.json, which is a RULING - nothing here was slugified or inferred.",
     "deals":  [
                   {
@@ -113,6 +113,32 @@
                   },
                   {
                       "store":  "Hy-Vee",
+                      "item":  "Kraft Monterey Jack Cheese",
+                      "ad_price":  "$3.18",
+                      "size":  "8 oz",
+                      "regular":  "$3.18",
+                      "current_price":  3.18,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Monterey Jack Cheese",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "block-cheese"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hy-Vee Pepper Jack Cheese",
+                      "ad_price":  "$1.97",
+                      "size":  "8 oz",
+                      "regular":  "$1.97",
+                      "current_price":  1.97,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Pepper Jack Cheese",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "block-cheese"
+                  },
+                  {
+                      "store":  "Hy-Vee",
                       "item":  "Red Apple Cheese Gruyere Cheese",
                       "ad_price":  "$4.99",
                       "size":  "7 oz",
@@ -123,6 +149,32 @@
                       "found_by_term":  "Gruyere Cheese",
                       "price_type":  "everyday",
                       "hunter_commodity":  "gruyere"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Johnsonville Polish Kielbasa Smoked Rope Pork Sausage",
+                      "ad_price":  "$3.99",
+                      "size":  "13.5 oz",
+                      "regular":  "$3.99",
+                      "current_price":  3.99,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Pork Smoked Sausage",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "kielbasa"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Better Than Bouillon Beef Base",
+                      "ad_price":  "$6.49",
+                      "size":  "8 oz",
+                      "regular":  "$6.49",
+                      "current_price":  6.49,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Beef Base",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "bouillon"
                   },
                   {
                       "store":  "Hy-Vee",

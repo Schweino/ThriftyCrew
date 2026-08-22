@@ -4,7 +4,7 @@
     "price_mode":  "in-store",
     "mode_verified":  "2026-08-16",
     "source":  "promote-ingredient-queue.ps1 from ingredient-queue.json - prices an agent captured per store and adjudicated per product",
-    "generated":  "2026-08-21T20:16:49",
+    "generated":  "2026-08-21T21:55:09",
     "note":  "Prices from the Recipe Hunter pricing agent, promoted into the engine because compare-deals reads out\\regular and does not read the queue. Commodity ids come from ingredient-queue-map.json, which is a RULING - nothing here was slugified or inferred.",
     "deals":  [
                   {
@@ -35,6 +35,32 @@
                   },
                   {
                       "store":  "Aldi",
+                      "item":  "Happy Farms Monterey Jack Cheese Block",
+                      "ad_price":  "$1.75",
+                      "size":  "8 oz",
+                      "regular":  "$1.75",
+                      "current_price":  1.75,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Monterey Jack Cheese",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "block-cheese"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Happy Farms Pepper Jack Cheese Block",
+                      "ad_price":  "$1.75",
+                      "size":  "8 oz",
+                      "regular":  "$1.75",
+                      "current_price":  1.75,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Pepper Jack Cheese",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "block-cheese"
+                  },
+                  {
+                      "store":  "Aldi",
                       "item":  "Specially Selected Le Gruyere Cheese",
                       "ad_price":  "$5.69",
                       "size":  "6 oz",
@@ -45,6 +71,19 @@
                       "found_by_term":  "Gruyere Cheese",
                       "price_type":  "everyday",
                       "hunter_commodity":  "gruyere"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Parkview Polska Kielbasa",
+                      "ad_price":  "$2.89",
+                      "size":  "14 oz",
+                      "regular":  "$2.89",
+                      "current_price":  2.89,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Pork Smoked Sausage",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "kielbasa"
                   },
                   {
                       "store":  "Aldi",

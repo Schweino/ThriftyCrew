@@ -497,6 +497,19 @@ function Get-RegularSrcDate([string]$store, [string]$baseName) {
   #              AD, a different KIND of price. Dating them would let the ad's date filter the everyday rows
   #              out from under the store. That is the near-miss this rule must not cross; case 23 pins it.
   if (@('Walmart', "Sam's Club") -notcontains $store) { return '' }
+  # A PROMOTED FILE IS NOT A CAPTURE, AND MUST NOT RANK LIKE ONE (2026-08-21).
+  # hunter-*-regular-<date>.json holds prices the Recipe Hunter's agent looked up one at a time. It is
+  # a handful of rows, not a sweep - and the freshness ranker reads "newest capture" as an authority
+  # about coverage. Dating it made a NINE-row file the newest Walmart capture, with depth 1 for any
+  # commodity it touched, so every older capture holding more than one row became eligible again:
+  #     bouillon / Walmart   0.1681 (08-11 capture)  ->  0.0813 from a 2026-07-18 vegetable base
+  # One promoted row re-opened five weeks of superseded captures and handed the cell to a 34-day-old
+  # product whose link could not even be derived. audit-tile-integrity hard-failed it at 2.07x.
+  # Left UNDATED these rows are treated the way every non-Walmart store's rows already are: always
+  # eligible, competing on price, never displacing a real capture and never admitting one. The Beef
+  # Base row it was carrying is $0.3506/oz against the capture's $0.1681, so it simply loses - which
+  # is the correct outcome for a single hand-checked price against a full sweep.
+  if ($baseName -match '^hunter-') { return '' }
   $m = [regex]::Match($baseName, '(\d{4}-\d{2}-\d{2})$')   # [regex]::Match, never -match: $Matches is global
   if (-not $m.Success) { return '' }
   return $m.Groups[1].Value
@@ -916,6 +929,18 @@ if ($SelfTest) {
   # the as_of laundering fixed in the Fareway builder the same day; taking its word would let a stale price
   # out-rank a live one, which is the exact failure this whole family of fixes exists to prevent.
   _Eq 'a row claiming to be FRESHER than its file is ignored' (Get-RowSrcDate "Sam's Club" ([pscustomobject]@{ as_of = '2026-08-05' }) '2026-08-01') '2026-08-01'
+  # MUST FIRE: A PROMOTED FILE IS NOT A CAPTURE (2026-08-21). hunter-*-regular-<date>.json holds a
+  # handful of hand-looked-up prices, but the freshness ranker reads "newest capture" as an authority
+  # about COVERAGE. Dated, a nine-row file became Walmart's newest capture at depth 1 for every
+  # commodity it touched, which re-admitted five weeks of superseded captures: bouillon/Walmart went
+  # from 0.1681 to a 2026-07-18 vegetable base at 0.0813, and tile-integrity hard-failed it at 2.07x.
+  # Undated, these rows behave like every non-Walmart store's - always eligible, competing on price,
+  # never displacing a real capture and never admitting one.
+  _Eq 'a hunter- promoted file is UNDATED, so it cannot become the newest capture' (Get-RegularSrcDate 'Walmart' 'hunter-walmart-regular-2026-08-16') ''
+  _Eq 'a hunter- Sam''s file is undated too' (Get-RegularSrcDate "Sam's Club" 'hunter-samsclub-regular-2026-08-16') ''
+  # CLEAN TWIN: a REAL Walmart capture must still be dated, or the ranker loses its ordering entirely
+  # and the onions bug walks straight back in.
+  _Eq 'a real walmart capture is still dated' (Get-RegularSrcDate 'Walmart' 'walmart-regular-2026-08-11') '2026-08-11'
   # CLEAN TWIN: Walmart is deliberately OUT of scope. Its 14-day union carries rows forward with their
   # original as_of, so re-dating them changes which capture owns a commodity - measured live on 2026-08-02 as
   # three cells landing at ~2x their own link. Pinned here so nobody widens the rule without redoing that work.

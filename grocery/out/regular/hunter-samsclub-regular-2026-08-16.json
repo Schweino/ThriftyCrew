@@ -4,7 +4,7 @@
     "price_mode":  "in-store",
     "mode_verified":  "2026-08-16",
     "source":  "promote-ingredient-queue.ps1 from ingredient-queue.json - prices an agent captured per store and adjudicated per product",
-    "generated":  "2026-08-21T20:16:49",
+    "generated":  "2026-08-21T21:55:09",
     "note":  "Prices from the Recipe Hunter pricing agent, promoted into the engine because compare-deals reads out\\regular and does not read the queue. Commodity ids come from ingredient-queue-map.json, which is a RULING - nothing here was slugified or inferred.",
     "deals":  [
                   {
@@ -35,6 +35,19 @@
                   },
                   {
                       "store":  "Sam\u0027s Club",
+                      "item":  "Tillamook Pepper Jack Cheese",
+                      "ad_price":  "$10.14",
+                      "size":  "2.5 lbs",
+                      "regular":  "$10.14",
+                      "current_price":  10.14,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Pepper Jack Cheese",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "block-cheese"
+                  },
+                  {
+                      "store":  "Sam\u0027s Club",
                       "item":  "Alpenhaus French Gruyere Semi-Hard Cheese Wedge",
                       "ad_price":  "$11.87",
                       "size":  "1 lb",
@@ -58,6 +71,19 @@
                       "found_by_term":  "80/20 Ground Beef",
                       "price_type":  "everyday",
                       "hunter_commodity":  "ground-beef-8020"
+                  },
+                  {
+                      "store":  "Sam\u0027s Club",
+                      "item":  "Member\u0027s Mark Beef Base",
+                      "ad_price":  "$5.98",
+                      "size":  "16 oz",
+                      "regular":  "$5.98",
+                      "current_price":  5.98,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Beef Base",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "bouillon"
                   },
                   {
                       "store":  "Sam\u0027s Club",

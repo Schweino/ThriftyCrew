@@ -4,7 +4,7 @@
     "price_mode":  "in-store",
     "mode_verified":  "2026-08-16",
     "source":  "promote-ingredient-queue.ps1 from ingredient-queue.json - prices an agent captured per store and adjudicated per product",
-    "generated":  "2026-08-21T20:16:49",
+    "generated":  "2026-08-21T21:55:09",
     "note":  "Prices from the Recipe Hunter pricing agent, promoted into the engine because compare-deals reads out\\regular and does not read the queue. Commodity ids come from ingredient-queue-map.json, which is a RULING - nothing here was slugified or inferred.",
     "deals":  [
                   {
@@ -48,6 +48,32 @@
                   },
                   {
                       "store":  "Walmart",
+                      "item":  "Great Value Monterey Jack Block Cheese",
+                      "ad_price":  "$3.58",
+                      "size":  "16 oz",
+                      "regular":  "$3.58",
+                      "current_price":  3.58,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Monterey Jack Cheese",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "block-cheese"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value Pepper Jack Block Cheese",
+                      "ad_price":  "$1.87",
+                      "size":  "8 oz",
+                      "regular":  "$1.87",
+                      "current_price":  1.87,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Pepper Jack Cheese",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "block-cheese"
+                  },
+                  {
+                      "store":  "Walmart",
                       "item":  "bettergoods Gruyere Cheese Block",
                       "ad_price":  "$2.97",
                       "size":  "8 oz",
@@ -58,6 +84,32 @@
                       "found_by_term":  "Gruyere Cheese",
                       "price_type":  "everyday",
                       "hunter_commodity":  "gruyere"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Johnsonville Polish Kielbasa Smoked Rope Pork Sausage",
+                      "ad_price":  "$5.48",
+                      "size":  "13.5 oz",
+                      "regular":  "$5.48",
+                      "current_price":  5.48,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Pork Smoked Sausage",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "kielbasa"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Knorr Shelf Stable Paste Beef Bouillon",
+                      "ad_price":  "$2.77",
+                      "size":  "7.9 oz",
+                      "regular":  "$2.77",
+                      "current_price":  2.77,
+                      "source_ad":  "Recipe Hunter pricing agent (in-store verified, ingredient-queue)",
+                      "as_of":  "2026-08-16",
+                      "found_by_term":  "Beef Base",
+                      "price_type":  "everyday",
+                      "hunter_commodity":  "bouillon"
                   },
                   {
                       "store":  "Walmart",

@@ -4333,7 +4333,14 @@
                                                                  "size":  "87 oz",
                                                                  "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                                  "board_pu":  0.0871
-                                                             }
+                                                             },
+                                         "Walmart":  {
+                                                         "url":  "https://www.walmart.com/ip/Great-Value-100-Pure-Pumpkin-15-oz/24538777",
+                                                         "name":  "Great Value 100% Pure Pumpkin, 15 oz",
+                                                         "price":  "$1.96",
+                                                         "size":  "15 oz",
+                                                         "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                     }
                                      },
                   "canned-salmon":  {
                                         "commodity":  "canned-salmon",
@@ -21299,20 +21306,20 @@
                                                          "size":  "8 oz",
                                                          "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                                      },
-                                          "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/Great-Value-Finely-Shredded-Sharp-Cheddar-Cheese-32-oz/42004037",
-                                                          "name":  "Great Value Sharp Cheddar Finely Shredded Cheese, 32 oz Bag",
-                                                          "price":  "$6.92",
-                                                          "size":  "32 oz",
-                                                          "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                      },
                                           "Baker\u0027s":  {
                                                                "url":  "https://www.bakersplus.com/p/kroger-mexican-style-blend-shredded-cheese/0001111015131",
                                                                "name":  "Kroger Mexican Style Blend Shredded Cheese",
                                                                "price":  "$3.50",
                                                                "size":  "16 oz",
                                                                "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                           }
+                                                           },
+                                          "Walmart":  {
+                                                          "url":  "https://www.walmart.com/ip/Great-Value-Finely-Shredded-Mild-Cheddar-Cheese-32-oz-Bag-Plastic-Packaging/10452439",
+                                                          "name":  "Great Value Mild Cheddar Finely Shredded Cheese, 32 oz Bag",
+                                                          "price":  "$6.92",
+                                                          "size":  "32 oz",
+                                                          "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                      }
                                       },
                   "shrimp":  {
                                  "commodity":  "shrimp",
@@ -25773,6 +25780,24 @@
                                                        "size":  "15 oz",
                                                        "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                                    }
-                                   }
+                                   },
+                  "block-cheese":  {
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/Great-Value-Low-Moisture-Part-Skim-Block-Mozzarella-Cheese-32-oz-Vacuum-Pack/10452459",
+                                                       "name":  "Great Value Low-Moisture Part-Skim Mozzarella Block Cheese, 32 oz Chunk",
+                                                       "price":  "$6.96",
+                                                       "size":  "32 oz",
+                                                       "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                   }
+                                   },
+                  "crushed-thai-chili":  {
+                                             "Walmart":  {
+                                                             "url":  "https://www.walmart.com/ip/McCormick-Crushed-Thai-Style-Chili-Pepper-1-37-oz-Bottle/14803611251",
+                                                             "name":  "McCormick Crushed Thai Style Chili Pepper, 1.37 oz Bottle",
+                                                             "price":  "$3.38",
+                                                             "size":  "1.37 oz",
+                                                             "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
+                                                         }
+                                         }
               }
 }
