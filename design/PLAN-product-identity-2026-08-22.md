@@ -170,6 +170,21 @@ Cost first, risk last: the two 100-second advisories first (pure speed, nothing 
 ### 5.5 Coordination with the browser-lane session
 That session owns `pull-browser-stores.py`, `build-walmart-deals.ps1`, `build-sams-deals.ps1`, `build-fareway-regular.ps1`, `build-aldi-regular.ps1` and carry-forward for the walled stores. This plan must not edit those files. Where step 3 needs them to stop scraping `compare-deals` (5.3 above), land `pricing-lib.ps1` and hand them the one-line adoption.
 
+**Open request to the browser-lane session (filed 2026-08-22 by step 1, §10.15).** The per-store id census on the current captures:
+
+| store | id field on the row today | identity key used |
+|---|---|---|
+| Baker's | `product_id` (7,289 rows) | product_id |
+| Family Fare | `product_id` (5,224) + `canonical_url` | product_id |
+| Hy-Vee | `product_id` (1,554) | product_id |
+| Walmart | `item_id` (136) | product_id |
+| Aldi | **none** — only `link_url` (2,507 rows) | name key |
+| Fareway | **none** — only `link_url` (912) | name key |
+| Sam's Club | **none** (60) | name key |
+| `hunter-*` | **none** | name key |
+
+Aldi and Fareway already carry `link_url`, which encodes a stable storefront id and would be a far better key than a product name — a name-keyed row loses its rulings the moment the store re-titles the listing. Sam's Club carries no identifier at all. **The request is one line per builder: persist the store's own product id on the row** (`product_id`), or confirm that `link_url` is stable enough to be promoted to the key. Step 1 did not touch those builders and does not depend on this; it only means those four stores' rows are less durable than they need to be.
+
 ---
 
 ## 6. Verification discipline (applies to every step)
