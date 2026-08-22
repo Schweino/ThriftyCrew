@@ -3937,6 +3937,16 @@ else { Bad ('rollback TTL fixtures FAILED (rc=' + $r.rc + ') - a 30-day window t
 # It now also covers Fareway's stated countdown ("Sale ends in N days"), whose must-not-drift case is
 # the important one: the window is anchored to the CAPTURE date, so the same row read a week later
 # still ends on the same day. Anchored on today instead, a sale would never end.
+# ---------------------------------------------------------------- the precompiled matcher (2026-08-22)
+# compare-deals' hot loop now runs match-lib instead of Match-Category: same decision, 17x faster (139s
+# of a 159s build was 45.7 million interpreted `-match` calls). A second copy of THE rule that decides
+# which product owns a cell is only tolerable because this harness extracts the original verbatim from
+# compare-deals.ps1 on every run and demands identical answers over every distinct name in the live
+# pool - both the compiled path and the PowerShell fallback. Zero divergences or the suite goes red.
+$r = RunPS 'test-match-lib.ps1' @('-Quiet')
+if ($r.rc -eq 0 -and $r.text -match 'MATCH-LIB PASSED') { Ok 'match-lib decides identically to the original Match-Category on every distinct product name (compiled path and fallback)' }
+else { Bad ('test-match-lib FAILED (rc=' + $r.rc + ') - the fast matcher has drifted from the reference, so the board may be assigning products to the wrong commodity: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL|diverg' } | Select-Object -First 4) -join ' | ')) }
+
 $r = RunPS 'test-price-split.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'PRICE-SPLIT PASSED') { Ok 'price split: ad never becomes everyday, everyday never becomes an ad, and a stated countdown does not drift with the clock' }
 else { Bad ('price-split fixtures FAILED (rc=' + $r.rc + ') - the everyday/ad separation or the stated sale window is wrong: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }

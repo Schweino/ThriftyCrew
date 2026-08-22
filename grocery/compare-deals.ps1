@@ -1630,8 +1630,19 @@ $deals = $ded
 $matched = New-Object System.Collections.Generic.List[object]
 $flagged = New-Object System.Collections.Generic.List[object]
 $mbUnpriced = New-Object System.Collections.Generic.List[object]   # Buy-N-Get-K deals we recognized but could NOT price -> surfaced, never silently dropped
+# THE HOT LOOP RUNS THE PRECOMPILED MATCHER (2026-08-22). Profiled: 139 of 159 seconds per build was
+# Match-Category - 45.7 million `-match` evaluations from an interpreted triple loop. match-lib makes
+# the SAME decision (first-match-wins, global-exclude + relax_global, excludes on the raw name) from
+# compiled regexes behind a sound literal prefilter, 17x faster on the full corpus.
+# Match-Category above is NOT deleted and is NOT dead: it is the reference implementation. -Explain and
+# the routing fixtures still call it, and test-match-lib.ps1 extracts it verbatim from this file every
+# suite run and demands match-lib agree with it on every distinct name the engine feeds it - zero
+# divergences or the suite goes red. That is what lets a second copy of the one rule that decides which
+# product owns a cell exist at all.
+. (Join-Path $PSScriptRoot 'match-lib.ps1')
+$fastMatcher = New-CommodityMatcher -Commodities $commodities -GlobalExclude $GLOBAL_EXCLUDE
 foreach ($d in $deals) {
-  $c = Match-Category $d.name
+  $c = Resolve-Commodity -Matcher $fastMatcher -Name $d.name
   if (-not $c) { continue }
   $up = Get-UnitPrice $d $c
   $uprice = $null; $basis = 'UNPRICED'; $note = ''

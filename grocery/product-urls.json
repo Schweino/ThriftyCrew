@@ -25718,20 +25718,20 @@
                                                        }
                                    },
                   "brandy":  {
-                                 "Baker\u0027s":  {
-                                                      "url":  "https://www.bakersplus.com/p/paul-masson-vs-brandy-80-proof-40-abv-/0008800404575",
-                                                      "name":  "Paul Masson VS Brandy, , 80 Proof (40% ABV)",
-                                                      "price":  21.99,
-                                                      "size":  "59.2 fl oz",
-                                                      "verified":  "2026-08-20"
-                                                  },
                                  "Family Fare":  {
                                                      "url":  "https://www.shopfamilyfare.com/shop/beer_wine_spirits/spirits/brandy_cognac/e_j_brandy_brandy_750_ml/p/182024",
                                                      "name":  "E \u0026 J Brandy Brandy 750 Ml",
                                                      "price":  "$12.99",
                                                      "size":  "750 ml",
                                                      "verified":  "2026-08-18 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                 "Baker\u0027s":  {
+                                                      "url":  "https://www.bakersplus.com/p/christian-brothers-vs-grape-brandy/0008603681547",
+                                                      "name":  "Christian Brothers Vs Grape Brandy",
+                                                      "price":  "$21.99",
+                                                      "size":  "59.2 fl oz",
+                                                      "verified":  "2026-08-22 DERIVED from the price row (same record the board priced)"
+                                                  }
                              },
                   "red-wine":  {
                                    "Family Fare":  {
@@ -25798,6 +25798,15 @@
                                                              "size":  "1.37 oz",
                                                              "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                                          }
-                                         }
+                                         },
+                  "ground-beef-9010":  {
+                                           "Baker\u0027s":  {
+                                                                "url":  "https://www.bakersplus.com/p/sterling-silver-ground-beef-sirloin-90-lean/0005399701700",
+                                                                "name":  "Sterling Silver Ground Beef Sirloin 90% Lean",
+                                                                "price":  "$28.99",
+                                                                "size":  "3 lb",
+                                                                "verified":  "2026-08-22 DERIVED from the price row (same record the board priced)"
+                                                            }
+                                       }
               }
 }
