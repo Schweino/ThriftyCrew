@@ -1780,6 +1780,12 @@ foreach ($d in $deals) {
     # one-off price snapshot, so it stamped every sale chip with the store's ad-cycle end date - dressing an
     # undated Aisles Online markdown up as "Sale thru Jul 19". A date we invented is worse than no date.
     source_ad=$d.source_ad; src_date=$d.src_date; ad_from=$d.ad_from; ad_to=$d.ad_to; ad_basis=$d.ad_basis;
+    # CAN THIS ROW BE LINKED? Carried as ONE boolean rather than four id fields, because the ranker
+    # only ever asks the yes/no question (see the tie-break below) and the projection is built ~40,000
+    # times a build. Computed from the SOURCE row: the projection above deliberately drops the id
+    # fields, which is why the tie-break silently did nothing the first time it was written - it was
+    # reading link_url off a shape that never had it.
+    has_identity=[bool]($d.link_url -or $d.item_id -or $d.product_id -or $d.sams_item_id)
     unit_price=$uprice; basis=$basis; note=$note })
 }
 
@@ -1837,7 +1843,22 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
   # only source and carry no capture-date to compare, so they always stay eligible alongside the newest capture.
   $byStore = $priced | Group-Object store | ForEach-Object {
     $rows = Select-FreshestCaptureRows $_.Group
-    $rows | Sort-Object unit_price | Select-Object -First 1
+    # A TIE GOES TO THE ROW WE CAN LINK (2026-08-22). Price first, exactly as before - this changes no
+    # cell's price and cannot make the board dearer. It only decides what happens when two rows cost
+    # the SAME per unit, where the order was previously whatever the group happened to yield.
+    # Measured the day it shipped: Aldi pancake-mix had
+    #     Millville Complete Buttermilk Pancake & Waffle Mix  $1.95/32 oz  (08-15, no link)
+    #     Aunt Maple's Buttermilk Pancake Mix 32 OZ           $1.95/32 oz  (08-22, linked)
+    # - identical price and size, and the unlinkable one won, so the tile carried a link to a
+    # different brand and audit-tile-integrity hard-failed the publish on brand-mismatch.
+    # An unlinked row cannot be verified against the shelf, cannot be re-found, and gives the reader
+    # nowhere to click. Between two prices that are equal in every way we can measure, the one we can
+    # stand behind should win. Sorting is stable, so rows that are equal on both keys keep their
+    # previous relative order.
+    $rows |
+      Sort-Object @{Expression = { $_.unit_price }},
+                  @{Expression = { if ($_.has_identity) { 0 } else { 1 } }} |
+      Select-Object -First 1
   }
   $ranked = @($byStore | Sort-Object unit_price)
   if ($ranked.Count -lt $MinStores) { continue }

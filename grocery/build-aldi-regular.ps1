@@ -204,6 +204,36 @@ function Invoke-Build([object[]]$raw, [string]$date) {
     if ($unit -match '(?i)\$\s*(\d+(?:\.\d+)?)\s*/\s*lb') { $price = [double]$Matches[1] }
 
     $size = Get-Size $name ([string]$r.size) $unit
+
+    # THE NAME AND THE SIZE MUST NOT CONTRADICT EACH OTHER (2026-08-22).
+    # The name comes from the product URL SLUG - the product's own identity - while the size is read
+    # off the tile, and a tile-scrape can pick up the neighbouring card's line. Measured that day:
+    #   "Tuscan Garden Ranch Salad Dressing Seasoning Mix 1 OZ"  captured with size "2.7 oz"
+    # $2.49 over 2.7 oz priced it at $0.92/oz against a linked 1 oz packet - a 0.6x tile mismatch that
+    # held the board red on its own. Same class as the "6 x 288 oz" applesauce: a size that
+    # contradicts the product's own name, producing a per-unit no shelf ever charged.
+    # DROP THE SIZE, DO NOT GUESS WHICH IS RIGHT. A size-less row is unscorable, sorts last and cannot
+    # win a cell, so the commodity falls to a product we CAN price - which is the honest outcome when
+    # our two witnesses disagree. Choosing a winner between them is how a 2.7x error gets published
+    # wearing the shape of a price ([[label-scales-wrong-was-already-wrong]]).
+    # Compared in the SAME unit only: "1 OZ" vs "2.7 oz" is a real disagreement, "1 OZ" vs "6 ct" is
+    # two different facts about one pack and not a contradiction.
+    if ($size) {
+      $nm = [regex]::Match($name, '(?i)(\d+(?:\.\d+)?)\s*(fl\s*oz|oz|lb|lbs|ct|count|each|ea)\s*$')
+      $sm = [regex]::Match([string]$size, '(?i)^\s*(\d+(?:\.\d+)?)\s*(fl\s*oz|oz|lb|lbs|ct|count|each|ea)\b')
+      if ($nm.Success -and $sm.Success) {
+        $nu = ($nm.Groups[2].Value -replace '\s', '').ToLower()
+        $su = ($sm.Groups[2].Value -replace '\s', '').ToLower()
+        if ($nu -eq $su) {
+          $nv = [double]$nm.Groups[1].Value; $sv = [double]$sm.Groups[1].Value
+          if ($sv -gt 0 -and [math]::Abs($nv - $sv) / $sv -gt 0.02) {
+            [void]$rejects.Add([pscustomobject]@{ item = $name; why = ("size contradicts the name: name says {0} {1}, tile says {2}" -f $nv, $nu, $size) })
+            continue
+          }
+        }
+      }
+    }
+
     if (-not $size) { [void]$rejects.Add([pscustomobject]@{ item = $name; why = 'no size' }); continue }
 
     $key = ($name + '|' + $size).ToLower()
