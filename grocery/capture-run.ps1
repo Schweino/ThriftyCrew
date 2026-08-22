@@ -52,6 +52,7 @@ $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 # the exit code is the ONLY thing that survives a run. Guarded: never fatal.
 $runLog = Start-RunLog -Name ("capture-run-" + $Kind) -OutDir $OutDir -Today $todayS
 
+
 # ---- THE RUN'S STRUCTURED RECORD (2026-08-22) ----------------------------------------------------------
 # The transcript above says what happened; this says HOW FAR IT GOT, in a form capture-watchdog can read
 # without parsing prose: out\logs\capture-run-status.json = { ad|daily: { date, pid, started, updated,
@@ -74,6 +75,26 @@ function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
     Move-Item -Path $tmp -Destination $script:StatusFile -Force
   } catch { }
 }
+function Release-RunMutex {
+  if ($script:HoldsMutex) { try { $script:RunMutex.ReleaseMutex() } catch { }; $script:HoldsMutex = $false }
+}
+# ---- ONE CAPTURE-RUN AT A TIME (2026-08-22) -----------------------------------------------------------
+# Task Scheduler's MultipleInstances=IgnoreNew is PER TASK, so it does not stop the 07:00 ad run (2h limit)
+# from overlapping the 08:00 daily one, and it does not see a manual run at all - both happened today.
+# Two runs reach the same git index and the same out\regular files: concurrent rebases either die on
+# index.lock or autostash each other's staged work, and an audit reading out\regular while the other run
+# rewrites it is a torn read by construction. The old 8:30 runner held a lock for exactly this reason and
+# the cutover did not carry it over. Named mutex, same pattern as send-alert's queue writer.
+$script:RunMutex = New-Object System.Threading.Mutex($false, 'Global\tc-capture-run')
+$script:HoldsMutex = $false
+try { $script:HoldsMutex = $script:RunMutex.WaitOne([TimeSpan]::FromMinutes(1)) } catch [System.Threading.AbandonedMutexException] { $script:HoldsMutex = $true }
+if (-not $script:HoldsMutex) {
+  Write-Output 'SKIP: another capture-run holds the lock (a scheduled run overlapping, or a manual one). Nothing started - two runs on one working tree corrupt each other.'
+  Write-RunStatus 'skipped-locked' 0
+  Stop-RunLog -ExitCode 0 -Path $runLog
+  exit 0
+}
+
 Write-RunStatus 'started'
 
 # ---- 1st-OF-MONTH HOUSEKEEPING (moved here 2026-08-22 from the retired run-daily-local.ps1) ----------
@@ -170,7 +191,7 @@ foreach ($s in $browser) {
 }
 foreach ($s in $toRun.Keys) { Write-Output ("  run      {0,-13} {1}" -f $s, $toRun[$s]) }
 
-if ($WhatIf) { Write-Output "`nWhatIf: nothing launched."; Write-RunStatus 'whatif' 0; Stop-RunLog -ExitCode 0 -Path $runLog; exit 0 }
+if ($WhatIf) { Write-Output "`nWhatIf: nothing launched."; Write-RunStatus 'whatif' 0; Release-RunMutex; Stop-RunLog -ExitCode 0 -Path $runLog; exit 0 }
 Write-RunStatus 'capturing'
 
 # ---- launch every headless lane AT ONCE ------------------------------------
@@ -421,15 +442,44 @@ $today = $todayS
 $repo = Split-Path -Parent $root
 if ($NoDownstream) { Write-Output 'publish: SKIPPED (-NoDownstream is a testing flag - no commit, no push)' }
 else {
-$paths = @('grocery/out', 'public',
-           'grocery/ad-cycle-log.txt', 'grocery/alert-log.txt', 'grocery/ff-sweep-log.txt',
-           'grocery/ad-schedule.json', 'grocery/price-history.json', 'grocery/product-urls.json',
-           'grocery/sale-windows.json', 'grocery/rollback-first-seen.json',
-           'meal-prep/db/costed.json', 'meal-prep/db/cost-flags.txt',
-           'meal-prep/pipeline/v2-perserving.json', 'meal-prep/pipeline/v2-perserving.prev.json',
-           'meal-prep/pipeline/v2-inversions.json',
-           'meal-prep/free-rotation.json', 'meal-prep/ingredient-map.json',
-           'meal-prep/recipes-db.json') | Where-Object { Test-Path (Join-Path $repo $_) }
+# TWO SETS, BECAUSE THEY CARRY DIFFERENT PROOF (2026-08-22).
+# INPUTS are what a store told us: raw captures, the schedules and ledgers derived from them, the logs.
+# They are evidence and are always worth committing - a capture-only ad run has nothing else to say.
+# SERVED are what a READER gets: public\** (Cloudflare deploys it from the repo) and the meal-prep files
+# the recipe cards price from. Those may be staged ONLY by a run that actually built them AND passed the
+# gate. Two ways that was wrong before this split:
+#   - the 07:00 ad run runs no chain at all, yet staged public\ and nine meal-prep paths - so whatever an
+#     overnight session had left mid-edit in them would be committed as smp-pipeline-bot and pushed;
+#   - export-feed writes public\smp-feed.json BEFORE guards run, so a board guards REJECTED still shipped
+#     its feed to the edge while the board post correctly stayed at last-good. Every recipe card prices
+#     off that feed: the one path where this system could publish confidently wrong numbers.
+$inputPaths = @('grocery/out',
+                'grocery/ad-cycle-log.txt', 'grocery/alert-log.txt', 'grocery/ff-sweep-log.txt',
+                'grocery/ad-schedule.json', 'grocery/price-history.json', 'grocery/product-urls.json',
+                'grocery/sale-windows.json', 'grocery/rollback-first-seen.json')
+$servedPaths = @('public',
+                 'meal-prep/db/costed.json', 'meal-prep/db/cost-flags.txt',
+                 'meal-prep/pipeline/v2-perserving.json', 'meal-prep/pipeline/v2-perserving.prev.json',
+                 'meal-prep/pipeline/v2-inversions.json',
+                 'meal-prep/free-rotation.json', 'meal-prep/ingredient-map.json',
+                 'meal-prep/recipes-db.json')
+# the gate's own verdict, written by check-ad-cycles right after guards ran (never inferred from a log)
+$guardsBlocked = $false
+$verdictSeen = $false
+try {
+  $vf = Join-Path $OutDir 'chain-verdict.json'
+  if (Test-Path $vf) {
+    $v = Get-Content $vf -Raw | ConvertFrom-Json
+    if ([string]$v.date -eq $todayS) { $verdictSeen = $true; $guardsBlocked = [bool]$v.guards_blocked }
+  }
+} catch { Write-Output ('chain-verdict unreadable: ' + $_.Exception.Message) }
+$shipServed = $runDownstream -and $verdictSeen -and (-not $guardsBlocked)
+if ($runDownstream -and -not $shipServed) {
+  $why = if (-not $verdictSeen) { 'the chain wrote no verdict for today (it did not reach the guard stage)' } else { 'guards BLOCKED this board' }
+  Write-Output ("publish: staging INPUTS only - $why, so public\** and the recipe files are NOT shipped. Readers keep the last good board.")
+  $failed += 'guards-blocked'
+}
+$paths = @($inputPaths + $(if ($shipServed) { $servedPaths } else { @() })) | Where-Object { Test-Path (Join-Path $repo $_) }
 Write-RunStatus 'publishing'
 $pushed = $false
 try {
@@ -475,13 +525,34 @@ try {
 if ($runDownstream -and $pushed) {
   try {
     $repoFeed = Get-Content (Join-Path $repo 'public\smp-feed.json') -Raw -Encoding UTF8 | ConvertFrom-Json
-    Start-Sleep -Seconds 30
-    $live = ((Invoke-WebRequest -Uri ("https://feed.thriftycrew.com/smp-feed.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45).Content | ConvertFrom-Json)
-    if ([string]$live.generated -ne [string]$repoFeed.generated) {
+    # POLL, DO NOT GUESS. A Workers asset deploy takes 1-3 minutes; the single 30-second check this
+    # replaced would have reported EDGE STALE on most days, and an alert that cries wolf about the one
+    # thing a reader actually sees is worse than no alert. Give it 5 minutes, then say so.
+    $live = $null
+    foreach ($try in 1..10) {
+      Start-Sleep -Seconds 30
+      try { $live = ((Invoke-WebRequest -Uri ("https://feed.thriftycrew.com/smp-feed.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45).Content | ConvertFrom-Json) } catch { continue }
+      if ([string]$live.generated -eq [string]$repoFeed.generated) { break }
+    }
+    if ($null -eq $live -or [string]$live.generated -ne [string]$repoFeed.generated) {
       $m = "The edge is serving a feed generated $($live.generated) but the repo pushed $($repoFeed.generated). The push succeeded, so this is a Cloudflare deploy that has not landed. Live recipe prices are stale until it does. Check the CF dashboard build log."
       Write-Output ("EDGE STALE: " + $m)
       try { Send-Alert -Subject "smp-feed edge did not pick up today's push - $today" -Body $m | Out-Null } catch {}
-    } else { Write-Output ("edge verified: serving generated $($live.generated), $($live.recipe_count) recipes") }
+    } else {
+      Write-Output ("edge verified: serving generated $($live.generated), $($live.recipe_count) recipes")
+      # board.json is 2.5 MB of store chips - every price a shopper reads on the board page - and had no
+      # read-after-write at all. Same question, second file.
+      try {
+        $repoBoard = (Get-Content (Join-Path $repo 'public\board.json') -Raw -Encoding UTF8)
+        $liveBoard = (Invoke-WebRequest -Uri ("https://feed.thriftycrew.com/board.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45).Content
+        $norm = { param($t) ($t -replace "`r`n", "`n").Trim() }
+        if ((& $norm $liveBoard) -ne (& $norm $repoBoard)) {
+          $bm = 'The edge is serving a board.json that does not match the one just pushed (' + (& $norm $liveBoard).Length + ' vs ' + (& $norm $repoBoard).Length + ' chars). smp-feed deployed, so this is board.json specifically - the store chips on the board page are stale.'
+          Write-Output ('EDGE STALE (board): ' + $bm)
+          try { Send-Alert -Subject "board.json edge did not pick up today's push - $today" -Body $bm | Out-Null } catch {}
+        } else { Write-Output 'edge verified: board.json matches the pushed copy' }
+      } catch { Write-Output ("board edge verify threw (not fatal): " + $_.Exception.Message) }
+    }
   } catch { Write-Output ("edge verify threw (not fatal): " + $_.Exception.Message) }
 }
 
@@ -520,6 +591,7 @@ if ($failed.Count) { Write-Output ("FAILED LANES: " + ($failed -join ', ')) }
 $rcFinal = if ($failed.Count) { 1 } else { 0 }
 Write-Output ("elapsed " + [int]((Get-Date) - $script:RunStart).TotalSeconds + " s")
 Write-RunStatus 'complete' $rcFinal
+Release-RunMutex
 Stop-RunLog -ExitCode $rcFinal -Path $runLog
 exit $rcFinal
 

@@ -1496,6 +1496,20 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $guardsRc = $LASTEXITCODE
       } catch { $guardsRc = 2; Log ('guards threw: ' + $_.Exception.Message) }
       $guardsBlocked = ($guardsRc -ne 0)
+      # ---- THE VERDICT AS A VALUE, NOT A SIDE EFFECT (2026-08-22) --------------------------------------
+      # Guards holding the Ghost publish is only half a gate: export-feed has ALREADY written
+      # public\smp-feed.json by this point (it runs in the recipe lane above), and capture-run's publish
+      # stage commits public\** to git, which is what Cloudflare deploys. So a board this gate rejected
+      # could still reach every recipe card on the site while the board POST correctly stayed at last-good.
+      # This file cannot answer that with an exit code - bakers-daily-scan and daily.yml both read its rc
+      # and would change meaning - so it states the verdict where the publisher can read it.
+      try {
+        ([ordered]@{
+          date = $asofS; written = (Get-Date).ToString('s'); guards_rc = $guardsRc
+          guards_blocked = [bool]$guardsBlocked
+          note = 'Written by check-ad-cycles after guards. capture-run reads guards_blocked before it stages public\** or meal-prep\** - a board the gate rejected must never reach the edge.'
+        } | ConvertTo-Json -Depth 4) | Set-Content -Path (Join-Path $OutDir 'chain-verdict.json') -Encoding UTF8
+      } catch { Log ('chain-verdict write threw: ' + $_.Exception.Message) }
       if ($guardsBlocked) {
         # Do NOT reuse $boardChanged here: that would log "no price change today", which is a lie -
         # the board DID change, we refused to ship it. A misleading log is how an outage goes unnoticed.
