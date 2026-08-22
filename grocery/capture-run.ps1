@@ -511,8 +511,14 @@ $paths = @($inputPaths + $(if ($shipServed) { $servedPaths } else { @() })) | Wh
 Write-RunStatus 'publishing'
 $pushed = $false
 try {
-  # alert-sent-*.txt rotate (created+deleted daily) - stage the pattern only if any exist or were deleted
-  & git -C $repo add -A -- 'grocery/alert-sent-*.txt' 2>$null
+  # alert-sent-*.txt rotate (created+deleted daily). Two traps in one line, both hit on 2026-08-22, the
+  # first real run of this stage: git EXITS NONZERO on a pathspec that matches nothing, and `2>$null` on a
+  # native child under EAP=Stop makes its first stderr line a TERMINATING error - the exact class
+  # test-native-stderr-eap.ps1 exists to catch, which I reintroduced here while fixing it elsewhere. So:
+  # no redirect, and only pass the pathspec when git itself says there is something under it (tracked or
+  # untracked). The whole publish threw on this and nothing shipped.
+  $alertSent = @(& git -C $repo status --porcelain --untracked-files=all -- 'grocery/alert-sent-*.txt' | Where-Object { $_ })
+  if ($alertSent.Count) { & git -C $repo add -A -- 'grocery/alert-sent-*.txt' | ForEach-Object { Write-Output ("add: " + $_) } }
   & git -C $repo add -A -- $paths | ForEach-Object { Write-Output ("add: " + $_) }
   & git -C $repo diff --cached --quiet
   if ($LASTEXITCODE -eq 0) {

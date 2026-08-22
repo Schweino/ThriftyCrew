@@ -1,4 +1,4 @@
-<#
+﻿<#
   test-native-stderr-eap.ps1 - the frozen fixture for the 2026-08-22 exit-1 bug.
 
   FOUNDING BUG. capture-run.ps1 sets $ErrorActionPreference='Stop' and invoked its
@@ -169,11 +169,16 @@ foreach ($f in $scan) {
     if ($l -match 'Start-Job')      { $inJob = $true }
     if ($inJob -and $l -match '^\s*\}\s*-ArgumentList') { $inJob = $false; continue }
     if ($inJob) { continue }
-    if ($l -match '^\s*[^#]*&\s*powershell.*2>&1') { $bad += ("{0}:{1}" -f $f, ($i + 1)) }
+    # ANY native command, not just powershell (widened 2026-08-22). The narrow pattern let
+    # `& git ... 2>$null` through in capture-run.ps1's publish stage, and on that stage's FIRST real run
+    # git exited nonzero on a pathspec matching nothing, the redirect made it terminating, and the whole
+    # commit/push threw - so the day's prices did not ship. Same bug class, different executable, and the
+    # test that exists to catch the class could not see it. Both redirect forms, any native command.
+    if ($l -match '^\s*[^#]*&\s*(powershell|git|python|node|npm|wrangler|nvidia-smi|robocopy|taskkill)[^|]*2>(&1|\$null)') { $bad += ("{0}:{1}" -f $f, ($i + 1)) }
   }
 }
 if (-not $bad.Count) {
-  Write-Output "  ok    entry-point scan: no '& powershell ... 2>&1' in a main body under EAP=Stop"
+  Write-Output "  ok    entry-point scan: no native child has its stderr redirected in a main body under EAP=Stop"
 } else {
   Write-Output ("  FAIL  entry-point scan: the founding bug shape is back at " + ($bad -join ', '))
   Write-Output '        Capture the child into a variable and read $LASTEXITCODE instead of redirecting.'
