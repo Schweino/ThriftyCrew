@@ -45,6 +45,10 @@
 #>
 param([switch]$Quiet)
 $ErrorActionPreference = 'Stop'
+# COMPLETION MARKER CONTRACT. Every detector the chain calls must say it REACHED THE END - an exit code
+# alone cannot tell a clean run from a crash three cases in. audit-guard-contract flagged this file the
+# moment it was wired into check-ad-cycles, which is the contract working.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = $PSScriptRoot
 $pass = 0
 $failed = 0
@@ -55,7 +59,11 @@ $dst = Join-Path $env:TEMP 'tc-precedence-fixture'
 # /XD out archive: out\ is 385 MB of capture data this fixture must never read (its whole point is a
 # corpus of exactly one row), and archive\ is frozen code.
 robocopy $root $dst /MIR /NFL /NDL /NJH /NJS /XD (Join-Path $root 'out') (Join-Path $root 'archive') /R:1 /W:1 | Out-Null
-if ($LASTEXITCODE -ge 8) { Write-Output ("test-precedence-ladders: hermetic copy FAILED (robocopy rc=" + $LASTEXITCODE + ") - nothing was proven"); exit 3 }
+if ($LASTEXITCODE -ge 8) {
+  Write-Output ("test-precedence-ladders: hermetic copy FAILED (robocopy rc=" + $LASTEXITCODE + ") - nothing was proven")
+  Write-GuardComplete -Name 'precedence-ladders' -Summary 'BLIND: fixture tree could not be built'
+  exit 3
+}
 $fxOut = Join-Path $dst 'out'
 New-Item -ItemType Directory -Force (Join-Path $fxOut 'regular') | Out-Null
 
@@ -174,5 +182,6 @@ if ($resolveSites -eq 1) {
 Remove-Item $dst -Recurse -Force -ErrorAction SilentlyContinue
 Write-Output ''
 Write-Output ("test-precedence-ladders: {0} passed, {1} failed" -f $pass, $failed)
+Write-GuardComplete -Name 'precedence-ladders' -Summary ("passed=" + $pass + " failed=" + $failed)
 if ($failed -gt 0) { exit 1 }
 exit 0

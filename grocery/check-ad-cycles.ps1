@@ -445,7 +445,13 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
 
   $bakers = Get-ChildItem (Join-Path $OutDir 'bakers\bakers-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   $fareway = Get-ChildItem (Join-Path $OutDir 'fareway\fareway-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-  $args = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'compare-deals.ps1'),'-MinStores','1')
+  # -IdentityNamespace staple: THIS is the board-building run, so this is the run that writes the product
+  # identity table (graph\identity\staple\<store>.jsonl). Emission is opt-in rather than default-on
+  # because compare-deals is also run ad hoc and by apply-coverage-batch, which edits commodities.json and
+  # re-runs the engine to see what moved - those runs carry a different rules hash and would rewrite the
+  # table with rules no board was ever built from (PLAN section 10.9). Removing this one argument disables
+  # the whole of step 1 without a code revert.
+  $args = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'compare-deals.ps1'),'-MinStores','1','-IdentityNamespace','staple')
   if ($bakers)  { $args += @('-BakersFile',  $bakers.FullName) }
   if ($fareway) { $args += @('-FarewayFile', $fareway.FullName) }
   # Sam's is deliberately NOT pinned here. Its club catalog is CAPTCHA-walled, so each capture only covers the
@@ -1143,6 +1149,25 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    an auditor copy of Match-Category no longer agrees with the engine - audit-household-in-food is a HARD gate built on one of those copies, so it may be judging cells under the wrong commodity' }
       } catch { Log ('matcher-parity threw: ' + $_.Exception.Message) }
         Set-CadenceRan 'matcher-parity'
+      }
+      # ---- PRECEDENCE LADDERS (wired 2026-08-22): the FROZEN semantics of an adjudicated ruling.
+      # test-precedence-ladders.ps1 runs the real engine over a purpose-built two-commodity corpus and
+      # proves what a known-wrong actually DOES: the product DROPS, it does not fall through to the next
+      # commodity whose include also matched. The product identity table's precedence logic (step 2 of
+      # PLAN-product-identity) is built on that answer, so if the engine's behaviour ever moves, this is
+      # what says so - and it has to run in the CHAIN, not only in a test file, for the same reason
+      # matcher-parity does: naming a guard in a test proves it is tested, not that it runs.
+      # Hermetic (its own %TEMP% copy) and ~5s. Advisory: it reports, the board still ships.
+      # CADENCE (7d): only an edit to the engine, the ruling library or the ruling file can change it.
+      if (-not (Test-CadenceDue -Name 'precedence-ladders' -EveryDays 7 -InputGlobs @('grocery/compare-deals.ps1','grocery/known-wrong-lib.ps1','grocery/known-wrong.json','grocery/match-lib.ps1'))) {
+        Log ('precedence-ladders: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'precedence-ladders') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
+      } else {
+        try {
+          & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-precedence-ladders.ps1') -Quiet | ForEach-Object { Log ('precedence-ladders: ' + $_) }
+          if ($LASTEXITCODE -eq 1) { $summary += 'REVIEW    the forbid-ladder semantics MOVED - a known-wrong no longer does what the identity table''s precedence logic assumes (see test-precedence-ladders.ps1)' }
+          elseif ($LASTEXITCODE -eq 3) { $summary += 'REVIEW    precedence-ladders could not build its fixture tree, so the ruling semantics went unproven this run - a BLIND is not a pass' }
+        } catch { Log ('precedence-ladders threw: ' + $_.Exception.Message) }
+        Set-CadenceRan 'precedence-ladders'
       }
       # ---- CATEGORY-COVERAGE GUARD: a commodity filed into NO category renders in no department/filter (invisible).
       # HARD publish gate + daily alert so adding a new item can never silently skip a filter.

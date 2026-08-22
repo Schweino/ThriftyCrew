@@ -90,6 +90,25 @@ $newPs = @{}
 foreach ($n in $list) { $c = Resolve-Commodity -Matcher $psOnly -Name $n; $newPs[$n] = $(if ($c) { [string]$c.id } else { '' }) }
 $tP = $swP.Elapsed.TotalSeconds
 
+# ---- 4b. THE DETAIL SCAN MUST AGREE WITH THE ANSWER ------------------------------------------------
+# Resolve-CommodityDetail is the second scan added for the identity table (PLAN section 10.6): it does not
+# stop at the first winner, so it can also report the contested set. That makes it a THIRD copy of the one
+# rule that decides which product owns a cell - and this file's whole argument is that a second copy is
+# only allowed to exist if it is proven against the first on the real corpus, every suite run. So:
+#   * its winner must be the ORIGINAL Match-Category's answer, on every name;
+#   * a name it says is matched must NAME the include that fired - an empty include_hit would put a blank
+#     provenance line on a board cell, which is worse than none because it reads as "checked".
+$swD = [Diagnostics.Stopwatch]::StartNew()
+$detailDiff = @()
+$detailNoHit = @()
+foreach ($n in $list) {
+  $d = Resolve-CommodityDetail -Matcher $matcher -Name $n
+  $did = $(if ($d.commodity) { [string]$d.commodity.id } else { '' })
+  if ($orig[$n] -ne $did) { $detailDiff += [pscustomobject]@{ name = $n; original = $orig[$n]; detail = $did } }
+  elseif ($did -and -not $d.include_hit) { $detailNoHit += $n }
+}
+$tD = $swD.Elapsed.TotalSeconds
+
 $diff = @()
 foreach ($n in $list) {
   if ($orig[$n] -ne $new[$n]) { $diff += [pscustomobject]@{ name = $n; original = $orig[$n]; fast = $new[$n]; path = $(if ($hasCore) { 'compiled' } else { 'powershell' }) } }
@@ -102,14 +121,18 @@ if (-not $Quiet) {
   Write-Output ("  original Match-Category : {0,7:N1}s" -f $tO)
   Write-Output ("  match-lib (compiled={2}) : {0,7:N1}s   ({1:N1}x faster)" -f $tN, $(if ($tN -gt 0) { $tO / $tN } else { 0 }), $hasCore)
   Write-Output ("  match-lib (ps fallback) : {0,7:N1}s   ({1:N1}x faster)" -f $tP, $(if ($tP -gt 0) { $tO / $tP } else { 0 }))
+  Write-Output ("  detail scan (identity)  : {0,7:N1}s   ({1} winner divergence(s), {2} matched name(s) with no include_hit)" -f $tD, $detailDiff.Count, $detailNoHit.Count)
   Write-Output ("  divergences             : {0}" -f $diff.Count)
   foreach ($d in ($diff | Select-Object -First 15)) { Write-Output ("     [{3}] '{0}'  original={1}  fast={2}" -f $d.name, $(if ($d.original) { $d.original } else { '<none>' }), $(if ($d.fast) { $d.fast } else { '<none>' }), $d.path) }
+  foreach ($d in ($detailDiff | Select-Object -First 15)) { Write-Output ("     [detail] '{0}'  original={1}  detail={2}" -f $d.name, $(if ($d.original) { $d.original } else { '<none>' }), $(if ($d.detail) { $d.detail } else { '<none>' })) }
+  foreach ($n in ($detailNoHit | Select-Object -First 10)) { Write-Output ("     [detail] '{0}' matched but named no include pattern" -f $n) }
 }
-if ($diff.Count) {
-  Write-Output ("MATCH-LIB FAILED ({0} divergence(s)) - match-lib must not be used by the engine until it decides identically" -f $diff.Count)
-  Write-GuardComplete -Name 'match-lib' -Summary "names=$($list.Count) divergences=$($diff.Count)"
+if ($diff.Count -or $detailDiff.Count -or $detailNoHit.Count) {
+  $total = $diff.Count + $detailDiff.Count + $detailNoHit.Count
+  Write-Output ("MATCH-LIB FAILED ({0} divergence(s): {1} fast-path, {2} detail-winner, {3} detail-no-include-hit) - match-lib must not be used by the engine until it decides identically" -f $total, $diff.Count, $detailDiff.Count, $detailNoHit.Count)
+  Write-GuardComplete -Name 'match-lib' -Summary "names=$($list.Count) divergences=$total"
   exit 1
 }
 Write-Output 'MATCH-LIB PASSED'
-Write-GuardComplete -Name 'match-lib' -Summary ("names=" + $list.Count + " divergences=0 speedup=" + [math]::Round($(if ($tN -gt 0) { $tO / $tN } else { 0 }), 1) + "x")
+Write-GuardComplete -Name 'match-lib' -Summary ("names=" + $list.Count + " divergences=0 detail=0 speedup=" + [math]::Round($(if ($tN -gt 0) { $tO / $tN } else { 0 }), 1) + "x")
 exit 0

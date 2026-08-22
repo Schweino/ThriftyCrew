@@ -23,7 +23,12 @@ if (-not (Test-Path $rulesFile)) { Write-Output 'recipe-overlay: no recipe-commo
 # 1. run the comparison engine against the RECIPE rule-set + today's ad feed (own output name; no collision)
 $bakers = Get-ChildItem (Join-Path $out 'bakers\bakers-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
 $sams   = Get-ChildItem (Join-Path $out 'sams\sams-deals-*.json')     -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-$args = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'compare-deals.ps1'),'-CommoditiesFile',$rulesFile,'-OutName','recipe-sales','-MinStores','1')
+# -IdentityNamespace recipe: the RECIPE half of the product identity table. graph\schema.md keeps the two
+# commodity namespaces separate on purpose - staple `ground-turkey` and recipe `93-7-ground-turkey` are
+# different purchases - so one SKU legitimately carries one assignment per namespace and they differ. This
+# run writes graph\identity\recipe\; the staple run (check-ad-cycles) writes graph\identity\staple\. A table
+# keyed on the product alone would have had these two runs overwrite each other every morning (section 10.1).
+$args = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'compare-deals.ps1'),'-CommoditiesFile',$rulesFile,'-OutName','recipe-sales','-MinStores','1','-IdentityNamespace','recipe')
 if ($bakers) { $args += @('-BakersFile', $bakers.FullName) }
 if ($sams)   { $args += @('-SamsFile',   $sams.FullName) }
 & powershell @args | Out-Null

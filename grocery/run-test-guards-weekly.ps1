@@ -11,11 +11,32 @@
   failed.
   Day-gate + stamp live in the caller (check-ad-cycles), like every other weekly job.
 #>
+#
+#  THE COPY IS A REPO ROOT, NOT A LOOSE grocery\ (2026-08-22). It used to robocopy grocery\ straight to
+#  %TEMP%\smp-test-guards-hermetic, whose PARENT is %TEMP% itself - and guards.ps1's very first act is to
+#  dot-source ..\lib\guard-contract.ps1. That resolved to %TEMP%\lib\guard-contract.ps1, which exists on
+#  this machine only because some earlier run happened to leave it there. The suite has been passing on a
+#  stray file in the temp directory; on a clean machine the baseline pre-check would have thrown.
+#  So the hermetic tree now has the shape the code expects: <root>\grocery, <root>\lib, <root>\graph. The
+#  graph\identity copy is what lets guard 13 (board vs the product identity table) be exercised at all -
+#  without it that gate reports BLIND inside the suite and its must-fire case could never fire.
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
-$dst = Join-Path $env:TEMP 'smp-test-guards-hermetic'
+$repo = Split-Path $root -Parent
+$hermetic = Join-Path $env:TEMP 'smp-test-guards-hermetic'
+$dst = Join-Path $hermetic 'grocery'
 robocopy $root $dst /MIR /NFL /NDL /NJH /R:1 /W:1 | Out-Null
 if ($LASTEXITCODE -ge 8) { Write-Output ("hermetic copy FAILED (robocopy rc=" + $LASTEXITCODE + ") - suite not run"); exit 4 }
+foreach ($sib in @('lib', 'graph\identity')) {
+  $src = Join-Path $repo $sib
+  if (-not (Test-Path $src)) { continue }
+  robocopy $src (Join-Path $hermetic $sib) /MIR /NFL /NDL /NJH /R:1 /W:1 | Out-Null
+  if ($LASTEXITCODE -ge 8) { Write-Output ("hermetic copy of " + $sib + " FAILED (robocopy rc=" + $LASTEXITCODE + ") - suite not run"); exit 4 }
+}
+if (-not (Test-Path (Join-Path $hermetic 'lib\guard-contract.ps1'))) {
+  Write-Output 'hermetic copy is missing lib\guard-contract.ps1 - guards.ps1 dot-sources it before anything else, so the suite would prove nothing'
+  exit 4
+}
 # Baseline pre-check IN THE COPY: guards red before any mutation means every expect-exit-2 case passes
 # vacuously (guards exits 2 no matter what is broken - measured 2026-07-30: 12 vacuous passes on the live
 # coverage-regression failure), so the suite can prove nothing. Exit 3 = "could not evaluate", the same
@@ -26,10 +47,10 @@ $base = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dst 'g
 if ($LASTEXITCODE -ne 0) {
   Write-Output ('baseline already red (guards exit ' + $LASTEXITCODE + ') before any mutation - nothing provable; the daily guards run owns this failure:')
   @($base) | Where-Object { $_ } | ForEach-Object { Write-Output $_ }
-  Remove-Item $dst -Recurse -Force -ErrorAction SilentlyContinue
+  Remove-Item $hermetic -Recurse -Force -ErrorAction SilentlyContinue
   exit 3
 }
 & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dst 'test-guards.ps1')
 $rc = $LASTEXITCODE
-Remove-Item $dst -Recurse -Force -ErrorAction SilentlyContinue   # never leave 658 MB in TEMP
+Remove-Item $hermetic -Recurse -Force -ErrorAction SilentlyContinue   # never leave 658 MB in TEMP
 exit $rc

@@ -191,6 +191,18 @@ function Check($name, $expect, $sig) {
   elseif ($r.rc -ne $expect) { Write-Output ("  FAIL  {0}  expected exit {1}, got {2}" -f $name, $expect, $r.rc); $script:failed++ }
   else { Write-Output ("  FAIL  {0}  exit {1} as expected BUT its own failure text /{2}/ is absent - a DIFFERENT guard failed, this one proved nothing" -f $name, $r.rc, $sig); $script:failed++ }
 }
+function CheckLoud($name, $expect, $sig) {
+  # LIKE Check, BUT WITHOUT -Quiet. An ADVISORY finding is emitted through guards' Say(), which -Quiet
+  # suppresses - so an advisory gate asserted through Check() would match nothing and "pass" by exiting 0
+  # for reasons that have nothing to do with it. Advisory gates are exactly the ones whose text IS the
+  # whole verdict, so they have to be read from a loud run.
+  $o = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') | ForEach-Object { [string]$_ }) -join "`n"
+  $rc = $LASTEXITCODE
+  $sigOk = if ($sig) { $o -match $sig } else { $true }
+  if ($rc -eq $expect -and $sigOk) { Write-Output ("  PASS  {0}  (exit {1})" -f $name, $rc); $script:pass++ }
+  elseif ($rc -ne $expect) { Write-Output ("  FAIL  {0}  expected exit {1}, got {2}" -f $name, $expect, $rc); $script:failed++ }
+  else { Write-Output ("  FAIL  {0}  exit {1} as expected BUT its own text /{2}/ is absent - this case proved nothing" -f $name, $rc, $sig); $script:failed++ }
+}
 # Some invariants live in their own gate rather than guards.ps1 (tile-integrity's ACCURACY check). Assert those
 # against the script that actually owns them - Check() always runs guards.ps1, so passing a script name to it
 # would silently test the wrong thing and "pass" for the wrong reason.
@@ -763,6 +775,57 @@ if ($g19Src.Contains($g19Anchor)) {
   Set-Content $g19A $g19Src -Encoding UTF8 -NoNewline
 } else {
   Skip 'delegate stderr: audit-price-mode.ps1 no longer sets $ErrorActionPreference - re-anchor the stderr probe'
+}
+
+# ---- 20. BOARD vs PRODUCT IDENTITY TABLE (2026-08-22, guard 13) -----------------------------------
+# The gate that replaces audit-match-soundness's self-check. It compares each board cell against the
+# assignment the ENGINE ITSELF recorded in graph\identity\, so there is no second implementation to drift.
+# A gate that cannot fail is worthless, so: take a real row out of the staple table, point it at a
+# commodity that is definitely not the one the board priced, and demand the gate names that exact cell.
+#
+# IT SHIPS ADVISORY (PLAN section 10.17: promotion to blocking is Brad's, after clean real mornings), so
+# the expected exit code is 0 and what is asserted is the WARN text. $g20Expect is the ONE thing to change
+# on promotion - flip it to 2 and the same case proves the hard fail.
+$g20Expect = 0
+$g20Dir = Join-Path (Split-Path $root -Parent) 'graph\identity\staple'
+$g20F = $null
+if (Test-Path $g20Dir) { $g20F = Get-ChildItem (Join-Path $g20Dir '*.jsonl') -ErrorAction SilentlyContinue | Sort-Object Length -Desc | Select-Object -First 1 }
+if (-not $g20F) {
+  Skip 'board-vs-identity: no graph\identity\staple table in this tree, so the parity gate could not be exercised (the hermetic runner copies graph\identity for exactly this reason)'
+} else {
+  # The mutated row must be one the BOARD ACTUALLY PRICED, or the gate correctly says nothing and the
+  # case passes vacuously - the "SKIP is a failure" rule this suite already enforces, applied to a join.
+  $g20Cmp = Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1
+  $g20Board = Get-Content $g20Cmp.FullName -Raw | ConvertFrom-Json
+  . (Join-Path $root 'match-lib.ps1')     # Get-MatchTexts - the same normalisation the gate joins on
+  $g20Want = @{}
+  foreach ($g20Row in @($g20Board.comparison)) {
+    foreach ($g20S in @($g20Row.stores)) {
+      if ($g20S.item) { $g20Want[([string]$g20S.store + '|' + (Get-MatchTexts ([string]$g20S.item))[1])] = [string]$g20Row.id }
+    }
+  }
+  $g20Src = Backup $g20F.FullName
+  $g20Lines = @($g20Src -split "`r?`n" | Where-Object { $_ -and $_.Trim() })
+  $g20Hit = -1
+  for ($i = 0; $i -lt $g20Lines.Count; $i++) {
+    $g20R = $null
+    try { $g20R = $g20Lines[$i] | ConvertFrom-Json } catch { continue }
+    if ($g20Want.ContainsKey([string]$g20R.store + '|' + [string]$g20R.name_key)) { $g20Hit = $i; break }
+  }
+  if ($g20Hit -lt 0) {
+    Skip 'board-vs-identity: no row in the identity table joins to a cell on today''s board, so a forced disagreement could not be made visible - the join key drifted and the gate is structurally unfirable'
+  } else {
+    $g20Orig = $g20Lines[$g20Hit] | ConvertFrom-Json
+    $g20Name = [string]$g20Orig.name
+    $g20Orig.commodity = 'commodity:staple:test-guards-forced-disagreement'
+    $g20Lines[$g20Hit] = ($g20Orig | ConvertTo-Json -Depth 6 -Compress)
+    [IO.File]::WriteAllText($g20F.FullName, (($g20Lines -join "`n") + "`n"), (New-Object System.Text.UTF8Encoding($false)))
+    CheckLoud 'board-vs-identity: a table row pointed at the wrong commodity is NAMED by the gate' $g20Expect ([regex]::Escape($g20Name))
+    # CLEAN TWIN: restore and prove the gate goes quiet again, so the case above cannot be passing on
+    # some unrelated permanent disagreement.
+    [IO.File]::WriteAllText($g20F.FullName, $g20Src, (New-Object System.Text.UTF8Encoding($false)))
+    CheckLoud 'board-vs-identity: with the row restored, the gate reports agreement again' 0 'board-vs-identity \[staple\]: all \d+ cell'
+  }
 }
 
 } finally {

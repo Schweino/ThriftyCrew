@@ -613,6 +613,40 @@ $totalCommodities = 0; $totalPrices = 0
 # server-rendered answer (SummaryHtml = cheapest store + price), so first paint and SEO are unchanged, and the
 # feed carries the SAME rendered html so there is no client re-render to drift and the audits reuse their regexes.
 $boardChips = [ordered]@{}
+# ---- WHY IS THIS THE CROWN? (2026-08-22, PLAN-product-identity step 1) ----------------------------
+# Until now the board could not answer it anywhere. compare-deals records, per product, the include
+# pattern that claimed it, how many excludes were tested, and which other commodities also wanted it;
+# this joins that to each rendered chip.
+#
+# A SHORT TOKEN, NOT THE PATTERN TEXT (section 10.19). public\board.json is a 2.5 MB asset cached
+# per-colo and fetched by every reader; "matched by \bblack\s+beans?\b" on ~3,000 chips is hundreds of
+# KB of regex shipped to people who will never look at it. So the chip carries
+#     data-mb="<include index>/<excludes tested>[+<contested count>]"
+# and the text stays in graph\identity\, where -Explain and the audits already read it.
+#
+# FAIL SOFT, AND SILENTLY BY DESIGN. The identity table is regenerated every morning and its parity
+# gate is still ADVISORY (section 10.17). A page build must never fail, or even change, because a
+# marker could not be resolved - so an unresolved chip simply carries no attribute. The gate, not this,
+# is what reports a table that disagrees with the board.
+$idIndexByNs = @{}
+try {
+  . (Join-Path $root 'identity-lib.ps1')
+  . (Join-Path $root 'match-lib.ps1')     # Get-MatchTexts only - no matcher is built here, so no Add-Type
+  $idPageHash = Get-IdentityRulesHash -GroceryRoot $root
+  foreach ($ns in @('staple', 'recipe')) {
+    $ixNs = Read-IdentityIndexByName -GroceryRoot $root -Namespace $ns -RulesHash $idPageHash
+    if ($null -ne $ixNs) { $idIndexByNs[$ns] = $ixNs.rows }
+  }
+} catch { $idIndexByNs = @{} }
+function MatchToken([string]$ns, [string]$store, [string]$item) {
+  if (-not $idIndexByNs.ContainsKey($ns) -or -not $item) { return '' }
+  $r = $idIndexByNs[$ns][($store + '|' + (Get-MatchTexts $item)[1])]
+  if ($null -eq $r) { return '' }
+  $t = [string]$r.include_hit_ix + '/' + [string]$r.excludes_tested
+  $nc = @($r.candidates).Count
+  if ($nc -gt 0) { $t += '+' + $nc }
+  return " data-mb='" + $t + "'"
+}
 $secN = 0
 foreach ($c in $cats) {
   $secN++
@@ -658,7 +692,7 @@ foreach ($c in $cats) {
       if ($s.membership) { $notes += $(if ([string]$s.member_label) { [string]$s.member_label } else { 'membership' }) }
       if ($s.bulk) { $notes += 'bulk' }
       $typeTag = if ([string]$s.type -eq 'sale') { "<span class='pg-tag pg-tag-sale'>sale</span>" } else { "<span class='pg-tag'>everyday</span>" }
-      [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "'>")
+      [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "'" + (MatchToken 'staple' ([string]$s.store) ([string]$s.item)) + ">")
       if ($isBest) { [void]$cb.Append("<span class='pg-best'>Cheapest</span>") }
       [void]$cb.Append("<span class='pg-store'>" + (HtmlEnc $shortName[[string]$s.store]) + "</span>")
       [void]$cb.Append("<span class='pg-price'>" + (Fmt-Price ([double]$s.per_unit) $unit) + "</span>")
@@ -699,7 +733,7 @@ foreach ($c in $cats) {
       $notes = @()
       if ([string]$s.store -eq "Sam's Club") { $notes += 'membership' }
       if ($s.bulk) { $notes += 'bulk' }
-      [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "'>")
+      [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "'" + (MatchToken 'recipe' ([string]$s.store) ([string]$s.item)) + ">")
       if ($isBest) { [void]$cb.Append("<span class='pg-best'>Cheapest</span>") }
       [void]$cb.Append("<span class='pg-store'>" + (HtmlEnc $shortName[[string]$s.store]) + "</span>")
       [void]$cb.Append("<span class='pg-price'>" + (Fmt-Price ([double]$s.per_unit) $unit) + "</span>")
