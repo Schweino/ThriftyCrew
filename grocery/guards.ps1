@@ -62,6 +62,145 @@ $script:ENGINE_FILES = @{}
 foreach ($ef in (EngineFileSet)) { $script:ENGINE_FILES[$ef.FullName] = $true }
 function InEngineSet([string]$fullName) { return $script:ENGINE_FILES.ContainsKey($fullName) }
 
+# ---------------------------------------------------------------- CONCURRENT CHILD AUDITS (2026-08-22)
+<#
+  WHY: this gate sits on the ship path - every second it costs is a second before today's prices are live.
+  Measured 2026-08-22 on the live board: 42.5s wall, of which 33.2s is SHELLED-OUT CHILD AUDITS run one
+  after another. The obvious suspect - process cold start - is NOT the cost: a bare `powershell -Command
+  exit 0` measured 107 ms, so all 14 spawns together are ~1.5s. The cost is the WORK inside them, and it is
+  wildly lopsided: audit-known-wrong 15.7s, audit-walmart-fullpull 4.8s, audit-household-in-food 4.6s,
+  and the remaining eleven 8.1s between them. Serially that is 33.2s of a 42.5s gate; run concurrently the
+  batch costs whatever its LONGEST member costs.
+
+  WHY NOT dot-source their decision functions into this process (the other obvious idea): EVERY child audit
+  in this tree declares param() AT FILE SCOPE. Dot-sourcing one therefore executes its param block in THIS
+  scope and clobbers the caller's variables - the trap capture-policy-lib.ps1's header and browser-feeds-lib's
+  "A SHARED LIBRARY MUST NOT DECLARE PARAMETERS AT ALL" were both written after being bitten by. Extracting
+  the Test-* functions by AST instead would leave their TOP-LEVEL orchestration (which file to load, which
+  exit code to return, which artifact to write) to be re-implemented HERE - a second copy of every gate's
+  decision, free to drift from the copy the audit itself runs. That is how a gate goes quietly unfirable.
+  So: same script, same process boundary, same exit code, same artifacts. Only the WAITING is overlapped.
+
+  WHAT IS PRESERVED, EXACTLY:
+   * Each child is still `powershell -NoProfile -ExecutionPolicy Bypass -File <same script> <same args>`.
+     Not one line of any audit changes, so not one verdict can change. ONE deliberate difference: the three
+     -SelfTest suites and audit-walmart-fullpull used to be launched WITHOUT -NoProfile, so a user profile
+     could reach into a publish gate. Every child now gets it, which is what the delegated-audit loop already
+     did and what every scheduled caller of guards.ps1 itself passes. Verified no output change.
+   * HARVEST ORDER IS THE ORIGINAL CALL ORDER. Results are read back at exactly the site that used to make
+     the call, so every ok/warn/HARD FAIL line keeps its text AND its position in the report.
+   * Stdout is decoded with [Console]::OutputEncoding - the SAME encoding the call operator uses to decode a
+     native child - so the captured strings are byte-identical to what `& powershell` produced.
+   * STDERR STILL REACHES THE CONSOLE AND STILL CANNOT KILL THIS FILE. Read the essay at the delegated-audit
+     loop below: under $ErrorActionPreference='Stop', PS 5.1's `2>$null` idiom turns a child's first stderr
+     line into a TERMINATING NativeCommandError in the PARENT, which once killed guards 3-12 outright. A
+     captured stream cannot become an ErrorRecord at all - the text is a plain string here, and it is written
+     back out through [Console]::Error, so a benign diagnostic still shows up and still cannot throw.
+   * Both streams are read ASYNCHRONOUSLY before WaitForExit. Reading one to the end first deadlocks the
+     moment a child fills the other pipe's buffer (~4 KB), which audit-known-wrong's report comfortably does.
+
+  WHAT IS NOT PARALLELISED, DELIBERATELY: audit-coverage-ledger.ps1. It COMPARES the coverage receipts every
+  other check wrote, including the ones guards.ps1 writes itself further down this file, so it must stay last
+  and serial or the ratchet reads a half-written ledger. Of the children below, only audit-food-category
+  writes a coverage receipt, so there is no concurrent read-modify-write of out\coverage-ledger.json here.
+  Every other artifact these children write goes to a file of its own (coverage-regression.json,
+  known-wrong-report.json, pack-basis report, basis-outliers.json, asof-evidence, tile-integrity.json), so
+  concurrency cannot interleave two writers.
+
+  THROTTLE: scaled to the box, so this degrades gracefully towards today's serial behaviour on a small cloud
+  runner rather than thrashing it. It can never be SLOWER than serial.
+#>
+$script:KidThrottle = 8
+try { $nproc = [int]$env:NUMBER_OF_PROCESSORS; if ($nproc -gt 0) { $script:KidThrottle = [math]::Max(2, [math]::Min(8, $nproc)) } } catch { }
+$script:KidQueue   = New-Object System.Collections.Generic.List[object]
+$script:KidByKey   = @{}
+
+function Register-Kid([string]$key, [string]$file, [string[]]$argv) {
+  # Queue a child. Returns $false if the script is missing, so callers keep their existing missing-file paths.
+  $p = Join-Path $root $file
+  if (-not (Test-Path $p)) { return $false }
+  $k = [pscustomobject]@{ key=$key; path=$p; argv=@($argv); proc=$null; so=$null; se=$null; done=$false }
+  [void]$script:KidQueue.Add($k)
+  $script:KidByKey[$key] = $k
+  return $true
+}
+
+function Start-KidProc($k) {
+  if ($k.proc) { return }
+  $psi = New-Object Diagnostics.ProcessStartInfo
+  $psi.FileName = (Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe')
+  if (-not (Test-Path $psi.FileName)) { $psi.FileName = 'powershell' }
+  $psi.UseShellExecute = $false
+  $psi.RedirectStandardOutput = $true
+  $psi.RedirectStandardError  = $true
+  # decode exactly as the call operator would, so captured text is identical to the serial version
+  $psi.StandardOutputEncoding = [Console]::OutputEncoding
+  $psi.StandardErrorEncoding  = [Console]::OutputEncoding
+  $psi.WorkingDirectory = $root
+  # PS 5.1's ProcessStartInfo has no ArgumentList collection, so build the command line as a string
+  $qa = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $k.path + '"'))
+  foreach ($a in @($k.argv)) {
+    if ($null -eq $a -or $a -eq '') { continue }
+    if ($a -match '\s') { $qa += ('"' + $a + '"') } else { $qa += $a }
+  }
+  $psi.Arguments = ($qa -join ' ')
+  $pr = New-Object Diagnostics.Process
+  $pr.StartInfo = $psi
+  [void]$pr.Start()
+  # async BOTH streams before waiting - see the deadlock note above
+  $k.so = $pr.StandardOutput.ReadToEndAsync()
+  $k.se = $pr.StandardError.ReadToEndAsync()
+  $k.proc = $pr
+}
+
+function Pump-Kids {
+  $running = 0
+  foreach ($k in $script:KidQueue) { if ($k.proc -and -not $k.done -and -not $k.proc.HasExited) { $running++ } }
+  foreach ($k in $script:KidQueue) {
+    if ($running -ge $script:KidThrottle) { break }
+    if (-not $k.proc) { Start-KidProc $k; $running++ }
+  }
+}
+
+function Split-KidLines([string]$text) {
+  # match what `& powershell` yields: one element per line, blank lines kept, no trailing empty element
+  if ($null -eq $text -or $text -eq '') { return @() }
+  $a = @($text -split "`r`n|`n|`r")
+  if ($a.Count -gt 0 -and $a[$a.Count - 1] -eq '') { $a = @($a[0..($a.Count - 2)]) }
+  return $a
+}
+
+function Wait-Kid([string]$key, [switch]$DropStderr) {
+  # Returns @{ rc; out }. Force-starts the child if the throttle has not reached it yet, so harvest order
+  # never depends on queue position.
+  # -DropStderr reproduces a call site that used `*> $null` (the three -SelfTest suites): those discarded
+  # BOTH streams, and echoing their stderr here would put text on the console that the serial version never
+  # showed. Every other site let stderr through, and still does.
+  $k = $script:KidByKey[$key]
+  # Unreachable on the shipped call sites (each one Test-Paths its script first, exactly as it always did),
+  # but fail LOUD rather than silently: -1 is not 0, so a caller reading $LASTEXITCODE gets a non-pass. A
+  # harvest of a child nobody registered must never be able to read as "ok".
+  if (-not $k) { $global:LASTEXITCODE = -1; return [pscustomobject]@{ rc = -1; out = @() } }
+  if (-not $k.proc) { Start-KidProc $k }
+  $out = ''; $err = ''
+  try { $out = $k.so.Result } catch { $out = '' }
+  try { $err = $k.se.Result } catch { $err = '' }
+  $k.proc.WaitForExit()
+  $rc = $k.proc.ExitCode
+  $k.done = $true
+  # stderr passes through to the console exactly as it did when the child inherited it, and as PLAIN TEXT -
+  # it can never be an ErrorRecord, so it can never terminate this file under EAP=Stop.
+  if ($err -and -not $DropStderr) { try { [Console]::Error.Write($err) } catch { } }
+  Pump-Kids
+  # SET $LASTEXITCODE, so every call site's conditional stays the EXACT text it was when the call was made
+  # inline. That is not cosmetic: test-auditors pins this file's source shape (it counts
+  # `elseif ($LASTEXITCODE -eq 3)` occurrences to prove the advisory wrappers still have a blind branch), and
+  # a refactor that reads a property instead would have silently retired that pin. $LASTEXITCODE is writable;
+  # nothing between a Wait-Kid and its `if` runs a native command, so the value it carries is this child's.
+  $global:LASTEXITCODE = $rc
+  return [pscustomobject]@{ rc = $rc; out = (Split-KidLines $out) }
+}
+
 function OkUnlessBlind([int]$checked, [string]$okMsg, [string]$blindMsg) {
   <#
     THE ZERO-ROWS RULE: a check that examined NOTHING must WARN, never print ok.
@@ -132,6 +271,27 @@ foreach ($c in $puCases) {
 if ($puBad.Count) { [void]$fail.Add("HARD FAIL: pu-lib per-unit math regressed [" + ($puBad -join '; ') + "] - the publish path prices with this engine; see test-pu-lib.ps1") }
 else { Say '  ok    pu-lib per-unit engine self-check' }
 
+# ---------------------------------------------------------------- launch every shelled-out child NOW
+# Registration order is a scheduling hint only (heaviest measured first, so the long pole starts in the first
+# throttle window); correctness does not depend on it, because every result is HARVESTED at its original call
+# site further down, in the original order. Adding a child here without harvesting it would leave a process
+# running and its verdict unread - so each Register-Kid below has exactly one matching Wait-Kid.
+$null = Register-Kid 'known-wrong'          'audit-known-wrong.ps1'          @()
+$null = Register-Kid 'walmart-fullpull'     'audit-walmart-fullpull.ps1'     @()
+$null = Register-Kid 'household-in-food'    'audit-household-in-food.ps1'    @()
+$null = Register-Kid 'price-mode'           'audit-price-mode.ps1'           @()
+$null = Register-Kid 'tile-integrity'       'audit-tile-integrity.ps1'       @()
+$null = Register-Kid 'st-compare-deals'     'compare-deals.ps1'              @('-SelfTest')
+$null = Register-Kid 'asof-evidence'        'audit-asof-evidence.ps1'        @()
+$null = Register-Kid 'food-category'        'audit-food-category.ps1'        @()
+$null = Register-Kid 'unit-basis-outlier'   'audit-unit-basis-outlier.ps1'   @()
+$null = Register-Kid 'cell-drops'           'audit-cell-drops.ps1'           @()
+$null = Register-Kid 'coverage-regression'  'audit-coverage-regression.ps1'  @()
+$null = Register-Kid 'pack-basis'           'audit-pack-basis.ps1'           @()
+$null = Register-Kid 'st-walmart-deals'     'build-walmart-deals.ps1'        @('-SelfTest')
+$null = Register-Kid 'st-walmart-batch'     'import-walmart-batch.ps1'       @('-SelfTest')
+Pump-Kids
+
 # ---------------------------------------------------------------- 0b: the 2026-07-23 incident self-tests
 # The Walmart alert flood had two producers: a PARTIAL pull that "newest-file-wins" turned into a coverage
 # collapse (fixed by compare-deals' union), and a builder that emitted BULK MULTIPACKS (fixed by
@@ -141,16 +301,18 @@ else { Say '  ok    pu-lib per-unit engine self-check' }
 # mutation, no network), safe on every run. If the invocation itself throws, degrade to a warning - a broken
 # test must never block the board by crashing.
 foreach ($st in @(
-  @{ label='partial-pull union (compare-deals)';       file='compare-deals.ps1' },
-  @{ label='multipack reject + pricing (walmart-deals)'; file='build-walmart-deals.ps1' },
+  @{ label='partial-pull union (compare-deals)';       file='compare-deals.ps1';        kid='st-compare-deals' },
+  @{ label='multipack reject + pricing (walmart-deals)'; file='build-walmart-deals.ps1'; kid='st-walmart-deals' },
   # 2026-07-27: Walmart's own unit price backed out a 10 fl oz size for a bottle its page calls 6.8 fl oz,
   # so we published fish sauce 32% under the real shelf price. The name now wins when the two disagree.
-  @{ label='name-size vs Walmart unit price (walmart-batch)'; file='import-walmart-batch.ps1' }
+  @{ label='name-size vs Walmart unit price (walmart-batch)'; file='import-walmart-batch.ps1'; kid='st-walmart-batch' }
 )) {
   try {
     $stPath = Join-Path $root $st.file
     if (-not (Test-Path $stPath)) { Say ("  warn  self-test skipped, missing $($st.file)"); continue }
-    & powershell -ExecutionPolicy Bypass -File $stPath -SelfTest *> $null
+    # HARVEST (launched above). Same script, same -SelfTest arg, same exit code; its output was discarded
+    # with *> $null before and is discarded here too - only the exit code was ever read.
+    $null = Wait-Kid $st.kid -DropStderr
     if ($LASTEXITCODE -ne 0) { [void]$fail.Add("HARD FAIL: $($st.label) self-test regressed (exit $LASTEXITCODE) - run '$($st.file) -SelfTest'. This is the 2026-07-23 partial-pull / multipack guard; a regression here re-opens the flood.") }
     else { Say "  ok    $($st.label) self-test" }
   } catch { Say ("  warn  could not run $($st.label) self-test: " + $_.Exception.Message) }
@@ -162,7 +324,12 @@ foreach ($st in @(
 # the single copy of that logic; check-ad-cycles emails on it (deduped), this line just makes it visible in
 # every gate run. A real expiry still fails CLOSED via the coverage-regression guard above.
 try {
-  $wfp = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-walmart-fullpull.ps1') 2>$null
+  # HARVEST (launched above). The old `2>$null` here was the very idiom the delegated-audit essay below
+  # condemns - under EAP=Stop it makes a child's first stderr line a TERMINATING throw in this parent. It
+  # survived only because this call sits inside a try/catch, where the cost was a wrong signal ("could not
+  # run") instead of the real finding. Captured stderr is plain text and cannot throw, so it is dropped here
+  # exactly as `2>$null` dropped it, with none of the risk.
+  $wfp = (Wait-Kid 'walmart-fullpull' -DropStderr).out
   if ($LASTEXITCODE -eq 0) { Say ("  ok    " + [string]$wfp) }
   elseif ($LASTEXITCODE -eq 3) { [void]$warn.Add('walmart-fullpull examined ZERO captures for a union store, so it proves nothing this run: ' + [string]$wfp) }
   else { [void]$warn.Add([string]$wfp) }
@@ -179,7 +346,8 @@ try {
   # delegated-audit loop. It sits inside its own try/catch here, so the blast radius was not a dead guard
   # but a wrong signal: any run where cell-drops wrote a single stderr line was reported as "could not run"
   # instead of its real finding, and a real leak would read as plumbing noise.
-  $cdOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-cell-drops.ps1')
+  # HARVEST (launched above); stderr still passes through to the console, as it has since 2026-07-31.
+  $cdOut = (Wait-Kid 'cell-drops').out
   if ($LASTEXITCODE -eq 0) { Say ("  ok    " + (@($cdOut) | Select-Object -First 1)) }
   elseif ($LASTEXITCODE -eq 3) { [void]$warn.Add('cell-drops could NOT be evaluated, so it proves nothing this run: ' + ((@($cdOut) | Where-Object { $_ }) -join ' ')) }
   else { [void]$warn.Add((@($cdOut) -join ' | ')) }
@@ -245,20 +413,20 @@ try {
 
 # ---------------------------------------------------------------- 1 + 2: delegate to the existing audits
 foreach ($g in @(
-    @{ f='audit-price-mode.ps1';        n='price-mode (in-store pricing)' },
-    @{ f='audit-household-in-food.ps1'; n='household-in-food' },
+    @{ f='audit-price-mode.ps1';        n='price-mode (in-store pricing)'; k='price-mode' },
+    @{ f='audit-household-in-food.ps1'; n='household-in-food'; k='household-in-food' },
     # blueberries-as-Bai-beverage class (2026-07-15): a FOOD commodity matched to a beverage/baby-food/pet/
     # household/bakery-carrier/dairy-carrier/candy product. Wrong-class products are usually CHEAPER than the
     # real item, so they win the cheapest slot and ship as a great-looking lie. Reads category-excludes.json -
     # the same library apply-category-excludes bakes into commodity rules and build-vet-sheet flags for review.
-    @{ f='audit-food-category.ps1';     n='no food commodity matched a wrong-class product (beverage/baby/pet/household/carrier/candy)' },
+    @{ f='audit-food-category.ps1';     n='no food commodity matched a wrong-class product (beverage/baby/pet/household/carrier/candy)'; k='food-category' },
     # coverage regression (2026-07-16): a store QUIETLY LOSING cells it had on the previous board. Guard 6 below
     # checks the same idea at the FILE level, and cannot see this class at all - it reads out\regular\, and Sam's
     # has no regular file (its prices come only from out\sams\ captures). So Sam's fell 251 -> 116 priced cells
     # with every guard on this page green: the publish gate enforces only a FLOOR (~15/store, which 116 clears),
     # and a store missing from a row renders as a lawful "doesn't carry" tile that no audit can distinguish from
     # a real gap. Brad caught it by eye. Intentional drops are acked in out\coverage-ack.json with an expiry.
-    @{ f='audit-coverage-regression.ps1'; n='no store lost coverage vs the previous board' },
+    @{ f='audit-coverage-regression.ps1'; n='no store lost coverage vs the previous board'; k='coverage-regression' },
     # tile integrity (2026-07-16) - BRAD'S INVARIANT: "no tile that has a price and item name and no link, and
     # the price and item name must match the link 100%". Runs as a RATCHET, not a hard gate: 313 of 2,047 tiles
     # violate it today and nearly all need a paced per-store browser pass, so a gate that fails from day one is
@@ -274,7 +442,7 @@ foreach ($g in @(
     # goes red on 12 of them and blocks 44 cells, 33 of which were CROWNS, with zero false positives - so it
     # is not a gate that can never arm. Exit 3 (blind - missing/empty/unevaluable list, or a board with no
     # named priced cells) surfaces here as a WARN naming what went unproven, never as a silent pass.
-    @{ f='audit-known-wrong.ps1';       n='no product a reasoner already ruled wrong is priced on the board (known-wrong blocklist)' },
+    @{ f='audit-known-wrong.ps1';       n='no product a reasoner already ruled wrong is priced on the board (known-wrong blocklist)'; k='known-wrong' },
     # pack-total read as an each-size (2026-08-02) - the DECIDABLE subset only. audit-pack-basis has run
     # daily since 2026-07-28 and it named the Sam's Pledge row correctly at 09:03 this morning; the board
     # then published furniture-polish at $0.1439/oz against a true $0.4317 anyway, because an advisory
@@ -286,7 +454,7 @@ foreach ($g in @(
     # Sam's Pledge "3 ct., 29 oz.": 29/3 = 9.67 against four stores' 9.7 oz cans. Sam's "6 ct., 3.5 oz."
     # tablets and the Member's Mark hummus 16 ct / 2.5 oz singles do NOT produce that identity and stay
     # advisory, so this cannot condemn a correct pack. Both cases are frozen fixtures in test-auditors.ps1.
-    @{ f='audit-pack-basis.ps1';        n='no cell is cheapest because a pack TOTAL was multiplied by its own count (peer-size fingerprint)' },
+    @{ f='audit-pack-basis.ps1';        n='no cell is cheapest because a pack TOTAL was multiplied by its own count (peer-size fingerprint)'; k='pack-basis' },
     # measure-kind mismatch (2026-08-08) - "no cell may win a row while being measured in a different KIND of
     # quantity than the row it wins". audit-unit-basis-outlier existed since 07-31 and was invoked by NOTHING;
     # worse, it only ever looked UPWARD, flagging rows at 4x+ the median. An expensive outlier takes no crown
@@ -297,7 +465,7 @@ foreach ($g in @(
     # sunflower-seed butter and a Birds Eye sauced CORN in the same row. Both fixed at the commodity rule.
     # Only the UNREVIEWED crown case is hard; the ratio findings stay advisory. Reviewed exceptions live in
     # basis-kind-allowlist.json keyed on commodity+store+size, so a changed size re-arms the check.
-    @{ f='audit-unit-basis-outlier.ps1'; n='no cell wins a row while measured in a different KIND of quantity than the row (volume among weights)' },
+    @{ f='audit-unit-basis-outlier.ps1'; n='no cell wins a row while measured in a different KIND of quantity than the row (volume among weights)'; k='unit-basis-outlier' },
     # as_of evidence (2026-08-02) - "no published price may claim a date newer than the capture it came
     # from". build-fareway-regular merged every extract on disk and stamped them all with the BUILD date, so
     # 431 of 577 live rows wore a date newer than the capture that produced them. That is worse than a
@@ -306,8 +474,8 @@ foreach ($g in @(
     # the shopper-visible end of it (ranch dressing published at $0.99 as_of today, real shelf price $2.48).
     # Every downstream freshness check is correct code reading an invented input, which is why this needs a
     # check of its own rather than trusting the builder to stay fixed.
-    @{ f='audit-asof-evidence.ps1';     n='no published price claims a date newer than the capture it came from (as_of evidence)' },
-    @{ f='audit-tile-integrity.ps1';    n='ZERO shipped links disagree with their tile (hard), and no store regressed on coverage (ratchet)' })) {
+    @{ f='audit-asof-evidence.ps1';     n='no published price claims a date newer than the capture it came from (as_of evidence)'; k='asof-evidence' },
+    @{ f='audit-tile-integrity.ps1';    n='ZERO shipped links disagree with their tile (hard), and no store regressed on coverage (ratchet)'; k='tile-integrity' })) {
   $p = Join-Path $root $g.f
   if (-not (Test-Path $p)) { [void]$fail.Add(("MISSING GUARD SCRIPT: " + $g.f)); continue }
   # CAPTURE the output instead of discarding it: a delegated audit that says "nothing to check" was exiting 0,
@@ -330,7 +498,11 @@ foreach ($g in @(
   # already asserted for check-ad-cycles by test-auditors ('leaves stderr unredirected'). This call was the
   # one site never converted. The child's stderr now passes through to the console; measured today, all
   # five delegated audits emit zero stderr bytes, so nothing new appears on a healthy run.
-  $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $p
+  # HARVEST (launched at the top of this file). The child is the same script run the same way in its own
+  # process; only the WAIT was moved earlier. Its stderr is captured as a plain string and written back to
+  # the console below, which is what the paragraph above asks for AND is immune to the NativeCommandError
+  # trap by construction - a captured string is never an ErrorRecord, so it can never terminate this file.
+  $o = (Wait-Kid $g.k).out
   if ($LASTEXITCODE -eq 3) { [void]$warn.Add($g.n + ' could NOT be evaluated, so it proves nothing this run: ' + ((@($o) | Where-Object { $_ }) -join ' ')) }
   elseif ($LASTEXITCODE -ne 0) { [void]$fail.Add(("HARD FAIL: " + $g.n + " (see " + $g.f + ")")) }
   else { Say ("  ok    " + $g.n) }
