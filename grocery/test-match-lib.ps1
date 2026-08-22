@@ -1,4 +1,4 @@
-<#
+﻿<#
   test-match-lib.ps1 - proves match-lib decides EXACTLY as the original Match-Category, on the real corpus.
 
   THE CONTRACT. match-lib exists for speed (see its header: 139 of 159 seconds per board build was the
@@ -52,7 +52,7 @@ if (($t1 -join '|') -ne ($t2 -join '|')) { Write-Output "FAIL  Get-MatchTexts di
 $names = @{}
 $cmp = Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1
 $today = if ($cmp -and $cmp.BaseName -match '(\d{4}-\d{2}-\d{2})$') { [datetime]$Matches[1] } else { Get-Date }
-foreach ($rf in (Select-RegularFileSet (Get-ChildItem (Join-Path $root 'out\regular\*-regular-*.json')) $today 14)) {
+foreach ($rf in (Select-RegularFileSet (Get-ChildItem (Join-Path $root 'out\regular\*-regular-*.json')) $today (Get-RegularUnionDays))) {
   $ex = Get-Content $rf.FullName -Raw | ConvertFrom-Json
   foreach ($d in $ex.deals) { if ($d.item) { $names[[string]$d.item] = 1 } }
 }

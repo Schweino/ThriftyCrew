@@ -123,9 +123,11 @@ function Get-LinkPerUnit {
 
   # 4. multipack in the SIZE stated WEIGHT-FIRST ("16 oz 6 pk") multiplies a weight. Skipped when the
   #    pack-first branch already ran, so "6 pk 16 oz" is not multiplied by the pack count twice.
+  #    LITRE / ML / QUART JOINED 2026-08-22: "2 l 6 pk" multiplied only oz/lb/gal, so a six-pack of 2-litre
+  #    bottles priced as ONE bottle (6x over). compare-deals' weight-first branch carries the same addition.
   if (-not $mpDone) {
     $pk = [regex]::Match($s, '([0-9]+)\s*-?\s*(pk|pack)\b')
-    if ($pk.Success -and $n -and ($un -match '^(oz|lbs?|gal)$')) { $n = $n * [double]$pk.Groups[1].Value }
+    if ($pk.Success -and $n -and ($un -match '^(oz|lbs?|gal|l|ml|qt)$')) { $n = $n * [double]$pk.Groups[1].Value }
   }
 
   # 5. multipack in the NAME. A link whose size is just "each" but whose NAME says "24 Pack" is 24 items, not

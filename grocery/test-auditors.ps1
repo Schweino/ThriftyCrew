@@ -1,4 +1,4 @@
-<#
+﻿<#
   test-auditors.ps1 - proves the WATCHERS still work. Complements test-guards.ps1, which breaks a live
   invariant and asserts guards.ps1 exits 2; this one tests the auditors and alert plumbing that guards.ps1
   does not own, using FROZEN FIXTURES instead of mutating live data.
@@ -1764,9 +1764,7 @@ else { Bad 'weekly lock: -Release left the file behind - a swept stale lock woul
 Remove-Item $fxWl -Recurse -Force -ErrorAction SilentlyContinue
 # and BOTH callers must still be wired to it - a lock nobody takes and nobody checks is a no-op that
 # passes every behavioural test above (source asserts: house precedent for caller plumbing).
-$rdlLk = Get-Content (Join-Path $root 'run-daily-local.ps1') -Raw
-if ($rdlLk -match 'weekly-run-lock\.ps1' -and $rdlLk -match '\$wlRc -eq 2' -and $rdlLk -match 'STAND DOWN: the weekly browser refresh' -and $rdlLk -match "weekly-run-lock\.ps1'\) -Release") { Ok 'run-daily-local still checks the weekly lock, stands down on HELD, and sweeps a stale one' }
-else { Bad 'run-daily-local no longer stands down for the weekly run - the 46-minute collision of 2026-07-29 is back' }
+# (run-daily-local.ps1's stand-down assert retired with that runner on 2026-08-22; capture-run has no weekly to stand down for - the weekly browser agent is disabled)
 if ($wpcLk -match "weekly-run-lock\.ps1'\) @\('-Acquire'") { Ok 'weekly-post-capture still takes the lock on every phase' }
 else { Bad 'weekly-post-capture stopped taking the weekly lock - the daily has nothing to stand down for' }
 if ($wpcLk -match "weekly-run-lock\.ps1'\) @\('-Release'") { Bad 'weekly-post-capture releases the lock mid-run again - on 2026-07-29 a links phase finished at 08:01:34 and the next phase was 08:46:24, so releasing hands grocery\out back 28 min before the 08:30 daily fires. The lock expires on its own TTL; nothing in the weekly may hand it back.' }
@@ -3924,6 +3922,22 @@ else { Bad ('pull_profile drift or a profile encoding carriage: ' + ((($r.text -
 $r = RunPS 'test-rollback-ttl.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'ROLLBACK-TTL PASSED') { Ok 'rollback TTL: first_seen anchors once and never re-anchors on re-sighting' }
 else { Bad ('rollback TTL fixtures FAILED (rc=' + $r.rc + ') - a 30-day window that re-anchors never expires') }
+
+# ---------------------------------------------------------------- the 2026-08-22 engine-review fixes
+# Each of these carries a MUST-FIRE that fails on the pre-fix code (verified against HEAD~ copies on the day
+# they shipped) and clean twins for what had to keep working. Wired here so a quiet suite proves they still run.
+$r = RunPS 'test-ad-match.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'AD-MATCH PASSED') { Ok 'ad-match: same-price candidates are scored, a cell cannot inherit another product''s window, the terse butter line still traces' }
+else { Bad ('test-ad-match FAILED (rc=' + $r.rc + ') - a sale cell can again take the window of whichever same-price ad line comes first: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
+$r = RunPS 'test-capture-policy.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'CAPTURE-POLICY PASSED') { Ok 'sale-expiry slice - an expiring sale''s terms/products are IN the headless lanes'' slice, not merely budgeted for' }
+else { Bad ('test-capture-policy FAILED (rc=' + $r.rc + ') - sale-expiry re-pricing no longer reaches the slice: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
+$r = RunPS 'test-pu-lib.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'PU-LIB PASSED') { Ok 'pu-lib: frozen per-unit values hold (fractions, x-packs, litre/ml/qt multipacks, pack count over per-each marker)' }
+else { Bad ('test-pu-lib FAILED (rc=' + $r.rc + ') - the shared per-unit math regressed against its frozen values: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
+$r = RunPS 'pull-regular-hyvee.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'pull-regular-hyvee -SelfTest: a carried markdown keeps its discount fields; an ended sale reverts to everyday at base_price' }
+else { Bad ('pull-regular-hyvee -SelfTest failed (rc=' + $r.rc + ') - the Hy-Vee carry can launder a markdown into an everyday price again: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
 
 # ---------------------------------------------------------------- Hy-Vee shelf tag + store identity (2026-08-21)
 # Brad checked four Hy-Vee cells against his own screen and all four disagreed. Two causes, and the

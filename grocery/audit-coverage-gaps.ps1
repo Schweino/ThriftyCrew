@@ -69,13 +69,19 @@ function Test-Probe($Rx, [string]$Name, [string]$Ctx) {
   $key = $Rx.ToString()
   if ([int]$reDead[$key] -ge $MAXPATTERNTIMEOUTS) { return $false }
   try { return $Rx.IsMatch($Name) }
-  catch [Text.RegularExpressions.RegexMatchTimeoutException] {
-    $reDead[$key] = [int]$reDead[$key] + 1
-    [void]$reTimeouts.Add([pscustomobject]@{ context = $Ctx; pattern = $key; name = $Name
-                                             quarantined = ([int]$reDead[$key] -ge $MAXPATTERNTIMEOUTS) })
-    return $false
-  }
+  catch [Text.RegularExpressions.RegexMatchTimeoutException] { $null = Note-Timeout $Rx $Name $Ctx; return $false }
 }
+# Records one timeout and returns $true once the pattern has just crossed into quarantine. Split out of
+# Test-Probe so the commodity loop below can call $rx.IsMatch directly and pay for bookkeeping ONLY when a
+# timeout fires - see the note at that loop.
+function Note-Timeout($Rx, [string]$Name, [string]$Ctx) {
+  $key = $Rx.ToString()
+  $reDead[$key] = [int]$reDead[$key] + 1
+  $q = ([int]$reDead[$key] -ge $MAXPATTERNTIMEOUTS)
+  [void]$reTimeouts.Add([pscustomobject]@{ context = $Ctx; pattern = $key; name = $Name; quarantined = $q })
+  return $q
+}
+function Live-Probes($Probes) { @($Probes | Where-Object { $_ -and ([int]$reDead[$_.ToString()] -lt $MAXPATTERNTIMEOUTS) }) }
 
 if ($SelfTest) {
   # Hermetic: reads no board, no capture, no commodities file. The founding bug is FROZEN here as the
@@ -225,6 +231,13 @@ foreach ($c in $commods) {
   # or "\s*" becomes ".{0,25}*" (a nested quantifier that throws). Order matters.
   $probes = @($c.include | ForEach-Object { New-Probe(((($_ -replace '\\s\*', '.{0,25}') -replace '\\s\+', '.{0,25}') -replace '\\s', '.{0,25}')) })
   $excl = @($c.exclude | Where-Object { $_ } | ForEach-Object { New-Probe ([string]$_) })
+  # relax_global waivers (pasta-sauce IS a sauce etc.) are applied ONCE per commodity, not per product name
+  $relax = @($c.relax_global | Where-Object { $_ })
+  $globP = @($GLOBAL | Where-Object { $relax -notcontains $_ } | ForEach-Object { New-Probe ([string]$_) })
+  $engP  = @($ENGINE_GLOBAL | Where-Object { $relax -notcontains $_ } | ForEach-Object { New-Probe ([string]$_) })
+  # The four lists below are the LIVE (non-quarantined) probes. They are re-filtered only when a timeout
+  # pushes a pattern over MAXPATTERNTIMEOUTS, so the hot loop never consults $reDead.
+  $pI = Live-Probes $probes; $pX = Live-Probes $excl; $pG = Live-Probes $globP; $pE = Live-Probes $engP
   foreach ($st in $stores) {
     if ($present.ContainsKey($id + '|' + $st)) { continue }
     if ($allow.ContainsKey($id + '|' + $st)) { continue }
@@ -238,16 +251,35 @@ foreach ($c in $commods) {
     # An allowlist decision is only as good as the evidence put in front of the reviewer.
     $MAXCAND = 5
     $found = New-Object System.Collections.Generic.List[string]
-    $relax = @($c.relax_global | Where-Object { $_ })
+    # HOT LOOP (2026-08-22). This block runs ~1.6M (name x store x commodity) times per day. The 2026-08-14
+    # ReDoS fix routed every match through Test-Probe, and a PowerShell function call per (name, pattern)
+    # - plus a .ToString() and a hashtable lookup inside it - took the script from ~24s to 94-150s. The
+    # timeout bound and the breaker are unchanged: every [regex] here was built by New-Probe with the same
+    # MatchTimeout, and a RegexMatchTimeoutException still lands in Note-Timeout, which counts it, reports
+    # it, and quarantines the pattern (the live lists are rebuilt so the quarantined pattern is skipped).
+    # What moved is WHERE the bookkeeping is paid: only on a timeout, never on the millions of clean calls.
     foreach ($nm in $prodUniq[$st]) {
-      $hit = $false; foreach ($p in $probes) { if (Test-Probe $p $nm ($id + '|include')) { $hit = $true; break } }
+      $hit = $false
+      foreach ($p in $pI) {
+        try { if ($p.IsMatch($nm)) { $hit = $true; break } }
+        catch [Text.RegularExpressions.RegexMatchTimeoutException] { if (Note-Timeout $p $nm ($id + '|include')) { $pI = Live-Probes $probes } }
+      }
       if (-not $hit) { continue }
       $bad = $false
-      foreach ($x in $excl)   { if (Test-Probe $x $nm ($id + '|exclude')) { $bad = $true; break } }
+      foreach ($x in $pX) {
+        try { if ($x.IsMatch($nm)) { $bad = $true; break } }
+        catch [Text.RegularExpressions.RegexMatchTimeoutException] { if (Note-Timeout $x $nm ($id + '|exclude')) { $pX = Live-Probes $excl } }
+      }
       # honor the commodity's relax_global waivers (pasta-sauce IS a sauce etc.) so those commodities still
       # get coverage-gap protection instead of every candidate being silently global-excluded
-      if (-not $bad) { foreach ($x in $GLOBAL) { if ($relax -notcontains $x -and (Test-Probe (New-Probe $x) $nm ($id + '|global'))) { $bad = $true; break } } }
-      if (-not $bad) { foreach ($x in $ENGINE_GLOBAL) { if ($relax -notcontains $x -and (Test-Probe (New-Probe $x) $nm ($id + '|engine-global'))) { $bad = $true; break } } }
+      if (-not $bad) { foreach ($x in $pG) {
+        try { if ($x.IsMatch($nm)) { $bad = $true; break } }
+        catch [Text.RegularExpressions.RegexMatchTimeoutException] { if (Note-Timeout $x $nm ($id + '|global')) { $pG = Live-Probes $globP } }
+      } }
+      if (-not $bad) { foreach ($x in $pE) {
+        try { if ($x.IsMatch($nm)) { $bad = $true; break } }
+        catch [Text.RegularExpressions.RegexMatchTimeoutException] { if (Note-Timeout $x $nm ($id + '|engine-global')) { $pE = Live-Probes $engP } }
+      } }
       if ($bad) { continue }
       $found.Add($nm)
       if ($found.Count -ge $MAXCAND) { break }

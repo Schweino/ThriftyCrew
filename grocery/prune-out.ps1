@@ -1,4 +1,4 @@
-# prune-out.ps1 - retention for grocery\out's dated file families. 960 MB and growing, with 18-27
+﻿# prune-out.ps1 - retention for grocery\out's dated file families. 960 MB and growing, with 18-27
 # generations of files whose consumers read at most a few weeks back.
 #
 # THE DESIGN RULE: a family is only listed here after its READERS were enumerated, and its window is set
@@ -29,6 +29,26 @@ $script:FAMILIES = @(
   @{ glob = 'flags-*.json';                      days = 30; min = 5 }
   @{ glob = 'captures\*.csv';                    days = 45; min = 3 }
   @{ glob = 'throttled\*.throttled.json';        days = 21; min = 2 }
+  # ---- added 2026-08-22 after out\ reached 2.8 GB (the review's item 16) ----------------------------
+  # price-history.backup-* : 49 x 14 MB = ~700 MB of a file git already versions on every bot commit
+  @{ glob = 'price-history.backup-*.json';       days = 14; min = 5 }
+  # one-off experiment dumps from July/August sessions (detA/detB, r300*, clean-base, after-primer,
+  # final-batch, cmp-min1, hfbase/hftort, regr-check): 20-26 MB each, read by nothing after their day
+  @{ glob = 'det?-candidates-*.json';            days = 7;  min = 0 }
+  @{ glob = 'r300*-candidates-*.json';           days = 7;  min = 0 }
+  @{ glob = 'clean-base-candidates-*.json';      days = 7;  min = 0 }
+  @{ glob = 'after-primer*-candidates-*.json';   days = 7;  min = 0 }
+  @{ glob = 'final-batch*-candidates-*.json';    days = 7;  min = 0 }
+  @{ glob = 'cmp-min1-candidates-*.json';        days = 7;  min = 0 }
+  @{ glob = 'hf*-candidates-*.json';             days = 7;  min = 0 }
+  @{ glob = 'regr-check-candidates-*.json';      days = 7;  min = 0 }
+)
+# DIRECTORY families are ARCHIVED (moved under out\archive\), never deleted: raw browser capture
+# sessions (captures\v2-manual-<date>\, 400+ MB each) are evidence of what a store showed on a day,
+# already reduced into out\regular, and read by nothing afterwards - measured 2026-08-22: 824 MB across
+# two sessions with zero consumers in the tree. Newest MIN survive in place regardless of age.
+$script:DIR_FAMILIES = @(
+  @{ glob = 'captures\v2-manual-*';              days = 14; min = 1 }
 )
 
 function Get-PruneList { param($Files, [datetime]$Today, [int]$Days, [int]$Min)
@@ -77,6 +97,21 @@ foreach ($fam in $script:FAMILIES) {
   $totalFiles += $prune.Count; $totalMB += $mb
   Write-Output ("  {0,-38} prune {1,3} of {2,3} generation(s), {3,8} MB  (keep {4}d / min {5})" -f $fam.glob, $prune.Count, $files.Count, $mb, $fam.days, $fam.min)
   if ($Apply) { $prune | Remove-Item -Force }
+}
+foreach ($fam in $script:DIR_FAMILIES) {
+  $dirs = @(Get-ChildItem (Join-Path $OutDir $fam.glob) -Directory -ErrorAction SilentlyContinue)
+  if (-not $dirs.Count) { continue }
+  $prune = @(Get-PruneList $dirs $today $fam.days $fam.min)
+  if (-not $prune.Count) { continue }
+  $mb = 0.0
+  foreach ($d in $prune) { $mb += [math]::Round(((Get-ChildItem $d.FullName -Recurse -File -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum) / 1MB, 1) }
+  $totalFiles += $prune.Count; $totalMB += $mb
+  Write-Output ("  {0,-38} archive {1,1} of {2,1} session dir(s), {3,8} MB  (keep {4}d / min {5}) -> archive\" -f $fam.glob, $prune.Count, $dirs.Count, $mb, $fam.days, $fam.min)
+  if ($Apply) {
+    $arch = Join-Path $OutDir 'archive'
+    if (-not (Test-Path $arch)) { New-Item -ItemType Directory -Path $arch -Force | Out-Null }
+    foreach ($d in $prune) { Move-Item -Path $d.FullName -Destination (Join-Path $arch $d.Name) -Force -ErrorAction SilentlyContinue }
+  }
 }
 Write-Output ("prune-out: {0} file(s), {1} MB{2}" -f $totalFiles, [math]::Round($totalMB, 1), $(if ($Apply) { ' DELETED' } else { ' would be deleted (dry run - pass -Apply)' }))
 if ($Apply -and $totalFiles -gt 0) { Write-Output 'now run guards.ps1 + test-auditors.ps1 - a deletion that blinded a watcher must say so TODAY' }

@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-08-22T07:27:13",
+    "updated":  "2026-08-21T13:26:00",
     "ttl_days":  30,
     "note":  "When each Walmart / Sam\u0027s rollback was FIRST observed. first_seen is written once per (store,item_id) and NEVER advanced - re-observing a rollback moves last_seen only, because an anchor that moves makes a 30-day TTL infinite. A CHANGED rolled-back price is a new promotion and re-anchors, counted in price_changed. Keyed by the store\u0027s own item id, never the name, so a re-listing cannot restart the clock.",
     "entries":  [
@@ -8,7 +8,7 @@
                         "store":  "Fareway",
                         "item_id":  "102767808",
                         "price":  10.88,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -17,7 +17,7 @@
                         "store":  "Fareway",
                         "item_id":  "102886",
                         "price":  5.69,
-                        "first_seen":  "2026-08-01",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -26,7 +26,7 @@
                         "store":  "Fareway",
                         "item_id":  "102971",
                         "price":  4.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -35,7 +35,7 @@
                         "store":  "Fareway",
                         "item_id":  "103011698",
                         "price":  9.98,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -44,7 +44,7 @@
                         "store":  "Fareway",
                         "item_id":  "103832577",
                         "price":  1.99,
-                        "first_seen":  "2026-08-01",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -53,7 +53,7 @@
                         "store":  "Fareway",
                         "item_id":  "104557563",
                         "price":  2.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -62,7 +62,7 @@
                         "store":  "Fareway",
                         "item_id":  "111646051",
                         "price":  2.5,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -71,7 +71,7 @@
                         "store":  "Fareway",
                         "item_id":  "11601",
                         "price":  3.99,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -80,7 +80,7 @@
                         "store":  "Fareway",
                         "item_id":  "121682",
                         "price":  3.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -89,7 +89,7 @@
                         "store":  "Fareway",
                         "item_id":  "130877",
                         "price":  2.99,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -98,7 +98,7 @@
                         "store":  "Fareway",
                         "item_id":  "132051",
                         "price":  2.99,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -107,7 +107,7 @@
                         "store":  "Fareway",
                         "item_id":  "13601",
                         "price":  3.49,
-                        "first_seen":  "2026-08-01",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -116,7 +116,7 @@
                         "store":  "Fareway",
                         "item_id":  "136826",
                         "price":  3.79,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -125,7 +125,7 @@
                         "store":  "Fareway",
                         "item_id":  "142397",
                         "price":  2.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -134,7 +134,7 @@
                         "store":  "Fareway",
                         "item_id":  "1458678",
                         "price":  1.68,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -143,7 +143,7 @@
                         "store":  "Fareway",
                         "item_id":  "1502258",
                         "price":  6.99,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -152,7 +152,7 @@
                         "store":  "Fareway",
                         "item_id":  "16236872",
                         "price":  6.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -161,7 +161,7 @@
                         "store":  "Fareway",
                         "item_id":  "16308201",
                         "price":  2,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -179,7 +179,7 @@
                         "store":  "Fareway",
                         "item_id":  "16408651",
                         "price":  5.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -188,7 +188,7 @@
                         "store":  "Fareway",
                         "item_id":  "16409168",
                         "price":  2.99,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -197,7 +197,7 @@
                         "store":  "Fareway",
                         "item_id":  "16409221",
                         "price":  2.97,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -206,7 +206,7 @@
                         "store":  "Fareway",
                         "item_id":  "16409339",
                         "price":  5.48,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -215,7 +215,7 @@
                         "store":  "Fareway",
                         "item_id":  "16409600",
                         "price":  1.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -224,7 +224,7 @@
                         "store":  "Fareway",
                         "item_id":  "16409704",
                         "price":  2.64,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -233,7 +233,7 @@
                         "store":  "Fareway",
                         "item_id":  "16409969",
                         "price":  1.44,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -242,7 +242,7 @@
                         "store":  "Fareway",
                         "item_id":  "16410324",
                         "price":  2.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -251,7 +251,7 @@
                         "store":  "Fareway",
                         "item_id":  "16411081",
                         "price":  1.92,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -260,7 +260,7 @@
                         "store":  "Fareway",
                         "item_id":  "16469141",
                         "price":  3.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -269,7 +269,7 @@
                         "store":  "Fareway",
                         "item_id":  "16482899",
                         "price":  2.78,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -278,7 +278,7 @@
                         "store":  "Fareway",
                         "item_id":  "16527122",
                         "price":  5.77,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -287,7 +287,7 @@
                         "store":  "Fareway",
                         "item_id":  "16606119",
                         "price":  0.88,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -296,7 +296,7 @@
                         "store":  "Fareway",
                         "item_id":  "1663547",
                         "price":  2.48,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -305,7 +305,7 @@
                         "store":  "Fareway",
                         "item_id":  "16696721",
                         "price":  3.97,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -314,7 +314,7 @@
                         "store":  "Fareway",
                         "item_id":  "16752065",
                         "price":  2.74,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -323,7 +323,7 @@
                         "store":  "Fareway",
                         "item_id":  "16754757",
                         "price":  5.48,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -332,7 +332,7 @@
                         "store":  "Fareway",
                         "item_id":  "16756902",
                         "price":  3.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -341,7 +341,7 @@
                         "store":  "Fareway",
                         "item_id":  "16758378",
                         "price":  1.88,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -350,7 +350,7 @@
                         "store":  "Fareway",
                         "item_id":  "16853220",
                         "price":  7.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -359,7 +359,7 @@
                         "store":  "Fareway",
                         "item_id":  "16865351",
                         "price":  3.48,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -368,7 +368,7 @@
                         "store":  "Fareway",
                         "item_id":  "16951403",
                         "price":  2.49,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -377,7 +377,7 @@
                         "store":  "Fareway",
                         "item_id":  "16951406",
                         "price":  1.5,
-                        "first_seen":  "2026-08-03",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -386,7 +386,7 @@
                         "store":  "Fareway",
                         "item_id":  "16997631",
                         "price":  6.99,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -395,7 +395,7 @@
                         "store":  "Fareway",
                         "item_id":  "17004459",
                         "price":  29.97,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -404,7 +404,7 @@
                         "store":  "Fareway",
                         "item_id":  "17105464",
                         "price":  1.99,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -413,7 +413,7 @@
                         "store":  "Fareway",
                         "item_id":  "17314053",
                         "price":  6.88,
-                        "first_seen":  "2026-08-20",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -422,7 +422,7 @@
                         "store":  "Fareway",
                         "item_id":  "17358177",
                         "price":  1,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -431,7 +431,7 @@
                         "store":  "Fareway",
                         "item_id":  "17358183",
                         "price":  1,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -440,7 +440,7 @@
                         "store":  "Fareway",
                         "item_id":  "17415315",
                         "price":  4.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -449,7 +449,7 @@
                         "store":  "Fareway",
                         "item_id":  "17445613",
                         "price":  3.48,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -458,7 +458,7 @@
                         "store":  "Fareway",
                         "item_id":  "17445773",
                         "price":  4.48,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -476,7 +476,7 @@
                         "store":  "Fareway",
                         "item_id":  "17668522",
                         "price":  0.88,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -485,7 +485,7 @@
                         "store":  "Fareway",
                         "item_id":  "18083759",
                         "price":  3.99,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -494,7 +494,7 @@
                         "store":  "Fareway",
                         "item_id":  "18311864",
                         "price":  2.29,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -503,7 +503,7 @@
                         "store":  "Fareway",
                         "item_id":  "18483941",
                         "price":  5.98,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -512,7 +512,7 @@
                         "store":  "Fareway",
                         "item_id":  "18529104",
                         "price":  2.5,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -521,7 +521,7 @@
                         "store":  "Fareway",
                         "item_id":  "18581926",
                         "price":  4.99,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -530,7 +530,7 @@
                         "store":  "Fareway",
                         "item_id":  "187189",
                         "price":  3,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -539,7 +539,7 @@
                         "store":  "Fareway",
                         "item_id":  "189310",
                         "price":  1.48,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -548,7 +548,7 @@
                         "store":  "Fareway",
                         "item_id":  "191981",
                         "price":  3.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -557,7 +557,7 @@
                         "store":  "Fareway",
                         "item_id":  "19256326",
                         "price":  3.97,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -566,7 +566,7 @@
                         "store":  "Fareway",
                         "item_id":  "19256333",
                         "price":  3.97,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -575,7 +575,7 @@
                         "store":  "Fareway",
                         "item_id":  "19267864",
                         "price":  2.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -584,7 +584,7 @@
                         "store":  "Fareway",
                         "item_id":  "192813",
                         "price":  4.88,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -593,7 +593,7 @@
                         "store":  "Fareway",
                         "item_id":  "19376323",
                         "price":  4.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -602,7 +602,7 @@
                         "store":  "Fareway",
                         "item_id":  "1939858",
                         "price":  4.97,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -611,7 +611,7 @@
                         "store":  "Fareway",
                         "item_id":  "19502658",
                         "price":  3.48,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -620,7 +620,7 @@
                         "store":  "Fareway",
                         "item_id":  "19541770",
                         "price":  7.94,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -629,7 +629,7 @@
                         "store":  "Fareway",
                         "item_id":  "1957199",
                         "price":  0.99,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -638,7 +638,7 @@
                         "store":  "Fareway",
                         "item_id":  "196536",
                         "price":  1.98,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -647,7 +647,7 @@
                         "store":  "Fareway",
                         "item_id":  "19867574",
                         "price":  7.99,
-                        "first_seen":  "2026-08-03",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -656,7 +656,7 @@
                         "store":  "Fareway",
                         "item_id":  "20030029",
                         "price":  7.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -665,7 +665,7 @@
                         "store":  "Fareway",
                         "item_id":  "2007891",
                         "price":  2.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -674,7 +674,7 @@
                         "store":  "Fareway",
                         "item_id":  "20139351",
                         "price":  2.47,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -683,7 +683,7 @@
                         "store":  "Fareway",
                         "item_id":  "20142067",
                         "price":  2.47,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -692,7 +692,7 @@
                         "store":  "Fareway",
                         "item_id":  "20207086",
                         "price":  2.49,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -701,7 +701,7 @@
                         "store":  "Fareway",
                         "item_id":  "20312106",
                         "price":  6.97,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -710,7 +710,7 @@
                         "store":  "Fareway",
                         "item_id":  "20539657",
                         "price":  1.28,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -719,7 +719,7 @@
                         "store":  "Fareway",
                         "item_id":  "20543846",
                         "price":  2.58,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -728,7 +728,7 @@
                         "store":  "Fareway",
                         "item_id":  "20544533",
                         "price":  3.99,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -737,7 +737,7 @@
                         "store":  "Fareway",
                         "item_id":  "205454",
                         "price":  3.33,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -746,7 +746,7 @@
                         "store":  "Fareway",
                         "item_id":  "20547451",
                         "price":  1.58,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -755,7 +755,7 @@
                         "store":  "Fareway",
                         "item_id":  "20548311",
                         "price":  1.97,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -764,7 +764,7 @@
                         "store":  "Fareway",
                         "item_id":  "20555547",
                         "price":  14.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -773,7 +773,7 @@
                         "store":  "Fareway",
                         "item_id":  "20582500",
                         "price":  0.99,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -782,7 +782,7 @@
                         "store":  "Fareway",
                         "item_id":  "20585402",
                         "price":  1.98,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -791,7 +791,7 @@
                         "store":  "Fareway",
                         "item_id":  "20591484",
                         "price":  2.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -800,7 +800,7 @@
                         "store":  "Fareway",
                         "item_id":  "20594930",
                         "price":  2.69,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -809,7 +809,7 @@
                         "store":  "Fareway",
                         "item_id":  "20601338",
                         "price":  2.69,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -827,7 +827,7 @@
                         "store":  "Fareway",
                         "item_id":  "20639609",
                         "price":  2.88,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -836,7 +836,7 @@
                         "store":  "Fareway",
                         "item_id":  "20642488",
                         "price":  1.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -845,7 +845,7 @@
                         "store":  "Fareway",
                         "item_id":  "20647701",
                         "price":  2.98,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -854,7 +854,7 @@
                         "store":  "Fareway",
                         "item_id":  "206606",
                         "price":  1.28,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -863,7 +863,7 @@
                         "store":  "Fareway",
                         "item_id":  "20671242",
                         "price":  0.98,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -872,7 +872,7 @@
                         "store":  "Fareway",
                         "item_id":  "20671650",
                         "price":  1.24,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -881,7 +881,7 @@
                         "store":  "Fareway",
                         "item_id":  "20677434",
                         "price":  5.48,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -890,7 +890,7 @@
                         "store":  "Fareway",
                         "item_id":  "207326",
                         "price":  11.49,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -899,7 +899,7 @@
                         "store":  "Fareway",
                         "item_id":  "20846854",
                         "price":  6.88,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -908,7 +908,7 @@
                         "store":  "Fareway",
                         "item_id":  "20964096",
                         "price":  2.88,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -917,7 +917,7 @@
                         "store":  "Fareway",
                         "item_id":  "21286519",
                         "price":  3.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -926,7 +926,7 @@
                         "store":  "Fareway",
                         "item_id":  "2133850",
                         "price":  1.67,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -935,7 +935,7 @@
                         "store":  "Fareway",
                         "item_id":  "21344009",
                         "price":  8.98,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -944,7 +944,7 @@
                         "store":  "Fareway",
                         "item_id":  "21871106",
                         "price":  5.59,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -953,7 +953,7 @@
                         "store":  "Fareway",
                         "item_id":  "220757",
                         "price":  1.78,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -962,7 +962,7 @@
                         "store":  "Fareway",
                         "item_id":  "22152068",
                         "price":  12.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -971,7 +971,7 @@
                         "store":  "Fareway",
                         "item_id":  "22160452",
                         "price":  2.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -980,7 +980,7 @@
                         "store":  "Fareway",
                         "item_id":  "22183576",
                         "price":  6.49,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -989,7 +989,7 @@
                         "store":  "Fareway",
                         "item_id":  "22243430",
                         "price":  2.49,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -998,7 +998,7 @@
                         "store":  "Fareway",
                         "item_id":  "224714",
                         "price":  8.48,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1007,7 +1007,7 @@
                         "store":  "Fareway",
                         "item_id":  "22979046",
                         "price":  4.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1016,7 +1016,7 @@
                         "store":  "Fareway",
                         "item_id":  "22999163",
                         "price":  1.88,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1025,7 +1025,7 @@
                         "store":  "Fareway",
                         "item_id":  "23422855",
                         "price":  2.78,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1034,7 +1034,7 @@
                         "store":  "Fareway",
                         "item_id":  "23584081",
                         "price":  29.44,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1043,7 +1043,7 @@
                         "store":  "Fareway",
                         "item_id":  "23820964",
                         "price":  1.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1052,7 +1052,7 @@
                         "store":  "Fareway",
                         "item_id":  "23958874",
                         "price":  9.48,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1061,7 +1061,7 @@
                         "store":  "Fareway",
                         "item_id":  "23966595",
                         "price":  2.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1070,7 +1070,7 @@
                         "store":  "Fareway",
                         "item_id":  "23984",
                         "price":  1.68,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1079,7 +1079,7 @@
                         "store":  "Fareway",
                         "item_id":  "24068308",
                         "price":  0.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1088,7 +1088,7 @@
                         "store":  "Fareway",
                         "item_id":  "24068330",
                         "price":  1.68,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1097,7 +1097,7 @@
                         "store":  "Fareway",
                         "item_id":  "24068566",
                         "price":  2.98,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1106,7 +1106,7 @@
                         "store":  "Fareway",
                         "item_id":  "24068568",
                         "price":  1.68,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1115,7 +1115,7 @@
                         "store":  "Fareway",
                         "item_id":  "24070065",
                         "price":  2.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1124,7 +1124,7 @@
                         "store":  "Fareway",
                         "item_id":  "24072206",
                         "price":  0.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1133,7 +1133,7 @@
                         "store":  "Fareway",
                         "item_id":  "24076005",
                         "price":  2.99,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1142,7 +1142,7 @@
                         "store":  "Fareway",
                         "item_id":  "24083026",
                         "price":  1.84,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1151,7 +1151,7 @@
                         "store":  "Fareway",
                         "item_id":  "24083373",
                         "price":  0.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1160,7 +1160,7 @@
                         "store":  "Fareway",
                         "item_id":  "24084456",
                         "price":  2.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1169,7 +1169,7 @@
                         "store":  "Fareway",
                         "item_id":  "24121102",
                         "price":  9.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1178,7 +1178,7 @@
                         "store":  "Fareway",
                         "item_id":  "24221467",
                         "price":  7.98,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1187,7 +1187,7 @@
                         "store":  "Fareway",
                         "item_id":  "24222138",
                         "price":  1.99,
-                        "first_seen":  "2026-08-20",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1196,7 +1196,7 @@
                         "store":  "Fareway",
                         "item_id":  "24225600",
                         "price":  2.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1205,7 +1205,7 @@
                         "store":  "Fareway",
                         "item_id":  "24226312",
                         "price":  1.77,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1214,7 +1214,7 @@
                         "store":  "Fareway",
                         "item_id":  "24226630",
                         "price":  1.44,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1223,7 +1223,7 @@
                         "store":  "Fareway",
                         "item_id":  "24227901",
                         "price":  2.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1232,7 +1232,7 @@
                         "store":  "Fareway",
                         "item_id":  "24227952",
                         "price":  0.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1241,7 +1241,7 @@
                         "store":  "Fareway",
                         "item_id":  "24244042",
                         "price":  2.88,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1250,7 +1250,7 @@
                         "store":  "Fareway",
                         "item_id":  "24266513",
                         "price":  4.49,
-                        "first_seen":  "2026-08-01",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1259,7 +1259,7 @@
                         "store":  "Fareway",
                         "item_id":  "24269937",
                         "price":  0.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1268,7 +1268,7 @@
                         "store":  "Fareway",
                         "item_id":  "24271686",
                         "price":  4.49,
-                        "first_seen":  "2026-08-03",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1277,7 +1277,7 @@
                         "store":  "Fareway",
                         "item_id":  "24278215",
                         "price":  4.49,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1286,7 +1286,7 @@
                         "store":  "Fareway",
                         "item_id":  "24281070",
                         "price":  2.77,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1295,7 +1295,7 @@
                         "store":  "Fareway",
                         "item_id":  "24302991",
                         "price":  1.44,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1304,7 +1304,7 @@
                         "store":  "Fareway",
                         "item_id":  "24303544",
                         "price":  3.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1313,7 +1313,7 @@
                         "store":  "Fareway",
                         "item_id":  "24454427",
                         "price":  2.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1322,7 +1322,7 @@
                         "store":  "Fareway",
                         "item_id":  "24455829",
                         "price":  3.49,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1331,7 +1331,7 @@
                         "store":  "Fareway",
                         "item_id":  "24461263",
                         "price":  0.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1340,7 +1340,7 @@
                         "store":  "Fareway",
                         "item_id":  "24462017",
                         "price":  2.88,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1349,7 +1349,7 @@
                         "store":  "Fareway",
                         "item_id":  "24479815",
                         "price":  1.44,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1358,7 +1358,7 @@
                         "store":  "Fareway",
                         "item_id":  "24481367",
                         "price":  0.97,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1367,7 +1367,7 @@
                         "store":  "Fareway",
                         "item_id":  "24637002",
                         "price":  1.44,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1376,7 +1376,7 @@
                         "store":  "Fareway",
                         "item_id":  "24721072",
                         "price":  4.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1385,7 +1385,7 @@
                         "store":  "Fareway",
                         "item_id":  "24750",
                         "price":  2.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1394,7 +1394,7 @@
                         "store":  "Fareway",
                         "item_id":  "2483231",
                         "price":  6.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1403,7 +1403,7 @@
                         "store":  "Fareway",
                         "item_id":  "24845",
                         "price":  4.97,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1412,7 +1412,7 @@
                         "store":  "Fareway",
                         "item_id":  "25022567",
                         "price":  1.25,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1421,7 +1421,7 @@
                         "store":  "Fareway",
                         "item_id":  "250947",
                         "price":  4.98,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1430,7 +1430,7 @@
                         "store":  "Fareway",
                         "item_id":  "25096494",
                         "price":  0.99,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1439,7 +1439,7 @@
                         "store":  "Fareway",
                         "item_id":  "25096769",
                         "price":  0.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1448,7 +1448,7 @@
                         "store":  "Fareway",
                         "item_id":  "25707",
                         "price":  1.49,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1457,7 +1457,7 @@
                         "store":  "Fareway",
                         "item_id":  "25799385",
                         "price":  6.68,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1466,7 +1466,7 @@
                         "store":  "Fareway",
                         "item_id":  "257999",
                         "price":  1.68,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1475,7 +1475,7 @@
                         "store":  "Fareway",
                         "item_id":  "258007",
                         "price":  1.68,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1484,7 +1484,7 @@
                         "store":  "Fareway",
                         "item_id":  "258047",
                         "price":  1.68,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1493,7 +1493,7 @@
                         "store":  "Fareway",
                         "item_id":  "25806497",
                         "price":  1.84,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1502,7 +1502,7 @@
                         "store":  "Fareway",
                         "item_id":  "25806503",
                         "price":  1.88,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1511,7 +1511,7 @@
                         "store":  "Fareway",
                         "item_id":  "25807192",
                         "price":  2.77,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1520,7 +1520,7 @@
                         "store":  "Fareway",
                         "item_id":  "25841971",
                         "price":  4.49,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1529,7 +1529,7 @@
                         "store":  "Fareway",
                         "item_id":  "25858077",
                         "price":  1.94,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1538,7 +1538,7 @@
                         "store":  "Fareway",
                         "item_id":  "25913229",
                         "price":  1.49,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1547,7 +1547,7 @@
                         "store":  "Fareway",
                         "item_id":  "2605626",
                         "price":  4.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1556,7 +1556,7 @@
                         "store":  "Fareway",
                         "item_id":  "2607426",
                         "price":  3.49,
-                        "first_seen":  "2026-08-01",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1565,7 +1565,7 @@
                         "store":  "Fareway",
                         "item_id":  "2609243",
                         "price":  4.97,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1574,7 +1574,7 @@
                         "store":  "Fareway",
                         "item_id":  "26184494",
                         "price":  2.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1583,7 +1583,7 @@
                         "store":  "Fareway",
                         "item_id":  "2622922",
                         "price":  5.98,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1592,7 +1592,7 @@
                         "store":  "Fareway",
                         "item_id":  "2626014",
                         "price":  1.5,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1601,7 +1601,7 @@
                         "store":  "Fareway",
                         "item_id":  "2626152",
                         "price":  3.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1610,7 +1610,7 @@
                         "store":  "Fareway",
                         "item_id":  "2627444",
                         "price":  2.88,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1628,7 +1628,7 @@
                         "store":  "Fareway",
                         "item_id":  "2672308",
                         "price":  3.99,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1637,7 +1637,7 @@
                         "store":  "Fareway",
                         "item_id":  "2682248",
                         "price":  3.48,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1646,7 +1646,7 @@
                         "store":  "Fareway",
                         "item_id":  "26824204",
                         "price":  4.97,
-                        "first_seen":  "2026-08-01",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1655,7 +1655,7 @@
                         "store":  "Fareway",
                         "item_id":  "26834389",
                         "price":  3.48,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1664,7 +1664,7 @@
                         "store":  "Fareway",
                         "item_id":  "2691028",
                         "price":  1.88,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1673,7 +1673,7 @@
                         "store":  "Fareway",
                         "item_id":  "26952710",
                         "price":  3.94,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1682,7 +1682,7 @@
                         "store":  "Fareway",
                         "item_id":  "2703598",
                         "price":  3.79,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1691,7 +1691,7 @@
                         "store":  "Fareway",
                         "item_id":  "27081908",
                         "price":  2.94,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1700,7 +1700,7 @@
                         "store":  "Fareway",
                         "item_id":  "27081909",
                         "price":  2.94,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1709,7 +1709,7 @@
                         "store":  "Fareway",
                         "item_id":  "27083529",
                         "price":  2.94,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1718,7 +1718,7 @@
                         "store":  "Fareway",
                         "item_id":  "2722879",
                         "price":  2.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1727,7 +1727,7 @@
                         "store":  "Fareway",
                         "item_id":  "2722903",
                         "price":  7.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1736,7 +1736,7 @@
                         "store":  "Fareway",
                         "item_id":  "27518926",
                         "price":  1.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1745,7 +1745,7 @@
                         "store":  "Fareway",
                         "item_id":  "2759335",
                         "price":  5.99,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1754,7 +1754,7 @@
                         "store":  "Fareway",
                         "item_id":  "2763236",
                         "price":  3.99,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1763,7 +1763,7 @@
                         "store":  "Fareway",
                         "item_id":  "2770882",
                         "price":  2.98,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1772,7 +1772,7 @@
                         "store":  "Fareway",
                         "item_id":  "2800650",
                         "price":  3.97,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1781,7 +1781,7 @@
                         "store":  "Fareway",
                         "item_id":  "28263754",
                         "price":  3.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1790,7 +1790,7 @@
                         "store":  "Fareway",
                         "item_id":  "2880716",
                         "price":  6.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1799,7 +1799,7 @@
                         "store":  "Fareway",
                         "item_id":  "28976947",
                         "price":  9.98,
-                        "first_seen":  "2026-08-20",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1808,7 +1808,7 @@
                         "store":  "Fareway",
                         "item_id":  "2997745",
                         "price":  7.99,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1817,7 +1817,7 @@
                         "store":  "Fareway",
                         "item_id":  "314328",
                         "price":  1.68,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1826,7 +1826,7 @@
                         "store":  "Fareway",
                         "item_id":  "314508",
                         "price":  8.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1835,7 +1835,7 @@
                         "store":  "Fareway",
                         "item_id":  "3153709",
                         "price":  4.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1844,7 +1844,7 @@
                         "store":  "Fareway",
                         "item_id":  "3153977",
                         "price":  3.98,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1853,7 +1853,7 @@
                         "store":  "Fareway",
                         "item_id":  "318862",
                         "price":  2.99,
-                        "first_seen":  "2026-08-01",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1862,7 +1862,7 @@
                         "store":  "Fareway",
                         "item_id":  "3235856",
                         "price":  5.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1871,7 +1871,7 @@
                         "store":  "Fareway",
                         "item_id":  "3250558",
                         "price":  9.97,
-                        "first_seen":  "2026-08-01",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1880,7 +1880,7 @@
                         "store":  "Fareway",
                         "item_id":  "3284135",
                         "price":  5.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1889,7 +1889,7 @@
                         "store":  "Fareway",
                         "item_id":  "3302949",
                         "price":  14.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1898,7 +1898,7 @@
                         "store":  "Fareway",
                         "item_id":  "3304127",
                         "price":  1.79,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1907,7 +1907,7 @@
                         "store":  "Fareway",
                         "item_id":  "34114022",
                         "price":  9.99,
-                        "first_seen":  "2026-08-01",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1916,7 +1916,7 @@
                         "store":  "Fareway",
                         "item_id":  "34114045",
                         "price":  9.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1925,7 +1925,7 @@
                         "store":  "Fareway",
                         "item_id":  "34166",
                         "price":  2.97,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1934,7 +1934,7 @@
                         "store":  "Fareway",
                         "item_id":  "34288284",
                         "price":  2.48,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1943,7 +1943,7 @@
                         "store":  "Fareway",
                         "item_id":  "34307177",
                         "price":  3.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1952,7 +1952,7 @@
                         "store":  "Fareway",
                         "item_id":  "34359829",
                         "price":  2,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1961,7 +1961,7 @@
                         "store":  "Fareway",
                         "item_id":  "34483",
                         "price":  3.48,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1970,7 +1970,7 @@
                         "store":  "Fareway",
                         "item_id":  "34650",
                         "price":  4.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1979,7 +1979,7 @@
                         "store":  "Fareway",
                         "item_id":  "34669",
                         "price":  6.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1988,7 +1988,7 @@
                         "store":  "Fareway",
                         "item_id":  "347235",
                         "price":  4.99,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -1997,7 +1997,7 @@
                         "store":  "Fareway",
                         "item_id":  "34852",
                         "price":  8.48,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2006,7 +2006,7 @@
                         "store":  "Fareway",
                         "item_id":  "35226",
                         "price":  3.99,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2015,7 +2015,7 @@
                         "store":  "Fareway",
                         "item_id":  "35278",
                         "price":  3.76,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2024,7 +2024,7 @@
                         "store":  "Fareway",
                         "item_id":  "35309",
                         "price":  3.48,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2033,7 +2033,7 @@
                         "store":  "Fareway",
                         "item_id":  "35605",
                         "price":  2.48,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2042,7 +2042,7 @@
                         "store":  "Fareway",
                         "item_id":  "35613907",
                         "price":  5,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2051,7 +2051,7 @@
                         "store":  "Fareway",
                         "item_id":  "35622673",
                         "price":  3.48,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2060,7 +2060,7 @@
                         "store":  "Fareway",
                         "item_id":  "36100",
                         "price":  16.48,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2069,7 +2069,7 @@
                         "store":  "Fareway",
                         "item_id":  "36513",
                         "price":  3.98,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2078,7 +2078,7 @@
                         "store":  "Fareway",
                         "item_id":  "36533",
                         "price":  2.48,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2087,7 +2087,7 @@
                         "store":  "Fareway",
                         "item_id":  "36791",
                         "price":  1.48,
-                        "first_seen":  "2026-08-01",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2096,7 +2096,7 @@
                         "store":  "Fareway",
                         "item_id":  "36902",
                         "price":  1.48,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2105,7 +2105,7 @@
                         "store":  "Fareway",
                         "item_id":  "37442",
                         "price":  2.48,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2114,7 +2114,7 @@
                         "store":  "Fareway",
                         "item_id":  "37452",
                         "price":  2.48,
-                        "first_seen":  "2026-08-01",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2123,7 +2123,7 @@
                         "store":  "Fareway",
                         "item_id":  "38030",
                         "price":  3.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2132,7 +2132,7 @@
                         "store":  "Fareway",
                         "item_id":  "38604",
                         "price":  3.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2141,7 +2141,7 @@
                         "store":  "Fareway",
                         "item_id":  "38638",
                         "price":  0.72,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2150,7 +2150,7 @@
                         "store":  "Fareway",
                         "item_id":  "39077",
                         "price":  1.79,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2159,7 +2159,7 @@
                         "store":  "Fareway",
                         "item_id":  "39164",
                         "price":  6.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2168,7 +2168,7 @@
                         "store":  "Fareway",
                         "item_id":  "39363",
                         "price":  2.49,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2186,7 +2186,7 @@
                         "store":  "Fareway",
                         "item_id":  "39625112",
                         "price":  6.98,
-                        "first_seen":  "2026-08-03",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2195,7 +2195,7 @@
                         "store":  "Fareway",
                         "item_id":  "39674",
                         "price":  3.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2204,7 +2204,7 @@
                         "store":  "Fareway",
                         "item_id":  "39736208",
                         "price":  2.48,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2213,7 +2213,7 @@
                         "store":  "Fareway",
                         "item_id":  "40413",
                         "price":  4.69,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2222,7 +2222,7 @@
                         "store":  "Fareway",
                         "item_id":  "41184",
                         "price":  2.49,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2231,7 +2231,7 @@
                         "store":  "Fareway",
                         "item_id":  "41206",
                         "price":  3.69,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2240,7 +2240,7 @@
                         "store":  "Fareway",
                         "item_id":  "41458026",
                         "price":  2.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2249,7 +2249,7 @@
                         "store":  "Fareway",
                         "item_id":  "41470",
                         "price":  2.49,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2258,7 +2258,7 @@
                         "store":  "Fareway",
                         "item_id":  "42112",
                         "price":  4.59,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2267,7 +2267,7 @@
                         "store":  "Fareway",
                         "item_id":  "42274",
                         "price":  6.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2276,7 +2276,7 @@
                         "store":  "Fareway",
                         "item_id":  "42571",
                         "price":  3.76,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2285,7 +2285,7 @@
                         "store":  "Fareway",
                         "item_id":  "42744",
                         "price":  6.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2294,7 +2294,7 @@
                         "store":  "Fareway",
                         "item_id":  "42950",
                         "price":  4.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2303,7 +2303,7 @@
                         "store":  "Fareway",
                         "item_id":  "43124",
                         "price":  2.99,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2312,7 +2312,7 @@
                         "store":  "Fareway",
                         "item_id":  "43571",
                         "price":  1.49,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2321,7 +2321,7 @@
                         "store":  "Fareway",
                         "item_id":  "43979690",
                         "price":  9.99,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2330,7 +2330,7 @@
                         "store":  "Fareway",
                         "item_id":  "45789282",
                         "price":  8.98,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2339,7 +2339,7 @@
                         "store":  "Fareway",
                         "item_id":  "46568408",
                         "price":  4.99,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2348,7 +2348,7 @@
                         "store":  "Fareway",
                         "item_id":  "48699356",
                         "price":  2.28,
-                        "first_seen":  "2026-08-01",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2357,7 +2357,7 @@
                         "store":  "Fareway",
                         "item_id":  "49863420",
                         "price":  7.47,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2366,7 +2366,7 @@
                         "store":  "Fareway",
                         "item_id":  "49863426",
                         "price":  7.47,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2375,7 +2375,7 @@
                         "store":  "Fareway",
                         "item_id":  "51144857",
                         "price":  5.48,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2384,7 +2384,7 @@
                         "store":  "Fareway",
                         "item_id":  "514611",
                         "price":  4.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2393,7 +2393,7 @@
                         "store":  "Fareway",
                         "item_id":  "53782",
                         "price":  5.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2402,7 +2402,7 @@
                         "store":  "Fareway",
                         "item_id":  "57039742",
                         "price":  7.49,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2411,7 +2411,7 @@
                         "store":  "Fareway",
                         "item_id":  "57594055",
                         "price":  12.98,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2420,7 +2420,7 @@
                         "store":  "Fareway",
                         "item_id":  "63124305",
                         "price":  3.49,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2429,7 +2429,7 @@
                         "store":  "Fareway",
                         "item_id":  "63362548",
                         "price":  9.96,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2438,7 +2438,7 @@
                         "store":  "Fareway",
                         "item_id":  "64484535",
                         "price":  2.69,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2447,7 +2447,7 @@
                         "store":  "Fareway",
                         "item_id":  "68773",
                         "price":  21.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2456,7 +2456,7 @@
                         "store":  "Fareway",
                         "item_id":  "68872",
                         "price":  4.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2465,7 +2465,7 @@
                         "store":  "Fareway",
                         "item_id":  "69166387",
                         "price":  2.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2474,7 +2474,7 @@
                         "store":  "Fareway",
                         "item_id":  "69573",
                         "price":  3.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2483,7 +2483,7 @@
                         "store":  "Fareway",
                         "item_id":  "69576",
                         "price":  2.99,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2492,7 +2492,7 @@
                         "store":  "Fareway",
                         "item_id":  "69757",
                         "price":  2.48,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2501,7 +2501,7 @@
                         "store":  "Fareway",
                         "item_id":  "69847878",
                         "price":  1.48,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2510,7 +2510,7 @@
                         "store":  "Fareway",
                         "item_id":  "69917",
                         "price":  2.67,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2519,7 +2519,7 @@
                         "store":  "Fareway",
                         "item_id":  "70208",
                         "price":  1.5,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2528,7 +2528,7 @@
                         "store":  "Fareway",
                         "item_id":  "70609",
                         "price":  2.97,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2537,7 +2537,7 @@
                         "store":  "Fareway",
                         "item_id":  "70627",
                         "price":  2.68,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2546,7 +2546,7 @@
                         "store":  "Fareway",
                         "item_id":  "70660",
                         "price":  6.98,
-                        "first_seen":  "2026-08-01",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2555,7 +2555,7 @@
                         "store":  "Fareway",
                         "item_id":  "70757",
                         "price":  6.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2564,7 +2564,7 @@
                         "store":  "Fareway",
                         "item_id":  "71192",
                         "price":  2.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2573,7 +2573,7 @@
                         "store":  "Fareway",
                         "item_id":  "71329922",
                         "price":  2.48,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2582,7 +2582,7 @@
                         "store":  "Fareway",
                         "item_id":  "71465",
                         "price":  2.77,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2591,7 +2591,7 @@
                         "store":  "Fareway",
                         "item_id":  "71519",
                         "price":  3.48,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2600,7 +2600,7 @@
                         "store":  "Fareway",
                         "item_id":  "71549",
                         "price":  2.78,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2609,7 +2609,7 @@
                         "store":  "Fareway",
                         "item_id":  "71979",
                         "price":  1.44,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2618,7 +2618,7 @@
                         "store":  "Fareway",
                         "item_id":  "72540",
                         "price":  2.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2627,7 +2627,7 @@
                         "store":  "Fareway",
                         "item_id":  "72573",
                         "price":  2.68,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2636,7 +2636,7 @@
                         "store":  "Fareway",
                         "item_id":  "72709",
                         "price":  4.99,
-                        "first_seen":  "2026-07-27",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2645,7 +2645,7 @@
                         "store":  "Fareway",
                         "item_id":  "73335",
                         "price":  4.77,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2654,7 +2654,7 @@
                         "store":  "Fareway",
                         "item_id":  "73433",
                         "price":  3.99,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2663,7 +2663,7 @@
                         "store":  "Fareway",
                         "item_id":  "74379214",
                         "price":  7.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2672,7 +2672,7 @@
                         "store":  "Fareway",
                         "item_id":  "74510",
                         "price":  5.44,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2681,7 +2681,7 @@
                         "store":  "Fareway",
                         "item_id":  "74760",
                         "price":  3.49,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2690,7 +2690,7 @@
                         "store":  "Fareway",
                         "item_id":  "74842",
                         "price":  2.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2699,7 +2699,7 @@
                         "store":  "Fareway",
                         "item_id":  "74844",
                         "price":  1.98,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2708,7 +2708,7 @@
                         "store":  "Fareway",
                         "item_id":  "75232",
                         "price":  6.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2717,7 +2717,7 @@
                         "store":  "Fareway",
                         "item_id":  "75563",
                         "price":  3.27,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2726,7 +2726,7 @@
                         "store":  "Fareway",
                         "item_id":  "76294",
                         "price":  4.98,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2735,7 +2735,7 @@
                         "store":  "Fareway",
                         "item_id":  "76592",
                         "price":  3.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2744,7 +2744,7 @@
                         "store":  "Fareway",
                         "item_id":  "77006",
                         "price":  13.48,
-                        "first_seen":  "2026-08-03",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2753,7 +2753,7 @@
                         "store":  "Fareway",
                         "item_id":  "77387",
                         "price":  3.98,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2762,7 +2762,7 @@
                         "store":  "Fareway",
                         "item_id":  "79518",
                         "price":  12.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2771,7 +2771,7 @@
                         "store":  "Fareway",
                         "item_id":  "81898",
                         "price":  3.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2780,7 +2780,7 @@
                         "store":  "Fareway",
                         "item_id":  "82401404",
                         "price":  1.97,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2789,7 +2789,7 @@
                         "store":  "Fareway",
                         "item_id":  "82690",
                         "price":  2.48,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2798,7 +2798,7 @@
                         "store":  "Fareway",
                         "item_id":  "84386214",
                         "price":  8.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2807,7 +2807,7 @@
                         "store":  "Fareway",
                         "item_id":  "84386666",
                         "price":  5,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2816,7 +2816,7 @@
                         "store":  "Fareway",
                         "item_id":  "84386957",
                         "price":  2.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2825,7 +2825,7 @@
                         "store":  "Fareway",
                         "item_id":  "84387103",
                         "price":  3.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2834,7 +2834,7 @@
                         "store":  "Fareway",
                         "item_id":  "84387226",
                         "price":  6.49,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2843,7 +2843,7 @@
                         "store":  "Fareway",
                         "item_id":  "84387419",
                         "price":  1.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2852,7 +2852,7 @@
                         "store":  "Fareway",
                         "item_id":  "84387445",
                         "price":  2.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2879,7 +2879,7 @@
                         "store":  "Fareway",
                         "item_id":  "84387953",
                         "price":  2.98,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2888,7 +2888,7 @@
                         "store":  "Fareway",
                         "item_id":  "84388147",
                         "price":  1.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2897,7 +2897,7 @@
                         "store":  "Fareway",
                         "item_id":  "84388382",
                         "price":  2.49,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2906,7 +2906,7 @@
                         "store":  "Fareway",
                         "item_id":  "84388413",
                         "price":  8.88,
-                        "first_seen":  "2026-08-01",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2924,7 +2924,7 @@
                         "store":  "Fareway",
                         "item_id":  "84389064",
                         "price":  2.29,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2933,7 +2933,7 @@
                         "store":  "Fareway",
                         "item_id":  "84389222",
                         "price":  1.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2942,7 +2942,7 @@
                         "store":  "Fareway",
                         "item_id":  "86814344",
                         "price":  12.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2951,7 +2951,7 @@
                         "store":  "Fareway",
                         "item_id":  "88434867",
                         "price":  4.97,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2960,7 +2960,7 @@
                         "store":  "Fareway",
                         "item_id":  "88883",
                         "price":  5.99,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2969,7 +2969,7 @@
                         "store":  "Fareway",
                         "item_id":  "89322267",
                         "price":  1.49,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2978,7 +2978,7 @@
                         "store":  "Fareway",
                         "item_id":  "89324456",
                         "price":  4.98,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2987,7 +2987,7 @@
                         "store":  "Fareway",
                         "item_id":  "89763",
                         "price":  2.62,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -2996,7 +2996,7 @@
                         "store":  "Fareway",
                         "item_id":  "91212795",
                         "price":  1.97,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3005,7 +3005,7 @@
                         "store":  "Fareway",
                         "item_id":  "91493120",
                         "price":  1.48,
-                        "first_seen":  "2026-08-03",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3014,7 +3014,7 @@
                         "store":  "Fareway",
                         "item_id":  "91707062",
                         "price":  5.99,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3023,7 +3023,7 @@
                         "store":  "Fareway",
                         "item_id":  "91726334",
                         "price":  2.97,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3032,7 +3032,7 @@
                         "store":  "Fareway",
                         "item_id":  "91935",
                         "price":  5.49,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3041,7 +3041,7 @@
                         "store":  "Fareway",
                         "item_id":  "92934906",
                         "price":  14.99,
-                        "first_seen":  "2026-07-31",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3050,7 +3050,7 @@
                         "store":  "Fareway",
                         "item_id":  "94702",
                         "price":  2.99,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3059,7 +3059,7 @@
                         "store":  "Fareway",
                         "item_id":  "94980",
                         "price":  6.97,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3068,7 +3068,7 @@
                         "store":  "Fareway",
                         "item_id":  "95781358",
                         "price":  2.99,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3077,7 +3077,7 @@
                         "store":  "Fareway",
                         "item_id":  "96188951",
                         "price":  18.88,
-                        "first_seen":  "2026-08-05",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3086,7 +3086,7 @@
                         "store":  "Fareway",
                         "item_id":  "96642554",
                         "price":  19.99,
-                        "first_seen":  "2026-07-23",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3095,7 +3095,7 @@
                         "store":  "Fareway",
                         "item_id":  "97404",
                         "price":  4.79,
-                        "first_seen":  "2026-08-11",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3104,7 +3104,7 @@
                         "store":  "Fareway",
                         "item_id":  "97755105",
                         "price":  10.99,
-                        "first_seen":  "2026-08-09",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3113,7 +3113,7 @@
                         "store":  "Walmart",
                         "item_id":  "10292699",
                         "price":  3.97,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3122,7 +3122,7 @@
                         "store":  "Walmart",
                         "item_id":  "10534165",
                         "price":  1.97,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3131,7 +3131,7 @@
                         "store":  "Walmart",
                         "item_id":  "10536157",
                         "price":  4.73,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3140,7 +3140,7 @@
                         "store":  "Walmart",
                         "item_id":  "105413616",
                         "price":  2.97,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3149,7 +3149,7 @@
                         "store":  "Walmart",
                         "item_id":  "12329735",
                         "price":  2.5,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3158,7 +3158,7 @@
                         "store":  "Walmart",
                         "item_id":  "13908160",
                         "price":  2.28,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3167,7 +3167,7 @@
                         "store":  "Walmart",
                         "item_id":  "161115457",
                         "price":  4.64,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3176,7 +3176,7 @@
                         "store":  "Walmart",
                         "item_id":  "17619759",
                         "price":  1.97,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3185,7 +3185,7 @@
                         "store":  "Walmart",
                         "item_id":  "17989615462",
                         "price":  12.53,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3194,7 +3194,7 @@
                         "store":  "Walmart",
                         "item_id":  "19400230",
                         "price":  2.64,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3203,7 +3203,7 @@
                         "store":  "Walmart",
                         "item_id":  "198361163",
                         "price":  2.97,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3212,7 +3212,7 @@
                         "store":  "Walmart",
                         "item_id":  "20647992",
                         "price":  2.98,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3221,7 +3221,7 @@
                         "store":  "Walmart",
                         "item_id":  "209292288",
                         "price":  22.22,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3230,7 +3230,7 @@
                         "store":  "Walmart",
                         "item_id":  "27935840",
                         "price":  2.23,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3239,7 +3239,7 @@
                         "store":  "Walmart",
                         "item_id":  "34632371",
                         "price":  2.83,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3248,7 +3248,7 @@
                         "store":  "Walmart",
                         "item_id":  "44030496",
                         "price":  2.56,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3257,7 +3257,7 @@
                         "store":  "Walmart",
                         "item_id":  "44390944",
                         "price":  0.97,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3266,7 +3266,7 @@
                         "store":  "Walmart",
                         "item_id":  "44390958",
                         "price":  1.54,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3275,7 +3275,7 @@
                         "store":  "Walmart",
                         "item_id":  "46491694",
                         "price":  2.5,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3284,7 +3284,7 @@
                         "store":  "Walmart",
                         "item_id":  "465183919",
                         "price":  3.38,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3293,7 +3293,7 @@
                         "store":  "Walmart",
                         "item_id":  "629539844",
                         "price":  5.93,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3302,7 +3302,7 @@
                         "store":  "Walmart",
                         "item_id":  "686470097",
                         "price":  2.5,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     },
@@ -3311,10 +3311,9 @@
                         "store":  "Walmart",
                         "item_id":  "865961246",
                         "price":  2.24,
-                        "first_seen":  "2026-07-14",
+                        "first_seen":  "2026-08-21",
                         "last_seen":  "2026-08-21",
                         "price_changed":  0
                     }
-                ],
-    "reanchored":  "2026-08-22: first_seen moved back to the capture\u0027s as_of on 360 entries per Brad\u0027s 2026-08-22 ruling (TTL from DETECTION = the capture). Backup beside this file: rollback-first-seen.pre-reanchor-2026-08-22.json"
+                ]
 }

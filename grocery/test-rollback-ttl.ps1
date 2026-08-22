@@ -57,6 +57,25 @@ if ($bad.Count) { foreach ($m in $bad) { Bad $m } } else { Ok 'Walmart, Sam''s a
 $n = Get-RollbackWindow -Store 'Walmart' -ItemId '' -Price 4.87 -Today '2026-08-21' -Root $tmp
 if ($null -eq $n) { Ok 'a row with no item id gets no window rather than a name-keyed guess' } else { Bad 'an id-less row was given a window' }
 
+# 7. DETECTION IS THE CAPTURE, NOT THE LEDGER (Brad, 2026-08-22). MUST-FIRE: a row captured on 08-11 that
+#    the ledger first meets on 08-21 is anchored at 08-11 and expires 09-10 - not 09-20.
+$g = Get-RollbackWindow -Store 'Fareway' -ItemId '102767808' -Price 10.88 -Today '2026-08-21' -AsOf '2026-08-11' -Root $tmp
+if ($g.ad_from -eq '2026-08-11' -and $g.ad_to -eq '2026-09-10' -and $g.is_new) { Ok 'a new entry anchors to the capture''s as_of (08-11 -> expires 09-10), not the ledger day' }
+else { Bad "NEW ENTRY ANCHORED TO THE LEDGER DAY, not the capture: $($g.ad_from)..$($g.ad_to) - a five-week-old markdown just earned a fresh 30 days" }
+# 7b. re-observed later with a LATER as_of: first_seen must not advance (the founding rule, through the new door)
+$h = Get-RollbackWindow -Store 'Fareway' -ItemId '102767808' -Price 10.88 -Today '2026-08-25' -AsOf '2026-08-25' -Root $tmp
+if ($h.ad_from -eq '2026-08-11' -and $h.last_seen -eq '2026-08-25') { Ok 're-observation with a later as_of left first_seen alone' } else { Bad "a later as_of MOVED first_seen to $($h.ad_from)" }
+# 7c. re-observed with an EARLIER as_of: the capture proves the price was there sooner, so first_seen moves BACK
+$i = Get-RollbackWindow -Store 'Fareway' -ItemId '102767808' -Price 10.88 -Today '2026-08-26' -AsOf '2026-08-05' -Root $tmp
+if ($i.ad_from -eq '2026-08-05' -and $i.ad_to -eq '2026-09-04') { Ok 'a provably earlier capture pulls first_seen BACK (08-05); earlier only ever shortens the window' } else { Bad "an earlier as_of did not re-anchor (got $($i.ad_from))" }
+# 7d. a future or malformed as_of cannot start a window that has not opened: falls back to today
+$j = Get-RollbackWindow -Store 'Walmart' -ItemId 'fut-1' -Price 2.00 -Today '2026-08-21' -AsOf '2026-09-01' -Root $tmp
+$k = Get-RollbackWindow -Store 'Walmart' -ItemId 'fut-2' -Price 2.00 -Today '2026-08-21' -AsOf 'not-a-date' -Root $tmp
+if ($j.ad_from -eq '2026-08-21' -and $k.ad_from -eq '2026-08-21') { Ok 'a future or malformed as_of falls back to today' } else { Bad "bad as_of produced $($j.ad_from) / $($k.ad_from)" }
+# 7e. no -AsOf at all still behaves exactly as before (today)
+$l = Get-RollbackWindow -Store 'Walmart' -ItemId 'noasof' -Price 2.00 -Today '2026-08-21' -Root $tmp
+if ($l.ad_from -eq '2026-08-21') { Ok 'no -AsOf anchors to today (unchanged contract)' } else { Bad "no -AsOf anchored to $($l.ad_from)" }
+
 # 6. it survives a round trip to disk with first_seen intact
 [void](Save-RollbackLedger $tmp)
 $script:RbLedger = $null   # force a reload from the file

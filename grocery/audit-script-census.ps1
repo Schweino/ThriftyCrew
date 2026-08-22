@@ -54,6 +54,7 @@ if ($OutBaseline -lt 0) { $OutBaseline = 38 }
 $KNOWN = [ordered]@{
   # -- manual investigation tools, run by a human when a question needs answering
   'probe-price-fields.ps1'           = 'PHASE 0 of PLAN-live-price-state: asks each of the 9 price sources whether it states that a discount is live and when it ENDS, and writes the raw payloads to out\audit\price-fields\ as evidence. Answered its question on 2026-08-21 (Baker''s and Family Fare publish windows; five stores do not). Re-run by hand when a store changes its API - it makes assertions about the world, not about our data, so a scheduled run would just re-download the same answer daily.'
+  'reanchor-rollback-ledger.ps1'     = 'ONE-OFF MIGRATION, by hand (2026-08-22): moved rollback-first-seen.json first_seen anchors back to the capture as_of per Brad''s ruling that the 30-day TTL runs from DETECTION. Idempotent and -WhatIf-able; kept so the migration is reproducible and documented, never scheduled - Get-RollbackWindow -AsOf now does this on every build.'
   # -- launched by hand from a scheduled-agent SKILL under ~\.claude\scheduled-tasks\ (not in this repo)
   'build-aldi-regular.ps1'           = 'SKILL grocery-browser-stores-refresh step F2 - weekly Aldi capture builder'
   'build-pull-order.ps1'             = 'SKILL grocery-browser-stores-refresh - priority term order for the walled stores'
@@ -71,7 +72,6 @@ $KNOWN = [ordered]@{
   'familyfare-sweep.ps1'             = 'scheduled task "SMP Family Fare Term Sweep", every 3h via run-hidden.vbs'
   'send-friday-email.ps1'            = 'scheduled task "SMP Friday Email (draft)", weekly via run-hidden.vbs; drafts unless -Send, and a week_of stamp stops a double-mail'
   # -- human entry points, run when a specific failure or a specific job shows up
-  'local-llm-lib.ps1'                = 'PowerShell client for the local inference endpoint. Uncalled ON PURPOSE for now: the graph pipeline reaches the same server through graph\lib\llm.py, and this is the PS-side client for when a .ps1 needs it. Nothing dot-sources it yet - delete this line and the file if that never happens.'
   'ingredient-queue.ps1'             = 'Recipe Hunter Rule B queue (an ingredient is CARRIED once ANY of the 7 stores has it; NOT-CARRIED only when all 7 were CHECKED and none do). Built 2026-08-15; stays uncalled until the Recipe Hunter runner is code rather than SKILL instructions. Delete this line the moment that runner lands.'
   'promote-ingredient-queue.ps1'     = 'by hand, and deliberately NOT on the daily chain: it writes engine inputs from ingredient-queue-map.json, which is a RULING about commodity identity that a human has to make. Auto-running it would let whatever is in the map file price the board unreviewed, and a careless id splits a commodity already priced under another name. Its fixtures DO run every suite (audit-graph-gates sits beside it in test-auditors); it is the -Apply that stays manual.'
   'promote-verdicts.ps1'             = 'weekly by hand after audit-match-soundness; writes exclude-provenance.json'

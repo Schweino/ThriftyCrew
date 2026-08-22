@@ -1,4 +1,4 @@
-<#
+﻿<#
   guards.ps1 - the BLOCKING invariant gate. Run before every publish; a hard failure means the board
   must NOT go live.
 
@@ -748,6 +748,9 @@ function Test-MaskedStaleCapture([datetime]$regDate, [datetime]$altDate, [dateti
   return ([int](($today - $regDate).TotalDays) -gt $cliffDays)
 }
 $today = [datetime](Get-Date -Format 'yyyy-MM-dd')
+# single-sourced from the capture policy (90); a missing policy is BLIND, never a silent 14
+$staleCliffDays = Get-RegularUnionDays
+if (-not $staleCliffDays) { throw 'guard 9: the capture-policy carry window could not be read (regular-fileset-lib Get-RegularUnionDays returned nothing) - the staleness cliff has no number to test against' }
 $stale = 0; $aged = 0
 foreach ($f in (RegFiles)) {
   $prefix = ($f.BaseName -replace '-regular-.*$','')
@@ -763,7 +766,7 @@ foreach ($f in (RegFiles)) {
     # has fewer than 2 files. Named by \ (from the FILENAME) and not \, which is read from the
     # very document whose deals array is empty and can therefore be '' - naming nobody is the one failure this
     # rule exists to prevent.
-    [void]$warn.Add(("{0}: newest price file '{1}' parsed to ZERO rows - neither the freshness note nor the >14-day staleness test could run for this store, and nothing else is watching its clock" -f $prefix, $f.Name))
+    [void]$warn.Add(("{0}: newest price file '{1}' parsed to ZERO rows - neither the freshness note nor the staleness test could run for this store, and nothing else is watching its clock" -f $prefix, $f.Name))
     continue
   }
 
@@ -801,7 +804,7 @@ foreach ($f in (RegFiles)) {
           # this is the LAST point at which the out\regular capture's own age still exists. $rows is still
           # that file's rows here (the swap below happens after). See Test-MaskedStaleCapture for why a
           # redirected out\regular file is not automatically an unused orphan.
-          if (Test-MaskedStaleCapture $fileDate $altDate $today (InEngineSet $f.FullName) 14) {
+          if (Test-MaskedStaleCapture $fileDate $altDate $today (InEngineSet $f.FullName) $staleCliffDays) {
             $maskKeys = @{}
             foreach ($mrow in $rows) { $maskKeys[(([string]$mrow.item).Trim() + '|' + ([string]$mrow.ad_price).Trim())] = $true }
             $maskCells = 0
@@ -810,7 +813,7 @@ foreach ($f in (RegFiles)) {
                 if (([string]$bcell.store) -eq $store -and $maskKeys.ContainsKey((([string]$bcell.item).Trim() + '|' + ([string]$bcell.ad).Trim()))) { $maskCells++ }
               }
             }
-            [void]$warn.Add(("{0}: the freshness line below is measured from {1}, but out\regular\{2} is STILL IN THE ENGINE'S FILE SET and is {3} days old ({4} rows; {5} live board cell(s) trace to it by name+price). Nothing writes that file, so its age can never improve and guard 9's >14-day HARD FAIL can never reach those rows. Fix it by refreshing those items into the store's own feed - do NOT simply delete the capture, because guard 9 reaches this store ONLY through its out\regular file (the loop above is over RegFiles), so deleting it drops the store out of guard 9 altogether while the aged count stays non-zero and the ok line still prints. Until then, do NOT read the file-age number below as covering these rows." -f $store, $alt.Name, $f.Name, [int](($today - $fileDate).TotalDays), $rows.Count, $maskCells))
+            [void]$warn.Add(("{0}: the freshness line below is measured from {1}, but out\regular\{2} is STILL IN THE ENGINE'S FILE SET and is {3} days old ({4} rows; {5} live board cell(s) trace to it by name+price). Nothing writes that file, so its age can never improve and guard 9's past-the-carry HARD FAIL can never reach those rows. Fix it by refreshing those items into the store's own feed - do NOT simply delete the capture, because guard 9 reaches this store ONLY through its out\regular file (the loop above is over RegFiles), so deleting it drops the store out of guard 9 altogether while the aged count stays non-zero and the ok line still prints. Until then, do NOT read the file-age number below as covering these rows." -f $store, $alt.Name, $f.Name, [int](($today - $fileDate).TotalDays), $rows.Count, $maskCells))
           }
           $fileDate = $altDate
           # TAKE THE ROWS FROM THAT FILE TOO - not just the date. The 2026-07-29 fix redirected only the AGE
@@ -862,17 +865,24 @@ foreach ($f in (RegFiles)) {
   [void]$warn.Add($note)
   $aged++   # a store that completed its freshness note - this is the count the ok line below gates on
 
-  # a store nobody has looked at in over two weeks is not "safe", it is unknown
-  if ($age -gt 14) {
+  # THE CLIFF IS THE CAPTURE POLICY'S CARRY, NOT 14 (Brad, 2026-08-22: "We should not have a 14 day
+  # anywhere"). Everyday prices rotate once a quarter (capture-policy-lib MaxCarryDays = 90) and
+  # Walmart rollbacks carry their own 30-day TTL from detection; this gate used to hard-fail the WHOLE
+  # publish at a hardcoded 14 days, written in July before that policy existed, so a store whose turn
+  # in the rotation had simply not come round (Walmart, captured 08-11, on-demand browser lane) would
+  # have blacked out the board on 08-26 with every number on it still inside policy. The number now
+  # comes from the same single source the engine's union window reads (regular-fileset-lib ->
+  # capture-policy-lib), so the gate and the policy cannot drift apart again.
+  if ($age -gt $staleCliffDays) {
     $stale++
-    [void]$fail.Add(("HARD FAIL: {0} price data is {1} days old - a stale price is a wrong price" -f $store, $age))
+    [void]$fail.Add(("HARD FAIL: {0} price data is {1} days old - past the {2}-day capture-policy carry, a stale price is a wrong price" -f $store, $age, $staleCliffDays))
   }
 }
 # The $stale -eq 0 wrapper STAYS: OkUnlessBlind prints ok whenever the count is non-zero, so dropping it would
-# announce "no store's price data is older than 14 days" on the very run where a 15-day-old store just filed
+# announce "no store's price data is older than the cliff" on the very run where a store just filed
 # the HARD FAIL above. Same shape guard 11 uses.
 if ($stale -eq 0) {
-  OkUnlessBlind $aged "no store's price data is older than 14 days ($aged store(s) aged)" `
+  OkUnlessBlind $aged "no store's price data is older than $staleCliffDays days - the capture-policy carry ($aged store(s) aged)" `
     'guard 9 aged ZERO stores - out\regular yielded no readable per-store data, so NOTHING checked any store''s clock. Guard 10''s own header names guard 9 as the only staleness watch on Baker''s, Fareway, Sam''s and Walmart.'
 }
 

@@ -1,7 +1,7 @@
-<#
-  test-log-sidecar-recovery.ps1 - self-test for the SIDECAR RECOVERY block in run-daily-local.ps1.
+﻿<#
+  test-log-sidecar-recovery.ps1 - self-test for the SIDECAR RECOVERY block in check-ad-cycles.ps1 (it lived in run-daily-local.ps1 until that runner was retired on 2026-08-22).
 
-  Why it is written this way: run-daily-local.ps1 cannot be dot-sourced (that would run the whole daily
+  Why it is written this way: check-ad-cycles.ps1 cannot be dot-sourced (that would run the whole daily
   pipeline), so this test EXTRACTS the shipped text between the >>> / <<< SIDECAR-RECOVERY sentinels and
   executes exactly those lines against a sandbox $root/$log. It therefore reaches the real code, not a
   copy of it - a copy is how two same-day fixes shipped regressions on 2026-07-29.
@@ -13,11 +13,11 @@
   Exit 0 = all cases pass. Exit 1 = a case failed.
 #>
 $ErrorActionPreference = 'Stop'
-$src = Join-Path $PSScriptRoot 'run-daily-local.ps1'
+$src = Join-Path $PSScriptRoot 'check-ad-cycles.ps1'
 $all = Get-Content $src
 $a = ($all | Select-String -Pattern '^# >>> SIDECAR-RECOVERY' -SimpleMatch:$false | Select-Object -First 1).LineNumber
 $b = ($all | Select-String -Pattern '^# <<< SIDECAR-RECOVERY' -SimpleMatch:$false | Select-Object -First 1).LineNumber
-if (-not $a -or -not $b -or $b -le $a) { Write-Host 'FAIL: SIDECAR-RECOVERY sentinels not found in run-daily-local.ps1'; exit 1 }
+if (-not $a -or -not $b -or $b -le $a) { Write-Host 'FAIL: SIDECAR-RECOVERY sentinels not found in check-ad-cycles.ps1'; exit 1 }
 $block = ($all[$a..($b - 2)]) -join "`r`n"
 $sb = [scriptblock]::Create($block)
 
@@ -43,6 +43,7 @@ try {
   Set-Content -Path $scToday -Value @('[t] run in progress') -Encoding UTF8
   Set-Content -Path $scEmpty -Value '' -NoNewline -Encoding UTF8
 
+  $LogFile = $log
   & $sb
 
   $after = @(Get-Content $log)
@@ -63,6 +64,7 @@ try {
   $sc2 = Join-Path $root ('local-daily-log.LOCKED-' + $yday + '.txt')
   Set-Content -Path $sc2 -Value @('[y] precious', '[y] trail') -Encoding UTF8
   $fs = [System.IO.File]::Open($log, 'Open', 'ReadWrite', 'None')
+  $LogFile = $log
   try { & $sb } finally { $fs.Close() }
   Check 'locked log: sidecar kept'   (Test-Path $sc2)                                        'sidecar deleted while the log was locked - trail destroyed'
   Check 'locked log: content intact' ((@(Get-Content $sc2)) -contains '[y] precious')         'sidecar content lost'

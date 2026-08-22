@@ -1,4 +1,4 @@
-[
+﻿[
     {
         "item":  "_r300_note",
         "pantry_pkg_g":  0,
@@ -1467,7 +1467,8 @@
     },
     {
         "item":  "Keto Bun",
-        "bid":  "keto-bun",
+        "bid":  null,
+        "note":  "UNPRICED 2026-08-22 (commodity-registrar): 'keto bun' is a brand-defined class, not a store search term. Needs Brad's product-class ruling - any low-carb hamburger bun (-> mint low-carb-hamburger-buns, allowlisted vs hamburger-buns) or a specific brand/sub roll. bid stays null until then so db-build can rebuild.",
         "gpu":  50,
         "unit":  "each",
         "board":  "recipe",
@@ -1485,7 +1486,8 @@
     },
     {
         "item":  "Korean Rice Cakes",
-        "bid":  "korean-rice-cakes",
+        "bid":  null,
+        "note":  "NOT-CARRIED 2026-08-22 (commodity-registrar + the 7-store sweep in grocery/ingredient-queue.json): no first-party Omaha store stocks plain garae-tteok (Walmart marketplace-only, Hy-Vee/Baker's sauced kits only, Aldi/Sam's puffed snack only; Family Fare blocked - recheck). rice-cakes is the Quaker snack and rice is long-grain rice: neither is this food. Do not fake an Asian-market price into the board.",
         "gpu":  28.3495,
         "unit":  "oz",
         "board":  "recipe",
@@ -2284,7 +2286,7 @@
     },
     {
         "item":  "Sumac",
-        "bid":  "sumac",
+        "bid":  "ground-sumac",
         "gpu":  28.3495,
         "unit":  "oz",
         "board":  "recipe",

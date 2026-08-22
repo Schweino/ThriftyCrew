@@ -1,4 +1,4 @@
-{
+﻿{
   "note": "Per-commodity search terms used by the everyday/regular-price pulls (Family Fare Freshop, Baker's/Kroger, Hy-Vee, Sam's). Keyed by commodity id in commodities.json.",
   "terms": {
     "chicken-breast": "boneless skinless chicken breast",
@@ -436,6 +436,7 @@
     "ground-cloves": "ground cloves",
     "ground-coriander": "ground coriander",
     "ground-allspice": "ground allspice",
+    "ground-sumac": "sumac",
     "ground-nutmeg": "ground nutmeg",
     "ground-ginger": "ground ginger",
     "poppy-seeds": "poppy seeds",
@@ -535,6 +536,7 @@
     "firm-tofu": "firm tofu",
     "quinoa-uncooked": "quinoa",
     "couscous": "couscous",
+    "bulgur-wheat": "bulgur",
     "frozen-lima-beans": "frozen lima beans",
     "cooked-shredded-chicken": "cooked shredded chicken",
     "mexican-chorizo-fresh": "mexican chorizo",

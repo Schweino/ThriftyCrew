@@ -1,4 +1,4 @@
-<#
+﻿<#
   regular-fileset-lib.ps1 - THE definition of "which out\regular files does the board actually price from".
 
   *** WHY THIS FILE EXISTS ***
@@ -6,7 +6,7 @@
   two answers differ for exactly one store, and it is the biggest one on the board.
 
   Walmart has no weekly ad cycle, so a partial daily capture must UNION with recent files instead of replacing
-  them (see the EVERYDAY-ONLY note below). The engine therefore prices Walmart from every file inside a 14-day
+  them (see the EVERYDAY-ONLY note below). The engine therefore prices Walmart from every file inside the policy's 90-day (was 14-day)
   window; guards.ps1 opened only the newest. Measured on 2026-07-29: 332 live Walmart board cells came from
   files guard 5 (multipack) and guard 10 (never publish the regular price) never opened. Those two guards exist
   to stop a 2x pack price and a price the store is not charging, and roughly a third of the Walmart cells they

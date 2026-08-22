@@ -1,4 +1,4 @@
-<#
+﻿<#
   check-ad-cycles.ps1 - Runs DAILY (Windows Task Scheduler). Pulls a store's ad only the day AFTER its
   current ad expires, tracks each store's cycle in ad-schedule.json, and keeps the comparison + price
   history fresh when a new ad drops.
@@ -52,8 +52,31 @@ function Log([string]$m) {
   for ($i = 0; $i -lt 5; $i++) {
     try { Add-Content -Path $LogFile -Value $line -ErrorAction Stop; return } catch { Start-Sleep -Milliseconds 120 }
   }
-  try { Write-Host ('[log locked, not written] ' + $line) } catch {}
+  # A LOCKED LOG MUST NOT GO MUTE (2026-08-22). On 08-21 and again on 08-22 another process (a git stash in
+  # an interactive session; a tail -f) held this file, the five retries failed, and the line was DROPPED -
+  # so three complete runs looked, from the only record they have, like they died after guard-contract.
+  # Same class the old 8:30 runner fixed for itself on 07-30. Fall back to a dated sidecar the run can
+  # always create; the next run that can write the primary folds it back in (SIDECAR RECOVERY below).
+  if (-not $script:LogSidecar) { $script:LogSidecar = ($LogFile -replace '\.txt$', '') + '.LOCKED-' + (Get-Date -Format 'yyyy-MM-dd') + '.txt' }
+  try { Add-Content -Path $script:LogSidecar -Value $line -ErrorAction Stop } catch { try { Write-Host ('[log locked, not written] ' + $line) } catch {} }
 }
+# SIDECAR RECOVERY: fold any PRIOR day's LOCKED-* sidecar into the primary log, in order, and remove it.
+# Today's is left alone (a concurrent run may still be appending). If the primary is still locked nothing
+# is deleted - the sidecar simply waits for a run that can write. Non-fatal.
+# >>> SIDECAR-RECOVERY (self-test extracts between these sentinels; see test-log-sidecar-recovery.ps1)
+try {
+  $todayStamp = (Get-Date -Format 'yyyy-MM-dd')
+  foreach ($sc in @(Get-ChildItem (($LogFile -replace '\.txt$', '') + '.LOCKED-*.txt') -ErrorAction SilentlyContinue | Sort-Object Name)) {
+    if ($sc.BaseName -notmatch 'LOCKED-(\d{4}-\d{2}-\d{2})$' -or $Matches[1] -ge $todayStamp) { continue }
+    $scBody = @(Get-Content $sc.FullName -ErrorAction SilentlyContinue)
+    if ($scBody.Count -eq 0) { Remove-Item $sc.FullName -Force -ErrorAction SilentlyContinue; continue }
+    $scMark = "[" + (Get-Date).ToString('s') + "] --- recovered from " + $sc.Name + " (" + $scBody.Count + " lines): the primary log was held by another process during that run, so its trail went to the lock sidecar. Folded back here in order; the sidecar is removed. ---"
+    $scOk = $false
+    for ($i = 0; $i -lt 5; $i++) { try { Add-Content -Path $LogFile -Value (@($scMark) + $scBody) -ErrorAction Stop; $scOk = $true; break } catch { Start-Sleep -Milliseconds 120 } }
+    if ($scOk) { Remove-Item $sc.FullName -Force -ErrorAction SilentlyContinue }
+  }
+} catch { }
+# <<< SIDECAR-RECOVERY
 
 # ---- SEND AN ALERT WITHOUT LOSING IT (2026-08-06) -------------------------------------------------------
 # Send-Alert is the only way this file may page anybody. Every alert below used to be
@@ -65,6 +88,80 @@ function Log([string]$m) {
 # out. The helper sends the body BY FILE and makes a failed send its own loud log line. Full account, and
 # the reason every caller goes through it even when today's body looks short, in alert-lib.ps1.
 . (Join-Path $root 'alert-lib.ps1')
+
+# ---- SIDE-BY-SIDE ADVISORY AUDITS WITH A HARD STOP (2026-08-22) ---------------------------------------
+# The stage profile over 08-12..08-21 put five advisory audits at ~2 min EACH, run one after another, in a
+# chain whose real work (compare + guards + publish) is ~2.5 min: semantic sweep 138 s, match-soundness
+# 111 s, coverage-gaps 111 s, discover-hyvee 103 s, basis-reconcile 40 s. None of them can block a publish,
+# none reads another's output, and each is its own `powershell -File` process that parses the same ~40 MB
+# of JSON from scratch - so there is nothing to wait FOR except the CPU, and this box has 32 of them.
+# They are launched together the moment the board is final and collected at the exact spot each used to
+# run, so every downstream reader (aisle-test, the arrivals desk, guards) still sees finished outputs.
+# THE TIMEOUT IS THE OTHER HALF. Every child here was synchronous and unbounded: on 2026-08-14
+# audit-coverage-gaps sat in a ReDoS for 11 hours and the board never published; the two Python steps
+# (the GPU sweep, graph gates) could hang a CUDA init or a SQLite lock forever and "BLIND never blocks"
+# covers only a non-zero EXIT, not a process that never exits. A job that outruns its budget is stopped,
+# logged by name with its budget, and reported as rc 124 so its caller takes the same BLIND/advisory path
+# it already has for a failure. The chain keeps moving; the board still ships.
+$script:AuditJobs = @{}
+function Start-AuditJob([string]$Name, [string[]]$Arguments) {
+  # $Arguments is the full powershell argument list (e.g. -ExecutionPolicy, Bypass, -File, <path>, ...)
+  # one string, quoted where needed, built HERE where the types are known: an array does not cross
+  # the job boundary as [string[]] (measured: it arrives flattened, and re-splitting it is guesswork)
+  $argStr = (@($Arguments) | ForEach-Object { $t = [string]$_; if ($t -match '\s') { '"' + $t + '"' } else { $t } }) -join ' '
+  $script:AuditJobs[$Name] = [pscustomobject]@{
+    Job = (Start-Job -Name ("audit-" + $Name) -ScriptBlock {
+      param($argStr, $pidFile)
+      # a real process we can name: Stop-Job alone would orphan the child and leave a hung audit holding
+      # the GPU or a file lock, which is the exact failure the budget exists to end
+      $so = [IO.Path]::GetTempFileName(); $se = [IO.Path]::GetTempFileName()
+      $p = Start-Process -FilePath 'powershell' -ArgumentList $argStr -PassThru -NoNewWindow -RedirectStandardOutput $so -RedirectStandardError $se
+      $null = $p.Handle   # PS 5.1: without touching Handle first, ExitCode reads null after the exit
+      Set-Content -Path $pidFile -Value $p.Id
+      $p.WaitForExit()
+      $o = @(Get-Content $so -ErrorAction SilentlyContinue) + @(Get-Content $se -ErrorAction SilentlyContinue)
+      Remove-Item $so, $se -Force -ErrorAction SilentlyContinue
+      [pscustomobject]@{ ExitCode = $p.ExitCode; Output = @($o | ForEach-Object { [string]$_ }) }
+    } -ArgumentList $argStr, (Join-Path $env:TEMP ("tc-audit-" + $Name + "-" + $PID + ".pid")))
+    PidFile = (Join-Path $env:TEMP ("tc-audit-" + $Name + "-" + $PID + ".pid"))
+    Started = Get-Date
+  }
+}
+function Stop-ProcessTree([int]$procId) {
+  foreach ($c in @(Get-CimInstance Win32_Process -Filter ("ParentProcessId = " + $procId) -ErrorAction SilentlyContinue)) { Stop-ProcessTree ([int]$c.ProcessId) }
+  Stop-Process -Id $procId -Force -ErrorAction SilentlyContinue
+}
+function Receive-AuditJob([string]$Name, [int]$TimeoutSec = 900) {
+  # returns @{ ExitCode; Output[]; TimedOut; Elapsed }. ExitCode 124 = stopped at the budget.
+  $e = $script:AuditJobs[$Name]
+  if (-not $e) { return [pscustomobject]@{ ExitCode = 125; Output = @("audit job '$Name' was never started"); TimedOut = $false; Elapsed = 0 } }
+  $remaining = [Math]::Max(1, $TimeoutSec - [int]((Get-Date) - $e.Started).TotalSeconds)
+  $null = Wait-Job -Job $e.Job -Timeout $remaining
+  $elapsed = [int]((Get-Date) - $e.Started).TotalSeconds
+  if ($e.Job.State -eq 'Running') {
+    try { $cp = [int](Get-Content $e.PidFile -ErrorAction Stop | Select-Object -First 1); if ($cp) { Stop-ProcessTree $cp } } catch { }
+    Stop-Job $e.Job -ErrorAction SilentlyContinue; Remove-Job $e.Job -Force -ErrorAction SilentlyContinue
+    Remove-Item $e.PidFile -Force -ErrorAction SilentlyContinue
+    $script:AuditJobs.Remove($Name)
+    Log ("TIMED OUT: $Name exceeded its $TimeoutSec s budget and was stopped - treated as could-not-evaluate (rc 124); the board still ships")
+    return [pscustomobject]@{ ExitCode = 124; Output = @("$Name TIMED OUT after $TimeoutSec s"); TimedOut = $true; Elapsed = $elapsed }
+  }
+  $r = Receive-Job $e.Job -ErrorAction SilentlyContinue
+  Remove-Job $e.Job -Force -ErrorAction SilentlyContinue
+  Remove-Item $e.PidFile -Force -ErrorAction SilentlyContinue
+  $script:AuditJobs.Remove($Name)
+  # no exit code = the job itself broke before the child reported: that is a failure (125), never a clean 0
+  $rc = if ($r -and $null -ne $r.ExitCode) { [int]$r.ExitCode } else { 125 }
+  $out = if ($r) { @($r.Output) } else { @() }
+  if ($rc -eq 125) { $out += @(($e.Job.ChildJobs[0].Error | ForEach-Object { [string]$_ })) }
+  Log ("{0}: {1} s side-by-side (rc={2})" -f $Name, $elapsed, $rc)
+  return [pscustomobject]@{ ExitCode = $rc; Output = $out; TimedOut = $false; Elapsed = $elapsed }
+}
+function Invoke-Bounded([string]$Name, [string[]]$Arguments, [int]$TimeoutSec = 600) {
+  # synchronous child with a hard stop; same result shape as Receive-AuditJob
+  Start-AuditJob $Name $Arguments
+  return (Receive-AuditJob $Name $TimeoutSec)
+}
 
 # Price signature of the current board: sorted id|store|per_unit|type over the latest comparison, hashed.
 # Used to re-publish only when a price actually changed (a new ad, a flash sale ending, a mid-cycle fix),
@@ -305,36 +402,10 @@ foreach ($rec in $newStores) {
 # ---- persist schedule ----
 ([ordered]@{ updated=$asofS; note=$sched.note; stores=$newStores } | ConvertTo-Json -Depth 8) | Set-Content $ScheduleFile -Encoding UTF8
 
-# ---- browser-refresh watchdog: only the weekly Wednesday Chrome agent can pull the browser stores.
-#      If it did not run, its data goes stale and NOTHING headless can refresh it. Alert Brad ONCE/week. ----
-if (-not $NoAlert) {
-  $dow = [int]$asof.DayOfWeek                  # Sun=0 .. Wed=3 .. Sat=6
-  $daysSinceWed = (($dow - 3) + 7) % 7         # 0 if today is Wednesday
-  if ($daysSinceWed -ge 1) {                   # Thursday or later -> the Wednesday agent should have run this week
-    $lastWed = $asof.AddDays(-$daysSinceWed).Date
-    $marker  = Join-Path $OutDir ('browser-stale-' + $lastWed.ToString('yyyy-MM-dd') + '.flag')
-    if (-not (Test-Path $marker)) {
-      # THE FEED LIST LIVES IN ONE PLACE: browser-refresh-due.ps1. This used to carry its own copy of the same
-      # six globs and the same mtime comparison, and the two drifted exactly as that class always does - neither
-      # listed FAREWAY, so when its weekly sweep was skipped on 2026-07-29 the pre-run gate said FRESH and this
-      # alert could not name the store either. Sourcing the definition means a store added to the gate is
-      # automatically watched by the alert. (Same fix shape as the pu-lib "1/2 gal" divergence.)
-      . (Join-Path $root 'browser-feeds-lib.ps1')
-      $feeds = Get-BrowserFeedDates -OutDir $OutDir
-      $stale = @()
-      foreach ($k in $feeds.Keys) { $m = $feeds[$k]; if (($null -eq $m) -or ($m.Date -lt $lastWed)) { $tag = if ($m) { ' (' + $m.ToString('MM-dd') + ')' } else { ' (missing)' }; $stale += ($k + $tag) } }
-      if ($stale.Count -gt 0) {
-        $bd = "The weekly Wednesday grocery browser refresh did not run for the week of " + $lastWed.ToString('yyyy-MM-dd') + ". Stale/missing browser feeds: " + ($stale -join ', ') + ". The live page is holding last week's prices for those stores. Open the Claude app and run the grocery-browser-stores-refresh agent. While in the warm store tabs, ALSO close any browser-store no-link gaps: run build-chips-from-tileintegrity.ps1 for the chip list (reads out\tile-integrity.json, all stores), then paste hyvee/browser-link-resolve.js and BLR.run('<store>', chips) per store (board-match, skips sponsored/wrong-size), save to out\url-inputs\store-<store>-urls.json, and merge -> stamp -> prune-bad-links -Tol 0.32 -> guards -> publish -> archive the url-inputs file. Family Fare's MISSING links now self-heal in the daily job (fix-links-ff, 30 Freshop calls/day) and Hy-Vee's link PRICES self-heal (refresh-hyvee-links) - but nothing headless can ADD a Hy-Vee/Aldi/Baker's/Walmart/Sam's link, so those no-link chips need this browser pass. Check out\tile-integrity.json for the current per-store count. IMPORTANT: the Walmart capture must run the FULL commodity worklist (every commodity-search.json term (count the file, 526 as of 2026-07-29)) - a core-staples subset is absorbed by the union but leaves the comprehensive-capture clock running (audit-walmart-fullpull warns from day 10 of 14)."
-        Send-Alert -Subject ("Grocery: Wednesday browser refresh MISSED - week of " + $lastWed.ToString('yyyy-MM-dd')) -Body $bd | Out-Null
-        # only burn the once-per-week de-dupe marker if the email actually SENT (send-alert exits 1 on
-        # failure) - otherwise a transient mail error silently ate the whole week's stale warning.
-        if ($LASTEXITCODE -eq 0) { New-Item -ItemType File -Path $marker -Force | Out-Null; Log ("browser-stale alert sent: " + ($stale -join ', ')) } else { Log 'browser-stale alert FAILED to send (will retry next run)' }
-        $summary += ("ALERT     Wednesday browser refresh missed - stale: " + ($stale -join ', '))
-      }
-    }
-  }
-}
-
+# ---- (retired 2026-08-22) the Wednesday browser-refresh watchdog. It paged when the weekly Chrome agent
+#      missed its week; that agent is disabled (Brad: the three TC tasks are the only routines) and the
+#      walled stores are captured on demand from out\browser-capture-due-<date>.flag, which
+#      capture-watchdog watches. A weekly clock nobody is on would have alerted every Thursday forever. ----
 # ---- refresh downstream if a server store flipped ----
 # Re-compare DAILY (server ads were just re-pulled) so the board reflects today's ad dates, then re-publish
 # ONLY when a price actually changed (new ad, flash sale ended, or a mid-cycle correction) - detected by the
@@ -421,6 +492,13 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # Evidence-driven and idempotent, so a day that banked nothing rejected changes nothing and costs ~3s.
       & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'purge-verdict-lows.ps1') -Apply | Out-Null
       & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sanity-check.ps1') | Out-Null   # exit 1 = flags (expected), not a crash -> guards-<week>.json
+      # the board is final from here: start the four heavy advisory audits together (collected below, in place)
+      Start-AuditJob 'coverage-gaps' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-coverage-gaps.ps1'))
+      Start-AuditJob 'semantic' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-semantic-identity.ps1'))
+      $msArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-match-soundness.ps1'),'-OutDir',$OutDir)
+      if (-not $NoAlert) { $msArgs += '-Alert' }
+      Start-AuditJob 'match-soundness' $msArgs
+      Start-AuditJob 'discover-hyvee' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'discover-hyvee.ps1'),'-Slice','40')
       # NOTE: the coverage-REGRESSION check (a store quietly shrinking between boards) is NOT run here. It is a
       # hard invariant, so it lives in guards.ps1 where a failure actually stops the publish. Setting $hardFail
       # at this point would not: the publish below gates on $guardsBlocked, and $hardFail was already read at the
@@ -431,7 +509,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # commodity's include (or allowlist it). Alert Brad ONCE per distinct gap-set (signature de-dup) so it is
       # never silent but never spams. Advisory (we still publish the current board).
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-coverage-gaps.ps1') | Out-Null
+        $null = Receive-AuditJob 'coverage-gaps' 900
         $cg = try { Get-Content (Join-Path $OutDir 'coverage-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
         # ---- ALERT ON THE ACTIONABLE SUBSET ONLY (2026-08-06, triage plan-2026-08-06 item 2026-08-03-f4fb91).
         # The audit already separates a gap it can act on (CLAIMED-BY / RULE-INVISIBLE / PRICED) from one the
@@ -480,8 +558,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # publish, and findings never change a price, a crown, a rule or a link on their own. Signature de-dup so
       # a standing backlog is reported ONCE and only genuinely NEW findings speak up again.
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-semantic-identity.ps1') *>&1 | Out-Null
-        $semRc = $LASTEXITCODE
+        $semRc = (Receive-AuditJob 'semantic' 900).ExitCode
         if ($semRc -eq 3) {
           Log 'semantic sweep BLIND (no sidecar/GPU available) - the board still ships; no coverage opinion today'
           $summary += 'REVIEW    semantic sweep could not run (BLIND) - no semantic coverage check on this board'
@@ -544,11 +621,10 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # guard catches theft-IN. audit-match-soundness -Alert self-dedups and emails on a NEW issue-set; a
       # MOVED/DROPPED also makes it exit 2 so the publish gate holds. Advisory here (the daily board still ships).
       try {
-        $msArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-match-soundness.ps1'),'-OutDir',$OutDir)
-        if (-not $NoAlert) { $msArgs += '-Alert' }
-        & powershell @msArgs | ForEach-Object { Log ('match-soundness: ' + $_) }
-        if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    commodity matching changed vs baseline (a product MOVED/DROPPED) - see out\audit\soundness-report.json; publish will HOLD until reviewed + audit-match-soundness.ps1 -Accept' }
-        elseif ($LASTEXITCODE -eq 3) { Log 'match-soundness BLIND: ingested ZERO products - no store feed reached this audit, so its silence is not a clean board'; $summary += 'REVIEW    audit-match-soundness ingested ZERO products - commodity matching is UNGUARDED this run (check out\regular\ and out\ads-*.json)' }
+        $msJ = Receive-AuditJob 'match-soundness' 900
+        $msJ.Output | ForEach-Object { Log ('match-soundness: ' + $_) }
+        if ($msJ.ExitCode -eq 2) { $summary += 'REVIEW    commodity matching changed vs baseline (a product MOVED/DROPPED) - see out\audit\soundness-report.json; publish will HOLD until reviewed + audit-match-soundness.ps1 -Accept' }
+        elseif ($msJ.ExitCode -eq 3) { Log 'match-soundness BLIND: ingested ZERO products - no store feed reached this audit, so its silence is not a clean board'; $summary += 'REVIEW    audit-match-soundness ingested ZERO products - commodity matching is UNGUARDED this run (check out\regular\ and out\ads-*.json)' }
       } catch { Log ('match-soundness guard threw: ' + $_.Exception.Message) }
       # ---- SALE WITHOUT AN AD (wired 2026-08-21, Brad: "Items that we show on 'sale' but no
       # matching 'ad' keep note of"). Every cell published as a sale that matches no row in any ad we
@@ -591,7 +667,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # it red there. While that is true it must not be able to stop a publish. Promotion to blocking
       # is per-gate, after a clean record of real days, and it is Brad's call.
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-graph-gates.ps1') | ForEach-Object { Log ('graph-gates: ' + $_) }
+        (Invoke-Bounded 'graph-gates' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-graph-gates.ps1')) 600).Output | ForEach-Object { Log ('graph-gates: ' + $_) }
       } catch { Log ('graph-gates threw: ' + $_.Exception.Message) }
       # ---- MATCHER PARITY (wired 2026-08-21): the auditors' COPIES of Match-Category must still assign
       # product names exactly as the engine does. audit-household-in-food is a HARD gate built on one of
@@ -659,7 +735,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # docket this writes. Reversed, the desk would always show yesterday's findings.
       # Non-fatal and advisory - it can never touch a board.
       try {
-        $dhOut = @(& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'discover-hyvee.ps1') -Slice 40)
+        $dhOut = @((Receive-AuditJob 'discover-hyvee' 900).Output)
         @($dhOut | Where-Object { $_ -match '^DOCKET:|^  \(|SEARCH FAILED|^BLIND' }) | ForEach-Object { Log ('discover-hyvee: ' + $_) }
       } catch { Log ('discover-hyvee threw: ' + $_.Exception.Message); $summary += 'REVIEW    discover-hyvee threw - no NEW Hy-Vee products were looked for today (the refresh-only puller cannot find any on its own)' }
 
@@ -792,8 +868,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # no price board and so cannot age, and (b) the engine over frozen INPUTS, byte for byte. Running it
       # here is the point: the eleven-day gap happened because nothing ever invoked it. Non-fatal; alerts.
       try {
-        $gt = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\golden-test.ps1') 2>&1 | ForEach-Object { [string]$_ }
-        if ($LASTEXITCODE -ne 0) {
+        # through the bounded helper: stderr captured by file (no 2>&1 under EAP=Stop - see the rule at the
+        # test-guards call), and a budget so a hung test cannot hold the chain
+        $gtJ = Invoke-Bounded 'golden-test' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\engine\golden-test.ps1')) 600
+        $gt = $gtJ.Output
+        if ($gtJ.ExitCode -ne 0) {
           $gtFail = @($gt | Where-Object { $_ -match '^\s+(FAIL|C\d+)' })
           Log ('golden-test FAILED: ' + (($gtFail | Select-Object -First 3) -join ' | '))
           $summary += "REVIEW    golden-test: the cost engine's regression suite failed - run meal-prep\engine\golden-test.ps1"
@@ -808,8 +887,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # minimum-per-unit selection must still fail on the butter assertions. A guard that only ever passes
       # has not been shown to discriminate. Non-fatal; alerts.
       try {
-        $sp = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\run-scaler-pricing-test.ps1') -Quiet 2>&1 | ForEach-Object { [string]$_ }
-        if ($LASTEXITCODE -ne 0) {
+        $spJ = Invoke-Bounded 'scaler-pricing' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\run-scaler-pricing-test.ps1'),'-Quiet') 600
+        $sp = $spJ.Output
+        if ($spJ.ExitCode -ne 0) {
           Log ('scaler-pricing FAILED: ' + (($sp | Select-Object -First 3) -join ' | '))
           $summary += "REVIEW    scaler-pricing: the recipe cards' store-selection rule failed its fixture - run meal-prep\pipeline\run-scaler-pricing-test.ps1"
           try { Send-Alert -Subject "Recipe cards: pricing rule guard failed" -Body ("meal-prep\pipeline\run-scaler-pricing-test.ps1 failed. This guard pins the rule that each ingredient is priced at the store where the PACKAGE YOU HAVE TO BUY costs least, not the store with the lowest per-unit price - the defect that once billed `$10.22 for 20 cents of butter and `$40.00 for a 50 lb sack of rice. A POSITIVE-lane failure means tpl2-scaler-prefix.html no longer satisfies the fixture. A NEGATIVE-lane failure means the fixture has stopped reproducing the founding bug, so it is no longer testing anything. Lines: " + (($sp | Select-Object -First 15) -join ' | ')) | Out-Null } catch {}
@@ -831,8 +911,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # is PHANTOM - a step naming an ingredient the list never buys, which is how
       # slow-cooker-dr-pepper-pulled-pork-bowls shipped a Dr Pepper braise with no soda in the cost list.
       try {
-        $sc = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-spec-contradictions.ps1') -Quiet 2>&1
-        if ($LASTEXITCODE -ne 0) {
+        $scJ = Invoke-Bounded 'spec-contradictions' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-spec-contradictions.ps1'),'-Quiet') 600
+        $sc = $scJ.Output
+        if ($scJ.ExitCode -ne 0) {
           $scWorse = (($sc | Where-Object { $_ -match 'FAIL' }) -join ' ')
           Log ('spec-contradiction guard got WORSE: ' + $scWorse)
           $summary += 'REVIEW    a spec-contradiction class got worse than its baseline - see meal-prep\out\spec-contradictions.json'
@@ -933,8 +1014,8 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # difference between detecting the Turkey Bacon bid class and preventing it. Exit 3 is the estate's
       # could-not-evaluate code (no interpreter) and must not read as clean.
       try {
-        $dbOut = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\db-build.ps1')
-        $dbRc  = $LASTEXITCODE
+        $dbJ   = Invoke-Bounded 'db-build' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\db-build.ps1')) 300
+        $dbOut = $dbJ.Output; $dbRc = $dbJ.ExitCode
         if ($dbRc -eq 1) {
           $bad = @($dbOut | Where-Object { $_ -match 'CONSTRAINT REFUSED|!' })
           Log ('db-build REFUSED: ' + (($bad | Select-Object -First 3) -join ' | '))
@@ -1117,7 +1198,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # Free-dinner rotation (Brad, 2026-07-25): top 5 cheapest dinners per protein go FREE for the board
       # week; they revert to members-only when the week re-ranks them. Runs daily right after re-costing but
       # no-ops until the board week (or the set) changes, so flips happen on the ad flip. Non-fatal.
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\rotate-free-dinners.ps1') 2>&1 | ForEach-Object { Log ('free-rotation: ' + $_) } } catch { Log ('rotate-free-dinners threw: ' + $_.Exception.Message) }
+      try { (Invoke-Bounded 'free-rotation' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\rotate-free-dinners.ps1')) 900).Output | ForEach-Object { Log ('free-rotation: ' + $_) } } catch { Log ('rotate-free-dinners threw: ' + $_.Exception.Message) }
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'export-feed.ps1') | Out-Null; Log 'smp-feed exported' } catch { Log ('export-feed threw: ' + $_.Exception.Message) }
       # price alerts: email label:alert-<id> subscribers when an item hits a tracked low (self-gates via alert-state.json)
       try { $paOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-price-alerts.ps1'); Log ('price-alerts: ' + (@($paOut)[-1])) } catch { Log ('send-price-alerts threw: ' + $_.Exception.Message) }
@@ -1647,7 +1728,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # by the notify-known-ids.json state diff, so it is a no-op every day nothing new was added - and it runs
       # regardless of -NoAlert (these are requester-facing, not Brad-alerts). Never fatal to the pipeline.
       try {
-        $niOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'notify-item-added.ps1') 2>&1
+        $niOut = (Invoke-Bounded 'notify-item-added' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'notify-item-added.ps1')) 300).Output
         foreach ($ln in @($niOut)) { Log ("notify-item-added: " + $ln) }
         $niSent = @($niOut | Where-Object { "$_" -match '^NOTIFIED ' }).Count
         if ($niSent -gt 0) { $summary += ("NOTIFIED  $niSent item-request follower(s) emailed - their suggested item is now on the board") }
@@ -1669,9 +1750,12 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
 # is no reason for it ever to be conditional. A blind watcher has to be LOUDER than the thing it watches:
 # if this fails, every quiet guard above it becomes unproven, including a clean board.
 try {
-  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-auditors.ps1') | Out-Null
-  if ($LASTEXITCODE -ne 0) {
-    $ta = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-auditors.ps1') 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
+  # ONE RUN, OUTPUT KEPT (2026-08-22). This used to run the suite once to get the exit code and then, on a
+  # failure, run it AGAIN to get the text - and it failed on 10 of the previous 14 days, so the ~3-minute
+  # suite cost ~7.5 minutes per chain, the single largest item in the stage profile. Capture once.
+  $taJ = Invoke-Bounded 'test-auditors' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'test-auditors.ps1')) 1200
+  $ta = ($taJ.Output -join "`n")
+  if ($taJ.ExitCode -ne 0) {
     Log 'WATCHERS FAILED: test-auditors could not prove a guard still sees its own bug'
     $summary += 'WATCHERS  a guard can no longer see its own founding bug - see test-auditors output'
     # PERSIST THE WHOLE THING BEFORE ALERTING (2026-07-31). send-alert used to truncate its body, and on

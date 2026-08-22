@@ -83,6 +83,32 @@ function Test-Actionable {
   return $true
 }
 
+# ---------------------------------------------------------------- VRAM guard (Brad's ruling, 2026-08-22)
+# The llama.cpp model (tools\local-llm\serve.ps1) takes ~13 GB of the 16 GB card and is ON-DEMAND ONLY,
+# never scheduled, precisely because it cannot share the card with this sweep: bge-m3 + the reranker need
+# ~3 GB. Launching sweep.py into a card llama-server holds does not fail fast - it OOMs minutes in, after
+# the corpus prep, and reads as a Python crash. So the audit asks nvidia-smi FIRST and goes BLIND with a
+# reason that names the holder. Both conditions are required: little free memory alone (a browser, the
+# sidecar's own resident app.py) is not llama-server, and llama-server with room to spare is not a block.
+$SWEEP_NEED_MIB = 3500
+function Test-SweepBlocked {
+  param([Nullable[int]]$FreeMiB, [bool]$LlamaRunning, [int]$NeedMiB = $SWEEP_NEED_MIB)
+  if ($null -eq $FreeMiB) { return $null }      # no nvidia-smi reading: do not invent a block
+  if ($LlamaRunning -and $FreeMiB -lt $NeedMiB) {
+    return ("llama-server holds the GPU ({0} MiB free, the sweep needs ~{1} MiB) - stop tools\local-llm\serve.ps1 or wait" -f $FreeMiB, $NeedMiB)
+  }
+  return $null
+}
+function Get-GpuRoom {
+  $free = $null
+  try {
+    $q = & nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits 2>$null
+    if ($q) { $free = [int](([string](@($q)[0])).Trim()) }
+  } catch { }
+  $llama = [bool](Get-Process -Name 'llama-server' -ErrorAction SilentlyContinue)
+  return @{ free = $free; llama = $llama }
+}
+
 if ($SelfTest) {
   # FROZEN FIXTURES (guard-fixture rule). No GPU, no network, no data files - so this runs in
   # test-auditors every day and proves the plumbing still discriminates.
@@ -122,7 +148,17 @@ if ($SelfTest) {
   if (-not (Test-Actionable -Kind 'coverage' -Id 'walnuts' -Store 'Walmart' -Product 'Fisher' -Blocks $blocks -BoardItems $wBoard)) {
     Write-Output '  X CLEAN TWIN: a short name is not a truncation artefact and must stay actionable'; $bad++
   }
-  if ($bad -eq 0) { Write-Output 'audit-semantic-identity SELF-TEST PASS (6 frozen cases)'; exit 0 }
+  # VRAM GUARD, fixtured. MUST-FIRE: llama-server up and the card nearly full -> BLIND, naming the holder.
+  $why = Test-SweepBlocked -FreeMiB 1092 -LlamaRunning $true
+  if (-not $why) { Write-Output '  X MUST-FIRE: llama-server holding the card with 1092 MiB free must block the sweep'; $bad++ }
+  elseif ($why -notmatch 'llama-server' -or $why -notmatch 'serve\.ps1') { Write-Output ("  X the BLIND reason must name the holder and the fix: " + $why); $bad++ }
+  # CLEAN TWIN 1: the card is nearly full but llama-server is NOT the holder -> not this rule's call, run.
+  if (Test-SweepBlocked -FreeMiB 1092 -LlamaRunning $false) { Write-Output '  X CLEAN TWIN: a full card without llama-server is not this guard''s block'; $bad++ }
+  # CLEAN TWIN 2: llama-server up but with room to spare -> run.
+  if (Test-SweepBlocked -FreeMiB 13600 -LlamaRunning $true) { Write-Output '  X CLEAN TWIN: llama-server with 13.6 GB free must not block'; $bad++ }
+  # CLEAN TWIN 3: no nvidia-smi reading at all -> never invent a block.
+  if (Test-SweepBlocked -FreeMiB $null -LlamaRunning $true) { Write-Output '  X CLEAN TWIN: no GPU reading must not block'; $bad++ }
+  if ($bad -eq 0) { Write-Output 'audit-semantic-identity SELF-TEST PASS (10 frozen cases)'; exit 0 }
   Write-Output ("audit-semantic-identity SELF-TEST FAIL ($bad)"); exit 2
 }
 
@@ -194,7 +230,10 @@ if ($PrepareOnly) { exit 0 }
 if (-not (Test-Path $py)) { Write-Output "BLIND: no sidecar python at $py - the semantic check did not run. This is never a publish blocker."; exit 3 }
 $sweep = Join-Path $sidecar 'sweep.py'
 if (-not (Test-Path $sweep)) { Write-Output 'BLIND: sidecar sweep.py missing'; exit 3 }
-Write-Output 'running the GPU sweep'
+$room = Get-GpuRoom
+$blocked = Test-SweepBlocked -FreeMiB $room.free -LlamaRunning $room.llama
+if ($blocked) { Write-Output ("BLIND: " + $blocked + ". The board is unaffected; the semantic guard did not run."); exit 3 }
+Write-Output ('running the GPU sweep' + $(if ($null -ne $room.free) { " ({0} MiB VRAM free)" -f $room.free } else { '' }))
 # EAP=Stop + a native command writing to stderr is fatal in PowerShell, and Python writes plenty of
 # benign stderr: SyntaxWarnings, HuggingFace rate-limit notices, tqdm bars. The FIRST run of this audit
 # died on a Python SyntaxWarning and reported a hard failure for a cosmetic warning. That is the

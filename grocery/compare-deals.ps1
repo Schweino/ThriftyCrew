@@ -247,7 +247,7 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
     $rc = Convert-ToUnit $hi $tok $unit; if ($rc -ne $null) { return $rc }
   }
   # first "<number> <unit-token>" occurrence
-  $m = [regex]::Match($s, '(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|ounce|ounces|lb|lbs|pound|pounds|#|gal|gallon|qt|quart|pt|pint|liter|litre|\bl\b|ml|g|gram|grams|dozen|doz|ct|count|ea|each|pk|pack|pkg|bunch|head|loaf)\b')
+  $m = [regex]::Match($s, '(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|ounce|ounces|lb|lbs|pound|pounds|#|gal|gallon|qt|quart|pt|pint|liters|litres|liter|litre|ltr|\bl\b|ml|g|gram|grams|dozen|doz|ct|count|ea|each|pk|pack|pkg|bunch|head|loaf)\b')
   if ($m.Success) {
     $num = [double]$m.Groups[1].Value; $tok = $m.Groups[2].Value
     $conv = Convert-ToUnit $num $tok $unit
@@ -256,7 +256,10 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
     # did not, so Bush's "16 oz 6 pk" priced as ONE can ($0.3988/oz, band-flagged) and Sam's grits PUBLISHED
     # at $0.1049/oz off a ".98 oz., 46 pk." name (the leading-dot group above reads 0.98, not 98). Guarded to
     # weight units + weight tokens so "12 pk" on an each/dozen commodity is never multiplied twice.
-    if ($conv -ne $null -and ($unit -eq 'oz' -or $unit -eq 'floz' -or $unit -eq 'lb' -or $unit -eq 'gallon') -and $tok -match '^(fl\s*oz|floz|oz|ounce|ounces|lb|lbs|pound|pounds|gal|gallon)$') {
+    # LITRE / ML / QUART JOINED THE TOKEN LIST 2026-08-22: "2 l 6 pk" (a soda six-pack of 2-litre bottles)
+    # was multiplied for oz/lb/gal only, so it priced as ONE bottle - 6x over. pu-lib step 4 carries the same
+    # addition; the parity test holds the two copies of this rule together.
+    if ($conv -ne $null -and ($unit -eq 'oz' -or $unit -eq 'floz' -or $unit -eq 'lb' -or $unit -eq 'gallon') -and $tok -match '^(fl\s*oz|floz|oz|ounce|ounces|lb|lbs|pound|pounds|gal|gallon|qt|quart|liters|litres|liter|litre|ltr|l|ml)$') {
       $wf = [regex]::Match($s, '(\d+)\s*-?\s*(?:pk|pack)\b')
       if ($wf.Success) { return $conv * [double]$wf.Groups[1].Value }
     }
@@ -360,7 +363,11 @@ function Get-PackCount($text) {
   # (Family Fare's Freshop feed does it throughout). Without them a 42-pod tub of laundry pacs had NO pack count
   # at all and priced as ONE pod. Safe next to a weight: "About 1.56 lb each" cannot match, because the count
   # must sit immediately before the unit and " lb " breaks it.
-  $m = [regex]::Match($t, '(?:per\s*)?(\d+)\s*[- ]?\s*(?:pack|pk|count|ct|each|ea)\b')
+  # THE COUNT MUST NOT START INSIDE A NUMBER (2026-08-22). "$3.87 each" used to match "87 each" and read an
+  # 87-pack out of a price. It never surfaced because the per-each marker returned before this ran; now that
+  # the pack count is checked FIRST for each-commodities (see Get-UnitPrice) it would have divided a $3.87
+  # bottle by 87. Same lookbehind the per-lb / per-each marker strips use.
+  $m = [regex]::Match($t, '(?:per\s*)?(?<![\d.$])(\d+)\s*[- ]?\s*(?:pack|pk|count|ct|each|ea)\b')
   if ($m.Success) { $n = [int]$m.Groups[1].Value; if ($n -gt 1) { return $n } }
   return $null
 }
@@ -414,7 +421,19 @@ function Get-UnitPrice($deal, $cat) {
     }
     return @{ unit_price=$pr.per_item; basis='per-lb marker'; note=$pr.note }
   }
-  if ($unit -eq 'each' -and $pr.kind.pereach) { return @{ unit_price=$pr.per_item; basis='per-each marker'; note=$pr.note } }
+  # A PACK COUNT BEATS A PER-EACH MARKER (2026-08-22). "Bottled Water 24 Pack, $3.87 each" carries both: the
+  # marker says the $3.87 is for one unit of SALE, the pack count says that unit is 24 bottles. For an
+  # each-commodity the bottle is the thing being compared, so the marker returning here first published
+  # $3.87/each against a true $0.161 (pu-lib step 5 already divided the same row by the name's pack count,
+  # so the two copies of this math disagreed - the parity test's whole reason to exist). Plain prices only,
+  # and never for a pack_is_package commodity, exactly as the plain path below decides it.
+  if ($unit -eq 'each' -and $pr.kind.pereach) {
+    if ($pr.note -eq '' -and -not ($cat.PSObject.Properties['pack_is_package'] -and $cat.pack_is_package)) {
+      $pkm = Get-PackCount $deal.price_text; if (-not $pkm) { $pkm = Get-PackCount $deal.size_text }; if (-not $pkm) { $pkm = Get-PackCount $deal.name }
+      if ($pkm) { return @{ unit_price=($pr.per_item/$pkm); basis="per-$pkm-pack (pack count beats the per-each marker)"; note=$pr.note } }
+    }
+    return @{ unit_price=$pr.per_item; basis='per-each marker'; note=$pr.note }
+  }
   # PER-LB RATE PRINTED IN THE SIZE, NOT THE PRICE. Hy-Vee's random-weight items carry the rate in the size
   # text ("2.85 lbs ($8.99/lb)") while the captured price is that same per-pound rate - the perlb marker above
   # only reads the PRICE text, so this fell through to the size division below and published $8.99/2.85 =
@@ -677,6 +696,24 @@ if ($SelfTest) {
   _Near '2X-marketing not a pack count'     (Get-UnitPrice (_D '$4.24' 'cleaner' $null 'fabuloso multi-purpose cleaner, 2x concentrated formula, lavender, 33.8 fl oz') (_C 'floz')).unit_price 0.1254 0.001
   _Near 'leading-dot ".98 oz" + name pack' (Get-UnitPrice (_D '$10.28' 'Quaker Instant Grits, Variety Pack, .98 oz., 46 pk.' $null '46 ct') (_C 'oz')).unit_price 0.228 0.001
   _Near 'leading-dot ".5 Gal." via name'   (Get-UnitPrice (_D '$4.49' 'Kemps 100% Pure Orange Juice From Concentrate .5 Gal. Jug' $null '0.5 gll') (_C 'floz')).unit_price 0.0702 0.001
+  # --- 11d2: PACK COUNT BEATS THE PER-EACH MARKER (2026-08-22) ----------------------------------------------
+  # MUST-FIRE: "Bottled Water 24 Pack, $3.87 each" on an each-commodity is 24 bottles at $0.161, not one at
+  # $3.87 - the marker used to return before Get-PackCount ran. Both orderings (count in the name, count in
+  # the size) and the marker in the price text. pu-lib's fixture for the same row lives in test-pu-lib.ps1.
+  _Near 'per-each marker + "24 Pack" in NAME -> /24'    (Get-UnitPrice (_D '$3.87 each' 'Bottled Water 24 Pack' $null 'each') (_C 'each')).unit_price 0.16125 0.0005
+  _Near 'per-each marker + "24 ct" in SIZE -> /24'      (Get-UnitPrice (_D '$3.87 each' 'Bottled Water' $null '24 ct') (_C 'each')).unit_price 0.16125 0.0005
+  _Near 'per-each marker, no pack anywhere -> per-each' (Get-UnitPrice (_D '$3.87 each' 'Bottled Water' $null 'each') (_C 'each')).unit_price 3.87 0.001
+  # the decimal in "$3.87 each" must never be read as an 87-pack (Get-PackCount's lookbehind)
+  if ($null -eq (Get-PackCount '$3.87 each')) { Write-Output 'ok    "$3.87 each" is not an 87-pack' } else { Write-Output 'FAIL  Get-PackCount read "$3.87 each" as a pack count'; $script:fail++ }
+  # a pack_is_package commodity keeps the package price even with the marker (the garlic-bread ruling)
+  _Near 'pack_is_package + marker stays per-package'    (Get-UnitPrice (_D '$6.99 each' 'Texas Toast' $null '6 ct') (_CP 'each')).unit_price 6.99 0.001
+  # --- 11d3: LITRE / ML / QUART MULTIPACKS, WEIGHT-FIRST (2026-08-22) -------------------------------------
+  # MUST-FIRE: "2 l 6 pk" is 12 litres = 405.77 fl oz; it was multiplied for oz/lb/gal only. Both orderings.
+  _Near 'weight-first "2 l 6 pk" /floz'     (Get-UnitPrice (_D '$6.00' 'Cola 6 pk' $null '2 l 6 pk') (_C 'floz')).unit_price 0.014787 0.0001
+  _Near 'pack-first "6 pk 2 l" /floz'       (Get-UnitPrice (_D '$6.00' 'Cola 6 pk' $null '6 pk 2 l') (_C 'floz')).unit_price 0.014787 0.0001
+  _Near 'weight-first "500 ml 24 pk" /floz' (Get-UnitPrice (_D '$4.87' 'Water 24 pk' $null '500 ml 24 pk') (_C 'floz')).unit_price 0.012 0.0005
+  _Near 'weight-first "1 qt 4 pk" /floz'    (Get-UnitPrice (_D '$8.00' 'Broth 4 pk' $null '1 qt 4 pk') (_C 'floz')).unit_price 0.0625 0.0005
+  _Near 'weight-first "2 ltr 6 pk" /floz'   (Get-UnitPrice (_D '$6.00' 'Cola 6 pk' $null '2 ltr 6 pk') (_C 'floz')).unit_price 0.014787 0.0001
   # --- 11e: pack_is_package - portion count inside ONE package (2026-07-30 garlic-bread basis bug) ---------
   # The live row: Baker's "New York Bakery Gluten Free Texas Toast" $6.99 / "6 ct" published $1.165/each and
   # took the cheapest slot from Fareway's whole $3.99 loaf. MUST-FIRE: with the declaration the price stays the
@@ -1429,7 +1466,12 @@ if (Test-Path $regDir) {
           elseif ($d.product_id)   { $ttlKey = [string]$d.product_id }
           elseif ($d.link_url -match '/products/(\d+)') { $ttlKey = $Matches[1] }
           if ($ttlKey) {
-            $rw = Get-RollbackWindow -Store ([string]$ex.store) -ItemId $ttlKey -Price ([double]$spl.sale_price) -Today ([string]$today) -Root $root
+            # -AsOf IS THE ROW'S OWN CAPTURE DATE. Brad's ruling (2026-08-22): the TTL runs from DETECTION,
+            # and detection is the capture that first showed the cut price, not the day this ledger met
+            # the row. Passing only -Today handed a five-week-old Fareway markdown a fresh 30 days on
+            # the day the ledger was created. Row as_of first, the file's date as the fallback.
+            $ttlAsOf = if ([string]$d.as_of -match '^\d{4}-\d{2}-\d{2}$') { [string]$d.as_of } else { [string]$rsd }
+            $rw = Get-RollbackWindow -Store ([string]$ex.store) -ItemId $ttlKey -Price ([double]$spl.sale_price) -Today ([string]$today) -AsOf $ttlAsOf -Root $root
             if ($rw) { $spl.sale_from = $rw.ad_from; $spl.sale_to = $rw.ad_to; $script:TtlDated++; $script:LastBasis = 'ttl' }
           }
         }

@@ -101,10 +101,18 @@ class LLMResult:
 
 
 class LocalLLM:
-    """Client for the llama.cpp OpenAI-compatible endpoint."""
+    """Client for the llama.cpp OpenAI-compatible endpoint.
+
+    timeout: 120 s per HTTP call (2026-08-22, was 600). A resolve call is ~312 tokens in
+    and <= 400 out, well under a minute on this box even with four slots busy; a call
+    that is still running at two minutes is a hung server or a slot starved by the GPU
+    being shared, and waiting ten minutes for it only hid that. The one caller that
+    legitimately needs longer - meal-prep/pipeline/local_extract.py asking for 4096
+    tokens - passes its own timeout explicitly rather than lifting the default for all.
+    """
 
     def __init__(self, endpoint: str = DEFAULT_ENDPOINT, model: str = DEFAULT_MODEL,
-                 timeout: int = 600):
+                 timeout: int = 120):
         self.endpoint = endpoint.rstrip("/")
         self.model = model
         self.timeout = timeout

@@ -33,6 +33,10 @@ param(
   # Skip the compare/guards/publish/commit chain. For testing only - a scheduled
   # run must ALWAYS publish, or the captures never reach the live board.
   [switch]$NoDownstream,
+  # -Kind ad never runs downstream unless this is passed (ONE CHAIN A DAY, Brad 2026-08-22: the 07:00 ad
+  # run captures only; the 08:00 daily run is the one that builds and publishes. Before this, any morning
+  # both fired ran the same 20-40 minute audit chain twice - three times on 08-21 with a manual run.)
+  [switch]$Downstream,
   [switch]$WhatIf
 )
 
@@ -46,6 +50,57 @@ $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 # The scheduled task runs this hidden with no redirect, so without a transcript
 # the exit code is the ONLY thing that survives a run. Guarded: never fatal.
 $runLog = Start-RunLog -Name ("capture-run-" + $Kind) -OutDir $OutDir -Today $todayS
+
+# ---- THE RUN'S STRUCTURED RECORD (2026-08-22) ----------------------------------------------------------
+# The transcript above says what happened; this says HOW FAR IT GOT, in a form capture-watchdog can read
+# without parsing prose: out\logs\capture-run-status.json = { ad|daily: { date, pid, started, updated,
+# stage, exit_code, log } }, rewritten whole at each stage. A run that sits in 'downstream' for hours, or
+# never reaches 'complete', is a finding even when Task Scheduler says rc=0. Guarded: never fatal.
+$script:RunStart = Get-Date
+$script:StatusFile = Join-Path (Join-Path $OutDir 'logs') 'capture-run-status.json'
+function Write-RunStatus([string]$Stage, [object]$ExitCode = $null) {
+  try {
+    $doc = @{}
+    if (Test-Path $script:StatusFile) { try { (Get-Content $script:StatusFile -Raw | ConvertFrom-Json).PSObject.Properties | ForEach-Object { $doc[$_.Name] = $_.Value } } catch { } }
+    $doc[$Kind] = [ordered]@{
+      date = $todayS; pid = $PID; started = $script:RunStart.ToString('s'); updated = (Get-Date).ToString('s')
+      stage = $Stage; exit_code = $ExitCode; log = [string]$runLog
+    }
+    $dir = Split-Path $script:StatusFile -Parent
+    if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+    $tmp = $script:StatusFile + '.tmp'
+    ($doc | ConvertTo-Json -Depth 5) | Set-Content -Path $tmp -Encoding UTF8
+    Move-Item -Path $tmp -Destination $script:StatusFile -Force
+  } catch { }
+}
+Write-RunStatus 'started'
+
+# ---- 1st-OF-MONTH HOUSEKEEPING (moved here 2026-08-22 from the retired run-daily-local.ps1) ----------
+# The pipeline logs grow forever and every line rides every bot commit; triage plans are pure history
+# once shipped; the Ghost content backup is the only off-Ghost copy. All three lived in the old 8:30
+# runner and would have stopped with it. Daily kind only, non-fatal by design: housekeeping must never
+# cost the day's prices.
+if ($Kind -eq 'daily' -and (Get-Date).Day -eq 1 -and -not $WhatIf) {
+  try {
+    $arch = Join-Path $root 'logs-archive'
+    if (-not (Test-Path $arch)) { New-Item -ItemType Directory -Path $arch -Force | Out-Null }
+    $stamp = (Get-Date).AddMonths(-1).ToString('yyyy-MM')
+    foreach ($lf in @('ad-cycle-log.txt', 'alert-log.txt', 'ff-sweep-log.txt')) {
+      $src = Join-Path $root $lf; $dst = Join-Path $arch ($lf -replace '[.]txt$', "-$stamp.txt")
+      if ((Test-Path $src) -and -not (Test-Path $dst)) { Move-Item $src $dst -Force -ErrorAction SilentlyContinue; Write-Output "rotation: $lf -> logs-archive" }
+    }
+    $tp = Join-Path $root 'triage-plans'; $tpArch = Join-Path $arch 'triage-plans'
+    if (Test-Path $tp) {
+      if (-not (Test-Path $tpArch)) { New-Item -ItemType Directory -Path $tpArch -Force | Out-Null }
+      $moved = 0
+      foreach ($pf in @(Get-ChildItem (Join-Path $tp 'plan-*.json') -ErrorAction SilentlyContinue)) {
+        if ($pf.BaseName -match '^plan-([0-9]{4}-[0-9]{2})' -and $Matches[1] -le $stamp) { Move-Item $pf.FullName $tpArch -Force -ErrorAction SilentlyContinue; $moved++ }
+      }
+      if ($moved) { Write-Output "rotation: archived $moved triage plan(s)" }
+    }
+    & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'ghost-export.ps1') | ForEach-Object { Write-Output ("ghost-export: " + $_) }
+  } catch { Write-Output ("monthly housekeeping threw (not fatal): " + $_.Exception.Message) }
+}
 
 # store -> how its EVERYDAY rotation is captured. $null = browser handoff.
 $DAILY_LANE = @{
@@ -114,7 +169,8 @@ foreach ($s in $browser) {
 }
 foreach ($s in $toRun.Keys) { Write-Output ("  run      {0,-13} {1}" -f $s, $toRun[$s]) }
 
-if ($WhatIf) { Write-Output "`nWhatIf: nothing launched."; Stop-RunLog -ExitCode 0 -Path $runLog; exit 0 }
+if ($WhatIf) { Write-Output "`nWhatIf: nothing launched."; Write-RunStatus 'whatif' 0; Stop-RunLog -ExitCode 0 -Path $runLog; exit 0 }
+Write-RunStatus 'capturing'
 
 # ---- launch every headless lane AT ONCE ------------------------------------
 $jobs = @()
@@ -274,7 +330,13 @@ Write-Output ("capture-run [$Kind] captures done. lanes run={0} failed={1} brows
 # the capture policy's budget. Letting check-ad-cycles pull again would both
 # double the request cost and bypass the budget that exists to stop us being
 # rate-limited in the first place.
-if (-not $NoDownstream) {
+$runDownstream = (-not $NoDownstream) -and (($Kind -ne 'ad') -or $Downstream)
+if ((-not $NoDownstream) -and (-not $runDownstream)) {
+  Write-Output ''
+  Write-Output 'downstream: SKIPPED - the ad run captures only; the 08:00 daily run builds and publishes (pass -Downstream to override)'
+}
+if ($runDownstream) {
+  Write-RunStatus 'downstream'
   Write-Output ''
   Write-Output 'downstream: check-ad-cycles -NoPull (compare -> guards -> publish -> recipes -> commit)'
   $cac = Join-Path $root 'check-ad-cycles.ps1'
@@ -314,6 +376,8 @@ if (-not $NoDownstream) {
 Write-Output 'CAPTURE-RUN-COMPLETE'
 if ($failed.Count) { Write-Output ("FAILED LANES: " + ($failed -join ', ')) }
 $rcFinal = if ($failed.Count) { 1 } else { 0 }
+Write-Output ("elapsed " + [int]((Get-Date) - $script:RunStart).TotalSeconds + " s")
+Write-RunStatus 'complete' $rcFinal
 Stop-RunLog -ExitCode $rcFinal -Path $runLog
 exit $rcFinal
 
