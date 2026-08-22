@@ -93,9 +93,14 @@ $script:MaxCarryDays = 90
 #   Hy-Vee     120  PROPOSED. GraphQL, no wall ever observed; the lane re-verified 1010
 #                   products in a run at baseline with no refusal, so 120 is ~12% of a
 #                   known-clean run. Its unit is PRODUCTS (see PRODUCT ROTATION below).
-#   Baker's    250  PROPOSED. The Kroger API pull is comprehensive - 7,281 rows in one pass
-#                   on 2026-08-21 - so there is no per-item request to ration. The cap only
-#                   bounds a worklist so this store cannot be the one exception.
+#   Baker's    250  PROPOSED. Kroger's sanctioned API, 180ms pacing, and until 2026-08-22 this
+#                   lane ignored the cap entirely: it walked ALL 598 search terms every single
+#                   day (7,281 rows on 2026-08-21) because it was "comprehensive". Brad's ruling
+#                   ended that - "Bakers should be following the SAME logic as literally everyone
+#                   else when it comes to ad rotation and 'everyday' pricing" - so the cap is now
+#                   a real ceiling on a real worklist, in this lane's own unit (search terms).
+#                   598/90 = 7 a day, so 250 clamps nothing today; it exists so a backlog of
+#                   expiring sales cannot turn one morning into a 130-request day.
 #   Fareway     45  PROPOSED. Browser lane, 900ms pacing. A 144-term sweep completed clean on
 #                   2026-08-15 with zero empties, but 144 is a fifth of the list and no wall
 #                   has ever been measured; 45 is under a third of that known-clean sweep.
@@ -623,19 +628,35 @@ function Set-SaleExpiryProcessed {
 # would be worse than not rotating at all - an audit would read a cursor that
 # means nothing. Three different shapes, named rather than blurred:
 #
-#   TERM ROTATION  Family Fare, Walmart, Sam's Club, Aldi, Fareway
+#   TERM ROTATION  Family Fare, Walmart, Sam's Club, Aldi, Fareway, Baker's
 #                  A slice of commodity-search.json per day. This cursor.
 #   PRODUCT ROTATION  Hy-Vee. Its lane re-verifies by product id, not by search
 #                  term, so its cursor indexes a different list entirely and
 #                  lives in hyvee-rotation-cursor.json. Folding it in here would
 #                  narrow a namespace: the same integer would mean two things.
-#   COMPREHENSIVE  Baker's. The Kroger API pull returns the whole catalog in one
-#                  pass (7,281 rows on 2026-08-21), so there is nothing to
-#                  rotate and no cursor to keep.
+#
+# BAKER'S MOVED FROM "COMPREHENSIVE" TO TERM ROTATION (2026-08-22, Brad's ruling:
+# "Bakers should be following the SAME logic as literally everyone else when it
+# comes to ad rotation and 'everyday' pricing. IDK why its pulling the entire
+# thing but it needs to stop."). This note used to read "COMPREHENSIVE Baker's -
+# the Kroger API pull returns the whole catalog in one pass, so there is nothing
+# to rotate and no cursor to keep", and that was true of the lane as written: it
+# walked all 598 terms at 180ms every day, ~5 minutes of the daily run and the
+# single largest remaining cost in the pipeline. It rotates now, over the SAME
+# term list in the SAME order as the other five, so its integer means exactly what
+# theirs means and one cursor file answers for all six.
+#
+# ONE CAVEAT THE BAKER'S LANE MUST HANDLE ITSELF, and it is the reason that lane
+# passes -Landed explicitly instead of letting Step-CaptureCursor ask:
+# Test-CaptureLanded reads out\regular\bakers-regular-<date>.json and counts rows,
+# and that file now carries all ~7,275 rows on EVERY run because the un-asked terms
+# are carried forward. So it says LANDED even on a run where every request failed.
+# The honest signal is what the run ASKED and was ANSWERED, which only the lane
+# knows - the same judgement Test-HyVeeCursorAdvance makes for the product cursor.
 #
 # Ask this before advancing anything. A store that is not TERM ROTATION must not
 # get a term cursor written for it.
-$script:TermRotationStores = @('Family Fare', 'Walmart', "Sam's Club", 'Aldi', 'Fareway')
+$script:TermRotationStores = @('Family Fare', 'Walmart', "Sam's Club", 'Aldi', 'Fareway', "Baker's")
 
 function Test-TermRotationStore([string]$Store) { return ($script:TermRotationStores -contains $Store) }
 
@@ -668,9 +689,9 @@ function Save-CaptureCursor {
   if (-not $OutDir) { $OutDir = Join-Path $script:PolicyRoot 'out' }
   if (-not (Test-TermRotationStore $Store)) {
     throw ("REFUSING to write a TERM cursor for '$Store': it does not rotate through " +
-           "commodity-search terms (see TermRotationStores). Hy-Vee rotates by product id " +
-           "and Baker's pulls comprehensively; giving either a term cursor would make the " +
-           'same integer mean two different things.')
+           "commodity-search terms (see TermRotationStores). Hy-Vee rotates by PRODUCT ID and " +
+           'keeps its own cursor file; giving it a term cursor would make the same integer ' +
+           'mean two different things.')
   }
   $p = Join-Path $OutDir $script:CursorFile
   $cur = Get-CaptureCursors $OutDir
@@ -681,7 +702,7 @@ function Save-CaptureCursor {
   # so a builder that runs twice does not rotate twice.
   if ($AdvancedOn) { $h[((Get-CursorKey $Store) + '_last')] = $AdvancedOn }
   $h['updated'] = (Get-Date).ToString('s')
-  $h['note'] = 'index into the commodity-search term order where each TERM-ROTATION store starts next. Advanced only after that store''s capture landed. Hy-Vee (product ids) and Baker''s (comprehensive) are deliberately absent.'
+  $h['note'] = 'index into the commodity-search term order where each TERM-ROTATION store starts next. Advanced only after that store''s capture landed. Baker''s joined this cursor on 2026-08-22 (it used to pull all 598 terms daily). Hy-Vee is deliberately absent: it rotates by PRODUCT ID and keeps hyvee-rotation-cursor.json.'
   $tmp = "$p.tmp"
   Set-Content -Path $tmp -Value ($h | ConvertTo-Json -Depth 4) -Encoding UTF8
   Move-Item -LiteralPath $tmp -Destination $p -Force
@@ -812,7 +833,7 @@ function Step-CaptureCursor {
 
   if (-not (Test-TermRotationStore $Store)) {
     return [pscustomobject]@{ Store = $Store; Advanced = $false; From = $null; To = $null
-      Reason = "not a term-rotation store (Hy-Vee rotates by product id; Baker's pulls comprehensively)" }
+      Reason = "not a term-rotation store (Hy-Vee rotates by product id and keeps its own cursor file)" }
   }
 
   $did = if ($null -ne $Landed) { [bool]$Landed } else { Test-CaptureLanded -Store $Store -Today $todayS -OutDir $OutDir }
