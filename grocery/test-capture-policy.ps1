@@ -83,7 +83,29 @@ try {
   $sl5 = Select-ExpiryFirstSlice -Items $prods -Expiring @($hp.SaleExpiries) -Budget 1 -CursorStart 0 -KeyOf { param($w) $ks = @(); if ($w.cid) { $ks += $w.cid }; $nk = $w.name.ToLower(); if ($names.ContainsKey($nk)) { $ks += $names[$nk] }; $ks }
   if ($sl5.Items.Count -eq 1 -and $sl5.Items[0].name -eq 'Hy-Vee Butter') { Ok 'Hy-Vee: a link-less product is found for its expiring commodity by name and takes the only slot' } else { Bad "Hy-Vee slice: $(@($sl5.Items | ForEach-Object { $_.name }) -join ', ')" }
 
-  # 9. THE COUPLING IS WRITTEN DOWN where the list is consumed (build-sale-windows prunes the day after refresh_on)
+  # 9. THE HY-VEE PRODUCT CURSOR ADVANCES ON WHAT THE RUN *ASKED*, not on what it managed to write.
+  #    THE DEADLOCK (live 2026-08-20 -> 2026-08-22): the budget collapsed the everyday file, the
+  #    THROTTLE-WIPEOUT guard quarantined it and exited 2 before the cursor commit, so the cursor was
+  #    never created; every run re-took products 0-6, all seven of which carry no product link, and the
+  #    lane reported "0 refreshed, 7 not re-verified" every day while the prices sat frozen.
+  if ((Test-HyVeeCursorAdvance -Attempted 0 -Answered 0 -SliceSize 7 -SliceUnaskable 7).Advance) {
+    Ok 'a slice with nothing to ask advances past itself rather than re-picking the same products forever'
+  } else { Bad 'the 7-unlinked-products deadlock is still a deadlock' }
+  if ((Test-HyVeeCursorAdvance -Attempted 18 -Answered 4 -SliceSize 18 -SliceUnaskable 14).Advance) {
+    Ok 'a run the store answered advances, whatever happens to the write afterwards'
+  } else { Bad 'a run that asked and was answered did not earn its advance' }
+  if (-not (Test-HyVeeCursorAdvance -Attempted 18 -Answered 0 -SliceSize 18 -SliceUnaskable 0).Advance) {
+    Ok 'a dead or throttled endpoint does NOT burn the slice (the Family Fare lesson of 2026-08-20)'
+  } else { Bad 'a slice was burned by a run that fetched nothing - the cursor ran ahead of the capture' }
+  if (-not (Test-HyVeeCursorAdvance -Attempted 0 -Answered 0 -SliceSize 18 -SliceUnaskable 2).Advance) {
+    Ok 'an askable slice we never got to (wall-clock cap) is still owed its turn'
+  } else { Bad 'the cursor skipped products that were never asked about' }
+  # The term cursor still refuses Hy-Vee outright: two cursors, two namespaces, one set of rules.
+  $hvTerm = Step-CaptureCursor -Store 'Hy-Vee' -Today '2026-08-22' -OutDir (Join-Path $tmp 'out')
+  if (-not $hvTerm.Advanced -and $hvTerm.Reason -match 'product id') { Ok 'Hy-Vee still gets no TERM cursor - it rotates by product id and has its own file' }
+  else { Bad "the term cursor accepted Hy-Vee: $($hvTerm.Reason)" }
+
+  # 10. THE COUPLING IS WRITTEN DOWN where the list is consumed (build-sale-windows prunes the day after refresh_on)
   $libText = Get-Content (Join-Path $root 'capture-policy-lib.ps1') -Raw
   if ($libText -match 'build-sale-windows\.ps1[\s\S]{0,400}refresh_on' ) { Ok 'capture-policy-lib documents the build-sale-windows prune that bounds SaleExpiries' } else { Bad 'the prune coupling is not documented beside its consumer' }
 } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
