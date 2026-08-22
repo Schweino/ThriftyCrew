@@ -27,6 +27,9 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
+$script:CadenceRoot = Split-Path $root -Parent          # repo root, for input globs
+$script:CadenceDir  = Join-Path $OutDir 'cadence'
+if (-not (Test-Path $script:CadenceDir)) { try { New-Item -ItemType Directory -Path $script:CadenceDir -Force | Out-Null } catch { } }
 if (-not $ScheduleFile) { $ScheduleFile = Join-Path $root 'ad-schedule.json' }
 $LogFile = Join-Path $root 'ad-cycle-log.txt'
 $asof = if ($Today) { ([datetime]$Today).Date } else { (Get-Date).Date }
@@ -106,75 +109,63 @@ try {
 # covers only a non-zero EXIT, not a process that never exits. A job that outruns its budget is stopped,
 # logged by name with its budget, and reported as the estate rc 3 (could-not-evaluate) so its caller takes
 # the same BLIND/advisory path it already has for a failure. The chain keeps moving; the board still ships.
-# Start-AuditJob / Receive-AuditJob are NOT called directly any more - Invoke-Bounded is the only entry
 # point, and it starts and collects in one breath. They stay split because that is what makes the budget
 # enforceable: you cannot kill a child you never named.
-$script:AuditJobs = @{}
-function Start-AuditJob([string]$Name, [string[]]$Arguments) {
-  # $Arguments is the full powershell argument list (e.g. -ExecutionPolicy, Bypass, -File, <path>, ...)
-  # one string, quoted where needed, built HERE where the types are known: an array does not cross
-  # the job boundary as [string[]] (measured: it arrives flattened, and re-splitting it is guesswork)
-  $argStr = (@($Arguments) | ForEach-Object { $t = [string]$_; if ($t -match '\s') { '"' + $t + '"' } else { $t } }) -join ' '
-  $script:AuditJobs[$Name] = [pscustomobject]@{
-    Job = (Start-Job -Name ("audit-" + $Name) -ScriptBlock {
-      param($argStr, $pidFile)
-      # a real process we can name: Stop-Job alone would orphan the child and leave a hung audit holding
-      # the GPU or a file lock, which is the exact failure the budget exists to end
-      $so = [IO.Path]::GetTempFileName(); $se = [IO.Path]::GetTempFileName()
-      $p = Start-Process -FilePath 'powershell' -ArgumentList $argStr -PassThru -NoNewWindow -RedirectStandardOutput $so -RedirectStandardError $se
-      $null = $p.Handle   # PS 5.1: without touching Handle first, ExitCode reads null after the exit
-      Set-Content -Path $pidFile -Value $p.Id
-      $p.WaitForExit()
-      $o = @(Get-Content $so -ErrorAction SilentlyContinue) + @(Get-Content $se -ErrorAction SilentlyContinue)
-      Remove-Item $so, $se -Force -ErrorAction SilentlyContinue
-      [pscustomobject]@{ ExitCode = $p.ExitCode; Output = @($o | ForEach-Object { [string]$_ }) }
-    } -ArgumentList $argStr, (Join-Path $env:TEMP ("tc-audit-" + $Name + "-" + $PID + ".pid")))
-    PidFile = (Join-Path $env:TEMP ("tc-audit-" + $Name + "-" + $PID + ".pid"))
-    Started = Get-Date
-  }
-}
+# ---- A BOUNDED CHILD, WITHOUT A POWERSHELL JOB (rewritten 2026-08-22) ---------------------------------
+# THE FIRST VERSION OF THIS COST MINUTES PER CALL AND I PUT IT AROUND TEN STAGES. It ran each child
+# through Start-Job, and a PS 5.1 job is not a thread - it launches an entire child PowerShell, builds a
+# runspace and serialises session state across the boundary, per call. Measured: audit-graph-gates.ps1
+# takes 1 SECOND called directly and sat at 3.8 MINUTES through the wrapper; a probe written to time the
+# two side by side hung on the wrapper and had to be killed. That overhead is most of what the owner was
+# looking at when he said the chain was too slow to promote - and it was mine, added the same morning.
+#
+# The timeout itself is worth keeping: it caught three genuine hangs today (a cold GPU sweep, a wedged
+# graph import, a stalled SQLite build). So keep the guarantee, drop the machinery. Start-Process gives a
+# real OS process with a real exit code and a WaitForExit(ms) that returns false on expiry - everything
+# the job was doing, in-process, with no runspace and no serialisation.
+#
+# STILL TRUE, AND STILL LOAD-BEARING:
+#   * the whole PROCESS TREE is killed on timeout - Stop-Process on the parent alone orphans a child that
+#     keeps the GPU or a file lock (that is why Stop-ProcessTree exists);
+#   * a timeout returns 3, the estate's could-not-evaluate code, so every caller's existing BLIND branch
+#     fires. It must never read as a clean 0 - a killed audit that logs "clean" is the exact false green
+#     this estate keeps rediscovering;
+#   * stderr is captured BY FILE, never by 2>&1, because redirecting a native child's stderr under
+#     EAP=Stop makes its first line a terminating throw (test-native-stderr-eap.ps1).
 function Stop-ProcessTree([int]$procId) {
   foreach ($c in @(Get-CimInstance Win32_Process -Filter ("ParentProcessId = " + $procId) -ErrorAction SilentlyContinue)) { Stop-ProcessTree ([int]$c.ProcessId) }
   Stop-Process -Id $procId -Force -ErrorAction SilentlyContinue
 }
-function Receive-AuditJob([string]$Name, [int]$TimeoutSec = 900) {
-  # returns @{ ExitCode; Output[]; TimedOut; Elapsed }. ExitCode 124 = stopped at the budget.
-  $e = $script:AuditJobs[$Name]
-  if (-not $e) { return [pscustomobject]@{ ExitCode = 125; Output = @("audit job '$Name' was never started"); TimedOut = $false; Elapsed = 0 } }
-  $remaining = [Math]::Max(1, $TimeoutSec - [int]((Get-Date) - $e.Started).TotalSeconds)
-  $null = Wait-Job -Job $e.Job -Timeout $remaining
-  $elapsed = [int]((Get-Date) - $e.Started).TotalSeconds
-  if ($e.Job.State -eq 'Running') {
-    try { $cp = [int](Get-Content $e.PidFile -ErrorAction Stop | Select-Object -First 1); if ($cp) { Stop-ProcessTree $cp } } catch { }
-    Stop-Job $e.Job -ErrorAction SilentlyContinue; Remove-Job $e.Job -Force -ErrorAction SilentlyContinue
-    Remove-Item $e.PidFile -Force -ErrorAction SilentlyContinue
-    $script:AuditJobs.Remove($Name)
-    # RETURN THE ESTATE'S OWN COULD-NOT-EVALUATE CODE (2026-08-22). The first version returned 124 and the
-    # commit claimed callers would "take the same BLIND path they already have for a failure". They do not:
-    # every collector tests for 3 (or for a specific failure code) and 124 fell through the ELSE - so a
-    # killed coverage-gaps re-read YESTERDAY's json and deduped against it as today's, a killed semantic
-    # sweep logged "no invisible products found" and cleared its alert signature, and a killed db-build,
-    # the foreign-key gate, logged clean. A timeout must mean what it is: nothing was proven. The distinct
-    # fact that we KILLED it rather than the script exiting 3 lives in TimedOut and in this log line.
+function Invoke-Bounded([string]$Name, [string[]]$Arguments, [int]$TimeoutSec = 600) {
+  # returns @{ ExitCode; Output[]; TimedOut; Elapsed }. ExitCode 3 = could-not-evaluate (timeout or launch failure).
+  $so = [IO.Path]::GetTempFileName(); $se = [IO.Path]::GetTempFileName()
+  $sw = [Diagnostics.Stopwatch]::StartNew()
+  $p = $null
+  try {
+    $p = Start-Process -FilePath 'powershell' -ArgumentList $Arguments -PassThru -NoNewWindow `
+                       -RedirectStandardOutput $so -RedirectStandardError $se
+    $null = $p.Handle   # PS 5.1: without touching Handle first, ExitCode reads $null after the exit
+  } catch {
+    Remove-Item $so, $se -Force -ErrorAction SilentlyContinue
+    Log ("$Name could not be launched: " + $_.Exception.Message)
+    return [pscustomobject]@{ ExitCode = 3; Output = @("$Name could not be launched - BLIND, nothing proven"); TimedOut = $false; Elapsed = 0 }
+  }
+  $done = $p.WaitForExit($TimeoutSec * 1000)
+  $sw.Stop(); $elapsed = [int]$sw.Elapsed.TotalSeconds
+  if (-not $done) {
+    try { Stop-ProcessTree ([int]$p.Id) } catch { }
+    try { $null = $p.WaitForExit(5000) } catch { }
+    Remove-Item $so, $se -Force -ErrorAction SilentlyContinue
     Log ("TIMED OUT: $Name exceeded its $TimeoutSec s budget and was stopped - reported as BLIND (could-not-evaluate); the board still ships")
     return [pscustomobject]@{ ExitCode = 3; Output = @("$Name TIMED OUT after $TimeoutSec s - BLIND, nothing proven"); TimedOut = $true; Elapsed = $elapsed }
   }
-  $r = Receive-Job $e.Job -ErrorAction SilentlyContinue
-  Remove-Job $e.Job -Force -ErrorAction SilentlyContinue
-  Remove-Item $e.PidFile -Force -ErrorAction SilentlyContinue
-  $script:AuditJobs.Remove($Name)
-  # no exit code = the job itself broke before the child ever reported. That is not a clean 0 and it is not
-  # a verdict either: it is BLIND, for the same reason as the timeout above.
-  $rc = if ($r -and $null -ne $r.ExitCode) { [int]$r.ExitCode } else { 3 }
-  $out = if ($r) { @($r.Output) } else { @() }
-  if (-not $r) { $out += @('the audit job produced no result object - BLIND') + @(($e.Job.ChildJobs[0].Error | ForEach-Object { [string]$_ })) }
-  Log ("{0}: {1} s (rc={2})" -f $Name, $elapsed, $rc)
-  return [pscustomobject]@{ ExitCode = $rc; Output = $out; TimedOut = $false; Elapsed = $elapsed }
-}
-function Invoke-Bounded([string]$Name, [string[]]$Arguments, [int]$TimeoutSec = 600) {
-  # synchronous child with a hard stop; same result shape as Receive-AuditJob
-  Start-AuditJob $Name $Arguments
-  return (Receive-AuditJob $Name $TimeoutSec)
+  $out = @()
+  try { $out += @(Get-Content $so -ErrorAction SilentlyContinue) } catch { }
+  try { $out += @(Get-Content $se -ErrorAction SilentlyContinue) } catch { }
+  Remove-Item $so, $se -Force -ErrorAction SilentlyContinue
+  $rc = try { [int]$p.ExitCode } catch { 3 }
+  if ($elapsed -ge 30) { Log ("{0}: {1} s (rc={2})" -f $Name, $elapsed, $rc) }
+  return [pscustomobject]@{ ExitCode = $rc; Output = @($out | ForEach-Object { [string]$_ }); TimedOut = $false; Elapsed = $elapsed }
 }
 
 # Price signature of the current board: sorted id|store|per_unit|type over the latest comparison, hashed.
@@ -1009,6 +1000,10 @@ ame-drift.json (it is how it knows which links are the wrong PRODUCT) and then W
       # Strictly advisory, and BLIND-not-block: exit 3 (no GPU, no python, no corpus) must never stop the daily
       # publish, and findings never change a price, a crown, a rule or a link on their own. Signature de-dup so
       # a standing backlog is reported ONCE and only genuinely NEW findings speak up again.
+      # CADENCE (7d): the GPU embedding sweep, 136-900 s. Due weekly OR whenever the rules/corpus move, which is what its findings depend on.
+      if (-not (Test-CadenceDue -Name 'semantic' -EveryDays 7 -InputGlobs @('grocery/commodities.json','grocery/out/regular/*.json'))) {
+        Log ('semantic: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'semantic') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
+      } else {
       try {
         $semRc = (Invoke-Bounded 'semantic' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-semantic-identity.ps1')) 900).ExitCode
         if ($semRc -eq 3) {
@@ -1034,6 +1029,8 @@ ame-drift.json (it is how it knows which links are the wrong PRODUCT) and then W
           }
         }
       } catch { Log ('semantic sweep threw: ' + $_.Exception.Message) }
+        Set-CadenceRan 'semantic'
+      }
       # ---- AISLE TEST ON THE LIVE BOARD (added 2026-08-01). The sweep above finds products no rule can
       # SEE. This finds the opposite defect: a product the rules DID match that the STORE files in a
       # department the commodity has no business occupying. First live run read 406 Family Fare cells and
@@ -1043,6 +1040,10 @@ ame-drift.json (it is how it knows which links are the wrong PRODUCT) and then W
       # Advisory + signature-deduped: ~22 known department-map false positives (spices shelved in produce,
       # canned milks in dairy) would otherwise shout every day, so only a CHANGED block-set speaks. The
       # gate is deliberately NOT loosened to silence them - that would trade a real defect class for quiet.
+      # CADENCE (3d): 173 s against Family Fare's shelf paths; its block-set logged 'unchanged' on every run this week.
+      if (-not (Test-CadenceDue -Name 'aisle-test' -EveryDays 3 -InputGlobs @('grocery/out/regular/family-fare-regular-*.json','grocery/taxonomy-map.json','grocery/commodities.json'))) {
+        Log ('aisle-test: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'aisle-test') + "; runs every 3d or the moment its inputs move. A SKIP IS NOT A PASS.")
+      } else {
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'aisle-test.ps1') -LiveBoard *>&1 | Out-Null
         $atRc = $LASTEXITCODE
@@ -1068,6 +1069,8 @@ ame-drift.json (it is how it knows which links are the wrong PRODUCT) and then W
           }
         }
       } catch { Log ('aisle test threw: ' + $_.Exception.Message) }
+        Set-CadenceRan 'aisle-test'
+      }
       # ---- MATCHING-SOUNDNESS GUARD: a WRONG product landing in a commodity, or a rule change quietly moving/
       # dropping an existing product vs the reviewed baseline (the 2026-07-13 matching-audit class). No other
       # guard catches theft-IN. audit-match-soundness -Alert self-dedups and emails on a NEW issue-set; a
@@ -1132,10 +1135,16 @@ ame-drift.json (it is how it knows which links are the wrong PRODUCT) and then W
       # it runs, which is the audit-unit-basis-outlier lesson this contract exists to enforce. So it runs
       # HERE, against live product names. Sampled (the full sweep is ~28.5k names); a copy that drifts does
       # so for a whole rule, not one unlucky name. Advisory: it reports, the board still ships.
+      # CADENCE (7d): compares auditor COPIES of Match-Category against the engine; only a code or rule edit can change the answer.
+      if (-not (Test-CadenceDue -Name 'matcher-parity' -EveryDays 7 -InputGlobs @('grocery/match-lib.ps1','grocery/compare-deals.ps1','grocery/audit-household-in-food.ps1','grocery/commodities.json'))) {
+        Log ('matcher-parity: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'matcher-parity') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
+      } else {
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-matcher-parity.ps1') -Sample 400 | ForEach-Object { Log ('matcher-parity: ' + $_) }
         if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    an auditor copy of Match-Category no longer agrees with the engine - audit-household-in-food is a HARD gate built on one of those copies, so it may be judging cells under the wrong commodity' }
       } catch { Log ('matcher-parity threw: ' + $_.Exception.Message) }
+        Set-CadenceRan 'matcher-parity'
+      }
       # ---- CATEGORY-COVERAGE GUARD: a commodity filed into NO category renders in no department/filter (invisible).
       # HARD publish gate + daily alert so adding a new item can never silently skip a filter.
       try {
@@ -1147,6 +1156,10 @@ ame-drift.json (it is how it knows which links are the wrong PRODUCT) and then W
       # ---- STORE-REGISTRY GUARD (2026-07-26): a hardcoded store list drifting from stores.json (the
       # publish-store-guide/publish-deals-page Fareway class - a store silently missing from ONE surface).
       # Advisory: alerts + summary, board still ships (drift is a surface bug, not a data bug).
+      # CADENCE (7d): hardcoded store lists vs stores.json - source + one json.
+      if (-not (Test-CadenceDue -Name 'store-registry' -EveryDays 7 -InputGlobs @('grocery/*.ps1','grocery/stores.json'))) {
+        Log ('store-registry: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'store-registry') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
+      } else {
       try {
         $srArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-store-registry.ps1'))
         if (-not $NoAlert) { $srArgs += '-Alert' }
@@ -1158,10 +1171,18 @@ ame-drift.json (it is how it knows which links are the wrong PRODUCT) and then W
       # Brad spotted it by eye on 2026-08-15 (two recipes paid $0.218/oz against a live $0.0743/oz). The id
       # namespace spans three files, so only a cross-namespace scan can see it. Review, not a gate: a suspect
       # needs a human merge-or-allowlist ruling, and blocking the publish would not make that happen faster.
+      # CADENCE (7d): 110 s reading the commodity registry, which only moves when a human mints an id.
+      if (-not (Test-CadenceDue -Name 'commodity-dupes' -EveryDays 7 -InputGlobs @('grocery/commodities.json','grocery/recipe-commodities.json','grocery/categories.json'))) {
+        Log ('commodity-dupes: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'commodity-dupes') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
+      } else {
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-commodity-dupes.ps1') | ForEach-Object { Log ('commodity-dupes: ' + $_) }
         if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    commodity-dupes: the same food may be priced under two ids (see out\commodity-dupes.json) - merge the real ones, allowlist the reviewed ones' }
       } catch { Log ('commodity-dupes audit threw: ' + $_.Exception.Message) }
+        Set-CadenceRan 'store-registry'
+      }
+        Set-CadenceRan 'commodity-dupes'
+      }
       # ---- ARRIVALS DESK (REVIEW QUEUE, NEVER A GATE). The 47-of-99 bug class - a commodity's include regex
       # matching a product that is NOT the commodity - is invisible to every hard invariant above it: those
       # products carry a real first-party product id, a real price and a working link, so identity, basis,
@@ -1392,6 +1413,10 @@ ame-drift.json (it is how it knows which links are the wrong PRODUCT) and then W
       # zero-output rule could not see it because it had produced plenty of output. Detectors now end with a
       # NAME-COMPLETE line (lib\guard-contract.ps1); this reports the retrofit backlog and hard-fails when a
       # detector LOSES its marker or a new one joins the chain without one.
+      # CADENCE (7d): static scan of completion markers in .ps1 text; 15 s but pure source.
+      if (-not (Test-CadenceDue -Name 'guard-contract' -EveryDays 7 -InputGlobs @('grocery/*.ps1','lib/*.ps1'))) {
+        Log ('guard-contract: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'guard-contract') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
+      } else {
       try {
         $gc = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-guard-contract.ps1')
         $gcBad = @($gc | Where-Object { $_ -match '^\s*!' })
@@ -1400,11 +1425,17 @@ ame-drift.json (it is how it knows which links are the wrong PRODUCT) and then W
           $summary += "REVIEW    $($gcBad.Count) detector(s) can no longer prove they ran to the end (grocery\audit-guard-contract.ps1)"
         } else { Log ('guard-contract: ' + (@($gc | Where-Object { $_ -match 'chain detector' }) -join '')) }
       } catch { Log ('audit-guard-contract threw: ' + $_.Exception.Message) }
+        Set-CadenceRan 'guard-contract'
+      }
       # ---- CLOUD READINESS (2026-08-08) ------------------------------------------------------------------
       # Static check that no script in this chain can ONLY read a gitignored key file. Key files do not exist
       # on a runner, so such a script is a cloud failure waiting for its first real run - and the cloud
       # backup has never had one (13 straight stand-downs from a PS 5.1 array bug, all reported SUCCESS).
       # meal-prep\engine\publish.ps1 was exactly that until today. Cheap, and it holds the fix in place.
+      # CADENCE (7d): static scan for scripts that can only read a local key file. Source-only.
+      if (-not (Test-CadenceDue -Name 'cloud-readiness' -EveryDays 7 -InputGlobs @('grocery/*.ps1','meal-prep/**/*.ps1'))) {
+        Log ('cloud-readiness: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'cloud-readiness') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
+      } else {
       try {
         $cr = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-cloud-readiness.ps1')
         if ($LASTEXITCODE -ne 0) {
@@ -1413,6 +1444,8 @@ ame-drift.json (it is how it knows which links are the wrong PRODUCT) and then W
           $summary += 'REVIEW    a daily-chain script can only read a local key file - it would fail on the cloud runner (grocery\audit-cloud-readiness.ps1)'
         }
       } catch { Log ('audit-cloud-readiness threw: ' + $_.Exception.Message) }
+        Set-CadenceRan 'cloud-readiness'
+      }
       # ---- DATABASE REBUILD (2026-08-08) -----------------------------------------------------------------
       # db\thriftycrew.db is rebuilt from the JSON stores with PRAGMA foreign_keys=ON. A reference that does
       # not resolve does not "produce a finding" here - it REFUSES the write and names the row, which is the
@@ -1989,6 +2022,10 @@ if ($script:DownstreamRan) {
 # whether the guards themselves can still be trusted. It depends on nothing but its own fixtures, so there
 # is no reason for it ever to be conditional. A blind watcher has to be LOUDER than the thing it watches:
 # if this fails, every quiet guard above it becomes unproven, including a clean board.
+# CADENCE (7d): replays frozen fixtures against guard SOURCE; 877 s. Due on any .ps1 edit, so a commit that blinds a guard is still caught the same day.
+if (-not (Test-CadenceDue -Name 'test-auditors' -EveryDays 7 -InputGlobs @('grocery/*.ps1','lib/*.ps1'))) {
+  Log ('test-auditors: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'test-auditors') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
+} else {
 try {
   # ONE RUN, OUTPUT KEPT (2026-08-22). This used to run the suite once to get the exit code and then, on a
   # failure, run it AGAIN to get the text - and it failed on 10 of the previous 14 days, so the ~3-minute
@@ -2027,6 +2064,8 @@ try {
     }
   } else { Log 'watchers ok: every guard still fires on its own founding bug' }
 } catch { Log ('test-auditors threw: ' + $_.Exception.Message) }
+  Set-CadenceRan 'test-auditors'
+}
 
 # ---- WEEKLY: prove each BLOCKING invariant can still FAIL (test-guards, hermetically) ----
 # test-auditors above proves the watchers fire on frozen fixtures; test-guards proves guards.ps1 itself

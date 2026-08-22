@@ -964,6 +964,19 @@ $cacSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
 # These are source asserts because the plumbing is the bug: the behaviour only appears on a real run,
 # and by then it is a live wrong price. Same precedent as the guard-caller asserts above.
 $crSrc = Get-Content (Join-Path $root 'capture-run.ps1') -Raw
+
+# ---- THE CADENCE MUST NOT BECOME A SILENT NO-OP, IN EITHER DIRECTION -----------------------------------
+# Gating the heavy audits (test-auditors itself, the embedding sweep, commodity-dupes, the static source
+# scans) is what took the chain's tail from ~23 min to a few. It buys minutes by NOT RUNNING CHECKS, so it
+# is exactly the kind of change that can quietly turn a guard estate into decoration. Two properties, both
+# fixtured in test-cadence.ps1 and asserted here so the wiring cannot rot:
+#   a skip is never a pass (missing/unreadable stamp -> run), and an input edit is due TODAY (not in 7 days).
+$tcOut = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'test-cadence.ps1') | ForEach-Object { [string]$_ }) -join "`n"
+if ($tcOut -match 'CADENCE SELF-TEST PASS') { Ok 'cadence gate: skips only when the clock AND its inputs both say so (test-cadence.ps1)' }
+else { Bad ('cadence gate self-test FAILED - a gated audit may be skipping while its inputs move, or running every day for nothing: ' + ($tcOut -replace "`n", ' | ')) }
+if ($cacSrc -match 'function Test-CadenceDue' -and $cacSrc -match "ToString\('o'\)") {
+  Ok 'cadence stamps keep sub-second precision (ToString(''o'')) - ''s'' truncation made every check due forever'
+} else { Bad 'the cadence stamp lost round-trip precision - an input written in the same second reads as newer and nothing ever skips' }
 if ($crSrc -match 'smp-pipeline-bot' -and $crSrc -match 'push origin HEAD:main') {
   Ok 'capture-run still commits and pushes the pipeline output (the last mile exists)'
 } else { Bad 'capture-run LOST its commit/push - the chain would compute prices that never reach a reader, exactly as 2026-08-18..22' }
