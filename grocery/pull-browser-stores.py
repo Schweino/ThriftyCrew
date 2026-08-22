@@ -708,7 +708,34 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
 
         body = browser.js(f"{cfg['to_csv']}()") or ""
         if not body.strip():
-            return False, "sweep produced no rows - capture NOT written (an empty file would read as a real, empty store)"
+            # BLINDNESS IS NOT EMPTINESS - AND THE DRIVER MUST SAY WHICH (fixed 2026-08-22).
+            # This used to report every empty capture as "sweep produced no rows", collapsing three
+            # different outcomes into one sentence: a store that genuinely lists nothing, a store we
+            # were BLOCKED from reading, and a broken parser. The agents are scrupulous about this
+            # distinction - EMPTY is a claim about the store, UNUSABLE is a claim about us - and the
+            # driver was throwing that away at the last step. Measured the day it was fixed: Walmart
+            # reported "produced no rows" when every term had settled UNUSABLE/bot-wall, and the real
+            # answer had to be recovered by grepping the profile's LevelDB off disk.
+            counts = {}
+            why = ""
+            try:
+                s = json.loads(summary_raw) if summary_raw else {}
+                counts = {k: s.get(k) for k in ("matches", "empty", "unusable") if s.get(k) is not None}
+                blocked = browser.js(
+                    "(function(){ try { const r = JSON.parse(localStorage.getItem(%s)||'{}');"
+                    "  for (const k in r) if (r[k] && r[k].v === 'UNUSABLE') return String(r[k].why||'blocked');"
+                    "  return ''; } catch(e){ return ''; } })()" % json.dumps(skey))
+                why = blocked or ""
+            except Exception:
+                pass
+            if counts.get("unusable"):
+                detail = f"{counts['unusable']} term(s) UNUSABLE" + (f" ({why})" if why else "")
+                if why and "wall" in why.lower():
+                    notify_wall(name, f"every term blocked - {why}")
+                return False, (f"BLOCKED, not empty: {detail}. Capture NOT written - recording this as "
+                               f"'no products' would retire real cells. Counts: {counts}")
+            return False, (f"sweep produced no rows and nothing reported as blocked - suspect the parser, "
+                           f"not the store. Counts: {counts}. Capture NOT written.")
 
         # HEADER, AND PROVE IT FITS. sweepToCsv emits data rows only; Import-Csv needs a header or it
         # eats the first product as one. Worse than missing is WRONG: Sam's captures carried five
