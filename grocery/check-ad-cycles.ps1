@@ -91,6 +91,7 @@ try {
 # out. The helper sends the body BY FILE and makes a failed send its own loud log line. Full account, and
 # the reason every caller goes through it even when today's body looks short, in alert-lib.ps1.
 . (Join-Path $root 'alert-lib.ps1')
+. (Join-Path $root 'native-lib.ps1')   # Invoke-Native / Invoke-NativeScript: the ONLY safe redirect under EAP=Stop
 
 # ---- BOUNDED CHILDREN, RUN ONE AT A TIME (2026-08-22) --------------------------------------------------
 # THE PARALLEL EXPERIMENT IS REVERTED, ON THE MEASUREMENT. Earlier today four advisory audits (coverage-gaps,
@@ -1620,7 +1621,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         # and then discarded. It is also the ONLY independent price proof Baker's has (see guards.ps1 invariant
         # 11, retired 2026-07-30 in its favour), so throwing its output away left the board's largest store
         # effectively unwatched. Advisory by design; what changes is that it is now READ.
-        $brOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-basis-reconcile.ps1') 2>$null
+        $brOut = (Invoke-NativeScript (Join-Path $root 'audit-basis-reconcile.ps1')).Output
         $brSummary = @($brOut) | Where-Object { $_ -match 'basis-reconcile:' } | Select-Object -First 1
         if ($brSummary) { Log ([string]$brSummary) }
         $brFindings = @($brOut) | Where-Object { $_ -match 'CONFLICT|disagree' }
@@ -1820,11 +1821,13 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # LOCAL browser pull can fix it, and send-alert's per-type daily gate caps it at one email per day.
       # Non-fatal by construction.
       try {
-        $wfpOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-walmart-fullpull.ps1') 2>$null
-        if ($LASTEXITCODE -eq 1) {
+        $wfpR = Invoke-NativeScript (Join-Path $root 'audit-walmart-fullpull.ps1')
+        $wfpOut = $wfpR.Output
+        $wfpRc = $wfpR.ExitCode
+        if ($wfpRc -eq 1) {
           Log ('walmart-fullpull ADVISORY: ' + [string]$wfpOut)
           try { Send-Alert -Subject "Grocery: Walmart full capture aging - $asofS" -Body ("Early warning, nothing is broken yet: " + [string]$wfpOut + " When the last comprehensive capture leaves the 14-day union window, the coverage guard will HOLD the board (safe, but that day's Walmart refresh is lost). Run the full-worklist Walmart browser pull to reset the clock.") | Out-Null } catch {}
-        } elseif ($LASTEXITCODE -eq 3) {
+        } elseif ($wfpRc -eq 3) {
           Log ('walmart-fullpull BLIND: ' + [string]$wfpOut)
           try { Send-Alert -Subject "Grocery: a union store has NO captures in its window - $asofS" -Body ("Not an early warning - the fullpull watch examined ZERO capture files for at least one union store (Walmart/Sam's): " + [string]$wfpOut + " The coverage guard will HOLD that store at the cliff; run the full-worklist browser pull now.") | Out-Null } catch {}
         } else { Log ('walmart-fullpull: ' + [string]$wfpOut) }
@@ -1842,12 +1845,18 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # already decides which row wins and guards.ps1 already fails closed, so this is the OUTCOME watch,
       # not a gate. It must never hold a board.
       # Exit 0 = clean or advisory findings (the count is in the summary line), 3 = BLIND (no src_date in
-      # candidates, or no board to read) which is NOT a clean result and says so. Output is captured first
-      # and 2>$null keeps a child stderr line from killing the cycle under EAP=Stop (the audit-ff-carry /
-      # logger-kills-pipeline lesson); the whole block is wrapped so a crash here cannot cost the cycle.
+      # candidates, or no board to read) which is NOT a clean result and says so.
+      # THE COMMENT THAT USED TO BE HERE WAS BACKWARDS AND IT COST US (corrected 2026-08-23). It read
+      # "2>$null keeps a child stderr line from killing the cycle under EAP=Stop". It does the OPPOSITE:
+      # under Stop ANY redirect on a native child mints an ErrorRecord per stderr line, and the first one
+      # TERMINATES the caller. That belief is what put `git fetch ... 2>$null` in capture-run's push stage,
+      # where it killed the 2026-08-23 07:00 run. Output now comes back through Invoke-Native, which does
+      # the redirect with EAP forced to 'Continue' - the only context where a redirect is safe. See
+      # native-lib.ps1. The whole block is still wrapped so a crash here cannot cost the cycle.
       try {
-        $ceOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-capture-eviction.ps1') 2>$null
-        $ceRc = $LASTEXITCODE
+        $ceR = Invoke-NativeScript (Join-Path $root 'audit-capture-eviction.ps1')
+        $ceOut = $ceR.Output
+        $ceRc = $ceR.ExitCode
         $ceLine = [string](@($ceOut) -match '^audit-capture-eviction: ' | Select-Object -First 1)
         if (-not $ceLine) { $ceLine = (@($ceOut) | ForEach-Object { [string]$_ }) -join ' ' }
         if ($ceRc -eq 3) {

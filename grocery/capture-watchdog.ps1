@@ -27,6 +27,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 . (Join-Path $root 'run-log-lib.ps1')
+. (Join-Path $root 'native-lib.ps1')   # Invoke-Native: the ONLY safe way to redirect a native child under EAP=Stop
 
 # Runs hidden from a scheduled task, so its findings only existed in an email.
 # The transcript keeps the evidence even when the alert de-dup suppresses the mail.
@@ -210,10 +211,16 @@ if ((Test-Path $cmp) -and (Test-Path $pub)) {
 # it, and a clean tree can mean "nothing ran" as easily as "everything shipped".
 $repoRoot = Split-Path $root -Parent
 try {
-  $lastBot = (& git -C $repoRoot log --author='smp-pipeline-bot' -1 --format=%cd --date=format:'%Y-%m-%d' 2>$null | Select-Object -First 1)
+  # Invoke-Native, not `git ... 2>$null`. This file sets EAP='Stop', and under Stop a redirect on a
+  # native child turns its FIRST stderr line into a TERMINATING error - `2>$null` causes that, it does
+  # not prevent it. git writes ordinary progress to stderr, so the watchdog's own "did it reach main?"
+  # check was one noisy git invocation away from killing the watchdog. See native-lib.ps1.
+  $lbR = Invoke-Native 'git' '-C' $repoRoot 'log' '--author=smp-pipeline-bot' '-1' '--format=%cd' '--date=format:%Y-%m-%d'
+  $lastBot = @($lbR.Output) | Select-Object -First 1
   $botAge = if ($lastBot) { [int]((Get-Date).Date - ([datetime]$lastBot)).TotalDays } else { 9999 }
   # the served files, as git sees them: dirty = computed but never shipped
-  $dirty = @(& git -C $repoRoot status --porcelain -- 'public/board.json' 'public/smp-feed.json' 2>$null | Where-Object { $_ })
+  $dirtyR = Invoke-Native 'git' '-C' $repoRoot 'status' '--porcelain' '--' 'public/board.json' 'public/smp-feed.json'
+  $dirty = @($dirtyR.Output | Where-Object { $_ })
   if ($botAge -gt 2) {
     $seen = if ($lastBot) { "the last pipeline commit is $lastBot ($botAge days ago)" } else { 'there is NO pipeline commit in this history' }
     [void]$findings.Add("NEVER REACHED MAIN: $seen. Cloudflare deploys public\** from the repo, so the live board and feed are stale by that much no matter how fresh the local files look. Check the publish stage at the end of capture-run.ps1 (commit -> push -> edge verify).")

@@ -22,6 +22,26 @@
 #>
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+
+# PSChild - every `& powershell ... -File X ... 2>&1` in this suite, routed through the ONE safe
+# redirect (native-lib.ps1). This file sets EAP='Stop', so each of those redirects was a latent
+# landmine: the moment a child under test writes to stderr, the FIRST line terminates THIS SCRIPT
+# and every remaining case goes unrun - the suite would report FEWER CASES, not a failure. That is
+# the same shape that killed capture-run at 07:00 on 2026-08-23, and a test harness that can be
+# silenced by the very thing it is testing is worth very little. $LASTEXITCODE still reads the
+# child's real code through the helper (verified), so the `$rc = $LASTEXITCODE` lines are unchanged.
+. (Join-Path $root 'native-lib.ps1')
+function PSChild {
+  # TWO EXPLICIT PARAMETERS, NOT ONE CATCH-ALL. A single ValueFromRemainingArguments array
+  # cannot carry `PSChild $script -SelfTest`: PowerShell tries to bind -SelfTest as a PARAMETER
+  # NAME of PSChild and mangles it. With $Path taking position 0 and $Rest collecting the rest,
+  # all four shapes used in this file work - no args, a switch, named values, and both mixed.
+  # (Verified against a probe child before shipping: SelfTest/Name/N all arrive intact.)
+  param([Parameter(Mandatory, Position = 0)][string]$Path,
+        [Parameter(ValueFromRemainingArguments = $true)][object[]]$Rest)
+  (Invoke-NativeScript $Path @Rest).Lines
+}
+
 $fix  = Join-Path $root 'regression-inputs\guard-fixtures'
 $pass = 0; $failed = 0; $skipped = 0
 
@@ -57,7 +77,7 @@ function RunPS($script, $argList) {
   # The merge is deliberate (assertions read the child's stderr); only the throw is unwanted.
   $prev = $ErrorActionPreference
   $ErrorActionPreference = 'Continue'
-  try { $out = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root $script) @argList 2>&1 | ForEach-Object { [string]$_ } }
+  try { $out = PSChild (Join-Path $root $script) @argList | ForEach-Object { [string]$_ } }
   finally { $ErrorActionPreference = $prev }
   return [pscustomobject]@{ rc = $LASTEXITCODE; text = ($out -join "`n") }
 }
@@ -190,7 +210,7 @@ function RunTriage($content) {
   $qf = Join-Path $tmp 'triage-queue.json'
   if ($null -eq $content) { Remove-Item $qf -ErrorAction SilentlyContinue }
   else { [IO.File]::WriteAllText($qf, $content, (New-Object Text.UTF8Encoding($false))) }
-  $o = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $tmp 'triage-due.ps1') 2>&1 | ForEach-Object { [string]$_ }
+  $o = PSChild (Join-Path $tmp 'triage-due.ps1') | ForEach-Object { [string]$_ }
   return ($o -join ' ')
 }
 # the exact 2026-07-28 failure: a queue file caught mid-rewrite reads as an empty string, and in PS 5.1
@@ -339,7 +359,7 @@ Write-Output 'SURVIVED'
 '@
   $pf = Join-Path $env:TEMP ('logprobe-' + [guid]::NewGuid().ToString('N').Substring(0,6) + '.ps1')
   Set-Content $pf $probeScript -Encoding UTF8
-  $out = (& powershell -NoProfile -ExecutionPolicy Bypass -File $pf $logProbe 2>&1 | ForEach-Object { [string]$_ }) -join ' '
+  $out = (PSChild $pf $logProbe | ForEach-Object { [string]$_ }) -join ' '
   Remove-Item $pf -Force -ErrorAction SilentlyContinue
   if ($out -match 'SURVIVED') { Ok 'a locked log file does not kill the run (retry-then-continue Log pattern)' }
   else { Bad ('a locked log file still terminates the run: ' + $out) }
@@ -363,7 +383,7 @@ else { Bad ('these loggers still die on a locked log file: ' + ($bare -join ', '
 # "drift". On 2026-07-29 it reported 66 differences and not one was a code bug. Now that the rules are
 # pinned it can only fail on a CODE change - which makes it safe to run daily, and makes red mean something.
 # Three checks: the guard is green, its founding-bug fixture still exists, and the hermetic seal is intact.
-$rt = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'regression-test.ps1') 2>&1 | ForEach-Object { [string]$_ }
+$rt = PSChild (Join-Path $root 'regression-test.ps1') | ForEach-Object { [string]$_ }
 if ($LASTEXITCODE -eq 0) { Ok 'golden regression guard is GREEN on the hermetic frozen inputs' }
 else { Bad ('golden regression guard is RED - the engine changed a known-good number: ' + (($rt | Select-Object -Last 3) -join ' | ')) }
 
@@ -630,7 +650,7 @@ function RunPSAt([string]$dir, [string]$script, $argList) {
   # same stderr-throw guard as RunPS above - see the long note there
   $prev = $ErrorActionPreference
   $ErrorActionPreference = 'Continue'
-  try { $out = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dir $script) @argList 2>&1 | ForEach-Object { [string]$_ } }
+  try { $out = PSChild (Join-Path $dir $script) @argList | ForEach-Object { [string]$_ } }
   finally { $ErrorActionPreference = $prev }
   return [pscustomobject]@{ rc = $LASTEXITCODE; text = ($out -join "`n") }
 }
@@ -936,7 +956,7 @@ $fxGwWarn = New-Object System.Collections.ArrayList
 $fxGwOk = New-Object System.Collections.ArrayList
 foreach ($fxChild in @('exit5.ps1','exit0.ps1')) {
   try {
-    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxGw $fxChild) 2>$null
+    $null = PSChild (Join-Path $fxGw $fxChild)
     if ($LASTEXITCODE -eq 0) { [void]$fxGwOk.Add($fxChild) }
     elseif ($LASTEXITCODE -eq 3) { [void]$fxGwWarn.Add($fxChild + ':blind') }
     else { [void]$fxGwWarn.Add($fxChild) }
@@ -998,7 +1018,10 @@ if ($cacSrc -match 'chain-verdict\.json' -and $cacSrc -match 'guards_blocked') {
 } else { Bad 'check-ad-cycles no longer writes chain-verdict.json - capture-run cannot tell a blocked board from a clean one' }
 # and the watchdog must ask the question that speaks for the READER, not for the pipeline
 $cwSrc = Get-Content (Join-Path $root 'capture-watchdog.ps1') -Raw
-if ($cwSrc -match 'NEVER REACHED MAIN' -and $cwSrc -match "log --author='smp-pipeline-bot'") {
+# ASSERT THE QUESTION, NOT ITS PUNCTUATION. This used to pin the literal "log --author='smp-pipeline-bot'",
+# so converting that call to Invoke-Native (2026-08-23) read as "the watchdog lost its reached-main check"
+# when the check was intact. A shape test that fails on a safe refactor teaches people to edit the test.
+if ($cwSrc -match 'NEVER REACHED MAIN' -and $cwSrc -match 'smp-pipeline-bot' -and $cwSrc -match "(Invoke-Native\s+'git'|&\s*git)") {
   Ok 'capture-watchdog asks git whether the pipeline output actually reached main'
 } else { Bad 'capture-watchdog lost the reached-main check - the four-day silent staleness of 2026-08-18..22 becomes invisible again' }
 if ($cacSrc -match 'walmart-fullpull BLIND' -and $cacSrc -match 'name-drift BLIND' -and $cacSrc -match 'coverage-gaps BLIND for' -and $cacSrc -match 'tile-integrity BLIND' -and $cacSrc -match 'match-soundness BLIND') { Ok 'check-ad-cycles keeps all five audit blind branches' }
@@ -3035,7 +3058,7 @@ if (-not (Test-Path $bvsPath) -or -not (Test-Path $rsvPath)) {
   $fxEnc = New-Object System.Text.UTF8Encoding($false)
   [IO.File]::WriteAllText((Join-Path $fxVs 'out\comparison-2026-01-01.json'), $fxBoard, $fxEnc)
 
-  $oVs = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxVs 'build-verification-sample.ps1') -N 100 -Quiet 2>&1 | ForEach-Object { [string]$_ }
+  $oVs = PSChild (Join-Path $fxVs 'build-verification-sample.ps1') -N 100 -Quiet | ForEach-Object { [string]$_ }
   $rcVs = $LASTEXITCODE
   $wlF = Join-Path $fxVs 'out\verification-worklist-2026-01-01.csv'
   $kyF = Join-Path $fxVs 'out\verification-sample-2026-01-01.json'
@@ -3068,11 +3091,11 @@ if (-not (Test-Path $bvsPath) -or -not (Test-Path $rsvPath)) {
     # REPRODUCIBLE: same board, same seed, byte-identical worklist. A sample nobody can redraw is a sample
     # nobody can audit, and Get-Random would silently make every past worklist unreproducible.
     $h1 = (Get-FileHash $wlF).Hash
-    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxVs 'build-verification-sample.ps1') -N 100 -Force -Quiet 2>&1
+    $null = PSChild (Join-Path $fxVs 'build-verification-sample.ps1') -N 100 -Force -Quiet
     if ((Get-FileHash $wlF).Hash -eq $h1) { Ok 'the draw is REPRODUCIBLE - re-running the sampler on the same board rebuilds a byte-identical worklist' }
     else { Bad 'the draw is NOT reproducible - a disputed verdict can never be traced back to the cell it graded' }
     # and it must REFUSE to silently redraw over a worklist somebody may already be verifying
-    $o2 = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxVs 'build-verification-sample.ps1') -N 100 2>&1 | ForEach-Object { [string]$_ }
+    $o2 = PSChild (Join-Path $fxVs 'build-verification-sample.ps1') -N 100 | ForEach-Object { [string]$_ }
     if (($o2 -join ' ') -match 'already exists') { Ok 'the sampler refuses to overwrite an existing worklist without -Force (no redrawing until the answer is convenient)' }
     else { Bad 'the sampler silently redrew over an existing sample - a sample you may redraw at will is not a sample' }
   } else {
@@ -3082,7 +3105,7 @@ if (-not (Test-Path $bvsPath) -or -not (Test-Path $rsvPath)) {
   $fxVsE = NewFxDir 'verif-sample-blind'
   New-Item -ItemType Directory -Force (Join-Path $fxVsE 'out') | Out-Null
   Copy-Item $bvsPath (Join-Path $fxVsE 'build-verification-sample.ps1')
-  $oE = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxVsE 'build-verification-sample.ps1') 2>&1 | ForEach-Object { [string]$_ }
+  $oE = PSChild (Join-Path $fxVsE 'build-verification-sample.ps1') | ForEach-Object { [string]$_ }
   if ($LASTEXITCODE -eq 3 -and ($oE -join ' ') -match 'BLIND') { Ok 'the sampler goes BLIND (exit 3) with no board to draw from, instead of reporting an empty sample' }
   else { Bad ('the sampler returned ' + $LASTEXITCODE + ' with no board present - a sample of nothing must never read as a result') }
 
@@ -3164,13 +3187,13 @@ if (-not (Test-Path $bvsPath) -or -not (Test-Path $rsvPath)) {
     }
     # MUST REFUSE: 12 verified rows is not a rate.
     FxFill $wlF (Join-Path $fxVs 'out\fx-few.csv') 12 'ok'
-    $oR = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxVs 'record-sample-verdict.ps1') -VerdictFile (Join-Path $fxVs 'out\fx-few.csv') -SampleFile $kyF 2>&1 | ForEach-Object { [string]$_ }
+    $oR = PSChild (Join-Path $fxVs 'record-sample-verdict.ps1') -VerdictFile (Join-Path $fxVs 'out\fx-few.csv') -SampleFile $kyF | ForEach-Object { [string]$_ }
     $rcR = $LASTEXITCODE
     if ($rcR -eq 3 -and ($oR -join ' ') -match 'NO RATE QUOTED') { Ok 'the recorder REFUSES to quote a defect rate from 12 verified cells (exit 3, could-not-evaluate)' }
     else { Bad ('the recorder quoted a rate from 12 cells (rc=' + $rcR + ') - a rate from 12 rows is not a small rate, it is not a rate: ' + ($oR -join ' | ')) }
     # ...and must never print a bare point estimate once it CAN quote: every rate arrives with an interval.
     FxFill $wlF (Join-Path $fxVs 'out\fx-all.csv') 100 'ok'
-    $oR2 = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxVs 'record-sample-verdict.ps1') -VerdictFile (Join-Path $fxVs 'out\fx-all.csv') -SampleFile $kyF 2>&1 | ForEach-Object { [string]$_ }
+    $oR2 = PSChild (Join-Path $fxVs 'record-sample-verdict.ps1') -VerdictFile (Join-Path $fxVs 'out\fx-all.csv') -SampleFile $kyF | ForEach-Object { [string]$_ }
     $rcR2 = $LASTEXITCODE
     $txtR2 = ($oR2 -join ' ')
     if ($rcR2 -eq 0 -and $txtR2 -match '95% CI' -and $txtR2 -match 'WHOLE BOARD' -and $txtR2 -match 'RESOLUTION') {
@@ -3181,7 +3204,7 @@ if (-not (Test-Path $bvsPath) -or -not (Test-Path $rsvPath)) {
     else { Bad ('a zero-defect sample reported a zero-width whole-board interval - that is the clean bill of health that has never once been true here: ' + $txtR2) }
     # unverifiable rows must leave the DENOMINATOR, not pass as ok
     FxFill $wlF (Join-Path $fxVs 'out\fx-unv.csv') 100 'unverifiable'
-    $oR3 = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxVs 'record-sample-verdict.ps1') -VerdictFile (Join-Path $fxVs 'out\fx-unv.csv') -SampleFile $kyF 2>&1 | ForEach-Object { [string]$_ }
+    $oR3 = PSChild (Join-Path $fxVs 'record-sample-verdict.ps1') -VerdictFile (Join-Path $fxVs 'out\fx-unv.csv') -SampleFile $kyF | ForEach-Object { [string]$_ }
     if ($LASTEXITCODE -eq 3 -and ($oR3 -join ' ') -match 'proved NOTHING') { Ok 'an all-unverifiable sample (bot walls) reports that it proved NOTHING - it never counts as 100 passes' }
     else { Bad ('an all-unverifiable sample was scored as a result (rc=' + $LASTEXITCODE + ') - a bot wall is not a clean cell: ' + ($oR3 -join ' | ')) }
   }
@@ -3355,7 +3378,7 @@ if ($ceCmps.Count -eq 0) {
 # The audit lives outside grocery\ (it is estate-wide), so call it by path.
 $pb = Join-Path (Split-Path $root -Parent) 'ops\audit-prompt-backup.ps1'
 if (Test-Path $pb) {
-  $out = & powershell -NoProfile -ExecutionPolicy Bypass -File $pb 2>&1 | ForEach-Object { [string]$_ }
+  $out = PSChild $pb | ForEach-Object { [string]$_ }
   $rc = $LASTEXITCODE; $txt = ($out -join "`n")
   # NOT EVERY MACHINE HOSTS THE PROMPTS (2026-08-08). audit-prompt-backup compares ops\prompt-backup against
   # hardcoded live roots (C:\Codex\ThriftyCrew\.claude\agents and friends). A CI runner has none of them, so it exits 3
@@ -3612,7 +3635,7 @@ $mpPipe = Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline'
 $ffs = Join-Path $mpPipe 'feed-freshness.ps1'
 if (-not (Test-Path $ffs)) { Bad 'meal-prep\pipeline\feed-freshness.ps1 is missing - nothing decides which feed a pricing stage may compute on, and the download-once-forever bug has nothing stopping it coming back' }
 else {
-  $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $ffs -SelfTest 2>&1 | Out-String
+  $r = PSChild $ffs -SelfTest | Out-String
   if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 25/25 pass') {
     Ok 'feed-freshness -SelfTest passes with its founding-bug fixtures armed (July 27 snapshot refused, fresh feed passes, mtime-laundering caught, an 8h cache refused against a 1h canonical feed, legitimate 23.5h aging not refused)'
   } else { Bad ('feed-freshness -SelfTest failed or lost its founding-bug fixtures: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
@@ -3642,7 +3665,7 @@ else {
   $cvMan = Join-Path $mpPipe 'v2-perserving.json'
   if (Test-Path $cvMan) {
     $cvHashBefore = (Get-FileHash $cvMan).Hash
-    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $mpPipe 'compute-v2-perserving.ps1') -FeedPath $ffMf -NoAlert 2>&1
+    $null = PSChild (Join-Path $mpPipe 'compute-v2-perserving.ps1') -FeedPath $ffMf -NoAlert
     $cvRc = $LASTEXITCODE
     $cvHashAfter = (Get-FileHash $cvMan).Hash
     if ($cvRc -eq 2 -and $cvHashAfter -eq $cvHashBefore) {
@@ -3674,7 +3697,7 @@ else {
 $fcp = Join-Path $mpPipe 'feed-covers-published.ps1'
 if (-not (Test-Path $fcp)) { Bad 'meal-prep\pipeline\feed-covers-published.ps1 is missing - nothing checks that the feed a published card FETCHES can actually price it, and a recipe can go live with an empty cost section again' }
 else {
-  $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $fcp -SelfTest 2>&1 | Out-String
+  $r = PSChild $fcp -SelfTest | Out-String
   # The count is pinned for the reason every count here is pinned: a case that silently stops running never
   # errors, so the tally is the only thing that notices it went missing.
   if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 16/16 pass') {
@@ -3704,7 +3727,7 @@ else {
       $fcDoc = Get-Content $fcCanon -Raw -Encoding utf8 | ConvertFrom-Json
       $fcDoc.PSObject.Properties.Remove('pricing_inputs')
       [IO.File]::WriteAllText($fcTmp, ($fcDoc | ConvertTo-Json -Depth 8 -Compress))
-      $fcOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $fcp -FeedPath $fcTmp 2>&1 | Out-String
+      $fcOut = PSChild $fcp -FeedPath $fcTmp | Out-String
       $fcRc = $LASTEXITCODE
       if ($fcRc -eq 1 -and $fcOut -match 'FEEDCOV-COMPLETE') {
         Ok 'feed-covers-published REFUSES a feed with pricing_inputs stripped end to end (exit 1) and still reports completion'
@@ -3726,11 +3749,11 @@ $mpPipe = Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline'
 $sps = Join-Path $mpPipe 'sync-prose-from-spec.ps1'
 if (-not (Test-Path $sps)) { Bad 'sync-prose-from-spec.ps1 is missing - nothing keeps specs\prose in step with the specs, and a full spec-guards run silently reverts the cost redesign' }
 else {
-  $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $sps -SelfTest 2>&1 | Out-String
+  $r = PSChild $sps -SelfTest | Out-String
   if ($r -match 'SELF-TEST PASS') { Ok 'prose-sync: still writes spec -> prose only, still refuses to blank a field the spec lost, and its -Check still fires on a re-drifted file' }
   else { Bad ('sync-prose-from-spec -SelfTest failed: ' + ($r -replace "`n", ' ')) }
 
-  $chk = & powershell -NoProfile -ExecutionPolicy Bypass -File $sps -AllRuns -Check 2>&1 | Out-String
+  $chk = PSChild $sps -AllRuns -Check | Out-String
   # SCOPE, stated in the label because the first version of it over-claimed: these prose files belong to
   # the ARCHIVE run snapshots. db\recipes (the layer engine\build-cards renders from) has no prose dir, so
   # full-mode spec-guards cannot run against it and cannot revert a live card.
@@ -3757,10 +3780,10 @@ else {
   # spec found 138. A hand-compiled worklist is a coincidence, not a detector.
   $asc = Join-Path $mpPipe 'audit-spec-contradictions.ps1'
   $rsc = Join-Path $mpPipe 'repair-spec-contradictions.ps1'
-  $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $asc -SelfTest 2>&1 | Out-String
+  $r = PSChild $asc -SelfTest | Out-String
   if ($r -match 'SELF-TEST PASS') { Ok 'spec-contradictions: all five classes still fire on the frozen live cases, and a self-consistent spec still produces nothing' }
   else { Bad ('audit-spec-contradictions -SelfTest failed: ' + ($r -replace "`n", ' ')) }
-  $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $rsc -SelfTest 2>&1 | Out-String
+  $r = PSChild $rsc -SelfTest | Out-String
   if ($r -match 'SELF-TEST PASS') { Ok 'contradiction repair: still refuses a two-quantity head line, "rice vinegar", and "wild rice" - and still matches "93/7 ground turkey" to its own line' }
   else { Bad ('repair-spec-contradictions -SelfTest failed - a head ingredient line can be rewritten to the WRONG ingredient''s amount: ' + ($r -replace "`n", ' ')) }
   # BUY-COVERAGE's repair side (2026-08-15). The class fires on a cost line whose buy sentence disagrees
@@ -3770,12 +3793,12 @@ else {
   $rbb = Join-Path $mpPipe 'repair-bulk-buy-line.ps1'
   if (-not (Test-Path $rbb)) { Bad 'repair-bulk-buy-line.ps1 is missing - bulk cost lines can go back to telling every shopper one package "lasts several batches"' }
   else {
-    $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $rbb -SelfTest 2>&1 | Out-String
+    $r = PSChild $rbb -SelfTest | Out-String
     if ($r -match 'all green') { Ok 'bulk buy line: a 1.88-batch box no longer reads "lasts several batches", a 14.8-batch bottle still does, and writer prose is never rewritten' }
     else { Bad ('repair-bulk-buy-line -SelfTest failed - the buy sentence can drift from the package the recipe actually needs: ' + ($r -replace "`n", ' ')) }
   }
 
-  $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $asc -Quiet 2>&1 | Out-String
+  $r = PSChild $asc -Quiet | Out-String
   if ($LASTEXITCODE -eq 0) { Ok 'no recipe spec contradicts itself worse than the recorded baseline (stat-vs-prose, stale money, head quantities, buy coverage all at ZERO)' }
   else { Bad ('a spec-contradiction class got WORSE: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL' }) -join ' ')) }
 
@@ -3788,11 +3811,11 @@ else {
   $rcm = Join-Path $mpPipe 'repair-cook-measures.ps1'
   if (-not (Test-Path $rcm)) { Bad 'repair-cook-measures.ps1 is missing - the ingredients list can go back to naming packages a cook cannot measure' }
   else {
-    $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $rcm -SelfTest 2>&1 | Out-String
+    $r = PSChild $rcm -SelfTest | Out-String
     if ($r -match 'SELF-TEST PASS') { Ok 'cook measures: a package noun that cannot prove it equals the grams is still replaced, a whole can is still left alone, and a WEIGHT label is still out of scope' }
     else { Bad ('repair-cook-measures -SelfTest failed: ' + ($r -replace "`n", ' ')) }
 
-    $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $rcm 2>&1 | Out-String
+    $r = PSChild $rcm | Out-String
     $n = 0
     $m = [regex]::Match($r, 'cook-measure repair: (\d+) false label')
     if ($m.Success) { $n = [int]$m.Groups[1].Value }
@@ -3819,11 +3842,11 @@ else {
     $rrb = Join-Path $mpPipe 'repair-range-buy.ps1'
     if (-not (Test-Path $rrb)) { Bad 'repair-range-buy.ps1 is missing - a range label can ship again and the servings control will render "4-3 cloves"' }
     else {
-      $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $rrb -SelfTest 2>&1 | Out-String
+      $r = PSChild $rrb -SelfTest | Out-String
       if ($r -match 'SELF-TEST PASS') { Ok 'range labels: the founding garlic case still resolves to the grams, a range with an unweighable unit is still REFUSED rather than guessed, and "12-oz bag" is still not a range' }
       else { Bad ('repair-range-buy -SelfTest failed: ' + ($r -replace "`n", ' ')) }
 
-      $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $rrb 2>&1 | Out-String
+      $r = PSChild $rrb | Out-String
       $n = -1
       $m = [regex]::Match($r, 'range-buy repair: (\d+) label')
       if ($m.Success) { $n = [int]$m.Groups[1].Value }
@@ -3843,11 +3866,11 @@ else {
     $srb = Join-Path $mpPipe 'sync-recipesdb-buy.ps1'
     if (-not (Test-Path $srb)) { Bad 'sync-recipesdb-buy.ps1 is missing - a spec label repair now has no path into recipes-db, and the Meal Plan Builder reads recipes-db' }
     else {
-      $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $srb -SelfTest 2>&1 | Out-String
+      $r = PSChild $srb -SelfTest | Out-String
       if ($r -match 'SELF-TEST PASS') { Ok 'recipes-db buy sync: both carry classes still fire on their frozen cases, and a true package noun, a hand-edited spec, a measure-vs-grams defect and disagreeing grams are all still refused' }
       else { Bad ('sync-recipesdb-buy -SelfTest failed - the only path a label repair has into recipes-db: ' + ($r -replace "`n", ' ')) }
 
-      $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $srb 2>&1 | Out-String
+      $r = PSChild $srb | Out-String
       $m = [regex]::Match($r, 'recipes-db buy sync: (\d+) label')
       if (-not $m.Success) { Bad ('could not read a label count out of sync-recipesdb-buy - the check cannot tell clean from broken: ' + ($r -replace "`n", ' ')) }
       elseif ([int]$m.Groups[1].Value -eq 0) { Ok "recipes-db states the same ingredient label as its spec everywhere the difference is a known repair class (the Meal Plan Builder's grocery list matches the recipe cards)" }

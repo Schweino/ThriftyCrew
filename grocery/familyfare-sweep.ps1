@@ -22,6 +22,7 @@
 param([int]$MaxMinutes = 9)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+. (Join-Path $root 'native-lib.ps1')   # Invoke-Native: the only safe native stderr redirect under EAP='Stop'
 $log = Join-Path $root 'ff-sweep-log.txt'
 function Log([string]$m) {
   $line = '[' + (Get-Date).ToString('s') + '] ' + $m
@@ -37,7 +38,9 @@ if (Test-Path $cursorF) { try { $before = [string]((Get-Content $cursorF -Raw | 
 Log ("sweep start (cursor before = " + ($(if ($before -ne '') { '#' + $before } else { 'unset' })) + ", MaxMinutes=$MaxMinutes)")
 $rc = 0
 try {
-  $out = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'pull-regular-familyfare.ps1') -MaxMinutes $MaxMinutes 2>&1
+  # Invoke-Native, not 2>&1: this file sets EAP='Stop', where a redirect makes the child's first
+  # stderr line terminate US. See native-lib.ps1.
+  $out = (Invoke-NativeScript (Join-Path $root 'pull-regular-familyfare.ps1') '-MaxMinutes' $MaxMinutes).Lines
   $rc = $LASTEXITCODE
   foreach ($l in @($out)) { $s = ([string]$l).Trim(); if ($s) { Log ('  ' + $s) } }
 } catch {

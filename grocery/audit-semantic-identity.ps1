@@ -66,6 +66,7 @@ param([switch]$PrepareOnly, [switch]$SelfTest, [int]$MaxReport = 25, [string]$Py
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+. (Join-Path $root 'native-lib.ps1')   # Invoke-Native: a native child's stderr under EAP=Stop is a TERMINATING error, and `2>&1`/`2>$null` CAUSE that (native-lib.ps1)
 $OutDir  = Join-Path $root 'out'
 $sidecar = Join-Path (Split-Path $root -Parent) 'sidecar'
 $py      = if ($Python) { $Python } else { Join-Path $sidecar '.venv\Scripts\python.exe' }
@@ -121,7 +122,7 @@ function Test-SweepBlocked {
 function Get-GpuRoom {
   $free = $null
   try {
-    $q = & nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits 2>$null
+    $q = (Invoke-Native 'nvidia-smi' '--query-gpu=memory.free' '--format=csv,noheader,nounits').Output
     if ($q) { $free = [int](([string](@($q)[0])).Trim()) }
   } catch { }
   $llama = [bool](Get-Process -Name 'llama-server' -ErrorAction SilentlyContinue)

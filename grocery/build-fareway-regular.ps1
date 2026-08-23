@@ -37,6 +37,7 @@ $asofS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 if (-not $In -or $In.Count -eq 0) {
   $In = @(Get-ChildItem (Join-Path $OutDir 'fareway\fareway-shop-*.json') -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object { $_.FullName })
 }
+. (Join-Path $root 'native-lib.ps1')   # Invoke-Native: a native child's stderr under EAP=Stop is a TERMINATING error, and `2>&1`/`2>$null` CAUSE that (native-lib.ps1)
 . (Join-Path $root 'capture-lib.ps1')   # UTF-8 capture read + mojibake repair, shared by every builder
 
 # ---------------------------------------------------------------- SLUG SIZE (2026-08-01, triage 9da3a8)
@@ -185,7 +186,7 @@ if ($SelfTest) {
     $fxF = Join-Path $T 'fareway-shop-2026-07-31.json'
     ($fx | ConvertTo-Json -Depth 4) | Set-Content $fxF -Encoding UTF8
     $selfPath = if ($PSCommandPath) { $PSCommandPath } else { Join-Path $root 'build-fareway-regular.ps1' }
-    $out = & powershell -NoProfile -ExecutionPolicy Bypass -File $selfPath -In $fxF -OutDir $T -Today '2026-07-31' -ModeVerified '2026-07-31' -NoCarry 2>&1 | Out-String
+    $out = (@((Invoke-NativeScript $selfPath '-In' $fxF '-OutDir' $T '-Today' '2026-07-31' '-ModeVerified' '2026-07-31' '-NoCarry').Lines) | Out-String)
     $doc = Get-Content (Join-Path $T 'regular\fareway-regular-2026-07-31.json') -Raw | ConvertFrom-Json
     $byid = @{}; foreach ($d in @($doc.deals)) { $byid[[string]$d.item] = $d }
     function Chk([string]$label, [bool]$cond, [string]$got) {
@@ -234,7 +235,7 @@ if ($SelfTest) {
     $fx2F = Join-Path $T 'twin\fareway-shop-2026-07-31.json'
     New-Item -ItemType Directory -Path (Join-Path $T 'twin') -Force | Out-Null
     ($fx2 | ConvertTo-Json -Depth 4) | Set-Content $fx2F -Encoding UTF8
-    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $selfPath -In $fx2F -OutDir (Join-Path $T 'twin') -Today '2026-07-31' -ModeVerified '2026-07-31' -NoCarry 2>&1
+    $null = (Invoke-NativeScript $selfPath '-In' $fx2F '-OutDir' (Join-Path $T 'twin') '-Today' '2026-07-31' '-ModeVerified' '2026-07-31' '-NoCarry').Lines
     $doc2 = Get-Content (Join-Path $T 'twin\regular\fareway-regular-2026-07-31.json') -Raw | ConvertFrom-Json
     $t1 = @($doc2.deals) | Where-Object { $_.item -eq 'Fareway Whole Milk' }
     $t2 = @($doc2.deals) | Where-Object { $_.item -eq 'Country Daybreak Large White Eggs' }
@@ -270,7 +271,7 @@ if ($SelfTest) {
     (@(
       @{ id = 'tomatoes'; name = 'NatureSweet Cherubs Tomatoes'; price = '3.99'; per = ''; orig = ''; unit = ''; size = '10 oz'; url = '' }
     ) | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $mDir 'fareway-shop-2026-08-01.json') -Encoding UTF8
-    $out3 = & powershell -NoProfile -ExecutionPolicy Bypass -File $selfPath -OutDir (Join-Path $T 'multi') -Today '2026-08-01' -ModeVerified '2026-08-01' -NoCarry 2>&1 | Out-String
+    $out3 = (@((Invoke-NativeScript $selfPath '-OutDir' (Join-Path $T 'multi') '-Today' '2026-08-01' '-ModeVerified' '2026-08-01' '-NoCarry').Lines) | Out-String)
     $doc3 = Get-Content (Join-Path $T 'multi\regular\fareway-regular-2026-08-01.json') -Raw | ConvertFrom-Json
     $b3 = @{}; foreach ($d in @($doc3.deals)) { $b3[[string]$d.item] = $d }
     $q1 = $b3['Fareway Ranch Dressing']

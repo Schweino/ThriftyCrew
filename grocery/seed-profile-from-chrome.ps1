@@ -39,6 +39,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+. (Join-Path $root 'native-lib.ps1')   # Invoke-Native: the only safe native stderr redirect under EAP='Stop'
 
 $src = Join-Path $env:LOCALAPPDATA 'Google\Chrome\User Data'
 if (-not (Test-Path $src)) { throw "no Chrome User Data at $src" }
@@ -80,7 +81,9 @@ foreach ($d in $dstRoots) {
             Where-Object { $_.CommandLine -like "*$d*" })
   if ($held.Count) {
     Write-Output "closing $($held.Count) Chrome process(es) holding $(Split-Path $d -Leaf)"
-    foreach ($p in $held) { & taskkill /PID $p.ProcessId /T /F 2>&1 | Out-Null }
+    # Invoke-Native, not 2>&1: taskkill writes to stderr for an already-dead PID, and under this
+    # file's EAP='Stop' that redirect would make the first such line terminating. See native-lib.ps1.
+    foreach ($p in $held) { $null = Invoke-Native 'taskkill' '/PID' $p.ProcessId '/T' '/F' }
     Start-Sleep -Seconds 2
   }
 }

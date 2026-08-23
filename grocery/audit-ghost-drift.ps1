@@ -37,6 +37,7 @@ param([switch]$ShowDiff, [switch]$Discover, [string]$Accept = '', [switch]$Recip
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
+. (Join-Path $root 'native-lib.ps1')   # Invoke-Native: a native child's stderr under EAP=Stop is a TERMINATING error, and `2>&1`/`2>$null` CAUSE that (native-lib.ps1)
 $repo = Split-Path $root -Parent
 $API  = 'https://map-to-success.ghost.io'
 $manifestPath  = Join-Path $root 'ghost-tool-manifest.json'
@@ -56,8 +57,9 @@ if ($SelfTest) {
   function T($m, $c, $g) { if ($c) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $g); $script:f++ } }
 
   $libPath = Join-Path $repo 'lib\ghost-drift-lib.ps1'
-  $libOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $libPath -SelfTest 2>&1 | ForEach-Object { [string]$_ }
-  $libRc = $LASTEXITCODE
+  $libR = Invoke-NativeScript $libPath '-SelfTest'
+  $libOut = @($libR.Lines)
+  $libRc = $libR.ExitCode
   foreach ($l in $libOut) { Write-Output ('  [lib] ' + $l) }
   T 'the shared comparison lib passes its own fixtures' ($libRc -eq 0) "lib self-test exit $libRc"
 

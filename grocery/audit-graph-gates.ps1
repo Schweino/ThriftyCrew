@@ -40,6 +40,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')
 . (Join-Path $root 'python-lib.ps1')
+. (Join-Path $root 'native-lib.ps1')   # Invoke-Native: a native child's stderr under EAP=Stop is a TERMINATING error, and `2>&1`/`2>$null` CAUSE that (native-lib.ps1)
 
 $graphDir = Join-Path (Split-Path $root -Parent) 'graph'
 
@@ -133,8 +134,10 @@ if (-not $py) {
 # today: a derived verdict must name the generation it was computed against.
 if (-not $SkipImport) {
   try {
-    $impOut = & $py (Join-Path $graphDir 'import\import_all.py') 2>&1
-    if ($LASTEXITCODE -ne 0) {
+    $impR = Invoke-Native $py (Join-Path $graphDir 'import\import_all.py')
+    $impOut = @($impR.Lines)
+    $impRc = $impR.ExitCode
+    if ($impRc -ne 0) {
       Write-Output ("graph-gates: BLIND - import failed (exit $LASTEXITCODE). The board is unaffected.")
       Write-Output ("  " + (($impOut | Select-Object -Last 3) -join ' | '))
       Write-GuardComplete -Name 'graph-gates' -Summary "BLIND: import exit $LASTEXITCODE"
@@ -148,7 +151,7 @@ if (-not $SkipImport) {
 }
 
 $statusOut = ''
-try { $statusOut = (& $py (Join-Path $graphDir 'eval\status.py') 2>&1 | Out-String) }
+try { $statusOut = ((@((Invoke-Native $py (Join-Path $graphDir 'eval\status.py')).Lines)) | Out-String) }
 catch {
   Write-Output ("graph-gates: BLIND - status threw: " + $_.Exception.Message + ". The board is unaffected.")
   Write-GuardComplete -Name 'graph-gates' -Summary 'BLIND: status threw'

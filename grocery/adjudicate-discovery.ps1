@@ -67,6 +67,7 @@ if (-not $DiscoveryFile) { $DiscoveryFile = Join-Path $outDir 'hyvee-discovery.j
 if (-not $VerdictsFile)  { $VerdictsFile  = Join-Path $Root 'discovery-verdicts.json' }
 if (-not $CatalogFile)   { $CatalogFile   = Join-Path $Root 'hyvee-catalog-adds.json' }
 . (Join-Path $Root 'discovery-lib.ps1')
+. (Join-Path $Root 'native-lib.ps1')   # Invoke-Native: a native child's stderr under EAP=Stop is TERMINATING, and `2>&1`/`2>$null` CAUSE that (native-lib.ps1)
 
 function Die([string]$m) { Write-Output ('adjudicate-discovery: ' + $m); exit 1 }
 
@@ -118,8 +119,9 @@ if ($SelfTest) {
   '{ "items": [] }' | Set-Content $cF -Encoding UTF8
   $base = @('-Root', $Root, '-DiscoveryFile', $dF, '-VerdictsFile', $vF, '-CatalogFile', $cF)
   function Run($extra) {
-    $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath @base @extra 2>&1
-    return @{ rc = $LASTEXITCODE; text = (($o | Out-String)) }
+    $rargs = @($base) + @($extra)
+    $r = Invoke-NativeScript $PSCommandPath @rargs
+    return @{ rc = $r.ExitCode; text = ((@($r.Lines) | Out-String)) }
   }
 
   # MUST-FIRE 1: the basis artefact. The vermicelli "beats" olive oil only because 4.6 WEIGHT ounces were
