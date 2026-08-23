@@ -553,10 +553,14 @@ This matters because a future efficiency-minded session will read the slimmed pr
 inputs, and reason "these are cheap now, drop a tier." One specific inversion is already on the
 record and must not be re-derived wrongly: PLAN-token-efficiency-2026-08-16 section 4 Group E
 floated the extractor as "the only cheap-model candidate among the Fable pins, because source-QA
-independently re-checks its output." **That argument is void in v3** - the easy pages no longer
-reach the extractor at all, only the ones a verified local pass failed on, and an invented recipe
-remains the worst outcome in this flow. Cheapening the extractor in v3 means putting the weakest
-model on the hardest inputs.
+independently re-checks its output." **That argument is void in v3, twice over.** First, the easy
+pages no longer reach the extractor at all - only the ones a verified local pass failed on. Second,
+the safety net Group E leaned on is weakest on exactly that set: coverage_check compares the built
+spec against the TRANSCRIPTION, so an invented transcription passes coverage by construction, and
+source-QA's independent anchor is the live page re-fetch - which is unavailable precisely on the
+blocked and unparseable pages that dominate escalations. An invented recipe remains the worst
+outcome in this flow; cheapening the extractor in v3 means putting the weakest model on the
+hardest inputs at the point where the net has the widest holes.
 
 Model-tier changes therefore stay OUT of this plan entirely (§11), exactly as Group E held them:
 each is its own measured experiment against a baseline, ordered by Brad, never a build-time
