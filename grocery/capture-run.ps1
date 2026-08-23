@@ -544,11 +544,17 @@ try {
     # regenerated derived files; abort on unresolvable so we NEVER strand a detached HEAD; autoStash
     # carries any human WIP across the rebase untouched.
     foreach ($attempt in 1..4) {
-      & git -C $repo fetch origin main 2>$null
+      # NO REDIRECT ON git fetch. `git fetch` writes its ordinary progress ("From https://github.com/...")
+      # to STDERR on every fetch that moves a ref, and under EAP=Stop a native child's stderr becomes a
+      # TERMINATING error even with `2>$null` - the same trap documented 20 lines above for the add stage
+      # and fixed 2026-08-22 for the downstream child. It hit here on the 2026-08-23 07:00 ad run: both
+      # captures succeeded, the commit landed, and then fetch's first stderr line threw out of the whole
+      # try block, so push was NEVER ATTEMPTED and the run exited 1 with FAILED LANES: push.
+      & git -C $repo fetch origin main | ForEach-Object { Write-Output ("fetch[$attempt]: " + $_) }
       & git -C $repo -c rebase.autoStash=true rebase -X theirs origin/main | ForEach-Object { Write-Output ("rebase[$attempt]: " + $_) }
       if ($LASTEXITCODE -ne 0) {
         Write-Output "rebase attempt $attempt conflicted; aborting (never detached)"
-        & git -C $repo rebase --abort 2>$null
+        & git -C $repo rebase --abort | ForEach-Object { Write-Output ("abort[$attempt]: " + $_) }   # no redirect: same EAP=Stop rule
         Start-Sleep -Seconds 10; continue
       }
       & git -C $repo push origin HEAD:main | ForEach-Object { Write-Output ("push[$attempt]: " + $_) }
