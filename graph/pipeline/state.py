@@ -36,6 +36,7 @@ import time
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "lib"))
 
+from authority import decided_by_stamp                          # noqa: E402
 from graphdb import open_db, write_json, GRAPH_DIR, REPO_ROOT   # noqa: E402
 from ids import norm_text                                       # noqa: E402
 from units import per_unit, reconcile_unit, names_multiple_products  # noqa: E402
@@ -240,7 +241,16 @@ def build_question_verdicts(db, ts: str) -> dict:
            VALUES (?,?,?,?,?,?,?,?,?)""",
         [(cid, pk, v["product_name"], v["match_status"], v["match_reason"],
           v["confidence"],
-          "model" if str(v["match_status"]).startswith("llm_") else "deterministic",
+          # AUTHORSHIP, not status. This column used to read
+          # `"model" if status.startswith("llm_")`, which stamped 'model' on
+          # every Claude reviewer ruling too — reviewer verdicts land as
+          # llm_confirmed/llm_rejected because those are match_status values,
+          # not authorship. The column therefore held two values across 4,141
+          # rows and told nobody anything. decided_by_stamp reads the reason's
+          # authorship marker instead (graph/lib/authority.py). ADVISORY ONLY:
+          # the resolver re-derives the tier from `reason` at retrieval time, so
+          # a bank written before this fix is stale, never wrong.
+          decided_by_stamp(v["match_status"], v["match_reason"]),
           None, ts)
          for (cid, pk), v in picked.items()])
     db.conn.commit()

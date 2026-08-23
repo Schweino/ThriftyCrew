@@ -30,6 +30,11 @@ for g in gold:
     tgt = (g["product"] or "").strip().lower()
     r._verdict_index[node] = [p for p in saved if (p[0] or "").strip().lower() != tgt]
     try:
+        # Since prompt v5 (2026-08-22) this returns ADJUDICATED rulings only, so the
+        # "warm" half of the corpus no longer teaches the model to trust its own
+        # unreviewed rejections. Deliberate: training on self-citation would bake the
+        # loop into the weights, where no retrieval change could undo it. Pass
+        # authority="all" here only to reproduce a pre-v5 corpus for comparison.
         priors_warm = r._prior_rulings(cc, g["product"])
     finally:
         r._verdict_index[node] = saved

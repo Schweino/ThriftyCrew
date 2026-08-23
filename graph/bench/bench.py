@@ -30,6 +30,7 @@ import random
 import statistics
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "lib"))
@@ -139,12 +140,33 @@ def bench_extract(llm: LocalLLM, n: int, say) -> dict:
     }
 
 
-def bench_resolution(llm: LocalLLM, db, n: int, say) -> dict:
+def bench_resolution(llm: LocalLLM, db, n: int, say, priors: str = "none",
+                     jobs: int = 4) -> dict:
     """Bar 2: agreement with hand adjudication, model judgment only.
 
     Deliberately bypasses the deterministic layers. A model that merely inherits
     the regex guardrails' verdicts would score ~100% and tell us nothing about
     whether it can be trusted on the contested rows it will actually be asked about.
+
+    PRIORS (2026-08-22, plan section 9). Until now this probe called
+    build_resolve_prompt with no examples at all, while production has passed
+    retrieved prior rulings since prompt v4 — so the recorded 0.900 was neither
+    the production number nor an honestly labelled cold-start number, it was an
+    unlabelled third thing. Both are now selectable and both get recorded:
+
+      priors='none'          ABLATED. No history of any kind. This is the true
+                             cold-start rate — what the model knows about a
+                             commodity it has never been taught, which is 6.5%
+                             of the gold corpus by construction (MEASURE doc
+                             section 2.1) and 100% of every new commodity.
+                             THIS is the baseline later phases are measured against.
+      priors='loo'           What production actually sends: retrieved priors,
+                             leave-one-out. Never let a case see itself; many
+                             gold cases ARE banked rulings, and a case among its
+                             own examples measures memorisation.
+      priors='loo-all'       leave-one-out with the PRE-2026-08-22 pool, which
+                             cited the model's own unreviewed rejections as
+                             precedent. Kept only to measure what tiering cost.
     """
     gold = [g for g in load_gold() if g["kind"] == "match"]
     random.Random(20260820).shuffle(gold)
@@ -163,36 +185,68 @@ def bench_resolution(llm: LocalLLM, db, n: int, say) -> dict:
                 continue
         probe.append((g, node))
 
-    for i, (g, node) in enumerate(probe):
+    # CONCURRENCY. Each probe case is an independent question, so the calls can
+    # share llama-server's slots — 120 sequential calls left three of four slots
+    # idle for ten minutes. The answers are unaffected (same prompt, same
+    # grammar, temperature 0.1); only wall clock moves. `jobs` must stay <= the
+    # server's --parallel (serve.ps1 -Slots, currently 4): more jobs than slots
+    # queues inside the server and burns each client's timeout waiting.
+    #
+    # bench_extract stays SEQUENTIAL on purpose: it measures decode tok/s for
+    # bars 1 and 3, and concurrent streams share memory bandwidth, so a parallel
+    # run would report a per-call rate the single-stream callers never see.
+    # Prompts are built HERE, on the main thread, because a sqlite3 connection
+    # may only be used by the thread that created it and both r.commodity() and
+    # r.prior_rulings() read the graph. Only the HTTP calls fan out.
+    prepared = []
+    for g, node in probe:
         cc = r.commodity(node)
-        system, user = build_resolve_prompt(cc, g["product"])
+        examples = None
+        if priors != "none":
+            authority = "all" if priors == "loo-all" else "adjudicated"
+            examples = r.prior_rulings(cc, g["product"], authority=authority)
+        prepared.append((g, *build_resolve_prompt(cc, g["product"], examples)))
+
+    def ask(item):
+        g, system, user = item
         try:
             parsed, _ = llm.json_call(system, user, schema=RESOLVE_SCHEMA,
                                       max_tokens=350, retries=1)
+            return g, parsed, None
         except Exception as e:                      # noqa: BLE001
-            disagree += 1
-            errors.append({"commodity": g["commodity"], "product": g["product"],
-                           "gold": g["label"], "got": f"error {e}"})
-            continue
+            return g, None, e
 
-        verdict = str(parsed.get("verdict", "UNSURE")).upper()
-        if verdict == "UNSURE":
-            unsure += 1
-            continue
-        predicted = "MATCH" if verdict == "MATCH" else "NO_MATCH"
-        if predicted == g["label"]:
-            agree += 1
-        else:
-            disagree += 1
-            errors.append({"commodity": g["commodity"], "product": g["product"][:70],
-                           "gold": g["label"], "got": predicted,
-                           "conf": parsed.get("confidence"),
-                           "why": str(parsed.get("evidence", ""))[:140]})
-        if say and (i + 1) % 10 == 0:
-            say(f"    resolve {i+1}/{len(probe)}  agree={agree} disagree={disagree} unsure={unsure}")
+    done = 0
+    # Results are consumed in submission order, so the tally and the reported
+    # disagreements do not depend on which slot answered first.
+    with ThreadPoolExecutor(max_workers=max(1, jobs)) as pool:
+        for g, parsed, err in pool.map(ask, prepared):
+            done += 1
+            if err is not None:
+                disagree += 1
+                errors.append({"commodity": g["commodity"], "product": g["product"],
+                               "gold": g["label"], "got": f"error {err}"})
+                continue
+            verdict = str(parsed.get("verdict", "UNSURE")).upper()
+            if verdict == "UNSURE":
+                unsure += 1
+            else:
+                predicted = "MATCH" if verdict == "MATCH" else "NO_MATCH"
+                if predicted == g["label"]:
+                    agree += 1
+                else:
+                    disagree += 1
+                    errors.append({"commodity": g["commodity"], "product": g["product"][:70],
+                                   "gold": g["label"], "got": predicted,
+                                   "conf": parsed.get("confidence"),
+                                   "why": str(parsed.get("evidence", ""))[:140]})
+            if say and done % 10 == 0:
+                say(f"    resolve {done}/{len(probe)}  agree={agree} disagree={disagree} unsure={unsure}")
 
     decided = agree + disagree
     return {
+        "priors": priors,
+        "jobs": jobs,
         "n": len(probe),
         "agree": agree, "disagree": disagree, "unsure": unsure,
         # UNSURE is not counted as a disagreement: abstaining is the SAFE
@@ -225,6 +279,17 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--extract-n", type=int, default=40)
     ap.add_argument("--probe-n", type=int, default=30)
+    ap.add_argument("--priors", choices=("none", "loo", "loo-all"), default="none",
+                    help="none = priors ABLATED, the cold-start baseline (default); "
+                         "loo = the priors production sends, leave-one-out; "
+                         "loo-all = leave-one-out with the pre-tiering pool")
+    ap.add_argument("--jobs", type=int, default=4,
+                    help="concurrent resolution calls; must be <= llama-server slots "
+                         "(serve.ps1 -Slots, currently 4). The extraction/decode bars stay "
+                         "single-stream regardless, so throughput is still measured honestly.")
+    ap.add_argument("--skip-extract", action="store_true",
+                    help="resolution probe only — bars 1 and 3 are unaffected by --priors, "
+                         "so a second priors run need not re-pay for them")
     ap.add_argument("--label", default=None, help="model label for the record")
     ap.add_argument("--no-record", action="store_true")
     args = ap.parse_args()
@@ -239,21 +304,30 @@ def main() -> int:
     say("")
 
     t0 = time.time()
-    say("  [1/3] structured extraction ...")
-    ex = bench_extract(llm, args.extract_n, say)
+    if args.skip_extract:
+        say("  [1/3] structured extraction ... SKIPPED (--skip-extract)")
+        ex = {"n": 0, "valid": 0, "valid_rate": 0.0, "median_tok_s": 0.0,
+              "mean_tok_s": 0.0, "failures": [], "skipped": True}
+    else:
+        say("  [1/3] structured extraction ...")
+        ex = bench_extract(llm, args.extract_n, say)
 
-    say("  [2/3] resolution agreement (model judgment, guardrails OFF) ...")
+    say(f"  [2/3] resolution agreement (model judgment, guardrails OFF, "
+        f"priors={args.priors}) ...")
     with open_db() as db:
-        rs = bench_resolution(llm, db, args.probe_n, say)
+        rs = bench_resolution(llm, db, args.probe_n, say, priors=args.priors,
+                              jobs=args.jobs)
 
     say("  [3/3] context headroom ...")
     ctx = bench_context(llm)
     elapsed = time.time() - t0
 
     passed = {
-        "valid_json": ex["valid_rate"] >= BARS["valid_json"],
+        # A skipped bar cannot PASS. --skip-extract is for a repeat resolution
+        # measurement, not for producing a gate verdict on the cheap.
+        "valid_json": (not ex.get("skipped")) and ex["valid_rate"] >= BARS["valid_json"],
         "agreement": rs["agreement_rate"] >= BARS["agreement"],
-        "tok_s": ex["median_tok_s"] >= BARS["tok_s"],
+        "tok_s": (not ex.get("skipped")) and ex["median_tok_s"] >= BARS["tok_s"],
         "context": bool(ctx.get("ok")),
     }
     all_pass = all(passed.values())
@@ -268,7 +342,8 @@ def main() -> int:
         f"bar >= {BARS['tok_s']}   {'PASS' if passed['tok_s'] else 'FAIL'}")
     say(f"  context headroom    {ctx.get('prompt_tokens','?')} prompt tokens   "
         f"{'PASS' if passed['context'] else 'FAIL'}")
-    say(f"\n  PHASE 0 GATE: {'PASS' if all_pass else 'FAIL'}   ({elapsed:.0f}s)")
+    gate = "PASS" if all_pass else ("NOT A GATE RUN" if ex.get("skipped") else "FAIL")
+    say(f"\n  PHASE 0 GATE: {gate}   ({elapsed:.0f}s)")
     say("=" * 64)
 
     if rs["errors"]:
@@ -280,13 +355,14 @@ def main() -> int:
                 say(f"       why: {e['why'][:100]}")
 
     if not args.no_record:
-        record_result(args.label or llm.model, ex, rs, ctx, passed, all_pass, elapsed)
+        record_result(args.label or llm.model, ex, rs, ctx, passed, all_pass, elapsed,
+                      priors=args.priors)
         say(f"\n  recorded -> graph/prompts/model-selection.md")
 
     return 0 if all_pass else 1
 
 
-def record_result(label, ex, rs, ctx, passed, all_pass, elapsed) -> None:
+def record_result(label, ex, rs, ctx, passed, all_pass, elapsed, priors="none") -> None:
     path = os.path.join(HERE, "..", "prompts", "model-selection.md")
     path = os.path.abspath(path)
     new = not os.path.exists(path)
@@ -297,13 +373,25 @@ def record_result(label, ex, rs, ctx, passed, all_pass, elapsed) -> None:
                      "measured on this box against the plan's acceptance bars.\n"
                      "The chosen primary model is whichever most recently PASSED.\n")
         fh.write(f"\n## {label} — {time.strftime('%Y-%m-%d %H:%M')}\n\n")
-        fh.write(f"- verdict: **{'PASS' if all_pass else 'FAIL'}** ({elapsed:.0f}s)\n")
-        fh.write(f"- valid strict JSON: {ex['valid_rate']:.3f} (n={ex['n']}) "
-                 f"{'PASS' if passed['valid_json'] else 'FAIL'}\n")
-        fh.write(f"- resolution agreement: {rs['agreement_rate']:.3f} (n={rs['n']}, "
+        verdict = ("PASS" if all_pass else
+                   ("NOT A GATE RUN" if ex.get("skipped") else "FAIL"))
+        fh.write(f"- verdict: **{verdict}** ({elapsed:.0f}s)\n")
+        # A skipped bar records as SKIPPED, not as 0.000 FAIL: a resolution-only
+        # re-run has not measured extraction, and a record claiming it measured
+        # it and got zero is a lie that outlives the session that wrote it.
+        if ex.get("skipped"):
+            fh.write("- valid strict JSON: SKIPPED (--skip-extract; resolution-only "
+                     "re-run, not a gate verdict)\n")
+        else:
+            fh.write(f"- valid strict JSON: {ex['valid_rate']:.3f} (n={ex['n']}) "
+                     f"{'PASS' if passed['valid_json'] else 'FAIL'}\n")
+        fh.write(f"- resolution agreement: {rs['agreement_rate']:.3f} (priors={priors}, n={rs['n']}, "
                  f"abstain {rs['abstain_rate']:.2f}) {'PASS' if passed['agreement'] else 'FAIL'}\n")
-        fh.write(f"- median decode: {ex['median_tok_s']:.1f} tok/s "
-                 f"{'PASS' if passed['tok_s'] else 'FAIL'}\n")
+        if ex.get("skipped"):
+            fh.write("- median decode: SKIPPED (--skip-extract)\n")
+        else:
+            fh.write(f"- median decode: {ex['median_tok_s']:.1f} tok/s "
+                     f"{'PASS' if passed['tok_s'] else 'FAIL'}\n")
         fh.write(f"- context headroom: {ctx.get('prompt_tokens','?')} prompt tokens "
                  f"{'PASS' if passed['context'] else 'FAIL'}\n")
         fh.write(f"\n```json\n{json.dumps({'extract': ex, 'resolution': rs, 'context': ctx}, indent=2, default=str)[:4000]}\n```\n")

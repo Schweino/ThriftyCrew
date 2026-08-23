@@ -180,6 +180,21 @@ reproduce), reviewer rulings, known-wrong. The resolver consults them at **layer
 4.5** — after the deterministic layers so a new rule still wins, before the model
 so a question is never paid for twice.
 
+**A banked verdict carries an AUTHORITY TIER (2026-08-22).** `decided_by` used to
+be derived from the status prefix — `"model" if status.startswith("llm_")` — so a
+Claude reviewer's ruling, which lands as `llm_confirmed`/`llm_rejected` because
+those are *match statuses, not authorship*, was stamped `model` exactly like the
+local model's own guess. The column held two values across 4,141 rows and told
+nobody anything, while `resolve.py` cited all of them to the model as precedent:
+3,315 of the 3,692 rejections are the model's own unreviewed work. `graph/lib/authority.py`
+now derives the tier from the reason's authorship marker (`reviewer ...`,
+`adjudicated ...`, `llm: ...`, under any number of `banked: ` re-bank prefixes),
+`state.py` stamps `decided_by` honestly going forward, and only **adjudicated**
+rulings are shown to the model as precedent — model-consensus ones are labelled
+tentative, single-model ones are not shown at all. The tier is re-derived from
+`reason` at read time, so a bank written before this change is stale, never wrong.
+ADVISORY ONLY: it changes what the model is TOLD, never what may price a cell.
+
 **Freshness is data.** `everyday_asof` + `MaxCarryDays` (read from
 `grocery/capture-policy.ps1`, never copied) decides staleness; `ad_from`/`ad_to`
 bound an ad price to its window; `reverted_checked_at` NULL after a window closes

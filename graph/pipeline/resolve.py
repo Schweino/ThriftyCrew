@@ -54,6 +54,37 @@ Roughly half the dangerous error and half the human review, for no new missed
 merges, using labels the estate had already paid for. Leave-one-out matters:
 many gold cases ARE banked rejections, so a case must never appear among its
 own examples or the number measures memory instead of learning.
+
+ONLY ADJUDICATED RULINGS COUNT AS PRECEDENT (prompt v5, 2026-08-22, plan §3.1).
+v4 cited every banked ruling, and 3,315 of the 3,692 `llm_rejected` rows are the
+local model's OWN unreviewed work — so it was shown its own guesses under the
+heading ALREADY RULED, a wrong rejection became the authority for rejecting its
+neighbours, and nothing in the loop ever reviewed it. v5 cites a ruling only when
+a human, the Claude review lane or a known-wrong node made it; model-consensus
+rulings (helper + LLM, phase 3) are shown in a separate list labelled tentative;
+single-model rulings are shown nowhere. They still prune their own row — they
+stop testifying about other rows. Who ruled what is decided in one place,
+graph/lib/authority.py, because `question_verdicts.decided_by` cannot say: it was
+derived from the status prefix, so reviewer rulings were stamped 'model' too.
+
+Measured the same way, leave-one-out, 2 x 120 gold cases whose commodities carry
+history (graph/bench/priors_ablation.py, seeds 20260822/20260823, 240 total):
+
+                            v4 (all rulings)   v5 (adjudicated only)
+    false MATCH             34/90 = 38%        33/90 = 37%
+    correct                 191                188
+    escalated                12                 16
+    false reject             3/150              3/150   unchanged
+    priors shown per case     5.9                3.3
+
+Free on the metric that matters: the dangerous error did not move (the two runs
+differ from each other by more), the missed-merge rate is identical, and the cost
+is ~4 more escalations per 240 — cases the model declines instead of deciding on
+its own past word, which is the direction this file's bias already prefers.
+
+The honest cold-start baseline for all of this is 0.79 agreement, not the 0.900
+in model-selection.md: that figure was measured with no priors while production
+sends them. See graph/prompts/model-selection.md, addendum 2026-08-22.
 """
 
 from __future__ import annotations
@@ -70,6 +101,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 
 from graphdb import GraphDB                        # noqa: E402
 from ids import hash_obj, norm_text                # noqa: E402
+from authority import (authority_tier, CITABLE_AS_PRECEDENT,   # noqa: E402
+                       CITABLE_AS_TENTATIVE)
 from llm import LocalLLM, should_escalate          # noqa: E402
 
 PROMPTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "prompts")
@@ -77,7 +110,7 @@ PROMPTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "prompt
 # Version of build_resolve_prompt + the layer-5 authority policy. Recorded on
 # every per-judgment decision-log row so a verdict can be attributed to the
 # exact prompt and policy that produced it. Bump on ANY change to either.
-PROMPT_VERSION = "resolve-v4-reject-only-with-priors"
+PROMPT_VERSION = "resolve-v5-reject-only-adjudicated-priors"
 
 # Verdicts are banked to SQLite every this many questions during the LLM pass,
 # so a long run is interruptible and resumable rather than all-or-nothing.
@@ -212,19 +245,26 @@ class Resolver:
                 self.bank = {}
 
         # Prior-ruling index for few-shot retrieval: commodity -> [(name, words,
-        # kind)]. Built once; the model is otherwise asked to judge blind while
-        # the human review packet for the same question gets all of this.
-        # known_wrong rows come from the ABSOLUTE rulings, llm_rejected from the
-        # model's own past work, llm_confirmed/include_hit from what belongs.
-        self._verdict_index: dict[str, list[tuple[str, set[str], str]]] = {}
+        # kind, tier)]. Built once; the model is otherwise asked to judge blind
+        # while the human review packet for the same question gets all of this.
+        #
+        # TIER is the 2026-08-22 fix (plan §3.1). Until now this index pulled
+        # every llm_rejected row regardless of who decided it, and 3,315 of the
+        # 3,692 are the local model's OWN unreviewed rejections — so the model
+        # was shown its own guesses as "already ruled", a wrong rejection became
+        # the authority for rejecting its neighbours, and nothing reviewed any of
+        # it. graph/lib/authority.py decides who actually ruled; prior_rulings()
+        # decides who is allowed to testify.
+        self._verdict_index: dict[str, list[tuple[str, set[str], str, str]]] = {}
+        self.prior_tier_counts: dict[str, int] = {}
         if use_bank:
             try:
                 rows = self.db.conn.execute(
-                    """SELECT commodity_id, product_name, status
+                    """SELECT commodity_id, product_name, status, reason, decided_by
                        FROM question_verdicts
                        WHERE status IN ('llm_rejected','known_wrong','llm_confirmed')
                        UNION ALL
-                       SELECT n.id, k.canonical_name, 'known_wrong'
+                       SELECT n.id, k.canonical_name, 'known_wrong', 'adjudicated: known-wrong node', 'reviewer'
                        FROM nodes k JOIN edges e ON e.source_id=k.id
                             AND e.predicate='known_wrong_for'
                        JOIN nodes n ON n.id=e.target_id
@@ -234,10 +274,13 @@ class Resolver:
                     if not nm:
                         continue
                     kind = "confirm" if r[2] == "llm_confirmed" else "reject"
+                    tier = authority_tier(r[2], r[3], r[4])
+                    self.prior_tier_counts[tier] = self.prior_tier_counts.get(tier, 0) + 1
                     self._verdict_index.setdefault(r[0], []).append(
-                        (nm, set(re.findall(r"[a-z]{3,}", nm.lower())), kind))
+                        (nm, set(re.findall(r"[a-z]{3,}", nm.lower())), kind, tier))
             except Exception:                                # noqa: BLE001
                 self._verdict_index = {}
+                self.prior_tier_counts = {}
 
     # -- setup -------------------------------------------------------------
     def _load_category_excludes(self) -> None:
@@ -401,8 +444,10 @@ class Resolver:
             return self._tally(Verdict("no_include_hit", "no include pattern matched"))
         return self._tally(self._llm_adjudicate(cc, name))
 
-    def _prior_rulings(self, cc: CompiledCommodity, name: str,
-                       n_rej: int = 6, n_conf: int = 3) -> dict:
+    def prior_rulings(self, cc: CompiledCommodity, name: str,
+                      n_rej: int = 6, n_conf: int = 3,
+                      authority: str = "adjudicated",
+                      exclude_keys: frozenset[str] | set[str] | None = None) -> dict:
         """The most RELEVANT prior rulings for this commodity, as few-shot.
 
         Ranked by word overlap with the listing under judgement, because a
@@ -410,28 +455,74 @@ class Resolver:
         carries 43 of them, and dumping all 43 would bury the one that matters
         and blow the prompt budget. Ties break toward the shorter name, which
         is usually the more general ruling.
+
+        AUTHORITY (plan §3.1, 2026-08-22) decides who may testify:
+
+          'adjudicated'  the shipped policy. Only adjudicated rulings — a human,
+                         the Claude review lane, or a known-wrong node — are
+                         cited as precedent. Model-consensus rows (helper + LLM,
+                         phase 3) ride along in a separate TENTATIVE list.
+                         Single-model rows are not shown at all.
+          'all'          the pre-fix behaviour, kept ONLY so the ablation harness
+                         can measure what the change cost or bought. Never ship
+                         it: it is what let the model cite itself.
+          'none'         no priors — the cold-start condition.
+
+        `exclude_keys` holds norm_text() keys that must not appear among the
+        examples. The measurement harness passes the case under test, because
+        many gold cases ARE banked rulings and a case that appears among its own
+        examples measures memorisation rather than learning.
         """
-        if not self._verdict_index:
+        if authority == "none" or not self._verdict_index:
             return {}
         pool = self._verdict_index.get(cc.node_id)
         if not pool:
             return {}
         want = set(re.findall(r"[a-z]{3,}", (name or "").lower()))
+        skip = set(exclude_keys or ())
+        if name:
+            # A ruling on the very listing under judgement is never an example
+            # for it, whatever the caller asked for.
+            skip.add(norm_text(name))
 
         def rank(item):
             words = item[1]
             overlap = len(want & words) / max(len(want | words), 1)
             return (-overlap, len(item[0]))
 
-        rej = sorted((p for p in pool if p[2] == "reject"), key=rank)[:n_rej]
-        conf = sorted((p for p in pool if p[2] == "confirm"), key=rank)[:n_conf]
-        return {"rejected": [r[0] for r in rej], "confirmed": [c[0] for c in conf]}
+        def usable(item, tiers):
+            return item[3] in tiers and norm_text(item[0]) not in skip
+
+        if authority == "all":
+            precedent_tiers = None            # every tier, the old behaviour
+            tentative_tiers: tuple = ()
+        else:
+            precedent_tiers = CITABLE_AS_PRECEDENT
+            tentative_tiers = CITABLE_AS_TENTATIVE
+
+        def pick(kind, tiers, limit):
+            if tiers is None:
+                items = (p for p in pool
+                         if p[2] == kind and norm_text(p[0]) not in skip)
+            else:
+                items = (p for p in pool if p[2] == kind and usable(p, tiers))
+            return [i[0] for i in sorted(items, key=rank)[:limit]]
+
+        out = {"rejected": pick("reject", precedent_tiers, n_rej),
+               "confirmed": pick("confirm", precedent_tiers, n_conf)}
+        if tentative_tiers:
+            out["tentative_rejected"] = pick("reject", tentative_tiers, n_rej)
+            out["tentative_confirmed"] = pick("confirm", tentative_tiers, n_conf)
+        return {k: v for k, v in out.items() if v}
+
+    # The pre-2026-08-22 name, kept so nothing outside this file breaks.
+    _prior_rulings = prior_rulings
 
     def _llm_adjudicate(self, cc: CompiledCommodity, name: str) -> Verdict:
         """Layer 5. The local model may REJECT a candidate or flag a probable
         match for review; it may never mint a price. See the module docstring
         for the bench decomposition that forced this asymmetry."""
-        system, user = build_resolve_prompt(cc, name, self._prior_rulings(cc, name))
+        system, user = build_resolve_prompt(cc, name, self.prior_rulings(cc, name))
         try:
             parsed, res = self.llm.json_call(system, user, schema=RESOLVE_SCHEMA, max_tokens=400)
         except Exception as e:                                  # noqa: BLE001
@@ -721,16 +812,33 @@ def build_resolve_prompt(cc: CompiledCommodity, product_name: str,
     # MATCH on adjacent products at 0.95+ confidence. Showing it the adjacent
     # products that were already ruled out is the cheapest correction available,
     # and it costs no training run - the labels exist.
+    #
+    # WHOSE rulings (v5, 2026-08-22, plan section 3.1). v4 showed every banked
+    # ruling, and 90% of them were the model's OWN unreviewed rejections - so
+    # "already ruled" meant "you said so last week", and a wrong rejection
+    # recruited its neighbours. Only ADJUDICATED rulings now speak with the
+    # board's authority. Model-consensus rulings (helper + LLM, plan section 4)
+    # appear in a separate list labelled tentative, so the model can weigh them
+    # without mistaking them for decisions. Single-model rulings appear nowhere.
+    # See graph/lib/authority.py and Resolver.prior_rulings.
     if examples:
         rejected = examples.get("rejected") or []
         confirmed = examples.get("confirmed") or []
+        t_rejected = examples.get("tentative_rejected") or []
+        t_confirmed = examples.get("tentative_confirmed") or []
         if rejected:
-            parts.append("\nALREADY RULED **NOT** THIS COMMODITY (do not repeat "
-                         "these mistakes):")
+            parts.append("\nALREADY RULED **NOT** THIS COMMODITY by an adjudicator "
+                         "(do not repeat these mistakes):")
             parts += [f"  - {r!r}" for r in rejected]
         if confirmed:
-            parts.append("\nALREADY RULED **YES**, this is what belonging looks like:")
+            parts.append("\nALREADY RULED **YES** by an adjudicator - this is what "
+                         "belonging looks like:")
             parts += [f"  - {c!r}" for c in confirmed]
+        if t_rejected or t_confirmed:
+            parts.append("\nTENTATIVE, machine-only and NOT reviewed by an "
+                         "adjudicator. Weigh these; they are not decided:")
+            parts += [f"  - probably NOT this commodity: {r!r}" for r in t_rejected]
+            parts += [f"  - probably IS this commodity: {c!r}" for c in t_confirmed]
     parts.append(f"\nSTORE PRODUCT LISTING: {product_name!r}\n")
     parts.append("Is this listing that commodity?")
     return system, "\n".join(parts)
