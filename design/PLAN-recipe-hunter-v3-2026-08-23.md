@@ -370,7 +370,11 @@ v2's dispatch carried "already accepted this run"; dropping it in the port was t
 fixture: the second batch's prompt provably contains the first batch's acceptances. (b) **the
 daemon marks candidates `taken:<run-id>` at POP time, before dispatch** - the bridge does not,
 which is safe only while exactly one run exists; two concurrent runs popping the same available
-candidates would both pay a decider for them.
+candidates would both pay a decider for them. The serial chain has a measured speed shape worth
+knowing before anyone calls it a bug: ~2-4 minutes per 10-candidate batch (gate rounds, 2026-08-23),
+so a 120-candidate run's decide pass is roughly 25-50 minutes of wall-clock, linear in pool size -
+and it is FRONT-LOADED, off the write/qa/audit critical path, which is why the singleton costs the
+run nothing it was not already paying.
 Acceptance pacing keeps v2's WIP discipline: the orchestrator
 pops candidates from the pool only while accepted-but-unresolved recipes sit under the WIP limit
 (25), so a deep backlog cannot flood the paid lanes.
@@ -641,6 +645,10 @@ decision-for-decision (the agent-as-shell steps inside it become direct calls; e
 its order and its refusal conditions), and the hunt-lib fixtures for planTrim / chooseScope /
 repairClaimHolds are the parity proof.
 
+One conflation to refuse (2026-08-23 audit): the extract lane's cap of 3 below counts CLAUDE
+escalation agents only; the local ladder's concurrency is the GPU slot budget in §4.3 and the two
+are separate ledgers - a sweep saturating 4 server slots while 3 escalation agents run is the
+intended steady state, not a cap violation.
 Concurrency per lane caps as in v2 §2.4 (extract 3, map 2, price 1, write 3, qa 2, decide 1, wave
 serial), with the WIP limit (25 accepted-but-unresolved) gating pool pops exactly as it gated
 sourcing. All caps, the WIP limit, retry budgets and breaker thresholds live as named constants in
@@ -673,10 +681,10 @@ from prose, and SKILL.md forbids exactly that. So the port is governed:
 
 | work | parallelism | bound by |
 |---|---|---|
-| harvest fetches | 8 async workers | network + per-domain politeness |
-| JSON-LD parse, band filter, signatures | 8-proc pool | trivial CPU |
+| harvest fetches | 8 workers, MEASURED 2026-08-23 at 131 pages/min - which IS the politeness ceiling (7 domains / 2-4 s each), so more workers buy nothing | network + per-domain politeness |
+| JSON-LD parse, band filter, signatures | CORRECTED 2026-08-23: runs INSIDE the 8 fetch threads, and no process pool was built or is needed - the crawl sits at the politeness ceiling with CPU idle, and --resignature re-derives 652 signatures in 60 s single-threaded. Build the pool only if a measurement ever shows parse waiting on CPU, which nothing has | trivial CPU |
 | bge-m3 embeddings | **CPU, measured and settled 2026-08-23: 36.36 ms/text, whole-pool build 24 s cold / 0 s warm - the GPU branch is CLOSED, not deferred** | trivial CPU (§3 S1) |
-| local 27B calls (line-split, full extract, enum, adversarial) | 4 (server --parallel 4; more queues) | GPU |
+| local 27B calls (line-split, full extract, enum, adversarial) | 4 (serve.ps1 default `-Slots 4`; more queues). **AUDITED 2026-08-23, and there is a CONTEXT-BUDGET CONFLICT D6 must resolve by measurement, not discover mid-sweep:** serve.ps1's `-c 16384` is the TOTAL KV budget SPLIT across slots - 4 slots = 4,096 tokens per slot - while rung-2 full-page transcription sends ~24k chars of page (~6k tokens) plus `max_tokens=4096`, roughly 10k tokens, which fits only a 1-slot split at the default context. Rung-1 line-splits (~100-200-token prompts) fit 4 or even 8 slots trivially (serve.ps1's own header measured 8 slots at 2.2x aggregate, flat past 8). So the sweep's shape is: rung-1 fans wide, rung-2 runs narrow or the server runs with raised `-Context` if VRAM allows - a measured decision recorded at D6 build time. The fan-out pattern is the estate's existing one: ThreadPoolExecutor with jobs <= Slots (graph\bench\adversarial_probe.py, `--jobs ... coupled to serve.ps1 -Slots`) | GPU |
 | QA battery / wave-preaudit | 8-wide across the SHARED checks, serial across slugs (S8's CORRECTED 2026-08-23 finding: the slug loop rides build-card2's process-global costed.json cache, and fanning it re-pays the 5.8 MB parse per child) | CPU, seconds |
 | cost engine, costed.json, recipes-db | **serialized by the daemon's cost-engine mutex (§4.5)** - spec assembly stays parallel, the cost pass does not | correctness |
 | CDP store sweeps | 1 thread per store (existing) | vendor politeness - the floor |
@@ -1056,6 +1064,18 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
     `<RunDir>\extracted\<slug>.json` per §4.5, and writes the lane-log line per settle
     (`-Lane -LaneName extract -By local`, tokens 0) - the sweep CAN shell, so §4.5's lane-log
     completeness rule is its job until the daemon takes it.
+  - **Concurrency and the wall-clock envelope (2026-08-23 audit).** Drive the server with a thread
+    pool at jobs <= Slots, the pattern graph\bench already uses. The arithmetic that says what
+    "good" looks like: a short grammar call measured 2.74 s, a recipe carries ~10-20 ingredient
+    lines, so rung-1 per-line splitting runs ~27-55 s/page SERIAL and ~7-14 s/page fanned across 4
+    slots - the phase-2 gate's 50 pages are ~8-12 minutes fanned versus ~25-45 serial, and a sweep
+    that measures near the serial number is leaving the card idle. Read the §4.3 local-27B row
+    BEFORE building: rung-2 full pages do NOT fit a 4-slot context split at serve.ps1's defaults,
+    and that conflict is resolved by measurement at build time, not discovered as mysterious
+    overflows mid-sweep. Endpoints, so nothing is guessed: llama-server is port 8080 (llm.py speaks
+    `/v1`, harvest.py --classify speaks native `/completion` + `/health`); the bge sidecar is 8077
+    and is NOT involved in D6 at all - phase 1 moved harvest embeddings to CPU, so the extraction
+    sweep has the whole card.
 - **D7 `map-preresolve`** - the pre-resolved decision table + mechanical unbid hold; mapper prompt
   rewritten to the residual contract. Fixtures: a cache-resolved term never reaches the residual; an
   unbid resolved term holds the recipe with a named follow-up.
@@ -1155,7 +1175,11 @@ Workflow orchestrator** - none of them is inert while phase 3 waits:
   to reach the gate's 50, drawn across all 7 publishers - `harvest.py --dossier --count N` pops them
   ranked, or read the pool directly for URLs; either way the pages come from the cache, zero
   fetches. llama-server must be up (hand-started, §4.4) before the sweep runs; a down server is
-  exit 2 BLOCKED, never an escalation.
+  exit 2 BLOCKED, never an escalation. And since the server is up anyway: run
+  `harvest.py --classify` in the same sitting - phase 1 never could (the server was down all
+  session), so the pool's sauce_family nulls are still unfilled, and every null widens a dossier's
+  neighbour search that one classify pass would sharpen. Zero extra GPU scheduling; the card is
+  already hot.
 
 | phase | items | gate to pass before the next phase |
 |---|---|---|
@@ -1244,6 +1268,18 @@ in recipes-db.json).
     from the pool candidate (drill fixture: the created state file carries them), and the nine were
     repaired by deleting and replaying the advances through the fixed path against a discard ledger
     (the 18 live rulings already stood; replaying against the live store would have doubled them).
+    Two audit facts recorded so later sessions reason from them rather than around them
+    (2026-08-23): **(a) the round-2 decider still read the corpus.** Both batches made 3 tool calls
+    where a dossier-only ruling needs 1 (StructuredOutput), and batch 2's own note says it
+    "adjudicated against the live catalog-digest.json" - despite the dispatch stating the catalog
+    had been searched for it. Roughly a third of the 1.05M context-moved is those extra turns. The
+    zero-tool decider (no Read at all, single-turn) is therefore a REAL efficiency lever - but it
+    is a phase-6 MEASURED decision, not a build-time convenience, because the residue principle
+    cuts the other way: Read is also how the decider double-checks, and round 2's accuracy may
+    lean on exactly the reads the lever would remove. **(b) the read-only tool restriction is not
+    yet live-tested.** Both gate rounds ran BEFORE the frontmatter was restricted (round 2 is when
+    the stray selected.json appeared), so the first bridge run of phase 2+ is the restricted
+    decider's first live dispatch - watch it, do not assume it.
 
 *Gate 3 - front-end token share re-measured on a mini-run in the phase-1 bridge configuration.*
 **MET.** Measured with `lane-tokens.ps1`, the same instrument and the same context-moved measure that
