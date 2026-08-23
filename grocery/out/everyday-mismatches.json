@@ -169,6 +169,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "cabbage",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  0.99,
+        "link":  0.77,
+        "ratio":  0.78,
+        "price":  0.77,
+        "size":  "lb",
+        "boardItem":  "Green Cabbage",
+        "linkItem":  "Green Cabbage",
+        "board_src":  "main"
+    },
+    {
         "id":  "caesar-salad-kit",
         "store":  "Aldi",
         "unit":  "oz",
@@ -192,19 +205,6 @@
         "size":  "12.5 oz",
         "boardItem":  "Brookdale Chicken Breast Extra Lean White Premium Chunk With Rib Meat IN Water 12.5 OZ",
         "linkItem":  "Brookdale Chunk Chicken Breast",
-        "board_src":  "main"
-    },
-    {
-        "id":  "carrots",
-        "store":  "Fareway",
-        "unit":  "lb",
-        "board":  1.245,
-        "link":  1.385,
-        "ratio":  1.11,
-        "price":  2.77,
-        "size":  "32 oz",
-        "boardItem":  "Carrot",
-        "linkItem":  "Dole Carrots, Mini Cut",
         "board_src":  "main"
     },
     {
@@ -244,6 +244,19 @@
         "size":  "3 lb",
         "boardItem":  "Sweet Red Cherries, 3 lbs.",
         "linkItem":  "Sweet Red Cherries, 3 lbs.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "chuck-roast",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  7.88,
+        "link":  8.88,
+        "ratio":  1.13,
+        "price":  8.88,
+        "size":  "lb",
+        "boardItem":  "USDA Choice Boneless Chuck Roast",
+        "linkItem":  "USDA Choice Boneless Chuck Roast",
         "board_src":  "main"
     },
     {
@@ -351,6 +364,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "dog-food",
+        "store":  "Fareway",
+        "unit":  "lb",
+        "board":  1.7685,
+        "link":  1.5377,
+        "ratio":  0.87,
+        "price":  19.99,
+        "size":  "208 oz",
+        "boardItem":  "Rachael Ray Nutrish Adult Dry Dog Food Real Beef, Pea \u0026 Brown Rice Recipe, 13 lb. Bag",
+        "linkItem":  "Rachael Ray Nutrish Adult Dry Dog Food Real Beef, Pea \u0026 Brown Rice Recipe, 13 lb. Bag",
+        "board_src":  "main"
+    },
+    {
         "id":  "donuts",
         "store":  "Fareway",
         "unit":  "each",
@@ -400,19 +426,6 @@
         "size":  "3.805 lb",
         "boardItem":  "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
         "linkItem":  "GortonÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢s Super Crunchy Fish Sticks, Frozen, 64 ct.",
-        "board_src":  "main"
-    },
-    {
-        "id":  "french-bread",
-        "store":  "Fareway",
-        "unit":  "each",
-        "board":  1.99,
-        "link":  2.49,
-        "ratio":  1.25,
-        "price":  2.49,
-        "size":  "each",
-        "boardItem":  "Bakery Fresh French Baguette",
-        "linkItem":  "Bakery Fresh French Bread",
         "board_src":  "main"
     },
     {
@@ -572,19 +585,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "milk",
-        "store":  "Fareway",
-        "unit":  "gallon",
-        "board":  4.99,
-        "link":  5.98,
-        "ratio":  1.2,
-        "price":  2.99,
-        "size":  "0.5 gal",
-        "boardItem":  "Fareway Skim Milk",
-        "linkItem":  "Fareway 2% Reduced Fat Milk",
-        "board_src":  "main"
-    },
-    {
         "id":  "olive-oil",
         "store":  "Aldi",
         "unit":  "floz",
@@ -621,19 +621,6 @@
         "size":  "40 oz",
         "boardItem":  "Peanut Delight Creamy Peanut Butter 40 OZ",
         "linkItem":  "Peanut Delight Creamy Peanut Butter 40 oz",
-        "board_src":  "main"
-    },
-    {
-        "id":  "pears",
-        "store":  "Fareway",
-        "unit":  "lb",
-        "board":  1.77,
-        "link":  1.99,
-        "ratio":  1.12,
-        "price":  1.99,
-        "size":  "lb",
-        "boardItem":  "Bartlett Pear",
-        "linkItem":  "D\u0027anjou Pears",
         "board_src":  "main"
     },
     {
@@ -715,19 +702,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "ribeye-steak",
-        "store":  "Fareway",
-        "unit":  "lb",
-        "board":  24.99,
-        "link":  29.98,
-        "ratio":  1.2,
-        "price":  14.99,
-        "size":  "8 oz",
-        "boardItem":  "USDA Choice Thick Cut Ribeye Steak",
-        "linkItem":  "USDA Choice Boneless Ribeye Steak",
-        "board_src":  "main"
-    },
-    {
         "id":  "ricotta",
         "store":  "Aldi",
         "unit":  "oz",
@@ -764,19 +738,6 @@
         "size":  "32 oz",
         "boardItem":  "Fremont Fish Market Value Pack Wild Caught Salmon 32 OZ",
         "linkItem":  "Fremont Fish Market Value Pack Wild Caught Salmon",
-        "board_src":  "main"
-    },
-    {
-        "id":  "salmon",
-        "store":  "Fareway",
-        "unit":  "lb",
-        "board":  7.495,
-        "link":  7.992,
-        "ratio":  1.07,
-        "price":  9.99,
-        "size":  "20 oz",
-        "boardItem":  "Northern Fisheries Salmon Portions",
-        "linkItem":  "Trident Seafoods Fillet, Alaska Salmon",
         "board_src":  "main"
     },
     {
@@ -1044,10 +1005,10 @@
         "store":  "Baker\u0027s",
         "unit":  "oz",
         "board":  0.998,
-        "link":  0.56,
+        "link":  0.5619,
         "ratio":  0.56,
         "price":  8.99,
-        "size":  "$0.56/oz",
+        "size":  "16 oz",
         "boardItem":  "PLANTERS Garlic Chili Crisp cashews 5oz",
         "linkItem":  "Simple Truth Sea Salt Roasted Cashews",
         "board_src":  "recipe"

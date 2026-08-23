@@ -12,10 +12,6 @@
                         "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
-                        "id":  "cherry-tomatoes",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
                         "id":  "croissants",
                         "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
@@ -25,14 +21,10 @@
                     },
                     {
                         "id":  "donuts",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "dried-guajillo-chiles",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "hot-dogs",
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
@@ -48,15 +40,15 @@
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
-                        "id":  "strawberries",
+                        "id":  "sports-drinks",
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
-                        "id":  "tomatoes",
+                        "id":  "strawberries",
                         "why":  "not attempted - circuit breaker tripped"
                     }
                 ],
-    "worked":  15,
-    "generated":  "2026-08-23 08:18",
+    "worked":  11,
+    "generated":  "2026-08-23 13:08",
     "board":  "comparison-2026-08-23.json"
 }

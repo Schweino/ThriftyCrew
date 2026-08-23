@@ -3,47 +3,47 @@
     "namespace":  "recipe",
     "rules_hash":  "3c8a5be3fe7d6b5133bd8e903a98fdf65455f2185f92ec9295469cc76fdb7879",
     "board_date":  "2026-08-23",
-    "built_at":  "2026-08-23T08:17:30",
-    "rows_total":  35321,
-    "rows_reused_from_previous":  0,
-    "rows_rematched":  35321,
+    "built_at":  "2026-08-23T13:29:22",
+    "rows_total":  35146,
+    "rows_reused_from_previous":  35146,
+    "rows_rematched":  0,
     "rows_contested":  41,
-    "key_collisions_demoted_to_name":  570,
+    "key_collisions_demoted_to_name":  572,
     "stores":  [
                    {
                        "store":  "Aldi",
                        "rows":  2353,
-                       "changed":  true
+                       "changed":  false
                    },
                    {
                        "store":  "Baker\u0027s",
-                       "rows":  7349,
-                       "changed":  true
+                       "rows":  7350,
+                       "changed":  false
                    },
                    {
                        "store":  "Family Fare",
-                       "rows":  5332,
-                       "changed":  true
+                       "rows":  5338,
+                       "changed":  false
                    },
                    {
                        "store":  "Fareway",
-                       "rows":  950,
-                       "changed":  true
+                       "rows":  770,
+                       "changed":  false
                    },
                    {
                        "store":  "Hy-Vee",
                        "rows":  2236,
-                       "changed":  true
+                       "changed":  false
                    },
                    {
                        "store":  "Sam\u0027s Club",
-                       "rows":  187,
-                       "changed":  true
+                       "rows":  185,
+                       "changed":  false
                    },
                    {
                        "store":  "Walmart",
                        "rows":  16914,
-                       "changed":  true
+                       "changed":  false
                    }
                ]
 }

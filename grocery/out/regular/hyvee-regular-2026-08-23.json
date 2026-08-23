@@ -14,9 +14,9 @@
     "not_reverified":  1552,
     "cap_skipped":  0,
     "failed":  0,
-    "budget_skipped":  532,
+    "budget_skipped":  533,
     "ask_budget":  18,
-    "asked":  3,
+    "asked":  2,
     "answered":  2,
     "multiple_descriptive":  0,
     "multiple_refused":  0,
@@ -150,252 +150,252 @@
                           {
                               "term":  "product-0018-104466",
                               "ordinal":  18,
-                              "outcome":  "rejected",
+                              "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "store product lookup returned no usable offer"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0019-unidentified",
                               "ordinal":  19,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0020-unidentified",
                               "ordinal":  20,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0021-57274",
                               "ordinal":  21,
-                              "outcome":  "success",
-                              "row_count":  1
+                              "outcome":  "not_attempted",
+                              "row_count":  0,
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0022-unidentified",
                               "ordinal":  22,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0023-unidentified",
                               "ordinal":  23,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0024-unidentified",
                               "ordinal":  24,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0025-unidentified",
                               "ordinal":  25,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0026-unidentified",
                               "ordinal":  26,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0027-unidentified",
                               "ordinal":  27,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0028-unidentified",
                               "ordinal":  28,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0029-unidentified",
                               "ordinal":  29,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0030-unidentified",
                               "ordinal":  30,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0031-37178",
                               "ordinal":  31,
-                              "outcome":  "success",
-                              "row_count":  1
+                              "outcome":  "not_attempted",
+                              "row_count":  0,
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0032-unidentified",
                               "ordinal":  32,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0033-unidentified",
                               "ordinal":  33,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0034-unidentified",
                               "ordinal":  34,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0035-unidentified",
                               "ordinal":  35,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "worklist product has no retailer product id"
+                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
                           },
                           {
                               "term":  "product-0036-unidentified",
                               "ordinal":  36,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0037-unidentified",
                               "ordinal":  37,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0038-8669",
                               "ordinal":  38,
-                              "outcome":  "not_attempted",
-                              "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "outcome":  "success",
+                              "row_count":  1
                           },
                           {
                               "term":  "product-0039-8665",
                               "ordinal":  39,
-                              "outcome":  "not_attempted",
-                              "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "outcome":  "success",
+                              "row_count":  1
                           },
                           {
                               "term":  "product-0040-unidentified",
                               "ordinal":  40,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0041-unidentified",
                               "ordinal":  41,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0042-unidentified",
                               "ordinal":  42,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0043-unidentified",
                               "ordinal":  43,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0044-unidentified",
                               "ordinal":  44,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0045-unidentified",
                               "ordinal":  45,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0046-unidentified",
                               "ordinal":  46,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0047-unidentified",
                               "ordinal":  47,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0048-unidentified",
                               "ordinal":  48,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0049-unidentified",
                               "ordinal":  49,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0050-unidentified",
                               "ordinal":  50,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0051-unidentified",
                               "ordinal":  51,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0052-unidentified",
                               "ordinal":  52,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0053-unidentified",
                               "ordinal":  53,
                               "outcome":  "not_attempted",
                               "row_count":  0,
-                              "reason":  "outside today\u0027s capture-policy slice - carried at its last known price"
+                              "reason":  "worklist product has no retailer product id"
                           },
                           {
                               "term":  "product-0054-unidentified",
@@ -11133,14 +11133,15 @@
                       "ad_price":  "$3.99",
                       "size":  "24 oz",
                       "regular":  3.99,
-                      "current_price":  3.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
                       "as_of":  "2026-08-23",
+                      "not_reverified":  true,
+                      "current_price":  3.99,
+                      "base_price":  3.99,
                       "product_id":  57274,
                       "store_department":  "Dairy, Cheese \u0026 Eggs",
                       "store_department_group":  "Fresh",
-                      "store_category":  "Cheese",
-                      "base_price":  3.99
+                      "store_category":  "Cheese"
                   },
                   {
                       "store":  "Hy-Vee",
@@ -11238,14 +11239,15 @@
                       "ad_price":  "$0.5",
                       "size":  "lb",
                       "regular":  0.5,
-                      "current_price":  0.5,
                       "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
                       "as_of":  "2026-08-23",
+                      "not_reverified":  true,
+                      "current_price":  0.5,
+                      "base_price":  0.5,
                       "product_id":  37178,
                       "store_department":  "Produce",
                       "store_department_group":  "Fresh",
-                      "store_category":  "Fresh Fruit",
-                      "base_price":  0.5
+                      "store_category":  "Fresh Fruit"
                   },
                   {
                       "store":  "Hy-Vee",
@@ -11310,35 +11312,32 @@
                   {
                       "store":  "Hy-Vee",
                       "item":  "Gala Apples",
-                      "ad_price":  "$1.98",
+                      "ad_price":  "$2.49",
                       "size":  "lb",
-                      "regular":  1.98,
-                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
-                      "as_of":  "2026-08-21",
-                      "not_reverified":  true,
-                      "current_price":  1.98,
-                      "base_price":  2.19,
-                      "marked_down":  true,
+                      "regular":  2.49,
+                      "current_price":  2.49,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
+                      "as_of":  "2026-08-23",
                       "product_id":  8669,
                       "store_department":  "Produce",
                       "store_department_group":  "Fresh",
-                      "store_category":  "Fresh Fruit"
+                      "store_category":  "Fresh Fruit",
+                      "base_price":  2.49
                   },
                   {
                       "store":  "Hy-Vee",
                       "item":  "Pink Lady Apples",
-                      "ad_price":  "$1.79",
+                      "ad_price":  "$1.99",
                       "size":  "lb",
-                      "regular":  1.79,
-                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
-                      "as_of":  "2026-08-21",
-                      "not_reverified":  true,
-                      "current_price":  1.79,
-                      "base_price":  1.79,
+                      "regular":  1.99,
+                      "current_price":  1.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1466, Omaha #02)",
+                      "as_of":  "2026-08-23",
                       "product_id":  8665,
                       "store_department":  "Produce",
                       "store_department_group":  "Fresh",
-                      "store_category":  "Fresh Fruit"
+                      "store_category":  "Fresh Fruit",
+                      "base_price":  1.99
                   },
                   {
                       "store":  "Hy-Vee",

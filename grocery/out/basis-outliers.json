@@ -4,6 +4,19 @@
                             ],
     "findings":  [
                      {
+                         "id":  "soda",
+                         "commodity":  "Soda (12-pack)",
+                         "unit":  "floz",
+                         "store":  "Fareway",
+                         "per_unit":  0.1395,
+                         "median":  0.0312,
+                         "mult":  4.47,
+                         "size":  "20 fl oz",
+                         "item":  "Coca-Cola Soda Bottle",
+                         "peers_packed":  "3 of 6",
+                         "size_shape_mismatch":  true
+                     },
+                     {
                          "id":  "protein-bars",
                          "commodity":  "Protein Bars",
                          "unit":  "each",
@@ -82,15 +95,15 @@
                          "size_shape_mismatch":  false
                      },
                      {
-                         "id":  "chocolate-milk",
-                         "commodity":  "Chocolate Milk",
+                         "id":  "hand-soap",
+                         "commodity":  "Hand Soap (liquid)",
                          "unit":  "floz",
-                         "store":  "Sam\u0027s Club",
-                         "per_unit":  0.1388,
-                         "median":  0.0327,
-                         "mult":  4.24,
-                         "size":  "144 fl oz",
-                         "item":  "Horizon Organic Lowfat Chocolate Milk with DHA Omega-3, 8 fl. oz., 18 pk.",
+                         "store":  "Fareway",
+                         "per_unit":  0.4653,
+                         "median":  0.0998,
+                         "mult":  4.66,
+                         "size":  "7.5 fl oz",
+                         "item":  "Dial Antibacterial Defense Power Berries Scent Foaming Hand Soap, 7.5 fl oz",
                          "peers_packed":  "0 of 6",
                          "size_shape_mismatch":  false
                      },
@@ -122,7 +135,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-23T08:19:02",
+    "generated":  "2026-08-23T14:02:15",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -381,18 +394,6 @@
                               "id":  "clam-chowder",
                               "commodity":  "Clam Chowder (canned)",
                               "unit":  "oz",
-                              "store":  "Fareway",
-                              "per_unit":  0.1319,
-                              "size":  "18.8 fl oz",
-                              "item":  "Campbell\u0027s New England Clam Chowder18.8 fl oz",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "clam-chowder",
-                              "commodity":  "Clam Chowder (canned)",
-                              "unit":  "oz",
                               "store":  "Aldi",
                               "per_unit":  0.1319,
                               "size":  "18.8 fl oz",
@@ -630,6 +631,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "heavy-cream",
+                              "commodity":  "Heavy Whipping Cream",
+                              "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.2494,
+                              "size":  "32 oz",
+                              "item":  "Kemps Heavy Whipping Cream",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "honey-mustard",
                               "commodity":  "Honey Mustard",
                               "unit":  "oz",
@@ -720,7 +733,7 @@
                               "store":  "Fareway",
                               "per_unit":  0.155,
                               "size":  "16 oz",
-                              "item":  "Fareway Zesty Italian Dressing",
+                              "item":  "Fareway Italian Dressing",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -738,18 +751,6 @@
                               "holds_crown":  false
                           },
                           {
-                              "id":  "lemonade",
-                              "commodity":  "Lemonade",
-                              "unit":  "floz",
-                              "store":  "Family Fare",
-                              "per_unit":  0.0422,
-                              "size":  "59 oz",
-                              "item":  "Minute Maid Lemonade 59 Oz",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
                               "id":  "egg-whites",
                               "commodity":  "Liquid Egg Whites",
                               "unit":  "floz",
@@ -759,18 +760,6 @@
                               "item":  "Hy-Vee 100% Egg Whites",
                               "kind":  "volume",
                               "row_kind":  "weight",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "mayonnaise",
-                              "commodity":  "Mayonnaise",
-                              "unit":  "oz",
-                              "store":  "Fareway",
-                              "per_unit":  0.1263,
-                              "size":  "30 oz",
-                              "item":  "Fareway Mayonnaise Homestyle",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
                               "holds_crown":  false
                           },
                           {
@@ -913,6 +902,18 @@
                               "per_unit":  0.1556,
                               "size":  "16 oz",
                               "item":  "Our Family Vinegar Red Wine",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "shampoo",
+                              "commodity":  "Shampoo",
+                              "unit":  "floz",
+                              "store":  "Fareway",
+                              "per_unit":  0.0876,
+                              "size":  "22.5 oz",
+                              "item":  "Suave Ocean Breeze Refreshing Shampoo with Sea Algae Extract \u0026 Vitamin E, Cleanses, Softens \u0026 Shines For All Hair Types, 22.5 FL OZ",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
