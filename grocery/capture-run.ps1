@@ -663,6 +663,14 @@ if ($runDownstream) {
     } else {
       try { foreach ($pp in ((Get-Content $pubFile -Raw -Encoding UTF8 | ConvertFrom-Json).PSObject.Properties)) { $pubSlugs += [string]$pp.Name } }
       catch { [void]$problems.Add('meal-prep\db\published-hashes.json is unreadable, so the feed was NOT checked against the published set') }
+      # AN EMPTY PUBLISHED SET IS BLINDNESS, NOT COVERAGE (2026-08-23). The missing and unreadable cases
+      # above are both reported, and then this one slipped through: a published-hashes.json that PARSES
+      # but holds no slugs left $pubSlugs empty, skipped the whole membership check, added no problem, and
+      # printed the green "feed fresh ... covering all 0 published" line. Could-not-evaluate has to look
+      # different from evaluated-clean in every direction, or the guard is quiet exactly when it is blind.
+      if (-not $pubSlugs.Count) {
+        [void]$problems.Add('meal-prep\db\published-hashes.json parsed but names NO published recipes, so the feed was NOT checked against anything - this is a blind assert, not a clean one')
+      }
       if ($pubSlugs.Count) {
         $feedSlugs = @{}
         foreach ($fp in $feed.recipes.PSObject.Properties) { $feedSlugs[[string]$fp.Name] = $true }
