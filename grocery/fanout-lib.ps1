@@ -1,4 +1,4 @@
-<#
+﻿<#
   fanout-lib.ps1 - ONE copy of "run these independent children side by side, and prove every
   one of them ran."
 
@@ -77,17 +77,19 @@ function New-FanoutLane {
     contain to count as having run to the end. A lane that exits 0 without its marker did NOT
     finish, and saying so is the entire guard-contract lesson (lib\guard-contract.ps1).
 
-    NO PHASE-1 LANE DECLARES ONE YET, AND THAT IS A MEASUREMENT, NOT AN OVERSIGHT.
-    PLAN-use-the-cores names COMMODITY-DUPES-COMPLETE, STORE-REGISTRY-COMPLETE,
-    GRAPH-GATES-COMPLETE and CAPTURE-EVICTION-COMPLETE as markers that "already exist". Checked
-    against the tree on 2026-08-23: only the first is real. audit-store-registry.ps1,
-    audit-graph-gates.ps1, audit-capture-eviction.ps1 and audit-row-age.ps1 emit no marker at
-    all, and audit-guard-contract reports audit-commodity-dupes as HALF-COVERED - it has the
-    marker but leaves by two unmarked verdict exits (lines 219, 235). Declaring a marker a
-    script does not print converts a working audit into a BLIND finding every single morning,
-    which is the false-alarm mirror of the failure this whole file guards against. So: markers
-    go on when audit-guard-contract's backlog closes for that script, one lane at a time, and
-    each one gets a run that proves the marker actually appears before it is demanded.
+    32 OF THE 34 INSPECT LANES DECLARE ONE. An earlier note here said none of them could,
+    because the markers PLAN-use-the-cores named did not exist in the tree. That note was wrong
+    and the mistake is worth keeping: the check behind it grepped for a literal '<NAME>-COMPLETE'
+    string and so missed every script that emits its marker through the helper, which is most of
+    them. audit-store-registry.ps1 does print STORE-REGISTRY-COMPLETE - via
+    Write-GuardComplete -Name 'store-registry'. Grepping for one of two legal spellings and
+    concluding the thing does not exist is the same shape as the backspace-in-the-regex scanner
+    that reported green for a day while watching nothing.
+
+    The two lanes without a marker are discover-hyvee and scaler-pricing; neither emits one, so
+    neither declares one. Every other lane's marker was confirmed to actually appear on a live
+    run before it was demanded - a marker a script does not print turns a working audit into a
+    BLIND line every morning, which is the false-alarm mirror of the failure this file guards.
 
     Due=$false means the caller's cadence gate said skip. The lane is not launched and its
     record comes back with Skipped=$true - which is NOT a pass, and the caller must log it as
@@ -101,10 +103,19 @@ function New-FanoutLane {
     [string]$Marker = '',
     [bool]$Due = $true
   )
+  # NULLS STRIPPED, AND THIS WAS A LIVE BUG NOT A PRECAUTION (2026-08-23). check-ad-cycles built one
+  # lane as `-Arguments $(if (-not $NoAlert) { @('-Alert') } else { @() })`. In PowerShell a $( )
+  # that yields an EMPTY collection collapses to $null, [string[]]$Arguments happily binds $null,
+  # and @($null) is an array holding ONE NULL - so Start-Process refused the entire ArgumentList and
+  # the lane never launched. It reported BLIND, correctly, on every -NoAlert run: which is exactly
+  # what the GitHub Actions daily backup uses, so the store-registry audit would have been dead on
+  # precisely the days Brad's machine was off. Caught by demanding completion markers, not by review.
+  # The call site is fixed too; this makes the shape unrepresentable rather than merely fixed once.
+  $argv = @(@($Arguments) | Where-Object { $null -ne $_ })
   return [pscustomobject]@{
     Name       = $Name
     File       = $File
-    Arguments  = @($Arguments)
+    Arguments  = $argv
     TimeoutSec = $TimeoutSec
     Marker     = $Marker
     Due        = $Due
@@ -144,6 +155,7 @@ $script:FanoutLaneBody = {
     return [pscustomobject]@{
       Name = $Name; Index = $Index; ExitCode = 3
       Output = @($Name + ' BLIND: script not found at ' + $File + ' - nothing proven')
+      StdOut = @(); StdErr = @()
       TimedOut = $false; Elapsed = 0; Blind = $true
       BlindReason = ('its script is missing (' + $File + ') - that check did not run this cycle')
       Skipped = $false; Launched = $false; LogLines = @($logs.ToArray())
@@ -164,6 +176,7 @@ $script:FanoutLaneBody = {
     [void]$logs.Add(($Name + ' could not be launched: ' + $_.Exception.Message))
     return [pscustomobject]@{
       Name = $Name; Index = $Index; ExitCode = 3; Output = @($Name + ' could not be launched - BLIND, nothing proven')
+      StdOut = @(); StdErr = @()
       TimedOut = $false; Elapsed = 0; Blind = $true
       BlindReason = ('could not be launched: ' + $_.Exception.Message)
       Skipped = $false; Launched = $true; LogLines = @($logs.ToArray())
@@ -179,30 +192,53 @@ $script:FanoutLaneBody = {
     [void]$logs.Add(("TIMED OUT: $Name exceeded its $TimeoutSec s budget and was stopped - reported as BLIND (could-not-evaluate); the board still ships"))
     return [pscustomobject]@{
       Name = $Name; Index = $Index; ExitCode = 3; Output = @("$Name TIMED OUT after $TimeoutSec s - BLIND, nothing proven")
+      StdOut = @(); StdErr = @()
       TimedOut = $true; Elapsed = $elapsed; Blind = $true
       BlindReason = ("timed out after $TimeoutSec s")
       Skipped = $false; Launched = $true; LogLines = @($logs.ToArray())
     }
   }
 
-  $out = @()
-  try { $out += @(Get-Content $so -ErrorAction SilentlyContinue) } catch { }
-  try { $out += @(Get-Content $se -ErrorAction SilentlyContinue) } catch { }
+  # STDOUT AND STDERR ARE KEPT APART AS WELL AS TOGETHER. Output stays merged because every existing
+  # consumer reads it that way (Invoke-Bounded's contract, unchanged), but the marker check below can
+  # only be asked of STDOUT: this appends stderr AFTER stdout, so on any child that writes a single
+  # warning line the marker stops being last and a correct guard would be called BLIND.
+  $stdout = @(); $stderr = @()
+  try { $stdout = @(Get-Content $so -ErrorAction SilentlyContinue) } catch { }
+  try { $stderr = @(Get-Content $se -ErrorAction SilentlyContinue) } catch { }
   Remove-Item $so, $se -Force -ErrorAction SilentlyContinue
   $rc = try { [int]$p.ExitCode } catch { 3 }
-  $out = @($out | ForEach-Object { [string]$_ })
+  $stdout = @($stdout | ForEach-Object { [string]$_ })
+  $stderr = @($stderr | ForEach-Object { [string]$_ })
+  $out = @($stdout + $stderr)
 
   # THE MARKER IS THE ONLY THING THAT PROVES THE END WAS REACHED. An exit code says the process
   # stopped, not that the check finished - test-auditors once threw 242 checks early, printed
-  # 176 lines of PASS and exited 1. If a lane declares a marker and the output does not carry
-  # it, the lane is BLIND no matter what it exited with.
+  # 176 lines of PASS and exited 1. If a lane declares a marker and stdout does not END with it,
+  # the lane is BLIND no matter what it exited with.
+  #
+  # LAST NON-EMPTY LINE, NOT "SOMEWHERE IN THE OUTPUT" (tightened 2026-08-23). The first version of
+  # this matched the marker anywhere, which is strictly weaker than the estate's own contract:
+  # lib\guard-contract.ps1's Test-GuardComplete requires it to be the LAST non-empty line, because
+  # "a guard that printed it and then kept going (and died) has not finished either". A weaker copy
+  # of a contract is worse than no copy - it looks like the rule is enforced. Same predicate here.
   $blind = $false; $why = ''
-  if ($Marker -and (($out -join "`n") -notmatch $Marker)) {
-    $blind = $true
-    $why = ("exited $rc without its completion marker (" + $Marker + ") - it did not run to the end, so its verdict proves nothing")
-  } elseif ($rc -eq 3) {
+  if ($Marker) {
+    $lines = @($stdout | Where-Object { $_.Trim() -ne '' })
+    $ends = ($lines.Count -gt 0) -and ($lines[-1].Trim() -match $Marker)
+    if (-not $ends) {
+      $blind = $true
+      $seen = if (($stdout -join "`n") -match $Marker) { ' (it appears earlier in the output, but the run did not END there - it kept going and stopped somewhere else)' } else { '' }
+      $why = ("exited $rc without its completion marker (" + $Marker + ") as the last line" + $seen + " - it did not run to the end, so its verdict proves nothing")
+    }
+  }
+  # The exit-code reasons are checked independently of the marker rather than chained onto it: a lane
+  # can be blind for more than one reason at once, and the first one found is a fine thing to report,
+  # but "already blind" must never stop a later check from running.
+  if (-not $blind -and $rc -eq 3) {
     $blind = $true; $why = 'the child reported could-not-evaluate (rc=3)'
-  } elseif ($rc -lt 0) {
+  }
+  if (-not $blind -and $rc -lt 0) {
     # A NEGATIVE CODE IS NOT ONE OF THE CHILD'S. The estate's scripts exit 0..3; anything below
     # zero came from the host refusing to run one (a bad -File, a fatal CLR exit), so it says
     # nothing about the check and must not be read as a verdict.
@@ -213,6 +249,10 @@ $script:FanoutLaneBody = {
 
   return [pscustomobject]@{
     Name = $Name; Index = $Index; ExitCode = $rc; Output = $out
+    # StdOut separately, because the marker contract is about STDOUT and Output has stderr appended
+    # to it. A consumer that wants to re-check completion itself must be able to ask the same
+    # question this lane asked, not a merged approximation of it.
+    StdOut = $stdout; StdErr = $stderr
     TimedOut = $false; Elapsed = $elapsed; Blind = $blind; BlindReason = $why
     Skipped = $false; Launched = $true; LogLines = @($logs.ToArray())
   }
@@ -250,6 +290,7 @@ function Invoke-Fanout {
     if (-not $L.Due) {
       $records[$i] = [pscustomobject]@{
         Name = [string]$L.Name; Index = $i; ExitCode = 0; Output = @()
+        StdOut = @(); StdErr = @()
         TimedOut = $false; Elapsed = 0; Blind = $false; BlindReason = ''
         Skipped = $true; Launched = $false; LogLines = @()
       }
@@ -273,6 +314,7 @@ function Invoke-Fanout {
         [pscustomobject]@{
           Name = [string]$L.Name; Index = [int]$e.Index; ExitCode = -1
           Output = @(([string]$L.Name) + ' produced no record - BLIND, nothing proven')
+          StdOut = @(); StdErr = @()
           TimedOut = $false; Elapsed = 0; Blind = $true
           BlindReason = 'the lane returned no record'
           Skipped = $false; Launched = $true; LogLines = @()
@@ -324,6 +366,7 @@ function Invoke-Fanout {
         $records[$h.Index] = [pscustomobject]@{
           Name = [string]$h.Name; Index = [int]$h.Index; ExitCode = -1
           Output = @(([string]$h.Name) + ' produced no record - BLIND, nothing proven')
+          StdOut = @(); StdErr = @()
           TimedOut = $false; Elapsed = 0; Blind = $true
           BlindReason = ('the lane returned no record' + $(if ($err) { ': ' + $err } else { '' }))
           Skipped = $false; Launched = $true; LogLines = @()
@@ -343,6 +386,7 @@ function Invoke-Fanout {
       $records[$i] = [pscustomobject]@{
         Name = [string]$lanes[$i].Name; Index = $i; ExitCode = -1
         Output = @(([string]$lanes[$i].Name) + ' produced no record - BLIND, nothing proven')
+        StdOut = @(); StdErr = @()
         TimedOut = $false; Elapsed = 0; Blind = $true
         BlindReason = 'no record was produced for this lane'
         Skipped = $false; Launched = $true; LogLines = @()
@@ -366,6 +410,7 @@ function Get-FanoutRecord {
   return [pscustomobject]@{
     Name = $Name; Index = -1; ExitCode = -1
     Output = @($Name + ' has no fan-out record - BLIND, nothing proven')
+    StdOut = @(); StdErr = @()
     TimedOut = $false; Elapsed = 0; Blind = $true
     BlindReason = 'no lane by that name was defined'
     Skipped = $false; Launched = $false; LogLines = @()
@@ -432,6 +477,8 @@ if ($__foSelfTest) {
     Set-Content (Join-Path $td 'slow.ps1')   -Value "Start-Sleep -Seconds 30; Write-Output 'never'"
     Set-Content (Join-Path $td 'err.ps1')    -Value "[Console]::Error.WriteLine('a stderr line'); Write-Output 'OK-COMPLETE'; exit 0"
     Set-Content (Join-Path $td 'sleep3.ps1') -Value "Start-Sleep -Seconds 3; Write-Output 'done'"
+    Set-Content (Join-Path $td 'kept-going.ps1') -Value "Write-Output 'OK-COMPLETE'; Write-Output 'and then it kept going'; exit 0"
+    Set-Content (Join-Path $td 'noisy.ps1')      -Value "[Console]::Error.WriteLine('a warning'); Write-Output 'work'; Write-Output 'OK-COMPLETE'; exit 0"
 
     $lanes = @(
       New-FanoutLane -Name 'ok'      -File (Join-Path $td 'ok.ps1')     -Marker 'OK-COMPLETE'
@@ -440,6 +487,11 @@ if ($__foSelfTest) {
       New-FanoutLane -Name 'slow'    -File (Join-Path $td 'slow.ps1')   -TimeoutSec 2
       New-FanoutLane -Name 'missing' -File (Join-Path $td 'nope.ps1')
       New-FanoutLane -Name 'err'     -File (Join-Path $td 'err.ps1')    -Marker 'OK-COMPLETE'
+      New-FanoutLane -Name 'kept'    -File (Join-Path $td 'kept-going.ps1') -Marker 'OK-COMPLETE'
+      # THE EXACT SHAPE THAT KILLED store-registry: a $( ) that yields an empty collection, which
+      # PowerShell collapses to $null on the way into [string[]]. It must LAUNCH, notreport BLIND.
+      New-FanoutLane -Name 'emptyargs' -File (Join-Path $td 'ok.ps1') -Marker 'OK-COMPLETE' -Arguments $(if ($false) { @('-Nope') } else { @() })
+      New-FanoutLane -Name 'noisy'   -File (Join-Path $td 'noisy.ps1')  -Marker 'OK-COMPLETE'
       New-FanoutLane -Name 'skipped' -File (Join-Path $td 'ok.ps1')     -Due $false
     )
 
@@ -480,13 +532,34 @@ if ($__foSelfTest) {
     # EAP=Stop a 2>&1 in the lane body would have terminated the pool instead of returning a record.
     T 'CLEAN TWIN a child that writes to stderr still reports rc 0' (-not $er.Blind -and $er.ExitCode -eq 0 -and (($er.Output -join ' ') -match 'a stderr line'))
 
+    # MUST FIRE - THE MARKER MUST BE THE LAST LINE, NOT MERELY PRESENT. lib\guard-contract.ps1 puts it
+    # exactly this way: "a guard that printed it and then kept going (and died) has not finished either".
+    # The first version of this file matched the marker ANYWHERE in the output, which is a weaker copy of
+    # the estate's own contract - and a weaker copy is worse than none, because it looks enforced.
+    $kp = @($par | Where-Object { $_.Name -eq 'kept' })[0]
+    T 'MUST FIRE  a marker that is present but NOT last is BLIND' ($kp.Blind -and $kp.ExitCode -eq 0) ("blind=" + $kp.Blind)
+
+    # CLEAN TWIN for the same rule, and the reason StdOut is kept apart from Output: this lane writes one
+    # line to STDERR, and Output appends stderr AFTER stdout. Checking the merged stream would put the
+    # warning last and call a perfectly finished guard BLIND - a false alarm on every child that warns.
+    $ny = @($par | Where-Object { $_.Name -eq 'noisy' })[0]
+    T 'CLEAN TWIN a child that warns on stderr still passes the last-line marker check' (-not $ny.Blind -and $ny.ExitCode -eq 0) ("blind=" + $ny.Blind + " why=" + $ny.BlindReason)
+
+    # MUST FIRE, FROM A LIVE REGRESSION (2026-08-23). check-ad-cycles built the store-registry lane as
+    # `-Arguments $(if (-not $NoAlert) { @('-Alert') } else { @() })`. An empty $( ) collapses to $null,
+    # [string[]] binds it, and @($null) is an array holding one NULL - Start-Process then refuses the
+    # whole ArgumentList and the lane never runs. It shipped, and it was dead on exactly the -NoAlert
+    # runs the cloud backup makes. A lane built this way must LAUNCH.
+    $ea = @($par | Where-Object { $_.Name -eq 'emptyargs' })[0]
+    T 'MUST FIRE  an empty $( ) argument list still launches (it collapses to $null, and @($null) is not empty)' (-not $ea.Blind -and $ea.ExitCode -eq 0) ("blind=" + $ea.Blind + " why=" + $ea.BlindReason)
+
     # A cadence skip is not a pass, but it is also not a BLIND - the caller reports it with its date.
     $sk = @($par | Where-Object { $_.Name -eq 'skipped' })[0]
     T 'a not-due lane is Skipped, not launched, and not accused' ($sk.Skipped -and -not $sk.Launched -and -not $sk.Blind)
 
     # Test-FanoutComplete turns exactly the three BLIND lanes into findings and accuses nobody else.
     $f = @(Test-FanoutComplete -Lanes $lanes -Records $par)
-    T 'the collector reports 3 BLIND finding(s) and no more' ($f.Count -eq 3) (($f -join ' | '))
+    T 'the collector reports 4 BLIND finding(s) and no more' ($f.Count -eq 4) (($f -join ' | '))
 
     # An unknown lane name is a code bug, and a code bug must read as "we did not check".
     $gone = Get-FanoutRecord 'nosuchlane' $par

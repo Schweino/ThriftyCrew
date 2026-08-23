@@ -1,4 +1,4 @@
-<#
+﻿<#
   audit-tile-integrity.ps1 - BRAD'S INVARIANT, as one number.
 
     "There should be no tile that has a price and item name and no link, and the price and item name need to
@@ -80,6 +80,11 @@ if (Test-Path $ndF) {
     Write-Output "  today's links against yesterday's verdicts - passing a wrong link that carries no stale flag."
     Write-Output "  Fix: run audit-name-drift.ps1, then re-run this. Do not -Force past it; a green from a stale"
     Write-Output "  flags file is exactly the false green this assertion exists to prevent."
+    # A REFUSAL IS A FINISHED RUN (2026-08-23). This branch reaches a considered decision - it will not
+    # grade today's links against yesterday's drift flags - and then left without the marker, so a
+    # caller saw exit 2 with no completion and could not tell a deliberate HELD from a crash. The
+    # refusal is the audit working, and it should be able to say so.
+    Write-GuardComplete -Name 'tile-integrity' -Summary 'HELD: name-drift.json is stale'
     exit 2
   }
   foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $drift[([string]$d.id + '|' + [string]$d.store)] = [string]$d.reason }

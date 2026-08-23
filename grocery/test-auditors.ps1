@@ -1099,8 +1099,8 @@ if (-not (Test-Path $foLib)) {
   # back BLIND rather than clean. Plus a CONCURRENCY case, because every other assertion in that file
   # would still pass if the pool had quietly become a serial loop.
   $r = PSChild $foLib -SelfTest | Out-String
-  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 14/14 pass') {
-    Ok 'fanout-lib -SelfTest passes (a missing lane, a markerless exit and a timeout each report BLIND; -Sequential agrees lane-for-lane; the pool is provably concurrent)'
+  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 17/17 pass') {
+    Ok 'fanout-lib -SelfTest passes (a missing lane, a timeout, and a marker present-but-not-LAST each report BLIND; a child that warns on stderr does not; -Sequential agrees lane-for-lane; the pool is provably concurrent)'
   } else { Bad ('fanout-lib -SelfTest failed or lost its fixtures: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 
   # EVERY LANE NAMES A SCRIPT THAT EXISTS. Get-FanoutRecord returns BLIND for a lane it cannot find, and
@@ -1139,6 +1139,16 @@ if (-not (Test-Path $foLib)) {
     if ($foBad.Count -eq 0) { Ok 'no mutator or deleter has been added to the inspect fan-out (they still run serially, around it)' }
     else { Bad ('a stage that MUTATES or DELETES shared inputs has been put in the read-only fan-out - other lanes will read a file mid-rewrite: ' + ($foBad -join ', ')) }
   }
+
+  # THE MARKERS ARE WIRED, AND A LANE THAT LOSES ONE MUST SURFACE HERE. 32 of the 34 lanes declare the
+  # completion marker their script prints; the two that do not (discover-hyvee, scaler-pricing) emit none.
+  # A marker is the only thing that separates "found nothing" from "died half way", which in a POOL is
+  # harder to notice than in a serial chain - nothing downstream waits on a lane, so a lane that dies just
+  # contributes silence. If this count collapses, the fan-out has gone back to trusting exit codes alone.
+  $foMarked = @([regex]::Matches($cacSrc, "New-FanoutLane[^
+]*-Marker '[A-Z0-9-]+-COMPLETE'")).Count
+  if ($foMarked -ge 30) { Ok ("$foMarked of the inspect fan-out lanes require their completion marker (a lane that dies mid-way cannot read as 'no findings')") }
+  else { Bad ("only $foMarked fan-out lane(s) still require a completion marker - the pool has gone back to judging lanes on exit code alone, and an exit code cannot tell 'clean' from 'stopped early'") }
 
   # -Sequential MUST SURVIVE. It is how the next person answers "is this a concurrency problem?" without
   # reverting anything, and it is the only reason the two transcripts are comparable at all. A fan-out

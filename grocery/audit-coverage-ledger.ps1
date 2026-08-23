@@ -1,4 +1,4 @@
-<#
+﻿<#
   audit-coverage-ledger.ps1 - THE RATCHET on how much each check actually looked at.
 
   Reads out\coverage-ledger.json (written by coverage-lib.ps1 from inside the checks themselves) and
@@ -385,7 +385,12 @@ if ($findings.Count -gt 0) {
   foreach ($f in $findings) { Write-Output ("  " + $f) }
   Write-Output ''
   Write-Output ("coverage-ledger: " + $findings.Count + " coverage finding(s) across " + $blRows.Count + " rostered check(s); " + $evaluated + " row(s) evaluated.")
-  if ($Gate) { exit 2 }
+  # THE GATE PATH HAD DONE EVERY BIT OF THE WORK AND THEN LEFT WITHOUT SAYING SO (2026-08-23).
+  # One line below, the advisory path marks completion and exits 1; this one exited 2 bare. So a
+  # caller running -Gate - the mode whose whole purpose is to BLOCK on the finding - could not tell
+  # "found coverage findings and finished" from "crashed part-way", which is the one distinction the
+  # completion contract exists to make, missing from the one mode that acts on it.
+  if ($Gate) { Write-GuardComplete -Name 'coverage-ledger' -Summary ("{0} finding(s), gate" -f $findings.Count); exit 2 }
   Write-GuardComplete -Name 'coverage-ledger'; exit 1
 }
 if ($evaluated -eq 0) {

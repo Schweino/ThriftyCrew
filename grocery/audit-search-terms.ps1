@@ -1,4 +1,4 @@
-# audit-search-terms.ps1 - "did we ever actually ask the right question?"
+﻿# audit-search-terms.ps1 - "did we ever actually ask the right question?"
 #
 # WHY (2026-08-22). A NOT-CARRIED verdict is only worth the search behind it, and this estate's one
 # confirmed "absence" was a wrong term, not an empty shelf. commodity-search.json searches doubanjiang as
@@ -157,9 +157,21 @@ if ($drift.Count) {
   Write-Output ("SEARCHTERMS: {0} term(s) never return the food, but the food IS in the corpus under another key - a term/matcher bug, NOT a carriage question:" -f $drift.Count)
   foreach ($s in $drift) { Write-Output ("  ~ {0,-26} term '{1}' -> {2} rows, e.g. '{3}'" -f $s.commodity, $s.term, $s.rows, $s.example) }
 }
-if (-not $suspect.Count) { Write-Output '  ok  no term returns rows while its food is absent from the whole corpus'; exit 0 }
+if (-not $suspect.Count) {
+  Write-Output '  ok  no term returns rows while its food is absent from the whole corpus'
+  . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+  Write-GuardComplete -Name 'search-terms' -Summary ("0 suspect, {0} drift, {1} untestable" -f @($drift).Count, @($untestable).Count)
+  exit 0
+}
 Write-Output ("SEARCHTERMS: {0} term(s) return rows but the food they name appears NOWHERE in the corpus:" -f $suspect.Count)
 foreach ($s in $suspect) { Write-Output ("  ? {0,-26} term '{1}' -> {2} rows, e.g. '{3}'" -f $s.commodity, $s.term, $s.rows, $s.example) }
 Write-Output '     A term on this list cannot support a NOT-CARRIED verdict: the silence may be the term, not the shelf.'
 Write-Output '     Fix the term in commodity-search.json and re-capture BEFORE promoting any absence to grocery\carriage.json.'
+# COMPLETION, NOT VERDICT (2026-08-23). This exits 0 whether or not it found anything - the finding
+# lives in its SEARCHTERMS lines - so the exit code alone cannot distinguish "no suspect terms" from
+# "died before it looked". That is precisely the shape lib\guard-contract.ps1 exists to close, and it
+# matters more here than most: this is a fan-out lane now, and a lane that dies quietly in a pool is
+# harder to notice than one that dies in a serial chain.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+Write-GuardComplete -Name 'search-terms' -Summary ("{0} suspect, {1} drift, {2} untestable" -f @($suspect).Count, @($drift).Count, @($untestable).Count)
 exit 0

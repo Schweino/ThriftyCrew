@@ -1117,40 +1117,40 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # name with two meanings in one scope is how the next edit here breaks quietly.
       $mealPrep = Join-Path (Split-Path $root -Parent) 'meal-prep'
       $fanLanes = @(
-        New-FanoutLane -Name 'coverage-gaps'       -File (Join-Path $root 'audit-coverage-gaps.ps1')        -TimeoutSec 900
-        New-FanoutLane -Name 'semantic'            -File (Join-Path $root 'audit-semantic-identity.ps1')    -TimeoutSec 900 -Due $cadDue['semantic']
-        New-FanoutLane -Name 'match-soundness'     -File (Join-Path $root 'audit-match-soundness.ps1')      -TimeoutSec 900 -Arguments (@('-OutDir', $OutDir) + $(if (-not $NoAlert) { @('-Alert') } else { @() }))
-        New-FanoutLane -Name 'aisle-test'          -File (Join-Path $root 'aisle-test.ps1')                 -TimeoutSec 900 -Arguments @('-LiveBoard') -Due $cadDue['aisle-test']
-        New-FanoutLane -Name 'sale-without-ad'     -File (Join-Path $root 'audit-sale-without-ad.ps1')      -Arguments @('-Quiet')
-        New-FanoutLane -Name 'hyvee-store-blend'   -File (Join-Path $root 'audit-hyvee-store-blend.ps1')
-        New-FanoutLane -Name 'price-capture-reach' -File (Join-Path $root 'audit-price-capture-reach.ps1')
-        New-FanoutLane -Name 'graph-gates'         -File (Join-Path $root 'audit-graph-gates.ps1')          -TimeoutSec 600
-        New-FanoutLane -Name 'matcher-parity'      -File (Join-Path $root 'test-matcher-parity.ps1')        -Arguments @('-Sample','400') -Due $cadDue['matcher-parity']
-        New-FanoutLane -Name 'precedence-ladders'  -File (Join-Path $root 'test-precedence-ladders.ps1')    -Arguments @('-Quiet')        -Due $cadDue['precedence-ladders']
-        New-FanoutLane -Name 'category-coverage'   -File (Join-Path $root 'audit-category-coverage.ps1')    -Arguments (@('-OutDir', $OutDir) + $(if (-not $NoAlert) { @('-Alert') } else { @() }))
-        New-FanoutLane -Name 'store-registry'      -File (Join-Path $root 'audit-store-registry.ps1')       -Arguments $(if (-not $NoAlert) { @('-Alert') } else { @() }) -Due $cadDue['store-registry']
-        New-FanoutLane -Name 'commodity-dupes'     -File (Join-Path $root 'audit-commodity-dupes.ps1')      -Due $cadDue['commodity-dupes']
-        New-FanoutLane -Name 'search-terms'        -File (Join-Path $root 'audit-search-terms.ps1')         -Due $cadDue['search-terms']
+        New-FanoutLane -Name 'coverage-gaps'       -File (Join-Path $root 'audit-coverage-gaps.ps1')        -TimeoutSec 900 -Marker 'COVERAGE-GAPS-COMPLETE'
+        New-FanoutLane -Name 'semantic'            -File (Join-Path $root 'audit-semantic-identity.ps1')    -TimeoutSec 900 -Due $cadDue['semantic'] -Marker 'SEMANTIC-IDENTITY-COMPLETE'
+        New-FanoutLane -Name 'match-soundness'     -File (Join-Path $root 'audit-match-soundness.ps1')      -TimeoutSec 900 -Arguments (@('-OutDir', $OutDir) + $(if (-not $NoAlert) { @('-Alert') } else { @() })) -Marker 'MATCH-SOUNDNESS-COMPLETE'
+        New-FanoutLane -Name 'aisle-test'          -File (Join-Path $root 'aisle-test.ps1')                 -TimeoutSec 900 -Arguments @('-LiveBoard') -Due $cadDue['aisle-test'] -Marker 'AISLE-TEST-COMPLETE'
+        New-FanoutLane -Name 'sale-without-ad'     -File (Join-Path $root 'audit-sale-without-ad.ps1')      -Arguments @('-Quiet') -Marker 'SALE-WITHOUT-AD-COMPLETE'
+        New-FanoutLane -Name 'hyvee-store-blend'   -File (Join-Path $root 'audit-hyvee-store-blend.ps1') -Marker 'HYVEE-STORE-BLEND-COMPLETE'
+        New-FanoutLane -Name 'price-capture-reach' -File (Join-Path $root 'audit-price-capture-reach.ps1') -Marker 'PRICE-CAPTURE-REACH-COMPLETE'
+        New-FanoutLane -Name 'graph-gates'         -File (Join-Path $root 'audit-graph-gates.ps1')          -TimeoutSec 600 -Marker 'GRAPH-GATES-COMPLETE'
+        New-FanoutLane -Name 'matcher-parity'      -File (Join-Path $root 'test-matcher-parity.ps1')        -Arguments @('-Sample','400') -Due $cadDue['matcher-parity'] -Marker 'MATCHER-PARITY-COMPLETE'
+        New-FanoutLane -Name 'precedence-ladders'  -File (Join-Path $root 'test-precedence-ladders.ps1')    -Arguments @('-Quiet')        -Due $cadDue['precedence-ladders'] -Marker 'PRECEDENCE-LADDERS-COMPLETE'
+        New-FanoutLane -Name 'category-coverage'   -File (Join-Path $root 'audit-category-coverage.ps1')    -Arguments (@('-OutDir', $OutDir) + $(if (-not $NoAlert) { @('-Alert') } else { @() })) -Marker 'CATEGORY-COVERAGE-COMPLETE'
+        New-FanoutLane -Name 'store-registry'      -File (Join-Path $root 'audit-store-registry.ps1')       -Arguments (@() + $(if (-not $NoAlert) { @('-Alert') } else { @() })) -Due $cadDue['store-registry'] -Marker 'STORE-REGISTRY-COMPLETE'
+        New-FanoutLane -Name 'commodity-dupes'     -File (Join-Path $root 'audit-commodity-dupes.ps1')      -Due $cadDue['commodity-dupes'] -Marker 'COMMODITY-DUPES-COMPLETE'
+        New-FanoutLane -Name 'search-terms'        -File (Join-Path $root 'audit-search-terms.ps1')         -Due $cadDue['search-terms'] -Marker 'SEARCH-TERMS-COMPLETE'
         New-FanoutLane -Name 'discover-hyvee'      -File (Join-Path $root 'discover-hyvee.ps1')             -TimeoutSec 900 -Arguments @('-Slice','40')
-        New-FanoutLane -Name 'store-taxonomy'      -File (Join-Path $root 'audit-store-taxonomy.ps1')       -Arguments @('-OutDir', $OutDir)
-        New-FanoutLane -Name 'sale-fallback'       -File (Join-Path $root 'audit-sale-fallback.ps1')
-        New-FanoutLane -Name 'golden-test'         -File (Join-Path $mealPrep 'engine\golden-test.ps1')         -TimeoutSec 600
+        New-FanoutLane -Name 'store-taxonomy'      -File (Join-Path $root 'audit-store-taxonomy.ps1')       -Arguments @('-OutDir', $OutDir) -Marker 'STORE-TAXONOMY-COMPLETE'
+        New-FanoutLane -Name 'sale-fallback'       -File (Join-Path $root 'audit-sale-fallback.ps1') -Marker 'SALE-FALLBACK-COMPLETE'
+        New-FanoutLane -Name 'golden-test'         -File (Join-Path $mealPrep 'engine\golden-test.ps1')         -TimeoutSec 600 -Marker 'GOLDEN-TEST-COMPLETE'
         New-FanoutLane -Name 'scaler-pricing'      -File (Join-Path $mealPrep 'pipeline\run-scaler-pricing-test.ps1') -TimeoutSec 600 -Arguments @('-Quiet')
-        New-FanoutLane -Name 'db-agreement'        -File (Join-Path $mealPrep 'engine\audit-db-agreement.ps1')
-        New-FanoutLane -Name 'spec-contradictions' -File (Join-Path $mealPrep 'pipeline\audit-spec-contradictions.ps1') -TimeoutSec 600 -Arguments @('-Quiet')
-        New-FanoutLane -Name 'store-integrity'     -File (Join-Path $mealPrep 'pipeline\audit-store-integrity.ps1')
-        New-FanoutLane -Name 'guard-contract'      -File (Join-Path $root 'audit-guard-contract.ps1')       -Due $cadDue['guard-contract']
-        New-FanoutLane -Name 'cloud-readiness'     -File (Join-Path $root 'audit-cloud-readiness.ps1')      -Due $cadDue['cloud-readiness']
-        New-FanoutLane -Name 'schema-constraints'  -File (Join-Path $mealPrep 'pipeline\audit-schema-constraints.ps1')
-        New-FanoutLane -Name 'batch-ledger'        -File (Join-Path $mealPrep 'pipeline\batch-ledger.ps1')      -Arguments @('-Verify')
-        New-FanoutLane -Name 'count-gpu'           -File (Join-Path $mealPrep 'pipeline\audit-count-gpu.ps1')
-        New-FanoutLane -Name 'row-age'             -File (Join-Path $root 'audit-row-age.ps1')              -Arguments @('-OutDir', $OutDir)
-        New-FanoutLane -Name 'sanity-check'        -File (Join-Path $root 'sanity-check.ps1')
-        New-FanoutLane -Name 'basis-reconcile'     -File (Join-Path $root 'audit-basis-reconcile.ps1')
-        New-FanoutLane -Name 'pack-basis'          -File (Join-Path $root 'audit-pack-basis.ps1')
-        New-FanoutLane -Name 'walmart-fullpull'    -File (Join-Path $root 'audit-walmart-fullpull.ps1')
-        New-FanoutLane -Name 'capture-eviction'    -File (Join-Path $root 'audit-capture-eviction.ps1')
-        New-FanoutLane -Name 'store-coverage'      -File (Join-Path $root 'audit-store-coverage.ps1')       -Due (-not $NoPublish)
+        New-FanoutLane -Name 'db-agreement'        -File (Join-Path $mealPrep 'engine\audit-db-agreement.ps1') -Marker 'DB-AGREEMENT-COMPLETE'
+        New-FanoutLane -Name 'spec-contradictions' -File (Join-Path $mealPrep 'pipeline\audit-spec-contradictions.ps1') -TimeoutSec 600 -Arguments @('-Quiet') -Marker 'SPEC-CONTRADICTIONS-COMPLETE'
+        New-FanoutLane -Name 'store-integrity'     -File (Join-Path $mealPrep 'pipeline\audit-store-integrity.ps1') -Marker 'STORE-INTEGRITY-COMPLETE'
+        New-FanoutLane -Name 'guard-contract'      -File (Join-Path $root 'audit-guard-contract.ps1')       -Due $cadDue['guard-contract'] -Marker 'GUARD-CONTRACT-COMPLETE'
+        New-FanoutLane -Name 'cloud-readiness'     -File (Join-Path $root 'audit-cloud-readiness.ps1')      -Due $cadDue['cloud-readiness'] -Marker 'CLOUD-READINESS-COMPLETE'
+        New-FanoutLane -Name 'schema-constraints'  -File (Join-Path $mealPrep 'pipeline\audit-schema-constraints.ps1') -Marker 'SCHEMA-CONSTRAINTS-COMPLETE'
+        New-FanoutLane -Name 'batch-ledger'        -File (Join-Path $mealPrep 'pipeline\batch-ledger.ps1')      -Arguments @('-Verify') -Marker 'BATCH-LEDGER-COMPLETE'
+        New-FanoutLane -Name 'count-gpu'           -File (Join-Path $mealPrep 'pipeline\audit-count-gpu.ps1') -Marker 'COUNT-GPU-COMPLETE'
+        New-FanoutLane -Name 'row-age'             -File (Join-Path $root 'audit-row-age.ps1')              -Arguments @('-OutDir', $OutDir) -Marker 'ROW-AGE-COMPLETE'
+        New-FanoutLane -Name 'sanity-check'        -File (Join-Path $root 'sanity-check.ps1') -Marker 'SANITY-CHECK-COMPLETE'
+        New-FanoutLane -Name 'basis-reconcile'     -File (Join-Path $root 'audit-basis-reconcile.ps1') -Marker 'BASIS-RECONCILE-COMPLETE'
+        New-FanoutLane -Name 'pack-basis'          -File (Join-Path $root 'audit-pack-basis.ps1') -Marker 'PACK-BASIS-COMPLETE'
+        New-FanoutLane -Name 'walmart-fullpull'    -File (Join-Path $root 'audit-walmart-fullpull.ps1') -Marker 'WALMART-FULLPULL-COMPLETE'
+        New-FanoutLane -Name 'capture-eviction'    -File (Join-Path $root 'audit-capture-eviction.ps1') -Marker 'CAPTURE-EVICTION-COMPLETE'
+        New-FanoutLane -Name 'store-coverage'      -File (Join-Path $root 'audit-store-coverage.ps1')       -Due (-not $NoPublish) -Marker 'STORE-COVERAGE-COMPLETE'
       )
 
       $fanRecs = @()

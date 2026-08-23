@@ -57,6 +57,16 @@ param(
   [string[]]$Ids = @(),
   [int]$PageSize = 90,
   [double]$MinBeatPct = 2,
+  # HOW MANY SEARCHES AT ONCE (2026-08-23). This script was 165 s of the inspect fan-out's 171 s
+  # wall - 96% of it - so every other advisory audit finished and sat waiting on this one lane.
+  # It is not compute: it is $Slice sequential HTTP POSTs to Hy-Vee, each followed by a deliberate
+  # 400 ms pace.
+  # FOUR, NOT SIXTEEN, AND THE REASON IS NOT PERFORMANCE. The pacing is politeness to somebody
+  # else's store API, and this estate has already been walled by one (Walmart) and rate-shaped by
+  # another. Each worker keeps the SAME 400 ms gap between its own requests, so the effective rate
+  # goes from ~0.24 req/s to ~1 req/s - a fourfold increase against a third party, deliberately
+  # chosen to be small. Raising this is a decision about a vendor relationship, not a tuning knob.
+  [int]$MaxParallel = 4,
   [switch]$SelfTest,
   [string]$OutDir = ''
 )
@@ -179,17 +189,94 @@ $searched = 0; $failed = 0; $scanned = 0; $settled = 0
 # id, and printed "searched 0 term(s)" with no reason - which reads exactly like a store that returned
 # nothing. Every path out of a requested id is now counted and named.
 $noCommodity = @(); $noTerm = @()
+# ---- PHASE 1: WHAT ARE WE ASKING, AND OF WHOM? (serial, no network) ------------------------------------
+# Split out from the search on 2026-08-23. These are pure lookups over data already in memory, and they
+# decide which ids are skipped and why. They stay serial and stay FIRST because $noCommodity / $noTerm are
+# the reasons a requested id produced nothing, and every one of them is printed - the first live run of
+# this script matched none of six ids and reported "searched 0 term(s)", which reads exactly like a store
+# that answered nothing. That accounting does not move into a thread.
+$plan = New-Object System.Collections.Generic.List[object]
 foreach ($id in $work) {
   $c = $comById[[string]$id]
   if (-not $c) { $noCommodity += [string]$id; continue }
   $term = (Get-PrimarySearchTerm $terms $id)
   if (-not $term) { $noTerm += [string]$id; continue }
+  $plan.Add([pscustomobject]@{ Id = [string]$id; Term = [string]$term; Commodity = $c })
+}
+
+# ---- PHASE 2: ASK THEM ALL, A FEW AT A TIME (concurrent, network only) ---------------------------------
+# A RUNSPACE IS THE RIGHT SHAPE **HERE** AND THE WRONG ONE NEXT DOOR. fanout-lib.ps1's rule 6 says
+# runspaces hold child PROCESSES and must not do the work, because PowerShell's -match/-replace go through
+# one process-wide static Regex cache behind one lock and scale NEGATIVELY across threads (measured
+# 8.9 s -> 215.5 s from 1 to 16 runspaces). That rule is about REGEX ON THE THREAD. What happens here is
+# Invoke-RestMethod: .NET socket I/O, no shared lock, genuinely concurrent, and spawning a whole
+# powershell.exe per HTTP request would cost more than the request. So: threads for the fetch, and every
+# line of judgement stays on the main thread in phase 3, where the regexes live.
+#
+# The results are keyed by id and read back IN PLAN ORDER, so the docket, the counters and the printed
+# lines are identical to the serial version regardless of which store response arrives first.
+$fetched = @{}
+if ($plan.Count) {
+  $pool = [runspacefactory]::CreateRunspacePool(1, [Math]::Max(1, $MaxParallel))
+  $pool.ApartmentState = 'MTA'
+  $pool.Open()
+  $jobs = New-Object System.Collections.ArrayList
+  try {
+    foreach ($pl in $plan) {
+      $ps = [powershell]::Create()
+      $ps.RunspacePool = $pool
+      # Self-contained: a runspace inherits none of this file's functions or variables, so HV-Search's
+      # body is passed in whole rather than called. Same retry ladder, same 25 s timeout, same
+      # $null-means-we-never-got-an-answer contract as the original - $null and @() must stay different,
+      # because "the store said nothing" and "we never asked" are different findings.
+      [void]$ps.AddScript({
+        param([string]$Term, [int]$Size, [string]$Endpoint, [string]$Ua, [int]$StoreId, [int]$PaceMs)
+        $ErrorActionPreference = 'Continue'
+        $h = @{ 'content-type' = 'application/json'; 'User-Agent' = $Ua; 'x-hy-vee-correlation-id' = [guid]::NewGuid().ToString() }
+        $body = @{ pageNumber = 1; pageSize = $Size; searchFilters = @(); searchTerm = $Term; sortDirection = 'RELEVANCE'; storeId = $StoreId; pageViewId = [guid]::NewGuid().ToString() } | ConvertTo-Json -Compress
+        $out = $null
+        for ($a = 1; $a -le 3; $a++) {
+          try { $out = @((Invoke-RestMethod -Uri $Endpoint -Method Post -Headers $h -Body $body -TimeoutSec 25).results); break }
+          catch { Start-Sleep -Seconds (2 * $a) }
+        }
+        # THE PACE IS PER WORKER AND IT IS AFTER THE CALL, exactly as the serial version paced. Keeping it
+        # inside the runspace is what bounds the request rate to (workers / 400 ms) instead of removing
+        # the bound altogether - deleting this line is how a polite client becomes a scraper.
+        Start-Sleep -Milliseconds $PaceMs
+        return @{ ok = ($null -ne $out); results = $out }
+      })
+      [void]$ps.AddArgument([string]$pl.Term)
+      [void]$ps.AddArgument([int]$PageSize)
+      [void]$ps.AddArgument([string]$EP)
+      [void]$ps.AddArgument([string]$HUA)
+      [void]$ps.AddArgument([int]$HStore)
+      [void]$ps.AddArgument(400)
+      [void]$jobs.Add(@{ Id = [string]$pl.Id; PS = $ps; Async = $ps.BeginInvoke() })
+    }
+    foreach ($j in $jobs) {
+      $r = $null
+      try { $r = @($j.PS.EndInvoke($j.Async)) | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1 } catch { $r = $null }
+      # A DEAD RUNSPACE IS A FAILED SEARCH, NOT AN EMPTY ONE. If the thread itself broke we know nothing
+      # about that term, which is exactly what $null means to phase 3 - it becomes a counted SEARCH FAILED
+      # line rather than a commodity that silently produced no candidates.
+      $fetched[[string]$j.Id] = if ($r -and $r.ok) { @($r.results) } else { $null }
+      try { $j.PS.Dispose() } catch { }
+    }
+  } finally {
+    try { $pool.Close() } catch { }
+    try { $pool.Dispose() } catch { }
+  }
+}
+
+# ---- PHASE 3: JUDGE THEM, IN PLAN ORDER (serial - this is where the regexes are) -----------------------
+foreach ($pl in $plan) {
+  $id = $pl.Id
+  $c = $pl.Commodity
   $rx = @(); foreach ($p in @($c.include)) { if ($p) { $rx += [regex]::new([string]$p, 'IgnoreCase,Compiled') } }
   $ex = @(); foreach ($p in @($c.exclude)) { if ($p) { $ex += [regex]::new([string]$p, 'IgnoreCase,Compiled') } }
-  $res = HV-Search $term $PageSize
+  $res = $fetched[[string]$id]
   if ($null -eq $res) { $failed++; Write-Output ("  {0,-26} SEARCH FAILED (counted, not silently skipped)" -f $id); continue }
   $searched++
-  Start-Sleep -Milliseconds 400
   $heldPu = if ($held.ContainsKey([string]$id)) { [double]$held[[string]$id] } else { 0 }
   $kept = 0
   foreach ($x in @($res)) {

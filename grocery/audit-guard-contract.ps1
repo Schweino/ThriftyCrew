@@ -1,4 +1,4 @@
-<#
+﻿<#
   audit-guard-contract.ps1 - which DETECTORS in the daily chain cannot prove they ran to the end?
 
   WHY (2026-08-08). See lib\guard-contract.ps1 for the founding incident: test-auditors died 242 checks
@@ -57,7 +57,20 @@ function Get-BareVerdictExits { param([string]$Text)
     $inST = $false; foreach ($r in $skip) { if ($off -ge $r[0] -and $off -lt $r[1]) { $inST = $true } }
     if ($inST) { continue }
     $ln = $x.Extent.StartLineNumber
-    if (($lines[[Math]::Max(0, $ln - 4)..($ln - 1)] -join "`n") -match 'Write-GuardComplete') { continue }
+    # THE TWO HALVES OF THIS FILE DISAGREED, AND THE COMPLETENESS HALF WAS THE STRICTER ONE (fixed
+    # 2026-08-23). Test-EmitsMarker above accepts EITHER shape - a Write-GuardComplete call or a literal
+    # '<NAME>-COMPLETE' line - because both satisfy the contract, which is about what reaches STDOUT. This
+    # look-back only recognised the helper. So every detector that writes its marker as a literal was
+    # reported HALF-COVERED on paths where it is completely correct: audit-commodity-dupes.ps1 prints
+    # 'COMMODITY-DUPES-COMPLETE' immediately before BOTH of its exits and was accused at both (lines 219
+    # and 235), and test-native-stderr-eap.ps1 the same at 280. Three of the eight HALF findings on
+    # 2026-08-23 were this bug, not the audited scripts.
+    #
+    # A watcher that cries wolf on correct code is not a stricter watcher, it is a quieter one: the reader
+    # learns the HALF list contains noise and stops reading the entries that are real. Same predicate as
+    # Test-EmitsMarker, so the two questions can never drift apart again.
+    $before = $lines[[Math]::Max(0, $ln - 4)..($ln - 1)] -join "`n"
+    if ($before -match 'Write-GuardComplete' -or $before -match "['`"][A-Z0-9-]+-COMPLETE") { continue }
     $bare += $ln
   }
   return @($bare)
@@ -96,6 +109,12 @@ $script:BARE_ALLOWED = @{
   'audit-schema-constraints.ps1' = 1   # -Baseline
   'audit-semantic-identity.ps1'  = 1   # -PrepareOnly
   'audit-store-coverage.ps1'     = 1   # SKIP: no built board to examine
+  # -Json: the whole stdout IS the report, and a caller pipes it to ConvertFrom-Json. A completion
+  # marker appended there would not prove anything - it would make the document unparseable, which is
+  # a worse failure than the one it guards against. The detection still runs; only the rendering
+  # differs, and the human-readable path one line below carries the marker as normal.
+  'audit-carriage.ps1'           = 1   # -Json: stdout is a JSON document, a marker would corrupt it
+  'audit-search-terms.ps1'       = 1   # -Json: same, and its human path got the marker on 2026-08-23
 }
 
 if ($SelfTest) {
@@ -143,8 +162,33 @@ if ($SelfTest) {
 
 # ---- which detectors does the chain actually invoke? -----------------------------------------------------
 $chainText = [IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))
+# A MENTION IS NOT A CALL (2026-08-23). This scanned the WHOLE file text for anything shaped like a
+# .ps1 name, so three files were reported as having "joined the chain with no completion marker"
+# when the chain does not run them at all:
+#   test-cadence.ps1               named in three PROSE COMMENTS explaining where the cadence
+#                                  helpers live and which self-test extracts them
+#   test-log-sidecar-recovery.ps1  named in one comment, next to the sentinel it extracts between
+#   audit-household-in-food.ps1    named inside a cadence -InputGlobs array - it is a file whose
+#                                  MTIME the matcher-parity gate watches, the exact opposite of a
+#                                  thing this file runs
+# Three of the four NEW findings on 2026-08-23 were this, and the cost is the same as the
+# HALF-COVERED false positives fixed below: a list with noise in it stops being read, and the one
+# real entry (audit-search-terms.ps1) sat in the middle of three imaginary ones.
+#
+# ONLY provably-not-a-call shapes are removed, because the failure this check exists to catch is a
+# detector that joined the chain UNNOTICED - so it must keep erring toward over-reporting:
+#   * comment lines AND <# block comments #> - nothing in either executes. Both are needed: this
+#     file's helpers carry long docstrings, and test-cadence.ps1 is named inside one of them
+#     (Set-CadenceRan's, "test-cadence.ps1 case 2 is what caught it") on a line that does not
+#     start with #, so a line-only filter still accused it
+#   * repo-relative 'grocery/x.ps1' strings - every real invocation in this file resolves the path
+#     with Join-Path $root 'x.ps1', so a forward slash and a directory prefix means it is data
+#     (a cadence input glob, a path in an alert body), not an invocation
+$chainCode = [regex]::Replace($chainText, '(?s)<#.*?#>', ' ')
+$chainCode = (($chainCode -replace "`r", '') -split "`n" | Where-Object { $_.TrimStart() -notmatch '^#' }) -join "`n"
+$chainCode = [regex]::Replace($chainCode, '[A-Za-z0-9_.-]+/[a-z0-9][a-z0-9-]*\.ps1', ' ')
 $invoked = @()
-foreach ($m in [regex]::Matches($chainText, '([a-z0-9][a-z0-9-]*\.ps1)')) { $invoked += $m.Groups[1].Value }
+foreach ($m in [regex]::Matches($chainCode, '([a-z0-9][a-z0-9-]*\.ps1)')) { $invoked += $m.Groups[1].Value }
 $invoked = @($invoked | Sort-Object -Unique | Where-Object { Test-IsDetector $_ })
 
 $covered = @(); $uncovered = @(); $missing = @(); $halfCovered = @()
