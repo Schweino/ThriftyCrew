@@ -7,10 +7,11 @@ why, and how to prove each phase did not make a watcher go quiet.** Every number
 measured on 2026-08-23 from the chain's own timestamped log (`grocery\ad-cycle-log.txt`) or
 from an instrumented copy of `test-auditors.ps1` that timed every `Ok`/`Bad` call.
 
-**Already in flight, do not redo:** task `task_ba80d0e1` parallelises the five checks that
-own 75% of `test-auditors` (`test-match-lib` over ~37k names, and the three
-`basis-reconcile` fixture runs). This plan is everything *else*. If that task has not landed
-when you start, build phases 1–3 here anyway; they do not touch the same files.
+**Landed, do not redo (efe803f5, 2026-08-23):** the five checks that owned 75% of
+`test-auditors` (`test-match-lib` over ~37k names, and the three `basis-reconcile` fixture
+runs) are parallel. `test-auditors` went 429 s → 202 s with byte-identical check lines.
+This plan is everything *else*. **That work also overturned one of this plan's rules —
+read rule 6 before building anything.**
 
 ---
 
@@ -66,6 +67,10 @@ by a relative path — all three reported something reassuring).
 2. **`$summary` and the log are emitted in a deterministic order** — the launch order, not
    the finish order. The daily summary is diffed by eye; if it reshuffles every run nobody
    can read it. Capture each lane's output in memory; `Log` it in sequence after the join.
+   The other reason lanes must never call `Log` themselves: it is `Add-Content` on one file
+   with a retry-then-sidecar fallback (`check-ad-cycles.ps1:52`). Eight lanes contending on
+   it would push some lines into `ad-cycle-log.LOCKED-<day>.txt` and scatter one run across
+   two files — the shape that made three runs look dead on 08-21/22.
 3. **Nothing that MUTATES shared inputs runs inside a fan-out.** `repair-multipack-sizes`
    rewrites `out\regular\*.json`, which five other lanes read. It runs *before* the fan-out,
    alone, or the fan-out reads a file mid-rewrite and reports on a board that never existed.
@@ -80,11 +85,29 @@ by a relative path — all three reported something reassuring).
    `test-native-stderr-eap.ps1` scans every EAP=Stop script and will fail you otherwise.
    Runspaces do not inherit the caller's dot-sourced functions — dot-source `native-lib.ps1`
    inside the runspace script block.
-6. **PowerShell 5.1 only.** No `ForEach-Object -Parallel` (PS 7). Use a `RunspacePool`
-   (`[runspacefactory]::CreateRunspacePool`), not `Start-Job`: a job is a whole new
-   `powershell.exe` (~110 ms and a fresh module load each), a runspace is a thread. One shared
-   helper for the pattern — `grocery\fanout-lib.ps1` — so the lesson lives in one place
-   (the estate's standing rule; see `run-log-lib.ps1` for the precedent).
+6. **PowerShell 5.1 only, and RUNSPACES HOLD CHILD PROCESSES — THEY DO NOT DO THE WORK.**
+   No `ForEach-Object -Parallel` (PS 7). For a lane that launches a child and waits on it,
+   a `RunspacePool` (`[runspacefactory]::CreateRunspacePool`) beats `Start-Job`: a job is a
+   whole new `powershell.exe` (~110 ms and a fresh module load each), a runspace is a thread.
+   Every lane in Phase 1 and Phase 2 is that shape, so use the pool there.
+
+   **But a runspace cannot parallelise PowerShell that does regex work on the thread
+   itself.** Measured 2026-08-23 while building efe803f5 — `test-match-lib`'s original
+   Match-Category pass, 3,000 names, in-process runspace pool:
+
+       1 runspace 8.9 s CPU | 2: 19.3 s | 4: 38.9 s | 8: 79.5 s | 16: 215.5 s — wall flat at ~14 s
+
+   That is negative scaling. `-match`, `-replace` and `-split` call the STATIC Regex
+   methods, and in .NET Framework every static Regex call goes through one process-wide
+   pattern cache behind one lock; sixteen threads queue on it. Sixteen *processes* each have
+   their own, and the same pass went 174 s → 23 s. So: if the hot loop is PowerShell regex
+   on the thread, shard into child processes (pass the work list through a temp file, as
+   `test-match-lib.ps1` does); precompiled `[regex]` instances are exempt. The collector's
+   own parsing of lane output is trivial and is fine on the thread — the trap is moving a
+   lane's *work* onto the runspace to "save a process".
+
+   One shared helper for the pattern — `grocery\fanout-lib.ps1` — so the lesson lives in one
+   place (the estate's standing rule; see `run-log-lib.ps1` for the precedent).
 7. **A cap, and a flag to turn it off.** Default `-MaxParallel 8`. `-Sequential` restores
    the old order exactly, so a flaky lane is one flag away from diagnosis rather than one
    revert away. Seeding, attended lanes, and anything that opens a visible window stay
@@ -114,12 +137,23 @@ marker (these already exist: `COMMODITY-DUPES-COMPLETE`, `STORE-REGISTRY-COMPLET
 | group | contents | mode |
 |---|---|---|
 | A — mutators | `repair-multipack-sizes`, `derive-links-from-prices`, `fix-links-ff` | serial, in current order |
+| A′ — deleters | `prune-out`, `prune-intermediates` | serial, **after B has joined** — they delete dated `out\*` files that B lanes read |
 | B — read-only audits | the ten in §0 minus the mutators, plus `store-registry`, `commodity-dupes`, `matcher-parity`, `precedence-ladders`, `graph-gates`, `capture-eviction`, `search-terms`, `walmart-fullpull` | **fan-out** |
 | C — alerts + summary | collector sends any alerts the lanes asked for, in launch order; appends to `$summary` in launch order | serial |
 
 Do the per-lane `$summary += 'REVIEW ...'` lines and the `Set-CadenceRan` stamps in group C
 from the records, not inside the lanes — `$summary = @()` (`check-ad-cycles.ps1:286`) is a
 plain array and `$script:` scope does not cross runspaces.
+
+**Two `test-auditors` checks added in efe803f5 will fire on a careless restructure.** They
+pin the fix for the 08-23 downstream rc=1 (see §7):
+- *every `Test-CadenceDue -Name` line in `check-ad-cycles.ps1` is indented or a `try {`, and
+  there are at least two of them.* If rule 8 moves the cadence decision into `Invoke-Fanout`,
+  the count in `check-ad-cycles.ps1` drops and the check fails. Keep the `Test-CadenceDue`
+  calls in `check-ad-cycles.ps1` (evaluate them while building the lane list, pass the
+  verdict into the lane definition) — or extend the check to scan `fanout-lib.ps1` too.
+- *`check-ad-cycles.ps1` ends with an explicit `exit N`.* Whatever the restructure appends,
+  `exit 0` stays the last statement.
 
 **Watch for:** `discover-hyvee` and `coverage-gaps` both read `comparison-*.json` — fine,
 reads are safe. `audit-match-soundness` writes `out\audit\*` — confirm no other B lane reads
@@ -131,7 +165,10 @@ record with `rc = -1` and the message, never an exception out of the pool.
 two `$summary` blocks and the two sets of `out\*` artefacts — they must be identical
 byte-for-byte except timestamps. (b) Kill one lane mid-run (rename its script); the run must
 report that lane BLIND by name and still complete every other lane. (c) `test-auditors`
-473/0 and `test-native-stderr-eap` 6/6 after. (d) Add a `test-auditors` case: the fan-out
+prints **the same check lines** as a same-day serial run (the suite is 475 checks as of
+efe803f5, and five fail at HEAD on this machine for reasons unrelated to this plan — a stale
+comparison board, prompt-backup drift, known-wrong red, food-category, feed-covers-published
+— so "N/0" is not the bar; an identical transcript is), and `test-native-stderr-eap` 6/6. (d) Add a `test-auditors` case: the fan-out
 with a lane whose script is missing reports BLIND, not clean.
 
 ---
@@ -210,10 +247,19 @@ Phase 1 is the largest edit and the largest win; Phases 2–4 are each a fractio
 
 - **Ghost publish variance** (60–449 s, §0). Network-bound. Worth its own look for
   retry/timeout behaviour, not for cores.
-- **The 08:00 chain's `downstream` rc=1** (2026-08-23). Undiagnosed; the chain stopped before
-  its capture-eviction block. Listed in `task_ba80d0e1` as well. Unrelated to parallelism
-  but the fan-out restructure in Phase 1 will pass through the same code — read that run's
-  log first so the restructure does not paper over it.
+- **The 08:00 chain's `downstream` rc=1** (2026-08-23) — **diagnosed and fixed in
+  efe803f5.** Of ten `Test-CadenceDue` call sites, nine sat inside a `try`; the tenth was
+  the `test-auditors` gate's own top-level `if`. When the helpers turned out never to exist,
+  the nine logged "threw" and that one terminated the chain under EAP=Stop two thirds of the
+  way in (the 08-23 LOCKED log ends on `prune-intermediates`, then nothing). The file had no
+  `exit` statement, so a throw was the only way it could return 1. The capture-eviction block
+  was NOT the casualty — it is ~250 lines earlier, in the inspect branch that run never
+  entered; that re-run had a different cause. The lesson for Phase 1: one unguarded gate can
+  end the chain, which is why a lane's throw must become a record and never an exception.
+- **Nested width.** `test-match-lib` now spawns 16 shard processes of its own. It runs from
+  `test-auditors`, which is cadence-gated and sits OUTSIDE the Phase 1 fan-out, so the two
+  do not stack; if that ever changes, the inner `-Workers` must come down or a quiet
+  morning becomes 8×16 powershell.exe.
 - **`test-auditors` in the chain at all.** It is cadence-gated at 7 days-or-inputs-moved and
   the gate works as of 08-23. On a quiet day it should now skip entirely. If it is still
   running daily after this plan lands, the cadence inputs are too broad, not the suite too
