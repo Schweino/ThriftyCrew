@@ -1,0 +1,208 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "turkey-zucchini-noodle-casserole",
+  "generated": "2026-08-23T15:58:57",
+  "inputs": {
+    "spec": "meal-prep/db/recipes/turkey-zucchini-noodle-casserole.json",
+    "source": "meal-prep/runs/hunt-2026-08-15-lowcarb-100/extracted/turkey-zucchini-noodle-casserole.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 11,
+        "source_ingredients": 10,
+        "matched": 9,
+        "invented": [
+          "93/7 Ground Turkey",
+          "Olive Oil"
+        ],
+        "dropped": [
+          "ground turkey, chicken or beef"
+        ],
+        "consolidated": []
+      },
+      "detail": "INVENTED: '93/7 Ground Turkey' is in the built recipe but nothing in the source transcription denotes it; INVENTED: 'Olive Oil' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'ground turkey, chicken or beef' and the built recipe has nothing that denotes it",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: '93/7 Ground Turkey' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Olive Oil' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'ground turkey, chicken or beef' and the built recipe has nothing that denotes it"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 9,
+        "unrated": 2,
+        "exempt": 0,
+        "recipe_ratio": 3.5,
+        "lines": [
+          {
+            "item": "Zucchini",
+            "source": "4 medium",
+            "spec": "14 medium",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Diced Tomatoes",
+            "source": "1 ",
+            "spec": "3.5 ",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Tomato Sauce",
+            "source": "1 ",
+            "spec": "3.5 ",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Butter",
+            "source": "2 tablespoon",
+            "spec": "7 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Salt",
+            "source": "0.5 teaspoon",
+            "spec": "1.75 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Italian Seasoning",
+            "source": "1 teaspoon",
+            "spec": "3.5 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Garlic Powder",
+            "source": "0.5 teaspoon",
+            "spec": "1.75 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Mozzarella Cheese",
+            "source": "2 cup",
+            "spec": "7 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Parmesan Cheese",
+            "source": "0.25 cup",
+            "spec": "0.75 cup",
+            "ratio": 3.0,
+            "deviation": 0.1429,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "93/7 Ground Turkey",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Olive Oil",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "every rated line scaled at the recipes own 3.5x (median of 9 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 4,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (4 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Turkey and Zucchini Noodle Casserole",
+        "spec_source_url": "https://www.theharvestskillet.com/italian-zucchini-noodle-casserole/",
+        "transcription_source_url": "https://www.theharvestskillet.com/italian-zucchini-noodle-casserole/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.5
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 1
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

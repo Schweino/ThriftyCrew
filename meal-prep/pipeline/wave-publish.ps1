@@ -152,41 +152,11 @@ function Get-CostBasisProblems {
 # thing worth reading.
 # ---------------------------------------------------------------------------------------------------
 
-# The URL the browser will actually fetch. Anchored to a line that is NOT a `//` comment, so a commented
-# out or merely discussed URL can never be mistaken for the live one. Returns '' when there is no
-# assignment at all, and '' must always REFUSE: could-not-look is never a clean bill (the P6 rule).
-function Get-CardFeedUrl {
-  param([string]$TemplateText)
-  $m = [regex]::Match($TemplateText, "(?m)^(?!\s*//)\s*var\s+SMPFEED\s*=\s*'([^']+)'")
-  if (-not $m.Success) { return '' }
-  return $m.Groups[1].Value
-}
-
-# Exact match against the endpoints this estate genuinely produces. grocery\export-feed.ps1 writes
-# smp-feed.json to grocery\out\ and public\, deployed via Cloudflare Pages; measured 2026-08-15,
-# feed.thriftycrew.com serves it 200 and the www host 301s to the same asset. Anything else - including
-# any V3 platform path - is a URL nobody here can regenerate, which is exactly how the dead endpoint went
-# on answering 200 with frozen prices for a month.
-$script:PRODUCIBLE_FEEDS = @(
-  'https://feed.thriftycrew.com/smp-feed.json',
-  'https://www.thriftycrew.com/smp-feed.json'
-)
-function Test-FeedUrlProducible {
-  param([string]$Url, [string[]]$Allowlist)
-  if (-not $Url) { return $false }
-  return (@($Allowlist) -contains $Url)
-}
-
-# THE SECOND COPY. feed-covers-published.ps1 carries its own $FEED_URL literal for its -Live mode. Two
-# copies of "which feed do the cards read" is the two-copies-of-a-rule shape: repoint the template again
-# and that guard keeps validating the OLD endpoint while reading perfectly green. They must agree, and
-# this is the only place that can notice they do not.
-function Get-GuardFeedUrl {
-  param([string]$GuardText)
-  $m = [regex]::Match($GuardText, "(?m)^(?!\s*#)\s*\`$FEED_URL\s*=\s*'([^']+)'")
-  if (-not $m.Success) { return '' }
-  return $m.Groups[1].Value
-}
+# P8's ENDPOINT PREDICATES LIVE IN pipelineeed-endpoint-lib.ps1 (extracted 2026-08-23 when
+# wave-preaudit.ps1 needed the same answer one stage earlier). Get-CardFeedUrl,
+# Test-FeedUrlProducible, Get-GuardFeedUrl and $script:PRODUCIBLE_FEEDS come from there, unchanged;
+# the fixtures below still exercise them, which is what proves the move changed no rule.
+. (Join-Path $here 'feed-endpoint-lib.ps1')
 
 # WHICH SLUGS COME DOWN. feed-covers-published names each failing slug on an `  X <slug>  [VERDICT]` line.
 # The rollback is PER SLUG - a wave where one recipe cannot price should not take the other nine down with

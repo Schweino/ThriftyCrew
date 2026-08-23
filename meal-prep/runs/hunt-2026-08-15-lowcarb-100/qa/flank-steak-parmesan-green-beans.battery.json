@@ -1,0 +1,215 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "flank-steak-parmesan-green-beans",
+  "generated": "2026-08-23T15:58:58",
+  "inputs": {
+    "spec": "meal-prep/db/recipes/flank-steak-parmesan-green-beans.json",
+    "source": "meal-prep/runs/hunt-2026-08-15-lowcarb-100/extracted/flank-steak-parmesan-green-beans.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 9,
+        "source_ingredients": 13,
+        "matched": 8,
+        "invented": [
+          "Parmesan Cheese"
+        ],
+        "dropped": [
+          "salt (from 'salt and pepper')",
+          "pepper (from 'salt and pepper')",
+          "parmesan"
+        ],
+        "consolidated": [
+          "olive oil",
+          "red wine vinegar"
+        ]
+      },
+      "detail": "INVENTED: 'Parmesan Cheese' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists \"salt (from 'salt and pepper')\" and the built recipe has nothing that denotes it; DROPPED: the source lists \"pepper (from 'salt and pepper')\" and the built recipe has nothing that denotes it; DROPPED: the source lists 'parmesan' and the built recipe has nothing that denotes it; CONSOLIDATED: the source states 'olive oil' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM; CONSOLIDATED: the source states 'red wine vinegar' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Parmesan Cheese' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists \"salt (from 'salt and pepper')\" and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists \"pepper (from 'salt and pepper')\" and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'parmesan' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'olive oil' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'red wine vinegar' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "fail",
+      "numbers": {
+        "rated": 7,
+        "unrated": 2,
+        "exempt": 0,
+        "recipe_ratio": 3.5,
+        "lines": [
+          {
+            "item": "Beef Flank/Sirloin Steak",
+            "source": "1 lb",
+            "spec": "3.5 lb",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Olive Oil",
+            "source": "0.25 cup",
+            "spec": "1.75 cup",
+            "ratio": 7.0,
+            "deviation": 1.0,
+            "quantization_explained": false,
+            "severity": "fail"
+          },
+          {
+            "item": "Garlic",
+            "source": "1 clove",
+            "spec": "3.5 clove",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Honey",
+            "source": "3 tbsp",
+            "spec": "10.5 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Red Wine Vinegar",
+            "source": "2 tbsp",
+            "spec": "10.5 tbsp",
+            "ratio": 5.25,
+            "deviation": 0.5,
+            "quantization_explained": false,
+            "severity": "fail"
+          },
+          {
+            "item": "Green Beans",
+            "source": "16 oz",
+            "spec": "3.5 lb",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Dijon Mustard",
+            "source": "1 tsp",
+            "spec": "3.5 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Soy Sauce",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Parmesan Cheese",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "Olive Oil scaled 7x while the recipe scaled 3.5x (100.0% off): the source says 0.25 cup and the spec buys 1.75 cup, where the exact scale is 0.875 cup. House quarter-quantization does not explain it.; Red Wine Vinegar scaled 5.25x while the recipe scaled 3.5x (50.0% off): the source says 2 tbsp and the spec buys 10.5 tbsp, where the exact scale is 7 tbsp. House quarter-quantization does not explain it.",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "Olive Oil scaled 7x while the recipe scaled 3.5x (100.0% off): the source says 0.25 cup and the spec buys 1.75 cup, where the exact scale is 0.875 cup. House quarter-quantization does not explain it."
+        },
+        {
+          "severity": "fail",
+          "detail": "Red Wine Vinegar scaled 5.25x while the recipe scaled 3.5x (50.0% off): the source says 2 tbsp and the spec buys 10.5 tbsp, where the exact scale is 7 tbsp. House quarter-quantization does not explain it."
+        }
+      ]
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 4,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (4 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Marinated Flank Steak with Parmesan Green Beans",
+        "spec_source_url": "https://www.momsintofitness.com/recipes/flank-steak-green-beans/",
+        "transcription_source_url": "https://www.momsintofitness.com/recipes/flank-steak-green-beans/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.5
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 2
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

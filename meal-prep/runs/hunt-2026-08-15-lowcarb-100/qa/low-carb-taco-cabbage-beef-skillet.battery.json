@@ -1,0 +1,174 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "low-carb-taco-cabbage-beef-skillet",
+  "generated": "2026-08-23T15:58:58",
+  "inputs": {
+    "spec": "meal-prep/db/recipes/low-carb-taco-cabbage-beef-skillet.json",
+    "source": "meal-prep/runs/hunt-2026-08-15-lowcarb-100/extracted/low-carb-taco-cabbage-beef-skillet.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 5,
+        "source_ingredients": 9,
+        "matched": 4,
+        "invented": [
+          "Mexican Cheese Blend"
+        ],
+        "dropped": [
+          "cheese",
+          "salt (from 'salt and pepper')",
+          "pepper (from 'salt and pepper')",
+          "sour cream (from 'sour cream and green onions')",
+          "green onions (from 'sour cream and green onions')"
+        ],
+        "consolidated": []
+      },
+      "detail": "INVENTED: 'Mexican Cheese Blend' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'cheese' and the built recipe has nothing that denotes it; DROPPED: the source lists \"salt (from 'salt and pepper')\" and the built recipe has nothing that denotes it; DROPPED: the source lists \"pepper (from 'salt and pepper')\" and the built recipe has nothing that denotes it; DROPPED: the source lists \"sour cream (from 'sour cream and green onions')\" and the built recipe has nothing that denotes it; DROPPED: the source lists \"green onions (from 'sour cream and green onions')\" and the built recipe has nothing that denotes it",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Mexican Cheese Blend' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'cheese' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists \"salt (from 'salt and pepper')\" and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists \"pepper (from 'salt and pepper')\" and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists \"sour cream (from 'sour cream and green onions')\" and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists \"green onions (from 'sour cream and green onions')\" and the built recipe has nothing that denotes it"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 4,
+        "unrated": 1,
+        "exempt": 0,
+        "recipe_ratio": 4.6667,
+        "lines": [
+          {
+            "item": "80/20 Ground Beef",
+            "source": "1 pound",
+            "spec": "4.75 lb",
+            "ratio": 4.75,
+            "deviation": 0.0178,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Salsa",
+            "source": "0.5 cup",
+            "spec": "2.33333 cup",
+            "ratio": 4.6667,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Green Cabbage",
+            "source": "2 cup",
+            "spec": "9.33333 cup",
+            "ratio": 4.6667,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Chili Powder",
+            "source": "2 teaspoon",
+            "spec": "3 tbsp",
+            "ratio": 4.5,
+            "deviation": 0.0357,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Mexican Cheese Blend",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "every rated line scaled at the recipes own 4.67x (median of 4 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 4,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (4 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Low Carb Taco Cabbage Beef Skillet",
+        "spec_source_url": "https://www.heyketomama.com/low-carb-taco-cabbage-skillet/",
+        "transcription_source_url": "https://www.heyketomama.com/low-carb-taco-cabbage-skillet/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 3,
+        "claimed_ratio": 4.6667,
+        "measured_ratio": 4.6667
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 1
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

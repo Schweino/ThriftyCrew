@@ -395,3 +395,8 @@ meal-prep/db/page-cache/
 # down before it ran.
 /graph/bench/out/*
 !/graph/bench/out/adversarial-*.json
+
+# wave-preaudit.ps1 rebuilds every card in a wave to a per-slug scratch dir so it can byte-compare the
+# structure against a known-good live card. That is ~150 KB of regenerated HTML per recipe, reproducible
+# in seconds, and nothing reads it after the audit. The machine report beside it IS committed.
+meal-prep/runs/*/waves/*.preaudit-cards/

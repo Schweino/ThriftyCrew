@@ -1,0 +1,158 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "baked-cauliflower-mac-smoked-sausage",
+  "generated": "2026-08-23T15:58:57",
+  "inputs": {
+    "spec": "meal-prep/db/recipes/baked-cauliflower-mac-smoked-sausage.json",
+    "source": "meal-prep/runs/hunt-2026-08-15-lowcarb-100/extracted/baked-cauliflower-mac-smoked-sausage.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "pass",
+      "numbers": {
+        "spec_ingredients": 7,
+        "source_ingredients": 7,
+        "matched": 7,
+        "invented": [],
+        "dropped": [],
+        "consolidated": []
+      },
+      "detail": "7 of 7 source ingredients pair with the spec, nothing invented, nothing dropped",
+      "findings": []
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 4,
+        "unrated": 3,
+        "exempt": 0,
+        "recipe_ratio": 3.25,
+        "lines": [
+          {
+            "item": "Heavy Cream",
+            "source": "0.25 cup",
+            "spec": "0.75 cup",
+            "ratio": 3.0,
+            "deviation": 0.0769,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Cheddar Cheese, Shredded",
+            "source": "1.5 cup",
+            "spec": "5.25 cup",
+            "ratio": 3.5,
+            "deviation": 0.0769,
+            "quantization_explained": false,
+            "severity": "note"
+          },
+          {
+            "item": "Monterey Jack Cheese",
+            "source": "0.333333 cup",
+            "spec": "1 cup",
+            "ratio": 3.0,
+            "deviation": 0.0769,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Cajun Seasoning",
+            "source": "1 teaspoon",
+            "spec": "3.5 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0769,
+            "quantization_explained": false,
+            "severity": "note"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Cauliflower",
+            "why": "the two measures are not the same kind (weight vs count:ounc), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Smoked Sausage",
+            "why": "the two measures are not the same kind (weight vs count:ounc), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "1/3 Fat Cream Cheese",
+            "why": "the two measures are not the same kind (weight vs count:ounc), so a ratio needs a density this check deliberately does not carry"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "Cheddar Cheese, Shredded scaled 3.5x while the recipe scaled 3.25x (7.7% off): the source says 1.5 cup and the spec buys 5.25 cup, where the exact scale is 4.88 cup. House quarter-quantization does not explain it.; Cajun Seasoning scaled 3.5x while the recipe scaled 3.25x (7.7% off): the source says 1 teaspoon and the spec buys 3.5 tsp, where the exact scale is 3.25 tsp. House quarter-quantization does not explain it.",
+      "findings": [
+        {
+          "severity": "note",
+          "detail": "Cheddar Cheese, Shredded scaled 3.5x while the recipe scaled 3.25x (7.7% off): the source says 1.5 cup and the spec buys 5.25 cup, where the exact scale is 4.88 cup. House quarter-quantization does not explain it."
+        },
+        {
+          "severity": "note",
+          "detail": "Cajun Seasoning scaled 3.5x while the recipe scaled 3.25x (7.7% off): the source says 1 teaspoon and the spec buys 3.5 tsp, where the exact scale is 3.25 tsp. House quarter-quantization does not explain it."
+        }
+      ]
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 4,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (4 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Baked Cauliflower Mac and Cheese with Smoked Sausage",
+        "spec_source_url": "https://thatlowcarblife.com/baked-cauliflower-mac-and-cheese-with-smoked-sausage/",
+        "transcription_source_url": "https://thatlowcarblife.com/baked-cauliflower-mac-and-cheese-with-smoked-sausage/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.25
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 0
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

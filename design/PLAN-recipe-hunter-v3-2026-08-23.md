@@ -3,7 +3,10 @@
 Date: 2026-08-23. Author: Fable (end-to-end review session, at Brad's direction: "find where we can
 move stuff to local llm to save tokens... a full redesign is absolutely okay... speed and accuracy are
 the two most important things... utilize up to 8 cores").
-Status: PROPOSED, awaiting Brad's direction. **Plan only - nothing in this document has been built.**
+Status: IN BUILD. Phase 0 (D1 + D2) built 2026-08-23; every later phase is still plan only.
+Corrections made during a build are folded into this document in the same commit and marked
+CORRECTED with the date and the measurement behind them - the plan is the spec, so it is the plan
+that moves when code reality disagrees with it.
 
 Prereq reading, in order: design\PLAN-recipe-hunter-v2-2026-08-15.md (the current architecture of
 record, section 2.4), design\PLAN-recipe-hunter-v2.1-2026-08-15.md (serveability + audit economics),
@@ -388,10 +391,27 @@ become hard pre-gates, and the agent's attention lands entirely on the judgment 
 ### S8 AUDIT -> wave-preaudit battery + judgment sign-off
 
 New `wave-preaudit.ps1 -RunDir -Wave` (the F3 fix), running the entire mechanical audit surface
-**8-wide across the wave's slugs**:
-macro recompute per spec from food-macros-db; cost reconciliation per spec vs costed.json (to the
-cent, tiers ordered); card rebuild to per-slug scratch dirs + structural byte-compare vs a
-known-good card;
+**8-wide across the SHARED checks, and serially across the slugs**
+(CORRECTED 2026-08-23 at build time, measured both ways - this document said 8-wide across the slugs).
+The slug loop is not the expensive part and fanning it out makes it slower: build-card2.ps1 caches the
+parsed 5.8 MB db\costed.json in a process global, so the first rebuild costs 0.81 s and every one after
+it costs 0.05 s, while a process per slug re-pays the parse eight times. The expensive part is the
+shared block - audit-spec-contradictions alone is 14.1 s of a 14.5 s whole-wave run - so that is what
+runs concurrently, eight children at once. A whole 9-slug wave takes 14.5 s and a scoped one-slug
+re-audit takes about 3 s.
+macro recompute per spec from food-macros-db (all four macros, tolerance 5 cal and 2 g - the same
+tolerances build-v2-spec.ps1 enforces at write time, so a spec that passed the build passes this or one
+of the two is lying); cost reconciliation, which the build split into TWO named checks because they are
+true at different times (CORRECTED 2026-08-23): `cost-engine-consistency` asks whether the engine row is
+internally coherent - line utils sum to the batch, both per-serving tiers derive, first run is true plus
+pantry, tiers ordered, lines_unpriced zero, no line costing nothing - and is true whenever it is run;
+`cost-reconcile` asks whether the SPEC prints the numbers that engine row holds, to the cent. Measured
+2026-08-23 over the 20 published lowcarb-100 recipes: the first is clean on 20 of 20, the second finds
+drift on 10 of 20, because db\costed.json is regenerated whenever grocery prices move and a spec keeps
+its build-time figures until a recost pass rewrites them. Both are findings for a wave about to publish;
+the report carries both mtimes so the auditor can tell price age from a spec that was written without
+re-syncing its cost block, and the fix in either case is recost-spec-cost-block.ps1;
+card rebuild to per-slug scratch dirs + structural byte-compare vs a known-good card;
 protein derivation + update-recipes-db -DryRun; audit-spec-contradictions / audit-store-integrity /
 audit-vocab-integrity / audit-unbid-ingredients / audit-cost-plausibility; voice sweep; P8 endpoint
 provenance + feed probe. Output: a machine report (per-slug PASS/FAIL per check, with numbers).
@@ -626,6 +646,14 @@ build time, fix THIS document in the same commit rather than deviating silently.
 machine report is still written), 2 = could-not-run (missing input, parse failure). **Exit 2 is a
 blocked stage, never a pass** - could-not-look is never a clean bill, mechanized.
 
+This DIFFERS from `lib\guard-contract.ps1`'s older vocabulary (0 clean / 1 findings / 2 hard / 3
+could-not-evaluate) and from the existing audit-*.ps1 scripts (which use 2 for a self-test failure), and
+the difference is deliberate: v3 fixes ONE convention for every new battery so a caller never has to
+know which script it is talking to. Noted here so a later session does not "fix" a new battery back to
+the old numbering. What the new batteries DO inherit from guard-contract is the completion marker -
+`<NAME>-COMPLETE` as the last line of stdout - because "did it finish" and "what did it find" are
+different questions and this estate has conflated them at least five times.
+
 **Thresholds (defaults; change only with a recorded reason in the run dir)**
 
 - Band: inclusive on both edges, exactly as the run's conditions state them.
@@ -633,10 +661,23 @@ blocked stage, never a pass** - could-not-look is never a clean bill, mechanized
   qty); a line deviating >10% after the house quarter-quantization allowance = battery FAIL routed
   to the QA agent's judgment (a deliberate substitution may survive); 5-10% = note. Lines the
   source states without a quantity are exempt.
-- Prose-number equality: every numeral literal in `prose.*` and head.description must equal one of
-  stat.{cal, protein, carbs, fat, cost_ps} or the serving count at its printed precision; `{{...}}`
-  tokens pass by construction; package-size claims are NOT in scope here - they stay under the
-  writer's cost-line-tracing contract and the auditor.
+- Prose-number equality (SCOPE CORRECTED 2026-08-23, measured): a numeral in `prose.*` or
+  head.description that **presents itself as one of the recipe's own stats** must equal that stat at its
+  printed precision - a `$N.NN` against stat.cost_ps, an `N cal/calories` against stat.cal, an
+  `N g protein / carbs / fat` against the matching stat, an `N servings/portions/containers` against the
+  serving count. `{{...}}` tokens pass by construction; package-size claims are NOT in scope here - they
+  stay under the writer's cost-line-tracing contract and the auditor.
+  This document first asked for EVERY numeral literal to equal a stat. Measured against four real wave-3
+  specs, that reads 40 legitimate literals as defects - oven temperatures (350), pan dimensions (9 by
+  13), cook times, step numbers, the 93/7 lean ratio - roughly ten per clean recipe, which is exactly how
+  a guard joins this estate's dead-guard pile. Two further readings are load-bearing and were also
+  measured: a **bare** `$N` is not a per-serving claim (every upsell in the catalog ends "all for $1 a
+  month" and the intro's takeout comparison is a bare `$12`), and an **upper-bound** claim is a different
+  statement from a quote - "under 15 grams of carbs" on an 11 g recipe is TRUE and 17 of the 20 published
+  lowcarb-100 recipes carry that exact sentence, so a bound is exempt only while the bound actually
+  holds ("under 5 grams" on a 6 g recipe still fires, and a negated bound is not a bound).
+  The patterns are `spec-contradiction-lib.ps1`'s, extended to carbs, fat and the serving count, and the
+  battery's self-test asserts the shared ones against that file's source text so the two cannot drift.
 - Local line-split acceptance (rung 1): `raw` equals the JSON-LD line; qty and unit substrings of
   raw verbatim; qty+unit+item+prep must jointly cover >=90% of raw's non-stopword tokens. ANY
   failing line sends the whole page to rung 2.
@@ -673,14 +714,39 @@ locally is work done, not work skipped. audit-lane-shape continues to judge the 
 
 Each ships with its must-fire fixture and clean twin in the same commit, per the guard-fixture rule.
 
-- **D1 `wave-preaudit.ps1`** - the mechanical audit battery (S8), 8-wide with per-slug scratch
-  dirs, machine report + exit codes per the §4.5 contract; auditor dispatch slimmed to report +
+- **D1 `wave-preaudit.ps1`** - the mechanical audit battery (S8), shared checks 8-wide with per-slug
+  scratch dirs, machine report + exit codes per the §4.5 contract; auditor dispatch slimmed to report +
   residue. Fixtures: a spec with a broken macro recompute MUST FIRE; a clean wave passes; a card
   rebuild diff fires on a mutated built card; a missing input exits 2 and reads as blocked, not
   clean.
+  BUILT 2026-08-23. Ships with 34 predicate fixtures plus an END-TO-END drill that runs the script as a
+  child process against a scratch meal-prep root: the clean twin, the broken-macro MUST FIRE, the mutated
+  reference card, a missing manifest, a scope naming a slug the wave never listed, and a missing required
+  input - the last four all asserting exit 2. It also extracted P8's four endpoint predicates into
+  `pipeline\feed-endpoint-lib.ps1` so wave-publish.ps1 and the preaudit read ONE copy of "which feed do
+  the cards fetch"; wave-publish -SelfTest still owns those fixtures and stays green, which is what
+  proves the move changed no rule.
 - **D2 QA battery** - extend coverage_check.py with scale-ratio and prose-number checks (thresholds
   per §4.5) + the `<slug>.battery.json` emitter. Fixtures: one hand-adjusted line fires the ratio
   check; a prose literal disagreeing with stat fires; `{{cost_ps}}` tokens never fire.
+  BUILT 2026-08-23, six checks: coverage, scale-ratio, prose-numbers, title/credit/URL, dash sweep,
+  servings-claim, behind `--battery`; the bare `--spec/--source --json` form is unchanged so the existing
+  QA instruction keeps working. 60 fixtures. Building it surfaced **a live defect in coverage_check.py
+  itself**: `_names` looked for an `ingredients` array, a v2 BUILT spec keeps its lines in `scaler.ing`,
+  and the QA lane passes the built spec - so the tool has been reporting ZERO spec ingredients and every
+  source line as DROPPED since it shipped (2026-08-16). Fixed and pinned. Three further matcher
+  corrections, each measured over the 20 published lowcarb-100 recipes and each shipped with its own
+  must-fire and clean twin: a parenthetical is a note about the food and not the food (an oil-packed
+  tomato ended in the word "oil" and could not pair with the source's tomatoes); a source line joining
+  two foods with AND is two requirements, which makes the check STRICTER; a line offering alternatives
+  with OR is a choice the source itself made, so picking one invents nothing; and a food a sectioned
+  source lists twice while the spec carries one line is CONSOLIDATED with a note about the summed amount,
+  not a false DROP. Hard findings over those 20 recipes fell from 88 to 63, and the residue is what the
+  check is for - each one a named INVENTED/DROPPED pair that is a real substitution question for the QA
+  agent (chicken stock against Chicken Broth, avocado oil against Olive Oil, Gouda against Cheddar).
+  A subset-pairing rule that would have quieted the remaining "shredded mozzarella" against "Mozzarella
+  Cheese" class was **considered and rejected**: it also pairs "Rice" with "wild rice", and a wrong
+  pairing hides an invention, which is the failure direction this check must never take.
 - **D3 `harvest.py` + `candidate-pool.json`** - enumeration, cached fetch, band filter, signatures,
   dedup scoring, ranked backlog with the S1 pool schema and single-writer verbs (--mark-taken,
   --mark-ruled, --ingest for sourcer finds); source-domains feedback on every fetch. Fixtures: a

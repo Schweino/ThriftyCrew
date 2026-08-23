@@ -47,12 +47,34 @@ mistake as calling an unreached store "not carried".
    spec but not in the source is invented; one in the source but not the spec is dropped. Both change the
    dish, and both are shipped silently today unless you catch them.
 
-   **RUN THE CODE FIRST - do not count this by hand.** This check is set arithmetic, and code does it
-   exactly while a model can miscount a fourteen-item list:
+   **RUN THE BATTERY FIRST - do not count, scale or read numbers by hand.** Every one of these is
+   arithmetic or a regex, and code does them exactly while a model can miscount a fourteen-item list
+   (2026-08-23, PLAN-recipe-hunter-v3 S7):
 
-       python meal-prep/pipeline/coverage_check.py --spec <built.json> --source <transcription.json> --json
+       C:\Codex\Python312\python.exe meal-prep\pipeline\coverage_check.py --battery ^
+         --spec <built.json> --source <transcription.json> --run-dir <run>
 
-   It returns `invented` and `dropped` by name, pairing on the HEAD NOUN so a cut or form substitution
+   It writes `<run>\qa\<slug>.battery.json` and settles SIX of your checks with numbers attached:
+   ingredient coverage (1), the scaling ratio (2), source credit and the URL match (5), prose numbers
+   against the stat (6), the dash sweep, and the servings claim. Exit 0 clean, 1 findings (the report is
+   still written), 2 could-not-run - and exit 2 is a BLOCKED stage, never a pass.
+
+   Read the report, then spend your judgement on the residue it explicitly does NOT decide, listed in its
+   own `not_checked` field: whether a substitution it found was deliberate and defensible, whether the
+   METHOD still cooks the source's dish, whether this is the same dish at all, and anything the live page
+   says that the transcription did not capture. A `pass` from the battery is not a pass from you - it
+   means the counting is done, not that the recipe is faithful. A FAIL from it is not a rejection either:
+   it means "look at this", and several of its classes are questions by design.
+
+   Two of its readings are deliberately conservative and will hand you real work every batch:
+   `INVENTED X` beside `DROPPED Y` is the head-noun rule reporting a SUBSTITUTION (chicken stock ->
+   Chicken Broth, broccoli florets -> Broccoli) - rule whether it is defensible. A `CONSOLIDATED` note
+   means the source listed a food in two sections and the spec carries one line: the food is present, so
+   the open question is whether that line's amount is the SUM.
+
+   The bare `--spec/--source --json` form still runs coverage alone if you want just that lane.
+
+   Coverage returns `invented` and `dropped` by name, pairing on the HEAD NOUN so a cut or form substitution
    cannot slip through as a match (chicken thighs vs breast, broth vs stock, heavy vs sour cream all
    separate; "extra virgin olive oil" and "olive oil" still pair). Take its lists as given and spend your
    judgement on what it explicitly does NOT decide, listed in its `not_checked` field: whether a

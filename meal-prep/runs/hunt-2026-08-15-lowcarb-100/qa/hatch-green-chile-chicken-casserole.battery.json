@@ -1,0 +1,224 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "hatch-green-chile-chicken-casserole",
+  "generated": "2026-08-23T15:58:58",
+  "inputs": {
+    "spec": "meal-prep/db/recipes/hatch-green-chile-chicken-casserole.json",
+    "source": "meal-prep/runs/hunt-2026-08-15-lowcarb-100/extracted/hatch-green-chile-chicken-casserole.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 14,
+        "source_ingredients": 15,
+        "matched": 14,
+        "invented": [],
+        "dropped": [
+          "water or chile liquid"
+        ],
+        "consolidated": []
+      },
+      "detail": "DROPPED: the source lists 'water or chile liquid' and the built recipe has nothing that denotes it",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'water or chile liquid' and the built recipe has nothing that denotes it"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 12,
+        "unrated": 2,
+        "exempt": 0,
+        "recipe_ratio": 1.75,
+        "lines": [
+          {
+            "item": "Rotisserie Chicken",
+            "source": "29 ounce",
+            "spec": "50.75 oz",
+            "ratio": 1.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Diced Green Chiles",
+            "source": "27 ounce",
+            "spec": "47.25 oz",
+            "ratio": 1.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Zucchini",
+            "source": "3 medium",
+            "spec": "5.25 medium",
+            "ratio": 1.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Pepper Jack Cheese",
+            "source": "2.25 cup",
+            "spec": "4 cup",
+            "ratio": 1.7778,
+            "deviation": 0.0159,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Heavy Cream",
+            "source": "1 cup",
+            "spec": "1.75 cup",
+            "ratio": 1.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Yellow Bell Pepper",
+            "source": "1 medium",
+            "spec": "1.75 medium",
+            "ratio": 1.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Red Bell Pepper",
+            "source": "1 medium",
+            "spec": "1.75 medium",
+            "ratio": 1.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "1/3 Fat Cream Cheese",
+            "source": "4 ounce",
+            "spec": "7 oz",
+            "ratio": 1.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Yellow Onion",
+            "source": "0.25 medium",
+            "spec": "0.5 medium",
+            "ratio": 2.0,
+            "deviation": 0.1429,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Cheddar Cheese, Shredded",
+            "source": "0.25 cup",
+            "spec": "7 tbsp",
+            "ratio": 1.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Olive Oil",
+            "source": "2 teaspoon",
+            "spec": "3.5 tsp",
+            "ratio": 1.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Garlic Powder",
+            "source": "1 teaspoon",
+            "spec": "1.75 tsp",
+            "ratio": 1.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Salt",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Black Pepper",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "every rated line scaled at the recipes own 1.75x (median of 12 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 4,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (4 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Hatch Green Chile Chicken Casserole",
+        "spec_source_url": "https://www.ruled.me/hatch-chile-casserole/",
+        "transcription_source_url": "https://www.ruled.me/hatch-chile-casserole/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 8,
+        "claimed_ratio": 1.75,
+        "measured_ratio": 1.75
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 1
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

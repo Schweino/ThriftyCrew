@@ -476,6 +476,12 @@ Audit wave ${wk} of run ${RUNID} before it publishes.
 Run dir: ${RUN}. Wave file: ${RUN}\\waves\\wave-${wk}.json. Slugs: ${slugs.join(', ')}.
 scope: whole-wave  (first audit of this wave)
 
+FIRST, before reading anything, run the mechanical battery and audit its residue (v3 S8 / Phase 0):
+  powershell -NoProfile -File C:\\Codex\\ThriftyCrew\\meal-prep\\pipeline\\wave-preaudit.ps1 -RunDir ${RUN} -Wave ${wk}
+Report at ${RUN}\\waves\\wave-${wk}.preaudit.json. Exit 0 clean, 1 findings, 2 could-not-run - and exit 2
+is a BLOCKED stage, never a pass. It does not audit and it cannot issue a GO; you remain the authority
+and may re-derive anything in it.
+
 This run's conditions: ${COND}. Verify each recipe's per-serving macros against that in addition to your
 normal battery (macros vs labels, cost sanity, gates, mapping soundness, card fidelity).
 
@@ -954,6 +960,12 @@ Built spec: C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\${c.slug}.json
 Transcription it came from: ${RUN}\\extracted\\${c.slug}.json
 Live source page: ${c.source_url || `(not passed to you - read the source_url out of ${RUN}\\extracted\\${c.slug}.json, which records the page this recipe was transcribed from)`}
 ${attempt > 1 ? 'This is the RE-QA after one owner-routed repair cycle. A second FAIL is terminal (rejected-qa).' : ''}
+
+FIRST, before reading anything, run the mechanical battery and judge its residue (v3 S7 / Phase 0):
+  C:\\Codex\\Python312\\python.exe C:\\Codex\\ThriftyCrew\\meal-prep\\pipeline\\coverage_check.py --battery --spec C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\${c.slug}.json --source ${RUN}\\extracted\\${c.slug}.json --run-dir ${RUN}
+Report at ${RUN}\\qa\\${c.slug}.battery.json. Exit 0 clean, 1 findings, 2 could-not-run - and exit 2 is a
+BLOCKED stage, never a pass. It settles coverage, the scaling ratio, prose numbers, credit/URL, the dash
+sweep and the servings claim with numbers; its findings are questions for you, not verdicts.
 
 Anchor on the transcription always; read the live page too when the domain is fetchable. A BLOCKED DOMAIN
 IS NEVER A FINDING AGAINST THE RECIPE - it makes the transcription the sole anchor and the verdict says so.

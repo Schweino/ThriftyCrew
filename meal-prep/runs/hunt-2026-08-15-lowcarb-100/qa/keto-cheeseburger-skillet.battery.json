@@ -1,0 +1,217 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "keto-cheeseburger-skillet",
+  "generated": "2026-08-23T15:58:58",
+  "inputs": {
+    "spec": "meal-prep/db/recipes/keto-cheeseburger-skillet.json",
+    "source": "meal-prep/runs/hunt-2026-08-15-lowcarb-100/extracted/keto-cheeseburger-skillet.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 12,
+        "source_ingredients": 12,
+        "matched": 11,
+        "invented": [
+          "Chicken Broth"
+        ],
+        "dropped": [
+          "chicken or beef broth"
+        ],
+        "consolidated": []
+      },
+      "detail": "INVENTED: 'Chicken Broth' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'chicken or beef broth' and the built recipe has nothing that denotes it",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Chicken Broth' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'chicken or beef broth' and the built recipe has nothing that denotes it"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 11,
+        "unrated": 1,
+        "exempt": 0,
+        "recipe_ratio": 3.5,
+        "lines": [
+          {
+            "item": "Hickory Smoked Bacon",
+            "source": "4 slice",
+            "spec": "14 slice",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Yellow Onion",
+            "source": "0.5 cup",
+            "spec": "1.75 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Tomato Paste",
+            "source": "2 tablespoon",
+            "spec": "7 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Yellow Mustard",
+            "source": "1 teaspoon",
+            "spec": "3.5 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "1/3 Fat Cream Cheese",
+            "source": "2 ounce",
+            "spec": "7 oz",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Chicken Broth",
+            "source": "0.5 cup",
+            "spec": "1.75 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Onion Powder",
+            "source": "0.5 teaspoon",
+            "spec": "1.75 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Garlic Powder",
+            "source": "0.5 teaspoon",
+            "spec": "1.75 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Salt",
+            "source": "0.25 teaspoon",
+            "spec": "1 tsp",
+            "ratio": 4.0,
+            "deviation": 0.1429,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Black Pepper",
+            "source": "0.25 teaspoon",
+            "spec": "1 tsp",
+            "ratio": 4.0,
+            "deviation": 0.1429,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Cheddar Cheese, Shredded",
+            "source": "1 cup",
+            "spec": "3.5 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "80/20 Ground Beef",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "every rated line scaled at the recipes own 3.5x (median of 11 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 4,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (4 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Keto Cheeseburger Casserole Skillet",
+        "spec_source_url": "https://thebestketorecipes.com/one-pan-keto-bacon-cheeseburger-skillet/",
+        "transcription_source_url": "https://thebestketorecipes.com/one-pan-keto-bacon-cheeseburger-skillet/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.5
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 1
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

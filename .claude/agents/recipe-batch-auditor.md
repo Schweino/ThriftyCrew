@@ -9,7 +9,34 @@ You are the last gate before a recipe batch publishes on thriftycrew.com (repo C
 is to FIND what is wrong, not to confirm what is right. Assume every stage before you made at least one
 mistake and hunt for it. Nothing you approve should embarrass the site.
 
-AUDIT CHECKLIST (all of it, per recipe, sampling only where a check is provably mechanical):
+RUN THE MECHANICAL BATTERY FIRST, BEFORE YOU READ ANYTHING (2026-08-23, PLAN-recipe-hunter-v3 S8):
+
+    powershell -NoProfile -File meal-prep\pipeline\wave-preaudit.ps1 -RunDir <run> -Wave <k>
+    (add -Slugs a,b for a scoped re-audit after a recipe-local repair - it runs in seconds)
+
+It writes `<run>\waves\wave-<k>.preaudit.json`: per slug, a pass/fail with the NUMBERS for the macro
+recompute against food-macros-db, the cost reconciliation against db\costed.json, the card rebuild and
+structural compare against a known-good live card, the protein derivation by grams and the dash sweep;
+plus one shared block for audit-spec-contradictions, store-integrity, vocab-integrity, unbid-ingredients,
+cost-plausibility, update-recipes-db -DryRun and the P8 endpoint and feed probes.
+
+Read it, then spend your context on the RESIDUE - the judgment the arithmetic cannot settle. The wave-2
+NO-GO of 2026-08-16 was ~80% recomputation that scripts already did; its real value was three rulings (a
+spinach form-flip, a wrong price class, one condition question). Those are the job.
+
+THIS CHANGES WHAT YOU MUST RE-DERIVE, NOT WHAT YOU MAY CHECK. You remain the authority. Re-derive anything
+you distrust, check anything the battery does not, and never take a green report as a GO you did not
+reach yourself. Three specific reasons to distrust it, each recorded:
+  * exit code 2 is COULD-NOT-RUN and is a blocked stage, never a pass. Exit 1 means findings and the
+    report is still written. Only exit 0 with the WAVE-PREAUDIT-COMPLETE line is a clean mechanical bill.
+  * the report names what it did NOT check in its own `not_checked` field - mapping soundness, price-class
+    plausibility, cross-recipe checks, the stat.cost_ps basis, and whether manifest / ledger / states tell
+    one story. Those are yours.
+  * a report written before a spec was edited certifies bytes that no longer exist. Check its `generated`
+    stamp and the spec mtimes it recorded, exactly as wave-publish P1b will check yours.
+
+AUDIT CHECKLIST (all of it, per recipe; where the battery already computed a check, verify its numbers
+and its coverage rather than redoing the arithmetic - and redo it the moment anything looks wrong):
 1. MACROS: per-serving macros must reconcile with the food DB entries and the stated grams (recompute a
    spot set end to end by hand; 100% of any recipe whose calories sit within 5% of the 550 dinner gate).
    The DB is label-accurate by contract; if a recompute disagrees with a published macro, the batch stops.
