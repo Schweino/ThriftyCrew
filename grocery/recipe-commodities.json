@@ -98,6 +98,14 @@
       "note": "Targets the lean (93/7 or leaner) ground turkey specifically so it never captures fattier 85/15 or the generic ground-turkey staple; excludes turkey sausage/patties/meatballs."
     },
     {
+      "id": "apple-cider",
+      "label": "Apple Cider",
+      "unit": "floz",
+      "include": [],
+      "exclude": [],
+      "note": "Brad 2026-08-23: STILL cider only, not sparkling. No custom exclude is needed - 'sparkling' is already in global_exclude, and this entry is what subjects the commodity to it. The recipe using this braises pork in 12 oz, where carbonation is beside the point and Martinelli's costs several times more per fl oz. No band: this commodity has no priced rows to derive one from, and inventing a price gate is not what this ruling was."
+    },
+    {
       "id": "boneless-skinless-chicken-thigh",
       "label": "Boneless Skinless Chicken Thigh",
       "unit": "lb",
@@ -878,6 +886,16 @@
       "note": "Squeeze/jar honey-dijon or honey-mustard condiment; excludes salad dressing, pretzel/chip dips, wing sauce."
     },
     {
+      "id": "jasmine-rice",
+      "label": "Jasmine Rice (Dry)",
+      "unit": "oz",
+      "include": [],
+      "exclude": [
+        "\\binstant\\b"
+      ],
+      "note": "Brad 2026-08-23: DRY raw jasmine only. Instant is parboiled then dehydrated - it neither cooks nor yields like raw jasmine at the same weight and costs more per oz - and 82 recipes buy against '3.5 cups dry jasmine' at 700 g on this per-oz basis. Ready-to-eat cups and frozen pouches are already caught by the global excludes."
+    },
+    {
       "id": "ketchup",
       "label": "Ketchup",
       "unit": "oz",
@@ -1186,6 +1204,16 @@
       "band_min": 0.03,
       "band_max": 0.25,
       "note": "Canned pineapple chunks; include gates on 'chunk' so rings/slices/crushed forms don't match. Deliberately does NOT exclude 'juice' broadly - canned pineapple is packed 'in juice' (the real product); only the 'pineapple juice' beverage is rejected. Heads-up: GLOBAL_EXCLUDE currently drops '\\bcanned\\b' and '\\bjuice\\b', which the orchestrator must relax for this canned commodity."
+    },
+    {
+      "id": "pineapple-juice",
+      "label": "Pineapple Juice",
+      "unit": "floz",
+      "include": [],
+      "exclude": [
+        "juice\\s*drink"
+      ],
+      "note": "Brad 2026-08-23: 100% juice only. 'Juice Drink' is the label wording for a diluted or sweetened blend, normally CHEAPER per oz - so it would win the crown while being the weaker ingredient. 'Cocktail' is already caught by global_exclude."
     },
     {
       "id": "poblano-peppers",
