@@ -8,7 +8,9 @@ from it, not from memory of it.**
 > rejects this plan is built around are ~0 (117 reviewed at random, 0 wrong), that a high
 > helper score is not evidence of a match (68 of 69 wrong where it was most confident),
 > and that a single training run cannot separate two fine-tunes. §4's routing table, §8's
-> auto-confirm premise and §12's ordering are amended there. §§1–3 and phases 1–3 stand. Written 2026-08-22 after a cold review of the
+> auto-confirm premise and §12's ordering are amended there. §§1–3 and phases 1–3 stand.
+
+Written 2026-08-22 after a cold review of the
 matching lane against the live graph. Scope is the **commodity matching system
 only** — the recipe hunter is explicitly out of scope (§11).
 
