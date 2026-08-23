@@ -521,6 +521,47 @@ pull and 08:00 capture (their sweeps go BLIND otherwise), and the nightly chain 
 Harvest's embedding batches schedule around llama-server, or run CPU. Nothing new schedules
 llama-server; install-nightly-task.ps1 remains the only scheduler.
 
+### 4.4a Model pins: preserved, and re-ratified against the changed roles
+
+**The frontmatter in `.claude\agents\*.md` is the single authority on model and effort.** The
+dispatch adapter (§4.1a) reads it per call; nothing in v3 hardcodes a model anywhere, and this
+table is a dated ratification record, NOT a second source of truth - if the two ever disagree, the
+frontmatter wins and this row is stale. (The estate's own lesson: duplicated lists in two agent
+prompts is what source-domains.ps1 was built to retire.)
+
+| agent | pin (2026-08-23) | what v3 changes about its job | pin verdict |
+|---|---|---|---|
+| recipe-sourcer | opus-4-8 / high | volume collapses to rare top-up + new-publisher discovery | HOLD - rarer, but each call is open-ended research, the hardest shape there is |
+| recipe-dedup-selector (DECIDE) | opus-4-8 / high | absorbs the adjudicators' work; rules over dossiers | HOLD - it now carries the whole dedup ruling alone; if anything this pin matters MORE |
+| recipe-hunter-extractor | fable / medium | escalation-only: the pages local could not settle | **HOLD, and explicitly do not cheapen** - see the residue principle below |
+| recipe-ingredient-mapper | fable / high | residual-only: the judgment lines, pre-resolved table supplied | HOLD |
+| recipe-hunter-pricer | opus-5 / medium | adjudicates pre-gathered rows; attends the walled stores | HOLD - carriage rulings are unrecoverable downstream |
+| recipe-writer | opus-4-8 / high | prose only, over a machine-locked skeleton | HOLD - what remains is exactly the part that needs the voice |
+| recipe-source-qa | fable / medium | judgment residue over the battery report | HOLD |
+| recipe-batch-auditor | fable / high | judgment residue over the preaudit report; still signs GO/NO-GO | HOLD - the tier that caught B12, the lying repair, and both correct NO-GOs |
+| post-publish-reviewer | fable / high | unchanged | HOLD |
+| commodity-registrar | fable / medium | unchanged | HOLD |
+
+**THE RESIDUE PRINCIPLE, and it is the point of this subsection.** v3 strips the mechanical
+majority out of every judgment lane. What is left in each dispatch is the *hard residue* - the
+pages local could not verify, the ingredients the cache and vocabulary could not resolve, the
+findings arithmetic could not settle. **The average call gets harder, not easier, even as it gets
+shorter.** So the standing conclusion is: v3 is an argument for HOLDING every pin, and against
+every tier downgrade.
+
+This matters because a future efficiency-minded session will read the slimmed prompts, see small
+inputs, and reason "these are cheap now, drop a tier." One specific inversion is already on the
+record and must not be re-derived wrongly: PLAN-token-efficiency-2026-08-16 section 4 Group E
+floated the extractor as "the only cheap-model candidate among the Fable pins, because source-QA
+independently re-checks its output." **That argument is void in v3** - the easy pages no longer
+reach the extractor at all, only the ones a verified local pass failed on, and an invented recipe
+remains the worst outcome in this flow. Cheapening the extractor in v3 means putting the weakest
+model on the hardest inputs.
+
+Model-tier changes therefore stay OUT of this plan entirely (§11), exactly as Group E held them:
+each is its own measured experiment against a baseline, ordered by Brad, never a build-time
+convenience.
+
 ### 4.5 Contracts (normative - the no-guessing appendix)
 
 Every artifact v3 introduces, with its path, producer, and shape. An implementer should never have
@@ -802,5 +843,8 @@ reject, rank and flag; it may never assert an identity or touch Brad's voice.**
 - Per-recipe publishing (the wave boundary amortizes propagate + the audit).
 - Reviving anything from the deleted V3 platform.
 - Fine-tuning as a dependency of anything above (Phase E is optional and gated).
+- **Model-tier changes to any Claude agent.** Every pin holds (§4.4a); the residue principle says
+  v3 makes each remaining call harder, so a downgrade is the opposite of what this plan implies. A
+  tier change is its own measured experiment, ordered by Brad, never a build-time convenience.
 - Parallelizing the price lane (singleton stands; a change there is a measured decision for Brad).
 - Any board/commodity capture-pipeline changes beyond reading what it already produces.
