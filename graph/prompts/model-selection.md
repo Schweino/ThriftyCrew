@@ -1301,9 +1301,12 @@ next capture makes the next contested set. That is the steady state this plan ai
 
 The local lane now prints which model held the opinion, which def set it read, and what
 the filter rejected, distinguishing "rejected 0" from "the filter is off" from BLIND.
-Today it reads the BEFORE, correctly: `scored 15 of 435`, `scored by the PINNED model`,
-`routes nothing`, `filter rejected 0`. The AFTER is one flag away and is Brad's call,
-because it is the daily path.
+Before the wiring it read `scored 15 of 435`, `scored by the PINNED model`,
+`routes nothing`; after it reads `defs commodity-defs-graph.json`, `scored by
+sidecar/models/resolve-ce-v1`, `routes reject-only`. It also separates ARMED-AND-QUIET
+from OFF, because zero rejections with a trained helper means nothing fell below the
+threshold, while zero without one means resolve.py refused to filter at all - a
+configuration fact, not a result.
 
 ### 9. What phase 3 did not do
 
