@@ -1,8 +1,9 @@
 {
   "_doc": "Bids that intentionally have NO first-party Omaha board price and are priced via a documented register-estimate label in labels-r300.json. cost-engine.ps1 suppresses the 'MAPPED BID NOT ON ANY BOARD' advisory for these so the flag list stays meaningful (an advisory should mean 'look at this', not 'known gap you already decided on'). An allowlisted bid with NO label still hard-flags as unpriced. Remove a bid the moment a real in-store capture lands for it. See recipe-r300-open-items memory #5.",
+  "_scope": "THIS LIST ANSWERS EXACTLY ONE QUESTION: may this bid skip BOARD PRICING? It does NOT say the food is carried, and it must never be used to answer that. Carriage is a separate fact with separate evidence, derived by lib\\carriage-lib.ps1 from the live feed and grocery\\carriage.json. cost-recipes.ps1 validates every bid here against carriage at load and HARD-ERRORS on any entry that is not CARRIED, so this file can no longer become a pardon.",
+  "_removed_2026_08_22": "doubanjiang was on this list and should never have been. The list was silently answering 'is it carried?' as well as 'may it skip board pricing?', and on that strength three paid recipes shipped whose defining ingredient no Omaha store has ever been shown to stock. Its carriage is UNKNOWN, not CARRIED - the term searched was 'chili bean sauce', which returns Bush's chili beans. It is recorded in grocery\\carriage.json with the terms nobody has tried yet, and its three recipes are drafts pending a real capture. dried-guajillo-chiles (Sam's Club, 3 stores) and aji-amarillo-paste (Walmart) both remain because both are genuinely carried and merely board-unpriced - the exact case this list is for.",
   "bids": [
     "dried-guajillo-chiles",
-    "doubanjiang",
     "aji-amarillo-paste"
   ]
 }

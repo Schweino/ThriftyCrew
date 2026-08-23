@@ -139,18 +139,49 @@ if($DRAINED.Count -gt 0){
   Write-Output ("drained-basis items: " + (($DRAINED.GetEnumerator() | Sort-Object Name | ForEach-Object { $_.Key + ' ' + $_.Value.drained + '/' + $_.Value.net + 'g' }) -join '; '))
 }
 
+# ---- CARRIAGE: does any Omaha store stock this food? ----
+# Separate from pricing, deliberately. See lib\carriage-lib.ps1 for why conflating the two put four
+# uncarried recipes on live paid pages. $FEEDCARRIED is the automatic tier (>=1 real store price in the
+# feed); $CARRLEDGER is the adjudicated remainder.
+$repoRoot = Split-Path $mp -Parent
+. (Join-Path $repoRoot 'lib\carriage-lib.ps1')
+$FEEDCARRIED = Get-FeedCarriedSet $feed
+$CARRLEDGER  = Import-CarriageLedger (Join-Path $repoRoot 'grocery\carriage.json')
+
 $noBoardOk=@{}
 $nbFile = Join-Path $db 'no-board-price-ok.json'
 if(Test-Path $nbFile){ foreach($b in (Get-Content $nbFile -Raw | ConvertFrom-Json).bids){ $noBoardOk[[string]$b]=1 } }
+
+# THE ALLOWLIST IS NOT A PARDON. It answers "may this bid skip board pricing?" and nothing else. Until
+# 2026-08-22 it was also silently answering "is it carried?", which is how doubanjiang - searched as
+# "chili bean sauce", never once found - reached three live paid recipes. An allowlisted bid whose
+# carriage is not CARRIED is a hard error, because the alternative is exactly the silence that failed.
+$nbBad = @()
+foreach($b in $noBoardOk.Keys){
+  $c = Get-Carriage -Bid $b -Item '' -FeedCarried $FEEDCARRIED -Ledger $CARRLEDGER
+  if($c.verdict -ne 'CARRIED'){ $nbBad += ($b + ' [' + $c.verdict + ': ' + $c.why + ']') }
+}
+if($nbBad.Count){
+  throw ("no-board-price-ok.json lists bid(s) with no carriage evidence: " + ($nbBad -join '; ') +
+         ". This list may only excuse BOARD PRICING for a food an Omaha store is proven to stock. " +
+         "Either record store evidence in grocery\carriage.json or remove the bid.")
+}
 $script:registerEst=0
 $out=@(); $costFlags=New-Object System.Collections.Generic.List[string]
 foreach($r in $computed){
   $lines=@(); $batch=0.0; $trueCost=0.0; $bulkUtil=0.0; $starterOutlay=0.0
+  $uncarried=@()   # item names whose carriage is not CARRIED; survives the `continue` paths below
   foreach($ing in $r.ingredients){
     $g=[double]$ing.grams
     if($g -le 0){ continue }
     $row = Resolve-ItemRow ([string]$ing.item)
     $ppg=$null; $basis=''
+    # CARRIAGE is judged from the ITEM ROW's bid, not from the basis the line ends up with. That
+    # distinction is the whole sumac case: Sumac carries bid=ground-sumac and still falls through to a
+    # label: price, so a gate reading only the basis sees no bid at all and asks nothing.
+    $lineBid = if($row -and (Has $row 'bid')){ [string]$row.bid } else { $null }
+    $carr = Get-Carriage -Bid $lineBid -Item ([string]$ing.item) -FeedCarried $FEEDCARRIED -Ledger $CARRLEDGER
+    if($carr.verdict -ne 'CARRIED'){ $uncarried += ([string]$ing.item + ' [' + $carr.verdict + ']') }
     if($row -and (Has $row 'bid')){
       $bid=[string]$row.bid; $gpu=[double]$row.gpu; $mu=if(Has $row 'unit'){ [string]$row.unit } else { '' }
       if($board.ContainsKey($bid)){
@@ -166,8 +197,17 @@ foreach($r in $computed){
       elseif($noBoardOk.ContainsKey($bid)){ $script:registerEst++ }
       else { $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: MAPPED BID NOT ON ANY BOARD (' + $bid + ')')) }
     }
+    # THE LABEL FALLBACK PRICES ONLY WHAT OMAHA IS PROVEN TO STOCK. Until 2026-08-22 these two
+    # statements ran unconditionally, directly after the 'MAPPED BID NOT ON ANY BOARD' flag above - so
+    # the engine noticed no store prices the ingredient, wrote an advisory line nothing gates on, and
+    # then priced it from a hard-coded label anyway. A recipe costed out normally and published. That is
+    # the exact route Sumac took, and doubanjiang after it.
     if($null -eq $ppg -and $labels.ContainsKey($ing.item)){
-      $L=$labels[$ing.item]; $ppg = $L.pkg_price/$L.pkg_g; $basis=('label:'+$L.desc)
+      if($carr.verdict -eq 'CARRIED'){
+        $L=$labels[$ing.item]; $ppg = $L.pkg_price/$L.pkg_g; $basis=('label:'+$L.desc)
+      } else {
+        $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: LABEL PRICE REFUSED, CARRIAGE ' + $carr.verdict + ' (' + $carr.why + ')'))
+      }
     }
     if($null -eq $ppg){
       $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: NO PRICE BASIS')); continue
@@ -215,7 +255,7 @@ foreach($r in $computed){
         $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: no package def, counted at util in true cost'))
       }
     }
-    $lines += [pscustomobject]@{ item=$ing.item; grams=$g; util_cost=$util; basis=$basis; bulk=$isBulk; buy_n=$buyN; buy_cost=$buyCost; pkg=$pkgLabel; pkg_g=$pkgG; starter_n=$stN; starter_cost=$stCost; starter_pkg=$stPkg; starter_pkg_g=$stPkgG }
+    $lines += [pscustomobject]@{ item=$ing.item; grams=$g; util_cost=$util; basis=$basis; carriage=$carr.verdict; bulk=$isBulk; buy_n=$buyN; buy_cost=$buyCost; pkg=$pkgLabel; pkg_g=$pkgG; starter_n=$stN; starter_cost=$stCost; starter_pkg=$stPkg; starter_pkg_g=$stPkgG }
   }
   $batch=[Math]::Round($batch,2); $trueCost=[Math]::Round($trueCost,2)
   $pantryAdd=[Math]::Round($starterOutlay-$bulkUtil,2)
@@ -229,6 +269,7 @@ foreach($r in $computed){
     cost_batch_true=$trueCost; cost_per_serving_true=[Math]::Round($trueCost/14,2)
     cost_pantry_add=$pantryAdd; cost_first_run=$firstRun
     lines_priced=$priced; lines_unpriced=$unpriced
+    lines_uncarried=@($uncarried).Count; uncarried=@($uncarried)
     lines=@($lines)
   }
 }

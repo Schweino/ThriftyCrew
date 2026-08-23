@@ -1,0 +1,57 @@
+{
+    "_doc":  "THE CARRIAGE LEDGER - adjudicated answers to 'does any Omaha store stock this food?', keyed by commodity id (or 'item:<Item Name>' for an ingredient that has no bid, e.g. Keto Bun). Read through lib\\carriage-lib.ps1 by every gate; never read directly. This file holds ONLY verdicts a human or the recipe-hunter-pricer adjudicated from real store evidence. The automatic tier is the live feed (grocery\\out\\smp-feed.json): a bid with >=1 real store price there is CARRIED without needing a row here, which covers 273 of the 275 bids in live use. This file is for the remainder.",
+    "_rule":  "CARRIED needs store + item + price + as_of. NOT-CARRIED needs all seven Omaha stores recorded as having ANSWERED (state carried|not-carried; blocked/error/unreached do NOT count) plus the terms tried at each - Rule B, identical to grocery\\ingredient-queue.ps1. Anything weaker degrades to UNKNOWN at read time, so a hand-edited pardon cannot open the gate. UNKNOWN is an explicit, valid record: it is where the history of a failed search lives.",
+    "_why_unknown_matters":  "Every 'absence' this estate has ever found was a wrong search term, not an empty shelf. doubanjiang was searched as 'chili bean sauce' and returned 237 rows - all Bush's/Mrs. Grimes chili beans and a Kroger hot dog chili sauce. Korean rice cakes were searched as 'rice cakes' and returned 650 rows of Quaker snack cakes, zero tteok. Neither was ever asked the right question. Recording that as UNKNOWN-with-history, rather than NOT-CARRIED, is what makes a future NOT-CARRIED verdict mean something.",
+    "generated":  "2026-08-22",
+    "bids":  {
+                 "ground-sumac":  {
+                                      "verdict":  "CARRIED",
+                                      "store":  "Baker's",
+                                      "item":  "Morton & Bassett All Natural Sumac",
+                                      "size":  "2 oz",
+                                      "price":  12.79,
+                                      "product_id":  "0001629144192",
+                                      "as_of":  "2026-08-22",
+                                      "source":  "kroger-api, bakers-regular-2026-08-22.json, found_by_term 'ground-sumac'",
+                                      "why":  "Baker's stocks it. CARRIED but UNPRICED: the matcher never lands it in smp-feed.json, which is why musakhan-sumac-chicken falls back to a label: basis. That is a matcher gap (one of the 13 recoverable), NOT a carriage failure, and it must not take the recipe down. Fixing the matcher retires this row automatically - the feed tier will answer instead.",
+                                      "recheck":  "Drop this row once ground-sumac appears in smp-feed.json with a store price."
+                                  },
+                 "item:Keto Bun":  {
+                                       "verdict":  "CARRIED",
+                                       "store":  "Walmart",
+                                       "item":  "bettergoods Keto Friendly Hamburger Buns, 14 oz, 8 Count",
+                                       "size":  "14 oz (8 ct)",
+                                       "price":  4.78,
+                                       "as_of":  "2026-08-11",
+                                       "source":  "walmart-regular-2026-08-01.json, -08-06, -08-11 (the exact product the label basis names)",
+                                       "why":  "Keyed by item name because db\\ingredients.json carries bid=null for Keto Bun. Three separate captures returned the exact bettergoods product the label prices, alongside three competing keto buns (Nature's Own Life $6.64, Keto Culture $6.32, Lewis Bake Shop $3.14). Carriage is not in doubt; only the missing commodity id is.",
+                                       "recheck":  "Drop this row once a keto-buns commodity is minted through the commodity-registrar and prices in the feed."
+                                   },
+                 "doubanjiang":  {
+                                     "verdict":  "UNKNOWN",
+                                     "as_of":  "2026-08-22",
+                                     "why":  "NEVER ESTABLISHED EITHER WAY - the search term is wrong, so silence proves nothing. commodity-search.json searches doubanjiang as 'chili bean sauce', which returns 237 rows across Family Fare, Walmart and Baker's, every one of them a chili BEAN product (Bush's, Mrs. Grimes) or 'Kroger Hot Dog Chili Sauce'. No row in the entire capture corpus contains 'doubanjiang' or 'toban'. Three recipes were unpublished to DRAFT on 2026-08-22 on this basis (ants-climbing-a-tree-pork-noodles, turkey-ants-climbing-a-tree, taiwanese-braised-beef-noodle-bowls); they are recoverable the moment this resolves CARRIED.",
+                                     "terms_never_tried":  [
+                                                               "doubanjiang",
+                                                               "toban djan",
+                                                               "Pixian",
+                                                               "Lee Kum Kee chili bean sauce",
+                                                               "broad bean chili paste"
+                                                           ],
+                                     "recheck":  "Re-capture with the terms above before ANY verdict. If all seven stores answer and none carry it, promote to NOT-CARRIED with per-store evidence."
+                                 },
+                 "item:Korean Rice Cakes":  {
+                                                "verdict":  "UNKNOWN",
+                                                "as_of":  "2026-08-22",
+                                                "why":  "NEVER ESTABLISHED EITHER WAY - wrong commodity entirely, not merely a wrong term. The rice-cakes commodity searches 'rice cakes' and returns 650 rows of Quaker/Kroger/Drizzilicious SNACK cakes; tteok is a different food and appears nowhere in the corpus. NOTE the live trap: rice-cakes IS priced in the feed (Sam's Club $0.4216/oz, a Quaker snack), so mapping a tteok recipe onto that bid would pass the carriage gate at a snack price. That is a MAPPING defect for the commodity-registrar, which is why this is keyed by item name and NOT pointed at rice-cakes. dak-galbi-chicken-cabbage-skillet was unpublished to DRAFT on 2026-08-22.",
+                                                "terms_never_tried":  [
+                                                                          "tteok",
+                                                                          "tteokbokki",
+                                                                          "rice cake sticks",
+                                                                          "garaetteok",
+                                                                          "Korean rice cake"
+                                                                      ],
+                                                "recheck":  "Needs its own commodity id through the commodity-registrar (it is NOT a variant of rice-cakes), then a capture with the terms above."
+                                            }
+             }
+}
