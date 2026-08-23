@@ -1,1 +1,1 @@
-﻿avocado-oil|Baker's;beets|Family Fare;canned-butter-beans|Hy-Vee;coleslaw-mix|Walmart;cooked-jasmine-rice|Walmart;cornmeal|Baker's;daiya-mozzarella-style-shreds|Baker's;nectarines|Fareway;papaya|Walmart;pie-pumpkins|Aldi;pistachios|Aldi;pomegranates|Walmart;quinoa-uncooked|Walmart;sea-salt|Aldi;teriyaki-sauce|Aldi
+﻿avocado-oil|Baker's;beets|Family Fare;canned-butter-beans|Hy-Vee;canned-mixed-vegetables|Aldi;cornmeal|Baker's;daiya-mozzarella-style-shreds|Baker's;honey|Aldi;iced-tea|Aldi;nectarines|Fareway;pie-pumpkins|Aldi;pork-shoulder|Aldi;sparkling-water|Aldi

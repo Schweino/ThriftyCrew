@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-22 09:19",
+    "generated":  "2026-08-23 01:25",
     "board":  "comparison-2026-08-21.json",
-    "sidecar_generated":  "2026-08-22 09:19:25",
+    "sidecar_generated":  "2026-08-23 01:25:39",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3077,
-                     "corpus":  37205,
-                     "rule_invisible":  6465
+                     "board_pairs":  3083,
+                     "corpus":  37428,
+                     "rule_invisible":  6546
                  },
     "identity_count":  0,
-    "coverage_count":  52,
+    "coverage_count":  55,
     "identity":  [
 
                  ],
@@ -81,6 +81,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "adobo-seasoning",
+                         "commodity":  "Adobo seasoning",
+                         "store":  "Walmart",
+                         "product":  "Goya All Purpose Seasoning with Pepper, 8 OZ",
+                         "cos":  0.7326,
+                         "score":  0.971244,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "furniture-polish",
                          "commodity":  "Furniture Polish / Dusting Spray",
                          "store":  "Walmart",
@@ -97,6 +107,16 @@
                          "product":  "Ox Brand Red Chili With Garlic Sauce",
                          "cos":  0.6803,
                          "score":  0.969741,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-beef-9010",
+                         "commodity":  "Ground Beef 90/10",
+                         "store":  "Walmart",
+                         "product":  "Marketside Grass-Fed Ground Beef, 90% Lean/10% Fat, 1 lb",
+                         "cos":  0.7,
+                         "score":  0.968356,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -125,8 +145,8 @@
                          "commodity":  "93/7 Lean Ground Beef",
                          "store":  "Walmart",
                          "product":  "93% Lean / 7% Fat Lean Ground Beef Patties, 4 Count, 1 lb Tray, Fresh, All Natural*",
-                         "cos":  0.7691,
-                         "score":  0.961829,
+                         "cos":  0.7673,
+                         "score":  0.961389,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -161,6 +181,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "almond-milk",
+                         "commodity":  "Almond Milk",
+                         "store":  "Aldi",
+                         "product":  "Friendly Farms Almond Original Milk",
+                         "cos":  0.688,
+                         "score":  0.951356,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "pork-tenderloin",
                          "commodity":  "Pork Tenderloin",
                          "store":  "Walmart",
@@ -171,12 +201,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
+                         "id":  "ground-beef-93-7",
+                         "commodity":  "93/7 Lean Ground Beef",
                          "store":  "Aldi",
-                         "product":  "80 Lean Ground Beef Patties Per LB",
-                         "cos":  0.669,
-                         "score":  0.948182,
+                         "product":  "USDA 73% Lean 27% Fat Ground Beef, Per LB",
+                         "cos":  0.7617,
+                         "score":  0.948645,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -204,9 +234,9 @@
                          "id":  "ground-beef-93-7",
                          "commodity":  "93/7 Lean Ground Beef",
                          "store":  "Aldi",
-                         "product":  "USDA 73% Lean 27% Fat Ground Beef, Per LB",
-                         "cos":  0.7619,
-                         "score":  0.941561,
+                         "product":  "73% Lean 27% Fat Ground Beef, 3 LB",
+                         "cos":  0.7412,
+                         "score":  0.944067,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -241,6 +271,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "sparkling-water",
+                         "commodity":  "Sparkling Water",
+                         "store":  "Aldi",
+                         "product":  "Puraqua Flavored Water Bottles, 24 Pack",
+                         "cos":  0.6295,
+                         "score":  0.936553,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "chili-garlic-sauce",
                          "commodity":  "Chili Garlic Sauce",
                          "store":  "Baker\u0027s",
@@ -257,6 +297,16 @@
                          "product":  "Mainstays 2 lb. Aluminum Foil Loaf Pans, 3 Count, Disposable, Easy Cleaning",
                          "cos":  0.6014,
                          "score":  0.935655,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "deli-ham",
+                         "commodity":  "Ham (deli / sliced)",
+                         "store":  "Walmart",
+                         "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
+                         "cos":  0.6922,
+                         "score":  0.935499,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -381,32 +431,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "deli-ham",
-                         "commodity":  "Ham (deli / sliced)",
-                         "store":  "Walmart",
-                         "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
-                         "cos":  0.691,
-                         "score":  0.920936,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "quart-storage-bags",
                          "commodity":  "Food Storage Bags (quart)",
                          "store":  "Walmart",
                          "product":  "FoodSaver Quart Vacuum Seal Bags, 19 Count Pre-Cut BPA-Free Freezer Bags, Align to Seal \u0026 Tear to Open for Food Storage, Sous Vide, and Meal Prep",
                          "cos":  0.6617,
                          "score":  0.915625,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "73% Lean 27% Fat Ground Beef, 3 LB",
-                         "cos":  0.7414,
-                         "score":  0.914338,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -481,22 +511,22 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "ground-beef-93-7",
+                         "commodity":  "93/7 Lean Ground Beef",
+                         "store":  "Walmart",
+                         "product":  "All Natural* 73% Lean/27% Fat Ground Beef, 1 lb Tray",
+                         "cos":  0.7634,
+                         "score":  0.905605,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "vegetable-soup",
                          "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
                          "store":  "Baker\u0027s",
                          "product":  "Campbell\u0027s Chunky Beef Soup with Country Vegetables 18.8 Oz Can",
                          "cos":  0.7303,
                          "score":  0.904312,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "Simply Nature Organic Grass Fed 93/07 Ground Beef",
-                         "cos":  0.6677,
-                         "score":  0.904109,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -521,22 +551,22 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "ground-beef-93-7",
+                         "commodity":  "93/7 Lean Ground Beef",
+                         "store":  "Aldi",
+                         "product":  "Simply Nature Organic Grass Fed 93/07 Ground Beef",
+                         "cos":  0.6604,
+                         "score":  0.902365,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "frozen-cauliflower-florets",
                          "commodity":  "Frozen Cauliflower Florets",
                          "store":  "Walmart",
                          "product":  "Great Value Frozen Cauliflower, 12 oz Bag, No Added Preservatives",
                          "cos":  0.7151,
                          "score":  0.901266,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "sparkling-water",
-                         "commodity":  "Sparkling Water",
-                         "store":  "Aldi",
-                         "product":  "Puraqua Flavored Water Bottles, 24 Pack",
-                         "cos":  0.6169,
-                         "score":  0.900009,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

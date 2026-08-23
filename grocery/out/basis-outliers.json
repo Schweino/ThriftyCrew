@@ -122,21 +122,9 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-22T10:42:11",
+    "generated":  "2026-08-22T18:19:55",
     "ratio":  4,
     "kind_mismatch":  [
-                          {
-                              "id":  "all-purpose-cleaner",
-                              "commodity":  "All-Purpose Cleaner",
-                              "unit":  "floz",
-                              "store":  "Aldi",
-                              "per_unit":  0.0841,
-                              "size":  "32 oz",
-                              "item":  "Power Force Lemon Scented All Purpose Cleaner",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
                           {
                               "id":  "all-purpose-cleaner",
                               "commodity":  "All-Purpose Cleaner",
@@ -288,7 +276,7 @@
                               "store":  "Aldi",
                               "per_unit":  0.0483,
                               "size":  "121 oz",
-                              "item":  "Tandil 7.5 Percent Bleach",
+                              "item":  "Tandil 75 Percent Bleach 121 OZ",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false

@@ -1,0 +1,56 @@
+﻿{
+    "generated":  "2026-08-23T01:26:17",
+    "started":  "2026-08-23T01:24:05",
+    "deadline":  "2026-08-23T02:04:05",
+    "hard_stop":  "06:30",
+    "jobs":  4,
+    "contested":  0,
+    "elapsed_sec":  132,
+    "card_free":  true,
+    "free_vram_mib":  14830,
+    "llama_started":  true,
+    "stages":  [
+                   {
+                       "stage":  "emit",
+                       "state":  "OK",
+                       "detail":  "contested: 0 question(s) of 20507 (20507 settled by the deterministic layers), 4070 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 1.9s",
+                       "sec":  2
+                   },
+                   {
+                       "stage":  "defs",
+                       "state":  "OK",
+                       "detail":  "[01:24:07] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
+                       "sec":  0
+                   },
+                   {
+                       "stage":  "sweep",
+                       "state":  "OK",
+                       "detail":  "",
+                       "sec":  93
+                   },
+                   {
+                       "stage":  "serve",
+                       "state":  "OK",
+                       "detail":  "4 slots",
+                       "sec":  8
+                   },
+                   {
+                       "stage":  "resolve",
+                       "state":  "OK",
+                       "detail":  "resolved 22140 rows in 1.9s (20507 distinct questions, 0 model calls)",
+                       "sec":  2
+                   },
+                   {
+                       "stage":  "stage1",
+                       "state":  "OK",
+                       "detail":  "Next: python graph/learning/stage2_review.py --emit-packet",
+                       "sec":  24
+                   },
+                   {
+                       "stage":  "stop",
+                       "state":  "OK",
+                       "detail":  "",
+                       "sec":  0
+                   }
+               ]
+}
