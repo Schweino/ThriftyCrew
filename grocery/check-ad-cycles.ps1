@@ -60,8 +60,20 @@ $script:EchoLog = ($env:GITHUB_ACTIONS -eq 'true' -or $env:CI -eq 'true')
 function Log([string]$m) {
   $line = ("[" + (Get-Date).ToString('s') + "] ") + $m
   if ($script:EchoLog) { try { Write-Host $line } catch {} }
-  for ($i = 0; $i -lt 5; $i++) {
-    try { Add-Content -Path $LogFile -Value $line -ErrorAction Stop; return } catch { Start-Sleep -Milliseconds 120 }
+  # RIDE OUT A TRANSIENT LOCK ONCE; DO NOT PAY FOR A PERSISTENT ONE ON EVERY LINE (2026-08-23).
+  # The retry ladder below is 5 x 120 ms, and it was written for a lock that clears - a backup, a
+  # virus scan, a git stash. It is exactly right for that. It is badly wrong for a lock that does
+  # NOT clear, because it then costs 600 ms of pure Start-Sleep PER LOG LINE, forever.
+  # Measured on the 2026-08-23 12:54 run, with `tail -n 0 -F` sitting on the log all day: 385 of the
+  # run's 408 lines were paced at ~0.65 s each - 250 SECONDS of a 29-minute run spent sleeping, to
+  # re-discover a lock already discovered. The file's own header names `tail -f` as a cause; what it
+  # did not account for is a tail that stays open.
+  # So: the first failure still pays the full ladder (a transient lock is worth waiting out). After
+  # the run has failed over to the sidecar, later lines make ONE attempt with no sleep - free, and it
+  # still returns to the primary the moment the lock clears, so nothing is permanently diverted.
+  $attempts = if ($script:LogSidecar) { 1 } else { 5 }
+  for ($i = 0; $i -lt $attempts; $i++) {
+    try { Add-Content -Path $LogFile -Value $line -ErrorAction Stop; return } catch { if ($i -lt ($attempts - 1)) { Start-Sleep -Milliseconds 120 } }
   }
   # A LOCKED LOG MUST NOT GO MUTE (2026-08-22). On 08-21 and again on 08-22 another process (a git stash in
   # an interactive session; a tail -f) held this file, the five retries failed, and the line was DROPPED -
