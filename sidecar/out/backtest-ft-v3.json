@@ -1,0 +1,1148 @@
+{
+  "generated": "2026-08-23 01:59:40",
+  "device": "cuda",
+  "tag": "ft-v3",
+  "embed_model": "BAAI/bge-m3",
+  "rerank_model": "sidecar/models/resolve-ce-v3",
+  "is_pinned_model": false,
+  "defs": "commodity-defs.json",
+  "defs_frozen": true,
+  "counts": {
+    "positives": 2816,
+    "hard_negatives": 25,
+    "commodities": 588,
+    "unmatched_prewiden": 3404
+  },
+  "task_a": {
+    "auc_bi_encoder": 0.9228977272727272,
+    "auc_cross_encoder": 0.9883380681818181,
+    "operating_points": {
+      "10": {
+        "threshold": 0.0015034740790724754,
+        "known_wrong_caught": 16,
+        "known_wrong_total": 25,
+        "recall": 0.64,
+        "accepted_flagged": 10
+      },
+      "20": {
+        "threshold": 0.0046609374694526196,
+        "known_wrong_caught": 22,
+        "known_wrong_total": 25,
+        "recall": 0.88,
+        "accepted_flagged": 20
+      },
+      "30": {
+        "threshold": 0.014128743670880795,
+        "known_wrong_caught": 23,
+        "known_wrong_total": 25,
+        "recall": 0.92,
+        "accepted_flagged": 30
+      },
+      "50": {
+        "threshold": 0.10369721055030823,
+        "known_wrong_caught": 23,
+        "known_wrong_total": 25,
+        "recall": 0.92,
+        "accepted_flagged": 50
+      },
+      "100": {
+        "threshold": 0.8152106404304504,
+        "known_wrong_caught": 24,
+        "known_wrong_total": 25,
+        "recall": 0.96,
+        "accepted_flagged": 100
+      }
+    }
+  },
+  "task_c": {
+    "ground-cloves": [
+      {
+        "rank": 1,
+        "score": 0.6347,
+        "store": "Family Fare",
+        "product": "Our Family Cloves, Ground 2 Oz"
+      },
+      {
+        "rank": 2,
+        "score": 0.6048,
+        "store": "Family Fare",
+        "product": "Tone's Cloves, Ground 0.55 Oz"
+      },
+      {
+        "rank": 3,
+        "score": 0.588,
+        "store": "Family Fare",
+        "product": "Sugar 'N Spice Cloves Ground Pp"
+      },
+      {
+        "rank": 4,
+        "score": 0.5584,
+        "store": "Walmart",
+        "product": "Great Value Organic Ginger Ground 1.6 oz"
+      },
+      {
+        "rank": 5,
+        "score": 0.5567,
+        "store": "Aldi",
+        "product": "Pringles Potato Crisps Chips Lunch Snacks ON The GO Snacks Cheddar Cheese 7.1 OZ"
+      },
+      {
+        "rank": 6,
+        "score": 0.5518,
+        "store": "Aldi",
+        "product": "Pringles Potato Crisps Chips Lunch Snacks Snacks ON The GO Original 6.8 OZ"
+      },
+      {
+        "rank": 7,
+        "score": 0.5503,
+        "store": "Family Fare",
+        "product": "The Little Potato Co. Potatoes, Garlic & Herb, Fresh 1 Lb"
+      },
+      {
+        "rank": 8,
+        "score": 0.5466,
+        "store": "Baker's",
+        "product": "Sensible Portions Garden Veggie Straws Avocado Oil Sea Salt Veggie Chips"
+      },
+      {
+        "rank": 9,
+        "score": 0.5453,
+        "store": "Aldi",
+        "product": "Earthly Grains Roasted Vegetable Chicken Long Grain Wild Rice Mix 6.3 OZ"
+      },
+      {
+        "rank": 10,
+        "score": 0.545,
+        "store": "Walmart",
+        "product": "Pyure Organic Stevia Blend   Granulated Sugar Substitute with Zero Calories & Carbs   Keto, Diabetic & Vegan Friendly   Sugary Taste Alternative   USDA Organic, Non-GMO   Good For Baking   12oz"
+      },
+      {
+        "rank": 11,
+        "score": 0.5394,
+        "store": "Family Fare",
+        "product": "Rice A Roni Rice, Long Grain & Wild, Original 4.3 Oz"
+      },
+      {
+        "rank": 12,
+        "score": 0.5386,
+        "store": "Baker's",
+        "product": "Cesar Filets in Gravy Wet Dog Food Mini-Pouch Rotisserie Chicken"
+      },
+      {
+        "rank": 13,
+        "score": 0.5366,
+        "store": "Family Fare",
+        "product": "Our Family Gravy Mix, Reduced Sodium, Brown 0.87 Oz"
+      },
+      {
+        "rank": 14,
+        "score": 0.536,
+        "store": "Baker's",
+        "product": "PLANTERS Garlic Chili Crisp cashews 5oz"
+      },
+      {
+        "rank": 15,
+        "score": 0.536,
+        "store": "Hy-Vee",
+        "product": "PLANTERS Garlic Chili Crisp cashews 5oz, 5 OZ"
+      },
+      {
+        "rank": 16,
+        "score": 0.5267,
+        "store": "Baker's",
+        "product": "Sensible Portions Garden Veggie Straws Avocado Oil Zesty Ranch Veggie Chips"
+      },
+      {
+        "rank": 17,
+        "score": 0.5261,
+        "store": "Walmart",
+        "product": "Pictsweet Farms Frozen Seasoned Vegetables for the Air Fryer Red Potatoes Onions & Sweet Peppers, 14 oz"
+      },
+      {
+        "rank": 18,
+        "score": 0.5256,
+        "store": "Aldi",
+        "product": "Earthly Grains Garlic Herb Long Grain Wild Rice Mix 5.9 OZ"
+      },
+      {
+        "rank": 19,
+        "score": 0.5254,
+        "store": "Family Fare",
+        "product": "Tone's Ginger, Ground 0.55 Oz"
+      },
+      {
+        "rank": 20,
+        "score": 0.5248,
+        "store": "Walmart",
+        "product": "Great Value Sliced Olives, 3.8 oz"
+      },
+      {
+        "rank": 21,
+        "score": 0.5233,
+        "store": "Family Fare",
+        "product": "Our Family Tomatoes, Crushed 28 Oz"
+      },
+      {
+        "rank": 22,
+        "score": 0.5233,
+        "store": "Family Fare",
+        "product": "Our Family Tomatoes, Crushed 15 Oz"
+      },
+      {
+        "rank": 23,
+        "score": 0.5217,
+        "store": "Family Fare",
+        "product": "Our Family Ice Cream Sandwiches, Cookies 'N Cream 12 Ea"
+      },
+      {
+        "rank": 24,
+        "score": 0.5193,
+        "store": "Walmart",
+        "product": "Outshine Blueberry Lemonade Fruit Blends Frozen Fruit Bars, 6 Count"
+      },
+      {
+        "rank": 25,
+        "score": 0.5188,
+        "store": "Walmart",
+        "product": "VAHDAM Garlic Granules Spice, 2.47 oz   Granulated Dried Garlic (Allium sativum), Non-GMO, Gluten-Free Seasoning for Cooking"
+      }
+    ],
+    "ground-ginger": [
+      {
+        "rank": 1,
+        "score": 0.685,
+        "store": "Walmart",
+        "product": "Great Value Organic Ginger Ground 1.6 oz"
+      },
+      {
+        "rank": 2,
+        "score": 0.6628,
+        "store": "Walmart",
+        "product": "VAHDAM Organic Ginger Powder Spice, 2.47 oz USDA Organic Ground Ginger Root, Non-GMO, Gluten-Free Cooking & Baking Spice"
+      },
+      {
+        "rank": 3,
+        "score": 0.6159,
+        "store": "Family Fare",
+        "product": "Finest Reserve Ginger, Ground 1.6 Oz"
+      },
+      {
+        "rank": 4,
+        "score": 0.6093,
+        "store": "Family Fare",
+        "product": "Tone's Ginger, Ground 0.55 Oz"
+      },
+      {
+        "rank": 5,
+        "score": 0.6079,
+        "store": "Walmart",
+        "product": "Gourmet Garden Ginger Stir-in Paste, 4.0 oz Tube"
+      },
+      {
+        "rank": 6,
+        "score": 0.5785,
+        "store": "Walmart",
+        "product": "Pyure Organic Stevia Blend   Granulated Sugar Substitute with Zero Calories & Carbs   Keto, Diabetic & Vegan Friendly   Sugary Taste Alternative   USDA Organic, Non-GMO   Good For Baking   12oz"
+      },
+      {
+        "rank": 7,
+        "score": 0.5765,
+        "store": "Family Fare",
+        "product": "Gatorade Zero Sugar Grape Thirst Quencher Powder 8 Ea"
+      },
+      {
+        "rank": 8,
+        "score": 0.5669,
+        "store": "Walmart",
+        "product": "(2 pack) Seeds Of Change Certified Organic Brown Basmati Rice, Organic Food, 8.5 Oz Pouch. Ready In 90 Seconds!"
+      },
+      {
+        "rank": 9,
+        "score": 0.5662,
+        "store": "Walmart",
+        "product": "Golden Blossom Organic Honey: 100% Unfiltered Honey Imported from Brazil, 24oz bottle, Gluten-Free, Packaged in a Peanut Free and Tree-Nut Free Facility."
+      },
+      {
+        "rank": 10,
+        "score": 0.5646,
+        "store": "Walmart",
+        "product": "Crystal Light Drink Mix, 6 Pitcher Packets, for Flavorful Hydration and Shareable Refreshment, Lemonade, natural flavor with other natural flavor, Zero Sugar, Low Calorie, 3.2 oz"
+      },
+      {
+        "rank": 11,
+        "score": 0.5574,
+        "store": "Aldi",
+        "product": "Earthly Grains Roasted Vegetable Chicken Long Grain Wild Rice Mix 6.3 OZ"
+      },
+      {
+        "rank": 12,
+        "score": 0.5565,
+        "store": "Walmart",
+        "product": "VAHDAM Garlic Granules Spice, 2.47 oz   Granulated Dried Garlic (Allium sativum), Non-GMO, Gluten-Free Seasoning for Cooking"
+      },
+      {
+        "rank": 13,
+        "score": 0.5543,
+        "store": "Walmart",
+        "product": "Spring Valley Ginger Root Dietary Supplement Capsules for Digestive Health, 550 mg, 100 Count"
+      },
+      {
+        "rank": 14,
+        "score": 0.5522,
+        "store": "Baker's",
+        "product": "Simple Truth Organic Lactose Free 2% Reduced Fat Milk Half Gallon"
+      },
+      {
+        "rank": 15,
+        "score": 0.5515,
+        "store": "Baker's",
+        "product": "Whole Moon Oat Plant Beverage Whole Protein"
+      },
+      {
+        "rank": 16,
+        "score": 0.5503,
+        "store": "Walmart",
+        "product": "Langers Pineapple Juice 100% Pure, 64 Fl Oz \u2013 Natural Sweetness and Refreshing Taste"
+      },
+      {
+        "rank": 17,
+        "score": 0.5471,
+        "store": "Family Fare",
+        "product": "Purina One Adult Classic Ground Chicken & Brown Rice Entree/Beef & Brown Rice Entree Natural Dog Food 6 Ea"
+      },
+      {
+        "rank": 18,
+        "score": 0.547,
+        "store": "Baker's",
+        "product": "Simple Truth Organic Lactose Free Vitamin D Whole Milk Half Gallon"
+      },
+      {
+        "rank": 19,
+        "score": 0.5466,
+        "store": "Walmart",
+        "product": "(3 pack) Great Value Organic Dried Mango Strips, 5 oz"
+      },
+      {
+        "rank": 20,
+        "score": 0.5463,
+        "store": "Walmart",
+        "product": "Ocean Spray\u00ae 100% Grapefruit Juice, 100% Juice, 60 fl oz Bottle"
+      },
+      {
+        "rank": 21,
+        "score": 0.5457,
+        "store": "Aldi",
+        "product": "Green Peppers, Package"
+      },
+      {
+        "rank": 22,
+        "score": 0.5456,
+        "store": "Family Fare",
+        "product": "Pure Kick Drink Mix, Zero Sugar, Hydrate, Concord Grape, 6 Packs 6 Ea"
+      },
+      {
+        "rank": 23,
+        "score": 0.5453,
+        "store": "Walmart",
+        "product": "Marketside Traditional Pulled Rotisserie Seasoned Chicken, 16 oz, 18g of Protein, No Artificial Ingredients, Gluten Free (Refrigerated)"
+      },
+      {
+        "rank": 24,
+        "score": 0.545,
+        "store": "Baker's",
+        "product": "Kodiak Gluten-Free Frontier Oat Power Cakes Protein Pancake and Waffle Mix with 14g Protein"
+      },
+      {
+        "rank": 25,
+        "score": 0.5448,
+        "store": "Walmart",
+        "product": "Carnation Breakfast Essentials Powder Protein Nutritional Shake Drink Mix Packets, Rich Milk Chocolate Breakfast Shake, 10 Count"
+      }
+    ],
+    "red-pepper-flakes": [
+      {
+        "rank": 1,
+        "score": 0.6098,
+        "store": "Family Fare",
+        "product": "Our Family Red Pepper, Crushed 1.5 Oz"
+      },
+      {
+        "rank": 2,
+        "score": 0.5932,
+        "store": "Walmart",
+        "product": "Pictsweet Farms Frozen Seasoned Vegetables for the Air Fryer Red Potatoes Onions & Sweet Peppers, 14 oz"
+      },
+      {
+        "rank": 3,
+        "score": 0.5913,
+        "store": "Aldi",
+        "product": "Green Peppers, Package"
+      },
+      {
+        "rank": 4,
+        "score": 0.5855,
+        "store": "Walmart",
+        "product": "Farmers Market Foods Farmers Market  Pumpkin, 15 oz"
+      },
+      {
+        "rank": 5,
+        "score": 0.5855,
+        "store": "Walmart",
+        "product": "Farmers Market Foods Farmers Market Pumpkin, 15 oz"
+      },
+      {
+        "rank": 6,
+        "score": 0.5813,
+        "store": "Aldi",
+        "product": "Multi-Colored Peppers, Package"
+      },
+      {
+        "rank": 7,
+        "score": 0.5771,
+        "store": "Aldi",
+        "product": "Multi Colored Peppers Package 3 CT"
+      },
+      {
+        "rank": 8,
+        "score": 0.5653,
+        "store": "Aldi",
+        "product": "Pringles Potato Crisps Chips Lunch Snacks ON The GO Snacks Cheddar Cheese 7.1 OZ"
+      },
+      {
+        "rank": 9,
+        "score": 0.5648,
+        "store": "Walmart",
+        "product": "Great Value Restaurant Style Pepper Refill, 4.7 oz"
+      },
+      {
+        "rank": 10,
+        "score": 0.5631,
+        "store": "Walmart",
+        "product": "Great Value Chopped Green Peppers, 10 oz (Frozen)"
+      },
+      {
+        "rank": 11,
+        "score": 0.5627,
+        "store": "Baker's",
+        "product": "Kroger Frozen Green Peppers Chopped"
+      },
+      {
+        "rank": 12,
+        "score": 0.5586,
+        "store": "Family Fare",
+        "product": "Fresh Sweet Peppers, Mini Mix"
+      },
+      {
+        "rank": 13,
+        "score": 0.5564,
+        "store": "Aldi",
+        "product": "Pringles Potato Crisps Chips Lunch Snacks Snacks ON The GO Original 6.8 OZ"
+      },
+      {
+        "rank": 14,
+        "score": 0.5549,
+        "store": "Walmart",
+        "product": "Snack Pack SOUR PATCH KIDS BLUE RASPBERRY Flavored Juicy Gels, 6 Count Snack Cups"
+      },
+      {
+        "rank": 15,
+        "score": 0.5517,
+        "store": "Baker's",
+        "product": "Cesar Filets in Gravy Wet Dog Food Mini-Pouch Rotisserie Chicken"
+      },
+      {
+        "rank": 16,
+        "score": 0.5489,
+        "store": "Aldi",
+        "product": "Tuscan Garden Roasted Red Pepper Pieces"
+      },
+      {
+        "rank": 17,
+        "score": 0.5489,
+        "store": "Aldi",
+        "product": "Tuscan Garden Roasted Red Pepper Pieces 12 OZ"
+      },
+      {
+        "rank": 18,
+        "score": 0.542,
+        "store": "Walmart",
+        "product": "Great Value Jalapeno Pepper Slices, 12 oz"
+      },
+      {
+        "rank": 19,
+        "score": 0.5406,
+        "store": "Aldi",
+        "product": "Earthly Grains Roasted Vegetable Chicken Long Grain Wild Rice Mix 6.3 OZ"
+      },
+      {
+        "rank": 20,
+        "score": 0.5395,
+        "store": "Walmart",
+        "product": "TEDDY GRAHAMS Cinnamon Graham Snacks, Kids Snacks, 10 oz"
+      },
+      {
+        "rank": 21,
+        "score": 0.538,
+        "store": "Aldi",
+        "product": "Tuscan Garden Roasted Red Pepper Strips 12 OZ"
+      },
+      {
+        "rank": 22,
+        "score": 0.5368,
+        "store": "Walmart",
+        "product": "TEDDY GRAHAMS Chocolate Graham Snacks, Kids Snacks, 10 oz"
+      },
+      {
+        "rank": 23,
+        "score": 0.5355,
+        "store": "Baker's",
+        "product": "RED PEPPER CRUSHED - SIMPLE TRUTH ORGANIC - 1.16 OZ"
+      },
+      {
+        "rank": 24,
+        "score": 0.5327,
+        "store": "Baker's",
+        "product": "Pilgrim's Pride Brand Fully Cooked Boneless Chicken Bites Breaded Chicken Breast Bites"
+      },
+      {
+        "rank": 25,
+        "score": 0.5324,
+        "store": "Baker's",
+        "product": "Pilgrim's x Flamin' Hot Fully Cooked Boneless Chicken Bites Breaded Chicken Breast Bites"
+      }
+    ],
+    "onion-powder": [
+      {
+        "rank": 1,
+        "score": 0.5956,
+        "store": "Walmart",
+        "product": "VAHDAM Organic Ginger Powder Spice, 2.47 oz USDA Organic Ground Ginger Root, Non-GMO, Gluten-Free Cooking & Baking Spice"
+      },
+      {
+        "rank": 2,
+        "score": 0.5835,
+        "store": "Walmart",
+        "product": "Pictsweet Farms Frozen Seasoned Vegetables for the Air Fryer Red Potatoes Onions & Sweet Peppers, 14 oz"
+      },
+      {
+        "rank": 3,
+        "score": 0.5713,
+        "store": "Walmart",
+        "product": "Snack Pack Banana Cream Pie Flavored Pudding, 3.25 oz Pudding Cups, 4 Count"
+      },
+      {
+        "rank": 4,
+        "score": 0.5638,
+        "store": "Walmart",
+        "product": "VAHDAM Garlic Granules Spice, 2.47 oz   Granulated Dried Garlic (Allium sativum), Non-GMO, Gluten-Free Seasoning for Cooking"
+      },
+      {
+        "rank": 5,
+        "score": 0.559,
+        "store": "Baker's",
+        "product": "Nature's Bounty Apple Cider Vinegar Raspberry Pomegranate Gummies, 500mg"
+      },
+      {
+        "rank": 6,
+        "score": 0.5567,
+        "store": "Walmart",
+        "product": "Pomi Chopped Tomatoes, 26.46 oz, 1/4 Cup per serving, 12 servings per Container"
+      },
+      {
+        "rank": 7,
+        "score": 0.5528,
+        "store": "Walmart",
+        "product": "S&B Golden Curry Sauce Mix, Hot, 3.2 oz., Powder, Contains W"
+      },
+      {
+        "rank": 8,
+        "score": 0.5516,
+        "store": "Walmart",
+        "product": "NPG Premium Dark Soy Sauce 16.9 Fl Oz, All Purpose Seasoning for Sushi, Chinese & Korean Cuisine Authentic Flavor Enhancer for Stir Fry"
+      },
+      {
+        "rank": 9,
+        "score": 0.5502,
+        "store": "Walmart",
+        "product": "Fire & Smoke Society Potato Slayer Vegetable Seasoning Blend, 5 Ounce Mixed Spices & Seasonings"
+      },
+      {
+        "rank": 10,
+        "score": 0.5484,
+        "store": "Aldi",
+        "product": "Pringles Potato Crisps Chips Lunch Snacks ON The GO Snacks Cheddar Cheese 7.1 OZ"
+      },
+      {
+        "rank": 11,
+        "score": 0.5479,
+        "store": "Baker's",
+        "product": "POM Wonderful Antioxidant Super Tea Pomegranate Peach Passion White Tea"
+      },
+      {
+        "rank": 12,
+        "score": 0.5472,
+        "store": "Walmart",
+        "product": "Kernel Seasons Jumbo White Cheddar Gourmet Popcorn Seasoning 8.5 oz Shaker"
+      },
+      {
+        "rank": 13,
+        "score": 0.5464,
+        "store": "Walmart",
+        "product": "Pyure Organic Stevia Blend   Granulated Sugar Substitute with Zero Calories & Carbs   Keto, Diabetic & Vegan Friendly   Sugary Taste Alternative   USDA Organic, Non-GMO   Good For Baking   12oz"
+      },
+      {
+        "rank": 14,
+        "score": 0.5432,
+        "store": "Baker's",
+        "product": "Kodiak Gluten-Free Frontier Oat Power Cakes Protein Pancake and Waffle Mix with 14g Protein"
+      },
+      {
+        "rank": 15,
+        "score": 0.542,
+        "store": "Walmart",
+        "product": "(12 pack) Lipton Recipe Secrets Onion Dry Recipe Soup and Di"
+      },
+      {
+        "rank": 16,
+        "score": 0.5411,
+        "store": "Walmart",
+        "product": "(2 pack) Seeds Of Change Certified Organic Brown Basmati Rice, Organic Food, 8.5 Oz Pouch. Ready In 90 Seconds!"
+      },
+      {
+        "rank": 17,
+        "score": 0.541,
+        "store": "Baker's",
+        "product": "Sensible Portions Garden Veggie Straws Avocado Oil Sea Salt Veggie Chips"
+      },
+      {
+        "rank": 18,
+        "score": 0.541,
+        "store": "Walmart",
+        "product": "Dan-O's Cheesoning Seasoning - All-Purpose - Parmesan, Italian, Pasta Seasoning - Small bottle (2.6 oz)"
+      },
+      {
+        "rank": 19,
+        "score": 0.5406,
+        "store": "Aldi",
+        "product": "Priano Cheese Microwaveable Ravioli Premium Pasta Stuffed With A Smooth Blend OF Fresh Ricotta Cheese Seasonings 25 OZ"
+      },
+      {
+        "rank": 20,
+        "score": 0.5386,
+        "store": "Walmart",
+        "product": "OLLY Metabolism Gummy Ring Supplement, Apple Cider Vinegar, Vitamin B12, Chromium Picolinate, Apple Flavored, 30 Count"
+      },
+      {
+        "rank": 21,
+        "score": 0.5376,
+        "store": "Baker's",
+        "product": "Private Selection Petite Spudlings Gourmet Red and Gold Potatoes"
+      },
+      {
+        "rank": 22,
+        "score": 0.537,
+        "store": "Baker's",
+        "product": "Private Selection Red Mini Petite Spudlings Gourmet Potatoes"
+      },
+      {
+        "rank": 23,
+        "score": 0.5362,
+        "store": "Walmart",
+        "product": "(4 pack) Great Value Mango Peach Flavored, 100% Juice, 64 fl oz"
+      },
+      {
+        "rank": 24,
+        "score": 0.5343,
+        "store": "Baker's",
+        "product": "Tasteful Selections 16oz Cheesy Bliss Potatoes Creamy Gouda"
+      },
+      {
+        "rank": 25,
+        "score": 0.5341,
+        "store": "Walmart",
+        "product": "Kinder's Garlic and Herb Chicken Seasoning Blend with Italian Herbs and Lemon, 1 oz Packet"
+      }
+    ],
+    "garlic-powder": [
+      {
+        "rank": 1,
+        "score": 0.6318,
+        "store": "Walmart",
+        "product": "VAHDAM Garlic Granules Spice, 2.47 oz   Granulated Dried Garlic (Allium sativum), Non-GMO, Gluten-Free Seasoning for Cooking"
+      },
+      {
+        "rank": 2,
+        "score": 0.6002,
+        "store": "Family Fare",
+        "product": "Garlic, Powder Tones"
+      },
+      {
+        "rank": 3,
+        "score": 0.5689,
+        "store": "Family Fare",
+        "product": "The Little Potato Co. Potatoes, Garlic & Herb, Fresh 1 Lb"
+      },
+      {
+        "rank": 4,
+        "score": 0.5648,
+        "store": "Aldi",
+        "product": "Earthly Grains Garlic Herb Long Grain Wild Rice Mix 5.9 OZ"
+      },
+      {
+        "rank": 5,
+        "score": 0.564,
+        "store": "Walmart",
+        "product": "Kinder's Garlic and Herb Chicken Seasoning Blend with Italian Herbs and Lemon, 1 oz Packet"
+      },
+      {
+        "rank": 6,
+        "score": 0.561,
+        "store": "Walmart",
+        "product": "VAHDAM Organic Ginger Powder Spice, 2.47 oz USDA Organic Ground Ginger Root, Non-GMO, Gluten-Free Cooking & Baking Spice"
+      },
+      {
+        "rank": 7,
+        "score": 0.5545,
+        "store": "Walmart",
+        "product": "Pictsweet Farms Frozen Seasoned Vegetables for the Air Fryer Red Potatoes Onions & Sweet Peppers, 14 oz"
+      },
+      {
+        "rank": 8,
+        "score": 0.5538,
+        "store": "Walmart",
+        "product": "Grill Mates Roasted Garlic & Herb Seasoning, 2.75 oz Bottle"
+      },
+      {
+        "rank": 9,
+        "score": 0.551,
+        "store": "Walmart",
+        "product": "The Laughing Cow Garlic and Herb Spreadable Cheese Wedge, 5.4 oz Box. Refrigerated"
+      },
+      {
+        "rank": 10,
+        "score": 0.5498,
+        "store": "Walmart",
+        "product": "Pyure Organic Stevia Blend   Granulated Sugar Substitute with Zero Calories & Carbs   Keto, Diabetic & Vegan Friendly   Sugary Taste Alternative   USDA Organic, Non-GMO   Good For Baking   12oz"
+      },
+      {
+        "rank": 11,
+        "score": 0.5497,
+        "store": "Aldi",
+        "product": "Pringles Potato Crisps Chips Lunch Snacks ON The GO Snacks Cheddar Cheese 7.1 OZ"
+      },
+      {
+        "rank": 12,
+        "score": 0.5495,
+        "store": "Baker's",
+        "product": "Goli Nutrition Apple Cider Vinegar+ (Zero Sugar) Gummies"
+      },
+      {
+        "rank": 13,
+        "score": 0.5483,
+        "store": "Baker's",
+        "product": "Stacy's Baked Pita Chips Parmesan Garlic & Herb"
+      },
+      {
+        "rank": 14,
+        "score": 0.5465,
+        "store": "Baker's",
+        "product": "Private Selection Garlic and Herb Pulled Roasted Chicken Cold"
+      },
+      {
+        "rank": 15,
+        "score": 0.5454,
+        "store": "Baker's",
+        "product": "Goli Nutrition Apple Cider Vinegar Gummies"
+      },
+      {
+        "rank": 16,
+        "score": 0.5438,
+        "store": "Walmart",
+        "product": "OLLY Metabolism Gummy Ring Supplement, Apple Cider Vinegar, Vitamin B12, Chromium Picolinate, Apple Flavored, 30 Count"
+      },
+      {
+        "rank": 17,
+        "score": 0.5436,
+        "store": "Walmart",
+        "product": "Riega Garlic Crunch Shaker, Large-Cut Garlic Herb Seasoning, 3.7 oz"
+      },
+      {
+        "rank": 18,
+        "score": 0.541,
+        "store": "Walmart",
+        "product": "Grill Mates Garlic Butter Seasoning, 6.56 oz Bottle"
+      },
+      {
+        "rank": 19,
+        "score": 0.5402,
+        "store": "Aldi",
+        "product": "Green Peppers, Package"
+      },
+      {
+        "rank": 20,
+        "score": 0.5401,
+        "store": "Baker's",
+        "product": "Nature's Bounty Apple Cider Vinegar Raspberry Pomegranate Gummies, 500mg"
+      },
+      {
+        "rank": 21,
+        "score": 0.5396,
+        "store": "Baker's",
+        "product": "McCormick GRILL MATES Garlic, Herb & Wine Marinade Seasoning Mix"
+      },
+      {
+        "rank": 22,
+        "score": 0.5395,
+        "store": "Walmart",
+        "product": "Farmers Market Foods Farmers Market  Pumpkin, 15 oz"
+      },
+      {
+        "rank": 23,
+        "score": 0.5395,
+        "store": "Walmart",
+        "product": "Farmers Market Foods Farmers Market Pumpkin, 15 oz"
+      },
+      {
+        "rank": 24,
+        "score": 0.5388,
+        "store": "Hy-Vee",
+        "product": "PLANTERS Garlic Chili Crisp cashews 5oz, 5 OZ"
+      },
+      {
+        "rank": 25,
+        "score": 0.5388,
+        "store": "Baker's",
+        "product": "PLANTERS Garlic Chili Crisp cashews 5oz"
+      }
+    ],
+    "minced-garlic": [
+      {
+        "rank": 1,
+        "score": 0.5915,
+        "store": "Walmart",
+        "product": "VAHDAM Garlic Granules Spice, 2.47 oz   Granulated Dried Garlic (Allium sativum), Non-GMO, Gluten-Free Seasoning for Cooking"
+      },
+      {
+        "rank": 2,
+        "score": 0.59,
+        "store": "Family Fare",
+        "product": "Sugar N Spice Garlic Minced Pp"
+      },
+      {
+        "rank": 3,
+        "score": 0.5765,
+        "store": "Aldi",
+        "product": "Earthly Grains Garlic Herb Long Grain Wild Rice Mix 5.9 OZ"
+      },
+      {
+        "rank": 4,
+        "score": 0.5744,
+        "store": "Family Fare",
+        "product": "The Little Potato Co. Potatoes, Garlic & Herb, Fresh 1 Lb"
+      },
+      {
+        "rank": 5,
+        "score": 0.5686,
+        "store": "Baker's",
+        "product": "Private Selection Garlic and Herb Roasted Chicken Leg Quarters Cold"
+      },
+      {
+        "rank": 6,
+        "score": 0.5568,
+        "store": "Baker's",
+        "product": "Private Selection Garlic and Herb Whole Roasted Chicken Cold"
+      },
+      {
+        "rank": 7,
+        "score": 0.5539,
+        "store": "Baker's",
+        "product": "Stacy's Baked Pita Chips Parmesan Garlic & Herb"
+      },
+      {
+        "rank": 8,
+        "score": 0.5531,
+        "store": "Baker's",
+        "product": "Private Selection Garlic and Herb Pulled Roasted Chicken Cold"
+      },
+      {
+        "rank": 9,
+        "score": 0.5508,
+        "store": "Baker's",
+        "product": "McCormick GRILL MATES Garlic, Herb & Wine Marinade Seasoning Mix"
+      },
+      {
+        "rank": 10,
+        "score": 0.5507,
+        "store": "Family Fare",
+        "product": "Garlic, Powder Tones"
+      },
+      {
+        "rank": 11,
+        "score": 0.5504,
+        "store": "Walmart",
+        "product": "Kinder's Garlic and Herb Chicken Seasoning Blend with Italian Herbs and Lemon, 1 oz Packet"
+      },
+      {
+        "rank": 12,
+        "score": 0.5487,
+        "store": "Walmart",
+        "product": "Grill Mates Roasted Garlic & Herb Seasoning, 2.75 oz Bottle"
+      },
+      {
+        "rank": 13,
+        "score": 0.5473,
+        "store": "Family Fare",
+        "product": "Rice A Roni Rice, Long Grain & Wild, Original 4.3 Oz"
+      },
+      {
+        "rank": 14,
+        "score": 0.5404,
+        "store": "Aldi",
+        "product": "Little Salad Bar Shredded Lettuce Finely Chopped Iceberg Lettuce For Tacos Snadwiches And Salads 8 OZ"
+      },
+      {
+        "rank": 15,
+        "score": 0.5374,
+        "store": "Aldi",
+        "product": "Pringles Potato Crisps Chips Lunch Snacks ON The GO Snacks Cheddar Cheese 7.1 OZ"
+      },
+      {
+        "rank": 16,
+        "score": 0.533,
+        "store": "Walmart",
+        "product": "Farmers Market Foods Farmers Market Pumpkin, 15 oz"
+      },
+      {
+        "rank": 17,
+        "score": 0.533,
+        "store": "Walmart",
+        "product": "Farmers Market Foods Farmers Market  Pumpkin, 15 oz"
+      },
+      {
+        "rank": 18,
+        "score": 0.5321,
+        "store": "Walmart",
+        "product": "Kinder's Italian Herb Seasoning Blend with Sea Salt and Garlic, 5.3 oz"
+      },
+      {
+        "rank": 19,
+        "score": 0.527,
+        "store": "Family Fare",
+        "product": "Heinz Vinegar, Flavored Distilled, Apple Cider 64 Oz"
+      },
+      {
+        "rank": 20,
+        "score": 0.5269,
+        "store": "Family Fare",
+        "product": "Fresh Ham, Half Spiral Sliced Our Family  (Limit 1. See Ad For Details)"
+      },
+      {
+        "rank": 21,
+        "score": 0.5258,
+        "store": "Family Fare",
+        "product": "Fresh Gourmet Fresh Gourmet Garlic Ginger Wonton Strips 3.5 Oz"
+      },
+      {
+        "rank": 22,
+        "score": 0.5256,
+        "store": "Baker's",
+        "product": "Private Selection Garlic and Herb Whole Roasted Chicken Hot - Available 11am-7pm"
+      },
+      {
+        "rank": 23,
+        "score": 0.5254,
+        "store": "Walmart",
+        "product": "Riega Garlic Crunch Shaker, Large-Cut Garlic Herb Seasoning, 3.7 oz"
+      },
+      {
+        "rank": 24,
+        "score": 0.5252,
+        "store": "Walmart",
+        "product": "Freshness Guaranteed Merchandise"
+      },
+      {
+        "rank": 25,
+        "score": 0.5247,
+        "store": "Baker's",
+        "product": "Private Selection Garlic and Herb Whole Roasted Chicken Hot - Available 11am-8pm"
+      }
+    ]
+  },
+  "negatives_detail": [
+    {
+      "commodity": "Coconut Oil",
+      "store": "Baker's",
+      "product": "Dr Teal's Foaming Bath with Pure Epsom Salt, Nourish & Protect with Coconut Oil",
+      "cos": 0.4656,
+      "ce": 0.0007
+    },
+    {
+      "commodity": "Coffee (ground/beans)",
+      "store": "Walmart",
+      "product": "Onyx Coffee Lab Salted Mocha Oat Milk Latte , 11 fl oz Can",
+      "cos": 0.4593,
+      "ce": 0.0001
+    },
+    {
+      "commodity": "Coffee (ground/beans)",
+      "store": "Walmart",
+      "product": "Onyx Coffee Lab Salted Mocha Oat Milk Latte, 11 fl oz Can",
+      "cos": 0.4507,
+      "ce": 0.0001
+    },
+    {
+      "commodity": "Coffee (ground/beans)",
+      "store": "Walmart",
+      "product": "(2 pack) Onyx Coffee Lab Matcha Oat Milk Latte, 11 fl oz Can",
+      "cos": 0.5035,
+      "ce": 0.0002
+    },
+    {
+      "commodity": "Frosting",
+      "store": "Walmart",
+      "product": "Freshness Guaranteed Shelf Stable Chocolate Chip Sandwich Cookies with Butter Cream Icing, 12 Count",
+      "cos": 0.5481,
+      "ce": 0.0021
+    },
+    {
+      "commodity": "Parmesan (grated/shredded)",
+      "store": "Aldi",
+      "product": "Clancy S Parmesan Garlic Pita Chips 7.33 OZ",
+      "cos": 0.4946,
+      "ce": 0.0002
+    },
+    {
+      "commodity": "Parmesan (grated/shredded)",
+      "store": "Aldi",
+      "product": "Clancy's Parmesan Garlic Pita Chips",
+      "cos": 0.4996,
+      "ce": 0.0002
+    },
+    {
+      "commodity": "Parmesan (grated/shredded)",
+      "store": "Baker's",
+      "product": "Idahoan Baby Reds with Roasted Garlic & Parmesan Mashed Potatoes",
+      "cos": 0.4518,
+      "ce": 0.0004
+    },
+    {
+      "commodity": "Salmon (fillets)",
+      "store": "Walmart",
+      "product": "Blue Buffalo Wilderness Natural High Protein Dry Food for Adult Cats, Salmon, 9.5-lb Bag",
+      "cos": 0.5882,
+      "ce": 0.0023
+    },
+    {
+      "commodity": "Ground Cinnamon",
+      "store": "Walmart",
+      "product": "TEDDY GRAHAMS Cinnamon Graham Snacks, Kids Snacks, 10 oz",
+      "cos": 0.6129,
+      "ce": 0.0012
+    },
+    {
+      "commodity": "Laundry Stain Remover",
+      "store": "Walmart",
+      "product": "Lysol Toilet Bowl Cleaner Clinging Gel, Power, Disinfecting Bathroom Cleaner and Toilet Bowl Stain Remover, 24 oz (2 Pack)",
+      "cos": 0.589,
+      "ce": 0.0055
+    },
+    {
+      "commodity": "Butter",
+      "store": "Walmart",
+      "product": "Nature's Own Butter Buns Hot Dog Buns, Non-GMO Hot Dog Buns, 8 Count",
+      "cos": 0.5405,
+      "ce": 0.004
+    },
+    {
+      "commodity": "Tomatoes (fresh)",
+      "store": "Family Fare",
+      "product": "Contadina Roma Tomatoes Puree 29 Oz",
+      "cos": 0.521,
+      "ce": 0.0026
+    },
+    {
+      "commodity": "Tomatoes (fresh)",
+      "store": "Family Fare",
+      "product": "Contadina Roma Tomatoes Puree",
+      "cos": 0.521,
+      "ce": 0.0026
+    },
+    {
+      "commodity": "Raspberries",
+      "store": "Family Fare",
+      "product": "Ken's Steak House Salad Dressing & Marinade, Raspberry Walnut Vinaigrette, Lite 16 Fl Oz",
+      "cos": 0.4244,
+      "ce": 0.0
+    },
+    {
+      "commodity": "Raspberries",
+      "store": "Baker's",
+      "product": "Pure Silk Raspberry Mist Moisturizing Shave Cream",
+      "cos": 0.3852,
+      "ce": 0.0001
+    },
+    {
+      "commodity": "Strawberries",
+      "store": "Sam's Club",
+      "product": "Monster Energy Zero Sugar, Strawberry Shot, 16 fl. oz., 24 pk.",
+      "cos": 0.4509,
+      "ce": 0.0023
+    },
+    {
+      "commodity": "Strawberries",
+      "store": "Family Fare",
+      "product": "Jumex Strawberry Banana Nectar From Concentrate 11.3 Fl Oz",
+      "cos": 0.4652,
+      "ce": 0.0004
+    },
+    {
+      "commodity": "Strawberries",
+      "store": "Baker's",
+      "product": "Kroger Strawberry Applesauce",
+      "cos": 0.5762,
+      "ce": 0.0001
+    },
+    {
+      "commodity": "Tortillas (flour)",
+      "store": "Sam's Club",
+      "product": "Quest Tortilla Style 10-20g Protein Chip Variety Pack, Salsa Verde and Chili Lime, 14 ct.",
+      "cos": 0.5165,
+      "ce": 0.0005
+    },
+    {
+      "commodity": "Cucumbers",
+      "store": "Sam's Club",
+      "product": "Member's Mark by FujiSan Cucumber Avocado Roll, 15 pcs.",
+      "cos": 0.4927,
+      "ce": 0.001
+    },
+    {
+      "commodity": "Black Pepper (ground)",
+      "store": "Baker's",
+      "product": "Simple Truth Protein Black Pepper Lentils Brown Rice and Ancient Grains Whole Grain Blend",
+      "cos": 0.6277,
+      "ce": 0.0008
+    },
+    {
+      "commodity": "Spinach (fresh)",
+      "store": "Walmart",
+      "product": "Pictsweet Family Size Chopped Spinach",
+      "cos": 0.5301,
+      "ce": 0.0007
+    },
+    {
+      "commodity": "Jalapeno Peppers",
+      "store": "Family Fare",
+      "product": "San Marcos Traditional Recipe Crunchy Whole Jalapenos Peppers 26 Oz",
+      "cos": 0.6093,
+      "ce": 0.4249
+    },
+    {
+      "commodity": "Cloves (ground)",
+      "store": "Family Fare",
+      "product": "Spice Supreme Spice Ground Cloves",
+      "cos": 0.6355,
+      "ce": 0.9999
+    }
+  ]
+}

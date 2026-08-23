@@ -45,11 +45,15 @@
 # today's mined AUC would measure the rules rather than the model. It is the third evaluation
 # record in this estate, beside the frozen defs and the gold set. ~950 KB.
 !/sidecar/data/mine-labelled.json
+# ...and the ADJUDICATED rulings on those pairs, which is the strongest case for tracking in this
+# whole file: a reasoner looked at a product and a commodity and ruled. It cost tokens, it cannot be
+# recomputed by any script, and authority.py gives it the same tier as the Claude review lane.
+!/sidecar/data/mine-adjudicated.json
 # The corpus MANIFEST but not the corpus. train/test.jsonl are 4 MB of text reproducible from the
 # graph + the two records above; the manifest is the split - seed, holdout families, per-source
 # counts - and without it "which rows did that model see" has no answer.
-!/sidecar/data/pair-corpus/
-/sidecar/data/pair-corpus/*.jsonl
+!/sidecar/data/pair-corpus*/
+/sidecar/data/pair-corpus*/*.jsonl
 # Candidate cross-encoders (finetune_reranker.py). 2.2 GB of weights each, reproducible from the
 # corpus manifest + the training card inside the directory, and never the pinned model - a candidate
 # is reached only through --reranker. The CARD is the record and is small enough to keep.
@@ -71,6 +75,10 @@
 !/sidecar/out/backtest-*.json
 !/sidecar/out/hardeval-*.json
 !/sidecar/out/hardeval-report-*.md
+# The rule gaps a reasoner found: pairs where a commodity's own include patterns reject a product
+# that IS that commodity. Each one is a live board defect and none of them is applied by any script,
+# so if this file is not tracked the finding exists only until the next run overwrites it.
+!/sidecar/out/mined-rule-gaps.json
 /sidecar/**/__pycache__/
 # The member-tool SOURCES and the build scripts that publish them. Same hole as lib\ and the interstitial:
 # these run on the live site, several are the only copy in existence, and none of them were versioned

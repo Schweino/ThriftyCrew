@@ -141,6 +141,11 @@ if ($Label) {
     $out.Add([pscustomobject]@{
       product = $name; owner = [string]$r.owner; candidate = $cid
       commodity = $labelOf[$cid]; cos = $r.cos
+      # Carried through from the mining stage, never recomputed here: `via` says WHY the pair was
+      # proposed (the cosine margin, or a round-2 reranker that still believed it) and `ce` is what
+      # that reranker said. A corpus that cannot say which round a negative came from cannot answer
+      # "which pile taught it that" later.
+      delta = $r.delta; via = $r.via; ce = $r.ce
       rules_accept = $acc; source = 'mined-near-miss'
     })
   }

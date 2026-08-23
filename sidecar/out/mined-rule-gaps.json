@@ -1,0 +1,31 @@
+{
+ "generated": "2026-08-23T01:54:21",
+ "ruled_by": "fable",
+ "what": "the candidate commodity's include patterns reject a product a reasoner says IS that commodity - a rule gap, reported not applied",
+ "gaps": [
+  {
+   "candidate": "cheese-crackers",
+   "owner": "crackers",
+   "product": "Great Value Baked Cheddar Cheese Penguin Crackers, 19 oz",
+   "verdict": "YES",
+   "why": "Baked cheddar cheese cracker in a family-size box, same form as Goldfish-style examples.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "egg-noodles",
+   "owner": "egg-whites",
+   "product": "No Yolks Extra Broad Egg White Noodles, 12 ounce bag",
+   "verdict": "YES",
+   "why": "A bagged dry broad noodle sold as the egg-noodle-aisle equivalent, not a liquid egg product.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "turkey-lunchmeat",
+   "owner": "turkey-breast",
+   "product": "Lunch Mate Mesquite Turkey Breast 9 OZ",
+   "verdict": "YES",
+   "why": "Lunch Mate is a deli lunchmeat line the candidate already accepts (Oven Roasted 16 OZ), and 9 oz mesquite turkey reads as sliced lunchmeat.",
+   "ruled_by": "fable"
+  }
+ ]
+}

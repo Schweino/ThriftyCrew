@@ -59,7 +59,7 @@ READ-ONLY on the graph, enforced with PRAGMA query_only.
 """
 from __future__ import annotations
 
-import argparse
+import argparse, hashlib
 import json
 import os
 import random
@@ -203,13 +203,49 @@ def collect(conn: sqlite3.Connection, defs_by_id: dict) -> tuple[list[dict], dic
                WHERE k.type = 'KnownWrong'"""):
         add(r["cid"], r["product"] or "", 0, "known_wrong")
 
+    # -- ADJUDICATED rulings on mined pairs, if a reasoner has been asked (2026-08-23).
+    #    A mined pair's label comes from the candidate commodity's regex, and the pairs a good
+    #    model scores highest are exactly the ones most likely to be MISLABELLED - a true match
+    #    whose regex happens to reject it. A reasoner ruling on those pairs is the same authority
+    #    the Claude review lane carries (authority.py: reviewer -> adjudicated), and it outranks
+    #    the regex here for the same reason a ruling outranks a mined proposal below.
+    #
+    #    UNSURE IS NOT A LABEL. A pair the reasoner declined to call is dropped from the corpus
+    #    entirely rather than falling back to the regex - the whole point of asking was that the
+    #    regex is what is in doubt, and an abstention that quietly becomes a negative is worse
+    #    than never having asked.
+    adjudged: dict[tuple[str, str], str] = {}
+    ap_ = os.path.join(DATA, "mine-adjudicated.json")
+    if os.path.exists(ap_):
+        doc = load_json(ap_)
+        for r in (doc.get("verdicts", []) if isinstance(doc, dict) else doc):
+            v = (r.get("verdict") or "").strip().upper()
+            if v in ("YES", "NO", "UNSURE"):
+                adjudged[(r.get("candidate") or "", clean_product(r.get("product") or ""))] = v
+        log(f"adjudicated rulings on mined pairs: {len(adjudged)} from {os.path.basename(ap_)}")
+    else:
+        stats["missing:mine_adjudicated"] = 1
+
     # -- mined near-misses, if anyone has labelled them yet (see the header)
     mp = os.path.join(DATA, "mine-labelled.json")
     if os.path.exists(mp):
         for r in mined_rows_of(load_json(mp)):
             if r.get("rules_accept"):
                 continue
-            add(r.get("candidate") or "", r.get("product") or "", 0, "mined_near_miss")
+            cid = r.get("candidate") or ""
+            prod = r.get("product") or ""
+            ruling = adjudged.get((cid, clean_product(prod)))
+            if ruling == "UNSURE":
+                stats["abstained:mined_near_miss"] = stats.get("abstained:mined_near_miss", 0) + 1
+                continue
+            if ruling == "YES":
+                # The reasoner says this IS the candidate commodity, so the regex that rejected it
+                # has a gap. The pair becomes a POSITIVE at adjudicated tier; the gap itself is a
+                # rule finding and is reported by the caller, never applied here - this builder
+                # writes a corpus and has no business editing commodities.json.
+                add(cid, prod, 1, "adjudicated_mined_match")
+                continue
+            add(cid, prod, 0, "adjudicated_mined_no_match" if ruling == "NO" else "mined_near_miss")
     else:
         stats["missing:mined_near_miss"] = 1
 
@@ -345,8 +381,23 @@ def main() -> int:
                 f.write(json.dumps(r, ensure_ascii=False) + "\n")
         log(f"wrote {p} ({len(rs)} rows)")
 
+    # WHICH mined file taught this corpus. The negatives are re-mined and re-labelled over time
+    # (round 2 landed the same day as round 1), so a manifest that names the path but not its
+    # CONTENT cannot tell two corpora apart - and "which rows did that model see" is the first
+    # question asked of any candidate months later.
+    def digest(path: str) -> str | None:
+        if not os.path.exists(path):
+            return None
+        h = hashlib.sha256()
+        with open(path, "rb") as f:
+            for chunk in iter(lambda: f.read(65536), b""):
+                h.update(chunk)
+        return h.hexdigest()[:16]
+
     manifest = {
         "generated": time.strftime("%Y-%m-%dT%H:%M:%S"),
+        "mine_labelled_sha256_16": digest(os.path.join(DATA, "mine-labelled.json")),
+        "mine_adjudicated_sha256_16": digest(os.path.join(DATA, "mine-adjudicated.json")),
         "defs": os.path.relpath(defs_path, REPO).replace("\\", "/"),
         "defs_frozen": os.path.abspath(defs_path).startswith(os.path.abspath(FROZEN)),
         "seed": args.seed,

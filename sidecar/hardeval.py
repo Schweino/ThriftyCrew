@@ -113,7 +113,8 @@ def load_defs(path: str | None = None):
     return defs, {d["id"]: d for d in defs}
 
 
-def stage_mine(top_k: int, defs_path: str | None = None, margin: float = 0.08) -> None:
+def stage_mine(top_k: int, defs_path: str | None = None, margin: float = 0.08,
+               rerank_with: str | None = None, keep_above: float = 0.1) -> None:
     """Propose the near-miss pairs. Bi-encoder only - no cross-encoder is loaded, and none is wanted:
     mining decides which pairs are WORTH labelling, and letting the model under test choose its own
     exam would be the same self-citation phase 1 took out of the resolver's memory.
@@ -124,7 +125,7 @@ def stage_mine(top_k: int, defs_path: str | None = None, margin: float = 0.08) -
     """
     prods = load_json(os.path.join(DATA, "mine-products.json"))
     defs, defs_by_id = load_defs(defs_path)
-    m = Matcher.load(with_reranker=False)   # mining is bi-encoder only; no cross-encoder is loaded
+    m = Matcher.load(with_reranker=bool(rerank_with), reranker_path=rerank_with)
     log(f"defs={defs_path or 'commodity-defs.json (today, drifts with the board)'}")
     log(f"device={DEVICE}  products={len(prods)}  commodities={len(defs)}")
 
@@ -155,24 +156,68 @@ def stage_mine(top_k: int, defs_path: str | None = None, margin: float = 0.08) -
             if cid == owner:
                 continue
             cos = float(top.values[i][rank])
-            if ocos is not None and (ocos - cos) > margin:
-                dropped_far += 1
-                continue
-            out.append({
+            row = {
                 "product": p["product"], "owner": owner, "candidate": cid,
                 "cos": round(cos, 4),
                 "owner_cos": (round(ocos, 4) if ocos is not None else None),
                 "delta": (round(ocos - cos, 4) if ocos is not None else None),
-            })
-    log(f"kept {len(out)} within {margin:.3f} cosine of the product's own commodity; "
-        f"dropped {dropped_far} as too far to be a near miss"
+                "via": "margin",
+            }
+            if ocos is not None and (ocos - cos) > margin:
+                dropped_far += 1
+                if rerank_with is None:
+                    continue
+                row["via"] = "far"          # kept for the reranker to judge, dropped if it declines
+            out.append(row)
+    log(f"kept {len(out) - (dropped_far if rerank_with else 0)} within {margin:.3f} cosine of the "
+        f"product's own commodity; {dropped_far} beyond it"
         + (f"; {no_owner} product(s) have no definition for their own commodity" if no_owner else ""))
+
+    # ROUND-2 MINING (2026-08-23). The bi-encoder chose round 1, so round 1 is a list of pairs the
+    # BI-ENCODER finds confusable - and the model being trained is a cross-encoder, which finds
+    # different things confusable. --rerank-with scores every top-k candidate with a trained copy
+    # and keeps the ones IT still believes: its own residual false positives, which is the only
+    # place left where a negative teaches it anything.
+    #
+    # THE HAZARD, named because it is real and it grows with each round. The label on a mined pair
+    # comes from the candidate commodity's regex, and the pairs a good model scores highest are
+    # exactly the ones most likely to be MISLABELLED - a true match whose regex happens to reject
+    # it. Iterating without saying so teaches the model the regex's mistakes, densest precisely
+    # where the signal is supposed to be strongest. Two things hold it: build_pair_corpus.py drops
+    # any mined row an actual ruling contradicts (a mechanical proposal never outranks a ruling),
+    # and the top of this list is meant to be READ before it is trained on. Read on 2026-08-23:
+    # of the top 30, ~28 are genuine form-and-pack confusions (canned corn against frozen-corn,
+    # heavy cream against whipped-cream, liquid detergent against laundry-pods, fresh salmon
+    # against canned-salmon) and 1 is a known regex error the ruling check already removes.
+    if rerank_with:
+        t0 = time.time()
+        pairs = [(clean_product(r["product"]), commodity_text(defs_by_id[r["candidate"]]))
+                 for r in out]
+        ce = m.rerank(pairs)
+        kept = []
+        rescued = 0
+        for r, v in zip(out, ce):
+            r["ce"] = round(float(v), 6)
+            hard = float(v) > keep_above
+            if r["via"] == "far":
+                if not hard:
+                    continue
+                r["via"] = "reranker"
+                rescued += 1
+            elif hard:
+                r["via"] = "both"
+            kept.append(r)
+        out = kept
+        log(f"reranked {len(pairs)} candidate(s) with {rerank_with} in {time.time()-t0:.0f}s; "
+            f"{rescued} pair(s) beyond the cosine margin kept because the reranker still "
+            f"believes them (> {keep_above:g})")
     path = os.path.join(DATA, "mine-candidates.json")
     with open(path, "w", encoding="utf-8") as f:
         json.dump({"generated": time.strftime("%Y-%m-%d %H:%M:%S"),
                    "defs": defs_path or "commodity-defs.json (today)",
                    "defs_frozen": bool(defs_path), "embed_model": EMBED_MODEL,
                    "top_k": top_k, "margin": margin, "dropped_too_far": dropped_far,
+                   "reranked_with": rerank_with, "keep_above": (keep_above if rerank_with else None),
                    "products": len(prods), "commodities": len(defs),
                    "pairs": out}, f, indent=1)
     log(f"mine-candidates.json: {len(out)} near-miss candidate pair(s) -> label them with "
@@ -424,6 +469,13 @@ if __name__ == "__main__":
                          "fine-tune is measured on rows it cannot have seen. See holdout_families(): "
                          "without this, a candidate trained on the board pairs and the known-wrong "
                          "rulings is being scored on its own training data.")
+    ap.add_argument("--rerank-with", default=None, metavar="MODEL",
+                    help="round-2 mining: score every top-k candidate with this cross-encoder and "
+                         "ALSO keep the ones it still scores above --keep-above, whatever the "
+                         "cosine margin says. Read stage_mine() on the hazard before using it.")
+    ap.add_argument("--keep-above", type=float, default=0.1,
+                    help="the reranker's cut for round-2 mining. Measured 2026-08-23: 0.1 adds 431 "
+                         "pairs the bi-encoder margin never surfaced; 0.9 adds only 159.")
     ap.add_argument("--defs", default=None,
                     help="a FROZEN commodity-defs.json to score against instead of today's. Required "
                          "in practice for any before/after: see load_defs().")
@@ -432,6 +484,7 @@ if __name__ == "__main__":
     if tag is None:
         ap.error("--tag is required with --reranker (try --tag ft-v1)")
     if a.stage == "mine":
-        stage_mine(a.top_k, defs_path=a.defs, margin=a.margin)
+        stage_mine(a.top_k, defs_path=a.defs, margin=a.margin,
+                   rerank_with=a.rerank_with, keep_above=a.keep_above)
     else:
         stage_score(reranker=a.reranker, tag=tag, defs_path=a.defs, corpus_dir=a.holdout_from)

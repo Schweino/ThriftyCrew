@@ -54,7 +54,14 @@ param([switch]$PrepareOnly, [switch]$SelfTest, [int]$MaxReport = 25, [string]$Py
       # would mean the last sweep of the day silently overwrote contested-scores.json with a
       # 15-of-435 version scored by the wrong model. One default, every caller, one file.
       [string]$ContestedDefs = (Join-Path (Split-Path $PSScriptRoot -Parent) 'sidecar\data\commodity-defs-graph.json'),
-      [string]$Helper = (Join-Path (Split-Path $PSScriptRoot -Parent) 'sidecar\models\resolve-ce-v1'),
+      # v3 promoted 2026-08-23 over v1 on the rule set before the run: it beats v1 on ALL THREE cold
+      # hardeval numbers (OLD .9958/.9938, GOLD .9939/.9920, MINED .9881/.9862 - GOLD deciding) and
+      # disagrees with the local model on 0 of the 435 live contested pairs at the 1e-4 threshold.
+      # The trade it makes is worth naming: it filters 18 a night where v1 filtered 21, and buys
+      # that with ZERO false rejects on the cold holdout where v1 loses 2. For a reject-only filter
+      # whose failure mode is a cell that never gets priced, fewer-and-safer is the right side.
+      # v1 remains on disk; this line is the whole of the change and the whole of the revert.
+      [string]$Helper = (Join-Path (Split-Path $PSScriptRoot -Parent) 'sidecar\models\resolve-ce-v3'),
       [switch]$NoHelper)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')

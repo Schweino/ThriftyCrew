@@ -1,0 +1,45 @@
+{
+  "generated": "2026-08-23T01:54:45",
+  "mine_labelled_sha256_16": "47c30a9c161bbccf",
+  "mine_adjudicated_sha256_16": "749b99591aeb9631",
+  "defs": "sidecar/data/frozen/phase3-baseline/commodity-defs.json",
+  "defs_frozen": true,
+  "seed": 20260822,
+  "holdout_families": [
+    "dairy",
+    "frozen",
+    "household",
+    "pet"
+  ],
+  "counts": {
+    "raw": 10859,
+    "conflicted_dropped": 2,
+    "kept": 9290,
+    "train": {
+      "pos": 2958,
+      "neg": 4395
+    },
+    "test": {
+      "pos": 718,
+      "neg": 1219
+    }
+  },
+  "sources": {
+    "gold_no_match": 564,
+    "gold_match": 1061,
+    "skipped:gold_match:no-definition": 40,
+    "skipped:accepted_pair:no-definition": 307,
+    "accepted_pair": 3105,
+    "adjudicated_known_wrong": 65,
+    "adjudicated_llm_confirmed": 375,
+    "excluded:single_model": 3315,
+    "adjudicated_llm_rejected": 377,
+    "known_wrong": 191,
+    "mined_near_miss": 4908,
+    "adjudicated_mined_no_match": 212,
+    "abstained:mined_near_miss": 9,
+    "adjudicated_mined_match": 3,
+    "overruled:mined_near_miss": 2
+  },
+  "excluded_by_design": "single-model rejections (see the module header)"
+}

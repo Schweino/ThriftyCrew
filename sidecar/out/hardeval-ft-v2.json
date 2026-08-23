@@ -1,0 +1,15 @@
+{
+  "tag": "ft-v2",
+  "embed_model": "BAAI/bge-m3",
+  "rerank_model": "sidecar/models/resolve-ce-v2",
+  "is_pinned_model": false,
+  "generated": "2026-08-23 01:45:14",
+  "positives": 2816,
+  "old": 25,
+  "gold": 45,
+  "mined": 5132,
+  "holdout_only": null,
+  "auc_old": 0.9965767045454546,
+  "auc_gold": 0.9963028724747475,
+  "auc_mined": 0.9965100674577517
+}

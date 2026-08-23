@@ -1,0 +1,1809 @@
+{
+ "generated": "2026-08-23T01:54:21",
+ "ruled_by": "fable",
+ "asked": 224,
+ "answered": 224,
+ "unanswered": 0,
+ "unmatched_dropped": 0,
+ "duplicates": 0,
+ "counts": {
+  "YES": 3,
+  "NO": 212,
+  "UNSURE": 9
+ },
+ "authority": "adjudicated - a reasoner's ruling, the tier authority.py gives the review lane. It overrides the mined pair's regex label in build_pair_corpus.py.",
+ "verdicts": [
+  {
+   "candidate": "air-freshener",
+   "owner": "laundry-detergent",
+   "product": "Arm & Hammer Plus Oxiclean Fresh Scent",
+   "verdict": "NO",
+   "why": "A&H Plus OxiClean is a laundry detergent line, not an air freshener spray.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "all-purpose-cleaner",
+   "owner": "oven-cleaner",
+   "product": "EASY-OFF Fume Free Oven Cleaner Spray Lemon",
+   "verdict": "NO",
+   "why": "A dedicated oven cleaner, not a multi-purpose cleaner.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "all-purpose-cleaner",
+   "owner": "glass-cleaner",
+   "product": "Hy-Vee Glass Cleaner with Ammonia",
+   "verdict": "NO",
+   "why": "Glass-specific cleaner, not an all-purpose cleaner.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "all-purpose-cleaner",
+   "owner": "disinfecting-wipes",
+   "product": "Lysol Disinfecting Wipes, All Purpose Cleaner, Multi Surface Antibacterial Cleaning Wipes, Cleaning Supplies, Lavender & Cotton Blossom Scent, 80 Count",
+   "verdict": "NO",
+   "why": "Wipes format; the candidate's examples are all liquid bottle cleaners.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "all-purpose-cleaner",
+   "owner": "glass-cleaner",
+   "product": "Our Family Glass Cleaner Refill With Ammonia 67.6 Fl Oz",
+   "verdict": "NO",
+   "why": "Glass-specific cleaner, not an all-purpose cleaner.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "all-purpose-cleaner",
+   "owner": "shower-cleaner",
+   "product": "Power Force Bathroom Cleaner",
+   "verdict": "NO",
+   "why": "A bathroom-specific cleaner, not an all-purpose/multipurpose cleaner.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "all-purpose-cleaner",
+   "owner": "floor-cleaner",
+   "product": "Swiffer WetJet Liquid Floor Cleaner, Lavender",
+   "verdict": "NO",
+   "why": "A floor-system cleaner refill, not a general-purpose surface cleaner.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "artichokes",
+   "owner": "artichoke-hearts",
+   "product": "Del Monte Quartered Artichoke Hearts 14 Oz",
+   "verdict": "NO",
+   "why": "Canned quartered hearts, not fresh whole artichokes.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "artichokes",
+   "owner": "artichoke-hearts",
+   "product": "Fareway Quartered in Brine Artichoke Hearts",
+   "verdict": "NO",
+   "why": "Quartered hearts in brine are the owner commodity, not fresh whole artichokes as the candidate label defines.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "artichokes",
+   "owner": "artichoke-hearts",
+   "product": "Hy-Vee Quartered Artichoke Hearts",
+   "verdict": "NO",
+   "why": "Quartered hearts, a verbatim owner example; not fresh whole produce.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "artichokes",
+   "owner": "artichoke-hearts",
+   "product": "Member's Mark Whole Artichoke Hearts, 33.5 oz.",
+   "verdict": "NO",
+   "why": "Whole HEARTS in a jar, still the canned/jarred hearts commodity, not fresh whole artichokes.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "artichokes",
+   "owner": "artichoke-hearts",
+   "product": "Tuscan Garden Quartered Artichoke Hearts 12 OZ",
+   "verdict": "NO",
+   "why": "Jarred quartered hearts, not a fresh whole artichoke.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "baby-food",
+   "owner": "baby-formula",
+   "product": "Comforts Infant Premium Immune Blend 6 Non GMO Baby Formula with Iron BIG DEAL!",
+   "verdict": "NO",
+   "why": "Named infant formula with iron, a formula powder, not jarred/pouch baby food.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "baby-food",
+   "owner": "baby-formula",
+   "product": "Enfamil Infant Formula, Milk-based Baby Formula with Iron, Powder Can",
+   "verdict": "NO",
+   "why": "Powdered infant formula, not puree jars/pouches.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "baby-food",
+   "owner": "baby-formula",
+   "product": "Similac Advance Infant Formula with Iron Powder Canister",
+   "verdict": "NO",
+   "why": "Formula powder canister, not baby food puree.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "baby-food",
+   "owner": "yogurt",
+   "product": "Yoplait Original Lowfat Yogurt Variety Pack, 6 oz., 18 ct.",
+   "verdict": "NO",
+   "why": "Regular yogurt cups, not baby food purees.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "baking-powder",
+   "owner": "cocoa-powder",
+   "product": "Great Value Baking Unsweetened Cocoa Powder, 8 oz Tub",
+   "verdict": "NO",
+   "why": "It is cocoa powder, a different baking ingredient than leavening baking powder.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "bar-soap",
+   "owner": "dish-soap",
+   "product": "Bright Essentials Original Scent Dish Soap",
+   "verdict": "NO",
+   "why": "Dish soap for washing dishes, not a personal-care soap bar.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "bleach",
+   "owner": "shower-cleaner",
+   "product": "Clorox Bleach Foamer Bathroom and Shower Cleaner Spray, Crisp Lemon, 30 fl oz",
+   "verdict": "NO",
+   "why": "A bathroom/shower cleaner spray that contains bleach, not jug bleach like the accepted examples.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "bleach",
+   "owner": "toilet-bowl-cleaner",
+   "product": "Kroger Fresh Scent Toilet Bowl Cleaner with Bleach Value Pack",
+   "verdict": "NO",
+   "why": "Toilet bowl cleaner that contains bleach, not jug bleach.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "block-cheese",
+   "owner": "shredded-cheese",
+   "product": "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Cheese",
+   "verdict": "NO",
+   "why": "Explicitly shredded, not a block.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "block-cheese",
+   "owner": "shredded-cheese",
+   "product": "Member's Mark Part-Skim Mozzarella Cheese 5 lbs.",
+   "verdict": "UNSURE",
+   "why": "Name states no form; the board's shredded example is the same item with Shredded in the name, but this name does not say block or shredded.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "block-cheese",
+   "owner": "string-cheese",
+   "product": "Our Family Low Moisture Part Skim Milk Mozzarella String Cheese 12 Oz",
+   "verdict": "NO",
+   "why": "Explicitly string cheese, not a block.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "bread",
+   "owner": "rye-bread",
+   "product": "Bakery Fresh Marble Rye Bread",
+   "verdict": "NO",
+   "why": "Marble rye; belongs to the separate rye-bread commodity.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "bread",
+   "owner": "garlic-bread",
+   "product": "Fareway Garlic Bread",
+   "verdict": "NO",
+   "why": "Garlic bread, not a plain sandwich loaf.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "bread",
+   "owner": "rye-bread",
+   "product": "Fresh & Finest Pumpernickel Rye Bread",
+   "verdict": "NO",
+   "why": "Pumpernickel rye; belongs to the separate rye-bread commodity.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "bread",
+   "owner": "french-bread",
+   "product": "Freshness Guaranteed French Bakery Bread Loaf",
+   "verdict": "NO",
+   "why": "French bakery bread, not a sliced sandwich loaf.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "bread",
+   "owner": "rye-bread",
+   "product": "Great Value New York Style Rye Bread, 24 oz",
+   "verdict": "NO",
+   "why": "Rye loaf; the board's bread commodity is white/wheat sandwich loaves and rye has its own commodity.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "bread",
+   "owner": "pita-bread",
+   "product": "Joseph's Flax Oat Bran & Whole Wheat Pita Bread",
+   "verdict": "NO",
+   "why": "Pita bread, not a sliced sandwich loaf.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "bread",
+   "owner": "pita-bread",
+   "product": "Joseph's Low Fat Whole Wheat Pita Bread 4 Ea",
+   "verdict": "NO",
+   "why": "Pita bread, not a sliced sandwich loaf.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "bread",
+   "owner": "pita-bread",
+   "product": "Josephs Original White Pita Bread 4 Count 11oz, Shelf-Stable",
+   "verdict": "NO",
+   "why": "Pita bread, not a sliced sandwich loaf.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "bread",
+   "owner": "rye-bread",
+   "product": "Private Selection Dark Rye Bread Wide Pan",
+   "verdict": "NO",
+   "why": "Dark rye loaf; belongs to the separate rye-bread commodity.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "breakfast-sausage",
+   "owner": "italian-sausage",
+   "product": "Hy-Vee Midwest Pork Italian Pork Sausage",
+   "verdict": "NO",
+   "why": "Italian-seasoned sausage, not breakfast sausage.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "cake-mix",
+   "owner": "pancake-mix",
+   "product": "Our Family Complete Pancake & Waffle Mix, Original 32 Oz",
+   "verdict": "NO",
+   "why": "Pancake and waffle mix, not cake mix.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "canned-chicken",
+   "owner": "chicken-breast",
+   "product": "All-Natural Boneless Skinless Chicken Breast",
+   "verdict": "NO",
+   "why": "Fresh raw chicken breast, not canned chunk chicken in water.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "canned-chicken",
+   "owner": "chicken-breast",
+   "product": "Boneless Skinless Chicken Breast, Case, priced per pound",
+   "verdict": "NO",
+   "why": "Fresh per-pound chicken breast, not canned chunk chicken.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "canned-chicken",
+   "owner": "chicken-breast",
+   "product": "Heritage Farm Boneless Skinless Chicken Breasts",
+   "verdict": "NO",
+   "why": "Fresh boneless skinless breasts, verbatim owner example, not a can.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "canned-chili",
+   "owner": "frozen-burritos",
+   "product": "Tina's Big Burrito Beef & Bean Green Chili, Quick Meal",
+   "verdict": "NO",
+   "why": "A burrito with chili filling, not a can of chili.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "canned-corn",
+   "owner": "frozen-corn",
+   "product": "Great Value Whole Kernel Corn, 32 oz Steamable Bag (Frozen)",
+   "verdict": "NO",
+   "why": "Frozen steamable bag, not shelf-stable canned corn.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "canned-mushrooms",
+   "owner": "mushrooms",
+   "product": "Kroger Sliced White Mushrooms BIG DEAL!",
+   "verdict": "NO",
+   "why": "Sliced white mushrooms matches the fresh-produce naming pattern; canned ones are named pieces & stems.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "canned-mushrooms",
+   "owner": "mushrooms",
+   "product": "Our Family Mushrooms, Baby Bella, Sliced 8 Oz",
+   "verdict": "NO",
+   "why": "Sliced baby bella in an 8 oz pack reads as a fresh tub, not the canned pieces-and-stems form.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "canned-peas",
+   "owner": "pigeon-peas",
+   "product": "Goya Green Pigeon Peas",
+   "verdict": "NO",
+   "why": "Pigeon peas are a distinct legume from canned sweet green peas.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "canned-peas",
+   "owner": "sugar-snap-peas",
+   "product": "Premium Sugar Snap Peas",
+   "verdict": "NO",
+   "why": "Fresh sugar snap peas in the pod, not canned sweet peas.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "canned-salmon",
+   "owner": "salmon",
+   "product": "Fremont Fish Market Value Pack Wild Caught Salmon 32 OZ",
+   "verdict": "NO",
+   "why": "Name says nothing about a can and matches the board's frozen fillet examples for this brand.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "cat-food",
+   "owner": "cat-litter",
+   "product": "Purina Tidy Cats Instant Action Non Clumping, Low Tracking Cat Litter",
+   "verdict": "NO",
+   "why": "Cat litter, not food.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "cat-food",
+   "owner": "cat-litter",
+   "product": "Purina Tidy Cats Non-Clumping Cat Litter 24/7 Performance",
+   "verdict": "NO",
+   "why": "Cat litter, not dry cat food.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "cat-food",
+   "owner": "cat-litter",
+   "product": "Special Kitty Clumping Clay Cat Litter, Fresh Scent, 20 lbs Jug, 1 Count",
+   "verdict": "NO",
+   "why": "Clay cat litter; the Special Kitty brand also makes food but this name says litter.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "cat-food",
+   "owner": "cat-litter",
+   "product": "Tidy Cats Instant Action Non Clumping Litter 20 Lb",
+   "verdict": "NO",
+   "why": "Cat litter, not dry cat food.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "cereal",
+   "owner": "feta",
+   "product": "Emporium Selection Original Feta Cheese Crumbles 4 OZ",
+   "verdict": "NO",
+   "why": "Feta cheese crumbles, not breakfast cereal.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "cheese-crackers",
+   "owner": "crackers",
+   "product": "Great Value Baked Cheddar Cheese Penguin Crackers, 19 oz",
+   "verdict": "YES",
+   "why": "Baked cheddar cheese cracker in a family-size box, same form as Goldfish-style examples.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "chicken-noodle-soup",
+   "owner": "ramen",
+   "product": "Maruchan Chicken Flavor Ramen Noodle Soup 12 Count",
+   "verdict": "NO",
+   "why": "Instant ramen packs, not canned or ready-to-serve chicken noodle soup.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "chicken-noodle-soup",
+   "owner": "ramen",
+   "product": "Maruchan Ramen Noodle Soup Chicken 6 PK 13 5 OZ",
+   "verdict": "NO",
+   "why": "Instant ramen packs, not canned chicken noodle soup.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "chocolate-milk",
+   "owner": "milk",
+   "product": "Our Family Lowfat Milk 1 Gal",
+   "verdict": "NO",
+   "why": "Plain lowfat milk; the name says nothing about chocolate.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "coffee",
+   "owner": "coffee-pods",
+   "product": "Great Value Donut Shop 100% Arabica Medium Roast Ground Coffee Pods, 48 Count",
+   "verdict": "NO",
+   "why": "Sold as pods, a single-serve pack form distinct from bagged/canned ground coffee.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "coffee-creamer",
+   "owner": "half-and-half",
+   "product": "Friendly Farms Half & Half",
+   "verdict": "UNSURE",
+   "why": "Nearly matches the accepted Friendly Farms Half & Half Creamer example, but the plain name reads as dairy half & half.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "coffee-creamer",
+   "owner": "half-and-half",
+   "product": "Kemps Fresh Half & Half",
+   "verdict": "NO",
+   "why": "Plain dairy half & half, not a flavored coffee creamer.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "corn-muffin-mix",
+   "owner": "stuffing-mix",
+   "product": "Chef S Cupboard Cornbread Stuffing Mix 6 OZ",
+   "verdict": "NO",
+   "why": "Cornbread-flavored stuffing mix, not a corn muffin baking mix.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "creme-fraiche",
+   "owner": "croissants",
+   "product": "Croissants 6 Count",
+   "verdict": "NO",
+   "why": "Plainly a bakery croissant, not creme fraiche.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "deli-ham",
+   "owner": "diced-ham",
+   "product": "Farmland Cubed Ham",
+   "verdict": "NO",
+   "why": "Cubed form, not deli/sliced ham.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "deli-ham",
+   "owner": "diced-ham",
+   "product": "Farmland Diced Ham",
+   "verdict": "NO",
+   "why": "Diced form, not deli/sliced ham.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "deli-ham",
+   "owner": "diced-ham",
+   "product": "Farmland Diced Ham 16 Oz",
+   "verdict": "NO",
+   "why": "Diced form, not deli/sliced ham.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "deli-ham",
+   "owner": "diced-ham",
+   "product": "Farmland Diced Ham 16oz",
+   "verdict": "NO",
+   "why": "Diced form, not deli/sliced ham.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "deli-ham",
+   "owner": "diced-ham",
+   "product": "Kroger Diced Ham",
+   "verdict": "NO",
+   "why": "Diced form, not deli/sliced ham.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "deodorant",
+   "owner": "laundry-detergent",
+   "product": "Arm & Hammer Plus Oxiclean Fresh Scent",
+   "verdict": "NO",
+   "why": "A&H Plus OxiClean is laundry detergent, not a personal deodorant stick.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "diapers",
+   "owner": "baby-formula",
+   "product": "Tippy Toes 0 12 Months Gentle Premium Milk Based Powder With Iron Infant Formula 33.2 Oz",
+   "verdict": "NO",
+   "why": "Infant formula powder, not diapers.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "dish-soap",
+   "owner": "bar-soap",
+   "product": "Olay Ultra Moisture Bar Soap, Shea Butter, 3.17 oz, 12 Count",
+   "verdict": "NO",
+   "why": "A body bar soap, not liquid dish soap.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "dishwasher-detergent",
+   "owner": "laundry-pods",
+   "product": "Gain flings! Laundry Detergent Pacs, Original, 31 Count",
+   "verdict": "NO",
+   "why": "Laundry pacs, not dishwasher pacs.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "dishwasher-detergent",
+   "owner": "laundry-pods",
+   "product": "Tandil Premium Laundry Detergent Pacs, Original Scent",
+   "verdict": "NO",
+   "why": "Laundry pacs, not dishwasher pacs.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "disinfectant-spray",
+   "owner": "shower-cleaner",
+   "product": "Scrubbing Bubbles Flowers & Showers, Bathroom Grime Fighter Spray, Rainshower, Petal Paradise, and Floral Fusion, 32 oz., 3 pk.",
+   "verdict": "UNSURE",
+   "why": "Same product line appears in both commodities' accepted examples and this name omits the word Disinfectant.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "disinfecting-wipes",
+   "owner": "baby-wipes",
+   "product": "Huggies Simply Clean Unscented Baby Wipes",
+   "verdict": "NO",
+   "why": "Baby wipes for skin, not disinfecting surface wipes.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "dog-food",
+   "owner": "dog-treats",
+   "product": "Milk-Bone Crunchy Medium Dog Treats, Original Beef Flavor",
+   "verdict": "NO",
+   "why": "Biscuit treats, not a bag of dry dog food kibble.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "dryer-sheets",
+   "owner": "fabric-softener",
+   "product": "Downy Soft, 2 in 1 Soft and Fresh Liquid Fabric Softener, Cool Cotton",
+   "verdict": "NO",
+   "why": "Explicitly liquid fabric softener, not sheets.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "dryer-sheets",
+   "owner": "fabric-softener",
+   "product": "Free & Clear Fabric Softener Our Family",
+   "verdict": "NO",
+   "why": "Plain fabric softener reads as liquid; nothing says sheets.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "dryer-sheets",
+   "owner": "fabric-softener",
+   "product": "Tandil Springtime Fresh Fabric Softener",
+   "verdict": "NO",
+   "why": "Matches the accepted Tandil liquid softener bottle; no sheet wording.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "egg-noodles",
+   "owner": "egg-whites",
+   "product": "No Yolks Extra Broad Egg White Noodles, 12 ounce bag",
+   "verdict": "YES",
+   "why": "A bagged dry broad noodle sold as the egg-noodle-aisle equivalent, not a liquid egg product.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "energy-drinks",
+   "owner": "sparkling-water",
+   "product": "Member's Mark Sparkling Water Variety Pack, 17 fl. oz., 24 pk.",
+   "verdict": "NO",
+   "why": "Sparkling water, not an energy drink.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "energy-drinks",
+   "owner": "lemonade",
+   "product": "Nature's Twist Sugar Free Lemonade Variety Pack, 16.9 fl. oz., 24 pk.",
+   "verdict": "NO",
+   "why": "A lemonade drink with no energy claim in the name.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "energy-drinks",
+   "owner": "soda",
+   "product": "Pepsi Made with Real Sugar Cola 12 fl oz, 12 pack Cans",
+   "verdict": "NO",
+   "why": "Cola soda, not an energy drink.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "english-muffins",
+   "owner": "muffins",
+   "product": "Otis Spunkmeyer Muffin, Wild Blueberry",
+   "verdict": "NO",
+   "why": "A sweet bakery blueberry muffin, not a fork-split English muffin.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "fabric-softener",
+   "owner": "dryer-sheets",
+   "product": "Hy-Vee fabric softener sheets, 80 ct., $2.99",
+   "verdict": "NO",
+   "why": "Sheet form, not liquid softener.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "fabric-softener",
+   "owner": "dryer-sheets",
+   "product": "Member's Mark Fabric Softener Dryer Sheets, Fresh Scent, 480 ct.",
+   "verdict": "NO",
+   "why": "Dryer sheets, not liquid softener.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "fabric-softener",
+   "owner": "dryer-sheets",
+   "product": "Tandil Freeclear Fabric Softener Sheets 80 CT",
+   "verdict": "NO",
+   "why": "Sheet form, not liquid softener.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "floor-cleaner",
+   "owner": "all-purpose-cleaner",
+   "product": "Fabuloso 2X Concentrated Multi-Purpose Cleaner, Lavender 210 fl. oz.",
+   "verdict": "NO",
+   "why": "Named a multi-purpose cleaner, matching the owner; floor-cleaner examples are all dedicated floor products.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "floor-cleaner",
+   "owner": "all-purpose-cleaner",
+   "product": "Kroger Mercado Lavender Scented Multi-Purpose Cleaner",
+   "verdict": "NO",
+   "why": "A multi-purpose cleaner, not a dedicated floor cleaner; near-verbatim owner example.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "fresh-green-beans",
+   "owner": "canned-green-beans",
+   "product": "Happy Harvest French Green Beans 14 5 OZ",
+   "verdict": "NO",
+   "why": "Happy Harvest 14.5 oz is the canned pattern in the owner examples, not fresh produce.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frosting",
+   "owner": "sports-drinks",
+   "product": "Gatorade Frost Thirst Quencher Variety Pack, 20 fl. oz., 24 pk.",
+   "verdict": "NO",
+   "why": "Frost is a Gatorade flavor line; this is a sports drink, not cake frosting.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-brussels-sprouts",
+   "owner": "brussels-sprouts",
+   "product": "Brussels Sprouts",
+   "verdict": "UNSURE",
+   "why": "Name states no form at all; likely fresh produce but the name does not say.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-brussels-sprouts",
+   "owner": "brussels-sprouts",
+   "product": "Brussels Sprouts, Package",
+   "verdict": "UNSURE",
+   "why": "Bare name gives no form; reads like a produce tag but frozen cannot be ruled out from the name alone.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-brussels-sprouts",
+   "owner": "brussels-sprouts",
+   "product": "Fareway Brussels Sprouts",
+   "verdict": "NO",
+   "why": "Verbatim accepted fresh-produce example with no frozen cue in the name.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-brussels-sprouts",
+   "owner": "brussels-sprouts",
+   "product": "Taylor Farms Brussels Sprouts 2 lbs.",
+   "verdict": "NO",
+   "why": "Verbatim accepted fresh example; a fresh-produce bag with no frozen marker.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-corn",
+   "owner": "canned-corn",
+   "product": "Corner Store Corn, Kernel, Whole",
+   "verdict": "NO",
+   "why": "Verbatim accepted canned example with no frozen/steamable cue.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-corn",
+   "owner": "canned-corn",
+   "product": "Del Monte Whole Kernel Corn, 106 oz.",
+   "verdict": "NO",
+   "why": "A 106 oz institutional can, verbatim owner example; not frozen.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-corn",
+   "owner": "canned-corn",
+   "product": "Great Value No Salt Added Golden Sweet Whole Kernel Corn, 15.25 oz",
+   "verdict": "NO",
+   "why": "15.25 oz is the standard can size; a shelf-stable can, not a frozen bag.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-corn",
+   "owner": "canned-corn",
+   "product": "Happy Harvest Whole Kernel Corn 15.25 OZ",
+   "verdict": "NO",
+   "why": "15.25 oz can size, matching the canned examples.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-corn",
+   "owner": "canned-corn",
+   "product": "Our Family Super Sweet Whole Kernel Corn 15.25 Oz",
+   "verdict": "NO",
+   "why": "15.25 oz can size; canned, not frozen.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-corn",
+   "owner": "canned-corn",
+   "product": "Smart Way Whole Kernel Sweet Golden Corn",
+   "verdict": "NO",
+   "why": "Whole-kernel phrasing follows the canned owner examples and carries no frozen marker.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-corn",
+   "owner": "canned-corn",
+   "product": "That's Smart! Whole Kernel Golden Corn",
+   "verdict": "NO",
+   "why": "Verbatim accepted canned-corn example; whole-kernel phrasing matches the canned pattern, no frozen cue.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-fruit",
+   "owner": "strawberries",
+   "product": "Kroger Sliced Strawberries BIG DEAL!",
+   "verdict": "UNSURE",
+   "why": "Name does not say fresh or frozen, and both commodities' accepted examples include sliced strawberries without a form word.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-lasagna",
+   "owner": "lasagna-noodles",
+   "product": "Hy-Vee Oven Ready No Boil Lasagna",
+   "verdict": "NO",
+   "why": "Oven-ready no-boil lasagna is dry pasta noodles, not a prepared frozen lasagna entree.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-peas",
+   "owner": "pigeon-peas",
+   "product": "Goya Green Pigeon Peas",
+   "verdict": "NO",
+   "why": "Canned pigeon peas, not frozen sweet peas.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-peas",
+   "owner": "canned-peas",
+   "product": "Great Value Sweet Peas, 15 oz Can",
+   "verdict": "NO",
+   "why": "The name says Can; shelf-stable, not frozen.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-peas",
+   "owner": "canned-peas",
+   "product": "Our Family No Salt Added Sweet Peas 15 Oz",
+   "verdict": "NO",
+   "why": "15 oz matches the canned pea pattern; no frozen marker in the name.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-peas",
+   "owner": "canned-peas",
+   "product": "Smart Way Sweet Peas",
+   "verdict": "NO",
+   "why": "Verbatim accepted canned example with no frozen/steamable cue.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-peas",
+   "owner": "canned-peas",
+   "product": "That's Smart! Sweet Peas",
+   "verdict": "NO",
+   "why": "Verbatim canned example; the frozen sibling is distinguished by an explicit (Frozen) tag this name lacks.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-pizza",
+   "owner": "pepperoni",
+   "product": "Great Value Original Pepperoni Mega Pack, 21 Oz.",
+   "verdict": "NO",
+   "why": "A pack of sliced pepperoni, not a pizza.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-vegetables",
+   "owner": "frozen-broccoli",
+   "product": "Great Value Broccoli Florets, 32 oz Bag (Frozen)",
+   "verdict": "NO",
+   "why": "Single-vegetable broccoli bag, not a mixed vegetable blend.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-vegetables",
+   "owner": "canned-mixed-vegetables",
+   "product": "Great Value Mixed Vegetables, 15 oz",
+   "verdict": "NO",
+   "why": "15 oz matches the canned examples; the frozen Great Value example is a 32 oz bag marked Frozen.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-vegetables",
+   "owner": "hash-browns",
+   "product": "Great Value Southern Hash Browns, 32 oz Bag (Frozen)",
+   "verdict": "NO",
+   "why": "Frozen potatoes, not a mixed vegetable blend.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-vegetables",
+   "owner": "canned-mixed-vegetables",
+   "product": "Kroger No Salt added Mixed Vegetables - 15oz can",
+   "verdict": "NO",
+   "why": "The name says 15oz can; not frozen.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-vegetables",
+   "owner": "frozen-peas",
+   "product": "That's Smart! Sweet Peas (Frozen)",
+   "verdict": "NO",
+   "why": "Peas alone, not a mixed vegetable blend.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "frozen-vegetables",
+   "owner": "canned-mixed-vegetables",
+   "product": "Veg-All Original Mixed Vegetables",
+   "verdict": "NO",
+   "why": "Verbatim accepted canned example; Veg-All is a canned line.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "fruit-cups",
+   "owner": "raspberries",
+   "product": "Raspberry/Blueberry Cup Fresh Divide",
+   "verdict": "NO",
+   "why": "A fresh berry cup from produce, not a shelf-stable fruit cup packed in juice.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "fruit-cups",
+   "owner": "yogurt",
+   "product": "Yoplait Original Low Fat Strawberry and Harvest Peach Yogurt Cups",
+   "verdict": "NO",
+   "why": "Yogurt cups, not fruit-in-juice cups.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "fruit-punch",
+   "owner": "sports-drinks",
+   "product": "Powerade Zero Sugar Fruit Punch Sports Drink Bottle 28 Fl Oz",
+   "verdict": "NO",
+   "why": "A fruit-punch-flavored sports drink, not a fruit punch juice drink like the accepted examples.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "fruit-snacks",
+   "owner": "baby-food",
+   "product": "Gerber 2nd Foods Fruit & Veggie Variety Pack, 4 oz., 30 ct.",
+   "verdict": "NO",
+   "why": "Gerber 2nd Foods is baby food puree, not gummy fruit snacks.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "glass-cleaner",
+   "owner": "all-purpose-cleaner",
+   "product": "Kroger Mercado Lavender Scented Multi-Purpose Cleaner",
+   "verdict": "NO",
+   "why": "Nothing in the name says glass; it is a multi-purpose cleaner like the owner examples.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "granola",
+   "owner": "granola-bars",
+   "product": "Great Value Chocolate Chip Chewy Granola Bars, Value Pack, 20.3 oz, 24 Count",
+   "verdict": "NO",
+   "why": "Wrapped granola bars, not loose bagged granola.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "granola",
+   "owner": "granola-bars",
+   "product": "Hy Vee Chewy Granola Bars Variety Pack 18Ct",
+   "verdict": "NO",
+   "why": "Wrapped granola bars, not loose bagged granola.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "granola",
+   "owner": "granola-bars",
+   "product": "Quaker Chewy Granola Bar, Variety Pack, 60 ct.",
+   "verdict": "NO",
+   "why": "Wrapped granola bars, not loose bagged granola.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "granola-bars",
+   "owner": "protein-bars",
+   "product": "Millville Peanut Butter Dark Chocolate Protein Chewy Bars",
+   "verdict": "NO",
+   "why": "Protein chewy bar matching the protein-bars examples, not a plain granola bar.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "granola-bars",
+   "owner": "protein-bars",
+   "product": "Nature Valley Peanut Butter Dark Chocolate Protein Chewy Bars, 30 ct.",
+   "verdict": "NO",
+   "why": "Named a protein chewy bar and already an accepted protein-bars example; the board separates these from plain granola bars.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "green-chilli",
+   "owner": "canned-green-chilies",
+   "product": "Chi-Chi's Diced Green Chiles",
+   "verdict": "NO",
+   "why": "Diced green chiles are exactly the owner commodity; candidate examples are stew and aioli products.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "green-olives",
+   "owner": "black-olives",
+   "product": "That's Smart! Large Pitted Ripe Olives",
+   "verdict": "NO",
+   "why": "Pitted ripe (black) olives per the owner examples, not stuffed green olives.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "green-olives",
+   "owner": "black-olives",
+   "product": "Tuscan Garden Large Pitted Black Ripe Olives 6 OZ",
+   "verdict": "NO",
+   "why": "Black ripe olives, not pimento-stuffed green manzanillas.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "half-and-half",
+   "owner": "buttermilk",
+   "product": "Kroger Cultured 1% Lowfat Buttermilk Half Gallon",
+   "verdict": "NO",
+   "why": "Cultured buttermilk, a different dairy product than half & half.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "half-and-half",
+   "owner": "milk",
+   "product": "Kroger Milk Half Gallon",
+   "verdict": "NO",
+   "why": "Half Gallon is the size of a milk carton, not half & half cream.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "hominy",
+   "owner": "grits",
+   "product": "Quaker Quick Enriched White Hominy Grits",
+   "verdict": "NO",
+   "why": "Ground quick grits, not whole canned hominy.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "hot-sauce",
+   "owner": "bbq-sauce",
+   "product": "Burman S Honey Barbecue Sauce 18 OZ",
+   "verdict": "NO",
+   "why": "A barbecue sauce, not a hot sauce.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "hot-sauce",
+   "owner": "worcestershire",
+   "product": "Lea & Perrins The Original Worcestershire Sauce, 20 oz., 2 pk.",
+   "verdict": "NO",
+   "why": "Worcestershire sauce, not hot sauce.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "hot-sauce",
+   "owner": "bbq-sauce",
+   "product": "Sweet Baby Ray's Honey Barbecue Sauce",
+   "verdict": "NO",
+   "why": "Honey barbecue sauce, matches owner examples, not hot sauce.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "iced-tea",
+   "owner": "tea-bags",
+   "product": "Lipton Tea Bags, Black Tea, 312 ct.",
+   "verdict": "NO",
+   "why": "Dry tea bags, not ready-to-drink bottled/gallon iced tea.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "iced-tea",
+   "owner": "tea-bags",
+   "product": "Lipton Yellow Label Black Tea",
+   "verdict": "NO",
+   "why": "Dry black tea (bags), not ready-to-drink iced tea.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "iced-tea",
+   "owner": "tea-bags",
+   "product": "Tetley Black Tea, Classic Blend, Double Chamber Bags 100 Ea",
+   "verdict": "NO",
+   "why": "Dry tea bags, not ready-to-drink iced tea.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "insect-spray",
+   "owner": "laundry-detergent",
+   "product": "Arm & Hammer Plus Oxiclean Fresh Scent",
+   "verdict": "NO",
+   "why": "Laundry detergent, nothing in the name suggests an insecticide.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "jalapenos",
+   "owner": "pickled-jalapenos",
+   "product": "La Costena Jalapenos, Pickled Jalapeno Peppers 26 Oz",
+   "verdict": "UNSURE",
+   "why": "Pickled jalapenos with whole-vs-sliced unstated; the candidate accepts a whole pickled can while the owner is sliced, and the name cannot settle which.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "jarred-gravy",
+   "owner": "brown-gravy-mix",
+   "product": "Great Value Reduced Sodium Brown Gravy Mix, 0.87 oz Packet",
+   "verdict": "NO",
+   "why": "A dry 0.87 oz mix packet, not ready-to-serve jarred/canned gravy.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "kidney-beans",
+   "owner": "canned-white-beans",
+   "product": "Delallo Cannellini Beans, White Kidney 15.5 Oz",
+   "verdict": "NO",
+   "why": "Cannellini/white kidney beans belong to the white-bean commodity; candidate examples are all red kidney beans.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "laundry-detergent",
+   "owner": "laundry-pods",
+   "product": "Arm & Hammer Laundry Detergent, Concentrated, 5 In 1, Fresh Burst, Power Paks 42 Ea",
+   "verdict": "NO",
+   "why": "Power Paks sold by count are pods, not the liquid jugs the candidate's examples define.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "laundry-detergent",
+   "owner": "laundry-pods",
+   "product": "Gain flings! Laundry Detergent Pacs, Original, 31 Count",
+   "verdict": "NO",
+   "why": "Pacs by count are pods, not liquid detergent.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "laundry-detergent",
+   "owner": "dishwasher-detergent",
+   "product": "Hy Vee Dishwasher Detergent 60 Packs",
+   "verdict": "NO",
+   "why": "Dishwasher detergent, not laundry detergent.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "laundry-detergent",
+   "owner": "laundry-pods",
+   "product": "Member's Mark Laundry Detergent Power Pacs, Blooming Breeze, 130 ct.",
+   "verdict": "NO",
+   "why": "Power Pacs by count are pods, and the candidate's accepted examples are all liquid A&H jugs.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "laundry-detergent",
+   "owner": "laundry-pods",
+   "product": "Tandil Premium Laundry Detergent Pacs, Original Scent",
+   "verdict": "NO",
+   "why": "Pacs are pods, not the liquid detergent the candidate's examples define.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "laundry-detergent",
+   "owner": "laundry-pods",
+   "product": "Tide PODS Liquid Laundry Detergent Pacs, 4-in-1 Ultra Oxi",
+   "verdict": "NO",
+   "why": "PODS/Pacs is the pod form despite the word liquid; not a liquid jug.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "laundry-detergent",
+   "owner": "laundry-pods",
+   "product": "Tide Pods Spring Meadow Laundry Detergent Pods",
+   "verdict": "NO",
+   "why": "Explicitly pods, not liquid detergent.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "laundry-pods",
+   "owner": "laundry-detergent",
+   "product": "ARM & HAMMER Plus OxiClean Ultra Stain Fighters Liquid Laundry Detergent, Fresh Scent",
+   "verdict": "NO",
+   "why": "Says Liquid Laundry Detergent, not pods.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "laundry-pods",
+   "owner": "laundry-detergent",
+   "product": "ARM & HAMMER Plus OxiClean with Odor Blasters Liquid Detergent Fresh Burst Scent",
+   "verdict": "NO",
+   "why": "Says Liquid Detergent, not pods.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "laundry-pods",
+   "owner": "laundry-detergent",
+   "product": "ARM & HAMMER Plus OxiClean with Odor Blasters Liquid Laundry Detergent, Fresh Burst, 96.2 Fl Oz",
+   "verdict": "NO",
+   "why": "Says Liquid Laundry Detergent in fluid ounces, not pods.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "laundry-pods",
+   "owner": "laundry-detergent",
+   "product": "Arm & Hammer Detergent, Odor Blasters, Stain Fighters, Fresh Burst 138 Fl Oz",
+   "verdict": "NO",
+   "why": "138 Fl Oz is a liquid jug; pods are sold by count.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "laundry-pods",
+   "owner": "laundry-detergent",
+   "product": "Arm & Hammer Plus Oxiclean Fresh Scent",
+   "verdict": "NO",
+   "why": "A&H pod products say Power Paks; this name matches the accepted liquid line and lacks any pod wording.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "laundry-pods",
+   "owner": "dishwasher-detergent",
+   "product": "Cascade Complete Action Pacs Dishwasher Detergent Fresh",
+   "verdict": "NO",
+   "why": "Cascade dishwasher pacs, not laundry pods.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "laundry-pods",
+   "owner": "dishwasher-detergent",
+   "product": "Hy Vee Dishwasher Detergent 60 Packs",
+   "verdict": "NO",
+   "why": "Dishwasher pacs, not laundry pods.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "milk",
+   "owner": "chocolate-milk",
+   "product": "Great Value 1% Low-fat Chocolate Milk, Gallon, 128 fl oz",
+   "verdict": "NO",
+   "why": "Chocolate milk is a distinct flavored commodity from plain gallon milk.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "milk",
+   "owner": "buttermilk",
+   "product": "Kemps Select Cultured 1% Lowfat Buttermilk, Quart",
+   "verdict": "NO",
+   "why": "Cultured buttermilk in a quart, not a gallon of regular milk.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "milk",
+   "owner": "chocolate-milk",
+   "product": "Kroger 1% Lowfat Chocolate Milk Gallon",
+   "verdict": "NO",
+   "why": "Chocolate milk, not plain milk, despite the gallon pack.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "milk",
+   "owner": "buttermilk",
+   "product": "Kroger Cultured 1% Lowfat Buttermilk Half Gallon",
+   "verdict": "NO",
+   "why": "Cultured buttermilk, not regular gallon milk.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "milk",
+   "owner": "half-and-half",
+   "product": "Kroger Half and Half Half Gallon",
+   "verdict": "NO",
+   "why": "Half & half, not a gallon of drinking milk.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "milk",
+   "owner": "almond-milk",
+   "product": "Silk Unsweetened Almond Milk, 32 fl. oz., 6 pk.",
+   "verdict": "NO",
+   "why": "Almond milk in a multipack, not a gallon of dairy milk.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "milk",
+   "owner": "almond-milk",
+   "product": "Simple Truth Plant Based Non Dairy Unsweetened Almondmilk Half Gallon",
+   "verdict": "NO",
+   "why": "Explicitly non-dairy plant-based almondmilk, not dairy gallon milk.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "milk",
+   "owner": "almond-milk",
+   "product": "bettergoods Unsweetened Vanilla Almond Milk, Half Gallon",
+   "verdict": "NO",
+   "why": "Almond milk is a distinct commodity from dairy gallon milk; matches the owner examples exactly.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "muffins",
+   "owner": "english-muffins",
+   "product": "Thomas' Buttermilk English Muffins 6 Ea",
+   "verdict": "NO",
+   "why": "English muffins are a griddled bread, not sweet bakery muffins.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "muffins",
+   "owner": "english-muffins",
+   "product": "Thomas' English Muffins",
+   "verdict": "NO",
+   "why": "English muffins are a griddled bread, not sweet bakery muffins.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "muffins",
+   "owner": "english-muffins",
+   "product": "Thomas' Original Nooks & Crannies English Muffins 12 ct.",
+   "verdict": "NO",
+   "why": "English muffins are a griddled bread, not sweet bakery muffins.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "mushrooms",
+   "owner": "canned-mushrooms",
+   "product": "Great Value White Mushrooms Pieces and Stems, 6.5 oz",
+   "verdict": "NO",
+   "why": "Pieces-and-stems 6.5 oz is canned mushrooms, not fresh whole/sliced mushrooms.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "nutritional-yeast",
+   "owner": "yeast",
+   "product": "Red Star Active Dry Yeast, 4 oz (113.4 g) Multi-Use Jar, Baking and Breadmaking Essential",
+   "verdict": "NO",
+   "why": "Active dry baking yeast, not deactivated nutritional yeast flakes.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "oven-cleaner",
+   "owner": "all-purpose-cleaner",
+   "product": "Power Force Lemon Scented All Purpose Cleaner",
+   "verdict": "NO",
+   "why": "An all-purpose cleaner, not an oven-specific foam/spray like every candidate example.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "pasta",
+   "owner": "canned-pasta",
+   "product": "SpaghettiOs Original Canned Pasta, 15.8 oz Can",
+   "verdict": "NO",
+   "why": "Explicitly a canned pasta can, not dry pasta.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "pasta",
+   "owner": "canned-pasta",
+   "product": "SpaghettiOs Original Canned Pasta, 15.8 oz Can (Pack of 4)",
+   "verdict": "NO",
+   "why": "Explicitly canned pasta, not dry boxed pasta.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "popsicles",
+   "owner": "sports-drinks",
+   "product": "Gatorade Frost Thirst Quencher Variety Pack, 20 fl. oz., 24 pk.",
+   "verdict": "NO",
+   "why": "Bottled sports drink, not freezer/ice pops.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "popsicles",
+   "owner": "yogurt",
+   "product": "Yoplait Original Lowfat Yogurt Variety Pack, 6 oz., 18 ct.",
+   "verdict": "NO",
+   "why": "Refrigerated yogurt cups, not freezer/ice pops.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "pudding-cups",
+   "owner": "sports-drinks",
+   "product": "Gatorade Frost Thirst Quencher Variety Pack, 20 fl. oz., 24 pk.",
+   "verdict": "NO",
+   "why": "Bottled sports drink, not pudding cups.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "quart-storage-bags",
+   "owner": "storage-bags",
+   "product": "Boulder Twin Lock Storage Bags 40 CT",
+   "verdict": "NO",
+   "why": "The Boulder quart variant carries Quart in its name (50 CT accepted example); this distinct name without it is the gallon line the board already accepted.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "quart-storage-bags",
+   "owner": "storage-bags",
+   "product": "Great Value Freezer Guard Double Zipper Gallon Freezer Bag, 80 Count",
+   "verdict": "NO",
+   "why": "Explicitly gallon, not quart.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "quart-storage-bags",
+   "owner": "storage-bags",
+   "product": "Kroger Double Zipper Reclosable Gallon Freezer Bags",
+   "verdict": "NO",
+   "why": "Explicitly gallon, not quart.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "quart-storage-bags",
+   "owner": "storage-bags",
+   "product": "Our Family Freezer Bags, Resealable, Gallon Size 30 Ea",
+   "verdict": "NO",
+   "why": "Explicitly gallon size, not quart.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "quart-storage-bags",
+   "owner": "oat-milk",
+   "product": "Simple Truth Dairy Free Shelf Stable Original Oat Milk Quart",
+   "verdict": "NO",
+   "why": "It is oat milk; quart is its size, not a storage bag.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "quart-storage-bags",
+   "owner": "storage-bags",
+   "product": "Ziploc storage bags, 105 or 108 ct., $4.49",
+   "verdict": "UNSURE",
+   "why": "Ad-style name states no bag size, so quart vs gallon is a guess.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "ranch-dressing",
+   "owner": "ranch-seasoning-mix",
+   "product": "Great Value Classic Ranch Salad Dressing & Recipe Mix, 1 oz",
+   "verdict": "NO",
+   "why": "A 1 oz dry recipe-mix packet, not bottled dressing.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "ranch-dressing",
+   "owner": "ranch-seasoning-mix",
+   "product": "Hidden Valley Original Ranch Salad Dressing and Seasoning Mix, 16 oz.",
+   "verdict": "NO",
+   "why": "The Dressing and Seasoning Mix line is dry mix (here a large canister), not bottled dressing.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "ranch-dressing",
+   "owner": "ranch-seasoning-mix",
+   "product": "Kroger Ranch Salad Dressing & Seasoning Mix Packet",
+   "verdict": "NO",
+   "why": "A dry mix packet, not bottled dressing.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "ranch-dressing",
+   "owner": "ranch-seasoning-mix",
+   "product": "Tuscan Garden Ranch Salad Dressing and Seasoning Mix",
+   "verdict": "NO",
+   "why": "A dry seasoning mix, not prepared bottled ranch dressing.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "red-wine",
+   "owner": "red-wine-vinegar",
+   "product": "Our Family Vinegar Red Wine",
+   "verdict": "NO",
+   "why": "Red wine vinegar, not drinkable red wine.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "relish",
+   "owner": "pickles",
+   "product": "Great Gherkins Kosher Dill Spears 24 FL OZ",
+   "verdict": "NO",
+   "why": "Dill pickle spears, not chopped sweet relish.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "salmon",
+   "owner": "canned-salmon",
+   "product": "Deming's Pink Salmon, Wild Caught Alaskan 14.75 Oz",
+   "verdict": "NO",
+   "why": "14.75 oz pink salmon is the standard can, near-verbatim owner example, not a fillet.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "shower-cleaner",
+   "owner": "all-purpose-cleaner",
+   "product": "All Purpose Cleaner W/Bleach Our Family",
+   "verdict": "NO",
+   "why": "Named all-purpose with bleach, not a bathroom cleaner; bleach content does not change the category.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "shower-cleaner",
+   "owner": "laundry-detergent",
+   "product": "Arm & Hammer Plus Oxiclean Fresh Scent",
+   "verdict": "NO",
+   "why": "Laundry detergent, not a bathroom surface cleaner.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "shower-cleaner",
+   "owner": "all-purpose-cleaner",
+   "product": "Bright Essentials All Purpose Cleaner, Citrus Scent",
+   "verdict": "NO",
+   "why": "Named all-purpose; the Bright Essentials bathroom product is a separate named SKU.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "shower-cleaner",
+   "owner": "toilet-bowl-cleaner",
+   "product": "Clorox Toilet Bowl Cleaner with Bleach, Rain Clean, 6pk., 144 fl. oz.",
+   "verdict": "NO",
+   "why": "Toilet bowl cleaner, not a shower/general bathroom surface cleaner.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "shower-cleaner",
+   "owner": "all-purpose-cleaner",
+   "product": "Great Value Multi Purpose Cleaner, Lavender Scent, 128 fl oz",
+   "verdict": "NO",
+   "why": "Multi-purpose by name; candidate examples are all bathroom/shower-specific products.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "shower-cleaner",
+   "owner": "toilet-bowl-cleaner",
+   "product": "Kroger Fresh Scent Toilet Bowl Cleaner with Bleach Value Pack",
+   "verdict": "NO",
+   "why": "Toilet bowl cleaner, not a shower/bathroom surface cleaner.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "shower-cleaner",
+   "owner": "all-purpose-cleaner",
+   "product": "Lysol Lemon Breeze All Purpose Cleaner",
+   "verdict": "NO",
+   "why": "Named all-purpose, not bathroom/shower-specific.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "shower-cleaner",
+   "owner": "all-purpose-cleaner",
+   "product": "Power Force Lemon Scented All Purpose Cleaner",
+   "verdict": "NO",
+   "why": "All-purpose by name and a verbatim owner example, not a bathroom-specific cleaner.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "shower-cleaner",
+   "owner": "bleach",
+   "product": "Sun Brite Ultra Bleach",
+   "verdict": "NO",
+   "why": "Plain bleach, not a bathroom/shower cleaner product.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "shredded-cheese",
+   "owner": "string-cheese",
+   "product": "Great Value Low-Moisture Part-Skim Mozzarella String Cheese, 24 oz Bag, 24 Count",
+   "verdict": "NO",
+   "why": "Explicitly string cheese sticks, not shredded or block.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "shredded-cheese",
+   "owner": "parmesan",
+   "product": "Kroger Parmesan Shredded Cheese",
+   "verdict": "NO",
+   "why": "Shredded parmesan belongs to the board's separate parmesan commodity, not the mozzarella/cheddar shredded-cheese group.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "soda",
+   "owner": "sports-drinks",
+   "product": "Gatorade Frost Thirst Quencher Variety Pack, 20 fl. oz., 24 pk.",
+   "verdict": "NO",
+   "why": "Sports drink, not soda.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "soy-sauce",
+   "owner": "sweet-soy-sauce",
+   "product": "(2 pack) Kikkoman Gluten-Free Sweet Soy Sauce for Rice, 10 oz Glass Bottle",
+   "verdict": "NO",
+   "why": "Sweet soy sauce (kecap manis style), a distinct commodity from regular brewed soy sauce.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "soy-sauce",
+   "owner": "sweet-soy-sauce",
+   "product": "Kikkoman Gluten Free Sweet Soy Sauce for Rice",
+   "verdict": "NO",
+   "why": "Sweet soy sauce, not regular soy sauce.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "soy-sauce",
+   "owner": "sweet-soy-sauce",
+   "product": "Kikkoman Gluten-Free Sweet Soy Sauce for Rice",
+   "verdict": "NO",
+   "why": "Sweet soy sauce, not regular soy sauce.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "sparkling-water",
+   "owner": "lemonade",
+   "product": "Nature's Twist Sugar Free Lemonade Variety Pack, 16.9 fl. oz., 24 pk.",
+   "verdict": "NO",
+   "why": "Named lemonade, nothing says sparkling or carbonated water.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "sports-drinks",
+   "owner": "baby-food",
+   "product": "Gerber 2nd Foods Fruit & Veggie Variety Pack, 4 oz., 30 ct.",
+   "verdict": "NO",
+   "why": "Baby food puree pouches, nothing like a bottled sports drink.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "sports-drinks",
+   "owner": "lemonade",
+   "product": "Nature's Twist Sugar Free Lemonade Variety Pack, 16.9 fl. oz., 24 pk.",
+   "verdict": "NO",
+   "why": "Lemonade, not an electrolyte sports drink like Gatorade or Powerade.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "stain-remover",
+   "owner": "laundry-detergent",
+   "product": "ARM & HAMMER Plus OxiClean Ultra Stain Fighters Liquid Laundry Detergent, Fresh Scent",
+   "verdict": "NO",
+   "why": "It is a detergent with stain fighters, not a pretreat stain remover product like Shout or Spray 'n Wash.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "storage-bags",
+   "owner": "raisins",
+   "product": "Sun-Maid® California Sun-Dried Raisins 32oz Resealable Stand-Up Bag",
+   "verdict": "NO",
+   "why": "It is raisins; the resealable bag is its packaging, not a storage-bag product.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "strawberries",
+   "owner": "frozen-fruit",
+   "product": "Fareway Unsweetened Sliced Strawberries",
+   "verdict": "UNSURE",
+   "why": "Unsweetened sliced suggests frozen, but the name states no form and the candidate's examples mix fresh and frozen.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "string-cheese",
+   "owner": "shredded-cheese",
+   "product": "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Cheese",
+   "verdict": "NO",
+   "why": "Explicitly shredded, not string cheese.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "string-cheese",
+   "owner": "shredded-cheese",
+   "product": "Member's Mark Part-Skim Mozzarella Cheese 5 lbs.",
+   "verdict": "NO",
+   "why": "No mention of string/sticks; a 5 lb mozzarella pack reads as bulk block or shredded, not string cheese.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "string-cheese",
+   "owner": "shredded-cheese",
+   "product": "Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz",
+   "verdict": "NO",
+   "why": "Explicitly shredded, not string cheese.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "sweet-potatoes",
+   "owner": "canned-yams",
+   "product": "Bruce's Sweet Potatoes, In Syrup, Cut, Yams 40 Oz",
+   "verdict": "NO",
+   "why": "Cut yams in syrup are canned, verbatim owner example, not fresh sweet potatoes.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "sweet-potatoes",
+   "owner": "russet-potatoes",
+   "product": "Hy-Vee One Step Russet Potatoes (5 lb)",
+   "verdict": "NO",
+   "why": "Russet potatoes, not sweet potatoes.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "sweet-potatoes",
+   "owner": "russet-potatoes",
+   "product": "Our Family Potatoes Russet Idaho",
+   "verdict": "NO",
+   "why": "Russet Idaho potatoes, not sweet potatoes.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "tampons",
+   "owner": "feminine-pads",
+   "product": "Stayfree Maxi Pads Super Absorbency Unscented",
+   "verdict": "NO",
+   "why": "Maxi pads, a different product form than tampons.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "toilet-bowl-cleaner",
+   "owner": "all-purpose-cleaner",
+   "product": "All Purpose Cleaner W/Bleach Our Family",
+   "verdict": "NO",
+   "why": "An all-purpose cleaner, not a toilet bowl product; candidate examples are all bowl-specific.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "turkey-lunchmeat",
+   "owner": "turkey-breast",
+   "product": "Butterball All Natural Frozen Turkey Breast Roast, 3 lbs",
+   "verdict": "NO",
+   "why": "A frozen raw turkey breast roast, not deli sliced lunchmeat.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "turkey-lunchmeat",
+   "owner": "turkey-breast",
+   "product": "Butterball Cajun Style Boneless Turkey Breast Roast",
+   "verdict": "NO",
+   "why": "A raw boneless turkey breast roast, not deli sliced lunchmeat.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "turkey-lunchmeat",
+   "owner": "turkey-breast",
+   "product": "Lunch Mate Mesquite Turkey Breast 9 OZ",
+   "verdict": "YES",
+   "why": "Lunch Mate is a deli lunchmeat line the candidate already accepts (Oven Roasted 16 OZ), and 9 oz mesquite turkey reads as sliced lunchmeat.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "vegetable-oil",
+   "owner": "cooking-spray",
+   "product": "Our Family Cooking Spray, No Stick, Canola Oil 6 Oz",
+   "verdict": "NO",
+   "why": "Aerosol cooking spray, not a bottle of pourable oil.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "whipped-cream",
+   "owner": "heavy-cream",
+   "product": "Friendly Farms Heavy Whipping Cream 32 FL OZ",
+   "verdict": "NO",
+   "why": "Liquid heavy cream, not a ready whipped topping.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "whipped-cream",
+   "owner": "heavy-cream",
+   "product": "Great Value Heavy Whipping Cream, 64 fl oz",
+   "verdict": "NO",
+   "why": "Liquid heavy cream, not a ready whipped topping.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "whipped-cream",
+   "owner": "heavy-cream",
+   "product": "Hy Vee Heavy Whipping Cream",
+   "verdict": "NO",
+   "why": "Liquid heavy cream, not a ready whipped topping.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "whipped-cream",
+   "owner": "heavy-cream",
+   "product": "Kemps Heavy Whipping Cream",
+   "verdict": "NO",
+   "why": "Liquid heavy cream, not a ready whipped topping.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "whipped-cream",
+   "owner": "heavy-cream",
+   "product": "Kroger Heavy Whipping Cream Quart",
+   "verdict": "NO",
+   "why": "Liquid heavy cream, not a ready whipped topping.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "whipped-cream",
+   "owner": "heavy-cream",
+   "product": "Member's Mark Heavy Whipping Cream, 32 fl. oz.",
+   "verdict": "NO",
+   "why": "Liquid heavy cream, not a ready whipped topping like the candidate's examples.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "whipped-cream",
+   "owner": "heavy-cream",
+   "product": "Our Family Heavy Whipping Cream 32 Fl Oz",
+   "verdict": "NO",
+   "why": "Liquid heavy cream, not a ready whipped topping.",
+   "ruled_by": "fable"
+  },
+  {
+   "candidate": "whole-chicken",
+   "owner": "rotisserie-chicken",
+   "product": "Freshness Guaranteed Traditional Rotisserie Whole Chicken",
+   "verdict": "NO",
+   "why": "A cooked rotisserie chicken, not a raw fresh whole chicken.",
+   "ruled_by": "fable"
+  }
+ ]
+}

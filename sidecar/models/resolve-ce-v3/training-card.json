@@ -1,0 +1,81 @@
+{
+  "generated": "2026-08-23T01:57:21",
+  "base": "BAAI/bge-reranker-v2-m3",
+  "is_the_pinned_model": true,
+  "corpus": "sidecar/data/pair-corpus-r3",
+  "corpus_manifest": {
+    "generated": "2026-08-23T01:54:45",
+    "mine_labelled_sha256_16": "47c30a9c161bbccf",
+    "mine_adjudicated_sha256_16": "749b99591aeb9631",
+    "defs": "sidecar/data/frozen/phase3-baseline/commodity-defs.json",
+    "defs_frozen": true,
+    "seed": 20260822,
+    "holdout_families": [
+      "dairy",
+      "frozen",
+      "household",
+      "pet"
+    ],
+    "counts": {
+      "raw": 10859,
+      "conflicted_dropped": 2,
+      "kept": 9290,
+      "train": {
+        "pos": 2958,
+        "neg": 4395
+      },
+      "test": {
+        "pos": 718,
+        "neg": 1219
+      }
+    },
+    "sources": {
+      "gold_no_match": 564,
+      "gold_match": 1061,
+      "skipped:gold_match:no-definition": 40,
+      "skipped:accepted_pair:no-definition": 307,
+      "accepted_pair": 3105,
+      "adjudicated_known_wrong": 65,
+      "adjudicated_llm_confirmed": 375,
+      "excluded:single_model": 3315,
+      "adjudicated_llm_rejected": 377,
+      "known_wrong": 191,
+      "mined_near_miss": 4908,
+      "adjudicated_mined_no_match": 212,
+      "abstained:mined_near_miss": 9,
+      "adjudicated_mined_match": 3,
+      "overruled:mined_near_miss": 2
+    },
+    "excluded_by_design": "single-model rejections (see the module header)"
+  },
+  "hyper": {
+    "epochs": 2,
+    "batch": 16,
+    "lr": 1e-05,
+    "warmup": 0.1,
+    "max_len": 160,
+    "seed": 20260823,
+    "pos_weight": 1.4858012170385395,
+    "precision": "bf16 autocast, fp32 master weights"
+  },
+  "train_rows": 7353,
+  "test_rows": 1937,
+  "stock_holdout_auc": 0.908353918116361,
+  "stock_holdout_auc_mined_only": 0.9339336161181713,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.2580090181649493,
+      "holdout_auc": 0.9579681962245871,
+      "holdout_auc_mined_only": 0.9813120708486085
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.14031146642920828,
+      "holdout_auc": 0.9593815196254293,
+      "holdout_auc_mined_only": 0.9821622597951645
+    }
+  ],
+  "elapsed_sec": 140.4,
+  "NOT_A_GATE": "the holdout AUC here is the training signal. The gate is hardeval.py --stage score --reranker <this dir> --defs <the same frozen snapshot>, GOLD deciding, and backtest.py alongside it."
+}
