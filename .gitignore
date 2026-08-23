@@ -143,6 +143,23 @@
 # seo-backlink-plan.md - a one-off plan doc from 2026-07-10 that nothing in the repo references and no
 #             build step reads. Notes, not source.
 
+# --- THE BROWSER AGENTS' CHROME PROFILES. NOT DATA, AND NOT OURS TO PUBLISH (2026-08-23) -----------------
+# capture-run stages the whole of grocery/out (see $inputPaths), and on 2026-08-22 the browser driver
+# started writing persistent Chrome profiles underneath it. They went straight into the repo: 4,552 files,
+# 680 MB, and 4,388 of them in a single commit (d2a864c0).
+#
+# THE SIZE IS THE SMALL PROBLEM. The profile is what pull-browser-stores.py uses to PROVE it is on the
+# right Omaha store - cookies, local storage, the Fareway in-store identity a human seeded once by hand.
+# That is a live session credential, and it was being pushed to a remote every morning. A fresh profile
+# "silently lands on some default store, and a plausible price for the wrong city is the worst thing this
+# estate can produce" (the driver's own header), which is exactly why the profile is persistent and
+# exactly why it must never be shared.
+#
+# The working copy STAYS - the driver needs it and is unaffected. Only git stops carrying it. The cloud
+# runner cannot drive Chrome at all (daily.yml runs -NoAlert, headless, no browser lane), so nothing
+# restores this from git and nothing depends on it being there.
+/grocery/out/browser-profiles/
+
 # --- regenerable pipeline OUTPUTS: recomputed every run from the raw inputs, so never tracked. This lets
 #     the local browser agents commit their raw store data without derived-file rebase conflicts vs the
 #     cloud, and keeps the repo to source-of-truth inputs + durable state only. ---
