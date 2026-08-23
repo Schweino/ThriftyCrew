@@ -37,6 +37,8 @@ param(
   [switch]$List,
   [switch]$Record,
   [switch]$Verdict,
+  [switch]$Promote,
+  [string]$Bid = '',
   [string]$Term = '',
   [string]$Recipe = '',
   [string]$Why = '',
@@ -185,6 +187,59 @@ if ($Verdict) {
   Write-Output ("   carried by: {0}" -f $(if ($v.carried_by.Count) { $v.carried_by -join ', ' } else { 'none yet' }))
   $un = @($STORES | Where-Object { $v.checked -notcontains $_ })
   if ($un.Count) { Write-Output ("   STILL UNCHECKED: {0}  (unchecked is not not-carried)" -f ($un -join ', ')) }
+  exit 0
+}
+
+# ---- -Promote --------------------------------------------------------------------------------------
+# Write a settled queue verdict into grocery\carriage.json, keyed by BID, where every gate can read it.
+#
+# WHY THIS EXISTS. The queue is per-RUN and keyed by TERM; the gates are permanent and keyed by BID. Until
+# these were joined, a pricer could check all seven stores, prove an ingredient absent, and that finding
+# died with the run - the cost engine and the publish gate never saw it. Promotion is what makes a
+# pricer's work durable. PENDING never promotes: an unfinished check is not a fact.
+if ($Promote) {
+  if (-not $Term) { Write-Output 'ingredient-queue: -Promote needs -Term'; exit 1 }
+  if (-not $Bid)  { Write-Output 'ingredient-queue: -Promote needs -Bid (the commodity id, or "item:<Item Name>" for a bid-less ingredient) - the ledger is keyed by bid, not by term'; exit 1 }
+  $e = Get-Item $doc $Term
+  if (-not $e) { Write-Output ("ingredient-queue: '{0}' is not queued" -f $Term); exit 1 }
+  $v = Get-QueueVerdict $e $STORES $TERMINAL
+  if ($v.verdict -eq 'PENDING') {
+    Write-Output ("ingredient-queue: REFUSED to promote '{0}' - verdict is PENDING ({1} of 7 checked). An unfinished check is not a fact." -f $Term, $v.checked.Count)
+    exit 1
+  }
+  $ledgerFile = Join-Path $root 'carriage.json'
+  if (-not (Test-Path $ledgerFile)) { Write-Output ("ingredient-queue: no ledger at " + $ledgerFile); exit 1 }
+  $led = Get-Content $ledgerFile -Raw | ConvertFrom-Json
+  $stamp = (Get-Date -Format 'yyyy-MM-dd')
+  if ($v.verdict -eq 'CARRIED') {
+    # the cheapest carrying store's own row is the evidence
+    $best = $null
+    foreach ($s in $v.carried_by) {
+      $r = $e.stores.$s
+      if ($null -eq $best -or ([double]$r.price -gt 0 -and [double]$r.price -lt [double]$best.price)) { $best = [pscustomobject]@{ store = $s; price = [double]$r.price; item = [string]$r.item; size = [string]$r.size } }
+    }
+    $entry = [pscustomobject]@{ verdict = 'CARRIED'; store = $best.store; item = $best.item; size = $best.size
+                                price = $best.price; as_of = $stamp
+                                source = ("promoted from ingredient-queue term '" + $Term + "'")
+                                why = ("carried by " + ($v.carried_by -join ', ')) }
+  } else {
+    $stores = [pscustomobject]@{}
+    foreach ($s in $STORES) {
+      $r = $e.stores.$s
+      $stores | Add-Member -NotePropertyName $s -NotePropertyValue ([pscustomobject]@{
+        state = [string]$r.state
+        terms_tried = @($(if ($r.PSObject.Properties.Name -contains 'terms_tried' -and @($r.terms_tried).Count) { $r.terms_tried } else { @($Term) }))
+        evidence = [string]$r.evidence })
+    }
+    $entry = [pscustomobject]@{ verdict = 'NOT-CARRIED'; as_of = $stamp; stores = $stores
+                                source = ("promoted from ingredient-queue term '" + $Term + "'")
+                                why = ("all seven Omaha stores answered and none carry it") }
+  }
+  if ($led.bids.PSObject.Properties.Name -contains $Bid) { $led.bids.$Bid = $entry }
+  else { $led.bids | Add-Member -NotePropertyName $Bid -NotePropertyValue $entry }
+  ($led | ConvertTo-Json -Depth 12) | Set-Content $ledgerFile -Encoding UTF8
+  Write-Output ("ingredient-queue: promoted '{0}' -> carriage.json[{1}] = {2}" -f $Term, $Bid, $v.verdict)
+  Write-Output '   recost (meal-prep\engine\cost-recipes.ps1) for the gates to see it.'
   exit 0
 }
 

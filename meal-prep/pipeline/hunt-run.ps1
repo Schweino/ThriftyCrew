@@ -231,6 +231,41 @@ function Read-Entries {
 
 # The live verdict map. ONE call to the queue, and we read the `verdict` it recomputes on every -Record
 # through its own single implementation of Rule B. Re-deriving that rule here would be the second copy.
+# ---------------------------------------------------------------------------------------------------
+# CARRIAGE-DERIVED BLOCKING TERMS. The mapper reports "absent terms" - ingredients it could not map to a
+# commodity id - and until 2026-08-22 that list WAS the pricing worklist. It is not sufficient, because
+# an ingredient can map perfectly and still be a food no Omaha store stocks: doubanjiang, rice-cakes and
+# ground-sumac all mapped to real ids, so the mapper reported nothing, so nothing was ever priced, so
+# `-To pricing` with an empty -Terms derived `priced` instantly and the recipe sailed to a paid page.
+#
+# So hunt-run derives the list ITSELF from the mapped artifact's bids, and unions it with whatever the
+# mapper reported. The mapper can now only ADD to the worklist, never shrink it - the difference between
+# a gate and a request. FAIL-CLOSED: an unreadable mapped file yields no derived terms and says so, and
+# an ingredient whose carriage is UNKNOWN parks the recipe rather than pricing it.
+# ---------------------------------------------------------------------------------------------------
+function Get-CarriageBlockingTerms {
+  param([string]$RunDir, [string]$Slug, [string]$RepoRoot)
+  $out = @()
+  $mf = Join-Path $RunDir ("mapped\{0}.json" -f $Slug)
+  if (-not (Test-Path $mf)) { return @{ terms = @(); read = $false; why = "no mapped\$Slug.json" } }
+  try { $doc = Get-Content $mf -Raw | ConvertFrom-Json } catch { return @{ terms = @(); read = $false; why = "mapped\$Slug.json unparseable" } }
+  $carrLib = Join-Path $RepoRoot 'lib\carriage-lib.ps1'
+  if (-not (Test-Path $carrLib)) { return @{ terms = @(); read = $false; why = 'carriage-lib.ps1 missing' } }
+  . $carrLib
+  $feedFile = Join-Path $RepoRoot 'grocery\out\smp-feed.json'
+  $fc = @{}
+  if (Test-Path $feedFile) { try { $fc = Get-FeedCarriedSet ((Get-Content $feedFile -Raw | ConvertFrom-Json).ingredients) } catch { $fc = @{} } }
+  $led = Import-CarriageLedger (Join-Path $RepoRoot 'grocery\carriage.json')
+  foreach ($ing in @($doc.ingredients)) {
+    $bid  = if ($ing.PSObject.Properties.Name -contains 'bid') { [string]$ing.bid } else { $null }
+    $item = [string]$ing.item
+    if (-not $item) { continue }
+    $c = Get-Carriage -Bid $bid -Item $item -FeedCarried $fc -Ledger $led
+    if ($c.verdict -ne 'CARRIED') { $out += $item }
+  }
+  return @{ terms = @($out | Sort-Object -Unique); read = $true; why = '' }
+}
+
 function Get-TermVerdictMap {
   param([string]$QueuePath)
   $map = @{}
@@ -350,6 +385,26 @@ if ($runSelfTest) {
   # answered for is exactly the case that must not ship.
   $d3 = Get-DerivedPricingState $tRows @{ 'saffron' = 'CARRIED' }
   T 'MUST FIRE  a term missing from the queue counts as PENDING, not as passed' ($d3.state -eq 'parked') $d3.state
+
+  # ---- CARRIAGE UNION. The 2026-08-22 hole: an ingredient that MAPS FINE but no Omaha store stocks.
+  # The mapper reports nothing (it mapped everything), so -Terms is empty, so the recipe derives `priced`
+  # with no pricing work at all. hunt-run must find it from the mapped bids on its own.
+  $tmpRun = Join-Path ([IO.Path]::GetTempPath()) ('hr-carr-' + [Guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Force (Join-Path $tmpRun 'mapped') | Out-Null
+  try {
+    @{ slug = 'fixture-dish'; ingredients = @(
+        @{ item = 'Chicken Thighs'; bid = 'chicken-thighs' },
+        @{ item = 'Doubanjiang';    bid = 'doubanjiang' },
+        @{ item = 'Keto Bun';       bid = $null }) } | ConvertTo-Json -Depth 6 |
+      Set-Content (Join-Path $tmpRun 'mapped\fixture-dish.json') -Encoding UTF8
+    $cb = Get-CarriageBlockingTerms -RunDir $tmpRun -Slug 'fixture-dish' -RepoRoot $repo
+    T 'carriage derives blocking terms from the mapped artifact' ($cb.read) $cb.why
+    T 'MUST FIRE  a mapped-but-uncarried ingredient is derived as blocking' (@($cb.terms) -contains 'Doubanjiang') (@($cb.terms) -join ',')
+    T 'CLEAN TWIN  a carried ingredient is NOT derived as blocking' (@($cb.terms) -notcontains 'Chicken Thighs') (@($cb.terms) -join ',')
+    T 'a bid-less item proven carried by the ledger is not blocking' (@($cb.terms) -notcontains 'Keto Bun') (@($cb.terms) -join ',')
+    $cbMissing = Get-CarriageBlockingTerms -RunDir $tmpRun -Slug 'no-such-slug' -RepoRoot $repo
+    T 'MUST FIRE  an unreadable mapped file reports read=false rather than a silent empty pass' (-not $cbMissing.read) 'claimed a clean read'
+  } finally { Remove-Item $tmpRun -Recurse -Force -ErrorAction SilentlyContinue }
 
   # ---- FIXTURE 2. A genuine NOT-CARRIED (all seven checked, none carry) is the ONLY way to reject...
   $vmFail = @{ 'saffron' = 'CARRIED'; 'achiote paste' = 'NOT-CARRIED' }
@@ -697,10 +752,32 @@ if ($runAdvance) {
     Write-Output ("hunt-run: REFUSED {0}: {1} -> {2}. Legal from '{1}': {3}" -f $Slug, $from, $To, $(if (@($script:NEXT[$from]).Count) { @($script:NEXT[$from]) -join ', ' } else { '(terminal)' }))
     exit 1
   }
-  if (@($Terms).Count -or @($OptionalTerms).Count) {
-    $rows = @()
-    foreach ($t in @($Terms)      | Where-Object { $_ }) { $rows += [pscustomobject]@{ term = [string]$t; optional = $false } }
-    foreach ($t in @($OptionalTerms) | Where-Object { $_ }) { $rows += [pscustomobject]@{ term = [string]$t; optional = $true } }
+  # THE CARRIAGE UNION. On the way into `pricing`, hunt-run derives the blocking list from the mapped
+  # bids itself and unions it with the mapper's. A carriage-blocked ingredient is NEVER optional: a
+  # garnish the store does not sell is still an ingredient nobody can buy.
+  $derivedTerms = @()
+  if ($To -eq 'pricing') {
+    $cb = Get-CarriageBlockingTerms -RunDir $RunDir -Slug $Slug -RepoRoot $repo
+    $derivedTerms = @($cb.terms)
+    if (-not $cb.read) {
+      Write-Output ("hunt-run: WARNING carriage not derived for {0} ({1}); relying on the mapper's -Terms alone" -f $Slug, $cb.why)
+    } elseif ($derivedTerms.Count) {
+      Write-Output ("hunt-run: carriage adds {0} blocking ingredient(s) the mapper did not report: {1}" -f $derivedTerms.Count, ($derivedTerms -join ', '))
+    }
+  }
+  if (@($Terms).Count -or @($OptionalTerms).Count -or $derivedTerms.Count) {
+    $rows = @(); $seen = @{}
+    foreach ($t in @($Terms) + @($derivedTerms) | Where-Object { $_ }) {
+      $k = [string]$t; if ($seen.ContainsKey($k)) { continue }; $seen[$k] = $true
+      $rows += [pscustomobject]@{ term = $k; optional = $false }
+    }
+    foreach ($t in @($OptionalTerms) | Where-Object { $_ }) {
+      $k = [string]$t
+      # a carriage-blocked term outranks an "optional" label from the mapper
+      if ($seen.ContainsKey($k)) { continue }
+      $seen[$k] = $true
+      $rows += [pscustomobject]@{ term = $k; optional = $true }
+    }
     $e.terms = @($rows)
   }
   $e.state = $To
