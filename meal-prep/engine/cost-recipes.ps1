@@ -146,7 +146,12 @@ if($DRAINED.Count -gt 0){
 $repoRoot = Split-Path $mp -Parent
 . (Join-Path $repoRoot 'lib\carriage-lib.ps1')
 $FEEDCARRIED = Get-FeedCarriedSet $feed
-$CARRLEDGER  = Import-CarriageLedger (Join-Path $repoRoot 'grocery\carriage.json')
+# THE LEDGER FOLLOWS -GroceryOut, exactly as the feed does. A fixture run supplies its own grocery-out and
+# must get that fixture's carriage too: reading the LIVE ledger while costing FIXTURE prices mixes two
+# worlds, and a golden test whose verdicts drift with production data is not a regression test. Falls back
+# to the repo ledger for a normal run, where $gout IS grocery\out.
+$CARRLEDGER  = Import-CarriageLedger (Join-Path $gout 'carriage.json')
+if (-not $CARRLEDGER.Count) { $CARRLEDGER = Import-CarriageLedger (Join-Path (Split-Path $gout -Parent) 'carriage.json') }
 
 $noBoardOk=@{}
 $nbFile = Join-Path $db 'no-board-price-ok.json'

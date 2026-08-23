@@ -1,0 +1,29 @@
+{
+    "_doc": "FIXTURE carriage ledger for the golden regression. Frozen inputs, deliberately NOT the live grocery\\carriage.json - a golden test whose verdicts drift with production data is not a regression test. cost-recipes.ps1 resolves the ledger relative to -GroceryOut for exactly this reason.",
+    "generated": "2026-08-22",
+    "bids": {
+        "aji-amarillo-paste": {
+            "verdict": "CARRIED",
+            "store": "Walmart",
+            "item": "Inca's Food Aji Amarillo Paste 10.5 oz",
+            "size": "10.5 oz",
+            "price": 3.98,
+            "as_of": "2026-08-22",
+            "why": "carried but board-unpriced - the case no-board-price-ok.json exists for"
+        },
+        "doubanjiang": {
+            "verdict": "UNKNOWN",
+            "as_of": "2026-08-22",
+            "why": "never established either way; searched as 'chili bean sauce', which returns chili beans"
+        },
+        "item:Bulgur Wheat": {
+            "verdict": "CARRIED",
+            "store": "Baker's",
+            "item": "Bob's Red Mill Whole Grain Red Bulgur",
+            "size": "24 oz",
+            "price": 4.79,
+            "as_of": "2026-08-22",
+            "why": "genuinely carried in Omaha; this fixture's feed is a 96-bid subset that does not price it. Keyed by ITEM NAME because this fixture's ingredients.json predates the bulgur-wheat bid and carries bid=null - the same bid-less path Keto Bun and Korean Rice Cakes take live."
+        }
+    }
+}

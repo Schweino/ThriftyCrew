@@ -2,7 +2,7 @@
   "_doc": "Bids that intentionally have NO first-party Omaha board price and are priced via a documented register-estimate label in labels-r300.json. cost-engine.ps1 suppresses the 'MAPPED BID NOT ON ANY BOARD' advisory for these so the flag list stays meaningful (an advisory should mean 'look at this', not 'known gap you already decided on'). An allowlisted bid with NO label still hard-flags as unpriced. Remove a bid the moment a real in-store capture lands for it. See recipe-r300-open-items memory #5.",
   "bids": [
     "dried-guajillo-chiles",
-    "doubanjiang",
     "aji-amarillo-paste"
-  ]
+  ],
+  "_fixture_note": "doubanjiang removed 2026-08-22 with the live list: the allowlist excuses BOARD PRICING for a food known to be on a shelf, and doubanjiang has never been found in any Omaha store. Its recipe (ants-climbing-a-tree-pork-noodles) is kept in this fixture ON PURPOSE so the expected output freezes the refusal."
 }

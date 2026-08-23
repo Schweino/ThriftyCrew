@@ -676,6 +676,24 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $dlOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'derive-links-from-prices.ps1') -Apply
         Log ('derive-links-from-prices: ' + ((@($dlOut) | Where-Object { $_ -match 'APPLIED' })[-1]))
       } catch { Log ('derive-links-from-prices threw: ' + $_.Exception.Message) }
+      # CARRIAGE WATCH. The gates that enforce carriage are event-driven - they fire when something is
+      # costed or published. Carriage itself is not static: a store delists a product and a LIVE recipe
+      # silently becomes a dish nobody can shop for, and nothing would say so until the next recost. This
+      # is the standing check. It changes nothing; taking a recipe down is Brad's call, and it pages him.
+      try {
+        $carrOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-carriage.ps1')
+        $carrBad = @($carrOut | Where-Object { $_ -match '^\s+X ' })
+        $carrRev = @($carrOut | Where-Object { $_ -match '^\s+\+ ' })
+        if ($carrBad.Count) {
+          Log ('CARRIAGE: ' + $carrBad.Count + ' LIVE recipe(s) have an ingredient no Omaha store is proven to carry')
+          $summary += ('ACT       ' + $carrBad.Count + ' live recipe(s) sell a dish nobody can shop for - see audit-carriage.ps1')
+          if (-not $NoAlert) { try { Send-Alert -Subject ("Live recipe(s) with an ingredient Omaha does not carry") -Body (("The standing carriage watch found {0} PUBLISHED recipe(s) whose ingredient no Omaha store is proven to stock. Brad's standing rule is that one uncarried ingredient means we cannot use the recipe, so these should come down.`n`n{1}`n`nThis is read-only: nothing was unpublished. Take them down with the same path used on 2026-08-22 (unpublish to DRAFT, not delete, so a later capture can revive them).`n`nIf an ingredient is actually carried and the board simply cannot price it, record the store evidence in grocery\carriage.json instead - that is what ground-sumac's row is." -f $carrBad.Count, (($carrBad | Select-Object -First 12) -join "`n"))) | Out-Null } catch {} }
+        }
+        if ($carrRev.Count) {
+          Log ('CARRIAGE: ' + $carrRev.Count + ' drafted recipe(s) are now unblocked')
+          $summary += ('REVIEW    ' + $carrRev.Count + ' drafted recipe(s) could come back - the ingredient that parked them is carried again')
+        }
+      } catch { Log ('audit-carriage threw: ' + $_.Exception.Message) }
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-tile-integrity.ps1') -Quiet | Out-Null
         if ($LASTEXITCODE -eq 3) { Log 'tile-integrity BLIND (zero links graded) - the link layer is empty/unreadable; fix-links-ff is about to run against nothing' }
