@@ -1,0 +1,35 @@
+{
+  "frozen": "2026-08-22T21:08:43",
+  "name": "phase3-baseline",
+  "files": {
+    "commodity-defs.json": {
+      "sha256_16": "de3f574d91d0672b",
+      "bytes": 305304
+    },
+    "positives.json": {
+      "sha256_16": "1d7299239d71f93d",
+      "bytes": 523477
+    },
+    "negatives.json": {
+      "sha256_16": "50f887a37327caae",
+      "bytes": 14661
+    },
+    "eval-positives.json": {
+      "sha256_16": "1d7299239d71f93d",
+      "bytes": 523477
+    },
+    "negatives-gold.json": {
+      "sha256_16": "4f7d7f6cb6b058a2",
+      "bytes": 14679
+    },
+    "mine-labelled.json": null
+  },
+  "notes": {
+    "commodity-defs.json": "label + today's accepted exemplars - THE drifting input",
+    "positives.json": "accepted board pairs (backtest.py's positive class)",
+    "negatives.json": "the 25 dramatic negatives (Phase 1's set)",
+    "eval-positives.json": "accepted board pairs (hardeval.py's positive class)",
+    "negatives-gold.json": "the adjudicated wrong-product rulings - the class that matters",
+    "mine-labelled.json": "mined near-misses, regex-labelled (empty to date)"
+  }
+}

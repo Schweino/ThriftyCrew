@@ -26,7 +26,19 @@
 # requirements.txt and the pinned model ids in lib_match.py. data\ and out\ are derived from the feeds.
 !/sidecar/
 /sidecar/.venv/
-/sidecar/data/
+# NOTE the trailing /* rather than /. Git does not descend into an EXCLUDED DIRECTORY, so a
+# later negation for a path inside it can never match - the frozen snapshots below stayed
+# invisible until this line was changed from `/sidecar/data/` to `/sidecar/data/*`.
+/sidecar/data/*
+# ...EXCEPT the frozen evaluation snapshots. data/ is a working directory and is rightly
+# ignored, but a snapshot is an evaluation RECORD, and the argument is the one made for the
+# gold set below: a record that does not outlive the machine that produced it is not a record.
+# It exists because commodity_text() is label + TODAY's accepted exemplars, so every score in
+# the estate drifts with the shelf - measured 2026-08-22, dropping the exemplars moves TASK A
+# AUC from 0.9705 to 0.7921, and the same eval files scored 24/24 on 08-01 and 17/25 on 08-22
+# with no model change at all. A stock-vs-candidate comparison must pin both sides to one
+# snapshot (sidecar/freeze_eval.py) or it measures the board. ~850 KB each.
+!/sidecar/data/frozen/
 /sidecar/out/*
 !/sidecar/out/backtest-report.md
 !/sidecar/out/phase2-report.md
@@ -35,6 +47,12 @@
 # negatives so dramatic (bath soap as coconut oil) that it answered a question nobody was asking.
 !/sidecar/out/hardeval-report.md
 !/sidecar/out/hardeval.json
+# The TAGGED eval records too (backtest.py/hardeval.py --tag). These are baselines a fine-tune
+# is measured against months later; an evaluation record that does not outlive the machine that
+# produced it is not a record. Tens of KB each.
+!/sidecar/out/backtest-*.json
+!/sidecar/out/hardeval-*.json
+!/sidecar/out/hardeval-report-*.md
 /sidecar/**/__pycache__/
 # The member-tool SOURCES and the build scripts that publish them. Same hole as lib\ and the interstitial:
 # these run on the live site, several are the only copy in existence, and none of them were versioned

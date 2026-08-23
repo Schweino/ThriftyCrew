@@ -21,6 +21,39 @@ about. This is that score. It answers three questions, and it is allowed to fail
       board. If it finds them without anyone writing a pattern, that is the whole thesis proved.
 
 Nothing here writes to the board, the feeds, or any rule. Output is a report.
+
+THE SAME GATE, POINTED AT A CANDIDATE (2026-08-22, PLAN-local-matching section 6)
+--------------------------------------------------------------------------------
+    python sidecar/backtest.py --reranker C:/path/to/finetuned-copy --tag ft-v1
+
+A fine-tuned cross-encoder for the resolve lane has to clear TWO bars, and this file is the second:
+beating stock on a cold holdout is not enough if the new weights lose a defect the old ones caught.
+So the candidate is scored HERE, on the same 25 adjudicated-wrong pairs and the same discovery
+replay, and it ships only if it still catches what stock catches.
+
+--reranker does NOT move the pin. RERANK_MODEL in lib_match.py stays exactly what it is, sweep.py
+takes no such flag, and the estate keeps scoring on the pinned model while a candidate is measured.
+The report records which model produced its numbers, and --tag names the output files, so a
+candidate run can never quietly overwrite the stock baseline it is supposed to be compared against.
+
+--defs, AND WHY A COMPARISON WITHOUT IT IS MEANINGLESS
+------------------------------------------------------
+commodity_text() is "label + up to 5 of the products the board currently accepts", so every score
+here is a function of what the shelf happened to look like this morning. That is right for the
+sweep - it is scoring today's board - and it is fatal for a before/after.
+
+MEASURED 2026-08-22, same model, same positives.json, same negatives.json, only the commodity text
+changed:
+
+    label + exemplars    AUC 0.9705    17/25 known-wrong caught at a 100/2816 budget
+    label alone          AUC 0.7921     0/25
+
+The exemplars are doing nearly all the work. And with the identical eval files, this gate reported
+24/24 recall on 2026-08-01 and 17/25 on 2026-08-22 - the model did not change, the board did.
+
+So: freeze the defs with the eval set (sidecar/freeze_eval.py) and pass --defs to BOTH the stock
+run and the candidate run. A candidate measured against a different day's commodity text is
+measuring board churn, and the difference is larger than any fine-tune is likely to buy.
 """
 from __future__ import annotations
 import json, os, sys, time
@@ -29,7 +62,8 @@ from collections import defaultdict
 import torch
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lib_match import Matcher, clean_product, commodity_text, load_json, calibrate, DEVICE
+from lib_match import (Matcher, clean_product, commodity_text, load_json, calibrate, DEVICE,
+                       EMBED_MODEL, RERANK_MODEL)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "data")
@@ -64,14 +98,37 @@ def auc(pos: list[float], neg: list[float]) -> float:
 
 
 def main() -> None:
+    import argparse
+    ap = argparse.ArgumentParser(description="Acceptance gate for the semantic matcher")
+    ap.add_argument("--reranker", default=None,
+                    help="path to a candidate cross-encoder to score with INSTEAD of the pinned "
+                         "model, for this run only. Does not change the pin or affect sweep.py.")
+    ap.add_argument("--tag", default=None,
+                    help="suffix for the output files, so a candidate run cannot overwrite the "
+                         "stock baseline it is being compared against. Defaults to 'stock' for a "
+                         "pinned run and is REQUIRED when --reranker is given.")
+    ap.add_argument("--defs", default=None,
+                    help="a FROZEN commodity-defs.json to score against instead of today's. Use "
+                         "this for any stock-vs-candidate comparison; see the note below.")
+    args = ap.parse_args()
+    # A candidate run that writes over backtest.json would destroy the only thing it can be judged
+    # against. Refuse rather than clobber.
+    tag = args.tag or ("stock" if not args.reranker else None)
+    if tag is None:
+        ap.error("--tag is required with --reranker, so the candidate's report cannot overwrite the "
+                 "stock baseline (try --tag ft-v1)")
+
     log(f"device={DEVICE} torch={torch.__version__}")
+    log(f"reranker={args.reranker or RERANK_MODEL}  tag={tag}")
     positives = load_json(os.path.join(DATA, "positives.json"))
     negatives = load_json(os.path.join(DATA, "negatives.json"))
-    defs = load_json(os.path.join(DATA, "commodity-defs.json"))
+    defs_path = args.defs or os.path.join(DATA, "commodity-defs.json")
+    defs = load_json(defs_path)
+    log(f"defs={defs_path}{'  (FROZEN)' if args.defs else '  (today, drifts with the board)'}")
     log(f"positives={len(positives)} hard-negatives={len(negatives)} commodities={len(defs)}")
 
-    m = Matcher.load(with_reranker=True)
-    log("models loaded")
+    m = Matcher.load(with_reranker=True, reranker_path=args.reranker)
+    log(f"models loaded (cross-encoder: {m.rerank_id})")
 
     defs_by_id = {d["id"]: d for d in defs}
     cids = [d["id"] for d in defs]
@@ -169,6 +226,14 @@ def main() -> None:
     report = {
         "generated": time.strftime("%Y-%m-%d %H:%M:%S"),
         "device": DEVICE,
+        # WHICH MODEL SAID THIS. A backtest report without it is a number nobody can reproduce once
+        # a second copy of the reranker exists on this box - which is the whole premise of section 6.
+        "tag": tag,
+        "embed_model": EMBED_MODEL,
+        "rerank_model": m.rerank_id,
+        "is_pinned_model": (m.rerank_id == RERANK_MODEL),
+        "defs": os.path.basename(defs_path),
+        "defs_frozen": bool(args.defs),
         "counts": {"positives": len(pos_ce), "hard_negatives": len(neg_ce), "commodities": len(defs),
                    "unmatched_prewiden": len(unmatched)},
         "task_a": {"auc_bi_encoder": auc_cos, "auc_cross_encoder": auc_ce, "operating_points": results_a},
@@ -179,9 +244,10 @@ def main() -> None:
             for i in range(len(all_pairs)) if all_pairs[i][2] == "neg"
         ],
     }
-    with open(os.path.join(OUT, "backtest.json"), "w", encoding="utf-8") as f:
+    name = "backtest.json" if tag == "stock" else f"backtest-{tag}.json"
+    with open(os.path.join(OUT, name), "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
-    log(f"wrote {os.path.join(OUT,'backtest.json')}")
+    log(f"wrote {os.path.join(OUT, name)}")
 
 
 if __name__ == "__main__":

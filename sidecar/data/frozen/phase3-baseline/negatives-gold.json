@@ -1,0 +1,407 @@
+﻿[
+    {
+        "id":  "coconut-oil",
+        "commodity":  "Coconut Oil",
+        "store":  "Baker\u0027s",
+        "product":  "Dr Teal\u0027s Foaming Bath with Pure Epsom Salt, Nourish \u0026 Protect with Coconut Oil",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "coffee",
+        "commodity":  "Coffee (ground/beans)",
+        "store":  "Walmart",
+        "product":  "Onyx Coffee Lab Salted Mocha Oat Milk Latte , 11 fl oz Can",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "coffee",
+        "commodity":  "Coffee (ground/beans)",
+        "store":  "Walmart",
+        "product":  "Onyx Coffee Lab Salted Mocha Oat Milk Latte, 11 fl oz Can",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "coffee",
+        "commodity":  "Coffee (ground/beans)",
+        "store":  "Walmart",
+        "product":  "(2 pack) Onyx Coffee Lab Matcha Oat Milk Latte, 11 fl oz Can",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "frosting",
+        "commodity":  "Frosting",
+        "store":  "Walmart",
+        "product":  "Freshness Guaranteed Shelf Stable Chocolate Chip Sandwich Cookies with Butter Cream Icing, 12 Count",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "parmesan",
+        "commodity":  "Parmesan (grated/shredded)",
+        "store":  "Aldi",
+        "product":  "Clancy S Parmesan Garlic Pita Chips 7.33 OZ",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "parmesan",
+        "commodity":  "Parmesan (grated/shredded)",
+        "store":  "Aldi",
+        "product":  "Clancy\u0027s Parmesan Garlic Pita Chips",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "parmesan",
+        "commodity":  "Parmesan (grated/shredded)",
+        "store":  "Baker\u0027s",
+        "product":  "Idahoan Baby Reds with Roasted Garlic \u0026 Parmesan Mashed Potatoes",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "salmon",
+        "commodity":  "Salmon (fillets)",
+        "store":  "Walmart",
+        "product":  "Blue Buffalo Wilderness Natural High Protein Dry Food for Adult Cats, Salmon, 9.5-lb Bag",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "ground-cinnamon",
+        "commodity":  "Ground Cinnamon",
+        "store":  "Walmart",
+        "product":  "TEDDY GRAHAMS Cinnamon Graham Snacks, Kids Snacks, 10 oz",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "stain-remover",
+        "commodity":  "Laundry Stain Remover",
+        "store":  "Walmart",
+        "product":  "Lysol Toilet Bowl Cleaner Clinging Gel, Power, Disinfecting Bathroom Cleaner and Toilet Bowl Stain Remover, 24 oz (2 Pack)",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "butter",
+        "commodity":  "Butter",
+        "store":  "Walmart",
+        "product":  "Nature\u0027s Own Butter Buns Hot Dog Buns, Non-GMO Hot Dog Buns, 8 Count",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "tomatoes",
+        "commodity":  "Tomatoes (fresh)",
+        "store":  "Family Fare",
+        "product":  "Contadina Roma Tomatoes Puree 29 Oz",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "tomatoes",
+        "commodity":  "Tomatoes (fresh)",
+        "store":  "Family Fare",
+        "product":  "Contadina Roma Tomatoes Puree",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "raspberries",
+        "commodity":  "Raspberries",
+        "store":  "Family Fare",
+        "product":  "Ken\u0027s Steak House Salad Dressing \u0026 Marinade, Raspberry Walnut Vinaigrette, Lite 16 Fl Oz",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "raspberries",
+        "commodity":  "Raspberries",
+        "store":  "Baker\u0027s",
+        "product":  "Pure Silk Raspberry Mist Moisturizing Shave Cream",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "strawberries",
+        "commodity":  "Strawberries",
+        "store":  "Sam\u0027s Club",
+        "product":  "Monster Energy Zero Sugar, Strawberry Shot, 16 fl. oz., 24 pk.",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "strawberries",
+        "commodity":  "Strawberries",
+        "store":  "Family Fare",
+        "product":  "Jumex Strawberry Banana Nectar From Concentrate 11.3 Fl Oz",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "strawberries",
+        "commodity":  "Strawberries",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Strawberry Applesauce",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "tortillas",
+        "commodity":  "Tortillas (flour)",
+        "store":  "Sam\u0027s Club",
+        "product":  "Quest Tortilla Style 10-20g Protein Chip Variety Pack, Salsa Verde and Chili Lime, 14 ct.",
+        "source":  "known-wrong",
+        "rules_accept":  true,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "cucumbers",
+        "commodity":  "Cucumbers",
+        "store":  "Sam\u0027s Club",
+        "product":  "Member\u0027s Mark by FujiSan Cucumber Avocado Roll, 15 pcs.",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "black-pepper",
+        "commodity":  "Black Pepper (ground)",
+        "store":  "Baker\u0027s",
+        "product":  "Simple Truth Protein Black Pepper Lentils Brown Rice and Ancient Grains Whole Grain Blend",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "accuracy-audit-2026-07-30"
+    },
+    {
+        "id":  "spinach",
+        "commodity":  "Spinach (fresh)",
+        "store":  "Walmart",
+        "product":  "Pictsweet Family Size Chopped Spinach",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "triage-developer 2026-07-31 (plan-2026-07-31 fa3102)"
+    },
+    {
+        "id":  "jalapenos",
+        "commodity":  "Jalapeno Peppers",
+        "store":  "Family Fare",
+        "product":  "San Marcos Traditional Recipe Crunchy Whole Jalapenos Peppers 26 Oz",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "triage-developer 2026-07-31 (plan-2026-07-31 fa3102)"
+    },
+    {
+        "id":  "ground-cloves",
+        "commodity":  "Cloves (ground)",
+        "store":  "Family Fare",
+        "product":  "Spice Supreme Spice Ground Cloves",
+        "source":  "known-wrong",
+        "rules_accept":  true,
+        "ruled_by":  "accuracy pass 2026-08-01"
+    },
+    {
+        "id":  "corned-beef-hash",
+        "commodity":  "Corned Beef Hash (canned)",
+        "store":  "Walmart",
+        "product":  "MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz Can",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "coverage-backlog-2026-08-01"
+    },
+    {
+        "id":  "coconut-milk-canned",
+        "commodity":  "Canned Coconut Milk",
+        "store":  "Walmart",
+        "product":  "Thai Kitchen Gluten Free Unsweetened Coconut Cream, 13.66 fl oz",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "coverage-backlog-2026-08-01"
+    },
+    {
+        "id":  "ground-pork",
+        "commodity":  "Ground Pork",
+        "store":  "Baker\u0027s",
+        "product":  "Ground Beef and Pork Blend, 80% Lean/20% Fat",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "coverage-backlog-2026-08-01"
+    },
+    {
+        "id":  "pork-tenderloin",
+        "commodity":  "Pork Tenderloin",
+        "store":  "Walmart",
+        "product":  "Prairie Fresh Natural Fresh Pork Half Loin, Boneless, 3.5-6 lb",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "coverage-backlog-2026-08-01"
+    },
+    {
+        "id":  "pork-tenderloin",
+        "commodity":  "Pork Tenderloin",
+        "store":  "Walmart",
+        "product":  "Smithfield All-Natural Boneless Pork Loin Filet, 1.0 - 2.87 lb",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "coverage-backlog-2026-08-01"
+    },
+    {
+        "id":  "pie-pumpkins",
+        "commodity":  "Pie Pumpkins",
+        "store":  "Baker\u0027s",
+        "product":  "Bakery Fresh Pumpkin Pie",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "coverage-backlog-2026-08-01"
+    },
+    {
+        "id":  "pie-pumpkins",
+        "commodity":  "Pie Pumpkins",
+        "store":  "Family Fare",
+        "product":  "Marie Callender\u0027s Pumpkin Pie 36 Oz",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "coverage-backlog-2026-08-01"
+    },
+    {
+        "id":  "ground-beef-93-7",
+        "commodity":  "93/7 Lean Ground Beef",
+        "store":  "Walmart",
+        "product":  "All Natural Extra Lean Ground Beef 96% Lean/4% Fat, 1 lb",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "coverage-backlog-2026-08-01"
+    },
+    {
+        "id":  "ground-beef-93-7",
+        "commodity":  "93/7 Lean Ground Beef",
+        "store":  "Aldi",
+        "product":  "96 Lean Ground Beef Per LB",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "coverage-backlog-2026-08-01"
+    },
+    {
+        "id":  "pork-tenderloin",
+        "commodity":  "Pork Tenderloin",
+        "store":  "Walmart",
+        "product":  "Prairie Fresh Natural Fresh Pork Half Loin, Boneless, 3.5- 5.5 lb, 22g of Protein per 4oz Serving",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "coverage-backlog-2026-08-01"
+    },
+    {
+        "id":  "pork-tenderloin",
+        "commodity":  "Pork Tenderloin",
+        "store":  "Walmart",
+        "product":  "Smithfield All-Natural Boneless Pork Loin Filet, 1.0 - 2.8 lb, 24 G of Protein per 4 oz Serving",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "coverage-backlog-2026-08-01"
+    },
+    {
+        "id":  "coconut-milk-canned",
+        "commodity":  "Canned Coconut Milk",
+        "store":  "Walmart",
+        "product":  "Thai Kitchen Gluten Free Unsweetened Coconut Cream, 13.66 fl oz",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "coverage-backlog-2026-08-01"
+    },
+    {
+        "id":  "frozen-vegetables",
+        "commodity":  "Frozen Mixed Vegetables",
+        "store":  "Baker\u0027s",
+        "product":  "Birds Eye Steamfresh Cut Green Beans, Frozen Vegetables",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "coverage-backlog-2026-08-01"
+    },
+    {
+        "id":  "baking-soda",
+        "commodity":  "Baking Soda",
+        "store":  "Family Fare",
+        "product":  "Arm \u0026 Hammer Baking Soda Clumping Litter, Fresh Scent",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "aisle-test-live-2026-08-01"
+    },
+    {
+        "id":  "pineapple",
+        "commodity":  "Pineapple (whole)",
+        "store":  "Family Fare",
+        "product":  "Pineapple Teriyaki Brats 4 Ct.",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "aisle-test-live-2026-08-01"
+    },
+    {
+        "id":  "sun-dried-tomatoes",
+        "commodity":  "Sun-Dried Tomatoes",
+        "store":  "Family Fare",
+        "product":  "Gilbert\u0027s Sausage, Chicken, Caprese, With Basil, Mozzarella \u0026 Sun Dried Tomatoes 10 Oz",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "aisle-test-live-2026-08-01"
+    },
+    {
+        "id":  "dried-thyme",
+        "commodity":  "Thyme (dried)",
+        "store":  "Family Fare",
+        "product":  "Local Roots Organic Thyme",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "plan-run-2026-08-01"
+    },
+    {
+        "id":  "olive-oil",
+        "commodity":  "Olive Oil",
+        "store":  "Family Fare",
+        "product":  "Violi Mediterranean Blend, Italian Sunflower \u0026 Extra Virgin Olive Oil 33.8 Oz",
+        "source":  "known-wrong",
+        "rules_accept":  false,
+        "ruled_by":  "plan-run-2026-08-01"
+    },
+    {
+        "id":  "olive-oil",
+        "commodity":  "Olive Oil",
+        "store":  "Hy-Vee",
+        "product":  "Pasta Roni Garlic \u0026 Olive Oil Vermicelli",
+        "source":  "known-wrong",
+        "rules_accept":  true,
+        "ruled_by":  "plan-run-2026-08-01"
+    },
+    {
+        "id":  "olive-oil",
+        "commodity":  "Olive Oil",
+        "store":  "Hy-Vee",
+        "product":  "Hendrickson\u0027s Sweet Vinegar \u0026 Olive Oil",
+        "source":  "known-wrong",
+        "rules_accept":  true,
+        "ruled_by":  "plan-run-2026-08-01"
+    }
+]

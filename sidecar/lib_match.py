@@ -88,23 +88,39 @@ def commodity_text(d: dict) -> str:
 class Matcher:
     embed_model: SentenceTransformer | None
     rerank_model: CrossEncoder | None
+    # WHICH cross-encoder this instance actually holds. Not decoration: a candidate copy and the pinned
+    # one produce different numbers for the same pair, so every report that quotes a score has to be
+    # able to say which model produced it. A run that cannot name its model is a run nobody can
+    # reproduce, and the estate has already paid for that lesson in the drift watch.
+    rerank_id: str = RERANK_MODEL
 
     @classmethod
-    def load(cls, with_reranker: bool = True) -> "Matcher":
+    def load(cls, with_reranker: bool = True, reranker_path: str | None = None) -> "Matcher":
         em = SentenceTransformer(EMBED_MODEL, device=DEVICE)
         em.max_seq_length = 96  # product names are short; this is a large throughput win
-        rr = cls._reranker() if with_reranker else None
-        return cls(em, rr)
+        rr = cls._reranker(reranker_path) if with_reranker else None
+        return cls(em, rr, reranker_path or RERANK_MODEL)
 
     @classmethod
-    def load_reranker_only(cls) -> "Matcher":
+    def load_reranker_only(cls, reranker_path: str | None = None) -> "Matcher":
         """The cross-encoder without the bi-encoder, for a caller (sweep.py's score cache) whose
         embeddings are already on disk. Same pinned model and max_length as load()."""
-        return cls(None, cls._reranker())
+        return cls(None, cls._reranker(reranker_path), reranker_path or RERANK_MODEL)
 
     @staticmethod
-    def _reranker() -> CrossEncoder:
-        return CrossEncoder(RERANK_MODEL, device=DEVICE, max_length=160)
+    def _reranker(path: str | None = None) -> CrossEncoder:
+        """The pinned cross-encoder, or an EXPLICIT candidate copy.
+
+        THE OVERRIDE DOES NOT MOVE THE PIN, and that distinction is the whole point (sidecar rule 3:
+        a model swap changes every score in the estate, so it is a deliberate, fixtured act, never an
+        implicit `latest`). RERANK_MODEL stays what it is; `path` is a caller saying, for this one
+        run, score with THIS copy instead - which is exactly what PLAN-local-matching section 6 needs
+        to gate a fine-tune: beat stock on the holdout AND still catch 24 of 24 known defects, both
+        measured by pointing backtest.py at the candidate while the sweep keeps scoring on the pin.
+
+        Passing a path here NEVER changes what sweep.py loads. sweep.py does not take one.
+        """
+        return CrossEncoder(path or RERANK_MODEL, device=DEVICE, max_length=160)
 
     def embed(self, texts: Sequence[str], batch_size: int = 256) -> torch.Tensor:
         return self.embed_model.encode(

@@ -35,8 +35,22 @@ catalogue every night.
                    needs it. Measured 2026-08-22: 46 s -> 4 s on an unchanged shelf, ~18 s with
                    1,500 new names, findings byte-identical either way. SWEEP_CACHE=0 bypasses it.
     app.py         FastAPI service on 127.0.0.1:8077 for interactive/ad-hoc scoring.
-    backtest.py    The acceptance gate. Scores the matcher against defects the estate already
-                   shipped. See out\backtest-report.md.
+    backtest.py    An acceptance gate. Scores the matcher against defects the estate already
+                   shipped. See out\backtest-report.md. NOT the gate that decides a fine-tune:
+                   its 25 negatives are all dramatically wrong, so it never asks a hard question.
+    hardeval.py    THE gate that decides. Same question against the ADJUDICATED negatives, which
+                   are subtle. Stock scores AUC 0.9705 on the dramatic set and 0.8312 on GOLD.
+    freeze_eval.py Snapshots the eval set under data\frozen\<name>\ (tracked). REQUIRED for any
+                   before/after: commodity_text() is label + TODAY's accepted exemplars, so
+                   scores drift with the shelf - dropping the exemplars moves TASK A AUC from
+                   0.9705 to 0.7921, and the same eval files scored 24/24 on 2026-08-01 and
+                   17/25 on 2026-08-22 with no model change at all. Pass the snapshot to BOTH
+                   sides via --defs, or the comparison measures the board.
+    build_pair_corpus.py
+                   The (query, doc, label) training corpus for a fine-tuned cross-encoder
+                   (PLAN-local-matching section 6). Read-only on the graph; holdout by commodity
+                   family so the test is cold by construction. Excludes single-model rejections
+                   by design - see its header for why that is not fastidiousness.
 
 The estate-side front end is `grocery\audit-semantic-identity.ps1`. It owns the corpus and the regex,
 because that matching must stay byte-identical to the pricing engine; Python never re-implements it.

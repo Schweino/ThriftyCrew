@@ -1,0 +1,177 @@
+﻿[
+    {
+        "id":  "coconut-oil",
+        "commodity":  "Coconut Oil",
+        "store":  "Baker\u0027s",
+        "product":  "Dr Teal\u0027s Foaming Bath with Pure Epsom Salt, Nourish \u0026 Protect with Coconut Oil",
+        "evidence":  "Epsom-salt bath soap, not an edible oil. Held the coconut-oil CROWN on comparison-2026-07-28 at $5.99 / 34 fl oz = $0.1762/oz, 46% under the real cheapest. Top-of-ladder verified the whole way: real Kroger product_id, real price, working link - identity proved the price belonged to the product and said nothing about whether the product belonged to the commodity. The include rule matched on the generic word \u0027pure\u0027, shared with LouAna 100% Pure Coconut Oil."
+    },
+    {
+        "id":  "coffee",
+        "commodity":  "Coffee (ground/beans)",
+        "store":  "Walmart",
+        "product":  "Onyx Coffee Lab Salted Mocha Oat Milk Latte , 11 fl oz Can",
+        "evidence":  "A single-serve ready-to-drink oat milk latte in a can, not ground or whole-bean coffee. Live in walmart-regular-2026-07-30 at $4.97 / 11 fl oz; a per-serving RTD beverage priced per ounce against a commodity whose real unit is dry coffee makes the coffee row unreadable. Caught before it reached a board."
+    },
+    {
+        "id":  "coffee",
+        "commodity":  "Coffee (ground/beans)",
+        "store":  "Walmart",
+        "product":  "Onyx Coffee Lab Salted Mocha Oat Milk Latte, 11 fl oz Can",
+        "evidence":  "A single-serve ready-to-drink oat milk latte in a can, not ground or whole-bean coffee. Live in walmart-regular-2026-07-30 at $4.97 / 11 fl oz; a per-serving RTD beverage priced per ounce against a commodity whose real unit is dry coffee makes the coffee row unreadable. Caught before it reached a board."
+    },
+    {
+        "id":  "coffee",
+        "commodity":  "Coffee (ground/beans)",
+        "store":  "Walmart",
+        "product":  "(2 pack) Onyx Coffee Lab Matcha Oat Milk Latte, 11 fl oz Can",
+        "evidence":  "Matcha - green tea - in a 2-pack of RTD cans. Not coffee at all, in the coffee commodity. Live in walmart-regular-2026-07-30 at $9.94 / 22 fl oz."
+    },
+    {
+        "id":  "frosting",
+        "commodity":  "Frosting",
+        "store":  "Walmart",
+        "product":  "Freshness Guaranteed Shelf Stable Chocolate Chip Sandwich Cookies with Butter Cream Icing, 12 Count",
+        "evidence":  "A packet of sandwich cookies, matched into frosting on the words \u0027Butter Cream Icing\u0027. Priced on comparison-2026-07-29 at $5.76 / 15 oz = $0.384/oz in the frosting row. The whole product is not frosting; the frosting is a filling inside it."
+    },
+    {
+        "id":  "parmesan",
+        "commodity":  "Parmesan (grated/shredded)",
+        "store":  "Aldi",
+        "product":  "Clancy S Parmesan Garlic Pita Chips 7.33 OZ",
+        "evidence":  "Pita chips with a parmesan-garlic seasoning, not parmesan cheese. Live in aldi-regular-2026-07-29 at $2.29 / 7.33 oz - about a quarter of real grated parmesan per ounce, so it wins the cheapest slot whenever it is admitted. Aldi publishes no product id, and its feed also strips the apostrophe (\"Clancy S\"), which is why the blocklist carries BOTH observed spellings and the normalizer re-joins the stranded possessive."
+    },
+    {
+        "id":  "parmesan",
+        "commodity":  "Parmesan (grated/shredded)",
+        "store":  "Aldi",
+        "product":  "Clancy\u0027s Parmesan Garlic Pita Chips",
+        "evidence":  "Pita chips with a parmesan-garlic seasoning, not parmesan cheese. Live in aldi-regular-2026-07-29 at $2.29 / 7.33 oz - about a quarter of real grated parmesan per ounce, so it wins the cheapest slot whenever it is admitted. Aldi publishes no product id, and its feed also strips the apostrophe (\"Clancy S\"), which is why the blocklist carries BOTH observed spellings and the normalizer re-joins the stranded possessive."
+    },
+    {
+        "id":  "parmesan",
+        "commodity":  "Parmesan (grated/shredded)",
+        "store":  "Baker\u0027s",
+        "product":  "Idahoan Baby Reds with Roasted Garlic \u0026 Parmesan Mashed Potatoes",
+        "evidence":  "Instant mashed potatoes with a garlic-parmesan flavour, not parmesan cheese. Held the parmesan CROWN on SIX consecutive boards, comparison-2026-07-23 through 2026-07-28, at $1.25 / 4.1 oz = $0.3049/oz. Six days of a wrong crown that nothing in the publish path could see, while Idahoan sits correctly in instant-mashed-potatoes on the same boards."
+    },
+    {
+        "id":  "salmon",
+        "commodity":  "Salmon (fillets)",
+        "store":  "Walmart",
+        "product":  "Blue Buffalo Wilderness Natural High Protein Dry Food for Adult Cats, Salmon, 9.5-lb Bag",
+        "evidence":  "Dry cat food. Held the salmon CROWN on comparison-2026-07-29 at $38.98 / 9.5 lb = $4.10/lb, 20.8% under the runner-up - a near-miss with no magnitude signal, so no price band could ever have caught it. The salmon commodity already carried TEN pet-food exclude patterns and the phrase \u0027Dry Food for Adult Cats\u0027 walked through all ten. This entry is the reason the blocklist exists: the rule library is 43,416 excludes against 1,079 includes and still loses."
+    },
+    {
+        "id":  "ground-cinnamon",
+        "commodity":  "Ground Cinnamon",
+        "store":  "Walmart",
+        "product":  "TEDDY GRAHAMS Cinnamon Graham Snacks, Kids Snacks, 10 oz",
+        "evidence":  "A box of cinnamon-flavoured kids\u0027 cookies, not ground cinnamon. Live in walmart-regular-2026-07-30 at $3.98 / 10 oz. Adjudicated at 4.7% under the runner-up, so the miss is invisible to any per-unit sanity band - the near-miss class that makes magnitude detectors useless here."
+    },
+    {
+        "id":  "stain-remover",
+        "commodity":  "Laundry Stain Remover",
+        "store":  "Walmart",
+        "product":  "Lysol Toilet Bowl Cleaner Clinging Gel, Power, Disinfecting Bathroom Cleaner and Toilet Bowl Stain Remover, 24 oz (2 Pack)",
+        "evidence":  "A toilet bowl cleaner, matched into stain-remover (laundry) on the words \u0027Stain Remover\u0027 in its own marketing copy. Adjudicated at 2.8% under the runner-up. NOTE THE SCOPE: this exact product is priced CORRECTLY on comparison-2026-07-30 in the toilet-bowl-cleaner row at $4.97 / 48 fl oz - the ruling is about (product, commodity), never about the product alone, and a product-global blocklist would have deleted a right answer."
+    },
+    {
+        "id":  "butter",
+        "commodity":  "Butter",
+        "store":  "Walmart",
+        "product":  "Nature\u0027s Own Butter Buns Hot Dog Buns, Non-GMO Hot Dog Buns, 8 Count",
+        "evidence":  "Hot dog buns whose brand line is literally \u0027Butter Buns\u0027. Priced on comparison-2026-07-29 in the butter row at $2.78 / 15.027 oz. Bakery carriers named after the dairy commodity are a standing class here (butter buns, cream cheese frosting, garlic bread)."
+    },
+    {
+        "id":  "tomatoes",
+        "commodity":  "Tomatoes (fresh)",
+        "store":  "Family Fare",
+        "product":  "Contadina Roma Tomatoes Puree 29 Oz",
+        "evidence":  "Canned tomato PUREE in the FRESH tomatoes commodity - a form flip, not a brand difference. Live in family-fare-regular-2026-07-30 at $2.99 / 29 oz, which is far under fresh Roma at $1.29-$1.49/lb and therefore wins the cheapest slot whenever admitted. Contadina Crushed Tomatoes from the same feed sits correctly in crushed-tomatoes on comparison-2026-07-30, so the brand cannot be excluded wholesale."
+    },
+    {
+        "id":  "tomatoes",
+        "commodity":  "Tomatoes (fresh)",
+        "store":  "Family Fare",
+        "product":  "Contadina Roma Tomatoes Puree",
+        "evidence":  "Canned tomato PUREE in the FRESH tomatoes commodity - a form flip, not a brand difference. Live in family-fare-regular-2026-07-30 at $2.99 / 29 oz, which is far under fresh Roma at $1.29-$1.49/lb and therefore wins the cheapest slot whenever admitted. Contadina Crushed Tomatoes from the same feed sits correctly in crushed-tomatoes on comparison-2026-07-30, so the brand cannot be excluded wholesale."
+    },
+    {
+        "id":  "raspberries",
+        "commodity":  "Raspberries",
+        "store":  "Family Fare",
+        "product":  "Ken\u0027s Steak House Salad Dressing \u0026 Marinade, Raspberry Walnut Vinaigrette, Lite 16 Fl Oz",
+        "evidence":  "Salad dressing in the fresh raspberries commodity. Held the raspberries CROWN on comparison-2026-07-14 at $3.69 / 16 fl oz = $0.2306/oz. Ken\u0027s dressings are correctly matched elsewhere on today\u0027s board (italian-dressing, caesar-dressing, honey-mustard), so the brand is legitimate and only this flavour-name collision is not."
+    },
+    {
+        "id":  "raspberries",
+        "commodity":  "Raspberries",
+        "store":  "Baker\u0027s",
+        "product":  "Pure Silk Raspberry Mist Moisturizing Shave Cream",
+        "evidence":  "Shave cream in the fresh raspberries commodity, matched on a SCENT name. Held the raspberries CROWN on comparison-2026-07-23 and 2026-07-25 through 2026-07-28 at $2.29 / 7.25 oz = $0.3159/oz. Pure Silk Spa Therapy from the same feed is priced correctly in shaving-cream on today\u0027s board, which is why the ruling is scoped to (raspberries, Baker\u0027s) and not to the brand."
+    },
+    {
+        "id":  "strawberries",
+        "commodity":  "Strawberries",
+        "store":  "Sam\u0027s Club",
+        "product":  "Monster Energy Zero Sugar, Strawberry Shot, 16 fl. oz., 24 pk.",
+        "evidence":  "A 24-pack of energy drinks in the fresh strawberries commodity. Held the strawberries CROWN on comparison-2026-07-17, 2026-07-18 and 2026-07-22 at $42.48 / 384 fl oz = $0.1106/oz, then stayed priced in the row through 2026-07-28. Sam\u0027s Club publishes no product id in its captures, so the name is the only available key."
+    },
+    {
+        "id":  "strawberries",
+        "commodity":  "Strawberries",
+        "store":  "Family Fare",
+        "product":  "Jumex Strawberry Banana Nectar From Concentrate 11.3 Fl Oz",
+        "evidence":  "Fruit nectar from concentrate in the fresh strawberries commodity. Held the strawberries CROWN on comparison-2026-07-12 at $1.19 / 11.3 fl oz = $0.1053/oz."
+    },
+    {
+        "id":  "strawberries",
+        "commodity":  "Strawberries",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Strawberry Applesauce",
+        "evidence":  "Applesauce cups in the fresh strawberries commodity. Held the strawberries CROWN on SIX consecutive boards, comparison-2026-07-23 through 2026-07-28, at $2.00 / 6 pk 4 oz = $0.0833/oz - roughly a tenth of real fresh strawberries per ounce, and still nothing in the publish path could see it."
+    },
+    {
+        "id":  "tortillas",
+        "commodity":  "Tortillas (flour)",
+        "store":  "Sam\u0027s Club",
+        "product":  "Quest Tortilla Style 10-20g Protein Chip Variety Pack, Salsa Verde and Chili Lime, 14 ct.",
+        "evidence":  "Protein CHIPS described as \u0027Tortilla Style\u0027 in the tortillas commodity. Held the tortillas CROWN on comparison-2026-07-14 at $1.56, priced against a bare \u0027oz\u0027 basis. A chip is not a tortilla and the pack basis is not comparable either."
+    },
+    {
+        "id":  "cucumbers",
+        "commodity":  "Cucumbers",
+        "store":  "Sam\u0027s Club",
+        "product":  "Member\u0027s Mark by FujiSan Cucumber Avocado Roll, 15 pcs.",
+        "evidence":  "A prepared sushi roll in the fresh cucumbers commodity. Held the cucumbers CROWN on FIVE consecutive boards, comparison-2026-07-17 through 2026-07-24, at $5.74 / 15 ct = $0.3827 per piece - a per-PIECE basis silently compared against per-cucumber."
+    },
+    {
+        "id":  "black-pepper",
+        "commodity":  "Black Pepper (ground)",
+        "store":  "Baker\u0027s",
+        "product":  "Simple Truth Protein Black Pepper Lentils Brown Rice and Ancient Grains Whole Grain Blend",
+        "evidence":  "A lentil / brown rice / ancient grain side dish flavoured with black pepper, in the black-pepper SPICE commodity. Held the black-pepper CROWN on SIX consecutive boards, comparison-2026-07-23 through 2026-07-28, at $2.99 / 8.8 oz = $0.3398/oz. Ground black pepper runs many times that per ounce, so the wrong product owned the row\u0027s headline number for six days."
+    },
+    {
+        "id":  "spinach",
+        "commodity":  "Spinach (fresh)",
+        "store":  "Walmart",
+        "product":  "Pictsweet Family Size Chopped Spinach",
+        "evidence":  "Wrong FORM. Pictsweet is a frozen-vegetable brand and this 32 oz chopped spinach is frozen, but the name carries no \u0027frozen\u0027 token so neither the global frozen exclude nor spinach\u0027s own \u0027birds eye\u0027 brand exclude could see it. It held the CROWN on fresh spinach at 0.115/oz, roughly half the real fresh crown (Aldi Little Salad Bar 8 oz 1.89 = 0.2362/oz), so the board advertised a frozen block as the cheapest fresh spinach. Brand excluded on spinach and sweet-potatoes; Pictsweet keeps its access to the frozen commodities."
+    },
+    {
+        "id":  "jalapenos",
+        "commodity":  "Jalapeno Peppers",
+        "store":  "Family Fare",
+        "product":  "San Marcos Traditional Recipe Crunchy Whole Jalapenos Peppers 26 Oz",
+        "evidence":  "Wrong FORM. San Marcos is a canned escabeche brand and this 26 oz jar is canned whole jalapenos in brine, but the name carries no \u0027canned\u0027 or \u0027pickled\u0027 token so jalapenos\u0027 own form excludes could not see it. It held the CROWN on fresh jalapenos at 1.3477/lb, beating six rows of actual fresh peppers (Aldi 1.70, Walmart 1.76, Baker\u0027s 1.99, Hy-Vee and Fareway 2.99). Brand excluded on the fresh jalapenos commodity only; San Marcos keeps its access to the chipotle and pickled commodities."
+    },
+    {
+        "id":  "ground-cloves",
+        "commodity":  "Cloves (ground)",
+        "store":  "Family Fare",
+        "product":  "Spice Supreme Spice Ground Cloves",
+        "evidence":  "Captured at current_price=45 for a 1.25 oz Spice Supreme jar, i.e. $36.00/oz, 13.6x the row median and 33x Walmart. Spice Supreme is a discount brand; a $45 spice jar is not a shelf price. Surfaced by audit-unit-basis-outlier on its first live run. The row is also STALE (as_of 2026-07-30 while its shelf-mates are 07-31), and Family Fare stocks Our Family Cloves Ground 2 Oz at $2.99 ($1.50/oz) in the same file, so the bad row was additionally hiding the store real best price."
+    }
+]

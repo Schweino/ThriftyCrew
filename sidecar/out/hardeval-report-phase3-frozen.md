@@ -1,4 +1,4 @@
-# Identity matcher: the harder eval (2026-08-22, tag `stock`, defs `today`)
+# Identity matcher: the harder eval (2026-08-22, tag `phase3-frozen`, defs `phase3-baseline`)
 
 Phase 1 reported **AUC 0.985** on 25 negatives that are all dramatically wrong (bath soap,
 dog food). This re-measures the SAME model against negatives that are subtle.

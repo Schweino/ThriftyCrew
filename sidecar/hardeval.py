@@ -31,6 +31,19 @@ STAGES
   --stage mine   embed products + commodities, propose near-miss candidates, write mine-candidates.json
                  for PowerShell to stamp with the regex verdict (Python never re-implements the rules)
   --stage score  score positives + gold (+ mined, if labelled) and write the report
+
+THIS FILE, NOT backtest.py, IS THE GATE A FINE-TUNE MUST CLEAR (2026-08-22)
+---------------------------------------------------------------------------
+    python sidecar/hardeval.py --stage score --reranker C:/path/to/candidate --tag ft-v1
+
+PLAN-local-matching section 6 names backtest.py as the acceptance gate for a retrained
+cross-encoder. That is the weaker of the two evals and this file is the reason it is weaker: on the
+dramatic negatives the stock model looks like AUC 0.985, and on the adjudicated ones it is 0.864.
+A candidate measured only against soap-as-coconut-oil can lose the wiener-vs-hot-dog cases and still
+report an improvement. Run BOTH; treat the GOLD number here as the one that decides.
+
+--reranker does not move the pin (see lib_match.Matcher._reranker), and --tag names the output so a
+candidate cannot overwrite the stock baseline it is being compared against.
 """
 from __future__ import annotations
 import argparse, json, os, sys, time
@@ -38,7 +51,8 @@ import argparse, json, os, sys, time
 import torch
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lib_match import Matcher, clean_product, commodity_text, load_json, DEVICE
+from lib_match import (Matcher, clean_product, commodity_text, load_json, DEVICE,
+                       EMBED_MODEL, RERANK_MODEL)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "data")
@@ -76,15 +90,23 @@ def auc(pos: list[float], neg: list[float]) -> float:
     return (sr - n1 * (n1 + 1) / 2.0) / (n1 * n0)
 
 
-def load_defs():
-    defs = load_json(os.path.join(DATA, "commodity-defs.json"))
+def load_defs(path: str | None = None):
+    """Today's commodity definitions, or a frozen snapshot.
+
+    commodity_text() is label + today's accepted exemplars, so these definitions drift with the
+    board and every score drifts with them. Measured 2026-08-22: dropping the exemplars moves TASK A
+    AUC from 0.9705 to 0.7921. Any stock-vs-candidate comparison must pass the SAME frozen file to
+    both sides (sidecar/freeze_eval.py), or it measures the shelf rather than the model.
+    """
+    p = path or os.path.join(DATA, "commodity-defs.json")
+    defs = load_json(p)
     return defs, {d["id"]: d for d in defs}
 
 
-def stage_mine(top_k: int) -> None:
+def stage_mine(top_k: int, reranker: str | None = None) -> None:
     prods = load_json(os.path.join(DATA, "mine-products.json"))
     defs, defs_by_id = load_defs()
-    m = Matcher.load(with_reranker=False)
+    m = Matcher.load(with_reranker=False)   # mining is bi-encoder only; no cross-encoder is loaded
     log(f"device={DEVICE}  products={len(prods)}  commodities={len(defs)}")
 
     cids = [d["id"] for d in defs]
@@ -151,8 +173,10 @@ def operating_points(pos: list[float], neg: list[float], label: str) -> list[str
     return lines
 
 
-def stage_score() -> None:
-    defs, defs_by_id = load_defs()
+def stage_score(reranker: str | None = None, tag: str = "stock",
+                defs_path: str | None = None) -> None:
+    defs, defs_by_id = load_defs(defs_path)
+    log(f"defs={defs_path or 'commodity-defs.json (today, drifts with the board)'}")
     pos_rows = load_json(os.path.join(DATA, "eval-positives.json"))
     gold_rows = load_json(os.path.join(DATA, "negatives-gold.json"))
     old_rows = load_json(os.path.join(DATA, "negatives.json"))
@@ -161,7 +185,8 @@ def stage_score() -> None:
     if os.path.exists(mp):
         mined_rows = [r for r in load_json(mp) if not r.get("rules_accept")]
 
-    m = Matcher.load(with_reranker=True)
+    m = Matcher.load(with_reranker=True, reranker_path=reranker)
+    log(f"cross-encoder: {m.rerank_id}")
     log(f"device={DEVICE}  positives={len(pos_rows)}  gold={len(gold_rows)}  "
         f"old-negatives={len(old_rows)}  mined={len(mined_rows)}")
 
@@ -173,7 +198,9 @@ def stage_score() -> None:
     log(f"scored {len(pos)+len(gold)+len(old)+len(mined)} pairs in {time.time()-t0:.1f}s")
 
     rep = []
-    rep.append("# Identity matcher: the harder eval (2026-08-02)\n")
+    rep.append(f"# Identity matcher: the harder eval "
+               f"({time.strftime('%Y-%m-%d')}, tag `{tag}`, defs "
+               f"`{os.path.basename(os.path.dirname(defs_path)) if defs_path else 'today'}`)\n")
     rep.append("Phase 1 reported **AUC 0.985** on 25 negatives that are all dramatically wrong (bath soap,")
     rep.append("dog food). This re-measures the SAME model against negatives that are subtle.\n")
     rep.append(f"- accepted board pairs (positives): **{len(pos)}**")
@@ -265,14 +292,20 @@ def stage_score() -> None:
         rep.append(f"- `{r['_score']:.3f}`  **{r['id']}**  <- {r['product'][:90]}")
     rep.append("")
 
-    path = os.path.join(OUT, "hardeval-report.md")
+    suffix = "" if tag == "stock" else f"-{tag}"
+    path = os.path.join(OUT, f"hardeval-report{suffix}.md")
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(rep))
     json.dump(
-        {"positives": len(pos), "old": len(old), "gold": len(gold), "mined": len(mined),
+        # WHICH MODEL SAID THIS. Without it, two reports on this box are indistinguishable the
+        # moment a second copy of the reranker exists - which is the premise of section 6.
+        {"tag": tag, "embed_model": EMBED_MODEL, "rerank_model": m.rerank_id,
+         "is_pinned_model": (m.rerank_id == RERANK_MODEL),
+         "generated": time.strftime("%Y-%m-%d %H:%M:%S"),
+         "positives": len(pos), "old": len(old), "gold": len(gold), "mined": len(mined),
          "auc_old": auc(pos, old), "auc_gold": auc(pos, gold),
          "auc_mined": (auc(pos, mined) if mined else None)},
-        open(os.path.join(OUT, "hardeval.json"), "w", encoding="utf-8"), indent=2)
+        open(os.path.join(OUT, f"hardeval{suffix}.json"), "w", encoding="utf-8"), indent=2)
     print("\n".join(rep))
     log(f"wrote {path}")
 
@@ -281,8 +314,20 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--stage", choices=["mine", "score"], required=True)
     ap.add_argument("--top-k", type=int, default=8)
+    ap.add_argument("--reranker", default=None,
+                    help="path to a candidate cross-encoder to score with INSTEAD of the pinned "
+                         "model, for this run only. Does not change the pin or affect sweep.py.")
+    ap.add_argument("--tag", default=None,
+                    help="suffix for the output files. Defaults to 'stock' for a pinned run and is "
+                         "REQUIRED with --reranker, so a candidate cannot overwrite the baseline.")
+    ap.add_argument("--defs", default=None,
+                    help="a FROZEN commodity-defs.json to score against instead of today's. Required "
+                         "in practice for any before/after: see load_defs().")
     a = ap.parse_args()
+    tag = a.tag or ("stock" if not a.reranker else None)
+    if tag is None:
+        ap.error("--tag is required with --reranker (try --tag ft-v1)")
     if a.stage == "mine":
         stage_mine(a.top_k)
     else:
-        stage_score()
+        stage_score(reranker=a.reranker, tag=tag, defs_path=a.defs)

@@ -1,9 +1,9 @@
 {
-  "tag": "stock",
+  "tag": "phase3-frozen",
   "embed_model": "BAAI/bge-m3",
   "rerank_model": "BAAI/bge-reranker-v2-m3",
   "is_pinned_model": true,
-  "generated": "2026-08-22 21:13:13",
+  "generated": "2026-08-22 21:12:46",
   "positives": 2816,
   "old": 25,
   "gold": 45,

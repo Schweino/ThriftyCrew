@@ -913,3 +913,121 @@ absent (no chain, no helper scores, `nightly BLIND`) to `nightly ran ... card
 handed back, 14,864 MiB free` and `helper scored 315 of 338`. Tokens per Claude
 ruling is unchanged and was expected to be: this phase asked Claude nothing, and
 the lever that moves that number is phase 3's filter and phase 5's packet.
+
+## Addendum 2026-08-22 (third) — phase 3 prep, and the eval that was measuring the shelf
+
+Three gaps stood between phase 2 and training a helper. Closing them turned up a
+fourth that matters more than the other three together.
+
+### 1. The gate a fine-tune must clear was measuring board churn, not the model
+
+`commodity_text()` is *label + up to 5 of the products the board currently
+accepts*. That is correct for the nightly sweep, which is scoring today's board.
+It also means every score in the estate is a function of what the shelf looked
+like that morning.
+
+**Measured. Same pinned model, byte-identical `positives.json` and
+`negatives.json`, only the commodity text changed:**
+
+| commodity text | TASK A AUC | known-wrong caught at a 100/2816 budget |
+|---|---|---|
+| label + exemplars | **0.9705** | 17/25 |
+| label alone | **0.7921** | 0/25 |
+
+The exemplars are doing nearly all the work. And the consequence was already
+sitting in the repo unnoticed: with the same eval files, `backtest.py` reported
+**24/24 recall on 2026-08-01 and 17/25 on 2026-08-22**. The model did not
+change. The board did.
+
+Two things follow, and the second one edits the plan:
+
+* A stock-vs-candidate comparison must pin **both sides** to one frozen
+  `commodity-defs.json`. `sidecar/freeze_eval.py` takes the snapshot;
+  `--defs` on `backtest.py` and `hardeval.py` consumes it. The snapshot is
+  tracked, for the reason `.gitignore` already gives about the gold set: a
+  record that does not outlive the machine that produced it is not a record.
+  (`/sidecar/data/` had to become `/sidecar/data/*` first — git does not descend
+  into an excluded directory, so the negation could never have matched.)
+* **§6's gate "still 100% recall on the 24 known defects" cannot stand as
+  written.** Stock itself is at 17/25 today. A candidate cannot be held to a bar
+  the incumbent fails. The honest restatement is *no worse than stock, measured
+  the same day against the same frozen defs* — which is what the frozen baseline
+  below exists to make possible.
+
+### 2. §6 names the weaker of the two evals
+
+The plan says re-run `backtest.py`. The estate had already written down why that
+is not enough: its 25 negatives are all dramatically wrong — bath soap as
+coconut oil, dog food as meat — so it never asks a hard question, and when the
+lane met the real board it flagged 173 pairs that were all correct.
+`hardeval.py` exists precisely because of that, and its GOLD negatives are the
+adjudicated rulings. Run both; **the GOLD number is the one that decides.**
+
+**The frozen stock baseline, `--tag phase3-frozen`, defs `phase3-baseline`:**
+
+| | value |
+|---|---|
+| TASK A AUC (cross-encoder, dramatic negatives) | 0.9705 |
+| hardeval AUC, OLD negatives | 0.8941 |
+| **hardeval AUC, GOLD negatives (the one that decides)** | **0.8312** |
+| hardeval AUC, MINED near-misses | *no data* |
+| TASK C discovery | #1 rank for 5 of 6 blind commodities |
+
+The three-week-old report says 0.8641 on GOLD. Comparing a fine-tune against
+that number would have credited it with 0.03 of board drift.
+
+### 3. The corpus did not exist, and is smaller than the plan implies
+
+`tools/local-llm/finetune-probe/build_corpus.py` looks like the thing but builds
+prompt→completion JSONL for the 27B (§10). A cross-encoder needs
+`(query, doc, label)`. `sidecar/build_pair_corpus.py` is that builder: read-only
+on the graph under `PRAGMA query_only`, doc text from the frozen snapshot,
+holdout **by commodity family** from the graph's own `in_category` edges so the
+test is cold by construction — the standard phase 1 held the bench to.
+
+**What it actually yields:**
+
+| | rows |
+|---|---|
+| raw labelled pairs | 5,738 |
+| after dedup by (commodity, product) | 4,232 |
+| train | 2,950 — **+2,571 / −379** |
+| test (families: dairy, oils, pet, snacks, veg) | 1,282 — **+1,105 / −177** |
+| excluded by design: single-model rejections | 3,315 |
+
+Two things worth stating before anyone plans a training run on this:
+
+* **556 unique hard negatives, against 3,676 positives — 6.6:1.** The plan's §6
+  reads as though the negative pile were several thousand; dedup collapses it,
+  because the same pair is banked as a gold NO_MATCH *and* a known-wrong *and*
+  an adjudicated rejection. The imbalance has to be handled deliberately.
+* Excluding the 3,315 single-model rejections is not fastidiousness. Phase 1
+  stopped citing them as precedent because a wrong rejection was becoming the
+  reason to reject its neighbours; training on them is the same disease with a
+  worse prognosis, because retrieval can be changed and weights cannot. It is
+  also the only reason §4's audit row means anything — the helper's verdict on
+  those rows stays genuinely out-of-sample.
+
+One pair carried both labels and was **dropped, not guessed at**. 307 accepted
+pairs and 40 gold matches name a commodity the sidecar has no definition for —
+the recipe namespace again, reported rather than silently trained on.
+
+### 4. The negatives that matter most have never been produced
+
+Every hardeval report to date says `mined: 0`. The mining stage exists
+(`hardeval.py --stage mine` → `export-identity-eval.ps1 -Label`) and its output
+has never been labelled. Those are the **near-miss** negatives: a real product
+paired with a commodity that is semantically close but whose own regex rejects
+it — Wimmer's Wieners against Hot Dogs, Kroger Olive Oil Mayo against
+Mayonnaise.
+
+That is the class the helper will actually meet. On the contested set nearly
+every pair is similar-and-wrong or similar-and-right; almost none is
+soap-versus-coconut-oil. A corpus without near-misses teaches the model
+something the stock weights already know, and an eval without them cannot
+measure the only improvement worth having.
+
+**This is the highest-value item before §6, and it is cheap** — the mining is a
+bi-encoder pass and the labelling is the existing regex, applied on the
+PowerShell side where the rules live. `build_pair_corpus.py` picks up
+`mine-labelled.json` automatically the moment it exists.
