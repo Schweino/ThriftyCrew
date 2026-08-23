@@ -1424,3 +1424,63 @@ constraint is one 16 GB card that holds exactly one training run at a time — s
 buys no wall-clock and a model in that path would only add nondeterminism to a
 measurement. The one non-deterministic weakness was the LABELS, and that is the only
 place an agent was used. Four ran concurrently because none of them needed the card.
+
+## Addendum 2026-08-23 (third) — the promotion was a shuffle
+
+The sixth addendum promoted ft-v3 over ft-v1 and reported the adjudication as the cause.
+Both claims were wrong, and this is the measurement that says so.
+
+### 1. Four seeds per arm, and the arms overlap
+
+Two corpora differing only by the Fable agents' ~12 label corrections, same recipe, seed
+the only thing moving:
+
+| arm | AUC mean | AUC range | cold neg caught | live filtered of 435 |
+|---|---|---|---|---|
+| regex labels | 0.9658 | 0.9652 – 0.9670 | 317 – 461 | 8 – 19 |
+| adjudicated labels | **0.9651** | 0.9641 – 0.9674 | 263 – 489 | 8 – 20 |
+| stock | 0.9126 | — | 108 | 9 |
+
+ft-v3's 0.9674 was the best of all eight runs and ft-v2's 0.9652 was near the bottom of
+its own arm. A lucky draw was compared against an unlucky one and called a result. The
+adjudicated arm's MEAN is if anything a hair lower.
+
+### 2. What it costs the sixth addendum, and phase 3
+
+- **The promotion is reverted.** Not because v1 is better — nothing here says it is —
+  but because the reason for moving off it does not exist, and v1 is the model phase 3
+  documents and the one that has actually run a night.
+- **A single run cannot separate two fine-tunes on these arenas.** The gate says so now,
+  in `finetune_reranker.py` where anyone about to train will read it: >= 3 seeds per arm,
+  and a gap wider than the within-arm spread.
+- **The stock-vs-fine-tune comparison is untouched** and remains enormous: AUC 0.9126
+  against ~0.965, 108 cold negatives caught against 317–489. That one a single run can
+  make, because the gap dwarfs the spread. This is the distinction that matters — it is
+  not "measurement is unreliable", it is "this particular difference was smaller than the
+  noise and that one is not".
+- **Phase 3's headline is overstated.** "The filter removes 21 of 435" is really
+  *between 8 and 20, depending on the training shuffle*, against 9 for stock. The filter's
+  value over stock is real but smaller and noisier than one run suggested.
+
+### 3. The likely cause, named and not fixed
+
+The instability is arguably the FIXED 1e-4 cut rather than the model. Each candidate's
+score distribution sits slightly differently, so one threshold gives yields that swing by
+2.5x across shuffles. A cut calibrated per candidate to a target false-reject rate on the
+holdout would not do that. That is a design change, and it is the right next thing here.
+
+### 4. And it answers the token question
+
+The Fable adjudication — 289k tokens, 224 pairs, 4 agents — did **not** buy a better
+helper. That is what two overlapping arms means.
+
+What it did buy is real and smaller than the sixth addendum claimed:
+
+- one live board defect (`Lunch Mate Mesquite Turkey Breast` priced as `turkey-breast`),
+- the measured fact that the hand-written rules are right on **95%** of the hardest cases
+  available, which retires a standing worry and is a question nobody has to pay for again,
+- and the credibility check that still stands: two of the three YES verdicts independently
+  reproduced rulings the estate already held, with no access to them.
+
+A fair price for a diagnostic; a bad price for a model. The corrected labels stay in the
+corpus — they are not wrong, they are simply not worth what they cost.
