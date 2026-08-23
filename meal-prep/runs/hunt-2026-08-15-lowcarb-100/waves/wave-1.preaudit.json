@@ -5,8 +5,8 @@
     "wave":  1,
     "batch":  "hunt-2026-08-15-lowcarb-100-w1",
     "scope":  "whole-wave",
-    "generated":  "2026-08-23T16:03:45",
-    "elapsed_sec":  13.8,
+    "generated":  "2026-08-23T16:20:43",
+    "elapsed_sec":  14.3,
     "wave_slugs":  [
                        "low-carb-ground-beef-stroganoff-skillet",
                        "creamy-tuscan-chicken-skillet",
@@ -30,9 +30,9 @@
                   "hatch-green-chile-chicken-casserole"
               ],
     "inputs":  {
-                   "costed_mtime":  "2026-08-23T13:29:25",
-                   "reference_card":  "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\built\\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html",
-                   "food_db":  "C:\\Codex\\ThriftyCrew\\meal-prep\\food-macros-db.json"
+                   "costed_mtime":  "2026-08-23T16:07:28",
+                   "reference_card":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\db\\built\\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html",
+                   "food_db":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\food-macros-db.json"
                },
     "slug_checks":  {
                         "low-carb-ground-beef-stroganoff-skillet":  [
@@ -40,7 +40,7 @@
                                                                             "check":  "spec-present",
                                                                             "verdict":  "pass",
                                                                             "numbers":  {
-                                                                                            "mtime":  "2026-08-23T13:29:34"
+                                                                                            "mtime":  "2026-08-23T16:20:12"
                                                                                         },
                                                                             "detail":  "spec present and parses"
                                                                         },
@@ -82,13 +82,13 @@
                                                                         },
                                                                         {
                                                                             "check":  "cost-reconcile",
-                                                                            "verdict":  "fail",
+                                                                            "verdict":  "pass",
                                                                             "numbers":  {
-                                                                                            "spec_mtime":  "2026-08-23T13:29:34",
-                                                                                            "costed_mtime":  "2026-08-23T13:29:25",
+                                                                                            "spec_mtime":  "2026-08-23T16:20:12",
+                                                                                            "costed_mtime":  "2026-08-23T16:07:28",
                                                                                             "costed_is_newer_than_spec":  false
                                                                                         },
-                                                                            "detail":  "cost_batch_true: spec 56.59 vs engine 56.61; cost_first_run: spec 59.9 vs engine 59.92 This spec\u0027s mtime (2026-08-23T13:29:34) is at or after costed.json\u0027s (2026-08-23T13:29:25), so price age is not the whole story - something wrote the spec without re-syncing its cost block, or a later edit touched other fields. The mtimes narrow it; they do not settle it. The fix is recost-spec-cost-block.ps1, not a rebuild, and a wave must not publish a stale price."
+                                                                            "detail":  "every spec cost field matches its engine row to the cent"
                                                                         },
                                                                         {
                                                                             "check":  "protein-derivation",
@@ -118,8 +118,8 @@
                                                                             "check":  "card-rebuild",
                                                                             "verdict":  "pass",
                                                                             "numbers":  {
-                                                                                            "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\low-carb-ground-beef-stroganoff-skillet",
-                                                                                            "body_bytes":  68752,
+                                                                                            "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\low-carb-ground-beef-stroganoff-skillet",
+                                                                                            "body_bytes":  68738,
                                                                                             "make_it_steps":  7,
                                                                                             "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                         },
@@ -131,7 +131,7 @@
                                                                   "check":  "spec-present",
                                                                   "verdict":  "pass",
                                                                   "numbers":  {
-                                                                                  "mtime":  "2026-08-23T13:29:34"
+                                                                                  "mtime":  "2026-08-23T16:07:28"
                                                                               },
                                                                   "detail":  "spec present and parses"
                                                               },
@@ -175,8 +175,8 @@
                                                                   "check":  "cost-reconcile",
                                                                   "verdict":  "pass",
                                                                   "numbers":  {
-                                                                                  "spec_mtime":  "2026-08-23T13:29:34",
-                                                                                  "costed_mtime":  "2026-08-23T13:29:25",
+                                                                                  "spec_mtime":  "2026-08-23T16:07:28",
+                                                                                  "costed_mtime":  "2026-08-23T16:07:28",
                                                                                   "costed_is_newer_than_spec":  false
                                                                               },
                                                                   "detail":  "every spec cost field matches its engine row to the cent"
@@ -209,8 +209,8 @@
                                                                   "check":  "card-rebuild",
                                                                   "verdict":  "pass",
                                                                   "numbers":  {
-                                                                                  "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\creamy-tuscan-chicken-skillet",
-                                                                                  "body_bytes":  67063,
+                                                                                  "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\creamy-tuscan-chicken-skillet",
+                                                                                  "body_bytes":  67064,
                                                                                   "make_it_steps":  7,
                                                                                   "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                               },
@@ -222,7 +222,7 @@
                                                                      "check":  "spec-present",
                                                                      "verdict":  "pass",
                                                                      "numbers":  {
-                                                                                     "mtime":  "2026-08-23T13:29:34"
+                                                                                     "mtime":  "2026-08-23T16:07:28"
                                                                                  },
                                                                      "detail":  "spec present and parses"
                                                                  },
@@ -266,8 +266,8 @@
                                                                      "check":  "cost-reconcile",
                                                                      "verdict":  "pass",
                                                                      "numbers":  {
-                                                                                     "spec_mtime":  "2026-08-23T13:29:34",
-                                                                                     "costed_mtime":  "2026-08-23T13:29:25",
+                                                                                     "spec_mtime":  "2026-08-23T16:07:28",
+                                                                                     "costed_mtime":  "2026-08-23T16:07:28",
                                                                                      "costed_is_newer_than_spec":  false
                                                                                  },
                                                                      "detail":  "every spec cost field matches its engine row to the cent"
@@ -300,8 +300,8 @@
                                                                      "check":  "card-rebuild",
                                                                      "verdict":  "pass",
                                                                      "numbers":  {
-                                                                                     "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\turkey-zucchini-noodle-casserole",
-                                                                                     "body_bytes":  68166,
+                                                                                     "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\turkey-zucchini-noodle-casserole",
+                                                                                     "body_bytes":  68167,
                                                                                      "make_it_steps":  6,
                                                                                      "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                  },
@@ -313,7 +313,7 @@
                                                                            "check":  "spec-present",
                                                                            "verdict":  "pass",
                                                                            "numbers":  {
-                                                                                           "mtime":  "2026-08-23T13:29:34"
+                                                                                           "mtime":  "2026-08-23T16:07:28"
                                                                                        },
                                                                            "detail":  "spec present and parses"
                                                                        },
@@ -357,8 +357,8 @@
                                                                            "check":  "cost-reconcile",
                                                                            "verdict":  "pass",
                                                                            "numbers":  {
-                                                                                           "spec_mtime":  "2026-08-23T13:29:34",
-                                                                                           "costed_mtime":  "2026-08-23T13:29:25",
+                                                                                           "spec_mtime":  "2026-08-23T16:07:28",
+                                                                                           "costed_mtime":  "2026-08-23T16:07:28",
                                                                                            "costed_is_newer_than_spec":  false
                                                                                        },
                                                                            "detail":  "every spec cost field matches its engine row to the cent"
@@ -391,8 +391,8 @@
                                                                            "check":  "card-rebuild",
                                                                            "verdict":  "pass",
                                                                            "numbers":  {
-                                                                                           "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\keto-turkey-broccoli-cheddar-casserole",
-                                                                                           "body_bytes":  67811,
+                                                                                           "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\keto-turkey-broccoli-cheddar-casserole",
+                                                                                           "body_bytes":  67812,
                                                                                            "make_it_steps":  7,
                                                                                            "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                        },
@@ -404,7 +404,7 @@
                                                                          "check":  "spec-present",
                                                                          "verdict":  "pass",
                                                                          "numbers":  {
-                                                                                         "mtime":  "2026-08-23T13:29:34"
+                                                                                         "mtime":  "2026-08-23T16:15:25"
                                                                                      },
                                                                          "detail":  "spec present and parses"
                                                                      },
@@ -446,13 +446,13 @@
                                                                      },
                                                                      {
                                                                          "check":  "cost-reconcile",
-                                                                         "verdict":  "fail",
+                                                                         "verdict":  "pass",
                                                                          "numbers":  {
-                                                                                         "spec_mtime":  "2026-08-23T13:29:34",
-                                                                                         "costed_mtime":  "2026-08-23T13:29:25",
+                                                                                         "spec_mtime":  "2026-08-23T16:15:25",
+                                                                                         "costed_mtime":  "2026-08-23T16:07:28",
                                                                                          "costed_is_newer_than_spec":  false
                                                                                      },
-                                                                         "detail":  "cost_batch: spec 19.32 vs engine 24.69; cost_batch_true: spec 23.51 vs engine 29.48; cost_per_serving: spec 1.38 vs engine 1.76; cost_per_serving_true: spec 1.68 vs engine 2.11; cost_first_run: spec 24.83 vs engine 30.8 This spec\u0027s mtime (2026-08-23T13:29:34) is at or after costed.json\u0027s (2026-08-23T13:29:25), so price age is not the whole story - something wrote the spec without re-syncing its cost block, or a later edit touched other fields. The mtimes narrow it; they do not settle it. The fix is recost-spec-cost-block.ps1, not a rebuild, and a wave must not publish a stale price."
+                                                                         "detail":  "every spec cost field matches its engine row to the cent"
                                                                      },
                                                                      {
                                                                          "check":  "protein-derivation",
@@ -482,8 +482,8 @@
                                                                          "check":  "card-rebuild",
                                                                          "verdict":  "pass",
                                                                          "numbers":  {
-                                                                                         "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\baked-cauliflower-mac-smoked-sausage",
-                                                                                         "body_bytes":  67247,
+                                                                                         "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\baked-cauliflower-mac-smoked-sausage",
+                                                                                         "body_bytes":  67248,
                                                                                          "make_it_steps":  7,
                                                                                          "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                      },
@@ -495,7 +495,7 @@
                                                                 "check":  "spec-present",
                                                                 "verdict":  "pass",
                                                                 "numbers":  {
-                                                                                "mtime":  "2026-08-23T13:29:34"
+                                                                                "mtime":  "2026-08-23T16:20:11"
                                                                             },
                                                                 "detail":  "spec present and parses"
                                                             },
@@ -537,13 +537,13 @@
                                                             },
                                                             {
                                                                 "check":  "cost-reconcile",
-                                                                "verdict":  "fail",
+                                                                "verdict":  "pass",
                                                                 "numbers":  {
-                                                                                "spec_mtime":  "2026-08-23T13:29:34",
-                                                                                "costed_mtime":  "2026-08-23T13:29:25",
+                                                                                "spec_mtime":  "2026-08-23T16:20:11",
+                                                                                "costed_mtime":  "2026-08-23T16:07:28",
                                                                                 "costed_is_newer_than_spec":  false
                                                                             },
-                                                                "detail":  "cost_batch: spec 51.95 vs engine 52.09; cost_batch_true: spec 63.49 vs engine 64.05; cost_per_serving: spec 3.71 vs engine 3.72; cost_per_serving_true: spec 4.54 vs engine 4.58; cost_first_run: spec 71.81 vs engine 72.37 This spec\u0027s mtime (2026-08-23T13:29:34) is at or after costed.json\u0027s (2026-08-23T13:29:25), so price age is not the whole story - something wrote the spec without re-syncing its cost block, or a later edit touched other fields. The mtimes narrow it; they do not settle it. The fix is recost-spec-cost-block.ps1, not a rebuild, and a wave must not publish a stale price."
+                                                                "detail":  "every spec cost field matches its engine row to the cent"
                                                             },
                                                             {
                                                                 "check":  "protein-derivation",
@@ -573,8 +573,8 @@
                                                                 "check":  "card-rebuild",
                                                                 "verdict":  "pass",
                                                                 "numbers":  {
-                                                                                "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\chimichurri-steak-sheet-pan",
-                                                                                "body_bytes":  68574,
+                                                                                "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\chimichurri-steak-sheet-pan",
+                                                                                "body_bytes":  68575,
                                                                                 "make_it_steps":  8,
                                                                                 "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                             },
@@ -586,7 +586,7 @@
                                                              "check":  "spec-present",
                                                              "verdict":  "pass",
                                                              "numbers":  {
-                                                                             "mtime":  "2026-08-23T13:29:34"
+                                                                             "mtime":  "2026-08-23T16:15:26"
                                                                          },
                                                              "detail":  "spec present and parses"
                                                          },
@@ -628,13 +628,13 @@
                                                          },
                                                          {
                                                              "check":  "cost-reconcile",
-                                                             "verdict":  "fail",
+                                                             "verdict":  "pass",
                                                              "numbers":  {
-                                                                             "spec_mtime":  "2026-08-23T13:29:34",
-                                                                             "costed_mtime":  "2026-08-23T13:29:25",
+                                                                             "spec_mtime":  "2026-08-23T16:15:26",
+                                                                             "costed_mtime":  "2026-08-23T16:07:28",
                                                                              "costed_is_newer_than_spec":  false
                                                                          },
-                                                             "detail":  "cost_batch: spec 52.09 vs engine 52.1; cost_batch_true: spec 63.48 vs engine 63.52; cost_per_serving_true: spec 4.53 vs engine 4.54; cost_first_run: spec 81.33 vs engine 81.37 This spec\u0027s mtime (2026-08-23T13:29:34) is at or after costed.json\u0027s (2026-08-23T13:29:25), so price age is not the whole story - something wrote the spec without re-syncing its cost block, or a later edit touched other fields. The mtimes narrow it; they do not settle it. The fix is recost-spec-cost-block.ps1, not a rebuild, and a wave must not publish a stale price."
+                                                             "detail":  "every spec cost field matches its engine row to the cent"
                                                          },
                                                          {
                                                              "check":  "protein-derivation",
@@ -664,8 +664,8 @@
                                                              "check":  "card-rebuild",
                                                              "verdict":  "pass",
                                                              "numbers":  {
-                                                                             "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\french-chicken-fricassee",
-                                                                             "body_bytes":  70389,
+                                                                             "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\french-chicken-fricassee",
+                                                                             "body_bytes":  70390,
                                                                              "make_it_steps":  10,
                                                                              "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                          },
@@ -677,7 +677,7 @@
                                                             "check":  "spec-present",
                                                             "verdict":  "pass",
                                                             "numbers":  {
-                                                                            "mtime":  "2026-08-23T13:29:34"
+                                                                            "mtime":  "2026-08-23T16:07:28"
                                                                         },
                                                             "detail":  "spec present and parses"
                                                         },
@@ -721,8 +721,8 @@
                                                             "check":  "cost-reconcile",
                                                             "verdict":  "pass",
                                                             "numbers":  {
-                                                                            "spec_mtime":  "2026-08-23T13:29:34",
-                                                                            "costed_mtime":  "2026-08-23T13:29:25",
+                                                                            "spec_mtime":  "2026-08-23T16:07:28",
+                                                                            "costed_mtime":  "2026-08-23T16:07:28",
                                                                             "costed_is_newer_than_spec":  false
                                                                         },
                                                             "detail":  "every spec cost field matches its engine row to the cent"
@@ -755,8 +755,8 @@
                                                             "check":  "card-rebuild",
                                                             "verdict":  "pass",
                                                             "numbers":  {
-                                                                            "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\chicken-piccata-skillet",
-                                                                            "body_bytes":  68294,
+                                                                            "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\chicken-piccata-skillet",
+                                                                            "body_bytes":  68279,
                                                                             "make_it_steps":  9,
                                                                             "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                         },
@@ -768,7 +768,7 @@
                                                                         "check":  "spec-present",
                                                                         "verdict":  "pass",
                                                                         "numbers":  {
-                                                                                        "mtime":  "2026-08-23T13:29:34"
+                                                                                        "mtime":  "2026-08-23T16:20:12"
                                                                                     },
                                                                         "detail":  "spec present and parses"
                                                                     },
@@ -810,13 +810,13 @@
                                                                     },
                                                                     {
                                                                         "check":  "cost-reconcile",
-                                                                        "verdict":  "fail",
+                                                                        "verdict":  "pass",
                                                                         "numbers":  {
-                                                                                        "spec_mtime":  "2026-08-23T13:29:34",
-                                                                                        "costed_mtime":  "2026-08-23T13:29:25",
+                                                                                        "spec_mtime":  "2026-08-23T16:20:12",
+                                                                                        "costed_mtime":  "2026-08-23T16:07:28",
                                                                                         "costed_is_newer_than_spec":  false
                                                                                     },
-                                                                        "detail":  "cost_batch: spec 36.25 vs engine 39; cost_batch_true: spec 47.01 vs engine 49.74; cost_per_serving: spec 2.59 vs engine 2.79; cost_per_serving_true: spec 3.36 vs engine 3.55; cost_pantry_add: spec 11.49 vs engine 11.52; cost_first_run: spec 58.5 vs engine 61.26 This spec\u0027s mtime (2026-08-23T13:29:34) is at or after costed.json\u0027s (2026-08-23T13:29:25), so price age is not the whole story - something wrote the spec without re-syncing its cost block, or a later edit touched other fields. The mtimes narrow it; they do not settle it. The fix is recost-spec-cost-block.ps1, not a rebuild, and a wave must not publish a stale price."
+                                                                        "detail":  "every spec cost field matches its engine row to the cent"
                                                                     },
                                                                     {
                                                                         "check":  "protein-derivation",
@@ -846,8 +846,8 @@
                                                                         "check":  "card-rebuild",
                                                                         "verdict":  "pass",
                                                                         "numbers":  {
-                                                                                        "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\hatch-green-chile-chicken-casserole",
-                                                                                        "body_bytes":  70297,
+                                                                                        "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-1.preaudit-cards\\hatch-green-chile-chicken-casserole",
+                                                                                        "body_bytes":  70298,
                                                                                         "make_it_steps":  8,
                                                                                         "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                     },
@@ -929,7 +929,7 @@
     "summary":  {
                     "slugs":  9,
                     "checks":  71,
-                    "failed":  5
+                    "failed":  0
                 },
     "not_checked":  [
                         "mapping soundness and the precedents behind a substitution",

@@ -52,15 +52,15 @@
                        "Heavy Cream, 3/4 cup plus 2 tbsp heavy cream: ~$1.04. \u003cstrong\u003eBuy 1 pint: $2.34.\u003c/strong\u003e",
                        "Chicken Broth, 3/4 cup plus 2 tbsp chicken broth (7 fl oz): ~$0.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Butter, 7 tbsp butter (3/4 stick plus 1 tbsp): ~$0.64. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Frozen Chopped Spinach, 14 oz frozen chopped spinach, thawed and squeezed dry: ~$1.61. \u003cstrong\u003eBuy 2 10oz boxes: $2.30.\u003c/strong\u003e",
+                       "Frozen Chopped Spinach, 14 oz frozen chopped spinach, thawed and squeezed dry: ~$1.47. \u003cstrong\u003eBuy 2 10oz boxes: $2.10.\u003c/strong\u003e",
                        "Artichoke Hearts, 17 1/2 oz quartered artichoke hearts, drained (about 1 1/4 of the 13.75 oz cans): ~$2.83. \u003cstrong\u003eBuy 2 13.8oz cans: $4.45.\u003c/strong\u003e",
                        "Mozzarella Cheese, 3 1/2 cups shredded mozzarella (14 oz): ~$2.12. \u003cstrong\u003eBuy 2 8oz bags: $2.44.\u003c/strong\u003e",
                        "Parmesan Cheese, 1 3/4 cups shredded parmesan (7 oz): ~$2.37. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
                        "Feta Cheese, 3/4 cup plus 2 tbsp crumbled feta: ~$1.95. \u003cstrong\u003eBuy 1 6oz tub: $3.38.\u003c/strong\u003e",
                        "Pantry seasonings (garlic powder, salt, black pepper): ~$0.08. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $21.76 across 14 servings, so roughly $1.55 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $31.40 across 14 servings, roughly $2.24 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.14 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $36.54. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $21.62 across 14 servings, so roughly $1.54 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.20 across 14 servings, roughly $2.23 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.14 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $36.34. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a baked, bubbling spinach artichoke chicken casserole that eats like the dip and skips the bread. The chicken and the cheese carry it; the spinach and artichokes do the flavor the crackers used to, for a lot less.",
     "shop_smart":  [
@@ -83,14 +83,14 @@
     "portion_html":  "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://kicking-carbs.com/spinach-artichoke-chicken-casserole/\" target=\"_blank\" rel=\"noopener\"\u003ekicking-carbs.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  21.76,
-    "cost_batch_true":  31.4,
-    "cost_per_serving":  1.55,
-    "cost_per_serving_true":  2.24,
+    "cost_batch":  21.62,
+    "cost_batch_true":  31.2,
+    "cost_per_serving":  1.54,
+    "cost_per_serving_true":  2.23,
     "cost_pantry_add":  5.14,
-    "cost_first_run":  36.54,
+    "cost_first_run":  36.34,
     "scaler":  {
-                   "cost":  "31.40",
+                   "cost":  "31.20",
                    "ing":  [
                                {
                                    "item":  "Chicken Breast (cooked, cubed)",
