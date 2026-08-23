@@ -1,0 +1,1783 @@
+{
+ "generated": "2026-08-23T02:42:21",
+ "asked": 192,
+ "ruled": 192,
+ "population": 3315,
+ "sets": {
+  "random": {
+   "n": 120,
+   "decided": 117,
+   "abstained": 3,
+   "model_was_wrong": 0,
+   "error_rate": 0.0,
+   "ci95": [
+    0.0,
+    0.0318
+   ],
+   "examples": [],
+   "implied_missing_cells": {
+    "point": 0,
+    "range": [
+     0,
+     105
+    ],
+    "note": "rejections the model got wrong across the whole unreviewed pile. Not all of them would price a cell - a wrong rejection only costs a cell where nothing else already prices it."
+   }
+  },
+  "disagreement": {
+   "n": 72,
+   "decided": 69,
+   "abstained": 3,
+   "model_was_wrong": 1,
+   "error_rate": 0.014492753623188406,
+   "ci95": [
+    0.0026,
+    0.0776
+   ],
+   "examples": [
+    {
+     "commodity": "commodity:staple:maple-syrup",
+     "product": "Pearl Milling Company Butter Light Syrup Dispenser, 24oz, Single Bottle, 24 Servings Per Container",
+     "helper": 0.9841,
+     "why": "Pearl Milling butter light syrup is a pancake syrup like the accepted examples."
+    }
+   ]
+  }
+ },
+ "helper_as_detector": {
+  "random_error_rate": 0.0,
+  "disagreement_error_rate": 0.0145,
+  "lift": null,
+  "verdict": "the helper does NOT reliably pick out the model's errors; its disagreements are no better than a random sample as a place to look"
+ },
+ "rulings": [
+  {
+   "n": 1,
+   "id": "commodity:staple:sauerkraut",
+   "product": "Oh Snap! Dilly Bites Fresh Dill Pickle Snack Pack",
+   "set": "random",
+   "helper": 1.7797365217120387e-05,
+   "verdict": "NO",
+   "why": "Fresh dill pickle snack pack is pickles, not canned/jarred sauerkraut."
+  },
+  {
+   "n": 2,
+   "id": "commodity:staple:vanilla-extract",
+   "product": "bettergoods Cinnamon Vanilla Flavor, 2 fl oz",
+   "set": "random",
+   "helper": 0.00018967545474879444,
+   "verdict": "NO",
+   "why": "Cinnamon vanilla 'flavor' is neither pure vanilla extract nor plain vanilla."
+  },
+  {
+   "n": 3,
+   "id": "commodity:staple:frozen-burritos",
+   "product": "El Monterey Beef, Bean & Cheese Flavor Chimichangas, 30.4 oz, 8 Count (Frozen)",
+   "set": "disagreement",
+   "helper": 0.9852527976036072,
+   "verdict": "NO",
+   "why": "Chimichangas are a distinct fried product, not the burritos the board accepts."
+  },
+  {
+   "n": 4,
+   "id": "commodity:staple:clam-chowder",
+   "product": "Member's Mark Yukon Gold Mashed Potatoes, 32 oz. each, 2 ct.",
+   "set": "random",
+   "helper": 5.713368227588944e-05,
+   "verdict": "NO",
+   "why": "Mashed potatoes are not clam chowder."
+  },
+  {
+   "n": 5,
+   "id": "commodity:staple:frozen-fries",
+   "product": "Great Value Hash Brown Sticks, Shredded Potatoes, 22 oz (Frozen)",
+   "set": "random",
+   "helper": 4.032191645819694e-05,
+   "verdict": "NO",
+   "why": "Hash brown sticks are a different form than french fries."
+  },
+  {
+   "n": 6,
+   "id": "commodity:staple:bay-leaves",
+   "product": "Great Value Basil Leaves, 0.8 oz",
+   "set": "random",
+   "helper": 2.270857476105448e-05,
+   "verdict": "NO",
+   "why": "Basil leaves are a different herb than bay leaves."
+  },
+  {
+   "n": 7,
+   "id": "commodity:staple:glass-cleaner",
+   "product": "Equate Streak-Free Lens Cleaner 8 oz Spray Bottle, 1 Count",
+   "set": "disagreement",
+   "helper": 0.9622569680213928,
+   "verdict": "NO",
+   "why": "Eyeglass lens cleaner is not household glass cleaner."
+  },
+  {
+   "n": 8,
+   "id": "commodity:staple:powdered-sugar",
+   "product": "C&H Premium Pure Cane Light Brown Sugar 2 lb. Zipper-Pak",
+   "set": "random",
+   "helper": 0.0009590046829544008,
+   "verdict": "NO",
+   "why": "Light brown sugar is a different sugar than powdered/confectioners."
+  },
+  {
+   "n": 9,
+   "id": "commodity:staple:canned-mixed-vegetables",
+   "product": "Taylor Farms Vegetable Tray with Ranch Dip, 4 lbs.",
+   "set": "random",
+   "helper": 0.010268277488648891,
+   "verdict": "NO",
+   "why": "A fresh vegetable tray with ranch dip is not canned mixed vegetables."
+  },
+  {
+   "n": 10,
+   "id": "commodity:staple:pesto",
+   "product": "Yo Mama's Foods Low-Carb Italian Pasta Sauce Gift Box, 25 oz., 3 pk.",
+   "set": "random",
+   "helper": 0.00015315382916014642,
+   "verdict": "NO",
+   "why": "Italian pasta sauce is not pesto."
+  },
+  {
+   "n": 11,
+   "id": "commodity:staple:poultry-seasoning",
+   "product": "Chef Merito Chicken Seasoning, 14 oz",
+   "set": "random",
+   "helper": 3.3760719816200435e-05,
+   "verdict": "UNSURE",
+   "why": "Chicken seasoning may be a salt-blend rub, not necessarily the classic poultry-seasoning herb blend the board accepts."
+  },
+  {
+   "n": 12,
+   "id": "commodity:staple:mixed-nuts",
+   "product": "Wonderful Pistachios No Shells Roasted & Salted Nuts, 12 Ounce Bag",
+   "set": "disagreement",
+   "helper": 0.9975444674491882,
+   "verdict": "NO",
+   "why": "Pistachios alone are a single nut, not mixed nuts."
+  },
+  {
+   "n": 13,
+   "id": "commodity:staple:bread-crumbs",
+   "product": "Kellogg's Corn Flakes Original Crumbs, 21 oz",
+   "set": "disagreement",
+   "helper": 0.9742007851600647,
+   "verdict": "NO",
+   "why": "Corn flake crumbs are a cereal crumb, not bread crumbs or panko."
+  },
+  {
+   "n": 14,
+   "id": "commodity:staple:lettuce",
+   "product": "Taylor Farms Apple & Walnut Salad, 5.5oz (Fresh)",
+   "set": "random",
+   "helper": 2.0635030523408204e-05,
+   "verdict": "NO",
+   "why": "A prepared salad kit with toppings is not head/romaine lettuce."
+  },
+  {
+   "n": 15,
+   "id": "commodity:staple:baking-powder",
+   "product": "Great Value Self-Rising  Enriched Bleached Flour, 5 lb Bag",
+   "set": "random",
+   "helper": 0.00053961924277246,
+   "verdict": "NO",
+   "why": "Self-rising flour is flour, not baking powder."
+  },
+  {
+   "n": 16,
+   "id": "commodity:staple:baby-wipes",
+   "product": "Desitin Maximum Strength Diaper Rash Paste, 4.8 oz., 3 pk.",
+   "set": "random",
+   "helper": 3.0278346457635053e-05,
+   "verdict": "NO",
+   "why": "Diaper rash paste is not baby wipes."
+  },
+  {
+   "n": 17,
+   "id": "commodity:staple:french-bread",
+   "product": "Marketside Sliced Honey Wheat Brioche Bread, 15.87 oz",
+   "set": "disagreement",
+   "helper": 0.9752222299575806,
+   "verdict": "NO",
+   "why": "Honey wheat brioche is a different bread than French bread/baguette."
+  },
+  {
+   "n": 18,
+   "id": "commodity:staple:vegetable-soup",
+   "product": "Progresso Vegetable Classics, Lentil With Roasted Vegetables Canned Soup, Gluten Free, 19 oz.",
+   "set": "disagreement",
+   "helper": 0.9996527433395386,
+   "verdict": "NO",
+   "why": "Lentil with roasted vegetables is a lentil soup variety, not vegetable/vegetable beef soup."
+  },
+  {
+   "n": 19,
+   "id": "commodity:staple:frozen-peas",
+   "product": "Great Value Black Eyed Peas, 12 oz (Frozen)",
+   "set": "disagreement",
+   "helper": 0.9997116923332214,
+   "verdict": "NO",
+   "why": "Black-eyed peas are a different vegetable than green peas."
+  },
+  {
+   "n": 20,
+   "id": "commodity:staple:clam-chowder",
+   "product": "Progresso Light Canned Soup, Chicken and Dumpling Soup, 18.5 oz",
+   "set": "random",
+   "helper": 0.00010858033783733845,
+   "verdict": "NO",
+   "why": "Chicken and dumpling soup is not clam chowder."
+  },
+  {
+   "n": 21,
+   "id": "commodity:staple:baking-soda",
+   "product": "Equate Omeprazole and Sodium Bicarbonate Capsules 20 mg/1100 mg, Acid Reducer, 42 Count, Compare to Zegerid OTC Active Ingredient",
+   "set": "random",
+   "helper": 0.00600199680775404,
+   "verdict": "NO",
+   "why": "Omeprazole acid-reducer capsules are medicine, not baking soda."
+  },
+  {
+   "n": 22,
+   "id": "commodity:staple:zucchini",
+   "product": "Fresh Spaghetti Squash, Each",
+   "set": "random",
+   "helper": 0.00010107104026246816,
+   "verdict": "NO",
+   "why": "Spaghetti squash is a distinct squash variety, not zucchini or yellow squash."
+  },
+  {
+   "n": 23,
+   "id": "commodity:staple:beef-stew",
+   "product": "Stokes Green Chile Stew with Pork and Potatoes, Medium, 15 oz Can",
+   "set": "random",
+   "helper": 0.8629120588302612,
+   "verdict": "NO",
+   "why": "Green chile pork stew is a different stew than canned beef stew."
+  },
+  {
+   "n": 24,
+   "id": "commodity:staple:all-purpose-cleaner",
+   "product": "Biotrue Hydration Plus Multi-Purpose Soln, 16 fl. oz., 2 pk.",
+   "set": "random",
+   "helper": 0.0005541571299545467,
+   "verdict": "NO",
+   "why": "Contact lens solution is not a household all-purpose cleaner."
+  },
+  {
+   "n": 25,
+   "id": "commodity:staple:english-muffins",
+   "product": "Marketside Moist Pumpkin Spice Streusel Muffins, 14 oz Tray, 4 Count",
+   "set": "random",
+   "helper": 0.15299339592456818,
+   "verdict": "NO",
+   "why": "Pumpkin spice streusel muffins are sweet bakery muffins, not English muffins."
+  },
+  {
+   "n": 26,
+   "id": "commodity:staple:laundry-pods",
+   "product": "Gain Powder Laundry Detergent, Original, 195 loads, 180 oz.",
+   "set": "disagreement",
+   "helper": 0.9990348815917969,
+   "verdict": "NO",
+   "why": "Powder detergent is a different form than pods/pacs."
+  },
+  {
+   "n": 27,
+   "id": "commodity:staple:vegetable-soup",
+   "product": "Progresso Lentil Soup, Vegetable Classics Canned Soup, Gluten Free, 19 oz",
+   "set": "disagreement",
+   "helper": 0.941525399684906,
+   "verdict": "NO",
+   "why": "Lentil soup is a distinct variety, not vegetable/vegetable beef soup."
+  },
+  {
+   "n": 28,
+   "id": "commodity:staple:garlic-bread",
+   "product": "Member's Mark Pre-Sheeted Pizza Dough, Frozen, 21 ct.",
+   "set": "random",
+   "helper": 0.0004540353547781706,
+   "verdict": "NO",
+   "why": "Frozen pizza dough is not garlic bread."
+  },
+  {
+   "n": 29,
+   "id": "commodity:staple:cream-cheese",
+   "product": "Nestle Coffee mate Liquid Non-Dairy Refrigerated Coffee Creamer, French Vanilla, 66 fl. oz",
+   "set": "random",
+   "helper": 3.700307570397854e-05,
+   "verdict": "NO",
+   "why": "Flavored coffee creamer is not cream cheese."
+  },
+  {
+   "n": 30,
+   "id": "commodity:staple:maple-syrup",
+   "product": "Pearl Milling Company Butter Light Syrup Dispenser, 24oz, Single Bottle, 24 Servings Per Container",
+   "set": "disagreement",
+   "helper": 0.9841181039810181,
+   "verdict": "YES",
+   "why": "Pearl Milling butter light syrup is a pancake syrup like the accepted examples."
+  },
+  {
+   "n": 31,
+   "id": "commodity:staple:high-fiber-tortillas",
+   "product": "Mission 8\" Protein Whole Wheat Flour Tortillas, 12 ct.",
+   "set": "disagreement",
+   "helper": 0.9943990111351013,
+   "verdict": "NO",
+   "why": "8-inch protein tortillas are not burrito size and not the carb-balance/high-fiber line."
+  },
+  {
+   "n": 32,
+   "id": "commodity:staple:laundry-detergent",
+   "product": "Arm & Hammer Deep Clean Free & Clear Detergent 75 Fl Oz",
+   "set": "disagreement",
+   "helper": 0.9954431056976318,
+   "verdict": "NO",
+   "why": "Deep Clean Free & Clear is a different A&H line, not the Plus OxiClean detergent this commodity tracks."
+  },
+  {
+   "n": 33,
+   "id": "commodity:staple:cream-of-mushroom-soup",
+   "product": "Campbell's® Cream Of Chicken And Mushroom Soup 10.500 Oz",
+   "set": "disagreement",
+   "helper": 0.9510625004768372,
+   "verdict": "NO",
+   "why": "Cream of chicken and mushroom is a different variety than cream of mushroom."
+  },
+  {
+   "n": 34,
+   "id": "commodity:staple:graham-crackers",
+   "product": "Annie's Gluten Free Cocoa and Vanilla Bunny Cookies, 6.75 oz",
+   "set": "random",
+   "helper": 0.005302052944898605,
+   "verdict": "NO",
+   "why": "Bunny cookies are cookies, not graham crackers."
+  },
+  {
+   "n": 35,
+   "id": "commodity:staple:all-purpose-cleaner",
+   "product": "Mr. Clean 2 In 1 Built In Bath Lemon Cleaner 3 Ea",
+   "set": "disagreement",
+   "helper": 0.9905444383621216,
+   "verdict": "NO",
+   "why": "A built-in-bath toilet/bathroom cleaner is a specialty cleaner, not an all-purpose cleaner."
+  },
+  {
+   "n": 36,
+   "id": "commodity:staple:laundry-pods",
+   "product": "Tide Ultra Oxi Boost Liquid Laundry Detergent, 100 loads, 128 fl. oz.",
+   "set": "disagreement",
+   "helper": 0.9826900959014893,
+   "verdict": "NO",
+   "why": "Liquid detergent is a different form than pods/pacs."
+  },
+  {
+   "n": 37,
+   "id": "commodity:staple:french-bread",
+   "product": "Marketside Sliced Cinnamon Brioche Bread, Shelf-Stable, Regular, 17.6 oz",
+   "set": "disagreement",
+   "helper": 0.9895356297492981,
+   "verdict": "NO",
+   "why": "Cinnamon brioche is a sweet bread, not French bread/baguette."
+  },
+  {
+   "n": 38,
+   "id": "commodity:staple:sandwich-bags",
+   "product": "Great Value Fresh Seal Quart Double Zipper Storage Bags, 50 Count",
+   "set": "disagreement",
+   "helper": 0.9753131866455078,
+   "verdict": "NO",
+   "why": "Quart storage bags are a different size/type than sandwich bags."
+  },
+  {
+   "n": 39,
+   "id": "commodity:staple:string-cheese",
+   "product": "Member's Mark Part-Skim Mozzarella Cheese 5 lbs.",
+   "set": "disagreement",
+   "helper": 0.9980531930923462,
+   "verdict": "NO",
+   "why": "A 5 lb mozzarella cheese is not string cheese sticks."
+  },
+  {
+   "n": 40,
+   "id": "commodity:staple:salmon",
+   "product": "Member's Mark Farm Raised Jumbo Cooked Shrimp, Frozen, 21-25 ct. per pound, 2 lbs.",
+   "set": "random",
+   "helper": 2.0870958906016313e-05,
+   "verdict": "NO",
+   "why": "Cooked shrimp is not salmon fillets."
+  },
+  {
+   "n": 41,
+   "id": "commodity:staple:high-fiber-tortillas",
+   "product": "Mission 10\" Burrito Flour Tortillas, 40 ct.",
+   "set": "disagreement",
+   "helper": 0.9592339992523193,
+   "verdict": "NO",
+   "why": "Regular burrito flour tortillas are not the high-fiber/carb-balance line."
+  },
+  {
+   "n": 42,
+   "id": "commodity:staple:half-and-half",
+   "product": "Finest Reserve Artisan Cheese & Garlic Half Baguette 11 Oz",
+   "set": "random",
+   "helper": 0.31985512375831604,
+   "verdict": "NO",
+   "why": "A cheese and garlic half baguette is bread, not half & half dairy creamer."
+  },
+  {
+   "n": 43,
+   "id": "commodity:staple:shredded-cheese",
+   "product": "Powered BY Onetrust",
+   "set": "random",
+   "helper": 2.5094293960137293e-05,
+   "verdict": "NO",
+   "why": "'Powered BY Onetrust' is scraped page furniture, not a cheese product at all."
+  },
+  {
+   "n": 44,
+   "id": "commodity:staple:garlic-herb-seasoning",
+   "product": "Minute Seasoned Rice, With Carrot, Onion & Garlic, Chicken & Herb 2 Ea",
+   "set": "random",
+   "helper": 0.0003526091459207237,
+   "verdict": "NO",
+   "why": "Seasoned rice is a rice side dish, not a garlic herb seasoning blend."
+  },
+  {
+   "n": 45,
+   "id": "commodity:staple:cocktail-sauce",
+   "product": "Hellmann's Real Mayonnaise, 64 fl. oz.",
+   "set": "random",
+   "helper": 4.994891060050577e-05,
+   "verdict": "NO",
+   "why": "Mayonnaise is not cocktail sauce."
+  },
+  {
+   "n": 46,
+   "id": "commodity:staple:steak-sauce",
+   "product": "Manwich Sloppy Joe Sauce, 15 oz., 6 pk.",
+   "set": "random",
+   "helper": 0.00036116113187745214,
+   "verdict": "NO",
+   "why": "Sloppy joe sauce is not A.1.-style steak sauce."
+  },
+  {
+   "n": 47,
+   "id": "commodity:staple:canned-mushrooms",
+   "product": "Farm Rich Breaded Mushrooms in a Crispy Breaded Coating, 17 oz (Frozen Snacks and Appetizers)",
+   "set": "random",
+   "helper": 0.05009432137012482,
+   "verdict": "NO",
+   "why": "Frozen breaded mushroom appetizers are not canned mushrooms."
+  },
+  {
+   "n": 48,
+   "id": "commodity:staple:acorn-squash",
+   "product": "Fresh Garlic Bulbs, 2 lbs.",
+   "set": "random",
+   "helper": 1.5301060557249002e-05,
+   "verdict": "NO",
+   "why": "Garlic bulbs are not acorn squash."
+  },
+  {
+   "n": 49,
+   "id": "commodity:staple:cheese-crackers",
+   "product": "Munchies Snack Mix Cheese Fix, 1.75 oz., 32 pk.",
+   "set": "random",
+   "helper": 0.0016065294621512294,
+   "verdict": "NO",
+   "why": "Munchies is a mixed snack mix (chips/pretzels), not a box of cheese crackers."
+  },
+  {
+   "n": 50,
+   "id": "commodity:staple:poblano-peppers",
+   "product": "Vlasic Mild Banana Pepper Rings, Keto Friendly, 12 fl. oz.",
+   "set": "random",
+   "helper": 1.643285395402927e-05,
+   "verdict": "NO",
+   "why": "Jarred pickled banana pepper rings, not fresh poblano peppers."
+  },
+  {
+   "n": 51,
+   "id": "commodity:staple:tomatillos",
+   "product": "RO*TEL Xtra Hot Diced Tomatoes With Ghost Peppers, 10 oz.",
+   "set": "random",
+   "helper": 0.0004036860482301563,
+   "verdict": "NO",
+   "why": "Canned diced tomatoes with peppers, not fresh tomatillos."
+  },
+  {
+   "n": 52,
+   "id": "commodity:staple:ground-turkey",
+   "product": "Perdue Fresh 92% Lean 8% Fat Ground Chicken",
+   "set": "random",
+   "helper": 4.2948548070853576e-05,
+   "verdict": "NO",
+   "why": "Ground chicken is a different meat than ground turkey."
+  },
+  {
+   "n": 53,
+   "id": "commodity:staple:laundry-detergent",
+   "product": "Arm & Hammer Clean Burst Dual He",
+   "set": "disagreement",
+   "helper": 0.9969623684883118,
+   "verdict": "NO",
+   "why": "Clean Burst is A&H's non-OxiClean line; the commodity is specifically the Plus OxiClean detergent."
+  },
+  {
+   "n": 54,
+   "id": "commodity:staple:pizza-sauce",
+   "product": "Melinda's Creamy Pizza Hot Sauce Ranch Dipping Sauce And Spicy Dressing 355 Ml",
+   "set": "random",
+   "helper": 0.007736606989055872,
+   "verdict": "NO",
+   "why": "A hot-sauce/ranch dipping sauce, not pizza sauce for making pizza."
+  },
+  {
+   "n": 55,
+   "id": "commodity:staple:queso",
+   "product": "Daiya Dairy Free Gluten Free Cheddar Cheese Sauce, Vegan, 14.2 oz (Shelf-Stable)",
+   "set": "disagreement",
+   "helper": 0.9977543950080872,
+   "verdict": "NO",
+   "why": "Dairy-free vegan cheddar sauce is a substitute product, not the queso/cheese dip the board prices."
+  },
+  {
+   "n": 56,
+   "id": "commodity:staple:cream-of-mushroom-soup",
+   "product": "(4 pack) Campbell's Condensed Beefy Mushroom Soup, 10.5 oz Can",
+   "set": "disagreement",
+   "helper": 0.9013053178787231,
+   "verdict": "NO",
+   "why": "Beefy Mushroom is a different soup variety than Cream of Mushroom."
+  },
+  {
+   "n": 57,
+   "id": "commodity:staple:onion-soup-mix",
+   "product": "Campbell's Condensed French Onion Soup, 10.5 oz Can",
+   "set": "random",
+   "helper": 0.11488547176122665,
+   "verdict": "NO",
+   "why": "Canned condensed French onion soup, not a dry onion soup mix packet."
+  },
+  {
+   "n": 58,
+   "id": "commodity:staple:cinnamon-stick",
+   "product": "Kodiak Cinnamon French Toast Sticks 14.5 Oz",
+   "set": "disagreement",
+   "helper": 0.9976880550384521,
+   "verdict": "NO",
+   "why": "Frozen cinnamon French toast sticks, not cinnamon bark spice sticks."
+  },
+  {
+   "n": 59,
+   "id": "commodity:staple:ground-turkey",
+   "product": "Soules Kitchen Chicken Breast Fajitas Strips, 32 oz., 2 pk.",
+   "set": "random",
+   "helper": 1.567362414789386e-05,
+   "verdict": "NO",
+   "why": "Cooked chicken fajita strips have nothing to do with ground turkey."
+  },
+  {
+   "n": 60,
+   "id": "commodity:staple:cheese-crackers",
+   "product": "Member's Mark Cheese and Cracker Snacks, 12 pk.",
+   "set": "disagreement",
+   "helper": 0.9649335145950317,
+   "verdict": "NO",
+   "why": "Cheese-and-cracker snack kits, not a box of cheese-flavored crackers."
+  },
+  {
+   "n": 61,
+   "id": "commodity:staple:crushed-tomatoes",
+   "product": "Great Value Italian-Style Petite Diced Tomatoes, 28 oz",
+   "set": "random",
+   "helper": 0.0001810969552025199,
+   "verdict": "NO",
+   "why": "Petite diced tomatoes are a different cut than crushed tomatoes."
+  },
+  {
+   "n": 62,
+   "id": "commodity:staple:rice-cakes",
+   "product": "GOOD THINS Garden Veggie Rice Snacks Gluten Free Crackers, Snack Crackers, 3.5 oz",
+   "set": "random",
+   "helper": 0.0008888480952009559,
+   "verdict": "NO",
+   "why": "Good Thins are thin rice crackers/snacks, not round puffed rice cakes."
+  },
+  {
+   "n": 63,
+   "id": "commodity:staple:chocolate-milk",
+   "product": "M&M's Full Size Peanut Milk Chocolate Candy 1.74 Oz",
+   "set": "random",
+   "helper": 0.0005312736611813307,
+   "verdict": "NO",
+   "why": "M&M's candy, not chocolate milk; only the words overlap."
+  },
+  {
+   "n": 64,
+   "id": "commodity:staple:avocados",
+   "product": "Broccoli Crowns, Per LB",
+   "set": "random",
+   "helper": 1.7194950487464666e-05,
+   "verdict": "NO",
+   "why": "Broccoli crowns are not avocados."
+  },
+  {
+   "n": 65,
+   "id": "commodity:staple:pomegranates",
+   "product": "Whole Seedless Watermelon",
+   "set": "random",
+   "helper": 2.619451333885081e-05,
+   "verdict": "NO",
+   "why": "A watermelon is not a pomegranate."
+  },
+  {
+   "n": 66,
+   "id": "commodity:staple:black-pepper",
+   "product": "McCormick Pepper Black Whole, 7.0 oz Bottle",
+   "set": "disagreement",
+   "helper": 0.9979555606842041,
+   "verdict": "NO",
+   "why": "Whole peppercorns, not ground black pepper as the label requires."
+  },
+  {
+   "n": 67,
+   "id": "commodity:staple:frozen-waffles",
+   "product": "De Wafelbakkers Blueberry Pancakes, 33 oz, 24 Ct Bag (Frozen)",
+   "set": "random",
+   "helper": 5.7734287111088634e-05,
+   "verdict": "NO",
+   "why": "Frozen pancakes, not frozen waffles."
+  },
+  {
+   "n": 68,
+   "id": "commodity:staple:cinnamon-stick",
+   "product": "Farm Rich High Protein Cinnamon French Toast Sticks 18.4 Oz",
+   "set": "disagreement",
+   "helper": 0.9965762495994568,
+   "verdict": "NO",
+   "why": "Frozen French toast sticks, not cinnamon bark spice sticks."
+  },
+  {
+   "n": 69,
+   "id": "commodity:staple:pita-bread",
+   "product": "Old El Paso Flour Tortilla Pockets, Meal Prep, 8 Ct, 8.4 oz",
+   "set": "random",
+   "helper": 0.0005890714819543064,
+   "verdict": "NO",
+   "why": "Flour tortilla pockets, not pita bread."
+  },
+  {
+   "n": 70,
+   "id": "commodity:staple:lotion",
+   "product": "NatureWell Firming Cheeky Cream, 10 oz.,  2 pk.",
+   "set": "disagreement",
+   "helper": 0.998160183429718,
+   "verdict": "NO",
+   "why": "A specialty firming cream, not general body lotion."
+  },
+  {
+   "n": 71,
+   "id": "commodity:staple:graham-crackers",
+   "product": "Stauffer's Simply Animals Glazed Cinnamon Animal Cookies, Fun Kid Snacks, 20oz Family-Size",
+   "set": "random",
+   "helper": 0.0038533678743988276,
+   "verdict": "NO",
+   "why": "Glazed animal cookies, not graham crackers."
+  },
+  {
+   "n": 72,
+   "id": "commodity:staple:diced-ham",
+   "product": "Bristol Brewing Company Brand Smoke Flavor Cooked Ham, High Protein, 16 oz Aluminum Can",
+   "set": "disagreement",
+   "helper": 0.9033910036087036,
+   "verdict": "NO",
+   "why": "Canned whole smoked ham, not refrigerated diced/cubed ham."
+  },
+  {
+   "n": 73,
+   "id": "commodity:staple:doubanjiang",
+   "product": "Bush's Best Southwest Zest Pinto Beans In A Medium Red Chili Sauce 15 Oz",
+   "set": "random",
+   "helper": 2.7352774850442074e-05,
+   "verdict": "NO",
+   "why": "Canned pinto beans in chili sauce, not doubanjiang fermented chili bean paste."
+  },
+  {
+   "n": 74,
+   "id": "commodity:staple:laundry-pods",
+   "product": "Tide + Ultra Oxi Powder Laundry Detergent, Original, 143 loads, 225 oz.",
+   "set": "disagreement",
+   "helper": 0.9994620680809021,
+   "verdict": "NO",
+   "why": "Powder detergent, and all accepted examples are pods/pacs."
+  },
+  {
+   "n": 75,
+   "id": "commodity:staple:ground-cumin",
+   "product": "McCormick Butter Chicken Seasoning Mix, 0.87 oz Packet",
+   "set": "random",
+   "helper": 2.4216911697294563e-05,
+   "verdict": "NO",
+   "why": "A butter chicken seasoning blend packet, not plain ground cumin."
+  },
+  {
+   "n": 76,
+   "id": "commodity:staple:crushed-tomatoes",
+   "product": "Pomi Chopped Tomatoes, 26.46 oz, 1/4 Cup per serving, 12 servings per Container",
+   "set": "random",
+   "helper": 0.0001572530745761469,
+   "verdict": "NO",
+   "why": "Chopped tomatoes are a diced-style cut, not crushed tomatoes."
+  },
+  {
+   "n": 77,
+   "id": "commodity:staple:mangoes",
+   "product": "Fresh Tropical Papaya - Ready to Eat",
+   "set": "random",
+   "helper": 1.557979703648016e-05,
+   "verdict": "NO",
+   "why": "Papaya is a different fruit than mango."
+  },
+  {
+   "n": 78,
+   "id": "commodity:staple:canned-mixed-vegetables",
+   "product": "Margaret Holmes Field Peas and Snaps, Canned Vegetables, 15 oz",
+   "set": "disagreement",
+   "helper": 0.9980181455612183,
+   "verdict": "NO",
+   "why": "Field peas and snaps is a single-vegetable Southern item, not mixed vegetables."
+  },
+  {
+   "n": 79,
+   "id": "commodity:staple:cinnamon-stick",
+   "product": "Farm Rich Cinnamon French Toast Sticks 48 Oz",
+   "set": "disagreement",
+   "helper": 0.9955742359161377,
+   "verdict": "NO",
+   "why": "Frozen French toast sticks, not cinnamon bark spice sticks."
+  },
+  {
+   "n": 80,
+   "id": "commodity:staple:cooked-jasmine-rice",
+   "product": "Idahoan Shredded Hashbrowns, 2.125 lbs.",
+   "set": "random",
+   "helper": 1.4934322280168999e-05,
+   "verdict": "NO",
+   "why": "Shredded hashbrown potatoes, not cooked jasmine rice."
+  },
+  {
+   "n": 81,
+   "id": "commodity:staple:pretzels",
+   "product": "SkinnyPop, Dot's & Pirate's Booty Variety Pack, 36 pk.",
+   "set": "random",
+   "helper": 0.2724344730377197,
+   "verdict": "NO",
+   "why": "A popcorn/cheese-puff/pretzel variety pack, not a bag of pretzels."
+  },
+  {
+   "n": 82,
+   "id": "commodity:staple:feta",
+   "product": "Boursin Garlic & Fine Herbs Cheese Crumbles, 4.0 oz",
+   "set": "disagreement",
+   "helper": 0.9838391542434692,
+   "verdict": "NO",
+   "why": "Boursin garlic-herb crumbles, not feta cheese."
+  },
+  {
+   "n": 83,
+   "id": "commodity:staple:instant-coffee",
+   "product": "La Colombe Coffee Cold Brew Black Unsweetened Cans, 9 fl. oz., 12 pk.",
+   "set": "random",
+   "helper": 0.06675279140472412,
+   "verdict": "NO",
+   "why": "Ready-to-drink canned cold brew, not instant coffee crystals."
+  },
+  {
+   "n": 84,
+   "id": "commodity:staple:smoked-turkey-sausage",
+   "product": "Member's Mark Smoked Sausage Made with Bacon, Jalapeno & Monterey Jack Cheese, 4 oz., 12 ct.",
+   "set": "random",
+   "helper": 6.509461672976613e-05,
+   "verdict": "NO",
+   "why": "A bacon-jalapeno-cheese smoked sausage with no indication it is turkey."
+  },
+  {
+   "n": 85,
+   "id": "commodity:staple:gingersnaps",
+   "product": "Walker's Shortbread Fingers 5.3 oz",
+   "set": "random",
+   "helper": 2.1322510292520747e-05,
+   "verdict": "NO",
+   "why": "Shortbread fingers, not gingersnap cookies."
+  },
+  {
+   "n": 86,
+   "id": "commodity:staple:glass-cleaner",
+   "product": "Equate Streak-Free Lens Cleaner, 8 oz Spray Bottle, 1 Count",
+   "set": "disagreement",
+   "helper": 0.9508103728294373,
+   "verdict": "NO",
+   "why": "Eyeglass lens cleaner, not household glass/window cleaner."
+  },
+  {
+   "n": 87,
+   "id": "commodity:staple:grapes",
+   "product": "Navel Oranges, 8 lb Bag",
+   "set": "random",
+   "helper": 0.0007528802379965782,
+   "verdict": "NO",
+   "why": "Navel oranges are not grapes."
+  },
+  {
+   "n": 88,
+   "id": "commodity:staple:all-purpose-cleaner",
+   "product": "Soft Scrub Sapphire Waters Duo Cubes In Tank Cleaner 4 Ea",
+   "set": "disagreement",
+   "helper": 0.9529033303260803,
+   "verdict": "NO",
+   "why": "In-tank toilet cleaner cubes, not an all-purpose surface cleaner."
+  },
+  {
+   "n": 89,
+   "id": "commodity:staple:rice-noodles",
+   "product": "Rice-A-Roni Rice, Spanish Flavor 6.8 oz Box",
+   "set": "random",
+   "helper": 0.00027627800591289997,
+   "verdict": "NO",
+   "why": "Rice-A-Roni is a seasoned rice mix, not rice noodles."
+  },
+  {
+   "n": 90,
+   "id": "commodity:staple:sugar-snap-peas",
+   "product": "Del Monte No Salt Added Sweet Peas, Canned Vegetables, 15 oz Can",
+   "set": "random",
+   "helper": 0.0007489066920243204,
+   "verdict": "NO",
+   "why": "Canned sweet peas, not fresh sugar snap peas."
+  },
+  {
+   "n": 91,
+   "id": "commodity:staple:popsicles",
+   "product": "Luigi's Squeeze Up Italian Ice Variety Pack, 3 fl. oz., 24 ct.",
+   "set": "disagreement",
+   "helper": 0.9784854650497437,
+   "verdict": "UNSURE",
+   "why": "Squeeze-up Italian ice is close to the accepted freezer pops but Italian ice may be a distinct frozen novelty to a shopper."
+  },
+  {
+   "n": 92,
+   "id": "commodity:staple:curry-powder",
+   "product": "Pioneer Brand Gluten Free Taco Seasoning - 1 oz",
+   "set": "random",
+   "helper": 3.668065619422123e-05,
+   "verdict": "NO",
+   "why": "Taco seasoning, not curry powder."
+  },
+  {
+   "n": 93,
+   "id": "commodity:staple:shower-cleaner",
+   "product": "CLR Calcium Lime and Rust Remover, Multi-Use Household Cleaner, EPA Safer Choice, 28 oz",
+   "set": "disagreement",
+   "helper": 0.928902804851532,
+   "verdict": "NO",
+   "why": "CLR is a calcium/lime/rust remover, not a daily shower or bathroom cleaner."
+  },
+  {
+   "n": 94,
+   "id": "commodity:staple:fruit-snacks",
+   "product": "MadeGood Mornings Organic Soft Baked Oat Bars, Variety Pack, 24 ct.",
+   "set": "disagreement",
+   "helper": 0.9855786561965942,
+   "verdict": "NO",
+   "why": "Soft baked oat bars, not gummy fruit snacks."
+  },
+  {
+   "n": 95,
+   "id": "commodity:staple:lotion",
+   "product": "NatureWell Clinical Retinol Advanced Moisture Cream, 16 oz.",
+   "set": "disagreement",
+   "helper": 0.9994545578956604,
+   "verdict": "NO",
+   "why": "A retinol facial/moisture cream, not body lotion."
+  },
+  {
+   "n": 96,
+   "id": "commodity:staple:oven-cleaner",
+   "product": "Mr. Clean Clean Freak Fresh Kitchen Multi Purpose Degreaser, 16 Fl oz, Household Cleaner",
+   "set": "random",
+   "helper": 0.0003963261260651052,
+   "verdict": "NO",
+   "why": "A kitchen degreaser spray, not an oven cleaner."
+  },
+  {
+   "n": 97,
+   "id": "commodity:staple:energy-drinks",
+   "product": "Member's Mark Sports Drink Variety Pack, 12 fl. oz., 24 pk.",
+   "set": "disagreement",
+   "helper": 0.9991052746772766,
+   "verdict": "NO",
+   "why": "Sports drink is a distinct category from energy drinks."
+  },
+  {
+   "n": 98,
+   "id": "commodity:staple:glass-cleaner",
+   "product": "Equate Streak-Free Lens Cleaner Value Pack, 2 Count, 8 oz and 2 oz Spray Bottle",
+   "set": "disagreement",
+   "helper": 0.978492796421051,
+   "verdict": "NO",
+   "why": "Eyeglass lens cleaner is not household glass/window cleaner."
+  },
+  {
+   "n": 99,
+   "id": "commodity:staple:brown-sugar",
+   "product": "Splenda Magic Baker Brown, Zero Calorie Granulated Sugar Substitute, 16oz Resealable Pouch",
+   "set": "disagreement",
+   "helper": 0.9925479292869568,
+   "verdict": "NO",
+   "why": "Splenda brown is a zero-calorie sugar substitute, not brown sugar."
+  },
+  {
+   "n": 100,
+   "id": "commodity:staple:blueberries",
+   "product": "Fresh USDA Organic Strawberries, 1 lb Container",
+   "set": "random",
+   "helper": 5.256528311292641e-05,
+   "verdict": "NO",
+   "why": "Strawberries are not blueberries."
+  },
+  {
+   "n": 101,
+   "id": "commodity:staple:shower-cleaner",
+   "product": "Comet® Lavender Scented All Purpose Cleaning Powder with Bleach 21oz",
+   "set": "disagreement",
+   "helper": 0.998450756072998,
+   "verdict": "NO",
+   "why": "Comet is an all-purpose cleaning powder, not a shower/bathroom cleaner spray like the accepted examples."
+  },
+  {
+   "n": 102,
+   "id": "commodity:staple:garam-masala",
+   "product": "St. Elmo Steak House Seasoning, 13 oz.",
+   "set": "random",
+   "helper": 0.00016053632134571671,
+   "verdict": "NO",
+   "why": "Steak house seasoning is not garam masala."
+  },
+  {
+   "n": 103,
+   "id": "commodity:staple:dish-soap",
+   "product": "Dawn Platinum Plus Powerwash Dish Spray Bottle Set, Fresh Scent, 1 Spray Bottle + 2 Refill",
+   "set": "random",
+   "helper": 0.061430204659700394,
+   "verdict": "NO",
+   "why": "Powerwash dish spray is a spray-format product with refills, a different form than the liquid dish soaps accepted."
+  },
+  {
+   "n": 104,
+   "id": "commodity:staple:rice-cakes",
+   "product": "Little Debbie Star Crunch Cookies With Caramel And Crisp Rice 12 Ea",
+   "set": "disagreement",
+   "helper": 0.9576854109764099,
+   "verdict": "NO",
+   "why": "Star Crunch are caramel crisp-rice cookies, not rice cakes."
+  },
+  {
+   "n": 105,
+   "id": "commodity:staple:canned-green-beans",
+   "product": "Del Monte Harvest Selects Lima Beans, Canned Vegetables, 8.5 oz Can",
+   "set": "random",
+   "helper": 0.00020322013006079942,
+   "verdict": "NO",
+   "why": "Lima beans are not green beans."
+  },
+  {
+   "n": 106,
+   "id": "commodity:staple:celery",
+   "product": "Fresh Organic Mini Cucumbers, 16 oz",
+   "set": "random",
+   "helper": 1.6225463696173392e-05,
+   "verdict": "NO",
+   "why": "Cucumbers are not celery."
+  },
+  {
+   "n": 107,
+   "id": "commodity:staple:aluminum-foil",
+   "product": "Reynolds Kitchens Unbleached Parchment Air Fryer Liners, 150 ct.",
+   "set": "random",
+   "helper": 3.71977366739884e-05,
+   "verdict": "NO",
+   "why": "Parchment air fryer liners are not aluminum foil."
+  },
+  {
+   "n": 108,
+   "id": "commodity:staple:pickled-jalapenos",
+   "product": "La Costeña Pickled Whole Jalapeno Peppers, 25.9 oz",
+   "set": "disagreement",
+   "helper": 0.9993041753768921,
+   "verdict": "NO",
+   "why": "Whole pickled jalapenos; the commodity is explicitly sliced."
+  },
+  {
+   "n": 109,
+   "id": "commodity:staple:gingersnaps",
+   "product": "bettergoods Soft Baked Lemon Chiffon Cookies, 6 oz",
+   "set": "random",
+   "helper": 0.00010489628039067611,
+   "verdict": "NO",
+   "why": "Lemon chiffon cookies are not gingersnaps."
+  },
+  {
+   "n": 110,
+   "id": "commodity:staple:sandwich-bags",
+   "product": "Ziploc Brand Half Gallon Freezer Storage Bags, Expandable Bottom, Grip ’n Seal Technology,",
+   "set": "random",
+   "helper": 0.0003587248211260885,
+   "verdict": "NO",
+   "why": "Half-gallon freezer bags are not sandwich bags."
+  },
+  {
+   "n": 111,
+   "id": "commodity:staple:relish",
+   "product": "Wickles Wicked Pickled Okra, 16 fl oz Jar",
+   "set": "disagreement",
+   "helper": 0.9087762236595154,
+   "verdict": "NO",
+   "why": "Pickled okra is not sweet relish."
+  },
+  {
+   "n": 112,
+   "id": "commodity:staple:popsicles",
+   "product": "Smirnoff Ice Orange Cream Pop 6 11.5 Z",
+   "set": "disagreement",
+   "helper": 0.9732427597045898,
+   "verdict": "NO",
+   "why": "Smirnoff Ice is an alcoholic beverage, not a freezer/ice pop."
+  },
+  {
+   "n": 113,
+   "id": "commodity:staple:muffins",
+   "product": "Pillsbury Cinnamon Rolls with Cinnabon Icing 13 oz., 4 pk.",
+   "set": "random",
+   "helper": 0.0074284435249865055,
+   "verdict": "NO",
+   "why": "Cinnamon rolls (refrigerated dough) are not bakery muffins."
+  },
+  {
+   "n": 114,
+   "id": "commodity:staple:instant-coffee",
+   "product": "Starbucks Lime Watermelon Refreshers Concentrate 32 Fl Oz",
+   "set": "random",
+   "helper": 0.0012528175720945,
+   "verdict": "NO",
+   "why": "A fruit refresher concentrate is not instant coffee."
+  },
+  {
+   "n": 115,
+   "id": "commodity:staple:ricotta",
+   "product": "Daisy Cottage Cheese, With Strawberries, 4% Milkfat Minimum 6 Oz",
+   "set": "random",
+   "helper": 0.0023482898250222206,
+   "verdict": "NO",
+   "why": "Cottage cheese is not ricotta."
+  },
+  {
+   "n": 116,
+   "id": "commodity:staple:english-muffins",
+   "product": "Bauducco Toast Original, 5oz Flow Pack",
+   "set": "random",
+   "helper": 0.00024425957235507667,
+   "verdict": "NO",
+   "why": "Bauducco toast is a packaged crisp toast, not English muffins."
+  },
+  {
+   "n": 117,
+   "id": "commodity:staple:cinnamon-stick",
+   "product": "Scooby Doo Baked Graham Cracker Sticks, Cinnamon 12.0 Oz",
+   "set": "random",
+   "helper": 0.24053433537483215,
+   "verdict": "NO",
+   "why": "Graham cracker snack sticks are not cinnamon bark sticks."
+  },
+  {
+   "n": 118,
+   "id": "commodity:staple:apricots",
+   "product": "Organic Blackberries, 12 oz.",
+   "set": "random",
+   "helper": 1.5581133993691765e-05,
+   "verdict": "NO",
+   "why": "Blackberries are not apricots."
+  },
+  {
+   "n": 119,
+   "id": "commodity:staple:disinfectant-spray",
+   "product": "Febreze Professional Sanitizing Fabric Spray 32 fl. oz., 6 ct.",
+   "set": "disagreement",
+   "helper": 0.9975971579551697,
+   "verdict": "NO",
+   "why": "Febreze fabric sanitizing spray is a fabric product, not a surface disinfectant spray."
+  },
+  {
+   "n": 120,
+   "id": "commodity:staple:pork-chops",
+   "product": "Smithfield All-Natural Boneless Pork Loin Filet, 1.0 - 2.8 lb, 24 G of Protein per 4 oz Serving",
+   "set": "random",
+   "helper": 0.004273975268006325,
+   "verdict": "NO",
+   "why": "A boneless pork loin filet is a whole roast/filet, not pork chops."
+  },
+  {
+   "n": 121,
+   "id": "commodity:staple:coconut-oil",
+   "product": "SheaMoisture Coconut & Hibiscus Smooth & Shine Oil Coconut & Hibiscus, 3.3fl oz",
+   "set": "disagreement",
+   "helper": 0.9961010217666626,
+   "verdict": "NO",
+   "why": "SheaMoisture is a hair/body oil, not culinary coconut oil."
+  },
+  {
+   "n": 122,
+   "id": "commodity:staple:eggs",
+   "product": "Powered BY Onetrust",
+   "set": "random",
+   "helper": 2.1546029529417865e-05,
+   "verdict": "NO",
+   "why": "\"Powered BY Onetrust\" is scrape debris, not a product at all."
+  },
+  {
+   "n": 123,
+   "id": "commodity:staple:wild-rice",
+   "product": "(6 pack) Knorr Spanish Parboiled Rice Cooks in 7 Minutes, No Artificial Flavors, 5.6 oz Regular Pouch",
+   "set": "random",
+   "helper": 0.0036964528262615204,
+   "verdict": "NO",
+   "why": "Knorr Spanish parboiled rice is a seasoned rice mix, not wild rice."
+  },
+  {
+   "n": 124,
+   "id": "commodity:staple:vegetable-oil",
+   "product": "Carlini Pure Corn Oil",
+   "set": "random",
+   "helper": 0.0003771551128011197,
+   "verdict": "NO",
+   "why": "Corn oil is a different oil variety than the vegetable/canola oils accepted."
+  },
+  {
+   "n": 125,
+   "id": "commodity:staple:laundry-pods",
+   "product": "Gain + Oxi Liquid Laundry Detergent, Moonlight Breeze, 159 Loads, 170 fl. oz.",
+   "set": "disagreement",
+   "helper": 0.9978564381599426,
+   "verdict": "NO",
+   "why": "Liquid laundry detergent, not pods/pacs."
+  },
+  {
+   "n": 126,
+   "id": "commodity:staple:sandwich-bags",
+   "product": "Great Value Freezer Guard Double Zipper Gallon Freezer Bag, 80 Count",
+   "set": "random",
+   "helper": 0.0014833128079771996,
+   "verdict": "NO",
+   "why": "Gallon freezer bags are not sandwich bags."
+  },
+  {
+   "n": 127,
+   "id": "commodity:staple:storage-bags",
+   "product": "Ziploc Store & Steam Variety Pack, 80 ct.",
+   "set": "disagreement",
+   "helper": 0.9092686772346497,
+   "verdict": "NO",
+   "why": "Store & Steam variety pack is mixed-size steam bags, not standard gallon storage bags."
+  },
+  {
+   "n": 128,
+   "id": "commodity:staple:cheese-tortellini",
+   "product": "Giovanni Rana Ravioli Spinach Ricotta Premium Filled Pasta Bag (Family Size, 18oz), Refrigerated",
+   "set": "random",
+   "helper": 0.00021560605091508478,
+   "verdict": "NO",
+   "why": "Spinach ricotta ravioli is not cheese tortellini."
+  },
+  {
+   "n": 129,
+   "id": "commodity:staple:poultry-seasoning",
+   "product": "Grill Mates Montreal Chicken Seasoning, 2.75 oz Bottle",
+   "set": "random",
+   "helper": 2.982156365760602e-05,
+   "verdict": "UNSURE",
+   "why": "Montreal Chicken is a chicken seasoning blend; the board's examples mix classic poultry seasoning with a bird rub, so the boundary is unclear."
+  },
+  {
+   "n": 130,
+   "id": "commodity:staple:canned-mixed-vegetables",
+   "product": "Glory Foods Canned Seasoned Collard Greens, 27 oz Can",
+   "set": "random",
+   "helper": 0.0067079984582960606,
+   "verdict": "NO",
+   "why": "Seasoned collard greens are not mixed vegetables."
+  },
+  {
+   "n": 131,
+   "id": "commodity:staple:walnuts",
+   "product": "(2 pack) Great Value Chopped Pecans, 4 oz",
+   "set": "random",
+   "helper": 1.810032881621737e-05,
+   "verdict": "NO",
+   "why": "Pecans are not walnuts."
+  },
+  {
+   "n": 132,
+   "id": "commodity:staple:phyllo-dough",
+   "product": "Sweet Dough Prebaked Cafe Pretzels, Frozen, Case, 60 ct.",
+   "set": "random",
+   "helper": 3.830655259662308e-05,
+   "verdict": "NO",
+   "why": "Prebaked frozen pretzels are not phyllo dough."
+  },
+  {
+   "n": 133,
+   "id": "commodity:staple:japanese-curry-roux",
+   "product": "Patak's Butter Chicken Simmer Sauce, 15 oz",
+   "set": "random",
+   "helper": 0.00013209764438215643,
+   "verdict": "NO",
+   "why": "Butter chicken simmer sauce is an Indian sauce, not Japanese curry roux."
+  },
+  {
+   "n": 134,
+   "id": "commodity:staple:condensed-milk",
+   "product": "Sweetened Condensed Coconut Mlk",
+   "set": "disagreement",
+   "helper": 0.9901891350746155,
+   "verdict": "NO",
+   "why": "Condensed coconut milk is a non-dairy substitute, not sweetened condensed milk."
+  },
+  {
+   "n": 135,
+   "id": "commodity:staple:vegetable-oil",
+   "product": "Partanna Organic Extra Virgin Olive Oil - Premium 100% Castelvetrano Oil - High Polyphenol - First Cold Pressed - Early Harvest in Sicily-Award Winning Italian EVOO-Monovarietal-16.9 oz -500ML-Glass",
+   "set": "random",
+   "helper": 0.0007241936400532722,
+   "verdict": "NO",
+   "why": "Extra virgin olive oil is not vegetable/canola oil."
+  },
+  {
+   "n": 136,
+   "id": "commodity:staple:vegetable-soup",
+   "product": "Progresso Minestrone Soup, Vegetable Classics Canned Soup, 19 oz",
+   "set": "disagreement",
+   "helper": 0.9997296929359436,
+   "verdict": "UNSURE",
+   "why": "Minestrone is a vegetable-based soup in the same Progresso line but a distinct variety from the accepted vegetable/vegetable-beef soups."
+  },
+  {
+   "n": 137,
+   "id": "commodity:staple:frosting",
+   "product": "Apple Turnover, Bulk Wholesale Case, 96 ct.",
+   "set": "random",
+   "helper": 0.0008333644364029169,
+   "verdict": "NO",
+   "why": "Apple turnovers are a pastry, not frosting."
+  },
+  {
+   "n": 138,
+   "id": "commodity:staple:frozen-burritos",
+   "product": "El Monterey Spicy Jalapeno Bean & Cheese Chimichangas, 30.4 oz, 8 Count (Frozen)",
+   "set": "disagreement",
+   "helper": 0.9890903830528259,
+   "verdict": "NO",
+   "why": "Chimichangas are a distinct fried product, not burritos."
+  },
+  {
+   "n": 139,
+   "id": "commodity:staple:bratwurst",
+   "product": "Johnsonville Patties, Cheddar Cheese & Bacon Flavor 6 Ea",
+   "set": "random",
+   "helper": 0.0031814095564186573,
+   "verdict": "NO",
+   "why": "Sausage patties are a different form than bratwurst links."
+  },
+  {
+   "n": 140,
+   "id": "commodity:staple:cinnamon-stick",
+   "product": "Eggo Cinnamon French Toaster Sticks 32 Ea",
+   "set": "disagreement",
+   "helper": 0.9963723421096802,
+   "verdict": "NO",
+   "why": "Eggo French toast sticks are a frozen breakfast, not cinnamon bark sticks."
+  },
+  {
+   "n": 141,
+   "id": "commodity:staple:limes",
+   "product": "Organic Lemons, 2 Lb.",
+   "set": "random",
+   "helper": 1.9497843823046423e-05,
+   "verdict": "NO",
+   "why": "Lemons are not limes."
+  },
+  {
+   "n": 142,
+   "id": "commodity:staple:walnuts",
+   "product": "Member's Mark Freeze Dried Strawberry Slices, 3 oz.",
+   "set": "random",
+   "helper": 1.7849988580564968e-05,
+   "verdict": "NO",
+   "why": "Freeze-dried strawberries are not walnuts."
+  },
+  {
+   "n": 143,
+   "id": "commodity:staple:caesar-salad-kit",
+   "product": "Taylor Farms Mexican Style Street Corn Fresh Chopped Salad Kit, 11.62 oz, Fresh",
+   "set": "random",
+   "helper": 0.0005715081933885813,
+   "verdict": "NO",
+   "why": "Street corn salad kit is a different salad variety than Caesar."
+  },
+  {
+   "n": 144,
+   "id": "commodity:staple:frozen-burritos",
+   "product": "El Monterey Beef & Bean Chimichangas, 30.4 oz, 8 Count (Frozen)",
+   "set": "disagreement",
+   "helper": 0.9792584776878357,
+   "verdict": "NO",
+   "why": "Chimichangas are a distinct fried product, not burritos."
+  },
+  {
+   "n": 145,
+   "id": "commodity:staple:brown-sugar",
+   "product": "Lakanto Monk Fruit Sweetener - 1:1 Raw Cane Sugar Substitute, Zero Calorie, Keto Diet Friendly, Zero Net Carbs, Zero Glycemic, Baking, Extract, Sugar Replacement (Golden - 1 lb)",
+   "set": "random",
+   "helper": 8.115640230244026e-05,
+   "verdict": "NO",
+   "why": "Monk fruit sweetener is a sugar substitute, not brown sugar."
+  },
+  {
+   "n": 146,
+   "id": "commodity:staple:brown-gravy-mix",
+   "product": "Morrison's Country Style Gravy Mix, 1.5 lbs., 3 pk.",
+   "set": "disagreement",
+   "helper": 0.9506938457489014,
+   "verdict": "NO",
+   "why": "Country style gravy is a white/peppered gravy, not brown gravy."
+  },
+  {
+   "n": 147,
+   "id": "commodity:staple:garlic-herb-seasoning",
+   "product": "Member’s Mark Garlic Pepper Seasoning, 21 oz.",
+   "set": "random",
+   "helper": 0.0003165407106280327,
+   "verdict": "NO",
+   "why": "Garlic pepper is a different seasoning variety than roasted garlic & herb."
+  },
+  {
+   "n": 148,
+   "id": "commodity:staple:fresh-basil",
+   "product": "Spice World Squeeze Minced Ginger Seasoning 22.75 oz.",
+   "set": "random",
+   "helper": 1.680511013546493e-05,
+   "verdict": "NO",
+   "why": "Minced ginger is not fresh basil."
+  },
+  {
+   "n": 149,
+   "id": "commodity:staple:hot-dog-buns",
+   "product": "Ball Park Bun Length Hot Dogs, Classic 8 Ct",
+   "set": "disagreement",
+   "helper": 0.9978712797164917,
+   "verdict": "NO",
+   "why": "Hot dogs are the sausage, not the buns."
+  },
+  {
+   "n": 150,
+   "id": "commodity:staple:sirloin-steak",
+   "product": "Ribeye Steak, Choice Angus Beef, 1 per Package, Fresh, 0.9 - 1.6 lb",
+   "set": "random",
+   "helper": 6.375632074195892e-05,
+   "verdict": "NO",
+   "why": "Ribeye is a different cut than sirloin."
+  },
+  {
+   "n": 151,
+   "id": "commodity:staple:beef-stew",
+   "product": "Great Value Potted Meat, 3 oz",
+   "set": "random",
+   "helper": 0.00013691461936105043,
+   "verdict": "NO",
+   "why": "Potted meat is a spread, not canned beef stew."
+  },
+  {
+   "n": 152,
+   "id": "commodity:staple:cod",
+   "product": "Great Value Frozen Skinless & Boneless Swai Fish Fillets Value Bag, 4 lb",
+   "set": "random",
+   "helper": 0.03898558393120766,
+   "verdict": "NO",
+   "why": "Swai is a different fish species than cod."
+  },
+  {
+   "n": 153,
+   "id": "commodity:staple:onion-soup-mix",
+   "product": "McCormick Caramelized Onion Seasoning, 4.66 oz Bottle",
+   "set": "random",
+   "helper": 0.0007914893212728202,
+   "verdict": "NO",
+   "why": "A caramelized onion seasoning bottle is not a dry onion soup mix packet."
+  },
+  {
+   "n": 154,
+   "id": "commodity:staple:poultry-seasoning",
+   "product": "Kinder's Lemon and Herb Chicken Seasoning, 6.3oz",
+   "set": "random",
+   "helper": 0.0003043076430913061,
+   "verdict": "UNSURE",
+   "why": "Lemon-herb chicken seasoning may or may not count as poultry seasoning given the board's mostly classic-blend examples."
+  },
+  {
+   "n": 155,
+   "id": "commodity:staple:rice-arborio",
+   "product": "Ben's Original Enriched Long Grain White Parboiled Rice, 12 lbs.",
+   "set": "random",
+   "helper": 0.0037765379529446363,
+   "verdict": "NO",
+   "why": "Long grain parboiled rice is not arborio risotto rice."
+  },
+  {
+   "n": 156,
+   "id": "commodity:staple:coconut-aminos",
+   "product": "Shea Moisture Curl Enhancing Smoothie Hair Cream, Coconut and Hibiscus, 20 oz.",
+   "set": "random",
+   "helper": 3.188989285263233e-05,
+   "verdict": "NO",
+   "why": "Hair cream is not a food, let alone coconut aminos."
+  },
+  {
+   "n": 157,
+   "id": "commodity:staple:half-and-half",
+   "product": "Great Value Original Dairy Whipped Topping, 13 oz",
+   "set": "random",
+   "helper": 0.0016996314516291022,
+   "verdict": "NO",
+   "why": "Whipped topping is not half & half."
+  },
+  {
+   "n": 158,
+   "id": "commodity:staple:italian-seasoning",
+   "product": "Mt Olive Pepperoncini, Italian Seasoned 12 Fl Oz",
+   "set": "disagreement",
+   "helper": 0.9672170877456665,
+   "verdict": "NO",
+   "why": "Jarred pepperoncini peppers are not the dry Italian seasoning herb blend."
+  },
+  {
+   "n": 159,
+   "id": "commodity:staple:cinnamon-stick",
+   "product": "Member's Mark Cinnamon French Toast Sticks, Frozen, 48 oz.",
+   "set": "disagreement",
+   "helper": 0.9714107513427734,
+   "verdict": "NO",
+   "why": "Frozen French toast sticks are not cinnamon stick spice."
+  },
+  {
+   "n": 160,
+   "id": "commodity:staple:beef-stew",
+   "product": "(2 pack) Armour Chicken & Pork Potted Meat, 10g Protein Per Serving, 3 oz Can",
+   "set": "random",
+   "helper": 0.0007451518904417753,
+   "verdict": "NO",
+   "why": "Potted meat is a spread, not canned beef stew."
+  },
+  {
+   "n": 161,
+   "id": "commodity:staple:sirloin-steak",
+   "product": "Marketside Grass-Fed Beef Filet Mignon Steak, 0.25 - 0.80 lb",
+   "set": "random",
+   "helper": 6.728227890562266e-05,
+   "verdict": "NO",
+   "why": "Filet mignon is a different cut than sirloin."
+  },
+  {
+   "n": 162,
+   "id": "commodity:staple:chicken-livers",
+   "product": "Member's Mark Organic Boneless and Skinless Chicken Breasts, priced per pound",
+   "set": "random",
+   "helper": 0.00016170098388101906,
+   "verdict": "NO",
+   "why": "Chicken breasts are not chicken livers."
+  },
+  {
+   "n": 163,
+   "id": "commodity:staple:dish-soap",
+   "product": "Powered BY Onetrust",
+   "set": "random",
+   "helper": 0.00010322922025807202,
+   "verdict": "NO",
+   "why": "'Powered BY Onetrust' is scrape junk, not a dish soap product."
+  },
+  {
+   "n": 164,
+   "id": "commodity:staple:powdered-sugar",
+   "product": "C&H Pure Cane Sugar Cubes, 126 ct",
+   "set": "random",
+   "helper": 0.0016303081065416336,
+   "verdict": "NO",
+   "why": "Sugar cubes are a different form than powdered sugar."
+  },
+  {
+   "n": 165,
+   "id": "commodity:staple:dijon-mustard",
+   "product": "Smash Kitchen Organic Yellow Mustard, 8 oz Bottle",
+   "set": "random",
+   "helper": 0.0013718472328037024,
+   "verdict": "NO",
+   "why": "Yellow mustard is a different variety than dijon."
+  },
+  {
+   "n": 166,
+   "id": "commodity:staple:rice-cakes",
+   "product": "Little Debbie Star Crunch Caramel And Crisp Rice Cookies Big Pack 12 Ea",
+   "set": "disagreement",
+   "helper": 0.9830973148345947,
+   "verdict": "NO",
+   "why": "Star Crunch cookies are candy cookies, not plain rice cakes."
+  },
+  {
+   "n": 167,
+   "id": "commodity:staple:poblano-peppers",
+   "product": "San Marcos Shelf Stable  Sliced Jalapenos, 26 oz Can",
+   "set": "random",
+   "helper": 1.4736958291905466e-05,
+   "verdict": "NO",
+   "why": "Canned sliced jalapenos are neither poblano nor fresh."
+  },
+  {
+   "n": 168,
+   "id": "commodity:staple:clam-chowder",
+   "product": "Progresso Traditional, Chicken & Sausage Gumbo Canned Soup, Gluten Free, 19 oz.",
+   "set": "random",
+   "helper": 0.0008331540739163756,
+   "verdict": "NO",
+   "why": "Chicken & sausage gumbo is a different soup than clam chowder."
+  },
+  {
+   "n": 169,
+   "id": "commodity:staple:mixed-nuts",
+   "product": "PLANTERS Nut Duos Peppercorn Pistachio and Parmesan Flavored Cashew, 5 oz Resealable Bag",
+   "set": "disagreement",
+   "helper": 0.9717507362365723,
+   "verdict": "NO",
+   "why": "A flavored pistachio-cashew duo snack is not a mixed nuts tin."
+  },
+  {
+   "n": 170,
+   "id": "commodity:staple:donuts",
+   "product": "Rians La Crème Brulee, 6 pk.",
+   "set": "random",
+   "helper": 0.03393363580107689,
+   "verdict": "NO",
+   "why": "Creme brulee is a custard dessert, not donuts."
+  },
+  {
+   "n": 171,
+   "id": "commodity:staple:ground-beef-8020",
+   "product": "Whole Beef Chuck Roll, Case, priced per pound",
+   "set": "random",
+   "helper": 0.002900576451793313,
+   "verdict": "NO",
+   "why": "A whole chuck roll is not ground beef."
+  },
+  {
+   "n": 172,
+   "id": "commodity:staple:kidney-beans",
+   "product": "GOYA Pinto Beans 15.5 oz Can",
+   "set": "random",
+   "helper": 0.00013299056445248425,
+   "verdict": "NO",
+   "why": "Pinto beans are a different bean than kidney beans."
+  },
+  {
+   "n": 173,
+   "id": "commodity:staple:energy-drinks",
+   "product": "Liquid I.V. Sugar-Free Hydration + Energy Electrolyte Powder Drink Mix, Fruit Punch & Stra",
+   "set": "disagreement",
+   "helper": 0.9382324814796448,
+   "verdict": "NO",
+   "why": "An electrolyte hydration powder mix is not a ready-to-drink energy drink."
+  },
+  {
+   "n": 174,
+   "id": "commodity:staple:laundry-detergent",
+   "product": "Member's Mark Laundry Detergent Ultimate Clean, Free & Clear, 166 loads, 218 fl. oz.",
+   "set": "disagreement",
+   "helper": 0.9991157650947571,
+   "verdict": "NO",
+   "why": "Commodity is Arm & Hammer OxiClean specifically; Member's Mark is a different product line."
+  },
+  {
+   "n": 175,
+   "id": "commodity:staple:cod",
+   "product": "Sea Best Skinless Antibiotic Free Atlantic Salmon Fillets, 2 lb Bag (Frozen Fish)",
+   "set": "random",
+   "helper": 7.386074867099524e-05,
+   "verdict": "NO",
+   "why": "Salmon is a different fish than cod."
+  },
+  {
+   "n": 176,
+   "id": "commodity:staple:condensed-milk",
+   "product": "Chobani Coffee Creamer Sweet Cream 32 fl oz Carton",
+   "set": "random",
+   "helper": 0.0001996603823499754,
+   "verdict": "NO",
+   "why": "Coffee creamer is not sweetened condensed milk."
+  },
+  {
+   "n": 177,
+   "id": "commodity:staple:all-purpose-cleaner",
+   "product": "Windex Original Glass Cleaner 23 Fl Oz",
+   "set": "random",
+   "helper": 0.01488117128610611,
+   "verdict": "NO",
+   "why": "Windex is a glass cleaner, not an all-purpose cleaner."
+  },
+  {
+   "n": 178,
+   "id": "commodity:staple:laundry-detergent",
+   "product": "Gain + Oxi Liquid Laundry Detergent, Original, 159 Loads, 170 fl. oz.",
+   "set": "disagreement",
+   "helper": 0.9989532232284546,
+   "verdict": "NO",
+   "why": "Commodity is Arm & Hammer OxiClean specifically; Gain + Oxi is a different brand."
+  },
+  {
+   "n": 179,
+   "id": "commodity:staple:high-fiber-tortillas",
+   "product": "Mi Mama's Low Carb Whole Wheat Tortillas, 9 oz",
+   "set": "disagreement",
+   "helper": 0.9397809505462646,
+   "verdict": "UNSURE",
+   "why": "Low-carb whole wheat tortillas fit the category but the name does not confirm burrito size."
+  },
+  {
+   "n": 180,
+   "id": "commodity:staple:bratwurst",
+   "product": "Jimmy Dean Premium Pork Sausage Roll, 2 lbs.",
+   "set": "random",
+   "helper": 0.005084892734885216,
+   "verdict": "NO",
+   "why": "A breakfast sausage roll is not bratwurst links."
+  },
+  {
+   "n": 181,
+   "id": "commodity:staple:buckwheat-soba-noodles",
+   "product": "Barilla Penne Pasta 16 oz., 6 pk.",
+   "set": "random",
+   "helper": 1.4751665730727836e-05,
+   "verdict": "NO",
+   "why": "Penne pasta is not buckwheat soba noodles."
+  },
+  {
+   "n": 182,
+   "id": "commodity:staple:garlic-bread",
+   "product": "Freshness Guaranteed Italian Garlic Herb Bread, Shelf-Stable, Regular, 14 oz",
+   "set": "disagreement",
+   "helper": 0.9995853304862976,
+   "verdict": "NO",
+   "why": "Shelf-stable bread differs in form from the frozen garlic bread the board accepts."
+  },
+  {
+   "n": 183,
+   "id": "commodity:staple:cream-of-mushroom-soup",
+   "product": "Campbell's Condensed Golden Mushroom Soup, 10.5 oz Can",
+   "set": "disagreement",
+   "helper": 0.9836138486862183,
+   "verdict": "NO",
+   "why": "Golden mushroom soup is a distinct variety from cream of mushroom."
+  },
+  {
+   "n": 184,
+   "id": "commodity:staple:laundry-pods",
+   "product": "Tide Liquid Laundry Detergent, Original, 152 loads, 170 fl. oz.",
+   "set": "disagreement",
+   "helper": 0.9235954880714417,
+   "verdict": "NO",
+   "why": "Liquid detergent is not pods."
+  },
+  {
+   "n": 185,
+   "id": "commodity:staple:15-bean-soup-mix",
+   "product": "Healthy Choice Soup Variety Pack, 15 oz., 10 pk.",
+   "set": "random",
+   "helper": 0.002079675905406475,
+   "verdict": "NO",
+   "why": "Canned ready-to-eat soup is not a dry 15 bean soup mix."
+  },
+  {
+   "n": 186,
+   "id": "commodity:staple:chicken-wings",
+   "product": "Member's Mark Mesquite Grilled Chicken Fillets, Frozen, 3 lbs.",
+   "set": "random",
+   "helper": 2.9647369956364855e-05,
+   "verdict": "NO",
+   "why": "Grilled chicken fillets are not chicken wings."
+  },
+  {
+   "n": 187,
+   "id": "commodity:staple:canned-tuna",
+   "product": "Season Brand Bone-In Sardines in EVOO, 4.375 oz., 6 pk.",
+   "set": "random",
+   "helper": 1.7541642591822892e-05,
+   "verdict": "NO",
+   "why": "Sardines are a different fish than canned tuna."
+  },
+  {
+   "n": 188,
+   "id": "commodity:staple:relish",
+   "product": "Wickles Wicked Pickle Slices, 16 fl oz Jar",
+   "set": "disagreement",
+   "helper": 0.9018353223800659,
+   "verdict": "NO",
+   "why": "Pickle slices are not sweet relish."
+  },
+  {
+   "n": 189,
+   "id": "commodity:staple:laundry-detergent",
+   "product": "Persil Advanced Clean Oxi+Odor Liquid Laundry Detergent, 120 loads, 202 fl. oz.",
+   "set": "disagreement",
+   "helper": 0.9998182654380798,
+   "verdict": "NO",
+   "why": "Commodity is Arm & Hammer OxiClean specifically; Persil is a different brand."
+  },
+  {
+   "n": 190,
+   "id": "commodity:staple:baked-beans",
+   "product": "Bush's Black Beans 15 oz., 6 pk.",
+   "set": "random",
+   "helper": 0.0002904547727666795,
+   "verdict": "NO",
+   "why": "Plain black beans are not baked beans in sauce."
+  },
+  {
+   "n": 191,
+   "id": "commodity:staple:garden-salad",
+   "product": "Marketside Premium Romaine Salad Blend, 18 oz Bag (Fresh)",
+   "set": "disagreement",
+   "helper": 0.9616393446922302,
+   "verdict": "NO",
+   "why": "A premium romaine blend is a different salad variety than the iceberg-based garden blend."
+  },
+  {
+   "n": 192,
+   "id": "commodity:staple:cranberry-juice",
+   "product": "Great Value White Cranberry Strawberry Juice Cocktail, 64 fl oz",
+   "set": "disagreement",
+   "helper": 0.9994064569473267,
+   "verdict": "NO",
+   "why": "White cranberry strawberry blend is a different juice variety than cranberry juice."
+  }
+ ]
+}

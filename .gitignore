@@ -83,6 +83,10 @@
 # the reason the gate now requires >= 3 seeds, and a rule whose evidence is not kept is a rule the
 # next person will argue with.
 !/sidecar/out/seed-sweep-*.json
+# The audit of the local model's own rejections: 192 adjudicated rulings and the two rates they
+# produce. It is the only measurement anyone has ever made of whether that model's 3,315 unreviewed
+# rejections are correct, it cost a review session, and no script can recompute it.
+!/sidecar/out/rejection-audit.json
 /sidecar/**/__pycache__/
 # The member-tool SOURCES and the build scripts that publish them. Same hole as lib\ and the interstitial:
 # these run on the live site, several are the only copy in existence, and none of them were versioned
