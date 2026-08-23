@@ -3415,6 +3415,25 @@ else { Bad ('audit-semantic-identity -SelfTest failed (rc=' + $r.rc + ') - the s
 $r = RunPSAt (Join-Path (Split-Path $root -Parent) 'graph\pipeline') 'nightly.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'self-test OK') { Ok 'nightly: the sweep/llama-server ordering rule, the deadline maths and the log-leak guard all hold' }
 else { Bad ('nightly.ps1 -SelfTest failed (rc=' + $r.rc + ') - the GPU handover rule is unproven, and its failure mode is a BLIND semantic sweep tomorrow morning: ' + ($r.text -replace "`n", ' ')) }
+# ---- (j3) WHICH COMMODITY DID THE HELPER JUST SCORE? (2026-08-22) -------------------------------
+# 33 bare commodity ids exist in BOTH namespaces - milk, butter, brown-sugar, carrots. The sweep's
+# contested lane used to key on the bare id, so a RECIPE question could be scored against the
+# STAPLE's definition. That failure produces a plausible number rather than a missing one, which is
+# why it needs a fixture: a missing score is a cache miss anyone can see, and a plausible wrong one
+# is never questioned. Asserted here daily so the refusal cannot quietly become a lookup again.
+# SKIPPED, never failed, without the sidecar venv - it carries torch, and a watcher that needs a GPU
+# stack is a watcher that goes BLIND on the cloud runner.
+$sidecarPy = Join-Path (Split-Path $root -Parent) 'sidecar\.venv\Scripts\python.exe'
+if (-not (Test-Path $sidecarPy)) {
+  Skip 'sweep -Selftest: no sidecar venv on this machine, so the namespace-collision fixture did not run'
+} else {
+  $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+  try { $swOut = & $sidecarPy (Join-Path (Split-Path $root -Parent) 'sidecar\sweep.py') '--selftest' 2>&1 | ForEach-Object { [string]$_ } }
+  finally { $ErrorActionPreference = $prevEap }
+  $swRc = $LASTEXITCODE
+  if ($swRc -eq 0 -and (($swOut -join "`n") -match 'sweep SELF-TEST PASS')) { Ok 'sweep: a recipe question cannot be scored against a staple commodity that shares its bare id' }
+  else { Bad ('sweep.py --selftest failed (rc=' + $swRc + ') - the contested lane may be scoring questions against the WRONG namespace''s commodity, which reads as a plausible number: ' + (($swOut -join ' '))) }
+}
 # ---- (k) THE FAREWAY SIZE SURFACE (2026-08-01, triage 2026-08-01-9da3a8) -------------------------------
 # Fareway's storefront DOM often omits the pack size, so the builder now reads it from the catalog slug.
 # That surface is unreliable in four proven ways (dropped decimal, leading zero, per-unit size on a

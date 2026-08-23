@@ -1031,3 +1031,94 @@ measure the only improvement worth having.
 bi-encoder pass and the labelling is the existing regex, applied on the
 PowerShell side where the rules live. `build_pair_corpus.py` picks up
 `mine-labelled.json` automatically the moment it exists.
+
+## Addendum 2026-08-22 (fourth) — the helper was blind to 97% of the questions
+
+Phase 2 shipped a contested lane that scored 15 of 435 pairs and reported the
+other 420 as "no sidecar definition". That line was accurate and easy to read
+past. It is the whole ballgame.
+
+### 1. Two catalogues, one of them invisible
+
+`grocery/audit-semantic-identity.ps1` builds the sidecar's `commodity-defs.json`
+from `grocery/commodities.json` — the **staple** catalogue, 588 entries. The
+graph holds **687** commodities across two namespaces, and the contested set is
+almost entirely the other one:
+
+| | n |
+|---|---|
+| contested questions on the live graph | 435 |
+| staple namespace | 15 |
+| **recipe namespace** | **420 (97%)** |
+
+Of the 44 distinct recipe commodities involved, 12 are in
+`grocery/recipe-commodities.json` and **32 are defined nowhere the sidecar can
+read** — they arrive through the recipe-board import and live only in the graph.
+
+`graph/pipeline/emit_commodity_defs.py` (read-only, `PRAGMA query_only`) emits
+definitions for all 687 from the graph. This does not touch the division of
+labour: PowerShell still owns the regex, because `commodity_text()` deliberately
+excludes the regex — it needs a label and some accepted examples, both of which
+the graph has for both namespaces.
+
+**With graph-sourced definitions the contested lane scores 435 of 435.**
+
+### 2. A silent-wrong-answer bug in phase 2's own lane
+
+**33 bare ids name a commodity in BOTH namespaces** — `milk`, `butter`,
+`brown-sugar`, `carrots`, `peanut-butter`, `honey`. Phase 2's lane keyed on the
+bare `def_id`, so a recipe question could be scored against the staple's text.
+
+That is worse than a missing score, and the reason is the asymmetry this whole
+plan keeps returning to: a missing score is a cache miss anyone can see, and for
+two near-identical foods a wrong one is *plausible* and would never be
+questioned. The lane now resolves on the full node id and permits the bare-id
+fallback only when the namespaces agree; a mismatch is refused and counted
+(`refused_wrong_namespace`).
+
+Worth recording that the first fix was itself wrong: the node-id index was built
+from `defs_by_id`, which is keyed by bare id and had already collapsed the 33
+colliding entries — reintroducing the same collision one level up. It is built
+from the defs list now. `sweep.py --selftest` fixtures the refusal with a
+MUST-FIRE and three clean twins, and runs daily in `test-auditors` (SKIPped, not
+failed, where the sidecar venv is absent — torch on the cloud runner is a
+watcher that goes BLIND).
+
+No pair was scored against the wrong namespace in practice: today's one
+colliding contested pair is `commodity:staple:brown-sugar`, so the namespaces
+agreed. The guard has caught nothing yet. That is the point of fixturing it.
+
+### 3. The switch is NOT safe to make wholesale, and here is the number
+
+`sweep.py` now takes `--defs` and `--tag`, so a comparison runs off the daily
+path and cannot overwrite the findings the alert de-dupes against. Run both ways
+on the same corpus, same models:
+
+| lane | today | graph defs | new | **gone** |
+|---|---|---|---|---|
+| identity | 181 | 255 | 204 | **130** |
+| coverage | 86 | 147 | 95 | 34 |
+| contested scored | 15 | **435** | — | — |
+
+The net "+74 identity findings" hides a near-total reshuffle: only ~51 of the
+current 181 survive. The cause is not the 66 added recipe commodities — it is
+that the graph draws exemplars from `instance_of` (everything the board has ever
+accepted) while the PowerShell prep draws them from today's comparison board, so
+**547 of 588 staple definitions change text**, and the identity lane's cut is
+relative to a peer median that moves with them.
+
+**130 GONE is the line that stops this shipping as-is.** Those are pairs the
+estate is being shown today and would stop being shown, with no event marking
+it — a guard silently narrowing, which this board rates worse than a noisy one.
+The 95 new coverage findings, by contrast, look real on inspection (`beef-base`,
+`fajita-seasoning`, `enchilada-sauce`, `cheddar-cheese-shredded` — recipe
+commodities with genuinely unmatched products).
+
+So the measurement recommends splitting what phase 3 needs from what it does not:
+**give the contested lane the graph definitions and leave identity and coverage
+on the staple catalogue**, which is a zero-diff change to the daily alert and
+takes the helper from 3% to 100% coverage. Unifying the two def sets is a
+separate piece of work whose cost is now known and is not small.
+
+Nothing in this addendum has been wired into the daily path. `emit_commodity_defs.py`
+writes a file nothing reads yet.

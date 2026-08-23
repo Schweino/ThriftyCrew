@@ -76,7 +76,91 @@ def log(m: str) -> None:
     print(f"[{time.strftime('%H:%M:%S')}] {m}", flush=True)
 
 
-def run_contested_lane(m, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all):
+def resolve_definition(pair, by_node, defs_by_id):
+    """Which commodity definition does this contested pair mean? Returns (def_or_None, reason).
+
+    WHY THIS IS NOT A DICT LOOKUP. 33 bare ids name a commodity in BOTH namespaces - milk, butter,
+    brown-sugar, carrots, peanut-butter, honey - so keying on `def_id` alone will happily score a
+    RECIPE question against the STAPLE's text. For near-identical foods that produces a PLAUSIBLE
+    number rather than a missing one, which is the worse failure of the two: a missing score is a
+    cache miss anyone can see, and a plausible wrong one is never questioned.
+
+    So the full node id wins wherever the definitions carry one, and the bare-id fallback is allowed
+    only when the namespaces agree. Today's commodity-defs.json is built by PowerShell from
+    grocery/commodities.json and carries neither field; every entry in it is a staple, which is what
+    an absent `namespace` is taken to mean.
+
+    reason is one of: node_id (exact), bare_id (fallback, namespaces agreed), wrong_namespace
+    (REFUSED - the bare id exists but belongs to the other namespace), unknown (no definition).
+    """
+    d = by_node.get(pair.get("id"))
+    if d is not None:
+        return d, "node_id"
+    d = defs_by_id.get(pair.get("def_id"))
+    if d is None:
+        return None, "unknown"
+    nid = pair.get("id") or ""
+    want = nid.split(":")[1] if nid.count(":") >= 2 else ""
+    have = d.get("namespace") or "staple"
+    if want and want != have:
+        return None, "wrong_namespace"
+    return d, "bare_id"
+
+
+def _selftest() -> int:
+    """Fixtures for the one piece of this file that can be wrong SILENTLY."""
+    bad = 0
+
+    def T(name, ok, got=""):
+        nonlocal bad
+        if ok:
+            print(f"  ok    {name}")
+        else:
+            print(f"  X     {name}   got: {got!r}")
+            bad += 1
+
+    staple = {"id": "brown-sugar", "node_id": "commodity:staple:brown-sugar",
+              "label": "Brown Sugar", "namespace": "staple", "exemplars": []}
+    recipe = {"id": "brown-sugar", "node_id": "commodity:recipe:brown-sugar",
+              "label": "Brown Sugar (recipe)", "namespace": "recipe", "exemplars": []}
+    legacy = {"id": "brown-sugar", "label": "Brown Sugar", "exemplars": []}   # PowerShell's file
+
+    both = [staple, recipe]
+    by_node = {d["node_id"]: d for d in both}
+    # defs_by_id collapses the collision - which is exactly why by_node exists
+    by_id = {d["id"]: d for d in both}
+
+    d, why = resolve_definition({"id": "commodity:recipe:brown-sugar", "def_id": "brown-sugar"},
+                                by_node, by_id)
+    T("a recipe question resolves to the RECIPE definition", d is recipe and why == "node_id", why)
+    d, why = resolve_definition({"id": "commodity:staple:brown-sugar", "def_id": "brown-sugar"},
+                                by_node, by_id)
+    T("a staple question resolves to the STAPLE definition", d is staple and why == "node_id", why)
+
+    # MUST FIRE: against the legacy all-staple file, a RECIPE question must be refused, never
+    # scored against the staple's text. This is the silent-wrong-answer case.
+    d, why = resolve_definition({"id": "commodity:recipe:brown-sugar", "def_id": "brown-sugar"},
+                                {}, {"brown-sugar": legacy})
+    T("MUST FIRE  a recipe question is REFUSED against a staple-only definition",
+      d is None and why == "wrong_namespace", why)
+    # CLEAN TWIN: the staple question against the same file is fine.
+    d, why = resolve_definition({"id": "commodity:staple:brown-sugar", "def_id": "brown-sugar"},
+                                {}, {"brown-sugar": legacy})
+    T("CLEAN TWIN  a staple question against the same file still resolves",
+      d is legacy and why == "bare_id", why)
+    # CLEAN TWIN: a commodity nobody defines is 'unknown', which is a different fact from a refusal.
+    d, why = resolve_definition({"id": "commodity:recipe:capers", "def_id": "capers"}, {}, {})
+    T("CLEAN TWIN  an undefined commodity is unknown, not a refusal",
+      d is None and why == "unknown", why)
+
+    if bad:
+        print(f"sweep SELF-TEST FAIL ({bad})")
+        return 2
+    print("sweep SELF-TEST PASS")
+    return 0
+
+
+def run_contested_lane(m, defs, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all):
     """LANE 3 - score the graph's contested questions, and warm every vector the resolve lane wants.
 
     Returns None when there is nothing to do (no file, or an unreadable one). A missing or stale
@@ -125,26 +209,47 @@ def run_contested_lane(m, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all):
         p10 = vals[max(0, min(len(vals) - 1, int(0.10 * (len(vals) - 1))))]
         peers[cid] = (vals[len(vals) // 2], p10, len(vals))
 
-    known, unknown = [], []
+    # Built from the DEFS LIST, never from defs_by_id: that dict is keyed by bare id, so the 33
+    # colliding commodities are already collapsed inside it and 33 node_ids would simply be absent
+    # here - the very collision this lookup exists to avoid, one level up.
+    by_node = {d["node_id"]: d for d in defs if d.get("node_id")}
+
+    known, unknown, wrong_ns = [], [], 0
     for p in pairs:
-        (known if p.get("def_id") in defs_by_id else unknown).append(p)
+        d, why = resolve_definition(p, by_node, defs_by_id)
+        if d is None:
+            unknown.append(p)
+            if why == "wrong_namespace":
+                wrong_ns += 1
+        else:
+            p["_def"] = d
+            known.append(p)
     if unknown:
         # A contested commodity the sidecar has no definition for is a real thing - the recipe
         # namespace and the staple catalogue are not the same set - and it is reported, not guessed.
         log(f"LANE contested: {len(unknown)} pair(s) name a commodity with no sidecar definition; not scored")
+        if wrong_ns:
+            log(f"  of those, {wrong_ns} share a bare id with a DIFFERENT namespace's commodity and "
+                f"were refused rather than scored against the wrong definition")
 
     scored = []
     if known:
         names = [clean_product(p["product"]) for p in known]
         pvecs = m.embed(names)
-        ce = m.rerank([(names[i], ctexts[cidx[known[i]["def_id"]]]) for i in range(len(known))])
+        # Text from the RESOLVED definition. ctexts/cidx are keyed by bare id and would reintroduce
+        # the collision this lane just refused, so they are used only for the peer calibration
+        # below, where the identity lane's own bare-id world is the right frame.
+        dtexts = [commodity_text(p["_def"]) for p in known]
+        dvecs = m.embed(dtexts)
+        ce = m.rerank([(names[i], dtexts[i]) for i in range(len(known))])
         for i, p in enumerate(known):
             did = p["def_id"]
             med, p10, n_peers = peers.get(did, (None, None, 0))
             scored.append({
                 "id": p["id"], "def_id": did, "commodity": p.get("commodity"),
+                "namespace": p["_def"].get("namespace") or "staple",
                 "product": p["product"], "rows": p.get("rows", 1),
-                "cos": round(float(torch.dot(pvecs[i], cvecs[cidx[did]])), 4),
+                "cos": round(float(torch.dot(pvecs[i], dvecs[i])), 4),
                 "score": round(float(ce[i]), 6),
                 "peer_median": None if med is None else round(float(med), 6),
                 "peer_p10": None if p10 is None else round(float(p10), 6),
@@ -162,13 +267,20 @@ def run_contested_lane(m, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all):
         "offered": len(pairs),
         "scored": len(scored),
         "no_definition": len(unknown),
+        "refused_wrong_namespace": wrong_ns,
         "vectors_warmed": len(texts),
         "pairs": scored,
     }
 
-def main() -> None:
+def main(defs_path: str | None = None, tag: str = "") -> None:
     t_start = time.time()
-    defs = load_json(os.path.join(DATA, "commodity-defs.json"))
+    # A comparison run must not overwrite the findings the daily alert de-dupes against: a changed
+    # signature file would make every standing finding look new exactly once, which is the alert
+    # noise this estate rates as worse than no alert at all.
+    suffix = f"-{tag}" if tag else ""
+    defs_path = defs_path or os.path.join(DATA, "commodity-defs.json")
+    defs = load_json(defs_path)
+    log(f"defs={os.path.basename(defs_path)}{'  (COMPARISON RUN, tag ' + tag + ')' if tag else ''}")
     pairs = load_json(os.path.join(DATA, "board-pairs.json"))
     corpus = load_json(os.path.join(DATA, "corpus-current.json"))
     log(f"device={DEVICE} commodities={len(defs)} board-pairs={len(pairs)} corpus={len(corpus)}")
@@ -276,7 +388,7 @@ def main() -> None:
     # The graph writes data/contested-pairs.json with `resolve.py --emit-contested`, read-only,
     # at the top of the nightly chain (graph/pipeline/nightly.ps1). Its absence is normal, not an
     # error: a run started by hand, or before the graph has ever emitted, simply skips this lane.
-    contested_report = run_contested_lane(m, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all)
+    contested_report = run_contested_lane(m, defs, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all)
 
     report = {
         "generated": time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -298,17 +410,33 @@ def main() -> None:
         report["cache"] = m.stats()
         log(f"cache: {report['cache']}")
     if contested_report is not None:
-        cp = os.path.join(OUT, "contested-scores.json")
+        cp = os.path.join(OUT, f"contested-scores{suffix}.json")
         tmp = cp + ".tmp"
         with open(tmp, "w", encoding="utf-8", newline="\n") as f:
             json.dump(contested_report, f, indent=2, ensure_ascii=False)
         os.replace(tmp, cp)
         log(f"wrote {cp}  ({contested_report['scored']} contested pair(s))")
-    p = os.path.join(OUT, "semantic-findings.json")
+    p = os.path.join(OUT, f"semantic-findings{suffix}.json")
     with open(p, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
     log(f"wrote {p}  ({len(identity)} identity + {len(coverage)} coverage) in {report['elapsed_sec']}s")
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    _ap = argparse.ArgumentParser(description="The nightly GPU batch (identity, coverage, contested)")
+    _ap.add_argument("--defs", default=None,
+                     help="commodity definitions to score against (default: data/commodity-defs.json). "
+                          "graph/pipeline/emit_commodity_defs.py writes a graph-sourced one covering "
+                          "BOTH namespaces.")
+    _ap.add_argument("--tag", default="",
+                     help="suffix the output files, so a comparison run cannot overwrite the "
+                          "findings the daily alert de-dupes against. REQUIRED with --defs.")
+    _ap.add_argument("--selftest", action="store_true")
+    _a = _ap.parse_args()
+    if _a.selftest:
+        raise SystemExit(_selftest())
+    if _a.defs and not _a.tag:
+        _ap.error("--tag is required with --defs, so a comparison run cannot overwrite the daily "
+                  "findings (try --tag graphdefs)")
+    main(defs_path=_a.defs, tag=_a.tag)
