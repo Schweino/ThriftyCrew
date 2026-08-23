@@ -188,7 +188,15 @@ gate with per-slug rollback to `held`, post-publish review, ledger close.
 
 ### S1 HARVEST (new; replaces the hunt lane's steady state)
 
-A local harvester (`meal-prep\pipeline\harvest.py`) that runs on demand and/or in the nightly window:
+A local harvester (`meal-prep\pipeline\harvest.py`) with two sub-commands, split by what they need:
+**`--crawl`** (enumerate, fetch, parse, band-filter, mechanical signature parts, dedup-score,
+store) needs NO GPU and runs any time, operator-started; **`--classify`** (the sauce-family
+local-enum backfill) needs llama-server up, so it runs only while the card is hand-held per §4.4
+and REFUSES with a clear message when the server is down (the audit-semantic-identity BLIND
+pattern) - pool entries sit with `sauce_family: null` until a classify pass fills them, and a null
+sauce-family only widens the neighbour search, never blocks a candidate. Nothing about harvest is
+scheduled in the initial build; folding a harvest step into graph\pipeline\nightly.ps1 (the
+sanctioned owner of scheduled GPU work) is a later decision for Brad.
 
 1. **Enumerate** recipe URLs from the source-domains ledger's reliable publishers via sitemap.xml,
    `/wp-json/wp/v2/` and category/tag indexes. No search engine, no WebSearch budget. New-publisher
@@ -211,7 +219,11 @@ A local harvester (`meal-prep\pipeline\harvest.py`) that runs on demand and/or i
    defend; everything else is a flag for the decider.
 4. **Signature + dedup scoring**: build the dish signature (protein | method | sauce-family | starch)
    - protein/method/starch mechanically from ingredients+instructions, sauce-family by local-27B
-   closed-enum classification (grammar-forced, and *only* a shortlist key, never a verdict). Score
+   closed-enum classification (grammar-forced, and *only* a shortlist key, never a verdict).
+   **The enums are not invented here**: the method vocabulary is the one considered-dishes.ps1
+   already records (`-Method` values in `db\considered-dishes.json`), and the sauce-family
+   vocabulary is the one make-saturation.ps1 already derives - one taxonomy shared with the
+   saturation brief and the prior-rulings ledger, or the three stop lining up. Score
    each candidate against the live catalog and the backlog: find-similar word overlap + bge-m3
    cosine + considered-dishes prior rulings. High-similarity candidates carry their top-5 neighbours
    into the dossier; nothing is auto-rejected by similarity alone except exact URL/slug re-finds.
@@ -224,7 +236,10 @@ A local harvester (`meal-prep\pipeline\harvest.py`) that runs on demand and/or i
    **harvest.py is the pool's single writer.** Consumption and rulings flow back through it
    (`harvest.py --mark-taken <slug> --run <id>` / `--mark-ruled <slug> --verdict <v>`), invoked by
    the orchestrator when the decider rules - a candidate the decider rejected must never resurface
-   as `available`, and one a run took must not be offered to a second run. The pool is the
+   as `available`, and one a run took must not be offered to a second run. Top-up sourcer finds
+   enter through the SAME gate (`harvest.py --ingest <candidates.json>`), so every candidate -
+   crawled or searched - gets the same band check, signature, and dedup scoring before the pool
+   will hold it; there is exactly one road into the pool. The pool is the
    institutional memory the 48% dupe churn never had.
 
    Politeness is part of the contract: respect robots.txt, per-domain pacing of one request every
@@ -255,8 +270,9 @@ rulings - but in v3 it returns them as a schema'd verdict and the orchestrator p
 agent stops running shell entirely. Acceptance pacing keeps v2's WIP discipline: the orchestrator
 pops candidates from the pool only while accepted-but-unresolved recipes sit under the WIP limit
 (25), so a deep backlog cannot flood the paid lanes.
-Local 27B's role: none in the ruling. Optionally, an adversarial "argue this is a dupe of its top
-neighbour" pass orders the dossier (86.4-pt separation shape, signal only).
+Local 27B's role: none in the ruling. (An adversarial "argue this is a dupe of its top neighbour"
+ordering pass is a candidate for later - **explicitly DEFERRED out of the initial build**; revisit
+only if phase-6 measurements show the decider mis-prioritizing, and never as a verdict.)
 The recipe-dedup-selector agent definition needs its dossier-contract rewrite (its current text
 specifies parallel per-protein selectors and selected-*.json file outputs, both retired here) - that
 rewrite is part of D5.
@@ -272,17 +288,20 @@ Priority ladder, run by the orchestrator (no Claude wrapper):
 2. **local_extract.py** full-page transcription with the existing 85% substring bar.
 3. **Escalate to the Claude extractor** exactly as today (`escalate: true` only).
 The extractor agent is invoked only for pages rungs 1-2 could not settle - and its definition needs
-one edit for that role: its current "TRY THE LOCAL MODEL FIRST" section must be removed or gated,
-because in v3 every page that reaches it has ALREADY failed the local pass; re-running local_extract
-there would waste minutes re-earning a failure the dispatch already carries. The dispatch includes
-the local attempt's escalate_reason and unverified lines so the agent starts where local stopped.
+one edit for that role: its current "TRY THE LOCAL MODEL FIRST" section is REPLACED with
+escalation-role text ("you receive only pages the local pass could not settle; the failure reason
+and unverified lines are in your dispatch - do not re-run the local script"), because in v3 every
+page that reaches it has ALREADY failed the local pass, and re-running local_extract there would
+waste minutes re-earning a failure the dispatch already carries.
 Expected Claude extraction calls: ~5-15% of pages (bench it in the proving run). Extraction
 was only 1.6% of tokens - this is as much an *accuracy and latency* play (JSON-LD is the page's own
 statement; no 24k-char prompt truncation) as a cost one.
 
 ### S4 MAP -> mechanical pre-resolve, Claude for the residual
 
-New `map-preresolve.ps1` (or .py) runs per micro-batch before any agent is paid:
+New `map-preresolve.ps1` (PowerShell - it composes ingredient-vocab, ingredient-resolutions and
+price-ingredient, which are all PS surfaces) runs per micro-batch before any agent is paid, writing
+`mapped-pre\<slug>.json` per the §4.5 contract:
 - For every extracted ingredient: ingredient-resolutions cache -> ingredient-vocab exact/alias ->
   price-ingredient carriage/board answer -> densities/each-nouns availability -> bid-exists check.
 - Output: a decision table where the (measured) majority of lines arrive **pre-resolved with
@@ -298,8 +317,9 @@ pre-computed: scaled grams x food-DB vs source-published macros, so it verifies 
 `-Advance`, `ingredient-queue -Add` and `-Derive` from that structure. This retires the B8 class
 (`-Terms 'a,b'` bound as one composite string parking recipes forever) by construction - a JSON
 array cannot be comma-joined by accident - instead of by prompt warning.
-Registrar path unchanged. Local 27B's role: `ingredient-vocab -Query` candidate ordering at most
-(rank, never resolve - "Dry White Wine" auto-matching "White Wine Vinegar" is the founding reason).
+Registrar path unchanged. Local 27B's role in mapping: **none in the initial build** (a
+vocab-candidate ordering signal is DEFERRED alongside S2's and S5's; and it could only ever rank,
+never resolve - "Dry White Wine" auto-matching "White Wine Vinegar" is the founding reason).
 Map was 13.1% at 627 agents; expect the residual to cut its context by well over half and its call
 count substantially, and - more important - to make the vocabulary misses of 2026-08-16 structurally
 impossible to reach the writer.
@@ -310,10 +330,13 @@ The singleton lane, Rule B, the queue, -Derive, promotion to carriage.json: all 
 changes is what the pricer does with its minutes:
 - **Server pre-pass (mechanical, before the agent):** probe-ingredient.ps1 for Baker's + Family Fare
   (already server-side), retry ladder + 3-state verdict from search-verdict-lib.
-- **Unattended browser pre-pass (mechanical):** pull-browser-stores.py CDP sweeps for Fareway, Sam's
-  (needs the member session live), and Hy-Vee single lookups, with the existing pacing profiles and
-  wall detection (a wall stops the lane and leaves UNUSABLE, which reads as PENDING - never
-  not-carried). This is the same code the capture estate already trusts daily.
+- **Unattended browser pre-pass (mechanical):** pull-browser-stores.py CDP sweeps for Fareway and
+  Hy-Vee single lookups, with the existing pacing profiles and wall detection (a wall stops the
+  lane and leaves UNUSABLE, which reads as PENDING - never not-carried). This is the same code the
+  capture estate already trusts daily. **Sam's Club sweeps only when the driver profile carries a
+  live member session** - the daemon checks that precondition before dispatching the sweep, and an
+  absent session makes Sam's UNUSABLE for the batch (the pricer attends it), never a guess against
+  a logged-out storefront.
 - **The pricer agent** receives, per term, the gathered candidate rows + verdict-ladder states from
   all reachable stores, and does the only two things that need it: adjudicate rows ("Saffron Road
   Drunken Noodles is not saffron") and drive the attended browser surfaces per its existing
@@ -325,8 +348,8 @@ changes is what the pricer does with its minutes:
 Price is 1.4% of tokens - this is a **wall-clock and accuracy** change, not a token one: pricer
 sessions shrink from browser-driving marathons to short adjudications, and the search ladder is
 enforced by code on every lane instead of by hand on five.
-Local 27B's role: none in verdicts. (Optional signal: adversarial "argue this row is NOT the
-ingredient" ordering, same doctrine as everywhere else.)
+Local 27B's role: none in verdicts. (An adversarial row-ordering signal is **DEFERRED out of the
+initial build**, same as S2's - build it only if phase-6 measurement shows the pricer needs it.)
 
 ### S6 WRITE -> prose only, over a machine-built skeleton
 
@@ -367,7 +390,8 @@ become hard pre-gates, and the agent's attention lands entirely on the judgment 
 New `wave-preaudit.ps1 -RunDir -Wave` (the F3 fix), running the entire mechanical audit surface
 **8-wide across the wave's slugs**:
 macro recompute per spec from food-macros-db; cost reconciliation per spec vs costed.json (to the
-cent, tiers ordered); card rebuild to a scratch dir + structural byte-compare vs a known-good card;
+cent, tiers ordered); card rebuild to per-slug scratch dirs + structural byte-compare vs a
+known-good card;
 protein derivation + update-recipes-db -DryRun; audit-spec-contradictions / audit-store-integrity /
 audit-vocab-integrity / audit-unbid-ingredients / audit-cost-plausibility; voice sweep; P8 endpoint
 provenance + feed probe. Output: a machine report (per-slug PASS/FAIL per check, with numbers).
@@ -449,7 +473,11 @@ repairClaimHolds are the parity proof.
 
 Concurrency per lane caps as in v2 §2.4 (extract 3, map 2, price 1, write 3, qa 2, decide 1, wave
 serial), with the WIP limit (25 accepted-but-unresolved) gating pool pops exactly as it gated
-sourcing.
+sourcing. All caps, the WIP limit, retry budgets and breaker thresholds live as named constants in
+hunt_lib.py - they are daemon CONFIG, not architecture. With the front end nearly free, the
+bottleneck moves to write/qa/audit, so raising those caps after the proving run measures them is a
+legitimate lever - **a measured decision for Brad**, per the estate's speed-measured-not-guessed
+rule, with one exception that is architecture: the price lane stays a singleton, full stop.
 
 ### 4.2 The re-derivation risk, met head on
 
@@ -478,7 +506,7 @@ from prose, and SKILL.md forbids exactly that. So the port is governed:
 | bge-m3 embeddings | CPU first (measure); else GPU batch in the sidecar window | see §3 S1 |
 | local 27B calls (line-split, full extract, enum, adversarial) | 4 (server --parallel 4; more queues) | GPU |
 | QA battery / wave-preaudit | 8-wide across slugs | CPU, seconds |
-| cost engine, costed.json, recipes-db | **serial** - single-writer files | correctness |
+| cost engine, costed.json, recipes-db | **serialized by the daemon's cost-engine mutex (§4.5)** - spec assembly stays parallel, the cost pass does not | correctness |
 | CDP store sweeps | 1 thread per store (existing) | vendor politeness - the floor |
 | Claude lanes | v2 §2.4 caps | plan/session budget |
 
@@ -493,22 +521,128 @@ pull and 08:00 capture (their sweeps go BLIND otherwise), and the nightly chain 
 Harvest's embedding batches schedule around llama-server, or run CPU. Nothing new schedules
 llama-server; install-nightly-task.ps1 remains the only scheduler.
 
+### 4.5 Contracts (normative - the no-guessing appendix)
+
+Every artifact v3 introduces, with its path, producer, and shape. An implementer should never have
+to invent a filename, a field, or a threshold; if something here conflicts with code reality at
+build time, fix THIS document in the same commit rather than deviating silently.
+
+**Artifacts**
+
+| artifact | path | producer -> consumers |
+|---|---|---|
+| candidate pool | `meal-prep\db\candidate-pool.json` | harvest.py (SOLE writer; the daemon serializes every mutation call through one lock) -> daemon, dossier builder |
+| extraction | `<RunDir>\extracted\<slug>.json` | rung 1/2 (local) or rung 3 (Claude) -> map, QA, coverage_check |
+| map pre-resolve table | `<RunDir>\mapped-pre\<slug>.json` | map-preresolve -> mapper dispatch, daemon |
+| mapper decision file | `<RunDir>\mapped\<slug>.json` | mapper agent (unchanged contract) -> skeleton builder, auditor |
+| intake skeleton snapshot | `<RunDir>\intake\<slug>.skeleton.json` | build-intake-skeleton.ps1 -> the post-write diff |
+| intake (writer-completed) | `<RunDir>\intake\<slug>.json` | skeleton builder writes machine fields; writer completes prose IN PLACE -> build-v2-spec |
+| QA battery report | `<RunDir>\qa\<slug>.battery.json` | QA battery -> QA dispatch, daemon |
+| QA verdict | `<RunDir>\qa\<slug>.json` | recipe-source-qa (unchanged shape) -> daemon, auditor |
+| wave preaudit report | `<RunDir>\waves\wave-<k>.preaudit.json` | wave-preaudit.ps1 -> auditor dispatch, reviewer dispatch, daemon |
+| price evidence | `<RunDir>\price-evidence\batch-<n>.json` | server probe + CDP sweeps -> pricer dispatch |
+| dispatch schemas + daemon config | `meal-prep\pipeline\hunt_lib.py` (ONE module) | daemon + fixtures |
+
+**Shape rules**
+
+- **Extraction is ONE contract regardless of rung.** All three rungs emit the exact shape the
+  extractor agent already returns - `{state, reason, title, source_url, servings, time_total,
+  time_active, ingredients: [{raw, item, qty, unit, prep, optional, section}], instructions: [],
+  concerns: []}` - plus `extracted_by: "jsonld-local" | "local-page" | "claude"` and the verifier's
+  `verification` block. Downstream code must not care which rung settled a page. JSON-LD
+  `recipeInstructions` arrives as plain strings OR `HowToStep`/`HowToSection` objects; the parser
+  flattens both into the ordered string list.
+- **Pre-resolve rows:** per ingredient `{raw, canon_item, bid, board, resolution: "resolved" |
+  "unresolved" | "different-form" | "unbid" | "new-food-suspect", gpu_known, density_known,
+  fooddb_known, evidence, source: "cache" | "vocab" | "alias"}`.
+- **Skeleton locked vs writer-fillable** (from the intake schema in build-v2-spec): LOCKED - name,
+  slug, protein, cuisine, source_url, visibility, `ingredients[]` (item/grams/buy),
+  `macros_per_serving`, head.prepTime/cookTime/totalTime. WRITER-FILLABLE - `prose.*`,
+  head.description/keywords/steps/step_names, `writer_notes`, `forbidden_prose_terms`. The
+  post-write check is `build-intake-skeleton.ps1 -Verify -InFile <intake> -Skeleton <snapshot>`:
+  exit 1 on any locked-field drift, naming the fields.
+- **Preaudit report:** per-slug per-check `{check, verdict: "pass"|"fail", numbers, detail}` plus
+  one shared-checks block (db-agreement-class audits, P8 probe) that runs ONCE per wave, not per
+  slug. Card rebuilds go to per-slug scratch dirs (no collision). **The auditor's
+  `wave-<k>.audit.md` remains the artifact wave-publish P1/P1b read; the preaudit report is an
+  input to the auditor, never a substitute for its GO.**
+- **Price evidence:** per term per store `{store, state: "MATCHES"|"EMPTY"|"UNUSABLE", term_used,
+  attempts: [], hits: [{item, price, size, url}] (cap 8), reason}` - the search-verdict-lib shape,
+  serialized. The pricer adjudicates from it and records via ingredient-queue exactly as today.
+- **Dispatch schemas:** the normative baseline is hunt-orchestrator.js's inline set (CANDS, STAGE,
+  MAPPED, DERIVE, QA, WAVECLOSE, AUDIT, REPAIRCHECK, PUB), moved verbatim into hunt_lib.py. Two
+  named deltas, and only these: **SEL is replaced by DECIDE** - `{decisions: [{slug, verdict:
+  "accepted" | "rejected-dupe" | "rejected-not-fit" | "deferred", reason, dupe_of: [], record:
+  {name, protein, method, verdict, reason}}], note}` (the `record` block is what the daemon writes
+  to considered-dishes verbatim); **WRITE drops its macro fields** - the band is settled pre-write,
+  so the writer returns `{slug, status, state, detail}` only.
+
+**Exit-code convention** for every new battery/pre-resolve script: 0 = clean, 1 = findings (the
+machine report is still written), 2 = could-not-run (missing input, parse failure). **Exit 2 is a
+blocked stage, never a pass** - could-not-look is never a clean bill, mechanized.
+
+**Thresholds (defaults; change only with a recorded reason in the run dir)**
+
+- Band: inclusive on both edges, exactly as the run's conditions state them.
+- Scale-ratio: the recipe's ratio is the MEDIAN of per-line implied ratios (scaled grams vs source
+  qty); a line deviating >10% after the house quarter-quantization allowance = battery FAIL routed
+  to the QA agent's judgment (a deliberate substitution may survive); 5-10% = note. Lines the
+  source states without a quantity are exempt.
+- Prose-number equality: every numeral literal in `prose.*` and head.description must equal one of
+  stat.{cal, protein, carbs, fat, cost_ps} or the serving count at its printed precision; `{{...}}`
+  tokens pass by construction; package-size claims are NOT in scope here - they stay under the
+  writer's cost-line-tracing contract and the auditor.
+- Local line-split acceptance (rung 1): `raw` equals the JSON-LD line; qty and unit substrings of
+  raw verbatim; qty+unit+item+prep must jointly cover >=90% of raw's non-stopword tokens. ANY
+  failing line sends the whole page to rung 2.
+
+**Resume seed table** (the daemon's `-Status`-driven re-entry; normative so nobody re-derives it):
+
+| state on disk | daemon action |
+|---|---|
+| sourced / selected | extraction ladder |
+| extracted | map lane |
+| mapped with open holds (unbid / vocab follow-ups) | held list in -Status output; NOT dispatched |
+| pricing / parked | run `-Derive` first; price lane only if still pending |
+| priced | skeleton build (band gate) -> write lane |
+| spec-built / written | qa lane (stages skip work whose output file exists) |
+| qa-passed | wave pool |
+| waved | wave lane, resuming at the first un-stamped ledger stage |
+| published, not verified | post-publish review pending |
+| held | open-items report; never auto-republished |
+| STUCK (per the prior run's report) | re-enter the lane that stalled |
+
+**The cost-engine mutex (a live race v2 tolerated; v3 removes it).** `build-v2-spec -RunCost`
+shells the cost engine, which rewrites `db\costed.json`; the write lane runs 3 concurrent writers,
+so v2 raced on that file (the wave-2 audit watched costed.json rewritten mid-audit by wave-3
+traffic). The daemon holds ONE process-wide lock around every cost-engine invocation - the -RunCost
+cost pass, preaudit cost re-runs, compute-v2-perserving. Spec assembly stays parallel; only the
+cost pass serializes. Fixture in D9: two write-lane completions landing together produce two
+serialized cost passes and a costed.json that parses.
+
+**Lane-log completeness:** every settle gets a lane-log line, including rung-1/2 local extractions
+(`-By local`, tokens 0) - the lane log is the only record of the run's SHAPE, and a page settled
+locally is work done, not work skipped. audit-lane-shape continues to judge the log unchanged.
+
 ## 5. Deliverables
 
 Each ships with its must-fire fixture and clean twin in the same commit, per the guard-fixture rule.
 
-- **D1 `wave-preaudit.ps1`** - the mechanical audit battery (S8), 8-wide, machine report; auditor
-  dispatch slimmed to report + residue. Fixtures: a spec with a broken macro recompute MUST FIRE; a
-  clean wave passes; a card rebuild diff fires on a mutated built card.
-- **D2 QA battery** - extend coverage_check.py with scale-ratio and prose-number checks + a
-  `qa-dossier` emitter. Fixtures: one hand-adjusted line fires the ratio check; a prose literal
-  disagreeing with stat fires; `{{cost_ps}}` tokens never fire.
+- **D1 `wave-preaudit.ps1`** - the mechanical audit battery (S8), 8-wide with per-slug scratch
+  dirs, machine report + exit codes per the §4.5 contract; auditor dispatch slimmed to report +
+  residue. Fixtures: a spec with a broken macro recompute MUST FIRE; a clean wave passes; a card
+  rebuild diff fires on a mutated built card; a missing input exits 2 and reads as blocked, not
+  clean.
+- **D2 QA battery** - extend coverage_check.py with scale-ratio and prose-number checks (thresholds
+  per §4.5) + the `<slug>.battery.json` emitter. Fixtures: one hand-adjusted line fires the ratio
+  check; a prose literal disagreeing with stat fires; `{{cost_ps}}` tokens never fire.
 - **D3 `harvest.py` + `candidate-pool.json`** - enumeration, cached fetch, band filter, signatures,
-  dedup scoring, ranked backlog with the S1 pool schema and single-writer consumption verbs;
-  source-domains feedback on every fetch. Fixtures: a page with out-of-band JSON-LD nutrition is
-  filtered with the numbers recorded; a no-JSON-LD page is kept flagged; an ambiguous serving basis
-  demotes to band-unverified (never a guess); an exact already-published slug never enters the pool;
-  a `ruled:` candidate never resurfaces as available.
+  dedup scoring, ranked backlog with the S1 pool schema and single-writer verbs (--mark-taken,
+  --mark-ruled, --ingest for sourcer finds); source-domains feedback on every fetch. Fixtures: a
+  page with out-of-band JSON-LD nutrition is filtered with the numbers recorded; a no-JSON-LD page
+  is kept flagged; an ambiguous serving basis demotes to band-unverified (never a guess); an exact
+  already-published slug never enters the pool; a `ruled:` candidate never resurfaces as available;
+  an --ingest candidate gets the same band/signature/dedup treatment as a crawled one.
 - **D4 embedding lane** - bge-m3 signature vectors with a harvest-owned cache namespace; CPU
   latency measured and recorded before any GPU scheduling is built. Fixture: cache eviction twin
   proving harvest vectors survive a sweep save.
@@ -533,8 +667,10 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   control flow ported decision-for-decision. Fixtures: the full hunt-lib suite ported, plus
   daemon-level twins for B5 (null is STUCK), B6 (per-slug budgets), B7 (first-token verdicts), B8
   (a mapper verdict with terms as a JSON array lands on the queue as distinct terms), B10 (trim),
-  B11 (repair-claim mtime check); plus the adapter drill artifacts: per-agent behavior diff vs a
-  Workflow twin and the measured per-dispatch fixed overhead.
+  B11 (repair-claim mtime check), and the cost-engine mutex (§4.5: two concurrent write-lane
+  completions produce serialized cost passes and a parseable costed.json); plus the adapter drill
+  artifacts: per-agent behavior diff vs a Workflow twin and the measured per-dispatch fixed
+  overhead.
 - **D10 price evidence pre-pass** - probe + unattended CDP gathering wired into the price lane's
   dossier; pricer prompt rewritten to adjudicate-and-attend. Fixture: an UNUSABLE sweep state reads
   as PENDING, never not-carried (the founding rule, mechanized).
@@ -573,7 +709,7 @@ Workflow orchestrator** - none of them is inert while phase 3 waits:
 | 3 | D9 (the daemon + §4.1a adapter) | hunt-lib parity suite green; adapter drill: per-agent behavior diff vs Workflow twins + measured per-dispatch overhead; drain drill per §4.2; audit-lane-shape clean on the daemon's log |
 | 4 | D7 + D8 (map/write slimming) | mapper residual rate measured; one wave written from skeletons with guards green |
 | 5 | D10 (price pre-pass) | one real absent-term batch priced with pre-gathered evidence; ladder states honest per store |
-| 6 | **the proving run**: ~20 recipes, wave size 10, Brad-directed conditions | success criteria written before the run, incl.: per-recipe tokens (billed measure) and wall-clock published; >=5x fewer Claude invocations per published recipe than the 27 measured; zero gate weakened; every new defect class frozen as a fixture same-day |
+| 6 | **the proving run**: ~20 recipes, wave size 10, Brad-directed conditions | success criteria written before the run, incl.: per-recipe tokens (billed measure) and steady-state wall-clock per published recipe both measured against §7's targets; >=5x fewer Claude invocations per published recipe than the 27 measured; zero gate weakened; every new defect class frozen as a fixture same-day |
 | E (optional) | 27B LoRA (extraction/line-split), cross-encoder dish-dedup fine-tune | only after 6; >=3 seeds per arm; detached LoRA never a merged GGUF |
 
 **Stop-rules.** Re-measure with lane-tokens/harvest-lane-tokens after phases 1, 3 and 6; if the
@@ -594,6 +730,7 @@ fall to zero. The audit's context shrinks to residue + report.
 | billed tokens / published recipe | 786k shakedown; 200-250k targeted, never hit | **<=150k median** |
 | front-end share of run tokens | 75.5% | **<15%** |
 | candidate supply latency | minutes-hours of live Opus searching | backlog pop (harvest amortized overnight) |
+| wall-clock / published recipe, steady state | days-scale runs with restarts | **<=30 min measured** (write ~20min/3 lanes + qa ~10min/2 + audit amortized /10) |
 | re-audit after a recipe-local repair | a full auditor pass | battery seconds + scoped sign-off |
 | pricer session shape | browser-driving marathon | adjudication + 2 attended stores |
 
