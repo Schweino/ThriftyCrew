@@ -1122,3 +1122,178 @@ separate piece of work whose cost is now known and is not small.
 
 Nothing in this addendum has been wired into the daily path. `emit_commodity_defs.py`
 writes a file nothing reads yet.
+
+## Addendum 2026-08-23 — phase 3: the near-misses, the helper, and a gate with its arguments backwards
+
+Phase 3 is §6 (train the helper), §2 step 2 (the filter) and the def split the fourth
+addendum recommended. §4's audit set is deliberately not here — it costs a review
+session and was deferred. Nothing in this phase is wired into the nightly chain, and
+nothing in it can price a cell: `v_current_rows` admits `include_hit` and
+`llm_confirmed` only, so the one new status is structurally incapable of it.
+
+### 1. The negatives that had never been produced, produced
+
+`mined: 0` in every hardeval report was not neglect, it was a missing half-pipeline.
+`hardeval.py --stage mine` worked; `export-identity-eval.ps1 -Label`, which its own
+output told you to run next, **had no `-Label` parameter**. Written, and the round
+trip costs 22 seconds of GPU: mine 13 s, label 9 s.
+
+**Top-k alone mines noise.** Unfiltered top-8 gives 22,547 pairs and the bottom of
+that pile is `Cantaloupe -> cornmeal` at cos 0.278 — a true negative, an easy one, and
+one that would have flattered the MINED AUC. The filter is RELATIVE to the product's
+own commodity (`--margin`, default 0.08), because this corpus already learned that
+short generic names score low against everything and an absolute floor just selects
+for short names. 4,785 kept, 17,762 dropped. **553 candidates beat their own owner** —
+`Demings Pink Salmon` reads more like canned-salmon than salmon, `Kroger Cut Asparagus
+Spears` more like canned-asparagus.
+
+    corpus 4,232 -> 8,872 rows. +3,676 / -5,196, from 6.6:1 the other way.
+
+Two builder bugs, both surfaced by the new rows. Mined rows speak bare ids while every
+other source carries a graph node id, and both the contradiction check and the FAMILY
+that decides the holdout key on that id — so a mined negative for a held-out family
+would have trained against its own test set. And a regex could delete a ruling: `Great
+Value Baked Cheddar Cheese Penguin Crackers` is a confirmed cheese-cracker whose own
+regex rejects it, so the contradiction rule correctly refused to guess and dropped
+BOTH rows. A mined pair is a mechanical proposal; a ruling is a ruling. Three pairs,
+and they are also the only visible sample of the mining rule's error rate.
+
+### 2. The gate had its arguments backwards
+
+`hardeval.py` fed the cross-encoder `(commodity_text, product)`. Every other rerank
+call site in the estate is product-first: `backtest.py:160`, all three sweep lanes,
+and the `query`/`doc` columns of the training corpus. A cross-encoder is not symmetric.
+
+It survived because the **stock model barely notices**: GOLD 0.8312 reversed against
+0.8329 correct. A fine-tune notices enormously, because it learned one order and only
+one — **ft-v1 measured GOLD 0.6918 reversed and 0.9940 correct.** So the file the third
+addendum promoted to "the number that decides", on the first day it had to decide
+anything, would have thrown away a candidate that beats the incumbent everywhere.
+
+The tell had been in the repo for a day, unread: hardeval reported OLD 0.8941 while
+backtest reported 0.9705 **on the same 25 negatives**. After the fix both say 0.9705.
+Two files that disagreed about one number now agree, which is the check that says the
+fix is right rather than merely different.
+
+### 3. And the deciding gate could not have decided anyway
+
+`eval-positives.json` IS the accepted board pairs and `negatives-gold.json` IS the
+known-wrong rulings — both are §6 training sources. Scoring a fine-tune on them is
+in-sample. `--holdout-from` restricts every set to the commodity families the corpus
+held out, so the cold row is the one to believe.
+
+**Frozen defs both sides (`phase3-baseline`), same day, same corpus:**
+
+| run | OLD | GOLD | MINED |
+|---|---|---|---|
+| stock | 0.9705 | 0.8329 | 0.9559 |
+| ft-v1 | 0.9948 | 0.9940 | 0.9977 |
+| stock, COLD | 0.9857 | 0.9572 | 0.9567 |
+| **ft-v1, COLD** | **0.9938** | **0.9920** | **0.9925** |
+
+    backtest TASK A AUC     0.9705 -> 0.9948
+    known-wrong @100 budget  17/25 -> 24/25   (in-sample; @30 budget 12 -> 23)
+    TASK C discovery        identical - the fine-tune touches the cross-encoder only
+    training holdout AUC    0.9127 -> 0.9672  (mined-only 0.9249 -> 0.9792)
+
+Cold GOLD is n=6 and should be read as such; cold MINED (n=964) is the number with
+weight behind it. §6's gate as the third addendum restated it — no worse than stock,
+same day, same frozen defs — is met on every set, cold and warm. 139 seconds of
+training, no new dependencies (a plain torch loop; sentence-transformers' trainer
+would have wanted `datasets` + `accelerate` in the venv the 07:00 sweep runs on).
+
+### 4. The peer hole was diagnosed wrong, and the fix is smaller than feared
+
+The plan says ~30% of contested pairs have `peer_n = 0` because the commodity ships
+nothing today. At 435 pairs it is **420 — 97%** — and all 54 contested commodities
+have accepted products in the graph. The peers were missing because the peer source is
+the identity lane's BOARD pairs (the staple catalogue) while 97% of contested questions
+are recipe commodities. **Wrong catalogue, not empty shelf**, so the absolute floor the
+plan feared is not needed and there is nothing to argue about.
+
+`loo_peers()` builds the distribution from a definition's own accepted examples, each
+scored against the OTHER examples — leave-one-out, because `commodity_text()` is label
++ those very examples and scoring one against a document containing it returns ~1.0.
+Phase 1 made the same ruling about retrieved priors; `--priors loo` is where. Under two
+exemplars it returns nothing and the row says `peer_source: none` rather than inventing
+a floor. Over 435: `exemplars_loo` 419, `board` 15, `none` 1.
+
+One consequence worth recording: the trained helper is confident enough that its LOO
+peer medians sit at ~0.9999 for nearly every commodity, so a peer-relative threshold
+degenerates into an absolute one. That is not the trap the identity lane fell into —
+the helper does not have the short-generic-name pathology, because it was trained on
+exactly those pairs — but it does mean the peer columns are calibration for the PINNED
+model's score and near-useless for the helper's.
+
+### 5. The filter, and the number that sets its threshold
+
+`resolve.py --helper-scores` turns on §2 step 2. It refuses a scores file with no
+`helper_model`: the pinned model was never measured as a filter, and phase 2 said so.
+
+**§2 step 2's other safeguard does not exist.** "Very low score AND no partial include
+hit" — the contested set IS the `no_include_hit` rows, that being what makes them
+contested, so the second condition is true of every candidate by construction. The
+threshold is the only protection there is.
+
+So it is measured twice. On the cold corpus holdout:
+
+| reject below | catches of 1,073 cold negatives | costs of 718 true pairs |
+|---|---|---|
+| 1e-5 | 0 | 0 |
+| **1e-4** | **469 (43.7%)** | **2 (0.28%)** |
+| 1e-3 | 733 (68.3%) | 8 (1.11%) |
+| 1e-2 | 864 (80.5%) | 35 (4.87%) |
+
+The distribution is a cliff; there is no threshold that rejects anything at zero cost.
+What makes 0.28% acceptable is what it replaces: the local model's own false-reject
+rate on this population is 3/150 = **2.0%** (`priors_ablation`, unchanged across v4 and
+v5). The filter is about seven times safer than the call it removes, and writes the
+same class of verdict — single-model, never precedent, never able to price.
+
+And against the model directly, on live data, no review session needed — the 435
+contested pairs of 2026-08-22 already carry the local model's own banked verdicts:
+
+| reject below | filtered of 435 | the model also REJECTED | the model MATCHED |
+|---|---|---|---|
+| **1e-4** | **21** | **19** | **0** |
+| 1e-3 | 48 | 41 | 5 |
+| 1e-2 | 76 | 54 | 16 |
+
+Zero disagreement at the default and five at the next decade is what sets it there.
+4.8% fewer model calls is modest, and modest is the right size for a first filter whose
+failure mode is a cell that never gets priced. Two of the 21 were headed for
+`escalated`, so the filter also removes them from Claude's queue — the phase's goal
+rather than a side effect, but a real change to what a reviewer is shown.
+
+Exercised on a COPY of the graph, never the live one: 19 filtered of 412 contested,
+`v_current_rows` unchanged at 15,648. `helper_rejected` is bankable, ranks just below
+`llm_rejected`, and `authority.py` rules it `single_model` even behind five `banked: `
+prefixes.
+
+### 6. The def split, and what it does not touch
+
+`sweep.py --contested-defs` gives LANE 3 the graph's definitions and leaves identity
+and coverage on the staple catalogue. Measured: **identity 181, coverage 86 —
+byte-identical to the daily numbers** — while contested goes 15 -> 435. The wholesale
+switch stays refused for the reason the fourth addendum gave: 130 identity findings
+would silently stop being shown.
+
+### 7. On the scorecard
+
+The local lane now prints which model held the opinion, which def set it read, and what
+the filter rejected, distinguishing "rejected 0" from "the filter is off" from BLIND.
+Today it reads the BEFORE, correctly: `scored 15 of 435`, `scored by the PINNED model`,
+`routes nothing`, `filter rejected 0`. The AFTER is one flag away and is Brad's call,
+because it is the daily path.
+
+### 8. What phase 3 did not do
+
+§4's audit set (helper YES / LLM NO, where the ~35 missing cells live) is not built.
+It is the one part of the phase that costs a Claude review session, and it wants a few
+nights of contested scores from the trained helper behind it rather than one.
+
+One correction to the brief that framed this session: there was **one** night of
+contested scores, not several, and `contested-scores.json` is a snapshot the sweep
+overwrites rather than a history — so "look at more than one night" was not available
+on any timeline. If nightly accumulation is wanted, that is a change worth making
+deliberately.
