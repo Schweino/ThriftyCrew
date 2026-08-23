@@ -455,6 +455,19 @@ two numbers sitting 76 days apart invite exactly the wrong conclusion.
 
 The baseline entry now carries this history so the next person does not re-chase it.
 
+**AMENDED 2026-08-22.** Two sentences above are wrong about the CODE, and left
+alone they would have kept the false alarm running under a nicer name. `$refreshable`
+is NOT computed after the trim - it counts every product holding a productId, and it
+only looked like the slice while the budget bug was replacing the work list. Once that
+was repaired the ledger row went back to eligible ~535 / examined ~2-18, which is a
+~98% REGRESSED verdict every morning, not POPULATION SHRANK: that escape needs
+examined >= eligible, and here the two are drawn from different populations. The budget
+is also 18 products a day, not 7 - the 7 was the SEARCH TERM budget this lane does not
+use. Fixed by changing the denominator itself: the row now records the slice the run was
+ALLOWED to ask about against what the store ANSWERED, and is judged by ratio
+(`min_ratio`) rather than against a count taken under the old regime. The reasoning,
+the measurements and the expected INERT days are in `grocery\coverage-baseline.json`.
+
 ## 19. The canned/fresh mix-up is a SINGLETON, not a class — DONE
 
 Finding #12 said `mandarin-oranges` is labelled "Canned Mandarin Oranges" and

@@ -17,8 +17,11 @@
 #   * Jump nav (Ingredients / What it costs / Make it / Portion it / Cook mode) under the stat line.
 #   * "What This Batch Costs" is a literal register RECEIPT: paper, tear edges, monospace quantities,
 #     TOTAL under a double rule, ink stamp. Function untouched; the widget still owns the numbers.
-#   * COST-COMPOSITION BAR above the receipt, computed at build time from the SAME whole-package
-#     everyday prices as the checklist. Never a second sum: the shares are that one array normalized.
+#   * COST-COMPOSITION BAR above the receipt, computed at build time from the costed run's per-line
+#     util_cost, which sums to cost_batch - so the shares are a real 100% of a published total, not a
+#     second sum. This is the PRE-HYDRATION snapshot only: renderComp() in tpl2-scaler-prefix.html
+#     rebuilds the same bar from the promoted release (whole-package basis) as soon as the feed lands,
+#     so the two bases differ slightly by design. Both are cost; neither is mass.
 #   * Make It steps carry id="stepN" (the JSON-LD has always pointed at those anchors; nothing did).
 #   * Related-recipes footer: three real cards (next-cheapest same protein, a free-this-week pick,
 #     an adjacent cuisine) instead of bare text links.
@@ -96,7 +99,7 @@ foreach($dl in $spec.ingredients_display){
   $dispNames += $m.Groups[1].Value
 }
 $ingParts = @()
-$compRows = @()      # build-time ingredient-weight anatomy; never a price authority
+$compRows = @()      # build-time cost anatomy, read from the engine; never a second pricing model
 $bidHave = 0; $bidMiss = @()
 $di = -1
 foreach($ing in $spec.scaler.ing){
@@ -117,8 +120,12 @@ foreach($ing in $spec.scaler.ing){
   if($ing.PSObject.Properties.Name -contains 'bid' -and $ing.bid){ $p += ',"bid":"' + $ing.bid + '","gpu":' + $ing.gpu; $bidHave++ } else { $bidMiss += [string]$ing.item }
   $p += ',"pkg_g":' + $pkgG + ',"pkg_l":"' + ($lbl -replace '"','\"') + '"}'
   $ingParts += $p
-  # Composition is physical ingredient mass, not a hidden second pricing model.
-  $compRows += [pscustomobject]@{ name = [string]$ing.item; cost = [double]$ing.grams }
+  # Composition is COST, because every label around this bar says cost and the widget's own renderComp()
+  # rebuilds it from the promoted release as cost. This is not a second pricing model: util_cost is the
+  # engine's per-line figure, and the lines sum to cost_batch exactly, so the shares are a real 100%.
+  # (Until 2026-08-16 this read $ing.grams, so the bar ranked ingredients by MASS under cost wording -
+  # potato read 22% of "this bill" on andong-jjimdak against a true 5%. Do not put grams back.)
+  $compRows += [pscustomobject]@{ name = [string]$ing.item; cost = [double]$cl.util_cost }
 }
 $scalerData = '{"slug":"' + $spec.slug + '","base":14,"ing":[' + ($ingParts -join ',') + ']}'
 $bidCoverage = if(@($spec.scaler.ing).Count -gt 0){ [double]$bidHave / @($spec.scaler.ing).Count } else { 0 }

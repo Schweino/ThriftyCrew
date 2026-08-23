@@ -19,6 +19,28 @@
     REGRESSED       examined < baseline.examined * (1 - tolerance). The partial-collapse class that every
                     in-run zero-rows test in this tree is blind to: 2,435 rows falling to 400 is not zero,
                     it is 84% blind, and it reads as a pass everywhere else.
+    SHORTFALL       examined < min_ratio * eligible AND more than one eligible row went unexamined, for the
+                    rows that declare a `min_ratio`. THE BUDGETED-LANE RAIL, added 2026-08-22 for
+                    pull-regular-hyvee. See below.
+
+  BUDGETED LANES, AND WHY REGRESSED CANNOT WATCH THEM. Every verdict above compares examined to a FIXED
+  baseline count, which assumes the population is roughly the same size every day. pull-regular-hyvee is no
+  longer that: capture-policy gives it ceil(population/90) products a day and rotates a cursor, so what it
+  is ALLOWED to look at legitimately swings 0-18 (median 3, measured over a full rotation of the 1,554-row
+  2026-08-21 file, whose 490 linked products cluster). Ratcheting its absolute count against the 1,010 it
+  measured in the re-verify-everything era reported a 98% collapse every single morning - a permanent
+  finding nobody could act on, which is this file's own founding failure (a confident answer about nothing)
+  running in reverse, because a watcher that cries daily is one people learn to scroll past.
+  A row may therefore declare `min_ratio`, and then it is judged on WHAT IT WAS ALLOWED TO LOOK AT TODAY:
+  examined / eligible must hold at or above that ratio. Full coverage of a small slice is ok; a slice we
+  could not finish asking about, or a source that stopped answering, drops the ratio immediately. For such
+  a row the absolute REGRESSED test is skipped (its baseline count is documentation, not a floor) and
+  -Accept will not raise it, or one dense day would re-arm the fixed floor the row exists to avoid.
+  ONE missing row is never a SHORTFALL, only a note: a median Hy-Vee slice is 3 products, where a single
+  dead product id is a 33% "collapse" - a percentage is the wrong instrument on a small n, the same lesson
+  guards/3-pin-derivable carries. Every failure this rail is for misses many rows at once.
+  BLIND, INERT and STALE still apply unchanged - they are the verdicts that do not need a stable
+  population, and BLIND is what fires when a budgeted lane asks and gets nothing back.
 
   CRY-WOLF, MEASURED BEFORE THIS WAS WRITTEN (not asserted). The default tolerance is 0.10. Across the 18
   consecutive retained boards in out\ (2026-07-05 -> 2026-07-30) the priced-cell count - the denominator
@@ -114,6 +136,8 @@ foreach ($bp in ($blRows | Sort-Object Name)) {
   $bExam = [int](Get-Num $b 'examined' 0)
   $bTol  = Get-Num $b 'tolerance' $Tolerance
   $bAge  = [int](Get-Num $b 'max_age_days' 2)
+  # 0 = off, which is every row but the budgeted lanes. See the header.
+  $bRatio = Get-Num $b 'min_ratio' 0.0
   $bPhase = 'publish'
   if ($b.PSObject.Properties['phase'] -and $b.phase) { $bPhase = [string]$b.phase }
   $required = ($Phase -eq 'all') -or ($Phase -eq $bPhase)
@@ -178,7 +202,10 @@ foreach ($bp in ($blRows | Sort-Object Name)) {
   # declared exemption, and silence makes it an accident. guards/5-multipack had no reason and was NOT an
   # inverse metric - its own guard warns that a terser Walmart capture turns the invariant into a no-op -
   # so it was simply unfirable, and now carries a real tolerance.
-  if ($bExam -gt 0 -and [math]::Floor($bExam * (1.0 - $bTol)) -le 0 -and -not $whyTxt) {
+  # A row judged by min_ratio is exempt here, and not by the usual write-down-a-reason route: its ratchet
+  # is the SHORTFALL rail below, which is live and firable. Reporting its unused tolerance as a dead ratchet
+  # would be the cry-wolf this check exists to avoid.
+  if ($bRatio -le 0 -and $bExam -gt 0 -and [math]::Floor($bExam * (1.0 - $bTol)) -le 0 -and -not $whyTxt) {
     $findings.Add(("DEAD-RATCHET    {0} - tolerance {1}% puts its regression floor at 0 of a {2}-row baseline, and BLIND already owns everything at or below zero. This check's REGRESSED verdict is STRUCTURALLY UNFIRABLE: it can drop to 1 examined row and still report ok, and nothing records that as deliberate. Give it a real tolerance, or write down why its ratchet is off on purpose. {3}" -f $name, [math]::Round($bTol * 100), $bExam, $detail))
   }
   # An override with no reason is how a threshold drifts loose and nobody can say whether it was measured.
@@ -189,6 +216,33 @@ foreach ($bp in ($blRows | Sort-Object Name)) {
 
   if ($blind -or $exam -le 0) {
     $findings.Add(("BLIND           {0} - examined {1} of {2} eligible row(s). This is the shape guard 11 held for five days: a confident ok over an empty examination. {3}" -f $name, $exam, $elig, $detail))
+    continue
+  }
+
+  # SHORTFALL - the ratchet for a row whose DENOMINATOR MOVES (see the header). Everything below this
+  # point compares examined to a fixed count; a budgeted lane has no fixed count to compare to, so it is
+  # judged on the fraction of today's own eligible set it managed to examine. BLIND above already owns
+  # exam <= 0 and INERT owns elig <= 0, so both numbers here are positive.
+  if ($bRatio -gt 0) {
+    $ratio = [double]$exam / [double]$elig
+    # ONE MISSING ROW IS NEVER A SHORTFALL, because these slices are SMALL and a percentage is the wrong
+    # instrument on a small n - the same lesson guards/3-pin-derivable carries. A median Hy-Vee slice holds
+    # THREE askable products, so a single delisted product id (measured ~2% of asked products: 08-18 landed
+    # 356 fresh + 171 capped of 539, and 08-21 landed 490 of 490) would read as a 33% collapse and fire
+    # about one morning in seventeen. What this rail is for leaves DOZENS unexamined at once - the
+    # wall-clock cap biting, or the endpoint refusing - and clears this floor easily. The single-row case
+    # is still said out loud, as a note, so a slow bleed is visible rather than swallowed.
+    $missed = $elig - $exam
+    if ($ratio -lt $bRatio -and $missed -gt 1) {
+      $findings.Add(("SHORTFALL       {0} - examined {1} of the {2} row(s) it was ALLOWED to examine today ({3}%), below the {4}% this row requires. Its population is a rotating daily slice, so a fixed baseline count cannot tell a throttled day from an ordinary one - this can, and what it says is that something stopped the work being asked for or stopped the source answering. {5}" -f $name, $exam, $elig, [math]::Round(100.0 * $ratio), [math]::Round(100.0 * $bRatio), $detail))
+      continue
+    }
+    if ($ratio -lt $bRatio) {
+      $notes.Add(("SMALL SLICE: {0} - examined {1} of {2} eligible today, ONE row short. A slice this small cannot carry a percentage: one unanswered product is a dead product id, not a throttle, so this is a note rather than a finding. A real throttle leaves dozens unexamined at once and is reported. {3}" -f $name, $exam, $elig, $detail))
+      $okLines.Add(("  ok    {0,-30} examined {1} of {2} eligible TODAY ({3}%) - one row short of its {4}% floor, too small to call; see the note below" -f $name, $exam, $elig, [math]::Round(100.0 * $ratio), [math]::Round(100.0 * $bRatio)))
+      continue
+    }
+    $okLines.Add(("  ok    {0,-30} examined {1} of {2} eligible TODAY ({3}%, floor {4}% of the day's slice; absolute count not ratcheted)" -f $name, $exam, $elig, [math]::Round(100.0 * $ratio), [math]::Round(100.0 * $bRatio)))
     continue
   }
 
@@ -251,12 +305,22 @@ if ($Accept) {
   # permanently unguarded, which is the whole failure this file was written for.
   # So: raise freely, lower only with -AcceptLower, and NAME every row that goes down either way.
   $lowered = @()
+  $pinned  = @()
   $merged = [ordered]@{}
   foreach ($bp in ($blRows | Sort-Object Name)) {
     $name = [string]$bp.Name; $b = $bp.Value
     $bWas = [int](Get-Num $b 'examined' 0)
+    $bRatioB = Get-Num $b 'min_ratio' 0.0
     $row = [ordered]@{ examined = $bWas }
-    if ($ledRows.ContainsKey($name)) {
+    # A RATIO-JUDGED ROW DOES NOT RATCHET ITS ABSOLUTE COUNT, in either direction. Its population is a
+    # rotating daily slice (pull-regular-hyvee: 0-18 askable products, median 3), so today's count says
+    # nothing about tomorrow's floor - and raising it on a dense day would re-arm the fixed floor that
+    # reported a 98% collapse every morning and made the whole ledger easy to ignore. The stored number is
+    # documentation of the measured typical day; the live rail is min_ratio.
+    if ($ledRows.ContainsKey($name) -and $bRatioB -gt 0) {
+      $pinned += ("{0}: examined stays {1} (judged by ratio, min_ratio {2}%; today's ledger said {3})" -f $name, $bWas, [math]::Round(100.0 * $bRatioB), [int](Get-Num $ledRows[$name] 'examined' 0))
+    }
+    elseif ($ledRows.ContainsKey($name)) {
       $now = [int](Get-Num $ledRows[$name] 'examined' 0)
       if ($now -ge $bWas) { $row['examined'] = $now }
       else {
@@ -265,6 +329,7 @@ if ($Accept) {
       }
     }
     $row['tolerance']    = (Get-Num $b 'tolerance' $Tolerance)
+    if ($bRatioB -gt 0) { $row['min_ratio'] = $bRatioB }
     $row['max_age_days'] = [int](Get-Num $b 'max_age_days' 2)
     $row['phase']        = $(if ($b.PSObject.Properties['phase'] -and $b.phase) { [string]$b.phase } else { 'publish' })
     if ($b.PSObject.Properties['why'] -and $b.why) { $row['why'] = [string]$b.why }
@@ -273,6 +338,10 @@ if ($Accept) {
   foreach ($k in ($ledRows.Keys | Sort-Object)) {
     if ($merged.Contains($k)) { continue }
     $merged[$k] = [ordered]@{ examined = [int](Get-Num $ledRows[$k] 'examined' 0); tolerance = $Tolerance; max_age_days = 2; phase = 'publish'; why = 'added by -Accept' }
+  }
+  if ($pinned.Count -gt 0) {
+    Write-Output ''
+    foreach ($l in $pinned) { Write-Output ('  PINNED    ' + $l) }
   }
   if ($lowered.Count -gt 0) {
     Write-Output ''
