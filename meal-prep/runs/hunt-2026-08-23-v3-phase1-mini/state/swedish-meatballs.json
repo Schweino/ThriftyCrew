@@ -1,12 +1,12 @@
 {
     "slug":  "swedish-meatballs",
-    "title":  "",
-    "source_url":  "",
-    "protein":  "",
+    "title":  "Swedish Meatballs",
+    "source_url":  "https://www.wellplated.com/swedish-meatballs/",
+    "protein":  "turkey",
     "state":  "rejected-dupe",
     "wave":  null,
-    "created":  "2026-08-23T18:01:49",
-    "updated":  "2026-08-23T18:01:49",
+    "created":  "2026-08-23T18:30:43",
+    "updated":  "2026-08-23T18:30:43",
     "terms":  [
 
               ],
@@ -17,13 +17,13 @@
     "history":  [
                     {
                         "state":  "sourced",
-                        "at":  "2026-08-23T18:01:49",
+                        "at":  "2026-08-23T18:30:43",
                         "by":  "harvest",
                         "detail":  "https://www.wellplated.com/swedish-meatballs/"
                     },
                     {
                         "state":  "rejected-dupe",
-                        "at":  "2026-08-23T18:01:49",
+                        "at":  "2026-08-23T18:30:43",
                         "by":  "decider",
                         "detail":  "Beef/turkey meatballs in Swedish cream gravy is the same dinner as live Swedish Meatball and Potato Bowls (bge-m3 0.87, live side). Sauce family + protein identical; serving format is not a genuine distinction."
                     }

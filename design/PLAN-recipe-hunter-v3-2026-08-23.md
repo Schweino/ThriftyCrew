@@ -258,6 +258,10 @@ sanctioned owner of scheduled GPU work) is a later decision for Brad.
    each candidate against the live catalog and the backlog: find-similar word overlap + bge-m3
    cosine + considered-dishes prior rulings. High-similarity candidates carry their top-5 neighbours
    into the dossier; nothing is auto-rejected by similarity alone except exact URL/slug re-finds.
+   **Refresh the digest first** (`make-catalog-digest.ps1`) whenever recipes have published since it
+   was last built: both neighbour sources read `pipeline\catalog-digest.json`, and on 2026-08-23 it
+   lagged recipes-db by 16 recipes - 16 published dinners invisible to every dossier scored that
+   day. (The published-slug ENTRY guard does not have this hole; it reads the db union the digest.)
 5. **Rank and store** into `candidate-pool.json`. One entry per candidate, shape (so the pool has a
    contract, not a vibe):
    `{slug, name, url, domain, first_seen, last_verified, signature: {protein, method, sauce_family,
@@ -373,9 +377,9 @@ pops candidates from the pool only while accepted-but-unresolved recipes sit und
 Local 27B's role: none in the ruling. (An adversarial "argue this is a dupe of its top neighbour"
 ordering pass is a candidate for later - **explicitly DEFERRED out of the initial build**; revisit
 only if phase-6 measurements show the decider mis-prioritizing, and never as a verdict.)
-The recipe-dedup-selector agent definition needs its dossier-contract rewrite (its current text
-specifies parallel per-protein selectors and selected-*.json file outputs, both retired here) - that
-rewrite is part of D5.
+The recipe-dedup-selector agent definition's dossier-contract rewrite shipped with D5 on
+2026-08-23 (the parallel per-protein selectors and selected-*.json outputs are retired, and after
+round 1 wrote one anyway, the agent's frontmatter tool list is read-only - see the D5 record).
 
 ### S3 EXTRACT -> mechanical first, local second, Claude last
 
@@ -496,8 +500,10 @@ Two consequences worth naming so they get built:
 
 Extend the mechanical battery (all pure code, run by the orchestrator before the agent):
 - coverage_check.py (built; invented/dropped by head-noun pairing),
-- **scale-ratio check** (new): per-line implied ratio vs the recipe's own; flags hand-adjusted lines,
-- **prose-number equality** (new): every literal number in prose vs the spec's stat (tokens pass by
+- **scale-ratio check** (BUILT, phase 0 D2): per-line implied ratio vs the recipe's own; flags
+  hand-adjusted lines,
+- **prose-number equality** (BUILT, phase 0 D2, with its scope corrected in §4.5's thresholds): a
+  numeral presenting itself as one of the recipe's own stats vs that stat (tokens pass by
   construction),
 - title/credit presence + URL match, dash sweep (exists), servings-claim consistency.
 The QA agent gets the battery output and rules only what code cannot: deliberate-substitution
@@ -605,7 +611,25 @@ choice:** judgment agents stop running `hunt-run.ps1` / `ingredient-queue.ps1 -A
 themselves. They return schema'd verdicts; the daemon performs every state advance, queue add,
 `-Derive`, lane-log line (both start/end events, since it owns a real clock) and ledger stamp,
 attributed `-By <stage>`. Agent-side marshalling bugs (B8's composite `-Terms` string) become
-impossible rather than warned against. Two deliberate exceptions: the pricer keeps `-Record`/
+impossible rather than warned against - **but only through one specific invocation form, and this
+document previously left that unsaid. CORRECTED 2026-08-23, measured during D5's drill:
+`powershell -File script.ps1 -A one two` binds ONE element and SILENTLY DROPS the rest, and
+`powershell -File script.ps1 -A one,two` binds ONE element whose value is the string `one,two`.
+PS 5.1 `-File` therefore CANNOT carry a multi-element `[string[]]` from a subprocess argv at all** -
+it can only reproduce B8 or truncate, and truncation is the worse of the two because nothing refuses
+it. Handing a JSON array to `-File` would re-create B8 with a Python accent. The daemon marshals
+through `-Command` with every element single-quote-escaped individually
+(`& 'script' -A 'one','two,with,commas'; exit $LASTEXITCODE`), which produces a real PowerShell
+array; the trailing `exit $LASTEXITCODE` is not decoration either, because without it powershell.exe
+reports its own success and every 0/1/2 script reads as clean. That one road is
+`hunt_lib.ps_invoke`, built in phase 1, and both broken `-File` shapes are frozen as MUST-FIRE
+fixtures in decide_apply's suite so nobody simplifies it back.
+(A process note, recorded because the failure mode will recur: this very correction was written
+during phase 1 and SILENTLY LOST - its patch script asserted on a later edit and wrote nothing,
+while the session verified only the other edit's landing. The phase-1 commit message claims it; the
+document did not carry it until the 2026-08-23 cold read. When a multi-edit patch fails partway,
+re-verify EVERY edit it carried, not the one that failed.)
+Two deliberate exceptions: the pricer keeps `-Record`/
 `-Promote` (script-enforced evidence contract, §3 S5), and content artifacts (extraction JSON,
 intake prose, spec builds via build-v2-spec) remain the agents' own writes - they are the work
 product, not bookkeeping.
@@ -620,7 +644,9 @@ repairClaimHolds are the parity proof.
 Concurrency per lane caps as in v2 §2.4 (extract 3, map 2, price 1, write 3, qa 2, decide 1, wave
 serial), with the WIP limit (25 accepted-but-unresolved) gating pool pops exactly as it gated
 sourcing. All caps, the WIP limit, retry budgets and breaker thresholds live as named constants in
-hunt_lib.py - they are daemon CONFIG, not architecture. With the front end nearly free, the
+hunt_lib.py - they are daemon CONFIG, not architecture. (LANE_CAPS, WIP_LIMIT and DECIDE_BATCH sit
+there since phase 1; the retry budgets and breaker thresholds arrive with the D9 port of
+hunt-lib.js, which owns them today.) With the front end nearly free, the
 bottleneck moves to write/qa/audit, so raising those caps after the proving run measures them is a
 legitimate lever - **a measured decision for Brad**, per the estate's speed-measured-not-guessed
 rule, with one exception that is architecture: the price lane stays a singleton, full stop.
@@ -651,7 +677,7 @@ from prose, and SKILL.md forbids exactly that. So the port is governed:
 | JSON-LD parse, band filter, signatures | 8-proc pool | trivial CPU |
 | bge-m3 embeddings | **CPU, measured and settled 2026-08-23: 36.36 ms/text, whole-pool build 24 s cold / 0 s warm - the GPU branch is CLOSED, not deferred** | trivial CPU (§3 S1) |
 | local 27B calls (line-split, full extract, enum, adversarial) | 4 (server --parallel 4; more queues) | GPU |
-| QA battery / wave-preaudit | 8-wide across slugs | CPU, seconds |
+| QA battery / wave-preaudit | 8-wide across the SHARED checks, serial across slugs (S8's CORRECTED 2026-08-23 finding: the slug loop rides build-card2's process-global costed.json cache, and fanning it re-pays the 5.8 MB parse per child) | CPU, seconds |
 | cost engine, costed.json, recipes-db | **serialized by the daemon's cost-engine mutex (§4.5)** - spec assembly stays parallel, the cost pass does not | correctness |
 | CDP store sweeps | 1 thread per store (existing) | vendor politeness - the floor |
 | Claude lanes | v2 §2.4 caps | plan/session budget |
@@ -728,7 +754,7 @@ build time, fix THIS document in the same commit rather than deviating silently.
 | embed CPU latency record | `meal-prep\db\harvest-embed-latency.json` | harvest_embed --measure -> the §4.3 GPU decision (committed) |
 | embedding neighbours | `meal-prep\db\harvest-neighbours.json` | harvest_embed --build -> harvest --rescore (NOT committed - regenerable in 24 s cold, 0 s warm) |
 | decide dossier batch | run-scoped, from `harvest.py --dossier --out` | harvest.py -> bridge/daemon decide dispatch (transient) |
-| DECIDE verdict file | run-scoped, the workflow's verdicts serialized | bridge/daemon -> decide_apply.py (transient) |
+| DECIDE verdict file | run-scoped; decide_apply accepts EITHER a bare DECIDE payload OR hunt-pool-seed.js's own return shape (`{verdicts:[{batch,decisions,note},...]}`) verbatim - it flattens the batches itself and a `stuck` batch contributes nothing, so the operator never hand-merges (ADDED 2026-08-23 after the gate run did exactly that with a throwaway one-liner) | bridge/daemon -> decide_apply.py (transient) |
 | extraction | `<RunDir>\extracted\<slug>.json` | rung 1/2 (local) or rung 3 (Claude) -> map, QA, coverage_check |
 | map pre-resolve table | `<RunDir>\mapped-pre\<slug>.json` | map-preresolve -> mapper dispatch, daemon |
 | mapper decision file | `<RunDir>\mapped\<slug>.json` | mapper agent (unchanged contract) -> skeleton builder, auditor |
@@ -768,7 +794,8 @@ build time, fix THIS document in the same commit rather than deviating silently.
   serialized. The pricer adjudicates from it and records via ingredient-queue exactly as today.
 - **Dossier (ADDED 2026-08-23 - the phase-1 gate run showed the contract was underspecified, and each
   of these three fields was added because a measured disagreement traced back to its absence).** Per
-  candidate: `{slug, name, url, domain, signature, band, servings, ingredients_verbatim (capped),
+  candidate: `{slug, name, url, domain, signature, band, servings, ingredients_verbatim (capped at
+  22 lines - DOSSIER_INGREDIENT_CAP in harvest.py),
   neighbours: [{slug, name, score, shared, source, side}], prior_rulings, saturation_pressure,
   batch_concerns: [], catalog_checked: {live_recipes_searched, live_matches, backlog_matches},
   entered_by}`.
@@ -869,6 +896,12 @@ different questions and this estate has conflated them at least five times.
 - Local line-split acceptance (rung 1): `raw` equals the JSON-LD line; qty and unit substrings of
   raw verbatim; qty+unit+item+prep must jointly cover >=90% of raw's non-stopword tokens. ANY
   failing line sends the whole page to rung 2.
+  ("Non-stopword" here is a COVERAGE ALLOWANCE local to this one check - the handful of glue words a
+  correct split legitimately drops ("of", "the", "a", "and", "or", "to", "into", "for", "plus
+  punctuation-only tokens"). Define the list in local_extract.py next to the check and pin it with
+  the round-trip fixtures. It is NOT find-similar's STOP list and must not import it - that list
+  exists to kill name-identity noise and deliberately swallows words like "chicken" that a split
+  must never be excused from covering.)
 
 **Resume seed table** (the daemon's `-Status`-driven re-entry; normative so nobody re-derives it):
 
@@ -982,8 +1015,9 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   DECIDE schema, the exit-code constants, the state routing table above, `validate_decide`, and
   `ps_invoke`; D9 ports hunt-lib.js's pure functions into the same module under section 4.2's parity
   gate. `harvest.py --dossier` pops ranked candidates and emits 2-3 KB dossiers. `decide_apply.py` is
-  the deterministic writer - validate-everything-then-apply, 39 fixtures (32 at first build; the gate
-  round added the closed-enum refusals after a live decider invented nine taxonomy values) including
+  the deterministic writer - validate-everything-then-apply, 43 fixtures (32 at first build; the
+  gate round added the closed-enum refusals after a live decider invented nine taxonomy values; the
+  2026-08-23 cold read added the state-metadata and workflow-shape classes) including
   an END-TO-END DRILL
   against a scratch run dir that asserts the ledger row equals the verdict's `record` block field by
   field, that `dupe_of` lands as DISTINCT terms, that a deferral goes back on the shelf, and that
@@ -1003,9 +1037,38 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   check; orchestrator-facing exit contract (settled / escalate); the extractor agent's
   "try local first" section removed/gated for its escalation-only role (S3). Fixtures: an invented
   line MUST FIRE the substring check; a JSON-LD line split that drops a token fails round-trip.
+  **PINNED FOR THE PHASE-2 BUILDER (2026-08-23 cold read - facts, not guesses):**
+  - The file exists and works; D6 EXTENDS it. Its transport is `graph\lib\llm.py`'s LocalLLM with a
+    deliberate 600 s timeout (the comment above that number says why - do not "fix" it down). Its
+    verification block is already the shape §4.5's extraction contract refers to:
+    `{lines, verified, unverified, verified_rate, unverified_lines, passed}` with the 0.85 bar in
+    `MIN_VERIFIED` - reuse it verbatim for the jsonld rung, do not mint a second shape. Its output
+    already carries `escalate` and `escalate_reason`.
+  - The existing CLI (`--url` / `--file` `[--json]`, exit 0 settled / 1 escalate) KEEPS WORKING,
+    exactly as D2 kept coverage_check's bare form when it added `--battery`. `--from-jsonld` is an
+    addition. The one exit-code change: llama-server unreachable becomes a clean **exit 2
+    could-not-run** naming the server (today it would traceback) - which completes the §4.5 mapping
+    for this script: 0 = settled, 1 = escalate (that IS the findings case here), 2 = could-not-run.
+  - The pre-extraction sweep (the phase-2 bridge) is a thin driver over this file: for each accepted
+    slug it reads `source_url` from `<RunDir>\state\<slug>.json` (populated at state creation -
+    decide_apply passes it since 2026-08-23; the pool entry carries the same URL as a cross-check),
+    pulls the page from the fetch cache, runs the ladder, writes
+    `<RunDir>\extracted\<slug>.json` per §4.5, and writes the lane-log line per settle
+    (`-Lane -LaneName extract -By local`, tokens 0) - the sweep CAN shell, so §4.5's lane-log
+    completeness rule is its job until the daemon takes it.
 - **D7 `map-preresolve`** - the pre-resolved decision table + mechanical unbid hold; mapper prompt
   rewritten to the residual contract. Fixtures: a cache-resolved term never reaches the residual; an
   unbid resolved term holds the recipe with a named follow-up.
+  **Ambiguity resolved before it becomes a guess (2026-08-23 cold read):** S4 says the mapper's
+  result includes "holds", while this section's schema-delta list says SEL->DECIDE and WRITE are the
+  ONLY schema changes. Both are true, read this way: the MECHANICAL unbid hold happens in
+  map-preresolve BEFORE any agent and never reaches the mapper at all; a JUDGMENT hold the mapper
+  itself raises is expressed through the EXISTING MAPPED fields (`status`/`state`/`detail` naming
+  the follow-up), not a new schema field. If the D7 build finds that inadequate, the fix is a third
+  NAMED delta recorded in §4.5 in the same commit - never an implicit field.
+  Composed surfaces, by path so nobody greps for them: `meal-prep\pipeline\ingredient-vocab.ps1`,
+  `meal-prep\pipeline\ingredient-resolutions.ps1`, `grocery\price-ingredient.ps1`,
+  `meal-prep\db\densities.json`, `meal-prep\db\each-nouns.json`.
 - **D8 `build-intake-skeleton.ps1`** - machine-complete intake skeleton; the pre-write band gate;
   writer prompt rewritten to prose-only; the orchestrator's post-write machine-field diff (S6).
   Fixtures: a skeleton field the writer changed is refused by the diff; an out-of-band skeleton
@@ -1031,7 +1094,9 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   writes the decide lane-log lines natively with real token stamps - the bridge cannot (no shell in
   the sandbox), so until D9 lands every bridge run ends with the operator recording them by hand,
   as the mini-run's were.
-- **D10 price evidence pre-pass** - probe + unattended CDP gathering wired into the price lane's
+- **D10 price evidence pre-pass** (paths, so nothing is guessed: `grocery\probe-ingredient.ps1`,
+  `grocery\pull-browser-stores.py`, `grocery\search-verdict-lib.ps1`, `grocery\price-ingredient.ps1`,
+  `grocery\ingredient-queue.ps1`) - probe + unattended CDP gathering wired into the price lane's
   dossier; pricer prompt rewritten to adjudicate-and-attend. Fixture: an UNUSABLE sweep state reads
   as PENDING, never not-carried (the founding rule, mechanized).
 - **D11 SKILL.md v3 rewrite + agent-prompt slimming** - constants out of per-call prompts into the
@@ -1081,6 +1146,16 @@ Workflow orchestrator** - none of them is inert while phase 3 waits:
   pre-extraction sweep over the accepted candidates (a script pass on the box, since the Workflow
   cannot shell), and the workflow's extract lane is dispatched only for the escalations the sweep
   left behind.
+  **Phase-2 pickup (2026-08-23, so the next session starts building instead of hunting):** read, in
+  order, local_extract.py's header (the file D6 extends - its transport, verification block and exit
+  codes are pinned in the D6 bullet), harvest.py's parser functions (reused, never re-implemented),
+  §4.5's extraction contract and rung-1 thresholds, and the D6 bullet itself. The gate corpus: the
+  four accepted recipes at `selected` in `runs\hunt-2026-08-23-v3-phase1-mini` (their `source_url`
+  is in each state file; every page cached), plus enough available in-band candidates' cached pages
+  to reach the gate's 50, drawn across all 7 publishers - `harvest.py --dossier --count N` pops them
+  ranked, or read the pool directly for URLs; either way the pages come from the cache, zero
+  fetches. llama-server must be up (hand-started, §4.4) before the sweep runs; a down server is
+  exit 2 BLOCKED, never an escalation.
 
 | phase | items | gate to pass before the next phase |
 |---|---|---|
@@ -1162,7 +1237,13 @@ in recipes-db.json).
     lane-logged by hand under `select` with each transcript's tokens measured by lane-tokens itself
     (r1: 741,282/19,444 and 896,058/16,186; r2: 562,011/5,784 and 472,877/9,788). D9's daemon owns
     that line natively; until then every bridge run ends with the operator recording its decide lane
-    lines the same way.
+    lines the same way. The cold read also found the entry advance passing only `-Detail`: hunt-run
+    sets `title`/`source_url`/`protein` ONLY at state-file creation, the wave manifest is built from
+    exactly those fields, and no later -Advance can back-fill them - so the mini-run's nine state
+    files were created with all three empty. decide_apply now passes `-Title`/`-SourceUrl`/`-Protein`
+    from the pool candidate (drill fixture: the created state file carries them), and the nine were
+    repaired by deleting and replaying the advances through the fixed path against a discard ledger
+    (the 18 live rulings already stood; replaying against the live store would have doubled them).
 
 *Gate 3 - front-end token share re-measured on a mini-run in the phase-1 bridge configuration.*
 **MET.** Measured with `lane-tokens.ps1`, the same instrument and the same context-moved measure that

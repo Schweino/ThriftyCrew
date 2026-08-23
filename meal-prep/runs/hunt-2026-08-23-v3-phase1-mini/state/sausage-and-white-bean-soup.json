@@ -1,12 +1,12 @@
 {
     "slug":  "sausage-and-white-bean-soup",
-    "title":  "",
-    "source_url":  "",
-    "protein":  "",
+    "title":  "Sausage and White Bean Soup",
+    "source_url":  "https://thecozycook.com/sausage-and-white-bean-soup/",
+    "protein":  "sausage",
     "state":  "rejected-dupe",
     "wave":  null,
-    "created":  "2026-08-23T18:01:56",
-    "updated":  "2026-08-23T18:01:56",
+    "created":  "2026-08-23T18:30:50",
+    "updated":  "2026-08-23T18:30:50",
     "terms":  [
 
               ],
@@ -17,13 +17,13 @@
     "history":  [
                     {
                         "state":  "sourced",
-                        "at":  "2026-08-23T18:01:56",
+                        "at":  "2026-08-23T18:30:50",
                         "by":  "harvest",
                         "detail":  "https://thecozycook.com/sausage-and-white-bean-soup/"
                     },
                     {
                         "state":  "rejected-dupe",
-                        "at":  "2026-08-23T18:01:56",
+                        "at":  "2026-08-23T18:30:50",
                         "by":  "decider",
                         "detail":  "Sausage + cannellini + kale + cream + parmesan is the same dinner as the live Tuscan White Bean and Sausage Soup (bge 0.899, word-overlap 40) - protein, starch, flavor family and method all match, four of four. Also crowds live Turkey Sausage Kale White Bean Soup (0.876) and the lentil-sausage-soup accepted earlier this run."
                     }

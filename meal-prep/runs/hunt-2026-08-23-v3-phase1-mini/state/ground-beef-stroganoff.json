@@ -1,12 +1,12 @@
 {
     "slug":  "ground-beef-stroganoff",
-    "title":  "",
-    "source_url":  "",
-    "protein":  "",
+    "title":  "Ground Beef Stroganoff",
+    "source_url":  "https://thecozycook.com/ground-beef-stroganoff-casserole/",
+    "protein":  "beef",
     "state":  "rejected-dupe",
     "wave":  null,
-    "created":  "2026-08-23T18:01:57",
-    "updated":  "2026-08-23T18:01:57",
+    "created":  "2026-08-23T18:30:51",
+    "updated":  "2026-08-23T18:30:51",
     "terms":  [
 
               ],
@@ -17,13 +17,13 @@
     "history":  [
                     {
                         "state":  "sourced",
-                        "at":  "2026-08-23T18:01:57",
+                        "at":  "2026-08-23T18:30:51",
                         "by":  "harvest",
                         "detail":  "https://thecozycook.com/ground-beef-stroganoff-casserole/"
                     },
                     {
                         "state":  "rejected-dupe",
-                        "at":  "2026-08-23T18:01:57",
+                        "at":  "2026-08-23T18:30:51",
                         "by":  "decider",
                         "detail":  "Ground beef + sour-cream stroganoff sauce + egg noodles is the same plate as the live Ground Beef Stroganoff Pasta (bge 0.965, word-overlap 30). The baked-casserole-with-cheddar format does not make it a distinct dinner - same protein, sauce family and starch."
                     }

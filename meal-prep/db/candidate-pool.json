@@ -1,6 +1,6 @@
 {
  "_doc": "Every candidate the harvester has ever looked at, with the numbers behind its verdict. harvest.py is the SOLE writer; --mark-taken / --mark-ruled / --ingest are the only roads in. A ruled candidate never resurfaces as available.",
- "updated": "2026-08-23T18:20:28",
+ "updated": "2026-08-23T18:30:54",
  "count": 2162,
  "candidates": [
   {
@@ -14182,7 +14182,7 @@
    "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
    "ruled_reason": "Ground beef + sour-cream stroganoff sauce + egg noodles is the same plate as the live Ground Beef Stroganoff Pasta (bge 0.965, word-overlap 30). The baked-casserole-with-cheddar format does not make it a distinct dinner - same protein, sauce family and starch.",
-   "ruled_at": "2026-08-23T18:20:26"
+   "ruled_at": "2026-08-23T18:30:52"
   },
   {
    "slug": "air-fryer-whole-chicken",
@@ -17326,7 +17326,7 @@
    "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
    "ruled_reason": "Pork butt + heavy cream + red potatoes + carrots + wine is the live Creamy Pork Stew with Potatoes and Carrots. 4/4 match: pork, stew, cream, potato.",
-   "ruled_at": "2026-08-23T18:20:20"
+   "ruled_at": "2026-08-23T18:30:43"
   },
   {
    "slug": "baked-chile-relleno",
@@ -29758,7 +29758,7 @@
     "cold-plate"
    ],
    "ruled_reason": "No live catalog dupe, but plated as warm-chicken-over-berry/arugula/feta salad (cold-plate flag; greens+berries don't batch) and very close (0.95) to a backlog Balsamic Chicken Salad. Flagged borderline: acceptable only if reframed as plain skillet balsamic chicken minus the salad build.",
-   "ruled_at": "2026-08-23T18:20:24"
+   "ruled_at": "2026-08-23T18:30:47"
   },
   {
    "slug": "chicken-tamales",
@@ -42953,7 +42953,7 @@
    "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
    "ruled_reason": "Cold assemble-to-order wrap (romaine + Caesar dressing in a tortilla) that goes soggy on hold. Not a hot batch dinner.",
-   "ruled_at": "2026-08-23T18:20:23"
+   "ruled_at": "2026-08-23T18:30:46"
   },
   {
    "slug": "mango-thai-red-curry-with-chicken-2-jpg",
@@ -45943,7 +45943,7 @@
    "status": "ruled:accepted",
    "entered_by": "crawl",
    "ruled_reason": "Chicken + broccoli + ziti in a light lemon-broth-parmesan sauce with artichokes. Live chicken-divan is a broccoli cheese BAKE and hot-honey-chicken bowls are rice+honey; no live chicken-broccoli PASTA. Kept but flagged borderline: shares chicken/skillet/pasta with the also-accepted mushroom-chicken-pasta and adds to catalog chicken-pasta density, though the broccoli/lemon/artichoke profile is a genuinely different plate from mushroom-cream farfalle. 37g protein, strong batch main.",
-   "ruled_at": "2026-08-23T18:20:25"
+   "ruled_at": "2026-08-23T18:30:50"
   },
   {
    "slug": "chili-cornbread-skillet",
@@ -60918,7 +60918,7 @@
    "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
    "ruled_reason": "Cold mayo-based chicken salad (grapes, celery, almonds) - a lunch/sandwich filling rather than a batch dinner. Backlog already holds several chicken-salad variants (balsamic 0.919, honey-mustard 0.891, fajita 0.884). Decent 28g protein but wrong meal format for the board.",
-   "ruled_at": "2026-08-23T18:20:28"
+   "ruled_at": "2026-08-23T18:30:54"
   },
   {
    "slug": "hashbrown-breakfast-casserole",
@@ -69860,7 +69860,7 @@
    "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
    "ruled_reason": "Ground beef + shell pasta + cheddar/cream/tomato matches live Cheesy Beef and Shells Casserole (bge-m3 0.89). 3/4: beef, cheesy-tomato-cream sauce, shells; skillet vs casserole is the same dinner.",
-   "ruled_at": "2026-08-23T18:20:22"
+   "ruled_at": "2026-08-23T18:30:45"
   },
   {
    "slug": "how-to-make-homemade-chicken-stock",
@@ -80794,7 +80794,7 @@
     "cold-plate"
    ],
    "ruled_reason": "No plain base pulled pork exists live (all 5 live hits are composites), and it's a great batch protein (54g). BUT hits the 3/4 near-dupe trigger vs live BBQ Pulled Pork Rice Bowl / Dr Pepper Pulled Pork Bowls (same pork+braise+BBQ sauce, differing only bun-vs-rice) and BBQ-pulled-pork is saturated. Flagged borderline for audit.",
-   "ruled_at": "2026-08-23T18:20:24"
+   "ruled_at": "2026-08-23T18:30:47"
   },
   {
    "slug": "best-easy-chicken-curry-1-jpg",
@@ -95255,7 +95255,7 @@
    "status": "ruled:accepted",
    "entered_by": "crawl",
    "ruled_reason": "Creamy jalapeño-popper chicken skillet (cream cheese, cheddar, bacon, jalapeño). Live neighbours are all generic word-overlap 'chicken' slow-cooker bowls, no real dupe; backlog jalapeño-poppers is an appetizer, and bacon-ranch/creamy-bacon-chicken sit at 0.79-0.80 with a different flavor family. The cold-plate flag is a false positive on a hot skillet main. Distinct, high-protein batch dinner.",
-   "ruled_at": "2026-08-23T18:20:24"
+   "ruled_at": "2026-08-23T18:30:48"
   },
   {
    "slug": "turkey-roll-ups",
@@ -98478,7 +98478,7 @@
    "status": "ruled:accepted",
    "entered_by": "crawl",
    "ruled_reason": "Distinct from the live sausage-soup cluster (Tuscan/turkey white-bean soups, zuppa toscana): brown lentils not beans, tomato-forward not creamy. Only 2/4 axes match the nearest live twin, so no near-dupe trigger. Lentils widen the ingredient board; batches cleanly, no flags.",
-   "ruled_at": "2026-08-23T18:20:20"
+   "ruled_at": "2026-08-23T18:30:42"
   },
   {
    "slug": "one-minute-easy-chocolate-frosting",
@@ -102654,7 +102654,7 @@
    "status": "ruled:accepted",
    "entered_by": "crawl",
    "ruled_reason": "Creamy mushroom-and-spinach chicken farfalle. Live chicken pastas differ in flavor (tuscan=sundried-tomato/spinach, parmesan=tomato, cacciatore=tomato); no live creamy-mushroom chicken pasta exists. Backlog mushroom-chicken and creamy-chicken-and-mushrooms are the same sauce but a different (starch-less) plate. Solid batch pasta dinner, widens the creamy-mushroom slot.",
-   "ruled_at": "2026-08-23T18:20:25"
+   "ruled_at": "2026-08-23T18:30:49"
   },
   {
    "slug": "air-fryer-asparagus",
@@ -103499,7 +103499,7 @@
    "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
    "ruled_reason": "Egg-based Italian brunch bake served with toasted crusty bread. Eggs overcook on reheat and do not survive a 14-serving batch; this is a light breakfast/brunch, not a high-protein batch dinner. No live dupe (only word-overlap on 'eggs'), but fails the board's batch-dinner mandate.",
-   "ruled_at": "2026-08-23T18:20:26"
+   "ruled_at": "2026-08-23T18:30:52"
   },
   {
    "slug": "candy-corn-fruit-parfaits",
@@ -105702,7 +105702,7 @@
    "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
    "ruled_reason": "Cold composed salad (5 cups lettuce, avocado dressing, corn), 2 servings. Dressed greens do not survive a 14-serving batch. Not a hot batch dinner.",
-   "ruled_at": "2026-08-23T18:20:22"
+   "ruled_at": "2026-08-23T18:30:45"
   },
   {
    "slug": "cauliflower-tots",
@@ -106244,7 +106244,7 @@
    "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
    "ruled_reason": "Cold pasta salad side, only 17g protein, near-twin of backlog antipasto-salad (bge 0.977). A cold-plate side, not a high-protein batch dinner main.",
-   "ruled_at": "2026-08-23T18:20:27"
+   "ruled_at": "2026-08-23T18:30:53"
   },
   {
    "slug": "sausage-stuffing",
@@ -116770,7 +116770,7 @@
    "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
    "ruled_reason": "Sausage + cannellini + kale + cream + parmesan is the same dinner as the live Tuscan White Bean and Sausage Soup (bge 0.899, word-overlap 40) - protein, starch, flavor family and method all match, four of four. Also crowds live Turkey Sausage Kale White Bean Soup (0.876) and the lentil-sausage-soup accepted earlier this run.",
-   "ruled_at": "2026-08-23T18:20:25"
+   "ruled_at": "2026-08-23T18:30:51"
   },
   {
    "slug": "banana-muffins",
@@ -117059,7 +117059,7 @@
    "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
    "ruled_reason": "The defining element is a fresh avocado-strawberry salsa that oxidizes and weeps and cannot be batched; a cold-plate, cook-to-order summer plate. Stripped of the salsa it is generic grilled chicken. cold-plate flag earned.",
-   "ruled_at": "2026-08-23T18:20:27"
+   "ruled_at": "2026-08-23T18:30:52"
   },
   {
    "slug": "crunchwrap-supreme-recipe",
@@ -117302,7 +117302,7 @@
    "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
    "ruled_reason": "Beef/turkey meatballs in Swedish cream gravy is the same dinner as live Swedish Meatball and Potato Bowls (bge-m3 0.87, live side). Sauce family + protein identical; serving format is not a genuine distinction.",
-   "ruled_at": "2026-08-23T18:20:21"
+   "ruled_at": "2026-08-23T18:30:44"
   },
   {
    "slug": "cucumber-margarita",
@@ -119599,7 +119599,7 @@
    "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
    "ruled_reason": "Breakfast dish with soft-scrambled eggs, cook-to-order; eggs don't reheat across a 14-serving batch.",
-   "ruled_at": "2026-08-23T18:20:23"
+   "ruled_at": "2026-08-23T18:30:46"
   },
   {
    "slug": "creamy-parmesan-spinach-dip",
@@ -121884,7 +121884,7 @@
    "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
    "ruled_reason": "Cold no-cook salad plate (greens, salami, cheeses, olives). Reads as a side, not a high-protein cooked main; doesn't batch as a hot dinner.",
-   "ruled_at": "2026-08-23T18:20:23"
+   "ruled_at": "2026-08-23T18:30:46"
   },
   {
    "slug": "slow-cooker-beef-stroganoff",
@@ -125066,7 +125066,7 @@
    "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
    "ruled_reason": "Cold side salad, 5.95g protein, no protein main at all. Not a batch dinner.",
-   "ruled_at": "2026-08-23T18:20:28"
+   "ruled_at": "2026-08-23T18:30:53"
   },
   {
    "slug": "stuffed-chicken-breast",

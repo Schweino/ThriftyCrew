@@ -124,9 +124,19 @@ def apply_verdict(payload, run_dir, run_id, pool_path, store_path, dry_run=False
         if entry_state:
             st = current_state(run_dir, slug)
             if st is None:
+                # -Title / -SourceUrl / -Protein are settable ONLY at state-file creation - hunt-run
+                # writes them in its -To sourced branch and no later -Advance can back-fill them, and
+                # the WAVE MANIFEST is built from exactly these fields. The first build of this file
+                # passed only -Detail, and the phase-1 mini-run's nine state files were created with
+                # source_url/title/protein all empty (found on the 2026-08-23 cold read, repaired by
+                # replaying the advances). The drill now asserts they are populated.
+                sig = cand.get("signature") or {}
                 rc, out, _e = run_ps(HUNT_RUN_PS, ["-Advance", "-RunDir", run_dir, "-Slug", slug,
                                                    "-To", entry_state, "-By", "harvest",
-                                                   "-Detail", cand.get("url") or ""])
+                                                   "-Detail", cand.get("url") or "",
+                                                   "-Title", cand.get("name") or "",
+                                                   "-SourceUrl", cand.get("url") or "",
+                                                   "-Protein", sig.get("protein") or ""])
                 if rc != 0:
                     findings.append("%s: could not enter %s (%s)" % (slug, entry_state, out.strip()))
                     continue
@@ -185,6 +195,29 @@ def _mark_ruled(slug, verdict, reason, pool_path):
     return p.returncode if p.returncode in (0, 1, 2) else 2
 
 
+def flatten_workflow_verdicts(payload):
+    """Accept hunt-pool-seed.js's OWN return shape, not just a bare DECIDE payload.
+
+    The bridge workflow returns {runId, verdicts: [{batch, decisions, note}, ...]} - one DECIDE
+    payload per batch. The first gate run made the operator merge those by hand with a throwaway
+    one-liner, which is exactly the kind of undocumented glue step a future session re-invents
+    wrong. So the merge lives here: a payload carrying `verdicts` is flattened into one
+    {decisions, note}; a batch marked `stuck` contributes nothing (its candidates were never
+    ruled - B5, a transport failure is not a verdict); validate_decide's duplicate-slug check
+    still applies across the merged whole. A bare DECIDE payload passes through untouched.
+    """
+    if not isinstance(payload, dict) or "verdicts" not in payload:
+        return payload
+    decisions, notes = [], []
+    for v in payload.get("verdicts") or []:
+        if not isinstance(v, dict) or v.get("stuck"):
+            continue
+        decisions.extend(v.get("decisions") or [])
+        if v.get("note"):
+            notes.append(str(v["note"]))
+    return {"decisions": decisions, "note": " || ".join(notes)}
+
+
 def cmd_apply(a):
     if not a.verdict or not os.path.exists(a.verdict):
         print("decide_apply: CANNOT RUN - no verdict file at %s" % a.verdict)
@@ -201,6 +234,7 @@ def cmd_apply(a):
         print("decide_apply: CANNOT RUN - %s does not parse (%s)" % (a.verdict, e))
         print("DECIDE-APPLY-COMPLETE")
         return hunt_lib.EXIT_CANNOT_RUN
+    payload = flatten_workflow_verdicts(payload)
 
     # The method enum comes from the LEDGER, not from a copy in this file. 'any' is the ledger's
     # wildcard and is always legal.
@@ -309,6 +343,21 @@ def cmd_selftest(_a):
                                                    "reason": "x"}]})))
     T("MUST FIRE  an empty decisions array is not a verdict",
       hunt_lib.validate_decide({"decisions": []}) != [], "accepted it")
+
+    # ---- the workflow's own return shape is accepted directly -------------------------------------
+    wf = {"runId": "r", "verdicts": [
+        {"batch": 1, "decisions": [good["decisions"][0]], "note": "n1"},
+        {"batch": 2, "stuck": True, "slugs": ["never-ruled"]},
+        {"batch": 3, "decisions": [good["decisions"][1]], "note": "n2"}]}
+    flat = flatten_workflow_verdicts(wf)
+    T("MUST FIRE  hunt-pool-seed.js's {verdicts:[...]} output flattens to one DECIDE payload - no "
+      "hand-merge step for the operator to re-invent",
+      len(flat.get("decisions", [])) == 2 and flat.get("note") == "n1 || n2"
+      and hunt_lib.validate_decide(flat) == [], json.dumps(flat)[:120])
+    T("MUST FIRE  a STUCK batch contributes NOTHING - its candidates were never ruled (B5)",
+      all(d["slug"] != "never-ruled" for d in flat["decisions"]), "stuck batch leaked")
+    T("CLEAN TWIN a bare DECIDE payload passes through untouched",
+      flatten_workflow_verdicts(good) is good, "was rewrapped")
     T("rejected-not-fit takes NO run state - it never entered the run",
       hunt_lib.DECIDE_STATE_ROUTE["rejected-not-fit"] == (None, None),
       str(hunt_lib.DECIDE_STATE_ROUTE["rejected-not-fit"]))
@@ -392,6 +441,12 @@ def cmd_selftest(_a):
         T("MUST FIRE  the accepted slug reached `selected`",
           current_state(run_dir, "drill-accept") == "selected",
           str(current_state(run_dir, "drill-accept")))
+        with open(os.path.join(run_dir, "state", "drill-accept.json"), encoding="utf-8-sig") as f:
+            stf = json.load(f)
+        T("MUST FIRE  the state file carries source_url/title at creation - the wave manifest is "
+          "built from these and no later -Advance can back-fill them",
+          stf.get("source_url") == "https://d/accept" and stf.get("title") == "Drill Accept",
+          json.dumps({k: stf.get(k) for k in ("source_url", "title", "protein")}))
         T("MUST FIRE  the dupe reached `rejected-dupe`",
           current_state(run_dir, "drill-dupe") == "rejected-dupe",
           str(current_state(run_dir, "drill-dupe")))
