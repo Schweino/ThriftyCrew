@@ -324,6 +324,102 @@ tens of seconds; do it only because the helper already exists by then. Keep the 
 `-In` path fixed in 189472c1 — the builders are handed `Join-Path $root $capRel`, never
 `$capRel`.
 
+
+### Phase 3 — PROFILED, 2026-08-23. The answer is: do not parallelise this.
+
+The plan says profile first and write the numbers in before changing anything. Done, and the
+numbers say the compute is not where the plan expected and is not worth a process pool.
+
+**First, a correction to §0's premise.** `import_all.py` is not a manual tool sitting outside the
+chain — `audit-graph-gates.ps1:137` runs it (structure-only, no `--observations`) on every
+inspect pass, and that whole lane measured **9 s parallel / 4 s sequential** in the Phase 1 A/B.
+The `--observations` backfill, which is the slow one, has no caller in the daily chain at all.
+
+**Structure-only import, this machine, `C:\Codex\Python312\python.exe`:**
+
+| | |
+|---|---|
+| wall clock | **3.77 / 3.89 / 3.91 s** (three runs) |
+| module import cost (`-X importtime`) | 26 ms total — `graphdb` 11.3 ms, `importers` 8.5 ms, `argparse` 6.0 ms |
+| under `cProfile` | 6.58 s, 21.9 M calls |
+
+`-X importtime` is a dead end: imports are 0.7% of the run. Where the time actually goes
+(cumulative, cProfile):
+
+| | calls | time | what it is |
+|---|---|---|---|
+| `importers.import_identity` | 1 | **5.63 s of 6.58 s (86%)** | one importer, one connection |
+| `sqlite3.Connection.execute` | **378,115** | 2.09 s *tottime* | the single largest self-time |
+| `ids.norm_text` | **391,678** | 2.07 s cumulative | pure-CPU string normalisation |
+| `ids.sku_id` | 77,349 | 1.96 s | almost entirely `norm_text` |
+| `unicodedata.combining` | 6,662,743 | 0.31 s | inside `norm_text` |
+
+**This is exactly the case §4 predicted and told us not to fan out.** The time is one importer,
+half of it inside SQLite writes on a single-writer connection, and the whole stage is 3.8 s —
+far below the plan's own ">20 s and compute-dominated" bar. A `ProcessPoolExecutor` here would
+serialise on the write lock at best, and 3.8 s is not worth the risk at any speed.
+
+**What the profile does hand us, measured rather than argued.** `norm_text` is a pure function of
+a string, and 89% of its calls are repeats:
+
+```
+norm_text calls   : 391,678
+distinct inputs   :  42,914      -> 9.1x repeat ratio
+top inputs        : 103,163 x 'Walmart'   45,919 x "Baker's"   33,653 x 'Family Fare'
+                     15,448 x 'Aldi'      14,964 x 'Hy-Vee'    12,384 x "Sam's Club"
+```
+
+225,000 of the 392,000 calls are **six store names**. `sku_id` is the reason: it calls
+`norm_store(store)` twice and `norm_text` twice per invocation, and `norm_store` calls `norm_text`
+again (and `slug`, which calls it a fourth time). An `lru_cache` on `norm_text` would serve 89% of
+those calls from a dict — roughly half of a 3.8 s stage, for one decorator, with no concurrency
+and no new failure mode.
+
+**Not done, deliberately: this session's scope was "Phase 3 profile".** The cache is a one-line
+change to `graph/lib/ids.py` and the measurement above is the whole argument for it, but it is a
+change to ID minting — the function whose output becomes every `sku:` in the graph — and that
+deserves its own commit with its own before/after row counts rather than riding along here.
+
+---
+
+### Phase 4 — BUILT, 2026-08-23
+
+The browser-store builder block in `capture-run.ps1` was one loop doing four things per store, one
+store after another: check the capture, build it, run the second stage, judge it. It is now three
+passes, and the split is where the safety lives:
+
+| pass | what | mode |
+|---|---|---|
+| 1 | decide what exists — the capture-landed check, the no-builder-wired check, `$browserUndone` | serial |
+| 2 | the **first-stage** builders | **fan-out** |
+| 3 | read the verdicts, run the second stage, judge it on evidence | serial |
+
+Pass 1 stays serial because `$browserUndone` is the honest answer to "what is still outstanding"
+and an array appended from eight threads at the end of a capture run is not worth introducing to
+save nothing. Pass 3 stays serial because it is conditional, not parallel: `build-fareway-regular`
+runs only if stage 1 exited 0, and its failure is judged on **evidence** — does today's file
+already hold rows captured today? — rather than on its exit code. Putting it in the pool would
+launch it before anything knew it should run, and it is a builder that deliberately REFUSES to
+shrink today's file.
+
+Lane budget is **1800 s**, not the helper's 600 s default: these are the tail of a capture that
+just spent up to 20 minutes in Chrome, and a budget that fires on a healthy build would report a
+real capture as BLIND and throw the day away.
+
+**Savings are small and the plan said so** — two or three lanes of tens of seconds each. It was
+done because the helper already existed, and because the `-In` absolute-path fix from `189472c1`
+is now resolved once in pass 1 and *carried* into the lane rather than rebuilt inside it, which
+removes the shape that caused it.
+
+**Verification.** `grocery\test-capture-builders.ps1` extracts the SHIPPED block out of
+`capture-run.ps1` by marker — never a transcribed copy, same reason `test-cadence.ps1` pulls its
+helpers out of `check-ad-cycles` — and runs it against fake captures and fake builders. Ten cases
+over four scenarios: a store that builds, a store with no capture, a builder that fails, and
+fareway's two-stage chain with its evidence-based judgement. Both must-fires were demonstrated
+rather than assumed: deleting the `$failed += ("build-" + $key)` line turns case C red, and
+renaming the block's start marker exits **3 BLIND** rather than passing quietly. Wired into
+`test-auditors`, which is **494/0** with it.
+
 ---
 
 ## 6. Order, and what to do if a phase fails its verification

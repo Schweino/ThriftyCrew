@@ -37,6 +37,13 @@ param(
   # run captures only; the 08:00 daily run is the one that builds and publishes. Before this, any morning
   # both fired ran the same 20-40 minute audit chain twice - three times on 08-21 with a manual run.)
   [switch]$Downstream,
+  # ---- THE BUILDER FAN-OUT (2026-08-23, PLAN-use-the-cores phase 4) ---------------------------
+  # Each drivable store's first-stage builder reads only its OWN capture and writes only its own
+  # out\regular\ file, so the two or three of them are independent. -Sequential restores the old
+  # one-after-another order through the same lane body, for the same reason it exists in
+  # check-ad-cycles: a suspect lane should cost a flag, not a revert.
+  [int]$MaxParallel = 8,
+  [switch]$Sequential,
   [switch]$WhatIf
 )
 
@@ -47,6 +54,7 @@ $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 . (Join-Path $root 'capture-policy-lib.ps1')
 . (Join-Path $root 'run-log-lib.ps1')
 . (Join-Path $root 'alert-lib.ps1')   # Send-Alert: the ONLY way this file may page (32 KB command-line trap)
+. (Join-Path $root 'fanout-lib.ps1')  # Invoke-Fanout: the browser-store builders, side by side
 
 # The scheduled task runs this hidden with no redirect, so without a transcript
 # the exit code is the ONLY thing that survives a run. Guarded: never fatal.
@@ -309,6 +317,21 @@ if ($browser.Count) {
       # A store whose capture landed gets BUILT here, so its rows reach compare-deals in the very
       # same run. Building is judged per store, not on the driver's overall exit code: one walled
       # store must not discard another store's good capture.
+      # ---- STAGE 1 BUILDERS, SIDE BY SIDE (2026-08-23, PLAN-use-the-cores phase 4) ----------------
+      # This used to be ONE loop: check the capture, build it, run the second stage, judge it - per
+      # store, one store after another. It is now three passes, and the split is where the safety is.
+      #
+      # PASS 1 (serial) decides what exists. $browserUndone is built here and nowhere else: it is the
+      # honest answer to "what is still outstanding", and an array appended from eight threads at the
+      # end of a capture run is not a thing worth introducing to save nothing.
+      # PASS 2 is the fan-out, and it holds ONLY the first-stage builders. They read their own capture
+      # and write their own out\regular\ file, so they are genuinely independent.
+      # PASS 3 (serial) reads the verdicts and runs the second stage. It stays serial because it is
+      # per-store conditional logic, not parallel work: build-fareway-regular runs only if stage 1
+      # exited 0, and its failure is judged on EVIDENCE - does today's file already hold rows captured
+      # today? - rather than on the exit code. None of that reasoning changed; only when the builder
+      # ran did.
+      $bLanes = @(); $bMeta = @{}
       foreach ($s in $drivable) {
         $key = $BROWSER_DRIVER_KEYS[$s]
         # DID THE CAPTURE LAND? Asked for EVERY drivable store, including the ones this script does
@@ -326,25 +349,50 @@ if ($browser.Count) {
           Write-Output ("  {0}: captured {1} - no builder wired for this store yet" -f $s, $capRel)
           continue
         }
-        $bScript = Join-Path $root $BROWSER_BUILDERS[$key].Script
         # Fareway's selector takes -Today, the CSV builders take -Date. Passing the wrong one binds
         # nothing and the script silently dates itself to the wall clock, which on a -Today replay
         # would file a rebuild of an old capture under today.
-        # ABSOLUTE -In, NOT $capRel (fixed 2026-08-23). The existence check 20 lines up asks
-        # `Test-Path (Join-Path $root $capRel)` - an ABSOLUTE path, which passes - and then this
-        # handed the child the RELATIVE one. The child resolves it against ITS OWN working directory,
+        # ABSOLUTE -In, NOT $capRel (fixed 2026-08-23). The existence check just above asks
+        # `Test-Path (Join-Path $root $capRel)` - an ABSOLUTE path, which passes - and this used to
+        # hand the child the RELATIVE one. The child resolves it against ITS OWN working directory,
         # which for a scheduled task is not the repo, so it threw "input not found" on a file sitting
         # right there. Measured on the 2026-08-23 08:00 run, the first day both browser lanes actually
         # delivered: Fareway wrote 45 of 45 terms at 08:14 and Sam's Club 7 MATCHES at 08:15, both
         # builders exited 1, and the whole capture was dropped. Proving a path one way and passing it
-        # another is the bug; proving and passing the SAME absolute path is the fix.
+        # another is the bug; proving and passing the SAME absolute path is the fix - which is also
+        # why the path is resolved HERE, once, and carried into the lane rather than rebuilt in it.
         $capAbs = Join-Path $root $capRel
-        $bOut = if ($key -eq 'fareway') {
-          & powershell -NoProfile -ExecutionPolicy Bypass -File $bScript -In $capAbs -Today $todayS
-        } else {
-          & powershell -NoProfile -ExecutionPolicy Bypass -File $bScript -In $capAbs -Date $todayS
+        $bArgs = if ($key -eq 'fareway') { @('-In', $capAbs, '-Today', $todayS) }
+                 else                    { @('-In', $capAbs, '-Date',  $todayS) }
+        $lname = 'build-' + $key
+        # 30 MINUTES, NOT THE HELPER'S 10-MINUTE DEFAULT. These are the tail of a capture that just
+        # spent up to 20 minutes in Chrome; Fareway's selector alone walks a 45-term shop capture. A
+        # budget that fires on a healthy build would report a real capture as BLIND and throw the day
+        # away, which is the opposite of what the budget is for.
+        $bLanes += New-FanoutLane -Name $lname -File (Join-Path $root $BROWSER_BUILDERS[$key].Script) -Arguments $bArgs -TimeoutSec 1800
+        $bMeta[$lname] = @{ Store = $s; Key = $key }
+      }
+
+      $bRecs = @()
+      if ($bLanes.Count) {
+        try {
+          $bRecs = @(Invoke-Fanout -Lanes $bLanes -MaxParallel $MaxParallel -Sequential:$Sequential)
+        } catch {
+          # A builder fan-out that throws must not take the capture run with it - the captures are on
+          # disk and correct either way. Every lane below then reads a BLIND record and is marked
+          # failed by name, which is what "we could not build it" should look like.
+          Write-Warning ("the builder fan-out threw: " + $_.Exception.Message + " - no browser store was built this run")
+          $bRecs = @()
         }
-        $bRc = $LASTEXITCODE
+        foreach ($f in @(Test-FanoutComplete -Lanes $bLanes -Records $bRecs)) { Write-Warning $f }
+      }
+
+      foreach ($lane in $bLanes) {
+        $rec  = Get-FanoutRecord $lane.Name $bRecs
+        $s    = $bMeta[$lane.Name].Store
+        $key  = $bMeta[$lane.Name].Key
+        $bOut = $rec.Output
+        $bRc  = $rec.ExitCode
         foreach ($l in @($bOut)) { Write-Output ("    " + $l) }
         if ($bRc -ne 0) { Write-Warning ("{0}: builder exited {1}" -f $s, $bRc); $failed += ("build-" + $key) }
 

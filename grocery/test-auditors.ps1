@@ -1156,6 +1156,34 @@ $saSrc = Get-Content (Join-Path $root 'send-alert.ps1') -Raw
 if ($saSrc -match "New-Object System\.Threading\.Mutex\(\`$false, 'Global\\smp-grocery-alert-sent'\)") {
   Ok 'send-alert holds a machine-wide lock across its once-per-type-per-day gate (concurrent lanes cannot double-send or silently suppress)'
 } else { Bad 'send-alert LOST the lock around its sent-file gate - with audits running side by side, two alerts of one type can both email, or one can be suppressed by an append that never landed' }
+
+# ---- THE BROWSER-STORE BUILDERS (2026-08-23, PLAN-use-the-cores phase 4) --------------------------------
+# capture-run's builder block stopped being one loop and became three passes: a serial pass that decides
+# what exists, a FAN-OUT over the first-stage builders, and a serial pass that reads the verdicts and runs
+# the second stage. The claim is that behaviour is identical and only timing changed - which is exactly the
+# kind of claim that needs a fixture rather than a reading, because this block is the last mile of every
+# capture the estate takes and a wrong answer here loses a whole morning's prices.
+# test-capture-builders.ps1 extracts the SHIPPED block out of capture-run.ps1 by marker and runs it against
+# fake captures and fake builders. Exit 3 means it could not find the block - BLIND, not clean.
+$tcb = Join-Path $root 'test-capture-builders.ps1'
+if (-not (Test-Path $tcb)) {
+  Bad 'grocery\test-capture-builders.ps1 is missing - the browser-store builder block is unfixtured, and it is the last mile of every capture'
+} else {
+  $r = PSChild $tcb | Out-String
+  $tcbRc = $LASTEXITCODE
+  if ($tcbRc -eq 3) {
+    Bad ('test-capture-builders is BLIND - it could not find the builder block in capture-run.ps1, so nothing about the builders was proven: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'BLIND' }) -join ' | '))
+  } elseif ($tcbRc -eq 0 -and $r -match 'SELFTEST: 10/10 pass') {
+    Ok 'capture-run builder block: a missing capture stays outstanding, a failed builder is named, a failed stage 1 skips stage 2, and stage 2 is still judged on evidence (test-capture-builders 10/10)'
+  } else { Bad ('test-capture-builders failed (rc=' + $tcbRc + '): ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
+}
+# THE SECOND STAGE MUST STAY SERIAL. build-fareway-regular runs only if stage 1 exited 0, and its failure
+# is judged on EVIDENCE - does today's file already hold rows captured today? - not on its exit code. That
+# is per-store conditional logic. Putting it in the pool would mean launching it before knowing whether it
+# should run at all, which for a builder that REFUSES to shrink today's file is a real risk to real prices.
+if ($crSrc -match "New-FanoutLane -Name \`$lname" -and $crSrc -notmatch "New-FanoutLane[^\r\n]*\.Then") {
+  Ok 'only the FIRST-stage builders are in capture-run''s fan-out (the conditional second stage stays serial)'
+} else { Bad 'capture-run''s builder fan-out no longer has the shape it was fixtured with - either the first-stage lane is gone, or the conditional second stage has been put in the pool where it would run before anything knows it should' }
 if ($crSrc -match 'smp-pipeline-bot' -and $crSrc -match 'push origin HEAD:main') {
   Ok 'capture-run still commits and pushes the pipeline output (the last mile exists)'
 } else { Bad 'capture-run LOST its commit/push - the chain would compute prices that never reach a reader, exactly as 2026-08-18..22' }
