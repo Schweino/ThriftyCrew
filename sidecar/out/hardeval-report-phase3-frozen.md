@@ -12,9 +12,9 @@ dog food). This re-measures the SAME model against negatives that are subtle.
 
 | negative set | n | AUC |
 |---|---:|---:|
-| Phase 1 (dramatic) | 25 | 0.8941 |
-| GOLD (adjudicated) | 45 | 0.8312 |
-| MINED (near miss)  | 4701 | 0.9183 |
+| Phase 1 (dramatic) | 25 | 0.9705 |
+| GOLD (adjudicated) | 45 | 0.8329 |
+| MINED (near miss)  | 4701 | 0.9559 |
 
 ## The number that decides shipping
 
@@ -22,17 +22,17 @@ AUC is not it. The lane is advisory, so what matters is how many CORRECT pairs a
 to read in order to be shown the wrong ones.
 
 ```
-  catch 13/25 OLD (thr 0.1710)  ->  240 of 2816 accepted pairs also flagged (8.5%)
-  catch 6/25 OLD (thr 0.0629)  ->  72 of 2816 accepted pairs also flagged (2.6%)
-  catch 3/25 OLD (thr 0.0293)  ->  28 of 2816 accepted pairs also flagged (1.0%)
-  catch 1/25 OLD (thr 0.0166)  ->  15 of 2816 accepted pairs also flagged (0.5%)
-  catch 23/45 GOLD (thr 0.1940)  ->  283 of 2816 accepted pairs also flagged (10.0%)
-  catch 10/45 GOLD (thr 0.0896)  ->  107 of 2816 accepted pairs also flagged (3.8%)
-  catch 5/45 GOLD (thr 0.0454)  ->  47 of 2816 accepted pairs also flagged (1.7%)
-  catch 1/45 GOLD (thr 0.0166)  ->  15 of 2816 accepted pairs also flagged (0.5%)
-  catch 2351/4701 MINED (thr 0.0785)  ->  88 of 2816 accepted pairs also flagged (3.1%)
-  catch 941/4701 MINED (thr 0.0042)  ->  0 of 2816 accepted pairs also flagged (0.0%)
-  catch 471/4701 MINED (thr 0.0004)  ->  0 of 2816 accepted pairs also flagged (0.0%)
+  catch 13/25 OLD (thr 0.0022)  ->  42 of 2816 accepted pairs also flagged (1.5%)
+  catch 6/25 OLD (thr 0.0006)  ->  12 of 2816 accepted pairs also flagged (0.4%)
+  catch 3/25 OLD (thr 0.0004)  ->  5 of 2816 accepted pairs also flagged (0.2%)
+  catch 1/25 OLD (thr 0.0002)  ->  0 of 2816 accepted pairs also flagged (0.0%)
+  catch 23/45 GOLD (thr 0.0161)  ->  140 of 2816 accepted pairs also flagged (5.0%)
+  catch 10/45 GOLD (thr 0.0009)  ->  16 of 2816 accepted pairs also flagged (0.6%)
+  catch 5/45 GOLD (thr 0.0005)  ->  9 of 2816 accepted pairs also flagged (0.3%)
+  catch 1/45 GOLD (thr 0.0002)  ->  0 of 2816 accepted pairs also flagged (0.0%)
+  catch 2351/4701 MINED (thr 0.0020)  ->  37 of 2816 accepted pairs also flagged (1.3%)
+  catch 941/4701 MINED (thr 0.0002)  ->  0 of 2816 accepted pairs also flagged (0.0%)
+  catch 471/4701 MINED (thr 0.0001)  ->  0 of 2816 accepted pairs also flagged (0.0%)
   catch 1/4701 MINED (thr 0.0000)  ->  0 of 2816 accepted pairs also flagged (0.0%)
 ```
 
@@ -44,13 +44,13 @@ not the threshold.
 
 - scorable positives 2754 / gold 43 (a commodity needs 3+ accepted
   products before it has a distribution to calibrate against)
-- AUC on the calibrated score: **0.9122**
+- AUC on the calibrated score: **0.8693**
 
 ```
-  catch 23/43 GOLD (calibrated) (thr -3.3042)  ->  213 of 2754 accepted pairs also flagged (7.7%)
-  catch 9/43 GOLD (calibrated) (thr -7.5717)  ->  78 of 2754 accepted pairs also flagged (2.8%)
-  catch 5/43 GOLD (calibrated) (thr -13.5238)  ->  37 of 2754 accepted pairs also flagged (1.3%)
-  catch 1/43 GOLD (calibrated) (thr -40.2826)  ->  10 of 2754 accepted pairs also flagged (0.4%)
+  catch 22/43 GOLD (calibrated) (thr -8.1939)  ->  344 of 2754 accepted pairs also flagged (12.5%)
+  catch 9/43 GOLD (calibrated) (thr -16.8521)  ->  150 of 2754 accepted pairs also flagged (5.4%)
+  catch 5/43 GOLD (calibrated) (thr -27.3574)  ->  78 of 2754 accepted pairs also flagged (2.8%)
+  catch 1/43 GOLD (calibrated) (thr -77.9646)  ->  17 of 2754 accepted pairs also flagged (0.6%)
 ```
 
 ## The adjudicated-wrong pairs the model likes MOST
@@ -74,29 +74,29 @@ in the blocklist as a PRICE defect, not an identity one. The product IS ground c
 model scoring it 0.531 is correct behaviour counted as a miss, so treat 45 as the
 pessimistic denominator.
 
-- `0.792`  **ground-beef-93-7**  <- All Natural Extra Lean Ground Beef 96% Lean/4% Fat, 1 lb
-- `0.757`  **corned-beef-hash**  <- MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz Can
-- `0.663`  **ground-pork**  <- Ground Beef and Pork Blend, 80% Lean/20% Fat
-- `0.642`  **sun-dried-tomatoes**  <- Gilbert's Sausage, Chicken, Caprese, With Basil, Mozzarella & Sun Dried Tomatoes 10 Oz
-- `0.559`  **frozen-vegetables**  <- Birds Eye Steamfresh Cut Green Beans, Frozen Vegetables
-- `0.531`  **ground-cloves**  <- Spice Supreme Spice Ground Cloves
-- `0.503`  **pork-tenderloin**  <- Prairie Fresh Natural Fresh Pork Half Loin, Boneless, 3.5- 5.5 lb, 22g of Protein per 4oz 
-- `0.498`  **pork-tenderloin**  <- Smithfield All-Natural Boneless Pork Loin Filet, 1.0 - 2.8 lb, 24 G of Protein per 4 oz Se
-- `0.379`  **parmesan**  <- Clancy S Parmesan Garlic Pita Chips 7.33 OZ
-- `0.378`  **pie-pumpkins**  <- Bakery Fresh Pumpkin Pie
+- `0.973`  **ground-pork**  <- Ground Beef and Pork Blend, 80% Lean/20% Fat
+- `0.959`  **pie-pumpkins**  <- Bakery Fresh Pumpkin Pie
+- `0.954`  **pork-tenderloin**  <- Prairie Fresh Natural Fresh Pork Half Loin, Boneless, 3.5- 5.5 lb, 22g of Protein per 4oz 
+- `0.949`  **ground-beef-93-7**  <- All Natural Extra Lean Ground Beef 96% Lean/4% Fat, 1 lb
+- `0.936`  **pork-tenderloin**  <- Smithfield All-Natural Boneless Pork Loin Filet, 1.0 - 2.8 lb, 24 G of Protein per 4 oz Se
+- `0.924`  **pie-pumpkins**  <- Marie Callender's Pumpkin Pie 36 Oz
+- `0.867`  **ground-beef-93-7**  <- 96 Lean Ground Beef Per LB
+- `0.852`  **corned-beef-hash**  <- MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz Can
+- `0.630`  **pork-tenderloin**  <- Prairie Fresh Natural Fresh Pork Half Loin, Boneless, 3.5-6 lb
+- `0.328`  **frozen-vegetables**  <- Birds Eye Steamfresh Cut Green Beans, Frozen Vegetables
 
 ## The accepted pairs the model likes LEAST
 
 The false alarms a low threshold buys. If these read as obviously fine, the lane is
 flagging correctness, not error.
 
-- `0.005`  **plums**  <- Plum Black Large
-- `0.005`  **plums**  <- Black Plums
-- `0.005`  **red-pepper-flakes**  <- Great Value Crushed Red Pepper, 12 oz
-- `0.006`  **red-pepper-flakes**  <- Badia Spices Crushed Red Pepper
-- `0.006`  **grapes**  <- Black Seedless Grapes, 3 lbs.
-- `0.006`  **red-pepper-flakes**  <- Smart Way Crushed Red Pepper
-- `0.007`  **red-pepper-flakes**  <- That's Smart! Crushed Red Pepper
-- `0.009`  **red-pepper-flakes**  <- Stonemill Crushed Red Pepper 1.5 OZ
-- `0.010`  **hot-dogs**  <- Wimmer's Wieners, Skinless 24 Oz
-- `0.011`  **plantains**  <- Fresh Plantain - Single
+- `0.000`  **apples**  <- Granny Smith Apple
+- `0.000`  **bottled-water**  <- Hy-Vee Spring Water 24Pk
+- `0.000`  **hot-dogs**  <- Wimmer's Wieners, Skinless 24 Oz
+- `0.000`  **pears**  <- Fareway Sliced in Extra Light Syrup Pears
+- `0.000`  **blackberries**  <- Siggi's Fruit & Fiber Blueberry Blackberry 5.3oz
+- `0.000`  **asparagus**  <- Great Value Asparagus Cut Spears, 14.5 oz
+- `0.000`  **frozen-waffles**  <- Fareway 10 Pack Blueberry Waffles
+- `0.000`  **cereal**  <- Hy Vee Whole Grain Raisin Bran
+- `0.001`  **pineapple**  <- Pineapple Teriyaki Brats 4 Ct.
+- `0.001`  **coffee-creamer**  <- Planet Oat Brown Sugar Cookie Oatmilk Creamer 32 Fl Oz

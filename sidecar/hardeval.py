@@ -186,7 +186,15 @@ def score_pairs(m: Matcher, defs_by_id: dict, rows: list[dict], key_id: str = "i
         d = defs_by_id.get(cid)
         if not d:
             continue
-        pairs.append((commodity_text(d), clean_product(r["product"])))
+        # (QUERY, DOCUMENT) - product first, commodity second. This file had it the other way round
+        # from the day it was written (fixed 2026-08-23). A cross-encoder is not symmetric, and the
+        # reason the bug survived is that the STOCK model barely notices: GOLD 0.8312 reversed
+        # against 0.8329 correct. A fine-tune notices enormously, because it learned one order and
+        # only one - ft-v1 measured GOLD 0.6918 reversed and 0.9940 correct, so the reversed gate
+        # would have rejected a candidate that beats the incumbent. Every other rerank call site in
+        # the estate (backtest.py:160, all three sweep lanes, the training corpus's query/doc) is
+        # product-first; this was the only one that was not.
+        pairs.append((clean_product(r["product"]), commodity_text(d)))
         keep.append(r)
     scores = m.rerank(pairs)
     for r, s in zip(keep, scores):
@@ -215,8 +223,37 @@ def operating_points(pos: list[float], neg: list[float], label: str) -> list[str
     return lines
 
 
+def holdout_families(corpus_dir: str) -> tuple[set[str], dict[str, str]]:
+    """The corpus's held-out families, and which family each commodity is in.
+
+    THE PROBLEM THIS EXISTS FOR (2026-08-23). eval-positives.json IS the accepted board pairs and
+    negatives-gold.json IS the known-wrong rulings - both are training sources for section 6. So
+    scoring a fine-tune on them is mostly IN-SAMPLE, and the prep addendum's ruling that "the GOLD
+    number is the one that decides" is true of the stock baseline and not true of a candidate that
+    trained on those rows. A candidate can memorise its way to a better GOLD AUC without having
+    learned anything transferable.
+
+    build_pair_corpus.py already holds out whole commodity FAMILIES, so the cold subset exists; it
+    just was not reachable from here. The family map is read back off the corpus rows rather than
+    recomputed from the graph, so the two can never disagree about which rows a model saw.
+    """
+    fam: dict[str, str] = {}
+    for name in ("train.jsonl", "test.jsonl"):
+        p = os.path.join(corpus_dir, name)
+        if not os.path.exists(p):
+            continue
+        with open(p, encoding="utf-8") as f:
+            for ln in f:
+                if ln.strip():
+                    r = json.loads(ln)
+                    fam.setdefault(r["def_id"], r.get("family") or "uncategorised")
+    mp = os.path.join(corpus_dir, "manifest.json")
+    held = set(json.load(open(mp, encoding="utf-8")).get("holdout_families", [])) if os.path.exists(mp) else set()
+    return held, fam
+
+
 def stage_score(reranker: str | None = None, tag: str = "stock",
-                defs_path: str | None = None) -> None:
+                defs_path: str | None = None, corpus_dir: str | None = None) -> None:
     defs, defs_by_id = load_defs(defs_path)
     log(f"defs={defs_path or 'commodity-defs.json (today, drifts with the board)'}")
     pos_rows = load_json(os.path.join(DATA, "eval-positives.json"))
@@ -226,6 +263,22 @@ def stage_score(reranker: str | None = None, tag: str = "stock",
     mp = os.path.join(DATA, "mine-labelled.json")
     if os.path.exists(mp):
         mined_rows = [r for r in mined_rows_of(load_json(mp)) if not r.get("rules_accept")]
+
+    held: set[str] = set()
+    if corpus_dir:
+        held, fam = holdout_families(corpus_dir)
+        if not held:
+            log(f"REFUSED: {corpus_dir} records no holdout families; a cold run cannot be built from it")
+            raise SystemExit(2)
+
+        def cold(rows, key="id"):
+            return [r for r in rows if fam.get(r.get(key), "uncategorised") in held]
+
+        pos_rows, gold_rows = cold(pos_rows), cold(gold_rows)
+        old_rows = cold(old_rows)
+        mined_rows = cold(mined_rows, key="candidate")
+        log(f"COLD RUN: rows restricted to the held-out families ({', '.join(sorted(held))}). "
+            f"Every pair here is one the corpus could not have shown the model.")
 
     m = Matcher.load(with_reranker=True, reranker_path=reranker)
     log(f"cross-encoder: {m.rerank_id}")
@@ -345,6 +398,7 @@ def stage_score(reranker: str | None = None, tag: str = "stock",
          "is_pinned_model": (m.rerank_id == RERANK_MODEL),
          "generated": time.strftime("%Y-%m-%d %H:%M:%S"),
          "positives": len(pos), "old": len(old), "gold": len(gold), "mined": len(mined),
+         "holdout_only": sorted(held) if held else None,
          "auc_old": auc(pos, old), "auc_gold": auc(pos, gold),
          "auc_mined": (auc(pos, mined) if mined else None)},
         open(os.path.join(OUT, f"hardeval{suffix}.json"), "w", encoding="utf-8"), indent=2)
@@ -365,6 +419,11 @@ if __name__ == "__main__":
     ap.add_argument("--tag", default=None,
                     help="suffix for the output files. Defaults to 'stock' for a pinned run and is "
                          "REQUIRED with --reranker, so a candidate cannot overwrite the baseline.")
+    ap.add_argument("--holdout-from", default=None, metavar="CORPUS_DIR",
+                    help="restrict every set to the commodity families that corpus held out, so a "
+                         "fine-tune is measured on rows it cannot have seen. See holdout_families(): "
+                         "without this, a candidate trained on the board pairs and the known-wrong "
+                         "rulings is being scored on its own training data.")
     ap.add_argument("--defs", default=None,
                     help="a FROZEN commodity-defs.json to score against instead of today's. Required "
                          "in practice for any before/after: see load_defs().")
@@ -375,4 +434,4 @@ if __name__ == "__main__":
     if a.stage == "mine":
         stage_mine(a.top_k, defs_path=a.defs, margin=a.margin)
     else:
-        stage_score(reranker=a.reranker, tag=tag, defs_path=a.defs)
+        stage_score(reranker=a.reranker, tag=tag, defs_path=a.defs, corpus_dir=a.holdout_from)

@@ -1,0 +1,20 @@
+{
+  "tag": "phase3-frozen-cold",
+  "embed_model": "BAAI/bge-m3",
+  "rerank_model": "BAAI/bge-reranker-v2-m3",
+  "is_pinned_model": true,
+  "generated": "2026-08-23 01:07:08",
+  "positives": 518,
+  "old": 5,
+  "gold": 6,
+  "mined": 964,
+  "holdout_only": [
+    "dairy",
+    "frozen",
+    "household",
+    "pet"
+  ],
+  "auc_old": 0.9857142857142858,
+  "auc_gold": 0.9572072072072072,
+  "auc_mined": 0.9566878674762492
+}

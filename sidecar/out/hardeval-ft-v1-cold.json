@@ -1,0 +1,20 @@
+{
+  "tag": "ft-v1-cold",
+  "embed_model": "BAAI/bge-m3",
+  "rerank_model": "sidecar/models/resolve-ce-v1",
+  "is_pinned_model": false,
+  "generated": "2026-08-23 01:07:59",
+  "positives": 518,
+  "old": 5,
+  "gold": 6,
+  "mined": 964,
+  "holdout_only": [
+    "dairy",
+    "frozen",
+    "household",
+    "pet"
+  ],
+  "auc_old": 0.9938223938223938,
+  "auc_gold": 0.991956241956242,
+  "auc_mined": 0.9925203063169868
+}

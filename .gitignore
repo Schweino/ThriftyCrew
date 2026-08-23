@@ -50,6 +50,13 @@
 # counts - and without it "which rows did that model see" has no answer.
 !/sidecar/data/pair-corpus/
 /sidecar/data/pair-corpus/*.jsonl
+# Candidate cross-encoders (finetune_reranker.py). 2.2 GB of weights each, reproducible from the
+# corpus manifest + the training card inside the directory, and never the pinned model - a candidate
+# is reached only through --reranker. The CARD is the record and is small enough to keep.
+# (and note the /*/* - git does not descend into an excluded DIRECTORY, the same trap this file
+# already documents twenty lines up, and which it fell into again on 2026-08-23.)
+/sidecar/models/*/*
+!/sidecar/models/*/training-card.json
 /sidecar/out/*
 !/sidecar/out/backtest-report.md
 !/sidecar/out/phase2-report.md
