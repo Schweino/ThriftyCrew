@@ -122,7 +122,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-22T18:19:55",
+    "generated":  "2026-08-23T08:19:02",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -298,7 +298,7 @@
                               "commodity":  "Blueberries",
                               "unit":  "oz",
                               "store":  "Family Fare",
-                              "per_unit":  0.3563,
+                              "per_unit":  0.267,
                               "size":  "1 pt",
                               "item":  "Fresh Blueberries",
                               "kind":  "volume",
@@ -321,20 +321,8 @@
                               "id":  "cherry-tomatoes",
                               "commodity":  "Cherry / Grape Tomatoes",
                               "unit":  "oz",
-                              "store":  "Fareway",
-                              "per_unit":  0.248,
-                              "size":  "pint",
-                              "item":  "Grape Tomatoes",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "cherry-tomatoes",
-                              "commodity":  "Cherry / Grape Tomatoes",
-                              "unit":  "oz",
                               "store":  "Family Fare",
-                              "per_unit":  0.399,
+                              "per_unit":  0.299,
                               "size":  "1 pt",
                               "item":  "Grape Tomatoes Our Family",
                               "kind":  "volume",
@@ -657,10 +645,10 @@
                               "id":  "honey-mustard",
                               "commodity":  "Honey Mustard",
                               "unit":  "oz",
-                              "store":  "Fareway",
-                              "per_unit":  0.1567,
+                              "store":  "Baker\u0027s",
+                              "per_unit":  0.1575,
                               "size":  "12 oz",
-                              "item":  "Fareway Honey Mustard",
+                              "item":  "Kroger Honey Mustard",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -669,10 +657,10 @@
                               "id":  "honey-mustard",
                               "commodity":  "Honey Mustard",
                               "unit":  "oz",
-                              "store":  "Baker\u0027s",
-                              "per_unit":  0.1575,
+                              "store":  "Fareway",
+                              "per_unit":  0.2492,
                               "size":  "12 oz",
-                              "item":  "Kroger Honey Mustard",
+                              "item":  "Fareway Honey Mustard",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -774,13 +762,25 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "mayonnaise",
+                              "commodity":  "Mayonnaise",
+                              "unit":  "oz",
+                              "store":  "Fareway",
+                              "per_unit":  0.1263,
+                              "size":  "30 oz",
+                              "item":  "Fareway Mayonnaise Homestyle",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "miracle-whip",
                               "commodity":  "Miracle Whip (Salad Dressing Spread)",
                               "unit":  "oz",
                               "store":  "Family Fare",
-                              "per_unit":  0.233,
+                              "per_unit":  0.1667,
                               "size":  "30 oz",
-                              "item":  "Miracle Whip Light Dressing 30 Fl Oz",
+                              "item":  "Miracle Whip Dressing 30 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1128,7 +1128,7 @@
                               "store":  "Fareway",
                               "per_unit":  0.0741,
                               "size":  "128 oz",
-                              "item":  "Fareway Canola Oil",
+                              "item":  "Fareway Vegetable Oil",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1170,5 +1170,5 @@
                               "holds_crown":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-08-21.json"
+    "compare_file":  "comparison-2026-08-23.json"
 }

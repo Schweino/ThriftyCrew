@@ -12,24 +12,16 @@
                         "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
-                        "id":  "canned-pasta",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
                         "id":  "cherry-tomatoes",
                         "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
-                        "id":  "clementines",
+                        "id":  "croissants",
                         "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
-                        "id":  "croissants",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
                         "id":  "dinner-rolls",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "donuts",
@@ -65,6 +57,6 @@
                     }
                 ],
     "worked":  15,
-    "generated":  "2026-08-22 11:46",
-    "board":  "comparison-2026-08-21.json"
+    "generated":  "2026-08-23 08:18",
+    "board":  "comparison-2026-08-23.json"
 }

@@ -1,5 +1,5 @@
 ﻿{
-    "updated":  "2026-08-22",
+    "updated":  "2026-08-23",
     "note":  "Per-store weekly-ad cycle tracker. \u0027current\u0027 = the live ad window; \u0027next_pull\u0027 = day AFTER it expires (when the new ad is live), so the automation pulls each store the day its new ad drops. Dates are read from each store\u0027s own feed when available and otherwise advanced only after a successful store-scoped capture. VERIFIED cadences (all weekly / 7-day): Hy-Vee = Mon-Sun (new ad Monday); Aldi = Wed-Tue (new ad Wednesday); Baker\u0027s = Wed-Tue (new ad Wednesday); Family Fare = Sun-Sat (new ad Sunday). Hy-Vee, Aldi, and Family Fare ad calendars are detected headlessly; Baker\u0027s calendar advances only after its successful store-scoped API capture. Price capture lanes remain platform-owned. Sam\u0027s and Walmart have no weekly ad cycle.",
     "stores":  [
                    {
@@ -121,10 +121,10 @@
                        "method":  "server",
                        "cadence_days":  7,
                        "current":  {
-                                       "from":  "2026-08-16",
-                                       "to":  "2026-08-22"
+                                       "from":  "2026-08-23",
+                                       "to":  "2026-08-29"
                                    },
-                       "next_pull":  "2026-08-23",
+                       "next_pull":  "2026-08-30",
                        "history":  [
                                        {
                                            "from":  "2026-07-05",
@@ -160,6 +160,11 @@
                                            "from":  "2026-08-16",
                                            "to":  "2026-08-22",
                                            "detected":  "2026-08-17"
+                                       },
+                                       {
+                                           "from":  "2026-08-23",
+                                           "to":  "2026-08-29",
+                                           "detected":  "2026-08-23"
                                        }
                                    ]
                    },

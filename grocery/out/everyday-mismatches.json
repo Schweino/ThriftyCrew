@@ -8,7 +8,7 @@
         "ratio":  0.97,
         "price":  5.99,
         "size":  "lb",
-        "boardItem":  "Ground Beef 80 20 1 Per LB",
+        "boardItem":  "80 / 20 Ground Beef",
         "linkItem":  "Ground Beef 80 20 1 Per LB",
         "board_src":  "main"
     },
@@ -36,6 +36,32 @@
         "size":  "3 lb",
         "boardItem":  "93% Lean / 7% Fat Lean Ground Beef, 3 lb Roll, Fresh, All Natural*",
         "linkItem":  "93% Lean / 7% Fat Lean Ground Beef, 3 lb Roll, Fresh, All Natural*",
+        "board_src":  "main"
+    },
+    {
+        "id":  "almonds",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.425,
+        "link":  0.4421,
+        "ratio":  1.04,
+        "price":  6.19,
+        "size":  "14 oz",
+        "boardItem":  "Southern Grove Oil Roasted And Salted Almonds",
+        "linkItem":  "Southern Grove Oil Roasted Salted Almonds 14 OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "apple-cider-vinegar",
+        "store":  "Aldi",
+        "unit":  "floz",
+        "board":  0.1403,
+        "link":  0.1328,
+        "ratio":  0.95,
+        "price":  4.49,
+        "size":  "33.8 fl oz",
+        "boardItem":  "Simply Nature Organic Apple Cider Vinegar 33 8 FL OZ",
+        "linkItem":  "Simply Nature Organic Apple Cider Vinegar",
         "board_src":  "main"
     },
     {
@@ -104,6 +130,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "blackberries",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.3983,
+        "link":  0.3583,
+        "ratio":  0.9,
+        "price":  2.15,
+        "size":  "6 oz",
+        "boardItem":  "Blackberries 6 OZ",
+        "linkItem":  "Blackberries, Package",
+        "board_src":  "main"
+    },
+    {
+        "id":  "bottled-water",
+        "store":  "Aldi",
+        "unit":  "each",
+        "board":  0.1662,
+        "link":  0.1329,
+        "ratio":  0.8,
+        "price":  3.19,
+        "size":  "24 ct",
+        "boardItem":  "Puraqua Natural Spring Water, 24 Pack",
+        "linkItem":  "PurAqua Purified Water 24 Pack",
+        "board_src":  "main"
+    },
+    {
         "id":  "broccoli",
         "store":  "Aldi",
         "unit":  "lb",
@@ -114,6 +166,32 @@
         "size":  "lb",
         "boardItem":  "Broccoli Crowns Per LB",
         "linkItem":  "Broccoli Crowns",
+        "board_src":  "main"
+    },
+    {
+        "id":  "caesar-salad-kit",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.2848,
+        "link":  0.2951,
+        "ratio":  1.04,
+        "price":  3.29,
+        "size":  "11.15 oz",
+        "boardItem":  "Dole Chopped Caesar Salad Kit 11 15 OZ",
+        "linkItem":  "Dole Chopped Caesar Salad Kit 11.15 OZ",
+        "board_src":  "main"
+    },
+    {
+        "id":  "canned-chicken",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.2072,
+        "link":  0.1992,
+        "ratio":  0.96,
+        "price":  2.49,
+        "size":  "12.5 oz",
+        "boardItem":  "Brookdale Chicken Breast Extra Lean White Premium Chunk With Rib Meat IN Water 12.5 OZ",
+        "linkItem":  "Brookdale Chunk Chicken Breast",
         "board_src":  "main"
     },
     {
@@ -143,6 +221,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "celery",
+        "store":  "Aldi",
+        "unit":  "each",
+        "board":  1.99,
+        "link":  2.59,
+        "ratio":  1.3,
+        "price":  2.59,
+        "size":  "each",
+        "boardItem":  "Celery, Each",
+        "linkItem":  "Organic Celery Heart Each",
+        "board_src":  "main"
+    },
+    {
         "id":  "cherries",
         "store":  "Sam\u0027s Club",
         "unit":  "lb",
@@ -156,6 +247,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "cod",
+        "store":  "Aldi",
+        "unit":  "lb",
+        "board":  8.745,
+        "link":  7.995,
+        "ratio":  0.91,
+        "price":  15.99,
+        "size":  "32 oz",
+        "boardItem":  "Fremont Fish Market Value Pack Cod Fillets 32 OZ",
+        "linkItem":  "Fremont Fish Market Value Pack Cod Fillets 32 OZ",
+        "board_src":  "main"
+    },
+    {
         "id":  "coffee",
         "store":  "Sam\u0027s Club",
         "unit":  "oz",
@@ -166,6 +270,19 @@
         "size":  "43.1 oz",
         "boardItem":  "Maxwell House Original Roast Medium Ground Coffee, 43.1 oz.",
         "linkItem":  "Maxwell House Original Roast Medium Ground Coffee, 43.1 oz.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "corned-beef-hash",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  0.3207,
+        "link":  0.285,
+        "ratio":  0.89,
+        "price":  3.99,
+        "size":  "14 oz",
+        "boardItem":  "MARY KITCHEN Mary Kitchen Homestyle Corned Beef Hash",
+        "linkItem":  "MARY KITCHEN Homestyle Corned Beef Hash",
         "board_src":  "main"
     },
     {
@@ -208,6 +325,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "deodorant",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  1.3133,
+        "link":  1.3533,
+        "ratio":  1.03,
+        "price":  4.06,
+        "size":  "3 oz",
+        "boardItem":  "Old Spice Anti Perspirant Deodorant For Men Pure Sport Scent 3 OZ",
+        "linkItem":  "Old Spice Pure Sport Deodorant",
+        "board_src":  "main"
+    },
+    {
+        "id":  "dog-food",
+        "store":  "Aldi",
+        "unit":  "lb",
+        "board":  1.398,
+        "link":  1.358,
+        "ratio":  0.97,
+        "price":  6.79,
+        "size":  "5 lb",
+        "boardItem":  "Pure Being Chicken Rice Premium Grain Free Dog Food 5 LB",
+        "linkItem":  "Pure Being Chicken and Rice Premium Dog Food",
+        "board_src":  "main"
+    },
+    {
         "id":  "donuts",
         "store":  "Fareway",
         "unit":  "each",
@@ -231,6 +374,19 @@
         "size":  "0.85 oz",
         "boardItem":  "McCormick Fennel Seed, 0.85 oz",
         "linkItem":  "McCormick Fennel Seed, 0.85 oz",
+        "board_src":  "main"
+    },
+    {
+        "id":  "feta",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.4488,
+        "link":  0.4725,
+        "ratio":  1.05,
+        "price":  1.89,
+        "size":  "4 oz",
+        "boardItem":  "Emporium Selection Traditional Feta Cheese Block",
+        "linkItem":  "Emporium Selection Original Feta Cheese Crumbles",
         "board_src":  "main"
     },
     {
@@ -261,6 +417,19 @@
     },
     {
         "id":  "chicken-nuggets",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.1435,
+        "link":  0.1373,
+        "ratio":  0.96,
+        "price":  6.59,
+        "size":  "48 oz",
+        "boardItem":  "Kirkwood Family Size Chicken Nuggets 48 OZ",
+        "linkItem":  "Kirkwood Family Pack Chicken Nuggets",
+        "board_src":  "main"
+    },
+    {
+        "id":  "chicken-nuggets",
         "store":  "Hy-Vee",
         "unit":  "oz",
         "board":  0.2584,
@@ -286,6 +455,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "sugar",
+        "store":  "Aldi",
+        "unit":  "lb",
+        "board":  0.6975,
+        "link":  0.7225,
+        "ratio":  1.04,
+        "price":  2.89,
+        "size":  "4 lb",
+        "boardItem":  "Baker S Corner Granulated Sugar 4 LB",
+        "linkItem":  "Baker\u0027s Corner Granulated Sugar",
+        "board_src":  "main"
+    },
+    {
         "id":  "ground-cinnamon",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -296,6 +478,32 @@
         "size":  "2.5 oz",
         "boardItem":  "That\u0027s Smart Ground Cinnamon",
         "linkItem":  "That\u0027s Smart Ground Cinnamon",
+        "board_src":  "main"
+    },
+    {
+        "id":  "conditioner",
+        "store":  "Aldi",
+        "unit":  "floz",
+        "board":  0.4775,
+        "link":  0.551,
+        "ratio":  1.15,
+        "price":  5.73,
+        "size":  "10.4 fl oz",
+        "boardItem":  "Pantene Fine Volume Conditioner",
+        "linkItem":  "Pantene Pro-V Daily Moisture Renewal Conditioner",
+        "board_src":  "main"
+    },
+    {
+        "id":  "hot-sauce",
+        "store":  "Aldi",
+        "unit":  "floz",
+        "board":  0.1158,
+        "link":  0.1292,
+        "ratio":  1.12,
+        "price":  1.55,
+        "size":  "12 fl oz",
+        "boardItem":  "Burman S Hot Sauce 12 FL OZ",
+        "linkItem":  "Burman\u0027s Hot Sauce",
         "board_src":  "main"
     },
     {
@@ -338,6 +546,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "mangoes",
+        "store":  "Aldi",
+        "unit":  "each",
+        "board":  1.15,
+        "link":  1.19,
+        "ratio":  1.03,
+        "price":  1.19,
+        "size":  "each",
+        "boardItem":  "Red Mango Each",
+        "linkItem":  "Red Mango Each",
+        "board_src":  "main"
+    },
+    {
+        "id":  "milk",
+        "store":  "Aldi",
+        "unit":  "gallon",
+        "board":  2.86,
+        "link":  3.01,
+        "ratio":  1.05,
+        "price":  3.01,
+        "size":  "1 gal",
+        "boardItem":  "Friendly Farms 1 Low Fat Milk 1 Gal",
+        "linkItem":  "Friendly Farms 1 Low Fat Milk 1 Gal",
+        "board_src":  "main"
+    },
+    {
         "id":  "milk",
         "store":  "Fareway",
         "unit":  "gallon",
@@ -348,6 +582,19 @@
         "size":  "0.5 gal",
         "boardItem":  "Fareway Skim Milk",
         "linkItem":  "Fareway 2% Reduced Fat Milk",
+        "board_src":  "main"
+    },
+    {
+        "id":  "olive-oil",
+        "store":  "Aldi",
+        "unit":  "floz",
+        "board":  0.2808,
+        "link":  0.334,
+        "ratio":  1.19,
+        "price":  11.29,
+        "size":  "33.8 oz",
+        "boardItem":  "Carlini Pure Olive Oil 33.8 FL OZ",
+        "linkItem":  "Carlini Pure Olive Oil 33.8 FL OZ",
         "board_src":  "main"
     },
     {
@@ -364,6 +611,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "peanut-butter",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.0863,
+        "link":  0.0988,
+        "ratio":  1.14,
+        "price":  3.95,
+        "size":  "40 oz",
+        "boardItem":  "Peanut Delight Creamy Peanut Butter 40 OZ",
+        "linkItem":  "Peanut Delight Creamy Peanut Butter 40 oz",
+        "board_src":  "main"
+    },
+    {
         "id":  "pears",
         "store":  "Fareway",
         "unit":  "lb",
@@ -374,6 +634,32 @@
         "size":  "lb",
         "boardItem":  "Bartlett Pear",
         "linkItem":  "D\u0027anjou Pears",
+        "board_src":  "main"
+    },
+    {
+        "id":  "plums",
+        "store":  "Aldi",
+        "unit":  "lb",
+        "board":  1.895,
+        "link":  1.49,
+        "ratio":  0.79,
+        "price":  2.98,
+        "size":  "2 lb",
+        "boardItem":  "Plum Bag 2 Lbs",
+        "linkItem":  "Plums, Bag",
+        "board_src":  "main"
+    },
+    {
+        "id":  "popsicles",
+        "store":  "Fareway",
+        "unit":  "each",
+        "board":  0.4067,
+        "link":  0.3325,
+        "ratio":  0.82,
+        "price":  3.99,
+        "size":  "12 ct",
+        "boardItem":  "Bomb Pop Original Ice Pops",
+        "linkItem":  "Bomb Pop Original Ice Pops",
         "board_src":  "main"
     },
     {
@@ -442,6 +728,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "ricotta",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.166,
+        "link":  0.1767,
+        "ratio":  1.06,
+        "price":  2.65,
+        "size":  "15 oz",
+        "boardItem":  "Part Skim Ricotta Cheese",
+        "linkItem":  "Part Skim Ricotta Cheese",
+        "board_src":  "main"
+    },
+    {
         "id":  "russet-potatoes",
         "store":  "Sam\u0027s Club",
         "unit":  "lb",
@@ -452,6 +751,19 @@
         "size":  "10 lb",
         "boardItem":  "Russet Potatoes, 10 lbs.",
         "linkItem":  "Russet Potatoes, 10 lbs.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "salmon",
+        "store":  "Aldi",
+        "unit":  "lb",
+        "board":  5.425,
+        "link":  5.175,
+        "ratio":  0.95,
+        "price":  10.35,
+        "size":  "32 oz",
+        "boardItem":  "Fremont Fish Market Value Pack Wild Caught Salmon 32 OZ",
+        "linkItem":  "Fremont Fish Market Value Pack Wild Caught Salmon",
         "board_src":  "main"
     },
     {
@@ -608,6 +920,19 @@
         "size":  "12 ct",
         "boardItem":  "Great Value Frosted Chocolate Fudge Toasted Pastries, 20.3 oz, 12 Count",
         "linkItem":  "Great Value Frosted Cherry Toaster Pastries",
+        "board_src":  "main"
+    },
+    {
+        "id":  "turkey-bacon",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.349,
+        "link":  0.325,
+        "ratio":  0.93,
+        "price":  3.25,
+        "size":  "10 oz",
+        "boardItem":  "Appleton Farms Uncured Turkey Bacon 10 OZ",
+        "linkItem":  "Appleton Farms Uncured Turkey Bacon",
         "board_src":  "main"
     },
     {

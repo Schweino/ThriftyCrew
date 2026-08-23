@@ -1,7 +1,7 @@
 ﻿{
-    "date":  "2026-08-22",
-    "written":  "2026-08-22T11:48:09",
-    "guards_rc":  2,
-    "guards_blocked":  true,
+    "date":  "2026-08-23",
+    "written":  "2026-08-23T08:19:45",
+    "guards_rc":  0,
+    "guards_blocked":  false,
     "note":  "Written by check-ad-cycles after guards. capture-run reads guards_blocked before it stages public\\** or meal-prep\\** - a board the gate rejected must never reach the edge."
 }
