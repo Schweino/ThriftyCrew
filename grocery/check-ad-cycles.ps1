@@ -2206,7 +2206,29 @@ if ($script:DownstreamRan) {
 # is no reason for it ever to be conditional. A blind watcher has to be LOUDER than the thing it watches:
 # if this fails, every quiet guard above it becomes unproven, including a clean board.
 # CADENCE (7d): replays frozen fixtures against guard SOURCE; 877 s. Due on any .ps1 edit, so a commit that blinds a guard is still caught the same day.
-if (-not (Test-CadenceDue -Name 'test-auditors' -EveryDays 7 -InputGlobs @('grocery/*.ps1','lib/*.ps1'))) {
+# *** THE ONE CADENCE GATE THAT WAS NOT INSIDE A try, AND IT COST A WHOLE CHAIN (2026-08-23). ***
+# There are ten Test-CadenceDue call sites in this file. Nine of them are inside their block's own
+# try/catch; this one IS the block's `if`, at top level, with nothing around it. On 2026-08-23 the
+# helpers had never actually been implemented (see e9731395 - `git log -S "function Test-CadenceDue"`
+# returned nothing), so every call site raised CommandNotFoundException. Under $ErrorActionPreference =
+# 'Stop' that is a TERMINATING error: the nine inside a try logged "threw" and skipped their audit, and
+# THIS ONE killed check-ad-cycles outright, mid-run, with no message of its own.
+# What that cost, read off ad-cycle-log.LOCKED-2026-08-23.txt, whose last two lines are prune-out and
+# prune-intermediates and then nothing at all: no test-auditors, no test-guards weekly, no ghost-drift,
+# no cloudflare-estate, no search-links, no cycle-phase coverage ratchet, and no `run complete` line.
+# This script has no `exit` statement anywhere, so a terminating error is also the ONLY way it returns
+# non-zero - which is the entire content of capture-run's "FAILED LANES: ... downstream" that morning.
+# The chain looked like it had failed at its last step; it had actually died two thirds of the way in.
+# (The capture-eviction audit that had to be re-run by hand that day is a DIFFERENT cause: its block is
+# ~250 lines EARLIER, inside the post-publish inspect branch, which that run never entered. The crash
+# here cannot explain it and must not be credited with it.)
+#
+# BOTH DIRECTIONS ARE NOW CLOSED. A gate that cannot decide must not skip - and must not be able to end
+# the chain either. Any throw resolves to DUE and says so out loud.
+$taSkip = $false
+try { $taSkip = -not (Test-CadenceDue -Name 'test-auditors' -EveryDays 7 -InputGlobs @('grocery/*.ps1','lib/*.ps1')) }
+catch { Log ('test-auditors cadence gate threw (' + $_.Exception.Message + ') - running the suite anyway; a gate that cannot decide must not skip, and must never take the rest of the chain with it') }
+if ($taSkip) {
   Log ('test-auditors: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'test-auditors') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
 } else {
 try {
@@ -2464,4 +2486,16 @@ if (@($flips).Count -gt 0) { Write-Output ""; Write-Output ("Flipped this run: "
 $totalSecs = [int]((Get-Date) - $script:ShipStart).TotalSeconds
 $shipNote = if ($script:DownstreamRan) { "ship=" + $shipSecs + "s" } else { "ship=not reached" }
 Log ("run complete; flips=" + (@($flips).Count) + "; pull=" + $pullNote.Trim() + "; " + $shipNote + "; total=" + $totalSecs + "s")
+
+# *** THIS FILE'S EXIT CODE WAS AN ACCIDENT UNTIL NOW (2026-08-23). *** There was no `exit` statement
+# anywhere in 2,467 lines, so `powershell -File check-ad-cycles.ps1` returned 0 on a normal finish and 1
+# on any terminating error - and every caller (capture-run's FAILED LANES, daily.yml) reads that code as
+# the chain's verdict. A verdict nobody wrote is a verdict nobody can reason about: on 2026-08-23 the
+# only thing "downstream rc=1" actually meant was "something threw, somewhere, and we are not saying
+# where". Stating it here changes no behaviour - a crash still never reaches this line, so it still
+# exits 1 - but it makes the zero DELIBERATE: reaching this point means the whole chain ran, which is
+# exactly what the caller believes the code means. Findings live in $summary and in each audit's own
+# exit code; they have never made this script non-zero and must not start now, or a REVIEW line would
+# read to capture-run as a failed lane.
+exit 0
 

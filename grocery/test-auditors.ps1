@@ -82,6 +82,54 @@ function RunPS($script, $argList) {
   return [pscustomobject]@{ rc = $LASTEXITCODE; text = ($out -join "`n") }
 }
 
+function RunPSMany {
+  # THE SAME CHILD, N AT A TIME (2026-08-23). Three of this suite's checks were 154 of its 467 seconds -
+  # three full runs of one auditor over three frozen boards, run one after another for no reason but that
+  # RunPS is synchronous. Independent inputs, independent outputs, verdicts read only from each child's own
+  # stdout: nothing about running them together can change an answer, and the suite gets ~100 seconds back.
+  #
+  # RUNSPACES, NOT Start-Job. PS 5.1 has no ForEach-Object -Parallel, and Start-Job pays a whole extra
+  # powershell.exe per unit of work on top of the one we already spawn. A runspace pool costs a thread.
+  #
+  # THE STDERR RULE IS UNCHANGED AND STILL THE ONLY SHAPE HERE. Each runspace dot-sources native-lib and
+  # calls Invoke-NativeScript exactly as PSChild does, so the child's stderr is merged inside a call that
+  # has forced EAP='Continue' for the duration - never by a redirect written here. A runspace also carries
+  # its OWN preference variables, so this thread starts at 'Continue' rather than inheriting this file's
+  # 'Stop'; that is belt and braces, not the guarantee. The guarantee is Invoke-Native.
+  #
+  # A WORKER THAT DIES BECOMES A FAILED CASE, NOT A MISSING ONE. EndInvoke rethrows in the parent, and an
+  # escaping throw under EAP='Stop' would end the suite mid-run with a cheerful PASS as its last line -
+  # the exact shape this harness exists to catch. Caught here, it comes back as rc=-1 with the message as
+  # its text, so the caller's own assertion fails loudly and the counts still add up.
+  param([object[]]$Calls)
+  $lib = Join-Path $root 'native-lib.ps1'
+  $sb = {
+    param([string]$Lib, [string]$Path, [object[]]$Argv)
+    $ErrorActionPreference = 'Continue'
+    . $Lib
+    $res = Invoke-NativeScript $Path @Argv
+    [pscustomobject]@{ rc = $res.ExitCode; text = ((@($res.Lines) | ForEach-Object { [string]$_ }) -join "`n") }
+  }
+  $calls = @($Calls)
+  $pool = [runspacefactory]::CreateRunspacePool(1, [Math]::Max(1, $calls.Count))
+  $pool.Open()
+  $jobs = @()
+  foreach ($c in $calls) {
+    $ps = [powershell]::Create()
+    $ps.RunspacePool = $pool
+    [void]$ps.AddScript([string]$sb).AddArgument($lib).AddArgument((Join-Path $root $c.script)).AddArgument([object[]]@($c.args))
+    $jobs += [pscustomobject]@{ ps = $ps; handle = $ps.BeginInvoke() }
+  }
+  $out = @()
+  foreach ($j in $jobs) {
+    try { $out += @($j.ps.EndInvoke($j.handle)) }
+    catch { $out += [pscustomobject]@{ rc = -1; text = ('RunPSMany worker failed: ' + $_.Exception.Message) } }
+    finally { $j.ps.Dispose() }
+  }
+  $pool.Close(); $pool.Dispose()
+  return $out
+}
+
 Write-Output 'test-auditors: can each watcher still see the bug it was written for?'
 
 # A FIXTURE RUN MUST NOT WRITE WHERE THE LIVE RUN WRITES (2026-07-31).
@@ -98,17 +146,31 @@ $fixRep = Join-Path $env:TEMP ('taudit-rep-' + [guid]::NewGuid().ToString('N').S
 $null = New-Item -ItemType Directory -Path $fixRep -Force
 
 # ---------------------------------------------------------------- 1. basis reconciler
-# MUST FIRE: Hy-Vee published $3.15/lb for corned beef brisket while the store's own size text printed
-# "($8.99/lb)" right there on the same row.
-$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'basis-conflict-board.json'), '-ReportDir', $fixRep)
+# ALL THREE AT ONCE. Measured 2026-08-23 at 53.4s + 50.3s + 49.9s = 154s of this suite's 467. They are
+# three independent processes over three FROZEN boards, and each verdict is read only from its own
+# stdout - so the only thing serialising them was RunPS. Each gets its OWN report directory: the audit
+# always writes basis-reconcile.json, and three simultaneous children in one directory would be three
+# writers on one file. Nothing reads these reports (that is the whole point of -ReportDir, section 97),
+# but a harness that races on a file it does not even read would look like a flaky auditor.
+$brCases = @(
+  # MUST FIRE: Hy-Vee published $3.15/lb for corned beef brisket while the store's own size text printed
+  # "($8.99/lb)" right there on the same row.
+  @{ tag = 'br-conflict'; fixture = 'basis-conflict-board.json' },
+  # MUST BE SILENT: same board with the cell corrected to the store's own rate.
+  @{ tag = 'br-clean';    fixture = 'basis-clean-board.json' },
+  # MUST NOT trip on sub-cent rounding (a store publishing "$0.01/ea" against our $0.0053 is rounding, not conflict)
+  @{ tag = 'br-round';    fixture = 'basis-rounding-board.json' })
+$br = RunPSMany @($brCases | ForEach-Object {
+  $d = Join-Path $fixRep $_.tag
+  $null = New-Item -ItemType Directory -Path $d -Force
+  @{ script = 'audit-basis-reconcile.ps1'; args = @('-CompareFile', (Join-Path $fix $_.fixture), '-ReportDir', $d) } })
+$r = $br[0]
 if ($r.text -match 'corned-beef-brisket' -and $r.text -match 'disagree') { Ok 'basis-reconcile FIRES on the per-lb-rate conflict' }
 else { Bad ('basis-reconcile MISSED its founding bug: ' + $r.text) }
-# MUST BE SILENT: same board with the cell corrected to the store's own rate.
-$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'basis-clean-board.json'), '-ReportDir', $fixRep)
+$r = $br[1]
 if ($r.text -match 'ok - every checkable cell agrees') { Ok 'basis-reconcile SILENT on the corrected board' }
 else { Bad ('basis-reconcile false-positived on a clean board: ' + $r.text) }
-# MUST NOT trip on sub-cent rounding (a store publishing "$0.01/ea" against our $0.0053 is rounding, not conflict)
-$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'basis-rounding-board.json'), '-ReportDir', $fixRep)
+$r = $br[2]
 if ($r.text -match 'ok - every checkable cell agrees') { Ok 'basis-reconcile ignores whole-cent rounding noise' }
 else { Bad ('basis-reconcile tripped on cent rounding: ' + $r.text) }
 
@@ -997,6 +1059,29 @@ else { Bad ('cadence gate self-test FAILED - a gated audit may be skipping while
 if ($cacSrc -match 'function Test-CadenceDue' -and $cacSrc -match "ToString\('o'\)") {
   Ok 'cadence stamps keep sub-second precision (ToString(''o'')) - ''s'' truncation made every check due forever'
 } else { Bad 'the cadence stamp lost round-trip precision - an input written in the same second reads as newer and nothing ever skips' }
+# A CADENCE GATE MUST NOT BE ABLE TO END THE CHAIN (2026-08-23, the undiagnosed downstream exit-1).
+# Ten call sites; nine sat inside their block's try/catch and one was the block's own top-level `if`.
+# When the helpers turned out never to have been implemented, the nine logged "threw" and skipped their
+# audit - and the tenth terminated check-ad-cycles outright under EAP=Stop, two thirds of the way in.
+# Everything after it (test-auditors itself, test-guards weekly, ghost-drift, the cloudflare estate,
+# search-links, the cycle-phase coverage ratchet) silently did not run, and the only symptom anywhere
+# was capture-run reporting "FAILED LANES: ... downstream". The bug is not "the helpers were missing" -
+# that is fixed and could not recur the same way. The bug is that ONE unprotected gate can take the
+# whole chain with it, and the next unprotected gate someone adds will do it again.
+# THE SHAPE, pinned: a Test-CadenceDue call is either indented (inside a block that catches) or it is
+# the `try {` itself. A bare top-level `if (-not (Test-CadenceDue ...))` is the exact line that died.
+$cadCalls = @(($cacSrc -replace "`r", '') -split "`n" | Where-Object { $_ -match 'Test-CadenceDue\s+-Name' })
+$cadBare = @($cadCalls | Where-Object { $_ -notmatch '^\s' -and $_ -notmatch '^try\s*\{' })
+if ($cadCalls.Count -ge 2 -and $cadBare.Count -eq 0) { Ok ('every cadence gate in check-ad-cycles (' + $cadCalls.Count + ') is inside something that catches - one that throws cannot end the chain') }
+else { Bad ('check-ad-cycles has ' + $cadBare.Count + ' cadence gate(s) whose throw would escape to the top level and kill the run mid-chain (found ' + $cadCalls.Count + ' gate(s) total): ' + (($cadBare | ForEach-Object { $_.Trim() }) -join ' | ')) }
+# AND ITS EXIT CODE MUST BE SOMETHING SOMEBODY WROTE. check-ad-cycles carried no `exit` statement at all,
+# so its rc was whatever powershell.exe inferred - 0 on a normal finish, 1 on any terminating error - and
+# capture-run and daily.yml both read that inferred number as the chain's verdict. "downstream rc=1" then
+# means only "something threw somewhere". An explicit terminal exit does not hide a crash (a crash never
+# reaches it) - it makes the SUCCESS deliberate.
+$cacTail = @(($cacSrc -replace "`r", '') -split "`n" | Where-Object { $_.Trim() -ne '' -and $_.Trim() -notmatch '^#' })
+if ($cacTail.Count -and $cacTail[-1].Trim() -match '^exit\s+\d+$') { Ok 'check-ad-cycles ends with an explicit exit - the chain verdict its callers read is stated, not inferred' }
+else { Bad ('check-ad-cycles has no explicit terminal exit, so its exit code is whatever PowerShell infers - a crash and a clean run are told apart only by luck; last statement: ' + $(if ($cacTail.Count) { $cacTail[-1].Trim() } else { '<none>' })) }
 if ($crSrc -match 'smp-pipeline-bot' -and $crSrc -match 'push origin HEAD:main') {
   Ok 'capture-run still commits and pushes the pipeline output (the last mile exists)'
 } else { Bad 'capture-run LOST its commit/push - the chain would compute prices that never reach a reader, exactly as 2026-08-18..22' }
