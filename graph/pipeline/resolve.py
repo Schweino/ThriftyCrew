@@ -1083,6 +1083,87 @@ def build_adversarial_prompt(cc: CompiledCommodity, product_name: str,
     return system, "\n".join(parts)
 
 
+def _challenge_backlog(jobs: int = 4, limit: int | None = None) -> int:
+    """Stamp §3.3's answer onto confirm_match leads that were queued before §3.3 existed.
+
+    326 leads were resolved under a resolver that had no challenge, so their ordering key is
+    null and stays null - the review packet would sort the whole backlog into one
+    undifferentiated tier forever while every NEW lead got the benefit. This is the one-off
+    that fixes that, and it stays in the tool because the same gap reopens any time the flag
+    is off for a night.
+
+    IT WRITES THE QUEUE FILE AND NOTHING ELSE. No verdict, no status, no database row: a
+    lead that fails the challenge is still a lead, at exactly the status it already had.
+    Re-runnable - entries already carrying an answer are skipped, so an interrupted run
+    resumes.
+    """
+    import json                                                            # noqa: PLC0415
+    from graphdb import open_db                                            # noqa: PLC0415
+    qp = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                      "..", "..", "grocery", "escalation-queue.json"))
+    if not os.path.exists(qp):
+        print(f"no queue at {qp}", file=sys.stderr)
+        return 2
+    with open(qp, encoding="utf-8-sig") as fh:
+        queue = json.load(fh)
+    todo = [e for e in queue
+            if e.get("kind") == "confirm_match" and e.get("survived_challenge") is None
+            and e.get("product") and e.get("commodity")]
+    if limit:
+        todo = todo[:limit]
+    print(f"queue {len(queue)} entr(ies); {len(todo)} confirm_match lead(s) with no challenge yet")
+    if not todo:
+        return 0
+
+    llm = LocalLLM()
+    if not llm.health():
+        print("local endpoint down - start it: powershell tools/local-llm/serve.ps1 -Slots 4",
+              file=sys.stderr)
+        return 2
+
+    with open_db() as db:
+        r = Resolver(db, llm=llm, use_llm=True, adversarial=True)
+        # Commodities on THIS thread; the workers do HTTP only (single-writer rule).
+        warm = {}
+        for e in todo:
+            cid = e["commodity"]
+            if cid not in warm:
+                try:
+                    warm[cid] = (r.commodity(cid), r.prior_rulings(r.commodity(cid), ""))
+                except KeyError:
+                    warm[cid] = (None, None)
+        skipped = sum(1 for e in todo if warm[e["commodity"]][0] is None)
+
+        def run(e):
+            cc, _ = warm[e["commodity"]]
+            if cc is None:
+                return e, None, "no commodity node"
+            survived, said = r._challenge(cc, e["product"],
+                                          str(e.get("reason") or "")[:200])
+            return e, survived, said
+
+        t0 = time.time()
+        done = 0
+        with ThreadPoolExecutor(max_workers=max(1, jobs)) as ex:
+            for e, survived, said in ex.map(run, todo):
+                if survived is not None:
+                    e["survived_challenge"] = survived
+                    e["challenge_said"] = said
+                done += 1
+                if done % 50 == 0:
+                    print(f"  {done}/{len(todo)} in {time.time()-t0:.0f}s", flush=True)
+    tmp = qp + ".tmp"
+    with open(tmp, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(queue, fh, indent=2, ensure_ascii=False)
+    os.replace(tmp, qp)
+    surv = sum(1 for e in queue if e.get("survived_challenge") is True)
+    fail = sum(1 for e in queue if e.get("survived_challenge") is False)
+    print(f"\n  {surv} survived the challenge, {fail} failed"
+          + (f", {skipped} had no commodity node and were left alone" if skipped else ""))
+    print(f"  wrote {qp} in {time.time()-t0:.0f}s")
+    return 0
+
+
 def _emit_contested(path: str, limit: int | None = None) -> int:
     """Write the contested question set for the sidecar to score.
 
@@ -1201,6 +1282,12 @@ def main() -> int:
                     help="write the contested (commodity, product) questions to "
                          "PATH and exit. Writes NOTHING to the database and "
                          "needs no model. See graph/pipeline/nightly.ps1.")
+    ap.add_argument("--challenge-backlog", action="store_true",
+                    help="run the §3.3 challenge over confirm_match entries ALREADY in "
+                         "grocery/escalation-queue.json and stamp the result on each. For the "
+                         "leads resolved before §3.3 existed, whose ordering key is otherwise "
+                         "null forever. Writes only the queue file - no verdict, no status, no "
+                         "database row changes.")
     ap.add_argument("--adversarial", action="store_true",
                     help="plan §3.3: re-ask every local MATCH with the instruction to argue "
                          "against it, and record whether it SURVIVED. Signal only - the status "
@@ -1223,6 +1310,9 @@ def main() -> int:
 
     if args.emit_contested:
         return _emit_contested(args.emit_contested, args.limit)
+
+    if args.challenge_backlog:
+        return _challenge_backlog(args.jobs, args.limit)
 
     llm = None
     if args.llm:

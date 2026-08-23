@@ -150,7 +150,9 @@ _WORD = re.compile(r"[a-z0-9%/]{2,}")
 # question. `Zero-Sugar Soda (2 L)` tokenises to zero/sugar/soda - the "2 L" disappears,
 # because "2" and "l" are both one character - and "2 L" is the entire difference between the
 # listings that belong in that commodity and the 12-oz 35-packs that do not.
-_SIZE = re.compile(r"(\d+(?:\.\d+)?)\s*(l|ml|oz|fl\s*oz|qt|lb|lbs|g|kg|ct|pk|pack|liter|litre)\b")
+_SIZE = re.compile(
+    r"(\d+(?:\.\d+)?)\s*(fl\s*oz|ml|oz|qt|lb|kg|ct|pk|pack|liter|litre|l|g)s?\b",
+    re.IGNORECASE)
 
 
 def _words(s: str) -> list[str]:
@@ -550,9 +552,17 @@ def _file_alias_proposal(db, ts: str, reviewer: str, target: str,
 def ingest(db, path: str) -> dict:
     with open(path, encoding="utf-8-sig") as fh:
         data = json.load(fh)
-    verdicts = data.get("verdicts", data if isinstance(data, list) else [])
-    reviewer = data.get("reviewer", "claude-review") if isinstance(data, dict) \
-        else "claude-review"
+    # A BARE LIST IS A VALID VERDICT FILE and always was meant to be - the fallback below was
+    # written for it. It could never run: `data.get(...)` was evaluated on the list before the
+    # isinstance check could save it, so handing this lane the shape its own docstring shows
+    # ("return one verdict object per question") died with an AttributeError. Found 2026-08-23
+    # by doing exactly that.
+    if isinstance(data, dict):
+        verdicts = data.get("verdicts", [])
+        reviewer = data.get("reviewer", "claude-review")
+    else:
+        verdicts = data if isinstance(data, list) else []
+        reviewer = "claude-review"
 
     ts = time.strftime("%Y-%m-%dT%H:%M:%S")
     run = f"run:escalation-review:{time.strftime('%Y%m%dT%H%M%S')}"
