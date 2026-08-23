@@ -1,6 +1,10 @@
 # PLAN — use the cores, part 2: the whole estate
 
-**Status: PROPOSED, 2026-08-23 evening. Plan only — no code has been changed for this document.**
+**Status: IMPLEMENTED, 2026-08-23. See §7 — and read it before re-proposing anything here, because
+the plan's own rule ("nothing gets a fan-out on a hunch") killed BOTH of its headline items once they
+were measured. §2.1 was projected at 50-70 s and is worth ~3 s. §2.2 turned out to be protected by its
+own serial control flow, not merely paced. What shipped: the Chrome profiles out of git, a pull refusal,
+and a stopwatch where a fan-out was planned.**
 Brad's objective, stated plainly: *everything that can use up to 8 cores should, and "everything" means
 the estate, not the one chain the first plan scoped.* This document is the full map, every process
 classified, with the number that justifies each verdict where one exists and an honest "unmeasured"
@@ -282,3 +286,84 @@ coverage decision, not a cores decision.
 Each is its own commit with before/after wall time in the message, a `-Sequential` path, records
 asserted by name, markers demanded where they exist, and a fixture proven to fire — the same
 discipline as part 1, because the three regressions part 1 found were all caught by exactly that.
+
+---
+
+## 7. IMPLEMENTED, 2026-08-23 — and three of this plan's own proposals died on measurement
+
+The plan's §2.4 rule was "nothing gets a fan-out on a hunch". Applied to the plan itself, it killed
+**§2.1 and §2.2** — the two headline items — and confirmed §3.4 and §4.1. That is the rule working,
+not the plan failing, but it should be read before anyone re-proposes either.
+
+### Shipped
+
+| § | what | commit |
+|---|---|---|
+| 4.1 | Chrome profiles out of git — 4,552 files, 680 MB untracked, working copy intact | `26b4cfd4` |
+| 3.4 | `check-ad-cycles` refuses to pull without `-ForcePull`, names `capture-run` | `9f938a5b` |
+| 2.1 | `publish-deals-page` reports per-child wall time — **instead of** the fan-out | `9f938a5b` |
+
+### §2.1 — RETRACTED. The projection was 50–70 s; the truth is ~3 s
+
+Timed standalone before writing any fan-out:
+
+```
+pre-build    audit-price-mode 1.2  audit-links 0.9  audit-name-drift 7.5     =  9.6 s
+post-build   store-coverage 0.6    match-soundness 1.9  category-coverage 0.4 =  2.9 s
+builders     build-deals-page 14.7   build-trend-pages 8.4   build-trend-index 0.8
+```
+
+Nine of the eleven children are **~36 s of a 167 s block**. Both fan-outs together save about
+**three seconds**. The remaining ~130 s is Ghost — the board upsert, `publish-store-guide`,
+`publish-trend-pages` — network, rate-limited, and serial on purpose (§3.5).
+
+**What shipped instead:** every child times itself and the run prints one summary line. That is the
+only way to get a number for the two publishers, which cannot be timed by hand without performing a
+real Ghost upsert. Decide again when tomorrow's run reports them.
+
+*Detail worth keeping:* the three post-build gates and both publishers are timed with a bare
+stopwatch pair, not a scriptblock wrapper, because each reads `$LASTEXITCODE` on the very next line
+and they are **hard publish gates**. That a stopwatch stop plus a hashtable assignment between the
+call and the read does not clobber `$LASTEXITCODE` was **proved** (rc=2 survives), not assumed —
+the audit-ff-carry lesson is precisely about assuming here.
+
+### §2.2 — RETRACTED, and for a better reason than the vendor caveat
+
+The plan called Family Fare's 94-term loop "the largest compute-side win left" (~100 s → ~30 s) and
+worried only about the request rate. Reading the loop, the request rate is the *lesser* problem.
+The sweep is adaptive and order-dependent in four ways at once:
+
+- `$bought` against `$script:TermBudget` — a request budget spent **in order**
+- `Over-Cap` — a wall-clock cap checked **between** terms
+- `$streak` — 15 consecutive empties triggers a 45 s cooldown
+- `$emptyRun` — N consecutive empties **aborts the whole pass**: *"Continuing would burn time for nothing and push the limit out further"*
+- `$lastSuccessRot = $i` — the cursor advances past the **contiguous** stretch actually bought
+
+Concurrency destroys every one of those. "Consecutive empties" is a serial concept; a look-ahead has
+already spent the requests the abort exists to save; and `$lastSuccessRot` stops meaning anything
+once terms complete out of order — which would move the shared rotation cursor wrongly, the one file
+whose corruption "silently loses a whole quarter of coverage".
+
+**The throttle protection *is* the serial control flow.** This is not `discover-hyvee` (a flat list
+of independent searches with no back-pressure). Leave it alone. If Family Fare's ~100 s ever has to
+come down, the lever is the term budget in capture policy — a coverage decision — not concurrency.
+
+### §2.4 — stopwatches taken
+
+| | measured | verdict |
+|---|---|---|
+| `guards.ps1` | **31.3 s** | over the plan's 30 s bar, but it is THE hard publish gate and 72 checks over one in-memory board. Sharding means N processes re-parsing a ~4 MB board for maybe 15 s. **Not worth the stakes**; revisit only if it grows |
+| `audit-search-links` | **38.5 s** | weekly, network-bound, under the plan's 60 s bar. No |
+| `top5-weekly` | **12.2 s** | the 35 s ship-path gap was not all this. No |
+| `build-sale-windows` | **0.65 s** | the 32 s gap was something else entirely. No |
+
+### Where this leaves the daily wall clock
+
+Unchanged from §5, and the reason is now measured rather than argued: **the remaining serial work is
+either network to a third party, a hard gate, or back-pressure that exists to stop a bot wall.** The
+compute side is done. §5's floor of ~15 minutes, all of it browser pacing, stands.
+
+The one thing that will still move it: `publish-deals-page`'s timing line, tomorrow, telling us what
+the ~130 s of Ghost actually splits into. If `publish-trend-pages` turns out to be most of it, trend
+pages are SEO furniture and could move off the critical path entirely — which is a scheduling change,
+not a concurrency one.
