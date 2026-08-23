@@ -50,17 +50,17 @@
     "cost_lines":  [
                        "Beef Flank/Sirloin Steak, 3 1/2 lb sirloin or flank steak: ~$30.87. \u003cstrong\u003eBuy 4 lbs: $35.27.\u003c/strong\u003e",
                        "Sweet Potatoes, 9 1/4 sweet potatoes, about 1/2 lb each: ~$6.79. \u003cstrong\u003eBuy 5 lbs: $7.40.\u003c/strong\u003e",
-                       "Broccolini, 2 1/4 bunches (about 18 oz): ~$10.19. \u003cstrong\u003eBuy 3 bunches: $11.97.\u003c/strong\u003e",
+                       "Broccolini, 18 oz: ~$10.19. \u003cstrong\u003eBuy 3 bunches: $11.97.\u003c/strong\u003e",
                        "Olive Oil, 7/8 cup extra virgin, divided: ~$2.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Red Wine Vinegar, 5 3/4 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Fresh Cilantro, 1/2 cup plus 1 1/2 tbsp, stems and leaves: ~$0.16. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1/2 cup plus 1 1/2 tbsp, stems and leaves: ~$0.31. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Fresh Parsley, 1/2 cup plus 1 1/2 tbsp, stems and leaves: ~$1.16. \u003cstrong\u003eBuy 1 bunch: $1.93.\u003c/strong\u003e",
                        "Garlic, 4 3/4 cloves, minced: ~$0.19. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Fresh Oregano, 1 1/4 tbsp, leaves stripped: ~$0.14. \u003cstrong\u003eBuy 1 0.75oz clamshell: $3.00.\u003c/strong\u003e",
+                       "Fresh Oregano, 1 1/4 tbsp, leaves stripped: ~$0.13. \u003cstrong\u003eBuy 1 0.75oz clamshell: $2.67.\u003c/strong\u003e",
                        "Pantry seasonings (red pepper flakes, salt): ~$0.04. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $51.95 across 14 servings, so roughly $3.71 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $63.49 across 14 servings, roughly $4.54 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $71.81. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $52.09 across 14 servings, so roughly $3.72 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $64.05 across 14 servings, roughly $4.58 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $72.37. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a chimichurri steak dinner that most people only order out. The steak and the sweet potatoes carry the plate, and the green sauce is what makes it taste like more than the sum of its parts.",
     "shop_smart":  [
@@ -83,14 +83,14 @@
     "portion_html":  "Set the loaded sheet pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total, steak and vegetables and sauce together. Divide that number by 14 and give each container that exact weight, aiming for an even share of steak, sweet potato, and broccolini. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://fedandfit.com/chimichurri-beef-sheet-pan-dinner/\" target=\"_blank\" rel=\"noopener\"\u003efedandfit.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  51.95,
-    "cost_batch_true":  63.49,
-    "cost_per_serving":  3.71,
-    "cost_per_serving_true":  4.54,
+    "cost_batch":  52.09,
+    "cost_batch_true":  64.05,
+    "cost_per_serving":  3.72,
+    "cost_per_serving_true":  4.58,
     "cost_pantry_add":  8.32,
-    "cost_first_run":  71.81,
+    "cost_first_run":  72.37,
     "scaler":  {
-                   "cost":  "63.49",
+                   "cost":  "64.05",
                    "ing":  [
                                {
                                    "item":  "Beef Flank/Sirloin Steak",

@@ -58,16 +58,16 @@
                        "Garlic, 7 cloves garlic, minced: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Pepper Jack Cheese, 11 1/4 oz pepper jack cheese, shredded (about 2 3/4 cups): ~$2.63. \u003cstrong\u003eBuy 2 8oz blocks: $3.74.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 11 1/4 oz shredded cheddar cheese (about 2 3/4 cups): ~$1.71. \u003cstrong\u003eBuy 2 8oz bags: $2.44.\u003c/strong\u003e",
-                       "Green Onions, 6 green onions, finely sliced: ~$0.79. \u003cstrong\u003eBuy 1 bunch: $0.79.\u003c/strong\u003e",
-                       "Fresh Cilantro, 1/3 cup fresh cilantro, finely chopped: ~$0.08. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Green Onions, 6 green onions, finely sliced: ~$1.07. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1/3 cup fresh cilantro, finely chopped: ~$0.16. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Jalapeno, 3 jalapenos, seeded, deveined, and finely chopped: ~$0.13. \u003cstrong\u003eBuy 1 lb: $1.43.\u003c/strong\u003e",
                        "Eggs, 17 large eggs: ~$2.30. \u003cstrong\u003eBuy 2 dozens: $3.25.\u003c/strong\u003e",
                        "Half and Half, 4 1/4 cups half and half: ~$2.68. \u003cstrong\u003eBuy 3 pints: $3.73.\u003c/strong\u003e",
                        "Corn Tortillas, 13 corn tortillas, quartered: ~$0.73. \u003cstrong\u003eBuy 1 80ct pack: $4.49.\u003c/strong\u003e",
                        "Pantry seasonings (hot sauce, black pepper): ~$0.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $17.85 across 14 servings, so roughly $1.28 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $30.19 across 14 servings, roughly $2.16 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.87. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $18.21 across 14 servings, so roughly $1.30 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.36 across 14 servings, roughly $2.24 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.04. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a baked chorizo and egg casserole that cuts into fourteen square, protein-heavy dinners. The chorizo, cheese, and eggs carry it; the peppers, onion, and herbs do the bright work, and the whole thing costs less than the drive-through breakfast it out-eats.",
     "shop_smart":  [
@@ -90,14 +90,14 @@
     "portion_html":  "Set the baked dish on your scale and subtract the empty weight you wrote down in Step 1 to get the total. Divide that number by 14 and scoop that exact weight into each container. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.thegraciouswife.com/mexican-breakfast-casserole/\" target=\"_blank\" rel=\"noopener\"\u003ethegraciouswife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A low-carb, high-protein dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  17.85,
-    "cost_batch_true":  30.19,
-    "cost_per_serving":  1.28,
-    "cost_per_serving_true":  2.16,
+    "cost_batch":  18.21,
+    "cost_batch_true":  31.36,
+    "cost_per_serving":  1.3,
+    "cost_per_serving_true":  2.24,
     "cost_pantry_add":  3.68,
-    "cost_first_run":  33.87,
+    "cost_first_run":  35.04,
     "scaler":  {
-                   "cost":  "30.19",
+                   "cost":  "31.36",
                    "ing":  [
                                {
                                    "item":  "Pork Chorizo",
