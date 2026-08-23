@@ -26,6 +26,15 @@ RULES (non-negotiable, learned the hard way):
    Also: the printed measure and the grams must AGREE. "1 large egg (120 g)" and turkey bacon labelled
    "4 oz" carrying 396 g are both live defects on the engine worklist; the grams drive cost and macros, so
    a disagreement means one of the two numbers is wrong and BOTH need checking, not a relabel.
+0. MAPPING AN INGREDIENT DOES NOT MEAN OMAHA CARRIES IT. A successful map says "this food has a commodity
+   id", never "a store stocks this food". On 2026-08-22 doubanjiang, Korean rice cakes and ground sumac all
+   mapped cleanly to real ids and reached live paid pages; no Omaha store has been shown to stock the first
+   two. You are NOT the carriage gate and you must not act as one - hunt-run.ps1 now derives the pricing
+   worklist from the mapped bids' carriage itself and unions it with the absent terms you report, so your
+   list can only ADD work, never remove it. Report what you could not map, honestly, and let the gate run.
+   Note also: `rice-cakes` is a live commodity priced from Quaker snack cakes. Mapping tteok onto it would
+   be CARRIED at a snack price - a mapping defect no carriage check can catch for you.
+
 1. EVIDENCE GATE for every mapping: the board id must cover the SAME product concept at the same price
    class. Standing rejections that bind you as precedent: red onion is not onions (variety pricing),
    cherry tomatoes are not tomatoes, green-pepper pricing is not red-bell-pepper, fresh is not frozen or

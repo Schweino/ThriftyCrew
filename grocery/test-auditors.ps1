@@ -3700,7 +3700,11 @@ else {
   $r = PSChild $fcp -SelfTest | Out-String
   # The count is pinned for the reason every count here is pinned: a case that silently stops running never
   # errors, so the tally is the only thing that notices it went missing.
-  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 16/16 pass') {
+  # 16 -> 19 (2026-08-23): a2a34ae3 "carriage gate phase 1b" added three cases to
+  # feed-covers-published.ps1 and did not move this pin, so the child passed 19/19 while the wrapper
+  # failed it. The pin is still pinned ON PURPOSE - a case that silently stops running never errors,
+  # so the tally is the only thing that notices - it just has to be MOVED when cases are added.
+  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 19/19 pass') {
     Ok 'feed-covers-published -SelfTest passes with its founding-bug fixtures armed (a published slug the feed does not carry, a bid in ingredients but not pricing_inputs, a present-but-zero-priced entry, and the allowlist pardoning only its own bid)'
   } else { Bad ('feed-covers-published -SelfTest failed or lost its founding-bug fixtures: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 

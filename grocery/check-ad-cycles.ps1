@@ -93,6 +93,93 @@ try {
 . (Join-Path $root 'alert-lib.ps1')
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native / Invoke-NativeScript: the ONLY safe redirect under EAP=Stop
 
+# ---- THE CADENCE GATE, WHICH WAS CALLED EIGHT TIMES AND NEVER EXISTED (2026-08-23) --------------------
+# Test-CadenceDue / Set-CadenceRan / Get-CadenceLast were designed, documented, given a self-test
+# (test-cadence.ps1) and asserted in test-auditors - and never written. `git log -S "function
+# Test-CadenceDue"` returns NOTHING: the string was never in this file. Every call site below therefore
+# threw CommandNotFoundException, the enclosing try/catch logged it, and the gated audit was SKIPPED:
+# the semantic sweep, aisle-test, matcher-parity and precedence-ladders. The feature whose own log line
+# reads "A SKIP IS NOT A PASS" was, in practice, skipping all four of them.
+#
+# It stayed invisible because both of its watchers failed in the same direction. test-cadence.ps1
+# extracts these three functions out of this file by regex and reports "could not extract the helpers",
+# which reads like a broken test rather than a missing feature; and test-auditors' second assertion
+# reports "the cadence stamp lost round-trip precision", which names a bug that cannot exist in code
+# that does not exist. Two red lines, neither of them saying "this function is missing."
+#
+# Implemented here, in this file and in this order, because test-cadence.ps1 pulls them out with
+# a regex over THIS FILE that requires the three definitions contiguous and in this exact order
+# (Test-CadenceDue, then Set-CadenceRan, then Get-CadenceLast, each closing on a brace at column 0).
+# It tests the SHIPPED code rather than a copy, which is the point - so do not reorder or separate
+# them, and do not indent their closing braces.
+# rather than a copy, so the definitions have to stay contiguous and in that order.
+$script:CadenceRoot = Split-Path $root -Parent          # repo root: InputGlobs are repo-relative
+$script:CadenceDir  = Join-Path $OutDir 'cadence'
+if (-not (Test-Path $script:CadenceDir)) { New-Item -ItemType Directory -Path $script:CadenceDir -Force | Out-Null }
+function Test-CadenceDue {
+  <#
+    Is this check due to run? DUE unless BOTH the clock and its inputs say otherwise.
+
+    A SKIP IS NOT A PASS. Every uncertain answer here resolves to DUE: no stamp, an
+    unreadable stamp, a stamp we cannot parse, a glob we cannot expand. The cost of a
+    wrong DUE is seconds of CPU; the cost of a wrong SKIP is a guard that silently stops
+    watching, which is the one failure this estate cannot tolerate.
+
+    AN INPUT EDIT IS DUE TODAY, not in EveryDays. A commit that blinds a guard has to be
+    caught the same day - otherwise the cadence trades minutes for exactly the blindness
+    the guard culture exists to prevent.
+  #>
+  param(
+    [Parameter(Mandatory)][string]$Name,
+    [Parameter(Mandatory)][int]$EveryDays,
+    [string[]]$InputGlobs = @()
+  )
+  $stampF = Join-Path $script:CadenceDir ("cadence-" + $Name + ".txt")
+  if (-not (Test-Path $stampF)) { return $true }                 # never run -> DUE
+  $last = $null
+  try {
+    $raw = (Get-Content $stampF -Raw -ErrorAction Stop).Trim()
+    if ($raw) { $last = [datetime]::Parse($raw, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::RoundtripKind) }
+  } catch { return $true }                                        # unreadable -> DUE (fails OPEN)
+  if ($null -eq $last) { return $true }
+  if (((Get-Date) - $last).TotalDays -ge $EveryDays) { return $true }   # the clock alone
+  # THE INPUT PATH. Globs are resolved against $script:CadenceRoot so callers can name
+  # repo-relative paths ('grocery/commodities.json') and the self-test can use a sandbox.
+  foreach ($g in @($InputGlobs)) {
+    if (-not $g) { continue }
+    $full = if ([IO.Path]::IsPathRooted($g)) { $g } else { Join-Path $script:CadenceRoot $g }
+    $hits = @()
+    try { $hits = @(Get-ChildItem -Path $full -File -ErrorAction SilentlyContinue) } catch { return $true }
+    foreach ($h in $hits) { if ($h.LastWriteTime -gt $last) { return $true } }
+  }
+  return $false
+}
+function Set-CadenceRan {
+  <#
+    Stamp this check as just-run. ToString('o') AND NOT 's' - the founding bug: 's'
+    truncates to the second, so an input written in the SAME second read as newer than
+    the stamp and every check was due forever. The cadence would have cost its full
+    runtime while looking like it worked. test-cadence.ps1 case 2 is what caught it.
+  #>
+  param([Parameter(Mandatory, Position = 0)][string]$Name)
+  try {
+    if (-not (Test-Path $script:CadenceDir)) { New-Item -ItemType Directory -Path $script:CadenceDir -Force | Out-Null }
+    Set-Content -Path (Join-Path $script:CadenceDir ("cadence-" + $Name + ".txt")) -Value ((Get-Date).ToString('o')) -Encoding ASCII
+  } catch { }   # a stamp we could not write means DUE next time, which is the safe direction
+}
+function Get-CadenceLast {
+  <# What the log prints next to a SKIP. 'never' for a check that has not run - never a fake date. #>
+  param([Parameter(Mandatory, Position = 0)][string]$Name)
+  $stampF = Join-Path $script:CadenceDir ("cadence-" + $Name + ".txt")
+  if (-not (Test-Path $stampF)) { return 'never' }
+  try {
+    $raw = (Get-Content $stampF -Raw -ErrorAction Stop).Trim()
+    if (-not $raw) { return 'never' }
+    return $raw
+  } catch { return 'never' }
+}
+
+
 # ---- BOUNDED CHILDREN, RUN ONE AT A TIME (2026-08-22) --------------------------------------------------
 # THE PARALLEL EXPERIMENT IS REVERTED, ON THE MEASUREMENT. Earlier today four advisory audits (coverage-gaps,
 # semantic, match-soundness, discover-hyvee) were launched side by side on the reasoning that none blocks a
@@ -1209,6 +1296,16 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         & powershell @srArgs | ForEach-Object { Log ('store-registry: ' + $_) }
         if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    store-registry drift: a hardcoded store list disagrees with stores.json - fix the script or document the subset in stores.json allowed_subsets' }
                   } catch { Log ('store-registry guard threw: ' + $_.Exception.Message) }
+        Set-CadenceRan 'store-registry'
+      }
+      # ---- commodity-dupes: ITS OWN CADENCE BLOCK, NOT A PASSENGER IN store-registry's (fixed 2026-08-23).
+      # This check used to live INSIDE the else branch above (proved with the parser: its if-statement spanned
+      # 1218-1226 entirely within store-registry's 1203-1228), and the two Set-CadenceRan calls were crossed -
+      # store-registry was stamped inside commodity-dupes' branch and vice versa. Harmless only for as long as
+      # the cadence helpers did not exist and the whole block threw. The moment they work, it becomes exactly
+      # the failure test-cadence.ps1 exists to prevent: whenever store-registry skipped on the clock,
+      # commodity-dupes would not run AT ALL - not even when its own inputs moved - because the decision was
+      # not its own. A SKIP IS NOT A PASS, and a skip decided by a different check's inputs is not even a skip.
       # Advisory: the same food priced under two ids lets the two prices DISAGREE while every per-file check
       # reads green - bread-crumbs vs breadcrumbs sat 2.9x apart across the weekly and recipe boards until
       # Brad spotted it by eye on 2026-08-15 (two recipes paid $0.218/oz against a live $0.0743/oz). The id
@@ -1222,9 +1319,33 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-commodity-dupes.ps1') | ForEach-Object { Log ('commodity-dupes: ' + $_) }
         if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    commodity-dupes: the same food may be priced under two ids (see out\commodity-dupes.json) - merge the real ones, allowlist the reviewed ones' }
       } catch { Log ('commodity-dupes audit threw: ' + $_.Exception.Message) }
-        Set-CadenceRan 'store-registry'
-      }
         Set-CadenceRan 'commodity-dupes'
+      }
+      # ---- SEARCH-TERM HONESTY (wired 2026-08-23 - it was built 2026-08-22 and called by NOTHING).
+      # A NOT-CARRIED verdict is only worth the search behind it. commodity-search.json searched
+      # doubanjiang as "chili bean sauce", which returns 237 rows across three stores - every one a
+      # chili BEAN product or hot dog chili sauce, and not one row in the whole corpus containing
+      # "doubanjiang". The search looked healthy from every angle the estate could see: rows came
+      # back, stores answered, nothing errored. Three paid recipes shipped behind it. The auditor
+      # that catches exactly this existed for a day with no caller, which is the same as not having
+      # it - the script-census orphan check is what surfaced that.
+      # REVIEW, NEVER A GATE: a suspect term needs a human to read it and re-word the search, and
+      # holding the board would not make that happen faster. Exits 0 either way; the finding is in
+      # its SEARCHTERMS lines, so the summary is driven off those, not off an exit code.
+      # CADENCE (7d): it reads the capture corpus, which moves daily, so in practice it runs when
+      # the terms file or a capture changes - which is precisely when a term can go wrong.
+      if (-not (Test-CadenceDue -Name 'search-terms' -EveryDays 7 -InputGlobs @('grocery/commodity-search.json','grocery/out/regular/*.json'))) {
+        Log ('search-terms: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'search-terms') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
+      } else {
+        try {
+          $stOut = (Invoke-NativeScript (Join-Path $root 'audit-search-terms.ps1')).Output
+          foreach ($l in @($stOut)) { Log ('search-terms: ' + [string]$l) }
+          $stSus = @($stOut | Where-Object { $_ -match 'appears NOWHERE in the corpus' })
+          $stDrift = @($stOut | Where-Object { $_ -match 'a term/matcher bug' })
+          if ($stSus.Count) { $summary += 'REVIEW    search-terms: a commodity''s own search term returns rows while the food it names appears NOWHERE in the corpus - that term cannot support a NOT-CARRIED verdict (the doubanjiang class). Re-word it in commodity-search.json and re-capture before promoting any absence.' }
+          if ($stDrift.Count) { $summary += 'REVIEW    search-terms: a term never returns its food although the food IS in the corpus under another key - a term/matcher bug, not a carriage question.' }
+        } catch { Log ('search-terms audit threw: ' + $_.Exception.Message) }
+        Set-CadenceRan 'search-terms'
       }
       # ---- ARRIVALS DESK (REVIEW QUEUE, NEVER A GATE). The 47-of-99 bug class - a commodity's include regex
       # matching a product that is NOT the commodity - is invisible to every hard invariant above it: those

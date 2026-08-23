@@ -14,6 +14,22 @@ seven have been CHECKED and none do. Measured on the 542 live recipes: requiring
 ingredient leaves 1 survivor; requiring at least one leaves all 542. achiote-paste is stocked at exactly 1 of
 7 stores and is on the live board today.
 
+EXISTENCE IS NOT CARRIAGE. A commodity id, an ingredient-map row, a label price and a search term all exist
+without any store stocking the food. On 2026-08-22 four live paid recipes were found whose defining
+ingredient no Omaha store has ever been shown to carry; every one of them MAPPED CLEANLY, which is exactly
+why nobody was asked to price them. Carriage is proven by a store row you looked at, or it is not proven.
+
+WHEN YOU SETTLE A TERM, PROMOTE IT. `ingredient-queue.ps1 -Promote -Term '<t>' -Bid '<commodity-id>'`
+(or `-Bid 'item:<Item Name>'` when the ingredient has no id) writes the verdict into grocery\carriage.json,
+where the cost engine and the publish gate actually read it. A verdict that stays in the run dies with the
+run: the queue is per-run and keyed by TERM, the gates are permanent and keyed by BID. PENDING never
+promotes, and the script refuses it.
+
+BEFORE YOU CALL ANYTHING NOT-CARRIED, CHECK THE TERM. `grocery\audit-search-terms.ps1` lists commodities whose
+search term returns rows but never the food it names - the term is wrong and its silence means nothing. It
+catches doubanjiang ('chili bean sauce' -> Bush's chili beans) and mace-spice ('mace spice' -> Old Spice body
+wash). A term on that list cannot support an absence verdict; fix the term and re-capture first.
+
 UNCHECKED IS NEVER NOT-CARRIED. A bot wall, a timeout, a wrong-store session, or a store you did not reach
 leaves the ingredient PENDING. Aldi and the Chrome extension both threw bot walls on 2026-08-14, so this is
 not hypothetical. Recording `blocked` or `error` is the correct, honest outcome; recording `not-carried`
