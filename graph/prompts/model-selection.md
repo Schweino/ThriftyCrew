@@ -1544,3 +1544,89 @@ The reviewer is a language model and so is the thing it graded; a shared blind s
 look exactly like agreement. A human spot-check of a dozen rows would settle it and is the
 cheapest outstanding item in this plan. And 0 of 117 bounds the rate at 3.2% — not the
 same as proving it is zero.
+
+## Addendum 2026-08-23 (fifth) — the challenge that passed its own kill test
+
+The re-scope pointed the remaining phases at the MATCH side, where the 37% false rate and
+the 326-lead queue are. Two of them are now built.
+
+### 1. §3.3, and a bar set before the run
+
+PLAN-local-matching §3.3 wrote its own kill test: *"run on the 375 llm_confirmed and the
+known false matches; if survival does not separate them, drop it."* The bar (30 points)
+went into `adversarial_probe.py` before the run.
+
+| | survived the challenge |
+|---|---|
+| Claude-CONFIRMED matches (n=375) | **88.5%** (332) |
+| adjudicated-WRONG matches (n=191) | **2.1%** (4) |
+| **separation** | **86.4 points against a bar of 30** |
+
+It kills 187 of 191 known false matches. And it is better than that: of the 4 it let
+through, three are `ARM & HAMMER ... Liquid Laundry Detergent` against `laundry-detergent`
+and one is literally `Mandarin Oranges` against `mandarin-oranges`. Those are blocklisted
+for NON-identity reasons — the same class as the ground-cloves price defect the hardeval
+report already names as a pessimistic denominator. The challenge was right; the eval is
+what is wrong.
+
+**It ships as a signal and never as a verdict.** 42 of 375 real matches died, so
+auto-rejecting on it would cost one true cell in nine. The status is identical either way,
+`None` means the challenge could not run and must be read as unknown rather than failed,
+and nothing in the path can price anything. Reading the 42: most are defensible
+distinctions a reviewer decided the other way — Cannellini against red `kidney-beans`,
+apple fritters against `donuts`, Hand & Face wipes against `baby-wipes` — and at least one
+is a hallucination, claiming Paul Masson is vodka.
+
+**One prompt iteration, on the record.** The first smoke killed 6 of 6 CONFIRMED matches
+by treating the absence of a qualifier as evidence against: `Breakfast Best Heat 'N Serve
+Sausage Links` rejected because the commodity reads `Breakfast Sausage (pork)` and the
+listing does not say pork. Two principled fixes made once — say outright that absence is
+not a case against, and show the challenge the board's CONFIRMED examples and not only its
+known-wrong ones, without which it argues from a general-knowledge notion of the commodity
+and wins every time. Smoke went 0% → 83% on confirmed with known-wrong still at 0%, and
+the full run was then taken as the answer. A third iteration would have been fitting the
+prompt to the test.
+
+### 2. §5, and what the reviewer was not being shown
+
+The packet carried include/exclude patterns, confirmed siblings and known-wrong names. It
+did NOT carry the rejections a REVIEWER had already made for that commodity — the largest
+body of relevant precedent there is, and exactly what prompt v5 hands the local model. **The
+reviewer was being shown less of this board's own history than the 27B was.**
+
+The deciding words are now computed once instead of re-derived by eye, and sizes are
+surfaced on both sides because the word regex could not see them at all:
+
+    commodity says ['2 l'] | listing says ['2.1 qt']   <- same bottle, CONFIRM
+    commodity says ['2 l'] | listing says ['35 pk']    <- not a 2 L, REJECT
+
+`Zero-Sugar Soda (2 L)` tokenises to zero/sugar/soda — "2" and "l" are one character each
+and vanish — and "2 L" is the entire question for the 40 listings at the top of the queue.
+Sizes are shown and NOT converted: '2 L' vs '2.1 Qt' is the same bottle and '2 L' vs '12 fl
+oz' is not, and guessing at that would put a wrong answer in front of a reviewer wearing
+the authority of a computed field.
+
+Ordered easiest first by §3.3 survival — survivors, then unruled, then challenge failures,
+which is where a reviewer's attention pays. Never by either model's raw score.
+
+### 3. §4 collapses, and that is the finding
+
+§4 was to "combine the two votes". Nothing is left to combine:
+
+- helper NO + LLM NO **cannot occur** — the filter rejects before the model, so a helper NO
+  never reaches the LLM to agree with;
+- helper YES + LLM YES is **built without the helper**, because helper agreement was
+  measured to add nothing;
+- helper YES + LLM NO is **retired** — that was the audit, and it found 1 error in 69.
+
+One of the two votes carries no information on the match side and is redundant on the
+reject side. The phase is closed rather than deferred.
+
+### 4. And a paragraph this record withdraws
+
+The re-scope argued that the filter should be stopped from overruling an `escalated`
+verdict. Measured afterwards: of 348 pairs the model has declined to settle, the filter
+would silence **4 in total**, at most two of them wrongly, all already in the review queue.
+It is also not implementable as stated — the filter runs before the model, so there is no
+verdict to overrule at the moment it decides. Left alone, and the paragraph was larger than
+the thing it described.

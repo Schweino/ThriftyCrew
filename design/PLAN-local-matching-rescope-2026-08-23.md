@@ -58,19 +58,38 @@ on the training shuffle, against 9 for the stock model.
 
 ## 3. Phase by phase, as it should now stand
 
-### §3.3 adversarial second pass — PROMOTED to the front of phase 4
+### §3.3 adversarial second pass — PROMOTED, TESTED, SHIPPED (2026-08-23)
 Re-ask every local MATCH with the instruction to argue NO_MATCH. This was third in a
 list of three; it is now the single highest-value local change, because it attacks the
 37% false-match rate and the 326-lead queue at once. The plan's own pre-registered test
-stands and should be honoured: run it on the 375 `llm_confirmed` and the known false
-matches, and **if survival does not separate them, drop it** rather than shipping it.
+was honoured, with the bar written into the code before the run:
 
-### §5 the pre-drafted packet — PROMOTED to the highest-value phase overall
+| | survived the challenge |
+|---|---|
+| Claude-CONFIRMED matches (n=375) | **88.5%** |
+| adjudicated-WRONG matches (n=191) | **2.1%** |
+| separation | **86.4 points against a bar of 30** |
+
+Shipped as a SIGNAL and never a verdict: 42 of 375 real matches died, so auto-rejecting on
+it would cost one true cell in nine. Wired into the nightly; it is the packet's ordering key.
+
+### §5 the pre-drafted packet — PROMOTED, BUILT (2026-08-23)
 326 leads are waiting. Every token saved per ruling multiplies by 326 and by every night
-after. This is now the plan's main lever on its own stated goal, ahead of everything in
-§3. One amendment: **do not order the packet by helper score.** Ordering "easiest first"
-by a signal that is 68-of-69 wrong at the confident end would put the most misleading
-rows on top.
+after, which is what made this the plan's main lever on its own stated goal. Built:
+
+- the reviewer now sees the **adjudicated rejections** for the commodity — the largest body
+  of relevant precedent there is, and the one thing the local model was shown and the
+  reviewer was not;
+- the **deciding words** are computed once (`commodity_words_missing`,
+  `not_in_any_confirmed`, `shared_with_rejected`, `include_hit`) rather than re-derived by
+  eye per question;
+- **sizes** are surfaced on both sides, because the word regex could not see them at all:
+  `Zero-Sugar Soda (2 L)` tokenises to zero/sugar/soda and "2 L" is the entire question;
+- **`--limit`**, because batch size is itself a lever and a packet nobody finishes teaches
+  nothing about how many one session clears;
+- ordered **easiest first by §3.3 survival**, and by neither model's raw score — the local
+  model's confidence does not separate its true matches from its false ones, and the
+  helper's high end is 68-of-69 wrong. Both would put the most misleading rows on top.
 
 ### §3.2 memory by meaning — KEEP, unchanged priority
 The bench bounds its value: priors move cold-start 0.79 → 0.83, so §3.2 must beat 0.83
@@ -81,15 +100,20 @@ be MATCH decisions rather than rejections.
 Apply it to the MATCH and UNSURE cases, not the reject side. There is nothing left to win
 on rejections.
 
-### §4 the routing table — REWRITE
-Three of its four rows rest on the helper carrying information it does not have.
+### §4 the routing table — COLLAPSES; there is nothing left to build
+It was to "combine the two votes". Row by row, against what is now measured:
 
-| helper | LLM | plan said | should now be |
+| helper | LLM | plan said | what it is |
 |---|---|---|---|
-| NO | NO | consensus | **unchanged.** Safe, and it can finally populate `authority.py`'s consensus tier. |
-| YES | YES | strong lead, §8 candidate | **re-derive without the helper.** The lead is LLM MATCH + survived §3.3 + no known-wrong neighbour. Helper agreement adds nothing. |
-| YES | NO | the false-reject audit set | **retire.** Measured: 1 error in 69. The audit is done. |
-| unclear | unclear | Claude packet | unchanged. |
+| NO | NO | consensus | **cannot occur.** The helper filter rejects BEFORE the model, so a helper NO never reaches the LLM to agree with. There is no surviving helper-NO band to combine. |
+| YES | YES | strong lead, §8 candidate | **built, without the helper.** The lead is an LLM MATCH that survived §3.3; helper agreement was measured to add nothing. |
+| YES | NO | the false-reject audit set | **retired.** Measured: 1 error in 69, and the audit is done. |
+| unclear | unclear | Claude packet | unchanged, and that is what the packet already does. |
+
+So §4 has no remaining content. One of the two votes carries no information on the match
+side and is redundant on the reject side, and "combining" it with the other is an operation
+with nothing to compute. What §4 was reaching for — a lead worth reading first — exists, and
+§3.3 supplies it. **This phase is closed, not deferred.**
 
 ### §7 loop hygiene — SPLIT
 Keep the 16 promotion-holds and 5 `held_for_human`; each is a real decision. **Demote the
@@ -123,10 +147,15 @@ So its defensible roles are narrow:
 - **Nothing on the positive side.** Not a match signal, not an auditor of the local
   model, not a packet-ordering key.
 
-**One change is worth making regardless of the rest of this document:** the filter should
-not overrule an `escalated` verdict. An escalation is the model saying *I am not sure*,
-and suppressing it is the helper's only unevidenced act. Rejecting where the model would
-also reject costs nothing and risks nothing; overruling its uncertainty does both.
+This document first argued that the filter should be stopped from overruling an `escalated`
+verdict, on the grounds that suppressing the model's uncertainty is its one unevidenced
+act. **Measured afterwards, and the concern was not worth the paragraph.** Of the 348 pairs
+the model has declined to settle, the filter would silence **4** — not 4 a night, 4 in
+total — and reading them, at most two look wrong (`Clancy's Spicy Margarita Chips` really
+are tortilla chips; `Whitewater Valley 18` reads like an egg carton). Both are already
+sitting in the review queue and will be seen anyway. It is also not implementable as
+stated: the filter runs BEFORE the model, so at the moment it decides there is no verdict
+to overrule. Left alone.
 
 ## 5. Newly open
 
@@ -142,8 +171,8 @@ also reject costs nothing and risks nothing; overruling its uncertainty does bot
 
 | phase | what | why it moved |
 |---|---|---|
-| 4 | **§5 packet** | 326 leads waiting; the plan's own goal, most directly |
-| 5 | **§3.3 adversarial pass** | attacks the 37% false-match rate, the measured risk |
+| 4 | ~~§5 packet~~ | **DONE 2026-08-23** - deciding words, sizes, ordered by §3.3 |
+| 5 | ~~§3.3 adversarial pass~~ | **DONE 2026-08-23** - 86.4 points of separation, signal only |
 | 6 | §3.2 memory, §3.4 thinking | unchanged in value, retargeted at matches |
 | 7 | §7 holds and `held_for_human` | real decisions; the re-ask is demoted out |
 | 8 | §8 shadow mode | only after its tier is re-derived |
