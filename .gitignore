@@ -87,7 +87,14 @@
 # produce. It is the only measurement anyone has ever made of whether that model's 3,315 unreviewed
 # rejections are correct, it cost a review session, and no script can recompute it.
 !/sidecar/out/rejection-audit.json
-/sidecar/**/__pycache__/
+# COMPILED BYTECODE, EVERYWHERE - NOT JUST sidecar (widened 2026-08-23). This rule covered
+# /sidecar/**/ only, so ten other __pycache__ directories sat unignored (graph\agentic, graph\eval,
+# graph\gold, graph\import, graph\learning, grocery\, meal-prep\pipeline\, ...) and two .pyc files
+# had already been committed from meal-prep\pipeline. A .pyc is regenerated on the next import, is
+# never source, and is architecture- and interpreter-version-specific - so a tracked one is a file
+# that can only ever be wrong for somebody else.
+__pycache__/
+*.pyc
 # The member-tool SOURCES and the build scripts that publish them. Same hole as lib\ and the interstitial:
 # these run on the live site, several are the only copy in existence, and none of them were versioned
 # while unrelated tool HTML at the same path was. Swept in 2026-08-01.

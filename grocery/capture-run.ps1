@@ -44,6 +44,9 @@ param(
   # check-ad-cycles: a suspect lane should cost a flag, not a revert.
   [int]$MaxParallel = 8,
   [switch]$Sequential,
+  # The stated way past the commit-size gate below. Named, because a guard that refuses without
+  # telling you how to proceed just gets worked around.
+  [switch]$ForceBigCommit,
   [switch]$WhatIf
 )
 
@@ -553,7 +556,15 @@ $inputPaths = @('grocery/out',
                 # tracked for the table to exist in the cloud at all: daily.yml clones clean and rebuilds
                 # graph.db from tracked JSON, so an untracked table means an empty index there.
                 # On a quiet day the emitter writes identical bytes and this stages nothing.
-                'graph/identity')
+                'graph/identity',
+                # THE AUDIT RECORD, WHICH WE WERE DROPPING WHILE KEEPING 191 MB OF COOKIES (2026-08-23).
+                # .gitignore:106 states the rule outright - "provenance JSONL ARE tracked: they are the
+                # evaluation record and the audit" - and then this list never staged them, so
+                # graph\provenance\2026-08-22.jsonl and -23 sat untracked and 08-21 sat modified and
+                # uncommitted. Exactly the last-mile failure the graph/identity note above describes,
+                # on the one family whose whole purpose is to be the durable record of what was decided
+                # and why. Same reason, same fix, one line later than it should have been.
+                'graph/provenance')
 $servedPaths = @('public',
                  'meal-prep/db/costed.json', 'meal-prep/db/cost-flags.txt',
                  'meal-prep/pipeline/v2-perserving.json', 'meal-prep/pipeline/v2-perserving.prev.json',
@@ -589,8 +600,99 @@ try {
   $alertSent = @(& git -C $repo status --porcelain --untracked-files=all -- 'grocery/alert-sent-*.txt' | Where-Object { $_ })
   if ($alertSent.Count) { & git -C $repo add -A -- 'grocery/alert-sent-*.txt' | ForEach-Object { Write-Output ("add: " + $_) } }
   & git -C $repo add -A -- $paths | ForEach-Object { Write-Output ("add: " + $_) }
+  # ---- HOW BIG IS THIS COMMIT? (2026-08-23) --------------------------------------------------------
+  # $inputPaths stages 'grocery/out' as a WHOLE DIRECTORY, so .gitignore is the only thing standing
+  # between a new subdirectory and the repo - and .gitignore is an exclusion list, which means
+  # anything new is tracked BY DEFAULT. On 2026-08-22 the browser driver started writing persistent
+  # Chrome profiles under out\ and d2a864c0 committed 4,388 files / 797,640 insertions in one go.
+  # Nobody noticed for two days. It became half the pack: 191 MB of ~380 MB, and the contents are the
+  # seeded store sessions - cookies, not data.
+  #
+  # A directory sweep cannot be made safe by listing what to exclude, because the next tool to write
+  # under out\ has not been written yet. So COUNT, and refuse a commit that does not look like a day
+  # of prices. The thresholds sit an order of magnitude from normal rather than being tuned: a normal
+  # daily commit adds a few hundred files and a few MB; the incident added 4,388.
+  #
+  # REFUSE, DO NOT AUTO-EXCLUDE. Guessing which of 400 new files were meant is the same class as
+  # rewriting a caller's argument - it hides the caller's bug. Unstage, name the directories by
+  # weight, and report it as a failed lane so the run says so out loud. -ForceBigCommit is the stated
+  # way through, because a guard that refuses without naming its escape hatch just gets worked around.
+  # A NEW TOP-LEVEL DIRECTORY UNDER out\ IS THE ACTUAL MECHANISM, AND IT NEEDS ITS OWN CHECK.
+  # The size gate below catches a big one. It does NOT catch a SMALL new directory - fifty files and
+  # two megabytes of somebody's cache - which is the same class arriving quietly, and browser-profiles
+  # started at exactly that size before it grew.
+  #
+  # WHY NOT AN ALLOWLIST, WHICH IS WHAT THE PLAN PROPOSED. PLAN-storage-hygiene §3.1 said to replace
+  # 'grocery/out' with prune-out.ps1's family list, "which already IS that enumeration". Measured
+  # 2026-08-23, it is not: prune-out lists 18 PRUNABLE DATED families and covers 37 of the 306 tracked
+  # top-level entries under out\. An allowlist built from it would silently stop tracking 269 things -
+  # _baseline.json, aisle-test.json, the alert .sig files, worklists\ - and the failure mode is the
+  # cloud clone quietly missing them, which is the exact shape the graph/identity note above warns of.
+  #
+  # So: keep the sweep, and refuse a directory that has never been tracked before. Precise, cannot drop
+  # anything that IS tracked, and it fires on the mechanism rather than on the symptom's size.
+  $newDirs = @()
+  $trackedTops = @{}
+  # HEAD, NOT THE INDEX. `git ls-files` reads the INDEX, and the add above has already staged these
+  # files - so ls-files would report the brand-new directory as tracked and this check could never
+  # fire. Caught by test-commit-size-gate's small-directory case, which is the whole reason that case
+  # exists: the guard looked right and was inert. ls-tree HEAD is "what was tracked BEFORE this run".
+  # NO 2>$null. This file sets EAP=Stop, and under it a redirect on a NATIVE child's stderr mints an
+  # ErrorRecord per line whose FIRST one is a TERMINATING error - the redirect CAUSES the failure it
+  # looks like it is preventing (native-lib.ps1 has the whole account, and this estate has paid for it
+  # three times: the 08-22 downstream, the 08-22 publish, the 08-23 07:00 push). I wrote it here anyway,
+  # today, while implementing a hygiene plan; test-native-stderr-eap caught it the same hour. Neither of
+  # these commands has any reason to write to stderr, and if one ever does, its line belongs in the
+  # transcript rather than killing the capture run.
+  foreach ($t in @(& git -C $repo ls-tree -r --name-only HEAD -- 'grocery/out')) {
+    $rest = $t.Substring('grocery/out/'.Length)
+    if ($rest -match '/') { $trackedTops[($rest -split '/')[0]] = $true }
+  }
+  foreach ($a in @(& git -C $repo diff --cached --name-only --diff-filter=A -- 'grocery/out' | Where-Object { $_ })) {
+    $rest = $a.Substring('grocery/out/'.Length)
+    if ($rest -match '/') {
+      $top = ($rest -split '/')[0]
+      if (-not $trackedTops.ContainsKey($top) -and $newDirs -notcontains $top) { $newDirs += $top }
+    }
+  }
+
+  $NEW_FILE_CAP = 300
+  $NEW_MB_CAP   = 25
+  $sizeGateRefused = $false
+  $added = @(& git -C $repo diff --cached --name-only --diff-filter=A | Where-Object { $_ })
+  $addedMB = 0.0
+  foreach ($f in $added) {
+    $fp = Join-Path $repo $f
+    if (Test-Path -LiteralPath $fp) { try { $addedMB += ((Get-Item -LiteralPath $fp).Length / 1MB) } catch { } }
+  }
+  $addedMB = [math]::Round($addedMB, 1)
+  if (-not $ForceBigCommit -and ($newDirs.Count -gt 0 -or $added.Count -gt $NEW_FILE_CAP -or $addedMB -gt $NEW_MB_CAP)) {
+    $sizeGateRefused = $true
+    Write-Warning ("commit REFUSED: this run would ADD {0} new file(s) totalling {1} MB (caps: {2} files / {3} MB)." -f $added.Count, $addedMB, $NEW_FILE_CAP, $NEW_MB_CAP)
+    if ($newDirs.Count) {
+      Write-Warning ("commit REFUSED: a directory under grocery\out has never been tracked before: " + ($newDirs -join ', '))
+      Write-Output  ('commit: REFUSED - NEW directory under grocery\out: ' + ($newDirs -join ', '))
+      Write-Output  '  browser-profiles arrived exactly this way on 2026-08-22 and became half the pack.'
+      Write-Output  '  If it does not belong in git, add it to .gitignore. If it does, -ForceBigCommit.'
+    }
+    Write-Output  'commit: REFUSED - that is not a day of prices. Top directories by new-file count:'
+    $byDir = @{}
+    foreach ($f in $added) { $d = Split-Path $f -Parent; if (-not $d) { $d = '(root)' }; $byDir[$d] = [int]$byDir[$d] + 1 }
+    foreach ($k in ($byDir.Keys | Sort-Object { -$byDir[$_] } | Select-Object -First 8)) {
+      Write-Output ("  {0,6}  {1}" -f $byDir[$k], $k)
+    }
+    Write-Output  '  Nothing was committed and the index has been reset - the working tree is untouched.'
+    Write-Output  '  If those files do NOT belong in git, add the family to .gitignore. If they do, re-run'
+    Write-Output  '  capture-run with -ForceBigCommit once you have read the list above.'
+    & git -C $repo reset -q -- $paths | Out-Null
+    $failed += 'commit-size-gate'
+  }
+
   & git -C $repo diff --cached --quiet
-  if ($LASTEXITCODE -eq 0) {
+  if ($sizeGateRefused) {
+    # already reported above; fall through without committing or pushing
+    $pushed = $false
+  } elseif ($LASTEXITCODE -eq 0) {
     Write-Output 'commit: no pipeline changes to commit'
     $pushed = $true      # nothing to ship is not a failed ship
   } else {

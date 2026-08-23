@@ -113,6 +113,48 @@ foreach ($fam in $script:DIR_FAMILIES) {
     foreach ($d in $prune) { Move-Item -Path $d.FullName -Destination (Join-Path $arch $d.Name) -Force -ErrorAction SilentlyContinue }
   }
 }
+# ---- THE ARCHIVE ITSELF NEEDS A CLOCK (2026-08-23) -------------------------------------------------
+# Everything above either deletes on a window or MOVES to outrchive\, and "archived, never deleted"
+# was the whole rule. Measured 2026-08-23: 91 MB, 57 files, oldest 2026-07-05, and NOTHING in the estate
+# reads it - the one other reference is test-precedence-ladders EXCLUDING it from a robocopy. Most of it
+# is not even a retained family: after-wm5-*, vettmp, scratch-out, one-off experiment output archived
+# once and forgotten.
+#
+# "Never" is not a retention policy, it is the absence of one, and it is the same reasoning error in the
+# other direction from the one this file exists to fix. So the archive gets the same days/min shape as
+# every other family - a QUARTER, matching capture-policy's QuarterDays, which is the longest window
+# anything in this estate legitimately looks back over. min = 5 so a quiet archive never erodes to
+# nothing, exactly as the file families above.
+#
+# DELETED here, not moved: this IS the place things get moved to. There is nowhere further to go, and a
+# second archive-of-the-archive would just restate the problem one directory deeper.
+$ARCHIVE_DAYS = 90; $ARCHIVE_MIN = 5
+$archDir = Join-Path $OutDir 'archive'
+if (Test-Path $archDir) {
+  $archFiles = @(Get-ChildItem $archDir -File -ErrorAction SilentlyContinue)
+  if ($archFiles.Count) {
+    $prune = @(Get-PruneList $archFiles $today $ARCHIVE_DAYS $ARCHIVE_MIN)
+    if ($prune.Count) {
+      $mb = [math]::Round((($prune | Measure-Object Length -Sum).Sum) / 1MB, 1)
+      $totalFiles += $prune.Count; $totalMB += $mb
+      Write-Output ("  {0,-38} prune {1,3} of {2,3} archived file(s), {3,8} MB  (keep {4}d / min {5})" -f 'archive\*', $prune.Count, $archFiles.Count, $mb, $ARCHIVE_DAYS, $ARCHIVE_MIN)
+      if ($Apply) { $prune | Remove-Item -Force }
+    }
+  }
+  # Session DIRECTORIES moved here by DIR_FAMILIES above age out on the same clock.
+  $archDirs = @(Get-ChildItem $archDir -Directory -ErrorAction SilentlyContinue)
+  if ($archDirs.Count) {
+    $pruneD = @(Get-PruneList $archDirs $today $ARCHIVE_DAYS $ARCHIVE_MIN)
+    if ($pruneD.Count) {
+      $mbD = 0.0
+      foreach ($d in $pruneD) { $mbD += [math]::Round(((Get-ChildItem $d.FullName -Recurse -File -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum) / 1MB, 1) }
+      $totalFiles += $pruneD.Count; $totalMB += $mbD
+      Write-Output ("  {0,-38} prune {1,3} of {2,3} archived session(s), {3,8} MB  (keep {4}d / min {5})" -f 'archive\<session>', $pruneD.Count, $archDirs.Count, $mbD, $ARCHIVE_DAYS, $ARCHIVE_MIN)
+      if ($Apply) { foreach ($d in $pruneD) { Remove-Item $d.FullName -Recurse -Force -ErrorAction SilentlyContinue } }
+    }
+  }
+}
+
 Write-Output ("prune-out: {0} file(s), {1} MB{2}" -f $totalFiles, [math]::Round($totalMB, 1), $(if ($Apply) { ' DELETED' } else { ' would be deleted (dry run - pass -Apply)' }))
 if ($Apply -and $totalFiles -gt 0) { Write-Output 'now run guards.ps1 + test-auditors.ps1 - a deletion that blinded a watcher must say so TODAY' }
 exit 0

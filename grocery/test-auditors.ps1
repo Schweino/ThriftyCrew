@@ -1170,6 +1170,52 @@ if (-not (Test-Path $foLib)) {
   if ($crSrc -match '-NoPull') {
     Ok 'capture-run still calls the chain with -NoPull (so the refusal never fires on a scheduled run)'
   } else { Bad 'capture-run no longer passes -NoPull to check-ad-cycles - every scheduled run will now hit the pull refusal and exit 3' }
+
+# ---- STORAGE HYGIENE (2026-08-23, PLAN-storage-hygiene) -------------------------------------------------
+# Half the pack (191 MB of ~380 MB) turned out to be two days of Chrome profiles that a directory sweep
+# committed unnoticed. These checks watch the three shapes that let it happen, because the cost of finding
+# out late is a rewrite of published history plus a credential rotation.
+$giSrc = Get-Content (Join-Path (Split-Path $root -Parent) '.gitignore') -Raw
+$crSrc2 = Get-Content (Join-Path $root 'capture-run.ps1') -Raw
+
+# 1. THE IGNORE LIST COVERS THE KNOWN-VOLATILE SHAPES. Each of these has either already cost us something
+#    or is one `git add -A` from doing so. Named individually so a failure says WHICH rule went.
+foreach ($rule in @(
+  @{ pat = '(?m)^__pycache__/';                     what = '__pycache__/ (bytecode, was sidecar-only while ten other dirs sat unignored)' }
+  @{ pat = '(?m)^\*\.pyc';                          what = '*.pyc (two were committed from meal-prep\pipeline)' }
+  @{ pat = '(?m)^/grocery/out/browser-profiles/';   what = 'grocery/out/browser-profiles/ (the seeded store sessions - 191 MB of the pack)' }
+  @{ pat = '(?m)^/grocery/out/archive/';            what = 'grocery/out/archive/ (what prune-out moves aside)' }
+)) {
+  if ($giSrc -match $rule.pat) { Ok ('.gitignore still covers ' + $rule.what) }
+  else { Bad ('.gitignore LOST its rule for ' + $rule.what + ' - the next daily commit sweeps it into the repo, and a directory sweep makes .gitignore the only defence there is') }
+}
+
+# 2. AND NOTHING OF THAT SHAPE IS ACTUALLY TRACKED. The ignore list only governs UNTRACKED files: a file
+#    already in the index keeps being committed no matter what .gitignore says, which is exactly why the
+#    profiles needed `git rm -r --cached` and not just a rule.
+$tracked = @(& git -C (Split-Path $root -Parent) ls-files 2>$null)
+$badTracked = @($tracked | Where-Object { $_ -match '__pycache__|\.pyc$|browser-profiles/' })
+if ($badTracked.Count -eq 0) { Ok ('no bytecode or browser-profile file is tracked (' + $tracked.Count + ' tracked file(s) checked)') }
+else { Bad ('these are TRACKED and should not be - a .gitignore rule does not untrack an existing file, it needs git rm --cached: ' + (($badTracked | Select-Object -First 6) -join ', ')) }
+
+# 3. THE COMMIT-SIZE GATE IS STILL WIRED, and its fixture still proves it fires. The gate is the general
+#    defence - the ignore list is per-shape and always one step behind whatever writes under out\ next.
+if ($crSrc2 -match '\$NEW_FILE_CAP' -and $crSrc2 -match 'commit REFUSED') {
+  Ok 'capture-run still refuses a daily commit that does not look like a day of prices (the 4,388-file class)'
+} else { Bad 'capture-run LOST its commit-size gate - a directory sweep can again put thousands of unintended files into the repo, and .gitignore only catches the shapes somebody already thought of' }
+$r = PSChild (Join-Path $root 'test-commit-size-gate.ps1')
+$csgRc = $LASTEXITCODE
+$rTxt = ($r | Out-String)
+if ($csgRc -eq 3) { Bad ('test-commit-size-gate is BLIND - it could not find the gate in capture-run.ps1, so nothing about it was proven: ' + (($rTxt -split "`r?`n" | Where-Object { $_ -match 'BLIND' }) -join ' ')) }
+elseif ($csgRc -eq 0 -and $rTxt -match 'SELFTEST: 7/7 pass') {
+  Ok 'commit-size gate fixture passes (400 files refused, 40 MB refused, a SMALL never-tracked directory refused, a normal day and an already-tracked directory untouched, -ForceBigCommit honoured)'
+} else { Bad ('test-commit-size-gate failed (rc=' + $csgRc + '): ' + (($rTxt -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
+
+# 4. THE AUDIT RECORD IS STAGED. .gitignore says provenance JSONL ARE tracked ("the evaluation record and
+#    the audit") and $inputPaths did not list them, so 08-22 and 08-23 were never committed while 191 MB of
+#    cookies were. Clean means the RIGHT things are tracked, not only that the wrong things are not.
+if ($crSrc2 -match "'graph/provenance'") { Ok 'capture-run stages graph/provenance (the audit record leaves this PC)' }
+else { Bad 'capture-run no longer stages graph/provenance - the evaluation record .gitignore promises is tracked never leaves this machine, and the cloud clone has none of it' }
 }
 # THE ALERT GATE IS NOT A CHECK-THEN-ACT RACE ANY MORE (2026-08-23). send-alert reads alert-sent-<day>.txt,
 # decides, sends over the network, then appends the type. Serial callers made that window harmless; the
