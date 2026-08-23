@@ -209,7 +209,12 @@ def build_question_verdicts(db, ts: str) -> dict:
     absolute ruling absolute.
     """
     rank = {"known_wrong": 0, "category_excluded": 1, "excluded": 2,
-            "llm_rejected": 3, "escalated": 4, "llm_match_unverified": 5,
+            # helper_rejected sits BELOW llm_rejected (plan §2 step 2, 2026-08-23): where both
+            # exist for one pair, the model's answer is the more expensive and the more
+            # examined of the two, and the helper's is the cheap pre-filter. Neither is
+            # precedent - authority.py rules both single_model.
+            "llm_rejected": 3, "helper_rejected": 3.5, "escalated": 4,
+            "llm_match_unverified": 5,
             "no_include_hit": 6, "llm_confirmed": 7, "include_hit": 8}
     # Only EXPENSIVE verdicts are banked. A deterministic one (include_hit,
     # excluded, category_excluded, no_include_hit) is re-derived from the rules
@@ -219,7 +224,7 @@ def build_question_verdicts(db, ts: str) -> dict:
     # store answers nobody consults. What IS banked: model calls (55 GPU-minutes
     # to reproduce), reviewer rulings (human time), and known-wrong (absolute).
     BANKABLE = ("llm_rejected", "llm_confirmed", "llm_match_unverified",
-                "escalated", "known_wrong")
+                "escalated", "known_wrong", "helper_rejected")
     rows = db.conn.execute(
         f"""SELECT commodity_id, product_name, match_status, match_reason, confidence
             FROM price_observations

@@ -160,7 +160,42 @@ def _selftest() -> int:
     return 0
 
 
-def run_contested_lane(m, defs, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all):
+def loo_peers(m, d: dict) -> tuple[float, float, int] | None:
+    """A peer distribution for a commodity the board itself has no shipped pairs for.
+
+    THE HOLE THIS FILLS, re-measured 2026-08-23 at full scale. The plan says ~30% of contested
+    pairs have peer_n = 0 "because the commodity ships nothing today". At 435 pairs it is 420 of
+    435 - 97% - and the cause is not an empty shelf: all 54 contested commodities have accepted
+    products in the graph. The peers were missing because the peer source is the identity lane's
+    BOARD pairs, which are the staple catalogue, and 97% of contested questions are recipe
+    commodities. Wrong catalogue, not empty shelf.
+
+    LEAVE ONE OUT, because the definition contains the answer. commodity_text() is label + up to 5
+    accepted products, so scoring an exemplar against its own commodity's text asks the model to
+    find a string that is literally printed in the document; it would score ~1.0 and hand back a
+    peer median no real pair could clear. Each exemplar is scored against the text of the OTHER
+    exemplars instead. This is the same ruling phase 1 made about the bench's retrieved priors,
+    for the same reason, and `--priors loo` is where it was made.
+
+    Returns None below 2 exemplars: one exemplar leaves a label-only document, which measured AUC
+    0.7921 against 0.9705 with exemplars. A calibration that weak is worse than no calibration,
+    and the filter's answer to no calibration is to abstain.
+    """
+    ex = [clean_product(x) for x in (d.get("exemplars") or [])][:5]
+    if len(ex) < 2:
+        return None
+    pairs = []
+    for i, e in enumerate(ex):
+        others = dict(d)
+        others["exemplars"] = [x for j, x in enumerate(ex) if j != i]
+        pairs.append((e, commodity_text(others)))
+    vals = sorted(float(v) for v in m.rerank(pairs))
+    p10 = vals[max(0, min(len(vals) - 1, int(0.10 * (len(vals) - 1))))]
+    return vals[len(vals) // 2], p10, len(vals)
+
+
+def run_contested_lane(m, defs, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all, defs_path="",
+                       helper=None, helper_id=""):
     """LANE 3 - score the graph's contested questions, and warm every vector the resolve lane wants.
 
     Returns None when there is nothing to do (no file, or an unreadable one). A missing or stale
@@ -241,19 +276,44 @@ def run_contested_lane(m, defs, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all)
         # below, where the identity lane's own bare-id world is the right frame.
         dtexts = [commodity_text(p["_def"]) for p in known]
         dvecs = m.embed(dtexts)
-        ce = m.rerank([(names[i], dtexts[i]) for i in range(len(known))])
+        rpairs = [(names[i], dtexts[i]) for i in range(len(known))]
+        ce = m.rerank(rpairs)
+        # THE HELPER'S OWN OPINION, from its own copy of the weights and its own cache file.
+        # The pinned model's number stays in `score` regardless: it is the estate's continuous
+        # record, it is what every earlier night wrote, and a phase that silently replaced it
+        # would make the before/after unreadable. Two models, two columns, both named.
+        hs = list(helper.rerank(rpairs)) if helper is not None else None
+        # Board peers where they exist, leave-one-out peers where they do not, and the row says
+        # WHICH - two calibrations in one unlabelled column would be indistinguishable from one.
+        loo_cache: dict[str, tuple | None] = {}
         for i, p in enumerate(known):
             did = p["def_id"]
-            med, p10, n_peers = peers.get(did, (None, None, 0))
+            src = "board"
+            got = peers.get(did)
+            if got is None:
+                node = p["_def"].get("node_id") or did
+                if node not in loo_cache:
+                    # Calibrate with the model whose scores the filter will read. A helper score
+                    # against a peer median produced by a DIFFERENT model is not a ratio, it is
+                    # two unrelated numbers divided by each other.
+                    loo_cache[node] = loo_peers(helper or m, p["_def"])
+                got = loo_cache[node]
+                src = "exemplars_loo" if got else "none"
+            med, p10, n_peers = got if got else (None, None, 0)
             scored.append({
                 "id": p["id"], "def_id": did, "commodity": p.get("commodity"),
                 "namespace": p["_def"].get("namespace") or "staple",
                 "product": p["product"], "rows": p.get("rows", 1),
                 "cos": round(float(torch.dot(pvecs[i], dvecs[i])), 4),
                 "score": round(float(ce[i]), 6),
+                "helper_score": (round(float(hs[i]), 6) if hs is not None else None),
                 "peer_median": None if med is None else round(float(med), 6),
                 "peer_p10": None if p10 is None else round(float(p10), 6),
                 "peer_n": n_peers,
+                # board = this commodity's own shipped products, scored by the identity lane.
+                # exemplars_loo = its accepted examples, each scored against the others (loo_peers).
+                # none = fewer than 2 examples; the filter abstains rather than invent a floor.
+                "peer_source": src,
             })
     scored.sort(key=lambda r: r["score"])
     log(f"LANE contested: scored {len(scored)} pair(s) in {time.time()-t0:.1f}s")
@@ -262,8 +322,11 @@ def run_contested_lane(m, defs, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all)
         "source_generated": doc.get("generated"),
         "embed_model": EMBED_MODEL,
         "rerank_model": RERANK_MODEL,
+        "helper_model": helper_id or None,
         "elapsed_sec": round(time.time() - t0, 1),
         "advisory": "scores only - nothing here filters, routes or prices anything (phase 3 does that)",
+        "defs": os.path.basename(defs_path) if defs_path else "",
+        "definitions": len(defs),
         "offered": len(pairs),
         "scored": len(scored),
         "no_definition": len(unknown),
@@ -272,7 +335,8 @@ def run_contested_lane(m, defs, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all)
         "pairs": scored,
     }
 
-def main(defs_path: str | None = None, tag: str = "") -> None:
+def main(defs_path: str | None = None, tag: str = "", contested_defs_path: str | None = None,
+         helper_path: str | None = None) -> None:
     t_start = time.time()
     # A comparison run must not overwrite the findings the daily alert de-dupes against: a changed
     # signature file would make every standing finding look new exactly once, which is the alert
@@ -281,6 +345,18 @@ def main(defs_path: str | None = None, tag: str = "") -> None:
     defs_path = defs_path or os.path.join(DATA, "commodity-defs.json")
     defs = load_json(defs_path)
     log(f"defs={os.path.basename(defs_path)}{'  (COMPARISON RUN, tag ' + tag + ')' if tag else ''}")
+    # ONE DEF SET PER LANE, AND THEY ARE NOT THE SAME SET. Measured 2026-08-22: switching all three
+    # lanes to the graph's definitions takes the contested lane from 15 of 435 pairs to 435 of 435,
+    # and reshuffles the identity lane 181 -> 255 with 130 GONE. Those 130 are pairs the estate is
+    # shown today and would stop being shown with no event marking it, which this board rates worse
+    # than a noisy guard - so the switch is NOT made wholesale. The contested lane, whose questions
+    # come from the graph and are 97% recipe-namespace, gets the graph's definitions; identity and
+    # coverage keep the staple catalogue they have always read, and the daily alert does not move.
+    cdefs = defs
+    if contested_defs_path:
+        cdefs = load_json(contested_defs_path)
+        log(f"contested-defs={os.path.basename(contested_defs_path)} ({len(cdefs)} definitions) - "
+            f"LANE 3 ONLY; identity and coverage are unchanged")
     pairs = load_json(os.path.join(DATA, "board-pairs.json"))
     corpus = load_json(os.path.join(DATA, "corpus-current.json"))
     log(f"device={DEVICE} commodities={len(defs)} board-pairs={len(pairs)} corpus={len(corpus)}")
@@ -388,7 +464,24 @@ def main(defs_path: str | None = None, tag: str = "") -> None:
     # The graph writes data/contested-pairs.json with `resolve.py --emit-contested`, read-only,
     # at the top of the nightly chain (graph/pipeline/nightly.ps1). Its absence is normal, not an
     # error: a run started by hand, or before the graph has ever emitted, simply skips this lane.
-    contested_report = run_contested_lane(m, defs, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all)
+    helper = None
+    if helper_path:
+        # A SECOND CROSS-ENCODER, LANE 3 ONLY, AND THE PIN IS UNTOUCHED. RerankCache names its file
+        # after the model id, so the helper's answers land beside the pinned model's and neither can
+        # be mistaken for the other. Loaded lazily like everything else here: on a night where the
+        # contested set has not changed, this costs no GPU at all.
+        helper = score_cache.CachedScorer(
+            CACHE, DEVICE,
+            embed_factory=lambda: Matcher.load(with_reranker=False),
+            rerank_factory=lambda: Matcher.load_reranker_only(helper_path),
+            embed_model=EMBED_MODEL, rerank_model=helper_path)
+        log(f"helper={helper_path} - LANE 3 ONLY; the sweep's own model is still {RERANK_MODEL}")
+    cdefs_by_id = defs_by_id if cdefs is defs else {d["id"]: d for d in cdefs}
+    contested_report = run_contested_lane(m, cdefs, cdefs_by_id, ctexts, cvecs, cidx, by_com, ce_all,
+                                          defs_path=(contested_defs_path or defs_path),
+                                          helper=helper, helper_id=helper_path or "")
+    if helper is not None:
+        helper.save()
 
     report = {
         "generated": time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -432,6 +525,15 @@ if __name__ == "__main__":
     _ap.add_argument("--tag", default="",
                      help="suffix the output files, so a comparison run cannot overwrite the "
                           "findings the daily alert de-dupes against. REQUIRED with --defs.")
+    _ap.add_argument("--contested-defs", default=None,
+                     help="definitions for LANE 3 ONLY. The contested questions come from the graph "
+                          "and are 97%% recipe-namespace, which the staple catalogue cannot define; "
+                          "identity and coverage keep --defs, so the daily alert does not move. "
+                          "No --tag needed: this changes no file the alert reads.")
+    _ap.add_argument("--helper", default=None,
+                     help="a trained cross-encoder (sidecar/finetune_reranker.py) to score the "
+                          "CONTESTED lane with, in its own cache, beside the pinned model's score. "
+                          "Never replaces the pin and never touches identity or coverage.")
     _ap.add_argument("--selftest", action="store_true")
     _a = _ap.parse_args()
     if _a.selftest:
@@ -439,4 +541,5 @@ if __name__ == "__main__":
     if _a.defs and not _a.tag:
         _ap.error("--tag is required with --defs, so a comparison run cannot overwrite the daily "
                   "findings (try --tag graphdefs)")
-    main(defs_path=_a.defs, tag=_a.tag)
+    main(defs_path=_a.defs, tag=_a.tag, contested_defs_path=_a.contested_defs,
+         helper_path=_a.helper)

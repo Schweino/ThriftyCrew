@@ -333,7 +333,19 @@ if (-not $ll) {
     Write-Output ("      helper   BLIND    {0}" -f $ll.helper.why)
   } else {
     Write-Output ("      helper   scored {0} of {1} contested pair(s), {2} with no sidecar definition" -f $ll.helper.scored, $ll.helper.offered, $ll.helper.no_definition)
-    Write-Output ("               warmed {0} vector(s) in {1}s; routes {2}" -f $ll.helper.vectors_warmed, $ll.helper.elapsed_sec, $ll.helper.routes)
+    Write-Output ("               warmed {0} vector(s) in {1}s; defs {2}" -f $ll.helper.vectors_warmed, $ll.helper.elapsed_sec, $(if ($ll.helper.defs) { $ll.helper.defs } else { 'unrecorded' }))
+    Write-Output ("               scored by {0}" -f $(if ($ll.helper.helper_model) { $ll.helper.helper_model } else { 'the PINNED model - no trained helper in this run' }))
+    Write-Output ("               routes {0}" -f $ll.helper.routes)
+  }
+  # THE FILTER, counted from the graph. "rejected 0" and "the filter is off" are different
+  # weeks and must never print the same line.
+  $hf = $ll.helper_filter_window
+  if ($null -eq $hf -or $null -eq $hf.rejected) {
+    Write-Output ("      filter   BLIND    {0}" -f $(if ($hf.why) { $hf.why } else { 'no helper_rejected count available' }))
+  } elseif ($hf.rejected -eq 0) {
+    Write-Output '      filter   rejected 0 question(s) this window (the filter is off unless resolve.py runs with --helper-scores)'
+  } else {
+    Write-Output ("      filter   rejected {0} question(s) before the model saw them" -f $hf.rejected)
   }
 }
 

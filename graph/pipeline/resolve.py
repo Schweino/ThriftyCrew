@@ -672,6 +672,71 @@ class Resolver:
                 verdicts[key] = v
         return groups, verdicts, contested
 
+    def load_helper_scores(self, path: str, threshold: float) -> int:
+        """PLAN §2 step 2, the helper filter. Returns how many pairs it can speak for.
+
+        The scores come from the sweep hours earlier, off a card this process does not share
+        with it, and were produced by a TRAINED copy of the cross-encoder
+        (sidecar/finetune_reranker.py). A file scored by the pinned model is REFUSED: the
+        pinned model's behaviour on this population was never measured as a filter, and phase
+        2 recorded its numbers as an observation explicitly "not a gate".
+
+        WHAT MAKES A THRESHOLD DEFENSIBLE HERE, measured 2026-08-23 on the corpus holdout -
+        commodity families the helper never saw:
+
+            reject below      catches            costs
+            1e-5              0 of 1,073 neg     0 of 718 true pairs
+            1e-4              469 (43.7%)        2 (0.28%)     <- the default
+            1e-3              733 (68.3%)        8 (1.11%)
+            1e-2              864 (80.5%)        35 (4.87%)
+
+        The distribution is a cliff, so there is no threshold that rejects anything at zero
+        cost, and 0.28% is a real false-reject rate, not a rounding error. What makes it
+        acceptable is WHAT IT REPLACES rather than the number alone: every pair it filters
+        would otherwise have gone to the local model, whose own false-reject rate on this
+        population is 3/150 = 2.0% (priors_ablation, 2026-08-22, unchanged across v4 and v5).
+        The filter is roughly seven times SAFER than the call it removes, and the verdict it
+        writes is the same class - single-model, never precedent, never able to price a cell
+        (v_current_rows admits include_hit and llm_confirmed only).
+
+        AND IT AGREES WITH THE MODEL IT REPLACES. The 435 contested pairs of 2026-08-22 already
+        carry the local model's own banked verdicts, so the filter can be graded against them
+        directly, on live data, with no review session:
+
+            reject below   filtered of 435   the model also REJECTED   the model MATCHED
+            1e-4           21                19                        0
+            1e-3           48                41                        5
+            1e-2           76                54                       16
+
+        Zero disagreement at the default and five at the next decade is what sets it where it
+        is. 21 of 435 is a 4.8% cut in model calls - modest, and modest is the correct size for
+        a first filter whose failure mode is a cell that never gets priced. Two of the 21 were
+        headed for `escalated` rather than a verdict, so the filter also removes them from
+        Claude's queue; that is the phase's goal rather than a side effect, but it is a real
+        change to what a reviewer is shown and is named here rather than discovered later.
+
+        THE PLAN'S OTHER SAFEGUARD DOES NOT EXIST. §2 step 2 says "very low score AND no
+        partial include hit". The contested set IS the no_include_hit rows - that is what
+        makes them contested - so the second condition is true of every candidate by
+        construction and adds nothing. The threshold is the only protection there is, which
+        is why it is measured rather than chosen.
+        """
+        import json                                                        # noqa: PLC0415
+        with open(path, encoding="utf-8-sig") as f:
+            doc = json.load(f)
+        model = doc.get("helper_model")
+        if not model:
+            raise ValueError(
+                f"{path} carries no helper_model - those are the PINNED model's scores, and "
+                f"the pinned model was never measured as a filter (see phase 2, §3: 'no number "
+                f"in this section is a gate'). Re-run the sweep with --helper.")
+        self._helper = {(r["id"], r["product"]): float(r["helper_score"])
+                        for r in doc.get("pairs", []) if r.get("helper_score") is not None}
+        self._helper_threshold = threshold
+        self._helper_model = model
+        self._helper_generated = doc.get("generated")
+        return len(self._helper)
+
     def resolve_pending(self, limit: int | None = None, run: str = "",
                         ts: str | None = None, allow_llm: bool = True,
                         progress=None, jobs: int = 1) -> dict:
@@ -706,8 +771,12 @@ class Resolver:
         self.stats = {}          # per-call, not per-Resolver: two runs on one
                                  # instance must not double-count in the log
         use_llm = allow_llm and self.use_llm and self.llm is not None
+        # The contested set is split out whenever ANYTHING downstream wants it - the model, or
+        # the helper filter, or both. Tying the split to the model alone would have made the
+        # filter untestable without a live llama-server, and a filter that can only be exercised
+        # by the thing it sits in front of is a filter nobody can measure on its own.
         groups, verdicts, contested = self.pending_questions(
-            limit=limit, split_contested=use_llm)
+            limit=limit, split_contested=(use_llm or bool(getattr(self, "_helper", None))))
         # The deterministic pass tallied by QUESTION; stats must count ROWS, so
         # rebuild the tally at write time below.
         self.stats = {}
@@ -718,6 +787,33 @@ class Resolver:
         # model call, so an interrupted LLM pass never loses them.
         n += self._commit_verdicts(verdicts, groups, run, ts, escalations)
 
+        # -- pass 1.5: THE HELPER FILTER (plan §2 step 2) -------------------
+        # Between the deterministic layers and the model. It only ever REJECTS, and only on a
+        # score produced hours ago by a different process against a frozen definition set -
+        # so it cannot be influenced by anything this run has decided, which is the property
+        # that lets phase 4 measure it against the model's independent answer.
+        helper_filtered = 0
+        if contested and getattr(self, "_helper", None):
+            keep, filtered = [], {}
+            for key in contested:
+                cid, name = key
+                sc = self._helper.get((cid, name))
+                if sc is not None and sc < self._helper_threshold:
+                    filtered[key] = Verdict(
+                        "helper_rejected",
+                        f"helper: {sc:.3g} < {self._helper_threshold:g} ({self._helper_model})",
+                        None)
+                else:
+                    keep.append(key)
+            if filtered:
+                helper_filtered = self._commit_verdicts(filtered, groups, run, ts, escalations)
+                n += helper_filtered
+                if progress:
+                    progress(f"    helper filtered {len(filtered)} of {len(contested)} contested "
+                             f"question(s) below {self._helper_threshold:g}; "
+                             f"{len(keep)} go to the model")
+            contested = keep
+
         # -- pass 2: the model, on the contested questions only -------------
         # Verdicts are CHECKPOINTED as they arrive, not held to the end. A run
         # over the full contested set takes ~48 minutes; banking nothing until
@@ -725,6 +821,10 @@ class Resolver:
         # power cut, Ctrl-C — threw away 40 minutes of GPU time. Because
         # resolve_pending selects rows still in 'no_include_hit', a checkpointed
         # run is also RESUMABLE: re-running simply continues where it stopped.
+        if contested and not use_llm:
+            # Helper-only pass: whatever the filter did not reject stays no_include_hit, exactly
+            # as it would on a night with no model at all.
+            contested = []
         if contested:
             if progress:
                 progress(f"    {len(contested)} contested questions "
@@ -780,7 +880,10 @@ class Resolver:
                                       "llm_enabled": bool(use_llm),
                                       "prompt_version": PROMPT_VERSION if use_llm else None,
                                       "escalations": len(escalations)})
-        return {"resolved": n, "by_status": dict(self.stats), "escalations": escalations,
+        return {"resolved": n, "by_status": dict(self.stats),
+                "helper_filtered_rows": helper_filtered,
+                "helper_model": getattr(self, "_helper_model", None),
+                "escalations": escalations,
                 "questions": len(groups),
                 "model_calls": len(contested) if use_llm else 0}
 
@@ -981,6 +1084,17 @@ def main() -> int:
                     help="write the contested (commodity, product) questions to "
                          "PATH and exit. Writes NOTHING to the database and "
                          "needs no model. See graph/pipeline/nightly.ps1.")
+    ap.add_argument("--helper-scores", metavar="PATH", default=None,
+                    help="sidecar/out/contested-scores.json from a sweep run with --helper. "
+                         "Turns on the plan's §2 step 2 filter: a contested question the trained "
+                         "helper scores below --helper-threshold is banked helper_rejected and "
+                         "never reaches the model. REJECT-ONLY; v_current_rows admits include_hit "
+                         "and llm_confirmed only, so nothing here can price a cell. Off unless "
+                         "given.")
+    ap.add_argument("--helper-threshold", type=float, default=1e-4,
+                    help="measured on the corpus holdout: 1e-4 rejects 43.7%% of cold negatives "
+                         "at a 0.28%% false-reject rate, against the local model's own 2.0%%. See "
+                         "Resolver.load_helper_scores.")
     args = ap.parse_args()
 
     if args.emit_contested:
@@ -1003,6 +1117,16 @@ def main() -> int:
                             "match_reason=NULL, confidence=NULL")
             db.conn.commit()
         r = Resolver(db, llm=llm, use_llm=bool(llm))
+        if args.helper_scores:
+            try:
+                k = r.load_helper_scores(args.helper_scores, args.helper_threshold)
+            except (OSError, ValueError, KeyError) as e:
+                # A filter that cannot read its scores must not quietly become no filter:
+                # the run would look normal and the night's numbers would be unexplainable.
+                print(f"helper filter REFUSED: {e}", file=sys.stderr)
+                return 2
+            print(f"helper filter: {k} scored pair(s) from {args.helper_scores} "
+                  f"({r._helper_model}), rejecting below {args.helper_threshold:g}")
         t0 = time.time()
         out = r.resolve_pending(limit=args.limit, run=run, allow_llm=bool(llm),
                                 progress=print, jobs=max(1, args.jobs))
@@ -1010,6 +1134,9 @@ def main() -> int:
         print(f"\nresolved {out['resolved']} rows in {dt:.1f}s "
               f"({out['questions']} distinct questions, "
               f"{out['model_calls']} model calls)")
+        if out.get("helper_filtered_rows"):
+            print(f"   helper filtered {out['helper_filtered_rows']} row(s) before the model "
+                  f"({out['helper_model']})")
         for k, v in sorted(out["by_status"].items(), key=lambda x: -x[1]):
             print(f"   {k:<20} {v}")
         if out["escalations"]:

@@ -117,11 +117,35 @@ def local_lane(repo: str) -> dict:
             "no_definition": c.get("no_definition"),
             "vectors_warmed": c.get("vectors_warmed"),
             "elapsed_sec": c.get("elapsed_sec"),
-            # Phase 2 CACHES; phase 3 filters. Stated in the report so nobody
-            # reads a scored pair as a routed one.
-            "routes": "nothing - scores only until phase 3",
+            "defs": c.get("defs"),
+            # WHICH MODEL HELD THE OPINION. Phase 3 trains a separate copy for
+            # this lane; a report that cannot say whether the numbers came from
+            # the pinned model or the candidate is a report nobody can act on.
+            "helper_model": c.get("helper_model"),
+            # Phase 2 CACHED and phase 3 FILTERS - but only where the filter is
+            # actually switched on, which is resolve.py --helper-scores. A file
+            # scored by the pinned model routes nothing, by refusal.
+            "routes": ("reject-only, below the threshold in resolve.py --helper-threshold"
+                       if c.get("helper_model") else "nothing - the pinned model's scores never filter"),
         }
+    # -- what the filter actually did last night, from the graph rather than a file.
+    # A status count, not a rate: "the helper rejected 0" and "the helper never ran"
+    # are different weeks, and only the artefact above can tell them apart.
+    out["helper_filter"] = {"state": "off" if not (out.get("helper") or {}).get("helper_model")
+                            else "on"}
     return out
+
+
+def helper_filter_counts(conn: sqlite3.Connection, since: str, until: str) -> dict:
+    """How many rows the §2 step 2 filter rejected in the window. Zero is a real answer."""
+    try:
+        r = conn.execute(
+            """SELECT COUNT(*) n FROM question_verdicts
+               WHERE status = 'helper_rejected' AND decided_at BETWEEN ? AND ?""",
+            (since, until + "T23:59:59")).fetchone()
+        return {"rejected": r["n"] if r else 0}
+    except sqlite3.Error as e:
+        return {"rejected": None, "why": str(e)}
 
 
 def collect(conn: sqlite3.Connection, since: str, until: str) -> dict:
@@ -203,7 +227,8 @@ def collect(conn: sqlite3.Connection, since: str, until: str) -> dict:
             "queue_now": queue,
             "prior_authority_tiers": tiers,
             "learning_proposals": learning,
-            "local_lane": local_lane(os.path.join(HERE, "..", ".."))}
+            "local_lane": {**local_lane(os.path.join(HERE, "..", "..")),
+                           "helper_filter_window": helper_filter_counts(conn, since, until)}}
 
 
 def _selftest() -> int:
