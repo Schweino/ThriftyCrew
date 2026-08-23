@@ -400,3 +400,9 @@ meal-prep/db/page-cache/
 # structure against a known-good live card. That is ~150 KB of regenerated HTML per recipe, reproducible
 # in seconds, and nothing reads it after the audit. The machine report beside it IS committed.
 meal-prep/runs/*/waves/*.preaudit-cards/
+
+# v3 harvest plane (2026-08-23). Derived state, regenerable from the page cache and the ledgers:
+# robots.txt copies refresh weekly, and harvest-neighbours.json is rebuilt by harvest_embed --build in
+# ~24 s cold and 0 s warm. The candidate POOL itself is committed - that one is institutional memory.
+meal-prep/db/harvest-robots/
+meal-prep/db/harvest-neighbours.json

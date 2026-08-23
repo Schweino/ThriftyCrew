@@ -1,0 +1,12 @@
+{
+    "run":  "hunt-2026-08-23-v3-phase1-mini",
+    "created":  "2026-08-23T17:16:35",
+    "conditions":  "v3 phase-1 gate mini-run: 400-650 cal / \u003c=35g carbs per serving, budget meal-prep dinner, scalable to 14 servings, no seafood",
+    "stop":  "10 candidates ruled",
+    "wave_size":  10,
+    "auto_publish":  true,
+    "catalog_digest":  "C:\\Codex\\ThriftyCrew\\meal-prep\\pipeline\\catalog-digest.json",
+    "catalog_digest_written":  "2026-08-22T18:40:56",
+    "board_file":  "comparison-2026-08-23.json",
+    "board_written":  "2026-08-23T13:28:38"
+}

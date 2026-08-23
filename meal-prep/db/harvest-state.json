@@ -1,0 +1,23 @@
+{
+ "_doc": "Per-domain nightly fetch counts and the enumeration cursor, so a capped run resumes where it stopped instead of re-walking the same sitemap.",
+ "days": {
+  "2026-08-23": {
+   "thecozycook.com": 311,
+   "isabeleats.com": 338,
+   "skinnytaste.com": 340,
+   "budgetbytes.com": 330,
+   "spendwithpennies.com": 329,
+   "wellplated.com": 319,
+   "recipetineats.com": 325
+  }
+ },
+ "cursor": {
+  "budgetbytes.com": 350,
+  "recipetineats.com": 343,
+  "skinnytaste.com": 340,
+  "thecozycook.com": 353,
+  "isabeleats.com": 341,
+  "spendwithpennies.com": 349,
+  "wellplated.com": 356
+ }
+}

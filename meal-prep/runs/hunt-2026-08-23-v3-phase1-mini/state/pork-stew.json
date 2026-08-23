@@ -1,0 +1,31 @@
+{
+    "slug":  "pork-stew",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-23T18:01:48",
+    "updated":  "2026-08-23T18:01:48",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Pork butt + heavy cream + red potatoes + carrots + wine is the live Creamy Pork Stew with Potatoes and Carrots. 4/4 match: pork, stew, cream, potato.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-23T18:01:48",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/pork-stew/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-23T18:01:48",
+                        "by":  "decider",
+                        "detail":  "Pork butt + heavy cream + red potatoes + carrots + wine is the live Creamy Pork Stew with Potatoes and Carrots. 4/4 match: pork, stew, cream, potato."
+                    }
+                ]
+}

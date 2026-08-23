@@ -1,0 +1,31 @@
+{
+    "slug":  "lentil-sausage-soup",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "selected",
+    "wave":  null,
+    "created":  "2026-08-23T18:01:47",
+    "updated":  "2026-08-23T18:01:47",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-23T18:01:47",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/lentil-sausage-soup/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-23T18:01:47",
+                        "by":  "decider",
+                        "detail":  "Distinct from the live sausage-soup cluster (Tuscan/turkey white-bean soups, zuppa toscana): brown lentils not beans, tomato-forward not creamy. Only 2/4 axes match the nearest live twin, so no near-dupe trigger. Lentils widen the ingredient board; batches cleanly, no flags."
+                    }
+                ]
+}

@@ -1,228 +1,85 @@
 ﻿{
     "_doc":  "What the pipeline has learned about recipe publishers. Written automatically on every fetch outcome; read by sourcers before searching and before fetching. Replaces the prose blocked-domain lists that used to live, duplicated, in two agent prompts.",
     "_rule":  "One failure is `unreliable`, not `blocked` - a 404 is a fact about one URL. Only a repeated pattern with no successes earns `blocked`. Counts stay visible so the judgment is auditable.",
-    "updated":  "2026-08-16T07:42:00",
-    "count":  20,
+    "updated":  "2026-08-23T17:27:07",
+    "count":  7,
     "domains":  [
                     {
-                        "domain":  "allrecipes.com",
-                        "ok":  0,
-                        "fail":  1,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  true,
-                        "status":  "blocked",
-                        "note":  "migrated from the prose blocked-domain lists in recipe-sourcer.md / recipe-source-qa.md",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "tasteofhome.com",
-                        "ok":  0,
-                        "fail":  1,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  true,
-                        "status":  "blocked",
-                        "note":  "migrated from the prose blocked-domain lists in recipe-sourcer.md / recipe-source-qa.md",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "foodnetwork.com",
-                        "ok":  0,
-                        "fail":  1,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  true,
-                        "status":  "blocked",
-                        "note":  "migrated from the prose blocked-domain lists in recipe-sourcer.md / recipe-source-qa.md",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "food.com",
-                        "ok":  0,
-                        "fail":  1,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  true,
-                        "status":  "blocked",
-                        "note":  "migrated from the prose blocked-domain lists in recipe-sourcer.md / recipe-source-qa.md",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "eatingwell.com",
-                        "ok":  0,
-                        "fail":  1,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  true,
-                        "status":  "blocked",
-                        "note":  "migrated from the prose blocked-domain lists in recipe-sourcer.md / recipe-source-qa.md",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "delish.com",
-                        "ok":  0,
-                        "fail":  1,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  true,
-                        "status":  "blocked",
-                        "note":  "migrated from the prose blocked-domain lists in recipe-sourcer.md / recipe-source-qa.md",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "thecountrycook.net",
-                        "ok":  0,
-                        "fail":  1,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  true,
-                        "status":  "blocked",
-                        "note":  "migrated from the prose blocked-domain lists in recipe-sourcer.md / recipe-source-qa.md",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "simplyrecipes.com",
-                        "ok":  0,
-                        "fail":  1,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  true,
-                        "status":  "blocked",
-                        "note":  "migrated from the prose blocked-domain lists in recipe-sourcer.md / recipe-source-qa.md",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "damndelicious.net",
-                        "ok":  0,
-                        "fail":  1,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  true,
-                        "status":  "blocked",
-                        "note":  "migrated from the prose blocked-domain lists in recipe-sourcer.md / recipe-source-qa.md",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "thespruceeats.com",
-                        "ok":  0,
-                        "fail":  1,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  true,
-                        "status":  "blocked",
-                        "note":  "migrated from the prose blocked-domain lists in recipe-sourcer.md / recipe-source-qa.md",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "mexicoinmykitchen.com",
-                        "ok":  0,
-                        "fail":  1,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  true,
-                        "status":  "blocked",
-                        "note":  "migrated from the prose blocked-domain lists in recipe-sourcer.md / recipe-source-qa.md",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "marionskitchen.com",
-                        "ok":  0,
-                        "fail":  1,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  true,
-                        "status":  "blocked",
-                        "note":  "migrated from the prose blocked-domain lists in recipe-sourcer.md / recipe-source-qa.md",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
                         "domain":  "budgetbytes.com",
+                        "ok":  11,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-23T17:26:47"
+                    },
+                    {
+                        "domain":  "spendwithpennies.com",
+                        "ok":  11,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-23T17:26:47"
+                    },
+                    {
+                        "domain":  "isabeleats.com",
+                        "ok":  4,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-23T17:26:21"
+                    },
+                    {
+                        "domain":  "wellplated.com",
+                        "ok":  17,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-23T17:27:07"
+                    },
+                    {
+                        "domain":  "thecozycook.com",
+                        "ok":  14,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-23T17:26:56"
+                    },
+                    {
+                        "domain":  "recipetineats.com",
+                        "ok":  6,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-23T17:26:30"
+                    },
+                    {
+                        "domain":  "skinnytaste.com",
                         "ok":  2,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
-                        "note":  "migrated: known reliable",
-                        "updated":  "2026-08-16T07:42:00"
-                    },
-                    {
-                        "domain":  "recipetineats.com",
-                        "ok":  1,
-                        "fail":  0,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  false,
-                        "status":  "reliable",
-                        "note":  "migrated: known reliable",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "skinnytaste.com",
-                        "ok":  1,
-                        "fail":  0,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  false,
-                        "status":  "reliable",
-                        "note":  "migrated: known reliable",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "thecozycook.com",
-                        "ok":  1,
-                        "fail":  0,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  false,
-                        "status":  "reliable",
-                        "note":  "migrated: known reliable",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "isabeleats.com",
-                        "ok":  1,
-                        "fail":  0,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  false,
-                        "status":  "reliable",
-                        "note":  "migrated: known reliable",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "spendwithpennies.com",
-                        "ok":  1,
-                        "fail":  0,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  false,
-                        "status":  "reliable",
-                        "note":  "migrated: known reliable",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "wellplated.com",
-                        "ok":  1,
-                        "fail":  0,
-                        "last_404":  null,
-                        "has_jsonld":  false,
-                        "forced_block":  false,
-                        "status":  "reliable",
-                        "note":  "migrated: known reliable",
-                        "updated":  "2026-08-16T07:32:22"
-                    },
-                    {
-                        "domain":  "themediterraneandish.com",
-                        "ok":  0,
-                        "fail":  1,
-                        "last_404":  "2026-08-16",
-                        "has_jsonld":  false,
-                        "forced_block":  false,
-                        "status":  "unreliable",
-                        "note":  "greek-pork-chops-zucchini-feta-skillet 404 on 2026-08-16 - was on NO prose list",
-                        "updated":  "2026-08-16T07:32:22"
+                        "note":  "",
+                        "updated":  "2026-08-23T17:26:20"
                     }
                 ]
 }

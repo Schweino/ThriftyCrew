@@ -20,6 +20,12 @@ param(
   [switch]$Record, [switch]$Query, [switch]$List, [switch]$SelfTest,
   [string]$Slug = '', [string]$Name = '', [string]$Protein = '', [string]$Method = '',
   [string]$Verdict = '', [string]$Reason = '', [string[]]$DupeOf = @(), [string]$Run = '', [string]$By = '',
+  # BATCH QUERY (2026-08-23, v3 D3). harvest.py asks this ledger about hundreds of candidates on every
+  # crawl. One process per question is ~1 s of start-up for ~2 ms of work, and the alternative - a
+  # Python copy of the wildcard-matching rule below - would fork the rule that decides what counts as
+  # prior art. -BatchFile is a JSON array of {key, name, protein, method}; -Json emits an array of
+  # {key, dish_key, rulings, same_family_other_protein} through the SAME matcher.
+  [string]$BatchFile = '',
   [string]$Store = '', [switch]$Json
 )
 $ErrorActionPreference = 'Stop'
@@ -73,6 +79,44 @@ function Read-Store {
 }
 
 # ---- self-test -------------------------------------------------------------------------------------
+# 'any' is a WILDCARD, not a value. A ruling recorded before the method was known must still match
+# the same dish when the method is known later, or the ledger silently forgets its own entries.
+function Test-Part { param([string]$a, [string]$b) return ($a -eq $b -or $a -eq 'any' -or $b -eq 'any') }
+
+# A match needs at least one POSITIVE signal. Without this, a stored row keyed `any|any|plain` - no
+# protein detected, no method detected, no sauce family - matches every query ever made, and the
+# ledger confidently reports a Senegalese chicken dish as prior art for a Moroccan lamb tagine.
+# Wildcards may WIDEN a match that already has evidence; they may never BE the evidence.
+function Test-HasSignal {
+  param($P, [string]$Kp, [string]$Km, [string]$Kf)
+  if ($Kf -ne 'plain') { return $true }                                  # shared sauce family is signal
+  if ($P[0] -eq $Kp -and $Kp -ne 'any' -and $P[1] -eq $Km -and $Km -ne 'any') { return $true }  # concrete protein+method
+  return $false
+}
+
+# ONE matcher, both roads. -Query and -Query -BatchFile must never be able to disagree about what
+# counts as prior art.
+function Get-Rulings {
+  param($Dishes, [string]$QName, [string]$QProtein, [string]$QMethod)
+  $key = Get-DishKey $QName $QProtein $QMethod
+  $kp = $key.Split('|')[0]; $km = $key.Split('|')[1]; $kf = $key.Split('|')[2]
+  $exact = @($Dishes | Where-Object {
+    $p = ([string]$_.key).Split('|')
+    (Test-Part $p[0] $kp) -and (Test-Part $p[1] $km) -and $p[2] -eq $kf -and (Test-HasSignal $p $kp $km $kf)
+  })
+  # 'plain' means NO family was detected - it is the absence of a signal, not a shared one. Reporting
+  # cross-protein 'plain' matches turned a brand-new lamb tagine into five false neighbours on first
+  # test, which is exactly the too-coarse failure this ledger has to avoid to stay believable.
+  $fam = @()
+  if ($kf -ne 'plain') {
+    $fam = @($Dishes | Where-Object {
+      $p = ([string]$_.key).Split('|')
+      $p[2] -eq $kf -and -not ((Test-Part $p[0] $kp) -and (Test-Part $p[1] $km))
+    })
+  }
+  return @{ key = $key; exact = @($exact); fam = @($fam) }
+}
+
 if ($runSelfTest) {
   $bad = 0
   function T([string]$n, [bool]$ok, [string]$got) {
@@ -120,6 +164,44 @@ if ($runSelfTest) {
     T 'MUST FIRE  a single stored row does not collapse to a scalar' (@($back).Count -eq 1) ([string]@($back).Count)
     $miss = Read-Store (Join-Path $env:TEMP 'definitely-not-here.json')
     T 'a missing store reads as empty, not as an error' (@($miss).Count -eq 0) ([string]@($miss).Count)
+
+    # BATCH QUERY answers through the SAME Get-Rulings as -Query, or the ledger has two opinions about
+    # what prior art is. Asserted on the cross-protein twin that founded the family key.
+    $fakeDishes = @(
+      [pscustomobject]@{ key='pork|skillet|cream'; slug='creamy-asiago-pork-medallions'; verdict='rejected-dupe'; reason='twin' },
+      [pscustomobject]@{ key='beef|stew|tomato';  slug='beef-chili';                     verdict='accepted';     reason='' }
+    )
+    $single = Get-Rulings $fakeDishes 'Creamy Tuscan Chicken' 'chicken' 'skillet'
+    T 'MUST FIRE  the single-query road finds the cross-protein cream twin as same-family' (@($single.fam).Count -eq 1) ([string]@($single.fam).Count)
+    $bf2 = Join-Path $env:TEMP ('cd-batch-' + [guid]::NewGuid().ToString('N') + '.json')
+    (ConvertTo-Json -InputObject @(@{ key='k1'; name='Creamy Tuscan Chicken'; protein='chicken'; method='skillet' }) -Depth 4) | Set-Content $bf2 -Encoding utf8
+    $pp2 = Get-Content $bf2 -Raw -Encoding utf8 | ConvertFrom-Json
+    $qs2 = @($pp2)
+    Remove-Item $bf2 -Force -ErrorAction SilentlyContinue
+    T 'a one-row batch file survives ConvertFrom-Json as an ARRAY (the PS 5.1 unwrap trap)' (@($qs2).Count -eq 1) ([string]@($qs2).Count)
+
+    # MUST FIRE, same trap, same day: a MANY-element array wrapped straight off the pipeline collapses
+    # to ONE Object[] element and every query in the batch becomes one row. See find-similar.ps1's
+    # twin fixture for the full account. A batch of one is the only size that hides it.
+    $bf3 = Join-Path $env:TEMP ('cd-batch3-' + [guid]::NewGuid().ToString('N') + '.json')
+    (ConvertTo-Json -InputObject @(
+        @{ key='a'; name='Creamy Tuscan Chicken'; protein='chicken'; method='skillet' },
+        @{ key='b'; name='Korean Beef Bulgogi';   protein='beef';    method='skillet' },
+        @{ key='c'; name='Pork Chops with Apples';protein='pork';    method='skillet' }) -Depth 4) | Set-Content $bf3 -Encoding utf8
+    $bad3  = @(Get-Content $bf3 -Raw -Encoding utf8 | ConvertFrom-Json)
+    $good3 = Get-Content $bf3 -Raw -Encoding utf8 | ConvertFrom-Json
+    Remove-Item $bf3 -Force -ErrorAction SilentlyContinue
+    T 'MUST FIRE  @(pipeline | ConvertFrom-Json) NESTS a 3-row array into one Object[] element' (@($bad3).Count -eq 1 -and $bad3[0] -is [object[]]) ('count=' + @($bad3).Count)
+    T 'CLEAN TWIN assign-then-wrap gives the three rows, each with its own key' (
+        @($good3).Count -eq 3 -and ([string]@($good3)[2].key) -eq 'c'
+      ) ([string]@($good3).Count)
+    $batched = Get-Rulings $fakeDishes ([string]$qs2[0].name) ([string]$qs2[0].protein) ([string]$qs2[0].method)
+    T 'MUST FIRE  batch mode answers identically - one matcher, not two' (
+        $batched.key -eq $single.key -and @($batched.fam).Count -eq @($single.fam).Count -and @($batched.exact).Count -eq @($single.exact).Count
+      ) ($batched.key + ' vs ' + $single.key)
+    T 'CLEAN TWIN an unrelated dish gets no prior art from the same rows' (
+        @((Get-Rulings $fakeDishes 'Moroccan Lamb Tagine' 'any' 'any').exact).Count -eq 0
+      ) ([string]@((Get-Rulings $fakeDishes 'Moroccan Lamb Tagine' 'any' 'any').exact).Count)
   } finally { if (Test-Path $tmp) { Remove-Item $tmp -Force } }
 
   if ($bad -gt 0) { Write-Output ("considered-dishes SELF-TEST FAIL ({0})" -f $bad); exit 2 }
@@ -155,40 +237,37 @@ if ($runRecord) {
 }
 
 # ---- -Query ----------------------------------------------------------------------------------------
+if ($runQuery -and $BatchFile) {
+  if (-not (Test-Path $BatchFile)) { Write-Output ("considered-dishes: no batch file at {0}" -f $BatchFile); exit 1 }
+  # PS 5.1, TWO traps on one line, and the second one bit this file on 2026-08-23:
+  #   1. a ONE-element JSON array comes back as a bare object, so it needs @() to stay a collection;
+  #   2. `@(<pipeline> | ConvertFrom-Json)` on a MANY-element array gives ONE element of type
+  #      Object[] - ConvertFrom-Json emits the whole array as a single pipeline object in 5.1, and
+  #      @() then collects that one object. The estate's standing "wrap ConvertFrom-Json in @()"
+  #      rule is only half the story and is actively wrong here.
+  # ASSIGN FIRST, THEN WRAP. The assignment takes the array itself; @() then guards case 1.
+  # A batch of one was the fixture, and a batch of one is the only size where the broken form looks
+  # right - which is why the fixture below sends THREE.
+  $parsed = Get-Content $BatchFile -Raw -Encoding utf8 | ConvertFrom-Json
+  $queries = @($parsed)
+  $rows = @()
+  foreach ($q in $queries) {
+    $r = Get-Rulings $dishes ([string]$q.name) ([string]$q.protein) ([string]$q.method)
+    $rows += [pscustomobject]@{
+      key = [string]$q.key
+      dish_key = $r.key
+      rulings = @($r.exact)
+      same_family_other_protein = @(@($r.fam) | Select-Object -First 5)
+    }
+  }
+  Write-Output (ConvertTo-Json -InputObject @($rows) -Depth 6)
+  exit 0
+}
+
 if ($runQuery) {
-  if (-not $Name) { Write-Output 'considered-dishes: -Query needs -Name'; exit 1 }
-  $key = Get-DishKey $Name $Protein $Method
-  $kp = $key.Split('|')[0]; $km = $key.Split('|')[1]; $kf = $key.Split('|')[2]
-
-  # 'any' is a WILDCARD, not a value. A ruling recorded before the method was known must still match
-  # the same dish when the method is known later, or the ledger silently forgets its own entries.
-  function Test-Part { param([string]$a, [string]$b) return ($a -eq $b -or $a -eq 'any' -or $b -eq 'any') }
-
-  # A match needs at least one POSITIVE signal. Without this, a stored row keyed `any|any|plain` - no
-  # protein detected, no method detected, no sauce family - matches every query ever made, and the
-  # ledger confidently reports a Senegalese chicken dish as prior art for a Moroccan lamb tagine.
-  # Wildcards may WIDEN a match that already has evidence; they may never BE the evidence.
-  function Test-HasSignal {
-    param($P, [string]$Kp, [string]$Km, [string]$Kf)
-    if ($Kf -ne 'plain') { return $true }                                  # shared sauce family is signal
-    if ($P[0] -eq $Kp -and $Kp -ne 'any' -and $P[1] -eq $Km -and $Km -ne 'any') { return $true }  # concrete protein+method
-    return $false
-  }
-  $exact = @($dishes | Where-Object {
-    $p = ([string]$_.key).Split('|')
-    (Test-Part $p[0] $kp) -and (Test-Part $p[1] $km) -and $p[2] -eq $kf -and (Test-HasSignal $p $kp $km $kf)
-  })
-
-  # 'plain' means NO family was detected - it is the absence of a signal, not a shared one. Reporting
-  # cross-protein 'plain' matches turned a brand-new lamb tagine into five false neighbours on first
-  # test, which is exactly the too-coarse failure this ledger has to avoid to stay believable.
-  $fam = @()
-  if ($kf -ne 'plain') {
-    $fam = @($dishes | Where-Object {
-      $p = ([string]$_.key).Split('|')
-      $p[2] -eq $kf -and -not ((Test-Part $p[0] $kp) -and (Test-Part $p[1] $km))
-    })
-  }
+  if (-not $Name) { Write-Output 'considered-dishes: -Query needs -Name (or -BatchFile <json>)'; exit 1 }
+  $r = Get-Rulings $dishes $Name $Protein $Method
+  $key = $r.key; $exact = @($r.exact); $fam = @($r.fam)
   if ($runJson) {
     ([pscustomobject]@{ key=$key; prior=@($exact); same_family_other_protein=@($fam | Select-Object -First 5) } | ConvertTo-Json -Depth 6)
     if (@($exact).Count -gt 0) { exit 3 }

@@ -1,0 +1,31 @@
+{
+    "slug":  "jalape-o-popper-chicken",
+    "title":  "",
+    "source_url":  "",
+    "protein":  "",
+    "state":  "selected",
+    "wave":  null,
+    "created":  "2026-08-23T18:01:53",
+    "updated":  "2026-08-23T18:01:53",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-23T18:01:53",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/jalapeno-popper-chicken/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-23T18:01:53",
+                        "by":  "decider",
+                        "detail":  "Creamy jalapeño-popper chicken skillet (cream cheese, cheddar, bacon, jalapeño). Live neighbours are all generic word-overlap \u0027chicken\u0027 slow-cooker bowls, no real dupe; backlog jalapeño-poppers is an appetizer, and bacon-ranch/creamy-bacon-chicken sit at 0.79-0.80 with a different flavor family. The cold-plate flag is a false positive on a hot skillet main. Distinct, high-protein batch dinner."
+                    }
+                ]
+}

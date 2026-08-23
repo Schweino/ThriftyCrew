@@ -1,0 +1,13 @@
+{
+ "measured_at": "2026-08-23T17:07:58",
+ "device": "cpu",
+ "model": "BAAI/bge-m3",
+ "n_texts": 300,
+ "misses": 300,
+ "model_load_sec": 4.4,
+ "embed_sec": 10.909,
+ "wall_sec": 10.91,
+ "per_text_ms": 36.36,
+ "cuda_available": true,
+ "note": "CPU-first per PLAN-recipe-hunter-v3 section 3 S1. Nothing is scheduled on this number; it exists so a GPU window is only ever asked for against a measurement."
+}

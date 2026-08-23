@@ -15,6 +15,15 @@ export const meta = {
 }
 
 // ---------------------------------------------------------------------------------------------
+// SUPERSEDED FRONT END (2026-08-23, PLAN-recipe-hunter-v3 phase 1). The hunt and adjudicate lanes
+// below - 12 sourcers and 8 dedup adjudicators, 75.5% of run wf_11382034-6fd's tokens - are replaced
+// in v3 by the harvest plane (meal-prep\pipeline\harvest.py, zero tokens) plus ONE decider call per
+// ten pre-qualified dossiers (hunt-pool-seed.js). This file is kept because everything from `extract`
+// downstream is still the architecture of record and DRAIN mode still carries a seeded run to
+// publication; the v3 bridge seeds `selected` and hands off here. Do not restore the sourcer lanes to
+// "fix" an empty candidate queue - the backlog is the supply now. Phase 3 (D9) ports the whole file
+// to hunt-daemon.py under section 4.2's parity gate.
+// ---------------------------------------------------------------------------------------------
 // Architecture of record: design\PLAN-recipe-hunter-v2-2026-08-15.md section 2.4 (lane model),
 // section 3 (stage specs), plus design\PLAN-recipe-hunter-v2.1-2026-08-15.md section 5 (proving run).
 // This is a LANE model, not a per-recipe pipeline. The price lane in particular is a self-looping

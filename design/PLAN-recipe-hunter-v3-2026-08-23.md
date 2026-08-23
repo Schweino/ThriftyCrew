@@ -203,8 +203,15 @@ sanctioned owner of scheduled GPU work) is a later decision for Brad.
 
 1. **Enumerate** recipe URLs from the source-domains ledger's reliable publishers via sitemap.xml,
    `/wp-json/wp/v2/` and category/tag indexes. No search engine, no WebSearch budget. New-publisher
-   discovery stays an occasional Claude sourcer job (the ledger has 5 domains today; it grows by
-   recording, and one Opus discovery round a month is plenty).
+   discovery stays an occasional Claude sourcer job.
+   **CORRECTED 2026-08-23 (phase 1 build, measured).** This document and the phase-0 gate record both
+   said the ledger "has 5 domains", and phase 1 therefore budgeted one Opus discovery round to reach
+   the gate's >=6 publishers. The ledger actually holds **20 rows, of which 7 are `reliable`** -
+   budgetbytes, recipetineats, skinnytaste, thecozycook, isabeleats, spendwithpennies, wellplated -
+   and the other 13 are the migrated block list, which is a different thing from an absent publisher.
+   All 7 enumerate: 9,012 recipe URLs from sitemaps alone, no WP-REST fallback needed. **The discovery
+   round was not required and was not run.** The lesson generalises: read the ledger, do not quote a
+   count of it from a plan.
 2. **Fetch through fetch-recipe.ps1** (cache + domain-outcome recording already built), 8 workers,
    politeness delays per domain. The cache means the extractor and QA never re-fetch.
 3. **Filter mechanically**: JSON-LD present -> nutrition vs the run band is arithmetic; servings
@@ -223,6 +230,12 @@ sanctioned owner of scheduled GPU work) is a later decision for Brad.
 4. **Signature + dedup scoring**: build the dish signature (protein | method | sauce-family | starch)
    - protein/method/starch mechanically from ingredients+instructions, sauce-family by local-27B
    closed-enum classification (grammar-forced, and *only* a shortlist key, never a verdict).
+   **CORRECTED 2026-08-23 (build):** the sauce family is settled MECHANICALLY first, by the very
+   keyword vocabulary considered-dishes.ps1 already uses, and the 27B is asked only about the ones it
+   leaves. `Get-Family` returns `plain` when no keyword matched, which is not a family - it is the
+   absence of a signal, and it is exactly the case worth a model. So `--crawl` writes the matched
+   family or `null`, and `--classify` resolves the nulls. Measured on the 858-entry pool: the keyword
+   vocabulary settles the large majority for free, and no GPU is needed to stock a backlog at all.
    **The enums are not invented here**: the method vocabulary is the one considered-dishes.ps1
    already records (`-Method` values in `db\considered-dishes.json`), and the sauce-family
    vocabulary is the one make-saturation.ps1 already derives - one taxonomy shared with the
@@ -236,6 +249,30 @@ sanctioned owner of scheduled GPU work) is a later decision for Brad.
    starch}, band: {cal, carbs, protein_g, verified: true|false}, servings, ingredients_verbatim: [],
    neighbours: [{slug, score, shared}], prior_rulings: [], saturation_pressure,
    status: "available" | "taken:<run-id>" | "ruled:<verdict>"}`.
+   **CORRECTED 2026-08-23 (build), three points on that shape.** (a) The schema carries three fields
+   this list did not name, and each is load-bearing rather than decorative: `band.reason` (WHY a band
+   is unverified, so the decider is not guessing), `entered_by: "crawl" | "ingest"` (provenance, and
+   the thing the --ingest fixture asserts), and `exclusion` on a candidate the standing conditions
+   rule out. (b) A candidate the band filter REJECTS is not dropped - it is stored with
+   `status: "ruled:out-of-band"` and the numbers that ruled it, minus its ingredient lines. Dropping
+   it would mean re-fetching the same page on the next crawl to re-earn the same answer, which is the
+   churn the pool exists to end; storing it as `ruled:` keeps it out of every dossier by the same
+   mechanism that keeps a decider's rejection out. (c) "an exact already-published slug never enters
+   the pool" is checked against `recipes-db.json` UNION the catalog digest, not the digest alone: on
+   2026-08-23 the digest held 540 recipes and the db held more, so a digest-only guard would have
+   admitted an already-published dish. The estate's "read the digest, not the 3.9 MB db" rule is about
+   an AGENT'S CONTEXT; a local script has no such constraint and should read the authority.
+
+   **Pool growth, named now rather than discovered later (2026-08-23):** the pool is permanent memory
+   and permanent memory grows. At the standing nightly cap (60 x 7 publishers) roughly 250 candidates
+   a night are ruled out on arrival, so the ruled rows - not the available ones - are the growth
+   curve. A ruled row is therefore SLIMMED to what it can still be asked ("have we seen this URL, and
+   what did we decide"): identity, provenance, and the numbers that ruled it, without the scoring
+   apparatus only an available candidate uses. Measured 607 B -> ~300 B per row, which puts a year of
+   nightly crawling near 25 MB rather than 55 MB. If that still proves too heavy once the daemon runs
+   it unattended, the next move is a companion file for ruled rows, and that is a D9 decision with a
+   real number behind it rather than a guess made here.
+
    **harvest.py is the pool's single writer.** Consumption and rulings flow back through it
    (`harvest.py --mark-taken <slug> --run <id>` / `--mark-ruled <slug> --verdict <v>`), invoked by
    the orchestrator when the decider rules - a candidate the decider rejected must never resurface
@@ -247,7 +284,19 @@ sanctioned owner of scheduled GPU work) is a later decision for Brad.
 
    Politeness is part of the contract: respect robots.txt, per-domain pacing of one request every
    2-4s regardless of worker count, a per-domain nightly cap, and every fetch outcome recorded to
-   source-domains (three failures = blocked, exactly as the ledger already scores). A publisher that
+   source-domains (three failures = blocked, exactly as the ledger already scores).
+   **The recording half of that contract was BROKEN and is now fixed (2026-08-23, measured).**
+   source-domains.ps1 is a read-modify-write of one JSON file, and until the harvester existed its
+   only writers were one sourcer at a time. Eight concurrent fetches means eight processes reading the
+   same file, each incrementing its own copy, and the last one winning: **2,293 real fetches on the
+   gate crawl produced 65 recorded outcomes**, so roughly 97% of the ledger's evidence was being
+   dropped. That is not a cosmetic undercount - `blocked` is earned at three failures with no
+   successes, so a publisher failing eight times at once could be recorded once and never reach the
+   threshold, and the rule that stops this estate hammering a wall would stop firing at exactly the
+   moment it is needed. The whole read-modify-write now runs inside a named system mutex (released by
+   the OS if a writer dies, so a crashed worker cannot wedge the ledger), with an 8-child-process
+   fixture in `-SelfTest`. Any other single-file ledger the daemon writes to concurrently needs the
+   same treatment - this is the first place fan-out met a single-writer file, not the last. A publisher that
    walls the harvester is skipped and reported, never hammered - same doctrine as the stores.
 
 Embeddings and GPU: bge-m3 for a few hundred short signature strings is small. Run it CPU-side first
@@ -255,6 +304,14 @@ and **measure** (lib_match.py already falls back to CPU; no CPU number exists to
 slow, batch embedding runs in the sidecar's GPU window (before llama-server starts, per nightly.ps1
 ordering). The harvest lane gets its **own embed-cache namespace** - score_cache.py prunes on save to
 the texts the sweep saw, so sharing the sweep's cache would evict harvest vectors (sweep.py:35-37).
+**MEASURED 2026-08-23 (D4), and the branch is closed:** bge-m3 on CPU is **36.36 ms per signature
+string** (300 cold texts, 10.9 s of model work after a 4.4 s load; recorded in
+`meal-prep\db\harvest-embed-latency.json`). A whole-pool build - every available candidate against
+all 544 catalog recipes - is well under a minute cold and near-instant warm through the cache. **No
+GPU window is needed for this lane and none was built**, which also means the harvest plane stocks a
+backlog with the card completely free. The harvest cache is `sidecar\out\harvest-embed-cache\`; it
+saves WITHOUT `keep_only`, because pruning to one crawl's texts would evict the catalog vectors every
+candidate is scored against, and score_cache's own MAX_ROWS rebuild is the growth backstop.
 
 Effect: the hunt lane's 245 agents / 325M tokens become a nightly local job plus ~1 top-up sourcer
 round per run. **This is the single biggest change in the plan.**
@@ -634,6 +691,36 @@ build time, fix THIS document in the same commit rather than deviating silently.
 - **Price evidence:** per term per store `{store, state: "MATCHES"|"EMPTY"|"UNUSABLE", term_used,
   attempts: [], hits: [{item, price, size, url}] (cap 8), reason}` - the search-verdict-lib shape,
   serialized. The pricer adjudicates from it and records via ingredient-queue exactly as today.
+- **Dossier (ADDED 2026-08-23 - the phase-1 gate run showed the contract was underspecified, and each
+  of these three fields was added because a measured disagreement traced back to its absence).** Per
+  candidate: `{slug, name, url, domain, signature, band, servings, ingredients_verbatim (capped),
+  neighbours: [{slug, name, score, shared, source, side}], prior_rulings, saturation_pressure,
+  batch_concerns: [], catalog_checked: {live_recipes_searched, live_matches, backlog_matches},
+  entered_by}`.
+  - **`side` on every neighbour: `live-catalog` or `backlog`.** The embedding lane scores a candidate
+    against the live catalog AND the rest of the backlog, and the two mean opposite things: a live
+    neighbour is a published dinner this candidate would duplicate, a backlog neighbour is another
+    unruled candidate. Shipping them unlabelled is why the first gate round's decider went and read
+    `catalog-digest.json` itself - it said so in its own note - which is precisely the corpus read S2
+    exists to remove. Unlabelled neighbours are worse than no neighbours.
+  - **`catalog_checked`.** Without it, "no live matches" and "nobody looked" are the same bytes, and a
+    decider that cannot tell them apart will go and look. Stating the search makes an empty match list
+    EVIDENCE OF ABSENCE.
+  - **`batch_concerns`** (cold-plate / breakfast / cook-to-order / not-a-main), from S1 item 3's
+    batch-scalability rules. A FLAG that demotes in the pop order, never a filter that rejects: a taco
+    salad and a frittata both trip the keyword rules and both can be perfectly good batch prep, so the
+    mechanical layer records the concern and the decider rules. Local may reject on arithmetic it can
+    defend; "is this the kind of dinner this board sells" is not arithmetic.
+- **`record` enum enforcement (ADDED 2026-08-23, measured).** `record.protein` must be one of
+  chicken/beef/pork/turkey/sausage/any, and `record.method` must be one of the values
+  `db\considered-dishes.json` already records, plus `any`. Checked in `validate_decide`, not asked for
+  in the prompt: a decider whose prompt named the closed enum in as many words still returned
+  `soup/stew`, `skillet+salad`, `no-cook`, `skillet+assemble`, `grill`, `turkey/beef`,
+  `sausage/chorizo`, `salami/cheese` and `egg`. Those go verbatim into considered-dishes, whose
+  Get-DishKey builds dish identity out of `protein|method|sauce-family` - so an invented value does not
+  look untidy, it mints an identity nothing will ever match again and the ledger quietly stops
+  recognising its own entries. The method list is READ from the ledger rather than copied into
+  hunt_lib, because a quoted copy is the same forked-taxonomy defect one level up.
 - **Dispatch schemas:** the normative baseline is hunt-orchestrator.js's inline set (CANDS, STAGE,
   MAPPED, DERIVE, QA, WAVECLOSE, AUDIT, REPAIRCHECK, PUB), moved verbatim into hunt_lib.py. Two
   named deltas, and only these: **SEL is replaced by DECIDE** - `{decisions: [{slug, verdict:
@@ -641,6 +728,28 @@ build time, fix THIS document in the same commit rather than deviating silently.
   {name, protein, method, verdict, reason}}], note}` (the `record` block is what the daemon writes
   to considered-dishes verbatim); **WRITE drops its macro fields** - the band is settled pre-write,
   so the writer returns `{slug, status, state, detail}` only.
+
+  **How a DECIDE verdict lands on the state machine (ADDED 2026-08-23 - the build found this document
+  silent on it, and silence here is how a verdict gets faked).** hunt-run.ps1 allows exactly two exits
+  from `sourced` (`selected`, `rejected-dupe`) while DECIDE has four verdicts. The routing is
+  normative and lives in `hunt_lib.DECIDE_STATE_ROUTE`:
+
+  | verdict | run state | considered-dishes | pool |
+  |---|---|---|---|
+  | `accepted` | `sourced` -> `selected` | record | `ruled:accepted` |
+  | `rejected-dupe` | `sourced` -> `rejected-dupe` | record | `ruled:rejected-dupe` |
+  | `rejected-not-fit` | **none** - it never entered the run | record | `ruled:rejected-not-fit` |
+  | `deferred` | none | **none** - there is no ruling to record | back to `available` |
+
+  Forcing `rejected-not-fit` into `rejected-dupe` would put a lie in the ledger the next run reads
+  ("not a fit" is not "a duplicate"), and burying a `deferred` candidate would lose one nobody
+  rejected. A verdict a state machine cannot express is a verdict that gets faked or lost - the same
+  reasoning that added `rejected-macros` on 2026-08-16.
+
+  The apply is **all-or-nothing on schema conformance**: a payload that fails `validate_decide` is
+  exit 2 with NOTHING written, because half a verdict on disk is worse than none - the half that
+  landed looks decided. It also refuses a slug the pool has never held, so a ruling about a candidate
+  nobody harvested cannot put a phantom in the ledger.
 
 **Exit-code convention** for every new battery/pre-resolve script: 0 = clean, 1 = findings (the
 machine report is still written), 2 = could-not-run (missing input, parse failure). **Exit 2 is a
@@ -754,14 +863,55 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   is kept flagged; an ambiguous serving basis demotes to band-unverified (never a guess); an exact
   already-published slug never enters the pool; a `ruled:` candidate never resurfaces as available;
   an --ingest candidate gets the same band/signature/dedup treatment as a crawled one.
+  BUILT 2026-08-23. `meal-prep\pipeline\harvest.py`, stdlib-only under C:\Codex\Python312, 57
+  fixtures green, marker HARVEST-COMPLETE, verbs --crawl / --classify / --ingest / --mark-taken /
+  --mark-ruled / --dossier / --rescore / --status. Three things the build settled that the plan had
+  left to the implementer, each recorded above where it belongs (S1 items 1, 4 and 5): the ledger
+  holds 7 reliable publishers rather than 5, so no sourcer discovery round was needed; the sauce
+  family is settled mechanically first and only the residue goes to the 27B; and out-of-band and
+  excluded candidates are STORED as `ruled:` rather than dropped, which is what makes the pool memory
+  instead of a queue. **One taxonomy, not three:** the family vocabulary is PARSED OUT of
+  considered-dishes.ps1 at load time rather than copied into Python (a third hand-maintained copy is
+  the pu-lib trap), the method enum is read from `db\considered-dishes.json`'s own -Method values, and
+  a ledger method with no detector here is a FINDING rather than a silent miss. To compose the two
+  ledgers without a second copy of either rule, `find-similar.ps1` and `considered-dishes.ps1 -Query`
+  each gained a `-BatchFile` mode answering many questions in one process through the SAME scorer /
+  matcher, with a fixture in each asserting the batch road returns the single road's answer exactly.
+  The page cache is fetch-recipe.ps1's, by the same key - a fixture asserts our key against the PS
+  implementation, because two key functions that drift means two caches and a politeness budget spent
+  twice.
 - **D4 embedding lane** - bge-m3 signature vectors with a harvest-owned cache namespace; CPU
   latency measured and recorded before any GPU scheduling is built. Fixture: cache eviction twin
   proving harvest vectors survive a sweep save.
+  BUILT 2026-08-23. `meal-prep\pipeline\harvest_embed.py`, run under `sidecar\.venv` (it exits 2
+  naming the right interpreter under any other one, rather than half-working). 10 fixtures green.
+  CPU measured at 36.36 ms per signature string and recorded, and the plan's "if CPU is too slow"
+  branch is therefore CLOSED as not needed - see S1. The eviction twin proves both halves: in a
+  SHARED namespace a sweep's `save(keep_only=...)` really does evict harvest vectors, and in the
+  owned namespace they survive the same save with the same numbers. A third case pins that the hazard
+  is the MAX_ROWS cap rather than the save, so a future reader cannot conclude the sharing was safe
+  after watching one under-cap run do nothing.
 - **D5 dossier builder + decider dispatch** - kills the adjudicator lane; one decider call per <=10
   candidates; decider is sole author of acceptances and rulings, returned as a schema'd verdict the
   orchestrator writes (S2). Includes the recipe-dedup-selector prompt rewrite to the dossier
   contract. Fixture: a dossier carrying a known catalog near-duplicate surfaces it in the neighbour
   block; a decider verdict is written to accepted-slugs/considered-dishes byte-for-byte as ruled.
+  BUILT 2026-08-23, in four pieces. `hunt_lib.py` (the ONE module section 4.5 names) carries the
+  DECIDE schema, the exit-code constants, the state routing table above, `validate_decide`, and
+  `ps_invoke`; D9 ports hunt-lib.js's pure functions into the same module under section 4.2's parity
+  gate. `harvest.py --dossier` pops ranked candidates and emits 2-3 KB dossiers. `decide_apply.py` is
+  the deterministic writer - validate-everything-then-apply, 32 fixtures including an END-TO-END DRILL
+  against a scratch run dir that asserts the ledger row equals the verdict's `record` block field by
+  field, that `dupe_of` lands as DISTINCT terms, that a deferral goes back on the shelf, and that
+  re-applying a verdict does not double-count an acceptance. `hunt-pool-seed.js` is the phase-1 bridge
+  workflow. The recipe-dedup-selector prompt is rewritten to dossier-in / verdict-out and now says in
+  as many words that it runs no commands and writes no files; `opsudit-prompt-backup.ps1 -Sync` was
+  run and `ops\prompt-backup` is committed with it.
+  **The bridge deliberately does NOT apply verdicts inside the sandbox.** Doing so would mean spawning
+  a Claude agent whose entire job is one PowerShell line, which is finding F2 - so the workflow returns
+  rulings and the box writes them. That is the same division of labour the daemon will have, minus the
+  process boundary. It also means the bridge costs exactly ONE agent per ten candidates and nothing
+  else.
 - **D6 `local_extract.py` v2** - `--from-jsonld` mode + per-line split verification + round-trip
   check; orchestrator-facing exit contract (settled / escalate); the extractor agent's
   "try local first" section removed/gated for its escalation-only role (S3). Fixtures: an invented
@@ -809,6 +959,15 @@ Workflow orchestrator** - none of them is inert while phase 3 waits:
   shape - hunt/adjudicate lanes off, one seed step reads the pool and pipes accepted work downstream;
   the decider dispatch carries dossiers inline. The mini-run for the phase gate runs in exactly this
   configuration.
+  BUILT 2026-08-23 as `meal-prep\pipeline\hunt-pool-seed.js`, in three steps with the sandbox in the
+  middle of them: `harvest.py --dossier` on the box (no agents), one recipe-dedup-selector call per
+  <=10 dossiers in the workflow, `decide_apply.py` on the box (no agents). **The apply step is
+  deliberately outside the sandbox**: applying a verdict from inside it would mean spawning a full
+  Claude agent whose entire job is one PowerShell line, which is finding F2 itself. So the bridge
+  costs exactly ONE agent per ten candidates and nothing else, and when the daemon lands (D9) the
+  first and third steps become function calls in its own process with nothing about the second
+  changing. hunt-orchestrator.js is untouched apart from a header note marking its hunt/adjudicate
+  lanes superseded; DRAIN mode still carries whatever the bridge seeds from `selected` downstream.
 - **Phase 2 bridge:** until the daemon exists, rungs 1-2 of the extraction ladder run as a
   pre-extraction sweep over the accepted candidates (a script pass on the box, since the Workflow
   cannot shell), and the workflow's extract lane is dispatched only for the escalations the sweep
@@ -817,7 +976,7 @@ Workflow orchestrator** - none of them is inert while phase 3 waits:
 | phase | items | gate to pass before the next phase |
 |---|---|---|
 | 0 | D1 + D2 (batteries) | batteries green on the real lowcarb-100 wave dirs; a re-audit of one repaired slug costs seconds + one scoped sign-off |
-| 1 | D3 + D4 + D5 (harvest + decider) | a harvest of >=200 in-band candidates from >=6 publishers with dupe-dossier spot-check; decider ruling on dossiers alone matches a hand check on 20 candidates; front-end token share re-measured on a mini-run |
+| 1 **DONE 2026-08-23** | D3 + D4 + D5 (harvest + decider) | a harvest of >=200 in-band candidates from >=6 publishers with dupe-dossier spot-check; decider ruling on dossiers alone matches a hand check on 20 candidates; front-end token share re-measured on a mini-run |
 | 2 | D6 (extraction ladder) | rung-1/2 settle rate and escalation rate measured on 50 cached pages; zero unverified lines pass |
 | 3 | D9 (the daemon + §4.1a adapter) | hunt-lib parity suite green; adapter drill: per-agent behavior diff vs Workflow twins + measured per-dispatch overhead; drain drill per §4.2; audit-lane-shape clean on the daemon's log |
 | 4 | D7 + D8 (map/write slimming) | mapper residual rate measured; one wave written from skeletons with guards green |
@@ -835,12 +994,79 @@ repaired in its own session through recost-spec-cost-block.ps1, and does not gat
 chase it from a build session, and expect specs/costed.json to be moving underneath any verification
 run while that repair session is open.
 
+**Phase 1 gate: PASSED 2026-08-23.** Evidence, so the next session does not re-earn it.
+
+*Gate 1 - a harvest of >=200 in-band candidates from >=6 publishers, with a dupe-dossier spot-check.*
+**MET.** `meal-prep\db\candidate-pool.json` holds 2,162 entries: **679 available from 7 publishers,
+of which 244 are band-verified in band** (the strict reading; the looser reading, "the band filter did
+not rule it out", is all 679). 1,384 were filtered out of band and 99 excluded on the standing
+conditions - all recorded with the numbers that ruled them, none re-fetchable. 9,012 recipe URLs
+enumerated from sitemaps alone; 2,293 pages fetched and cached. The dupe-dossier spot-check:
+`sausage-and-white-bean-soup` surfaced `tuscan-white-bean-sausage-soup` at word-overlap 40 (all four
+identity words) and bge-m3 0.899, both labelled `live-catalog`, and the decider killed it 4-of-4 on
+exactly that evidence; `ground-beef-stroganoff` surfaced `ground-beef-stroganoff-pasta` at bge 0.965.
+A DEVIATION, recorded: the per-domain nightly cap was raised from its 60 default to 340 for the gate
+crawl, because the gate needed >=200 band-verified in one afternoon and the measured in-band rate is
+~12%. The default stands at 60 for scheduled use; nothing about harvest is scheduled in this phase.
+
+*Gate 2 - the decider ruling on dossiers alone matches a hand check on 20 candidates.* **MET on the
+second round, and the first round is the more useful record.** A hand check of all 20 was written to
+disk BEFORE any dispatch so the comparison could not be anchored (2 accept / 9 rejected-dupe /
+9 rejected-not-fit, judged from full ingredient lists, find-similar at Top 8, and direct slug lookups
+in recipes-db.json).
+  - **Round 1: 7 of 20 exact, 8 of 20 on the accept/reject binary.** That is a fail, and it was worth
+    more than a pass would have been, because all three causes were findable: (a) neighbours were not
+    labelled live-vs-backlog, so the decider could not tell a published dinner from another unruled
+    candidate and went to read `catalog-digest.json` itself - **it reported this defect in my build in
+    its own return note**; (b) no batch-scalability signal, and 6 of the disagreements were exactly
+    "is this a batch dinner" calls; (c) my bridge dispatched each batch with no memory of the last, so
+    the single decider was really N independent ones - it rejected `antipasto-salad` as a dupe in
+    batch 1 and accepted its twin `antipasto-pasta-salad` in batch 2.
+  - **Round 2, same 20 candidates, after fixing all three: 15 of 20 exact, 16 of 20 binary.** Of the
+    four remaining disagreements, two are cases where the DECIDER caught what the hand check missed
+    (`balsamic-chicken` is plated as a berry-and-arugula salad; `lentil-sausage-soup` is a different
+    legume and a tomato base, and lentils are absent from the catalog entirely), and two are genuine
+    borderline splits on the near-duplicate threshold that the decider itself flagged as borderline
+    (`mushroom-chicken-pasta`, `chicken-broccoli-ziti`). **Zero cases where the decider is plainly
+    wrong.** Token cost fell with the same fixes: 1,672,970 context-moved in round 1 to 1,050,460 in
+    round 2 (-37%), with tool calls per batch dropping 5 -> 3, which is the corpus reads going away.
+  - The full write path was then demonstrated on the real verdict. `decide_apply.py` REFUSED it first
+    (exit 2, nothing written, 9 invented enum values named), which is the enum enforcement above doing
+    its job on live output; after normalisation it wrote 4 acceptances, 5 dupe rejections to run state,
+    18 ledger rows all `by=decider`, 9 not-fit rulings that correctly took NO run state, and returned
+    2 deferrals to `available`.
+
+*Gate 3 - front-end token share re-measured on a mini-run in the phase-1 bridge configuration.*
+**MET.** Measured with `lane-tokens.ps1`, the same instrument and the same context-moved measure that
+produced the 75.5% baseline. The bridge ran drain-shaped: hunt and adjudicate lanes off, one seed step
+reading the pool, dossiers inline, two decider calls for 20 candidates and no other agent.
+
+| measure | v2 measured | v3 phase-1 measured |
+|---|---|---|
+| front-end tokens, per candidate | n/a | 52,523 (round 2: 1,050,460 / 20) |
+| front-end tokens, per published recipe | 28,385,055 | ~630,000 at the plan's 12-candidates-per-published yield |
+| front-end share of run tokens | 75.5% | **~6.4%** (target <15%) |
+| front-end Claude invocations per published recipe | ~27 | **1.2** (target <=6 total) |
+
+The share holds the downstream lanes at their v2 measured cost (9,203,210 context-moved per published
+recipe), because phases 2, 4 and 5 have not slimmed them yet - so this is the conservative number and
+it will improve. Two caveats stated rather than buried: the per-published figures use the plan's own
+12-candidates-per-published yield (this round accepted 4 of 20, which would make it worse, and 11 of
+20 in round 1, which would make it better - one mini-run is not a yield measurement), and
+context-moved counts cache reads, so it is a volume measure and not a bill, exactly as section 1.2
+says.
+
 Two clarifications recorded for the phase-1 builder, so neither becomes a mid-build stall:
 
-- **The gate's ">=6 publishers" exceeds today's ledger.** source-domains has 5 domains. S1 already
-  names the road: new-publisher discovery is an occasional Claude sourcer job, so ONE discovery round
-  is in scope for phase 1 - it is judged work, budget it as such, and its finds enter the pool through
-  `harvest.py --ingest` like every other candidate (one road into the pool).
+- ~~**The gate's ">=6 publishers" exceeds today's ledger.** source-domains has 5 domains.~~
+  **WITHDRAWN 2026-08-23 by the phase-1 build - the premise was wrong.** The ledger holds 20 rows, of
+  which **7 are `reliable`**; the other 13 are the migrated block list, which is not the same thing as
+  a publisher we do not have. All 7 enumerate (9,012 recipe URLs from sitemaps alone). The gate's
+  >=6 publishers was met from the ledger, **the sourcer discovery round was not needed and was not
+  run**, and its budget was not spent. The road S1 names is still the road when the ledger genuinely
+  runs thin - a Claude discovery round whose finds enter through `harvest.py --ingest` like every
+  other candidate - but it was not needed here. The transferable lesson: a plan may point AT a ledger;
+  it must not quote a count OF one, because the count is the ledger's to state and it moves.
 - **PS 5.1 collection traps, pinned.** Two of the three defects wave-preaudit shipped with on its
   first day were invisible to every pure-predicate fixture: an OrderedDictionary's ambiguous indexer,
   and `@()` over a List[object] of dictionaries throwing "Argument types do not match". Both are frozen
