@@ -5,8 +5,8 @@
     "wave":  4,
     "batch":  "hunt-2026-08-15-lowcarb-100-w4",
     "scope":  "whole-wave",
-    "generated":  "2026-08-23T16:21:10",
-    "elapsed_sec":  13.1,
+    "generated":  "2026-08-23T16:26:06",
+    "elapsed_sec":  12.2,
     "wave_slugs":  [
                        "sheet-pan-smoked-sausage-broccoli-cheddar",
                        "spinach-provolone-stuffed-flank-steak-rolls"
@@ -16,9 +16,9 @@
                   "spinach-provolone-stuffed-flank-steak-rolls"
               ],
     "inputs":  {
-                   "costed_mtime":  "2026-08-23T16:07:28",
-                   "reference_card":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\db\\built\\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html",
-                   "food_db":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\food-macros-db.json"
+                   "costed_mtime":  "2026-08-23T13:29:25",
+                   "reference_card":  "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\built\\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html",
+                   "food_db":  "C:\\Codex\\ThriftyCrew\\meal-prep\\food-macros-db.json"
                },
     "slug_checks":  {
                         "sheet-pan-smoked-sausage-broccoli-cheddar":  [
@@ -26,7 +26,7 @@
                                                                               "check":  "spec-present",
                                                                               "verdict":  "pass",
                                                                               "numbers":  {
-                                                                                              "mtime":  "2026-08-23T16:07:28"
+                                                                                              "mtime":  "2026-08-23T13:29:34"
                                                                                           },
                                                                               "detail":  "spec present and parses"
                                                                           },
@@ -70,8 +70,8 @@
                                                                               "check":  "cost-reconcile",
                                                                               "verdict":  "pass",
                                                                               "numbers":  {
-                                                                                              "spec_mtime":  "2026-08-23T16:07:28",
-                                                                                              "costed_mtime":  "2026-08-23T16:07:28",
+                                                                                              "spec_mtime":  "2026-08-23T13:29:34",
+                                                                                              "costed_mtime":  "2026-08-23T13:29:25",
                                                                                               "costed_is_newer_than_spec":  false
                                                                                           },
                                                                               "detail":  "every spec cost field matches its engine row to the cent"
@@ -104,8 +104,8 @@
                                                                               "check":  "card-rebuild",
                                                                               "verdict":  "pass",
                                                                               "numbers":  {
-                                                                                              "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-4.preaudit-cards\\sheet-pan-smoked-sausage-broccoli-cheddar",
-                                                                                              "body_bytes":  66491,
+                                                                                              "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-4.preaudit-cards\\sheet-pan-smoked-sausage-broccoli-cheddar",
+                                                                                              "body_bytes":  66490,
                                                                                               "make_it_steps":  6,
                                                                                               "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                           },
@@ -117,7 +117,7 @@
                                                                                 "check":  "spec-present",
                                                                                 "verdict":  "pass",
                                                                                 "numbers":  {
-                                                                                                "mtime":  "2026-08-23T16:20:12"
+                                                                                                "mtime":  "2026-08-23T16:25:22"
                                                                                             },
                                                                                 "detail":  "spec present and parses"
                                                                             },
@@ -161,8 +161,8 @@
                                                                                 "check":  "cost-reconcile",
                                                                                 "verdict":  "pass",
                                                                                 "numbers":  {
-                                                                                                "spec_mtime":  "2026-08-23T16:20:12",
-                                                                                                "costed_mtime":  "2026-08-23T16:07:28",
+                                                                                                "spec_mtime":  "2026-08-23T16:25:22",
+                                                                                                "costed_mtime":  "2026-08-23T13:29:25",
                                                                                                 "costed_is_newer_than_spec":  false
                                                                                             },
                                                                                 "detail":  "every spec cost field matches its engine row to the cent"
@@ -195,8 +195,8 @@
                                                                                 "check":  "card-rebuild",
                                                                                 "verdict":  "pass",
                                                                                 "numbers":  {
-                                                                                                "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-4.preaudit-cards\\spinach-provolone-stuffed-flank-steak-rolls",
-                                                                                                "body_bytes":  67930,
+                                                                                                "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-4.preaudit-cards\\spinach-provolone-stuffed-flank-steak-rolls",
+                                                                                                "body_bytes":  67929,
                                                                                                 "make_it_steps":  7,
                                                                                                 "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                             },

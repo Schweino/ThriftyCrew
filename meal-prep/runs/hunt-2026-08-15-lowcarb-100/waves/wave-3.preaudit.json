@@ -5,8 +5,8 @@
     "wave":  3,
     "batch":  "hunt-2026-08-15-lowcarb-100-w3",
     "scope":  "whole-wave",
-    "generated":  "2026-08-23T16:20:57",
-    "elapsed_sec":  13.7,
+    "generated":  "2026-08-23T16:25:54",
+    "elapsed_sec":  12.7,
     "wave_slugs":  [
                        "garlic-butter-steak-bites-zucchini",
                        "turkey-meatballs-cream-sauce-skillet",
@@ -30,9 +30,9 @@
                   "sheet-pan-tandoori-chicken-cauliflower"
               ],
     "inputs":  {
-                   "costed_mtime":  "2026-08-23T16:07:28",
-                   "reference_card":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\db\\built\\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html",
-                   "food_db":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\food-macros-db.json"
+                   "costed_mtime":  "2026-08-23T13:29:25",
+                   "reference_card":  "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\built\\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html",
+                   "food_db":  "C:\\Codex\\ThriftyCrew\\meal-prep\\food-macros-db.json"
                },
     "slug_checks":  {
                         "garlic-butter-steak-bites-zucchini":  [
@@ -40,7 +40,7 @@
                                                                        "check":  "spec-present",
                                                                        "verdict":  "pass",
                                                                        "numbers":  {
-                                                                                       "mtime":  "2026-08-23T16:07:28"
+                                                                                       "mtime":  "2026-08-23T13:29:34"
                                                                                    },
                                                                        "detail":  "spec present and parses"
                                                                    },
@@ -84,8 +84,8 @@
                                                                        "check":  "cost-reconcile",
                                                                        "verdict":  "pass",
                                                                        "numbers":  {
-                                                                                       "spec_mtime":  "2026-08-23T16:07:28",
-                                                                                       "costed_mtime":  "2026-08-23T16:07:28",
+                                                                                       "spec_mtime":  "2026-08-23T13:29:34",
+                                                                                       "costed_mtime":  "2026-08-23T13:29:25",
                                                                                        "costed_is_newer_than_spec":  false
                                                                                    },
                                                                        "detail":  "every spec cost field matches its engine row to the cent"
@@ -118,8 +118,8 @@
                                                                        "check":  "card-rebuild",
                                                                        "verdict":  "pass",
                                                                        "numbers":  {
-                                                                                       "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\garlic-butter-steak-bites-zucchini",
-                                                                                       "body_bytes":  68088,
+                                                                                       "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\garlic-butter-steak-bites-zucchini",
+                                                                                       "body_bytes":  68087,
                                                                                        "make_it_steps":  7,
                                                                                        "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                    },
@@ -131,7 +131,7 @@
                                                                          "check":  "spec-present",
                                                                          "verdict":  "pass",
                                                                          "numbers":  {
-                                                                                         "mtime":  "2026-08-23T16:07:28"
+                                                                                         "mtime":  "2026-08-23T13:29:34"
                                                                                      },
                                                                          "detail":  "spec present and parses"
                                                                      },
@@ -175,8 +175,8 @@
                                                                          "check":  "cost-reconcile",
                                                                          "verdict":  "pass",
                                                                          "numbers":  {
-                                                                                         "spec_mtime":  "2026-08-23T16:07:28",
-                                                                                         "costed_mtime":  "2026-08-23T16:07:28",
+                                                                                         "spec_mtime":  "2026-08-23T13:29:34",
+                                                                                         "costed_mtime":  "2026-08-23T13:29:25",
                                                                                          "costed_is_newer_than_spec":  false
                                                                                      },
                                                                          "detail":  "every spec cost field matches its engine row to the cent"
@@ -209,8 +209,8 @@
                                                                          "check":  "card-rebuild",
                                                                          "verdict":  "pass",
                                                                          "numbers":  {
-                                                                                         "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\turkey-meatballs-cream-sauce-skillet",
-                                                                                         "body_bytes":  69855,
+                                                                                         "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\turkey-meatballs-cream-sauce-skillet",
+                                                                                         "body_bytes":  69854,
                                                                                          "make_it_steps":  7,
                                                                                          "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                      },
@@ -222,7 +222,7 @@
                                                                   "check":  "spec-present",
                                                                   "verdict":  "pass",
                                                                   "numbers":  {
-                                                                                  "mtime":  "2026-08-23T16:15:26"
+                                                                                  "mtime":  "2026-08-23T16:25:22"
                                                                               },
                                                                   "detail":  "spec present and parses"
                                                               },
@@ -266,8 +266,8 @@
                                                                   "check":  "cost-reconcile",
                                                                   "verdict":  "pass",
                                                                   "numbers":  {
-                                                                                  "spec_mtime":  "2026-08-23T16:15:26",
-                                                                                  "costed_mtime":  "2026-08-23T16:07:28",
+                                                                                  "spec_mtime":  "2026-08-23T16:25:22",
+                                                                                  "costed_mtime":  "2026-08-23T13:29:25",
                                                                                   "costed_is_newer_than_spec":  false
                                                                               },
                                                                   "detail":  "every spec cost field matches its engine row to the cent"
@@ -300,8 +300,8 @@
                                                                   "check":  "card-rebuild",
                                                                   "verdict":  "pass",
                                                                   "numbers":  {
-                                                                                  "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\mexican-chorizo-egg-casserole",
-                                                                                  "body_bytes":  70598,
+                                                                                  "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\mexican-chorizo-egg-casserole",
+                                                                                  "body_bytes":  70597,
                                                                                   "make_it_steps":  8,
                                                                                   "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                               },
@@ -313,7 +313,7 @@
                                                                         "check":  "spec-present",
                                                                         "verdict":  "pass",
                                                                         "numbers":  {
-                                                                                        "mtime":  "2026-08-23T16:20:12"
+                                                                                        "mtime":  "2026-08-23T16:25:22"
                                                                                     },
                                                                         "detail":  "spec present and parses"
                                                                     },
@@ -357,8 +357,8 @@
                                                                         "check":  "cost-reconcile",
                                                                         "verdict":  "pass",
                                                                         "numbers":  {
-                                                                                        "spec_mtime":  "2026-08-23T16:20:12",
-                                                                                        "costed_mtime":  "2026-08-23T16:07:28",
+                                                                                        "spec_mtime":  "2026-08-23T16:25:22",
+                                                                                        "costed_mtime":  "2026-08-23T13:29:25",
                                                                                         "costed_is_newer_than_spec":  false
                                                                                     },
                                                                         "detail":  "every spec cost field matches its engine row to the cent"
@@ -391,8 +391,8 @@
                                                                         "check":  "card-rebuild",
                                                                         "verdict":  "pass",
                                                                         "numbers":  {
-                                                                                        "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\spinach-artichoke-chicken-casserole",
-                                                                                        "body_bytes":  69765,
+                                                                                        "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\spinach-artichoke-chicken-casserole",
+                                                                                        "body_bytes":  69764,
                                                                                         "make_it_steps":  8,
                                                                                         "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                     },
@@ -404,7 +404,7 @@
                                                                 "check":  "spec-present",
                                                                 "verdict":  "pass",
                                                                 "numbers":  {
-                                                                                "mtime":  "2026-08-23T16:15:26"
+                                                                                "mtime":  "2026-08-23T16:25:22"
                                                                             },
                                                                 "detail":  "spec present and parses"
                                                             },
@@ -448,8 +448,8 @@
                                                                 "check":  "cost-reconcile",
                                                                 "verdict":  "pass",
                                                                 "numbers":  {
-                                                                                "spec_mtime":  "2026-08-23T16:15:26",
-                                                                                "costed_mtime":  "2026-08-23T16:07:28",
+                                                                                "spec_mtime":  "2026-08-23T16:25:22",
+                                                                                "costed_mtime":  "2026-08-23T13:29:25",
                                                                                 "costed_is_newer_than_spec":  false
                                                                             },
                                                                 "detail":  "every spec cost field matches its engine row to the cent"
@@ -482,8 +482,8 @@
                                                                 "check":  "card-rebuild",
                                                                 "verdict":  "pass",
                                                                 "numbers":  {
-                                                                                "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\pulled-pork-stuffed-peppers",
-                                                                                "body_bytes":  66547,
+                                                                                "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\pulled-pork-stuffed-peppers",
+                                                                                "body_bytes":  66546,
                                                                                 "make_it_steps":  8,
                                                                                 "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                             },
@@ -495,7 +495,7 @@
                                                                      "check":  "spec-present",
                                                                      "verdict":  "pass",
                                                                      "numbers":  {
-                                                                                     "mtime":  "2026-08-23T16:07:28"
+                                                                                     "mtime":  "2026-08-23T13:29:34"
                                                                                  },
                                                                      "detail":  "spec present and parses"
                                                                  },
@@ -539,8 +539,8 @@
                                                                      "check":  "cost-reconcile",
                                                                      "verdict":  "pass",
                                                                      "numbers":  {
-                                                                                     "spec_mtime":  "2026-08-23T16:07:28",
-                                                                                     "costed_mtime":  "2026-08-23T16:07:28",
+                                                                                     "spec_mtime":  "2026-08-23T13:29:34",
+                                                                                     "costed_mtime":  "2026-08-23T13:29:25",
                                                                                      "costed_is_newer_than_spec":  false
                                                                                  },
                                                                      "detail":  "every spec cost field matches its engine row to the cent"
@@ -573,8 +573,8 @@
                                                                      "check":  "card-rebuild",
                                                                      "verdict":  "pass",
                                                                      "numbers":  {
-                                                                                     "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\flank-steak-parmesan-green-beans",
-                                                                                     "body_bytes":  67883,
+                                                                                     "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\flank-steak-parmesan-green-beans",
+                                                                                     "body_bytes":  67882,
                                                                                      "make_it_steps":  8,
                                                                                      "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                  },
@@ -586,7 +586,7 @@
                                                               "check":  "spec-present",
                                                               "verdict":  "pass",
                                                               "numbers":  {
-                                                                              "mtime":  "2026-08-23T16:07:28"
+                                                                              "mtime":  "2026-08-23T13:29:34"
                                                                           },
                                                               "detail":  "spec present and parses"
                                                           },
@@ -630,8 +630,8 @@
                                                               "check":  "cost-reconcile",
                                                               "verdict":  "pass",
                                                               "numbers":  {
-                                                                              "spec_mtime":  "2026-08-23T16:07:28",
-                                                                              "costed_mtime":  "2026-08-23T16:07:28",
+                                                                              "spec_mtime":  "2026-08-23T13:29:34",
+                                                                              "costed_mtime":  "2026-08-23T13:29:25",
                                                                               "costed_is_newer_than_spec":  false
                                                                           },
                                                               "detail":  "every spec cost field matches its engine row to the cent"
@@ -664,8 +664,8 @@
                                                               "check":  "card-rebuild",
                                                               "verdict":  "pass",
                                                               "numbers":  {
-                                                                              "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\keto-cheeseburger-skillet",
-                                                                              "body_bytes":  68306,
+                                                                              "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\keto-cheeseburger-skillet",
+                                                                              "body_bytes":  68305,
                                                                               "make_it_steps":  7,
                                                                               "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                           },
@@ -677,7 +677,7 @@
                                                                        "check":  "spec-present",
                                                                        "verdict":  "pass",
                                                                        "numbers":  {
-                                                                                       "mtime":  "2026-08-23T16:07:28"
+                                                                                       "mtime":  "2026-08-23T13:29:34"
                                                                                    },
                                                                        "detail":  "spec present and parses"
                                                                    },
@@ -721,8 +721,8 @@
                                                                        "check":  "cost-reconcile",
                                                                        "verdict":  "pass",
                                                                        "numbers":  {
-                                                                                       "spec_mtime":  "2026-08-23T16:07:28",
-                                                                                       "costed_mtime":  "2026-08-23T16:07:28",
+                                                                                       "spec_mtime":  "2026-08-23T13:29:34",
+                                                                                       "costed_mtime":  "2026-08-23T13:29:25",
                                                                                        "costed_is_newer_than_spec":  false
                                                                                    },
                                                                        "detail":  "every spec cost field matches its engine row to the cent"
@@ -755,8 +755,8 @@
                                                                        "check":  "card-rebuild",
                                                                        "verdict":  "pass",
                                                                        "numbers":  {
-                                                                                       "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\low-carb-taco-cabbage-beef-skillet",
-                                                                                       "body_bytes":  65558,
+                                                                                       "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\low-carb-taco-cabbage-beef-skillet",
+                                                                                       "body_bytes":  65557,
                                                                                        "make_it_steps":  7,
                                                                                        "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                    },
@@ -768,7 +768,7 @@
                                                                            "check":  "spec-present",
                                                                            "verdict":  "pass",
                                                                            "numbers":  {
-                                                                                           "mtime":  "2026-08-23T16:15:26"
+                                                                                           "mtime":  "2026-08-23T16:25:22"
                                                                                        },
                                                                            "detail":  "spec present and parses"
                                                                        },
@@ -812,8 +812,8 @@
                                                                            "check":  "cost-reconcile",
                                                                            "verdict":  "pass",
                                                                            "numbers":  {
-                                                                                           "spec_mtime":  "2026-08-23T16:15:26",
-                                                                                           "costed_mtime":  "2026-08-23T16:07:28",
+                                                                                           "spec_mtime":  "2026-08-23T16:25:22",
+                                                                                           "costed_mtime":  "2026-08-23T13:29:25",
                                                                                            "costed_is_newer_than_spec":  false
                                                                                        },
                                                                            "detail":  "every spec cost field matches its engine row to the cent"
@@ -846,8 +846,8 @@
                                                                            "check":  "card-rebuild",
                                                                            "verdict":  "pass",
                                                                            "numbers":  {
-                                                                                           "scratch":  "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\confident-northcutt-d9a1a4\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\sheet-pan-tandoori-chicken-cauliflower",
-                                                                                           "body_bytes":  67846,
+                                                                                           "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100\\waves\\wave-3.preaudit-cards\\sheet-pan-tandoori-chicken-cauliflower",
+                                                                                           "body_bytes":  67845,
                                                                                            "make_it_steps":  8,
                                                                                            "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                        },
