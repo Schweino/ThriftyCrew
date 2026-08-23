@@ -1234,6 +1234,30 @@ def _emit_contested(path: str, limit: int | None = None) -> int:
                 r[0] for r in db.conn.execute(
                     "SELECT DISTINCT product_name FROM question_verdicts "
                     "WHERE product_name IS NOT NULL AND product_name <> ''")}),
+            # THE RULINGS THAT MAY TESTIFY (plan §3.2, added 2026-08-23). The sidecar owns
+            # vector maths and this side owns AUTHORITY, so the filtering happens here: only
+            # adjudicated rulings are emitted, exactly the set prompt v5 is allowed to cite.
+            # Sending everything and letting the sidecar filter would put authority.py's
+            # judgement in two places, which is the two-implementations bug this estate keeps
+            # paying for.
+            #
+            # WHY THE SIDECAR AND NOT resolve.py. §3.2 says the vectors are "searched from RAM
+            # at resolve time", and that cannot happen: the resolve lane runs under the graph's
+            # interpreter, which has no numpy (only sidecar/.venv does, 2.5.1), and installing
+            # it there to serve one feature would put the nightly matching chain's dependencies
+            # at the mercy of a retrieval nicety. So the sweep - which already holds the
+            # vectors, the model and numpy - computes the neighbours while it is scoring the
+            # contested lane, and resolve reads the answer hours later off a card it never
+            # touched. Same shape as the helper scores, same reason.
+            "rulings": [
+                {"name": r[1], "commodity": r[0], "kind": ("confirm" if r[2] == "llm_confirmed"
+                                                           else "reject")}
+                for r in db.conn.execute(
+                    """SELECT commodity_id, product_name, status, reason, decided_by
+                       FROM question_verdicts
+                       WHERE status IN ('llm_rejected','known_wrong','llm_confirmed')
+                         AND product_name IS NOT NULL AND product_name <> ''""")
+                if authority_tier(r[2], r[3], r[4]) in CITABLE_AS_PRECEDENT],
         }
     d = os.path.dirname(os.path.abspath(path))
     if d:

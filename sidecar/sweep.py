@@ -160,6 +160,81 @@ def _selftest() -> int:
     return 0
 
 
+def memory_by_meaning(m, pairs: list[dict], rulings: list[dict], names: list[str],
+                      n_rej: int = 6, n_conf: int = 3) -> int:
+    """Plan §3.2 - the nearest ADJUDICATED rulings to each contested listing, BY MEANING.
+
+    What it replaces: `Resolver.prior_rulings` ranks precedent by bag-of-words Jaccard over
+    `[a-z]{3,}`, per commodity. That fails twice. It cannot transfer a ruling ACROSS
+    commodities, and it retrieves nothing at all when the words do not overlap - the
+    coconut-oil / Epsom-salt case the plan names, where the two listings share no word and
+    are the same mistake.
+
+    WHY THIS RUNS HERE AND NOT IN resolve.py. §3.2 says the vectors are "searched from RAM at
+    resolve time". They cannot be: the resolve lane runs under the graph's interpreter, which
+    has no numpy, and adding it there would put the nightly matching chain's dependencies at
+    the mercy of a retrieval feature. The sweep already holds the vectors, the model and
+    numpy, so it computes the neighbours while it is scoring the contested lane and resolve
+    reads the answer hours later off a card it never touched - the same shape as the helper
+    scores, for the same reason.
+
+    ACROSS ALL COMMODITIES IS THE POINT, and it is also the hazard. A neighbour drawn from a
+    DIFFERENT commodity cannot be shown under prompt v5's heading "ALREADY RULED NOT THIS
+    COMMODITY" - that sentence would be false, and a false precedent is precisely what phase 1
+    took out of this loop. Every neighbour therefore carries the commodity it was ruled for,
+    so the prompt can say which board decision it is quoting.
+
+    A ruling on the listing under judgement is never its own neighbour.
+    """
+    if not rulings or not pairs:
+        return 0
+    t0 = time.time()
+    rnames = [r["name"] for r in rulings]
+    rvecs = m.embed([clean_product(x) for x in rnames])
+    qvecs = m.embed([clean_product(x) for x in names])
+    sims = qvecs @ rvecs.T                       # (queries, rulings), both normalised
+    k = min(len(rulings), max(n_rej, n_conf) * 8)
+    top = torch.topk(sims, k=k, dim=1)
+    for i, p in enumerate(pairs):
+        own = clean_product(p["product"]).lower()
+        rej, conf = [], []
+        for rank in range(k):
+            j = int(top.indices[i][rank])
+            r = rulings[j]
+            if clean_product(r["name"]).lower() == own:
+                continue                          # never its own precedent
+            same = r.get("commodity") == p.get("id")
+            # A CROSS-COMMODITY *CONFIRM* IS NOT EVIDENCE, and this is measured rather than
+            # assumed. bge-m3 cosine ranks brand-and-format likeness, not food identity, so
+            # the highest-scoring cross-commodity neighbours on 2026-08-23 were
+            # `Great Value Swiss Sliced` -> confirm `Great Value Sliced Olives` (0.817) and
+            # `Member's Mark Taco Seasoning` -> confirm `Member's Mark Italian Spaghetti
+            # Seasoning` (0.813). Showing those under "this is what belonging looks like"
+            # teaches the model about a different food, and no cosine floor helps because the
+            # WORST examples score HIGHEST.
+            #
+            # Rejections transfer and confirmations do not, which is not symmetry-breaking for
+            # its own sake: "this shape of listing was ruled out" is a statement about the
+            # listing, while "this belongs" is a statement about a specific commodity. The
+            # reject side earns it on the same data - `Bush's Hot Honey Grillin' Beans` ->
+            # reject `Bush's Mild Red Chili Beans` for baked-beans (0.804), and `GV No Salt
+            # Added Whole Kernel` -> reject the same product for frozen-corn (0.826).
+            if r["kind"] == "confirm" and not same:
+                continue
+            bucket = rej if r["kind"] == "reject" else conf
+            if len(bucket) >= (n_rej if r["kind"] == "reject" else n_conf):
+                continue
+            bucket.append({"name": r["name"], "commodity": r.get("commodity"),
+                           "kind": r["kind"], "cos": round(float(top.values[i][rank]), 4),
+                           "same_commodity": same})
+            if len(rej) >= n_rej and len(conf) >= n_conf:
+                break
+        p["_neighbours"] = rej + conf
+    log(f"LANE contested: memory-by-meaning over {len(rulings)} adjudicated ruling(s) "
+        f"in {time.time()-t0:.1f}s")
+    return len(rulings)
+
+
 def loo_peers(m, d: dict) -> tuple[float, float, int] | None:
     """A peer distribution for a commodity the board itself has no shipped pairs for.
 
@@ -195,7 +270,7 @@ def loo_peers(m, d: dict) -> tuple[float, float, int] | None:
 
 
 def run_contested_lane(m, defs, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all, defs_path="",
-                       helper=None, helper_id=""):
+                       helper=None, helper_id="", neighbours=False):
     """LANE 3 - score the graph's contested questions, and warm every vector the resolve lane wants.
 
     Returns None when there is nothing to do (no file, or an unreadable one). A missing or stale
@@ -276,6 +351,12 @@ def run_contested_lane(m, defs, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all,
         # below, where the identity lane's own bare-id world is the right frame.
         dtexts = [commodity_text(p["_def"]) for p in known]
         dvecs = m.embed(dtexts)
+        # §3.2, OFF BY DEFAULT. The 07:00 and 08:00 jobs run this same sweep, so a new stage
+        # that fires without being asked would change a scheduled run's behaviour on the day
+        # it lands. --neighbours turns it on; without it this sweep is byte-identical to the
+        # one that shipped.
+        if neighbours:
+            memory_by_meaning(m, known, doc.get("rulings") or [], names)
         rpairs = [(names[i], dtexts[i]) for i in range(len(known))]
         ce = m.rerank(rpairs)
         # THE HELPER'S OWN OPINION, from its own copy of the weights and its own cache file.
@@ -314,6 +395,9 @@ def run_contested_lane(m, defs, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all,
                 # exemplars_loo = its accepted examples, each scored against the others (loo_peers).
                 # none = fewer than 2 examples; the filter abstains rather than invent a floor.
                 "peer_source": src,
+                # §3.2. Absent when --neighbours was not asked for; an empty list means it ran
+                # and found none, which is a different fact.
+                **({"neighbours": p["_neighbours"]} if "_neighbours" in p else {}),
             })
     scored.sort(key=lambda r: r["score"])
     log(f"LANE contested: scored {len(scored)} pair(s) in {time.time()-t0:.1f}s")
@@ -342,7 +426,7 @@ def run_contested_lane(m, defs, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all,
     }
 
 def main(defs_path: str | None = None, tag: str = "", contested_defs_path: str | None = None,
-         helper_path: str | None = None) -> None:
+         helper_path: str | None = None, neighbours: bool = False) -> None:
     t_start = time.time()
     # A comparison run must not overwrite the findings the daily alert de-dupes against: a changed
     # signature file would make every standing finding look new exactly once, which is the alert
@@ -485,7 +569,8 @@ def main(defs_path: str | None = None, tag: str = "", contested_defs_path: str |
     cdefs_by_id = defs_by_id if cdefs is defs else {d["id"]: d for d in cdefs}
     contested_report = run_contested_lane(m, cdefs, cdefs_by_id, ctexts, cvecs, cidx, by_com, ce_all,
                                           defs_path=(contested_defs_path or defs_path),
-                                          helper=helper, helper_id=helper_path or "")
+                                          helper=helper, helper_id=helper_path or "",
+                                          neighbours=neighbours)
     if helper is not None:
         helper.save()
 
@@ -563,6 +648,11 @@ if __name__ == "__main__":
                      help="a trained cross-encoder (sidecar/finetune_reranker.py) to score the "
                           "CONTESTED lane with, in its own cache, beside the pinned model's score. "
                           "Never replaces the pin and never touches identity or coverage.")
+    _ap.add_argument("--neighbours", action="store_true",
+                     help="plan §3.2: attach the nearest ADJUDICATED rulings BY MEANING to "
+                          "each contested pair, across all commodities. Needs `rulings` in "
+                          "contested-pairs.json (resolve.py --emit-contested writes it). OFF "
+                          "by default - the 07:00 and 08:00 jobs run this same sweep.")
     _ap.add_argument("--selftest", action="store_true")
     _a = _ap.parse_args()
     if _a.selftest:
@@ -571,4 +661,4 @@ if __name__ == "__main__":
         _ap.error("--tag is required with --defs, so a comparison run cannot overwrite the daily "
                   "findings (try --tag graphdefs)")
     main(defs_path=_a.defs, tag=_a.tag, contested_defs_path=_a.contested_defs,
-         helper_path=_a.helper)
+         helper_path=_a.helper, neighbours=_a.neighbours)
