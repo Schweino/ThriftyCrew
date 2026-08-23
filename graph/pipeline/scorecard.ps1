@@ -343,7 +343,11 @@ if (-not $ll) {
   if ($null -eq $hf -or $null -eq $hf.rejected) {
     Write-Output ("      filter   BLIND    {0}" -f $(if ($hf.why) { $hf.why } else { 'no helper_rejected count available' }))
   } elseif ($hf.rejected -eq 0) {
-    Write-Output '      filter   rejected 0 question(s) this window (the filter is off unless resolve.py runs with --helper-scores)'
+    # ARMED-AND-QUIET and OFF are different weeks. Zero rejections on a night with a trained
+    # helper in the scores file means there was nothing below the threshold; zero without one
+    # means resolve.py refused to filter at all, which is a configuration fact, not a result.
+    if ($ll.helper.helper_model) { Write-Output '      filter   armed, rejected 0 question(s) this window - nothing scored below the threshold' }
+    else { Write-Output '      filter   OFF - the scores carry no trained helper, so resolve.py refuses to filter on them' }
   } else {
     Write-Output ("      filter   rejected {0} question(s) before the model saw them" -f $hf.rejected)
   }

@@ -43,7 +43,19 @@
 # -Python exists so the BLIND path is TESTABLE. A failure mode nobody can exercise on demand is a
 # failure mode nobody has actually verified, and "it degrades gracefully" is the easiest claim in
 # software to believe and never check.
-param([switch]$PrepareOnly, [switch]$SelfTest, [int]$MaxReport = 25, [string]$Python = '', [switch]$IncludeIdentity)
+param([switch]$PrepareOnly, [switch]$SelfTest, [int]$MaxReport = 25, [string]$Python = '', [switch]$IncludeIdentity,
+      # LANE 3 ONLY (phase 3, 2026-08-23). The contested questions come from the graph and are 97%
+      # recipe-namespace, which the staple catalogue cannot define; the identity and coverage lanes
+      # this script exists for keep reading commodity-defs.json and their findings do not move
+      # (measured: identity 181, coverage 86, byte-identical either way).
+      #
+      # DEFAULTED HERE RATHER THAN AT THE CALLER, on purpose. The nightly chain is not the only
+      # thing that runs this - the 07:00 and 08:00 jobs do too - and flags passed by one caller
+      # would mean the last sweep of the day silently overwrote contested-scores.json with a
+      # 15-of-435 version scored by the wrong model. One default, every caller, one file.
+      [string]$ContestedDefs = (Join-Path (Split-Path $PSScriptRoot -Parent) 'sidecar\data\commodity-defs-graph.json'),
+      [string]$Helper = (Join-Path (Split-Path $PSScriptRoot -Parent) 'sidecar\models\resolve-ce-v1'),
+      [switch]$NoHelper)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -242,7 +254,14 @@ Write-Output ('running the GPU sweep' + $(if ($null -ne $room.free) { " ({0} MiB
 # something. A crashed sweep must read as BLIND, never as a board problem.
 $prevEap = $ErrorActionPreference
 $ErrorActionPreference = 'Continue'
-$swOut = & $py $sweep 2>&1 | ForEach-Object { [string]$_ }
+# A missing definitions file or a missing helper is a NAMED condition, never a silent fallback:
+# the lane degrades to what phase 2 shipped, and the run says which of the two it lost.
+$swArgs = @($sweep)
+if ($ContestedDefs -and (Test-Path $ContestedDefs)) { $swArgs += @('--contested-defs', $ContestedDefs) }
+elseif ($ContestedDefs) { Write-Output ("  contested lane: no {0} - scoring against the staple catalogue only (run graph\pipeline\emit_commodity_defs.py --out)" -f (Split-Path $ContestedDefs -Leaf)) }
+if (-not $NoHelper -and $Helper -and (Test-Path $Helper)) { $swArgs += @('--helper', $Helper) }
+elseif (-not $NoHelper -and $Helper) { Write-Output ("  contested lane: no trained helper at {0} - the pinned model scores it, and resolve.py will refuse to filter on that" -f $Helper) }
+$swOut = & $py @swArgs 2>&1 | ForEach-Object { [string]$_ }
 $rc = $LASTEXITCODE
 $ErrorActionPreference = $prevEap
 $findF = Join-Path $sidecar 'out\semantic-findings.json'

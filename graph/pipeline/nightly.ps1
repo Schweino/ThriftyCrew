@@ -26,15 +26,23 @@
                  honest source of that is the resolver's own deterministic pass. The sidecar
                  deciding for itself what "contested" means is the two-implementations bug this
                  estate keeps getting bitten by.
+    1b defs      emit_commodity_defs.py. Read-only, ~1 s, and BLIND rather than fatal. The
+                 contested questions come from the GRAPH and are 97% recipe-namespace, which the
+                 staple catalogue cannot define - without this file the contested lane can score
+                 15 of 435. The identity and coverage lanes never read it, so the daily alert
+                 does not move (measured: identity 181, coverage 86, either way).
     2  sweep     audit-semantic-identity.ps1. Preps the corpus (the regex lives on the PowerShell
                  side, byte-identical to the pricing engine), then runs sweep.py: identity,
                  coverage, and now the contested lane, which scores those pairs and warms every
                  vector the resolve lane will want. The sidecar process EXITS at the end of this
                  stage; that is what frees the card.
     3  serve     tools\local-llm\serve.ps1. Started here and nowhere else in any scheduled path.
-    4  resolve   resolve.py --llm over the contested set. Checkpointed and resumable by
-                 construction, which is what makes a deadline kill safe: stopping it at minute 40
-                 keeps the first 40 minutes of verdicts.
+    4  resolve   resolve.py --llm over the contested set, now behind the HELPER FILTER (plan §2
+                 step 2): a question the trained cross-encoder scores below --helper-threshold is
+                 banked helper_rejected and never reaches the model. Reject-only - v_current_rows
+                 admits include_hit and llm_confirmed only, so nothing in this stage can price a
+                 cell. Checkpointed and resumable by construction, which is what makes a deadline
+                 kill safe: stopping it at minute 40 keeps the first 40 minutes of verdicts.
     5  stage1    graph\learning\stage1_analyze.py, the free local half of the learning loop.
     6  stop      llama-server down, verified, always.
 
@@ -76,6 +84,13 @@ param(
   # interpreters, two purposes (grocery\python-lib.ps1's header). Passed through to the audit for the
   # same reason the audit takes it - a BLIND path nobody can exercise on demand is untestable.
   [string]$SidecarPython = '',
+  # The helper filter's cut (plan section 2 step 2). Measured 2026-08-23 two ways, and both land
+  # here: on the corpus's COLD holdout 1e-4 rejects 43.7% of negatives at a 0.28% false-reject rate
+  # against the local model's own 2.0%; and on the 435 live contested pairs of 2026-08-22, whose
+  # model verdicts are already banked, it filtered 21 - 19 the model also rejected and 0 it matched.
+  # The next decade up (1e-3) disagrees with the model on 5. Raising this is a decision about
+  # cells that never get priced, so it is a parameter with a measured default, not a constant.
+  [double]$HelperThreshold = 1e-4,
   [switch]$SkipSweep,
   [switch]$SkipStage1
 )
@@ -334,9 +349,10 @@ Log ("nightly matching chain: now {0}, deadline {1} ({2} min), jobs {3}" -f `
 if ($WhatIfOnly) {
   Log 'plan only:'
   Write-Output "  1 emit     $py graph\pipeline\resolve.py --emit-contested sidecar\data\contested-pairs.json"
+  Write-Output "  1b defs    $py graph\pipeline\emit_commodity_defs.py --out sidecar\data\commodity-defs-graph.json"
   Write-Output "  2 sweep    grocery\audit-semantic-identity.ps1        (sidecar takes and releases the card)"
   Write-Output "  3 serve    tools\local-llm\serve.ps1 -Slots $Jobs"
-  Write-Output "  4 resolve  $py graph\pipeline\resolve.py --llm --jobs $Jobs"
+  Write-Output "  4 resolve  $py graph\pipeline\resolve.py --llm --jobs $Jobs --helper-scores sidecar\out\contested-scores.json --helper-threshold $HelperThreshold"
   Write-Output "  5 stage1   $py graph\learning\stage1_analyze.py"
   Write-Output "  6 stop     llama-server down, verified"
   if ($refuse) { Write-Output "  REFUSED: $refuse" }
@@ -367,6 +383,16 @@ try {
   # the scorecard cannot show it falling if nobody writes it down.
   try { $contestedN = [int]((Get-Content $contestedF -Raw | ConvertFrom-Json).contested) } catch { }
   if ($null -ne $contestedN) { Log ("contested questions for the model half: {0}" -f $contestedN) }
+
+  # -- 1b. refresh the graph's own commodity definitions, for the CONTESTED lane only (phase 3).
+  #        Read-only on the database (PRAGMA query_only), ~1 s, and BLIND rather than fatal: without
+  #        it the sweep scores the contested set against the staple catalogue, which is what phase 2
+  #        shipped and covers 15 of 435. The identity and coverage lanes never read this file, which
+  #        is what makes this a zero-diff change to the daily alert.
+  $gdefsF = Join-Path $sidecar 'data\commodity-defs-graph.json'
+  $r = Invoke-Stage 'defs' $py @('graph\pipeline\emit_commodity_defs.py', '--out', $gdefsF) 300
+  if ($r.Ok) { Record 'defs' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed }
+  else { Record 'defs' 'BLIND' 'the contested lane falls back to the staple catalogue (15 of 435)' $r.Elapsed }
 
   # -- 2. the sweep. The chain must not OOM its own sidecar, so llama-server goes down FIRST even
   #       though this script has not started it yet: a leftover from a human session is exactly the
@@ -401,7 +427,19 @@ try {
   # -- 4. resolve. Bounded by what is left of the window, and safe to kill: resolve_pending
   #       checkpoints every batch and re-selects only rows still unsettled, so a killed run resumes.
   $budget = [math]::Max(60, (Remaining) - 240)   # leave 4 min for stage 1's tail and teardown
-  $r = Invoke-Stage 'resolve' $py @('graph\pipeline\resolve.py', '--llm', '--jobs', $Jobs) $budget
+  # THE HELPER FILTER (plan section 2 step 2). The scores were written minutes ago by the sweep
+  # above, by a TRAINED copy of the cross-encoder, on a card this process was not sharing with it.
+  # A contested question the helper scores below the threshold is banked helper_rejected and never
+  # reaches the model. REJECT-ONLY: v_current_rows admits include_hit and llm_confirmed only, so
+  # nothing here can price a cell. resolve.py REFUSES a scores file the pinned model wrote, and
+  # that refusal is fatal to the stage by design - a filter that quietly becomes no filter makes a
+  # night's numbers unexplainable. Passed only when the file exists, so a BLIND sweep degrades to
+  # the phase-2 behaviour of asking the model everything.
+  $hsF = Join-Path $sidecar 'out\contested-scores.json'
+  $rvArgs = @('graph\pipeline\resolve.py', '--llm', '--jobs', $Jobs)
+  if (Test-Path $hsF) { $rvArgs += @('--helper-scores', $hsF, '--helper-threshold', $HelperThreshold) }
+  else { Log 'no contested-scores.json - the helper filter is off for this run' }
+  $r = Invoke-Stage 'resolve' $py $rvArgs $budget
   if ($r.Ok) { Record 'resolve' 'OK' (($r.Tail | Where-Object { $_ -match 'resolved' } | Select-Object -Last 1)) $r.Elapsed }
   elseif ($r.TimedOut) { Record 'resolve' 'PARTIAL' 'stopped at the deadline; checkpointed verdicts stand and the next run resumes' $r.Elapsed }
   else { Record 'resolve' 'FAILED' ("rc=" + $r.ExitCode + ' ' + (($r.Tail | Select-Object -Last 1))) $r.Elapsed }

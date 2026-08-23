@@ -324,7 +324,13 @@ def run_contested_lane(m, defs, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all,
         "rerank_model": RERANK_MODEL,
         "helper_model": helper_id or None,
         "elapsed_sec": round(time.time() - t0, 1),
-        "advisory": "scores only - nothing here filters, routes or prices anything (phase 3 does that)",
+        # Accurate as of 2026-08-23 and it changed meaning that day: while helper_model is null
+        # these are advisory scores and resolve.py refuses to filter on them. With a trained
+        # helper named here, resolve.py --helper-scores DOES reject on them - and still cannot
+        # price anything, because v_current_rows admits include_hit and llm_confirmed only.
+        "advisory": ("reject-only input to resolve.py --helper-scores; it can remove a question "
+                     "from the model's queue and can never price a cell" if helper is not None else
+                     "scores only - the pinned model's numbers never filter anything"),
         "defs": os.path.basename(defs_path) if defs_path else "",
         "definitions": len(defs),
         "offered": len(pairs),
@@ -509,6 +515,29 @@ def main(defs_path: str | None = None, tag: str = "", contested_defs_path: str |
             json.dump(contested_report, f, indent=2, ensure_ascii=False)
         os.replace(tmp, cp)
         log(f"wrote {cp}  ({contested_report['scored']} contested pair(s))")
+        # AND ONE LINE OF HISTORY. contested-scores.json is a SNAPSHOT the next sweep overwrites,
+        # which is why "look at more than one night" was not a thing anyone could do on 2026-08-23:
+        # the file only ever held the newest run. §4's audit set - the disagreement rows where the
+        # ~35 missing cells live - wants the helper's answer across several nights, and a night that
+        # has been overwritten cannot be re-scored, because the definitions it read have moved on.
+        # Trimmed to the columns that make a pair identifiable and its two opinions comparable:
+        # ~40 KB a night against ~160 KB for the whole report. Untracked and prunable like every
+        # other out/ artefact; losing it costs history, never a decision.
+        hp = os.path.join(OUT, f"contested-scores-history{suffix}.jsonl")
+        with open(hp, "a", encoding="utf-8", newline="\n") as f:
+            f.write(json.dumps({
+                "generated": contested_report["generated"],
+                "source_generated": contested_report.get("source_generated"),
+                "defs": contested_report.get("defs"),
+                "rerank_model": contested_report.get("rerank_model"),
+                "helper_model": contested_report.get("helper_model"),
+                "offered": contested_report["offered"], "scored": contested_report["scored"],
+                "pairs": [{k: r.get(k) for k in
+                           ("id", "product", "score", "helper_score", "peer_median",
+                            "peer_n", "peer_source")}
+                          for r in contested_report.get("pairs", [])],
+            }, ensure_ascii=False) + "\n")
+        log(f"appended one run to {os.path.basename(hp)}")
     p = os.path.join(OUT, f"semantic-findings{suffix}.json")
     with open(p, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
