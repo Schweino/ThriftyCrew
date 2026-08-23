@@ -622,7 +622,7 @@ if ($runDownstream -and $pushed) {
 # moment it runs. Every recipe-lane stage upstream is non-fatal try/catch, so if one throws, export-feed
 # still runs happily over YESTERDAY's costed.json and stamps TODAY on the output - green assert, stale
 # prices, the dates-written-not-measured class. So check the INPUTS the feed's numbers derive from, and
-# the count. Only meaningful after the chain ran.
+# ask by NAME whether every published recipe is in it. Only meaningful after the chain ran.
 if ($runDownstream) {
   try {
     $feed = Get-Content (Join-Path $repo 'public\smp-feed.json') -Raw | ConvertFrom-Json
@@ -635,12 +635,54 @@ if ($runDownstream) {
       $mt = (Get-Item $dp).LastWriteTime.ToString('yyyy-MM-dd')
       if ($mt -ne $today) { [void]$problems.Add("$dep last written $mt, not today - a recipe-lane stage threw and the feed re-exported stale numbers") }
     }
+    # WHICH SET THE FEED IS MEASURED AGAINST: THE PUBLISHED ONE, NOT THE SPEC FOLDER (2026-08-23).
+    # This used to compare recipe_count against the number of files in meal-prep\db\recipes, and those two
+    # have never counted the same thing. A spec exists the moment a recipe is WRITTEN; it enters the feed
+    # only once top5-weekly costs it, and top5-weekly costs a recipe only when it is PUBLISHED (its own
+    # `if (-not ("" + $r.published -match '^\d{4}')) { continue }`). Ten finished-but-unpublished specs were
+    # sitting in that folder on 2026-08-23, so the assert reported "feed carries 564 recipes but 570 specs
+    # exist" about a feed that was in fact covering all 560 published recipes.
+    #
+    # A COUNT CANNOT ASK THIS QUESTION IN EITHER DIRECTION. It reads green whenever two unrelated numbers
+    # happen to match - drop one published recipe from the feed on a day one draft is authored and the tally
+    # is perfect - and the failure this assert exists for is feed-covers-published's founding bug: a
+    # PUBLISHED recipe whose card fetches a feed that has never heard of its slug, rendering an empty cost
+    # section to a paying reader. That is MEMBERSHIP, not a tally. So ask it by name, off the same authority
+    # feed-covers-published reads (db\published-hashes.json), rather than a second copy of "what counts as
+    # published".
+    #
+    # AND NOTHING ELSE ASKS IT DAILY: feed-covers-published runs only in the PUBLISH chain
+    # (propagate-recipes, wave-publish), scoped to the wave being shipped. This is the daily check.
     $specCount = @(Get-ChildItem (Join-Path $repo 'meal-prep\db\recipes\*.json') -ErrorAction SilentlyContinue).Count
-    if ($specCount -gt 0 -and [int]$feed.recipe_count -ne $specCount) { [void]$problems.Add("feed carries $($feed.recipe_count) recipes but $specCount specs exist") }
+    $pubFile  = Join-Path $repo 'meal-prep\db\published-hashes.json'
+    $pubSlugs = @()
+    if (-not (Test-Path $pubFile)) {
+      # NOT a silent pass. "Could not evaluate" has to look different from "evaluated clean", or this
+      # becomes one more guard that is quiet because it is blind.
+      [void]$problems.Add('meal-prep\db\published-hashes.json is missing, so the feed was NOT checked against the published set')
+    } else {
+      try { foreach ($pp in ((Get-Content $pubFile -Raw -Encoding UTF8 | ConvertFrom-Json).PSObject.Properties)) { $pubSlugs += [string]$pp.Name } }
+      catch { [void]$problems.Add('meal-prep\db\published-hashes.json is unreadable, so the feed was NOT checked against the published set') }
+      if ($pubSlugs.Count) {
+        $feedSlugs = @{}
+        foreach ($fp in $feed.recipes.PSObject.Properties) { $feedSlugs[[string]$fp.Name] = $true }
+        $absent = @($pubSlugs | Where-Object { -not $feedSlugs.ContainsKey($_) })
+        if ($absent.Count) { [void]$problems.Add(("{0} PUBLISHED recipe(s) absent from the feed their own cards fetch - each one renders an empty cost section to readers right now: {1}" -f $absent.Count, ((@($absent) | Select-Object -First 8) -join ', '))) }
+        # THE OTHER DIRECTION IS NOT A FAILURE, and failing on it would put this assert red for a day every
+        # time a recipe comes down. export-feed runs on check-ad-cycles' SHIP path; top5-weekly, which
+        # writes the recipe-costs.json the feed's recipe list is built from, runs on the INSPECT path after
+        # it. So the feed always carries the PREVIOUS run's slug list, and a recipe unpublished today
+        # lingers in it for exactly one more run before dropping out on its own - dead weight nothing links
+        # to, not a broken page. Printed anyway, on its own line: a lag nobody can see is a lag nobody
+        # notices growing.
+        $stale = @($feedSlugs.Keys | Where-Object { $pubSlugs -notcontains $_ })
+        if ($stale.Count) { Write-Output ("feed note: {0} feed slug(s) are no longer published and drop out on the next run - export-feed runs before top5-weekly, so the recipe list is one run behind: {1}" -f $stale.Count, ((@($stale) | Select-Object -First 8) -join ', ')) }
+      }
+    }
     if ($problems.Count) {
       Write-Output ("FEED ASSERT FAILED: " + ($problems -join ' | '))
       try { Send-Alert -Subject "Grocery pipeline: feed did not truly refresh - $today" -Body ("capture-run.ps1 finished but the feed is not trustworthy:`n`n" + ($problems -join "`n") + "`n`nNote ``generated`` alone is self-stamped by export-feed and cannot detect an upstream stage throwing. See grocery\ad-cycle-log.txt.") | Out-Null } catch {}
-    } else { Write-Output ("feed fresh: week $($feed.week_of), $($feed.recipe_count) recipes, $($feed.ingredient_count) ingredients (inputs verified same-day)") }
+    } else { Write-Output ("feed fresh: week $($feed.week_of), $($feed.recipe_count) recipes covering all $($pubSlugs.Count) published, $($feed.ingredient_count) ingredients; $specCount spec file(s) on disk - drafts included, and not expected in the feed (inputs verified same-day)") }
   } catch { Write-Output ("feed assert threw: " + $_.Exception.Message) }
 }
 
