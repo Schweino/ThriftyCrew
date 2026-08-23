@@ -3,12 +3,12 @@
   "embed_model": "BAAI/bge-m3",
   "rerank_model": "BAAI/bge-reranker-v2-m3",
   "is_pinned_model": true,
-  "generated": "2026-08-22 21:12:46",
+  "generated": "2026-08-23 00:49:57",
   "positives": 2816,
   "old": 25,
   "gold": 45,
-  "mined": 0,
+  "mined": 4701,
   "auc_old": 0.8941477272727273,
   "auc_gold": 0.8312460542929293,
-  "auc_mined": null
+  "auc_mined": 0.9183153276140473
 }

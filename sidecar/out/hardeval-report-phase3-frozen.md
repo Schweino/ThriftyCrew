@@ -1,4 +1,4 @@
-# Identity matcher: the harder eval (2026-08-22, tag `phase3-frozen`, defs `phase3-baseline`)
+# Identity matcher: the harder eval (2026-08-23, tag `phase3-frozen`, defs `phase3-baseline`)
 
 Phase 1 reported **AUC 0.985** on 25 negatives that are all dramatically wrong (bath soap,
 dog food). This re-measures the SAME model against negatives that are subtle.
@@ -6,7 +6,7 @@ dog food). This re-measures the SAME model against negatives that are subtle.
 - accepted board pairs (positives): **2816**
 - OLD negatives (Phase 1's set): **25**
 - GOLD negatives (adjudicated wrong-product rulings): **45**
-- MINED near-miss negatives (rule-rejected, semantically close): **0**
+- MINED near-miss negatives (rule-rejected, semantically close): **4701**
 
 ## AUC
 
@@ -14,6 +14,7 @@ dog food). This re-measures the SAME model against negatives that are subtle.
 |---|---:|---:|
 | Phase 1 (dramatic) | 25 | 0.8941 |
 | GOLD (adjudicated) | 45 | 0.8312 |
+| MINED (near miss)  | 4701 | 0.9183 |
 
 ## The number that decides shipping
 
@@ -29,6 +30,10 @@ to read in order to be shown the wrong ones.
   catch 10/45 GOLD (thr 0.0896)  ->  107 of 2816 accepted pairs also flagged (3.8%)
   catch 5/45 GOLD (thr 0.0454)  ->  47 of 2816 accepted pairs also flagged (1.7%)
   catch 1/45 GOLD (thr 0.0166)  ->  15 of 2816 accepted pairs also flagged (0.5%)
+  catch 2351/4701 MINED (thr 0.0785)  ->  88 of 2816 accepted pairs also flagged (3.1%)
+  catch 941/4701 MINED (thr 0.0042)  ->  0 of 2816 accepted pairs also flagged (0.0%)
+  catch 471/4701 MINED (thr 0.0004)  ->  0 of 2816 accepted pairs also flagged (0.0%)
+  catch 1/4701 MINED (thr 0.0000)  ->  0 of 2816 accepted pairs also flagged (0.0%)
 ```
 
 ## Calibrated per commodity (the fair test)

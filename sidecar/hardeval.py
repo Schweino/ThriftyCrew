@@ -90,6 +90,16 @@ def auc(pos: list[float], neg: list[float]) -> float:
     return (sr - n1 * (n1 + 1) / 2.0) / (n1 * n0)
 
 
+def mined_rows_of(obj) -> list[dict]:
+    """mine-candidates.json / mine-labelled.json, in either shape.
+
+    The files were a bare list before they carried provenance. Both shapes are read rather than
+    migrated, because a mined set is a record: an older one on someone's disk must still be
+    readable, and the alternative is a builder that silently sees zero rows.
+    """
+    return obj.get("pairs", []) if isinstance(obj, dict) else list(obj)
+
+
 def load_defs(path: str | None = None):
     """Today's commodity definitions, or a frozen snapshot.
 
@@ -103,10 +113,19 @@ def load_defs(path: str | None = None):
     return defs, {d["id"]: d for d in defs}
 
 
-def stage_mine(top_k: int, reranker: str | None = None) -> None:
+def stage_mine(top_k: int, defs_path: str | None = None, margin: float = 0.08) -> None:
+    """Propose the near-miss pairs. Bi-encoder only - no cross-encoder is loaded, and none is wanted:
+    mining decides which pairs are WORTH labelling, and letting the model under test choose its own
+    exam would be the same self-citation phase 1 took out of the resolver's memory.
+
+    --defs matters here as much as it does in stage_score, and for a longer-lived reason. The mined
+    negatives become part of the eval set and part of the training corpus, so a candidate list mined
+    against today's drifting board would bake one morning's shelf into every later comparison.
+    """
     prods = load_json(os.path.join(DATA, "mine-products.json"))
-    defs, defs_by_id = load_defs()
+    defs, defs_by_id = load_defs(defs_path)
     m = Matcher.load(with_reranker=False)   # mining is bi-encoder only; no cross-encoder is loaded
+    log(f"defs={defs_path or 'commodity-defs.json (today, drifts with the board)'}")
     log(f"device={DEVICE}  products={len(prods)}  commodities={len(defs)}")
 
     cids = [d["id"] for d in defs]
@@ -119,20 +138,43 @@ def stage_mine(top_k: int, reranker: str | None = None) -> None:
     sims = pvecs @ cvecs.T                       # (P, C) cosine, both already normalised
     k = min(top_k + 1, len(cids))                # +1 because the owner itself will usually rank first
     top = torch.topk(sims, k=k, dim=1)
-    out = []
+    col = {c: j for j, c in enumerate(cids)}
+    out, dropped_far, no_owner = [], 0, 0
     for i, p in enumerate(prods):
         owner = p["owner"]
+        # THE PRODUCT'S OWN COMMODITY IS THE YARDSTICK, not a global floor. This corpus already
+        # learned that short generic names ("Cantaloupe") score low against everything, so an
+        # absolute bar just selects for short names. `Cantaloupe -> cornmeal` at 0.278 is a true
+        # negative and not a near miss, and mining it would flatter the MINED AUC with easy rows.
+        j = col.get(owner)
+        ocos = float(sims[i][j]) if j is not None else None
+        if ocos is None:
+            no_owner += 1
         for rank in range(k):
             cid = cids[int(top.indices[i][rank])]
             if cid == owner:
                 continue
+            cos = float(top.values[i][rank])
+            if ocos is not None and (ocos - cos) > margin:
+                dropped_far += 1
+                continue
             out.append({
                 "product": p["product"], "owner": owner, "candidate": cid,
-                "cos": round(float(top.values[i][rank]), 4),
+                "cos": round(cos, 4),
+                "owner_cos": (round(ocos, 4) if ocos is not None else None),
+                "delta": (round(ocos - cos, 4) if ocos is not None else None),
             })
+    log(f"kept {len(out)} within {margin:.3f} cosine of the product's own commodity; "
+        f"dropped {dropped_far} as too far to be a near miss"
+        + (f"; {no_owner} product(s) have no definition for their own commodity" if no_owner else ""))
     path = os.path.join(DATA, "mine-candidates.json")
     with open(path, "w", encoding="utf-8") as f:
-        json.dump(out, f)
+        json.dump({"generated": time.strftime("%Y-%m-%d %H:%M:%S"),
+                   "defs": defs_path or "commodity-defs.json (today)",
+                   "defs_frozen": bool(defs_path), "embed_model": EMBED_MODEL,
+                   "top_k": top_k, "margin": margin, "dropped_too_far": dropped_far,
+                   "products": len(prods), "commodities": len(defs),
+                   "pairs": out}, f, indent=1)
     log(f"mine-candidates.json: {len(out)} near-miss candidate pair(s) -> label them with "
         f"export-identity-eval.ps1 -Label")
 
@@ -183,7 +225,7 @@ def stage_score(reranker: str | None = None, tag: str = "stock",
     mined_rows = []
     mp = os.path.join(DATA, "mine-labelled.json")
     if os.path.exists(mp):
-        mined_rows = [r for r in load_json(mp) if not r.get("rules_accept")]
+        mined_rows = [r for r in mined_rows_of(load_json(mp)) if not r.get("rules_accept")]
 
     m = Matcher.load(with_reranker=True, reranker_path=reranker)
     log(f"cross-encoder: {m.rerank_id}")
@@ -314,6 +356,9 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--stage", choices=["mine", "score"], required=True)
     ap.add_argument("--top-k", type=int, default=8)
+    ap.add_argument("--margin", type=float, default=0.08,
+                    help="mine a candidate only when it scores within this cosine of the product's "
+                         "OWN commodity. Relative, not absolute: see stage_mine().")
     ap.add_argument("--reranker", default=None,
                     help="path to a candidate cross-encoder to score with INSTEAD of the pinned "
                          "model, for this run only. Does not change the pin or affect sweep.py.")
@@ -328,6 +373,6 @@ if __name__ == "__main__":
     if tag is None:
         ap.error("--tag is required with --reranker (try --tag ft-v1)")
     if a.stage == "mine":
-        stage_mine(a.top_k)
+        stage_mine(a.top_k, defs_path=a.defs, margin=a.margin)
     else:
         stage_score(reranker=a.reranker, tag=tag, defs_path=a.defs)

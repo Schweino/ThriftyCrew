@@ -39,6 +39,17 @@
 # with no model change at all. A stock-vs-candidate comparison must pin both sides to one
 # snapshot (sidecar/freeze_eval.py) or it measures the board. ~850 KB each.
 !/sidecar/data/frozen/
+# ...and the LABELLED near-miss set, for the same reason one step further. mine-candidates.json is
+# a 13-second bi-encoder pass and is rightly derived, but the LABELS come from commodities.json's
+# regex, which drifts: re-labelling next month gives a different file, so a comparison against
+# today's mined AUC would measure the rules rather than the model. It is the third evaluation
+# record in this estate, beside the frozen defs and the gold set. ~950 KB.
+!/sidecar/data/mine-labelled.json
+# The corpus MANIFEST but not the corpus. train/test.jsonl are 4 MB of text reproducible from the
+# graph + the two records above; the manifest is the split - seed, holdout families, per-source
+# counts - and without it "which rows did that model see" has no answer.
+!/sidecar/data/pair-corpus/
+/sidecar/data/pair-corpus/*.jsonl
 /sidecar/out/*
 !/sidecar/out/backtest-report.md
 !/sidecar/out/phase2-report.md

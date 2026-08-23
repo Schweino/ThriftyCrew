@@ -101,10 +101,35 @@ def newest_frozen() -> str | None:
     return os.path.join(FROZEN, cands[-1], "commodity-defs.json")
 
 
+def mined_rows_of(obj) -> list[dict]:
+    """mine-labelled.json in either shape - a bare list, or the provenance-carrying object it
+    became on 2026-08-23. Read both: an older file on disk must not silently read as zero rows."""
+    return obj.get("pairs", []) if isinstance(obj, dict) else list(obj)
+
+
 def bare(cid: str) -> str:
     """`commodity:staple:cumin` -> `cumin`. The graph namespaces its node ids and
     grocery/commodities.json (which builds commodity-defs.json) does not."""
     return cid.rsplit(":", 1)[-1]
+
+
+def node_ids_by_bare(conn: sqlite3.Connection) -> dict[str, str]:
+    """`coconut-oil` -> `commodity:staple:coconut-oil`, for the one source that speaks bare ids.
+
+    Everything else here carries a graph node id, and two things downstream depend on it: the
+    dedup key that catches a pair labelled both ways, and the family that decides the holdout.
+    A bare id would collide with neither and would land in `uncategorised`, so a mined negative
+    for a held-out family would have trained against its own test set.
+
+    STAPLE WINS, and only staple. commodity-defs.json is built from the staple catalogue, so a
+    staple node is the one the mined pair actually names; 33 bare ids exist in both namespaces
+    (`milk`, `butter`, `honey`), and guessing the other one is the silent-wrong-answer shape
+    phase 2 already got bitten by. A bare id with no staple node is refused, not guessed.
+    """
+    out = {}
+    for r in conn.execute("SELECT id FROM nodes WHERE type = 'Commodity' AND id LIKE 'commodity:staple:%'"):
+        out[r["id"].rsplit(":", 1)[-1]] = r["id"]
+    return out
 
 
 def collect(conn: sqlite3.Connection, defs_by_id: dict) -> tuple[list[dict], dict]:
@@ -119,8 +144,15 @@ def collect(conn: sqlite3.Connection, defs_by_id: dict) -> tuple[list[dict], dic
 
     rows: list[dict] = []
     stats: dict[str, int] = {}
+    by_bare = node_ids_by_bare(conn)
 
     def add(cid: str, product: str, label: int, source: str) -> None:
+        if cid and ":" not in cid:                    # a bare id: only the mined file speaks one
+            node = by_bare.get(cid)
+            if not node:
+                stats[f"skipped:{source}:no-staple-node"] = stats.get(f"skipped:{source}:no-staple-node", 0) + 1
+                return
+            cid = node
         d = defs_by_id.get(bare(cid))
         if not d or not product:
             stats[f"skipped:{source}:no-definition"] = stats.get(f"skipped:{source}:no-definition", 0) + 1
@@ -174,7 +206,7 @@ def collect(conn: sqlite3.Connection, defs_by_id: dict) -> tuple[list[dict], dic
     # -- mined near-misses, if anyone has labelled them yet (see the header)
     mp = os.path.join(DATA, "mine-labelled.json")
     if os.path.exists(mp):
-        for r in load_json(mp):
+        for r in mined_rows_of(load_json(mp)):
             if r.get("rules_accept"):
                 continue
             add(r.get("candidate") or "", r.get("product") or "", 0, "mined_near_miss")
@@ -225,6 +257,23 @@ def main() -> int:
         fam = families(conn)
     finally:
         conn.close()
+
+    # -- A MINED PROPOSAL NEVER OUTRANKS A RULING. Mining labels a pair by regex; everything else
+    #    here was labelled by a reasoner or by the board. Where they disagree the ruling wins and the
+    #    mined row is discarded - not both dropped, which is what the contradiction rule below would
+    #    otherwise do, letting a regex delete a confirmed MATCH. Measured 2026-08-23: 3 of 4,701
+    #    mined pairs collide this way (Great Value Baked Cheddar Cheese Penguin Crackers is a
+    #    confirmed cheese-cracker whose own regex rejects it). Those 3 are also the only visible
+    #    sample of the mining rule's error rate, so the count is reported rather than swallowed.
+    ruled = {(r["commodity_id"], r["query"]) for r in rows if r["source"] != "mined_near_miss"}
+    overruled = sum(1 for r in rows if r["source"] == "mined_near_miss"
+                    and (r["commodity_id"], r["query"]) in ruled)
+    if overruled:
+        rows = [r for r in rows if not (r["source"] == "mined_near_miss"
+                                        and (r["commodity_id"], r["query"]) in ruled)]
+        log(f"{overruled} mined near-miss(es) overruled by an existing ruling on the same pair - "
+            f"dropped the mined row, kept the ruling")
+        stats["overruled:mined_near_miss"] = overruled
 
     # -- CONTRADICTIONS ARE REPORTED, NEVER RESOLVED SILENTLY. The same pair labelled both ways is
     #    either a ruling that changed or a mistake, and a builder that quietly picks one teaches the

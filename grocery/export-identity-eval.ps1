@@ -29,8 +29,16 @@
   truly ambiguous ones - out of the measurement, which is a limit worth naming rather than hiding.
 
   Usage: .\export-identity-eval.ps1 [-TopK 8] [-SelfTest]
+         .\export-identity-eval.ps1 -Label          # after sidecar\hardeval.py --stage mine
+
+  THE -Label STAGE (added 2026-08-23). Mining is a two-language round trip on purpose: Python picks
+  which commodities are semantically NEAR a product, PowerShell rules whether the pair is a legal
+  negative, because the regex lives here and Python never re-implements the corpus rules. -Label is
+  the return leg - it reads mine-candidates.json and stamps rules_accept on every row. Until
+  2026-08-23 it was only a sentence in a Write-Output, which is why every hardeval report ever
+  written says `mined: 0`.
 #>
-param([int]$TopK = 8, [switch]$SelfTest, [string]$Root = "")
+param([int]$TopK = 8, [switch]$SelfTest, [switch]$Label, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 $sd = Join-Path (Split-Path $root -Parent) 'sidecar\data'
@@ -38,20 +46,33 @@ $sd = Join-Path (Split-Path $root -Parent) 'sidecar\data'
 function Get-RuleIndex($coms) {
   $inc = New-Object System.Collections.Generic.List[object]
   $exc = @{}
+  $incById = @{}
   foreach ($c in $coms) {
-    foreach ($p in @($c.include)) { if ($p) { $inc.Add([pscustomobject]@{ id = [string]$c.id; r = [regex]::new([string]$p, 'IgnoreCase,Compiled') }) } }
+    $il = New-Object System.Collections.Generic.List[object]
+    foreach ($p in @($c.include)) {
+      if ($p) {
+        $rx = [regex]::new([string]$p, 'IgnoreCase,Compiled')
+        $inc.Add([pscustomobject]@{ id = [string]$c.id; r = $rx })   # ordered, for first-match-wins callers
+        $il.Add($rx)
+      }
+    }
+    $incById[[string]$c.id] = $il
     $l = New-Object System.Collections.Generic.List[object]
     foreach ($p in @($c.exclude)) { if ($p) { $l.Add([regex]::new([string]$p, 'IgnoreCase,Compiled')) } }
     $exc[[string]$c.id] = $l
   }
-  return @{ inc = $inc; exc = $exc }
+  return @{ inc = $inc; exc = $exc; incById = $incById }
 }
 function Test-CommodityAccepts($idx, [string]$cid, [string]$name) {
   <# Does commodity $cid's OWN rule set accept this product? Include-then-exclude, exactly as the engine
      evaluates a single commodity. NOT first-match-wins across commodities - that decides which commodity
      WINS a product, and the question here is whether this one would take it at all. #>
   $hit = $false
-  foreach ($e in $idx.inc) { if ($e.id -eq $cid -and $e.r.IsMatch($name)) { $hit = $true; break } }
+  # $incById is this commodity's includes only. Scanning the whole ordered list was the same answer
+  # and 588x the work; -Label asks this question ~22,000 times.
+  # No @() around the lookup: in PS 5.1 @(<empty List[object]>) throws "Argument types do not match",
+  # and a commodity with zero include patterns is a real row.
+  foreach ($rx in $idx.incById[$cid]) { if ($rx.IsMatch($name)) { $hit = $true; break } }
   if (-not $hit) { return $false }
   foreach ($xp in $idx.exc[$cid]) { if ($xp.IsMatch($name)) { return $false } }
   return $true
@@ -65,7 +86,8 @@ if ($SelfTest) {
   $fx = @(
     [pscustomobject]@{ id = 'broccoli';    label = 'Broccoli';    include = @('broccoli'); exclude = @('\bcauliflower\b','\bfrozen\b') },
     [pscustomobject]@{ id = 'cauliflower'; label = 'Cauliflower'; include = @('cauliflower'); exclude = @('\bbroccoli\b') },
-    [pscustomobject]@{ id = 'coffee';      label = 'Coffee';      include = @('coffee'); exclude = @() }
+    [pscustomobject]@{ id = 'coffee';      label = 'Coffee';      include = @('coffee'); exclude = @() },
+    [pscustomobject]@{ id = 'no-rules';     label = 'No Rules';     include = @(); exclude = @() }
   )
   $idx = Get-RuleIndex $fx
   Chk 'a commodity accepts its own product' (Test-CommodityAccepts $idx 'broccoli' 'Great Value Broccoli Florets, 14 oz') 'rejected'
@@ -76,7 +98,69 @@ if ($SelfTest) {
   # rules still ACCEPT it - which is exactly why it shipped. It must never be mined as a clean negative;
   # it belongs to the GOLD set, where the label comes from a reasoner and not from the rules.
   Chk 'a rule-accepted product is NOT minable as a negative (it is contested, not clean)' (Test-CommodityAccepts $idx 'coffee' 'Onyx Coffee Lab Salted Mocha Oat Milk Latte, 11 fl oz Can') 'rejected'
+  # A commodity with NO include patterns is a real row, and the lookup used to throw on it rather
+  # than answer - which -Label would have hit ~22,000 times. Proven able to fail before it is trusted.
+  $threw = $false
+  try { $r = Test-CommodityAccepts $idx 'no-rules' 'Great Value Broccoli Florets' } catch { $threw = $true }
+  Chk 'a commodity with zero include patterns answers NO instead of throwing' ((-not $threw) -and (-not $r)) $(if ($threw) { 'threw' } else { 'accepted' })
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
+}
+
+# ---- -Label: the return leg of the mining round trip.
+# Python proposed the near pairs; this stamps the regex verdict on each one, in the same
+# include-then-exclude semantics Test-CommodityAccepts uses everywhere else in this file.
+if ($Label) {
+  if (-not (Test-Path $sd)) { throw "sidecar data dir not found: $sd" }
+  $cp = Join-Path $sd 'mine-candidates.json'
+  if (-not (Test-Path $cp)) { throw "no mine-candidates.json: run `python sidecar\hardeval.py --stage mine --defs sidecar\data\frozen\phase3-baseline\commodity-defs.json` first" }
+  $coms = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+  $idx = Get-RuleIndex $coms
+  $labelOf = @{}
+  foreach ($c in $coms) { $labelOf[[string]$c.id] = [string]$c.label }
+
+  $raw = Get-Content $cp -Raw | ConvertFrom-Json
+  $cands = if ($raw.PSObject.Properties.Name -contains 'pairs') { @($raw.pairs) } else { @($raw) }
+  Write-Output ("mine-candidates.json: {0} candidate pair(s), mined from {1}" -f $cands.Count, $(if ($raw.defs) { $raw.defs } else { 'an unrecorded def set' }))
+
+  $out = New-Object System.Collections.Generic.List[object]
+  $rejected = 0; $accepted = 0; $unknown = 0; $selfPair = 0
+  $seen = @{}
+  foreach ($r in $cands) {
+    $cid = [string]$r.candidate
+    $name = [string]$r.product
+    if (-not $cid -or -not $name) { continue }
+    # A pair whose candidate IS the owner is not a near miss, it is the row itself. Python already
+    # skips these; the check is here too because this file is the one that decides what a negative is.
+    if ($cid -eq [string]$r.owner) { $selfPair++; continue }
+    if (-not $labelOf.ContainsKey($cid)) { $unknown++; continue }
+    $k = $cid + [char]1 + $name   # `u{...} is PS6+; this file must run under 5.1
+    if ($seen.ContainsKey($k)) { continue }
+    $seen[$k] = $true
+    $acc = Test-CommodityAccepts $idx $cid $name
+    if ($acc) { $accepted++ } else { $rejected++ }
+    $out.Add([pscustomobject]@{
+      product = $name; owner = [string]$r.owner; candidate = $cid
+      commodity = $labelOf[$cid]; cos = $r.cos
+      rules_accept = $acc; source = 'mined-near-miss'
+    })
+  }
+  $payload = [pscustomobject]@{
+    generated = (Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
+    mined_from = $(if ($raw.defs) { [string]$raw.defs } else { $null })
+    mined_generated = $(if ($raw.generated) { [string]$raw.generated } else { $null })
+    labelled_by = 'export-identity-eval.ps1 -Label (commodities.json regex, include-then-exclude)'
+    candidates = $cands.Count; clean_negatives = $rejected; contested_skipped = $accepted
+    unknown_commodity = $unknown; self_pairs = $selfPair
+    pairs = $out.ToArray()
+  }
+  ($payload | ConvertTo-Json -Depth 4 -Compress) | Set-Content (Join-Path $sd 'mine-labelled.json') -Encoding UTF8
+  Write-Output ("mine-labelled.json: {0} CLEAN near-miss negative(s) (the candidate's own rules reject the product)" -f $rejected)
+  # These are the honest limit named in the header: both commodities accept the name, so the pair is
+  # genuinely contested and labelling it either way would teach the eval a lie.
+  Write-Output ("  {0} pair(s) SKIPPED as contested - the candidate's rules accept the product too" -f $accepted)
+  if ($unknown) { Write-Output ("  {0} pair(s) name a commodity absent from commodities.json - not guessed at" -f $unknown) }
+  Write-Output 'next: sidecar\hardeval.py --stage score (mined AUC), then sidecar\build_pair_corpus.py'
+  exit 0
 }
 
 if (-not (Test-Path $sd)) { throw "sidecar data dir not found: $sd (run audit-semantic-identity.ps1 -PrepareOnly first)" }
