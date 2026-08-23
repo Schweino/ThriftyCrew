@@ -65,7 +65,7 @@ def free_port():
 
 class Chrome:
     def __init__(self, headless=True, width=375, height=812, dsf=3.0, verbose=False,
-                 profile_dir=None, mobile=True, browsing=False):
+                 profile_dir=None, mobile=True, browsing=False, window_position=None):
         """
         profile_dir  None (default) = a throwaway profile, deleted on close. This is right for the
                      reel and the demo, which drive our own public pages and want a clean browser
@@ -87,6 +87,7 @@ class Chrome:
         # browsing=True drops the screenshot-tuned rendering flags (see start()). Default False so
         # the reel and demo keep the deterministic rendering they were built around.
         self.browsing = browsing
+        self.window_position = window_position
         self._own_profile = profile_dir is None
         self._id = 0
         self.proc = None
@@ -114,6 +115,18 @@ class Chrome:
             "--no-default-browser-check",
             f"--window-size={self.width},{self.height}",
         ]
+        # OFF-SCREEN, AND WHY IT IS NOT "MINIMISED". Callers that drive several visible browsers at
+        # once (the grocery lanes) want them out of the way without stealing focus. Minimising is the
+        # obvious move and it is the wrong one: Windows occlusion detection then throttles rendering
+        # and timers, and those lanes depend on lazy-load - Fareway paints its results nine at a time
+        # as you scroll. A throttled window returns a SHORT page that still looks like a real answer,
+        # which is the worst failure shape available. So place it off-screen and turn the throttling
+        # off explicitly, which keeps compositing at full speed.
+        if self.window_position is not None:
+            x, y = self.window_position
+            args.append(f"--window-position={x},{y}")
+            args.append("--disable-backgrounding-occluded-windows")
+            args.append("--disable-features=CalculateNativeWinOcclusion")
         # THE RENDERING FLAGS ARE FOR SCREENSHOTS, NOT FOR BROWSING (split 2026-08-22).
         # This flag set was written for the reel and the demo, which photograph our own pages: pin
         # the colour profile, kill font hinting, hide scrollbars, strip extensions so nothing draws

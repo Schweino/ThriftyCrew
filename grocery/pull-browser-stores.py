@@ -544,8 +544,14 @@ def storage_key_of(cfg):
     return found
 
 
-def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
-    """Capture one store. Returns (ok: bool, note: str)."""
+def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slot=None):
+    """Capture one store. Returns (ok: bool, note: str).
+
+    slot: when several stores run at once, the index of this lane. It only decides where the
+    window is parked - each lane is otherwise fully independent already (its own persistent
+    profile, its own OS-assigned debug port, its own worklist and its own output file), which
+    is what makes running them together safe rather than merely faster.
+    """
     cfg = STORES[store_key]
     name = cfg["name"]
 
@@ -594,8 +600,12 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40):
             return False, str(e)
 
     release_profile(prof)
+    # Parked off-screen when this is one of several concurrent lanes, so two visible browsers do
+    # not fight over focus while Brad is working. Seeding is ATTENDED - he has to see and drive
+    # that window - so a seed run is never parked.
+    win_pos = None if (seed or slot is None) else (-2400, -2400 + (slot * 40))
     browser = Chrome(headless=headless, width=1440, height=900, dsf=1.0,
-                     profile_dir=prof, mobile=False, browsing=True)
+                     profile_dir=prof, mobile=False, browsing=True, window_position=win_pos)
     try:
         browser.start()
     except Exception as e:
@@ -933,6 +943,9 @@ def _identity_call(cfg):
 
 def main():
     ap = argparse.ArgumentParser(description="Drive the bot-walled grocery stores in a real Chrome.")
+    ap.add_argument("--sequential", action="store_true",
+                    help="drive the stores one at a time (the pre-2026-08-23 behaviour). "
+                         "Seeding is always sequential regardless.")
     ap.add_argument("--store", action="append",
                     help="store key (walmart, samsclub, fareway). Repeatable. Default: all.")
     ap.add_argument("--date", default="", help="capture date (yyyy-MM-dd). Default: today.")
@@ -962,14 +975,45 @@ def main():
         return 2
 
     print(f"browser pull  -  {date_s}  -  stores: {', '.join(keys)}")
+
+    # ONE THREAD PER STORE (2026-08-23). This was a sequential loop, so the browser stage cost the
+    # SUM of its lanes when it only ever needed to cost the slowest one. Nothing about a lane is
+    # shared: profile_dir() already gives each store its own persistent Chrome profile (and says
+    # why - a wall or a logout at one store must not take the others with it), cdp.free_port()
+    # binds :0 so the OS hands out a distinct debug port per launch, the worklist and the output
+    # path are both keyed by store, and release_profile() is deliberately narrow-matched to ONE
+    # profile path, so no lane can kill another lane's Chrome - or Brad's.
+    #
+    # SEEDING STAYS SEQUENTIAL. It is an attended operation: Brad has to watch and drive the
+    # window, which he cannot do for two at once, and a seed run is never parked off-screen.
+    #
+    # --sequential is the escape hatch. If a lane ever turns flaky under concurrency, the old
+    # behaviour is one flag away rather than one revert away.
     results = {}
-    for k in keys:
+    run_together = (len(keys) > 1) and (not args.seed) and (not args.sequential)
+
+    def _one(k, slot):
         try:
-            ok, note = run_store(k, date_s, headless=args.headless, seed=args.seed,
-                                 timeout_min=args.timeout_min)
+            return run_store(k, date_s, headless=args.headless, seed=args.seed,
+                             timeout_min=args.timeout_min, slot=slot)
         except Exception as e:
-            ok, note = False, f"threw: {e}"
-        results[k] = (ok, note)
+            return False, f"threw: {e}"
+
+    if run_together:
+        import concurrent.futures as _cf
+        with _cf.ThreadPoolExecutor(max_workers=len(keys)) as ex:
+            futs = {ex.submit(_one, k, i): k for i, k in enumerate(keys)}
+            for f in _cf.as_completed(futs):
+                results[futs[f]] = f.result()
+    else:
+        for k in keys:
+            results[k] = _one(k, None)
+
+    # PRINTED IN THE ORDER ASKED FOR, NOT THE ORDER FINISHED. Concurrent lanes interleave their own
+    # progress output, so this summary is the one stable thing a reader (and capture-run's parser)
+    # can rely on.
+    for k in keys:
+        ok, note = results[k]
         print(f"  {STORES[k]['name']:<12} {'ok  ' if ok else 'FAIL'} {note}")
 
     failed = [k for k, (ok, _) in results.items() if not ok]

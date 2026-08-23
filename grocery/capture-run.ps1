@@ -330,10 +330,19 @@ if ($browser.Count) {
         # Fareway's selector takes -Today, the CSV builders take -Date. Passing the wrong one binds
         # nothing and the script silently dates itself to the wall clock, which on a -Today replay
         # would file a rebuild of an old capture under today.
+        # ABSOLUTE -In, NOT $capRel (fixed 2026-08-23). The existence check 20 lines up asks
+        # `Test-Path (Join-Path $root $capRel)` - an ABSOLUTE path, which passes - and then this
+        # handed the child the RELATIVE one. The child resolves it against ITS OWN working directory,
+        # which for a scheduled task is not the repo, so it threw "input not found" on a file sitting
+        # right there. Measured on the 2026-08-23 08:00 run, the first day both browser lanes actually
+        # delivered: Fareway wrote 45 of 45 terms at 08:14 and Sam's Club 7 MATCHES at 08:15, both
+        # builders exited 1, and the whole capture was dropped. Proving a path one way and passing it
+        # another is the bug; proving and passing the SAME absolute path is the fix.
+        $capAbs = Join-Path $root $capRel
         $bOut = if ($key -eq 'fareway') {
-          & powershell -NoProfile -ExecutionPolicy Bypass -File $bScript -In $capRel -Today $todayS
+          & powershell -NoProfile -ExecutionPolicy Bypass -File $bScript -In $capAbs -Today $todayS
         } else {
-          & powershell -NoProfile -ExecutionPolicy Bypass -File $bScript -In $capRel -Date $todayS
+          & powershell -NoProfile -ExecutionPolicy Bypass -File $bScript -In $capAbs -Date $todayS
         }
         $bRc = $LASTEXITCODE
         foreach ($l in @($bOut)) { Write-Output ("    " + $l) }
