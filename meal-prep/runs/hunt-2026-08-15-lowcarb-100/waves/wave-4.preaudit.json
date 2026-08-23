@@ -5,8 +5,8 @@
     "wave":  4,
     "batch":  "hunt-2026-08-15-lowcarb-100-w4",
     "scope":  "whole-wave",
-    "generated":  "2026-08-23T16:17:56",
-    "elapsed_sec":  13.6,
+    "generated":  "2026-08-23T16:21:10",
+    "elapsed_sec":  13.1,
     "wave_slugs":  [
                        "sheet-pan-smoked-sausage-broccoli-cheddar",
                        "spinach-provolone-stuffed-flank-steak-rolls"
@@ -117,7 +117,7 @@
                                                                                 "check":  "spec-present",
                                                                                 "verdict":  "pass",
                                                                                 "numbers":  {
-                                                                                                "mtime":  "2026-08-23T16:15:26"
+                                                                                                "mtime":  "2026-08-23T16:20:12"
                                                                                             },
                                                                                 "detail":  "spec present and parses"
                                                                             },
@@ -161,7 +161,7 @@
                                                                                 "check":  "cost-reconcile",
                                                                                 "verdict":  "pass",
                                                                                 "numbers":  {
-                                                                                                "spec_mtime":  "2026-08-23T16:15:26",
+                                                                                                "spec_mtime":  "2026-08-23T16:20:12",
                                                                                                 "costed_mtime":  "2026-08-23T16:07:28",
                                                                                                 "costed_is_newer_than_spec":  false
                                                                                             },

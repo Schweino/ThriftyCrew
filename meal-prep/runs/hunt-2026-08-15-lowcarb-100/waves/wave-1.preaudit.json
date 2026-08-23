@@ -5,8 +5,8 @@
     "wave":  1,
     "batch":  "hunt-2026-08-15-lowcarb-100-w1",
     "scope":  "whole-wave",
-    "generated":  "2026-08-23T16:17:27",
-    "elapsed_sec":  14.1,
+    "generated":  "2026-08-23T16:20:43",
+    "elapsed_sec":  14.3,
     "wave_slugs":  [
                        "low-carb-ground-beef-stroganoff-skillet",
                        "creamy-tuscan-chicken-skillet",
@@ -40,7 +40,7 @@
                                                                             "check":  "spec-present",
                                                                             "verdict":  "pass",
                                                                             "numbers":  {
-                                                                                            "mtime":  "2026-08-23T16:15:13"
+                                                                                            "mtime":  "2026-08-23T16:20:12"
                                                                                         },
                                                                             "detail":  "spec present and parses"
                                                                         },
@@ -84,7 +84,7 @@
                                                                             "check":  "cost-reconcile",
                                                                             "verdict":  "pass",
                                                                             "numbers":  {
-                                                                                            "spec_mtime":  "2026-08-23T16:15:13",
+                                                                                            "spec_mtime":  "2026-08-23T16:20:12",
                                                                                             "costed_mtime":  "2026-08-23T16:07:28",
                                                                                             "costed_is_newer_than_spec":  false
                                                                                         },
@@ -495,7 +495,7 @@
                                                                 "check":  "spec-present",
                                                                 "verdict":  "pass",
                                                                 "numbers":  {
-                                                                                "mtime":  "2026-08-23T16:15:26"
+                                                                                "mtime":  "2026-08-23T16:20:11"
                                                                             },
                                                                 "detail":  "spec present and parses"
                                                             },
@@ -539,7 +539,7 @@
                                                                 "check":  "cost-reconcile",
                                                                 "verdict":  "pass",
                                                                 "numbers":  {
-                                                                                "spec_mtime":  "2026-08-23T16:15:26",
+                                                                                "spec_mtime":  "2026-08-23T16:20:11",
                                                                                 "costed_mtime":  "2026-08-23T16:07:28",
                                                                                 "costed_is_newer_than_spec":  false
                                                                             },
@@ -768,7 +768,7 @@
                                                                         "check":  "spec-present",
                                                                         "verdict":  "pass",
                                                                         "numbers":  {
-                                                                                        "mtime":  "2026-08-23T16:15:26"
+                                                                                        "mtime":  "2026-08-23T16:20:12"
                                                                                     },
                                                                         "detail":  "spec present and parses"
                                                                     },
@@ -812,7 +812,7 @@
                                                                         "check":  "cost-reconcile",
                                                                         "verdict":  "pass",
                                                                         "numbers":  {
-                                                                                        "spec_mtime":  "2026-08-23T16:15:26",
+                                                                                        "spec_mtime":  "2026-08-23T16:20:12",
                                                                                         "costed_mtime":  "2026-08-23T16:07:28",
                                                                                         "costed_is_newer_than_spec":  false
                                                                                     },

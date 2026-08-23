@@ -5,8 +5,8 @@
     "wave":  3,
     "batch":  "hunt-2026-08-15-lowcarb-100-w3",
     "scope":  "whole-wave",
-    "generated":  "2026-08-23T16:17:42",
-    "elapsed_sec":  14.3,
+    "generated":  "2026-08-23T16:20:57",
+    "elapsed_sec":  13.7,
     "wave_slugs":  [
                        "garlic-butter-steak-bites-zucchini",
                        "turkey-meatballs-cream-sauce-skillet",
@@ -313,7 +313,7 @@
                                                                         "check":  "spec-present",
                                                                         "verdict":  "pass",
                                                                         "numbers":  {
-                                                                                        "mtime":  "2026-08-23T16:15:26"
+                                                                                        "mtime":  "2026-08-23T16:20:12"
                                                                                     },
                                                                         "detail":  "spec present and parses"
                                                                     },
@@ -357,7 +357,7 @@
                                                                         "check":  "cost-reconcile",
                                                                         "verdict":  "pass",
                                                                         "numbers":  {
-                                                                                        "spec_mtime":  "2026-08-23T16:15:26",
+                                                                                        "spec_mtime":  "2026-08-23T16:20:12",
                                                                                         "costed_mtime":  "2026-08-23T16:07:28",
                                                                                         "costed_is_newer_than_spec":  false
                                                                                     },
