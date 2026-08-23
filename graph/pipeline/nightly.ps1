@@ -352,7 +352,7 @@ if ($WhatIfOnly) {
   Write-Output "  1b defs    $py graph\pipeline\emit_commodity_defs.py --out sidecar\data\commodity-defs-graph.json"
   Write-Output "  2 sweep    grocery\audit-semantic-identity.ps1        (sidecar takes and releases the card)"
   Write-Output "  3 serve    tools\local-llm\serve.ps1 -Slots $Jobs"
-  Write-Output "  4 resolve  $py graph\pipeline\resolve.py --llm --jobs $Jobs --helper-scores sidecar\out\contested-scores.json --helper-threshold $HelperThreshold"
+  Write-Output "  4 resolve  $py graph\pipeline\resolve.py --llm --jobs $Jobs --adversarial --helper-scores sidecar\out\contested-scores.json --helper-threshold $HelperThreshold"
   Write-Output "  5 stage1   $py graph\learning\stage1_analyze.py"
   Write-Output "  6 stop     llama-server down, verified"
   if ($refuse) { Write-Output "  REFUSED: $refuse" }
@@ -436,7 +436,15 @@ try {
   # night's numbers unexplainable. Passed only when the file exists, so a BLIND sweep degrades to
   # the phase-2 behaviour of asking the model everything.
   $hsF = Join-Path $sidecar 'out\contested-scores.json'
-  $rvArgs = @('graph\pipeline\resolve.py', '--llm', '--jobs', $Jobs)
+  # §3.3, THE ADVERSARIAL SECOND PASS. Every local MATCH is re-asked with the instruction to
+  # argue against it, and whether it SURVIVED rides to the review packet. Measured 2026-08-23
+  # on 375 Claude-confirmed matches and 191 adjudicated-wrong ones: 88.5% of real matches
+  # survive, 2.1% of false ones do - 86.4 points against a pre-registered bar of 30.
+  # SIGNAL ONLY. 11.5% of real matches fail the challenge, so auto-rejecting on it would cost
+  # one true cell in nine; the row's status is identical either way and nothing here can price
+  # anything. It doubles the model calls on the MATCH slice - ~316 extra calls, ~7 minutes
+  # against a 150-minute budget - and buys a packet ordered by which leads are worth reading.
+  $rvArgs = @('graph\pipeline\resolve.py', '--llm', '--jobs', $Jobs, '--adversarial')
   if (Test-Path $hsF) { $rvArgs += @('--helper-scores', $hsF, '--helper-threshold', $HelperThreshold) }
   else { Log 'no contested-scores.json - the helper filter is off for this run' }
   $r = Invoke-Stage 'resolve' $py $rvArgs $budget

@@ -364,3 +364,10 @@ meal-prep/db/page-cache/
 # The board-gap worklist is DERIVED: board_parity.py regenerates it every run
 # from cell_state and the live board. Its findings are actionable, not records.
 /grocery/out/board-gap-worklist.json
+
+# The §3.3 pre-registered test: 566 model calls over the pairs Claude confirmed and the
+# pairs adjudicated wrong. It is the evidence the adversarial pass ships on, it cannot be
+# recomputed without holding the card for 25 minutes, and the bar it cleared was written
+# down before it ran.
+/graph/bench/out/*
+!/graph/bench/out/adversarial-*.json

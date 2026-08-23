@@ -214,11 +214,14 @@ def _compile_all(patterns: list[str]) -> list[re.Pattern]:
 class Resolver:
     def __init__(self, db: GraphDB, llm: LocalLLM | None = None,
                  use_llm: bool = True, escalate_below: float = 0.75,
-                 use_bank: bool = True):
+                 use_bank: bool = True, adversarial: bool = False):
         self.db = db
         self.llm = llm
         self.use_llm = use_llm
         self.escalate_below = escalate_below
+        # Plan §3.3. Off by default because it doubles the model calls on the MATCH slice;
+        # the nightly chain turns it on. It changes no status and can price nothing.
+        self.adversarial = adversarial
         self._cache: dict[str, CompiledCommodity] = {}
         self._catex: list[tuple[re.Pattern, str, re.Pattern | None]] = []
         self._class_scope: dict[str, set[str]] = {}
@@ -548,6 +551,20 @@ class Resolver:
             # false matches carried conf 0.95-0.98, so no threshold cleanses a
             # local MATCH; only the Claude reviewer may upgrade this row to
             # llm_confirmed. Meanwhile it cannot price a cell.
+            #
+            # §3.3, THE ADVERSARIAL SECOND PASS. Measured 2026-08-23 on 375 Claude-confirmed
+            # matches and 191 adjudicated-wrong ones: 88.5% of real matches survive the
+            # challenge and 2.1% of false ones do - 86.4 points of separation against a
+            # pre-registered bar of 30. It SHIPS, and it ships as a signal only: 11.5% of
+            # real matches died, so auto-rejecting on it would cost one cell in nine. The
+            # status is unchanged either way; what the challenge buys is an ordered packet.
+            if self.adversarial:
+                meta["survived_challenge"], meta["challenge_said"] = self._challenge(cc, name, why)
+                tag = ("survived the §3.3 challenge" if meta["survived_challenge"]
+                       else "FAILED the §3.3 challenge - look here first")
+                return Verdict("llm_match_unverified",
+                               f"llm MATCH (unverified, {tag}): {why}",
+                               conf, escalate=True, meta=meta)
             return Verdict("llm_match_unverified", f"llm MATCH (unverified): {why}",
                            conf, escalate=True, meta=meta)
         # UNSURE, or any answer below threshold -> escalate. Preferring a missed
@@ -555,6 +572,23 @@ class Resolver:
         # waits for Claude.
         return Verdict("escalated", f"llm {verdict} conf={conf:.2f}: {why}", conf,
                        escalate=True, meta=meta)
+
+    def _challenge(self, cc: CompiledCommodity, name: str, evidence: str) -> tuple[bool | None, str]:
+        """Ask the model to argue against its own MATCH. Returns (survived, what it said).
+
+        A failure here is not a rejection. `None` means the challenge could not be run, and a
+        caller must treat that as "unknown", never as "failed" - an unavailable second opinion
+        is the absence of evidence and this lane's whole discipline is not to confuse the two.
+        """
+        system, user = build_adversarial_prompt(
+            cc, name, evidence=evidence, examples=self.prior_rulings(cc, name))
+        try:
+            parsed, _ = self.llm.json_call(system, user, schema=RESOLVE_SCHEMA, max_tokens=400)
+        except Exception as e:                                  # noqa: BLE001
+            return None, f"challenge unavailable: {e}"[:200]
+        v = str(parsed.get("verdict", "UNSURE")).upper()
+        # UNSURE counts as survival: the challenge was asked to make a case and could not.
+        return v != "NO_MATCH", f"{v}: {str(parsed.get('evidence',''))[:200]}"
 
     def _tally(self, v: Verdict) -> Verdict:
         self.stats[v.status] = self.stats.get(v.status, 0) + 1
@@ -607,6 +641,10 @@ class Resolver:
                     "kind": ("confirm_match" if v.status == "llm_match_unverified"
                              else "contested"),
                     "confidence": v.confidence,
+                    # §3.3's answer, carried to the packet as a SIGNAL and never as a
+                    # verdict. None when the challenge did not run.
+                    "survived_challenge": (v.meta or {}).get("survived_challenge"),
+                    "challenge_said": (v.meta or {}).get("challenge_said"),
                 })
             n += len(ids)
         self.db.conn.commit()
@@ -966,6 +1004,85 @@ def build_resolve_prompt(cc: CompiledCommodity, product_name: str,
     return system, "\n".join(parts)
 
 
+ADVERSARIAL_PROMPT_VERSION = "adversarial-v1-argue-no-match"
+
+
+def build_adversarial_prompt(cc: CompiledCommodity, product_name: str,
+                             evidence: str = "", examples: dict | None = None) -> tuple[str, str]:
+    """Plan §3.3 - re-ask a local MATCH with the instruction to argue AGAINST it.
+
+    WHY THIS AND NOT A HIGHER CONFIDENCE THRESHOLD. The local model's measured false-MATCH
+    rate on the contested slice is 37%, and the bench's three false matches carried confidence
+    0.95-0.98 - so no cut separates them. The model is confidently wrong, not hesitantly
+    wrong. What might separate them is whether a match SURVIVES an argument against it: a real
+    instance has nothing to find, a false one has a specific word that gives it away.
+
+    THIS PROMPT MUST NOT BE A LEADING QUESTION, which is the whole difficulty. A model told to
+    argue NO_MATCH will argue NO_MATCH, and a pass that rejects everything separates nothing
+    while looking rigorous. So it is asked for the strongest case against and then asked to
+    rule on that case honestly - with the explicit instruction that an argument it cannot
+    support from the words of the listing is not an argument.
+
+    IT SHIPS ONLY IF IT SEPARATES. graph/bench/adversarial_probe.py runs it over the pairs
+    Claude CONFIRMED and the pairs adjudicated WRONG. If confirmed matches do not survive at a
+    much higher rate than known-wrong ones, this is a rejection machine rather than a filter,
+    and the plan says drop it. That test is pre-registered in PLAN-local-matching §3.3 and
+    predates any result.
+    """
+    system = (
+        "You are the SECOND opinion on a grocery product match that a first pass already "
+        "called a MATCH. Your job is to test it, not to rubber-stamp it and not to overturn "
+        "it.\n\n"
+        "Work in two steps.\n"
+        "1. Build the strongest honest case that this listing is NOT the commodity. Look for "
+        "a different food, a different CUT or GRADE, a different VARIETY the commodity names, "
+        "a prepared or cooked form where the commodity is raw, a different FORM or PACK "
+        "(canned vs frozen vs fresh, liquid vs powder vs pods), or a non-food item that "
+        "merely mentions the food.\n"
+        "2. Then rule on that case honestly.\n\n"
+        "DOMAIN RULES (this board's semantics, not general knowledge):\n"
+        "- The board prices PACKAGED RETAIL PRODUCTS. A branded, packaged item IS a valid "
+        "instance of a commodity. Brand is never a reason to reject.\n"
+        "- Package SIZE is never a reason to reject; the board normalises per unit.\n\n"
+        "AN ARGUMENT YOU CANNOT SUPPORT FROM THE WORDS OF THE LISTING IS NOT AN ARGUMENT. "
+        "If your best case against rests on something the listing does not say, the match "
+        "SURVIVES.\n"
+        "IN PARTICULAR, THE ABSENCE OF A QUALIFIER IS NOT EVIDENCE AGAINST. A commodity "
+        "written 'Breakfast Sausage (pork)' does not require the listing to say 'pork'; a "
+        "listing that fails to contradict the commodity has not been contradicted. Doubt is "
+        "not a case against - only a word in the listing that is INCOMPATIBLE with the "
+        "commodity is.\n"
+        "Answer MATCH when the case against fails, NO_MATCH when it holds, and UNSURE only "
+        "when the listing is genuinely ambiguous.\n"
+        "Cite the specific words that decide it. Output JSON only."
+    )
+    inc = cc.raw_include[:8]
+    parts = [f"COMMODITY: {cc.label}",
+             f"sold by: {cc.unit or 'unspecified'}",
+             f"known surface patterns: {inc}"]
+    if cc.known_wrong:
+        # The products already adjudicated WRONG for this commodity are the sharpest thing
+        # this prompt can carry: they are what a false match here has actually looked like.
+        parts.append("\nALREADY ADJUDICATED **NOT** THIS COMMODITY - a false match here has "
+                     "looked like these before:")
+        parts += [f"  - {k!r}" for k in list(cc.known_wrong)[:8]]
+    # AND WHAT BELONGING LOOKS LIKE. Added 2026-08-23 after the first smoke run killed 6 of 6
+    # CONFIRMED matches: without these the challenge has no idea the board accepts precooked
+    # breakfast sausage or brioche hamburger buns, so it argues from a general-knowledge
+    # notion of the commodity and wins every time. A challenge that cannot see what the board
+    # has already accepted is not testing the match, it is testing its own priors.
+    confirmed = (examples or {}).get("confirmed") or []
+    if confirmed:
+        parts.append("\nALREADY ADJUDICATED **YES** - the board accepts these as this "
+                     "commodity, so an argument that would also exclude them is wrong:")
+        parts += [f"  - {c!r}" for c in confirmed]
+    parts.append(f"\nSTORE PRODUCT LISTING: {product_name!r}")
+    if evidence:
+        parts.append(f"\nThe first pass called this a MATCH, reasoning: {evidence!r}")
+    parts.append("\nBuild the case against, then rule. Does this match survive?")
+    return system, "\n".join(parts)
+
+
 def _emit_contested(path: str, limit: int | None = None) -> int:
     """Write the contested question set for the sidecar to score.
 
@@ -1084,6 +1201,13 @@ def main() -> int:
                     help="write the contested (commodity, product) questions to "
                          "PATH and exit. Writes NOTHING to the database and "
                          "needs no model. See graph/pipeline/nightly.ps1.")
+    ap.add_argument("--adversarial", action="store_true",
+                    help="plan §3.3: re-ask every local MATCH with the instruction to argue "
+                         "against it, and record whether it SURVIVED. Signal only - the status "
+                         "is unchanged either way, because 11.5%% of Claude-confirmed matches "
+                         "fail the challenge and auto-rejecting would cost one real cell in "
+                         "nine. What it buys is a packet ordered by which leads are worth "
+                         "reading first. Doubles the model calls on the MATCH slice.")
     ap.add_argument("--helper-scores", metavar="PATH", default=None,
                     help="sidecar/out/contested-scores.json from a sweep run with --helper. "
                          "Turns on the plan's §2 step 2 filter: a contested question the trained "
@@ -1116,7 +1240,7 @@ def main() -> int:
             db.conn.execute("UPDATE price_observations SET match_status='unadjudicated', "
                             "match_reason=NULL, confidence=NULL")
             db.conn.commit()
-        r = Resolver(db, llm=llm, use_llm=bool(llm))
+        r = Resolver(db, llm=llm, use_llm=bool(llm), adversarial=args.adversarial)
         if args.helper_scores:
             try:
                 k = r.load_helper_scores(args.helper_scores, args.helper_threshold)

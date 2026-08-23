@@ -371,6 +371,14 @@ def emit_packet(db, kind: str = "confirm_match", deferred_only: bool = False,
                 "model_said": "MATCH" if kind == "confirm_match" else "could not decide",
                 "model_reason": e.get("reason"),
                 "model_confidence": e.get("confidence"),
+                # §3.3's SECOND OPINION, and the one measured signal in this packet worth
+                # ordering by. On 375 Claude-confirmed matches and 191 adjudicated-wrong ones:
+                # 88.5% of real matches survive the challenge, 2.1% of false ones do. So a
+                # SURVIVED lead is very likely real and a FAILED one is where a reviewer's
+                # attention is worth most. It is not a verdict - 11.5% of real matches fail -
+                # and the row's status is identical either way.
+                "survived_challenge": e.get("survived_challenge"),
+                "challenge_said": e.get("challenge_said"),
                 # THE DECIDING WORDS, computed. See _deciding_words: read
                 # not_in_any_confirmed first, it is where a false match hides.
                 "deciding_words": dec,
@@ -408,9 +416,18 @@ def emit_packet(db, kind: str = "confirm_match", deferred_only: bool = False,
         # wrong. Both would put the most misleading rows on top. So the order is how much of
         # the listing is already vouched for by an ADJUDICATED confirmation, with row count
         # breaking ties, which is the same coverage-return argument as before.
-        questions.sort(key=lambda q: (q["unvouched_words"] is None,
-                                      q["unvouched_words"] if q["unvouched_words"] is not None else 0,
-                                      -q["rows_live"]))
+        # EASIEST FIRST, and §3.3 is the strongest key available because it is the only one
+        # with a measured separation behind it (88.5% vs 2.1%). Survivors first - they are
+        # nearly all real and clear fastest - then the unruled, then the ones that FAILED the
+        # challenge, which is where a reviewer's attention actually pays. Word-familiarity
+        # breaks ties, and neither model's raw score is used at any level.
+        def _order(q):
+            sc = q.get("survived_challenge")
+            tier = 0 if sc is True else (1 if sc is None else 2)
+            uw = q["unvouched_words"]
+            return (tier, uw is None, uw if uw is not None else 0, -q["rows_live"])
+
+        questions.sort(key=_order)
         ctx["rows_total"] = sum(q["rows_live"] for q in questions)
         ctx["questions"] = questions
         commodities.append(ctx)
@@ -764,9 +781,16 @@ def main() -> int:
                 print(f"  capped at {packet['batch_limit']}; "
                       f"{packet['questions_left_for_a_later_packet']} question(s) wait for a "
                       f"later packet")
-            print("Ordered EASIEST FIRST - by how much of each listing is already vouched for "
-                  "by an adjudicated confirmation, never by either model's score. Ingest with "
-                  "--ingest; cap a session with --limit.")
+            surv = sum(1 for c in packet["commodities"] for q in c["questions"]
+                       if q.get("survived_challenge") is True)
+            fail = sum(1 for c in packet["commodities"] for q in c["questions"]
+                       if q.get("survived_challenge") is False)
+            if surv or fail:
+                print(f"  §3.3 challenge: {surv} survived (very likely real), {fail} failed "
+                      f"(read these closely)")
+            print("Ordered EASIEST FIRST - challenge survivors, then unruled, then challenge "
+                  "failures; ties by how much of the listing an adjudicated confirmation "
+                  "vouches for. Never by either model's raw score. Cap a session with --limit.")
         if args.ingest:
             res = ingest(db, args.ingest)
             print(f"confirmed {len(res['confirmed'])}  "
