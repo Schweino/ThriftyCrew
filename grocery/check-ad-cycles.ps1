@@ -908,8 +908,22 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         Log 'no price change today - board already current, nothing republished'
         $summary += 'CURRENT   no price change today - live page already current'
       } elseif (-not $NoPublish) {
+        # TIME THE PUBLISH, BECAUSE NOBODY COULD (2026-08-23). PLAN-use-the-cores §7 books this step at
+        # "60-449 s, 7x day-to-day variance" and calls it network-bound. That number cannot be read off
+        # this log: it is a GAP between two log lines, and the gap contains whatever else ran between
+        # them. Measured properly from the log's own share-image -> AUTO-PUBLISH pairs, the step is
+        # 24-61 s (08-15 25 s, 08-16 24 s, 08-17 57 s, 08-18 55 s and 61 s), and a HELD run - which
+        # skips the Ghost calls entirely - is 15-16 s. publish-deals-page makes exactly THREE Ghost
+        # calls, each -TimeoutSec 30 and none retried, so the Ghost portion cannot exceed 90 s by
+        # construction. Whatever the 449 s was, it was not this.
+        # So stop inferring it. One elapsed number, on the line that already reports the outcome, and
+        # the next person asking "is the publish slow?" reads an answer instead of subtracting
+        # timestamps and getting a different question's answer.
+        $pubSw = [Diagnostics.Stopwatch]::StartNew()
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1') | Out-Null
         $pubrc = $LASTEXITCODE
+        $pubSw.Stop(); $pubSecs = [int]$pubSw.Elapsed.TotalSeconds
+        Log ("publish-deals-page: {0} s (rc={1}) - 3 Ghost calls, 30 s timeout each, no retries" -f $pubSecs, $pubrc)
         if ($pubrc -eq 0)     { Set-Content -Path $sigFile -Value $sigAfter -Encoding ASCII; Log ('AUTO-PUBLISH: live page updated (price change' + $(if (@($flips).Count -gt 0) { '/new ad' } else { ' mid-cycle' }) + ')'); $summary += 'PUBLISHED live page updated (price change detected)' }
         elseif ($pubrc -eq 2) {
           Log 'AUTO-PUBLISH HELD: coverage gate failed - live page NOT updated'
