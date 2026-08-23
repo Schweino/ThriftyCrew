@@ -79,6 +79,10 @@
 # that IS that commodity. Each one is a live board defect and none of them is applied by any script,
 # so if this file is not tracked the finding exists only until the next run overwrites it.
 !/sidecar/out/mined-rule-gaps.json
+# The seed sweep that reverted a promotion: four trainings per arm, corpus and recipe fixed. It is
+# the reason the gate now requires >= 3 seeds, and a rule whose evidence is not kept is a rule the
+# next person will argue with.
+!/sidecar/out/seed-sweep-*.json
 /sidecar/**/__pycache__/
 # The member-tool SOURCES and the build scripts that publish them. Same hole as lib\ and the interstitial:
 # these run on the live site, several are the only copy in existence, and none of them were versioned

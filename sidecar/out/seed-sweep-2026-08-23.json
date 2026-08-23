@@ -1,0 +1,62 @@
+[
+ {
+  "auc": 0.9670170843208976,
+  "neg_caught": 383,
+  "true_lost": 2,
+  "filtered": 12,
+  "disagreed": 0,
+  "arm": "regex",
+  "seed": 101,
+  "sec": 164
+ },
+ {
+  "auc": 0.965811888153642,
+  "neg_caught": 349,
+  "true_lost": 1,
+  "filtered": 8,
+  "disagreed": 0,
+  "arm": "regex",
+  "seed": 202,
+  "sec": 311
+ },
+ {
+  "auc": 0.9652537466868463,
+  "neg_caught": 317,
+  "true_lost": 0,
+  "filtered": 12,
+  "disagreed": 0,
+  "arm": "regex",
+  "seed": 303,
+  "sec": 226
+ },
+ {
+  "auc": 0.9640686695724636,
+  "neg_caught": 263,
+  "true_lost": 1,
+  "filtered": 8,
+  "disagreed": 0,
+  "arm": "adjudicated",
+  "seed": 101,
+  "sec": 207
+ },
+ {
+  "auc": 0.9646079899897977,
+  "neg_caught": 489,
+  "true_lost": 3,
+  "filtered": 20,
+  "disagreed": 0,
+  "arm": "adjudicated",
+  "seed": 202,
+  "sec": 222
+ },
+ {
+  "auc": 0.9642789461250704,
+  "neg_caught": 445,
+  "true_lost": 1,
+  "filtered": 20,
+  "disagreed": 1,
+  "arm": "adjudicated",
+  "seed": 303,
+  "sec": 227
+ }
+]

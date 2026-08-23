@@ -13,6 +13,14 @@ torch + transformers are already here and are all this needs. The saved director
 AutoModelForSequenceClassification, which is exactly what `CrossEncoder(path)` loads, so the
 artefact this writes is consumable by backtest.py --reranker and hardeval.py --reranker unchanged.
 
+ONE RUN CANNOT PROMOTE A CANDIDATE (measured 2026-08-23, after a promotion had to be reverted).
+Two corpora differing only by ~12 labels were each trained four times, same recipe, seed the only
+change. Holdout AUC ranged 0.9641-0.9674 and the live filter yield ranged 8-20 of 435 - WITHIN each
+arm. The arms overlapped completely, so a single-run difference between two fine-tunes is a shuffle,
+not a finding. The gap between stock and ANY fine-tune is a different matter and is enormous (AUC
+0.9126 against ~0.965, 108 cold negatives caught against 317-489); that comparison a single run can
+make. Comparing two CANDIDATES needs >= 3 seeds per arm and a gap wider than the within-arm spread.
+
 THE GATES (section 6 as the 2026-08-22 prep corrected it, not as written):
   - hardeval GOLD is the number that DECIDES. backtest.py's 25 negatives are all dramatically
     wrong and never ask a hard question; run both, believe GOLD.
