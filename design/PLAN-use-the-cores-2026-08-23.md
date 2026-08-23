@@ -6,15 +6,22 @@
 >
 > | phase | outcome | number |
 > |---|---|---|
-> | 1 — advisory-audit fan-out | **SHIPPED** (`9d56d137`) | 34 lanes, **513 s → 171 s wall**, daily, 0/34 verdicts changed |
+> | 1 — advisory-audit fan-out | **SHIPPED** (`9d56d137`) | 34 lanes, **513 s → 171 s → 104 s wall**, daily, 0/34 verdicts changed |
 > | 2 — `test-auditors` self-tests | **measured, NOT shipped** | the whole win is **8 s**, on a suite that runs weekly |
 > | 3 — Python import | **profiled, NOT parallelised** | 3.8 s, 86% in one importer, half of it inside SQLite `execute` |
 > | 4 — capture builders | **SHIPPED** (`50a5e623`) | first-stage builders side by side, fixtured 10/10 |
 >
-> The plan was wrong about three things and they are corrected in place, not quietly: the
-> completion markers §2 names mostly do not exist; rule 4 needed a lock in `send-alert.ps1`, not
-> just a convention; and the 2026-08-22 "parallel is worse" measurement it inherited was
-> confounded by a wrapper proven broken one hour later.
+> **§8 is the follow-up pass, and it is the part worth reading.** Every open item was worked, and
+> doing so found more defects in *this plan* and in the estate's own watchers than in the code
+> being changed: the fan-out lost another 67 s, a lane shipped in Phase 1 turned out never to have
+> launched on any `-NoAlert` run, and **seven of `audit-guard-contract`'s ten findings were the
+> auditor accusing correct code.**
+>
+> Corrected in place rather than quietly — the plan was wrong about the completion markers (32 of
+> 34 lanes have one, not one), about the Ghost publish (24–61 s, not 60–449 s), about what
+> cProfile was measuring, and about rule 4, which needed a lock in `send-alert.ps1` rather than a
+> convention. The 2026-08-22 "parallel is worse" verdict it inherited was confounded by a wrapper
+> proven broken one hour later.
 
 **Status when written: PROPOSED, 2026-08-23, for a fresh build session. The machine is a Ryzen 9
 9950X (16 cores / 32 threads). Every stage in this estate that is not a capture lane runs on
@@ -555,3 +562,86 @@ Phase 1 is the largest edit and the largest win; Phases 2–4 are each a fractio
   the gate works as of 08-23. On a quiet day it should now skip entirely. If it is still
   running daily after this plan lands, the cadence inputs are too broad, not the suite too
   slow.
+
+---
+
+## 8. The follow-up pass, 2026-08-23 evening — and four things this plan got wrong
+
+Everything in §§1–7 was taken to a decision. Then the seven open items were worked, and working
+them found more defects in *this plan* and in the estate's own watchers than in the code being
+changed. That pattern is the finding: **most of what looked like a backlog was a watcher
+mis-reporting, and most of what looked measured had been inferred.**
+
+### The wins, measured
+
+| | before | after |
+|---|---|---|
+| inspect fan-out wall | 171 s | **104 s** |
+| ↳ its longest lane, `discover-hyvee` | 165 s (96% of the wall) | 4 concurrent fetch workers |
+| structure-only graph import | 3.69 s | **3.43 s** (`norm_text` memoised) |
+| `audit-guard-contract` backlog / half | 4 / 6 | **0 / 0** |
+| lanes proving completion | 0 of 34 | **32 of 34** |
+
+`discover-hyvee` was split into resolve-plan (serial) → fetch (concurrent) → judge (serial). On a
+pinned id set, **57.1 s → 23.8 s over 12 terms, 0 failed both ways.** The only difference was 621
+vs 620 products scanned — and a control of two further **serial** runs scanned 623 and 623, so the
+count drifts run-to-run on its own and the concurrent run sits inside that spread. Four workers,
+each keeping the same 400 ms pace, because the pacing is politeness to a third-party store API and
+raising it is a vendor decision rather than a tuning knob.
+
+### Four corrections to this plan
+
+1. **The completion markers exist — 32 of 34 lanes have one.** §2 named four; the earlier note in
+   this document said only one was real. Both were wrong. That check grepped for a literal
+   `'<NAME>-COMPLETE'` string and so missed every script emitting through `Write-GuardComplete`,
+   which is most of them. `audit-store-registry` does print `STORE-REGISTRY-COMPLETE`. Grepping one
+   of two legal spellings and concluding the thing does not exist is the same shape as the
+   backspace-in-the-regex scanner that reported green for a day while watching nothing.
+
+2. **The `norm_text` cache is worth 0.26 s, not the ~2 s cProfile implied.** cProfile charges its
+   own per-call overhead to the function, and at 391,678 calls that *is* most of its 2.07 s
+   "cumulative". It is the right tool for finding **where** the time is and the wrong one for
+   deciding **how much** there is to win. Same correction applies to the `sqlite3.execute` row.
+
+3. **Ghost publish is 24–61 s, not 60–449 s.** §7's figure is a gap between two log lines, and a
+   gap contains whatever else ran between them. `publish-deals-page` makes exactly three Ghost
+   calls, each `-TimeoutSec 30`, none retried — so the Ghost portion cannot exceed 90 s by
+   construction. The step now times itself and logs the number, so the next reader gets an answer
+   instead of re-deriving a wrong one.
+
+4. **Phase 1 shipped a lane that never launched.** `store-registry`'s lane read
+   `-Arguments $(if (-not $NoAlert) { @('-Alert') } else { @() })`. An empty `$( )` collapses to
+   `$null`, `[string[]]` binds it, and `@($null)` is an array holding one null — so `Start-Process`
+   refused the entire ArgumentList. That audit did not run on **any `-NoAlert` invocation**, which
+   is exactly what the GitHub Actions daily backup uses: dead on precisely the days Brad's machine
+   is off. It was found by demanding completion markers, not by review — which is the whole
+   argument for markers, arriving one commit after the argument was made.
+
+### The watchers were accusing correct code
+
+`audit-guard-contract` reported ten findings. **Seven were the auditor, not the audited.**
+
+- Its presence check accepts a literal marker **or** the helper; its completeness check only knew
+  the helper. Every literal-emitter was `HALF-COVERED` on paths where it is perfectly correct.
+- It derived "the chain invokes this" by regexing the **whole file text**, so `test-cadence.ps1`
+  (three prose comments and one docstring), `test-log-sidecar-recovery.ps1` (one comment) and
+  `audit-household-in-food.ps1` (named inside a cadence `-InputGlobs` array — a file it *watches*)
+  were all reported as having joined the chain without a marker.
+
+A list with noise in it stops being read, which is the same failure as not having the list. The
+three real HALF findings were fixed rather than allowlisted, and one of them mattered:
+`audit-store-integrity`'s "indexed only N price names — implausible; parse error" exited 1 with a
+line that did not start with `!`, and `check-ad-cycles` judges that guard on its **output** — so a
+parse error severe enough to lose 200 price names was reported to Brad as a clean board.
+
+### Closed, with the reason
+
+- **`codex/parallel-recipe-pipeline` must not be merged.** It is 552 commits behind and edits
+  `platform/`, which was deliberately deleted from main on 2026-08-14 in `f5e187a0` ("Remove the
+  V3/V4 platform estate; return to the PowerShell pipeline"). All 32 "conflicts" are
+  delete-vs-modify. Merging it would resurrect the removed estate.
+- **`claude/great-kepler-1b6495` merged**, keeping both sides of its one real conflict: main's
+  `Get-ClaimedSlugs` and kepler's composite-term guard were unrelated additions at the same
+  insertion point.
+- **The ~30 `ingredient-publish/*` branches** cover only 16 distinct batch ids — roughly half are
+  duplicate publishes of the same ingredients. Untouched; they need a data ruling, not a merge.
