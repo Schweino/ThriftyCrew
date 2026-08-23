@@ -1319,3 +1319,108 @@ contested scores, not several, and `contested-scores.json` is a snapshot the swe
 overwrites rather than a history — so "look at more than one night" was not available
 on any timeline. If nightly accumulation is wanted, that is a change worth making
 deliberately.
+
+## Addendum 2026-08-23 (second) — round 2, an adjudicator, and why v2 lost
+
+Phase 3 shipped ft-v1 and wired it. This is the same night's follow-on, on a card the
+nightly chain had already handed back.
+
+### 1. Round 1 was mined by the wrong model
+
+`mine-products.json` → top-k by the **bi-encoder** → pairs the bi-encoder finds
+confusable. The thing being trained is a **cross-encoder**, which finds different things
+confusable. `--rerank-with` scores every top-k candidate with a trained copy and also
+keeps the ones IT still believes: **436 pairs beyond the cosine margin, 431 never
+surfaced by round 1**.
+
+What that pile is, read before training on it: canned corn against `frozen-corn`, heavy
+cream against `whipped-cream`, liquid detergent against `laundry-pods`, fresh salmon
+against `canned-salmon`. FORM and PACK confusions — the wrong-crown class this board
+exists to prevent, and the class a regex is blind to.
+
+### 2. The hazard, and the measurement that retires it
+
+A mined pair's label is the candidate commodity's regex, and the pairs a good model
+scores highest are exactly the ones most likely to be MISLABELLED. Round-2 mining
+concentrates the corpus on those pairs, so it concentrates the label error too.
+
+So the labels were adjudicated. A Fable agent ruled on all 224 pairs ft-v1 scores above
+0.9, given the product name and the commodity's accepted examples and nothing else — no
+score, no regex, no board access, the same independence rule §2 step 3 applies to the
+local model. 224 answered, 0 join misses, 0 strays.
+
+    YES 3    NO 212    UNSURE 9
+
+**The regex was right 95% of the time on the hardest slice available.** And two of the
+three YES verdicts INDEPENDENTLY REPRODUCE rulings the estate already holds — the Penguin
+cheddar crackers and No Yolks Egg White Noodles are both gold matches whose mined label
+phase 3a had to overrule. The agent had neither.
+
+UNSURE is not a label: those 9 are dropped from the corpus rather than falling back to
+the regex, because the regex is what was in doubt.
+
+The third YES is a live board defect, reported and never applied
+(`out/mined-rule-gaps.json`): `Lunch Mate Mesquite Turkey Breast 9 OZ` is priced as
+`turkey-breast` and reads as sliced lunchmeat.
+
+### 3. The rigged arena, named rather than used
+
+The round-2 test set is NOT a fair arena: its negatives were selected *because* ft-v1
+scores them high, so it is rigged against ft-v1 by construction. Stock confirms it —
+0.9064 there against 0.9127 on the round-1 holdout; the set is simply harder. The fair
+arenas are the round-1 holdout (chosen by the bi-encoder before either model existed)
+and the 435 live contested pairs (which no corpus contains).
+
+    model | A: AUC  neg<1e-4  TRUE lost | B: filtered  agreed  DISAGREED
+    stock | 0.9126      108          5  |          9        8          0
+    ft-v1 | 0.9672      469          2  |         21       19          0
+    ft-v2 | 0.9652      461          2  |         19       17          1   <- rejected
+    ft-v3 | 0.9674      434          0  |         18       17          0   <- promoted
+
+    cold hardeval |    OLD   GOLD   MINED     (GOLD/OLD independent of every model)
+    stock         | 0.9857 0.9572  0.9504
+    ft-v1         | 0.9938 0.9920  0.9862
+    ft-v2         | 0.9954 0.9891  0.9866
+    ft-v3         | 0.9958 0.9939  0.9881
+
+### 4. Why ft-v2 lost, which is the useful part
+
+ft-v2 is the round-2 corpus with REGEX labels. It lost both gates. The diagnostic:
+
+    round-2-only negatives    still believed > 0.5
+    v2's TRAIN split (275)    ft-v1 160/275  ->  ft-v2   2/275
+    held-out TEST split (153) ft-v1  95/153  ->  ft-v2  44/153
+
+It memorised what it saw and **generalised partially to unseen negatives of the same
+class** (mean 0.657 → 0.314). The signal is real and it transfers. It simply cost more
+calibration elsewhere than it bought — 8 fewer negatives caught at the operating point,
+and one live disagreement where v1 had none.
+
+And because the adjudication then showed the labels were 95% right, **v2's loss was
+never label noise**. It is a genuine capacity trade-off, which means the next round needs
+more data or a different loss, not better labels. That is a more useful thing to know
+than a win would have been.
+
+### 5. What was promoted, and the trade it makes
+
+ft-v3 — the same corpus with adjudicated labels — beats v1 on all three cold hardeval
+numbers including GOLD, the one the third addendum designated as deciding, and disagrees
+with the local model on 0 of 435. One line in `audit-semantic-identity.ps1`; v1 stays on
+disk and that line is the whole revert.
+
+The trade is named rather than buried: **18 filtered a night where v1 filtered 21,
+bought with ZERO false rejects on the cold holdout where v1 loses 2.** For a reject-only
+filter whose failure mode is a cell that never gets priced, fewer-and-safer is the right
+side of that.
+
+**1e-4 stays**, checked rather than assumed: both models hit their first live
+disagreement at 3e-4, so v3's own optimum is the same cut v1 was calibrated at.
+Promoting a model on the previous model's threshold would have under-used it.
+
+### 6. Where an agent helped and where it would not have
+
+The mine → label → build → train → gate path is deterministic scripts, and the binding
+constraint is one 16 GB card that holds exactly one training run at a time — so fan-out
+buys no wall-clock and a model in that path would only add nondeterminism to a
+measurement. The one non-deterministic weakness was the LABELS, and that is the only
+place an agent was used. Four ran concurrently because none of them needed the card.
