@@ -29,6 +29,9 @@ param(
   # -Sequential restores the old order EXACTLY, through the same lane body, so "is this a concurrency
   # problem?" is one flag away rather than one revert away - and so the two transcripts are diffable.
   # It is not a legacy switch: it is how the next person answers that question without reverting anything.
+  # The escape hatch for the pull refusal below. Named rather than implied: a guard that refuses
+  # without telling you how to proceed just gets worked around.
+  [switch]$ForcePull,
   [int]$MaxParallel = 8,
   [switch]$Sequential
 )
@@ -342,6 +345,38 @@ $hardFail = $false
 # measured. Observed 2026-08-03. Set this flag, and only this flag, drive the header note.
 $pullRan = $false
 $adsToday = Join-Path $OutDir ("ads-" + $asofS + ".json")
+
+# ---- PULLING FROM HERE IS A MANUAL-ONLY PATH, AND IT IS A TRAP (2026-08-23) -----------------------------
+# EVERY scheduled caller passes -NoPull. capture-run.ps1 pulls the three server stores as PARALLEL LANES
+# and only then calls this file as its downstream, so on the 07:00 and 08:00 tasks and on the cloud runner
+# the block below never executes. It exists for a human running check-ad-cycles by hand.
+#
+# On that path it does harm rather than good, measured today. A chain run at 12:54 - hours after the 08:00
+# task had already pulled - re-pulled Family Fare, was throttled by Freshop to 567 s against its 88-108 s
+# scheduled-morning baseline (the same shape as 08-01's 407 s and 08-08's 408 s, both also second runs of a
+# day), and spent seven terms of the shared rotation cursor (FamilyFare 515 -> 522) on a test. Nothing
+# stopped it, because $serverDue is unconditionally true whenever ANY store is method=server: it cannot
+# tell a test from the morning.
+#
+# So make the file say what it means. Without -NoPull this now REFUSES and names capture-run, unless
+# -ForcePull is passed - because refusing outright would break the one legitimate case (no capture-run,
+# genuinely wanting a pull) and this estate's rule is that a guard names the escape hatch rather than
+# leaving the operator to discover it. Same call the -Lane branch already makes on an unknown -LaneName:
+# refuse and print the correct form, never guess on the caller's behalf.
+if ($serverDue -and -not $NoPull -and -not $ForcePull) {
+  Log 'REFUSING to pull: check-ad-cycles does not own the store pulls. capture-run.ps1 runs them as parallel lanes and calls this file with -NoPull.'
+  Write-Output 'check-ad-cycles: REFUSING to pull.'
+  Write-Output '  The store pulls belong to capture-run.ps1, which runs them as PARALLEL LANES and then'
+  Write-Output '  calls this file with -NoPull. Pulling from here re-pulls stores that were already'
+  Write-Output '  pulled this morning: Freshop throttles a same-day repeat to ~5x its normal cost'
+  Write-Output '  (567 s vs 88-108 s, measured 2026-08-23), and it spends the shared rotation cursor.'
+  Write-Output ''
+  Write-Output '  What you almost certainly want:   .\capture-run.ps1 -Kind daily'
+  Write-Output '  To re-run only the downstream:    .\check-ad-cycles.ps1 -NoPull'
+  Write-Output '  If you really do want a pull:     .\check-ad-cycles.ps1 -ForcePull'
+  exit 3
+}
+
 if ($serverDue) {
   $pullOk = $NoPull   # in NoPull test mode we don't judge health
   if (-not $NoPull) {

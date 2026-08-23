@@ -1,4 +1,4 @@
-<#
+﻿<#
   publish-deals-page.ps1 - The single, gated PUBLISH action for the public Omaha grocery page. HEADLESS
   (no browser). Rebuilds out\deals-page-embed.html from the newest board, runs a COVERAGE GATE so a
   degraded/half-empty matrix is NEVER pushed live, then upserts the Ghost Resources post
@@ -15,6 +15,34 @@ param([string]$CompareFile = "", [int]$MinCommodities = 25, [int]$MinPerStore = 
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
+
+# ---- WHERE DOES THE PUBLISH BLOCK ACTUALLY GO? (2026-08-23) -------------------------------------
+# This file launches eleven children and reported none of their times, so the only number anyone had
+# was the gap between two check-ad-cycles log lines - 167 s on 2026-08-23 - which says "the publish
+# block" and nothing about which part. PLAN-use-the-cores-2 §2.1 proposed fanning out the two
+# read-only gate trios on that gap. Measured standalone first, and the proposal was wrong:
+#
+#     pre-build   price-mode 1.2 s + links 0.9 s + name-drift 7.5 s   =  9.6 s
+#     post-build  store-coverage 0.6 + match-soundness 1.9 + cat-cov 0.4 =  2.9 s
+#     builders    build-deals-page 14.7 s, trend-pages 8.4 s, trend-index 0.8 s
+#
+# Nine of the eleven children are ~36 s of a 167 s block. Fanning out both trios would save about
+# THREE SECONDS. The other ~130 s is Ghost: the board upsert, publish-store-guide and
+# publish-trend-pages - network, rate-limited, and serial on purpose (§3.5).
+#
+# So this is a stopwatch, not a fan-out. Each child reports its own wall time on the line it already
+# logs, and tomorrow's run answers the question for the two publishers that cannot be timed by hand
+# without doing a real Ghost upsert. Measure, then decide - the same order that turned §2.1 from a
+# 50-70 s projection into a 3 s one.
+$script:StageTimes = [ordered]@{}
+function Invoke-Timed {
+  param([Parameter(Mandatory)][string]$Name, [Parameter(Mandatory)][scriptblock]$Body)
+  $sw = [Diagnostics.Stopwatch]::StartNew()
+  try { & $Body } finally {
+    $sw.Stop()
+    $script:StageTimes[$Name] = [math]::Round($sw.Elapsed.TotalSeconds, 1)
+  }
+}
 $slug   = 'omaha-grocery-prices'
 
 # ---- CHANGE-GATE DECISION (2026-07-30). Kept pure and file-only so -SelfTest can prove it BOTH fires and
@@ -96,7 +124,7 @@ if ($reasons.Count -gt 0 -and -not $Force) {
 # ---- price-mode visibility: compare-deals already DROPS any unverified Instacart store (Aldi/Fareway) so its
 #      marked-up delivery prices never reach the board; surface it here too so a drop is never silent ----
 try {
-  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-price-mode.ps1') | Out-Null
+  Invoke-Timed 'audit-price-mode' { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-price-mode.ps1') | Out-Null }
   if ($LASTEXITCODE -eq 2) { Write-Output "price-mode: an Instacart store is UNVERIFIED - compare-deals EXCLUDED it from the board. Re-capture In-Store + stamp mode_verified to restore it." }
   elseif ($LASTEXITCODE -eq 3) { Write-Output "price-mode: BLIND - no canonical file for a mode-sensitive store reached the audit; nothing this run proves Aldi/Fareway are in-store priced (their board cells are also thin/absent, which the coverage gate above holds on)." }
 } catch {}
@@ -123,7 +151,7 @@ try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-dr
 # guards.ps1) and only APPLIED here. Publish must never mint a number the guards have not seen: on 2026-07-23
 # this script regenerated pins post-gate and shipped 37 wrong-basis prices (pack price pinned onto per-item
 # cells) that guards would have refused. If the pins file looks stale, re-run the pipeline, not this script.
-& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-deals-page.ps1') -CompareFile $CompareFile -Out $embed -Embed | Out-Null
+Invoke-Timed 'build-deals-page' { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-deals-page.ps1') -CompareFile $CompareFile -Out $embed -Embed | Out-Null }
 if ($LASTEXITCODE -ne 0) { Write-Output ("ERROR: page build FAILED (rc=$LASTEXITCODE) - not publishing"); exit 1 }
 if (-not (Test-Path $embed) -or ((Get-Item $embed).Length -lt 2000)) { Write-Output 'ERROR: page build produced no/short file'; exit 1 }
 # Link-coverage self-check: how many priced chips render NO "See item" link (or Does-not-carry cell)? A spike
@@ -174,20 +202,26 @@ try {
 # ---- ALL-STORES-SHOWN invariant (HARD gate): every staple commodity must render a tile for ALL 7 stores - a
 # price, or a "Doesn't carry / No price yet - See it? Let us know!" card. A store missing from a commodity row
 # is the exact blueberries drop-off Brad caught; do NOT ship a board that hides a store. -Force overrides.
+$__sw = [Diagnostics.Stopwatch]::StartNew()
 & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-store-coverage.ps1') -Embed $embed -OutDir $OutDir
+$__sw.Stop(); $script:StageTimes['audit-store-coverage'] = [math]::Round($__sw.Elapsed.TotalSeconds, 1)
 if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: a staple commodity is missing a store tile (see out\store-coverage-report.json). NOT publishing (run -Force to override once the render is fixed).'; exit 2 }
 
 # ---- MATCHING-SOUNDNESS gate (HARD): a rule change that MOVED or DROPPED an existing product's commodity
 # vs the reviewed baseline is a matching regression (the 2026-07-13 audit class). Hold until a human reviews
 # and runs `audit-match-soundness.ps1 -Accept`. Steady state (no rule change) => 0 changes => passes. -Force overrides.
+$__sw = [Diagnostics.Stopwatch]::StartNew()
 & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-match-soundness.ps1') -OutDir $OutDir
+$__sw.Stop(); $script:StageTimes['audit-match-soundness'] = [math]::Round($__sw.Elapsed.TotalSeconds, 1)
 if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: commodity matching changed vs the reviewed baseline (see out\audit\soundness-report.json). A product MOVED/DROPPED commodity. Review, then `audit-match-soundness.ps1 -Accept` (or -Force to override).'; exit 2 }
 elseif ($LASTEXITCODE -eq 3) { Write-Output 'match-soundness: BLIND - it ingested ZERO products, so nothing this build proves any commodity matching is sound; the matching gate above passed on an empty examination, not on a clean result.' }
 
 # ---- CATEGORY-COVERAGE gate (HARD): every commodity must be filed into exactly one category, else it renders in
 # NO department/filter (invisible). This is what makes "add a new item" safe: forget to categorize it and the
 # publish HOLDS. Daily pipeline never adds commodities, so it only trips right after a human adds one. -Force overrides.
+$__sw = [Diagnostics.Stopwatch]::StartNew()
 & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-category-coverage.ps1') -OutDir $OutDir
+$__sw.Stop(); $script:StageTimes['audit-category-coverage'] = [math]::Round($__sw.Elapsed.TotalSeconds, 1)
 if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: a commodity is not in exactly one category (see out\category-coverage-report.json) - it would render in no filter. Add it to a category in categories.json (or -Force to override).'; exit 2 }
 
 # ---- preserve the live post's current visibility (so a weekly refresh never reverts a manual paid-gate) ----
@@ -243,7 +277,9 @@ if (-not (Test-UpsertNeeded -Sig $sig -SigFile $sigFile -LiveSeen ([bool]$ex) -F
     '-MetaDesc',"See the cheapest Omaha store for milk, eggs, chicken, produce and more this week. Hundreds of staples compared across Aldi, Walmart, Hy-Vee, Baker's, Fareway, Sam's Club and Family Fare.",
     '-Visibility',$vis)
   if ($Draft) { $pubArgs += '-Draft' }
+  $__sw = [Diagnostics.Stopwatch]::StartNew()
   & powershell @pubArgs
+  $__sw.Stop(); $script:StageTimes['ghost-board-upsert'] = [math]::Round($__sw.Elapsed.TotalSeconds, 1)
   $prc = $LASTEXITCODE
   if ($prc -ne 0) {
     Write-Output ("ERROR: Ghost upsert FAILED (rc=$prc) - live page NOT updated (change not published)")
@@ -277,7 +313,9 @@ try {
   # publish-store-guide also exits 0 when its own change gate skips the upsert - which is how the 2026-07-29
   # audit counted 12 store-guide upserts from 12 log lines. Do NOT add 2>&1 here: this block runs under
   # EAP=Stop, where redirecting a native child's stderr turns its first stderr line into a terminating throw.
+  $__sw = [Diagnostics.Stopwatch]::StartNew()
   $sgOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-store-guide.ps1')
+  $__sw.Stop(); $script:StageTimes['publish-store-guide'] = [math]::Round($__sw.Elapsed.TotalSeconds, 1)
   $sgRc = $LASTEXITCODE
   if ($sgRc -eq 0) {
     if ((@($sgOut) -join ' ') -match 'guide unchanged') { Write-Output "store guide already current - upsert skipped" }
@@ -307,15 +345,23 @@ try {
   if($curWk -and $stampWk -eq $curWk){
     Write-Output "trend pages up to date for week $curWk - builds skipped"
   } else {
-    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-trend-pages.ps1') | Out-Null
-    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-trend-index.ps1') | Out-Null
+    Invoke-Timed 'build-trend-pages' { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-trend-pages.ps1') | Out-Null }
+    Invoke-Timed 'build-trend-index' { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-trend-index.ps1') | Out-Null }
     # Do NOT swallow the child's exit code. publish-trend-pages exits 1 when it cannot stamp, and because
     # this call piped to Out-Null and ignored $LASTEXITCODE, 80 failures a day were invisible for 11 days.
     # Report it; do NOT make it fatal - a trend-page problem must never hold the board publish.
-    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-trend-pages.ps1') | Out-Null
+    Invoke-Timed 'publish-trend-pages' { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-trend-pages.ps1') | Out-Null }
     $tprc = $LASTEXITCODE
     if ($tprc -ne 0) { Write-Output ("trend pages: publisher exited $tprc - it could NOT write its weekly stamp, so the next publish will redo all of them (see publish-trend-pages output)") }
     else { Write-Output "trend pages built + published (weekly stamp armed)" }
   }
 } catch { Write-Output ("trend pages step threw: " + $_.Exception.Message + " - board publish unaffected") }
+
+# One line, always, listing every child that ran and what it cost. Printed even when a stage was
+# skipped, because "which stages ran at all" is half the question this answers.
+if ($script:StageTimes.Count) {
+  $__tot = 0; foreach ($__v in $script:StageTimes.Values) { $__tot += [double]$__v }
+  Write-Output ("publish-deals-page timings ({0:n1} s total): " -f $__tot)
+  foreach ($__k in $script:StageTimes.Keys) { Write-Output ("    {0,-24} {1,6} s" -f $__k, $script:StageTimes[$__k]) }
+}
 exit 0

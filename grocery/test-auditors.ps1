@@ -1156,6 +1156,20 @@ if (-not (Test-Path $foLib)) {
   if ($cacSrc -match '\[switch\]\$Sequential' -and $cacSrc -match '-Sequential:\$Sequential') {
     Ok 'check-ad-cycles keeps -Sequential wired through to the fan-out (a flaky lane is one flag from diagnosis, not one revert)'
   } else { Bad 'check-ad-cycles lost its -Sequential escape hatch - a concurrency-suspect lane can now only be investigated by reverting the fan-out' }
+
+  # THE PULLS BELONG TO capture-run, AND THE CHAIN NOW SAYS SO (2026-08-23). check-ad-cycles' pull block
+  # is inside `if (-not $NoPull)`, every scheduled caller passes -NoPull, and capture-run does those pulls
+  # as parallel lanes BEFORE calling this file. So the block only ever runs for a human - where it re-pulls
+  # stores already pulled that morning, is throttled by Freshop to ~5x normal (567 s vs 88-108 s, measured
+  # 2026-08-23), and spends the shared rotation cursor on a test. It now refuses without -ForcePull.
+  # Pinned because the refusal is one `if` guarding an expensive, slow-to-notice mistake, and because
+  # capture-run MUST keep passing -NoPull or every scheduled run starts hitting the refusal instead.
+  if ($cacSrc -match '\[switch\]\$ForcePull' -and $cacSrc -match 'REFUSING to pull') {
+    Ok 'check-ad-cycles refuses to pull unless -ForcePull (the pulls belong to capture-run, which runs them as parallel lanes)'
+  } else { Bad 'check-ad-cycles lost its pull refusal - a manual run will silently re-pull stores captured hours earlier, get throttled, and spend the rotation cursor' }
+  if ($crSrc -match '-NoPull') {
+    Ok 'capture-run still calls the chain with -NoPull (so the refusal never fires on a scheduled run)'
+  } else { Bad 'capture-run no longer passes -NoPull to check-ad-cycles - every scheduled run will now hit the pull refusal and exit 3' }
 }
 # THE ALERT GATE IS NOT A CHECK-THEN-ACT RACE ANY MORE (2026-08-23). send-alert reads alert-sent-<day>.txt,
 # decides, sends over the network, then appends the type. Serial callers made that window harmless; the
