@@ -49,8 +49,34 @@ $hashFile = Join-Path $root 'db\published-hashes.json'
 $pubHashes = @{}
 if(Test-Path $hashFile){ try { $o=(Get-Content $hashFile -Raw | ConvertFrom-Json); foreach($p in $o.PSObject.Properties){ $pubHashes[$p.Name]=[string]$p.Value } } catch {} }
 
-$ok=0; $skipped=0; $failed=@(); $refusedCreate=@()
+# CARRIAGE, read from db\costed.json where cost-recipes.ps1 recorded it (lib\carriage-lib.ps1 derives it).
+# Publishing is the act this estate cannot take back cheaply, so it reads the fact rather than trusting
+# that some earlier stage checked. Unreadable means the map stays EMPTY and $carriageKnown false - which
+# is reported loudly below rather than passed off as "nothing uncarried".
+$uncarriedMap=@{}; $carriageKnown=$false
+$costedFile = Join-Path $root 'db\costed.json'
+if(Test-Path $costedFile){
+  try{
+    foreach($c in (Get-Content $costedFile -Raw | ConvertFrom-Json)){
+      if(($c.PSObject.Properties.Name -contains 'uncarried') -and @($c.uncarried).Count){ $uncarriedMap[[string]$c.slug] = @($c.uncarried) }
+    }
+    $carriageKnown=$true
+  } catch { $uncarriedMap=@{}; $carriageKnown=$false }
+}
+if(-not $carriageKnown){ Write-Output 'PUBLISH: WARNING - db\costed.json unreadable, so carriage could not be checked. Recost before publishing.' }
+
+$ok=0; $skipped=0; $failed=@(); $refusedCreate=@(); $refusedCarriage=@()
 foreach($slug in $Slugs){
+  # THE CARRIAGE GUARD, before any work is spent on this slug. Brad's standing rule: if even ONE
+  # ingredient is not carried in any Omaha store, we cannot use the recipe. This refuses BOTH create and
+  # republish - a recipe already live with an uncarried line is exactly the state that had to be cleaned
+  # up by hand on 2026-08-22, and republishing it would re-assert it. Taking the live post DOWN is
+  # feed-covers-published's job; this script's job is to never put one up.
+  if($uncarriedMap.ContainsKey($slug)){
+    $refusedCarriage += $slug
+    Write-Output ("REFUSED CARRIAGE  $slug  - no Omaha store is proven to carry: " + ((@($uncarriedMap[$slug]) | Select-Object -First 6) -join ', '))
+    continue
+  }
   $spec = Get-Content (Join-Path $root "db\recipes\$slug.json") -Raw | ConvertFrom-Json
   # expand {{stat}} tokens BEFORE any field leaves this script: $desc feeds custom_excerpt, meta_description
   # AND the og/twitter pair, so an unexpanded token would ship to social verbatim. Expansion resolves from
@@ -180,6 +206,10 @@ foreach($slug in $Slugs){
 if(-not $VerifyOnly){ ($pubHashes | ConvertTo-Json) | Set-Content $hashFile -Encoding UTF8 }
 Write-Output ("published+verified OK: $ok / $($Slugs.Count)   (skipped-unchanged: $skipped)")
 if($failed){ Write-Output ("FAILED (" + $failed.Count + "): " + ($failed -join ', ')) }
+if($refusedCarriage){
+  Write-Output ("REFUSED CARRIAGE (" + $refusedCarriage.Count + " slug(s) have an ingredient no Omaha store is proven to stock): " + ($refusedCarriage -join ', '))
+  Write-Output ("  These were NOT published. Either prove carriage with store evidence in grocery\carriage.json, re-price the line from a carried board commodity, or drop the recipe.")
+}
 # Refusals are LOUD. A silently-skipped create is how 21 unaudited specs nearly became live paid posts.
 if($refusedCreate){
   Write-Output ("REFUSED CREATE (" + $refusedCreate.Count + " slug(s) had no live post and no -AllowCreate authority): " + ($refusedCreate -join ', '))

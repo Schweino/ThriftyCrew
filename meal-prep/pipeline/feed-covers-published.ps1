@@ -84,11 +84,27 @@ function Test-FeedCoverage {
     [hashtable]$FeedRecipes,
     [hashtable]$FeedIngredients,
     [hashtable]$FeedPricingInputs,
-    [string[]]$Exempt = @()
+    [string[]]$Exempt = @(),
+    # slug -> array of "Item [VERDICT]" for lines whose carriage is not CARRIED, from costed.json's
+    # `uncarried` field. Derived by lib\carriage-lib.ps1 in cost-recipes.ps1; this gate only reads it.
+    [hashtable]$Uncarried = @{}
   )
   $findings = New-Object System.Collections.Generic.List[object]
   $exempted = New-Object System.Collections.Generic.List[object]
   foreach ($slug in $PublishedSlugs) {
+    # CARRIAGE FIRST, and it is NOT exemptible. A recipe whose ingredient no Omaha store is proven to
+    # stock comes down whatever the feed says about pricing - Brad's standing rule, 2026-08-22: one
+    # uncarried ingredient and we cannot use the recipe. The no-board-price allowlist deliberately does
+    # not apply here; it excuses BOARD PRICING, never carriage, and reading it as both is the bug this
+    # gate exists to close.
+    if ($Uncarried.ContainsKey($slug) -and @($Uncarried[$slug]).Count) {
+      $findings.Add([pscustomobject]@{
+        slug    = $slug
+        verdict = 'NOT-CARRIED'
+        detail  = ("no Omaha store is proven to carry: " + ((@($Uncarried[$slug]) | Select-Object -First 6) -join ', '))
+      })
+      continue
+    }
     $missIng = New-Object System.Collections.Generic.List[string]
     $missPin = New-Object System.Collections.Generic.List[string]
     $exBids  = New-Object System.Collections.Generic.List[string]
@@ -183,20 +199,49 @@ if ($SelfTest) {
         -FeedIngredients $ING -FeedPricingInputs $PIN
   TT 'CLEAN TWIN  both published recipes fully covered is silent' ($f.Count -eq 0) ("count=$($f.Count)")
 
-  # -- THE ALLOWLIST, honoured from the file cost-engine already reads. doubanjiang is on it: the estate
-  #    ruled it has no first-party Omaha board price and carries a register-estimate label instead. It must
-  #    not fail the gate, and it must not vanish either.
-  $CARDS2 = @{ 'taiwanese-braised-beef-noodle-bowls' = @('chicken-thigh', 'doubanjiang') }
-  $r = Test-FeedCoverage -PublishedSlugs @('taiwanese-braised-beef-noodle-bowls') -CardBids $CARDS2 `
-        -FeedRecipes @{ 'taiwanese-braised-beef-noodle-bowls' = 1 } -FeedIngredients $ING -FeedPricingInputs $PIN `
-        -Exempt @('doubanjiang', 'aji-amarillo-paste')
+  # -- THE ALLOWLIST, honoured from the file cost-engine already reads. aji-amarillo-paste is on it: the
+  #    estate ruled it has no first-party Omaha board price and carries a register-estimate label
+  #    instead. It must not fail the gate, and it must not vanish either.
+  #
+  #    THIS FIXTURE USED TO BE doubanjiang, AND THAT WAS THE BUG WRITTEN DOWN AS A TEST. doubanjiang has
+  #    never been found in any Omaha store - it is searched as "chili bean sauce", which returns Bush's
+  #    chili beans - so this self-test was asserting that an ingredient nobody stocks must pass the
+  #    publish gate. Three paid recipes shipped on that assertion. The allowlist excuses BOARD PRICING
+  #    for a food we know is on a shelf; aji-amarillo-paste (Walmart) actually is one.
+  $CARDS2 = @{ 'peruvian-pollo-saltado' = @('chicken-thigh', 'aji-amarillo-paste') }
+  $r = Test-FeedCoverage -PublishedSlugs @('peruvian-pollo-saltado') -CardBids $CARDS2 `
+        -FeedRecipes @{ 'peruvian-pollo-saltado' = 1 } -FeedIngredients $ING -FeedPricingInputs $PIN `
+        -Exempt @('aji-amarillo-paste', 'dried-guajillo-chiles')
   TT 'CLEAN TWIN  an allowlisted no-board-price bid does not fail the gate' ($r.findings.Count -eq 0) ("findings=$($r.findings.Count)")
   TT 'MUST FIRE  ...but it is still REPORTED, never silently dropped' `
-     ($r.exempted.Count -eq 1 -and $r.exempted[0].bids -contains 'doubanjiang') ("exempted=$($r.exempted.Count)")
+     ($r.exempted.Count -eq 1 -and $r.exempted[0].bids -contains 'aji-amarillo-paste') ("exempted=$($r.exempted.Count)")
+
+  # -- CARRIAGE IS NOT EXEMPTIBLE. The allowlist says "may skip board pricing", never "is carried".
+  #    A recipe with an uncarried line comes down even when its bid is allowlisted and the feed is fine.
+  $r = Test-FeedCoverage -PublishedSlugs @('peruvian-pollo-saltado') -CardBids $CARDS2 `
+        -FeedRecipes @{ 'peruvian-pollo-saltado' = 1 } -FeedIngredients $ING -FeedPricingInputs $PIN `
+        -Exempt @('aji-amarillo-paste') -Uncarried @{ 'peruvian-pollo-saltado' = @('Aji Amarillo Paste [UNKNOWN]') }
+  TT 'MUST FIRE  an uncarried line fails the gate even when its bid is allowlisted' `
+     ($r.findings.Count -eq 1 -and $r.findings[0].verdict -eq 'NOT-CARRIED') ("findings=$($r.findings.Count) verdict=$($r.findings[0].verdict)")
+
+  # -- UNKNOWN takes a LIVE recipe down. Brad's call, 2026-08-22: on a page already selling to readers,
+  #    "we cannot prove Omaha has it" is not good enough to leave up.
+  $r = Test-FeedCoverage -PublishedSlugs @('country-captain-chicken') -CardBids $CARDS `
+        -FeedRecipes @{ 'country-captain-chicken' = 1 } -FeedIngredients $ING -FeedPricingInputs $PIN `
+        -Uncarried @{ 'country-captain-chicken' = @('Doubanjiang [UNKNOWN]') }
+  TT 'MUST FIRE  UNKNOWN carriage on a live recipe is a takedown finding' `
+     ($r.findings.Count -eq 1 -and $r.findings[0].verdict -eq 'NOT-CARRIED') ("findings=$($r.findings.Count)")
+
+  # -- and a fully carried recipe is untouched by the new check
+  $r = Test-FeedCoverage -PublishedSlugs @('country-captain-chicken') -CardBids $CARDS `
+        -FeedRecipes @{ 'country-captain-chicken' = 1 } -FeedIngredients $ING -FeedPricingInputs $PIN `
+        -Uncarried @{ 'american-goulash-pasta' = @('Something [UNKNOWN]') }
+  TT 'CLEAN TWIN  another recipe''s uncarried line does not fail this one' ($r.findings.Count -eq 0) ("findings=$($r.findings.Count)")
+
   # and the allowlist must not become a blanket pardon for the rest of the card
-  $r = Test-FeedCoverage -PublishedSlugs @('taiwanese-braised-beef-noodle-bowls') -CardBids $CARDS2 `
-        -FeedRecipes @{ 'taiwanese-braised-beef-noodle-bowls' = 1 } -FeedIngredients @{ 'rice' = @{} } -FeedPricingInputs $PIN `
-        -Exempt @('doubanjiang')
+  $r = Test-FeedCoverage -PublishedSlugs @('peruvian-pollo-saltado') -CardBids $CARDS2 `
+        -FeedRecipes @{ 'peruvian-pollo-saltado' = 1 } -FeedIngredients @{ 'rice' = @{} } -FeedPricingInputs $PIN `
+        -Exempt @('aji-amarillo-paste')
   TT 'MUST FIRE  an exemption pardons only its own bid, not the card' `
      ($r.findings.Count -eq 1 -and $r.findings[0].detail -match 'chicken-thigh') ("findings=$($r.findings.Count)")
 
@@ -290,13 +335,31 @@ $exempt = @()
 $okFile = Join-Path $mp 'db\no-board-price-ok.json'
 if (Test-Path $okFile) { try { $exempt = @((Get-Content $okFile -Raw -Encoding utf8 | ConvertFrom-Json).bids) } catch { $exempt = @() } }
 
+# CARRIAGE, read from costed.json where cost-recipes.ps1 recorded it. Unreadable means EMPTY, which
+# makes this gate blind rather than permissive-by-accident - so a missing/corrupt costed.json is called
+# out loudly instead of quietly passing every recipe.
+$uncarried = @{}
+$costedFile = Join-Path $mp 'db\costed.json'
+$carriageKnown = $false
+if (Test-Path $costedFile) {
+  try {
+    foreach ($c in (Get-Content $costedFile -Raw | ConvertFrom-Json)) {
+      if (($c.PSObject.Properties.Name -contains 'uncarried') -and @($c.uncarried).Count) { $uncarried[[string]$c.slug] = @($c.uncarried) }
+    }
+    $carriageKnown = $true
+  } catch { $uncarried = @{}; $carriageKnown = $false }
+}
+
 $res = Test-FeedCoverage -PublishedSlugs $published -CardBids $cardBids `
          -FeedRecipes (ToMap $feed.recipes) -FeedIngredients (ToMap $feed.ingredients) `
-         -FeedPricingInputs (ToMap $feed.pricing_inputs) -Exempt $exempt
+         -FeedPricingInputs (ToMap $feed.pricing_inputs) -Exempt $exempt -Uncarried $uncarried
 $findings = @($res.findings)
 
 $where = $(if ($Live) { "the LIVE feed at $FEED_URL" } else { $feedSrc })
 Write-Output ("FEEDCOV: {0} published recipe(s) checked against {1} (feed generated {2}, week {3})" -f $published.Count, $where, $feed.generated, $feed.week_of)
+if (-not $carriageKnown) {
+  Write-Output 'FEEDCOV: WARNING - db\costed.json is missing or unparseable, so CARRIAGE WAS NOT CHECKED on any recipe. Pricing coverage below is still valid; carriage is simply unknown this run.'
+}
 if ($noCard.Count) { Write-Output ("FEEDCOV: {0} published slug(s) have no readable built card, so their bids were not checked: {1}" -f $noCard.Count, (($noCard | Select-Object -First 8) -join ', ')) }
 if (@($res.exempted).Count) {
   # Visible, every run. These lines DO still render as unavailable to a reader; they are accepted, not fixed.
