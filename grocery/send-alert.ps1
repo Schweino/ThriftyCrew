@@ -327,6 +327,29 @@ if ($mute.muted) {
   exit 0
 }
 
+# ---- THE ONCE-PER-TYPE-PER-DAY GATE IS A CHECK-THEN-ACT RACE, AND NOW IT IS NOT (2026-08-23) ----
+# Read the sent-file, decide, send over the network, THEN append the type. Two send-alert.ps1
+# processes hitting that window together both read a file without their type in it and both
+# email; and the append itself can lose a line, after which the rest of the day re-pages a type
+# that was already delivered. Until today the window was narrow because the daily chain called
+# every alert serially from one script. fanout-lib.ps1 ends that assumption: several advisory
+# audits now run side by side and three of them (match-soundness, store-registry,
+# category-coverage) page on their OWN behalf, as grandchildren, so the parent cannot serialise
+# them by holding anything. A cross-process lock is the only place the fix can live.
+#
+# Named exactly like the triage-queue mutex twenty lines up, which fixed the same shape on the
+# same file for the same reason on 2026-07-28 - that precedent is why this is a mutex and not,
+# say, a lock file with a retry loop.
+#
+# A LOCK MUST NEVER SWALLOW AN ALERT. If the wait expires we send ANYWAY and say so: a duplicate
+# email is an annoyance, a suppressed one is a watcher gone quiet, and this estate has already
+# paid for the second kind. 90 s covers the 30 s Gmail timeout with room for a retry behind it.
+$sMutex = New-Object System.Threading.Mutex($false, 'Global\smp-grocery-alert-sent')
+$sHeld = $false
+try { $sHeld = $sMutex.WaitOne(90000) } catch [System.Threading.AbandonedMutexException] { $sHeld = $true }
+if (-not $sHeld) { Log ("alert-sent lock not acquired in 90 s - sending anyway rather than risking a suppressed alert [type: $typeKey]") }
+try {
+
 if (-not $Force -and (Test-Path $sentFile) -and ((Get-Content $sentFile) -contains $typeKey)) {
   Log ("SUPPRESSED (already sent this type today) '$Subject' [type: $typeKey]")
   Write-Output ("alert suppressed - '$typeKey' already emailed today (use -Force to override)")
@@ -356,4 +379,13 @@ try {
     Write-Output ("EMAIL NOT SENT: " + $msg + "  (logged to alert-log.txt)")
   }
   exit 1
+}
+
+} finally {
+  # Runs on every path out of the block above, `exit` included: PowerShell's exit unwinds
+  # through finally. Even if it did not, a process death releases the mutex as ABANDONED and
+  # the next waiter catches AbandonedMutexException above and treats it as acquired - so a
+  # crashed alert can never wedge every later alert in the estate.
+  if ($sHeld) { try { $sMutex.ReleaseMutex() } catch { } }
+  try { $sMutex.Dispose() } catch { }
 }

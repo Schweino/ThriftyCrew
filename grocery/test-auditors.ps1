@@ -1082,6 +1082,80 @@ else { Bad ('check-ad-cycles has ' + $cadBare.Count + ' cadence gate(s) whose th
 $cacTail = @(($cacSrc -replace "`r", '') -split "`n" | Where-Object { $_.Trim() -ne '' -and $_.Trim() -notmatch '^#' })
 if ($cacTail.Count -and $cacTail[-1].Trim() -match '^exit\s+\d+$') { Ok 'check-ad-cycles ends with an explicit exit - the chain verdict its callers read is stated, not inferred' }
 else { Bad ('check-ad-cycles has no explicit terminal exit, so its exit code is whatever PowerShell infers - a crash and a clean run are told apart only by luck; last statement: ' + $(if ($cacTail.Count) { $cacTail[-1].Trim() } else { '<none>' })) }
+
+# ---- THE INSPECT FAN-OUT (2026-08-23, PLAN-use-the-cores phase 1) --------------------------------------
+# The advisory audits below the ship boundary now run side by side through grocery\fanout-lib.ps1.
+# Concurrency is where a watcher goes quiet without anyone noticing: a lane that dies returns nothing, and
+# "nothing" and "no findings" are the same shape unless something counts. So the count is asserted, and
+# these cases assert that the counting works.
+$foLib = Join-Path $root 'fanout-lib.ps1'
+if (-not (Test-Path $foLib)) {
+  Bad 'grocery\fanout-lib.ps1 is missing - the inspect fan-out has no helper, so either the chain is broken or every advisory audit quietly went back to running one at a time with nobody counting them'
+} else {
+  # ITS OWN FIXTURES, RUN HERE SO THEY ACTUALLY RUN. A self-test with no caller is not a guard - that is
+  # the audit-unit-basis-outlier / test-matcher-parity lesson, and this file is where such a caller lives.
+  # The 14 cases include the three MUST-FIREs that matter most: a lane whose script is MISSING, a lane
+  # that exits 0 without its declared completion marker, and a lane killed at its budget must each come
+  # back BLIND rather than clean. Plus a CONCURRENCY case, because every other assertion in that file
+  # would still pass if the pool had quietly become a serial loop.
+  $r = PSChild $foLib -SelfTest | Out-String
+  if ($LASTEXITCODE -eq 0 -and $r -match 'SELFTEST: 14/14 pass') {
+    Ok 'fanout-lib -SelfTest passes (a missing lane, a markerless exit and a timeout each report BLIND; -Sequential agrees lane-for-lane; the pool is provably concurrent)'
+  } else { Bad ('fanout-lib -SelfTest failed or lost its fixtures: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
+
+  # EVERY LANE NAMES A SCRIPT THAT EXISTS. Get-FanoutRecord returns BLIND for a lane it cannot find, and
+  # the lane body returns BLIND for a script that is not on disk - both correct, and both would make the
+  # daily summary carry a BLIND line every single morning until somebody read it. A rename or a moved
+  # script should fail HERE, at change time, not by degrading the whole chain to advisory noise.
+  $foLanes = [regex]::Matches($cacSrc, "New-FanoutLane -Name '([a-z0-9-]+)'\s+-File \(Join-Path \`$(root|mealPrep)\s+'([^']+)'\)")
+  if ($foLanes.Count -lt 20) {
+    Bad ('check-ad-cycles declares only ' + $foLanes.Count + ' fan-out lane(s) - the inspect audits have been unwired from the fan-out, or the lane shape changed and this check can no longer see them (a scan that finds nothing to look at is BLIND, not clean)')
+  } else {
+    $foMissing = @()
+    foreach ($m in $foLanes) {
+      $base = if ($m.Groups[2].Value -eq 'root') { $root } else { Join-Path (Split-Path $root -Parent) 'meal-prep' }
+      if (-not (Test-Path (Join-Path $base $m.Groups[3].Value))) { $foMissing += ($m.Groups[1].Value + ' -> ' + $m.Groups[3].Value) }
+    }
+    if ($foMissing.Count -eq 0) { Ok ('all ' + $foLanes.Count + ' inspect fan-out lanes name a script that exists') }
+    else { Bad ('inspect fan-out lane(s) point at a script that is not there, so each reports BLIND every morning: ' + ($foMissing -join '; ')) }
+
+    # LAUNCHED AND NEVER READ IS THE WORSE HALF. A lane with no Get-FanoutRecord consumer costs its full
+    # runtime every day and its verdict reaches nobody - a guard that runs, finds something, and is thrown
+    # away. The reverse (a consumer with no lane) is loud by construction: Get-FanoutRecord hands back a
+    # BLIND record. This side is silent, so it gets the check.
+    $foNames = @($foLanes | ForEach-Object { $_.Groups[1].Value })
+    $foRead  = @([regex]::Matches($cacSrc, "Get-FanoutRecord '([a-z0-9-]+)'") | ForEach-Object { $_.Groups[1].Value })
+    $foOrphan = @($foNames | Where-Object { $foRead -notcontains $_ })
+    if ($foOrphan.Count -eq 0) { Ok 'every inspect fan-out lane is read back by a consumer (none runs daily for nobody)' }
+    else { Bad ('inspect fan-out lane(s) are launched every day and their verdict is never read: ' + ($foOrphan -join ', ')) }
+
+    # THE MUTATORS AND DELETERS MUST STAY OUT. repair-multipack-sizes / derive-links-from-prices /
+    # fix-links-ff rewrite out\regular\ and product-urls.json, which the read-only lanes READ; prune-out
+    # and prune-intermediates DELETE dated out\ files they read. Putting any of them in the pool means a
+    # lane reporting on a board that never existed, which is worse than a slow chain and much harder to
+    # see. Named here so the next person adding a lane finds out at change time.
+    $foBanned = @('repair-multipack-sizes','derive-links-from-prices','fix-links-ff','prune-out','prune-intermediates','db-build')
+    $foBad = @($foBanned | Where-Object { $cacSrc -match ("New-FanoutLane[^\r\n]*" + [regex]::Escape($_)) })
+    if ($foBad.Count -eq 0) { Ok 'no mutator or deleter has been added to the inspect fan-out (they still run serially, around it)' }
+    else { Bad ('a stage that MUTATES or DELETES shared inputs has been put in the read-only fan-out - other lanes will read a file mid-rewrite: ' + ($foBad -join ', ')) }
+  }
+
+  # -Sequential MUST SURVIVE. It is how the next person answers "is this a concurrency problem?" without
+  # reverting anything, and it is the only reason the two transcripts are comparable at all. A fan-out
+  # with no way back to serial is a fan-out nobody can debug.
+  if ($cacSrc -match '\[switch\]\$Sequential' -and $cacSrc -match '-Sequential:\$Sequential') {
+    Ok 'check-ad-cycles keeps -Sequential wired through to the fan-out (a flaky lane is one flag from diagnosis, not one revert)'
+  } else { Bad 'check-ad-cycles lost its -Sequential escape hatch - a concurrency-suspect lane can now only be investigated by reverting the fan-out' }
+}
+# THE ALERT GATE IS NOT A CHECK-THEN-ACT RACE ANY MORE (2026-08-23). send-alert reads alert-sent-<day>.txt,
+# decides, sends over the network, then appends the type. Serial callers made that window harmless; the
+# fan-out ends that assumption - three lanes (match-soundness, store-registry, category-coverage) page on
+# their own behalf as grandchildren, so the parent cannot serialise them by holding anything. Two processes
+# in that window both email, or one loses its append and re-pages a type already delivered.
+$saSrc = Get-Content (Join-Path $root 'send-alert.ps1') -Raw
+if ($saSrc -match "New-Object System\.Threading\.Mutex\(\`$false, 'Global\\smp-grocery-alert-sent'\)") {
+  Ok 'send-alert holds a machine-wide lock across its once-per-type-per-day gate (concurrent lanes cannot double-send or silently suppress)'
+} else { Bad 'send-alert LOST the lock around its sent-file gate - with audits running side by side, two alerts of one type can both email, or one can be suppressed by an append that never landed' }
 if ($crSrc -match 'smp-pipeline-bot' -and $crSrc -match 'push origin HEAD:main') {
   Ok 'capture-run still commits and pushes the pipeline output (the last mile exists)'
 } else { Bad 'capture-run LOST its commit/push - the chain would compute prices that never reach a reader, exactly as 2026-08-18..22' }

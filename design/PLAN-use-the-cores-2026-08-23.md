@@ -171,6 +171,102 @@ comparison board, prompt-backup drift, known-wrong red, food-category, feed-cove
 — so "N/0" is not the bar; an identical transcript is), and `test-native-stderr-eap` 6/6. (d) Add a `test-auditors` case: the fan-out
 with a lane whose script is missing reports BLIND, not clean.
 
+
+### Phase 1 — BUILT AND MEASURED, 2026-08-23
+
+**Result: 34 lanes, wall 513 s → 171 s (3.0×, 342 s off the chain), and 0 of 34 lane verdicts
+differ between `-Sequential` and the pool.** Measured on this machine, same inputs, same day,
+both passes back to back over the real audits, cadence gates forced DUE so both covered the same
+34 lanes.
+
+| lane group | serial-equivalent | fan-out x8 |
+|---|---|---|
+| all 34 advisory audits | 513 s wall (507 s sum-of-lanes) | **171 s wall** (681 s sum-of-lanes) |
+
+The tail is `discover-hyvee` at 165 s — 40 sequential network searches, not compute — with
+`semantic` (118 s) behind it. Nothing else exceeds 60 s, so the fan-out is now bounded by a
+network lane and further width buys nothing until that lane is split.
+
+**The I/O hypothesis is real but small.** Sum-of-lanes rose 507 s → 681 s (+34%) under
+concurrency, so the lanes do contend. It costs a third of each lane's time and buys back two
+thirds of the wall clock. `-MaxParallel 8` stays the default on that number; it was not tuned
+further because the tail is one network-bound lane.
+
+#### The 2026-08-22 "parallel is worse" verdict was confounded, and is now corrected in place
+
+`check-ad-cycles.ps1:183` carried *"THE PARALLEL EXPERIMENT IS REVERTED, ON THE MEASUREMENT"* —
+serial 30.9 min vs parallel 41.7 min, match-soundness 111 s → 904 s, CPU at 14%. Read the clock:
+
+| 2026-08-22 | commit | what |
+|---|---|---|
+| 07:24 | `31f4835b` | audits go side by side — through `Invoke-Bounded`, then **`Start-Job`-based** |
+| 10:09 | `9825bb80` | parallel **reverted** on the 30.9-vs-41.7 numbers |
+| 11:14 | `9a23e342` | `Invoke-Bounded` measured at **3.8 minutes per call for a 1-second script**, and rewritten to `Start-Process` |
+
+The verdict was recorded one hour before the machinery it was measured through was proven to
+cost minutes per call, and was never re-measured. That comment has been rewritten rather than
+obeyed, with the timeline in it, so the next reader does not revert this on a number that was
+never valid.
+
+#### Three things the plan got wrong, found while building
+
+1. **The completion markers mostly do not exist.** §2 names `COMMODITY-DUPES-COMPLETE`,
+   `STORE-REGISTRY-COMPLETE`, `GRAPH-GATES-COMPLETE` and `CAPTURE-EVICTION-COMPLETE` as markers
+   that "already exist". Only the first is real, and `audit-guard-contract` reports even that one
+   HALF-COVERED (two unmarked verdict exits, lines 219/235). `audit-store-registry`,
+   `audit-graph-gates`, `audit-capture-eviction` and `audit-row-age` emit nothing.
+   **So no phase-1 lane declares a marker.** Demanding one a script does not print turns a
+   working audit into a BLIND finding every morning — the false-alarm mirror of the failure the
+   fan-out exists to prevent. `Marker` is built and tested in `fanout-lib`; lanes get one as
+   `audit-guard-contract`'s backlog closes, one at a time, each proven on a real run first.
+
+2. **Rule 4 needed a root-cause fix, not just a convention.** "Do not call `Send-Alert` from
+   inside a lane" is right for check-ad-cycles' own alerts (they all live in the consumption
+   blocks already, so nothing moved). But three lanes — `match-soundness`, `store-registry`,
+   `category-coverage` — page on their **own** behalf via `-Alert`, as grandchildren, and no
+   amount of parent-side discipline serialises those. `send-alert.ps1`'s gate is
+   read-then-send-then-append across a 30 s network call. It now holds
+   `Global\smp-grocery-alert-sent` across that window — the same shape, named the same way, as
+   the triage-queue mutex twenty lines above it, which fixed the same race on the same file on
+   2026-07-28. If the wait expires it sends **anyway** and says so: a duplicate email is an
+   annoyance, a suppressed one is a watcher gone quiet.
+
+3. **Groups A and A′ needed no work.** The mutators already run above the ship boundary
+   (`repair-multipack-sizes` at :526, `derive-links-from-prices` at :764, `fix-links-ff` at :788)
+   and the deleters already run below the last reader (`prune-out` / `prune-intermediates` at
+   :2185). Both were already correct; the plan's table describes a move that did not need making.
+
+#### What shipped
+
+- `grocery\fanout-lib.ps1` — `New-FanoutLane` / `Invoke-Fanout` / `Get-FanoutRecord` /
+  `Test-FanoutComplete`, plus a 14-case `-SelfTest` run from `test-auditors`. `RunspacePool`
+  over `Start-Process` children (rule 6: **runspaces hold children, they do not do the work**).
+  No `param()` block, deliberately — a dot-sourced `param([switch]$SelfTest)` resets the
+  caller's own switches, which is the bug `lib\guard-contract.ps1` already paid for.
+- `check-ad-cycles.ps1` — 34 lanes; **only the launch moved.** Every stage's reading, signature
+  de-dup, summary line, alert and cadence stamp is byte-identical and now reads its child's
+  output out of a record instead of off a pipeline. That is what makes the `-Sequential` diff
+  meaningful at all.
+- `-MaxParallel 8` (default) and `-Sequential`, wired through and pinned by a test.
+
+#### Verification actually performed
+
+- **(a) same verdicts:** 34/34 lanes identical rc and BLIND state between the two modes. ✅
+- **(b) a killed lane reports BLIND by name:** proven in `fanout-lib -SelfTest`, not on the live
+  chain. `powershell -File missing.ps1` does **not** fail to launch — it starts, prints its
+  banner and exits −196608 — so the first version of this returned `Blind=$false` with no
+  finding at all. That is a deleted check reporting a clean board, and it was the harness that
+  caught it, not review. Now rc 3 + BLIND, with a frozen fixture. ✅
+- **(c)** `test-auditors` PASS and `test-native-stderr-eap` 6/6. ✅
+- **(d)** the fan-out BLIND case is a `test-auditors` case, plus four structural ones: every
+  lane names a script that exists, every lane is read back by a consumer, no mutator or deleter
+  has been added to the pool, and `-Sequential` still exists. ✅
+
+**Not done:** an end-to-end `-Sequential` vs fan-out run of the *whole* chain with byte-compared
+`out\*` artefacts. The A/B above covers group B — which is the only part that changed — over the
+real audits; the rest of the chain is untouched code. A full-chain diff is still the stronger
+test and is worth one run on a quiet morning.
+
 ---
 
 ## 3. Phase 2 — `test-auditors.ps1`: the other 433 checks

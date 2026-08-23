@@ -22,7 +22,15 @@ param(
   [switch]$NoDownstream,
   [switch]$NoAlert,
   [switch]$NoPublish,
-  [string]$ScheduleFile = ""
+  [string]$ScheduleFile = "",
+  # ---- THE INSPECT FAN-OUT (2026-08-23, PLAN-use-the-cores phase 1) --------------------------------------
+  # The advisory audits below the ship boundary are independent read-only children. They ran one after
+  # another and that tail was ~750 s of a 95-minute chain on a box with 32 threads.
+  # -Sequential restores the old order EXACTLY, through the same lane body, so "is this a concurrency
+  # problem?" is one flag away rather than one revert away - and so the two transcripts are diffable.
+  # It is not a legacy switch: it is how the next person answers that question without reverting anything.
+  [int]$MaxParallel = 8,
+  [switch]$Sequential
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -92,6 +100,7 @@ try {
 # the reason every caller goes through it even when today's body looks short, in alert-lib.ps1.
 . (Join-Path $root 'alert-lib.ps1')
 . (Join-Path $root 'native-lib.ps1')   # Invoke-Native / Invoke-NativeScript: the ONLY safe redirect under EAP=Stop
+. (Join-Path $root 'fanout-lib.ps1')   # Invoke-Fanout / Get-FanoutRecord / Test-FanoutComplete: the inspect fan-out
 
 # ---- THE CADENCE GATE, WHICH WAS CALLED EIGHT TIMES AND NEVER EXISTED (2026-08-23) --------------------
 # Test-CadenceDue / Set-CadenceRan / Get-CadenceLast were designed, documented, given a self-test
@@ -180,16 +189,27 @@ function Get-CadenceLast {
 }
 
 
-# ---- BOUNDED CHILDREN, RUN ONE AT A TIME (2026-08-22) --------------------------------------------------
-# THE PARALLEL EXPERIMENT IS REVERTED, ON THE MEASUREMENT. Earlier today four advisory audits (coverage-gaps,
-# semantic, match-soundness, discover-hyvee) were launched side by side on the reasoning that none blocks a
-# publish, none reads another's output, and this box has 32 threads. Measured end to end it was WORSE, not
-# better: serial 30.9 min vs parallel 41.7 min. Under concurrency match-soundness went 111 s -> 904 s,
-# graph-gates 22 s -> killed at its 600 s budget, db-build 2 s -> killed at 300 s, while the CPU sat at 14%.
-# They do not contend on the CPU; they contend on I/O, each re-parsing the same ~40 MB of JSON from disk.
-# So: plain serial invocation, at the exact spot each audit's result is read.
-# WHAT ACTUALLY BOUGHT THE TIME is the ship/inspect split further down - the board now publishes before any
-# of these runs at all, so their cost no longer sits between a price and a shopper.
+# ---- BOUNDED CHILDREN (2026-08-22, and the parallel verdict corrected 2026-08-23) ----------------------
+# THE COMMENT THAT STOOD HERE SAID "THE PARALLEL EXPERIMENT IS REVERTED, ON THE MEASUREMENT" AND THE
+# MEASUREMENT WAS CONFOUNDED. It read: four advisory audits launched side by side, serial 30.9 min vs
+# parallel 41.7 min, match-soundness 111 s -> 904 s, graph-gates and db-build killed at their budgets, CPU
+# at 14% - concluding they contend on I/O, each re-parsing the same ~40 MB of JSON. Read the clock on
+# 2026-08-22 instead of the conclusion:
+#     07:24  31f4835b  the audits go side by side - through Invoke-Bounded, which at that hour launched
+#                      every child with Start-Job
+#     10:09  9825bb80  parallel REVERTED on the 30.9-vs-41.7 numbers
+#     11:14  9a23e342  Invoke-Bounded is measured at 3.8 MINUTES per call for a 1-SECOND script, because a
+#                      PS 5.1 job is a whole child PowerShell plus runspace construction plus session-state
+#                      serialisation - and is rewritten to Start-Process, which is what it is today
+# The verdict was recorded one hour before the machinery it was measured through was proven to cost minutes
+# per call, and was never re-measured afterwards. So it is not evidence, and PLAN-use-the-cores phase 1
+# proceeds - through fanout-lib.ps1, over Start-Process children held by runspace threads, never Start-Job.
+# WHAT THE OLD NOTE STILL LEAVES STANDING is an untested HYPOTHESIS: that these audits are I/O- and
+# memory-bound rather than CPU-bound. That is exactly why -Sequential exists and why the fan-out logs its
+# own wall time. If a future run shows the fan-out losing, the honest response is to post the two numbers
+# here, not to delete the flag.
+# WHAT ACTUALLY BOUGHT THE FIRST BIG WIN is the ship/inspect split further down - the board now publishes
+# before any of these runs at all, so their cost no longer sits between a price and a shopper.
 # THE TIMEOUT STAYS, and it is the half that earned its keep (it caught three real hangs). Every child here
 # used to be synchronous and unbounded: on 2026-08-14
 # audit-coverage-gaps sat in a ReDoS for 11 hours and the board never published; the two Python steps
@@ -1042,6 +1062,126 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # no-ops until the board week (or the set) changes, so flips happen on the ad flip. Non-fatal.
       try { (Invoke-Bounded 'free-rotation' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\rotate-free-dinners.ps1')) 900).Output | ForEach-Object { Log ('free-rotation: ' + $_) } } catch { Log ('rotate-free-dinners threw: ' + $_.Exception.Message) }
 
+      # ==== GROUP B: THE ADVISORY AUDITS, LAUNCHED TOGETHER (2026-08-23, PLAN-use-the-cores phase 1) ====
+      # Every lane below is a read-only child that reports and never changes what shipped. They used to run
+      # one after another, at the exact spot each result was read, and that tail was ~750 s of a 95-minute
+      # chain on a box with 32 threads.
+      #
+      # WHAT MOVES AND WHAT DOES NOT. Only the LAUNCH moves here. Every stage's reading, signature de-dup,
+      # summary line, alert and cadence stamp stays exactly where it was, byte for byte, and now reads its
+      # child's output out of a record instead of off a pipeline. That is deliberate: the point of
+      # -Sequential is that the two transcripts can be diffed, and they only can be if the only thing that
+      # changed is WHEN the child ran.
+      #
+      # WHAT IS DELIBERATELY *NOT* IN HERE, and why - this list is the safety argument, not decoration:
+      #   * the MUTATORS (repair-multipack-sizes, derive-links-from-prices, fix-links-ff). They rewrite
+      #     out\regular\*.json and product-urls.json, which lanes below read. They already run above the
+      #     ship boundary, alone and in order, and they must stay there: a lane reading a file mid-rewrite
+      #     reports on a board that never existed.
+      #   * the DELETERS (prune-out, prune-intermediates). They remove dated out\* files these lanes read,
+      #     and they already sit far below, after the last reader. Do not move them up.
+      #   * build-arrivals-docket, which reads the docket discover-hyvee writes, and resolve-worklist,
+      #     which reads the worklist audit-sale-fallback writes. Both stay serial, below the join.
+      #   * db-build, which REBUILDS db\thriftycrew.db. It is 2 s, and a lane that writes a database is not
+      #     a read-only audit whatever its runtime says.
+      #   * anything that publishes or emails on its own account: top5-weekly, free-rotation, the Friday
+      #     digest, notify-item-added, send-price-alerts. Outward-facing work stays sequential.
+      #
+      # THE CADENCE DECISION IS MADE HERE, IN THIS FILE, ON PURPOSE. It could have moved into Invoke-Fanout
+      # and it must not: test-auditors pins that every Test-CadenceDue call in check-ad-cycles.ps1 is
+      # indented inside something that catches, and counts them, because on 2026-08-23 ONE bare top-level
+      # gate took the whole chain down under EAP=Stop two thirds of the way through. Evaluating the gates
+      # here keeps them in the file that check watches, and inside this block's try. A lane that is not due
+      # is never launched and comes back Skipped - which its own block still reports as a SKIP with the
+      # last-run date, because A SKIP IS NOT A PASS.
+      $cadDue = @{}
+      foreach ($c in @(
+        @{ n = 'semantic';           d = 7; g = @('grocery/commodities.json','grocery/out/regular/*.json') }
+        @{ n = 'aisle-test';         d = 3; g = @('grocery/out/regular/family-fare-regular-*.json','grocery/taxonomy-map.json','grocery/commodities.json') }
+        @{ n = 'matcher-parity';     d = 7; g = @('grocery/match-lib.ps1','grocery/compare-deals.ps1','grocery/audit-household-in-food.ps1','grocery/commodities.json') }
+        @{ n = 'precedence-ladders'; d = 7; g = @('grocery/compare-deals.ps1','grocery/known-wrong-lib.ps1','grocery/known-wrong.json','grocery/match-lib.ps1') }
+        @{ n = 'store-registry';     d = 7; g = @('grocery/*.ps1','grocery/stores.json') }
+        @{ n = 'commodity-dupes';    d = 7; g = @('grocery/commodities.json','grocery/recipe-commodities.json','grocery/categories.json') }
+        @{ n = 'search-terms';       d = 7; g = @('grocery/commodity-search.json','grocery/out/regular/*.json') }
+        @{ n = 'guard-contract';     d = 7; g = @('grocery/*.ps1','lib/*.ps1') }
+        @{ n = 'cloud-readiness';    d = 7; g = @('grocery/*.ps1','meal-prep/**/*.ps1') }
+      )) {
+        # FAIL OPEN, exactly as Test-CadenceDue does internally: a gate we could not evaluate means RUN.
+        # The cost of a wrong DUE is seconds of CPU; the cost of a wrong SKIP is a guard that stopped
+        # watching while reporting nothing at all.
+        try { $cadDue[$c.n] = [bool](Test-CadenceDue -Name $c.n -EveryDays $c.d -InputGlobs $c.g) }
+        catch { $cadDue[$c.n] = $true; Log ('cadence gate for ' + $c.n + ' threw (' + $_.Exception.Message + ') - treating it as DUE') }
+      }
+
+      # NOT $mp - that name already means the REPO ROOT at line 713 in this same scope, and one
+      # name with two meanings in one scope is how the next edit here breaks quietly.
+      $mealPrep = Join-Path (Split-Path $root -Parent) 'meal-prep'
+      $fanLanes = @(
+        New-FanoutLane -Name 'coverage-gaps'       -File (Join-Path $root 'audit-coverage-gaps.ps1')        -TimeoutSec 900
+        New-FanoutLane -Name 'semantic'            -File (Join-Path $root 'audit-semantic-identity.ps1')    -TimeoutSec 900 -Due $cadDue['semantic']
+        New-FanoutLane -Name 'match-soundness'     -File (Join-Path $root 'audit-match-soundness.ps1')      -TimeoutSec 900 -Arguments (@('-OutDir', $OutDir) + $(if (-not $NoAlert) { @('-Alert') } else { @() }))
+        New-FanoutLane -Name 'aisle-test'          -File (Join-Path $root 'aisle-test.ps1')                 -TimeoutSec 900 -Arguments @('-LiveBoard') -Due $cadDue['aisle-test']
+        New-FanoutLane -Name 'sale-without-ad'     -File (Join-Path $root 'audit-sale-without-ad.ps1')      -Arguments @('-Quiet')
+        New-FanoutLane -Name 'hyvee-store-blend'   -File (Join-Path $root 'audit-hyvee-store-blend.ps1')
+        New-FanoutLane -Name 'price-capture-reach' -File (Join-Path $root 'audit-price-capture-reach.ps1')
+        New-FanoutLane -Name 'graph-gates'         -File (Join-Path $root 'audit-graph-gates.ps1')          -TimeoutSec 600
+        New-FanoutLane -Name 'matcher-parity'      -File (Join-Path $root 'test-matcher-parity.ps1')        -Arguments @('-Sample','400') -Due $cadDue['matcher-parity']
+        New-FanoutLane -Name 'precedence-ladders'  -File (Join-Path $root 'test-precedence-ladders.ps1')    -Arguments @('-Quiet')        -Due $cadDue['precedence-ladders']
+        New-FanoutLane -Name 'category-coverage'   -File (Join-Path $root 'audit-category-coverage.ps1')    -Arguments (@('-OutDir', $OutDir) + $(if (-not $NoAlert) { @('-Alert') } else { @() }))
+        New-FanoutLane -Name 'store-registry'      -File (Join-Path $root 'audit-store-registry.ps1')       -Arguments $(if (-not $NoAlert) { @('-Alert') } else { @() }) -Due $cadDue['store-registry']
+        New-FanoutLane -Name 'commodity-dupes'     -File (Join-Path $root 'audit-commodity-dupes.ps1')      -Due $cadDue['commodity-dupes']
+        New-FanoutLane -Name 'search-terms'        -File (Join-Path $root 'audit-search-terms.ps1')         -Due $cadDue['search-terms']
+        New-FanoutLane -Name 'discover-hyvee'      -File (Join-Path $root 'discover-hyvee.ps1')             -TimeoutSec 900 -Arguments @('-Slice','40')
+        New-FanoutLane -Name 'store-taxonomy'      -File (Join-Path $root 'audit-store-taxonomy.ps1')       -Arguments @('-OutDir', $OutDir)
+        New-FanoutLane -Name 'sale-fallback'       -File (Join-Path $root 'audit-sale-fallback.ps1')
+        New-FanoutLane -Name 'golden-test'         -File (Join-Path $mealPrep 'engine\golden-test.ps1')         -TimeoutSec 600
+        New-FanoutLane -Name 'scaler-pricing'      -File (Join-Path $mealPrep 'pipeline\run-scaler-pricing-test.ps1') -TimeoutSec 600 -Arguments @('-Quiet')
+        New-FanoutLane -Name 'db-agreement'        -File (Join-Path $mealPrep 'engine\audit-db-agreement.ps1')
+        New-FanoutLane -Name 'spec-contradictions' -File (Join-Path $mealPrep 'pipeline\audit-spec-contradictions.ps1') -TimeoutSec 600 -Arguments @('-Quiet')
+        New-FanoutLane -Name 'store-integrity'     -File (Join-Path $mealPrep 'pipeline\audit-store-integrity.ps1')
+        New-FanoutLane -Name 'guard-contract'      -File (Join-Path $root 'audit-guard-contract.ps1')       -Due $cadDue['guard-contract']
+        New-FanoutLane -Name 'cloud-readiness'     -File (Join-Path $root 'audit-cloud-readiness.ps1')      -Due $cadDue['cloud-readiness']
+        New-FanoutLane -Name 'schema-constraints'  -File (Join-Path $mealPrep 'pipeline\audit-schema-constraints.ps1')
+        New-FanoutLane -Name 'batch-ledger'        -File (Join-Path $mealPrep 'pipeline\batch-ledger.ps1')      -Arguments @('-Verify')
+        New-FanoutLane -Name 'count-gpu'           -File (Join-Path $mealPrep 'pipeline\audit-count-gpu.ps1')
+        New-FanoutLane -Name 'row-age'             -File (Join-Path $root 'audit-row-age.ps1')              -Arguments @('-OutDir', $OutDir)
+        New-FanoutLane -Name 'sanity-check'        -File (Join-Path $root 'sanity-check.ps1')
+        New-FanoutLane -Name 'basis-reconcile'     -File (Join-Path $root 'audit-basis-reconcile.ps1')
+        New-FanoutLane -Name 'pack-basis'          -File (Join-Path $root 'audit-pack-basis.ps1')
+        New-FanoutLane -Name 'walmart-fullpull'    -File (Join-Path $root 'audit-walmart-fullpull.ps1')
+        New-FanoutLane -Name 'capture-eviction'    -File (Join-Path $root 'audit-capture-eviction.ps1')
+        New-FanoutLane -Name 'store-coverage'      -File (Join-Path $root 'audit-store-coverage.ps1')       -Due (-not $NoPublish)
+      )
+
+      $fanRecs = @()
+      $fanWall = 0
+      try {
+        $fanSw = [Diagnostics.Stopwatch]::StartNew()
+        $fanRecs = @(Invoke-Fanout -Lanes $fanLanes -MaxParallel $MaxParallel -Sequential:$Sequential)
+        $fanSw.Stop(); $fanWall = [int]$fanSw.Elapsed.TotalSeconds
+      } catch {
+        # RULE 6 OF THE PLAN, MADE TRUE HERE TOO. Nothing about the fan-out may end the chain; if the pool
+        # itself dies, every lane is BLIND and every consumer below takes its own could-not-evaluate path.
+        Log ('the inspect fan-out THREW: ' + $_.Exception.Message + ' - every advisory audit is BLIND this cycle')
+        $summary += 'REVIEW    the advisory-audit fan-out could not run - NONE of the inspect checks ran this cycle, and that silence is not a clean board'
+        $fanRecs = @()
+      }
+
+      # THE JOIN, AND THE ACCOUNTING. A fan-out that collects "no error" from N children has not proved N
+      # children ran, so the count is asserted by name and anything missing becomes a REVIEW line rather
+      # than silence. Lane log lines are emitted HERE, in launch order, never from inside a lane: Log is
+      # Add-Content on one file with a sidecar fallback, and eight writers would scatter one run across
+      # ad-cycle-log.txt and ad-cycle-log.LOCKED-<day>.txt - the shape that made three runs look dead.
+      $fanMode = if ($Sequential) { 'SEQUENTIAL' } else { ('fan-out x' + $MaxParallel) }
+      $fanRan  = @($fanRecs | Where-Object { $_ -and -not $_.Skipped })
+      $fanCpu  = 0; foreach ($r in $fanRan) { $fanCpu += [int]$r.Elapsed }
+      Log ('---- INSPECT AUDITS (' + $fanMode + '): ' + $fanRan.Count + ' of ' + $fanLanes.Count + ' lane(s) ran in ' + $fanWall + ' s wall (' + $fanCpu + ' s if run one after another) ----')
+      $summary += ('INSPECT   ' + $fanRan.Count + ' advisory audit(s) ran ' + $fanMode + ' in ' + $fanWall + ' s wall vs ' + $fanCpu + ' s serial')
+      foreach ($r in $fanRecs) {
+        foreach ($ln in @($r.LogLines)) { Log ([string]$ln) }
+      }
+      foreach ($f in @(Test-FanoutComplete -Lanes $fanLanes -Records $fanRecs)) { Log ($f -replace '^REVIEW\s+', 'BLIND LANE: '); $summary += $f }
+
       # NOTE: the coverage-REGRESSION check (a store quietly shrinking between boards) is NOT run here. It is a
       # hard invariant, so it lives in guards.ps1 where a failure actually stops the publish. Setting $hardFail
       # at this point would not: the publish (now ABOVE, on the ship path) gates on $guardsBlocked, and $hardFail
@@ -1052,7 +1192,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # commodity's include (or allowlist it). Alert Brad ONCE per distinct gap-set (signature de-dup) so it is
       # never silent but never spams. Advisory (we still publish the current board).
       try {
-        $cgRc = (Invoke-Bounded 'coverage-gaps' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-coverage-gaps.ps1')) 900).ExitCode
+        $cgRc = (Get-FanoutRecord 'coverage-gaps' $fanRecs).ExitCode
         if ($cgRc -eq 3) {
           # BLIND: the file on disk is a PREVIOUS day's. Reading it here would dedupe today against
           # yesterday's gap set and report "unchanged" about a scan that never happened.
@@ -1112,11 +1252,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # publish, and findings never change a price, a crown, a rule or a link on their own. Signature de-dup so
       # a standing backlog is reported ONCE and only genuinely NEW findings speak up again.
       # CADENCE (7d): the GPU embedding sweep, 136-900 s. Due weekly OR whenever the rules/corpus move, which is what its findings depend on.
-      if (-not (Test-CadenceDue -Name 'semantic' -EveryDays 7 -InputGlobs @('grocery/commodities.json','grocery/out/regular/*.json'))) {
+      if (-not $cadDue['semantic']) {
         Log ('semantic: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'semantic') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
       } else {
       try {
-        $semRc = (Invoke-Bounded 'semantic' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-semantic-identity.ps1')) 900).ExitCode
+        $semRc = (Get-FanoutRecord 'semantic' $fanRecs).ExitCode
         if ($semRc -eq 3) {
           Log 'semantic sweep BLIND (no sidecar/GPU available) - the board still ships; no coverage opinion today'
           $summary += 'REVIEW    semantic sweep could not run (BLIND) - no semantic coverage check on this board'
@@ -1152,12 +1292,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # canned milks in dairy) would otherwise shout every day, so only a CHANGED block-set speaks. The
       # gate is deliberately NOT loosened to silence them - that would trade a real defect class for quiet.
       # CADENCE (3d): 173 s against Family Fare's shelf paths; its block-set logged 'unchanged' on every run this week.
-      if (-not (Test-CadenceDue -Name 'aisle-test' -EveryDays 3 -InputGlobs @('grocery/out/regular/family-fare-regular-*.json','grocery/taxonomy-map.json','grocery/commodities.json'))) {
+      if (-not $cadDue['aisle-test']) {
         Log ('aisle-test: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'aisle-test') + "; runs every 3d or the moment its inputs move. A SKIP IS NOT A PASS.")
       } else {
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'aisle-test.ps1') -LiveBoard *>&1 | Out-Null
-        $atRc = $LASTEXITCODE
+        $atRc = (Get-FanoutRecord 'aisle-test' $fanRecs).ExitCode
         if ($atRc -eq 3) {
           Log 'aisle test BLIND (no board or no Family Fare feed) - no shelf opinion on this board'
         } else {
@@ -1187,9 +1326,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # guard catches theft-IN. audit-match-soundness -Alert self-dedups and emails on a NEW issue-set; a
       # MOVED/DROPPED also makes it exit 2 so the publish gate holds. Advisory here (the daily board still ships).
       try {
-        $msArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-match-soundness.ps1'),'-OutDir',$OutDir)
-        if (-not $NoAlert) { $msArgs += '-Alert' }
-        $msJ = Invoke-Bounded 'match-soundness' $msArgs 900
+        $msJ = Get-FanoutRecord 'match-soundness' $fanRecs
         $msJ.Output | ForEach-Object { Log ('match-soundness: ' + $_) }
         if ($msJ.ExitCode -eq 2) { $summary += 'REVIEW    commodity matching changed vs baseline (a product MOVED/DROPPED) - see out\audit\soundness-report.json; publish will HOLD until reviewed + audit-match-soundness.ps1 -Accept' }
         elseif ($msJ.ExitCode -eq 3) { $summary += 'REVIEW    audit-match-soundness could not evaluate - commodity matching is UNGUARDED this run'; Log 'match-soundness BLIND: ingested ZERO products - no store feed reached this audit, so its silence is not a clean board'; $summary += 'REVIEW    audit-match-soundness ingested ZERO products - commodity matching is UNGUARDED this run (check out\regular\ and out\ads-*.json)' }
@@ -1201,7 +1338,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # keeps first_seen so "unexplained for three weeks" becomes visible; a count alone would not.
       # Advisory: it reports a question, not a defect, so the board still ships.
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-sale-without-ad.ps1') -Quiet | ForEach-Object { Log ('sale-without-ad: ' + $_) }
+        (Get-FanoutRecord 'sale-without-ad' $fanRecs).Output | ForEach-Object { Log ('sale-without-ad: ' + $_) }
       } catch { Log ('sale-without-ad threw: ' + $_.Exception.Message) }
       # ---- HY-VEE STORE BLEND (wired 2026-08-21). Brad moved the board from Omaha #01 to Omaha #02.
       # The code switched in one commit; the DATA cannot, because capture policy refreshes 7 Hy-Vee
@@ -1212,7 +1349,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # instead of leaving it as a thing nobody is tracking. Advisory: the blend is a known, accepted
       # migration state; what must not happen is it becoming an unknown one.
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-hyvee-store-blend.ps1') | ForEach-Object { Log ('hyvee-store-blend: ' + $_) }
+        (Get-FanoutRecord 'hyvee-store-blend' $fanRecs).Output | ForEach-Object { Log ('hyvee-store-blend: ' + $_) }
       } catch { Log ('hyvee-store-blend threw: ' + $_.Exception.Message) }
       # ---- PRICE CAPTURE REACH (wired 2026-08-21, Brad: "make sure that when we pull pricing, from
       # ANY part of our codebase, its populating the table correctly"). Every OTHER guard here starts
@@ -1222,7 +1359,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # Hunter's pricing agent had 99 captured store prices sitting in ingredient-queue.json, 97 of
       # which had reached nothing at all since 2026-08-16.
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-price-capture-reach.ps1') | ForEach-Object { Log ('price-capture-reach: ' + $_) }
+        (Get-FanoutRecord 'price-capture-reach' $fanRecs).Output | ForEach-Object { Log ('price-capture-reach: ' + $_) }
       } catch { Log ('price-capture-reach threw: ' + $_.Exception.Message) }
       # ---- GRAPH GATES (graduated 2026-08-21 on Brad's call: "Im confident to graduate this system
       # and well work out the kinks as it's live"). graph\ stops being a bystander and starts CHECKING
@@ -1235,7 +1372,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # it red there. While that is true it must not be able to stop a publish. Promotion to blocking
       # is per-gate, after a clean record of real days, and it is Brad's call.
       try {
-        (Invoke-Bounded 'graph-gates' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-graph-gates.ps1')) 600).Output | ForEach-Object { Log ('graph-gates: ' + $_) }
+        (Get-FanoutRecord 'graph-gates' $fanRecs).Output | ForEach-Object { Log ('graph-gates: ' + $_) }
       } catch { Log ('graph-gates threw: ' + $_.Exception.Message) }
       # ---- MATCHER PARITY (wired 2026-08-21): the auditors' COPIES of Match-Category must still assign
       # product names exactly as the engine does. audit-household-in-food is a HARD gate built on one of
@@ -1247,12 +1384,13 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # HERE, against live product names. Sampled (the full sweep is ~28.5k names); a copy that drifts does
       # so for a whole rule, not one unlucky name. Advisory: it reports, the board still ships.
       # CADENCE (7d): compares auditor COPIES of Match-Category against the engine; only a code or rule edit can change the answer.
-      if (-not (Test-CadenceDue -Name 'matcher-parity' -EveryDays 7 -InputGlobs @('grocery/match-lib.ps1','grocery/compare-deals.ps1','grocery/audit-household-in-food.ps1','grocery/commodities.json'))) {
+      if (-not $cadDue['matcher-parity']) {
         Log ('matcher-parity: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'matcher-parity') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
       } else {
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-matcher-parity.ps1') -Sample 400 | ForEach-Object { Log ('matcher-parity: ' + $_) }
-        if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    an auditor copy of Match-Category no longer agrees with the engine - audit-household-in-food is a HARD gate built on one of those copies, so it may be judging cells under the wrong commodity' }
+        $parityR = Get-FanoutRecord 'matcher-parity' $fanRecs
+        $parityR.Output | ForEach-Object { Log ('matcher-parity: ' + $_) }
+        if ($parityR.ExitCode -eq 2) { $summary += 'REVIEW    an auditor copy of Match-Category no longer agrees with the engine - audit-household-in-food is a HARD gate built on one of those copies, so it may be judging cells under the wrong commodity' }
       } catch { Log ('matcher-parity threw: ' + $_.Exception.Message) }
         Set-CadenceRan 'matcher-parity'
       }
@@ -1265,36 +1403,35 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # matcher-parity does: naming a guard in a test proves it is tested, not that it runs.
       # Hermetic (its own %TEMP% copy) and ~5s. Advisory: it reports, the board still ships.
       # CADENCE (7d): only an edit to the engine, the ruling library or the ruling file can change it.
-      if (-not (Test-CadenceDue -Name 'precedence-ladders' -EveryDays 7 -InputGlobs @('grocery/compare-deals.ps1','grocery/known-wrong-lib.ps1','grocery/known-wrong.json','grocery/match-lib.ps1'))) {
+      if (-not $cadDue['precedence-ladders']) {
         Log ('precedence-ladders: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'precedence-ladders') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
       } else {
         try {
-          & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-precedence-ladders.ps1') -Quiet | ForEach-Object { Log ('precedence-ladders: ' + $_) }
-          if ($LASTEXITCODE -eq 1) { $summary += 'REVIEW    the forbid-ladder semantics MOVED - a known-wrong no longer does what the identity table''s precedence logic assumes (see test-precedence-ladders.ps1)' }
-          elseif ($LASTEXITCODE -eq 3) { $summary += 'REVIEW    precedence-ladders could not build its fixture tree, so the ruling semantics went unproven this run - a BLIND is not a pass' }
+          $plR = Get-FanoutRecord 'precedence-ladders' $fanRecs
+          $plR.Output | ForEach-Object { Log ('precedence-ladders: ' + $_) }
+          if ($plR.ExitCode -eq 1) { $summary += 'REVIEW    the forbid-ladder semantics MOVED - a known-wrong no longer does what the identity table''s precedence logic assumes (see test-precedence-ladders.ps1)' }
+          elseif ($plR.ExitCode -eq 3) { $summary += 'REVIEW    precedence-ladders could not build its fixture tree, so the ruling semantics went unproven this run - a BLIND is not a pass' }
         } catch { Log ('precedence-ladders threw: ' + $_.Exception.Message) }
         Set-CadenceRan 'precedence-ladders'
       }
       # ---- CATEGORY-COVERAGE GUARD: a commodity filed into NO category renders in no department/filter (invisible).
       # HARD publish gate + daily alert so adding a new item can never silently skip a filter.
       try {
-        $ccArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-category-coverage.ps1'),'-OutDir',$OutDir)
-        if (-not $NoAlert) { $ccArgs += '-Alert' }
-        & powershell @ccArgs | ForEach-Object { Log ('category-coverage: ' + $_) }
-        if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    a commodity is in no category (renders in no filter) - see out\category-coverage-report.json; publish will HOLD until it is filed into a category' }
+        $ccR = Get-FanoutRecord 'category-coverage' $fanRecs
+        $ccR.Output | ForEach-Object { Log ('category-coverage: ' + $_) }
+        if ($ccR.ExitCode -eq 2) { $summary += 'REVIEW    a commodity is in no category (renders in no filter) - see out\category-coverage-report.json; publish will HOLD until it is filed into a category' }
       } catch { Log ('category-coverage guard threw: ' + $_.Exception.Message) }
       # ---- STORE-REGISTRY GUARD (2026-07-26): a hardcoded store list drifting from stores.json (the
       # publish-store-guide/publish-deals-page Fareway class - a store silently missing from ONE surface).
       # Advisory: alerts + summary, board still ships (drift is a surface bug, not a data bug).
       # CADENCE (7d): hardcoded store lists vs stores.json - source + one json.
-      if (-not (Test-CadenceDue -Name 'store-registry' -EveryDays 7 -InputGlobs @('grocery/*.ps1','grocery/stores.json'))) {
+      if (-not $cadDue['store-registry']) {
         Log ('store-registry: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'store-registry') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
       } else {
       try {
-        $srArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-store-registry.ps1'))
-        if (-not $NoAlert) { $srArgs += '-Alert' }
-        & powershell @srArgs | ForEach-Object { Log ('store-registry: ' + $_) }
-        if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    store-registry drift: a hardcoded store list disagrees with stores.json - fix the script or document the subset in stores.json allowed_subsets' }
+        $srR = Get-FanoutRecord 'store-registry' $fanRecs
+        $srR.Output | ForEach-Object { Log ('store-registry: ' + $_) }
+        if ($srR.ExitCode -eq 2) { $summary += 'REVIEW    store-registry drift: a hardcoded store list disagrees with stores.json - fix the script or document the subset in stores.json allowed_subsets' }
                   } catch { Log ('store-registry guard threw: ' + $_.Exception.Message) }
         Set-CadenceRan 'store-registry'
       }
@@ -1312,12 +1449,13 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # namespace spans three files, so only a cross-namespace scan can see it. Review, not a gate: a suspect
       # needs a human merge-or-allowlist ruling, and blocking the publish would not make that happen faster.
       # CADENCE (7d): 110 s reading the commodity registry, which only moves when a human mints an id.
-      if (-not (Test-CadenceDue -Name 'commodity-dupes' -EveryDays 7 -InputGlobs @('grocery/commodities.json','grocery/recipe-commodities.json','grocery/categories.json'))) {
+      if (-not $cadDue['commodity-dupes']) {
         Log ('commodity-dupes: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'commodity-dupes') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
       } else {
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-commodity-dupes.ps1') | ForEach-Object { Log ('commodity-dupes: ' + $_) }
-        if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    commodity-dupes: the same food may be priced under two ids (see out\commodity-dupes.json) - merge the real ones, allowlist the reviewed ones' }
+        $cdR = Get-FanoutRecord 'commodity-dupes' $fanRecs
+        $cdR.Output | ForEach-Object { Log ('commodity-dupes: ' + $_) }
+        if ($cdR.ExitCode -eq 2) { $summary += 'REVIEW    commodity-dupes: the same food may be priced under two ids (see out\commodity-dupes.json) - merge the real ones, allowlist the reviewed ones' }
       } catch { Log ('commodity-dupes audit threw: ' + $_.Exception.Message) }
         Set-CadenceRan 'commodity-dupes'
       }
@@ -1334,11 +1472,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # its SEARCHTERMS lines, so the summary is driven off those, not off an exit code.
       # CADENCE (7d): it reads the capture corpus, which moves daily, so in practice it runs when
       # the terms file or a capture changes - which is precisely when a term can go wrong.
-      if (-not (Test-CadenceDue -Name 'search-terms' -EveryDays 7 -InputGlobs @('grocery/commodity-search.json','grocery/out/regular/*.json'))) {
+      if (-not $cadDue['search-terms']) {
         Log ('search-terms: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'search-terms') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
       } else {
         try {
-          $stOut = (Invoke-NativeScript (Join-Path $root 'audit-search-terms.ps1')).Output
+          $stOut = (Get-FanoutRecord 'search-terms' $fanRecs).Output
           foreach ($l in @($stOut)) { Log ('search-terms: ' + [string]$l) }
           $stSus = @($stOut | Where-Object { $_ -match 'appears NOWHERE in the corpus' })
           $stDrift = @($stOut | Where-Object { $_ -match 'a term/matcher bug' })
@@ -1374,7 +1512,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # docket this writes. Reversed, the desk would always show yesterday's findings.
       # Non-fatal and advisory - it can never touch a board.
       try {
-        $dhJ = Invoke-Bounded 'discover-hyvee' @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'discover-hyvee.ps1'),'-Slice','40') 900
+        $dhJ = Get-FanoutRecord 'discover-hyvee' $fanRecs
         if ($dhJ.ExitCode -eq 3) { Log 'discover-hyvee BLIND (killed at its budget or the job broke) - no NEW Hy-Vee products were looked for today' }
         $dhOut = @($dhJ.Output)
         @($dhOut | Where-Object { $_ -match '^DOCKET:|^  \(|SEARCH FAILED|^BLIND' }) | ForEach-Object { Log ('discover-hyvee: ' + $_) }
@@ -1429,11 +1567,12 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # The queue lives in the log and in out\taxonomy-disagreements-<date>.json. Only a LIVE CELL - a wrong
       # product actually on the board - earns a line in the summary Brad reads.
       try {
-        $txArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-store-taxonomy.ps1'),'-OutDir',$OutDir)
-        # capture FIRST, then read $LASTEXITCODE, then log - piping the call straight into ForEach-Object
-        # loses the child's exit code (the audit-ff-carry lesson, pinned in test-auditors).
-        $txOut = & powershell @txArgs
-        $txRc = $LASTEXITCODE
+        # capture FIRST, then read the exit code, then log - piping a call straight into ForEach-Object
+        # loses the child's exit code (the audit-ff-carry lesson, pinned in test-auditors). The fan-out
+        # record keeps the two apart by construction: .Output and .ExitCode are separate fields.
+        $txR = Get-FanoutRecord 'store-taxonomy' $fanRecs
+        $txOut = $txR.Output
+        $txRc = $txR.ExitCode
         foreach ($l in @($txOut)) { Log ('taxonomy: ' + $l) }
         if ($txRc -eq 3) {
           Log 'store-taxonomy BLIND: judged ZERO rows - no store feed carried a department, so its silence says nothing about the board'
@@ -1449,7 +1588,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # audit-sale-fallback flags them; FF self-heals daily (researched above), browser-store gaps go to
       # research-worklist.json for the weekly agent to research the next-cheapest everyday item. De-duped alert.
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-sale-fallback.ps1') | Out-Null
+        $null = (Get-FanoutRecord 'sale-fallback' $fanRecs).ExitCode
         $sf = try { Get-Content (Join-Path $OutDir 'sale-fallback-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
         if ($sf -and [int]$sf.gap_count -gt 0) {
           $sfSig = (@($sf.gaps | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object) -join ';')
@@ -1496,7 +1635,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       try {
         # through the bounded helper: stderr captured by file (no 2>&1 under EAP=Stop - see the rule at the
         # test-guards call), and a budget so a hung test cannot hold the chain
-        $gtJ = Invoke-Bounded 'golden-test' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\engine\golden-test.ps1')) 600
+        $gtJ = Get-FanoutRecord 'golden-test' $fanRecs
         $gt = $gtJ.Output
         if ($gtJ.ExitCode -ne 0) {
           $gtFail = @($gt | Where-Object { $_ -match '^\s+(FAIL|C\d+)' })
@@ -1513,7 +1652,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # minimum-per-unit selection must still fail on the butter assertions. A guard that only ever passes
       # has not been shown to discriminate. Non-fatal; alerts.
       try {
-        $spJ = Invoke-Bounded 'scaler-pricing' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\run-scaler-pricing-test.ps1'),'-Quiet') 600
+        $spJ = Get-FanoutRecord 'scaler-pricing' $fanRecs
         $sp = $spJ.Output
         if ($spJ.ExitCode -ne 0) {
           Log ('scaler-pricing FAILED: ' + (($sp | Select-Object -First 3) -join ' | '))
@@ -1523,8 +1662,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       } catch { Log ('scaler-pricing threw: ' + $_.Exception.Message) }
       # drift guard: recipes-db index vs db\recipes specs vs db\ingredients (2026-07-26). Non-fatal; alerts.
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\audit-db-agreement.ps1') | Out-Null
-        if ($LASTEXITCODE -ne 0) {
+        if ((Get-FanoutRecord 'db-agreement' $fanRecs).ExitCode -ne 0) {
           Log 'db-agreement guard found DRIFT (see its output)'
           try { Send-Alert -Subject "Recipe db drift (index vs specs)" -Body "meal-prep\engine\audit-db-agreement.ps1 found drift between recipes-db.json and db\recipes specs (or missing db\ingredients items). Run it for the list; fix the lagging side." | Out-Null } catch {}
         } else { Log 'db-agreement guard: clean' }
@@ -1537,7 +1675,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # is PHANTOM - a step naming an ingredient the list never buys, which is how
       # slow-cooker-dr-pepper-pulled-pork-bowls shipped a Dr Pepper braise with no soda in the cost list.
       try {
-        $scJ = Invoke-Bounded 'spec-contradictions' @('-ExecutionPolicy','Bypass','-File',(Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-spec-contradictions.ps1'),'-Quiet') 600
+        $scJ = Get-FanoutRecord 'spec-contradictions' $fanRecs
         $sc = $scJ.Output
         if ($scJ.ExitCode -ne 0) {
           $scWorse = (($sc | Where-Object { $_ -match 'FAIL' }) -join ' ')
@@ -1558,8 +1696,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # greps stdout for '^\s*!' and ignored the exit code, a CRASH was indistinguishable from CLEAN. This
       # guard prints a summary line on every completion, so zero output is itself the failure.
       try {
-        $si   = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-store-integrity.ps1')
-        $siRc = $LASTEXITCODE
+        $siR  = Get-FanoutRecord 'store-integrity' $fanRecs
+        $si   = $siR.Output
+        $siRc = $siR.ExitCode
         $siHard = @($si | Where-Object { $_ -match '^\s*!' })
         if (@($si).Count -eq 0) {
           Log ("store-integrity DID NOT RUN - exit $siRc with no output; the ingredient stores were not compared this cycle")
@@ -1578,11 +1717,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # NAME-COMPLETE line (lib\guard-contract.ps1); this reports the retrofit backlog and hard-fails when a
       # detector LOSES its marker or a new one joins the chain without one.
       # CADENCE (7d): static scan of completion markers in .ps1 text; 15 s but pure source.
-      if (-not (Test-CadenceDue -Name 'guard-contract' -EveryDays 7 -InputGlobs @('grocery/*.ps1','lib/*.ps1'))) {
+      if (-not $cadDue['guard-contract']) {
         Log ('guard-contract: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'guard-contract') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
       } else {
       try {
-        $gc = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-guard-contract.ps1')
+        $gc = (Get-FanoutRecord 'guard-contract' $fanRecs).Output
         $gcBad = @($gc | Where-Object { $_ -match '^\s*!' })
         if ($gcBad.Count) {
           Log ('guard-contract: ' + ($gcBad -join ' | '))
@@ -1597,12 +1736,13 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # backup has never had one (13 straight stand-downs from a PS 5.1 array bug, all reported SUCCESS).
       # meal-prep\engine\publish.ps1 was exactly that until today. Cheap, and it holds the fix in place.
       # CADENCE (7d): static scan for scripts that can only read a local key file. Source-only.
-      if (-not (Test-CadenceDue -Name 'cloud-readiness' -EveryDays 7 -InputGlobs @('grocery/*.ps1','meal-prep/**/*.ps1'))) {
+      if (-not $cadDue['cloud-readiness']) {
         Log ('cloud-readiness: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'cloud-readiness') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
       } else {
       try {
-        $cr = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-cloud-readiness.ps1')
-        if ($LASTEXITCODE -ne 0) {
+        $crR = Get-FanoutRecord 'cloud-readiness' $fanRecs
+        $cr = $crR.Output
+        if ($crR.ExitCode -ne 0) {
           $crBad = @($cr | Where-Object { $_ -match '^\s*!' })
           Log ('cloud-readiness: ' + ($crBad -join ' | '))
           $summary += 'REVIEW    a daily-chain script can only read a local key file - it would fail on the cloud runner (grocery\audit-cloud-readiness.ps1)'
@@ -1635,8 +1775,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # (two files holding different grams for one unit) ratchet against db\schema-constraint-baseline.json:
       # deciding a gram figure needs the SOURCE, not a sweep, so the known dozen stay visible without paging.
       try {
-        $sc   = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-schema-constraints.ps1')
-        $scRc = $LASTEXITCODE
+        $scR  = Get-FanoutRecord 'schema-constraints' $fanRecs
+        $sc   = $scR.Output
+        $scRc = $scR.ExitCode
         $scBad = @($sc | Where-Object { $_ -match '^\s*!' })
         if (@($sc).Count -eq 0) {
           Log ("schema-constraints DID NOT RUN - exit $scRc with no output")
@@ -1655,8 +1796,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # gone quiet is a finding rather than silence.
       # No 2>&1, and zero output is a failure, for the same reason as store-integrity above.
       try {
-        $bl   = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\batch-ledger.ps1') -Verify
-        $blRc = $LASTEXITCODE
+        $blR  = Get-FanoutRecord 'batch-ledger' $fanRecs
+        $bl   = $blR.Output
+        $blRc = $blR.ExitCode
         $blBad = @($bl | Where-Object { $_ -match '^\s*!' })
         if (@($bl).Count -eq 0) {
           Log ("batch-ledger DID NOT RUN - exit $blRc with no output; unfinished batches were not checked this cycle")
@@ -1673,8 +1815,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # "Tortilla" row carried gpu 45 with unit 'each' against a 300 g 10ct pack, and "each == each" passes
       # the gpu reconciler unconditionally, so count-priced gpu was never checked by anything that runs.
       try {
-        $cg = (& powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-count-gpu.ps1') | ForEach-Object { [string]$_ }) -join "`n"
-        $cgRc = $LASTEXITCODE
+        $cgR = Get-FanoutRecord 'count-gpu' $fanRecs
+        $cg = (@($cgR.Output) | ForEach-Object { [string]$_ }) -join "`n"
+        $cgRc = $cgR.ExitCode
         if ($cg -notmatch '(?m)^COUNT-GPU-COMPLETE') {
           Log ('count-gpu DID NOT RUN TO THE END (rc=' + $cgRc + ') - no completion marker, so its verdict proves nothing')
           $summary += 'REVIEW    count-gpu did not finish - count-unit gpu rows went unchecked'
@@ -1691,8 +1834,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # 11,092 rows plus Sam's 1,808 carried no date AT ALL, so neither store could be age-checked by anything.
       # Those prices are on 542 live recipe pages. No 2>&1 and zero-output-is-failure, same as the guards above.
       try {
-        $ra   = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-row-age.ps1') -OutDir $OutDir
-        $raRc = $LASTEXITCODE
+        $raR  = Get-FanoutRecord 'row-age' $fanRecs
+        $ra   = $raR.Output
+        $raRc = $raR.ExitCode
         $raBad = @($ra | Where-Object { $_ -match '^\s*!' })
         if (@($ra).Count -eq 0) {
           Log ("row-age DID NOT RUN - exit $raRc with no output; per-row price staleness was not measured this cycle")
@@ -1713,7 +1857,10 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # $flagKeys and the alerted-flags.json write). Split them and the alert block reads a PREVIOUS day's
       # flags and stamps them as today's. All of it is advisory - none of it has ever gated a publish -
       # so the whole unit sits after the board has shipped.
-      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sanity-check.ps1') | Out-Null   # exit 1 = flags (expected), not a crash -> guards-<week>.json
+      # exit 1 = flags (expected), not a crash -> guards-<week>.json. Launched with the other lanes above;
+      # the ORDER that matters here is not sanity-check-before-basis-reconcile (they touch different files)
+      # but all three before THIS block, which is the single consumer of all of their reports.
+      $null = (Get-FanoutRecord 'sanity-check' $fanRecs).ExitCode
 
       # ---- REVIEW FLAGS: a likely-wrong in-band price (sanity outlier / WoW) or an unpriced tracked BOGO is
       #      advisory (we still publish so the board stays current) but must NOT be silent. Alert Brad ONCE per
@@ -1742,7 +1889,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         # and then discarded. It is also the ONLY independent price proof Baker's has (see guards.ps1 invariant
         # 11, retired 2026-07-30 in its favour), so throwing its output away left the board's largest store
         # effectively unwatched. Advisory by design; what changes is that it is now READ.
-        $brOut = (Invoke-NativeScript (Join-Path $root 'audit-basis-reconcile.ps1')).Output
+        $brOut = (Get-FanoutRecord 'basis-reconcile' $fanRecs).Output
         $brSummary = @($brOut) | Where-Object { $_ -match 'basis-reconcile:' } | Select-Object -First 1
         if ($brSummary) { Log ([string]$brSummary) }
         $brFindings = @($brOut) | Where-Object { $_ -match 'CONFLICT|disagree' }
@@ -1757,7 +1904,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         }
       } catch { Log ('audit-basis-reconcile threw: ' + $_.Exception.Message) }
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-pack-basis.ps1') | Out-Null
+        $null = (Get-FanoutRecord 'pack-basis' $fanRecs).ExitCode
         $pbF = Join-Path $OutDir 'pack-basis-audit.json'
         if (Test-Path $pbF) {
           $pbJ = Get-Content $pbF -Raw | ConvertFrom-Json
@@ -1942,7 +2089,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # LOCAL browser pull can fix it, and send-alert's per-type daily gate caps it at one email per day.
       # Non-fatal by construction.
       try {
-        $wfpR = Invoke-NativeScript (Join-Path $root 'audit-walmart-fullpull.ps1')
+        $wfpR = Get-FanoutRecord 'walmart-fullpull' $fanRecs
         $wfpOut = $wfpR.Output
         $wfpRc = $wfpR.ExitCode
         if ($wfpRc -eq 1) {
@@ -1975,7 +2122,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # the redirect with EAP forced to 'Continue' - the only context where a redirect is safe. See
       # native-lib.ps1. The whole block is still wrapped so a crash here cannot cost the cycle.
       try {
-        $ceR = Invoke-NativeScript (Join-Path $root 'audit-capture-eviction.ps1')
+        $ceR = Get-FanoutRecord 'capture-eviction' $fanRecs
         $ceOut = $ceR.Output
         $ceRc = $ceR.ExitCode
         $ceLine = [string](@($ceOut) -match '^audit-capture-eviction: ' | Select-Object -First 1)
@@ -2014,8 +2161,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # alert ONCE per distinct violation set (sig de-dup) even under -NoAlert, so a silent store-drop can't recur.
       if (-not $NoPublish) {
         try {
-          & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-store-coverage.ps1') | Out-Null
-          if ($LASTEXITCODE -eq 2) {
+          if ((Get-FanoutRecord 'store-coverage' $fanRecs).ExitCode -eq 2) {
             $sc = try { Get-Content (Join-Path $OutDir 'store-coverage-report.json') -Raw | ConvertFrom-Json } catch { $null }
             $scList = if ($sc) { (@($sc.violations | ForEach-Object { $_.commodity + ' [missing: ' + $_.missing + ']' }) -join '; ') } else { '?' }
             $scSig  = if ($sc) { (@($sc.violations | ForEach-Object { $_.commodity + '|' + $_.missing } | Sort-Object) -join ';') } else { '' }
