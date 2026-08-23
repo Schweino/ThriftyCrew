@@ -306,6 +306,37 @@ if ($g.prior_authority_tiers) {
 if ($g.learning_proposals) {
   foreach ($p in $g.learning_proposals.PSObject.Properties) { Write-Output ("      learning {0,-15} {1,10:N0}" -f $p.Name, $p.Value) }
 }
+
+# ---- THE LOCAL LANE (phase 2). Reads the two run artefacts, not the graph -----------------------
+# Deliberately printed BELOW the token figures, because that is the order the plan reasons in: the
+# question is always "what did a Claude ruling cost", and this section is the machinery whose job is
+# to make that number smaller by asking for fewer of them. It reports what the machinery DID, and it
+# is scrupulous about the difference between a zero and a BLIND.
+Write-Output ''
+Write-Output '  the local lane (nightly chain + helper scores):'
+$ll = $g.local_lane
+if (-not $ll) {
+  Write-Output '      BLIND    this scorecard predates the local lane; re-run scorecard_query.py'
+} else {
+  if ($ll.nightly.state -ne 'ran') {
+    Write-Output ("      nightly  BLIND    {0}" -f $ll.nightly.why)
+  } else {
+    $bl = @($ll.nightly.blind_stages)
+    Write-Output ("      nightly  ran {0}  in {1}s, contested {2}" -f $ll.nightly.at, $ll.nightly.elapsed_sec, $(if ($null -eq $ll.nightly.contested) { 'n/a' } else { $ll.nightly.contested }))
+    # THE ONE LINE THAT IS ABOUT RIGHT NOW. Everything else here is history; a card still held is a
+    # BLIND 07:00 sweep tomorrow, and it wants to be read as an alarm, not as a statistic.
+    if ($ll.nightly.card_free -eq $true) { Write-Output ("               card handed back, {0} MiB free" -f $ll.nightly.free_vram_mib) }
+    else { Write-Output '               *** THE CARD WAS NOT HANDED BACK - llama-server may still hold it, and the next semantic sweep will go BLIND ***' }
+    if ($bl.Count) { Write-Output ("               stages not clean: {0}" -f ($bl -join ', ')) }
+  }
+  if ($ll.helper.state -ne 'ran') {
+    Write-Output ("      helper   BLIND    {0}" -f $ll.helper.why)
+  } else {
+    Write-Output ("      helper   scored {0} of {1} contested pair(s), {2} with no sidecar definition" -f $ll.helper.scored, $ll.helper.offered, $ll.helper.no_definition)
+    Write-Output ("               warmed {0} vector(s) in {1}s; routes {2}" -f $ll.helper.vectors_warmed, $ll.helper.elapsed_sec, $ll.helper.routes)
+  }
+}
+
 if ($rulings -eq 0) {
   Write-Output ''
   Write-Output '  NOTE no Claude rulings in this window, so tokens-per-ruling is n/a rather than 0.'

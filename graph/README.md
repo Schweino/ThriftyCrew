@@ -34,6 +34,9 @@ python graph/pipeline/state.py --ad-reversions  # cells owing a post-ad check
 # 2. adjudicate candidate rows (deterministic layers only, ~9s for 119k rows)
 python graph/pipeline/resolve.py
 python graph/pipeline/resolve.py --llm      # + local model on the contested set
+python graph/pipeline/resolve.py --emit-contested sidecar/data/contested-pairs.json
+                                            # the contested questions, for the sidecar to score.
+                                            # READ-ONLY: writes one file, no verdict, no event.
 
 # 3. score against the gold set
 python graph/gold/seed_gold.py              # (re)build the gold set
@@ -83,6 +86,9 @@ re-running step 1 is always safe.
 | `lib/units.py` | size parsing, per-unit normalisation, basis reconciliation |
 | `import/` | the 10 seed importers (legacy JSON -> graph) |
 | `pipeline/resolve.py` | the layered resolver — the highest-risk component |
+| `pipeline/nightly.ps1` | the nightly chain, and the ONLY scheduled thing that may start llama-server: emit -> sweep -> sidecar exits -> llama-server -> resolve -> Stage 1 -> card handed back in a `finally`. `-SelfTest`, `-WhatIfOnly`, `-StopOnly` |
+| `pipeline/install-nightly-task.ps1` | the only thing that may schedule that chain (`-Show`, `-Uninstall`) |
+| `pipeline/scorecard.ps1` | the standing weekly scorecard (plan §9), including the local lane and tokens per Claude ruling |
 | `pipeline/review_escalations.py` | the escalation review lanes (confirm-match + contested); the only writer of `llm_confirmed` |
 | `learning/alias_blast_radius.py` | what a proposed include alias would touch across the whole corpus — the non-circular half of an alias review |
 | `gold/` | the evaluation gold set and its seeder |

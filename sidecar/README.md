@@ -22,7 +22,13 @@ catalogue every night.
     lib_match.py   THE matcher. Bi-encoder + cross-encoder, per-commodity calibration. One
                    implementation, shared by everything below.
     sweep.py       The nightly GPU batch. Reads a corpus prepared by PowerShell, writes ranked
-                   findings to out\semantic-findings.json. Scoring only.
+                   findings to out\semantic-findings.json. Scoring only. THREE lanes: identity,
+                   coverage, and (2026-08-22) contested - the pairs the graph's deterministic
+                   layers could not settle, listed by `resolve.py --emit-contested` in
+                   data\contested-pairs.json and scored to out\contested-scores.json while the
+                   models are already resident. That lane DECIDES NOTHING; it records scores and
+                   warms the vectors the resolve lane wants hours later, on a card this process
+                   has already given back. Measured: 3.2 s cold, 0.0 s and no model load warm.
     score_cache.py The on-disk memo sweep.py scores through: bi-encoder vectors and cross-encoder
                    pair scores keyed by (model id, exact text) in out\embed-cache\. Only text the
                    run has never seen reaches the card, and a model is loaded only on a miss that
@@ -47,9 +53,11 @@ CUDA wheels will not run on it.
 Model weights (~4.5 GB) download from HuggingFace on first use and are cached outside the repo.
 
 **The GPU is shared and the sweep needs ~3 GB of it.** The llama.cpp model (`tools\local-llm\serve.ps1`)
-is on-demand only and must be stopped before the 07:00 pipeline; `audit-semantic-identity.ps1` checks
-`nvidia-smi` before launching the sweep and goes BLIND (exit 3) rather than OOM if llama-server holds
-the card with under 3,500 MiB free.
+takes ~13 GB and cannot be resident at the same time. Since 2026-08-22 that ordering has an owner:
+`graph\pipeline\nightly.ps1` runs this sweep first, waits for this process to exit, and only then
+starts llama-server - stopping it again in a finally block. `audit-semantic-identity.ps1` still checks
+`nvidia-smi` before launching the sweep and still goes BLIND (exit 3) rather than OOM if llama-server
+holds the card with under 3,500 MiB free; it is the backstop now, not the rule.
 
 ## The rules that make it safe to run unattended
 

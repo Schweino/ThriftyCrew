@@ -6,19 +6,34 @@
   Launches llama.cpp's llama-server with the settings validated for THIS box:
   RTX 5070 Ti (Blackwell, sm_120, 16 GB) + Ryzen 9 9950X + 64 GB RAM.
 
-  ON-DEMAND ONLY. NEVER SCHEDULED. (Brad's ruling, 2026-08-22.)
+  ONE OWNER OF THE CARD. (Brad's ruling 2026-08-22, narrowed the same day by
+  PLAN-local-matching phase 2.)
     This model takes ~13 GB of the 16 GB card and leaves ~1 GB free. The
     semantic sidecar sweep (sidecar\sweep.py, run by
-    groceryudit-semantic-identity.ps1 in the 07:00 daily pipeline and 2-3x a
+    grocery\audit-semantic-identity.ps1 in the 07:00 daily pipeline and 2-3x a
     day) needs ~3 GB of VRAM for bge-m3 + the reranker. The two cannot share
-    the card: with this server up the sweep OOMs. So:
-      - start this by hand when a graph/learning/meal-prep job needs it;
-      - STOP IT BEFORE 07:00 (Stop-Process llama-server) and before any
-        manual run of the semantic audit;
-      - nothing in Task Scheduler or the pipeline may start it.
-    audit-semantic-identity.ps1 checks nvidia-smi first and goes BLIND
-    (exit 3, naming llama-server as the holder) rather than launching a sweep
-    that will OOM - but BLIND means the semantic guard did not run that day.
+    the card: with this server up the sweep OOMs.
+
+    The original ruling was NEVER SCHEDULED, start it by hand, stop it before
+    07:00. That was the right rule while nothing owned the ordering, and it was
+    paid for nightly in graph work that simply did not happen. The rule is now
+    what it always meant:
+
+      - NOTHING starts llama-server except graph\pipeline\nightly.ps1, which
+        runs the sweep FIRST, waits for the sidecar to exit, checks nvidia-smi,
+        and stops this server in a finally block that runs on success, failure,
+        timeout and Ctrl-C;
+      - nothing schedules that chain except
+        graph\pipeline\install-nightly-task.ps1, whose default window ends at
+        06:30 - half an hour clear of the 07:00 ad pull;
+      - start it by hand for interactive work, and STOP IT WHEN YOU ARE DONE
+        (`graph\pipeline\nightly.ps1 -StopOnly` does exactly that);
+      - nothing else in Task Scheduler or the pipeline may start it.
+    audit-semantic-identity.ps1 still checks nvidia-smi first and still goes
+    BLIND (exit 3, naming llama-server as the holder) rather than launching a
+    sweep that will OOM. It is now a BACKSTOP for a rule something enforces
+    rather than the rule itself - and BLIND still means the semantic guard did
+    not run that day.
     Ollama is a separate process and a separate decision; this rule is about
     llama-server only.
 

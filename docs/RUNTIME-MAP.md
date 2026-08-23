@@ -33,6 +33,7 @@ and checked on every push by `ops\audit-cloudflare-estate.ps1`.
 |---|---|---|
 | TC Grocery Ad Pulls 0700 | 7:00am | `capture-run.ps1 -Kind ad` — pulls the weekly ad for every store whose ad rolled over TODAY (capture-policy decides; a store not due is skipped, not pulled "just in case"). All stores run CONCURRENTLY, then the downstream chain: compare-deals -> guards -> publish -> recipes -> commit. |
 | TC Grocery Daily Capture 0800 | 8:00am | `capture-run.ps1 -Kind daily` — the quarterly rotation slice (total terms / 90 days, per store) plus any sale reverting today, then the same downstream chain. Ads land on different days per store, but everyday prices move daily, so this publishes too. |
+| TC Graph Nightly Matching | 9:30pm (when installed) | `graph/pipeline/nightly.ps1` — the local matching chain. Owns the GPU window end to end and hands the card back before 06:30, so the 07:00 and 08:00 jobs never find it held. BLIND-not-block at every stage; publishes nothing. |
 | TC Grocery Capture Watchdog 0930 | 9:30am | `capture-watchdog.ps1 -Alert` — asks whether the 07:00/08:00 jobs actually CAPTURED and PUBLISHED, not merely exited 0. One email, never six. |
 
 **The four `SMP *` tasks that used to sit here are gone** (deleted 2026-08-20, not renamed): `SMP Bakers
@@ -109,15 +110,23 @@ those gates are numbers.
   OVERHAUL-4 problem.
 - **A fifth local model, not a fifth runtime.** `tools/local-llm/serve.ps1`
   starts a llama.cpp OpenAI-compatible endpoint on 127.0.0.1:8080 (Qwen3.8-27B,
-  13.1 GB, weights OUTSIDE the repo at `C:\Codex\llm`). Nothing schedules it and
-  nothing requires it: every caller checks `LocalLLM.health()` (`graph/lib/llm.py`)
-  and falls back to the deterministic path, because the board must publish with
-  the endpoint down. **ON-DEMAND ONLY, BY RULE (2026-08-22):** it cannot share
-  the 16 GB card with the semantic sidecar sweep, which needs ~3 GB and runs in
-  the 07:00 pipeline and 2-3x a day. Start llama-server by hand when a job needs
-  it and **stop it before 07:00**; `audit-semantic-identity.ps1` checks
-  `nvidia-smi` first and goes BLIND (exit 3, naming llama-server) instead of
-  launching a sweep that would OOM. Client bounds: `LocalLLM` times out at 120 s
+  13.1 GB, weights OUTSIDE the repo at `C:\Codex\llm`). Nothing requires it:
+  every caller checks `LocalLLM.health()` (`graph/lib/llm.py`) and falls back to
+  the deterministic path, because the board must publish with the endpoint down.
+  **ONE OWNER OF THE CARD (2026-08-22, narrowed by PLAN-local-matching phase
+  2):** it cannot share the 16 GB card with the semantic sidecar sweep, which
+  needs ~3 GB and runs in the 07:00 pipeline and 2-3x a day. The ordering is
+  owned by `graph/pipeline/nightly.ps1` — emit contested (read-only) -> sweep ->
+  **sidecar exits** -> llama-server -> resolve -> Learning Stage 1 ->
+  **llama-server down, in a finally block**. That chain is the only scheduled
+  path allowed to start the server, and `graph/pipeline/install-nightly-task.ps1`
+  is the only thing allowed to schedule the chain (default 21:30, hard stop
+  06:30, status in `grocery/out/logs/graph-nightly-status.json`). Start it by
+  hand for interactive work and stop it when done —
+  `nightly.ps1 -StopOnly`. `audit-semantic-identity.ps1` still checks
+  `nvidia-smi` first and still goes BLIND (exit 3, naming llama-server) instead
+  of launching a sweep that would OOM; it is now a backstop for a rule something
+  enforces, not the rule itself. Client bounds: `LocalLLM` times out at 120 s
   per call (recipe extraction passes 600 explicitly for its 4096-token ask) and
   `resolve.py --jobs` defaults to 4, coupled to `serve.ps1 -Slots 4`. The old
   PowerShell client `grocery/local-llm-lib.ps1` was deleted the same day: it had

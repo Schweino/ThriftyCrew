@@ -768,3 +768,148 @@ on; false MATCH and false reject are.
 **This does not re-open reject-only.** A 37% false-match rate on the contested
 slice is nowhere near safe enough to price a cell, and nothing here changes what
 may (`v_current_cell`, `llm_confirmed` from the review lane only).
+
+## Addendum 2026-08-22 (second) — phase 2: one process owns the card
+
+Phase 1 made the baseline honest and stopped the loop citing itself. Phase 2 is
+not about accuracy at all. It is about a rule that existed only as a sentence,
+and about paying for the helper's opinion while the card is already warm.
+
+Nothing in this phase changes what may price a cell, and nothing in it routes,
+filters or rejects anything. The contested lane records scores. **Phase 2
+caches; phase 3 decides.** Keeping those two acts apart is what will let phase 3
+measure its filter against a set that was scored before anyone knew what the
+filter would do.
+
+### 1. The rule that was a sentence
+
+`tools\local-llm\serve.ps1` carried this, from 2026-08-22:
+
+> ON-DEMAND ONLY. NEVER SCHEDULED. [...] start this by hand when a job needs it;
+> STOP IT BEFORE 07:00; nothing in Task Scheduler or the pipeline may start it.
+
+That rule was never really about scheduling. It was about the card: llama-server
+takes ~13 GB of 16 and the semantic sidecar sweep needs ~3, so the two cannot be
+resident together. With nothing owning the ordering, the only safe owner was a
+human — and `audit-semantic-identity.ps1`'s nvidia-smi guard could only ever say
+NO, turning a forgotten teardown into a BLIND semantic sweep the next morning.
+
+`graph\pipeline\nightly.ps1` owns the ordering now:
+
+    emit -> sweep -> SIDECAR EXITS -> llama-server -> resolve -> Stage 1 -> LLAMA-SERVER EXITS
+
+It stops llama-server in a `finally` block that runs on success, on failure, on
+timeout and on Ctrl-C, and it will not start it while the sidecar's own python
+is alive or the card is short of room. The nvidia-smi guard is unchanged and is
+now a **backstop for a rule something enforces**, rather than the rule itself.
+So the doctrine narrows rather than relaxes: nothing may start llama-server
+except this chain, and nothing may schedule this chain except
+`install-nightly-task.ps1`.
+
+Two clocks, because they fail differently. `-HardStop` (06:30) protects the
+07:00 ad pull and the 08:00 daily capture, both of which run the sweep, and is
+meaningless if the system clock jumps; `-MaxMinutes` (150) is immune to the
+clock and knows nothing about 07:00. The deadline is the **earlier** of the two,
+so either one alone gets the card back. Killing `resolve` at the deadline is
+safe by construction: `resolve_pending` checkpoints every batch and re-selects
+only rows still unsettled, so a killed run resumes where it stopped.
+
+**Measured, 2026-08-22, full chain on the live graph:**
+
+| stage | s | outcome |
+|---|---|---|
+| emit | 2 | 338 contested of 21,092 questions, read-only |
+| sweep | 95 | 3 lanes, sidecar exits |
+| serve | 8 | llama-server up, 4 slots |
+| resolve | 410 (first run) / 2 (nothing left) | 338 model calls -> 306 `llm_rejected`, 21 `llm_match_unverified`, 11 `escalated` |
+| stage1 | 25 | learning proposals |
+| stop | 2 | card back, 14,864 MiB free |
+
+The refusal paths were exercised, not just fixtured: a 5-minute window refuses
+and starts nothing, and a run with no sidecar interpreter records `sweep BLIND`
+and carries on to the model half. `grocery\out\logs\graph-nightly-status.json`
+is written on every path including the refusals, because "the chain did not run"
+and "the chain ran clean" have to be different weeks on the scorecard.
+
+**One bug, found by running it.** The first version had `Log` write to the
+success stream. A PowerShell function returns *everything* written there, so
+`Stop-Llama`'s return value was two log lines plus a boolean and the status file
+recorded `card_free: ["[20:39:53] stopping...", "[20:39:56] llama-server down...",
+true]`. `Log` now writes via `[Console]::WriteLine`, and the self-test asserts
+that `@(Log 'x')` has zero elements — a fixture proven able to fail before it
+was trusted.
+
+### 2. The helper's opinion, bought while the models are already resident
+
+The sweep gained a third lane. It scores the pairs the deterministic layers
+could not settle, and it embeds every product name the resolve lane will later
+want a vector for.
+
+**The contested set comes from the resolver, not from the sidecar.**
+`resolve.py --emit-contested` runs pass 1 in memory, writes one JSON file and
+touches nothing else — read-only on a database a publish may be reading, 1.9 s
+for 21,092 questions. The alternative, letting the sidecar decide for itself
+what "contested" means, is the two-implementations bug this estate keeps getting
+bitten by (pu-lib had three; the category-exclude bake drifted 2,165 patterns).
+`pending_questions()` is now the one implementation, called by both.
+
+**The lane lives in the sweep and not in a script of its own** for a reason
+that is easy to miss: `score_cache` prunes on save to the texts *that run* saw
+(`keep_only=_seen_texts`), so a vector produced by any other process is evicted
+the next time the sweep saves. One process, one cache, one save.
+
+**Measured on the 2026-08-22 corpus** (588 commodities, 2,860 board pairs,
+37,340 product rows, 338 contested):
+
+| | cold cache | warm cache |
+|---|---|---|
+| whole sweep | 51.0 s | **0.4 s** |
+| contested lane | 3.2 s | 0.0 s |
+| models loaded onto the card | both | **neither** |
+| embed / rerank lookups | 12,375 + 8,481 misses | 14,024 + 8,189 hits, **0 misses** |
+
+The steady-state cost of the third lane is not "small". `embedder_loaded: false`
+and `gpu_sec: 0.0` on the warm run: the helper's opinion on every contested pair
+and 4,051 warm vectors cost **no GPU time at all** on a day the shelf has not
+moved. That is the whole argument for putting it here.
+
+Of 338 contested pairs, 315 scored and **23 named a commodity the sidecar has no
+definition for** — the recipe namespace and the staple catalogue are not the
+same set. Those are reported and counted, never guessed at.
+
+### 3. What the stock cross-encoder already says — an observation, not a gate
+
+Recorded because it is free and because phase 3's fine-tune needs a *before*.
+The contested scores are sharply bimodal: the 90th percentile is **0.024**, and
+what sits above it reads right by eye (`Fresh Green Peppers` -> Bell Peppers at
+0.822 against a peer median of 0.893). That is the shape a very-low-score filter
+wants, and it is the first evidence that §2 step 2 can exist.
+
+Two honest limits on it, both recorded in the artefact rather than argued away:
+
+* **93 of 315 pairs have `peer_n = 0`** — the commodity ships nothing today, so
+  there is no peer distribution to calibrate against. An absolute floor cannot
+  substitute: this sweep already learned that short generic names score low
+  against everything, so a global bar just selects for short names and flags
+  "Yellow Bananas" as suspicious bananas. Phase 3 owes those 93 an answer that
+  is not a global threshold.
+* Nothing here is validated against a label. These are **the stock model's**
+  scores on rows nobody has adjudicated. The §6 training set does not contain
+  them, which is exactly what will make §4's audit row honest later — and is
+  also why no number in this section is a gate.
+
+### 4. On the scorecard
+
+`scorecard.ps1` gained a local-lane section fed by the two run artefacts rather
+than by the graph, because neither fact is a decision and neither belongs in
+`decision_log`. It distinguishes BLIND from zero everywhere, and it prints one
+line that is about *right now* rather than about last week:
+
+    *** THE CARD WAS NOT HANDED BACK - llama-server may still hold it, and the
+        next semantic sweep will go BLIND ***
+
+Phase 2's before/after, as the scorecard reads it: the local lane went from
+absent (no chain, no helper scores, `nightly BLIND`) to `nightly ran ... card
+handed back, 14,864 MiB free` and `helper scored 315 of 338`. Tokens per Claude
+ruling is unchanged and was expected to be: this phase asked Claude nothing, and
+the lever that moves that number is phase 3's filter and phase 5's packet.

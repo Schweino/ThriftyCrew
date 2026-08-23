@@ -3404,6 +3404,17 @@ else { Bad ('audit-board-consistency -SelfTest failed (rc=' + $r.rc + ') - the a
 $r = RunPS 'audit-semantic-identity.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'semantic-identity: the actionable filter still admits fresh findings and still suppresses settled rulings' }
 else { Bad ('audit-semantic-identity -SelfTest failed (rc=' + $r.rc + ') - the semantic advisory feed may be re-reporting adjudicated cells or dropping real ones: ' + ($r.text -replace "`n", ' ')) }
+# ---- (j2) THE ONE PROCESS THAT OWNS THE GPU WINDOW (2026-08-22, PLAN-local-matching phase 2) ----------
+# graph\pipeline\nightly.ps1 is the only scheduled thing allowed to start llama-server, and the only
+# reason that is safe is the ordering rule: the sidecar sweep takes the card first and must have given
+# it back before the 13 GB server may take it. Both halves of that rule are pure functions, and both are
+# asserted here daily, because the failure has no symptom on the day it happens - it shows up as a BLIND
+# semantic sweep at 07:00 the NEXT morning, attributed to "the GPU was busy" and never traced back.
+# Also fixtured: Log must not leak into any function's return value, which this script shipped wrong
+# once and which silently turned the run-status file's card_free flag into an array of log lines.
+$r = RunPSAt (Join-Path (Split-Path $root -Parent) 'graph\pipeline') 'nightly.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'self-test OK') { Ok 'nightly: the sweep/llama-server ordering rule, the deadline maths and the log-leak guard all hold' }
+else { Bad ('nightly.ps1 -SelfTest failed (rc=' + $r.rc + ') - the GPU handover rule is unproven, and its failure mode is a BLIND semantic sweep tomorrow morning: ' + ($r.text -replace "`n", ' ')) }
 # ---- (k) THE FAREWAY SIZE SURFACE (2026-08-01, triage 2026-08-01-9da3a8) -------------------------------
 # Fareway's storefront DOM often omits the pack size, so the builder now reads it from the catalog slug.
 # That surface is unreliable in four proven ways (dropped decimal, leading zero, per-unit size on a

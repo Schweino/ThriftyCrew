@@ -20,7 +20,23 @@ TWO LANES, both advisory:
               candidate blind spots. This is the "Cloves, Ground" class: the right product sitting in
               the feed, invisible, while a $45 jar wins the cell unopposed.
 
-Output: out/semantic-findings.json. Nothing else is written, and nothing is applied.
+  CONTESTED - (2026-08-22, PLAN-local-matching phase 2) the pairs the graph's deterministic layers
+              could not settle, scored while the models are already resident. Writes
+              out/contested-scores.json and, just as importantly, leaves the vectors and pair scores
+              in the on-disk cache, so the resolve lane — which runs HOURS later, on a card this
+              process has already given back — pays nothing for them.
+
+              THIS LANE DECIDES NOTHING. Phase 2 caches; phase 3 trains the helper and lets it
+              filter. Recording a score is not the same act as acting on one, and keeping them
+              separate is what lets phase 3 measure the filter against a set that was scored before
+              anyone knew what the filter would do.
+
+WHY THE SWEEP AND NOT A SCRIPT OF ITS OWN. score_cache prunes on save to the texts the run saw
+(keep_only=_seen_texts), so a vector some other process produced is evicted the next time the sweep
+saves. One process, one cache, one save.
+
+Output: out/semantic-findings.json + out/contested-scores.json. Nothing else is written, and nothing
+is applied.
 """
 from __future__ import annotations
 import json, os, sys, time
@@ -59,6 +75,96 @@ COVERAGE_RERANK_FLOOR = 0.90
 def log(m: str) -> None:
     print(f"[{time.strftime('%H:%M:%S')}] {m}", flush=True)
 
+
+def run_contested_lane(m, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all):
+    """LANE 3 - score the graph's contested questions, and warm every vector the resolve lane wants.
+
+    Returns None when there is nothing to do (no file, or an unreadable one). A missing or stale
+    contested file is NEVER an error here: this lane is a cache-warmer with an advisory report
+    attached, and the resolve lane treats a missing score exactly as it treats any cache miss.
+
+    WHAT IS WRITTEN, AND WHY EACH FIELD IS THERE
+      score        the cross-encoder's raw number for (product, commodity_text). The quantity
+                   phase 3's trained helper replaces, measured today with the stock model so the
+                   retrain has a before.
+      cos          the bi-encoder cosine. Cheap, and the only signal available for a commodity with
+                   too few shipped peers to calibrate against.
+      peer_median  the median score THIS commodity's own shipped products earn, and peer_p10 the
+                   tenth percentile of the same. A raw floor cannot work and this sweep already
+                   learned why: short generic names score low against everything, so an absolute bar
+                   selects for short names and flags "Yellow Bananas" as suspicious bananas. The
+                   honest question is whether a pair is an outlier AMONG ITS OWN PEERS, so the
+                   calibration travels WITH the score. peer_n says how much to trust it.
+
+    peers come from the identity lane's ce_all, which has already reranked every shipped board pair
+    on this run - the same numbers, no second model call.
+    """
+    path = os.path.join(DATA, "contested-pairs.json")
+    if not os.path.exists(path):
+        log("LANE contested: no data/contested-pairs.json - skipped (run resolve.py --emit-contested)")
+        return None
+    try:
+        doc = load_json(path)
+        pairs = doc["pairs"]
+        texts = doc.get("embed_texts") or []
+    except Exception as e:                                                        # noqa: BLE001
+        log(f"LANE contested: unreadable contested file ({e}) - skipped")
+        return None
+
+    t0 = time.time()
+    # Every text the resolve lane will want a vector for, embedded in THIS run so the save keeps it.
+    # Cached texts cost nothing; the misses are what this line is for.
+    if texts:
+        m.embed([clean_product(t) for t in texts])
+        log(f"LANE contested: warmed {len(texts)} product vector(s) for the resolve lane")
+
+    # Per-commodity peer calibration from the shipped pairs the identity lane already scored.
+    peers = {}
+    for cid, idxs in by_com.items():
+        vals = sorted(ce_all[i] for i in idxs)
+        p10 = vals[max(0, min(len(vals) - 1, int(0.10 * (len(vals) - 1))))]
+        peers[cid] = (vals[len(vals) // 2], p10, len(vals))
+
+    known, unknown = [], []
+    for p in pairs:
+        (known if p.get("def_id") in defs_by_id else unknown).append(p)
+    if unknown:
+        # A contested commodity the sidecar has no definition for is a real thing - the recipe
+        # namespace and the staple catalogue are not the same set - and it is reported, not guessed.
+        log(f"LANE contested: {len(unknown)} pair(s) name a commodity with no sidecar definition; not scored")
+
+    scored = []
+    if known:
+        names = [clean_product(p["product"]) for p in known]
+        pvecs = m.embed(names)
+        ce = m.rerank([(names[i], ctexts[cidx[known[i]["def_id"]]]) for i in range(len(known))])
+        for i, p in enumerate(known):
+            did = p["def_id"]
+            med, p10, n_peers = peers.get(did, (None, None, 0))
+            scored.append({
+                "id": p["id"], "def_id": did, "commodity": p.get("commodity"),
+                "product": p["product"], "rows": p.get("rows", 1),
+                "cos": round(float(torch.dot(pvecs[i], cvecs[cidx[did]])), 4),
+                "score": round(float(ce[i]), 6),
+                "peer_median": None if med is None else round(float(med), 6),
+                "peer_p10": None if p10 is None else round(float(p10), 6),
+                "peer_n": n_peers,
+            })
+    scored.sort(key=lambda r: r["score"])
+    log(f"LANE contested: scored {len(scored)} pair(s) in {time.time()-t0:.1f}s")
+    return {
+        "generated": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "source_generated": doc.get("generated"),
+        "embed_model": EMBED_MODEL,
+        "rerank_model": RERANK_MODEL,
+        "elapsed_sec": round(time.time() - t0, 1),
+        "advisory": "scores only - nothing here filters, routes or prices anything (phase 3 does that)",
+        "offered": len(pairs),
+        "scored": len(scored),
+        "no_definition": len(unknown),
+        "vectors_warmed": len(texts),
+        "pairs": scored,
+    }
 
 def main() -> None:
     t_start = time.time()
@@ -166,6 +272,12 @@ def main() -> None:
     coverage.sort(key=lambda r: -r["score"])
     log(f"LANE coverage: {len(coverage)} rule-invisible product(s) that look real")
 
+    # ---------------- LANE 3: CONTESTED (phase 2, advisory + cache-warming) ----------------
+    # The graph writes data/contested-pairs.json with `resolve.py --emit-contested`, read-only,
+    # at the top of the nightly chain (graph/pipeline/nightly.ps1). Its absence is normal, not an
+    # error: a run started by hand, or before the graph has ever emitted, simply skips this lane.
+    contested_report = run_contested_lane(m, defs_by_id, ctexts, cvecs, cidx, by_com, ce_all)
+
     report = {
         "generated": time.strftime("%Y-%m-%d %H:%M:%S"),
         "device": DEVICE,
@@ -179,10 +291,19 @@ def main() -> None:
         "identity": identity,
         "coverage": coverage,
     }
+    if contested_report is not None:
+        report["contested"] = {k: v for k, v in contested_report.items() if k != "pairs"}
     if isinstance(m, score_cache.CachedScorer):
         m.save()
         report["cache"] = m.stats()
         log(f"cache: {report['cache']}")
+    if contested_report is not None:
+        cp = os.path.join(OUT, "contested-scores.json")
+        tmp = cp + ".tmp"
+        with open(tmp, "w", encoding="utf-8", newline="\n") as f:
+            json.dump(contested_report, f, indent=2, ensure_ascii=False)
+        os.replace(tmp, cp)
+        log(f"wrote {cp}  ({contested_report['scored']} contested pair(s))")
     p = os.path.join(OUT, "semantic-findings.json")
     with open(p, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)

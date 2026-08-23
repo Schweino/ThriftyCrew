@@ -91,7 +91,6 @@ from __future__ import annotations
 
 import os
 import re
-import sqlite3
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -614,6 +613,65 @@ class Resolver:
         return n
 
     # -- bulk application --------------------------------------------------
+    def pending_questions(self, limit: int | None = None,
+                          split_contested: bool = True):
+        """The deterministic pass, WRITING NOTHING. One implementation of the
+        two facts everything downstream needs: what the cheap layers settle,
+        and what is left contested.
+
+        Returns (groups, verdicts, contested):
+          groups     {(commodity_id, product_name): [observation ids]}
+          verdicts   the deterministic verdict for every settled question
+          contested  the keys the cheap layers could not settle, i.e. exactly
+                     the questions layer 5 would be asked
+        `resolve_pending` calls this and then banks the verdicts;
+        `--emit-contested` calls it and banks nothing, so the sidecar can score
+        the same set BEFORE llama-server exists (see graph/pipeline/nightly.ps1).
+        The alternative — the sidecar deciding for itself what "contested"
+        means — is the two-implementations bug this estate keeps getting bitten
+        by (pu-lib had three, the category-exclude bake drifted 2,165 patterns).
+
+        DETERMINISTIC verdicts are recomputed EVERY pass, never trusted from a
+        previous run. They cost ~2s for 120k rows, and freezing them meant a
+        new rule could not reach a row adjudicated before the rule existed:
+        the dried_carrier class guard landed on 2026-08-20 and freeze-dried
+        red onion, celery flakes and dried brussels-sprout crisps all kept
+        their old include_hit and kept pricing fresh-produce cells. The same
+        disease known-wrong rulings had, and the same cure — a rule change
+        binds everything, not just the future. What is NEVER re-rolled here:
+        llm_* and escalated (paid verdicts, banked in question_verdicts) and
+        known_wrong (absolute).
+        """
+        pending = ("unadjudicated", "include_hit", "excluded",
+                   "category_excluded", "no_include_hit")
+        q = ("SELECT id, commodity_id, product_name FROM price_observations "
+             f"WHERE match_status IN ({','.join('?' * len(pending))})")
+        if limit:
+            q += f" LIMIT {int(limit)}"
+        rows = self.db.conn.execute(q, pending).fetchall()
+
+        # -- group identical questions ------------------------------------
+        groups: dict[tuple[str, str], list[str]] = {}
+        for r in rows:
+            key = (r["commodity_id"], r["product_name"] or "")
+            groups.setdefault(key, []).append(r["id"])
+
+        verdicts: dict[tuple[str, str], Verdict] = {}
+        contested: list[tuple[str, str]] = []
+        for key in groups:
+            cid, name = key
+            try:
+                # allow_llm=False even in LLM mode: this pass settles what the
+                # cheap layers can settle and isolates the contested set.
+                v = self.resolve(cid, name, allow_llm=False)
+            except KeyError:
+                v = Verdict("escalated", "commodity node missing", 0.0, escalate=True)
+            if split_contested and v.status == "no_include_hit":
+                contested.append(key)
+            else:
+                verdicts[key] = v
+        return groups, verdicts, contested
+
     def resolve_pending(self, limit: int | None = None, run: str = "",
                         ts: str | None = None, allow_llm: bool = True,
                         progress=None, jobs: int = 1) -> dict:
@@ -648,47 +706,8 @@ class Resolver:
         self.stats = {}          # per-call, not per-Resolver: two runs on one
                                  # instance must not double-count in the log
         use_llm = allow_llm and self.use_llm and self.llm is not None
-        # DETERMINISTIC verdicts are recomputed EVERY pass, never trusted from a
-        # previous run. They cost ~2s for 120k rows, and freezing them meant a
-        # new rule could not reach a row adjudicated before the rule existed:
-        # the dried_carrier class guard landed on 2026-08-20 and freeze-dried
-        # red onion, celery flakes and dried brussels-sprout crisps all kept
-        # their old include_hit and kept pricing fresh-produce cells. The same
-        # disease known-wrong rulings had, and the same cure — a rule change
-        # binds everything, not just the future. What is NEVER re-rolled here:
-        # llm_* and escalated (paid verdicts, banked in question_verdicts) and
-        # known_wrong (absolute).
-        pending = ("unadjudicated", "include_hit", "excluded",
-                   "category_excluded", "no_include_hit")
-        q = ("SELECT id, commodity_id, product_name FROM price_observations "
-             f"WHERE match_status IN ({','.join('?' * len(pending))})")
-        if limit:
-            q += f" LIMIT {int(limit)}"
-        rows = self.db.conn.execute(q, pending).fetchall()
-
-        # -- group identical questions ------------------------------------
-        groups: dict[tuple[str, str], list[str]] = {}
-        meta_of: dict[tuple[str, str], sqlite3.Row] = {}
-        for r in rows:
-            key = (r["commodity_id"], r["product_name"] or "")
-            groups.setdefault(key, []).append(r["id"])
-            meta_of.setdefault(key, r)
-
-        # -- pass 1: deterministic layers, in-process ----------------------
-        verdicts: dict[tuple[str, str], Verdict] = {}
-        contested: list[tuple[str, str]] = []
-        for key in groups:
-            cid, name = key
-            try:
-                # allow_llm=False here even in LLM mode: this pass settles what
-                # the cheap layers can settle and isolates the contested set.
-                v = self.resolve(cid, name, allow_llm=False)
-            except KeyError:
-                v = Verdict("escalated", "commodity node missing", 0.0, escalate=True)
-            if use_llm and v.status == "no_include_hit":
-                contested.append(key)
-            else:
-                verdicts[key] = v
+        groups, verdicts, contested = self.pending_questions(
+            limit=limit, split_contested=use_llm)
         # The deterministic pass tallied by QUESTION; stats must count ROWS, so
         # rebuild the tally at write time below.
         self.stats = {}
@@ -844,6 +863,91 @@ def build_resolve_prompt(cc: CompiledCommodity, product_name: str,
     return system, "\n".join(parts)
 
 
+def _emit_contested(path: str, limit: int | None = None) -> int:
+    """Write the contested question set for the sidecar to score.
+
+    READ-ONLY on the database, and deliberately so: this runs at the top of the
+    nightly chain, before the sweep, while a Claude session or a publish may
+    still be reading the graph. It banks no verdict and logs no event — the
+    real `resolve_pending` run hours later does that, recomputing the
+    deterministic layers from scratch as it always has. If the shelf moves
+    between the two, the sweep simply scored a pair nobody asks about; a MISSING
+    score is a cache miss, never a wrong answer (score_cache.py).
+
+    The file carries the model-facing text for each side of the pair —
+    `product` exactly as the observation holds it, and the commodity label —
+    but NOT the commodity's exemplar text: `commodity_text()` is the sidecar's
+    to build, from commodity-defs.json, so that the cache key stays exactly
+    what the model saw.
+    """
+    import json as _json
+    from graphdb import open_db
+
+    t0 = time.time()
+    with open_db() as db:
+        # READ-ONLY, ENFORCED RATHER THAN PROMISED. GraphDB.__exit__ commits on a
+        # clean exit, which is a no-op over an empty transaction -- but "no-op
+        # because I checked the code" is not the same guarantee as "SQLite will
+        # refuse". query_only makes any write from here an OperationalError, so
+        # this stage cannot become a writer by accident later. It matters because
+        # this runs at the top of the nightly chain, potentially alongside a
+        # publish or a Claude session reading the same file.
+        db.conn.execute("PRAGMA query_only = ON")
+        r = Resolver(db, llm=None, use_llm=False)
+        groups, verdicts, contested = r.pending_questions(limit=limit,
+                                                          split_contested=True)
+        labels: dict[str, str] = {}
+        for cid, _ in contested:
+            if cid not in labels:
+                try:
+                    labels[cid] = r.commodity(cid).label or cid
+                except KeyError:
+                    labels[cid] = cid
+        out = {
+            "generated": time.strftime("%Y-%m-%dT%H:%M:%S"),
+            "prompt_version": PROMPT_VERSION,
+            "questions": len(groups),
+            "settled_deterministically": len(verdicts),
+            "contested": len(contested),
+            "elapsed_sec": round(time.time() - t0, 1),
+            # def_id is the id the SIDECAR knows this commodity by. The graph
+            # namespaces its nodes (`commodity:staple:cumin`) and
+            # grocery/commodities.json — which is what builds the sidecar's
+            # commodity-defs.json — does not (`cumin`). Translating here, on
+            # the side that owns the namespace, keeps id surgery out of the
+            # sidecar entirely; a pair whose def_id the sidecar cannot find is
+            # skipped and counted, never guessed at.
+            "pairs": [{"id": cid, "def_id": cid.rsplit(":", 1)[-1],
+                       "commodity": labels.get(cid, cid),
+                       "product": name, "rows": len(groups[(cid, name)])}
+                      for cid, name in contested],
+            # EVERY text the resolve lane will want a vector for, in one list
+            # so ONE sweep run embeds them all. This matters more than it
+            # looks: score_cache prunes on save to the texts THAT RUN saw
+            # (keep_only=_seen_texts), so a vector produced by some other
+            # process is evicted the next time the sweep saves. The banked
+            # rulings are here because phase 4's memory-by-meaning searches
+            # them as neighbours of the listing under judgement; the contested
+            # names are here because they are the queries.
+            "embed_texts": sorted({name for _, name in contested} | {
+                r[0] for r in db.conn.execute(
+                    "SELECT DISTINCT product_name FROM question_verdicts "
+                    "WHERE product_name IS NOT NULL AND product_name <> ''")}),
+        }
+    d = os.path.dirname(os.path.abspath(path))
+    if d:
+        os.makedirs(d, exist_ok=True)
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8", newline="\n") as fh:
+        _json.dump(out, fh, indent=2, ensure_ascii=False)
+    os.replace(tmp, path)
+    print(f"contested: {out['contested']} question(s) of {out['questions']} "
+          f"({out['settled_deterministically']} settled by the deterministic "
+          f"layers), {len(out['embed_texts'])} text(s) to embed "
+          f"-> {path} in {out['elapsed_sec']}s")
+    return 0
+
+
 def main() -> int:
     """CLI: adjudicate pending observations.
 
@@ -868,7 +972,19 @@ def main() -> int:
                          "slots (tools/local-llm/serve.ps1 -Slots, currently 4), else requests queue")
     ap.add_argument("--reset", action="store_true",
                     help="re-adjudicate everything (clears prior verdicts first)")
+    # PHASE 2 (2026-08-22). The sidecar sweep scores the contested pairs while
+    # it already has the card, HOURS before llama-server is allowed to start;
+    # this is how it learns which pairs those are without re-deriving the
+    # deterministic layers in Python. Read-only by construction: it opens the
+    # database, runs pass 1 in memory and writes one JSON file.
+    ap.add_argument("--emit-contested", metavar="PATH",
+                    help="write the contested (commodity, product) questions to "
+                         "PATH and exit. Writes NOTHING to the database and "
+                         "needs no model. See graph/pipeline/nightly.ps1.")
     args = ap.parse_args()
+
+    if args.emit_contested:
+        return _emit_contested(args.emit_contested, args.limit)
 
     llm = None
     if args.llm:

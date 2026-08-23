@@ -19,6 +19,15 @@ answers plan section 9's standing questions:
     sent to Claude                         escalations the reviewer picked up
     confirmed / rejected / deferred        what Claude ruled
     tokens per Claude ruling               added by the .ps1 wrapper
+    the nightly chain, and the helper      from the two run artefacts (phase 2)
+
+The last row reads FILES, not the graph, because the two facts phase 2 added
+are not decisions and do not belong in decision_log: whether the chain got the
+card back (grocery/out/logs/graph-nightly-status.json) and how many contested
+pairs the sidecar scored (sidecar/out/contested-scores.json). A missing file is
+reported as BLIND, never as a zero -- "the chain did not run" and "the chain ran
+and found nothing" are different weeks and a scorecard that conflates them is
+worse than no scorecard.
 """
 
 from __future__ import annotations
@@ -58,6 +67,61 @@ def open_ro(path: str) -> sqlite3.Connection:
     conn = sqlite3.connect(uri, uri=True)
     conn.row_factory = sqlite3.Row
     return conn
+
+
+def read_json(path: str):
+    """A local artefact, or None. Never raises: every caller reports BLIND."""
+    try:
+        with open(path, encoding="utf-8-sig") as fh:
+            return json.load(fh)
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
+def local_lane(repo: str) -> dict:
+    """Phase 2's two questions: did the chain hand the card back, and did the
+    helper see the contested set before the model did?
+
+    Both answers live in files a run wrote, so BLIND is a first-class outcome
+    here. `card_free: false` is the only line in this whole report that means
+    something is wrong RIGHT NOW rather than last week: it says llama-server is
+    still holding the GPU, which makes tomorrow's 07:00 semantic sweep BLIND.
+    """
+    n = read_json(os.path.join(repo, "grocery", "out", "logs",
+                               "graph-nightly-status.json"))
+    c = read_json(os.path.join(repo, "sidecar", "out", "contested-scores.json"))
+    out: dict = {}
+    if n is None:
+        out["nightly"] = {"state": "BLIND", "why": "no graph-nightly-status.json - the chain has never run here"}
+    else:
+        stages = {str(x.get("stage")): str(x.get("state")) for x in (n.get("stages") or [])}
+        out["nightly"] = {
+            "state": "ran",
+            "at": n.get("started"),
+            "elapsed_sec": n.get("elapsed_sec"),
+            "contested": n.get("contested"),
+            "card_free": n.get("card_free"),
+            "free_vram_mib": n.get("free_vram_mib"),
+            "stages": stages,
+            "blind_stages": sorted(k for k, v in stages.items() if v in ("BLIND", "FAILED")),
+        }
+    if c is None:
+        out["helper"] = {"state": "BLIND", "why": "no contested-scores.json - the sweep's contested lane has not run"}
+    else:
+        out["helper"] = {
+            "state": "ran",
+            "at": c.get("generated"),
+            "model": c.get("rerank_model"),
+            "offered": c.get("offered"),
+            "scored": c.get("scored"),
+            "no_definition": c.get("no_definition"),
+            "vectors_warmed": c.get("vectors_warmed"),
+            "elapsed_sec": c.get("elapsed_sec"),
+            # Phase 2 CACHES; phase 3 filters. Stated in the report so nobody
+            # reads a scored pair as a routed one.
+            "routes": "nothing - scores only until phase 3",
+        }
+    return out
 
 
 def collect(conn: sqlite3.Connection, since: str, until: str) -> dict:
@@ -138,7 +202,8 @@ def collect(conn: sqlite3.Connection, since: str, until: str) -> dict:
             "reviewers": reviewers,
             "queue_now": queue,
             "prior_authority_tiers": tiers,
-            "learning_proposals": learning}
+            "learning_proposals": learning,
+            "local_lane": local_lane(os.path.join(HERE, "..", ".."))}
 
 
 def _selftest() -> int:
@@ -160,6 +225,16 @@ def _selftest() -> int:
       classify_status("escalated") == "layer5")
     T("MUST FIRE  an unknown status is 'other', never silently deterministic",
       classify_status("brand_new_status") == "other", classify_status("brand_new_status"))
+
+    # MUST FIRE: a missing artefact is BLIND, not a zero. The whole point of the
+    # phase-2 section is telling "the chain did not run" apart from "it ran clean".
+    blind = local_lane(os.path.join(HERE, "no-such-repo-dir"))
+    T("MUST FIRE  a missing nightly status reads BLIND, not 0",
+      blind["nightly"]["state"] == "BLIND", blind["nightly"])
+    T("MUST FIRE  a missing contested-scores reads BLIND, not 0",
+      blind["helper"]["state"] == "BLIND", blind["helper"])
+    T("read_json returns None rather than raising on a missing file",
+      read_json(os.path.join(HERE, "nope.json")) is None)
 
     db = os.environ.get("SCORECARD_DB", DEFAULT_DB)
     if os.path.exists(db):
