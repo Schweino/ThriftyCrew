@@ -44,6 +44,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import time
 
@@ -55,6 +56,7 @@ from graphdb import open_db, GRAPH_DIR, REPO_ROOT, read_json   # noqa: E402
 from ids import hash_obj, store_label                   # noqa: E402
 from seed_gold import case as gold_case, GOLD_PATH      # noqa: E402
 from flag_outliers import flag as flag_basis            # noqa: E402
+from authority import authority_tier                    # noqa: E402
 
 QUEUE = os.path.join(REPO_ROOT, "grocery", "escalation-queue.json")
 PACKET = os.path.join(REPO_ROOT, "grocery", "escalation-review-packet.json")
@@ -116,6 +118,19 @@ def _commodity_context(db, cid: str) -> dict:
            JOIN edges e ON e.source_id = n.id
            WHERE e.predicate='known_wrong_for' AND e.target_id=?""",
         (cid,)).fetchall()]
+    # ADJUDICATED REJECTIONS (plan §5, added 2026-08-23). The packet showed the reviewer the
+    # known-wrong blocklist and the confirmed siblings but never the rejections a REVIEWER had
+    # already made for this commodity - which is the largest body of relevant precedent there
+    # is, and the very thing prompt v5 hands the local model. The reviewer was being shown
+    # less of this board's own history than the 27B was. authority.py decides who counts;
+    # single-model rejections are excluded here for the same reason they are excluded there.
+    adjudicated_rejections = []
+    for r in db.conn.execute(
+            """SELECT product_name, reason, status, decided_by FROM question_verdicts
+               WHERE commodity_id=? AND status='llm_rejected' AND product_name IS NOT NULL""",
+            (cid,)).fetchall():
+        if authority_tier(r["status"], r["reason"], r["decided_by"]) == "adjudicated":
+            adjudicated_rejections.append(r["product_name"])
     return {
         "commodity": cid,
         "label": node["canonical_name"] if node else None,
@@ -124,8 +139,116 @@ def _commodity_context(db, cid: str) -> dict:
         "include_patterns": [a["alias"] for a in db.aliases_for(cid, "include")],
         "exclude_patterns": [a["alias"] for a in db.aliases_for(cid, "exclude")],
         "confirmed_siblings": siblings,
+        "adjudicated_rejections": adjudicated_rejections[:12],
         "known_wrong": known_wrong,
     }
+
+
+_WORD = re.compile(r"[a-z0-9%/]{2,}")
+
+# Size tokens, which the word regex above cannot see and which decide a whole class of
+# question. `Zero-Sugar Soda (2 L)` tokenises to zero/sugar/soda - the "2 L" disappears,
+# because "2" and "l" are both one character - and "2 L" is the entire difference between the
+# listings that belong in that commodity and the 12-oz 35-packs that do not.
+_SIZE = re.compile(r"(\d+(?:\.\d+)?)\s*(l|ml|oz|fl\s*oz|qt|lb|lbs|g|kg|ct|pk|pack|liter|litre)\b")
+
+
+def _words(s: str) -> list[str]:
+    return _WORD.findall((s or "").lower())
+
+
+def _sizes(s: str) -> list[str]:
+    """Every quantity+unit in a string, normalised only in spacing.
+
+    NOT converted between units, deliberately. '2 L' and '2.1 Qt' are the same bottle and
+    '2 L' and '12 fl oz' are not, and deciding which is which is unit arithmetic the board
+    already owns elsewhere. Guessing at it here would put a wrong answer in front of a
+    reviewer wearing the authority of a computed field. Both sides are shown; the reviewer
+    does the comparing.
+    """
+    out = []
+    for m in _SIZE.finditer((s or "").lower()):
+        out.append(f"{m.group(1)} {' '.join(m.group(2).split())}")
+    return out
+
+
+def _deciding_words(product: str, ctx: dict) -> dict:
+    """Plan §5 - "the deciding words highlighted", computed and not guessed.
+
+    A reviewer's whole job on a confirm_match question is to find the word that makes this
+    listing different from the ones already accepted. So the packet does that arithmetic for
+    them rather than making each reviewer redo it by eye:
+
+      not_in_any_confirmed  words in this listing that appear in NO confirmed sibling. This is
+                            where a false match hides - `Powder` in a pods commodity, `Frozen`
+                            in a canned one - and it is the first thing to read.
+      shared_with_rejected  words this listing shares with something already ruled out for this
+                            same commodity. Not proof, but it is where the last mistake was.
+      include_hit          which of the commodity's own include patterns actually matches.
+
+    Deterministic, cheap, and carries no model opinion - which matters, because the two model
+    opinions in this packet are of measured and unequal value.
+    """
+    pw = _words(product)
+    conf = set()
+    for s in (ctx.get("confirmed_siblings") or []):
+        conf.update(_words(s))
+    rej = set()
+    for s in (ctx.get("adjudicated_rejections") or []) + (ctx.get("known_wrong") or []):
+        rej.update(_words(s))
+    label = set(_words(ctx.get("label") or ""))
+    hit = None
+    for pat in (ctx.get("include_patterns") or []):
+        try:
+            if re.search(pat, product or "", re.IGNORECASE):
+                hit = pat
+                break
+        except re.error:
+            continue
+    seen: set[str] = set()
+    novel = [w for w in pw
+             if w not in conf and w not in label and not (w in seen or seen.add(w))]
+    return {
+        # THE COMMODITY'S OWN QUALIFIERS, ABSENT FROM THE LISTING. The sharpest single signal
+        # in this packet and the last one added: `Zero-Sugar Soda (2 L)` carries `2 l`, and a
+        # listing reading `12 fl oz, 12 Pack Cans` does not - which is the whole case against
+        # a MATCH the local model asserted at 0.95. Absence is not proof (a commodity written
+        # 'Breakfast Sausage (pork)' does not need the listing to say pork), so this is
+        # reported for the reviewer to weigh and never scored.
+        "commodity_words_missing": sorted(w for w in label if w not in set(pw))[:8],
+        # Shown side by side and NOT compared - see _sizes(). For a commodity that names a
+        # size, this is usually the whole question.
+        "size_in_commodity": _sizes(ctx.get("label") or ""),
+        "size_in_listing": _sizes(product)[:6],
+        "not_in_any_confirmed": novel[:10],
+        "shared_with_rejected": sorted({w for w in pw if w in rej and w not in label})[:8],
+        "include_hit": hit,
+        # No confirmed sibling means `not_in_any_confirmed` is every word, which is an
+        # artefact and not a measurement. Said out loud so the ordering below can refuse to
+        # pretend otherwise.
+        "no_confirmed_precedent": not conf,
+    }
+
+
+def _helper_scores() -> dict:
+    """The sidecar's cached opinion on the contested pairs, if last night's sweep left one.
+
+    READ WITH THE MEASUREMENT ATTACHED, which is why this returns the score under a name that
+    says what it is worth. Measured 2026-08-23: where this helper was MOST confident a pair
+    was a match, an adjudicator agreed with the local model against it 68 times out of 69. A
+    high helper score is not evidence of a match, and the packet must never order or lead with
+    it. Its LOW end is the half that has been shown to agree with the board.
+    """
+    path = os.path.join(REPO_ROOT, "sidecar", "out", "contested-scores.json")
+    if not os.path.exists(path):
+        return {}
+    try:
+        doc = read_json(path)
+    except (ValueError, OSError):
+        return {}
+    if not doc.get("helper_model"):
+        return {}
+    return {(r.get("id"), r.get("product")): r for r in (doc.get("pairs") or [])}
 
 
 # The row status each queue kind is waiting on. A verdict may only move rows
@@ -172,7 +295,8 @@ def _store_page_hint(cid: str, rows: list[dict]) -> dict:
     return hint
 
 
-def emit_packet(db, kind: str = "confirm_match", deferred_only: bool = False) -> str:
+def emit_packet(db, kind: str = "confirm_match", deferred_only: bool = False,
+                limit: int | None = None) -> str:
     """Build a review packet for one KIND of queued question.
 
     confirm_match — the local model said MATCH with confidence; the reviewer is
@@ -191,6 +315,7 @@ def emit_packet(db, kind: str = "confirm_match", deferred_only: bool = False) ->
     if kind not in KIND_STATUS:
         raise ValueError(f"unknown kind {kind!r}; expected one of {sorted(KIND_STATUS)}")
     status = KIND_STATUS[kind]
+    helper = _helper_scores()
 
     queue = _load_queue()
     entries = [e for e in queue if e.get("kind") == kind]
@@ -235,16 +360,41 @@ def emit_packet(db, kind: str = "confirm_match", deferred_only: bool = False) ->
         questions = []
         for e in group:
             rows = _question_rows(db, cid, e["product"], status)
+            hs = helper.get((cid, e["product"])) or {}
+            dec = _deciding_words(e["product"], ctx)
             q = {
                 "observation": e["observation"],
                 "product": e["product"],
+                # THE VERDICT AND EVIDENCE AT THE TOP (plan §5). The reviewer's first
+                # question is always "what did the model think and why"; it used to be two
+                # fields down among the bookkeeping.
+                "model_said": "MATCH" if kind == "confirm_match" else "could not decide",
                 "model_reason": e.get("reason"),
                 "model_confidence": e.get("confidence"),
+                # THE DECIDING WORDS, computed. See _deciding_words: read
+                # not_in_any_confirmed first, it is where a false match hides.
+                "deciding_words": dec,
+                # THE SECOND OPINION, named for what it is worth rather than left to look
+                # like corroboration. Measured 2026-08-23: where this helper was most
+                # confident a pair matched, an adjudicator sided against it 68 times in 69.
+                # It is carried because its LOW end has been shown to agree with the board,
+                # and it must not be read as support for a MATCH.
+                "helper_score_low_end_only": hs.get("helper_score"),
                 "rows_live": len(rows),
                 "stores": sorted({r["store_id"] for r in rows}),
                 # Echoed onto every verdict at ingest so the UPDATE can scope
                 # itself to the status this question is actually waiting in.
                 "from_status": status,
+                # ORDERING KEY (plan §5, "easiest first"), kept visible so the order can be
+                # argued with. How many of this listing's words are vouched for by NO
+                # confirmed sibling - an adjudicated signal, not a model's; fewer is easier.
+                # None where the
+                # commodity has no confirmed sibling at all: there the count would be an
+                # artefact of having no precedent, and a commodity with no precedent is
+                # genuinely harder to review, so those sort last on an honest absence rather
+                # than on a number that looks like a measurement.
+                "unvouched_words": (None if dec["no_confirmed_precedent"]
+                                    else len(dec["not_in_any_confirmed"])),
             }
             if kind == "contested":
                 q["adjudicate_from_scratch"] = True
@@ -252,11 +402,39 @@ def emit_packet(db, kind: str = "confirm_match", deferred_only: bool = False) ->
                 q["deferred_reason"] = e["deferred_reason"]
                 q["store_page_hint"] = _store_page_hint(cid, rows)
             questions.append(q)
-        questions.sort(key=lambda q: -q["rows_live"])
+        # EASIEST FIRST (plan §5), and deliberately NOT by either model's score. The local
+        # model's confidence does not separate its true matches from its false ones - the
+        # bench's false matches carried 0.95-0.98 - and the helper's high end is 68-of-69
+        # wrong. Both would put the most misleading rows on top. So the order is how much of
+        # the listing is already vouched for by an ADJUDICATED confirmation, with row count
+        # breaking ties, which is the same coverage-return argument as before.
+        questions.sort(key=lambda q: (q["unvouched_words"] is None,
+                                      q["unvouched_words"] if q["unvouched_words"] is not None else 0,
+                                      -q["rows_live"]))
         ctx["rows_total"] = sum(q["rows_live"] for q in questions)
         ctx["questions"] = questions
         commodities.append(ctx)
     commodities.sort(key=lambda c: -c["rows_total"])
+
+    # BATCH SIZE IS ITSELF A LEVER (plan §5). 326 confirm_match questions is not one session,
+    # and a packet nobody finishes teaches nothing about how many one session clears. The cap
+    # is applied AFTER ordering so a capped packet is the easiest N rather than an arbitrary
+    # N, and what was left behind is stated rather than silently missing.
+    dropped = 0
+    if limit and limit > 0:
+        kept, n = [], 0
+        for c in commodities:
+            if n >= limit:
+                dropped += len(c["questions"])
+                continue
+            room = limit - n
+            if len(c["questions"]) > room:
+                dropped += len(c["questions"]) - room
+                c["questions"] = c["questions"][:room]
+            c["rows_total"] = sum(q["rows_live"] for q in c["questions"])
+            n += len(c["questions"])
+            kept.append(c)
+        commodities = kept
 
     instructions = (
         "For each question return one verdict object: {observation, "
@@ -300,6 +478,8 @@ def emit_packet(db, kind: str = "confirm_match", deferred_only: bool = False) ->
         "instructions": instructions,
         "questions_total": sum(len(c["questions"]) for c in commodities),
         "swept_from_db": swept,
+        "batch_limit": limit,
+        "questions_left_for_a_later_packet": dropped,
         "other_kinds_not_in_this_packet": other,
         "commodities": commodities,
     }
@@ -549,6 +729,10 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Escalation review lanes "
                                              "(confirm-match and contested)")
     ap.add_argument("--emit-packet", action="store_true")
+    ap.add_argument("--limit", type=int, default=None,
+                    help="cap the packet to the N easiest questions (plan §5: batch size is "
+                         "itself a lever). Applied after ordering; what is left over is "
+                         "reported, not silently dropped.")
     ap.add_argument("--kind", choices=sorted(KIND_STATUS), default="confirm_match",
                     help="which queued question kind to emit (default confirm_match)")
     ap.add_argument("--deferred-only", action="store_true",
@@ -563,7 +747,8 @@ def main() -> int:
 
     with open_db() as db:
         if args.emit_packet:
-            p = emit_packet(db, kind=args.kind, deferred_only=args.deferred_only)
+            p = emit_packet(db, kind=args.kind, deferred_only=args.deferred_only,
+                            limit=args.limit)
             packet = json.load(open(p, encoding="utf-8"))
             print(f"review packet [{packet['kind']}"
                   f"{', deferred-only' if packet['deferred_only'] else ''}]: {p}")
@@ -575,8 +760,13 @@ def main() -> int:
                 print(f"  {packet['other_kinds_not_in_this_packet']} queue entr(ies) "
                       f"of another kind are NOT in this packet — emit them with "
                       f"--kind")
-            print("Review in batches of ~50, biggest rows_live first; "
-                  "ingest each batch with --ingest.")
+            if packet.get("questions_left_for_a_later_packet"):
+                print(f"  capped at {packet['batch_limit']}; "
+                      f"{packet['questions_left_for_a_later_packet']} question(s) wait for a "
+                      f"later packet")
+            print("Ordered EASIEST FIRST - by how much of each listing is already vouched for "
+                  "by an adjudicated confirmation, never by either model's score. Ingest with "
+                  "--ingest; cap a session with --limit.")
         if args.ingest:
             res = ingest(db, args.ingest)
             print(f"confirmed {len(res['confirmed'])}  "
