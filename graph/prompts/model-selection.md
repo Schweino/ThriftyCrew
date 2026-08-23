@@ -1484,3 +1484,63 @@ What it did buy is real and smaller than the sixth addendum claimed:
 
 A fair price for a diagnostic; a bad price for a model. The corrected labels stay in the
 corpus — they are not wrong, they are simply not worth what they cost.
+
+## Addendum 2026-08-23 (fourth) — §4, and whether the 27B makes sense at all
+
+Asked out loud after the seed sweep: *if the regex is better, does it even make sense to
+have a local LLM?* The question deserved a number rather than an argument, and §4's audit
+set is the number.
+
+First, a correction to how the "95%" of the second addendum reads. It measured *when the
+regex REJECTS a product, is it right to reject* — on 224 pairs the regex had already
+rejected. **The contested set is by definition the rows where no include pattern matched.**
+The regex does not lose those questions, it abstains; its accuracy there is undefined, not
+95%. On the live graph the rules settle 22,140 of 26,740 rows — 83% — and the model only
+ever sees what is left.
+
+### 1. The audit
+
+3,315 banked rejections are the local model's own and unreviewed. 192 were ruled on by an
+independent reasoner that never saw the model's verdict, in two sets **shuffled together
+and unmarked**, so no reviewer could be primed to hunt for errors in the set chosen for
+being suspicious:
+
+| set | decided | model was WRONG | rate | 95% CI |
+|---|---|---|---|---|
+| random sample | 117 | **0** | 0.0% | 0.0% – 3.2% |
+| helper disagrees (> 0.9) | 69 | **1** | 1.4% | 0.3% – 7.8% |
+
+Scaled to all 3,315: best estimate **0** wrong rejections, upper bound ~105.
+
+**The plan's "~35 missing cells" is not there.** It sits inside the interval, but the
+point estimate is zero and 117 straight correct rejections is not what a lane leaking
+cells looks like. §4's audit row closes with a number instead of a suspicion.
+
+### 2. And it inverts what the third addendum's author speculated
+
+The suggestion three hours earlier was that the 568M helper — five seconds for all 435 —
+might make the 27B redundant. Where the helper was MOST confident the model had blundered,
+**the model was right 68 of 69**. The helper does not detect the model's errors; it
+manufactures its own. The single real error in 192 rows is a pancake syrup rejected from
+`maple-syrup`.
+
+### 3. What that settles
+
+- **The 27B earns the machinery.** The nightly chain, the card handoff, the serve/stop
+  dance, the 06:30 hard stop all exist to schedule and contain one model, and a lane whose
+  rejections are ~100% correct is worth containing.
+- **Reject-only is vindicated in its exact shape.** This model's REJECTIONS are excellent
+  and its MATCHES are 37% false. That asymmetry is precisely what reject-only encodes, and
+  it was designed on a hunch that now has a measurement under it.
+- **§4's routing table needs re-deriving.** It treats a high helper score as evidence of a
+  match ("helper YES + LLM YES -> strong lead", a §8 auto-confirm candidate). 68-of-69
+  wrong says that row cannot be built on as written. The FILTER is unaffected — it reads
+  only the helper's LOW scores, and those agreed with the model 19 of 21 with zero
+  disagreements.
+
+### 4. The caveat, named
+
+The reviewer is a language model and so is the thing it graded; a shared blind spot would
+look exactly like agreement. A human spot-check of a dozen rows would settle it and is the
+cheapest outstanding item in this plan. And 0 of 117 bounds the rate at 3.2% — not the
+same as proving it is zero.
