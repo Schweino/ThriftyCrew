@@ -236,6 +236,21 @@ sanctioned owner of scheduled GPU work) is a later decision for Brad.
    absence of a signal, and it is exactly the case worth a model. So `--crawl` writes the matched
    family or `null`, and `--classify` resolves the nulls. Measured on the 858-entry pool: the keyword
    vocabulary settles the large majority for free, and no GPU is needed to stock a backlog at all.
+   **CORRECTED 2026-08-23 (gate round 1): the mechanical protein/method/starch detectors as first
+   written were first-substring-wins, and the first REAL 20-dossier pop showed that to be wrong in
+   ways no synthetic fixture had exercised** - "Chicken Madeira" read as BEEF from its beef broth,
+   "Jalapeno Popper Chicken" read as PORK from its bacon, "chili powder" made a breakfast taco a
+   STEW, breadcrumbs made Swedish meatballs a `bread` starch, and "Chicken and Stuffing Casserole"
+   read as SAUSAGE from the sausage in its stuffing. The detectors are now weighted: broth/stock
+   phrases are removed before matching; a named CUT outranks a bare noun; bacon and ham are weak
+   evidence; a protein named in the TITLE wins when the ingredients corroborate it ("Chicken Fried
+   Steak" is the counterexample that keeps the title rule honest - it names chicken, contains none,
+   and correctly reads beef); method words are word-boundary regexes with the title deciding when it
+   speaks. Every one of those defects is frozen as a must-fire fixture with its clean twin. And the
+   correction MECHANISM matters more than any one correction: `--resignature` re-derives every
+   signature from the CACHED page, so a detector fix reaches the whole pool without a single
+   re-fetch - 652 signatures re-derived in 60 s on the day, zero network. Fix the detector,
+   re-derive from cache, never crawl again; that is the pattern for this entire class.
    **The enums are not invented here**: the method vocabulary is the one considered-dishes.ps1
    already records (`-Method` values in `db\considered-dishes.json`), and the sauce-family
    vocabulary is the one make-saturation.ps1 already derives - one taxonomy shared with the
@@ -282,6 +297,20 @@ sanctioned owner of scheduled GPU work) is a later decision for Brad.
    will hold it; there is exactly one road into the pool. The pool is the
    institutional memory the 48% dupe churn never had.
 
+   **GAP, found 2026-08-23 and left open deliberately: recipes IN FLIGHT in another open run are
+   invisible to the dedup surface.** It covers the live catalog (find-similar + the embedding lane's
+   catalog side), the backlog (pool side) and prior rulings - but a recipe between acceptance and
+   publication in a DIFFERENT run is in none of those: not in the digest (unpublished), not in the
+   pool (sourced before the pool existed or taken by that run), not in the ledger (no ruling yet).
+   Measured on the gate run: `jalapeno-popper-chicken-casserole` sits at `priced` in the lowcarb-100
+   run dir while the pool offered `jalape-o-popper-chicken` as novel and the decider accepted it -
+   arguably the same dinner by its own three-of-four rule, and no signal could have shown it. The fix
+   is mechanical: a third neighbour `side: "in-flight"`, read from `runs\*\state` for states that are
+   neither rejected nor published, surfaced in the dossier like the other two sides. It belongs to
+   the next session that touches harvest.py, or to D9's daemon at the latest; it does NOT block D6.
+   Until it lands, the batch auditor remains the catch-point for this collision class - at the cost
+   v3 exists to stop paying.
+
    Politeness is part of the contract: respect robots.txt, per-domain pacing of one request every
    2-4s regardless of worker count, a per-domain nightly cap, and every fetch outcome recorded to
    source-domains (three failures = blocked, exactly as the ledger already scores).
@@ -327,7 +356,18 @@ out. The select lane's 333 agents / 242M tokens become ~1 call per 10 candidates
 **Authorship vs pen:** the decider remains the sole AUTHOR of acceptances and considered-dishes
 rulings - but in v3 it returns them as a schema'd verdict and the orchestrator performs the writes
 (accepted-slugs.json, `considered-dishes.ps1 -Record`, state advances), attributed `-By decider`. The
-agent stops running shell entirely. Acceptance pacing keeps v2's WIP discipline: the orchestrator
+agent stops running shell entirely.
+**Two dispatch-shape rules the gate run earned (2026-08-23, both now bridge behavior and both D9
+fixtures):** (a) **every decide dispatch after the first carries the run's accepted-so-far list.**
+The bridge's first round omitted it and the "single decider" became N independent deciders wearing
+the same name: it rejected `antipasto-salad` as a near-twin (bge 0.977) in batch 1, then ACCEPTED
+`antipasto-pasta-salad` in batch 2, and accepted two different chicken salads across the rounds.
+v2's dispatch carried "already accepted this run"; dropping it in the port was the error. The D9
+fixture: the second batch's prompt provably contains the first batch's acceptances. (b) **the
+daemon marks candidates `taken:<run-id>` at POP time, before dispatch** - the bridge does not,
+which is safe only while exactly one run exists; two concurrent runs popping the same available
+candidates would both pay a decider for them.
+Acceptance pacing keeps v2's WIP discipline: the orchestrator
 pops candidates from the pool only while accepted-but-unresolved recipes sit under the WIP limit
 (25), so a deep backlog cannot flood the paid lanes.
 Local 27B's role: none in the ruling. (An adversarial "argue this is a dupe of its top neighbour"
@@ -353,6 +393,18 @@ escalation-role text ("you receive only pages the local pass could not settle; t
 and unverified lines are in your dispatch - do not re-run the local script"), because in v3 every
 page that reaches it has ALREADY failed the local pass, and re-running local_extract there would
 waste minutes re-earning a failure the dispatch already carries.
+**Three D6 build notes earned in phase 1 (2026-08-23):** (1) **reuse harvest.py's parsers.**
+`find_recipe_node`, `flatten_instructions`, `ingredient_lines`, `extract_number` and `parse_yield`
+exist there with fixtures, shape-matched to fetch-recipe.ps1's PS implementations; a third JSON-LD
+parser inside local_extract.py would be the pu-lib trap with a new face. Import them. (2) **when
+llama-server is down, rungs 1 and 2 are BLOCKED (exit 2) - never silently escalated to rung 3.**
+Rung 3 exists for pages the local pass FAILED ON, not for hours nobody started the server; a sweep
+that quietly promotes every page to a Claude extractor because the card was idle re-creates the v2
+cost structure in one unattended evening. Same refusal contract as `harvest.py --classify`, which is
+the pattern's reference implementation. (3) **the phase-2 gate corpus already exists**: 2,293 pages
+sit in the fetch cache and four accepted recipes sit at `selected` in
+`runs\hunt-2026-08-23-v3-phase1-mini`, every one with its page cached - the "50 cached pages" the
+gate asks for need no fetching and no politeness budget.
 Expected Claude extraction calls: ~5-15% of pages (bench it in the proving run). Extraction
 was only 1.6% of tokens - this is as much an *accuracy and latency* play (JSON-LD is the page's own
 statement; no 24k-char prompt truncation) as a cost one.
@@ -377,6 +429,14 @@ pre-computed: scaled grams x food-DB vs source-published macros, so it verifies 
 `-Advance`, `ingredient-queue -Add` and `-Derive` from that structure. This retires the B8 class
 (`-Terms 'a,b'` bound as one composite string parking recipes forever) by construction - a JSON
 array cannot be comma-joined by accident - instead of by prompt warning.
+**ADDED 2026-08-23, from the source-domains lesson: `db\ingredient-resolutions.json` is the next
+single-file read-modify-write ledger in a lane that fans out.** The map lane runs 2 concurrent
+workers, and source-domains.ps1 under the harvester's 8 measured what last-writer-wins costs a
+ledger like this: 2,293 outcomes recorded as 65, a 97% loss. D7 builds resolution writes behind the
+same named-system-mutex pattern from day one (or routes them through the daemon's single pen with
+the rest of the bookkeeping), with a concurrent-writers fixture; it does not wait to measure the
+loss a second time. The audit rule generalises: before any lane's cap is raised above 1, enumerate
+every single-file ledger its stage writes and give each one a mutex or a single pen.
 Registrar path unchanged. Local 27B's role in mapping: **none in the initial build** (a
 vocab-candidate ordering signal is DEFERRED alongside S2's and S5's; and it could only ever rank,
 never resolve - "Dry White Wine" auto-matching "White Wine Vinegar" is the founding reason).
@@ -517,7 +577,16 @@ the plan. The adapter therefore reconstructs each agent from its definition file
    body>`, `--allowedTools <the frontmatter tool list>`, `--output-format json`, cwd = repo root,
    and the estate's permission settings. The user prompt is the dossier + stage contract only.
 3. Parse the JSON result envelope; validate the payload against the stage schema in the daemon;
-   re-ask once on schema failure; then per-slug retry budgets and the breaker exactly as hunt-lib
+   re-ask once on schema failure - **and enum violations ARE schema failures: the re-ask quotes the
+   refusal's named violations back to the agent, and the daemon NEVER auto-coerces (ADDED 2026-08-23,
+   measured).** On the gate run a decider whose prompt spelled out the closed enums still returned
+   nine invented values (`soup/stew`, `turkey/beef`, `no-cook`, `skillet+assemble`, `grill`, `egg`,
+   ...); decide_apply refused the whole payload with every violation named, which is the correct
+   machine behavior. The gate demonstration then normalised those nine BY HAND, once, with the
+   mapping recorded in the run's scratchpad - a one-time act of the operator, not a precedent.
+   Silently coercing an invented taxonomy into a legal one is how a ledger stops noticing it is
+   being forked, so the daemon's only move on an enum violation is the re-ask;
+   then per-slug retry budgets and the breaker exactly as hunt-lib
    prescribes. A transport/timeout failure is a null - STUCK, never a verdict (B5).
 4. Where a frontmatter field has no CLI flag (e.g. `effort`), record the gap in the drill report
    rather than silently dropping it; if it materially changes an agent's behavior, that is a
@@ -580,7 +649,7 @@ from prose, and SKILL.md forbids exactly that. So the port is governed:
 |---|---|---|
 | harvest fetches | 8 async workers | network + per-domain politeness |
 | JSON-LD parse, band filter, signatures | 8-proc pool | trivial CPU |
-| bge-m3 embeddings | CPU first (measure); else GPU batch in the sidecar window | see §3 S1 |
+| bge-m3 embeddings | **CPU, measured and settled 2026-08-23: 36.36 ms/text, whole-pool build 24 s cold / 0 s warm - the GPU branch is CLOSED, not deferred** | trivial CPU (§3 S1) |
 | local 27B calls (line-split, full extract, enum, adversarial) | 4 (server --parallel 4; more queues) | GPU |
 | QA battery / wave-preaudit | 8-wide across slugs | CPU, seconds |
 | cost engine, costed.json, recipes-db | **serialized by the daemon's cost-engine mutex (§4.5)** - spec assembly stays parallel, the cost pass does not | correctness |
@@ -595,7 +664,8 @@ single-writer; vendor pacing is the floor no core count moves.
 llama-server is started by hand at run start and stopped at run end (`graph\pipeline\nightly.ps1
 -StopOnly`), per the standing ownership rule; a hunt run must be off the card before the 07:00 ad
 pull and 08:00 capture (their sweeps go BLIND otherwise), and the nightly chain owns 21:30-06:30.
-Harvest's embedding batches schedule around llama-server, or run CPU. Nothing new schedules
+Harvest's embedding batches run CPU - measured 2026-08-23 at 36.36 ms per signature string, the
+whole question is closed and nothing about harvest ever asks for the card except `--classify`. Nothing new schedules
 llama-server; install-nightly-task.ps1 remains the only scheduler.
 
 ### 4.4a Model pins: preserved, and re-ratified against the changed roles
@@ -654,6 +724,11 @@ build time, fix THIS document in the same commit rather than deviating silently.
 | artifact | path | producer -> consumers |
 |---|---|---|
 | candidate pool | `meal-prep\db\candidate-pool.json` | harvest.py (SOLE writer; the daemon serializes every mutation call through one lock) -> daemon, dossier builder |
+| harvest cursor + nightly caps | `meal-prep\db\harvest-state.json` | harvest.py -> itself (committed) |
+| embed CPU latency record | `meal-prep\db\harvest-embed-latency.json` | harvest_embed --measure -> the §4.3 GPU decision (committed) |
+| embedding neighbours | `meal-prep\db\harvest-neighbours.json` | harvest_embed --build -> harvest --rescore (NOT committed - regenerable in 24 s cold, 0 s warm) |
+| decide dossier batch | run-scoped, from `harvest.py --dossier --out` | harvest.py -> bridge/daemon decide dispatch (transient) |
+| DECIDE verdict file | run-scoped, the workflow's verdicts serialized | bridge/daemon -> decide_apply.py (transient) |
 | extraction | `<RunDir>\extracted\<slug>.json` | rung 1/2 (local) or rung 3 (Claude) -> map, QA, coverage_check |
 | map pre-resolve table | `<RunDir>\mapped-pre\<slug>.json` | map-preresolve -> mapper dispatch, daemon |
 | mapper decision file | `<RunDir>\mapped\<slug>.json` | mapper agent (unchanged contract) -> skeleton builder, auditor |
@@ -711,6 +786,10 @@ build time, fix THIS document in the same commit rather than deviating silently.
     salad and a frittata both trip the keyword rules and both can be perfectly good batch prep, so the
     mechanical layer records the concern and the decider rules. Local may reject on arithmetic it can
     defend; "is this the kind of dinner this board sells" is not arithmetic.
+  Measured size with all three additions: 1.9-3.3 KB per dossier against S2's 2-3 KB budget - the
+  stretch is deliberate and paid for itself, buying a 37% token drop and 5-to-3 tool calls per batch
+  between the gate rounds. The cap that carries the cost model is the batch size (<=10), not the
+  kilobyte.
 - **`record` enum enforcement (ADDED 2026-08-23, measured).** `record.protein` must be one of
   chicken/beef/pork/turkey/sausage/any, and `record.method` must be one of the values
   `db\considered-dishes.json` already records, plus `any`. Checked in `validate_decide`, not asked for
@@ -863,9 +942,12 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   is kept flagged; an ambiguous serving basis demotes to band-unverified (never a guess); an exact
   already-published slug never enters the pool; a `ruled:` candidate never resurfaces as available;
   an --ingest candidate gets the same band/signature/dedup treatment as a crawled one.
-  BUILT 2026-08-23. `meal-prep\pipeline\harvest.py`, stdlib-only under C:\Codex\Python312, 57
-  fixtures green, marker HARVEST-COMPLETE, verbs --crawl / --classify / --ingest / --mark-taken /
-  --mark-ruled / --dossier / --rescore / --status. Three things the build settled that the plan had
+  BUILT 2026-08-23. `meal-prep\pipeline\harvest.py`, stdlib-only under C:\Codex\Python312, 84
+  fixtures green (57 at first commit; the gate round added the signature-detector, batch-concern,
+  neighbour-side and entry-guard classes), marker HARVEST-COMPLETE, verbs --crawl / --classify /
+  --ingest / --mark-taken / --mark-ruled / --dossier / --rescore / --resignature / --status
+  (--resignature re-derives every signature from the cached page: the correction mechanism for the
+  whole detector class, zero network). Three things the build settled that the plan had
   left to the implementer, each recorded above where it belongs (S1 items 1, 4 and 5): the ledger
   holds 7 reliable publishers rather than 5, so no sourcer discovery round was needed; the sauce
   family is settled mechanically first and only the residue goes to the 27B; and out-of-band and
@@ -884,7 +966,7 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   latency measured and recorded before any GPU scheduling is built. Fixture: cache eviction twin
   proving harvest vectors survive a sweep save.
   BUILT 2026-08-23. `meal-prep\pipeline\harvest_embed.py`, run under `sidecar\.venv` (it exits 2
-  naming the right interpreter under any other one, rather than half-working). 10 fixtures green.
+  naming the right interpreter under any other one, rather than half-working). 11 fixtures green.
   CPU measured at 36.36 ms per signature string and recorded, and the plan's "if CPU is too slow"
   branch is therefore CLOSED as not needed - see S1. The eviction twin proves both halves: in a
   SHARED namespace a sweep's `save(keep_only=...)` really does evict harvest vectors, and in the
@@ -900,12 +982,17 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   DECIDE schema, the exit-code constants, the state routing table above, `validate_decide`, and
   `ps_invoke`; D9 ports hunt-lib.js's pure functions into the same module under section 4.2's parity
   gate. `harvest.py --dossier` pops ranked candidates and emits 2-3 KB dossiers. `decide_apply.py` is
-  the deterministic writer - validate-everything-then-apply, 32 fixtures including an END-TO-END DRILL
+  the deterministic writer - validate-everything-then-apply, 39 fixtures (32 at first build; the gate
+  round added the closed-enum refusals after a live decider invented nine taxonomy values) including
+  an END-TO-END DRILL
   against a scratch run dir that asserts the ledger row equals the verdict's `record` block field by
   field, that `dupe_of` lands as DISTINCT terms, that a deferral goes back on the shelf, and that
   re-applying a verdict does not double-count an acceptance. `hunt-pool-seed.js` is the phase-1 bridge
   workflow. The recipe-dedup-selector prompt is rewritten to dossier-in / verdict-out and now says in
-  as many words that it runs no commands and writes no files; `opsudit-prompt-backup.ps1 -Sync` was
+  as many words that it runs no commands and writes no files - and, after the round-1 decider wrote
+  a v2-shape `selected.json` into the run dir despite that prose, the prohibition was converted into
+  a read-only frontmatter tool list (`tools: Read, Grep, Glob`), which is the enforcement and the
+  prose is now just the explanation; `ops\audit-prompt-backup.ps1 -Sync` was
   run and `ops\prompt-backup` is committed with it.
   **The bridge deliberately does NOT apply verdicts inside the sandbox.** Doing so would mean spawning
   a Claude agent whose entire job is one PowerShell line, which is finding F2 - so the workflow returns
@@ -932,6 +1019,18 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   completions produce serialized cost passes and a parseable costed.json); plus the adapter drill
   artifacts: per-agent behavior diff vs a Workflow twin and the measured per-dispatch fixed
   overhead.
+  **ADDED 2026-08-23, five more D9 obligations from phase 1's measured findings:** every PowerShell
+  call that carries an array goes through `hunt_lib.ps_invoke` - the `-File` binding twins (silent
+  drop, composite string) are frozen in decide_apply's suite and the daemon inherits them, never a
+  second invocation style; any single-file ledger written by a lane whose cap exceeds 1 takes the
+  source-domains named-mutex pattern, with a concurrent-writers fixture PER LEDGER (the measured
+  cost of skipping one: 2,293 outcomes recorded as 65); the decide dispatch threads accepted-so-far
+  (fixture: the second batch's prompt contains the first's acceptances); candidates are marked
+  `taken:<run-id>` at pop, before dispatch; and the dedup surface gains the `in-flight` side from
+  open run dirs (the jalapeno-popper collision, S1). Also inherited from the bridge: the daemon
+  writes the decide lane-log lines natively with real token stamps - the bridge cannot (no shell in
+  the sandbox), so until D9 lands every bridge run ends with the operator recording them by hand,
+  as the mini-run's were.
 - **D10 price evidence pre-pass** - probe + unattended CDP gathering wired into the price lane's
   dossier; pricer prompt rewritten to adjudicate-and-attend. Fixture: an UNUSABLE sweep state reads
   as PENDING, never not-carried (the founding rule, mechanized).
@@ -939,6 +1038,13 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   agent definitions (prefix-cache friendly), stage contracts updated to dossier-in/ruling-out, the
   v3 lane diagram, and the run-budget practice (fresh session per phase; ask Brad for the usage %
   before each phase - the daemon cannot see the meter either).
+  **ADDED 2026-08-23: every rewritten agent gets the MINIMAL tool list its contract needs, declared
+  in frontmatter.** On the gate run a decider forbidden IN PROSE from writing files wrote a v2-shape
+  `selected.json` into the run dir anyway; the fix was `tools: Read, Grep, Glob`, not better prose.
+  A prohibition in prose is a request; a missing tool is a contract. Where an agent must keep Write
+  for its work product (the writer's intake prose, the extractor's transcription), the enforcement
+  is the mechanical postcondition instead - D8's locked-field diff, D6's substring verifier - and
+  the D5 decider conversion is the reference for the pattern.
   **Every agent-prompt or skill edit in D5/D6/D7/D8/D10/D11 must be followed by
   `ops\audit-prompt-backup.ps1 -Sync` with `ops\prompt-backup` committed** - the estate audits live
   prompts against that mirror and flags unsynced drift as a finding.
@@ -968,6 +1074,9 @@ Workflow orchestrator** - none of them is inert while phase 3 waits:
   first and third steps become function calls in its own process with nothing about the second
   changing. hunt-orchestrator.js is untouched apart from a header note marking its hunt/adjudicate
   lanes superseded; DRAIN mode still carries whatever the bridge seeds from `selected` downstream.
+  One operating duty until D9: the bridge cannot write lane-log lines, so after each bridge run the
+  operator records the decide dispatches under `select` via `hunt-run.ps1 -Lane` with lane-tokens'
+  per-transcript figures - §4.5's lane-log completeness rule does not pause for the interim.
 - **Phase 2 bridge:** until the daemon exists, rungs 1-2 of the extraction ladder run as a
   pre-extraction sweep over the accepted candidates (a script pass on the box, since the Workflow
   cannot shell), and the workflow's extract lane is dispatched only for the escalations the sweep
@@ -1022,11 +1131,17 @@ in recipes-db.json).
     "is this a batch dinner" calls; (c) my bridge dispatched each batch with no memory of the last, so
     the single decider was really N independent ones - it rejected `antipasto-salad` as a dupe in
     batch 1 and accepted its twin `antipasto-pasta-salad` in batch 2.
-  - **Round 2, same 20 candidates, after fixing all three: 15 of 20 exact, 16 of 20 binary.** Of the
-    four remaining disagreements, two are cases where the DECIDER caught what the hand check missed
-    (`balsamic-chicken` is plated as a berry-and-arugula salad; `lentil-sausage-soup` is a different
-    legume and a tomato base, and lentils are absent from the catalog entirely), and two are genuine
-    borderline splits on the near-duplicate threshold that the decider itself flagged as borderline
+  - **Round 2, same 20 candidates, after fixing all three: 15 of 20 exact; on the 18 candidates the
+    decider actually RULED, 15 of 18.** (An earlier draft of this record said "16 of 20 binary" and
+    "four disagreements" - both were arithmetic errors, corrected 2026-08-23 against the recorded
+    verdict files; there are FIVE disagreements.) Two of the five are DEFERRALS, which are
+    non-rulings routed back to the shelf: `instant-pot-pulled-pork` (hand check said dupe; the
+    decider flagged the same 3-of-4 collision and deferred it to audit) and `balsamic-chicken` (hand
+    check said accept; the decider's reason caught what the hand check missed - the page plates the
+    chicken over a berry-and-arugula salad). One is the decider being right where the hand check was
+    coarse: `lentil-sausage-soup` is a different legume and a tomato base, not another white-bean
+    soup, and lentils are absent from the catalog entirely. Two are genuine borderline splits on the
+    near-duplicate threshold that the decider itself flagged as borderline
     (`mushroom-chicken-pasta`, `chicken-broccoli-ziti`). **Zero cases where the decider is plainly
     wrong.** Token cost fell with the same fixes: 1,672,970 context-moved in round 1 to 1,050,460 in
     round 2 (-37%), with tool calls per batch dropping 5 -> 3, which is the corpus reads going away.
@@ -1035,6 +1150,19 @@ in recipes-db.json).
     its job on live output; after normalisation it wrote 4 acceptances, 5 dupe rejections to run state,
     18 ledger rows all `by=decider`, 9 not-fit rulings that correctly took NO run state, and returned
     2 deferrals to `available`.
+  - *Addendum, same day.* The gate demonstration ran the pool/ledger writes against SCRATCH copies
+    while the run-dir state writes were real - which left the committed run dir claiming state the
+    live pool and ledger did not carry, a trap for the next session. The verdict was therefore
+    re-applied through the same decide_apply path against the LIVE stores (idempotent on the run
+    dir: state advances and the accepted-slugs append skip work already done). Live pool after:
+    661 available (226 band-verified), 18 newly ruled, the 2 deferrals back on the shelf; 18 rulings
+    in `db\considered-dishes.json`, all `-By decider`, run `hunt-2026-08-23-v3-phase1-mini`. And one
+    §4.5 deviation recorded: the bridge cannot write lane-log lines (no shell in the sandbox) and
+    decide_apply does not know token counts, so the mini-run's four decide dispatches were
+    lane-logged by hand under `select` with each transcript's tokens measured by lane-tokens itself
+    (r1: 741,282/19,444 and 896,058/16,186; r2: 562,011/5,784 and 472,877/9,788). D9's daemon owns
+    that line natively; until then every bridge run ends with the operator recording its decide lane
+    lines the same way.
 
 *Gate 3 - front-end token share re-measured on a mini-run in the phase-1 bridge configuration.*
 **MET.** Measured with `lane-tokens.ps1`, the same instrument and the same context-moved measure that
@@ -1073,6 +1201,17 @@ Two clarifications recorded for the phase-1 builder, so neither becomes a mid-bu
   as fixtures in `wave-preaudit.ps1 -SelfTest`; read them before writing any new PS collection code,
   and prefer an end-to-end drill (run the script as a child against a scratch root) for anything whose
   failure mode only appears when results are collected.
+  **A THIRD trap joined them during phase 1 (2026-08-23, measured): `@(<pipeline> | ConvertFrom-Json)`
+  on a MANY-element JSON array binds ONE element of type Object[].** ConvertFrom-Json emits the whole
+  array as a single pipeline object in PS 5.1, and `@()` then collects that one object - so the
+  estate's standing "wrap ConvertFrom-Json in @()" rule is only the one-element half of the story,
+  and on a many-element file it is actively wrong. ASSIGN FIRST, THEN WRAP (`$p = ... | ConvertFrom-Json;
+  $rows = @($p)`). It cost both new `-BatchFile` roads their entire batch - every query collapsed into
+  one row whose key was all the keys joined by spaces - and it was invisible at batch size one, which
+  was exactly the size the first fixture used. Frozen as must-fire three-row fixtures in
+  `find-similar.ps1 -SelfTest` and `considered-dishes.ps1 -SelfTest`. **D7's map-preresolve.ps1 and
+  D8's build-intake-skeleton.ps1 are the next new PS collection code this plan orders; their builders
+  read all three traps first, and any fixture over a collection uses at least three elements.**
 
 **Stop-rules.** Re-measure with lane-tokens/harvest-lane-tokens after phases 1, 3 and 6; if the
 remaining spend concentrates somewhere this plan did not predict, the measurement wins and the order
@@ -1096,6 +1235,13 @@ fall to zero. The audit's context shrinks to residue + report.
 | re-audit after a recipe-local repair | a full auditor pass | battery seconds + scoped sign-off |
 | pricer session shape | browser-driving marathon | adjudication + 2 attended stores |
 
+Phase-1 measurements against these targets (2026-08-23, the bridge mini-run; full evidence in the
+section 6 gate record): front-end share **6.4%** against the <15% target, and **1.2** front-end
+Claude invocations per published recipe against the ~27 measured baseline, both at the plan's
+12-candidates-per-published yield assumption and both by lane-tokens' context-moved measure - the
+same instrument as the 75.5% baseline. The billed-tokens and wall-clock rows remain phase 6's to
+measure.
+
 Wall-clock steady state becomes write -> QA -> wave (the paid lanes), with harvest and batteries
 off-path. The pricer singleton and vendor pacing remain the floor for absent-term recipes, by design.
 
@@ -1108,7 +1254,7 @@ off-path. The pricer singleton and vendor pacing remain the floor for absent-ter
 | unbid ingredient reaches writer | B-2 rule in prompts | mechanical hold at `mapped` |
 | prose number drift | QA/audit reading prose | writer cannot produce numbers (skeleton) + battery equality check |
 | hand-adjusted scaling line | QA judgment | scale-ratio arithmetic in the battery |
-| duplicate dish published | 8-agent adjudication + decider | signature + embedding + prior-rulings dossier, then the same decider |
+| duplicate dish published | 8-agent adjudication + decider | signature + embedding + prior-rulings dossier, then the same decider (in-flight recipes in OTHER open runs stay a blind spot until S1's `in-flight` side lands - gap dated 2026-08-23) |
 | "no results" suggestion grid read as results | pricer discipline by hand | search-verdict-lib enforced in code on every store lane |
 | unchecked store read as not-carried | prompts + queue arithmetic | unchanged queue arithmetic + UNUSABLE-from-code sweeps |
 | audit certifying stale bytes | P1b mtime gate | unchanged, plus battery re-runs are cheap so freshness is easy to restore |
@@ -1122,6 +1268,13 @@ narrows what they may check - it narrows what they must re-derive to earn a verd
 - **The harvester starves on enumeration** (publishers without sitemaps/REST, or which block
   crawlers). Mitigation: the ladder keeps the Claude sourcer as top-up; source-domains records which
   publishers enumerate; the phase-1 gate measures yield before anything depends on it.
+  MEASURED 2026-08-23: no starvation - all 7 reliable publishers enumerate, 9,012 recipe URLs from
+  sitemaps alone, zero WP-REST fallbacks needed. The number that DOES bound the backlog is the
+  in-band rate: ~11% of crawled pages land band-verified in band (244 of 2,162 pool entries; another
+  435 sit available band-unverified for the decider), and the rate declines as the priority-ordered
+  URLs are consumed. At the standing 60-page nightly cap that is roughly 45 band-verified candidates
+  a night across the estate - fine for steady state, and the reason the gate crawl ran with an
+  explicitly recorded raised cap rather than a bigger default.
 - **Local line-split quietly mangles fields that still substring-verify** (e.g. prep/optional
   misassigned). Mitigation: round-trip coverage check (D6), and source-QA's coverage battery
   downstream pairs on head nouns, which catches item misassignment; measured escalation rate in the

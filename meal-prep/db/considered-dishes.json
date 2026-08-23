@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Dishes this estate has already ruled on. Read by sourcers BEFORE fetching and by adjudicators as prior art. Written by the DECIDER only - it is already the single writer of selection state. Advisory: a sourcer may return a previously-rejected dish with a stated reason.",
     "_key":  "protein|method|sauce-family - identity, not slug, because slugs vary by publisher and the same dinner recurs under many names.",
-    "updated":  "2026-08-16T07:30:14",
-    "count":  54,
+    "updated":  "2026-08-23T18:20:28",
+    "count":  72,
     "dishes":  [
                    {
                        "key":  "any|casserole|cheese",
@@ -813,6 +813,277 @@
                        "run":  "hunt-2026-08-15-lowcarb-100",
                        "by":  "backfill",
                        "at":  "2026-08-16T07:30:14"
+                   },
+                   {
+                       "key":  "sausage|stew|plain",
+                       "slug":  "lentil-sausage-soup",
+                       "name":  "Lentil Sausage Soup",
+                       "protein":  "sausage",
+                       "method":  "stew",
+                       "verdict":  "accepted",
+                       "reason":  "Different legume (lentil) and tomato base vs the live white-bean/creamy sausage soups; widens board; clean hot batch dinner.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:20"
+                   },
+                   {
+                       "key":  "pork|stew|plain",
+                       "slug":  "pork-stew",
+                       "name":  "Pork Stew",
+                       "protein":  "pork",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same dish as live creamy-pork-stew-potatoes-carrots (4/4 axes).",
+                       "dupe_of":  [
+                                       "creamy-pork-stew-potatoes-carrots"
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:20"
+                   },
+                   {
+                       "key":  "beef|bake|plain",
+                       "slug":  "swedish-meatballs",
+                       "name":  "Swedish Meatballs",
+                       "protein":  "beef",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same Swedish-gravy meatball dinner as live swedish-meatball-potato-bowls.",
+                       "dupe_of":  [
+                                       "swedish-meatball-potato-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:21"
+                   },
+                   {
+                       "key":  "beef|skillet|cream",
+                       "slug":  "creamy-beef-and-shells",
+                       "name":  "Creamy Beef and Shells",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same dinner as live cheesy-beef-and-shells-casserole (3/4 axes).",
+                       "dupe_of":  [
+                                       "cheesy-beef-and-shells-casserole",
+                                       "beef-stuffed-shells"
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:21"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "chicken-salad-with-avocado-dressing",
+                       "name":  "Chicken Salad with Avocado Dressing",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Cold dressed salad; doesn\u0027t batch as a hot dinner.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:22"
+                   },
+                   {
+                       "key":  "sausage|skillet|spice",
+                       "slug":  "mexican-breakfast-tacos-chorizo-and-egg",
+                       "name":  "Mexican Breakfast Tacos (Chorizo and Egg)",
+                       "protein":  "sausage",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:22"
+                   },
+                   {
+                       "key":  "any|any|plain",
+                       "slug":  "antipasto-salad",
+                       "name":  "Antipasto Salad",
+                       "protein":  "any",
+                       "method":  "any",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Cold no-cook side salad; not a hot batch dinner.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:23"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "chicken-caesar-wraps",
+                       "name":  "Chicken Caesar Wraps",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Cold soggy-prone wrap; doesn\u0027t hold for batch.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:23"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "jalape-o-popper-chicken",
+                       "name":  "Jalapeño Popper Chicken",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Distinct creamy jalapeño-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:24"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "mushroom-chicken-pasta",
+                       "name":  "Mushroom Chicken Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:24"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "chicken-broccoli-ziti",
+                       "name":  "Chicken Broccoli Ziti",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:25"
+                   },
+                   {
+                       "key":  "sausage|stew|plain",
+                       "slug":  "sausage-and-white-bean-soup",
+                       "name":  "Sausage and White Bean Soup",
+                       "protein":  "sausage",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same dish as live tuscan-white-bean-sausage-soup (sausage/white-bean/kale/cream, bge 0.899); catalog already carries it plus turkey-sausage-kale-white-bean-soup.",
+                       "dupe_of":  [
+                                       "tuscan-white-bean-sausage-soup"
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:25"
+                   },
+                   {
+                       "key":  "beef|casserole|plain",
+                       "slug":  "ground-beef-stroganoff",
+                       "name":  "Ground Beef Stroganoff",
+                       "protein":  "beef",
+                       "method":  "casserole",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same dinner as live ground-beef-stroganoff-pasta (bge 0.965); casserole/cheddar format not a distinct plate.",
+                       "dupe_of":  [
+                                       "ground-beef-stroganoff-pasta"
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:26"
+                   },
+                   {
+                       "key":  "any|bake|plain",
+                       "slug":  "caprese-baked-eggs",
+                       "name":  "Caprese Baked Eggs",
+                       "protein":  "any",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Brunch baked-egg dish with bread; eggs don\u0027t reheat/batch; not a batch dinner main.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:26"
+                   },
+                   {
+                       "key":  "chicken|any|plain",
+                       "slug":  "grilled-chicken-breast-with-strawberry-avocado-salsa",
+                       "name":  "Grilled Chicken Breast with Strawberry Avocado Salsa",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Fresh avocado-strawberry salsa doesn\u0027t hold a batch; cold cook-to-order plate.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:27"
+                   },
+                   {
+                       "key":  "any|any|plain",
+                       "slug":  "antipasto-pasta-salad",
+                       "name":  "Antipasto Pasta Salad",
+                       "protein":  "any",
+                       "method":  "any",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Cold pasta salad side, 17g protein, near-twin of backlog antipasto-salad; not a dinner main.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:27"
+                   },
+                   {
+                       "key":  "any|skillet|plain",
+                       "slug":  "autumn-kale-and-apple-salad",
+                       "name":  "Autumn Kale and Apple Salad",
+                       "protein":  "any",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Cold side salad, ~6g protein, no main; not a batch dinner.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:27"
+                   },
+                   {
+                       "key":  "chicken|any|plain",
+                       "slug":  "chicken-salad-recipe",
+                       "name":  "Chicken Salad Recipe",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Cold mayo chicken salad; lunch/sandwich filling not a dinner; backlog dense with chicken-salad variants.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-23-v3-phase1-mini",
+                       "by":  "decider",
+                       "at":  "2026-08-23T18:20:28"
                    }
                ]
 }

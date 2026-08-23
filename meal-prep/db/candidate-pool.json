@@ -1,6 +1,6 @@
 {
  "_doc": "Every candidate the harvester has ever looked at, with the numbers behind its verdict. harvest.py is the SOLE writer; --mark-taken / --mark-ruled / --ingest are the only roads in. A ruled candidate never resurfaces as available.",
- "updated": "2026-08-23T17:52:54",
+ "updated": "2026-08-23T18:20:28",
  "count": 2162,
  "candidates": [
   {
@@ -14165,7 +14165,6 @@
    "url": "https://thecozycook.com/ground-beef-stroganoff-casserole/",
    "domain": "thecozycook.com",
    "first_seen": "2026-08-23T17:07:27",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "beef",
     "method": "casserole",
@@ -14180,125 +14179,10 @@
     "reason": ""
    },
    "servings": 6,
-   "ingredients_verbatim": [
-    "1 lb. ground beef (I use 85% lean)",
-    "Salt/Pepper (to taste)",
-    "1 onion (finely diced)",
-    "2 cloves garlic (minced)",
-    "3 Tablespoons butter",
-    "3 Tablespoons flour",
-    "2 ½ cups beef broth",
-    "¾ cup sour cream (close to room temperature)",
-    "1 teaspoon Worcestershire Sauce (can sub low sodium soy sauce)",
-    "1 Tablespoon Dijon mustard",
-    "1 cup frozen peas",
-    "2 cups cheddar cheese (shredded)",
-    "8 oz. egg noodles (uncooked)",
-    "Parsley (to garnish)"
-   ],
-   "neighbours": [
-    {
-     "slug": "ground-beef-stroganoff-pasta",
-     "name": "Ground Beef Stroganoff Pasta",
-     "score": 30,
-     "shared": [
-      "ground",
-      "beef",
-      "stroganoff"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chile-relleno-casserole-ground-beef",
-     "name": "Chile Relleno Casserole with Ground Beef",
-     "score": 20,
-     "shared": [
-      "ground",
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "japanese-ground-beef-curry",
-     "name": "Japanese Ground Beef Curry",
-     "score": 20,
-     "shared": [
-      "ground",
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "indian-keema-matar-bowls",
-     "name": "Indian Keema Matar (Ground Beef & Peas Curry) Bowls",
-     "score": 20,
-     "shared": [
-      "ground",
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-ground-beef-rice-bowls",
-     "name": "Korean Ground Beef Rice Bowls",
-     "score": 20,
-     "shared": [
-      "ground",
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "ground-beef-stroganoff-pasta",
-     "name": "Ground Beef Stroganoff Pasta",
-     "score": 0.9653,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "beef-stroganoff-soup",
-     "name": "Beef Stroganoff Soup",
-     "score": 0.8988,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-cooker-beef-stroganoff",
-     "name": "Slow Cooker Beef Stroganoff",
-     "score": 0.8839,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "onepot-ground-turkey-stroganoff",
-     "name": "One-Pot Ground Turkey Stroganoff",
-     "score": 0.8604,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "ground-beef-and-broccoli-bowls",
-     "name": "Ground Beef and Broccoli Bowls",
-     "score": 0.8332,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Ground beef + sour-cream stroganoff sauce + egg noodles is the same plate as the live Ground Beef Stroganoff Pasta (bge 0.965, word-overlap 30). The baked-casserole-with-cheddar format does not make it a distinct dinner - same protein, sauce family and starch.",
+   "ruled_at": "2026-08-23T18:20:26"
   },
   {
    "slug": "air-fryer-whole-chicken",
@@ -17425,7 +17309,6 @@
    "url": "https://thecozycook.com/pork-stew/",
    "domain": "thecozycook.com",
    "first_seen": "2026-08-23T17:07:44",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "pork",
     "method": "stew",
@@ -17440,133 +17323,10 @@
     "reason": ""
    },
    "servings": 6,
-   "ingredients_verbatim": [
-    "1 teaspoon EACH: dried rosemary, thyme",
-    "¾ teaspoon EACH: dried oregano, ground sage",
-    "½ teaspoon EACH: pepper, celery salt",
-    "2 ½ lbs. pork butt ((Boston butt), see notes)",
-    "2 ¼ teaspoons salt",
-    "3 tablespoons flour",
-    "2-3 tablespoons olive oil",
-    "¾ cup dry white wine (see notes)",
-    "3 tablespoons butter",
-    "1 yellow onion (diced)",
-    "4 medium carrots (diced)",
-    "3 ribs celery (diced)",
-    "4 cloves garlic (minced)",
-    "2 teaspoons Worcestershire sauce",
-    "1 teaspoon Dijon mustard",
-    "1 teaspoon hot sauce",
-    "1/3 cup flour",
-    "5 cups chicken broth",
-    "½ cup heavy cream",
-    "1 beef bouillon cube",
-    "2 bay leaves",
-    "1 lb. baby red potatoes (I leave the skins on.)",
-    "Salt/pepper"
-   ],
-   "neighbours": [
-    {
-     "slug": "japanese-pork-nikujaga-potato-stew",
-     "name": "Japanese Pork Nikujaga Potato Stew",
-     "score": 20,
-     "shared": [
-      "pork",
-      "stew"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "pozole-rojo-pork-hominy-bowls",
-     "name": "Pozole Rojo (Red Pork and Hominy Stew) Bowls",
-     "score": 20,
-     "shared": [
-      "pork",
-      "stew"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "asado-de-puerco-red-chile-pork-bowls",
-     "name": "Asado de Puerco (Mexican Red Chile Pork Stew) Bowls",
-     "score": 20,
-     "shared": [
-      "pork",
-      "stew"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "creamy-pork-stew-potatoes-carrots",
-     "name": "Creamy Pork Stew with Potatoes and Carrots",
-     "score": 20,
-     "shared": [
-      "pork",
-      "stew"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "brazilian-feijoada-pork-black-bean-bowls",
-     "name": "Brazilian Feijoada Pork and Black Bean Stew Bowls",
-     "score": 20,
-     "shared": [
-      "pork",
-      "stew"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "pork-steak",
-     "name": "Pork Steak",
-     "score": 0.9549,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-stew",
-     "name": "Chicken Stew",
-     "score": 0.9272,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "beef-stew-recipe",
-     "name": "Beef Stew Recipe",
-     "score": 0.9157,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-cooker-beef-stew",
-     "name": "Slow Cooker Beef Stew",
-     "score": 0.8837,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "instant-pot-beef-stew",
-     "name": "Instant Pot Beef Stew",
-     "score": 0.8836,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Pork butt + heavy cream + red potatoes + carrots + wine is the live Creamy Pork Stew with Potatoes and Carrots. 4/4 match: pork, stew, cream, potato.",
+   "ruled_at": "2026-08-23T18:20:20"
   },
   {
    "slug": "baked-chile-relleno",
@@ -29996,7 +29756,9 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "ruled_reason": "No live catalog dupe, but plated as warm-chicken-over-berry/arugula/feta salad (cold-plate flag; greens+berries don't batch) and very close (0.95) to a backlog Balsamic Chicken Salad. Flagged borderline: acceptable only if reframed as plain skillet balsamic chicken minus the salad build.",
+   "ruled_at": "2026-08-23T18:20:24"
   },
   {
    "slug": "chicken-tamales",
@@ -43174,7 +42936,6 @@
    "url": "https://www.budgetbytes.com/chicken-caesar-wrap/",
    "domain": "budgetbytes.com",
    "first_seen": "2026-08-23T17:10:52",
-   "last_verified": "2026-08-23T17:43:47",
    "signature": {
     "protein": "chicken",
     "method": "skillet",
@@ -43189,125 +42950,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "1 boneless, skinless chicken breast (about ⅔ lb.) ($2.67)",
-    "2 Tbsps olive oil, divided ($0.44)",
-    "1 Tbsp grated Parmesan ($0.10)",
-    "1/4 tsp Italian seasoning ($0.02)",
-    "1/4 tsp garlic powder ($0.02)",
-    "1/4 tsp salt ($0.02)",
-    "1/4 tsp black pepper ($0.02)",
-    "1 Tbsp butter ($0.13)",
-    "1/4 cup Panko breadcrumbs ($0.13)",
-    "1/4 tsp Italian seasoning ($0.02)",
-    "1/4 tsp garlic powder ($0.02)",
-    "1/4 tsp salt ($0.02)",
-    "1/4 tsp black pepper ($0.02)",
-    "2 cups chopped Romaine lettuce ($1.50)",
-    "1/2 cup grape tomatoes ($0.74)",
-    "1/2 cup Parmesan (grated or shredded) ($0.80)",
-    "1/3 cup Caesar dressing ($0.90)",
-    "4 large flour tortillas ($0.79)"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-chicken-chile-verde-bowls",
-     "name": "Slow Cooker Chicken Chile Verde Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-cacciatore-pasta",
-     "name": "Slow Cooker Chicken Cacciatore Pasta",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-gyro-bowls",
-     "name": "Slow Cooker Chicken Gyro Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-buffalo-chicken-bowl",
-     "name": "Slow Cooker Buffalo Chicken and Rice Bowl",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "best-chicken-caesar-salad",
-     "name": "BEST Chicken Caesar Salad",
-     "score": 0.8746,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "avocado-ranch-chicken-salad-wrap",
-     "name": "Avocado Ranch Chicken Salad Wrap",
-     "score": 0.8238,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "caprese-chicken",
-     "name": "Caprese Chicken",
-     "score": 0.8196,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-salad-recipe",
-     "name": "Chicken Salad Recipe",
-     "score": 0.8163,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "cajun-chicken",
-     "name": "Cajun Chicken",
-     "score": 0.8162,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "Cold assemble-to-order wrap (romaine + Caesar dressing in a tortilla) that goes soggy on hold. Not a hot batch dinner.",
+   "ruled_at": "2026-08-23T18:20:23"
   },
   {
    "slug": "mango-thai-red-curry-with-chicken-2-jpg",
@@ -46280,7 +45926,6 @@
    "url": "https://www.wellplated.com/chicken-broccoli-ziti/",
    "domain": "wellplated.com",
    "first_seen": "2026-08-23T17:11:15",
-   "last_verified": "2026-08-23T17:43:47",
    "signature": {
     "protein": "chicken",
     "method": "skillet",
@@ -46295,124 +45940,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "3 tablespoons butter (divided)",
-    "1 tablespoon extra-virgin olive oil",
-    "1 pound boneless (skinless chicken breasts, cut into ½-inch strips)",
-    "½ teaspoon kosher salt (divided)",
-    "1/4 teaspoon ground black pepper (divided)",
-    "1 small yellow onion (chopped)",
-    "3 cloves garlic (minced (about 1 tablespoon))",
-    "2 teaspoons Italian seasoning",
-    "¼ teaspoon red pepper flakes (optional; or reduce to 1/8 teaspoon if sensitive to spice)",
-    "1 14-ounce can low-sodium chicken broth",
-    "1 1/2 cups nonfat milk (plus additional as needed)",
-    "6 ounces dry whole wheat ziti pasta or similar pasta (such as penne, rigatoni, or fusilli (about 2 1/4 cups))",
-    "1 medium head broccoli (cut into florets (about 3 cups))",
-    "1 14 ounce can artichoke hearts in water (drained, cut into quarters, and patted dry)",
-    "2 tablespoons freshly squeezed lemon juice (for even more lemon flavor, add the zest also)",
-    "1/4 cup grated Parmesan cheese (plus additional for serving)",
-    "2 tablespoons chopped fresh parsley (plus additional for serving)"
-   ],
-   "neighbours": [
-    {
-     "slug": "hot-honey-chicken-bowls",
-     "name": "Hot Honey Chicken and Broccoli Bowls",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "broccoli"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chicken-divan-broccoli-bake",
-     "name": "Chicken Divan (Broccoli Cheese Bake)",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "broccoli"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-chile-verde-bowls",
-     "name": "Slow Cooker Chicken Chile Verde Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-gyro-bowls",
-     "name": "Slow Cooker Chicken Gyro Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chicken-broccoli-rice-casserole",
-     "name": "Chicken Broccoli Rice Casserole",
-     "score": 0.8409,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "bruschetta-chicken",
-     "name": "Bruschetta Chicken",
-     "score": 0.8204,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "hot-honey-chicken-bowls",
-     "name": "Hot Honey Chicken and Broccoli Bowls",
-     "score": 0.8129,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "homemade-chicken-broth",
-     "name": "Homemade Chicken Broth",
-     "score": 0.8092,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-provencal",
-     "name": "Chicken Provencal",
-     "score": 0.8003,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Chicken + broccoli + ziti in a light lemon-broth-parmesan sauce with artichokes. Live chicken-divan is a broccoli cheese BAKE and hot-honey-chicken bowls are rice+honey; no live chicken-broccoli PASTA. Kept but flagged borderline: shares chicken/skillet/pasta with the also-accepted mushroom-chicken-pasta and adds to catalog chicken-pasta density, though the broccoli/lemon/artichoke profile is a genuinely different plate from mushroom-cream farfalle. 37g protein, strong batch main.",
+   "ruled_at": "2026-08-23T18:20:25"
   },
   {
    "slug": "chili-cornbread-skillet",
@@ -61370,7 +60901,6 @@
    "url": "https://thecozycook.com/chicken-salad-recipe/",
    "domain": "thecozycook.com",
    "first_seen": "2026-08-23T17:16:03",
-   "last_verified": "2026-08-23T17:43:48",
    "signature": {
     "protein": "chicken",
     "method": "any",
@@ -61385,121 +60915,10 @@
     "reason": ""
    },
    "servings": 6,
-   "ingredients_verbatim": [
-    "2 large boneless skinless chicken breasts (about 1 ¾ lbs. or 4 cups cooked)",
-    "¾ cup mayonnaise",
-    "2 ribs celery (finely diced)",
-    "2 tablespoons lemon juice",
-    "2 teaspoons Dijon mustard",
-    "¾ cup red grapes (quartered)",
-    "3 green onions (diced)",
-    "1/3 cup sliced almonds",
-    "¼ cup dried cranberries (optional)",
-    "½ teaspoon garlic salt",
-    "½ teaspoon dried dill weed",
-    "¼ teaspoon paprika",
-    "¼ teaspoon pepper",
-    "¼ teaspoon salt (plus more to taste)"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-chicken-chile-verde-bowls",
-     "name": "Slow Cooker Chicken Chile Verde Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-cacciatore-pasta",
-     "name": "Slow Cooker Chicken Cacciatore Pasta",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-gyro-bowls",
-     "name": "Slow Cooker Chicken Gyro Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-buffalo-chicken-bowl",
-     "name": "Slow Cooker Buffalo Chicken and Rice Bowl",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "balsamic-chicken-salad",
-     "name": "Balsamic Chicken Salad",
-     "score": 0.9186,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "honey-mustard-chicken-salad",
-     "name": "Honey Mustard Chicken Salad",
-     "score": 0.8908,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "salsa-chicken",
-     "name": "Salsa Chicken",
-     "score": 0.8889,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-fajita-salad",
-     "name": "Chicken Fajita Salad",
-     "score": 0.8838,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "best-chicken-caesar-salad",
-     "name": "BEST Chicken Caesar Salad",
-     "score": 0.875,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "Cold mayo-based chicken salad (grapes, celery, almonds) - a lunch/sandwich filling rather than a batch dinner. Backlog already holds several chicken-salad variants (balsamic 0.919, honey-mustard 0.891, fajita 0.884). Decent 28g protein but wrong meal format for the board.",
+   "ruled_at": "2026-08-23T18:20:28"
   },
   {
    "slug": "hashbrown-breakfast-casserole",
@@ -70424,7 +69843,6 @@
    "url": "https://thecozycook.com/creamy-beef-and-shells/",
    "domain": "thecozycook.com",
    "first_seen": "2026-08-23T17:17:16",
-   "last_verified": "2026-08-23T17:43:48",
    "signature": {
     "protein": "beef",
     "method": "skillet",
@@ -70439,126 +69857,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "1 lb. ground beef (85% lean)",
-    "Salt/Pepper",
-    "1 small diced yellow onion (can sub 1 tsp onion powder)",
-    "3 cloves minced garlic (can sub ½ tsp garlic powder)",
-    "1 teaspoon hot sauce",
-    "1 Tablespoon Worcestershire sauce",
-    "1 teaspoon Italian seasoning",
-    "½ teaspoon mustard powder",
-    "1 pinch red pepper flakes (optional)",
-    "1 tablespoon flour (optional-helps thicken the sauce)",
-    "1 cup beef broth",
-    "16 oz. tomato sauce",
-    "1 tablespoon tomato paste",
-    "1 tablespoon cream cheese (softened)",
-    "½ cups half and half",
-    "1 ½ cups shredded cheddar cheese",
-    "½ pound medium shell pasta",
-    "Fresh parsley (to garnish)",
-    "Grated Parmesan cheese (for serving.)"
-   ],
-   "neighbours": [
-    {
-     "slug": "cheesy-beef-and-shells-casserole",
-     "name": "Cheesy Beef and Shells Casserole",
-     "score": 20,
-     "shared": [
-      "beef",
-      "shells"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "beef-stuffed-shells",
-     "name": "Beef Stuffed Shells",
-     "score": 20,
-     "shared": [
-      "beef",
-      "shells"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-beef-japchae-noodle-bowls",
-     "name": "Korean Beef Japchae Noodle Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-beef-bibimbap-bowls",
-     "name": "Korean Beef Bibimbap Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "kerala-beef-ularthiyathu-rice-bowls",
-     "name": "Kerala Beef Ularthiyathu (South Indian Beef Fry) Rice Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "beef-stuffed-shells",
-     "name": "Beef Stuffed Shells",
-     "score": 0.8997,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "cheesy-beef-and-shells-casserole",
-     "name": "Cheesy Beef and Shells Casserole",
-     "score": 0.8886,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "beef-and-noodles",
-     "name": "Beef and Noodles",
-     "score": 0.8476,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "creamy-ranch-chicken",
-     "name": "Creamy Ranch Chicken",
-     "score": 0.8412,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "creamy-lemon-chicken",
-     "name": "Creamy Lemon Chicken",
-     "score": 0.8272,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Ground beef + shell pasta + cheddar/cream/tomato matches live Cheesy Beef and Shells Casserole (bge-m3 0.89). 3/4: beef, cheesy-tomato-cream sauce, shells; skillet vs casserole is the same dinner.",
+   "ruled_at": "2026-08-23T18:20:22"
   },
   {
    "slug": "how-to-make-homemade-chicken-stock",
@@ -81490,7 +80792,9 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "ruled_reason": "No plain base pulled pork exists live (all 5 live hits are composites), and it's a great batch protein (54g). BUT hits the 3/4 near-dupe trigger vs live BBQ Pulled Pork Rice Bowl / Dr Pepper Pulled Pork Bowls (same pork+braise+BBQ sauce, differing only bun-vs-rice) and BBQ-pulled-pork is saturated. Flagged borderline for audit.",
+   "ruled_at": "2026-08-23T18:20:24"
   },
   {
    "slug": "best-easy-chicken-curry-1-jpg",
@@ -95934,7 +95238,6 @@
    "url": "https://thecozycook.com/jalapeno-popper-chicken/",
    "domain": "thecozycook.com",
    "first_seen": "2026-08-23T17:22:12",
-   "last_verified": "2026-08-23T17:43:49",
    "signature": {
     "protein": "chicken",
     "method": "skillet",
@@ -95949,125 +95252,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "1 ½ cups chicken broth",
-    "1 teaspoon hot sauce",
-    "½ chicken bouillon cube",
-    "¾ teaspoon EACH: oregano, mustard powder, parsley, onion powder",
-    "½ teaspoon garlic powder",
-    "2 large boneless skinless chicken breasts",
-    "Salt/pepper (to taste)",
-    "¾ teaspoon paprika",
-    "1-2 tablespoons olive oil",
-    "2 tablespoons butter (or bacon drippings)",
-    "3-4 Jalapenos (seeded and diced)",
-    "3 cloves garlic (minced)",
-    "2 tablespoons flour",
-    "4 oz. cream cheese (softened &amp; cut into cubes)",
-    "½ cup sour cream",
-    "¾ cup shredded cheddar cheese",
-    "5 strips cooked bacon (roughly chopped)",
-    "3 green onions (sliced)"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-chicken-chile-verde-bowls",
-     "name": "Slow Cooker Chicken Chile Verde Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-cacciatore-pasta",
-     "name": "Slow Cooker Chicken Cacciatore Pasta",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-gyro-bowls",
-     "name": "Slow Cooker Chicken Gyro Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-buffalo-chicken-bowl",
-     "name": "Slow Cooker Buffalo Chicken and Rice Bowl",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "jalape-o-poppers",
-     "name": "Jalapeño Poppers",
-     "score": 0.8628,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-poblano-soup",
-     "name": "Chicken Poblano Soup",
-     "score": 0.8108,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "jamaican-jerk-chicken",
-     "name": "Jamaican Jerk Chicken",
-     "score": 0.8103,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "bacon-ranch-chicken",
-     "name": "Bacon Ranch Chicken",
-     "score": 0.7993,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "creamy-bacon-chicken",
-     "name": "Creamy Bacon Chicken",
-     "score": 0.7968,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "Creamy jalapeño-popper chicken skillet (cream cheese, cheddar, bacon, jalapeño). Live neighbours are all generic word-overlap 'chicken' slow-cooker bowls, no real dupe; backlog jalapeño-poppers is an appetizer, and bacon-ranch/creamy-bacon-chicken sit at 0.79-0.80 with a different flavor family. The cold-plate flag is a false positive on a hot skillet main. Distinct, high-protein batch dinner.",
+   "ruled_at": "2026-08-23T18:20:24"
   },
   {
    "slug": "turkey-roll-ups",
@@ -99273,7 +98461,6 @@
    "url": "https://thecozycook.com/lentil-sausage-soup/",
    "domain": "thecozycook.com",
    "first_seen": "2026-08-23T17:22:44",
-   "last_verified": "2026-08-23T17:43:49",
    "signature": {
     "protein": "sausage",
     "method": "any",
@@ -99288,128 +98475,10 @@
     "reason": ""
    },
    "servings": 6,
-   "ingredients_verbatim": [
-    "1 teaspoon dried basil",
-    "½ teaspoon dried parsley",
-    "½ teaspoon oregano",
-    "½ teaspoon mustard powder",
-    "¼ teaspoon pepper",
-    "1 lb. ground sausage (hot or mild)",
-    "1 small yellow onion",
-    "1 cup carrots (diced)",
-    "½ cup celery (diced)",
-    "2 tablespoons butter",
-    "3 cloves garlic (minced)",
-    "2 tablespoons flour",
-    "1 tablespoon tomato paste",
-    "6 cups chicken broth",
-    "2 cups beef broth",
-    "1 teaspoon Worcestershire sauce",
-    "1 teaspoon hot sauce",
-    "1 cup dry brown lentils (rinsed. See notes.)",
-    "1 bay leaf",
-    "1 14.5 oz. can diced tomatoes, drained"
-   ],
-   "neighbours": [
-    {
-     "slug": "turkey-sausage-kale-white-bean-soup",
-     "name": "Turkey Sausage, Kale and White Bean Soup",
-     "score": 20,
-     "shared": [
-      "sausage",
-      "soup"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "zuppa-toscana-sausage-potato-kale-soup",
-     "name": "Zuppa Toscana (Sausage, Potato and Kale Soup)",
-     "score": 20,
-     "shared": [
-      "sausage",
-      "soup"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "tuscan-white-bean-sausage-soup",
-     "name": "Tuscan White Bean and Sausage Soup",
-     "score": 20,
-     "shared": [
-      "sausage",
-      "soup"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "red-beans-turkey-sausage-and-rice",
-     "name": "Red Beans, Turkey Sausage and Rice",
-     "score": 10,
-     "shared": [
-      "sausage"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "one-pot-creamy-cajun-sausage-pasta",
-     "name": "One-Pot Creamy Cajun Sausage Pasta",
-     "score": 10,
-     "shared": [
-      "sausage"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "curried-sausages",
-     "name": "Curried Sausages",
-     "score": 0.8375,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "sausage-kebabs",
-     "name": "Sausage Kebabs",
-     "score": 0.8365,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "sausage-and-white-bean-soup",
-     "name": "Sausage and White Bean Soup",
-     "score": 0.8312,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "sausage-and-vegetable-skillet",
-     "name": "Sausage and Vegetable Skillet",
-     "score": 0.828,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "sausage-and-peppers",
-     "name": "Sausage and Peppers",
-     "score": 0.82,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Distinct from the live sausage-soup cluster (Tuscan/turkey white-bean soups, zuppa toscana): brown lentils not beans, tomato-forward not creamy. Only 2/4 axes match the nearest live twin, so no near-dupe trigger. Lentils widen the ingredient board; batches cleanly, no flags.",
+   "ruled_at": "2026-08-23T18:20:20"
   },
   {
    "slug": "one-minute-easy-chocolate-frosting",
@@ -103568,7 +102637,6 @@
    "url": "https://thecozycook.com/mushroom-chicken-pasta/",
    "domain": "thecozycook.com",
    "first_seen": "2026-08-23T17:23:25",
-   "last_verified": "2026-08-23T17:43:49",
    "signature": {
     "protein": "chicken",
     "method": "skillet",
@@ -103583,128 +102651,10 @@
     "reason": ""
    },
    "servings": 6,
-   "ingredients_verbatim": [
-    "1 ¼ cup half and half",
-    "3/4 cup chicken broth",
-    "1 teaspoon Worcestershire sauce",
-    "1 teaspoon Dijon mustard",
-    "1 teaspoon dried parsley",
-    "½ teaspoon EACH: dried basil, onion powder",
-    "¼ teaspoon EACH: salt, dried oregano, thyme, ground sage",
-    "2 tablespoons olive oil (divided)",
-    "8 oz. sliced white button mushrooms (cleaned and patted dry)",
-    "2 cups spinach (packed)",
-    "1 lb. boneless skinless chicken breast",
-    "Salt and pepper (to taste)",
-    "½ cup dry white wine (See notes.)",
-    "3 tablespoons salted butter",
-    "3 cloves garlic (minced)",
-    "2 tablespoons flour",
-    "¾ cup Parmesan cheese (grated)",
-    "¾ lb. Farfalle pasta (see notes)"
-   ],
-   "neighbours": [
-    {
-     "slug": "claypot-chicken-mushroom-rice",
-     "name": "Claypot Chicken and Mushroom Rice",
-     "score": 20,
-     "shared": [
-      "mushroom",
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chicken-parmesan-pasta",
-     "name": "Chicken Parmesan Pasta",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "pasta"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-cacciatore-pasta",
-     "name": "Slow Cooker Chicken Cacciatore Pasta",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "pasta"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "buffalo-chicken-pasta-bake",
-     "name": "Buffalo Chicken Pasta Bake",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "pasta"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-tuscan-chicken-pasta",
-     "name": "Slow Cooker Tuscan Chicken Pasta",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "pasta"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "mushroom-chicken",
-     "name": "Mushroom Chicken",
-     "score": 0.9009,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-with-creamy-mushroom-sauce",
-     "name": "Chicken with Creamy Mushroom Sauce",
-     "score": 0.8705,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-parmesan-pasta",
-     "name": "Chicken Parmesan Pasta",
-     "score": 0.8583,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "creamy-chicken-and-mushrooms",
-     "name": "Creamy Chicken and Mushrooms",
-     "score": 0.8531,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "claypot-chicken-mushroom-rice",
-     "name": "Claypot Chicken and Mushroom Rice",
-     "score": 0.8459,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Creamy mushroom-and-spinach chicken farfalle. Live chicken pastas differ in flavor (tuscan=sundried-tomato/spinach, parmesan=tomato, cacciatore=tomato); no live creamy-mushroom chicken pasta exists. Backlog mushroom-chicken and creamy-chicken-and-mushrooms are the same sauce but a different (starch-less) plate. Solid batch pasta dinner, widens the creamy-mushroom slot.",
+   "ruled_at": "2026-08-23T18:20:25"
   },
   {
    "slug": "air-fryer-asparagus",
@@ -104532,7 +103482,6 @@
    "url": "https://www.recipetineats.com/caprese-baked-eggs/",
    "domain": "recipetineats.com",
    "first_seen": "2026-08-23T17:23:30",
-   "last_verified": "2026-08-23T17:43:49",
    "signature": {
     "protein": "any",
     "method": "bake",
@@ -104547,82 +103496,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "1 tbsp olive oil",
-    "2 garlic cloves (, minced)",
-    "½ small onion (, diced (brown, white or yellow))",
-    "14 oz / 400g can cannellini beans ((or other beans of choice))",
-    "14 oz / 400g can crushed tomato",
-    "¼ cup chicken broth/stock ((or water))",
-    "1 tbsp mixed Italian herbs (, dried (Note 1 for substitution))",
-    "½ tsp sugar ((optional) (Note 2))",
-    "Salt and pepper",
-    "7 oz / 200g cherry tomatoes ((1/2 punnet))",
-    "½ cup (packed) basil leaves roughly torn",
-    "6 oz / 180g bocconcini (, sliced OR buffalo mozzarella, torn (Note 3))",
-    "4 eggs",
-    "2/3 cup balsamic vinegar",
-    "2 tbsp brown sugar",
-    "Salt",
-    "Toasted crusty bread slices"
-   ],
-   "neighbours": [
-    {
-     "slug": "vietnamese-thit-kho-braised-pork-and-eggs",
-     "name": "Vietnamese Thit Kho Braised Pork and Eggs",
-     "score": 10,
-     "shared": [
-      "eggs"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "caprese-chicken",
-     "name": "Caprese Chicken",
-     "score": 0.9172,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "baked-italian-chicken-with-potatoes",
-     "name": "Baked Italian Chicken with Potatoes",
-     "score": 0.8018,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "baked-chicken-legs",
-     "name": "Baked Chicken Legs",
-     "score": 0.8001,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "baked-chicken-quarters",
-     "name": "Baked Chicken Quarters",
-     "score": 0.7945,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-milanese",
-     "name": "Chicken Milanese",
-     "score": 0.7798,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Egg-based Italian brunch bake served with toasted crusty bread. Eggs overcook on reheat and do not survive a 14-serving batch; this is a light breakfast/brunch, not a high-protein batch dinner. No live dupe (only word-overlap on 'eggs'), but fails the board's batch-dinner mandate.",
+   "ruled_at": "2026-08-23T18:20:26"
   },
   {
    "slug": "candy-corn-fruit-parfaits",
@@ -106808,7 +105685,6 @@
    "url": "https://www.recipetineats.com/chicken-salad-with-avocado-dressing/",
    "domain": "recipetineats.com",
    "first_seen": "2026-08-23T17:23:59",
-   "last_verified": "2026-08-23T17:43:49",
    "signature": {
     "protein": "chicken",
     "method": "skillet",
@@ -106823,128 +105699,10 @@
     "reason": ""
    },
    "servings": 2,
-   "ingredients_verbatim": [
-    "1/2 large or 1 small ripe avocado",
-    "1 garlic clove (, minced)",
-    "2 tbsp diced red onion",
-    "1/4 cup cilantro (, stems and leaves, not packed in)",
-    "1/2 tbsp olive oil ((optional))",
-    "1 tbsp plain low fat yoghurt ((I use Greek))",
-    "3 tbsp lime juice",
-    "3 - 5 tbsp low fat milk",
-    "1/4 tsp onion or garlic powder",
-    "1/2 tsp salt",
-    "Black pepper",
-    "5 - 7 oz / 250 - 300g chicken breast (, skinless boneless (I had 1 large one))",
-    "1 tbsp olive oil",
-    "1 tsp smoked paprika",
-    "1/4 tsp each onion powder (, garlic powder, cayenne pepper, salt)",
-    "2 tbsp plain flour",
-    "Black pepper",
-    "1/2 cup diced red onion",
-    "1 corn (, steamed, kernels cut off (or 3/4 cup cooked kernels))",
-    "3/4 cup cherry tomatoes (, halved or quartered)",
-    "5 cups chopped lettuce"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-chicken-chile-verde-bowls",
-     "name": "Slow Cooker Chicken Chile Verde Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-cacciatore-pasta",
-     "name": "Slow Cooker Chicken Cacciatore Pasta",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-gyro-bowls",
-     "name": "Slow Cooker Chicken Gyro Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-buffalo-chicken-bowl",
-     "name": "Slow Cooker Buffalo Chicken and Rice Bowl",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "avocado-ranch-chicken-salad-wrap",
-     "name": "Avocado Ranch Chicken Salad Wrap",
-     "score": 0.8886,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-salad-recipe",
-     "name": "Chicken Salad Recipe",
-     "score": 0.8726,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "grilled-chicken-breast-with-strawberry-avocado-salsa",
-     "name": "Grilled Chicken Breast with Strawberry Avocado Salsa",
-     "score": 0.8486,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "balsamic-chicken-salad",
-     "name": "Balsamic Chicken Salad",
-     "score": 0.8474,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "avocado-pasta-salad",
-     "name": "Avocado Pasta Salad",
-     "score": 0.8186,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "Cold composed salad (5 cups lettuce, avocado dressing, corn), 2 servings. Dressed greens do not survive a 14-serving batch. Not a hot batch dinner.",
+   "ruled_at": "2026-08-23T18:20:22"
   },
   {
    "slug": "cauliflower-tots",
@@ -107469,7 +106227,6 @@
    "url": "https://www.spendwithpennies.com/antipasto-pasta-salad/",
    "domain": "spendwithpennies.com",
    "first_seen": "2026-08-23T17:24:02",
-   "last_verified": "2026-08-23T17:43:49",
    "signature": {
     "protein": "any",
     "method": "any",
@@ -107484,122 +106241,10 @@
     "reason": ""
    },
    "servings": 6,
-   "ingredients_verbatim": [
-    "8 ounces rotini",
-    "1 pint cherry tomatoes (halved)",
-    "6 ounces jar marinated artichoke hearts (quartered &amp; drained (reserve juices*))",
-    "¼ medium red onion (sliced)",
-    "½ cup olives (green, black or a mixture)",
-    "4 ounces salami (thinly sliced and halved)",
-    "8 ounces mozzarella balls",
-    "2 tablespoons thinly sliced fresh basil leaves",
-    "1 tablespoon chopped fresh parsley",
-    "1 cup Italian dressing",
-    "¼ cup red wine vinegar",
-    "⅓ cup olive oil (or use the reserved olive oil from the artichoke hearts)",
-    "½ teaspoon garlic powder",
-    "½ teaspoon dried basil",
-    "salt and pepper to taste"
-   ],
-   "neighbours": [
-    {
-     "slug": "one-pot-creamy-cajun-sausage-pasta",
-     "name": "One-Pot Creamy Cajun Sausage Pasta",
-     "score": 10,
-     "shared": [
-      "pasta"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "one-pot-turkey-mexican-pasta",
-     "name": "One-Pot Turkey Mexican Pasta",
-     "score": 10,
-     "shared": [
-      "pasta"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "creamy-ground-turkey-shell-pasta",
-     "name": "Creamy Ground Turkey Shell Pasta",
-     "score": 10,
-     "shared": [
-      "pasta"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "pasta-alla-norcina-creamy-sausage-pasta",
-     "name": "Pasta alla Norcina Creamy Sausage Pasta",
-     "score": 10,
-     "shared": [
-      "pasta"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "creamy-ground-turkey-and-chorizo-pasta",
-     "name": "Creamy Ground Turkey and Chorizo Pasta",
-     "score": 10,
-     "shared": [
-      "pasta"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "antipasto-salad",
-     "name": "Antipasto Salad",
-     "score": 0.9768,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "roasted-tomato-salsa",
-     "name": "Roasted Tomato Salsa",
-     "score": 0.8249,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "one-pot-sausage-meatball-pasta",
-     "name": "One Pot Sausage Meatball Pasta",
-     "score": 0.8213,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "fire-roasted-salsa",
-     "name": "Fire Roasted Salsa",
-     "score": 0.8202,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "candied-tomato-sauce",
-     "name": "Candied Tomato Sauce",
-     "score": 0.8168,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "Cold pasta salad side, only 17g protein, near-twin of backlog antipasto-salad (bge 0.977). A cold-plate side, not a high-protein batch dinner main.",
+   "ruled_at": "2026-08-23T18:20:27"
   },
   {
    "slug": "sausage-stuffing",
@@ -118108,7 +116753,6 @@
    "url": "https://thecozycook.com/sausage-and-white-bean-soup/",
    "domain": "thecozycook.com",
    "first_seen": "2026-08-23T17:25:28",
-   "last_verified": "2026-08-23T17:43:50",
    "signature": {
     "protein": "sausage",
     "method": "stew",
@@ -118123,131 +116767,10 @@
     "reason": ""
    },
    "servings": 6,
-   "ingredients_verbatim": [
-    "½ teaspoon EACH: oregano, basil, parsley",
-    "1 pinch red pepper flakes",
-    "1 lb. ground sausage (regular, hot, or mild. see notes)",
-    "½ cup dry white wine (see notes)",
-    "2 tablespoons butter",
-    "1 yellow onion (diced)",
-    "2 ribs celery (diced)",
-    "3 cloves garlic (minced)",
-    "1 teaspoon Worcestershire sauce",
-    "1 teaspoon Dijon mustard",
-    "6 cups chicken broth (consider low sodium )",
-    "¼ cup heavy cream (can sub half and half)",
-    "2 (15.5 oz.) cans Cannellini beans (drained but not rinsed)",
-    "3 cups kale (roughly chopped)",
-    "1/3 cup grated parmesan cheese",
-    "1-2 tablespoons fresh lemon juice"
-   ],
-   "neighbours": [
-    {
-     "slug": "tuscan-white-bean-sausage-soup",
-     "name": "Tuscan White Bean and Sausage Soup",
-     "score": 40,
-     "shared": [
-      "sausage",
-      "white",
-      "bean",
-      "soup"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-sausage-kale-white-bean-soup",
-     "name": "Turkey Sausage, Kale and White Bean Soup",
-     "score": 40,
-     "shared": [
-      "sausage",
-      "white",
-      "bean",
-      "soup"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "ham-and-white-bean-soup",
-     "name": "Ham and White Bean Soup",
-     "score": 30,
-     "shared": [
-      "white",
-      "bean",
-      "soup"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-white-bean-cassoulet",
-     "name": "Turkey and White Bean Cassoulet",
-     "score": 20,
-     "shared": [
-      "white",
-      "bean"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-italian-pork-loin-bowls",
-     "name": "Slow Cooker Italian Pork and White Bean Bowls",
-     "score": 20,
-     "shared": [
-      "white",
-      "bean"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "tuscan-white-bean-sausage-soup",
-     "name": "Tuscan White Bean and Sausage Soup",
-     "score": 0.8991,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "ham-and-white-bean-soup",
-     "name": "Ham and White Bean Soup",
-     "score": 0.8761,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-sausage-kale-white-bean-soup",
-     "name": "Turkey Sausage, Kale and White Bean Soup",
-     "score": 0.8756,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "sausage-and-peppers",
-     "name": "Sausage and Peppers",
-     "score": 0.8702,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "cabbage-and-sausage",
-     "name": "Cabbage and Sausage",
-     "score": 0.8586,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Sausage + cannellini + kale + cream + parmesan is the same dinner as the live Tuscan White Bean and Sausage Soup (bge 0.899, word-overlap 40) - protein, starch, flavor family and method all match, four of four. Also crowds live Turkey Sausage Kale White Bean Soup (0.876) and the lentil-sausage-soup accepted earlier this run.",
+   "ruled_at": "2026-08-23T18:20:25"
   },
   {
    "slug": "banana-muffins",
@@ -118519,7 +117042,6 @@
    "url": "https://www.wellplated.com/strawberry-chicken-with-avocado/",
    "domain": "wellplated.com",
    "first_seen": "2026-08-23T17:25:28",
-   "last_verified": "2026-08-23T17:43:50",
    "signature": {
     "protein": "chicken",
     "method": "any",
@@ -118534,128 +117056,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "2 pounds boneless skinless chicken breasts ( or thighs, trimmed of excess fat)",
-    "1 tablespoon lime zest (from about 2 limes)",
-    "1/4 cup fresh lime juice (from the same 2 limes)",
-    "2 tablespoons extra virgin olive oil (plus additional for oiling the grill)",
-    "2 cloves garlic (minced (about 2 teaspoons))",
-    "1 1/2 teaspoons honey (omit to make the recipe Whole30 or Paleo)",
-    "1/2 teaspoon kosher salt",
-    "1/4 teaspoon ground black pepper",
-    "1/4 cup fresh cilantro (chopped leaves and tender stems)",
-    "1/2 small red onion (diced (about 1/4 cup))",
-    "1 cup strawberries (diced (roughly 2/3 dry pint of whole strawberries))",
-    "1 medium jalapeno (cored seeded and finely chopped)",
-    "2 tablespoons fresh cilantro (chopped)",
-    "2 tablespoons freshly squeezed lime juice ((about 1 small/medium lime))",
-    "1/2 teaspoon honey (omit to make the recipe Whole30 or Paleo)",
-    "1/4 teaspoon kosher salt ((up to 1/2 teaspoon, adjust amount to taste))",
-    "1 medium avocado (diced)"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-salsa-chicken-bowl",
-     "name": "Slow Cooker Salsa Chicken Burrito Bowl",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "salsa"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "jerk-chicken-mango-burrito",
-     "name": "Jerk Chicken Burrito with Mango Salsa",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "salsa"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "salsa-verde-chicken-burrito",
-     "name": "Salsa Verde Chicken Burrito",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "salsa"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-salsa-verde-chicken-bowl",
-     "name": "Salsa Verde Chicken Burrito Bowl",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "salsa"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-adobo-rice-bowls",
-     "name": "Slow Cooker Chicken Adobo Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chicken-salad-with-avocado-dressing",
-     "name": "Chicken Salad with Avocado Dressing",
-     "score": 0.8486,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "stuffed-chicken-breast",
-     "name": "Stuffed Chicken Breast",
-     "score": 0.8119,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "smoked-chicken-breasts",
-     "name": "Smoked Chicken Breasts",
-     "score": 0.808,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "salsa-chicken",
-     "name": "Salsa Chicken",
-     "score": 0.7963,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "avocado-ranch-chicken-salad-wrap",
-     "name": "Avocado Ranch Chicken Salad Wrap",
-     "score": 0.7937,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "The defining element is a fresh avocado-strawberry salsa that oxidizes and weeps and cannot be batched; a cold-plate, cook-to-order summer plate. Stripped of the salsa it is generic grilled chicken. cold-plate flag earned.",
+   "ruled_at": "2026-08-23T18:20:27"
   },
   {
    "slug": "crunchwrap-supreme-recipe",
@@ -118881,7 +117285,6 @@
    "url": "https://www.wellplated.com/swedish-meatballs/",
    "domain": "wellplated.com",
    "first_seen": "2026-08-23T17:25:31",
-   "last_verified": "2026-08-23T17:43:50",
    "signature": {
     "protein": "turkey",
     "method": "bake",
@@ -118896,127 +117299,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "1 tablespoon extra-virgin olive oil",
-    "¾ cup small-diced yellow onion",
-    "2 garlic cloves (minced)",
-    "1 teaspoon kosher salt",
-    "¼ teaspoon ground allspice",
-    "¼ teaspoon ground ginger",
-    "⅛ teaspoon ground nutmeg",
-    "¾ pound 90% lean ground beef",
-    "½ pound ground turkey (use ground pork for a more traditional Swedish meatball)",
-    "½ cup panko breadcrumbs",
-    "1 large egg",
-    "⅓ cup milk (any kind you like)",
-    "½ cup chopped fresh parsley (plus more for garnish)",
-    "1 ½ cups low-sodium beef broth",
-    "1 teaspoon Worcestershire sauce",
-    "1 teaspoon Dijon mustard",
-    "½ cup sour cream or full-fat plain Greek yogurt (at room temperature)",
-    "2 tablespoons unsalted butter",
-    "3 tablespoons all-purpose flour",
-    "½ teaspoon kosher salt"
-   ],
-   "neighbours": [
-    {
-     "slug": "sheet-pan-bbq-turkey-meatballs-over-rice",
-     "name": "Sheet-Pan BBQ Turkey Meatballs over Rice",
-     "score": 10,
-     "shared": [
-      "meatballs"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "greek-turkey-meatballs-with-lemon-orzo",
-     "name": "Greek Turkey Meatballs with Lemon Orzo",
-     "score": 10,
-     "shared": [
-      "meatballs"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "thai-coconut-curry-turkey-meatballs",
-     "name": "Thai Coconut Curry Turkey Meatballs",
-     "score": 10,
-     "shared": [
-      "meatballs"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "vietnamese-turkey-xiu-mai-meatballs",
-     "name": "Vietnamese Turkey Xiu Mai Meatballs over Rice",
-     "score": 10,
-     "shared": [
-      "meatballs"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "albondigas-en-chipotle-rice-bowls",
-     "name": "Albondigas en Chipotle (Mexican Meatballs in Chipotle Sauce)",
-     "score": 10,
-     "shared": [
-      "meatballs"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-meatballs",
-     "name": "Turkey Meatballs",
-     "score": 0.9017,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "swedish-meatball-recipe",
-     "name": "Swedish Meatball Recipe",
-     "score": 0.8952,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "southwest-turkey-meatballs",
-     "name": "Southwest Turkey Meatballs",
-     "score": 0.88,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "swedish-meatball-potato-bowls",
-     "name": "Swedish Meatball and Potato Bowls",
-     "score": 0.8728,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-and-stuffing-meatballs",
-     "name": "Turkey and Stuffing Meatballs",
-     "score": 0.8659,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "Beef/turkey meatballs in Swedish cream gravy is the same dinner as live Swedish Meatball and Potato Bowls (bge-m3 0.87, live side). Sauce family + protein identical; serving format is not a genuine distinction.",
+   "ruled_at": "2026-08-23T18:20:21"
   },
   {
    "slug": "cucumber-margarita",
@@ -121296,7 +119582,6 @@
    "url": "https://www.recipetineats.com/mexican-breakfast-tacos-chorizo-and-egg/",
    "domain": "recipetineats.com",
    "first_seen": "2026-08-23T17:25:53",
-   "last_verified": "2026-08-23T17:43:50",
    "signature": {
     "protein": "sausage",
     "method": "skillet",
@@ -121311,128 +119596,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "2 tomatoes (, deseeded and diced)",
-    "1/2 red onion (, diced)",
-    "2 tbsp lime juice ((adjust to taste) (around 1 lime))",
-    "1 tbsp olive oil",
-    "2 tbsp coriander/cilantro leaves",
-    "1/2 tsp salt",
-    "Black pepper",
-    "1 tbsp olive oil",
-    "7 oz / 200g Mexican or raw Spanish chorizo (, removed from casings (Note 1))",
-    "2 garlic cloves",
-    "2 birds eye chilies (, deseeded and finely chopped (adjust to taste))",
-    "1 small onion ((brown, yellow, white))",
-    "4 large eggs (, lightly whisked (or 6 small eggs))",
-    "1 tbsp milk",
-    "3/4 tsp salt",
-    "Black pepper",
-    "4 small tortillas (, corn or flour (around 6\" / 12 cm rounds))",
-    "Cotija or feta (, crumbled)",
-    "Avocado (, diced)",
-    "Cilantro/coriander leaves"
-   ],
-   "neighbours": [
-    {
-     "slug": "baked-sausage-egg-breakfast-hash",
-     "name": "Baked Sausage and Egg Breakfast Hash",
-     "score": 20,
-     "shared": [
-      "breakfast",
-      "egg"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "crockpot-mexican-turkey-casserole",
-     "name": "Crockpot Mexican Turkey Casserole",
-     "score": 10,
-     "shared": [
-      "mexican"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "creamy-ground-turkey-and-chorizo-pasta",
-     "name": "Creamy Ground Turkey and Chorizo Pasta",
-     "score": 10,
-     "shared": [
-      "chorizo"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "pork-tenderloin-stroganoff-over-egg-noodles",
-     "name": "Pork Tenderloin Stroganoff over Egg Noodles",
-     "score": 10,
-     "shared": [
-      "egg"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "sausage-hash-brown-egg-casserole",
-     "name": "Sausage Hash Brown and Egg Casserole",
-     "score": 10,
-     "shared": [
-      "egg"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "baked-sausage-egg-breakfast-hash",
-     "name": "Baked Sausage and Egg Breakfast Hash",
-     "score": 0.8111,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "cheesy-oven-baked-tacos",
-     "name": "Cheesy Oven Baked Tacos",
-     "score": 0.7885,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "cheesy-taco-spaghetti",
-     "name": "Cheesy Taco Spaghetti",
-     "score": 0.7879,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "taco-casserole",
-     "name": "Taco Casserole",
-     "score": 0.7672,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "beef-and-cauliflower-taco-skillet",
-     "name": "Beef and Cauliflower Taco Skillet",
-     "score": 0.7626,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "breakfast"
-   ]
+   "ruled_reason": "Breakfast dish with soft-scrambled eggs, cook-to-order; eggs don't reheat across a 14-serving batch.",
+   "ruled_at": "2026-08-23T18:20:23"
   },
   {
    "slug": "creamy-parmesan-spinach-dip",
@@ -123700,7 +121867,6 @@
    "url": "https://www.budgetbytes.com/antipasto-salad/",
    "domain": "budgetbytes.com",
    "first_seen": "2026-08-23T17:26:05",
-   "last_verified": "2026-08-23T17:43:50",
    "signature": {
     "protein": "any",
     "method": "any",
@@ -123715,76 +121881,10 @@
     "reason": ""
    },
    "servings": 8,
-   "ingredients_verbatim": [
-    "8 oz. salad greens ($0.99*)",
-    "1 12oz. jar artichoke hearts ($2.45)",
-    "1 pint grape tomatoes ($2.48)",
-    "8 oz. mozzarella ($2.61)",
-    "8 oz. salami ($3.00)",
-    "1 6oz. jar kalamata olives ($4.12)",
-    "1 8oz. jar banana peppers ($0.97)",
-    "1/2 red onion ($0.57)",
-    "8 oz. provolone ($1.97)",
-    "1/2 cup extra virgin olive oil ($1.76)",
-    "3 Tbsp red wine vinegar ($0.30)",
-    "1 Tbsp lemon juice ($0.04)",
-    "2 tsp Dijon mustard ($0.12)",
-    "1/4 tsp garlic powder ($0.02)",
-    "1 Tbsp Italian seasoning ($0.30)",
-    "1/2 tsp sugar ($0.01)",
-    "1/2 tsp salt ($0.02)",
-    "1/4 tsp black pepper (freshly cracked, $0.02)",
-    "2 Tbsp Parmesan (grated, $0.22)"
-   ],
-   "neighbours": [
-    {
-     "slug": "antipasto-pasta-salad",
-     "name": "Antipasto Pasta Salad",
-     "score": 0.9768,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chipotle-ranch",
-     "name": "Chipotle Ranch",
-     "score": 0.8343,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "fish-taco-slaw",
-     "name": "Fish Taco Slaw",
-     "score": 0.8287,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "fire-roasted-salsa",
-     "name": "Fire Roasted Salsa",
-     "score": 0.8272,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "candied-tomato-sauce",
-     "name": "Candied Tomato Sauce",
-     "score": 0.8261,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "Cold no-cook salad plate (greens, salami, cheeses, olives). Reads as a side, not a high-protein cooked main; doesn't batch as a hot dinner.",
+   "ruled_at": "2026-08-23T18:20:23"
   },
   {
    "slug": "slow-cooker-beef-stroganoff",
@@ -126949,7 +125049,6 @@
    "url": "https://www.budgetbytes.com/autumn-kale-and-apple-salad/",
    "domain": "budgetbytes.com",
    "first_seen": "2026-08-23T17:26:40",
-   "last_verified": "2026-08-23T17:43:50",
    "signature": {
     "protein": "any",
     "method": "skillet",
@@ -126964,122 +125063,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "1/3 cup olive oil ($0.55)",
-    "3 Tbsp balsamic vinegar ($0.41)",
-    "2 Tbsp mayonnaise ($0.17)",
-    "1/2 Tbsp Dijon mustard ($0.09)",
-    "1 clove garlic, minced ($0.08)",
-    "1/2 tsp dried basil ($0.05)",
-    "1/4 tsp salt ($0.01)",
-    "freshly cracked pepper ($0.02)",
-    "1/2 cup walnuts, chopped ($0.60)",
-    "1/2 Tbsp butter ($0.07)",
-    "2 Tbsp brown sugar ($0.08)",
-    "1 pinch salt ($0.01)",
-    "8 oz. torn kale leaves (about 12 cups) ($2.13)",
-    "1 apple ($0.52)",
-    "2 Tbsp crumbled blue cheese ($0.30)"
-   ],
-   "neighbours": [
-    {
-     "slug": "sausage-cabbage-apple-skillet",
-     "name": "Sausage, Cabbage and Apple Skillet",
-     "score": 10,
-     "shared": [
-      "apple"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "zuppa-toscana-sausage-potato-kale-soup",
-     "name": "Zuppa Toscana (Sausage, Potato and Kale Soup)",
-     "score": 10,
-     "shared": [
-      "kale"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-sausage-kale-white-bean-soup",
-     "name": "Turkey Sausage, Kale and White Bean Soup",
-     "score": 10,
-     "shared": [
-      "kale"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-pesto-pasta-kale",
-     "name": "Turkey Pesto Pasta with Kale",
-     "score": 10,
-     "shared": [
-      "kale"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "apple-cider-beef-pot-roast-bowls",
-     "name": "Apple Cider Beef Pot Roast Bowls",
-     "score": 10,
-     "shared": [
-      "apple"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "apple-dijon-kale-salad-meal-prep",
-     "name": "Apple Dijon Kale Salad Meal Prep",
-     "score": 0.8403,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "apple-pie-egg-rolls",
-     "name": "Apple Pie Egg Rolls",
-     "score": 0.7816,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "apple-pie-tacos",
-     "name": "Apple Pie Tacos",
-     "score": 0.7763,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "antipasto-salad",
-     "name": "Antipasto Salad",
-     "score": 0.7756,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "apple-pie-cupcakes",
-     "name": "Apple Pie Cupcakes",
-     "score": 0.774,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "Cold side salad, 5.95g protein, no protein main at all. Not a batch dinner.",
+   "ruled_at": "2026-08-23T18:20:28"
   },
   {
    "slug": "stuffed-chicken-breast",
