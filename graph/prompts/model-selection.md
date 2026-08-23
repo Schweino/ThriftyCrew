@@ -1278,7 +1278,26 @@ byte-identical to the daily numbers** — while contested goes 15 -> 435. The wh
 switch stays refused for the reason the fourth addendum gave: 130 identity findings
 would silently stop being shown.
 
-### 7. On the scorecard
+### 7. Wired, the same night
+
+All three switches are on. `emit -> DEFS -> sweep -> serve -> resolve (behind the
+filter) -> stage1 -> stop`, run end to end at 01:24 and clean, card handed back.
+
+The load-bearing decision is WHERE the flags default. `audit-semantic-identity.ps1`
+holds them, not the caller: the nightly chain is not the only thing that runs the
+sweep - the 07:00 and 08:00 jobs do too - so flags passed by one caller would have
+meant the last sweep of the day silently overwrote `contested-scores.json` with a
+15-of-435 version scored by the pinned model, and the scorecard would have read the
+BEFORE forever. One default, every caller, one file.
+
+`contested-scores-history.jsonl` now gets one trimmed line per run (~40 KB), because
+the snapshot was the reason nobody could look at more than one night, and an
+overwritten night cannot be re-scored - the definitions it read have moved on.
+
+Tonight's run scored 0 of 0: the 21:30 chain had already settled everything, and the
+next capture makes the next contested set. That is the steady state this plan aims at.
+
+### 8. On the scorecard
 
 The local lane now prints which model held the opinion, which def set it read, and what
 the filter rejected, distinguishing "rejected 0" from "the filter is off" from BLIND.
@@ -1286,7 +1305,7 @@ Today it reads the BEFORE, correctly: `scored 15 of 435`, `scored by the PINNED 
 `routes nothing`, `filter rejected 0`. The AFTER is one flag away and is Brad's call,
 because it is the daily path.
 
-### 8. What phase 3 did not do
+### 9. What phase 3 did not do
 
 §4's audit set (helper YES / LLM NO, where the ~35 missing cells live) is not built.
 It is the one part of the phase that costs a Claude review session, and it wants a few
