@@ -31,6 +31,12 @@
                        "recorded":  "2026-08-21",
                        "recorded_by":  "claude",
                        "reason":  "A FIXTURE TEST, not a detector. It exercises rollback-ttl-lib against frozen synthetic dates and reads no live data at all, so there is nothing for a production run to detect - running it in the daily chain would assert the same six things about the same constants every morning. It IS run: test-auditors calls it, which is the correct home for a unit test. The thing it protects (first_seen must never re-anchor, or a 30-day TTL becomes infinite) is enforced in production by rollback-ttl-lib itself, which the builders call."
+                   },
+                   {
+                       "name":  "test-capture-builders.ps1",
+                       "recorded":  "2026-08-23",
+                       "recorded_by":  "claude",
+                       "reason":  "A FIXTURE TEST, not a detector - same class as test-rollback-ttl.ps1 above, and blessed for the same reason. It builds a sandbox of fake captures and fake builders, extracts capture-run.ps1's builder block by marker and runs it against them. It reads no live data and detects nothing about the estate, so a production caller would assert the same ten things about the same fakes every morning. It IS run: test-auditors calls it. What it protects - that the 2026-08-23 three-pass restructure (serial existence checks, a fan-out over the first-stage builders, serial verdict handling) still keeps a missing capture outstanding, names a failed builder, skips stage 2 after a failed stage 1, and judges stage 2 on evidence rather than exit code - is enforced in production by capture-run.ps1 itself on every capture. Declared here on the day it was added, rather than left to show up as audit-guard-contract's seventh DEAD line."
                    }
                ]
 }

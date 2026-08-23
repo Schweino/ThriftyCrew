@@ -15,6 +15,7 @@ import hashlib
 import json
 import re
 import unicodedata
+from functools import lru_cache
 
 # --------------------------------------------------------------------------
 # hashing
@@ -44,6 +45,37 @@ _WS = re.compile(r"\s+")
 _NONWORD = re.compile(r"[^a-z0-9]+")
 
 
+# MEMOISED, ON A MEASUREMENT (2026-08-23). norm_text is called 391,678 times per structure-only
+# import against 42,914 distinct inputs - a 9.1x repeat ratio, so 89% of the calls recompute an
+# answer already known. 225,000 of them are SIX strings:
+#
+#     103,163 x 'Walmart'   45,919 x "Baker's"   33,653 x 'Family Fare'
+#      15,448 x 'Aldi'      14,964 x 'Hy-Vee'    12,384 x "Sam's Club"
+#
+# sku_id is why: it calls norm_store(store) twice and norm_text twice per invocation, and
+# norm_store calls norm_text again plus slug(), which calls it a fourth time. The unicodedata
+# pass underneath ran 6.66 MILLION times to answer questions about seven store names.
+#
+# THE WIN IS 0.26 s, NOT THE 2 s cProfile IMPLIED - AND THAT GAP IS THE LESSON. cProfile put
+# norm_text at 2.07 s cumulative, which read like half the import. Wall clock says otherwise:
+# 3.69 s -> 3.43 s median of three, both ways. A profiler charges its own per-call cost to the
+# function, and at 391,678 calls a couple of microseconds each IS most of that 2.07 s. On a
+# hot, tiny, very-high-call-count function, cProfile measures the profiler. Trust the clock.
+#
+# The same measurement said no to more: slug() and norm_store() were cached too, on the same
+# reasoning, and moved the median 3.42 -> 3.42 s. Both were reverted. A change that measures
+# zero is churn, and shipping it would have implied a benefit nobody could reproduce.
+#
+# SAFE BECAUSE IT IS PURE, AND PROVEN RATHER THAN ASSERTED. This function is the root of every
+# deterministic id in the graph - change its output and every sku:, commodity:, alias and edge
+# key moves - so it was verified by fingerprinting the whole graph before and after: nodes,
+# edges, aliases and price_observations byte-identical (40,500 / 72,854 / 73,168 / 26,740 rows,
+# sha over every id, not merely the same counts). Only `provenance` differs, and it differs
+# run-to-run with no code change at all - one new id per file imported, +42 every time.
+#
+# BOUNDED, NOT unbounded. maxsize covers the observed 42,914 distinct inputs with headroom, so
+# nothing evicts on a real import, while a long-lived caller cannot grow it without limit.
+@lru_cache(maxsize=1 << 17)
 def norm_text(s: str | None) -> str:
     """Normalise a free-text surface form for comparison/blocking.
 

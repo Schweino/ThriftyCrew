@@ -452,14 +452,32 @@ top inputs        : 103,163 x 'Walmart'   45,919 x "Baker's"   33,653 x 'Family 
 
 225,000 of the 392,000 calls are **six store names**. `sku_id` is the reason: it calls
 `norm_store(store)` twice and `norm_text` twice per invocation, and `norm_store` calls `norm_text`
-again (and `slug`, which calls it a fourth time). An `lru_cache` on `norm_text` would serve 89% of
-those calls from a dict — roughly half of a 3.8 s stage, for one decorator, with no concurrency
-and no new failure mode.
+again (and `slug`, which calls it a fourth time).
 
-**Not done, deliberately: this session's scope was "Phase 3 profile".** The cache is a one-line
-change to `graph/lib/ids.py` and the measurement above is the whole argument for it, but it is a
-change to ID minting — the function whose output becomes every `sku:` in the graph — and that
-deserves its own commit with its own before/after row counts rather than riding along here.
+#### The cache was built, and it is worth 0.26 s — not the 2 s cProfile implied
+
+**Corrected on the clock, 2026-08-23.** The paragraph that stood here estimated "roughly half of a
+3.8 s stage" from `norm_text`'s 2.07 s cProfile cumulative. Wall clock, median of three runs each
+way: **3.69 s → 3.43 s. A 0.26 s win, 7%.**
+
+That gap is the more useful finding. **cProfile charges its own per-call overhead to the function**,
+and at 391,678 calls a couple of microseconds each *is* most of that 2.07 s. On a hot, tiny,
+very-high-call-count function, cProfile is substantially measuring the profiler. It is still the
+right tool for finding *where* the time is; it is the wrong tool for deciding *how much* there is
+to win. Trust the clock. The same correction applies to the `sqlite3.execute` row above — 378,115
+calls, so its 2.09 s *tottime* is inflated the same way.
+
+The same measurement also said **no** to more of the same: `slug()` and `norm_store()` were cached
+too, on identical reasoning, and moved the median **3.42 → 3.42 s**. Both were reverted. A change
+that measures zero is churn, and shipping it would imply a benefit nobody could reproduce.
+
+**Verified rather than asserted**, because this is the function every `sku:`, `commodity:`, alias
+and edge key in the graph derives from: the whole graph was fingerprinted before and after —
+`nodes` 40,500, `edges` 72,854, `aliases` 73,168, `price_observations` 26,740, each with a sha
+over **every id, not merely the counts** — and all four are byte-identical. Only `provenance`
+differs, and it differs run-to-run with no code change at all (+42 per run, one id per file
+imported), which was established by running the baseline twice before trusting any comparison.
+`audit-graph-gates` reports the same 7 gates, 0 failing.
 
 ---
 
