@@ -431,7 +431,7 @@ if ($__foSelfTest) {
     Set-Content (Join-Path $td 'nomark.ps1') -Value "Write-Output 'quiet'; exit 0"
     Set-Content (Join-Path $td 'slow.ps1')   -Value "Start-Sleep -Seconds 30; Write-Output 'never'"
     Set-Content (Join-Path $td 'err.ps1')    -Value "[Console]::Error.WriteLine('a stderr line'); Write-Output 'OK-COMPLETE'; exit 0"
-    Set-Content (Join-Path $td 'sleep6.ps1') -Value "Start-Sleep -Seconds 6; Write-Output 'done'"
+    Set-Content (Join-Path $td 'sleep3.ps1') -Value "Start-Sleep -Seconds 3; Write-Output 'done'"
 
     $lanes = @(
       New-FanoutLane -Name 'ok'      -File (Join-Path $td 'ok.ps1')     -Marker 'OK-COMPLETE'
@@ -501,15 +501,18 @@ if ($__foSelfTest) {
     T '-Sequential returns the SAME verdict for every lane as the pool' ($diff -eq 0) ("$diff lane(s) differ")
 
     # AND IT MUST ACTUALLY BE CONCURRENT. Without this case the whole file could be a slow serial loop and
-    # every assertion above would still pass - a fan-out that does not fan out, reporting green. Eight
-    # 6-second children: concurrent is ~6-8 s, serial is ~48 s. There is no ambiguous middle, so a 20 s
-    # threshold cannot be flaky.
-    $probe = 1..8 | ForEach-Object { New-FanoutLane -Name ("L$_") -File (Join-Path $td 'sleep6.ps1') -TimeoutSec 60 }
+    # every assertion above would still pass - a fan-out that does not fan out, reporting green.
+    # THE SLEEP IS 3 s, NOT 6 (trimmed 2026-08-23 on a measurement). At 6 s this self-test was 12 s, which
+    # made it the single most expensive -SelfTest in the estate and 57% of that whole group's runtime - a
+    # fixture that costs more than the thing it is measuring is its own small defect. 8 x 3 s is concurrent
+    # at ~3-4 s and serial at ~24 s: the gap is still 6x, so a 12 s threshold cannot be flaky, and the case
+    # keeps exactly the discrimination it had.
+    $probe = 1..8 | ForEach-Object { New-FanoutLane -Name ("L$_") -File (Join-Path $td 'sleep3.ps1') -TimeoutSec 60 }
     $sw = [Diagnostics.Stopwatch]::StartNew()
     $pr = @(Invoke-Fanout -Lanes $probe -MaxParallel 8)
     $sw.Stop()
     $sum = 0; foreach ($x in $pr) { $sum += [int]$x.Elapsed }
-    T 'the pool really runs lanes CONCURRENTLY (8 x 6 s in under 20 s wall)' ($sw.Elapsed.TotalSeconds -lt 20 -and $sum -ge 40) ("wall {0:n1} s, sum {1} s" -f $sw.Elapsed.TotalSeconds, $sum)
+    T 'the pool really runs lanes CONCURRENTLY (8 x 3 s in under 12 s wall)' ($sw.Elapsed.TotalSeconds -lt 12 -and $sum -ge 16) ("wall {0:n1} s, sum {1} s" -f $sw.Elapsed.TotalSeconds, $sum)
   } finally {
     Remove-Item $td -Recurse -Force -ErrorAction SilentlyContinue
   }

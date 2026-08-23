@@ -1,6 +1,22 @@
 # PLAN — use the cores
 
-**Status: PROPOSED, written 2026-08-23 for a fresh build session. The machine is a Ryzen 9
+> **STATUS: CLOSED, 2026-08-23 evening.** All four phases were taken to a decision. Two shipped,
+> two were measured and deliberately not shipped — and each "no" is written up where the phase is,
+> because a rejection nobody recorded is a rejection somebody re-derives in three months.
+>
+> | phase | outcome | number |
+> |---|---|---|
+> | 1 — advisory-audit fan-out | **SHIPPED** (`9d56d137`) | 34 lanes, **513 s → 171 s wall**, daily, 0/34 verdicts changed |
+> | 2 — `test-auditors` self-tests | **measured, NOT shipped** | the whole win is **8 s**, on a suite that runs weekly |
+> | 3 — Python import | **profiled, NOT parallelised** | 3.8 s, 86% in one importer, half of it inside SQLite `execute` |
+> | 4 — capture builders | **SHIPPED** (`50a5e623`) | first-stage builders side by side, fixtured 10/10 |
+>
+> The plan was wrong about three things and they are corrected in place, not quietly: the
+> completion markers §2 names mostly do not exist; rule 4 needed a lock in `send-alert.ps1`, not
+> just a convention; and the 2026-08-22 "parallel is worse" measurement it inherited was
+> confounded by a wrapper proven broken one hour later.
+
+**Status when written: PROPOSED, 2026-08-23, for a fresh build session. The machine is a Ryzen 9
 9950X (16 cores / 32 threads). Every stage in this estate that is not a capture lane runs on
 ONE of them. This plan says which stages to fan out, in what order, what must stay serial and
 why, and how to prove each phase did not make a watcher go quiet.** Every number below was
@@ -286,6 +302,71 @@ output. The assertions stay exactly where they are; only the launches move.
 **Verify:** pass/fail counts identical to the serial run; every assertion still reads the
 same `$r` text it read before (the `SELFTEST: N/N pass` pins are load-bearing — see the
 19/19 note at `test-auditors.ps1` `$fcp`).
+
+
+### Phase 2 — MEASURED, 2026-08-23, and NOT SHIPPED. The win is 8 seconds.
+
+The plan says the ~19 independent `-SelfTest` children are what is "worth doing, cheaply". They
+were timed rather than assumed, and the number does not support the edit.
+
+**The 19 `-SelfTest` children, this machine, run through `Invoke-Fanout` both ways:**
+
+```
+SERIAL 21 s  ->  FAN-OUT 13 s   (saving 8 s)   verdicts differing: 0
+```
+
+Seventeen of the nineteen are **under one second each**. The two that are not are
+`adjudicate-discovery` (2 s) and `fanout-lib` itself (12 s, and see below). The fan-out is
+floor-bound by the single longest lane, so 8 s is the entire ceiling of this phase.
+
+**Set against what it costs:** nineteen edit sites in `test-auditors.ps1`, each replacing a
+`$LASTEXITCODE` read at an assertion whose `SELFTEST: N/N pass` pin is load-bearing, in the one
+file where a mistake blinds every guard in the estate. §3 already rejected the larger version of
+this edit as "a large risky edit to the estate's most load-bearing harness for a ~40 s gain". The
+real number is a fifth of that.
+
+**And test-auditors does not run daily.** It is cadence-gated at 7 days-or-inputs-moved and that
+gate works as of 08-23, so this would buy 8 s roughly once a week. Phase 1 buys 342 s every
+morning. **Phase 2 is closed as not worth doing** — recorded here rather than left as an open
+item somebody re-derives in three months.
+
+#### Where test-auditors' time actually goes, since it was instrumented anyway
+
+Every `PSChild` call timed on a full run (an instrumented copy, deleted after — and the estate
+noticed it was there: three checks failed on the copy, flagging it as an orphan, a census miss and
+a send-alert shape, which is the script-census/guard-contract roster doing exactly its job):
+
+| | |
+|---|---|
+| suite wall clock | **226 s** (3 m 46 s) |
+| child launches | **220** |
+| total time inside children | **162.9 s — 72% of the suite** |
+
+| child | calls | s |
+|---|---|---|
+| `test-match-lib` | 1 | 22.5 |
+| `test-matcher-parity` | 1 | 22.0 |
+| `fanout-lib` | 1 | 12.1 |
+| `audit-spec-contradictions` | 2 | 10.8 |
+| `audit-script-census` | 8 | 8.3 |
+| `audit-coverage-ledger` | 27 | 7.8 |
+| `audit-coverage-gaps` | 4 | 7.3 |
+| `audit-match-soundness` | 22 | 6.2 |
+
+So the plan's "the remaining 433 total 49 s" is wrong — 163 s of the 226 s is child time — but it
+is wrong in a way that does not help: the time is spread across 220 launches averaging 0.74 s,
+interleaved with the fixture setup the very next line asserts on. Hoisting *those* is the
+whole-file shard §3 rejected, and it is still the right rejection.
+
+`test-match-lib` (22.5 s) is already sharded 16 ways by `efe803f5`; `test-matcher-parity` (22 s)
+is one sampled sweep. Those two are 27% of the child time and neither has an easy next move.
+
+**One thing was fixed rather than just noted.** `fanout-lib -SelfTest` came in at 12.1 s — the
+single most expensive `-SelfTest` in the estate, and 57% of that whole group's runtime, from a
+concurrency probe of eight 6-second children. A fixture that costs more than the thing it measures
+is its own small defect. Trimmed to eight 3-second children: **12.1 s → 9.2 s**, and the
+discrimination is unchanged (concurrent ~3–4 s vs serial ~24 s is still 6×, against a 12 s
+threshold).
 
 ---
 
