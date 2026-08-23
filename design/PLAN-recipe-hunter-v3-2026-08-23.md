@@ -803,6 +803,8 @@ Workflow orchestrator** - none of them is inert while phase 3 waits:
   coverage_check.py pattern that already works) - the auditor's dispatch starts "run wave-preaudit
   and audit the residue", the QA dispatch starts with the QA battery. The daemon later moves the
   invocation pre-dispatch; the token savings start now either way.
+  BUILT 2026-08-23: both agent definitions and both hunt-orchestrator.js dispatch prompts carry the
+  concrete battery commands, and ops\prompt-backup was synced in the same commit.
 - **Phase 1 bridge:** the harvester feeds the existing orchestrator through the proven drain-mode
   shape - hunt/adjudicate lanes off, one seed step reads the pool and pipes accepted work downstream;
   the decider dispatch carries dossiers inline. The mini-run for the phase gate runs in exactly this
@@ -822,6 +824,29 @@ Workflow orchestrator** - none of them is inert while phase 3 waits:
 | 5 | D10 (price pre-pass) | one real absent-term batch priced with pre-gathered evidence; ladder states honest per store |
 | 6 | **the proving run**: ~20 recipes, wave size 10, Brad-directed conditions | success criteria written before the run, incl.: per-recipe tokens (billed measure) and steady-state wall-clock per published recipe both measured against §7's targets; >=5x fewer Claude invocations per published recipe than the 27 measured; zero gate weakened; every new defect class frozen as a fixture same-day |
 | E (optional) | 27B LoRA (extraction/line-split), cross-encoder dish-dedup fine-tune | only after 6; >=3 seeds per arm; detached LoRA never a merged GGUF |
+
+**Phase 0 gate: PASSED 2026-08-23** (commit d0d8af5c). Evidence, so the next session does not re-earn
+it: batteries run whole-wave against the real lowcarb-100 dirs in ~14 s each (waves 1/3/4; wave 2 exits
+2 on its genuinely empty reconciled manifest, which is the correct answer, not a stumble); a scoped
+re-audit of one slug is 13 s and exits 0; the five self-test suites are green (wave-preaudit 48,
+wave-publish 43, guard-contract 9, test-guards 48, qa-battery 69; zero FAIL). The one live finding
+class the batteries surfaced - `cost-reconcile` drift on 10 of 20 published specs - is real, is being
+repaired in its own session through recost-spec-cost-block.ps1, and does not gate phase 1. Do not
+chase it from a build session, and expect specs/costed.json to be moving underneath any verification
+run while that repair session is open.
+
+Two clarifications recorded for the phase-1 builder, so neither becomes a mid-build stall:
+
+- **The gate's ">=6 publishers" exceeds today's ledger.** source-domains has 5 domains. S1 already
+  names the road: new-publisher discovery is an occasional Claude sourcer job, so ONE discovery round
+  is in scope for phase 1 - it is judged work, budget it as such, and its finds enter the pool through
+  `harvest.py --ingest` like every other candidate (one road into the pool).
+- **PS 5.1 collection traps, pinned.** Two of the three defects wave-preaudit shipped with on its
+  first day were invisible to every pure-predicate fixture: an OrderedDictionary's ambiguous indexer,
+  and `@()` over a List[object] of dictionaries throwing "Argument types do not match". Both are frozen
+  as fixtures in `wave-preaudit.ps1 -SelfTest`; read them before writing any new PS collection code,
+  and prefer an end-to-end drill (run the script as a child against a scratch root) for anything whose
+  failure mode only appears when results are collected.
 
 **Stop-rules.** Re-measure with lane-tokens/harvest-lane-tokens after phases 1, 3 and 6; if the
 remaining spend concentrates somewhere this plan did not predict, the measurement wins and the order
