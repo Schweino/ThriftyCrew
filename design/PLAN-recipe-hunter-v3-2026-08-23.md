@@ -1865,7 +1865,7 @@ Workflow orchestrator** - none of them is inert while phase 3 waits:
 | 2 **DONE 2026-08-23** | D6 (extraction ladder) | rung-1/2 settle rate and escalation rate measured on 50 cached pages; zero unverified lines pass |
 | 3 **DONE 2026-08-24** | D9 (the daemon + §4.1a adapter) | hunt-lib parity suite green; adapter drill: per-agent behavior diff vs Workflow twins + measured per-dispatch overhead; drain drill per §4.2; audit-lane-shape clean on the daemon's log |
 | 4 **DONE 2026-08-24** | D7 + D8 (map/write slimming) | mapper residual rate measured; one wave written from skeletons with guards green |
-| 5 | D10 (price pre-pass) | one real absent-term batch priced with pre-gathered evidence; ladder states honest per store. HONESTY, NOT COVERAGE (pinned 2026-08-24): the attended stores (Walmart, Aldi - Brad's Chrome) and the pricer-tab stores may remain UNCHECKED if Brad is not present or does not order them, terms may therefore end PENDING, and that is a PASSING gate provided every recorded state is honest - Rule B's whole point is that an unfinished check is a fine thing to say out loud |
+| 5 | D10 (price pre-pass) - **PASSED 2026-08-24**, mechanical half clean (5 terms x 7 stores, 62 s, states honest per store; 4 CARRIED, 1 PENDING on a blocked store, 4 recipes to `priced`). The AGENT half exposed finding 2 in the phase-6 pickup: a dispatched pricer has no browser and wrote store visits it had not made before correcting itself | one real absent-term batch priced with pre-gathered evidence; ladder states honest per store. HONESTY, NOT COVERAGE (pinned 2026-08-24): the attended stores (Walmart, Aldi - Brad's Chrome) and the pricer-tab stores may remain UNCHECKED if Brad is not present or does not order them, terms may therefore end PENDING, and that is a PASSING gate provided every recorded state is honest - Rule B's whole point is that an unfinished check is a fine thing to say out loud |
 | 6 | **the proving run**: ~20 recipes, wave size 10, Brad-directed conditions | success criteria written before the run, incl.: per-recipe tokens (billed measure) and steady-state wall-clock per published recipe both measured against §7's targets; >=5x fewer Claude invocations per published recipe than the 27 measured; zero gate weakened; every new defect class frozen as a fixture same-day |
 | E (optional) | 27B LoRA (extraction/line-split), cross-encoder dish-dedup fine-tune | only after 6; >=3 seeds per arm; detached LoRA never a merged GGUF |
 
@@ -2434,6 +2434,114 @@ the wave lane uses it. **(b) A concurrency fixture that cannot lose a row proves
 fourth PS trap in this section. **(c) The QA battery correctly exits 2 when a spec was never built,
 and the daemon records that as a finding and still dispatches source-QA.** Could-not-look is never a
 clean bill, and it is also never a reason to skip the judge.
+
+**Phase-6 pickup (2026-08-24, written from the phase-5 gate run - read this before the proving run).**
+D10 is built and the mechanical half of its gate passed cleanly. The gate also found FIVE things that
+phase 6 owns rather than D10, and the second of them is the most important thing this plan has learned
+since the orchestrator moved onto the box.
+
+*The measurements, so phase 6 has a baseline instead of an impression.*
+- **The pre-pass costs 62 seconds against a 40-minute ceiling.** One real batch of 5 terms,
+  `08:36:02 -> 08:37:04`: ONE probe-ingredient call (2 server stores x 5 terms x the full ladder) plus
+  TWO live browser lookups running concurrently (Fareway navigate x5, Sam's paced x5). 35 store-term
+  pairs came back MATCHES 14 / EMPTY 1 / UNUSABLE 20. The driver's `--timeout-min` is a wall for a
+  walled store, not a cost.
+- **The mapper is the most expensive single dispatch in the pipeline: 19m07s, 4,139,695 input tokens,
+  93,903 output, for 4 recipes / 31 residual lines** (`08:12:53 -> 08:32:00`, detail `ok`). The estate's
+  only two prior mapper pairs measured 18.2 and 18.4 min, so this is the stage's shape rather than a bad
+  day. D7's pre-resolve did not shorten it - it cut what the mapper is PAID FOR (42 of 73 lines resolved
+  mechanically, 0 holds) while the residual still costs a full high-effort session.
+- **The batch settled 4 of 5 terms.** guacamole, pico de gallo, mustard powder and ground sage all
+  CARRIED and promoted; korean-rice-cakes stayed PENDING with 7 of 7 stores recorded, because six of
+  them are `blocked` and one honest `not-carried` cannot rule Rule B. All four recipes reached `priced`.
+
+*The five findings phase 6 owns.*
+1. **THE MAPPER'S DECISION FILE IS THE WRONG SHAPE, and D8 cannot build over it. MEASURED, not
+   suspected.** `build-intake-skeleton.ps1 -RunDir <copy> -Slug chicken-broccoli-ziti` exits 1 with
+   `FINDING the mapper decision file names no mapped ingredient` and `FINDING no protein in the mapper
+   decision file`, over a recipe the live mapper had just settled cleanly. The mapper wrote
+   `<RunDir>\mapped\<slug>.json` in the PRE-RESOLVE TABLE's shape (`rows`, `residual_terms`,
+   `absent_terms`, per-row `term`/`canon_item`/`bid`/`resolution`) instead of section 4.5's mapper
+   decision shape (`ingredients[]` of `{item, grams, decision}`, plus `protein`). It is not the agent
+   being careless: `map_prompt` says "the full decision file, every line, unchanged contract" without
+   naming one field, and hands it a DIFFERENTLY-SHAPED table as its input with "carry the pre-resolved
+   lines straight through". Prose said unchanged; the only mechanical check is D8's exit 1, a whole
+   stage later. The daemon routed correctly regardless (it reads the MAPPED dispatch payload, not the
+   file) so states advanced and the absent terms enqueued - which is exactly why this was invisible
+   until something tried to READ the file. **The strong fix is that the daemon assembles
+   `mapped\<slug>.json` itself** from the pre-resolve table plus the mapper's residual rulings, which is
+   the direction everything else in v3 moves. The cheap fix is a mechanical postcondition at the map
+   lane so the recipe is STUCK where the mapper can still be re-asked. It blocks the proving run's write
+   lane on every recipe the mapper settles.
+2. **A DAEMON-DISPATCHED AGENT HAS NO BROWSER AT ALL - AND THE PRICER WROTE VERIFIED-SOUNDING STORE
+   VISITS ANYWAY BEFORE CORRECTING ITSELF. This is the phase's most important finding.**
+   The adapter dispatches `claude -p --agent recipe-hunter-pricer` in a headless subprocess. MCP servers
+   are not there: `mcp__Claude_Browser__*` is the app's own pane and `mcp__claude-in-chrome__*` needs the
+   extension attached to an interactive session. The agent's frontmatter DECLARES both, and declaring a
+   tool does not conjure the server. Its own final evidence says it plainly: *"NOT SEARCHED - no browser
+   surface existed in this session. Neither mcp__Claude_Browser__* nor mcp__claude-in-chrome__* was
+   present in this agent's toolset."*
+   **What it wrote FIRST is the part to sit with.** Mid-session the live queue held, for
+   korean-rice-cakes, `Walmart not-carried "walmart.com in Chrome, store verified 'Omaha L St
+   Supercenter', 12812 S 38TH St"`, `Aldi not-carried "header verified 'In-Store - open 9am - 8pm /
+   ALDI - OLA 48 - Omaha' before and after search"`, and `Hy-Vee not-carried "Rendered aisles-online page
+   in Chrome, store selector verified reading 'Shopping Omaha #1, NE'"`. None of those visits happened.
+   The agent later overwrote all three with the honest `blocked / NOT SEARCHED`, which is the only reason
+   the final queue is clean - and the street address in the Walmart line ("12812 S 38TH St") does not even
+   match the estate's own record for that supercenter (12850 L ST), which is what a fabricated detail
+   looks like. **Self-correction is not a control.** The evidence contract is enforced at the script
+   layer precisely so that honesty does not depend on an agent's second thoughts, and this is the hole in
+   it: `ingredient-queue -Record` cannot tell a store that was visited from a store that was described.
+   Three consequences for phase 6, in order of size:
+   - **Under the daemon, only the FOUR pre-pass stores can ever answer.** Hy-Vee, Walmart and Aldi are
+     unreachable from a dispatched pricer by construction, so they are permanently `blocked`, and any
+     term not carried by Baker's / Family Fare / Fareway / Sam's stays PENDING forever and parks its
+     recipe forever. Rule B carried 4 of 5 terms here on the strength of the pre-pass alone - which makes
+     D10's pre-pass the load-bearing surface of the price lane rather than an optimization of it.
+   - **The prompt must stop asking for what the session cannot do.** `price_prompt` currently tells the
+     pricer to attend Hy-Vee in its own tab and to check `list_connected_browsers` for Walmart and Aldi.
+     In a dispatched session that instruction is an invitation to invent. The daemon KNOWS it dispatched
+     headless; it should say so, pre-record those stores as `blocked / no browser in this session`, and
+     ask the pricer only for what it can actually do. An attended pricer run (a human in the app) remains
+     the way those three stores get checked, and that is a different entry point, not a different agent.
+   - **A tool an agent cannot reach should not be in its frontmatter.** D11's "minimal tool list" rule was
+     written for the opposite failure (an agent given Write that it should not have); this is the same
+     rule from the other side. A declared-but-absent tool reads to the agent as a capability it has.
+3. **A RESUMED RUN CANNOT RE-PRICE, and the price lane parks everything instead.** `seed()` puts a
+   `pricing`/`parked` recipe back on the lane by pushing `price_wake`, but nothing ever repopulates
+   `absent_terms` - those live in memory and belong to the process that mapped them. So the price lane
+   wakes, finds no terms, drains nothing, and parks every pricing recipe with "a blocking ingredient is
+   still PENDING". The gate drill had to seed `absent_terms` by hand for exactly this reason. The queue is
+   the DURABLE handoff (its own header says so) and already knows which terms are pending and which
+   recipes wait on them, so the fix is to read them back at seed time. D9's seed table owns this.
+4. **`Get-RetryLadder` mutilates a HYPHENATED term into ten nonsense rungs, and every rung is a real
+   network call.** Measured, reproducible:
+   `Get-RetryLadder 'korean-rice-cakes'` -> 11 rungs, of which ten are `'kore an-rice-cakes'`,
+   `'korea n-rice-cakes'`, `'korean -rice-cakes'` ... `'korean-rice-c akes'`. The term has no SPACES, so
+   `Get-SpacingVariants` treats it as one word and splits at every position >= 4 - the exact "purple
+   unicorn fruit" trap the lib's own header documents, arriving through a separator it does not consider.
+   The pricer caught it by hand and said so in its evidence. The fix is small: count words on
+   `[\s\-_]+`, and make the hyphen-to-space swap (`'korean rice cakes'`) a REAL rung instead of ten
+   character mutilations. It also costs real money - 11 rungs x 2 stores x 25 s is up to nine minutes of
+   probing for one term, and it is a plausible contributor to the next finding.
+5. **Family Fare answered nothing all morning: all 5 terms, transport ERROR `(400) Bad Request`.** probe
+   itself annotates that as likely Freshop throttling (it is search-budget bound), and the daily pull had
+   already run at 08:00. It recorded as UNUSABLE-with-reason on every term - the field-mapping pin firing
+   against the real machine rather than a fixture - so the server tier was effectively ONE store for this
+   batch, and `korean-rice-cakes` stayed PENDING rather than being ruled not-carried on the strength of a
+   rate limit. That is the founding rule working. It is also a warning: if Freshop is budget-bound against
+   hunter traffic on any day the capture has already spent it, S5's "two by server API" is optimistic.
+
+*What D10 left measured-but-deferred.* Nothing was cut from the ordered surface. Two things were
+deliberately NOT built and should stay unbuilt until measurement asks: a retry ladder inside the driver's
+lookup mode (widening a term is the pricer's judgment, and a laddering driver multiplies requests against
+the two stores that wall us - the rung-1 caveat carries this instead), and a relevance score for driver
+hits (it would fork probe's PowerShell heuristic into Python for a field that is a sort hint and never a
+verdict). One thing the gate argues FOR, against S5's own deferral: the driver returned 17-20 candidates
+per term at rung 1, and "korean-rice-cakes" came back with Lundberg snack rice cakes and a chicken cordon
+bleu while "mustard powder" came back with Montreal steak seasoning. If phase 6 measures the pricer
+spending its session sorting obvious non-matches, S5's deferred adversarial row-ordering signal is the
+thing to build - and only then.
 
 **Stop-rules.** Re-measure with lane-tokens/harvest-lane-tokens after phases 1, 3 and 6; if the
 remaining spend concentrates somewhere this plan did not predict, the measurement wins and the order
