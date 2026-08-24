@@ -1825,6 +1825,91 @@ def cmd_probe_domains(a):
     return 0
 
 
+def cmd_classify_nutrition(a):
+    """Transcribe printed nutrition panels for candidates whose JSON-LD carries none.
+
+    WHY (measured 2026-08-24). 314 available candidates were unverified, and ~60% of them print a
+    complete panel in the page TEXT - "Nutrition Serving: 6 ounces | Calories: 255 kcal |
+    Carbohydrates: 0 g". The numbers were always there; only the machine-readable block was missing,
+    so publishers who render nutrition in HTML were second-class to this pipeline for no reason.
+
+    LOCAL, AND ONLY BECAUSE IT IS TRANSCRIPTION. Section 1.4 lets local transcribe verifiably and
+    forbids it to assert. Every number here is proved a substring of the page it came from, the panel's
+    own serving basis is captured rather than assumed, and the required set must be COMPLETE - a panel
+    missing protein verifies perfectly on what IS there, which is the confident-fragment failure. Where
+    a page prints NO panel this writes nothing: computing macros from ingredients would be an
+    assertion, and the estate already answers that better with the label-accurate macro recompute.
+
+    REFUSES when llama-server is down, the audit-semantic-identity BLIND pattern: a pass that could not
+    reach the model has transcribed nothing, and reporting that as clean is could-not-look-is-not-a-
+    clean-bill. Nothing here starts or stops the server (section 4.4).
+    """
+    import local_extract                                          # noqa: PLC0415
+    if not llama_up():
+        say("harvest --classify-nutrition: REFUSING - llama-server is not answering at %s." % LLAMA_URL)
+        say("  Start it by hand (section 4.4), then run this again. Nothing was written.")
+        say("HARVEST-COMPLETE")
+        return 2
+    pool = read_pool(a.pool or POOL)
+    # RE-EVALUATE STORED PANELS TOO, so re-running corrects an earlier verdict rather than skipping
+    # what it already touched. Needed the day it shipped: the first full pass marked 129 panels
+    # `verified` before `verified` was tightened to mean "one whole serving", and those rows would
+    # otherwise have been invisible to every later run.
+    for c in pool["candidates"]:
+        if not c.get("nutrition_serving"):
+            continue
+        band = dict(c.get("band") or {})
+        whole = local_extract.serving_is_whole(c.get("nutrition_serving"))
+        if bool(band.get("verified")) != whole:
+            band["verified"] = whole
+            band["reason"] = (("transcribed from the page's printed panel (serving: %s)"
+                               % str(c.get("nutrition_serving"))[:40]) if whole else
+                              ("the page's panel is per %s, not per serving - the numbers are real "
+                               "but they are not a serving's" % str(c.get("nutrition_serving"))[:40]))
+            c["band"] = band
+    targets = [c for c in pool["candidates"]
+               if c.get("status") == "available" and not (c.get("band") or {}).get("verified")
+               and not c.get("nutrition_serving")]
+    if a.limit:
+        targets = targets[:a.limit]
+    say("harvest --classify-nutrition: %d unverified candidate(s) to try" % len(targets))
+    llm = local_extract.LocalLLM(timeout=180)
+    read = uncached = nopanel = failed = 0
+    for c in targets:
+        body = cached_body(c.get("url") or "")
+        if body is None:
+            uncached += 1
+            continue
+        text = local_extract.page_text_from_html(body)
+        try:
+            r = local_extract.read_nutrition(text, llm)
+        except Exception as e:                                    # noqa: BLE001
+            failed += 1
+            if failed <= 3:
+                say("  %-44s ERROR %s" % (c["slug"][:44], str(e)[:60]))
+            continue
+        if not r.get("ok"):
+            nopanel += 1
+            continue
+        band = dict(c.get("band") or {})
+        band.update(r["band"])
+        c["band"] = band
+        c["nutrition_serving"] = r.get("serving")
+        read += 1
+        if read <= 12:
+            say("  %-44s cal %-7s p %-6s c %-6s  serving: %s"
+                % (c["slug"][:44], band.get("cal"), band.get("protein_g"), band.get("carbs"),
+                   str(r.get("serving"))[:22]))
+    if a.dry_run:
+        say("  DRY RUN - nothing written")
+    else:
+        write_pool(pool, a.pool or POOL)
+    say("  transcribed %d, no printed panel %d, no cached page %d, errors %d"
+        % (read, nopanel, uncached, failed))
+    say("HARVEST-COMPLETE")
+    return 0
+
+
 def cmd_reingredients(a):
     """Restore ingredient lines to pooled candidates from the PAGE CACHE. No network, no model.
 
@@ -2551,6 +2636,9 @@ def main(argv=None):
     ap.add_argument("--dossier", action="store_true")
     ap.add_argument("--status", action="store_true")
     ap.add_argument("--rescore", action="store_true")
+    ap.add_argument("--classify-nutrition", dest="classify_nutrition", action="store_true",
+                    help="transcribe printed nutrition panels for candidates whose JSON-LD has "
+                         "none. Needs llama-server; every number is proved against the page.")
     ap.add_argument("--probe-domains", dest="probe_domains", action="store_true",
                     help="MANUAL ONLY. Probe candidate publisher domains mechanically - robots, "
                          "enumeration, and whether their pages carry a usable recipe block. "
@@ -2595,6 +2683,8 @@ def main(argv=None):
         return cmd_dossier(a)
     if a.resignature:
         return cmd_resignature(a)
+    if a.classify_nutrition:
+        return cmd_classify_nutrition(a)
     if a.probe_domains:
         return cmd_probe_domains(a)
     if a.reingredients:

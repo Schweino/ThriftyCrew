@@ -1,6 +1,6 @@
 {
  "_doc": "Every candidate the harvester has ever looked at, with the numbers behind its verdict. harvest.py is the SOLE writer; --mark-taken / --mark-ruled / --ingest are the only roads in. A ruled candidate never resurfaces as available.",
- "updated": "2026-08-24T16:21:04",
+ "updated": "2026-08-24T17:19:45",
  "count": 2441,
  "candidates": [
   {
@@ -2728,7 +2728,7 @@
     "carbs": 11.0,
     "protein_g": 5.0,
     "verified": false,
-    "reason": "89 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 balls, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 11,
    "ingredients_verbatim": [
@@ -2840,7 +2840,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "2 balls"
   },
   {
    "slug": "baked-meatballs",
@@ -6432,10 +6433,10 @@
    },
    "band": {
     "cal": 255.0,
-    "carbs": null,
+    "carbs": 0.0,
     "protein_g": 30.0,
     "verified": false,
-    "reason": "carbohydrateContent not stated as a single number"
+    "reason": "the page's panel is per 6 ounces, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -6567,7 +6568,8 @@
    "saturation_pressure": 2,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "6 ounces"
   },
   {
    "slug": "chicken-broccoli-casserole",
@@ -8732,8 +8734,8 @@
     "cal": 68.85,
     "carbs": 1.85,
     "protein_g": 0.4,
-    "verified": false,
-    "reason": "68.85 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1 Serving)"
    },
    "servings": 2,
    "ingredients_verbatim": [
@@ -8866,7 +8868,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 Serving"
   },
   {
    "slug": "baked-macaroni-cheese-with-chicken-amp-broccoli",
@@ -9258,8 +9261,8 @@
     "cal": 86.33,
     "carbs": 9.25,
     "protein_g": 3.25,
-    "verified": false,
-    "reason": "86.33 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 6,
    "ingredients_verbatim": [
@@ -9394,7 +9397,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1"
   },
   {
    "slug": "braised-beef-short-ribs-in-red-wine-sauce",
@@ -9511,8 +9515,8 @@
     "cal": 62.0,
     "carbs": 5.0,
     "protein_g": 1.0,
-    "verified": false,
-    "reason": "62 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1 servings)"
    },
    "servings": 6,
    "ingredients_verbatim": [
@@ -9619,7 +9623,8 @@
    "saturation_pressure": 2,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 servings"
   },
   {
    "slug": "fried-pork-chops-with-apples",
@@ -9776,8 +9781,8 @@
     "cal": 73.0,
     "carbs": 9.0,
     "protein_g": 4.0,
-    "verified": false,
-    "reason": "73 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 24,
    "ingredients_verbatim": [
@@ -9912,7 +9917,8 @@
    "saturation_pressure": 1,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1"
   },
   {
    "slug": "curry-roasted-vegetable-bowls",
@@ -17968,7 +17974,7 @@
     "carbs": 10.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "74 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 churro, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 36,
    "ingredients_verbatim": [
@@ -18044,7 +18050,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1 churro"
   },
   {
    "slug": "pot-roast-recipe",
@@ -20792,7 +20799,7 @@
     "carbs": 4.0,
     "protein_g": 6.0,
     "verified": false,
-    "reason": "65 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 meatball (with 1.25 ounces sauce), not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 38,
    "ingredients_verbatim": [
@@ -20911,7 +20918,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1 meatball (with 1.25 ounces sauce)"
   },
   {
    "slug": "skillet-meatballs-and-marinara",
@@ -22197,7 +22205,7 @@
     "carbs": 4.0,
     "protein_g": 5.0,
     "verified": false,
-    "reason": "67 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per per meatball, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 35,
    "ingredients_verbatim": [
@@ -22327,7 +22335,8 @@
    "saturation_pressure": 2,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "per meatball"
   },
   {
    "slug": "buffalo-chicken-quesadillas",
@@ -22940,7 +22949,7 @@
     "carbs": 2.5,
     "protein_g": 10.5,
     "verified": false,
-    "reason": "67 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 meatballs, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -23071,7 +23080,8 @@
    "saturation_pressure": 9,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "2 meatballs"
   },
   {
    "slug": "turkey-meatballs",
@@ -25281,7 +25291,7 @@
     "carbs": 1.0,
     "protein_g": 9.0,
     "verified": false,
-    "reason": "93 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 egg muffin, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -25519,7 +25529,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "breakfast"
-   ]
+   ],
+   "nutrition_serving": "1 egg muffin"
   },
   {
    "slug": "overnight-apple-pie-french-toast-casserole",
@@ -25576,7 +25587,7 @@
     "carbs": 2.0,
     "protein_g": 6.0,
     "verified": false,
-    "reason": "53 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 meatball, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 20,
    "ingredients_verbatim": [
@@ -25709,7 +25720,8 @@
    "saturation_pressure": 4,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 meatball"
   },
   {
    "slug": "sweet-chili-chicken-stir-fry-bowls",
@@ -28795,7 +28807,7 @@
     "carbs": 20.0,
     "protein_g": 5.0,
     "verified": false,
-    "reason": "97 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1.5 cups, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 5,
    "ingredients_verbatim": [
@@ -28929,7 +28941,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1.5 cups"
   },
   {
    "slug": "crispy-shredded-chicken-noodle-stir-fry-nutrition-png",
@@ -30625,7 +30638,7 @@
     "carbs": 1.0,
     "protein_g": 3.0,
     "verified": false,
-    "reason": "92 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 bacon strip, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 1,
    "ingredients_verbatim": [
@@ -30742,7 +30755,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1 bacon strip"
   },
   {
    "slug": "apple-cherry-baked-oatmeal",
@@ -32257,8 +32271,8 @@
     "cal": 50.0,
     "carbs": 2.0,
     "protein_g": 3.0,
-    "verified": false,
-    "reason": "50 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 24,
    "ingredients_verbatim": [
@@ -32321,7 +32335,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1"
   },
   {
    "slug": "baked-beans",
@@ -33787,10 +33802,10 @@
    },
    "band": {
     "cal": 255.0,
-    "carbs": null,
+    "carbs": 0.0,
     "protein_g": 30.0,
     "verified": false,
-    "reason": "carbohydrateContent not stated as a single number"
+    "reason": "the page's panel is per 6 ounces, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -33910,7 +33925,8 @@
    "saturation_pressure": 6,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "6 ounces"
   },
   {
    "slug": "brown-sugar-roasted-rutabaga",
@@ -35218,7 +35234,7 @@
     "carbs": 12.0,
     "protein_g": 0.6,
     "verified": false,
-    "reason": "recipeYield does not parse to one integer - the serving basis is ambiguous"
+    "reason": "the page's panel is per 0.5 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": null,
    "ingredients_verbatim": [
@@ -35333,7 +35349,8 @@
    "saturation_pressure": 4,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "0.5 cup"
   },
   {
    "slug": "bbq-beef-and-cabbage",
@@ -40030,7 +40047,7 @@
     "carbs": 3.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "25 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 tablespoons, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -40232,7 +40249,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "2 tablespoons"
   },
   {
    "slug": "chicken-parmesan-spaghetti-squash",
@@ -41708,7 +41726,7 @@
     "carbs": 2.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "89 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 tablespoons, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -41872,7 +41890,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "2 tablespoons"
   },
   {
    "slug": "sun-dried-tomato-pasta-with-chicken",
@@ -42349,8 +42368,8 @@
     "cal": 53.0,
     "carbs": 6.0,
     "protein_g": 1.0,
-    "verified": false,
-    "reason": "53 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1 serving)"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -42518,7 +42537,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1 serving"
   },
   {
    "slug": "butter-chicken",
@@ -46669,7 +46689,7 @@
     "carbs": 3.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "18 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 tablespoons, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -46833,7 +46853,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "2 tablespoons"
   },
   {
    "slug": "crock-pot-chicken-and-dumplings",
@@ -48552,7 +48573,7 @@
     "carbs": 8.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "33 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 pepper, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -48656,7 +48677,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1 pepper"
   },
   {
    "slug": "crock-pot-taco-soup",
@@ -48906,9 +48928,9 @@
    "band": {
     "cal": 94.0,
     "carbs": 9.0,
-    "protein_g": null,
+    "protein_g": 0.0,
     "verified": false,
-    "reason": "94 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 0.25 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -49015,7 +49037,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "0.25 cup"
   },
   {
    "slug": "lemon-chicken-piccata",
@@ -53324,8 +53347,8 @@
     "cal": 93.0,
     "carbs": 11.0,
     "protein_g": 3.0,
-    "verified": false,
-    "reason": "93 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1 serving)"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -53443,7 +53466,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 serving"
   },
   {
    "slug": "easy-swiss-steak",
@@ -53625,8 +53649,8 @@
     "cal": 68.0,
     "carbs": 5.0,
     "protein_g": 1.0,
-    "verified": false,
-    "reason": "68 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 48,
    "ingredients_verbatim": [
@@ -53698,7 +53722,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1"
   },
   {
    "slug": "cumin-lime-roasted-sweet-potatoes",
@@ -56457,8 +56482,8 @@
     "cal": 68.0,
     "carbs": 7.0,
     "protein_g": 2.0,
-    "verified": false,
-    "reason": "68 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1 serving)"
    },
    "servings": 6,
    "ingredients_verbatim": [
@@ -56537,7 +56562,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 serving"
   },
   {
    "slug": "roasted-brussels-sprouts-butternut-squash-and-bacon-with-maple-soy-glaze",
@@ -56952,7 +56978,7 @@
     "carbs": 4.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "23 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 0.25 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 7,
    "ingredients_verbatim": [
@@ -57075,7 +57101,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "0.25 cup"
   },
   {
    "slug": "spaghetti-and-meatball-soup",
@@ -58827,7 +58854,7 @@
     "carbs": 8.0,
     "protein_g": 3.0,
     "verified": false,
-    "reason": "88 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 5,
    "ingredients_verbatim": [
@@ -58924,7 +58951,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 cup"
   },
   {
    "slug": "vegetable-beef-soup-recipe",
@@ -59475,7 +59503,7 @@
     "carbs": 1.0,
     "protein_g": 3.0,
     "verified": false,
-    "reason": "50 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 halves, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -59573,7 +59601,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "2 halves"
   },
   {
    "slug": "fire-roasted-salsa",
@@ -61144,9 +61173,9 @@
    "band": {
     "cal": 72.0,
     "carbs": 3.0,
-    "protein_g": null,
+    "protein_g": 0.0,
     "verified": false,
-    "reason": "72 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 g, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -61285,7 +61314,8 @@
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 g"
   },
   {
    "slug": "roasted-broccoli-rabe-with-garlic",
@@ -61305,7 +61335,7 @@
     "carbs": 1.7,
     "protein_g": 1.2,
     "verified": false,
-    "reason": "72.4 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 /4th, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -61411,7 +61441,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 /4th"
   },
   {
    "slug": "giant-slow-cooker-meatballs",
@@ -62966,7 +62997,7 @@
     "carbs": 17.5,
     "protein_g": 3.0,
     "verified": false,
-    "reason": "94 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 ear, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 6,
    "ingredients_verbatim": [
@@ -63073,7 +63104,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 ear"
   },
   {
    "slug": "ground-turkey-recipes",
@@ -64023,7 +64055,7 @@
     "carbs": 6.5,
     "protein_g": 2.5,
     "verified": false,
-    "reason": "55 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -64130,7 +64162,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 cup"
   },
   {
    "slug": "honey-garlic-chicken",
@@ -64473,7 +64506,7 @@
     "carbs": 6.5,
     "protein_g": 7.0,
     "verified": false,
-    "reason": "65 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 bundle, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -64582,7 +64615,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1 bundle"
   },
   {
    "slug": "honey-mustard-chicken-salad",
@@ -65288,7 +65322,7 @@
     "carbs": 11.0,
     "protein_g": 1.5,
     "verified": false,
-    "reason": "69 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 /2 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 6,
    "ingredients_verbatim": [
@@ -65396,7 +65430,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1 /2 cup"
   },
   {
    "slug": "honey-sriracha-chicken-thighs",
@@ -65702,7 +65737,7 @@
     "carbs": 15.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "82 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 /2 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 6,
    "ingredients_verbatim": [
@@ -65809,7 +65844,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 /2 cup"
   },
   {
    "slug": "roasted-pumpkin-seeds",
@@ -65829,7 +65865,7 @@
     "carbs": 1.69,
     "protein_g": 3.43,
     "verified": false,
-    "reason": "78 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 0.25 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 10,
    "ingredients_verbatim": [
@@ -65913,7 +65949,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "0.25 cup"
   },
   {
    "slug": "curry-soup",
@@ -67434,8 +67471,8 @@
     "cal": 56.28,
     "carbs": 5.05,
     "protein_g": 2.58,
-    "verified": false,
-    "reason": "56.28 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1 serving)"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -67556,7 +67593,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 serving"
   },
   {
    "slug": "fig-and-date-energy-balls",
@@ -67575,8 +67613,8 @@
     "cal": 89.0,
     "carbs": 15.0,
     "protein_g": 2.0,
-    "verified": false,
-    "reason": "89 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 18,
    "ingredients_verbatim": [
@@ -67633,7 +67671,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1"
   },
   {
    "slug": "corned-beef-and-cabbage",
@@ -69516,7 +69555,7 @@
     "carbs": 7.0,
     "protein_g": 7.5,
     "verified": false,
-    "reason": "87 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 pieces, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -69577,7 +69616,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "2 pieces"
   },
   {
    "slug": "maple-sage-breakfast-sausage",
@@ -70118,7 +70158,7 @@
     "carbs": 12.0,
     "protein_g": 2.0,
     "verified": false,
-    "reason": "62 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 tortilla, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 14,
    "ingredients_verbatim": [
@@ -70215,7 +70255,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1 tortilla"
   },
   {
    "slug": "skinny-no-bake-chocolate-peanut-butter-cookies",
@@ -72033,7 +72074,7 @@
     "carbs": 17.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "67 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -72087,7 +72128,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 cup"
   },
   {
    "slug": "slow-cooker-italian-beef-hoagies",
@@ -72448,8 +72490,8 @@
     "cal": 51.0,
     "carbs": 12.0,
     "protein_g": 1.0,
-    "verified": false,
-    "reason": "51 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1 serving)"
    },
    "servings": 6,
    "ingredients_verbatim": [
@@ -72504,7 +72546,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 serving"
   },
   {
    "slug": "soba-noodle-veggie-stir-fry",
@@ -73184,7 +73227,7 @@
     "carbs": 11.0,
     "protein_g": 2.0,
     "verified": false,
-    "reason": "89 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 cookie, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 30,
    "ingredients_verbatim": [
@@ -73247,7 +73290,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1 cookie"
   },
   {
    "slug": "oven-baked-chicken-and-rice-0-jpg",
@@ -76332,7 +76376,7 @@
     "carbs": 5.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "27 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 tablespoon, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 2,
    "ingredients_verbatim": [
@@ -76447,7 +76491,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 tablespoon"
   },
   {
    "slug": "mexican-arancini-rice-balls",
@@ -78413,7 +78458,7 @@
     "carbs": 14.0,
     "protein_g": 2.0,
     "verified": false,
-    "reason": "69 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 sope (baked), not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -78521,7 +78566,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1 sope (baked)"
   },
   {
    "slug": "tomato-fresh-mozzarella-roasted-pepper-on-whole-wheat-bread",
@@ -79887,8 +79933,8 @@
     "cal": 82.7,
     "carbs": 7.0,
     "protein_g": 2.52,
-    "verified": false,
-    "reason": "82.7 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1 Serving)"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -79978,7 +80024,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 Serving"
   },
   {
    "slug": "one-skillet-butternut-squash-gnocchi-with-italian-sausage",
@@ -80106,7 +80153,7 @@
     "carbs": 2.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "53 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 0.5 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -80194,7 +80241,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "0.5 cup"
   },
   {
    "slug": "refried-beans",
@@ -80694,7 +80742,7 @@
     "carbs": 6.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "37 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 0.5 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 2,
    "ingredients_verbatim": [
@@ -80818,7 +80866,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "0.5 cup"
   },
   {
    "slug": "tuscan-white-bean-and-roasted-garlic-soup-crock-pot-recipe",
@@ -81250,7 +81299,7 @@
     "carbs": 5.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "70 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 tablespoons, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -81307,7 +81356,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "2 tablespoons"
   },
   {
    "slug": "whole-roasted-baby-cauliflower",
@@ -81327,7 +81377,7 @@
     "carbs": 3.5,
     "protein_g": 1.5,
     "verified": false,
-    "reason": "46.5 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 /4 cauliflower head, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -81403,7 +81453,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 /4 cauliflower head"
   },
   {
    "slug": "avocado-egg-salad",
@@ -82053,7 +82104,7 @@
     "carbs": 15.0,
     "protein_g": 4.0,
     "verified": false,
-    "reason": "98 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 taquito, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 25,
    "ingredients_verbatim": [
@@ -82257,7 +82308,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 taquito"
   },
   {
    "slug": "35-skinny-zucchini-recipes",
@@ -83246,7 +83298,7 @@
     "carbs": 8.0,
     "protein_g": 2.0,
     "verified": false,
-    "reason": "84 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 0.75 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -83323,7 +83375,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "0.75 cup"
   },
   {
    "slug": "bbq-chicken-sliders",
@@ -84432,7 +84485,7 @@
     "carbs": 3.0,
     "protein_g": 8.0,
     "verified": false,
-    "reason": "96 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 Chipotle Sweet Potato Egg Cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -84564,7 +84617,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "breakfast"
-   ]
+   ],
+   "nutrition_serving": "1 Chipotle Sweet Potato Egg Cup"
   },
   {
    "slug": "irish-beef-stew-8-jpg",
@@ -84826,7 +84880,7 @@
     "carbs": 10.5,
     "protein_g": 15.0,
     "verified": false,
-    "reason": "recipeYield does not parse to one integer - the serving basis is ambiguous"
+    "reason": "the page's panel is per 3 ounces, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": null,
    "ingredients_verbatim": [
@@ -84942,7 +84996,8 @@
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "3 ounces"
   },
   {
    "slug": "roasted-tomato-soup",
@@ -85540,7 +85595,7 @@
     "carbs": 14.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "67 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 buñuelo, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 25,
    "ingredients_verbatim": [
@@ -85605,7 +85660,8 @@
    "batch_concerns": [
     "cold-plate",
     "breakfast"
-   ]
+   ],
+   "nutrition_serving": "1 buñuelo"
   },
   {
    "slug": "how-to-make-slow-roasted-pork-belly-2-roasting-jpg",
@@ -85929,7 +85985,7 @@
     "carbs": 19.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "73 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -85986,7 +86042,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 cup"
   },
   {
    "slug": "overhead-slow-roasted-pork-belly-jpg",
@@ -86031,7 +86088,7 @@
     "carbs": 5.0,
     "protein_g": 3.0,
     "verified": false,
-    "reason": "48 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 tartlets, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 15,
    "ingredients_verbatim": [
@@ -86143,7 +86200,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "2 tartlets"
   },
   {
    "slug": "sausage-and-cheese-hand-pies-recipe",
@@ -86516,7 +86574,7 @@
     "carbs": 7.5,
     "protein_g": 4.5,
     "verified": false,
-    "reason": "91 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 tartlet, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 6,
    "ingredients_verbatim": [
@@ -86580,7 +86638,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "breakfast"
-   ]
+   ],
+   "nutrition_serving": "1 tartlet"
   },
   {
    "slug": "sausage-and-egg-breakfast-quesadillas",
@@ -90187,8 +90246,8 @@
     "cal": 87.0,
     "carbs": 13.0,
     "protein_g": 2.0,
-    "verified": false,
-    "reason": "87 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -90257,7 +90316,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1"
   },
   {
    "slug": "carne-adovada",
@@ -90921,7 +90981,7 @@
     "carbs": 8.2,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "55.6 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 cookie, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 30,
    "ingredients_verbatim": [
@@ -91030,7 +91090,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1 cookie"
   },
   {
    "slug": "slow-cooker-chicken-tortilla-soup",
@@ -92969,7 +93030,7 @@
     "carbs": 5.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "28 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 cebollitas, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -93065,7 +93126,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "2 cebollitas"
   },
   {
    "slug": "white-chicken-or-turkey-enchilada-soup",
@@ -93875,7 +93937,7 @@
     "carbs": 36.0,
     "protein_g": 2.5,
     "verified": false,
-    "reason": "76 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 \n/2 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -93953,7 +94015,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1 \n/2 cup"
   },
   {
    "slug": "smoky-parmesan-roasted-cauliflower",
@@ -96068,7 +96131,7 @@
     "carbs": 10.9,
     "protein_g": 0.7,
     "verified": false,
-    "reason": "75 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 31\ng, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 36,
    "ingredients_verbatim": [
@@ -96181,7 +96244,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "31\ng"
   },
   {
    "slug": "breakfast-burrito-bowl-with-spiced-butternut-squash",
@@ -96418,7 +96482,7 @@
     "carbs": 3.0,
     "protein_g": 2.0,
     "verified": false,
-    "reason": "60 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 jalapeño poppers, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -96478,7 +96542,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "2 jalapeño poppers"
   },
   {
    "slug": "caramel-self-saucing-baked-apples",
@@ -96706,7 +96771,7 @@
     "carbs": 6.0,
     "protein_g": 2.0,
     "verified": false,
-    "reason": "84 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -96820,7 +96885,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 cup"
   },
   {
    "slug": "roasted-acorn-squash",
@@ -97064,8 +97130,8 @@
     "cal": 36.0,
     "carbs": 4.0,
     "protein_g": 2.0,
-    "verified": false,
-    "reason": "36 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -97147,7 +97213,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1"
   },
   {
    "slug": "chicharrones-de-harina-duros",
@@ -100646,8 +100713,8 @@
     "cal": 95.0,
     "carbs": 11.0,
     "protein_g": 4.0,
-    "verified": false,
-    "reason": "95 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -100755,7 +100822,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1"
   },
   {
    "slug": "chiles-en-nogada",
@@ -101304,7 +101372,7 @@
     "carbs": 11.5,
     "protein_g": 2.5,
     "verified": false,
-    "reason": "56 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1/3 cups, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 6,
    "ingredients_verbatim": [
@@ -101415,7 +101483,8 @@
    "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1/3 cups"
   },
   {
    "slug": "stovetop-baked-beans-recipe",
@@ -102248,7 +102317,7 @@
     "carbs": 6.0,
     "protein_g": 3.0,
     "verified": false,
-    "reason": "91 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 of 4, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -102335,7 +102404,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 of 4"
   },
   {
    "slug": "chili-lime-seasoning",
@@ -102355,7 +102425,7 @@
     "carbs": 3.0,
     "protein_g": 0.4,
     "verified": false,
-    "reason": "19 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 teaspoons, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -102477,7 +102547,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "2 teaspoons"
   },
   {
    "slug": "candied-tomato-sauce",
@@ -102497,7 +102568,7 @@
     "carbs": 17.3,
     "protein_g": 3.2,
     "verified": false,
-    "reason": "78.1 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 /4, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -102620,7 +102691,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1 /4"
   },
   {
    "slug": "sweet-n-spicy-chicken-bowls",
@@ -103857,8 +103929,8 @@
     "cal": 42.0,
     "carbs": 5.0,
     "protein_g": 2.0,
-    "verified": false,
-    "reason": "42 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 16,
    "ingredients_verbatim": [
@@ -103970,7 +104042,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1"
   },
   {
    "slug": "chocolate-flan",
@@ -106268,8 +106341,8 @@
     "cal": 42.0,
     "carbs": 2.0,
     "protein_g": 3.0,
-    "verified": false,
-    "reason": "42 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 42,
    "ingredients_verbatim": [
@@ -106383,7 +106456,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1"
   },
   {
    "slug": "churros-recipe",
@@ -106444,7 +106518,7 @@
     "carbs": 12.0,
     "protein_g": 6.0,
     "verified": false,
-    "reason": "93 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 3/4 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -106552,7 +106626,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 3/4 cup"
   },
   {
    "slug": "turkey-chili-smothered-sweet-potatoes",
@@ -108063,7 +108138,7 @@
     "carbs": 3.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "41 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 tablespoons, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 10,
    "ingredients_verbatim": [
@@ -108152,7 +108227,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "2 tablespoons"
   },
   {
    "slug": "chorizo-potato-stew-soup",
@@ -111215,7 +111291,7 @@
     "carbs": 1.5,
     "protein_g": 0.5,
     "verified": false,
-    "reason": "86 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 tablespoon, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 6,
    "ingredients_verbatim": [
@@ -111273,7 +111349,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 tablespoon"
   },
   {
    "slug": "white-beans-with-tomato-and-sausage",
@@ -111935,7 +112012,7 @@
     "carbs": 3.0,
     "protein_g": 5.0,
     "verified": false,
-    "reason": "89 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per per meatball, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 43,
    "ingredients_verbatim": [
@@ -112081,7 +112158,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "per meatball"
   },
   {
    "slug": "avocado-deviled-eggs",
@@ -113068,7 +113146,7 @@
     "carbs": 22.0,
     "protein_g": 5.0,
     "verified": false,
-    "reason": "6 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 glass, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 1,
    "ingredients_verbatim": [
@@ -113125,7 +113203,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 glass"
   },
   {
    "slug": "yogurt-marinated-chicken",
@@ -113507,7 +113586,7 @@
     "carbs": 8.0,
     "protein_g": 4.0,
     "verified": false,
-    "reason": "85 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 pinwheel, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 24,
    "ingredients_verbatim": [
@@ -113655,7 +113734,8 @@
    "saturation_pressure": 6,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 pinwheel"
   },
   {
    "slug": "crock-pot-moroccan-chicken",
@@ -113716,7 +113796,7 @@
     "carbs": 15.0,
     "protein_g": 11.0,
     "verified": false,
-    "reason": "90 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 cookie, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 24,
    "ingredients_verbatim": [
@@ -113780,7 +113860,8 @@
    "batch_concerns": [
     "cold-plate",
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1 cookie"
   },
   {
    "slug": "fiery-fall-apart-mexican-beef-ribs",
@@ -115619,8 +115700,8 @@
     "cal": 73.0,
     "carbs": 5.0,
     "protein_g": 8.0,
-    "verified": false,
-    "reason": "73 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -115735,7 +115816,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1"
   },
   {
    "slug": "corona-sunrise",
@@ -115841,7 +115923,7 @@
     "carbs": 20.5,
     "protein_g": 4.0,
     "verified": false,
-    "reason": "88 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 \n/2 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -115921,7 +116003,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1 \n/2 cup"
   },
   {
    "slug": "5-minute-microwave-french-toast-mug",
@@ -116028,7 +116111,7 @@
     "carbs": 8.0,
     "protein_g": 2.0,
     "verified": false,
-    "reason": "75 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 bacon wrapped date, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 24,
    "ingredients_verbatim": [
@@ -116148,7 +116231,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1 bacon wrapped date"
   },
   {
    "slug": "smoked-turkey",
@@ -116271,7 +116355,7 @@
     "carbs": 24.7,
     "protein_g": 1.7,
     "verified": false,
-    "reason": "97.7 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 /2 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 5,
    "ingredients_verbatim": [
@@ -116330,7 +116414,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1 /2 cup"
   },
   {
    "slug": "5-minute-savory-microwave-breakfast-mug",
@@ -117675,7 +117760,7 @@
     "carbs": 0.3,
     "protein_g": 3.0,
     "verified": false,
-    "reason": "92 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 slice, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -117757,7 +117842,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 slice"
   },
   {
    "slug": "sausage-and-broccoli-pasta",
@@ -118014,7 +118100,7 @@
     "carbs": 3.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "42 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 tablespoons, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -118139,7 +118225,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "2 tablespoons"
   },
   {
    "slug": "honey-mustard-baked-chicken-with-potatoes-amp-bacon",
@@ -119861,9 +119948,9 @@
    "band": {
     "cal": 97.0,
     "carbs": 3.0,
-    "protein_g": null,
+    "protein_g": 0.0,
     "verified": false,
-    "reason": "97 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 drink, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 1,
    "ingredients_verbatim": [
@@ -119933,7 +120020,8 @@
    "batch_concerns": [
     "cold-plate",
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1 drink"
   },
   {
    "slug": "italian-dressing-chicken-marinade",
@@ -119994,7 +120082,7 @@
     "carbs": 14.0,
     "protein_g": 0.5,
     "verified": false,
-    "reason": "recipeYield does not parse to one integer - the serving basis is ambiguous"
+    "reason": "the page's panel is per 1 /4 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": null,
    "ingredients_verbatim": [
@@ -120098,7 +120186,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 /4 cup"
   },
   {
    "slug": "air-fryer-grilled-cheese",
@@ -120525,7 +120614,7 @@
     "carbs": 10.0,
     "protein_g": 3.5,
     "verified": false,
-    "reason": "60 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1/2 cups, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -120832,7 +120921,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1/2 cups"
   },
   {
    "slug": "air-fryer-salmon",
@@ -121519,7 +121609,7 @@
     "carbs": 8.5,
     "protein_g": 3.5,
     "verified": false,
-    "reason": "62 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 3 \n/4 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -121605,7 +121695,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "3 \n/4 cup"
   },
   {
    "slug": "air-fryer-tofu",
@@ -122224,7 +122315,7 @@
     "carbs": 11.0,
     "protein_g": 3.0,
     "verified": false,
-    "reason": "65 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1/4 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 5,
    "ingredients_verbatim": [
@@ -122390,7 +122481,8 @@
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1/4 cup"
   },
   {
    "slug": "garlic-herb-seasoning",
@@ -122410,7 +122502,7 @@
     "carbs": 2.3,
     "protein_g": 0.6,
     "verified": false,
-    "reason": "10.2 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 Tbsp, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 1,
    "ingredients_verbatim": [
@@ -122532,7 +122624,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 Tbsp"
   },
   {
    "slug": "barley-salad",
@@ -122690,7 +122783,7 @@
     "carbs": 3.3,
     "protein_g": 3.2,
     "verified": false,
-    "reason": "79.4 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 /4 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -122998,7 +123091,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1 /4 cup"
   },
   {
    "slug": "almond-apricot-biscotti",
@@ -123017,8 +123111,8 @@
     "cal": 90.65,
     "carbs": 14.86,
     "protein_g": 1.64,
-    "verified": false,
-    "reason": "90.65 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1 Serving)"
    },
    "servings": 28,
    "ingredients_verbatim": [
@@ -123080,7 +123174,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 Serving"
   },
   {
    "slug": "bean-sprout-salad",
@@ -123530,9 +123625,9 @@
    "band": {
     "cal": 66.0,
     "carbs": 3.0,
-    "protein_g": null,
+    "protein_g": 0.0,
     "verified": false,
-    "reason": "66 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 tablespoons, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 15,
    "ingredients_verbatim": [
@@ -123652,7 +123747,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "2 tablespoons"
   },
   {
    "slug": "middle-eastern-roasted-eggplant-with-couscous",
@@ -125051,7 +125147,7 @@
     "carbs": 11.0,
     "protein_g": 4.0,
     "verified": false,
-    "reason": "80 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 1/2 cups, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -125360,7 +125456,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 1/2 cups"
   },
   {
    "slug": "antipasto-salad",
@@ -126371,7 +126468,7 @@
     "carbs": 7.5,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "57 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 \"donut\", not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -126468,7 +126565,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1 \"donut\""
   },
   {
    "slug": "apple-cider-shrub-mocktail-recipe",
@@ -126488,7 +126586,7 @@
     "carbs": 10.0,
     "protein_g": 0.1,
     "verified": false,
-    "reason": "39 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 oz (shrub only), not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -126588,7 +126686,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 oz (shrub only)"
   },
   {
    "slug": "slow-cooker-meatballs",
@@ -126608,7 +126707,7 @@
     "carbs": 5.0,
     "protein_g": 6.0,
     "verified": false,
-    "reason": "89 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per one meatball with sauce, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 29,
    "ingredients_verbatim": [
@@ -126748,7 +126847,8 @@
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "one meatball with sauce"
   },
   {
    "slug": "black-bean-and-corn-salsa",
@@ -129860,7 +129960,7 @@
     "carbs": 2.0,
     "protein_g": 4.0,
     "verified": false,
-    "reason": "71 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per per meatball, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 33,
    "ingredients_verbatim": [
@@ -129997,7 +130097,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "per meatball"
   },
   {
    "slug": "blackened-zucchini-tacos",
@@ -130573,8 +130674,8 @@
     "cal": 43.0,
     "carbs": 2.0,
     "protein_g": 1.0,
-    "verified": false,
-    "reason": "43 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 6,
    "ingredients_verbatim": [
@@ -130640,7 +130741,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1"
   },
   {
    "slug": "empanadas-recipe",
@@ -130711,7 +130813,7 @@
     "carbs": 14.0,
     "protein_g": 5.0,
     "verified": false,
-    "reason": "87 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 knot, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -130781,7 +130883,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 knot"
   },
   {
    "slug": "enchiladas-potosinas",
@@ -130841,7 +130944,7 @@
     "carbs": 5.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "28 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 3 \n/4 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -130909,7 +131012,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "3 \n/4 cup"
   },
   {
    "slug": "enchiladas-suizas",
@@ -131996,7 +132100,7 @@
     "carbs": 4.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "19 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 tablespoons, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -132110,7 +132214,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "2 tablespoons"
   },
   {
    "slug": "farro-salad-with-feta-cucumbers-and-sun-dried-tomatoes",
@@ -132644,7 +132749,7 @@
     "carbs": 6.0,
     "protein_g": 1.5,
     "verified": false,
-    "reason": "65 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 mini cupcake, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -132764,7 +132869,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "breakfast"
-   ]
+   ],
+   "nutrition_serving": "1 mini cupcake"
   },
   {
    "slug": "banana-nut-breakfast-farro",
@@ -133298,7 +133404,7 @@
     "carbs": 15.0,
     "protein_g": 0.3,
     "verified": false,
-    "reason": "99 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 pop, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -133316,7 +133422,8 @@
    "batch_concerns": [
     "cold-plate",
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1 pop"
   },
   {
    "slug": "bbq-beans-and-greens-recipe",
@@ -133420,8 +133527,8 @@
     "cal": 40.0,
     "carbs": 6.0,
     "protein_g": 1.0,
-    "verified": false,
-    "reason": "40 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1 serving)"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -133494,7 +133601,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1 serving"
   },
   {
    "slug": "easy-slow-cooker-bbq-pulled-pork",
@@ -133562,7 +133670,7 @@
     "carbs": 8.0,
     "protein_g": 0.5,
     "verified": false,
-    "reason": "32 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 pop, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -133577,7 +133685,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 pop"
   },
   {
    "slug": "bbq-ribs",
@@ -133797,7 +133906,7 @@
     "carbs": 22.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "91.5 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 pop, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -133823,7 +133932,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 pop"
   },
   {
    "slug": "bbq-side-dishes",
@@ -134021,8 +134131,8 @@
     "cal": 17.0,
     "carbs": 4.0,
     "protein_g": 1.0,
-    "verified": false,
-    "reason": "17 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1 serving)"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -134090,7 +134200,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 serving"
   },
   {
    "slug": "roasted-broccoli-with-toasted-pangritata-breadcrumbs",
@@ -135002,7 +135113,7 @@
     "carbs": 1.4,
     "protein_g": 8.1,
     "verified": false,
-    "reason": "66 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 46 g, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -135085,7 +135196,8 @@
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "46 g"
   },
   {
    "slug": "gochujang-honey-glazed-shrimp-skewers",
@@ -135932,8 +136044,8 @@
     "cal": 54.0,
     "carbs": 2.0,
     "protein_g": 4.0,
-    "verified": false,
-    "reason": "54 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 24,
    "ingredients_verbatim": [
@@ -135955,7 +136067,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1"
   },
   {
    "slug": "simple-very-tasty-cauliflower-cheese-steaks",
@@ -136498,7 +136611,7 @@
     "carbs": 12.0,
     "protein_g": 2.0,
     "verified": false,
-    "reason": "55 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 gordita, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 16,
    "ingredients_verbatim": [
@@ -136513,7 +136626,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1 gordita"
   },
   {
    "slug": "air-fryer-potato-chips",
@@ -136532,8 +136646,8 @@
     "cal": 98.0,
     "carbs": 15.0,
     "protein_g": 2.0,
-    "verified": false,
-    "reason": "98 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -136598,7 +136712,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1"
   },
   {
    "slug": "slow-cooked-beef-ribs-in-korean-bbq-sauce",
@@ -137157,8 +137272,8 @@
     "cal": 67.0,
     "carbs": 9.0,
     "protein_g": 1.0,
-    "verified": false,
-    "reason": "67 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1 serving)"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -137246,7 +137361,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 serving"
   },
   {
    "slug": "slow-cooker-beef-and-broccoli",
@@ -138045,8 +138161,8 @@
     "cal": 99.0,
     "carbs": 8.0,
     "protein_g": 3.0,
-    "verified": false,
-    "reason": "99 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1)"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -138075,7 +138191,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1"
   },
   {
    "slug": "slow-roasted-rosemary-garlic-lamb-shoulder",
@@ -138802,7 +138919,7 @@
     "carbs": 19.0,
     "protein_g": 2.0,
     "verified": false,
-    "reason": "78 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 \n/2 peach with 1 tbsp yogurt, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -138867,7 +138984,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 \n/2 peach with 1 tbsp yogurt"
   },
   {
    "slug": "blackened-shrimp-pasta",
@@ -139485,7 +139603,7 @@
     "carbs": 3.3,
     "protein_g": 5.6,
     "verified": false,
-    "reason": "93 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 43 g, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 10,
    "ingredients_verbatim": [
@@ -139682,7 +139800,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "breakfast"
-   ]
+   ],
+   "nutrition_serving": "43 g"
   },
   {
    "slug": "grilled-rainbow-peppers-with-herb-cream-cheese",
@@ -139702,7 +139821,7 @@
     "carbs": 4.0,
     "protein_g": 3.0,
     "verified": false,
-    "reason": "94 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 4 halves, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -139972,7 +140091,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "4 halves"
   },
   {
    "slug": "bloody-mary-mix-recipe",
@@ -139992,7 +140112,7 @@
     "carbs": 8.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "32 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 serving (5 oz), not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 12,
    "ingredients_verbatim": [
@@ -140011,7 +140131,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 serving (5 oz)"
   },
   {
    "slug": "caramel-marshmallow-popcorn",
@@ -140771,7 +140892,7 @@
     "carbs": 6.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "30 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 tablespoon, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 4,
    "ingredients_verbatim": [
@@ -140855,7 +140976,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "cold-plate"
-   ]
+   ],
+   "nutrition_serving": "1 tablespoon"
   },
   {
    "slug": "apple-cider-caramel-sauce",
@@ -140958,7 +141080,7 @@
     "carbs": 9.0,
     "protein_g": 0.1,
     "verified": false,
-    "reason": "37 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 2 Tbsp, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 16,
    "ingredients_verbatim": [
@@ -141024,7 +141146,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "2 Tbsp"
   },
   {
    "slug": "cauliflower-pizza-crust",
@@ -141044,7 +141167,7 @@
     "carbs": 4.0,
     "protein_g": 5.0,
     "verified": false,
-    "reason": "68 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 slice of crust (1/8th), not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -141164,7 +141287,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 slice of crust (1/8th)"
   },
   {
    "slug": "apple-cider-cocktail",
@@ -141467,8 +141591,8 @@
     "cal": 57.0,
     "carbs": 9.3,
     "protein_g": 2.6,
-    "verified": false,
-    "reason": "57 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1 serving)"
    },
    "servings": 7,
    "ingredients_verbatim": [
@@ -141539,7 +141663,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 serving"
   },
   {
    "slug": "apple-cinnamon-overnight-oats",
@@ -141855,7 +141980,7 @@
     "carbs": 10.0,
     "protein_g": 2.0,
     "verified": false,
-    "reason": "50 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 0.25 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -141926,7 +142051,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "0.25 cup"
   },
   {
    "slug": "apple-coffee-cake",
@@ -142766,7 +142892,7 @@
     "carbs": 12.0,
     "protein_g": 1.0,
     "verified": false,
-    "reason": "57 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 tostada shell, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 8,
    "ingredients_verbatim": [
@@ -142800,7 +142926,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 tostada shell"
   },
   {
    "slug": "apple-smoothie",
@@ -143897,8 +144024,8 @@
     "cal": 14.0,
     "carbs": 3.0,
     "protein_g": 1.0,
-    "verified": false,
-    "reason": "14 cal is implausible for one serving - the block may be per-RECIPE"
+    "verified": true,
+    "reason": "transcribed from the page's printed panel (serving: 1 serving)"
    },
    "servings": 2,
    "ingredients_verbatim": [
@@ -143911,7 +144038,8 @@
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "batch_concerns": [],
+   "nutrition_serving": "1 serving"
   },
   {
    "slug": "crab-artichoke-toasts",
@@ -144333,7 +144461,7 @@
     "carbs": 5.0,
     "protein_g": 2.0,
     "verified": false,
-    "reason": "28.5 cal is implausible for one serving - the block may be per-RECIPE"
+    "reason": "the page's panel is per 1 /4 cup, not per serving - the numbers are real but they are not a serving's"
    },
    "servings": 16,
    "ingredients_verbatim": [
@@ -144352,7 +144480,8 @@
    "entered_by": "crawl",
    "batch_concerns": [
     "not-a-main"
-   ]
+   ],
+   "nutrition_serving": "1 /4 cup"
   }
  ]
 }

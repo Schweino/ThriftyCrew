@@ -685,6 +685,64 @@ def selftest() -> int:
       extract_from_jsonld.__globals__["harvest"].find_recipe_node.__module__ == "harvest",
       extract_from_jsonld.__globals__["harvest"].find_recipe_node.__module__)
 
+    # ---- NUTRITION TRANSCRIPTION (2026-08-24). Read the panel, never compute one. -----------------
+    # FROZEN FIXTURES over the real panel text of curry-roasted-carrots, verbatim from its cached page.
+    # 314 pooled candidates carried no machine-readable nutrition and ~60% of them print a complete
+    # panel in the page TEXT; this reads it, and every number is provable as a substring of the page.
+    panel = ("Nutrition Information Serving: 1 Serving Calories: 68.85 kcal (3%) "
+             "Carbohydrates: 1.85 g (1%) Protein: 0.9 g Fat: 4.6 g")
+    good = {"found": True, "serving": "1 Serving", "calories": "68.85",
+            "protein_g": "0.9", "carbs_g": "1.85", "fat_g": "4.6"}
+    T("a complete printed panel verifies", verify_nutrition(panel, good)["ok"],
+      json.dumps(verify_nutrition(panel, good)["reasons"]))
+    # MUST FIRE: a number that is not on the page is the whole failure this exists to prevent.
+    made_up = dict(good, calories="999")
+    T("MUST FIRE  a number that is NOT printed on the page is refused",
+      not verify_nutrition(panel, made_up)["ok"],
+      json.dumps(verify_nutrition(panel, made_up)["reasons"]))
+    # MUST FIRE: substring proof cannot prove COMPLETENESS - section 4.3's rung-2 warning, one stage
+    # later. A panel missing protein verifies perfectly on what IS there, so completeness is separate.
+    partial = dict(good, protein_g=None)
+    T("MUST FIRE  a panel missing a REQUIRED macro is refused even though every number present is real",
+      not verify_nutrition(panel, partial)["ok"],
+      json.dumps(verify_nutrition(panel, partial)["reasons"]))
+    # MUST FIRE: the serving basis. Measured on the first live run - the arancini panel reads
+    # "2 balls" and the meatballs "1 (of 24)". Treating either as a dinner serving mis-scales it.
+    noserv = dict(good, serving=None)
+    T("MUST FIRE  a panel with no serving basis is refused - its numbers cannot be scaled",
+      not verify_nutrition(panel, noserv)["ok"],
+      json.dumps(verify_nutrition(panel, noserv)["reasons"]))
+    T("MUST FIRE  found=false yields no band at all - prose about calories is not a panel",
+      not verify_nutrition(panel, {"found": False})["ok"], "accepted a non-panel")
+    # THE WINDOW. Measured: 14,000 chars is ~4,275 tokens against the 4-slot server's 4,096 per slot,
+    # and llama-server refuses. And taking the LAST `Nutrition` marker landed on footer boilerplate
+    # past the real panel, so pages whose panel was present came back `no panel found`.
+    long_page = ("x" * 20000) + " " + panel + " " + ("y" * 3000) + " Nutrition Disclaimer footer text"
+    win = nutrition_window(long_page)
+    T("MUST FIRE  the window is small enough for one slot and still holds the panel",
+      len(win) <= NUTRITION_WINDOW and "68.85" in win, "len=%d has_panel=%s" % (len(win), "68.85" in win))
+    T("MUST FIRE  ...and it picks the marker with NUMBERS after it, not a footer disclaimer",
+      "Calories: 68.85" in win, win[-80:])
+    T("CLEAN TWIN a short page passes through whole", nutrition_window("abc") == "abc", "trimmed a short page")
+    # A PANEL IS NOT AUTOMATICALLY A SERVING. Found on the first FULL pass, before shipping: of 129
+    # transcribed panels only 29 described a whole serving. The rest read "2 tablespoons", "0.25 cup",
+    # "1 meatball", "1 churro", "2 balls" - sauces, condiments and per-piece counts. Marking those
+    # verified would rank them higher AND make them eligible for any band a run states, where a
+    # per-2-tablespoon figure is ruled on as if it were a dinner portion. The numbers are real; they
+    # are simply not a serving's, and `verified` has to mean the second thing.
+    T("MUST FIRE  a per-condiment panel is NOT a serving, however real its numbers",
+      not any(serving_is_whole(x) for x in ("2 tablespoons", "0.25 cup", "1 cup", "2 tsp")),
+      "a condiment portion was accepted as a serving")
+    T("MUST FIRE  ...and neither is a per-PIECE panel",
+      not any(serving_is_whole(x) for x in ("1 meatball", "1 churro", "2 balls", "1 egg muffin",
+                                            "per meatball", "1 cookie")),
+      "a per-piece portion was accepted as a serving")
+    T("CLEAN TWIN a whole serving still counts",
+      all(serving_is_whole(x) for x in ("1 Serving", "1", "serving", "1 serving")),
+      "a real serving was rejected")
+    T("MUST FIRE  an EMPTY or unrecognised basis is not a serving - being wrong here mis-scales a gate",
+      not serving_is_whole("") and not serving_is_whole("a handful"), "accepted an unknown basis")
+
     # ---- rung 2: the invented-line check that has always been this file's point ------------------
     page = "1 lb chicken thighs\n2 cups rice\n1 tsp salt"
     honest = {"ingredients": [{"raw": "1 lb chicken thighs"}, {"raw": "2 cups rice"},
@@ -863,6 +921,187 @@ def selftest() -> int:
     print("local_extract selftest: all green")
     print("LOCAL-EXTRACT-COMPLETE")
     return 0
+
+
+# =====================================================================================================
+# NUTRITION TRANSCRIPTION (Brad's ruling 2026-08-24). READ THE PANEL, NEVER COMPUTE ONE.
+#
+# WHY IT EXISTS. 314 pooled candidates carry no machine-readable nutrition, and MEASURED, ~60% of them
+# state a complete panel in the page TEXT - "Nutrition Serving: 6 ounces | Calories: 255 kcal |
+# Carbohydrates: 0 g", "Nutrition Information Serving: 1 Serving Calories: 68.85 kcal (3%)". The
+# numbers are right there; only the JSON-LD is missing. Publishers who render nutrition in HTML rather
+# than in a script tag were second-class to this pipeline for no reason.
+#
+# WHERE THE DOCTRINE PUTS THIS (section 1.4). Reading a printed panel is TRANSCRIPTION - every number
+# is provable as a substring of the page - and transcription is what local scored 1.000 valid strict
+# JSON on. COMPUTING nutrition where the page states none would be an ASSERTION, which the doctrine
+# forbids and which the estate already answers better: the mechanical macro recompute over the food DB
+# is label-accurate, and a model guess would be strictly worse than it.
+#
+# TWO THINGS BUILT IN FROM THE START, because both were foreseen rather than discovered:
+#
+#   1. THE PANEL'S OWN SERVING BASIS IS CAPTURED, NEVER ASSUMED. "Serving: 6 ounces" and "Serving:
+#      1 Serving" mean different things, and silently mis-scaling a panel is worse than having none.
+#      It is transcribed like every other field and substring-checked like every other field.
+#   2. SUBSTRING PROOF CANNOT PROVE COMPLETENESS. This is section 4.3's warning about rung 2 arriving
+#      one stage later: a panel where the model skips the protein line verifies perfectly clean,
+#      because what IS there is all correct. So the verifier demands the FULL required set and rejects
+#      a partial panel outright rather than accepting a confident fragment.
+# =====================================================================================================
+
+NUTRITION_SCHEMA = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["found", "serving", "calories", "protein_g", "carbs_g", "fat_g"],
+    "properties": {
+        "found": {"type": "boolean",
+                  "description": "true ONLY when the page prints a nutrition panel. Never infer one."},
+        "serving": {"type": ["string", "null"],
+                    "description": "the panel's own serving basis AS PRINTED ('1 Serving', '6 ounces')"},
+        "calories": {"type": ["string", "null"], "description": "the calorie number AS PRINTED"},
+        "protein_g": {"type": ["string", "null"], "description": "the protein number AS PRINTED"},
+        "carbs_g": {"type": ["string", "null"], "description": "the carbohydrate number AS PRINTED"},
+        "fat_g": {"type": ["string", "null"], "description": "the fat number AS PRINTED"},
+    },
+}
+
+NUTRITION_SYSTEM = (
+    "You COPY a nutrition panel out of a recipe page. You never compute, estimate, convert or infer.\n"
+    "- found: true ONLY if the page actually prints a nutrition panel. If it does not, set found "
+    "false and every other field null. A page that discusses calories in prose ('often deep fried "
+    "and high in calories') is NOT a panel.\n"
+    "- serving: the panel's own serving basis exactly as printed - '1 Serving', '6 ounces', "
+    "'1 cookie'. This is checked as a substring of the page.\n"
+    "- calories, protein_g, carbs_g, fat_g: the NUMBER exactly as printed, digits only, no unit and "
+    "no percent ('255', '68.85', '0'). Each is checked as a substring of the page.\n"
+    "- If the panel omits one of those four, leave that field null. Do not fill it from another "
+    "number and do not work it out.\n"
+    "Copy what is printed. A number you cannot point at on the page is a wrong answer."
+)
+
+NUTRITION_REQUIRED = ("calories", "protein_g", "carbs_g")
+
+# A PANEL IS NOT AUTOMATICALLY A SERVING (found 2026-08-24, before shipping, on the full pass).
+# 129 transcribed panels carried bases like "2 tablespoons", "0.25 cup", "1 meatball", "1 churro" -
+# sauces, condiments and per-piece counts. Marking those `verified` would make them rank higher AND
+# make them eligible for any band a run states, where a per-2-tablespoon figure gets ruled on as if it
+# were a dinner portion. That is a silent mis-scaling walking into a gate.
+#
+# So the panel is always RECORDED, and `verified` is set only when the basis reads like a whole
+# serving. The rest keep their numbers and their basis and say why they are not verified - nothing is
+# lost, and nothing is claimed that was not measured.
+SERVING_LIKE = re.compile(r"^\s*(?:1\s*)?(?:serving|servings|portion|plate|bowl|about\s+1)?\s*$", re.I)
+SUB_SERVING = re.compile(r"(tablespoon|tbsp|teaspoon|tsp|cup|ounce|oz|gram|g|ml|piece|ball|"
+                         r"meatball|cookie|churro|muffin|bar|slice|square|each|per\s+\w+|roll|"
+                         r"cracker|chip|wing|skewer|stick)", re.I)
+
+
+def serving_is_whole(serving) -> bool:
+    """Does this panel's basis describe ONE WHOLE SERVING? Conservative on purpose: an unrecognised
+    basis is NOT treated as a serving, because the cost of being wrong is a band ruling on the macros
+    of two tablespoons of sauce."""
+    t = str(serving or "").strip()
+    if not t:
+        return False
+    if SUB_SERVING.search(t):
+        return False
+    return bool(SERVING_LIKE.match(t)) or t.lower() in ("1", "1 serving", "serving")
+
+
+def verify_nutrition(page_text: str, fields: dict) -> dict:
+    """The panel's proof. Every stated number must re-substring into the page, AND the required set
+    must be complete - see the header on why completeness is checked separately."""
+    reasons = []
+    hay = _norm(page_text)
+    if not isinstance(fields, dict) or not fields.get("found"):
+        return {"ok": False, "reasons": ["no panel found"], "complete": False}
+    for name in ("serving", "calories", "protein_g", "carbs_g", "fat_g"):
+        v = fields.get(name)
+        if v is None or str(v).strip() == "":
+            continue
+        if _norm(v) not in hay:
+            reasons.append("%s %r is not printed on the page" % (name, str(v)[:24]))
+    missing = [k for k in NUTRITION_REQUIRED
+               if fields.get(k) is None or str(fields.get(k)).strip() == ""]
+    if missing:
+        # A CONFIDENT FRAGMENT IS THE FAILURE MODE. What IS there substrings perfectly, so without
+        # this the panel reads clean while a macro the band would rule on is simply absent.
+        reasons.append("the panel is incomplete - no %s" % ", ".join(missing))
+    if not str(fields.get("serving") or "").strip():
+        reasons.append("the panel states no serving basis, so its numbers cannot be scaled")
+    return {"ok": not reasons, "reasons": reasons, "complete": not missing}
+
+
+def _num(v):
+    try:
+        return float(str(v).replace(",", "").strip())
+    except (TypeError, ValueError):
+        return None
+
+
+NUTRITION_MARKER = re.compile(r"nutrition(?:\s+(?:information|facts|per\s+serving))?", re.I)
+NUTRITION_WINDOW = 5000
+NUTRITION_CAL = re.compile(r"calories?\s*[:=]?\s*\d", re.I)
+
+
+def nutrition_window(page_text: str) -> str:
+    """The slice of the page most likely to hold the panel, and small enough to fit ONE SLOT.
+
+    MEASURED 2026-08-24 on the first live run: 14,000 chars is ~4,275 tokens against the 4-slot
+    server's 4,096 per slot, and llama-server refuses with exceed_context_size_error. That is
+    section 4.3's context-budget conflict arriving in a new place, and the answer is the same one
+    4.3 reached: do not grab more context, send less and send the RIGHT less. A nutrition panel sits
+    near the END of a recipe page, after the method, so a window around the LAST `Nutrition` heading
+    is both smaller AND likelier to hold the panel than the first 14,000 characters were.
+
+    THE VERIFIER SEES THE SAME SLICE, so trimming can never let an unprovable number through. It can
+    only mean the panel fell outside the window, which reads as `no panel found` - never as a
+    fabricated one.
+    """
+    text = page_text or ""
+    if len(text) <= NUTRITION_WINDOW:
+        return text
+    # PICK THE MARKER THAT ACTUALLY HAS NUMBERS AFTER IT, not simply the last one. Measured on the
+    # second live run: taking the LAST `Nutrition` landed on footer boilerplate ("Nutrition
+    # Disclaimer") past the real panel, and pages whose panel I had already seen came back
+    # `no panel found` - a recall loss, not a correctness one, but a silly one.
+    best = None
+    for m in NUTRITION_MARKER.finditer(text):
+        near = text[m.start():m.start() + 400]
+        if NUTRITION_CAL.search(near):
+            best = m          # keep scanning: a later panel beats an earlier mention
+    if best is None:
+        for m in NUTRITION_MARKER.finditer(text):
+            best = m
+    if best is None:
+        return text[-NUTRITION_WINDOW:]
+    start = max(0, best.start() - 200)
+    return text[start:start + NUTRITION_WINDOW]
+
+
+def read_nutrition(page_text: str, llm=None) -> dict:
+    """Transcribe a printed nutrition panel. Returns {ok, band, serving, reasons}."""
+    text = nutrition_window(page_text or "")
+    if not text.strip():
+        return {"ok": False, "band": None, "serving": None, "reasons": ["no page text"]}
+    parsed, _res = (llm or LocalLLM(timeout=180)).json_call(
+        NUTRITION_SYSTEM, "PAGE:\n" + text, schema=NUTRITION_SCHEMA, max_tokens=256)
+    fields = parsed if isinstance(parsed, dict) else {}
+    chk = verify_nutrition(text, fields)
+    if not chk["ok"]:
+        return {"ok": False, "band": None, "serving": fields.get("serving"), "reasons": chk["reasons"]}
+    serving = fields.get("serving")
+    whole = serving_is_whole(serving)
+    return {"ok": True, "serving": serving, "reasons": [], "whole_serving": whole,
+            "band": {"cal": _num(fields.get("calories")),
+                     "carbs": _num(fields.get("carbs_g")),
+                     "protein_g": _num(fields.get("protein_g")),
+                     # VERIFIED means "these are one serving's macros", not merely "we read them".
+                     "verified": whole,
+                     "reason": ("transcribed from the page's printed panel (serving: %s)"
+                                % str(serving or "")[:40]) if whole else
+                               ("the page's panel is per %s, not per serving - the numbers are real "
+                                "but they are not a serving's" % str(serving or "?")[:40])}}
 
 
 if __name__ == "__main__":
