@@ -782,6 +782,21 @@ from prose, and SKILL.md forbids exactly that. So the port is governed:
 - **hunt-lib parity gate.** hunt-lib.js's pure functions port 1:1 to `hunt_lib.py` with the SAME
   fixture set (B5-B11 + channel semantics), plus the fixtures run against both implementations with
   shared test vectors. The daemon may not dispatch a single agent until the parity suite is green.
+  - **HALF OF THIS GATE HAS NEVER RUN, recorded 2026-08-24 so nobody mistakes an unrun half for a
+    passing one.** `hunt_lib.py --parity` runs the shared vectors against the PYTHON port and is
+    green 63/63. `hunt-lib-parity.js` runs the same vectors against hunt-lib.js - and there is no
+    node runtime on this box, so its only runner is a zero-agent Workflow invocation that has not
+    been made. What IS mechanically guaranteed: `hunt_lib.py --selftest` re-hashes the shipped
+    hunt-lib.js and FIRES if the spliced copy no longer matches, so a JS edit that forgets to
+    regenerate cannot pass unnoticed.
+  - **Why the exposure is small, and it is a fact about the ARCHITECTURE rather than a comfort.**
+    Nothing executes hunt-lib.js in production. The v3 daemon IS the orchestrator; every reference
+    to hunt-lib.js in live code is a comment recording where a function was ported from. This gate
+    was built to stop the PORT drifting from a running original, and the original stopped running
+    when the daemon landed. So the unproven claim is "hunt-lib.js would still pass its own
+    vectors", which no production path depends on. Brad reviewed and left the gate standing
+    2026-08-24 rather than retiring the JS side, because section 4.2 built it deliberately and a
+    tidy-up is not a reason to delete scar tissue.
 - **State, queue, lane-log, ledger, publish contracts do not move.** The daemon calls the same .ps1
   surfaces; audit-lane-shape.ps1 judges its lane log unchanged; a run dir produced by the daemon is
   indistinguishable in shape from one produced by the workflow.
