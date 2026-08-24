@@ -464,17 +464,39 @@ The singleton lane, Rule B, the queue, -Derive, promotion to carriage.json: all 
 changes is what the pricer does with its minutes:
 - **Server pre-pass (mechanical, before the agent):** probe-ingredient.ps1 for Baker's + Family Fare
   (already server-side), retry ladder + 3-state verdict from search-verdict-lib.
-- **Unattended browser pre-pass (mechanical):** pull-browser-stores.py CDP sweeps for Fareway and
-  Hy-Vee single lookups, with the existing pacing profiles and wall detection (a wall stops the
-  lane and leaves UNUSABLE, which reads as PENDING - never not-carried). This is the same code the
-  capture estate already trusts daily. **Sam's Club sweeps only when the driver profile carries a
+- **Unattended browser pre-pass (mechanical):** pull-browser-stores.py lookups with the existing
+  pacing profiles and wall detection (a wall stops the lane and leaves UNUSABLE, which reads as
+  PENDING - never not-carried). **Sam's Club sweeps only when the driver profile carries a
   live member session** - the daemon checks that precondition before dispatching the sweep, and an
   absent session makes Sam's UNUSABLE for the batch (the pricer attends it), never a guess against
   a logged-out storefront.
+  **CORRECTED 2026-08-24 (phase-4 aftercare cold read, against pull-browser-stores.py as it stands
+  on disk - this paragraph originally ordered "CDP sweeps for Fareway and Hy-Vee single lookups",
+  and HALF OF THAT SURFACE DOES NOT EXIST.** The driver's STORES dict holds exactly three keys -
+  `walmart`, `samsclub`, `fareway` - and two facts the paragraph contradicted:
+  - **Hy-Vee has NO driver lane and never had one.** `pull-regular-hyvee.ps1` is a refresh, not a
+    search (it re-verifies known product ids one request each; zero search capability - its own
+    header says so and probe-ingredient.ps1's store table repeats it). A Hy-Vee lookup for a NEW
+    term is browser work the PRICER does in its own tab, exactly as it does today, and D10 must NOT
+    build a Hy-Vee driver lane - that would be a new unproven store agent smuggled in as plumbing.
+  - **Walmart is PAUSED in the driver, with the reason measured 2026-08-22** (the automation
+    channel gets price-less payloads while Brad's own Chrome gets prices - a soft block on the
+    channel, not the profile or IP), and **Aldi was never in STORES at all**. Both are captured
+    through Brad's own Chrome via the claude-in-chrome extension (the Chrome debug port is blocked
+    on his default profile, so the extension is the only road into his real session). D10 must not
+    "retry" Walmart from the driver - the pause note documents the one-shot retry procedure and it
+    is Brad's to order.
+  So the pre-pass tiers, as buildable: **server** (Baker's + Family Fare via probe-ingredient.ps1),
+  **driver CDP** (Fareway + Sam's Club, via the lookup mode D10 adds - see the D10 pins),
+  **pricer's own browser tab** (Hy-Vee, plus any store the pre-pass left UNUSABLE), **Brad's Chrome,
+  attended** (Walmart, Aldi - only when Brad is present). "The same code the capture estate already
+  trusts daily" is true of the Fareway and Sam's lanes and was never true of a Hy-Vee lookup.
 - **The pricer agent** receives, per term, the gathered candidate rows + verdict-ladder states from
   all reachable stores, and does the only two things that need it: adjudicate rows ("Saffron Road
-  Drunken Noodles is not saffron") and drive the attended browser surfaces per its existing
-  two-surface contract (Walmart and Aldi today) plus any store the pre-pass left UNUSABLE.
+  Drunken Noodles is not saffron") and drive the browser surfaces no pre-pass reaches: the attended
+  pair per its existing two-surface contract (Walmart and Aldi, Brad's Chrome, only when Brad is
+  present), Hy-Vee in its own tab (no driver lane exists - see the correction above), plus any
+  store the pre-pass left UNUSABLE.
   **The pricer keeps running `-Record`/`-Verdict`/`-Promote` itself** - unlike the other lanes, its
   evidence contract is enforced at the script layer (carried-requires-a-price, exact store names,
   PENDING-never-promotes) and that enforcement is worth keeping at the point of entry. `-Derive`
@@ -882,9 +904,20 @@ build time, fix THIS document in the same commit rather than deviating silently.
   `verification` block. Downstream code must not care which rung settled a page. JSON-LD
   `recipeInstructions` arrives as plain strings OR `HowToStep`/`HowToSection` objects; the parser
   flattens both into the ordered string list.
-- **Pre-resolve rows:** per ingredient `{raw, canon_item, bid, board, resolution: "resolved" |
+- **Pre-resolve rows:** per ingredient `{raw, term, canon_item, bid, board, resolution: "resolved" |
   "unresolved" | "different-form" | "unbid" | "new-food-suspect", gpu_known, density_known,
-  fooddb_known, evidence, source: "cache" | "vocab" | "alias"}`.
+  fooddb_known, evidence, source: "cache" | "vocab" | "alias", optional}`.
+  **AS-BUILT 2026-08-24 (D7): two fields joined the row and the table gained an envelope.** `term`
+  is the string the lookups were keyed by (the extraction's `item`, falling back to `raw`) and
+  `optional` mirrors the extraction line's flag; both are in every shipped table and a reader of
+  this contract must not treat them as surprises. The per-slug FILE is
+  `{slug, title, source_url, servings, built_at, line_count, resolved_count, residual_count,
+  hold_count, residual_terms, holds, rows, macro_precheck}` - `holds` rows are
+  `{term, canon_item, bid, why}`, and `macro_precheck` is
+  `{state: "computed"|"partial"|"unavailable"|"skipped", reason, source: {from, cal, carbs,
+  protein_g, fat_g}, lines_covered, lines_total, uncovered_lines, computed_per_serving,
+  portion_factor, tuning, missing_db_items}` with `computed` legal ONLY at total line coverage
+  (a partial figure ships no numbers - the D7 built record says why, measured).
 - **Skeleton locked vs writer-fillable** (from the intake schema in build-v2-spec): LOCKED - name,
   slug, protein, source_url, visibility, `ingredients[]` (item/grams/buy),
   `macros_per_serving`, head.prepTime/cookTime/totalTime. WRITER-FILLABLE - `prose.*`, `cuisine`,
@@ -907,8 +940,23 @@ build time, fix THIS document in the same commit rather than deviating silently.
   `wave-<k>.audit.md` remains the artifact wave-publish P1/P1b read; the preaudit report is an
   input to the auditor, never a substitute for its GO.**
 - **Price evidence:** per term per store `{store, state: "MATCHES"|"EMPTY"|"UNUSABLE", term_used,
-  attempts: [], hits: [{item, price, size, url}] (cap 8), reason}` - the search-verdict-lib shape,
-  serialized. The pricer adjudicates from it and records via ingredient-queue exactly as today.
+  attempts: [], hits: [{item, price, size, relevance, url}] (cap 8), reason}` - the
+  search-verdict-lib shape, serialized. The pricer adjudicates from it and records via
+  ingredient-queue exactly as today.
+  **FIELD-MAPPING PIN, ADDED 2026-08-24 (phase-4 aftercare cold read), because probe-ingredient's
+  -Json output carries TWO state-like fields and picking the wrong one records transport noise as a
+  search answer.** Probe's per-store object is `{store, state, note, verdict, term_used, attempts,
+  reason, hits}` where `state` is TRANSPORT (`OK` / `ERROR` / `NO-CREDENTIALS`) and `verdict` is
+  the search-verdict ladder state. This contract's `state` field is probe's **`verdict`** field;
+  probe's transport `state` and `note` fold into `reason` when they are not OK (a transport ERROR
+  is UNUSABLE with the exception text as the reason). Probe already caps hits at 8 and already
+  carries `relevance` - keep it: it is a SORT HINT for the pricer and never a verdict (probing
+  "saffron" ranks a Saffron Road frozen noodle dish above the actual jar - probe's own header).
+  **And the two vocabularies never mix:** MATCHES/EMPTY/UNUSABLE are SEARCH states;
+  carried/not-carried/blocked/error are the QUEUE's per-store record states; only the PRICER
+  converts one into the other, and the daemon never writes a queue record from evidence. EMPTY
+  after a full ladder PERMITS not-carried (search-verdict-lib's own table) - permitting is not
+  recording.
 - **Dossier (ADDED 2026-08-23 - the phase-1 gate run showed the contract was underspecified, and each
   of these three fields was added because a measured disagreement traced back to its absence).** Per
   candidate: `{slug, name, url, domain, signature, band, servings, ingredients_verbatim (capped at
@@ -1039,7 +1087,7 @@ different questions and this estate has conflated them at least five times.
 |---|---|
 | sourced / selected | extraction ladder |
 | extracted | map lane |
-| mapped with open holds (unbid / vocab follow-ups) | held list in -Status output; NOT dispatched |
+| mapped with open holds (unbid / vocab follow-ups) | map-preresolve RE-RUN at seed (mechanical, zero agents); a CLEARED hold advances on the mapper decision file already on disk, a standing hold goes to the held list, NOT dispatched (CORRECTED 2026-08-24 - the original row said held-only, which strands a repaired recipe forever; the unhold is D7's pinned path and `_unhold_between_seeds` is its real-machine fixture) |
 | pricing / parked | run `-Derive` first; price lane only if still pending |
 | priced | skeleton build (band gate) -> write lane |
 | spec-built / written | qa lane (stages skip work whose output file exists) |
@@ -1638,6 +1686,57 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
     mini-run recipes through the REAL D7 map lane will yield more, which doubles as D7's first live
     mapper dispatch. The gate's "one real absent-term batch priced with pre-gathered evidence" can
     be met from those without inventing a synthetic term list.
+  - **THE LOOKUP MODE IS NEW WORK, AND THIS IS ITS WORK ORDER - because the cold read found that the
+    capability S5 originally named DOES NOT EXIST.** pull-browser-stores.py today reads ONLY
+    `out\worklists\capture-<store>-<date>.json` and writes ONLY the capture estate's own output
+    files; it has no way to sweep an ad-hoc term list, and pointing it at hunter terms by writing
+    that worklist file would destroy the day's real capture worklist AND its output would land in
+    the daily capture files the board builders parse. D10 adds to pull-browser-stores.py exactly:
+    `--lookup-terms-file <path>` (a JSON array of term strings) and `--lookup-out <path>`, legal
+    only together and only with an explicit `--store fareway` or `--store samsclub` (`walmart` is
+    refused with the pause note quoted; unknown keys already exit 2). Lookup mode reuses the
+    store's EXISTING agent, pacing profile, identity assertion and wall handling untouched - the
+    fareway lane is already per-term navigation against `search_url` with Apollo-cache extraction,
+    which is precisely a lookup - and writes per-term search-verdict objects
+    (`{term, state, term_used, attempts, hits, reason}`) to `--lookup-out`. In lookup mode it must
+    read NO worklist file and write NO capture file: the daily capture surfaces are load-bearing
+    and this is the drill-writes-live class with a different costume. A NEEDS-SEEDING refusal, a
+    wall, a dead CDP, or a driver crash all read back as UNUSABLE for that store for the whole
+    batch. The driver's own `--selftest` (throwaway profile, captures nothing) gains a lookup-mode
+    case. Its exit codes stay ITS OWN (0/1/2 per its header) - existing scripts are never "fixed"
+    onto the new battery convention, in either direction.
+  - **THE SAM'S PRECONDITION, CONCRETE: there is no separate session probe, and D10 must not build
+    one.** The check IS the run - an unseeded or logged-out profile fails `samsIdentity()` /
+    the seeded-profile check, ends the store NEEDS-SEEDING, and captures nothing. The daemon reads
+    that from the lookup output and exit code, records UNUSABLE, and never opens a browser to find
+    out (the phase-3 pin's "the puller is the only honest source on its own session", now with the
+    mechanism named).
+  - **THE DAEMON'S PER-BATCH FLOW, PINNED TO THE LINE.** Inside `price_lane`'s greedy loop, after
+    `terms = self.absent_terms[:hunt_lib.PRICE_BATCH]` is sliced and `n += 1`: (1) ONE
+    probe-ingredient call for the whole batch - `ps_invoke(PROBE_INGREDIENT_PS, ["-Term",
+    list(terms), "-Json"])`, the parameter NAMED never positional (the -File-binding family is why
+    ps_invoke exists), timeout >= 900 s (25 s/request x ladder rungs x 2 stores x up to 10 terms);
+    (2) per drivable store, the lookup via `sys.executable` + `run_in_executor` with timeout >= the
+    driver's own `--timeout-min` (default 40 MINUTES - pacing dominates, and that is the price of
+    not tripping a wall); (3) assemble `<RunDir>\price-evidence\batch-<n>.json` - `n` IS the
+    lane's existing invocation counter, and the file is singleton-written so its header says NO
+    MUTEX NEEDED; (4) dispatch with the evidence INLINE in the prompt - the 8-hit cap bounds the
+    size, and phase 1 measured inline dossiers beating tool-call reads, which is the precedent.
+  - **DEGRADE, NEVER BLOCK - explicitly the OPPOSITE of D7's exit-2 semantics, pinned so nobody
+    copies the wrong convention across.** map-preresolve's exit 2 blocks its batch because a mapper
+    ruling on unreadable inputs would be a guess. The price pre-gather is EVIDENCE for a judge who
+    can also go look: a failed probe call, a walled sweep, or a missing lookup output makes those
+    STORES UNUSABLE in the evidence file and the pricer is STILL dispatched - it adjudicates what
+    was gathered and attends what was not. Could-not-look still never reads as EMPTY, and the
+    daemon never skips the judge. The one thing that DOES hold the lane is the singleton cap,
+    which is architecture.
+  - **FIXTURES OWED, with the network never touched by one:** injected FakePS replies frozen as a
+    literal of probe-ingredient's real -Json shape (comment naming the source script and date); a
+    driver-lookup stand-in per store state (MATCHES / EMPTY / UNUSABLE / NEEDS-SEEDING); the
+    must-fire that an UNUSABLE store reaches the evidence file as UNUSABLE and the dispatch STILL
+    happens; the must-fire that a probe transport ERROR lands as UNUSABLE-with-reason and never as
+    EMPTY; and the clean twin where every store answers. The REAL surface is exercised by the gate
+    run itself, not by a fixture that hits stores.
 - **D11 SKILL.md v3 rewrite + agent-prompt slimming** - constants out of per-call prompts into the
   agent definitions (prefix-cache friendly), stage contracts updated to dossier-in/ruling-out, the
   v3 lane diagram, and the run-budget practice (fresh session per phase; ask Brad for the usage %
@@ -1715,7 +1814,7 @@ Workflow orchestrator** - none of them is inert while phase 3 waits:
 | 2 **DONE 2026-08-23** | D6 (extraction ladder) | rung-1/2 settle rate and escalation rate measured on 50 cached pages; zero unverified lines pass |
 | 3 **DONE 2026-08-24** | D9 (the daemon + §4.1a adapter) | hunt-lib parity suite green; adapter drill: per-agent behavior diff vs Workflow twins + measured per-dispatch overhead; drain drill per §4.2; audit-lane-shape clean on the daemon's log |
 | 4 **DONE 2026-08-24** | D7 + D8 (map/write slimming) | mapper residual rate measured; one wave written from skeletons with guards green |
-| 5 | D10 (price pre-pass) | one real absent-term batch priced with pre-gathered evidence; ladder states honest per store |
+| 5 | D10 (price pre-pass) | one real absent-term batch priced with pre-gathered evidence; ladder states honest per store. HONESTY, NOT COVERAGE (pinned 2026-08-24): the attended stores (Walmart, Aldi - Brad's Chrome) and the pricer-tab stores may remain UNCHECKED if Brad is not present or does not order them, terms may therefore end PENDING, and that is a PASSING gate provided every recorded state is honest - Rule B's whole point is that an unfinished check is a fine thing to say out loud |
 | 6 | **the proving run**: ~20 recipes, wave size 10, Brad-directed conditions | success criteria written before the run, incl.: per-recipe tokens (billed measure) and steady-state wall-clock per published recipe both measured against §7's targets; >=5x fewer Claude invocations per published recipe than the 27 measured; zero gate weakened; every new defect class frozen as a fixture same-day |
 | E (optional) | 27B LoRA (extraction/line-split), cross-encoder dish-dedup fine-tune | only after 6; >=3 seeds per arm; detached LoRA never a merged GGUF |
 
@@ -2246,10 +2345,13 @@ the corpus, not about D8, and it is the strongest single argument for D7 that th
 every one of those 14 names is a line map-preresolve now enumerates BEFORE the mapper is paid
 
 **Phase-5 pickup (2026-08-24, so the next session starts building instead of hunting):** read, in
-order, S5 and the D10 bullet WITH BOTH its pinned blocks (the phase-3 one names the hook points and
-the Sam's-session rule; the phase-4 one names the adapter's return-contract behaviour, the
-concurrency answers, and the machinery to reuse), section 4.5's price-evidence shape (the
-search-verdict-lib serialization, cap 8 hits per store), `hunt-daemon.py`'s `price_lane` /
+order, S5 INCLUDING ITS 2026-08-24 CORRECTION (the store tiers as they actually are: Hy-Vee has no
+driver lane and stays the pricer's; Walmart is paused in the driver and attended with Aldi through
+Brad's Chrome) and the D10 bullet WITH ALL of its pinned blocks (the phase-3 one names the hook
+points; the phase-4 ones name the adapter's return-contract behaviour, the lookup-mode work order
+with its exact flags, the per-batch flow pinned to the line, the degrade-never-block semantics, and
+the fixtures owed), section 4.5's price-evidence shape WITH its field-mapping pin (probe's `verdict`
+field is the evidence `state`; probe's transport `state` folds into `reason`), `hunt-daemon.py`'s `price_lane` /
 `price_prompt` / `reap_priced` (the daemon is built; extend it, never re-derive it - the greedy
 exhaustive service loop and the one-wake-per-micro-batch rule are both measured decisions),
 `grocery\probe-ingredient.ps1` and `grocery\pull-browser-stores.py` headers (the surfaces being
@@ -2258,7 +2360,10 @@ the evidence file serializes), and `ingredient-queue.ps1`'s header including the
 The gate corpus: the three genuinely pending queue terms (`guacamole`, `pico de gallo`,
 `korean-rice-cakes`) plus whatever absent terms fall out of running the four phase-2 mini-run
 recipes through the REAL D7 map lane - which is also D7's first live mapper dispatch and should be
-reported as such. llama-server is NOT needed for phase 5 (the price pre-pass is CPU + network);
+reported as such. (Their states verified 2026-08-24: all four sit at `extracted` on disk, so a seed
+routes them straight to the MAP lane - no extraction, no GPU. Run it on a COPY of the run dir; the
+mapper's db-side writes - resolutions rows, food-DB labels - land LIVE by design, because they are
+its real work product, while run-dir state stays on the copy.) llama-server is NOT needed for phase 5 (the price pre-pass is CPU + network);
 browser surfaces follow the estate's standing constraints (the Chrome debug port is blocked on the
 default profile, so Walmart/Aldi stay attended by the pricer - D10 changes what the pricer reads,
 never which stores it must attend). The pricer dispatch carries no schema and must keep carrying
