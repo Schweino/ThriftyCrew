@@ -406,3 +406,10 @@ meal-prep/runs/*/waves/*.preaudit-cards/
 # ~24 s cold and 0 s warm. The candidate POOL itself is committed - that one is institutional memory.
 meal-prep/db/harvest-robots/
 meal-prep/db/harvest-neighbours.json
+
+# API CREDENTIALS. Never committed. fdc_lookup.py reads the FDC key from here (or from
+# FDC_API_KEY / FDC_KEY_FILE) and the file itself must stay out of the repo - a key in git history
+# is a key that has to be rotated, whether or not the repo is public today.
+meal-prep/db/fdc-api-key.txt
+*-api-key.txt
+*.apikey
