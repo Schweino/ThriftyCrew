@@ -336,7 +336,7 @@ def run_ps(script, args, timeout=180):
     return rc, out
 
 
-def fetch_through_cache(url, cache_dir=PAGE_CACHE):
+def fetch_through_cache(url, cache_dir=PAGE_CACHE, record=True):
     """The page body, and whether the network was touched.
 
     Contract (section 3 S1 item 2): every page fetch goes THROUGH fetch-recipe.ps1, which owns the
@@ -348,7 +348,12 @@ def fetch_through_cache(url, cache_dir=PAGE_CACHE):
     body = cached_body(url, cache_dir)
     if body is not None:
         return body, False
-    rc, _out = run_ps(FETCH_RECIPE_PS, ["-Url", url], timeout=120)
+    args = ["-Url", url]
+    if not record:
+        # A PROBE MAY NOT PROMOTE A PUBLISHER. Recording a sample fetch marks the domain `reliable`,
+        # and `reliable` is exactly what the crawl enumerates - so probing a useless site admitted it.
+        args.append("-NoRecord")
+    rc, _out = run_ps(FETCH_RECIPE_PS, args, timeout=120)
     if rc != 0:
         return None, True
     return cached_body(url, cache_dir), True
@@ -1735,7 +1740,7 @@ def probe_domain(domain, samples=5):
         body = cached_body(u)
         if body is None:
             pacer.wait(domain)
-            body, _net = fetch_through_cache(u)
+            body, _net = fetch_through_cache(u, record=False)
         if body is None:
             continue
         out["sampled"] += 1

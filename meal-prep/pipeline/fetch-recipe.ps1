@@ -25,6 +25,12 @@
 # ---------------------------------------------------------------------------------------------------
 param(
   [string]$Url = '', [switch]$Refresh, [switch]$BodyPath, [switch]$Stats, [switch]$Json, [switch]$SelfTest,
+  # PROBING IS NOT USING (2026-08-24). A publisher PROBE fetches a few sample pages to decide
+  # whether a site is worth admitting at all, and recording those fetches promotes the domain to
+  # `reliable` in the ledger - which is what the crawl enumerates. So probing a useless site
+  # admitted it. Measured: four domains the probe judged UNUSABLE were promoted by the act of
+  # probing them. -NoRecord lets a caller fetch without making a claim about the publisher.
+  [switch]$NoRecord,
   [string]$CacheDir = '', [int]$TimeoutSec = 30
 )
 $ErrorActionPreference = 'Stop'
@@ -132,10 +138,12 @@ if ((Test-Path $bodyFile) -and -not $runRefresh) {
     $html = [string]$resp.Content
   } catch {
     # Record the failure against the publisher so the pipeline stops re-learning which domains fail.
+    # -NoRecord suppresses this too: a probe that cannot fetch a page has learned something about the
+    # site, but it has not earned the right to mark a publisher failing on the strength of a sample.
     $sd = Join-Path $here 'source-domains.ps1'
     if (Test-Path $sd) {
       $outcome = if ($_.Exception.Message -match '404|NotFound') { '404' } else { 'fail' }
-      & powershell -NoProfile -File $sd -Record -Domain $Url -Outcome $outcome -Note ("fetch-recipe: " + $_.Exception.Message.Substring(0, [Math]::Min(120, $_.Exception.Message.Length))) | Out-Null
+      if (-not $NoRecord) { & powershell -NoProfile -File $sd -Record -Domain $Url -Outcome $outcome -Note ("fetch-recipe: " + $_.Exception.Message.Substring(0, [Math]::Min(120, $_.Exception.Message.Length))) | Out-Null }
     }
     Write-Output ("fetch-recipe: FETCH FAILED {0} - {1}" -f $Url, $_.Exception.Message)
     exit 1
@@ -151,7 +159,7 @@ foreach ($b in (Get-JsonLdBlocks $html)) {
 
 if (-not $fromCache) {
   $sd = Join-Path $here 'source-domains.ps1'
-  if (Test-Path $sd) {
+  if ((Test-Path $sd) -and -not $NoRecord) {
     $a = @('-Record', '-Domain', $Url, '-Outcome', 'ok')
     if ($hasLd) { $a += '-HasJsonLd' }
     & powershell -NoProfile -File $sd @a | Out-Null
