@@ -243,6 +243,30 @@ is ever dispatched. Flagging is permitted locally - but this case needs no model
 
 ---
 
+## 3A. BRAD DECIDED (2026-08-24). These are rulings, not proposals.
+
+| # | question | RULING | status |
+|---|---|---|---|
+| D1 | quantity-less GARNISH line | treat as optional: drop from cost and macros, keep it named for the reader | **BUILT** b4679175 |
+| D2 | rib recipes | REFUSE the whole class - "ribs are super high in calories and the protein/carb ratio would never stay under the gate" | **BUILT** 3056a7d1 |
+| D3 | which cost items to build | ALL FOUR: the yield fixes, B, F, A | B and F built; A pending |
+| D4 | weekly-usage stop rule | explicitly waived for this work ("forget about my usage - build everything") | noted |
+| D5 | ALTERNATIVES line | price them and take the CHEAPEST, disclose it on the card - but ONLY alternatives that resolve through a board id or label. An include-pattern substitution never counts. | pending |
+| D6 | commodity fixes 2.7 and 2.8 | ORDERED, both, with fixtures. This is an explicit exception to section 11 for these two rows. | pending |
+| D7 | pop-vs-gate class | record the (source claim, our recompute) pair on every band-gate ruling. No margin applied, no gate behaviour changed. | pending |
+| D8 | verification run | YES - a fresh full run once everything lands | pending |
+
+**D5 is the one with a dependency and it is worth stating plainly:** picking the cheapest alternative is
+only safe because it is restricted to exact id/label matches. `price-ingredient.ps1` already reports
+which road it used, so the guard is mechanical rather than a judgement. Without that restriction, the
+motivating recipe would have priced cauliflower rice as white rice (2.8).
+
+**D6 is recorded as an EXPLICIT EXCEPTION** because section 11 puts "any board/commodity
+capture-pipeline changes beyond reading what it already produces" out of scope. Brad ordered these two
+rows specifically; the exception does not generalise.
+
+---
+
 ## 4. OPEN QUESTIONS for Brad (nothing can be fixtured until these are answered)
 
 ### 4.1 What should the pipeline do with an ALTERNATIVES ingredient line?
