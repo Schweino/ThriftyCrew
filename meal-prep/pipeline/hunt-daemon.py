@@ -1492,6 +1492,16 @@ class Daemon(object):
         return store_name, doc, why
 
     def price_prompt(self, terms, evidence=None, path=""):
+        """B3 / pin P9. THE PROMPT STATES THE HEADLESS TRUTH UNCONDITIONALLY, and there is no flag.
+
+        price_prompt is DAEMON-ONLY BY CONSTRUCTION. The attended path is a human invoking the agent
+        interactively in the app, and no human path ever renders this string - so there is nothing to
+        switch on, and a conditional here would be a branch nobody could ever take. The agent
+        definition keeps its attended instructions for that other entry point: two entry points, one
+        agent, zero conditionals.
+        """
+        blocked = price_evidence.headless_blocked_stores(evidence) if evidence else []
+        walled = price_evidence.walled_stores(evidence) if evidence else []
         body = (
             "Price this batch of %d term(s) the board has never carried. They come from SEVERAL\n"
             "recipes at once - the ingredient queue is keyed by term and dedupes across recipes,\n"
@@ -1503,22 +1513,48 @@ class Daemon(object):
             "pre-pass reaches.\n\n"
             "ADJUDICATE. MATCHES is a pile of candidates, never a carriage ruling. Ask of each row\n"
             "whether it is THE INGREDIENT, in a form a cook would buy for this recipe.\n\n"
-            "ATTEND, in this order:\n"
-            "  * Hy-Vee, in your own browser tab. It has no driver lane and never had one, so a new\n"
-            "    term there is browser work every time.\n"
-            "  * any store the file shows UNUSABLE. That is 'we could not look', not 'nothing there'.\n"
-            "  * Walmart and Aldi ONLY if Brad is at the keyboard - they answer his own Chrome\n"
-            "    through the extension and not an automated one. Check list_connected_browsers\n"
-            "    first; an empty array means say so plainly and leave those two PENDING.\n\n"
+            "YOU HAVE NO BROWSER IN THIS SESSION. Read that as a fact about this process, not as a\n"
+            "difficulty to work around. You were dispatched headless, so no MCP server is attached:\n"
+            "mcp__Claude_Browser__* is the app's own pane and mcp__claude-in-chrome__* needs the\n"
+            "extension on an interactive session. Your frontmatter DECLARES both, and declaring a\n"
+            "tool does not conjure the server. Do not check list_connected_browsers, do not try a\n"
+            "tab, and do not describe a store page you did not load. On 2026-08-24 a dispatched\n"
+            "pricer wrote three verified-sounding store visits - a Walmart store address, an Aldi\n"
+            "header, a Hy-Vee store selector - that never happened, then corrected itself. The\n"
+            "correction is why the queue is clean and it is not a control, which is why this\n"
+            "paragraph exists.\n\n"
+            "SO THESE STORES ARE RECORDED BLOCKED, MECHANICALLY, IN THE SAME BATCH: %s.\n"
+            "State `blocked`, evidence exactly `%s`. That is not a defeat - blocked is honest and it\n"
+            "keeps the term PENDING, which is what an unchecked store is meant to do. Brad checks\n"
+            "those three in an attended run.\n\n"
+            "AND DO NOT RE-PROBE A STORE THE EVIDENCE ALREADY MARKS UNUSABLE AT THE SERVER OR DRIVER\n"
+            "TIER%s. That is a transport refusal, not an empty shelf: on 2026-08-24 Family Fare\n"
+            "answered (400) Bad Request to all five terms of a batch (Freshop is search-budget bound\n"
+            "and the daily capture had already spent it) and ate three futile retries. Record it\n"
+            "`blocked` with the reason the evidence gives, and move on.\n\n"
+            "WHAT IS LEFT IS THE WHOLE OF YOUR JUDGMENT, and it is worth the session: which gathered\n"
+            "row is really this ingredient, in a form a cook would buy.\n\n"
             "READ THE STATES AS THEY ARE WRITTEN. MATCHES / EMPTY / UNUSABLE are SEARCH states.\n"
             "carried / not-carried / blocked / error are what YOU record, and you are the only one\n"
             "who converts between them. An EMPTY from the two server stores is a FULL LADDER empty;\n"
             "an EMPTY from Fareway or Sam's Club is RUNG 1 ONLY and does not support not-carried\n"
             "until you have walked the ladder yourself. UNUSABLE is never not-carried.\n\n"
-            "You still hold the pen: ingredient-queue.ps1 -Record per store with evidence a reviewer\n"
-            "could check, then -Verdict, then -Promote when a term settles. Do not write board cells\n"
-            "and do not move any recipe state - the orchestrator derives that from the queue.\n"
-            % (len(terms), ", ".join(terms)))
+            "YOU STILL HOLD THE PEN, AND IT IS ONE CALL NOW, NOT THIRTY-FIVE.\n"
+            "  ingredient-queue.ps1 -RecordBatch -File <a JSON array you write to a temp file>\n"
+            "with one object per store per term: {term, store, state, price, size, item, evidence}.\n"
+            "Seven stores across %d terms is one write, not %d round trips, and each round trip is a\n"
+            "turn that re-reads this whole session. THE BATCH IS ALL-OR-NOTHING: every row is checked\n"
+            "against the same contract -Record enforces (exact store names, a carried row needs a\n"
+            "price, the state enum), and one bad row means NOTHING is written and every violation is\n"
+            "named with its row number - so you get one correction pass rather than a hole in your\n"
+            "own evidence. Then -Verdict, then -Promote when a term settles; those stay per term.\n"
+            "Do not write board cells and do not move any recipe state - the orchestrator derives\n"
+            "that from the queue.\n"
+            % (len(terms), ", ".join(terms),
+               ", ".join(blocked) or "(the evidence names none)",
+               price_evidence.NO_BROWSER_EVIDENCE,
+               (" - today that is: " + ", ".join(walled)) if walled else "",
+               len(terms), 7 * len(terms)))
         if evidence:
             body += "\n" + price_evidence.render(evidence, path=path) + "\n"
         else:

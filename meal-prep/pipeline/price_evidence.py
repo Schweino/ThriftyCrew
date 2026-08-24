@@ -290,6 +290,51 @@ def _price(v):
         return str(v)
 
 
+NO_BROWSER_EVIDENCE = "blocked - no browser in this session"
+
+
+def headless_blocked_stores(doc):
+    """The stores a DAEMON-DISPATCHED pricer structurally cannot reach (B3 / pin P9).
+
+    Gate finding 2, and it is the phase's most important measurement. The adapter dispatches
+    `claude -p --agent recipe-hunter-pricer` in a headless subprocess. MCP servers are not there:
+    `mcp__Claude_Browser__*` is the app's own pane and `mcp__claude-in-chrome__*` needs the extension
+    attached to an interactive session. Declaring a tool in frontmatter does not conjure the server.
+    The agent's own final evidence said so plainly - and what it wrote FIRST, mid-session, was three
+    verified-sounding store visits that never happened, one of them carrying a street address that
+    does not match the estate's own record for that supercenter. It corrected itself afterwards, which
+    is the only reason the queue is clean, and SELF-CORRECTION IS NOT A CONTROL.
+
+    So the prompt stops asking for what the session cannot do. These are the pricer-tab and attended
+    tiers - Hy-Vee, Walmart, Aldi - named off the evidence's OWN tier field rather than a second list.
+    """
+    out = []
+    for t in (doc or {}).get("terms") or []:
+        for srow in t.get("stores") or []:
+            if srow.get("tier") in (TIER_PRICER, TIER_ATTENDED) and srow["store"] not in out:
+                out.append(srow["store"])
+    return out
+
+
+def walled_stores(doc):
+    """Stores a pre-pass DID reach for and was refused by: UNUSABLE at the server or driver tier.
+
+    "Nobody has looked and it is yours" and "we looked and were walled" are both UNUSABLE, and the
+    tier is what tells them apart - which is why the tier is on every row. Family Fare answered
+    `(400) Bad Request` to all five terms on the phase-5 batch (Freshop is search-budget bound and the
+    daily capture had already spent it) and ate three futile retries from the pricer. Re-probing a
+    store the transport just refused buys nothing but minutes.
+    """
+    out = []
+    for t in (doc or {}).get("terms") or []:
+        for srow in t.get("stores") or []:
+            if (srow.get("state") == "UNUSABLE"
+                    and srow.get("tier") in (TIER_SERVER, TIER_DRIVER)
+                    and srow["store"] not in out):
+                out.append(srow["store"])
+    return out
+
+
 def render(doc, path=""):
     """The evidence, INLINE for the prompt. Compact on purpose: the 8-hit cap bounds it and phase 1
     measured an inline dossier beating a tool-call read, but a raw JSON dump would spend most of its

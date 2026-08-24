@@ -29,6 +29,7 @@
     .\ingredient-queue.ps1 -List -Status pending
     .\ingredient-queue.ps1 -Record -Term 'saffron' -Store "Baker's" -State carried -Price 28.99 -Size '0.03 oz' -Item 'Spice Islands Spanish Threads Saffron' -Evidence 'jar of threads, adjudicated'
     .\ingredient-queue.ps1 -Record -Term 'saffron' -Store 'Aldi' -State not-carried -Evidence 'searched in-store mode, no saffron in spice aisle'
+    .\ingredient-queue.ps1 -RecordBatch -File batch.json      one call, N records, ALL-OR-NOTHING
     .\ingredient-queue.ps1 -Verdict -Term 'saffron'
     .\ingredient-queue.ps1 -SelfTest
 #>
@@ -36,6 +37,8 @@ param(
   [switch]$Add,
   [switch]$List,
   [switch]$Record,
+  [switch]$RecordBatch,             # B2: N records in ONE call, validated first, written all-or-nothing
+  [string]$File = '',               # the batch: a JSON ARRAY of {term, store, state, price, size, item, evidence}
   [switch]$Verdict,
   [switch]$Promote,
   [string]$Bid = '',
@@ -135,6 +138,46 @@ function Get-QueueVerdict($Entry, $AllStores, $TerminalStates) {
   return @{ verdict = 'PENDING'; carried_by = @(); checked = $checked }
 }
 
+# ---------------------------------------------------------------------------------------------------
+# THE ROW CONTRACT, IN ONE PLACE (B2, added 2026-08-24, phase 6a / cold-read pin P8).
+#
+# -Record and -RecordBatch both run this. That is the whole reason it is a function: the batch road has
+# to enforce the evidence contract "PER ROW exactly as it does per call", and the only way to be sure
+# of that is for both roads to run the same code. Two copies of a rule is the forked-taxonomy defect
+# this estate already has scars from, and here the two copies would be the difference between a
+# carriage claim with evidence and one without.
+$script:BATCH_STATES = @('carried', 'not-carried', 'blocked', 'error')
+
+function Test-BatchRow {
+  <# Returns the violations for ONE row as an array of strings; empty means legal.
+     $Index 0 means "not a batch row" - the single -Record road passes it, so its messages read
+     exactly as they always did instead of gaining a row number nobody sent. #>
+  param($Row, [int]$Index, $AllStores)
+  $bad = @()
+  $at = if ($Index -gt 0) { "row {0}: " -f $Index } else { '' }
+  $term  = [string]$Row.term
+  $store = [string]$Row.store
+  $state = [string]$Row.state
+  if (-not $term)  { $bad += ($at + "no term") }
+  if (-not $store) { $bad += ($at + "no store") }
+  elseif ($AllStores -notcontains $store) {
+    # A worker recording 'Bakers' or 'Sams Club' would create a silent eighth store and the
+    # all-seven-checked test would never fire - the difference between NOT-CARRIED and a recipe
+    # parked forever.
+    $bad += ($at + ("unknown store '{0}'. Must be exactly one of: {1}" -f $store, ($AllStores -join ', ')))
+  }
+  if (-not $state) { $bad += ($at + "no state") }
+  elseif ($script:BATCH_STATES -notcontains $state) {
+    $bad += ($at + ("state '{0}' is not one of: {1}" -f $state, ($script:BATCH_STATES -join ', ')))
+  }
+  $price = 0.0
+  if ($null -ne $Row.price) { try { $price = [double]$Row.price } catch { $price = 0.0 } }
+  if ($state -eq 'carried' -and $price -le 0) {
+    $bad += ($at + ("'{0}' @ {1} is carried with no price. A carriage claim with no price is not evidence." -f $term, $store))
+  }
+  return $bad
+}
+
 if ($SelfTest -or $IngredientQueueSelfTest) {
   $bad = 0
   function New-E { $st = @{}; foreach ($s in $STORES) { $st[$s] = $null }; return [pscustomobject]@{ term = 't'; stores = [pscustomobject]$st } }
@@ -226,7 +269,129 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
     else { Write-Output '  ok and not one of the 400 items already in the queue was dropped on the way' }
   } finally { if (Test-Path $ctmp) { Remove-Item $ctmp -Force -ErrorAction SilentlyContinue } }
 
-  if ($bad -eq 0) { Write-Output 'ingredient-queue SELF-TEST PASS (Rule B: one carried is enough; unchecked/blocked/errored is never not-carried; file round-trips; concurrent writers lose nothing)'; exit 0 }
+  # =================================================================================================
+  # -RecordBatch (B2 / pin P8, added 2026-08-24). ATOMIC: every row validated first, ANY invalid row
+  # means NOTHING is written and every violation is named with its row.
+  #
+  # THREE ROWS MINIMUM ON EVERY FIXTURE, and here the size matters twice over: `@(<pipeline> |
+  # ConvertFrom-Json)` on a many-element array binds ONE element of type Object[], which this estate
+  # has lost two whole -BatchFile roads to and which is INVISIBLE at batch size one; and "one bad row
+  # writes zero rows" cannot be told from "the write failed" at size one either.
+  # =================================================================================================
+  $btmp = Join-Path ([IO.Path]::GetTempPath()) ('iq-batch-' + [Guid]::NewGuid().ToString('N') + '.json')
+  $bfile = Join-Path ([IO.Path]::GetTempPath()) ('iq-rows-' + [Guid]::NewGuid().ToString('N') + '.json')
+  try {
+    $stb = @{}; foreach ($sn in $STORES) { $stb[$sn] = $null }
+    $seedB = @('saffron', 'achiote paste', 'gochujang' | ForEach-Object {
+      [pscustomobject]@{ term = $_; recipes = @('r'); added = (Get-Stamp); why = 'fixture'
+                         status = 'pending'; stores = [pscustomobject]$stb; verdict = 'PENDING'; notes = $null } })
+    function Reset-BatchQueue {
+      ([pscustomobject]@{ readme = 'batch fixture'; items = $script:seedBRows } | ConvertTo-Json -Depth 8) |
+        Set-Content -LiteralPath $btmp -Encoding UTF8
+    }
+    $script:seedBRows = $seedB
+    Reset-BatchQueue
+
+    # ---- THE HAPPY PATH: three rows, one call, one lock take. ------------------------------------
+    $good = @(
+      [pscustomobject]@{ term='saffron'; store="Baker's"; state='carried'; price=28.99; size='0.03 oz'; item='Spice Islands Saffron'; evidence='jar of threads' },
+      [pscustomobject]@{ term='achiote paste'; store='Aldi'; state='not-carried'; price=0; size=''; item=''; evidence='searched in-store mode' },
+      [pscustomobject]@{ term='gochujang'; store='Hy-Vee'; state='blocked'; price=0; size=''; item=''; evidence='no browser in this session' })
+    ($good | ConvertTo-Json -Depth 6) | Set-Content -LiteralPath $bfile -Encoding UTF8
+    $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecordBatch -File $bfile -QueueFile $btmp 2>&1
+    $rc = $LASTEXITCODE
+    $after = Read-Queue $btmp
+    $sf = (Get-Item $after 'saffron').stores."Baker's"
+    $ap = (Get-Item $after 'achiote paste').stores.'Aldi'
+    $gj = (Get-Item $after 'gochujang').stores.'Hy-Vee'
+    if ($rc -ne 0 -or -not $sf -or -not $ap -or -not $gj) {
+      Write-Output ("  X MUST FIRE one -RecordBatch call must land ALL THREE records; rc=$rc " + ($o -join ' | ')); $bad++
+    } else { Write-Output '  ok one -RecordBatch call landed three records across three terms and three stores' }
+    if ($sf -and ([double]$sf.price -ne 28.99 -or [string]$sf.item -ne 'Spice Islands Saffron' -or [string]$sf.evidence -ne 'jar of threads')) {
+      Write-Output '  X MUST FIRE the batch road must carry price, item and evidence exactly as -Record does'; $bad++
+    } else { Write-Output '  ok and each row carried its price, item and evidence through unchanged' }
+    if ((Get-Item $after 'saffron').verdict -ne 'CARRIED' -or (Get-Item $after 'saffron').status -ne 'resolved') {
+      Write-Output '  X MUST FIRE Rule B must be applied per row - one carried store resolves the term'; $bad++
+    } else { Write-Output '  ok Rule B applied per row: one carried store resolved saffron' }
+    if ((Get-Item $after 'gochujang').verdict -ne 'PENDING') {
+      Write-Output '  X MUST FIRE a BLOCKED store is not a check - the term must stay PENDING'; $bad++
+    } else { Write-Output '  ok CLEAN TWIN a blocked store left its term PENDING (unchecked is never not-carried)' }
+
+    # ---- ATOMICITY: one bad row writes ZERO rows. ------------------------------------------------
+    Reset-BatchQueue
+    $mixed = @(
+      [pscustomobject]@{ term='saffron'; store="Baker's"; state='carried'; price=28.99; size=''; item='x'; evidence='e' },
+      [pscustomobject]@{ term='achiote paste'; store='Sams Club'; state='not-carried'; price=0; size=''; item=''; evidence='e' },
+      [pscustomobject]@{ term='gochujang'; store='Hy-Vee'; state='blocked'; price=0; size=''; item=''; evidence='e' })
+    ($mixed | ConvertTo-Json -Depth 6) | Set-Content -LiteralPath $bfile -Encoding UTF8
+    $o2 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecordBatch -File $bfile -QueueFile $btmp 2>&1
+    $rc2 = $LASTEXITCODE
+    $after2 = Read-Queue $btmp
+    $wrote = @(@($after2.items) | Where-Object { @($_.stores.PSObject.Properties | Where-Object { $null -ne $_.Value }).Count -gt 0 }).Count
+    if ($rc2 -ne 1 -or $wrote -ne 0) {
+      Write-Output ("  X MUST FIRE one contract-violating row must write ZERO rows and exit 1; rc=$rc2 rows_written=$wrote"); $bad++
+    } else { Write-Output '  ok MUST FIRE a 3-row batch with ONE bad row wrote zero rows and exited 1 - a partly-applied batch is a hole in the evidence' }
+    if (($o2 -join ' ') -notmatch "row 2" -or ($o2 -join ' ') -notmatch "Sams Club") {
+      Write-Output ("  X MUST FIRE the violation must be NAMED with its row, so the pricer gets one correction pass; got: " + ($o2 -join ' | ')); $bad++
+    } else { Write-Output "  ok and the violation was named with its row number and the offending store ('Sams Club' - the silent eighth store)" }
+
+    # a carried row with no price is the OTHER contract rule, and it refuses the batch too
+    Reset-BatchQueue
+    $nopr = @(
+      [pscustomobject]@{ term='saffron'; store="Baker's"; state='not-carried'; price=0; size=''; item=''; evidence='e' },
+      [pscustomobject]@{ term='achiote paste'; store='Aldi'; state='carried'; price=0; size=''; item='paste'; evidence='e' },
+      [pscustomobject]@{ term='gochujang'; store='Fareway'; state='error'; price=0; size=''; item=''; evidence='e' })
+    ($nopr | ConvertTo-Json -Depth 6) | Set-Content -LiteralPath $bfile -Encoding UTF8
+    $o3 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecordBatch -File $bfile -QueueFile $btmp 2>&1
+    $rc3 = $LASTEXITCODE
+    $after3 = Read-Queue $btmp
+    $wrote3 = @(@($after3.items) | Where-Object { @($_.stores.PSObject.Properties | Where-Object { $null -ne $_.Value }).Count -gt 0 }).Count
+    if ($rc3 -ne 1 -or $wrote3 -ne 0 -or ($o3 -join ' ') -notmatch 'no price') {
+      Write-Output ("  X MUST FIRE carried-with-no-price must refuse the WHOLE batch; rc=$rc3 rows=$wrote3 " + ($o3 -join ' | ')); $bad++
+    } else { Write-Output '  ok MUST FIRE a carried row with no price refuses the whole batch - a carriage claim with no price is not evidence' }
+
+    # a term nobody queued cannot be recorded against, and that check is INSIDE the lock
+    Reset-BatchQueue
+    $unq = @(
+      [pscustomobject]@{ term='saffron'; store="Baker's"; state='not-carried'; price=0; size=''; item=''; evidence='e' },
+      [pscustomobject]@{ term='never queued'; store='Aldi'; state='not-carried'; price=0; size=''; item=''; evidence='e' },
+      [pscustomobject]@{ term='gochujang'; store='Fareway'; state='not-carried'; price=0; size=''; item=''; evidence='e' })
+    ($unq | ConvertTo-Json -Depth 6) | Set-Content -LiteralPath $bfile -Encoding UTF8
+    $o4 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecordBatch -File $bfile -QueueFile $btmp 2>&1
+    $rc4 = $LASTEXITCODE
+    $after4 = Read-Queue $btmp
+    $wrote4 = @(@($after4.items) | Where-Object { @($_.stores.PSObject.Properties | Where-Object { $null -ne $_.Value }).Count -gt 0 }).Count
+    if ($rc4 -ne 1 -or $wrote4 -ne 0) {
+      Write-Output ("  X MUST FIRE a row naming an unqueued term must refuse the whole batch; rc=$rc4 rows=$wrote4"); $bad++
+    } else { Write-Output '  ok MUST FIRE a row naming an unqueued term refuses the whole batch, and that check runs INSIDE the lock' }
+
+    # ---- THE TWO ROADS ENFORCE THE SAME CONTRACT, ROW FOR ROW. ------------------------------------
+    # -Record and -RecordBatch run the SAME validator, which is why it is a function. This asserts it
+    # rather than trusting it, because two copies of a rule is the forked-taxonomy defect.
+    $sameRules = $true
+    foreach ($case in @(
+        @{ row = [pscustomobject]@{ term='t'; store='Bakers'; state='carried'; price=1 }; why = 'unknown store' },
+        @{ row = [pscustomobject]@{ term='t'; store="Baker's"; state='carried'; price=0 }; why = 'carried with no price' },
+        @{ row = [pscustomobject]@{ term=''; store="Baker's"; state='carried'; price=1 }; why = 'no term' })) {
+      if (-not @(Test-BatchRow $case.row 0 $STORES).Count) { $sameRules = $false; Write-Output ("  X the shared validator missed: " + $case.why); $bad++ }
+    }
+    if ($sameRules) { Write-Output '  ok -Record and -RecordBatch run ONE validator, and it catches all three contract rules' }
+    if (@(Test-BatchRow ([pscustomobject]@{ term='t'; store="Sam's Club"; state='blocked'; price=0 }) 0 $STORES).Count) {
+      Write-Output '  X CLEAN TWIN a legal blocked row with no price must pass - only CARRIED needs one'; $bad++
+    } else { Write-Output '  ok CLEAN TWIN a legal blocked row with no price passes: only CARRIED needs a price' }
+    # and the ValidateSet on -State is PowerShell's own copy of the same list. It cannot reference a
+    # variable, so the two are pinned to each other here rather than left to drift.
+    $psSet = @((Get-Command $PSCommandPath).Parameters['State'].Attributes |
+               Where-Object { $_ -is [System.Management.Automation.ValidateSetAttribute] } |
+               ForEach-Object { $_.ValidValues } | Where-Object { $_ })
+    if ((@($psSet | Sort-Object) -join ',') -ne (@($script:BATCH_STATES | Sort-Object) -join ',')) {
+      Write-Output ("  X MUST FIRE -State's ValidateSet and BATCH_STATES have drifted: [" + ($psSet -join ',') + "] vs [" + ($script:BATCH_STATES -join ',') + "]"); $bad++
+    } else { Write-Output '  ok -State''s ValidateSet and the batch state enum are the same set (PowerShell cannot share the variable, so it is pinned here)' }
+  } finally {
+    foreach ($f in @($btmp, $bfile)) { if (Test-Path $f) { Remove-Item $f -Force -ErrorAction SilentlyContinue } }
+  }
+
+  if ($bad -eq 0) { Write-Output 'ingredient-queue SELF-TEST PASS (Rule B: one carried is enough; unchecked/blocked/errored is never not-carried; file round-trips; concurrent writers lose nothing; -RecordBatch is atomic)'; exit 0 }
   Write-Output ("ingredient-queue SELF-TEST FAIL ({0} problem(s))" -f $bad); exit 1
 }
 
@@ -259,8 +424,10 @@ if ($Add) {
 
 if ($Record) {
   if (-not $Term -or -not $Store -or -not $State) { Write-Output 'ingredient-queue: -Record needs -Term, -Store and -State'; exit 1 }
-  if ($STORES -notcontains $Store) { Write-Output ("ingredient-queue: unknown store '{0}'. Must be exactly one of: {1}" -f $Store, ($STORES -join ', ')); exit 1 }
-  if ($State -eq 'carried' -and $Price -le 0) { Write-Output 'ingredient-queue: a carried store needs -Price. A carriage claim with no price is not evidence.'; exit 1 }
+  # THE SAME VALIDATOR -RecordBatch USES. It now names EVERY violation rather than the first, which is
+  # the same courtesy the batch road extends: one correction pass, not one per round trip.
+  $rowBad = Test-BatchRow ([pscustomobject]@{ term=$Term; store=$Store; state=$State; price=$Price }) 0 $STORES
+  if (@($rowBad).Count) { foreach ($v in $rowBad) { Write-Output ("ingredient-queue: " + $v) }; exit 1 }
   $script:recMsg = ''; $script:recRc = 0
   Invoke-Locked -Path $QueueFile -Body {
     $fresh = Read-Queue $QueueFile
@@ -276,6 +443,89 @@ if ($Record) {
   }
   Write-Output $script:recMsg
   exit $script:recRc
+}
+
+# ---------------------------------------------------------------------------------------------------
+# -RecordBatch (B2, added 2026-08-24, phase 6a / cold-read pin P8).
+#
+# WHY. Seven stores x five terms is ~35 separate -Record invocations, and under the v3 daemon each one
+# is a TURN in the pricer's session - the single largest turn sink in the price lane, measured on the
+# phase-5 gate run. The pen stays with the pricer and the enforcement stays at the script layer; only
+# the number of round trips changes.
+#
+# IT IS ATOMIC, AND THAT IS THE POINT RATHER THAN A DETAIL. EVERY row is validated FIRST, under exactly
+# -Record's rules (the same function, above), and if ANY row is invalid then NOTHING is written, the
+# exit is 1, and every violation is named with its row. The pricer gets ONE correction pass instead of
+# a silent hole in its evidence - and a hole in the evidence is precisely what the per-store record
+# exists to prevent.
+#
+# ONE MUTEX TAKE for the whole batch, and the document is re-read INSIDE it, exactly as -Add and
+# -Record do. -Verdict and -Promote stay per-term and are untouched: a verdict is a reading of one
+# term's rows, and promotion writes a different ledger under its own lock.
+if ($RecordBatch) {
+  if (-not $File) { Write-Output 'ingredient-queue: -RecordBatch needs -File (a JSON array of {term, store, state, price, size, item, evidence})'; exit 1 }
+  if (-not (Test-Path $File)) { Write-Output ("ingredient-queue: no batch file at {0}" -f $File); exit 1 }
+  $rows = $null
+  try {
+    $btext = [IO.File]::ReadAllText($File, [Text.Encoding]::UTF8) -replace '^﻿', ''
+    # ASSIGN FIRST, THEN WRAP. `@(<pipeline> | ConvertFrom-Json)` on a MANY-element array binds ONE
+    # element of type Object[]; the estate has lost two whole -BatchFile roads to that, and it is
+    # invisible at batch size one - exactly the size a first fixture reaches for.
+    $parsed = ($btext | ConvertFrom-Json)
+    $rows = @($parsed)
+  } catch {
+    Write-Output ("ingredient-queue: the batch file would not parse: {0}" -f $_.Exception.Message); exit 1
+  }
+  if (-not @($rows).Count) { Write-Output 'ingredient-queue: the batch file holds no rows'; exit 1 }
+
+  # ---- VALIDATE EVERY ROW FIRST. Nothing is opened for writing until all of them are legal. -------
+  $violations = @()
+  for ($i = 0; $i -lt @($rows).Count; $i++) {
+    $violations += (Test-BatchRow @($rows)[$i] ($i + 1) $STORES)
+  }
+  if (@($violations).Count) {
+    Write-Output ("ingredient-queue: -RecordBatch REFUSED - {0} violation(s) across {1} row(s). NOTHING was written." -f @($violations).Count, @($rows).Count)
+    foreach ($v in $violations) { Write-Output ("    " + $v) }
+    Write-Output '   Fix the named rows and re-send the WHOLE batch. A partly-applied batch is a hole in the evidence, which is the thing the per-store record exists to prevent.'
+    exit 1
+  }
+
+  $script:batchMsg = @()
+  $script:batchRc = 0
+  Invoke-Locked -Path $QueueFile -Body {
+    $fresh = Read-Queue $QueueFile
+    # A SECOND PASS INSIDE THE LOCK, for the one thing the pure validator cannot know: whether the
+    # term is actually queued. Still all-or-nothing - the document is not touched until every row has
+    # somewhere to land.
+    $missing = @()
+    for ($i = 0; $i -lt @($rows).Count; $i++) {
+      $t = [string](@($rows)[$i].term)
+      if (-not (Get-Item $fresh $t)) { $missing += ("row {0}: '{1}' is not queued - -Add it first" -f ($i + 1), $t) }
+    }
+    if (@($missing).Count) {
+      $script:batchMsg = @(("ingredient-queue: -RecordBatch REFUSED - {0} row(s) name a term that is not queued. NOTHING was written." -f @($missing).Count)) + @($missing | ForEach-Object { "    " + $_ })
+      $script:batchRc = 1
+      return
+    }
+    $lines = @()
+    foreach ($r in @($rows)) {
+      $t = [string]$r.term
+      $e = Get-Item $fresh $t
+      $pr = 0.0; if ($null -ne $r.price) { try { $pr = [double]$r.price } catch { $pr = 0.0 } }
+      $e.stores.([string]$r.store) = [pscustomobject]@{ state = [string]$r.state
+                                                        price = $(if ($pr -gt 0) { $pr } else { $null })
+                                                        size = [string]$r.size; item = [string]$r.item
+                                                        evidence = [string]$r.evidence; checked = (Get-Stamp) }
+      $v = Get-QueueVerdict $e $STORES $TERMINAL
+      $e.verdict = $v.verdict
+      $e.status = $(if ($v.verdict -eq 'PENDING') { 'pending' } else { 'resolved' })
+      $lines += ("  {0,-22} @ {1,-13} = {2,-12} ->  {3} ({4} of 7 checked)" -f $t, [string]$r.store, [string]$r.state, $v.verdict, $v.checked.Count)
+    }
+    Write-Queue $fresh $QueueFile
+    $script:batchMsg = @(("ingredient-queue: -RecordBatch wrote {0} record(s) in ONE take of the write lock" -f @($rows).Count)) + $lines
+  }
+  foreach ($m in $script:batchMsg) { Write-Output $m }
+  exit $script:batchRc
 }
 
 if ($Verdict) {

@@ -560,6 +560,19 @@ def run():
       *_pregather_inline_and_numbered())
 
     # =================================================================================================
+    H("B3 / pin P9 - the price prompt tells the pricer the truth about its hands")
+    # =================================================================================================
+    T("MUST FIRE  the prompt states UNCONDITIONALLY that no browser exists, names Hy-Vee/Walmart/Aldi "
+      "as blocked in the same batch, and asks for none of what the session cannot do",
+      *_price_prompt_headless_truth())
+    T("MUST FIRE  a store the evidence marks UNUSABLE at the server or driver tier is NAMED as "
+      "not-to-be-re-probed - a transport refusal is not an empty shelf",
+      *_price_prompt_no_reprobe())
+    T("MUST FIRE  the prompt asks for ONE -RecordBatch call, not one -Record per store per term, and "
+      "says the batch is all-or-nothing",
+      *_price_prompt_one_batch())
+
+    # =================================================================================================
     H("Resume, against a real scratch run dir")
     # =================================================================================================
     for name, ok, got in _resume_seed_table():
@@ -2553,6 +2566,80 @@ def _b5_reseed_from_queue():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     return out
+
+
+def _b3_prompt(terms=("korean-rice-cakes", "gochujang", "doubanjiang")):
+    """A real evidence document, built by price_evidence itself from its own frozen probe sample, so
+    the prompt under test is rendered over the shape the live gather actually produces."""
+    roster = ["Baker's", "Family Fare", "Hy-Vee", "Aldi", "Fareway", "Sam's Club", "Walmart"]
+    terms = list(terms)
+    probe = price_evidence.probe_failed(["Baker's", "Family Fare"], terms,
+                                        "transport ERROR (400) Bad Request - likely Freshop throttling")
+    doc = price_evidence.build("drill-run", 1, terms, probe_by_term=probe, roster=roster)
+    d = daemon(run_dir="R")
+    return d.price_prompt(terms, doc, path="R\\price-evidence\\batch-1.json"), doc, terms
+
+
+def _price_prompt_headless_truth():
+    r"""B3 / pin P9, and gate finding 2's remediation.
+
+    A daemon-dispatched agent has NO browser at all - MCP servers are not attached to a headless
+    subprocess, and declaring a tool in frontmatter does not conjure one. The old prompt told the
+    pricer to attend Hy-Vee in its own tab and to check list_connected_browsers for Walmart and Aldi.
+    In a dispatched session that instruction is an invitation to invent, and on 2026-08-24 it was
+    taken up: three verified-sounding store visits that never happened, one carrying a street address
+    that does not match the estate's own record for that supercenter. The agent corrected itself, and
+    self-correction is not a control.
+
+    NO FLAG, and pin P9 is explicit about why: price_prompt is daemon-only by construction. The
+    attended path is a human invoking the agent interactively and no human path ever renders this
+    string, so a conditional here would be a branch nobody could take.
+    """
+    prompt, _doc, _terms = _b3_prompt()
+    says = "NO BROWSER IN THIS SESSION" in prompt.upper()
+    names = all(st in prompt for st in ("Hy-Vee", "Walmart", "Aldi"))
+    evidence = price_evidence.NO_BROWSER_EVIDENCE in prompt
+    # ...and it asks for NONE of what the session cannot do. These three are the exact instructions
+    # the old prompt carried, and every one of them is now an invitation to invent.
+    asks_anyway = ("in your own browser tab" in prompt
+                   or "ONLY if Brad is at the keyboard" in prompt
+                   or "Check list_connected_browsers\n            first" in prompt)
+    bans = "Do not check list_connected_browsers" in prompt
+    return (says and names and evidence and bans and not asks_anyway,
+            "says=%s names=%s evidence=%s bans=%s still_asks=%s"
+            % (says, names, evidence, bans, asks_anyway))
+
+
+def _price_prompt_no_reprobe():
+    """Family Fare answered (400) Bad Request to all five terms of the phase-5 batch - Freshop is
+    search-budget bound and the daily capture had already spent it - and ate three futile retries.
+    'Nobody looked and it is yours' and 'we looked and were walled' are BOTH UNUSABLE; the tier is
+    what tells them apart, which is why every evidence row carries one."""
+    prompt, doc, _terms = _b3_prompt()
+    walled = price_evidence.walled_stores(doc)
+    named = bool(walled) and all(w in prompt for w in walled)
+    rule = "DO NOT RE-PROBE" in prompt.upper()
+    # CLEAN TWIN: the three unreachable stores are NOT in the walled list. They are a different
+    # sentence with a different instruction, and conflating them would tell the pricer that Hy-Vee
+    # was tried and refused when nobody looked at all.
+    twin = not any(st in walled for st in ("Hy-Vee", "Walmart", "Aldi"))
+    return (named and rule and twin,
+            "walled=%s named=%s rule=%s twin=%s" % (json.dumps(walled), named, rule, twin))
+
+
+def _price_prompt_one_batch():
+    """B2's consumption. Seven stores x five terms is ~35 -Record invocations, and under the daemon
+    each one is a TURN - the single largest turn sink in the lane."""
+    prompt, _doc, terms = _b3_prompt()
+    asks_batch = "-RecordBatch" in prompt
+    atomic = "all-or-nothing" in prompt.lower() or "ALL-OR-NOTHING" in prompt
+    counts = ("%d round trips" % (7 * len(terms))) in prompt
+    # -Verdict and -Promote stay per term, and the prompt still says so: B2 changed how records are
+    # written, not what a verdict is.
+    keeps = "-Verdict" in prompt and "-Promote" in prompt
+    return (asks_batch and atomic and counts and keeps,
+            "batch=%s atomic=%s counts=%s verdict_promote=%s"
+            % (asks_batch, atomic, counts, keeps))
 
 
 def _resume_seed_table():

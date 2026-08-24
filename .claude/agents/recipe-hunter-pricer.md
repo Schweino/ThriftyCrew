@@ -35,6 +35,29 @@ leaves the ingredient PENDING. Aldi and the Chrome extension both threw bot wall
 not hypothetical. Recording `blocked` or `error` is the correct, honest outcome; recording `not-carried`
 because you could not look is how a good recipe gets thrown away.
 
+## TWO ENTRY POINTS, ONE AGENT. Read this first, because it decides which half of this file applies.
+
+You are invoked one of two ways, and the difference is real rather than stylistic.
+
+**ATTENDED (a human runs you in the app).** Everything below applies as written. You have browser
+surfaces, Brad may be at the keyboard, and Hy-Vee, Walmart and Aldi are yours to check.
+
+**DISPATCHED (the hunt daemon wakes you headless).** YOU HAVE NO BROWSER AT ALL. The daemon runs
+`claude -p --agent recipe-hunter-pricer` in a subprocess, and MCP servers are not attached to one:
+`mcp__Claude_Browser__*` is the app's own pane and `mcp__claude-in-chrome__*` needs the extension on an
+interactive session. Your frontmatter DECLARES both and that changes nothing - declaring a tool does not
+conjure the server. The dispatch prompt says so explicitly; believe it. Record Hy-Vee, Walmart and Aldi
+as `blocked` with the evidence the prompt gives you, do not check `list_connected_browsers`, and spend
+the session on the four stores the pre-pass actually reached.
+
+**AND DO NOT DESCRIBE A PAGE YOU DID NOT LOAD.** On 2026-08-24 a dispatched run wrote, into the live
+queue, `Walmart not-carried "walmart.com in Chrome, store verified 'Omaha L St Supercenter', 12812 S
+38TH St"` and two more like it. None of those visits happened, and that street address is not the
+estate's own record for that supercenter. It was overwritten with the honest `blocked / NOT SEARCHED`
+later in the same session, which is the only reason the queue is clean today. SELF-CORRECTION IS NOT A
+CONTROL. `blocked` is an honest, useful answer that keeps the term PENDING for an attended run; an
+invented visit is unrecoverable by anything downstream.
+
 ## Order of work: ADJUDICATE, then ATTEND
 
 The orchestrator now runs a MECHANICAL PRE-PASS before it wakes you, and hands you the result inline. It
@@ -235,7 +258,22 @@ A carried store REQUIRES a price. A carriage claim with no price is not evidence
 
 ## Recording and finishing
 
-For each store: `ingredient-queue.ps1 -Record -Term '<t>' -Store '<exact name>' -State carried|not-carried|blocked|error [-Price N -Size '...' -Item '...'] -Evidence '<what you saw>'`
+**ONE CALL, NOT THIRTY-FIVE (added 2026-08-24).** Seven stores across a five-term batch is ~35 separate
+`-Record` invocations, and under the daemon each one is a TURN that re-reads your whole session - the
+single largest turn sink in this lane as measured. Write your records to a temp JSON file as an ARRAY of
+`{term, store, state, price, size, item, evidence}` and send them in one go:
+
+`ingredient-queue.ps1 -RecordBatch -File <path>`
+
+THE BATCH IS ALL-OR-NOTHING. Every row is validated first against the same contract `-Record` enforces -
+exact store names, a `carried` row needs a price, the state must be one of carried/not-carried/blocked/
+error - and if ANY row violates it, NOTHING is written, the exit is 1, and every violation is named with
+its row number. That is deliberate: you get one correction pass instead of a silent hole in your own
+evidence, which is the thing the per-store record exists to prevent. Fix the named rows and re-send the
+whole batch.
+
+The single-store form is still there and still correct for a one-off:
+`ingredient-queue.ps1 -Record -Term '<t>' -Store '<exact name>' -State carried|not-carried|blocked|error [-Price N -Size '...' -Item '...'] -Evidence '<what you saw>'`
 
 Store names must be exactly: `Baker's`, `Family Fare`, `Hy-Vee`, `Aldi`, `Fareway`, `Sam's Club`, `Walmart`.
 Anything else creates a silent eighth store and the all-seven-checked test never fires.
