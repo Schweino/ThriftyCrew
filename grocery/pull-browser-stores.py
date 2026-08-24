@@ -1317,13 +1317,29 @@ def self_test(headless=False):
     print("")
     for key, cfg in STORES.items():
         print(f"\n  --- {cfg['name']} ---")
-        try:
-            found = storage_key_of(cfg)
-            print(f"    ok    storage key agrees with {cfg['agent']} ({found})")
-        except Exception as e:
-            print(f"    FAIL  {e}")
-            failures += 1
-            continue
+        # THE NAVIGATE LANE HAS NO SWEEP, NO CSV AND NO STORAGE KEY, AND THIS LOOP USED TO ASSUME
+        # OTHERWISE (fixed 2026-08-24). Fareway has been the navigate lane since the storefront went
+        # client-rendered, so `storage_key_of` raised KeyError('storage_key') and the suite reported
+        # `FAIL 'storage_key'` for it - a message that reads like agent drift and is actually the
+        # test asking a paced-lane question of a store that does not have one. The consequence was
+        # worse than the noise: Fareway's REAL contract - that its extractor loads and is callable -
+        # was never checked by anything, on one of the two stores D10's lookup mode drives.
+        navigate_lane = cfg.get("lane") == "navigate"
+        if not navigate_lane:
+            try:
+                found = storage_key_of(cfg)
+                print(f"    ok    storage key agrees with {cfg['agent']} ({found})")
+            except Exception as e:
+                print(f"    FAIL  {e}")
+                failures += 1
+                continue
+        else:
+            missing = [k for k in ("extract", "search_url") if not cfg.get(k)]
+            if missing:
+                print(f"    FAIL  navigate lane declares no {', '.join(missing)}")
+                failures += 1
+                continue
+            print(f"    ok    navigate lane declares {cfg['extract']}() and a search url")
 
         # Throwaway profile ON PURPOSE: this must never inherit a seeded session, or the identity
         # check below would pass for the wrong reason and prove nothing.
@@ -1333,14 +1349,31 @@ def self_test(headless=False):
             b.goto(cfg["origin"], wait_ms=4000)
             b.js(js_file("pull-agent-lib.js"))
             b.js(js_file(cfg["agent"]))
+            # The navigate lane's extractor lives in a SECOND file, and a run injects both. A
+            # self-test that injected only the first would report the extractor missing on a store
+            # where nothing is wrong.
+            if cfg.get("extra_agent"):
+                b.js(js_file(cfg["extra_agent"]))
 
-            missing = [fn for fn in (cfg["sweep"], cfg["to_csv"])
-                       if not b.js(f"typeof {fn} === 'function'")]
+            want = ([cfg["extract"]] if navigate_lane else [cfg["sweep"], cfg["to_csv"]])
+            missing = [fn for fn in want if not b.js(f"typeof {fn} === 'function'")]
             if missing:
                 print(f"    FAIL  agent loaded but these are not defined: {', '.join(missing)}")
                 failures += 1
             else:
-                print(f"    ok    {cfg['sweep']}() and {cfg['to_csv']}() are defined")
+                print(f"    ok    {', '.join(fn + '()' for fn in want)} defined")
+
+            # LOOKUP MODE'S OWN HANDLE, on the stores that have one. `lookup_agent` names a
+            # page-global object this driver clones with a different storageKey; if it ever stopped
+            # existing, lookup mode would throw at the first Sam's batch and nothing else would say
+            # why.
+            if key in LOOKUP_STORES and cfg.get("lookup_agent"):
+                h = cfg["lookup_agent"]
+                if b.js(f"typeof {h} === 'object' && !!{h} && typeof {h}.probe === 'function'"):
+                    print(f"    ok    lookup mode can clone {h} (an agent object with a probe)")
+                else:
+                    print(f"    FAIL  {h} is not a usable agent object - lookup mode would throw")
+                    failures += 1
 
             if not b.js("typeof runPacedSweep === 'function'"):
                 print("    FAIL  pull-agent-lib.js did not load (runPacedSweep undefined)")
@@ -1365,11 +1398,24 @@ def self_test(headless=False):
             )
             if str(verdict).startswith("REFUSED"):
                 print(f"    ok    identity guard refuses an unseeded profile -> {verdict}")
-            else:
+            elif key == "walmart":
                 # Walmart's guard only asserts the origin (it has no store toggle), so NO-THROW is
                 # legitimate there and must not be reported as a failure.
                 print(f"    ok    identity guard reachable, returned {verdict} "
-                      f"(expected for a store with no store-toggle to assert)")
+                      f"(expected: Walmart has no store toggle to assert)")
+            else:
+                # AND FOR EVERY OTHER STORE, NO-THROW IS A CAUTION, NOT A PASS (2026-08-24). This
+                # line used to print the Walmart sentence for any store that did not refuse, which
+                # reads as "checked and fine" on a store that has a club to prove. samsIdentity()
+                # matches the WORD "Omaha" anywhere in the page text, so a cold profile the site
+                # geolocates can satisfy it: it proves the ORIGIN, not the club and not the member
+                # session. Not a failure here, because a stricter club assertion is a change to the
+                # store agent rather than to this driver - and D10's Sam's precondition does not
+                # lean on it: it leans on the seeded marker, and on a logged-out sweep failing to
+                # produce rows (which reads UNUSABLE, which reads PENDING).
+                print(f"    note  identity guard did NOT refuse an unseeded throwaway profile "
+                      f"({verdict}). It proves the origin, not the club or the session - see the "
+                      f"comment here before trusting it as a session check.")
         except Exception as e:
             print(f"    FAIL  {e}")
             failures += 1
